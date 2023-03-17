@@ -41,19 +41,6 @@ target_link_libraries("${PROJECT_NAME}" PUBLIC thermo_solver)
 # # add directories to include for targets to us
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 
-# CVODE libaries stuff
-# specify libraries to link against
-set(LIBDIR /usr/local/cvode-6/lib)
-find_library(CVODE_LIB NAMES sundials_cvode HINTS "${LIBDIR}")
-find_library(NVECS_LIB NAMES sundials_nvecserial HINTS "${LIBDIR}")
-
-# find_library(MANYVECS_LIB NAMES sundials_nvecmanyvector  HINTS "${LIBDIR}")
-set(SUNDIALS_LIBS ${CVODE_LIB} ${NVECS_LIB})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${SUNDIALS_LIBS})
-
-# CVODE include libraries stuff
-target_include_directories(${PROJECT_NAME} PRIVATE /usr/local/cvode-6/include)
-
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS OFF
