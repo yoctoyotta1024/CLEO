@@ -16,7 +16,6 @@ add_subdirectory(thermo_solver)
 
 # add executables to project (only one main() function!)
 set(SOURCES "main.cpp"
-  "./thermodynamic_equations.cpp"
   "./coupledmodel/initialisation/readbinary.cpp"
   "./coupledmodel/initialisation/read_gbxboundaries.cpp"
   "./coupledmodel/initialisation/read_initsuperdrops.cpp"

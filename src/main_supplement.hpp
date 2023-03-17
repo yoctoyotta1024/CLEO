@@ -16,7 +16,6 @@ SDM process and observers to use in main.cpp */
 
 /* constants and equations */
 #include "claras_SDconstants.hpp"
-#include "thermodynamic_equations.hpp"
 
 /* coupled model setup */
 #include "coupledmodel/config.hpp"
@@ -30,6 +29,7 @@ SDM process and observers to use in main.cpp */
 #include "coupledmodel/run_coupledmodel.hpp"
 
 /* Superdroplet Model (SDM) */
+#include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "superdrop_solver/coalescencekernel.hpp"
 #include "superdrop_solver/collisionsmethod.hpp"

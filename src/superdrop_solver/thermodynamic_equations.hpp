@@ -10,7 +10,7 @@ Left Hand Side of thermodynamic equations */
 #include <cmath>
 #include <stdexcept>
 
-#include "claras_SDconstants.hpp"
+#include "../claras_SDconstants.hpp"
 
 namespace dlc = dimless_constants;
 

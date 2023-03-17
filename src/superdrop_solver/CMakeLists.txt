@@ -15,7 +15,7 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
 # add executables to project (only one main() function!)
 set(SOURCES 
-  "../thermodynamic_equations.cpp"
+  "thermodynamic_equations.cpp"
   "condensationmethod.cpp"
   "impliciteuler.cpp"
   "superdrop.cpp"

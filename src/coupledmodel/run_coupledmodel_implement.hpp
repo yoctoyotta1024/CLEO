@@ -16,7 +16,6 @@ seperated to increase readability */
 
 /* constants and equations */
 #include "claras_SDconstants.hpp"
-#include "thermodynamic_equations.hpp"
 
 /* coupled model setup */
 #include "config.hpp"
@@ -27,6 +26,7 @@ seperated to increase readability */
 #include "observers/observers.hpp"
 
 /* Superdroplet Model (SDM) files */
+#include "superdrop_solver/thermodynamic_equations.hpp"
 #include "../superdrop_solver/sdmprocess.hpp"
 #include "../superdrop_solver/superdrop.hpp"
 #include "../superdrop_solver/thermostate.hpp"
