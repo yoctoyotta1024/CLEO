@@ -16,7 +16,7 @@ initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initia
 grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for gridbox boundaries
 
 ### output data parameters ###
-setuptxt = solsetup.txt                     # .txt filename to copy inital setup to as output
+setuptxt = ./bin/solsetup.txt                     # .txt filename to copy inital setup to as output
 zarrbasedir = ./bin/solSDMdata.zarr        # zarr store base directory
 maxcsize = 8192                             # maximum size of chunks of output data put into a zarr store array
 
