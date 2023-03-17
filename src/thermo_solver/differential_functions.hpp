@@ -11,7 +11,7 @@ thermodynamics (p, temp, qv and qc) over time */
 #include <cmath>
 #include <nvector/nvector_serial.h> /* access to serial N_Vector            */
 
-#include "claras_SDconstants.hpp"
+#include "../claras_SDconstants.hpp"
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;

@@ -11,6 +11,8 @@ project("coupledmodel")
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
+add_subdirectory(thermo_solver)
+
 # add executables to project (only one main() function!)
 set(SOURCES "main.cpp"
   "./thermodynamic_equations.cpp"
@@ -27,12 +29,14 @@ set(SOURCES "main.cpp"
   "./coupledmodel/run_coupledmodel.cpp"
   "./coupledmodel/superdrops_with_gridboxes.cpp"
   "./coupledmodel/timesteps.cpp"
-  "./thermo_solver/cvodethermosolver.cpp"
-  "./thermo_solver/differential_functions.cpp"
   "./superdrop_solver/condensationmethod.cpp"
   "./superdrop_solver/impliciteuler.cpp"
-  "./superdrop_solver/superdrop.cpp")
+  "./superdrop_solver/superdrop.cpp"
+  )
+
 add_executable("${PROJECT_NAME}" ${SOURCES})
+
+target_link_libraries("${PROJECT_NAME}" PUBLIC thermo_solver)
 
 # # add directories to include for targets to us
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
