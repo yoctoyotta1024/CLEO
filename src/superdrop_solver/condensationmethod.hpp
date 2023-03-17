@@ -13,8 +13,8 @@ and Mahrt, 1st edition. */
 #include <random>
 #include <span>
 
-#include "claras_SDconstants.hpp"
-#include "thermodynamic_equations.hpp"
+#include "../claras_SDconstants.hpp"
+#include "../thermodynamic_equations.hpp"
 #include "impliciteuler.hpp"
 #include "thermostate.hpp"
 #include "superdrop.hpp"
