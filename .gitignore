@@ -1,0 +1,15 @@
+*.log
+*.png
+*.npy
+*.csv
+*.dat
+*.zip
+*.out
+*.ipynb
+.vscode
+.ipynb_checkpoints
+.DS_Store
+__pycache__
+build
+bin
+docs/source/_autosummary
