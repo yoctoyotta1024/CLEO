@@ -1,0 +1,5 @@
+name: enviropy3
+dependencies:
+    - python>=3.9
+    - pytest
+    - sphinx
