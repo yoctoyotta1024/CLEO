@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
-- family-names: "Clara"
-  given-names: "Bayley"
+- family-names: "Bayley"
+  given-names: "Clara"
   orcid: "https://orcid.org/0000-0002-4540-9382"
 title: "CLEO, an implementation of a Superdroplet Model"
 version: 1.0
