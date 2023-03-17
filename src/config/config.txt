@@ -12,12 +12,12 @@
 #  created using python "create_gbxboundariesbinary_script" script.
 
 ### input file parameters ###
-initSDs_filename = dimlessSDsinit.dat       # binary filename for initialisation of superdrops
-grid_filename = dimlessGBxboundaries.dat    # binary filename for gridbox boundaries
+initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initialisation of superdrops
+grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for gridbox boundaries
 
 ### output data parameters ###
 setuptxt = solsetup.txt                     # .txt filename to copy inital setup to as output
-zarrbasedir = ../bin/solSDMdata.zarr        # zarr store base directory
+zarrbasedir = ./bin/solSDMdata.zarr        # zarr store base directory
 maxcsize = 8192                             # maximum size of chunks of output data put into a zarr store array
 
 ### SDM parameters ###
@@ -33,7 +33,7 @@ TEND = 3600                              # time span of integration [s]
 
 ### superdroplet params ###
 NSUPERS = 1024                          # initial total no. superdrops
-SDnspace = 0                            # no. of spatial coordinates of superdroplets ( = dimension of model)
+SDnspace = 1                            # no. of spatial coordinates of superdroplets ( = dimension of model)
 
 ### initial thermodynamic conditions ###
 P_INIT = 100000.0                       # initial pressure [Pa]

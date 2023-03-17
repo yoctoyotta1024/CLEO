@@ -9,7 +9,7 @@ abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
 constsfile = abspath+"src/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
 
-gridfilepath = abspath+"build/src/"
+gridfilepath = abspath+"build/share/"
 gridfile = gridfilepath+"dimlessGBxboundaries.dat"
 binpath = abspath+"build/bin/"
 

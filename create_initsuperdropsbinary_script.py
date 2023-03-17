@@ -10,7 +10,7 @@ abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
 constsfile = abspath+"src/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
 
-initSDsfilepath = abspath+"build/src/"
+initSDsfilepath = abspath+"build/share/"
 initSDsfile = initSDsfilepath+"dimlessSDsinit.dat"
 binpath = abspath+"build/bin/"
 
@@ -48,14 +48,14 @@ radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
 
-coord3gen            = None                        # do not generate superdroplet coord3s
+#coord3gen            = None                        # do not generate superdroplet coord3s
 
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen = initattributes.MonoAttrsGen(monocoord3)
 
-# coord3span           = [0, 5000]                # max and min range of coord3 to sample [m]                 
-# randomcoord3         = True                        # sample coord3 range randomly or not
-# coord3gen = initattributes.SampleCoord3Gen(coord3span, randomcoord3)
+coord3span           = [0, 5000]                # max and min range of coord3 to sample [m]                 
+randomcoord3         = True                        # sample coord3 range randomly or not
+coord3gen = initattributes.SampleCoord3Gen(coord3span, randomcoord3)
 
 ### ---------------------------------------------------------------- ###
 
