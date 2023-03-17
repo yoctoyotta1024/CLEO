@@ -1,22 +1,9 @@
 # run cmake with " cmake -S [source dir of targerts] -B [build dir for makefile] "
-# or enter build dir and just do " cmake [source dir] "
-
-#run cmake with these compiler options:
+# and then run cmake with this compiler:
 # CXX=/opt/homebrew/bin/g++-12 cmake -S ./ -B ./build
 
 # set cmake version
-cmake_minimum_required(VERSION "3.23.1")
-
-# add compiler flags (TOD0: do this in proper way...)
-add_compile_options(-Wall -g -std=c++20)
-
-#add_compile_options(-Wall -Werror -pedantic -g -std=c++20)
-
-# # specify the C++ standard (or use flag in line 8 above)
-# set(CMAKE_CXX_STANDARD 11)
-# target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_11)
-# set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_CXX_STANDARD_REQUIRED ON)
-# set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_CXX_EXTENSIONS ON)
+cmake_minimum_required(VERSION "3.18.0")
 
 # set project name and source directory of .cpp files
 project("coupledmodel")
@@ -63,7 +50,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${SUNDIALS_LIBS})
 # CVODE include libraries stuff
 target_include_directories(${PROJECT_NAME} PRIVATE /usr/local/cvode-6/include)
 
-# ## some extra stuff that's redundant at the moment
-# include_directories(${PROJECT_SOURCE_DIR})
-# install(TARGETS "${PROJECT_NAME}" DESTINATION bin) # ${CMAKE_INSTALL_PREFIX}/bin
-# install(FILES "testing.cpp" DESTINATION src) # ${CMAKE_INSTALL_PREFIX}/src
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  CMAKE_CXX_STANDARD_REQUIRED ON
+  CMAKE_CXX_EXTENSIONS OFF
+  CXX_STANDARD 20)
+
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -g)
+#target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -pedantic -g)
