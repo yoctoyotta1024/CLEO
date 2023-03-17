@@ -1,0 +1,53 @@
+##### CONFIG FILE #####
+# Author: Clara Bayley
+# File: config.txt
+# File containing configuration 
+# for initial conditions & parameters 
+# of CVODE ODE solver and SDM
+
+#  Note: inital superdroplets data (eps, r0 and m_sol (and optionally coord3))
+#  read from file "initSDs_filename" is made with PYSD module using python
+#  script "create_initsuperdropsbinary_script". Likewise data to make 
+#  gridboxmap from gridbox boundaries is read from file "grid_filename"
+#  created using python "create_gbxboundariesbinary_script" script.
+
+### input file parameters ###
+initSDs_filename = dimlessSDsinit.dat       # binary filename for initialisation of superdrops
+grid_filename = dimlessGBxboundaries.dat    # binary filename for gridbox boundaries
+
+### output data parameters ###
+setuptxt = solsetup.txt                     # .txt filename to copy inital setup to as output
+zarrbasedir = ../bin/solSDMdata.zarr        # zarr store base directory
+maxcsize = 8192                             # maximum size of chunks of output data put into a zarr store array
+
+### SDM parameters ###
+cond_maxiters = 100                     # maximum no. iterations of Newton Raphson Method
+cond_rtol = 1e-6                        # relative tolerance for implicit euler integration
+cond_atol = 1e-6                        # abolute tolerance for implicit euler integration
+COND_TSTEP = 1                          # time between SD condensation events [s]
+COLL_TSTEP = 1                          # time between SD collision events [s]
+SEDI_TSTEP = 1                          # time between SD sedimentation events [s]
+XCHANGE_TSTEP = 1                       # time between SD exchange between gridboxes [s]
+OUT_TSTEP = 30                          # time between outputting data (and coupling) [s]
+TEND = 3600                              # time span of integration [s]
+
+### superdroplet params ###
+NSUPERS = 1024                          # initial total no. superdrops
+SDnspace = 0                            # no. of spatial coordinates of superdroplets ( = dimension of model)
+
+### initial thermodynamic conditions ###
+P_INIT = 100000.0                       # initial pressure [Pa]
+TEMP_INIT = 273.15                      # initial parcel temperature [T]
+relh_init = 99.0                        # initial relative humidity (%)
+qc_init = 0.0                           # initial liquid water content []
+
+### CVODE ODE solver paramters ###
+doCouple = false                        # enable coupling from SDM to CVODE 
+doThermo = false                        # enable parcel adiabatic expansion
+W_AVG = 1                               # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
+T_HALF = 4000                           # timescale for w sinusoid, tau = THALF/pi [s]
+cvode_rtol = 1e-6                       # relative tolerance (tol) for integration
+cvode_atol_p = 1e-6                     # absolute tolerances for thermodynamics ODEs [P, T, qv, qc]
+cvode_atol_temp = 1e-6
+cvode_atol_qv =1e-6
+cvode_atol_qc = 1e-6    
