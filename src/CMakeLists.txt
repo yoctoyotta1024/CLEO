@@ -20,9 +20,7 @@ set(SOURCES "main.cpp" "run_coupledmodel.cpp")
 
 add_executable("${PROJECT_NAME}" ${SOURCES})
 
-target_link_libraries("${PROJECT_NAME}" PUBLIC thermo_solver)
-target_link_libraries("${PROJECT_NAME}" PUBLIC superdrop_solver)
-target_link_libraries("${PROJECT_NAME}" PUBLIC runmodel)
+target_link_libraries("${PROJECT_NAME}" PUBLIC thermo_solver superdrop_solver runmodel)
 
 # # add directories to include for targets to us
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
