@@ -15,13 +15,13 @@ could compile with e.g.
 #include <iostream>
 #include <string_view>
 
-#include "claras_SDconstants.hpp"
-#include "config.hpp"
-#include "readbinary.hpp"
-#include "read_gbxboundaries.hpp"
-#include "read_initsuperdrops.hpp"
-#include "maps4gridboxes.hpp"
-#include "superdrops_with_gridboxes.hpp"
+#include "../src/claras_SDconstants.hpp"
+#include "../src/runmodel/config.hpp"
+#include "../src/runmodel/initialisation/readbinary.hpp"
+#include "../src/runmodel/initialisation/read_gbxboundaries.hpp"
+#include "../src/runmodel/initialisation/read_initsuperdrops.hpp"
+#include "../src/runmodel/maps4gridboxes.hpp"
+#include "../src/runmodel/superdrops_with_gridboxes.hpp"
 
 namespace dlc = dimless_constants;
 
