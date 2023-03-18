@@ -11,30 +11,18 @@ project("coupledCVODECLEO")
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
-add_subdirectory(superdrop_solver)
 add_subdirectory(thermo_solver)
+add_subdirectory(superdrop_solver)
+add_subdirectory(runmodel)
 
 # add executables to project (only one main() function!)
-set(SOURCES "main.cpp"
-"run_coupledmodel.cpp"
-  "./runmodel/initialisation/readbinary.cpp"
-  "./runmodel/initialisation/read_gbxboundaries.cpp"
-  "./runmodel/initialisation/read_initsuperdrops.cpp"
-  "./runmodel/config.cpp"
-  "./runmodel/gridbox.cpp"
-  "./runmodel/maps4gridboxes.cpp"
-  "./runmodel/observers/observers.cpp"
-  "./runmodel/observers/observer_singlevariable.cpp"
-  "./runmodel/observers/observer_thermostate.cpp"
-  "./runmodel/observers/zarrstores.cpp"
-  "./runmodel/superdrops_with_gridboxes.cpp"
-  "./runmodel/timesteps.cpp"
-  )
+set(SOURCES "main.cpp" "run_coupledmodel.cpp")
 
 add_executable("${PROJECT_NAME}" ${SOURCES})
 
 target_link_libraries("${PROJECT_NAME}" PUBLIC thermo_solver)
 target_link_libraries("${PROJECT_NAME}" PUBLIC superdrop_solver)
+target_link_libraries("${PROJECT_NAME}" PUBLIC runmodel)
 
 # # add directories to include for targets to us
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
