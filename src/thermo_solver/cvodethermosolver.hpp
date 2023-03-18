@@ -17,7 +17,7 @@ which models evolution of the thermodynamics
 #include <sunlinsol/sunlinsol_dense.h> /* access to dense SUNLinearSolver      */
 
 #include "differential_functions.hpp"
-#include "../coupledmodel/config.hpp"
+#include "../runmodel/config.hpp"
 
 namespace dlc = dimless_constants;
 

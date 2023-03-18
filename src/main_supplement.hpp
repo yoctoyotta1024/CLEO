@@ -4,7 +4,7 @@
 SDM process and observers to use in main.cpp */
 
 // after make/compiling, execute for example via:
-// ./src/coupledmodel "../src/config/config.txt" "../src/claras_SDconstants.hpp"
+// ./src/coupledCVODECLEO "../src/config/config.txt" "../src/claras_SDconstants.hpp"
 
 
 #ifndef MAIN_SUPPLEMENT_HPP
@@ -18,15 +18,15 @@ SDM process and observers to use in main.cpp */
 #include "claras_SDconstants.hpp"
 
 /* coupled model setup */
-#include "coupledmodel/config.hpp"
-#include "coupledmodel/maps4gridboxes.hpp"
-#include "coupledmodel/timesteps.hpp"
-#include "coupledmodel/observers/observers.hpp"
-#include "coupledmodel/observers/observer_superdropletattributes.hpp"
-#include "coupledmodel/observers/observer_thermostate.hpp"
-#include "coupledmodel/observers/zarrstores.hpp"
-#include "coupledmodel/run_coupledmodel_implement.hpp"
-#include "coupledmodel/run_coupledmodel.hpp"
+#include "run_coupledmodel_implement.hpp"
+#include "run_coupledmodel.hpp"
+#include "runmodel/config.hpp"
+#include "runmodel/maps4gridboxes.hpp"
+#include "runmodel/timesteps.hpp"
+#include "runmodel/observers/observers.hpp"
+#include "runmodel/observers/observer_superdropletattributes.hpp"
+#include "runmodel/observers/observer_thermostate.hpp"
+#include "runmodel/observers/zarrstores.hpp"
 
 /* Superdroplet Model (SDM) */
 #include "superdrop_solver/thermodynamic_equations.hpp"

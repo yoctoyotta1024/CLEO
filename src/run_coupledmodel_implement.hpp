@@ -18,21 +18,21 @@ seperated to increase readability */
 #include "claras_SDconstants.hpp"
 
 /* coupled model setup */
-#include "config.hpp"
-#include "maps4gridboxes.hpp"
-#include "superdrops_with_gridboxes.hpp"
-#include "timesteps.hpp"
-#include "gridbox.hpp"
-#include "observers/observers.hpp"
+#include "./runmodel/config.hpp"
+#include "./runmodel/maps4gridboxes.hpp"
+#include "./runmodel/superdrops_with_gridboxes.hpp"
+#include "./runmodel/timesteps.hpp"
+#include "./runmodel/gridbox.hpp"
+#include "./runmodel/observers/observers.hpp"
 
 /* Superdroplet Model (SDM) files */
-#include "superdrop_solver/thermodynamic_equations.hpp"
-#include "../superdrop_solver/sdmprocess.hpp"
-#include "../superdrop_solver/superdrop.hpp"
-#include "../superdrop_solver/thermostate.hpp"
+#include "./superdrop_solver/thermodynamic_equations.hpp"
+#include "./superdrop_solver/sdmprocess.hpp"
+#include "./superdrop_solver/superdrop.hpp"
+#include "./superdrop_solver/thermostate.hpp"
 
 /* CVODE ODE thermodynamics solver files */
-#include "../thermo_solver/cvodethermosolver.hpp"
+#include "./thermo_solver/cvodethermosolver.hpp"
 
 namespace dlc = dimless_constants;
 
