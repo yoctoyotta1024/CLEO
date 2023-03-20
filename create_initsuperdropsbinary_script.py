@@ -18,7 +18,6 @@ binpath = abspath+"build/bin/"
 isfigures = [True, True]
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
-
 monor                = 1e-6                        # all SDs have this same radius [m]
 radiigen  = initattributes.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
@@ -42,9 +41,9 @@ scalefacs            = [1e6, 0.3e6, 0.025e6]
 numconc = np.sum(scalefacs) 
 radiiprobdist = radiiprobdistribs.LnNormal(geomeans, geosigs, scalefacs)
  
-# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-# radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
+volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
+numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
+radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
 
