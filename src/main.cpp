@@ -5,7 +5,8 @@ coupled with a CVODE ode solver for the thermodynamics
 (p, temp, qv and qc) over time */
 
 // after make/compiling, execute for example via:
-// ./src/coupledCVODECLEO "../src/config/config.txt" "../src/claras_SDconstants.hpp"
+// ./src/coupledCVODECLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
+
 
 #include "main_supplement.hpp"
 
