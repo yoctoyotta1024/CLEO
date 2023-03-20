@@ -16,7 +16,7 @@ add_subdirectory(runmodel)
 set(SOURCES "main.cpp" "run_coupledmodel.cpp")
 add_executable("${PROJECT_NAME}" ${SOURCES})
 
-set(LIBSDIR /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs)
+set(LIBSDIR "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs")
 find_library(thermo_solver NAMES thermo_solver HINTS ${LIBSDIR})
 find_library(superdrop_solver NAMES superdrop_solver HINTS ${LIBSDIR})
 find_library(initialisation NAMES initialisation HINTS ${LIBSDIR})
