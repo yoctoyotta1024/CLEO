@@ -28,17 +28,14 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${INITLIB})
 
 # CVODE libaries stuff
 # specify libraries to link against
-set(LIBDIR /usr/local/cvode-6/lib)
-find_library(CVODE_LIB NAMES sundials_cvode HINTS "${LIBDIR}")
-find_library(NVECS_LIB NAMES sundials_nvecserial HINTS "${LIBDIR}")
+set(CVODEDIR "${PROJECT_SOURCE_DIR}/cvode-6-copy")
+find_library(CVODE_LIB NAMES sundials_cvode HINTS "${CVODEDIR}/lib")
+find_library(NVECS_LIB NAMES sundials_nvecserial HINTS "${CVODEDIR}/lib")
+target_link_libraries(${PROJECT_NAME} PRIVATE ${CVODE_LIB} ${NVECS_LIB})
 
-# find_library(MANYVECS_LIB NAMES sundials_nvecmanyvector  HINTS "${LIBDIR}")
-set(SUNDIALS_LIBS ${CVODE_LIB} ${NVECS_LIB})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${SUNDIALS_LIBS})
+target_include_directories(${PROJECT_NAME} PUBLIC "${CVODEDIR}/include")
 
-# CVODE include libraries stuff
-target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/cvode-6/include)
-
+# compilation properties
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS OFF

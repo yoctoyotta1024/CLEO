@@ -22,14 +22,14 @@ maxcsize = 8192                             # maximum size of chunks of output d
 
 ### SDM parameters ###
 cond_maxiters = 100                     # maximum no. iterations of Newton Raphson Method
-cond_rtol = 1e-6                        # relative tolerance for implicit euler integration
-cond_atol = 1e-6                        # abolute tolerance for implicit euler integration
-COND_TSTEP = 1                          # time between SD condensation events [s]
+cond_rtol = 1e-1                        # relative tolerance for implicit euler integration
+cond_atol = 100                         # abolute tolerance for implicit euler integration
+COND_TSTEP = 0.1                        # time between SD condensation events [s]
 COLL_TSTEP = 1                          # time between SD collision events [s]
 SEDI_TSTEP = 1                          # time between SD sedimentation events [s]
 XCHANGE_TSTEP = 1                       # time between SD exchange between gridboxes [s]
 OUT_TSTEP = 30                          # time between outputting data (and coupling) [s]
-TEND = 3600                              # time span of integration [s]
+TEND = 2400                             # time span of integration [s]
 
 ### superdroplet params ###
 NSUPERS = 1024                          # initial total no. superdrops
@@ -38,12 +38,12 @@ SDnspace = 1                            # no. of spatial coordinates of superdro
 ### initial thermodynamic conditions ###
 P_INIT = 100000.0                       # initial pressure [Pa]
 TEMP_INIT = 273.15                      # initial parcel temperature [T]
-relh_init = 99.0                        # initial relative humidity (%)
+relh_init = 95.0                        # initial relative humidity (%)
 qc_init = 0.0                           # initial liquid water content []
 
 ### CVODE ODE solver paramters ###
-doCouple = false                        # enable coupling from SDM to CVODE 
-doThermo = false                        # enable parcel adiabatic expansion
+doCouple = true                        # enable coupling from SDM to CVODE 
+doThermo = true                        # enable parcel adiabatic expansion
 W_AVG = 1                               # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
 T_HALF = 4000                           # timescale for w sinusoid, tau = THALF/pi [s]
 cvode_rtol = 1e-6                       # relative tolerance (tol) for integration
