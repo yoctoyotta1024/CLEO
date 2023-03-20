@@ -21,10 +21,10 @@ set(SOURCES
 add_library("${PROJECT_NAME}" SHARED ${SOURCES})
 
 # # add directories to include for targets to us
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 
 set(INITLIB /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs)
-target_include_directories(${PROJECT_NAME} PUBLIC ${INITLIB})
+target_include_directories(${PROJECT_NAME} PRIVATE ${INITLIB})
 
 # CVODE libaries stuff
 # specify libraries to link against
@@ -34,7 +34,7 @@ find_library(NVECS_LIB NAMES sundials_nvecserial HINTS "${LIBDIR}")
 
 # find_library(MANYVECS_LIB NAMES sundials_nvecmanyvector  HINTS "${LIBDIR}")
 set(SUNDIALS_LIBS ${CVODE_LIB} ${NVECS_LIB})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${SUNDIALS_LIBS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${SUNDIALS_LIBS})
 
 # CVODE include libraries stuff
 target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/cvode-6/include)
@@ -44,5 +44,5 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_EXTENSIONS OFF
   CXX_STANDARD 20)
 
-target_compile_options(${PROJECT_NAME} PUBLIC -Wall -g)
-#target_compile_options(${PROJECT_NAME} PUBLIC -Wall -Werror -pedantic -g)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -g)
+#target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -pedantic -g)

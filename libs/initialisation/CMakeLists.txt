@@ -23,12 +23,12 @@ set(SOURCES
 add_library("${PROJECT_NAME}" SHARED ${SOURCES})
 
 # # add directories to include for targets to us
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS OFF
   CXX_STANDARD 20)
 
-target_compile_options(${PROJECT_NAME} PUBLIC -Wall -g)
-#target_compile_options(${PROJECT_NAME} PUBLIC -Wall -Werror -pedantic -g)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -g)
+#target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -pedantic -g)
