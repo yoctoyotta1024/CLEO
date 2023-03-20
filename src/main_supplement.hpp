@@ -16,17 +16,17 @@ SDM process and observers to use in main.cpp */
 
 /* constants and equations */
 #include "claras_SDconstants.hpp"
+#include "initialisation/config.hpp"
 
 /* coupled model setup */
-#include "run_coupledmodel_implement.hpp"
-#include "run_coupledmodel.hpp"
-#include "runmodel/config.hpp"
-#include "runmodel/maps4gridboxes.hpp"
-#include "runmodel/timesteps.hpp"
-#include "runmodel/observers/observers.hpp"
-#include "runmodel/observers/observer_superdropletattributes.hpp"
-#include "runmodel/observers/observer_thermostate.hpp"
-#include "runmodel/observers/zarrstores.hpp"
+#include "./run_coupledmodel_implement.hpp"
+#include "./run_coupledmodel.hpp"
+#include "./runmodel/maps4gridboxes.hpp"
+#include "./runmodel/timesteps.hpp"
+#include "./runmodel/observers/observers.hpp"
+#include "./runmodel/observers/observer_superdropletattributes.hpp"
+#include "./runmodel/observers/observer_thermostate.hpp"
+#include "./runmodel/observers/zarrstores.hpp"
 
 /* Superdroplet Model (SDM) */
 #include "superdrop_solver/thermodynamic_equations.hpp"

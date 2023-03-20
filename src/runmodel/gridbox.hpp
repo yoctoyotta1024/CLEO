@@ -12,11 +12,11 @@ struct */
 #include <algorithm>
 #include <span>
 
-#include "config.hpp"
-#include "maps4gridboxes.hpp"
-#include "superdrops_with_gridboxes.hpp"
-#include "../superdrop_solver/superdrop.hpp"
-#include "../superdrop_solver/thermostate.hpp"
+#include "./maps4gridboxes.hpp"
+#include "./superdrops_with_gridboxes.hpp"
+#include "initialisation/config.hpp"
+#include "superdrop_solver/superdrop.hpp"
+#include "superdrop_solver/thermostate.hpp"
 
 struct GridBox
 /* gridbox contains vector of superdroplets in grid box,

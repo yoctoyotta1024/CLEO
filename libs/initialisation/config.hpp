@@ -14,7 +14,7 @@ in reading values from config files */
 #include <stdexcept>
 #include <filesystem>
 
-#include "copyfiles2txt.hpp"
+#include "./copyfiles2txt.hpp"
 
 struct Config
 {

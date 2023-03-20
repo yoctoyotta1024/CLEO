@@ -13,8 +13,8 @@ concept */
 #include <concepts>
 #include <cmath>
 
-#include "claras_SDconstants.hpp"
-#include "superdrop.hpp"
+#include "../claras_SDconstants.hpp"
+#include "./superdrop.hpp"
 
 namespace dlc = dimless_constants;
 

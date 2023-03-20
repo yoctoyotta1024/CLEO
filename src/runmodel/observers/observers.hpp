@@ -20,12 +20,12 @@ to terminal or writing them to a datafile */
 #include <ios>
 #include <iomanip>
 
-#include "observer_superdropletattributes.hpp"
-#include "observer_thermostate.hpp"
-#include "observer_singlevariable.hpp"
+#include "./observer_superdropletattributes.hpp"
+#include "./observer_thermostate.hpp"
+#include "./observer_singlevariable.hpp"
 #include "../gridbox.hpp"
-#include "../../superdrop_solver/superdrop.hpp"
-#include "../../superdrop_solver/thermostate.hpp"
+#include "superdrop_solver/superdrop.hpp"
+#include "superdrop_solver/thermostate.hpp"
 
 template <typename Obs>
 concept Observer = requires(Obs obs, const std::vector<GridBox> &gboxes)

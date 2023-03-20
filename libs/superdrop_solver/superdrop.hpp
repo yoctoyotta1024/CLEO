@@ -16,8 +16,8 @@
 #include <algorithm>
 
 #include "../claras_SDconstants.hpp"
-#include "impliciteuler.hpp"
-#include "superdrop_ids.hpp"
+#include "./impliciteuler.hpp"
+#include "./superdrop_ids.hpp"
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;

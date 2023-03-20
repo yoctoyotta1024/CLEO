@@ -24,10 +24,10 @@ an sd_gbxindex to neighbouring gridboxes' gbxindex,
 #include <stdexcept>
 #include <algorithm>
 
-#include "maps4gridboxes.hpp"
+#include "./maps4gridboxes.hpp"
+#include "claras_SDconstants.hpp"
 #include "initialisation/read_initsuperdrops.hpp"
-#include "../claras_SDconstants.hpp"
-#include "../superdrop_solver/superdrop.hpp"
+#include "superdrop_solver/superdrop.hpp"
 
 namespace dlc = dimless_constants;
 

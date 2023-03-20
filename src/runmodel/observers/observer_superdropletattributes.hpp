@@ -16,7 +16,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <algorithm>
 #include <concepts>
 
-#include "zarrstores.hpp"
+#include "./zarrstores.hpp"
 
 struct SomeMetadata
 {

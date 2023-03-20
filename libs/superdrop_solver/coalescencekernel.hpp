@@ -14,8 +14,8 @@ concept in Collisionsmethod struct  */
 #include <math.h>
 #include <cmath>
 
-#include "superdrop.hpp"
-#include "terminalvelocity.hpp"
+#include "./superdrop.hpp"
+#include "./terminalvelocity.hpp"
 
 struct GolovinProb
 {

@@ -27,6 +27,14 @@ set(SOURCES
 add_library("${PROJECT_NAME}" SHARED ${SOURCES})
 
 # # add directories to include for targets to us
+set(LIBSDIR /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs)
+find_library(thermo_solver NAMES thermo_solver HINTS ${LIBSDIR})
+find_library(superdrop_solver NAMES superdrop_solver HINTS ${LIBSDIR})
+find_library(initialisation NAMES initialisation HINTS ${LIBSDIR})
+target_link_libraries("${PROJECT_NAME}" PUBLIC thermo_solver superdrop_solver initialisation)
+
+# # add directories to include for targets to us
+target_include_directories(${PROJECT_NAME} PUBLIC ${LIBSDIR})
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

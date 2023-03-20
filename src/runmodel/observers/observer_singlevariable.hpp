@@ -13,7 +13,7 @@ in a zarr store */
 #include <cmath>
 #include <cassert>
 
-#include "zarrstores.hpp"
+#include "./zarrstores.hpp"
 
 template <typename T>
 class SingleVarStorage

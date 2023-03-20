@@ -11,8 +11,8 @@ timestep variables for SDM */
 #include <stdexcept>
 #include <algorithm>
 
-#include "../claras_SDconstants.hpp"
-#include "config.hpp"
+#include "claras_SDconstants.hpp"
+#include "initialisation/config.hpp"
 
 namespace dlc = dimless_constants;
 

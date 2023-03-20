@@ -12,7 +12,7 @@ struct from binary file */
 #include <fstream>
 #include <string_view>
 
-#include "readbinary.hpp"
+#include "./readbinary.hpp"
 
 struct GridBoxBoundaries
 /* holds vectors containing z, x and y half coords

@@ -9,9 +9,9 @@ sedimentation of superdroplets */
 #include <span>
 #include <random>
 
-#include "terminalvelocity.hpp"
-#include "superdrop.hpp"
-#include "thermostate.hpp"
+#include "./terminalvelocity.hpp"
+#include "./superdrop.hpp"
+#include "./thermostate.hpp"
 
 template <VelocityFormula TerminalVelocity>
 class SedimentationMethod

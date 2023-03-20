@@ -15,7 +15,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <sstream>
 
 #include "../gridbox.hpp"
-#include "../../superdrop_solver/superdrop.hpp"
+#include "superdrop_solver/superdrop.hpp"
 
 template <typename Store>
 struct StoreAccessor

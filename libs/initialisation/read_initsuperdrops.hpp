@@ -14,7 +14,7 @@ from a binary file */
 #include <iostream>
 #include <utility>
 
-#include "readbinary.hpp"
+#include "./readbinary.hpp"
 
 struct InitSDsData
 {

@@ -14,10 +14,10 @@ collision events in superdroplet model */
 #include <stdexcept>
 #include <span>
 
-#include "claras_SDconstants.hpp"
-#include "superdrop.hpp"
-#include "thermostate.hpp"
-#include "coalescencekernel.hpp"
+#include "../claras_SDconstants.hpp"
+#include "./superdrop.hpp"
+#include "./thermostate.hpp"
+#include "./coalescencekernel.hpp"
 
 namespace dlc = dimless_constants;
 

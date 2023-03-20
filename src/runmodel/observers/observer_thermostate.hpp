@@ -15,8 +15,8 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <algorithm>
 #include <cassert>
 
-#include "zarrstores.hpp"
-#include "../../superdrop_solver/thermostate.hpp"
+#include "./zarrstores.hpp"
+#include "superdrop_solver/thermostate.hpp"
 
 struct ThermoIntoStore
 {

@@ -16,8 +16,8 @@ which models evolution of the thermodynamics
 #include <sunmatrix/sunmatrix_dense.h> /* access to dense SUNMatrix            */
 #include <sunlinsol/sunlinsol_dense.h> /* access to dense SUNLinearSolver      */
 
-#include "differential_functions.hpp"
-#include "config.hpp"
+#include "initialisation/config.hpp"
+#include "./differential_functions.hpp"
 
 namespace dlc = dimless_constants;
 
