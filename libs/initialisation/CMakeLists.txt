@@ -6,30 +6,29 @@
 cmake_minimum_required(VERSION "3.18.0")
 
 # set project name and source directory of .cpp files
-project("coupledCVODECLEO")
+project("initialisation")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
-add_subdirectory(runmodel)
+set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
 # add executables to project (only one main() function!)
-set(SOURCES "main.cpp" "run_coupledmodel.cpp")
-
-add_executable("${PROJECT_NAME}" ${SOURCES})
-
-# set(LIBSDIR /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs)
-# find_library(lib1 NAMES thermo_solver HINTS "${LIBSDIR}")
-# find_library(lib2 NAMES superdrops_solver HINTS "${LIBSDIR}")
-target_link_libraries("${PROJECT_NAME}" PUBLIC thermo_solver superdrop_solver runmodel)
+set(SOURCES 
+  "config.cpp"
+  "read_gbxboundaries.cpp"
+  "read_initsuperdrops.cpp"
+  "readbinary.cpp"
+  )
+add_library("${PROJECT_NAME}" SHARED ${SOURCES})
 
 # # add directories to include for targets to us
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS OFF
   CXX_STANDARD 20)
 
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -g)
-#target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -pedantic -g)
+target_compile_options(${PROJECT_NAME} PUBLIC -Wall -g)
+#target_compile_options(${PROJECT_NAME} PUBLIC -Wall -Werror -pedantic -g)

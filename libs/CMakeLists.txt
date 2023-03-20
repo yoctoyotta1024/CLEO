@@ -5,9 +5,10 @@ cmake_minimum_required(VERSION 3.18.0)
 
 project(project
   LANGUAGES CXX
-  DESCRIPTION "this is CLEO by Clara Bayley"
+  DESCRIPTION "CLEO superdroplet and CVODE libraries by Clara Bayley"
   VERSION 1.0
 )
 
-add_subdirectory(libs)
-add_subdirectory(src)
+add_subdirectory(thermo_solver)
+add_subdirectory(superdrop_solver)
+add_subdirectory(initialisation)

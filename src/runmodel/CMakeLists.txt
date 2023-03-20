@@ -15,10 +15,6 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
 # add executables to project (only one main() function!)
 set(SOURCES 
-    "initialisation/readbinary.cpp"
-    "initialisation/read_gbxboundaries.cpp"
-    "initialisation/read_initsuperdrops.cpp"
-    "config.cpp"
     "gridbox.cpp"
     "maps4gridboxes.cpp"
     "observers/observers.cpp"
