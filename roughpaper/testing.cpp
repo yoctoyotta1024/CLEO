@@ -15,11 +15,11 @@ could compile with e.g.
 #include <iostream>
 #include <string_view>
 
-#include "../src/claras_SDconstants.hpp"
-#include "../src/runmodel/config.hpp"
-#include "../src/runmodel/initialisation/readbinary.hpp"
-#include "../src/runmodel/initialisation/read_gbxboundaries.hpp"
-#include "../src/runmodel/initialisation/read_initsuperdrops.hpp"
+#include "../libs/claras_SDconstants.hpp"
+#include "../libs/initialisation/config.hpp"
+#include "../libs/initialisation/readbinary.hpp"
+#include "../libs/initialisation/read_gbxboundaries.hpp"
+#include "../libs/initialisation/read_initsuperdrops.hpp"
 #include "../src/runmodel/maps4gridboxes.hpp"
 #include "../src/runmodel/superdrops_with_gridboxes.hpp"
 

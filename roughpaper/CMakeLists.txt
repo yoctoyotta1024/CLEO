@@ -13,15 +13,18 @@ message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # add executables to project (only one main() function!)
 set(SOURCES "testing.cpp")
-
 add_executable("${PROJECT_NAME}" ${SOURCES})
 
-target_include_directories("${PROJECT_NAME}" PUBLIC ../src/superdrop_solver ../src/runmodel)
-
-target_link_libraries("${PROJECT_NAME}" PUBLIC ../src/superdrop_solver ../src/runmodel)
 
 # # add directories to include for targets to us
+set(CLEODIR "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO")
+target_include_directories(${PROJECT_NAME} PRIVATE "${CLEODIR}/src/runmodel")
+target_include_directories(${PROJECT_NAME} PRIVATE "${CLEODIR}/libs")
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs" ${CMAKE_CURRENT_BINARY_DIR}/libs)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../src/runmodel" ${CMAKE_CURRENT_BINARY_DIR}/src/runmodel)
+target_link_libraries("${PROJECT_NAME}" PRIVATE superdrop_solver initialisation runmodel)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
