@@ -7,7 +7,6 @@ coupled with a CVODE ode solver for the thermodynamics
 // after make/compiling, execute for example via:
 // ./src/coupledCVODECLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
 
-
 #include "main_supplement.hpp"
 
 int main(int argc, char *argv[])
