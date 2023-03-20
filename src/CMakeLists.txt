@@ -23,7 +23,7 @@ find_library(initialisation NAMES initialisation HINTS ${LIBSDIR})
 target_link_libraries("${PROJECT_NAME}" PUBLIC thermo_solver superdrop_solver initialisation runmodel)
 
 # # add directories to include for targets to us
-target_include_directories(${PROJECT_NAME} PUBLIC ${LIBSDIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${LIBSDIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

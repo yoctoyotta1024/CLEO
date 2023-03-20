@@ -7,7 +7,7 @@ from pySD.initsuperdropsbinary_src import *
 
 ### path and filenames
 abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
-constsfile = abspath+"src/claras_SDconstants.hpp"
+constsfile = abspath+"libs/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
 
 initSDsfilepath = abspath+"build/share/"
