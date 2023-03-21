@@ -14,8 +14,8 @@ initSDsfilepath = abspath+"build/share/"
 initSDsfile = initSDsfilepath+"dimlessSDsinit.dat"
 binpath = abspath+"build/bin/"
 
-### booleans for [making+saving, showing] figures
-isfigures = [True, True]
+### booleans for [making+showing, saving] figures
+isfigures = [False, False]
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
 monor                = 1e-6                        # all SDs have this same radius [m]
