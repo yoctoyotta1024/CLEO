@@ -22,20 +22,10 @@ set(SOURCES
 add_library("${PROJECT_NAME}" SHARED ${SOURCES})
 
 # # add directories to include for targets to us
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
-
-#set(INITLIB /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs)
-set(INITLIB ../)
-target_include_directories(${PROJECT_NAME} PRIVATE ${INITLIB})
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC "../")
 
 # CVODE libaries stuff
-# specify libraries to link against
-#set(CVODEDIR "${PROJECT_SOURCE_DIR}/cvode-6-copy")
-#find_library(CVODE_LIB NAMES sundials_cvode HINTS "${CVODEDIR}/lib")
-#find_library(NVECS_LIB NAMES sundials_nvecserial HINTS "${CVODEDIR}/lib")
-
-#target_include_directories(${PROJECT_NAME} PUBLIC "${CVODEDIR}/include")
-
 include(FetchContent)
 FetchContent_Declare(
   cvodes

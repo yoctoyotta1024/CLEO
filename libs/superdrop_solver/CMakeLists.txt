@@ -24,7 +24,7 @@ set(SOURCES
 add_library("${PROJECT_NAME}" SHARED ${SOURCES})
 
 # # add directories to include for targets to us
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
