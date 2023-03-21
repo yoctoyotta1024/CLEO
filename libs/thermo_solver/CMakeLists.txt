@@ -30,12 +30,22 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${INITLIB})
 
 # CVODE libaries stuff
 # specify libraries to link against
-set(CVODEDIR "${PROJECT_SOURCE_DIR}/cvode-6-copy")
-find_library(CVODE_LIB NAMES sundials_cvode HINTS "${CVODEDIR}/lib")
-find_library(NVECS_LIB NAMES sundials_nvecserial HINTS "${CVODEDIR}/lib")
-target_link_libraries(${PROJECT_NAME} PRIVATE ${CVODE_LIB} ${NVECS_LIB})
+#set(CVODEDIR "${PROJECT_SOURCE_DIR}/cvode-6-copy")
+#find_library(CVODE_LIB NAMES sundials_cvode HINTS "${CVODEDIR}/lib")
+#find_library(NVECS_LIB NAMES sundials_nvecserial HINTS "${CVODEDIR}/lib")
 
-target_include_directories(${PROJECT_NAME} PUBLIC "${CVODEDIR}/include")
+#target_include_directories(${PROJECT_NAME} PUBLIC "${CVODEDIR}/include")
+
+include(FetchContent)
+FetchContent_Declare(
+  cvodes
+  URL https://github.com/LLNL/sundials/releases/download/v6.5.0/cvodes-6.5.0.tar.gz
+  URL_HASH MD5=dc0cd29340599f0f8b027c6f1e0107ba
+)
+FetchContent_MakeAvailable(cvodes)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC SUNDIALS::cvodes_static)
+#target_link_libraries(${PROJECT_NAME} PRIVATE ${CVODE_LIB} ${NVECS_LIB})
 
 # compilation properties
 set_target_properties(${PROJECT_NAME} PROPERTIES
