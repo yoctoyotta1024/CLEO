@@ -13,8 +13,8 @@ gridfilepath = abspath+"build/share/"
 gridfile = gridfilepath+"dimlessGBxboundaries.dat"
 binpath = abspath+"build/bin/"
 
-### booleans for [making+saving, showing] figures
-isfigures = [True, True]
+### booleans for [making+showing, saving] figures
+isfigures = [False, False]
 
 ### input parameters for zcoords of gridbox boundaries
 zmax = 5000 # maximum z coord [m]
