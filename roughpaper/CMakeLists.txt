@@ -18,7 +18,8 @@ add_executable("${PROJECT_NAME}" ${SOURCES})
 
 
 # # add directories to include for targets to us
-set(CLEODIR "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO")
+# set(CLEODIR "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO")
+set(CLEODIR "../")
 target_include_directories(${PROJECT_NAME} PRIVATE "${CLEODIR}/src/runmodel")
 target_include_directories(${PROJECT_NAME} PRIVATE "${CLEODIR}/libs")
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})

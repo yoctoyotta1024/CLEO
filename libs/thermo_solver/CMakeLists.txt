@@ -24,7 +24,8 @@ add_library("${PROJECT_NAME}" SHARED ${SOURCES})
 # # add directories to include for targets to us
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 
-set(INITLIB /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs)
+#set(INITLIB /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs)
+set(INITLIB ../)
 target_include_directories(${PROJECT_NAME} PRIVATE ${INITLIB})
 
 # CVODE libaries stuff
