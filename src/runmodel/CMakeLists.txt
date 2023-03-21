@@ -28,7 +28,8 @@ set(SOURCES
 add_library("${PROJECT_NAME}" SHARED ${SOURCES})
 
 # # add directories to include for targets to us
-set(LIBSDIR /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs)
+#set(LIBSDIR /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/libs)
+set(LIBSDIR "../../libs")
 find_library(thermo_solver NAMES thermo_solver HINTS ${LIBSDIR})
 find_library(superdrop_solver NAMES superdrop_solver HINTS ${LIBSDIR})
 find_library(initialisation NAMES initialisation HINTS ${LIBSDIR})
