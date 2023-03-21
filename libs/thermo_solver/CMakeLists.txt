@@ -40,7 +40,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC SUNDIALS::cvodes_static)
 # compilation properties
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
-  CMAKE_CXX_EXTENSIONS OFF
+  CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -g)
