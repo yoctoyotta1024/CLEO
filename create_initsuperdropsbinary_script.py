@@ -6,7 +6,8 @@ from pathlib import Path
 from pySD.initsuperdropsbinary_src import *
 
 ### path and filenames
-abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+#abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+abspath = sys.argv[1]
 constsfile = abspath+"libs/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
 
@@ -60,7 +61,7 @@ coord3gen = initattributes.SampleCoord3Gen(coord3span, randomcoord3)
 
 
 try:
-  samplevol          = float(sys.argv[1])          # volume of droplet sample region [m^3]
+  samplevol          = float(sys.argv[2])          # volume of droplet sample region [m^3]
 except:
   errmsg = "please run script with volume of droplet sample region in m^3"
   raise ValueError(errmsg)
