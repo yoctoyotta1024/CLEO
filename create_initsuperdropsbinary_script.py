@@ -16,7 +16,7 @@ initSDsfile = initSDsfilepath+"dimlessSDsinit.dat"
 binpath = abspath+"build/bin/"
 
 ### booleans for [making+showing, saving] figures
-isfigures = [False, False]
+isfigures = [True, True]
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
 monor                = 1e-6                        # all SDs have this same radius [m]
@@ -48,14 +48,14 @@ radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
 
-#coord3gen            = None                        # do not generate superdroplet coord3s
+coord3gen            = None                        # do not generate superdroplet coord3s
 
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen = initattributes.MonoAttrsGen(monocoord3)
 
-coord3span           = [0, 5000]                # max and min range of coord3 to sample [m]                 
-randomcoord3         = True                        # sample coord3 range randomly or not
-coord3gen = initattributes.SampleCoord3Gen(coord3span, randomcoord3)
+# coord3span           = [0, 5000]                # max and min range of coord3 to sample [m]                 
+# randomcoord3         = True                        # sample coord3 range randomly or not
+# coord3gen = initattributes.SampleCoord3Gen(coord3span, randomcoord3)
 
 ### ---------------------------------------------------------------- ###
 
