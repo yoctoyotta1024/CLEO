@@ -1,8 +1,8 @@
 #!/bin/bash
 
-module load python3/2022.01-gcc-11.2.0
 conda init bash
-conda activate /work/mh1126/m300950/superdropsV2
+module load python3/2022.01-gcc-11.2.0
+conda activate /work/mh1126/m300950/pySDenv
 
 module load gcc/11.2.0-gcc-11.2.0
 
