@@ -32,6 +32,7 @@ FetchContent_Declare(
   cvodes
   URL https://github.com/LLNL/sundials/releases/download/v6.5.0/cvodes-6.5.0.tar.gz
   URL_HASH MD5=dc0cd29340599f0f8b027c6f1e0107ba
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(cvodes)
 
