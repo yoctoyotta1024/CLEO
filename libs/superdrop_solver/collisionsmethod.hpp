@@ -105,7 +105,7 @@ private:
     const double prob = scale_p * std::max(eps1, eps2) * prob_jk;
 
     /* 3. Monte Carlo step: randomly determine coalescence gamma factor */
-    const int gamma = monte_carlo_gamma(gen, prob, eps1, eps2);
+    const size_t gamma = monte_carlo_gamma(gen, prob, eps1, eps2);
 
     /* 4. coalesce particles if gamma != 0 */
     if (gamma != 0)
@@ -145,7 +145,7 @@ private:
     }
   }
 
-  int monte_carlo_gamma(std::mt19937 &gen, const double prob,
+  size_t monte_carlo_gamma(std::mt19937 &gen, const double prob,
                         const size_t eps1, const size_t eps2) const
   /* calculates value of gamma factor in
   Monte Carlo collision-coalescence process
@@ -154,7 +154,7 @@ private:
     std::uniform_real_distribution<> dis(0.0, 1.0);
     const double phi = dis(gen); // random number phi in range [0,1]
 
-    int gamma = 0;
+    size_t gamma = 0;
     if (phi < (prob - floor(prob)))
     {
       gamma = floor(prob) + 1;
@@ -164,13 +164,16 @@ private:
       gamma = floor(prob);
     }
 
-    const int maxgamma = floor((eps1) / (eps2));
+    const size_t maxgamma = floor((eps1) / (eps2));
 
+    std::cout << "gamma = " << gamma << " or " << maxgamma << "\n";
+    std::cout << "floor = " <<  (eps1) << ", " << (eps2) << "\n";
+  
     return std::min(gamma, maxgamma);
   }
 
   void coalesce_superdroplet_pair(Superdrop &drop1, Superdrop &drop2,
-                                  const int gamma) const
+                                  const size_t gamma) const
   /* coalesce pair of superdroplets by changing multiplicity,
   radius and solute mass of each superdroplet in pair
   according to Shima et al. 2009 Section 5.1.3. part (5) */
@@ -189,14 +192,17 @@ private:
     {
       std::string errormsg = "something undefined occured during colllision-coalescence" +
                              std::to_string(drop1.eps) + " < " +
-                             std::to_string(gamma * (drop2.eps)) + " ?";
+                             //std::to_string(gamma * (drop2.eps)) + " ?";
+                             std::to_string(gamma * (drop2.eps)) + ", " +
+                             std::to_string(gamma) + ", " +
+                             std::to_string(drop2.eps) + "?\n";
       throw std::invalid_argument(errormsg);
     }
   }
 
   void twin_superdroplet_coalescence(Superdrop &drop1,
                                      Superdrop &drop2,
-                                     const int gamma) const
+                                     const size_t gamma) const
   /* if eps1 = gamma*eps2 coalescence makes twin SDs
   with same eps, r and solute mass. According to Shima et al. 2009
   Section 5.1.3. part (5) option (b)  */
@@ -218,7 +224,7 @@ private:
 
   void different_superdroplet_coalescence(Superdrop &drop1,
                                           Superdrop &drop2,
-                                          const int gamma) const
+                                          const size_t gamma) const
   /* if eps1 > gamma*eps2 coalescence grows drop2 radius and mass
   via decreasing multiplicity of drop1. According to
   Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
