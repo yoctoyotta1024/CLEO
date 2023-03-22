@@ -56,7 +56,7 @@ static double dp_dt(const double t, const double wmax, const double tauhalf)
   constexpr double tempg = 273.15 / dlc::TEMP0;                          // dimensionless temperature at zg
   constexpr double pg = 100000.0 / dlc::P0;                              // dimensionless pressure at zg
   constexpr double lpsrate = 0.0062 / dlc::TEMP0 * dlc::W0 * dlc::TIME0; // dimensionless moist adiabatic lapse rate
-  constexpr double gamma = DC::G / (DC::RGAS_DRY * 0.0062) - 1.0;        // constant in dry adiabatic expansion
+  constexpr double gammafac = DC::G / (DC::RGAS_DRY * 0.0062) - 1.0;        // constant in dry adiabatic expansion
   constexpr double dp_dt_const = -dlc::W0 * dlc::TIME0 * DC::G / (DC::RGAS_DRY * dlc::TEMP0) * pg / tempg;
 
   /* comment this in for sinusoidally time dependent velocity, w */
@@ -68,7 +68,7 @@ static double dp_dt(const double t, const double wmax, const double tauhalf)
   // z = w * t;                                          // linear z coordinate
 
   profile = 1.0 - lpsrate / tempg * (z - zg); // characteristic function for pressure profile as
-  profile = pow(profile, gamma);              //      a funciton of time (ie. height via z=w*t)
+  profile = pow(profile, gammafac);              //      a funciton of time (ie. height via z=w*t)
 
   pdot = dp_dt_const * profile * w;
 

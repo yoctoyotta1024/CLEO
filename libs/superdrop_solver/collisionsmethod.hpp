@@ -166,9 +166,6 @@ private:
 
     const size_t maxgamma = floor((eps1) / (eps2));
 
-    std::cout << "gamma = " << gamma << " or " << maxgamma << "\n";
-    std::cout << "floor = " <<  (eps1) << ", " << (eps2) << "\n";
-  
     return std::min(gamma, maxgamma);
   }
 
@@ -192,10 +189,7 @@ private:
     {
       std::string errormsg = "something undefined occured during colllision-coalescence" +
                              std::to_string(drop1.eps) + " < " +
-                             //std::to_string(gamma * (drop2.eps)) + " ?";
-                             std::to_string(gamma * (drop2.eps)) + ", " +
-                             std::to_string(gamma) + ", " +
-                             std::to_string(drop2.eps) + "?\n";
+                             std::to_string(gamma * (drop2.eps)) + " ?";
       throw std::invalid_argument(errormsg);
     }
   }
