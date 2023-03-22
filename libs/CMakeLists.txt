@@ -4,12 +4,6 @@
 # or CXX=gcc cmake -S ./ -B ./build
 cmake_minimum_required(VERSION 3.18.0)
 
-project(libs4project
-  LANGUAGES CXX
-  DESCRIPTION "CLEO superdroplet and CVODE libraries by Clara Bayley"
-  VERSION 1.0
-)
-
 add_subdirectory(initialisation)
 add_subdirectory(thermo_solver)
 add_subdirectory(superdrop_solver)

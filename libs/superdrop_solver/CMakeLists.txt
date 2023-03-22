@@ -6,30 +6,32 @@
 # set cmake version
 cmake_minimum_required(VERSION "3.18.0")
 
-# set project name and source directory of .cpp files
-project("superdrop_solver")
+# setlibrary name
+set(LIBNAME "superdrop_solver")
 
 # print where exactly project source dir is for this CMakeLists.txt
-message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+message("${LIBNAME} LIBRARY_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
+# explicitly set library executables path to /lib in top level of build tree
 set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
-# add executables to project (only one main() function!)
+# add executables to library
 set(SOURCES 
   "thermodynamic_equations.cpp"
   "condensationmethod.cpp"
   "impliciteuler.cpp"
   "superdrop.cpp"
   )
-add_library("${PROJECT_NAME}" SHARED ${SOURCES})
+add_library("${LIBNAME}" SHARED ${SOURCES})
 
-# # add directories to include for targets to us
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
+# add directories to include for targets
+target_include_directories(${LIBNAME} PUBLIC ${PROJECT_SOURCE_DIR})
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
+# some compilation properties
+set_target_properties(${LIBNAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -g)
-#target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -pedantic -g)
+target_compile_options(${LIBNAME} PRIVATE -Wall -g)
+#target_compile_options(${LIBNAME} PRIVATE -Wall -Werror -pedantic -g)
