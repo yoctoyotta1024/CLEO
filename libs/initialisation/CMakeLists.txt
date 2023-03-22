@@ -33,5 +33,5 @@ set_target_properties(${LIBNAME} PROPERTIES
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 
-target_compile_options(${LIBNAME} PRIVATE -Wall -g)
-#target_compile_options(${LIBNAME} PRIVATE -Wall -Werror -pedantic -g)
+target_compile_options(${LIBNAME} PRIVATE -Wall -pedantic -g -gdwarf-4)
+#target_compile_options(${LIBNAME} PRIVATE -Wall -Werror -pedantic -g -gdwarf-4)
