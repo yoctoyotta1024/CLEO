@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
   CoordStorage<double> timezarr(fsstore, config.maxcsize, "time", "<f8", "s", dlc::TIME0);
   CoordStorage<unsigned int> gbxzarr(fsstore, config.maxcsize, "gbxindex", "<u4", " ", 1);
   TwoDStorage<size_t> nsuperszarr(fsstore, config.maxcsize, "nsupers", "<u8", " ", 1, ngridboxes);
+  SDMomentsStorage sdmomentszarr(fsstore, config.maxcsize, ngridboxes);
+  
   const auto observer = create_observer(config, sdzarr, thermozarr,
                                         timezarr, gbxzarr, nsuperszarr);
 

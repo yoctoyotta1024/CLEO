@@ -23,6 +23,7 @@ to terminal or writing them to a datafile */
 #include "./observer_superdropletattributes.hpp"
 #include "./observer_thermostate.hpp"
 #include "./observer_singlevariable.hpp"
+#include "./observer_moments.hpp"
 #include "../gridbox.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"
@@ -218,7 +219,7 @@ class SDMass0thMomentObserver
     TwoDStorage<double> &zarr;
   
   public:
-    SDMass0thMomentObserver(TwoDStorage<size_t> &zarr) : zarr(zarr)
+    SDMass0thMomentObserver(TwoDStorage<double> &zarr) : zarr(zarr)
     {
       if (zarr.get_name() != "massmoment0")
       {

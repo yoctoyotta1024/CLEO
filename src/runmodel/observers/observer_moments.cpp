@@ -20,5 +20,5 @@ given by the superdrops in the span passed as an argument */
     massmoment0 += SDinGBx.superdrop.eps * SDinGBx.superdrop.mass();
   }
   
-  return massmoment0
+  return massmoment0;
 }

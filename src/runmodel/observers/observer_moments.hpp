@@ -13,6 +13,18 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <span>
 
 #include "superdrop_solver/superdrop.hpp"
+#include "./observer_singlevariable.hpp"
+
+struct SDMomentsStorage
+{
+  TwoDStorage<double> massmoment0;
+
+  SDMomentsStorage(FSStore &store, const unsigned int maxcsize,
+                   const unsigned int ngridboxes)
+  : massmoment0(store, maxcsize, "massmoment0", "<f8", " ", 1, ngridboxes)
+  {};
+
+};
 
 double mass0thmoment(const std::span<SuperdropWithGridbox> span4SDsinGBx);
 /* calculates the 0th moment of the (real) droplet mass distirbution

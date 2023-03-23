@@ -20,6 +20,7 @@ set(SOURCES
     "gridbox.cpp"
     "maps4gridboxes.cpp"
     "observers/observers.cpp"
+    "observers/observer_moments.cpp"
     "observers/observer_singlevariable.cpp"
     "observers/observer_thermostate.cpp"
     "observers/zarrstores.cpp"
