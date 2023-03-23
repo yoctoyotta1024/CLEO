@@ -223,8 +223,9 @@ class SDMass0thMomentObserver
     {
       if (zarr.get_name() != "massmoment0")
       {
-        const std::string errmsg = "name of storage meant for 0th moment of SD"
-                                   " mass distirbution is not called 'massmoment0'";
+        const std::string errmsg = "name of storage meant for 0th"
+                                   " moment of SD mass distirbution"
+                                   " is not called 'massmoment0'";
         throw std::invalid_argument(errmsg);
       }
     }
@@ -237,6 +238,42 @@ class SDMass0thMomentObserver
       {
         double moment0 = mass0thmoment(gbx.span4SDsinGBx);
         zarr.value_to_storage(moment0);
+      }
+
+      ++zarr.nobs;
+    }
+};
+
+class SDMassNthMomentObserver
+{
+  private:
+    const int nth_moment;
+    TwoDStorage<double> &zarr;
+  
+  public:
+    SDMassNthMomentObserver(TwoDStorage<double> &zarr,
+                            const int nth_moment)
+        : nth_moment(nth_moment),
+          zarr(zarr)
+    {
+      if (zarr.get_name() != "massmoment"+std::to_string(nth_moment))
+      {
+        const std::string errmsg = "name of storage meant for nth "
+                                   "moment of SD mass distirbution "
+                                   "is not called 'massmoment[n]'";
+        throw std::invalid_argument(errmsg);
+      }
+    }
+    
+    void observe_state(const std::vector<GridBox> &gridboxes) const
+    /* observe time of 0th gridbox and write it to an array
+    as determined by the CoordStorage instance */
+    {
+      const double n = nth_moment;
+      for (auto &gbx : gridboxes)
+      {
+        double moment = massnthmoment(gbx.span4SDsinGBx, n);
+        zarr.value_to_storage(moment);
       }
 
       ++zarr.nobs;

@@ -23,3 +23,18 @@ given by the superdrops in the span passed as an argument */
   
   return massmoment0;
 }
+
+double massnthmoment(const std::span<SuperdropWithGridbox> span4SDsinGBx,
+                      const double nth_moment)
+/* calculates the nth moment of the (real) droplet mass distirbution
+given by the superdrops in the span passed as an argument */
+{
+  double massmoment = 0.0;
+  
+  for (const auto &SDinGBx : span4SDsinGBx)
+  {
+    massmoment += SDinGBx.superdrop.eps * pow(SDinGBx.superdrop.mass(), nth_moment);
+  }
+
+  return massmoment;
+}

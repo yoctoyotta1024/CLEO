@@ -13,6 +13,7 @@ collision events in superdroplet model */
 #include <iostream>
 #include <stdexcept>
 #include <span>
+#include <cmath>
 
 #include "../claras_SDconstants.hpp"
 #include "./superdrop.hpp"
