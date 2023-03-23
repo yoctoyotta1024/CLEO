@@ -17,7 +17,8 @@ given by the superdrops in the span passed as an argument */
   
   for (const auto &SDinGBx : span4SDsinGBx)
   {
-    massmoment0 += SDinGBx.superdrop.eps * SDinGBx.superdrop.mass();
+    //massmoment0 += SDinGBx.superdrop.eps * SDinGBx.superdrop.mass();
+    massmoment0 += SDinGBx.superdrop.eps;
   }
   
   return massmoment0;

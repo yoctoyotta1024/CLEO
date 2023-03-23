@@ -39,13 +39,17 @@ int main(int argc, char *argv[])
   ContiguousRaggedSuperdropStorage sdzarr(fsstore, superdropattributes_to_observe(),
                                           config.maxcsize);
   ThermoStateStorage thermozarr(fsstore, config.maxcsize, ngridboxes);
-  CoordStorage<double> timezarr(fsstore, config.maxcsize, "time", "<f8", "s", dlc::TIME0);
-  CoordStorage<unsigned int> gbxzarr(fsstore, config.maxcsize, "gbxindex", "<u4", " ", 1);
-  TwoDStorage<size_t> nsuperszarr(fsstore, config.maxcsize, "nsupers", "<u8", " ", 1, ngridboxes);
-  SDMomentsStorage sdmomentszarr(fsstore, config.maxcsize, ngridboxes);
-  
+  CoordStorage<double> timezarr(fsstore, config.maxcsize,
+                                "time", "<f8", "s", dlc::TIME0);
+  CoordStorage<unsigned int> gbxzarr(fsstore, config.maxcsize,
+                                     "gbxindex", "<u4", " ", 1);
+  TwoDStorage<size_t> nsuperszarr(fsstore, config.maxcsize,
+                                  "nsupers", "<u8", " ", 1, ngridboxes);
+  SDMomentsStorage sdmoments(fsstore, config.maxcsize, ngridboxes);
+
   const auto observer = create_observer(config, sdzarr, thermozarr,
-                                        timezarr, gbxzarr, nsuperszarr);
+                                        timezarr, gbxzarr, nsuperszarr,
+                                        sdmoments);
 
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
   run_cvodeSDM_coupledmodel(config, mdlsteps, mdlmaps, sdmprocess, observer);

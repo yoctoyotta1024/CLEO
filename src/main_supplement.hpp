@@ -85,7 +85,8 @@ Observer auto create_observer(const Config &config,
                               ThermoStateStorage &thermozarr,
                               CoordStorage<double> &timezarr,
                               CoordStorage<unsigned int> &gbxzarr,
-                              TwoDStorage<size_t> &nsuperszarr)
+                              TwoDStorage<size_t> &nsuperszarr,
+                              SDMomentsStorage &sdmoments)
 /* return an Observer type from an amalgamation of other observer types.
 For example return an observer that observes both the thermostate and the
 superdroplets from combination of those two seperate observers */
@@ -99,6 +100,8 @@ superdroplets from combination of those two seperate observers */
   const Observer auto obs4 = GridBoxIndexObserver(gbxzarr);
   
   const Observer auto obs5 = NsupersPerGridBoxObserver(nsuperszarr);
+
+  const Observer auto obs6 = SDMass0thMomentObserver(sdmoments.massmoment0zarr);
 
   const auto observer = obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
 

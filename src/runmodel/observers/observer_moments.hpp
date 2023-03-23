@@ -17,11 +17,11 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
 struct SDMomentsStorage
 {
-  TwoDStorage<double> massmoment0;
+  TwoDStorage<double> massmoment0zarr;
 
   SDMomentsStorage(FSStore &store, const unsigned int maxcsize,
                    const unsigned int ngridboxes)
-  : massmoment0(store, maxcsize, "massmoment0", "<f8", " ", 1, ngridboxes)
+  : massmoment0zarr(store, maxcsize, "massmoment0", "<f8", " ", 1, ngridboxes)
   {};
 
 };
