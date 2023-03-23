@@ -79,6 +79,15 @@ combined process of those two individual processes */
   return sdmprocess;
 }
 
+Observer auto create_sdmomentsobserver(SDMomentsStorage &sdmoments)
+{
+  const Observer auto mom0 = SDMass0thMomentObserver(sdmoments.massmoment0zarr);
+
+  const auto sdmomentobs = mom0; 
+
+  return sdmomentobs;
+}
+
 template <typename ContiguousRaggedZarrStorage>
 Observer auto create_observer(const Config &config,
                               ContiguousRaggedZarrStorage &sdzarr,
@@ -101,9 +110,9 @@ superdroplets from combination of those two seperate observers */
   
   const Observer auto obs5 = NsupersPerGridBoxObserver(nsuperszarr);
 
-  const Observer auto obs6 = SDMass0thMomentObserver(sdmoments.massmoment0zarr);
+  const Observer auto obs6 = create_sdmomentsobserver(sdmoments);
 
-  const auto observer = obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
+  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
 
   return observer;
 }

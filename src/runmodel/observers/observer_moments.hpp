@@ -23,7 +23,6 @@ struct SDMomentsStorage
                    const unsigned int ngridboxes)
   : massmoment0zarr(store, maxcsize, "massmoment0", "<f8", " ", 1, ngridboxes)
   {};
-
 };
 
 double mass0thmoment(const std::span<SuperdropWithGridbox> span4SDsinGBx);
