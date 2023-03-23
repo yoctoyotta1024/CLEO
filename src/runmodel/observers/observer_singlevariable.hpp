@@ -180,4 +180,5 @@ public:
     this->zarrayjsons(shape, chunks, dims); 
   }
 };
+
 #endif // OBSERVER_SINGLEVARIABLE_HPP
