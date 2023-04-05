@@ -45,8 +45,8 @@ For example return a process that does SDM condensation and collisions from
 combined process of those two individual processes */
 {
   /* create process for collision-coalescene in SDM */
-  const auto probs = GolovinProb(dlc::R0);
-  // const auto probs = LongHydrodynamicProb();
+  // const auto probs = GolovinProb(dlc::R0);
+  const auto probs = LongHydrodynamicProb();
   const double COLLTSTEP = timestep2realtime(mdlsteps.collstep);
   const CollisionsMethod collisions(COLLTSTEP, probs);
   const auto collision_process = ConstTstepProcess{mdlsteps.collstep,
@@ -114,7 +114,8 @@ superdroplets from combination of those two seperate observers */
 
   const Observer auto obs6 = create_sdmomentsobserver(sdmoments);
 
-  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
+  //const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
+  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
 
   return observer;
 }
