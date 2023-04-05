@@ -67,15 +67,17 @@ monotonically decreasing. */
   idx2bounds_y[0] = {std::numeric_limits<double>::max(),
                      -std::numeric_limits<double>::max()};
 
-  unsigned int i = 0;
-  for (auto it = gbxbounds.zhalf.begin() + 1; it != gbxbounds.zhalf.end(); ++it)
+  size_t pos = 0;
+  for(auto idx : gbxbounds.gbxidxs)
   {
-    const double zup = *(it - 1);
-    const double zlow = *it;
-    idx2bounds_z[i] = {zup, zlow};
+    const double zlow = gbxbounds[pos];
+    const double zup = gbxbounds[pos+1];
+    idx2bounds_z[pos] = {zup, zlow};
 
-    const double vol = (zup - zlow) * gbxbounds.domainarea();
-    idx2vol[i] = vol;
-    ++i;
+    const double vol = (zup - zlow) * gbxbounds.gridboxarea(pos);
+    idx2vol[pos] = vol;
+    // idx2bounds_x[pos] = {gbxbounds[pos+2], gbxbounds[pos+3]}
+    // idx2bounds_y[pos] = {gbxbounds[pos+3], gbxbounds[pos+4]}
+    pos += 6;
   }
 }

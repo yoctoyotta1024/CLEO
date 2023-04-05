@@ -16,30 +16,26 @@ struct from binary file */
 
 struct GridBoxBoundaries
 /* holds vectors containing gridbox indicies and the corresponding
-coords of the [zmin, zmax, zmin, xmax, ymin, ymax] boundaries of 
+coords of the [zmin, zmax, zmin, xmax, ymin, ymax] boundaries of
 that gridbox which are read from gridfile and used in
 construction of Maps4GridBoxes */
 {
+private:
+  size_t find_idx_in_gbxidxs(const unsigned int idx) const;
+
+public:
   std::vector<unsigned int> gbxidxs; // gridbox indicies
-  std::vector<double> gbxbounds; // corresponding (z,x,y) coords of max and min boundaries
-  
-  // double domainarea() const
-  // /* returns horizontal area of entire domain */
-  // {
-  //   const double xdelta = std::abs(xhalf.front() - xhalf.back());
-  //   const double ydelta = std::abs(yhalf.front() - yhalf.back());
+  std::vector<double> gbxbounds;     // corresponding (z,x,y) coords of max and min boundaries
 
-  //   return xdelta * ydelta;
-  // }
+  double gridboxarea(const unsigned int idx) const;
+  /* calculates horizontal area of gridbox using boundaries
+   corresponding to gridbox with gbxidx=idx. First finds position
+   of first gbxbound (zmin) from position of idx in gbxidxs */
 
-  double gridboxvol(const unsigned int gbxidx) const
+  double GridBoxBoundaries::gridboxvol(const unsigned int idx) const;
   /* calculates volume of gridbox using boundaries corresponding to
-  gridbox with gbxidx=idx */
-  {
-    const double zdelta = std::abs(zhalf.front() - zhalf.back());
-
-    return zdelta * domainarea();
-  }
+  gridbox with gbxidx=idx. First finds position of first gbxbound (zmin)
+  for that gridbox from position of idx in gbxidxs */
 };
 
 GridBoxBoundaries read_gbxboundaries(std::string_view gridfile);
@@ -55,4 +51,4 @@ binary. This is the domian volume in the 0D (1 gridbox) model */
   return gbxbounds.gridboxvol(0);
 }
 
-#endif // READ_GBXBOUNDARIES_HPP 
+#endif // READ_GBXBOUNDARIES_HPP
