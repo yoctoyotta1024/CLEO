@@ -11,33 +11,40 @@ def get_gridboxboundaries(constsfile, gridfile):
 
     COORD0 = get_COORD0_from_constsfile(constsfile)
 
-    zhalf, xhalf, yhalf = read_dimless_gbxboundaries_binary(gridfile)
+    zhalf, xhalf, yhalf = read_dimless_gbxboundaries_binary(gridfile,
+                                                            retdict=False)
 
     return zhalf*COORD0, xhalf*COORD0, yhalf*COORD0
 
 
-def read_dimless_gbxboundaries_binary(filename, COORD0=False):
+def read_dimless_gbxboundaries_binary(filename, COORD0=False, retdict=True):
     ''' return dimenionsless gbx boundaries by reading binary file'''
 
     data, ndata_pervar = readbinary(filename)
 
-    idxs = []
-    for n in range(1, len(ndata_pervar)):
-        # indexs for division of data list between each variable
-        idxs.append(np.sum(ndata_pervar[:n]))
-
-    zhalf = np.asarray(data[:idxs[0]], dtype=np.double)
-    xhalf = np.asarray(data[idxs[0]:idxs[1]], dtype=np.double)
-    yhalf = np.asarray(data[idxs[1]:], dtype=np.double)
-
-    print("zhalf: ", zhalf)
-    print("xhalf: ", xhalf)
-    print("yhalf: ", yhalf)
-
-    if COORD0:
-        return zhalf*COORD0, xhalf*COORD0, yhalf*COORD0
+    idxs = np.asarray(data[:ndata_pervar[0]], dtype=np.uint)
+    ngridboxes = len(idxs)
+    boundsdata = np.asarray(data[ndata_pervar[0]:], dtype=np.double)
+    boundsdata = np.reshape(boundsdata, [ngridboxes, len(boundsdata)//ngridboxes])
+    
+    if retdict:
+        # return gbx boudnaries in dictinoary with indicies
+        gbxbounds = {idxs[i]: boundsdata[i] for i in range(ngridboxes)}
     else:
-        return zhalf, xhalf, yhalf
+        # return gbx boundaries in lists    
+        print(boundsdata, boundsdata[0,1])
+        zhalf = boundsdata[0,0]
+        xhalf = boundsdata[:,1] 
+        yhalf = boundsdata[:,2]
+
+        print("zhalf: ", zhalf)
+        print("xhalf: ", xhalf)
+        print("yhalf: ", yhalf)
+
+        if COORD0:
+            return zhalf*COORD0, xhalf*COORD0, yhalf*COORD0
+        else:
+            return zhalf, xhalf, yhalf
 
 
 def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
