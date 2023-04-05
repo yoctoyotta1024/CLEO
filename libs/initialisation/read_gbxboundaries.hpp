@@ -32,7 +32,7 @@ public:
    corresponding to gridbox with gbxidx=idx. First finds position
    of first gbxbound (zmin) from position of idx in gbxidxs */
 
-  double GridBoxBoundaries::gridboxvol(const unsigned int idx) const;
+  double gridboxvol(const unsigned int idx) const;
   /* calculates volume of gridbox using boundaries corresponding to
   gridbox with gbxidx=idx. First finds position of first gbxbound (zmin)
   for that gridbox from position of idx in gbxidxs */
@@ -46,9 +46,9 @@ inline double get_0Ddomainvol_from_gridfile(std::string_view gridfile)
 /* return the volume of the 0th gridbox by reading the 'gridfile'
 binary. This is the domian volume in the 0D (1 gridbox) model */
 {
-  const GridBoxBoundaries gbxbounds(read_gbxboundaries(gridfile));
+  const GridBoxBoundaries gridfilebounds(read_gbxboundaries(gridfile));
 
-  return gbxbounds.gridboxvol(0);
+  return gridfilebounds.gridboxvol(0);
 }
 
 #endif // READ_GBXBOUNDARIES_HPP

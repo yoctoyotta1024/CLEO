@@ -29,7 +29,7 @@ private:
   void set_0Dmodel_maps(const double domainvol);
   /* set vol map using coords read from gridfile */
 
-  void set_1Dmodel_maps(const GridBoxBoundaries &gbxbounds);
+  void set_1Dmodel_maps(const GridBoxBoundaries &gridfilebounds);
   /* set z and vol maps using coords from gridfile */
 public:
   std::map<unsigned int, std::pair<double, double>> idx2bounds_z; // coord limits to each gridbox given its index

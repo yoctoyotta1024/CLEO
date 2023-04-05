@@ -28,8 +28,8 @@ whilst the volume is determind by reading the gridfile */
 
   else if (SDnspace == 1)
   {
-    const GridBoxBoundaries gbxbounds(read_gbxboundaries(gridfile));
-    set_1Dmodel_maps(gbxbounds);
+    const GridBoxBoundaries gridfilebounds(read_gbxboundaries(gridfile));
+    set_1Dmodel_maps(gridfilebounds);
   }
 
   else
@@ -56,7 +56,7 @@ void Maps4GridBoxes::set_0Dmodel_maps(const double domainvol)
   idx2vol[0] = domainvol; // dimensionless volume of 0D model
 }
 
-void Maps4GridBoxes::set_1Dmodel_maps(const GridBoxBoundaries &gbxbounds)
+void Maps4GridBoxes::set_1Dmodel_maps(const GridBoxBoundaries &gridfilebounds)
 /* Set idx2bounds x and y maps to numerical limits. Set z and volume maps using coords
 from gridfile. It is assumed zhalf coords read from gbxbounds are 
 monotonically decreasing. */
@@ -67,17 +67,22 @@ monotonically decreasing. */
   idx2bounds_y[0] = {std::numeric_limits<double>::max(),
                      -std::numeric_limits<double>::max()};
 
-  size_t pos = 0;
-  for(auto idx : gbxbounds.gbxidxs)
+  for (auto gbxbound : gridfilebounds.gbxidxs)
   {
-    const double zlow = gbxbounds[pos];
-    const double zup = gbxbounds[pos+1];
-    idx2bounds_z[pos] = {zup, zlow};
+    std::cout << gbxbound <<", ";
+  }
 
-    const double vol = (zup - zlow) * gbxbounds.gridboxarea(pos);
-    idx2vol[pos] = vol;
-    // idx2bounds_x[pos] = {gbxbounds[pos+2], gbxbounds[pos+3]}
-    // idx2bounds_y[pos] = {gbxbounds[pos+3], gbxbounds[pos+4]}
+  size_t pos = 0;
+  for(auto idx : gridfilebounds.gbxidxs)
+  {
+    const double zlow = gridfilebounds.gbxbounds[pos];
+    const double zup = gridfilebounds.gbxbounds[pos+1];
+    idx2bounds_z[idx] = {zup, zlow}; //TODO swap order to {zlow, zup}
+
+    const double vol = (zup - zlow) * gridfilebounds.gridboxarea(idx);
+    idx2vol[idx] = vol;
+    // idx2bounds_x[idx] = {gridfilebounds.gbxbounds[pos+2], gridfilebounds.gbxbounds[pos+3]}
+    // idx2bounds_y[idx] = {gridfilebounds.gbxbounds[pos+3], gridfilebounds.gbxbounds[pos+4]}
     pos += 6;
   }
 }
