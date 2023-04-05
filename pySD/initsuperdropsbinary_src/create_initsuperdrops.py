@@ -53,8 +53,7 @@ def set_arraydtype(arr, dtype):
 
     warning = "WARNING! dtype of attributes is being changed!"+\
                 " from "+str(og)+" to "+str(dtype)
-    raise ValueError(warning)
-    #print(warning)
+    raise ValueError(warning) 
 
   return arr
 

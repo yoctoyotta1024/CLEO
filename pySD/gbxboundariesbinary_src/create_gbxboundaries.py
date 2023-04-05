@@ -15,57 +15,14 @@ def get_COORD0_from_constsfile(constsfile, returnconsts=False):
   else:
     return COORD0
 
-def linearlyspaced_halfcoords(min, max, delta):
+def linearlyspaced_halfcoords(grid):
   ''' returns linearly spaced half coords ie. 1D 
-  gridbox boundaries given the maximum, minimum coord
-  and the spacing '''
+  gridbox boundaries given 'grid' list of
+  [min coord, max coord, delta coord] for x, y or z'''
+
+  min, max, delta = grid
 
   return np.arange(min, max+delta, delta, dtype=np.double)
-
-def linearlyspaced_zhalf(zmin, zmax, zdelta):
-  ''' returns linearly spaced z half coordinates
-  given the z coord limits and spacing. returned
-  zhalf goes from largest to smallest z coord '''
-
-  zhalf = np.flip(linearlyspaced_halfcoords(zmin, zmax, zdelta))
-
-  return zhalf
-
-def halfcoords_from_coordlims(grid, coord):
-  ''' return half coordinates (ie. gridbox boundaries)
-  given 'grid' list of [min coord, max coord, delta coord]
-  for x, y or z coord '''
-
-  if (coord not in ["z", "x", "y"]):
-    raise ValueError("coord should be x, y or z")
-
-  elif coord == "z":
-    return linearlyspaced_zhalf(grid[0], grid[1], grid[2]) 
-  
-  elif coord == "x" or coord == "y":
-    return linearlyspaced_halfcoords(grid[0], grid[1], grid[2]) 
-
-def check_halfcoords(grid, coord):
-  ''' return half coordinates (ie. gridbox boundaries)
-  given array containing 
-  for x, y or z coord '''
-  
-  if (coord not in ["z", "x", "y"]):
-    raise ValueError("coord should be x, y or z")
-
-  elif coord == "z":
-    # check z grid is at least 1 cell with
-    # strictly monotonically decreasing boundaries
-    dz = np.diff(grid)
-    criteria = (len(grid) >= 2 and np.all(dz < 0))
-    
-  elif coord == "x" or coord == "y":
-    # check that x or y grid is single cell with
-    # strictly monotonically increasing bounds
-    criteria = (len(grid) == 2 and np.all(np.diff(grid) > 0))
-
-  if criteria != True:
-    raise ValueError(str(grid)+" does not meet criteria for "+coord+" halfcoords")
 
 def get_dimless_halfcoords(grid, coord, COORD0):
   ''' given a list or array, return dimensionless halfcoords.
@@ -76,12 +33,48 @@ def get_dimless_halfcoords(grid, coord, COORD0):
     raise ValueError("input "+coord+" grid is neither list or array ") 
 
   elif type(grid) == list:
-    grid = halfcoords_from_coordlims(grid, coord)
+    grid = linearlyspaced_halfcoords(grid) 
 
   elif type(grid) == np.ndarray:
     grid = np.array(grid, dtype=np.double)
    
   return grid / COORD0
+
+def check_halfcoords(grid, coord):
+  ''' check that x , y or z grid limits are for at least
+  1 cell with strictly monotonically increasing bounds '''
+  
+  if (coord not in ["z", "x", "y"]):
+    raise ValueError("coord should be x, y or z")
+  
+  criteria = (len(grid) >= 2 and np.all(np.diff(grid) > 0))
+  if criteria != True:
+    errmsg = str(grid)+" does not meet criteria for "+coord+" halfcoords"
+    raise ValueError(errmsg)
+
+def gridboxboundaries_from_halfcoords(allhalfcoords):
+  ''' returns gbxbounds dictionary. Each key of gbxbounds is a gridbox's
+  index and the corresponding value is the gridbox's
+  [zmin, zmax, xmin, xmax, ymin, ymax] boundaries'''
+
+  zhalfs = allhalfcoords[0]
+  xhalfs = allhalfcoords[1]
+  yhalfs = allhalfcoords[2]
+
+  gbxbounds, ii = {}, 0
+  for j in range(len(yhalfs)-1):
+    for i in range(len(xhalfs)-1):
+      for k in range(len(zhalfs)-1):
+        zbounds = [zhalfs[k], zhalfs[k+1]]
+        xbounds = [xhalfs[i], xhalfs[i+1]]
+        ybounds = [yhalfs[j], yhalfs[j+1]]
+        gbxbounds[ii] = zbounds + xbounds + ybounds
+        ii+=1
+ 
+  ngridboxes = len(gbxbounds)
+  print("created boundaries for",ngridboxes,"gridboxes")
+
+  return gbxbounds, ngridboxes
 
 def dimless_gridboxboundaries(zgrid, xgrid, ygrid, COORD0):
   ''' use zgrid, xgrid and ygrid lists or arrays to create half coords
@@ -90,37 +83,46 @@ def dimless_gridboxboundaries(zgrid, xgrid, ygrid, COORD0):
   many of each z, x and y coords there are'''
 
   allhalfcoords = [] # z, x and y half coords in 1 continuous list
-  num_halfcoords = [] # number of z, x and y half coords
   for grid, coord in zip([zgrid, xgrid, ygrid], ["z", "x", "y"]):
     
     halfcoords = get_dimless_halfcoords(grid, coord, COORD0)
-    
     check_halfcoords(halfcoords, coord)
-    
-    allhalfcoords.extend(halfcoords)
-    num_halfcoords.append(len(halfcoords))
+  
+    allhalfcoords.append(halfcoords)
+  
+  gbxbounds, ngridboxes = gridboxboundaries_from_halfcoords(allhalfcoords)
+  
+  gbxindicies = np.array(list(gbxbounds.keys()), dtype=np.uint).flatten()
+  gbxboundsdata = np.array(list(gbxbounds.values()), dtype=np.double).flatten()
+  
+  return gbxindicies, gbxboundsdata, ngridboxes
 
-  return allhalfcoords, num_halfcoords
+def set_arraydtype(arr, dtype):
+   
+  og = type(arr[0])
+  if og != dtype: 
+    arr = np.array(arr, dtype=dtype)
 
-def ctype_compatible_gridboxboundaries(data):
+    warning = "WARNING! dtype of attributes is being changed!"+\
+                " from "+str(og)+" to "+str(dtype)
+    raise ValueError(warning) 
+
+  return arr
+
+def ctype_compatible_gridboxboundaries(idxs, bounds):
   ''' check type of gridbox boundaries data is compatible
   with c type double. If not, change type and raise error '''
 
-  og = type(data[0])
-  if og != np.double: 
-    
-    data = [np.double(d) for d in data]
-    
-    warning = "WARNING! dtype of gbx boundaries is being changed!"+\
-              " from "+str(og)+" to np.double"
-    raise ValueError(warning)
-    #print(warning)
-  
-  datatypes = [np.double]*3
+  datatypes = [np.uint, np.double]
 
-  return data, datatypes
+  idxs = list(set_arraydtype(idxs, datatypes[0]))
+  bounds = list(set_arraydtype(bounds, datatypes[1]))
 
-def write_gridboxboundaries_binary(filename, zgrid, xgrid, ygrid, constsfile):
+  datalist = idxs + bounds
+
+  return datalist, datatypes
+
+def write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile):
   ''' zgrid, xgrid and ygrid can either be list of
   [min coord, max coord, delta] or they can be arrays of
   their half coordinates (ie. gridbox boundaries). If the former,
@@ -129,14 +131,17 @@ def write_gridboxboundaries_binary(filename, zgrid, xgrid, ygrid, constsfile):
 
   COORD0 = get_COORD0_from_constsfile(constsfile)
 
-  halfcoordsdata, nhalfcoords = dimless_gridboxboundaries(zgrid, xgrid, 
-                                                            ygrid, COORD0) 
-
-  metastr = 'Variables in this file are coordinates of'+\
-            ' [zhalf, xhalf, yhalf] gridbox boundaries'
+  gbxindicies, gbxboundsdata, ngridboxes = dimless_gridboxboundaries(zgrid, xgrid,
+                                                                     ygrid, COORD0) 
   
-  halfcoordsdata, datatypes = ctype_compatible_gridboxboundaries(halfcoordsdata) 
+  metastr = 'Variables in this file are '+str(ngridboxes)+' gridbox'+\
+            ' indicies followed by the [zmin, zmax, xmin, xmax, ymin, ymax]'+\
+            ' coordinates for each gridbox\'s boundaries'
+  
+  ndata = [len(dt) for dt in [gbxindicies, gbxboundsdata]]
+  data, datatypes = ctype_compatible_gridboxboundaries(gbxindicies, gbxboundsdata) 
   scale_factors = np.array([COORD0, COORD0, COORD0], dtype=np.double) 
-  units = [b"m"]*3
-  writebinary.writebinary(filename, halfcoordsdata, nhalfcoords, 
-                datatypes, units, scale_factors, metastr)
+  units = [b' ', b"m"]
+
+  writebinary.writebinary(gridfile, data, ndata, datatypes,
+                          units, scale_factors, metastr)
