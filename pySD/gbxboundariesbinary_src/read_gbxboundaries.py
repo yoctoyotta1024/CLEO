@@ -10,15 +10,18 @@ def get_gridboxboundaries(constsfile, gridfile):
     re-dimensionalise usign COORD0 const from constsfile '''
 
     COORD0 = get_COORD0_from_constsfile(constsfile)
+    
+    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0) 
 
-    zhalf, xhalf, yhalf = read_dimless_gbxboundaries_binary(gridfile,
-                                                            retdict=False)
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
 
-    return zhalf*COORD0, xhalf*COORD0, yhalf*COORD0
+    return zhalf, xhalf, yhalf
 
 
-def read_dimless_gbxboundaries_binary(filename, COORD0=False, retdict=True):
-    ''' return dimenionsless gbx boundaries by reading binary file'''
+def read_dimless_gbxboundaries_binary(filename, COORD0=False):
+    ''' return dictionary for gbx indicies to gbx boundaries by
+    reading binary file. Return dimensionless version if COORD0
+    not give (=False). '''
 
     data, ndata_pervar = readbinary(filename)
 
@@ -27,25 +30,33 @@ def read_dimless_gbxboundaries_binary(filename, COORD0=False, retdict=True):
     boundsdata = np.asarray(data[ndata_pervar[0]:], dtype=np.double)
     boundsdata = np.reshape(boundsdata, [ngridboxes, len(boundsdata)//ngridboxes])
     
-    if retdict:
-        # return gbx boudnaries in dictinoary with indicies
-        gbxbounds = {idxs[i]: boundsdata[i] for i in range(ngridboxes)}
-    else:
-        # return gbx boundaries in lists    
-        print(boundsdata, boundsdata[0,1])
-        zhalf = boundsdata[0,0]
-        xhalf = boundsdata[:,1] 
-        yhalf = boundsdata[:,2]
+    if COORD0:
+        boundsdata = boundsdata * COORD0
+    
+    gbxbounds = {idxs[i]: boundsdata[i] for i in range(ngridboxes)}
+    
+    return gbxbounds
 
-        print("zhalf: ", zhalf)
-        print("xhalf: ", xhalf)
-        print("yhalf: ", yhalf)
+def halfcoords_from_gbxbounds(gbxbounds):
+    ''' returns half coords of gbx boundaries in lists obtained
+     from gbxbounds dictionary '''
 
-        if COORD0:
-            return zhalf*COORD0, xhalf*COORD0, yhalf*COORD0
-        else:
-            return zhalf, xhalf, yhalf
+    boundsdata = np.asarray(list(gbxbounds.values()))
+    
+    zhalf = np.unique(np.sort(boundsdata[:,0]))
+    zhalf = np.append(zhalf, np.amax(boundsdata[:,1]))
 
+    xhalf = np.unique(np.sort(boundsdata[:,2]))
+    xhalf = np.append(xhalf, np.amax(boundsdata[:,3]))
+
+    yhalf = np.unique(np.sort(boundsdata[:,4]))
+    yhalf = np.append(yhalf, np.amax(boundsdata[:,5]))
+
+    print("zhalf: ", zhalf)
+    print("xhalf: ", xhalf)
+    print("yhalf: ", yhalf)
+
+    return zhalf, xhalf, yhalf
 
 def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
 

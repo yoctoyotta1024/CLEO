@@ -29,14 +29,14 @@ zgrid = [zmin, zmax, zdelta]
 xgrid = np.asarray([0, 1000])
 
 ### input parameters for y coords of gridbox boundaries
-ygrid = np.asarray([0, 200])
+ygrid = np.asarray([0, 1000])
 
 Path(gridfilepath).mkdir(exist_ok=True) 
 Path(binpath).mkdir(exist_ok=True) 
 write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 print_domain_info(constsfile, gridfile)
 
-# if isfigures[0]:
-#   plot_gridboxboundaries(constsfile, gridfile, binpath, isfigures[1])
+if isfigures[0]:
+  plot_gridboxboundaries(constsfile, gridfile, binpath, isfigures[1])
 
 
