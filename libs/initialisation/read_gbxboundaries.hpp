@@ -15,14 +15,14 @@ struct from binary file */
 #include "./readbinary.hpp"
 
 struct GridBoxBoundaries
-/* holds vectors containing z, x and y half coords
-(ie. gridbox boundaries) which are read from
-gridfile and used in construction of Maps4GridBoxes */
+/* holds vectors containing gridbox indicies and the corresponding
+coords of the [zmin, zmax, zmin, xmax, ymin, ymax] boundaries of 
+that gridbox which are read from gridfile and used in
+construction of Maps4GridBoxes */
 {
-  std::vector<double> zhalf;
-  std::vector<double> xhalf;
-  std::vector<double> yhalf;
-
+  std::vector<unsigned int> gbxidxs; // gridbox indicies
+  std::vector<double> gbxbounds; // corresponding (z,x,y) coords of max and min boundaries
+  
   double domainarea() const
   /* returns horizontal area of entire domain */
   {

@@ -15,20 +15,15 @@ return GridBoxBoundaries instance created from that data */
   
   VarMetadata var(meta.at(0));
   file.seekg(var.b0, std::ios::beg);
-  std::vector<double> zhalf(var.nvar, 0);
-  binary_into_buffer<double>(file, zhalf);
+  std::vector<unsigned int> gbxidxs(var.nvar, 0);
+  binary_into_buffer<unsigned int>(file, gbxidxs);
  
   var = meta.at(1);
   file.seekg(var.b0, std::ios::beg);
-  std::vector<double> xhalf(var.nvar, 0);
-  binary_into_buffer<double>(file, xhalf);
-
-  var = meta.at(2);
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<double> yhalf(var.nvar, 0);
-  binary_into_buffer<double>(file, yhalf);
+  std::vector<double> gbxbounds(var.nvar, 0);
+  binary_into_buffer<double>(file, gbxbounds);
 
   file.close();
 
-  return GridBoxBoundaries{zhalf, xhalf, yhalf};
+  return GridBoxBoundaries{gbxidxs, gbxbounds};
 }
