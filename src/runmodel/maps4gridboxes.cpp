@@ -22,7 +22,7 @@ whilst the volume is determind by reading the gridfile */
 {
   if (SDnspace == 0)
   {
-    const double domainvol = domainvol_from_gridfile(gridfile);
+    const double domainvol = get_0Ddomainvol_from_gridfile(gridfile);
     set_0Dmodel_maps(domainvol);
   }
 

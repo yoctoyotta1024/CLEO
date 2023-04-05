@@ -23,17 +23,18 @@ construction of Maps4GridBoxes */
   std::vector<unsigned int> gbxidxs; // gridbox indicies
   std::vector<double> gbxbounds; // corresponding (z,x,y) coords of max and min boundaries
   
-  double domainarea() const
-  /* returns horizontal area of entire domain */
-  {
-    const double xdelta = std::abs(xhalf.front() - xhalf.back());
-    const double ydelta = std::abs(yhalf.front() - yhalf.back());
+  // double domainarea() const
+  // /* returns horizontal area of entire domain */
+  // {
+  //   const double xdelta = std::abs(xhalf.front() - xhalf.back());
+  //   const double ydelta = std::abs(yhalf.front() - yhalf.back());
 
-    return xdelta * ydelta;
-  }
+  //   return xdelta * ydelta;
+  // }
 
-  double domainvol() const
-  /* returns volume of entire domain */
+  double gridboxvol(const unsigned int gbxidx) const
+  /* calculates volume of gridbox using boundaries corresponding to
+  gridbox with gbxidx=idx */
   {
     const double zdelta = std::abs(zhalf.front() - zhalf.back());
 
@@ -45,13 +46,13 @@ GridBoxBoundaries read_gbxboundaries(std::string_view gridfile);
 /* read metadata and data in binary file called 'gridfile', then
 return GridBoxBoundaries instance created from that data */
 
-inline double domainvol_from_gridfile(std::string_view gridfile)
-/* return the volume of the domain determined by
-reading data from 'gridfile' binary */
+inline double get_0Ddomainvol_from_gridfile(std::string_view gridfile)
+/* return the volume of the 0th gridbox by reading the 'gridfile'
+binary. This is the domian volume in the 0D (1 gridbox) model */
 {
   const GridBoxBoundaries gbxbounds(read_gbxboundaries(gridfile));
 
-  return gbxbounds.domainvol();
+  return gbxbounds.gridboxvol(0);
 }
 
 #endif // READ_GBXBOUNDARIES_HPP 
