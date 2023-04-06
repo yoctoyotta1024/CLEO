@@ -11,13 +11,13 @@ def get_superdroplet_attributes(configfile, constsfile, initSDsfile):
 
     inputs = initSDsinputsdict(configfile, constsfile)
     
-    epss, radii, m_sols, coord3s = read_dimless_superdrops_binary(initSDsfile)
+    eps, radius, m_sol, coord3 = read_dimless_superdrops_binary(initSDsfile)
 
-    radii = radii * inputs["R0"]
-    m_sols = m_sols * inputs["MASS0"]
-    coord3s = coord3s * inputs["COORD0"]
+    radius = radius * inputs["R0"]
+    m_sol = m_sol * inputs["MASS0"]
+    coord3 = coord3 * inputs["COORD0"]
 
-    return epss, radii, m_sols, coord3s
+    return eps, radius, m_sol, coord3
 
 
 def read_dimless_superdrops_binary(filename):
@@ -30,14 +30,14 @@ def read_dimless_superdrops_binary(filename):
         # indexs for division of data list between each variable
         idxs.append(np.sum(ndata_pervar[:n]))
 
-    epss = np.asarray(data[:idxs[0]], dtype=np.uint)
-    radii = np.asarray(data[idxs[0]:idxs[1]], dtype=np.double)
-    m_sols = np.asarray(data[idxs[1]:idxs[2]], dtype=np.double)
-    coord3s = np.asarray(data[idxs[2]:], dtype=np.double)
+    eps = np.asarray(data[:idxs[0]], dtype=np.uint)
+    radius = np.asarray(data[idxs[0]:idxs[1]], dtype=np.double)
+    m_sol = np.asarray(data[idxs[1]:idxs[2]], dtype=np.double)
+    coord3 = np.asarray(data[idxs[2]:], dtype=np.double)
 
-    print("attribute shapes: ", epss.shape, radii.shape, m_sols.shape, coord3s.shape)
+    print("attribute shapes: ", eps.shape, radius.shape, m_sol.shape, coord3.shape)
     
-    return epss, radii, m_sols, coord3s
+    return eps, radius, m_sol, coord3
 
 
 def plot_initdistribs(configfile, constsfile, initSDsfile,
@@ -45,26 +45,28 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
 
     plt.rcParams.update({'font.size': 14})
 
-    epss, radii, m_sols, coord3s = get_superdroplet_attributes(configfile,
+    eps, radius, m_sol, coord3 = get_superdroplet_attributes(configfile,
                                                                constsfile,
                                                                initSDsfile)
+
+    print(eps, radius, m_sol, coord3)
 
     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(14, 8))
     axs = axs.flatten()
 
     # create nbins evenly spaced in log10(r)
     nbins = 100
-    minr, maxr = np.min(radii)/10, np.max(radii)*10
+    minr, maxr = np.min(radius)/10, np.max(radius)*10
     hedgs = np.linspace(np.log10(minr), np.log10(maxr),
                         nbins+1)  # edges to lnr bins
 
-    l0 = plot_radiidistrib(axs[0], hedgs, radii, epss)
+    l0 = plot_radiusdistrib(axs[0], hedgs, radius, eps)
 
-    l1 = plot_numconcdistrib(axs[1], hedgs, epss, radii, vol)
+    l1 = plot_numconcdistrib(axs[1], hedgs, eps, radius, vol)
 
-    l3 = plot_masssolutedistrib(axs[3], hedgs, epss, radii, m_sols, vol)
+    l3 = plot_masssolutedistrib(axs[3], hedgs, eps, radius, m_sol, vol)
 
-    l2 = plot_coord3distrib(axs[2], hedgs, coord3s, radii)
+    l2 = plot_coord3distrib(axs[2], hedgs, coord3, radius)
 
     fig.tight_layout()
     if savefig:
@@ -74,7 +76,7 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
     plt.show()
 
 
-def log10r_frequency_distribution(radii, hedgs, wghts):
+def log10r_frequency_distribution(radius, hedgs, wghts):
     ''' get distribution of data with weights 'wghts' against 
     log10(r). Uses np.histogram to get frequency of a particular
     value of data that falls in each bin (with each bin defined
@@ -82,9 +84,9 @@ def log10r_frequency_distribution(radii, hedgs, wghts):
     bin centers and widths in [m]'''
 
     if type(wghts) != np.ndarray:
-        wghts = np.full(np.shape(radii), wghts)
+        wghts = np.full(np.shape(radius), wghts)
 
-    hist, hedgs = np.histogram(np.log10(radii), bins=hedgs,
+    hist, hedgs = np.histogram(np.log10(radius), bins=hedgs,
                                weights=wghts, density=None)
 
     # convert [m] to [micron]
@@ -97,15 +99,15 @@ def log10r_frequency_distribution(radii, hedgs, wghts):
     return hist, hedgs, hwdths, hcens
 
 
-def plot_radiidistrib(ax, hedgs, radii, epss):
-    ''' get and plotthe superdroplet radii in each log10(r)
+def plot_radiusdistrib(ax, hedgs, radius, eps):
+    ''' get and plotthe superdroplet radius in each log10(r)
     bin and as a scatter on a twinx axis with their multiplicities'''
 
-    l1 = ax.scatter(radii*1e6, epss, zorder=1,
+    l1 = ax.scatter(radius*1e6, eps, zorder=1,
                     color="purple", label="multiplicities")
 
     ax2 = ax.twinx()
-    hist, hedgs, hwdths, hcens = log10r_frequency_distribution(radii, hedgs, 1)
+    hist, hedgs, hwdths, hcens = log10r_frequency_distribution(radius, hedgs, 1)
     l2 = ax2.step(hcens, hist, where='mid', alpha=0.8, zorder=0,
                   color="grey", label="number distribution")
 
@@ -122,12 +124,12 @@ def plot_radiidistrib(ax, hedgs, radii, epss):
     return [l1, l2]
 
 
-def plot_numconcdistrib(ax, hedgs, epss, radii, vol):
+def plot_numconcdistrib(ax, hedgs, eps, radius, vol):
     ''' get and plot frequency of real droplets in each log10(r) bin '''
 
-    wghts = epss / vol / 1e6  # [cm^-3]
+    wghts = eps / vol / 1e6  # [cm^-3]
     hist, hedgs, hwdths, hcens = log10r_frequency_distribution(
-        radii, hedgs, wghts)
+        radius, hedgs, wghts)
 
     line = ax.bar(hcens, hist, hwdths, color="teal",
                   label="binned distribution")
@@ -139,12 +141,12 @@ def plot_numconcdistrib(ax, hedgs, epss, radii, vol):
     return line
 
 
-def plot_masssolutedistrib(ax, hedgs, epss, radii, m_sols, vol):
+def plot_masssolutedistrib(ax, hedgs, eps, radius, m_sol, vol):
     ''' get and plot frequency of real droplets in each log10(r) bin '''
 
-    wghts = m_sols*epss/vol * 1000 / 1e6  # [g cm^-3]
+    wghts = m_sol*eps/vol * 1000 / 1e6  # [g cm^-3]
     hist, hedgs, hwdths, hcens = log10r_frequency_distribution(
-        radii, hedgs, wghts)
+        radius, hedgs, wghts)
 
     line = ax.bar(hcens, hist, hwdths, color="teal")
     ax.set_xscale("log")
@@ -154,11 +156,11 @@ def plot_masssolutedistrib(ax, hedgs, epss, radii, m_sols, vol):
     return line
 
 
-def plot_coord3distrib(ax, hedgs, coord3s, radii):
+def plot_coord3distrib(ax, hedgs, coord3, radius):
 
     line = None
-    if any(coord3s):
-        line = ax.scatter(radii*1e6, coord3s, c="purple")
+    if any(coord3):
+        line = ax.scatter(radius*1e6, coord3, c="purple")
 
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
