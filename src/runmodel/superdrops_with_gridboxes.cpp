@@ -13,9 +13,7 @@ std::vector<SuperdropWithGridbox>
 create_superdropswithgridboxes(const int nsupers, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties> solute,
-                               const std::map<unsigned int,
-                                              std::pair<double,
-                                                        double>> &gridboxmap);
+                               const Maps4GridBoxes &mdlmaps);
 
 std::vector<double> initSDcoords(const int SDnspace,
                                  const InitSDsData &initSDs,
@@ -24,12 +22,12 @@ std::vector<double> initSDcoords(const int SDnspace,
 unsigned int sd_gbxindex_from_coords(const double coord3,
                                      const std::map<unsigned int,
                                                     std::pair<double,
-                                                              double>> &gridboxmap);
+                                                              double>> &idx2bounds_z);
 /* ------------------------------------------------------ */
 /* ----- function called by sdgbxindex_to_neighbour ----- */
 int flag_tochange_sdgbxindex(const SuperdropWithGridbox &SDinGBx,
                              const std::map<unsigned int,
-                                            std::pair<double, double>> &gridboxmap);
+                                            std::pair<double, double>> &idx2bounds_z);
 /* ------------------------------------------------------ */
 
 std::vector<SuperdropWithGridbox>
@@ -37,8 +35,7 @@ superdrops_from_initSDsfile(std::string_view initSDs_filename,
                             const int nsupers,
                             const int SDnspace,
                             const std::shared_ptr<const SoluteProperties> solute,
-                            const std::map<unsigned int,
-                                           std::pair<double, double>> &gridboxmap)
+                            const Maps4GridBoxes &mdlmaps)
 /* reads initsuperdrop file for superdroplets' initial properties. Uses this data
 to create 'nsupers' no. of SuperdropletWithGridbox instances in a vector
 where all the superdroplets have the same solute properties, "solute".
@@ -56,7 +53,7 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
 
   std::vector<SuperdropWithGridbox>
       SDsInGBxs = create_superdropswithgridboxes(nsupers, SDnspace, initSDs,
-                                                 solute, gridboxmap);
+                                                 solute, mdlmaps);
 
   /* 3. Initialise gridbox index associated with each superdroplets */
   std::cout << "Now sorting superdroplets based on the"
@@ -71,9 +68,7 @@ std::vector<SuperdropWithGridbox>
 create_superdropswithgridboxes(const int nsupers, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties> solute,
-                               const std::map<unsigned int,
-                                              std::pair<double,
-                                                        double>> &gridboxmap)
+                               const Maps4GridBoxes &mdlmaps)
 {
   std::vector<SuperdropWithGridbox> SDsInGBxs;
   auto sdIdGen = Superdrop::IDType::Gen{};
@@ -86,7 +81,7 @@ create_superdropswithgridboxes(const int nsupers, const int SDnspace,
     const double m_sol = initSDs.m_sol_init.at(i);
     const std::vector<double> zxycoords = initSDcoords(SDnspace, initSDs, i);
     const unsigned int sd_gbxindex = sd_gbxindex_from_coords(zxycoords.at(0),
-                                                             gridboxmap);
+                                                             mdlmaps.idx2bounds_z);
 
     const SuperdropWithGridbox SDinGBx(sd_gbxindex,
                                        Superdrop(solute, eps, radius, m_sol,
@@ -126,7 +121,9 @@ std::vector<double> initSDcoords(const int SDnspace,
 }
 
 unsigned int sd_gbxindex_from_coords(const double coord3,
-                                     const std::map<unsigned int, std::pair<double, double>> &gridboxmap)
+                                     const std::map<unsigned int,
+                                                    std::pair<double,
+                                                              double>> &idx2bounds_z)
 /* uses the coordinates of the superdroplet in the
 SuperdropWithGridbox struct to identify which
 gridbox the superdrop is in and then assign
@@ -139,11 +136,11 @@ the appropriate gridbox index value to sd_gbxindex */
     return a.second.second < val;
   };
 
-  auto it = std::lower_bound(gridboxmap.begin(), gridboxmap.end(), coord3, lowcompare);
+  auto it = std::lower_bound(idx2bounds_z.begin(), idx2bounds_z.end(), coord3, lowcompare);
 
   unsigned int sd_gbxindex = (*it).first - 1;
 
-  if (it == gridboxmap.begin() && coord3 >= (*it).second.first)
+  if (it == idx2bounds_z.begin() && coord3 >= (*it).second.first)
   {
     sd_gbxindex = -1;
   }
@@ -152,7 +149,7 @@ the appropriate gridbox index value to sd_gbxindex */
 }
 
 int flag_tochange_sdgbxindex(const SuperdropWithGridbox &SDinGBx,
-                             const std::map<unsigned int, std::pair<double, double>> &gridboxmap)
+                             const std::map<unsigned int, std::pair<double, double>> &idx2bounds_z)
 /* Determines value of the is_change flag used to signal if
 the gridboxindex associated with a superdrop needs to change
 and if so, in which direction the superdroplet needs to move */

@@ -52,7 +52,7 @@ int main()
       SDsInGBxs = superdrops_from_initSDsfile(initSDs_filename,
                                               config.NSUPERS,
                                               config.SDnspace, solute,
-                                              mdlmaps.idx2bounds_z);
+                                              mdlmaps);
 
   for (auto a : SDsInGBxs)
   {

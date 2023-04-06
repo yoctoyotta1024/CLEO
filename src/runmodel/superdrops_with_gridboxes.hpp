@@ -36,7 +36,7 @@ superdrops_from_initSDsfile(std::string_view initSDs_filename,
                             const int nsupers,
                             const int SDnspace,
                             const std::shared_ptr<const SoluteProperties> solute,
-                            const std::map<unsigned int, std::pair<double, double>> &gridboxmap);
+                            const Maps4GridBoxes &mdlmaps);
 /* creates vector containing nsupers no. of instances of SuperdropWithGridBox struct
 where the superdroplets inside each instance all have the same solute properties.
 Initialises each superdrop's radius, multiplicity and solute mass

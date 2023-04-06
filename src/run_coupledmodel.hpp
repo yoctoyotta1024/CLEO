@@ -29,7 +29,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
       SDsInGBxs = superdrops_from_initSDsfile(config.initSDs_filename,
                                               config.NSUPERS,
                                               config.SDnspace, solute,
-                                              mdlmaps.idx2bounds_z);
+                                              mdlmaps);
 
   /* vector containing all gridboxes that makeup the SDM domain */
   std::vector<GridBox> gridboxes = create_gridboxes(ngridboxes, mdlmaps.idx2vol, 
