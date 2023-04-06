@@ -136,12 +136,12 @@ the appropriate gridbox index value to sd_gbxindex */
   auto lowcompare = [](const std::pair<const unsigned int, std::pair<double, double>> a,
                        const double val)
   {
-    return val < a.second.second;
+    return a.second.second < val;
   };
 
   auto it = std::lower_bound(gridboxmap.begin(), gridboxmap.end(), coord3, lowcompare);
 
-  unsigned int sd_gbxindex = (*it).first;
+  unsigned int sd_gbxindex = (*it).first - 1;
 
   if (it == gridboxmap.begin() && coord3 >= (*it).second.first)
   {
