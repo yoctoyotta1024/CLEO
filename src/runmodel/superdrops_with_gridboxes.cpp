@@ -192,7 +192,7 @@ The direction is given by the value of the is_change flag */
   };
 
   int is_change = flag_tochange_sdgbxindex(SDinGBx, mdlmaps.idx2bounds_z);
-
+  
   if (is_change != No)
   {
     if (is_change == Down)

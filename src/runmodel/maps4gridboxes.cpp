@@ -55,14 +55,14 @@ void Maps4GridBoxes::set_0Dmodel_maps(const double domainvol)
 /* set idx2bounds_[i] maps to numeical limits. Set volume
  map using coords read from gridfile */
 {
-  idx2bounds_z[0] = {std::numeric_limits<double>::max(),
-                     -std::numeric_limits<double>::max()};
+  idx2bounds_z[0] = {-std::numeric_limits<double>::max(),
+                     std::numeric_limits<double>::max()};
 
-  idx2bounds_x[0] = {std::numeric_limits<double>::max(),
-                     -std::numeric_limits<double>::max()};
+  idx2bounds_x[0] = {-std::numeric_limits<double>::max(),
+                     std::numeric_limits<double>::max()};
 
-  idx2bounds_y[0] = {std::numeric_limits<double>::max(),
-                     -std::numeric_limits<double>::max()};
+  idx2bounds_y[0] = {-std::numeric_limits<double>::max(),
+                     std::numeric_limits<double>::max()};
 
   idx2vol[0] = domainvol; // dimensionless volume of 0D model
 }
@@ -74,11 +74,11 @@ it's index at position 'p' in the gfb.gbxidxs vector, the
 [zmin, zmax] coords of that gridbox are at [pos, pos+1] in the
 gfb.gbxidxs vector, where pos = p*6 */
 {
-  idx2bounds_x[0] = {std::numeric_limits<double>::max(),
-                     -std::numeric_limits<double>::max()};
+  idx2bounds_x[0] = {-std::numeric_limits<double>::max(),
+                     std::numeric_limits<double>::max()};
 
-  idx2bounds_y[0] = {std::numeric_limits<double>::max(),
-                     -std::numeric_limits<double>::max()};
+  idx2bounds_y[0] = {-std::numeric_limits<double>::max(),
+                     std::numeric_limits<double>::max()};
 
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
@@ -102,8 +102,8 @@ vector, the [zmin, zmax, xmin, xmax] coords of that gridbox are
 at [pos, pos+1, pos+2, pos+3] in the gfb.gbxidxs
 vector, where pos = p*6 */
 {
-  idx2bounds_y[0] = {std::numeric_limits<double>::max(),
-                     -std::numeric_limits<double>::max()};
+  idx2bounds_y[0] = {-std::numeric_limits<double>::max(),
+                     std::numeric_limits<double>::max()};
 
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
