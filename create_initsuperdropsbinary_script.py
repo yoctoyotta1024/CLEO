@@ -10,12 +10,17 @@ abspath = sys.argv[1]
 constsfile = abspath+"libs/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
 
-initSDsfilepath = abspath+"build/share/"
-initSDsfile = initSDsfilepath+"dimlessSDsinit.dat"
+spath = abspath+"build/share/"
+gridfile = spath+"dimlessGBxboundaries.dat"
+initSDsfile = spath+"dimlessSDsinit.dat"
+
 binpath = abspath+"build/bin/"
 
 ### booleans for [making+showing, saving] figures
 isfigures = [True, True]
+
+### ------------ Number of Superdroplets per Gridbox ------------ ###
+nsupers = 1024 # int or dict of ints for number of superdroplets in a gridbox
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
 monor                = 1e-6                        # all SDs have this same radius [m]
@@ -27,7 +32,6 @@ radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled 
 
 
 ### ------ Choice of Droplet Radius Probability Distribution ------- ###
-
 dirac0               = 1e-6                        # radius in sample closest to this value is dirac delta peak
 numconc              = 1e9                         # total no. conc of real droplets [m^-3]
 radiiprobdist = radiiprobdistribs.DiracDelta(dirac0)
@@ -46,30 +50,24 @@ numconc              = 2**(23)                     # total no. conc of real drop
 radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
-
 # coord3gen            = None                        # do not generate superdroplet coord3s
 
-# monocoord3           = 1000                        # all SDs have this same coord3 [m] 
-# coord3gen = initattributes.MonoAttrsGen(monocoord3)
+monocoord3           = 1000                        # all SDs have this same coord3 [m] 
+coord3gen = initattributes.MonoAttrsGen(monocoord3)
 
-coord3span           = [0, 5000]                # max and min range of coord3 to sample [m]                 
-randomcoord3         = True                        # sample coord3 range randomly or not
-coord3gen = initattributes.SampleCoord3Gen(coord3span, randomcoord3)
+# coord3span           = [0, 5000]                # max and min range of coord3 to sample [m]                 
+# randomcoord3         = True                     # sample coord3 range randomly or not
+# coord3gen = initattributes.SampleCoord3Gen(coord3span, randomcoord3)
 
 ### ---------------------------------------------------------------- ###
 
 
-try:
-  samplevol          = float(sys.argv[2])          # volume of droplet sample region [m^3]
-except:
-  errmsg = "please run script with volume of droplet sample region in m^3"
-  raise ValueError(errmsg)
-
 Path(binpath).mkdir(exist_ok=True) 
-Path(initSDsfilepath).mkdir(exist_ok=True) 
-initattrs = initattributes.InitAttributes(radiigen, radiiprobdist, coord3gen, numconc, samplevol)
-create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrs, 
-                                                  configfile, constsfile)
+Path(spath).mkdir(exist_ok=True) 
+initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist, coord3gen)
+create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+                                                  configfile, constsfile,
+                                                  gridfile, nsupers,numconc)
 
 if isfigures[0]:
     read_initsuperdrops.plot_initdistribs(configfile, constsfile, initSDsfile,

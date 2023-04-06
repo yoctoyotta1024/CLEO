@@ -1,5 +1,30 @@
 import numpy as np
+from os.path import isfile
 from .. import cxx2py, writebinary
+from ..gbxboundariesbinary_src.read_gbxboundaries import read_dimless_gbxboundaries_binary
+
+class ManyInitAttrs:
+    '''store for lists of each attribute for all superdroplets ''' 
+    def __init__(self):
+        self.sd_gbxindex = []
+        self.eps = []
+        self.radius = []
+        self.m_sol = []
+        self.coord3 = []
+    
+    def set_attrlists(self, a, b, c, d, e):
+        self.sd_gbxindex = a
+        self.eps = b
+        self.radius = c
+        self.m_sol = d
+        self.coord3 = e 
+
+    def extend_attrlists(self, a, b, c, d, e):
+        self.sd_gbxindex.extend(a)
+        self.eps.extend(b)
+        self.radius.extend(c)
+        self.m_sol.extend(d)
+        self.coord3.extend(e)
 
 def initSDsinputsdict(configfile, constsfile):
   ''' create values from constants file & config file
@@ -11,9 +36,7 @@ def initSDsinputsdict(configfile, constsfile):
   config = cxx2py.read_configtxt_into_floats(configfile)[0]
 
   inputs = {
-    
     # for creating SD attribute distirbutions
-    "totnsupers0": int(config["nSDsvec"]),          # no. of distinct superdrops (different initial radii (evenly spaced between ln(rspan))
     "SDnspace": int(config["SDnspace"]),
     "RHO_SOL": consts["RHO_SOL"],               # solute density [Kg/m^3]
 
@@ -26,24 +49,69 @@ def initSDsinputsdict(configfile, constsfile):
   inputs["MASS0"] = inputs["RHO0"] * (inputs["R0"]**3)
 
   return inputs
-    
 
-def dimless_superdropsattributes(initattrs, inputs):
-    ''' use superdroplet attribute generator "initattrs"
+def is_sd_gbxindex_correct(gridboxbounds, coord3,
+                           sd_gbxindex, gbxindex, COORD0):
+
+  coord3 = coord3*COORD0 #[m]
+  
+  errmsg = None
+  if (coord3 < gridboxbounds[0]).any():
+    errmsg = "superdroplet coord3 below lower"+\
+              " limit of gridbox it's associated with"
+  elif (coord3 >= gridboxbounds[1]).any(): 
+    errmsg = "superdroplet coord3 above upper"+\
+              " limit of gridbox it's associated with" 
+  elif (sd_gbxindex != gbxindex).any():
+    errmsg = "superdroplet gridbox index not same as"+\
+              " gridbox it should be associated with"
+  
+  if errmsg:
+    raise ValueError(errmsg)
+
+def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
+                            gridboxbounds, NUMCONC):
+    ''' use superdroplet attribute generator "initattrsgen"
     and settings from config and consts files to
     make dimensionless superdroplet attributes'''
     
     # generate attributes
-    epss, radii, m_sols, coord3s = initattrs.generate_attributes(inputs["nsupers"], 
-                                                              inputs["RHO_SOL"],
-                                                              inputs["SDnspace"])
-    
+    sd_gbxindex = [gbxindex]*nsupers
+    eps, radius, m_sol, coord3 = initattrsgen.generate_attributes(nsupers, 
+                                                                inputs["RHO_SOL"],
+                                                                inputs["SDnspace"],
+                                                                NUMCONC,
+                                                                gridboxbounds)
     # de-dimsionalise attributes
-    radii = radii / inputs["R0"]
-    m_sols = m_sols / inputs["MASS0"]
-    coord3s = coord3s / inputs["COORD0"]
+    radius = radius / inputs["R0"]
+    m_sol = m_sol / inputs["MASS0"]
+    coord3 = coord3 / inputs["COORD0"]
 
-    return epss, radii, m_sols, coord3s
+    attrs4gbx = ManyInitAttrs() 
+    attrs4gbx.set_attrlists(sd_gbxindex, eps, radius, m_sol, coord3)
+
+    is_sd_gbxindex_correct(gridboxbounds, coord3, sd_gbxindex,
+                           gbxindex, inputs["COORD0"])
+
+    return attrs4gbx
+
+def create_allsuperdropattrs(nsupers, initattrsgen,
+                             gbxbounds, inputs, NUMCONC):
+  ''' returns lists for attributes of all SDs in domain called attrs'''
+
+  attrs = ManyInitAttrs() # lists of attrs for SDs in domain
+
+  for gbxindex, gridboxbounds in gbxbounds.items():
+
+    attrs4gbx = dimless_superdropsattrs(nsupers, initattrsgen, inputs,
+                                        gbxindex, gridboxbounds, NUMCONC) # lists of attrs for SDs in gridbox
+    
+    attrs.extend_attrlists(attrs4gbx.sd_gbxindex, attrs4gbx.eps,
+                           attrs4gbx.radius, attrs4gbx.m_sol,
+                           attrs4gbx.coord3)
+
+  return attrs
+
 
 def set_arraydtype(arr, dtype):
    
@@ -57,22 +125,23 @@ def set_arraydtype(arr, dtype):
 
   return arr
 
-def ctype_compatible_attrs(epss, radii, m_sols, coord3s):
+def ctype_compatible_attrs(attrs):
   ''' make list from arrays of SD attributes that are compatible
   with c type expected by SDM e.g. unsigned long ints for eps,
   doubles for radius and m_sol'''   
 
-  datatypes = [np.uint, np.double, np.double, np.double]
+  datatypes = [np.uintc, np.uint, np.double, np.double, np.double]
   
-  epss = list(set_arraydtype(epss, datatypes[0]))
-  radii = list(set_arraydtype(radii, datatypes[1]))
-  m_sols = list(set_arraydtype(m_sols, datatypes[2]))
+  attrs.sd_gbxindex = list(set_arraydtype(attrs.sd_gbxindex, datatypes[0]))
+  attrs.eps = list(set_arraydtype(attrs.eps, datatypes[1]))
+  attrs.radius = list(set_arraydtype(attrs.radius, datatypes[2]))
+  attrs.m_sol = list(set_arraydtype(attrs.m_sol, datatypes[3]))
   
-  datalist = epss + radii + m_sols
+  datalist = attrs.sd_gbxindex + attrs.eps + attrs.radius + attrs.m_sol
   
-  if any(coord3s):
-    coord3s = list(set_arraydtype(coord3s, datatypes[3]))
-    datalist += coord3s
+  if any(attrs.coord3):
+    attrs.coord3 = list(set_arraydtype(attrs.coord3, datatypes[4]))
+    datalist += attrs.coord3
 
   return datalist, datatypes
 
@@ -94,29 +163,38 @@ def check_datashape(data, ndata):
             " [nsupers]*num_attributes."     
       raise ValueError(err)
                                                                                                                   
-def write_initsuperdrops_binary(initSDsfile, initattrs, configfile, constsfile):
-
-  ''' de-dimensionalise attributes in initattrs and then write to 
+def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile, 
+                                constsfile, gridfile, nsupers, NUMCONC):
+  ''' de-dimensionalise attributes in initattrsgen and then write to 
   to a binary file, "initSDsfile", with some metadata '''
   
+  if not isfile(gridfile):
+    errmsg = "gridfile not found, but must be"+\
+              " created before initSDsfile can be"
+    raise ValueError(errmsg)
+  
   inputs = initSDsinputsdict(configfile, constsfile)
-
-  epss, radii, m_sols, coord3s = dimless_superdropsattributes(initattrs, 
-                                                              inputs) 
-  ndata = [len(dt) for dt in [epss, radii, m_sols, coord3s]]
-  data, datatypes = ctype_compatible_attrs(epss, radii, m_sols, coord3s) 
+  gbxbounds = read_dimless_gbxboundaries_binary(gridfile,
+                                                COORD0=inputs["COORD0"])
+  
+  attrs = create_allsuperdropattrs(nsupers, initattrsgen,
+                                   gbxbounds, inputs, NUMCONC) 
+  
+  ndata = [len(dt) for dt in [attrs.sd_gbxindex, attrs.eps,
+                              attrs.radius, attrs.m_sol, attrs.coord3]]
+  data, datatypes = ctype_compatible_attrs(attrs) 
   check_datashape(data, ndata)
 
-  units = [b' ', b'm', b'g', b'm']
-  scale_factors = np.array([1.0, inputs["R0"], inputs["MASS0"], 
+  units = [b' ', b' ', b'm', b'g', b'm']
+  scale_factors = np.array([1.0, 1.0, inputs["R0"], inputs["MASS0"], 
                            inputs["COORD0"]], dtype=np.double)
 
-  if initattrs.coord3gen: 
+  if initattrsgen.coord3gen: 
     metastr = 'Variables in this file are Superdroplet attributes:'+\
-            ' [eps, radius, m_sol, coord3]'
+            ' [sd_gbxindex, eps, radius, m_sol, coord3]'
   else:
     metastr = 'Variables in this file are Superdroplet attributes:'+\
-            ' [eps, radius, m_sol]'
+            ' [sd_gbxindex, eps, radius, m_sol]'
   
   writebinary.writebinary(initSDsfile, data, ndata, datatypes,
-                units, scale_factors, metastr)
+                          units, scale_factors, metastr)

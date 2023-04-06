@@ -1,6 +1,7 @@
 import numpy as np
 
 from .radiiprobdistribs import *
+from ..gbxboundariesbinary_src.read_gbxboundaries import calc_domainvol
 
 class MonoAttrsGen:
     ''' method to generate superdroplets with an
@@ -101,17 +102,16 @@ class SampleCoord3Gen:
 
         return coord3s  # units [m]
 
-class InitAttributes:
+class InitManyAttrsGen:
+    ''' class for functions to generate attributes of superdroplets
+    given the generators for independent attributes
+    e.g. for radius and coord3 in substantation of class'''
 
-    def __init__(self, dryradiigen, radiiprobdist, coord3gen, 
-                NUMCONC, SAMPLEVOL):
+    def __init__(self, dryradiigen, radiiprobdist, coord3gen):
 
         self.dryradiigen = dryradiigen
         self.radiiprobdist = radiiprobdist
         self.coord3gen = coord3gen
-        
-        self.numconc = NUMCONC                              # total number concentration of real droplets [m^-3]
-        self.samplevol = SAMPLEVOL                          # volume of droplet sample region [m^3]
 
     def mass_solutes(self, dryradii, RHO_SOL):
         ''' return the mass [Kg] of the solute in superdroplets given their 
@@ -121,7 +121,7 @@ class InitAttributes:
 
         return m_sols  # [Kg]
 
-    def multiplicities(self, radii):
+    def multiplicities(self, radii, NUMCONC, samplevol):
         ''' Calculate the multiplicity of the dry radius of each
         superdroplet given it's probability such that the total number
         concentration [m^-3] of real droplets in the volume, vol, [m^3]
@@ -129,7 +129,7 @@ class InitAttributes:
         mulitiplicities are zero '''
 
         prob = self.radiiprobdist(radii)
-        eps = np.rint(prob * self.numconc * self.samplevol)
+        eps = np.rint(prob * NUMCONC * samplevol)
 
         if any(eps == 0):
           num = len(eps[eps==0])
@@ -150,47 +150,52 @@ class InitAttributes:
             errmsg = "no coord3 generator specified but SDnspace > 1"
             raise ValueError(errmsg)
 
-    def check_totalnumconc(self, multiplicities):
+    def check_totalnumconc(self, multiplicities, NUMCONC, samplevol):
         '''check number concentration of real droplets calculated from
         multiplicities is same as input value for number conc. Also check
         total number of real droplets is within 10% of the expected
         value given the input number conc and sample volume '''
 
-        nreals = np.rint(self.numconc * self.samplevol)
+        nreals = np.rint(NUMCONC * samplevol)
         calcnreals = np.rint(np.sum(multiplicities))
-        calcnumconc = np.rint(calcnreals/self.samplevol)
+        calcnumconc = np.rint(calcnreals/samplevol)
         
-        if np.rint(self.numconc) != calcnumconc:
+        if np.rint(NUMCONC) != calcnumconc:
           errmsg = "total real droplet concentration"+\
-                    " {:0g} != numconc, {:0g}".format(calcnumconc, self.numconc)
+                    " {:0g} != numconc, {:0g}".format(calcnumconc, NUMCONC)
           raise ValueError(errmsg)
 
         if abs(nreals - calcnreals) > 0.001*nreals:
           errmsg = "total no. real droplets, {:0g},".format(calcnreals)+\
-            " not consistent with sample volume {:.3g} m^3".format(self.samplevol)
+            " not consistent with sample volume {:.3g} m^3".format(samplevol)
           raise ValueError(errmsg)
 
         else:
           msg = "--- total real droplet concentration = "+\
-            "{:0g} m^-3 in {:.3g} m^3 volume --- ".format(calcnumconc, self.samplevol)
+            "{:0g} m^-3 in {:.3g} m^3 volume --- ".format(calcnumconc, samplevol)
           print(msg)
 
-    def generate_attributes(self, nsupers, RHO_SOL, SDnspace):
+    def generate_attributes(self, nsupers, RHO_SOL, SDnspace,
+                            NUMCONC, gridboxbounds):
         ''' generate superdroplets (SDs) attributes that have dimensions
         by calling the appropraite generating functions'''
 
         self.check_coord3gen_matches_modeldimension(SDnspace)
        
+        gbxvol = calc_domainvol(gridboxbounds[0:2], gridboxbounds[2:4], 
+                                gridboxbounds[4:]) # [m^3]
+        
         dryradii = self.dryradiigen(nsupers) # [m]
 
         mass_solutes = self.mass_solutes(dryradii, RHO_SOL)  # [Kg]
 
-        multiplicities = self.multiplicities(dryradii)
+        multiplicities = self.multiplicities(dryradii, NUMCONC, gbxvol)
+
 
         coord3s = np.array([])
         if self.coord3gen:
           coord3s = self.coord3gen(nsupers)
           
-        self.check_totalnumconc(multiplicities) 
+        self.check_totalnumconc(multiplicities, NUMCONC, gbxvol) 
          
         return multiplicities, dryradii, mass_solutes, coord3s  # units [], [m], [Kg], [m]
