@@ -133,14 +133,14 @@ the appropriate gridbox index value to sd_gbxindex */
   auto lowcompare = [](const std::pair<const unsigned int, std::pair<double, double>> a,
                        const double val)
   {
-    return a.second.second < val;
+    return a.second.first < val;
   };
 
   auto it = std::lower_bound(idx2bounds_z.begin(), idx2bounds_z.end(), coord3, lowcompare);
 
   unsigned int sd_gbxindex = (*it).first - 1;
 
-  if (it == idx2bounds_z.begin() && coord3 >= (*it).second.first)
+  if (it == idx2bounds_z.begin() && coord3 >= (*it).second.second)
   {
     sd_gbxindex = -1;
   }
@@ -155,8 +155,8 @@ the gridboxindex associated with a superdrop needs to change
 and if so, in which direction the superdroplet needs to move */
 {
   const double coord = SDinGBx.superdrop.coord3;
-  const double ulim = (*idx2bounds_z.find(SDinGBx.sd_gbxindex)).second.first;
-  const double llim = (*idx2bounds_z.find(SDinGBx.sd_gbxindex)).second.second;
+  const double llim = (*idx2bounds_z.find(SDinGBx.sd_gbxindex)).second.first;
+  const double ulim = (*idx2bounds_z.find(SDinGBx.sd_gbxindex)).second.second;
 
   if (coord < llim)
   {
