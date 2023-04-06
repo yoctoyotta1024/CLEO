@@ -11,33 +11,37 @@ def get_superdroplet_attributes(configfile, constsfile, initSDsfile):
 
     inputs = initSDsinputsdict(configfile, constsfile)
     
-    eps, radius, m_sol, coord3 = read_dimless_superdrops_binary(initSDsfile)
+    sd_gbxindex, eps, radius, m_sol, coord3 = read_dimless_superdrops_binary(initSDsfile)
 
     radius = radius * inputs["R0"]
     m_sol = m_sol * inputs["MASS0"]
     coord3 = coord3 * inputs["COORD0"]
 
-    return eps, radius, m_sol, coord3
+    return sd_gbxindex, eps, radius, m_sol, coord3
 
 
 def read_dimless_superdrops_binary(filename):
     ''' return dimenionsless gbx boundaries by reading binary file'''
 
+    datatypes = [np.uintc, np.uint, np.double, np.double, np.double]
     data, ndata_pervar = readbinary(filename)
 
+    print(ndata_pervar)
     idxs = []
     for n in range(1, len(ndata_pervar)):
         # indexs for division of data list between each variable
         idxs.append(np.sum(ndata_pervar[:n]))
 
-    eps = np.asarray(data[:idxs[0]], dtype=np.uint)
-    radius = np.asarray(data[idxs[0]:idxs[1]], dtype=np.double)
-    m_sol = np.asarray(data[idxs[1]:idxs[2]], dtype=np.double)
-    coord3 = np.asarray(data[idxs[2]:], dtype=np.double)
+    sd_gbxindex = np.asarray(data[:idxs[0]], dtype=datatypes[0])
+    eps = np.asarray(data[idxs[0]:idxs[1]], dtype=datatypes[1])
+    radius = np.asarray(data[idxs[1]:idxs[2]], dtype=datatypes[2])
+    m_sol = np.asarray(data[idxs[2]:idxs[3]], dtype=datatypes[3])
+    coord3 = np.asarray(data[idxs[3]:], dtype=datatypes[4])
 
-    print("attribute shapes: ", eps.shape, radius.shape, m_sol.shape, coord3.shape)
+    print("attribute shapes: ", sd_gbxindex.shape, eps.shape,
+          radius.shape, m_sol.shape, coord3.shape)
     
-    return eps, radius, m_sol, coord3
+    return sd_gbxindex, eps, radius, m_sol, coord3
 
 
 def plot_initdistribs(configfile, constsfile, initSDsfile,
@@ -47,7 +51,7 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
 
     eps, radius, m_sol, coord3 = get_superdroplet_attributes(configfile,
                                                                constsfile,
-                                                               initSDsfile)
+                                                               initSDsfile)[1:]
 
     print(eps, radius, m_sol, coord3)
 
