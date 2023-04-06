@@ -10,7 +10,7 @@ def readbinary(filename):
   print("Reading binary file:\n "+filename)
 
   nvars, metabytes, metapervar = read_metadata(filename)
-  
+
   data, ndata_pervar = read_data(filename, nvars, metabytes, metapervar)
 
   return data, ndata_pervar
@@ -63,7 +63,6 @@ def get_metadatapervar(filename, dtc, gblmeta_bytes, nvars, metabytes):
 def read_data(filename, nvars, metabytes, metapervar):
 
   dataformat, ndata_pervar = get_dataformat(nvars, metapervar)
-  
   with open(filename, mode="rb") as binaryfile:
     binaryfile.seek(metabytes)
     data = struct.unpack(dataformat, binaryfile.read()) 
@@ -80,7 +79,7 @@ def get_dataformat(nvars, metapervar):
   dtypes = metapervar[:,3] # struct code for datatype of each variable 
   ndata_pervar = np.asarray(metapervar[:,2], dtype=np.uintc) # no. datapoints of each variable
 
-  dataformat = ''
+  dataformat = '<'
   for n in range(nvars):
     format = [dtypes[n]]*ndata_pervar[n] # list of binary encoded characters for struct format
     format = "".join([str(f.decode()) for f in format]) # convert to one continous decoded string
