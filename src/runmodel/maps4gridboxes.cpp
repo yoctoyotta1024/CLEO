@@ -77,7 +77,7 @@ monotonically decreasing. */
   {
     const double zlow = gridfilebounds.gbxbounds[pos];
     const double zup = gridfilebounds.gbxbounds[pos+1];
-    idx2bounds_z[idx] = {zup, zlow}; //TODO swap order to {zlow, zup}
+    idx2bounds_z[idx] = {zlow, zup};
 
     const double vol = (zup - zlow) * gridfilebounds.gridboxarea(idx);
     idx2vol[idx] = vol;
