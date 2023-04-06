@@ -54,14 +54,14 @@ public:
   /* given gridbox index, return index of neighbouring
   gridbox in upwards direction */
   {
-    return gbxindex - 1;
+    return gbxindex + 1;
   }
 
   inline unsigned int get_gridboxneighbour_down(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in downwards direction */
   {
-    return gbxindex + 1;
+    return gbxindex - 1;
   }
 };
 
