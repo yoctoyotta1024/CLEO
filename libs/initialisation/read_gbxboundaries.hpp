@@ -7,6 +7,7 @@ struct from binary file */
 #define READ_GBXBOUNDARIES_HPP
 
 #include <vector>
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <fstream>
@@ -38,17 +39,16 @@ public:
   for that gridbox from position of idx in gbxidxs */
 };
 
-GridBoxBoundaries read_gbxboundaries(std::string_view gridfile);
+GridBoxBoundaries read_gbxboundaries(std::string_view gridfile,
+                                     const unsigned int SDnspace);
 /* read metadata and data in binary file called 'gridfile', then
 return GridBoxBoundaries instance created from that data */
 
-inline double get_0Ddomainvol_from_gridfile(std::string_view gridfile)
+inline double get_0Ddomainvol_from_gridfile(const GridBoxBoundaries &gfb)
 /* return the volume of the 0th gridbox by reading the 'gridfile'
 binary. This is the domian volume in the 0D (1 gridbox) model */
 {
-  const GridBoxBoundaries gridfilebounds(read_gbxboundaries(gridfile));
-
-  return gridfilebounds.gridboxvol(0);
+  return gfb.gridboxvol(0);
 }
 
 #endif // READ_GBXBOUNDARIES_HPP
