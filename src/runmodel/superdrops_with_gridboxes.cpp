@@ -155,8 +155,8 @@ the gridboxindex associated with a superdrop needs to change
 and if so, in which direction the superdroplet needs to move */
 {
   const double coord = SDinGBx.superdrop.coord3;
-  const double ulim = (*gridboxmap.find(SDinGBx.sd_gbxindex)).second.first;
-  const double llim = (*gridboxmap.find(SDinGBx.sd_gbxindex)).second.second;
+  const double ulim = (*idx2bounds_z.find(SDinGBx.sd_gbxindex)).second.first;
+  const double llim = (*idx2bounds_z.find(SDinGBx.sd_gbxindex)).second.second;
 
   if (coord < llim)
   {
