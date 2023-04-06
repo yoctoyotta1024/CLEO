@@ -50,7 +50,7 @@ int main()
   const auto solute(std::make_shared<const SoluteProperties>());
   std::vector<SuperdropWithGridbox>
       SDsInGBxs = superdrops_from_initSDsfile(initSDs_filename,
-                                              config.NSUPERS,
+                                              config.nSDsvec,
                                               config.SDnspace, solute,
                                               mdlmaps);
 

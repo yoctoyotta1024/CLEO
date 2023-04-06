@@ -145,7 +145,7 @@ def read_configtxt_into_floats(filename, is_print=True):
         notfloats[name] = value
 
   try:
-    floats["nsupers"] = int(floats["NSUPERS"])                # no. of distinct superdrops 
+    floats["totnsupers0"] = int(floats["nSDsvec"])              # initial total no. of superdrops 
   except:
     pass
   try:

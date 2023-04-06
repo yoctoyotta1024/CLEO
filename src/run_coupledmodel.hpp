@@ -27,7 +27,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   const auto solute(std::make_shared<const SoluteProperties>());
   std::vector<SuperdropWithGridbox>
       SDsInGBxs = superdrops_from_initSDsfile(config.initSDs_filename,
-                                              config.NSUPERS,
+                                              config.nSDsvec,
                                               config.SDnspace, solute,
                                               mdlmaps);
 

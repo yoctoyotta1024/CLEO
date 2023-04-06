@@ -70,7 +70,7 @@ public:
 
   /* Superdroplet init params */
   int SDnspace;    // number of spatial coordinates of superdroplets
-  int NSUPERS;     // max. no. distinct superdrop objects in array
+  int nSDsvec;     // initial no. elements in SDsInGBxs vector
 
   /* initial parcel conditions */
   double P_INIT;    // initial pressure [Pa]

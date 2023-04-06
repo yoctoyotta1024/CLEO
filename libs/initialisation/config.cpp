@@ -164,9 +164,9 @@ void Config::configvariable(const std::string name, std::string value)
     SDnspace = stoi(value);
     issuccess = true;
   }
-  else if (name == "NSUPERS")
+  else if (name == "nSDsvec")
   {
-    NSUPERS = stoi(value);
+    nSDsvec = stoi(value);
     issuccess = true;
   }
 

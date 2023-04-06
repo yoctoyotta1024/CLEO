@@ -33,16 +33,15 @@ namespace dlc = dimless_constants;
 
 std::vector<SuperdropWithGridbox>
 superdrops_from_initSDsfile(std::string_view initSDs_filename,
-                            const int nsupers,
+                            const int nSDsvec,
                             const int SDnspace,
                             const std::shared_ptr<const SoluteProperties> solute,
                             const Maps4GridBoxes &mdlmaps);
-/* creates vector containing nsupers no. of instances of SuperdropWithGridBox struct
-where the superdroplets inside each instance all have the same solute properties.
-Initialises each superdrop's radius, multiplicity and solute mass
-using the data read from initSDs_filename csv file. Uses the coordinates
-of the superdroplet to set value of the sd_gbxindex in each struct. Then returns
-vector sorted by these sd_gbxindexes (from low to high). */
+/* reads initsuperdrop file for superdroplets' initial properties. Uses this data
+to create 'nSDsvec' no. of SuperdropletWithGridbox instances in a vector
+where all the superdroplets have the same solute properties, "solute".
+Uses the coordinates of each superdroplet to set the value of the sd_gbxindex
+associated with each superdroplet in the SuperdropletWithGridbox struct */
 
 void sdgbxindex_to_neighbour(const Maps4GridBoxes &mdlmaps,
                                 SuperdropWithGridbox &SDinGBx);

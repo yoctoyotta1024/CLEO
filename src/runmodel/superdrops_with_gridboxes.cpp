@@ -10,7 +10,7 @@ declared here to avoid being visible externally */
 /* ------------------------------------------------------ */
 /* -- function called create_superdrops_with_gridboxes -- */
 std::vector<SuperdropWithGridbox>
-create_superdropswithgridboxes(const int nsupers, const int SDnspace,
+create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties> solute,
                                const Maps4GridBoxes &mdlmaps);
@@ -32,12 +32,12 @@ int flag_tochange_sdgbxindex(const SuperdropWithGridbox &SDinGBx,
 
 std::vector<SuperdropWithGridbox>
 superdrops_from_initSDsfile(std::string_view initSDs_filename,
-                            const int nsupers,
+                            const int nSDsvec,
                             const int SDnspace,
                             const std::shared_ptr<const SoluteProperties> solute,
                             const Maps4GridBoxes &mdlmaps)
 /* reads initsuperdrop file for superdroplets' initial properties. Uses this data
-to create 'nsupers' no. of SuperdropletWithGridbox instances in a vector
+to create 'nSDsvec' no. of SuperdropletWithGridbox instances in a vector
 where all the superdroplets have the same solute properties, "solute".
 Uses the coordinates of each superdroplet to set the value of the sd_gbxindex
 associated with each superdroplet in the SuperdropletWithGridbox struct */
@@ -45,14 +45,14 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
   /* 1. Read initial superdroplets' data from 'initsuperdrop' file */
   const InitSDsData initSDs = get_initsuperdropsdata(initSDs_filename);
 
-  /* 2. Create vector of nsupers no. of superdroplets containing
-  superdroplets with the index of their associated gridbox */
+  /* 2. Create vector of 'nSDsvec' elements. Each element is
+  superdroplet with the index of its associated gridbox */
   std::cout << "Initialisation data for superdrops' read from "
             << initSDs_filename << ". "
             << "\nNow creating superdrops with gridboxes\n";
 
   std::vector<SuperdropWithGridbox>
-      SDsInGBxs = create_superdropswithgridboxes(nsupers, SDnspace, initSDs,
+      SDsInGBxs = create_superdropswithgridboxes(nSDsvec, SDnspace, initSDs,
                                                  solute, mdlmaps);
 
   /* 3. Initialise gridbox index associated with each superdroplets */
@@ -65,7 +65,7 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
 }
 
 std::vector<SuperdropWithGridbox>
-create_superdropswithgridboxes(const int nsupers, const int SDnspace,
+create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties> solute,
                                const Maps4GridBoxes &mdlmaps)
@@ -73,7 +73,7 @@ create_superdropswithgridboxes(const int nsupers, const int SDnspace,
   std::vector<SuperdropWithGridbox> SDsInGBxs;
   auto sdIdGen = Superdrop::IDType::Gen{};
 
-  for (int i = 0; i < nsupers; ++i)
+  for (int i = 0; i < nSDsvec; ++i)
   {
     const auto sd_identity = sdIdGen.next();
     const size_t eps = (size_t)(initSDs.eps_init.at(i) + 0.5);
