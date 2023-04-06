@@ -41,7 +41,7 @@ return GridBoxBoundaries instance created from that data */
 
   file.close();
 
-  if (6 * gbxidxs.size() != gbxbounds.size())
+  if (6 * gbxidxs.size() != gbxbounds.size() && gbxbounds.size() >=6)
   {
     std::string errormsg = "sizes of gbxidxs and gbxbounds vectors"
                            " read from gridfile not consistent";

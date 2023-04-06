@@ -33,7 +33,7 @@ TEND = 2400                             # time span of integration [s]
 
 ### superdroplet params ###
 NSUPERS = 1024                          # initial total no. superdrops
-SDnspace = 3                           # no. of spatial coordinates of superdroplets ( = dimension of model)
+SDnspace = 1                           # no. of spatial coordinates of superdroplets ( = dimension of model)
 
 ### initial thermodynamic conditions ###
 P_INIT = 100000.0                       # initial pressure [Pa]
