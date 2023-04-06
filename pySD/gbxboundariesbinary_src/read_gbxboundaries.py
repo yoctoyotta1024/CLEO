@@ -18,6 +18,13 @@ def get_gridboxboundaries(gridfile, COORD0=False, constsfile=""):
 
     return zhalf, xhalf, yhalf
 
+def get_domainvol_from_gridfile(gridfile, COORD0=False, constsfile=""):
+    ''' get total domain volume from binary file '''
+
+    zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile, COORD0=COORD0,
+                                               constsfile=constsfile)
+    
+    return calc_domainvol(zhalf, xhalf, yhalf)
 
 def read_dimless_gbxboundaries_binary(filename, COORD0=False):
     ''' return dictionary for gbx indicies to gbx boundaries by

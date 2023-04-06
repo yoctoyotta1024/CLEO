@@ -3,6 +3,7 @@ import numpy as np
 from pathlib import Path
 
 from pySD.initsuperdropsbinary_src import *
+from pySD.gbxboundariesbinary_src.read_gbxboundaries import get_domainvol_from_gridfile
 
 ### path and filenames
 #abspath = /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/
@@ -70,5 +71,6 @@ create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                                   gridfile, nsupers,numconc)
 
 if isfigures[0]:
+    domainvol = get_domainvol_from_gridfile(gridfile, constsfile=constsfile)
     read_initsuperdrops.plot_initdistribs(configfile, constsfile, initSDsfile,
-                                          samplevol, binpath, isfigures[1])
+                                          domainvol, binpath, isfigures[1])

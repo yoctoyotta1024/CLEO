@@ -191,7 +191,6 @@ class InitManyAttrsGen:
 
         multiplicities = self.multiplicities(dryradii, NUMCONC, gbxvol)
 
-
         coord3s = np.array([])
         if self.coord3gen:
           coord3s = self.coord3gen(nsupers)
