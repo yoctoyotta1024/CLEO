@@ -5,11 +5,12 @@ from .create_gbxboundaries import get_COORD0_from_constsfile
 from ..readbinary import readbinary
 
 
-def get_gridboxboundaries(constsfile, gridfile):
+def get_gridboxboundaries(gridfile, COORD0=False, constsfile=""):
     ''' get gridbox boundaries from binary file and 
     re-dimensionalise usign COORD0 const from constsfile '''
 
-    COORD0 = get_COORD0_from_constsfile(constsfile)
+    if not COORD0:
+        COORD0 = get_COORD0_from_constsfile(constsfile)
     
     gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0) 
 
@@ -63,7 +64,8 @@ def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
 
     plt.rcParams.update({'font.size': 14})
 
-    zhalf, xhalf, yhalf = get_gridboxboundaries(constsfile, gridfile)
+    zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile, 
+                                                constsfile=constsfile)
 
     halfs = [zhalf, xhalf, yhalf]
     deltas = []
@@ -148,7 +150,8 @@ def print_domain_info(constsfile, gridfile):
     required as inputs to create initial 
     superdroplet conditions '''
 
-    zhalf, xhalf, yhalf = get_gridboxboundaries(constsfile, gridfile)
+    zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile,
+                                                constsfile=constsfile)
 
     domainvol, gridboxvols, num_gridboxes, SDnspace = calc_domaininfo(
         zhalf, xhalf, yhalf)
