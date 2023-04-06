@@ -13,7 +13,7 @@ def initSDsinputsdict(configfile, constsfile):
   inputs = {
     
     # for creating SD attribute distirbutions
-    "nsupers": int(config["NSUPERS"]),          # no. of distinct superdrops (different initial radii (evenly spaced between ln(rspan))
+    "totnsupers0": int(config["nSDsvec"]),          # no. of distinct superdrops (different initial radii (evenly spaced between ln(rspan))
     "SDnspace": int(config["SDnspace"]),
     "RHO_SOL": consts["RHO_SOL"],               # solute density [Kg/m^3]
 
