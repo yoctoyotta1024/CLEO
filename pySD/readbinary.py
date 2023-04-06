@@ -78,7 +78,7 @@ def read_data(filename, nvars, metabytes, metapervar):
 def get_dataformat(nvars, metapervar):
   
   dtypes = metapervar[:,3] # struct code for datatype of each variable 
-  ndata_pervar = np.asarray(metapervar[:,2], dtype=np.uintc) # no. datapints of each variable
+  ndata_pervar = np.asarray(metapervar[:,2], dtype=np.uintc) # no. datapoints of each variable
 
   dataformat = ''
   for n in range(nvars):

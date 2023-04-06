@@ -24,10 +24,11 @@ def read_dimless_gbxboundaries_binary(filename, COORD0=False):
     not give (=False). '''
 
     data, ndata_pervar = readbinary(filename)
-
-    idxs = np.asarray(data[:ndata_pervar[0]], dtype=np.uint)
+    datatypes = [np.uintc, np.double]
+    
+    idxs = np.asarray(data[:ndata_pervar[0]], dtype=datatypes[0])
     ngridboxes = len(idxs)
-    boundsdata = np.asarray(data[ndata_pervar[0]:], dtype=np.double)
+    boundsdata = np.asarray(data[ndata_pervar[0]:], dtype=datatypes[1])
     boundsdata = np.reshape(boundsdata, [ngridboxes, len(boundsdata)//ngridboxes])
     
     if COORD0:

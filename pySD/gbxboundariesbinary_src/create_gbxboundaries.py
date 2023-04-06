@@ -92,7 +92,7 @@ def dimless_gridboxboundaries(zgrid, xgrid, ygrid, COORD0):
   
   gbxbounds, ngridboxes = gridboxboundaries_from_halfcoords(allhalfcoords)
   
-  gbxindicies = np.array(list(gbxbounds.keys()), dtype=np.uint).flatten()
+  gbxindicies = np.array(list(gbxbounds.keys()), dtype=np.uintc).flatten()
   gbxboundsdata = np.array(list(gbxbounds.values()), dtype=np.double).flatten()
   
   return gbxindicies, gbxboundsdata, ngridboxes
@@ -113,7 +113,7 @@ def ctype_compatible_gridboxboundaries(idxs, bounds):
   ''' check type of gridbox boundaries data is compatible
   with c type double. If not, change type and raise error '''
 
-  datatypes = [np.uint, np.double]
+  datatypes = [np.uintc, np.double]
 
   idxs = list(set_arraydtype(idxs, datatypes[0]))
   bounds = list(set_arraydtype(bounds, datatypes[1]))
