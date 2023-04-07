@@ -32,7 +32,8 @@ number of sueprdrops to terminal */
 
   for (auto &gbx : gridboxes)
   {
-    std::cout << "t=" << std::fixed
+    std::cout << "GBx " << gbx.gbxindex << ": "
+              << "t=" << std::fixed
               << std::setprecision(printprec)
               << gbx.state.time * dlc::TIME0 << "s, "
               << "nsupers=" << gbx.span4SDsinGBx.size() << ", ";
