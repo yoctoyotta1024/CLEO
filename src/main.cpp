@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
   /* create observer from combination of chosen observers */
   // std::ofstream thermo_datafile, superdrops_datafile;
   // const auto observer = create_observer(config, thermo_datafile, superdrops_datafile);
-  const unsigned int ngridboxes = mdlmaps.idx2bounds_z.size();
+  const unsigned int ngridboxes = mdlmaps.gbxidxs.size();
   FSStore fsstore(config.zarrbasedir);
   ContiguousRaggedSuperdropStorage sdzarr(fsstore, superdropattributes_to_observe(),
                                           config.maxcsize);

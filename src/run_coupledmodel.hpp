@@ -19,7 +19,7 @@ void run_cvodeSDM_coupledmodel(const Config &config,
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 {
   /* CVODE thermodynamics solver */
-  const unsigned int ngridboxes = mdlmaps.idx2bounds_z.size();
+  const unsigned int ngridboxes = mdlmaps.gbxidxs.size();
   CvodeThermoSolver cvode(config, init_thermodynamics(ngridboxes, config));
 
   /* vector containing all superdroplets within a struct that also holds their

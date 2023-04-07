@@ -38,6 +38,7 @@ private:
   void set_3Dmodel_maps(const GridBoxBoundaries &gfb);
   /* Set z, x, y and volume maps using coords from gridfile. */
 public:
+  std::vector<unsigned int> gbxidxs; // vector of all gridbox indexes in domain
   std::map<unsigned int, std::pair<double, double>> idx2bounds_z; // coord limits to each gridbox given its index
   std::map<unsigned int, std::pair<double, double>> idx2bounds_x;
   std::map<unsigned int, std::pair<double, double>> idx2bounds_y;

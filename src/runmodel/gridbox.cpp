@@ -46,8 +46,7 @@ std::vector<GridBox> create_gridboxes(const size_t num_gridboxes,
 is initialised with a label (ii), a superdroplet vector with
 superdroplets created from the SDinitialisation csv file, 
 and an (uninitialised) thermodynamic state. */                                   
-{
-  
+{ 
   sort_superdrops_via_gridboxindex(SDsInGBxs);
   
   std::vector<GridBox> gridboxes;
