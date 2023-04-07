@@ -13,6 +13,7 @@ from a binary file */
 #include <fstream>
 #include <iostream>
 #include <utility>
+#include <stdexcept>
 
 #include "./readbinary.hpp"
 

@@ -13,7 +13,7 @@
 
 #include <iostream>
 #include <string>
-//#include <stdexcept>
+#include <stdexcept>
 #include <cmath>
 
 #include "../claras_SDconstants.hpp"
