@@ -194,7 +194,8 @@ class InitManyAttrsGen:
         coord3s = np.array([])
         if self.coord3gen:
           coord3s = self.coord3gen(nsupers)
-          
-        self.check_totalnumconc(multiplicities, NUMCONC, gbxvol) 
+
+        if nsupers > 0:  
+            self.check_totalnumconc(multiplicities, NUMCONC, gbxvol) 
          
         return multiplicities, dryradii, mass_solutes, coord3s  # units [], [m], [Kg], [m]

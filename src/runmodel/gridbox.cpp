@@ -49,7 +49,6 @@ void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &mdlmaps)
 {
   for (auto &SDinGBx : span4SDsinGBx)
   {
-    SDinGBx.superdrop.coord3 = -1.4;
     iscoord_within_bounds(mdlmaps.idx2bounds_z, SDinGBx.superdrop.coord3);
     iscoord_within_bounds(mdlmaps.idx2bounds_x, SDinGBx.superdrop.coord1);
     iscoord_within_bounds(mdlmaps.idx2bounds_y, SDinGBx.superdrop.coord2);
