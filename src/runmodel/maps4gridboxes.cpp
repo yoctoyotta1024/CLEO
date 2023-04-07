@@ -76,15 +76,15 @@ it's index at position 'p' in the gfb.gbxidxs vector, the
 [zmin, zmax] coords of that gridbox are at [pos, pos+1] in the
 gfb.gbxidxs vector, where pos = p*6 */
 {
-  idx2bounds_x[0] = {-std::numeric_limits<double>::max(),
-                     std::numeric_limits<double>::max()};
-
-  idx2bounds_y[0] = {-std::numeric_limits<double>::max(),
-                     std::numeric_limits<double>::max()};
-
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
+    idx2bounds_x[idx] = {-std::numeric_limits<double>::max(),
+                      std::numeric_limits<double>::max()};
+
+    idx2bounds_y[idx] = {-std::numeric_limits<double>::max(),
+                      std::numeric_limits<double>::max()};
+
     const double zlow = gfb.gbxbounds[pos];
     const double zup = gfb.gbxbounds[pos+1];
     idx2bounds_z[idx] = {zlow, zup};
@@ -104,12 +104,13 @@ vector, the [zmin, zmax, xmin, xmax] coords of that gridbox are
 at [pos, pos+1, pos+2, pos+3] in the gfb.gbxidxs
 vector, where pos = p*6 */
 {
-  idx2bounds_y[0] = {-std::numeric_limits<double>::max(),
-                     std::numeric_limits<double>::max()};
 
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
+    idx2bounds_y[idx] = {-std::numeric_limits<double>::max(),
+                      std::numeric_limits<double>::max()};
+
     const double zlow = gfb.gbxbounds[pos];
     const double zup = gfb.gbxbounds[pos+1];
     idx2bounds_z[idx] = {zlow, zup};
