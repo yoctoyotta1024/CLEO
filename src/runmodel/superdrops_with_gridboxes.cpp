@@ -18,11 +18,6 @@ create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
 std::vector<double> initSDcoords(const int SDnspace,
                                  const InitSDsData &initSDs,
                                  const int i);
-
-unsigned int sd_gbxindex_from_coords(const double coord3,
-                                     const std::map<unsigned int,
-                                                    std::pair<double,
-                                                              double>> &idx2bounds_z);
 /* ------------------------------------------------------ */
 /* ----- function called by sdgbxindex_to_neighbour ----- */
 int flag_tochange_sdgbxindex(const SuperdropWithGridbox &SDinGBx,
@@ -117,34 +112,6 @@ std::vector<double> initSDcoords(const int SDnspace,
   }
 
   return zxycoords;
-}
-
-unsigned int sd_gbxindex_from_coords(const double coord3,
-                                     const std::map<unsigned int,
-                                                    std::pair<double,
-                                                              double>> &idx2bounds_z)
-/* uses the coordinates of the superdroplet in the
-SuperdropWithGridbox struct to identify which
-gridbox the superdrop is in and then assign
-the appropriate gridbox index value to sd_gbxindex */
-{
-
-  auto lowcompare = [](const std::pair<const unsigned int, std::pair<double, double>> a,
-                       const double val)
-  {
-    return a.second.first < val;
-  };
-
-  auto it = std::lower_bound(idx2bounds_z.begin(), idx2bounds_z.end(), coord3, lowcompare);
-
-  unsigned int sd_gbxindex = (*it).first - 1;
-
-  if (it == idx2bounds_z.begin() && coord3 >= (*it).second.second)
-  {
-    sd_gbxindex = -1;
-  }
-
-  return sd_gbxindex;
 }
 
 int flag_tochange_sdgbxindex(const SuperdropWithGridbox &SDinGBx,
