@@ -10,6 +10,7 @@ q_condensate, volume, time) of SDM */
 
 #include <iostream>
 #include <stdexcept>
+#include <string>
 
 struct ThermoState
 {

@@ -9,6 +9,7 @@ Left Hand Side of thermodynamic equations */
 #include <iostream>
 #include <cmath>
 #include <stdexcept>
+#include <string>
 
 #include "../claras_SDconstants.hpp"
 

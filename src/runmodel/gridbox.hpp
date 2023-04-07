@@ -11,6 +11,8 @@ struct */
 #include <iterator>
 #include <algorithm>
 #include <span>
+#include <string>
+#include <stdexcept>
 
 #include "./maps4gridboxes.hpp"
 #include "./superdrops_with_gridboxes.hpp"

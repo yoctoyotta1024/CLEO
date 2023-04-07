@@ -19,6 +19,7 @@ to terminal or writing them to a datafile */
 #include <iostream>
 #include <ios>
 #include <iomanip>
+#include <stdexcept>
 
 #include "./observer_superdropletattributes.hpp"
 #include "./observer_thermostate.hpp"

@@ -11,6 +11,7 @@ struct from binary file */
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <string_view>
 
 #include "./readbinary.hpp"

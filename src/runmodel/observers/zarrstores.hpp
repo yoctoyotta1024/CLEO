@@ -7,6 +7,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #ifndef ZARRSTORES_HPP
 #define ZARRSTORES_HPP
 
+#include <string>
 #include <string_view>
 #include <span>
 #include <filesystem>

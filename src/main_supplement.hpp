@@ -12,6 +12,7 @@ SDM process and observers to use in main.cpp */
 /* standard library packages */
 #include <vector>
 #include <stdexcept>
+#include <string>
 
 /* constants and equations */
 #include "claras_SDconstants.hpp"

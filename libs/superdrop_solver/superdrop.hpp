@@ -14,6 +14,7 @@
 #include <memory>
 #include <utility>
 #include <algorithm>
+#include <string>
 
 #include "../claras_SDconstants.hpp"
 #include "./impliciteuler.hpp"
