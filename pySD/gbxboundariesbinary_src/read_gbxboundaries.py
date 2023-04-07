@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from .create_gbxboundaries import get_COORD0_from_constsfile
 from ..readbinary import readbinary
 
-
 def get_gridboxboundaries(gridfile, COORD0=False, constsfile=""):
     ''' get gridbox boundaries from binary file and 
     re-dimensionalise usign COORD0 const from constsfile '''
