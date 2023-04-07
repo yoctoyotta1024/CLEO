@@ -129,8 +129,9 @@ def plot_radiusdistrib(ax, hedgs, radius, eps):
     ax.set_ylabel("superdroplet multiplicity")
     ax2.set_ylabel("superdroplet number distribution")
 
-    ax.legend(loc="lower left")
-    ax2.legend(loc="lower right")
+    if not ax.get_legend():
+        ax.legend(loc="lower left")
+        ax2.legend(loc="lower right")
 
     return [l1, l2]
 
@@ -146,7 +147,9 @@ def plot_numconcdistrib(ax, hedgs, eps, radius, vol):
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
     ax.set_ylabel("real droplet number concentration / cm$^{-3}$")
-    ax.legend(loc="lower left")
+    
+    if not ax.get_legend():
+        ax.legend(loc="lower left")
 
     return line
 
