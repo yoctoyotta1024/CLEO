@@ -22,6 +22,7 @@ isfigures = [True, True]
 
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
 nsupers = 1024 # int or dict of ints for number of superdroplets in a gridbox
+nsupers = {0: 1024}
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
 monor                = 1e-6                        # all SDs have this same radius [m]
@@ -71,6 +72,5 @@ create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                                   gridfile, nsupers,numconc)
 
 if isfigures[0]:
-    domainvol = get_domainvol_from_gridfile(gridfile, constsfile=constsfile)
     read_initsuperdrops.plot_initdistribs(configfile, constsfile, initSDsfile,
-                                          domainvol, binpath, isfigures[1])
+                                          gridfile, binpath, isfigures[1])

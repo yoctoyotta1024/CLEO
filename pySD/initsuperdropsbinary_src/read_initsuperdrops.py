@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from .create_initsuperdrops import initSDsinputsdict
 from ..readbinary import readbinary
-
+from ..gbxboundariesbinary_src.read_gbxboundaries import get_gbxvols_from_gridfile
 
 def get_superdroplet_attributes(configfile, constsfile, initSDsfile):
     ''' get gridbox boundaries from binary file and 
@@ -26,7 +26,6 @@ def read_dimless_superdrops_binary(filename):
     datatypes = [np.uintc, np.uint, np.double, np.double, np.double]
     data, ndata_pervar = readbinary(filename)
 
-    print(ndata_pervar)
     idxs = []
     for n in range(1, len(ndata_pervar)):
         # indexs for division of data list between each variable
@@ -45,15 +44,14 @@ def read_dimless_superdrops_binary(filename):
 
 
 def plot_initdistribs(configfile, constsfile, initSDsfile,
-                      vol, binpath, savefig):
+                      gridfile, binpath, savefig):
 
     plt.rcParams.update({'font.size': 14})
 
-    eps, radius, m_sol, coord3 = get_superdroplet_attributes(configfile,
+    gbxvols = get_gbxvols_from_gridfile(gridfile, constsfile=constsfile)
+    sd_gbxindex, eps, radius, m_sol, coord3 = get_superdroplet_attributes(configfile,
                                                                constsfile,
-                                                               initSDsfile)[1:]
-
-    print(eps, radius, m_sol, coord3)
+                                                               initSDsfile)
 
     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(14, 8))
     axs = axs.flatten()
@@ -64,13 +62,20 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
     hedgs = np.linspace(np.log10(minr), np.log10(maxr),
                         nbins+1)  # edges to lnr bins
 
-    l0 = plot_radiusdistrib(axs[0], hedgs, radius, eps)
+    unique_idxs = np.unique(sd_gbxindex)
+    for j, idx in enumerate(unique_idxs):
+        vol = gbxvols[j]
+        i2plt = np.where(sd_gbxindex == idx)
+        l0 = plot_radiusdistrib(axs[0], hedgs, 
+                                radius[i2plt], eps[i2plt])
 
-    l1 = plot_numconcdistrib(axs[1], hedgs, eps, radius, vol)
+        l1 = plot_numconcdistrib(axs[1], hedgs, eps[i2plt],
+                                 radius[i2plt], vol)
 
-    l3 = plot_masssolutedistrib(axs[3], hedgs, eps, radius, m_sol, vol)
+        l3 = plot_masssolutedistrib(axs[3], hedgs, eps[i2plt],
+                                    radius[i2plt], m_sol[i2plt], vol)
 
-    l2 = plot_coord3distrib(axs[2], hedgs, coord3, radius)
+        l2 = plot_coord3distrib(axs[2], hedgs, coord3[i2plt], radius[i2plt])
 
     fig.tight_layout()
     if savefig:
@@ -108,7 +113,7 @@ def plot_radiusdistrib(ax, hedgs, radius, eps):
     bin and as a scatter on a twinx axis with their multiplicities'''
 
     l1 = ax.scatter(radius*1e6, eps, zorder=1,
-                    color="purple", label="multiplicities")
+                    label="multiplicities")
 
     ax2 = ax.twinx()
     hist, hedgs, hwdths, hcens = log10r_frequency_distribution(radius, hedgs, 1)
@@ -133,10 +138,9 @@ def plot_numconcdistrib(ax, hedgs, eps, radius, vol):
 
     wghts = eps / vol / 1e6  # [cm^-3]
     hist, hedgs, hwdths, hcens = log10r_frequency_distribution(
-        radius, hedgs, wghts)
+                                            radius, hedgs, wghts)
 
-    line = ax.bar(hcens, hist, hwdths, color="teal",
-                  label="binned distribution")
+    line = ax.step(hcens, hist, label="binned distribution", where='mid')
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
     ax.set_ylabel("real droplet number concentration / cm$^{-3}$")
@@ -152,7 +156,7 @@ def plot_masssolutedistrib(ax, hedgs, eps, radius, m_sol, vol):
     hist, hedgs, hwdths, hcens = log10r_frequency_distribution(
         radius, hedgs, wghts)
 
-    line = ax.bar(hcens, hist, hwdths, color="teal")
+    line = ax.step(hcens, hist, where='mid')
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
     ax.set_ylabel("solute mass per unit volume / g cm$^{-3}$")
@@ -164,7 +168,7 @@ def plot_coord3distrib(ax, hedgs, coord3, radius):
 
     line = None
     if any(coord3):
-        line = ax.scatter(radius*1e6, coord3, c="purple")
+        line = ax.scatter(radius*1e6, coord3)
 
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")

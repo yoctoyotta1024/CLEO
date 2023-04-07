@@ -95,7 +95,7 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
 
     return attrs4gbx
 
-def create_allsuperdropattrs(nsupers, initattrsgen,
+def create_allsuperdropattrs(nsupersdict, initattrsgen,
                              gbxbounds, inputs, NUMCONC):
   ''' returns lists for attributes of all SDs in domain called attrs'''
 
@@ -103,6 +103,7 @@ def create_allsuperdropattrs(nsupers, initattrsgen,
 
   for gbxindex, gridboxbounds in gbxbounds.items():
 
+    nsupers = nsupersdict[gbxindex]
     attrs4gbx = dimless_superdropsattrs(nsupers, initattrsgen, inputs,
                                         gbxindex, gridboxbounds, NUMCONC) # lists of attrs for SDs in gridbox
     
@@ -162,7 +163,29 @@ def check_datashape(data, ndata):
             " shape: num_attributes * nsupers. nata should be list of"+\
             " [nsupers]*num_attributes."     
       raise ValueError(err)
-                                                                                                                  
+
+def nsupers_pergridboxdict(nsupers, gbxbounds):
+  
+  if type(nsupers) == int:
+    nsupersdict = {}
+    for key in gbxbounds.keys():
+      nsupersdict[key] = nsupers
+    return nsupersdict
+
+  elif type(nsupers) == dict:
+    print(nsupers.keys())
+    if nsupers.keys() != gbxbounds.keys():
+      errmsg = "keys for nsupers dict don't match gridbox indexes"
+      raise ValueError(errmsg)
+    else:
+      return nsupers
+      nsupersdict == nsupers
+
+  else:
+    errmsg = "nsupers must be either dict or int"
+    raise ValueError(errmsg)
+
+
 def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile, 
                                 constsfile, gridfile, nsupers, NUMCONC):
   ''' de-dimensionalise attributes in initattrsgen and then write to 
@@ -172,12 +195,13 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
     errmsg = "gridfile not found, but must be"+\
               " created before initSDsfile can be"
     raise ValueError(errmsg)
-  
+
   inputs = initSDsinputsdict(configfile, constsfile)
   gbxbounds = read_dimless_gbxboundaries_binary(gridfile,
                                                 COORD0=inputs["COORD0"])
+  nsupersdict = nsupers_pergridboxdict(nsupers, gbxbounds) 
   
-  attrs = create_allsuperdropattrs(nsupers, initattrsgen,
+  attrs = create_allsuperdropattrs(nsupersdict, initattrsgen,
                                    gbxbounds, inputs, NUMCONC) 
   
   ndata = [len(dt) for dt in [attrs.sd_gbxindex, attrs.eps,

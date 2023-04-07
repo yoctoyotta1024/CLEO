@@ -26,6 +26,17 @@ def get_domainvol_from_gridfile(gridfile, COORD0=False, constsfile=""):
     
     return calc_domainvol(zhalf, xhalf, yhalf)
 
+def get_gbxvols_from_gridfile(gridfile, COORD0=False, constsfile=""):
+    ''' get total domain volume from binary file '''
+
+    if not COORD0:
+        COORD0 = get_COORD0_from_constsfile(constsfile)
+    
+    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0) 
+
+    return calc_gridboxvols(gbxbounds)
+
+
 def read_dimless_gbxboundaries_binary(filename, COORD0=False):
     ''' return dictionary for gbx indicies to gbx boundaries by
     reading binary file. Return dimensionless version if COORD0
@@ -124,17 +135,17 @@ def calc_domainvol(zhalf, xhalf, yhalf):
     return domainvol
 
 
-def calc_gridboxvols(zhalf, xhalf, yhalf):
+def calc_gridboxvols(gbxbounds):
 
-    widths = []
-    for half in [xhalf, yhalf]:
-        widths.append(np.amax(half) - np.amin(half))
-
-    area = np.prod(widths)
-    zwidths = abs(zhalf[1:] - zhalf[:-1])
-    gridboxvols = zwidths * area
-
-    return gridboxvols
+    gbxvols = []
+    for gbxindex, bounds in gbxbounds.items():
+        zwidth = bounds[1] - bounds[0]
+        xwidth = bounds[3] - bounds[2]
+        ywidth = bounds[5] - bounds[4]
+        
+        gbxvols.append(zwidth * xwidth * ywidth )
+    
+    return gbxvols
 
 
 def calc_domaininfo(zhalf, xhalf, yhalf):
