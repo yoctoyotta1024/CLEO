@@ -148,55 +148,63 @@ def calc_gridboxvols(gbxbounds):
     return gbxvols
 
 
-def calc_domaininfo(zhalf, xhalf, yhalf):
+def domaininfo(gbxbounds):
 
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds) 
     domainvol = calc_domainvol(zhalf, xhalf, yhalf)
 
-    gridboxvols = calc_gridboxvols(zhalf, xhalf, yhalf)
+    gridboxvols = calc_gridboxvols(gbxbounds)
     num_gridboxes = len(gridboxvols)
 
-    if num_gridboxes == 1:
-        SDnspace = 0
+    return domainvol, gridboxvols, num_gridboxes
+
+def grid_dimensions(gbxbounds):
+
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds) 
+    
+    if len(zhalf) == 2:
+        griddims = 0
+    elif len(xhalf) == 2:
+        griddims = 1
+    elif len(yhalf) == 2:
+        griddims = 2
     else:
-        SDnspace = 1
-
-    return domainvol, gridboxvols, num_gridboxes, SDnspace
-
+        griddims = 3
+    
+    extents, spacings = [], []
+    for half in [zhalf, xhalf, yhalf]:
+        extents.append([np.amin(half), np.amax(half)])
+        spacings.append(abs(half[1:]-half[:-1]))
+    
+    return extents, spacings, griddims
 
 def print_domain_info(constsfile, gridfile):
     ''' create values from constants file & config file
     required as inputs to create initial 
     superdroplet conditions '''
+    
+    COORD0 = get_COORD0_from_constsfile(constsfile)
+    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0) 
+    
+    domainvol, gridboxvols, num_gridboxes = domaininfo(gbxbounds)
+    xtns, spacings, griddims = grid_dimensions(gbxbounds) 
+    ztot = abs(xtns[0][0] - xtns[0][1])
+    xtot = abs(xtns[1][0] - xtns[1][1])
+    ytot = abs(xtns[2][0] - xtns[2][1])
 
-    zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile,
-                                                constsfile=constsfile)
-
-    domainvol, gridboxvols, num_gridboxes, SDnspace = calc_domaininfo(
-        zhalf, xhalf, yhalf)
-
-    zwdths = abs(zhalf[1:]-zhalf[:-1])
-    xwdths = abs(xhalf[1:]-xhalf[:-1])
-    ywdths = abs(yhalf[1:]-yhalf[:-1])
-
-    ztot = abs(np.amax(zhalf) - np.amin(zhalf))
-    xtot = abs(np.amax(xhalf) - np.amin(xhalf))
-    ytot = abs(np.amax(yhalf) - np.amin(yhalf))
-
-    print("\n------ DOMAIN / GRIDBOXES INFO ------")
-    print("------------ "+str(SDnspace)+"-D MODEL ------------")
-    print("domain dimensions: ({:3g}x{:3g}x{:3g})m^3".format(ztot, xtot, ytot))
-    print("domain no. gridboxes: "+str(len(zwdths)) +
-          "x"+str(len(xwdths))+"x"+str(len(ywdths)))
-    print("domain (upper,lower) z limits: ({:3g},{:3g})m".format(
-        np.amax(zhalf), np.amin(zhalf)))
-    print("domain (upper,lower) x limits: ({:3g},{:3g})m".format(
-        np.amax(xhalf), np.amin(xhalf)))
-    print("domain (upper,lower) y limits: ({:3g},{:3g})m".format(
-        np.amax(yhalf), np.amin(yhalf)))
-    print("avg gridbox z spacing: {:3g} m".format(np.mean(zwdths)))
-    print("avg gridbox x spacing: {:3g} m".format(np.mean(xwdths)))
-    print("avg gridbox y spacing: {:3g} m".format(np.mean(ywdths)))
-    print("avg gridbox volume: {:3g}".format(np.mean(gridboxvols))+" m^3")
-    print("total domain volume: {:3g} m^3".format(domainvol))
-    print("total no. gridboxes:", num_gridboxes)
-    print("------------------------------------\n")
+    inforstr = "\n------ DOMAIN / GRIDBOXES INFO ------\n"+\
+    "------------- "+str(griddims)+"-D MODEL -------------\n"+\
+    "domain dimensions: ({:3g}x{:3g}x{:3g})m^3\n".format(ztot, xtot, ytot)+\
+    "domain no. gridboxes: "+str(len(spacings[0])) +\
+          "x"+str(len(spacings[1]))+"x"+str(len(spacings[2]))+"\n"+\
+    "domain z limits: ({:3g},{:3g})m\n".format(np.amin(xtns[0]),np.amax(xtns[0]))+\
+    "domain x limits: ({:3g}, {:3g})m\n".format(np.amin(xtns[1]),np.amax(xtns[1]))+\
+    "domain y limits: ({:3g}, {:3g})m\n".format(np.amin(xtns[2]), np.amax(xtns[2]))+\
+    "mean gridbox z spacing: {:3g} m\n".format(np.mean(spacings[0]))+\
+    "mean gridbox x spacing: {:3g} m\n".format(np.mean(spacings[1]))+\
+    "mean gridbox y spacing: {:3g} m\n".format(np.mean(spacings[2]))+\
+    "mean gridbox volume: {:3g}".format(np.mean(gridboxvols))+" m^3\n"+\
+    "total domain volume: {:3g} m^3\n".format(domainvol)+\
+    "total no. gridboxes: "+str(num_gridboxes)+\
+    "\n------------------------------------\n"
+    print(inforstr)
