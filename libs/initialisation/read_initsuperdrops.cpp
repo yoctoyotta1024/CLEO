@@ -13,20 +13,25 @@ InitSDsData get_initsuperdropsdata(std::string_view initSDsfile)
 
   VarMetadata var(meta.at(0));
   file.seekg(var.b0, std::ios::beg);
+  std::vector<unsigned int> isd_gbxindex(var.nvar, 0);
+  binary_into_buffer<unsigned int>(file, isd_gbxindex);
+ 
+  var = meta.at(1);
+  file.seekg(var.b0, std::ios::beg);
   std::vector<size_t> ieps(var.nvar, 0);
   binary_into_buffer<size_t>(file, ieps);
  
-  var = meta.at(1);
+  var = meta.at(2);
   file.seekg(var.b0, std::ios::beg);
   std::vector<double> iradius(var.nvar, 0);
   binary_into_buffer<double>(file, iradius);
 
-  var = meta.at(2);
+  var = meta.at(3);
   file.seekg(var.b0, std::ios::beg);
   std::vector<double> im_sol(var.nvar, 0);
   binary_into_buffer<double>(file, im_sol);
 
-  var = meta.at(3);
+  var = meta.at(4);
   file.seekg(var.b0, std::ios::beg);
   std::vector<double> icoord3(var.nvar, 0);
   binary_into_buffer<double>(file, icoord3);
@@ -36,5 +41,6 @@ InitSDsData get_initsuperdropsdata(std::string_view initSDsfile)
   std::vector<double> icoord1(0);
   std::vector<double> icoord2(0);
 
-  return InitSDsData{ieps, iradius, im_sol, icoord3, icoord1, icoord2};
+  return InitSDsData{isd_gbxindex, ieps, iradius, im_sol,
+                      icoord3, icoord1, icoord2};
 };

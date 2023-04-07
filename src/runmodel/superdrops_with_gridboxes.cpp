@@ -75,13 +75,12 @@ create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
 
   for (int i = 0; i < nSDsvec; ++i)
   {
+    const unsigned int sd_gbxindex = initSDs.sd_gbxindex.at(i);
     const auto sd_identity = sdIdGen.next();
     const size_t eps = (size_t)(initSDs.eps_init.at(i) + 0.5);
     const double radius = initSDs.radius_init.at(i);
     const double m_sol = initSDs.m_sol_init.at(i);
     const std::vector<double> zxycoords = initSDcoords(SDnspace, initSDs, i);
-    const unsigned int sd_gbxindex = sd_gbxindex_from_coords(zxycoords.at(0),
-                                                             mdlmaps.idx2bounds_z);
 
     const SuperdropWithGridbox SDinGBx(sd_gbxindex,
                                        Superdrop(solute, eps, radius, m_sol,
