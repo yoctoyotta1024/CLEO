@@ -39,20 +39,18 @@ True volume = state.volume * COORD0^3 [m^3] */
   std::cout << "ie. VOLUME = " << state.volume * pow(dlc::COORD0, 3.0) << "m^3\n";
 }
 
-std::vector<GridBox> create_gridboxes(const size_t num_gridboxes,
-                                      const std::map<unsigned int, double> &idx2vol,
+std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &mdlmaps,
                                       std::vector<SuperdropWithGridbox> &SDsInGBxs)
-/* create domain as a vector of grid boxes such that each grid box 
-is initialised with a label (ii), a superdroplet vector with
-superdroplets created from the SDinitialisation csv file, 
-and an (uninitialised) thermodynamic state. */                                   
+/* create domain as a vector of grid boxes such that each grid box
+is initialised with a labels from mdlmaps.gbxidxs, and a span of the
+superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
 { 
   sort_superdrops_via_gridboxindex(SDsInGBxs);
   
   std::vector<GridBox> gridboxes;
-  for (unsigned int ii = 0; ii < num_gridboxes; ++ii)
+  for (auto ii : mdlmaps.gbxidxs)
   {
-    gridboxes.push_back(GridBox(ii, idx2vol, SDsInGBxs));
+    gridboxes.push_back(GridBox(ii, mdlmaps.idx2vol, SDsInGBxs));
   }
 
   return gridboxes;

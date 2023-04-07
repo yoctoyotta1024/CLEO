@@ -40,13 +40,11 @@ coupled thermodynamics */
   True volume = state.volume * COORD0^3 [m^3] */
 };
 
-std::vector<GridBox> create_gridboxes(const size_t num_gridboxes,
-                                      const std::map<unsigned int, double> &idx2vol,
+std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &mdlmaps,
                                       std::vector<SuperdropWithGridbox> &SDsInGBxs);
 /* create domain as a vector of grid boxes such that each grid box
-is initialised with a label (ii), a superdroplet vector with
-superdroplets created from the SDinitialisation csv file,
-and an (uninitialised) thermodynamic state. */
+is initialised with a labels from mdlmaps.gbxidxs, and a span of the
+superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
 
 inline void set_gridboxes_superdropletspan(std::vector<GridBox> &gridboxes,
                                            std::vector<SuperdropWithGridbox> &SDsInGBxs)
