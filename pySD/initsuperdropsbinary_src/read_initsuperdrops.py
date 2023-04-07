@@ -74,8 +74,10 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
 
         l3 = plot_masssolutedistrib(axs[3], hedgs, eps[i2plt],
                                     radius[i2plt], m_sol[i2plt], vol)
-
-        l2 = plot_coord3distrib(axs[2], hedgs, coord3[i2plt], radius[i2plt])
+        
+        if coord3 != []:
+            l2 = plot_coord3distrib(axs[2], hedgs,
+                                    coord3[i2plt], radius[i2plt])
 
     fig.tight_layout()
     if savefig:
