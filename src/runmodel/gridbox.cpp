@@ -49,6 +49,15 @@ void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &mdlmaps)
 {
   for (auto &SDinGBx : span4SDsinGBx)
   {
+    if(SDinGBx.sd_gbxindex != gbxindex)
+    {
+      const std::string err = "span4SDsinGBx incorrectly set."
+                              " At least one sd_gbxindex"
+                              " does not match this gridbox's index (ie. " +
+                              std::to_string(SDinGBx.sd_gbxindex) +
+                              " != "+std::to_string(gbxindex)+")";
+      throw std::invalid_argument(err);
+    }
     iscoord_within_bounds(mdlmaps.idx2bounds_z, SDinGBx.superdrop.coord3);
     iscoord_within_bounds(mdlmaps.idx2bounds_x, SDinGBx.superdrop.coord1);
     iscoord_within_bounds(mdlmaps.idx2bounds_y, SDinGBx.superdrop.coord2);
