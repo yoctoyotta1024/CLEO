@@ -12,7 +12,7 @@ of this header file that's been moved into a new file for clarity */
 
 void run_cvodeSDM_coupledmodel(const Config &config,
                                const Timesteps &mdlsteps,
-                               const Maps4GridBoxes mdlmaps,
+                               const Maps4GridBoxes &mdlmaps,
                                const SdmProcess auto &sdmprocess,
                                const Observer auto &observer)
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
@@ -32,8 +32,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
                                               mdlmaps);
 
   /* vector containing all gridboxes that makeup the SDM domain */
-  std::vector<GridBox> gridboxes = create_gridboxes(ngridboxes, mdlmaps.idx2vol, 
-                                                    SDsInGBxs);
+  std::vector<GridBox> gridboxes = create_gridboxes(mdlmaps, SDsInGBxs);
 
   /* prepare, launch, and end coupled model */
   auto gen = prepare_coupledmodel(mdlsteps, cvode, gridboxes);
@@ -45,7 +44,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
 }
 
 void timestep_coupledmodel(const Timesteps &mdlsteps,
-                           const Maps4GridBoxes mdlmaps,
+                           const Maps4GridBoxes &mdlmaps,
                            const SdmProcess auto &sdmprocess,
                            const Observer auto &observer,
                            const bool doCouple,

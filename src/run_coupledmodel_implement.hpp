@@ -38,14 +38,14 @@ namespace dlc = dimless_constants;
 
 void run_cvodeSDM_coupledmodel(const Config &config,
                                const Timesteps &mdlsteps,
-                               const Maps4GridBoxes mdlmaps,
+                               const Maps4GridBoxes &mdlmaps,
                                const SdmProcess auto &sdmprocess,
                                const Observer auto &observer);
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 
 void timestep_coupledmodel(const Timesteps &mdlsteps,
-                           const Maps4GridBoxes mdlmaps,
+                           const Maps4GridBoxes &mdlmaps,
                            const SdmProcess auto &sdmprocess,
                            const Observer auto &observer,
                            const bool doCouple,
