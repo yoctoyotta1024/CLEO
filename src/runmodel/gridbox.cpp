@@ -32,13 +32,18 @@ void GridBox::set_span(std::vector<SuperdropWithGridbox> &SDsInGBxs)
 from lowest to highest. Finds first and last SDWithGBx that has 
 sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
 {
-  auto upcompare = [](const int val, const SuperdropWithGridbox &a)
+  auto lowcompare = [](const SuperdropWithGridbox &a, const unsigned int val)
   {
-    return val < (int)a.sd_gbxindex; // cast sd_gbxindex to *signed* int
+    return a.sd_gbxindex < val; // cast sd_gbxindex to *signed* int
   };
 
-  auto low = std::upper_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
-                              gbxindex - 1, upcompare);
+  auto upcompare = [](const unsigned int val, const SuperdropWithGridbox &a)
+  {
+    return val < a.sd_gbxindex; // cast sd_gbxindex to *signed* int
+  };
+
+  auto low = std::lower_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
+                              gbxindex, lowcompare);
   auto up = std::upper_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
                              gbxindex, upcompare);
 

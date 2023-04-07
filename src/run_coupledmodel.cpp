@@ -152,6 +152,11 @@ updating spans4SDsInGbx for each gridbox */
   sort_superdrops_via_gridboxindex(SDsInGBxs); // see superdrops_with_gridboxes.cpp
 
   set_gridboxes_superdropletspan(gridboxes, SDsInGBxs); // see gridbox.cpp
+  
+  // for (auto gbx: gridboxes)
+  // {
+  //   gbx.iscorrect_span_for_gbxindex(mdlmaps);
+  // }
 }
 
 void change_superdroplets_gridboxindex(const Maps4GridBoxes &mdlmaps,
