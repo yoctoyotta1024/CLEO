@@ -69,7 +69,7 @@ Path(spath).mkdir(exist_ok=True)
 initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist, coord3gen)
 create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
                                                   configfile, constsfile,
-                                                  gridfile, nsupers,numconc)
+                                                  gridfile, nsupers, numconc)
 
 if isfigures[0]:
     read_initsuperdrops.plot_initdistribs(configfile, constsfile, initSDsfile,
