@@ -81,23 +81,22 @@ class SampleDryradiiGen:
 
         return radii  # [m]
 
-class SampleCoord3Gen:
+class SampleCoordGen:
     ''' method to generate superdroplet coord3s [m] by
     sampling in range bewteen coord3span '''
 
-    def __init__(self, coord3span, random):
+    def __init__(self, random):
 
-        self.span = coord3span
         self.random = random
 
-    def __call__(self, nsupers):
+    def __call__(self, nsupers, coordrange):
         ''' Returns coord3 for nsupers
         sampled from coord3span [m]'''
 
         if not self.random:
-          coord3s = np.linspace(self.span[0], self.span[1], nsupers)
+          coord3s = np.linspace(coordrange[0], coordrange[1], nsupers)
         else:
-          coord3s = np.random.uniform(low=self.span[0], high=self.span[1], 
+          coord3s = np.random.uniform(low=coordrange[0], high=coordrange[1], 
                                       size=nsupers)
 
         return coord3s  # units [m]
@@ -193,7 +192,8 @@ class InitManyAttrsGen:
 
         coord3s = np.array([])
         if self.coord3gen:
-          coord3s = self.coord3gen(nsupers)
+          coord3range = [gridboxbounds[0], gridboxbounds[1]] # [min,max] coord3 to sample within
+          coord3s = self.coord3gen(nsupers, coord3range)
 
         if nsupers > 0:  
             self.check_totalnumconc(multiplicities, NUMCONC, gbxvol) 

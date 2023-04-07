@@ -59,7 +59,7 @@ radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
 # coord3gen = initattributes.MonoAttrsGen(monocoord3)
                 
 randomcoord3         = True                     # sample coord3 range randomly or not
-coord3gen = initattributes.SampleCoord3Gen(randomcoord3)
+coord3gen = initattributes.SampleCoordGen(randomcoord3)
 
 ### ---------------------------------------------------------------- ###
 
