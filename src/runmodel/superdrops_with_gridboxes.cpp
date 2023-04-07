@@ -86,6 +86,13 @@ create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
     SDsInGBxs.push_back(SDinGBx);
   }
 
+  if (SDsInGBxs.size() < initSDs.sd_gbxindex.size())
+  {
+    const std::string err = "Fewer superdroplets were created than were"
+                              " read from initialisation file into initSDs";
+    throw std::invalid_argument(err);
+  }
+
   return SDsInGBxs;
 }
 
