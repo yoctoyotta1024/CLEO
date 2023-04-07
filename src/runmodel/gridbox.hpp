@@ -31,15 +31,28 @@ coupled thermodynamics */
   ThermoState state;
 
   GridBox(const unsigned int ii,
-          const std::map<unsigned int, double> &idx2vol,
+          const Maps4GridBoxes &mdlmaps,
           std::vector<SuperdropWithGridbox> &SDsInGBxs);
 
   void set_span(std::vector<SuperdropWithGridbox> &SDsInGBxs);
+  /* assumes SDsInGBxs is ordered based on sd_gbxindex
+  from lowest to highest. Finds first and last SDWithGBx that has 
+  sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
 
   void set_statevolume(const std::map<unsigned int, double> &idx2vol);
   /* set dimensionless value for gridbox state's 
   volume using Map4GridBoxes idx2vol map.
   True volume = state.volume * COORD0^3 [m^3] */
+
+  void iscorrect_span_for_gbxindex(const Maps4GridBoxes &mdlmaps);
+  /* throw error if the coordinates of the superdroplets
+  in the span do not lie within the gridboux boundaries
+  given my the gbxindex */
+
+  void iscoord_within_bounds(const std::map<unsigned int,
+                                            std::pair<double,
+                                                      double>> &idx2bounds,
+                             const double coord);
 };
 
 std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &mdlmaps,

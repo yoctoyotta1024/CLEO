@@ -6,15 +6,31 @@ a gridbox */
 #include "gridbox.hpp"
 
 GridBox::GridBox(const unsigned int ii,
-                 const std::map<unsigned int, double> &idx2vol,
+                 const Maps4GridBoxes &mdlmaps,
                  std::vector<SuperdropWithGridbox> &SDsInGBxs)
     : gbxindex(ii), state()
 {
+  set_statevolume(mdlmaps.idx2vol);
+  
   set_span(SDsInGBxs);
-  set_statevolume(idx2vol);
+  iscorrect_span_for_gbxindex(mdlmaps);
+}
+
+void GridBox::set_statevolume(const std::map<unsigned int, double> &idx2vol)
+/* set dimensionless value for gridbox state's 
+volume using Map4GridBoxes idx2vol map.
+True volume = state.volume * COORD0^3 [m^3] */
+{
+  state.volume = (*idx2vol.find(gbxindex)).second;
+  std::cout << "dimensionless volume = " << state.volume
+            << "\nie. VOLUME = "
+            << state.volume * pow(dlc::COORD0, 3.0) << "m^3\n";
 }
 
 void GridBox::set_span(std::vector<SuperdropWithGridbox> &SDsInGBxs)
+/* assumes SDsInGBxs is ordered based on sd_gbxindex
+from lowest to highest. Finds first and last SDWithGBx that has 
+sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
 {
   auto upcompare = [](const int val, const SuperdropWithGridbox &a)
   {
@@ -29,14 +45,31 @@ void GridBox::set_span(std::vector<SuperdropWithGridbox> &SDsInGBxs)
   span4SDsinGBx = {low, up};  
 }
 
-void GridBox::set_statevolume(const std::map<unsigned int, double> &idx2vol)
-/* set dimensionless value for gridbox state's 
-volume using Map4GridBoxes idx2vol map.
-True volume = state.volume * COORD0^3 [m^3] */
+void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &mdlmaps)
 {
-  state.volume = (*idx2vol.find(gbxindex)).second;
-  std::cout << "dimensionless volume = " << state.volume << "\n";
-  std::cout << "ie. VOLUME = " << state.volume * pow(dlc::COORD0, 3.0) << "m^3\n";
+  for (auto &SDinGBx : span4SDsinGBx)
+  {
+    SDinGBx.superdrop.coord3 = -1.4;
+    iscoord_within_bounds(mdlmaps.idx2bounds_z, SDinGBx.superdrop.coord3);
+    iscoord_within_bounds(mdlmaps.idx2bounds_x, SDinGBx.superdrop.coord1);
+    iscoord_within_bounds(mdlmaps.idx2bounds_y, SDinGBx.superdrop.coord2);
+  }
+}
+
+void GridBox::iscoord_within_bounds(const std::map<unsigned int,
+                                                   std::pair<double,
+                                                             double>> &idx2bounds,
+                                    const double coord)
+{
+  const double llim = (*idx2bounds.find(gbxindex)).second.first;
+  const double ulim = (*idx2bounds.find(gbxindex)).second.second;
+
+  if (coord < llim || coord >= ulim)
+  {
+    const std::string err = "superdrop coord lies outside"
+                            " its gridbox's bounds";
+    throw std::invalid_argument(err);
+  }
 }
 
 std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &mdlmaps,
@@ -50,7 +83,7 @@ superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
   std::vector<GridBox> gridboxes;
   for (auto ii : mdlmaps.gbxidxs)
   {
-    gridboxes.push_back(GridBox(ii, mdlmaps.idx2vol, SDsInGBxs));
+    gridboxes.push_back(GridBox(ii, mdlmaps, SDsInGBxs));
   }
 
   return gridboxes;
