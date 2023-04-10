@@ -42,22 +42,25 @@ class SampleDryradiiGen:
         obtain the dry radius of 'nsupers' no. of superdroplets unless random=False.
         If random=False, return radii evenly distirbuted in log10(r /m) space '''
 
-        log10redgs = np.linspace(np.log10(self.rspan[0]), np.log10(
-                                  self.rspan[1]), self.nbins+1)  # log10(r) bin edges
+        if self.nbins:
+            log10redgs = np.linspace(np.log10(self.rspan[0]), np.log10(
+                                    self.rspan[1]), self.nbins+1)  # log10(r) bin edges
 
-        if edges:
-            redgs = 10**(log10redgs)
-            return redgs
-
-        else:
-            if not self.random:
-                radii = self.centres_log10rbins(log10redgs)
+            if edges:
+                redgs = 10**(log10redgs)
+                return redgs
 
             else:
-                radii = self.randomlysample_log10rbins(log10redgs)
+                if not self.random:
+                    radii = self.centres_log10rbins(log10redgs)
 
-            return radii  # [m]
+                else:
+                    radii = self.randomlysample_log10rbins(log10redgs)
 
+                return radii  # [m]
+        else:
+            return np.array([])
+        
     def centres_log10rbins(self, log10redgs):
         ''' return radii [m] that are at centres of
         evenly spaced bins of log10(radii /m)'''
@@ -81,6 +84,25 @@ class SampleDryradiiGen:
 
         return radii  # [m]
 
+class MonoCoordGen:
+    ''' method to generate superdroplets with 
+     coord all equal to coord0 '''
+
+    def __init__(self, coord0):
+
+        self.coord0 = coord0
+
+    def __call__(self, nsupers, coordrange):
+        ''' Returns coord for nsupers all
+        with the value of coord0 '''
+
+        if (self.coord0 >= coordrange[0] and self.coord0 < coordrange[0]):
+            attrs = np.full(nsupers, self.coord0)
+        else:
+            attrs = np.array([])
+        
+        return attrs
+    
 class SampleCoordGen:
     ''' method to generate 'nsupers'
     no. of superdroplets' coord [m]
@@ -202,11 +224,19 @@ class InitManyAttrsGen:
 
         self.check_coordsgen_matches_modeldimension(SDnspace)
        
-        coord3 = np.array([])
-        if self.coord3gen:
-          coord3range = [gridboxbounds[0], gridboxbounds[1]] # [min,max] coord3 to sample within
-          coord3 = self.coord3gen(nsupers, coord3range)
- 
-        coord1, coord2 = np.array([]), np.array([])
+        coord3, coord1, coord2 = np.array([]), np.array([]), np.array([])
         
+        if self.coord3gen:
+            coord3range = [gridboxbounds[0], gridboxbounds[1]] # [min,max] coord3 to sample within
+            coord3 = self.coord3gen(nsupers, coord3range)
+
+            if self.coord1gen:
+                coord1range = [gridboxbounds[2], gridboxbounds[3]] # [min,max] coord1 to sample within
+                coord1 = self.coord1gen(nsupers, coord1range)
+
+                if self.coord2gen:
+                    coord2range = [gridboxbounds[4], gridboxbounds[5]] # [min,max] coord2 to sample within
+                    coord2 = self.coord2gen(nsupers, coord2range)
+
+
         return coord3, coord1, coord2 # units [m], [m], [m]

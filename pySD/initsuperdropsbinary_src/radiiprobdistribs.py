@@ -17,12 +17,15 @@ class DiracDelta:
     (ie. prob = 1 and is then re-normalised such that sum of the
     probalilities over the sample = 1) ''' 
 
-    diff = np.abs(radii - self.r0)
+    if radii.any():
+      diff = np.abs(radii - self.r0)
+      
+      probs = np.where(diff == np.min(diff), 1, 0)
+
+      return probs / np.sum(probs) #normalise so sum(prob) = 1
+    else:
+      return np.array([])
     
-    probs = np.where(diff == np.min(diff), 1, 0)
-
-    return probs / np.sum(probs) #normalise so sum(prob) = 1
-
 class VolExponential:
   ''' probability of radius given by exponential in
   volume distribution as defined by Shima et al. (2009) '''
