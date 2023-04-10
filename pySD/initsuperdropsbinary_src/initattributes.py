@@ -116,6 +116,8 @@ class InitManyAttrsGen:
         self.coord1gen = coord1gen
         self.coord2gen = coord2gen
 
+        self.ncoordsgen = sum(x is not None for x in [coord3gen, coord2gen, coord1gen])
+
     def mass_solutes(self, dryradii, RHO_SOL):
         ''' return the mass [Kg] of the solute in superdroplets given their 
         dry radii [m] and solute density [Kg m^3]'''
@@ -143,14 +145,11 @@ class InitManyAttrsGen:
 
         return np.array(eps, dtype=np.uint)
 
-    def check_coord3gen_matches_modeldimension(self, SDnspace):
+    def check_coordsgen_matches_modeldimension(self, SDnspace):
        
-        if SDnspace == 0 and self.coord3gen:
-            errmsg = "coord3 generator specified but SDnspace = 0"
-            raise ValueError(errmsg)
-        
-        elif SDnspace > 0 and not (self.coord3gen):
-            errmsg = "no coord3 generator specified but SDnspace > 1"
+        if SDnspace != self.ncoordsgen:
+            errmsg = str(self.ncoordsgen)+" coord generators specified "+\
+                    "but SDnspace = "+str(SDnspace)
             raise ValueError(errmsg)
 
     def check_totalnumconc(self, multiplicities, NUMCONC, samplevol):
@@ -200,7 +199,7 @@ class InitManyAttrsGen:
         ''' generate superdroplets (SDs) attributes that have dimensions
         by calling the appropraite generating functions'''
 
-        self.check_coord3gen_matches_modeldimension(SDnspace)
+        self.check_coordsgen_matches_modeldimension(SDnspace)
        
         coord3 = np.array([])
         if self.coord3gen:
