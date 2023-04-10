@@ -117,7 +117,8 @@ class SampleCoordGen:
         sampled from coord3span [m]'''
 
         if not self.random:
-          coord = np.linspace(coordrange[0], coordrange[1], nsupers)
+          coord = np.linspace(coordrange[0], coordrange[1],
+                              nsupers, endpoint=False)
         else:
           coord = np.random.uniform(low=coordrange[0], high=coordrange[1], 
                                       size=nsupers)

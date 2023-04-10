@@ -79,8 +79,8 @@ def is_sd_gbxindex_correct(gridboxbounds, coord3, coord1, coord2,
     if (coord < gridboxbounds[2*i]).any():
       errmsg = "superdroplet coord"+str(i+1)+" below lower"+\
                 " limit of gridbox it's associated with"
-    elif (coord >= gridboxbounds[2*i+1]).any(): 
-      errmsg = "superdroplet coord"+str(i+1)+"above upper"+\
+    elif (coord >= gridboxbounds[2*i+1]).any():
+      errmsg = "superdroplet coord"+str(i+1)+" above upper"+\
                 " limit of gridbox it's associated with"    
   if errmsg:
     raise ValueError(errmsg)

@@ -23,22 +23,25 @@ def get_superdroplet_attributes(configfile, constsfile, initSDsfile):
 def read_dimless_superdrops_binary(filename):
     ''' return dimenionsless gbx boundaries by reading binary file'''
 
-    datatypes = [np.uintc, np.uint, np.double, np.double, np.double]
+    datatypes = [np.uintc, np.uint, np.double, np.double]
+    datatypes += [np.double]*3
     data, ndata_pervar = readbinary(filename)
 
-    idxs = []
+    idxs = [0,0,0,0,0,0] # indexs for division of data list between each variable
     for n in range(1, len(ndata_pervar)):
-        # indexs for division of data list between each variable
-        idxs.append(np.sum(ndata_pervar[:n]))
+        idxs[n-1] = np.sum(ndata_pervar[:n])
 
     sd_gbxindex = np.asarray(data[:idxs[0]], dtype=datatypes[0])
     eps = np.asarray(data[idxs[0]:idxs[1]], dtype=datatypes[1])
     radius = np.asarray(data[idxs[1]:idxs[2]], dtype=datatypes[2])
     m_sol = np.asarray(data[idxs[2]:idxs[3]], dtype=datatypes[3])
-    coord3 = np.asarray(data[idxs[3]:], dtype=datatypes[4])
+    coord3 = np.asarray(data[idxs[3]:idxs[4]], dtype=datatypes[4])
+    coord1 = np.asarray(data[idxs[4]:idxs[5]], dtype=datatypes[5])
+    coord2 = np.asarray(data[idxs[5]:], dtype=datatypes[6])
 
     print("attribute shapes: ", sd_gbxindex.shape, eps.shape,
-          radius.shape, m_sol.shape, coord3.shape)
+          radius.shape, m_sol.shape, coord3.shape, coord1.shape,
+          coord2.shape)
     
     return sd_gbxindex, eps, radius, m_sol, coord3
 
