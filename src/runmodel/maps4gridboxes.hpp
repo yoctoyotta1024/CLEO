@@ -44,6 +44,10 @@ public:
   std::map<unsigned int, std::pair<double, double>> idx2bounds_y;
   std::map<unsigned int, double> idx2vol; // volume of gridbox given its index
 
+  std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nbour_z; // neigbouring gbxindex to each gridbox given its gbxindex
+  std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nbour_x;
+  std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nbour_y;
+
   Maps4GridBoxes(const unsigned int SDnspace, std::string_view gridfile);
   /* initilaises idx2bounds_[i] maps (for i = x, y or z) which map
   from every gridbox index to its boundaries in domain coordinates.
@@ -57,18 +61,46 @@ public:
   for gridbox 0 which are the upper and lower numerical limits,
   whilst the volume is determind by reading the gridfile */
 
-  inline unsigned int get_gridboxneighbour_up(unsigned int gbxindex) const
+  inline unsigned int get_neighbour_zup(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
-  gridbox in upwards direction */
+  gridbox in the forwards z, ie. upwards direction */
   {
-    return gbxindex + 1;
+    return (*idx2nbour_z.find(gbxindex)).second.first;
   }
 
-  inline unsigned int get_gridboxneighbour_down(unsigned int gbxindex) const
+  inline unsigned int get_neighbour_zdown(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
-  gridbox in downwards direction */
+  gridbox in the forwards z, ie. downwards direction */
   {
-    return gbxindex - 1;
+    return (*idx2nbour_z.find(gbxindex)).second.second; 
+  }
+
+  inline unsigned int get_neighbour_yright(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the forwards y direction, ie. right */
+  {
+    return (*idx2nbour_y.find(gbxindex)).second.first;
+  }
+
+  inline unsigned int get_neighbour_yleft(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the backwards y direction, ie. left */
+  {
+    return (*idx2nbour_y.find(gbxindex)).second.second;
+  }
+
+  inline unsigned int get_neighbour_xforward(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the forwards x direction, ie. out of page */
+  {
+    return (*idx2nbour_x.find(gbxindex)).second.first;
+  }
+
+  inline unsigned int get_neighbour_xbackward(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the backwards x direction, ie. into page */
+  {
+    return (*idx2nbour_x.find(gbxindex)).second.second;
   }
 };
 
