@@ -20,18 +20,21 @@ add_executable("${PROJECT_NAME}" ${SOURCES})
 # # add directories to include for targets to us
 # set(CLEODIR "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO")
 set(CLEODIR "../")
-target_include_directories(${PROJECT_NAME} PRIVATE "${CLEODIR}/src/runmodel")
-target_include_directories(${PROJECT_NAME} PRIVATE "${CLEODIR}/libs")
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+include_directories("${CLEODIR}/src/runmodel")
+include_directories("${CLEODIR}/libs")
+include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${CLEODIR})
 
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs" ${CMAKE_CURRENT_BINARY_DIR}/libs)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/initialisation" ${CMAKE_CURRENT_BINARY_DIR}/libs/initialisation)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/thermo_solver" ${CMAKE_CURRENT_BINARY_DIR}/libs/thermo_solver)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/superdrop_solver" ${CMAKE_CURRENT_BINARY_DIR}/libs/superdrop_solver)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../src/runmodel" ${CMAKE_CURRENT_BINARY_DIR}/src/runmodel)
-target_link_libraries("${PROJECT_NAME}" PRIVATE superdrop_solver initialisation runmodel)
+target_link_libraries("${PROJECT_NAME}" PUBLIC superdrop_solver initialisation runmodel)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -pedantic -g -gdwarf-4)
+target_compile_options(${PROJECT_NAME} PUBLIC -Wall -pedantic -g -gdwarf-4)
 #target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -pedantic -g)

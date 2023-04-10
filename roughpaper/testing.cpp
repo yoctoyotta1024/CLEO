@@ -30,8 +30,7 @@ void print_initSDs(const InitSDsData &initSDs);
 
 int main()
 {
-  const std::string abspath("/Users/yoctoyotta1024/Documents/autumnwinter2022_23"
-                            "/clara-bayley-superdroplets/superdroplet_model/");
+  const std::string abspath("/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/");
   
   const std::string configfilepath = abspath+"src/config/config.txt";    // path to configuration (.txt file)
   const std::string constantsfilepath = abspath+"src/include/claras_SDconstants.hpp"; // path to constants (.hpp file)
