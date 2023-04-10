@@ -82,8 +82,9 @@ class SampleDryradiiGen:
         return radii  # [m]
 
 class SampleCoordGen:
-    ''' method to generate superdroplet coord3s [m] by
-    sampling in range bewteen coord3span '''
+    ''' method to generate 'nsupers'
+    no. of superdroplets' coord [m]
+    by sampling in range bewteen coordspan '''
 
     def __init__(self, random):
 
@@ -94,12 +95,12 @@ class SampleCoordGen:
         sampled from coord3span [m]'''
 
         if not self.random:
-          coord3s = np.linspace(coordrange[0], coordrange[1], nsupers)
+          coord = np.linspace(coordrange[0], coordrange[1], nsupers)
         else:
-          coord3s = np.random.uniform(low=coordrange[0], high=coordrange[1], 
+          coord = np.random.uniform(low=coordrange[0], high=coordrange[1], 
                                       size=nsupers)
 
-        return coord3s  # units [m]
+        return coord  # units [m]
 
 class InitManyAttrsGen:
     ''' class for functions to generate attributes of superdroplets
