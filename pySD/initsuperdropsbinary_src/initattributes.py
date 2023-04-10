@@ -96,7 +96,7 @@ class MonoCoordGen:
         ''' Returns coord for nsupers all
         with the value of coord0 '''
 
-        if (self.coord0 >= coordrange[0] and self.coord0 < coordrange[0]):
+        if (self.coord0 >= coordrange[0] and self.coord0 < coordrange[1]):
             attrs = np.full(nsupers, self.coord0)
         else:
             attrs = np.array([])

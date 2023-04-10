@@ -176,27 +176,30 @@ def ctype_compatible_attrs(attrs):
       if any(attrs.coord2):
         # make coord2 compatible if there is data for it and coord3 and coord2 (>= 3-D model)
         attrs.coord2 = list(set_arraydtype(attrs.coord2, datatypes[4]))
-        datalist += attrs.coo2d3
+        datalist += attrs.coord2
 
   return datalist, datatypes
 
-def check_datashape(data, ndata):
+def check_datashape(data, ndata, SDnspace):
   ''' make sure each superdroplet attribute in data has length stated
   in ndata and that this length is compatible with the nummber of
   attributes and superdroplets expected given ndata'''
   
-  if any([n != len(data) / len(ndata) for n in ndata]):
+  err=''
+  if any([n != ndata[0] for n in ndata[:4+SDnspace]]):
     
-    print("\n------ WARNING! -----\n",
-          "not all variables in data are same length, ndata = ",
-          ndata, "\n---------------------\n")
-    
-    if len(data) != np.sum(ndata): 
-      err = "inconsistent dimensions of data: "+str(np.shape(data))+", and"+\
-            " data per attribute: "+str(ndata)+". data should be 1D with"+\
-            " shape: num_attributes * nsupers. nata should be list of"+\
-            " [nsupers]*num_attributes."     
-      raise ValueError(err)
+    err += "\n------ ERROR! -----\n"+\
+          "not all variables in data are same length, ndata = "+\
+          str(ndata[:4+SDnspace])+"\n---------------------\n"
+     
+  if len(data) != np.sum(ndata): 
+    err += "inconsistent dimensions of data: "+str(np.shape(data))+", and"+\
+          " data per attribute: "+str(ndata)+". data should be 1D with"+\
+          " shape: num_attributes * nsupers. nata should be list of"+\
+          " [nsupers]*num_attributes."     
+
+  if err: 
+    raise ValueError(err)
 
 def nsupers_pergridboxdict(nsupers, gbxbounds):
   
@@ -242,7 +245,7 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
                               attrs.radius, attrs.m_sol, attrs.coord3,
                               attrs.coord1, attrs.coord2]]
   data, datatypes = ctype_compatible_attrs(attrs) 
-  check_datashape(data, ndata)
+  check_datashape(data, ndata, inputs["SDnspace"])
 
   units = [b' ', b' ', b'm', b'g']
   units += [b'm']*3 # coords units
