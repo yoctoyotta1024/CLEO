@@ -67,7 +67,7 @@ coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly o
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord1 Generator ------------- ###
-# coord1gen            = None                        # do not generate superdroplet coord1s
+#coord1gen            = None                        # do not generate superdroplet coord1s
 
 # monocoord1           = 1000                        # all SDs have this same coord1 [m] 
 # coord1gen = initattributes.MonoCoordGen(monocoord1)
@@ -76,12 +76,12 @@ coord1gen            = initattributes.SampleCoordGen(True) # sample coord1 range
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord2 Generator ------------- ###
-coord2gen            = None                        # do not generate superdroplet coord2s
+#coord2gen            = None                        # do not generate superdroplet coord2s
 
 # monocoord2           = 1000                        # all SDs have this same coord2 [m] 
 # coord2gen = initattributes.MonoCoordGen(monocoord2)
          
-#coord2gen             = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
+coord2gen             = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
 ### ---------------------------------------------------------------- ###
 
 
