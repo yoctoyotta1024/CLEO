@@ -6,8 +6,8 @@ from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src.read_gbxboundaries import get_domainvol_from_gridfile
 
 ### path and filenames
-#abspath = /Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/
-abspath = sys.argv[1]
+abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+#abspath = sys.argv[1]
 constsfile = abspath+"libs/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
 
@@ -76,12 +76,12 @@ coord1gen            = initattributes.SampleCoordGen(True) # sample coord1 range
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord2 Generator ------------- ###
-#coord2gen            = None                        # do not generate superdroplet coord2s
+coord2gen            = None                        # do not generate superdroplet coord2s
 
 # monocoord2           = 1000                        # all SDs have this same coord2 [m] 
 # coord2gen = initattributes.MonoCoordGen(monocoord2)
          
-coord2gen             = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord2gen             = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
 ### ---------------------------------------------------------------- ###
 
 

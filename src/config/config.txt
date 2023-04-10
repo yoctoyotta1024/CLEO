@@ -32,8 +32,8 @@ OUT_TSTEP = 30                          # time between outputting data (and coup
 TEND = 2400                             # time span of integration [s]
 
 ### superdroplet params ###
-nSDsvec = 200                         # initial no. elements in superdroplets' vector ( = initial total no. of superdroplets)
-SDnspace = 3                           # no. of spatial coordinates of superdroplets ( = dimension of model)
+nSDsvec = 100                         # initial no. elements in superdroplets' vector ( = initial total no. of superdroplets)
+SDnspace = 2                           # no. of spatial coordinates of superdroplets ( = dimension of model)
 
 ### initial thermodynamic conditions ###
 P_INIT = 100000.0                       # initial pressure [Pa]
