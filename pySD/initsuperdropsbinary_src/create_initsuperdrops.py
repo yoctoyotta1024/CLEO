@@ -136,7 +136,6 @@ def create_allsuperdropattrs(nsupersdict, initattrsgen,
 
   return attrs
 
-
 def set_arraydtype(arr, dtype):
    
   og = type(arr[0])
@@ -164,8 +163,19 @@ def ctype_compatible_attrs(attrs):
   datalist = attrs.sd_gbxindex + attrs.eps + attrs.radius + attrs.m_sol
   
   if any(attrs.coord3):
+    # make coord3 compatible if there is data for it (>= 1-D model)
     attrs.coord3 = list(set_arraydtype(attrs.coord3, datatypes[4]))
     datalist += attrs.coord3
+
+    if any(attrs.coord1):
+      # make coord1 compatible if there is data for it and coord3 (>= 2-D model)
+      attrs.coord1 = list(set_arraydtype(attrs.coord1, datatypes[4]))
+      datalist += attrs.coord1
+    
+      if any(attrs.coord2):
+        # make coord2 compatible if there is data for it and coord3 and coord2 (>= 3-D model)
+        attrs.coord2 = list(set_arraydtype(attrs.coord2, datatypes[4]))
+        datalist += attrs.coo2d3
 
   return datalist, datatypes
 
@@ -228,12 +238,14 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
                                    gbxbounds, inputs, NUMCONC) 
   
   ndata = [len(dt) for dt in [attrs.sd_gbxindex, attrs.eps,
-                              attrs.radius, attrs.m_sol, attrs.coord3]]
+                              attrs.radius, attrs.m_sol, attrs.coord3,
+                              attrs.coord1, attrs.coord2]]
   data, datatypes = ctype_compatible_attrs(attrs) 
   check_datashape(data, ndata)
 
-  units = [b' ', b' ', b'm', b'g', b'm']
+  units = [b' ', b' ', b'm', b'g', b'm', b'm', b'm']
   scale_factors = np.array([1.0, 1.0, inputs["R0"], inputs["MASS0"], 
+                           inputs["COORD0"], inputs["COORD0"],
                            inputs["COORD0"]], dtype=np.double)
 
   if initattrsgen.coord3gen: 
