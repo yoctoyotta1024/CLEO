@@ -58,8 +58,7 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
     gbxvols = get_gbxvols_from_gridfile(gridfile, constsfile=constsfile)
     attrs = get_superdroplet_attributes(configfile,constsfile, initSDsfile)
 
-    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(14, 8))
-    axs = axs.flatten()
+    fig, axs = figure_setup(attrs.coord3, attrs.coord1, attrs.coord2)
 
     # create nbins evenly spaced in log10(r)
     nbins = 100
@@ -77,14 +76,12 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
         l1 = plot_numconcdistrib(axs[1], hedgs, attrs.eps[i2plt],
                                  attrs.radius[i2plt], vol)
 
-        l3 = plot_masssolutedistrib(axs[3], hedgs, attrs.eps[i2plt],
+        l3 = plot_masssolutedistrib(axs[2], hedgs, attrs.eps[i2plt],
                                     attrs.radius[i2plt], attrs.m_sol[i2plt],
                                     vol)
         
-        if attrs.coord3 != []:
-            l2 = plot_coord3distrib(axs[2], hedgs, attrs.coord3[i2plt],
-                                    attrs.radius[i2plt])
-
+        ls = plot_coorddistribs(axs, i2plt, hedgs, attrs)
+        
     fig.tight_layout()
     if savefig:
         fig.savefig(binpath+"/initdistribs.png", dpi=400,
@@ -92,6 +89,21 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
         print("Figure .png saved as: "+binpath+"/gridboxboundaries.png")
     plt.show()
 
+def figure_setup(coord3, coord1, coord2):
+    
+    ncoords = 3-sum(not x.any() for x in [coord3, coord2, coord1])
+    
+    if ncoords == 0:
+        fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(14, 4))
+    elif ncoords == 1:
+        fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(14, 8))
+    else:
+        fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(14, 8))
+
+    fig.suptitle(str(ncoords)+"-D SDM Initial Superdroplet Conditions")
+    axs = axs.flatten()
+
+    return fig, axs
 
 def log10r_frequency_distribution(radius, hedgs, wghts):
     ''' get distribution of data with weights 'wghts' against 
@@ -152,7 +164,7 @@ def plot_numconcdistrib(ax, hedgs, eps, radius, vol):
     line = ax.step(hcens, hist, label="binned distribution", where='mid')
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
-    ax.set_ylabel("real droplet number concentration / cm$^{-3}$")
+    ax.set_ylabel("real droplet number\nconcentration / cm$^{-3}$")
     
     if not ax.get_legend():
         ax.legend(loc="lower left")
@@ -174,8 +186,22 @@ def plot_masssolutedistrib(ax, hedgs, eps, radius, m_sol, vol):
 
     return line
 
+def plot_coorddistribs(axs, i2plt, hedgs, attrs):
 
-def plot_coord3distrib(ax, hedgs, coord3, radius):
+    ls = []
+    if attrs.coord3.any():
+            ls.append(plot_coorddist(axs[3], hedgs, attrs.coord3[i2plt],
+                                    attrs.radius[i2plt], 3))
+            if attrs.coord1.any():
+                ls.append(plot_coorddist(axs[4], hedgs, attrs.coord1[i2plt],
+                                        attrs.radius[i2plt], 1))
+                if attrs.coord2.any():
+                    ls.append(plot_coorddist(axs[5], hedgs, 
+                                            attrs.coord2[i2plt],
+                                            attrs.radius[i2plt], 2))                        
+    return ls
+
+def plot_coorddist(ax, hedgs, coord3, radius, coordnum):
 
     line = None
     if any(coord3):
@@ -183,6 +209,6 @@ def plot_coord3distrib(ax, hedgs, coord3, radius):
 
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
-    ax.set_ylabel("superdroplet coord3 / m")
+    ax.set_ylabel("superdroplet coord"+str(coordnum)+" / m")
 
     return line
