@@ -170,11 +170,11 @@ The direction is given by the value of the is_change flag */
   {
     if (is_change == Down)
     {
-      SDinGBx.sd_gbxindex = mdlmaps.get_gridboxneighbour_down(SDinGBx.sd_gbxindex);
+      SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_zdown(SDinGBx.sd_gbxindex);
     }
     else if (is_change == Up)
     {
-      SDinGBx.sd_gbxindex = mdlmaps.get_gridboxneighbour_up(SDinGBx.sd_gbxindex);
+      SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_zup(SDinGBx.sd_gbxindex);
     }
     else
     {
