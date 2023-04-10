@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .create_initsuperdrops import initSDsinputsdict
+from .create_initsuperdrops import initSDsinputsdict, ManyInitAttrs
 from ..readbinary import readbinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import get_gbxvols_from_gridfile
 
@@ -11,13 +11,16 @@ def get_superdroplet_attributes(configfile, constsfile, initSDsfile):
 
     inputs = initSDsinputsdict(configfile, constsfile)
     
-    sd_gbxindex, eps, radius, m_sol, coord3 = read_dimless_superdrops_binary(initSDsfile)
+    attrs = read_dimless_superdrops_binary(initSDsfile)
 
-    radius = radius * inputs["R0"]
-    m_sol = m_sol * inputs["MASS0"]
-    coord3 = coord3 * inputs["COORD0"]
+    # re-dimensionalise SD attributes
+    attrs.radius = attrs.radius * inputs["R0"]
+    attrs.m_sol = attrs.m_sol * inputs["MASS0"]
+    attrs.coord3 = attrs.coord3 * inputs["COORD0"]
+    attrs.coord1 = attrs.coord1 * inputs["COORD0"]
+    attrs.coord2 = attrs.coord2 * inputs["COORD0"]
 
-    return sd_gbxindex, eps, radius, m_sol, coord3
+    return attrs
 
 
 def read_dimless_superdrops_binary(filename):
@@ -31,19 +34,20 @@ def read_dimless_superdrops_binary(filename):
     for n in range(1, len(ndata_pervar)):
         idxs[n-1] = np.sum(ndata_pervar[:n])
 
-    sd_gbxindex = np.asarray(data[:idxs[0]], dtype=datatypes[0])
-    eps = np.asarray(data[idxs[0]:idxs[1]], dtype=datatypes[1])
-    radius = np.asarray(data[idxs[1]:idxs[2]], dtype=datatypes[2])
-    m_sol = np.asarray(data[idxs[2]:idxs[3]], dtype=datatypes[3])
-    coord3 = np.asarray(data[idxs[3]:idxs[4]], dtype=datatypes[4])
-    coord1 = np.asarray(data[idxs[4]:idxs[5]], dtype=datatypes[5])
-    coord2 = np.asarray(data[idxs[5]:], dtype=datatypes[6])
+    attrs = ManyInitAttrs()
+    attrs.sd_gbxindex = np.asarray(data[:idxs[0]], dtype=datatypes[0])
+    attrs.eps = np.asarray(data[idxs[0]:idxs[1]], dtype=datatypes[1])
+    attrs.radius = np.asarray(data[idxs[1]:idxs[2]], dtype=datatypes[2])
+    attrs.m_sol = np.asarray(data[idxs[2]:idxs[3]], dtype=datatypes[3])
+    attrs.coord3 = np.asarray(data[idxs[3]:idxs[4]], dtype=datatypes[4])
+    attrs.coord1 = np.asarray(data[idxs[4]:idxs[5]], dtype=datatypes[5])
+    attrs.coord2 = np.asarray(data[idxs[5]:], dtype=datatypes[6])
 
-    print("attribute shapes: ", sd_gbxindex.shape, eps.shape,
-          radius.shape, m_sol.shape, coord3.shape, coord1.shape,
-          coord2.shape)
+    print("attribute shapes: ", attrs.sd_gbxindex.shape, attrs.eps.shape,
+          attrs.radius.shape, attrs.m_sol.shape, attrs.coord3.shape,
+          attrs.coord1.shape, attrs.coord2.shape)
     
-    return sd_gbxindex, eps, radius, m_sol, coord3
+    return attrs
 
 
 def plot_initdistribs(configfile, constsfile, initSDsfile,
@@ -52,35 +56,34 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
     plt.rcParams.update({'font.size': 14})
 
     gbxvols = get_gbxvols_from_gridfile(gridfile, constsfile=constsfile)
-    sd_gbxindex, eps, radius, m_sol, coord3 = get_superdroplet_attributes(configfile,
-                                                               constsfile,
-                                                               initSDsfile)
+    attrs = get_superdroplet_attributes(configfile,constsfile, initSDsfile)
 
     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(14, 8))
     axs = axs.flatten()
 
     # create nbins evenly spaced in log10(r)
     nbins = 100
-    minr, maxr = np.min(radius)/10, np.max(radius)*10
+    minr, maxr = np.min(attrs.radius)/10, np.max(attrs.radius)*10
     hedgs = np.linspace(np.log10(minr), np.log10(maxr),
                         nbins+1)  # edges to lnr bins
 
-    unique_idxs = np.unique(sd_gbxindex)
+    unique_idxs = np.unique(attrs.sd_gbxindex)
     for j, idx in enumerate(unique_idxs):
         vol = gbxvols[j]
-        i2plt = np.where(sd_gbxindex == idx)
+        i2plt = np.where(attrs.sd_gbxindex == idx)
         l0 = plot_radiusdistrib(axs[0], hedgs, 
-                                radius[i2plt], eps[i2plt])
+                                attrs.radius[i2plt], attrs.eps[i2plt])
 
-        l1 = plot_numconcdistrib(axs[1], hedgs, eps[i2plt],
-                                 radius[i2plt], vol)
+        l1 = plot_numconcdistrib(axs[1], hedgs, attrs.eps[i2plt],
+                                 attrs.radius[i2plt], vol)
 
-        l3 = plot_masssolutedistrib(axs[3], hedgs, eps[i2plt],
-                                    radius[i2plt], m_sol[i2plt], vol)
+        l3 = plot_masssolutedistrib(axs[3], hedgs, attrs.eps[i2plt],
+                                    attrs.radius[i2plt], attrs.m_sol[i2plt],
+                                    vol)
         
-        if coord3 != []:
-            l2 = plot_coord3distrib(axs[2], hedgs,
-                                    coord3[i2plt], radius[i2plt])
+        if attrs.coord3 != []:
+            l2 = plot_coord3distrib(axs[2], hedgs, attrs.coord3[i2plt],
+                                    attrs.radius[i2plt])
 
     fig.tight_layout()
     if savefig:
