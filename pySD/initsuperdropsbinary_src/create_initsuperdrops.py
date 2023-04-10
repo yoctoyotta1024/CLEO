@@ -248,12 +248,17 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
                            inputs["COORD0"], inputs["COORD0"],
                            inputs["COORD0"]], dtype=np.double)
 
+  metastr = 'Variables in this file are Superdroplet attributes:'
   if initattrsgen.coord3gen: 
-    metastr = 'Variables in this file are Superdroplet attributes:'+\
-            ' [sd_gbxindex, eps, radius, m_sol, coord3]'
+    if initattrsgen.coord1gen:
+      if initattrsgen.coord2gen: 
+        metastr += ' [sd_gbxindex, eps, radius, m_sol, coord3, coord1, coord2]'
+      else:
+        metastr += ' [sd_gbxindex, eps, radius, m_sol, coord3, coord1]'
+    else:
+      metastr += ' [sd_gbxindex, eps, radius, m_sol, coord3]'
   else:
-    metastr = 'Variables in this file are Superdroplet attributes:'+\
-            ' [sd_gbxindex, eps, radius, m_sol]'
+    metastr += ' [sd_gbxindex, eps, radius, m_sol]'
   
   writebinary.writebinary(initSDsfile, data, ndata, datatypes,
                           units, scale_factors, metastr)

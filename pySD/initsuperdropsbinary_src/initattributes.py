@@ -106,11 +106,15 @@ class InitManyAttrsGen:
     given the generators for independent attributes
     e.g. for radius and coord3 in substantation of class'''
 
-    def __init__(self, dryradiigen, radiiprobdist, coord3gen):
+    def __init__(self, dryradiigen, radiiprobdist,
+                 coord3gen, coord1gen, coord2gen):
 
         self.dryradiigen = dryradiigen
         self.radiiprobdist = radiiprobdist
+        
         self.coord3gen = coord3gen
+        self.coord1gen = coord1gen
+        self.coord2gen = coord2gen
 
     def mass_solutes(self, dryradii, RHO_SOL):
         ''' return the mass [Kg] of the solute in superdroplets given their 

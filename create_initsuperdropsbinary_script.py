@@ -63,10 +63,20 @@ coord3gen = initattributes.SampleCoordGen(randomcoord3)
 
 ### ---------------------------------------------------------------- ###
 
+### ---------- Choice of Superdroplet Coord1 Generator ------------- ###
+coord1gen            = None                        # do not generate superdroplet coord1s
+### ---------------------------------------------------------------- ###
+
+### ---------- Choice of Superdroplet Coord2 Generator ------------- ###
+coord2gen            = None                        # do not generate superdroplet coord2s
+### ---------------------------------------------------------------- ###
+
+
 
 Path(binpath).mkdir(exist_ok=True) 
 Path(spath).mkdir(exist_ok=True) 
-initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist, coord3gen)
+initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
+                                               coord3gen, coord1gen, coord2gen)
 create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
                                                   configfile, constsfile,
                                                   gridfile, nsupers, numconc)
