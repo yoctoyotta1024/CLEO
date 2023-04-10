@@ -174,13 +174,10 @@ class InitManyAttrsGen:
             "{:0g} m^-3 in {:.3g} m^3 volume --- ".format(calcnumconc, samplevol)
           print(msg)
 
-    def generate_attributes(self, nsupers, RHO_SOL, SDnspace,
-                            NUMCONC, gridboxbounds):
+    def generate_attributes(self, nsupers, RHO_SOL, NUMCONC, gridboxbounds):
         ''' generate superdroplets (SDs) attributes that have dimensions
         by calling the appropraite generating functions'''
 
-        self.check_coord3gen_matches_modeldimension(SDnspace)
-       
         gbxvol = calc_domainvol(gridboxbounds[0:2], gridboxbounds[2:4], 
                                 gridboxbounds[4:]) # [m^3]
         
@@ -190,12 +187,22 @@ class InitManyAttrsGen:
 
         multiplicities = self.multiplicities(dryradii, NUMCONC, gbxvol)
 
-        coord3s = np.array([])
-        if self.coord3gen:
-          coord3range = [gridboxbounds[0], gridboxbounds[1]] # [min,max] coord3 to sample within
-          coord3s = self.coord3gen(nsupers, coord3range)
-
         if nsupers > 0:  
             self.check_totalnumconc(multiplicities, NUMCONC, gbxvol) 
          
-        return multiplicities, dryradii, mass_solutes, coord3s  # units [], [m], [Kg], [m]
+        return multiplicities, dryradii, mass_solutes # units [], [m], [Kg], [m]
+
+    def generate_coords(self, nsupers, SDnspace, gridboxbounds):
+        ''' generate superdroplets (SDs) attributes that have dimensions
+        by calling the appropraite generating functions'''
+
+        self.check_coord3gen_matches_modeldimension(SDnspace)
+       
+        coord3 = np.array([])
+        if self.coord3gen:
+          coord3range = [gridboxbounds[0], gridboxbounds[1]] # [min,max] coord3 to sample within
+          coord3 = self.coord3gen(nsupers, coord3range)
+ 
+        coord1, coord2 = np.array([]), np.array([])
+        
+        return coord3, coord1, coord2 # units [m], [m], [m]

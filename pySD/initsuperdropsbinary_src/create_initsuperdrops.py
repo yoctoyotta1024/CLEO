@@ -11,20 +11,39 @@ class ManyInitAttrs:
         self.radius = []
         self.m_sol = []
         self.coord3 = []
+        self.coord1 = []
+        self.coord2 = []
     
-    def set_attrlists(self, a, b, c, d, e):
+    def set_attrlists(self, a, b, c, 
+                      d, e, f, g):
         self.sd_gbxindex = a
         self.eps = b
         self.radius = c
         self.m_sol = d
         self.coord3 = e 
-
-    def extend_attrlists(self, a, b, c, d, e):
+        self.coord1 = f 
+        self.coord2 = g 
+        
+    def extend_attrlists_fromlists(self, a, b, c, 
+                                   d, e, f, g):
         self.sd_gbxindex.extend(a)
         self.eps.extend(b)
         self.radius.extend(c)
         self.m_sol.extend(d)
         self.coord3.extend(e)
+        self.coord1.extend(f) 
+        self.coord2.extend(g) 
+   
+    def extend_attrlists(self, mia):
+        ''' use an instance of ManyInitAttrs (mia) to
+        extend lists in this instance '''
+        self.sd_gbxindex.extend(mia.sd_gbxindex)
+        self.eps.extend(mia.eps)
+        self.radius.extend(mia.radius)
+        self.m_sol.extend(mia.m_sol)
+        self.coord3.extend(mia.coord3)
+        self.coord1.extend(mia.coord1)
+        self.coord2.extend(mia.coord2)   
 
 def initSDsinputsdict(configfile, constsfile):
   ''' create values from constants file & config file
@@ -77,19 +96,24 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     
     # generate attributes
     sd_gbxindex = [gbxindex]*nsupers
-    eps, radius, m_sol, coord3 = initattrsgen.generate_attributes(nsupers, 
-                                                                inputs["RHO_SOL"],
-                                                                inputs["SDnspace"],
-                                                                NUMCONC,
-                                                                gridboxbounds)
-    
+    eps, radius, m_sol = initattrsgen.generate_attributes(nsupers, 
+                                                          inputs["RHO_SOL"],
+                                                          NUMCONC,
+                                                          gridboxbounds) 
+    coord3, coord1, coord2 = initattrsgen.generate_coords(nsupers,
+                                                          inputs["SDnspace"],
+                                                          gridboxbounds)
+
     # de-dimsionalise attributes
     radius = radius / inputs["R0"]
     m_sol = m_sol / inputs["MASS0"]
     coord3 = coord3 / inputs["COORD0"]
+    coord1 = coord1 / inputs["COORD0"]
+    coord2 = coord2 / inputs["COORD0"]
 
     attrs4gbx = ManyInitAttrs() 
-    attrs4gbx.set_attrlists(sd_gbxindex, eps, radius, m_sol, coord3)
+    attrs4gbx.set_attrlists(sd_gbxindex, eps, radius, m_sol,
+                            coord3, coord1, coord2)
 
     is_sd_gbxindex_correct(gridboxbounds, coord3, sd_gbxindex,
                            gbxindex, inputs["COORD0"])
@@ -107,10 +131,8 @@ def create_allsuperdropattrs(nsupersdict, initattrsgen,
     nsupers = nsupersdict[gbxindex]
     attrs4gbx = dimless_superdropsattrs(nsupers, initattrsgen, inputs,
                                         gbxindex, gridboxbounds, NUMCONC) # lists of attrs for SDs in gridbox
-    
-    attrs.extend_attrlists(attrs4gbx.sd_gbxindex, attrs4gbx.eps,
-                           attrs4gbx.radius, attrs4gbx.m_sol,
-                           attrs4gbx.coord3)
+
+    attrs.extend_attrlists(attrs4gbx)
 
   return attrs
 
