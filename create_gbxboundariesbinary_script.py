@@ -26,7 +26,7 @@ zgrid = [zmin, zmax, zdelta]
 #zgrid = np.asarray([0, 500, 1000, 2500, 5000])
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = np.asarray([0, 500, 1000])
+xgrid = np.asarray([0, 1000])
 
 ### input parameters for y coords of gridbox boundaries
 ygrid = np.asarray([0, 1000])

@@ -19,6 +19,7 @@ given direction */
 #include <string>
 #include <limits>
 #include <stdexcept>
+#include <algorithm>
 
 #include "initialisation/readbinary.hpp"
 #include "initialisation/read_gbxboundaries.hpp"

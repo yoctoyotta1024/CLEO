@@ -12,8 +12,29 @@ std::pair<double, double> numeric_limit_bounds()
                      std::numeric_limits<double>::max()};
 }
 
+std::pair<unsigned int, unsigned int> nghbours_1Dcartesian(const unsigned int idx,
+                                                           const std::vector<
+                                                               unsigned int> &gbxidxs)
+/* returns gbx indexes of {upwards, downwards} neighbour
+of gridbox with index idx in 1D setup. End points return 
+max unsigned int value. */
+{
+
+  const unsigned int maxidx = *std::max_element(gbxidxs.begin(), gbxidxs.end());
+
+  unsigned int zup_nghbour = idx+1;
+  if (zup_nghbour > maxidx)
+  {
+    zup_nghbour = -1; // no neighbour above gbx with largest idx
+  }
+
+  const unsigned int zdown_nghbour = std::max(-1, (int)idx - 1); // no neighbour below gbx with lowest idx
+
+  return {zup_nghbour, zdown_nghbour};
+}
+
 Maps4GridBoxes::Maps4GridBoxes(const unsigned int SDnspace,
-                               std::string_view gridfile)
+                                   std::string_view gridfile)
 /* initilaises idx2bounds_[i] maps (for i = x, y or z) which map
 from every gridbox index to its boundaries in domain coordinates.
 Also initialises idx2vol map whose values are the volume of a gridbox
@@ -69,7 +90,7 @@ void Maps4GridBoxes::set_0Dmodel_maps(const double domainvol)
   
   idx2vol[0] = domainvol; // dimensionless volume of 0D model
 
-  idx2nghbour_z[0] = {0, 0};  
+  idx2nghbour_z[0] = {0, 0}; // 'periodic' BCs in non-existent dimensions 
   idx2nghbour_x[0] = {0, 0};
   idx2nghbour_y[0] = {0, 0};
 }
@@ -94,6 +115,10 @@ gfb.gbxidxs vector, where pos = p*6 */
     const double vol = (zup - zlow) * gfb.gridboxarea(idx);
     idx2vol[idx] = vol;
 
+    idx2nghbour_z[idx] = nghbours_1Dcartesian(idx, gfb.gbxidxs); 
+    idx2nghbour_x[idx] = {idx, idx}; // 'periodic' BCs in non-existent dimensions
+    idx2nghbour_y[idx] = {idx, idx};
+    
     pos += 6;
   }
 }
