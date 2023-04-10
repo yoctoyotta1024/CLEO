@@ -69,23 +69,25 @@ def initSDsinputsdict(configfile, constsfile):
 
   return inputs
 
-def is_sd_gbxindex_correct(gridboxbounds, coord3,
-                           sd_gbxindex, gbxindex, COORD0):
+def is_sd_gbxindex_correct(gridboxbounds, coord3, coord1, coord2,
+                           gbxindex, sd_gbxindex):
+  ''' rasises error if superdroplet coords [m] lie outside gridbox bounds [m]
+    or if gridbox index not equal to superdroplet's. '''
 
-  coord3 = coord3*COORD0 #[m]
-  
   errmsg = None
-  if (coord3 < gridboxbounds[0]).any():
-    errmsg = "superdroplet coord3 below lower"+\
-              " limit of gridbox it's associated with"
-  elif (coord3 >= gridboxbounds[1]).any(): 
-    errmsg = "superdroplet coord3 above upper"+\
-              " limit of gridbox it's associated with" 
-  elif (sd_gbxindex != gbxindex).any():
-    errmsg = "superdroplet gridbox index not same as"+\
-              " gridbox it should be associated with"
-  
+  for i, coord in enumerate([coord3, coord2, coord1]):
+    if (coord < gridboxbounds[2*i]).any():
+      errmsg = "superdroplet coord"+str(i+1)+" below lower"+\
+                " limit of gridbox it's associated with"
+    elif (coord >= gridboxbounds[2*i+1]).any(): 
+      errmsg = "superdroplet coord"+str(i+1)+"above upper"+\
+                " limit of gridbox it's associated with"    
   if errmsg:
+    raise ValueError(errmsg)
+
+  elif (sd_gbxindex != gbxindex).any():
+    errmsg = "superdroplet gridbox index not the same as"+\
+              " gridbox it should be associated with"
     raise ValueError(errmsg)
 
 def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
@@ -103,6 +105,8 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     coord3, coord1, coord2 = initattrsgen.generate_coords(nsupers,
                                                           inputs["SDnspace"],
                                                           gridboxbounds)
+    is_sd_gbxindex_correct(gridboxbounds, coord3, coord1, coord2,
+                           gbxindex, sd_gbxindex)
 
     # de-dimsionalise attributes
     radius = radius / inputs["R0"]
@@ -114,9 +118,6 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     attrs4gbx = ManyInitAttrs() 
     attrs4gbx.set_attrlists(sd_gbxindex, eps, radius, m_sol,
                             coord3, coord1, coord2)
-
-    is_sd_gbxindex_correct(gridboxbounds, coord3, sd_gbxindex,
-                           gbxindex, inputs["COORD0"])
 
     return attrs4gbx
 
@@ -210,14 +211,12 @@ def nsupers_pergridboxdict(nsupers, gbxbounds):
     return nsupersdict
 
   elif type(nsupers) == dict:
-    print(nsupers.keys())
     if nsupers.keys() != gbxbounds.keys():
       errmsg = "keys for nsupers dict don't match gridbox indexes"
       raise ValueError(errmsg)
     else:
       return nsupers
-      nsupersdict == nsupers
-
+      
   else:
     errmsg = "nsupers must be either dict or int"
     raise ValueError(errmsg)
@@ -244,6 +243,7 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
   ndata = [len(dt) for dt in [attrs.sd_gbxindex, attrs.eps,
                               attrs.radius, attrs.m_sol, attrs.coord3,
                               attrs.coord1, attrs.coord2]]
+  
   data, datatypes = ctype_compatible_attrs(attrs) 
   check_datashape(data, ndata, inputs["SDnspace"])
 
