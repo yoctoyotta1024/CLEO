@@ -6,6 +6,12 @@ and its coordinate boundaries */
 
 #include "maps4gridboxes.hpp"
 
+std::pair<double, double> numeric_limit_bounds()
+{
+  return {-std::numeric_limits<double>::max(),
+                     std::numeric_limits<double>::max()};
+}
+
 Maps4GridBoxes::Maps4GridBoxes(const unsigned int SDnspace,
                                std::string_view gridfile)
 /* initilaises idx2bounds_[i] maps (for i = x, y or z) which map
@@ -57,16 +63,15 @@ void Maps4GridBoxes::set_0Dmodel_maps(const double domainvol)
 /* set idx2bounds_[i] maps to numeical limits. Set volume
  map using coords read from gridfile */
 {
-  idx2bounds_z[0] = {-std::numeric_limits<double>::max(),
-                     std::numeric_limits<double>::max()};
-
-  idx2bounds_x[0] = {-std::numeric_limits<double>::max(),
-                     std::numeric_limits<double>::max()};
-
-  idx2bounds_y[0] = {-std::numeric_limits<double>::max(),
-                     std::numeric_limits<double>::max()};
-
+  idx2bounds_z[0] = numeric_limit_bounds();
+  idx2bounds_x[0] = numeric_limit_bounds();
+  idx2bounds_y[0] = numeric_limit_bounds();
+  
   idx2vol[0] = domainvol; // dimensionless volume of 0D model
+
+  idx2nghbour_z[0] = {0, 0};  
+  idx2nghbour_x[0] = {0, 0};
+  idx2nghbour_y[0] = {0, 0};
 }
 
 void Maps4GridBoxes::set_1Dmodel_maps(const GridBoxBoundaries &gfb)
@@ -79,11 +84,8 @@ gfb.gbxidxs vector, where pos = p*6 */
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
-    idx2bounds_x[idx] = {-std::numeric_limits<double>::max(),
-                      std::numeric_limits<double>::max()};
-
-    idx2bounds_y[idx] = {-std::numeric_limits<double>::max(),
-                      std::numeric_limits<double>::max()};
+    idx2bounds_x[idx] = numeric_limit_bounds();
+    idx2bounds_y[idx] = numeric_limit_bounds();
 
     const double zlow = gfb.gbxbounds[pos];
     const double zup = gfb.gbxbounds[pos+1];
@@ -108,8 +110,7 @@ vector, where pos = p*6 */
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
-    idx2bounds_y[idx] = {-std::numeric_limits<double>::max(),
-                      std::numeric_limits<double>::max()};
+    idx2bounds_y[idx] = numeric_limit_bounds(); 
 
     const double zlow = gfb.gbxbounds[pos];
     const double zup = gfb.gbxbounds[pos+1];

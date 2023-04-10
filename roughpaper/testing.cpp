@@ -25,6 +25,7 @@ could compile with e.g.
 
 namespace dlc = dimless_constants;
 
+void print_nbourmaps(const Maps4GridBoxes &mdlmaps, const double COORD0);
 void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0);
 void print_initSDs(const InitSDsData &initSDs);
 
@@ -44,30 +45,24 @@ int main()
   const std::string initSDs_filename = abspath+"build/"+config.initSDs_filename;
   const InitSDsData initSDs = get_initsuperdropsdata(initSDs_filename);
 
-  print_initSDs(initSDs);
-
-  const auto solute(std::make_shared<const SoluteProperties>());
-  std::vector<SuperdropWithGridbox>
-      SDsInGBxs = superdrops_from_initSDsfile(initSDs_filename,
-                                              config.nSDsvec,
-                                              config.SDnspace, solute,
-                                              mdlmaps);
-
-  for (auto a : SDsInGBxs)
-  {
-    std::cout << "---\nSD " << a.superdrop.id.value
-              << ": " << a.sd_gbxindex << ", " << a.superdrop.eps
-              << ", " << a.superdrop.radius << ", " << a.superdrop.m_sol
-              << ", " << a.superdrop.coord3 << ", " << a.superdrop.coord1
-              << ", " << a.superdrop.coord2 << "\n ---- ";
-  }
+  // print_initSDs(initSDs);
+  print_nbourmaps(mdlmaps, dlc::COORD0);
 
   return 0;
+}
+void print_nbourmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
+{
+  std::cout << "---- NBOUR MAPS ----\n";
+  std::cout << "Z nghbours" << "\n";
+  for (const auto & [key, value] : mdlmaps.idx2nghbour_z)
+  {
+    std::cout << key << ": " << value.first  <<", " << value.second << '\n';
+  }
 }
 
 void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
 {
-  std::cout << "---- RESULTS ----\n";
+  std::cout << "---- GBX MAPS ----\n";
   std::cout << "Zmap" << "\n";
   for (const auto & [key, value] : mdlmaps.idx2bounds_z)
   {
@@ -110,31 +105,5 @@ void print_initSDs(const InitSDsData &initSDs)
   }
   std::cout << "\n----------------\n";
 
-  std::cout << "m_sol_init" << "\n";
-  for (auto x : initSDs.m_sol_init)
-  {
-    std::cout << x << ", ";
-  }
-  std::cout << "\n----------------\n";
 
-  std::cout << "coord3_init" << "\n";
-  for (auto x : initSDs.coord3_init)
-  {
-    std::cout << x << ", ";
-  }
-  std::cout << "\n----------------\n";
-
-  std::cout << "coord1_init" << "\n";
-  for (auto x : initSDs.coord1_init)
-  {
-    std::cout << x << ", ";
-  }
-  std::cout << "\n----------------\n";
-
-  std::cout << "coord2_init" << "\n";
-  for (auto x : initSDs.coord2_init)
-  {
-    std::cout << x << ", ";
-  }
-  std::cout << "\n----------------\n";
 }
