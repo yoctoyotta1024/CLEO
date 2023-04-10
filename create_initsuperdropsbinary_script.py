@@ -53,7 +53,7 @@ numconc              = 2**(23)                     # total no. conc of real drop
 radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
-#coord3gen            = None                        # do not generate superdroplet coord3s
+# coord3gen            = None                        # do not generate superdroplet coord3s
 
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen = initattributes.MonoAttrsGen(monocoord3)

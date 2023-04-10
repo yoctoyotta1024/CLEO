@@ -153,7 +153,8 @@ def ctype_compatible_attrs(attrs):
   with c type expected by SDM e.g. unsigned long ints for eps,
   doubles for radius and m_sol'''   
 
-  datatypes = [np.uintc, np.uint, np.double, np.double, np.double]
+  datatypes = [np.uintc, np.uint, np.double, np.double]
+  datatypes += [np.double]*3 # coords datatype
   
   attrs.sd_gbxindex = list(set_arraydtype(attrs.sd_gbxindex, datatypes[0]))
   attrs.eps = list(set_arraydtype(attrs.eps, datatypes[1]))
@@ -243,10 +244,12 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
   data, datatypes = ctype_compatible_attrs(attrs) 
   check_datashape(data, ndata)
 
-  units = [b' ', b' ', b'm', b'g', b'm', b'm', b'm']
-  scale_factors = np.array([1.0, 1.0, inputs["R0"], inputs["MASS0"], 
-                           inputs["COORD0"], inputs["COORD0"],
-                           inputs["COORD0"]], dtype=np.double)
+  units = [b' ', b' ', b'm', b'g']
+  units += [b'm']*3 # coords units
+  
+  scale_factors = [1.0, 1.0, inputs["R0"], inputs["MASS0"]]
+  scale_factors += [inputs["COORD0"]]*3 # coords scale factors
+  scale_factors = np.asarray(scale_factors, dtype=np.double)
 
   metastr = 'Variables in this file are Superdroplet attributes:'
   if initattrsgen.coord3gen: 
