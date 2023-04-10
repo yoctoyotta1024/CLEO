@@ -24,6 +24,7 @@ isfigures = [True, True]
 nsupers = 1024 # int or dict of ints for number of superdroplets in a gridbox
 # nsupers = {0: 1024,
 #            1: 0}
+### ---------------------------------------------------------------- ###
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
 # monor                = 1e-6                        # all SDs have this same radius [m]
@@ -32,7 +33,7 @@ nsupers = 1024 # int or dict of ints for number of superdroplets in a gridbox
 rspan                = [1e-8, 9.1e-5]                # max and min range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]
-
+### ---------------------------------------------------------------- ###
 
 ### ------ Choice of Droplet Radius Probability Distribution ------- ###
 # dirac0               = 1e-6                        # radius in sample closest to this value is dirac delta peak
@@ -51,6 +52,7 @@ radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled 
 volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
+### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
 # coord3gen            = None                        # do not generate superdroplet coord3s
@@ -60,7 +62,6 @@ radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
                 
 randomcoord3         = True                     # sample coord3 range randomly or not
 coord3gen = initattributes.SampleCoordGen(randomcoord3)
-
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord1 Generator ------------- ###
@@ -70,7 +71,6 @@ coord1gen            = None                        # do not generate superdrople
 ### ---------- Choice of Superdroplet Coord2 Generator ------------- ###
 coord2gen            = None                        # do not generate superdroplet coord2s
 ### ---------------------------------------------------------------- ###
-
 
 
 Path(binpath).mkdir(exist_ok=True) 
