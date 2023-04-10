@@ -30,7 +30,7 @@ each of the variables in the file */
   const GblMetadata gblmeta(file);
 
   unsigned int pos = 4 * sizeof(unsigned int) + gblmeta.charbytes; // position of 1st byte of variable specific metadata
-  
+
   std::vector<VarMetadata> mdata(0);
   for (unsigned int i = 0; i < gblmeta.nvars; ++i)
   {

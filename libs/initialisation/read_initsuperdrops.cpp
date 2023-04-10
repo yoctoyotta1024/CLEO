@@ -14,7 +14,7 @@ InitSDsData get_initsuperdropsdata(std::string_view initSDsfile)
 {
   std::ifstream file(open_binary(initSDsfile));
 
-  std::vector<VarMetadata> meta (metadata_from_binary(file));
+  std::vector<VarMetadata> meta(metadata_from_binary(file));
 
   VarMetadata var(meta.at(0));
   file.seekg(var.b0, std::ios::beg);
@@ -41,10 +41,17 @@ InitSDsData get_initsuperdropsdata(std::string_view initSDsfile)
   std::vector<double> icoord3(var.nvar, 0);
   binary_into_buffer<double>(file, icoord3);
 
+  var = meta.at(5);
+  file.seekg(var.b0, std::ios::beg);
+  std::vector<double> icoord1(var.nvar, 0);
+  binary_into_buffer<double>(file, icoord1);
+
+  var = meta.at(6);
+  file.seekg(var.b0, std::ios::beg);
+  std::vector<double> icoord2(var.nvar, 0);
+  binary_into_buffer<double>(file, icoord2);
+
   file.close();
-  
-  std::vector<double> icoord1(0);
-  std::vector<double> icoord2(0);
 
   check_vectorsizes({isd_gbxindex.size(), ieps.size(),
                    iradius.size(), im_sol.size()});
@@ -63,7 +70,8 @@ male InitSdsData object are the same size */
   {
     if (sz != sz0)
     {
-      const std::string err("sizes of vectors for InitSDsData are not consistent");
+      const std::string err("sizes of vectors for InitSDsData"
+                            "are not consistent");
       throw std::invalid_argument(err);
     }
   }
