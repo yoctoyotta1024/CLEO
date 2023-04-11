@@ -113,25 +113,41 @@ private:
   unsigned int maxidx;                     // largest value gridbox index
   std::array<size_t, 3> ndims = {0, 0, 0}; // number of gridboxes in [z,x,y] directions
 
+  std::pair<unsigned int, unsigned int>
+  handle_finitedomain_nghbours(const unsigned int forward,
+                               const int backward) const;
+
 public:
   CartesianNeighbourIndexes(const unsigned int maxidx,
                             const std::array<size_t, 3> ndims)
       : maxidx(maxidx), ndims(ndims) {}
 
-  std::pair<unsigned int,
-            unsigned int>
+  std::pair<unsigned int, unsigned int>
   znghbours_cartesian(const unsigned int idx,
-                      const std::vector<unsigned int> &gbxidxs) const;
+                      const std::vector<
+                          unsigned int> &gbxidxs) const
+  /* returns pair of gbx indexes for {upwards, downwards} neighbour
+  of a gridbox with index 'idx'. Treatment of neighbours for gridboxes
+  at edges of domain is determined by the 'handle_XXX_nghbours' function */
+  {
+    return handle_finitedomain_nghbours(idx + 1, (int)idx - 1);
+  }
 
-  std::pair<unsigned int,
-            unsigned int>
+  std::pair<unsigned int, unsigned int>
   xnghbours_cartesian(const unsigned int idx,
-                      const std::vector<unsigned int> &gbxidxs) const;
+                      const std::vector<unsigned int> &gbxidxs) const
+  {
+    const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
+    return handle_finitedomain_nghbours(idx + nz, (int)(idx - nz));
+  }
 
-  std::pair<unsigned int,
-            unsigned int>
+  std::pair<unsigned int, unsigned int>
   ynghbours_cartesian(const unsigned int idx,
-                      const std::vector<unsigned int> &gbxidxs) const;
+                      const std::vector<unsigned int> &gbxidxs) const
+  {
+    const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
+    return handle_finitedomain_nghbours(idx + nznx, (int)(idx - nznx));
+  }
 };
 
 #endif // MAPS4GRIDBOXES_HPP

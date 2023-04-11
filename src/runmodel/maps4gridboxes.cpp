@@ -181,56 +181,23 @@ in the gfb.gbxidxs vector, where pos = p*6 */
   }
 }
 
-std::pair<unsigned int,
-          unsigned int>
-CartesianNeighbourIndexes::znghbours_cartesian(const unsigned int idx,
-                                     const std::vector<
-                                         unsigned int> &gbxidxs) const
-/* returns gbx indexes of {upwards, downwards} neighbour
-of gridbox with index idx. End points return 
-max unsigned int value. */
+std::pair<unsigned int, unsigned int>
+CartesianNeighbourIndexes::handle_finitedomain_nghbours(const unsigned int forward,
+                                    const int backward) const
+/* Treatment of neighbours as if bounds of domain are finite.
+Means that no neighbour exists above/below highest/lowest gbxindex.
+For non-existent neighbours, max unsigned int value is returned,
+ie. neighbour backwards for gridboxes with backward<0 is maximum unsigned int,
+while neighbour forwards for gridboxes with forward>maxidx
+is maximm unsigned int */
 {
-  const unsigned int zdown = std::max(-1, (int)idx - 1); // no neighbour below gbx with lowest idx
-  
-  unsigned int zup = idx+1;
-  if (zup > maxidx)
+  const unsigned int bidx = std::max((int)backward, -1);
+
+  unsigned int fidx = forward; 
+  if (forward > maxidx)
   {
-    zup = -1; // no neighbour above gbx with largest idx
+    fidx = (unsigned int)-1;
   }
 
-  return {zup, zdown};
-}
-
-std::pair<unsigned int,
-          unsigned int>
-CartesianNeighbourIndexes::xnghbours_cartesian(const unsigned int idx,
-                    const std::vector<unsigned int> &gbxidxs) const
-{
-  const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
-  const unsigned int xbackward = std::max((int)(idx-nz), -1);
-  
-  unsigned int xforward = idx + nz;
-  if (xforward > maxidx)
-  {
-    xforward = -1; // no neighbours beyond gbx with largest idx
-  }
-  
-  return {xforward, xbackward};
-}
-
-std::pair<unsigned int,
-          unsigned int>
-CartesianNeighbourIndexes::ynghbours_cartesian(const unsigned int idx,
-                    const std::vector<unsigned int> &gbxidxs) const
-{
-  const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
-  const unsigned int yleft = std::max((int)(idx-nznx), -1);
-  
-  unsigned int yright = idx+nznx;
-  if (yright > maxidx)
-  {
-    yright = -1;
-  }
-  
-  return {yleft, yright};
+  return {fidx, bidx};
 }
