@@ -142,7 +142,20 @@ public:
   gridboxes at edges of domain is determined by the
   'handle_XXX_nghbours' function */
   {
-    return handle_finitedomain_nghbours(idx + 1, idx - 1);
+    unsigned int forward = idx+1;
+    unsigned int backward = idx-1;
+
+    if (idx % ndims.at(0) == 0)
+    {
+      backward = -1;
+    }
+
+    if (forward % ndims.at(0) == 0)
+    {
+      forward = -1;
+    }
+
+    return {forward, backward};
   }
 
   std::pair<unsigned int, unsigned int>
@@ -154,7 +167,22 @@ public:
   'handle_XXX_nghbours' function */
   {
     const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
-    return handle_finitedomain_nghbours(idx + nz, idx - nz);
+
+    unsigned int forward = idx+nz;
+    unsigned int backward = idx-nz;
+
+    if ((idx / nz) % ndims.at(1) == 0)
+    {
+      backward = -1;
+    }
+
+    if ((forward / nz) % ndims.at(1) == 0)
+    {
+      std::cout << "xfront: " << idx <<"\n";
+      forward = -1;
+    }
+
+    return {forward, backward};
   }
 
   std::pair<unsigned int, unsigned int>
@@ -166,7 +194,23 @@ public:
   'handle_XXX_nghbours' function */
   {
     const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
-    return handle_finitedomain_nghbours(idx + nznx, idx - nznx);
+
+    unsigned int forward = idx+nznx;
+    unsigned int backward = idx-nznx;
+
+    if ((idx / nznx) % ndims.at(2) == 0)
+    {
+      std::cout << "yback: " << idx <<"\n";
+      backward = -1;
+    }
+
+    if ((forward / nznx) % ndims.at(2) == 0)
+    {
+      std::cout << "yfront: " << idx <<"\n";
+      forward = -1;
+    }
+
+    return {forward, backward}; 
   }
 };
 
