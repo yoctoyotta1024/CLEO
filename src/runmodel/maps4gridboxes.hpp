@@ -117,6 +117,10 @@ private:
   handle_finitedomain_nghbours(const unsigned int forward,
                                const int backward) const;
 
+  std::pair<unsigned int, unsigned int>
+  handle_periodicdomain_nghbours(const unsigned int forward,
+                                 const int backward) const;                             
+
 public:
   CartesianNeighbourIndexes(const unsigned int maxidx,
                             const std::array<size_t, 3> ndims)
