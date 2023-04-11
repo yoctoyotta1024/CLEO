@@ -115,7 +115,7 @@ private:
 
   std::pair<unsigned int, unsigned int>
   handle_finitedomain_nghbours(const unsigned int forward,
-                               const int backward) const;
+                               const unsigned int backward) const;
   /* retunrs {forward, backward} gridbox neighbours with
   treatment of neighbours as if bounds of domain are finite.
   Means that no neighbour exists above/below highest/lowest gbxindex.
@@ -126,7 +126,7 @@ private:
 
   std::pair<unsigned int, unsigned int>
   handle_periodicdomain_nghbours(const unsigned int forward,
-                                 const int backward) const;                             
+                                 const unsigned int backward) const;                             
 
 public:
   CartesianNeighbourIndexes(const unsigned int maxidx,
@@ -142,7 +142,7 @@ public:
   gridboxes at edges of domain is determined by the
   'handle_XXX_nghbours' function */
   {
-    return handle_finitedomain_nghbours(idx + 1, (int)idx - 1);
+    return handle_finitedomain_nghbours(idx + 1, idx - 1);
   }
 
   std::pair<unsigned int, unsigned int>
@@ -154,7 +154,7 @@ public:
   'handle_XXX_nghbours' function */
   {
     const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
-    return handle_finitedomain_nghbours(idx + nz, (int)(idx - nz));
+    return handle_finitedomain_nghbours(idx + nz, idx - nz);
   }
 
   std::pair<unsigned int, unsigned int>
@@ -166,7 +166,7 @@ public:
   'handle_XXX_nghbours' function */
   {
     const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
-    return handle_finitedomain_nghbours(idx + nznx, (int)(idx - nznx));
+    return handle_finitedomain_nghbours(idx + nznx, idx - nznx);
   }
 };
 
