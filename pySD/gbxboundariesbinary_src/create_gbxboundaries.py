@@ -52,7 +52,7 @@ def check_halfcoords(grid, coord):
     errmsg = str(grid)+" does not meet criteria for "+coord+" halfcoords"
     raise ValueError(errmsg)
 
-def gridboxboundaries_from_halfcoords(allhalfcoords):
+def gridboxboundaries_from_halfcoords(allhalfcoords, ngridboxes):
   ''' returns gbxbounds dictionary. Each key of gbxbounds is a gridbox's
   index and the corresponding value is the gridbox's
   [zmin, zmax, xmin, xmax, ymin, ymax] boundaries'''
@@ -70,11 +70,13 @@ def gridboxboundaries_from_halfcoords(allhalfcoords):
         ybounds = [yhalfs[j], yhalfs[j+1]]
         gbxbounds[ii] = zbounds + xbounds + ybounds
         ii+=1
- 
-  ngridboxes = len(gbxbounds)
-  print("created boundaries for",ngridboxes,"gridboxes")
+  
+  if len(gbxbounds) != ngridboxes:
+    raise ValueError("not enough gbxbounds for ngridboxes")
+  else:
+    print("created boundaries for",ngridboxes,"gridboxes")
 
-  return gbxbounds, ngridboxes
+  return gbxbounds
 
 def dimless_gridboxboundaries(zgrid, xgrid, ygrid, COORD0):
   ''' use zgrid, xgrid and ygrid lists or arrays to create half coords
@@ -82,20 +84,22 @@ def dimless_gridboxboundaries(zgrid, xgrid, ygrid, COORD0):
   then xhalf, then yhalf coords and a list of len(3) which states how
   many of each z, x and y coords there are'''
 
-  allhalfcoords = [] # z, x and y half coords in 1 continuous list
+  allhalfcoords, ndims = [], [] # z, x and y half coords in 1 continuous list
   for grid, coord in zip([zgrid, xgrid, ygrid], ["z", "x", "y"]):
     
     halfcoords = get_dimless_halfcoords(grid, coord, COORD0)
     check_halfcoords(halfcoords, coord)
   
     allhalfcoords.append(halfcoords)
-  
-  gbxbounds, ngridboxes = gridboxboundaries_from_halfcoords(allhalfcoords)
-  
+    ndims.append(len(halfcoords)-1)
+
+  gbxbounds = gridboxboundaries_from_halfcoords(allhalfcoords, np.prod(ndims))
+
+  ndims = np.asarray(ndims, dtype=np.uint)
   gbxindicies = np.array(list(gbxbounds.keys()), dtype=np.uintc).flatten()
   gbxboundsdata = np.array(list(gbxbounds.values()), dtype=np.double).flatten()
   
-  return gbxindicies, gbxboundsdata, ngridboxes
+  return ndims, gbxindicies, gbxboundsdata
 
 def set_arraydtype(arr, dtype):
    
@@ -109,16 +113,17 @@ def set_arraydtype(arr, dtype):
 
   return arr
 
-def ctype_compatible_gridboxboundaries(idxs, bounds):
+def ctype_compatible_gridboxboundaries(ndims, idxs, bounds):
   ''' check type of gridbox boundaries data is compatible
   with c type double. If not, change type and raise error '''
 
-  datatypes = [np.uintc, np.double]
+  datatypes = [np.uint, np.uintc, np.double]
 
-  idxs = list(set_arraydtype(idxs, datatypes[0]))
-  bounds = list(set_arraydtype(bounds, datatypes[1]))
+  ndims = list(set_arraydtype(ndims, datatypes[0]))
+  idxs = list(set_arraydtype(idxs, datatypes[1]))
+  bounds = list(set_arraydtype(bounds, datatypes[2]))
 
-  datalist = idxs + bounds
+  datalist = ndims + idxs + bounds
 
   return datalist, datatypes
 
@@ -131,17 +136,18 @@ def write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile):
 
   COORD0 = get_COORD0_from_constsfile(constsfile)
 
-  gbxindicies, gbxboundsdata, ngridboxes = dimless_gridboxboundaries(zgrid, xgrid,
-                                                                     ygrid, COORD0) 
-  
-  metastr = 'Variables in this file are '+str(ngridboxes)+' gridbox'+\
-            ' indicies followed by the [zmin, zmax, xmin, xmax, ymin, ymax]'+\
+  ndims, gbxindicies, gbxboundsdata = dimless_gridboxboundaries(zgrid, xgrid,
+                                                                ygrid, COORD0) 
+  metastr = 'Variables in this file are ndims in (z,x,y), then the '+\
+            str(np.prod(ndims))+' gridbox indicies followed by the'+\
+            ' [zmin, zmax, xmin, xmax, ymin, ymax]'+\
             ' coordinates for each gridbox\'s boundaries'
   
-  ndata = [len(dt) for dt in [gbxindicies, gbxboundsdata]]
-  data, datatypes = ctype_compatible_gridboxboundaries(gbxindicies, gbxboundsdata) 
-  scale_factors = np.array([COORD0, COORD0, COORD0], dtype=np.double) 
-  units = [b' ', b"m"]
+  ndata = [len(dt) for dt in [ndims, gbxindicies, gbxboundsdata]]
+  data, datatypes = ctype_compatible_gridboxboundaries(ndims, gbxindicies,
+                                                       gbxboundsdata) 
+  scale_factors = np.array([1.0, 1.0, COORD0], dtype=np.double) 
+  units = [b' ', b' ', b"m"]
 
   writebinary.writebinary(gridfile, data, ndata, datatypes,
                           units, scale_factors, metastr)
