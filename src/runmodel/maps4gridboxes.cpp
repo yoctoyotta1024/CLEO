@@ -12,27 +12,6 @@ std::pair<double, double> numeric_limit_bounds()
                      std::numeric_limits<double>::max()};
 }
 
-std::pair<unsigned int, unsigned int> nghbours_1Dcartesian(const unsigned int idx,
-                                                           const std::vector<
-                                                               unsigned int> &gbxidxs)
-/* returns gbx indexes of {upwards, downwards} neighbour
-of gridbox with index idx in 1D setup. End points return 
-max unsigned int value. */
-{
-
-  const unsigned int maxidx = *std::max_element(gbxidxs.begin(), gbxidxs.end());
-
-  unsigned int zup_nghbour = idx+1;
-  if (zup_nghbour > maxidx)
-  {
-    zup_nghbour = -1; // no neighbour above gbx with largest idx
-  }
-
-  const unsigned int zdown_nghbour = std::max(-1, (int)idx - 1); // no neighbour below gbx with lowest idx
-
-  return {zup_nghbour, zdown_nghbour};
-}
-
 Maps4GridBoxes::Maps4GridBoxes(const unsigned int SDnspace,
                                    std::string_view gridfile)
 /* initilaises idx2bounds_[i] maps (for i = x, y or z) which map
@@ -149,6 +128,10 @@ vector, where pos = p*6 */
     const double vol = (zup - zlow) * (xup - xlow) * deltay;
     idx2vol[idx] = vol;
 
+    idx2nghbour_z[idx] = nghbours_2Dcartesian(idx, gfb.gbxidxs, 'z'); 
+    idx2nghbour_x[idx] = nghbours_2Dcartesian(idx, gfb.gbxidxs, 'x'); 
+    idx2nghbour_y[idx] = {idx, idx}; // 'periodic' BCs in non-existent dimensions
+    
     pos += 6;
   }
 }
@@ -179,5 +162,50 @@ in the gfb.gbxidxs vector, where pos = p*6 */
     idx2vol[idx] = vol;
 
     pos += 6;
+  }
+}
+
+
+std::pair<unsigned int, unsigned int> Maps4GridBoxes::nghbours_1Dcartesian(const unsigned int idx,
+                                                           const std::vector<
+                                                               unsigned int> &gbxidxs)
+/* returns gbx indexes of {upwards, downwards} neighbour
+of gridbox with index idx in 1D setup. End points return 
+max unsigned int value. */
+{
+
+  const unsigned int maxidx = *std::max_element(gbxidxs.begin(), gbxidxs.end());
+
+  unsigned int zup_nghbour = idx+1;
+  if (zup_nghbour > maxidx)
+  {
+    zup_nghbour = -1; // no neighbour above gbx with largest idx
+  }
+
+  const unsigned int zdown_nghbour = std::max(-1, (int)idx - 1); // no neighbour below gbx with lowest idx
+
+  return {zup_nghbour, zdown_nghbour};
+}
+
+std::pair<unsigned int, unsigned int> Maps4GridBoxes::nghbours_2Dcartesian(const unsigned int idx,
+                                                           const std::vector<
+                                                               unsigned int> &gbxidxs,
+                                                               const unsigned char dim)
+/* returns gbx indexes of {upwards, downwards} or {forwards, backwards} 
+neighbour of gridbox with index idx in 2D setup depending on dim char.
+End points return max unsigned int value. */
+{
+  if (dim == 'z')
+  {
+    return nghbours_1Dcartesian(idx, gbxidxs);
+  }
+  else if (dim == 'x')
+  {
+    std::cout << "char" << dim << "\n";
+    std::cout << ndims[0] << ", " << ndims[1] << ", " << ndims[2] << "\n";
+  }
+  else
+  {
+    throw std::invalid_argument("dim in 2D cartesian setup must be 'z' or 'x'");
   }
 }
