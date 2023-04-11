@@ -42,17 +42,27 @@ def read_dimless_gbxboundaries_binary(filename, COORD0=False):
     not give (=False). '''
 
     data, ndata_pervar = readbinary(filename)
-    datatypes = [np.uintc, np.double]
+    datatypes = [np.uint, np.uintc, np.double]
+
+    ll = [0,0] # indexs for division of data list between each variable
+    for n in range(1, len(ndata_pervar)):
+        ll[n-1] = np.sum(ndata_pervar[:n])
     
-    idxs = np.asarray(data[:ndata_pervar[0]], dtype=datatypes[0])
-    ngridboxes = len(idxs)
-    boundsdata = np.asarray(data[ndata_pervar[0]:], dtype=datatypes[1])
+    ndims = np.asarray(data[:ll[0]], dtype=datatypes[0])
+    gbxidxs = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[0]) 
+
+    ngridboxes = int(np.prod(ndims))
+    if len(gbxidxs) != ngridboxes:
+        err = "number of gridbox indexes not consistent with (z,x,y) dims"
+        raise ValueError(err)
+    
+    boundsdata = np.asarray(data[ll[1]:], dtype=datatypes[1])
     boundsdata = np.reshape(boundsdata, [ngridboxes, len(boundsdata)//ngridboxes])
     
     if COORD0:
         boundsdata = boundsdata * COORD0
     
-    gbxbounds = {idxs[i]: boundsdata[i] for i in range(ngridboxes)}
+    gbxbounds = {gbxidxs[i]: boundsdata[i] for i in range(ngridboxes)}
     
     return gbxbounds
 

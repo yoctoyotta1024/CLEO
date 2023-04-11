@@ -30,18 +30,18 @@ def read_dimless_superdrops_binary(filename):
     datatypes += [np.double]*3
     data, ndata_pervar = readbinary(filename)
 
-    idxs = [0,0,0,0,0,0] # indexs for division of data list between each variable
+    ll = [0,0,0,0,0,0] # indexs for division of data list between each variable
     for n in range(1, len(ndata_pervar)):
-        idxs[n-1] = np.sum(ndata_pervar[:n])
+        ll[n-1] = np.sum(ndata_pervar[:n])
 
     attrs = ManyInitAttrs()
-    attrs.sd_gbxindex = np.asarray(data[:idxs[0]], dtype=datatypes[0])
-    attrs.eps = np.asarray(data[idxs[0]:idxs[1]], dtype=datatypes[1])
-    attrs.radius = np.asarray(data[idxs[1]:idxs[2]], dtype=datatypes[2])
-    attrs.m_sol = np.asarray(data[idxs[2]:idxs[3]], dtype=datatypes[3])
-    attrs.coord3 = np.asarray(data[idxs[3]:idxs[4]], dtype=datatypes[4])
-    attrs.coord1 = np.asarray(data[idxs[4]:idxs[5]], dtype=datatypes[5])
-    attrs.coord2 = np.asarray(data[idxs[5]:], dtype=datatypes[6])
+    attrs.sd_gbxindex = np.asarray(data[:ll[0]], dtype=datatypes[0])
+    attrs.eps = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1])
+    attrs.radius = np.asarray(data[ll[1]:ll[2]], dtype=datatypes[2])
+    attrs.m_sol = np.asarray(data[ll[2]:ll[3]], dtype=datatypes[3])
+    attrs.coord3 = np.asarray(data[ll[3]:ll[4]], dtype=datatypes[4])
+    attrs.coord1 = np.asarray(data[ll[4]:ll[5]], dtype=datatypes[5])
+    attrs.coord2 = np.asarray(data[ll[5]:], dtype=datatypes[6])
 
     print("attribute shapes: ", attrs.sd_gbxindex.shape, attrs.eps.shape,
           attrs.radius.shape, attrs.m_sol.shape, attrs.coord3.shape,
