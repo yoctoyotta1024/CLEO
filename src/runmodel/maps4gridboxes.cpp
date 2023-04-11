@@ -192,13 +192,13 @@ Maps4GridBoxes::znghbours_cartesian(const unsigned int idx,
 of gridbox with index idx. End points return 
 max unsigned int value. */
 {
+  const unsigned int zdown = std::max(-1, (int)idx - 1); // no neighbour below gbx with lowest idx
+  
   unsigned int zup = idx+1;
   if (zup > maxidx)
   {
     zup = -1; // no neighbour above gbx with largest idx
   }
-
-  const unsigned int zdown = std::max(-1, (int)idx - 1); // no neighbour below gbx with lowest idx
 
   return {zup, zdown};
 }
@@ -209,10 +209,16 @@ Maps4GridBoxes::xnghbours_cartesian(const unsigned int idx,
                     const std::vector<unsigned int> &gbxidxs,
                     const unsigned int maxidx)
 {
-
   const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
-
-  return { idx + nz, idx - nz};
+  const unsigned int xbackward = std::max((int)(idx-nz), -1);
+  
+  unsigned int xforward = idx + nz;
+  if (xforward > maxidx)
+  {
+    xforward = -1; // no neighbours beyond gbx with largest idx
+  }
+  
+  return {xforward, xbackward};
 }
 
 std::pair<unsigned int,
@@ -222,5 +228,13 @@ Maps4GridBoxes::ynghbours_cartesian(const unsigned int idx,
                     const unsigned int maxidx)
 {
   const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
-  return { idx + nznx, idx - nznx};
+  const unsigned int yleft = std::max((int)(idx-nznx), -1);
+  
+  unsigned int yright = idx+nznx;
+  if (yright > maxidx)
+  {
+    yright = -1;
+  }
+  
+  return {yleft, yright};
 }
