@@ -40,27 +40,8 @@ private:
   void set_3Dmodel_maps(const GridBoxBoundaries &gfb);
   /* Set z, x, y and volume maps using coords from gridfile. */
 
-  std::pair<unsigned int,
-            unsigned int>
-  znghbours_cartesian(const unsigned int idx,
-                       const std::vector<unsigned int> &gbxidxs,
-                       const unsigned int maxidx);
-
-  std::pair<unsigned int,
-            unsigned int>
-  xnghbours_cartesian(const unsigned int idx,
-              const std::vector<unsigned int> &gbxidxs,
-              const unsigned int maxidx);
-
-  std::pair<unsigned int,
-            unsigned int>
-  ynghbours_cartesian(const unsigned int idx,
-              const std::vector<unsigned int> &gbxidxs,
-              const unsigned int maxidx);
-
 public:
-  std::array<size_t, 3> ndims = {0,0,0};       // number of gridboxes in [z,x,y] directions
-  std::vector<unsigned int> gbxidxs; // vector of all gridbox indexes in domain
+  std::vector<unsigned int> gbxidxs;                              // vector of all gridbox indexes in domain
   std::map<unsigned int, std::pair<double, double>> idx2bounds_z; // coord limits to each gridbox given its index
   std::map<unsigned int, std::pair<double, double>> idx2bounds_x;
   std::map<unsigned int, std::pair<double, double>> idx2bounds_y;
@@ -94,7 +75,7 @@ public:
   /* given gridbox index, return index of neighbouring
   gridbox in the forwards z, ie. downwards direction */
   {
-    return (*idx2nghbour_z.find(gbxindex)).second.second; 
+    return (*idx2nghbour_z.find(gbxindex)).second.second;
   }
 
   inline unsigned int get_neighbour_yright(unsigned int gbxindex) const
@@ -124,6 +105,33 @@ public:
   {
     return (*idx2nghbour_x.find(gbxindex)).second.second;
   }
+};
+
+struct CartesianNeighbourIndexes
+{
+private:
+  unsigned int maxidx;                     // largest value gridbox index
+  std::array<size_t, 3> ndims = {0, 0, 0}; // number of gridboxes in [z,x,y] directions
+
+public:
+  CartesianNeighbourIndexes(const unsigned int maxidx,
+                            const std::array<size_t, 3> ndims)
+      : maxidx(maxidx), ndims(ndims) {}
+
+  std::pair<unsigned int,
+            unsigned int>
+  znghbours_cartesian(const unsigned int idx,
+                      const std::vector<unsigned int> &gbxidxs) const;
+
+  std::pair<unsigned int,
+            unsigned int>
+  xnghbours_cartesian(const unsigned int idx,
+                      const std::vector<unsigned int> &gbxidxs) const;
+
+  std::pair<unsigned int,
+            unsigned int>
+  ynghbours_cartesian(const unsigned int idx,
+                      const std::vector<unsigned int> &gbxidxs) const;
 };
 
 #endif // MAPS4GRIDBOXES_HPP

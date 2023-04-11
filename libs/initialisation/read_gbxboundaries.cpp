@@ -151,7 +151,7 @@ void is_gridbounds_SDnspace_compatible(const unsigned int SDnspace,
 
   else
   {
-    throw std::invalid_argument("SDnspace or ndims not valid");
+    throw std::invalid_argument("ndims from gridfile and/or SDnspace not valid");
   }
 
   if (isgood != true)

@@ -63,8 +63,6 @@ void Maps4GridBoxes::set_0Dmodel_maps(const double domainvol)
 /* set idx2bounds_[i] maps to numeical limits. Set volume
  map using coords read from gridfile */
 {
-  ndims = {1, 1, 1};
-
   idx2bounds_z[0] = numeric_limit_bounds();
   idx2bounds_x[0] = numeric_limit_bounds();
   idx2bounds_y[0] = numeric_limit_bounds();
@@ -83,9 +81,9 @@ it's index at position 'p' in the gfb.gbxidxs vector, the
 [zmin, zmax] coords of that gridbox are at [pos, pos+1] in the
 gfb.gbxidxs vector, where pos = p*6 */
 {
-  ndims = {gfb.ndims.at(0), 1, 1};
-  const unsigned int maxidx = *std::max_element(gfb.gbxidxs.begin(),
-                                                gfb.gbxidxs.end()); // largest value gridbox index
+  const CartesianNeighbourIndexes cni(*std::max_element(gfb.gbxidxs.begin(),
+                                                  gfb.gbxidxs.end()),
+                                                  {gfb.ndims.at(0), 1, 1}); 
 
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
@@ -100,7 +98,7 @@ gfb.gbxidxs vector, where pos = p*6 */
     const double vol = (zup - zlow) * gfb.gridboxarea(idx);
     idx2vol[idx] = vol;
 
-    idx2nghbour_z[idx] = znghbours_cartesian(idx, gfb.gbxidxs, maxidx); 
+    idx2nghbour_z[idx] = cni.znghbours_cartesian(idx, gfb.gbxidxs); 
     idx2nghbour_x[idx] = {idx, idx}; // 'periodic' BCs in non-existent dimensions
     idx2nghbour_y[idx] = {idx, idx};
     
@@ -116,9 +114,9 @@ vector, the [zmin, zmax, xmin, xmax] coords of that gridbox are
 at [pos, pos+1, pos+2, pos+3] in the gfb.gbxidxs
 vector, where pos = p*6 */
 {
-  ndims = {gfb.ndims.at(0), gfb.ndims.at(1), 1};
-  const unsigned int maxidx = *std::max_element(gfb.gbxidxs.begin(),
-                                                gfb.gbxidxs.end()); // largest value gridbox index
+  const CartesianNeighbourIndexes cni(*std::max_element(gfb.gbxidxs.begin(),
+                                                        gfb.gbxidxs.end()),
+                                      {gfb.ndims.at(0), gfb.ndims.at(1), 1});
 
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
@@ -137,8 +135,8 @@ vector, where pos = p*6 */
     const double vol = (zup - zlow) * (xup - xlow) * deltay;
     idx2vol[idx] = vol;
 
-    idx2nghbour_z[idx] = znghbours_cartesian(idx, gbxidxs, maxidx); 
-    idx2nghbour_x[idx] = xnghbours_cartesian(idx, gbxidxs, maxidx);
+    idx2nghbour_z[idx] = cni.znghbours_cartesian(idx, gbxidxs); 
+    idx2nghbour_x[idx] = cni.xnghbours_cartesian(idx, gbxidxs);
     idx2nghbour_y[idx] = {idx, idx}; // 'periodic' BCs in non-existent dimensions
     
     pos += 6;
@@ -152,9 +150,10 @@ gfb.gbxidxs vector, the [zmin, zmax, xmin, xmax, ymin, ymax]
 coords of that gridbox are at [pos, pos+1, pos+2, pos+3, pos+4, pos+5]
 in the gfb.gbxidxs vector, where pos = p*6 */
 {
-  ndims = {gfb.ndims.at(0), gfb.ndims.at(1), gfb.ndims.at(2)};
-  const unsigned int maxidx = *std::max_element(gfb.gbxidxs.begin(),
-                                                gfb.gbxidxs.end()); // largest value gridbox index
+  const CartesianNeighbourIndexes cni(*std::max_element(gfb.gbxidxs.begin(),
+                                                        gfb.gbxidxs.end()),
+                                      {gfb.ndims.at(0), gfb.ndims.at(1),
+                                       gfb.ndims.at(2)});
 
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
@@ -174,9 +173,9 @@ in the gfb.gbxidxs vector, where pos = p*6 */
     const double vol = (zup - zlow) * (xup - xlow) * (yup - ylow);
     idx2vol[idx] = vol;
 
-    idx2nghbour_z[idx] = znghbours_cartesian(idx, gbxidxs, maxidx); 
-    idx2nghbour_x[idx] = xnghbours_cartesian(idx, gbxidxs, maxidx);
-    idx2nghbour_y[idx] = ynghbours_cartesian(idx, gbxidxs, maxidx);
+    idx2nghbour_z[idx] = cni.znghbours_cartesian(idx, gbxidxs); 
+    idx2nghbour_x[idx] = cni.xnghbours_cartesian(idx, gbxidxs);
+    idx2nghbour_y[idx] = cni.ynghbours_cartesian(idx, gbxidxs);
     
     pos += 6;
   }
@@ -184,10 +183,9 @@ in the gfb.gbxidxs vector, where pos = p*6 */
 
 std::pair<unsigned int,
           unsigned int>
-Maps4GridBoxes::znghbours_cartesian(const unsigned int idx,
+CartesianNeighbourIndexes::znghbours_cartesian(const unsigned int idx,
                                      const std::vector<
-                                         unsigned int> &gbxidxs,
-                                         const unsigned int maxidx)
+                                         unsigned int> &gbxidxs) const
 /* returns gbx indexes of {upwards, downwards} neighbour
 of gridbox with index idx. End points return 
 max unsigned int value. */
@@ -205,9 +203,8 @@ max unsigned int value. */
 
 std::pair<unsigned int,
           unsigned int>
-Maps4GridBoxes::xnghbours_cartesian(const unsigned int idx,
-                    const std::vector<unsigned int> &gbxidxs,
-                    const unsigned int maxidx)
+CartesianNeighbourIndexes::xnghbours_cartesian(const unsigned int idx,
+                    const std::vector<unsigned int> &gbxidxs) const
 {
   const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
   const unsigned int xbackward = std::max((int)(idx-nz), -1);
@@ -223,9 +220,8 @@ Maps4GridBoxes::xnghbours_cartesian(const unsigned int idx,
 
 std::pair<unsigned int,
           unsigned int>
-Maps4GridBoxes::ynghbours_cartesian(const unsigned int idx,
-                    const std::vector<unsigned int> &gbxidxs,
-                    const unsigned int maxidx)
+CartesianNeighbourIndexes::ynghbours_cartesian(const unsigned int idx,
+                    const std::vector<unsigned int> &gbxidxs) const
 {
   const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
   const unsigned int yleft = std::max((int)(idx-nznx), -1);
