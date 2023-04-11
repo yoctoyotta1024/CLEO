@@ -27,6 +27,7 @@ private:
   size_t find_idx_in_gbxidxs(const unsigned int idx) const;
 
 public:
+  std::vector<size_t> ndims; // number of gridboxes in (z,x,y) dimensions
   std::vector<unsigned int> gbxidxs; // gridbox indicies
   std::vector<double> gbxbounds;     // corresponding (z,x,y) coords of max and min boundaries
 

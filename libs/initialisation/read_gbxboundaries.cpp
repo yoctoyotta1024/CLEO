@@ -6,7 +6,8 @@ struct from binary file */
 #include "read_gbxboundaries.hpp"
 
 void is_gridbounds_SDnspace_compatible(const unsigned int SDnspace,
-                                       const std::vector<double> &gbxbounds);
+                                       const std::vector<double> &gbxbounds,
+                                       std::vector<size_t> &ndims);
 /* check that data for gridbox boundaries read from gridfile is
 compatible with SDnspace from config file. Throw error if not. */                                       
 
@@ -31,10 +32,15 @@ return GridBoxBoundaries instance created from that data */
 
   VarMetadata var(meta.at(0));
   file.seekg(var.b0, std::ios::beg);
+  std::vector<size_t> ndims(var.nvar, 0);
+  binary_into_buffer<size_t>(file, ndims);
+
+  var = meta.at(1);
+  file.seekg(var.b0, std::ios::beg);
   std::vector<unsigned int> gbxidxs(var.nvar, 0);
   binary_into_buffer<unsigned int>(file, gbxidxs);
 
-  var = meta.at(1);
+  var = meta.at(2);
   file.seekg(var.b0, std::ios::beg);
   std::vector<double> gbxbounds(var.nvar, 0);
   binary_into_buffer<double>(file, gbxbounds);
@@ -48,9 +54,9 @@ return GridBoxBoundaries instance created from that data */
     throw std::invalid_argument(errormsg);
   }
 
-  is_gridbounds_SDnspace_compatible(SDnspace, gbxbounds);
+  is_gridbounds_SDnspace_compatible(SDnspace, gbxbounds, ndims);
 
-  return GridBoxBoundaries{gbxidxs, gbxbounds};
+  return GridBoxBoundaries{ndims, gbxidxs, gbxbounds};
 }
 
 double GridBoxBoundaries::gridboxarea(const unsigned int idx) const
@@ -82,7 +88,7 @@ for that gridbox from position of idx in gbxidxs */
 
 size_t GridBoxBoundaries::find_idx_in_gbxidxs(const unsigned int idx) const
 /* returns position in gbxidxs vector
-where idx is found or raises error*/
+where idx is found or raises error */
 {
   size_t pos = 0;
   for (auto gbxidx : gbxidxs)
@@ -106,25 +112,29 @@ where idx is found or raises error*/
 }
 
 void is_gridbounds_SDnspace_compatible(const unsigned int SDnspace,
-                                       const std::vector<double> &gbxbounds)
+                                       const std::vector<double> &gbxbounds,
+                                       std::vector<size_t> &ndims)
 {
   bool isgood = false;
 
   if (SDnspace == 0)
   {
     // 0D model should have 1 gridbox, hence 6 values in gbxbounds
-    if (gbxbounds.size() == 6)
+    if (gbxbounds.size() == 6 &&
+        ndims.at(0) == 1 && ndims.at(1) == 1 &&
+        ndims.at(2) == 1)
     {
       isgood = true;
     }
   }
 
-  else if (SDnspace == 1)
+  else if (SDnspace == 1 &&
+           ndims.at(1) == 1 && ndims.at(2) == 1)
   {
     isgood = check_1Dmodel_gridbounds(gbxbounds);
   }
 
-  else if (SDnspace == 2)
+  else if (SDnspace == 2 && ndims.at(2) == 1 )
   {
     // 2D model should have constant y coords
     isgood = check_2Dmodel_gridbounds(gbxbounds);
@@ -141,7 +151,7 @@ void is_gridbounds_SDnspace_compatible(const unsigned int SDnspace,
 
   else
   {
-    throw std::invalid_argument("SDnspace > 3 not valid");
+    throw std::invalid_argument("SDnspace or ndims not valid");
   }
 
   if (isgood != true)

@@ -63,7 +63,7 @@ void Maps4GridBoxes::set_0Dmodel_maps(const double domainvol)
 /* set idx2bounds_[i] maps to numeical limits. Set volume
  map using coords read from gridfile */
 {
-  ndims = {1,1,1}
+  ndims = {1, 1, 1};
 
   idx2bounds_z[0] = numeric_limit_bounds();
   idx2bounds_x[0] = numeric_limit_bounds();
@@ -83,6 +83,8 @@ it's index at position 'p' in the gfb.gbxidxs vector, the
 [zmin, zmax] coords of that gridbox are at [pos, pos+1] in the
 gfb.gbxidxs vector, where pos = p*6 */
 {
+  ndims = {gfb.ndims.at(0), 1, 1};
+
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
@@ -112,6 +114,7 @@ vector, the [zmin, zmax, xmin, xmax] coords of that gridbox are
 at [pos, pos+1, pos+2, pos+3] in the gfb.gbxidxs
 vector, where pos = p*6 */
 {
+  ndims = {gfb.ndims.at(0), gfb.ndims.at(1), 1};
 
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
@@ -145,6 +148,8 @@ gfb.gbxidxs vector, the [zmin, zmax, xmin, xmax, ymin, ymax]
 coords of that gridbox are at [pos, pos+1, pos+2, pos+3, pos+4, pos+5]
 in the gfb.gbxidxs vector, where pos = p*6 */
 {
+  ndims = {gfb.ndims.at(0), gfb.ndims.at(1), gfb.ndims.at(2)};
+  
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
@@ -208,9 +213,8 @@ End points return max unsigned int value. */
   {
     std::cout << "char" << dim << "\n";
     std::cout << ndims[0] << ", " << ndims[1] << ", " << ndims[2] << "\n";
+    return {0,0};
   }
-  else
-  {
-    throw std::invalid_argument("dim in 2D cartesian setup must be 'z' or 'x'");
-  }
+  
+  throw std::invalid_argument("dim in 2D cartesian setup must be 'z' or 'x'");
 }
