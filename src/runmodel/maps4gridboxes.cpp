@@ -29,6 +29,7 @@ whilst the volume is determind by reading the gridfile */
   const GridBoxBoundaries gfb(read_gbxboundaries(gridfile, SDnspace));
 
   gbxidxs = gfb.gbxidxs;  
+  maxidx = *std::max_element(gfb.gbxidxs.begin(), gfb.gbxidxs.end());
 
   if (SDnspace == 0)
   {
@@ -84,7 +85,7 @@ it's index at position 'p' in the gfb.gbxidxs vector, the
 gfb.gbxidxs vector, where pos = p*6 */
 {
   ndims = {gfb.ndims.at(0), 1, 1};
-
+   
   size_t pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
@@ -98,7 +99,7 @@ gfb.gbxidxs vector, where pos = p*6 */
     const double vol = (zup - zlow) * gfb.gridboxarea(idx);
     idx2vol[idx] = vol;
 
-    idx2nghbour_z[idx] = nghbours_1Dcartesian(idx, gfb.gbxidxs); 
+    idx2nghbour_z[idx] = znghbours_cartesian(idx, gfb.gbxidxs); 
     idx2nghbour_x[idx] = {idx, idx}; // 'periodic' BCs in non-existent dimensions
     idx2nghbour_y[idx] = {idx, idx};
     
@@ -133,8 +134,8 @@ vector, where pos = p*6 */
     const double vol = (zup - zlow) * (xup - xlow) * deltay;
     idx2vol[idx] = vol;
 
-    idx2nghbour_z[idx] = nghbours_2Dcartesian(idx, gfb.gbxidxs, 'z'); 
-    idx2nghbour_x[idx] = nghbours_2Dcartesian(idx, gfb.gbxidxs, 'x'); 
+    idx2nghbour_z[idx] = znghbours_cartesian(idx, gbxidxs); 
+    idx2nghbour_x[idx] = xnghbours_cartesian(idx, gbxidxs);
     idx2nghbour_y[idx] = {idx, idx}; // 'periodic' BCs in non-existent dimensions
     
     pos += 6;
@@ -168,53 +169,50 @@ in the gfb.gbxidxs vector, where pos = p*6 */
     const double vol = (zup - zlow) * (xup - xlow) * (yup - ylow);
     idx2vol[idx] = vol;
 
+    idx2nghbour_z[idx] = znghbours_cartesian(idx, gbxidxs); 
+    idx2nghbour_x[idx] = xnghbours_cartesian(idx, gbxidxs);
+    idx2nghbour_y[idx] = ynghbours_cartesian(idx, gbxidxs);
+    
     pos += 6;
   }
 }
 
 std::pair<unsigned int,
           unsigned int>
-Maps4GridBoxes::nghbours_1Dcartesian(const unsigned int idx,
+Maps4GridBoxes::znghbours_cartesian(const unsigned int idx,
                                      const std::vector<
                                          unsigned int> &gbxidxs)
 /* returns gbx indexes of {upwards, downwards} neighbour
-of gridbox with index idx in 1D setup. End points return 
+of gridbox with index idx. End points return 
 max unsigned int value. */
 {
-
-  const unsigned int maxidx = *std::max_element(gbxidxs.begin(), gbxidxs.end());
-
-  unsigned int zup_nghbour = idx+1;
-  if (zup_nghbour > maxidx)
+  unsigned int zup = idx+1;
+  if (zup > maxidx)
   {
-    zup_nghbour = -1; // no neighbour above gbx with largest idx
+    zup = -1; // no neighbour above gbx with largest idx
   }
 
-  const unsigned int zdown_nghbour = std::max(-1, (int)idx - 1); // no neighbour below gbx with lowest idx
+  const unsigned int zdown = std::max(-1, (int)idx - 1); // no neighbour below gbx with lowest idx
 
-  return {zup_nghbour, zdown_nghbour};
+  return {zup, zdown};
 }
 
 std::pair<unsigned int,
           unsigned int>
-Maps4GridBoxes::nghbours_2Dcartesian(const unsigned int idx,
-                                     const std::vector<
-                                         unsigned int> &gbxidxs,
-                                     const unsigned char dim)
-/* returns gbx indexes of {upwards, downwards} or {forwards, backwards} 
-neighbour of gridbox with index idx in 2D setup depending on dim char.
-End points return max unsigned int value. */
+Maps4GridBoxes::xnghbours_cartesian(const unsigned int idx,
+                    const std::vector<unsigned int> &gbxidxs)
 {
-  if (dim == 'z')
-  {
-    return nghbours_1Dcartesian(idx, gbxidxs);
-  }
-  else if (dim == 'x')
-  {
-    std::cout << "char" << dim << "\n";
-    std::cout << ndims[0] << ", " << ndims[1] << ", " << ndims[2] << "\n";
-    return {0,0};
-  }
-  
-  throw std::invalid_argument("dim in 2D cartesian setup must be 'z' or 'x'");
+
+  const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
+
+  return { idx + nz, idx - nz};
+}
+
+std::pair<unsigned int,
+          unsigned int>
+Maps4GridBoxes::ynghbours_cartesian(const unsigned int idx,
+                    const std::vector<unsigned int> &gbxidxs)
+{
+  const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
+  return { idx + nznx, idx - nznx};
 }

@@ -58,6 +58,18 @@ void print_nbourmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
   {
     std::cout << key << ": " << value.first  <<", " << value.second << '\n';
   }
+
+  std::cout << "X nghbours" << "\n";
+  for (const auto & [key, value] : mdlmaps.idx2nghbour_x)
+  {
+    std::cout << key << ": " << value.first  <<", " << value.second << '\n';
+  }
+
+  std::cout << "Y nghbours" << "\n";
+  for (const auto & [key, value] : mdlmaps.idx2nghbour_y)
+  {
+    std::cout << key << ": " << value.first  <<", " << value.second << '\n';
+  }
 }
 
 void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)

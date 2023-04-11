@@ -28,6 +28,8 @@ given direction */
 struct Maps4GridBoxes
 {
 private:
+  unsigned int maxidx; // largest gridbox index value
+
   void set_0Dmodel_maps(const double domainvol);
   /* set vol map using coords read from gridfile */
 
@@ -42,14 +44,18 @@ private:
 
   std::pair<unsigned int,
             unsigned int>
-  nghbours_1Dcartesian(const unsigned int idx,
+  znghbours_cartesian(const unsigned int idx,
                        const std::vector<unsigned int> &gbxidxs);
 
   std::pair<unsigned int,
             unsigned int>
-  nghbours_2Dcartesian(const unsigned int idx,
-                       const std::vector<unsigned int> &gbxidxs,
-                       const unsigned char dim);
+  xnghbours_cartesian(const unsigned int idx,
+              const std::vector<unsigned int> &gbxidxs);
+
+  std::pair<unsigned int,
+            unsigned int>
+  ynghbours_cartesian(const unsigned int idx,
+              const std::vector<unsigned int> &gbxidxs);
 
 public:
   std::array<size_t, 3> ndims = {0,0,0};       // number of gridboxes in [z,x,y] directions
