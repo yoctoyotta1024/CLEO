@@ -102,6 +102,9 @@ def figure_setup(coord3, coord1, coord2):
 
     fig.suptitle(str(ncoords)+"-D SDM Initial Superdroplet Conditions")
     axs = axs.flatten()
+    if ncoords == 2:
+        axs[-1].remove()
+            
 
     return fig, axs
 
