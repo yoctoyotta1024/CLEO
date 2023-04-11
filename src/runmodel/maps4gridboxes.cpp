@@ -63,6 +63,8 @@ void Maps4GridBoxes::set_0Dmodel_maps(const double domainvol)
 /* set idx2bounds_[i] maps to numeical limits. Set volume
  map using coords read from gridfile */
 {
+  ndims = {1,1,1}
+
   idx2bounds_z[0] = numeric_limit_bounds();
   idx2bounds_x[0] = numeric_limit_bounds();
   idx2bounds_y[0] = numeric_limit_bounds();
@@ -165,10 +167,11 @@ in the gfb.gbxidxs vector, where pos = p*6 */
   }
 }
 
-
-std::pair<unsigned int, unsigned int> Maps4GridBoxes::nghbours_1Dcartesian(const unsigned int idx,
-                                                           const std::vector<
-                                                               unsigned int> &gbxidxs)
+std::pair<unsigned int,
+          unsigned int>
+Maps4GridBoxes::nghbours_1Dcartesian(const unsigned int idx,
+                                     const std::vector<
+                                         unsigned int> &gbxidxs)
 /* returns gbx indexes of {upwards, downwards} neighbour
 of gridbox with index idx in 1D setup. End points return 
 max unsigned int value. */
@@ -187,10 +190,12 @@ max unsigned int value. */
   return {zup_nghbour, zdown_nghbour};
 }
 
-std::pair<unsigned int, unsigned int> Maps4GridBoxes::nghbours_2Dcartesian(const unsigned int idx,
-                                                           const std::vector<
-                                                               unsigned int> &gbxidxs,
-                                                               const unsigned char dim)
+std::pair<unsigned int,
+          unsigned int>
+Maps4GridBoxes::nghbours_2Dcartesian(const unsigned int idx,
+                                     const std::vector<
+                                         unsigned int> &gbxidxs,
+                                     const unsigned char dim)
 /* returns gbx indexes of {upwards, downwards} or {forwards, backwards} 
 neighbour of gridbox with index idx in 2D setup depending on dim char.
 End points return max unsigned int value. */

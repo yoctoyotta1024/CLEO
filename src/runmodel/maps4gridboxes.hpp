@@ -20,6 +20,7 @@ given direction */
 #include <limits>
 #include <stdexcept>
 #include <algorithm>
+#include <array>
 
 #include "initialisation/readbinary.hpp"
 #include "initialisation/read_gbxboundaries.hpp"
@@ -51,7 +52,7 @@ private:
                        const unsigned char dim);
 
 public:
-  std::array<size_t, 3> ndims;       // number of gridboxes in [z,x,y] directions
+  std::array<size_t, 3> ndims = {0,0,0};       // number of gridboxes in [z,x,y] directions
   std::vector<unsigned int> gbxidxs; // vector of all gridbox indexes in domain
   std::map<unsigned int, std::pair<double, double>> idx2bounds_z; // coord limits to each gridbox given its index
   std::map<unsigned int, std::pair<double, double>> idx2bounds_x;
