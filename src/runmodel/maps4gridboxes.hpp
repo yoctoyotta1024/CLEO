@@ -116,6 +116,13 @@ private:
   std::pair<unsigned int, unsigned int>
   handle_finitedomain_nghbours(const unsigned int forward,
                                const int backward) const;
+  /* retunrs {forward, backward} gridbox neighbours with
+  treatment of neighbours as if bounds of domain are finite.
+  Means that no neighbour exists above/below highest/lowest gbxindex.
+  For non-existent neighbours, max unsigned int value is returned,
+  ie. neighbour backwards for gridboxes with backward<0 is maximum unsigned int,
+  while neighbour forwards for gridboxes with forward>maxidx
+  is maximm unsigned int */
 
   std::pair<unsigned int, unsigned int>
   handle_periodicdomain_nghbours(const unsigned int forward,
@@ -131,8 +138,9 @@ public:
                       const std::vector<
                           unsigned int> &gbxidxs) const
   /* returns pair of gbx indexes for {upwards, downwards} neighbour
-  of a gridbox with index 'idx'. Treatment of neighbours for gridboxes
-  at edges of domain is determined by the 'handle_XXX_nghbours' function */
+  of a gridbox with index 'idx'. Treatment of neighbours for
+  gridboxes at edges of domain is determined by the
+  'handle_XXX_nghbours' function */
   {
     return handle_finitedomain_nghbours(idx + 1, (int)idx - 1);
   }
@@ -140,6 +148,10 @@ public:
   std::pair<unsigned int, unsigned int>
   xnghbours_cartesian(const unsigned int idx,
                       const std::vector<unsigned int> &gbxidxs) const
+  /* returns pair of gbx indexes for {infront, behind} neighbour
+  of a gridbox with index 'idx'. Treatment of neighbours for
+  gridboxes at edges of domain is determined by the
+  'handle_XXX_nghbours' function */
   {
     const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
     return handle_finitedomain_nghbours(idx + nz, (int)(idx - nz));
@@ -148,6 +160,10 @@ public:
   std::pair<unsigned int, unsigned int>
   ynghbours_cartesian(const unsigned int idx,
                       const std::vector<unsigned int> &gbxidxs) const
+  /* returns pair of gbx indexes for {right, left} neighbour
+  of a gridbox with index 'idx'. Treatment of neighbours for
+  gridboxes at edges of domain is determined by the
+  'handle_XXX_nghbours' function */
   {
     const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
     return handle_finitedomain_nghbours(idx + nznx, (int)(idx - nznx));

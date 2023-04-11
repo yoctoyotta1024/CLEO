@@ -42,8 +42,8 @@ int main()
 
   print_gridboxmaps(mdlmaps, dlc::COORD0);
 
-  const std::string initSDs_filename = abspath+"build/"+config.initSDs_filename;
-  const InitSDsData initSDs = get_initsuperdropsdata(initSDs_filename);
+  // const std::string initSDs_filename = abspath+"build/"+config.initSDs_filename;
+  // const InitSDsData initSDs = get_initsuperdropsdata(initSDs_filename);
 
   // print_initSDs(initSDs);
   print_nbourmaps(mdlmaps, dlc::COORD0);
