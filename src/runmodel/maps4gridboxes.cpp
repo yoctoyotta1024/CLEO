@@ -182,24 +182,31 @@ in the gfb.gbxidxs vector, where pos = p*6 */
 }
 
 std::pair<unsigned int, unsigned int>
-CartesianNeighbourIndexes::handle_finitedomain_nghbours(const unsigned int forward,
-                                                        const unsigned int backward) const
-/* Treatment of neighbours as if bounds of domain are finite.
-Means that no neighbour exists above/below highest/lowest gbxindex.
-For non-existent neighbours, max unsigned int value is returned,
-ie. neighbour backwards for gridboxes with backward<0 is maximum unsigned int,
-while neighbour forwards for gridboxes with forward>maxidx
-is maximm unsigned int */
+CartesianNeighbourIndexes::handle_finitedomain_nghbours(const unsigned int idx,
+                                                        const unsigned int increment,
+                                                        const unsigned int ndim) const
+/* returns {forward, backward} gridbox neighbours with
+treatment of neighbours as if bounds of domain are finite. This
+means that no neighbour exists above/below highest/lowest gridboxes 
+in a given direction. For non-existent neighbours, max unsigned int
+value is returned, ie. in a given direction, index of neighbour
+backwards and/or forwards of gridboxes at edge of domain is
+maximum unsigned int */
 {
-  const unsigned int bidx = std::max(backward, (unsigned int)-1);
+  unsigned int forward = idx + increment;
+  unsigned int backward = idx - increment;
 
-  unsigned int fidx = forward; 
-  if (forward > maxidx)
+  if ((idx/increment) % ndim == 0)
   {
-    fidx = (unsigned int)-1;
+    backward = -1;
   }
 
-  return {fidx, bidx};
+  if ((forward/increment) % ndim == 0)
+  {
+    forward = -1;
+  }
+
+  return {forward, backward};
 }
 
 // std::pair<unsigned int, unsigned int>

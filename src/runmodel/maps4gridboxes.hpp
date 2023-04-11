@@ -92,14 +92,14 @@ public:
     return (*idx2nghbour_y.find(gbxindex)).second.second;
   }
 
-  inline unsigned int get_neighbour_xforward(unsigned int gbxindex) const
+  inline unsigned int get_neighbour_xinfront(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in the forwards x direction, ie. out of page */
   {
     return (*idx2nghbour_x.find(gbxindex)).second.first;
   }
 
-  inline unsigned int get_neighbour_xbackward(unsigned int gbxindex) const
+  inline unsigned int get_neighbour_xbehind(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in the backwards x direction, ie. into page */
   {
@@ -114,15 +114,16 @@ private:
   std::array<size_t, 3> ndims = {0, 0, 0}; // number of gridboxes in [z,x,y] directions
 
   std::pair<unsigned int, unsigned int>
-  handle_finitedomain_nghbours(const unsigned int forward,
-                               const unsigned int backward) const;
-  /* retunrs {forward, backward} gridbox neighbours with
-  treatment of neighbours as if bounds of domain are finite.
-  Means that no neighbour exists above/below highest/lowest gbxindex.
-  For non-existent neighbours, max unsigned int value is returned,
-  ie. neighbour backwards for gridboxes with backward<0 is maximum unsigned int,
-  while neighbour forwards for gridboxes with forward>maxidx
-  is maximm unsigned int */
+  handle_finitedomain_nghbours(const unsigned int idx,
+                              const unsigned int increment,
+                              const unsigned int ndim) const;
+  /* returns {forward, backward} gridbox neighbours with
+  treatment of neighbours as if bounds of domain are finite. This
+  means that no neighbour exists above/below highest/lowest gridboxes 
+  in a given direction. For non-existent neighbours, max unsigned int
+  value is returned, ie. in a given direction, index of neighbour
+  backwards and/or forwards of gridboxes at edge of domain is
+  maximum unsigned int */
 
   std::pair<unsigned int, unsigned int>
   handle_periodicdomain_nghbours(const unsigned int forward,
@@ -142,20 +143,7 @@ public:
   gridboxes at edges of domain is determined by the
   'handle_XXX_nghbours' function */
   {
-    unsigned int forward = idx+1;
-    unsigned int backward = idx-1;
-
-    if (idx % ndims.at(0) == 0)
-    {
-      backward = -1;
-    }
-
-    if (forward % ndims.at(0) == 0)
-    {
-      forward = -1;
-    }
-
-    return {forward, backward};
+    return handle_finitedomain_nghbours(idx, 1, ndims.at(0));
   }
 
   std::pair<unsigned int, unsigned int>
@@ -167,22 +155,7 @@ public:
   'handle_XXX_nghbours' function */
   {
     const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
-
-    unsigned int forward = idx+nz;
-    unsigned int backward = idx-nz;
-
-    if ((idx / nz) % ndims.at(1) == 0)
-    {
-      backward = -1;
-    }
-
-    if ((forward / nz) % ndims.at(1) == 0)
-    {
-      std::cout << "xfront: " << idx <<"\n";
-      forward = -1;
-    }
-
-    return {forward, backward};
+    return handle_finitedomain_nghbours(idx, nz, ndims.at(1));
   }
 
   std::pair<unsigned int, unsigned int>
@@ -194,23 +167,7 @@ public:
   'handle_XXX_nghbours' function */
   {
     const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
-
-    unsigned int forward = idx+nznx;
-    unsigned int backward = idx-nznx;
-
-    if ((idx / nznx) % ndims.at(2) == 0)
-    {
-      std::cout << "yback: " << idx <<"\n";
-      backward = -1;
-    }
-
-    if ((forward / nznx) % ndims.at(2) == 0)
-    {
-      std::cout << "yfront: " << idx <<"\n";
-      forward = -1;
-    }
-
-    return {forward, backward}; 
+    return handle_finitedomain_nghbours(idx, nznx, ndims.at(2));
   }
 };
 
