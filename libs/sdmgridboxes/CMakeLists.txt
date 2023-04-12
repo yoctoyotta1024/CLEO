@@ -20,7 +20,7 @@ set(SOURCES
 "gridbox.cpp"
 "maps4gridboxes.cpp"
 "superdrops_in_gridboxes.cpp"
-"superdropsmotion.cpp"
+"movement_in_domain.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

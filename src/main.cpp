@@ -51,8 +51,12 @@ int main(int argc, char *argv[])
                                         timezarr, gbxzarr, nsuperszarr,
                                         sdmoments);
 
+
+  const SdmMotion sdmmotion;
+
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
-  run_cvodeSDM_coupledmodel(config, mdlsteps, mdlmaps, sdmprocess, observer);
+  run_cvodeSDM_coupledmodel(config, mdlsteps, mdlmaps,
+                            sdmprocess, sdmmotion, observer);
 
   return 0;
 }

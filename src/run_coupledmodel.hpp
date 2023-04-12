@@ -14,6 +14,7 @@ void run_cvodeSDM_coupledmodel(const Config &config,
                                const Timesteps &mdlsteps,
                                const Maps4GridBoxes &mdlmaps,
                                const SdmProcess auto &sdmprocess,
+                               const SdmMotion &sdmmotion,
                                const Observer auto &observer)
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
@@ -37,7 +38,8 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   /* prepare, launch, and end coupled model */
   auto gen = prepare_coupledmodel(mdlsteps, cvode, gridboxes, config.wetradiiinit);
 
-  timestep_coupledmodel(mdlsteps, mdlmaps, sdmprocess, observer, config.doCouple,
+  timestep_coupledmodel(mdlsteps, mdlmaps, sdmprocess, sdmmotion,
+                        observer, config.doCouple,
                         cvode, gen, gridboxes, SDsInGBxs);
 
   printfinish_coupledmodel();
@@ -46,6 +48,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
 void timestep_coupledmodel(const Timesteps &mdlsteps,
                            const Maps4GridBoxes &mdlmaps,
                            const SdmProcess auto &sdmprocess,
+                           const SdmMotion &sdmmotion,
                            const Observer auto &observer,
                            const bool doCouple,
                            CvodeThermoSolver &cvode,
@@ -66,7 +69,7 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
                                                                       cvode);
     /* advance SDM by outstep (parallel to CVODE section) */
     run_sdmstep(t_out, mdlsteps.outstep, mdlsteps.xchangestep,
-                sdmprocess, mdlmaps, gen, gridboxes, SDsInGBxs);
+                sdmprocess, sdmmotion, mdlmaps, gen, gridboxes, SDsInGBxs);
 
     /* advance CVODE solver by outstep (parallel to SDM) */
     cvode.run_cvodestep(timestep2dimlesstime(t_out + mdlsteps.outstep));

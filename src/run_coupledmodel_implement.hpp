@@ -22,13 +22,14 @@ seperated to increase readability */
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
 #include "sdmgridboxes/superdrops_in_gridboxes.hpp"
-#include "sdmgridboxes/superdropsmotion.hpp"
+#include "sdmgridboxes/movement_in_domain.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 #include "observers/observers.hpp"
 
 /* Superdroplet Model (SDM) files */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
+#include "superdrop_solver/sdmmotion.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"
 
@@ -42,6 +43,7 @@ void run_cvodeSDM_coupledmodel(const Config &config,
                                const Timesteps &mdlsteps,
                                const Maps4GridBoxes &mdlmaps,
                                const SdmProcess auto &sdmprocess,
+                               const SdmMotion &sdmmotion,
                                const Observer auto &observer);
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
@@ -49,6 +51,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
 void timestep_coupledmodel(const Timesteps &mdlsteps,
                            const Maps4GridBoxes &mdlmaps,
                            const SdmProcess auto &sdmprocess,
+                           const SdmMotion &sdmmotion,
                            const Observer auto &observer,
                            const bool doCouple,
                            CvodeThermoSolver &cvode,
@@ -122,6 +125,14 @@ is next to occur and return the time of the sooner event */
   return std::min(next_xchange, next_out);
 }
 
+inline void exchanges_between_gridboxes(const Maps4GridBoxes &mdlmaps,
+                                        const SdmMotion &sdmmotion,
+                                        std::vector<SuperdropWithGbxindex> &SDsInGBxs,
+                                        std::vector<GridBox> &gridboxes)
+{
+  move_superdrops_in_domain(mdlmaps, sdmmotion, SDsInGBxs, gridboxes);
+}
+
 std::vector<ThermoState> start_coupledstep(const Observer auto &observer,
                                            std::vector<GridBox> &gridboxes,
                                            const CvodeThermoSolver &cvode)
@@ -141,6 +152,7 @@ of current thermodynamic states (for later use in SDM) */
 void run_sdmstep(const int t_out, const int outstep,
                  const int xchangestep,
                  const SdmProcess auto &sdmprocess,
+                 const SdmMotion &sdmmotion,
                  const Maps4GridBoxes &mdlmaps,
                  std::mt19937 &gen,
                  std::vector<GridBox> &gridboxes,
@@ -173,7 +185,8 @@ gridboxes and the SDM process to occur at smaller time intervals */
     /* do exchange if timestep is on exchange event */
     if (nextt % xchangestep == 0)
     {
-      sdmmotion(mdlmaps, SDsInGBxs, gridboxes);
+      exchanges_between_gridboxes(mdlmaps, sdmmotion,
+                                  SDsInGBxs, gridboxes);
     }
 
     t = nextt;

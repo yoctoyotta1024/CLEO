@@ -9,8 +9,7 @@ being visible externally */
 
 #include "superdrops_in_gridboxes.hpp"
 
-/* ------------------------------------------------------ */
-/* -- function called create_superdrops_in_gridboxes -- */
+/* -- function called by superdrops_from_initSDsfile -- */
 std::vector<SuperdropWithGbxindex>
 create_superdropsingridboxes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
@@ -20,11 +19,6 @@ create_superdropsingridboxes(const int nSDsvec, const int SDnspace,
 std::vector<double> initSDcoords(const int SDnspace,
                                  const InitSDsData &initSDs,
                                  const int i);
-/* ------------------------------------------------------ */
-/* ----- function called by sdgbxindex_to_neighbour ----- */
-int flag_tochange_sdgbxindex(const SuperdropWithGbxindex &SDinGBx,
-                             const std::map<unsigned int,
-                                            std::pair<double, double>> &idx2bounds_z);
 /* ------------------------------------------------------ */
 
 std::vector<SuperdropWithGbxindex>
@@ -123,67 +117,4 @@ std::vector<double> initSDcoords(const int SDnspace,
   }
 
   return zxycoords;
-}
-
-int flag_tochange_sdgbxindex(const SuperdropWithGbxindex &SDinGBx,
-                             const std::map<unsigned int, std::pair<double, double>> &idx2bounds_z)
-/* Determines value of the is_change flag used to signal if
-the gridboxindex associated with a superdrop needs to change
-and if so, in which direction the superdroplet needs to move */
-{
-  const double coord = SDinGBx.superdrop.coord3;
-  const double llim = (*idx2bounds_z.find(SDinGBx.sd_gbxindex)).second.first;
-  const double ulim = (*idx2bounds_z.find(SDinGBx.sd_gbxindex)).second.second;
-
-  if (coord < llim)
-  {
-    return 1; // enum for moving SD index down a gridbox
-  }
-  else if (coord >= ulim)
-  {
-    return 2; // enum for moving SD index up a gridbox
-  }
-  else
-  {
-    return 0; // enum for not changing SD index
-  }
-}
-
-void sdgbxindex_to_neighbour(const Maps4GridBoxes &mdlmaps,
-                             SuperdropWithGbxindex &SDinGBx)
-/* first check if gridbox index associated with the superdrop
-in SDinGBx needs to change. If it does, implement change by
-calling correct function for changing the sd_gbxindex to a
-neighbouring gridbox's index in a particular direction.
-The direction is given by the value of the is_change flag */
-{
-  enum MoveSuperdrop
-  {
-    No,
-    Down,
-    Up,
-    Left,
-    Right,
-    Forwards,
-    Backwards
-  };
-
-  int is_change = flag_tochange_sdgbxindex(SDinGBx, mdlmaps.idx2bounds_z);
-  
-  if (is_change != No)
-  {
-    if (is_change == Down)
-    {
-      SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_zdown(SDinGBx.sd_gbxindex);
-    }
-    else if (is_change == Up)
-    {
-      SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_zup(SDinGBx.sd_gbxindex);
-    }
-    else
-    {
-      throw std::invalid_argument("method to change SD index for"
-                                  "given is_change flag is not defined");
-    }
-  }
 }

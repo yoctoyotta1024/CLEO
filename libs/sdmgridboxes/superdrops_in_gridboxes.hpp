@@ -1,7 +1,7 @@
 // Author: Clara Bayley
 // File: superdrops_in_gridboxes.hpp
-/* Header file for functions involved in handling vector of
-SuperdropWithGbxindex instances (see superdrop.hpp
+/* Header file for functions involved in handling
+vector of SuperdropWithGbxindex instances (see superdrop.hpp
 for definition of this struct) associated with Gridboxes
 defined by relations of gbxindex in Maps4GridBoxes.
 Note: some hidden functions called internally are
@@ -40,27 +40,6 @@ where all the superdroplets have the same solute properties, "solute".
 Uses the coordinates of each superdroplet to set the value of the sd_gbxindex
 associated with each superdroplet in the SuperdropletWithGridbox struct */
 
-void sdgbxindex_to_neighbour(const Maps4GridBoxes &mdlmaps,
-                                SuperdropWithGbxindex &SDinGBx);
-/* first check if gridbox index associated with the superdrop
-in SDinGBx needs to change. If it does, implement change by
-calling correct function for changing the sd_gbxindex to a
-neighbouring gridbox's index in a particular direction.
-The direction is given by the value of the is_change flag */
-
-inline void sort_superdrops_via_gridboxindex(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
-/* uses the value of sd_gbxindex within each SuperdropWithGbxindex
-struct to sort the vector from lowest sd_gbxindex to highest. Sorting
-of objects with same value of sd_gbxindex can take any order */
-{
-  auto compare = [](SuperdropWithGbxindex &a, SuperdropWithGbxindex &b)
-  {
-    return (a.sd_gbxindex) < (b.sd_gbxindex);
-  };
-
-  std::sort(SDsInGBxs.begin(), SDsInGBxs.end(), compare);
-}
-
 inline void print_SDinGBx(const SuperdropWithGbxindex SDinGBx)
 {
   std::cout << "SD " << SDinGBx.superdrop.id.value
@@ -69,5 +48,7 @@ inline void print_SDinGBx(const SuperdropWithGbxindex SDinGBx)
               << ", " << SDinGBx.superdrop.coord3 << ", " << SDinGBx.superdrop.coord1
               << ", " << SDinGBx.superdrop.coord2 << "\n";
 }
+
+
 
 #endif // SUPERDROPS_IN_GRIDBOXES_HPP
