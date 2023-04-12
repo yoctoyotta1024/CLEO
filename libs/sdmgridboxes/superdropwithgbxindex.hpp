@@ -1,5 +1,5 @@
 // Author: Clara Bayley
-// File: superdrops_in_gridboxes.hpp
+// File: superdropwithgbxindex.hpp
 /* Header file for functions involved in handling
 vector of SuperdropWithGbxindex instances (see superdrop.hpp
 for definition of this struct) associated with Gridboxes
@@ -7,8 +7,8 @@ defined by relations of gbxindex in Maps4GridBoxes.
 Note: some hidden functions called internally are
 defined in .cpp implementaiton file */
 
-#ifndef SUPERDROPS_IN_GRIDBOXES_HPP
-#define SUPERDROPS_IN_GRIDBOXES_HPP
+#ifndef SUPERDROPWITHGBXINDEX_HPP
+#define SUPERDROPWITHGBXINDEX_HPP
 
 #include <vector>
 #include <string>
@@ -21,7 +21,6 @@ defined in .cpp implementaiton file */
 #include <stdexcept>
 #include <algorithm>
 
-#include "./maps4gridboxes.hpp"
 #include "claras_SDconstants.hpp"
 #include "initialisation/read_initsuperdrops.hpp"
 #include "superdrop_solver/superdrop.hpp"
@@ -29,11 +28,10 @@ defined in .cpp implementaiton file */
 namespace dlc = dimless_constants;
 
 std::vector<SuperdropWithGbxindex>
-superdrops_from_initSDsfile(std::string_view initSDs_filename,
+create_superdrops_from_initSDsfile(std::string_view initSDs_filename,
                             const int nSDsvec,
                             const int SDnspace,
-                            const std::shared_ptr<const SoluteProperties> solute,
-                            const Maps4GridBoxes &mdlmaps);
+                            const std::shared_ptr<const SoluteProperties> solute);
 /* reads initsuperdrop file for superdroplets' initial properties. Uses this data
 to create 'nSDsvec' no. of SuperdropletWithGridbox instances in a vector
 where all the superdroplets have the same solute properties, "solute".
@@ -49,6 +47,17 @@ inline void print_SDinGBx(const SuperdropWithGbxindex SDinGBx)
               << ", " << SDinGBx.superdrop.coord2 << "\n";
 }
 
+inline void sort_superdrops_via_gridboxindex(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+/* uses the value of sd_gbxindex within each SuperdropWithGbxindex
+struct to sort the vector from lowest sd_gbxindex to highest. Sorting
+of objects with same value of sd_gbxindex can take any order */
+{
+  auto compare = [](SuperdropWithGbxindex &a, SuperdropWithGbxindex &b)
+  {
+    return (a.sd_gbxindex) < (b.sd_gbxindex);
+  };
 
+  std::sort(SDsInGBxs.begin(), SDsInGBxs.end(), compare);
+}
 
-#endif // SUPERDROPS_IN_GRIDBOXES_HPP
+#endif // SUPERDROPWITHGBXINDEX_HPP

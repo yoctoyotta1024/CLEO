@@ -27,10 +27,9 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   associated gridbox index. (all superdroplets have same solute properties) */
   const auto solute(std::make_shared<const SoluteProperties>());
   std::vector<SuperdropWithGbxindex>
-      SDsInGBxs = superdrops_from_initSDsfile(config.initSDs_filename,
+      SDsInGBxs = create_superdrops_from_initSDsfile(config.initSDs_filename,
                                               config.nSDsvec,
-                                              config.SDnspace, solute,
-                                              mdlmaps);
+                                              config.SDnspace, solute);
 
   /* vector containing all gridboxes that makeup the SDM domain */
   std::vector<GridBox> gridboxes = create_gridboxes(mdlmaps, SDsInGBxs);

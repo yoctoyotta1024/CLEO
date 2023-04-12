@@ -1,5 +1,5 @@
 // Author: Clara Bayley
-// File: superdrops_in_gridboxes.cpp
+// File: superdropwithgbxindex.cpp
 /* functionality involved in handling vector of
 SuperdropWithGbxindex instances (see superdrop.hpp
 for definition of this struct) associated with Gridboxes
@@ -7,14 +7,14 @@ defined by relations of gbxindex in Maps4GridBoxes.
 Note: some functions are declared here to avoid
 being visible externally */
 
-#include "superdrops_in_gridboxes.hpp"
+#include "superdropwithgbxindex.hpp"
 
-/* -- function called by superdrops_from_initSDsfile -- */
+/* -- function called by create_superdrops_from_initSDsfile -- */
 std::vector<SuperdropWithGbxindex>
-create_superdropsingridboxes(const int nSDsvec, const int SDnspace,
+create_superdropwithgbxindexes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
-                               const std::shared_ptr<const SoluteProperties> solute,
-                               const Maps4GridBoxes &mdlmaps);
+                               const std::shared_ptr<const SoluteProperties>
+                                   solute);
 
 std::vector<double> initSDcoords(const int SDnspace,
                                  const InitSDsData &initSDs,
@@ -22,11 +22,10 @@ std::vector<double> initSDcoords(const int SDnspace,
 /* ------------------------------------------------------ */
 
 std::vector<SuperdropWithGbxindex>
-superdrops_from_initSDsfile(std::string_view initSDs_filename,
+create_superdrops_from_initSDsfile(std::string_view initSDs_filename,
                             const int nSDsvec,
                             const int SDnspace,
-                            const std::shared_ptr<const SoluteProperties> solute,
-                            const Maps4GridBoxes &mdlmaps)
+                            const std::shared_ptr<const SoluteProperties> solute)
 /* reads initsuperdrop file for superdroplets' initial properties. Uses this data
 to create 'nSDsvec' no. of SuperdropletWithGridbox instances in a vector
 where all the superdroplets have the same solute properties, "solute".
@@ -43,8 +42,8 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
             << "\nNow creating superdrops with gridboxes\n";
 
   std::vector<SuperdropWithGbxindex>
-      SDsInGBxs = create_superdropsingridboxes(nSDsvec, SDnspace, initSDs,
-                                                 solute, mdlmaps);
+      SDsInGBxs = create_superdropwithgbxindexes(nSDsvec, SDnspace,
+                                                 initSDs, solute);
 
   /* 3. Initialise gridbox index associated with each superdroplets */
   std::cout << "Now sorting superdroplets based on the"
@@ -56,10 +55,10 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
 }
 
 std::vector<SuperdropWithGbxindex>
-create_superdropsingridboxes(const int nSDsvec, const int SDnspace,
+create_superdropwithgbxindexes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
-                               const std::shared_ptr<const SoluteProperties> solute,
-                               const Maps4GridBoxes &mdlmaps)
+                               const std::shared_ptr<const SoluteProperties>
+                                   solute)
 {
   std::vector<SuperdropWithGbxindex> SDsInGBxs;
   auto sdIdGen = Superdrop::IDType::Gen{};

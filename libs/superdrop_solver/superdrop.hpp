@@ -168,17 +168,4 @@ the GBx the SD is associated with */
       : sd_gbxindex(isd_gbxindex), superdrop(isuperdrop) {}
 };
 
-inline void sort_superdrops_via_gridboxindex(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
-/* uses the value of sd_gbxindex within each SuperdropWithGbxindex
-struct to sort the vector from lowest sd_gbxindex to highest. Sorting
-of objects with same value of sd_gbxindex can take any order */
-{
-  auto compare = [](SuperdropWithGbxindex &a, SuperdropWithGbxindex &b)
-  {
-    return (a.sd_gbxindex) < (b.sd_gbxindex);
-  };
-
-  std::sort(SDsInGBxs.begin(), SDsInGBxs.end(), compare);
-}
-
 #endif // SUPERDROP_HPP
