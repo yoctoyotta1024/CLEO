@@ -1,5 +1,5 @@
 // Author: Clara Bayley
-// File: superdrops_with_gridboxes.hpp
+// File: superdrops_in_gridboxes.hpp
 /* Header file for functions involved in handling
 the SuperdropWithGbxindex instances (see superdrop.hpp
 for definition of this struct). Four Functions can be
@@ -10,8 +10,8 @@ vector based on a value in each struct, 3) for changing
 an sd_gbxindex to neighbouring gridboxes' gbxindex, 
 4) for printing member variables of a SDinGBx instance */
 
-#ifndef SUPERDROPS_WITH_GRIDBOXES_HPP
-#define SUPERDROPS_WITH_GRIDBOXES_HPP
+#ifndef SUPERDROPS_IN_GRIDBOXES_HPP
+#define SUPERDROPS_IN_GRIDBOXES_HPP
 
 #include <vector>
 #include <string>
@@ -73,4 +73,4 @@ inline void print_SDinGBx(const SuperdropWithGbxindex SDinGBx)
               << ", " << SDinGBx.superdrop.coord2 << "\n";
 }
 
-#endif // SUPERDROPS_WITH_GRIDBOXES_HPP
+#endif // SUPERDROPS_IN_GRIDBOXES_HPP

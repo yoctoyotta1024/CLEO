@@ -1,14 +1,14 @@
 // Author: Clara Bayley
-// File: superdrops_with_gridboxes.cpp
+// File: superdrops_in_gridboxes.cpp
 /* functionality involved in handling
 the SuperdropWithGbxindex instances (see superdrop.hpp
 for definition of this struct). Some functions
 declared here to avoid being visible externally */
 
-#include "superdrops_with_gridboxes.hpp"
+#include "superdrops_in_gridboxes.hpp"
 
 /* ------------------------------------------------------ */
-/* -- function called create_superdrops_with_gridboxes -- */
+/* -- function called create_superdrops_in_gridboxes -- */
 std::vector<SuperdropWithGbxindex>
 create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
