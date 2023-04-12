@@ -126,9 +126,16 @@ private:
   maximum unsigned int */
 
   std::pair<unsigned int, unsigned int>
-  handle_periodicdomain_nghbours(const unsigned int forward,
-                                 const unsigned int backward) const;                             
-
+  handle_periodicdomain_nghbours(const unsigned int idx,
+                              const unsigned int increment,
+                              const unsigned int ndim) const;                       
+  /* returns {forward, backward} gridbox neighbours with
+  treatment of neighbours as if bounds of domain are periodic. This
+  means that highest/lowest gridboxes in a given direction are 
+  neighbours. I.e.  index of neighbour forwards of gridboxes at
+  the uppermost edge of domain in a given direction, are the
+  lowermost gridboxes in that direction (and vice versa). */
+  
 public:
   CartesianNeighbourIndexes(const unsigned int maxidx,
                             const std::array<size_t, 3> ndims)
