@@ -8,24 +8,16 @@ coords and moving them between gridboxes) */
 #include "./movement_in_domain.hpp"
 
 /* ----- function called internally ----- */
-void set_superdrop_gbxindex(const Maps4GridBoxes &mdlmaps,
-                            const std::pair<double, double> zbounds,
-                            const std::pair<double, double> xbounds,
-                            const std::pair<double, double> ybounds,
-                            const unsigned int gbxindex,
-                            SuperdropWithGbxindex &SDinGBx);
+unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &mdlmaps,
+                                       const unsigned int gbxindex,
+                                       const std::pair<double, double> zbounds,
+                                       const std::pair<double, double> xbounds,
+                                       const std::pair<double, double> ybounds,
+                                       const Superdrop &superdrop);
 /* For each direction, first check if gridbox index associated
 with the superdrop in SDinGBx needs to change. If it does, implement
 change by calling correct function for changing the sd_gbxindex to a
 neighbouring gridbox's index in that direction */
-
-char flag_tochange_sdgbxindex(const double coord,
-                              const std::pair<double, double> bounds);
-/* Determines value of the is_change flag used to signal if
-the gridboxindex associated with a superdrop needs to change
-and if so, in which direction the superdroplet needs to move.
-returned char is: 'n' = no change, 'f' = move to forward neighbour,
-'b' = move to backward neighbour */
 /* -------------------------------------- */
 
 void move_superdrops_in_domain(const Maps4GridBoxes &mdlmaps,
@@ -42,7 +34,7 @@ spans4SDsInGbx for each gridbox */
   const double w = 0.0; // TODO: get winds from gridbox state
   const double u = 0.0;
   const double v = 0.0;
-  
+
   for (auto &gbx : gridboxes)
   {
     const std::pair<double, double>
@@ -57,80 +49,52 @@ spans4SDsInGbx for each gridbox */
     for (auto &SDinGBx : gbx.span4SDsinGBx)
     {
       sdmmotion.move_superdroplet(w, u, v, SDinGBx.superdrop);
-      //SDinGBx.superdrop.coord3 += 1.0;
+      // SDinGBx.superdrop.coord3 += 1.0;
 
-      set_superdrop_gbxindex(mdlmaps, zbounds, xbounds, ybounds,
-                             gbx.gbxindex, SDinGBx);
+      SDinGBx.sd_gbxindex = update_superdrop_gbxindex(mdlmaps, gbx.gbxindex,
+                                                      zbounds, xbounds, ybounds,
+                                                      SDinGBx.superdrop);
     }
   }
-  
+
   exchange_superdroplets_between_gridboxes(SDsInGBxs, gridboxes);
 }
 
-void set_superdrop_gbxindex(const Maps4GridBoxes &mdlmaps,
-                            const std::pair<double, double> zbounds,
-                            const std::pair<double, double> xbounds,
-                            const std::pair<double, double> ybounds,
-                            const unsigned int gbxindex,
-                            SuperdropWithGbxindex &SDinGBx)
+unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &mdlmaps,
+                                       const unsigned int gbxindex,
+                                       const std::pair<double, double> zbounds,
+                                       const std::pair<double, double> xbounds,
+                                       const std::pair<double, double> ybounds,
+                                       const Superdrop &superdrop)
 /* For each direction, first check if gridbox index associated
 with the superdrop in SDinGBx needs to change. If it does, implement
 change by calling correct function for changing the sd_gbxindex to a
 neighbouring gridbox's index in that direction */
 {
-  const char zflag(flag_tochange_sdgbxindex(SDinGBx.superdrop.coord3, zbounds));
-  const char xflag(flag_tochange_sdgbxindex(SDinGBx.superdrop.coord1, xbounds));
-  const char yflag(flag_tochange_sdgbxindex(SDinGBx.superdrop.coord2, ybounds));
- 
-  if (zflag == 'b')
+  auto bindfunc = [](const Maps4GridBoxes mdlmaps, const auto funcref)
   {
-    SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_zdown(gbxindex);
-  }
-  else if (zflag == 'f')
-  {
-    SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_zup(gbxindex);
-  }
+    return std::bind(funcref, mdlmaps, std::placeholders::_1); // cast sd_gbxindex to *signed* int
+  };
 
-  if (xflag == 'b')
-  {
-    SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_xbehind(gbxindex);
-  }
-  else if (xflag == 'f')
-  {
-    SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_xinfront(gbxindex);
-  }
+  unsigned int sd_gbxindex(gbxindex);
 
-  if (yflag == 'b')
-  {
-    SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_yleft(gbxindex);
-  }
-  else if (yflag == 'f')
-  {
-    SDinGBx.sd_gbxindex = mdlmaps.get_neighbour_yright(gbxindex);
-  } 
-}
+  const auto zdown = bindfunc(mdlmaps, &Maps4GridBoxes::get_neighbour_zdown);
+  const auto zup = bindfunc(mdlmaps, &Maps4GridBoxes::get_neighbour_zup);
+  sd_gbxindex = flag_tochange_sdgbxindex(sd_gbxindex, zbounds,
+                                         superdrop.coord3,
+                                         zdown, zup);
 
-char flag_tochange_sdgbxindex(const double coord,
-                              const std::pair<double, double> bounds)
-/* Determines value of the is_change flag used to signal if
-the gridboxindex associated with a superdrop needs to change
-and if so, in which direction the superdroplet needs to move.
-returned char is: 'n' = no change, 'f' = move to forward neighbour,
-'b' = move to backward neighbour */
-{
-  const double llim = bounds.first;
-  const double ulim = bounds.second;
+  const auto xbehind = bindfunc(mdlmaps, &Maps4GridBoxes::get_neighbour_xbehind);
+  const auto xinfront = bindfunc(mdlmaps, &Maps4GridBoxes::get_neighbour_xinfront);
+  sd_gbxindex = flag_tochange_sdgbxindex(sd_gbxindex, xbounds,
+                                         superdrop.coord1,
+                                         xbehind, xinfront);
 
-  if (coord < llim)
-  {
-    return 'b'; // char to signal move SD backward a gridbox
-  }
-  else if (coord >= ulim)
-  {
-    return 'f'; // char to signal move SD forward a gridbox
-  }
-  else
-  {
-    return 'n'; // char to signal no change to SD gridbox
-  }
+  const auto yleft = bindfunc(mdlmaps, &Maps4GridBoxes::get_neighbour_yleft);
+  const auto yright = bindfunc(mdlmaps, &Maps4GridBoxes::get_neighbour_yright);
+  sd_gbxindex = flag_tochange_sdgbxindex(sd_gbxindex, ybounds,
+                                         superdrop.coord2,
+                                         yleft, yright);
+
+  return sd_gbxindex;
 }
