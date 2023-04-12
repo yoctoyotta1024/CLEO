@@ -16,7 +16,7 @@ message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 set(SOURCES "main.cpp" "run_coupledmodel.cpp" "timesteps.cpp")
 add_executable("${PROJECT_NAME}" ${SOURCES})
 
-target_link_libraries("${PROJECT_NAME}" PRIVATE thermo_solver superdrop_solver initialisation sdmgridboxes)
+target_link_libraries("${PROJECT_NAME}" PRIVATE thermo_solver superdrop_solver initialisation sdmgridboxes observers)
 
 # # add directories to include for targets to us
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})

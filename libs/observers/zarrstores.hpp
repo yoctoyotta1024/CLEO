@@ -15,7 +15,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <fstream>
 #include <sstream>
 
-#include "../gridbox.hpp"
+#include "sdmgridboxes/gridbox.hpp"
 #include "superdrop_solver/superdrop.hpp"
 
 template <typename Store>

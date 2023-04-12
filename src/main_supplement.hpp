@@ -25,10 +25,10 @@ SDM process and observers to use in main.cpp */
 
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
-#include "sdmgridboxes/observers/observers.hpp"
-#include "sdmgridboxes/observers/observer_superdropletattributes.hpp"
-#include "sdmgridboxes/observers/observer_thermostate.hpp"
-#include "sdmgridboxes/observers/zarrstores.hpp"
+#include "observers/observers.hpp"
+#include "observers/observer_superdropletattributes.hpp"
+#include "observers/observer_thermostate.hpp"
+#include "observers/zarrstores.hpp"
 
 /* Superdroplet Model (SDM) */
 #include "superdrop_solver/thermodynamic_equations.hpp"

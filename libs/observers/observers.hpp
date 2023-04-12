@@ -25,7 +25,7 @@ to terminal or writing them to a datafile */
 #include "./observer_thermostate.hpp"
 #include "./observer_singlevariable.hpp"
 #include "./observer_moments.hpp"
-#include "../gridbox.hpp"
+#include "sdmgridboxes/gridbox.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"
 

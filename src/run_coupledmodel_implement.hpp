@@ -24,7 +24,7 @@ seperated to increase readability */
 #include "sdmgridboxes/superdrops_with_gridboxes.hpp"
 #include "sdmgridboxes/superdropsmotion.hpp"
 #include "sdmgridboxes/gridbox.hpp"
-#include "sdmgridboxes/observers/observers.hpp"
+#include "observers/observers.hpp"
 
 /* Superdroplet Model (SDM) files */
 #include "superdrop_solver/thermodynamic_equations.hpp"
