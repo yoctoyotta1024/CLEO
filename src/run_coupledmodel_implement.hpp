@@ -14,17 +14,17 @@ seperated to increase readability */
 #include <memory>
 #include <algorithm>
 
-/* constants and equations */
+/* constants and coupled model setup */
 #include "claras_SDconstants.hpp"
 #include "initialisation/config.hpp"
+#include "./timesteps.hpp"
 
-/* coupled model setup */
-#include "./runmodel/maps4gridboxes.hpp"
-#include "./runmodel/superdrops_with_gridboxes.hpp"
-#include "./runmodel/superdropsmotion.hpp"
-#include "./runmodel/timesteps.hpp"
-#include "./runmodel/gridbox.hpp"
-#include "./runmodel/observers/observers.hpp"
+/* sdm gridboxes setup */
+#include "sdmgridboxes/maps4gridboxes.hpp"
+#include "sdmgridboxes/superdrops_with_gridboxes.hpp"
+#include "sdmgridboxes/superdropsmotion.hpp"
+#include "sdmgridboxes/gridbox.hpp"
+#include "sdmgridboxes/observers/observers.hpp"
 
 /* Superdroplet Model (SDM) files */
 #include "superdrop_solver/thermodynamic_equations.hpp"

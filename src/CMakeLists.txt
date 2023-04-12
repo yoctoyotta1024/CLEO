@@ -13,11 +13,11 @@ project("coupledCVODECLEO")
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # add executables to project (only one main() function!)
-add_subdirectory(runmodel)
-set(SOURCES "main.cpp" "run_coupledmodel.cpp")
+add_subdirectory(sdmgridboxes)
+set(SOURCES "main.cpp" "run_coupledmodel.cpp" "timesteps.cpp")
 add_executable("${PROJECT_NAME}" ${SOURCES})
 
-target_link_libraries("${PROJECT_NAME}" PRIVATE thermo_solver superdrop_solver initialisation runmodel)
+target_link_libraries("${PROJECT_NAME}" PRIVATE thermo_solver superdrop_solver initialisation sdmgridboxes)
 
 # # add directories to include for targets to us
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})

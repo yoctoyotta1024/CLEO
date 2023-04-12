@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION "3.18.0")
 
 # setlibrary name
-set(LIBNAME "runmodel")
+set(LIBNAME "sdmgridboxes")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
@@ -17,24 +17,24 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 # add executables to library
 set(SOURCES
-  "gridbox.cpp"
-  "maps4gridboxes.cpp"
-  "observers/observers.cpp"
-  "observers/observer_moments.cpp"
-  "observers/observer_singlevariable.cpp"
-  "observers/observer_thermostate.cpp"
-  "observers/zarrstores.cpp"
-  "superdrops_with_gridboxes.cpp"
-  "superdropsmotion.cpp"
-  "timesteps.cpp"
+"gridbox.cpp"
+"maps4gridboxes.cpp"
+"superdrops_with_gridboxes.cpp"
+"superdropsmotion.cpp"
+"observers/observers.cpp"
+"observers/observer_moments.cpp"
+"observers/observer_singlevariable.cpp"
+"observers/observer_thermostate.cpp"
+"observers/zarrstores.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
 # add directories to include for target
 target_include_directories(${LIBNAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(${LIBNAME} PUBLIC "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
-target_link_libraries("${LIBNAME}" PRIVATE thermo_solver superdrop_solver initialisation)
+target_link_libraries("${LIBNAME}" PRIVATE superdrop_solver initialisation)
 
 # some compilation properties
 set_target_properties(${LIBNAME} PROPERTIES

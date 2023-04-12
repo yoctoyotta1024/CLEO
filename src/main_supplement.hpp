@@ -21,12 +21,14 @@ SDM process and observers to use in main.cpp */
 /* coupled model setup */
 #include "./run_coupledmodel_implement.hpp"
 #include "./run_coupledmodel.hpp"
-#include "./runmodel/maps4gridboxes.hpp"
-#include "./runmodel/timesteps.hpp"
-#include "./runmodel/observers/observers.hpp"
-#include "./runmodel/observers/observer_superdropletattributes.hpp"
-#include "./runmodel/observers/observer_thermostate.hpp"
-#include "./runmodel/observers/zarrstores.hpp"
+#include "./timesteps.hpp"
+
+/* sdm gridboxes setup */
+#include "sdmgridboxes/maps4gridboxes.hpp"
+#include "sdmgridboxes/observers/observers.hpp"
+#include "sdmgridboxes/observers/observer_superdropletattributes.hpp"
+#include "sdmgridboxes/observers/observer_thermostate.hpp"
+#include "sdmgridboxes/observers/zarrstores.hpp"
 
 /* Superdroplet Model (SDM) */
 #include "superdrop_solver/thermodynamic_equations.hpp"
