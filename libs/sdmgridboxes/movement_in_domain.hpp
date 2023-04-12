@@ -8,7 +8,9 @@ coords and moving them between gridboxes) */
 #define MOVEMENT_IN_DOMAIN_HPP
 
 #include <vector>
-#include <span>
+#include <map>
+#include <utility>
+#include <stdexcept>
 
 #include "./gridbox.hpp"
 #include "./maps4gridboxes.hpp"
