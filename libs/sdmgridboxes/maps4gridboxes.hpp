@@ -64,13 +64,6 @@ public:
   for gridbox 0 which are the upper and lower numerical limits,
   whilst the volume is determind by reading the gridfile */
 
-  inline unsigned int get_neighbour_zup(unsigned int gbxindex) const
-  /* given gridbox index, return index of neighbouring
-  gridbox in the forwards z, ie. upwards direction */
-  {
-    return (*idx2nghbour_z.find(gbxindex)).second.first;
-  }
-
   inline unsigned int get_neighbour_zdown(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in the forwards z, ie. downwards direction */
@@ -78,18 +71,18 @@ public:
     return (*idx2nghbour_z.find(gbxindex)).second.second;
   }
 
-  inline unsigned int get_neighbour_yright(unsigned int gbxindex) const
+  inline unsigned int get_neighbour_zup(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
-  gridbox in the forwards y direction, ie. right */
+  gridbox in the forwards z, ie. upwards direction */
   {
-    return (*idx2nghbour_y.find(gbxindex)).second.first;
+    return (*idx2nghbour_z.find(gbxindex)).second.first;
   }
-
-  inline unsigned int get_neighbour_yleft(unsigned int gbxindex) const
+  
+  inline unsigned int get_neighbour_xbehind(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
-  gridbox in the backwards y direction, ie. left */
+  gridbox in the backwards x direction, ie. into page */
   {
-    return (*idx2nghbour_y.find(gbxindex)).second.second;
+    return (*idx2nghbour_x.find(gbxindex)).second.second;
   }
 
   inline unsigned int get_neighbour_xinfront(unsigned int gbxindex) const
@@ -99,12 +92,20 @@ public:
     return (*idx2nghbour_x.find(gbxindex)).second.first;
   }
 
-  inline unsigned int get_neighbour_xbehind(unsigned int gbxindex) const
+  inline unsigned int get_neighbour_yleft(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
-  gridbox in the backwards x direction, ie. into page */
+  gridbox in the backwards y direction, ie. left */
   {
-    return (*idx2nghbour_x.find(gbxindex)).second.second;
+    return (*idx2nghbour_y.find(gbxindex)).second.second;
   }
+
+  inline unsigned int get_neighbour_yright(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the forwards y direction, ie. right */
+  {
+    return (*idx2nghbour_y.find(gbxindex)).second.first;
+  }
+
 };
 
 struct CartesianNeighbourIndexes
@@ -151,6 +152,7 @@ public:
   'handle_XXX_nghbours' function */
   {
     return handle_finitedomain_nghbours(idx, 1, ndims.at(0));
+    //return handle_periodicdomain_nghbours(idx, 1, ndims.at(0));
   }
 
   std::pair<unsigned int, unsigned int>

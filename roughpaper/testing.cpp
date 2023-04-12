@@ -20,14 +20,18 @@ could compile with e.g.
 #include "../libs/initialisation/readbinary.hpp"
 #include "../libs/initialisation/read_gbxboundaries.hpp"
 #include "../libs/initialisation/read_initsuperdrops.hpp"
-#include "../src/runmodel/maps4gridboxes.hpp"
-#include "../src/runmodel/superdrops_in_gridboxes.hpp"
+#include "../libs/sdmgridboxes/maps4gridboxes.hpp"
+#include "../libs/sdmgridboxes/gridbox.hpp"
+#include "../libs/sdmgridboxes/movement_in_domain.hpp"
+#include "../libs/sdmgridboxes/superdropwithgbxindex.hpp"
+#include "../libs/superdrop_solver/sdmmotion.hpp"
 
 namespace dlc = dimless_constants;
 
 void print_nbourmaps(const Maps4GridBoxes &mdlmaps, const double COORD0);
 void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0);
-void print_initSDs(const InitSDsData &initSDs);
+void print_superdropcoords(const std::vector<GridBox> &gridboxes,
+                           const Maps4GridBoxes &mdlmaps);
 
 int main()
 {
@@ -37,16 +41,26 @@ int main()
   const std::string constantsfilepath = abspath+"src/include/claras_SDconstants.hpp"; // path to constants (.hpp file)
   const Config config(configfilepath, constantsfilepath);
 
-  const std::string grid_filename = abspath+"build/"+config.grid_filename;
+  const std::string grid_filename = abspath+"build/share/dimlessGBxboundaries.dat";    
+  const std::string initSDs_filename = abspath+"build/share/dimlessSDsinit.dat";   
+
   const Maps4GridBoxes mdlmaps(config.SDnspace, grid_filename); 
 
+  const auto solute(std::make_shared<const SoluteProperties>());
+  std::vector<SuperdropWithGbxindex>
+      SDsInGBxs = create_superdrops_from_initSDsfile(initSDs_filename,
+                                              config.nSDsvec,
+                                              config.SDnspace, solute);
+
+  /* vector containing all gridboxes that makeup the SDM domain */
+  std::vector<GridBox> gridboxes = create_gridboxes(mdlmaps, SDsInGBxs);
+
   print_gridboxmaps(mdlmaps, dlc::COORD0);
-
-  // const std::string initSDs_filename = abspath+"build/"+config.initSDs_filename;
-  // const InitSDsData initSDs = get_initsuperdropsdata(initSDs_filename);
-
-  // print_initSDs(initSDs);
   print_nbourmaps(mdlmaps, dlc::COORD0);
+  print_superdropcoords(gridboxes, mdlmaps);
+
+  move_superdrops_in_domain(mdlmaps, SdmMotion(), SDsInGBxs, gridboxes);
+  print_superdropcoords(gridboxes, mdlmaps);
 
   return 0;
 }
@@ -70,6 +84,7 @@ void print_nbourmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
   {
     std::cout << key << ": " << value.first  <<", " << value.second << '\n';
   }
+  std::cout << "------------------\n";
 }
 
 void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
@@ -101,21 +116,20 @@ void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
   std::cout << "----------------\n";
 }
 
-void print_initSDs(const InitSDsData &initSDs)
+void print_superdropcoords(const std::vector<GridBox> &gridboxes,
+                           const Maps4GridBoxes &mdlmaps)
 {
-  std::cout << "eps_init" << "\n";
-  for (auto x : initSDs.eps_init)
+  std::cout << "\n---- SD Positions -----\n";
+  std::cout << " -- in Z direction --\n";
+  for (auto gbx: gridboxes)
   {
-    std::cout << x << ", ";
+    std::cout << "GBx " << gbx.gbxindex << " : ("
+              << (*mdlmaps.idx2bounds_z.find(gbx.gbxindex)).second.first << ", "
+              << (*mdlmaps.idx2bounds_z.find(gbx.gbxindex)).second.second <<")\n";
+    for (auto SDinGBx : gbx.span4SDsinGBx)
+    {
+      std::cout << "sdgbx " << SDinGBx.sd_gbxindex << " : " << SDinGBx.superdrop.coord3 << "\n";
+    }
   }
-  std::cout << "\n----------------\n";
-
-  std::cout << "radius_init" << "\n";
-  for (auto x : initSDs.radius_init)
-  {
-    std::cout << x << ", ";
-  }
-  std::cout << "\n----------------\n";
-
-
+  std::cout << "\n-----------------------\n";
 }

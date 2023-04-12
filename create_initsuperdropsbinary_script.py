@@ -21,7 +21,7 @@ binpath = abspath+"build/bin/"
 isfigures = [True, True]
 
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
-nsupers = 1024 # int or dict of ints for number of superdroplets in a gridbox
+nsupers = 5 # int or dict of ints for number of superdroplets in a gridbox
 # nsupers = {0: 0,
 #            1: 10,
 #            2: 0,

@@ -24,37 +24,18 @@ include_directories("${CLEODIR}/libs")
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${CLEODIR})
 
-set(LIBNAME "runmodel")
-# add executables to runmodel library
-set(LIBSOURCES 
-    "../src/runmodel/gridbox.cpp"
-    "../src/runmodel/maps4gridboxes.cpp"
-    "../src/runmodel/observers/observers.cpp"
-    "../src/runmodel/observers/observer_moments.cpp"
-    "../src/runmodel/observers/observer_singlevariable.cpp"
-    "../src/runmodel/observers/observer_thermostate.cpp"
-    "../src/runmodel/observers/zarrstores.cpp"
-    "../src/runmodel/superdrops_in_gridboxes.cpp"
-    "../src/runmodel/timesteps.cpp"
-  )
-add_library("${LIBNAME}" SHARED ${LIBSOURCES})
-
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/initialisation" ${CMAKE_CURRENT_BINARY_DIR}/libs/initialisation)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/superdrop_solver" ${CMAKE_CURRENT_BINARY_DIR}/libs/superdrop_solver)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/observers" ${CMAKE_CURRENT_BINARY_DIR}/libs/observers)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/sdmgridboxes" ${CMAKE_CURRENT_BINARY_DIR}/libs/sdmgridboxes)
 
-target_link_libraries("${LIBNAME}" PRIVATE superdrop_solver initialisation)
-target_link_libraries("${PROJECT_NAME}" PUBLIC superdrop_solver initialisation runmodel)
+target_link_libraries("${PROJECT_NAME}" PUBLIC superdrop_solver initialisation sdmgridboxes observers)
 
-set_target_properties(${LIBNAME} PROPERTIES
-  CMAKE_CXX_STANDARD_REQUIRED ON
-  CMAKE_CXX_EXTENSIONS ON
-  CXX_STANDARD 20)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 
-target_compile_options(${LIBNAME} PUBLIC -Wall -pedantic -g -gdwarf-4)
 target_compile_options(${PROJECT_NAME} PUBLIC -Wall -pedantic -g -gdwarf-4)
 #target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -pedantic -g)
