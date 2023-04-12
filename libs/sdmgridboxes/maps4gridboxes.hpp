@@ -28,6 +28,10 @@ given direction */
 struct Maps4GridBoxes
 {
 private:
+  std::map<unsigned int, std::pair<double, double>> idx2bounds_z; // coord limits to each gridbox given its index
+  std::map<unsigned int, std::pair<double, double>> idx2bounds_x;
+  std::map<unsigned int, std::pair<double, double>> idx2bounds_y;
+  
   std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nghbour_z; // neigbouring gbxindex to each gridbox given its gbxindex
   std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nghbour_x;
   std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nghbour_y;
@@ -46,9 +50,6 @@ private:
 
 public:
   std::vector<unsigned int> gbxidxs;                              // vector of all gridbox indexes in domain
-  std::map<unsigned int, std::pair<double, double>> idx2bounds_z; // coord limits to each gridbox given its index
-  std::map<unsigned int, std::pair<double, double>> idx2bounds_x;
-  std::map<unsigned int, std::pair<double, double>> idx2bounds_y;
   std::map<unsigned int, double> idx2vol; // volume of gridbox given its index
 
   Maps4GridBoxes(const unsigned int SDnspace, std::string_view gridfile);
@@ -63,6 +64,21 @@ public:
   finite. E.g. In the 0-D case, the idx2bounds maps have 1 {key, value}
   for gridbox 0 which are the upper and lower numerical limits,
   whilst the volume is determind by reading the gridfile */
+
+  std::pair<double, double> get_bounds_z(const unsigned int gbxidx) const
+  {
+    return (*idx2bounds_z.find(gbxidx)).second;
+  }
+
+  std::pair<double, double> get_bounds_x(const unsigned int gbxidx) const
+  {
+    return (*idx2bounds_x.find(gbxidx)).second;
+  }
+
+  std::pair<double, double> get_bounds_y(const unsigned int gbxidx) const
+  {
+    return (*idx2bounds_y.find(gbxidx)).second;
+  }
 
   unsigned int get_neighbour_zdown(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring

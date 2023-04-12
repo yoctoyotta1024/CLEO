@@ -37,14 +37,9 @@ spans4SDsInGbx for each gridbox */
 
   for (auto &gbx : gridboxes)
   {
-    const std::pair<double, double>
-        zbounds((*mdlmaps.idx2bounds_z.find(gbx.gbxindex)).second);
-
-    const std::pair<double, double>
-        xbounds((*mdlmaps.idx2bounds_x.find(gbx.gbxindex)).second);
-
-    const std::pair<double, double>
-        ybounds((*mdlmaps.idx2bounds_y.find(gbx.gbxindex)).second);
+    const auto zbounds(mdlmaps.get_bounds_z(gbx.gbxindex));
+    const auto xbounds(mdlmaps.get_bounds_x(gbx.gbxindex));
+    const auto ybounds(mdlmaps.get_bounds_y(gbx.gbxindex));
 
     for (auto &SDinGBx : gbx.span4SDsinGBx)
     {

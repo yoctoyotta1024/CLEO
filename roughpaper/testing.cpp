@@ -97,21 +97,27 @@ void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
 {
   std::cout << "---- GBX MAPS ----\n";
   std::cout << "Zmap" << "\n";
-  for (const auto & [key, value] : mdlmaps.idx2bounds_z)
+  for (const auto idxkey : mdlmaps.gbxidxs)
   {
-    std::cout << key << ": " << value.first  <<", " << value.second << '\n';
+    std::cout << idxkey << ": "
+              << mdlmaps.get_bounds_z(idxkey).first << ", "
+              <<  mdlmaps.get_bounds_z(idxkey).second << '\n'; 
   }
 
   std::cout << "Xmap" << "\n";
-  for (const auto & [key, value] : mdlmaps.idx2bounds_x)
+  for (const auto idxkey : mdlmaps.gbxidxs)
   {
-    std::cout << key << ": " << value.first  <<", " << value.second << '\n';
+    std::cout << idxkey << ": "
+              << mdlmaps.get_bounds_x(idxkey).first << ", "
+              <<  mdlmaps.get_bounds_x(idxkey).second << '\n'; 
   }
 
   std::cout << "Ymap" << "\n";
-  for (const auto & [key, value] : mdlmaps.idx2bounds_y)
+  for (const auto idxkey : mdlmaps.gbxidxs)
   {
-    std::cout << key << ": " << value.first  <<", " << value.second << '\n';
+    std::cout << idxkey << ": "
+              << mdlmaps.get_bounds_y(idxkey).first << ", "
+              <<  mdlmaps.get_bounds_y(idxkey).second << '\n'; 
   }
 
   std::cout << "Vol map" << "\n";
@@ -130,8 +136,9 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
   for (auto gbx: gridboxes)
   {
     std::cout << "GBx " << gbx.gbxindex << " : ("
-              << (*mdlmaps.idx2bounds_z.find(gbx.gbxindex)).second.first << ", "
-              << (*mdlmaps.idx2bounds_z.find(gbx.gbxindex)).second.second <<")\n";
+              << mdlmaps.get_bounds_z(gbx.gbxindex).first << ", " << ", "
+              << mdlmaps.get_bounds_z(gbx.gbxindex).second << "\n";
+    
     for (auto SDinGBx : gbx.span4SDsinGBx)
     {
       std::cout << "sdgbx " << SDinGBx.sd_gbxindex << " : " << SDinGBx.superdrop.coord3 << "\n";

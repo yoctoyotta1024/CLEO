@@ -63,19 +63,17 @@ void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &mdlmaps)
                               " != "+std::to_string(gbxindex)+")";
       throw std::invalid_argument(err);
     }
-    iscoord_within_bounds(mdlmaps.idx2bounds_z, SDinGBx.superdrop.coord3);
-    iscoord_within_bounds(mdlmaps.idx2bounds_x, SDinGBx.superdrop.coord1);
-    iscoord_within_bounds(mdlmaps.idx2bounds_y, SDinGBx.superdrop.coord2);
+    iscoord_within_bounds(mdlmaps.get_bounds_z(gbxindex), SDinGBx.superdrop.coord3);
+    iscoord_within_bounds(mdlmaps.get_bounds_x(gbxindex), SDinGBx.superdrop.coord1);
+    iscoord_within_bounds(mdlmaps.get_bounds_y(gbxindex), SDinGBx.superdrop.coord2);
   }
 }
 
-void GridBox::iscoord_within_bounds(const std::map<unsigned int,
-                                                   std::pair<double,
-                                                             double>> &idx2bounds,
+void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
                                     const double coord)
 {
-  const double llim = (*idx2bounds.find(gbxindex)).second.first;
-  const double ulim = (*idx2bounds.find(gbxindex)).second.second;
+  const double llim = bounds.first;
+  const double ulim = bounds.second;
 
   if (coord < llim || coord >= ulim)
   {

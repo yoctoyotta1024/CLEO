@@ -49,9 +49,7 @@ coupled thermodynamics */
   in the span do not lie within the gridboux boundaries
   given my the gbxindex */
 
-  void iscoord_within_bounds(const std::map<unsigned int,
-                                            std::pair<double,
-                                                      double>> &idx2bounds,
+  void iscoord_within_bounds(const std::pair<double, double> bounds,
                              const double coord);
 };
 
