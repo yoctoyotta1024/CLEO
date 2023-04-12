@@ -1,9 +1,11 @@
 // Author: Clara Bayley
 // File: superdrops_in_gridboxes.cpp
-/* functionality involved in handling
-the SuperdropWithGbxindex instances (see superdrop.hpp
-for definition of this struct). Some functions
-declared here to avoid being visible externally */
+/* functionality involved in handling vector of
+SuperdropWithGbxindex instances (see superdrop.hpp
+for definition of this struct) associated with Gridboxes
+defined by relations of gbxindex in Maps4GridBoxes.
+Note: some functions are declared here to avoid
+being visible externally */
 
 #include "superdrops_in_gridboxes.hpp"
 

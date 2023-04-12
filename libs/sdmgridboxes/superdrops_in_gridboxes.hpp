@@ -1,14 +1,11 @@
 // Author: Clara Bayley
 // File: superdrops_in_gridboxes.hpp
-/* Header file for functions involved in handling
-the SuperdropWithGbxindex instances (see superdrop.hpp
-for definition of this struct). Four Functions can be
-called externally: 1) for creating a vector of
-these objects by reading a binary file containing
-intial superdrop (SD) data, 2) for sorting the
-vector based on a value in each struct, 3) for changing 
-an sd_gbxindex to neighbouring gridboxes' gbxindex, 
-4) for printing member variables of a SDinGBx instance */
+/* Header file for functions involved in handling vector of
+SuperdropWithGbxindex instances (see superdrop.hpp
+for definition of this struct) associated with Gridboxes
+defined by relations of gbxindex in Maps4GridBoxes.
+Note: some hidden functions called internally are
+defined in .cpp implementaiton file */
 
 #ifndef SUPERDROPS_IN_GRIDBOXES_HPP
 #define SUPERDROPS_IN_GRIDBOXES_HPP
