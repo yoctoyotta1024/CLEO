@@ -68,21 +68,27 @@ void print_nbourmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
 {
   std::cout << "---- NBOUR MAPS ----\n";
   std::cout << "Z nghbours" << "\n";
-  for (const auto & [key, value] : mdlmaps.idx2nghbour_z)
+  for (const auto idxkey : mdlmaps.gbxidxs)
   {
-    std::cout << key << ": " << value.first  <<", " << value.second << '\n';
+    std::cout << idxkey << ": "
+              << mdlmaps.get_neighbour_zdown(idxkey) << ", "
+              << mdlmaps.get_neighbour_zup(idxkey) << '\n';
   }
 
   std::cout << "X nghbours" << "\n";
-  for (const auto & [key, value] : mdlmaps.idx2nghbour_x)
+  for (const auto idxkey : mdlmaps.gbxidxs)
   {
-    std::cout << key << ": " << value.first  <<", " << value.second << '\n';
+    std::cout << idxkey << ": "
+              << mdlmaps.get_neighbour_xbehind(idxkey) << ", "
+              << mdlmaps.get_neighbour_xinfront(idxkey) << '\n'; 
   }
 
   std::cout << "Y nghbours" << "\n";
-  for (const auto & [key, value] : mdlmaps.idx2nghbour_y)
+  for (const auto idxkey : mdlmaps.gbxidxs)
   {
-    std::cout << key << ": " << value.first  <<", " << value.second << '\n';
+    std::cout << idxkey << ": "
+              << mdlmaps.get_neighbour_yleft(idxkey) << ", "
+              << mdlmaps.get_neighbour_yright(idxkey) << '\n';  
   }
   std::cout << "------------------\n";
 }
