@@ -81,7 +81,7 @@ water mass per volume during time interval delt */
   state.qcond += delta_qcond;
 }
 
-void CondensationMethod::condensation_onto_superdroplets(std::span<SuperdropWithGridbox> span4SDsinGBx,
+void CondensationMethod::condensation_onto_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
                                                          ThermoState &state) const
 /* Change to superdroplet radii and temp, qv and
 qc due to sum of radii changes via diffusion and

@@ -54,7 +54,7 @@ void timestep_coupledmodel(const Timesteps &mdlsteps,
                            CvodeThermoSolver &cvode,
                            std::mt19937 &gen,
                            std::vector<GridBox> &gridboxes,
-                           std::vector<SuperdropWithGridbox> &SDsInGBxs);
+                           std::vector<SuperdropWithGbxindex> &SDsInGBxs);
 /* timestep coupled model from t=0 to t=tend. Each coupled step is
 length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
 2) run SDM step (independent) 3) run CVODE step (independent)
@@ -144,7 +144,7 @@ void run_sdmstep(const int t_out, const int outstep,
                  const Maps4GridBoxes &mdlmaps,
                  std::mt19937 &gen,
                  std::vector<GridBox> &gridboxes,
-                 std::vector<SuperdropWithGridbox> &SDsInGBxs)
+                 std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* run SDM for each gridbox from time t_out to t_out+outstep
 with subtimestepping such that each output timestep (outstep)
 can be subdivided to allow the exchange of superdroplets between

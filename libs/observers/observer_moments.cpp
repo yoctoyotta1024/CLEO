@@ -9,7 +9,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
 #include "observer_moments.hpp"
 
-double mass0thmoment(const std::span<SuperdropWithGridbox> span4SDsinGBx)
+double mass0thmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx)
 /* calculates the 0th moment of the (real) droplet mass distirbution
 given by the superdrops in the span passed as an argument */
 {
@@ -24,7 +24,7 @@ given by the superdrops in the span passed as an argument */
   return massmoment0;
 }
 
-double massnthmoment(const std::span<SuperdropWithGridbox> span4SDsinGBx,
+double massnthmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
                       const double nth_moment)
 /* calculates the nth moment of the (real) droplet mass distirbution
 given by the superdrops in the span passed as an argument */

@@ -27,14 +27,14 @@ and index for finding associated grridbox in
 coupled thermodynamics */
 {
   unsigned int gbxindex; // index / unique identifier of gridbox
-  std::span<SuperdropWithGridbox> span4SDsinGBx;
+  std::span<SuperdropWithGbxindex> span4SDsinGBx;
   ThermoState state;
 
   GridBox(const unsigned int ii,
           const Maps4GridBoxes &mdlmaps,
-          std::vector<SuperdropWithGridbox> &SDsInGBxs);
+          std::vector<SuperdropWithGbxindex> &SDsInGBxs);
 
-  void set_span(std::vector<SuperdropWithGridbox> &SDsInGBxs);
+  void set_span(std::vector<SuperdropWithGbxindex> &SDsInGBxs);
   /* assumes SDsInGBxs is ordered based on sd_gbxindex
   from lowest to highest. Finds first and last SDWithGBx that has 
   sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
@@ -56,13 +56,13 @@ coupled thermodynamics */
 };
 
 std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &mdlmaps,
-                                      std::vector<SuperdropWithGridbox> &SDsInGBxs);
+                                      std::vector<SuperdropWithGbxindex> &SDsInGBxs);
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from mdlmaps.gbxidxs, and a span of the
 superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
 
 inline void set_gridboxes_superdropletspan(std::vector<GridBox> &gridboxes,
-                                           std::vector<SuperdropWithGridbox> &SDsInGBxs)
+                                           std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 {
   for (auto &gbx : gridboxes)
   {

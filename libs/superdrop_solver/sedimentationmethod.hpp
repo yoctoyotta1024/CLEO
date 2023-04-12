@@ -35,7 +35,7 @@ public:
       : delt(delt),
         terminal_velocity(v) {}
 
-  void sediment_superdroplets(std::span<SuperdropWithGridbox> span4SDsinGBx) const
+  void sediment_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx) const
   /* sediment all superdroplets stored in some span of contigous memory.
   Here the span points to some subsection of a vector containing
   superdroplet in gridbox instances 'SDinGBx' */
@@ -47,7 +47,7 @@ public:
   }
 
   inline void operator()(const int currenttimestep,
-                         std::span<SuperdropWithGridbox> span4SDsinGBx,
+                         std::span<SuperdropWithGbxindex> span4SDsinGBx,
                          ThermoState &state,
                          std::mt19937 &gen) const
   /* this operator is used as an "adaptor" for using a run_step

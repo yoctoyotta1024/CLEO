@@ -20,7 +20,7 @@ collision-coalescence (see ConstTstepProcess struct) */
 
 template <typename F>
 concept StepFunc = requires(F f, int currenttimestep,
-                            std::span<SuperdropWithGridbox> span4SDsinGBx,
+                            std::span<SuperdropWithGbxindex> span4SDsinGBx,
                             ThermoState state,
                             std::mt19937 gen)
 /* concept StepFunc is all (function-like) types
@@ -33,7 +33,7 @@ function (see below in SdmProcess) */
 
 template <typename P, typename... Args>
 concept SdmProcess = requires(P p, int currenttimestep,
-                              std::span<SuperdropWithGridbox> span4SDsinGBx,
+                              std::span<SuperdropWithGbxindex> span4SDsinGBx,
                               ThermoState state,
                               std::mt19937 gen)
 /* concept SdmProcess is all types that meet requirements
@@ -81,7 +81,7 @@ struct CombinedSdmProcess
   }
 
   void run_step(const int currenttimestep,
-                std::span<SuperdropWithGridbox> span4SDsinGBx,
+                std::span<SuperdropWithGbxindex> span4SDsinGBx,
                 ThermoState &state,
                 std::mt19937 &gen) const
   /* for combination of 2 SDM proceses, each process is
@@ -121,7 +121,7 @@ struct NullProcess
   }
 
   void run_step(const int currenttimestep,
-                std::span<SuperdropWithGridbox> span4SDsinGBx,
+                std::span<SuperdropWithGbxindex> span4SDsinGBx,
                 ThermoState &state,
                 std::mt19937 &gen) const {}
 };

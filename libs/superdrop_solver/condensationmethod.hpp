@@ -59,7 +59,7 @@ private:
   given the total change in condensed mass per
   parcel volume during timestep delt */
 
-  void condensation_onto_superdroplets(std::span<SuperdropWithGridbox> span4SDsinGBx,
+  void condensation_onto_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
                                        ThermoState &state) const;
   /* Change to superdroplet radii and temp, qv and
   qc due to sum of radii changes via diffusion and
@@ -82,7 +82,7 @@ public:
         impliciteuler(maxiters, delt, rtol, atol) {}
 
   inline void operator()(const int currenttimestep,
-                         std::span<SuperdropWithGridbox> span4SDsinGBx,
+                         std::span<SuperdropWithGbxindex> span4SDsinGBx,
                          ThermoState &state,
                          std::mt19937 &gen) const
   /* this operator is used as an "adaptor" for using a run_step

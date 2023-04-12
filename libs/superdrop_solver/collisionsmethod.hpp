@@ -52,7 +52,7 @@ private:
   where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|,
   is coalescence kernel (see Shima 2009 eqn 3) */
 
-  void collide_superdroplets(std::span<SuperdropWithGridbox> span4SDsinGBx,
+  void collide_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
                              std::mt19937 &gen,
                              const double VOLUME) const
   /* Superdroplet collision-coalescence method according to Shima et al. 2009.
@@ -61,7 +61,7 @@ private:
   random pairs of SDs. If coalescene occurs between two superdrops, it then
   also changes the multiplicity, radius and solute mass of the superdroplets
   that coalesce. In this implementation, superdroplets are stored contiguously
-  in memory in a vector composed of SuperdropWithGridbox instances. The span
+  in memory in a vector composed of SuperdropWithGbxindex instances. The span
   points to the section of that vector containing the superdroplets involed
   in the collision event. */
   {
@@ -236,7 +236,7 @@ public:
       : DELT(DELT), pair_coalesce_probability(p) {}
 
   inline void operator()(const int currenttimestep,
-                  std::span<SuperdropWithGridbox> span4SDsinGBx,
+                  std::span<SuperdropWithGbxindex> span4SDsinGBx,
                   ThermoState &state,
                   std::mt19937 &gen) const
   /* this operator is used as an "adaptor" for using a run_step

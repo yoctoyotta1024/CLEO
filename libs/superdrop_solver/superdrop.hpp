@@ -155,7 +155,7 @@ struct WetRadiusRootFinder
 
 };
 
-struct SuperdropWithGridbox
+struct SuperdropWithGbxindex
 /* Structure containing a superdroplet (SD) and the index/unique
 identifier of the gridbox (GBx) it occupies ie. the identity of
 the GBx the SD is associated with */
@@ -163,7 +163,7 @@ the GBx the SD is associated with */
   unsigned int sd_gbxindex; // index/unique identifier of gridbox the superdrop occupies
   Superdrop superdrop;
 
-  SuperdropWithGridbox(const unsigned int isd_gbxindex, Superdrop isuperdrop) 
+  SuperdropWithGbxindex(const unsigned int isd_gbxindex, Superdrop isuperdrop) 
       : sd_gbxindex(isd_gbxindex), superdrop(isuperdrop) {}
 };
 

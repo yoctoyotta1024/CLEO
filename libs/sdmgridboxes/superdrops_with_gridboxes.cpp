@@ -1,7 +1,7 @@
 // Author: Clara Bayley
 // File: superdrops_with_gridboxes.cpp
 /* functionality involved in handling
-the SuperdropWithGridbox instances (see superdrop.hpp
+the SuperdropWithGbxindex instances (see superdrop.hpp
 for definition of this struct). Some functions
 declared here to avoid being visible externally */
 
@@ -9,7 +9,7 @@ declared here to avoid being visible externally */
 
 /* ------------------------------------------------------ */
 /* -- function called create_superdrops_with_gridboxes -- */
-std::vector<SuperdropWithGridbox>
+std::vector<SuperdropWithGbxindex>
 create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties> solute,
@@ -20,12 +20,12 @@ std::vector<double> initSDcoords(const int SDnspace,
                                  const int i);
 /* ------------------------------------------------------ */
 /* ----- function called by sdgbxindex_to_neighbour ----- */
-int flag_tochange_sdgbxindex(const SuperdropWithGridbox &SDinGBx,
+int flag_tochange_sdgbxindex(const SuperdropWithGbxindex &SDinGBx,
                              const std::map<unsigned int,
                                             std::pair<double, double>> &idx2bounds_z);
 /* ------------------------------------------------------ */
 
-std::vector<SuperdropWithGridbox>
+std::vector<SuperdropWithGbxindex>
 superdrops_from_initSDsfile(std::string_view initSDs_filename,
                             const int nSDsvec,
                             const int SDnspace,
@@ -46,7 +46,7 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
             << initSDs_filename << ". "
             << "\nNow creating superdrops with gridboxes\n";
 
-  std::vector<SuperdropWithGridbox>
+  std::vector<SuperdropWithGbxindex>
       SDsInGBxs = create_superdropswithgridboxes(nSDsvec, SDnspace, initSDs,
                                                  solute, mdlmaps);
 
@@ -59,13 +59,13 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
   return SDsInGBxs;
 }
 
-std::vector<SuperdropWithGridbox>
+std::vector<SuperdropWithGbxindex>
 create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties> solute,
                                const Maps4GridBoxes &mdlmaps)
 {
-  std::vector<SuperdropWithGridbox> SDsInGBxs;
+  std::vector<SuperdropWithGbxindex> SDsInGBxs;
   auto sdIdGen = Superdrop::IDType::Gen{};
 
   for (int i = 0; i < nSDsvec; ++i)
@@ -77,7 +77,7 @@ create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
     const double m_sol = initSDs.m_sol_init.at(i);
     const std::vector<double> zxycoords = initSDcoords(SDnspace, initSDs, i);
 
-    const SuperdropWithGridbox SDinGBx(sd_gbxindex,
+    const SuperdropWithGbxindex SDinGBx(sd_gbxindex,
                                        Superdrop(solute, eps, radius, m_sol,
                                                  zxycoords.at(0), zxycoords.at(1),
                                                  zxycoords.at(2), sd_identity));
@@ -123,7 +123,7 @@ std::vector<double> initSDcoords(const int SDnspace,
   return zxycoords;
 }
 
-int flag_tochange_sdgbxindex(const SuperdropWithGridbox &SDinGBx,
+int flag_tochange_sdgbxindex(const SuperdropWithGbxindex &SDinGBx,
                              const std::map<unsigned int, std::pair<double, double>> &idx2bounds_z)
 /* Determines value of the is_change flag used to signal if
 the gridboxindex associated with a superdrop needs to change
@@ -148,7 +148,7 @@ and if so, in which direction the superdroplet needs to move */
 }
 
 void sdgbxindex_to_neighbour(const Maps4GridBoxes &mdlmaps,
-                             SuperdropWithGridbox &SDinGBx)
+                             SuperdropWithGbxindex &SDinGBx)
 /* first check if gridbox index associated with the superdrop
 in SDinGBx needs to change. If it does, implement change by
 calling correct function for changing the sd_gbxindex to a

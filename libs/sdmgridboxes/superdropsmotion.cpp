@@ -8,7 +8,7 @@ coords and moving them between gridboxes) */
 #include "./superdropsmotion.hpp"
 
 void sdmmotion(const Maps4GridBoxes &mdlmaps,
-               std::vector<SuperdropWithGridbox> &SDsInGBxs,
+               std::vector<SuperdropWithGbxindex> &SDsInGBxs,
                std::vector<GridBox> &gridboxes)
 /* update superdroplet positions according to their motion and
 move superdroplets between gridboxes by changing their associated
@@ -19,7 +19,7 @@ updating spans4SDsInGbx for each gridbox */
 }
 
 void exchange_superdroplets_between_gridboxes(const Maps4GridBoxes &mdlmaps,
-                                              std::vector<SuperdropWithGridbox> &SDsInGBxs,
+                                              std::vector<SuperdropWithGbxindex> &SDsInGBxs,
                                               std::vector<GridBox> &gridboxes)
 /* move superdroplets between gridboxes by changing their associated
 gridboxindex if necessary, then (re)sorting SDsInGBxs vector and

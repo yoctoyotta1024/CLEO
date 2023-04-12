@@ -7,7 +7,7 @@ a gridbox */
 
 GridBox::GridBox(const unsigned int ii,
                  const Maps4GridBoxes &mdlmaps,
-                 std::vector<SuperdropWithGridbox> &SDsInGBxs)
+                 std::vector<SuperdropWithGbxindex> &SDsInGBxs)
     : gbxindex(ii), state()
 {
   set_statevolume(mdlmaps.idx2vol);
@@ -27,17 +27,17 @@ True volume = state.volume * COORD0^3 [m^3] */
             << state.volume * pow(dlc::COORD0, 3.0) << "m^3\n";
 }
 
-void GridBox::set_span(std::vector<SuperdropWithGridbox> &SDsInGBxs)
+void GridBox::set_span(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* assumes SDsInGBxs is ordered based on sd_gbxindex
 from lowest to highest. Finds first and last SDWithGBx that has 
 sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
 {
-  auto lowcompare = [](const SuperdropWithGridbox &a, const unsigned int val)
+  auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
   {
     return a.sd_gbxindex < val; // cast sd_gbxindex to *signed* int
   };
 
-  auto upcompare = [](const unsigned int val, const SuperdropWithGridbox &a)
+  auto upcompare = [](const unsigned int val, const SuperdropWithGbxindex &a)
   {
     return val < a.sd_gbxindex; // cast sd_gbxindex to *signed* int
   };
@@ -88,7 +88,7 @@ void GridBox::iscoord_within_bounds(const std::map<unsigned int,
 }
 
 std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &mdlmaps,
-                                      std::vector<SuperdropWithGridbox> &SDsInGBxs)
+                                      std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from mdlmaps.gbxidxs, and a span of the
 superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */

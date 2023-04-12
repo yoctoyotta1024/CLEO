@@ -25,7 +25,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   /* vector containing all superdroplets within a struct that also holds their
   associated gridbox index. (all superdroplets have same solute properties) */
   const auto solute(std::make_shared<const SoluteProperties>());
-  std::vector<SuperdropWithGridbox>
+  std::vector<SuperdropWithGbxindex>
       SDsInGBxs = superdrops_from_initSDsfile(config.initSDs_filename,
                                               config.nSDsvec,
                                               config.SDnspace, solute,
@@ -51,7 +51,7 @@ void timestep_coupledmodel(const Timesteps &mdlsteps,
                            CvodeThermoSolver &cvode,
                            std::mt19937 &gen,
                            std::vector<GridBox> &gridboxes,
-                           std::vector<SuperdropWithGridbox> &SDsInGBxs)
+                           std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep coupled model from t=0 to t=tend. Each coupled step is
 length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
 2) run SDM step (independent) 3) run CVODE step (independent)
