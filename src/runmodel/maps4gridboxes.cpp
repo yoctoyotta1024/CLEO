@@ -210,7 +210,7 @@ maximum unsigned int */
 }
 
 std::pair<unsigned int, unsigned int>
-  handle_periodicdomain_nghbours(const unsigned int idx,
+CartesianNeighbourIndexes::handle_periodicdomain_nghbours(const unsigned int idx,
                               const unsigned int increment,
                               const unsigned int ndim) const
 /* returns {forward, backward} gridbox neighbours with

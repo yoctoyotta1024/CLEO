@@ -135,7 +135,7 @@ private:
   neighbours. I.e.  index of neighbour forwards of gridboxes at
   the uppermost edge of domain in a given direction, are the
   lowermost gridboxes in that direction (and vice versa). */
-  
+
 public:
   CartesianNeighbourIndexes(const unsigned int maxidx,
                             const std::array<size_t, 3> ndims)
@@ -150,7 +150,8 @@ public:
   gridboxes at edges of domain is determined by the
   'handle_XXX_nghbours' function */
   {
-    return handle_finitedomain_nghbours(idx, 1, ndims.at(0));
+    return handle_periodicdomain_nghbours(idx, 1, ndims.at(0));
+    //return handle_finitedomain_nghbours(idx, 1, ndims.at(0));
   }
 
   std::pair<unsigned int, unsigned int>
@@ -162,7 +163,8 @@ public:
   'handle_XXX_nghbours' function */
   {
     const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
-    return handle_finitedomain_nghbours(idx, nz, ndims.at(1));
+    return handle_periodicdomain_nghbours(idx, nz, ndims.at(1));
+    //return handle_finitedomain_nghbours(idx, nz, ndims.at(1));
   }
 
   std::pair<unsigned int, unsigned int>
@@ -174,7 +176,8 @@ public:
   'handle_XXX_nghbours' function */
   {
     const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
-    return handle_finitedomain_nghbours(idx, nznx, ndims.at(2));
+    return handle_periodicdomain_nghbours(idx, nznx, ndims.at(2));
+    //return handle_finitedomain_nghbours(idx, nznx, ndims.at(2));
   }
 };
 
