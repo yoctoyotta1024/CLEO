@@ -21,6 +21,7 @@ seperated to increase readability */
 /* coupled model setup */
 #include "./runmodel/maps4gridboxes.hpp"
 #include "./runmodel/superdrops_with_gridboxes.hpp"
+#include "./runmodel/superdropsmotion.hpp"
 #include "./runmodel/timesteps.hpp"
 #include "./runmodel/gridbox.hpp"
 #include "./runmodel/observers/observers.hpp"
@@ -36,6 +37,7 @@ seperated to increase readability */
 
 namespace dlc = dimless_constants;
 
+/* ----------- implementation in run_coupledmodel.hpp ----------- */
 void run_cvodeSDM_coupledmodel(const Config &config,
                                const Timesteps &mdlsteps,
                                const Maps4GridBoxes &mdlmaps,
@@ -57,7 +59,9 @@ void timestep_coupledmodel(const Timesteps &mdlsteps,
 length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
 2) run SDM step (independent) 3) run CVODE step (independent)
 4) proceed to next step (coupled) */
+/* -------------------------------------------------------------- */
 
+/* ----------- implementation in run_coupledmodel.cpp ----------- */
 std::vector<double> init_thermodynamics(const size_t num_gridboxes,
                                         const Config &config);
 /* return vector of dimensionless initial conditions
@@ -71,47 +75,21 @@ std::mt19937 prepare_coupledmodel(const Timesteps &mdlsteps, CvodeThermoSolver &
 return a random number generator. Call funciton to set superdroplet radii
 to equilibrium wet radius if wetradiiinit is true. */
 
-void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes);
-/* for each gridbox, set the radius of each superdroplet (SD) to their
-equlibrium radius (given the relative humidity (relh) of the gridbox).
-If relh > maxrelh = 0.95, set each SD's radius to their 
-equilibrium radius at relh = maxrelh = 0.95 */
-
 std::vector<ThermoState> set_thermodynamics_from_cvodesolver(std::vector<GridBox> &gridboxes,
                                                              const CvodeThermoSolver &cvode);
 /* get thermo variables from thermodynamics solver and use
 these to set ThermoState of each gridbox. Return vector
 containing all those Thermostates */
 
-int proceeed_tonext_coupledstep(int t_out, const int outstep,
-                                const bool doCouple,
-                                const std::vector<ThermoState> &previousstates,
-                                std::vector<GridBox> &gridboxes,
-                                CvodeThermoSolver &cvode);
+int proceed_tonext_coupledstep(int t_out, const int outstep,
+                               const bool doCouple,
+                               const std::vector<ThermoState> &previousstates,
+                               std::vector<GridBox> &gridboxes,
+                               CvodeThermoSolver &cvode);
 /* exchanges superdroplets between gridboxes and sends
 changes in thermodynamics due to SDM microphysics to thermodynamics solver
 (eg. raise in temperature of a gridbox due to latent heat release) */
-
-void thermodynamic_changes_to_cvodesolver(const std::vector<ThermoState> &previousstates,
-                                          const std::vector<GridBox> &gridboxes,
-                                          CvodeThermoSolver &cvode);
-/* calculate changes in thermodynamics (temp, qv and qc) due to SDM process
-affecting ThermoState, then reinitialise cvode solver with those changes */
-
-void exchange_superdroplets_between_gridboxes(const Maps4GridBoxes &mdlmaps,
-                                              std::vector<SuperdropWithGridbox> &SDsInGBxs,
-                                              std::vector<GridBox> &gridboxes);
-/* move superdroplets between gridboxes by changing their associated
-gridboxindex if necessary, then (re)sorting SDsInGBxs vector and
-updating spans4SDsInGbx for each gridbox */
-
-void change_superdroplets_gridboxindex(const Maps4GridBoxes &mdlmaps,
-                                       std::vector<GridBox> &gridboxes);
-/* first check if superdrop's associated gridboxindex (sd_gbxindex) 
-needs to change. If it does, implement change by calling correct 
-function for changing the sd_gbxindex to a neighbouring gridbox's index
-in a particular direction. The direction is given by the value of 
-the is_change flag */
+/* -------------------------------------------------------------- */
 
 inline void printfinish_coupledmodel()
 /* print statement declaring coupled model completed*/
@@ -134,7 +112,7 @@ thermodyanics ODE solver (cvode) */
 }
 
 inline int exchange_or_outstep(const int t_out, const int outstep,
-                                const int xchangestep)
+                               const int xchangestep)
 /* given current time, t_out, work out which event (exchange or output)
 is next to occur and return the time of the sooner event */
 {
@@ -152,7 +130,8 @@ Sets current thermodynamic state of SDM to match that communicated by
 CVODE solver. Then observes each gridbox and then returns vector
 of current thermodynamic states (for later use in SDM) */
 {
-  std::vector<ThermoState> currentstates(set_thermodynamics_from_cvodesolver(gridboxes, cvode));
+  std::vector<ThermoState> currentstates(
+      set_thermodynamics_from_cvodesolver(gridboxes, cvode));
 
   observer.observe_state(gridboxes);
 
@@ -167,24 +146,24 @@ void run_sdmstep(const int t_out, const int outstep,
                  std::vector<GridBox> &gridboxes,
                  std::vector<SuperdropWithGridbox> &SDsInGBxs)
 /* run SDM for each gridbox from time t_out to t_out+outstep
-with subtimestepping such that each output timestep (outstep) 
-can be subdivided to allow the exchange of superdroplets between 
+with subtimestepping such that each output timestep (outstep)
+can be subdivided to allow the exchange of superdroplets between
 gridboxes and the SDM process to occur at smaller time intervals */
 {
 
-  int t = t_out; 
+  int t = t_out;
 
   while (t < t_out + outstep)
   {
     /* nextt is t of next exchange and/or t of next outstep */
     const int nextt = exchange_or_outstep(t, outstep, xchangestep);
-    
-    /* run SDM process for all gridboxes from t_out to nextt 
+
+    /* run SDM process for all gridboxes from t_out to nextt
     using SDM subt timestepping routine */
     for (auto &gbx : gridboxes)
     {
       for (int subt = t; subt < nextt;
-          subt = sdmprocess.next_step(subt))            
+           subt = sdmprocess.next_step(subt))
       {
         sdmprocess.run_step(subt, gbx.span4SDsinGBx,
                             gbx.state, gen);
@@ -194,13 +173,11 @@ gridboxes and the SDM process to occur at smaller time intervals */
     /* do exchange if timestep is on exchange event */
     if (nextt % xchangestep == 0)
     {
-      exchange_superdroplets_between_gridboxes(mdlmaps, SDsInGBxs, gridboxes);
+      sdmmotion(mdlmaps, SDsInGBxs, gridboxes);
     }
 
     t = nextt;
   }
-
 }
 
 #endif // RUN_COUPLEDMODEL_IMPLEMENT_HPP
-

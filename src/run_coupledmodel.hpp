@@ -72,8 +72,8 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
     cvode.run_cvodestep(timestep2dimlesstime(t_out + mdlsteps.outstep));
 
     /* prepare for next coupled step */
-    t_out = proceeed_tonext_coupledstep(t_out, mdlsteps.outstep, doCouple,
-                                        previousstates, gridboxes, cvode);
+    t_out = proceed_tonext_coupledstep(t_out, mdlsteps.outstep, doCouple,
+                                       previousstates, gridboxes, cvode);
   }
 }
 

@@ -1,5 +1,5 @@
 # run cmake with " cmake -S [source dir of targerts] -B [build dir for makefile] "
-#run cmake with these compiler options:
+# run cmake with these compiler options:
 # CXX=/opt/homebrew/bin/g++-12 cmake -S ./ -B ./build
 # or CXX=gcc cmake -S ./ -B ./build
 
@@ -13,20 +13,21 @@ set(LIBNAME "runmodel")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
-set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 # add executables to library
-set(SOURCES 
-    "gridbox.cpp"
-    "maps4gridboxes.cpp"
-    "observers/observers.cpp"
-    "observers/observer_moments.cpp"
-    "observers/observer_singlevariable.cpp"
-    "observers/observer_thermostate.cpp"
-    "observers/zarrstores.cpp"
-    "superdrops_with_gridboxes.cpp"
-    "timesteps.cpp"
-  )
+set(SOURCES
+  "gridbox.cpp"
+  "maps4gridboxes.cpp"
+  "observers/observers.cpp"
+  "observers/observer_moments.cpp"
+  "observers/observer_singlevariable.cpp"
+  "observers/observer_thermostate.cpp"
+  "observers/zarrstores.cpp"
+  "superdrops_with_gridboxes.cpp"
+  "superdropsmotion.cpp"
+  "timesteps.cpp"
+)
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
 # add directories to include for target
