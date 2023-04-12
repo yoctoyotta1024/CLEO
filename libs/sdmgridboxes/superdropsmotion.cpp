@@ -49,7 +49,7 @@ the is_change flag */
   {
     for (auto &SDinGBx : gbx.span4SDsinGBx)
     {
-      sdgbxindex_to_neighbour(mdlmaps, SDinGBx); // see superdrops_with_gridboxes.cpp
+      sdgbxindex_to_neighbour(mdlmaps, SDinGBx);
     }
   }
 }

@@ -21,7 +21,7 @@ seperated to increase readability */
 
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
-#include "sdmgridboxes/superdrops_with_gridboxes.hpp"
+#include "sdmgridboxes/superdrops_in_gridboxes.hpp"
 #include "sdmgridboxes/superdropsmotion.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 #include "observers/observers.hpp"

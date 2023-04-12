@@ -11,7 +11,7 @@ coords and moving them between gridboxes) */
 
 #include "./gridbox.hpp"
 #include "./maps4gridboxes.hpp"
-#include "./superdrops_with_gridboxes.hpp"
+#include "./superdrops_in_gridboxes.hpp"
 #include "superdrop_solver/superdrop.hpp"
 
 void sdmmotion(const Maps4GridBoxes &mdlmaps,

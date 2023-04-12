@@ -21,7 +21,7 @@ could compile with e.g.
 #include "../libs/initialisation/read_gbxboundaries.hpp"
 #include "../libs/initialisation/read_initsuperdrops.hpp"
 #include "../src/runmodel/maps4gridboxes.hpp"
-#include "../src/runmodel/superdrops_with_gridboxes.hpp"
+#include "../src/runmodel/superdrops_in_gridboxes.hpp"
 
 namespace dlc = dimless_constants;
 

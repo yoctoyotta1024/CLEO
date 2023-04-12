@@ -15,7 +15,7 @@ struct */
 #include <stdexcept>
 
 #include "./maps4gridboxes.hpp"
-#include "./superdrops_with_gridboxes.hpp"
+#include "./superdrops_in_gridboxes.hpp"
 #include "initialisation/config.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"

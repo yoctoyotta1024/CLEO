@@ -34,7 +34,7 @@ set(LIBSOURCES
     "../src/runmodel/observers/observer_singlevariable.cpp"
     "../src/runmodel/observers/observer_thermostate.cpp"
     "../src/runmodel/observers/zarrstores.cpp"
-    "../src/runmodel/superdrops_with_gridboxes.cpp"
+    "../src/runmodel/superdrops_in_gridboxes.cpp"
     "../src/runmodel/timesteps.cpp"
   )
 add_library("${LIBNAME}" SHARED ${LIBSOURCES})

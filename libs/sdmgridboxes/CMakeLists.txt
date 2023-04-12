@@ -19,7 +19,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(SOURCES
 "gridbox.cpp"
 "maps4gridboxes.cpp"
-"superdrops_with_gridboxes.cpp"
+"superdrops_in_gridboxes.cpp"
 "superdropsmotion.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
