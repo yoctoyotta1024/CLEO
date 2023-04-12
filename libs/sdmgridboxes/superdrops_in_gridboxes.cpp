@@ -10,7 +10,7 @@ declared here to avoid being visible externally */
 /* ------------------------------------------------------ */
 /* -- function called create_superdrops_in_gridboxes -- */
 std::vector<SuperdropWithGbxindex>
-create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
+create_superdropsingridboxes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties> solute,
                                const Maps4GridBoxes &mdlmaps);
@@ -47,7 +47,7 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
             << "\nNow creating superdrops with gridboxes\n";
 
   std::vector<SuperdropWithGbxindex>
-      SDsInGBxs = create_superdropswithgridboxes(nSDsvec, SDnspace, initSDs,
+      SDsInGBxs = create_superdropsingridboxes(nSDsvec, SDnspace, initSDs,
                                                  solute, mdlmaps);
 
   /* 3. Initialise gridbox index associated with each superdroplets */
@@ -60,7 +60,7 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
 }
 
 std::vector<SuperdropWithGbxindex>
-create_superdropswithgridboxes(const int nSDsvec, const int SDnspace,
+create_superdropsingridboxes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties> solute,
                                const Maps4GridBoxes &mdlmaps)
