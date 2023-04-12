@@ -75,9 +75,9 @@ combined process of those two individual processes */
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
   // const auto sdmprocess =  condensation_process >> collision_process >> sedimentation_process;
   // const auto sdmprocess = condensation_process >> collision_process;
-  // const auto sdmprocess = collision_process >> sedimentation_process;
+  const auto sdmprocess = collision_process >> sedimentation_process;
   // const auto sdmprocess = collision_process;
-  const auto sdmprocess = condensation_process;
+  // const auto sdmprocess = condensation_process;
   // const auto sdmprocess = NullProcess{};
 
   return sdmprocess;
