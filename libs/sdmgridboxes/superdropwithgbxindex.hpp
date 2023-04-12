@@ -2,8 +2,7 @@
 // File: superdropwithgbxindex.hpp
 /* Header file for functions involved in handling
 vector of SuperdropWithGbxindex instances (see superdrop.hpp
-for definition of this struct) associated with Gridboxes
-defined by relations of gbxindex in Maps4GridBoxes.
+for definition of this struct).
 Note: some hidden functions called internally are
 defined in .cpp implementaiton file */
 
@@ -14,9 +13,6 @@ defined in .cpp implementaiton file */
 #include <string>
 #include <string_view>
 #include <memory>
-#include <map>
-#include <utility>
-#include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
