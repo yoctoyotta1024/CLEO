@@ -10,18 +10,18 @@ GridBox::GridBox(const unsigned int ii,
                  std::vector<SuperdropWithGbxindex> &SDsInGBxs)
     : gbxindex(ii), state()
 {
-  set_statevolume(mdlmaps.idx2vol);
+  set_statevolume(mdlmaps);
   
   set_span(SDsInGBxs);
   iscorrect_span_for_gbxindex(mdlmaps);
 }
 
-void GridBox::set_statevolume(const std::map<unsigned int, double> &idx2vol)
+void GridBox::set_statevolume(const Maps4GridBoxes &mdlmaps)
 /* set dimensionless value for gridbox state's 
-volume using Map4GridBoxes idx2vol map.
+volume using Map4GridBoxes idx2vol map (via get_volume function).
 True volume = state.volume * COORD0^3 [m^3] */
 {
-  state.volume = (*idx2vol.find(gbxindex)).second;
+  state.volume = mdlmaps.get_volume(gbxindex);
   std::cout << "dimensionless volume = " << state.volume
             << "\nie. VOLUME = "
             << state.volume * pow(dlc::COORD0, 3.0) << "m^3\n";

@@ -121,9 +121,11 @@ void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
   }
 
   std::cout << "Vol map" << "\n";
-  for (const auto & [key, value] : mdlmaps.idx2vol)
+  for (const auto idxkey : mdlmaps.gbxidxs)
   {
-    std::cout << key << ": " << value << " -> ie. = "<< value * pow(COORD0, 3.0) << "m^3\n";
+    std::cout << idxkey << ": "
+              << mdlmaps.get_volume(idxkey) 
+              << " -> ie. = " << mdlmaps.get_volume(idxkey) * pow(COORD0, 3.0) << "m^3\n";
   }
   std::cout << "----------------\n";
 }

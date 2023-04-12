@@ -39,9 +39,9 @@ coupled thermodynamics */
   from lowest to highest. Finds first and last SDWithGBx that has 
   sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
 
-  void set_statevolume(const std::map<unsigned int, double> &idx2vol);
+  void set_statevolume(const Maps4GridBoxes &mdlmaps);
   /* set dimensionless value for gridbox state's 
-  volume using Map4GridBoxes idx2vol map.
+  volume using Map4GridBoxes idx2vol map (via get_volume function).
   True volume = state.volume * COORD0^3 [m^3] */
 
   void iscorrect_span_for_gbxindex(const Maps4GridBoxes &mdlmaps);
