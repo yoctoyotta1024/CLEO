@@ -24,8 +24,11 @@ spans4SDsInGbx for each gridbox */
   
   for (auto &gbx : gridboxes)
   {
+    
     sdmmotion.move_superdroplets(gbx.span4SDsinGBx, w, u, v);
   }
+  
+  change_superdroplets_gridboxindex(mdlmaps, gridboxes);
   
   exchange_superdroplets_between_gridboxes(mdlmaps, SDsInGBxs, gridboxes);
 }
@@ -37,8 +40,6 @@ void exchange_superdroplets_between_gridboxes(const Maps4GridBoxes &mdlmaps,
 gridboxindex if necessary, then (re)sorting SDsInGBxs vector and
 updating spans4SDsInGbx for each gridbox */
 {
-  change_superdroplets_gridboxindex(mdlmaps, gridboxes);
-
   sort_superdrops_via_gridboxindex(SDsInGBxs);
 
   set_gridboxes_superdropletspan(gridboxes, SDsInGBxs);

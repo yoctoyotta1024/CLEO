@@ -12,7 +12,7 @@ coords and moving them between gridboxes) */
 
 #include "./gridbox.hpp"
 #include "./maps4gridboxes.hpp"
-#include "./superdrops_in_gridboxes.hpp"
+#include "./superdropwithgbxindex.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/sdmmotion.hpp"
 
@@ -54,6 +54,15 @@ The direction is given by the value of the is_change flag */
 int flag_tochange_sdgbxindex(const SuperdropWithGbxindex &SDinGBx,
                              const std::map<unsigned int,
                                             std::pair<double, double>> &idx2bounds_z);
+
+inline void set_gridboxes_superdropletspan(std::vector<GridBox> &gridboxes,
+                                           std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+{
+  for (auto &gbx : gridboxes)
+  {
+    gbx.set_span(SDsInGBxs);
+  }
+}
 /* ------------------------------------------------------ */
 
 #endif // MOVEMENT_IN_DOMAIN_HPP

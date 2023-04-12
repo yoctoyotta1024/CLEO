@@ -15,7 +15,7 @@ struct */
 #include <stdexcept>
 
 #include "./maps4gridboxes.hpp"
-#include "./superdrops_in_gridboxes.hpp"
+#include "./superdropwithgbxindex.hpp"
 #include "initialisation/config.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"
@@ -60,14 +60,5 @@ std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &mdlmaps,
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from mdlmaps.gbxidxs, and a span of the
 superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
-
-inline void set_gridboxes_superdropletspan(std::vector<GridBox> &gridboxes,
-                                           std::vector<SuperdropWithGbxindex> &SDsInGBxs)
-{
-  for (auto &gbx : gridboxes)
-  {
-    gbx.set_span(SDsInGBxs);
-  }
-}
 
 #endif // GRIDBOX_HPP
