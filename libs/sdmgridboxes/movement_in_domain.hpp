@@ -27,42 +27,25 @@ gridboxes by changing their associated gridboxindex as appropriate.
 Final step is (re)sorting SDsInGBxs vector and updating
 spans4SDsInGbx for each gridbox */
 
-/* ----- function called internally ----- */
-void exchange_superdroplets_between_gridboxes(const Maps4GridBoxes &mdlmaps,
-                                              std::vector<SuperdropWithGbxindex> &SDsInGBxs,
-                                              std::vector<GridBox> &gridboxes);
-/* move superdroplets between gridboxes by changing their associated
-gridboxindex if necessary, then (re)sorting SDsInGBxs vector and
-updating spans4SDsInGbx for each gridbox */
-
-void change_superdroplets_gridboxindex(const Maps4GridBoxes &mdlmaps,
-                                       std::vector<GridBox> &gridboxes);
-/* first check if superdrop's associated gridboxindex (sd_gbxindex)
-needs to change. If it does, implement change by calling correct
-function for changing the sd_gbxindex to a neighbouring gridbox's index
-in a particular direction. The direction is given by the value of
-the is_change flag */
-
-void sdgbxindex_to_neighbour(const Maps4GridBoxes &mdlmaps,
-                                SuperdropWithGbxindex &SDinGBx);
-/* first check if gridbox index associated with the superdrop
-in SDinGBx needs to change. If it does, implement change by
-calling correct function for changing the sd_gbxindex to a
-neighbouring gridbox's index in a particular direction.
-The direction is given by the value of the is_change flag */
-
-int flag_tochange_sdgbxindex(const SuperdropWithGbxindex &SDinGBx,
-                             const std::map<unsigned int,
-                                            std::pair<double, double>> &idx2bounds_z);
-
 inline void set_gridboxes_superdropletspan(std::vector<GridBox> &gridboxes,
                                            std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 {
   for (auto &gbx : gridboxes)
   {
     gbx.set_span(SDsInGBxs);
+    
+    //gbx.iscorrect_span_for_gbxindex(mdlmaps);
   }
 }
-/* ------------------------------------------------------ */
+
+inline void exchange_superdroplets_between_gridboxes(std::vector<SuperdropWithGbxindex> &SDsInGBxs,
+                                                     std::vector<GridBox> &gridboxes)
+/* move superdroplets between gridboxes by changing their associated
+gridboxindex if necessary, then (re)sorting SDsInGBxs vector and
+updating spans4SDsInGbx for each gridbox */
+{
+  sort_superdrops_via_gridboxindex(SDsInGBxs);
+  set_gridboxes_superdropletspan(gridboxes, SDsInGBxs);
+}
 
 #endif // MOVEMENT_IN_DOMAIN_HPP

@@ -7,6 +7,20 @@ coords and moving them between gridboxes) */
 
 #include "./movement_in_domain.hpp"
 
+/* ----- function called internally ----- */
+void sdgbxindex_to_neighbour(const Maps4GridBoxes &mdlmaps,
+                                SuperdropWithGbxindex &SDinGBx);
+/* first check if gridbox index associated with the superdrop
+in SDinGBx needs to change. If it does, implement change by
+calling correct function for changing the sd_gbxindex to a
+neighbouring gridbox's index in a particular direction.
+The direction is given by the value of the is_change flag */
+
+int flag_tochange_sdgbxindex(const SuperdropWithGbxindex &SDinGBx,
+                             const std::map<unsigned int,
+                                            std::pair<double, double>> &idx2bounds_z);
+/* -------------------------------------- */
+
 void move_superdrops_in_domain(const Maps4GridBoxes &mdlmaps,
                                const SdmMotion &sdmmotion,
                                std::vector<SuperdropWithGbxindex> &SDsInGBxs,
@@ -24,49 +38,16 @@ spans4SDsInGbx for each gridbox */
   
   for (auto &gbx : gridboxes)
   {
-    
-    sdmmotion.move_superdroplets(gbx.span4SDsinGBx, w, u, v);
-  }
-  
-  change_superdroplets_gridboxindex(mdlmaps, gridboxes);
-  
-  exchange_superdroplets_between_gridboxes(mdlmaps, SDsInGBxs, gridboxes);
-}
-
-void exchange_superdroplets_between_gridboxes(const Maps4GridBoxes &mdlmaps,
-                                              std::vector<SuperdropWithGbxindex> &SDsInGBxs,
-                                              std::vector<GridBox> &gridboxes)
-/* move superdroplets between gridboxes by changing their associated
-gridboxindex if necessary, then (re)sorting SDsInGBxs vector and
-updating spans4SDsInGbx for each gridbox */
-{
-  sort_superdrops_via_gridboxindex(SDsInGBxs);
-
-  set_gridboxes_superdropletspan(gridboxes, SDsInGBxs);
-
-  // for (auto gbx: gridboxes)
-  // {
-  //   gbx.iscorrect_span_for_gbxindex(mdlmaps);
-  // }
-}
-
-void change_superdroplets_gridboxindex(const Maps4GridBoxes &mdlmaps,
-                                       std::vector<GridBox> &gridboxes)
-/* first check if superdrop's associated gridboxindex (sd_gbxindex)
-needs to change. If it does, implement change by calling correct
-function for changing the sd_gbxindex to a neighbouring gridbox's index
-in a particular direction. The direction is given by the value of
-the is_change flag */
-{
-  for (auto &gbx : gridboxes)
-  {
     for (auto &SDinGBx : gbx.span4SDsinGBx)
     {
+      sdmmotion.move_superdroplet(w, u, v, SDinGBx.superdrop);
+
       sdgbxindex_to_neighbour(mdlmaps, SDinGBx);
     }
   }
+  
+  exchange_superdroplets_between_gridboxes(SDsInGBxs, gridboxes);
 }
-
 
 void sdgbxindex_to_neighbour(const Maps4GridBoxes &mdlmaps,
                              SuperdropWithGbxindex &SDinGBx)

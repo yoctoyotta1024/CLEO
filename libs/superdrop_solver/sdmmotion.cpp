@@ -6,8 +6,10 @@ coordinates) */
 
 #include "./sdmmotion.hpp"
 
-void SdmMotion::move_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                                   const double w, const double u, const double v) const
+void SdmMotion::move_superdroplet(const double w,
+                                  const double u,
+                                  const double v,
+                                  Superdrop &superdrop) const
 {
-  // std::cout << "this is where the SDs coords are changed\n";
+  // std::cout << "this is where a SD's coords are changed\n";
 }

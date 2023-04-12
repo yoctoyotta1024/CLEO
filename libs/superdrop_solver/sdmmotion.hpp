@@ -7,16 +7,14 @@ coordinates) */
 #ifndef SDMMOTION_HPP
 #define SDMMOTION_HPP
 
-#include <span>
-
 #include "./superdrop.hpp"
 
 struct SdmMotion
 {
   SdmMotion(){};
 
-  void move_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                 const double w, const double u, const double v) const;
+  void move_superdroplet(const double w, const double u,
+                         const double v, Superdrop &superdrop) const;
 };
 
 #endif // SDMMOTION_HPP
