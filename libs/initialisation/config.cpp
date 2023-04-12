@@ -159,14 +159,19 @@ void Config::configvariable(const std::string name, std::string value)
     issuccess = true;
   }
 
+  else if (name == "nSDsvec")
+  {
+    nSDsvec = stoi(value);
+    issuccess = true;
+  }
   else if (name == "SDnspace")
   {
     SDnspace = stoi(value);
     issuccess = true;
   }
-  else if (name == "nSDsvec")
+  else if (name == "wetradiiinit")
   {
-    nSDsvec = stoi(value);
+    wetradiiinit = string2bool(value);
     issuccess = true;
   }
 

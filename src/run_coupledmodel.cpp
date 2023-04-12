@@ -5,8 +5,6 @@ CVODE ODE thermodyanmics solver */
 
 #include "run_coupledmodel.hpp"
 
-// TO DO: use pushback for init_thermodynamics y_init vector creation
-
 std::vector<double> init_thermodynamics(const size_t num_gridboxes,
                                         const Config &config)
 /* return vector of dimensionless initial conditions
@@ -35,9 +33,11 @@ initialise cvode thermodynamics solver */
 }
 
 std::mt19937 prepare_coupledmodel(const Timesteps &mdlsteps, CvodeThermoSolver &cvode,
-                                  std::vector<GridBox> &gridboxes)
+                                  std::vector<GridBox> &gridboxes,
+                                  const bool wetradiiinit)
 /* print some details about the cvode thermodynamics solver setup and
-return a random number generator */
+return a random number generator. Call funciton to set superdroplet radii
+to equilibrium wet radius if wetradiiinit is true. */
 {
   cvode.print_init_ODEdata(timestep2dimlesstime(mdlsteps.outstep),
                            timestep2dimlesstime(mdlsteps.tend));
@@ -47,7 +47,10 @@ return a random number generator */
     set_thermostate(ii, gridboxes[ii].state, cvode);
   }
 
-  set_superdroplets_to_wetradius(gridboxes);
+  if (wetradiiinit)
+  {
+    set_superdroplets_to_wetradius(gridboxes);
+  }
 
   return std::mt19937(std::random_device()());
 }

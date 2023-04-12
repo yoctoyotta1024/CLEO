@@ -69,8 +69,9 @@ public:
   double TEND;        // time span of integration [s]
 
   /* Superdroplet init params */
-  int SDnspace;    // number of spatial coordinates of superdroplets
   int nSDsvec;     // initial no. elements in SDsInGBxs vector
+  int SDnspace;    // number of spatial coordinates of superdroplets
+  bool wetradiiinit; // set initial SD radii to equilibrium wet radius
 
   /* initial parcel conditions */
   double P_INIT;    // initial pressure [Pa]

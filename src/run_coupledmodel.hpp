@@ -35,7 +35,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   std::vector<GridBox> gridboxes = create_gridboxes(mdlmaps, SDsInGBxs);
 
   /* prepare, launch, and end coupled model */
-  auto gen = prepare_coupledmodel(mdlsteps, cvode, gridboxes);
+  auto gen = prepare_coupledmodel(mdlsteps, cvode, gridboxes, config.wetradiiinit);
 
   timestep_coupledmodel(mdlsteps, mdlmaps, sdmprocess, observer, config.doCouple,
                         cvode, gen, gridboxes, SDsInGBxs);

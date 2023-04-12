@@ -65,9 +65,11 @@ for thermodyanmic variables (p, temp, qv, qc) to
 initialise cvode thermodynamics solver */
 
 std::mt19937 prepare_coupledmodel(const Timesteps &mdlsteps, CvodeThermoSolver &cvode,
-                                  std::vector<GridBox> &gridboxes);
+                                  std::vector<GridBox> &gridboxes,
+                                  const bool wetradiiinit);
 /* print some details about the cvode thermodynamics solver setup and
-return a random number generator */
+return a random number generator. Call funciton to set superdroplet radii
+to equilibrium wet radius if wetradiiinit is true. */
 
 void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes);
 /* for each gridbox, set the radius of each superdroplet (SD) to their
