@@ -13,7 +13,6 @@ project("coupledCVODECLEO")
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # add executables to project (only one main() function!)
-add_subdirectory(sdmgridboxes)
 set(SOURCES "main.cpp" "run_coupledmodel.cpp" "timesteps.cpp")
 add_executable("${PROJECT_NAME}" ${SOURCES})
 
