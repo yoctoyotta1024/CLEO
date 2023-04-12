@@ -52,7 +52,7 @@ updating spans4SDsInGbx for each gridbox */
 }
 
 template <typename BackwardIdxFunc, typename ForwardIdxFunc>
-unsigned int flag_tochange_sdgbxindex(const unsigned int gbxindex,
+unsigned int changeindex_ifcoord_outofbounds(const unsigned int index,
                                       const std::pair<double, double> bounds,
                                       const double coord,
                                       const BackwardIdxFunc backwardsidx,
@@ -64,20 +64,17 @@ If coord not within bounds backwardsidx or forwardsidx function,
 as appropriate, is used to return a neighbouring gridbox's index.
 If coord lies within bounds, gbxindex is returned */
 {
-  const double lowerbound = bounds.first;
-  const double upperbound = bounds.second;
-
-  if (coord < lowerbound)
+  if (coord < bounds.first) // lowerbound
   {
-    return backwardsidx(gbxindex); // return index of gridbox 1 backwards from gbxidx
+    return backwardsidx(index);
   }
-  else if (coord >= upperbound)
+  else if (coord >= bounds.second) // upperbound
   {
-    return forwardsidx(gbxindex); // char to signal move SD forward a gridbox
+    return forwardsidx(index);
   }
   else
   {
-    return gbxindex; // char to signal no change to SD gridbox
+    return index; // no change to index if coord within bounds
   }
 }
 
