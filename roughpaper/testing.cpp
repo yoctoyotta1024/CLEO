@@ -32,6 +32,23 @@ void print_nbourmaps(const Maps4GridBoxes &mdlmaps, const double COORD0);
 void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0);
 void print_superdropcoords(const std::vector<GridBox> &gridboxes,
                            const Maps4GridBoxes &mdlmaps);
+int visualise_tsteps();
+
+inline int exchange_or_outstep(const int t_out, const int outstep,
+                               const int xchangestep)
+/* given current time, t_out, work out which event (exchange or output)
+is next to occur and return the time of the sooner event */
+{
+  const int next_xchange = ((t_out / xchangestep) + 1) * xchangestep; // t of next xchange
+  const int next_out = ((t_out / outstep) + 1) * outstep;             // t of next output
+
+  return std::min(next_xchange, next_out);
+}
+
+inline int next_step(int t, int step)
+{
+  return ((t / step) + 1) * step;
+}
 
 int main()
 {
@@ -66,6 +83,8 @@ int main()
   move_superdrops_in_domain(mdlmaps, sdmmotion,
                             SDsInGBxs, gridboxes);
   print_superdropcoords(gridboxes, mdlmaps);
+
+  visualise_tsteps();
 
   return 0;
 }
@@ -182,4 +201,39 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
   }
 
   std::cout << "\n-----------------------\n";
+}
+
+int visualise_tsteps()
+{
+  const int t_end = 10;
+  const int couplstep = 3; //outstep
+  const int motionstep = 4;
+  const int sdmstep = 4;
+  int t_out = 0; // time that is incremented by length 'outstep' between coupling communication
+  
+  while (t_out <= t_end)
+  {
+    std::cout << "run_sdmstep\n";
+    int t = t_out;
+    const int nextt = exchange_or_outstep(t, couplstep, motionstep);
+
+    for (int subt = t; subt < nextt; subt=next_step(subt, sdmstep))
+    {
+      std::cout << "---> process step\n";
+    }
+
+    if (nextt % motionstep == 0)
+    {
+      std::cout << "--> motion step\n";
+    }
+
+    std::cout << "run_driverstep\n";
+    std::cout << "-> couple step\n";
+
+
+    t_out += couplstep;
+  }
+
+
+  return 0;
 }
