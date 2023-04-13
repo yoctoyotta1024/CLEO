@@ -42,35 +42,54 @@ SDM process and observers to use in main.cpp */
 
 namespace dlc = dimless_constants;
 
+template <PairProbability PairCoalescenceProbability>
+SdmProcess auto CollisionsProcess(const int interval,
+                                  PairCoalescenceProbability p)
+{
+  const double realtstep = timestep2realtime(interval);
+  return ConstTstepProcess{interval, CollisionsMethod(realtstep, p)};
+}
+
+SdmProcess auto CondensationProcess(const int interval, const bool doCouple,
+                                    const double maxiters, const double rtol,
+                                    const double atol)
+{
+  const double dimlesststep = timestep2dimlesstime(interval);
+  return ConstTstepProcess{interval, CondensationMethod(doCouple, dimlesststep,
+                                                        maxiters, rtol, atol)};
+}
+
+template <VelocityFormula TerminalVelocity>
+SdmProcess auto SedimentationProcess(const int interval, TerminalVelocity v)
+{
+  const double dimlesststep = timestep2dimlesstime(interval);
+  return ConstTstepProcess{interval, SedimentationMethod(dimlesststep, v)};
+}
+
 SdmProcess auto create_sdmprocess(const Config &config,
                                   const Timesteps &mdlsteps)
 /* return an SdmProcess type from an amalgamation of other SdmProcess types.
 For example return a process that does SDM condensation and collisions from
 combined process of those two individual processes */
 {
+  /* create process for condensation in SDM including Implicit
+  Euler Method for solving condensation ODEs */
+  const auto condensation_process = CondensationProcess(mdlsteps.condstep,
+                                                        config.doCouple,
+                                                        config.cond_maxiters,
+                                                        config.cond_rtol,
+                                                        config.cond_atol);
+
   /* create process for collision-coalescene in SDM */
   const auto probs = GolovinProb(dlc::R0);
   // const auto probs = LongHydrodynamicProb();
-  const double COLLTSTEP = timestep2realtime(mdlsteps.collstep);
-  const CollisionsMethod collisions(COLLTSTEP, probs);
-  const auto collision_process = ConstTstepProcess{mdlsteps.collstep,
-                                                   collisions};
-
-  /* create process for condensation in SDM including Implicit
-  Euler Method for solving condensation ODEs */
-  const double condtimestep = timestep2dimlesstime(mdlsteps.condstep);
-  const CondensationMethod condensationmethod(config.doCouple, condtimestep,
-                                              config.cond_maxiters, config.cond_rtol,
-                                              config.cond_atol);
-  const auto condensation_process = ConstTstepProcess{mdlsteps.condstep,
-                                                      condensationmethod};
+  const auto collision_process = CollisionsProcess(mdlsteps.collstep, probs);
 
   /* create process for sedimentation in SDM */
-  const double seditstep = timestep2dimlesstime(mdlsteps.sedistep);
-  const SedimentationMethod sedimentation(seditstep, SimmelTerminalVelocity{});
-  // const SedimentationMethod sedimentation(seditstep, RogersYauTerminalVelocity{});
-  const auto sedimentation_process = ConstTstepProcess{mdlsteps.sedistep,
-                                                       sedimentation};
+  const auto sedimentation_process = SedimentationProcess(mdlsteps.sedistep,
+                                                          SimmelTerminalVelocity{});
+  // const auto sedimentation_process = SedimentationProcess(mdlsteps.sedistep,
+  //                                                         RogersYauTerminalVelocity{});
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
   // const auto sdmprocess =  condensation_process >> collision_process >> sedimentation_process;
