@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
   /* object for time-stepping parameters of coupled model */
   const Timesteps mdlsteps(config.CONDTSTEP, config.COLLTSTEP,
-                           config.MOTINOTSTEP, config.COUPLTSTEP,
+                           config.MOTIONTSTEP, config.COUPLTSTEP,
                            config.T_END);
 
   /* create map from gridbox index to its coordinate boundaries */
