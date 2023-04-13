@@ -61,12 +61,11 @@ public:
   int cond_maxiters;  // maximum no. iterations of Newton Raphson Method
   double cond_rtol;   // relative tolerance for implicit euler integration
   double cond_atol;   //  abolute tolerance for implicit euler integration
-  double COND_TSTEP;  // time between SD condensation events [s]
-  double COLL_TSTEP;  // time between SD collision events [s]
-  double SEDI_TSTEP; // time between SD coordinate position updates [s]
-  double XCHANGE_TSTEP; // time between SD exchange between gridboxes [s]
-  double OUT_TSTEP;   // time between outputting data (and coupling) [s]
-  double TEND;        // time span of integration [s]
+  double CONDTSTEP;  // time between SD condensation events [s]
+  double COLLTSTEP;  // time between SD collision events [s]
+  double MOTIONTSTEP; // time between SD coordinate position updates [s]
+  double COUPLTSTEP; // time between SDM data output and thermodynamic coupling [s]
+  double T_END;        // time span of integration [s]
 
   /* Superdroplet init params */
   int nSDsvec;     // initial no. elements in SDsInGBxs vector

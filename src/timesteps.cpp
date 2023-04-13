@@ -5,7 +5,6 @@ timstep variables for SDM */
 
 #include "timesteps.hpp"
 
-
 Timesteps::Timesteps(const double CONDTSTEP, const double COLLTSTEP,
 const double MOTIONTSTEP, const double COUPLTSTEP, const double T_END)
 /* (dimensionless) double's that are timesteps in config struct
@@ -31,17 +30,8 @@ timestep = 0 */
   if ((couplstep < condsubstep) |
       (couplstep < collsubstep))
   {
-    const std::string err("invalid model steps: an sdm substep is larger"
-                          " than the coupling step");
+    const std::string err("an sdm substep is larger than the coupling"
+                          " step - are you sure you want this?");
     throw std::invalid_argument(err);
   }
-
-  if ((outstep < condstep) |
-      (outstep < collstep) |
-      (outstep < sedistep))
-  {
-    throw std::invalid_argument("ERROR! OUTSTEP MODEL TIMESTEP less than cond"
-                                "coll or sedi tstep. undefined sdm timstepping");
-  }
-
 }

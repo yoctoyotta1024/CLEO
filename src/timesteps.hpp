@@ -52,11 +52,14 @@ in running coupled model */
   const int couplstep;
   const int t_end;
 
-  Timesteps(Config config);
-  /* double's that are timesteps [s] in config struct
+  Timesteps(const double CONDTSTEP, const double COLLTSTEP,
+            const double MOTIONTSTEP, const double COUPLTSTEP,
+            const double T_END);
+  /* (dimensionless) double's that are timesteps in config struct
   are converted into integer values of model timesteps using
   model_step and secd template functions created using std::chrono library.
-  Throw error if after convertion into model step, any step = 0 */
+  Throw error if after convertion into model timestep, any
+  timestep = 0 */
 };
 
 #endif // TIMESTEPS_HPP

@@ -128,34 +128,29 @@ void Config::configvariable(const std::string name, std::string value)
     cond_atol = stod(value);
     issuccess = true;
   }
-  else if (name == "COND_TSTEP")
+  else if (name == "CONDTSTEP")
   {
-    COND_TSTEP = stod(value);
+    CONDTSTEP = stod(value);
     issuccess = true;
   }
-  else if (name == "COLL_TSTEP")
+  else if (name == "COLLTSTEP")
   {
-    COLL_TSTEP = stod(value);
+    COLLTSTEP = stod(value);
     issuccess = true;
   }
-  else if (name == "SEDI_TSTEP")
+  else if (name == "MOTIONTSTEP")
   {
-    SEDI_TSTEP = stod(value);
+    MOTIONTSTEP = stod(value);
     issuccess = true;
   }
-  else if (name == "XCHANGE_TSTEP")
+  else if (name == "COUPLTSTEP")
   {
-    XCHANGE_TSTEP = stod(value);
+    COUPLTSTEP = stod(value);
     issuccess = true;
   }
-  else if (name == "OUT_TSTEP")
+  else if (name == "T_END")
   {
-    OUT_TSTEP = stod(value);
-    issuccess = true;
-  }
-  else if (name == "TEND")
-  {
-    TEND = stod(value);
+    T_END = stod(value);
     issuccess = true;
   }
 
