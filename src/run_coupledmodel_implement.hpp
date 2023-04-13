@@ -168,6 +168,13 @@ gridboxes and the SDM process to occur at smaller time intervals */
     /* nextt is t of next exchange and/or t of next outstep */
     const int nextt_sdm = nextt_coupl_or_motion(t_sdm, couplstep, motionstep);
 
+    /* do exchange if timestep is on exchange event */
+    if (t_sdm % motionstep == 0)
+    {
+      exchanges_between_gridboxes(gbxmaps, sdmmotion,
+                                  SDsInGBxs, gridboxes);
+    }
+
     /* run SDM process for all gridboxes from t_sdm to nextt_sdm
     using sdmprocess subttimestepping routine */
     for (auto &gbx : gridboxes)
@@ -180,12 +187,6 @@ gridboxes and the SDM process to occur at smaller time intervals */
       }
     }
 
-    /* do exchange if timestep is on exchange event */
-    if (t_sdm % motionstep == 0)
-    {
-      exchanges_between_gridboxes(gbxmaps, sdmmotion,
-                                  SDsInGBxs, gridboxes);
-    }
 
     t_sdm = nextt_sdm;
   }
