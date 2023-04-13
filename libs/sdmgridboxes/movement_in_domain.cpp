@@ -64,7 +64,6 @@ return a new value of sd_gbxindex via calling the appropriate get_neighbour
 function. After algorithm for z, then x, then y directions are complete,
 resultant sd_gbxindex is returned. */
 {
-  unsigned int sd_gbxindex(gbxindex);
 
   auto zdown = [](const Maps4GridBoxes &mdlmaps,
                   const unsigned int index)
@@ -78,9 +77,6 @@ resultant sd_gbxindex is returned. */
     return mdlmaps.get_neighbour_zup(index);
   };
 
-  sd_gbxindex = changeindex_ifcoord_outofbounds(mdlmaps, zdown, zup,
-                                                zbounds, superdrop.coord3,
-                                                sd_gbxindex);
 
   auto xbehind = [](const Maps4GridBoxes &mdlmaps,
                     const unsigned int index)
@@ -94,9 +90,6 @@ resultant sd_gbxindex is returned. */
     return mdlmaps.get_neighbour_xinfront(index);
   };
 
-  sd_gbxindex = changeindex_ifcoord_outofbounds(mdlmaps, xbehind, xinfront,
-                                                xbounds, superdrop.coord1,
-                                                sd_gbxindex);
 
   auto yleft = [](const Maps4GridBoxes &mdlmaps,
                   const unsigned int index)
@@ -109,6 +102,15 @@ resultant sd_gbxindex is returned. */
   {
     return mdlmaps.get_neighbour_yright(index);
   };
+
+  unsigned int sd_gbxindex(gbxindex);
+  sd_gbxindex = changeindex_ifcoord_outofbounds(mdlmaps, zdown, zup,
+                                                zbounds, superdrop.coord3,
+                                                sd_gbxindex);
+
+  sd_gbxindex = changeindex_ifcoord_outofbounds(mdlmaps, xbehind, xinfront,
+                                                xbounds, superdrop.coord1,
+                                                sd_gbxindex);
 
   sd_gbxindex = changeindex_ifcoord_outofbounds(mdlmaps, yleft, yright,
                                                 ybounds, superdrop.coord2,
