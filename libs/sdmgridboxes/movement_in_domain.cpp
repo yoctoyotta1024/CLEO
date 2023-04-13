@@ -18,6 +18,13 @@ unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &mdlmaps,
 with the superdrop in SDinGBx needs to change. If it does, implement
 change by calling correct function for changing the sd_gbxindex to a
 neighbouring gridbox's index in that direction */
+
+unsigned int zdown(const Maps4GridBoxes &mdlmaps, const unsigned int index);
+unsigned int zup(const Maps4GridBoxes &mdlmaps, const unsigned int index);
+unsigned int xbehind(const Maps4GridBoxes &mdlmaps, const unsigned int index);
+unsigned int xinfront(const Maps4GridBoxes &mdlmaps, const unsigned int index);
+unsigned int yleft(const Maps4GridBoxes &mdlmaps, const unsigned int index);
+unsigned int yright(const Maps4GridBoxes &mdlmaps, const unsigned int index);
 /* -------------------------------------- */
 
 void move_superdrops_in_domain(const Maps4GridBoxes &mdlmaps,
@@ -64,45 +71,6 @@ return a new value of sd_gbxindex via calling the appropriate get_neighbour
 function. After algorithm for z, then x, then y directions are complete,
 resultant sd_gbxindex is returned. */
 {
-
-  auto zdown = [](const Maps4GridBoxes &mdlmaps,
-                  const unsigned int index)
-  {
-    return mdlmaps.get_neighbour_zdown(index);
-  };
-
-  auto zup = [](const Maps4GridBoxes &mdlmaps,
-                const unsigned int index)
-  {
-    return mdlmaps.get_neighbour_zup(index);
-  };
-
-
-  auto xbehind = [](const Maps4GridBoxes &mdlmaps,
-                    const unsigned int index)
-  {
-    return mdlmaps.get_neighbour_xbehind(index);
-  };
-
-  auto xinfront = [](const Maps4GridBoxes &mdlmaps,
-                     const unsigned int index)
-  {
-    return mdlmaps.get_neighbour_xinfront(index);
-  };
-
-
-  auto yleft = [](const Maps4GridBoxes &mdlmaps,
-                  const unsigned int index)
-  {
-    return mdlmaps.get_neighbour_yleft(index);
-  };
-
-  auto yright = [](const Maps4GridBoxes &mdlmaps,
-                   const unsigned int index)
-  {
-    return mdlmaps.get_neighbour_yright(index);
-  };
-
   unsigned int sd_gbxindex(gbxindex);
   sd_gbxindex = changeindex_ifcoord_outofbounds(mdlmaps, zdown, zup,
                                                 zbounds, superdrop.coord3,
@@ -118,3 +86,39 @@ resultant sd_gbxindex is returned. */
 
   return sd_gbxindex;
 }
+
+unsigned int zdown(const Maps4GridBoxes &mdlmaps,
+                   const unsigned int index)
+{
+  return mdlmaps.get_neighbour_zdown(index);
+};
+
+unsigned int zup(const Maps4GridBoxes &mdlmaps,
+                 const unsigned int index)
+{
+  return mdlmaps.get_neighbour_zup(index);
+};
+
+unsigned int xbehind(const Maps4GridBoxes &mdlmaps,
+                     const unsigned int index)
+{
+  return mdlmaps.get_neighbour_xbehind(index);
+};
+
+unsigned int xinfront(const Maps4GridBoxes &mdlmaps,
+                      const unsigned int index)
+{
+  return mdlmaps.get_neighbour_xinfront(index);
+};
+
+unsigned int yleft(const Maps4GridBoxes &mdlmaps,
+                   const unsigned int index)
+{
+  return mdlmaps.get_neighbour_yleft(index);
+};
+
+unsigned int yright(const Maps4GridBoxes &mdlmaps,
+                    const unsigned int index)
+{
+  return mdlmaps.get_neighbour_yright(index);
+};
