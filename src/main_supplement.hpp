@@ -74,12 +74,25 @@ combined process of those two individual processes */
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
   // const auto sdmprocess =  condensation_process >> collision_process >> sedimentation_process;
   // const auto sdmprocess = condensation_process >> collision_process;
-  const auto sdmprocess = collision_process >> sedimentation_process;
-  // const auto sdmprocess = collision_process;
-  // const auto sdmprocess = condensation_process;
+  // const auto sdmprocess = collision_process >> sedimentation_process;
+  const auto sdmprocess = collision_process;
+  //const auto sdmprocess = condensation_process;
   // const auto sdmprocess = NullProcess{};
 
   return sdmprocess;
+}
+
+SuperdropIntoStoreViaBuffer auto superdropattributes_to_observe()
+{
+  SuperdropIntoStoreViaBuffer auto id = IdIntoStore();
+  SuperdropIntoStoreViaBuffer auto eps = EpsIntoStore();
+  SuperdropIntoStoreViaBuffer auto radius = RadiusIntoStore();
+  SuperdropIntoStoreViaBuffer auto m_sol = M_solIntoStore();
+  SuperdropIntoStoreViaBuffer auto coord3 = Coord3IntoStore();
+
+  SuperdropIntoStoreViaBuffer auto attrs = id >> eps >> radius >> coord3 >> m_sol;
+
+  return attrs;
 }
 
 Observer auto create_sdmomentsobserver(SDMomentsStorage &sdmoments)
@@ -121,19 +134,6 @@ superdroplets from combination of those two seperate observers */
   //const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
 
   return observer;
-}
-
-SuperdropIntoStoreViaBuffer auto superdropattributes_to_observe()
-{
-  SuperdropIntoStoreViaBuffer auto id = IdIntoStore();
-  SuperdropIntoStoreViaBuffer auto eps = EpsIntoStore();
-  SuperdropIntoStoreViaBuffer auto radius = RadiusIntoStore();
-  SuperdropIntoStoreViaBuffer auto m_sol = M_solIntoStore();
-  SuperdropIntoStoreViaBuffer auto coord3 = Coord3IntoStore();
-
-  SuperdropIntoStoreViaBuffer auto attrs = id >> eps >> radius >> coord3 >> m_sol;
-
-  return attrs;
 }
 
 #endif // MAIN_SUPPLEMENT_HPP
