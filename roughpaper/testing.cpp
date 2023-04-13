@@ -75,11 +75,7 @@ int main()
   print_gridboxmaps(mdlmaps, dlc::COORD0);
   print_nbourmaps(mdlmaps, dlc::COORD0);
   print_superdropcoords(gridboxes, mdlmaps);
-
-  const double seditstep = 1.0;//timestep2dimlesstime(mdlsteps.sedistep);
-  const SdmMotion auto sdmmotion = MoveWithSedimentation(seditstep,
-                                                         SimmelTerminalVelocity{});
-
+ 
   move_superdrops_in_domain(mdlmaps, sdmmotion,
                             SDsInGBxs, gridboxes);
   print_superdropcoords(gridboxes, mdlmaps);

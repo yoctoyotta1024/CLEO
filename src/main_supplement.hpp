@@ -43,7 +43,7 @@ SDM process and observers to use in main.cpp */
 namespace dlc = dimless_constants;
 
 SdmProcess auto create_sdmprocess(const Config &config,
-                                  const Timesteps &mdlsteps)
+                                  const ModelTimesteps &mdlsteps)
 /* return an SdmProcess type from an amalgamation of other SdmProcess types.
 For example return a process that does SDM condensation and collisions from
 combined process of those two individual processes */

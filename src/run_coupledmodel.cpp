@@ -71,7 +71,7 @@ equilibrium radius at relh = maxrelh = 0.95 */
   }
 }
 
-std::mt19937 prepare_coupledmodel(const Timesteps &mdlsteps, CvodeThermoSolver &cvode,
+std::mt19937 prepare_coupledmodel(const ModelTimesteps &mdlsteps, CvodeThermoSolver &cvode,
                                   std::vector<GridBox> &gridboxes,
                                   const bool wetradiiinit)
 /* print some details about the cvode thermodynamics solver setup and

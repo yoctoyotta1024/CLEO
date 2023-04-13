@@ -40,7 +40,7 @@ namespace dlc = dimless_constants;
 
 /* ----------- implementation in run_coupledmodel.hpp ----------- */
 void run_cvodeSDM_coupledmodel(const Config &config,
-                               const Timesteps &mdlsteps,
+                               const ModelTimesteps &mdlsteps,
                                const Maps4GridBoxes &mdlmaps,
                                const SdmProcess auto &sdmprocess,
                                const SdmMotion auto &sdmmotion,
@@ -48,7 +48,7 @@ void run_cvodeSDM_coupledmodel(const Config &config,
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 
-void timestep_coupledmodel(const Timesteps &mdlsteps,
+void timestep_coupledmodel(const ModelTimesteps &mdlsteps,
                            const Maps4GridBoxes &mdlmaps,
                            const SdmProcess auto &sdmprocess,
                            const SdmMotion auto &sdmmotion,
@@ -71,7 +71,7 @@ std::vector<double> init_thermodynamics(const size_t num_gridboxes,
 for thermodyanmic variables (p, temp, qv, qc) to
 initialise cvode thermodynamics solver */
 
-std::mt19937 prepare_coupledmodel(const Timesteps &mdlsteps, CvodeThermoSolver &cvode,
+std::mt19937 prepare_coupledmodel(const ModelTimesteps &mdlsteps, CvodeThermoSolver &cvode,
                                   std::vector<GridBox> &gridboxes,
                                   const bool wetradiiinit);
 /* print some details about the cvode thermodynamics solver setup and

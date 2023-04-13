@@ -5,7 +5,7 @@ timstep variables for SDM */
 
 #include "timesteps.hpp"
 
-Timesteps::Timesteps(const double CONDTSTEP, const double COLLTSTEP,
+ModelTimesteps::ModelTimesteps(const double CONDTSTEP, const double COLLTSTEP,
 const double MOTIONTSTEP, const double COUPLTSTEP, const double T_END)
 /* (dimensionless) double's that are timesteps in config struct
 are converted into integer values of model timesteps using

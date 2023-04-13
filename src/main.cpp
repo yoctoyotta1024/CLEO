@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
   const Config config(configfilepath, constantsfilepath);
 
   /* object for time-stepping parameters of coupled model */
-  const Timesteps mdlsteps(config.CONDTSTEP, config.COLLTSTEP,
+  const ModelTimesteps mdlsteps(config.CONDTSTEP, config.COLLTSTEP,
                            config.MOTIONTSTEP, config.COUPLTSTEP,
                            config.T_END);
 

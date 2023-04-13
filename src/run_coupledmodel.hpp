@@ -11,7 +11,7 @@ of this header file that's been moved into a new file for clarity */
 #include "run_coupledmodel_implement.hpp"
 
 void run_cvodeSDM_coupledmodel(const Config &config,
-                               const Timesteps &mdlsteps,
+                               const ModelTimesteps &mdlsteps,
                                const Maps4GridBoxes &mdlmaps,
                                const SdmProcess auto &sdmprocess,
                                const SdmMotion auto &sdmmotion,
@@ -44,7 +44,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   printfinish_coupledmodel();
 }
 
-void timestep_coupledmodel(const Timesteps &mdlsteps,
+void timestep_coupledmodel(const ModelTimesteps &mdlsteps,
                            const Maps4GridBoxes &mdlmaps,
                            const SdmProcess auto &sdmprocess,
                            const SdmMotion auto &sdmmotion,
