@@ -139,12 +139,42 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
   {
     std::cout << "GBx " << gbx.gbxindex << " : ("
               << mdlmaps.get_bounds_z(gbx.gbxindex).first << ", " << ", "
-              << mdlmaps.get_bounds_z(gbx.gbxindex).second << "\n";
+              << mdlmaps.get_bounds_z(gbx.gbxindex).second << ")\n";
     
     for (auto SDinGBx : gbx.span4SDsinGBx)
     {
-      std::cout << "sdgbx " << SDinGBx.sd_gbxindex << " : " << SDinGBx.superdrop.coord3 << "\n";
+      std::cout << "sdgbx " << SDinGBx.sd_gbxindex
+                << " : " << SDinGBx.superdrop.coord3 << "\n";
     }
   }
+
+  std::cout << " -- in X direction --\n";
+  for (auto gbx: gridboxes)
+  {
+    std::cout << "GBx " << gbx.gbxindex << " : ("
+              << mdlmaps.get_bounds_x(gbx.gbxindex).first << ", " << ", "
+              << mdlmaps.get_bounds_x(gbx.gbxindex).second << ")\n";
+    
+    for (auto SDinGBx : gbx.span4SDsinGBx)
+    {
+      std::cout << "sdgbx " << SDinGBx.sd_gbxindex
+      << " : " << SDinGBx.superdrop.coord1 << "\n";
+    }
+  }
+
+  std::cout << " -- Summary --\n";
+  for (auto gbx: gridboxes)
+  {
+    std::cout << "GBx" << gbx.gbxindex << ", ("
+              << mdlmaps.get_bounds_x(gbx.gbxindex).first << " " << ", "
+              << mdlmaps.get_bounds_x(gbx.gbxindex).second << ") SDs: ";
+    
+    for (auto SDinGBx : gbx.span4SDsinGBx)
+    {
+      std::cout << SDinGBx.superdrop.id << ", ";
+    }
+    std::cout << "\n";
+  }
+
   std::cout << "\n-----------------------\n";
 }

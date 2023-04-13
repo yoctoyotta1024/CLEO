@@ -44,7 +44,6 @@ spans4SDsInGbx for each gridbox */
     for (auto &SDinGBx : gbx.span4SDsinGBx)
     {
       sdmmotion.move_superdroplet(w, u, v, SDinGBx.superdrop);
-      // SDinGBx.superdrop.coord3 += 1.0;
 
       SDinGBx.sd_gbxindex = update_superdrop_gbxindex(mdlmaps, gbx.gbxindex,
                                                       zbounds, xbounds, ybounds,

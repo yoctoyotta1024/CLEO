@@ -32,8 +32,8 @@ OUT_TSTEP = 30                          # time between outputting data (and coup
 TEND = 2400                             # time span of integration [s]
 
 ### superdroplet params ###
-nSDsvec = 10                            # initial no. elements in superdroplets' vector ( = initial total no. of superdroplets)
-SDnspace = 1                            # no. of spatial coordinates of superdroplets ( = dimension of model)
+nSDsvec = 60                            # initial no. elements in superdroplets' vector ( = initial total no. of superdroplets)
+SDnspace = 3                            # no. of spatial coordinates of superdroplets ( = dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 
 ### initial thermodynamic conditions ###

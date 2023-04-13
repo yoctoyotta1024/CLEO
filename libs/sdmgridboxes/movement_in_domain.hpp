@@ -59,11 +59,18 @@ unsigned int changeindex_ifcoord_outofbounds(const unsigned int index,
                                       const ForwardIdxFunc forwardsidx)
 /* Given bounds = {lowerbound, upperbound} of a gridbox with
 index 'gbxindex', function determines if coord is within bounds
-of that gridbox. (Note: lower bound exclusive, upper bound inclusive).
+of that gridbox. (Note: lower bound inclusive, upper bound exclusive).
 If coord not within bounds backwardsidx or forwardsidx function, 
 as appropriate, is used to return a neighbouring gridbox's index.
-If coord lies within bounds, gbxindex is returned */
+If coord lies within bounds, gbxindex is returned. If index is
+already out of domain (ie. value is the maximum unsigned int),
+return out of domain index */
 {
+  if (index == (unsigned int)-1)
+  {
+    return index; // out of domain index
+  }
+
   if (coord < bounds.first) // lowerbound
   {
     return backwardsidx(index);

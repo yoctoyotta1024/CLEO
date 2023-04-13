@@ -173,7 +173,6 @@ public:
   'handle_XXX_nghbours' function */
   {
     return handle_finitedomain_nghbours(idx, 1, ndims.at(0));
-    //return handle_periodicdomain_nghbours(idx, 1, ndims.at(0));
   }
 
   std::pair<unsigned int, unsigned int>
