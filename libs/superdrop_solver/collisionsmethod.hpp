@@ -48,7 +48,7 @@ superdrops during collision events in SDM */
 private:
   const double DELT; // time interval [s] for which probability of coalescence is calculated
 
-  PairCoalescenceProbability pair_coalesce_probability;
+  const PairCoalescenceProbability pair_coalesce_probability;
   /* object (has operator () that) returns probability a pair of
   droplets coalesces according to a particular coalescence kernel.
   Equation is: prob_jk = K(drop1, drop2) delta_t/delta_vol
@@ -253,8 +253,8 @@ public:
 
 template <PairProbability PairCoalescenceProbability>
 SdmProcess auto CollisionsProcess(const int interval,
-                                  std::function<double(int)> int2time,
-                                  PairCoalescenceProbability p)
+                                  const std::function<double(int)> int2time,
+                                  const PairCoalescenceProbability p)
 {
   const double realtstep = int2time(interval);
   return ConstTstepProcess{interval, CollisionsMethod(realtstep, p)};

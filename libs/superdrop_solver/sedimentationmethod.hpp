@@ -22,7 +22,7 @@ class SedimentationMethod
 {
 private:
   const double delt;
-  TerminalVelocity terminal_velocity; // returns terminal velocity given a superdroplet
+  const TerminalVelocity terminal_velocity; // returns terminal velocity given a superdroplet
 
   void sediment_drop(Superdrop &drop) const
   /* enacts sedimentation by changing coord3
@@ -32,7 +32,7 @@ private:
   }
 
 public:
-  SedimentationMethod(const double delt, TerminalVelocity v)
+  SedimentationMethod(const double delt, const TerminalVelocity v)
       : delt(delt),
         terminal_velocity(v) {}
 
@@ -62,8 +62,8 @@ public:
 
 template <VelocityFormula TerminalVelocity>
 SdmProcess auto SedimentationProcess(const int interval,
-                                     std::function<double(int)> int2time,
-                                     TerminalVelocity v)
+                                     const std::function<double(int)> int2time,
+                                     const TerminalVelocity v)
 /* constructs SdmProcess for sedimentation with constant timestep 'interval'
 given a function to convert the interval to a (dimensionless) time
 and a terminal velocity formula */

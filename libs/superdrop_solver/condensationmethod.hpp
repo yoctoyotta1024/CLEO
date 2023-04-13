@@ -98,7 +98,7 @@ public:
 };
 
 SdmProcess auto CondensationProcess(const int interval,
-                                    std::function<double(int)> int2time,
+                                    const std::function<double(int)> int2time,
                                     const bool doCouple,
                                     const double maxiters,
                                     const double rtol,

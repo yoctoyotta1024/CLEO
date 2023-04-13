@@ -46,7 +46,7 @@ struct GolovinProb
 struct LongHydrodynamicProb
 {
   const double prob_jk_const;
-  SimmelTerminalVelocity simmel_terminal_velocity;
+  const SimmelTerminalVelocity simmel_terminal_velocity;
 
   LongHydrodynamicProb()
       : prob_jk_const(M_PI * pow(dlc::R0, 2.0) * dlc::W0),
