@@ -8,6 +8,7 @@ coordinates) */
 #define SDMMOTION_HPP
 
 #include "./superdrop.hpp"
+#include "./thermostate.hpp"
 
 struct SdmMotion
 {

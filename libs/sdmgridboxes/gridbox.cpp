@@ -8,20 +8,21 @@ a gridbox */
 GridBox::GridBox(const unsigned int ii,
                  const Maps4GridBoxes &mdlmaps,
                  std::vector<SuperdropWithGbxindex> &SDsInGBxs)
-    : gbxindex(ii), state()
+    : gbxindex(ii), state(mdlmaps.get_volume(gbxindex))
+/* Volume in Thermostate set using Map4GridBoxes
+idx2vol map (via get_volume function). Other ThermoState variables
+are default behaviour initialised. */
 {
-  set_statevolume(mdlmaps);
+  print_statevolume();
   
   set_span(SDsInGBxs);
   iscorrect_span_for_gbxindex(mdlmaps);
 }
 
-void GridBox::set_statevolume(const Maps4GridBoxes &mdlmaps)
-/* set dimensionless value for gridbox state's 
-volume using Map4GridBoxes idx2vol map (via get_volume function).
-True volume = state.volume * COORD0^3 [m^3] */
+void GridBox::print_statevolume()
+/* print's dimensionless value for gridbox state's 
+volume. Also prints true volume = state.volume * COORD0^3 [m^3] */
 {
-  state.volume = mdlmaps.get_volume(gbxindex);
   std::cout << "dimensionless volume = " << state.volume
             << "\nie. VOLUME = "
             << state.volume * pow(dlc::COORD0, 3.0) << "m^3\n";

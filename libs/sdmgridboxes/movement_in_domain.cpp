@@ -31,10 +31,6 @@ gridboxes by changing their associated gridboxindex as appropriate.
 Final step is (re)sorting SDsInGBxs vector and updating
 spans4SDsInGbx for each gridbox */
 {
-  const double w = 0.0; // TODO: get winds from gridbox state
-  const double u = 0.0;
-  const double v = 0.0;
-
   for (auto &gbx : gridboxes)
   {
     const auto zbounds(mdlmaps.get_bounds_z(gbx.gbxindex));

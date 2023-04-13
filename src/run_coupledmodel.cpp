@@ -100,13 +100,11 @@ std::vector<ThermoState> set_thermodynamics_from_cvodesolver(std::vector<GridBox
 these to set ThermoState of each gridbox. Return vector
 containing all those Thermostates */
 {
-  const long unsigned int gridN = gridboxes.size();
-  std::vector<ThermoState> currentstates(gridN);
-
-  for (long unsigned int ii = 0; ii < gridN; ++ii)
+  std::vector<ThermoState> currentstates;
+  for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
   {
     set_thermostate(ii, gridboxes[ii].state, cvode);
-    currentstates[ii] = gridboxes[ii].state;
+    currentstates.push_back(gridboxes[ii].state);
   }
 
   return currentstates;

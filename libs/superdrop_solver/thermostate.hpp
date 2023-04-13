@@ -11,68 +11,40 @@ q_condensate, volume, time) of SDM */
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <map>
 
 struct ThermoState
 {
+  const double volume;
+  double time;
+  
   double press;
   double temp;
   double qvap;
   double qcond;
-  double volume;
-  double time;
+  double wvel;
+  double uvel;
+  double vvel;
 
-  inline ThermoState();
+  ThermoState(const double vol) : volume(vol), time(), press(),
+                                  temp(), qvap(), qcond(),
+                                  wvel(), uvel(), vvel(){};
   inline double operator[](const int i) const;
   inline ThermoState operator-(const ThermoState &previousstate) const;
   inline bool operator==(const ThermoState &previousstate) const;
 };
 
-ThermoState::ThermoState()
-    : press(), temp(), qvap(),
-      qcond(), volume(), time()
-{
-}
-
-double ThermoState::operator[](const int i) const
-{
-  if (i == -1)
-  {
-    return time;
-  }
-  else if (i == 0)
-  {
-    return press;
-  }
-  else if (i == 1)
-  {
-    return temp;
-  }
-  else if (i == 2)
-  {
-    return qvap;
-  }
-  else if (i == 3)
-  {
-    return qcond;
-  }
-  else if (i == 4)
-  {
-    return volume;
-  }
-  else
-  {
-    const std::string errormsg = "index out of range for thermo state";
-    throw std::invalid_argument(errormsg);
-  }
-}
-
 ThermoState ThermoState::operator-(const ThermoState &previousstate) const
 {
-  ThermoState delta_state;
+  ThermoState delta_state(volume);
 
   delta_state.temp = temp - previousstate.temp;
   delta_state.qvap = qvap - previousstate.qvap;
   delta_state.qcond = qcond - previousstate.qcond;
+  
+  delta_state.wvel = wvel - previousstate.wvel;
+  delta_state.uvel = uvel - previousstate.uvel;
+  delta_state.vvel = vvel - previousstate.vvel;
 
   return delta_state;
 }
