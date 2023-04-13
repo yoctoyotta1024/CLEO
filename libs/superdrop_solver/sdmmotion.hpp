@@ -30,10 +30,10 @@ which takes a ThermoState and Superdrop as arguments */
 template <VelocityFormula TerminalVelocity>
 struct MoveWithSedimentation
 {
-  SedimentationMethod<TerminalVelocity> sedimentation;
-
+  TerminalVelocity terminal_velocity; // returns terminal velocity given a superdroplet
+  
   MoveWithSedimentation(const double delt, TerminalVelocity v)
-      : sedimentation(delt, v){};
+      : terminal_velocity(v){};
 
   void move_superdroplet(const ThermoState &state,
                          Superdrop &superdrop) const
