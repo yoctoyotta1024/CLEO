@@ -30,8 +30,23 @@ timestep = 0 */
   if ((couplstep < condsubstep) |
       (couplstep < collsubstep))
   {
-    const std::string err("an sdm substep is larger than the coupling"
-                          " step - are you sure you want this?");
+    const std::string err("an sdm substep is larger than the coupling step"
+                          " - it's possible but are you sure you want this?");
+    throw std::invalid_argument(err);
+  }
+
+  if ((motionstep < condsubstep) |
+      (motionstep < collsubstep))
+  {
+    const std::string err("an sdm substep is larger than the motion step"
+                          " - it's possible but are you sure you want this?");
+    throw std::invalid_argument(err);
+  }
+
+  if (couplstep < motionstep)
+  {
+    const std::string err("coupling step is smaller than sdm motion step"
+                          " - it's possible but are you sure you want this?");
     throw std::invalid_argument(err);
   }
 }
