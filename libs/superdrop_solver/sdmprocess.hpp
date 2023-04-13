@@ -28,7 +28,9 @@ concept StepFunc = requires(F f, int currenttimestep,
 that have the same signature as the "run_step"
 function (see below in SdmProcess) */
 {
-  {f(currenttimestep, span4SDsinGBx, state, gen)};
+  {
+    f(currenttimestep, span4SDsinGBx, state, gen)
+  };
 };
 
 template <typename P, typename... Args>
@@ -46,7 +48,9 @@ and "next_step" and have a "run_step" function */
   {
     p.on_step(currenttimestep)
     } -> std::convertible_to<bool>;
-  {p.run_step(currenttimestep, span4SDsinGBx, state, gen)};
+  {
+    p.run_step(currenttimestep, span4SDsinGBx, state, gen)
+  };
 };
 
 template <SdmProcess A, SdmProcess B>
