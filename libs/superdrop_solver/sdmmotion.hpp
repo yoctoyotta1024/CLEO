@@ -27,9 +27,9 @@ which takes a ThermoState and Superdrop as arguments */
   };
 };
 
-struct NullMovement
+struct NullMotion 
 {
-  NullMovement(){};
+  NullMotion(){};
 
   void move_superdroplet(const ThermoState &state,
                          Superdrop &superdrop) const {}

@@ -34,15 +34,15 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
                            const Maps4GridBoxes &mdlmaps);
 int visualise_tsteps();
 
-inline int exchange_or_outstep(const int t_out, const int outstep,
-                               const int xchangestep)
-/* given current time, t_out, work out which event (exchange or output)
+inline int nextt_coupl_or_motion(const int t_sdm, const int couplstep,
+                               const int motionstep)
+/* given current time, t_sdm, work out which event (motion or coupling)
 is next to occur and return the time of the sooner event */
 {
-  const int next_xchange = ((t_out / xchangestep) + 1) * xchangestep; // t of next xchange
-  const int next_out = ((t_out / outstep) + 1) * outstep;             // t of next output
+  const int next_motion = ((t_sdm / motionstep) + 1) * motionstep; // t of next xchange
+  const int next_coupl = ((t_sdm / couplstep) + 1) * couplstep;             // t of next output
 
-  return std::min(next_xchange, next_out);
+  return std::min(next_motion, next_coupl);
 }
 
 inline int next_step(int t, int step)
@@ -76,6 +76,9 @@ int main()
   print_nbourmaps(mdlmaps, dlc::COORD0);
   print_superdropcoords(gridboxes, mdlmaps);
  
+  
+  const SdmMotion auto sdmmotion = NullMotion();
+
   move_superdrops_in_domain(mdlmaps, sdmmotion,
                             SDsInGBxs, gridboxes);
   print_superdropcoords(gridboxes, mdlmaps);
@@ -202,32 +205,39 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
 int visualise_tsteps()
 {
   const int t_end = 10;
-  const int couplstep = 3; //outstep
-  const int motionstep = 4;
-  const int sdmstep = 4;
-  int t_out = 0; // time that is incremented by length 'outstep' between coupling communication
+  const int couplstep = 2; //outstep
+  const int motionstep = 5;
+  const int sdmstep = 5;
+  int t_mdl = 0; // time that is incremented by length 'outstep' between coupling communication
   
-  while (t_out <= t_end)
+  while (t_mdl <= t_end)
   {
     std::cout << "run_sdmstep\n";
-    int t = t_out;
-    const int nextt = exchange_or_outstep(t, couplstep, motionstep);
-
-    for (int subt = t; subt < nextt; subt=next_step(subt, sdmstep))
+    int t_sdm = t_mdl;
+    while (t_sdm < t_mdl + couplstep)
     {
-      std::cout << "---> process step\n";
-    }
+      const int nextt = nextt_coupl_or_motion(t_sdm, couplstep, motionstep);
 
-    if (nextt % motionstep == 0)
-    {
-      std::cout << "--> motion step\n";
+      for (int subt = t_sdm; subt < nextt; subt=next_step(subt, sdmstep))
+      {
+        if (subt % sdmstep == 0)
+        {
+          std::cout << subt << " ---> process step\n";
+        }
+      }
+
+      if (t_sdm % motionstep == 0)
+      {
+        std::cout << t_sdm <<  " --> motion step\n";
+      }
+
+      t_sdm += nextt;
     }
 
     std::cout << "run_driverstep\n";
-    std::cout << "-> couple step\n";
+    std::cout << t_mdl << " -> couple step\n";
 
-
-    t_out += couplstep;
+    t_mdl += couplstep;
   }
 
 

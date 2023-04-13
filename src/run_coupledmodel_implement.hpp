@@ -84,7 +84,7 @@ std::vector<ThermoState> set_thermodynamics_from_cvodesolver(std::vector<GridBox
 these to set ThermoState of each gridbox. Return vector
 containing all those Thermostates */
 
-int proceed_tonext_coupledstep(int t_out, const int outstep,
+int proceed_tonext_coupledstep(int t_mdl, const int couplstep,
                                const bool doCouple,
                                const std::vector<ThermoState> &previousstates,
                                std::vector<GridBox> &gridboxes,
@@ -114,15 +114,15 @@ thermodyanics ODE solver (cvode) */
   state.qcond = cvode.get_qcond(ii);
 }
 
-inline int exchange_or_outstep(const int t_out, const int outstep,
-                               const int xchangestep)
-/* given current time, t_out, work out which event (exchange or output)
+inline int nextt_coupl_or_motion(const int t_sdm, const int couplstep,
+                               const int motionstep)
+/* given current time, t_sdm, work out which event (motion or coupling)
 is next to occur and return the time of the sooner event */
 {
-  const int next_xchange = ((t_out / xchangestep) + 1) * xchangestep; // t of next xchange
-  const int next_out = ((t_out / outstep) + 1) * outstep;             // t of next output
+  const int next_motion = ((t_sdm / motionstep) + 1) * motionstep; // t of next xchange
+  const int next_coupl = ((t_sdm / couplstep) + 1) * couplstep;             // t of next output
 
-  return std::min(next_xchange, next_out);
+  return std::min(next_motion, next_coupl);
 }
 
 inline void exchanges_between_gridboxes(const Maps4GridBoxes &mdlmaps,
@@ -149,32 +149,30 @@ of current thermodynamic states (for later use in SDM) */
   return currentstates;
 }
 
-void run_sdmstep(const int t_out, const int outstep,
-                 const int xchangestep,
+void run_sdmstep(const int t_mdl, const int couplstep,
+                 const int motionstep,
                  const SdmProcess auto &sdmprocess,
                  const SdmMotion auto &sdmmotion,
                  const Maps4GridBoxes &mdlmaps,
                  std::mt19937 &gen,
                  std::vector<GridBox> &gridboxes,
                  std::vector<SuperdropWithGbxindex> &SDsInGBxs)
-/* run SDM for each gridbox from time t_out to t_out+outstep
+/* run SDM for each gridbox from time t_mdl to t_mdl+couplstep
 with subtimestepping such that each output timestep (outstep)
 can be subdivided to allow the exchange of superdroplets between
 gridboxes and the SDM process to occur at smaller time intervals */
 {
-
-  int t = t_out;
-
-  while (t < t_out + outstep)
+  int t_sdm = t_mdl; // model time of SDM is incremented by nextt_sdm until >= t_mdl+couplstep
+  while (t_sdm < t_mdl + couplstep)
   {
     /* nextt is t of next exchange and/or t of next outstep */
-    const int nextt = exchange_or_outstep(t, outstep, xchangestep);
+    const int nextt_sdm = nextt_coupl_or_motion(t_sdm, couplstep, motionstep);
 
-    /* run SDM process for all gridboxes from t_out to nextt
-    using SDM subt timestepping routine */
+    /* run SDM process for all gridboxes from t_sdm to nextt_sdm
+    using sdmprocess subttimestepping routine */
     for (auto &gbx : gridboxes)
     {
-      for (int subt = t; subt < nextt;
+      for (int subt = t_sdm; subt < nextt_sdm;
            subt = sdmprocess.next_step(subt))
       {
         sdmprocess.run_step(subt, gbx.span4SDsinGBx,
@@ -183,13 +181,13 @@ gridboxes and the SDM process to occur at smaller time intervals */
     }
 
     /* do exchange if timestep is on exchange event */
-    if (nextt % xchangestep == 0)
+    if (t_sdm % motionstep == 0)
     {
       exchanges_between_gridboxes(mdlmaps, sdmmotion,
                                   SDsInGBxs, gridboxes);
     }
 
-    t = nextt;
+    t_sdm = nextt_sdm;
   }
 }
 

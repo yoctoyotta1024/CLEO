@@ -50,7 +50,7 @@ combined process of those two individual processes */
 {
   /* create process for condensation in SDM including Implicit
   Euler Method for solving condensation ODEs */
-  const auto condensation_process = CondensationProcess(mdlsteps.condstep,
+  const auto condensation_process = CondensationProcess(mdlsteps.condsubstep,
                                                         &timestep2dimlesstime,
                                                         config.doCouple,
                                                         config.cond_maxiters,
@@ -60,15 +60,15 @@ combined process of those two individual processes */
   /* create process for collision-coalescene in SDM */
   const auto probs = GolovinProb(dlc::R0);
   // const auto probs = LongHydrodynamicProb();
-  const auto collision_process = CollisionsProcess(mdlsteps.collstep,
+  const auto collision_process = CollisionsProcess(mdlsteps.collsubstep,
                                                    &timestep2realtime,
                                                    probs);
 
   /* create process for sedimentation in SDM */
-  const auto sedimentation_process = SedimentationProcess(mdlsteps.sedistep,
+  const auto sedimentation_process = SedimentationProcess(mdlsteps.motionstep,
                                                           &timestep2dimlesstime,
                                                           SimmelTerminalVelocity{});
-  // const auto sedimentation_process = SedimentationProcess(mdlsteps.sedistep,
+  // const auto sedimentation_process = SedimentationProcess(mdlsteps.motionstep,
   //                                                         RogersYauTerminalVelocity{});
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */

@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
 
   /* object for time-stepping parameters of coupled model */
   const ModelTimesteps mdlsteps(config.CONDTSTEP, config.COLLTSTEP,
-                           config.MOTIONTSTEP, config.COUPLTSTEP,
-                           config.T_END);
+                                config.MOTIONTSTEP, config.COUPLTSTEP,
+                                config.T_END);
 
   /* create map from gridbox index to its coordinate boundaries */
   const Maps4GridBoxes mdlmaps(config.SDnspace, config.grid_filename);
@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
                                         timezarr, gbxzarr, nsuperszarr,
                                         sdmoments);
 
-  const double motiontstep = timestep2dimlesstime(mdlsteps.xchangestep);
-  const SdmMotion auto sdmmotion = MoveWithSedimentation(motiontstep,
+  const double dimlessmotiontstep = timestep2dimlesstime(mdlsteps.motionstep);
+  const SdmMotion auto sdmmotion = MoveWithSedimentation(dimlessmotiontstep,
                                                          SimmelTerminalVelocity{});
                                                          
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */

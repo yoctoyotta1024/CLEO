@@ -78,8 +78,8 @@ std::mt19937 prepare_coupledmodel(const ModelTimesteps &mdlsteps, CvodeThermoSol
 return a random number generator. Call funciton to set superdroplet radii
 to equilibrium wet radius if wetradiiinit is true. */
 {
-  cvode.print_init_ODEdata(timestep2dimlesstime(mdlsteps.outstep),
-                           timestep2dimlesstime(mdlsteps.tend));
+  cvode.print_init_ODEdata(timestep2dimlesstime(mdlsteps.couplstep),
+                           timestep2dimlesstime(mdlsteps.t_end));
 
   for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
   {
@@ -110,7 +110,7 @@ containing all those Thermostates */
   return currentstates;
 }
 
-int proceed_tonext_coupledstep(int t_out, const int outstep,
+int proceed_tonext_coupledstep(int t_mdl, const int couplstep,
                                const bool doCouple,
                                const std::vector<ThermoState> &previousstates,
                                std::vector<GridBox> &gridboxes,
@@ -125,7 +125,7 @@ changes in thermodynamics due to SDM microphysics to thermodynamics solver
     thermodynamic_changes_to_cvodesolver(previousstates, gridboxes, cvode);
   }
 
-  return t_out += outstep;
+  return t_mdl += couplstep;
 }
 
 void thermodynamic_changes_to_cvodesolver(const std::vector<ThermoState> &previousstates,

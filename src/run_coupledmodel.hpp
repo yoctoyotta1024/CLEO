@@ -59,22 +59,23 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
 2) run SDM step (independent) 3) run CVODE step (independent)
 4) proceed to next step (coupled) */
 {
-  int t_out = 0; // time that is incremented by length 'outstep' between coupling communication
-  while (t_out <= mdlsteps.tend)
+  int t_mdl = 0; // model time is incremented by proceed_tonext_coupledstep 
+
+  while (t_mdl <= mdlsteps.t_end)
   {
     /* begin coupled step */
     const std::vector<ThermoState> previousstates = start_coupledstep(observer,
                                                                       gridboxes,
                                                                       cvode);
     /* advance SDM by outstep (parallel to CVODE section) */
-    run_sdmstep(t_out, mdlsteps.outstep, mdlsteps.xchangestep,
+    run_sdmstep(t_mdl, mdlsteps.couplstep, mdlsteps.motionstep,
                 sdmprocess, sdmmotion, mdlmaps, gen, gridboxes, SDsInGBxs);
 
     /* advance CVODE solver by outstep (parallel to SDM) */
-    cvode.run_cvodestep(timestep2dimlesstime(t_out + mdlsteps.outstep));
+    cvode.run_cvodestep(timestep2dimlesstime(t_mdl + mdlsteps.couplstep));
 
     /* prepare for next coupled step */
-    t_out = proceed_tonext_coupledstep(t_out, mdlsteps.outstep, doCouple,
+    t_mdl = proceed_tonext_coupledstep(t_mdl, mdlsteps.couplstep, doCouple,
                                        previousstates, gridboxes, cvode);
   }
 }
