@@ -30,16 +30,18 @@ timestep = 0 */
   if ((couplstep < condsubstep) |
       (couplstep < collsubstep))
   {
-    const std::string err("an sdm substep is larger than the coupling step"
-                          " - it's possible but are you sure you want this?");
+    const std::string err("invalid sdm substepping: an sdm substep is larger"
+                          " than the coupling step. Coupled model timesteps"
+                          " may not necessarily monotonically increase.");
     throw std::invalid_argument(err);
   }
 
   if ((motionstep < condsubstep) |
       (motionstep < collsubstep))
   {
-    const std::string err("an sdm substep is larger than the motion step"
-                          " - it's possible but are you sure you want this?");
+    const std::string err("invalid sdm substepping: an sdm substep is larger"
+                          " than the motion step. SDM timesteps"
+                          " may not necessarily monotonically increase.");
     throw std::invalid_argument(err);
   }
 

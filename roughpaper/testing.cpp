@@ -202,39 +202,43 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
   std::cout << "\n-----------------------\n";
 }
 
+void run_sdmstep(const int t_mdl, const int couplstep,
+                 const int motionstep, const int sdmstep)
+{
+  int t_sdm = t_mdl;
+  while (t_sdm < t_mdl + couplstep)
+  {
+    const int nextt = nextt_coupl_or_motion(t_sdm, couplstep, motionstep);
+
+    for (int subt = t_sdm; subt < nextt; subt=next_step(subt, sdmstep))
+    {
+      if (subt % sdmstep == 0)
+      {
+        std::cout << subt << " ---> process step\n";
+      }
+    }
+
+    if (t_sdm % motionstep == 0)
+    {
+      std::cout << t_sdm <<  " --> motion step\n";
+    }
+
+    t_sdm += nextt;
+  }
+}
+
 int visualise_tsteps()
 {
   const int t_end = 10;
-  const int couplstep = 2; //outstep
-  const int motionstep = 5;
+  const int couplstep = 8; //outstep
+  const int motionstep = 6;
   const int sdmstep = 5;
   int t_mdl = 0; // time that is incremented by length 'outstep' between coupling communication
-  
+ 
   while (t_mdl <= t_end)
   {
-    std::cout << "run_sdmstep\n";
-    int t_sdm = t_mdl;
-    while (t_sdm < t_mdl + couplstep)
-    {
-      const int nextt = nextt_coupl_or_motion(t_sdm, couplstep, motionstep);
-
-      for (int subt = t_sdm; subt < nextt; subt=next_step(subt, sdmstep))
-      {
-        if (subt % sdmstep == 0)
-        {
-          std::cout << subt << " ---> process step\n";
-        }
-      }
-
-      if (t_sdm % motionstep == 0)
-      {
-        std::cout << t_sdm <<  " --> motion step\n";
-      }
-
-      t_sdm += nextt;
-    }
-
-    std::cout << "run_driverstep\n";
+    run_sdmstep(t_mdl, couplstep, motionstep, sdmstep);
+    std::cout << t_mdl << " -> run driver step\n";
     std::cout << t_mdl << " -> couple step\n";
 
     t_mdl += couplstep;
