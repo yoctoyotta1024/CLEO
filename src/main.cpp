@@ -51,9 +51,10 @@ int main(int argc, char *argv[])
                                         timezarr, gbxzarr, nsuperszarr,
                                         sdmoments);
 
-
-  const SdmMotion sdmmotion;
-
+  const double motiontstep = timestep2dimlesstime(mdlsteps.xchangestep);
+  const SdmMotion auto sdmmotion = MoveWithSedimentation(motiontstep,
+                                                         SimmelTerminalVelocity{});
+                                                         
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
   run_cvodeSDM_coupledmodel(config, mdlsteps, mdlmaps,
                             sdmprocess, sdmmotion, observer);

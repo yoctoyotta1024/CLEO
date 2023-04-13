@@ -43,7 +43,7 @@ void run_cvodeSDM_coupledmodel(const Config &config,
                                const Timesteps &mdlsteps,
                                const Maps4GridBoxes &mdlmaps,
                                const SdmProcess auto &sdmprocess,
-                               const SdmMotion &sdmmotion,
+                               const SdmMotion auto &sdmmotion,
                                const Observer auto &observer);
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
@@ -51,7 +51,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
 void timestep_coupledmodel(const Timesteps &mdlsteps,
                            const Maps4GridBoxes &mdlmaps,
                            const SdmProcess auto &sdmprocess,
-                           const SdmMotion &sdmmotion,
+                           const SdmMotion auto &sdmmotion,
                            const Observer auto &observer,
                            const bool doCouple,
                            CvodeThermoSolver &cvode,
@@ -126,7 +126,7 @@ is next to occur and return the time of the sooner event */
 }
 
 inline void exchanges_between_gridboxes(const Maps4GridBoxes &mdlmaps,
-                                        const SdmMotion &sdmmotion,
+                                        const SdmMotion auto &sdmmotion,
                                         std::vector<SuperdropWithGbxindex> &SDsInGBxs,
                                         std::vector<GridBox> &gridboxes)
 {
@@ -152,7 +152,7 @@ of current thermodynamic states (for later use in SDM) */
 void run_sdmstep(const int t_out, const int outstep,
                  const int xchangestep,
                  const SdmProcess auto &sdmprocess,
-                 const SdmMotion &sdmmotion,
+                 const SdmMotion auto &sdmmotion,
                  const Maps4GridBoxes &mdlmaps,
                  std::mt19937 &gen,
                  std::vector<GridBox> &gridboxes,
