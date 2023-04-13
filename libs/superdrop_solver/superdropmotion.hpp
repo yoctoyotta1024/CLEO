@@ -2,7 +2,7 @@
 // File: "superdropmotion.hpp"
 /* Header file for functions related to
 moving superdroplets (updating their
-coordinates) */
+coordinates according to equations of motion) */
 
 #ifndef SDMMOTION_HPP
 #define SDMMOTION_HPP
@@ -16,9 +16,9 @@ coordinates) */
 #include "./thermostate.hpp"
 
 template <typename P>
-concept SdmMotion = requires(P p, const ThermoState &state,
-                             Superdrop &superdrop)
-/* concept SdmMotion is all types that meet requirements
+concept SuperdropMotion = requires(P p, const ThermoState &state,
+                                   Superdrop &superdrop)
+/* concept SuperdropMotion is all types that meet requirements
 (constraints) of void function called "move_superdroplet"
 which takes a ThermoState and Superdrop as arguments */
 {

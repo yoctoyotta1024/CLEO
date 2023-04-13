@@ -2,7 +2,7 @@
 // File: "superdropmotion.hpp"
 /* Functions involved in
 moving superdroplets (updating their
-coordinates) */
+coordinates according to equations of motion) */
 
 #include "./superdropmotion.hpp"
 
