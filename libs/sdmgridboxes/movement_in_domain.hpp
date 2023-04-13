@@ -16,7 +16,7 @@ coords and moving them between gridboxes) */
 #include "./maps4gridboxes.hpp"
 #include "./superdropwithgbxindex.hpp"
 #include "superdrop_solver/superdrop.hpp"
-#include "superdrop_solver/sdmmotion.hpp"
+#include "superdrop_solver/superdropmotion.hpp"
 
 unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &gbxmaps,
                                        const unsigned int gbxindex,

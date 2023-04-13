@@ -1,8 +1,8 @@
 // Author: Clara Bayley
-// File: "sdmmotion.hpp"
+// File: "superdropmotion.hpp"
 /* Functions involved in
 moving superdroplets (updating their
 coordinates) */
 
-#include "./sdmmotion.hpp"
+#include "./superdropmotion.hpp"
 
