@@ -13,8 +13,8 @@ struct SdmMotion
 {
   SdmMotion(){};
 
-  void move_superdroplet(const double w, const double u,
-                         const double v, Superdrop &superdrop) const;
+  void move_superdroplet(const ThermoState &state,
+                         Superdrop &superdrop) const;
 };
 
 #endif // SDMMOTION_HPP
