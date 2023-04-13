@@ -36,8 +36,8 @@ inline void set_gridboxes_superdropletspan(std::vector<GridBox> &gridboxes,
   for (auto &gbx : gridboxes)
   {
     gbx.set_span(SDsInGBxs);
-    
-    //gbx.iscorrect_span_for_gbxindex(mdlmaps);
+
+    // gbx.iscorrect_span_for_gbxindex(mdlmaps);
   }
 }
 
@@ -52,36 +52,37 @@ updating spans4SDsInGbx for each gridbox */
 }
 
 template <typename BackwardIdxFunc, typename ForwardIdxFunc>
-unsigned int changeindex_ifcoord_outofbounds(const unsigned int index,
-                                      const std::pair<double, double> bounds,
-                                      const double coord,
-                                      const BackwardIdxFunc backwardsidx,
-                                      const ForwardIdxFunc forwardsidx)
+unsigned int changeindex_ifcoord_outofbounds(const Maps4GridBoxes &mdlmaps,
+                                             const BackwardIdxFunc backwardsidx,
+                                             const ForwardIdxFunc forwardsidx,
+                                             const std::pair<double, double> bounds,
+                                             const double coord,
+                                             const unsigned int sd_gbxindex)
 /* Given bounds = {lowerbound, upperbound} of a gridbox with
 index 'gbxindex', function determines if coord is within bounds
 of that gridbox. (Note: lower bound inclusive, upper bound exclusive).
-If coord not within bounds backwardsidx or forwardsidx function, 
+If coord not within bounds backwardsidx or forwardsidx function,
 as appropriate, is used to return a neighbouring gridbox's index.
 If coord lies within bounds, gbxindex is returned. If index is
 already out of domain (ie. value is the maximum unsigned int),
 return out of domain index */
 {
-  if (index == (unsigned int)-1)
+  if (sd_gbxindex == (unsigned int)-1)
   {
-    return index; // out of domain index
+    return sd_gbxindex; // sd_gbxindex is out of domain
   }
 
   if (coord < bounds.first) // lowerbound
   {
-    return backwardsidx(index);
+    return backwardsidx(mdlmaps, sd_gbxindex);
   }
   else if (coord >= bounds.second) // upperbound
   {
-    return forwardsidx(index);
+    return forwardsidx(mdlmaps, sd_gbxindex);
   }
   else
   {
-    return index; // no change to index if coord within bounds
+    return sd_gbxindex; // no change to index if coord within bounds
   }
 }
 
