@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
                                                          SimmelTerminalVelocity{});
                                                          
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
-  run_cvodeSDM_coupledmodel(config, mdlsteps, gbxmaps,
-                            sdmprocess, sdmmotion, observer);
+  run_cvodeSDM_coupledmodel(config, gbxmaps, sdmprocess, sdmmotion,
+                            observer, mdlsteps.t_end, mdlsteps.couplstep);
 
   return 0;
 }

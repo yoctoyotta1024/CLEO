@@ -11,11 +11,11 @@ of this header file that's been moved into a new file for clarity */
 #include "run_coupledmodel_implement.hpp"
 
 void run_cvodeSDM_coupledmodel(const Config &config,
-                               const ModelTimesteps &mdlsteps,
                                const Maps4GridBoxes &gbxmaps,
                                const SdmProcess auto &sdmprocess,
                                const SdmMotion auto &sdmmotion,
-                               const Observer auto &observer)
+                               const Observer auto &observer,
+                               const int t_end, const int couplstep)
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 {
@@ -35,21 +35,23 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
 
   /* prepare, launch, and end coupled model */
-  auto gen = prepare_coupledmodel(mdlsteps, cvode, gridboxes, config.wetradiiinit);
+  auto gen = prepare_coupledmodel(cvode, gridboxes, config.wetradiiinit,
+                                  t_end, couplstep);
 
-  timestep_coupledmodel(mdlsteps, gbxmaps, sdmprocess, sdmmotion,
-                        observer, config.doCouple,
+  timestep_coupledmodel(gbxmaps, sdmprocess, sdmmotion, observer,
+                        config.doCouple, t_end, couplstep,
                         cvode, gen, gridboxes, SDsInGBxs);
 
   printfinish_coupledmodel();
 }
 
-void timestep_coupledmodel(const ModelTimesteps &mdlsteps,
-                           const Maps4GridBoxes &gbxmaps,
+void timestep_coupledmodel(const Maps4GridBoxes &gbxmaps,
                            const SdmProcess auto &sdmprocess,
                            const SdmMotion auto &sdmmotion,
                            const Observer auto &observer,
                            const bool doCouple,
+                           const int t_end,
+                           const int couplstep,
                            CvodeThermoSolver &cvode,
                            std::mt19937 &gen,
                            std::vector<GridBox> &gridboxes,
@@ -61,21 +63,21 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
 {
   int t_mdl = 0; // model time is incremented by proceed_tonext_coupledstep 
 
-  while (t_mdl <= mdlsteps.t_end)
+  while (t_mdl <= t_end)
   {
     /* begin coupled step */
     const std::vector<ThermoState> previousstates = start_coupledstep(observer,
                                                                       gridboxes,
                                                                       cvode);
     /* advance SDM by outstep (parallel to CVODE section) */
-    run_sdmstep(t_mdl, mdlsteps.couplstep, mdlsteps.motionstep,
-                sdmprocess, sdmmotion, gbxmaps, gen, gridboxes, SDsInGBxs);
+    run_sdmstep(t_mdl, couplstep, sdmprocess, sdmmotion,
+                gbxmaps, gen, gridboxes, SDsInGBxs);
 
     /* advance CVODE solver by outstep (parallel to SDM) */
-    cvode.run_cvodestep(timestep2dimlesstime(t_mdl + mdlsteps.couplstep));
+    cvode.run_cvodestep(timestep2dimlesstime(t_mdl + couplstep));
 
     /* prepare for next coupled step */
-    t_mdl = proceed_tonext_coupledstep(t_mdl, mdlsteps.couplstep, doCouple,
+    t_mdl = proceed_tonext_coupledstep(t_mdl, couplstep, doCouple,
                                        previousstates, gridboxes, cvode);
   }
 }

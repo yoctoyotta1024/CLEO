@@ -71,15 +71,17 @@ equilibrium radius at relh = maxrelh = 0.95 */
   }
 }
 
-std::mt19937 prepare_coupledmodel(const ModelTimesteps &mdlsteps, CvodeThermoSolver &cvode,
+std::mt19937 prepare_coupledmodel(CvodeThermoSolver &cvode,
                                   std::vector<GridBox> &gridboxes,
-                                  const bool wetradiiinit)
+                                  const bool wetradiiinit,
+                                  const int t_end,
+                                  const int couplstep)
 /* print some details about the cvode thermodynamics solver setup and
 return a random number generator. Call funciton to set superdroplet radii
 to equilibrium wet radius if wetradiiinit is true. */
 {
-  cvode.print_init_ODEdata(timestep2dimlesstime(mdlsteps.couplstep),
-                           timestep2dimlesstime(mdlsteps.t_end));
+  cvode.print_init_ODEdata(timestep2dimlesstime(couplstep),
+                           timestep2dimlesstime(t_end));
 
   for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
   {
