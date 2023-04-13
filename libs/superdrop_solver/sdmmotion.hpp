@@ -27,6 +27,14 @@ which takes a ThermoState and Superdrop as arguments */
   };
 };
 
+struct NullMovement
+{
+  NullMovement(){};
+
+  void move_superdroplet(const ThermoState &state,
+                         Superdrop &superdrop) const {}
+};
+
 template <VelocityFormula TerminalVelocity>
 struct MoveWithSedimentation
 {
