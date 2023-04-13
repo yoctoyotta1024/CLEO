@@ -12,12 +12,15 @@ and Mahrt, 1st edition. */
 
 #include <random>
 #include <span>
+#include <functional>
+#include <concepts>
 
 #include "../claras_SDconstants.hpp"
 #include "./thermodynamic_equations.hpp"
 #include "./impliciteuler.hpp"
 #include "./thermostate.hpp"
 #include "./superdrop.hpp"
+#include "./sdmprocess.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -93,5 +96,20 @@ public:
     condensation_onto_superdroplets(span4SDsinGBx, state);
   }
 };
+
+SdmProcess auto CondensationProcess(const int interval,
+                                    std::function<double(int)> int2time,
+                                    const bool doCouple,
+                                    const double maxiters,
+                                    const double rtol,
+                                    const double atol)
+/* constructs SdmProcess for condensation with constant timestep 'interval'
+given a function to convert the interval to a (dimensionless) time
+and the arguments required to construct the condensation method */
+{
+  const double dimlesststep = int2time(interval);
+  return ConstTstepProcess{interval, CondensationMethod(doCouple, dimlesststep,
+                                                        maxiters, rtol, atol)};
+}
 
 #endif // CONDENSATIONMETHOD_HPP

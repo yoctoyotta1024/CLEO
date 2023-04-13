@@ -15,8 +15,6 @@ collision-coalescence (see ConstTstepProcess struct) */
 
 #include "./superdrop.hpp"
 #include "./thermostate.hpp"
-#include "./collisionsmethod.hpp"
-#include "./condensationmethod.hpp"
 
 template <typename F>
 concept StepFunc = requires(F f, int currenttimestep,

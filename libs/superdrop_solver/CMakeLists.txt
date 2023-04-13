@@ -18,8 +18,8 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 # add executables to library
 set(SOURCES 
   "thermodynamic_equations.cpp"
-  "condensationmethod.cpp"
   "impliciteuler.cpp"
+  "condensationmethod.cpp"
   "sdmmotion.cpp"
   "superdrop.cpp"
   )

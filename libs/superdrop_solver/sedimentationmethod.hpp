@@ -9,6 +9,7 @@ sedimentation of superdroplets */
 #include <span>
 #include <random>
 #include <functional>
+#include <concepts>
 
 #include "./terminalvelocity.hpp"
 #include "./superdrop.hpp"
@@ -61,13 +62,13 @@ public:
 
 template <VelocityFormula TerminalVelocity>
 SdmProcess auto SedimentationProcess(const int interval,
-                                     std::function<double(int)> interval2time,
+                                     std::function<double(int)> int2time,
                                      TerminalVelocity v)
-/* constructs SdmProcess with constant timestep 'interval'
+/* constructs SdmProcess for sedimentation with constant timestep 'interval'
 given a function to convert the interval to a (dimensionless) time
 and a terminal velocity formula */
 {
-  const double dimlesststep = interval2time(interval);
+  const double dimlesststep = int2time(interval);
   return ConstTstepProcess{interval, SedimentationMethod(dimlesststep, v)};
 }
 

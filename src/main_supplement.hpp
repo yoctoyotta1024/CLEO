@@ -42,23 +42,6 @@ SDM process and observers to use in main.cpp */
 
 namespace dlc = dimless_constants;
 
-template <PairProbability PairCoalescenceProbability>
-SdmProcess auto CollisionsProcess(const int interval,
-                                  PairCoalescenceProbability p)
-{
-  const double realtstep = timestep2realtime(interval);
-  return ConstTstepProcess{interval, CollisionsMethod(realtstep, p)};
-}
-
-SdmProcess auto CondensationProcess(const int interval, const bool doCouple,
-                                    const double maxiters, const double rtol,
-                                    const double atol)
-{
-  const double dimlesststep = timestep2dimlesstime(interval);
-  return ConstTstepProcess{interval, CondensationMethod(doCouple, dimlesststep,
-                                                        maxiters, rtol, atol)};
-}
-
 SdmProcess auto create_sdmprocess(const Config &config,
                                   const Timesteps &mdlsteps)
 /* return an SdmProcess type from an amalgamation of other SdmProcess types.
@@ -68,6 +51,7 @@ combined process of those two individual processes */
   /* create process for condensation in SDM including Implicit
   Euler Method for solving condensation ODEs */
   const auto condensation_process = CondensationProcess(mdlsteps.condstep,
+                                                        &timestep2dimlesstime,
                                                         config.doCouple,
                                                         config.cond_maxiters,
                                                         config.cond_rtol,
@@ -76,7 +60,9 @@ combined process of those two individual processes */
   /* create process for collision-coalescene in SDM */
   const auto probs = GolovinProb(dlc::R0);
   // const auto probs = LongHydrodynamicProb();
-  const auto collision_process = CollisionsProcess(mdlsteps.collstep, probs);
+  const auto collision_process = CollisionsProcess(mdlsteps.collstep,
+                                                   &timestep2realtime,
+                                                   probs);
 
   /* create process for sedimentation in SDM */
   const auto sedimentation_process = SedimentationProcess(mdlsteps.sedistep,

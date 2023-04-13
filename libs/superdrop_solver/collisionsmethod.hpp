@@ -14,11 +14,14 @@ collision events in superdroplet model */
 #include <stdexcept>
 #include <span>
 #include <cmath>
+#include <functional>
+#include <concepts>
 
 #include "../claras_SDconstants.hpp"
 #include "./superdrop.hpp"
 #include "./thermostate.hpp"
 #include "./coalescencekernel.hpp"
+#include "./sdmprocess.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -247,5 +250,14 @@ public:
     collide_superdroplets(span4SDsinGBx, gen, VOLUME);
   }
 };
+
+template <PairProbability PairCoalescenceProbability>
+SdmProcess auto CollisionsProcess(const int interval,
+                                  std::function<double(int)> int2time,
+                                  PairCoalescenceProbability p)
+{
+  const double realtstep = int2time(interval);
+  return ConstTstepProcess{interval, CollisionsMethod(realtstep, p)};
+}
 
 #endif // COLLISIONSMETHOD_HPP
