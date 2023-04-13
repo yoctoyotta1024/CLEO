@@ -1,11 +1,11 @@
 
 // Author: Clara Bayley
-// File: "movement_in_domain.cpp"
+// File: "movesuperdropsindomain.cpp"
 /* Implementation of functions related to
 moving superdroplets (both updating their
 coords and moving them between gridboxes) */
 
-#include "./movement_in_domain.hpp"
+#include "./movesuperdropsindomain.hpp"
 
 /* ----- function called internally ----- */
 unsigned int zdown(const Maps4GridBoxes &gbxmaps, const unsigned int index);
@@ -16,12 +16,13 @@ unsigned int yleft(const Maps4GridBoxes &gbxmaps, const unsigned int index);
 unsigned int yright(const Maps4GridBoxes &gbxmaps, const unsigned int index);
 /* -------------------------------------- */
 
-unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &gbxmaps,
-                                       const unsigned int gbxindex,
-                                       const std::pair<double, double> zbounds,
-                                       const std::pair<double, double> xbounds,
-                                       const std::pair<double, double> ybounds,
-                                       const Superdrop &superdrop)
+unsigned int MoveSuperdropsInDomain::update_superdrop_gbxindex(
+    const Maps4GridBoxes &gbxmaps,
+    const unsigned int gbxindex,
+    const std::pair<double, double> zbounds,
+    const std::pair<double, double> xbounds,
+    const std::pair<double, double> ybounds,
+    const Superdrop &superdrop) const
 /* For each direction (z, then x, then y), gbxmaps's forward and backward
 get_neighbour functions are passed into changeindex_ifcoord_outofbounds
 along with superdroplet's coord and the gridbox bounds for that direction.
@@ -31,16 +32,22 @@ function. After algorithm for z, then x, then y directions are complete,
 resultant sd_gbxindex is returned. */
 {
   unsigned int sd_gbxindex(gbxindex);
-  sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps, zdown, zup,
-                                                zbounds, superdrop.coord3,
+  sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps,
+                                                zdown, zup,
+                                                zbounds,
+                                                superdrop.coord3,
                                                 sd_gbxindex);
 
-  sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps, xbehind, xinfront,
-                                                xbounds, superdrop.coord1,
+  sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps,
+                                                xbehind, xinfront,
+                                                xbounds,
+                                                superdrop.coord1,
                                                 sd_gbxindex);
 
-  sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps, yleft, yright,
-                                                ybounds, superdrop.coord2,
+  sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps,
+                                                yleft, yright,
+                                                ybounds,
+                                                superdrop.coord2,
                                                 sd_gbxindex);
 
   return sd_gbxindex;

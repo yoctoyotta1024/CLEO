@@ -23,24 +23,25 @@ concept SuperdropMotion = requires(P p, const ThermoState &state,
 which takes a ThermoState and Superdrop as arguments */
 {
   {
-    p.move_superdroplet(state, superdrop)
+    p(state, superdrop)
   };
 };
 
-struct NullMotion 
+struct NullMotion
 {
   NullMotion(){};
 
-  void move_superdroplet(const ThermoState &state,
-                         Superdrop &superdrop) const {}
+  void operator()(const ThermoState &state,
+                Superdrop &superdrop) const {}
 };
 
 template <VelocityFormula TerminalVelocity>
-struct MoveWithSedimentation
+class MoveWithSedimentation
 {
-  const double delt; //dimensionless delta time durign which motion occurs
+private:
+  const double delt;                  // dimensionless delta time durign which motion occurs
   TerminalVelocity terminal_velocity; // returns terminal velocity given a superdroplet
-  
+
   MoveWithSedimentation(const double delt, TerminalVelocity v)
       : delt(delt), terminal_velocity(v){};
 
@@ -50,6 +51,13 @@ struct MoveWithSedimentation
     // const double vel3 = state.wvel; // w component of wind velocity (z=3)
     // const double vel1 = state.uvel; // u component of wind velocity (x=1)
     // const double vel2 = state.vvel; // v component of wind velocity (y=2)
+  }
+
+public:
+  void operator()(const ThermoState &state,
+                Superdrop &superdrop) const
+  {
+    move_superdroplet(state, superdrop);
   }
 };
 

@@ -22,7 +22,7 @@ could compile with e.g.
 #include "../libs/initialisation/read_initsuperdrops.hpp"
 #include "../libs/sdmgridboxes/maps4gridboxes.hpp"
 #include "../libs/sdmgridboxes/gridbox.hpp"
-#include "../libs/sdmgridboxes/movement_in_domain.hpp"
+#include "../libs/sdmgridboxes/movesuperdropsindomain.hpp"
 #include "../libs/sdmgridboxes/superdropwithgbxindex.hpp"
 #include "../libs/superdrop_solver/superdropmotion.hpp"
 
@@ -58,12 +58,11 @@ int main()
   print_gridboxmaps(gbxmaps, dlc::COORD0);
   print_nbourmaps(gbxmaps, dlc::COORD0);
   print_superdropcoords(gridboxes, gbxmaps);
- 
-  
-  const SdmMotion auto sdmmotion = NullMotion();
 
-  move_superdrops_in_domain(gbxmaps, sdmmotion,
-                            SDsInGBxs, gridboxes);
+  const SuperdropMotion auto sdmmotion = NullMotion();
+  const MoveSuperdropsInDomain move(sdmmotion);
+
+  move.move_superdrops_in_domain(gbxmaps, SDsInGBxs, gridboxes);
   print_superdropcoords(gridboxes, gbxmaps);
 
   return 0;
