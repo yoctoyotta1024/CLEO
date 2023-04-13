@@ -11,7 +11,6 @@ coords and moving them between gridboxes) */
 #include <map>
 #include <utility>
 #include <stdexcept>
-#include <functional>
 
 #include "./gridbox.hpp"
 #include "./maps4gridboxes.hpp"

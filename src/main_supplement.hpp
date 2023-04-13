@@ -59,13 +59,6 @@ SdmProcess auto CondensationProcess(const int interval, const bool doCouple,
                                                         maxiters, rtol, atol)};
 }
 
-template <VelocityFormula TerminalVelocity>
-SdmProcess auto SedimentationProcess(const int interval, TerminalVelocity v)
-{
-  const double dimlesststep = timestep2dimlesstime(interval);
-  return ConstTstepProcess{interval, SedimentationMethod(dimlesststep, v)};
-}
-
 SdmProcess auto create_sdmprocess(const Config &config,
                                   const Timesteps &mdlsteps)
 /* return an SdmProcess type from an amalgamation of other SdmProcess types.
@@ -87,6 +80,7 @@ combined process of those two individual processes */
 
   /* create process for sedimentation in SDM */
   const auto sedimentation_process = SedimentationProcess(mdlsteps.sedistep,
+                                                          &timestep2dimlesstime,
                                                           SimmelTerminalVelocity{});
   // const auto sedimentation_process = SedimentationProcess(mdlsteps.sedistep,
   //                                                         RogersYauTerminalVelocity{});
