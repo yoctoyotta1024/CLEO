@@ -6,9 +6,9 @@ a gridbox */
 #include "gridbox.hpp"
 
 GridBox::GridBox(const unsigned int ii,
-                 const Maps4GridBoxes &mdlmaps,
+                 const Maps4GridBoxes &gbxmaps,
                  std::vector<SuperdropWithGbxindex> &SDsInGBxs)
-    : gbxindex(ii), state(mdlmaps.get_volume(gbxindex))
+    : gbxindex(ii), state(gbxmaps.get_volume(gbxindex))
 /* Volume in Thermostate set using Map4GridBoxes
 idx2vol map (via get_volume function). Other ThermoState variables
 are default behaviour initialised. */
@@ -16,7 +16,7 @@ are default behaviour initialised. */
   print_statevolume();
   
   set_span(SDsInGBxs);
-  iscorrect_span_for_gbxindex(mdlmaps);
+  iscorrect_span_for_gbxindex(gbxmaps);
 }
 
 void GridBox::print_statevolume()
@@ -51,7 +51,7 @@ sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
   span4SDsinGBx = {low, up};  
 }
 
-void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &mdlmaps)
+void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps)
 {
   for (auto &SDinGBx : span4SDsinGBx)
   {
@@ -64,9 +64,9 @@ void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &mdlmaps)
                               " != "+std::to_string(gbxindex)+")";
       throw std::invalid_argument(err);
     }
-    iscoord_within_bounds(mdlmaps.get_bounds_z(gbxindex), SDinGBx.superdrop.coord3);
-    iscoord_within_bounds(mdlmaps.get_bounds_x(gbxindex), SDinGBx.superdrop.coord1);
-    iscoord_within_bounds(mdlmaps.get_bounds_y(gbxindex), SDinGBx.superdrop.coord2);
+    iscoord_within_bounds(gbxmaps.get_bounds_z(gbxindex), SDinGBx.superdrop.coord3);
+    iscoord_within_bounds(gbxmaps.get_bounds_x(gbxindex), SDinGBx.superdrop.coord1);
+    iscoord_within_bounds(gbxmaps.get_bounds_y(gbxindex), SDinGBx.superdrop.coord2);
   }
 }
 
@@ -86,18 +86,18 @@ void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
   }
 }
 
-std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &mdlmaps,
+std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &gbxmaps,
                                       std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* create domain as a vector of grid boxes such that each grid box
-is initialised with a labels from mdlmaps.gbxidxs, and a span of the
+is initialised with a labels from gbxmaps.gbxidxs, and a span of the
 superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
 { 
   sort_superdrops_via_gridboxindex(SDsInGBxs);
   
   std::vector<GridBox> gridboxes;
-  for (auto ii : mdlmaps.gbxidxs)
+  for (auto ii : gbxmaps.gbxidxs)
   {
-    gridboxes.push_back(GridBox(ii, mdlmaps, SDsInGBxs));
+    gridboxes.push_back(GridBox(ii, gbxmaps, SDsInGBxs));
   }
 
   return gridboxes;

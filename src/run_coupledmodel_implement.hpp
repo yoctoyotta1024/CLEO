@@ -41,7 +41,7 @@ namespace dlc = dimless_constants;
 /* ----------- implementation in run_coupledmodel.hpp ----------- */
 void run_cvodeSDM_coupledmodel(const Config &config,
                                const ModelTimesteps &mdlsteps,
-                               const Maps4GridBoxes &mdlmaps,
+                               const Maps4GridBoxes &gbxmaps,
                                const SdmProcess auto &sdmprocess,
                                const SdmMotion auto &sdmmotion,
                                const Observer auto &observer);
@@ -49,7 +49,7 @@ void run_cvodeSDM_coupledmodel(const Config &config,
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 
 void timestep_coupledmodel(const ModelTimesteps &mdlsteps,
-                           const Maps4GridBoxes &mdlmaps,
+                           const Maps4GridBoxes &gbxmaps,
                            const SdmProcess auto &sdmprocess,
                            const SdmMotion auto &sdmmotion,
                            const Observer auto &observer,
@@ -125,12 +125,12 @@ is next to occur and return the time of the sooner event */
   return std::min(next_motion, next_coupl);
 }
 
-inline void exchanges_between_gridboxes(const Maps4GridBoxes &mdlmaps,
+inline void exchanges_between_gridboxes(const Maps4GridBoxes &gbxmaps,
                                         const SdmMotion auto &sdmmotion,
                                         std::vector<SuperdropWithGbxindex> &SDsInGBxs,
                                         std::vector<GridBox> &gridboxes)
 {
-  move_superdrops_in_domain(mdlmaps, sdmmotion, SDsInGBxs, gridboxes);
+  move_superdrops_in_domain(gbxmaps, sdmmotion, SDsInGBxs, gridboxes);
 }
 
 std::vector<ThermoState> start_coupledstep(const Observer auto &observer,
@@ -153,7 +153,7 @@ void run_sdmstep(const int t_mdl, const int couplstep,
                  const int motionstep,
                  const SdmProcess auto &sdmprocess,
                  const SdmMotion auto &sdmmotion,
-                 const Maps4GridBoxes &mdlmaps,
+                 const Maps4GridBoxes &gbxmaps,
                  std::mt19937 &gen,
                  std::vector<GridBox> &gridboxes,
                  std::vector<SuperdropWithGbxindex> &SDsInGBxs)
@@ -183,7 +183,7 @@ gridboxes and the SDM process to occur at smaller time intervals */
     /* do exchange if timestep is on exchange event */
     if (t_sdm % motionstep == 0)
     {
-      exchanges_between_gridboxes(mdlmaps, sdmmotion,
+      exchanges_between_gridboxes(gbxmaps, sdmmotion,
                                   SDsInGBxs, gridboxes);
     }
 

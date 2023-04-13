@@ -31,7 +31,7 @@ coupled thermodynamics */
   ThermoState state;
 
   GridBox(const unsigned int ii,
-          const Maps4GridBoxes &mdlmaps,
+          const Maps4GridBoxes &gbxmaps,
           std::vector<SuperdropWithGbxindex> &SDsInGBxs);
   /* Volume in Thermostate set using Map4GridBoxes
   idx2vol map (via get_volume function). Other ThermoState variables
@@ -46,7 +46,7 @@ coupled thermodynamics */
   /* print's dimensionless value for gridbox state's 
   volume. Also prints true volume = state.volume * COORD0^3 [m^3] */
 
-  void iscorrect_span_for_gbxindex(const Maps4GridBoxes &mdlmaps);
+  void iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps);
   /* throw error if the coordinates of the superdroplets
   in the span do not lie within the gridboux boundaries
   given my the gbxindex */
@@ -55,10 +55,10 @@ coupled thermodynamics */
                              const double coord);
 };
 
-std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &mdlmaps,
+std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &gbxmaps,
                                       std::vector<SuperdropWithGbxindex> &SDsInGBxs);
 /* create domain as a vector of grid boxes such that each grid box
-is initialised with a labels from mdlmaps.gbxidxs, and a span of the
+is initialised with a labels from gbxmaps.gbxidxs, and a span of the
 superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
 
 #endif // GRIDBOX_HPP

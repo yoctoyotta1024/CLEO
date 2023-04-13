@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
                                 config.T_END);
 
   /* create map from gridbox index to its coordinate boundaries */
-  const Maps4GridBoxes mdlmaps(config.SDnspace, config.grid_filename);
+  const Maps4GridBoxes gbxmaps(config.SDnspace, config.grid_filename);
 
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
   const auto sdmprocess = create_sdmprocess(config, mdlsteps);
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
   /* create observer from combination of chosen observers */
   // std::ofstream thermo_datafile, superdrops_datafile;
   // const auto observer = create_observer(config, thermo_datafile, superdrops_datafile);
-  const unsigned int ngridboxes = mdlmaps.gbxidxs.size();
+  const unsigned int ngridboxes = gbxmaps.gbxidxs.size();
   FSStore fsstore(config.zarrbasedir);
   ContiguousRaggedSuperdropStorage sdzarr(fsstore, superdropattributes_to_observe(),
                                           config.maxcsize);
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
                                                          SimmelTerminalVelocity{});
                                                          
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
-  run_cvodeSDM_coupledmodel(config, mdlsteps, mdlmaps,
+  run_cvodeSDM_coupledmodel(config, mdlsteps, gbxmaps,
                             sdmprocess, sdmmotion, observer);
 
   return 0;

@@ -12,7 +12,7 @@ of this header file that's been moved into a new file for clarity */
 
 void run_cvodeSDM_coupledmodel(const Config &config,
                                const ModelTimesteps &mdlsteps,
-                               const Maps4GridBoxes &mdlmaps,
+                               const Maps4GridBoxes &gbxmaps,
                                const SdmProcess auto &sdmprocess,
                                const SdmMotion auto &sdmmotion,
                                const Observer auto &observer)
@@ -20,7 +20,7 @@ void run_cvodeSDM_coupledmodel(const Config &config,
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 {
   /* CVODE thermodynamics solver */
-  const unsigned int ngridboxes = mdlmaps.gbxidxs.size();
+  const unsigned int ngridboxes = gbxmaps.gbxidxs.size();
   CvodeThermoSolver cvode(config, init_thermodynamics(ngridboxes, config));
 
   /* vector containing all superdroplets within a struct that also holds their
@@ -32,12 +32,12 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
                                               config.SDnspace, solute);
 
   /* vector containing all gridboxes that makeup the SDM domain */
-  std::vector<GridBox> gridboxes = create_gridboxes(mdlmaps, SDsInGBxs);
+  std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
 
   /* prepare, launch, and end coupled model */
   auto gen = prepare_coupledmodel(mdlsteps, cvode, gridboxes, config.wetradiiinit);
 
-  timestep_coupledmodel(mdlsteps, mdlmaps, sdmprocess, sdmmotion,
+  timestep_coupledmodel(mdlsteps, gbxmaps, sdmprocess, sdmmotion,
                         observer, config.doCouple,
                         cvode, gen, gridboxes, SDsInGBxs);
 
@@ -45,7 +45,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
 }
 
 void timestep_coupledmodel(const ModelTimesteps &mdlsteps,
-                           const Maps4GridBoxes &mdlmaps,
+                           const Maps4GridBoxes &gbxmaps,
                            const SdmProcess auto &sdmprocess,
                            const SdmMotion auto &sdmmotion,
                            const Observer auto &observer,
@@ -69,7 +69,7 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
                                                                       cvode);
     /* advance SDM by outstep (parallel to CVODE section) */
     run_sdmstep(t_mdl, mdlsteps.couplstep, mdlsteps.motionstep,
-                sdmprocess, sdmmotion, mdlmaps, gen, gridboxes, SDsInGBxs);
+                sdmprocess, sdmmotion, gbxmaps, gen, gridboxes, SDsInGBxs);
 
     /* advance CVODE solver by outstep (parallel to SDM) */
     cvode.run_cvodestep(timestep2dimlesstime(t_mdl + mdlsteps.couplstep));

@@ -28,10 +28,10 @@ could compile with e.g.
 
 namespace dlc = dimless_constants;
 
-void print_nbourmaps(const Maps4GridBoxes &mdlmaps, const double COORD0);
-void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0);
+void print_nbourmaps(const Maps4GridBoxes &gbxmaps, const double COORD0);
+void print_gridboxmaps(const Maps4GridBoxes &gbxmaps, const double COORD0);
 void print_superdropcoords(const std::vector<GridBox> &gridboxes,
-                           const Maps4GridBoxes &mdlmaps);
+                           const Maps4GridBoxes &gbxmaps);
 int visualise_tsteps();
 
 inline int nextt_coupl_or_motion(const int t_sdm, const int couplstep,
@@ -61,7 +61,7 @@ int main()
   const std::string grid_filename = abspath+"build/share/dimlessGBxboundaries.dat";    
   const std::string initSDs_filename = abspath+"build/share/dimlessSDsinit.dat";   
 
-  const Maps4GridBoxes mdlmaps(config.SDnspace, grid_filename); 
+  const Maps4GridBoxes gbxmaps(config.SDnspace, grid_filename); 
 
   const auto solute(std::make_shared<const SoluteProperties>());
   std::vector<SuperdropWithGbxindex>
@@ -70,99 +70,99 @@ int main()
                                               config.SDnspace, solute);
 
   /* vector containing all gridboxes that makeup the SDM domain */
-  std::vector<GridBox> gridboxes = create_gridboxes(mdlmaps, SDsInGBxs);
+  std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
 
-  print_gridboxmaps(mdlmaps, dlc::COORD0);
-  print_nbourmaps(mdlmaps, dlc::COORD0);
-  print_superdropcoords(gridboxes, mdlmaps);
+  print_gridboxmaps(gbxmaps, dlc::COORD0);
+  print_nbourmaps(gbxmaps, dlc::COORD0);
+  print_superdropcoords(gridboxes, gbxmaps);
  
   
   const SdmMotion auto sdmmotion = NullMotion();
 
-  move_superdrops_in_domain(mdlmaps, sdmmotion,
+  move_superdrops_in_domain(gbxmaps, sdmmotion,
                             SDsInGBxs, gridboxes);
-  print_superdropcoords(gridboxes, mdlmaps);
+  print_superdropcoords(gridboxes, gbxmaps);
 
   visualise_tsteps();
 
   return 0;
 }
-void print_nbourmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
+void print_nbourmaps(const Maps4GridBoxes &gbxmaps, const double COORD0)
 {
   std::cout << "---- NBOUR MAPS ----\n";
   std::cout << "Z nghbours" << "\n";
-  for (const auto idxkey : mdlmaps.gbxidxs)
+  for (const auto idxkey : gbxmaps.gbxidxs)
   {
     std::cout << idxkey << ": "
-              << mdlmaps.get_neighbour_zdown(idxkey) << ", "
-              << mdlmaps.get_neighbour_zup(idxkey) << '\n';
+              << gbxmaps.get_neighbour_zdown(idxkey) << ", "
+              << gbxmaps.get_neighbour_zup(idxkey) << '\n';
   }
 
   std::cout << "X nghbours" << "\n";
-  for (const auto idxkey : mdlmaps.gbxidxs)
+  for (const auto idxkey : gbxmaps.gbxidxs)
   {
     std::cout << idxkey << ": "
-              << mdlmaps.get_neighbour_xbehind(idxkey) << ", "
-              << mdlmaps.get_neighbour_xinfront(idxkey) << '\n'; 
+              << gbxmaps.get_neighbour_xbehind(idxkey) << ", "
+              << gbxmaps.get_neighbour_xinfront(idxkey) << '\n'; 
   }
 
   std::cout << "Y nghbours" << "\n";
-  for (const auto idxkey : mdlmaps.gbxidxs)
+  for (const auto idxkey : gbxmaps.gbxidxs)
   {
     std::cout << idxkey << ": "
-              << mdlmaps.get_neighbour_yleft(idxkey) << ", "
-              << mdlmaps.get_neighbour_yright(idxkey) << '\n';  
+              << gbxmaps.get_neighbour_yleft(idxkey) << ", "
+              << gbxmaps.get_neighbour_yright(idxkey) << '\n';  
   }
   std::cout << "------------------\n";
 }
 
-void print_gridboxmaps(const Maps4GridBoxes &mdlmaps, const double COORD0)
+void print_gridboxmaps(const Maps4GridBoxes &gbxmaps, const double COORD0)
 {
   std::cout << "---- GBX MAPS ----\n";
   std::cout << "Zmap" << "\n";
-  for (const auto idxkey : mdlmaps.gbxidxs)
+  for (const auto idxkey : gbxmaps.gbxidxs)
   {
     std::cout << idxkey << ": "
-              << mdlmaps.get_bounds_z(idxkey).first << ", "
-              <<  mdlmaps.get_bounds_z(idxkey).second << '\n'; 
+              << gbxmaps.get_bounds_z(idxkey).first << ", "
+              <<  gbxmaps.get_bounds_z(idxkey).second << '\n'; 
   }
 
   std::cout << "Xmap" << "\n";
-  for (const auto idxkey : mdlmaps.gbxidxs)
+  for (const auto idxkey : gbxmaps.gbxidxs)
   {
     std::cout << idxkey << ": "
-              << mdlmaps.get_bounds_x(idxkey).first << ", "
-              <<  mdlmaps.get_bounds_x(idxkey).second << '\n'; 
+              << gbxmaps.get_bounds_x(idxkey).first << ", "
+              <<  gbxmaps.get_bounds_x(idxkey).second << '\n'; 
   }
 
   std::cout << "Ymap" << "\n";
-  for (const auto idxkey : mdlmaps.gbxidxs)
+  for (const auto idxkey : gbxmaps.gbxidxs)
   {
     std::cout << idxkey << ": "
-              << mdlmaps.get_bounds_y(idxkey).first << ", "
-              <<  mdlmaps.get_bounds_y(idxkey).second << '\n'; 
+              << gbxmaps.get_bounds_y(idxkey).first << ", "
+              <<  gbxmaps.get_bounds_y(idxkey).second << '\n'; 
   }
 
   std::cout << "Vol map" << "\n";
-  for (const auto idxkey : mdlmaps.gbxidxs)
+  for (const auto idxkey : gbxmaps.gbxidxs)
   {
     std::cout << idxkey << ": "
-              << mdlmaps.get_volume(idxkey) 
-              << " -> ie. = " << mdlmaps.get_volume(idxkey) * pow(COORD0, 3.0) << "m^3\n";
+              << gbxmaps.get_volume(idxkey) 
+              << " -> ie. = " << gbxmaps.get_volume(idxkey) * pow(COORD0, 3.0) << "m^3\n";
   }
   std::cout << "----------------\n";
 }
 
 void print_superdropcoords(const std::vector<GridBox> &gridboxes,
-                           const Maps4GridBoxes &mdlmaps)
+                           const Maps4GridBoxes &gbxmaps)
 {
   std::cout << "\n---- SD Positions -----\n";
   std::cout << " -- in Z direction --\n";
   for (auto gbx: gridboxes)
   {
     std::cout << "GBx " << gbx.gbxindex << " : ("
-              << mdlmaps.get_bounds_z(gbx.gbxindex).first << ", " << ", "
-              << mdlmaps.get_bounds_z(gbx.gbxindex).second << ")\n";
+              << gbxmaps.get_bounds_z(gbx.gbxindex).first << ", " << ", "
+              << gbxmaps.get_bounds_z(gbx.gbxindex).second << ")\n";
     
     for (auto SDinGBx : gbx.span4SDsinGBx)
     {
@@ -175,8 +175,8 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
   for (auto gbx: gridboxes)
   {
     std::cout << "GBx " << gbx.gbxindex << " : ("
-              << mdlmaps.get_bounds_x(gbx.gbxindex).first << ", " << ", "
-              << mdlmaps.get_bounds_x(gbx.gbxindex).second << ")\n";
+              << gbxmaps.get_bounds_x(gbx.gbxindex).first << ", " << ", "
+              << gbxmaps.get_bounds_x(gbx.gbxindex).second << ")\n";
     
     for (auto SDinGBx : gbx.span4SDsinGBx)
     {
@@ -189,8 +189,8 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
   for (auto gbx: gridboxes)
   {
     std::cout << "GBx" << gbx.gbxindex << ", ("
-              << mdlmaps.get_bounds_x(gbx.gbxindex).first << " " << ", "
-              << mdlmaps.get_bounds_x(gbx.gbxindex).second << ") SDs: ";
+              << gbxmaps.get_bounds_x(gbx.gbxindex).first << " " << ", "
+              << gbxmaps.get_bounds_x(gbx.gbxindex).second << ") SDs: ";
     
     for (auto SDinGBx : gbx.span4SDsinGBx)
     {

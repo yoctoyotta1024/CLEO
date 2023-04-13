@@ -8,21 +8,21 @@ coords and moving them between gridboxes) */
 #include "./movement_in_domain.hpp"
 
 /* ----- function called internally ----- */
-unsigned int zdown(const Maps4GridBoxes &mdlmaps, const unsigned int index);
-unsigned int zup(const Maps4GridBoxes &mdlmaps, const unsigned int index);
-unsigned int xbehind(const Maps4GridBoxes &mdlmaps, const unsigned int index);
-unsigned int xinfront(const Maps4GridBoxes &mdlmaps, const unsigned int index);
-unsigned int yleft(const Maps4GridBoxes &mdlmaps, const unsigned int index);
-unsigned int yright(const Maps4GridBoxes &mdlmaps, const unsigned int index);
+unsigned int zdown(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int zup(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int xbehind(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int xinfront(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int yleft(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int yright(const Maps4GridBoxes &gbxmaps, const unsigned int index);
 /* -------------------------------------- */
 
-unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &mdlmaps,
+unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &gbxmaps,
                                        const unsigned int gbxindex,
                                        const std::pair<double, double> zbounds,
                                        const std::pair<double, double> xbounds,
                                        const std::pair<double, double> ybounds,
                                        const Superdrop &superdrop)
-/* For each direction (z, then x, then y), mdlmaps's forward and backward
+/* For each direction (z, then x, then y), gbxmaps's forward and backward
 get_neighbour functions are passed into changeindex_ifcoord_outofbounds
 along with superdroplet's coord and the gridbox bounds for that direction.
 If coord not within bounds, changeindex_ifcoord_outofbounds is used to
@@ -31,53 +31,53 @@ function. After algorithm for z, then x, then y directions are complete,
 resultant sd_gbxindex is returned. */
 {
   unsigned int sd_gbxindex(gbxindex);
-  sd_gbxindex = changeindex_ifcoord_outofbounds(mdlmaps, zdown, zup,
+  sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps, zdown, zup,
                                                 zbounds, superdrop.coord3,
                                                 sd_gbxindex);
 
-  sd_gbxindex = changeindex_ifcoord_outofbounds(mdlmaps, xbehind, xinfront,
+  sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps, xbehind, xinfront,
                                                 xbounds, superdrop.coord1,
                                                 sd_gbxindex);
 
-  sd_gbxindex = changeindex_ifcoord_outofbounds(mdlmaps, yleft, yright,
+  sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps, yleft, yright,
                                                 ybounds, superdrop.coord2,
                                                 sd_gbxindex);
 
   return sd_gbxindex;
 }
 
-unsigned int zdown(const Maps4GridBoxes &mdlmaps,
+unsigned int zdown(const Maps4GridBoxes &gbxmaps,
                    const unsigned int index)
 {
-  return mdlmaps.get_neighbour_zdown(index);
+  return gbxmaps.get_neighbour_zdown(index);
 };
 
-unsigned int zup(const Maps4GridBoxes &mdlmaps,
+unsigned int zup(const Maps4GridBoxes &gbxmaps,
                  const unsigned int index)
 {
-  return mdlmaps.get_neighbour_zup(index);
+  return gbxmaps.get_neighbour_zup(index);
 };
 
-unsigned int xbehind(const Maps4GridBoxes &mdlmaps,
+unsigned int xbehind(const Maps4GridBoxes &gbxmaps,
                      const unsigned int index)
 {
-  return mdlmaps.get_neighbour_xbehind(index);
+  return gbxmaps.get_neighbour_xbehind(index);
 };
 
-unsigned int xinfront(const Maps4GridBoxes &mdlmaps,
+unsigned int xinfront(const Maps4GridBoxes &gbxmaps,
                       const unsigned int index)
 {
-  return mdlmaps.get_neighbour_xinfront(index);
+  return gbxmaps.get_neighbour_xinfront(index);
 };
 
-unsigned int yleft(const Maps4GridBoxes &mdlmaps,
+unsigned int yleft(const Maps4GridBoxes &gbxmaps,
                    const unsigned int index)
 {
-  return mdlmaps.get_neighbour_yleft(index);
+  return gbxmaps.get_neighbour_yleft(index);
 };
 
-unsigned int yright(const Maps4GridBoxes &mdlmaps,
+unsigned int yright(const Maps4GridBoxes &gbxmaps,
                     const unsigned int index)
 {
-  return mdlmaps.get_neighbour_yright(index);
+  return gbxmaps.get_neighbour_yright(index);
 };

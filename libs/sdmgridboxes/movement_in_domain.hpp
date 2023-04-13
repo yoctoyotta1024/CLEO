@@ -18,7 +18,7 @@ coords and moving them between gridboxes) */
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/sdmmotion.hpp"
 
-unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &mdlmaps,
+unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &gbxmaps,
                                        const unsigned int gbxindex,
                                        const std::pair<double, double> zbounds,
                                        const std::pair<double, double> xbounds,
@@ -36,7 +36,7 @@ inline void set_gridboxes_superdropletspan(std::vector<GridBox> &gridboxes,
   {
     gbx.set_span(SDsInGBxs);
 
-    // gbx.iscorrect_span_for_gbxindex(mdlmaps);
+    // gbx.iscorrect_span_for_gbxindex(gbxmaps);
   }
 }
 
@@ -50,7 +50,7 @@ updating spans4SDsInGbx for each gridbox */
   set_gridboxes_superdropletspan(gridboxes, SDsInGBxs);
 }
 
-void move_superdrops_in_domain(const Maps4GridBoxes &mdlmaps,
+void move_superdrops_in_domain(const Maps4GridBoxes &gbxmaps,
                                const SdmMotion auto &sdmmotion,
                                std::vector<SuperdropWithGbxindex> &SDsInGBxs,
                                std::vector<GridBox> &gridboxes)
@@ -63,15 +63,15 @@ spans4SDsInGbx for each gridbox */
 {
   for (auto &gbx : gridboxes)
   {
-    const auto zbounds(mdlmaps.get_bounds_z(gbx.gbxindex));
-    const auto xbounds(mdlmaps.get_bounds_x(gbx.gbxindex));
-    const auto ybounds(mdlmaps.get_bounds_y(gbx.gbxindex));
+    const auto zbounds(gbxmaps.get_bounds_z(gbx.gbxindex));
+    const auto xbounds(gbxmaps.get_bounds_x(gbx.gbxindex));
+    const auto ybounds(gbxmaps.get_bounds_y(gbx.gbxindex));
 
     for (auto &SDinGBx : gbx.span4SDsinGBx)
     {
       sdmmotion.move_superdroplet(gbx.state, SDinGBx.superdrop);
 
-      SDinGBx.sd_gbxindex = update_superdrop_gbxindex(mdlmaps, gbx.gbxindex,
+      SDinGBx.sd_gbxindex = update_superdrop_gbxindex(gbxmaps, gbx.gbxindex,
                                                       zbounds, xbounds, ybounds,
                                                       SDinGBx.superdrop);
     }
@@ -81,7 +81,7 @@ spans4SDsInGbx for each gridbox */
 }
 
 template <typename BackwardIdxFunc, typename ForwardIdxFunc>
-unsigned int changeindex_ifcoord_outofbounds(const Maps4GridBoxes &mdlmaps,
+unsigned int changeindex_ifcoord_outofbounds(const Maps4GridBoxes &gbxmaps,
                                              const BackwardIdxFunc backwardsidx,
                                              const ForwardIdxFunc forwardsidx,
                                              const std::pair<double, double> bounds,
@@ -103,11 +103,11 @@ return out of domain index */
 
   if (coord < bounds.first) // lowerbound
   {
-    return backwardsidx(mdlmaps, sd_gbxindex);
+    return backwardsidx(gbxmaps, sd_gbxindex);
   }
   else if (coord >= bounds.second) // upperbound
   {
-    return forwardsidx(mdlmaps, sd_gbxindex);
+    return forwardsidx(gbxmaps, sd_gbxindex);
   }
   else
   {
