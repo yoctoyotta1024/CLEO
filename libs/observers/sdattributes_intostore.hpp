@@ -15,6 +15,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <cmath>
 #include <algorithm>
 #include <concepts>
+#include <limits>
 
 #include "./zarrstores.hpp"
 #include "./contigraggedsdstorage.hpp"
@@ -64,7 +65,7 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
   {
     if (buffer.size() != csize)
     {
-      buffer = std::vector<T>(csize, std::nan(""));
+      buffer = std::vector<T>(csize, std::numeric_limits<T>::max());
     }
   } 
 };
@@ -78,14 +79,6 @@ struct IdIntoStore : AttributeIntoStoreViaBuffer<size_t>
   {
     storagehelper::val2buffer<size_t>(superdrop.id.value, buffer, j);
   }
-
-  void set_buffersize(const size_t csize)
-  {
-    if (buffer.size() != csize)
-    {
-      buffer = std::vector<size_t>(csize, -1);
-    }
-  } 
 };
 
 struct EpsIntoStore : AttributeIntoStoreViaBuffer<size_t>
@@ -97,14 +90,6 @@ struct EpsIntoStore : AttributeIntoStoreViaBuffer<size_t>
   {
     storagehelper::val2buffer<size_t>(superdrop.eps, buffer, j);
   }
-
-  void set_buffersize(const size_t csize)
-  {
-    if (buffer.size() != csize)
-    {
-      buffer = std::vector<size_t>(csize, -1);
-    }
-  } 
 };
 
 struct RadiusIntoStore : AttributeIntoStoreViaBuffer<double>

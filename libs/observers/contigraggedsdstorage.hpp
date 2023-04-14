@@ -163,7 +163,7 @@ public:
         chunksize(csize), chunkcount(0), bufferfill(0), ndata(0),
         raggedcount_chunkcount(0), raggedcount_bufferfill(0), raggedcount_ndata(0)
   {
-    // initialise buffer(s) to size 'chunksize' (filled with nans)
+    // initialise buffer(s) to size 'chunksize' (filled with numeric limit)
     sdbuffers.set_buffersize(chunksize);                                                   
   }
 
