@@ -18,7 +18,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 # add executables to library
 set(SOURCES
 "observers.cpp"
-"observer_moments.cpp"
+"sdmomentsstorage.cpp"
 "observer_singlevariable.cpp"
 "observer_thermostate.cpp"
 "zarrstores.cpp"
