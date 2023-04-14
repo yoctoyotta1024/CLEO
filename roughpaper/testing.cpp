@@ -59,8 +59,8 @@ int main()
   print_nbourmaps(gbxmaps, dlc::COORD0);
   print_superdropcoords(gridboxes, gbxmaps);
 
-  const SuperdropMotion auto sdmmotion = NullMotion();
-  const MoveSuperdropsInDomain move(sdmmotion);
+  const SdMotion auto movesd = NullMotion();
+  const MoveSuperdropsInDomain move(movesd);
 
   move.move_superdrops_in_domain(gbxmaps, SDsInGBxs, gridboxes);
   print_superdropcoords(gridboxes, gbxmaps);
@@ -148,20 +148,6 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
     {
       std::cout << "sdgbx " << SDinGBx.sd_gbxindex
                 << " : " << SDinGBx.superdrop.coord3 << "\n";
-    }
-  }
-
-  std::cout << " -- in X direction --\n";
-  for (auto gbx: gridboxes)
-  {
-    std::cout << "GBx " << gbx.gbxindex << " : ("
-              << gbxmaps.get_bounds_x(gbx.gbxindex).first << ", " << ", "
-              << gbxmaps.get_bounds_x(gbx.gbxindex).second << ")\n";
-    
-    for (auto SDinGBx : gbx.span4SDsinGBx)
-    {
-      std::cout << "sdgbx " << SDinGBx.sd_gbxindex
-      << " : " << SDinGBx.superdrop.coord1 << "\n";
     }
   }
 

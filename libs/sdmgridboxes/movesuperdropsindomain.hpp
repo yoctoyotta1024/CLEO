@@ -17,23 +17,58 @@ coords and moving them between gridboxes) */
 #include "./maps4gridboxes.hpp"
 #include "./superdropwithgbxindex.hpp"
 #include "superdrop_solver/superdrop.hpp"
-#include "superdrop_solver/superdropmotion.hpp"
+#include "superdrop_solver/sdmotion.hpp"
 
+/* ----- function called internally ----- */
+unsigned int zdown(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int zup(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int xbehind(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int xinfront(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int yleft(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int yright(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+/* -------------------------------------- */
+
+template <SdMotion MoveSuperdrop>
 class MoveSuperdropsInDomain
 {
 private:
-  const NullMotion superdroplet_motion;
+  const MoveSuperdrop movesd;
 
   unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &gbxmaps,
                                          const unsigned int gbxindex,
                                          const std::pair<double, double> zbounds,
                                          const std::pair<double, double> xbounds,
                                          const std::pair<double, double> ybounds,
-                                         const Superdrop &superdrop) const;
-  /* For each direction, first check if gridbox index associated
-  with the superdrop in SDinGBx needs to change. If it does, implement
-  change by calling correct function for changing the sd_gbxindex to a
-  neighbouring gridbox's index in that direction */
+                                         const Superdrop &superdrop) const
+  /* For each direction (z, then x, then y), gbxmaps's forward and backward
+  get_neighbour functions are passed into changeindex_ifcoord_outofbounds
+  along with superdroplet's coord and the gridbox bounds for that direction.
+  If coord not within bounds, changeindex_ifcoord_outofbounds is used to
+  return a new value of sd_gbxindex via calling the appropriate get_neighbour
+  function. After algorithm for z, then x, then y directions are complete,
+  resultant sd_gbxindex is returned. */
+  {
+    unsigned int sd_gbxindex(gbxindex);
+    sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps,
+                                                  zdown, zup,
+                                                  zbounds,
+                                                  superdrop.coord3,
+                                                  sd_gbxindex);
+
+    sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps,
+                                                  xbehind, xinfront,
+                                                  xbounds,
+                                                  superdrop.coord1,
+                                                  sd_gbxindex);
+
+    sd_gbxindex = changeindex_ifcoord_outofbounds(gbxmaps,
+                                                  yleft, yright,
+                                                  ybounds,
+                                                  superdrop.coord2,
+                                                  sd_gbxindex);
+
+    return sd_gbxindex;
+}
 
   void move_superdroplets_between_gridboxes(std::vector<SuperdropWithGbxindex> &SDsInGBxs,
                                             std::vector<GridBox> &gridboxes) const
@@ -55,9 +90,44 @@ private:
     }
   }
 
+  template <typename BackwardIdxFunc, typename ForwardIdxFunc>
+  unsigned int changeindex_ifcoord_outofbounds(const Maps4GridBoxes &gbxmaps,
+                                               const BackwardIdxFunc backwardsidx,
+                                               const ForwardIdxFunc forwardsidx,
+                                               const std::pair<double, double> bounds,
+                                               const double coord,
+                                               const unsigned int sd_gbxindex) const
+  /* Given bounds = {lowerbound, upperbound} of a gridbox with
+  index 'gbxindex', function determines if coord is within bounds
+  of that gridbox. (Note: lower bound inclusive, upper bound exclusive).
+  If coord not within bounds backwardsidx or forwardsidx function,
+  as appropriate, is used to return a neighbouring gridbox's index.
+  If coord lies within bounds, gbxindex is returned. If index is
+  already out of domain (ie. value is the maximum unsigned int),
+  return out of domain index */
+  {
+    if (sd_gbxindex == (unsigned int)-1)
+    {
+      return sd_gbxindex; // sd_gbxindex is out of domain
+    }
+
+    if (coord < bounds.first) // lowerbound
+    {
+      return backwardsidx(gbxmaps, sd_gbxindex);
+    }
+    else if (coord >= bounds.second) // upperbound
+    {
+      return forwardsidx(gbxmaps, sd_gbxindex);
+    }
+    else
+    {
+      return sd_gbxindex; // no change to index if coord within bounds
+    }
+  }
+
 public:
-  MoveSuperdropsInDomain(const NullMotion superdroplet_motion)
-      : superdroplet_motion(superdroplet_motion) {}
+  MoveSuperdropsInDomain(const MoveSuperdrop movesd)
+      : movesd(movesd) {}
 
   void move_superdrops_in_domain(const Maps4GridBoxes &gbxmaps,
                                  std::vector<SuperdropWithGbxindex> &SDsInGBxs,
@@ -77,7 +147,7 @@ public:
 
       for (auto &SDinGBx : gbx.span4SDsinGBx)
       {
-        superdroplet_motion(gbx.state, SDinGBx.superdrop);
+        movesd.change_superdroplet_coords(gbx.state, SDinGBx.superdrop);
 
         SDinGBx.sd_gbxindex = update_superdrop_gbxindex(gbxmaps,
                                                         gbx.gbxindex,
@@ -89,40 +159,5 @@ public:
     move_superdroplets_between_gridboxes(SDsInGBxs, gridboxes);
   }
 };
-
-template <typename BackwardIdxFunc, typename ForwardIdxFunc>
-unsigned int changeindex_ifcoord_outofbounds(const Maps4GridBoxes &gbxmaps,
-                                             const BackwardIdxFunc backwardsidx,
-                                             const ForwardIdxFunc forwardsidx,
-                                             const std::pair<double, double> bounds,
-                                             const double coord,
-                                             const unsigned int sd_gbxindex)
-/* Given bounds = {lowerbound, upperbound} of a gridbox with
-index 'gbxindex', function determines if coord is within bounds
-of that gridbox. (Note: lower bound inclusive, upper bound exclusive).
-If coord not within bounds backwardsidx or forwardsidx function,
-as appropriate, is used to return a neighbouring gridbox's index.
-If coord lies within bounds, gbxindex is returned. If index is
-already out of domain (ie. value is the maximum unsigned int),
-return out of domain index */
-{
-  if (sd_gbxindex == (unsigned int)-1)
-  {
-    return sd_gbxindex; // sd_gbxindex is out of domain
-  }
-
-  if (coord < bounds.first) // lowerbound
-  {
-    return backwardsidx(gbxmaps, sd_gbxindex);
-  }
-  else if (coord >= bounds.second) // upperbound
-  {
-    return forwardsidx(gbxmaps, sd_gbxindex);
-  }
-  else
-  {
-    return sd_gbxindex; // no change to index if coord within bounds
-  }
-}
 
 #endif // MOVEMENT_IN_DOMAIN_HPP
