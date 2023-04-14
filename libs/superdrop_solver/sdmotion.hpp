@@ -59,15 +59,15 @@ private:
   const int interval;                 // integer timestep for movement
   const double delt;                  // equivalent of interval as dimensionless time
   
-  TerminalVelocity terminal_velocity; // returns terminal velocity given a superdroplet
+  TerminalVelocity terminalv; // returns terminal velocity given a superdroplet
 
 public:
   MoveWithSedimentation(const int interval,
                         const std::function<double(int)> int2time,
-                        const TerminalVelocity v)
+                        const TerminalVelocity terminalv)
       : interval(interval),
         delt(int2time(interval)),
-        terminal_velocity(v) {}
+        terminalv(v) {}
 
   int next_move(const int t) const
   {
@@ -80,11 +80,14 @@ public:
   }
 
   void change_superdroplet_coords(const ThermoState &state,
-                                  Superdrop &superdrop) const
+                                  Superdrop &drop) const
   {
     // const double vel3 = state.wvel; // w component of wind velocity (z=3)
     // const double vel1 = state.uvel; // u component of wind velocity (x=1)
     // const double vel2 = state.vvel; // v component of wind velocity (y=2)
+
+    const double vel3 = state.wvel - terminalv(drop); 
+    drop.coord3 += vel3 * delt;
   }
 };
 

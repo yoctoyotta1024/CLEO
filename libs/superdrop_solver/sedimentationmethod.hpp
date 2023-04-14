@@ -22,20 +22,20 @@ class SedimentationMethod
 {
 private:
   const double delt;
-  const TerminalVelocity terminal_velocity; // returns terminal velocity given a superdroplet
+  const TerminalVelocity terminalv; // returns terminal velocity given a superdroplet
 
   void sediment_drop(Superdrop &drop) const
   /* enacts sedimentation by changing coord3
   (z coord) of superdroplet */
   {
-    drop.coord3 -= terminal_velocity(drop) * delt;
+    drop.coord3 -= terminalv(drop) * delt;
   }
 
 public:
-  SedimentationMethod(const double delt, const TerminalVelocity v)
+  SedimentationMethod(const double delt,
+                      const TerminalVelocity terminalv)
       : delt(delt),
-        terminal_velocity(v) {}
-
+        terminalv(terminalv) {}
 
   void sediment_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx) const
   /* sediment all superdroplets stored in some span of contigous memory.

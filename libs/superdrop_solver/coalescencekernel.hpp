@@ -46,11 +46,11 @@ struct GolovinProb
 struct LongHydrodynamicProb
 {
   const double prob_jk_const;
-  const SimmelTerminalVelocity simmel_terminal_velocity;
+  const SimmelTerminalVelocity simmel_terminalv;
 
   LongHydrodynamicProb()
       : prob_jk_const(M_PI * pow(dlc::R0, 2.0) * dlc::W0),
-        simmel_terminal_velocity(SimmelTerminalVelocity{}) {}
+        simmel_terminalv(SimmelTerminalVelocity{}) {}
 
   const double operator()(const Superdrop &drop1,
                           const Superdrop &drop2,
@@ -84,8 +84,8 @@ struct LongHydrodynamicProb
 
     /* calculate Long's hydrodynamic (i.e. gravitational) 
     collision kernel according to Simmel et al. 2002 */
-    const double v1 = simmel_terminal_velocity(drop1);
-    const double v2 = simmel_terminal_velocity(drop2);
+    const double v1 = simmel_terminalv(drop1);
+    const double v2 = simmel_terminalv(drop2);
     const double longs_kernel = prob_jk_const * colleff * pow((bigr + smallr), 2.0) * std::abs(v1 - v2);
     
     const double prob_jk = longs_kernel * DELT_DELVOL;
