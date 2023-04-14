@@ -72,8 +72,8 @@ combined process of those two individual processes */
   // const auto sdmprocess =  cond >> colls >> sedi;
   // const auto sdmprocess = colls >> sedi;
   // const auto sdmprocess = cond >> colls;
-  // const auto sdmprocess = cond;
-  const auto sdmprocess = colls;
+  const auto sdmprocess = cond;
+  // const auto sdmprocess = colls;
 
   return sdmprocess;
   // return NullProcess{};
@@ -87,8 +87,8 @@ SdMotion auto create_sdmotion(const int motionstep)
                                                      &step2dimlesstime,
                                                      terminalv);
   
-  return movesd;
-  //return NullMotion{};
+  // return movesd;
+  return NullMotion{};
 }
 
 SuperdropIntoStoreViaBuffer auto superdropattributes_to_observe()
