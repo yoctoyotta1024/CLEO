@@ -379,15 +379,12 @@ struct M_solIntoStore : AttributeIntoStoreViaBuffer<double>
   }
 };
 
-struct Coord3IntoStore : AttributeIntoStoreViaBuffer<double>
+struct SdCoordIntoStore : AttributeIntoStoreViaBuffer<double>
 {
-  Coord3IntoStore()
-      : AttributeIntoStoreViaBuffer("coord3", "<f8"){};
+  SdCoordIntoStore(const std::string attr)
+      : AttributeIntoStoreViaBuffer(attr, "<f8"){};
 
-  void copy2buffer(const Superdrop &superdrop, const int j)
-  {
-    storagehelper::val2buffer<double>(superdrop.coord3, buffer, j);
-  }
+  virtual void copy2buffer(const Superdrop &superdrop, const int j) = 0;
 
   void zarrayjsons(FSStore &store, const SomeMetadata &md) const
   /* write metadata for attr's array into store */
@@ -399,6 +396,36 @@ struct Coord3IntoStore : AttributeIntoStoreViaBuffer<double>
     const std::string arrayattrs = storagehelper::arrayattrs(md.dims, "m",
                                                              dlc::COORD0);
     store[attr + "/.zattrs"] = arrayattrs; 
+  }
+};
+
+struct Coord3IntoStore : SdCoordIntoStore
+{
+  Coord3IntoStore() : SdCoordIntoStore("coord3"){};
+
+  void copy2buffer(const Superdrop &superdrop, const int j)
+  {
+    storagehelper::val2buffer<double>(superdrop.coord3, buffer, j);
+  }
+};
+
+struct Coord1IntoStore : SdCoordIntoStore
+{
+  Coord1IntoStore() : SdCoordIntoStore("coord1"){};
+
+  void copy2buffer(const Superdrop &superdrop, const int j)
+  {
+    storagehelper::val2buffer<double>(superdrop.coord1, buffer, j);
+  }
+};
+
+struct Coord2IntoStore : SdCoordIntoStore
+{
+  Coord2IntoStore() : SdCoordIntoStore("coord2"){};
+
+  void copy2buffer(const Superdrop &superdrop, const int j)
+  {
+    storagehelper::val2buffer<double>(superdrop.coord2, buffer, j);
   }
 };
 
