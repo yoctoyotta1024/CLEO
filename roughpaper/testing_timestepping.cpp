@@ -6,8 +6,6 @@
 
 #include <iostream>
 #include <algorithm>
-#include <vector>
-#include <limits>
 
 int next_step(int t, int step)
 {
@@ -85,7 +83,6 @@ int main()
     run_driverstep(t_mdl);
     t_mdl = proceed_tonextstep(t_mdl, couplstep);
   }
-
 
   return 0;
 }

@@ -14,6 +14,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <limits>
 
 #include "sdmgridboxes/gridbox.hpp"
 #include "superdrop_solver/superdrop.hpp"
@@ -102,33 +103,14 @@ array in a store, and an array's metadata to a store */
     buffer[j] = val;
   }
 
-  inline void writebuffer2chunk(FSStore &store, std::vector<double> &buffer,
-                               const std::string name, const std::string chunk_num)
+  template <typename V>
+  void writebuffer2chunk(FSStore &store, std::vector<V> &buffer,
+                        const std::string name, const std::string chunk_num)
   /* write buffer vector into attr's store at chunk no. 'kk', then
-  replace contents of buffer with nans */
+  replace contents of buffer with max numeric limit of type */
   {
-    store[name + "/" + chunk_num].operator=<double>(buffer);
-    std::fill(buffer.begin(), buffer.end(), std::nan(""));
-  }
-
-  inline void writebuffer2chunk(FSStore &store, std::vector<unsigned int> &buffer,
-                               const std::string name, const std::string chunk_num)
-  /* write buffer vector into attr's store at chunk no. 'kk', then
-  replace contents of buffer with largest possible unsigned int
-  (via setting unsigned int to -1) */
-  {
-    store[name + "/" + chunk_num].operator=<unsigned int>(buffer);
-    std::fill(buffer.begin(), buffer.end(), -1);
-  }
-
-  inline void writebuffer2chunk(FSStore &store, std::vector<size_t> &buffer,
-                               const std::string name, const std::string chunk_num)
-  /* write buffer vector into attr's store at chunk no. 'kk', then
-  replace contents of buffer with largest possible size_t int
-  (via setting size_t type (i.e. long unsigned int) to -1) */
-  {
-    store[name + "/" + chunk_num].operator=<size_t>(buffer);
-    std::fill(buffer.begin(), buffer.end(), -1);
+    store[name + "/" + chunk_num].operator=<V>(buffer);
+    std::fill(buffer.begin(), buffer.end(), std::numeric_limits<V>::max());
   }
 
   inline std::string metadata(const unsigned int zarr_format,
