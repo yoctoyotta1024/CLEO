@@ -26,7 +26,7 @@ SDM process and observers to use in main.cpp */
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
 #include "observers/observers.hpp"
-#include "observers/observer_superdropletattributes.hpp"
+#include "observers/sdattributes_intostore.hpp"
 #include "observers/contigraggedsdstorage.hpp"
 #include "observers/thermostatestorage.hpp"
 #include "observers/zarrstores.hpp"

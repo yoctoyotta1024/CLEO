@@ -1,5 +1,5 @@
 // Author: Clara Bayley
-// File: observer_superdropletattributes.hpp
+// File: sdattributes_intostore.hpp
 /* structs to create a SDsAttributeObserver that writes 
 data for (any chosen combination of) a superdroplet's 
 attribute(s) into ragged contiguous array(s)
@@ -7,8 +7,8 @@ attribute(s) into ragged contiguous array(s)
 in a FFStore obeying zarr storage specification verion 2:
 https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
-#ifndef OBSERVER_SUPERDROPLETATTRIBUTES_HPP
-#define OBSERVER_SUPERDROPLETATTRIBUTES_HPP
+#ifndef SDATTRIBUTES_INTOSTORE_HPP 
+#define SDATTRIBUTES_INTOSTORE_HPP 
 
 #include <string>
 #include <vector>
@@ -205,4 +205,4 @@ struct Coord2IntoStore : SdCoordIntoStore
   }
 };
 
-#endif // OBSERVER_SUPERDROPLETATTRIBUTES_HPP
+#endif // SDATTRIBUTES_INTOSTORE_HPP 
