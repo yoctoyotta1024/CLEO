@@ -12,11 +12,11 @@ are converted into integer values of model timesteps using
 model_step and secd template functions created using std::chrono library.
 Throw error if after convertion into model timestep, any
 timestep = 0 */
-    : condsubstep(realtime2timestep(CONDTSTEP)),
-      collsubstep(realtime2timestep(COLLTSTEP)),
-      motionstep(realtime2timestep(MOTIONTSTEP)),
-      couplstep(realtime2timestep(COUPLTSTEP)),
-      t_end(realtime2timestep(T_END))
+    : condsubstep(realtime2step(CONDTSTEP)),
+      collsubstep(realtime2step(COLLTSTEP)),
+      motionstep(realtime2step(MOTIONTSTEP)),
+      couplstep(realtime2step(COUPLTSTEP)),
+      t_end(realtime2step(T_END))
 {
   if ((condsubstep == 0) | (collsubstep == 0) | (motionstep == 0) |
       (couplstep == 0) | (t_end == 0))

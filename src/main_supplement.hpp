@@ -79,6 +79,13 @@ combined process of those two individual processes */
   return sdmprocess;
 }
 
+SdMotion auto create_sdmmotion()
+{
+  const SdMotion auto movesd = NullMotion();
+ 
+  return movesd;
+}
+
 SuperdropIntoStoreViaBuffer auto superdropattributes_to_observe()
 {
   SuperdropIntoStoreViaBuffer auto id = IdIntoStore();

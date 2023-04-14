@@ -76,7 +76,7 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
                 sdmprocess, gen, gridboxes, SDsInGBxs);
 
     /* advance CVODE solver by outstep (parallel to SDM) */
-    cvode.run_cvodestep(timestep2dimlesstime(t_mdl + couplstep));
+    cvode.run_cvodestep(step2dimlesstime(t_mdl + couplstep));
 
     /* prepare for next coupled step */
     t_mdl = proceed_tonext_coupledstep(t_mdl, couplstep, doCouple,

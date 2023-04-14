@@ -80,8 +80,8 @@ std::mt19937 prepare_coupledmodel(CvodeThermoSolver &cvode,
 return a random number generator. Call funciton to set superdroplet radii
 to equilibrium wet radius if wetradiiinit is true. */
 {
-  cvode.print_init_ODEdata(timestep2dimlesstime(couplstep),
-                           timestep2dimlesstime(t_end));
+  cvode.print_init_ODEdata(step2dimlesstime(couplstep),
+                           step2dimlesstime(t_end));
 
   for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
   {

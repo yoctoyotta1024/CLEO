@@ -20,7 +20,7 @@ namespace dlc = dimless_constants;
 using model_step = std::chrono::duration<int, std::ratio<1, 100000>>;
 using secd = std::chrono::duration<double>;
 
-inline int realtime2timestep(const double TSTEP)
+inline int realtime2step(const double TSTEP)
 /* convert TSTEP [seconds] (e.g. a double from Config struct)
 into a dimensionless time and then into an integer no. of
 model steps using model_step chrono function */
@@ -28,14 +28,14 @@ model steps using model_step chrono function */
   return std::chrono::round<model_step>(secd{TSTEP / dlc::TIME0}).count();
 }
 
-inline double timestep2realtime(const int mdlstep)
+inline double step2realtime(const int mdlstep)
 /* convert model step (integer) into a time [seconds]
 given secd and model_step chrono functions */
 {
   return secd{model_step{mdlstep}}.count() * dlc::TIME0;
 }
 
-inline double timestep2dimlesstime(const int mdlstep)
+inline double step2dimlesstime(const int mdlstep)
 /* convert model timestep (integer) into a dimensionless
 time given secd and model_step chrono functions */
 {
