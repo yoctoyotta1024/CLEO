@@ -36,25 +36,11 @@ int main(int argc, char *argv[])
   /* create observer from combination of chosen observers */
   // std::ofstream thermo_datafile, superdrops_datafile;
   // const auto observer = create_observer(config, thermo_datafile, superdrops_datafile);
-  const unsigned int ngridboxes = gbxmaps.gbxidxs.size();
   FSStore fsstore(config.zarrbasedir);
-
-  //SomeZarrStorage zarrstores()
-
-  ContiguousRaggedSDStorage sdzarr(fsstore, superdropattributes_to_observe(),
-                                          config.maxcsize);
-  ThermoStateStorage thermozarr(fsstore, config.maxcsize, ngridboxes);
-  CoordinateStorage<double> timezarr(fsstore, config.maxcsize,
-                                "time", "<f8", "s", dlc::TIME0);
-  CoordinateStorage<unsigned int> gbxzarr(fsstore, config.maxcsize,
-                                     "gbxindex", "<u4", " ", 1);
-  TwoDStorage<size_t> nsuperszarr(fsstore, config.maxcsize,
-                                  "nsupers", "<u8", " ", 1, ngridboxes);
-  SDMomentsStorage sdmoments(fsstore, config.maxcsize, ngridboxes);
-
-  const auto observer = create_observer(config, sdzarr, thermozarr,
-                                        timezarr, gbxzarr, nsuperszarr,
-                                        sdmoments);
+  const unsigned int ngridboxes = gbxmaps.gbxidxs.size();
+  SomeZarrStores zarrstores(fsstore, config.maxcsize, ngridboxes,
+                            sdattrs_to_observe());
+  const auto observer = create_observer(zarrstores);
 
   const MoveSuperdropsInDomain sdmmotion(create_sdmotion(mdlsteps.motionstep));
 

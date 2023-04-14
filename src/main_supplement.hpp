@@ -44,6 +44,29 @@ SDM process and observers to use in main.cpp */
 
 namespace dlc = dimless_constants;
 
+template <SuperdropIntoStoreViaBuffer S>
+struct SomeZarrStores
+{
+  ThermoStateStorage thermozarr;
+  ContiguousRaggedSDStorage<S> sdzarr;
+  SDMomentsStorage sdmoments;
+  CoordinateStorage<double> timezarr;
+  CoordinateStorage<unsigned int> gbxzarr;
+  TwoDStorage<size_t> nsuperszarr;
+
+SomeZarrStores(FSStore &fsstore, const int maxcsize,
+              const unsigned int ngridboxes, S sdattrs)
+      : thermozarr(fsstore, maxcsize, ngridboxes),
+        sdzarr(fsstore, sdattrs, maxcsize),
+        sdmoments(fsstore, maxcsize, ngridboxes),
+        timezarr(fsstore, maxcsize, "time",
+                 "<f8", "s", dlc::TIME0),
+        gbxzarr(fsstore, maxcsize, "gbxindex",
+                "<u4", " ", 1),
+        nsuperszarr(fsstore, maxcsize, "nsupers",
+                    "<u8", " ", 1, ngridboxes) {}
+};
+
 SdmProcess auto create_sdmprocess(const Config &config,
                                   const ModelTimesteps &mdlsteps)
 /* return an SdmProcess type from an amalgamation of other SdmProcess types.
@@ -93,7 +116,9 @@ SdMotion auto create_sdmotion(const int motionstep)
   // return NullMotion{};
 }
 
-SuperdropIntoStoreViaBuffer auto superdropattributes_to_observe()
+SuperdropIntoStoreViaBuffer auto sdattrs_to_observe()
+/* choose which methods are used to write attributes
+of a superdroplet into zarr storage */
 {
   SuperdropIntoStoreViaBuffer auto id = IdIntoStore();
   SuperdropIntoStoreViaBuffer auto eps = EpsIntoStore();
@@ -119,29 +144,23 @@ Observer auto create_sdmomentsobserver(SDMomentsStorage &sdmoments)
   return sdmomentobs;
 }
 
-template <typename ContiguousRaggedZarrStorage>
-Observer auto create_observer(const Config &config,
-                              ContiguousRaggedZarrStorage &sdzarr,
-                              ThermoStateStorage &thermozarr,
-                              CoordinateStorage<double> &timezarr,
-                              CoordinateStorage<unsigned int> &gbxzarr,
-                              TwoDStorage<size_t> &nsuperszarr,
-                              SDMomentsStorage &sdmoments)
+template <SuperdropIntoStoreViaBuffer S>
+Observer auto create_observer(SomeZarrStores<S> &stores)
 /* return an Observer type from an amalgamation of other observer types.
 For example return an observer that observes both the thermostate and the
 superdroplets from combination of those two seperate observers */
 {
-  const Observer auto obs1 = TimeObserver(timezarr);
+  const Observer auto obs1 = TimeObserver(stores.timezarr);
 
-  const Observer auto obs2 = SDsAttributeObserver(sdzarr);
+  const Observer auto obs2 = SDsAttributeObserver(stores.sdzarr);
 
-  const Observer auto obs3 = ThermoStateObserver(thermozarr);
+  const Observer auto obs3 = ThermoStateObserver(stores.thermozarr);
   
-  const Observer auto obs4 = GridBoxIndexObserver(gbxzarr);
+  const Observer auto obs4 = GridBoxIndexObserver(stores.gbxzarr);
   
-  const Observer auto obs5 = NsupersPerGridBoxObserver(nsuperszarr);
+  const Observer auto obs5 = NsupersPerGridBoxObserver(stores.nsuperszarr);
 
-  const Observer auto obs6 = create_sdmomentsobserver(sdmoments);
+  const Observer auto obs6 = create_sdmomentsobserver(stores.sdmoments);
 
   const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
   //const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
