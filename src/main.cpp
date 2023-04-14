@@ -37,8 +37,8 @@ int main(int argc, char *argv[])
   // std::ofstream thermo_datafile, superdrops_datafile;
   // const auto observer = create_observer(config, thermo_datafile, superdrops_datafile);
   FSStore fsstore(config.zarrbasedir);
-  const unsigned int ngridboxes = gbxmaps.gbxidxs.size();
-  SomeZarrStores zarrstores(fsstore, config.maxcsize, ngridboxes,
+  SomeZarrStores zarrstores(fsstore, config.maxcsize,
+                            gbxmaps.gbxidxs.size(),
                             sdattrs_to_observe());
   const auto observer = create_observer(zarrstores);
 
