@@ -72,8 +72,8 @@ combined process of those two individual processes */
   // const auto sdmprocess =  cond >> colls >> sedi;
   // const auto sdmprocess = colls >> sedi;
   // const auto sdmprocess = cond >> colls;
-  const auto sdmprocess = cond;
-  // const auto sdmprocess = colls;
+  // const auto sdmprocess = cond;
+  const auto sdmprocess = colls;
 
   return sdmprocess;
   // return NullProcess{};
@@ -83,12 +83,12 @@ SdMotion auto create_sdmotion(const int motionstep)
 {
   //const auto terminalv = RogersYauTerminalVelocity{};
   const auto terminalv = SimmelTerminalVelocity{};
-  const SdMotion auto movesd = MoveWithSedimentation(motionstep,
+  const SdMotion auto movesedi = MoveWithSedimentation(motionstep,
                                                      &step2dimlesstime,
                                                      terminalv);
   
-  // return movesd;
-  return NullMotion{};
+  return movesedi;
+  // return NullMotion{};
 }
 
 SuperdropIntoStoreViaBuffer auto superdropattributes_to_observe()
