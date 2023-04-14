@@ -31,8 +31,9 @@ int main(int argc, char *argv[])
   const Maps4GridBoxes gbxmaps(config.SDnspace, config.grid_filename);
 
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
-  const auto sdmprocess = create_sdmprocess(config, mdlsteps);
-
+  const auto sdmprocess(create_sdmprocess(config, mdlsteps));
+  const MoveSuperdropsInDomain sdmmotion(create_sdmotion(mdlsteps.motionstep));
+  
   /* create observer from combination of chosen observers */
   // std::ofstream thermo_datafile, superdrops_datafile;
   // const auto observer = create_observer(config, thermo_datafile, superdrops_datafile);
@@ -41,8 +42,6 @@ int main(int argc, char *argv[])
                             gbxmaps.gbxidxs.size(),
                             sdattrs_to_observe());
   const auto observer = create_observer(zarrstores);
-
-  const MoveSuperdropsInDomain sdmmotion(create_sdmotion(mdlsteps.motionstep));
 
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
   run_cvodeSDM_coupledmodel(config, gbxmaps, sdmmotion, sdmprocess,
