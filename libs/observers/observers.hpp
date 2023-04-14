@@ -23,7 +23,7 @@ to terminal or writing them to a datafile */
 
 #include "./observer_superdropletattributes.hpp"
 #include "./contigraggedsdstorage.hpp"
-#include "./observer_thermostate.hpp"
+#include "./thermostatestorage.hpp"
 #include "./singlevarstorage.hpp"
 #include "./sdmomentsstorage.hpp"
 #include "sdmgridboxes/gridbox.hpp"

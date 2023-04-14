@@ -28,7 +28,7 @@ SDM process and observers to use in main.cpp */
 #include "observers/observers.hpp"
 #include "observers/observer_superdropletattributes.hpp"
 #include "observers/contigraggedsdstorage.hpp"
-#include "observers/observer_thermostate.hpp"
+#include "observers/thermostatestorage.hpp"
 #include "observers/zarrstores.hpp"
 
 /* Superdroplet Model (SDM) */

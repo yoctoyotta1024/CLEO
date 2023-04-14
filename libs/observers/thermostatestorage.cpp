@@ -1,9 +1,9 @@
 // Author: Clara Bayley
-// File: observer_thermostate.cpp
+// File: thermostatestorage.cpp
 /* structs/classes to create a ThermoStateObserver that writes
 data from thermostate into orthogonal multidimensional array(s) */
 
-#include "observer_thermostate.hpp"
+#include "thermostatestorage.hpp"
 
 void ThermoIntoStore::copy2buffers(const ThermoState &state, const int j)
 /* copy press, temp, qvap and qcond data in the state to buffers at index j */

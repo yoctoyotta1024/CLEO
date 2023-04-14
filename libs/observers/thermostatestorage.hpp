@@ -1,13 +1,13 @@
 // Author: Clara Bayley
-// File: observer_thermostate.hpp
+// File: thermostatestorage.hpp
 /* structs/classes to create a ThermoStateObserver that writes
 data from thermostate into orthogonal multidimensional array(s)
 (see: https://cfconventions.org/Data/cf-conventions/cf-conventions-1.10/cf-conventions.html#_contiguous_ragged_array_representation)
 in a FFStore obeying zarr storage specification verion 2:
 https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
-#ifndef OBSERVER_THERMOSTATE
-#define OBSERVER_THERMOSTATE
+#ifndef THERMOSTATESTORAGE_HPP
+#define THERMOSTATESTORAGE_HPP
 
 #include <string>
 #include <vector>
@@ -102,4 +102,4 @@ public:
 
 };
 
-#endif // OBSERVER_THERMOSTATE 
+#endif // THERMOSTATESTORAGE_HPP 

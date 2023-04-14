@@ -20,7 +20,7 @@ set(SOURCES
 "observers.cpp"
 "sdmomentsstorage.cpp"
 "singlevarstorage.cpp"
-"observer_thermostate.cpp"
+"thermostatestorage.cpp"
 "zarrstores.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
