@@ -35,8 +35,6 @@ int main(int argc, char *argv[])
   const MoveSuperdropsInDomain sdmmotion(create_sdmotion(mdlsteps.motionstep));
   
   /* create observer from combination of chosen observers */
-  // std::ofstream thermo_datafile, superdrops_datafile;
-  // const auto observer = create_observer(config, thermo_datafile, superdrops_datafile);
   FSStore fsstore(config.zarrbasedir);
   SomeZarrStores zarrstores(fsstore, config.maxcsize,
                             gbxmaps.gbxidxs.size(),
