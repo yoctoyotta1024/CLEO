@@ -93,7 +93,7 @@ public:
 };
 
 template <typename T>
-struct CoordStorage : SingleVarStorage<T>
+struct CoordinateStorage : SingleVarStorage<T>
 /* storage of a 1D variable with 'dims' in .zattrs metadata
 equal to name of variable (ie. variable is an xarray coord)*/
 {
@@ -110,13 +110,13 @@ private:
   }
 
 public:
-  CoordStorage(FSStore &store, const unsigned int maxcsize, const std::string name,
+  CoordinateStorage(FSStore &store, const unsigned int maxcsize, const std::string name,
                const std::string dtype, const std::string units,
                const double scale_factor)
       : SingleVarStorage<T>(store, maxcsize, name,
                             dtype, units, scale_factor) {}
 
-  ~CoordStorage()
+  ~CoordinateStorage()
   /* upon destruction write any data leftover in buffer
   to a chunk and write array's metadata to a .json file */
   {

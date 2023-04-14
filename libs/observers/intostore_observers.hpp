@@ -44,10 +44,10 @@ class ThermoStateObserver
 class TimeObserver
 {
   private:
-    CoordStorage<double> &zarr;
+    CoordinateStorage<double> &zarr;
   
   public:
-    TimeObserver(CoordStorage<double> &zarr) : zarr(zarr)
+    TimeObserver(CoordinateStorage<double> &zarr) : zarr(zarr)
     {
       if (zarr.get_name() != "time")
       {
@@ -59,7 +59,7 @@ class TimeObserver
     
     void observe_state(const std::vector<GridBox> &gridboxes) const
     /* observe time of 0th gridbox and write it to an array
-    as determined by the CoordStorage instance */
+    as determined by the CoordinateStorage instance */
     {
       auto gbx = gridboxes[0];
       zarr.value_to_storage(gbx.state.time);
@@ -69,10 +69,10 @@ class TimeObserver
 class GridBoxIndexObserver
 {
   private:
-    CoordStorage<unsigned int> &zarr;
+    CoordinateStorage<unsigned int> &zarr;
   
   public:
-    GridBoxIndexObserver(CoordStorage<unsigned int> &zarr) : zarr(zarr)
+    GridBoxIndexObserver(CoordinateStorage<unsigned int> &zarr) : zarr(zarr)
     {
       if (zarr.get_name() != "gbxindex")
       {
@@ -84,7 +84,7 @@ class GridBoxIndexObserver
     
     void observe_state(const std::vector<GridBox> &gridboxes) const
     /* observe time of 0th gridbox and write it to an array
-    as determined by the CoordStorage instance */
+    as determined by the CoordinateStorage instance */
     {
       if (zarr.get_ndata() == 0)
       {
@@ -114,7 +114,7 @@ class NsupersPerGridBoxObserver
     
     void observe_state(const std::vector<GridBox> &gridboxes) const
     /* observe time of 0th gridbox and write it to an array
-    as determined by the CoordStorage instance */
+    as determined by the CoordinateStorage instance */
     {
       for (auto &gbx : gridboxes)
       {
@@ -149,7 +149,7 @@ class SDMassNthMomentObserver
     
     void observe_state(const std::vector<GridBox> &gridboxes) const
     /* observe time of 0th gridbox and write it to an array
-    as determined by the CoordStorage instance */
+    as determined by the CoordinateStorage instance */
     {
       const double n = nth_moment;
       for (auto &gbx : gridboxes)

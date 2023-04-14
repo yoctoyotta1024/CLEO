@@ -123,8 +123,8 @@ template <typename ContiguousRaggedZarrStorage>
 Observer auto create_observer(const Config &config,
                               ContiguousRaggedZarrStorage &sdzarr,
                               ThermoStateStorage &thermozarr,
-                              CoordStorage<double> &timezarr,
-                              CoordStorage<unsigned int> &gbxzarr,
+                              CoordinateStorage<double> &timezarr,
+                              CoordinateStorage<unsigned int> &gbxzarr,
                               TwoDStorage<size_t> &nsuperszarr,
                               SDMomentsStorage &sdmoments)
 /* return an Observer type from an amalgamation of other observer types.
