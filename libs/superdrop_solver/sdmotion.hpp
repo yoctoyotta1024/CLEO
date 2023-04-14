@@ -61,13 +61,14 @@ private:
   
   TerminalVelocity terminal_velocity; // returns terminal velocity given a superdroplet
 
+public:
   MoveWithSedimentation(const int interval,
                         const std::function<double(int)> int2time,
-                        TerminalVelocity v)
-      : interval(interval), delt(int2time(interval)),
-        terminal_velocity(v){};
+                        const TerminalVelocity v)
+      : interval(interval),
+        delt(int2time(interval)),
+        terminal_velocity(v) {}
 
-public:
   int next_move(const int t) const
   {
     return ((t / interval) + 1) * interval;

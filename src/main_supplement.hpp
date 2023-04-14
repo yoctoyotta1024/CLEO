@@ -74,16 +74,21 @@ combined process of those two individual processes */
   // const auto sdmprocess = cond >> colls;
   // const auto sdmprocess = cond;
   const auto sdmprocess = colls;
-  // const auto sdmprocess = NullProcess{};
 
   return sdmprocess;
+  // return NullProcess{};
 }
 
-SdMotion auto create_sdmotion()
+SdMotion auto create_sdmotion(const int motionstep)
 {
-  const SdMotion auto movesd = NullMotion();
- 
+  //const auto terminalv = RogersYauTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
+  const SdMotion auto movesd = MoveWithSedimentation(motionstep,
+                                                     &step2dimlesstime,
+                                                     terminalv);
+  
   return movesd;
+  // return NullMotion{};
 }
 
 SuperdropIntoStoreViaBuffer auto superdropattributes_to_observe()
