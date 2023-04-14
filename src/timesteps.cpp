@@ -11,7 +11,7 @@ const double MOTIONTSTEP, const double COUPLTSTEP, const double T_END)
 are converted into integer values of model timesteps using
 model_step and secd template functions created using std::chrono library.
 Throw error if after convertion into model timestep, any
-timestep = 0 */
+timestep = 0. Substeps for sdmprocess must be larger than steps! */
     : condsubstep(realtime2step(CONDTSTEP)),
       collsubstep(realtime2step(COLLTSTEP)),
       motionstep(realtime2step(MOTIONTSTEP)),
@@ -27,19 +27,20 @@ timestep = 0 */
     throw std::invalid_argument(err);
   }
 
-  if ((couplstep < condsubstep) |
-      (couplstep < collsubstep))
+  const int minstep = std::min(couplstep, motionstep);
+  if ((minstep < condsubstep) |
+      (minstep < collsubstep))
   {
-    const std::string err("sdm substepping warning: an sdm substep is"
-                          " larger than the coupling step. "
-                          " - it's possible but are you sure you want this?");
+    const std::string err("invalid sdm substepping: an sdm substep is larger"
+                          " than the smallest step (couplstep or motionstep)");
     throw std::invalid_argument(err);
   }
 
   if (couplstep < motionstep)
   {
-    const std::string err("coupling step is smaller than the sdm motion step"
-                          " - it's possible but are you sure you want this?");
+    const std::string err("Warning: coupling step is smaller than the"
+                          " sdmmotion step - it's viable but are you"
+                          " sure you want this?");
     throw std::invalid_argument(err);
   }
 }

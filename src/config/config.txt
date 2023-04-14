@@ -24,11 +24,11 @@ maxcsize = 8192                             # maximum size of chunks of output d
 cond_maxiters = 100                     # maximum no. iterations of Newton Raphson Method
 cond_rtol = 1e-1                        # relative tolerance for implicit euler integration
 cond_atol = 100                         # abolute tolerance for implicit euler integration
-CONDTSTEP = 0.1                         # time between SD condensation events [s]
+CONDTSTEP = 1                           # time between SD condensation events [s]
 COLLTSTEP = 1                           # time between SD collision events [s]
-MOTIONTSTEP = 1                         # time between SD coordinate position updates [s]
+MOTIONTSTEP = 5                       # time between SD coordinate position updates [s]
 COUPLTSTEP = 30                         # time between SDM data output and thermodynamic coupling [s]
-T_END = 2400                             # time span of integration [s]
+T_END = 2400                            # time span of integration [s]
 
 ### superdroplet params ###
 nSDsvec = 1024                          # initial no. elements in superdroplets' vector ( = initial total no. of superdroplets)
