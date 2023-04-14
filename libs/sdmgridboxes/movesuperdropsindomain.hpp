@@ -116,7 +116,7 @@ private:
   already out of domain (ie. value is the maximum unsigned int),
   return out of domain index */
   {
-    if (sd_gbxindex == (unsigned int)-1)
+    if (sd_gbxindex == std::numeric_limits<unsigned int>::max())
     {
       return sd_gbxindex; // sd_gbxindex is out of domain
     }

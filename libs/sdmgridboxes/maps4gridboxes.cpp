@@ -198,12 +198,12 @@ maximum unsigned int */
 
   if ((idx/increment) % ndim == 0) // at lower edge of domain
   {
-    backward = -1;
+    backward = std::numeric_limits<unsigned int>::max();
   }
 
   if ((forward/increment) % ndim == 0) // at upper edge of domain
   {
-    forward = -1;
+    forward = std::numeric_limits<unsigned int>::max();
   }
 
   return {forward, backward};
