@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   // const auto observer = create_observer(config, thermo_datafile, superdrops_datafile);
   const unsigned int ngridboxes = gbxmaps.gbxidxs.size();
   FSStore fsstore(config.zarrbasedir);
-  ContiguousRaggedSuperdropStorage sdzarr(fsstore, superdropattributes_to_observe(),
+  ContiguousRaggedSDStorage sdzarr(fsstore, superdropattributes_to_observe(),
                                           config.maxcsize);
   ThermoStateStorage thermozarr(fsstore, config.maxcsize, ngridboxes);
   CoordStorage<double> timezarr(fsstore, config.maxcsize,

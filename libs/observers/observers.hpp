@@ -22,6 +22,7 @@ to terminal or writing them to a datafile */
 #include <stdexcept>
 
 #include "./observer_superdropletattributes.hpp"
+#include "./contigraggedsdstorage.hpp"
 #include "./observer_thermostate.hpp"
 #include "./observer_singlevariable.hpp"
 #include "./observer_moments.hpp"
@@ -103,19 +104,19 @@ class ThermoStateObserver
     }
 };
 
-template <typename ContiguousRaggedSuperdropStorage>
+template <typename ContiguousRaggedSDStorage>
 class SDsAttributeObserver
 {
 private:
-  ContiguousRaggedSuperdropStorage &zarr;
+  ContiguousRaggedSDStorage &zarr;
 
 public:
-  SDsAttributeObserver(ContiguousRaggedSuperdropStorage &zarr) : zarr(zarr) {}
+  SDsAttributeObserver(ContiguousRaggedSDStorage &zarr) : zarr(zarr) {}
   
   void observe_state(const std::vector<GridBox> &gridboxes) const
   /* observe superdroplets by writing their data to contigious
   ragged represented arrays as determined by the 
-  ContiguousRaggedSuperdropStorage instance */
+  ContiguousRaggedSDStorage instance */
   {
     size_t nsupers(0);
     for (auto &gbx : gridboxes)
