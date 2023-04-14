@@ -19,7 +19,6 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(SOURCES
 "observers.cpp"
 "sdmomentsstorage.cpp"
-"singlevarstorage.cpp"
 "thermostatestorage.cpp"
 "zarrstores.cpp"
 )

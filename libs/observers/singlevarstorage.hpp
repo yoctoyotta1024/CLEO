@@ -12,6 +12,7 @@ in a zarr store */
 #include <vector>
 #include <cmath>
 #include <cassert>
+#include <limits>
 
 #include "./zarrstores.hpp"
 
@@ -19,10 +20,6 @@ template <typename T>
 class SingleVarStorage
 {
 private:
-  void init_buffer(const unsigned int maxcsize);
-  /* fill buffer to size maxcsize with a (type/implementation
-  dependent) value e.g. for a buffer of doubles, fill it with nan */
-
   virtual unsigned int writechunk() = 0;
 
 protected:
@@ -63,9 +60,12 @@ protected:
   }
 
 public:
-  SingleVarStorage(FSStore &store, const unsigned int maxcsize, const std::string name,
-                   const std::string dtype, const std::string units,
-                   const double scale_factor);
+  SingleVarStorage(FSStore &store, const unsigned int maxcsize,
+                   const std::string name, const std::string dtype,
+                   const std::string units, const double scale_factor)
+      : store(store), name(name), units(units), scale_factor(scale_factor),
+        buffer(maxcsize, std::numeric_limits<T>::max()), chunksize(maxcsize),
+        chunkcount(0), bufferfill(0), ndata(0), dtype(dtype) {}
 
   virtual ~SingleVarStorage(){};
   

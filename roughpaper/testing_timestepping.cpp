@@ -1,11 +1,13 @@
 // Author: Clara Bayley
 // File: testing_timestepping.cpp
 /* This file shows model of how timestepping works.
-///opt/homebrew/bin/g++-12 testing_timestepping.cpp && ./a.out
+/opt/homebrew/bin/g++-12 testing_timestepping.cpp && ./a.out
 */
 
 #include <iostream>
 #include <algorithm>
+#include <vector>
+#include <limits>
 
 int next_step(int t, int step)
 {
