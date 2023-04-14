@@ -86,16 +86,14 @@ combined process of those two individual processes */
                                        &step2realtime,
                                        probs);
 
-  /* create process for sedimentation in SDM */
+  /* create process for sedimentation in SDM -> n.b. this has moved to sdmmotion*/
   //const auto terminalv = RogersYauTerminalVelocity{};
-  const auto terminalv = SimmelTerminalVelocity{};
-  const auto sedi = SedimentationProcess(mdlsteps.motionstep,
-                                         &step2dimlesstime,
-                                         terminalv);
+  // const auto terminalv = SimmelTerminalVelocity{};
+  // const auto sedi = SedimentationProcess(mdlsteps.motionstep,
+  //                                        &step2dimlesstime,
+  //                                        terminalv);
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  // const auto sdmprocess =  cond >> colls >> sedi;
-  // const auto sdmprocess = colls >> sedi;
   // const auto sdmprocess = cond >> colls;
   // const auto sdmprocess = cond;
   const auto sdmprocess = colls;
@@ -113,7 +111,7 @@ SdMotion auto create_sdmotion(const int motionstep)
                                                      terminalv);
   
   return movesedi;
-  // return NullMotion{};
+  //return NullMotion{};
 }
 
 SuperdropIntoStoreViaBuffer auto sdattrs_to_observe()
