@@ -79,7 +79,7 @@ combined process of those two individual processes */
   return sdmprocess;
 }
 
-SdMotion auto create_sdmmotion()
+SdMotion auto create_sdmotion()
 {
   const SdMotion auto movesd = NullMotion();
  
