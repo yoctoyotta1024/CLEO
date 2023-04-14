@@ -1,12 +1,12 @@
 // Author: Clara Bayley
-// File: "observer_singlevariable.hpp"
+// File: "singlevarstorage.hpp"
 /* Classes and helper functions in a namespace
 useful for using storage clases with buffers to
 write values of 1D data into chunks of arrays
 in a zarr store */
 
-#ifndef OBSERVER_SINGLEVARIABLE_HPP
-#define OBSERVER_SINGLEVARIABLE_HPP
+#ifndef SINGLEVARSTORAGE_HPP 
+#define SINGLEVARSTORAGE_HPP 
 
 #include <string>
 #include <vector>
@@ -181,4 +181,4 @@ public:
   }
 };
 
-#endif // OBSERVER_SINGLEVARIABLE_HPP
+#endif // SINGLEVARSTORAGE_HPP 

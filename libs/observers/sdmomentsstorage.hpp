@@ -14,7 +14,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <cmath>
 
 #include "superdrop_solver/superdrop.hpp"
-#include "./observer_singlevariable.hpp"
+#include "./singlevarstorage.hpp"
 
 struct SDMomentsStorage
 {

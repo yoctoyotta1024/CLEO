@@ -1,11 +1,11 @@
 // Author: Clara Bayley
-// File: "observer_singlevariable.cpp"
+// File: "singlevarstorage.cpp"
 /* Classes and helper functions in a namespace
 useful for using storage clases with buffers to
 write values of 1D data into chunks of arrays
 in a zarr store */
 
-#include "observer_singlevariable.hpp" 
+#include "singlevarstorage.hpp" 
 
 template class SingleVarStorage<double>;
 template class SingleVarStorage<unsigned int>;
