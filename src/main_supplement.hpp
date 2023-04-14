@@ -50,33 +50,30 @@ combined process of those two individual processes */
 {
   /* create process for condensation in SDM including Implicit
   Euler Method for solving condensation ODEs */
-  const auto condensation_process = CondensationProcess(mdlsteps.condsubstep,
-                                                        &timestep2dimlesstime,
-                                                        config.doCouple,
-                                                        config.cond_maxiters,
-                                                        config.cond_rtol,
-                                                        config.cond_atol);
+  const auto cond = CondensationProcess(mdlsteps.condsubstep, &step2dimlesstime,
+                                        config.doCouple, config.cond_maxiters,
+                                        config.cond_rtol, config.cond_atol);
 
   /* create process for collision-coalescene in SDM */
   const auto probs = GolovinProb(dlc::R0);
   // const auto probs = LongHydrodynamicProb();
-  const auto collision_process = CollisionsProcess(mdlsteps.collsubstep,
-                                                   &timestep2realtime,
-                                                   probs);
+  const auto colls = CollisionsProcess(mdlsteps.collsubstep,
+                                       &step2realtime,
+                                       probs);
 
   /* create process for sedimentation in SDM */
-  const auto sedimentation_process = SedimentationProcess(mdlsteps.motionstep,
-                                                          &timestep2dimlesstime,
-                                                          SimmelTerminalVelocity{});
-  // const auto sedimentation_process = SedimentationProcess(mdlsteps.motionstep,
-  //                                                         RogersYauTerminalVelocity{});
+  //const auto terminalv = RogersYauTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
+  const auto sedi = SedimentationProcess(mdlsteps.motionstep,
+                                         &step2dimlesstime,
+                                         terminalv);
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  // const auto sdmprocess =  condensation_process >> collision_process >> sedimentation_process;
-  // const auto sdmprocess = condensation_process >> collision_process;
-  // const auto sdmprocess = collision_process >> sedimentation_process;
-  const auto sdmprocess = collision_process;
-  //const auto sdmprocess = condensation_process;
+  // const auto sdmprocess =  cond >> colls >> sedi;
+  // const auto sdmprocess = colls >> sedi;
+  // const auto sdmprocess = cond >> colls;
+  // const auto sdmprocess = cond;
+  const auto sdmprocess = colls;
   // const auto sdmprocess = NullProcess{};
 
   return sdmprocess;
