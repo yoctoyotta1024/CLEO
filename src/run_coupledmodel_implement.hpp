@@ -149,7 +149,7 @@ of the sooner event */
 }
 
 template <SdMotion M>
-void run_sdmstep(const int t, const int couplstep,
+void run_sdmstep(const int t_mdl, const int couplstep,
                  const Maps4GridBoxes &gbxmaps,
                  const MoveSuperdropsInDomain<M> &sdmmotion,
                  const SdmProcess auto &sdmprocess,
@@ -162,11 +162,14 @@ can be subdivided to allow the movement of superdroplets between
 gridboxes and the SDM process to occur at smaller time intervals */
 {
 
+  int t_sdm(t_mdl);
+  
   /* sdm model time is incremented until >= t_mdl+couplstep
   allowing for motion and process subtimestepping*/
-  int nextt = coupl_or_motion(t, couplstep, sdmmotion);
-  for (int t_sdm = t; t_sdm < t + couplstep; t_sdm = nextt)
+  while (t_sdm < t_mdl + couplstep)
   {
+    int nextt = coupl_or_motion(t_sdm, couplstep, sdmmotion);
+    
     sdmmotion.run_step(t_sdm, gbxmaps, SDsInGBxs, gridboxes);
 
     /* run SDM process for each gridbox
@@ -181,7 +184,7 @@ gridboxes and the SDM process to occur at smaller time intervals */
       }
     }
     
-    nextt = coupl_or_motion(t_sdm, couplstep, sdmmotion);
+    t_sdm = nextt;
   }
 }
 

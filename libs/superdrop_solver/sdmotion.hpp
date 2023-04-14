@@ -12,10 +12,8 @@ coordinates according to equations of motion) */
 #include <limits>
 
 #include "./superdrop.hpp"
-#include "./sedimentationmethod.hpp"
-#include "./sdmprocess.hpp"
-#include "./terminalvelocity.hpp"
 #include "./thermostate.hpp"
+#include "./terminalvelocity.hpp"
 
 template <typename M>
 concept SdMotion = requires(M m, const int currenttimestep,
