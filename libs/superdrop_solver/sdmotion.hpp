@@ -38,12 +38,12 @@ which takes a ThermoState and Superdrop as arguments */
 
 struct NullMotion
 {
-  int next_move(int currenttimestep) const
+  int next_move(const int currenttimestep) const
   {
     return std::numeric_limits<int>::max();
   }
 
-  bool on_move(int currenttimestep) const
+  bool on_move(const int currenttimestep) const
   {
     return false;
   }
@@ -58,6 +58,7 @@ class MoveWithSedimentation
 private:
   const int interval;                 // integer timestep for movement
   const double delt;                  // equivalent of interval as dimensionless time
+  
   TerminalVelocity terminal_velocity; // returns terminal velocity given a superdroplet
 
   MoveWithSedimentation(const int interval,
@@ -67,12 +68,12 @@ private:
         terminal_velocity(v){};
 
 public:
-  int next_move(int t) const
+  int next_move(const int t) const
   {
     return ((t / interval) + 1) * interval;
   }
 
-  bool on_move(int t) const
+  bool on_move(const int t) const
   {
     return t % interval == 0;
   }

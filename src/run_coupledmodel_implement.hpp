@@ -39,18 +39,20 @@ seperated to increase readability */
 namespace dlc = dimless_constants;
 
 /* ----------- implementation in run_coupledmodel.hpp ----------- */
+template <SdMotion M>
 void run_cvodeSDM_coupledmodel(const Config &config,
                                const Maps4GridBoxes &gbxmaps,
+                               const MoveSuperdropsInDomain<M> &sdmmotion,
                                const SdmProcess auto &sdmprocess,
-                               const SdmMotion auto &sdmmotion,
                                const Observer auto &observer,
                                const int t_end, const int couplstep);
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 
+template <SdMotion M>
 void timestep_coupledmodel(const Maps4GridBoxes &gbxmaps,
+                           const MoveSuperdropsInDomain<M> &sdmmotion,
                            const SdmProcess auto &sdmprocess,
-                           const SdmMotion auto &sdmmotion,
                            const Observer auto &observer,
                            const bool doCouple,
                            const int t_end,
@@ -92,9 +94,9 @@ int proceed_tonext_coupledstep(int t_mdl, const int couplstep,
                                const std::vector<ThermoState> &previousstates,
                                std::vector<GridBox> &gridboxes,
                                CvodeThermoSolver &cvode);
-/* exchanges superdroplets between gridboxes and sends
-changes in thermodynamics due to SDM microphysics to thermodynamics solver
-(eg. raise in temperature of a gridbox due to latent heat release) */
+/* sends changes in thermodynamics due to SDM microphysics
+to thermodynamics solver (eg. raise in temperature of a
+gridbox due to latent heat release) */
 /* -------------------------------------------------------------- */
 
 inline void printfinish_coupledmodel()
@@ -117,29 +119,6 @@ thermodyanics ODE solver (cvode) */
   state.qcond = cvode.get_qcond(ii);
 }
 
-inline int nextt_coupl_or_motion(const int t_sdm, const int couplstep,
-                               const int motionstep)
-/* given current time, t_sdm, work out which event (motion or coupling)
-is next to occur and return the time of the sooner event */
-{
-  const int next_motion = ((t_sdm / motionstep) + 1) * motionstep; // t of next xchange
-  const int next_coupl = ((t_sdm / couplstep) + 1) * couplstep;             // t of next output
-
-  return std::min(next_motion, next_coupl);
-}
-
-inline void exchanges_between_gridboxes(const Maps4GridBoxes &gbxmaps,
-                                        const SdmMotion auto &sdmmotion,
-                                        std::vector<SuperdropWithGbxindex> &SDsInGBxs,
-                                        std::vector<GridBox> &gridboxes)
-/* do exchange if timestep is on exchange event */
-{
-  if (t_sdm % motionstep == 0)
-  {
-    move_superdrops_in_domain(gbxmaps, sdmmotion, SDsInGBxs, gridboxes);
-  }
-}
-
 std::vector<ThermoState> start_coupledstep(const Observer auto &observer,
                                            std::vector<GridBox> &gridboxes,
                                            const CvodeThermoSolver &cvode)
@@ -156,41 +135,53 @@ of current thermodynamic states (for later use in SDM) */
   return currentstates;
 }
 
-void run_sdmstep(const int t_mdl, const int couplstep,
-                 const SdmProcess auto &sdmprocess,
-                 const SdmMotion auto &sdmmotion,
+template <SdMotion M>
+inline int coupl_or_motion(const int t_sdm, const int couplstep,
+                           const MoveSuperdropsInDomain<M> &sdmmotion)
+/* given current timestep, t_sdm, work out which event
+(motion or coupling) is next to occur and return the time
+of the sooner event */
+{
+  const int next_coupl = ((t_sdm / couplstep) + 1) * couplstep;             // t of next output
+  const int next_motion = sdmmotion.next_step(t_sdm);                       // t of next sdmmotion
+
+  return std::min(next_coupl, next_motion);
+}
+
+template <SdMotion M>
+void run_sdmstep(const int t, const int couplstep,
                  const Maps4GridBoxes &gbxmaps,
+                 const MoveSuperdropsInDomain<M> &sdmmotion,
+                 const SdmProcess auto &sdmprocess,
                  std::mt19937 &gen,
                  std::vector<GridBox> &gridboxes,
                  std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* run SDM for each gridbox from time t_mdl to t_mdl+couplstep
-with subtimestepping such that each output timestep (outstep)
-can be subdivided to allow the exchange of superdroplets between
+with subtimestepping such that each coupled timestep (couplstep)
+can be subdivided to allow the movement of superdroplets between
 gridboxes and the SDM process to occur at smaller time intervals */
 {
-  int t_sdm = t_mdl; // model time of SDM is incremented by nextt_sdm until >= t_mdl+couplstep
-  while (t_sdm < t_mdl + couplstep)
+
+  /* sdm model time is incremented until >= t_mdl+couplstep
+  allowing for motion and process subtimestepping*/
+  int nextt = coupl_or_motion(t, couplstep, sdmmotion);
+  for (int t_sdm = t; t_sdm < t + couplstep; t_sdm = nextt)
   {
-    /* nextt is t of next exchange and/or t of next outstep */
-    const int nextt_sdm = nextt_coupl_or_motion(t_sdm, couplstep, motionstep);
+    sdmmotion.run_step(t_sdm, gbxmaps, SDsInGBxs, gridboxes);
 
-    exchanges_between_gridboxes(gbxmaps, sdmmotion,
-                                SDsInGBxs, gridboxes);
-
-    /* run SDM process for all gridboxes from t_sdm to nextt_sdm
+    /* run SDM process for each gridbox
     using sdmprocess subttimestepping routine */
     for (auto &gbx : gridboxes)
     {
-      for (int subt = t_sdm; subt < nextt_sdm;
+      for (int subt = t_sdm; subt < nextt;
            subt = sdmprocess.next_step(subt))
       {
         sdmprocess.run_step(subt, gbx.span4SDsinGBx,
                             gbx.state, gen);
       }
     }
-
-
-    t_sdm = nextt_sdm;
+    
+    nextt = coupl_or_motion(t_sdm, couplstep, sdmmotion);
   }
 }
 

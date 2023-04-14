@@ -117,9 +117,9 @@ int proceed_tonext_coupledstep(int t_mdl, const int couplstep,
                                const std::vector<ThermoState> &previousstates,
                                std::vector<GridBox> &gridboxes,
                                CvodeThermoSolver &cvode)
-/* exchanges superdroplets between gridboxes and sends
-changes in thermodynamics due to SDM microphysics to thermodynamics solver
-(eg. raise in temperature of a gridbox due to latent heat release) */
+/* sends changes in thermodynamics due to SDM microphysics
+to thermodynamics solver (eg. raise in temperature of a
+gridbox due to latent heat release) */
 {
 
   if (doCouple)
