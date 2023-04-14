@@ -61,13 +61,19 @@ private:
   
   TerminalVelocity terminalv; // returns terminal velocity given a superdroplet
 
+  double deltacoord(const double vel) const
+  /* returns change in a coord given a velocity component 'vel' */
+  {
+    return vel * delt;
+  }
+
 public:
   MoveWithSedimentation(const int interval,
                         const std::function<double(int)> int2time,
                         const TerminalVelocity terminalv)
       : interval(interval),
         delt(int2time(interval)),
-        terminalv(v) {}
+        terminalv(terminalv) {}
 
   int next_move(const int t) const
   {
@@ -82,12 +88,14 @@ public:
   void change_superdroplet_coords(const ThermoState &state,
                                   Superdrop &drop) const
   {
-    // const double vel3 = state.wvel; // w component of wind velocity (z=3)
-    // const double vel1 = state.uvel; // u component of wind velocity (x=1)
-    // const double vel2 = state.vvel; // v component of wind velocity (y=2)
+    const double vel3 = state.wvel - terminalv(drop); // w wind + terminal velocity
+    drop.coord3 += deltacoord(vel3);
+    
+    const double vel1 = state.uvel; // u component of wind velocity
+    drop.coord1 += deltacoord(vel1);
 
-    const double vel3 = state.wvel - terminalv(drop); 
-    drop.coord3 += vel3 * delt;
+    const double vel2 = state.vvel; // v component of wind velocity (y=2)
+    drop.coord2 += deltacoord(vel2);
   }
 };
 
