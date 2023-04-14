@@ -20,7 +20,7 @@ set(SOURCES
   "thermodynamic_equations.cpp"
   "impliciteuler.cpp"
   "condensationmethod.cpp"
-  "superdropmotion.cpp"
+  "sdmotion.cpp"
   "superdrop.cpp"
   )
 add_library("${LIBNAME}" SHARED ${SOURCES})

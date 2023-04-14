@@ -30,7 +30,8 @@ to terminal or writing them to a datafile */
 #include "superdrop_solver/thermostate.hpp"
 
 template <typename Obs>
-concept Observer = requires(Obs obs, const std::vector<GridBox> &gboxes)
+concept Observer = requires(Obs obs,
+                            const std::vector<GridBox> &gboxes)
 /* concept Observer is all types that have a function
 called observe_state() which take a gridbox type as
 argument and returns a void type */
@@ -47,7 +48,7 @@ struct CombinedObserver
   O1 observer1;
   O2 observer2;
 
-  CombinedObserver(O1 observer1, O2 observer2)
+  CombinedObserver(const O1 observer1, const O2 observer2)
       : observer1(observer1), observer2(observer2) {}
 
   void observe_state(const std::vector<GridBox> &gboxes) const
@@ -57,7 +58,7 @@ struct CombinedObserver
   }
 };
 
-auto operator>>(Observer auto o1, Observer auto o2)
+auto operator>>(const Observer auto o1, const Observer auto o2)
 /* define ">>" operator that combines two observers */
 {
   return CombinedObserver{o1, o2};

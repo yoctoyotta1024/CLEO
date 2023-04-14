@@ -33,7 +33,7 @@ SDM process and observers to use in main.cpp */
 /* Superdroplet Model (SDM) */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
-#include "superdrop_solver/superdropmotion.hpp"
+#include "superdrop_solver/sdmotion.hpp"
 #include "superdrop_solver/coalescencekernel.hpp"
 #include "superdrop_solver/collisionsmethod.hpp"
 #include "superdrop_solver/condensationmethod.hpp"

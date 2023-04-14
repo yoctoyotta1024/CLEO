@@ -17,7 +17,7 @@ collision-coalescence (see ConstTstepProcess struct) */
 #include "./thermostate.hpp"
 
 template <typename F>
-concept StepFunc = requires(F f, int currenttimestep,
+concept StepFunc = requires(F f, const int currenttimestep,
                             std::span<SuperdropWithGbxindex> span4SDsinGBx,
                             ThermoState state,
                             std::mt19937 gen)
@@ -32,7 +32,7 @@ function (see below in SdmProcess) */
 };
 
 template <typename P, typename... Args>
-concept SdmProcess = requires(P p, int currenttimestep,
+concept SdmProcess = requires(P p, const int currenttimestep,
                               std::span<SuperdropWithGbxindex> span4SDsinGBx,
                               ThermoState state,
                               std::mt19937 gen)
@@ -57,7 +57,7 @@ struct CombinedSdmProcess
   A a;
   B b;
 
-  CombinedSdmProcess(A a, B b) : a(a), b(b) {}
+  CombinedSdmProcess(const A a, const B b) : a(a), b(b) {}
 
   int next_step(const int currenttimestep) const
   /* for combination of 2 SDM proceses, the next step
@@ -101,7 +101,7 @@ struct CombinedSdmProcess
   }
 };
 
-auto operator>>(SdmProcess auto a, SdmProcess auto b)
+auto operator>>(const SdmProcess auto a, const SdmProcess auto b)
 /* define ">>" operator that combines
 two Superdroplet Model Processes */
 {
@@ -112,12 +112,12 @@ struct NullProcess
 /* NullProcess does nothing at all
 (is defined for a Monoid Structure) */
 {
-  int next_step(int currenttimestep) const
+  int next_step(const int currenttimestep) const
   {
     return std::numeric_limits<int>::max();
   }
 
-  bool on_step(int currenttimestep) const
+  bool on_step(const int currenttimestep) const
   {
     return false;
   }
@@ -138,12 +138,12 @@ satisfies the StepFunc concept */
   int interval;
   F run_step;
 
-  int next_step(int t) const
+  int next_step(const int t) const
   {
     return ((t / interval) + 1) * interval;
   }
 
-  bool on_step(int t) const
+  bool on_step(const int t) const
   {
     return t % interval == 0;
   }

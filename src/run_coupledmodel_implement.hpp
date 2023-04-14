@@ -22,14 +22,14 @@ seperated to increase readability */
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
 #include "sdmgridboxes/superdropwithgbxindex.hpp"
-#include "sdmgridboxes/movesuperdropsdomain.hpp"
+#include "sdmgridboxes/movesuperdropsindomain.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 #include "observers/observers.hpp"
 
 /* Superdroplet Model (SDM) files */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
-#include "superdrop_solver/sdmmotion.hpp"
+#include "superdrop_solver/sdmotion.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"
 
