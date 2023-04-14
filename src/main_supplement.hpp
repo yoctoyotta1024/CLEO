@@ -110,7 +110,7 @@ SuperdropIntoStoreViaBuffer auto superdropattributes_to_observe()
 
 Observer auto create_sdmomentsobserver(SDMomentsStorage &sdmoments)
 {
-  const Observer auto mom0 = SDMass0thMomentObserver(sdmoments.massmoment0zarr);
+  const Observer auto mom0 = SDMassNthMomentObserver(sdmoments.massmoment0zarr, 0);
   const Observer auto mom1 = SDMassNthMomentObserver(sdmoments.massmoment1zarr, 1);
   const Observer auto mom2 = SDMassNthMomentObserver(sdmoments.massmoment2zarr, 2);
 

@@ -126,37 +126,6 @@ class NsupersPerGridBoxObserver
     }
 };
 
-class SDMass0thMomentObserver
-{
-  private:
-    TwoDStorage<double> &zarr;
-  
-  public:
-    SDMass0thMomentObserver(TwoDStorage<double> &zarr) : zarr(zarr)
-    {
-      if (zarr.get_name() != "massmoment0")
-      {
-        const std::string errmsg = "name of storage meant for 0th"
-                                   " moment of SD mass distirbution"
-                                   " is not called 'massmoment0'";
-        throw std::invalid_argument(errmsg);
-      }
-    }
-    
-    void observe_state(const std::vector<GridBox> &gridboxes) const
-    /* observe time of 0th gridbox and write it to an array
-    as determined by the CoordStorage instance */
-    {
-      for (auto &gbx : gridboxes)
-      {
-        double moment0 = mass0thmoment(gbx.span4SDsinGBx);
-        zarr.value_to_storage(moment0);
-      }
-
-      ++zarr.nobs;
-    }
-};
-
 class SDMassNthMomentObserver
 {
   private:

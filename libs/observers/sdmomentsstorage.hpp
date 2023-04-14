@@ -35,10 +35,6 @@ struct SDMomentsStorage
                         "g^2", pow(scalefac, 2.0), ngridboxes){};
 };
 
-double mass0thmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx);
-/* calculates the 0th moment of the (real) droplet mass distirbution
-given by the superdrops in the span passed as an argument */
-
 double massnthmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
                     const double nth_moment);
 /* calculates the nth moment of the (real) droplet mass distirbution
