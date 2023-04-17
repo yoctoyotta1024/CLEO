@@ -46,10 +46,10 @@ radii to equilibrium wet radius if wetradiiinit is true. */
   cvode.print_init_ODEdata(step2dimlesstime(couplstep),
                            step2dimlesstime(t_end));
 
-  // for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
-  // {
-  //   set_thermostate_fromcvode(ii, cvode, gridboxes[ii].state);
-  // }
+  for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
+  {
+    set_thermostate(ii, cvode, gridboxes[ii].state);
+  }
 
   if (wetradiiinit)
   {
