@@ -109,8 +109,8 @@ SdMotion auto create_sdmotion(const int motionstep)
                                                      &step2dimlesstime,
                                                      terminalv);
   
-  return movesedi;
-  //return NullMotion{};
+  //return movesedi;
+  return NullMotion{};
 }
 
 SuperdropIntoStoreViaBuffer auto sdattrs_to_observe()
