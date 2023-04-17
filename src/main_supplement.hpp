@@ -18,10 +18,9 @@ SDM process and observers to use in main.cpp */
 #include "claras_SDconstants.hpp"
 #include "initialisation/config.hpp"
 
-/* coupled model setup */
-#include "./run_coupledmodel_implement.hpp"
-#include "./run_coupledmodel.hpp"
+/* Coupled model setup */
 #include "./timesteps.hpp"
+#include "cvodesdm/run_cvodesdm.hpp"
 
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"

@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.18.0)
 
 add_subdirectory(initialisation)
-add_subdirectory(thermo_solver)
+add_subdirectory(cvodesdm)
 add_subdirectory(superdrop_solver)
 add_subdirectory(sdmgridboxes)
 add_subdirectory(observers)
