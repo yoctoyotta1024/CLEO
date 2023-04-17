@@ -60,12 +60,6 @@ int main()
   print_nbourmaps(gbxmaps, dlc::COORD0);
   print_superdropcoords(gridboxes, gbxmaps);
 
-  const SdMotion auto movesd = NullMotion();
-  const MoveSuperdropsInDomain move(movesd);
-
-  move.move_superdrops_in_domain(gbxmaps, SDsInGBxs, gridboxes);
-  print_superdropcoords(gridboxes, gbxmaps);
-
   return 0;
 }
 void print_nbourmaps(const Maps4GridBoxes &gbxmaps, const double COORD0)
