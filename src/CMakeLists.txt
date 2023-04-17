@@ -12,28 +12,31 @@ project("CLEOsetups")
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
+set(SDMLIBS superdrop_solver initialisation sdmgridboxes observers)
+set(compileops -Wall -pedantic -g -gdwarf-4)
+#set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
+
 # executable for cvodesdm coupled model
 set(CVODECLEO "coupledCVODECLEO")
 add_executable(${CVODECLEO} "main.cpp")
-target_link_libraries(${CVODECLEO} PRIVATE
-  cvodesdm superdrop_solver initialisation sdmgridboxes observers)
-target_include_directories(${CVODECLEO} PRIVATE ${PROJECT_SOURCE_DIR})
+target_link_libraries(${CVODECLEO} PRIVATE cvodesdm "${SDMLIBS}")
+#target_include_directories(${CVODECLEO} PRIVATE ${PROJECT_SOURCE_DIR})
+target_compile_options(${CVODECLEO} PRIVATE ${compileops})
 
-# executable for cvodesdm coupled model
-set(uncoupledCLEO "uncoupledCLEO")
-add_executable(${uncoupledCLEO} "mainU.cpp")
-target_link_libraries(${uncoupledCLEO} PRIVATE
-  superdrop_solver initialisation sdmgridboxes observers)
-target_include_directories(${uncoupledCLEO} PRIVATE ${PROJECT_SOURCE_DIR})
+# executable for cvodesdm coupled model 0D condensation setup 
+set(cond0D "cond0D")
+add_executable(${cond0D} EXCLUDE_FROM_ALL "main_cond0D.cpp")
+target_link_libraries(${cond0D} PRIVATE cvodesdm "${SDMLIBS}")
+target_compile_options(${cond0D} PRIVATE ${compileops}) 
+
+# executable for cvodesdm coupled model 0D golovin collisions setup
+set(golcolls0D "golcolls0D")
+add_executable(${golcolls0D} EXCLUDE_FROM_ALL "main_golcolls0D.cpp")
+target_link_libraries(${golcolls0D} PRIVATE cvodesdm "${SDMLIBS}")
+target_compile_options(${golcolls0D} PRIVATE ${compileops})
 
 # set compiler properties for target(s)
-set_target_properties(${CVODECLEO} ${uncoupledCLEO} PROPERTIES
+set_target_properties(${CVODECLEO} ${cond0D} ${golcolls0D} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
-
-target_compile_options(${CVODECLEO} PRIVATE -Wall -pedantic -g -gdwarf-4)
-target_compile_options(${uncoupledCLEO} PRIVATE -Wall -pedantic -g -gdwarf-4)
-
-#target_compile_options(${CVODECLEO} PRIVATE -Wall -Werror -pedantic -g -gdwarf-4)
-#target_compile_options(${uncoupledCLEO} PRIVATE -Wall -Werror -pedantic -g -gdwarf-4)
