@@ -58,14 +58,10 @@ thermodyanics ODE solver (cvode) */
   state.qcond = cvode.get_qcond(ii);
 }
 
-template <SdMotion M>
-void timestep_cvodesdm(const Maps4GridBoxes &gbxmaps,
-                       const MoveSuperdropsInDomain<M> &sdmmotion,
-                       const SdmProcess auto &sdmprocess,
-                       const Observer auto &observer,
-                       const bool doCouple,
-                       const int t_end,
+void timestep_cvodesdm(const int t_end,
                        const int couplstep,
+                       const bool doCouple,
+                       const RunSDMStep<auto, auto, auto> &sdm,
                        CvodeThermoSolver &cvode,
                        std::mt19937 &gen,
                        std::vector<GridBox> &gridboxes,
@@ -76,17 +72,16 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
 4) proceed to next step (coupled) */
 {
   int t_mdl = 0; // model time is incremented by proceed_tonext_coupledstep
-  RunSDMStep<M> sdm;
-
+  
   while (t_mdl <= t_end)
   {
     /* begin coupled step */
     const std::vector<ThermoState>
-        previousstates = start_cvodesdmstep(observer, cvode, gridboxes);
+        previousstates = start_cvodesdmstep(sdm.observer,
+                                            cvode, gridboxes);
 
     /* advance SDM by outstep (parallel to CVODE section) */
-    sdm.run_sdmstep(t_mdl, couplstep, gbxmaps, sdmmotion,
-                sdmprocess, gen, gridboxes, SDsInGBxs);
+    sdm.run_sdmstep(t_mdl, couplstep, gen, gridboxes, SDsInGBxs);
 
     /* advance CVODE solver by outstep (parallel to SDM) */
     cvode.run_cvodestep(step2dimlesstime(t_mdl + couplstep));

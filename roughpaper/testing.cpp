@@ -24,6 +24,7 @@ could compile with e.g.
 #include "../libs/sdmgridboxes/gridbox.hpp"
 #include "../libs/sdmgridboxes/movesuperdropsindomain.hpp"
 #include "../libs/sdmgridboxes/superdropwithgbxindex.hpp"
+#include "../libs/sdmgridboxes/run_sdmstep.hpp"
 #include "../libs/superdrop_solver/sdmotion.hpp"
 
 namespace dlc = dimless_constants;

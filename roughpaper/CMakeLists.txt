@@ -19,10 +19,9 @@ add_executable("${PROJECT_NAME}" ${SOURCES})
 # # add directories to include for targets to us
 # set(CLEODIR "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO")
 set(CLEODIR "../")
-include_directories("${CLEODIR}/src/runmodel")
 include_directories("${CLEODIR}/libs")
-include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${CLEODIR})
+# include_directories(${PROJECT_SOURCE_DIR})
+# include_directories(${CLEODIR})
 
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/initialisation" ${CMAKE_CURRENT_BINARY_DIR}/libs/initialisation)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/superdrop_solver" ${CMAKE_CURRENT_BINARY_DIR}/libs/superdrop_solver)

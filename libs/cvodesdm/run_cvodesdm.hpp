@@ -48,18 +48,14 @@ std::vector<double> initcvodethermo(const size_t num_gridboxes,
 
 void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes);
 
-template <SdMotion M>
 void run_cvodesdm(const Config &config,
-                  const Maps4GridBoxes &gbxmaps,
-                  const MoveSuperdropsInDomain<M> &sdmmotion,
-                  const SdmProcess auto &sdmprocess,
-                  const Observer auto &observer,
+                  const RunSDMStep<auto, auto, auto> &sdm,
                   const int t_end, const int couplstep)
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 {
   /* CVODE thermodynamics solver */
-  const unsigned int ngridboxes = gbxmaps.gbxidxs.size();
+  const unsigned int ngridboxes = sdm.ngridboxes;
   CvodeThermoSolver cvode(config, initcvodethermo(ngridboxes, config));
 
   /* vector containing all superdroplets within a struct that also holds their
@@ -71,16 +67,15 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
                                               config.SDnspace, solute);
 
   /* vector containing all gridboxes that makeup the SDM domain */
-  std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
+  std::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
 
   /* prepare coupled model for timestepping */
   auto gen = preparetotimestep(cvode, gridboxes, config.wetradiiinit,
                                   t_end, couplstep);
 
   /* run coupled model from t=0 to t=t_end */
-  timestep_cvodesdm(gbxmaps, sdmmotion, sdmprocess, observer,
-                        config.doCouple, t_end, couplstep,
-                        cvode, gen, gridboxes, SDsInGBxs);
+  timestep_cvodesdm(t_end, couplstep, config.doCouple, sdm, cvode,
+                    gen, gridboxes, SDsInGBxs);
 
   std::cout << "\n ---- CVODE-SDM Coupled Model Complete ---- \n";
 }

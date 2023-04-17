@@ -66,6 +66,18 @@ SomeZarrStores(FSStore &fsstore, const int maxcsize,
                     "<u8", " ", 1, ngridboxes) {}
 };
 
+SdMotion auto create_sdmotion(const int motionstep)
+{
+  //const auto terminalv = RogersYauTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
+  const SdMotion auto movesedi = MoveWithSedimentation(motionstep,
+                                                     &step2dimlesstime,
+                                                     terminalv);
+ 
+  return movesedi;
+  //return NullMotion{};
+}
+
 SdmProcess auto create_sdmprocess(const Config &config,
                                   const SDMTimesteps &mdlsteps)
 /* return an SdmProcess type from an amalgamation of other SdmProcess types.
@@ -99,18 +111,6 @@ combined process of those two individual processes */
 
   return sdmprocess;
   // return NullProcess{};
-}
-
-SdMotion auto create_sdmotion(const int motionstep)
-{
-  //const auto terminalv = RogersYauTerminalVelocity{};
-  const auto terminalv = SimmelTerminalVelocity{};
-  const SdMotion auto movesedi = MoveWithSedimentation(motionstep,
-                                                     &step2dimlesstime,
-                                                     terminalv);
-  
-  //return movesedi;
-  return NullMotion{};
 }
 
 SuperdropIntoStoreViaBuffer auto sdattrs_to_observe()

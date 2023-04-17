@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
 
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
   const auto sdmprocess(create_sdmprocess(config, mdlsteps));
-  const MoveSuperdropsInDomain sdmmotion(create_sdmotion(mdlsteps.motionstep));
-  
+  const auto sdmotion(create_sdmotion(mdlsteps.motionstep));
+
   /* create observer from combination of chosen observers */
   FSStore fsstore(config.zarrbasedir);
   SomeZarrStores zarrstores(fsstore, config.maxcsize,
@@ -41,9 +41,10 @@ int main(int argc, char *argv[])
                             sdattrs_to_observe());
   const auto observer = create_observer(zarrstores);
 
+  const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
+
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
-  run_cvodesdm(config, gbxmaps, sdmmotion, sdmprocess,
-                observer, mdlsteps.t_end, mdlsteps.couplstep);
+  run_cvodesdm(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
 
   return 0;
 }
