@@ -16,6 +16,7 @@ or both ways */
 #include "sdmgridboxes/run_sdmstep.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 #include "sdmgridboxes/maps4gridboxes.hpp"
+#include "sdmgridboxes/sdmtimesteps.hpp"
 #include "sdmgridboxes/superdropwithgbxindex.hpp"
 #include "superdrop_solver/thermostate.hpp"
 #include "superdrop_solver/sdmprocess.hpp"

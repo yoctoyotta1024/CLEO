@@ -14,7 +14,7 @@ struct */
 #include <string>
 #include <stdexcept>
 
-#include "claras_SDconstants.hpp"
+#include "../claras_SDconstants.hpp"
 #include "./maps4gridboxes.hpp"
 #include "./superdropwithgbxindex.hpp"
 #include "initialisation/config.hpp"

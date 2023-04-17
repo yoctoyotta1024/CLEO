@@ -1,5 +1,5 @@
 // Author: Clara Bayley
-// File: timesteps.hpp
+// File: sdmtimesteps.hpp
 /* Structs for handling values of
 timestep variables for SDM */
 
@@ -12,8 +12,7 @@ timestep variables for SDM */
 #include <stdexcept>
 #include <algorithm>
 
-#include "claras_SDconstants.hpp"
-#include "initialisation/config.hpp"
+#include "../claras_SDconstants.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -42,7 +41,7 @@ time given secd and model_step chrono functions */
   return secd{model_step{mdlstep}}.count();
 }
 
-struct ModelTimesteps
+struct SDMTimesteps
 /* integer intervals (timesteps) involved
 in running coupled model */
 {
@@ -52,7 +51,7 @@ in running coupled model */
   const int couplstep;
   const int t_end;
 
-  ModelTimesteps(const double CONDTSTEP, const double COLLTSTEP,
+  SDMTimesteps(const double CONDTSTEP, const double COLLTSTEP,
             const double MOTIONTSTEP, const double COUPLTSTEP,
             const double T_END);
   /* (dimensionless) double's that are timesteps in config struct

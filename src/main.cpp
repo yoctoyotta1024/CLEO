@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
   const Config config(configfilepath, constantsfilepath);
 
   /* object for time-stepping parameters of coupled model */
-  const ModelTimesteps mdlsteps(config.CONDTSTEP, config.COLLTSTEP,
+  const SDMTimesteps mdlsteps(config.CONDTSTEP, config.COLLTSTEP,
                                 config.MOTIONTSTEP, config.COUPLTSTEP,
                                 config.T_END);
 
@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
   const auto observer = create_observer(zarrstores);
 
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
-  run_cvodeSDM_coupledmodel(config, gbxmaps, sdmmotion, sdmprocess,
-                            observer, mdlsteps.t_end, mdlsteps.couplstep);
+  run_cvodesdm(config, gbxmaps, sdmmotion, sdmprocess,
+                observer, mdlsteps.t_end, mdlsteps.couplstep);
 
   return 0;
 }

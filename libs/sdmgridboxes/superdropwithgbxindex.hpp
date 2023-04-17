@@ -17,7 +17,7 @@ defined in .cpp implementaiton file */
 #include <stdexcept>
 #include <algorithm>
 
-#include "claras_SDconstants.hpp"
+#include "../claras_SDconstants.hpp"
 #include "initialisation/read_initsuperdrops.hpp"
 #include "superdrop_solver/superdrop.hpp"
 

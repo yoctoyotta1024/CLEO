@@ -15,7 +15,7 @@ and Mahrt, 1st edition. */
 #include <functional>
 #include <concepts>
 
-#include "claras_SDconstants.hpp"
+#include "../claras_SDconstants.hpp"
 #include "./thermodynamic_equations.hpp"
 #include "./impliciteuler.hpp"
 #include "./thermostate.hpp"

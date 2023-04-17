@@ -17,7 +17,7 @@ collision events in superdroplet model */
 #include <functional>
 #include <concepts>
 
-#include "claras_SDconstants.hpp"
+#include "../claras_SDconstants.hpp"
 #include "./superdrop.hpp"
 #include "./thermostate.hpp"
 #include "./coalescencekernel.hpp"

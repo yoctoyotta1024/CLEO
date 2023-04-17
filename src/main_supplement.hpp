@@ -19,11 +19,11 @@ SDM process and observers to use in main.cpp */
 #include "initialisation/config.hpp"
 
 /* Coupled model setup */
-#include "./timesteps.hpp"
 #include "cvodesdm/run_cvodesdm.hpp"
 
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
+#include "sdmgridboxes/sdmtimesteps.hpp"
 #include "observers/observers.hpp"
 #include "observers/intostore_observers.hpp"
 #include "observers/sdattributes_intostore.hpp"
@@ -67,7 +67,7 @@ SomeZarrStores(FSStore &fsstore, const int maxcsize,
 };
 
 SdmProcess auto create_sdmprocess(const Config &config,
-                                  const ModelTimesteps &mdlsteps)
+                                  const SDMTimesteps &mdlsteps)
 /* return an SdmProcess type from an amalgamation of other SdmProcess types.
 For example return a process that does SDM condensation and collisions from
 combined process of those two individual processes */

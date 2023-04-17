@@ -20,6 +20,7 @@ set(SOURCES
 "gridbox.cpp"
 "maps4gridboxes.cpp"
 "movesuperdropsindomain.cpp"
+"sdmtimesteps.cpp"
 "superdropwithgbxindex.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})

@@ -1,11 +1,11 @@
 // Author: Clara Bayley
-// File: timesteps.cpp
+// File: sdmtimesteps.cpp
 /* Structs for handling values of
 timstep variables for SDM */
 
-#include "timesteps.hpp"
+#include "sdmtimesteps.hpp"
 
-ModelTimesteps::ModelTimesteps(const double CONDTSTEP, const double COLLTSTEP,
+SDMTimesteps::SDMTimesteps(const double CONDTSTEP, const double COLLTSTEP,
 const double MOTIONTSTEP, const double COUPLTSTEP, const double T_END)
 /* (dimensionless) double's that are timesteps in config struct
 are converted into integer values of model timesteps using
