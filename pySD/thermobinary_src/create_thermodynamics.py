@@ -38,7 +38,7 @@ def relh2qvap(press, temp, relh, Mr_ratio):
   
   vapourpress = saturation_press(temp) * relh / 100.0  # [Pa]
   
-  qvap = Mr_ratio * vapourpress / (press - vapourpress) # dimensionless []
+  qvap = Mr_ratio * vapourpress / (press - vapourpress) # dimensionless [Kg/kg]
 
   return qvap
 
@@ -141,5 +141,6 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   thermodata = thermogen.generate_thermo(ngridboxes, ntime)
 
   print(thermodata["PRESS"], thermodata["TEMP"], thermodata["qvap"])
+  print(saturation_press(thermodata["TEMP"][0]))
 
   thermodata, scale_factors = dimless_thermodynamics(thermodata, inputs)
