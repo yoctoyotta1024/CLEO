@@ -17,8 +17,11 @@ to terminal or writing them to a datafile */
 #include <ios>
 #include <iomanip>
 
+#include "claras_SDconstants.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 #include "superdrop_solver/thermostate.hpp"
+
+namespace dlc = dimless_constants;
 
 template <typename Obs>
 concept Observer = requires(Obs obs,

@@ -14,11 +14,14 @@ struct */
 #include <string>
 #include <stdexcept>
 
+#include "claras_SDconstants.hpp"
 #include "./maps4gridboxes.hpp"
 #include "./superdropwithgbxindex.hpp"
 #include "initialisation/config.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"
+
+namespace dlc = dimless_constants
 
 struct GridBox
 /* gridbox contains vector of superdroplets in grid box,

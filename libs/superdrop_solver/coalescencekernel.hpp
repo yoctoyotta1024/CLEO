@@ -14,8 +14,11 @@ concept in Collisionsmethod struct  */
 #include <math.h>
 #include <cmath>
 
+#include "claras_SDconstants.hpp"
 #include "./superdrop.hpp"
 #include "./terminalvelocity.hpp"
+
+namespace dlc = dimless_constants
 
 struct GolovinProb
 {

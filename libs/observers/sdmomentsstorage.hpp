@@ -13,8 +13,11 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <span>
 #include <cmath>
 
+#include "claras_SDconstants.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "./singlevarstorage.hpp"
+
+namespace dlc = dimless_constants
 
 struct SDMomentsStorage
 {

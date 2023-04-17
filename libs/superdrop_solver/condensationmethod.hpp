@@ -15,7 +15,7 @@ and Mahrt, 1st edition. */
 #include <functional>
 #include <concepts>
 
-#include "../claras_SDconstants.hpp"
+#include "claras_SDconstants.hpp"
 #include "./thermodynamic_equations.hpp"
 #include "./impliciteuler.hpp"
 #include "./thermostate.hpp"
@@ -23,6 +23,7 @@ and Mahrt, 1st edition. */
 #include "./sdmprocess.hpp"
 
 namespace dlc = dimless_constants;
+namespace DC = dimmed_constants;
 
 class CondensationMethod
 /* class for method to grow/shrink superdroplets due to
