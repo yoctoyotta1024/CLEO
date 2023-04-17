@@ -13,7 +13,7 @@ project("coupledCVODECLEO")
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # add executables to project (only one main() function!)
-set(SOURCES "main.cpp" "run_coupledmodel.cpp" "timesteps.cpp")
+set(SOURCES "main.cpp" "timesteps.cpp")
 add_executable("${PROJECT_NAME}" ${SOURCES})
 
 target_link_libraries("${PROJECT_NAME}" PRIVATE cvodesdm superdrop_solver initialisation sdmgridboxes observers)

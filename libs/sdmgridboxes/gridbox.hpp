@@ -21,7 +21,7 @@ struct */
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"
 
-namespace dlc = dimless_constants
+namespace dlc = dimless_constants;
 
 struct GridBox
 /* gridbox contains vector of superdroplets in grid box,

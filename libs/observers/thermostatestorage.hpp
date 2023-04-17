@@ -19,7 +19,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include "./zarrstores.hpp"
 #include "superdrop_solver/thermostate.hpp"
 
-namespace dlc = dimless_constants
+namespace dlc = dimless_constants;
 
 struct ThermoIntoStore
 {

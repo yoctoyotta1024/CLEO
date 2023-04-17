@@ -18,7 +18,7 @@ concept in Collisionsmethod struct  */
 #include "./superdrop.hpp"
 #include "./terminalvelocity.hpp"
 
-namespace dlc = dimless_constants
+namespace dlc = dimless_constants;
 
 struct GolovinProb
 {

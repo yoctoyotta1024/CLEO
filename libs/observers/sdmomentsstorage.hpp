@@ -17,7 +17,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include "superdrop_solver/superdrop.hpp"
 #include "./singlevarstorage.hpp"
 
-namespace dlc = dimless_constants
+namespace dlc = dimless_constants;
 
 struct SDMomentsStorage
 {

@@ -74,13 +74,17 @@ public:
 
   inline double get_time() const { return t; }
 
-  inline double get_pressure(const long unsigned int ii) const { return NV_Ith_S(y, NVARS * ii); }
+  inline double get_pressure(const long unsigned int ii)
+      const { return NV_Ith_S(y, NVARS * ii); }
 
-  inline double get_temperature(const long unsigned int ii) const { return NV_Ith_S(y, NVARS * ii + 1); }
+  inline double get_temperature(const long unsigned int ii)
+      const { return NV_Ith_S(y, NVARS * ii + 1); }
 
-  inline double get_qvap(const long unsigned int ii) const { return NV_Ith_S(y, NVARS * ii + 2); }
+  inline double get_qvap(const long unsigned int ii)
+      const { return NV_Ith_S(y, NVARS * ii + 2); }
 
-  inline double get_qcond(const long unsigned int ii) const { return NV_Ith_S(y, NVARS * ii + 3); }
+  inline double get_qcond(const long unsigned int ii)
+      const { return NV_Ith_S(y, NVARS * ii + 3); }
 };
 
 #endif // CVODETHERMOSOLVER_HPP

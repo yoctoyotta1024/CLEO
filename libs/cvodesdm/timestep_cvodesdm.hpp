@@ -75,7 +75,7 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
 4) proceed to next step (coupled) */
 {
   int t_mdl = 0; // model time is incremented by proceed_tonext_coupledstep
-  RunSDMStep<M> sdm();
+  RunSDMStep<M> sdm;
 
   while (t_mdl <= t_end)
   {
