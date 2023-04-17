@@ -118,5 +118,8 @@ int main(int argc, char *argv[])
 
   const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
 
+  /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
+  run_cvodesdm(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+
   return 0;
 }
