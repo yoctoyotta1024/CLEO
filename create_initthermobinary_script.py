@@ -1,20 +1,26 @@
 import numpy as np
-from pySD.initthermobinary_src.create_initthermo import *
+from pySD.thermobinary_src import create_thermodynamics as cthermo
 
 abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
 constsfile = abspath+"libs/claras_SDconstants.hpp"
-gridfile = abspath+"build/share/dimlessGBxboundaries.dat"
+configfile = abspath+"src/config/config.txt"
+
+spath = abspath+"build/share/"
+gridfile = spath+"dimlessGBxboundaries.dat"
+thermofile =  spath+"dimlessthermodynamics.dat"
 
 ### initial thermodynamic conditions for all gridboxes ###
 P_INIT = 100000.0                       # initial pressure [Pa]
 TEMP_INIT = 273.15                      # initial parcel temperature [T]
 relh_init = 95.0                        # initial relative humidity (%)
 qc_init = 0.0                           # initial liquid water content []
+W_INIT = 0.0                            # initial vertical (z) velocity [m/s]
+U_INIT = 0.0                            # initial horizontal x velocity [m/s]
+V_INIT = 0.0                            # initial horizontal y velocity [m/s]
 
-from pySD.gbxboundariesbinary_src import read_gbxboundaries
-zhalf, xhalf, yhalf = read_gbxboundaries.get_gridboxboundaries(constsfile,
-                                                               gridfile)
+thermogen = cthermo.ConstUniformThermo(P_INIT, TEMP_INIT, relh_init,
+                                       qc_init, W_INIT, U_INIT, V_INIT,
+                                       constsfile)
+cthermo.write_thermodynamics_binary(thermofile, thermogen, configfile,
+                                    constsfile, gridfile)
 
-print(zhalf)
-print(xhalf)
-print(yhalf)
