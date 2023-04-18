@@ -54,16 +54,16 @@ struct SomeZarrStores
   CoordinateStorage<unsigned int> gbxzarr;
   TwoDStorage<size_t> nsuperszarr;
 
-SomeZarrStores(FSStore &fsstore, const int maxcsize,
+SomeZarrStores(FSStore &fsstore, const int maxchunk,
               const unsigned int ngridboxes, S sdattrs)
-      : thermozarr(fsstore, maxcsize, ngridboxes),
-        sdzarr(fsstore, sdattrs, maxcsize),
-        sdmoments(fsstore, maxcsize, ngridboxes),
-        timezarr(fsstore, maxcsize, "time",
+      : thermozarr(fsstore, maxchunk, ngridboxes),
+        sdzarr(fsstore, sdattrs, maxchunk),
+        sdmoments(fsstore, maxchunk, ngridboxes),
+        timezarr(fsstore, maxchunk, "time",
                  "<f8", "s", dlc::TIME0),
-        gbxzarr(fsstore, maxcsize, "gbxindex",
+        gbxzarr(fsstore, maxchunk, "gbxindex",
                 "<u4", " ", 1),
-        nsuperszarr(fsstore, maxcsize, "nsupers",
+        nsuperszarr(fsstore, maxchunk, "nsupers",
                     "<u8", " ", 1, ngridboxes) {}
 };
 

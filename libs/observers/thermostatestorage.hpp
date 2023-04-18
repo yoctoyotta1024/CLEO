@@ -68,10 +68,10 @@ private:
 public:
   unsigned int nobs; // number of output times that have been observed 
   
-  ThermoStateStorage(FSStore &store, const unsigned int maxcsize,
+  ThermoStateStorage(FSStore &store, const unsigned int maxchunk,
                      const unsigned int ngrid)
-      : store(store), buffers(floor(maxcsize / ngrid)*ngrid), 
-        chunksize(floor(maxcsize / ngrid)*ngrid), chunkcount(0),
+      : store(store), buffers(floor(maxchunk / ngrid)*ngrid), 
+        chunksize(floor(maxchunk / ngrid)*ngrid), chunkcount(0),
         bufferfill(0), ndata(0), ngridboxes(ngrid), nobs(0) {}
 
   ~ThermoStateStorage()

@@ -27,14 +27,14 @@ struct SDMomentsStorage
   TwoDStorage<double> massmoment1zarr;
   TwoDStorage<double> massmoment2zarr;
 
-  SDMomentsStorage(FSStore &store, const unsigned int maxcsize,
+  SDMomentsStorage(FSStore &store, const unsigned int maxchunk,
                    const unsigned int ngridboxes)
       : scalefac(pow(dlc::R0, 3.0) * dlc::RHO0 * 1000),
-        massmoment0zarr(store, maxcsize, "massmoment0", "<f8",
+        massmoment0zarr(store, maxchunk, "massmoment0", "<f8",
                         " ", 1, ngridboxes),
-        massmoment1zarr(store, maxcsize, "massmoment1", "<f8",
+        massmoment1zarr(store, maxchunk, "massmoment1", "<f8",
                         "g", scalefac, ngridboxes),
-        massmoment2zarr(store, maxcsize, "massmoment2", "<f8",
+        massmoment2zarr(store, maxchunk, "massmoment2", "<f8",
                         "g^2", pow(scalefac, 2.0), ngridboxes){};
 };
 

@@ -108,9 +108,9 @@ void Config::configvariable(const std::string name, std::string value)
     zarrbasedir = value;
     issuccess = true;
   }
-  else if (name == "maxcsize")
+  else if (name == "maxchunk")
   {
-    maxcsize = stoi(value);
+    maxchunk = stoi(value);
     issuccess = true;
   }
   else if (name == "cond_maxiters")

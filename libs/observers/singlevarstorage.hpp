@@ -60,11 +60,11 @@ protected:
   }
 
 public:
-  SingleVarStorage(FSStore &store, const unsigned int maxcsize,
+  SingleVarStorage(FSStore &store, const unsigned int maxchunk,
                    const std::string name, const std::string dtype,
                    const std::string units, const double scale_factor)
       : store(store), name(name), units(units), scale_factor(scale_factor),
-        buffer(maxcsize, std::numeric_limits<T>::max()), chunksize(maxcsize),
+        buffer(maxchunk, std::numeric_limits<T>::max()), chunksize(maxchunk),
         chunkcount(0), bufferfill(0), ndata(0), dtype(dtype) {}
 
   virtual ~SingleVarStorage(){};
@@ -110,10 +110,10 @@ private:
   }
 
 public:
-  CoordinateStorage(FSStore &store, const unsigned int maxcsize, const std::string name,
+  CoordinateStorage(FSStore &store, const unsigned int maxchunk, const std::string name,
                const std::string dtype, const std::string units,
                const double scale_factor)
-      : SingleVarStorage<T>(store, maxcsize, name,
+      : SingleVarStorage<T>(store, maxchunk, name,
                             dtype, units, scale_factor) {}
 
   ~CoordinateStorage()
@@ -153,10 +153,10 @@ private:
 public:
   unsigned int nobs; // number of output times that have been observed
 
-  TwoDStorage(FSStore &store, const unsigned int maxcsize, const std::string name,
+  TwoDStorage(FSStore &store, const unsigned int maxchunk, const std::string name,
               const std::string dtype, const std::string units,
               const double scale_factor, const unsigned int ngrid)
-      : SingleVarStorage<T>(store, floor(maxcsize / ngrid) * ngrid, name,
+      : SingleVarStorage<T>(store, floor(maxchunk / ngrid) * ngrid, name,
                             dtype, units, scale_factor),
         ngridboxes(ngrid), nobs(0) {}
 

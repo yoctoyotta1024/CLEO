@@ -50,22 +50,22 @@ private:
 
 public:
   /* in/output data parameters */
-  std::string initSDs_filename; // binary filename for initialisation of superdrops
-  std::string grid_filename;    // binary filename for gridbox boundaries
-  std::string setuptxt;         // text filename to copy inital setup to as output
+  std::string initSDs_filename;      // binary filename for initialisation of superdrops
+  std::string grid_filename;         // binary filename for gridbox boundaries
+  std::string setuptxt;              // text filename to copy inital setup to as output
   std::filesystem::path zarrbasedir; // zarr store base directory
-  int maxcsize;              // size of array chunks for SD attributes data if outputing to zarr store
+  int maxchunk;                      // maximum no. of elements in chunks of zarr store array
 
   /* Model Settings */
   /* Model timestep parameters */
   int cond_maxiters;  // maximum no. iterations of Newton Raphson Method
   double cond_rtol;   // relative tolerance for implicit euler integration
   double cond_atol;   //  abolute tolerance for implicit euler integration
-  double CONDTSTEP;  // time between SD condensation events [s]
-  double COLLTSTEP;  // time between SD collision events [s]
+  double CONDTSTEP;   // time between SD condensation events [s]
+  double COLLTSTEP;   // time between SD collision events [s]
   double MOTIONTSTEP; // time between SD coordinate position updates [s]
-  double COUPLTSTEP; // time between SDM data output and thermodynamic coupling [s]
-  double T_END;        // time span of integration [s]
+  double COUPLTSTEP;  // time between SDM data output and thermodynamic coupling [s]
+  double T_END;       // time span of integration [s]
 
   /* Superdroplet init params */
   int nSDsvec;     // initial no. elements in SDsInGBxs vector

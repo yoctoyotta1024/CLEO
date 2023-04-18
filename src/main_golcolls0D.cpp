@@ -46,11 +46,11 @@ struct SomeZarrStores
   ContiguousRaggedSDStorage<S> sdzarr;
   CoordinateStorage<double> timezarr;
 
-SomeZarrStores(FSStore &fsstore, const int maxcsize,
+SomeZarrStores(FSStore &fsstore, const int maxchunk,
               const unsigned int ngridboxes, S sdattrs)
-      : thermozarr(fsstore, maxcsize, ngridboxes),
-        sdzarr(fsstore, sdattrs, maxcsize),
-        timezarr(fsstore, maxcsize, "time",
+      : thermozarr(fsstore, maxchunk, ngridboxes),
+        sdzarr(fsstore, sdattrs, maxchunk),
+        timezarr(fsstore, maxchunk, "time",
                  "<f8", "s", dlc::TIME0) {}
 };
 
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 
   /* create observer from combination of chosen observers */
   FSStore fsstore(config.zarrbasedir);
-  SomeZarrStores zarrstores(fsstore, config.maxcsize,
+  SomeZarrStores zarrstores(fsstore, config.maxchunk,
                             gbxmaps.gbxidxs.size(),
                             sdattrs_to_observe());
   const auto observer = create_observer(zarrstores);

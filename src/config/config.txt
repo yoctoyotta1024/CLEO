@@ -18,7 +18,7 @@ grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for gridbo
 ### output data parameters ###
 setuptxt = ./bin/solsetup.txt               # .txt filename to copy inital setup to as output
 zarrbasedir = ./bin/solSDMdata.zarr         # zarr store base directory
-maxcsize = 8192                             # maximum size of chunks of output data put into a zarr store array
+maxchunk = 8192                             # maximum no. of elements in chunks of zarr store array output data
 
 ### SDM parameters ###
 cond_maxiters = 100                     # maximum no. iterations of Newton Raphson Method
