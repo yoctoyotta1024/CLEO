@@ -169,6 +169,43 @@ void Config::configvariable(const std::string name, std::string value)
     issuccess = true;
   }
 
+  /* read in thermodynamics file parameters */
+  else if (name == "press_filename")
+  {
+    press_filename = value;
+    issuccess = true;
+  }
+  else if (name == "temp_filename")
+  {
+    temp_filename = value;
+    issuccess = true;
+  }
+  else if (name == "qvap_filename")
+  {
+    qvap_filename = value;
+    issuccess = true;
+  }
+  else if (name == "qcond_filename")
+  {
+    qcond_filename = value;
+    issuccess = true;
+  }
+  else if (name == "wvel_filename")
+  {
+    wvel_filename = value;
+    issuccess = true;
+  }
+  else if (name == "uvel_filename")
+  {
+    uvel_filename = value;
+    issuccess = true;
+  }
+  else if (name == "vvel_filename")
+  {
+    vvel_filename = value;
+    issuccess = true;
+  }
+  
   // /* CVODE ODE solver paramters */
   // else if (name == "P_INIT")
   // {
