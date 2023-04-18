@@ -74,7 +74,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
                                   t_end, couplstep);
 
   /* run coupled model from t=0 to t=t_end */
-  timestep_cvodesdm(t_end, couplstep, config.doCouple, sdm, cvode,
+  timestep_cvodesdm(t_end, couplstep, config.doAlterThermo, sdm, cvode,
                     gen, gridboxes, SDsInGBxs);
 
   std::cout << "\n ---- CVODE-SDM Coupled Model Complete ---- \n";

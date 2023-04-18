@@ -67,9 +67,10 @@ public:
   double T_END;       // time span of integration [s]
 
   /* superdroplet parameters */
-  int nSDsvec;       // initial no. elements in SDsInGBxs vector
-  int SDnspace;      // number of spatial coordinates of superdroplets
-  bool wetradiiinit; // set initial SD radii to equilibrium wet radius
+  int nSDsvec;        // initial no. elements in SDsInGBxs vector
+  int SDnspace;       // number of spatial coordinates of superdroplets
+  bool wetradiiinit;  // set initial SD radii to equilibrium wet radius
+  bool doAlterThermo; // enable condensation to alter the thermodynamic state
 
   /* read in thermodynamics file parameters */
   std::string press_filename; // binary filename for pressure
@@ -86,7 +87,6 @@ public:
   // double relh_init;    // initial relative humidity (%)
   // double qc_init;      // initial liquid water content []
   
-  // bool doCouple;       // enable coupling from SDM to CVODE
   // bool doThermo;       // enable condensational growth of superdroplets
   // double W_AVG;        // average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
   // double T_HALF;       // timescale for w sinusoid, tau_half = T_HALF/pi [s]

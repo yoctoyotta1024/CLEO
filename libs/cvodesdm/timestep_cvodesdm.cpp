@@ -26,7 +26,7 @@ containing all those Thermostates */
 }
 
 int proceedtonext_cvodesdmstep(int t_mdl, const int couplstep,
-                               const bool doCouple,
+                               const bool doAlterThermo,
                                const std::vector<ThermoState> &previousstates,
                                const std::vector<GridBox> &gridboxes,
                                CvodeThermoSolver &cvode)
@@ -35,7 +35,7 @@ to thermodynamics solver (eg. raise in temperature of a
 gridbox due to latent heat release) */
 {
 
-  if (doCouple)
+  if (doAlterThermo)
   {
     send_thermodynamics_to_cvode(previousstates, gridboxes, cvode);
   }

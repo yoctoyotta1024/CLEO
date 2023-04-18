@@ -168,6 +168,11 @@ void Config::configvariable(const std::string name, std::string value)
     wetradiiinit = string2bool(value);
     issuccess = true;
   }
+  else if (name == "doAlterThermo")
+  {
+    doAlterThermo = string2bool(value);
+    issuccess = true;
+  }
 
   /* read in thermodynamics file parameters */
   else if (name == "press_filename")
@@ -228,11 +233,6 @@ void Config::configvariable(const std::string name, std::string value)
   //   issuccess = true;
   // }
 
-  // else if (name == "doCouple")
-  // {
-  //   doCouple = string2bool(value);
-  //   issuccess = true;
-  // }
   // else if (name == "doThermo")
   // {
   //   doThermo = string2bool(value);
