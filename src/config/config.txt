@@ -1,9 +1,10 @@
 ##### CONFIG FILE #####
 # Author: Clara Bayley
 # File: config.txt
-# File containing configuration 
-# for initial conditions & parameters 
-# of CVODE ODE solver and SDM
+# File containing configuration of CLEO
+# SDM = SuperDroplet Model
+# SD(s) = SuperDroplet(s)
+# GBx(s) = GridBox(es)
 
 #  Note: inital superdroplets data (eps, r0 and m_sol (and optionally coord3))
 #  read from file "initSDs_filename" is made with PYSD module using python
@@ -11,32 +12,33 @@
 #  gridboxmap from gridbox boundaries is read from file "grid_filename"
 #  created using python "create_gbxboundariesbinary_script" script.
 
-### initialisation file parameters ###
-initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initialisation of superdrops
-grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for gridbox boundaries
+### Initialisation Files and Output Data parameters ###
+initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initialisation of SDs
+grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for GBx boundaries
 
 ### output data parameters ###
-setuptxt = ./bin/solsetup.txt               # .txt filename to copy inital setup to as output
+setuptxt = ./bin/solsetup.txt               # name of .txt output file to copy setup to
 zarrbasedir = ./bin/solSDMdata.zarr         # zarr store base directory
-maxchunk = 8192                             # maximum no. of elements in chunks of zarr store array
+maxchunk = 1250000                          # maximum no. of elements in chunks of zarr store array
 
 ### SDM parameters ###
+# timestepping parameters #
 cond_maxiters = 100                     # maximum no. iterations of Newton Raphson Method
 cond_rtol = 1e-1                        # relative tolerance for implicit euler integration
 cond_atol = 100                         # abolute tolerance for implicit euler integration
 CONDTSTEP = 1                           # time between SD condensation events [s]
 COLLTSTEP = 1                           # time between SD collision events [s]
 MOTIONTSTEP = 5                         # time between SD coordinate position updates [s]
-COUPLTSTEP = 30                         # time between SDM data output and thermodynamic coupling [s]
+COUPLTSTEP = 30                         # time between SDM motion [s]
 T_END = 2400                            # time span of integration [s]
 
-### superdroplet parameters ###
-nSDsvec = 1024                          # initial no. elements in superdroplets' vector ( = initial total no. of superdroplets)
-SDnspace = 1                            # no. of spatial coordinates of superdroplets ( = dimension of model)
+# SDs parameters #
+nSDsvec = 1024                          # initial no. elements in SDs' vector (=total initial no. of SDs)
+SDnspace = 1                            # no. of spatial coordinates of SDs (=dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state
 
-### thermodynamics file parameters ###
+### Read in Thermodynamics File parameters ###
 press_filename = dimlessthermodynamics_press.dat          # binary filename for pressure
 temp_filename = dimlessthermodynamics_temp.dat            # binary filename for temperature
 qvap_filename = dimlessthermodynamics_qvap.dat            # binary filename for vapour mixing ratio

@@ -83,7 +83,7 @@ void Config::configvariable(const std::string name, std::string value)
 {
   bool issuccess = false;
 
-  /* initialisation and output parameters */
+  /* Initialisation Files and Output Data parameters */
   if (name == "initSDs_filename")
   {
     initSDs_filename = value;
@@ -110,7 +110,8 @@ void Config::configvariable(const std::string name, std::string value)
     issuccess = true;
   }
 
-  /* SDM timestepping parameters */
+  /* SDM parameters */
+  /* timestepping parameters */
   else if (name == "cond_maxiters")
   {
     cond_maxiters = stoi(value);
@@ -152,7 +153,7 @@ void Config::configvariable(const std::string name, std::string value)
     issuccess = true;
   }
 
-  /* superdroplet parameters */
+  /* SDs parameters */
   else if (name == "nSDsvec")
   {
     nSDsvec = stoi(value);
@@ -174,7 +175,7 @@ void Config::configvariable(const std::string name, std::string value)
     issuccess = true;
   }
 
-  /* read in thermodynamics file parameters */
+  /* Read in Thermodynamics File Parameters */
   else if (name == "press_filename")
   {
     press_filename = value;
@@ -211,7 +212,8 @@ void Config::configvariable(const std::string name, std::string value)
     issuccess = true;
   }
   
-  // /* CVODE ODE solver paramters */
+  // /* CVODE ODE solver parameters */
+  // /* initial (uniform) thermodynamic conditions */
   // else if (name == "P_INIT")
   // {
   //   P_INIT = stod(value);
@@ -233,6 +235,7 @@ void Config::configvariable(const std::string name, std::string value)
   //   issuccess = true;
   // }
 
+  // /* ODE parameters */ 
   // else if (name == "doThermo")
   // {
   //   doThermo = string2bool(value);

@@ -49,30 +49,31 @@ private:
   'name' member cannot be assigned, throw error */
 
 public:
-  /* initialisation and output parameters */
-  std::string initSDs_filename;      // binary filename for initialisation of superdrops
-  std::string grid_filename;         // binary filename for gridbox boundaries
-  std::string setuptxt;              // text filename to copy inital setup to as output
+  /* Initialisation Files and Output Data parameters */
+  std::string initSDs_filename;      // binary filename for initialisation of SDs 
+  std::string grid_filename;         // binary filename for GBx boundaries
+  std::string setuptxt;              // name of .txt output file to copy setup to
   std::filesystem::path zarrbasedir; // zarr store base directory
   int maxchunk;                      // maximum no. of elements in chunks of zarr store array
 
-  /* SDM timestepping parameters */
+  /* SDM parameters */
+  /* timestepping parameters */
   int cond_maxiters;  // maximum no. iterations of Newton Raphson Method
   double cond_rtol;   // relative tolerance for implicit euler integration
   double cond_atol;   //  abolute tolerance for implicit euler integration
   double CONDTSTEP;   // time between SD condensation events [s]
   double COLLTSTEP;   // time between SD collision events [s]
-  double MOTIONTSTEP; // time between SD coordinate position updates [s]
+  double MOTIONTSTEP; // time between SDM motion [s]
   double COUPLTSTEP;  // time between SDM data output and thermodynamic coupling [s]
   double T_END;       // time span of integration [s]
 
-  /* superdroplet parameters */
-  int nSDsvec;        // initial no. elements in SDsInGBxs vector
-  int SDnspace;       // number of spatial coordinates of superdroplets
+  /* SDs parameters */
+  int nSDsvec;        // initial no. elements in SDs' vector (=total initial no. of SDs)
+  int SDnspace;       // no. of spatial coordinates of SDs (=dimension of model)
   bool wetradiiinit;  // set initial SD radii to equilibrium wet radius
   bool doAlterThermo; // enable condensation to alter the thermodynamic state
 
-  /* read in thermodynamics file parameters */
+  /* Read in Thermodynamics File parameters */
   std::string press_filename; // binary filename for pressure
   std::string temp_filename;  // binary filename for temperature
   std::string qvap_filename;  // binary filename for vapour mixing ratio
@@ -81,17 +82,19 @@ public:
   std::string uvel_filename;  // binary filename for horizontal x velocity
   std::string vvel_filename;  // binary filename for horizontal y velocity
 
-  // /* CVODE ODE solver paramters */
+  // /* CVODE ODE solver parameters */
+  // /* initial (uniform) thermodynamic conditions */
   // double P_INIT;       // initial pressure [Pa]
   // double TEMP_INIT;    // initial parcel temperature [T]
   // double relh_init;    // initial relative humidity (%)
   // double qc_init;      // initial liquid water content []
-  
-  // bool doThermo;       // enable condensational growth of superdroplets
+
+  // /* ODE parameters */ 
+  // bool doThermo;       // enable ODEs for adiabatic expansion
   // double W_AVG;        // average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
   // double T_HALF;       // timescale for w sinusoid, tau_half = T_HALF/pi [s]
-  // double cvode_rtol;   // relative tolerance (tol) for integration
-  // double cvode_atol_p; // absolute tolerances for thermodynamics ODEs [P, T, qv, qc]
+  // double cvode_rtol;   // relative tolerance for [P, T, qv, qc] ODEs integration
+  // double cvode_atol_p; // absolute tolerances for [P, T, qv, qc] ODEs integration 
   // double cvode_atol_temp;
   // double cvode_atol_qv;
   // double cvode_atol_qc;
