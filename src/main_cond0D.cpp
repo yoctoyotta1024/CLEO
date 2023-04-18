@@ -104,11 +104,9 @@ int main(int argc, char *argv[])
   const Maps4GridBoxes gbxmaps(config.SDnspace, config.grid_filename);
 
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
-  const auto sdmprocess(CondensationProcess(mdlsteps.condsubstep,
-                                            &step2dimlesstime,
-                                            config.cond_maxiters,
-                                            config.cond_rtol,
-                                            config.cond_atol));
+  const auto sdmprocess(CondensationProcess(mdlsteps.condsubstep, &step2dimlesstime,
+                                            config.doCouple, config.cond_maxiters,
+                                            config.cond_rtol, config.cond_atol));
   const auto sdmotion(NullMotion{});
 
   /* create observer from combination of chosen observers */

@@ -84,11 +84,9 @@ combined process of those two individual processes */
 {
   /* create process for condensation in SDM including Implicit
   Euler Method for solving condensation ODEs */
-  const auto cond = CondensationProcess(mdlsteps.condsubstep,
-                                        &step2dimlesstime,
-                                        config.cond_maxiters,
-                                        config.cond_rtol,
-                                        config.cond_atol);
+  const auto cond = CondensationProcess(mdlsteps.condsubstep, &step2dimlesstime,
+                                        config.doCouple, config.cond_maxiters,
+                                        config.cond_rtol, config.cond_atol);
 
   /* create process for collision-coalescene in SDM */
   const auto probs = GolovinProb(dlc::R0);

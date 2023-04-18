@@ -64,7 +64,7 @@ double CondensationMethod::superdroplet_growth_by_condensation(const double pres
   return mass_condensed;
 }
 
-void CondensationMethod::condensation_alters_thermostate(ThermoState &state,
+void CondensationMethod::condensation_effects_thermostate(ThermoState &state,
                                                           const double tot_rho_condensed) const
 /* change the thermodynamic variables (temp, qv and qc) of
 ThermoState state given the total change in condensed
@@ -105,5 +105,8 @@ Clouds...." (see note at top of file) */
   }
 
   /* resultant effect on thermodynamic state */
-  condensation_alters_thermostate(state, tot_rho_condensed);
+  if (doCouple)
+  {
+    condensation_effects_thermostate(state, tot_rho_condensed);
+  }
 }
