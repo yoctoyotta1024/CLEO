@@ -4,7 +4,7 @@
 SDM process and observers to use in main.cpp */
 
 // after make/compiling, execute for example via:
-// ./src/coupledCVODECLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
+// ./src/runCLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
 
 #ifndef MAIN_SUPPLEMENT_HPP
 #define MAIN_SUPPLEMENT_HPP

@@ -12,4 +12,4 @@ python ./create_initsuperdropsbinary_script.py ./ 1e9
 
 cd build
 make clean && make
-./src/coupledCVODECLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
+./src/runCLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
