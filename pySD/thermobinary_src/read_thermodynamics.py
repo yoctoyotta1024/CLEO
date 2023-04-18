@@ -58,25 +58,21 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
     thermodata = get_thermodyanmcis_from_thermofile(thermofile, ngridboxes,
                                                     constsfile, configfile)
     
-    print(thermodata)
-    fig, axs = plt.subplots(nrows=3, ncols=4, figsize=(10, 5))
+    vars = ["press", "temp", "qvap", "qcond", "wvel", "vvel", "uvel"]
+    units = [" /Pa", " /K", "", ""]+[" /ms$^{-1}$"]*3
+    fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(12, 6))
+    axs = axs.flatten()
 
-    # for i, crd in enumerate(["z", "x", "y"]):
-    #     xlims = [0.8*np.amin(deltas[i])/1000, np.amax(deltas[i])/1000*1.2]
-    #     ylims = [np.amin(halfs[i])/1000, np.amax(halfs[i])/1000]
-    #     axs[i].scatter(deltas[i]/1000, fulls[i]/1000,
-    #                    color="k", label="centres")
-    #     axs[i].hlines(halfs[i]/1000, xlims[0], xlims[1],
-    #                   color="grey", alpha=0.8, linewidth=0.8, label="boundaries")
-    #     axs[i].set_xlim(xlims)
-    #     axs[i].set_ylim(ylims)
-    #     axs[i].set_xlabel("gridbox spacing, \u0394 "+crd+" /km")
-    #     axs[i].set_ylabel("gridbox centres, "+crd+"f /km")
-    #     axs[i].legend()
+    for v, var in enumerate(vars):
+      axs[v].plot(thermodata[var], range(ngridboxes))
+      axs[v].set_xlabel(var+units[v])
+      axs[v].set_ylabel("GBx")
+    axs[v+1].remove()
 
-    # fig.tight_layout()
-    # if savefig:
-    #     fig.savefig(binpath+"/gridboxboundaries.png", dpi=400,
-    #                 bbox_inches="tight", facecolor='w', format="png")
-    #     print("Figure .png saved as: "+binpath+"/gridboxboundaries.png")
-    # plt.show()
+    fig.tight_layout()
+    if savefig:
+        tstr = str(t2plt).replace('.', "p")
+        fig.savefig(binpath+"/thermodynamics_time"+tstr+".png", dpi=400,
+                    bbox_inches="tight", facecolor='w', format="png")
+        print("Figure .png saved as: "+binpath+"/gridboxboundaries.png")
+    plt.show()
