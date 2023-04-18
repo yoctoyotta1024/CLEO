@@ -35,6 +35,16 @@ def get_gbxvols_from_gridfile(gridfile, COORD0=False, constsfile=""):
 
     return calc_gridboxvols(gbxbounds)
 
+def get_fullcoords_from_gridfile(gridfile, COORD0=False, constsfile=""):
+    
+    zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile, COORD0=COORD0,
+                                                constsfile=constsfile)
+    
+    zfull = get_fullcell_and_cellspacing(zhalf)[0] 
+    xfull= get_fullcell_and_cellspacing(xhalf)[0] 
+    yfull= get_fullcell_and_cellspacing(yhalf)[0] 
+    
+    return zfull, xfull, yfull
 
 def read_dimless_gbxboundaries_binary(filename, COORD0=False):
     ''' return dictionary for gbx indicies to gbx boundaries by
@@ -131,7 +141,6 @@ def get_fullcell_and_cellspacing(halfcell):
     cellwidth = abs(halfcell[1:]-halfcell[:-1])
 
     return fullcell, cellwidth
-
 
 def calc_domainvol(zhalf, xhalf, yhalf):
 

@@ -3,79 +3,6 @@ from os.path import isfile
 from .. import cxx2py, writebinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import read_dimless_gbxboundaries_binary
 
-def get_Mrratio_from_constsfile(constsfile):
-  
-  consts = cxx2py.read_cpp_into_floats(constsfile, False)[0]
-  moreconsts = cxx2py.derive_more_floats(consts, False)
-
-  return moreconsts["Mr_ratio"]
-
-def saturation_press(TEMP):
-  ''' Calculate the equilibrium vapor pressure of water over
-  liquid water ie. the saturation pressure (psat) given the
-  temperature [K]. Equation from Bjorn Steven's "make_tetens"
-  function in module "moist_thermodynamics.saturation_vapour_pressures"
-  available on gitlab. Original paper "Murray, F. W. On the
-  Computation of Saturation Vapor Pressure. Journal of Applied
-  Meteorology and Climatology 6, 203–204 (1967). '''
-  
-  Aconst = 17.4146
-  Bconst = 33.639
-  TREF = 273.16 # Triple point temperature [K] of water
-  PREF = 611.655 # Triple point pressure [Pa] of water
-
-  if (TEMP <= 0.0):
-    raise ValueError("psat ERROR: T must be larger than 0K."+\
-                     " T = " + str(TEMP))
-
-  return PREF * np.exp(Aconst * (TEMP - TREF) / (TEMP - Bconst)) # [Pa]
-
-
-def relh2qvap(press, temp, relh, Mr_ratio):
-  ''' convert relative humidity [%] (relh) into vapour mass
-  mixing ratio (qvap) given ambient temperature and pressure
-  and ratio of molecular masses: vapour/air '''
-  
-  vapourpress = saturation_press(temp) * relh / 100.0  # [Pa]
-  
-  qvap = Mr_ratio * vapourpress / (press - vapourpress) # dimensionless [Kg/kg]
-
-  return qvap
-
-  
-class ConstUniformThermo:
-  ''' create thermodyanmcis thats constant in time 
-  and uniform throughout the domain '''
-
-  def __init__(self, PRESS, TEMP, relh,
-              qcond, WVEL, UVEL, VVEL,
-              constsfile):
-    self.PRESS = PRESS                        # pressure [Pa]
-    self.TEMP = TEMP                          # temperature [T]
-    
-    Mr_ratio = get_Mrratio_from_constsfile(constsfile)
-    self.qvap = relh2qvap(PRESS, TEMP, 
-                          relh, Mr_ratio)     # water vapour content []
-    
-    self.qcond = qcond                        # liquid water content []
-    self.WVEL = WVEL                          # vertical (z) velocity [m/s]
-    self.UVEL = UVEL                          # horizontal x velocity [m/s]
-    self.VVEL = VVEL                          # horizontal y velocity [m/s]
-
-  def generate_thermo(self, ngrid, ntime):
-
-    THERMODATA = {
-      "PRESS": np.full(ngrid*ntime, self.PRESS),
-      "TEMP": np.full(ngrid*ntime, self.TEMP),
-      "qvap": np.full(ngrid*ntime, self.qvap),
-      "qcond": np.full(ngrid*ntime, self.qcond), 
-      "WVEL": np.full(ngrid*ntime, self.WVEL),
-      "UVEL": np.full(ngrid*ntime, self.UVEL),
-      "VVEL": np.full(ngrid*ntime, self.VVEL) 
-    }
-
-    return THERMODATA
-
 def thermoinputsdict(configfile, constsfile):
   ''' create values from constants file & config file
   required as inputs to create initial 
@@ -104,26 +31,101 @@ def thermoinputsdict(configfile, constsfile):
     "COORD0": moreconsts["COORD0"]            # z coordinate lengthscale [m]
   }
 
+  inputs["ntime"] = round(inputs["T_END"]/inputs["COUPLTSTEP"])+1
+
   return inputs
 
-def dimless_thermodynamics(THERMO, inputs):
+class DimlessThermodynamics:
 
-  sfs = [inputs["P0"], inputs["TEMP0"],
-                   1.0, 1.0] + [inputs["W0"]]*3 # scale_factors to de-dimensionalise data
+  def __init__(self, inputs=False, configfile="", constsfile=""):
 
-  thermodata = {
-      "press": THERMO["PRESS"] / sfs[0],
-      "temp":THERMO["TEMP"] / sfs[1],
-      "qvap":THERMO["qvap"] / sfs[2],
-      "qcond": THERMO["qcond"] / sfs[3],
-      "wvel":THERMO["WVEL"] / sfs[4],
-      "uvel":THERMO["UVEL"] / sfs[5],
-      "vvel":THERMO["VVEL"] / sfs[6]
-    }
+    if not inputs:
+      inputs = thermoinputsdict(configfile, constsfile)
+
+    # scale_factors to de-dimensionalise data
+    self.PRESS0 = inputs["P0"]
+    self.TEMP0 = inputs["TEMP0"]
+    self.qvap0 = 1.0
+    self.qcond0 = 1.0
+    self.VEL0 = inputs["W0"]
+    
+  def makedimless(self, THERMO):
+
+    thermodata = {
+        "press": THERMO["PRESS"] / self.PRESS0,
+        "temp":THERMO["TEMP"] / self.TEMP0,
+        "qvap":THERMO["qvap"],
+        "qcond": THERMO["qcond"],
+        "wvel":THERMO["WVEL"] / self.VEL0,
+        "uvel":THERMO["UVEL"] / self.VEL0,
+        "vvel":THERMO["VVEL"] / self.VEL0
+      }
+ 
+    sfs = [self.PRESS0, self.TEMP0, 1.0, 1.0]
+    sfs += [self.VEL0]*3
+    
+    return thermodata, sfs
+
+  def redimensionalise(self, thermo):
+    
+    THERMODATA = {
+        "press": thermo["press"] * self.PRESS0,
+        "temp":thermo["temp"] * self.TEMP0,
+        "qvap":thermo["qvap"],
+        "qcond": thermo["qcond"],
+        "wvel":thermo["wvel"] * self.VEL0,
+        "uvel":thermo["uvel"] * self.VEL0,
+        "vvel":thermo["vvel"] * self.VEL0
+      } 
+    
+    return THERMODATA
+
+def set_arraydtype(arr, dtype):
+   
+  og = type(arr[0])
+  if og != dtype: 
+    arr = np.array(arr, dtype=dtype)
+
+    warning = "WARNING! dtype of attributes is being changed!"+\
+                " from "+str(og)+" to "+str(dtype)
+    raise ValueError(warning) 
+
+  return list(arr)
+
+def ctype_compatible_thermodynamics(thermodata):
+  ''' check type of gridbox boundaries data is compatible
+  with c type double. If not, change type and raise error '''
+
+  datatypes = [np.double]*7
+
+  for k, key in enumerate(thermodata.keys()):
+
+    thermodata[key] = set_arraydtype(thermodata[key], datatypes[k])
   
-  return thermodata, sfs
-  
+  return thermodata, datatypes
 
+
+def check_datashape(thermodata, ndata, ngridboxes, ntime):
+  ''' make sure each superdroplet attribute in data has length stated
+  in ndata and that this length is compatible with the nummber of
+  attributes and superdroplets expected given ndata'''
+  
+  err=''
+  if any([n != ndata[0] for n in ndata]):
+    
+    err += "\n------ ERROR! -----\n"+\
+          "not all variables in thermodynamics data are the"+\
+            " same length, ndata = "+str(ndata)+\
+              "\n---------------------\n"
+  
+  if any([len(d) != ngridboxes*ntime for d in thermodata.values()]): 
+    err += "inconsistent dimensions of thermodynamic data: "+\
+            str(ndata)+". Lengths should all = "+str(ngridboxes*ntime)+\
+            " since data should be list of [ntimesteps]*ngridboxes"   
+
+  if err: 
+    raise ValueError(err)
+  
 def write_thermodynamics_binary(thermofile, thermogen, configfile,
                                 constsfile, gridfile):
   
@@ -136,11 +138,36 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   gbxbounds = read_dimless_gbxboundaries_binary(gridfile,
                                                 COORD0=inputs["COORD0"])
   
+
   ngridboxes = len(gbxbounds.keys())
-  ntime = round(inputs["T_END"]/inputs["COUPLTSTEP"])+1
-  thermodata = thermogen.generate_thermo(ngridboxes, ntime)
+  thermodata = thermogen.generate_thermo(ngridboxes, inputs["ntime"])
 
-  print(thermodata["PRESS"], thermodata["TEMP"], thermodata["qvap"])
-  print(saturation_press(thermodata["TEMP"][0]))
+  dth = DimlessThermodynamics(inputs=inputs)
+  thermodata, scale_factors = dth.makedimless(thermodata)
 
-  thermodata, scale_factors = dimless_thermodynamics(thermodata, inputs)
+  ndata = [len(dt) for dt in thermodata.values()]
+  
+  data, datatypes = ctype_compatible_thermodynamics(thermodata) 
+  check_datashape(data, ndata, ngridboxes, inputs["ntime"])
+
+  vars = ["press", "temp", "qvap", "qcond", "wvel", "vvel", "uvel"]
+  units = [b'P', b'K', b' ', b' ']
+  units += [b'm']*3 # velocity units
+
+  scale_factors = np.asarray(scale_factors, dtype=np.double)
+
+  filestem, filetype = thermofile.split(".")
+  ng, nt = str(ngridboxes), str(inputs["ntime"])
+  for v, var in enumerate(vars):
+
+    metastr = 'Variable in this file is flattened array of '+var+\
+              ' with original dimensions [ngridboxes, time] = ['+\
+              ng+', '+nt+'] (ie. file contains '+str(ndata[v])+\
+              ' datapoints corresponding to '+ng+' gridboxes over '+\
+              nt+' time steps)'
+    
+    filename = filestem+"_"+var+"."+filetype
+    writebinary.writebinary(filename, thermodata[var],
+                            [ndata[v]], [datatypes[v]],
+                            [units[v]], [scale_factors[v]],
+                            metastr)

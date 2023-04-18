@@ -1,5 +1,7 @@
 import numpy as np
+from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
+from pySD.thermobinary_src import read_thermodynamics as rthermo
 
 abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
 constsfile = abspath+"libs/claras_SDconstants.hpp"
@@ -8,6 +10,10 @@ configfile = abspath+"src/config/config.txt"
 spath = abspath+"build/share/"
 gridfile = spath+"dimlessGBxboundaries.dat"
 thermofile =  spath+"dimlessthermodynamics.dat"
+binpath = abspath+"build/bin/"
+
+### booleans for [making+showing, saving] figures
+isfigures = [True, True]
 
 ### initial thermodynamic conditions for all gridboxes ###
 P_INIT = 100000.0                       # initial pressure [Pa]
@@ -18,9 +24,14 @@ W_INIT = 0.0                            # initial vertical (z) velocity [m/s]
 U_INIT = 0.0                            # initial horizontal x velocity [m/s]
 V_INIT = 0.0                            # initial horizontal y velocity [m/s]
 
-thermogen = cthermo.ConstUniformThermo(P_INIT, TEMP_INIT, relh_init,
+thermogen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, relh_init,
                                        qc_init, W_INIT, U_INIT, V_INIT,
                                        constsfile)
 cthermo.write_thermodynamics_binary(thermofile, thermogen, configfile,
                                     constsfile, gridfile)
 
+if isfigures[0]:
+    t2plt = 0.0
+    rthermo.plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
+                                          thermofile, t2plt, binpath,
+                                          isfigures[1])

@@ -111,7 +111,7 @@ def set_arraydtype(arr, dtype):
                 " from "+str(og)+" to "+str(dtype)
     raise ValueError(warning) 
 
-  return arr
+  return list(arr)
 
 def ctype_compatible_gridboxboundaries(ndims, idxs, bounds):
   ''' check type of gridbox boundaries data is compatible
@@ -119,9 +119,9 @@ def ctype_compatible_gridboxboundaries(ndims, idxs, bounds):
 
   datatypes = [np.uint, np.uintc, np.double]
 
-  ndims = list(set_arraydtype(ndims, datatypes[0]))
-  idxs = list(set_arraydtype(idxs, datatypes[1]))
-  bounds = list(set_arraydtype(bounds, datatypes[2]))
+  ndims = set_arraydtype(ndims, datatypes[0])
+  idxs = set_arraydtype(idxs, datatypes[1])
+  bounds = set_arraydtype(bounds, datatypes[2])
 
   datalist = ndims + idxs + bounds
 

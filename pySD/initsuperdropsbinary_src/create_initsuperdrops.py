@@ -196,7 +196,7 @@ def check_datashape(data, ndata, SDnspace):
   if len(data) != np.sum(ndata): 
     err += "inconsistent dimensions of data: "+str(np.shape(data))+", and"+\
           " data per attribute: "+str(ndata)+". data should be 1D with"+\
-          " shape: num_attributes * nsupers. nata should be list of"+\
+          " shape: num_attributes * nsupers. data should be list of"+\
           " [nsupers]*num_attributes."     
 
   if err: 
