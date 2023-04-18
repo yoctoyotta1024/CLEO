@@ -12,11 +12,11 @@
 #  gridboxmap from gridbox boundaries is read from file "grid_filename"
 #  created using python "create_gbxboundariesbinary_script" script.
 
-### Initialisation Files and Output Data parameters ###
+### Initialisation Files parameters ###
 initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initialisation of SDs
 grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for GBx boundaries
 
-### output data parameters ###
+### Output Data parameters ###
 setuptxt = ./bin/solsetup.txt               # name of .txt output file to copy setup to
 zarrbasedir = ./bin/solSDMdata.zarr         # zarr store base directory
 maxchunk = 1250000                          # maximum no. of elements in chunks of zarr store array
@@ -28,8 +28,8 @@ cond_rtol = 1e-1                        # relative tolerance for implicit euler 
 cond_atol = 100                         # abolute tolerance for implicit euler integration
 CONDTSTEP = 1                           # time between SD condensation events [s]
 COLLTSTEP = 1                           # time between SD collision events [s]
-MOTIONTSTEP = 5                         # time between SD coordinate position updates [s]
-COUPLTSTEP = 30                         # time between SDM motion [s]
+MOTIONTSTEP = 5                         # time between SDM motion [s]
+COUPLTSTEP = 30                         # time between SDM observations and between thermodynamic couplings [s]
 T_END = 2400                            # time span of integration [s]
 
 # SDs parameters #
