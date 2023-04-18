@@ -17,11 +17,11 @@ set(compileops -Wall -pedantic -g -gdwarf-4)
 #set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
 
 # primary executable for CLEO sdm
-set(CLEO "runCLEO")
-add_executable(${CLEO} "main.cpp")
-target_link_libraries(${CLEO} PRIVATE "${SDMLIBS}")
-target_include_directories(${CLEO} PRIVATE ${PROJECT_SOURCE_DIR})
-target_compile_options(${CLEO} PRIVATE ${compileops})
+set(runCLEO "runCLEO")
+add_executable(${runCLEO} "main.cpp")
+target_link_libraries(${runCLEO} PRIVATE "${SDMLIBS}")
+target_include_directories(${runCLEO} PRIVATE ${PROJECT_SOURCE_DIR})
+target_compile_options(${runCLEO} PRIVATE ${compileops})
 
 # executable for CVODE-CLEO coupled model 0D condensation setup 
 set(cond0D "cond0D")
@@ -36,7 +36,7 @@ target_link_libraries(${golcolls0D} PRIVATE cvodesdm "${SDMLIBS}")
 target_compile_options(${golcolls0D} PRIVATE ${compileops})
 
 # set compiler properties for target(s)
-set_target_properties(${CVODECLEO} ${cond0D} ${golcolls0D} PROPERTIES
+set_target_properties(${runCLEO} ${cond0D} ${golcolls0D} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
