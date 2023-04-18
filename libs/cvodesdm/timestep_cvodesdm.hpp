@@ -31,7 +31,6 @@ std::vector<ThermoState> start_cvodesdmstep(const Observer auto &observer,
                                             std::vector<GridBox> &gridboxes);
 
 int proceedtonext_cvodesdmstep(int t_mdl, const int couplstep,
-                               const bool doAlterThermo,
                                const std::vector<ThermoState> &previousstates,
                                const std::vector<GridBox> &gridboxes,
                                CvodeThermoSolver &cvode);
@@ -60,7 +59,6 @@ thermodyanics ODE solver (cvode) */
 
 void timestep_cvodesdm(const int t_end,
                        const int couplstep,
-                       const bool doAlterThermo,
                        const RunSDMStep<auto, auto, auto> &sdm,
                        CvodeThermoSolver &cvode,
                        std::mt19937 &gen,
@@ -87,8 +85,8 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
     cvode.run_cvodestep(step2dimlesstime(t_mdl + couplstep));
 
     /* prepare for next coupled step */
-    t_mdl = proceedtonext_cvodesdmstep(t_mdl, couplstep, doAlterThermo,
-                                       previousstates, gridboxes, cvode);
+    t_mdl = proceedtonext_cvodesdmstep(t_mdl, couplstep, previousstates,
+                                       gridboxes, cvode);
   }
 }
 
