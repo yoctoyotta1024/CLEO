@@ -19,7 +19,7 @@ set(compileops -Wall -pedantic -g -gdwarf-4)
 # primary executable for CLEO sdm
 set(runCLEO "runCLEO")
 add_executable(${runCLEO} "main.cpp")
-target_link_libraries(${runCLEO} PRIVATE "${SDMLIBS}")
+target_link_libraries(${runCLEO} PRIVATE thermofromfile "${SDMLIBS}")
 target_include_directories(${runCLEO} PRIVATE ${PROJECT_SOURCE_DIR})
 target_compile_options(${runCLEO} PRIVATE ${compileops})
 

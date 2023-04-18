@@ -37,6 +37,8 @@ namespace dlc = dimless_constants;
 std::mt19937 preparetotimestep()
 {
   std::cout << "any preparation? \n";
+
+  return std::mt19937(std::random_device()());
 }
 
 void start_step()
@@ -47,7 +49,7 @@ void start_step()
 int proceedto_next_step(int t_mdl, const int couplstep)
 {
   std::cout << "at the very least, advance to next step\n";
-  return t_mdl + couplstep
+  return t_mdl + couplstep;
 }
 
 void timestep_thermofromfile(const int t_end,
@@ -66,7 +68,7 @@ superdroplet model (SDM) using thermodynamics read from files */
 {
   /* create thermodynamics from file */
   const unsigned int ngridboxes = sdm.ngridboxes;
-  ThermodynamicsFromFile thermodyn();
+  const ThermodynamicsFromFile thermodyn(ngridboxes);
   
   /* vector containing all superdroplets within a
   struct that also holds their associated gridbox index.
@@ -109,8 +111,7 @@ length 'couplstep' and is decomposed into 4 parts:
   while (t_mdl <= t_end)
   {
     /* start step (in general involves coupling) */
-    const std::vector<ThermoState>
-        previousstates = start_step();
+    start_step();
 
     /* advance SDM by couplstep
     (optionally concurrent to thermodynamics solver) */

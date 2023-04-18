@@ -39,6 +39,9 @@ SDM process and observers to use in main.cpp */
 #include "superdrop_solver/sedimentationmethod.hpp"
 #include "superdrop_solver/terminalvelocity.hpp"
 
+/* Thermodynamics Solver */
+#include "thermofromfile/run_thermofromfile.hpp"
+
 namespace dlc = dimless_constants;
 
 template <SuperdropIntoStoreViaBuffer S>
@@ -103,9 +106,9 @@ combined process of those two individual processes */
   //                                        terminalv);
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  // const auto sdmprocess = cond >> colls;
+  const auto sdmprocess = cond >> colls;
   // const auto sdmprocess = cond;
-  const auto sdmprocess = colls;
+  // const auto sdmprocess = colls;
 
   return sdmprocess;
   // return NullProcess{};

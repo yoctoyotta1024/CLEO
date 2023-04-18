@@ -9,19 +9,28 @@ are read from file */
 
 //#include "initialisation/config.hpp"
 #include <iostream>
+#include <vector>
 
 class ThermodynamicsFromFile
 {
+private:
+  std::vector<double> press;
+  std::vector<double> temp;
+  std::vector<double> qvap;
+  std::vector<double> qcond;
+  std::vector<double> wvel;
+  std::vector<double> uvel;
+  std::vector<double> vvel;
+
+public:
   //ThermodynamicsFromFile(const Config &config){}
-  ThermodynamicsFromFile()
+  ThermodynamicsFromFile(const int ngridboxes)
   {
-    std::cout << "here thermo from file is init-ed\n";
+    std::cout << "here thermo from file is init-ed eg. ngridboxes = "
+    << ngridboxes << '\n';
   }
 
-  void run_thermostep(const int couplstep)
-  {
-    std::cout << "thermostep\n";
-  }
-}
+  void run_thermostep(const int couplstep) const;
+};
 
 #endif // THERMODYNAMICSFROMFILE_HPP 
