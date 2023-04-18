@@ -150,7 +150,6 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   data, datatypes = ctype_compatible_thermodynamics(thermodata) 
   check_datashape(data, ndata, ngridboxes, inputs["ntime"])
 
-  vars = ["press", "temp", "qvap", "qcond", "wvel", "vvel", "uvel"]
   units = [b'P', b'K', b' ', b' ']
   units += [b'm']*3 # velocity units
 
@@ -158,6 +157,7 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
 
   filestem, filetype = thermofile.split(".")
   ng, nt = str(ngridboxes), str(inputs["ntime"])
+  vars = ["press", "temp", "qvap", "qcond", "wvel", "vvel", "uvel"]
   for v, var in enumerate(vars):
 
     metastr = 'Variable in this file is flattened array of '+var+\
