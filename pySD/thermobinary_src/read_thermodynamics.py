@@ -33,7 +33,7 @@ def read_dimless_thermodynamics_binary(thermofile, ngridboxes, ntime):
   
   return thermodata
 
-def get_thermodynamcis_from_thermofile(thermofile, ngridboxes, inputs=False,
+def get_thermodynamics_from_thermofile(thermofile, ngridboxes, inputs=False,
                                        constsfile="", configfile=""):
 
   if not inputs:  
@@ -55,7 +55,7 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
                                                        inputs["COORD0"])
 
     ngridboxes = len(zfull)*len(xfull)*len(yfull)
-    thermodata = get_thermodynamcis_from_thermofile(thermofile, ngridboxes,
+    thermodata = get_thermodynamics_from_thermofile(thermofile, ngridboxes,
                                                     inputs=inputs)
     
     vars = ["press", "temp", "qvap", "qcond", "wvel", "vvel", "uvel"]
