@@ -57,7 +57,7 @@ private:
   using impliciteuler method which iterates condensation-diffusion
   ODE given the previous radius. */
 
-  void condensation_effects_thermostate(ThermoState &state,
+  void condensation_alters_thermostate(ThermoState &state,
                                         const double tot_rho_condensed) const;
   /* change the thermodynamic variables (temp, qv and qc)
   given the total change in condensed mass per
