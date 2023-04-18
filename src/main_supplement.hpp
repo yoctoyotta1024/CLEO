@@ -163,9 +163,4 @@ superdroplets from combination of those two seperate observers */
   return observer;
 }
 
-void run_thermofileCLEO()
-{
-  std::cout << "now run thermo-file CLEO\n";
-}
-
 #endif // MAIN_SUPPLEMENT_HPP
