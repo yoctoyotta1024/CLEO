@@ -32,7 +32,6 @@ Optionally also implements the resultant thermodynamic
 changes to a (ThermoState) thermodynamic state */
 {
 private:
-  const bool doCouple;               // whether to make condensation effect ThermoState or not
   const double delt;                 // dimensionless time interval during which condenstaion occurs
   const ImplicitEuler impliciteuler; // method to integrate condensation equation
 
@@ -57,7 +56,7 @@ private:
   using impliciteuler method which iterates condensation-diffusion
   ODE given the previous radius. */
 
-  void condensation_effects_thermostate(ThermoState &state,
+  void condensation_alters_thermostate(ThermoState &state,
                                         const double tot_rho_condensed) const;
   /* change the thermodynamic variables (temp, qv and qc)
   given the total change in condensed mass per
@@ -72,17 +71,15 @@ private:
   Clouds...." (see note at top of file) */
 
 public:
-  CondensationMethod(const bool doCouple, const double delt,
+  CondensationMethod(const double delt,
                      const ImplicitEuler impliciteuler)
-      : doCouple(doCouple),
-        delt(delt),
+      : delt(delt),
         impliciteuler(impliciteuler) {}
 
-  CondensationMethod(const bool doCouple, const double delt,
+  CondensationMethod(const double delt,
                      const double maxiters, const double rtol,
                      const double atol)
-      : doCouple(doCouple),
-        delt(delt),
+      : delt(delt),
         impliciteuler(maxiters, delt, rtol, atol) {}
 
   inline void operator()(const int currenttimestep,
@@ -100,7 +97,6 @@ public:
 
 SdmProcess auto CondensationProcess(const int interval,
                                     const std::function<double(int)> int2time,
-                                    const bool doCouple,
                                     const double maxiters,
                                     const double rtol,
                                     const double atol)
@@ -109,8 +105,9 @@ given a function to convert the interval to a (dimensionless) time
 and the arguments required to construct the condensation method */
 {
   const double dimlesststep = int2time(interval);
-  return ConstTstepProcess{interval, CondensationMethod(doCouple, dimlesststep,
-                                                        maxiters, rtol, atol)};
+  return ConstTstepProcess{interval, CondensationMethod(dimlesststep,
+                                                        maxiters, rtol,
+                                                        atol)};
 }
 
 #endif // CONDENSATIONMETHOD_HPP
