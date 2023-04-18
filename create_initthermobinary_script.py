@@ -31,7 +31,8 @@ cthermo.write_thermodynamics_binary(thermofile, thermogen, configfile,
                                     constsfile, gridfile)
 
 if isfigures[0]:
-    t2plt = 0.0
+    #t2plt = 0.0
+    t2plt =  "all"
     rthermo.plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
                                           thermofile, t2plt, binpath,
                                           isfigures[1])

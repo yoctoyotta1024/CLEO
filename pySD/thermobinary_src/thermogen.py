@@ -72,5 +72,8 @@ class ConstUniformThermo:
       "VVEL": np.full(ngrid*ntime, self.VVEL) 
     }
 
+    # THERMODATA["PRESS"][0:ngrid] = 800 # makes all gbxs a t=0 have P=800Pa
+    # THERMODATA["PRESS"][::ngrid] = 800 # makes 0th gbx at all times have P=800Pa
+
     return THERMODATA
 

@@ -29,17 +29,16 @@ def read_dimless_thermodynamics_binary(thermofile, ngridboxes, ntime):
                        str(ngridboxes)+ " gridboxes and "+str(ntime)+\
                         " timesteps")
     data = np.asarray(data, dtype=datatypes[v])
-    thermodata[var] = np.reshape(data, [ngridboxes, ntime])
+    thermodata[var] = np.reshape(data, [ntime, ngridboxes])
   
   return thermodata
 
+def get_thermodynamcis_from_thermofile(thermofile, ngridboxes, inputs=False,
+                                       constsfile="", configfile=""):
 
-def get_thermodyanmcis_from_thermofile(thermofile, ngridboxes,
-                                       constsfile, configfile):
-    
-  inputs = thermoinputsdict(configfile, constsfile)
+  if not inputs:  
+    inputs = thermoinputsdict(configfile, constsfile)
 
-  
   thermodata = read_dimless_thermodynamics_binary(thermofile, ngridboxes, 
                                                   inputs["ntime"]) 
   dth = DimlessThermodynamics(inputs=inputs)
@@ -51,20 +50,34 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
 
     plt.rcParams.update({'font.size': 14})
 
+    inputs = thermoinputsdict(configfile, constsfile)
     zfull, xfull, yfull = get_fullcoords_from_gridfile(gridfile,
-                                                       constsfile=constsfile)
-    
+                                                       inputs["COORD0"])
+
     ngridboxes = len(zfull)*len(xfull)*len(yfull)
-    thermodata = get_thermodyanmcis_from_thermofile(thermofile, ngridboxes,
-                                                    constsfile, configfile)
+    thermodata = get_thermodynamcis_from_thermofile(thermofile, ngridboxes,
+                                                    inputs=inputs)
     
     vars = ["press", "temp", "qvap", "qcond", "wvel", "vvel", "uvel"]
     units = [" /Pa", " /K", "", ""]+[" /ms$^{-1}$"]*3
     fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(12, 6))
     axs = axs.flatten()
 
-    for v, var in enumerate(vars):
-      axs[v].plot(thermodata[var], range(ngridboxes))
+    gbxs = range(ngridboxes)
+    if t2plt == "all":
+      for v, var in enumerate(vars):
+        for t in range(inputs['ntime']):
+          axs[v].plot(thermodata[var][t,:], gbxs)
+      
+    else:
+      for v, var in enumerate(vars):
+        end, stp = inputs["T_END"]+inputs["COUPLTSTEP"], inputs["COUPLTSTEP"]
+        times = np.arange(0, end, stp)
+        t = np.argmin(abs(t2plt-times))
+        l = axs[v].plot(thermodata[var][t,:], gbxs, color="k")
+        axs[0].legend(["t={:.0f}s".format(times[t])], loc="upper right")
+    
+    for v in range(len(vars)):
       axs[v].set_xlabel(var+units[v])
       axs[v].set_ylabel("GBx")
     axs[v+1].remove()
