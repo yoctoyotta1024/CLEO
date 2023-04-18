@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION "3.18.0")
 
 # setlibrary name
-set(LIBNAME "cvodesdm")
+set(LIBNAME "cvodecoupld")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
@@ -19,8 +19,8 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 set(SOURCES 
   "cvodethermosolver.cpp"
   "differential_functions.cpp"
-  "timestep_cvodesdm.cpp"
-  "run_cvodesdm.cpp"
+  "timestep_cvodecoupld.cpp"
+  "run_cvodecoupld.cpp"
   )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

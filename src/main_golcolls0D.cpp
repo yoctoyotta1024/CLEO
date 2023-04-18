@@ -17,7 +17,7 @@ coupled with a CVODE ode solver for the thermodynamics
 #include "initialisation/config.hpp"
 
 /* Coupled model setup */
-#include "cvodesdm/run_cvodesdm.hpp"
+#include "cvodecoupld/run_cvodecoupld.hpp"
 
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
   const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
 
   /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
-  run_cvodesdm(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+  run_cvodecoupld(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
 
   return 0;
 }

@@ -1,12 +1,12 @@
 // Author: Clara Bayley
-// File: run_cvodesdm.hpp
+// File: run_cvodecoupld.hpp
 /* Header file for functions specifically
 to run SDM coupled to Sundials CVODE ODE
 solver for the thermodynamics.
 Coupling can be one-way or both ways */
 
-#ifndef RUN_CVODESDM_HPP
-#define RUN_CVODESDM_HPP
+#ifndef RUN_CVODECOUPLD_HPP
+#define RUN_CVODECOUPLD_HPP
 
 #include <random>
 #include <vector>
@@ -16,7 +16,7 @@ Coupling can be one-way or both ways */
 
 /* Coupled model setup */
 #include "claras_SDconstants.hpp"
-#include "./timestep_cvodesdm.hpp"
+#include "./timestep_cvodecoupld.hpp"
 #include "initialisation/config.hpp"
 
 /* Superdroplet Model (SDM) */
@@ -48,7 +48,7 @@ std::vector<double> initcvodethermo(const size_t num_gridboxes,
 
 void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes);
 
-void run_cvodesdm(const Config &config,
+void run_cvodecoupld(const Config &config,
                   const RunSDMStep<auto, auto, auto> &sdm,
                   const int t_end, const int couplstep)
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
@@ -74,10 +74,10 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
                                   t_end, couplstep);
 
   /* run coupled model from t=0 to t=t_end */
-  timestep_cvodesdm(t_end, couplstep, sdm, cvode,
+  timestep_cvodecoupld(t_end, couplstep, sdm, cvode,
                     gen, gridboxes, SDsInGBxs);
 
   std::cout << "\n ---- CVODE-SDM Coupled Model Complete ---- \n";
 }
 
-#endif // RUN_CVODESDM_HPP
+#endif // RUN_CVODECOUPLD_HPP

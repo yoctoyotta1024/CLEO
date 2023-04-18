@@ -1,13 +1,13 @@
 // Author: Clara Bayley
-// File: timestep_cvodesdm.hpp
+// File: timestep_cvodecoupld.hpp
 /* Header file for functions specifically
 to run timstep algoritms for SDM coupled
 to Sundials CVODE ODE solver for the
 thermodynamics. Coupling can be one-way
 or both ways */
 
-#ifndef TIMESTEP_CVODESDM_HPP
-#define TIMESTEP_CVODESDM_HPP
+#ifndef TIMESTEP_CVODECOUPLD_HPP
+#define TIMESTEP_CVODECOUPLD_HPP
 
 #include <random>
 #include <vector>
@@ -26,11 +26,11 @@ or both ways */
 /* CVODE thermodynamics ODE solver */
 #include "./cvodethermosolver.hpp"
 
-std::vector<ThermoState> start_cvodesdmstep(const Observer auto &observer,
+std::vector<ThermoState> start_coupldstep(const Observer auto &observer,
                                             const CvodeThermoSolver &cvode,
                                             std::vector<GridBox> &gridboxes);
 
-int proceedtonext_cvodesdmstep(int t_mdl, const int couplstep,
+int proceedtonext_coupldstep(int t_mdl, const int couplstep,
                                const std::vector<ThermoState> &previousstates,
                                const std::vector<GridBox> &gridboxes,
                                CvodeThermoSolver &cvode);
@@ -57,7 +57,7 @@ thermodyanics ODE solver (cvode) */
   state.qcond = cvode.get_qcond(ii);
 }
 
-void timestep_cvodesdm(const int t_end,
+void timestep_cvodecoupld(const int t_end,
                        const int couplstep,
                        const RunSDMStep<auto, auto, auto> &sdm,
                        CvodeThermoSolver &cvode,
@@ -75,7 +75,7 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
   {
     /* begin coupled step */
     const std::vector<ThermoState>
-        previousstates = start_cvodesdmstep(sdm.observer,
+        previousstates = start_coupldstep(sdm.observer,
                                             cvode, gridboxes);
 
     /* advance SDM by outstep (parallel to CVODE section) */
@@ -85,12 +85,12 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
     cvode.run_cvodestep(step2dimlesstime(t_mdl + couplstep));
 
     /* prepare for next coupled step */
-    t_mdl = proceedtonext_cvodesdmstep(t_mdl, couplstep, previousstates,
+    t_mdl = proceedtonext_coupldstep(t_mdl, couplstep, previousstates,
                                        gridboxes, cvode);
   }
 }
 
-std::vector<ThermoState> start_cvodesdmstep(const Observer auto &observer,
+std::vector<ThermoState> start_coupldstep(const Observer auto &observer,
                                             const CvodeThermoSolver &cvode,
                                             std::vector<GridBox> &gridboxes)
 /* communication of thermodynamic state from CVODE solver to SDM.
@@ -106,4 +106,4 @@ of current thermodynamic states (for later use in SDM) */
   return currentstates;
 }
 
-#endif // TIMESTEP_CVODESDM_HPP
+#endif // TIMESTEP_CVODECOUPLD_HPP

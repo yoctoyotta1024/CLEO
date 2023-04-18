@@ -1,11 +1,11 @@
 // Author: Clara Bayley
-// File: run_cvodesdm.cpp
+// File: run_cvodecoupld.cpp
 /* Functions involved specifically
 in running SDM coupled to Sundials
 CVODE ODE solver for the thermodynamics.
 Coupling can be one-way or both ways */
 
-#include "./run_cvodesdm.hpp"
+#include "./run_cvodecoupld.hpp"
 
 std::vector<double> initcvodethermo(const size_t num_gridboxes,
                                         const Config &config)

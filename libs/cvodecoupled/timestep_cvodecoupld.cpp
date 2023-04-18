@@ -1,12 +1,12 @@
 // Author: Clara Bayley
-// File: timestep_cvodesdm.hpp
+// File: timestep_cvodecoupld.hpp
 /* Implementation of (non-templated)
 functions involved in the timstepping
 algoritms for SDM coupled to Sundials
 CVODE ODE solver for the thermodynamics.
 Coupling can be one-way or both ways */
 
-#include "./timestep_cvodesdm.hpp"
+#include "./timestep_cvodecoupld.hpp"
 
 std::vector<ThermoState>
   recieve_thermodynamics_from_cvode(const CvodeThermoSolver &cvode,
@@ -25,7 +25,7 @@ containing all those Thermostates */
   return currentstates;
 }
 
-int proceedtonext_cvodesdmstep(int t_mdl, const int couplstep,
+int proceedtonext_coupldstep(int t_mdl, const int couplstep,
                                const std::vector<ThermoState> &previousstates,
                                const std::vector<GridBox> &gridboxes,
                                CvodeThermoSolver &cvode)
