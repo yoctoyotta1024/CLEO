@@ -65,7 +65,7 @@ void timestep_cvodecoupld(const int t_end,
                        std::vector<GridBox> &gridboxes,
                        std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep coupled model from t=0 to t=tend. Each coupled step is
-length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
+length 'couplstep' and decomposed into 4 parts: 1) start of step (coupled)
 2) run SDM step (independent) 3) run CVODE step (independent)
 4) proceed to next step (coupled) */
 {
@@ -78,10 +78,10 @@ length 'outstep' and decomposed into 4 parts: 1) start of step (coupled)
         previousstates = start_coupldstep(sdm.observer,
                                             cvode, gridboxes);
 
-    /* advance SDM by outstep (parallel to CVODE section) */
+    /* advance SDM by couplstep (parallel to CVODE section) */
     sdm.run_sdmstep(t_mdl, couplstep, gen, gridboxes, SDsInGBxs);
 
-    /* advance CVODE solver by outstep (parallel to SDM) */
+    /* advance CVODE solver by couplstep (parallel to SDM) */
     cvode.run_cvodestep(step2dimlesstime(t_mdl + couplstep));
 
     /* prepare for next coupled step */
