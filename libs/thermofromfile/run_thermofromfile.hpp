@@ -36,7 +36,7 @@ namespace dlc = dimless_constants;
 
 std::mt19937 preparetotimestep()
 {
-  std::cout << "any preparation? \n";
+  std::cout << "\n-----------\nany preparation? \n";
 
   return std::mt19937(std::random_device()());
 }
