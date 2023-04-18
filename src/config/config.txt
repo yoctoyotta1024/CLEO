@@ -31,23 +31,15 @@ COUPLTSTEP = 30                         # time between SDM data output and therm
 T_END = 2400                            # time span of integration [s]
 
 ### superdroplet params ###
-nSDsvec = 1024                            # initial no. elements in superdroplets' vector ( = initial total no. of superdroplets)
+nSDsvec = 1024                          # initial no. elements in superdroplets' vector ( = initial total no. of superdroplets)
 SDnspace = 1                            # no. of spatial coordinates of superdroplets ( = dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 
-### initial thermodynamic conditions ###
-P_INIT = 100000.0                       # initial pressure [Pa]
-TEMP_INIT = 273.15                      # initial parcel temperature [T]
-relh_init = 95.0                        # initial relative humidity (%)
-qc_init = 0.0                           # initial liquid water content []
-
-### CVODE ODE solver paramters ###
-doCouple = true                         # enable coupling from SDM to CVODE 
-doThermo = true                         # enable parcel adiabatic expansion
-W_AVG = 1                               # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
-T_HALF = 4000                           # timescale for w sinusoid, tau = THALF/pi [s]
-cvode_rtol = 1e-6                       # relative tolerance (tol) for integration
-cvode_atol_p = 1e-6                     # absolute tolerances for thermodynamics ODEs [P, T, qv, qc]
-cvode_atol_temp = 1e-6
-cvode_atol_qv =1e-6
-cvode_atol_qc = 1e-6    
+### thermodynamics file parameters ###
+press_filename = dimlessthermodynamics_press.dat          # binary filename for pressure
+temp_filename = dimlessthermodynamics_temp.dat            # binary filename for temperature
+qvap_filename = dimlessthermodynamics_qvap.dat            # binary filename for vapour mixing ratio
+qcond_filename = dimlessthermodynamics_qcond.dat          # binary filename for liquid mixing ratio
+wvel_filename = dimlessthermodynamics_wvel.dat            # binary filename for vertical (z) velocity
+uvel_filename = dimlessthermodynamics_uvel.dat            # binary filename for horizontal x velocity
+vvel_filename = dimlessthermodynamics_vvel.dat            # binary filename for horizontal y velocity
