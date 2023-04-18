@@ -56,7 +56,6 @@ public:
   std::filesystem::path zarrbasedir; // zarr store base directory
   int maxchunk;                      // maximum no. of elements in chunks of zarr store array
 
-  /* Model Settings */
   /* SDM timestepping parameters */
   int cond_maxiters;  // maximum no. iterations of Newton Raphson Method
   double cond_rtol;   // relative tolerance for implicit euler integration
@@ -86,6 +85,7 @@ public:
   // double TEMP_INIT;    // initial parcel temperature [T]
   // double relh_init;    // initial relative humidity (%)
   // double qc_init;      // initial liquid water content []
+  
   // bool doCouple;       // enable coupling from SDM to CVODE
   // bool doThermo;       // enable condensational growth of superdroplets
   // double W_AVG;        // average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)

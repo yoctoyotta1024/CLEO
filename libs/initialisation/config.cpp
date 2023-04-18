@@ -83,14 +83,10 @@ void Config::configvariable(const std::string name, std::string value)
 {
   bool issuccess = false;
 
+  /* initialisation and output parameters */
   if (name == "initSDs_filename")
   {
     initSDs_filename = value;
-    issuccess = true;
-  }
-  else if (name == "grid_filename")
-  {
-    grid_filename = value;
     issuccess = true;
   }
   else if (name == "grid_filename")
@@ -113,6 +109,8 @@ void Config::configvariable(const std::string name, std::string value)
     maxchunk = stoi(value);
     issuccess = true;
   }
+
+  /* SDM timestepping parameters */
   else if (name == "cond_maxiters")
   {
     cond_maxiters = stoi(value);
@@ -154,6 +152,7 @@ void Config::configvariable(const std::string name, std::string value)
     issuccess = true;
   }
 
+  /* superdroplet parameters */
   else if (name == "nSDsvec")
   {
     nSDsvec = stoi(value);
@@ -170,72 +169,73 @@ void Config::configvariable(const std::string name, std::string value)
     issuccess = true;
   }
 
-  else if (name == "P_INIT")
-  {
-    P_INIT = stod(value);
-    issuccess = true;
-  }
-  else if (name == "TEMP_INIT")
-  {
-    TEMP_INIT = stod(value);
-    issuccess = true;
-  }
-  else if (name == "relh_init")
-  {
-    relh_init = stod(value);
-    issuccess = true;
-  }
-  else if (name == "qc_init")
-  {
-    qc_init = stod(value);
-    issuccess = true;
-  }
+  // /* CVODE ODE solver paramters */
+  // else if (name == "P_INIT")
+  // {
+  //   P_INIT = stod(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "TEMP_INIT")
+  // {
+  //   TEMP_INIT = stod(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "relh_init")
+  // {
+  //   relh_init = stod(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "qc_init")
+  // {
+  //   qc_init = stod(value);
+  //   issuccess = true;
+  // }
 
-  else if (name == "doCouple")
-  {
-    doCouple = string2bool(value);
-    issuccess = true;
-  }
-  else if (name == "doThermo")
-  {
-    doThermo = string2bool(value);
-    issuccess = true;
-  }
-  else if (name == "W_AVG")
-  {
-    W_AVG = stod(value);
-    issuccess = true;
-  }
-  else if (name == "T_HALF")
-  {
-    T_HALF = stod(value);
-    issuccess = true;
-  }
-  else if (name == "cvode_rtol")
-  {
-    cvode_rtol = stod(value);
-    issuccess = true;
-  }
-  else if (name == "cvode_atol_p")
-  {
-    cvode_atol_p = stod(value);
-    issuccess = true;
-  }
-  else if (name == "cvode_atol_temp")
-  {
-    cvode_atol_temp = stod(value);
-    issuccess = true;
-  }
-  else if (name == "cvode_atol_qv")
-  {
-    cvode_atol_qv = stod(value);
-    issuccess = true;
-  }
-  else if (name == "cvode_atol_qc")
-  {
-    cvode_atol_qc = stod(value);
-    issuccess = true;
-  }
+  // else if (name == "doCouple")
+  // {
+  //   doCouple = string2bool(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "doThermo")
+  // {
+  //   doThermo = string2bool(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "W_AVG")
+  // {
+  //   W_AVG = stod(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "T_HALF")
+  // {
+  //   T_HALF = stod(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "cvode_rtol")
+  // {
+  //   cvode_rtol = stod(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "cvode_atol_p")
+  // {
+  //   cvode_atol_p = stod(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "cvode_atol_temp")
+  // {
+  //   cvode_atol_temp = stod(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "cvode_atol_qv")
+  // {
+  //   cvode_atol_qv = stod(value);
+  //   issuccess = true;
+  // }
+  // else if (name == "cvode_atol_qc")
+  // {
+  //   cvode_atol_qc = stod(value);
+  //   issuccess = true;
+  // }
 
   if (issuccess)
   {
