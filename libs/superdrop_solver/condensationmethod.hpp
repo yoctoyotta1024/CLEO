@@ -32,7 +32,7 @@ Optionally also implements the resultant thermodynamic
 changes to a (ThermoState) thermodynamic state */
 {
 private:
-  const bool doCouple;               // whether to make condensation effect ThermoState or not
+  const bool doAlterThermo;               // whether to make condensation alter ThermoState or not
   const double delt;                 // dimensionless time interval during which condenstaion occurs
   const ImplicitEuler impliciteuler; // method to integrate condensation equation
 
@@ -72,16 +72,16 @@ private:
   Clouds...." (see note at top of file) */
 
 public:
-  CondensationMethod(const bool doCouple, const double delt,
+  CondensationMethod(const bool doAlterThermo, const double delt,
                      const ImplicitEuler impliciteuler)
-      : doCouple(doCouple),
+      : doAlterThermo(doAlterThermo),
         delt(delt),
         impliciteuler(impliciteuler) {}
 
-  CondensationMethod(const bool doCouple, const double delt,
+  CondensationMethod(const bool doAlterThermo, const double delt,
                      const double maxiters, const double rtol,
                      const double atol)
-      : doCouple(doCouple),
+      : doAlterThermo(doAlterThermo),
         delt(delt),
         impliciteuler(maxiters, delt, rtol, atol) {}
 
@@ -100,7 +100,7 @@ public:
 
 SdmProcess auto CondensationProcess(const int interval,
                                     const std::function<double(int)> int2time,
-                                    const bool doCouple,
+                                    const bool doAlterThermo,
                                     const double maxiters,
                                     const double rtol,
                                     const double atol)
@@ -109,7 +109,7 @@ given a function to convert the interval to a (dimensionless) time
 and the arguments required to construct the condensation method */
 {
   const double dimlesststep = int2time(interval);
-  return ConstTstepProcess{interval, CondensationMethod(doCouple, dimlesststep,
+  return ConstTstepProcess{interval, CondensationMethod(doAlterThermo, dimlesststep,
                                                         maxiters, rtol, atol)};
 }
 

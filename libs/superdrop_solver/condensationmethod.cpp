@@ -105,7 +105,7 @@ Clouds...." (see note at top of file) */
   }
 
   /* resultant effect on thermodynamic state */
-  if (doCouple)
+  if (doAlterThermo)
   {
     condensation_alters_thermostate(state, tot_rho_condensed);
   }
