@@ -58,15 +58,16 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   const unsigned int ngridboxes = sdm.ngridboxes;
   CvodeThermoSolver cvode(config, initcvodethermo(ngridboxes, config));
 
-  /* vector containing all superdroplets within a struct that also holds their
-  associated gridbox index. (all superdroplets have same solute properties) */
+  /* vector containing all superdroplets within a
+  struct that also holds their associated gridbox index.
+  (all superdroplets have same solute properties) */
   const auto solute(std::make_shared<const SoluteProperties>());
   std::vector<SuperdropWithGbxindex>
       SDsInGBxs = create_superdrops_from_initSDsfile(config.initSDs_filename,
                                               config.nSDsvec,
                                               config.SDnspace, solute);
 
-  /* vector containing all gridboxes that makeup the SDM domain */
+  /* vector containing all gridboxes in SDM domain */
   std::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
 
   /* prepare coupled model for timestepping */
@@ -77,7 +78,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   timestep_cvodecoupld(t_end, couplstep, sdm, cvode,
                     gen, gridboxes, SDsInGBxs);
 
-  std::cout << "\n ---- CVODE-SDM Coupled Model Complete ---- \n";
+  std::cout << "\n ---- CVODE-SDM Coupled Run Complete ---- \n";
 }
 
 #endif // RUN_CVODECOUPLD_HPP

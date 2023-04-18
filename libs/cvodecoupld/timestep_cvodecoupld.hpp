@@ -65,26 +65,30 @@ void timestep_cvodecoupld(const int t_end,
                        std::vector<GridBox> &gridboxes,
                        std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep coupled model from t=0 to t=tend. Each coupled step is
-length 'couplstep' and decomposed into 4 parts: 1) start of step (coupled)
-2) run SDM step (independent) 3) run CVODE step (independent)
+length 'couplstep' and decomposed into 4 parts:
+1) start of step (coupled)
+2) run SDM step (independent, optionally concurrent)
+3) run CVODE step (independent, optionally concurrent)
 4) proceed to next step (coupled) */
 {
   int t_mdl = 0; // model time is incremented by proceed_tonext_coupledstep
   
   while (t_mdl <= t_end)
   {
-    /* begin coupled step */
+    /* start step (in general involves coupling) */
     const std::vector<ThermoState>
         previousstates = start_coupldstep(sdm.observer,
                                             cvode, gridboxes);
 
-    /* advance SDM by couplstep (parallel to CVODE section) */
+    /* advance SDM by couplstep (optionally
+    concurrent to CVODE thermodynamics solver) */
     sdm.run_sdmstep(t_mdl, couplstep, gen, gridboxes, SDsInGBxs);
 
-    /* advance CVODE solver by couplstep (parallel to SDM) */
+    /* advance CVODE thermodynamics solver by
+    couplstep (optionally concurrent to SDM) */
     cvode.run_cvodestep(step2dimlesstime(t_mdl + couplstep));
 
-    /* prepare for next coupled step */
+    /* prepare for next coupled step (in general involves coupling) */
     t_mdl = proceedtonext_coupldstep(t_mdl, couplstep, previousstates,
                                        gridboxes, cvode);
   }

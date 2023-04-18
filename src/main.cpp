@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
   /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */
   // run_thermofileCLEO(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
-  run_thermofileCLEO();
+  run_thermofromfile();
 
   return 0;
 }
