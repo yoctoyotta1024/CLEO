@@ -11,14 +11,14 @@
 #  gridboxmap from gridbox boundaries is read from file "grid_filename"
 #  created using python "create_gbxboundariesbinary_script" script.
 
-### input file parameters ###
+### initialisation file parameters ###
 initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initialisation of superdrops
 grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for gridbox boundaries
 
 ### output data parameters ###
 setuptxt = ./bin/solsetup.txt               # .txt filename to copy inital setup to as output
 zarrbasedir = ./bin/solSDMdata.zarr         # zarr store base directory
-maxchunk = 8192                             # maximum no. of elements in chunks of zarr store array output data
+maxchunk = 8192                             # maximum no. of elements in chunks of zarr store array
 
 ### SDM parameters ###
 cond_maxiters = 100                     # maximum no. iterations of Newton Raphson Method
@@ -30,7 +30,7 @@ MOTIONTSTEP = 5                         # time between SD coordinate position up
 COUPLTSTEP = 30                         # time between SDM data output and thermodynamic coupling [s]
 T_END = 2400                            # time span of integration [s]
 
-### superdroplet params ###
+### superdroplet parameters ###
 nSDsvec = 1024                          # initial no. elements in superdroplets' vector ( = initial total no. of superdroplets)
 SDnspace = 1                            # no. of spatial coordinates of superdroplets ( = dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius

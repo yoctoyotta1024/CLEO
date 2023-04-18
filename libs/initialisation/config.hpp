@@ -49,7 +49,7 @@ private:
   'name' member cannot be assigned, throw error */
 
 public:
-  /* in/output data parameters */
+  /* initialisation and output parameters */
   std::string initSDs_filename;      // binary filename for initialisation of superdrops
   std::string grid_filename;         // binary filename for gridbox boundaries
   std::string setuptxt;              // text filename to copy inital setup to as output
@@ -57,7 +57,7 @@ public:
   int maxchunk;                      // maximum no. of elements in chunks of zarr store array
 
   /* Model Settings */
-  /* Model timestep parameters */
+  /* SDM timestepping parameters */
   int cond_maxiters;  // maximum no. iterations of Newton Raphson Method
   double cond_rtol;   // relative tolerance for implicit euler integration
   double cond_atol;   //  abolute tolerance for implicit euler integration
@@ -67,27 +67,34 @@ public:
   double COUPLTSTEP;  // time between SDM data output and thermodynamic coupling [s]
   double T_END;       // time span of integration [s]
 
-  /* Superdroplet init params */
-  int nSDsvec;     // initial no. elements in SDsInGBxs vector
-  int SDnspace;    // number of spatial coordinates of superdroplets
+  /* superdroplet parameters */
+  int nSDsvec;       // initial no. elements in SDsInGBxs vector
+  int SDnspace;      // number of spatial coordinates of superdroplets
   bool wetradiiinit; // set initial SD radii to equilibrium wet radius
 
-  /* initial parcel conditions */
-  double P_INIT;    // initial pressure [Pa]
-  double TEMP_INIT; // initial parcel temperature [T]
-  double relh_init; // initial relative humidity (%)
-  double qc_init;   // initial liquid water content []
+  /* read in thermodynamics file parameters */
+  std::string press_filename; // binary filename for pressure
+  std::string temp_filename;  // binary filename for temperature
+  std::string qvap_filename;  // binary filename for vapour mixing ratio
+  std::string qcond_filename; // binary filename for liquid mixing ratio
+  std::string wvel_filename;  // binary filename for vertical (z) velocity
+  std::string uvel_filename;  // binary filename for horizontal x velocity
+  std::string vvel_filename;  // binary filename for horizontal y velocity
 
-  /* CVODE ODE solver paramters */
-  bool doCouple;       // enable coupling from SDM to CVODE
-  bool doThermo;       // enable condensational growth of superdroplets
-  double W_AVG;        // average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
-  double T_HALF;       // timescale for w sinusoid, tau_half = T_HALF/pi [s]
-  double cvode_rtol;   // relative tolerance (tol) for integration
-  double cvode_atol_p; // absolute tolerances for thermodynamics ODEs [P, T, qv, qc]
-  double cvode_atol_temp;
-  double cvode_atol_qv;
-  double cvode_atol_qc;
+  // /* CVODE ODE solver paramters */
+  // double P_INIT;       // initial pressure [Pa]
+  // double TEMP_INIT;    // initial parcel temperature [T]
+  // double relh_init;    // initial relative humidity (%)
+  // double qc_init;      // initial liquid water content []
+  // bool doCouple;       // enable coupling from SDM to CVODE
+  // bool doThermo;       // enable condensational growth of superdroplets
+  // double W_AVG;        // average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
+  // double T_HALF;       // timescale for w sinusoid, tau_half = T_HALF/pi [s]
+  // double cvode_rtol;   // relative tolerance (tol) for integration
+  // double cvode_atol_p; // absolute tolerances for thermodynamics ODEs [P, T, qv, qc]
+  // double cvode_atol_temp;
+  // double cvode_atol_qv;
+  // double cvode_atol_qc;
 
   Config(const std::string configfilepath)
   /* set input paramters as members of config
