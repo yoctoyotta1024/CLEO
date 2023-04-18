@@ -43,8 +43,9 @@ int main(int argc, char *argv[])
 
   const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
 
-  /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
-  run_cvodesdm(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+  /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */
+  // run_thermofileCLEO(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+  run_thermofileCLEO();
 
   return 0;
 }

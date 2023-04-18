@@ -16,20 +16,20 @@ set(SDMLIBS superdrop_solver initialisation sdmgridboxes observers)
 set(compileops -Wall -pedantic -g -gdwarf-4)
 #set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
 
-# executable for cvodesdm coupled model
-set(CVODECLEO "coupledCVODECLEO")
-add_executable(${CVODECLEO} "main.cpp")
-target_link_libraries(${CVODECLEO} PRIVATE cvodesdm "${SDMLIBS}")
-#target_include_directories(${CVODECLEO} PRIVATE ${PROJECT_SOURCE_DIR})
-target_compile_options(${CVODECLEO} PRIVATE ${compileops})
+# primary executable for CLEO sdm
+set(CLEO "runCLEO")
+add_executable(${CLEO} "main.cpp")
+target_link_libraries(${CLEO} PRIVATE "${SDMLIBS}")
+target_include_directories(${CLEO} PRIVATE ${PROJECT_SOURCE_DIR})
+target_compile_options(${CLEO} PRIVATE ${compileops})
 
-# executable for cvodesdm coupled model 0D condensation setup 
+# executable for CVODE-CLEO coupled model 0D condensation setup 
 set(cond0D "cond0D")
 add_executable(${cond0D} EXCLUDE_FROM_ALL "main_cond0D.cpp")
 target_link_libraries(${cond0D} PRIVATE cvodesdm "${SDMLIBS}")
 target_compile_options(${cond0D} PRIVATE ${compileops}) 
 
-# executable for cvodesdm coupled model 0D golovin collisions setup
+# executable for CVODE-CLEO coupled model 0D golovin collisions setup
 set(golcolls0D "golcolls0D")
 add_executable(${golcolls0D} EXCLUDE_FROM_ALL "main_golcolls0D.cpp")
 target_link_libraries(${golcolls0D} PRIVATE cvodesdm "${SDMLIBS}")

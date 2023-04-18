@@ -18,9 +18,6 @@ SDM process and observers to use in main.cpp */
 #include "claras_SDconstants.hpp"
 #include "initialisation/config.hpp"
 
-/* Coupled model setup */
-#include "cvodesdm/run_cvodesdm.hpp"
-
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
 #include "sdmgridboxes/sdmtimesteps.hpp"
@@ -164,6 +161,11 @@ superdroplets from combination of those two seperate observers */
   //const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
 
   return observer;
+}
+
+void run_thermofileCLEO()
+{
+  std::cout << "now run thermo-file CLEO\n";
 }
 
 #endif // MAIN_SUPPLEMENT_HPP
