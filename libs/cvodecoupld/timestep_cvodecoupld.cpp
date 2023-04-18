@@ -4,7 +4,7 @@
 functions involved in the timstepping
 algoritms for SDM coupled to Sundials
 CVODE ODE solver for the thermodynamics.
-Coupling can be one-way or both ways */
+Coupling is both ways (send and receive) */
 
 #include "./timestep_cvodecoupld.hpp"
 

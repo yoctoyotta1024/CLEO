@@ -3,8 +3,8 @@
 /* Header file for functions specifically
 to run timstep algoritms for SDM coupled
 to Sundials CVODE ODE solver for the
-thermodynamics. Coupling can be one-way
-or both ways */
+thermodynamics. Coupling is in general 
+both ways (send and receive) */
 
 #ifndef TIMESTEP_CVODECOUPLD_HPP
 #define TIMESTEP_CVODECOUPLD_HPP

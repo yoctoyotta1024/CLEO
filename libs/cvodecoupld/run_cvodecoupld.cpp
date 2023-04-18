@@ -3,7 +3,7 @@
 /* Functions involved specifically
 in running SDM coupled to Sundials
 CVODE ODE solver for the thermodynamics.
-Coupling can be one-way or both ways */
+Coupling is both ways (send and receive) */
 
 #include "./run_cvodecoupld.hpp"
 

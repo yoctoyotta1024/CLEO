@@ -3,7 +3,7 @@
 /* Header file for functions specifically
 to run SDM coupled to Sundials CVODE ODE
 solver for the thermodynamics.
-Coupling can be one-way or both ways */
+Coupling is both ways (send and receive) */
 
 #ifndef RUN_CVODECOUPLD_HPP
 #define RUN_CVODECOUPLD_HPP
