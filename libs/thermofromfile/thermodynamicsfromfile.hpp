@@ -87,7 +87,6 @@ public:
 
   double get_vvel(const unsigned int gbxindex) const
   {
-    std::cout << "get vel?\n";
     return get_var(vvel, (size_t)gbxindex);
   }
 };
