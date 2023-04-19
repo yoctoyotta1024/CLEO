@@ -11,6 +11,7 @@ SD initial conditions */
 #include <string>
 #include <string_view>
 #include <iostream>
+#include <ios>
 #include <fstream>
 #include <istream>
 #include <vector>
@@ -55,6 +56,20 @@ void binary_into_buffer(std::ifstream &file,
 {
   file.read(reinterpret_cast<char *>(buffer.data()),
             buffer.size() * sizeof(T));
+}
+
+template <typename T>
+std::vector<T> vector_from_binary(std::ifstream &file,
+                                  const VarMetadata &varmeta)
+/* return vector of data read from ifstream file for
+one variable in a binary file given that variable's 
+metadata is given by the VarMetadata instance, 'varmeta' */
+{
+  file.seekg(varmeta.b0, std::ios::beg);
+  std::vector<double> vardata(varmeta.nvar, 0);
+  binary_into_buffer<double>(file, vardata);
+
+  return vardata; // data for variable in binary file given it's metadata
 }
 
 std::ifstream open_binary(std::string_view filename);

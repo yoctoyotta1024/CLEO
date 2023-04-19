@@ -8,14 +8,14 @@ are read from file */
 
 std::vector<double> thermovar_frombinary(std::string_view filename)
 {
+  /* open file and read in the metatdata
+  for all the variables in that file */
   std::ifstream file(open_binary(filename));
-
   std::vector<VarMetadata> meta(metadata_from_binary(file));
   
-  VarMetadata varmeta(meta.at(0));
-  file.seekg(varmeta.b0, std::ios::beg);
-  std::vector<double> thermovar(varmeta.nvar, 0);
-  binary_into_buffer<double>(file, thermovar);
+  /* read in the data for the 1st variable in the file */
+  std::vector<double>
+      thermovar(vector_from_binary<double>(file, meta.at(0)));
 
   return thermovar;
 }
