@@ -12,6 +12,7 @@ SD initial conditions */
 #include <string_view>
 #include <iostream>
 #include <fstream>
+#include <istream>
 #include <vector>
 #include <stdexcept>
 

@@ -9,8 +9,12 @@ are read from file */
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <istream>
+#include <string_view>
 
 #include "initialisation/config.hpp"
+#include "initialisation/readbinary.hpp"
 
 class ThermodynamicsFromFile
 {

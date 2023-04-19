@@ -11,6 +11,7 @@ from a binary file */
 #include <string>
 #include <string_view>
 #include <fstream>
+#include <istream>
 #include <iostream>
 #include <utility>
 #include <stdexcept>
