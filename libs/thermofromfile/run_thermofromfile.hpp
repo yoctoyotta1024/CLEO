@@ -36,22 +36,10 @@ are read from file */
 
 namespace dlc = dimless_constants;
 
-void print_state(const std::vector<GridBox> &gridboxes)
-{
-  for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
-  {
-    std::cout << "gbx " << ii << ", " << gridboxes[ii].state.press << ", ";
-    std::cout << gridboxes[ii].state.temp<< ", ";
-    std::cout << gridboxes[ii].state.qvap << ", ";
-    std::cout << gridboxes[ii].state.qcond << ", ";
-    std::cout << gridboxes[ii].state.wvel << "\n";
-  }
-}
-
 void timestep_thermofromfile(const int t_end,
                             const int couplstep,
                             const RunSDMStep<auto, auto, auto> &sdm,
-                            const ThermodynamicsFromFile &thermodyn,
+                            ThermodynamicsFromFile &thermodyn,
                             std::mt19937 &gen,
                             std::vector<GridBox> &gridboxes,
                             std::vector<SuperdropWithGbxindex> &SDsInGBxs);

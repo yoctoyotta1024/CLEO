@@ -35,6 +35,15 @@ private:
   void check_thermodyanmics_vectorsizes(const int SDnspace,
                                         const size_t sz0) const;
 
+  double get_var(const std::vector<double> &vec,
+                 const size_t ii) const
+  /* use atpos to get a value from 'vec' (which should
+  correspond to the thermodynamic variable for
+  ii'th gridbox at desired timestep (step = atos//ngrid) */
+  {
+    return vec.at(atpos+ii);
+  }
+
 public:
   ThermodynamicsFromFile(const Config &config,
                          const size_t nsteps, const size_t ngridboxes);
@@ -48,37 +57,38 @@ public:
 
   double get_press(const unsigned int gbxindex) const
   {
-    return press.at(atpos+(size_t)gbxindex);
+    return get_var(press, (size_t)gbxindex);
   }
 
   double get_temp(const unsigned int gbxindex) const
   {
-    return temp.at(atpos+(size_t)gbxindex);
+    return get_var(temp, (size_t)gbxindex);
   }
   
   double get_qvap(const unsigned int gbxindex) const
   {
-    return qvap.at(atpos+(size_t)gbxindex);
+    return get_var(qvap, (size_t)gbxindex);
   }
 
   double get_qcond(const unsigned int gbxindex) const
   {
-    return qcond.at(atpos+(size_t)gbxindex);
+    return get_var(qcond, (size_t)gbxindex);
   }
 
   double get_wvel(const unsigned int gbxindex) const
   {
-    return wvel.at(atpos+(size_t)gbxindex);
+    return get_var(wvel, (size_t)gbxindex);
   }
 
   double get_uvel(const unsigned int gbxindex) const
   {
-    return uvel.at(atpos+(size_t)gbxindex);
+    return get_var(uvel, (size_t)gbxindex);
   }
 
   double get_vvel(const unsigned int gbxindex) const
   {
-    return vvel.at(atpos+(size_t)gbxindex);
+    std::cout << "get vel?\n";
+    return get_var(vvel, (size_t)gbxindex);
   }
 };
 

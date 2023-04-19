@@ -29,7 +29,7 @@ zgrid = [zmin, zmax, zdelta]
 xgrid = np.asarray([0, 500, 1000])
 
 ### input parameters for y coords of gridbox boundaries
-ygrid = np.asarray([0, 200, 1000])
+ygrid = np.asarray([0, 1000])
 
 Path(gridfilepath).mkdir(exist_ok=True) 
 Path(binpath).mkdir(exist_ok=True) 
