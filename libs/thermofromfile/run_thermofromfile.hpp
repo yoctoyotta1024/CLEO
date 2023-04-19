@@ -85,9 +85,9 @@ superdroplet model (SDM) using thermodynamics read from files */
   /* prepare model for timestepping */
   auto gen = preparetotimestep();
 
-  /* run model from t=0 to t=t_end */
-  timestep_thermofromfile(t_end, couplstep, sdm, thermodyn,
-                          gen, gridboxes, SDsInGBxs);
+  // /* run model from t=0 to t=t_end */
+  // timestep_thermofromfile(t_end, couplstep, sdm, thermodyn,
+  //                         gen, gridboxes, SDsInGBxs);
 
   std::cout << "\n ---- Uncoupled SDM Run Complete ---- \n";
 }
