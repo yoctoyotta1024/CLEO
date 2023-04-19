@@ -78,7 +78,7 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
         axs[0].legend(["t={:.0f}s".format(times[t])], loc="upper right")
     
     for v in range(len(vars)):
-      axs[v].set_xlabel(var+units[v])
+      axs[v].set_xlabel(vars[v]+units[v])
       axs[v].set_ylabel("GBx")
     axs[v+1].remove()
 
