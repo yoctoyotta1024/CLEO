@@ -11,6 +11,7 @@ are read from file */
 #include <vector>
 #include <iostream>
 #include <memory>
+#include <cmath>
 
 /* Coupled model setup */
 #include "claras_SDconstants.hpp"
@@ -91,12 +92,14 @@ about thermodynamic state (changes) is possible. */
 void run_thermofromfile(const Config &config,
                     const RunSDMStep<auto, auto, auto> &sdm,
                     const int t_end, const int couplstep)
-/* create superdroplets and gridboxes and then run uncoupled 
+/* create superdroplets and gridboxes and then run uncoupled
 superdroplet model (SDM) using thermodynamics read from files */
 {
   /* create thermodynamics from file */
-  const ThermodynamicsFromFile thermodyn(config);
-  
+  const size_t ngridboxes = sdm.ngridboxes;
+  ThermodynamicsFromFile thermodyn(config, ceil(t_end / couplstep),
+                                         ngridboxes);
+
   /* vector containing all superdroplets within a
   struct that also holds their associated gridbox index.
   (all superdroplets have same solute properties) */
@@ -122,7 +125,7 @@ superdroplet model (SDM) using thermodynamics read from files */
 void timestep_thermofromfile(const int t_end,
                             const int couplstep,
                             const RunSDMStep<auto, auto, auto> &sdm,
-                            const ThermodynamicsFromFile &thermodyn,
+                            ThermodynamicsFromFile &thermodyn,
                             std::mt19937 &gen,
                             std::vector<GridBox> &gridboxes,
                             std::vector<SuperdropWithGbxindex> &SDsInGBxs)
@@ -146,7 +149,7 @@ length 'couplstep' and is decomposed into 4 parts:
 
     /* advance thermodynamics solver by couplstep
     (optionally concurrent to SDM) */
-    thermodyn.run_thermostep(couplstep);
+    thermodyn.run_thermostep();
 
     /* proceed to next step (in general involves coupling) */
     t_mdl = proceedto_next_step(t_mdl, couplstep);

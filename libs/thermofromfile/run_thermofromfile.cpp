@@ -15,12 +15,12 @@ to match that given by the ThermodnamicsFromFile 'thermodyn' */
   for (auto &gbx : gridboxes)
   {
     gbx.state.time = time; 
-    gbx.state.press = thermodyn.get_press();
-    gbx.state.temp = thermodyn.get_temp();
-    gbx.state.qvap = thermodyn.get_qvap();
-    gbx.state.qcond = thermodyn.get_qcond();
-    gbx.state.wvel = thermodyn.get_wvel();
-    gbx.state.uvel = thermodyn.get_uvel();
-    gbx.state.vvel = thermodyn.get_vvel();
+    gbx.state.press = thermodyn.get_press(gbx.gbxindex);
+    gbx.state.temp = thermodyn.get_temp(gbx.gbxindex);
+    gbx.state.qvap = thermodyn.get_qvap(gbx.gbxindex);
+    gbx.state.qcond = thermodyn.get_qcond(gbx.gbxindex);
+    gbx.state.wvel = thermodyn.get_wvel(gbx.gbxindex);
+    gbx.state.uvel = thermodyn.get_uvel(gbx.gbxindex);
+    gbx.state.vvel = thermodyn.get_vvel(gbx.gbxindex);
   }
 }

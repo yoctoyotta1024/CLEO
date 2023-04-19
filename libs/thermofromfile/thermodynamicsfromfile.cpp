@@ -22,8 +22,10 @@ thermodynamicvar_from_binary(std::string_view filename)
 }
 
 ThermodynamicsFromFile::
-    ThermodynamicsFromFile(const Config &config)
+    ThermodynamicsFromFile(const Config &config,
+                           const size_t nsteps, const size_t ngridboxes)
     : atpos(0),
+      ngrid(ngridboxes),
       press(thermodynamicvar_from_binary(config.press_filename)),
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
@@ -37,7 +39,8 @@ ThermodynamicsFromFile::
                "  liquid water mass mixing ratio,\n  "
             << windstr << '\n';
   
-  check_thermodyanmics_vectorsizes(config.SDnspace, press.size()); 
+  const size_t size(nsteps*ngridboxes); // correct size of thermodata vectors
+  check_thermodyanmics_vectorsizes(config.SDnspace, size); 
 }
 
 std::string ThermodynamicsFromFile::
@@ -100,10 +103,4 @@ void ThermodynamicsFromFile::
   else if (SDnspace == 2 && (w != sz || u != sz || v != 0)){err();}
   else if (SDnspace == 1 && (w != sz || u != 0 || v != 0)){err();}
   else if (SDnspace == 0 && (w != 0 || u != 0 || v != 0)){err();}
-}
-
-void ThermodynamicsFromFile::
-    run_thermostep(const int couplstep) const
-{
-  std::cout << "thermostep\n";
 }
