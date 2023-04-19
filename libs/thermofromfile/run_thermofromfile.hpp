@@ -34,10 +34,8 @@ are read from file */
 
 namespace dlc = dimless_constants;
 
-std::mt19937 preparetotimestep()
+inline std::mt19937 preparetotimestep()
 {
-  std::cout << "\n-----------\nany preparation? \n";
-
   return std::mt19937(std::random_device()());
 }
 
@@ -85,9 +83,9 @@ superdroplet model (SDM) using thermodynamics read from files */
   /* prepare model for timestepping */
   auto gen = preparetotimestep();
 
-  // /* run model from t=0 to t=t_end */
-  // timestep_thermofromfile(t_end, couplstep, sdm, thermodyn,
-  //                         gen, gridboxes, SDsInGBxs);
+  /* run model from t=0 to t=t_end */
+  timestep_thermofromfile(t_end, couplstep, sdm, thermodyn,
+                          gen, gridboxes, SDsInGBxs);
 
   std::cout << "\n ---- Uncoupled SDM Run Complete ---- \n";
 }
