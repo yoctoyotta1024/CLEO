@@ -7,9 +7,10 @@ are read from file */
 #ifndef THERMODYNAMICSFROMFILE_HPP
 #define THERMODYNAMICSFROMFILE_HPP
 
-//#include "initialisation/config.hpp"
 #include <iostream>
 #include <vector>
+
+#include "initialisation/config.hpp"
 
 class ThermodynamicsFromFile
 {
@@ -23,12 +24,7 @@ private:
   std::vector<double> vvel;
 
 public:
-  //ThermodynamicsFromFile(const Config &config){}
-  ThermodynamicsFromFile(const int ngridboxes)
-  {
-    std::cout << "here thermo from file is init-ed eg. ngridboxes = "
-    << ngridboxes << '\n';
-  }
+  ThermodynamicsFromFile(const Config &config, const int ngridboxes);
 
   void run_thermostep(const int couplstep) const;
 };

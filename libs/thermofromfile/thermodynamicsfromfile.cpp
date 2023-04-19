@@ -6,6 +6,12 @@ are read from file */
 
 #include "thermodynamicsfromfile.hpp"
 
+ThermodynamicsFromFile::ThermodynamicsFromFile(const Config &config,
+                                               const int ngridboxes)
+{
+  std::cout << "initit\n";
+}
+
 void ThermodynamicsFromFile::run_thermostep(const int couplstep) const
 {
   std::cout << "thermostep\n";
