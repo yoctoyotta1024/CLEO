@@ -81,4 +81,10 @@ read and print the global metadata string at the start of the file,
 then return a vector containing the metadata that is specific to
 each of the variables in the file */
 
+void check_vectorsizes(const std::vector<size_t> &sizes);
+/* raise error if values in vector 'sizes' are not the same. Useful 
+for checking if vectors are the same size e.g. for vectors of
+SD attributes created from reading initSDsfile and used to
+make InitSdsData object */
+
 #endif // READBINARY_HPP

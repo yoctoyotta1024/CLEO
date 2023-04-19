@@ -5,11 +5,6 @@ struct by reading data from a binary file */
 
 #include "read_initsuperdrops.hpp"
 
-void check_vectorsizes(const std::vector<size_t> &sizes);
-/* raise error if values in sizes vector are not the same. Used to check
-if vectors for SD attributes created from reading initSDsfile and used to
-male InitSdsData object are the same size */
-
 InitSDsData get_initsuperdropsdata(std::string_view initSDsfile)
 {
   std::ifstream file(open_binary(initSDsfile));
@@ -45,20 +40,3 @@ InitSDsData get_initsuperdropsdata(std::string_view initSDsfile)
   return InitSDsData{sd_gbxindex, eps, radius, m_sol,
                      coord3, coord1, coord2};
 };
-
-void check_vectorsizes(const std::vector<size_t> &sizes)
-/* raise error if values in sizes vector are not the same. Used to check
-if vectors for SD attributes created from reading initSDsfile and used to
-male InitSdsData object are the same size */
-{
-  const size_t sz0 = sizes.front();
-  for (auto sz : sizes)
-  {
-    if (sz != sz0)
-    {
-      const std::string err("sizes of vectors for InitSDsData"
-                            "are not consistent");
-      throw std::invalid_argument(err);
-    }
-  }
-}

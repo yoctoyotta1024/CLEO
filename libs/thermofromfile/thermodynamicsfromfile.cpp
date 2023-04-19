@@ -24,8 +24,8 @@ ThermodynamicsFromFile::ThermodynamicsFromFile(const Config &config,
                                                const int ngridboxes)
   : press(thermodynamicvar_from_binary(config.press_filename)),
   temp(thermodynamicvar_from_binary(config.temp_filename)),
-  qvap(thermodynamicvar_from_binary(config.press_filename)),
-  qcond(thermodynamicvar_from_binary(config.press_filename)),
+  qvap(thermodynamicvar_from_binary(config.qvap_filename)),
+  qcond(thermodynamicvar_from_binary(config.qcond_filename)),
   wvel(), uvel(), vvel()
 {
   std::string windstr = set_windvelocities(config);
@@ -34,9 +34,14 @@ ThermodynamicsFromFile::ThermodynamicsFromFile(const Config &config,
                "  water vapour mass mixing ratio,\n"
                "  liquid water mass mixing ratio,\n  "
             << windstr << '\n';
+  
+  check_thermodyanmics_vectorsizes(press.size(), config.SDnspace); 
 }
 
 std::string ThermodynamicsFromFile::set_windvelocities(const Config &config)
+/* depending on SDnspace, read in data for wind velocity
+components from binary files into appropriate vectors
+and check they have correct size */
 {
   const int SDnspace(config.SDnspace);
 
@@ -68,6 +73,38 @@ std::string ThermodynamicsFromFile::set_windvelocities(const Config &config)
   {
     const std::string errmsg("SDnspace > 3 is invalid");
     throw std::invalid_argument(errmsg);
+  }
+}
+
+void ThermodynamicsFromFile::check_thermodyanmics_vectorsizes(const int SDnspace,
+                                                              const size_t sz)
+{
+  check_vectorsizes({press.size(), temp.size(),
+                      qvap.size(), qcond.size()});
+
+  const size_t w(wvel.size());
+  const size_t u(uvel.size());
+  const size_t v(vvel.size());
+  const std::string err("wind velocity vectors are not consistent with SDnspace");
+  
+  if (SDnspace == 3 && (w != sz || u != sz || v != sz))
+  {
+    throw std::invalid_argument(err);
+  }
+
+  if (SDnspace == 2 && (w != sz || u != sz || v != 0))
+  {
+    throw std::invalid_argument(err);
+  }
+
+  if (SDnspace == 1 && (w != sz || u != 0 || v != 0))
+  {
+    throw std::invalid_argument(err);
+  }
+
+  if (SDnspace == 0 && (w != 0 || u != 0 || v != 0))
+  {
+    throw std::invalid_argument(err);
   }
 }
 

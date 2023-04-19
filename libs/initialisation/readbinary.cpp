@@ -41,6 +41,23 @@ each of the variables in the file */
   return mdata;
 }
 
+void check_vectorsizes(const std::vector<size_t> &sizes)
+/* raise error if values in vector 'sizes' are not the same. Useful 
+for checking if vectors are the same size e.g. for vectors of
+SD attributes created from reading initSDsfile and used to
+make InitSdsData object */
+{
+  const size_t sz0 = sizes.front();
+  for (auto sz : sizes)
+  {
+    if (sz != sz0)
+    {
+      const std::string err("values in 'sizes' vector are not identical");
+      throw std::invalid_argument(err);
+    }
+  }
+}
+
 GblMetadata::GblMetadata(std::ifstream &file)
 {
   // read 4 unsigned ints are start of binary file

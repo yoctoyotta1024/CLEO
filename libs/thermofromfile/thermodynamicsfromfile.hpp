@@ -29,6 +29,9 @@ private:
   std::vector<double> vvel;
 
   std::string set_windvelocities(const Config &config);
+  
+  void check_thermodyanmics_vectorsizes(const int SDnspace,
+                                        const size_t sz0);
 
 public:
   ThermodynamicsFromFile(const Config &config, const int ngridboxes);
