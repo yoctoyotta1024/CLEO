@@ -22,6 +22,7 @@ are read from file */
 #include "sdmgridboxes/movesuperdropsindomain.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 #include "sdmgridboxes/sdmtimesteps.hpp"
+#include "sdmgridboxes/runsdmstep.hpp"
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "superdrop_solver/sdmotion.hpp"

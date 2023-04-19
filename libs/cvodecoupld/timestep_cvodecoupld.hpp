@@ -13,7 +13,7 @@ both ways (send and receive) */
 #include <vector>
 
 /* Superdroplet Model (SDM) */
-#include "sdmgridboxes/run_sdmstep.hpp"
+#include "sdmgridboxes/runsdmstep.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 #include "sdmgridboxes/maps4gridboxes.hpp"
 #include "sdmgridboxes/sdmtimesteps.hpp"

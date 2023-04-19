@@ -1,10 +1,10 @@
 // Author: Clara Bayley
-// File: run_sdmstep.hpp
+// File: runsdmstep.hpp
 /* Header file for class to
 run 1 timestep of SDM */
 
-#ifndef RUN_SDMSTEP_HPP
-#define RUN_SDMSTEP_HPP
+#ifndef RUNSDMSTEP_HPP
+#define RUNSDMSTEP_HPP
 
 #include <concepts>
 #include <random>
@@ -85,4 +85,4 @@ public:
   }
 };
 
-#endif // RUN_SDMSTEP_HPP
+#endif // RUNSDMSTEP_HPP

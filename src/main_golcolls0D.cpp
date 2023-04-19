@@ -22,7 +22,7 @@ coupled with a CVODE ode solver for the thermodynamics
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
 #include "sdmgridboxes/sdmtimesteps.hpp"
-#include "sdmgridboxes/run_sdmstep.hpp"
+#include "sdmgridboxes/runsdmstep.hpp"
 #include "observers/observers.hpp"
 #include "observers/intostore_observers.hpp"
 #include "observers/sdattributes_intostore.hpp"
