@@ -34,19 +34,42 @@ are read from file */
 
 namespace dlc = dimless_constants;
 
+void print_state(const std::vector<GridBox> &gridboxes)
+{
+  for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
+  {
+    std::cout << "gbx " << ii << ", " << gridboxes[ii].state.press << ", ";
+    std::cout << gridboxes[ii].state.temp<< ", ";
+    std::cout << gridboxes[ii].state.qvap << ", ";
+    std::cout << gridboxes[ii].state.qcond << ", ";
+    std::cout << gridboxes[ii].state.wvel << "\n";
+  }
+}
+
 inline std::mt19937 preparetotimestep()
+/* return random number generator used in SDM */
 {
   return std::mt19937(std::random_device()());
 }
 
-void start_step()
+void start_step(const Observer auto &observer,
+                const ThermodynamicsFromFile &thermodyn,
+                std::vector<GridBox> &gridboxes)
+/* communication of thermodynamic state to SDM and observation.
+Sets current thermodynamic state of SDM to match that given
+by the thermodnamics from file */
 {
-  std::cout << "start step\n";
+  recieve_thermodynamics(thermodyn, gridboxes);
+
+  observer.observe_state(gridboxes);
 }
 
-int proceedto_next_step(int t_mdl, const int couplstep)
+inline int proceedto_next_step(int t_mdl, const int couplstep)
+/* increments timestep of model by couplstep.
+This function is also placeholder for moment when 
+communication from SDM to thermodynamic solver
+about thermodynamic state (changes) is possible. */
 {
-  std::cout << "at the very least, advance to next step\n";
   return t_mdl + couplstep;
 }
 
