@@ -82,30 +82,20 @@ void ThermodynamicsFromFile::check_thermodyanmics_vectorsizes(const int SDnspace
   check_vectorsizes({press.size(), temp.size(),
                       qvap.size(), qcond.size()});
 
+  auto err = []()
+  {
+    throw std::invalid_argument("wind velocity vectors are "
+                                "not consistent with SDnspace");
+  };
+
   const size_t w(wvel.size());
   const size_t u(uvel.size());
   const size_t v(vvel.size());
-  const std::string err("wind velocity vectors are not consistent with SDnspace");
   
-  if (SDnspace == 3 && (w != sz || u != sz || v != sz))
-  {
-    throw std::invalid_argument(err);
-  }
-
-  if (SDnspace == 2 && (w != sz || u != sz || v != 0))
-  {
-    throw std::invalid_argument(err);
-  }
-
-  if (SDnspace == 1 && (w != sz || u != 0 || v != 0))
-  {
-    throw std::invalid_argument(err);
-  }
-
-  if (SDnspace == 0 && (w != 0 || u != 0 || v != 0))
-  {
-    throw std::invalid_argument(err);
-  }
+  if (SDnspace == 3 && (w != sz || u != sz || v != sz)){err();}
+  else if (SDnspace == 2 && (w != sz || u != sz || v != 0)){err();}
+  else if (SDnspace == 1 && (w != sz || u != 0 || v != 0)){err();}
+  else if (SDnspace == 0 && (w != 0 || u != 0 || v != 0)){err();}
 }
 
 void ThermodynamicsFromFile::run_thermostep(const int couplstep) const
