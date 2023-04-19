@@ -19,8 +19,8 @@ to match that given by the ThermodnamicsFromFile 'thermodyn' */
     gbx.state.temp = thermodyn.get_temp();
     gbx.state.qvap = thermodyn.get_qvap();
     gbx.state.qcond = thermodyn.get_qcond();
-    // gbx.state.wvel = thermodyn.get_wvel();
-    // gbx.state.uvel = thermodyn.get_uvel();
-    // gbx.state.vvel = thermodyn.get_vvel();
+    gbx.state.wvel = thermodyn.get_wvel();
+    gbx.state.uvel = thermodyn.get_uvel();
+    gbx.state.vvel = thermodyn.get_vvel();
   }
 }
