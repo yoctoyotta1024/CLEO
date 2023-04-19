@@ -35,7 +35,7 @@ ThermodynamicsFromFile::ThermodynamicsFromFile(const Config &config,
                "  liquid water mass mixing ratio,\n  "
             << windstr << '\n';
   
-  check_thermodyanmics_vectorsizes(press.size(), config.SDnspace); 
+  check_thermodyanmics_vectorsizes(config.SDnspace, press.size()); 
 }
 
 std::string ThermodynamicsFromFile::set_windvelocities(const Config &config)
