@@ -98,7 +98,7 @@ void ThermodynamicsFromFile::
   const size_t w(wvel.size());
   const size_t u(uvel.size());
   const size_t v(vvel.size());
-  
+
   if (SDnspace == 3 && (w != sz || u != sz || v != sz)){err();}
   else if (SDnspace == 2 && (w != sz || u != sz || v != 0)){err();}
   else if (SDnspace == 1 && (w != sz || u != 0 || v != 0)){err();}
