@@ -11,6 +11,7 @@ are read from file */
 #include <vector>
 #include <fstream>
 #include <istream>
+#include <string>
 #include <string_view>
 
 #include "initialisation/config.hpp"
@@ -26,6 +27,8 @@ private:
   std::vector<double> wvel;
   std::vector<double> uvel;
   std::vector<double> vvel;
+
+  std::string set_windvelocities(const Config &config);
 
 public:
   ThermodynamicsFromFile(const Config &config, const int ngridboxes);
