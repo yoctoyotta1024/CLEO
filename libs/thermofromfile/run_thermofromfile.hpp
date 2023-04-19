@@ -30,21 +30,21 @@ are read from file */
 #include "observers/observers.hpp"
 
 /* Thermodynamics Solver */
-#include "thermofromfile/thermodynamicsfromfile.hpp"
+#include "./thermodynamicsfromfile.hpp"
 
 namespace dlc = dimless_constants;
 
-// void print_state(const std::vector<GridBox> &gridboxes)
-// {
-//   for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
-//   {
-//     std::cout << "gbx " << ii << ", " << gridboxes[ii].state.press << ", ";
-//     std::cout << gridboxes[ii].state.temp<< ", ";
-//     std::cout << gridboxes[ii].state.qvap << ", ";
-//     std::cout << gridboxes[ii].state.qcond << ", ";
-//     std::cout << gridboxes[ii].state.wvel << "\n";
-//   }
-// }
+void print_state(const std::vector<GridBox> &gridboxes)
+{
+  for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
+  {
+    std::cout << "gbx " << ii << ", " << gridboxes[ii].state.press << ", ";
+    std::cout << gridboxes[ii].state.temp<< ", ";
+    std::cout << gridboxes[ii].state.qvap << ", ";
+    std::cout << gridboxes[ii].state.qcond << ", ";
+    std::cout << gridboxes[ii].state.wvel << "\n";
+  }
+}
 
 void timestep_thermofromfile(const int t_end,
                             const int couplstep,
@@ -54,7 +54,8 @@ void timestep_thermofromfile(const int t_end,
                             std::vector<GridBox> &gridboxes,
                             std::vector<SuperdropWithGbxindex> &SDsInGBxs);
 
-void recieve_thermodynamics(const ThermodynamicsFromFile &thermodyn,
+void recieve_thermodynamics(const int time,
+                            const ThermodynamicsFromFile &thermodyn,
                             std::vector<GridBox> &gridboxes);
 /* Sets current thermodynamic state of SDM to match that given
 by the ThermodnamicsFromFile 'thermodyn' */
@@ -65,13 +66,14 @@ inline std::mt19937 preparetotimestep()
   return std::mt19937(std::random_device()());
 }
 
-inline void start_step(const Observer auto &observer,
-                const ThermodynamicsFromFile &thermodyn,
-                std::vector<GridBox> &gridboxes)
+inline void start_step(const int t_mdl,
+                       const Observer auto &observer,
+                       const ThermodynamicsFromFile &thermodyn,
+                       std::vector<GridBox> &gridboxes)
 /* communication of thermodynamic state
 to SDM and observation of SDM gridboxes */
 {
-  recieve_thermodynamics(thermodyn, gridboxes);
+  recieve_thermodynamics(t_mdl, thermodyn, gridboxes);
 
   observer.observe_state(gridboxes);
 }
@@ -135,7 +137,7 @@ length 'couplstep' and is decomposed into 4 parts:
   while (t_mdl <= t_end)
   {
     /* start step (in general involves coupling) */
-    start_step(sdm.observer, thermodyn, gridboxes);
+    start_step(t_mdl, sdm.observer, thermodyn, gridboxes);
 
     /* advance SDM by couplstep
     (optionally concurrent to thermodynamics solver) */

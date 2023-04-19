@@ -23,7 +23,8 @@ thermodynamicvar_from_binary(std::string_view filename)
 
 ThermodynamicsFromFile::
     ThermodynamicsFromFile(const Config &config)
-    : press(thermodynamicvar_from_binary(config.press_filename)),
+    : atpos(0),
+      press(thermodynamicvar_from_binary(config.press_filename)),
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
       qcond(thermodynamicvar_from_binary(config.qcond_filename)),

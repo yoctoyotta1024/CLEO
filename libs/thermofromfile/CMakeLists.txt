@@ -17,8 +17,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 # add executables to library
 set(SOURCES 
-"run_thermofromfile.cpp"
 "thermodynamicsfromfile.cpp"
+"run_thermofromfile.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
@@ -27,7 +27,7 @@ target_include_directories(${LIBNAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PUBLIC "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
-target_link_libraries("${LIBNAME}" PRIVATE initialisation)
+target_link_libraries("${LIBNAME}" PRIVATE superdrop_solver initialisation sdmgridboxes observers)
 
 # some compilation properties
 set_target_properties(${LIBNAME} PROPERTIES

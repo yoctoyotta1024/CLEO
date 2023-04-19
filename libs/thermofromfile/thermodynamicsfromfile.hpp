@@ -20,6 +20,8 @@ are read from file */
 class ThermodynamicsFromFile
 {
 private:
+  int atpos; // position in vector to count from
+
   std::vector<double> press;
   std::vector<double> temp;
   std::vector<double> qvap;
@@ -37,6 +39,30 @@ public:
   ThermodynamicsFromFile(const Config &config);
 
   void run_thermostep(const int couplstep) const;
+
+  double get_press() const
+  {
+    return press.at(atpos);
+  }
+
+  double get_temp() const
+  {
+    return temp.at(atpos);
+  }
+  
+  double get_qvap() const
+  {
+    return qvap.at(atpos);
+  }
+
+  double get_qcond() const
+  {
+    return qcond.at(atpos);
+  }
+
+  double get_wvel() const;
+  double get_uvel() const;
+  double get_vvel() const;
 };
 
 #endif // THERMODYNAMICSFROMFILE_HPP 
