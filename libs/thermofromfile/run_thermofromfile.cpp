@@ -9,8 +9,6 @@ are read from file */
 void recieve_windcomponents(const ThermodynamicsFromFile &thermodyn,
                             std::vector<GridBox> &gridboxes)
 {
-  const int SDnspace = 2;
-
   for (auto &gbx : gridboxes)
   {
     if (SDnspace >= 1)
