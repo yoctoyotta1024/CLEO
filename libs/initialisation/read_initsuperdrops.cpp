@@ -16,48 +16,34 @@ InitSDsData get_initsuperdropsdata(std::string_view initSDsfile)
 
   std::vector<VarMetadata> meta(metadata_from_binary(file));
 
-  VarMetadata var(meta.at(0));
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<unsigned int> isd_gbxindex(var.nvar, 0);
-  binary_into_buffer<unsigned int>(file, isd_gbxindex);
- 
-  var = meta.at(1);
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<size_t> ieps(var.nvar, 0);
-  binary_into_buffer<size_t>(file, ieps);
- 
-  var = meta.at(2);
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<double> iradius(var.nvar, 0);
-  binary_into_buffer<double>(file, iradius);
+  std::vector<unsigned int>
+      sd_gbxindex(vector_from_binary<unsigned int>(file, meta.at(0)));
+  
+  std::vector<size_t>
+      eps(vector_from_binary<size_t>(file, meta.at(1)));
 
-  var = meta.at(3);
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<double> im_sol(var.nvar, 0);
-  binary_into_buffer<double>(file, im_sol);
+  std::vector<double>
+      radius(vector_from_binary<double>(file, meta.at(2)));
 
-  var = meta.at(4);
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<double> icoord3(var.nvar, 0);
-  binary_into_buffer<double>(file, icoord3);
+  std::vector<double>
+      m_sol(vector_from_binary<double>(file, meta.at(3)));
 
-  var = meta.at(5);
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<double> icoord1(var.nvar, 0);
-  binary_into_buffer<double>(file, icoord1);
+  std::vector<double>
+      coord3(vector_from_binary<double>(file, meta.at(4)));
 
-  var = meta.at(6);
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<double> icoord2(var.nvar, 0);
-  binary_into_buffer<double>(file, icoord2);
+  std::vector<double>
+      coord1(vector_from_binary<double>(file, meta.at(5)));
+  
+  std::vector<double>
+      coord2(vector_from_binary<double>(file, meta.at(6)));
 
   file.close();
 
-  check_vectorsizes({isd_gbxindex.size(), ieps.size(),
-                   iradius.size(), im_sol.size()});
+  check_vectorsizes({sd_gbxindex.size(), eps.size(),
+                    radius.size(), m_sol.size()});
 
-  return InitSDsData{isd_gbxindex, ieps, iradius, im_sol,
-                     icoord3, icoord1, icoord2};
+  return InitSDsData{sd_gbxindex, eps, radius, m_sol,
+                     coord3, coord1, coord2};
 };
 
 void check_vectorsizes(const std::vector<size_t> &sizes)

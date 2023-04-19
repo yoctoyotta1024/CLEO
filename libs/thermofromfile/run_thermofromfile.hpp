@@ -68,7 +68,7 @@ superdroplet model (SDM) using thermodynamics read from files */
 {
   /* create thermodynamics from file */
   const unsigned int ngridboxes = sdm.ngridboxes;
-  const ThermodynamicsFromFile thermodyn(ngridboxes);
+  const ThermodynamicsFromFile thermodyn(config, ngridboxes);
   
   /* vector containing all superdroplets within a
   struct that also holds their associated gridbox index.

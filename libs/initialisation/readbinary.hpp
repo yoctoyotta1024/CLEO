@@ -66,8 +66,8 @@ one variable in a binary file given that variable's
 metadata is given by the VarMetadata instance, 'varmeta' */
 {
   file.seekg(varmeta.b0, std::ios::beg);
-  std::vector<double> vardata(varmeta.nvar, 0);
-  binary_into_buffer<double>(file, vardata);
+  std::vector<T> vardata(varmeta.nvar, 0);
+  binary_into_buffer<T>(file, vardata);
 
   return vardata; // data for variable in binary file given it's metadata
 }

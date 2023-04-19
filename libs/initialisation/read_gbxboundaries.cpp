@@ -26,24 +26,19 @@ GridBoxBoundaries read_gbxboundaries(std::string_view gridfile,
 /* read metadata and data in binary file called 'gridfile', then
 return GridBoxBoundaries instance created from that data */
 {
+  /* open file and read in the metatdata
+  for all the variables in gridfile */
   std::ifstream file(open_binary(gridfile));
-
   std::vector<VarMetadata> meta(metadata_from_binary(file));
 
-  VarMetadata var(meta.at(0));
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<size_t> ndims(var.nvar, 0);
-  binary_into_buffer<size_t>(file, ndims);
+  std::vector<size_t>
+      ndims(vector_from_binary<size_t>(file, meta.at(0)));
 
-  var = meta.at(1);
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<unsigned int> gbxidxs(var.nvar, 0);
-  binary_into_buffer<unsigned int>(file, gbxidxs);
+  std::vector<unsigned int>
+      gbxidxs(vector_from_binary<unsigned int>(file, meta.at(1))); 
 
-  var = meta.at(2);
-  file.seekg(var.b0, std::ios::beg);
-  std::vector<double> gbxbounds(var.nvar, 0);
-  binary_into_buffer<double>(file, gbxbounds);
+  std::vector<double>
+      gbxbounds(vector_from_binary<double>(file, meta.at(2))); 
 
   file.close();
 
