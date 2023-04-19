@@ -61,7 +61,7 @@ class TimeObserver
     /* observe time of 0th gridbox and write it to an array
     as determined by the CoordinateStorage instance */
     {
-      auto gbx = gridboxes[0];
+      const auto gbx = gridboxes[0];
       zarr.value_to_storage(gbx.state.time);
     }
 };

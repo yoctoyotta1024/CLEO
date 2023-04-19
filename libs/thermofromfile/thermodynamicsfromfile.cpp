@@ -6,7 +6,8 @@ are read from file */
 
 #include "thermodynamicsfromfile.hpp"
 
-std::vector<double> thermodynamicvar_from_binary(std::string_view filename)
+std::vector<double>
+thermodynamicvar_from_binary(std::string_view filename)
 {
   /* open file and read in the metatdata
   for all the variables in that file */
@@ -20,13 +21,13 @@ std::vector<double> thermodynamicvar_from_binary(std::string_view filename)
   return thermovar;
 }
 
-ThermodynamicsFromFile::ThermodynamicsFromFile(const Config &config,
-                                               const int ngridboxes)
-  : press(thermodynamicvar_from_binary(config.press_filename)),
-  temp(thermodynamicvar_from_binary(config.temp_filename)),
-  qvap(thermodynamicvar_from_binary(config.qvap_filename)),
-  qcond(thermodynamicvar_from_binary(config.qcond_filename)),
-  wvel(), uvel(), vvel()
+ThermodynamicsFromFile::
+    ThermodynamicsFromFile(const Config &config)
+    : press(thermodynamicvar_from_binary(config.press_filename)),
+      temp(thermodynamicvar_from_binary(config.temp_filename)),
+      qvap(thermodynamicvar_from_binary(config.qvap_filename)),
+      qcond(thermodynamicvar_from_binary(config.qcond_filename)),
+      wvel(), uvel(), vvel()
 {
   std::string windstr = set_windvelocities(config);
   std::cout << "\nFinished reading thermodynamics from binaries for:\n"
@@ -38,7 +39,8 @@ ThermodynamicsFromFile::ThermodynamicsFromFile(const Config &config,
   check_thermodyanmics_vectorsizes(config.SDnspace, press.size()); 
 }
 
-std::string ThermodynamicsFromFile::set_windvelocities(const Config &config)
+std::string ThermodynamicsFromFile::
+    set_windvelocities(const Config &config)
 /* depending on SDnspace, read in data for wind velocity
 components from binary files into appropriate vectors
 and check they have correct size */
@@ -76,8 +78,9 @@ and check they have correct size */
   }
 }
 
-void ThermodynamicsFromFile::check_thermodyanmics_vectorsizes(const int SDnspace,
-                                                              const size_t sz)
+void ThermodynamicsFromFile::
+    check_thermodyanmics_vectorsizes(const int SDnspace,
+                                     const size_t sz) const
 {
   check_vectorsizes({press.size(), temp.size(),
                       qvap.size(), qcond.size()});
@@ -98,7 +101,8 @@ void ThermodynamicsFromFile::check_thermodyanmics_vectorsizes(const int SDnspace
   else if (SDnspace == 0 && (w != 0 || u != 0 || v != 0)){err();}
 }
 
-void ThermodynamicsFromFile::run_thermostep(const int couplstep) const
+void ThermodynamicsFromFile::
+    run_thermostep(const int couplstep) const
 {
   std::cout << "thermostep\n";
 }

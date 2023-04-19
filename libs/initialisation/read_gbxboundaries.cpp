@@ -86,7 +86,7 @@ size_t GridBoxBoundaries::find_idx_in_gbxidxs(const unsigned int idx) const
 where idx is found or raises error */
 {
   size_t pos = 0;
-  for (auto gbxidx : gbxidxs)
+  for (const auto gbxidx : gbxidxs)
   {
     if (gbxidx == idx)
     {

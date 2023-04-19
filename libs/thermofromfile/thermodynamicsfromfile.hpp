@@ -31,10 +31,10 @@ private:
   std::string set_windvelocities(const Config &config);
   
   void check_thermodyanmics_vectorsizes(const int SDnspace,
-                                        const size_t sz0);
+                                        const size_t sz0) const;
 
 public:
-  ThermodynamicsFromFile(const Config &config, const int ngridboxes);
+  ThermodynamicsFromFile(const Config &config);
 
   void run_thermostep(const int couplstep) const;
 };
