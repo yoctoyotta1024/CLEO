@@ -75,7 +75,7 @@ C++ boolean, else returns false */
   }
 }
 
-void Config::configvariable(const std::string name, std::string value)
+void Config::configvariable(const std::string name, const std::string value)
 /* setter function. assigns value of member of Config struct
   called 'name' by coverting strings containing
   value into actual value for that  members's type. If
@@ -174,108 +174,24 @@ void Config::configvariable(const std::string name, std::string value)
     doAlterThermo = string2bool(value);
     issuccess = true;
   }
+  else if (name == "thermosolver")
+  {
+    thermosolver = value;
+    issuccess = true;
+  }
 
-  /* Read in Thermodynamics File Parameters */
-  else if (name == "press_filename")
+  if (thermosolver == "fromfile")
   {
-    press_filename = value;
+    /* Read in Thermodynamics File Parameters */
+    configvariable_thermosolverfromfile(name, value);
     issuccess = true;
   }
-  else if (name == "temp_filename")
+  else if (thermosolver == "cvode")
   {
-    temp_filename = value;
+    /* CVODE ODE solver parameters */
+    configvariable_thermosolvercvode(name, value);
     issuccess = true;
   }
-  else if (name == "qvap_filename")
-  {
-    qvap_filename = value;
-    issuccess = true;
-  }
-  else if (name == "qcond_filename")
-  {
-    qcond_filename = value;
-    issuccess = true;
-  }
-  else if (name == "wvel_filename")
-  {
-    wvel_filename = value;
-    issuccess = true;
-  }
-  else if (name == "uvel_filename")
-  {
-    uvel_filename = value;
-    issuccess = true;
-  }
-  else if (name == "vvel_filename")
-  {
-    vvel_filename = value;
-    issuccess = true;
-  }
-  
-  // /* CVODE ODE solver parameters */
-  // /* initial (uniform) thermodynamic conditions */
-  // else if (name == "P_INIT")
-  // {
-  //   P_INIT = stod(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "TEMP_INIT")
-  // {
-  //   TEMP_INIT = stod(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "relh_init")
-  // {
-  //   relh_init = stod(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "qc_init")
-  // {
-  //   qc_init = stod(value);
-  //   issuccess = true;
-  // }
-
-  // /* ODE parameters */ 
-  // else if (name == "doThermo")
-  // {
-  //   doThermo = string2bool(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "W_AVG")
-  // {
-  //   W_AVG = stod(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "T_HALF")
-  // {
-  //   T_HALF = stod(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "cvode_rtol")
-  // {
-  //   cvode_rtol = stod(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "cvode_atol_p")
-  // {
-  //   cvode_atol_p = stod(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "cvode_atol_temp")
-  // {
-  //   cvode_atol_temp = stod(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "cvode_atol_qv")
-  // {
-  //   cvode_atol_qv = stod(value);
-  //   issuccess = true;
-  // }
-  // else if (name == "cvode_atol_qc")
-  // {
-  //   cvode_atol_qc = stod(value);
-  //   issuccess = true;
-  // }
 
   if (issuccess)
   {
@@ -284,5 +200,101 @@ void Config::configvariable(const std::string name, std::string value)
   else
   {
     throw std::invalid_argument(name + " cannot be assigned with input value");
+  }
+}
+
+void Config::configvariable_thermosolverfromfile(const std::string name,
+                                                 const std::string value)
+/* setter function for assigning 'value' to members of
+Config struct called 'name' specifically for members
+involved when thermosolver == 'fromfile'. Returns false only if
+name is one of these specific members and also cannot be assigned */
+{
+  if (name == "press_filename")
+  {
+    press_filename = value;
+  }
+  else if (name == "temp_filename")
+  {
+    temp_filename = value;
+  }
+  else if (name == "qvap_filename")
+  {
+    qvap_filename = value;
+  }
+  else if (name == "qcond_filename")
+  {
+    qcond_filename = value;
+  }
+  else if (name == "wvel_filename")
+  {
+    wvel_filename = value;
+  }
+  else if (name == "uvel_filename")
+  {
+    uvel_filename = value;
+  }
+  else if (name == "vvel_filename")
+  {
+    vvel_filename = value;
+  }
+}
+
+void Config::configvariable_thermosolvercvode(const std::string name,
+                                              const std::string value)
+/* setter function for assigning 'value' to members of
+Config struct called 'name' specifically for members
+involved when thermosolver == 'cvode' */
+{
+  /* initial (uniform) thermodynamic conditions */
+  if (name == "P_INIT")
+  {
+    P_INIT = stod(value);
+  }
+  else if (name == "TEMP_INIT")
+  {
+    TEMP_INIT = stod(value);
+  }
+  else if (name == "relh_init")
+  {
+    relh_init = stod(value);
+  }
+  else if (name == "qc_init")
+  {
+    qc_init = stod(value);
+  }
+
+  /* ODE parameters */
+  else if (name == "doThermo")
+  {
+    doThermo = string2bool(value);
+  }
+  else if (name == "W_AVG")
+  {
+    W_AVG = stod(value);
+  }
+  else if (name == "T_HALF")
+  {
+    T_HALF = stod(value);
+  }
+  else if (name == "cvode_rtol")
+  {
+    cvode_rtol = stod(value);
+  }
+  else if (name == "cvode_atol_p")
+  {
+    cvode_atol_p = stod(value);
+  }
+  else if (name == "cvode_atol_temp")
+  {
+    cvode_atol_temp = stod(value);
+  }
+  else if (name == "cvode_atol_qv")
+  {
+    cvode_atol_qv = stod(value);
+  }
+  else if (name == "cvode_atol_qc")
+  {
+    cvode_atol_qc = stod(value);
   }
 }

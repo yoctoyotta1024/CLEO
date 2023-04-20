@@ -37,6 +37,7 @@ nSDsvec = 1024                          # initial no. elements in SDs' vector (=
 SDnspace = 0                            # no. of spatial coordinates of SDs (=dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state
+thermosolver = fromfile                 # type of thermodynamic solver to configure
 
 ### Read in Thermodynamics File parameters ###
 press_filename = ./share/dimlessthermodynamics_press.dat          # binary filename for pressure
