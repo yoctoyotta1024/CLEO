@@ -19,9 +19,9 @@ binpath = abspath+"build/bin/"
 isfigures = [True, True]
 
 ### input parameters for zcoords of gridbox boundaries
-zmax = 5000 # maximum z coord [m]
+zmax = 4000 # maximum z coord [m]
 zmin = 0 # minimum z coord [m]
-zdelta = 5000 # even spacing
+zdelta = 1000 # even spacing
 zgrid = [zmin, zmax, zdelta] 
 #zgrid = np.asarray([0, 500, 1000, 2500, 5000])
 

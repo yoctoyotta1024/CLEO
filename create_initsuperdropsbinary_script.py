@@ -21,12 +21,11 @@ binpath = abspath+"build/bin/"
 isfigures = [True, True]
 
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
-nsupers = 1024 # int or dict of ints for number of superdroplets in a gridbox
-# nsupers = {0: 0,
-#            1: 10,
-#            2: 0,
-#            3: 0,
-#            4: 0}
+# nsupers = 1024 # int or dict of ints for number of superdroplets in a gridbox
+nsupers = {0: 0,
+           1: 0,
+           2: 0,
+           3: 1024}
 ### ---------------------------------------------------------------- ###
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
@@ -58,12 +57,12 @@ radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
-coord3gen            = None                        # do not generate superdroplet coord3s
+# coord3gen            = None                        # do not generate superdroplet coord3s
 
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen = initattributes.MonoCoordGen(monocoord3)
                
-# coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
+coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord1 Generator ------------- ###
