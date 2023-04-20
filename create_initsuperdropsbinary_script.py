@@ -21,7 +21,7 @@ binpath = abspath+"build/bin/"
 isfigures = [True, True]
 
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
-nsupers = 1024 # int or dict of ints for number of superdroplets in a gridbox
+nsupers = 512 # int or dict of ints for number of superdroplets in a gridbox
 # nsupers = {0: 0,
 #            1: 0,
 #            2: 0,
@@ -43,27 +43,30 @@ radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled 
 # numconc              = 1e9                         # total no. conc of real droplets [m^-3]
 # radiiprobdist = radiiprobdistribs.DiracDelta(dirac0)
 
-# # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
-# # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
-# # scalefacs          = [1e9]                       # relative heights of modes         
+# geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
+# geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
+# scalefacs          = [1e9]                       # relative heights of modes         
 # geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
 # geosigs              = [1.55, 2.3, 2]                    
 # scalefacs            = [1e6, 0.3e6, 0.025e6]   
-# numconc = np.sum(scalefacs) 
-# radiiprobdist = radiiprobdistribs.LnNormal(geomeans, geosigs, scalefacs)
+geomeans             = [0.02e-6, 0.15e-6]               
+geosigs              = [1.4, 1.6]                    
+scalefacs            = [60e6, 40e6]   
+numconc = np.sum(scalefacs) 
+radiiprobdist = radiiprobdistribs.LnNormal(geomeans, geosigs, scalefacs)
  
-volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
+# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
+# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
+# radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
-coord3gen            = None                        # do not generate superdroplet coord3s
+# coord3gen            = None                        # do not generate superdroplet coord3s
 
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen = initattributes.MonoCoordGen(monocoord3)
                
-# coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
+coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord1 Generator ------------- ###
