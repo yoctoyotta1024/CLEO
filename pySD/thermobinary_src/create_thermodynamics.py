@@ -28,7 +28,10 @@ def thermoinputsdict(configfile, constsfile):
     "TEMP0": consts["TEMP0"],
     "RHO0": moreconsts["RHO0"],               # characteristic density scale [Kg/m^3]
     "CP0": moreconsts["CP0"],
-    "COORD0": moreconsts["COORD0"]            # z coordinate lengthscale [m]
+    "COORD0": moreconsts["COORD0"],           # z coordinate lengthscale [m]
+
+    # for reading dimless thermodynamics
+    "SDnspace": config["SDnspace"]
   }
 
   inputs["ntime"] = round(inputs["T_END"]/inputs["COUPLTSTEP"])+1
@@ -53,12 +56,12 @@ class DimlessThermodynamics:
 
     thermodata = {
         "press": THERMO["PRESS"] / self.PRESS0,
-        "temp":THERMO["TEMP"] / self.TEMP0,
-        "qvap":THERMO["qvap"],
+        "temp": THERMO["TEMP"] / self.TEMP0,
+        "qvap": THERMO["qvap"],
         "qcond": THERMO["qcond"],
-        "wvel":THERMO["WVEL"] / self.VEL0,
-        "uvel":THERMO["UVEL"] / self.VEL0,
-        "vvel":THERMO["VVEL"] / self.VEL0
+        "wvel": THERMO["WVEL"] / self.VEL0,
+        "uvel": THERMO["UVEL"] / self.VEL0,
+        "vvel": THERMO["VVEL"] / self.VEL0
       }
  
     sfs = [self.PRESS0, self.TEMP0, 1.0, 1.0]
@@ -72,11 +75,14 @@ class DimlessThermodynamics:
         "press": thermo["press"] * self.PRESS0,
         "temp":thermo["temp"] * self.TEMP0,
         "qvap":thermo["qvap"],
-        "qcond": thermo["qcond"],
-        "wvel":thermo["wvel"] * self.VEL0,
-        "uvel":thermo["uvel"] * self.VEL0,
-        "vvel":thermo["vvel"] * self.VEL0
-      } 
+        "qcond": thermo["qcond"]
+    }
+    if "wvel" in thermo.keys():
+        THERMODATA["wvel"] = thermo["wvel"] * self.VEL0
+    if "uvel" in thermo.keys():
+        THERMODATA["uvel"] = thermo["uvel"] * self.VEL0
+    if "vvel" in thermo.keys():
+        THERMODATA["vvel"] = thermo["vvel"] * self.VEL0 
     
     return THERMODATA
 
@@ -150,8 +156,8 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
 
   ndata = [len(dt) for dt in thermodata.values()]
   
-  data, datatypes = ctype_compatible_thermodynamics(thermodata) 
-  check_datashape(data, ndata, ngridboxes, inputs["ntime"])
+  thermodata, datatypes = ctype_compatible_thermodynamics(thermodata) 
+  check_datashape(thermodata, ndata, ngridboxes, inputs["ntime"])
 
   units = [b'P', b'K', b' ', b' ']
   units += [b'm']*3 # velocity units
@@ -160,17 +166,16 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
 
   filestem, filetype = thermofile.split(".")
   ng, nt = str(ngridboxes), str(inputs["ntime"])
-  vars = ["press", "temp", "qvap", "qcond", "wvel", "vvel", "uvel"]
-  for v, var in enumerate(vars):
-
-    metastr = 'Variable in this file is flattened array of '+var+\
-              ' with original dimensions [ngridboxes, time] = ['+\
-              ng+', '+nt+'] (ie. file contains '+str(ndata[v])+\
-              ' datapoints corresponding to '+ng+' gridboxes over '+\
-              nt+' time steps)'
-    
-    filename = filestem+"_"+var+"."+filetype
-    writebinary.writebinary(filename, thermodata[var],
-                            [ndata[v]], [datatypes[v]],
-                            [units[v]], [scale_factors[v]],
-                            metastr)
+  for v, var in enumerate(thermodata.keys()):
+    if thermodata[var] != []:
+      metastr = 'Variable in this file is flattened array of '+var+\
+                ' with original dimensions [ngridboxes, time] = ['+\
+                ng+', '+nt+'] (ie. file contains '+str(ndata[v])+\
+                ' datapoints corresponding to '+ng+' gridboxes over '+\
+                nt+' time steps)'
+      
+      filename = filestem+"_"+var+"."+filetype
+      writebinary.writebinary(filename, thermodata[var],
+                              [ndata[v]], [datatypes[v]],
+                              [units[v]], [scale_factors[v]],
+                              metastr)
