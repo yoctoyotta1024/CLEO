@@ -46,7 +46,8 @@ def get_fullcoords_from_gridfile(gridfile, COORD0=False, constsfile=""):
     
     return zfull, xfull, yfull
 
-def read_dimless_gbxboundaries_binary(filename, COORD0=False):
+def read_dimless_gbxboundaries_binary(filename, COORD0=False,
+                                      return_ndims=False):
     ''' return dictionary for gbx indicies to gbx boundaries by
     reading binary file. Return dimensionless version if COORD0
     not give (=False). '''
@@ -74,7 +75,10 @@ def read_dimless_gbxboundaries_binary(filename, COORD0=False):
     
     gbxbounds = {gbxidxs[i]: boundsdata[i] for i in range(ngridboxes)}
     
-    return gbxbounds
+    if return_ndims:
+        return gbxbounds, ndims
+    else:
+        return gbxbounds
 
 def halfcoords_from_gbxbounds(gbxbounds):
     ''' returns half coords of gbx boundaries in lists obtained
