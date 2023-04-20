@@ -20,9 +20,9 @@ P_INIT = 100000.0                       # initial pressure [Pa]
 TEMP_INIT = 273.15                      # initial parcel temperature [T]
 relh_init = 95.0                        # initial relative humidity (%)
 qc_init = 0.0                           # initial liquid water content []
-W_INIT = 0.0                            # initial vertical (z) velocity [m/s]
-U_INIT = 0.0                           # initial horizontal x velocity [m/s]
-V_INIT = 0.0                             # initial horizontal y velocity [m/s]
+W_INIT = 1.0                            # initial vertical (z) velocity [m/s]
+U_INIT = 0.5                           # initial horizontal x velocity [m/s]
+V_INIT = 3.0                             # initial horizontal y velocity [m/s]
 
 thermogen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, relh_init,
                                        qc_init, W_INIT, U_INIT, V_INIT,

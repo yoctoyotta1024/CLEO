@@ -33,8 +33,8 @@ COUPLTSTEP = 30                         # time between SDM observations and betw
 T_END = 2400                             # time span of integration [s]
 
 # SDs parameters #
-nSDsvec = 5120                          # initial no. elements in SDs' vector (=total initial no. of SDs)
-SDnspace = 3                            # no. of spatial coordinates of SDs (=dimension of model)
+nSDsvec = 1024                          # initial no. elements in SDs' vector (=total initial no. of SDs)
+SDnspace = 0                            # no. of spatial coordinates of SDs (=dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state
 thermosolver = fromfile                 # type of thermodynamic solver to configure

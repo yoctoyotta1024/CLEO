@@ -66,18 +66,17 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
     gbxs = range(ngridboxes)
     if t2plt == "all":
       for v, var in enumerate(vars):
-        if thermodata[var] != []:
-          for t in range(inputs['ntime']):
-            axs[v].plot(thermodata[var][t,:], gbxs, marker="x")
+        for t in range(inputs['ntime']):
+          axs[v].plot(thermodata[var][t,:], gbxs, marker="x")
       
     else:
       for v, var in enumerate(vars):
-        if thermodata[var] != []:
-          end, stp = inputs["T_END"]+inputs["COUPLTSTEP"], inputs["COUPLTSTEP"]
-          times = np.arange(0, end, stp)
-          t = np.argmin(abs(t2plt-times))
-          l = axs[v].plot(thermodata[var][t,:], gbxs,
-                          color="k", marker="x", linestyle="--")
+        end, stp = inputs["T_END"]+inputs["COUPLTSTEP"], inputs["COUPLTSTEP"]
+        times = np.arange(0, end, stp)
+        t = np.argmin(abs(t2plt-times))
+        l = axs[v].plot(thermodata[var][t,:], gbxs,
+                        color="k", marker="x", linestyle="--")
+      
         axs[0].legend(["t={:.0f}s".format(times[t])], loc="upper right")
     
     for v in range(len(vars)):
