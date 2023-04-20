@@ -82,13 +82,14 @@ class DimlessThermodynamics:
 
 def set_arraydtype(arr, dtype):
    
-  og = type(arr[0])
-  if og != dtype: 
-    arr = np.array(arr, dtype=dtype)
+  if any(arr):
+    og = type(arr[0])
+    if og != dtype: 
+      arr = np.array(arr, dtype=dtype)
 
-    warning = "WARNING! dtype of attributes is being changed!"+\
-                " from "+str(og)+" to "+str(dtype)
-    raise ValueError(warning) 
+      warning = "WARNING! dtype of attributes is being changed!"+\
+                  " from "+str(og)+" to "+str(dtype)
+      raise ValueError(warning) 
 
   return list(arr)
 
@@ -111,14 +112,16 @@ def check_datashape(thermodata, ndata, ngridboxes, ntime):
   attributes and superdroplets expected given ndata'''
   
   err=''
-  if any([n != ndata[0] for n in ndata]):
-    
+  notnull = np.where(np.asarray(ndata)!=0)
+  lendata = [len(d) != ngridboxes*ntime for d in thermodata.values()]
+  
+  if any([n != ndata[0] for n in np.asarray(ndata)[notnull]]):
     err += "\n------ ERROR! -----\n"+\
           "not all variables in thermodynamics data are the"+\
             " same length, ndata = "+str(ndata)+\
               "\n---------------------\n"
   
-  if any([len(d) != ngridboxes*ntime for d in thermodata.values()]): 
+  if any(np.asarray(lendata)[notnull]): 
     err += "inconsistent dimensions of thermodynamic data: "+\
             str(ndata)+". Lengths should all = "+str(ngridboxes*ntime)+\
             " since data should be list of [ntimesteps]*ngridboxes"   

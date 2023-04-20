@@ -23,17 +23,18 @@ target_link_libraries(${runCLEO} PRIVATE thermofromfile "${SDMLIBS}")
 target_include_directories(${runCLEO} PRIVATE ${PROJECT_SOURCE_DIR})
 target_compile_options(${runCLEO} PRIVATE ${compileops})
 
+# executable for CVODE-CLEO coupled model 0D golovin collisions setup
+set(golcolls0D "golcolls0D")
+add_executable(${golcolls0D} EXCLUDE_FROM_ALL "main_golcolls0D.cpp")
+target_link_libraries(${golcolls0D} PRIVATE thermofromfile "${SDMLIBS}")
+target_compile_options(${golcolls0D} PRIVATE ${compileops})
+
 # executable for CVODE-CLEO coupled model 0D condensation setup 
 set(cond0D "cond0D")
 add_executable(${cond0D} EXCLUDE_FROM_ALL "main_cond0D.cpp")
 target_link_libraries(${cond0D} PRIVATE cvodecoupld "${SDMLIBS}")
 target_compile_options(${cond0D} PRIVATE ${compileops}) 
 
-# executable for CVODE-CLEO coupled model 0D golovin collisions setup
-set(golcolls0D "golcolls0D")
-add_executable(${golcolls0D} EXCLUDE_FROM_ALL "main_golcolls0D.cpp")
-target_link_libraries(${golcolls0D} PRIVATE cvodecoupld "${SDMLIBS}")
-target_compile_options(${golcolls0D} PRIVATE ${compileops})
 
 # set compiler properties for target(s)
 set_target_properties(${runCLEO} ${cond0D} ${golcolls0D} PROPERTIES

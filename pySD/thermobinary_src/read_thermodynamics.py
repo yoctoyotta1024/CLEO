@@ -14,9 +14,9 @@ def read_dimless_thermodynamics_binary(thermofile, ngridboxes, ntime):
     "temp": [],
     "qvap": [],
     "qcond": [],
-    "wvel": [],
-    "vvel": [],
-    "uvel": []
+    "wvel": np.asarray([]),
+    "vvel": np.asarray([]),
+    "uvel": np.asarray([])
   }
   
   filestem, filetype = thermofile.split(".")
@@ -24,12 +24,13 @@ def read_dimless_thermodynamics_binary(thermofile, ngridboxes, ntime):
     filename = filestem+"_"+var+"."+filetype
     data, ndata = readbinary(filename)
 
-    if ndata != [ngridboxes*ntime]:
-      raise ValueError("incorrect data length for "+var+" given "+
-                       str(ngridboxes)+ " gridboxes and "+str(ntime)+\
-                        " timesteps")
-    data = np.asarray(data, dtype=datatypes[v])
-    thermodata[var] = np.reshape(data, [ntime, ngridboxes])
+    if data:
+      if ndata != [ngridboxes*ntime]:
+        raise ValueError("incorrect data length for "+var+" given "+
+                        str(ngridboxes)+ " gridboxes and "+str(ntime)+\
+                          " timesteps")
+      data = np.asarray(data, dtype=datatypes[v])
+      thermodata[var] = np.reshape(data, [ntime, ngridboxes])
   
   return thermodata
 
@@ -67,14 +68,20 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
     if t2plt == "all":
       for v, var in enumerate(vars):
         for t in range(inputs['ntime']):
-          axs[v].plot(thermodata[var][t,:], gbxs, marker="x")
+          try:
+            axs[v].plot(thermodata[var][t,:], gbxs, marker="x")
+          except:
+            pass
       
     else:
       for v, var in enumerate(vars):
         end, stp = inputs["T_END"]+inputs["COUPLTSTEP"], inputs["COUPLTSTEP"]
         times = np.arange(0, end, stp)
         t = np.argmin(abs(t2plt-times))
-        l = axs[v].plot(thermodata[var][t,:], gbxs, color="k", marker="x")
+        try:
+          l = axs[v].plot(thermodata[var][t,:], gbxs, color="k", marker="x")
+        except:
+          print("not plotting "+var)
         axs[0].legend(["t={:.0f}s".format(times[t])], loc="upper right")
     
     for v in range(len(vars)):

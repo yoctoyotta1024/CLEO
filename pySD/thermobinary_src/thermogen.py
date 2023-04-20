@@ -67,10 +67,19 @@ class ConstUniformThermo:
       "TEMP": np.full(ngrid*ntime, self.TEMP),
       "qvap": np.full(ngrid*ntime, self.qvap),
       "qcond": np.full(ngrid*ntime, self.qcond), 
-      "WVEL": np.full(ngrid*ntime, self.WVEL),
-      "UVEL": np.full(ngrid*ntime, self.UVEL),
-      "VVEL": np.full(ngrid*ntime, self.VVEL) 
+      "WVEL": np.array([]), 
+      "UVEL": np.array([]),
+      "VVEL": np.array([])
     }
+
+    if self.WVEL:
+      THERMODATA["WVEL"] =  np.full(ngrid*ntime, self.WVEL)
+
+      if self.UVEL:
+        THERMODATA["UVEL"] =  np.full(ngrid*ntime, self.UVEL)
+
+        if self.VVEL:
+          THERMODATA["VVEL"] =  np.full(ngrid*ntime, self.VVEL)
 
     # THERMODATA["PRESS"][0:ngrid] = 800 # makes all gbxs a t=0 have P=800Pa
     # THERMODATA["PRESS"][::ngrid] = 800 # makes 0th gbx at all times have P=800Pa
