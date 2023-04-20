@@ -30,7 +30,10 @@ ThermodynamicsFromFile::
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
       qcond(thermodynamicvar_from_binary(config.qcond_filename)),
-      wvel(), uvel(), vvel()
+      wvel(), uvel(), vvel(),
+      get_wvel([](const unsigned int ii) {return 0.0;}),
+      get_uvel([](const unsigned int ii) {return 0.0;}),
+      get_vvel([](const unsigned int ii) {return 0.0;})
 {
   std::string windstr = set_windvelocities(config);
   std::cout << "\nFinished reading thermodynamics from binaries for:\n"
@@ -38,7 +41,7 @@ ThermodynamicsFromFile::
                "  water vapour mass mixing ratio,\n"
                "  liquid water mass mixing ratio,\n  "
             << windstr << '\n';
-  
+
   const size_t size(nsteps*ngridboxes); // correct size of thermodata vectors
   check_thermodyanmics_vectorsizes(config.SDnspace, size); 
 }
@@ -58,18 +61,25 @@ and check they have correct size */
 
   else if (SDnspace <= 3) // means 1 <= SDnspace < 4
   {
-    std::string info(std::to_string(SDnspace)+"-D model ");
+    std::string info(std::to_string(SDnspace) + "-D model ");
     wvel = thermodynamicvar_from_binary(config.wvel_filename);
-    
+    get_wvel = [&](const unsigned int gbxindex)
+    { return wvel.at(atpos + (size_t)gbxindex); };
+
     if (SDnspace >= 2)
     {
       uvel = thermodynamicvar_from_binary(config.uvel_filename);
+      get_uvel = [&](const unsigned int gbxindex)
+      { return uvel.at(atpos + (size_t)gbxindex); };
 
       if (SDnspace == 3)
       {
         vvel = thermodynamicvar_from_binary(config.vvel_filename);
-        return info+"[w, u, v] wind velocity";
-      }      
+        get_vvel = [&](const unsigned int gbxindex)
+        { return vvel.at(atpos + (size_t)gbxindex); };
+        
+        return info + "[w, u, v] wind velocity";
+      }
       return info+"[w, u] wind velocity";
     }
     return info+"vertical w wind velocity";

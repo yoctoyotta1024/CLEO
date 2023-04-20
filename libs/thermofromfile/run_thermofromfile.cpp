@@ -6,26 +6,6 @@ are read from file */
 
 #include "run_thermofromfile.hpp"
 
-void recieve_windcomponents(const ThermodynamicsFromFile &thermodyn,
-                            std::vector<GridBox> &gridboxes)
-{
-  for (auto &gbx : gridboxes)
-  {
-    if (SDnspace >= 1)
-    {
-      gbx.state.wvel = thermodyn.get_wvel(gbx.gbxindex);
-    }
-    if (SDnspace >= 2)
-    {
-      gbx.state.uvel = thermodyn.get_uvel(gbx.gbxindex);
-    }
-    if (SDnspace >=3)
-    {
-      gbx.state.vvel = thermodyn.get_vvel(gbx.gbxindex);
-    }
-  }
-}
-
 void recieve_thermodynamics(const int time,
                             const ThermodynamicsFromFile &thermodyn,
                             std::vector<GridBox> &gridboxes)
@@ -40,7 +20,9 @@ to match that given by the ThermodnamicsFromFile 'thermodyn' */
     gbx.state.temp = thermodyn.get_temp(gbx.gbxindex);
     gbx.state.qvap = thermodyn.get_qvap(gbx.gbxindex);
     gbx.state.qcond = thermodyn.get_qcond(gbx.gbxindex);
-  }  
-  
-  recieve_windcomponents(thermodyn, gridboxes);
+
+    gbx.state.wvel = thermodyn.get_wvel(gbx.gbxindex);
+    gbx.state.uvel = thermodyn.get_uvel(gbx.gbxindex);
+    gbx.state.vvel = thermodyn.get_vvel(gbx.gbxindex);
+  }
 }

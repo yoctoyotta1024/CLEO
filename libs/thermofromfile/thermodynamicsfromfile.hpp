@@ -13,6 +13,7 @@ are read from file */
 #include <istream>
 #include <string>
 #include <string_view>
+#include <functional>
 
 #include "initialisation/config.hpp"
 #include "initialisation/readbinary.hpp"
@@ -45,6 +46,10 @@ private:
   }
 
 public:
+  std::function<double(const unsigned int)> get_wvel; // funcs to get velocity defined in construction of class 
+  std::function<double(const unsigned int)> get_uvel; // warning: these functions are not const member funcs by default
+  std::function<double(const unsigned int)> get_vvel;
+  
   ThermodynamicsFromFile(const Config &config,
                          const size_t nsteps, const size_t ngridboxes);
 
@@ -73,21 +78,6 @@ public:
   double get_qcond(const unsigned int gbxindex) const
   {
     return get_var(qcond, (size_t)gbxindex);
-  }
-
-  double get_wvel(const unsigned int gbxindex) const
-  {
-    return get_var(wvel, (size_t)gbxindex);
-  }
-
-  double get_uvel(const unsigned int gbxindex) const
-  {
-    return get_var(uvel, (size_t)gbxindex);
-  }
-
-  double get_vvel(const unsigned int gbxindex) const
-  {
-    return get_var(vvel, (size_t)gbxindex);
   }
 };
 
