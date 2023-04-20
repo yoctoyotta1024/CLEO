@@ -75,8 +75,8 @@ SdMotion auto create_sdmotion(const int motionstep)
                                                      &step2dimlesstime,
                                                      terminalv);
  
-  // return movesedi;
-  return NullMotion{};
+  return movesedi;
+  // return NullMotion{};
 }
 
 SdmProcess auto create_sdmprocess(const Config &config,
