@@ -16,9 +16,6 @@ coupled with a CVODE ode solver for the thermodynamics
 #include "claras_SDconstants.hpp"
 #include "initialisation/config.hpp"
 
-/* Coupled model setup */
-#include "cvodecoupld/run_cvodecoupld.hpp"
-
 /* sdm gridboxes setup */
 #include "sdmgridboxes/maps4gridboxes.hpp"
 #include "sdmgridboxes/sdmtimesteps.hpp"
@@ -30,11 +27,14 @@ coupled with a CVODE ode solver for the thermodynamics
 #include "observers/thermostatestorage.hpp"
 #include "observers/zarrstores.hpp"
 
-/* Superdroplet Model (SDM) */
+/* sdm superdroplets setup */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "superdrop_solver/sdmotion.hpp"
 #include "superdrop_solver/condensationmethod.hpp"
+
+/* thermodynamics solver and coupled model setup */
+#include "cvodecoupld/run_cvodecoupld.hpp"
 
 namespace dlc = dimless_constants;
 

@@ -29,7 +29,7 @@ SDM process and observers to use in main.cpp */
 #include "observers/thermostatestorage.hpp"
 #include "observers/zarrstores.hpp"
 
-/* Superdroplet Model (SDM) */
+/* sdm superdroplets setup */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "superdrop_solver/sdmotion.hpp"
@@ -39,7 +39,7 @@ SDM process and observers to use in main.cpp */
 #include "superdrop_solver/sedimentationmethod.hpp"
 #include "superdrop_solver/terminalvelocity.hpp"
 
-/* Thermodynamics Solver */
+/* thermodynamics solver and coupled model setup */
 #include "thermofromfile/run_thermofromfile.hpp"
 
 namespace dlc = dimless_constants;
