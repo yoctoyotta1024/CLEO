@@ -67,14 +67,14 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
     if t2plt == "all":
       for v, var in enumerate(vars):
         for t in range(inputs['ntime']):
-          axs[v].plot(thermodata[var][t,:], gbxs)
+          axs[v].plot(thermodata[var][t,:], gbxs, marker="x")
       
     else:
       for v, var in enumerate(vars):
         end, stp = inputs["T_END"]+inputs["COUPLTSTEP"], inputs["COUPLTSTEP"]
         times = np.arange(0, end, stp)
         t = np.argmin(abs(t2plt-times))
-        l = axs[v].plot(thermodata[var][t,:], gbxs, color="k")
+        l = axs[v].plot(thermodata[var][t,:], gbxs, color="k", marker="x")
         axs[0].legend(["t={:.0f}s".format(times[t])], loc="upper right")
     
     for v in range(len(vars)):

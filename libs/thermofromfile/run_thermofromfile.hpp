@@ -44,7 +44,7 @@ void timestep_thermofromfile(const int t_end,
                             std::vector<GridBox> &gridboxes,
                             std::vector<SuperdropWithGbxindex> &SDsInGBxs);
 
-void recieve_thermodynamics(const int time,
+void recieve_thermodynamics(const double time,
                             const ThermodynamicsFromFile &thermodyn,
                             std::vector<GridBox> &gridboxes);
 /* Sets current thermodynamic state of SDM to match that given
@@ -63,7 +63,8 @@ inline void start_step(const int t_mdl,
 /* communication of thermodynamic state
 to SDM and observation of SDM gridboxes */
 {
-  recieve_thermodynamics(t_mdl, thermodyn, gridboxes);
+  const double time = step2dimlesstime(t_mdl);
+  recieve_thermodynamics(time, thermodyn, gridboxes);
 
   observer.observe_state(gridboxes);
 }

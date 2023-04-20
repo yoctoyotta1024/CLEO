@@ -6,7 +6,7 @@ are read from file */
 
 #include "run_thermofromfile.hpp"
 
-void recieve_thermodynamics(const int time,
+void recieve_thermodynamics(const double time,
                             const ThermodynamicsFromFile &thermodyn,
                             std::vector<GridBox> &gridboxes)
 /* Sets current thermodynamic state of SDM (time, p, temp, qv, etc.)
