@@ -21,7 +21,7 @@ binpath = abspath+"build/bin/"
 isfigures = [True, True]
 
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
-nsupers = 512 # int or dict of ints for number of superdroplets in a gridbox
+nsupers = 32 # int or dict of ints for number of superdroplets in a gridbox
 # nsupers = {0: 0,
 #            1: 0,
 #            2: 0,
@@ -33,7 +33,8 @@ nsupers = 512 # int or dict of ints for number of superdroplets in a gridbox
 # monor                = 1e-6                        # all SDs have this same radius [m]
 # radiigen  = initattributes.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
-rspan                = [1e-8, 9.1e-5]                # max and min range of radii to sample [m]
+rspan                = [1e-8, 1e-6]                # max and min range of radii to sample [m]
+#rspan                = [1e-8, 9.1e-5]                # max and min range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]
 ### ---------------------------------------------------------------- ###
@@ -70,12 +71,12 @@ coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly o
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord1 Generator ------------- ###
-coord1gen            = None                        # do not generate superdroplet coord1s
+# coord1gen            = None                        # do not generate superdroplet coord1s
 
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
 # coord1gen = initattributes.MonoCoordGen(monocoord1)
          
-# coord1gen            = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
+coord1gen            = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord2 Generator ------------- ###

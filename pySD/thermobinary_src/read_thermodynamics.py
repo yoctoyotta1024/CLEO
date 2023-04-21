@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from .create_thermodynamics import thermoinputsdict, DimlessThermodynamics
-from ..gbxboundariesbinary_src.read_gbxboundaries import get_fullcoords_from_gridfile
 from ..readbinary import readbinary
+from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid 
 
 def read_dimless_thermodynamics_binary(thermofile, ngridboxes,
                                        ntime, SDnspace):
@@ -51,10 +51,13 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
     plt.rcParams.update({'font.size': 14})
 
     inputs = thermoinputsdict(configfile, constsfile)
-    zfull, xfull, yfull = get_fullcoords_from_gridfile(gridfile,
-                                                       inputs["COORD0"])
+    gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(gridfile,
+                                                            COORD0=inputs["COORD0"],
+                                                            return_ndims=True)
+    zhalf, xhalf, yhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds)
+    zfull, xfull, yfull = rgrid.fullcell_fromhalfcoords(zhalf, xhalf, yhalf)
 
-    ngridboxes = len(zfull)*len(xfull)*len(yfull)
+    ngridboxes = int(np.prod(ndims))
     thermodata = get_thermodynamics_from_thermofile(thermofile, ngridboxes,
                                                     inputs=inputs)
     

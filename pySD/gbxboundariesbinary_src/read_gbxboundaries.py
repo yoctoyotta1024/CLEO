@@ -35,16 +35,31 @@ def get_gbxvols_from_gridfile(gridfile, COORD0=False, constsfile=""):
 
     return calc_gridboxvols(gbxbounds)
 
-def get_fullcoords_from_gridfile(gridfile, COORD0=False, constsfile=""):
-    
-    zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile, COORD0=COORD0,
-                                                constsfile=constsfile)
-    
+def fullcell_fromhalfcoords(zhalf, xhalf, yhalf):
+
     zfull = get_fullcell_and_cellspacing(zhalf)[0] 
-    xfull= get_fullcell_and_cellspacing(xhalf)[0] 
-    yfull= get_fullcell_and_cellspacing(yhalf)[0] 
+    xfull = get_fullcell_and_cellspacing(xhalf)[0] 
+    yfull = get_fullcell_and_cellspacing(yhalf)[0] 
     
     return zfull, xfull, yfull
+
+def fullcoords_forallgridboxes(gbxbounds, ndims):
+
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
+    zfull, xfull, yfull = fullcell_fromhalfcoords(zhalf, xhalf, yhalf)
+
+    zfullcoords = np.tile(zfull, int(ndims[1]*ndims[2])) # zfull of every gridbox in order of gbxindex
+    xfullcoords = np.tile(np.repeat(xfull, ndims[0]), int(ndims[2]))
+    yfullcoords = np.repeat(yfull, ndims[0]*ndims[1])
+
+    return zfullcoords, xfullcoords, yfullcoords
+
+def allgbxfullcoords_fromgridfile(gridfile, COORD0=False):
+
+    gbxbounds, ndims = read_dimless_gbxboundaries_binary(gridfile,
+                                                        COORD0=COORD0,
+                                                        return_ndims=True)
+    return fullcoords_forallgridboxes(gbxbounds, ndims)
 
 def read_dimless_gbxboundaries_binary(filename, COORD0=False,
                                       return_ndims=False):
@@ -137,7 +152,6 @@ def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
                     bbox_inches="tight", facecolor='w', format="png")
         print("Figure .png saved as: "+binpath+"/gridboxboundaries.png")
     plt.show()
-
 
 def get_fullcell_and_cellspacing(halfcell):
 

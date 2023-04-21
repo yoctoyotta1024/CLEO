@@ -60,29 +60,30 @@ class ConstUniformThermo:
     self.UVEL = UVEL                          # horizontal x velocity [m/s]
     self.VVEL = VVEL                          # horizontal y velocity [m/s]
 
-  def generate_thermo(self, ngrid, ntime):
+  def generate_thermo(self, zfulls, xfulls, yfulls,
+                      ngridboxes, ntime):
 
     THERMODATA = {
-      "PRESS": np.full(ngrid*ntime, self.PRESS),
-      "TEMP": np.full(ngrid*ntime, self.TEMP),
-      "qvap": np.full(ngrid*ntime, self.qvap),
-      "qcond": np.full(ngrid*ntime, self.qcond), 
+      "PRESS": np.full(ngridboxes*ntime, self.PRESS),
+      "TEMP": np.full(ngridboxes*ntime, self.TEMP),
+      "qvap": np.full(ngridboxes*ntime, self.qvap),
+      "qcond": np.full(ngridboxes*ntime, self.qcond), 
       "WVEL": np.array([]), 
       "UVEL": np.array([]),
       "VVEL": np.array([])
     }
 
     if self.WVEL != None:
-      THERMODATA["WVEL"] =  np.full(ngrid*ntime, self.WVEL)
+      THERMODATA["WVEL"] =  np.full(ngridboxes*ntime, self.WVEL)
 
       if self.UVEL != None:
-        THERMODATA["UVEL"] =  np.full(ngrid*ntime, self.UVEL)
+        THERMODATA["UVEL"] =  np.full(ngridboxes*ntime, self.UVEL)
 
         if self.VVEL != None:
-          THERMODATA["VVEL"] =  np.full(ngrid*ntime, self.VVEL)
+          THERMODATA["VVEL"] =  np.full(ngridboxes*ntime, self.VVEL)
 
-    # THERMODATA["PRESS"][0:ngrid] = 800 # makes all gbxs a t=0 have P=800Pa
-    # THERMODATA["PRESS"][::ngrid] = 800 # makes 0th gbx at all times have P=800Pa
+    # THERMODATA["PRESS"][0:ngridboxes] = 800 # makes all gbxs a t=0 have P=800Pa
+    # THERMODATA["PRESS"][::ngridboxes] = 800 # makes 0th gbx at all times have P=800Pa
 
     return THERMODATA
 
@@ -93,7 +94,8 @@ class ConstHydrostaticAdiabat:
   Equations derived from Arabas et al. 2015 (sect 2.1) '''
 
   def __init__(self, PRESS0, THETA, qvap, qcond, WMAX,
-               VVEL, GRAVG, CP_DRY, RGAS_DRY, RGAS_V):
+               Zlength, Xlength, VVEL, GRAVG, CP_DRY,
+               RGAS_DRY, RGAS_V):
     
     ### parameters of profile ###
     self.PRESS0 = PRESS0 #pressure at z=0m [Pa]
@@ -101,6 +103,8 @@ class ConstHydrostaticAdiabat:
     self.qvap = qvap # (constant) vapour mass mixing ratio []
     self.qcond = qcond # liquid mass mixing ratio []
     self.WMAX = WMAX  # max velocities constant
+    self.Zlength = Zlength # wavelength of velocity modulation in z direction [m]
+    self.Xlength = Xlength # wavelength of velocity modulation in x direction [m]
     self.VVEL = VVEL # horizontal (y) velocity
 
     ### constants ###
@@ -146,44 +150,45 @@ class ConstHydrostaticAdiabat:
     
     return RHO, PRESS, TEMP
 
-  def divfree_flowfield2D(self, ZCOORDS, XCOORDS, Zlim, Xlim, RHO):
+  def divfree_flowfield2D(self, ZCOORDS, XCOORDS, RHO):
 
-    ztilda = np.pi * ZCOORDS / Zlim
-    xtilda = 2* np.pi * XCOORDS / Xlim
+    ztilda = np.pi * ZCOORDS / self.Zlength 
+    xtilda = 2* np.pi * XCOORDS / self.Xlength 
     rhotilda = RHO / self.RHO0
     VELfactor = self.WMAX / rhotilda
         
     WVEL = 2 * VELfactor * np.sin(ztilda) * np.sin(xtilda)
-    UVEL = VELfactor * Xlim / Zlim * np.cos(ztilda) * np.cos(xtilda)
+    
+    UVEL = VELfactor *  self.Xlength /  self.Zlength
+    UVEL =  UVEL * np.cos(ztilda) * np.cos(xtilda)
 
     return WVEL, UVEL
   
-  def generate_thermo(self, Zfulls, Xfulls, Zlim, Xlim,
-                      ngrid, ntime):
+  def generate_thermo(self, Zfulls, Xfulls, Yfulls,
+                      ngridboxes, ntime):
 
     RHO, PRESS, TEMP = self.hydrostatic_adiabatic_thermo(Zfulls)
 
     THERMODATA = {
       "PRESS": np.tile(PRESS, ntime),
       "TEMP": np.tile(TEMP, ntime),
-      "qvap": np.full(int(ngrid*ntime), self.qvap),
-      "qcond": np.full(int(ngrid*ntime), self.qcond), 
+      "qvap": np.full(int(ngridboxes*ntime), self.qvap),
+      "qcond": np.full(int(ngridboxes*ntime), self.qcond), 
       "WVEL": np.array([]), 
       "UVEL": np.array([]),
       "VVEL": np.array([])
     }
 
     if self.WMAX != None:
-      WVEL, UVEL = self.divfree_flowfield2D(Zfulls, Xfulls, Zlim, Xlim,
-                                            RHO)
+      WVEL, UVEL = self.divfree_flowfield2D(Zfulls, Xfulls, RHO)
       THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
       THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
 
       if self.VVEL != None:
-        THERMODATA["VVEL"] =  np.full(int(ngrid*ntime), self.VVEL)
+        THERMODATA["VVEL"] =  np.full(int(ngridboxes*ntime), self.VVEL)
 
-    # THERMODATA["PRESS"][0:ngrid] = 800 # makes all gbxs a t=0 have P=800Pa
-    # THERMODATA["PRESS"][::ngrid] = 800 # makes 0th gbx at all times have P=800Pa
+    # THERMODATA["PRESS"][0:ngridboxes] = 800 # makes all gbxs a t=0 have P=800Pa
+    # THERMODATA["PRESS"][::ngridboxes] = 800 # makes 0th gbx at all times have P=800Pa
 
     return THERMODATA 
 
