@@ -88,8 +88,8 @@ public:
   'XXXdomain_nghbours' function */
   {
     const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
-    return finitedomain_nghbours(idx, nz, ndims.at(1));
-    // return periodicdomain_nghbours(idx, nz, ndims.at(1));
+    // return finitedomain_nghbours(idx, nz, ndims.at(1));
+    return periodicdomain_nghbours(idx, nz, ndims.at(1));
   }
 
   std::pair<unsigned int, unsigned int>
@@ -101,8 +101,8 @@ public:
   'XXXdomain_nghbours' function */
   {
     const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
-    return finitedomain_nghbours(idx, nznx, ndims.at(2));
-    // return periodicdomain_nghbours(idx, nznx, ndims.at(2));
+    // return finitedomain_nghbours(idx, nznx, ndims.at(2));
+    return periodicdomain_nghbours(idx, nznx, ndims.at(2));
   }
 };
 
@@ -151,8 +151,8 @@ that coord1 exceedes the domain's backwardsmost boundary
 in x direction, or given that coord1 exceedes the
 domain's forwardmost boundary in x direction */
 {
-  return coordbeyond_finitedomain(coord1, lim1, lim2);
-  // return coordbeyond_periodicdomain(coord1, lim1, lim2);
+  // return coordbeyond_finitedomain(coord1, lim1, lim2);
+  return coordbeyond_periodicdomain(coord1, lim1, lim2);
 };
 
 inline double coord2_beyondy(const double coord2,
@@ -163,8 +163,8 @@ that coord2 exceedes the domain's edge/boundary in y
 leftwards direction, or given that coord2 exceedes the
 domain's edge/boundary in y rightwards direction */
 {
-  return coordbeyond_finitedomain(coord2, lim1, lim2);
-  // return coordbeyond_periodicdomain(coord2, lim1, lim2);
+  // return coordbeyond_finitedomain(coord2, lim1, lim2);
+  return coordbeyond_periodicdomain(coord2, lim1, lim2);
 };
 
 #endif // CARTESIANNEIGHBOURS_HPP
