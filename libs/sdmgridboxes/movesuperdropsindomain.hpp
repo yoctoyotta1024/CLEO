@@ -84,30 +84,34 @@ private:
                                               zdown, zup,
                                               zbounds,
                                               superdrop.coord3,
-                                              sd_gbxindex);
+                                              sd_gbxindex,
+                                              superdrop);
 
     sd_gbxindex = update_superdrop_ifneighbour(gbxmaps,
                                         xbehind, xinfront,
                                         xbounds,
                                         superdrop.coord1,
-                                        sd_gbxindex);
+                                        sd_gbxindex,
+                                        superdrop);
 
     sd_gbxindex = update_superdrop_ifneighbour(gbxmaps,
-                                                  yleft, yright,
-                                                  ybounds,
-                                                  superdrop.coord2,
-                                                  sd_gbxindex);
+                                                yleft, yright,
+                                                ybounds,
+                                                superdrop.coord2,
+                                                sd_gbxindex,
+                                                superdrop);
 
     return sd_gbxindex;
   }
 
   template <typename BackwardIdxFunc, typename ForwardIdxFunc>
-  unsigned int changeindex_ifcoord_outofbounds(const Maps4GridBoxes &gbxmaps,
-                                               const BackwardIdxFunc backwardsidx,
-                                               const ForwardIdxFunc forwardsidx,
-                                               const std::pair<double, double> bounds,
-                                               const double coord,
-                                               const unsigned int sd_gbxindex) const
+  unsigned int update_superdrop_ifneighbour(const Maps4GridBoxes &gbxmaps,
+                                            const BackwardIdxFunc backwardsidx,
+                                            const ForwardIdxFunc forwardsidx,
+                                            const std::pair<double, double> bounds,
+                                            const double coord,
+                                            const unsigned int sd_gbxindex,
+                                            Superdrop &superdrop) const
   /* Given bounds = {lowerbound, upperbound} of a gridbox with
   index 'gbxindex', function determines if coord is within bounds
   of that gridbox. (Note: lower bound inclusive, upper bound exclusive).
@@ -124,11 +128,11 @@ private:
 
     if (coord < bounds.first) // lowerbound
     {
-      return backwardsidx(gbxmaps, sd_gbxindex);
+      return backwardsidx(gbxmaps, sd_gbxindex, superdrop);
     }
     else if (coord >= bounds.second) // upperbound
     {
-      return forwardsidx(gbxmaps, sd_gbxindex);
+      return forwardsidx(gbxmaps, sd_gbxindex, superdrop);
     }
     else
     {

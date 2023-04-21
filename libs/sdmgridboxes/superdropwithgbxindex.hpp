@@ -34,7 +34,7 @@ where all the superdroplets have the same solute properties, "solute".
 Uses the coordinates of each superdroplet to set the value of the sd_gbxindex
 associated with each superdroplet in the SuperdropletWithGridbox struct */
 
-inline void print_SDinGBx(const SuperdropWithGbxindex SDinGBx)
+inline void print_SDinGBx(const SuperdropWithGbxindex &SDinGBx)
 {
   std::cout << "SD " << SDinGBx.superdrop.id.value
               << ": " << SDinGBx.sd_gbxindex << ", " << SDinGBx.superdrop.eps
