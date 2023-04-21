@@ -106,56 +106,92 @@ public:
   }
 };
 
-inline double coordbeyond_finitedomain(const double coord)
+inline double coordbeyond_finitedomain(const double coord,
+                                       const double lim1,
+                                       const double lim2)
 /* Finite domain boundaries don't change superdroplet coord */
 {
   return coord; // finite domain therefore don't change coord
 }
 
-inline double coord3_beyondzdown(const double coord3)
+inline double coordbeyond_periodicdomain(const double coord,
+                                         const double lim1,
+                                         const double lim2)
+/* In periodic domain, two scenarios:
+a) If superdroplet crosses lower boundary of domain,
+lim1 = upper bound of backwards neighbour from gbx (upper boundary of domain)
+lim2 = lower bound of gridbox (lower boundary of domain) so
+coord -> coord + length_of_domain
+b) If superdroplet crosses upper boundary of domain,
+lim1 = lower bound of forwards neighbour from gbx (lower boundary of domain)
+lim2 = upper bound of gridbox (upper boundary of domain) so
+coord -> coord - length_of_domain */
+{
+  return coord + lim1 - lim2; // periodic domain coord -> coord +/- |length_of_domain|
+}
+
+inline double coord3_beyondzdown(const double coord3,
+                                 const double lim1,
+                                 const double lim2)
 /* return value is new coord for a superdroplet given that
 coord3 exceedes the domain's lower boundary in z direction
 (ie. coord3 is below the lower edge of the lowest gridboxes
  in the z direction) */
 {
-  return coordbeyond_finitedomain(coord3);
+  return coordbeyond_finitedomain(coord3, lim1, lim2);
+  // return coordbeyond_periodicdomain(coord3, lim1, lim2);
 };
 
-inline double coord3_beyondzup(const double coord3)
+inline double coord3_beyondzup(const double coord3,
+                               const double lim1,
+                               const double lim2)
 /* return value is new coord for a superdroplet given that
 coord3 exceedes the domain's upper boundary in z direction
 (ie. coord3 is above the upper edge of highest gridboxes
 in the z direction) */
 {
-  return coordbeyond_finitedomain(coord3);
+  return coordbeyond_finitedomain(coord3, lim1, lim2);
+  // return coordbeyond_periodicdomain(coord3, lim1, lim2);
 };
 
-inline double coord1_beyondxbehind(const double coord1)
+inline double coord1_beyondxbehind(const double coord1,
+                                   const double lim1,
+                                   const double lim2)
 /* return value is new coord for a superdroplet given that coord1
 exceedes the domain's backwardsmost boundary in x direction */
 {
-  return coordbeyond_finitedomain(coord1);
+  // return coordbeyond_finitedomain(coord1, lim1, lim2);
+  return coordbeyond_periodicdomain(coord1, lim1, lim2);
 };
 
-inline double coord1_beyondxinfront(const double coord1)
+inline double coord1_beyondxinfront(const double coord1,
+                                    const double lim1,
+                                    const double lim2)
 /* return value is new coord for a superdroplet given that coord1
 exceedes the domain's forwardmost boundary in x direction */
 {
-  return coordbeyond_finitedomain(coord1);
+  // return coordbeyond_finitedomain(coord1, lim1, lim2);
+  return coordbeyond_periodicdomain(coord1, lim1, lim2);
 };
 
-inline double coord2_beyondyleft(const double coord2)
+inline double coord2_beyondyleft(const double coord2,
+                                 const double lim1,
+                                 const double lim2)
 /* return value is new coord for a superdroplet given that coord2
 exceedes the domain's edge/boundary in y leftwards direction */
 {
-  return coordbeyond_finitedomain(coord2);
+  // return coordbeyond_finitedomain(coord2, lim1, lim2);
+  return coordbeyond_periodicdomain(coord2, lim1, lim2);
 };
 
-inline double coord2_beyondyright(const double coord2)
+inline double coord2_beyondyright(const double coord2,
+                                  const double lim1,
+                                  const double lim2)
 /* return value is new coord for a superdroplet given that coord2
 exceedes the domain's edge/boundary in y rightwards direction */
 {
-  return coordbeyond_finitedomain(coord2);
+  // return coordbeyond_finitedomain(coord2, lim1, lim2);
+  return coordbeyond_periodicdomain(coord2, lim1, lim2);
 };
 
 #endif // CARTESIANNEIGHBOURS_HPP
