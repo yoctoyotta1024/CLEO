@@ -91,3 +91,99 @@ class ConstHydrostaticAdiabat:
   and in hydrostatic equillibrium with a dry adiabat 
   accounting for the mass of water vapour in the air.
   Equations derived from Arabas et al. 2015 (sect 2.1) '''
+
+  def __init__(self, PRESS0, THETA, qvap, qcond, WMAX,
+               VVEL, GRAVG, CP_DRY, RGAS_DRY, RGAS_V):
+    
+    ### parameters of profile ###
+    self.PRESS0 = PRESS0 #pressure at z=0m [Pa]
+    self.THETA = THETA # (constant) dry potential temperature [K]
+    self.qvap = qvap # (constant) vapour mass mixing ratio []
+    self.qcond = qcond # liquid mass mixing ratio []
+    self.WMAX = WMAX  # max velocities constant
+    self.VVEL = VVEL # horizontal (y) velocity
+
+    ### constants ###
+    self.GRAVG = GRAVG
+    self.CP_DRY = CP_DRY
+    self.RGAS_DRY = RGAS_DRY
+    self.RGAS_V = RGAS_V
+    self.RC_DRY = RGAS_DRY / CP_DRY
+    self.RCONST = 1 + self.qvap * RGAS_V / RGAS_DRY
+    self.P1000 = 100000 # P_1000 = 1000 hPa [Pa]
+    
+    alpha = PRESS0 / (self.RCONST * self.P1000) 
+    self.TEMP0 = THETA * np.power(alpha, self.RC_DRY) #temperature at z=0m [K]
+
+    beta = (1+self.qvap) / self.RCONST / self.RGAS_DRY
+    self.RHO0 = beta * self.PRESS0 / self.TEMP0
+
+  def hydrostatic_adiabatic_profile(self, ZCOORDS):
+    ''' returns *profile* of density (not the density itself!)
+    rho = rhoprofile^((1-RC_DRY)/RC_DRY) = profile^pow '''
+    
+    pow = 1/self.RC_DRY - 1
+    
+    Aa = (1+self.qvap)*np.power(self.P1000, self.RC_DRY)
+    Aa = (self.THETA * self.RGAS_DRY / Aa) 
+    Aconst = self.RCONST * np.power(Aa, (1 / (1-self.RC_DRY)))
+
+    RHOconst = -1 * self.GRAVG * self.RC_DRY / Aconst
+    RHOprofile = np.power(self.RHO0, 1/pow) + RHOconst * ZCOORDS # RHO0^pow
+
+    return RHOprofile, Aconst
+
+  def hydrostatic_adiabatic_thermo(self, ZCOORDS):
+    
+    RHOprof, Aconst = self.hydrostatic_adiabatic_profile(ZCOORDS)
+    
+    RHO = np.power(RHOprof, (1/self.RC_DRY - 1))
+
+    PRESS = Aconst * np.power(RHOprof, 1/self.RC_DRY)
+    
+    TEMPconst = np.power(Aconst / (self.RCONST * self.P1000), self.RC_DRY)
+    TEMP = self.THETA * TEMPconst * RHOprof
+    
+    return RHO, PRESS, TEMP
+
+  def divfree_flowfield2D(self, ZCOORDS, XCOORDS, Zlim, Xlim, RHO):
+
+    ztilda = np.pi * ZCOORDS / Zlim
+    xtilda = 2* np.pi * XCOORDS / Xlim
+    rhotilda = RHO / self.RHO0
+    VELfactor = self.WMAX / rhotilda
+        
+    WVEL = 2 * VELfactor * np.sin(ztilda) * np.sin(xtilda)
+    UVEL = VELfactor * Xlim / Zlim * np.cos(ztilda) * np.cos(xtilda)
+
+    return WVEL, UVEL
+  
+  def generate_thermo(self, Zfulls, Xfulls, Zlim, Xlim,
+                      ngrid, ntime):
+
+    RHO, PRESS, TEMP = self.hydrostatic_adiabatic_thermo(Zfulls)
+
+    THERMODATA = {
+      "PRESS": np.tile(PRESS, ntime),
+      "TEMP": np.tile(TEMP, ntime),
+      "qvap": np.full(int(ngrid*ntime), self.qvap),
+      "qcond": np.full(int(ngrid*ntime), self.qcond), 
+      "WVEL": np.array([]), 
+      "UVEL": np.array([]),
+      "VVEL": np.array([])
+    }
+
+    if self.WMAX != None:
+      WVEL, UVEL = self.divfree_flowfield2D(Zfulls, Xfulls, Zlim, Xlim,
+                                            RHO)
+      THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
+      THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
+
+      if self.VVEL != None:
+        THERMODATA["VVEL"] =  np.full(int(ngrid*ntime), self.VVEL)
+
+    # THERMODATA["PRESS"][0:ngrid] = 800 # makes all gbxs a t=0 have P=800Pa
+    # THERMODATA["PRESS"][::ngrid] = 800 # makes 0th gbx at all times have P=800Pa
+
+    return THERMODATA 
+

@@ -82,16 +82,22 @@ print(np.all(zmesh == zz))
 print(np.all(xmesh == xx))
 print(np.all(ymesh == yy))
 
-def hydrostatic_pressure_profile(z, ntime):
+PRESS0 = 101500 # [Pa]
+THETA = 289 # [K]
+qvap = 0.0075 # [Kg/Kg]
+qcond = 0.0 # [Kg/Kg]
+WMAX = 0.6 # [m/s]
+VVEL = None # [m/s]
 
-    p0 = 1000 #hPa
-    z0 = 1250 #km
-    p = p0 * np.exp(1-z/z0)
+gen = thermogen.ConstHydrostaticAdiabat(PRESS0, THETA, qvap, qcond, WMAX, VVEL,
+                              inputs["G"], inputs["CP_DRY"], inputs["RGAS_DRY"],
+                                inputs["RGAS_V"])
+thermodata = gen.generate_thermo(zfulls, xfulls, np.amax(zhalf), np.amax(xhalf),
+                                    np.prod(ndims), inputs["ntime"])
 
-    return np.tile(p, ntime)
-
-press = hydrostatic_pressure_profile(zfulls, ntime)
-press = np.reshape(press, [ntime]+shape)
+press = thermodata["PRESS"]
+reshape = [inputs["ntime"]] + list(np.flip(ndims))
+press = np.reshape(press, reshape)
 print(press, press.shape)
 meanpress = np.mean(press, axis=(0,1)) # avg over y dim and time
 
@@ -105,21 +111,23 @@ plt.show()
 
 def windfield2D_wvel(x, z, ntime):
 
+    rho_tilda = 1
     w0 = 1
-    x0 = 150/(2*np.pi)
-    z0 = 1500/(np.pi)
-    w = - w0 * np.sin(x/x0) * np.sin(z/z0) * 1/x0
+    x0 = 150
+    z0 = 1500
+    w = 2 * w0 / rho_tilda * np.sin(np.pi*z/z0) * np.sin(2*np.pi*x/x0)
 
     return np.tile(w, ntime)
 
 def windfield2D_uvel(x, z, ntime):
 
-    u0 = 1
-    x0 = 150/(2*np.pi)
-    z0 = 1500/(np.pi)
-    w = - u0 * np.cos(x/x0) * np.cos(z/z0) * 1/z0
+    rho_tilda = 1
+    w0 = 1
+    x0 = 150
+    z0 = 1500
+    u = w0 / rho_tilda * x0/z0 * np.cos(np.pi*z/z0) * np.cos(2*np.pi*x/x0)
 
-    return np.tile(w, ntime)
+    return np.tile(u, ntime)
 
 wvel = windfield2D_wvel(xfulls, zfulls, ntime)
 wvel = np.reshape(wvel, [ntime]+shape)
