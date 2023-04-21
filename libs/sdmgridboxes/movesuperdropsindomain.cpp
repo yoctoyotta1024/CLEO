@@ -91,7 +91,7 @@ unsigned int yleft(const Maps4GridBoxes &gbxmaps,
     superdrop.coord2 = coord2_beyondy(superdrop.coord2, lim1, lim2);
   }
 
-  return nghbour // gbxindex of yleft_neighbour
+  return nghbour; // gbxindex of yleft_neighbour
 };
 
 unsigned int yright(const Maps4GridBoxes &gbxmaps,
