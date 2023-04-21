@@ -26,10 +26,10 @@ zgrid = [zmin, zmax, zdelta]
 #zgrid = np.asarray([0, 500, 1000, 2500, 5000])
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 1500, 100] # np.asarray([0, 2,4,6,8, 10])
+xgrid = [0, 1500, 100] # np.asarray([0, 250, 500, 750, 1000])
 
 ### input parameters for y coords of gridbox boundaries
-ygrid = np.asarray([0,100])
+ygrid = np.asarray([0, 100])
 
 Path(gridfilepath).mkdir(exist_ok=True) 
 Path(binpath).mkdir(exist_ok=True) 
