@@ -13,7 +13,7 @@ unsigned int zdown(const Maps4GridBoxes &gbxmaps,
 /* function to update superdrop coord3 and return
 sd_gbxindex of neighbouring gridbox in downards z direction */
 {
-  if superdrop.coord3 <= domainlowerbound
+  if (at_domainboundary(index, 1, gbxmaps.ndims.at(0))) // at lower edge of domain
   {
     superdrop.coord3 = coord3_beyondzdown();
   }
@@ -27,7 +27,7 @@ unsigned int zup(const Maps4GridBoxes &gbxmaps,
 /* function to update superdrop coord3 and return
 sd_gbxindex of neighbouring gridbox in upwards z direction */
 {
-  if superdrop.coord3 > domainupperbound 
+  if (at_domainboundary(index + 1, 1, gbxmaps.ndims.at(0))) // at upper edge of domain
   {
     superdrop.coord3 = coord3_beyondzup();
   }

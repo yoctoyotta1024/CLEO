@@ -51,12 +51,12 @@ lowermost gridboxes in that direction (and vice versa). */
   unsigned int forward = idx + increment;
   unsigned int backward = idx - increment;
 
-  if ((idx/increment) % ndim == 0) // at lower edge of domain
+  if (at_domainboundary(idx, increment, ndim)) // at lower edge of domain
   {
     backward = idx + (ndim-1) * increment;
   }
 
-  if ((forward/increment) % ndim == 0) // at upper edge of domain
+  if (at_domainboundary(forward, increment, ndim)) // at upper edge of domain
   {
     forward = idx - (ndim-1) * increment;
   }

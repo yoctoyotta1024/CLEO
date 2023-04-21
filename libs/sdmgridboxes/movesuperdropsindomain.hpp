@@ -15,6 +15,7 @@ coords and moving them between gridboxes) */
 
 #include "./gridbox.hpp"
 #include "./maps4gridboxes.hpp"
+#include "./cartesianneighbours.hpp"
 #include "./superdropwithgbxindex.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/sdmotion.hpp"
