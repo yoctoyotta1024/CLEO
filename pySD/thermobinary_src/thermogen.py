@@ -42,7 +42,7 @@ def relh2qvap(press, temp, relh, Mr_ratio):
 
   
 class ConstUniformThermo:
-  ''' create thermodyanmcis thats constant in time 
+  ''' create thermodyanmics that's constant in time 
   and uniform throughout the domain '''
 
   def __init__(self, PRESS, TEMP, relh,
@@ -86,3 +86,8 @@ class ConstUniformThermo:
 
     return THERMODATA
 
+class ConstHydrostaticAdiabat:
+  ''' create thermodyanmics that's constant in time 
+  and in hydrostatic equillibrium with a dry adiabat 
+  accounting for the mass of water vapour in the air.
+  Equations derived from Arabas et al. 2015 (sect 2.1) '''

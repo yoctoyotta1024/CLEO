@@ -18,6 +18,7 @@ def thermoinputsdict(configfile, constsfile):
     "CP_DRY": consts["CP_DRY"],
     "RHO_DRY": consts["RHO_DRY"],               # dry air density [Kg/m^3]
     "RGAS_DRY": moreconsts["RGAS_DRY"],
+    "RGAS_V": moreconsts["RGAS_V"],
     "Mr_ratio": moreconsts["Mr_ratio"],
     "COUPLTSTEP": config["COUPLTSTEP"],
     "T_END": config["T_END"],
