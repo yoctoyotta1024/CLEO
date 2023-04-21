@@ -15,7 +15,7 @@ sd_gbxindex of neighbouring gridbox in downards z direction */
 {
   if (at_domainboundary(index, 1, gbxmaps.ndims.at(0))) // at lower edge of domain
   {
-    superdrop.coord3 = coord3_beyondzdown();
+    superdrop.coord3 = coord3_beyondzdown(superdrop.coord3);
   }
   
   return gbxmaps.get_neighbour_zdown(index);
@@ -29,7 +29,7 @@ sd_gbxindex of neighbouring gridbox in upwards z direction */
 {
   if (at_domainboundary(index + 1, 1, gbxmaps.ndims.at(0))) // at upper edge of domain
   {
-    superdrop.coord3 = coord3_beyondzup();
+    superdrop.coord3 = coord3_beyondzup(superdrop.coord3);
   }
 
   return gbxmaps.get_neighbour_zup(index);

@@ -109,7 +109,7 @@ public:
 inline double coordbeyond_finitedomain(const double coord)
 /* Finite domain boundaries don't change superdroplet coord */
 {
-  return coord; // finite domain therefore don't change cprpod
+  return coord; // finite domain therefore don't change coord
 }
 
 inline double coord3_beyondzdown(const double coord3)
