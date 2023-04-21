@@ -10,12 +10,13 @@ coords and moving them between gridboxes) */
 unsigned int zdown(const Maps4GridBoxes &gbxmaps,
                    const unsigned int index,
                    Superdrop &superdrop)
-/* function to update superdrop coord3 and return
-sd_gbxindex of neighbouring gridbox in downards z direction */
+/* function to return sd_gbxindex of neighbouring gridbox in
+downards z direction and to update superdrop coord3 if SD
+has exceeded the z lower domain boundary */
 {
   const unsigned int nghbour(gbxmaps.get_neighbour_zdown(index));
 
-  if (at_domainboundary(index, 1, gbxmaps.ndims.at(0))) // at lower z edge of domain
+  if (at_domainboundary(index, 1, gbxmaps.ndims.at(0))) // SD was at lower z edge of domain (now moving beyond it)
   {
     const double lim1 = gbxmaps.get_bounds_z(nghbour).second; // upper lim of backward nghbour
     const double lim2 = gbxmaps.get_bounds_z(index).first; // lower lim of gbx
@@ -28,12 +29,13 @@ sd_gbxindex of neighbouring gridbox in downards z direction */
 unsigned int zup(const Maps4GridBoxes &gbxmaps,
                  const unsigned int index,
                  Superdrop &superdrop)
-/* function to update superdrop coord3 and return
-sd_gbxindex of neighbouring gridbox in upwards z direction */
+/* function to return sd_gbxindex of neighbouring gridbox in
+upwards z direction and to update superdrop coord3 if SD
+has exceeded the z upper domain boundary */
 {
   const unsigned int nghbour(gbxmaps.get_neighbour_zup(index));
 
-  if (at_domainboundary(index + 1, 1, gbxmaps.ndims.at(0))) // at upper z edge of domain
+  if (at_domainboundary(index + 1, 1, gbxmaps.ndims.at(0))) // SD was upper z edge of domain (now moving above it)
   {
     const double lim1 = gbxmaps.get_bounds_z(nghbour).first; // lower lim of forward nghbour
     const double lim2 = gbxmaps.get_bounds_z(index).second; // upper lim of gbx
@@ -46,6 +48,9 @@ sd_gbxindex of neighbouring gridbox in upwards z direction */
 unsigned int xbehind(const Maps4GridBoxes &gbxmaps,
                      const unsigned int index,
                      Superdrop &superdrop)
+/* function to return sd_gbxindex of neighbouring gridbox in
+backwards x direction and to update superdrop coord1 if SD
+has exceeded the x lower domain boundary */
 {
   const unsigned int nghbour(gbxmaps.get_neighbour_xbehind(index));
   
@@ -63,6 +68,9 @@ unsigned int xbehind(const Maps4GridBoxes &gbxmaps,
 unsigned int xinfront(const Maps4GridBoxes &gbxmaps,
                       const unsigned int index,
                       Superdrop &superdrop)
+/* function to return sd_gbxindex of neighbouring gridbox in
+forwards x direction and to update superdrop coord1 if SD
+has exceeded the x upper domain boundary */
 {
   const unsigned int nghbour(gbxmaps.get_neighbour_xinfront(index));
 
@@ -80,6 +88,9 @@ unsigned int xinfront(const Maps4GridBoxes &gbxmaps,
 unsigned int yleft(const Maps4GridBoxes &gbxmaps,
                    const unsigned int index,
                    Superdrop &superdrop)
+/* function to return sd_gbxindex of neighbouring gridbox in
+leftwards y direction and to update superdrop coord2 if SD
+has exceeded the y lower domain boundary */
 {
   const unsigned int nghbour(gbxmaps.get_neighbour_yleft(index));
 
@@ -97,6 +108,9 @@ unsigned int yleft(const Maps4GridBoxes &gbxmaps,
 unsigned int yright(const Maps4GridBoxes &gbxmaps,
                     const unsigned int index,
                     Superdrop &superdrop)
+/* function to return sd_gbxindex of neighbouring gridbox in
+rightwards y direction and to update superdrop coord2 if SD
+has exceeded the y upper domain boundary */
 {
   const unsigned int nghbour(gbxmaps.get_neighbour_yright(index));
 
