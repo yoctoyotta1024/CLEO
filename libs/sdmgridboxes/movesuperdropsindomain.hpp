@@ -19,7 +19,10 @@ coords and moving them between gridboxes) */
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/sdmotion.hpp"
 
-/* ----- function called internally ----- */
+/* ----- function called internally -----
+  to update superdrop coord and return
+  sd_gbxindex of neighbouring gridbox in
+  one of 6 particular directions */
 unsigned int zdown(const Maps4GridBoxes &gbxmaps,
                    const unsigned int index,
                    Superdrop &superdrop);
@@ -118,8 +121,8 @@ private:
 
   template <typename BackwardIdxFunc, typename ForwardIdxFunc>
   unsigned int update_superdrop_ifneighbour(const Maps4GridBoxes &gbxmaps,
-                                            const BackwardIdxFunc backwardsidx,
-                                            const ForwardIdxFunc forwardsidx,
+                                            const BackwardIdxFunc backwards_neighbour,
+                                            const ForwardIdxFunc forwards_neighbour,
                                             const std::pair<double, double> bounds,
                                             const double coord,
                                             const unsigned int sd_gbxindex,
@@ -140,11 +143,11 @@ private:
 
     if (coord < bounds.first) // lowerbound
     {
-      return backwardsidx(gbxmaps, sd_gbxindex, superdrop);
+      return backwards_neighbour(gbxmaps, sd_gbxindex, superdrop);
     }
     else if (coord >= bounds.second) // upperbound
     {
-      return forwardsidx(gbxmaps, sd_gbxindex, superdrop);
+      return forwards_neighbour(gbxmaps, sd_gbxindex, superdrop);
     }
     else
     {
