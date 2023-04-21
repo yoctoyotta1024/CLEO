@@ -115,7 +115,8 @@ inline double coordbeyond_finitedomain(const double coord)
 inline double coord3_beyondzdown(const double coord3)
 /* return value is new coord for a superdroplet given that
 coord3 exceedes the domain's lower boundary in z direction
-(ie. coord3 is below the minimum gridbox bound in z direction */
+(ie. coord3 is below the lower edge of the lowest gridboxes
+ in the z direction) */
 {
   return coordbeyond_finitedomain(coord3);
 };
@@ -123,10 +124,38 @@ coord3 exceedes the domain's lower boundary in z direction
 inline double coord3_beyondzup(const double coord3)
 /* return value is new coord for a superdroplet given that
 coord3 exceedes the domain's upper boundary in z direction
-(ie. coord3 is above the maximum gridbox bound in z direction */
+(ie. coord3 is above the upper edge of highest gridboxes
+in the z direction) */
 {
   return coordbeyond_finitedomain(coord3);
 };
 
+inline double coord1_beyondxbehind(const double coord1)
+/* return value is new coord for a superdroplet given that coord1
+exceedes the domain's backwardsmost boundary in x direction */
+{
+  return coordbeyond_finitedomain(coord1);
+};
+
+inline double coord1_beyondxinfront(const double coord1)
+/* return value is new coord for a superdroplet given that coord1
+exceedes the domain's forwardmost boundary in x direction */
+{
+  return coordbeyond_finitedomain(coord1);
+};
+
+inline double coord2_beyondyleft(const double coord2)
+/* return value is new coord for a superdroplet given that coord2
+exceedes the domain's edge/boundary in y leftwards direction */
+{
+  return coordbeyond_finitedomain(coord2);
+};
+
+inline double coord2_beyondyright(const double coord2)
+/* return value is new coord for a superdroplet given that coord2
+exceedes the domain's edge/boundary in y rightwards direction */
+{
+  return coordbeyond_finitedomain(coord2);
+};
 
 #endif // CARTESIANNEIGHBOURS_HPP
