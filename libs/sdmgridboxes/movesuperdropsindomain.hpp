@@ -4,8 +4,8 @@
 moving superdroplets (both updating their
 coords and moving them between gridboxes) */
 
-#ifndef MOVEMENT_IN_DOMAIN_HPP
-#define MOVEMENT_IN_DOMAIN_HPP
+#ifndef MOVESUPERDROPSINDOMAIN_HPP 
+#define MOVESUPERDROPSINDOMAIN_HPP 
 
 #include <vector>
 #include <map>
@@ -20,12 +20,24 @@ coords and moving them between gridboxes) */
 #include "superdrop_solver/sdmotion.hpp"
 
 /* ----- function called internally ----- */
-unsigned int zdown(const Maps4GridBoxes &gbxmaps, const unsigned int index);
-unsigned int zup(const Maps4GridBoxes &gbxmaps, const unsigned int index);
-unsigned int xbehind(const Maps4GridBoxes &gbxmaps, const unsigned int index);
-unsigned int xinfront(const Maps4GridBoxes &gbxmaps, const unsigned int index);
-unsigned int yleft(const Maps4GridBoxes &gbxmaps, const unsigned int index);
-unsigned int yright(const Maps4GridBoxes &gbxmaps, const unsigned int index);
+unsigned int zdown(const Maps4GridBoxes &gbxmaps,
+                   const unsigned int index,
+                   Superdrop &superdrop);
+unsigned int zup(const Maps4GridBoxes &gbxmaps,
+                 const unsigned int index,
+                 Superdrop &superdrop);
+unsigned int xbehind(const Maps4GridBoxes &gbxmaps,
+                     const unsigned int index,
+                     Superdrop &superdrop);
+unsigned int xinfront(const Maps4GridBoxes &gbxmaps,
+                      const unsigned int index,
+                      Superdrop &superdrop);
+unsigned int yleft(const Maps4GridBoxes &gbxmaps,
+                   const unsigned int index,
+                   Superdrop &superdrop);
+unsigned int yright(const Maps4GridBoxes &gbxmaps,
+                    const unsigned int index,
+                    Superdrop &superdrop);
 /* -------------------------------------- */
 
 template <SdMotion MoveSuperdrop>
@@ -181,4 +193,4 @@ public:
   }
 };
 
-#endif // MOVEMENT_IN_DOMAIN_HPP
+#endif // MOVESUPERDROPSINDOMAIN_HPP 
