@@ -11,8 +11,8 @@ peiodic boundary conditions */
 
 std::pair<unsigned int, unsigned int>
 CartesianNeighbourGBxIndexes::finitedomain_nghbours(const unsigned int idx,
-                                                        const unsigned int increment,
-                                                        const unsigned int ndim) const
+                                                    const unsigned int increment,
+                                                    const unsigned int ndim) const
 /* returns {forward, backward} gridbox neighbours with
 treatment of neighbours as if bounds of domain are finite. This
 means that no neighbour exists above/below highest/lowest gridboxes 
@@ -24,12 +24,12 @@ maximum unsigned int */
   unsigned int forward = idx + increment;
   unsigned int backward = idx - increment;
 
-  if ((idx/increment) % ndim == 0) // at lower edge of domain
+  if (at_domainboundary(idx, increment, ndim)) // at lower edge of domain
   {
     backward = std::numeric_limits<unsigned int>::max();
   }
 
-  if ((forward/increment) % ndim == 0) // at upper edge of domain
+  if (at_domainboundary(forward, increment, ndim)) // at upper edge of domain
   {
     forward = std::numeric_limits<unsigned int>::max();
   }

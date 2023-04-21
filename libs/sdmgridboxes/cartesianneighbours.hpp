@@ -22,6 +22,16 @@ boundary conditions */
   y: PERIODIC (see ynghbours_cartesian, coord2_beyondyleft and coord2_beyondyright)
 */
 
+inline bool at_domainboundary(const unsigned int idx,
+                              const unsigned int increment,
+                               const unsigned int ndim)
+/* returns true if idx for gridbox is at a domain boundary, given
+neighbouring indexes are +- increment from idx and the number of
+gridboxes making up the domain in that direction (ndim) */
+{
+  return (idx/increment) % ndim == 0;
+}
+
 struct CartesianNeighbourGBxIndexes
 {
 private:
