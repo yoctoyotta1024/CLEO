@@ -21,12 +21,12 @@ isfigures = [True, True]
 ### input parameters for zcoords of gridbox boundaries
 zmax = 1500 # maximum z coord [m]
 zmin = 0 # minimum z coord [m]
-zdelta = 20 # even spacing
+zdelta = 100 # even spacing
 zgrid = [zmin, zmax, zdelta] 
 #zgrid = np.asarray([0, 500, 1000, 2500, 5000])
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 1500, 20] # np.asarray([0, 2,4,6,8, 10])
+xgrid = [0, 1500, 100] # np.asarray([0, 2,4,6,8, 10])
 
 ### input parameters for y coords of gridbox boundaries
 ygrid = np.asarray([0,100])
