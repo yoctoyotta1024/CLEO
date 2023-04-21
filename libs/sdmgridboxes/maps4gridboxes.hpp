@@ -47,6 +47,7 @@ private:
 
 public:
   std::vector<unsigned int> gbxidxs;                              // vector of all gridbox indexes in domain
+  std::array<size_t, 3> ndims;                                    // number of gridboxes in [z,x,y] directions
 
   Maps4GridBoxes(const unsigned int SDnspace, std::string_view gridfile);
   /* initilaises idx2bounds_[i] maps (for i = x, y or z) which map

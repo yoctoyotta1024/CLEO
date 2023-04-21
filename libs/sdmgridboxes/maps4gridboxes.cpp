@@ -29,7 +29,8 @@ whilst the volume is determind by reading the gridfile */
   const GridBoxBoundaries gfb(read_gbxboundaries(gridfile, SDnspace));
 
   gbxidxs = gfb.gbxidxs;  
-
+  ndims = {gfb.ndims.at(0), gfb.ndims.at(1), gfb.ndims.at(2)};
+  
   if (SDnspace == 0)
   {
     const double domainvol = get_0Ddomainvol_from_gridfile(gfb);
