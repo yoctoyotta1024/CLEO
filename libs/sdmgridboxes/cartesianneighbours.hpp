@@ -144,8 +144,8 @@ gridboxes in the z direction)*/
 };
 
 inline double coord1_beyondx(const double coord1,
-                                   const double lim1,
-                                   const double lim2)
+                              const double lim1,
+                              const double lim2)
 /* return value is new coord for a superdroplet given
 that coord1 exceedes the domain's backwardsmost boundary
 in x direction, or given that coord1 exceedes the
