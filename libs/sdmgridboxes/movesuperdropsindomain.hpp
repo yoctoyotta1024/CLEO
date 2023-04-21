@@ -118,7 +118,7 @@ private:
   {
     if (sd_gbxindex == std::numeric_limits<unsigned int>::max())
     {
-      return sd_gbxindex; // sd_gbxindex is out of domain
+      return sd_gbxindex; // ignore SDs whose sd_gbxindex is already out of domain
     }
 
     if (coord < bounds.first) // lowerbound
