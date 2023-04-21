@@ -130,25 +130,14 @@ coord -> coord - length_of_domain */
   return coord + lim1 - lim2; // periodic domain coord -> coord +/- |length_of_domain|
 }
 
-inline double coord3_beyondzdown(const double coord3,
+inline double coord3_beyondz(const double coord3,
                                  const double lim1,
                                  const double lim2)
 /* return value is new coord for a superdroplet given that
-coord3 exceedes the domain's lower boundary in z direction
+coord3 exceedes the domain's lower or upper boundary in z direction.
 (ie. coord3 is below the lower edge of the lowest gridboxes
- in the z direction) */
-{
-  return coordbeyond_finitedomain(coord3, lim1, lim2);
-  // return coordbeyond_periodicdomain(coord3, lim1, lim2);
-};
-
-inline double coord3_beyondzup(const double coord3,
-                               const double lim1,
-                               const double lim2)
-/* return value is new coord for a superdroplet given that
-coord3 exceedes the domain's upper boundary in z direction
-(ie. coord3 is above the upper edge of highest gridboxes
-in the z direction) */
+in the z direction, or coord3 is above the upper edge of highest
+gridboxes in the z direction)*/
 {
   return coordbeyond_finitedomain(coord3, lim1, lim2);
   // return coordbeyond_periodicdomain(coord3, lim1, lim2);

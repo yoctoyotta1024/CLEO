@@ -13,12 +13,16 @@ unsigned int zdown(const Maps4GridBoxes &gbxmaps,
 /* function to update superdrop coord3 and return
 sd_gbxindex of neighbouring gridbox in downards z direction */
 {
+  const unsigned int nghbour(gbxmaps.get_neighbour_zdown(index));
+
   if (at_domainboundary(index, 1, gbxmaps.ndims.at(0))) // at lower z edge of domain
   {
-    superdrop.coord3 = coord3_beyondzdown(superdrop.coord3);
+    const unsigned int lim1 = gbxmaps.get_bounds_z(nghbour).second; // upper lim of backward nghbour
+    const unsigned int lim2 = gbxmaps.get_bounds_z(index).first; // lower lim of gbx
+    superdrop.coord3 = coord3_beyondz(superdrop.coord3, lim1, lim2);
   }
   
-  return gbxmaps.get_neighbour_zdown(index);
+  return nghbour; // gbxindex of zdown_neighbour
 };
 
 unsigned int zup(const Maps4GridBoxes &gbxmaps,
@@ -27,12 +31,16 @@ unsigned int zup(const Maps4GridBoxes &gbxmaps,
 /* function to update superdrop coord3 and return
 sd_gbxindex of neighbouring gridbox in upwards z direction */
 {
+  const unsigned int nghbour(gbxmaps.get_neighbour_zup(index));
+
   if (at_domainboundary(index + 1, 1, gbxmaps.ndims.at(0))) // at upper z edge of domain
   {
-    superdrop.coord3 = coord3_beyondzup(superdrop.coord3);
+    const unsigned int lim1 = gbxmaps.get_bounds_z(nghbour).first; // lower lim of forward nghbour
+    const unsigned int lim2 = gbxmaps.get_bounds_z(index).second; // upper lim of gbx
+    superdrop.coord3 = coord3_beyondz(superdrop.coord3, lim1, lim2);
   }
 
-  return gbxmaps.get_neighbour_zup(index);
+  return nghbour; // gbxindex of zup_neighbour
 };
 
 unsigned int xbehind(const Maps4GridBoxes &gbxmaps,

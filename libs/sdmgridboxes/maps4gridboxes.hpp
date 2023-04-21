@@ -25,7 +25,7 @@ struct Maps4GridBoxes
 {
 private:
   std::map<unsigned int, std::pair<double, double>> idx2bounds_z; // coord limits to each gridbox given its index
-  std::map<unsigned int, std::pair<double, double>> idx2bounds_x;
+  std::map<unsigned int, std::pair<double, double>> idx2bounds_x; // value pair is {lower bound, upper bounds} for gbxindex key
   std::map<unsigned int, std::pair<double, double>> idx2bounds_y;
   std::map<unsigned int, double> idx2vol; // volume of gridbox given its index
 
@@ -55,7 +55,7 @@ public:
   Also initialises idx2vol map whose values are the volume of a gridbox
   given the gridbox's index as key. The keys of idx2bounds_[i] map's
   are also gridbox indexes. The corresponding value is that gridbox's
-  {upper boundary, lower boundary}. In a non-3D case, coordinates of the
+  {lower boundary, upper boundary}. In a non-3D case, coordinates of the
   gridbox boundaries for unused dimensions are the min/max possible
   doubles of computer (numerical limits), however the volume remains
   finite. E.g. In the 0-D case, the idx2bounds maps have 1 {key, value}
