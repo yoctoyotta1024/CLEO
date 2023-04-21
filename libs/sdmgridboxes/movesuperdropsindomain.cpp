@@ -64,13 +64,17 @@ unsigned int xinfront(const Maps4GridBoxes &gbxmaps,
                       const unsigned int index,
                       Superdrop &superdrop)
 {
+  const unsigned int nghbour(gbxmaps.get_neighbour_xinfront(index));
+
   const unsigned int increment = gbxmaps.ndims.at(0);
   if (at_domainboundary(index + increment, increment, gbxmaps.ndims.at(1))) // at upper x edge of domain
   {
-    superdrop.coord1 = coord1_beyondx(superdrop.coord1, 0, 0);
+    const double lim1 = gbxmaps.get_bounds_x(nghbour).first; // lower lim of forward nghbour
+    const double lim2 = gbxmaps.get_bounds_x(index).second; // upper lim of gbx
+    superdrop.coord1 = coord1_beyondx(superdrop.coord1, lim1, lim2);
   }
 
-  return gbxmaps.get_neighbour_xinfront(index);
+  return nghbour;
 };
 
 unsigned int yleft(const Maps4GridBoxes &gbxmaps,
@@ -94,11 +98,15 @@ unsigned int yright(const Maps4GridBoxes &gbxmaps,
                     const unsigned int index,
                     Superdrop &superdrop)
 {
+  const unsigned int nghbour(gbxmaps.get_neighbour_yright(index));
+
   const unsigned int increment = gbxmaps.ndims.at(0) * gbxmaps.ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
   if (at_domainboundary(index + increment, increment, gbxmaps.ndims.at(2))) // at upper y edge of domain
   {
-    superdrop.coord2 = coord2_beyondy(superdrop.coord2, 0, 0);
+    const double lim1 = gbxmaps.get_bounds_y(nghbour).first; // lower lim of forward nghbour
+    const double lim2 = gbxmaps.get_bounds_y(index).second; // upper lim of gbx
+    superdrop.coord2 = coord2_beyondy(superdrop.coord2, lim1, lim2);
   }
 
-  return gbxmaps.get_neighbour_yright(index);
+  return nghbour;
 };
