@@ -17,8 +17,8 @@ sd_gbxindex of neighbouring gridbox in downards z direction */
 
   if (at_domainboundary(index, 1, gbxmaps.ndims.at(0))) // at lower z edge of domain
   {
-    const unsigned int lim1 = gbxmaps.get_bounds_z(nghbour).second; // upper lim of backward nghbour
-    const unsigned int lim2 = gbxmaps.get_bounds_z(index).first; // lower lim of gbx
+    const double lim1 = gbxmaps.get_bounds_z(nghbour).second; // upper lim of backward nghbour
+    const double lim2 = gbxmaps.get_bounds_z(index).first; // lower lim of gbx
     superdrop.coord3 = coord3_beyondz(superdrop.coord3, lim1, lim2);
   }
   
@@ -35,8 +35,8 @@ sd_gbxindex of neighbouring gridbox in upwards z direction */
 
   if (at_domainboundary(index + 1, 1, gbxmaps.ndims.at(0))) // at upper z edge of domain
   {
-    const unsigned int lim1 = gbxmaps.get_bounds_z(nghbour).first; // lower lim of forward nghbour
-    const unsigned int lim2 = gbxmaps.get_bounds_z(index).second; // upper lim of gbx
+    const double lim1 = gbxmaps.get_bounds_z(nghbour).first; // lower lim of forward nghbour
+    const double lim2 = gbxmaps.get_bounds_z(index).second; // upper lim of gbx
     superdrop.coord3 = coord3_beyondz(superdrop.coord3, lim1, lim2);
   }
 
