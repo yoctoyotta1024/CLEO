@@ -81,7 +81,7 @@ it's index at position 'p' in the gfb.gbxidxs vector, the
 [zmin, zmax] coords of that gridbox are at [pos, pos+1] in the
 gfb.gbxidxs vector, where pos = p*6 */
 {
-  const CartesianNeighbourIndexes cni(*std::max_element(gfb.gbxidxs.begin(),
+  const CartesianNeighbourGBxIndexes cni(*std::max_element(gfb.gbxidxs.begin(),
                                                   gfb.gbxidxs.end()),
                                                   {gfb.ndims.at(0), 1, 1}); 
 
@@ -114,7 +114,7 @@ vector, the [zmin, zmax, xmin, xmax] coords of that gridbox are
 at [pos, pos+1, pos+2, pos+3] in the gfb.gbxidxs
 vector, where pos = p*6 */
 {
-  const CartesianNeighbourIndexes cni(*std::max_element(gfb.gbxidxs.begin(),
+  const CartesianNeighbourGBxIndexes cni(*std::max_element(gfb.gbxidxs.begin(),
                                                         gfb.gbxidxs.end()),
                                       {gfb.ndims.at(0), gfb.ndims.at(1), 1});
 
@@ -150,7 +150,7 @@ gfb.gbxidxs vector, the [zmin, zmax, xmin, xmax, ymin, ymax]
 coords of that gridbox are at [pos, pos+1, pos+2, pos+3, pos+4, pos+5]
 in the gfb.gbxidxs vector, where pos = p*6 */
 {
-  const CartesianNeighbourIndexes cni(*std::max_element(gfb.gbxidxs.begin(),
+  const CartesianNeighbourGBxIndexes cni(*std::max_element(gfb.gbxidxs.begin(),
                                                         gfb.gbxidxs.end()),
                                       {gfb.ndims.at(0), gfb.ndims.at(1),
                                        gfb.ndims.at(2)});

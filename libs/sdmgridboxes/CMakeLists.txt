@@ -18,11 +18,11 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 # add executables to library
 set(SOURCES
 "gridbox.cpp"
-"cartesianneighbours.cpp"
 "maps4gridboxes.cpp"
 "movesuperdropsindomain.cpp"
 "sdmtimesteps.cpp"
 "superdropwithgbxindex.cpp"
+"cartesianneighbours.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

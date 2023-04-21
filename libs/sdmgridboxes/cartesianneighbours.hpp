@@ -10,10 +10,11 @@ boundary conditions */
 #ifndef CARTESIANNEIGHBOURS_HPP
 #define CARTESIANNEIGHBOURS_HPP
 
-#include <utility>
-#include <array>
+#include <cstddef>
 #include <vector>
+#include <utility>
 #include <limits>
+#include <array>
 
 struct CartesianNeighbourGBxIndexes
 {
