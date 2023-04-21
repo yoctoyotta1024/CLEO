@@ -23,7 +23,7 @@ private:
   std::array<size_t, 3> ndims = {0, 0, 0}; // number of gridboxes in [z,x,y] directions
 
   std::pair<unsigned int, unsigned int>
-  handle_finitedomain_nghbours(const unsigned int idx,
+  finitedomain_nghbours(const unsigned int idx,
                               const unsigned int increment,
                               const unsigned int ndim) const;
   /* returns {forward, backward} gridbox neighbours with
@@ -35,7 +35,7 @@ private:
   maximum unsigned int */
 
   std::pair<unsigned int, unsigned int>
-  handle_periodicdomain_nghbours(const unsigned int idx,
+  periodicdomain_nghbours(const unsigned int idx,
                               const unsigned int increment,
                               const unsigned int ndim) const;                       
   /* returns {forward, backward} gridbox neighbours with
@@ -57,9 +57,9 @@ public:
   /* returns pair of gbx indexes for {upwards, downwards} neighbour
   of a gridbox with index 'idx'. Treatment of neighbours for
   gridboxes at edges of domain is determined by the
-  'handle_XXX_nghbours' function */
+  'XXXdomain_nghbours' function */
   {
-    return handle_finitedomain_nghbours(idx, 1, ndims.at(0));
+    return finitedomain_nghbours(idx, 1, ndims.at(0));
   }
 
   std::pair<unsigned int, unsigned int>
@@ -68,10 +68,10 @@ public:
   /* returns pair of gbx indexes for {infront, behind} neighbour
   of a gridbox with index 'idx'. Treatment of neighbours for
   gridboxes at edges of domain is determined by the
-  'handle_XXX_nghbours' function */
+  'XXXdomain_nghbours' function */
   {
     const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
-    return handle_finitedomain_nghbours(idx, nz, ndims.at(1));
+    return finitedomain_nghbours(idx, nz, ndims.at(1));
   }
 
   std::pair<unsigned int, unsigned int>
@@ -80,10 +80,10 @@ public:
   /* returns pair of gbx indexes for {right, left} neighbour
   of a gridbox with index 'idx'. Treatment of neighbours for
   gridboxes at edges of domain is determined by the
-  'handle_XXX_nghbours' function */
+  'XXXdomain_nghbours' function */
   {
     const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
-    return handle_finitedomain_nghbours(idx, nznx, ndims.at(2));
+    return finitedomain_nghbours(idx, nznx, ndims.at(2));
   }
 };
 

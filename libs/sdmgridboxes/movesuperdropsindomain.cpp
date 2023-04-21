@@ -7,12 +7,12 @@ coords and moving them between gridboxes) */
 
 #include "./movesuperdropsindomain.hpp"
 
-unsigned int zdown_periodic(const Maps4GridBoxes &gbxmaps,
-                   const unsigned int index,
-                   Superdrop &superdrop)
-{
-  return gbxmaps.get_neighbour_zdown(index);
-};
+// unsigned int zdown_periodic(const Maps4GridBoxes &gbxmaps,
+//                    const unsigned int index,
+//                    Superdrop &superdrop)
+// {
+//   return gbxmaps.get_neighbour_zdown(index);
+// };
 
 
 unsigned int zdown_finite(const Maps4GridBoxes &gbxmaps,

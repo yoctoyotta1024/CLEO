@@ -10,7 +10,7 @@ peiodic boundary conditions */
 #include "cartesianneighbours.hpp"
 
 std::pair<unsigned int, unsigned int>
-CartesianNeighbourGBxIndexes::handle_finitedomain_nghbours(const unsigned int idx,
+CartesianNeighbourGBxIndexes::finitedomain_nghbours(const unsigned int idx,
                                                         const unsigned int increment,
                                                         const unsigned int ndim) const
 /* returns {forward, backward} gridbox neighbours with
@@ -38,7 +38,7 @@ maximum unsigned int */
 }
 
 std::pair<unsigned int, unsigned int>
-CartesianNeighbourGBxIndexes::handle_periodicdomain_nghbours(const unsigned int idx,
+CartesianNeighbourGBxIndexes::periodicdomain_nghbours(const unsigned int idx,
                               const unsigned int increment,
                               const unsigned int ndim) const
 /* returns {forward, backward} gridbox neighbours with
