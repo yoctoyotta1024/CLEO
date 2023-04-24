@@ -3,7 +3,9 @@ from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
 
-abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+# abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+abspath = "/home/m/m300950/CLEO/"
+#abspath = sys.argv[1]
 constsfile = abspath+"libs/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
 

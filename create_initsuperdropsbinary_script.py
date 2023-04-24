@@ -6,7 +6,8 @@ from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src.read_gbxboundaries import get_domainvol_from_gridfile
 
 ### path and filenames
-abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+# abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+abspath = "/home/m/m300950/CLEO/"
 #abspath = sys.argv[1]
 constsfile = abspath+"libs/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
