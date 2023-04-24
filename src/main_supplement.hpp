@@ -70,7 +70,8 @@ SomeZarrStores(FSStore &fsstore, const int maxchunk,
 SdMotion auto create_sdmotion(const int motionstep)
 {
   //const auto terminalv = RogersYauTerminalVelocity{};
-  const auto terminalv = SimmelTerminalVelocity{};
+  // const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = NullTerminalVelocity{};
   const SdMotion auto movesedi = MoveWithSedimentation(motionstep,
                                                      &step2dimlesstime,
                                                      terminalv);
