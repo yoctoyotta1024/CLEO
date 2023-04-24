@@ -40,7 +40,21 @@ def relh2qvap(press, temp, relh, Mr_ratio):
 
   return qvap
 
+def divfree_flowfield2D(WMAX, rhotilda, Zlength, Xlength, 
+                        ZCOORDS, XCOORDS):
+
+    ztilda = np.pi * ZCOORDS / Zlength 
+    xtilda = 2* np.pi * XCOORDS / Xlength 
+    VELfactor = WMAX / rhotilda
+        
+    WVEL = 2 * VELfactor * np.sin(ztilda) * np.sin(xtilda)
+    
+    UVEL = VELfactor *  Xlength /  Zlength
+    UVEL =  UVEL * np.cos(ztilda) * np.cos(xtilda)
+
+    return WVEL, UVEL
   
+
 class ConstUniformThermo:
   ''' create thermodyanmics that's constant in time 
   and uniform throughout the domain '''
@@ -150,24 +164,10 @@ class ConstHydrostaticAdiabat:
     
     return RHO, PRESS, TEMP
 
-  def divfree_flowfield2D(self, ZCOORDS, XCOORDS, RHO):
-
-    ztilda = np.pi * ZCOORDS / self.Zlength 
-    xtilda = 2* np.pi * XCOORDS / self.Xlength 
-    rhotilda = RHO / self.RHO0
-    VELfactor = self.WMAX / rhotilda
-        
-    WVEL = 2 * VELfactor * np.sin(ztilda) * np.sin(xtilda)
-    
-    UVEL = VELfactor *  self.Xlength /  self.Zlength
-    UVEL =  UVEL * np.cos(ztilda) * np.cos(xtilda)
-
-    return WVEL, UVEL
-  
-  def generate_thermo(self, Zfulls, Xfulls, Yfulls,
+  def generate_thermo(self, zfulls, xfulls, yfulls,
                       ngridboxes, ntime):
 
-    RHO, PRESS, TEMP = self.hydrostatic_adiabatic_thermo(Zfulls)
+    RHO, PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
 
     THERMODATA = {
       "PRESS": np.tile(PRESS, ntime),
@@ -180,15 +180,57 @@ class ConstHydrostaticAdiabat:
     }
 
     if self.WMAX != None:
-      WVEL, UVEL = self.divfree_flowfield2D(Zfulls, Xfulls, RHO)
+      rhotilda = RHO / self.RHO0
+      WVEL, UVEL = divfree_flowfield2D(self.WMAX, rhotilda, self.Zlength, 
+                                       self.Xlength, zfulls, xfulls)
       THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
       THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
 
       if self.VVEL != None:
         THERMODATA["VVEL"] =  np.full(int(ngridboxes*ntime), self.VVEL)
 
-    # THERMODATA["PRESS"][0:ngridboxes] = 800 # makes all gbxs a t=0 have P=800Pa
-    # THERMODATA["PRESS"][::ngridboxes] = 800 # makes 0th gbx at all times have P=800Pa
-
     return THERMODATA 
 
+class ConstThermo2Dflowfield:
+  ''' create thermodyanmics that's constant in time 
+  with (P,T,qv,qc) uniform throughout the domain
+  and a 2D (z,x) dependent flow field'''
+
+  def __init__(self, PRESS, TEMP, relh, qcond, WMAX, Zlength,
+               Xlength, VVEL, constsfile):
+    
+    self.PRESS = PRESS                        # pressure [Pa]
+    self.TEMP = TEMP                          # temperature [T]
+    Mr_ratio = get_Mrratio_from_constsfile(constsfile)
+    self.qvap = relh2qvap(PRESS, TEMP, 
+                          relh, Mr_ratio)     # water vapour content []
+    self.qcond = qcond                        # liquid water content []
+    
+    self.WMAX = WMAX  # max velocities constant
+    self.Zlength = Zlength # wavelength of velocity modulation in z direction [m]
+    self.Xlength = Xlength # wavelength of velocity modulation in x direction [m]
+    self.VVEL = VVEL # horizontal (y) velocity
+
+  def generate_thermo(self, zfulls, xfulls, yfulls,
+                          ngridboxes, ntime):
+
+      THERMODATA = {
+        "PRESS": np.full(ngridboxes*ntime, self.PRESS),
+        "TEMP": np.full(ngridboxes*ntime, self.TEMP),
+        "qvap": np.full(ngridboxes*ntime, self.qvap),
+        "qcond": np.full(ngridboxes*ntime, self.qcond), 
+        "WVEL": np.array([]), 
+        "UVEL": np.array([]),
+        "VVEL": np.array([])
+      }
+
+      if self.WMAX != None:
+        WVEL, UVEL = divfree_flowfield2D(self.WMAX, 1.0, self.Zlength, 
+                                          self.Xlength, zfulls, xfulls)
+        THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
+        THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
+
+        if self.VVEL != None:
+          THERMODATA["VVEL"] =  np.full(int(ngridboxes*ntime), self.VVEL)
+
+      return THERMODATA

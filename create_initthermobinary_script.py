@@ -38,11 +38,13 @@ VVEL = None # [m/s]
 Zlength = 1500 # [m]
 Xlength = 1500 # [m]
 inputs = cthermo.thermoinputsdict(configfile, constsfile)
-gen = thermogen.ConstHydrostaticAdiabat(PRESS0, THETA, qvap, qcond, WMAX, 
-                                        Zlength, Xlength, VVEL,
-                                        inputs["G"], inputs["CP_DRY"],
-                                        inputs["RGAS_DRY"], inputs["RGAS_V"])
 
+# gen = thermogen.ConstHydrostaticAdiabat(PRESS0, THETA, qvap, qcond, WMAX, 
+#                                         Zlength, Xlength, VVEL,
+#                                         inputs["G"], inputs["CP_DRY"],
+#                                         inputs["RGAS_DRY"], inputs["RGAS_V"])
+gen = thermogen.ConstThermo2Dflowfield(PRESS0, THETA, 1.05, qcond, WMAX,
+                                        Zlength, Xlength, VVEL, constsfile)
 thermodata = cthermo.write_thermodynamics_binary(thermofile, gen, configfile,
                                     constsfile, gridfile)
 
