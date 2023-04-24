@@ -8,7 +8,8 @@ source activate /work/mh1126/m300950/pySDenv
 CXX=g++ cmake -S ./ -B ./build
 
 python ./create_gbxboundariesbinary_script.py ./
-python ./create_initsuperdropsbinary_script.py ./ 1e9
+python ./create_initsuperdropsbinary_script.py ./ 
+python ./create_initthermobinary_script.py ./
 
 cd build
 make clean && make
