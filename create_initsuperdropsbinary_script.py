@@ -22,19 +22,15 @@ binpath = abspath+"build/bin/"
 isfigures = [True, True]
 
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
-nsupers = 64 # int or dict of ints for number of superdroplets in a gridbox
-# nsupers = {0: 0,
-#            1: 0,
-#            2: 0,
-#            3: 1024
-# }
+# nsupers = 64 # int or dict of ints for number of superdroplets in a gridbox
+nsupers = initattributes.nsupers_at_domain_base(gridfile, 256*15)
 ### ---------------------------------------------------------------- ###
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
 # monor                = 1e-6                        # all SDs have this same radius [m]
 # radiigen  = initattributes.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
-rspan                = [2e-9, 5e-6]                # max and min range of radii to sample [m]
+rspan                = [2e-9, 4e-6]                # max and min range of radii to sample [m]
 #rspan                = [1e-8, 9.1e-5]                # max and min range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]

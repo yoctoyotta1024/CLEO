@@ -1,7 +1,20 @@
 import numpy as np
 
 from .radiiprobdistribs import *
-from ..gbxboundariesbinary_src.read_gbxboundaries import calc_domainvol
+from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
+
+def nsupers_at_domain_base(gridfile, nsupers):
+
+    gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(gridfile,
+                                                            COORD0=False,
+                                                            return_ndims=True)
+    nsupersdict = {}
+    for ii in gbxbounds.keys():
+        if (ii%ndims[1]*ndims[0] == 0):
+            nsupersdict[ii] = nsupers
+        else:
+            nsupersdict[ii] = 0
+    return nsupersdict
 
 class MonoAttrsGen:
     ''' method to generate superdroplets with an
@@ -205,7 +218,7 @@ class InitManyAttrsGen:
         ''' generate superdroplets (SDs) attributes that have dimensions
         by calling the appropraite generating functions'''
 
-        gbxvol = calc_domainvol(gridboxbounds[0:2], gridboxbounds[2:4], 
+        gbxvol = rgrid.calc_domainvol(gridboxbounds[0:2], gridboxbounds[2:4], 
                                 gridboxbounds[4:]) # [m^3]
         
         dryradii = self.dryradiigen(nsupers) # [m]
