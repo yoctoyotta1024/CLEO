@@ -179,5 +179,3 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
                               [ndata[v]], [datatypes[v]],
                               [units[v]], [scale_factors[v]],
                               metastr)
-
-  return thermodata

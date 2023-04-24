@@ -29,6 +29,15 @@ to a double (hopefully a velocity!) */
     } -> std::convertible_to<double>;
 };
 
+struct NullTerminalVelocity
+{
+  const double operator()(const Superdrop &drop) const
+  /* returns 0.0 as terminal velocity of a superdroplet */
+  {
+    return 0.0;
+  }
+};
+
 struct RogersYauTerminalVelocity
 {
   const double operator()(const Superdrop &drop) const

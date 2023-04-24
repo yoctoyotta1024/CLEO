@@ -22,7 +22,7 @@ def saturation_press(TEMP):
   TREF = 273.16 # Triple point temperature [K] of water
   PREF = 611.655 # Triple point pressure [Pa] of water
 
-  if (TEMP <= 0.0):
+  if (np.any(TEMP <= 0.0)):
     raise ValueError("psat ERROR: T must be larger than 0K."+\
                      " T = " + str(TEMP))
 
@@ -37,6 +37,15 @@ def relh2qvap(press, temp, relh, Mr_ratio):
   vapourpress = saturation_press(temp) * relh / 100.0  # [Pa]
   
   qvap = Mr_ratio * vapourpress / (press - vapourpress) # dimensionless [Kg/kg]
+
+  return qvap
+
+def sratio2qvap(sratio, press, temp, Mr_ratio):
+
+  psat = saturation_press(temp)
+  
+  qvap = Mr_ratio * sratio 
+  qvap = qvap / (press/psat - 1)
 
   return qvap
 
@@ -59,16 +68,19 @@ class ConstUniformThermo:
   ''' create thermodyanmics that's constant in time 
   and uniform throughout the domain '''
 
-  def __init__(self, PRESS, TEMP, relh,
+  def __init__(self, PRESS, TEMP, qvap,
               qcond, WVEL, UVEL, VVEL,
-              constsfile):
+              relh=False, constsfile=""):
     self.PRESS = PRESS                        # pressure [Pa]
     self.TEMP = TEMP                          # temperature [T]
     
-    Mr_ratio = get_Mrratio_from_constsfile(constsfile)
-    self.qvap = relh2qvap(PRESS, TEMP, 
-                          relh, Mr_ratio)     # water vapour content []
-    
+    if relh:
+      Mr_ratio = get_Mrratio_from_constsfile(constsfile)
+      self.qvap = relh2qvap(PRESS, TEMP, 
+                            relh, Mr_ratio)     # water vapour content []
+    else:
+      self.qvap = qvap
+
     self.qcond = qcond                        # liquid water content []
     self.WVEL = WVEL                          # vertical (z) velocity [m/s]
     self.UVEL = UVEL                          # horizontal x velocity [m/s]
@@ -196,14 +208,18 @@ class ConstThermo2Dflowfield:
   with (P,T,qv,qc) uniform throughout the domain
   and a 2D (z,x) dependent flow field'''
 
-  def __init__(self, PRESS, TEMP, relh, qcond, WMAX, Zlength,
-               Xlength, VVEL, constsfile):
+  def __init__(self, PRESS, TEMP, qvapmethod, qcond, WMAX, Zlength,
+               Xlength, VVEL, qparam, constsfile=''):
     
     self.PRESS = PRESS                        # pressure [Pa]
     self.TEMP = TEMP                          # temperature [T]
-    Mr_ratio = get_Mrratio_from_constsfile(constsfile)
-    self.qvap = relh2qvap(PRESS, TEMP, 
-                          relh, Mr_ratio)     # water vapour content []
+    if qvapmethod == "relh":
+      Mr_ratio = get_Mrratio_from_constsfile(constsfile)
+      self.qvap = relh2qvap(PRESS, TEMP, 
+                            qparam, Mr_ratio)     # water vapour content []
+    elif qvapmethod == "sratio":
+      Mr_ratio = get_Mrratio_from_constsfile(constsfile)
+      self.qvap = sratio2qvap(qparam, self.PRESS, self.TEMP, Mr_ratio)
     self.qcond = qcond                        # liquid water content []
     
     self.WMAX = WMAX  # max velocities constant

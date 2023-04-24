@@ -2,8 +2,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from .create_thermodynamics import thermoinputsdict, DimlessThermodynamics
+from .thermogen import saturation_press
 from ..readbinary import readbinary
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid 
+
+def relative_humidity(press, temp, qvap, Mr_ratio):
+
+    pv = qvap*press/(Mr_ratio + qvap) # vapour pressure
+    psat = saturation_press(temp)
+    relh = pv/psat
+    
+    qsat = Mr_ratio * psat/(press-pv) 
+    supersat = qvap/qsat - 1  
+
+    return relh, supersat
 
 def read_dimless_thermodynamics_binary(thermofile, ngridboxes,
                                        ntime, SDnspace):

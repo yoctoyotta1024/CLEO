@@ -25,9 +25,9 @@ isfigures = [True, True]
 # W_INIT = 0.0                            # initial vertical (z) velocity [m/s]
 # U_INIT = 0.0                           # initial horizontal x velocity [m/s]
 # V_INIT = 0.0                             # initial horizontal y velocity [m/s]
-# gen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, relh_init,
+# gen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
 #                                        qc_init, W_INIT, U_INIT, V_INIT,
-#                                        constsfile)
+#                                        relh=relh_init, constsfile)
 
 PRESS0 = 101500 # [Pa]
 THETA = 289 # [K]
@@ -43,9 +43,10 @@ inputs = cthermo.thermoinputsdict(configfile, constsfile)
 #                                         Zlength, Xlength, VVEL,
 #                                         inputs["G"], inputs["CP_DRY"],
 #                                         inputs["RGAS_DRY"], inputs["RGAS_V"])
-gen = thermogen.ConstThermo2Dflowfield(PRESS0, THETA, 1.05, qcond, WMAX,
-                                        Zlength, Xlength, VVEL, constsfile)
-thermodata = cthermo.write_thermodynamics_binary(thermofile, gen, configfile,
+gen = thermogen.ConstThermo2Dflowfield(PRESS0, THETA, "sratio", qcond, WMAX,
+                                        Zlength, Xlength, VVEL,
+                                        qparam=1.05, constsfile=constsfile)
+cthermo.write_thermodynamics_binary(thermofile, gen, configfile,
                                     constsfile, gridfile)
 
 # if isfigures[0]:
@@ -79,37 +80,46 @@ class Thermo2Davg:
         self.uvel = np.array([])
         self.vvel = np.array([])
 
-        if any(thermodata["wvel"]):
+        if "wvel" in thermodata.keys():
             self.wvel = np.reshape(thermodata["wvel"], reshape) 
-            if any(thermodata["uvel"]):
+            if "uvel" in thermodata.keys():
                 self.uvel = np.reshape(thermodata["uvel"], reshape) 
-                if any(thermodata["vvel"]):
+                if "vvel" in thermodata.keys():
                     self.vvel = np.reshape(thermodata["vvel"], reshape)  
 
-    def meanYtime(self, var):
+    def meanytime(self, var):
 
         return np.mean(var, axis=(0,1))
 
-# redim = cthermo.DimlessThermodynamics(inputs=inputs)
-# thermodata = redim.redimensionalise(thermodata)
+    def meanxytime(self, var):
+
+        return np.mean(var, axis=(0,1, 2))
+
+ngridboxes=int(np.prod(ndims))
+thermodata = rthermo.get_thermodynamics_from_thermofile(thermofile, ngridboxes,
+                                               inputs=inputs)
 d = Thermo2Davg(thermodata, ndims, inputs["ntime"])
 
-meanpress = d.meanYtime(d.press)
-meantemp = d.meanYtime(d.temp)
-meanqvap = d.meanYtime(d.qvap)
-meanqcond = d.meanYtime(d.qcond)
-meanwvel = d.meanYtime(d.wvel)
-meanuvel = d.meanYtime(d.uvel)
+meanpress = d.meanytime(d.press)
+meantemp = d.meanytime(d.temp)
+meanqvap = d.meanytime(d.qvap)
+meanqcond = d.meanytime(d.qcond)
+meanwvel = d.meanytime(d.wvel)
+meanuvel = d.meanytime(d.uvel)
 
 xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
 xxf, zzf = np.meshgrid(xfull, zfull, indexing="ij") # dims [xdims, zdims]
+
+meanrelh, meansupersat = rthermo.relative_humidity(meanpress, meantemp,
+                                                meanqvap, inputs["Mr_ratio"])
 
 fig, axs = plt.subplots(nrows=2, ncols=2)
 axs = axs.flatten()
 axs[0].pcolormesh(xxh[:,:], zzh[:,:], meanpress, cmap="plasma_r")
 axs[1].pcolormesh(xxh[:,:], zzh[:,:], meantemp, cmap="plasma_r")
 axs[2].pcolormesh(xxh[:,:], zzh[:,:], meanqvap, cmap="plasma_r")
-axs[3].pcolormesh(xxh[:,:], zzh[:,:], meanqcond, cmap="plasma_r")
+#axs[3].pcolormesh(xxh[:,:], zzh[:,:], meanqcond, cmap="plasma_r")
+axs[3].pcolormesh(xxh[:,:], zzh[:,:], meansupersat, cmap="plasma_r")
 fig.tight_layout()
 plt.show()
 
@@ -138,4 +148,35 @@ plt.show()
 fig, ax = plt.subplots()
 print(xxf.shape, zzf.shape, meanuvel.shape, meanwvel.shape)
 ax.quiver(xxf, zzf, meanuvel, meanwvel)
+plt.show()
+
+fig, axs = plt.subplots(nrows=2, ncols=2)
+axs = axs.flatten()
+labs = ["P /mbar", "T /K", "q$_{vapour}$", "supersaturation"]
+legs = []
+axs[0].plot(d.meanxytime(d.press), zfull)
+legs.append("<P>={:.1f}Pa".format(np.mean(d.meanxytime(d.press))))
+axs[1].plot(d.meanxytime(d.temp), zfull)
+legs.append("<T>={:.1f}K".format(np.mean(d.meanxytime(d.temp))))
+axs[2].plot(d.meanxytime(d.qvap), zfull)
+legs.append("<q$_{v}$>="+"{:.3g}".format(np.mean(d.meanxytime(d.qvap))))
+axs[3].plot(np.mean(meansupersat, axis=0), zfull)
+legs.append("<s>="+"{:.3g}".format(np.mean(meansupersat)))
+
+axs[3].vlines(0.0, np.amin(zfull), np.amax(zfull),
+              color="grey", linestyle="--")
+s0 = zfull[np.argmin(abs(np.mean(meansupersat, axis=0)))]
+stext = "s$_{0}$="+"{:.2f}m".format(s0)
+axs[3].text(0.95, 0.05, stext, transform=axs[3].transAxes,
+            horizontalalignment="right")
+
+for a, ax in enumerate(axs):
+  ax.set_xlabel(labs[a])
+  ax.set_ylabel("z / m")
+  ax.text(0.95, 0.85, legs[a], transform=ax.transAxes, horizontalalignment="right")
+fig.tight_layout()
+if isfigures[1]:
+    fig.savefig(binpath+"thermoprofile1D.png", dpi=400,
+                bbox_inches="tight", facecolor='w', format="png")
+    print("Figure .png saved as: "+binpath+"thermoprofile1D.png")
 plt.show()
