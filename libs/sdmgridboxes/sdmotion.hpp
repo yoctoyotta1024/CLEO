@@ -14,6 +14,7 @@ coordinates according to equations of motion) */
 #include <stdexcept>
 #include <cmath>
 #include <numbers>
+#include <utility>
 
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/terminalvelocity.hpp"
@@ -157,6 +158,13 @@ private:
   const double delt;                  // equivalent of interval as dimensionless time
 
   const Prescribed2DFlow flow2d;            // method to get wvel and uvel from 2D flow field
+
+  std::pair<double, double>
+  MoveWith2DFixedFlow::predictor_corrector(const double coord3,
+                                           const double coord1) const;
+  /* returns change in (z,x) coordinates = (delta3, delta1)
+  obtained using predictor-corrector method and velocities
+  calculated from a Prescribed2DFlow */
 
 public:
   MoveWith2DFixedFlow(const int interval,

@@ -57,17 +57,6 @@ single step forward euler method to integrate dx/dt */
   drop.coord2 += delta2;
 }
 
-double MoveWith2DFixedFlow::predictor_corrector(const double coord3,
-                                                const double coord1)
-{
-  const double vel3 = flow2d.prescribed_wvel(drop.coord3, drop.coord1); // w wind from prescribed 2D flow
-  const double vel1 = flow2d.prescribed_uvel(drop.coord3, drop.coord1); // u wind from prescribed 2D flow
-
-  const double predict = 
-
-  return deltacoord;
-}
-
 void MoveWith2DFixedFlow::
     change_superdroplet_coords(const Maps4GridBoxes &gbxmaps,
                                const GridBox &gbx,
@@ -77,12 +66,32 @@ void MoveWith2DFixedFlow::
 The velocity required for this scheme is determined
 from the PrescribedFlow2D instance */
 {
+  auto deltas = predictor_corrector(drop.coord3, drop.coord1);
+  
+  cfl_criteria(gbxmaps, gbx.gbxindex, deltas.first, deltas.second, 0.0);
 
-  const double delta3 = predictor_corrector(drop.coord3, drop.coord1);
-  const double delta1 = predictor_corrector(drop.coord3, drop.coord1);
+  drop.coord3 += deltas.first;
+  drop.coord1 += deltas.second; 
+}
 
-  cfl_criteria(gbxmaps, gbx.gbxindex, delta3, delta1, 0.0);
+std::pair<double, double>
+MoveWith2DFixedFlow::predictor_corrector(const double coord3,
+                                         const double coord1) const
+/* returns change in (z,x) coordinates = (delta3, delta1)
+obtained using predictor-corrector method and velocities
+calculated from a Prescribed2DFlow */
+{ 
+  const double vel3 = flow2d.prescribed_wvel(coord3, coord1); // w wind from prescribed 2D flow
+  const double vel1 = flow2d.prescribed_uvel(coord3, coord1); // u wind from prescribed 2D flow
 
-  drop.coord3 += delta3; 
-  drop.coord1 += delta1; 
+  const double pred3(coord3 + vel3 * delt);
+  const double pred1(coord1 + vel1 * delt);
+
+  const double corrvel3 = flow2d.prescribed_wvel(pred3, pred1); // w wind from prescribed 2D flow
+  const double corrvel1 = flow2d.prescribed_uvel(pred3, pred1); // w wind from prescribed 2D flow
+
+  const double delta3((vel3 + corrvel3) * (delt / 2));
+  const double delta1((vel1 + corrvel1) * (delt / 2));
+
+  return std::pair<double, double>(delta3, delta1);
 }
