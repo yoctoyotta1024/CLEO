@@ -20,6 +20,7 @@ coupled with a CVODE ode solver for the thermodynamics
 #include "sdmgridboxes/maps4gridboxes.hpp"
 #include "sdmgridboxes/sdmtimesteps.hpp"
 #include "sdmgridboxes/runsdmstep.hpp"
+#include "sdmgridboxes/sdmotion.hpp"
 #include "observers/observers.hpp"
 #include "observers/intostore_observers.hpp"
 #include "observers/sdattributes_intostore.hpp"
@@ -30,7 +31,6 @@ coupled with a CVODE ode solver for the thermodynamics
 /* sdm superdroplets setup */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
-#include "superdrop_solver/sdmotion.hpp"
 #include "superdrop_solver/coalescencekernel.hpp"
 #include "superdrop_solver/collisionsmethod.hpp"
 

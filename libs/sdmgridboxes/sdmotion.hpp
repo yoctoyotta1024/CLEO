@@ -87,16 +87,16 @@ public:
     return t % interval == 0;
   }
 
-  void change_superdroplet_coords(const ThermoState &state,
+  void change_superdroplet_coords(const GridBox &gbx,
                                   Superdrop &drop) const
   {
-    const double vel3 = state.wvel - terminalv(drop); // w wind + terminal velocity
+    const double vel3 = gbx.state.wvel - terminalv(drop); // w wind + terminal velocity
     drop.coord3 += deltacoord(vel3);
     
-    const double vel1 = state.uvel; // u component of wind velocity
+    const double vel1 = gbx.state.uvel; // u component of wind velocity
     drop.coord1 += deltacoord(vel1);
 
-    const double vel2 = state.vvel; // v component of wind velocity (y=2)
+    const double vel2 = gbx.state.vvel; // v component of wind velocity (y=2)
     drop.coord2 += deltacoord(vel2);
   }
 };

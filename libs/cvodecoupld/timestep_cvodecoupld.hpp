@@ -18,9 +18,9 @@ both ways (send and receive) */
 #include "sdmgridboxes/maps4gridboxes.hpp"
 #include "sdmgridboxes/sdmtimesteps.hpp"
 #include "sdmgridboxes/superdropwithgbxindex.hpp"
+#include "sdmgridboxes/sdmotion.hpp"
 #include "superdrop_solver/thermostate.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
-#include "superdrop_solver/sdmotion.hpp"
 #include "observers/observers.hpp"
 
 /* CVODE thermodynamics ODE solver */

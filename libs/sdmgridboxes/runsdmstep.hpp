@@ -12,12 +12,12 @@ run 1 timestep of SDM */
 #include <algorithm>
 
 #include "./gridbox.hpp"
+#include "./sdmotion.hpp"
 #include "./maps4gridboxes.hpp"
 #include "./movesuperdropsindomain.hpp"
 #include "./superdropwithgbxindex.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
-#include "superdrop_solver/sdmotion.hpp"
 #include "observers/observers.hpp"
 
 template <SdMotion M, SdmProcess P, Observer O>
