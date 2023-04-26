@@ -43,9 +43,12 @@ inputs = cthermo.thermoinputsdict(configfile, constsfile)
 #                                         Zlength, Xlength, VVEL,
 #                                         inputs["G"], inputs["CP_DRY"],
 #                                         inputs["RGAS_DRY"], inputs["RGAS_V"])
+
+qvapmethod, sratio = "sratio", 1.05
+zbase = 750
 gen = thermogen.ConstThermo2Dflowfield(PRESS0, THETA, "sratio", qcond, WMAX,
-                                        Zlength, Xlength, VVEL,
-                                        qparam=1.05, constsfile=constsfile)
+                                        Zlength, Xlength, VVEL, zbase,
+                                        sratio, constsfile)
 cthermo.write_thermodynamics_binary(thermofile, gen, configfile,
                                     constsfile, gridfile)
 
@@ -161,7 +164,11 @@ legs.append("<T>={:.1f}K".format(np.mean(d.meanxytime(d.temp))))
 axs[2].plot(d.meanxytime(d.qvap), zfull)
 legs.append("<q$_{v}$>="+"{:.3g}".format(np.mean(d.meanxytime(d.qvap))))
 axs[3].plot(np.mean(meansupersat, axis=0), zfull)
-legs.append("<s>="+"{:.3g}".format(np.mean(meansupersat)))
+
+sabove = np.mean(np.mean(meansupersat, axis=0)[zfull >= zbase])
+sbelow = np.mean(np.mean(meansupersat, axis=0)[zfull < zbase])
+sleg = "<s$_1$>="+"{:.2g}\n<s$_2$>={:.2g}".format(sabove, sbelow)
+legs.append(sleg)
 
 axs[3].vlines(0.0, np.amin(zfull), np.amax(zfull),
               color="grey", linestyle="--")
@@ -173,7 +180,8 @@ axs[3].text(0.95, 0.05, stext, transform=axs[3].transAxes,
 for a, ax in enumerate(axs):
   ax.set_xlabel(labs[a])
   ax.set_ylabel("z / m")
-  ax.text(0.95, 0.85, legs[a], transform=ax.transAxes, horizontalalignment="right")
+  ax.text(0.95, 0.95, legs[a], transform=ax.transAxes,
+          horizontalalignment="right", verticalalignment="top")
 fig.tight_layout()
 if isfigures[1]:
     fig.savefig(binpath+"thermoprofile1D.png", dpi=400,

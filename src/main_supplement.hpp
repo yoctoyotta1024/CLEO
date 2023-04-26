@@ -107,12 +107,12 @@ combined process of those two individual processes */
   //                                        terminalv);
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  const auto sdmprocess = cond >> colls;
-  // const auto sdmprocess = cond;
+  // const auto sdmprocess = cond >> colls;
+  const auto sdmprocess = cond;
   // const auto sdmprocess = colls;
 
-  return sdmprocess;
-  // return NullProcess{};
+  // return sdmprocess;
+  return NullProcess{};
 }
 
 SuperdropIntoStoreViaBuffer auto sdattrs_to_observe()

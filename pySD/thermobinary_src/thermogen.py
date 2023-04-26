@@ -205,35 +205,46 @@ class ConstHydrostaticAdiabat:
 
 class ConstThermo2Dflowfield:
   ''' create thermodyanmics that's constant in time 
-  with (P,T,qv,qc) uniform throughout the domain
-  and a 2D (z,x) dependent flow field'''
+  with (P,T,qc) uniform throughout the domain with relative humidity
+  = 0.95 below zbase and a 2D (z,x) dependent flow field'''
 
   def __init__(self, PRESS, TEMP, qvapmethod, qcond, WMAX, Zlength,
-               Xlength, VVEL, qparam, constsfile=''):
+               Xlength, VVEL, zbase, qparam, constsfile=''):
     
     self.PRESS = PRESS                        # pressure [Pa]
     self.TEMP = TEMP                          # temperature [T]
+    self.qcond = qcond                        # liquid water content []
+    
+    # determine qvap above z (cloud) base
+    self.zbase = zbase
+    Mr_ratio = get_Mrratio_from_constsfile(constsfile)
+    self.qvap_below = sratio2qvap(0.85, PRESS, TEMP,Mr_ratio) # supersat=0.85 below zbase
     if qvapmethod == "relh":
-      Mr_ratio = get_Mrratio_from_constsfile(constsfile)
-      self.qvap = relh2qvap(PRESS, TEMP, 
+      self.qvap_above = relh2qvap(PRESS, TEMP, 
                             qparam, Mr_ratio)     # water vapour content []
     elif qvapmethod == "sratio":
-      Mr_ratio = get_Mrratio_from_constsfile(constsfile)
-      self.qvap = sratio2qvap(qparam, self.PRESS, self.TEMP, Mr_ratio)
-    self.qcond = qcond                        # liquid water content []
+      self.qvap_above = sratio2qvap(qparam, self.PRESS, self.TEMP, Mr_ratio)
     
     self.WMAX = WMAX  # max velocities constant
     self.Zlength = Zlength # wavelength of velocity modulation in z direction [m]
     self.Xlength = Xlength # wavelength of velocity modulation in x direction [m]
     self.VVEL = VVEL # horizontal (y) velocity
 
+  def generate_qvap_profile(self, zfulls):
+
+    qvap = np.where(zfulls >= self.zbase, self.qvap_above, self.qvap_below)
+
+    return qvap
+
   def generate_thermo(self, zfulls, xfulls, yfulls,
                           ngridboxes, ntime):
+
+      qvap = self.generate_qvap_profile(zfulls)
 
       THERMODATA = {
         "PRESS": np.full(ngridboxes*ntime, self.PRESS),
         "TEMP": np.full(ngridboxes*ntime, self.TEMP),
-        "qvap": np.full(ngridboxes*ntime, self.qvap),
+        "qvap": np.tile(qvap, ntime),
         "qcond": np.full(ngridboxes*ntime, self.qcond), 
         "WVEL": np.array([]), 
         "UVEL": np.array([]),
