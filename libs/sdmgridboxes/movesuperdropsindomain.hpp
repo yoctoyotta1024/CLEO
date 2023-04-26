@@ -77,7 +77,7 @@ private:
       }
     }
 
-    move_superdroplets_between_gridboxes(SDsInGBxs, gridboxes);
+    move_superdroplets_between_gridboxes(gbxmaps, SDsInGBxs, gridboxes);
   }
 
   unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &gbxmaps,
@@ -156,23 +156,25 @@ private:
     }
   }
 
-  void move_superdroplets_between_gridboxes(std::vector<SuperdropWithGbxindex> &SDsInGBxs,
+  void move_superdroplets_between_gridboxes(const Maps4GridBoxes &gbxmaps,
+                                            std::vector<SuperdropWithGbxindex> &SDsInGBxs,
                                             std::vector<GridBox> &gridboxes) const
   /* move superdroplets between gridboxes by changing their associated
   gridboxindex if necessary, then (re)sorting SDsInGBxs vector and
   updating spans4SDsInGbx for each gridbox */
   {
     sort_superdrops_via_gridboxindex(SDsInGBxs);
-    set_gridboxes_superdropletspan(gridboxes, SDsInGBxs);
+    set_gridboxes_superdropletspan(gbxmaps, gridboxes, SDsInGBxs);
   }
 
-  void set_gridboxes_superdropletspan(std::vector<GridBox> &gridboxes,
+  void set_gridboxes_superdropletspan(const Maps4GridBoxes &gbxmaps,
+                                      std::vector<GridBox> &gridboxes,
                                       std::vector<SuperdropWithGbxindex> &SDsInGBxs) const
   {
     for (auto &gbx : gridboxes)
     {
       gbx.set_span(SDsInGBxs);
-      // gbx.iscorrect_span_for_gbxindex(gbxmaps);
+      gbx.iscorrect_span_for_gbxindex(gbxmaps); // (expensive!) optional test to raise error if SDspan isn't consistent with gbxindex 
     }
   }
 
