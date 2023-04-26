@@ -135,13 +135,13 @@ private:
   const double ztilda;
   const double xtilda;
   const double wamp;
-  const double rhotilda;
+  const std::function<double(double)> rhotilda; // function for normalised rho(z)
 
 public:
   Prescribed2DFlow(const double zlength,
                    const double xlength,
                    const double wmax,
-                   const double rhotilda)
+                   const std::function<double(double)> rhotilda)
       /* Fixed 2D flow with constant density from
       Arabas et al. 2015 with lengthscales
       xlength = 2*pi*xtilda and zlength = pi*ztilda */
@@ -152,13 +152,13 @@ public:
 
   double prescribed_wvel(const double zcoord, const double xcoord) const
   {
-    return wamp / rhotilda *
+    return wamp / rhotilda(zcoord) *
            std::sin(zcoord / ztilda) * std::sin(xcoord / xtilda);
   }
 
   double prescribed_uvel(const double zcoord, const double xcoord) const
   {
-    return wamp / rhotilda * xtilda / ztilda *
+    return wamp / rhotilda(zcoord) * xtilda / ztilda *
            std::cos(zcoord / ztilda) * std::cos(xcoord / xtilda);
   }
 };
@@ -190,7 +190,7 @@ public:
                       const double zlength,
                       const double xlength,
                       const double wmax,
-                      const double rhotilda)
+                      const std::function<double(double)> rhotilda)
       : interval(interval),
         delt(int2time(interval)),
         flow2d(Prescribed2DFlow(zlength, xlength, wmax, rhotilda)) {}

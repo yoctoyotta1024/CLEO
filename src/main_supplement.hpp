@@ -69,14 +69,20 @@ SomeZarrStores(FSStore &fsstore, const int maxchunk,
 
 SdMotion auto create_sdmotion(const int motionstep)
 {
-  //const auto terminalv = RogersYauTerminalVelocity{};
+  // const auto terminalv = RogersYauTerminalVelocity{};
   // const auto terminalv = SimmelTerminalVelocity{};
-  const auto terminalv = NullTerminalVelocity{};
-  const SdMotion auto movesedi = NoInterpMoveWithSedimentation(motionstep,
-                                                     &step2dimlesstime,
-                                                     terminalv);
- 
-  return movesedi;
+  // const auto terminalv = NullTerminalVelocity{};
+  // const SdMotion auto crudemove = NoInterpMoveWithSedimentation(motionstep,
+  //                                                    &step2dimlesstime,
+  //                                                    terminalv);
+  
+  const Prescribed2DFlow flow2D(1500 / dlc::COORD0, 1500 / dlc::COORD0,
+                                0.6 / dlc::W0, [](){return 1.0;});
+  const SdMotion auto move2d = MoveWith2DFixedFlow(motionstep,
+                                                  &step2dimlesstime,
+                                                  flow2d);
+  return move2d;
+  // return crudemove;
   // return NullMotion{};
 }
 
