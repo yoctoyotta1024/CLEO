@@ -23,7 +23,9 @@ isfigures = [True, True]
 
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
 # nsupers = 64 # int or dict of ints for number of superdroplets in a gridbox
-nsupers = initattributes.nsupers_at_domain_base(gridfile, 256*15)
+zlim = 500
+nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile,
+                                                256*15, zlim)
 ### ---------------------------------------------------------------- ###
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
@@ -84,7 +86,6 @@ coord2gen            = None                        # do not generate superdrople
          
 # coord2gen             = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
 ### ---------------------------------------------------------------- ###
-
 
 Path(binpath).mkdir(exist_ok=True) 
 Path(spath).mkdir(exist_ok=True) 

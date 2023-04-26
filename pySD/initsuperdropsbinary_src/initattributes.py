@@ -3,18 +3,22 @@ import numpy as np
 from .radiiprobdistribs import *
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
-def nsupers_at_domain_base(gridfile, nsupers):
-
+def nsupers_at_domain_base(gridfile, constsfile, nsupers, zlim):
+    ''' create dict for sd initialisation where nsupers
+    only occur in gridboxes with upper bound <= zlim '''
+    
+    COORD0 = rgrid.get_COORD0_from_constsfile(constsfile)
     gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(gridfile,
-                                                            COORD0=False,
+                                                            COORD0=COORD0,
                                                             return_ndims=True)
     nsupersdict = {}
     for ii in gbxbounds.keys():
-        print(ii%ndims[1]*ndims[0])
-        if (ii%ndims[1]*ndims[0] == 0):
+        gbx_zupper = gbxbounds[ii][1]  # z upper bound of gridbox  
+        if (gbx_zupper <= zlim):
             nsupersdict[ii] = nsupers
         else:
             nsupersdict[ii] = 0
+    
     return nsupersdict
 
 class MonoAttrsGen:
