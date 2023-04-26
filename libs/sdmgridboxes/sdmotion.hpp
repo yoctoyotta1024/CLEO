@@ -15,6 +15,7 @@ coordinates according to equations of motion) */
 #include <cmath>
 #include <numbers>
 #include <utility>
+#include <functional>
 
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/terminalvelocity.hpp"

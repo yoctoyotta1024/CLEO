@@ -76,13 +76,14 @@ SdMotion auto create_sdmotion(const int motionstep)
   //                                                    &step2dimlesstime,
   //                                                    terminalv);
   
-  const Prescribed2DFlow flow2D(1500 / dlc::COORD0, 1500 / dlc::COORD0,
-                                0.6 / dlc::W0, [](){return 1.0;});
+  auto rhotilda = [](double){return 1.0;};
+  const Prescribed2DFlow flow2d(1500 / dlc::COORD0, 1500 / dlc::COORD0,
+                                0.6 / dlc::W0, rhotilda);
   const SdMotion auto move2d = MoveWith2DFixedFlow(motionstep,
                                                   &step2dimlesstime,
                                                   flow2d);
-  return move2d;
   // return crudemove;
+  return move2d;
   // return NullMotion{};
 }
 
