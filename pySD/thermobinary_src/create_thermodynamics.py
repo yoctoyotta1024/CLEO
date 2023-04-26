@@ -35,7 +35,7 @@ def thermoinputsdict(configfile, constsfile):
     "SDnspace": config["SDnspace"]
   }
 
-  inputs["ntime"] = round(inputs["T_END"]/inputs["COUPLTSTEP"])+1
+  inputs["ntime"] = int(np.ceil(inputs["T_END"]/inputs["COUPLTSTEP"]))+1
 
   return inputs
 

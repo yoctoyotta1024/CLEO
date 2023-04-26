@@ -174,7 +174,7 @@ private:
     for (auto &gbx : gridboxes)
     {
       gbx.set_span(SDsInGBxs);
-      gbx.iscorrect_span_for_gbxindex(gbxmaps); // (expensive!) optional test to raise error if SDspan isn't consistent with gbxindex 
+      // gbx.iscorrect_span_for_gbxindex(gbxmaps); // (expensive!) optional test to raise error if SDspan isn't consistent with gbxindex 
     }
   }
 
