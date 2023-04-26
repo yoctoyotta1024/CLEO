@@ -1,7 +1,8 @@
 // Author: Clara Bayley
 // File: "sdmotion.hpp"
 /* Header file for functions related to
-moving superdroplets (updating their
+updatings superdroplets positions 
+(updating their
 coordinates according to equations of motion) */
 
 #ifndef SDMOTION_HPP
@@ -11,13 +12,16 @@ coordinates according to equations of motion) */
 #include <functional>
 #include <limits>
 
-#include "./superdrop.hpp"
-#include "./thermostate.hpp"
-#include "./terminalvelocity.hpp"
+#include "superdrop_solver/superdrop.hpp"
+#include "superdrop_solver/terminalvelocity.hpp"
+#include "superdrop_solver/thermostate.hpp"
+#include "./gridbox.hpp"
+
+bool cfl_criterion
 
 template <typename M>
 concept SdMotion = requires(M m, const int currenttimestep,
-                            const ThermoState &state,
+                            const GridBox &gbx,
                             Superdrop &superdrop)
 /* concept SdMotion is all types that meet requirements
 (constraints) of void function called "move_superdroplet"
@@ -30,7 +34,7 @@ which takes a ThermoState and Superdrop as arguments */
     m.on_move(currenttimestep)
     } -> std::convertible_to<bool>;
   {
-    m.change_superdroplet_coords(state, superdrop)
+    m.change_superdroplet_coords(gbx, superdrop)
   };
 };
 
@@ -46,8 +50,8 @@ struct NullMotion
     return false;
   }
 
-  void change_superdroplet_coords(const ThermoState &state,
-                                    Superdrop &superdrop) const {}
+  void change_superdroplet_coords(const GridBox &gbx,
+                                  Superdrop &superdrop) const {}
 };
 
 template <VelocityFormula TerminalVelocity>
