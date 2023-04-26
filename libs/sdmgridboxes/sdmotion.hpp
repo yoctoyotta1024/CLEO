@@ -22,16 +22,20 @@ coordinates according to equations of motion) */
 #include "./maps4gridboxes.hpp"
 
 bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
-                    const unsigned int gbxindex,
-                    const double delt,const double wvel,
-                    const double uvel, const double vvel);
+                  const unsigned int gbxindex,
+                  const double delta3, const double delta1,
+                  const double delta2);
+/* returns false if any of z, x or y (3,1,2) directions
+  do not meet their cfl criterion. For each direction,
+  Criterion is C = delta[X] / gridstep =< 1 where the
+  gridstep is calculated from the gridbox boundaries map */
 
 inline bool cfl_criterion(const double gridstep,
-                          const double speed,
-                          const double delt)
-/* returns false if cfl criterion, C = speed*delt / gridstep, > 1 */
+                          const double sdstep)
+/* sdstep = change in superdroplet coordinate position.
+returns false if cfl criterion, C = sdstep / gridstep, > 1 */
 {
-  return (speed*delt <= gridstep);
+  return (sdstep <= gridstep);
 }
 
 template <typename M>
@@ -109,9 +113,8 @@ public:
                                   Superdrop &drop) const;
   /* very crude method to forward timestep the velocity
   using the velocity from the gridbox thermostate, ie.
-  without interpolation to the SD position and using 
-  forward euler method to integrate dx/dt instead of
-  a better method e.g. a predictor-corrector scheme */
+  without interpolation to the SD position and using
+  single step forward euler method to integrate dx/dt */
 };
 
 class Prescribed2DFlow
@@ -135,15 +138,16 @@ class Prescribed2DFlow
 
   double prescribed_wvel(const double zcoord, const double xcoord) const
   {
-    return wamp / rhotilda * std::sin(zcoord/ztilda) * std::sin(xcoord/xtilda);
-  } 
+    return wamp / rhotilda *
+           std::sin(zcoord / ztilda) * std::sin(xcoord / xtilda);
+  }
 
   double prescribed_uvel(const double zcoord, const double xcoord) const
   {
-    const double u_amplitude = wamp / rhotilda * xtilda / ztilda; 
-    return u_amplitude * std::cos(zcoord/ztilda) * std::cos(xcoord/xtilda);
+    return wamp / rhotilda * xtilda / ztilda *
+           std::cos(zcoord / ztilda) * std::cos(xcoord / xtilda);
   }
-}
+};
 
 template <VelocityFormula TerminalVelocity>
 class MoveWith2DFixedFlow
