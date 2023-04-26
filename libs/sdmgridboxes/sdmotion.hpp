@@ -27,7 +27,7 @@ bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
 inline bool cfl_criterion(const double gridstep,
                           const double speed,
                           const double delt)
-''' returns false if cfl criterion, C = speed*delt / gridstep, > 1 '''
+/* returns false if cfl criterion, C = speed*delt / gridstep, > 1 */
 {
   return (speed*delt <= gridstep);
 }
@@ -35,6 +35,7 @@ inline bool cfl_criterion(const double gridstep,
 template <typename M>
 concept SdMotion = requires(M m, const int currenttimestep,
                             const GridBox &gbx,
+                            const Maps4GridBoxes &gbxmaps,
                             Superdrop &superdrop)
 /* concept SdMotion is all types that meet requirements
 (constraints) of void function called "move_superdroplet"
@@ -47,7 +48,7 @@ which takes a ThermoState and Superdrop as arguments */
     m.on_move(currenttimestep)
     } -> std::convertible_to<bool>;
   {
-    m.change_superdroplet_coords(gbx, superdrop)
+    m.change_superdroplet_coords(gbxmaps, gbx, superdrop)
   };
 };
 
@@ -63,7 +64,8 @@ struct NullMotion
     return false;
   }
 
-  void change_superdroplet_coords(const GridBox &gbx,
+  void change_superdroplet_coords(const Maps4GridBoxes &gbxmaps,
+                                  const GridBox &gbx,
                                   Superdrop &superdrop) const {}
 };
 
@@ -100,7 +102,8 @@ public:
     return t % interval == 0;
   }
 
-  void change_superdroplet_coords(const GridBox &gbx,
+  void change_superdroplet_coords(const Maps4GridBoxes &gbxmaps,
+                                  const GridBox &gbx,
                                   Superdrop &drop) const
   {
     const double vel3 = gbx.state.wvel - terminalv(drop); // w wind + terminal velocity
@@ -110,7 +113,7 @@ public:
     const bool cfl = cfl_criteria(gbxmaps, gbx.gbxindex, delt,
                                   vel3, vel1, vel2);
 
-    if cfl
+    if (cfl)
     {
       drop.coord3 += deltacoord(vel3);
       drop.coord1 += deltacoord(vel1);

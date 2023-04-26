@@ -68,7 +68,7 @@ private:
 
       for (auto &SDinGBx : gbx.span4SDsinGBx)
       {
-        movesd.change_superdroplet_coords(gbx, SDinGBx.superdrop);
+        movesd.change_superdroplet_coords(gbxmaps, gbx, SDinGBx.superdrop);
 
         SDinGBx.sd_gbxindex = update_superdrop_gbxindex(gbxmaps,
                                                         gbx.gbxindex,

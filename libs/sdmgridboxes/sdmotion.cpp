@@ -11,11 +11,11 @@ bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
                   const unsigned int gbxindex,
                   const double delt,const double wvel,
                   const double uvel, const double vvel)
-''' returns false if any of z,x or y directions
+/* returns false if any of z,x or y directions
   do not meet their cfl criterion. For each direction,
   Criterion is C = velocity_component*delt / gridstep =< 1 
   where the gridstep is calculated from the gridbox boundaries 
-  map (in the same direction as the velocity component) '''
+  map (in the same direction as the velocity component) */
 {
   double gridstep(gbxmaps.get_bounds_z(gbxindex).second -
                   gbxmaps.get_bounds_z(gbxindex).first);

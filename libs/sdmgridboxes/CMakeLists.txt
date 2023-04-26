@@ -23,7 +23,7 @@ set(SOURCES
 "sdmtimesteps.cpp"
 "superdropwithgbxindex.cpp"
 "cartesianneighbours.cpp"
-"sdmotion.cpp
+"sdmotion.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
