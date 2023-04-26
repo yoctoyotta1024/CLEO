@@ -103,7 +103,8 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
     fig.tight_layout()
     if savefig:
         tstr = str(t2plt).replace('.', "p")
-        fig.savefig(binpath+"/thermodynamics_time"+tstr+".png", dpi=400,
+        savename = "/gridboxboundaries.png"
+        fig.savefig(binpath+savename, dpi=400,
                     bbox_inches="tight", facecolor='w', format="png")
-        print("Figure .png saved as: "+binpath+"/gridboxboundaries.png")
+        print("Figure .png saved as: "+binpath+savename)
     plt.show()

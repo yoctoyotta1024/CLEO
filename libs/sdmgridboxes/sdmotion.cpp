@@ -37,26 +37,6 @@ bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
   return cfl;
 }
 
-void NoInterpMoveWithSedimentation::
-    change_superdroplet_coords(const Maps4GridBoxes &gbxmaps,
-                               const GridBox &gbx,
-                               Superdrop &drop) const
-/* very crude method to forward timestep the velocity
-using the velocity from the gridbox thermostate, ie.
-without interpolation to the SD position and using
-single step forward euler method to integrate dx/dt */
-{
-  const double delta3 = deltacoord(gbx.state.wvel - terminalv(drop)); // w wind + terminal velocity
-  const double delta1 = deltacoord(gbx.state.uvel); // u component of wind velocity
-  const double delta2 = deltacoord(gbx.state.vvel); // v component of wind velocity (y=2)
-
-  cfl_criteria(gbxmaps, gbx.gbxindex, delta3, delta1, delta2);
-
-  drop.coord3 += delta3;
-  drop.coord1 += delta1;
-  drop.coord2 += delta2;
-}
-
 void MoveWith2DFixedFlow::
     change_superdroplet_coords(const Maps4GridBoxes &gbxmaps,
                                const GridBox &gbx,

@@ -148,9 +148,9 @@ def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
 
     fig.tight_layout()
     if savefig:
-        fig.savefig(binpath+"/gridboxboundaries.png", dpi=400,
+        fig.savefig(binpath+"gridboxboundaries.png", dpi=400,
                     bbox_inches="tight", facecolor='w', format="png")
-        print("Figure .png saved as: "+binpath+"/gridboxboundaries.png")
+        print("Figure .png saved as: "+binpath+"gridboxboundaries.png")
     plt.show()
 
 def get_fullcell_and_cellspacing(halfcell):

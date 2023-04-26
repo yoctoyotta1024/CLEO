@@ -84,9 +84,9 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
         
     fig.tight_layout()
     if savefig:
-        fig.savefig(binpath+"/initdistribs.png", dpi=400,
+        fig.savefig(binpath+"initdistribs.png", dpi=400,
                     bbox_inches="tight", facecolor='w', format="png")
-        print("Figure .png saved as: "+binpath+"/gridboxboundaries.png")
+        print("Figure .png saved as: "+binpath+"initdistribs.png")
     plt.show()
 
 def figure_setup(coord3, coord1, coord2):

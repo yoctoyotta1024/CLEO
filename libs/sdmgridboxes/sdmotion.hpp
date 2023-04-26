@@ -111,20 +111,33 @@ public:
 
   void change_superdroplet_coords(const Maps4GridBoxes &gbxmaps,
                                   const GridBox &gbx,
-                                  Superdrop &drop) const;
+                                  Superdrop &drop) const
   /* very crude method to forward timestep the velocity
   using the velocity from the gridbox thermostate, ie.
   without interpolation to the SD position and using
   single step forward euler method to integrate dx/dt */
+  {
+  const double delta3 = deltacoord(gbx.state.wvel - terminalv(drop)); // w wind + terminal velocity
+  const double delta1 = deltacoord(gbx.state.uvel); // u component of wind velocity
+  const double delta2 = deltacoord(gbx.state.vvel); // v component of wind velocity (y=2)
+
+  cfl_criteria(gbxmaps, gbx.gbxindex, delta3, delta1, delta2);
+
+  drop.coord3 += delta3;
+  drop.coord1 += delta1;
+  drop.coord2 += delta2;
+  }
 };
 
 class Prescribed2DFlow
 {
+private:
   const double ztilda;
   const double xtilda;
   const double wamp;
   const double rhotilda;
 
+public:
   Prescribed2DFlow(const double zlength,
                    const double xlength,
                    const double wmax,
@@ -150,7 +163,6 @@ class Prescribed2DFlow
   }
 };
 
-template <VelocityFormula TerminalVelocity>
 class MoveWith2DFixedFlow
 {
 private:
@@ -159,9 +171,8 @@ private:
 
   const Prescribed2DFlow flow2d;            // method to get wvel and uvel from 2D flow field
 
-  std::pair<double, double>
-  MoveWith2DFixedFlow::predictor_corrector(const double coord3,
-                                           const double coord1) const;
+  std::pair<double, double> predictor_corrector(const double coord3,
+                                                const double coord1) const;
   /* returns change in (z,x) coordinates = (delta3, delta1)
   obtained using predictor-corrector method and velocities
   calculated from a Prescribed2DFlow */

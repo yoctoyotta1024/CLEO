@@ -10,6 +10,7 @@ def nsupers_at_domain_base(gridfile, nsupers):
                                                             return_ndims=True)
     nsupersdict = {}
     for ii in gbxbounds.keys():
+        print(ii%ndims[1]*ndims[0])
         if (ii%ndims[1]*ndims[0] == 0):
             nsupersdict[ii] = nsupers
         else:

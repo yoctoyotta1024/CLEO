@@ -72,7 +72,7 @@ SdMotion auto create_sdmotion(const int motionstep)
   //const auto terminalv = RogersYauTerminalVelocity{};
   // const auto terminalv = SimmelTerminalVelocity{};
   const auto terminalv = NullTerminalVelocity{};
-  const SdMotion auto movesedi = MoveWithSedimentation(motionstep,
+  const SdMotion auto movesedi = NoInterpMoveWithSedimentation(motionstep,
                                                      &step2dimlesstime,
                                                      terminalv);
  
