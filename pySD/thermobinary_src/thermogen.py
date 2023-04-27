@@ -86,32 +86,42 @@ class ConstUniformThermo:
     self.UVEL = UVEL                          # horizontal x velocity [m/s]
     self.VVEL = VVEL                          # horizontal y velocity [m/s]
 
-  def generate_thermo(self, gbxbounds, ndims, ntime):
 
-    ngridboxes = int(np.prod(ndims))
+  def generate_winds(self, ndims, ntime, THERMODATA):
 
-    THERMODATA = {
-      "PRESS": np.full(ngridboxes*ntime, self.PRESS),
-      "TEMP": np.full(ngridboxes*ntime, self.TEMP),
-      "qvap": np.full(ngridboxes*ntime, self.qvap),
-      "qcond": np.full(ngridboxes*ntime, self.qcond), 
-      "WVEL": np.array([]), 
-      "UVEL": np.array([]),
-      "VVEL": np.array([])
-    }
+    for VEL in ["WVEL", "UVEL", "VVEL"]:
+      THERMODATA[VEL] = np.array([])
+
+    # shape_[X]face = no. data for var defined at gridbox [X] faces
+    shape_zface = int((ndims[0]+1)*ndims[1]*ndims[2]*ntime)
+    shape_xface = int((ndims[1]+1)*ndims[2]*ndims[0]*ntime)
+    shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1]*ntime)
 
     if self.WVEL != None:
-      THERMODATA["WVEL"] =  np.full(ngridboxes*ntime, self.WVEL)
+      THERMODATA["WVEL"] =  np.full(shape_zface, self.WVEL)
 
       if self.UVEL != None:
-        THERMODATA["UVEL"] =  np.full(ngridboxes*ntime, self.UVEL)
+        THERMODATA["UVEL"] =  np.full(shape_xface, self.UVEL)
 
         if self.VVEL != None:
-          THERMODATA["VVEL"] =  np.full(ngridboxes*ntime, self.VVEL)
+          THERMODATA["VVEL"] =  np.full(shape_yface, self.VVEL)
 
-    # THERMODATA["PRESS"][0:ngridboxes] = 800 # makes all gbxs a t=0 have P=800Pa
-    # THERMODATA["PRESS"][::ngridboxes] = 800 # makes 0th gbx at all times have P=800Pa
+    return THERMODATA
 
+  def generate_thermo(self, gbxbounds, ndims, ntime):
+
+    # shape_cen = ngridboxes * ntime = no. data for var defined at gridbox centers
+    shape_cen = int(np.prod(ndims)*ntime)
+    THERMODATA = {
+      "PRESS": np.full(shape_cen, self.PRESS),
+      "TEMP": np.full(shape_cen, self.TEMP),
+      "qvap": np.full(shape_cen, self.qvap),
+      "qcond": np.full(shape_cen, self.qcond), 
+    }
+
+    THERMODATA = self.generate_winds(ndims, ntime, THERMODATA)
+    
+    print()
     return THERMODATA
 
 class SimpleThermo2Dflowfield:

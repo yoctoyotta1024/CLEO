@@ -113,7 +113,7 @@ def ctype_compatible_thermodynamics(thermodata):
   return thermodata, datatypes
 
 
-def check_datashape(thermodata, ndata, ngridboxes, ntime):
+def check_datashape(thermodata, ndata, ndims, ntime):
   ''' make sure each superdroplet attribute in data has length stated
   in ndata and that this length is compatible with the nummber of
   attributes and superdroplets expected given ndata'''
@@ -138,7 +138,10 @@ def check_datashape(thermodata, ndata, ngridboxes, ntime):
   
 def write_thermodynamics_binary(thermofile, thermogen, configfile,
                                 constsfile, gridfile):
-  
+  ''' write binarys for thermodynamic data over time on C staggered
+  grid. So that pressure, temperature, qvap and qcond are defined at
+  centres of gridboxes, whereas wind velocities are defined at faces'''
+
   if not isfile(gridfile):
     errmsg = "gridfile not found, but must be"+\
               " created before initSDsfile can be"
@@ -156,8 +159,7 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   ndata = [len(dt) for dt in thermodata.values()]
   
   thermodata, datatypes = ctype_compatible_thermodynamics(thermodata) 
-  ngridboxes = int(np.prod(ndims))
-  check_datashape(thermodata, ndata, ngridboxes, inputs["ntime"])
+  # check_datashape(thermodata, ndata, ndims, inputs["ntime"])
 
   units = [b'P', b'K', b' ', b' ']
   units += [b'm']*3 # velocity units
@@ -165,15 +167,15 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   scale_factors = np.asarray(scale_factors, dtype=np.double)
 
   filestem, filetype = thermofile.split(".")
-  ng, nt = str(ngridboxes), str(inputs["ntime"])
+  varat = ["centres"]*4 + ["z-faces", "x-faces", "y-faces"]
   for v, var in enumerate(thermodata.keys()):
     if thermodata[var] != []:
-      metastr = 'Variable in this file is flattened array of '+var+\
-                ' with original dimensions [ngridboxes, time] = ['+\
-                ng+', '+nt+'] (ie. file contains '+str(ndata[v])+\
-                ' datapoints corresponding to '+ng+' gridboxes over '+\
-                nt+' time steps)'
-      
+      metastr = 'This file is flattened array of '+var+' variable'+\
+                ' for '+str(inputs["ntime"])+' timesteps defined at'+\
+                ' grid '+varat[v]+' for grid with dims: '+str(ndims)+\
+                ' (ie. file contains '+str(ndata[v])+' datapoints'+\
+                ' for '+var+' defined at gridbox '+varat[v]+\
+                ' over '+str(inputs["ntime"])+' time steps)'
       filename = filestem+"_"+var+"."+filetype
       writebinary.writebinary(filename, thermodata[var],
                               [ndata[v]], [datatypes[v]],
