@@ -121,7 +121,6 @@ class ConstUniformThermo:
 
     THERMODATA = self.generate_winds(ndims, ntime, THERMODATA)
     
-    print()
     return THERMODATA
 
 class SimpleThermo2Dflowfield:

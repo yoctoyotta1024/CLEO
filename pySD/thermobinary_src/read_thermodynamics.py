@@ -69,31 +69,51 @@ class Thermo4D:
 
         return np.mean(var, axis=(0,1,2))
 
-def read_dimless_thermodynamics_binary(thermofile, ngridboxes,
+def thermovar_from_binary(var, thermofiles, shape,
+                          ntime, ndims, dtype):
+  
+  filestem, filetype = thermofiles.split(".")
+  filename = filestem+"_"+var+"."+filetype
+  data, ndata = readbinary(filename)
+
+  if ndata != int(np.prod(shape)):
+    err = "incorrect data length for "+var+" defined at"+\
+                    " gridbox centres for "+str(ntime)+" timesteps"+\
+                    " on grid with dims = "+str(ndims)
+    raise ValueError(err)
+  else:
+    data = np.reshape(np.asarray(data, dtype=dtype), shape)
+  
+  return data
+
+def read_dimless_thermodynamics_binary(thermofiles, ndims,
                                        ntime, SDnspace):
 
-  datatypes = [np.double]*7
-  vars = ["press", "temp", "qvap", "qcond"]
-  if SDnspace >= 1:
-    vars += ["wvel"]
-    if SDnspace >= 2:
-      vars += ["uvel"]
-      if SDnspace >= 3:
-        vars += ["vvel"]
+  # expected lengths of data defined on gridbox centres or faces 
+  cen = [ntime, int(np.prod(ndims))]
+  zface = [ntime, int((ndims[0]+1)*ndims[1]*ndims[2])]
+  xface = [ntime, int((ndims[1]+1)*ndims[2]*ndims[0])]
+  yface = [ntime, int((ndims[2]+1)*ndims[0]*ndims[1])]
 
   thermodata = {} 
-  filestem, filetype = thermofile.split(".")
-  for v, var in enumerate(vars):
-    filename = filestem+"_"+var+"."+filetype
-    data, ndata = readbinary(filename)
-
-    if ndata != [ngridboxes*ntime]:
-      raise ValueError("incorrect data length for "+var+" given "+
-                      str(ngridboxes)+ " gridboxes and "+str(ntime)+\
-                        " timesteps")
-    data = np.asarray(data, dtype=datatypes[v])
-    thermodata[var] = np.reshape(data, [ntime, ngridboxes])
   
+  vars = ["press", "temp", "qvap", "qcond"]
+  datatypes = [np.double]*4
+  for v, var in enumerate(vars): 
+    thermodata[var] = thermovar_from_binary(var, thermofiles, cen,
+                                            ntime, ndims, datatypes[v])
+
+  datatypes = [np.double]*3
+  if SDnspace >= 1:
+    thermodata["wvel"] = thermovar_from_binary("wvel", thermofiles, zface,
+                                              ntime, ndims, datatypes[0]) 
+    if SDnspace >= 2:
+      thermodata["uvel"] = thermovar_from_binary("uvel", thermofiles, xface,
+                                                ntime, ndims, datatypes[1])
+      if SDnspace >= 3:
+        thermodata["vvel"] = thermovar_from_binary("vvel", thermofiles, yface,
+                                                  ntime, ndims, datatypes[2])
+
   return thermodata
 
 def get_thermodynamics_from_thermofile(thermofile, ndims, inputs=False,
@@ -102,8 +122,7 @@ def get_thermodynamics_from_thermofile(thermofile, ndims, inputs=False,
   if not inputs:  
     inputs = thermoinputsdict(configfile, constsfile)
 
-  ngridboxes = int(np.prod(ndims))
-  thermodata = read_dimless_thermodynamics_binary(thermofile, ngridboxes, 
+  thermodata = read_dimless_thermodynamics_binary(thermofile, ndims, 
                                                   inputs["ntime"],
                                                   inputs["SDnspace"]) 
   dth = DimlessThermodynamics(inputs=inputs)

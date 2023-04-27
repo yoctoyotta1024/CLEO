@@ -61,3 +61,4 @@ if isfigures[0]:
     rthermo.plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
                                           thermofile, binpath,
                                           isfigures[1])
+[27150, 27150, 27150, 27150, 28960, 32580, 40725]
