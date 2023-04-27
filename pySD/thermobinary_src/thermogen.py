@@ -53,8 +53,8 @@ def sratio2qvap(sratio, press, temp, Mr_ratio):
 def divfree_flowfield2D(WMAX, rhotilda, Zlength, Xlength, 
                         ZCOORDS, XCOORDS):
 
-    ztilda = np.pi * ZCOORDS / Zlength 
-    xtilda = 2* np.pi * XCOORDS / Xlength 
+    ztilda = np.pi * ZCOORDS / Zlength
+    xtilda = 2* np.pi * XCOORDS / Xlength
     VELfactor = WMAX / rhotilda
         
     WVEL = 2 * VELfactor * np.sin(ztilda) * np.sin(xtilda)
@@ -90,24 +90,26 @@ class ConstUniformThermo:
 
     ngridboxes = int(np.prod(ndims))
 
+    ncen = int(ngridboxes*ntime)
     THERMODATA = {
-      "PRESS": np.full(ngridboxes*ntime, self.PRESS),
-      "TEMP": np.full(ngridboxes*ntime, self.TEMP),
-      "qvap": np.full(ngridboxes*ntime, self.qvap),
-      "qcond": np.full(ngridboxes*ntime, self.qcond), 
+      "PRESS": np.full(ncen, self.PRESS),
+      "TEMP": np.full(ncen, self.TEMP),
+      "qvap": np.full(ncen, self.qvap),
+      "qcond": np.full(ncen, self.qcond), 
       "WVEL": np.array([]), 
       "UVEL": np.array([]),
       "VVEL": np.array([])
     }
 
     if self.WVEL != None:
-      THERMODATA["WVEL"] =  np.full(ngridboxes*ntime, self.WVEL)
+      nface = int(2*ngridboxes*ntime)
+      THERMODATA["WVEL"] =  np.full(nface, self.WVEL)
 
       if self.UVEL != None:
-        THERMODATA["UVEL"] =  np.full(ngridboxes*ntime, self.UVEL)
+        THERMODATA["UVEL"] =  np.full(nface, self.UVEL)
 
         if self.VVEL != None:
-          THERMODATA["VVEL"] =  np.full(ngridboxes*ntime, self.VVEL)
+          THERMODATA["VVEL"] =  np.full(nface, self.VVEL)
 
     # THERMODATA["PRESS"][0:ngridboxes] = 800 # makes all gbxs a t=0 have P=800Pa
     # THERMODATA["PRESS"][::ngridboxes] = 800 # makes 0th gbx at all times have P=800Pa
@@ -154,18 +156,20 @@ class SimpleThermo2Dflowfield:
       
       qvap = self.generate_qvap_profile(zfulls)
 
+      ncen = int(ngridboxes*ntime)
       THERMODATA = {
-        "PRESS": np.full(ngridboxes*ntime, self.PRESS),
-        "TEMP": np.full(ngridboxes*ntime, self.TEMP),
+        "PRESS": np.full(ncen, self.PRESS),
+        "TEMP": np.full(ncen, self.TEMP),
         "qvap": np.tile(qvap, ntime),
-        "qcond": np.full(ngridboxes*ntime, self.qcond), 
+        "qcond": np.full(ncen, self.qcond), 
         "WVEL": np.array([]), 
         "UVEL": np.array([]),
         "VVEL": np.array([])
       }
 
       if self.WMAX != None:
-        zhalfs, xhalfs, yhalfs = rgrid.halfcoords_forallgridboxes(gbxbounds, ndims)
+        zhalfs, xhalfs, yhalfs = rgrid.halfcoords_forallgridboxes(gbxbounds, 
+                                                                  ndims)
         WVEL, UVEL = divfree_flowfield2D(self.WMAX, 1.0, self.Zlength, 
                                           self.Xlength, zhalfs, xhalfs)
         THERMODATA["WVEL"] =  np.tile(WVEL, ntime)

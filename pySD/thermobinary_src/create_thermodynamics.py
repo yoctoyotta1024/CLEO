@@ -119,34 +119,28 @@ def check_datashape(thermodata, ndata, ndims, ntime):
   attributes and superdroplets expected given ndata'''
  
   ngridboxes = int(np.prod(ndims))
-  nedgs = [n+1 for n in ndims]
   ndatacorr = {
     "c": int(ngridboxes*ntime), # if defined at gridbox centres (C-staggered)
-    "fz": int(nedgs[0]*ndims[1]*ndims[2]*ntime), # z face on C-staggered grid (w velocity) 
-    "fx": int(nedgs[1]*ndims[2]*ndims[0]*ntime),  # x face (u velocity)
-    "fy": int(nedgs[2]*ndims[1]*ndims[0]*ntime)  # y face (v velocity)
+    "f": int(2*ngridboxes*ntime), # face on C-staggered grid (wind velocity) 
   }
 
   for var in ["press", "temp", "qvap", "qcond"]:
-    if len(thermodata[var]) != ndatacorr["c"]:
+    lenvar = len(thermodata[var])
+    if lenvar != ndatacorr["c"]:
       err = "\n------ ERROR! -----\n"+\
-            var+" in thermodynamics data is not the"+\
+            str(lenvar)+" "+var+" in thermodynamics data is not the"+\
               " expected length: ntimesteps*ngridboxes = "+\
-                str(ndatacorr["centre"])+\
+                str(ndatacorr["c"])+\
                 "\n---------------------\n"
       raise ValueError(err)
   
-  print([len(d) for d in thermodata.values()])
-  print(ndatacorr, ndims, nedgs)
-  for var, facelen in zip(["wvel", "uvel", "vvel"], 
-                          [ndatacorr["fz"], ndatacorr["fx"],
-                           ndatacorr["fy"]]):
+  for var in ["wvel", "uvel", "vvel"]:
     lenvel = len(thermodata[var])
-    if np.logical_and(lenvel, lenvel != facelen):
+    if np.logical_and(lenvel, lenvel != ndatacorr["f"]):
           err = "\n------ ERROR! -----\n"+\
-            var+" in thermodynamics data is not the"+\
+            str(lenvel)+" "+var+" in thermodynamics data is not the"+\
               " expected length: ntimesteps*(ngridboxes+1) = "+\
-                str(facelen)+\
+                str(ndatacorr["f"])+\
                 "\n---------------------\n"
           raise ValueError(err)
   

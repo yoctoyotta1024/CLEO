@@ -58,9 +58,13 @@ def halfcoords_forallgridboxes(gbxbounds, ndims):
 
     zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
 
-    zhalfcoords = np.tile(zhalf, int(ndims[1]*ndims[2])) # zfull of every gridbox in order of gbxindex
-    xhalfcoords = np.tile(np.repeat(xhalf, ndims[0]), int(ndims[2]))
-    yhalfcoords = np.repeat(yhalf, ndims[0]*ndims[1])
+    zhalfcoords = np.repeat(zhalf, 2)[1:-1]
+    xhalfcoords = np.repeat(xhalf, 2)[1:-1]
+    yhalfcoords = np.repeat(yhalf, 2)[1:-1]
+
+    zhalfcoords = np.tile(zhalfcoords, int(ndims[1]*ndims[2])) # zhalf of every gridbox in order of gbxindex
+    xhalfcoords = np.tile(np.repeat(xhalfcoords, ndims[0]), int(ndims[2]))
+    yhalfcoords = np.repeat(yhalfcoords, ndims[0]*ndims[1])
 
     return zhalfcoords, xhalfcoords, yhalfcoords
 
