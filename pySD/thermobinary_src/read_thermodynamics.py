@@ -166,7 +166,7 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
 
     thermodata = get_thermodynamics_from_thermofile(thermofile, ndims,
                                                     inputs=inputs)
-    
+
     plot_1dprofiles(zfull, thermodata, binpath, savefig)
     
     xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]

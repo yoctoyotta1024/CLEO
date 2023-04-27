@@ -54,22 +54,17 @@ def sratio2qvap(sratio, press, temp, Mr_ratio):
 def divfree_flowfield2D(wmax, rhotilda, zlength, xlength, 
                         gbxbounds, ndims):
 
-    # # # shape_[X]face = no. data for var defined at gridbox [X] faces
-    shape_zface = int((ndims[0]+1)*ndims[1]*ndims[2])
-    shape_xface = int((ndims[1]+1)*ndims[2]*ndims[0])
-
-
     zfaces, xcens_z = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'z')[0:2] 
-    xfaces, zcens_x = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'x')[0:2] 
+    zcens_x, xfaces = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'x')[0:2] 
     
     ztilda = zlength / np.pi
-    xtilda = xlength / 2* np.pi
-    velfactor = wmax / rhotilda
-        
-    WVEL = 2 * velfactor * np.sin(zfaces / ztilda) * np.sin(xcens_z/xtilda)
+    xtilda = xlength / (2*np.pi)
+    wamp = 2 * wmax
+
+    WVEL = wamp / rhotilda * np.sin(zfaces / ztilda) * np.sin(xcens_z / xtilda)
     
-    UVEL = velfactor *  xlength /  zlength
-    UVEL =  UVEL * np.cos(zcens_x/ztilda) * np.cos(xfaces/xtilda)
+    UVEL = wamp / rhotilda * xtilda / ztilda
+    UVEL = UVEL * np.cos(zcens_x/ztilda) * np.cos(xfaces/xtilda)
 
     return WVEL, UVEL
   
