@@ -39,13 +39,16 @@ class ThermoOnGrid:
 
     if "wvel" in thermodata.keys():
         self.wvel = np.reshape(thermodata["wvel"], zface) 
-        self.vars += ["wvel"]
+        self.wvel_cens = (self.wvel[:,:,:,1:] + self.wvel[:,:,:,:-1])/2
+        self.vars += ["wvel", "wvel_cens"]
         if "uvel" in thermodata.keys():
             self.uvel = np.reshape(thermodata["uvel"], xface) 
-            self.vars += ["uvel"]
+            self.uvel_cens = (self.uvel[:,:,1:,:] + self.uvel[:,:,:-1,:])/2
+            self.vars += ["uvel", "uvel_cens"]
             if "vvel" in thermodata.keys():
                 self.vvel = np.reshape(thermodata["vvel"], yface)  
-                self.vars += ["vvel"]
+                self.vvel_cens = (self.vvel[:,1:,:,:] + self.vvel[:,:-1,:,:])/2
+                self.vars += ["vvel", "vvel_cens"]
 
   def __getitem__(self, key):
     if key not in self.vars:
@@ -59,6 +62,7 @@ class ThermoOnGrid:
       return self.qvap
     elif key == "qcond":
       return self.qcond
+    
     elif key == "wvel":
       return self.wvel
     elif key == "uvel":
@@ -66,13 +70,27 @@ class ThermoOnGrid:
     elif key == "vvel":
       return self.vvel
 
-  def meanytime(self, var):
+    elif key == "wvel_cens":
+      return self.wvel_cens
+    elif key == "uvel_cens":
+      return self.uvel_cens
+    elif key == "vvel_cens":
+      return self.vvel_cens
+    
+  def xymean(self, var):
+    '''mean over x and y'''
 
-      return np.mean(var, axis=(0,1))
+    return np.mean(var, axis=(1,2)) #d ims [time, z]
+    
+  def ytmean(self, var):
+    '''mean over time and y'''
 
-  def meanxytime(self, var):
+    return np.mean(var, axis=(0,1)) # dims [x, z]
 
-      return np.mean(var, axis=(0,1,2))
+  def xytmean(self, var):
+    '''mean over time, x and y'''
+
+    return np.mean(var, axis=(0,1,2)) # dims [z]
 
 def thermovar_from_binary(var, thermofiles, shape,
                           ntime, ndims, dtype):
@@ -134,7 +152,7 @@ def get_thermodynamics_from_thermofile(thermofile, ndims, inputs=False,
 
   return thermodata # data with units in 4D arrays with dims [time, y, x, z]
 
-def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
+def plot_thermodynamics(constsfile, configfile, gridfile,
                                   thermofile, binpath, savefig):
 
     plt.rcParams.update({'font.size': 14})
@@ -159,17 +177,20 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
 
 def plot_1dprofiles(zfull, thermodata, binpath, savefig):
     
-    vars = thermodata.vars
+    vars = ["press", "temp", "qvap", "qcond",
+            "wvel_cens", "uvel_cens", "vvel_cens"]
     units = [" /Pa", " /K", "", ""]+[" /ms$^{-1}$"]*3
+    
     fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(12, 6))
     axs = axs.flatten()
 
-    handles, labels = [], []
+    handles = []
     for v, var in enumerate(vars):
-      var1d_alltime = np.mean(thermodata[var], axis=(1,2)) # z profile at each time
-      line = axs[v].plot(var1d_alltime.T, zfull[None,:].T, marker="x")
-      axs[v].set_xlabel(vars[v]+units[v])  
-      handles.append(line)
+      if var in thermodata.vars:
+        profalltime = thermodata.xymean(thermodata[var]) # 1d profile at all times
+        line = axs[v].plot(profalltime.T, zfull[None,:].T, marker="x")
+        axs[v].set_xlabel(vars[v]+units[v])  
+        handles.append(line)
 
     axs[0].set_ylabel("z /km")
     axs[4].set_ylabel("z /km")
@@ -195,27 +216,18 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
   axs = axs.flatten()
   
   for v, var in enumerate(vars):
-    mean2d = thermodata.meanytime(thermodata[var]) #avg over time and y axes
+    mean2d = thermodata.ytmean(thermodata[var]) #avg over time and y axes
     pcm = axs[v].pcolormesh(xxh[:,:], zzh[:,:], mean2d, cmap=cmaps[v])
     plt.colorbar(pcm, ax=axs[v], location="top", label=var+units[v])
 
   relh, supersat = relative_humidity(thermodata.press, thermodata.temp,
                                       thermodata.qvap, inputs["Mr_ratio"])
   
-  meanrelh = thermodata.meanytime(relh)
-  pcm =axs[4].pcolormesh(xxh[:,:], zzh[:,:], meanrelh, cmap=cmaps[4])                  
-  cb = plt.colorbar(pcm, ax=axs[4], location="top", label="relative humidity")
-  axs[4].contour(xxf, zzf, meanrelh, levels=[1.0],
-                linestyles=["--"], colors=["grey"])
-  cb.ax.plot([1.0]*2, [0, 1], color='grey', linewidth=0.95)
-
-  meansupersat = thermodata.meanytime(supersat)*100
-  pcm = axs[5].pcolormesh(xxh[:,:], zzh[:,:], meansupersat, cmap=cmaps[5])
-  cb = plt.colorbar(pcm, ax=axs[5], location="top", label="% supersaturation")
-  axs[5].contour(xxf, zzf, meansupersat, levels=[0.0],
-                linestyles=["--"], colors=["grey"])
-  cb.ax.plot([0.0]*2, [0, 1], color='grey', linewidth=0.95)
-
+  relh = thermodata.ytmean(relh)
+  supersat = thermodata.ytmean(supersat)
+  relh_supersat_colomaps([axs[4], axs[5]], zzh, xxh, zzf, xxf,
+                            relh, supersat, [cmaps[4], cmaps[5]])
+  
   for ax in axs:
     ax.set_aspect("equal")
 
@@ -231,6 +243,19 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
                   bbox_inches="tight", facecolor='w', format="png")
       print("Figure .png saved as: "+binpath+savename)
   plt.show()
+
+def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf, relh, supersat, cmaps):
+  
+  supersat = supersat*100 # convert supersaturation to %
+  
+  label = ["relative humidity", "% supersaturation"]
+  contour = [1.0, 0.0]
+  for v, var in enumerate([relh, supersat]):
+    pcm = axs[v].pcolormesh(xxh, zzh, var, cmap=cmaps[v])                  
+    cb = plt.colorbar(pcm, ax=axs[v], location="top", label=label[v])
+    axs[v].contour(xxf, zzf, var, levels=[contour[v]],
+                  linestyles=["--"], colors=["grey"])
+    cb.ax.plot([contour]*2, [0, 1], color='grey', linewidth=0.95)
 
 def plot_2dwindfield(zzh, xxh, zzf, xxf, wvel4d, uvel4d, 
                      binpath, savefig):

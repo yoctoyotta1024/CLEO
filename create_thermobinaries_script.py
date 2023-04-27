@@ -58,7 +58,7 @@ cthermo.write_thermodynamics_binary(thermofile, gen, configfile,
                                     constsfile, gridfile)
 
 if isfigures[0]:
-    rthermo.plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
+    rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                                           thermofile, binpath,
                                           isfigures[1])
 [27150, 27150, 27150, 27150, 28960, 32580, 40725]
