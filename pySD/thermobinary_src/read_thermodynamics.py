@@ -172,8 +172,10 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
     xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
     xxf, zzf = np.meshgrid(xfull, zfull, indexing="ij") # dims [xdims, zdims]
     plot_2dcolormaps(zzh, xxh, zzf, xxf, thermodata, inputs, binpath, savefig)
-    plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel"],
-                    thermodata["uvel"], binpath, savefig)
+    
+    if inputs["SDnspace"] >= 2:
+      plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel_cens"],
+                    thermodata["uvel_cens"], binpath, savefig)
 
 def plot_1dprofiles(zfull, thermodata, binpath, savefig):
     
@@ -210,9 +212,9 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
 
   vars = ["press", "temp", "qvap", "qcond"]
   units = [" /Pa", " /K", "", ""]
-  cmaps = ["PRGn", "RdBu", "BrBG", "BrBG", "Blues", "Blues"]
+  cmaps = ["PRGn", "RdBu", "BrBG", "BrBG"]
   
-  fig, axs = plt.subplots(nrows=2, ncols=3,  figsize=(8,6))
+  fig, axs = plt.subplots(nrows=2, ncols=3,  figsize=(13,8))
   axs = axs.flatten()
   
   for v, var in enumerate(vars):
@@ -223,10 +225,9 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
   relh, supersat = relative_humidity(thermodata.press, thermodata.temp,
                                       thermodata.qvap, inputs["Mr_ratio"])
   
-  relh = thermodata.ytmean(relh)
-  supersat = thermodata.ytmean(supersat)
-  relh_supersat_colomaps([axs[4], axs[5]], zzh, xxh, zzf, xxf,
-                            relh, supersat, [cmaps[4], cmaps[5]])
+  cmaps = ["Blues", "Blues"]
+  relh_supersat_colomaps([axs[4], axs[5]], zzh, xxh, zzf, xxf, cmaps,
+                          thermodata.ytmean(relh), thermodata.ytmean(supersat))
   
   for ax in axs:
     ax.set_aspect("equal")
@@ -244,7 +245,7 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
       print("Figure .png saved as: "+binpath+savename)
   plt.show()
 
-def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf, relh, supersat, cmaps):
+def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf, cmaps, relh, supersat):
   
   supersat = supersat*100 # convert supersaturation to %
   
@@ -257,27 +258,23 @@ def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf, relh, supersat, cmaps):
                   linestyles=["--"], colors=["grey"])
     cb.ax.plot([contour]*2, [0, 1], color='grey', linewidth=0.95)
 
-def plot_2dwindfield(zzh, xxh, zzf, xxf, wvel4d, uvel4d, 
+def plot_2dwindfield(zzh, xxh, zzf, xxf, wvel_cens, uvel_cens, 
                      binpath, savefig):
   
-  cmaps = ["coolwarm"]*3
-  meanwvel = np.mean(wvel4d, axis=(0,1)) #avg over y and time axes
-  meanuvel = np.mean(uvel4d, axis=(0,1))
-  norm = np.sqrt(meanwvel**2 + meanuvel**2)
+  wcen = np.mean(wvel_cens, axis=(0,1)) # avg over y and time axes
+  ucen = np.mean(uvel_cens, axis=(0,1))
+  norm = np.sqrt(wcen**2 + ucen**2)
 
   fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(9,6))
   axs = axs.flatten()
 
-  pcm = axs[0].pcolormesh(xxh[:,:], zzh[:,:], meanwvel, cmap=cmaps[0])
-  plt.colorbar(pcm, ax=axs[0], location="top", label="w / m s$^{-1}$") 
-
-  pcm = axs[1].pcolormesh(xxh[:,:], zzh[:,:], meanuvel, cmap=cmaps[0])
-  plt.colorbar(pcm, ax=axs[1], location="top", label="u / m s$^{-1}$")
-
-  pcm = axs[2].pcolormesh(xxh[:,:], zzh[:,:], norm, cmap=cmaps[0])
-  plt.colorbar(pcm, ax=axs[2], location="top",
-               label="|wind velocity| / m s$^{-1}$")
-  axs[2].quiver(xxf, zzf, meanuvel, meanwvel)
+  label = ["w", "u", "|wind velocity|"]
+  units = " / m s$^{-1}$"
+  cmaps = ["coolwarm"]*3
+  for v, vel in enumerate([wcen, ucen, norm]):
+    pcm = axs[v].pcolormesh(xxh, zzh, vel, cmap=cmaps[v])
+    plt.colorbar(pcm, ax=axs[v], location="top", label=label[v]+units) 
+  axs[2].quiver(xxf, zzf, ucen, wcen)
   
   axs[0].set_ylabel("z /km")
   for ax in axs:
