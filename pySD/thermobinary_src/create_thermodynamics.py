@@ -113,49 +113,29 @@ def ctype_compatible_thermodynamics(thermodata):
   return thermodata, datatypes
 
 
-def check_datashape(thermodata, ndata, ndims, ntime):
+def check_datashape(thermodata, ndata, ngridboxes, ntime):
   ''' make sure each superdroplet attribute in data has length stated
   in ndata and that this length is compatible with the nummber of
   attributes and superdroplets expected given ndata'''
- 
-  ngridboxes = int(np.prod(ndims))
-  nedgs = [n+1 for n in ndims]
-  ndatacorr = {
-    "c": int(ngridboxes*ntime), # if defined at gridbox centres (C-staggered)
-    "fz": int(nedgs[0]*ndims[1]*ndims[2]*ntime), # z face on C-staggered grid (w velocity) 
-    "fx": int(nedgs[1]*ndims[2]*ndims[0]*ntime),  # x face (u velocity)
-    "fy": int(nedgs[2]*ndims[1]*ndims[0]*ntime)  # y face (v velocity)
-  }
-
-  for var in ["press", "temp", "qvap", "qcond"]:
-    if len(thermodata[var]) != ndatacorr["c"]:
-      err = "\n------ ERROR! -----\n"+\
-            var+" in thermodynamics data is not the"+\
-              " expected length: ntimesteps*ngridboxes = "+\
-                str(ndatacorr["centre"])+\
-                "\n---------------------\n"
-      raise ValueError(err)
   
-  print([len(d) for d in thermodata.values()])
-  print(ndatacorr, ndims, nedgs)
-  for var, facelen in zip(["wvel", "uvel", "vvel"], 
-                          [ndatacorr["fz"], ndatacorr["fx"],
-                           ndatacorr["fy"]]):
-    lenvel = len(thermodata[var])
-    if np.logical_and(lenvel, lenvel != facelen):
-          err = "\n------ ERROR! -----\n"+\
-            var+" in thermodynamics data is not the"+\
-              " expected length: ntimesteps*(ngridboxes+1) = "+\
-                str(facelen)+\
-                "\n---------------------\n"
-          raise ValueError(err)
+  err=''
+  notnull = np.where(np.asarray(ndata)!=0)
+  lendata = [len(d) != ngridboxes*ntime for d in thermodata.values()]
   
-  lens = [len(d) for d in thermodata.values()]
-  if lens != ndata:
-    err = "inconsistent dimensions of thermodynamic data: "+\
-            str(lens)+" compared with given lengths: "+str(ndata)   
-    raise ValueError(err) 
+  if any([n != ndata[0] for n in np.asarray(ndata)[notnull]]):
+    err += "\n------ ERROR! -----\n"+\
+          "not all variables in thermodynamics data are the"+\
+            " same length, ndata = "+str(ndata)+\
+              "\n---------------------\n"
+  
+  if any(np.asarray(lendata)[notnull]): 
+    err += "inconsistent dimensions of thermodynamic data: "+\
+            str(ndata)+". Lengths should all = "+str(ngridboxes*ntime)+\
+            " since data should be list of [ntimesteps]*ngridboxes"   
 
+  if err: 
+    raise ValueError(err)
+  
 def write_thermodynamics_binary(thermofile, thermogen, configfile,
                                 constsfile, gridfile):
   
@@ -177,7 +157,7 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   
   thermodata, datatypes = ctype_compatible_thermodynamics(thermodata) 
   ngridboxes = int(np.prod(ndims))
-  check_datashape(thermodata, ndata, ndims, inputs["ntime"])
+  check_datashape(thermodata, ndata, ngridboxes, inputs["ntime"])
 
   units = [b'P', b'K', b' ', b' ']
   units += [b'm']*3 # velocity units
