@@ -39,13 +39,13 @@ WMAX = 0.6 # [m/s]
 VVEL = None # [m/s]
 Zlength = 1500 # [m]
 Xlength = 1500 # [m]
-inputs = cthermo.thermoinputsdict(configfile, constsfile)
 
 qvapmethod, sratio = "sratio", 0.85
 zbase = 750
-gen = thermogen.SimpleThermo2Dflowfield(PRESS0, THETA, "sratio", qcond, WMAX,
-                                        Zlength, Xlength, VVEL, zbase,
-                                        sratio, constsfile)
+gen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
+                                        THETA, "sratio", zbase, sratio,
+                                        qcond, WMAX, Zlength, Xlength,
+                                        VVEL)
 
 # qvap = 0.0075 # [Kg/Kg]
 # gen = thermogen.ConstHydrostaticAdiabat(PRESS0, THETA, qvap, qcond, WMAX, 
@@ -61,4 +61,3 @@ if isfigures[0]:
     rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                                           thermofile, binpath,
                                           isfigures[1])
-[27150, 27150, 27150, 27150, 28960, 32580, 40725]

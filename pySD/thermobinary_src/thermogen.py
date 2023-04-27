@@ -54,11 +54,13 @@ def sratio2qvap(sratio, press, temp, Mr_ratio):
 def divfree_flowfield2D(wmax, rhotilda, zlength, xlength, 
                         gbxbounds, ndims):
 
-    # # shape_[X]face = no. data for var defined at gridbox [X] faces
-    # shape_zface = int((ndims[0]+1)*ndims[1]*ndims[2]*ntime)
-    # shape_xface = int((ndims[1]+1)*ndims[2]*ndims[0]*ntime)
+    # # # shape_[X]face = no. data for var defined at gridbox [X] faces
+    shape_zface = int((ndims[0]+1)*ndims[1]*ndims[2])
+    shape_xface = int((ndims[1]+1)*ndims[2]*ndims[0])
 
-    zhalf, xhalf, yhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds)
+    zfaces, xcens_z = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'z')[0:2] 
+    xfaces, zcens_x = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'x')[0:2] 
+    rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'y')
     
     ztilda = zlength / np.pi
     xtilda = xlength / 2* np.pi
@@ -178,16 +180,16 @@ class SimpleThermo2Dflowfield:
       rho_dry = THERMODATA["PRESS"][0] / (THERMODATA["TEMP"][0] * beta)
       rhotilda = rho_dry / self.RHO0
       
-    #   WVEL, UVEL = divfree_flowfield2D(self.WMAX, rhotilda, self.Zlength, 
-    #                                   self.Xlength, gbxbounds, ndims)
-    #   THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
-    #   THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
+      WVEL, UVEL = divfree_flowfield2D(self.WMAX, rhotilda, self.Zlength, 
+                                      self.Xlength, gbxbounds, ndims)
+      THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
+      THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
 
-    #   if self.VVEL != None:
-    #     shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1]*ntime)
-    #     THERMODATA["VVEL"] = np.full(shape_yface, self.VVEL)
+      if self.VVEL != None:
+        shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1]*ntime)
+        THERMODATA["VVEL"] = np.full(shape_yface, self.VVEL)
 
-    # return THERMODATA
+    return THERMODATA
   
   def generate_thermo(self, gbxbounds, ndims, ntime):
 

@@ -44,6 +44,7 @@ def fullcell_fromhalfcoords(zhalf, xhalf, yhalf):
     return zfull, xfull, yfull
 
 def fullcoords_forallgridboxes(gbxbounds, ndims):
+    ''' returns (x,y,z) centres of gridboxes in domain '''
 
     zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
     zfull, xfull, yfull = fullcell_fromhalfcoords(zhalf, xhalf, yhalf)
@@ -54,8 +55,36 @@ def fullcoords_forallgridboxes(gbxbounds, ndims):
 
     return zfullcoords, xfullcoords, yfullcoords
 
-def allgbxfullcoords_fromgridfile(gridfile, COORD0=False):
+def coords_forgridboxfaces(gbxbounds, ndims, face): 
+    ''' returns (x,y,z) coordinates of gridboxes faces
+    in a particular direction '''
 
+    ndims = [int(n) for n in ndims]
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
+    zfull, xfull, yfull = fullcell_fromhalfcoords(zhalf, xhalf, yhalf)
+    
+    if face == "z":
+        nz, nx, ny = ndims[0]+1, ndims[1], ndims[2]
+        zfaces = np.tile(zhalf, nx*ny) # zfull of every gridbox in order of gbxindex
+        xfulls = np.tile(np.repeat(xfull, nz), ny)
+        yfulls = np.repeat(yfull, nz*nx)
+        return zfaces, xfulls, yfulls
+    
+    elif face == "x":
+        nz, nx, ny = ndims[0], ndims[1]+1, ndims[2]
+        zfulls = np.tile(zfull, nx*ny) # zfull of every gridbox in order of gbxindex
+        xfaces = np.tile(np.repeat(xhalf, nz), ny)
+        yfulls = np.repeat(yfull, nz*nx)
+        return zfulls, xfaces, yfulls
+    
+    elif face == "y":
+        nz, nx, ny = ndims[0], ndims[1], ndims[2]+1
+        zfulls = np.tile(zfull, nx*ny) # zfull of every gridbox in order of gbxindex
+        xfulls = np.tile(np.repeat(xfull, nz), ny)
+        yfaces = np.repeat(yhalf, nz*nx)
+        return zfulls, xfulls, yfaces
+    
+def allgbxfullcoords_fromgridfile(gridfile, COORD0=False):
     gbxbounds, ndims = read_dimless_gbxboundaries_binary(gridfile,
                                                         COORD0=COORD0,
                                                         return_ndims=True)
