@@ -130,9 +130,10 @@ def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
     
     plot_1dprofiles(zfull, thermodata, binpath, savefig)
     
-    plot_2dcolormaps(zhalf, xhalf, thermodata, inputs, binpath, savefig)
-
-    plot_2dwindfield(zfull, xfull, zhalf, xhalf, thermodata["wvel"],
+    xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
+    xxf, zzf = np.meshgrid(xfull, zfull, indexing="ij") # dims [xdims, zdims]
+    plot_2dcolormaps(zzh, xxh, zzf, xxf, thermodata, inputs, binpath, savefig)
+    plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel"],
                     thermodata["uvel"], binpath, savefig)
 
 def plot_1dprofiles(zfull, thermodata, binpath, savefig):
@@ -162,12 +163,12 @@ def plot_1dprofiles(zfull, thermodata, binpath, savefig):
         print("Figure .png saved as: "+binpath+savename)
     plt.show()
 
-def plot_2dcolormaps(zhalf, xhalf, thermodata, inputs, binpath, savefig):
+def plot_2dcolormaps(zzh, xxh, zzf, xxf,
+                     thermodata, inputs, binpath, savefig):
 
   vars = ["press", "temp", "qvap", "qcond"]
   units = [" /Pa", " /K", "", ""]
   cmaps = ["PRGn", "RdBu", "BrBG", "BrBG", "Blues", "Blues"]
-  xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
   
   fig, axs = plt.subplots(nrows=2, ncols=3,  figsize=(8,6))
   axs = axs.flatten()
@@ -180,12 +181,19 @@ def plot_2dcolormaps(zhalf, xhalf, thermodata, inputs, binpath, savefig):
   relh, supersat = relative_humidity(thermodata.press, thermodata.temp,
                                       thermodata.qvap, inputs["Mr_ratio"])
   
-  pcm =axs[4].pcolormesh(xxh[:,:], zzh[:,:],
-                    thermodata.meanytime(relh), cmap=cmaps[4])
-  plt.colorbar(pcm, ax=axs[4], location="top", label="relative humidity")
-  pcm = axs[5].pcolormesh(xxh[:,:], zzh[:,:],
-                    thermodata.meanytime(supersat)*100, cmap=cmaps[5])
-  plt.colorbar(pcm, ax=axs[5], location="top", label="% supersaturation")
+  meanrelh = thermodata.meanytime(relh)
+  pcm =axs[4].pcolormesh(xxh[:,:], zzh[:,:], meanrelh, cmap=cmaps[4])                  
+  cb = plt.colorbar(pcm, ax=axs[4], location="top", label="relative humidity")
+  axs[4].contour(xxf, zzf, meanrelh, levels=[1.0],
+                linestyles=["--"], colors=["grey"])
+  cb.ax.plot([1.0]*2, [0, 1], color='grey', linewidth=0.95)
+
+  meansupersat = thermodata.meanytime(supersat)*100
+  pcm = axs[5].pcolormesh(xxh[:,:], zzh[:,:], meansupersat, cmap=cmaps[5])
+  cb = plt.colorbar(pcm, ax=axs[5], location="top", label="% supersaturation")
+  axs[5].contour(xxf, zzf, meansupersat, levels=[0.0],
+                linestyles=["--"], colors=["grey"])
+  cb.ax.plot([0.0]*2, [0, 1], color='grey', linewidth=0.95)
 
   for ax in axs:
     ax.set_aspect("equal")
@@ -203,12 +211,10 @@ def plot_2dcolormaps(zhalf, xhalf, thermodata, inputs, binpath, savefig):
       print("Figure .png saved as: "+binpath+savename)
   plt.show()
 
-def plot_2dwindfield(zfull, xfull, zhalf, xhalf, wvel4d, uvel4d, 
+def plot_2dwindfield(zzh, xxh, zzf, xxf, wvel4d, uvel4d, 
                      binpath, savefig):
   
   cmaps = ["coolwarm"]*3
-  xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
-  xxf, zzf = np.meshgrid(xfull, zfull, indexing="ij") # dims [xdims, zdims]
   meanwvel = np.mean(wvel4d, axis=(0,1)) #avg over y and time axes
   meanuvel = np.mean(uvel4d, axis=(0,1))
   norm = np.sqrt(meanwvel**2 + meanuvel**2)

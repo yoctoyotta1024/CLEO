@@ -1,7 +1,7 @@
 import numpy as np
 from os.path import isfile
 from .. import cxx2py, writebinary
-from ..gbxboundariesbinary_src.read_gbxboundaries import allgbxfullcoords_fromgridfile 
+from ..gbxboundariesbinary_src.read_gbxboundaries import read_dimless_gbxboundaries_binary
 
 def thermoinputsdict(configfile, constsfile):
   ''' create values from constants file & config file
@@ -145,11 +145,10 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
     raise ValueError(errmsg)
 
   inputs = thermoinputsdict(configfile, constsfile)
-  zfulls, xfulls, yfulls = allgbxfullcoords_fromgridfile(gridfile, 
-                                                        COORD0=inputs["COORD0"])
-  ngridboxes = len(zfulls)
-  thermodata = thermogen.generate_thermo(zfulls, xfulls, yfulls,
-                                         ngridboxes, inputs["ntime"])
+  gbxbounds, ndims = read_dimless_gbxboundaries_binary(gridfile,
+                                                      COORD0=inputs["COORD0"],
+                                                      return_ndims=True)
+  thermodata = thermogen.generate_thermo(gbxbounds, ndims, inputs["ntime"])
 
   dth = DimlessThermodynamics(inputs=inputs)
   thermodata, scale_factors = dth.makedimless(thermodata)
@@ -157,6 +156,7 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   ndata = [len(dt) for dt in thermodata.values()]
   
   thermodata, datatypes = ctype_compatible_thermodynamics(thermodata) 
+  ngridboxes = int(np.prod(ndims))
   check_datashape(thermodata, ndata, ngridboxes, inputs["ntime"])
 
   units = [b'P', b'K', b' ', b' ']
