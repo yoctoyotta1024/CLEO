@@ -58,18 +58,18 @@ def divfree_flowfield2D(wmax, rhotilda, zlength, xlength,
     shape_zface = int((ndims[0]+1)*ndims[1]*ndims[2])
     shape_xface = int((ndims[1]+1)*ndims[2]*ndims[0])
 
+
     zfaces, xcens_z = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'z')[0:2] 
     xfaces, zcens_x = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'x')[0:2] 
-    rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'y')
     
     ztilda = zlength / np.pi
     xtilda = xlength / 2* np.pi
     velfactor = wmax / rhotilda
         
-    WVEL = 2 * velfactor * np.sin(zedgs / ztilda) * np.sin(xcens/xtilda)
+    WVEL = 2 * velfactor * np.sin(zfaces / ztilda) * np.sin(xcens_z/xtilda)
     
     UVEL = velfactor *  xlength /  zlength
-    UVEL =  UVEL * np.cos(zcens/ztilda) * np.cos(xedgs/xtilda)
+    UVEL =  UVEL * np.cos(zcens_x/ztilda) * np.cos(xfaces/xtilda)
 
     return WVEL, UVEL
   
@@ -217,12 +217,13 @@ class ConstHydrostaticAdiabat:
   accounting for the mass of water vapour in the air.
   Equations derived from Arabas et al. 2015 (sect 2.1) '''
 
-  def __init__(self, PRESS0, THETA, qvap, qcond, WMAX,
-               Zlength, Xlength, VVEL, GRAVG, CP_DRY,
-               RGAS_DRY, RGAS_V, CP0):
+  def __init__(self, configfile, constsfile, PRESSz0, THETA,
+              qvap, qcond, WMAX, Zlength, Xlength, VVEL):
+    
+    inputs = thermoinputsdict(configfile, constsfile)
     
     ### parameters of profile ###
-    self.PRESS0 = PRESS0 #pressure at z=0m [Pa]
+    self.PRESSz0 = PRESSz0 #pressure at z=0m [Pa]
     self.THETA = THETA # (constant) dry potential temperature [K]
     self.qvap = qvap # (constant) vapour mass mixing ratio []
     self.qcond = qcond # liquid mass mixing ratio []
@@ -232,20 +233,21 @@ class ConstHydrostaticAdiabat:
     self.VVEL = VVEL # horizontal (y) velocity
 
     ### constants ###
-    self.GRAVG = GRAVG
-    self.CP_DRY = CP_DRY
-    self.RGAS_DRY = RGAS_DRY
-    self.RGAS_V = RGAS_V
-    self.RC_DRY = RGAS_DRY / CP_DRY
-    self.RCONST = 1 + self.qvap * RGAS_V / RGAS_DRY
+    self.GRAVG = inputs["G"]
+    self.CP_DRY = inputs["CP_DRY"]
+    self.RGAS_DRY = inputs["RGAS_DRY"]
+    self.RGAS_V = inputs["RGAS_V"]
+    self.RC_DRY = self.RGAS_DRY / self.CP_DRY
+    self.RCONST = 1 + self.qvap * self.RGAS_V / self.RGAS_DRY
     self.P1000 = 100000 # P_1000 = 1000 hPa [Pa]
-    self.CP0 = CP0
+    self.CP0 = inputs["CP0"]
+    self.RHO0 = inputs["RHO0"]
 
-    alpha = PRESS0 / (self.RCONST * self.P1000) 
+    alpha = PRESSz0 / (self.RCONST * self.P1000) 
     self.TEMP0 = THETA * np.power(alpha, self.RC_DRY) # temperature at z=0m [K]
 
     beta = (1+self.qvap) / self.RCONST / self.RGAS_DRY
-    self.RHO0 = beta * self.PRESS0 / self.TEMP0
+    self.RHOz0 = beta * self.PRESSz0 / self.TEMP0
 
   def hydrostatic_adiabatic_profile(self, ZCOORDS):
     ''' returns *profile* of density (not the density itself!)
@@ -258,7 +260,7 @@ class ConstHydrostaticAdiabat:
     Aconst = self.RCONST * np.power(Aa, (1 / (1-self.RC_DRY)))
 
     RHOconst = -1 * self.GRAVG * self.RC_DRY / Aconst
-    RHOprofile = np.power(self.RHO0, 1/pow) + RHOconst * ZCOORDS # RHO0^pow
+    RHOprofile = np.power(self.RHOz0, 1/pow) + RHOconst * ZCOORDS # RHO0^pow
 
     return RHOprofile, Aconst
 
