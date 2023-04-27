@@ -17,57 +17,62 @@ def relative_humidity(press, temp, qvap, Mr_ratio):
 
     return relh, supersat
 
-class Thermo4D:
+class ThermoOnGrid:
 
-    def __init__(self, thermodata, ndims, ntime):
-        
-        reshape = [ntime] + list(np.flip(ndims))
-        
-        self.vars = ["press", "temp", "qvap", "qcond"]
-        self.press = np.reshape(thermodata["press"], reshape)
-        self.temp = np.reshape(thermodata["temp"], reshape)
-        self.qvap= np.reshape(thermodata["qvap"], reshape)
-        self.qcond = np.reshape(thermodata["qcond"], reshape)
-        # self.wvel = np.array([])
-        # self.uvel = np.array([])
-        # self.vvel = np.array([])
+  def __init__(self, thermodata, inputs, ndims):
 
-        if "wvel" in thermodata.keys():
-            self.wvel = np.reshape(thermodata["wvel"], reshape) 
-            self.vars += ["wvel"]
-            if "uvel" in thermodata.keys():
-                self.uvel = np.reshape(thermodata["uvel"], reshape) 
-                self.vars += ["uvel"]
-                if "vvel" in thermodata.keys():
-                    self.vvel = np.reshape(thermodata["vvel"], reshape)  
-                    self.vars += ["vvel"]
+    dth = DimlessThermodynamics(inputs=inputs)
+    thermodata = dth.redimensionalise(thermodata)
     
-    def __getitem__(self, key):
-      if key not in self.vars:
-        err = "no variable "+key+" in Thermo4D"
-        raise ValueError(err)         
-      elif key == "press":
-        return self.press
-      elif key == "temp":
-        return self.temp
-      elif key == "qvap":
-        return self.qvap
-      elif key == "qcond":
-        return self.qcond
-      elif key == "wvel":
-        return self.wvel
-      elif key == "uvel":
-        return self.uvel
-      elif key == "vvel":
-        return self.vvel
+    ntime = inputs["ntime"]
+    ndims = [int(n) for n in ndims]
+    cen = [inputs["ntime"]] + list(np.flip(ndims))
+    zface = [ntime, ndims[2], ndims[1], ndims[0]+1]
+    xface = [ntime, ndims[2], ndims[1]+1, ndims[0]]
+    yface = [ntime, ndims[2]+1, ndims[1], ndims[0]]
 
-    def meanytime(self, var):
+    self.vars = ["press", "temp", "qvap", "qcond"]
+    self.press = np.reshape(thermodata["press"], cen) 
+    self.temp = np.reshape(thermodata["temp"], cen) 
+    self.qvap= np.reshape(thermodata["qvap"], cen) 
+    self.qcond = np.reshape(thermodata["qcond"], cen) 
 
-        return np.mean(var, axis=(0,1))
+    if "wvel" in thermodata.keys():
+        self.wvel = np.reshape(thermodata["wvel"], zface) 
+        self.vars += ["wvel"]
+        if "uvel" in thermodata.keys():
+            self.uvel = np.reshape(thermodata["uvel"], xface) 
+            self.vars += ["uvel"]
+            if "vvel" in thermodata.keys():
+                self.vvel = np.reshape(thermodata["vvel"], yface)  
+                self.vars += ["vvel"]
 
-    def meanxytime(self, var):
+  def __getitem__(self, key):
+    if key not in self.vars:
+      err = "no variable "+key+" in ThermoOnGrid"
+      raise ValueError(err)         
+    elif key == "press":
+      return self.press
+    elif key == "temp":
+      return self.temp
+    elif key == "qvap":
+      return self.qvap
+    elif key == "qcond":
+      return self.qcond
+    elif key == "wvel":
+      return self.wvel
+    elif key == "uvel":
+      return self.uvel
+    elif key == "vvel":
+      return self.vvel
 
-        return np.mean(var, axis=(0,1,2))
+  def meanytime(self, var):
+
+      return np.mean(var, axis=(0,1))
+
+  def meanxytime(self, var):
+
+      return np.mean(var, axis=(0,1,2))
 
 def thermovar_from_binary(var, thermofiles, shape,
                           ntime, ndims, dtype):
@@ -91,9 +96,9 @@ def read_dimless_thermodynamics_binary(thermofiles, ndims,
 
   # expected lengths of data defined on gridbox centres or faces 
   cen = [ntime, int(np.prod(ndims))]
-  zface = [ntime, int((ndims[0]+1)*ndims[1]*ndims[2])]
-  xface = [ntime, int((ndims[1]+1)*ndims[2]*ndims[0])]
-  yface = [ntime, int((ndims[2]+1)*ndims[0]*ndims[1])]
+  zface = [ntime, int(ndims[2] * ndims[1] * (ndims[0]+1))]
+  xface = [ntime, int(ndims[2] * (ndims[1]+1) * ndims[0])]
+  yface = [ntime, int((ndims[2]+1) * ndims[1] * ndims[0])]
 
   thermodata = {} 
   
@@ -124,13 +129,10 @@ def get_thermodynamics_from_thermofile(thermofile, ndims, inputs=False,
 
   thermodata = read_dimless_thermodynamics_binary(thermofile, ndims, 
                                                   inputs["ntime"],
-                                                  inputs["SDnspace"]) 
-  dth = DimlessThermodynamics(inputs=inputs)
-  thermodata = dth.redimensionalise(thermodata)
+                                                  inputs["SDnspace"]) # dimensionless data [time, gridboxes]
+  thermodata = ThermoOnGrid(thermodata, inputs, ndims) 
 
-  thermodata = Thermo4D(thermodata, ndims, inputs["ntime"]) 
-
-  return thermodata # shaped into 4D array dims [time, y, x, z]
+  return thermodata # data with units in 4D arrays with dims [time, y, x, z]
 
 def plot_thermodynamics_timeslice(constsfile, configfile, gridfile,
                                   thermofile, binpath, savefig):

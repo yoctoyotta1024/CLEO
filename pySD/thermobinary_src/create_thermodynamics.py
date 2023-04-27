@@ -119,11 +119,11 @@ def check_datashape(thermodata, ndata, ndims, ntime):
   attributes and superdroplets expected given ndata'''
 
   # expected lengths of data defined on gridbox centres or faces 
-  cen = int(np.prod(ndims)*ntime)
-  zface = int((ndims[0]+1)*ndims[1]*ndims[2]*ntime)
-  xface = int((ndims[1]+1)*ndims[2]*ndims[0]*ntime)
-  yface = int((ndims[2]+1)*ndims[0]*ndims[1]*ntime)
-
+  cen = int(ntime*np.prod(ndims))
+  zface = int(ntime * ndims[2] * ndims[1] * (ndims[0]+1))
+  xface = int(ntime * ndims[2] * (ndims[1]+1) * ndims[0])
+  yface = int(ntime * (ndims[2]+1) * ndims[1] * ndims[0])
+  
   lenvars = [len(thermodata[var]) for var in ["press", "temp", "qvap", "qcond"]]
   for lenvar in lenvars:
     if lenvar != cen:

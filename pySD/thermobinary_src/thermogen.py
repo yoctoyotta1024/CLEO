@@ -111,7 +111,7 @@ class ConstUniformThermo:
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
     # shape_cen = ngridboxes * ntime = no. data for var defined at gridbox centers
-    shape_cen = int(np.prod(ndims)*ntime)
+    shape_cen = int(ntime * np.prod(ndims))
     THERMODATA = {
       "PRESS": np.full(shape_cen, self.PRESS),
       "TEMP": np.full(shape_cen, self.TEMP),
