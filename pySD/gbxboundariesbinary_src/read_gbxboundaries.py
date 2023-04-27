@@ -54,16 +54,6 @@ def fullcoords_forallgridboxes(gbxbounds, ndims):
 
     return zfullcoords, xfullcoords, yfullcoords
 
-def halfcoords_forallgridboxes(gbxbounds, ndims):
-
-    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
-
-    zhalfcoords = np.tile(zhalf, int(ndims[1]*ndims[2])) # zfull of every gridbox in order of gbxindex
-    xhalfcoords = np.tile(np.repeat(xhalf, ndims[0]), int(ndims[2]))
-    yhalfcoords = np.repeat(yhalf, ndims[0]*ndims[1])
-
-    return zhalfcoords, xhalfcoords, yhalfcoords
-
 def allgbxfullcoords_fromgridfile(gridfile, COORD0=False):
 
     gbxbounds, ndims = read_dimless_gbxboundaries_binary(gridfile,

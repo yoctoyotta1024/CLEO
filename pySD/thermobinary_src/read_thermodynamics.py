@@ -182,7 +182,7 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
                                       thermodata.qvap, inputs["Mr_ratio"])
   
   meanrelh = thermodata.meanytime(relh)
-  pcm = axs[4].pcolormesh(xxh[:,:], zzh[:,:], meanrelh, cmap=cmaps[4])                  
+  pcm =axs[4].pcolormesh(xxh[:,:], zzh[:,:], meanrelh, cmap=cmaps[4])                  
   cb = plt.colorbar(pcm, ax=axs[4], location="top", label="relative humidity")
   axs[4].contour(xxf, zzf, meanrelh, levels=[1.0],
                 linestyles=["--"], colors=["grey"])

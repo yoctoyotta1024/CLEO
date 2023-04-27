@@ -1,6 +1,6 @@
 import numpy as np
 from .. import cxx2py
-from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
+from ..gbxboundariesbinary_src.read_gbxboundaries import fullcoords_forallgridboxes
 
 def get_Mrratio_from_constsfile(constsfile):
   
@@ -150,7 +150,7 @@ class SimpleThermo2Dflowfield:
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
       ngridboxes = int(np.prod(ndims))
-      zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds, ndims)
+      zfulls, xfulls, yfulls = fullcoords_forallgridboxes(gbxbounds, ndims)
       
       qvap = self.generate_qvap_profile(zfulls)
 
@@ -165,9 +165,8 @@ class SimpleThermo2Dflowfield:
       }
 
       if self.WMAX != None:
-        zhalfs, xhalfs, yhalfs = rgrid.halfcoords_forallgridboxes(gbxbounds, ndims)
         WVEL, UVEL = divfree_flowfield2D(self.WMAX, 1.0, self.Zlength, 
-                                          self.Xlength, zhalfs, xhalfs)
+                                          self.Xlength, zfulls, xfulls)
         THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
         THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
 
@@ -242,7 +241,7 @@ class ConstHydrostaticAdiabat:
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
     ngridboxes = int(np.prod(ndims))
-    zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds, ndims)
+    zfulls, xfulls, yfulls = fullcoords_forallgridboxes(gbxbounds, ndims)
     RHO, PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
 
     THERMODATA = {
