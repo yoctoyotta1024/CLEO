@@ -49,13 +49,13 @@ namespace dimless_constants
   constexpr double TIME0 = 1000.0;      // timescale [s]
   constexpr double COORD0 = TIME0 * W0; // coordinate grid scale [m]
 
-  constexpr double P0 = 100000.0;                      // pressure [Pa]
-  constexpr double TEMP0 = 273.15;                     // temperature [K]
-  constexpr double RHO0 = P0 / (DC::RGAS_DRY * TEMP0); // density [Kg/m^3]
-
   constexpr double CP0 = DC::CP_DRY;              // Heat capacity [J/Kg/K]
   constexpr double MR0 = DC::MR_DRY;              // molecular molar mass [Kg/mol]
   constexpr double R0 = 1e-6;                     // droplet radius lengthscale [m]
+  
+  constexpr double P0 = 100000.0;                 // pressure [Pa]
+  constexpr double TEMP0 = 273.15;                // temperature [K]
+  constexpr double RHO0 = P0 / (CP0 * TEMP0); // density [Kg/m^3]
   constexpr double F0 = TIME0 / (RHO0 * R0 * R0); // droplet condensation-diffusion factors []
 
   /* dimensionaless constants */
@@ -65,6 +65,7 @@ namespace dimless_constants
   constexpr double C_l = DC::C_L / CP0;
   constexpr double Latent_v = DC::LATENT_V / (TEMP0 * CP0);
   constexpr double Rgas_dry = DC::RGAS_DRY / CP0;
+  constexpr double Rgas_v = DC::RGAS_V / CP0;
   constexpr double Rho_dry = DC::RHO_DRY / RHO0;
   constexpr double Rho_l = DC::RHO_L / RHO0;
   constexpr double Rho_sol = DC::RHO_SOL / RHO0;
