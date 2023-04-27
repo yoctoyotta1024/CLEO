@@ -186,18 +186,19 @@ def plot_1dprofiles(zfull, thermodata, binpath, savefig):
     fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(12, 6))
     axs = axs.flatten()
 
-    handles = []
+    lines = 0
     for v, var in enumerate(vars):
       if var in thermodata.vars:
         profalltime = thermodata.xymean(thermodata[var]) # 1d profile at all times
-        line = axs[v].plot(profalltime.T, zfull[None,:].T, marker="x")
+        axs[v].plot(profalltime.T, zfull[None,:].T, marker="x")
         axs[v].set_xlabel(vars[v]+units[v])  
-        handles.append(line)
+        lines += 1
 
     axs[0].set_ylabel("z /km")
     axs[4].set_ylabel("z /km")
-    for a in range(len(vars), len(axs), 1):
-      axs[a].remove()
+    
+    for a in range(lines, len(axs), 1):
+      axs[a].remove() # delete unused axes
 
     fig.tight_layout()
     if savefig:
