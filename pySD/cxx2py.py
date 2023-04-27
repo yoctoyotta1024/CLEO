@@ -108,7 +108,8 @@ def derive_more_floats(CONSTS, is_print=True):
     "MR0"        : CONSTS["MR_DRY"], # characteristic molecular molar mass [Kg/mol]
     "Mr_ratio"   : CONSTS["MR_WATER"]/CONSTS["MR_DRY"],
   }
-  MCONSTS["RHO0"]       = CONSTS["P0"]/(MCONSTS["RGAS_DRY"]*CONSTS["TEMP0"]) # characteristic density [Kg/m^3]
+  
+  MCONSTS["RHO0"]       = CONSTS["P0"]/(MCONSTS["CP0"]*CONSTS["TEMP0"]) # characteristic density [Kg/m^3]
   MCONSTS["Rho_sol"]    =  CONSTS["RHO_SOL"]/MCONSTS["RHO0"]     # dimensionless solute density []
 
   if is_print:

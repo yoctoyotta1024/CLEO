@@ -1,6 +1,7 @@
 import numpy as np
 from .. import cxx2py
-from ..gbxboundariesbinary_src.read_gbxboundaries import fullcoords_forallgridboxes
+from .create_thermodynamics import thermoinputsdict
+from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 def get_Mrratio_from_constsfile(constsfile):
   
@@ -50,17 +51,23 @@ def sratio2qvap(sratio, press, temp, Mr_ratio):
 
   return qvap
 
-def divfree_flowfield2D(WMAX, rhotilda, Zlength, Xlength, 
-                        ZCOORDS, XCOORDS):
+def divfree_flowfield2D(wmax, rhotilda, zlength, xlength, 
+                        gbxbounds, ndims):
 
-    ztilda = np.pi * ZCOORDS / Zlength 
-    xtilda = 2* np.pi * XCOORDS / Xlength 
-    VELfactor = WMAX / rhotilda
-        
-    WVEL = 2 * VELfactor * np.sin(ztilda) * np.sin(xtilda)
+    # # shape_[X]face = no. data for var defined at gridbox [X] faces
+    # shape_zface = int((ndims[0]+1)*ndims[1]*ndims[2]*ntime)
+    # shape_xface = int((ndims[1]+1)*ndims[2]*ndims[0]*ntime)
+
+    zhalf, xhalf, yhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds)
     
-    UVEL = VELfactor *  Xlength /  Zlength
-    UVEL =  UVEL * np.cos(ztilda) * np.cos(xtilda)
+    ztilda = zlength / np.pi
+    xtilda = xlength / 2* np.pi
+    velfactor = wmax / rhotilda
+        
+    WVEL = 2 * velfactor * np.sin(zedgs / ztilda) * np.sin(xcens/xtilda)
+    
+    UVEL = velfactor *  xlength /  zlength
+    UVEL =  UVEL * np.cos(zcens/ztilda) * np.cos(xedgs/xtilda)
 
     return WVEL, UVEL
   
@@ -128,8 +135,10 @@ class SimpleThermo2Dflowfield:
   with (P,T,qc) uniform throughout the domain with relative humidity
   = 0.95 below zbase and a 2D (z,x) dependent flow field'''
 
-  def __init__(self, PRESS, TEMP, qvapmethod, qcond, WMAX, Zlength,
-               Xlength, VVEL, zbase, qparam, constsfile=''):
+  def __init__(self, configfile, constsfile, PRESS, TEMP, qvapmethod, 
+                zbase, qparam, qcond, WMAX, Zlength, Xlength, VVEL):
+    
+    inputs = thermoinputsdict(configfile, constsfile)
     
     self.PRESS = PRESS                        # pressure [Pa]
     self.TEMP = TEMP                          # temperature [T]
@@ -137,11 +146,10 @@ class SimpleThermo2Dflowfield:
     
     # determine qvap above z (cloud) base
     self.zbase = zbase
-    Mr_ratio = get_Mrratio_from_constsfile(constsfile)
-    self.qvap_below = sratio2qvap(0.85, PRESS, TEMP,Mr_ratio) # supersat=0.85 below zbase
+    Mr_ratio = inputs["Mr_ratio"]
+    self.qvap_below = sratio2qvap(0.85, PRESS, TEMP, Mr_ratio) # supersat=0.85 below zbase
     if qvapmethod == "relh":
-      self.qvap_above = relh2qvap(PRESS, TEMP, 
-                            qparam, Mr_ratio)     # water vapour content []
+      self.qvap_above = relh2qvap(PRESS, TEMP, qparam, Mr_ratio)     # water vapour content []
     elif qvapmethod == "sratio":
       self.qvap_above = sratio2qvap(qparam, self.PRESS, self.TEMP, Mr_ratio)
     
@@ -150,40 +158,57 @@ class SimpleThermo2Dflowfield:
     self.Xlength = Xlength # wavelength of velocity modulation in x direction [m]
     self.VVEL = VVEL # horizontal (y) velocity
 
+    self.RGAS_DRY = inputs["RGAS_DRY"]
+    self.RGAS_V = inputs["RGAS_V"]
+    self.RHO0 = inputs["RHO0"]
+
   def generate_qvap_profile(self, zfulls):
 
     qvap = np.where(zfulls >= self.zbase, self.qvap_above, self.qvap_below)
 
     return qvap
+  
+  def generate_winds(self, gbxbounds, ndims, ntime, THERMODATA):
 
+    for VEL in ["WVEL", "UVEL", "VVEL"]:
+      THERMODATA[VEL] = np.array([])
+
+    if self.WMAX != None:
+      beta = (self.RGAS_DRY + THERMODATA["qvap"][0] * self.RGAS_V)
+      rho_dry = THERMODATA["PRESS"][0] / (THERMODATA["TEMP"][0] * beta)
+      rhotilda = rho_dry / self.RHO0
+      
+    #   WVEL, UVEL = divfree_flowfield2D(self.WMAX, rhotilda, self.Zlength, 
+    #                                   self.Xlength, gbxbounds, ndims)
+    #   THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
+    #   THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
+
+    #   if self.VVEL != None:
+    #     shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1]*ntime)
+    #     THERMODATA["VVEL"] = np.full(shape_yface, self.VVEL)
+
+    # return THERMODATA
+  
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
-      ngridboxes = int(np.prod(ndims))
-      zfulls, xfulls, yfulls = fullcoords_forallgridboxes(gbxbounds, ndims)
-      
+      zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
+                                                                ndims)
+
       qvap = self.generate_qvap_profile(zfulls)
 
+      shape_cen = int(ntime * np.prod(ndims))
       THERMODATA = {
-        "PRESS": np.full(ngridboxes*ntime, self.PRESS),
-        "TEMP": np.full(ngridboxes*ntime, self.TEMP),
+        "PRESS": np.full(shape_cen, self.PRESS),
+        "TEMP": np.full(shape_cen, self.TEMP),
         "qvap": np.tile(qvap, ntime),
-        "qcond": np.full(ngridboxes*ntime, self.qcond), 
-        "WVEL": np.array([]), 
-        "UVEL": np.array([]),
-        "VVEL": np.array([])
+        "qcond": np.full(shape_cen, self.qcond), 
       }
-
-      if self.WMAX != None:
-        WVEL, UVEL = divfree_flowfield2D(self.WMAX, 1.0, self.Zlength, 
-                                          self.Xlength, zfulls, xfulls)
-        THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
-        THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
-
-        if self.VVEL != None:
-          THERMODATA["VVEL"] =  np.full(int(ngridboxes*ntime), self.VVEL)
-
+      
+      THERMODATA = self.generate_winds(gbxbounds, ndims,
+                                       ntime, THERMODATA)
+    
       return THERMODATA
-  
+
 class ConstHydrostaticAdiabat:
   ''' create thermodyanmics that's constant in time 
   and in hydrostatic equillibrium with a dry adiabat 
@@ -192,7 +217,7 @@ class ConstHydrostaticAdiabat:
 
   def __init__(self, PRESS0, THETA, qvap, qcond, WMAX,
                Zlength, Xlength, VVEL, GRAVG, CP_DRY,
-               RGAS_DRY, RGAS_V):
+               RGAS_DRY, RGAS_V, CP0):
     
     ### parameters of profile ###
     self.PRESS0 = PRESS0 #pressure at z=0m [Pa]
@@ -212,9 +237,10 @@ class ConstHydrostaticAdiabat:
     self.RC_DRY = RGAS_DRY / CP_DRY
     self.RCONST = 1 + self.qvap * RGAS_V / RGAS_DRY
     self.P1000 = 100000 # P_1000 = 1000 hPa [Pa]
-    
+    self.CP0 = CP0
+
     alpha = PRESS0 / (self.RCONST * self.P1000) 
-    self.TEMP0 = THETA * np.power(alpha, self.RC_DRY) #temperature at z=0m [K]
+    self.TEMP0 = THETA * np.power(alpha, self.RC_DRY) # temperature at z=0m [K]
 
     beta = (1+self.qvap) / self.RCONST / self.RGAS_DRY
     self.RHO0 = beta * self.PRESS0 / self.TEMP0
@@ -247,30 +273,40 @@ class ConstHydrostaticAdiabat:
     
     return RHO, PRESS, TEMP
 
-  def generate_thermo(self, gbxbounds, ndims, ntime):
+  def generate_winds(self, gbxbounds, ndims, ntime, THERMODATA, RHO):
 
-    ngridboxes = int(np.prod(ndims))
-    zfulls, xfulls, yfulls = fullcoords_forallgridboxes(gbxbounds, ndims)
-    RHO, PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
-
-    THERMODATA = {
-      "PRESS": np.tile(PRESS, ntime),
-      "TEMP": np.tile(TEMP, ntime),
-      "qvap": np.full(int(ngridboxes*ntime), self.qvap),
-      "qcond": np.full(int(ngridboxes*ntime), self.qcond), 
-      "WVEL": np.array([]), 
-      "UVEL": np.array([]),
-      "VVEL": np.array([])
-    }
+    for VEL in ["WVEL", "UVEL", "VVEL"]:
+      THERMODATA[VEL] = np.array([])
 
     if self.WMAX != None:
-      rhotilda = RHO / self.RHO0
+      rhotilda = RHO/self.RHO0
       WVEL, UVEL = divfree_flowfield2D(self.WMAX, rhotilda, self.Zlength, 
-                                       self.Xlength, zfulls, xfulls)
+                                      self.Xlength, gbxbounds, ndims)
       THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
       THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
 
       if self.VVEL != None:
-        THERMODATA["VVEL"] =  np.full(int(ngridboxes*ntime), self.VVEL)
+        shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1]*ntime)
+        THERMODATA["VVEL"] = np.full(shape_yface, self.VVEL)
 
+    return THERMODATA
+  
+  def generate_thermo(self, gbxbounds, ndims, ntime):
+
+    ngridboxes = int(np.prod(ndims))
+    zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
+                                                              ndims)
+    RHO, PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
+
+    shape_cen = int(ntime * np.prod(ndims))
+    THERMODATA = {
+      "PRESS": np.tile(PRESS, ntime),
+      "TEMP": np.tile(TEMP, ntime),
+      "qvap": np.full(shape_cen, self.qvap),
+      "qcond": np.full(shape_cen, self.qcond), 
+    }
+
+    THERMODATA = self.generate_winds(gbxbounds, ndims, ntime,
+                                     THERMODATA, RHO)
+    
     return THERMODATA 

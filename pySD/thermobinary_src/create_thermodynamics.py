@@ -124,8 +124,9 @@ def check_datashape(thermodata, ndata, ndims, ntime):
   xface = int(ntime * ndims[2] * (ndims[1]+1) * ndims[0])
   yface = int(ntime * (ndims[2]+1) * ndims[1] * ndims[0])
   
-  lenvars = [len(thermodata[var]) for var in ["press", "temp", "qvap", "qcond"]]
-  for lenvar in lenvars:
+  vars = ["press", "temp", "qvap", "qcond"]
+  for var in vars:
+    lenvar = len(thermodata[var])
     if lenvar != cen:
       err = "\n------ ERROR! -----\n"+\
             str(lenvar)+" "+var+" in thermodynamics data is not the"+\
@@ -133,8 +134,9 @@ def check_datashape(thermodata, ndata, ndims, ntime):
               "\n---------------------\n"
       raise ValueError(err)
    
-  lenvars = [len(thermodata[var]) for var in ["wvel", "uvel", "vvel"]]
-  for lenvar, face in zip(lenvars, [zface, xface, yface]):
+  vars = ["wvel", "uvel", "vvel"]
+  for var, face in zip(vars, [zface, xface, yface]):
+    lenvar = len(thermodata[var])
     if np.logical_and(lenvar, lenvar != face):
           err = "\n------ ERROR! -----\n"+\
             str(lenvar)+" "+var+" in thermodynamics data is not the"+\
