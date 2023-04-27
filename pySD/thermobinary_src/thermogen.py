@@ -172,7 +172,8 @@ class SimpleThermo2Dflowfield:
         THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
 
         if self.VVEL != None:
-          THERMODATA["VVEL"] =  np.full(int(ngridboxes*ntime), self.VVEL)
+          nface_y = ndims[0]*ndims[1]*(ndims[2]+1) # no. of y faces on grid
+          THERMODATA["VVEL"] =  np.full(int(nface_y*ntime), self.VVEL)
 
       return THERMODATA
   
