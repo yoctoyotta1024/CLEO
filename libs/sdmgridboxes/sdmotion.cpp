@@ -72,7 +72,7 @@ The velocity required for this scheme is determined
 from the PrescribedFlow2D instance */
 {
   auto deltas = predictor_corrector(gbx.state, drop.coord3, drop.coord1);
-  //auto deltas = leapfrog(gbx.state, drop.coord3, drop.coord1);
+  // auto deltas = leapfrog(gbx.state, drop.coord3, drop.coord1);
   
   cfl_criteria(gbxmaps, gbx.gbxindex, deltas.first, deltas.second, 0.0);
 
