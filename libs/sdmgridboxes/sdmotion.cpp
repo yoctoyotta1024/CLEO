@@ -101,3 +101,22 @@ calculated from a Prescribed2DFlow */
 
   return std::pair<double, double>(delta3, delta1);
 }
+
+std::pair<double, double>
+MoveWith2DFixedFlow::leapfrog(const ThermoState &state,
+                              const double coord3,
+                              const double coord1) const
+/* returns change in (z,x) coordinates = (delta3, delta1)
+obtained using a simple leapfrog method and velocities
+calculated from a Prescribed2DFlow */
+{ 
+  const double vel1 = flow2d.prescribed_uvel(state, coord3, coord1); // w wind from prescribed 2D flow
+  const double pred1(coord1 + vel1 * delt);
+
+  const double vel3 = flow2d.prescribed_wvel(state, coord3, pred1); // u wind from prescribed 2D flow
+  
+  const double delta3(vel3 * delt);
+  const double delta1(vel1 * delt);
+
+  return std::pair<double, double>(delta3, delta1);
+}

@@ -168,6 +168,13 @@ private:
   /* returns change in (z,x) coordinates = (delta3, delta1)
   obtained using predictor-corrector method and velocities
   calculated from a Prescribed2DFlow */
+  
+  std::pair<double, double> leapfrog(const ThermoState &state,
+                              const double coord3,
+                              const double coord1) const;
+  /* returns change in (z,x) coordinates = (delta3, delta1)
+  obtained using a simple leapfrog method and velocities
+  calculated from a Prescribed2DFlow */
 
 public:
   MoveWith2DFixedFlow(const int interval,
