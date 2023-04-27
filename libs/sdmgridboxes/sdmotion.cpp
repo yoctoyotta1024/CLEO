@@ -37,6 +37,31 @@ bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
   return cfl;
 }
 
+Prescribed2DFlow::Prescribed2DFlow(const double zlength,
+                                   const double xlength,
+                                   const double wmax,
+                                   const std::function<double(ThermoState)> rhotilda)
+    : ztilda(zlength / std::numbers::pi),         // 1/wavenumber given dimensionless wavelength
+      xtilda(xlength / (2.0 * std::numbers::pi)), // 1/wavenumber given dimensionless wavelength
+      wamp(2.0 * wmax),                           // amplitude of velocioty variations
+      rhotilda(rhotilda)                          // normaliseddry air density
+{
+}
+
+double Prescribed2DFlow::prescribed_wvel(const ThermoState &state,
+                                         const double zcoord, const double xcoord) const
+{
+  return wamp / rhotilda(state) *
+         std::sin(zcoord / ztilda) * std::sin(xcoord / xtilda);
+}
+
+double Prescribed2DFlow::prescribed_uvel(const ThermoState &state,
+                                         const double zcoord, const double xcoord) const
+{
+  return wamp / rhotilda(state) * xtilda / ztilda *
+         std::cos(zcoord / ztilda) * std::cos(xcoord / xtilda);
+}
+
 void MoveWith2DFixedFlow::
     change_superdroplet_coords(const Maps4GridBoxes &gbxmaps,
                                const GridBox &gbx,
@@ -55,20 +80,21 @@ from the PrescribedFlow2D instance */
 }
 
 std::pair<double, double>
-MoveWith2DFixedFlow::predictor_corrector(const double coord3,
+MoveWith2DFixedFlow::predictor_corrector(const ThermoState &state,
+                                         const double coord3,
                                          const double coord1) const
 /* returns change in (z,x) coordinates = (delta3, delta1)
 obtained using predictor-corrector method and velocities
 calculated from a Prescribed2DFlow */
 { 
-  const double vel3 = flow2d.prescribed_wvel(coord3, coord1); // w wind from prescribed 2D flow
-  const double vel1 = flow2d.prescribed_uvel(coord3, coord1); // u wind from prescribed 2D flow
+  const double vel3 = flow2d.prescribed_wvel(state, coord3, coord1); // w wind from prescribed 2D flow
+  const double vel1 = flow2d.prescribed_uvel(state, coord3, coord1); // u wind from prescribed 2D flow
 
   const double pred3(coord3 + vel3 * delt);
   const double pred1(coord1 + vel1 * delt);
 
-  const double corrvel3 = flow2d.prescribed_wvel(pred3, pred1); // w wind from prescribed 2D flow
-  const double corrvel1 = flow2d.prescribed_uvel(pred3, pred1); // w wind from prescribed 2D flow
+  const double corrvel3 = flow2d.prescribed_wvel(state, pred3, pred1); // w wind from prescribed 2D flow
+  const double corrvel1 = flow2d.prescribed_uvel(state, pred3, pred1); // w wind from prescribed 2D flow
 
   const double delta3((vel3 + corrvel3) * (delt / 2));
   const double delta1((vel1 + corrvel1) * (delt / 2));

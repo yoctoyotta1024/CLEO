@@ -131,37 +131,27 @@ public:
 };
 
 class Prescribed2DFlow
+/* Fixed 2D flow with constant density from
+Arabas et al. 2015 with lengthscales
+xlength = 2*pi*xtilda and zlength = pi*ztilda */
 {
 private:
   const double ztilda;
   const double xtilda;
   const double wamp;
-  const std::function<double(double)> rhotilda; // function for normalised rho(z)
+  const std::function<double(ThermoState)> rhotilda; // function for normalised rho(z)
 
 public:
   Prescribed2DFlow(const double zlength,
                    const double xlength,
                    const double wmax,
-                   const std::function<double(double)> rhotilda)
-      /* Fixed 2D flow with constant density from
-      Arabas et al. 2015 with lengthscales
-      xlength = 2*pi*xtilda and zlength = pi*ztilda */
-      : ztilda(zlength / std::numbers::pi),         // 1/wavenumber given dimensionless wavelength
-        xtilda(xlength / (2.0 * std::numbers::pi)), // 1/wavenumber given dimensionless wavelength
-        wamp(2.0 * wmax),                           // amplitude of velocioty variations
-        rhotilda(rhotilda) {} // normaliseddry air density
+                   const std::function<double(ThermoState)> rhotilda);
 
-  double prescribed_wvel(const double zcoord, const double xcoord) const
-  {
-    return wamp / rhotilda(zcoord) *
-           std::sin(zcoord / ztilda) * std::sin(xcoord / xtilda);
-  }
+  double prescribed_wvel(const ThermoState &state, const double zcoord,
+                         const double xcoord) const;
 
-  double prescribed_uvel(const double zcoord, const double xcoord) const
-  {
-    return wamp / rhotilda(zcoord) * xtilda / ztilda *
-           std::cos(zcoord / ztilda) * std::cos(xcoord / xtilda);
-  }
+  double prescribed_uvel(const ThermoState &state, const double zcoord,
+                         const double xcoord) const;
 };
 
 class MoveWith2DFixedFlow
@@ -170,9 +160,10 @@ private:
   const int interval;                 // integer timestep for movement
   const double delt;                  // equivalent of interval as dimensionless time
 
-  const Prescribed2DFlow flow2d;            // method to get wvel and uvel from 2D flow field
+  const Prescribed2DFlow flow2d; // method to get wvel and uvel from 2D flow field
 
-  std::pair<double, double> predictor_corrector(const double coord3,
+  std::pair<double, double> predictor_corrector(const ThermoState &state,
+                                                const double coord3,
                                                 const double coord1) const;
   /* returns change in (z,x) coordinates = (delta3, delta1)
   obtained using predictor-corrector method and velocities
@@ -191,7 +182,7 @@ public:
                       const double zlength,
                       const double xlength,
                       const double wmax,
-                      const std::function<double(double)> rhotilda)
+                      const std::function<double(ThermoState)> rhotilda)
       : interval(interval),
         delt(int2time(interval)),
         flow2d(Prescribed2DFlow(zlength, xlength, wmax, rhotilda)) {}

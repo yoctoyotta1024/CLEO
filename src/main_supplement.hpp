@@ -75,16 +75,17 @@ SdMotion auto create_sdmotion(const int motionstep)
   // const SdMotion auto crudemove = NoInterpMoveWithSedimentation(motionstep,
   //                                                    &step2dimlesstime,
   //                                                    terminalv);
-  
-  auto rhotilda = [](double){return 1.0;};
-  const Prescribed2DFlow flow2d(1500 / dlc::COORD0, 1500 / dlc::COORD0,
-                                0.6 / dlc::W0, rhotilda);
-  const SdMotion auto move2d = MoveWith2DFixedFlow(motionstep,
-                                                  &step2dimlesstime,
-                                                  flow2d);
-  // return crudemove;
-  return move2d;
-  // return NullMotion{};
+
+auto rhotilda = [](const ThermoState &state)
+{ return state.press / (state.temp * (dlc::Rgas_dry + state.qvap * dlc::Rgas_v)); };
+const Prescribed2DFlow flow2d(1500 / dlc::COORD0, 1500 / dlc::COORD0,
+                              0.6 / dlc::W0, rhotilda);
+const SdMotion auto move2d = MoveWith2DFixedFlow(motionstep,
+                                                 &step2dimlesstime,
+                                                 flow2d);
+// return crudemove;
+return move2d;
+// return NullMotion{};
 }
 
 SdmProcess auto create_sdmprocess(const Config &config,
@@ -168,8 +169,8 @@ superdroplets from combination of those two seperate observers */
 
   const Observer auto obs6 = create_sdmomentsobserver(stores.sdmoments);
 
-  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
-  //const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
+  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
+  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
 
   return observer;
 }

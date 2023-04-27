@@ -44,7 +44,7 @@ inputs = cthermo.thermoinputsdict(configfile, constsfile)
 #                                         inputs["G"], inputs["CP_DRY"],
 #                                         inputs["RGAS_DRY"], inputs["RGAS_V"])
 
-qvapmethod, sratio = "sratio", 1.05
+qvapmethod, sratio = "sratio", 0.85
 zbase = 750
 gen = thermogen.ConstThermo2Dflowfield(PRESS0, THETA, "sratio", qcond, WMAX,
                                         Zlength, Xlength, VVEL, zbase,
