@@ -31,13 +31,30 @@ struct ThermoState
                                   temp(), qvap(), qcond(),
                                   wvel(), uvel(), vvel(){};
 
+  double wvelcentre()
+  /* return wvel defined at centre of volume */
+  {
+    return (wvel.first + wvel.second)/2;
+  }
+
+  double uvelcentre()
+  /* return uvel defined at centre of volume */
+  {
+    return (uvel.first + uvel.second)/2;
+  }
+
+  double vvelcentre()
+  /* return vvel defined at centre of volume */
+  {
+    return (vvel.first + vvel.second)/2;
+  }
+
   ThermoState operator-(const ThermoState &prevstate) const
   {
-    std::pair<double, double>
-        subtract = [](const std::pair<double, double> a,
+    auto subtract = [](const std::pair<double, double> a,
                           const std::pair<double, double> b)
     {
-      return { a.first - b.first, a.second - b.second };
+      return std::pair<double, double>{a.first - b.first, a.second - b.second};
     };
 
     ThermoState delta_state(volume);
