@@ -154,7 +154,7 @@ public:
                          const double xcoord) const;
 };
 
-class MoveWith2DFixedFlow
+class MoveWith2DPrescribedFlow
 {
 private:
   const int interval;                 // integer timestep for movement
@@ -177,14 +177,14 @@ private:
   calculated from a Prescribed2DFlow */
 
 public:
-  MoveWith2DFixedFlow(const int interval,
+  MoveWith2DPrescribedFlow(const int interval,
                       const std::function<double(int)> int2time,
                       const Prescribed2DFlow flow2d)
       : interval(interval),
         delt(int2time(interval)),
         flow2d(flow2d) {}
 
-  MoveWith2DFixedFlow(const int interval,
+  MoveWith2DPrescribedFlow(const int interval,
                       const std::function<double(int)> int2time,
                       const double zlength,
                       const double xlength,

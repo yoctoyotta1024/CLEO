@@ -71,21 +71,21 @@ SdMotion auto create_sdmotion(const int motionstep)
 {
   // const auto terminalv = RogersYauTerminalVelocity{};
   // const auto terminalv = SimmelTerminalVelocity{};
-  // const auto terminalv = NullTerminalVelocity{};
-  // const SdMotion auto crudemove = NoInterpMoveWithSedimentation(motionstep,
-  //                                                    &step2dimlesstime,
-  //                                                    terminalv);
+  const auto terminalv = NullTerminalVelocity{};
+  const SdMotion auto movewithsedi = NoInterpMoveWithSedimentation(motionstep,
+                                                     &step2dimlesstime,
+                                                     terminalv);
 
-auto rhotilda = [](const ThermoState &state)
-{ return state.press / (state.temp * (dlc::Rgas_dry + state.qvap * dlc::Rgas_v)); };
-const Prescribed2DFlow flow2d(1500 / dlc::COORD0, 1500 / dlc::COORD0,
-                              0.6 / dlc::W0, rhotilda);
-const SdMotion auto move2d = MoveWith2DFixedFlow(motionstep,
-                                                 &step2dimlesstime,
-                                                 flow2d);
-// return crudemove;
-return move2d;
-// return NullMotion{};
+  auto rhotilda = [](const ThermoState &state)
+  { return state.press / (state.temp * (dlc::Rgas_dry + state.qvap * dlc::Rgas_v)); };
+  const Prescribed2DFlow flow2d(1500 / dlc::COORD0, 1500 / dlc::COORD0,
+                                0.6 / dlc::W0, rhotilda);
+  const SdMotion auto prescribed2d = MoveWith2DPrescribedFlow(motionstep,
+                                                  &step2dimlesstime,
+                                                  flow2d);
+  return movewithsedi;
+  // return prescribed2d;
+  // return NullMotion{};
 }
 
 SdmProcess auto create_sdmprocess(const Config &config,

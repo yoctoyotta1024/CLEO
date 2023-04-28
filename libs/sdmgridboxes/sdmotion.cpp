@@ -62,7 +62,7 @@ double Prescribed2DFlow::prescribed_uvel(const ThermoState &state,
          std::cos(zcoord / ztilda) * std::cos(xcoord / xtilda);
 }
 
-void MoveWith2DFixedFlow::
+void MoveWith2DPrescribedFlow::
     change_superdroplet_coords(const Maps4GridBoxes &gbxmaps,
                                const GridBox &gbx,
                                Superdrop &drop) const
@@ -81,7 +81,7 @@ from the PrescribedFlow2D instance */
 }
 
 std::pair<double, double>
-MoveWith2DFixedFlow::predictor_corrector(const ThermoState &state,
+MoveWith2DPrescribedFlow::predictor_corrector(const ThermoState &state,
                                          const double coord3,
                                          const double coord1) const
 /* returns change in (z,x) coordinates = (delta3, delta1)
@@ -104,7 +104,7 @@ calculated from a Prescribed2DFlow */
 }
 
 std::pair<double, double>
-MoveWith2DFixedFlow::leapfrog(const ThermoState &state,
+MoveWith2DPrescribedFlow::leapfrog(const ThermoState &state,
                               const double coord3,
                               const double coord1) const
 /* returns change in (z,x) coordinates = (delta3, delta1)
