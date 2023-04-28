@@ -37,7 +37,7 @@ ThermodynamicsFromFile::
       get_uvelxfaces([](const unsigned int ii)
                      { return std::pair<double, double>{0.0, 0.0}; }),
       get_vvelyfaces([](const unsigned int ii)
-                     { return std::pair<double, double>{0.0, 0.0}; }),
+                     { return std::pair<double, double>{0.0, 0.0}; })
 {
   std::string windstr = set_windvelocities(config);
   std::cout << "\nFinished reading thermodynamics from binaries for:\n"
@@ -62,7 +62,7 @@ for wind velocity components (or not)*/
   }
   else if (SDnspace <= 3) // means 1 <= SDnspace < 4
   {
-    set_windvelocities_frombinaries(config);
+    return set_windvelocities_frombinaries(config);
   }
   else // means SDnspace > 3
   {
@@ -82,17 +82,17 @@ and check they have correct size */
   std::string info(std::to_string(SDnspace) + "-D model ");
   if (SDnspace >= 1)
   {
+    wvel = wvel_from_binary(config.wvel_filename);
     if (SDnspace >= 2)
     {
+      uvel = uvel_from_binary(config.uvel_filename);
       if (SDnspace == 3)
       {
         vvel = vvel_from_binary(config.vvel_filename);
         return info + "[w, u, v] wind velocity";
       }
-      uvel = uvel_from_binary(config.uvel_filename);
       return info+"[w, u] wind velocity";
     }
-    wvel = wvel_from_binary(config.wvel_filename);
     return info+"vertical w wind velocity";
   }
   return info;
@@ -149,14 +149,14 @@ void ThermodynamicsFromFile::
                                      const std::array<size_t, 3> &ndims,
                                      const size_t nsteps) const
 {
-
   auto is_size = [](const std::vector<double> &vel, const size_t sz)
   { 
     const size_t velsize(vel.size());
     if( velsize != sz )
     {
-      throw std::invalid_argument("wind velocity vectors are "
-                                "not consistent with SDnspace");
+      throw std::invalid_argument(std::to_string(velsize)+ " vector is "
+                                "not consistent with correct size "+
+                                std::to_string(sz));
     }
   };
 

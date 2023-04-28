@@ -31,19 +31,19 @@ struct ThermoState
                                   temp(), qvap(), qcond(),
                                   wvel(), uvel(), vvel(){};
 
-  double wvelcentre()
+  double wvelcentre() const
   /* return wvel defined at centre of volume */
   {
     return (wvel.first + wvel.second)/2;
   }
 
-  double uvelcentre()
+  double uvelcentre() const
   /* return uvel defined at centre of volume */
   {
     return (uvel.first + uvel.second)/2;
   }
 
-  double vvelcentre()
+  double vvelcentre() const
   /* return vvel defined at centre of volume */
   {
     return (vvel.first + vvel.second)/2;
