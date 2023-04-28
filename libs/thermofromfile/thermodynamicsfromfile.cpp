@@ -51,9 +51,8 @@ ThermodynamicsFromFile::
 
 std::string ThermodynamicsFromFile::
     set_windvelocities(const Config &config)
-/* depending on SDnspace, read in data for wind velocity
-components from binary files into appropriate vectors
-and check they have correct size */
+/* depending on SDnspace, read in data
+for wind velocity components (or not)*/
 {
   const int SDnspace(config.SDnspace);
 
@@ -61,38 +60,88 @@ and check they have correct size */
   {
     return "0-D model has no wind data";
   }
-
   else if (SDnspace <= 3) // means 1 <= SDnspace < 4
   {
-    std::string info(std::to_string(SDnspace) + "-D model ");
-    wvel = thermodynamicvar_from_binary(config.wvel_filename);
-    get_wvelzfaces = [&](const unsigned int gbxindex)
-    { return wvel.at(atpos + (size_t)gbxindex); };
-
-    if (SDnspace >= 2)
-    {
-      uvel = thermodynamicvar_from_binary(config.uvel_filename);
-      get_uvelxfaces = [&](const unsigned int gbxindex)
-      { return uvel.at(atpos + (size_t)gbxindex); };
-
-      if (SDnspace == 3)
-      {
-        vvel = thermodynamicvar_from_binary(config.vvel_filename);
-        get_vvelyfaces = [&](const unsigned int gbxindex)
-        { return vvel.at(atpos + (size_t)gbxindex); };
-        
-        return info + "[w, u, v] wind velocity";
-      }
-      return info+"[w, u] wind velocity";
-    }
-    return info+"vertical w wind velocity";
+    set_windvelocities_frombinaries(config);
   }
-
   else // means SDnspace > 3
   {
     const std::string errmsg("SDnspace > 3 is invalid");
     throw std::invalid_argument(errmsg);
   }
+}
+
+std::string ThermodynamicsFromFile::
+    set_windvelocities_frombinaries(const Config &config)
+/* Read in data from binary files for wind
+velocity components in 1D, 2D or 3D model
+and check they have correct size */
+{
+  const int SDnspace(config.SDnspace);
+ 
+  std::string info(std::to_string(SDnspace) + "-D model ");
+  if (SDnspace >= 1)
+  {
+    if (SDnspace >= 2)
+    {
+      if (SDnspace == 3)
+      {
+        vvel = vvel_from_binary(config.vvel_filename);
+        return info + "[w, u, v] wind velocity";
+      }
+      uvel = uvel_from_binary(config.uvel_filename);
+      return info+"[w, u] wind velocity";
+    }
+    wvel = wvel_from_binary(config.wvel_filename);
+    return info+"vertical w wind velocity";
+  }
+  return info;
+}
+
+
+std::vector<double> ThermodynamicsFromFile::
+    wvel_from_binary(std::string_view filename)
+    /* set function for retrieving wvel defined at zfaces of 
+    a gridbox with index 'gbxindex' and return vector 
+    containting wvel data from binary file */
+{
+  get_wvelzfaces = [&](const unsigned int gbxindex)
+  {
+    const size_t lpos(atpos_zface + (size_t)gbxindex);
+    return std::pair<double, double>{wvel.at(lpos), wvel.at(lpos+1)};
+  };
+
+  return thermodynamicvar_from_binary(filename);
+}
+
+std::vector<double> ThermodynamicsFromFile::
+    uvel_from_binary(std::string_view filename)
+    /* set function for retrieving uvel defined at xfaces of 
+    a gridbox with index 'gbxindex' and return vector 
+    containting uvel data from binary file */
+{
+  get_uvelxfaces = [&](const unsigned int gbxindex)
+  {
+    const size_t lpos(atpos_xface + (size_t)gbxindex);
+    return std::pair<double, double>{uvel.at(lpos), uvel.at(lpos+1)};
+  };
+
+  return thermodynamicvar_from_binary(filename);
+}
+
+std::vector<double> ThermodynamicsFromFile::
+    vvel_from_binary(std::string_view filename)
+    /* set function for retrieving vvel defined at yfaces of 
+    a gridbox with index 'gbxindex' and return vector 
+    containting vvel data from binary file */
+{
+  get_vvelyfaces = [&](const unsigned int gbxindex)
+  {
+    const size_t lpos(atpos_yface + (size_t)gbxindex);
+    return std::pair<double, double>{vvel.at(lpos), vvel.at(lpos+1)};
+  };
+
+  return thermodynamicvar_from_binary(filename);
 }
 
 void ThermodynamicsFromFile::
