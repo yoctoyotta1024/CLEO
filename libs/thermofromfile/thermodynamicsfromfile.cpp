@@ -24,21 +24,20 @@ thermodynamicvar_from_binary(std::string_view filename)
 ThermodynamicsFromFile::
     ThermodynamicsFromFile(const Config &config,
                            const std::array<size_t, 3> &ndims,
-                           const size_t nsteps,
-                           const size_t ngridboxes)
-    : atpos(0),
-      ngridboxes(ngridboxes),
+                           const size_t nsteps)
+    : ndims(ndims),
+      atpos(0),
       press(thermodynamicvar_from_binary(config.press_filename)),
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
       qcond(thermodynamicvar_from_binary(config.qcond_filename)),
       wvel(), uvel(), vvel(),
       get_wvelzfaces([](const unsigned int ii)
-               {return std::pair<double, double>{0.0,0.0};}),
+                     { return std::pair<double, double>{0.0, 0.0}; }),
       get_uvelxfaces([](const unsigned int ii)
-               {return std::pair<double, double>{0.0,0.0};}),
+                     { return std::pair<double, double>{0.0, 0.0}; }),
       get_vvelyfaces([](const unsigned int ii)
-               {return std::pair<double, double>{0.0,0.0};}),
+                     { return std::pair<double, double>{0.0, 0.0}; }),
 {
   std::string windstr = set_windvelocities(config);
   std::cout << "\nFinished reading thermodynamics from binaries for:\n"
@@ -101,8 +100,6 @@ void ThermodynamicsFromFile::
                                      const std::array<size_t, 3> &ndims,
                                      const size_t nsteps) const
 {
-  check_vectorsizes({press.size(), temp.size(),
-                      qvap.size(), qcond.size()});
 
   auto is_size = [](const std::vector<double> &vel, const size_t sz)
   { 
@@ -113,6 +110,11 @@ void ThermodynamicsFromFile::
                                 "not consistent with SDnspace");
     }
   };
+
+  const size_t ngridboxes(ndims[0]*ndims[1]*ndims[2]);
+  is_size(press, nsteps*ngridboxes);
+  check_vectorsizes({press.size(), temp.size(),
+                      qvap.size(), qcond.size()});
 
   if (SDnspace >= 1)
   {
