@@ -27,6 +27,9 @@ ThermodynamicsFromFile::
                            const size_t nsteps)
     : ndims(ndims),
       atpos(0),
+      atpos_zface(0),
+      atpos_xface(0),
+      atpos_yface(0),
       press(thermodynamicvar_from_binary(config.press_filename)),
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
