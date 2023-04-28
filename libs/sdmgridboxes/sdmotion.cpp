@@ -37,6 +37,42 @@ bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
   return cfl;
 }
 
+double WindsAtCoord::interpolate_wind(const std::pair<double, double> bounds,
+                                      const std::pair<double, double> vel,
+                                      const double coord)
+/* Given [X = z,x or y] wind velocity component, vel, that is
+defined on the faces of a gridbox at {lower, upper} [X] bounds,
+return wind at [X] coord. Method is 'simple' linear interpolation
+from Grabowski et al. (2018) */
+{
+  const double alpha((coord - bounds.first) / (bounds.second - bounds.first));
+
+  const double interpolated_vel(alpha*vel.second + (1-alpha)*vel.first);
+
+  return interpolated_vel;
+} 
+
+double WindsAtCoord::interp_wvel() const
+/* returns w wind velocity at z=coord3 for gridbox gbxindex */
+{
+  return interpolate_wind(gbxmaps.get_bounds_z(gbxindex),
+                          gbx.state.wvel, coord3);
+}
+
+double WindsAtCoord::interp_uvel() const
+/* returns u wind velocity at x=coord1 for gridbox gbxindex */
+{
+  return interpolate_wind(gbxmaps.get_bounds_x(gbxindex),
+                          gbx.state.uvel, coord1); 
+}
+
+double WindsAtCoord::interp_vvel() const
+/* returns v wind velocity at y=coord2 for gridbox gbxindex */
+{
+  return interpolate_wind(gbxmaps.get_bounds_y(gbxindex),
+                          gbx.state.vvel, coord2); 
+}
+
 Prescribed2DFlow::Prescribed2DFlow(const double zlength,
                                    const double xlength,
                                    const double wmax,

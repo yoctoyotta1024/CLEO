@@ -23,23 +23,6 @@ coordinates according to equations of motion) */
 #include "./gridbox.hpp"
 #include "./maps4gridboxes.hpp"
 
-bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
-                  const unsigned int gbxindex,
-                  const double delta3, const double delta1,
-                  const double delta2);
-/* returns false if any of z, x or y (3,1,2) directions
-  do not meet their cfl criterion. For each direction,
-  Criterion is C = delta[X] / gridstep =< 1 where the
-  gridstep is calculated from the gridbox boundaries map */
-
-inline bool cfl_criterion(const double gridstep,
-                          const double sdstep)
-/* sdstep = change in superdroplet coordinate position.
-returns false if cfl criterion, C = sdstep / gridstep, > 1 */
-{
-  return (sdstep <= gridstep);
-}
-
 template <typename M>
 concept SdMotion = requires(M m, const int currenttimestep,
                             const GridBox &gbx,
@@ -60,6 +43,56 @@ which takes a ThermoState and Superdrop as arguments */
   };
 };
 
+bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
+                  const unsigned int gbxindex,
+                  const double delta3, const double delta1,
+                  const double delta2);
+/* returns false if any of z, x or y (3,1,2) directions
+  do not meet their cfl criterion. For each direction,
+  Criterion is C = delta[X] / gridstep =< 1 where the
+  gridstep is calculated from the gridbox boundaries map */
+
+inline bool cfl_criterion(const double gridstep,
+                          const double sdstep)
+/* sdstep = change in superdroplet coordinate position.
+returns false if cfl criterion, C = sdstep / gridstep, > 1 */
+{
+  return (sdstep <= gridstep);
+}
+
+struct WindsAtCoord
+/* struct containing method to interpolate w, u, and v
+wind velocities defined on faces on gridbox to a
+superdroplet's (z,x,y) coordinates at
+(coord3, coord1, coord2) */
+{
+private:
+  const Maps4GridBoxes &gbxmaps;
+  const ThermoState &state;
+  const unsigned int gbxindex;
+  const double coord3;
+  const double coord1;
+  const double coord2;
+
+  double WindsAtCoord::interpolate_wind(const std::pair<double, double> bounds,
+                                        const std::pair<double, double> vel,
+                                        const double coord);
+  /* Given [X = z,x or y] wind velocity component, vel, that is
+  defined on the faces of a gridbox at {lower, upper} [X] bounds,
+  return wind at [X] coord. Method is 'simple' linear interpolation
+  from Grabowski et al. (2018) */
+
+public:
+  double interp_wvel() const;
+  /* returns w wind velocity at z=coord3 for gridbox gbxindex */
+
+  double interp_uvel() const;
+  /* returns u wind velocity at x=coord1 for gridbox gbxindex */
+
+  double interp_vvel() const;
+  /* returns v wind velocity at y=coord2 for gridbox gbxindex */
+};
+
 struct NullMotion
 {
   int next_move(const int currenttimestep) const
@@ -78,7 +111,7 @@ struct NullMotion
 };
 
 template <VelocityFormula TerminalVelocity>
-class NoInterpMoveWithSedimentation
+class MoveWithSedimentation
 {
 private:
   const int interval;                 // integer timestep for movement
@@ -93,7 +126,7 @@ private:
   }
 
 public:
-  NoInterpMoveWithSedimentation(const int interval,
+  MoveWithSedimentation(const int interval,
                         const std::function<double(int)> int2time,
                         const TerminalVelocity terminalv)
       : interval(interval),
@@ -118,15 +151,18 @@ public:
   without interpolation to the SD position and using
   single step forward euler method to integrate dx/dt */
   {
-  const double delta3 = deltacoord(gbx.state.wvelcentre() - terminalv(drop)); // w wind + terminal velocity
-  const double delta1 = deltacoord(gbx.state.uvelcentre()); // u component of wind velocity
-  const double delta2 = deltacoord(gbx.state.vvelcentre()); // v component of wind velocity (y=2)
+    const WindsAtCoord winds{gbxmaps, gbx.state, gbx.gbxindex,
+                             drop.coord3, drop.coord1, drop.coord2};
 
-  cfl_criteria(gbxmaps, gbx.gbxindex, delta3, delta1, delta2);
+    const double delta3 = deltacoord(winds.interp_wvel() - terminalv(drop)); // w wind + terminal velocity
+    const double delta1 = deltacoord(winds.interp_uvel());                   // u component of wind velocity
+    const double delta2 = deltacoord(winds.interp_vvel());                   // v component of wind velocity (y=2)
 
-  drop.coord3 += delta3;
-  drop.coord1 += delta1;
-  drop.coord2 += delta2;
+    cfl_criteria(gbxmaps, gbx.gbxindex, delta3, delta1, delta2);
+
+    drop.coord3 += delta3;
+    drop.coord1 += delta1;
+    drop.coord2 += delta2;
   }
 };
 
