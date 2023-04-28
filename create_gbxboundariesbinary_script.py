@@ -30,6 +30,7 @@ xgrid = [0, 1500, 100]
 
 ### input parameters for y coords of gridbox boundaries
 ygrid = np.asarray([0, 100])
+# ygrid = [0, 1500, 200]
 
 Path(gridfilepath).mkdir(exist_ok=True) 
 Path(binpath).mkdir(exist_ok=True) 
