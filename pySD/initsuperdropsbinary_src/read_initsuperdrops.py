@@ -61,26 +61,23 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
     fig, axs = figure_setup(attrs.coord3, attrs.coord1, attrs.coord2)
 
     # create nbins evenly spaced in log10(r)
-    nbins = 100
+    nbins = 20
     minr, maxr = np.min(attrs.radius)/10, np.max(attrs.radius)*10
     hedgs = np.linspace(np.log10(minr), np.log10(maxr),
                         nbins+1)  # edges to lnr bins
 
-    unique_idxs = np.unique(attrs.sd_gbxindex)
-    for j, idx in enumerate(unique_idxs):
-        vol = gbxvols[j]
-        i2plt = np.where(attrs.sd_gbxindex == idx)
+    gbxidxs  = np.unique(attrs.sd_gbxindex)
+    for idx in gbxidxs:
+        vol = gbxvols[idx]
+        sl = np.s_[attrs.sd_gbxindex==idx]
         l0 = plot_radiusdistrib(axs[0], hedgs, 
-                                attrs.radius[i2plt], attrs.eps[i2plt])
-
-        l1 = plot_numconcdistrib(axs[1], hedgs, attrs.eps[i2plt],
-                                 attrs.radius[i2plt], vol)
-
-        l3 = plot_masssolutedistrib(axs[2], hedgs, attrs.eps[i2plt],
-                                    attrs.radius[i2plt], attrs.m_sol[i2plt],
+                                attrs.radius[sl], attrs.eps[sl])
+        l1 = plot_numconcdistrib(axs[1], hedgs, attrs.eps[sl],
+                                 attrs.radius[sl], vol)
+        l3 = plot_masssolutedistrib(axs[2], hedgs, attrs.eps[sl],
+                                    attrs.radius[sl], attrs.m_sol[sl],
                                     vol)
-        
-        ls = plot_coorddistribs(axs, i2plt, hedgs, attrs)
+        ls = plot_coorddistribs(axs, sl, hedgs, attrs)
         
     fig.tight_layout()
     if savefig:
