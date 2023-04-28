@@ -54,8 +54,8 @@ private:
   from Grabowski et al. (2018) */
 
 public:
-  Maps4GridBoxes &gbxmaps;
-  ThermoState &state;
+  const Maps4GridBoxes &gbxmaps;
+  const ThermoState &state;
   unsigned int gbxindex;
   double coord3;
   double coord1;
@@ -112,15 +112,48 @@ template <VelocityFormula TerminalVelocity>
 class MoveWithSedimentation
 {
 private:
-  const int interval;                 // integer timestep for movement
-  const double delt;                  // equivalent of interval as dimensionless time
-  
+  const int interval; // integer timestep for movement
+  const double delt;  // equivalent of interval as dimensionless time
+
   TerminalVelocity terminalv; // returns terminal velocity given a superdroplet
 
-  double deltacoord(const double vel) const
-  /* returns change in a coord given a velocity component 'vel' */
+  struct Deltas
   {
-    return vel * delt;
+    double delta3;
+    double delta1;
+    double delta2;
+  };
+
+  Deltas predictor_corrector(const Maps4GridBoxes &gbxmaps,
+                             const GridBox &gbx,
+                             const Superdrop &drop) const
+  {
+    const double terminal = terminalv(drop);
+
+    WindsAtCoord winds{gbxmaps, gbx.state, gbx.gbxindex,
+                       drop.coord3, drop.coord1, drop.coord2};
+
+    /* corrector velocities based on predicted coords */
+    const double vel3 = winds.interp_wvel() - terminal;
+    const double vel1 = winds.interp_uvel();
+    const double vel2 = winds.interp_vvel();
+
+    /* predictor coords given velocity at previous coords */
+    winds.coord3 += vel3 * delt; // move by w wind + terminal velocity
+    winds.coord1 += vel1 * delt; // move by u wind
+    winds.coord2 += vel2 * delt; // move by v wind
+
+    /* corrector velocities based on predicted coords */
+    const double corrvel3 = winds.interp_wvel() - terminal;
+    const double corrvel1 = winds.interp_uvel();
+    const double corrvel2 = winds.interp_vvel();
+
+    /* predicted-corrected change to superdrop coords */
+    const double delta3((vel3 + corrvel3) * (delt / 2));
+    const double delta1((vel1 + corrvel1) * (delt / 2));
+    const double delta2((vel2 + corrvel2) * (delt / 2));
+
+    return Deltas{delta3, delta1, delta2};
   }
 
 public:
@@ -144,23 +177,20 @@ public:
   void change_superdroplet_coords(const Maps4GridBoxes &gbxmaps,
                                   const GridBox &gbx,
                                   Superdrop &drop) const
-  /* very crude method to forward timestep the velocity
-  using the velocity from the gridbox thermostate, ie.
-  without interpolation to the SD position and using
-  single step forward euler method to integrate dx/dt */
+  /* Uses predictor-corrector method to forward timestep 
+  a superdroplet's coordinates using the interpolated 
+  wind velocity from a gridbox's thermostate */
   {
-    const WindsAtCoord winds{gbxmaps, gbx.state, gbx.gbxindex,
-                             drop.coord3, drop.coord1, drop.coord2};
+    /* USe predictor-corrector method to get change in SD coords */
+    Deltas d{predictor_corrector(gbxmaps, gbx, drop)};
 
-    const double delta3 = deltacoord(winds.interp_wvel() - terminalv(drop)); // w wind + terminal velocity
-    const double delta1 = deltacoord(winds.interp_uvel());                   // u component of wind velocity
-    const double delta2 = deltacoord(winds.interp_vvel());                   // v component of wind velocity (y=2)
+    /* CFL check predicted change to SD coords */
+    cfl_criteria(gbxmaps, gbx.gbxindex, d.delta3, d.delta1, d.delta2);
 
-    cfl_criteria(gbxmaps, gbx.gbxindex, delta3, delta1, delta2);
-
-    drop.coord3 += delta3;
-    drop.coord1 += delta1;
-    drop.coord2 += delta2;
+    /* update SD coords */
+    drop.coord3 += d.delta3;
+    drop.coord1 += d.delta1;
+    drop.coord2 += d.delta2;
   }
 };
 
