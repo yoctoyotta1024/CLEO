@@ -22,42 +22,45 @@ class ThermodynamicsFromFile
 {
 private:
   size_t atpos; // position of thermodata for 0th gridbox at given timestep
-  size_t ngrid; // number of gridboxes in domain (=increment of atpos)  
+  size_t ngridboxes; // number of gridboxes in domain (=increment of atpos)  
   std::vector<double> press;
   std::vector<double> temp;
   std::vector<double> qvap;
   std::vector<double> qcond;
-  std::vector<double> wvel;
-  std::vector<double> uvel;
-  std::vector<double> vvel;
+  std::vector<double> wvelzface; // w velocity define of z faces of gridboxes
+  std::vector<double> uvelxface; // u velocity define of x faces of gridboxes
+  std::vector<double> vvelyface; // v velocity define of y faces of gridboxes
 
   std::string set_windvelocities(const Config &config);
   
   void check_thermodyanmics_vectorsizes(const int SDnspace,
-                                        const size_t sz0) const;
+                                     const std::array<size_t, 3> &ndims,
+                                     const size_t nsteps) const;
 
   double get_var(const std::vector<double> &vec,
                  const size_t ii) const
   /* use atpos to get a value from 'vec' (which should
   correspond to the thermodynamic variable for
-  ii'th gridbox at desired timestep (step = atos//ngrid) */
+  ii'th gridbox at desired timestep (step = atos//ngridboxes) */
   {
     return vec.at(atpos+ii);
   }
 
 public:
-  std::function<double(const unsigned int)> get_wvel; // funcs to get velocity defined in construction of class 
-  std::function<double(const unsigned int)> get_uvel; // warning: these functions are not const member funcs by default
-  std::function<double(const unsigned int)> get_vvel;
-  
+  std::function<double(const unsigned int)> get_wvelzface; // funcs to get velocity defined in construction of class 
+  std::function<double(const unsigned int)> get_uvelxface; // warning: these functions are not const member funcs by default
+  std::function<double(const unsigned int)> get_vvelyface;
+
   ThermodynamicsFromFile(const Config &config,
-                         const size_t nsteps, const size_t ngridboxes);
+                         const std::array<size_t, 3> &ndims,
+                         const size_t nsteps,
+                         const size_t ngridboxes);
 
   void run_thermostep()
   /* increment position of thermodata for 0th gridbox to positon
   at next timestep (ie. ngridboxes further along vector) */
   {
-    atpos += ngrid;
+    atpos += ngridboxes;
   }
 
   double get_press(const unsigned int gbxindex) const

@@ -23,17 +23,22 @@ thermodynamicvar_from_binary(std::string_view filename)
 
 ThermodynamicsFromFile::
     ThermodynamicsFromFile(const Config &config,
-                           const size_t nsteps, const size_t ngridboxes)
+                           const std::array<size_t, 3> &ndims,
+                           const size_t nsteps,
+                           const size_t ngridboxes)
     : atpos(0),
-      ngrid(ngridboxes),
+      ngridboxes(ngridboxes),
       press(thermodynamicvar_from_binary(config.press_filename)),
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
       qcond(thermodynamicvar_from_binary(config.qcond_filename)),
-      wvel(), uvel(), vvel(),
-      get_wvel([](const unsigned int ii) {return 0.0;}),
-      get_uvel([](const unsigned int ii) {return 0.0;}),
-      get_vvel([](const unsigned int ii) {return 0.0;})
+      wvelzface(), uvelxface(), vvelyface(),
+      get_wvelzface([](const unsigned int ii)
+               { return 0.0; }),
+      get_uvelxface([](const unsigned int ii)
+               { return 0.0; }),
+      get_vvelyface([](const unsigned int ii)
+               { return 0.0; })
 {
   std::string windstr = set_windvelocities(config);
   std::cout << "\nFinished reading thermodynamics from binaries for:\n"
@@ -42,8 +47,7 @@ ThermodynamicsFromFile::
                "  liquid water mass mixing ratio,\n  "
             << windstr << '\n';
 
-  const size_t size(nsteps*ngridboxes); // correct size of thermodata vectors
-  check_thermodyanmics_vectorsizes(config.SDnspace, size); 
+  check_thermodyanmics_vectorsizes(config.SDnspace, ndims, nsteps);
 }
 
 std::string ThermodynamicsFromFile::
@@ -62,21 +66,21 @@ and check they have correct size */
   else if (SDnspace <= 3) // means 1 <= SDnspace < 4
   {
     std::string info(std::to_string(SDnspace) + "-D model ");
-    wvel = thermodynamicvar_from_binary(config.wvel_filename);
-    get_wvel = [&](const unsigned int gbxindex)
-    { return wvel.at(atpos + (size_t)gbxindex); };
+    wvelzface = thermodynamicvar_from_binary(config.wvel_filename);
+    get_wvelzface = [&](const unsigned int gbxindex)
+    { return wvelzface.at(atpos + (size_t)gbxindex); };
 
     if (SDnspace >= 2)
     {
-      uvel = thermodynamicvar_from_binary(config.uvel_filename);
-      get_uvel = [&](const unsigned int gbxindex)
-      { return uvel.at(atpos + (size_t)gbxindex); };
+      uvelxface = thermodynamicvar_from_binary(config.uvel_filename);
+      get_uvelxface = [&](const unsigned int gbxindex)
+      { return uvelxface.at(atpos + (size_t)gbxindex); };
 
       if (SDnspace == 3)
       {
-        vvel = thermodynamicvar_from_binary(config.vvel_filename);
-        get_vvel = [&](const unsigned int gbxindex)
-        { return vvel.at(atpos + (size_t)gbxindex); };
+        vvelyface = thermodynamicvar_from_binary(config.vvel_filename);
+        get_vvelyface = [&](const unsigned int gbxindex)
+        { return vvelyface.at(atpos + (size_t)gbxindex); };
         
         return info + "[w, u, v] wind velocity";
       }
@@ -94,23 +98,35 @@ and check they have correct size */
 
 void ThermodynamicsFromFile::
     check_thermodyanmics_vectorsizes(const int SDnspace,
-                                     const size_t sz) const
+                                     const std::array<size_t, 3> &ndims,
+                                     const size_t nsteps) const
 {
   check_vectorsizes({press.size(), temp.size(),
                       qvap.size(), qcond.size()});
 
-  auto err = []()
-  {
-    throw std::invalid_argument("wind velocity vectors are "
+  auto is_size = [](const std::vector<double> &vel, const size_t sz)
+  { 
+    const size_t velsize(vel.size());
+    if( velsize != sz )
+    {
+      throw std::invalid_argument("wind velocity vectors are "
                                 "not consistent with SDnspace");
+    }
   };
 
-  const size_t w(wvel.size());
-  const size_t u(uvel.size());
-  const size_t v(vvel.size());
-
-  if (SDnspace == 3 && (w != sz || u != sz || v != sz)){err();}
-  else if (SDnspace == 2 && (w != sz || u != sz || v != 0)){err();}
-  else if (SDnspace == 1 && (w != sz || u != 0 || v != 0)){err();}
-  else if (SDnspace == 0 && (w != 0 || u != 0 || v != 0)){err();}
+  if (SDnspace >= 1)
+  {
+    const size_t wsz = nsteps*(ndims[0]+1)*ndims[1]*ndims[2];
+    is_size(wvelzface, wsz);
+    if (SDnspace >= 2)
+    {
+      const size_t usz = nsteps*ndims[0]*(ndims[1]+1)*ndims[2];
+      is_size(uvelxface, usz);
+      if (SDnspace >= 3)
+      {
+        const size_t vsz = nsteps*ndims[0]*ndims[1]*(ndims[2]+1);
+        is_size(vvelyface, vsz);
+      }
+    } 
+  }
 }
