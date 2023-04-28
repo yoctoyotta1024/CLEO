@@ -46,7 +46,15 @@ public:
   RunSDMStep(const Maps4GridBoxes &gbxmaps, const M &movesd,
              const P &sdmprocess, const O &observer)
       : sdmmotion(movesd), gbxmaps(gbxmaps), sdmprocess(sdmprocess),
-      observer(observer), ngridboxes(gbxmaps.gbxidxs.size()) {}
+      observer(observer), ngridboxes(gbxmaps.gbxidxs.size())
+      {
+        const size_t ngrid(gbxmaps.ndims[0]*gbxmaps.ndims[1]*gbxmaps.ndims[2]);
+        if (ngrid != ngridboxes)
+        {
+          throw std::invalid_argument("Model dimensions doesn't match "
+                                      "number of gridboxes");
+        }
+      }
 
   void run_sdmstep(const int t_mdl, const int onestep,
                    std::mt19937 &gen,
