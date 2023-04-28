@@ -118,9 +118,9 @@ public:
   without interpolation to the SD position and using
   single step forward euler method to integrate dx/dt */
   {
-  const double delta3 = deltacoord(gbx.state.wvel - terminalv(drop)); // w wind + terminal velocity
-  const double delta1 = deltacoord(gbx.state.uvel); // u component of wind velocity
-  const double delta2 = deltacoord(gbx.state.vvel); // v component of wind velocity (y=2)
+  const double delta3 = deltacoord(gbx.state.wvelcentre() - terminalv(drop)); // w wind + terminal velocity
+  const double delta1 = deltacoord(gbx.state.uvelcentre()); // u component of wind velocity
+  const double delta2 = deltacoord(gbx.state.vvelcentre()); // v component of wind velocity (y=2)
 
   cfl_criteria(gbxmaps, gbx.gbxindex, delta3, delta1, delta2);
 

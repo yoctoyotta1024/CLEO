@@ -27,9 +27,9 @@ private:
   std::vector<double> temp;
   std::vector<double> qvap;
   std::vector<double> qcond;
-  std::vector<double> wvelzface; // w velocity define of z faces of gridboxes
-  std::vector<double> uvelxface; // u velocity define of x faces of gridboxes
-  std::vector<double> vvelyface; // v velocity define of y faces of gridboxes
+  std::vector<double> wvel; // w velocity define of z faces of gridboxes
+  std::vector<double> uvel; // u velocity define of x faces of gridboxes
+  std::vector<double> vvel; // v velocity define of y faces of gridboxes
 
   std::string set_windvelocities(const Config &config);
   
@@ -47,9 +47,9 @@ private:
   }
 
 public:
-  std::function<double(const unsigned int)> get_wvelzface; // funcs to get velocity defined in construction of class 
-  std::function<double(const unsigned int)> get_uvelxface; // warning: these functions are not const member funcs by default
-  std::function<double(const unsigned int)> get_vvelyface;
+  std::function<std::pair<double,double>(const unsigned int)> get_wvelzfaces; // funcs to get velocity defined in construction of class 
+  std::function<std::pair<double,double>(const unsigned int)> get_uvelxfaces; // warning: these functions are not const member funcs by default
+  std::function<std::pair<double,double>(const unsigned int)> get_vvelyfaces;
 
   ThermodynamicsFromFile(const Config &config,
                          const std::array<size_t, 3> &ndims,

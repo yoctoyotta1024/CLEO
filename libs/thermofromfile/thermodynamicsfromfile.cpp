@@ -32,13 +32,13 @@ ThermodynamicsFromFile::
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
       qcond(thermodynamicvar_from_binary(config.qcond_filename)),
-      wvelzface(), uvelxface(), vvelyface(),
-      get_wvelzface([](const unsigned int ii)
-               { return 0.0; }),
-      get_uvelxface([](const unsigned int ii)
-               { return 0.0; }),
-      get_vvelyface([](const unsigned int ii)
-               { return 0.0; })
+      wvel(), uvel(), vvel(),
+      get_wvelzfaces([](const unsigned int ii)
+               {return std::pair<double, double>{0.0,0.0};}),
+      get_uvelxfaces([](const unsigned int ii)
+               {return std::pair<double, double>{0.0,0.0};}),
+      get_vvelyfaces([](const unsigned int ii)
+               {return std::pair<double, double>{0.0,0.0};}),
 {
   std::string windstr = set_windvelocities(config);
   std::cout << "\nFinished reading thermodynamics from binaries for:\n"
@@ -66,21 +66,21 @@ and check they have correct size */
   else if (SDnspace <= 3) // means 1 <= SDnspace < 4
   {
     std::string info(std::to_string(SDnspace) + "-D model ");
-    wvelzface = thermodynamicvar_from_binary(config.wvel_filename);
-    get_wvelzface = [&](const unsigned int gbxindex)
-    { return wvelzface.at(atpos + (size_t)gbxindex); };
+    wvel = thermodynamicvar_from_binary(config.wvel_filename);
+    get_wvelzfaces = [&](const unsigned int gbxindex)
+    { return wvel.at(atpos + (size_t)gbxindex); };
 
     if (SDnspace >= 2)
     {
-      uvelxface = thermodynamicvar_from_binary(config.uvel_filename);
-      get_uvelxface = [&](const unsigned int gbxindex)
-      { return uvelxface.at(atpos + (size_t)gbxindex); };
+      uvel = thermodynamicvar_from_binary(config.uvel_filename);
+      get_uvelxfaces = [&](const unsigned int gbxindex)
+      { return uvel.at(atpos + (size_t)gbxindex); };
 
       if (SDnspace == 3)
       {
-        vvelyface = thermodynamicvar_from_binary(config.vvel_filename);
-        get_vvelyface = [&](const unsigned int gbxindex)
-        { return vvelyface.at(atpos + (size_t)gbxindex); };
+        vvel = thermodynamicvar_from_binary(config.vvel_filename);
+        get_vvelyfaces = [&](const unsigned int gbxindex)
+        { return vvel.at(atpos + (size_t)gbxindex); };
         
         return info + "[w, u, v] wind velocity";
       }
@@ -117,15 +117,15 @@ void ThermodynamicsFromFile::
   if (SDnspace >= 1)
   {
     const size_t wsz = nsteps*(ndims[0]+1)*ndims[1]*ndims[2];
-    is_size(wvelzface, wsz);
+    is_size(wvel, wsz);
     if (SDnspace >= 2)
     {
       const size_t usz = nsteps*ndims[0]*(ndims[1]+1)*ndims[2];
-      is_size(uvelxface, usz);
+      is_size(uvel, usz);
       if (SDnspace >= 3)
       {
         const size_t vsz = nsteps*ndims[0]*ndims[1]*(ndims[2]+1);
-        is_size(vvelyface, vsz);
+        is_size(vvel, vsz);
       }
     } 
   }

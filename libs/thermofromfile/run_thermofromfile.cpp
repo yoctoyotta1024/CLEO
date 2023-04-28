@@ -21,8 +21,8 @@ to match that given by the ThermodnamicsFromFile 'thermodyn' */
     gbx.state.qvap = thermodyn.get_qvap(gbx.gbxindex);
     gbx.state.qcond = thermodyn.get_qcond(gbx.gbxindex);
 
-    gbx.state.wvel = thermodyn.get_wvelzface(gbx.gbxindex);
-    gbx.state.uvel = thermodyn.get_uvelxface(gbx.gbxindex);
-    gbx.state.vvel = thermodyn.get_vvelyface(gbx.gbxindex);
+    gbx.state.wvel = thermodyn.get_wvelzfaces(gbx.gbxindex);
+    gbx.state.uvel = thermodyn.get_uvelxfaces(gbx.gbxindex);
+    gbx.state.vvel = thermodyn.get_vvelyfaces(gbx.gbxindex);
   }
 }
