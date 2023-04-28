@@ -124,14 +124,14 @@ containting wvel data from binary file */
 {
   get_wvelzfaces = [&](const unsigned int gbxindex)
   {
-    const auto kij = kijfromindex(ndims, (size_t)gbxindex);  // [k,i,j] of gridbox centre on 3D grid
-    const size_t nzfaces(ndims[0]+1);  // no. z faces to same 3D grid
-    
-    size_t lpos(ndims[1]*nzfaces*kij[2] + nzfaces * kij[1] + kij[0]); // position of lower face in 1D wvel vector
-    lpos += atpos_xface;
-    const size_t upos(lpos + 1); 
+    const auto kij = kijfromindex(ndims, (size_t)gbxindex); // [k,i,j] of gridbox centre on 3D grid
+    const size_t nzfaces(ndims[0] + 1);                     // no. z faces to same 3D grid
 
-    return std::pair<double, double>{wvel.at(lpos), wvel.at(upos)};
+    size_t lpos(ndims[1] * nzfaces * kij[2] + nzfaces * kij[1] + kij[0]); // position of z lower face in 1D wvel vector
+    lpos += atpos_zface;
+    const size_t uppos(lpos + 1); // position of z upper face
+
+    return std::pair<double, double>{wvel.at(lpos), wvel.at(uppos)};
   };
 
   return thermodynamicvar_from_binary(filename);
@@ -139,14 +139,20 @@ containting wvel data from binary file */
 
 std::vector<double> ThermodynamicsFromFile::
     uvel_from_binary(std::string_view filename)
-    /* set function for retrieving uvel defined at xfaces of 
-    a gridbox with index 'gbxindex' and return vector 
-    containting uvel data from binary file */
+/* set function for retrieving uvel defined at xfaces of
+a gridbox with index 'gbxindex' and return vector
+containting uvel data from binary file */
 {
   get_uvelxfaces = [&](const unsigned int gbxindex)
   {
-    const size_t lpos(atpos_xface + (size_t)gbxindex);
-    return std::pair<double, double>{uvel.at(lpos), uvel.at(lpos+1)};
+    const auto kij = kijfromindex(ndims, (size_t)gbxindex); // [k,i,j] of gridbox centre on 3D grid
+    const size_t nxfaces(ndims[1] + 1);                     // no. x faces to same 3D grid
+
+    size_t lpos(nxfaces * ndims[0] * kij[2] + ndims[0] * kij[1] + kij[0]); // position of x lower face in 1D uvel vector
+    lpos += atpos_xface;
+    const size_t uppos(lpos + ndims[0]); // position of x upper face
+
+    return std::pair<double, double>{uvel.at(lpos), uvel.at(uppos)};
   };
 
   return thermodynamicvar_from_binary(filename);
@@ -160,8 +166,13 @@ std::vector<double> ThermodynamicsFromFile::
 {
   get_vvelyfaces = [&](const unsigned int gbxindex)
   {
-    const size_t lpos(atpos_yface + (size_t)gbxindex);
-    return std::pair<double, double>{vvel.at(lpos), vvel.at(lpos+1)};
+    const auto kij = kijfromindex(ndims, (size_t)gbxindex); // [k,i,j] of gridbox centre on 3D grid
+    
+    size_t lpos(ndims[1] * ndims[0] * kij[2] + ndims[0] * kij[1] + kij[0]); // position of y lower face in 1D vvel vector
+    lpos += atpos_yface;
+    const size_t uppos(lpos + ndims[1] * ndims[0]); // position of x upper face
+
+    return std::pair<double, double>{vvel.at(lpos), vvel.at(uppos)};
   };
 
   return thermodynamicvar_from_binary(filename);
