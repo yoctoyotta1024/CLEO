@@ -48,7 +48,7 @@ from Grabowski et al. (2018) */
   const double alpha((coord - bounds.first) / (bounds.second - bounds.first));
 
   const double interpolated_vel(alpha*vel.second + (1-alpha)*vel.first);
-
+  
   return interpolated_vel;
 } 
 
