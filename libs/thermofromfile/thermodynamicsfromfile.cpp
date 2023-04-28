@@ -166,10 +166,7 @@ std::vector<double> ThermodynamicsFromFile::
 {
   get_vvelyfaces = [&](const unsigned int gbxindex)
   {
-    const auto kij = kijfromindex(ndims, (size_t)gbxindex); // [k,i,j] of gridbox centre on 3D grid
-    
-    size_t lpos(ndims[1] * ndims[0] * kij[2] + ndims[0] * kij[1] + kij[0]); // position of y lower face in 1D vvel vector
-    lpos += atpos_yface;
+    const size_t lpos((size_t)gbxindex + atpos_yface); // position of y lower face in 1D vvel vector
     const size_t uppos(lpos + ndims[1] * ndims[0]); // position of x upper face
 
     return std::pair<double, double>{vvel.at(lpos), vvel.at(uppos)};
