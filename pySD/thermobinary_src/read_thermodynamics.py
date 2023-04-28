@@ -168,14 +168,15 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
                                                     inputs=inputs)
 
     plot_1dprofiles(zfull, thermodata, binpath, savefig)
+
+    if inputs["SDnspace"] > 0: 
+      xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
+      xxf, zzf = np.meshgrid(xfull, zfull, indexing="ij") # dims [xdims, zdims]
+      plot_2dcolormaps(zzh, xxh, zzf, xxf, thermodata, inputs, binpath, savefig)
     
-    xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
-    xxf, zzf = np.meshgrid(xfull, zfull, indexing="ij") # dims [xdims, zdims]
-    plot_2dcolormaps(zzh, xxh, zzf, xxf, thermodata, inputs, binpath, savefig)
-    
-    if inputs["SDnspace"] >= 2:
-      plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel_cens"],
-                    thermodata["uvel_cens"], binpath, savefig)
+      if inputs["SDnspace"] > 1:
+        plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel_cens"],
+                      thermodata["uvel_cens"], binpath, savefig)
 
 def plot_1dprofiles(zfull, thermodata, binpath, savefig):
     
@@ -190,7 +191,10 @@ def plot_1dprofiles(zfull, thermodata, binpath, savefig):
     for v, var in enumerate(vars):
       if var in thermodata.vars:
         profalltime = thermodata.xymean(thermodata[var]) # 1d profile at all times
-        axs[v].plot(profalltime.T, zfull[None,:].T, marker="x")
+        try:
+          axs[v].plot(profalltime.T, zfull[None,:].T, marker="x") # (fails for 0D model)
+        except:
+          axs[v].scatter(profalltime.T, zfull[None,:].T, marker="x")
         axs[v].set_xlabel(vars[v]+units[v])  
         lines += 1
 
