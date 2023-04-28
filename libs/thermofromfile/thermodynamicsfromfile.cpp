@@ -21,6 +21,21 @@ thermodynamicvar_from_binary(std::string_view filename)
   return thermovar;
 }
 
+std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims,
+                                   const size_t index)
+/* return (k,i,j) indicies from idx for a flattened 3D array
+with ndims [nz, nx, ny]. kij is useful for then getting
+position in of a variable in a flattened array defined on
+the faces of the same grid. E.g for the w velocity defined 
+on z faces of the grid which therefore has dims [nz+1, nx, ny] */
+{
+  const size_t j = index / (ndims[0] * ndims[1]);
+  const size_t k = index % ndims[0];
+  const size_t i = index / ndims[0] - ndims[1] * j;
+
+  return std::array<size_t, 3>{k, i, j};
+}
+
 ThermodynamicsFromFile::
     ThermodynamicsFromFile(const Config &config,
                            const std::array<size_t, 3> &ndims,
@@ -101,19 +116,22 @@ and check they have correct size */
   return info;
 }
 
-
 std::vector<double> ThermodynamicsFromFile::
     wvel_from_binary(std::string_view filename)
-    /* set function for retrieving wvel defined at zfaces of 
-    a gridbox with index 'gbxindex' and return vector 
-    containting wvel data from binary file */
+/* set function for retrieving wvel defined at zfaces of
+a gridbox with index 'gbxindex' and return vector
+containting wvel data from binary file */
 {
   get_wvelzfaces = [&](const unsigned int gbxindex)
   {
-    const size_t ii(gbxindex);
-    const size_t relpos = (ii / ndims[0])*(ndims[0]+1) + ii % ndims[0]; 
-    const size_t lpos(atpos_zface + relpos);
-    return std::pair<double, double>{wvel.at(lpos), wvel.at(lpos+1)};
+    const auto kij = kijfromindex(ndims, (size_t)gbxindex);  // [k,i,j] of gridbox centre on 3D grid
+    const size_t nzfaces(ndims[0]+1);  // no. z faces to same 3D grid
+    
+    size_t lpos(ndims[1]*nzfaces*kij[2] + nzfaces * kij[1] + kij[0]); // position of lower face in 1D wvel vector
+    lpos += atpos_xface;
+    const size_t upos(lpos + 1); 
+
+    return std::pair<double, double>{wvel.at(lpos), wvel.at(upos)};
   };
 
   return thermodynamicvar_from_binary(filename);
