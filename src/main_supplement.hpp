@@ -41,6 +41,7 @@ SDM process and observers to use in main.cpp */
 
 /* thermodynamics solver and coupled model setup */
 #include "thermofromfile/run_thermofromfile.hpp"
+#include "thermofromfile/prescribedmotion.hpp"
 
 namespace dlc = dimless_constants;
 

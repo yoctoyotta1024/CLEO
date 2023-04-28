@@ -19,6 +19,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(SOURCES 
 "thermodynamicsfromfile.cpp"
 "run_thermofromfile.cpp"
+"prescribedmotion.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
