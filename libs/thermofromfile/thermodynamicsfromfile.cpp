@@ -110,7 +110,9 @@ std::vector<double> ThermodynamicsFromFile::
 {
   get_wvelzfaces = [&](const unsigned int gbxindex)
   {
-    const size_t lpos(atpos_zface + (size_t)gbxindex);
+    const size_t ii(gbxindex);
+    const size_t relpos = (ii / ndims[0])*(ndims[0]+1) + ii % ndims[0]; 
+    const size_t lpos(atpos_zface + relpos);
     return std::pair<double, double>{wvel.at(lpos), wvel.at(lpos+1)};
   };
 
