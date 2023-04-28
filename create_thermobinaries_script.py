@@ -42,15 +42,15 @@ Xlength = 1500 # [m]
 
 qvapmethod, sratio = "sratio", 0.85
 zbase = 750
-# gen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
-#                                         THETA, "sratio", zbase, sratio,
-#                                         qcond, WMAX, Zlength, Xlength,
-#                                         VVEL)
+gen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
+                                        THETA, "sratio", zbase, sratio,
+                                        qcond, WMAX, Zlength, Xlength,
+                                        VVEL)
 
-qvap = 0.0075 # [Kg/Kg]
-gen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
-                                        THETA, qvap, qcond, WMAX, 
-                                        Zlength, Xlength, VVEL)
+# qvap = 0.0075 # [Kg/Kg]
+# gen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+#                                         THETA, qvap, qcond, WMAX, 
+#                                         Zlength, Xlength, VVEL)
 # -------------------------------------------------------------- #
 
 cthermo.write_thermodynamics_binary(thermofile, gen, configfile,

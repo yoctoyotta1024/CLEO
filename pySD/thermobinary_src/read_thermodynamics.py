@@ -100,9 +100,9 @@ def thermovar_from_binary(var, thermofiles, shape,
   data, ndata = readbinary(filename)
 
   if ndata != int(np.prod(shape)):
-    err = "incorrect data length for "+var+" defined at"+\
-                    " gridbox centres for "+str(ntime)+" timesteps"+\
-                    " on grid with dims = "+str(ndims)
+    err = str(ndata)+" is incorrect data length for "+var+\
+          " defined for "+str(ntime)+" timesteps"+\
+         " on grid with dims = "+str(ndims)
     raise ValueError(err)
   else:
     data = np.reshape(np.asarray(data, dtype=dtype), shape)
