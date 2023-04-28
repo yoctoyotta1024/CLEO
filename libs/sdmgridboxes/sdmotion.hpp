@@ -44,22 +44,23 @@ superdroplet's (z,x,y) coordinates at
 (coord3, coord1, coord2) */
 {
 private:
-  const Maps4GridBoxes &gbxmaps;
-  const ThermoState &state;
-  const unsigned int gbxindex;
-  const double coord3;
-  const double coord1;
-  const double coord2;
 
-  double WindsAtCoord::interpolate_wind(const std::pair<double, double> bounds,
-                                        const std::pair<double, double> vel,
-                                        const double coord);
+  double interpolate_wind(const std::pair<double, double> bounds,
+                          const std::pair<double, double> vel,
+                          const double coord) const;
   /* Given [X = z,x or y] wind velocity component, vel, that is
   defined on the faces of a gridbox at {lower, upper} [X] bounds,
   return wind at [X] coord. Method is 'simple' linear interpolation
   from Grabowski et al. (2018) */
 
 public:
+  Maps4GridBoxes &gbxmaps;
+  ThermoState &state;
+  unsigned int gbxindex;
+  double coord3;
+  double coord1;
+  double coord2;
+
   double interp_wvel() const;
   /* returns w wind velocity at z=coord3 for gridbox gbxindex */
 
@@ -150,8 +151,6 @@ public:
   {
     const WindsAtCoord winds{gbxmaps, gbx.state, gbx.gbxindex,
                              drop.coord3, drop.coord1, drop.coord2};
-
-
 
     const double delta3 = deltacoord(winds.interp_wvel() - terminalv(drop)); // w wind + terminal velocity
     const double delta1 = deltacoord(winds.interp_uvel());                   // u component of wind velocity

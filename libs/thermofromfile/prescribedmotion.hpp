@@ -18,6 +18,7 @@ according to a prescribed 2D flow */
 #include "superdrop_solver/thermostate.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 #include "sdmgridboxes/maps4gridboxes.hpp"
+#include "sdmgridboxes/sdmotion.hpp"
 
 class Prescribed2DFlow
 /* Fixed 2D flow with constant density from
