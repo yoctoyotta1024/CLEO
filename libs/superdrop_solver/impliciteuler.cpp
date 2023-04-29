@@ -25,7 +25,7 @@ Refer to sect 5.1.2 Shima et al. 2009 for more details */
 {
   bool do_iter = true;
   int iter = 0;
-  double ziter = r_k; // value of ziter at iter=0 (no iterations yet)
+  double ziter(initial_guess(s_ratio, akoh, bkoh, r_k)); // ziter at iter=0 (before any iterations)
 
   while (do_iter)
   {
@@ -52,6 +52,22 @@ Refer to sect 5.1.2 Shima et al. 2009 for more details */
 
   // once iterations have converged, return ziter
   return ziter;
+}
+
+double ImplicitEuler::initial_guess(const double s_ratio, const double akoh,
+                                    const double bkoh, const double r_k) const
+/* returns appropriate initial value for ziter based on 
+uniqueness criteria of solution (root) of condensation ODE */
+{
+  // const double sact_factor = 4.0*std::pow(akoh, 3.0) / (27*bkoh);
+  // if (s_ratio > 1.0 && sact_factor < 1.0)
+  // {
+  //   return 1e-6 / dlc::R0;
+  // }
+
+  const double r1(std::sqrt(bkoh/akoh)); // equilibrium radius for drolet at s_ratio=1
+  
+  return std::max(r_k, r1);
 }
 
 ImplicitEuler::IterReturn

@@ -15,6 +15,7 @@
 #include <string>
 #include <stdexcept>
 #include <cmath>
+#include <algorithm>
 
 #include "../claras_SDconstants.hpp"
 
@@ -37,6 +38,11 @@ private:
     bool do_iter;
     double ziter;
   };
+
+  double initial_guess(const double s_ratio, const double akoh,
+                      const double bkoh, const double r_k) const;
+  /* returns appropriate initial value for ziter based on 
+  uniqueness criteria of solution (root) of condensation ODE */
 
   ImplicitEuler::IterReturn
   iterate_rootfinding_algorithm(double ziter, const double s_ratio,
