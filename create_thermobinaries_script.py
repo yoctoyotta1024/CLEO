@@ -27,9 +27,9 @@ qc_init = 0.0                           # initial liquid water content []
 W_INIT = 0.0                            # initial vertical (z) velocity [m/s]
 U_INIT = 0.0                            # initial horizontal x velocity [m/s]
 V_INIT = 0.0                            # initial horizontal y velocity [m/s]
-# gen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
-#                                     qc_init, W_INIT, U_INIT, V_INIT,
-#                                     relh=relh_init, constsfile=constsfile)
+gen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
+                                    qc_init, W_INIT, U_INIT, V_INIT,
+                                    relh=relh_init, constsfile=constsfile)
 
 # ----- 2D Flow Field with Hydrostatic or Simple z Profile ----- #
 PRESS0 = 101500 # [Pa]
@@ -42,10 +42,10 @@ Xlength = 1500 # [m]
 
 qvapmethod, sratio = "sratio", 0.85
 zbase = 750
-gen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
-                                        THETA, "sratio", zbase, sratio,
-                                        qcond, WMAX, Zlength, Xlength,
-                                        VVEL)
+# gen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
+#                                         THETA, "sratio", zbase, sratio,
+#                                         qcond, WMAX, Zlength, Xlength,
+#                                         VVEL)
 
 # qvap = 0.0075 # [Kg/Kg]
 # gen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
