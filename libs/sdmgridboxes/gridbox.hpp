@@ -20,6 +20,7 @@ struct */
 #include "initialisation/config.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"
+#include "superdrop_solver/thermodynamic_equations.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -63,5 +64,12 @@ std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &gbxmaps,
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from gbxmaps.gbxidxs, and a span of the
 superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
+
+void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes);
+/* for each gridbox, set the radius of each superdroplet (SD) to
+whichever is larger out of their dry radius or equlibrium wet radius
+(given the relative humidity (s_ratio) and temperature of the gridbox).
+If relh > maxrelh = 0.95, set each SD's radius to their
+equilibrium radius at relh = maxrelh = 0.95 */
 
 #endif // GRIDBOX_HPP

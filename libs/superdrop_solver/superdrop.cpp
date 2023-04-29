@@ -17,9 +17,10 @@ double Superdrop::mass() const
 	return mass;
 }
 
-double Superdrop::superdroplet_wet_radius(const double s_ratio, const double temp) const
+double Superdrop::equilibrium_wetradius(const double s_ratio,
+                                        const double temp) const
 /* Performs Newton Raphson root finding algorithm using functions in 
-WetRadiusRootFinder struct to solve equation for equilibrium (wet) 
+WetRadius root finder struct to solve equation for equilibrium (wet) 
 radius of superdroplet at given relative humidity. Equilibrium radius 
 defined by radius when ODE from "An Introduction To Clouds...."
 (see note at top of file) eqn [7.28] = 0. */
@@ -28,34 +29,9 @@ defined by radius when ODE from "An Introduction To Clouds...."
   const double akoh = akohler_factor(temp);
   const double bkoh = bkohler_factor();
 
-  int iter = 0;
-  bool do_iter = true;
-  double ziter = radius; // value of ziter at iter=0 (no iterations yet)
-	WetRadiusRootFinder wrrf;
+	WetRadius wrrf{maxiters};
 
-  while (do_iter)
-  {
-    if (iter > maxiters)
-    {
-      const std::string errormsg = "WARNING! Newton Raphson Method did not "
-                                   " converge within " +
-                                   std::to_string(maxiters) +
-                                   " no. iterations\n";
-      throw std::invalid_argument(errormsg);             
-      break;
-    }
-    else
-    {
-      /* add one to the number of attempted iterations
-        z^(m+1) for iteration m+1 starting at m=0 */
-      iter += 1;
-      const WetRadiusRootFinder::IterationReturn a = wrrf.iterate_wetradius_rootfinding_algorithm(ziter, s_ratio, akoh, bkoh);
-      do_iter = a.do_iter;
-      ziter = a.ziter;
-    }
-  }
-
-  return ziter;
+  return wrrf.get_wetradius(radius, s_ratio, akoh, bkoh);
 }
 
 double Superdrop::rhoeff() const
@@ -112,39 +88,73 @@ Prevents drops shrinking further once they are size of dry_radius(). */
 	return radius - oldradius;
 }
 
-WetRadiusRootFinder::IterationReturn
-WetRadiusRootFinder::iterate_wetradius_rootfinding_algorithm(double ziter, const double s_ratio,
-																									 const double akoh, const double bkoh) const
+double WetRadius::get_wetradius(const double radius0, const double s_ratio,
+                                const double akoh, const double bkoh) const
+/* Iterate Newton Raphson root finding algorithm to
+return wet radius of a superdroplet in equilibrium
+with supersaturation s_ratio */
+{
+  int iter = 0;
+  bool do_iter = true;
+  double ziter = radius0; // value of ziter at iter=0 (no iterations yet)
+  
+  while (do_iter)
+  {
+    if (iter > maxiters)
+    {
+      const std::string err = "Newton Raphson Method did not converge"
+                              " within " + std::to_string(maxiters) +
+                              " iterations to find wet radius\n";
+      throw std::invalid_argument(err);             
+      break;
+    }
+    else
+    {
+      /* add one to the number of attempted iterations
+        z^(m+1) for iteration m+1 starting at m=0 */
+      iter += 1;
+      const auto a(iterate_rootfinding(ziter, s_ratio, akoh, bkoh));
+      do_iter = a.do_iter;
+      ziter = a.ziter;
+    }
+  }
+
+  return ziter;
+}
+
+WetRadius::IterationReturn
+WetRadius::iterate_rootfinding(double ziter, const double s_ratio,
+                               const double akoh, const double bkoh) const
 /* performs 1 iteration of newton raphson root finding algorithm for 
 obtaining the equilibrium wet radius of the condensation ODE at a given 
 relative humidity (s_ratio). ODE from "An Introduction To Clouds...." 
 (see note at top of file) eqn [7.28] */
 {
-  const double ode = equilibrium_radius_polynomial(s_ratio, akoh, bkoh, ziter);
+  const double ode = wetradius_polynomial(ziter, s_ratio, akoh, bkoh);
   const double odederiv = 3 * (s_ratio - 1.0) * pow(ziter, 2.0) - 2 * akoh * ziter;
   
   ziter -= ode / odederiv; // increment ziter
 
   // prepare for next iteration or end while loop
-  const double new_ode = equilibrium_radius_polynomial(s_ratio, akoh, bkoh, ziter); 
+  const double new_ode = wetradius_polynomial(ziter, s_ratio, akoh, bkoh); 
   
   return IterationReturn{isnotconverged(new_ode, ode), ziter};
 }
 
-double WetRadiusRootFinder::equilibrium_radius_polynomial(const double s_ratio,
-																													const double akoh,
-																													const double bkoh,
-																													const double ziter) const
+double WetRadius::wetradius_polynomial(const double ziter,
+                                       const double s_ratio,
+                                       const double akoh,
+                                       const double bkoh) const
 /* returns value of (cubic) polynomial evaluted at ziter. Root of this
-polynomial is the value of the equilibrium (wet) radius of a superdroplet 
-at a given relative humidity (ie. s_ratio) derived from ODE in 
-"An Introduction To Clouds...." (see note at top of file) eqn [7.28] */                                    
+polynomial is the value of the equilibrium (wet) radius of a superdroplet
+at a given relative humidity (ie. s_ratio) derived from ODE in
+"An Introduction To Clouds...." (see note at top of file) eqn [7.28] */
 {
   return (s_ratio - 1.0) * pow(ziter, 3.0) - (akoh * pow(ziter, 2.0)) + bkoh;
 }
 
-bool WetRadiusRootFinder::isnotconverged(const double new_ode,
-																				 const double ode) const
+bool WetRadius::isnotconverged(const double new_ode,
+                               const double ode) const
 /* boolean where True means criteria for ending newton raphson iterations
 has not yet been met. Criteria is standard local error test:
 |iteration - previous iteration| < RTOL * |iteration| + ATOL */

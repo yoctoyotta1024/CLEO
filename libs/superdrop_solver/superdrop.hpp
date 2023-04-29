@@ -85,9 +85,10 @@ public:
   /* calculate total mass of droplet
   mass = (water + dry areosol)  */
 
-  double superdroplet_wet_radius(const double s_ratio, const double temp) const;
+  double equilibrium_wetradius(const double s_ratio,
+                               const double temp) const;
   /* Performs Newton Raphson root finding algorithm using functions in 
-  WetRadiusRootFinder struct to solve equation for equilibrium (wet) 
+  WetRadius root finder struct to solve equation for equilibrium (wet) 
   radius of superdroplet at given relative humidity. Equilibrium radius 
   defined by radius when ODE from "An Introduction To Clouds...."
   (see note at top of file) eqn [7.28] = 0. */
@@ -122,11 +123,27 @@ public:
   }
 };
 
-struct WetRadiusRootFinder
+struct WetRadius
 {
   private:
-    double equilibrium_radius_polynomial(const double s_ratio, const double akoh,
-                                        const double bkoh, const double ziter) const;
+    struct IterationReturn
+    /* struct used for returning boolean and double
+    from iterate_rootfinding_algorithm function */
+    {
+      bool do_iter;
+      double ziter;
+    };
+
+    IterationReturn iterate_rootfinding(double ziter, const double s_ratio,
+                                        const double akoh, const double bkoh) const;
+    /* iterate wetradius rootfinding algorithm. Performs 1 iteration of
+    newton raphson root finding algorithm for obtaining the equilibrium
+    wet radius of the condensation ODE at a given 
+    relative humidity (s_ratio). ODE from "An Introduction To Clouds...." 
+    (see note at top of file) eqn [7.28] */
+
+    double wetradius_polynomial(const double ziter, const double s_ratio,
+                                const double akoh, const double bkoh) const;
     /* returns value of (cubic) polynomial evaluted at ziter. Root of this
     polynomial is the value of the equilibrium (wet) radius of a superdroplet 
     at a given relative humidity (ie. s_ratio) derived from ODE in 
@@ -136,23 +153,15 @@ struct WetRadiusRootFinder
     /* boolean where True means criteria for ending newton raphson iterations
     has not yet been met. Criteria is standard local error test:
     |iteration - previous iteration| < RTOL * |iteration| + ATOL */
- 
+  
   public: 
-    struct IterationReturn
-    /* struct used for returning boolean and double
-    from iterate_rootfinding_algorithm function */
-    {
-      bool do_iter;
-      double ziter;
-    };
+    int maxiters;
 
-    IterationReturn iterate_wetradius_rootfinding_algorithm(double ziter, const double s_ratio,
-                                                            const double akoh, const double bkoh) const;
-    /* performs 1 iteration of newton raphson root finding algorithm for 
-    obtaining the equilibrium wet radius of the condensation ODE at a given 
-    relative humidity (s_ratio). ODE from "An Introduction To Clouds...." 
-    (see note at top of file) eqn [7.28] */    
-
+    double get_wetradius(const double radius0, const double s_ratio,
+                         const double akoh, const double bkoh) const;
+    /* Iterate Newton Raphson root finding algorithm to
+    return wet radius of a superdroplet in equilibrium
+    with supersaturation s_ratio */
 };
 
 struct SuperdropWithGbxindex

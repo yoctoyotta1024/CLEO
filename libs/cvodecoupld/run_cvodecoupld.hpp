@@ -46,8 +46,6 @@ std::mt19937 preparetotimestep(CvodeThermoSolver &cvode,
 std::vector<double> initcvodethermo(const size_t num_gridboxes,
                               const Config &config);
 
-void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes);
-
 void run_cvodecoupld(const Config &config,
                   const RunSDMStep<auto, auto, auto> &sdm,
                   const int t_end, const int couplstep)

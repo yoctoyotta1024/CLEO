@@ -102,3 +102,31 @@ superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
 
   return gridboxes;
 }
+
+void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes)
+/* for each gridbox, set the radius of each superdroplet (SD) to
+whichever is larger out of their dry radius or equlibrium wet radius
+(given the relative humidity (s_ratio) and temperature of the gridbox).
+If relh > maxrelh = 0.95, set each SD's radius to their
+equilibrium radius at relh = maxrelh = 0.95 */
+{
+
+  const double maxrelh = 0.95;
+
+  for (auto &gbx : gridboxes)
+  {
+    const double temp = gbx.state.temp;
+    const double psat = saturation_pressure(temp);
+    const double supersat = supersaturation_ratio(gbx.state.press,
+                                                  gbx.state.qvap, psat);
+    const double s_ratio = std::min(maxrelh, supersat);
+    
+    for (auto &SDinGBx : gbx.span4SDsinGBx)
+    {
+      const double wetr(SDinGBx.superdrop.equilibrium_wetradius(s_ratio,
+                                                                temp));
+      const double dryr(SDinGBx.superdrop.get_dry_radius());
+      SDinGBx.superdrop.radius = std::max(dryr, wetr);
+    }
+  }
+}

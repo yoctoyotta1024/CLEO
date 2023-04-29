@@ -58,28 +58,3 @@ radii to equilibrium wet radius if wetradiiinit is true. */
 
   return std::mt19937(std::random_device()());
 }
-
-void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes)
-/* for each gridbox, set the radius of each superdroplet (SD) to whichever is
-larger out of their dry radius or equlibrium wet radius
-(given the relative humidity (s_ratio) and temperature of the gridbox).
-If relh > maxrelh = 0.95, set each SD's radius to their
-equilibrium radius at relh = maxrelh = 0.95 */
-{
-
-  const double maxrelh = 0.95;
-
-  for (auto &gbx : gridboxes)
-  {
-    const double temp = gbx.state.temp;
-    const double psat = saturation_pressure(temp);
-    const double s_ratio = std::min(maxrelh, supersaturation_ratio(gbx.state.press,
-                                                                   gbx.state.qvap, psat));
-    for (auto &SDinGBx : gbx.span4SDsinGBx)
-    {
-      const double equilwetradius = SDinGBx.superdrop.superdroplet_wet_radius(s_ratio, temp);
-      const double dryradius = SDinGBx.superdrop.get_dry_radius();
-      SDinGBx.superdrop.radius = std::max(dryradius, equilwetradius);
-    }
-  }
-}
