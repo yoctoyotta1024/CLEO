@@ -122,7 +122,7 @@ with supersaturation s_ratio */
   return ziter;
 }
 
-WetRadius::IterationReturn
+WetRadius::IterReturn
 WetRadius::iterate_rootfinding(double ziter, const double s_ratio,
                                const double akoh, const double bkoh) const
 /* performs 1 iteration of newton raphson root finding algorithm for 
@@ -138,7 +138,7 @@ relative humidity (s_ratio). ODE from "An Introduction To Clouds...."
   // prepare for next iteration or end while loop
   const double new_ode = wetradius_polynomial(ziter, s_ratio, akoh, bkoh); 
   
-  return IterationReturn{isnotconverged(new_ode, ode), ziter};
+  return IterReturn{isnotconverged(new_ode, ode), ziter};
 }
 
 double WetRadius::wetradius_polynomial(const double ziter,

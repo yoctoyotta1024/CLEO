@@ -32,20 +32,18 @@ private:
   const double rtol;  // relative tolerance for convergence of NR method
   const double atol;  // abolute tolerance for convergence of NR method
 
-  struct IterationReturn
+  struct IterReturn
   {
     bool do_iter;
     double ziter;
   };
 
-  ImplicitEuler::IterationReturn iterate_rootfinding_algorithm(double ziter,
-                                                const double s_ratio,
-                                                const double akoh,
-                                                const double bkoh,
-                                                const double fkl,
-                                                const double fdl,
-                                                const double r_k) const;
-  /* function performs one iteration of Newton Raphson rootfinding 
+  ImplicitEuler::IterReturn
+  iterate_rootfinding_algorithm(double ziter, const double s_ratio,
+                                const double akoh, const double bkoh,
+                                const double fkl, const double fdl,
+                                const double r_k) const;
+  /* function performs one iteration of Newton Raphson rootfinding
   method and returns updated value of radius alongside a boolean that
   is false if algorithm has converged */
 

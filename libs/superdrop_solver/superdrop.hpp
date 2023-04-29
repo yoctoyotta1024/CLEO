@@ -126,7 +126,7 @@ public:
 struct WetRadius
 {
   private:
-    struct IterationReturn
+    struct IterReturn
     /* struct used for returning boolean and double
     from iterate_rootfinding_algorithm function */
     {
@@ -134,8 +134,8 @@ struct WetRadius
       double ziter;
     };
 
-    IterationReturn iterate_rootfinding(double ziter, const double s_ratio,
-                                        const double akoh, const double bkoh) const;
+    IterReturn iterate_rootfinding(double ziter, const double s_ratio,
+                                   const double akoh, const double bkoh) const;
     /* iterate wetradius rootfinding algorithm. Performs 1 iteration of
     newton raphson root finding algorithm for obtaining the equilibrium
     wet radius of the condensation ODE at a given 

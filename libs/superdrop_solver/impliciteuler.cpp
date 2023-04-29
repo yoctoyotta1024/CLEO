@@ -43,8 +43,8 @@ Refer to sect 5.1.2 Shima et al. 2009 for more details */
       /* add one to the number of attempted iterations
         z^(m+1) for iteration m+1 starting at m=0 */
       iter += 1;
-      const IterationReturn a = iterate_rootfinding_algorithm(ziter, s_ratio, akoh,
-                                                              bkoh, fkl, fdl, r_k);
+      const IterReturn a = iterate_rootfinding_algorithm(ziter, s_ratio, akoh,
+                                                         bkoh, fkl, fdl, r_k);
       do_iter = a.do_iter;
       ziter = a.ziter;
     }
@@ -54,13 +54,14 @@ Refer to sect 5.1.2 Shima et al. 2009 for more details */
   return ziter;
 }
 
-ImplicitEuler::IterationReturn ImplicitEuler::iterate_rootfinding_algorithm(double ziter,
-                                                             const double s_ratio,
-                                                             const double akoh,
-                                                             const double bkoh,
-                                                             const double fkl,
-                                                             const double fdl,
-                                                             const double r_k) const
+ImplicitEuler::IterReturn
+ImplicitEuler::iterate_rootfinding_algorithm(double ziter,
+                                             const double s_ratio,
+                                             const double akoh,
+                                             const double bkoh,
+                                             const double fkl,
+                                             const double fdl,
+                                             const double r_k) const
 /* function performs one iteration of Newton Raphson rootfinding
   method and returns updated value of radius alongside a boolean that
   is false if algorithm has converged */
@@ -73,7 +74,7 @@ ImplicitEuler::IterationReturn ImplicitEuler::iterate_rootfinding_algorithm(doub
   const double newgfunc = ode_gfunc(ziter, r_k, s_ratio, akoh, bkoh, fkl, fdl);
   const bool do_iter = isnotconverged(newgfunc, gfunc);
 
-  return IterationReturn{do_iter, ziter};
+  return IterReturn{do_iter, ziter};
 }
 
 double ImplicitEuler::ode_gfunc(const double ziter, const double r_k,
