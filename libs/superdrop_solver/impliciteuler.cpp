@@ -76,13 +76,13 @@ by delt assuming that solution to g(ziter)=0 is unique and therefore
 Newton Raphson root finding algorithm converges quickly. This
 means sufficiently small tolerances and timestep are comparitively
 large, and maximum number of iterations is small:
-Relative tolerance 'rtol' >= 0.01, absolute tolerance 'atol' >= 0.1.
-Maximum number of Newton Raphson Iterations for timestep delt <= 3 */
+Relative tolerance 'rtol' >= 0.1, absolute tolerance 'atol' >= 0.1.
+Maximum number of Newton Raphson Iterations for timestep delt <= 10 */
 {
-  const int iterlimit(std::min(5, maxiters));
+  const int iterlimit(std::min(10, maxiters));
   const double subdelt(delt);
-  const double rtol(std::max(0.01, maxrtol));
-  const double atol(std::max(0.01, maxatol)); 
+  const double rtol(std::max(0.1, maxrtol));
+  const double atol(std::max(0.1, maxatol)); 
 
   const ImpIter impit{iterlimit, subdelt, rtol, atol,
                       s_ratio, akoh, bkoh, ffactor, rprev};
