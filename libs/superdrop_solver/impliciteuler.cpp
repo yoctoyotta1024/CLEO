@@ -35,11 +35,13 @@ for more details. */
 
   if ((s_ratio <= 1.0 && ract_ratio < 1.0) || (delt <= max_uniquedelt))
   {
-    return unique_solution_for_implicitmethod(rprev);  
+    return unique_solution_for_implicitmethod(s_ratio, akoh, bkoh,
+                                              ffactor, rprev);
   }
   else
   {
-    return subtimestep_solution_for_implicitmethod(rprev); 
+    return subtimestep_solution_for_implicitmethod(s_ratio, akoh, bkoh,
+                                                   ffactor, rprev);
   }
 }
 
@@ -81,6 +83,7 @@ Maximum number of Newton Raphson Iterations for timestep delt <= 3 */
   const double subdelt(delt);
   const double rtol(std::max(0.01, rtol));
   const double atol(std::max(1.0, atol)); 
+  
   const ImpIter impit{iterlimit, subdelt, rtol, atol,
                       s_ratio, akoh, bkoh, ffactor, rprev};
   
@@ -108,12 +111,12 @@ Iterations >= 25 for each subtimetep. */
   const double subdelt(delt);
   const double rtol(std::min(0.01, rtol));
   const double atol(std::min(0.1, atol));
+
   const ImpIter impit{iterlimit, subdelt, rtol, atol,
                       s_ratio, akoh, bkoh, ffactor, rprev};
 
   const double init_ziter(initial_ziter(rprev, s_ratio,
                                         akoh, bkoh)); // guess for ziter (before any iterations)
-
   return impit.implicitmethod_forcondensation(init_ziter);
 }
 

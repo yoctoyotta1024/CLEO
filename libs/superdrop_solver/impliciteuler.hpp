@@ -31,8 +31,8 @@ class ImplicitEuler
 private:
   const int maxiters;   // maximum number of NR iterations before error raised
   const double delt;    // timestep of ODE solver (at each step implicit method is called)
-  const double maxrtol; // maximum relative tolerance for convergence of NR method
-  const double maxatol; // maximum abolute tolerance for convergence of NR method
+  const double maxrtol; // adjustable relative tolerance for convergence of NR method
+  const double maxatol; // adjustable abolute tolerance for convergence of NR method
 
   double initial_ziter(const double s_ratio, const double akoh,
                        const double bkoh, const double r_k) const;
@@ -53,12 +53,11 @@ private:
   Relative tolerance 'rtol' >= 0.01, absolute tolerance 'atol' >= 0.1.
   Maximum number of Newton Raphson Iterations for timestep delt <= 3 */
 
-  double ImplicitEuler::
-    subtimestep_solution_for_implicitmethod(const double s_ratio,
-                                            const double akoh,
-                                            const double bkoh,
-                                            const double ffactor,
-                                            const double rprev) const;
+  double subtimestep_solution_for_implicitmethod(const double s_ratio,
+                                                 const double akoh,
+                                                 const double bkoh,
+                                                 const double ffactor,
+                                                 const double rprev) const;
   /* construct ImpIter instance to timestep condensation ODE
   by delt assuming that solution to g(ziter)=0 is not unique and
   therefore sub-timestepping is required with sufficiently
