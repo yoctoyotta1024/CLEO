@@ -44,7 +44,8 @@ private:
                                             const double akoh,
                                             const double bkoh,
                                             const double ffactor,
-                                            const double rprev) const;
+                                            const double rprev,
+                                            const std::string scenario) const;
   /* construct ImpIter instance to timestep condensation ODE
   by delt assuming that solution to g(ziter)=0 is unique and therefore
   Newton Raphson root finding algorithm converges quickly. This
@@ -57,7 +58,8 @@ private:
                                           const double akoh,
                                           const double bkoh,
                                           const double ffactor,
-                                          const double rprev) const;
+                                          const double rprev,
+                                          const std::string scenario) const;
   /* construct ImpIter instance to timestep condensation ODE
   by delt assuming that solution to g(ziter)=0 is not unique and
   therefore sub-timestepping is required with sufficiently
@@ -70,8 +72,8 @@ private:
 
   struct ImpIter
   {
-    const unsigned int iterlimit;  // maximum number of NR iterations before error raised
-    const double subdelt; // substepping timestep of implicit method (at each substep <= iterlimit NR iterations occur)
+    const unsigned int niters;  // number of NR iterations to try before testing convergence
+    const double subdelt; // timestep of implicit method (at each substep >= niter NR iterations occur)
     const double rtol;    // relative tolerance for convergence of NR method
     const double atol;    // abolute tolerance for convergence of NR method
 
@@ -81,17 +83,30 @@ private:
     const double ffactor;
     const double rprev;
 
-    double substepped_implicitmethod(const double delt, double ziter) const;
-    /* given initial guess for ziter, (which is usually radius^squared
-    from previous timestep), uses newton raphson iterative method to
-    find new value of radius that converges on the root of the
-    polynomial g(ziter) within the tolerances of the ImpIter instance.
-    Raises error if method does not converge within 'iterlimit' iterations.
-    Otherwise returns new value for the radius (which is the radius at
-    timestep 't+subdelt'. Refer to section 5.1.2 Shima et al. 2009
-    and section 3.3.3 of Matsushima et al. 2023 for more details. */
+    double newtonraphsoniterations(double ziter,
+                                const std::string scenario) const;
+    /* Timestep condensation ODE by delt given initial guess for ziter,
+    (which is usually radius^squared from previous timestep). Uses newton 
+    raphson iterative method to find new value of radius that converges
+    on the root of the polynomial g(ziter) within the tolerances of the
+    ImpIter instance. Uniquesol method assumes that solution to g(ziter)=0
+    is unique and therefore Newton Raphson root finding algorithm converges
+    quickly. This means method can be used with comparitively large tolerances
+    and timesteps, and the maximum number of iterations is small. After
+    'niters' iterations, convergence criteria is tested and futher 
+    iterations undertaken if not converged within 'niters' iterations. */
 
-    double implicitmethod(double ziter) const;
+    double newtonraphson_testediterations(const unsigned int iterlimit,
+                                          double ziter, const std::string scenario) const;
+    /*  Timestep condensation ODE by delt given initial guess for ziter,
+    (which is usually radius^squared from previous timestep). Uses
+    newton raphson iterative method to find new value of radius that
+    converges on the root of the polynomial g(ziter) within the tolerances
+    of the ImpIter instance. After every iteration, convergence criteria is
+    tested and error is raised if method does not converge within
+    'iterlimit' iterations. Otherwise returns new value for the radius
+    (which is the radius at timestep 't+subdelt'. Refer to section 5.1.2 Shima
+    et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
 
     std::pair<bool, double>
     iterate_rootfinding_algorithm(double ziter) const;
