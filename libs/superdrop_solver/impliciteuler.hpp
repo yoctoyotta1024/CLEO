@@ -39,11 +39,6 @@ private:
     double ziter;
   };
 
-  double initial_guess(const double s_ratio, const double akoh,
-                      const double bkoh, const double r_k) const;
-  /* returns appropriate initial value for ziter based on 
-  uniqueness criteria of solution (root) of condensation ODE */
-
   ImplicitEuler::IterReturn
   iterate_rootfinding_algorithm(double ziter, const double rprev,
                                 const double s_ratio, const double akoh,
@@ -51,6 +46,11 @@ private:
   /* function performs one iteration of Newton Raphson rootfinding
   method and returns updated value of radius^2 alongside a boolean that
   is false if algorithm has converged */
+
+  double initial_guess(const double s_ratio, const double akoh,
+                      const double bkoh, const double r_k) const;
+  /* returns appropriate initial value for ziter based on 
+  uniqueness criteria of solution (root) of condensation ODE */
 
   double ode_gfunc(const double rsqrd, const double radius,
                    const double rprev, const double s_ratio,
@@ -89,12 +89,12 @@ public:
                 const double rtol, const double atol)
       : maxiters(maxiters), delt(delt), rtol(rtol), atol(atol) {}
 
-  double ImplicitEuler::implicitmethod_forcondensation(const double s_ratio,
-                                                      const double akoh,
-                                                      const double bkoh,
-                                                      const double fkl,
-                                                      const double fdl,
-                                                      const double rprev) const;
+  double implicitmethod_forcondensation(const double s_ratio,
+                                        const double akoh,
+                                        const double bkoh,
+                                        const double fkl,
+                                        const double fdl,
+                                        const double rprev) const;
   /* given initial guess for radius, (which is usually squared r from previous
   timestep 'rprev'^2), uses newton raphson iterative method to find value of r
   that converges on the root of function g(z), "gfunc", within the

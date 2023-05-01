@@ -54,24 +54,6 @@ Refer to sect 5.1.2 Shima et al. 2009 for more details */
   return std::sqrt(ziter);
 }
 
-double ImplicitEuler::initial_guess(const double rprev,
-                                    const double s_ratio,
-                                    const double akoh,
-                                    const double bkoh) const
-/* returns appropriate initial value for ziter based on 
-uniqueness criteria of solution (root) of condensation ODE */
-{
-  // const double sact_factor = 4.0*std::pow(akoh, 3.0) / (27*bkoh);
-  // if (s_ratio > 1.0 && sact_factor < 1.0)
-  // {
-  //   return std::pow(1e-6 / dlc::R0, 2.0);
-  // }
-
-  const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
-  
-  return std::max(std::pow(rprev, 2.0), r1sqrd);
-}
-
 ImplicitEuler::IterReturn
 ImplicitEuler::iterate_rootfinding_algorithm(double ziter,
                                              const double rprev,
@@ -98,6 +80,24 @@ ImplicitEuler::iterate_rootfinding_algorithm(double ziter,
   const bool do_iter = isnotconverged(newnumerator, numerator);
 
   return IterReturn{do_iter, ziter};
+}
+
+double ImplicitEuler::initial_guess(const double rprev,
+                                    const double s_ratio,
+                                    const double akoh,
+                                    const double bkoh) const
+/* returns appropriate initial value for ziter based on 
+uniqueness criteria of solution (root) of condensation ODE */
+{
+  // const double sact_factor = 4.0*std::pow(akoh, 3.0) / (27*bkoh);
+  // if (s_ratio > 1.0 && sact_factor < 1.0)
+  // {
+  //   return std::pow(1e-6 / dlc::R0, 2.0);
+  // }
+
+  const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
+  
+  return std::max(std::pow(rprev, 2.0), r1sqrd);
 }
 
 double ImplicitEuler::ode_gfunc(const double rsqrd, const double radius,
