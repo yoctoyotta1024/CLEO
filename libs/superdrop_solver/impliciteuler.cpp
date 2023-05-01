@@ -16,40 +16,40 @@ double ImplicitEuler::solve_condensation(const double s_ratio,
                                          const double fkl,
                                          const double fdl,
                                          const double rprev) const
-/* given initial guess for radius, (which is usually squared r from previous
-timestep 'rprev'^2), uses newton raphson iterative method to find value of r
-that converges on the root of function g(z), "gfunc", within the
-tolerances of the ImplicitEuler instance. Returns this value
-of r (usually used for new value of radius at current timestep)
-Refer to sect 5.1.2 Shima et al. 2009 for more details */
+/* forward timestep previous radius 'rprev' by delt using an implicit
+euler method to integrate the condensation/evaporation ODg. Implict
+timestepping equation defined in section 5.1.2 of Shima et al. 2009
+and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
+Newton Raphson iterations are used to converge towards the root of 
+g(z) within the tolerances of an ImpIter instance. Tolerances,
+maxium number of iterations and sub-timestepping are adjusted based on
+on the uniqueness criteria of the polynomial g(z). Refer to section
+5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023
+for more details. */
 {
   const double ffactor(dlc::Rho_l * (fkl + fdl));
+  const double ract_ratio(rprev * rprev * akoh / 3.0 / bkoh);
 
-  const ImpIter impit{maxiters, delt, maxrtol, maxatol,
-                      s_ratio, akoh, bkoh, ffactor, rprev};
+  const double max_uniquedelt(
+      12.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
 
-  // if (is_caseb, or is_casea)
-  // {
-  //   rtol = 1e-2, do iters;
-  // }
-  // else
-  // {
-
-  //   delt = 0.1*delt;
-  //   do iters
-  // }
-
-  const double ziter(initial_guess(rprev, s_ratio, akoh, bkoh)); // ziter at iter=0 (before any iterations)
-
-  return impit.implicitmethod_forcondensation(ziter);
+  if ((s_ratio <= 1.0 && ract_ratio < 1.0) || (delt <= max_uniquedelt))
+  {
+    return unique_solution_for_implicitmethod(rprev);  
+  }
+  else
+  {
+    return subtimestep_solution_for_implicitmethod(rprev); 
+  }
 }
 
-double ImplicitEuler::initial_guess(const double rprev,
+double ImplicitEuler::initial_ziter(const double rprev,
                                     const double s_ratio,
                                     const double akoh,
                                     const double bkoh) const
-/* returns appropriate initial value for ziter based on 
-uniqueness criteria of solution (root) of condensation ODE */
+/* returns appropriate initial value (ie. a reasonable guess) for
+'ziter' to use as first iteration of newton raphson method in
+rootfinding algorithm for timestepping condensation/evaporation ODE */
 {
   // const double s_activ(1 + std::sqrt(4.0*std::pow(akoh, 3.0) / (27*bkoh))); // activation supersaturation of droplet
   // if (s_ratio > s_activ)
@@ -63,14 +63,70 @@ uniqueness criteria of solution (root) of condensation ODE */
   return std::pow(rprev, 2.0);
 }
 
+double ImplicitEuler::
+    unique_solution_for_implicitmethod(const double s_ratio,
+                                       const double akoh,
+                                       const double bkoh,
+                                       const double ffactor,
+                                       const double rprev) const
+/* construct ImpIter instance to timestep condensation ODE
+by delt assuming that solution to g(ziter)=0 is unique and therefore
+Newton Raphson root finding algorithm converges quickly. This
+means sufficiently small tolerances and timestep are comparitively
+large, and maximum number of iterations is small:
+Relative tolerance 'rtol' >= 0.01, absolute tolerance 'atol' >= 0.1.
+Maximum number of Newton Raphson Iterations for timestep delt <= 3 */
+{
+  const int iterlimit(std::min(3, maxiters));
+  const double subdelt(delt);
+  const double rtol(std::max(0.01, rtol));
+  const double atol(std::max(1.0, atol)); 
+  const ImpIter impit{iterlimit, subdelt, rtol, atol,
+                      s_ratio, akoh, bkoh, ffactor, rprev};
+  
+  const double init_ziter(std::pow(rprev, 2.0)); // guess for ziter (before any iterations)
+  return impit.implicitmethod_forcondensation(init_ziter);
+}
+
+double ImplicitEuler::
+    subtimestep_solution_for_implicitmethod(const double s_ratio,
+                                            const double akoh,
+                                            const double bkoh,
+                                            const double ffactor,
+                                            const double rprev) const
+/* construct ImpIter instance to timestep condensation ODE
+by delt assuming that solution to g(ziter)=0 is not unique and
+therefore sub-timestepping is required with sufficiently
+small tolerances. For each subtimestep, perform Newton Raphson
+root finding algorithm with comparitevly small tolerances to
+obtain solution to g(ziter) polynomial. Tolerances are:
+relative tolerance 'rtol' <= 0.01, absolute tolerance 'atol' <= 0.1.
+Subtimestep = delt/10 and maximum number of Newton Raphson
+Iterations >= 25 for each subtimetep. */
+{
+  const int iterlimit(std::max(25, maxiters));
+  const double subdelt(delt);
+  const double rtol(std::min(0.01, rtol));
+  const double atol(std::min(0.1, atol));
+  const ImpIter impit{iterlimit, subdelt, rtol, atol,
+                      s_ratio, akoh, bkoh, ffactor, rprev};
+
+  const double init_ziter(initial_ziter(rprev, s_ratio,
+                                        akoh, bkoh)); // guess for ziter (before any iterations)
+
+  return impit.implicitmethod_forcondensation(init_ziter);
+}
+
 double ImplicitEuler::ImpIter::
     implicitmethod_forcondensation(double ziter) const
-/* given initial guess for radius, (which is usually squared r from previous
-timestep 'rprev'^2), uses newton raphson iterative method to find value of r
-that converges on the root of function g(z), "gfunc", within the
-tolerances of the ImplicitEuler instance. Returns this value
-of r (usually used for new value of radius at current timestep)
-Refer to sect 5.1.2 Shima et al. 2009 for more details */
+/* given initial guess for ziter, (which is usually radius^squared
+from previous timestep), uses newton raphson iterative method to
+find new value of radius that converges on the root of the
+polynomial g(ziter) within the tolerances of the ImpIter instance.
+Raises error if method does not converge within 'iterlimit' iterations.
+Otherwise returns new value for the radius (which is the radius at
+timestep 't+subdelt'. Refer to section 5.1.2 Shima et al. 2009
+and section 3.3.3 of Matsushima et al. 2023 for more details. */
 {
   bool do_iter(true);
   int iter(1);
