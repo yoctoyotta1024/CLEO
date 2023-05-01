@@ -40,7 +40,7 @@ private:
   'ziter' to use as first iteration of newton raphson method in
   rootfinding algorithm for timestepping condensation/evaporation ODE */
 
-  double unique_solution_for_implicitmethod(const double s_ratio,
+  double uniquesol_for_implicitmethod(const double s_ratio,
                                             const double akoh,
                                             const double bkoh,
                                             const double ffactor,
@@ -53,11 +53,11 @@ private:
   Relative tolerance 'rtol' >= 0.01, absolute tolerance 'atol' >= 0.1.
   Maximum number of Newton Raphson Iterations for timestep delt <= 3 */
 
-  double subtimestep_solution_for_implicitmethod(const double s_ratio,
-                                                 const double akoh,
-                                                 const double bkoh,
-                                                 const double ffactor,
-                                                 const double rprev) const;
+  double substeppedsol_for_implicitmethod(const double s_ratio,
+                                          const double akoh,
+                                          const double bkoh,
+                                          const double ffactor,
+                                          const double rprev) const;
   /* construct ImpIter instance to timestep condensation ODE
   by delt assuming that solution to g(ziter)=0 is not unique and
   therefore sub-timestepping is required with sufficiently
@@ -81,7 +81,7 @@ private:
     const double ffactor;
     const double rprev;
 
-    double implicitmethod_forcondensation(double ziter) const;
+    double substepped_implicitmethod(const double delt, double ziter) const;
     /* given initial guess for ziter, (which is usually radius^squared
     from previous timestep), uses newton raphson iterative method to
     find new value of radius that converges on the root of the
@@ -90,6 +90,8 @@ private:
     Otherwise returns new value for the radius (which is the radius at
     timestep 't+subdelt'. Refer to section 5.1.2 Shima et al. 2009
     and section 3.3.3 of Matsushima et al. 2023 for more details. */
+
+    double implicitmethod(double ziter) const;
 
     std::pair<bool, double>
     iterate_rootfinding_algorithm(double ziter) const;
@@ -110,10 +112,10 @@ private:
     respect to z=rsqrd. g(z) is polynomial to find root of using
     Newton Raphson Method. */
 
-    inline bool isnotconverged(const double gfunciter,
+    bool isnotconverged(const double gfunciter,
                                const double gfuncprev) const
     /* boolean where True means criteria for ending newton raphson
-    iteratiions has not yet been met. Criteria is standard local error
+    iterations has not yet been met. Criteria is standard local error
     test: |iteration - previous iteration| < RTOL * |iteration| + ATOL */
     {
       const double converged = rtol * std::abs(gfunciter) + atol;

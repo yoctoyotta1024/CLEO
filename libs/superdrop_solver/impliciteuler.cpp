@@ -35,13 +35,13 @@ for more details. */
 
   if ((s_ratio <= 1.0 && ract_ratio < 1.0) || (delt <= max_uniquedelt))
   {
-    return unique_solution_for_implicitmethod(s_ratio, akoh, bkoh,
+    return uniquesol_for_implicitmethod(s_ratio, akoh, bkoh,
                                               ffactor, rprev);
   }
   else
   {
-    return subtimestep_solution_for_implicitmethod(s_ratio, akoh, bkoh,
-                                                   ffactor, rprev);
+    return substeppedsol_for_implicitmethod(s_ratio, akoh, bkoh,
+                                            ffactor, rprev);
   }
 }
 
@@ -65,12 +65,11 @@ rootfinding algorithm for timestepping condensation/evaporation ODE */
   return std::pow(rprev, 2.0);
 }
 
-double ImplicitEuler::
-    unique_solution_for_implicitmethod(const double s_ratio,
-                                       const double akoh,
-                                       const double bkoh,
-                                       const double ffactor,
-                                       const double rprev) const
+double ImplicitEuler::uniquesol_for_implicitmethod(const double s_ratio,
+                                                   const double akoh,
+                                                   const double bkoh,
+                                                   const double ffactor,
+                                                   const double rprev) const
 /* construct ImpIter instance to timestep condensation ODE
 by delt assuming that solution to g(ziter)=0 is unique and therefore
 Newton Raphson root finding algorithm converges quickly. This
@@ -80,7 +79,7 @@ Relative tolerance 'rtol' >= 0.1, absolute tolerance 'atol' >= 0.1.
 Maximum number of Newton Raphson Iterations for timestep delt <= 10 */
 {
   const unsigned int iterlimit(std::min(maxiters, (unsigned int)5)); // allow at most 10 iterations
-  const double subdelt(delt);                  // no subtimestepping
+  const double subdelt(delt);                   // no subtimestepping
   const double rtol(std::max(0.01, maxrtol));   // at least 0.1 rtol
   const double atol(std::max(0.01, maxatol));   // at least 0.1 atol
 
@@ -88,15 +87,14 @@ Maximum number of Newton Raphson Iterations for timestep delt <= 10 */
                       s_ratio, akoh, bkoh, ffactor, rprev};
   
   const double init_ziter(std::pow(rprev, 2.0)); // guess for ziter (before any iterations)
-  return impit.implicitmethod_forcondensation(init_ziter);
+  return impit.implicitmethod(init_ziter);
 }
 
-double ImplicitEuler::
-    subtimestep_solution_for_implicitmethod(const double s_ratio,
-                                            const double akoh,
-                                            const double bkoh,
-                                            const double ffactor,
-                                            const double rprev) const
+double ImplicitEuler::substeppedsol_for_implicitmethod(const double s_ratio,
+                                                       const double akoh,
+                                                       const double bkoh,
+                                                       const double ffactor,
+                                                       const double rprev) const
 /* construct ImpIter instance to timestep condensation ODE
 by delt assuming that solution to g(ziter)=0 is not unique and
 therefore sub-timestepping is required with sufficiently
@@ -108,7 +106,7 @@ Subtimestep = delt/10 and maximum number of Newton Raphson
 Iterations >= 25 for each subtimetep. */
 {
   const unsigned int iterlimit(std::max(maxiters, (unsigned int)10)); // allow at least 10 iterations
-  const double subdelt(delt); // divide delt into sub-timesteps
+  const double subdelt(delt/10); // divide delt into sub-timesteps
   const double rtol(std::min(0.01, maxrtol)); // at most 0.01 rtol
   const double atol(std::min(0.01, maxatol)); // at most 0.01 atol
 
@@ -117,11 +115,42 @@ Iterations >= 25 for each subtimetep. */
 
   const double init_ziter(initial_ziter(rprev, s_ratio,
                                         akoh, bkoh)); // guess for ziter (before any iterations)
-  return impit.implicitmethod_forcondensation(init_ziter);
+  return impit.substepped_implicitmethod(delt, init_ziter);
 }
 
-double ImplicitEuler::ImpIter::
-    implicitmethod_forcondensation(double ziter) const
+double ImplicitEuler::ImpIter::implicitmethod(double ziter) const
+{
+  const double init_ziter(ziter);
+  double numerator(0.0);
+  for (int iter=0; iter < iterlimit; ++iter)
+  {
+    /* perform one attempted iteration  ziter^(m) -> ziter^(m+1)
+    for iteration m+1 starting at m=1 */
+    numerator = ode_gfunc(ziter);
+    const double denominator = ode_gfuncderivative(ziter);
+    ziter -= ziter * numerator / denominator; // increment ziter
+  }
+
+  // substep timestep if convergence test fails
+  if (!(isnotconverged(ode_gfunc(ziter), numerator)))
+  {
+    return std::sqrt(ziter);
+  }
+  else
+  {
+    const unsigned int iterlimit(10); // allow at least 10 iterations
+    const double smallerdelt(subdelt); // divide delt into sub-timesteps
+    const double rtol(0.01); // at most 0.01 rtol
+    const double atol(0.01); // at most 0.01 atol
+
+    const ImpIter impit2{iterlimit, smallerdelt, rtol, atol,
+                        s_ratio, akoh, bkoh, ffactor, rprev};
+    return impit2.substepped_implicitmethod(subdelt, init_ziter);
+  } 
+}
+
+double ImplicitEuler::ImpIter::substepped_implicitmethod(const double delt,
+                                                         double ziter) const
 /* given initial guess for ziter, (which is usually radius^squared
 from previous timestep), uses newton raphson iterative method to
 find new value of radius that converges on the root of the
@@ -131,30 +160,34 @@ Otherwise returns new value for the radius (which is the radius at
 timestep 't+subdelt'. Refer to section 5.1.2 Shima et al. 2009
 and section 3.3.3 of Matsushima et al. 2023 for more details. */
 {
-  bool do_iter(true);
-  unsigned int iter(1);
-
-  while (do_iter)
+  double dt(0.0);
+  while (dt <= delt)
   {
-    if (iter > iterlimit)
+    bool do_iter(true);
+    unsigned int iter(1);
+    while (do_iter)
     {
-      const std::string err = "Newton Raphson Method did not converge "
-                          "within " + std::to_string(iterlimit) + " iterations\n";
-      throw std::invalid_argument(err);
-      break;
+      if (iter > iterlimit)
+      {
+        const std::string err = "Newton Raphson Method did not converge "
+                                "within " + std::to_string(iterlimit) +\
+                                 " iterations\n";
+        throw std::invalid_argument(err);
+        break;
+      }
+      else
+      {
+        /* perform one attempted iteration  ziter^(m) -> ziter^(m+1)
+        for iteration m+1 starting at m=1 and then test for convergence */
+        const auto iterret = iterate_rootfinding_algorithm(ziter);
+        do_iter = iterret.first;
+        ziter = iterret.second;
+        iter += 1;
+      }
     }
-    else
-    {
-      /* perform one attempted iteration  ziter^(m) -> ziter^(m+1)
-      for iteration m+1 starting at m=1 */
-      const auto iterret = iterate_rootfinding_algorithm(ziter);
-      do_iter = iterret.first;
-      ziter = iterret.second;
-      iter += 1;
-    }
+    dt += subdelt;
   }
 
-  // once iterations have converged, return ziter
   return std::sqrt(ziter);
 }
 
