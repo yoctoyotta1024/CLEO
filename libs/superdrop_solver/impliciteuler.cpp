@@ -106,10 +106,10 @@ uniqueness criteria of solution (root) of condensation ODE */
     return std::pow(1e-3 / dlc::R0, 2.0);
   }
   
-  // const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
+  const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
   
-  // return std::max(std::pow(rprev, 2.0), r1sqrd);
-  return std::pow(rprev, 2.0);
+  return std::max(std::pow(rprev, 2.0), r1sqrd);
+  // return std::pow(rprev, 2.0);
 }
 
 double ImplicitEuler::ode_gfunc(const double rsqrd, const double radius,
