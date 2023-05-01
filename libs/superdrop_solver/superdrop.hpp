@@ -128,7 +128,7 @@ struct WetRadius
   private:
     struct IterReturn
     /* struct used for returning boolean and double
-    from iterate_rootfinding_algorithm function */
+    from iterate_rootfinding function */
     {
       bool do_iter;
       double ziter;

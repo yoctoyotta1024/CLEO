@@ -1,0 +1,57 @@
+##### CONFIG FILE #####
+# Author: Clara Bayley
+# File: condconfig.txt
+# File containing configuration for
+# running CLEO in 0D setup coupled 
+# to CVODE ODE solver with condensation
+# with wetradiiinit 
+
+#  Note: inital superdroplets data (eps, r0 and m_sol) read from 
+#  file "initSDs_filename" is made with PYSD module using python
+#  script "create_initsuperdropsbinary_script". Likewise data to make 
+#  gridboxmap from gridbox boundaries is read from file "grid_filename"
+#  created using python "create_gbxboundariesbinary_script" script.
+
+### Initialisation Files parameters ###
+initSDs_filename = ./share/dimlessSDsinit.dat            # binary filename for initialisation of superdrops
+grid_filename = ./share/dimlessGBxboundaries.dat         # binary filename for gridbox boundaries
+
+### Output Data parameters ###
+setuptxt = /home/m/m300950/superdrops_in_action/quickplots/condensationmethod/newrsqrd/bin/solsetup.txt               # name of .txt output file to copy setup to
+zarrbasedir = /home/m/m300950/superdrops_in_action/quickplots/condensationmethod/newrsqrd/bin/solSDMdata.zarr         # zarr store base directory
+maxchunk = 1250000                          # maximum no. of elements in chunks of zarr store array
+
+### SDM parameters ###
+# timestepping parameters #
+cond_maxiters = 100                     # maximum no. iterations of Newton Raphson Method
+cond_rtol = 1                           # relative tolerance for implicit euler integration
+cond_atol = 0.01                        # abolute tolerance for implicit euler integration
+CONDTSTEP = 1                           # time between SD condensation events [s]
+COLLTSTEP = 2                           # time between SD collision events [s]
+MOTIONTSTEP = 2                         # time between SDM motion [s]
+COUPLTSTEP = 2                          # time between SDM observations and between thermodynamic couplings [s]
+T_END = 600                             # time span of integration [s]
+
+# SDs parameters #
+nSDsvec = 500                        # initial no. elements in SDs' vector (=total initial no. of SDs)
+SDnspace = 0                         # no. of spatial coordinates of SDs (=dimension of model)
+wetradiiinit = true                  # set initial SD radii to equilibrium wet radius
+doAlterThermo = true                 # enable condensation to alter the thermodynamic state
+thermosolver = cvode                 # type of thermodynamic solver to configure
+
+### CVODE ODE solver paramters ###
+# initial (uniform) thermodynamic conditions #
+P_INIT = 100000.0                       # initial pressure [Pa]
+TEMP_INIT = 273.15                      # initial parcel temperature [T]
+relh_init = 99.0                        # initial relative humidity (%) unphyical < 0.0 in this setup to prevent wetradius initialisation
+qc_init = 0.0                           # initial liquid water content []
+
+# ODE solver parameters #
+doThermo = true                         # enable ODEs for adiabatic expansion
+W_AVG = 0.5                             # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
+T_HALF = 300                            # timescale for w sinusoid, tau = THALF/pi [s]
+cvode_rtol = 1e-6                       # relative tolerance for [P, T, qv, qc] ODEs integration
+cvode_atol_p = 1e-6                     # absolute tolerance for [P, T, qv, qc] ODEs integration
+cvode_atol_temp = 1e-6
+cvode_atol_qv =1e-6
+cvode_atol_qc = 1e-6    
