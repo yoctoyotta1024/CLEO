@@ -10,14 +10,14 @@
 
 #include "impliciteuler.hpp"
 
-double ImplicitEuler::newton_raphson_iterator_forcondensation(const double s_ratio,
-                                                              const double akoh,
-                                                              const double bkoh,
-                                                              const double fkl,
-                                                              const double fdl,
-                                                              const double r_k) const
-/* given initial guess for radius, "r_k", (which is usually r from
-previous timestep), newton_raphson_iterator finds value of r
+double ImplicitEuler::implicitmethod_forcondensation(const double s_ratio,
+                                                     const double akoh,
+                                                     const double bkoh,
+                                                     const double fkl,
+                                                     const double fdl,
+                                                     const double r_k) const
+/* given initial guess for radius, "r_k", (which is usually r from previous
+timestep), uses newton raphson iterative method to find value of r
 that converges on the root of function g(z), "gfunc", within the
 tolerances of the ImplicitEuler instance. Returns this value
 of r (usually used for new value of radius at current timestep)

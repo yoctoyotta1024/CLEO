@@ -17,4 +17,5 @@ module load gcc/11.2.0-gcc-11.2.0
 
 cd build
 # make clean && make
-./src/runCLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
+#./src/runCLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
+./src/cond0D "../src/config/condconfig.txt" "../libs/claras_SDconstants.hpp"
