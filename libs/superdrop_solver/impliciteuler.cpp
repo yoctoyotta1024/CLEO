@@ -46,7 +46,7 @@ for more details. */
   }
   else if (delt <= max_uniquedelt)
   {
-    const unsigned int niters(2); // allow at most 10 iterations
+    const unsigned int niters(3); // allow at most 10 iterations
     const double rtol(0.01);   // at least 0.1 rtol
     const double atol(0.01);   // at least 0.1 atol
     const ImpIter impit{niters, delt, rtol, atol, s_ratio,
@@ -58,8 +58,8 @@ for more details. */
   else
   {
     const unsigned int niters(5); // allow at most 10 iterations
-    const double rtol(0.0001);   // at least 0.1 rtol
-    const double atol(0.0001);   // at least 0.1 atol
+    const double rtol(0.05);   // at least 0.1 rtol
+    const double atol(0.01);   // at least 0.1 atol
     const ImpIter impit{niters, delt, rtol, atol, s_ratio,
                         akoh, bkoh, ffactor, rprev};
 
