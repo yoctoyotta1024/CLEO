@@ -89,11 +89,11 @@ double ImplicitEuler::initial_guess(const double rprev,
 /* returns appropriate initial value for ziter based on 
 uniqueness criteria of solution (root) of condensation ODE */
 {
-  // const double sact_factor = 4.0*std::pow(akoh, 3.0) / (27*bkoh);
-  // if (s_ratio > 1.0 && sact_factor < 1.0)
-  // {
-  //   return std::pow(1e-6 / dlc::R0, 2.0);
-  // }
+  const double sact_factor(4.0*std::pow(akoh, 3.0) / (27*bkoh));
+  if (s_ratio > 1 && sact_factor < 1.0)
+  {
+    return std::pow(1e-3 / dlc::R0, 2.0);
+  }
 
   const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
   
