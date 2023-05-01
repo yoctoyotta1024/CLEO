@@ -33,6 +33,7 @@ for more details. */
   const double max_uniquedelt(
       12.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
 
+// std::cout << "-----\n";
   if ((s_ratio <= 1.0 && ract_ratio < 1.0) || (delt <= max_uniquedelt))
   {
     return unique_solution_for_implicitmethod(s_ratio, akoh, bkoh,
@@ -79,10 +80,10 @@ large, and maximum number of iterations is small:
 Relative tolerance 'rtol' >= 0.1, absolute tolerance 'atol' >= 0.1.
 Maximum number of Newton Raphson Iterations for timestep delt <= 10 */
 {
-  const int iterlimit(std::min(10, maxiters));
-  const double subdelt(delt);
-  const double rtol(std::max(0.1, maxrtol));
-  const double atol(std::max(0.1, maxatol)); 
+  const unsigned int iterlimit(std::min(10, maxiters)); // at most 10 iterations
+  const double subdelt(delt);                  // no subtimestepping
+  const double rtol(std::max(1.0, maxrtol));   // at least 0.1 rtol
+  const double atol(std::max(1.0, maxatol));   // at least 0.1 atol
 
   const ImpIter impit{iterlimit, subdelt, rtol, atol,
                       s_ratio, akoh, bkoh, ffactor, rprev};
@@ -132,7 +133,7 @@ timestep 't+subdelt'. Refer to section 5.1.2 Shima et al. 2009
 and section 3.3.3 of Matsushima et al. 2023 for more details. */
 {
   bool do_iter(true);
-  int iter(1);
+  unsigned int iter(1);
 
   while (do_iter)
   {

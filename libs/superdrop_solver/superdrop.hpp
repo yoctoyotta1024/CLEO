@@ -155,7 +155,7 @@ struct WetRadius
     |iteration - previous iteration| < RTOL * |iteration| + ATOL */
   
   public: 
-    int maxiters;
+    unsigned int maxiters;
 
     double get_wetradius(const double radius0, const double s_ratio,
                          const double akoh, const double bkoh) const;

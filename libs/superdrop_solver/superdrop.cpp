@@ -25,7 +25,7 @@ radius of superdroplet at given relative humidity. Equilibrium radius
 defined by radius when ODE from "An Introduction To Clouds...."
 (see note at top of file) eqn [7.28] = 0. */
 {
-  const int maxiters = 100;
+  const unsigned int maxiters = 100;
   const double akoh = akohler_factor(temp);
   const double bkoh = bkohler_factor();
 
@@ -94,7 +94,7 @@ double WetRadius::get_wetradius(const double radius0, const double s_ratio,
 return wet radius of a superdroplet in equilibrium
 with supersaturation s_ratio */
 {
-  int iter = 0;
+  unsigned int iter = 0;
   bool do_iter = true;
   double ziter = radius0; // value of ziter at iter=0 (no iterations yet)
   

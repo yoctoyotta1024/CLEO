@@ -29,7 +29,7 @@ class ImplicitEuler
   the implicit timestepping equation of stiff ODE */
 {
 private:
-  const int maxiters;   // maximum number of NR iterations before error raised
+  const unsigned int maxiters;   // maximum number of NR iterations before error raised
   const double delt;    // timestep of ODE solver (at each step implicit method is called)
   const double maxrtol; // adjustable relative tolerance for convergence of NR method
   const double maxatol; // adjustable abolute tolerance for convergence of NR method
@@ -70,7 +70,7 @@ private:
 
   struct ImpIter
   {
-    const int iterlimit;  // maximum number of NR iterations before error raised
+    const unsigned int iterlimit;  // maximum number of NR iterations before error raised
     const double subdelt; // substepping timestep of implicit method (at each substep <= iterlimit NR iterations occur)
     const double rtol;    // relative tolerance for convergence of NR method
     const double atol;    // abolute tolerance for convergence of NR method
@@ -119,13 +119,13 @@ private:
       const double converged = rtol * std::abs(gfunciter) + atol;
       const double currentvalue = std::abs(gfunciter - gfuncprev);
 
-      std::cout << converged << ", " << currentvalue << "\n";
+      // std::cout << converged << ", " << currentvalue << "\n";
       return (currentvalue >= converged); // true means it's not yet converged
     }
   };
 
 public:
-  ImplicitEuler(const int maxiters, const double delt,
+  ImplicitEuler(const unsigned int maxiters, const double delt,
                 const double maxrtol, const double maxatol)
       : maxiters(maxiters), delt(delt), maxrtol(maxrtol), maxatol(maxatol) {}
 

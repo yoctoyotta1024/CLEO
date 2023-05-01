@@ -79,7 +79,7 @@ public:
         impliciteuler(impliciteuler) {}
 
   CondensationMethod(const bool doAlterThermo, const double delt,
-                     const double maxiters, const double rtol,
+                     const unsigned maxiters, const double rtol,
                      const double atol)
       : doAlterThermo(doAlterThermo),
         delt(delt),
@@ -101,7 +101,7 @@ public:
 SdmProcess auto CondensationProcess(const int interval,
                                     const std::function<double(int)> int2time,
                                     const bool doAlterThermo,
-                                    const double maxiters,
+                                    const unsigned maxiters,
                                     const double rtol,
                                     const double atol)
 /* constructs SdmProcess for condensation with constant timestep 'interval'

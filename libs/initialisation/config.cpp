@@ -114,7 +114,7 @@ void Config::configvariable(const std::string name, const std::string value)
   /* timestepping parameters */
   else if (name == "cond_maxiters")
   {
-    cond_maxiters = stoi(value);
+    cond_maxiters = stoul(value);
     issuccess = true;
   }
   else if (name == "cond_rtol")
