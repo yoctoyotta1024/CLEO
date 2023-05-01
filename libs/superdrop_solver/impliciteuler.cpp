@@ -23,7 +23,9 @@ tolerances of the ImplicitEuler instance. Returns this value
 of r (usually used for new value of radius at current timestep)
 Refer to sect 5.1.2 Shima et al. 2009 for more details */
 {
-  double ziter(initial_guess(s_ratio, akoh, bkoh, rprev)); // ziter at iter=0 (before any iterations)
+  const double ffactor(dlc::Rho_l * (fkl + fdl));
+
+  double ziter(initial_guess(rprev, s_ratio, akoh, bkoh)); // ziter at iter=0 (before any iterations)
   bool do_iter(true);
   int iter(1);
 
@@ -40,8 +42,8 @@ Refer to sect 5.1.2 Shima et al. 2009 for more details */
     {
       /* add one to the number of attempted iterations
         z^(m+1) for iteration m+1 starting at m=0 */
-      const IterReturn a = iterate_rootfinding_algorithm(ziter, s_ratio, akoh,
-                                                         bkoh, fkl, fdl, rprev);
+      const IterReturn a = iterate_rootfinding_algorithm(ziter, rprev, s_ratio,
+                                                         akoh, bkoh, ffactor);
       do_iter = a.do_iter;
       ziter = a.ziter;
       iter += 1;
@@ -52,8 +54,10 @@ Refer to sect 5.1.2 Shima et al. 2009 for more details */
   return std::sqrt(ziter);
 }
 
-double ImplicitEuler::initial_guess(const double s_ratio, const double akoh,
-                                    const double bkoh, const double rprev) const
+double ImplicitEuler::initial_guess(const double rprev,
+                                    const double s_ratio,
+                                    const double akoh,
+                                    const double bkoh) const
 /* returns appropriate initial value for ziter based on 
 uniqueness criteria of solution (root) of condensation ODE */
 {
@@ -70,83 +74,65 @@ uniqueness criteria of solution (root) of condensation ODE */
 
 ImplicitEuler::IterReturn
 ImplicitEuler::iterate_rootfinding_algorithm(double ziter,
+                                             const double rprev,
                                              const double s_ratio,
                                              const double akoh,
                                              const double bkoh,
-                                             const double fkl,
-                                             const double fdl,
-                                             const double rprev) const
+                                             const double ffactor) const
 /* function performs one iteration of Newton Raphson rootfinding
   method and returns updated value of radius^2 alongside a boolean that
   is false if algorithm has converged */
 { 
   const double radius = std::sqrt(ziter);
 
-  const double numerator = ode_gfunc(radius, rprev, s_ratio, akoh, bkoh, fkl, fdl);
-  const double denominator = ode_gfuncderivative(radius, s_ratio, akoh, bkoh, fkl, fdl);
-  ziter -= ziter * numerator / denominator; // increment ziter
+  // increment ziter
+  const double numerator = ode_gfunc(ziter, radius, rprev, s_ratio,
+                                     akoh, bkoh, ffactor);
+  const double denominator = ode_gfuncderivative(ziter, radius, s_ratio,
+                                                 akoh, bkoh, ffactor);
+  ziter = ziter * (1 - numerator / denominator); 
 
-  // prepare for next iteration or end while loop
-  const double newnumerator = ode_gfunc(radius, rprev, s_ratio, akoh, bkoh, fkl, fdl);
+  // test for next iteration
+  const double newnumerator = ode_gfunc(ziter, radius, rprev, s_ratio,
+                                        akoh, bkoh, ffactor);
   const bool do_iter = isnotconverged(newnumerator, numerator);
 
   return IterReturn{do_iter, ziter};
 }
 
-double ImplicitEuler::ode_gfunc(const double ziter, const double r_k,
-                                const double s_ratio, const double akoh,
-                                const double bkoh, const double fkl,
-                                const double fdl) const
-/* returns value of g(z) function
-used in root finding Newton Raphson
-Method for condensation ODE */
+double ImplicitEuler::ode_gfunc(const double rsqrd, const double radius,
+                                const double rprev, const double s_ratio,
+                                const double akoh, const double bkoh,
+                                const double ffactor) const
+/* returns g(z) / z * delt for g(z) function used in root finding
+Newton Raphson Method for dr/dt condensation / evaporation ODE. 
+ODE is for radial growth/shrink of each superdroplet due to
+condensation and diffusion of water vapour according to
+equations from "An Introduction To Clouds...."
+(see note at top of file). Note: z = ziter = radius^2 */
 {
-  const double rdot = condensation_ode(ziter, s_ratio, akoh, bkoh, fkl, fdl);
+  const double alpha(s_ratio - 1 - akoh / radius + bkoh / std::pow(radius, 3.0));
 
-  const double gfunc = (pow(ziter, 2.0) - pow(r_k, 2.0)) / (2 * delt) - ziter * rdot;
+  const double beta(2.0 * delt / (rsqrd * ffactor));
 
-  return gfunc;
+  const double gamma(std::pow(rprev/radius, 2.0));
+
+  return 1 - gamma - alpha * beta;
 }
 
-double ImplicitEuler::condensation_ode(const double radius,
-                                       const double s_ratio,
-                                       const double akoh,
-                                       const double bkoh,
-                                       const double fkl,
-                                       const double fdl) const
-/* dr/dt ODE for radial growth/shrink
-  of each superdroplet due to	condensation and
-  diffusion of water vapour according to
-  equations from "An Introduction To
-  Clouds...." (see note at top of file)
-  used in calculation of ode_gfunc(...) for
-  Newton Raphson method increment */
-{
-  const double nominator = (s_ratio - 1.0) - (akoh / radius) + (bkoh / pow(radius, 3.0)); // eqn [7.28]
-
-  const double denominator = dlc::Rho_l * (fkl + fdl) * radius;
-
-  const double rdot = nominator / denominator;
-
-  return rdot;
-}
-
-double ImplicitEuler::ode_gfuncderivative(const double ziter,
+double ImplicitEuler::ode_gfuncderivative(const double rsqrd,
+                                          const double radius,
                                           const double s_ratio,
                                           const double akoh,
                                           const double bkoh,
-                                          const double fkl,
-                                          const double fdl) const
-/* derivative of g(z) function w.r.t z.
-used in root finding Newton Raphson Method.
-Involves calculation of r_rdot_deriv,
-which is deriative of r * dr/dt ODE */
+                                          const double ffactor) const
+/* dg(z)/dz * delt, where dg(z)/dz is derivative of g(z) with
+respect to z=rsqrd. g(z) is polynomial to find root of using
+Newton Raphson Method. */
 {
-  const double numerator = (akoh / pow(ziter, 2.0)) - (3 * bkoh / pow(ziter, 4.0));
-  const double denominator = dlc::Rho_l * (fkl + fdl);
-  const double r_rdot_deriv = numerator / denominator; // derivative of r * eqn [7.28] (make sure this matches with condensation_ode)
+  const double alpha(akoh/radius - 3.0 * bkoh/ std::pow(radius, 3.0));
 
-  const double gfuncderiv = ziter / delt - r_rdot_deriv;
+  const double beta(delt / (rsqrd * ffactor));
 
-  return gfuncderiv;
+  return 1 - alpha * beta;
 }

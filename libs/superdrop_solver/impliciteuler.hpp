@@ -45,40 +45,30 @@ private:
   uniqueness criteria of solution (root) of condensation ODE */
 
   ImplicitEuler::IterReturn
-  iterate_rootfinding_algorithm(double ziter, const double s_ratio,
-                                const double akoh, const double bkoh,
-                                const double fkl, const double fdl,
-                                const double r_k) const;
+  iterate_rootfinding_algorithm(double ziter, const double rprev,
+                                const double s_ratio, const double akoh,
+                                const double bkoh, const double ffactor) const;
   /* function performs one iteration of Newton Raphson rootfinding
-  method and returns updated value of radius alongside a boolean that
+  method and returns updated value of radius^2 alongside a boolean that
   is false if algorithm has converged */
 
-  double ode_gfunc(const double ziter, const double r_k,
-                   const double s_ratio, const double akoh,
-                   const double bkoh, const double fkl,
-                   const double fdl) const;
-  /* returns value of g(z) function
-  used in root finding Newton Raphson
-  Method for condensation ODE */
+  double ode_gfunc(const double rsqrd, const double radius,
+                   const double rprev, const double s_ratio,
+                   const double akoh, const double bkoh,
+                   const double ffactor) const;
+  /* returns g(z) / z * delt for g(z) function used in root finding
+  Newton Raphson Method for dr/dt condensation / evaporation ODE.
+  ODE is for radial growth/shrink of each superdroplet due to
+  condensation and diffusion of water vapour according to
+  equations from "An Introduction To Clouds...."
+  (see note at top of file). Note: z = ziter = radius^2 */
 
-  double condensation_ode(const double radius, const double s_ratio,
-                          const double akoh, const double bkoh,
-                          const double fkl, const double fdl) const;
-  /* dr/dt ODE for radial growth/shrink
-   of each superdroplet due to	condensation and
-   diffusion of water vapour according to
-   equations from "An Introduction To
-   Clouds...." (see note at top of file)
-   used in calculation of ode_gfunc(...) for
-   Newton Raphson method increment */
-
-  double ode_gfuncderivative(const double ziter, const double s_ratio,
-                             const double akoh, const double bkoh,
-                             const double fkl, const double fdl) const;
-  /* derivative of g(z) function w.r.t used
-  in root finding Newton Raphson Method.
-  Involves calculation of r_rdot_deriv,
-  which is deriative of r * dr/dt ODE */
+  double ode_gfuncderivative(const double rsqrd, const double radius,
+                             const double s_ratio, const double akoh,
+                             const double bkoh, const double ffactor) const;
+  /* dg(z)/dz * delt, where dg(z)/dz is derivative of g(z) with
+  respect to z=rsqrd. g(z) is polynomial to find root of using
+  Newton Raphson Method. */
 
   inline bool isnotconverged(const double gfunciter,
                              const double gfuncprev) const
@@ -99,16 +89,18 @@ public:
                 const double rtol, const double atol)
       : maxiters(maxiters), delt(delt), rtol(rtol), atol(atol) {}
 
-  double implicitmethod_forcondensation(const double s_ratio,
-                                        const double akoh, const double bkoh,
-                                        const double fkl, const double fdl,
-                                        const double r_k) const;
-/* given initial guess for radius, "r_k", (which is usually r from previous
-timestep), uses newton raphson iterative method to find value of r
-that converges on the root of function g(z), "gfunc", within the
-tolerances of the ImplicitEuler instance. Returns this value
-of r (usually used for new value of radius at current timestep)
-Refer to sect 5.1.2 Shima et al. 2009 for more details */
+  double ImplicitEuler::implicitmethod_forcondensation(const double s_ratio,
+                                                      const double akoh,
+                                                      const double bkoh,
+                                                      const double fkl,
+                                                      const double fdl,
+                                                      const double rprev) const;
+  /* given initial guess for radius, (which is usually squared r from previous
+  timestep 'rprev'^2), uses newton raphson iterative method to find value of r
+  that converges on the root of function g(z), "gfunc", within the
+  tolerances of the ImplicitEuler instance. Returns this value
+  of r (usually used for new value of radius at current timestep)
+  Refer to sect 5.1.2 Shima et al. 2009 for more details */
 };
 
 #endif // IMPLICITEULER_HPP
