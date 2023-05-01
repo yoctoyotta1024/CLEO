@@ -100,16 +100,16 @@ double ImplicitEuler::initial_guess(const double rprev,
 /* returns appropriate initial value for ziter based on 
 uniqueness criteria of solution (root) of condensation ODE */
 {
-  // const double sact_factor(4.0*std::pow(akoh, 3.0) / (27*bkoh));
-  // if (s_ratio > 1 && sact_factor < 1.0)
-  // {
-  //   return std::pow(1e-3 / dlc::R0, 2.0);
-  // }
+  const double s_activ(1 + std::sqrt(4.0*std::pow(akoh, 3.0) / (27*bkoh))); // activation supersaturation of droplet
+  if (s_ratio > s_activ)
+  {
+    return std::pow(1e-3 / dlc::R0, 2.0);
+  }
   
-  const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
+  // const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
   
-  return std::max(std::pow(rprev, 2.0), r1sqrd);
-  // return std::pow(rprev, 2.0);
+  // return std::max(std::pow(rprev, 2.0), r1sqrd);
+  return std::pow(rprev, 2.0);
 }
 
 double ImplicitEuler::ode_gfunc(const double rsqrd, const double radius,
