@@ -78,12 +78,11 @@ large, and maximum number of iterations is small:
 Relative tolerance 'rtol' >= 0.1, absolute tolerance 'atol' >= 0.1.
 Maximum number of Newton Raphson Iterations for timestep delt <= 10 */
 {
-  const unsigned int iterlimit(std::min(maxiters, (unsigned int)5)); // allow at most 10 iterations
-  const double subdelt(delt);                   // no subtimestepping
-  const double rtol(std::max(0.01, maxrtol));   // at least 0.1 rtol
-  const double atol(std::max(0.01, maxatol));   // at least 0.1 atol
+  const unsigned int iterlimit(maxiters); // allow at most 10 iterations
+  const double rtol(maxrtol);   // at least 0.1 rtol
+  const double atol(maxatol);   // at least 0.1 atol
 
-  const ImpIter impit{iterlimit, subdelt, rtol, atol,
+  const ImpIter impit{iterlimit, delt, rtol, atol,
                       s_ratio, akoh, bkoh, ffactor, rprev};
   
   const double init_ziter(std::pow(rprev, 2.0)); // guess for ziter (before any iterations)
@@ -105,10 +104,10 @@ relative tolerance 'rtol' <= 0.01, absolute tolerance 'atol' <= 0.1.
 Subtimestep = delt/10 and maximum number of Newton Raphson
 Iterations >= 25 for each subtimetep. */
 {
-  const unsigned int iterlimit(std::max(maxiters, (unsigned int)10)); // allow at least 10 iterations
+  const unsigned int iterlimit(100); // allow at least 10 iterations
   const double subdelt(delt/10); // divide delt into sub-timesteps
-  const double rtol(std::min(0.01, maxrtol)); // at most 0.01 rtol
-  const double atol(std::min(0.01, maxatol)); // at most 0.01 atol
+  const double rtol(0.01); // at most 0.01 rtol
+  const double atol(0.01); // at most 0.01 atol
 
   const ImpIter impit{iterlimit, subdelt, rtol, atol,
                       s_ratio, akoh, bkoh, ffactor, rprev};
@@ -122,7 +121,7 @@ double ImplicitEuler::ImpIter::implicitmethod(double ziter) const
 {
   const double init_ziter(ziter);
   double numerator(0.0);
-  for (int iter=0; iter < iterlimit; ++iter)
+  for (unsigned int iter=0; iter < iterlimit; ++iter)
   {
     /* perform one attempted iteration  ziter^(m) -> ziter^(m+1)
     for iteration m+1 starting at m=1 */
@@ -138,8 +137,8 @@ double ImplicitEuler::ImpIter::implicitmethod(double ziter) const
   }
   else
   {
-    const unsigned int iterlimit(10); // allow at least 10 iterations
-    const double smallerdelt(subdelt); // divide delt into sub-timesteps
+    const unsigned int iterlimit(100); // allow at least 10 iterations
+    const double smallerdelt(subdelt/10); // divide delt into sub-timesteps
     const double rtol(0.01); // at most 0.01 rtol
     const double atol(0.01); // at most 0.01 atol
 
