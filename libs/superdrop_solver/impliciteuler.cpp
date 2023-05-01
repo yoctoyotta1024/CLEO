@@ -79,11 +79,11 @@ large, and maximum number of iterations is small:
 Relative tolerance 'rtol' >= 0.01, absolute tolerance 'atol' >= 0.1.
 Maximum number of Newton Raphson Iterations for timestep delt <= 3 */
 {
-  const int iterlimit(std::min(3, maxiters));
+  const int iterlimit(std::min(5, maxiters));
   const double subdelt(delt);
-  const double rtol(std::max(0.01, rtol));
-  const double atol(std::max(1.0, atol)); 
-  
+  const double rtol(std::max(0.01, maxrtol));
+  const double atol(std::max(0.01, maxatol)); 
+
   const ImpIter impit{iterlimit, subdelt, rtol, atol,
                       s_ratio, akoh, bkoh, ffactor, rprev};
   

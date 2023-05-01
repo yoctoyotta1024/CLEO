@@ -112,16 +112,15 @@ private:
 
     inline bool isnotconverged(const double gfunciter,
                                const double gfuncprev) const
-    /* boolean where True means
-    criteria for ending newton raphson iteratiions
-    has not yet been met. Criteria is standard local error
-    test: |iteration - previous iteration|
-    < RTOL * |iteration| + ATOL */
+    /* boolean where True means criteria for ending newton raphson
+    iteratiions has not yet been met. Criteria is standard local error
+    test: |iteration - previous iteration| < RTOL * |iteration| + ATOL */
     {
-      const double convergence_threshold = rtol * std::abs(gfunciter) + atol;
+      const double converged = rtol * std::abs(gfunciter) + atol;
       const double currentvalue = std::abs(gfunciter - gfuncprev);
 
-      return (currentvalue >= convergence_threshold); // true means it's not yet converged
+      std::cout << converged << ", " << currentvalue << "\n";
+      return (currentvalue >= converged); // true means it's not yet converged
     }
   };
 
