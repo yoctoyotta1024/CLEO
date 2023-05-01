@@ -6,8 +6,8 @@ from pySD.gbxboundariesbinary_src.create_gbxboundaries import *
 from pySD.gbxboundariesbinary_src.read_gbxboundaries import *
 
 ### path and filenames
-abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
-# abspath = "/home/m/m300950/CLEO/"
+# abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+abspath = "/home/m/m300950/CLEO/"
 #abspath = sys.argv[1]
 constsfile = abspath+"libs/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
@@ -20,13 +20,13 @@ binpath = abspath+"build/bin/"
 isfigures = [True, True]
 
 ### input parameters for zcoords of gridbox boundaries
-zmax = 1500 # maximum z coord [m]
+zmax = 100 # maximum z coord [m]
 zmin = 0 # minimum z coord [m]
-zdelta = 1500 # even spacing
+zdelta = 100 # even spacing
 zgrid = [zmin, zmax, zdelta] 
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 1500, 1500]
+xgrid = [0, 100, 100]
 
 ### input parameters for y coords of gridbox boundaries
 ygrid = np.asarray([0, 100])
