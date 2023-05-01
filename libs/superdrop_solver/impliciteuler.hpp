@@ -81,7 +81,7 @@ private:
   which is deriative of r * dr/dt ODE */
 
   inline bool isnotconverged(const double gfunciter,
-                                  const double gfuncprev) const
+                             const double gfuncprev) const
   /* boolean where True means
   criteria for ending newton raphson iteratiions
   has not yet been met. Criteria is standard local error
