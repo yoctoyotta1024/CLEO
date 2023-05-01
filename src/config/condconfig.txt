@@ -23,10 +23,10 @@ maxchunk = 1250000                          # maximum no. of elements in chunks 
 
 ### SDM parameters ###
 # timestepping parameters #
-cond_maxiters = 100                    # maximum no. iterations of Newton Raphson Method
-cond_rtol = 1                          # relative tolerance for implicit euler integration
-cond_atol = 0.01                       # abolute tolerance for implicit euler integration
-CONDTSTEP = 1                          # time between SD condensation events [s]
+cond_maxiters = 5                    # maximum no. iterations of Newton Raphson Method
+cond_rtol = 10                        # relative tolerance for implicit euler integration
+cond_atol = 10                        # abolute tolerance for implicit euler integration
+CONDTSTEP = 0.1                          # time between SD condensation events [s]
 COLLTSTEP = 2                          # time between SD collision events [s]
 MOTIONTSTEP = 2                        # time between SDM motion [s]
 COUPLTSTEP = 2                         # time between SDM observations and between thermodynamic couplings [s]

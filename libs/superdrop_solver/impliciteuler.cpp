@@ -33,7 +33,6 @@ for more details. */
   const double max_uniquedelt(
       12.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
 
-// std::cout << "-----\n";
   if ((s_ratio <= 1.0 && ract_ratio < 1.0) || (delt <= max_uniquedelt))
   {
     return unique_solution_for_implicitmethod(s_ratio, akoh, bkoh,
@@ -80,10 +79,10 @@ large, and maximum number of iterations is small:
 Relative tolerance 'rtol' >= 0.1, absolute tolerance 'atol' >= 0.1.
 Maximum number of Newton Raphson Iterations for timestep delt <= 10 */
 {
-  const unsigned int iterlimit(std::min(10, maxiters)); // at most 10 iterations
+  const unsigned int iterlimit(std::min(maxiters, (unsigned int)5)); // allow at most 10 iterations
   const double subdelt(delt);                  // no subtimestepping
-  const double rtol(std::max(1.0, maxrtol));   // at least 0.1 rtol
-  const double atol(std::max(1.0, maxatol));   // at least 0.1 atol
+  const double rtol(std::max(0.01, maxrtol));   // at least 0.1 rtol
+  const double atol(std::max(0.01, maxatol));   // at least 0.1 atol
 
   const ImpIter impit{iterlimit, subdelt, rtol, atol,
                       s_ratio, akoh, bkoh, ffactor, rprev};
@@ -108,10 +107,10 @@ relative tolerance 'rtol' <= 0.01, absolute tolerance 'atol' <= 0.1.
 Subtimestep = delt/10 and maximum number of Newton Raphson
 Iterations >= 25 for each subtimetep. */
 {
-  const int iterlimit(std::max(25, maxiters));
-  const double subdelt(delt);
-  const double rtol(std::min(0.01, rtol));
-  const double atol(std::min(0.1, atol));
+  const unsigned int iterlimit(std::max(maxiters, (unsigned int)10)); // allow at least 10 iterations
+  const double subdelt(delt); // divide delt into sub-timesteps
+  const double rtol(std::min(0.01, maxrtol)); // at most 0.01 rtol
+  const double atol(std::min(0.01, maxatol)); // at most 0.01 atol
 
   const ImpIter impit{iterlimit, subdelt, rtol, atol,
                       s_ratio, akoh, bkoh, ffactor, rprev};

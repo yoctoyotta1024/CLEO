@@ -119,7 +119,6 @@ private:
       const double converged = rtol * std::abs(gfunciter) + atol;
       const double currentvalue = std::abs(gfunciter - gfuncprev);
 
-      // std::cout << converged << ", " << currentvalue << "\n";
       return (currentvalue >= converged); // true means it's not yet converged
     }
   };
