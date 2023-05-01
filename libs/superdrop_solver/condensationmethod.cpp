@@ -55,9 +55,9 @@ double CondensationMethod::superdroplet_growth_by_condensation(const double pres
   const auto [fkl, fdl] = diffusion_factors(press, temp, psat);
 
   /* do not pass r by reference here!! copy value into iterator */
-  double newradius = impliciteuler.implicitmethod_forcondensation(s_ratio,
-                                                                  akoh, bkoh, fkl,
-                                                                  fdl, drop.radius); // timestepping eqn [7.28] forward
+  double newradius = impliciteuler.solve_condensation(s_ratio,
+                                                      akoh, bkoh, fkl,
+                                                      fdl, drop.radius); // timestepping eqn [7.28] forward
   double delta_radius = drop.change_radius(newradius);
   double mass_condensed = (dmdt_const * pow(drop.radius, 2.0) * drop.eps * delta_radius); // eqn [7.22] * delta t
 
