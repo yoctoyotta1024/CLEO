@@ -23,30 +23,28 @@ tolerances of the ImplicitEuler instance. Returns this value
 of r (usually used for new value of radius at current timestep)
 Refer to sect 5.1.2 Shima et al. 2009 for more details */
 {
-  bool do_iter = true;
-  int iter = 0;
   double ziter(initial_guess(s_ratio, akoh, bkoh, r_k)); // ziter at iter=0 (before any iterations)
+  bool do_iter(true);
+  int iter(1);
 
   while (do_iter)
   {
     if (iter > maxiters)
     {
-      const std::string errormsg = "WARNING! Newton Raphson Method did not "
-                          " converge within " +
-                          std::to_string(maxiters) +
-                          " no. iterations\n";
-      throw std::invalid_argument(errormsg);
+      const std::string err = "Newton Raphson Method did not converge "
+                          "within " + std::to_string(maxiters) + " iterations\n";
+      throw std::invalid_argument(err);
       break;
     }
     else
     {
       /* add one to the number of attempted iterations
         z^(m+1) for iteration m+1 starting at m=0 */
-      iter += 1;
       const IterReturn a = iterate_rootfinding_algorithm(ziter, s_ratio, akoh,
                                                          bkoh, fkl, fdl, r_k);
       do_iter = a.do_iter;
       ziter = a.ziter;
+      iter += 1;
     }
   }
 
