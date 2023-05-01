@@ -25,6 +25,17 @@ Refer to sect 5.1.2 Shima et al. 2009 for more details */
 {
   const double ffactor(dlc::Rho_l * (fkl + fdl));
 
+  // if (is_caseb, or is_casea)
+  // {
+  //   rtol = 1e-2, do iters;
+  // }
+  // else
+  // {
+
+  //   delt = 0.1*delt;
+  //   do iters
+  // }
+
   double ziter(initial_guess(rprev, s_ratio, akoh, bkoh)); // ziter at iter=0 (before any iterations)
   bool do_iter(true);
   int iter(1);

@@ -17,8 +17,8 @@ initSDs_filename = ./share/dimlessSDsinit.dat            # binary filename for i
 grid_filename = ./share/dimlessGBxboundaries.dat         # binary filename for gridbox boundaries
 
 ### Output Data parameters ###
-setuptxt = /home/m/m300950/superdrops_in_action/quickplots/condensationmethod/newrsqrd_shimacrit2only/bin/solsetup.txt               # name of .txt output file to copy setup to
-zarrbasedir = /home/m/m300950/superdrops_in_action/quickplots/condensationmethod/newrsqrd_shimacrit2only/bin/solSDMdata.zarr         # zarr store base directory
+setuptxt = /home/m/m300950/superdrops_in_action/quickplots/condensationmethod/newrsqrd_matsucrit2only/bin/solsetup.txt               # name of .txt output file to copy setup to
+zarrbasedir = /home/m/m300950/superdrops_in_action/quickplots/condensationmethod/newrsqrd_matsucrit2only/bin/solSDMdata.zarr         # zarr store base directory
 maxchunk = 1250000                          # maximum no. of elements in chunks of zarr store array
 
 ### SDM parameters ###
