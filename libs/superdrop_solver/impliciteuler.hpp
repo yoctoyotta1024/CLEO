@@ -29,7 +29,7 @@ class ImplicitEuler
   the implicit timestepping equation of stiff ODE */
 {
 private:
-  const unsigned int niters;   // maximum number of NR iterations before error raised
+  const unsigned int miniters;   // suggested maximum number of iterations for implicit method
   const double delt;    // timestep of ODE solver (at each step implicit method is called)
   const double maxrtol; // adjustable relative tolerance for convergence of NR method
   const double maxatol; // adjustable abolute tolerance for convergence of NR method
@@ -46,36 +46,6 @@ private:
                              const double bkoh) const;
   /* returns appropriate initial value (ie. a reasonable guess)
   as in Shima's SCALE-SDM */
-
-  double uniquesol_for_implicitmethod(const double s_ratio,
-                                            const double akoh,
-                                            const double bkoh,
-                                            const double ffactor,
-                                            const double rprev,
-                                            const std::string scenario) const;
-  /* construct ImpIter instance to timestep condensation ODE
-  by delt assuming that solution to g(ziter)=0 is unique and therefore
-  Newton Raphson root finding algorithm converges quickly. This
-  means sufficiently small tolerances and timestep are comparitively
-  large, and maximum number of iterations is small:
-  Relative tolerance 'rtol' >= 0.01, absolute tolerance 'atol' >= 0.1.
-  Maximum number of Newton Raphson Iterations for timestep delt <= 3 */
-
-  double substeppedsol_for_implicitmethod(const double s_ratio,
-                                          const double akoh,
-                                          const double bkoh,
-                                          const double ffactor,
-                                          const double rprev,
-                                          const std::string scenario) const;
-  /* construct ImpIter instance to timestep condensation ODE
-  by delt assuming that solution to g(ziter)=0 is not unique and
-  therefore sub-timestepping is required with sufficiently
-  small tolerances. For each subtimestep, perform Newton Raphson
-  root finding algorithm with comparitevly small tolerances to
-  obtain solution to g(ziter) polynomial. Tolerances are:
-  relative tolerance 'rtol' <= 0.01, absolute tolerance 'atol' <= 0.1.
-  Subtimestep = delt/10 and maximum number of Newton Raphson
-  Iterations >= 25 for each subtimetep. */
 
   struct ImpIter
   {
@@ -102,7 +72,7 @@ private:
     and timesteps, and the maximum number of iterations is small. After
     'niters' iterations, convergence criteria is tested and futher 
     iterations undertaken if not converged within 'niters' iterations. */
-
+    
     double newtonraphson_testediterations(const unsigned int iterlimit,
                                           double ziter, const std::string scenario) const;
     /*  Timestep condensation ODE by delt given initial guess for ziter,
@@ -148,9 +118,9 @@ private:
   };
 
 public:
-  ImplicitEuler(const unsigned int niters, const double delt,
+  ImplicitEuler(const unsigned int miniters, const double delt,
                 const double maxrtol, const double maxatol)
-      : niters(niters), delt(delt), maxrtol(maxrtol), maxatol(maxatol) {}
+      : miniters(miniters), delt(delt), maxrtol(maxrtol), maxatol(maxatol) {}
 
   double solve_condensation(const double s_ratio,
                             const double akoh,

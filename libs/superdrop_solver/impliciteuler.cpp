@@ -29,37 +29,23 @@ for more details. */
 {
   const double ffactor(dlc::Rho_l * (fkl + fdl));
   const double ract_ratio(rprev * rprev * akoh / 3.0 / bkoh);
-  
   const double max_uniquedelt(
       2.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
   
-  if (s_ratio <= 1.0 && ract_ratio < 1.0)
+  if ((s_ratio <= 1.0 && ract_ratio < 1.0) || (delt <= max_uniquedelt))
   {
-    const double rtol(0.001);   // at least 0.1 rtol
-    const double atol(0.001);   // at least 0.1 atol
-    const ImpIter impit{niters, delt, rtol, atol, s_ratio,
+    /* criteria for unique solution are met */
+    const ImpIter impit{miniters, delt, maxrtol, maxatol, s_ratio,
                         akoh, bkoh, ffactor, rprev};
 
     double init_ziter(initial_ziter(rprev, s_ratio, akoh, bkoh));
-    return impit.newtonraphsoniterations(init_ziter, "A");
-  }
-  else if (delt <= max_uniquedelt)
-  {
-    const double rtol(0.001);   // at least 0.1 rtol
-    const double atol(0.001);   // at least 0.1 atol
-    const ImpIter impit{niters, delt, rtol, atol, s_ratio,
-                        akoh, bkoh, ffactor, rprev};
-
-    double init_ziter(initial_ziter(rprev, s_ratio, akoh, bkoh));
-    return impit.newtonraphsoniterations(init_ziter, "B");
+    return impit.newtonraphsoniterations(init_ziter, "A/B");
   }
   else
   {
-
-    std::cout << "\nscenario" << "C" << ", ";
-    const double rtol(0.001);   // at least 0.1 rtol
-    const double atol(0.001);   // at least 0.1 atol
-    const ImpIter impit{niters, delt, rtol, atol, s_ratio,
+    /* In general there may be > 0 spurious solutions */
+    const unsigned int niters(std::max(miniters, (unsigned int)3));
+    const ImpIter impit{niters, delt, maxrtol, maxatol, s_ratio,
                         akoh, bkoh, ffactor, rprev};
 
     double init_ziter(initial_ziter(rprev, s_ratio, akoh, bkoh));
@@ -139,7 +125,7 @@ iterations undertaken if not converged within 'niters' iterations. */
   }
   else
   {
-    const unsigned int iterlimit(50); // allow at most 10 iterations
+    const unsigned int iterlimit(25); // allow at most 10 iterations
     return newtonraphson_testediterations(iterlimit, ziter, scenario);
   } 
 }
