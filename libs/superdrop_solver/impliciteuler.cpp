@@ -104,7 +104,7 @@ is unique and therefore Newton Raphson root finding algorithm converges
 quickly. This means method can be used with comparitively large tolerances
 and timesteps, and the maximum number of iterations is small. After
 'niters' iterations, convergence criteria is tested and futher 
-iterations undertaken if not converged within 'niters' iterations. */
+iterations undertaken if not yet converged. */
 {
   double numerator(0.0);
   for (unsigned int iter=0; iter < niters; ++iter)
@@ -123,7 +123,7 @@ iterations undertaken if not converged within 'niters' iterations. */
   }
   else
   {
-    const unsigned int iterlimit(50); // allow at most 10 iterations
+    const unsigned int iterlimit(50); // allow at most 50 iterations
     return newtonraphson_testediterations(iterlimit, ziter, scenario);
   } 
 }

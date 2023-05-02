@@ -34,16 +34,18 @@ private:
   const double maxrtol; // adjustable relative tolerance for convergence of NR method
   const double maxatol; // adjustable abolute tolerance for convergence of NR method
 
-  double initial_ziter(const double s_ratio, const double akoh,
-                       const double bkoh, const double r_k) const;
+  double initialguess(const double rprev,
+                      const double s_ratio,
+                      const double akoh,
+                      const double bkoh) const;
   /* returns appropriate initial value (ie. a reasonable guess) for
   'ziter' to use as first iteration of newton raphson method in
   rootfinding algorithm for timestepping condensation/evaporation ODE */
 
-  double shima_initial_ziter(const double rprev,
-                             const double s_ratio,
-                             const double akoh,
-                             const double bkoh) const;
+  double ImplicitEuler::initialguess_shima(const double rprev,
+                                           const double s_ratio,
+                                           const double akoh,
+                                           const double bkoh) const;
   /* returns appropriate initial value (ie. a reasonable guess)
   as in Shima's SCALE-SDM */
 
@@ -63,16 +65,16 @@ private:
     double newtonraphsoniterations(double ziter,
                                 const std::string scenario) const;
     /* Timestep condensation ODE by delt given initial guess for ziter,
-    (which is usually radius^squared from previous timestep). Uses newton 
+    (which is usually radius^squared from previous timestep). Uses newton
     raphson iterative method to find new value of radius that converges
     on the root of the polynomial g(ziter) within the tolerances of the
     ImpIter instance. Uniquesol method assumes that solution to g(ziter)=0
     is unique and therefore Newton Raphson root finding algorithm converges
     quickly. This means method can be used with comparitively large tolerances
     and timesteps, and the maximum number of iterations is small. After
-    'niters' iterations, convergence criteria is tested and futher 
-    iterations undertaken if not converged within 'niters' iterations. */
-    
+    'niters' iterations, convergence criteria is tested and futher
+    iterations undertaken if not yet converged. */
+
     double newtonraphson_testediterations(const unsigned int iterlimit,
                                           double ziter, const std::string scenario) const;
     /*  Timestep condensation ODE by delt given initial guess for ziter,
