@@ -32,29 +32,32 @@ for more details. */
         2.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
   const double ract_ratio(rprev * rprev * akoh / 3.0 / bkoh);
    
-  if (delt <= max_uniquedelt)
-  /* criteria for unique solution are met */
+  const bool ucrit1((s_ratio <= 1.0 && ract_ratio < 1.0));
+  const bool ucrit2(delt <= max_uniquedelt);
+  if (ucrit1 || ucrit2)
+  /* >=1 criteria for unique solution are met */
   {
-    const double subdelt(delt/10.0);
-    const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
-                      s_ratio, akoh, bkoh, ffactor};
-    return newtonraphson_subtimestepped(subdelt, delt, impit, rprev);
+    const double s_act(1 + std::sqrt(4.0 * std::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
+    if (ucrit2 && (s_ratio/s_act-1 <= 0.01))
+    {
+      const double subdelt(delt/10.0);
+      const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
+                          s_ratio, akoh, bkoh, ffactor};
+      return newtonraphson_subtimestepped(subdelt, delt, impit, rprev);
+    }
+    else
+    {
+      const ImpIter impit{miniters, delt, maxrtol, maxatol,
+                          s_ratio, akoh, bkoh, ffactor};
+      double init_ziter(impit.initialguess(rprev));
+      return impit.newtonraphson_niterations(rprev, init_ziter, "A");
+    }
   }
 
-  else if (s_ratio <= 1.0 && ract_ratio < 1.0)
-  /* criteria for unique solution are met */
-  {
-    const ImpIter impit{miniters, delt, maxrtol, maxatol,
-                        s_ratio, akoh, bkoh, ffactor};
-
-    double init_ziter(impit.initialguess(rprev));
-    return impit.newtonraphson_niterations(rprev, init_ziter, "A");
-  } 
-
   else
+  /* In general there may be > 0 spurious solutions. Convergence is
+  slower so always allow >= 3 Newton Raphson Iterations */
   {
-    /* In general there may be > 0 spurious solutions. Convergence is
-    slower so always allow >= 3 Newton Raphson Iterations */
     const unsigned int niters(std::max(miniters, (unsigned int)3));
     const ImpIter impit{niters, delt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
