@@ -112,9 +112,9 @@ void Config::configvariable(const std::string name, const std::string value)
 
   /* SDM parameters */
   /* timestepping parameters */
-  else if (name == "cond_maxiters")
+  else if (name == "cond_iters")
   {
-    cond_maxiters = stoul(value);
+    cond_iters = stoul(value);
     issuccess = true;
   }
   else if (name == "cond_rtol")

@@ -69,7 +69,7 @@ public:
 
   /* SDM parameters */
   /* timestepping parameters */
-  unsigned int cond_maxiters;  // maximum no. iterations of Newton Raphson Method
+  unsigned int cond_iters;  // suggested no. iterations of Newton Raphson Method
   double cond_rtol;   // relative tolerance for implicit euler integration
   double cond_atol;   //  abolute tolerance for implicit euler integration
   double CONDTSTEP;   // time between SD condensation events [s]
