@@ -29,7 +29,7 @@ class ImplicitEuler
   the implicit timestepping equation of stiff ODE */
 {
 private:
-  const unsigned int maxiters;   // maximum number of NR iterations before error raised
+  const unsigned int niters;   // maximum number of NR iterations before error raised
   const double delt;    // timestep of ODE solver (at each step implicit method is called)
   const double maxrtol; // adjustable relative tolerance for convergence of NR method
   const double maxatol; // adjustable abolute tolerance for convergence of NR method
@@ -148,9 +148,9 @@ private:
   };
 
 public:
-  ImplicitEuler(const unsigned int maxiters, const double delt,
+  ImplicitEuler(const unsigned int niters, const double delt,
                 const double maxrtol, const double maxatol)
-      : maxiters(maxiters), delt(delt), maxrtol(maxrtol), maxatol(maxatol) {}
+      : niters(niters), delt(delt), maxrtol(maxrtol), maxatol(maxatol) {}
 
   double solve_condensation(const double s_ratio,
                             const double akoh,

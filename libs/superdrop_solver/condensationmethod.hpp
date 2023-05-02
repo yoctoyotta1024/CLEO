@@ -79,11 +79,11 @@ public:
         impliciteuler(impliciteuler) {}
 
   CondensationMethod(const bool doAlterThermo, const double delt,
-                     const unsigned maxiters, const double rtol,
+                     const unsigned niters, const double rtol,
                      const double atol)
       : doAlterThermo(doAlterThermo),
         delt(delt),
-        impliciteuler(maxiters, delt, rtol, atol) {}
+        impliciteuler(niters, delt, rtol, atol) {}
 
   inline void operator()(const int currenttimestep,
                          std::span<SuperdropWithGbxindex> span4SDsinGBx,
@@ -101,7 +101,7 @@ public:
 SdmProcess auto CondensationProcess(const int interval,
                                     const std::function<double(int)> int2time,
                                     const bool doAlterThermo,
-                                    const unsigned maxiters,
+                                    const unsigned niters,
                                     const double rtol,
                                     const double atol)
 /* constructs SdmProcess for condensation with constant timestep 'interval'
@@ -110,7 +110,7 @@ and the arguments required to construct the condensation method */
 {
   const double dimlesststep = int2time(interval);
   return ConstTstepProcess{interval, CondensationMethod(doAlterThermo, dimlesststep,
-                                                        maxiters, rtol, atol)};
+                                                        niters, rtol, atol)};
 }
 
 #endif // CONDENSATIONMETHOD_HPP

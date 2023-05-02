@@ -35,7 +35,6 @@ for more details. */
   
   if (s_ratio <= 1.0 && ract_ratio < 1.0)
   {
-    const unsigned int niters(2); // allow at most 10 iterations
     const double rtol(0.001);   // at least 0.1 rtol
     const double atol(0.001);   // at least 0.1 atol
     const ImpIter impit{niters, delt, rtol, atol, s_ratio,
@@ -46,7 +45,6 @@ for more details. */
   }
   else if (delt <= max_uniquedelt)
   {
-    const unsigned int niters(maxiters); // allow at most 10 iterations
     const double rtol(0.001);   // at least 0.1 rtol
     const double atol(0.001);   // at least 0.1 atol
     const ImpIter impit{niters, delt, rtol, atol, s_ratio,
@@ -59,7 +57,6 @@ for more details. */
   {
 
     std::cout << "\nscenario" << "C" << ", ";
-    const unsigned int niters(maxiters); // allow at most 10 iterations
     const double rtol(0.001);   // at least 0.1 rtol
     const double atol(0.001);   // at least 0.1 atol
     const ImpIter impit{niters, delt, rtol, atol, s_ratio,
