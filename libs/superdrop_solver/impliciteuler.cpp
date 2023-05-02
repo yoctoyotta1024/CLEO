@@ -37,8 +37,7 @@ for more details. */
   if (ucrit1 || ucrit2)
   /* >=1 criteria for unique solution are met */
   {
-    const double s_act(1 + std::sqrt(4.0 * std::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
-    if (ucrit2 && (s_ratio/s_act-1 <= 0.01))
+    if (ucrit2 && (std::abs(s_ratio-1) <= 0.005))
     {
       const double subdelt(delt/10.0);
       const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
