@@ -38,7 +38,7 @@ for more details. */
     const ImpIter impit{miniters, delt, maxrtol, maxatol, s_ratio,
                         akoh, bkoh, ffactor, rprev};
 
-    double init_ziter(initial_ziter(rprev, s_ratio, akoh, bkoh));
+    double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
     return impit.newtonraphsoniterations(init_ziter, "A/B");
   }
   else
@@ -48,12 +48,12 @@ for more details. */
     const ImpIter impit{niters, delt, maxrtol, maxatol, s_ratio,
                         akoh, bkoh, ffactor, rprev};
 
-    double init_ziter(initial_ziter(rprev, s_ratio, akoh, bkoh));
+    double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
     return impit.newtonraphsoniterations(init_ziter,"C");
   }
 }
 
-double ImplicitEuler::initial_ziter(const double rprev,
+double ImplicitEuler::initialguess(const double rprev,
                                     const double s_ratio,
                                     const double akoh,
                                     const double bkoh) const
@@ -61,38 +61,36 @@ double ImplicitEuler::initial_ziter(const double rprev,
 'ziter' to use as first iteration of newton raphson method in
 rootfinding algorithm for timestepping condensation/evaporation ODE */
 {
-  // const double s_activ(1 + std::sqrt(4.0*std::pow(akoh, 3.0) / (27*bkoh))); // activation supersaturation of droplet
-  // if (s_ratio > s_activ)
-  // {
-  //   return std::max(1e-3, std::pow(rprev, 2.0));
-  // }
+  const double rprevsqrd(std::pow(rprev, 2.0));
+  const double s_activ(1 + std::sqrt(4.0*std::pow(akoh, 3.0) / (27*bkoh))); // activation supersaturation
   
-  // else if (s_ratio > 1)
-  // {
-  //   const double r1sqrd(3*bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
-  //   return std::max(std::pow(rprev, 2.0), r1sqrd);
-  // } 
-
-  return std::pow(rprev, 2.0);
+  if (s_ratio > s_activ)
+  {
+    const double bigrsqrd = std::pow(1e-3/dlc::R0, 2.0); // large initial guess for radius of drop that should be activated
+    return std::max(bigrsqrd, rprev);
+  }
+  
+  return rprevsqrd;
 }
 
-double ImplicitEuler::shima_initial_ziter(const double rprev,
-                                    const double s_ratio,
-                                    const double akoh,
-                                    const double bkoh) const
+double ImplicitEuler::initialguess_shima(const double rprev,
+                                         const double s_ratio,
+                                         const double akoh,
+                                         const double bkoh) const
 /* returns appropriate initial value (ie. a reasonable guess)
 as in Shima's SCALE-SDM */
 {
-  const double s_activ(1 + std::sqrt(4.0*std::pow(akoh, 3.0) / (27*bkoh))); // activation supersaturation of droplet
+  const double rprevsqrd(std::pow(rprev, 2.0));
+  const double s_activ(1 + std::sqrt(4.0*std::pow(akoh, 3.0) / (27*bkoh))); // activation supersaturation
+  
   if (s_ratio > s_activ)
   {
-    return std::max(1e-3, std::pow(rprev, 2.0));
+    const double bigrsqrd = std::pow(1e-3/dlc::R0, 2.0); // large initial guess for radius of drop that should be activated
+    return std::max(bigrsqrd, rprev);
   }
-  else
-  {
-    const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
-    return std::max(std::pow(rprev, 2.0), r1sqrd);
-  }
+  
+  const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
+  return std::max(rprevsqrd, r1sqrd);
 }
 
 double ImplicitEuler::ImpIter::
@@ -125,7 +123,7 @@ iterations undertaken if not converged within 'niters' iterations. */
   }
   else
   {
-    const unsigned int iterlimit(25); // allow at most 10 iterations
+    const unsigned int iterlimit(50); // allow at most 10 iterations
     return newtonraphson_testediterations(iterlimit, ziter, scenario);
   } 
 }
