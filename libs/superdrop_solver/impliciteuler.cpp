@@ -15,7 +15,7 @@ double ImplicitEuler::solve_condensation(const double s_ratio,
                                          const double bkoh,
                                          const double fkl,
                                          const double fdl,
-                                         const double rprev) const
+                                         const double rprev0) const
 /* forward timestep previous radius 'rprev' by delt using an implicit
 euler method to integrate the condensation/evaporation ODg. Implict
 timestepping equation defined in section 5.1.2 of Shima et al. 2009
@@ -28,29 +28,45 @@ on the uniqueness criteria of the polynomial g(z). Refer to section
 for more details. */
 {
   const double ffactor(dlc::Rho_l * (fkl + fdl));
-  const double ract_ratio(rprev * rprev * akoh / 3.0 / bkoh);
-  const double max_uniquedelt(
-      2.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
+    const double max_uniquedelt(
+        2.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
+  const double ract_ratio(rprev0 * rprev0 * akoh / 3.0 / bkoh);
+   
+  if (delt <= max_uniquedelt)
+  {
+    double rprev(rprev0); 
+    const double subdelt = delt/100.0;
+    for (int i=0; i<100; ++i)
+    {
+      /* criteria for unique solution are met */
+      const ImpIter impit{miniters, subdelt, maxrtol, maxatol, s_ratio,
+                          akoh, bkoh, ffactor, rprev};
 
-  if ((s_ratio <= 1.0 && ract_ratio < 1.0) || (delt <= max_uniquedelt))
+      double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
+      rprev = impit.newtonraphson_niterations(init_ziter, "B");
+    }
+  }
+
+  else if (s_ratio <= 1.0 && ract_ratio < 1.0)
   {
     /* criteria for unique solution are met */
     const ImpIter impit{miniters, delt, maxrtol, maxatol, s_ratio,
-                        akoh, bkoh, ffactor, rprev};
+                        akoh, bkoh, ffactor, rprev0};
 
-    double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
-    return impit.newtonraphsoniterations(init_ziter, "A/B");
-  }
+    double init_ziter(initialguess(rprev0, s_ratio, akoh, bkoh));
+    return impit.newtonraphson_niterations(init_ziter, "A");
+  } 
+
   else
   {
     /* In general there may be > 0 spurious solutions. Convergence is
     slower so always allow >= 3 Newton Raphson Iterations */
     const unsigned int niters(std::max(miniters, (unsigned int)3));
     const ImpIter impit{niters, delt, maxrtol, maxatol, s_ratio,
-                        akoh, bkoh, ffactor, rprev};
+                        akoh, bkoh, ffactor, rprev0};
 
-    double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
-    return impit.newtonraphsoniterations(init_ziter, "C");
+    double init_ziter(initialguess(rprev0, s_ratio, akoh, bkoh));
+    return impit.newtonraphson_niterations(init_ziter, "C");
   }
 }
 
@@ -65,7 +81,7 @@ Criteria is as in SCALE-SDM for making initial guess >> (activation radius)^2
 if supersaturation > activation supersaturation for given droplet */
 {
   const double rprevsqrd(std::pow(rprev, 2.0));
-  const double s_act(1 + std::sqrt(4.0 * std::pow(akoh, 3.0) / (27 * bkoh))); // activation supersaturation
+  const double s_act(1 + std::sqrt(4.0 * std::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
 
   if (s_ratio > s_act)
   {
@@ -91,7 +107,7 @@ from rprev^2. Second criteria is that initial guess >=
 }
 
 double ImplicitEuler::ImpIter::
-    newtonraphsoniterations(double ziter, const std::string scenario) const
+    newtonraphson_niterations(double ziter, const std::string scenario) const
 /* Timestep condensation ODE by delt given initial guess for ziter,
 (which is usually radius^squared from previous timestep). Uses newton
 raphson iterative method to find new value of radius that converges
@@ -103,6 +119,7 @@ and timesteps, and the maximum number of iterations is small. After
 'niters' iterations, convergence criteria is tested and futher
 iterations undertaken if not yet converged. */
 {
+  // perform 'niters' iterations
   double numerator(0.0);
   for (unsigned int iter = 0; iter < niters; ++iter)
   {
@@ -113,21 +130,21 @@ iterations undertaken if not yet converged. */
     ziter -= ziter * numerator / denominator; // increment ziter
   }
 
-  // substep timestep if convergence test fails
+  // perform upto 'iterlimit' further iterations if convergence test fails
   if (!(isnotconverged(ode_gfunc(ziter), numerator)))
   {
     return std::sqrt(ziter);
   }
   else
   {
-    const unsigned int iterlimit(50); // allow at most 50 iterations
-    return newtonraphson_testediterations(iterlimit, ziter, scenario);
+    const unsigned int iterlimit(50); // maximum number of further iterations
+    return newtonraphson_iteruntilconverged(iterlimit, ziter, scenario);
   }
 }
 
 double ImplicitEuler::ImpIter::
-    newtonraphson_testediterations(const unsigned int iterlimit,
-                                   double ziter, const std::string scenario) const
+    newtonraphson_iteruntilconverged(const unsigned int iterlimit,
+                                    double ziter, const std::string scenario) const
 /*  Timestep condensation ODE by delt given initial guess for ziter,
 (which is usually radius^squared from previous timestep). Uses
 newton raphson iterative method to find new value of radius that
@@ -141,6 +158,8 @@ et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
   bool do_iter(true);
   unsigned int iter(1);
 
+  // perform newton raphson iterations if convergence test fails
+  // and throw error if not converged within 'iterlimit' iterations
   while (do_iter)
   {
     if (iter <= iterlimit)

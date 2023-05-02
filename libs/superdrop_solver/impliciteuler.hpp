@@ -62,8 +62,8 @@ private:
     const double ffactor;
     const double rprev;
 
-    double newtonraphsoniterations(double ziter,
-                                   const std::string scenario) const;
+    double newtonraphson_niterations(double ziter,
+                                     const std::string scenario) const;
     /* Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses newton
     raphson iterative method to find new value of radius that converges
@@ -75,7 +75,7 @@ private:
     'niters' iterations, convergence criteria is tested and futher
     iterations undertaken if not yet converged. */
 
-    double newtonraphson_testediterations(const unsigned int iterlimit,
+    double newtonraphson_iteruntilconverged(const unsigned int iterlimit,
                                           double ziter,
                                           const std::string scenario) const;
     /*  Timestep condensation ODE by delt given initial guess for ziter,
