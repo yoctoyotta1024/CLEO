@@ -43,7 +43,8 @@ for more details. */
   }
   else
   {
-    /* In general there may be > 0 spurious solutions */
+    /* In general there may be > 0 spurious solutions. Convergence is
+    slower so always allow >= 3 Newton Raphson Iterations */
     const unsigned int niters(std::max(miniters, (unsigned int)3));
     const ImpIter impit{niters, delt, maxrtol, maxatol, s_ratio,
                         akoh, bkoh, ffactor, rprev};
