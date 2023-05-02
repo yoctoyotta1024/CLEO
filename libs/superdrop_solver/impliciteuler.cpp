@@ -38,6 +38,8 @@ for more details. */
   /* >=1 criteria for unique solution are met */
   {
     if (ucrit2 && (std::abs(s_ratio-1) <= 0.005))
+    /* if close to s=1, acitvation / deactivation may
+    occur so perform subtimestepping */
     {
       const double subdelt(delt/10.0);
       const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
