@@ -29,32 +29,32 @@ class ImplicitEuler
   the implicit timestepping equation of stiff ODE */
 {
 private:
-  const unsigned int miniters;   // suggested maximum number of iterations for implicit method
-  const double delt;    // timestep of ODE solver (at each step implicit method is called)
-  const double maxrtol; // adjustable relative tolerance for convergence of NR method
-  const double maxatol; // adjustable abolute tolerance for convergence of NR method
+  const unsigned int miniters; // suggested maximum number of iterations for implicit method
+  const double delt;           // timestep of ODE solver (at each step implicit method is called)
+  const double maxrtol;        // adjustable relative tolerance for convergence of NR method
+  const double maxatol;        // adjustable abolute tolerance for convergence of NR method
 
-  double initialguess(const double rprev,
-                      const double s_ratio,
-                      const double akoh,
-                      const double bkoh) const;
+  double initialguess(const double rprev, const double s_ratio,
+                      const double akoh, const double bkoh) const;
   /* returns appropriate initial value (ie. a reasonable guess) for
   'ziter' to use as first iteration of newton raphson method in
-  rootfinding algorithm for timestepping condensation/evaporation ODE */
-
-  double ImplicitEuler::initialguess_shima(const double rprev,
-                                           const double s_ratio,
-                                           const double akoh,
-                                           const double bkoh) const;
+  rootfinding algorithm for timestepping condensation/evaporation ODE.
+  Criteria is as in SCALE-SDM for making initial guess >> (activation radius)^2
+  if supersaturation > activation supersaturation for given droplet */
+  
+  double initialguess_shima(const double rprev, const double s_ratio,
+                            const double akoh, const double bkoh) const;
   /* returns appropriate initial value (ie. a reasonable guess)
-  as in Shima's SCALE-SDM */
-
+  as in Shima's SCALE-SDM with 2 criteria for modifying guess 
+  from rprev^2. Second criteria is that initial guess >= 
+  (equilibrium radius when s_ratio=1)^2, 'r1sqrd' */
+  
   struct ImpIter
   {
-    const unsigned int niters;  // number of NR iterations to try before testing convergence
-    const double subdelt; // timestep of implicit method (at each substep >= niter NR iterations occur)
-    const double rtol;    // relative tolerance for convergence of NR method
-    const double atol;    // abolute tolerance for convergence of NR method
+    const unsigned int niters; // number of NR iterations to try before testing convergence
+    const double subdelt;      // timestep of implicit method (at each substep >= niter NR iterations occur)
+    const double rtol;         // relative tolerance for convergence of NR method
+    const double atol;         // abolute tolerance for convergence of NR method
 
     const double s_ratio;
     const double akoh;
@@ -63,7 +63,7 @@ private:
     const double rprev;
 
     double newtonraphsoniterations(double ziter,
-                                const std::string scenario) const;
+                                   const std::string scenario) const;
     /* Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses newton
     raphson iterative method to find new value of radius that converges
@@ -76,7 +76,8 @@ private:
     iterations undertaken if not yet converged. */
 
     double newtonraphson_testediterations(const unsigned int iterlimit,
-                                          double ziter, const std::string scenario) const;
+                                          double ziter,
+                                          const std::string scenario) const;
     /*  Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses
     newton raphson iterative method to find new value of radius that
@@ -107,7 +108,7 @@ private:
     Newton Raphson Method. */
 
     bool isnotconverged(const double gfunciter,
-                               const double gfuncprev) const
+                        const double gfuncprev) const
     /* boolean where True means criteria for ending newton raphson
     iterations has not yet been met. Criteria is standard local error
     test: |iteration - previous iteration| < RTOL * |iteration| + ATOL */
@@ -134,7 +135,7 @@ public:
   euler method to integrate the condensation/evaporation ODg. Implict
   timestepping equation defined in section 5.1.2 of Shima et al. 2009
   and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
-  Newton Raphson iterations are used to converge towards the root of 
+  Newton Raphson iterations are used to converge towards the root of
   g(z) within the tolerances of an ImpIter instance. Tolerances,
   maxium number of iterations and sub-timestepping are adjusted based on
   on the uniqueness criteria of the polynomial g(z). Refer to section
