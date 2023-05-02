@@ -15,7 +15,7 @@ double ImplicitEuler::solve_condensation(const double s_ratio,
                                          const double bkoh,
                                          const double fkl,
                                          const double fdl,
-                                         const double rprev0) const
+                                         const double rprev) const
 /* forward timestep previous radius 'rprev' by delt using an implicit
 euler method to integrate the condensation/evaporation ODg. Implict
 timestepping equation defined in section 5.1.2 of Shima et al. 2009
@@ -30,31 +30,31 @@ for more details. */
   const double ffactor(dlc::Rho_l * (fkl + fdl));
     const double max_uniquedelt(
         2.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
-  const double ract_ratio(rprev0 * rprev0 * akoh / 3.0 / bkoh);
+  const double ract_ratio(rprev * rprev * akoh / 3.0 / bkoh);
    
   if (delt <= max_uniquedelt)
+  /* criteria for unique solution are met */
   {
-    double rprev(rprev0); 
     const double subdelt = delt/100.0;
+    const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
+                        s_ratio, akoh, bkoh, ffactor};
+    double subr(rprev); 
     for (int i=0; i<100; ++i)
     {
-      /* criteria for unique solution are met */
-      const ImpIter impit{miniters, subdelt, maxrtol, maxatol, s_ratio,
-                          akoh, bkoh, ffactor, rprev};
-
-      double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
-      rprev = impit.newtonraphson_niterations(init_ziter, "B");
+      double init_ziter(initialguess(subr, s_ratio, akoh, bkoh));
+      subr = impit.newtonraphson_niterations(subr, init_ziter, "B");
     }
+    return subr;
   }
 
   else if (s_ratio <= 1.0 && ract_ratio < 1.0)
+  /* criteria for unique solution are met */
   {
-    /* criteria for unique solution are met */
-    const ImpIter impit{miniters, delt, maxrtol, maxatol, s_ratio,
-                        akoh, bkoh, ffactor, rprev0};
+    const ImpIter impit{miniters, delt, maxrtol, maxatol,
+                        s_ratio, akoh, bkoh, ffactor};
 
-    double init_ziter(initialguess(rprev0, s_ratio, akoh, bkoh));
-    return impit.newtonraphson_niterations(init_ziter, "A");
+    double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
+    return impit.newtonraphson_niterations(rprev, init_ziter, "A");
   } 
 
   else
@@ -62,12 +62,13 @@ for more details. */
     /* In general there may be > 0 spurious solutions. Convergence is
     slower so always allow >= 3 Newton Raphson Iterations */
     const unsigned int niters(std::max(miniters, (unsigned int)3));
-    const ImpIter impit{niters, delt, maxrtol, maxatol, s_ratio,
-                        akoh, bkoh, ffactor, rprev0};
+    const ImpIter impit{niters, delt, maxrtol, maxatol,
+                        s_ratio, akoh, bkoh, ffactor};
 
-    double init_ziter(initialguess(rprev0, s_ratio, akoh, bkoh));
-    return impit.newtonraphson_niterations(init_ziter, "C");
+    double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
+    return impit.newtonraphson_niterations(rprev, init_ziter, "C");
   }
+
 }
 
 double ImplicitEuler::initialguess(const double rprev,
@@ -107,7 +108,9 @@ from rprev^2. Second criteria is that initial guess >=
 }
 
 double ImplicitEuler::ImpIter::
-    newtonraphson_niterations(double ziter, const std::string scenario) const
+    newtonraphson_niterations(const double rprev,
+                              double ziter,
+                              const std::string scenario) const
 /* Timestep condensation ODE by delt given initial guess for ziter,
 (which is usually radius^squared from previous timestep). Uses newton
 raphson iterative method to find new value of radius that converges
@@ -125,26 +128,28 @@ iterations undertaken if not yet converged. */
   {
     /* perform one attempted iteration  ziter^(m) -> ziter^(m+1)
     for iteration m+1 starting at m=1 */
-    numerator = ode_gfunc(ziter);
+    numerator = ode_gfunc(rprev, ziter);
     const double denominator = ode_gfuncderivative(ziter);
     ziter -= ziter * numerator / denominator; // increment ziter
   }
 
   // perform upto 'iterlimit' further iterations if convergence test fails
-  if (!(isnotconverged(ode_gfunc(ziter), numerator)))
+  if (!(isnotconverged(ode_gfunc(rprev, ziter), numerator)))
   {
     return std::sqrt(ziter);
   }
   else
   {
     const unsigned int iterlimit(50); // maximum number of further iterations
-    return newtonraphson_iteruntilconverged(iterlimit, ziter, scenario);
+    return newtonraphson_iteruntilconverged(iterlimit, rprev, ziter, scenario);
   }
 }
 
 double ImplicitEuler::ImpIter::
     newtonraphson_iteruntilconverged(const unsigned int iterlimit,
-                                    double ziter, const std::string scenario) const
+                                     const double rprev,
+                                     double ziter,
+                                     const std::string scenario) const
 /*  Timestep condensation ODE by delt given initial guess for ziter,
 (which is usually radius^squared from previous timestep). Uses
 newton raphson iterative method to find new value of radius that
@@ -166,7 +171,7 @@ et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
     {
       /* perform one attempted iteration  ziter^(m) -> ziter^(m+1)
       for iteration m+1 starting at m=1 and then test for convergence */
-      const auto iterret = iterate_rootfinding_algorithm(ziter);
+      const auto iterret = iterate_rootfinding_algorithm(rprev, ziter);
       do_iter = iterret.first;
       ziter = iterret.second;
       iter += 1;
@@ -186,25 +191,25 @@ et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
 }
 
 std::pair<bool, double> ImplicitEuler::ImpIter::
-    iterate_rootfinding_algorithm(double ziter) const
+    iterate_rootfinding_algorithm(const double rprev, double ziter) const
 /* function performs one iteration of Newton Raphson rootfinding
   method and returns updated value of radius^2 alongside a boolean that
   is false if algorithm has converged */
 {
   // increment ziter
-  const double numerator = ode_gfunc(ziter);
+  const double numerator = ode_gfunc(rprev, ziter);
   const double denominator = ode_gfuncderivative(ziter);
   ziter = ziter * (1 - numerator / denominator);
 
   // test for next iteration
-  const double newnumerator = ode_gfunc(ziter);
+  const double newnumerator = ode_gfunc(rprev, ziter);
   const bool do_iter = isnotconverged(newnumerator, numerator);
 
   return std::pair<bool, double>{do_iter, ziter};
 }
 
 double ImplicitEuler::ImpIter::
-    ode_gfunc(const double rsqrd) const
+    ode_gfunc(const double rprev, const double rsqrd) const
 /* returns g(z) / z * delt for g(z) function used in root finding
 Newton Raphson Method for dr/dt condensation / evaporation ODE.
 ODE is for radial growth/shrink of each superdroplet due to

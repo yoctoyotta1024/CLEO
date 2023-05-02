@@ -60,10 +60,10 @@ private:
     const double akoh;
     const double bkoh;
     const double ffactor;
-    const double rprev;
-
-    double newtonraphson_niterations(double ziter,
-                                     const std::string scenario) const;
+    
+    double newtonraphson_niterations(const double rprev,
+                              double ziter,
+                              const std::string scenario) const;
     /* Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses newton
     raphson iterative method to find new value of radius that converges
@@ -76,8 +76,9 @@ private:
     iterations undertaken if not yet converged. */
 
     double newtonraphson_iteruntilconverged(const unsigned int iterlimit,
-                                          double ziter,
-                                          const std::string scenario) const;
+                                     const double rprev,
+                                     double ziter,
+                                     const std::string scenario) const;
     /*  Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses
     newton raphson iterative method to find new value of radius that
@@ -89,12 +90,12 @@ private:
     et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
 
     std::pair<bool, double>
-    iterate_rootfinding_algorithm(double ziter) const;
+    iterate_rootfinding_algorithm(const double rprev, double ziter) const;
     /* function performs one iteration of Newton Raphson rootfinding
     method and returns updated value of radius^2 alongside a boolean that
     is false if algorithm has converged */
 
-    double ode_gfunc(const double rsqrd) const;
+    double ode_gfunc(const double rprev, const double rsqrd) const;
     /* returns g(z) / z * delt for g(z) function used in root finding
     Newton Raphson Method for dr/dt condensation / evaporation ODE.
     ODE is for radial growth/shrink of each superdroplet due to
