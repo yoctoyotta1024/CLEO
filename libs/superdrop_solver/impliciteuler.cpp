@@ -41,7 +41,7 @@ for more details. */
     const ImpIter impit{niters, delt, rtol, atol, s_ratio,
                         akoh, bkoh, ffactor, rprev};
 
-    const double init_ziter(std::pow(rprev, 2.0)); // guess for ziter (before any iterations)
+    double init_ziter(initial_ziter(rprev, s_ratio, akoh, bkoh));
     return impit.newtonraphsoniterations(init_ziter, "A");
   }
   else if (delt <= max_uniquedelt)
@@ -52,13 +52,13 @@ for more details. */
     const ImpIter impit{niters, delt, rtol, atol, s_ratio,
                         akoh, bkoh, ffactor, rprev};
 
-    const double init_ziter(std::pow(rprev, 2.0)); // guess for ziter (before any iterations)
+    double init_ziter(initial_ziter(rprev, s_ratio, akoh, bkoh));
     return impit.newtonraphsoniterations(init_ziter, "B");
   }
   else
   {
     const unsigned int niters(5); // allow at most 10 iterations
-    const double rtol(0.05);   // at least 0.1 rtol
+    const double rtol(0.01);   // at least 0.1 rtol
     const double atol(0.01);   // at least 0.1 atol
     const ImpIter impit{niters, delt, rtol, atol, s_ratio,
                         akoh, bkoh, ffactor, rprev};
@@ -79,13 +79,35 @@ rootfinding algorithm for timestepping condensation/evaporation ODE */
   // const double s_activ(1 + std::sqrt(4.0*std::pow(akoh, 3.0) / (27*bkoh))); // activation supersaturation of droplet
   // if (s_ratio > s_activ)
   // {
-  //   return std::pow(1e-3 / dlc::R0, 2.0);
+  //   return std::max(1e-3, std::pow(rprev, 2.0));
   // }
   
-  // const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
-  
-  // return std::max(std::pow(rprev, 2.0), r1sqrd);
+  // else if (s_ratio > 1)
+  // {
+  //   const double r1sqrd(3*bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
+  //   return std::max(std::pow(rprev, 2.0), r1sqrd);
+  // } 
+
   return std::pow(rprev, 2.0);
+}
+
+double ImplicitEuler::shima_initial_ziter(const double rprev,
+                                    const double s_ratio,
+                                    const double akoh,
+                                    const double bkoh) const
+/* returns appropriate initial value (ie. a reasonable guess)
+as in Shima's SCALE-SDM */
+{
+  const double s_activ(1 + std::sqrt(4.0*std::pow(akoh, 3.0) / (27*bkoh))); // activation supersaturation of droplet
+  if (s_ratio > s_activ)
+  {
+    return std::max(1e-3, std::pow(rprev, 2.0));
+  }
+  else
+  {
+    const double r1sqrd(bkoh/akoh); // (equilibrium radius for drolet at s_ratio=1)^2
+    return std::max(std::pow(rprev, 2.0), r1sqrd);
+  }
 }
 
 double ImplicitEuler::ImpIter::

@@ -40,6 +40,13 @@ private:
   'ziter' to use as first iteration of newton raphson method in
   rootfinding algorithm for timestepping condensation/evaporation ODE */
 
+  double shima_initial_ziter(const double rprev,
+                             const double s_ratio,
+                             const double akoh,
+                             const double bkoh) const;
+  /* returns appropriate initial value (ie. a reasonable guess)
+  as in Shima's SCALE-SDM */
+
   double uniquesol_for_implicitmethod(const double s_ratio,
                                             const double akoh,
                                             const double bkoh,
