@@ -123,14 +123,12 @@ private:
 public:
   ImplicitEuler(const unsigned int miniters, const double delt,
                 const double maxrtol, const double maxatol)
-      : miniters(miniters), delt(delt), maxrtol(maxrtol), maxatol(maxatol) {}
+      : miniters(miniters), delt(delt),
+        maxrtol(maxrtol), maxatol(maxatol) {}
 
-  double solve_condensation(const double s_ratio,
-                            const double akoh,
-                            const double bkoh,
-                            const double fkl,
-                            const double fdl,
-                            const double rprev) const;
+  double solve_condensation(const double s_ratio, const double akoh,
+                            const double bkoh, const double fkl,
+                            const double fdl, const double rprev) const;
   /* forward timestep previous radius 'rprev' by delt using an implicit
   euler method to integrate the condensation/evaporation ODg. Implict
   timestepping equation defined in section 5.1.2 of Shima et al. 2009
