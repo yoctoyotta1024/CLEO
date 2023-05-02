@@ -35,16 +35,10 @@ for more details. */
   if (delt <= max_uniquedelt)
   /* criteria for unique solution are met */
   {
-    const double subdelt = delt/100.0;
+    const double subdelt(delt/10.0);
     const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
-                        s_ratio, akoh, bkoh, ffactor};
-    double subr(rprev); 
-    for (int i=0; i<100; ++i)
-    {
-      double init_ziter(initialguess(subr, s_ratio, akoh, bkoh));
-      subr = impit.newtonraphson_niterations(subr, init_ziter, "B");
-    }
-    return subr;
+                      s_ratio, akoh, bkoh, ffactor};
+    return newtonraphson_subtimestepped(subdelt, delt, impit, rprev);
   }
 
   else if (s_ratio <= 1.0 && ract_ratio < 1.0)
@@ -53,7 +47,7 @@ for more details. */
     const ImpIter impit{miniters, delt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
 
-    double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
+    double init_ziter(impit.initialguess(rprev));
     return impit.newtonraphson_niterations(rprev, init_ziter, "A");
   } 
 
@@ -65,16 +59,27 @@ for more details. */
     const ImpIter impit{niters, delt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
 
-    double init_ziter(initialguess(rprev, s_ratio, akoh, bkoh));
+    double init_ziter(impit.initialguess(rprev));
     return impit.newtonraphson_niterations(rprev, init_ziter, "C");
   }
 
 }
 
-double ImplicitEuler::initialguess(const double rprev,
-                                   const double s_ratio,
-                                   const double akoh,
-                                   const double bkoh) const
+double ImplicitEuler::newtonraphson_subtimestepped(const double subdelt,
+                                               const double delt,
+                                               const ImpIter &impit, 
+                                               const double rprev) const
+{
+  double subr(rprev); 
+  for (double dt=0.0; dt<delt; dt+=subdelt)
+  {
+    double init_ziter(impit.initialguess(subr));
+    subr = impit.newtonraphson_niterations(subr, init_ziter, "B");
+  }
+  return subr;
+}
+
+double ImplicitEuler::ImpIter::initialguess(const double rprev) const
 /* returns appropriate initial value (ie. a reasonable guess) for
 'ziter' to use as first iteration of newton raphson method in
 rootfinding algorithm for timestepping condensation/evaporation ODE.
@@ -93,16 +98,13 @@ if supersaturation > activation supersaturation for given droplet */
   return rprevsqrd;
 }
 
-double ImplicitEuler::initialguess_shima(const double rprev,
-                                         const double s_ratio,
-                                         const double akoh,
-                                         const double bkoh) const
+double ImplicitEuler::ImpIter::initialguess_shima(const double rprev) const
 /* returns appropriate initial value (ie. a reasonable guess)
 as in Shima's SCALE-SDM with 2 criteria for modifying guess 
 from rprev^2. Second criteria is that initial guess >= 
 (equilibrium radius when s_ratio=1)^2, 'r1sqrd' */
 {
-  const double rsqrd = initialguess(rprev, s_ratio, akoh, bkoh);
+  const double rsqrd = initialguess(rprev);
   const double r1sqrd(bkoh / akoh);
   return std::max(rsqrd, r1sqrd);
 }
