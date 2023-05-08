@@ -49,9 +49,9 @@ double CondensationMethod::superdroplet_growth_by_condensation(const double pres
   ODE given the previous radius. */
 {
   /* n.b. Structured bindings require C++17. Can use std::tie for C++11 */
-  const double dmdt_const = 4.0 * M_PI * drop.get_solute()->rho_l * pow(dlc::R0, 3.0);
-  const double akoh = drop.akohler_factor(temp);
-  const double bkoh = drop.bkohler_factor();
+  const double dmdt_const(4.0 * M_PI * drop.get_solute()->rho_l * pow(dlc::R0, 3.0));
+  const double akoh(drop.akohler_factor(temp));
+  const double bkoh(drop.bkohler_factor());
   const auto [fkl, fdl] = diffusion_factors(press, temp, psat);
 
   /* do not pass r by reference here!! copy value into iterator */
