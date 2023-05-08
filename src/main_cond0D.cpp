@@ -106,7 +106,8 @@ int main(int argc, char *argv[])
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
   const auto sdmprocess(CondensationProcess(mdlsteps.condsubstep, &step2dimlesstime,
                                             config.doAlterThermo, config.cond_iters,
-                                            config.cond_rtol, config.cond_atol));
+                                            config.cond_nsubsteps, config.cond_rtol,
+                                            config.cond_atol));
   const auto sdmotion(NullMotion{});
 
   /* create observer from combination of chosen observers */

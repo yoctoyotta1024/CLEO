@@ -39,7 +39,7 @@ for more details. */
   /* if close to -0.01 < s-1 < 0.001, activation / deactivation
   may occur so perform subtimestepping */
   {
-    const double subdelt(delt / 10.0);
+    const double subdelt(delt / (double)nsubsteps);
     const unsigned int niters(std::max(miniters, (unsigned int)3));
     const ImpIter impit{niters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};

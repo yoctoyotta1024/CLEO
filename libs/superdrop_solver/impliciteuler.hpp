@@ -29,10 +29,11 @@ class ImplicitEuler
   the implicit timestepping equation of stiff ODE */
 {
 private:
-  const unsigned int miniters; // suggested maximum number of iterations for implicit method
-  const double delt;           // timestep of ODE solver (at each step implicit method is called)
-  const double maxrtol;        // adjustable relative tolerance for convergence of NR method
-  const double maxatol;        // adjustable abolute tolerance for convergence of NR method
+  const unsigned int miniters;  // suggested number of iterations for implicit method before testing for convergence
+  const unsigned int nsubsteps; // number of substeps to condensation method when supersat close to 1 (0 = false ie. none)
+  const double delt;            // timestep of ODE solver (at each step implicit method is called)
+  const double maxrtol;         // adjustable relative tolerance for convergence of NR method
+  const double maxatol;         // adjustable abolute tolerance for convergence of NR method
 
   struct ImpIter
   {
@@ -123,9 +124,9 @@ private:
                                 const double rprev) const;
 
 public:
-  ImplicitEuler(const unsigned int miniters, const double delt,
-                const double maxrtol, const double maxatol)
-      : miniters(miniters), delt(delt),
+  ImplicitEuler(const unsigned int miniters, const unsigned int nsubsteps,
+                const double delt, const double maxrtol, const double maxatol)
+      : miniters(miniters), nsubsteps(nsubsteps), delt(delt),
         maxrtol(maxrtol), maxatol(maxatol) {}
 
   double solve_condensation(const double s_ratio, const double akoh,
