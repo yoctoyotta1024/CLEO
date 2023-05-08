@@ -43,7 +43,7 @@ for more details. */
     const unsigned int niters(std::max(miniters, (unsigned int)3));
     const ImpIter impit{niters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
-    return newtonraphson_subtimestepped(subdelt, delt, impit, rprev);
+    return substep_implicitmethod(subdelt, delt, impit, rprev);
   }
 
   else if (ucrit1 || ucrit2)
@@ -70,10 +70,10 @@ for more details. */
   }
 }
 
-double ImplicitEuler::newtonraphson_subtimestepped(const double subdelt,
-                                                    const double delt,
-                                                    const ImpIter &impit, 
-                                                    const double rprev) const
+double ImplicitEuler::substep_implicitmethod(const double subdelt,
+                                             const double delt,
+                                             const ImpIter &impit,
+                                             const double rprev) const
 {
   double subr(rprev); 
   for (double dt=0.0; dt<delt; dt+=subdelt)

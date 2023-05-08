@@ -117,10 +117,10 @@ private:
     }
   };
 
-  double newtonraphson_subtimestepped(const double subdelt,
-                                    const double delt,
-                                    const ImpIter &impit,
-                                    const double rprev) const;
+  double substep_implicitmethod(const double subdelt,
+                                const double delt,
+                                const ImpIter &impit,
+                                const double rprev) const;
 
 public:
   ImplicitEuler(const unsigned int miniters, const double delt,
