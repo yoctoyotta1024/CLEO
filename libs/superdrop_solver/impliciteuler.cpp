@@ -108,7 +108,7 @@ from rprev^2. Second criteria is that initial guess >=
 (equilibrium radius when s_ratio=1)^2, 'r1sqrd' */
 {
   const double rsqrd = initialguess(rprev);
-  const double r1sqrd(bkoh / akoh);
+  const double r1sqrd(bkoh / akoh); 
   return std::max(rsqrd, r1sqrd);
 }
 
@@ -135,6 +135,7 @@ iterations undertaken if not yet converged. */
     numerator = ode_gfunc(rprev, ziter);
     const double denominator = ode_gfuncderivative(ziter);
     ziter -= ziter * numerator / denominator; // increment ziter
+    ziter = std::max(std::pow(rprev, 2.0)*1e-4, ziter); // do not allow ziter < 0.0
   }
 
   // perform upto 'iterlimit' further iterations if convergence test fails
@@ -176,7 +177,7 @@ et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
       for iteration m+1 starting at m=1 and then test for convergence */
       const auto iterret = iterate_rootfinding_algorithm(rprev, ziter);
       do_iter = iterret.first;
-      ziter = iterret.second;
+      ziter = std::max(std::pow(rprev, 2.0)*1e-4, iterret.second); // do not allow ziter < 0.0
       iter += 1;
     }
     else

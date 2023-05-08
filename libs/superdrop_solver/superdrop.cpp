@@ -83,7 +83,7 @@ Prevents drops shrinking further once they are size of dry_radius(). */
 	/*  if droplets are dry, do not shrink further */
 	const double oldradius = radius;
 	radius = std::max(dry_radius(), newradius);
-	
+
 	/* return change in radius due to growth/shrinking of droplet */
 	return radius - oldradius;
 }
