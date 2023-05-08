@@ -60,7 +60,7 @@ private:
     from rprev^2. Second criteria is that initial guess >=
     (equilibrium radius when s_ratio=1)^2, 'r1sqrd' */
 
-    double newtonraphson_niterations(const double rprev,
+    std::pair<double, unsigned int> newtonraphson_niterations(const double rprev,
                                      double ziter) const;
     /* Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses newton
@@ -73,7 +73,7 @@ private:
     'niters' iterations, convergence criteria is tested and futher
     iterations undertaken if not yet converged. */
 
-    double newtonraphson_untilconverged(const unsigned int iterlimit,
+    std::pair<double, unsigned int> newtonraphson_untilconverged(const unsigned int iterlimit,
                                         const double rprev,
                                         double ziter) const;
     /*  Timestep condensation ODE by delt given initial guess for ziter,

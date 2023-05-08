@@ -51,7 +51,8 @@ for more details. */
     const ImpIter impit{niters, delt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     double init_ziter(impit.initialguess(rprev));
-    return impit.newtonraphson_niterations(rprev, init_ziter);
+    const auto a = impit.newtonraphson_niterations(rprev, init_ziter);
+    return a.first;
   }
 
   else
@@ -59,12 +60,11 @@ for more details. */
   Convergence may be slower so allow >= 3 Newton Raphson
   iterations (could also refine tolerances) */
   {
-    const unsigned int miniters(std::max(niters, (unsigned int)3)); // at least 3 iterations
-    const ImpIter impit{miniters, delt, maxrtol, maxatol,
+    const ImpIter impit{niters, delt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
-
     double init_ziter(impit.initialguess(rprev));
-    return impit.newtonraphson_niterations(rprev, init_ziter);
+    const auto a = impit.newtonraphson_niterations(rprev, init_ziter);
+    return a.first;
   }
 }
 
@@ -76,8 +76,9 @@ double ImplicitEuler::substep_implicitmethod(const double subdelt,
   double subr(rprev);
   for (double dt = 0.0; dt < delt; dt += subdelt)
   {
-    double init_ziter(impit.initialguess(subr));
-    subr = impit.newtonraphson_niterations(subr, init_ziter);
+    double init_ziter(impit.initialguess_shima(subr));
+    const auto a = impit.newtonraphson_niterations(subr, init_ziter);
+    subr = a.first;
   }
   return subr;
 }
@@ -112,7 +113,7 @@ from rprev^2. Second criteria is that initial guess >=
   return std::max(rsqrd, r1sqrd);
 }
 
-double ImplicitEuler::ImpIter::
+std::pair<double, unsigned int> ImplicitEuler::ImpIter::
     newtonraphson_niterations(const double rprev,
                               double ziter) const
 /* Timestep condensation ODE by delt given initial guess for ziter,
@@ -141,7 +142,7 @@ iterations undertaken if not yet converged. */
   // perform upto 'iterlimit' further iterations if convergence test fails
   if (!(isnotconverged(ode_gfunc(rprev, ziter), numerator)))
   {
-    return std::sqrt(ziter);
+    return {std::sqrt(ziter), niters};
   }
   else
   {
@@ -150,7 +151,7 @@ iterations undertaken if not yet converged. */
   }
 }
 
-double ImplicitEuler::ImpIter::
+std::pair<double, unsigned int> ImplicitEuler::ImpIter::
     newtonraphson_untilconverged(const unsigned int iterlimit,
                                  const double rprev,
                                  double ziter) const
@@ -191,7 +192,7 @@ et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
     }
   }
 
-  return std::sqrt(ziter);
+  return {std::sqrt(ziter), iter};
 }
 
 std::pair<bool, double> ImplicitEuler::ImpIter::
