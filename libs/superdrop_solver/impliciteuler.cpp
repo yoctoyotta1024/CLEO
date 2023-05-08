@@ -28,31 +28,32 @@ on the uniqueness criteria of the polynomial g(z). Refer to section
 for more details. */
 {
   const double ffactor(dlc::Rho_l * (fkl + fdl));
-    const double max_uniquedelt(
-        2.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
+  const double max_uniquedelt(
+      2.5 * ffactor / akoh * std::pow(5.0 * bkoh / akoh, 1.5));
   const double ract_ratio(rprev * rprev * akoh / 3.0 / bkoh);
-   
+
   const bool ucrit1((s_ratio <= 1.0 && ract_ratio < 1.0));
   const bool ucrit2(delt <= max_uniquedelt);
-  if (ucrit1 || ucrit2)
+
+  if ((s_ratio > 0.99) && (s_ratio < 1.001))
+  // if ((ucrit2) && (std::abs(1.0-s_ratio) <= 1.0))
+  /* if close to s=1, acitvation / deactivation may
+  occur so perform subtimestepping */
+  {
+    const double subdelt(delt / 10.0);
+    const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
+                        s_ratio, akoh, bkoh, ffactor};
+    return newtonraphson_subtimestepped(subdelt, delt, impit, rprev);
+  }
+
+  else if (ucrit1 || ucrit2)
   /* >=1 criteria for unique solution are met */
   {
-    if (ucrit2 && (std::abs(s_ratio-1) <= 0.005))
-    /* if close to s=1, acitvation / deactivation may
-    occur so perform subtimestepping */
-    {
-      const double subdelt(delt/10.0);
-      const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
-                          s_ratio, akoh, bkoh, ffactor};
-      return newtonraphson_subtimestepped(subdelt, delt, impit, rprev);
-    }
-    else
-    {
-      const ImpIter impit{miniters, delt, maxrtol, maxatol,
-                          s_ratio, akoh, bkoh, ffactor};
-      double init_ziter(impit.initialguess(rprev));
-      return impit.newtonraphson_niterations(rprev, init_ziter, "A");
-    }
+    const unsigned int niters(std::max(miniters, (unsigned int)2));
+    const ImpIter impit{niters, delt, maxrtol, maxatol,
+                        s_ratio, akoh, bkoh, ffactor};
+    double init_ziter(impit.initialguess(rprev));
+    return impit.newtonraphson_niterations(rprev, init_ziter, "A");
   }
 
   else
@@ -66,13 +67,12 @@ for more details. */
     double init_ziter(impit.initialguess(rprev));
     return impit.newtonraphson_niterations(rprev, init_ziter, "C");
   }
-
 }
 
 double ImplicitEuler::newtonraphson_subtimestepped(const double subdelt,
-                                               const double delt,
-                                               const ImpIter &impit, 
-                                               const double rprev) const
+                                                    const double delt,
+                                                    const ImpIter &impit, 
+                                                    const double rprev) const
 {
   double subr(rprev); 
   for (double dt=0.0; dt<delt; dt+=subdelt)
