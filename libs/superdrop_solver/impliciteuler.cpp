@@ -40,7 +40,6 @@ for more details. */
   may occur so perform subtimestepping */
   {
     const double subdelt(delt / (double)nsubsteps);
-    const unsigned int niters(std::max(miniters, (unsigned int)3));
     const ImpIter impit{niters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     return substep_implicitmethod(subdelt, delt, impit, rprev);
@@ -49,7 +48,6 @@ for more details. */
   else if (ucrit1 || ucrit2)
   /* at least one criteria is met such that there is unique solution */
   {
-    const unsigned int niters(std::max(miniters, (unsigned int)2));
     const ImpIter impit{niters, delt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     double init_ziter(impit.initialguess(rprev));
@@ -61,8 +59,8 @@ for more details. */
   Convergence may be slower so allow >= 3 Newton Raphson
   iterations (could also refine tolerances) */
   {
-    const unsigned int niters(std::max(miniters, (unsigned int)3));
-    const ImpIter impit{niters, delt, maxrtol, maxatol,
+    const unsigned int miniters(std::max(niters, (unsigned int)3)); // at least 3 iterations
+    const ImpIter impit{miniters, delt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
 
     double init_ziter(impit.initialguess(rprev));
