@@ -38,7 +38,7 @@ for more details. */
   if ((s_ratio > 0.99) && (s_ratio < 1.001))
   /* if close to -0.01 < s-1 < 0.001, activation / deactivation
   may occur so perform subtimestepping */
-  {
+  {    
     const double subdelt(delt / (double)nsubsteps);
     const ImpIter impit{niters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
@@ -95,7 +95,7 @@ if supersaturation > activation supersaturation for given droplet */
   if (s_ratio > s_act)
   {
     const double bigrsqrd = std::pow(1e-3 / dlc::R0, 2.0); // large initial guess for radius of drop that should be activated
-    return std::max(bigrsqrd, rprev);
+    return std::max(bigrsqrd, rprevsqrd);
   }
 
   return rprevsqrd;
@@ -135,7 +135,7 @@ iterations undertaken if not yet converged. */
     numerator = ode_gfunc(rprev, ziter);
     const double denominator = ode_gfuncderivative(ziter);
     ziter -= ziter * numerator / denominator; // increment ziter
-    ziter = std::max(std::pow(rprev, 2.0)*1e-4, ziter); // do not allow ziter < 0.0
+    ziter = std::max(ziter, 1e-12); // do not allow ziter < 0.0
   }
 
   // perform upto 'iterlimit' further iterations if convergence test fails
@@ -177,7 +177,7 @@ et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
       for iteration m+1 starting at m=1 and then test for convergence */
       const auto iterret = iterate_rootfinding_algorithm(rprev, ziter);
       do_iter = iterret.first;
-      ziter = std::max(std::pow(rprev, 2.0)*1e-4, iterret.second); // do not allow ziter < 0.0
+      ziter = std::max(iterret.second, 1e-12); // do not allow ziter < 0.0
       iter += 1;
     }
     else
