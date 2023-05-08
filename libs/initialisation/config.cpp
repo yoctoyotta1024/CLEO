@@ -117,6 +117,11 @@ void Config::configvariable(const std::string name, const std::string value)
     cond_iters = stoul(value);
     issuccess = true;
   }
+  else if (name == "cond_nsubsteps")
+  {
+    cond_nsubsteps = stoul(value);
+    issuccess = true;
+  }
   else if (name == "cond_rtol")
   {
     cond_rtol = stod(value);

@@ -69,14 +69,15 @@ public:
 
   /* SDM parameters */
   /* timestepping parameters */
-  unsigned int cond_iters;  // suggested no. iterations of Newton Raphson Method
-  double cond_rtol;   // relative tolerance for implicit euler integration
-  double cond_atol;   //  abolute tolerance for implicit euler integration
-  double CONDTSTEP;   // time between SD condensation events [s]
-  double COLLTSTEP;   // time between SD collision events [s]
-  double MOTIONTSTEP; // time between SDM motion [s]
-  double COUPLTSTEP;  // time between SDM observations and between thermodynamic couplings [s]
-  double T_END;       // time span of integration [s]
+  unsigned int cond_iters;     // suggested no. iterations of Newton Raphson Method
+  unsigned int cond_nsubsteps; // no. subtimesteps when supersaturation is close to 1.0
+  double cond_rtol;            // relative tolerance for implicit euler integration
+  double cond_atol;            //  abolute tolerance for implicit euler integration
+  double CONDTSTEP;            // time between SD condensation events [s]
+  double COLLTSTEP;            // time between SD collision events [s]
+  double MOTIONTSTEP;          // time between SDM motion [s]
+  double COUPLTSTEP;           // time between SDM observations and between thermodynamic couplings [s]
+  double T_END;                // time span of integration [s]
 
   /* SDs parameters */
   int nSDsvec;              // initial no. elements in SDs' vector (=total initial no. of SDs)
