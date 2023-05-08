@@ -38,7 +38,7 @@ for more details. */
   if ((s_ratio > 0.99) && (s_ratio < 1.001))
   /* if close to -0.01 < s-1 < 0.001, activation / deactivation
   may occur so perform subtimestepping */
-  {    
+  {
     const double subdelt(delt / (double)nsubsteps);
     const ImpIter impit{niters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
@@ -73,8 +73,8 @@ double ImplicitEuler::substep_implicitmethod(const double subdelt,
                                              const ImpIter &impit,
                                              const double rprev) const
 {
-  double subr(rprev); 
-  for (double dt=0.0; dt<delt; dt+=subdelt)
+  double subr(rprev);
+  for (double dt = 0.0; dt < delt; dt += subdelt)
   {
     double init_ziter(impit.initialguess(subr));
     subr = impit.newtonraphson_niterations(subr, init_ziter);
@@ -103,12 +103,12 @@ if supersaturation > activation supersaturation for given droplet */
 
 double ImplicitEuler::ImpIter::initialguess_shima(const double rprev) const
 /* returns appropriate initial value (ie. a reasonable guess)
-as in Shima's SCALE-SDM with 2 criteria for modifying guess 
-from rprev^2. Second criteria is that initial guess >= 
+as in Shima's SCALE-SDM with 2 criteria for modifying guess
+from rprev^2. Second criteria is that initial guess >=
 (equilibrium radius when s_ratio=1)^2, 'r1sqrd' */
 {
   const double rsqrd = initialguess(rprev);
-  const double r1sqrd(bkoh / akoh); 
+  const double r1sqrd(bkoh / akoh);
   return std::max(rsqrd, r1sqrd);
 }
 
@@ -135,7 +135,7 @@ iterations undertaken if not yet converged. */
     numerator = ode_gfunc(rprev, ziter);
     const double denominator = ode_gfuncderivative(ziter);
     ziter -= ziter * numerator / denominator; // increment ziter
-    ziter = std::max(ziter, 1e-8); // do not allow ziter < 0.0
+    ziter = std::max(ziter, 1e-8);            // do not allow ziter < 0.0
   }
 
   // perform upto 'iterlimit' further iterations if convergence test fails
@@ -152,8 +152,8 @@ iterations undertaken if not yet converged. */
 
 double ImplicitEuler::ImpIter::
     newtonraphson_untilconverged(const unsigned int iterlimit,
-                                     const double rprev,
-                                     double ziter) const
+                                 const double rprev,
+                                 double ziter) const
 /*  Timestep condensation ODE by delt given initial guess for ziter,
 (which is usually radius^squared from previous timestep). Uses
 newton raphson iterative method to find new value of radius that

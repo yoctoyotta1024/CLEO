@@ -29,7 +29,7 @@ class ImplicitEuler
   the implicit timestepping equation of stiff ODE */
 {
 private:
-  const unsigned int niters;  // suggested number of iterations for implicit method before testing for convergence
+  const unsigned int niters;    // suggested number of iterations for implicit method before testing for convergence
   const unsigned int nsubsteps; // number of substeps to condensation method when supersat close to 1 (0 = false ie. none)
   const double delt;            // timestep of ODE solver (at each step implicit method is called)
   const double maxrtol;         // adjustable relative tolerance for convergence of NR method
@@ -53,7 +53,7 @@ private:
     rootfinding algorithm for timestepping condensation/evaporation ODE.
     Criteria is as in SCALE-SDM for making initial guess >> (activation radius)^2
     if supersaturation > activation supersaturation for given droplet */
-    
+
     double initialguess_shima(const double rprev) const;
     /* returns appropriate initial value (ie. a reasonable guess)
     as in Shima's SCALE-SDM with 2 criteria for modifying guess
@@ -61,7 +61,7 @@ private:
     (equilibrium radius when s_ratio=1)^2, 'r1sqrd' */
 
     double newtonraphson_niterations(const double rprev,
-                              double ziter) const;
+                                     double ziter) const;
     /* Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses newton
     raphson iterative method to find new value of radius that converges
@@ -74,8 +74,8 @@ private:
     iterations undertaken if not yet converged. */
 
     double newtonraphson_untilconverged(const unsigned int iterlimit,
-                                     const double rprev,
-                                     double ziter) const;
+                                        const double rprev,
+                                        double ziter) const;
     /*  Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses
     newton raphson iterative method to find new value of radius that
