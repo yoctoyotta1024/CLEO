@@ -36,36 +36,37 @@ for more details. */
   const bool ucrit2(delt <= max_uniquedelt);
 
   if ((s_ratio > 0.99) && (s_ratio < 1.001))
-  // if ((ucrit2) && (std::abs(1.0-s_ratio) <= 1.0))
-  /* if close to s=1, acitvation / deactivation may
-  occur so perform subtimestepping */
+  /* if close to -0.01 < s-1 < 0.001, activation / deactivation
+  may occur so perform subtimestepping */
   {
     const double subdelt(delt / 10.0);
-    const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
+    const unsigned int niters(std::max(miniters, (unsigned int)3));
+    const ImpIter impit{niters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     return newtonraphson_subtimestepped(subdelt, delt, impit, rprev);
   }
 
   else if (ucrit1 || ucrit2)
-  /* >=1 criteria for unique solution are met */
+  /* at least one criteria is met such that there is unique solution */
   {
     const unsigned int niters(std::max(miniters, (unsigned int)2));
     const ImpIter impit{niters, delt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     double init_ziter(impit.initialguess(rprev));
-    return impit.newtonraphson_niterations(rprev, init_ziter, "A");
+    return impit.newtonraphson_niterations(rprev, init_ziter);
   }
 
   else
-  /* In general there may be > 0 spurious solutions. Convergence is
-  slower so always allow >= 3 Newton Raphson Iterations */
+  /* In general there may be > 0 spurious solutions.
+  Convergence may be slower so allow >= 3 Newton Raphson
+  iterations (could also refine tolerances) */
   {
     const unsigned int niters(std::max(miniters, (unsigned int)3));
     const ImpIter impit{niters, delt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
 
     double init_ziter(impit.initialguess(rprev));
-    return impit.newtonraphson_niterations(rprev, init_ziter, "C");
+    return impit.newtonraphson_niterations(rprev, init_ziter);
   }
 }
 
@@ -78,7 +79,7 @@ double ImplicitEuler::newtonraphson_subtimestepped(const double subdelt,
   for (double dt=0.0; dt<delt; dt+=subdelt)
   {
     double init_ziter(impit.initialguess(subr));
-    subr = impit.newtonraphson_niterations(subr, init_ziter, "B");
+    subr = impit.newtonraphson_niterations(subr, init_ziter);
   }
   return subr;
 }
@@ -115,8 +116,7 @@ from rprev^2. Second criteria is that initial guess >=
 
 double ImplicitEuler::ImpIter::
     newtonraphson_niterations(const double rprev,
-                              double ziter,
-                              const std::string scenario) const
+                              double ziter) const
 /* Timestep condensation ODE by delt given initial guess for ziter,
 (which is usually radius^squared from previous timestep). Uses newton
 raphson iterative method to find new value of radius that converges
@@ -147,15 +147,14 @@ iterations undertaken if not yet converged. */
   else
   {
     const unsigned int iterlimit(50); // maximum number of further iterations
-    return newtonraphson_iteruntilconverged(iterlimit, rprev, ziter, scenario);
+    return newtonraphson_untilconverged(iterlimit, rprev, ziter);
   }
 }
 
 double ImplicitEuler::ImpIter::
-    newtonraphson_iteruntilconverged(const unsigned int iterlimit,
+    newtonraphson_untilconverged(const unsigned int iterlimit,
                                      const double rprev,
-                                     double ziter,
-                                     const std::string scenario) const
+                                     double ziter) const
 /*  Timestep condensation ODE by delt given initial guess for ziter,
 (which is usually radius^squared from previous timestep). Uses
 newton raphson iterative method to find new value of radius that
@@ -187,7 +186,7 @@ et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
       const std::string err = "Newton Raphson Method did not converge "
                               "within " +
                               std::to_string(iterlimit + niters) +
-                              " iterations, case: " + scenario + "\n";
+                              " iterations\n";
       throw std::invalid_argument(err);
       break;
     }

@@ -60,8 +60,7 @@ private:
     (equilibrium radius when s_ratio=1)^2, 'r1sqrd' */
 
     double newtonraphson_niterations(const double rprev,
-                              double ziter,
-                              const std::string scenario) const;
+                              double ziter) const;
     /* Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses newton
     raphson iterative method to find new value of radius that converges
@@ -73,10 +72,9 @@ private:
     'niters' iterations, convergence criteria is tested and futher
     iterations undertaken if not yet converged. */
 
-    double newtonraphson_iteruntilconverged(const unsigned int iterlimit,
+    double newtonraphson_untilconverged(const unsigned int iterlimit,
                                      const double rprev,
-                                     double ziter,
-                                     const std::string scenario) const;
+                                     double ziter) const;
     /*  Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses
     newton raphson iterative method to find new value of radius that
