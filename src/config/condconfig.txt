@@ -24,7 +24,7 @@ maxchunk = 1250000                          # maximum no. of elements in chunks 
 ### SDM parameters ###
 # timestepping parameters #
 cond_iters = 2                        # no. iterations of Newton Raphson Method before testing for convergence
-cond_nsubsteps = 2                    # number of substeps to condensation method when supersaturation is close to 1 (0 = false ie. none)
+cond_nsubsteps = 1                    # number of substeps to condensation method when supersaturation is close to 1 (0 = false ie. none)
 cond_rtol = 1e-4                      # relative tolerance for implicit euler integration
 cond_atol = 1e-4                      # abolute tolerance for implicit euler integration
 CONDTSTEP = 1                         # time between SD condensation events [s]
