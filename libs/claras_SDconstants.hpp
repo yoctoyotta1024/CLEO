@@ -31,8 +31,8 @@ constants with dimensions */
   constexpr double RHO_L = 998.203;        // density of liquid water condensing [kg/m^3] (water at 293K from SCALE-SDM)
   constexpr double DYNVISC = 18.45 * 1e-6; // dynamic viscosity of air [Pa s] (at 300K)
 
-  constexpr double RHO_SOL = 2077;    // density of (dry) areosol [Kg/m^3] (e.g. solubility parameter, kappa=1.28 NaCl use RHO_SOL=2077)
-  constexpr double MR_SOL = 0.058443; //  molecular mass of areosol [Kg/mol] (NaCl=0.058)
+  constexpr double RHO_SOL = 2016.5;    // density of (dry) areosol [Kg/m^3] (NaCl from SCALE-SDM)
+  constexpr double MR_SOL = 0.05844277; //  molecular mass of areosol [Kg/mol] (NaCl=0.058 from SCALE-SDM)
   constexpr int IONIC = 2;            //  degree ionic dissociation (van't Hoff factor) [dimensionless]
 }
 
