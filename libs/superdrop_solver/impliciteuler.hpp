@@ -51,14 +51,17 @@ private:
     /* returns appropriate initial value (ie. a reasonable guess) for
     'ziter' to use as first iteration of newton raphson method in
     rootfinding algorithm for timestepping condensation/evaporation ODE.
-    Criteria is as in SCALE-SDM for making initial guess >> (activation radius)^2
-    if supersaturation > activation supersaturation for given droplet */
+    Criteria is as in SCALE-SDM for making initial guess for given droplet
+    much greater than its (activation radius)^2 if the
+    supersaturation > its activation supersaturation  */
 
     double initialguess_shima(const double rprev) const;
-    /* returns appropriate initial value (ie. a reasonable guess)
-    as in Shima's SCALE-SDM with 2 criteria for modifying guess
-    from rprev^2. Second criteria is that initial guess >=
-    (equilibrium radius when s_ratio=1)^2, 'r1sqrd' */
+    /* returns appropriate initial value (ie. a reasonable guess) for
+    'ziter' to use as first iteration of newton raphson method in
+    rootfinding algorithm for timestepping condensation/evaporation ODE.
+    Criteria for modifying guess from rprev^2 are adapted from SCALE-SDM.
+    Second criteria is that initial guess >= 'r1sqrd', where r1 is the
+    equilibrium radius of a given droplet when s_ratio=1  */
 
     std::pair<double, unsigned int> newtonraphson_niterations(const double rprev,
                                      double ziter) const;
@@ -129,9 +132,9 @@ public:
       : niters(niters), nsubsteps(nsubsteps), delt(delt),
         maxrtol(maxrtol), maxatol(maxatol) {}
 
-  double solve_condensation(const double s_ratio, const double akoh,
-                            const double bkoh, const double fkl,
-                            const double fdl, const double rprev) const;
+  double solve_condensation_matsushima(const double s_ratio, const double akoh,
+                                       const double bkoh, const double fkl,
+                                       const double fdl, const double rprev) const;
   /* forward timestep previous radius 'rprev' by delt using an implicit
   euler method to integrate the condensation/evaporation ODg. Implict
   timestepping equation defined in section 5.1.2 of Shima et al. 2009
@@ -142,6 +145,20 @@ public:
   on the uniqueness criteria of the polynomial g(z). Refer to section
   5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023
   for more details. */
+
+  double solve_condensation(const double s_ratio, const double akoh,
+                            const double bkoh, const double fkl,
+                            const double fdl, const double rprev) const;
+  /* forward timestep previous radius 'rprev' by delt using an implicit
+  euler method to integrate the condensation/evaporation ODg. Implict
+  timestepping equation defined in section 5.1.2 of Shima et al. 2009
+  and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
+  Newton Raphson iterations are used to converge towards the root of
+  g(z) within the tolerances of an ImpIter instance. Tolerances,
+  maxium number of iterations and sub-timestepping are adjusted when
+  near to supersaturation=1 (when activation / deactivation may occur).
+  Refer to section 5.1.2 Shima et al. 2009 and section 3.3.3 of
+  Matsushima et al. 2023 for more details. */
 };
 
 #endif // IMPLICITEULER_HPP
