@@ -32,8 +32,7 @@ nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, z
 # monor                = 1e-6                        # all SDs have this same radius [m]
 # radiigen  = initattributes.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
-rspan                = [1e-9, 1e-5]                # max and min range of radii to sample [m]
-# rspan                = [2e-9, 4e-6]                # max and min range of radii to sample [m]
+rspan                = [2e-9, 4e-6]                # max and min range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]
 ### ---------------------------------------------------------------- ###
@@ -46,13 +45,13 @@ radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled 
 # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
 # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
 # scalefacs          = [1e9]                       # relative heights of modes         
-geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-geosigs              = [1.55, 2.3, 2]                    
-scalefacs            = [1e6, 0.3e6, 0.025e6]   
-# geomeans             = [0.02e-6, 0.15e-6]               
-# geosigs              = [1.4, 1.6]                    
-# scalefacs            = [60e6, 40e6]   
-numconc = np.sum(scalefacs) 
+# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
+# geosigs              = [1.55, 2.3, 2]                    
+# scalefacs            = [1e6, 0.3e6, 0.025e6]   
+geomeans             = [0.02e-6, 0.15e-6]               
+geosigs              = [1.4, 1.6]                    
+scalefacs            = [6e6, 4e6]   
+numconc = np.sum(scalefacs)
 radiiprobdist = radiiprobdistribs.LnNormal(geomeans, geosigs, scalefacs)
  
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]

@@ -24,17 +24,17 @@ maxchunk = 1250000                          # maximum no. of elements in chunks 
 ### SDM parameters ###
 # timestepping parameters #
 cond_iters = 2                        # no. iterations of Newton Raphson Method before testing for convergence
-cond_nsubsteps = 3                   # number of substeps to condensation method when supersaturation is close to 1 (0 = false ie. none)
-cond_rtol = 0.0                      # relative tolerance for implicit euler integration
-cond_atol = 1e-8                      # abolute tolerance for implicit euler integration
+cond_nsubsteps = 5                    # number of substeps to condensation method when supersaturation is close to 1 (0 = false ie. none)
+cond_rtol = 0.0                       # relative tolerance for implicit euler integration
+cond_atol = 1e-6                      # abolute tolerance for implicit euler integration
 CONDTSTEP = 1                         # time between SD condensation events [s]
 COLLTSTEP = 2                         # time between SD collision events [s]
 MOTIONTSTEP = 2                       # time between SDM motion [s]
 COUPLTSTEP = 2                        # time between SDM observations and between thermodynamic couplings [s]
-T_END = 600                           # time span of integration [s]
+T_END = 700                           # time span of integration [s]
 
 # SDs parameters #
-nSDsvec = 128                      # initial no. elements in SDs' vector (=total initial no. of SDs)
+nSDsvec = 256                      # initial no. elements in SDs' vector (=total initial no. of SDs)
 SDnspace = 0                         # no. of spatial coordinates of SDs (=dimension of model)
 wetradiiinit = false                 # set initial SD radii to equilibrium wet radius
 doAlterThermo = true                 # enable condensation to alter the thermodynamic state

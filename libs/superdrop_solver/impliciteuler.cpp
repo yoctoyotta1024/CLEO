@@ -29,8 +29,8 @@ Matsushima et al. 2023 for more details. */
 {
   const double ffactor(dlc::Rho_l * (fkl + fdl));
 
-  if (std::abs(1.0 - s_ratio) < 0.01)
-  /* if s_ratio within 10% of s=1, activation or
+  if ((s_ratio > 0.95) && (s_ratio < 1.01))
+  /* if supersaturation close to 1.0, activation or
   deactivation might occur so perform subtimestepping */
   {
     const unsigned int miniters(std::max(niters, (unsigned int)5));
