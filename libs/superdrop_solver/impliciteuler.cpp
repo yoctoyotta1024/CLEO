@@ -29,12 +29,13 @@ Matsushima et al. 2023 for more details. */
 {
   const double ffactor(dlc::Rho_l * (fkl + fdl));
 
-  if ((s_ratio > 0.99) && (s_ratio < 1.001))
-  /* if -0.01 < s-1 < 0.001, activation / deactivation
-  may occur so perform subtimestepping */
+  if (std::abs(1.0 - s_ratio) < 0.01)
+  /* if s_ratio within 10% of s=1, activation or
+  deactivation might occur so perform subtimestepping */
   {
+    const unsigned int miniters(std::max(niters, (unsigned int)5));
     const double subdelt(delt / (double)nsubsteps);
-    const ImpIter impit{niters, subdelt, maxrtol, maxatol,
+    const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     return substep_implicitmethod(subdelt, delt, impit, rprev);
   }
