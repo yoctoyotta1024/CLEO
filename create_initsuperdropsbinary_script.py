@@ -24,7 +24,7 @@ isfigures = [True, True]
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
 # nsupers = 64 # int or dict of ints for number of superdroplets in a gridbox
 zlim = 1500
-npergbx = 128
+npergbx = 256
 nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 ### ---------------------------------------------------------------- ###
 
@@ -32,8 +32,8 @@ nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, z
 # monor                = 1e-6                        # all SDs have this same radius [m]
 # radiigen  = initattributes.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
-# rspan                = [1e-9, 1e-5]                # max and min range of radii to sample [m]
-rspan                = [2e-9, 4e-6]                # max and min range of radii to sample [m]
+rspan                = [1e-9, 1e-5]                # max and min range of radii to sample [m]
+# rspan                = [2e-9, 4e-6]                # max and min range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]
 ### ---------------------------------------------------------------- ###
