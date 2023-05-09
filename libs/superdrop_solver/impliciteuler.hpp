@@ -63,7 +63,7 @@ private:
     Second criteria is that initial guess >= 'r1sqrd', where r1 is the
     equilibrium radius of a given droplet when s_ratio=1  */
 
-    std::pair<double, unsigned int> newtonraphson_niterations(const double rprev,
+    double newtonraphson_niterations(const double rprev,
                                      double ziter) const;
     /* Timestep condensation ODE by delt given initial guess for ziter,
     (which is usually radius^squared from previous timestep). Uses newton
@@ -76,7 +76,7 @@ private:
     'niters' iterations, convergence criteria is tested and futher
     iterations undertaken if not yet converged. */
 
-    std::pair<double, unsigned int> newtonraphson_untilconverged(const unsigned int iterlimit,
+    double newtonraphson_untilconverged(const unsigned int iterlimit,
                                         const double rprev,
                                         double ziter) const;
     /*  Timestep condensation ODE by delt given initial guess for ziter,
