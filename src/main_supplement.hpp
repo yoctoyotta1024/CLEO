@@ -98,32 +98,32 @@ combined process of those two individual processes */
 {
   /* create process for condensation in SDM including Implicit
   Euler Method for solving condensation ODEs */
-  const auto sdmprocess(CondensationProcess(mdlsteps.condsubstep, &step2dimlesstime,
+  const auto cond(CondensationProcess(mdlsteps.condsubstep, &step2dimlesstime,
                                             config.doAlterThermo, config.cond_iters,
                                             config.cond_nsubsteps, config.cond_rtol,
                                             config.cond_atol));
 
   /* create process for collision-coalescene in SDM */
-  const auto probs = GolovinProb(dlc::R0);
-  // const auto probs = LongHydrodynamicProb();
-  const auto colls = CollisionsProcess(mdlsteps.collsubstep,
+  const auto probs(GolovinProb(dlc::R0));
+  // const auto probs(LongHydrodynamicProb());
+  const auto colls(CollisionsProcess(mdlsteps.collsubstep,
                                        &step2realtime,
-                                       probs);
+                                       probs));
 
   /* create process for sedimentation in SDM -> n.b. this has moved to sdmmotion*/
-  //const auto terminalv = RogersYauTerminalVelocity{};
-  // const auto terminalv = SimmelTerminalVelocity{};
-  // const auto sedi = SedimentationProcess(mdlsteps.motionstep,
+  // // const auto terminalv(RogersYauTerminalVelocity{});
+  // const auto terminalv(SimmelTerminalVelocity{});
+  // const auto sedi(SedimentationProcess(mdlsteps.motionstep,
   //                                        &step2dimlesstime,
-  //                                        terminalv);
+  //                                        terminalv));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  // const auto sdmprocess = cond >> colls;
-  const auto sdmprocess = cond;
+  const auto sdmprocess = cond >> colls;
+  // const auto sdmprocess = cond;
   // const auto sdmprocess = colls;
 
-  // return sdmprocess;
-  return NullProcess{};
+  return sdmprocess;
+  // return NullProcess{};
 }
 
 SuperdropIntoStoreViaBuffer auto sdattrs_to_observe()
@@ -172,8 +172,8 @@ superdroplets from combination of those two seperate observers */
 
   const Observer auto obs6 = create_sdmomentsobserver(stores.sdmoments);
 
-  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
-  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
+  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
+  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
 
   return observer;
 }

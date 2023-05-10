@@ -10,7 +10,7 @@ abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
 # abspath = "/home/m/m300950/CLEO/"
 #abspath = sys.argv[1]
 constsfile = abspath+"libs/claras_SDconstants.hpp"
-configfile = abspath+"src/config/condconfig.txt"
+configfile = abspath+"src/config/config.txt"
 
 spath = abspath+"build/share/"
 gridfile = spath+"dimlessGBxboundaries.dat"
@@ -19,12 +19,12 @@ initSDsfile = spath+"dimlessSDsinit.dat"
 binpath = abspath+"build/bin/"
 
 ### booleans for [making+showing, saving] figures
-isfigures = [True, True]
+isfigures = [False, False]
 
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
 # nsupers = 64 # int or dict of ints for number of superdroplets in a gridbox
 zlim = 1500
-npergbx = 256
+npergbx = 128
 nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 ### ---------------------------------------------------------------- ###
 
@@ -32,7 +32,7 @@ nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, z
 # monor                = 1e-6                        # all SDs have this same radius [m]
 # radiigen  = initattributes.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
-rspan                = [2e-9, 4e-6]                # max and min range of radii to sample [m]
+rspan                = [3e-9, 3e-6]                # max and min range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]
 ### ---------------------------------------------------------------- ###
@@ -60,21 +60,21 @@ radiiprobdist = radiiprobdistribs.LnNormal(geomeans, geosigs, scalefacs)
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
-coord3gen            = None                        # do not generate superdroplet coord3s
+# coord3gen            = None                        # do not generate superdroplet coord3s
 
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen = initattributes.MonoCoordGen(monocoord3)
                
-# coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
+coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord1 Generator ------------- ###
-coord1gen            = None                        # do not generate superdroplet coord1s
+# coord1gen            = None                        # do not generate superdroplet coord1s
 
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
 # coord1gen = initattributes.MonoCoordGen(monocoord1)
          
-# coord1gen            = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
+coord1gen            = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord2 Generator ------------- ###
