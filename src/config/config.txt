@@ -26,7 +26,7 @@ maxchunk = 1250000                              # maximum no. of elements in chu
 cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
 cond_nsubsteps = 5                        # number of substeps to condensation method when supersaturation is close to 1 (0 = false ie. none)
 cond_rtol = 0.0                           # relative tolerance for implicit euler integration
-cond_atol = 0.0001                        # abolute tolerance for implicit euler integration
+cond_atol = 0.01                          # abolute tolerance for implicit euler integration
 CONDTSTEP = 1                             # time between SD condensation events [s]
 COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 5                           # time between SDM motion [s]
