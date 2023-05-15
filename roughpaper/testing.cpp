@@ -38,15 +38,41 @@ void print_superdropcoords(const std::vector<GridBox> &gridboxes,
 
 int main(int argc, char* argv[])
 {
+  const std::string abspath("/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/");
+
+  const std::string configfilepath = abspath+"src/config/config.txt";    // path to configuration (.txt file)
+  const std::string constantsfilepath = abspath+"src/include/claras_SDconstants.hpp"; // path to constants (.hpp file)
+  const Config config(configfilepath, constantsfilepath);
+
+  const std::string grid_filename = abspath+"build/share/dimlessGBxboundaries.dat";
+  const std::string initSDs_filename = abspath+"build/share/dimlessSDsinit.dat";
+
+  const Maps4GridBoxes gbxmaps(config.SDnspace, grid_filename);
+
+  const auto solute(std::make_shared<const SoluteProperties>());
+  std::vector<SuperdropWithGbxindex>
+      SDsInGBxs = create_superdrops_from_initSDsfile(initSDs_filename,
+                                              config.nSDsvec,
+                                              config.SDnspace, solute);
+
+  /* vector containing all gridboxes that makeup the SDM domain */
+  std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
+
+
   Kokkos::initialize(argc, argv);
   Kokkos::DefaultExecutionSpace{}.print_configuration(std::cout);
-
+  {
+    size_t ngrid = gridboxes.size();
+    Kokkos::parallel_for("gbxi", ngrid, [=](const size_t i)
+    {
+      std::cout << "sdmstep for gbx: " << gridboxes[i].gbxindex << "\n";
+    });
+  }
 
   Kokkos::finalize();
 
-  return (count == seq_count) ? 0 : -1;
+  return 0;
 }
-
 
 void print_nbourmaps(const Maps4GridBoxes &gbxmaps, const double COORD0)
 {
