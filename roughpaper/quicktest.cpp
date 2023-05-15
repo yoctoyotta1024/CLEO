@@ -1,4 +1,4 @@
-// /opt/homebrew/bin/g++-12 quicktest.cpp && ./a.out 
+// /opt/homebrew/bin/g++-13 quicktest.cpp && ./a.out 
 
 #include <iostream> 
 #include <functional>

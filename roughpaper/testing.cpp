@@ -2,7 +2,7 @@
 // File: testing.cpp
 /* This file runs test snippets of c++.
 could compile with e.g.
-/opt/homebrew/bin/g++-12 testing.cpp ../src/include/superdrop_solver/superdrop.cpp -I ../src/include/superdrop_solver --std=c++20
+/opt/homebrew/bin/g++-13 testing.cpp ../src/include/superdrop_solver/superdrop.cpp -I ../src/include/superdrop_solver --std=c++20
 */
 
 #include <map>
@@ -14,6 +14,8 @@ could compile with e.g.
 #include <cmath>
 #include <iostream>
 #include <string_view>
+
+#include <Kokkos_core.hpp>
 
 #include "../libs/claras_SDconstants.hpp"
 #include "../libs/initialisation/config.hpp"
@@ -34,34 +36,44 @@ void print_gridboxmaps(const Maps4GridBoxes &gbxmaps, const double COORD0);
 void print_superdropcoords(const std::vector<GridBox> &gridboxes,
                            const Maps4GridBoxes &gbxmaps);
 
-int main()
+int main(int argc, char* argv[])
 {
-  const std::string abspath("/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/");
-  
-  const std::string configfilepath = abspath+"src/config/config.txt";    // path to configuration (.txt file)
-  const std::string constantsfilepath = abspath+"src/include/claras_SDconstants.hpp"; // path to constants (.hpp file)
-  const Config config(configfilepath, constantsfilepath);
+  Kokkos::initialize(argc, argv);
+  Kokkos::DefaultExecutionSpace{}.print_configuration(std::cout);
 
-  const std::string grid_filename = abspath+"build/share/dimlessGBxboundaries.dat";    
-  const std::string initSDs_filename = abspath+"build/share/dimlessSDsinit.dat";   
+  const long n = 101;
 
-  const Maps4GridBoxes gbxmaps(config.SDnspace, grid_filename); 
+  std::cout << "Number of even integers from 0 to " << n-1 << "\n";
 
-  const auto solute(std::make_shared<const SoluteProperties>());
-  std::vector<SuperdropWithGbxindex>
-      SDsInGBxs = create_superdrops_from_initSDsfile(initSDs_filename,
-                                              config.nSDsvec,
-                                              config.SDnspace, solute);
+  Kokkos::Timer timer;
+  timer.reset();
 
-  /* vector containing all gridboxes that makeup the SDM domain */
-  std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
+  // Compute the number of even integers from 0 to n-1, in parallel.
+  long count = 0;
+  Kokkos::parallel_reduce(
+      n, KOKKOS_LAMBDA(const long i, long& lcount) { lcount += (i % 2) == 0; },
+      count);
 
-  print_gridboxmaps(gbxmaps, dlc::COORD0);
-  print_nbourmaps(gbxmaps, dlc::COORD0);
-  print_superdropcoords(gridboxes, gbxmaps);
+  double count_time = timer.seconds();
+  std::cout << "  Parallel: "<<count << "    " << count_time << "\n";
 
-  return 0;
+  timer.reset();
+
+  // Compare to a sequential loop.
+  long seq_count = 0;
+  for (long i = 0; i < n; ++i) {
+    seq_count += (i % 2) == 0;
+  }
+
+  count_time = timer.seconds();
+  std::cout << "  Sequential: "<<seq_count << "    " << count_time << "\n";
+
+  Kokkos::finalize();
+
+  return (count == seq_count) ? 0 : -1;
 }
+
+
 void print_nbourmaps(const Maps4GridBoxes &gbxmaps, const double COORD0)
 {
   std::cout << "---- NBOUR MAPS ----\n";
