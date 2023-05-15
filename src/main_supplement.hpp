@@ -50,6 +50,7 @@ struct SomeZarrStores
 {
   ThermoStateStorage thermozarr;
   ContiguousRaggedSDStorage<S> sdzarr;
+  ContiguousRaggedSDStorage<SdgbxIntoStore> sdgbxzarr;
   SDMomentsStorage sdmoments;
   CoordinateStorage<double> timezarr;
   CoordinateStorage<unsigned int> gbxzarr;
@@ -59,6 +60,7 @@ SomeZarrStores(FSStore &fsstore, const int maxchunk,
               const unsigned int ngridboxes, S sdattrs)
       : thermozarr(fsstore, maxchunk, ngridboxes),
         sdzarr(fsstore, sdattrs, maxchunk),
+        sdgbxzarr(fsstore, SdgbxIntoStore(), maxchunk),
         sdmoments(fsstore, maxchunk, ngridboxes),
         timezarr(fsstore, maxchunk, "time",
                  "<f8", "s", dlc::TIME0),
@@ -162,7 +164,8 @@ superdroplets from combination of those two seperate observers */
 {
   const Observer auto obs1 = TimeObserver(stores.timezarr);
 
-  const Observer auto obs2 = SDsAttributeObserver(stores.sdzarr);
+  const Observer auto obs2a = SDsAttributeObserver(stores.sdzarr);
+  const Observer auto obs2b = SDsGbxindexObserver(stores.sdgbxzarr);
 
   const Observer auto obs3 = ThermoStateObserver(stores.thermozarr);
   
@@ -172,8 +175,8 @@ superdroplets from combination of those two seperate observers */
 
   const Observer auto obs6 = create_sdmomentsobserver(stores.sdmoments);
 
-  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> PrintObserver{};
-  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
+  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{};
+  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1;
 
   return observer;
 }

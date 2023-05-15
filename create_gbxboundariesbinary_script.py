@@ -26,10 +26,10 @@ zdelta = 20 # even spacing
 zgrid = [zmin, zmax, zdelta] 
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 1500, 20]
+xgrid = [0, 1500, 50]
 
 ### input parameters for y coords of gridbox boundaries
-ygrid = np.asarray([0, 20])
+ygrid = np.asarray([0, 50])
 # ygrid = [0, 1500, 200]
 
 Path(gridfilepath).mkdir(exist_ok=True) 

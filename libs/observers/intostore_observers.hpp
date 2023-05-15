@@ -192,19 +192,6 @@ public:
 class SDsGbxindexObserver
 {
 private:
-  struct SdgbxIntoStore : AttributeIntoStoreViaBuffer<unsigned int>
-  {
-    SdgbxIntoStore()
-        : AttributeIntoStoreViaBuffer("sd_gbxindex", "<u4"){};
-
-    void copy2buffer(const Superdrop &superdrop, const int j) {}
-
-    void copy2buffer(const unsigned int sd_gbxindex, const int j)
-    {
-      storagehelper::val2buffer<unsigned int>(sd_gbxindex, buffer, j);
-    }
-  };
-
   ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr;
 
 public:
