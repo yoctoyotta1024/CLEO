@@ -197,9 +197,10 @@ public:
   }
 
   void data_to_contigraggedarray(const Superdrop &superdrop)
-  /* write superdrop's data in contoguous ragged representation of an array
-  in the zarr store. First copy data to buffer(s), then write buffer(s) to chunks
-  in the store when the number of datapoints they contain reaches the chunksize */
+  /* write superdrop's data in contiguous ragged representation of an array
+  in the zarr store. First copy data to buffer(s), then write buffer(s)
+  to chunks in the store when the number of datapoints they contain
+  reaches the chunksize */
   {
     if (bufferfill == chunksize)
     {
@@ -211,6 +212,28 @@ public:
 
     // copy data from superdrop to buffer(s)
     sdbuffers.copy2buffer(superdrop, bufferfill);
+    ++bufferfill;
+
+    ++ndata;
+  }
+
+  template <typename T>
+  void data_to_contigraggedarray(const T value)
+  /* write 'value' in contiguous ragged representation of an array
+  in the zarr store. First copy data to buffer(s), then write buffer(s)
+  to chunks in the store when the number of datapoints they contain
+  reaches the chunksize */
+  {
+    if (bufferfill == chunksize)
+    {
+      // write data in buffer to a chunk in store
+      sdbuffers.writechunk(store, chunkcount);
+      ++chunkcount;
+      bufferfill = 0;
+    }
+
+    // copy data from superdrop to buffer(s)
+    sdbuffers.copy2buffer(value, bufferfill);
     ++bufferfill;
 
     ++ndata;

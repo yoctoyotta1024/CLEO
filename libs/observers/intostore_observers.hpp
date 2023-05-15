@@ -189,4 +189,43 @@ public:
   }
 };
 
+class SDsGbxindexObserver
+{
+private:
+  struct SdgbxIntoStore : AttributeIntoStoreViaBuffer<unsigned int>
+  {
+    SdgbxIntoStore()
+        : AttributeIntoStoreViaBuffer("sd_gbxindex", "<u4"){};
+
+    void copy2buffer(const Superdrop &superdrop, const int j) {}
+
+    void copy2buffer(const unsigned int sd_gbxindex, const int j)
+    {
+      storagehelper::val2buffer<unsigned int>(sd_gbxindex, buffer, j);
+    }
+  };
+
+  ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr;
+
+public:
+  SDsGbxindexObserver(ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr) : zarr(zarr) {}
+
+  void observe_state(const std::vector<GridBox> &gridboxes) const
+  /* observe superdroplets by writing their data to contigious
+  ragged represented arrays as determined by the 
+  ContiguousRaggedSDStorage instance */
+  {
+    size_t nsupers(0);
+    for (auto &gbx : gridboxes)
+    {
+      for (auto &SDinGBx : gbx.span4SDsinGBx)
+      {
+        zarr.data_to_contigraggedarray<unsigned int>(SDinGBx.sd_gbxindex);
+        ++nsupers;
+      }
+    }
+    zarr.contigraggedarray_count(nsupers);
+  }
+};
+
 #endif // INTOSTORE_OBSERVERS_HPP
