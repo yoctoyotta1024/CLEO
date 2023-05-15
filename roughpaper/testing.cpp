@@ -41,32 +41,6 @@ int main(int argc, char* argv[])
   Kokkos::initialize(argc, argv);
   Kokkos::DefaultExecutionSpace{}.print_configuration(std::cout);
 
-  const long n = 101;
-
-  std::cout << "Number of even integers from 0 to " << n-1 << "\n";
-
-  Kokkos::Timer timer;
-  timer.reset();
-
-  // Compute the number of even integers from 0 to n-1, in parallel.
-  long count = 0;
-  Kokkos::parallel_reduce(
-      n, KOKKOS_LAMBDA(const long i, long& lcount) { lcount += (i % 2) == 0; },
-      count);
-
-  double count_time = timer.seconds();
-  std::cout << "  Parallel: "<<count << "    " << count_time << "\n";
-
-  timer.reset();
-
-  // Compare to a sequential loop.
-  long seq_count = 0;
-  for (long i = 0; i < n; ++i) {
-    seq_count += (i % 2) == 0;
-  }
-
-  count_time = timer.seconds();
-  std::cout << "  Sequential: "<<seq_count << "    " << count_time << "\n";
 
   Kokkos::finalize();
 
