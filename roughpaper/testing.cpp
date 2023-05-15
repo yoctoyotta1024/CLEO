@@ -58,15 +58,68 @@ int main(int argc, char* argv[])
   /* vector containing all gridboxes that makeup the SDM domain */
   std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
 
+  auto gen = std::mt19937(std::random_device()());
+
+  int t_sdm = 0;
+  int nextt = 5;
+  struct SdmProcess
+  {
+    int next_step(const int t) const
+    {
+      return t+1;
+    }
+
+    int run_step(const int currenttimestep,
+                std::span<SuperdropWithGbxindex> span4SDsinGBx,
+                ThermoState &state,
+                std::mt19937 &gen) const
+    {
+      int n(0);
+      for (auto &SDinGBx : span4SDsinGBx)
+      {
+        ++n;
+      }
+      return n;
+    }
+
+
+    int run_step() const {return 1;}
+
+  };
+
+  SdmProcess sdmprocess{};
 
   Kokkos::initialize(argc, argv);
   Kokkos::DefaultExecutionSpace{}.print_configuration(std::cout);
+  
   {
+    
     size_t ngrid = gridboxes.size();
     Kokkos::parallel_for("gbxi", ngrid, [=](const size_t i)
     {
-      std::cout << "sdmstep for gbx: " << gridboxes[i].gbxindex << "\n";
+      for (int subt = t_sdm; subt < nextt;
+            subt = sdmprocess.next_step(subt))
+      {
+        // sdmprocess.run_step(subt, gridboxes[i].span4SDsinGBx,
+        //                     gridboxes[i].state, gen);
+        sdmprocess.run_step();
+      }
     });
+
+    size_t ngbxs(0);
+    Kokkos::parallel_reduce("gbxi", ngrid, [=](const size_t i, size_t &tempsum)
+    {
+      for (int subt = t_sdm; subt < nextt;
+            subt = sdmprocess.next_step(subt))
+      {
+        // sdmprocess.run_step(subt, gridboxes[i].span4SDsinGBx,
+        //                     gridboxes[i].state, gen);
+        tempsum += sdmprocess.run_step();
+      }
+    }, ngbxs);
+
+    std::cout <<" ngrid*ntime: " << ngrid*5 << " =?= " << ngbxs << "\n";
+
   }
 
   Kokkos::finalize();
