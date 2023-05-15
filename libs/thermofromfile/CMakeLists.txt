@@ -1,7 +1,7 @@
 # run cmake with " cmake -S [source dir of targerts] -B [build dir for makefile] "
 # run cmake with these compiler options:
-# CXX=g++-13 cmake -S ./ -B ./build
-# or CXX=g++ cmake -S ./ -B ./build
+# CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build
+# or CXX=g++ CC=gcc cmake -S ./ -B ./build
 
 # set cmake version
 cmake_minimum_required(VERSION "3.18.0")
