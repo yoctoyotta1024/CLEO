@@ -16,6 +16,7 @@ could compile with e.g.
 #include <string_view>
 
 #include <Kokkos_core.hpp>
+#include <Kokkos_Vector.hpp>
 
 #include "../libs/claras_SDconstants.hpp"
 #include "../libs/initialisation/config.hpp"
@@ -35,6 +36,155 @@ void print_nbourmaps(const Maps4GridBoxes &gbxmaps, const double COORD0);
 void print_gridboxmaps(const Maps4GridBoxes &gbxmaps, const double COORD0);
 void print_superdropcoords(const std::vector<GridBox> &gridboxes,
                            const Maps4GridBoxes &gbxmaps);
+
+
+struct kGridBoxBarren
+/* gridbox contains vector of superdroplets in grid box,
+thermodynamic state temp, pressure, etc. used for SDM,
+and index for finding associated grridbox in
+coupled thermodynamics */
+{
+  unsigned int gbxindex; // index / unique identifier of gridbox
+  double state;
+  std::span<SuperdropWithGbxindex> span4SDsinGBx;
+
+  kGridBoxBarren(const int i){}
+  
+  void set_span(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+  {
+    auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
+    {
+      return a.sd_gbxindex < val; // cast sd_gbxindex to *signed* int
+    };
+
+    auto upcompare = [](const unsigned int val, const SuperdropWithGbxindex &a)
+    {
+      return val < a.sd_gbxindex; // cast sd_gbxindex to *signed* int
+    };
+
+    auto low = std::lower_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
+                                gbxindex, lowcompare);
+    auto up = std::upper_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
+                              gbxindex, upcompare);
+
+    span4SDsinGBx = {low, up};  
+  }
+
+  void iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps)
+  {
+    for (auto &SDinGBx : span4SDsinGBx)
+    {
+      if(SDinGBx.sd_gbxindex != gbxindex)
+      {
+        const std::string err = "span4SDsinGBx incorrectly set."
+                                " At least one sd_gbxindex"
+                                " does not match this gridbox's index (ie. " +
+                                std::to_string(SDinGBx.sd_gbxindex) +
+                                " != "+std::to_string(gbxindex)+")";
+        throw std::invalid_argument(err);
+      }
+      iscoord_within_bounds(gbxmaps.get_bounds_z(gbxindex), SDinGBx.superdrop.coord3);
+      iscoord_within_bounds(gbxmaps.get_bounds_x(gbxindex), SDinGBx.superdrop.coord1);
+      iscoord_within_bounds(gbxmaps.get_bounds_y(gbxindex), SDinGBx.superdrop.coord2);
+    }
+  }
+
+  void iscoord_within_bounds(const std::pair<double, double> bounds,
+                                    const double coord)
+  {
+    const double llim = bounds.first;
+    const double ulim = bounds.second;
+
+    if (coord < llim || coord >= ulim)
+    {
+      const std::string err = "superdrop coord: "+std::to_string(coord)+
+                                " lies outside its gridbox's bounds ["+
+                                std::to_string(llim)+", "+
+                                std::to_string(ulim)+"]";
+      throw std::invalid_argument(err);
+    }
+  }
+
+};
+
+struct kGridBox
+/* gridbox contains vector of superdroplets in grid box,
+thermodynamic state temp, pressure, etc. used for SDM,
+and index for finding associated grridbox in
+coupled thermodynamics */
+{
+  unsigned int gbxindex; // index / unique identifier of gridbox
+  double state;
+  std::span<SuperdropWithGbxindex> span4SDsinGBx;
+
+  kGridBox(const unsigned int ii,
+                 const Maps4GridBoxes &gbxmaps,
+                 std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+    : gbxindex(ii), state(0.0)
+  {
+    std::cout << state << "\n";
+
+    set_span(SDsInGBxs);
+    iscorrect_span_for_gbxindex(gbxmaps);
+  }
+  
+  void set_span(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+  {
+    auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
+    {
+      return a.sd_gbxindex < val; // cast sd_gbxindex to *signed* int
+    };
+
+    auto upcompare = [](const unsigned int val, const SuperdropWithGbxindex &a)
+    {
+      return val < a.sd_gbxindex; // cast sd_gbxindex to *signed* int
+    };
+
+    auto low = std::lower_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
+                                gbxindex, lowcompare);
+    auto up = std::upper_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
+                              gbxindex, upcompare);
+
+    span4SDsinGBx = {low, up};  
+  }
+
+  void iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps)
+  {
+    for (auto &SDinGBx : span4SDsinGBx)
+    {
+      if(SDinGBx.sd_gbxindex != gbxindex)
+      {
+        const std::string err = "span4SDsinGBx incorrectly set."
+                                " At least one sd_gbxindex"
+                                " does not match this gridbox's index (ie. " +
+                                std::to_string(SDinGBx.sd_gbxindex) +
+                                " != "+std::to_string(gbxindex)+")";
+        throw std::invalid_argument(err);
+      }
+      iscoord_within_bounds(gbxmaps.get_bounds_z(gbxindex), SDinGBx.superdrop.coord3);
+      iscoord_within_bounds(gbxmaps.get_bounds_x(gbxindex), SDinGBx.superdrop.coord1);
+      iscoord_within_bounds(gbxmaps.get_bounds_y(gbxindex), SDinGBx.superdrop.coord2);
+    }
+  }
+
+  void iscoord_within_bounds(const std::pair<double, double> bounds,
+                                    const double coord)
+  {
+    const double llim = bounds.first;
+    const double ulim = bounds.second;
+
+    if (coord < llim || coord >= ulim)
+    {
+      const std::string err = "superdrop coord: "+std::to_string(coord)+
+                                " lies outside its gridbox's bounds ["+
+                                std::to_string(llim)+", "+
+                                std::to_string(ulim)+"]";
+      throw std::invalid_argument(err);
+    }
+  }
+
+};
+
 
 int main(int argc, char* argv[])
 {
@@ -57,7 +207,7 @@ int main(int argc, char* argv[])
 
   /* vector containing all gridboxes that makeup the SDM domain */
   std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
-
+  
   auto gen = std::mt19937(std::random_device()());
 
   int t_sdm = 0;
@@ -89,11 +239,13 @@ int main(int argc, char* argv[])
 
   SdmProcess sdmprocess{};
 
+
   Kokkos::initialize(argc, argv);
   Kokkos::DefaultExecutionSpace{}.print_configuration(std::cout);
-  
   {
-    
+    Kokkos::vector<kGridBoxBarren> kgrids;
+    kgrids.push_back(kGridBoxBarren(0));
+
     size_t ngrid = gridboxes.size();
     Kokkos::parallel_for("gbxi", ngrid, [=](const size_t i)
     {
@@ -121,7 +273,6 @@ int main(int argc, char* argv[])
     std::cout <<" ngrid*ntime: " << ngrid*5 << " =?= " << ngbxs << "\n";
 
   }
-
   Kokkos::finalize();
 
   return 0;
