@@ -30,6 +30,19 @@ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/sdmgridboxes" ${CMAKE_CURR
 
 target_link_libraries("${PROJECT_NAME}" PUBLIC superdrop_solver initialisation sdmgridboxes observers)
 
+# Kokkos library stuff
+include(FetchContent)
+FetchContent_Declare(
+  Kokkos
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.0.01.tar.gz
+  GIT_TAG 62d2b6c879b74b6ae7bd06eb3e5e80139c4708e6
+)
+FetchContent_MakeAvailable(Kokkos)
+
+# link kokkos library to target
+target_link_libraries(${PROJECT_NAME} PUBLIC Kokkos::kokkos)
+
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
