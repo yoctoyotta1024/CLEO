@@ -14,6 +14,8 @@ could compile with e.g.
 #include <cmath>
 #include <iostream>
 #include <string_view>
+#include <span>
+#include <utility> 
 
 #include <Kokkos_core.hpp>
 #include <Kokkos_Vector.hpp>
@@ -37,115 +39,54 @@ void print_gridboxmaps(const Maps4GridBoxes &gbxmaps, const double COORD0);
 void print_superdropcoords(const std::vector<GridBox> &gridboxes,
                            const Maps4GridBoxes &gbxmaps);
 
-
-struct kGridBoxBarren
-/* gridbox contains vector of superdroplets in grid box,
-thermodynamic state temp, pressure, etc. used for SDM,
-and index for finding associated grridbox in
-coupled thermodynamics */
+struct kThermoState
 {
-  unsigned int gbxindex; // index / unique identifier of gridbox
-  double state;
-  std::span<SuperdropWithGbxindex> span4SDsinGBx;
+  double vol;
 
-  kGridBoxBarren(const int i){}
-  
-  void set_span(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
-  {
-    auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
-    {
-      return a.sd_gbxindex < val; // cast sd_gbxindex to *signed* int
-    };
+  KOKKOS_INLINE_FUNCTION kThermoState() = default;
+  KOKKOS_INLINE_FUNCTION ~kThermoState() = default;
 
-    auto upcompare = [](const unsigned int val, const SuperdropWithGbxindex &a)
-    {
-      return val < a.sd_gbxindex; // cast sd_gbxindex to *signed* int
-    };
-
-    auto low = std::lower_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
-                                gbxindex, lowcompare);
-    auto up = std::upper_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
-                              gbxindex, upcompare);
-
-    span4SDsinGBx = {low, up};  
-  }
-
-  void iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps)
-  {
-    for (auto &SDinGBx : span4SDsinGBx)
-    {
-      if(SDinGBx.sd_gbxindex != gbxindex)
-      {
-        const std::string err = "span4SDsinGBx incorrectly set."
-                                " At least one sd_gbxindex"
-                                " does not match this gridbox's index (ie. " +
-                                std::to_string(SDinGBx.sd_gbxindex) +
-                                " != "+std::to_string(gbxindex)+")";
-        throw std::invalid_argument(err);
-      }
-      iscoord_within_bounds(gbxmaps.get_bounds_z(gbxindex), SDinGBx.superdrop.coord3);
-      iscoord_within_bounds(gbxmaps.get_bounds_x(gbxindex), SDinGBx.superdrop.coord1);
-      iscoord_within_bounds(gbxmaps.get_bounds_y(gbxindex), SDinGBx.superdrop.coord2);
-    }
-  }
-
-  void iscoord_within_bounds(const std::pair<double, double> bounds,
-                                    const double coord)
-  {
-    const double llim = bounds.first;
-    const double ulim = bounds.second;
-
-    if (coord < llim || coord >= ulim)
-    {
-      const std::string err = "superdrop coord: "+std::to_string(coord)+
-                                " lies outside its gridbox's bounds ["+
-                                std::to_string(llim)+", "+
-                                std::to_string(ulim)+"]";
-      throw std::invalid_argument(err);
-    }
-  }
-
+  KOKKOS_INLINE_FUNCTION kThermoState(const double v) : vol(v) {};
 };
 
 struct kGridBox
-/* gridbox contains vector of superdroplets in grid box,
-thermodynamic state temp, pressure, etc. used for SDM,
-and index for finding associated grridbox in
-coupled thermodynamics */
 {
-  unsigned int gbxindex; // index / unique identifier of gridbox
-  double state;
+  unsigned int gbxindex;
   std::span<SuperdropWithGbxindex> span4SDsinGBx;
+  kThermoState state;
 
-  kGridBox(const unsigned int ii,
-                 const Maps4GridBoxes &gbxmaps,
-                 std::vector<SuperdropWithGbxindex> &SDsInGBxs)
-    : gbxindex(ii), state(0.0)
+  KOKKOS_INLINE_FUNCTION kGridBox(const unsigned int ii,
+                                   const Maps4GridBoxes &gbxmaps,
+                                   std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+      : gbxindex(ii), state(gbxmaps.get_volume(gbxindex))
   {
-    std::cout << state << "\n";
-
+    std::cout << "vol: " << state.vol << "\n";
+    
     set_span(SDsInGBxs);
     iscorrect_span_for_gbxindex(gbxmaps);
   }
-  
+
+  KOKKOS_INLINE_FUNCTION kGridBox() = default;
+  KOKKOS_INLINE_FUNCTION ~kGridBox() = default;
+
   void set_span(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
   {
-    auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
-    {
-      return a.sd_gbxindex < val; // cast sd_gbxindex to *signed* int
-    };
+  auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
+  {
+    return a.sd_gbxindex < val; // cast sd_gbxindex to *signed* int
+  };
 
-    auto upcompare = [](const unsigned int val, const SuperdropWithGbxindex &a)
-    {
-      return val < a.sd_gbxindex; // cast sd_gbxindex to *signed* int
-    };
+  auto upcompare = [](const unsigned int val, const SuperdropWithGbxindex &a)
+  {
+    return val < a.sd_gbxindex; // cast sd_gbxindex to *signed* int
+  };
 
-    auto low = std::lower_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
-                                gbxindex, lowcompare);
-    auto up = std::upper_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
-                              gbxindex, upcompare);
+  auto low = std::lower_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
+                              gbxindex, lowcompare);
+  auto up = std::upper_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
+                             gbxindex, upcompare);
 
-    span4SDsinGBx = {low, up};  
+  span4SDsinGBx = {low, up};  
   }
 
   void iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps)
@@ -168,23 +109,21 @@ coupled thermodynamics */
   }
 
   void iscoord_within_bounds(const std::pair<double, double> bounds,
-                                    const double coord)
+                             const double coord)
   {
     const double llim = bounds.first;
     const double ulim = bounds.second;
 
     if (coord < llim || coord >= ulim)
     {
-      const std::string err = "superdrop coord: "+std::to_string(coord)+
-                                " lies outside its gridbox's bounds ["+
-                                std::to_string(llim)+", "+
-                                std::to_string(ulim)+"]";
+      const std::string err = "superdrop coord: " + std::to_string(coord) +
+                              " lies outside its gridbox's bounds [" +
+                              std::to_string(llim) + ", " +
+                              std::to_string(ulim) + "]";
       throw std::invalid_argument(err);
     }
   }
-
 };
-
 
 int main(int argc, char* argv[])
 {
@@ -221,8 +160,8 @@ int main(int argc, char* argv[])
 
     int run_step(const int currenttimestep,
                 std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                ThermoState &state,
-                std::mt19937 &gen) const
+                kThermoState &state,
+                Kokkos::View<double[1]> gen) const
     {
       int n(0);
       for (auto &SDinGBx : span4SDsinGBx)
@@ -231,7 +170,6 @@ int main(int argc, char* argv[])
       }
       return n;
     }
-
 
     int run_step() const {return 1;}
 
@@ -243,34 +181,36 @@ int main(int argc, char* argv[])
   Kokkos::initialize(argc, argv);
   Kokkos::DefaultExecutionSpace{}.print_configuration(std::cout);
   {
-    Kokkos::vector<kGridBoxBarren> kgrids;
-    kgrids.push_back(kGridBoxBarren(0));
+    Kokkos::vector<kGridBox> kgrids;
+    for (unsigned int i=0; i<10; ++i)
+    {
+      kgrids.push_back(kGridBox(i, gbxmaps, SDsInGBxs));
+    }
 
-    size_t ngrid = gridboxes.size();
+    size_t ngrid = kgrids.size();
+    Kokkos::View<double[1]> kgens("gens", 2);
     Kokkos::parallel_for("gbxi", ngrid, [=](const size_t i)
     {
       for (int subt = t_sdm; subt < nextt;
             subt = sdmprocess.next_step(subt))
       {
-        // sdmprocess.run_step(subt, gridboxes[i].span4SDsinGBx,
-        //                     gridboxes[i].state, gen);
-        sdmprocess.run_step();
+        sdmprocess.run_step(subt, kgrids(i).span4SDsinGBx,
+                              kgrids(i).state, kgens);
       }
     });
 
-    size_t ngbxs(0);
-    Kokkos::parallel_reduce("gbxi", ngrid, [=](const size_t i, size_t &tempsum)
+    size_t nSDs(0);
+    Kokkos::parallel_reduce("gbxireduce", ngrid, [=](const size_t i, size_t &tempsum)
     {
       for (int subt = t_sdm; subt < nextt;
             subt = sdmprocess.next_step(subt))
       {
-        // sdmprocess.run_step(subt, gridboxes[i].span4SDsinGBx,
-        //                     gridboxes[i].state, gen);
-        tempsum += sdmprocess.run_step();
+        tempsum += sdmprocess.run_step(subt, kgrids(i).span4SDsinGBx,
+                                        kgrids(i).state, kgens); 
       }
-    }, ngbxs);
+    }, nSDs);
 
-    std::cout <<" ngrid*ntime: " << ngrid*5 << " =?= " << ngbxs << "\n";
+    std::cout <<" nSDs: " << SDsInGBxs.size() << " =?= " << nSDs << "\n";
 
   }
   Kokkos::finalize();
