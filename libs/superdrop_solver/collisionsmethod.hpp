@@ -74,7 +74,7 @@ private:
 
     /* Randomly shuffle order of superdroplet objects
     in order to generate random pairs */
-    shuffle(span4SDsinGBx.begin(), span4SDsinGBx.end(), gen);
+    std::shuffle(span4SDsinGBx.begin(), span4SDsinGBx.end(), gen);
 
     /* collide all randomly generated pairs of SDs */
     for (int i = 1; i < nsupers; i += 2)
