@@ -35,17 +35,17 @@ std::vector<ThermoState> start_coupldstep(const Observer auto &observer,
                                           const Kokkos::View<GridBox*> h_gridboxes);
 
 int proceedtonext_coupldstep(int t_mdl, const int couplstep,
-                               const std::vector<ThermoState> &previousstates,
-                               const Kokkos::vector<GridBox> &gridboxes,
-                               CvodeThermoSolver &cvode);
+                             const std::vector<ThermoState> &previousstates,
+                             const Kokkos::View<GridBox *> h_gridboxes,
+                             CvodeThermoSolver &cvode);
 
 std::vector<ThermoState>
 recieve_thermodynamics_from_cvode(const CvodeThermoSolver &cvode,
                                   Kokkos::View<GridBox*> h_gridboxes);
 
 void send_thermodynamics_to_cvode(const std::vector<ThermoState> &previousstates,
-                                      const Kokkos::vector<GridBox> &gridboxes,
-                                      CvodeThermoSolver &cvode);
+                                  const Kokkos::View<GridBox *> h_gridboxes,
+                                  CvodeThermoSolver &cvode);
 
 inline void set_thermostate(const long unsigned int ii,
                             const CvodeThermoSolver &cvode,
@@ -75,12 +75,11 @@ length 'couplstep' and decomposed into 4 parts:
 3) run CVODE step (independent, optionally concurrent)
 4) proceed to next step (coupled) */
 {
-  int t_mdl = 0; // model time is incremented by proceed_tonext_coupledstep
+  int t_mdl = 0; // model time is incremented by proceedtonext_coupledstep
   
   while (t_mdl <= t_end)
   {
     /* start step (in general involves coupling) */
-    gridboxes.on_host(); SDsInGBxs.on_host();
     const std::vector<ThermoState>
         previousstates = start_coupldstep(sdm.observer, cvode,
                                           gridboxes.view_host());
@@ -95,8 +94,9 @@ length 'couplstep' and decomposed into 4 parts:
     cvode.run_cvodestep(step2dimlesstime(t_mdl + couplstep));
 
     /* prepare for next coupled step (in general involves coupling) */
+    gridboxes.on_host(); SDsInGBxs.on_host();
     t_mdl = proceedtonext_coupldstep(t_mdl, couplstep, previousstates,
-                                       gridboxes, cvode);
+                                      gridboxes.view_host(), cvode);
   }
 }
 

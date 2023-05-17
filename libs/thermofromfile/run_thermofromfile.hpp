@@ -138,6 +138,7 @@ length 'couplstep' and is decomposed into 4 parts:
 
     /* advance SDM by couplstep
     (optionally concurrent to thermodynamics solver) */
+    gridboxes.on_device(); SDsInGBxs.on_device();
     sdm.run_sdmstep(t_mdl, couplstep, genpool, gridboxes, SDsInGBxs);
 
     /* advance thermodynamics solver by couplstep
