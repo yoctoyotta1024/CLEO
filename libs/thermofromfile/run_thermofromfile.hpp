@@ -88,6 +88,8 @@ void run_thermofromfile(const Config &config,
 /* create superdroplets and gridboxes and then run uncoupled
 superdroplet model (SDM) using thermodynamics read from files */
 {
+  Kokkos::Timer kokkostimer;
+  
   /* create thermodynamics from file */
   const size_t nsteps = ceil(t_end / couplstep) + 1;
   ThermodynamicsFromFile thermodyn(config, sdm.gbxmaps.ndims, nsteps);
@@ -109,11 +111,17 @@ superdroplet model (SDM) using thermodynamics read from files */
   /* prepare model for timestepping */
   auto genpool = preparetotimestep();
   
+  const double t1 = kokkostimer.seconds();
   /* run model from t=0 to t=t_end */
   timestep_thermofromfile(t_end, couplstep, sdm, thermodyn,
                           genpool, gridboxes, SDsInGBxs);
-
-  std::cout << "\n ---- Uncoupled SDM Run Complete ---- \n";
+  const double t2 = kokkostimer.seconds();
+  
+  std::cout << "\n ---- Uncoupled SDM Run Complete ---- \n"
+            << "       Duration: " << t2 << "s ----- \n"
+            << "       Initialisation: " << t1 << "s ----- \n"
+            << "       Timestepping: " << t2 - t1 << "s ----- \n"
+            << "\n ------------------------------------ \n";
 }
 
 void timestep_thermofromfile(const int t_end,

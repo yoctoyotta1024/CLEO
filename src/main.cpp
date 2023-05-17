@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     run_thermofromfile(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
   }
   Kokkos::finalize();
-  std::cout << "  ------ Total Duration: " << kokkostimer.seconds() << "s ----- \n";
+  std::cout << " ---- Total Duration: " << kokkostimer.seconds() << "s ---- \n";
 
   return 0;
 }
