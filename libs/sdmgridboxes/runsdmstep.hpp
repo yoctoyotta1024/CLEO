@@ -80,14 +80,14 @@ public:
       using sdmprocess subttimestepping routine */
       for (auto &gbx : gridboxes)
       {
-        auto gen = genpool.get_state();
+        URBG urbg(genpool.get_state());
         for (int subt = t_sdm; subt < nextt;
              subt = sdmprocess.next_step(subt))
         {
           sdmprocess.run_step(subt, gbx.span4SDsinGBx,
-                              gbx.state, URBG(gen));
+                              gbx.state, urbg);
         }
-        genpool.free_state(gen);
+        genpool.free_state(urbg.gen);
       }
 
       t_sdm = nextt;
