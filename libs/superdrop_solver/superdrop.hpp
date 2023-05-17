@@ -18,6 +18,8 @@
 #include <stdexcept>
 #include <vector> 
 
+#include <Kokkos_Core.hpp>
+
 #include "../claras_SDconstants.hpp"
 #include "./impliciteuler.hpp"
 #include "./superdrop_ids.hpp"
@@ -31,8 +33,13 @@ struct SoluteProperties
   const double mrsol;   // (dimensionless) Mr of solute
   const double ionic;   // degree ionic dissociation (van't Hoff factor)
 
+  /* A Kokkos requirement for use of struct in (dual)View (such as a
+  Kokkos::vector) is that default constructor and destructor exist */
+  KOKKOS_INLINE_FUNCTION
   SoluteProperties() : rho_l(dlc::Rho_l), rho_sol(dlc::Rho_sol),
-                       mrsol(dlc::Mr_sol), ionic(dlc::IONIC) {}
+                       mrsol(dlc::Mr_sol), ionic(dlc::IONIC) {} 
+
+  KOKKOS_INLINE_FUNCTION ~SoluteProperties() = default;
 };
 
 class Superdrop
@@ -40,18 +47,18 @@ class Superdrop
 private:
   std::shared_ptr<const SoluteProperties> solute; // reference to solute properties
 
-  inline double dry_radius() const
+  KOKKOS_INLINE_FUNCTION double dry_radius() const
   /* calculate radius as if dry droplet, ie.
   radius if drop was entirely made of solute */
   {
     return pow(3.0 * m_sol / (4.0 * M_PI * solute->rho_sol), 1.0 / 3.0);
   }
 
-  double rhoeff() const;
+  KOKKOS_FUNCTION double rhoeff() const;
   /* calculates effective density of droplet
   so mass_droplet = m = 4/3*pi*r^3 * rhoeff */
 
-  // double m_liq() const;
+  // KOKKOS_INLINE_FUNCTION double m_liq() const;
   // /* calculate mass of only water in droplet */
 
 public:
@@ -66,56 +73,59 @@ public:
   double coord2; // a 2nd spatial coordinate of superdroplet (y)
   [[no_unique_address]] IDType id; // superdroplet (unique) identity
 
-  Superdrop(const std::shared_ptr<const SoluteProperties> isolute,
-            const size_t ieps, const double iradius,
-            const double im_sol, const double icoord3,
-            const double icoord1, const double icoord2,
-            const IDType iid)
+  KOKKOS_FUNCTION Superdrop(const std::shared_ptr<const SoluteProperties> isolute,
+                            const size_t ieps, const double iradius,
+                            const double im_sol, const double icoord3,
+                            const double icoord1, const double icoord2,
+                            const IDType iid)
       : solute(isolute), eps(ieps), radius(iradius),
         m_sol(im_sol), coord3(icoord3), coord1(icoord1),
         coord2(icoord2), id(iid) {}
 
-  inline double vol() const
+  KOKKOS_INLINE_FUNCTION Superdrop() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~Superdrop() = default; // Kokkos requirement for a (dual)View
+
+  KOKKOS_INLINE_FUNCTION double vol() const
   /* spherical volume of droplet calculated from its radius */
   {
     return 4.0 / 3.0 * M_PI * pow(radius, 3.0);
   }
 
-  double mass() const;
+  KOKKOS_FUNCTION double mass() const;
   /* calculate total mass of droplet
   mass = (water + dry areosol)  */
 
-  double equilibrium_wetradius(const double s_ratio,
-                               const double temp) const;
+  KOKKOS_FUNCTION double equilibrium_wetradius(const double s_ratio,
+                                               const double temp) const;
   /* Performs Newton Raphson root finding algorithm using functions in 
   WetRadius root finder struct to solve equation for equilibrium (wet) 
   radius of superdroplet at given relative humidity. Equilibrium radius 
   defined by radius when ODE from "An Introduction To Clouds...."
   (see note at top of file) eqn [7.28] = 0. */
 
-  double akohler_factor(double temp) const;
+  KOKKOS_FUNCTION double akohler_factor(double temp) const;
   /* calculate value of a in raoult factor (exp^(a/r))
   to account for effect of dissolved solute
   on radial growth of droplet. Using equations from
   "An Introduction To Clouds...." (see note at top of file) */
 
-  double bkohler_factor() const;
+  KOKKOS_FUNCTION double bkohler_factor() const;
   /* calculate value of b in kelvin factor (1-b/r^3)
   to account for curvature on radial growth
   of droplet. Using equations from "An Introduction
   To Clouds...." (see note at top of file) */
 
-  double change_radius(const double newradius);
+  KOKKOS_FUNCTION double change_radius(const double newradius);
   /* Update droplet radius to newradius or dry_radius() and
   return resultant change in radius. Prevents drops shrinking
   further once they are size of dry_radius(). */
 
-  inline auto get_solute() const
+  KOKKOS_INLINE_FUNCTION auto get_solute() const
   {
     return solute;
   }
 
-  inline double get_dry_radius() const
+  KOKKOS_INLINE_FUNCTION double get_dry_radius() const
   /* calculate radius as if dry droplet, ie.
   radius if drop was entirely made of solute */
   {
@@ -172,8 +182,13 @@ the GBx the SD is associated with */
   unsigned int sd_gbxindex; // index/unique identifier of gridbox the superdrop occupies
   Superdrop superdrop;
 
-  SuperdropWithGbxindex(const unsigned int isd_gbxindex, Superdrop isuperdrop) 
+  KOKKOS_INLINE_FUNCTION
+  SuperdropWithGbxindex(const unsigned int isd_gbxindex, Superdrop isuperdrop)
       : sd_gbxindex(isd_gbxindex), superdrop(isuperdrop) {}
+  
+  KOKKOS_INLINE_FUNCTION SuperdropWithGbxindex() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~SuperdropWithGbxindex() = default; // Kokkos requirement for a (dual)View
+
 };
 
 #endif // SUPERDROP_HPP

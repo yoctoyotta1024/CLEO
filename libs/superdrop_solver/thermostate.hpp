@@ -14,6 +14,8 @@ q_condensate, volume, time) of SDM */
 #include <map>
 #include <utility>
 
+#include <Kokkos_Core.hpp>
+
 struct ThermoState
 {
 private:
