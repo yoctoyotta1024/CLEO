@@ -24,7 +24,7 @@ isfigures = [True, True]
 ### ------------ Number of Superdroplets per Gridbox ------------ ###
 # nsupers = 64 # int or dict of ints for number of superdroplets in a gridbox
 zlim = 750
-npergbx = 8
+npergbx = 16
 nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 ### ---------------------------------------------------------------- ###
 
