@@ -53,7 +53,7 @@ affecting ThermoState, then reinitialise cvode solver with those changes */
 
   for (size_t ii(0); ii<Ngrid; ++ii)
   {
-    ThermoState delta_state = gridboxes(ii).state - previousstates.at(ii);
+    ThermoState delta_state = h_gridboxes(ii).state - previousstates.at(ii);
 
     delta_y[NVARS * ii + 1] = delta_state.temp;
     delta_y[NVARS * ii + 2] = delta_state.qvap;
