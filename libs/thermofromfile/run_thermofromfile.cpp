@@ -8,14 +8,16 @@ are read from file */
 
 void recieve_thermodynamics(const double time,
                             const ThermodynamicsFromFile &thermodyn,
-                            Kokkos::vector<GridBox> &gridboxes)
+                            Kokkos::View<GridBox*> h_gridboxes)
 /* Sets current thermodynamic state of SDM (time, p, temp, qv, etc.)
 to match that given by the ThermodnamicsFromFile 'thermodyn' */
 {
-  for (auto &gbx : gridboxes)
+  const size_t Ngrid = h_gridboxes.size();
+  for (size_t ii(0); ii < Ngrid; ++ii)
   {
-    gbx.state.time = time; 
-    
+    auto &gbx = h_gridboxes(ii);
+
+    gbx.state.time = time;
     gbx.state.press = thermodyn.get_press(gbx.gbxindex);
     gbx.state.temp = thermodyn.get_temp(gbx.gbxindex);
     gbx.state.qvap = thermodyn.get_qvap(gbx.gbxindex);

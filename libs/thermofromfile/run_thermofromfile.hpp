@@ -49,7 +49,7 @@ void timestep_thermofromfile(const int t_end,
 
 void recieve_thermodynamics(const double time,
                             const ThermodynamicsFromFile &thermodyn,
-                            Kokkos::vector<GridBox> &gridboxes);
+                            Kokkos::View<GridBox*> h_gridboxes);
 /* Sets current thermodynamic state of SDM to match that given
 by the ThermodnamicsFromFile 'thermodyn' */
 
@@ -63,14 +63,14 @@ generators used in SDM */
 inline void start_step(const int t_mdl,
                        const Observer auto &observer,
                        const ThermodynamicsFromFile &thermodyn,
-                       Kokkos::vector<GridBox> &gridboxes)
+                       Kokkos::View<GridBox*> h_gridboxes)
 /* communication of thermodynamic state
 to SDM and observation of SDM gridboxes */
 {
   const double time = step2dimlesstime(t_mdl);
-  recieve_thermodynamics(time, thermodyn, gridboxes);
+  recieve_thermodynamics(time, thermodyn, h_gridboxes);
 
-  observer.observe_state(gridboxes);
+  observer.observe_state(h_gridboxes);
 }
 
 inline int proceedto_next_step(int t_mdl, const int couplstep)
@@ -133,7 +133,8 @@ length 'couplstep' and is decomposed into 4 parts:
   while (t_mdl <= t_end)
   {
     /* start step (in general involves coupling) */
-    start_step(t_mdl, sdm.observer, thermodyn, gridboxes);
+    gridboxes.on_host(); SDsInGBxs.on_host();
+    start_step(t_mdl, sdm.observer, thermodyn, gridboxes.view_host());
 
     /* advance SDM by couplstep
     (optionally concurrent to thermodynamics solver) */
