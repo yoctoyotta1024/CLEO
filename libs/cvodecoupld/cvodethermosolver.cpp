@@ -106,7 +106,7 @@ to use CVODE sundials ODE solver */
     return (1);
   for (size_t i = 0; i < neq; ++i)
   {
-    NV_Ith_S(y, i) = y_init.at(i);
+    NV_Ith_S(y, i) = i_yinit.at(i);
   }
 
   /* 4. Call CVodeCreate to create the solver memory and specify the

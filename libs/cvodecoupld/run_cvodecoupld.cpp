@@ -15,7 +15,6 @@ initialise cvode thermodynamics solver */
 {
   constexpr int NVARS = 4;                  // no. (distinct) variables per grid box
   const size_t neq = NVARS * num_gridboxes; // total no. variables
-  std::vector<double> y_init(neq);
 
   const double p_init = config.P_INIT / dlc::P0;
   const double temp_init = config.TEMP_INIT / dlc::TEMP0;
@@ -23,12 +22,13 @@ initialise cvode thermodynamics solver */
   const double qv_init = vapourpressure_2_massmixratio(vapourp_init, p_init);
   const double qc_init = config.qc_init;
 
+  std::vector<double> y_init(neq);
   for (size_t k = 0; k < neq; k += NVARS)
   {
-    y_init[k] = p_init;
-    y_init[k + 1] = temp_init;
-    y_init[k + 2] = qv_init;
-    y_init[k + 3] = qc_init;
+    y_init.at(k) = p_init;
+    y_init.at(k + 1) = temp_init;
+    y_init.at(k + 2) = qv_init;
+    y_init.at(k + 3) = qc_init;
   }
 
   return y_init;
