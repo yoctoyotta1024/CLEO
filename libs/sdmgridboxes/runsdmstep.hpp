@@ -68,7 +68,6 @@ public:
   to allow the movement of superdroplets between gridboxes and the
   SDM process to occur at smaller time intervals */
   {
-
     int t_sdm(t_mdl);
 
     /* sdm model time is incremented until >= t_mdl+onestep
@@ -77,18 +76,22 @@ public:
     {
       int nextt = onestep_or_motion(t_sdm, onestep, sdmmotion);
 
+      gridboxes.on_host(); SDsInGBxs.on_host();
       sdmmotion.run_step(t_sdm, gbxmaps, SDsInGBxs, gridboxes);
 
       /* run SDM process for each gridbox
       using sdmprocess subttimestepping routine */
-      for (auto &gbx : gridboxes)
+      gridboxes.on_device(); SDsInGBxs.on_device();
+      auto d_gridboxes = gridboxes.view_device();
+      const size_t Ngrid = d_gridboxes.size();
+      for (size_t ii(0); ii < Ngrid; ++ii) 
       {
         URBG urbg(genpool.get_state());
         for (int subt = t_sdm; subt < nextt;
              subt = sdmprocess.next_step(subt))
         {
-          sdmprocess.run_step(subt, gbx.span4SDsinGBx,
-                              gbx.state, urbg);
+          sdmprocess.run_step(subt, d_gridboxes(ii).span4SDsinGBx,
+                              d_gridboxes(ii).state, urbg);
         }
         genpool.free_state(urbg.gen);
       }

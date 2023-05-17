@@ -100,10 +100,12 @@ superdroplet model (SDM) using thermodynamics read from files */
       SDsInGBxs = create_superdrops_from_initSDsfile(config.initSDs_filename,
                                               config.nSDsvec,
                                               config.SDnspace, solute);
+  SDsInGBxs.on_device();
 
   /* vector containing all gridboxes in SDM domain */
   Kokkos::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
-
+  gridboxes.on_device(); 
+  
   /* prepare model for timestepping */
   auto genpool = preparetotimestep();
   
