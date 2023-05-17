@@ -12,6 +12,8 @@ coupled with a CVODE ode solver for the thermodynamics
 #include <stdexcept>
 #include <string>
 
+#include <Kokkos_Core.hpp>
+
 /* constants and equations */
 #include "claras_SDconstants.hpp"
 #include "initialisation/config.hpp"

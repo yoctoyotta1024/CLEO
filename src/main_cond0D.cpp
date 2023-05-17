@@ -12,6 +12,8 @@ coupled with a CVODE ode solver for the thermodynamics
 #include <stdexcept>
 #include <string>
 
+#include <Kokkos_Core.hpp>
+
 /* constants and equations */
 #include "claras_SDconstants.hpp"
 #include "initialisation/config.hpp"
@@ -84,6 +86,8 @@ superdroplets from combination of those two seperate observers */
 
 int main(int argc, char *argv[])
 {
+  Kokkos::Timer kokkostimer;
+  
   if (argc < 3)
   {
     throw std::invalid_argument("config and/or constants files not specified");
@@ -119,8 +123,13 @@ int main(int argc, char *argv[])
 
   const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
 
-  /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
-  run_cvodecoupld(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+  Kokkos::initialize(argc, argv);
+  {
+    /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
+    run_cvodecoupld(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+  }
+  Kokkos::finalize();
+  std::cout << "  ------ Total Duration: " << kokkostimer.seconds() << "s ----- \n";
 
   return 0;
 }
