@@ -57,7 +57,7 @@ struct kGridBox
 
   KOKKOS_INLINE_FUNCTION kGridBox(const unsigned int ii,
                                    const Maps4GridBoxes &gbxmaps,
-                                   std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+                                   Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
       : gbxindex(ii), state(gbxmaps.get_volume(gbxindex))
   {
     std::cout << "vol: " << state.get_volume() << "\n";
@@ -69,7 +69,7 @@ struct kGridBox
   KOKKOS_INLINE_FUNCTION kGridBox() = default;
   KOKKOS_INLINE_FUNCTION ~kGridBox() = default;
 
-  void set_span(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+  void set_span(Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
   {
   auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
   {
@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
   const Maps4GridBoxes gbxmaps(config.SDnspace, grid_filename);
 
   const auto solute(std::make_shared<const SoluteProperties>());
-  std::vector<SuperdropWithGbxindex>
+  Kokkos::vector<SuperdropWithGbxindex>
       SDsInGBxs = create_superdrops_from_initSDsfile(initSDs_filename,
                                               config.nSDsvec,
                                               config.SDnspace, solute);

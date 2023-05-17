@@ -14,6 +14,7 @@ are read from file */
 #include <cmath>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Vector.hpp>
 #include <Kokkos_Random.hpp>
 
 /* Coupled model setup */
@@ -45,7 +46,7 @@ void timestep_thermofromfile(const int t_end,
                             ThermodynamicsFromFile &thermodyn,
                             Kokkos::Random_XorShift64_Pool<> &genpool,
                             std::vector<GridBox> &gridboxes,
-                            std::vector<SuperdropWithGbxindex> &SDsInGBxs);
+                            Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs);
 
 void recieve_thermodynamics(const double time,
                             const ThermodynamicsFromFile &thermodyn,
@@ -96,7 +97,7 @@ superdroplet model (SDM) using thermodynamics read from files */
   struct that also holds their associated gridbox index.
   (all superdroplets have same solute properties) */
   const auto solute(std::make_shared<const SoluteProperties>());
-  std::vector<SuperdropWithGbxindex>
+  Kokkos::vector<SuperdropWithGbxindex>
       SDsInGBxs = create_superdrops_from_initSDsfile(config.initSDs_filename,
                                               config.nSDsvec,
                                               config.SDnspace, solute);
@@ -120,7 +121,7 @@ void timestep_thermofromfile(const int t_end,
                             ThermodynamicsFromFile &thermodyn,
                             Kokkos::Random_XorShift64_Pool<> &genpool,
                             std::vector<GridBox> &gridboxes,
-                            std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+                            Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep model from t=0 to t=tend. Each step is
 length 'couplstep' and is decomposed into 4 parts:
 1) start of step (optionally coupled)

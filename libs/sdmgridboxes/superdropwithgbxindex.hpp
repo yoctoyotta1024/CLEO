@@ -17,13 +17,16 @@ defined in .cpp implementaiton file */
 #include <stdexcept>
 #include <algorithm>
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Vector.hpp>
+
 #include "../claras_SDconstants.hpp"
 #include "initialisation/read_initsuperdrops.hpp"
 #include "superdrop_solver/superdrop.hpp"
 
 namespace dlc = dimless_constants;
 
-std::vector<SuperdropWithGbxindex>
+Kokkos::vector<SuperdropWithGbxindex>
 create_superdrops_from_initSDsfile(std::string_view initSDs_filename,
                             const int nSDsvec,
                             const int SDnspace,
@@ -43,7 +46,7 @@ inline void print_SDinGBx(const SuperdropWithGbxindex &SDinGBx)
               << ", " << SDinGBx.superdrop.coord2 << "\n";
 }
 
-inline void sort_superdrops_via_gridboxindex(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+inline void sort_superdrops_via_gridboxindex(Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* uses the value of sd_gbxindex within each SuperdropWithGbxindex
 struct to sort the vector from lowest sd_gbxindex to highest. Sorting
 of objects with same value of sd_gbxindex can take any order */

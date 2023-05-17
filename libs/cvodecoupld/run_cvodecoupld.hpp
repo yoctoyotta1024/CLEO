@@ -15,6 +15,7 @@ Coupling is both ways (send and receive) */
 #include <algorithm>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Vector.hpp>
 #include <Kokkos_Random.hpp>
 
 /* Coupled model setup */
@@ -71,7 +72,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   struct that also holds their associated gridbox index.
   (all superdroplets have same solute properties) */
   const auto solute(std::make_shared<const SoluteProperties>());
-  std::vector<SuperdropWithGbxindex>
+  Kokkos::vector<SuperdropWithGbxindex>
       SDsInGBxs = create_superdrops_from_initSDsfile(config.initSDs_filename,
                                               config.nSDsvec,
                                               config.SDnspace, solute);

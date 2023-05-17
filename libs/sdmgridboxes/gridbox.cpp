@@ -8,7 +8,7 @@ a gridbox */
 KOKKOS_FUNCTION
 GridBox::GridBox(const unsigned int ii,
                  const Maps4GridBoxes &gbxmaps,
-                 std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+                 Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
     : gbxindex(ii), state(gbxmaps.get_volume(gbxindex))
 /* Volume in Thermostate set using Map4GridBoxes
 idx2vol map (via get_volume function). Other ThermoState variables
@@ -31,7 +31,7 @@ volume. Also prints true volume = volume * COORD0^3 [m^3] */
 }
 
 KOKKOS_FUNCTION
-void GridBox::set_span(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+void GridBox::set_span(Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* assumes SDsInGBxs is ordered based on sd_gbxindex
 from lowest to highest. Finds first and last SDWithGBx that has 
 sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
@@ -93,7 +93,7 @@ void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
 
 KOKKOS_FUNCTION std::vector<GridBox>
 create_gridboxes(const Maps4GridBoxes &gbxmaps,
-                 std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+                 Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from gbxmaps.gbxidxs, and a span of the
 superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */

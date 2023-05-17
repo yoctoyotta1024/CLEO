@@ -13,6 +13,9 @@ coords and moving them between gridboxes) */
 #include <stdexcept>
 #include <concepts>
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Vector.hpp>
+
 #include "./gridbox.hpp"
 #include "./maps4gridboxes.hpp"
 #include "./cartesianneighbours.hpp"
@@ -51,7 +54,7 @@ private:
   const MoveSuperdrop movesd;
 
   void move_superdrops_in_domain(const Maps4GridBoxes &gbxmaps,
-                                 std::vector<SuperdropWithGbxindex> &SDsInGBxs,
+                                 Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs,
                                  std::vector<GridBox> &gridboxes) const
   /* Move superdroplets in gridboxes used movesd and then move them
   between gridboxes if necessary. First update superdroplet positions
@@ -157,7 +160,7 @@ private:
   }
 
   void move_superdroplets_between_gridboxes(const Maps4GridBoxes &gbxmaps,
-                                            std::vector<SuperdropWithGbxindex> &SDsInGBxs,
+                                            Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs,
                                             std::vector<GridBox> &gridboxes) const
   /* move superdroplets between gridboxes by changing their associated
   gridboxindex if necessary, then (re)sorting SDsInGBxs vector and
@@ -169,7 +172,7 @@ private:
 
   void set_gridboxes_superdropletspan(const Maps4GridBoxes &gbxmaps,
                                       std::vector<GridBox> &gridboxes,
-                                      std::vector<SuperdropWithGbxindex> &SDsInGBxs) const
+                                      Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs) const
   {
     for (auto &gbx : gridboxes)
     {
@@ -189,7 +192,7 @@ public:
 
   void run_step(const int currenttimestep,
            const Maps4GridBoxes &gbxmaps,
-           std::vector<SuperdropWithGbxindex> &SDsInGBxs,
+           Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs,
            std::vector<GridBox> &gridboxes) const
   {
     if (movesd.on_move(currenttimestep))

@@ -11,6 +11,10 @@ run 1 timestep of SDM */
 #include <vector>
 #include <algorithm>
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Vector.hpp>
+#include <Kokkos_Random.hpp>
+
 #include "./gridbox.hpp"
 #include "./sdmotion.hpp"
 #include "./maps4gridboxes.hpp"
@@ -59,7 +63,7 @@ public:
   void run_sdmstep(const int t_mdl, const int onestep,
                    Kokkos::Random_XorShift64_Pool<> &genpool,
                    std::vector<GridBox> &gridboxes,
-                   std::vector<SuperdropWithGbxindex> &SDsInGBxs) const
+                   Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs) const
   /* run SDM for each gridbox from time t_mdl to t_mdl+onestep
   with subtimestepping such that each step (onestep) can be subdivided
   to allow the movement of superdroplets between gridboxes and the

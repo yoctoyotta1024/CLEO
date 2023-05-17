@@ -12,6 +12,9 @@ both ways (send and receive) */
 #include <random>
 #include <vector>
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Vector.hpp>
+
 /* Superdroplet Model (SDM) */
 #include "sdmgridboxes/runsdmstep.hpp"
 #include "sdmgridboxes/gridbox.hpp"
@@ -63,7 +66,7 @@ void timestep_cvodecoupld(const int t_end,
                        CvodeThermoSolver &cvode,
                        Kokkos::Random_XorShift64_Pool<> &genpool,
                        std::vector<GridBox> &gridboxes,
-                       std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+                       Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep coupled model from t=0 to t=tend. Each coupled step is
 length 'couplstep' and decomposed into 4 parts:
 1) start of step (coupled)

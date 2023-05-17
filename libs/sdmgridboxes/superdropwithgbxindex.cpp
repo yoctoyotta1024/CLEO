@@ -9,7 +9,7 @@ being visible externally */
 #include "superdropwithgbxindex.hpp"
 
 /* -- function called by create_superdrops_from_initSDsfile -- */
-std::vector<SuperdropWithGbxindex>
+Kokkos::vector<SuperdropWithGbxindex>
 create_superdropwithgbxindexes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties>
@@ -20,7 +20,7 @@ std::vector<double> initSDcoords(const int SDnspace,
                                  const int i);
 /* ------------------------------------------------------ */
 
-std::vector<SuperdropWithGbxindex>
+Kokkos::vector<SuperdropWithGbxindex>
 create_superdrops_from_initSDsfile(std::string_view initSDs_filename,
                             const int nSDsvec,
                             const int SDnspace,
@@ -40,7 +40,7 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
             << initSDs_filename << ". "
             << "\nNow creating superdrops with gridboxes\n";
 
-  std::vector<SuperdropWithGbxindex>
+  Kokkos::vector<SuperdropWithGbxindex>
       SDsInGBxs = create_superdropwithgbxindexes(nSDsvec, SDnspace,
                                                  initSDs, solute);
 
@@ -53,13 +53,13 @@ associated with each superdroplet in the SuperdropletWithGridbox struct */
   return SDsInGBxs;
 }
 
-std::vector<SuperdropWithGbxindex>
+Kokkos::vector<SuperdropWithGbxindex>
 create_superdropwithgbxindexes(const int nSDsvec, const int SDnspace,
                                const InitSDsData &initSDs,
                                const std::shared_ptr<const SoluteProperties>
                                    solute)
 {
-  std::vector<SuperdropWithGbxindex> SDsInGBxs;
+  Kokkos::vector<SuperdropWithGbxindex> SDsInGBxs;
   auto sdIdGen = Superdrop::IDType::Gen{};
 
   for (int i = 0; i < nSDsvec; ++i)
