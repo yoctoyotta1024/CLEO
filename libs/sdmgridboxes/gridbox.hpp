@@ -56,7 +56,7 @@ coupled thermodynamics */
   KOKKOS_FUNCTION
   void print_statevolume();
   /* print's dimensionless value for gridbox state's 
-  volume. Also prints true volume = state.volume * COORD0^3 [m^3] */
+  volume. Also prints true volume = volume * COORD0^3 [m^3] */
 
   KOKKOS_FUNCTION
   void iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps);

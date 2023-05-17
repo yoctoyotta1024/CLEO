@@ -22,11 +22,12 @@ are default behaviour initialised. */
 
 KOKKOS_FUNCTION void GridBox::print_statevolume()
 /* print's dimensionless value for gridbox state's 
-volume. Also prints true volume = state.volume * COORD0^3 [m^3] */
+volume. Also prints true volume = volume * COORD0^3 [m^3] */
 {
-  std::cout << "dimensionless volume = " << state.volume
+  const double vol = state.get_volume()
+  std::cout << "dimensionless volume = " << vol
             << "\nie. VOLUME = "
-            << state.volume * pow(dlc::COORD0, 3.0) << "m^3\n";
+            << vol * pow(dlc::COORD0, 3.0) << "m^3\n";
 }
 
 KOKKOS_FUNCTION

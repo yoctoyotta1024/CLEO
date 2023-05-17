@@ -16,7 +16,10 @@ q_condensate, volume, time) of SDM */
 
 struct ThermoState
 {
-  const double volume;
+private:
+  double volume;
+
+public:
   double time;
 
   double press;                   // defined at centre of volume
@@ -31,28 +34,30 @@ struct ThermoState
                                   temp(), qvap(), qcond(),
                                   wvel(), uvel(), vvel(){};
 
+  double get_volume() const {return volume;}
+
   double wvelcentre() const
   /* return wvel defined at centre of volume */
   {
-    return (wvel.first + wvel.second)/2;
+    return (wvel.first + wvel.second) / 2;
   }
 
   double uvelcentre() const
   /* return uvel defined at centre of volume */
   {
-    return (uvel.first + uvel.second)/2;
+    return (uvel.first + uvel.second) / 2;
   }
 
   double vvelcentre() const
   /* return vvel defined at centre of volume */
   {
-    return (vvel.first + vvel.second)/2;
+    return (vvel.first + vvel.second) / 2;
   }
 
   ThermoState operator-(const ThermoState &prevstate) const
   {
     auto subtract = [](const std::pair<double, double> a,
-                          const std::pair<double, double> b)
+                       const std::pair<double, double> b)
     {
       return std::pair<double, double>{a.first - b.first, a.second - b.second};
     };
@@ -65,7 +70,7 @@ struct ThermoState
     delta_state.wvel = subtract(wvel, prevstate.wvel);
     delta_state.uvel = subtract(uvel, prevstate.uvel);
     delta_state.vvel = subtract(vvel, prevstate.vvel);
-    
+
     return delta_state;
   }
 

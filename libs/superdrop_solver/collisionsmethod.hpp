@@ -246,7 +246,7 @@ public:
   function in order to call collide_superdroplets. (*hint* run_step
   is usually found within a type that satisfies the SdmProcess concept) */
   {
-    const double VOLUME = state.volume * pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
+    const double VOLUME = state.get_volume() * pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
     collide_superdroplets(span4SDsinGBx, gen, VOLUME);
   }
 };

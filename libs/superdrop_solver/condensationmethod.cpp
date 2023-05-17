@@ -100,7 +100,7 @@ Clouds...." (see note at top of file) */
     const double delta_mass_condensed = superdroplet_growth_by_condensation(state.press, state.temp,
                                                                             psat, s_ratio, delt,
                                                                             impliciteuler, SDinGBx.superdrop);
-    const double VOLUME = state.volume * pow(dlc::COORD0, 3.0); // volume in which condensation occurs [m^3]
+    const double VOLUME = state.get_volume() * pow(dlc::COORD0, 3.0); // volume in which condensation occurs [m^3]
     tot_rho_condensed += (delta_mass_condensed / VOLUME);       // drho_condensed_vapour/dt * delta t
   }
 

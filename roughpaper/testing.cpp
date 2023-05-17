@@ -60,7 +60,7 @@ struct kGridBox
                                    std::vector<SuperdropWithGbxindex> &SDsInGBxs)
       : gbxindex(ii), state(gbxmaps.get_volume(gbxindex))
   {
-    std::cout << "vol: " << state.vol << "\n";
+    std::cout << "vol: " << state.get_volume() << "\n";
     
     set_span(SDsInGBxs);
     iscorrect_span_for_gbxindex(gbxmaps);
