@@ -30,20 +30,24 @@ both ways (send and receive) */
 /* CVODE thermodynamics ODE solver */
 #include "./cvodethermosolver.hpp"
 
-std::vector<ThermoState> start_coupldstep(const Observer auto &observer,
+std::vector<ThermoState> start_coupldstep(const size_t ngbxs,
+                                          const Observer auto &observer,
                                           const CvodeThermoSolver &cvode,
-                                          const Kokkos::View<GridBox*> h_gridboxes);
+                                          const Kokkos::View<GridBox *> h_gridboxes);
 
 int proceedtonext_coupldstep(int t_mdl, const int couplstep,
+                             const size_t ngbxs,
                              const std::vector<ThermoState> &previousstates,
                              const Kokkos::View<GridBox *> h_gridboxes,
                              CvodeThermoSolver &cvode);
 
 std::vector<ThermoState>
-recieve_thermodynamics_from_cvode(const CvodeThermoSolver &cvode,
-                                  Kokkos::View<GridBox*> h_gridboxes);
+recieve_thermodynamics_from_cvode(const size_t ngbxs,
+                                  const CvodeThermoSolver &cvode,
+                                  Kokkos::View<GridBox *> h_gridboxes);
 
-void send_thermodynamics_to_cvode(const std::vector<ThermoState> &previousstates,
+void send_thermodynamics_to_cvode(const size_t ngbxs,
+                                  const std::vector<ThermoState> &previousstates,
                                   const Kokkos::View<GridBox *> h_gridboxes,
                                   CvodeThermoSolver &cvode);
 
@@ -75,13 +79,15 @@ length 'couplstep' and decomposed into 4 parts:
 3) run CVODE step (independent, optionally concurrent)
 4) proceed to next step (coupled) */
 {
+  const size_t ngbxs(gridboxes.size());
   int t_mdl = 0; // model time is incremented by proceedtonext_coupledstep
   
   while (t_mdl <= t_end)
   {
     /* start step (in general involves coupling) */
     const std::vector<ThermoState>
-        previousstates = start_coupldstep(sdm.observer, cvode,
+        previousstates = start_coupldstep(ngbxs,
+                                          sdm.observer, cvode,
                                           gridboxes.view_host());
 
     /* advance SDM by couplstep (optionally
@@ -95,23 +101,26 @@ length 'couplstep' and decomposed into 4 parts:
 
     /* prepare for next coupled step (in general involves coupling) */
     gridboxes.on_host(); SDsInGBxs.on_host();
-    t_mdl = proceedtonext_coupldstep(t_mdl, couplstep, previousstates,
-                                      gridboxes.view_host(), cvode);
+    t_mdl = proceedtonext_coupldstep(t_mdl, couplstep, ngbxs,
+                                     previousstates,
+                                     gridboxes.view_host(),
+                                     cvode);
   }
 }
 
-std::vector<ThermoState> start_coupldstep(const Observer auto &observer,
+std::vector<ThermoState> start_coupldstep(const size_t ngbxs,
+                                          const Observer auto &observer,
                                           const CvodeThermoSolver &cvode,
-                                          Kokkos::View<GridBox*> h_gridboxes)
+                                          Kokkos::View<GridBox *> h_gridboxes)
 /* communication of thermodynamic state from CVODE solver to SDM.
 Sets current thermodynamic state of SDM to match that communicated by
 CVODE solver. Then observes each gridbox and then returns vector
 of current thermodynamic states (for later use in SDM) */
 {
   std::vector<ThermoState>
-      currentstates(recieve_thermodynamics_from_cvode(cvode, h_gridboxes));
+      currentstates(recieve_thermodynamics_from_cvode(ngbxs, cvode, h_gridboxes));
 
-  observer.observe_state(h_gridboxes);
+  observer.observe_state(ngbxs, h_gridboxes);
 
   return currentstates;
 }

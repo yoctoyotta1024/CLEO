@@ -9,15 +9,15 @@ Coupling is both ways (send and receive) */
 #include "./timestep_cvodecoupld.hpp"
 
 std::vector<ThermoState>
-  recieve_thermodynamics_from_cvode(const CvodeThermoSolver &cvode,
-                                    Kokkos::View<GridBox*> h_gridboxes)
+recieve_thermodynamics_from_cvode(const size_t ngbxs,
+                                  const CvodeThermoSolver &cvode,
+                                  Kokkos::View<GridBox *> h_gridboxes)
 /* get thermo variables from thermodynamics solver and use
 these to set ThermoState of each gridbox. Return vector
 containing all those Thermostates */
 {
   std::vector<ThermoState> currentstates;
-  const size_t Ngrid = h_gridboxes.size();
-  for (size_t ii(0); ii<Ngrid; ++ii)
+  for (size_t ii(0); ii<ngbxs; ++ii)
   {
     set_thermostate(ii, cvode, h_gridboxes(ii).state);
     currentstates.push_back(h_gridboxes(ii).state);
@@ -27,6 +27,7 @@ containing all those Thermostates */
 }
 
 int proceedtonext_coupldstep(int t_mdl, const int couplstep,
+                             const size_t ngbxs,
                              const std::vector<ThermoState> &previousstates,
                              const Kokkos::View<GridBox *> h_gridboxes,
                              CvodeThermoSolver &cvode)
@@ -35,23 +36,23 @@ to thermodynamics solver (eg. raise in temperature of a
 gridbox due to latent heat release).
 Then increments timestep by couplstep */
 {
-  send_thermodynamics_to_cvode(previousstates, h_gridboxes, cvode);
+  send_thermodynamics_to_cvode(ngbxs, previousstates, h_gridboxes, cvode);
 
   return t_mdl += couplstep;
 }
 
-void send_thermodynamics_to_cvode(const std::vector<ThermoState> &previousstates,
+void send_thermodynamics_to_cvode(const size_t ngbxs,
+                                  const std::vector<ThermoState> &previousstates,
                                   const Kokkos::View<GridBox *> h_gridboxes,
                                   CvodeThermoSolver &cvode)
 /* calculate changes in thermodynamics (temp, qv and qc) due to SDM process
 affecting ThermoState, then reinitialise cvode solver with those changes */
 {
   constexpr int NVARS = 4;
-  const size_t Ngrid = h_gridboxes.size();
 
-  std::vector<double> delta_y(Ngrid * NVARS, 0.0);
+  std::vector<double> delta_y(ngbxs * NVARS, 0.0);
 
-  for (size_t ii(0); ii<Ngrid; ++ii)
+  for (size_t ii(0); ii<ngbxs; ++ii)
   {
     ThermoState delta_state = h_gridboxes(ii).state - previousstates.at(ii);
 
@@ -60,7 +61,7 @@ affecting ThermoState, then reinitialise cvode solver with those changes */
     delta_y[NVARS * ii + 3] = delta_state.qcond;
   }
 
-  std::vector<double> nodelta(Ngrid * NVARS, 0.0);
+  std::vector<double> nodelta(ngbxs * NVARS, 0.0);
   if (delta_y != nodelta)
   {
     cvode.reinitialise(cvode.get_time(), delta_y);

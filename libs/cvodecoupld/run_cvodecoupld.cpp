@@ -45,12 +45,14 @@ and return pool of Kokkos' random number generator. Call
 function to set superdroplet radii to equilibrium wet radius
 if wetradiiinit is true. */
 {
+  const size_t ngbxs(gridboxes.size());
+
   cvode.print_init_ODEdata(step2dimlesstime(couplstep),
                            step2dimlesstime(t_end));
 
-  for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
+  for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    set_thermostate(ii, cvode, gridboxes[ii].state);
+    set_thermostate(ii, cvode, gridboxes(ii).state);
   }
 
   if (wetradiiinit)
