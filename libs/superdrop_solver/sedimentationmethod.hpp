@@ -15,6 +15,7 @@ sedimentation of superdroplets */
 #include "./superdrop.hpp"
 #include "./thermostate.hpp"
 #include "./sdmprocess.hpp"
+#include "./randomgen.hpp"
 
 template <VelocityFormula TerminalVelocity>
 class SedimentationMethod
@@ -51,7 +52,7 @@ public:
   inline void operator()(const int currenttimestep,
                          std::span<SuperdropWithGbxindex> span4SDsinGBx,
                          ThermoState &state,
-                         std::mt19937 &gen) const
+                         URBG &urbg) const
   /* this operator is used as an "adaptor" for using a run_step
   function in order to call sediment_superdroplets. (*hint* run_step
   usually found within a type that satisfies the SdmProcess concept) */

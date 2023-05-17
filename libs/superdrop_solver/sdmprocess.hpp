@@ -15,27 +15,28 @@ collision-coalescence (see ConstTstepProcess struct) */
 
 #include "./superdrop.hpp"
 #include "./thermostate.hpp"
+#include "./randomgen.hpp"
 
 template <typename F>
 concept StepFunc = requires(F f, const int currenttimestep,
                             std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                            ThermoState state,
-                            std::mt19937 gen)
+                            ThermoState &state,
+                            URBG &urbg)
 /* concept StepFunc is all (function-like) types
 (ie. types that can be called with some arguments)
 that have the same signature as the "run_step"
 function (see below in SdmProcess) */
 {
   {
-    f(currenttimestep, span4SDsinGBx, state, gen)
+    f(currenttimestep, span4SDsinGBx, state, urbg)
   };
 };
 
 template <typename P, typename... Args>
 concept SdmProcess = requires(P p, const int currenttimestep,
                               std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                              ThermoState state,
-                              std::mt19937 gen)
+                              ThermoState &state,
+                              URBG &urbg)
 /* concept SdmProcess is all types that meet requirements
 (constraints) of 2 timstepping functions called "on_step"
 and "next_step" and have a "run_step" function */
@@ -47,7 +48,7 @@ and "next_step" and have a "run_step" function */
     p.on_step(currenttimestep)
     } -> std::convertible_to<bool>;
   {
-    p.run_step(currenttimestep, span4SDsinGBx, state, gen)
+    p.run_step(currenttimestep, span4SDsinGBx, state, urbg)
   };
 };
 
@@ -85,18 +86,18 @@ struct CombinedSdmProcess
   void run_step(const int currenttimestep,
                 std::span<SuperdropWithGbxindex> span4SDsinGBx,
                 ThermoState &state,
-                std::mt19937 &gen) const
+                URBG &urbg) const
   /* for combination of 2 SDM proceses, each process is
   run if it's respective on_step returns true */
   {
     if (a.on_step(currenttimestep))
     {
-      a.run_step(currenttimestep, span4SDsinGBx, state, gen);
+      a.run_step(currenttimestep, span4SDsinGBx, state, urbg);
     }
 
     if (b.on_step(currenttimestep))
     {
-      b.run_step(currenttimestep, span4SDsinGBx, state, gen);
+      b.run_step(currenttimestep, span4SDsinGBx, state, urbg);
     }
   }
 };
@@ -125,7 +126,7 @@ struct NullProcess
   void run_step(const int currenttimestep,
                 std::span<SuperdropWithGbxindex> span4SDsinGBx,
                 ThermoState &state,
-                std::mt19937 &gen) const {}
+                URBG &urbg) const {}
 };
 
 template <StepFunc F>

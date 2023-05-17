@@ -21,6 +21,7 @@ and Mahrt, 1st edition. */
 #include "./thermostate.hpp"
 #include "./superdrop.hpp"
 #include "./sdmprocess.hpp"
+#include "./randomgen.hpp"
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;
@@ -89,7 +90,7 @@ public:
   inline void operator()(const int currenttimestep,
                          std::span<SuperdropWithGbxindex> span4SDsinGBx,
                          ThermoState &state,
-                         std::mt19937 &gen) const
+                         URBG &urbg) const
   /* this operator is used as an "adaptor" for using a run_step
   function in order to call condensation_onto_superdroplets.
   (*hint* run_step is usually found within a type that
