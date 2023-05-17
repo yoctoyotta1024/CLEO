@@ -13,6 +13,9 @@ are read from file */
 #include <memory>
 #include <cmath>
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Random.hpp>
+
 /* Coupled model setup */
 #include "claras_SDconstants.hpp"
 #include "initialisation/config.hpp"
@@ -40,7 +43,7 @@ void timestep_thermofromfile(const int t_end,
                             const int couplstep,
                             const RunSDMStep<auto, auto, auto> &sdm,
                             ThermodynamicsFromFile &thermodyn,
-                            std::mt19937 &gen,
+                            Kokkos::Random_XorShift64_Pool<> &genpool,
                             std::vector<GridBox> &gridboxes,
                             std::vector<SuperdropWithGbxindex> &SDsInGBxs);
 
@@ -50,10 +53,11 @@ void recieve_thermodynamics(const double time,
 /* Sets current thermodynamic state of SDM to match that given
 by the ThermodnamicsFromFile 'thermodyn' */
 
-inline std::mt19937 preparetotimestep()
-/* return random number generator used in SDM */
+inline Kokkos::Random_XorShift64_Pool<> preparetotimestep()
+/* return pool of Kokkos' random number
+generators used in SDM */
 {
-  return std::mt19937(std::random_device()());
+  return Kokkos::Random_XorShift64_Pool<>(std::random_device{}());
 }
 
 inline void start_step(const int t_mdl,
@@ -101,11 +105,11 @@ superdroplet model (SDM) using thermodynamics read from files */
   std::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
 
   /* prepare model for timestepping */
-  auto gen = preparetotimestep();
+  auto genpool = preparetotimestep();
   
   /* run model from t=0 to t=t_end */
   timestep_thermofromfile(t_end, couplstep, sdm, thermodyn,
-                          gen, gridboxes, SDsInGBxs);
+                          genpool, gridboxes, SDsInGBxs);
 
   std::cout << "\n ---- Uncoupled SDM Run Complete ---- \n";
 }
@@ -114,7 +118,7 @@ void timestep_thermofromfile(const int t_end,
                             const int couplstep,
                             const RunSDMStep<auto, auto, auto> &sdm,
                             ThermodynamicsFromFile &thermodyn,
-                            std::mt19937 &gen,
+                            Kokkos::Random_XorShift64_Pool<> &genpool,
                             std::vector<GridBox> &gridboxes,
                             std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep model from t=0 to t=tend. Each step is
@@ -133,7 +137,7 @@ length 'couplstep' and is decomposed into 4 parts:
 
     /* advance SDM by couplstep
     (optionally concurrent to thermodynamics solver) */
-    sdm.run_sdmstep(t_mdl, couplstep, gen, gridboxes, SDsInGBxs);
+    sdm.run_sdmstep(t_mdl, couplstep, genpool, gridboxes, SDsInGBxs);
 
     /* advance thermodynamics solver by couplstep
     (optionally concurrent to SDM) */

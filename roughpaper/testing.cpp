@@ -147,7 +147,7 @@ int main(int argc, char* argv[])
   /* vector containing all gridboxes that makeup the SDM domain */
   std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
   
-  auto gen = std::mt19937(std::random_device()());
+  // auto gen = std::mt19937(std::random_device()());
 
   int t_sdm = 0;
   int nextt = 5;

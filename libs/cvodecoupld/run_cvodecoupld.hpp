@@ -14,6 +14,9 @@ Coupling is both ways (send and receive) */
 #include <memory>
 #include <algorithm>
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Random.hpp>
+
 /* Coupled model setup */
 #include "claras_SDconstants.hpp"
 #include "./timestep_cvodecoupld.hpp"
@@ -37,14 +40,22 @@ Coupling is both ways (send and receive) */
 
 namespace dlc = dimless_constants;
 
-std::mt19937 preparetotimestep(CvodeThermoSolver &cvode,
-                                  std::vector<GridBox> &gridboxes,
-                                  const bool wetradiiinit,
-                                  const int t_end,
-                                  const int couplstep);
+Kokkos::Random_XorShift64_Pool<>
+preparetotimestep(CvodeThermoSolver &cvode,
+                  std::vector<GridBox> &gridboxes,
+                  const bool wetradiiinit,
+                  const int t_end,
+                  const int couplstep);
+/* print some details about the cvode thermodynamics solver setup
+and return pool of Kokkos' random number generator. Call
+function to set superdroplet radii to equilibrium wet radius
+if wetradiiinit is true. */
 
 std::vector<double> initcvodethermo(const size_t num_gridboxes,
-                              const Config &config);
+                                    const Config &config);
+/* return vector of dimensionless initial conditions
+for thermodyanmic variables (p, temp, qv, qc) to
+initialise cvode thermodynamics solver */
 
 void run_cvodecoupld(const Config &config,
                   const RunSDMStep<auto, auto, auto> &sdm,
@@ -69,12 +80,12 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   std::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
 
   /* prepare coupled model for timestepping */
-  auto gen = preparetotimestep(cvode, gridboxes, config.wetradiiinit,
+  auto genpool = preparetotimestep(cvode, gridboxes, config.wetradiiinit,
                                   t_end, couplstep);
 
   /* run coupled model from t=0 to t=t_end */
   timestep_cvodecoupld(t_end, couplstep, sdm, cvode,
-                    gen, gridboxes, SDsInGBxs);
+                    genpool, gridboxes, SDsInGBxs);
 
   std::cout << "\n ---- CVODE-SDM Coupled Run Complete ---- \n";
 }

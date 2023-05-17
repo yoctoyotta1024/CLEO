@@ -34,14 +34,16 @@ initialise cvode thermodynamics solver */
   return y_init;
 }
 
-std::mt19937 preparetotimestep(CvodeThermoSolver &cvode,
-                               std::vector<GridBox> &gridboxes,
-                               const bool wetradiiinit,
-                               const int t_end,
-                               const int couplstep)
+Kokkos::Random_XorShift64_Pool<>
+preparetotimestep(CvodeThermoSolver &cvode,
+                  std::vector<GridBox> &gridboxes,
+                  const bool wetradiiinit,
+                  const int t_end,
+                  const int couplstep)
 /* print some details about the cvode thermodynamics solver setup
-and return a random number generator. Call funciton to set superdroplet
-radii to equilibrium wet radius if wetradiiinit is true. */
+and return pool of Kokkos' random number generator. Call
+function to set superdroplet radii to equilibrium wet radius
+if wetradiiinit is true. */
 {
   cvode.print_init_ODEdata(step2dimlesstime(couplstep),
                            step2dimlesstime(t_end));
@@ -56,5 +58,5 @@ radii to equilibrium wet radius if wetradiiinit is true. */
     set_superdroplets_to_wetradius(gridboxes);
   }
 
-  return std::mt19937(std::random_device()());
+  return Kokkos::Random_XorShift64_Pool<>(std::random_device{}()); // pool of Kokkos' random number generators
 }

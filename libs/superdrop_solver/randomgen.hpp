@@ -14,8 +14,12 @@ superdroplet's vector) */
 
 template <class DeviceType>
 struct URBG
-/* struct staisfying requirement to meet requirements
-of C++11 UniformRandomBitGenerator Object */
+/* struct wrapping Kokkos random number generator to 
+satisfy requirements of C++11 UniformRandomBitGenerator 
+bject for a 32 bit unsigned int. Useful e.g. so that
+gen's urand() function can be used in std::shuffle 
+to generate random pairs of superdroplets
+during collision process */
 {
   using result_type = uint32_t;
   Kokkos::Random_XorShift64<DeviceType> &gen;

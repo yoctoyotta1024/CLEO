@@ -57,7 +57,7 @@ public:
       }
 
   void run_sdmstep(const int t_mdl, const int onestep,
-                   std::mt19937 &gen,
+                   Kokkos::Random_XorShift64_Pool<> &genpool,
                    std::vector<GridBox> &gridboxes,
                    std::vector<SuperdropWithGbxindex> &SDsInGBxs) const
   /* run SDM for each gridbox from time t_mdl to t_mdl+onestep
@@ -80,12 +80,14 @@ public:
       using sdmprocess subttimestepping routine */
       for (auto &gbx : gridboxes)
       {
+        auto gen = genpool.get_state();
         for (int subt = t_sdm; subt < nextt;
              subt = sdmprocess.next_step(subt))
         {
           sdmprocess.run_step(subt, gbx.span4SDsinGBx,
-                              gbx.state, gen);
+                              gbx.state, URBG(gen));
         }
+        genpool.free_state(gen);
       }
 
       t_sdm = nextt;

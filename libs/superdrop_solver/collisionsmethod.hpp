@@ -22,6 +22,7 @@ collision events in superdroplet model */
 #include "./thermostate.hpp"
 #include "./coalescencekernel.hpp"
 #include "./sdmprocess.hpp"
+#include "./randomgen.hpp"
 
 namespace dlc = dimless_constants;
 

@@ -61,7 +61,7 @@ void timestep_cvodecoupld(const int t_end,
                        const int couplstep,
                        const RunSDMStep<auto, auto, auto> &sdm,
                        CvodeThermoSolver &cvode,
-                       std::mt19937 &gen,
+                       Kokkos::Random_XorShift64_Pool<> &genpool,
                        std::vector<GridBox> &gridboxes,
                        std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep coupled model from t=0 to t=tend. Each coupled step is
@@ -82,7 +82,7 @@ length 'couplstep' and decomposed into 4 parts:
 
     /* advance SDM by couplstep (optionally
     concurrent to CVODE thermodynamics solver) */
-    sdm.run_sdmstep(t_mdl, couplstep, gen, gridboxes, SDsInGBxs);
+    sdm.run_sdmstep(t_mdl, couplstep, genpool, gridboxes, SDsInGBxs);
 
     /* advance CVODE thermodynamics solver by
     couplstep (optionally concurrent to SDM) */
