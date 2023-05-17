@@ -123,7 +123,7 @@ class NsupersPerGridBoxObserver
       const size_t Ngrid = h_gridboxes.size();
       for (size_t ii(0); ii<Ngrid; ++ii)
       {
-        size_t nsupers = h_gridbooxes(ii).span4SDsinGBx.size();
+        size_t nsupers = h_gridboxes(ii).span4SDsinGBx.size();
         zarr.value_to_storage(nsupers);
       }
 

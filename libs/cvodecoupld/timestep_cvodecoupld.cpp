@@ -10,16 +10,17 @@ Coupling is both ways (send and receive) */
 
 std::vector<ThermoState>
   recieve_thermodynamics_from_cvode(const CvodeThermoSolver &cvode,
-                                    Kokkos::vector<GridBox> &gridboxes)
+                                    Kokkos::View<GridBox*> h_gridboxes)
 /* get thermo variables from thermodynamics solver and use
 these to set ThermoState of each gridbox. Return vector
 containing all those Thermostates */
 {
   std::vector<ThermoState> currentstates;
-  for (long unsigned int ii = 0; ii < gridboxes.size(); ++ii)
+  const size_t Ngrid = h_gridboxes.size();
+  for (size_t ii(0); ii<Ngrid; ++ii)
   {
-    set_thermostate(ii, cvode, gridboxes[ii].state);
-    currentstates.push_back(gridboxes[ii].state);
+    set_thermostate(ii, cvode, h_gridboxes(ii).state);
+    currentstates.push_back(h_gridboxes(ii).state);
   }
 
   return currentstates;
