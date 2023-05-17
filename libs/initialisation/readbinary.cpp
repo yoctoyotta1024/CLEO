@@ -83,12 +83,10 @@ to print to terminal. Return current position in file (after reading) */
 {
   file.seekg(off, std::ios::beg);
 
-  const unsigned int nchars = charbytes / sizeof(char);
-  char gblmchars[nchars]; // buffer for chars that form global metadata string
-
-  file.read(gblmchars, charbytes);
-
-  const std::string metastr(gblmchars);
+  const size_t nchars = charbytes / sizeof(char);
+  std::string metastr(nchars, ' ');
+  file.read(&metastr[0], nchars);
+  
   std::cout << "----------------- gridfile global metastring -----------------\n"
             << metastr
             << "\n--------------------------------------------------------------\n";
