@@ -83,17 +83,19 @@ public:
       gridboxes.on_device(); SDsInGBxs.on_device();
       auto d_gridboxes = gridboxes.view_device();
       const size_t Ngrid = d_gridboxes.size();
-      for (size_t ii(0); ii < Ngrid; ++ii) 
-      {
-        URBG urbg(genpool.get_state());
-        for (int subt = t_sdm; subt < nextt;
-             subt = sdmprocess.next_step(subt))
-        {
-          sdmprocess.run_step(subt, d_gridboxes(ii).span4SDsinGBx,
-                              d_gridboxes(ii).state, urbg);
-        }
-        genpool.free_state(urbg.gen);
-      }
+
+      Kokkos::parallel_for(
+          "run_sdmstep_perGBx", Ngrid,
+          KOKKOS_CLASS_LAMBDA(const size_t ii) {
+            URBG urbg(genpool.get_state());
+            for (int subt = t_sdm; subt < nextt;
+                 subt = sdmprocess.next_step(subt))
+            {
+              sdmprocess.run_step(subt, d_gridboxes(ii).span4SDsinGBx,
+                                  d_gridboxes(ii).state, urbg);
+            }
+            genpool.free_state(urbg.gen);
+          });
 
       t_sdm = nextt;
     }
