@@ -31,19 +31,19 @@ both ways (send and receive) */
 
 std::vector<ThermoState> start_coupldstep(const Observer auto &observer,
                                             const CvodeThermoSolver &cvode,
-                                            std::vector<GridBox> &gridboxes);
+                                            Kokkos::vector<GridBox> &gridboxes);
 
 int proceedtonext_coupldstep(int t_mdl, const int couplstep,
                                const std::vector<ThermoState> &previousstates,
-                               const std::vector<GridBox> &gridboxes,
+                               const Kokkos::vector<GridBox> &gridboxes,
                                CvodeThermoSolver &cvode);
 
 std::vector<ThermoState>
 recieve_thermodynamics_from_cvode(const CvodeThermoSolver &cvode,
-                                 std::vector<GridBox> &gridboxes);
+                                 Kokkos::vector<GridBox> &gridboxes);
 
 void send_thermodynamics_to_cvode(const std::vector<ThermoState> &previousstates,
-                                      const std::vector<GridBox> &gridboxes,
+                                      const Kokkos::vector<GridBox> &gridboxes,
                                       CvodeThermoSolver &cvode);
 
 inline void set_thermostate(const long unsigned int ii,
@@ -65,7 +65,7 @@ void timestep_cvodecoupld(const int t_end,
                        const RunSDMStep<auto, auto, auto> &sdm,
                        CvodeThermoSolver &cvode,
                        Kokkos::Random_XorShift64_Pool<> &genpool,
-                       std::vector<GridBox> &gridboxes,
+                       Kokkos::vector<GridBox> &gridboxes,
                        Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep coupled model from t=0 to t=tend. Each coupled step is
 length 'couplstep' and decomposed into 4 parts:
@@ -99,7 +99,7 @@ length 'couplstep' and decomposed into 4 parts:
 
 std::vector<ThermoState> start_coupldstep(const Observer auto &observer,
                                             const CvodeThermoSolver &cvode,
-                                            std::vector<GridBox> &gridboxes)
+                                            Kokkos::vector<GridBox> &gridboxes)
 /* communication of thermodynamic state from CVODE solver to SDM.
 Sets current thermodynamic state of SDM to match that communicated by
 CVODE solver. Then observes each gridbox and then returns vector

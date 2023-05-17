@@ -10,7 +10,7 @@ Coupling is both ways (send and receive) */
 
 std::vector<ThermoState>
   recieve_thermodynamics_from_cvode(const CvodeThermoSolver &cvode,
-                                 std::vector<GridBox> &gridboxes)
+                                    Kokkos::vector<GridBox> &gridboxes)
 /* get thermo variables from thermodynamics solver and use
 these to set ThermoState of each gridbox. Return vector
 containing all those Thermostates */
@@ -27,7 +27,7 @@ containing all those Thermostates */
 
 int proceedtonext_coupldstep(int t_mdl, const int couplstep,
                                const std::vector<ThermoState> &previousstates,
-                               const std::vector<GridBox> &gridboxes,
+                               const Kokkos::vector<GridBox> &gridboxes,
                                CvodeThermoSolver &cvode)
 /* sends changes in thermodynamics due to SDM microphysics
 to thermodynamics solver (eg. raise in temperature of a
@@ -41,7 +41,7 @@ Then increments timestep by couplstep */
 }
 
 void send_thermodynamics_to_cvode(const std::vector<ThermoState> &previousstates,
-                                      const std::vector<GridBox> &gridboxes,
+                                      const Kokkos::vector<GridBox> &gridboxes,
                                       CvodeThermoSolver &cvode)
 /* calculate changes in thermodynamics (temp, qv and qc) due to SDM process
 affecting ThermoState, then reinitialise cvode solver with those changes */

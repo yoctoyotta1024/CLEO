@@ -43,7 +43,7 @@ namespace dlc = dimless_constants;
 
 Kokkos::Random_XorShift64_Pool<>
 preparetotimestep(CvodeThermoSolver &cvode,
-                  std::vector<GridBox> &gridboxes,
+                  Kokkos::vector<GridBox> &gridboxes,
                   const bool wetradiiinit,
                   const int t_end,
                   const int couplstep);
@@ -78,7 +78,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
                                               config.SDnspace, solute);
 
   /* vector containing all gridboxes in SDM domain */
-  std::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
+  Kokkos::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
 
   /* prepare coupled model for timestepping */
   auto genpool = preparetotimestep(cvode, gridboxes, config.wetradiiinit,

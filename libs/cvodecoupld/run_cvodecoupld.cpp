@@ -36,7 +36,7 @@ initialise cvode thermodynamics solver */
 
 Kokkos::Random_XorShift64_Pool<>
 preparetotimestep(CvodeThermoSolver &cvode,
-                  std::vector<GridBox> &gridboxes,
+                  Kokkos::vector<GridBox> &gridboxes,
                   const bool wetradiiinit,
                   const int t_end,
                   const int couplstep)
