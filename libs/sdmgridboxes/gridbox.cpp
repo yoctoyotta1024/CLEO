@@ -5,6 +5,7 @@ a gridbox */
 
 #include "gridbox.hpp"
 
+KOKKOS_FUNCTION
 GridBox::GridBox(const unsigned int ii,
                  const Maps4GridBoxes &gbxmaps,
                  std::vector<SuperdropWithGbxindex> &SDsInGBxs)
@@ -19,7 +20,7 @@ are default behaviour initialised. */
   iscorrect_span_for_gbxindex(gbxmaps);
 }
 
-void GridBox::print_statevolume()
+KOKKOS_FUNCTION void GridBox::print_statevolume()
 /* print's dimensionless value for gridbox state's 
 volume. Also prints true volume = state.volume * COORD0^3 [m^3] */
 {
@@ -28,6 +29,7 @@ volume. Also prints true volume = state.volume * COORD0^3 [m^3] */
             << state.volume * pow(dlc::COORD0, 3.0) << "m^3\n";
 }
 
+KOKKOS_FUNCTION
 void GridBox::set_span(std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* assumes SDsInGBxs is ordered based on sd_gbxindex
 from lowest to highest. Finds first and last SDWithGBx that has 
@@ -51,6 +53,7 @@ sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
   span4SDsinGBx = {low, up};  
 }
 
+KOKKOS_FUNCTION
 void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps)
 {
   for (auto &SDinGBx : span4SDsinGBx)
@@ -70,6 +73,7 @@ void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps)
   }
 }
 
+KOKKOS_FUNCTION
 void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
                                     const double coord)
 {
@@ -86,8 +90,9 @@ void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
   }
 }
 
-std::vector<GridBox> create_gridboxes(const Maps4GridBoxes &gbxmaps,
-                                      std::vector<SuperdropWithGbxindex> &SDsInGBxs)
+KOKKOS_FUNCTION std::vector<GridBox>
+create_gridboxes(const Maps4GridBoxes &gbxmaps,
+                 std::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from gbxmaps.gbxidxs, and a span of the
 superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
@@ -103,6 +108,7 @@ superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
   return gridboxes;
 }
 
+KOKKOS_FUNCTION
 void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes)
 /* for each gridbox, set the radius of each superdroplet (SD) to
 whichever is larger out of their dry radius or equlibrium wet radius
