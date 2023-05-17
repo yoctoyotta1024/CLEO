@@ -30,31 +30,35 @@ public:
   std::pair<double, double> uvel; // defined on {lower, upper} x faces of volume
   std::pair<double, double> vvel; // defined on {lower, upper} y faces of volume
 
+  KOKKOS_INLINE_FUNCTION ThermoState() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~ThermoState() = default; // Kokkos requirement for a (dual)View
+
   ThermoState(const double vol) : volume(vol), time(), press(),
                                   temp(), qvap(), qcond(),
                                   wvel(), uvel(), vvel(){};
 
-  double get_volume() const {return volume;}
+  KOKKOS_INLINE_FUNCTION double get_volume() const { return volume; }
 
-  double wvelcentre() const
+  KOKKOS_INLINE_FUNCTION double wvelcentre() const
   /* return wvel defined at centre of volume */
   {
     return (wvel.first + wvel.second) / 2;
   }
 
-  double uvelcentre() const
+  KOKKOS_INLINE_FUNCTION double uvelcentre() const
   /* return uvel defined at centre of volume */
   {
     return (uvel.first + uvel.second) / 2;
   }
 
-  double vvelcentre() const
+  KOKKOS_INLINE_FUNCTION double vvelcentre() const
   /* return vvel defined at centre of volume */
   {
     return (vvel.first + vvel.second) / 2;
   }
 
-  ThermoState operator-(const ThermoState &prevstate) const
+  KOKKOS_INLINE_FUNCTION ThermoState
+  operator-(const ThermoState &prevstate) const
   {
     auto subtract = [](const std::pair<double, double> a,
                        const std::pair<double, double> b)
@@ -74,7 +78,8 @@ public:
     return delta_state;
   }
 
-  bool operator==(const ThermoState &prevstate) const
+  KOKKOS_INLINE_FUNCTION bool
+  operator==(const ThermoState &prevstate) const
   {
     if (temp == prevstate.temp &&
         qvap == prevstate.qvap &&
