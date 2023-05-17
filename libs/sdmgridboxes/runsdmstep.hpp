@@ -41,13 +41,12 @@ private:
 
   KOKKOS_INLINE_FUNCTION
   void substep_sdmprocess(const int t_sdm, const int nextt,
+                          const size_t ngbxs,
                           Kokkos::Random_XorShift64_Pool<> &genpool,
                           Kokkos::View<GridBox *> d_gridboxes) const
   {
-    const size_t Ngrid = d_gridboxes.size();
-
     Kokkos::parallel_for(
-        "run_sdmstep_perGBx", Ngrid,
+        "run_sdmstep_perGBx", ngbxs,
         KOKKOS_CLASS_LAMBDA(const size_t ii) {
           URBG urbg(genpool.get_state());
 
@@ -94,6 +93,7 @@ public:
   {
     /* sdm model time is incremented until >= t_mdl+onestep
     allowing for motion and process subtimestepping*/
+    const size_t ngbxs(gridboxes.size());
     int t_sdm(t_mdl);
     while (t_sdm < t_mdl + onestep)
     {
@@ -108,7 +108,7 @@ public:
       using SDM subttimestepping routine */
       gridboxes.on_device(); SDsInGBxs.on_device();
       auto d_gridboxes = gridboxes.view_device();
-      substep_sdmprocess(t_sdm, nextt, genpool, d_gridboxes);
+      substep_sdmprocess(t_sdm, nextt, ngbxs, genpool, d_gridboxes);
 
       t_sdm = nextt;
     }

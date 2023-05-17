@@ -59,8 +59,9 @@ class TimeObserver
         throw std::invalid_argument(errmsg);
       }
     }
-    
-    void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
+
+    void observe_state(const size_t ngbxs,
+                       const Kokkos::View<GridBox *> h_gridboxes) const
     /* observe time of 0th gridbox and write it to an array
     as determined by the CoordinateStorage instance */
     {
@@ -84,15 +85,15 @@ class GridBoxIndexObserver
         throw std::invalid_argument(errmsg);
       }
     }
-    
-    void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
+
+    void observe_state(const size_t ngbxs,
+                       const Kokkos::View<GridBox *> h_gridboxes) const
     /* observe time of 0th gridbox and write it to an array
     as determined by the CoordinateStorage instance */
     {
       if (zarr.get_ndata() == 0)
       {
-        const size_t Ngrid = h_gridboxes.size();
-        for (size_t ii(0); ii<Ngrid; ++ii)
+        for (size_t ii(0); ii<ngbxs; ++ii)
         { 
           zarr.value_to_storage(h_gridboxes(ii).gbxindex);
         }
@@ -115,13 +116,13 @@ class NsupersPerGridBoxObserver
         throw std::invalid_argument(errmsg);
       }
     }
-    
-    void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
+
+    void observe_state(const size_t ngbxs,
+                       const Kokkos::View<GridBox *> h_gridboxes) const
     /* observe time of 0th gridbox and write it to an array
     as determined by the CoordinateStorage instance */
     {
-      const size_t Ngrid = h_gridboxes.size();
-      for (size_t ii(0); ii<Ngrid; ++ii)
+      for (size_t ii(0); ii<ngbxs; ++ii)
       {
         size_t nsupers = h_gridboxes(ii).span4SDsinGBx.size();
         zarr.value_to_storage(nsupers);
@@ -151,13 +152,13 @@ class SDMassNthMomentObserver
         throw std::invalid_argument(errmsg);
       }
     }
-    
-    void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
+
+    void observe_state(const size_t ngbxs,
+                       const Kokkos::View<GridBox *> h_gridboxes) const
     /* observe time of 0th gridbox and write it to an array
     as determined by the CoordinateStorage instance */
     {
-      const size_t Ngrid = h_gridboxes.size();
-      for (size_t ii(0); ii<Ngrid; ++ii)
+      for (size_t ii(0); ii<ngbxs; ++ii)
       {
         const double moment = massnthmoment(h_gridboxes(ii).span4SDsinGBx,
                                             nth_moment);
@@ -176,15 +177,15 @@ private:
 
 public:
   SDsAttributeObserver(ContiguousRaggedSDStorage &zarr) : zarr(zarr) {}
-  
-  void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
+
+  void observe_state(const size_t ngbxs,
+                     const Kokkos::View<GridBox *> h_gridboxes) const
   /* observe superdroplets by writing their data to contigious
   ragged represented arrays as determined by the 
   ContiguousRaggedSDStorage instance */
   {
     size_t nsupers(0);
-    const size_t Ngrid = h_gridboxes.size();
-    for (size_t ii(0); ii<Ngrid; ++ii)
+    for (size_t ii(0); ii<ngbxs; ++ii)
     {
       for (auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
       {
@@ -204,14 +205,14 @@ private:
 public:
   SDsGbxindexObserver(ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr) : zarr(zarr) {}
 
-  void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
+  void observe_state(const size_t ngbxs,
+                     const Kokkos::View<GridBox *> h_gridboxes) const
   /* observe superdroplets by writing their data to contigious
   ragged represented arrays as determined by the 
   ContiguousRaggedSDStorage instance */
   {
     size_t nsupers(0);
-    const size_t Ngrid = h_gridboxes.size();
-    for (size_t ii(0); ii<Ngrid; ++ii)
+    for (size_t ii(0); ii<ngbxs; ++ii)
     {
       for (auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
       {

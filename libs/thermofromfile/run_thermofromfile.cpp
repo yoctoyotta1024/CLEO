@@ -6,14 +6,13 @@ are read from file */
 
 #include "run_thermofromfile.hpp"
 
-void recieve_thermodynamics(const double time,
+void recieve_thermodynamics(const size_t ngbxs, const double time,
                             const ThermodynamicsFromFile &thermodyn,
                             Kokkos::View<GridBox*> h_gridboxes)
 /* Sets current thermodynamic state of SDM (time, p, temp, qv, etc.)
 to match that given by the ThermodnamicsFromFile 'thermodyn' */
 {
-  const size_t Ngrid = h_gridboxes.size();
-  for (size_t ii(0); ii < Ngrid; ++ii)
+  for (size_t ii(0); ii < ngbxs; ++ii)
   {
     auto &gbx = h_gridboxes(ii);
 

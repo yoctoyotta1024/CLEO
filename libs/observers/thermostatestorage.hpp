@@ -48,13 +48,13 @@ struct ThermoIntoStore
 class ThermoStateStorage
 {
 private:
-  FSStore &store;           // file system store satisfying zarr store specificaiton v2
+  FSStore &store;          // file system store satisfying zarr store specificaiton v2
   ThermoIntoStore buffers; // buffers and their handler functions for wrting SD data to store
 
-  const size_t chunksize; // fixed size of array chunks (=max no. datapoints in buffer before writing)
-  unsigned int chunkcount;      // number of chunks of array so far written to store
-  unsigned int bufferfill;      // number of datapoints so far copied into buffer
-  unsigned int ndata; // number of data points that have been observed should = nobs * ngridboxes
+  const size_t chunksize;  // fixed size of array chunks (=max no. datapoints in buffer before writing)
+  unsigned int chunkcount; // number of chunks of array so far written to store
+  unsigned int bufferfill; // number of datapoints so far copied into buffer
+  unsigned int ndata;      // number of data points that have been observed should = nobs * ngridboxes
 
   const unsigned int zarr_format = 2;    // storage spec. version 2
   const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
