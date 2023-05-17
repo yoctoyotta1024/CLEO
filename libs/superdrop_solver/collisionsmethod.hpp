@@ -57,8 +57,7 @@ private:
   is coalescence kernel (see Shima 2009 eqn 3) */
 
   void collide_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                             std::mt19937 &gen,
-                             const double VOLUME) const
+                             URBG &urbg, const double VOLUME) const
   /* Superdroplet collision-coalescence method according to Shima et al. 2009.
   For some 'VOLUME' [m^3] in which the collisions occur, this function
   determines whether of not coalescence occurs from Monte-Carlo collisions of
@@ -75,19 +74,19 @@ private:
 
     /* Randomly shuffle order of superdroplet objects
     in order to generate random pairs */
-    std::shuffle(span4SDsinGBx.begin(), span4SDsinGBx.end(), gen);
+    std::shuffle(span4SDsinGBx.begin(), span4SDsinGBx.end(), urbg);
 
     /* collide all randomly generated pairs of SDs */
     for (int i = 1; i < nsupers; i += 2)
     {
-      collide_superdroplet_pair(gen, span4SDsinGBx[i-1].superdrop,
+      collide_superdroplet_pair(urbg, span4SDsinGBx[i-1].superdrop,
                                 span4SDsinGBx[i].superdrop, scale_p, VOLUME);
     }
  
   }
 
 
-  void collide_superdroplet_pair(std::mt19937 &gen, Superdrop &dropA,
+  void collide_superdroplet_pair(URBG &urbg, Superdrop &dropA,
                                  Superdrop &dropB, const int scale_p,
                                  const double VOLUME) const
   /* Monte Carlo Routine according to Shima et al. 2009
@@ -110,7 +109,7 @@ private:
     const double prob = scale_p * std::max(eps1, eps2) * prob_jk;
 
     /* 3. Monte Carlo step: randomly determine coalescence gamma factor */
-    const size_t gamma = monte_carlo_gamma(gen, prob, eps1, eps2);
+    const size_t gamma = monte_carlo_gamma(urbg, prob, eps1, eps2);
 
     /* 4. coalesce particles if gamma != 0 */
     if (gamma != 0)
@@ -150,14 +149,14 @@ private:
     }
   }
 
-  size_t monte_carlo_gamma(std::mt19937 &gen, const double prob,
+  size_t monte_carlo_gamma(URBG &urbg, const double prob,
                         const size_t eps1, const size_t eps2) const
   /* calculates value of gamma factor in
   Monte Carlo collision-coalescence process
   according to Shima et al. 2009 */
   {
     std::uniform_real_distribution<> dis(0.0, 1.0);
-    const double phi = dis(gen); // random number phi in range [0,1]
+    const double phi = dis(urbg); // random number phi in range [0,1]
 
     size_t gamma = 0;
     if (phi < (prob - floor(prob)))
@@ -242,13 +241,13 @@ public:
   inline void operator()(const int currenttimestep,
                   std::span<SuperdropWithGbxindex> span4SDsinGBx,
                   ThermoState &state,
-                  std::mt19937 &gen) const
+                  URBG &urbg) const
   /* this operator is used as an "adaptor" for using a run_step
   function in order to call collide_superdroplets. (*hint* run_step
   is usually found within a type that satisfies the SdmProcess concept) */
   {
     const double VOLUME = state.get_volume() * pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
-    collide_superdroplets(span4SDsinGBx, gen, VOLUME);
+    collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
   }
 };
 
