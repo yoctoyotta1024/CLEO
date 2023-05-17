@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
                                             config.doAlterThermo, config.cond_iters,
                                             config.cond_nsubsteps, config.cond_rtol,
                                             config.cond_atol));
-  const auto sdmotion(NullMotion{});
+  const MoveSuperdropsInDomain sdmmotion(NullMotion{});
 
   /* create observer from combination of chosen observers */
   FSStore fsstore(config.zarrbasedir);
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
                             sdattrs_to_observe());
   const auto observer = create_observer(zarrstores);
 
-  const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
+  const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 
   Kokkos::initialize(argc, argv);
   {

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
   const auto sdmprocess(create_sdmprocess(config, mdlsteps));
-  const auto sdmotion(create_sdmotion(mdlsteps.motionstep));
+  const MoveSuperdropsInDomain sdmmotion(create_sdmotion(mdlsteps.motionstep));
 
   /* create observer from combination of chosen observers */
   FSStore fsstore(config.zarrbasedir);
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
                             sdattrs_to_observe());
   const auto observer = create_observer(zarrstores);
 
-  const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
+  const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 
   Kokkos::initialize(argc, argv);
   {

@@ -111,9 +111,8 @@ int main(int argc, char *argv[])
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
   const auto sdmprocess(CollisionsProcess(mdlsteps.collsubstep,
                                        &step2realtime,
-                                       GolovinProb(dlc::R0)));
-    
-  const auto sdmotion(NullMotion{});
+                                       GolovinProb(dlc::R0)));    
+  const MoveSuperdropsInDomain sdmmotion(NullMotion{});
 
   /* create observer from combination of chosen observers */
   FSStore fsstore(config.zarrbasedir);
@@ -122,7 +121,7 @@ int main(int argc, char *argv[])
                             sdattrs_to_observe());
   const auto observer = create_observer(zarrstores);
 
-  const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
+  const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 
   Kokkos::initialize(argc, argv);
   {
