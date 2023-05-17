@@ -26,12 +26,14 @@ isfigures = [True, True]
 zlim = 750
 npergbx = 16
 nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+# nsupers = 1024
 ### ---------------------------------------------------------------- ###
 
 ### ------------ Choice of Superdroplet Radii Generator ------------ ###
 # monor                = 1e-6                        # all SDs have this same radius [m]
 # radiigen  = initattributes.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
+# rspan                = [1e-8, 9e-5]                # max and min range of radii to sample [m]
 rspan                = [3e-9, 3e-6]                # max and min range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]
@@ -48,42 +50,36 @@ radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled 
 # geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
 # geosigs              = [1.55, 2.3, 2]                    
 # scalefacs            = [1e6, 0.3e6, 0.025e6]   
-geomeans             = [0.02e-6, 0.15e-6]               
-geosigs              = [1.4, 1.6]                    
-scalefacs            = [6e6, 4e6]   
-numconc = np.sum(scalefacs)
-radiiprobdist = radiiprobdistribs.LnNormal(geomeans, geosigs, scalefacs)
+# geomeans             = [0.02e-6, 0.15e-6]               
+# geosigs              = [1.4, 1.6]                    
+# scalefacs            = [6e6, 4e6]   
+# numconc = np.sum(scalefacs)
+# radiiprobdist = radiiprobdistribs.LnNormal(geomeans, geosigs, scalefacs)
  
-# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-# radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
+volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
+numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
+radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
-# coord3gen            = None                        # do not generate superdroplet coord3s
-
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen = initattributes.MonoCoordGen(monocoord3)
-               
-coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
+# coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
+coord3gen            = None                        # do not generate superdroplet coord3s
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord1 Generator ------------- ###
-# coord1gen            = None                        # do not generate superdroplet coord1s
-
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
 # coord1gen = initattributes.MonoCoordGen(monocoord1)
-         
 coord1gen            = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
+coord1gen            = None                        # do not generate superdroplet coord1s
 ### ---------------------------------------------------------------- ###
 
 ### ---------- Choice of Superdroplet Coord2 Generator ------------- ###
-coord2gen            = None                        # do not generate superdroplet coord2s
-
 # monocoord2           = 1000                        # all SDs have this same coord2 [m] 
 # coord2gen = initattributes.MonoCoordGen(monocoord2)
-         
 # coord2gen             = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
+coord2gen            = None                        # do not generate superdroplet coord2s
 ### ---------------------------------------------------------------- ###
 
 Path(binpath).mkdir(exist_ok=True) 

@@ -138,7 +138,7 @@ def create_allsuperdropattrs(nsupersdict, initattrsgen,
   return attrs
 
 def set_arraydtype(arr, dtype):
-   
+
   og = type(arr[0])
   if og != dtype: 
     arr = np.array(arr, dtype=dtype)
