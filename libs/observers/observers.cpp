@@ -25,13 +25,14 @@ by "lineend" string with precision "prec" */
             << state.qcond << "]\n";
 }
 
-void PrintObserver::observe_state(const std::vector<GridBox> &gridboxes) const
+void PrintObserver::observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
 /* print t, kinematic data (p, temp, qv, qc) and total
 number of sueprdrops to terminal */
 {
-
-  for (auto &gbx : gridboxes)
+  const size_t Ngrid = h_gridboxes.size();
+  for (size_t ii(0); ii < Ngrid; ++ii)
   {
+    const auto &gbx = h_gridboxes(ii);
     std::cout << "GBx " << gbx.gbxindex << ": "
               << "t=" << std::fixed
               << std::setprecision(printprec)

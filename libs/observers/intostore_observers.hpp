@@ -8,9 +8,11 @@ into a (zarr) store on disk */
 #ifndef INTOSTORE_OBSERVERS_HPP
 #define INTOSTORE_OBSERVERS_HPP
 
-#include <vector>
 #include <string>
 #include <stdexcept>
+
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
 
 #include "./observers.hpp"
 #include "./thermostatestorage.hpp"

@@ -12,10 +12,12 @@ to terminal or writing them to a datafile */
 #define OBSERVERS_HPP
 
 #include <concepts>
-#include <vector>
 #include <iostream>
 #include <ios>
 #include <iomanip>
+
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
 
 #include "../claras_SDconstants.hpp"
 #include "sdmgridboxes/gridbox.hpp"
@@ -25,7 +27,7 @@ namespace dlc = dimless_constants;
 
 template <typename Obs>
 concept Observer = requires(Obs obs,
-                            const std::vector<GridBox> &gboxes)
+                            const Kokkos::View<GridBox*> h_gridboxes)
 /* concept Observer is all types that have a function
 called observe_state() which take a gridbox type as
 argument and returns a void type */
@@ -45,7 +47,7 @@ struct CombinedObserver
   CombinedObserver(const O1 observer1, const O2 observer2)
       : observer1(observer1), observer2(observer2) {}
 
-  void observe_state(const std::vector<GridBox> &gboxes) const
+  void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
   {
     observer1.observe_state(gboxes);
     observer2.observe_state(gboxes);
@@ -62,7 +64,7 @@ struct NullObserver
 /* NullObserver does nothing at all
 (is defined for a Monoid Structure) */
 {
-  void observe_state(const std::vector<GridBox> &gridboxes) const {}
+  void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
 };
 
 struct PrintObserver
@@ -71,7 +73,7 @@ thermodynamic state and superdroplets to terminal */
 {
   const int printprec = 4; // precision to print data with
 
-  void observe_state(const std::vector<GridBox> &gridboxes) const;
+  void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
   /* print time, thermodynamic data (p, temp, qv, qc)
   and total number of superdrops to terminal */
 };
