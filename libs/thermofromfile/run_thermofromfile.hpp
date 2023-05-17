@@ -8,7 +8,6 @@ are read from file */
 #define RUN_THERMOFROMFILE_HPP
 
 #include <random>
-#include <vector>
 #include <iostream>
 #include <memory>
 #include <cmath>
@@ -45,12 +44,12 @@ void timestep_thermofromfile(const int t_end,
                             const RunSDMStep<auto, auto, auto> &sdm,
                             ThermodynamicsFromFile &thermodyn,
                             Kokkos::Random_XorShift64_Pool<> &genpool,
-                            std::vector<GridBox> &gridboxes,
+                            Kokkos::vector<GridBox> &gridboxes,
                             Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs);
 
 void recieve_thermodynamics(const double time,
                             const ThermodynamicsFromFile &thermodyn,
-                            std::vector<GridBox> &gridboxes);
+                            Kokkos::vector<GridBox> &gridboxes);
 /* Sets current thermodynamic state of SDM to match that given
 by the ThermodnamicsFromFile 'thermodyn' */
 
@@ -64,7 +63,7 @@ generators used in SDM */
 inline void start_step(const int t_mdl,
                        const Observer auto &observer,
                        const ThermodynamicsFromFile &thermodyn,
-                       std::vector<GridBox> &gridboxes)
+                       Kokkos::vector<GridBox> &gridboxes)
 /* communication of thermodynamic state
 to SDM and observation of SDM gridboxes */
 {
@@ -103,7 +102,7 @@ superdroplet model (SDM) using thermodynamics read from files */
                                               config.SDnspace, solute);
 
   /* vector containing all gridboxes in SDM domain */
-  std::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
+  Kokkos::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
 
   /* prepare model for timestepping */
   auto genpool = preparetotimestep();
@@ -120,7 +119,7 @@ void timestep_thermofromfile(const int t_end,
                             const RunSDMStep<auto, auto, auto> &sdm,
                             ThermodynamicsFromFile &thermodyn,
                             Kokkos::Random_XorShift64_Pool<> &genpool,
-                            std::vector<GridBox> &gridboxes,
+                            Kokkos::vector<GridBox> &gridboxes,
                             Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep model from t=0 to t=tend. Each step is
 length 'couplstep' and is decomposed into 4 parts:

@@ -8,7 +8,7 @@ are read from file */
 
 void recieve_thermodynamics(const double time,
                             const ThermodynamicsFromFile &thermodyn,
-                            std::vector<GridBox> &gridboxes)
+                            Kokkos::vector<GridBox> &gridboxes)
 /* Sets current thermodynamic state of SDM (time, p, temp, qv, etc.)
 to match that given by the ThermodnamicsFromFile 'thermodyn' */
 {

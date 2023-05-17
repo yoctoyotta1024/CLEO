@@ -10,7 +10,6 @@ could compile with e.g.
 #include <ranges>
 #include <filesystem>
 #include <algorithm>
-#include <vector>
 #include <cmath>
 #include <iostream>
 #include <string_view>
@@ -36,7 +35,7 @@ namespace dlc = dimless_constants;
 
 void print_nbourmaps(const Maps4GridBoxes &gbxmaps, const double COORD0);
 void print_gridboxmaps(const Maps4GridBoxes &gbxmaps, const double COORD0);
-void print_superdropcoords(const std::vector<GridBox> &gridboxes,
+void print_superdropcoords(const Kokkos::vector<GridBox> &gridboxes,
                            const Maps4GridBoxes &gbxmaps);
 
 struct kThermoState
@@ -145,7 +144,7 @@ int main(int argc, char* argv[])
                                               config.SDnspace, solute);
 
   /* vector containing all gridboxes that makeup the SDM domain */
-  std::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
+  Kokkos::vector<GridBox> gridboxes = create_gridboxes(gbxmaps, SDsInGBxs);
   
   // auto gen = std::mt19937(std::random_device()());
 
@@ -284,7 +283,7 @@ void print_gridboxmaps(const Maps4GridBoxes &gbxmaps, const double COORD0)
   std::cout << "----------------\n";
 }
 
-void print_superdropcoords(const std::vector<GridBox> &gridboxes,
+void print_superdropcoords(const Kokkos::vector<GridBox> &gridboxes,
                            const Maps4GridBoxes &gbxmaps)
 {
   std::cout << "\n---- SD Positions -----\n";

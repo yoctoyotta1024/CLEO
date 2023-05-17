@@ -16,7 +16,6 @@
 #include <algorithm>
 #include <string>
 #include <stdexcept>
-#include <vector> 
 
 #include <Kokkos_Core.hpp>
 

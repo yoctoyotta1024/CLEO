@@ -91,7 +91,7 @@ void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
   }
 }
 
-KOKKOS_FUNCTION std::vector<GridBox>
+KOKKOS_FUNCTION Kokkos::vector<GridBox>
 create_gridboxes(const Maps4GridBoxes &gbxmaps,
                  Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* create domain as a vector of grid boxes such that each grid box
@@ -100,7 +100,7 @@ superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
 { 
   sort_superdrops_via_gridboxindex(SDsInGBxs);
   
-  std::vector<GridBox> gridboxes;
+  Kokkos::vector<GridBox> gridboxes;
   for (auto ii : gbxmaps.gbxidxs)
   {
     gridboxes.push_back(GridBox(ii, gbxmaps, SDsInGBxs));
@@ -110,7 +110,7 @@ superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
 }
 
 KOKKOS_FUNCTION
-void set_superdroplets_to_wetradius(std::vector<GridBox> &gridboxes)
+void set_superdroplets_to_wetradius(Kokkos::vector<GridBox> &gridboxes)
 /* for each gridbox, set the radius of each superdroplet (SD) to
 whichever is larger out of their dry radius or equlibrium wet radius
 (given the relative humidity (s_ratio) and temperature of the gridbox).
