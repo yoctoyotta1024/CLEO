@@ -68,10 +68,9 @@ public:
   to allow the movement of superdroplets between gridboxes and the
   SDM process to occur at smaller time intervals */
   {
-    int t_sdm(t_mdl);
-
     /* sdm model time is incremented until >= t_mdl+onestep
     allowing for motion and process subtimestepping*/
+    int t_sdm(t_mdl);
     while (t_sdm < t_mdl + onestep)
     {
       int nextt = onestep_or_motion(t_sdm, onestep, sdmmotion);
