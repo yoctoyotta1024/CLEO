@@ -41,8 +41,7 @@ something convertible to a double
     } -> std::convertible_to<double>;
 };
 
-template <PairProbability PairCoalescenceProbability,
-          class DeviceType>
+template <PairProbability PairCoalescenceProbability>
 class CollisionsMethod
 /* class for method to enact collisions between
 superdrops during collision events in SDM */
@@ -57,6 +56,7 @@ private:
   where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|,
   is coalescence kernel (see Shima 2009 eqn 3) */
 
+  template <class DeviceType>
   void collide_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
                              URBG<DeviceType> &urbg, const double VOLUME) const
   /* Superdroplet collision-coalescence method according to Shima et al. 2009.
@@ -87,6 +87,7 @@ private:
   }
 
 
+  template <class DeviceType>
   void collide_superdroplet_pair(URBG<DeviceType> &urbg, Superdrop &dropA,
                                  Superdrop &dropB, const int scale_p,
                                  const double VOLUME) const
@@ -150,6 +151,7 @@ private:
     }
   }
 
+  template <class DeviceType>
   size_t monte_carlo_gamma(URBG<DeviceType> &urbg, const double prob,
                         const size_t eps1, const size_t eps2) const
   /* calculates value of gamma factor in
@@ -239,6 +241,7 @@ public:
   CollisionsMethod(const double DELT, PairCoalescenceProbability p)
       : DELT(DELT), pair_coalesce_probability(p) {}
 
+  template <class DeviceType>
   inline void operator()(const int currenttimestep,
                   std::span<SuperdropWithGbxindex> span4SDsinGBx,
                   ThermoState &state,
@@ -252,16 +255,13 @@ public:
   }
 };
 
-template <PairProbability PairCoalescenceProbability,
-          class DeviceType = Kokkos::DefaultExecutionSpace>
+template <PairProbability PairCoalescenceProbability>
 SdmProcess auto CollisionsProcess(const int interval,
                                   const std::function<double(int)> int2time,
                                   const PairCoalescenceProbability p)
 {
   const double realtstep = int2time(interval);
-  return ConstTstepProcess{interval,
-                           CollisionsMethod<PairCoalescenceProbability,
-                                            DeviceType>(realtstep, p)};
+  return ConstTstepProcess{interval, CollisionsMethod(realtstep, p)};
 }
 
 #endif // COLLISIONSMETHOD_HPP
