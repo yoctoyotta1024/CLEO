@@ -39,6 +39,29 @@ private:
     return std::min(next_one, next_motion);
   }
 
+  KOKKOS_INLINE_FUNCTION
+  void substep_sdmprocess(const int t_sdm, const int nextt,
+                          Kokkos::Random_XorShift64_Pool<> &genpool,
+                          Kokkos::View<GridBox *> d_gridboxes) const
+  {
+    const size_t Ngrid = d_gridboxes.size();
+
+    Kokkos::parallel_for(
+        "run_sdmstep_perGBx", Ngrid,
+        KOKKOS_CLASS_LAMBDA(const size_t ii) {
+          URBG urbg(genpool.get_state());
+
+          for (int subt = t_sdm; subt < nextt;
+               subt = sdmprocess.next_step(subt))
+          {
+            sdmprocess.run_step(subt, d_gridboxes(ii).span4SDsinGBx,
+                                d_gridboxes(ii).state, urbg);
+          }
+
+          genpool.free_state(urbg.gen);
+        });
+  }
+
 public:
   const MoveSuperdropsInDomain<M> sdmmotion;
   const Maps4GridBoxes &gbxmaps;
@@ -75,27 +98,16 @@ public:
     {
       int nextt = onestep_or_motion(t_sdm, onestep, sdmmotion);
 
+      /* run sdmmotion for superdroplets
+      including movement between gridboxes */
       gridboxes.on_host(); SDsInGBxs.on_host();
       sdmmotion.run_step(t_sdm, gbxmaps, SDsInGBxs, gridboxes);
 
-      /* run SDM process for each gridbox
-      using sdmprocess subttimestepping routine */
+      /* run sdmprocess for each gridbox
+      using SDM subttimestepping routine */
       gridboxes.on_device(); SDsInGBxs.on_device();
       auto d_gridboxes = gridboxes.view_device();
-      const size_t Ngrid = d_gridboxes.size();
-
-      Kokkos::parallel_for(
-          "run_sdmstep_perGBx", Ngrid,
-          KOKKOS_CLASS_LAMBDA(const size_t ii) {
-            URBG urbg(genpool.get_state());
-            for (int subt = t_sdm; subt < nextt;
-                 subt = sdmprocess.next_step(subt))
-            {
-              sdmprocess.run_step(subt, d_gridboxes(ii).span4SDsinGBx,
-                                  d_gridboxes(ii).state, urbg);
-            }
-            genpool.free_state(urbg.gen);
-          });
+      substep_sdmprocess(t_sdm, nextt, genpool, d_gridboxes);
 
       t_sdm = nextt;
     }
