@@ -20,7 +20,9 @@ FetchContent_Declare(
   URL https://github.com/kokkos/kokkos/archive/refs/tags/4.0.01.tar.gz
   GIT_TAG 62d2b6c879b74b6ae7bd06eb3e5e80139c4708e6
 )
+set(CMAKE_CXX_STANDARD "20")
 FetchContent_MakeAvailable(Kokkos)
+unset(CMAKE_CXX_STANDARD)
 
 set(SDMLIBS superdrop_solver initialisation sdmgridboxes observers)
 set(compileops -Wall -pedantic -g -gdwarf-4)

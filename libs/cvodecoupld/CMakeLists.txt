@@ -48,7 +48,9 @@ FetchContent_Declare(
   URL https://github.com/kokkos/kokkos/archive/refs/tags/4.0.01.tar.gz
   GIT_TAG 62d2b6c879b74b6ae7bd06eb3e5e80139c4708e6
 )
+set(CMAKE_CXX_STANDARD "20")
 FetchContent_MakeAvailable(Kokkos)
+unset(CMAKE_CXX_STANDARD)
 
 # link cvode library to target
 target_link_libraries(${LIBNAME} PUBLIC SUNDIALS::cvodes_static Kokkos::kokkos)
