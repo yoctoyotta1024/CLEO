@@ -87,10 +87,11 @@ public:
         delt(delt),
         impliciteuler(niters, nsubsteps, delt, rtol, atol) {}
 
+  template <class DeviceType>
   inline void operator()(const int currenttimestep,
                          std::span<SuperdropWithGbxindex> span4SDsinGBx,
                          ThermoState &state,
-                         URBG &urbg) const
+                         URBG<DeviceType> &urbg) const
   /* this operator is used as an "adaptor" for using a run_step
   function in order to call condensation_onto_superdroplets.
   (*hint* run_step is usually found within a type that

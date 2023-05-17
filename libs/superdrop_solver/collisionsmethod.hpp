@@ -41,7 +41,7 @@ something convertible to a double
     } -> std::convertible_to<double>;
 };
 
-template <PairProbability PairCoalescenceProbability>
+template <PairProbability PairCoalescenceProbability, class DeviceType>
 class CollisionsMethod
 /* class for method to enact collisions between
 superdrops during collision events in SDM */
@@ -57,7 +57,7 @@ private:
   is coalescence kernel (see Shima 2009 eqn 3) */
 
   void collide_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                             URBG &urbg, const double VOLUME) const
+                             URBG<DeviceType> &urbg, const double VOLUME) const
   /* Superdroplet collision-coalescence method according to Shima et al. 2009.
   For some 'VOLUME' [m^3] in which the collisions occur, this function
   determines whether of not coalescence occurs from Monte-Carlo collisions of
@@ -86,7 +86,7 @@ private:
   }
 
 
-  void collide_superdroplet_pair(URBG &urbg, Superdrop &dropA,
+  void collide_superdroplet_pair(URBG<DeviceType> &urbg, Superdrop &dropA,
                                  Superdrop &dropB, const int scale_p,
                                  const double VOLUME) const
   /* Monte Carlo Routine according to Shima et al. 2009
@@ -149,7 +149,7 @@ private:
     }
   }
 
-  size_t monte_carlo_gamma(URBG &urbg, const double prob,
+  size_t monte_carlo_gamma(URBG<DeviceType> &urbg, const double prob,
                         const size_t eps1, const size_t eps2) const
   /* calculates value of gamma factor in
   Monte Carlo collision-coalescence process
@@ -241,7 +241,7 @@ public:
   inline void operator()(const int currenttimestep,
                   std::span<SuperdropWithGbxindex> span4SDsinGBx,
                   ThermoState &state,
-                  URBG &urbg) const
+                  URBG<DeviceType> &urbg) const
   /* this operator is used as an "adaptor" for using a run_step
   function in order to call collide_superdroplets. (*hint* run_step
   is usually found within a type that satisfies the SdmProcess concept) */

@@ -49,10 +49,11 @@ public:
     }
   }
 
+  template <class DeviceType>
   inline void operator()(const int currenttimestep,
                          std::span<SuperdropWithGbxindex> span4SDsinGBx,
                          ThermoState &state,
-                         URBG &urbg) const
+                         URBG<DeviceType> &urbg) const
   /* this operator is used as an "adaptor" for using a run_step
   function in order to call sediment_superdroplets. (*hint* run_step
   usually found within a type that satisfies the SdmProcess concept) */
