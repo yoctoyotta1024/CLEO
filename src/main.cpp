@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
 
   const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
 
-  /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */
   Kokkos::initialize(argc, argv);
   {
+    /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */
     run_thermofromfile(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
   }
   Kokkos::finalize();

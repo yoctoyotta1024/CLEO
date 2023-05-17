@@ -5,7 +5,7 @@ coupled with a CVODE ode solver for the thermodynamics
 (p, temp, qv and qc) over time */
 
 // after make/compiling, execute for example via:
-// ./src/colls0D "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
+// ./src/golcolls0D "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
 
 /* standard library packages */
 #include <vector>
@@ -85,6 +85,8 @@ superdroplets from combination of those two seperate observers */
 
 int main(int argc, char *argv[])
 {
+  Kokkos::Timer kokkostimer;
+
   if (argc < 3)
   {
     throw std::invalid_argument("config and/or constants files not specified");
@@ -120,8 +122,13 @@ int main(int argc, char *argv[])
 
   const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
 
-  /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */
-  run_thermofromfile(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+  Kokkos::initialize(argc, argv);
+  {
+    /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */
+    run_thermofromfile(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+  }
+  Kokkos::finalize();
+  std::cout << "  ------ Total Duration: " << kokkostimer.seconds() << "s ----- \n";
 
   return 0;
 }
