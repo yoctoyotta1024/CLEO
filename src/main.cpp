@@ -11,6 +11,8 @@ coupled with a CVODE ode solver for the thermodynamics
 
 int main(int argc, char *argv[])
 {
+  Kokkos::Timer kokkostimer;
+
   if (argc < 3)
   {
     throw std::invalid_argument("config and/or constants files not specified");
@@ -44,7 +46,12 @@ int main(int argc, char *argv[])
   const RunSDMStep sdm(gbxmaps, sdmotion, sdmprocess, observer);
 
   /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */
-  run_thermofromfile(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
-  
+  Kokkos::initialize( argc, argv );
+  {
+    run_thermofromfile(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+  }
+  Kokkos::finalize();
+  std::cout << "  ------ Total Duration: " << kokkostimer.seconds() << "s ----- \n";
+
   return 0;
 }

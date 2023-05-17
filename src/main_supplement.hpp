@@ -14,6 +14,8 @@ SDM process and observers to use in main.cpp */
 #include <stdexcept>
 #include <string>
 
+#include <Kokkos_Core.hpp>
+
 /* constants and equations */
 #include "claras_SDconstants.hpp"
 #include "initialisation/config.hpp"
