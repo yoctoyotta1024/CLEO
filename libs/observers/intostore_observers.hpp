@@ -29,13 +29,13 @@ class ThermoStateObserver
   
   public:
     ThermoStateObserver(ThermoStateStorage &zarr) : zarr(zarr) {}
-    
-    void observe_state(const Kokkos::View<GridBox*> h_gridboxes) const
+
+    void observe_state(const size_t ngbxs,
+                       const Kokkos::View<GridBox *> h_gridboxes) const
     /* observe thermostate by writing it to arrays
     as determined by the ThermoStateStorage instance */
     {
-      const size_t Ngrid = h_gridboxes.size();
-      for (size_t ii(0); ii<Ngrid; ++ii)
+      for (size_t ii(0); ii<ngbxs; ++ii)
       {
         zarr.thermodata_to_storage(h_gridboxes(ii).state);
       }
