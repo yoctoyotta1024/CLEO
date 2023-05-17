@@ -41,7 +41,8 @@ something convertible to a double
     } -> std::convertible_to<double>;
 };
 
-template <PairProbability PairCoalescenceProbability, class DeviceType>
+template <PairProbability PairCoalescenceProbability,
+          class DeviceType>
 class CollisionsMethod
 /* class for method to enact collisions between
 superdrops during collision events in SDM */
@@ -251,13 +252,16 @@ public:
   }
 };
 
-template <PairProbability PairCoalescenceProbability>
+template <PairProbability PairCoalescenceProbability,
+          class DeviceType = Kokkos::DefaultExecutionSpace>
 SdmProcess auto CollisionsProcess(const int interval,
                                   const std::function<double(int)> int2time,
                                   const PairCoalescenceProbability p)
 {
   const double realtstep = int2time(interval);
-  return ConstTstepProcess{interval, CollisionsMethod(realtstep, p)};
+  return ConstTstepProcess{interval,
+                           CollisionsMethod<PairCoalescenceProbability,
+                                            DeviceType>(realtstep, p)};
 }
 
 #endif // COLLISIONSMETHOD_HPP

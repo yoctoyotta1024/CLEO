@@ -12,7 +12,7 @@ superdroplet's vector) */
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 
-template <class DeviceType>
+template <class DeviceType = Kokkos::DefaultExecutionSpace>
 struct URBG
 /* struct wrapping Kokkos random number generator to 
 satisfy requirements of C++11 UniformRandomBitGenerator 
