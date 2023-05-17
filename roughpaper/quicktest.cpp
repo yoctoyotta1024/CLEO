@@ -2,35 +2,53 @@
 
 #include <iostream> 
 #include <functional>
+#include <concepts>
 
-struct IncFunctional
+
+class DefaultDeviceType
 {
-    double w;
-    std::function<double(const unsigned int)> get_wvel;
+};
 
-    IncFunctional(const unsigned int SDnspace)
-      : w(3.0), get_wvel()
-    {
-      if (SDnspace > 0)
-      {
-        get_wvel = [&](const unsigned int ii) {return w;}; 
-      }
-      else
-      {
-       get_wvel =  [](const unsigned int ii) {return 0.0;};
-      }
-    }
+// template <typename P, class DT = Kokkos::DefaultExecutionSpace, typename... Args>
+template <typename P, class DT, typename... Args>
+concept SdmProcess = requires(P p, const int currenttimestep)
+/* concept SdmProcess is all types that meet requirements
+(constraints) of 2 timstepping functions called "on_step"
+and "next_step" and have a "run_step" function */
+{
+  {
+    p.next_step(currenttimestep)
+    } -> std::convertible_to<int>;
+  {
+    p.on_step(currenttimestep)
+    } -> std::convertible_to<bool>;
+  {
+    p.template run_step<DT>(currenttimestep)
+  };
+};
+
+struct ConstTStep
+{
+  int interval;
+  
+  int next_step(const int t) const
+  {
+    return ((t / interval) + 1) * interval;
+  }
+
+  bool on_step(const int t) const
+  {
+    return t % interval == 0;
+  }
+
+  template <class DT = DefaultDeviceType>
+  void run_step(const int t) {}
 };
 
 int main()
-{
-  IncFunctional testit(0);
-  double a = testit.get_wvel(3); 
-  std::cout << a;
-
-  IncFunctional testit2(1);
-  a = testit2.get_wvel(3); 
-  std::cout << a;
+{ 
+   
+  SdmProcess<> auto a = ConstTStep{1};
 
   return 0;
 }

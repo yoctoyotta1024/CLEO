@@ -20,8 +20,8 @@ collision-coalescence (see ConstTstepProcess struct) */
 template <typename F>
 concept StepFunc = requires(F f, const int currenttimestep,
                             std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                            ThermoState &state,
-                            URBG<DT> &urbg)
+                            ThermoState state,
+                            URBG &urbg)
 /* concept StepFunc is all (function-like) types
 (ie. types that can be called with some arguments)
 that have the same signature as the "run_step"
@@ -35,8 +35,8 @@ function (see below in SdmProcess) */
 template <typename P, typename... Args>
 concept SdmProcess = requires(P p, const int currenttimestep,
                               std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                              ThermoState &state,
-                              URBG<DT> &urbg)
+                              ThermoState state,
+                              URBG &urbg)
 /* concept SdmProcess is all types that meet requirements
 (constraints) of 2 timstepping functions called "on_step"
 and "next_step" and have a "run_step" function */
@@ -83,11 +83,10 @@ struct CombinedSdmProcess
     return a.on_step(currenttimestep) || b.on_step(currenttimestep);
   }
 
-  template <class DeviceType>
   void run_step(const int currenttimestep,
                 std::span<SuperdropWithGbxindex> span4SDsinGBx,
                 ThermoState &state,
-                URBG<DeviceType> &urbg) const
+                URBG &urbg) const
   /* for combination of 2 SDM proceses, each process is
   run if it's respective on_step returns true */
   {
@@ -124,11 +123,10 @@ struct NullProcess
     return false;
   }
 
-  template <class DeviceType>
   void run_step(const int currenttimestep,
                 std::span<SuperdropWithGbxindex> span4SDsinGBx,
                 ThermoState &state,
-                URBG<DeviceType> &urbg) const {}
+                URBG &urbg) const {}
 };
 
 template <StepFunc F>
