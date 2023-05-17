@@ -7,6 +7,7 @@ which models evolution of the thermodynamics
 #ifndef CVODETHERMOSOLVER_HPP
 #define CVODETHERMOSOLVER_HPP
 
+#include <array>
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -57,8 +58,9 @@ public:
                      const double wmax, const double tauhalf);
   /* set values in UserData structure for odes_func */
 
-  int setup_ODE_solver(const double i_rtol, const double i_atols[],
-                       const double y_init[]);
+  int setup_ODE_solver(const double i_rtol,
+                       const std::vector<double> &i_atols,
+                       const std::vector<double> &i_yinit);
   /* function does all the setup steps in order
   to use CVODE sundials ODE solver */
 

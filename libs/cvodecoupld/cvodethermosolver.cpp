@@ -28,22 +28,20 @@ CvodeThermoSolver::CvodeThermoSolver(const Config &config,
   const double tauhalf = (config.T_HALF / dlc::TIME0) / M_PI; // dimensionless timescale for w sinusoid
   init_userdata(neq, config.doThermo, wmax, tauhalf);
 
-  const double var_atols[NVARS] = {config.cvode_atol_p,
-                                   config.cvode_atol_temp,
-                                   config.cvode_atol_qv,
-                                   config.cvode_atol_qc};
-  double atols[neq];
+  const std::array<double, NVARS> var_atols = {config.cvode_atol_p,
+                                            config.cvode_atol_temp,
+                                            config.cvode_atol_qv,
+                                            config.cvode_atol_qc};
+  std::vector<double> atols(neq);
   for (size_t k = 0; k < neq; k += NVARS)
   {
-    atols[k] = var_atols[0];
-    atols[k + 1] = var_atols[1];
-    atols[k + 2] = var_atols[2];
-    atols[k + 3] = var_atols[3];
+    atols.at(k) =  std::get<0>(var_atols);
+    atols.at(k + 1) = std::get<1>(var_atols);
+    atols.at(k + 2) = std::get<2>(var_atols);
+    atols.at(k + 3) = std::get<3>(var_atols);
   }
 
-  double y_init[neq];
-  std::copy(yinit_vector.begin(), yinit_vector.end(), y_init);
-  setup_ODE_solver(config.cvode_rtol, atols, y_init);
+  setup_ODE_solver(config.cvode_rtol, atols, yinit_vector);
 }
 
 CvodeThermoSolver::~CvodeThermoSolver()
@@ -75,8 +73,8 @@ void CvodeThermoSolver::init_userdata(const size_t neq,
 };
 
 int CvodeThermoSolver::setup_ODE_solver(const double i_rtol,
-                                        const double i_atols[],
-                                        const double y_init[])
+                                        const std::vector<double> &i_atols,
+                                        const std::vector<double> &i_yinit)
 /* function does all the setup steps in order
 to use CVODE sundials ODE solver */
 {
@@ -99,7 +97,7 @@ to use CVODE sundials ODE solver */
 
   for (size_t i = 0; i < neq; ++i)
   {
-    NV_Ith_S(ATOLS, i) = i_atols[i];
+    NV_Ith_S(ATOLS, i) = i_atols.at(i);
   }
 
   /* 3. initialise y vector with initial conditions */
@@ -108,7 +106,7 @@ to use CVODE sundials ODE solver */
     return (1);
   for (size_t i = 0; i < neq; ++i)
   {
-    NV_Ith_S(y, i) = y_init[i];
+    NV_Ith_S(y, i) = y_init.at(i);
   }
 
   /* 4. Call CVodeCreate to create the solver memory and specify the
