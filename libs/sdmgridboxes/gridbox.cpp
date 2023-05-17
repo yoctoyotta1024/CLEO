@@ -24,7 +24,7 @@ KOKKOS_FUNCTION void GridBox::print_statevolume()
 /* print's dimensionless value for gridbox state's 
 volume. Also prints true volume = volume * COORD0^3 [m^3] */
 {
-  const double vol = state.get_volume()
+  const double vol = state.get_volume();
   std::cout << "dimensionless volume = " << vol
             << "\nie. VOLUME = "
             << vol * pow(dlc::COORD0, 3.0) << "m^3\n";

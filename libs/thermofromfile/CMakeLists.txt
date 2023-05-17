@@ -39,7 +39,7 @@ target_include_directories(${LIBNAME} PUBLIC "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
 target_link_libraries(${LIBNAME} PRIVATE superdrop_solver initialisation sdmgridboxes observers)
-target_link_libraries(${LIBNAME} PUBLIC Kokkos:kokkos)
+target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # some compilation properties
 set_target_properties(${LIBNAME} PROPERTIES
