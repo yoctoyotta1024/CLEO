@@ -23,7 +23,7 @@ path2CLEO = sys.argv[1]  # absolute or relative path of CLEO directory
 path2build = sys.argv[2] # absolute or relative path to build directory
 isfigures = [True, True] # booleans for [making+showing, saving] figures
 
-### --- essential paths to files --- ###
+### --- essential paths and filenames --- ###
 # where to find constants and config files
 constsfile = path2CLEO+"/libs/claras_SDconstants.hpp"
 configfile = path2CLEO+"/src/config/config.txt"
@@ -118,6 +118,8 @@ create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
 ### ----- show (and save) plots of binary file data ----- ###
 if isfigures[0]:
   issavefig = isfigures[1]
+  if issavefig:
+    Path(savefigpath).mkdir(exist_ok=True) 
   rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, issavefig)
   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                               thermofile, savefigpath, issavefig)

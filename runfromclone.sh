@@ -15,7 +15,7 @@
 ### -----  default compiler and python environment ----- ###
 module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
-source activate /work/mh1126/m300950/pySDenv
+source activate /work/mh1126/m300950/superdropsV2
 ### ---------------------------------------------------- ###
 
 ### build CLEO (with openMP thread parallelism using Kokkos)
@@ -26,7 +26,10 @@ mkdir ./build/bin
 mkdir ./build/share
 
 ### generate input files
-# abspath = "/home/m/m300950/CLEO/"
+# path2CLEO = "/home/m/m300950/CLEO/"
+# path2CLEO = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+# path2build = "/home/m/m300950/CLEO/build/"
+# path2build = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/build/"
 python ./create_gbxboundariesbinary_script.py ./
 python ./create_initsuperdropsbinary_script.py ./ 
 python ./create_initthermobinary_script.py ./
