@@ -16,7 +16,7 @@ could compile with e.g.
 #include <span>
 #include <utility> 
 
-#include <Kokkos_core.hpp>
+#include <Kokkos_Core.hpp>
 #include <Kokkos_Vector.hpp>
 
 #include "../libs/claras_SDconstants.hpp"
@@ -46,6 +46,8 @@ struct kThermoState
   KOKKOS_INLINE_FUNCTION ~kThermoState() = default;
 
   KOKKOS_INLINE_FUNCTION kThermoState(const double v) : vol(v) {};
+
+  KOKKOS_INLINE_FUNCTION double get_volume(){return vol;};
 };
 
 struct kGridBox
