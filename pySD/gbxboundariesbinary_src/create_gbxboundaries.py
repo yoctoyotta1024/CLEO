@@ -7,7 +7,7 @@ def get_COORD0_from_constsfile(constsfile, returnconsts=False):
   required as inputs to create initial 
   superdroplet conditions '''
 
-  consts = cxx2py.read_cpp_into_floats(constsfile)[0]
+  consts = cxx2py.read_cpp_into_floats(constsfile, False)[0]
   COORD0 = consts["TIME0"]*consts["W0"]
   
   if returnconsts:

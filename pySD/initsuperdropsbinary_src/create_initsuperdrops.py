@@ -50,9 +50,9 @@ def initSDsinputsdict(configfile, constsfile):
   required as inputs to create initial 
   superdroplet conditions '''
 
-  consts = cxx2py.read_cpp_into_floats(constsfile)[0]
-  moreconsts = cxx2py.derive_more_floats(consts)
-  config = cxx2py.read_configtxt_into_floats(configfile)[0]
+  consts = cxx2py.read_cpp_into_floats(constsfile, False)[0]
+  moreconsts = cxx2py.derive_more_floats(consts, False)
+  config = cxx2py.read_configtxt_into_floats(configfile, False)[0]
 
   inputs = {
     # for creating SD attribute distirbutions
