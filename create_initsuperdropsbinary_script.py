@@ -12,7 +12,8 @@ path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 
 ### booleans for [making+showing, saving] figures
-isfigures = [True, True]
+# isfigures = [True, True]
+isfigures = [False, False]
 
 ### essential paths and filenames
 constsfile = path2CLEO+"libs/claras_SDconstants.hpp"

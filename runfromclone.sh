@@ -39,7 +39,7 @@ mkdir ${path2build}bin
 mkdir ${path2build}share
 
 ### generate input files
-${python} ${path2CLEO}quickcreate_inputbinaries.py ${path2CLEO} $path2build
+${python} ${path2CLEO}examplecreate_inputbinaries.py ${path2CLEO} $path2build
 
 ### compile and run CLEO
 cd build
