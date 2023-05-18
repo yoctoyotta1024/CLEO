@@ -31,8 +31,8 @@ gcc="gcc"
 ### ---------------------------------------------------- ###
 
 ### build CLEO (with openMP thread parallelism using Kokkos)
-# CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON- DKokkos_ENABLE_OPENMP=ON
-CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON
+# CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON- DKokkos_ENABLE_OPENMP=ON # openMP parallelism
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON # in serial
 
 ### it's a good idea to ensure these directories exist
 mkdir ${path2build}bin
