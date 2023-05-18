@@ -15,7 +15,7 @@
 ### use spack find (or module avail) to get package versions ###
 e.g. spack find cmake
 
-### useful kokkos flags:
+### some useful kokkos flags to consider:
 -DKokkos_ARCH_NATIVE=ON
 -DKokkos_ARCH_AMPERE80=ON (or -DKokkos_ARCH_AMPERE86=ON)
 -DKokkos_ENABLE_SERIAL=ON
@@ -24,22 +24,22 @@ e.g. spack find cmake
 -DKokkos_ENABLE_CUDA_LAMBDA=ON
 -DKokkos_ENABLE_CUDA_UVM=ON (depreciated)
 
-CUDA ONLY ENABLED build:
+GPU (CUDA) ENABLED build:
 module load gcc
 module load nvhpc
 spack load cmake@3.23.1%gcc
 CXX=nvc++ CC=nvcc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_UVM=ON
 
-OPENMP ONLY ENABLE build:
+OPENMP ENABLED build:
 module load gcc
 CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
 
-SERIAL ONLY ENABLE build:
+SERIAL ONLY build:
 module load gcc
 CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
 CXX=nvc++ CC=nvcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
 
-GO CRAZY build:
+GO CRAZY CUDA and OPENMP build:
 module load gcc
 module load nvhpc
 spack load cmake@3.23.1%gcc
