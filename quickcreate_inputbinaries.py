@@ -1,5 +1,5 @@
 ### Author: Clara Bayley
-### File: quickrunCLEO.py
+### File: quickcreate_inputbinaries.py
 ### python script to generate some input
 ### binary files for an example of runing CLEO
 
