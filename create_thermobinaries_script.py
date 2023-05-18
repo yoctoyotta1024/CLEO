@@ -1,23 +1,28 @@
+import sys
 import numpy as np
 from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
 
-abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
-# abspath = "/home/m/m300950/CLEO/"
-#abspath = sys.argv[1]
-constsfile = abspath+"libs/claras_SDconstants.hpp"
-configfile = abspath+"src/config/config.txt"
-
-spath = abspath+"build/share/"
-gridfile = spath+"dimlessGBxboundaries.dat"
-thermofile =  spath+"dimlessthermodynamics.dat"
-binpath = abspath+"build/bin/"
+### ----------------------- INPUT PARAMETERS ----------------------- ###
+### absolute or relative paths for build and CLEO directories
+path2CLEO = sys.argv[1]
+path2build = sys.argv[2]
 
 ### booleans for [making+showing, saving] figures
 isfigures = [True, True]
 
-### initial thermodynamic conditions for all gridboxes ###
+### essential paths and filenames
+constsfile = path2CLEO+"libs/claras_SDconstants.hpp"
+configfile = path2CLEO+"src/config/config.txt"
+binariespath = path2build+"/share/"
+savefigpath = path2build+"/bin/"
+
+gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
+thermofile =  binariespath+"dimlessthermodynamics.dat"
+
+
+### --- Choose Initial Thermodynamic Conditions for Gridboxes --- ###
 
 # # ----- Constant and Uniform ----- #
 # P_INIT = 100000.0                       # initial pressure [Pa]
