@@ -12,29 +12,29 @@
 #SBATCH --error=./build/bin/quickrun_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
-### -----  default compiler and python environment ----- ###
+### ----- default compiler and python environment   ---- ###
+### ----  and paths for CLEO and build directories  ---- ###
 module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/superdropsV2
+
+path2CLEO=${HOME}/CLEO/
+path2build=${HOME}/CLEO/build/
 ### ---------------------------------------------------- ###
 
 ### build CLEO (with openMP thread parallelism using Kokkos)
-CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ENABLE_OPENMP=ON -DKokkos_ARCH_NATIVE=ON
+# compilecmd="cmake CXX=g++ CC=gcc -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_OPENMP=ON"
+compilecmd="cmake CXX=g++ CC=gcc -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON"
+echo compilecmd
 
 ### it's a good idea to ensure these directories exist
-mkdir ./build/bin
-mkdir ./build/share
+mkdir ${path2build}bin
+mkdir ${path2build}share
 
 ### generate input files
-# path2CLEO = "/home/m/m300950/CLEO/"
-# path2CLEO = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
-# path2build = "/home/m/m300950/CLEO/build/"
-# path2build = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/build/"
-python ./create_gbxboundariesbinary_script.py ./
-python ./create_initsuperdropsbinary_script.py ./ 
-python ./create_initthermobinary_script.py ./
+python ${path2CLEO}quickcreate_inputbinaries.py ${path2CLEO} $path2build
 
 ### compile and run CLEO
 cd build
 make clean && make -j 16
-./src/runCLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
+runcmd=".${path2build}/src/runCLEO ${path2CLEO}src/config/config.txt ${path2CLEO}libs/claras_SDconstants.hpp"

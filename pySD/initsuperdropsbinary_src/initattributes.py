@@ -214,10 +214,10 @@ class InitManyAttrsGen:
             " not consistent with sample volume {:.3g} m^3".format(samplevol)
           raise ValueError(errmsg)
 
-        else:
-          msg = "--- total real droplet concentration = "+\
-            "{:0g} m^-3 in {:.3g} m^3 volume --- ".format(calcnumconc, samplevol)
-          print(msg)
+        # else:
+        #   msg = "--- total real droplet concentration = "+\
+        #     "{:0g} m^-3 in {:.3g} m^3 volume --- ".format(calcnumconc, samplevol)
+        #   print(msg)
 
     def generate_attributes(self, nsupers, RHO_SOL, NUMCONC, gridboxbounds):
         ''' generate superdroplets (SDs) attributes that have dimensions

@@ -24,6 +24,7 @@ from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 path2CLEO = sys.argv[1]  # absolute or relative path of CLEO directory
 path2build = sys.argv[2] # absolute or relative path to build directory
 isfigures = [True, True] # booleans for [making+showing, saving] figures
+isSDfigures = [False, False] # booleans initial superdropets figures (nb. can be very slow)
 
 ### --- essential paths and filenames --- ###
 # where to find constants and config files
@@ -125,7 +126,11 @@ if isfigures[0]:
                                savefigpath, isfigures[1])
   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                               thermofile, savefigpath, isfigures[1])
+
+if isSDfigures[0]:
+  if isSDfigures[1]:
+    Path(savefigpath).mkdir(exist_ok=True)  
   rsupers.plot_initdistribs(configfile, constsfile, initSDsfile,
-                            gridfile, savefigpath, isfigures[1]) 
+                            gridfile, savefigpath, isSDfigures[1]) 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
