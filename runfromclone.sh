@@ -14,25 +14,25 @@
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
 ### ----  and paths for CLEO and build directories  ---- ###
-# module load gcc/11.2.0-gcc-11.2.0
-# module load python3/2022.01-gcc-11.2.0
-# source activate /work/mh1126/m300950/superdropsV2
-# path2CLEO=${HOME}/CLEO/
-# path2build=${HOME}/CLEO/build/
-# python=python
-# gxx="g++"
-# gcc="gcc"
+module load gcc/11.2.0-gcc-11.2.0
+module load python3/2022.01-gcc-11.2.0
+source activate /work/mh1126/m300950/superdropsV2
+path2CLEO=${HOME}/CLEO/
+path2build=${HOME}/CLEO/build/
+python=python
+gxx="g++"
+gcc="gcc"
 
-path2CLEO=${HOME}/Documents/b1_springsummer2023/CLEO/
-path2build=${HOME}/Documents/b1_springsummer2023/CLEO/build/
-python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
-gxx="g++-13"
-gcc="gcc-13"
+# path2CLEO=${HOME}/Documents/b1_springsummer2023/CLEO/
+# path2build=${HOME}/Documents/b1_springsummer2023/CLEO/build/
+# python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
+# gxx="g++-13"
+# gcc="gcc-13"
 ### ---------------------------------------------------- ###
 
 ### build CLEO (with openMP thread parallelism using Kokkos)
-# CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON
-CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ENABLE_OPENMP=ON -DKokkos_ARCH_NATIVE=ON
+# CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON- DKokkos_ENABLE_OPENMP=ON
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON
 
 ### it's a good idea to ensure these directories exist
 mkdir ${path2build}bin
