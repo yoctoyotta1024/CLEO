@@ -50,11 +50,14 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 # link kokkos library to target
 target_link_libraries(${PROJECT_NAME} PUBLIC Kokkos::kokkos)
 
-
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 
-target_compile_options(${PROJECT_NAME} PUBLIC -Wall -pedantic -g -gdwarf-4)
+set(compileops -Wall -pedantic -g)
+#set(compileops -Wall -pedantic -g -gdwarf-4)
+#set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
+
+target_compile_options(${PROJECT_NAME} PUBLIC ${compileops})
 #target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -pedantic -g)

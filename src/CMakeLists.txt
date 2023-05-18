@@ -30,7 +30,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
 set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 set(SDMLIBS superdrop_solver initialisation sdmgridboxes observers)
-set(compileops -Wall -pedantic -g -gdwarf-4)
+set(compileops -Wall -pedantic -g)
+#set(compileops -Wall -pedantic -g -gdwarf-4)
 #set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
 
 # primary executable for CLEO sdm
