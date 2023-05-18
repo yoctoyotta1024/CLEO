@@ -33,8 +33,8 @@ nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, z
 # monor                = 1e-6                        # all SDs have this same radius [m]
 # radiigen  = initattributes.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
-# rspan                = [1e-8, 9e-5]                # max and min range of radii to sample [m]
-rspan                = [3e-9, 3e-6]                # max and min range of radii to sample [m]
+# rspan                = [1e-8, 9e-5]                # min and max range of radii to sample [m]
+rspan                = [3e-9, 3e-6]                # min and max range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]
 ### ---------------------------------------------------------------- ###

@@ -6,15 +6,14 @@ from pySD.gbxboundariesbinary_src.create_gbxboundaries import *
 from pySD.gbxboundariesbinary_src.read_gbxboundaries import *
 
 ### path and filenames
-abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
-# abspath = "/home/m/m300950/CLEO/"
-#abspath = sys.argv[1]
-constsfile = abspath+"libs/claras_SDconstants.hpp"
-configfile = abspath+"src/config/config.txt"
+# path2CLEO = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+# path2CLEO = "/home/m/m300950/CLEO/"
+path2CLEO = sys.argv[1]
+constsfile = path2CLEO+"libs/claras_SDconstants.hpp"
+configfile = path2CLEO+"src/config/config.txt"
 
-gridfilepath = abspath+"build/share/"
-gridfile = gridfilepath+"dimlessGBxboundaries.dat"
-binpath = abspath+"build/bin/"
+gridfile = path2CLEO+"/build/share/dimlessGBxboundaries.dat"
+binpath = path2CLEO+"/build/bin/"
 
 ### booleans for [making+showing, saving] figures
 isfigures = [True, True]

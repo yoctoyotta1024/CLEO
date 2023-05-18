@@ -1,4 +1,15 @@
 #!/bin/bash
+#SBATCH --job-name=quickrun
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=128
+#SBATCH --mem=30G
+#SBATCH --time=00:30:00
+#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
+#SBATCH --mail-type=FAIL
+#SBATCH --account=mh1126
+#SBATCH --output=./build/bin/quickrun_out.%j.out
+#SBATCH --error=./build/bin/quickrun_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### -----  default compiler and python environment ----- ###
@@ -15,6 +26,7 @@ mkdir ./build/bin
 mkdir ./build/share
 
 ### generate input files
+# abspath = "/home/m/m300950/CLEO/"
 python ./create_gbxboundariesbinary_script.py ./
 python ./create_initsuperdropsbinary_script.py ./ 
 python ./create_initthermobinary_script.py ./
