@@ -1,7 +1,7 @@
 # run cmake with " cmake -S [source dir of targerts] -B [build dir for makefile] "
-#run cmake with these compiler options:
-# CXX=/opt/homebrew/bin/g++-13 CC=/opt/homebrew/bin/gcc-13 cmake -S ./ -B ./build
-# or CXX=g++ CC=gcc cmake -S ./ -B ./build
+# e.g. could run cmake with these compiler options:
+# CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
+# CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
 
 # set cmake version
 cmake_minimum_required(VERSION 3.18.0)
