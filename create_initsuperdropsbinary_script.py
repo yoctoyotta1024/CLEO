@@ -6,7 +6,8 @@ from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src.read_gbxboundaries import get_domainvol_from_gridfile
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
-### absolute or relative paths for build and CLEO directories
+### --- absolute or relative paths for --- ###
+### ---   build and CLEO directories --- ###
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 
