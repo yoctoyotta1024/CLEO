@@ -179,7 +179,8 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   units += [b'm']*3 # velocity units
   scale_factors = np.asarray(scale_factors, dtype=np.double)
 
-  filestem, filetype = thermofile.split(".")
+  idot = [i for i, ltr in enumerate(thermofile) if ltr == "."][-1]
+  filestem, filetype = thermofile[:idot], thermofile[idot:]
   varat = ["centres"]*4 + ["z-faces", "x-faces", "y-faces"]
   for v, var in enumerate(thermodata.keys()):
     if thermodata[var] != []:
@@ -189,7 +190,7 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
                 ' (ie. file contains '+str(ndata[v])+' datapoints'+\
                 ' for '+var+' defined at gridbox '+varat[v]+\
                 ' over '+str(inputs["ntime"])+' time steps)'
-      filename = filestem+"_"+var+"."+filetype
+      filename = filestem+"_"+var+filetype
       writebinary.writebinary(filename, thermodata[var],
                               [ndata[v]], [datatypes[v]],
                               [units[v]], [scale_factors[v]],

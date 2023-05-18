@@ -92,11 +92,12 @@ class ThermoOnGrid:
 
     return np.mean(var, axis=(0,1,2)) # dims [z]
 
-def thermovar_from_binary(var, thermofiles, shape,
+def thermovar_from_binary(var, thermofile, shape,
                           ntime, ndims, dtype):
   
-  filestem, filetype = thermofiles.split(".")
-  filename = filestem+"_"+var+"."+filetype
+  idot = [i for i, ltr in enumerate(thermofile) if ltr == "."][-1]
+  filestem, filetype = thermofile[:idot], thermofile[idot:]
+  filename = filestem+"_"+var+filetype
   data, ndata = readbinary(filename)
 
   if ndata != int(np.prod(shape)):
@@ -109,7 +110,7 @@ def thermovar_from_binary(var, thermofiles, shape,
   
   return data
 
-def read_dimless_thermodynamics_binary(thermofiles, ndims,
+def read_dimless_thermodynamics_binary(thermofile, ndims,
                                        ntime, SDnspace):
 
   # expected lengths of data defined on gridbox centres or faces 
@@ -123,18 +124,18 @@ def read_dimless_thermodynamics_binary(thermofiles, ndims,
   vars = ["press", "temp", "qvap", "qcond"]
   datatypes = [np.double]*4
   for v, var in enumerate(vars): 
-    thermodata[var] = thermovar_from_binary(var, thermofiles, cen,
+    thermodata[var] = thermovar_from_binary(var, thermofile, cen,
                                             ntime, ndims, datatypes[v])
 
   datatypes = [np.double]*3
   if SDnspace >= 1:
-    thermodata["wvel"] = thermovar_from_binary("wvel", thermofiles, zface,
+    thermodata["wvel"] = thermovar_from_binary("wvel", thermofile, zface,
                                               ntime, ndims, datatypes[0]) 
     if SDnspace >= 2:
-      thermodata["uvel"] = thermovar_from_binary("uvel", thermofiles, xface,
+      thermodata["uvel"] = thermovar_from_binary("uvel", thermofile, xface,
                                                 ntime, ndims, datatypes[1])
       if SDnspace >= 3:
-        thermodata["vvel"] = thermovar_from_binary("vvel", thermofiles, yface,
+        thermodata["vvel"] = thermovar_from_binary("vvel", thermofile, yface,
                                                   ntime, ndims, datatypes[2])
 
   return thermodata
