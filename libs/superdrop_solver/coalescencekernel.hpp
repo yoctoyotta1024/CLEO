@@ -27,7 +27,7 @@ struct GolovinProb
   GolovinProb(const double R0)
       : prob_jk_const(1.5e3 * (pow(R0, 3.0))) {}
 
-  const double operator()(const Superdrop &drop1,
+  double operator()(const Superdrop &drop1,
                           const Superdrop &drop2,
                           const double DELT,
                           const double VOLUME) const
@@ -55,7 +55,7 @@ struct LongHydrodynamicProb
       : prob_jk_const(M_PI * pow(dlc::R0, 2.0) * dlc::W0),
         simmel_terminalv(SimmelTerminalVelocity{}) {}
 
-  const double operator()(const Superdrop &drop1,
+  double operator()(const Superdrop &drop1,
                           const Superdrop &drop2,
                           const double DELT,
                           const double VOLUME) const

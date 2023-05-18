@@ -31,7 +31,7 @@ to a double (hopefully a velocity!) */
 
 struct NullTerminalVelocity
 {
-  const double operator()(const Superdrop &drop) const
+  double operator()(const Superdrop &drop) const
   /* returns 0.0 as terminal velocity of a superdroplet */
   {
     return 0.0;
@@ -40,7 +40,7 @@ struct NullTerminalVelocity
 
 struct RogersYauTerminalVelocity
 {
-  const double operator()(const Superdrop &drop) const
+  double operator()(const Superdrop &drop) const
   /* returns (dimensionless) terminal velocity of a superdroplet
   according to formulas based off Stokes' terminal velocity. 
   See Rogers and Yau 1989 textbook "a short course in cloud physics" 
@@ -79,7 +79,7 @@ struct RogersYauTerminalVelocity
 
 struct SimmelTerminalVelocity
 {
-  const double operator()(const Superdrop &drop) const
+  double operator()(const Superdrop &drop) const
   /* returns (dimensionless) terminal velocity of a superdroplet
   according to Simmel et al. 2002. This is semi-empirical formula
   adapted  from work of Gunn and Kinzer, 1949 and Beard, 1976.
