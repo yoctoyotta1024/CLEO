@@ -41,6 +41,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(cvodes)
 
 # Kokkos library stuff
+set(CMAKE_CXX_FLAGS_B4 "${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_STANDARD_B4 "${CMAKE_CXX_STANDARD}")
 include(FetchContent)
 FetchContent_Declare(
   Kokkos
@@ -49,8 +51,10 @@ FetchContent_Declare(
   GIT_TAG 62d2b6c879b74b6ae7bd06eb3e5e80139c4708e6
 )
 set(CMAKE_CXX_STANDARD "20")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 FetchContent_MakeAvailable(Kokkos)
-unset(CMAKE_CXX_STANDARD)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
+set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # link cvode library to target
 target_link_libraries(${LIBNAME} PUBLIC SUNDIALS::cvodes_static Kokkos::kokkos)
