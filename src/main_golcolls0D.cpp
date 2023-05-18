@@ -92,7 +92,6 @@ int main(int argc, char *argv[])
   if (argc < 3)
   {
     throw std::invalid_argument("config and/or constants files not specified");
-    return -1;
   }
 
   /* object containing input parameters from configuration file */

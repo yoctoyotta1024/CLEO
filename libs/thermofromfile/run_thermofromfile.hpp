@@ -39,9 +39,10 @@ are read from file */
 
 namespace dlc = dimless_constants;
 
+template <typename A, typename B, typename C>
 void timestep_thermofromfile(const int t_end,
                             const int couplstep,
-                            const RunSDMStep<auto, auto, auto> &sdm,
+                            const RunSDMStep<A, B, C> &sdm,
                             ThermodynamicsFromFile &thermodyn,
                             Kokkos::Random_XorShift64_Pool<> &genpool,
                             Kokkos::vector<GridBox> &gridboxes,
@@ -82,8 +83,9 @@ about thermodynamic state (changes) is possible. */
   return t_mdl + couplstep;
 }
 
+template <typename A, typename B, typename C>
 void run_thermofromfile(const Config &config,
-                    const RunSDMStep<auto, auto, auto> &sdm,
+                    const RunSDMStep<A, B, C> &sdm,
                     const int t_end, const int couplstep)
 /* create superdroplets and gridboxes and then run uncoupled
 superdroplet model (SDM) using thermodynamics read from files */
@@ -124,9 +126,10 @@ superdroplet model (SDM) using thermodynamics read from files */
             << "\n ------------------------------------ \n";
 }
 
+template <typename A, typename B, typename C>
 void timestep_thermofromfile(const int t_end,
                             const int couplstep,
-                            const RunSDMStep<auto, auto, auto> &sdm,
+                            const RunSDMStep<A, B, C> &sdm,
                             ThermodynamicsFromFile &thermodyn,
                             Kokkos::Random_XorShift64_Pool<> &genpool,
                             Kokkos::vector<GridBox> &gridboxes,
