@@ -221,7 +221,6 @@ et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
                               std::to_string(iterlimit + niters) +
                               " iterations\n";
       throw std::invalid_argument(err);
-      break;
     }
   }
 

@@ -106,7 +106,6 @@ with supersaturation s_ratio */
                               " within " + std::to_string(maxiters) +
                               " iterations to find wet radius\n";
       throw std::invalid_argument(err);             
-      break;
     }
     else
     {
