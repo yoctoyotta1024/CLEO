@@ -1,0 +1,46 @@
+### --- CLEO C++ Requirements --- ###
+### always need c++20 standard!
+### using gcc compiler:
+###     gcc > 8 (tested > gcc 11.2.0)
+###     with cmake 3.18.0
+### using nvcc compiler:
+###     nvhpc > 22.3
+###     with cmake 3.21.1
+### ----------------------------- ###
+
+### -- CLEO PySD Requirements --- ###
+### python 3.0 (tested python > 3.10.4)
+### ----------------------------- ###
+
+### use spack find (or module avail) to get package versions ###
+e.g. spack find cmake
+
+### useful kokkos flags:
+-DKokkos_ARCH_NATIVE=ON
+-DKokkos_ARCH_AMPERE80=ON (or -DKokkos_ARCH_AMPERE86=ON)
+-DKokkos_ENABLE_SERIAL=ON
+-DKokkos_ENABLE_OPENMP=ON
+-DKokkos_ENABLE_CUDA=ON
+-DKokkos_ENABLE_CUDA_LAMBDA=ON
+-DKokkos_ENABLE_CUDA_UVM=ON (depreciated)
+
+CUDA ONLY ENABLED build:
+module load gcc
+module load nvhpc
+spack load cmake@3.23.1%gcc
+CXX=nvc++ CC=nvcc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_UVM=ON
+
+OPENMP ONLY ENABLE build:
+module load gcc
+CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
+
+SERIAL ONLY ENABLE build:
+module load gcc
+CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
+CXX=nvc++ CC=nvcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
+
+GO CRAZY build:
+module load gcc
+module load nvhpc
+spack load cmake@3.23.1%gcc
+CXX=nvc++ CC=nvcc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_UVM=ON
