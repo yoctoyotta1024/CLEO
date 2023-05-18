@@ -4,8 +4,8 @@
 # or CXX=g++ CC=gcc cmake -S ./ -B ./build
 
 # set cmake version
-#cmake_minimum_required(VERSION 3.18.0)
-cmake_minimum_required(VERSION 3.21.1) # for using Kokkos with NVC++ compiler 
+cmake_minimum_required(VERSION 3.18.0)
+#cmake_minimum_required(VERSION 3.21.1) # for using Kokkos with NVC++ compiler 
 
 # set project name and source directory of .cpp files
 project("testing")
@@ -55,9 +55,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 
-set(compileops -Wall -pedantic -g)
-#set(compileops -Wall -pedantic -g -gdwarf-4)
 #set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
+set(compileops -Wall -pedantic -g -gdwarf-4) # less strict without -Werror
+#set(compileops  -Wall -pedantic -g) # cannot use -gdwarf-4 flag for nvc++ compiler 
 
 target_compile_options(${PROJECT_NAME} PUBLIC ${compileops})
-#target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -pedantic -g)
