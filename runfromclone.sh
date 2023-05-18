@@ -12,5 +12,5 @@ python ./create_initsuperdropsbinary_script.py ./
 python ./create_initthermobinary_script.py ./
 
 cd build
-make clean && make
+make clean && make -j 16
 ./src/runCLEO "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
