@@ -25,7 +25,8 @@ path2build=${HOME}/CLEO/build/
 ### build CLEO (with openMP thread parallelism using Kokkos)
 # compilecmd="cmake CXX=g++ CC=gcc -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_OPENMP=ON"
 compilecmd="cmake CXX=g++ CC=gcc -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON"
-echo compilecmd
+echo ${compilecmd}
+${compilecmd}
 
 ### it's a good idea to ensure these directories exist
 mkdir ${path2build}bin
@@ -38,3 +39,5 @@ python ${path2CLEO}quickcreate_inputbinaries.py ${path2CLEO} $path2build
 cd build
 make clean && make -j 16
 runcmd=".${path2build}/src/runCLEO ${path2CLEO}src/config/config.txt ${path2CLEO}libs/claras_SDconstants.hpp"
+echo ${runcmd}
+${runcmd}
