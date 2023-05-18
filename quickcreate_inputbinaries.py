@@ -14,6 +14,8 @@ from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
 from pySD.initsuperdropsbinary_src import initattributes as iattrs
 from pySD.initsuperdropsbinary_src import radiiprobdistribs as rprobs 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -108,21 +110,22 @@ coord2gen = None                        # do not generate superdroplet coord2s
 radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
 radiigen = iattrs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
 
-initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
-                                               coord3gen, coord1gen, coord2gen)
-create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
-                                                  configfile, constsfile,
-                                                  gridfile, nsupers, numconc)
+initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
+                                        coord3gen, coord1gen, coord2gen)
+csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+                                      configfile, constsfile,
+                                      gridfile, nsupers, numconc)
 
 
 ### ----- show (and save) plots of binary file data ----- ###
 if isfigures[0]:
-  issavefig = isfigures[1]
-  if issavefig:
+  if isfigures[1]:
     Path(savefigpath).mkdir(exist_ok=True) 
-  rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, issavefig)
+  rgrid.plot_gridboxboundaries(constsfile, gridfile,
+                               savefigpath, isfigures[1])
   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
-                              thermofile, savefigpath, issavefig)
-  
+                              thermofile, savefigpath, isfigures[1])
+  rsupers.plot_initdistribs(configfile, constsfile, initSDsfile,
+                            gridfile, savefigpath, isfigures[1]) 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

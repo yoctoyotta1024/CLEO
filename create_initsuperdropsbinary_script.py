@@ -5,31 +5,32 @@ from pathlib import Path
 from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src.read_gbxboundaries import get_domainvol_from_gridfile
 
-### path and filenames
-abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
-# abspath = "/home/m/m300950/CLEO/"
-#abspath = sys.argv[1]
-constsfile = abspath+"libs/claras_SDconstants.hpp"
-configfile = abspath+"src/config/config.txt"
-
-spath = abspath+"build/share/"
-gridfile = spath+"dimlessGBxboundaries.dat"
-initSDsfile = spath+"dimlessSDsinit.dat"
-
-binpath = abspath+"build/bin/"
+### ----------------------- INPUT PARAMETERS ----------------------- ###
+### absolute or relative paths for build and CLEO directories
+path2CLEO = sys.argv[1]
+path2build = sys.argv[2]
 
 ### booleans for [making+showing, saving] figures
 isfigures = [True, True]
 
-### ------------ Number of Superdroplets per Gridbox ------------ ###
-# nsupers = 64 # int or dict of ints for number of superdroplets in a gridbox
+### essential paths and filenames
+constsfile = path2CLEO+"libs/claras_SDconstants.hpp"
+configfile = path2CLEO+"src/config/config.txt"
+binariespath = path2build+"/share/"
+savefigpath = path2build+"/bin/"
+
+gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
+initSDsfile = binariespath+"/dimlessSDsinit.dat" # note this should match config.txt
+
+### --- Number of Superdroplets per Gridbox --- ###
+### ---        (an int or dict of ints)     --- ###
 zlim = 750
 npergbx = 8
 nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 # nsupers = 1024
-### ---------------------------------------------------------------- ###
+### ------------------------------------------- ###
 
-### ------------ Choice of Superdroplet Radii Generator ------------ ###
+### --- Choice of Superdroplet Radii Generator --- ###
 # monor                = 1e-6                        # all SDs have this same radius [m]
 # radiigen  = initattributes.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
@@ -37,9 +38,9 @@ nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, z
 rspan                = [3e-9, 3e-6]                # min and max range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = initattributes.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]
-### ---------------------------------------------------------------- ###
+### ---------------------------------------------- ###
 
-### ------ Choice of Droplet Radius Probability Distribution ------- ###
+### --- Choice of Droplet Radius Probability Distribution --- ###
 # dirac0               = 1e-6                        # radius in sample closest to this value is dirac delta peak
 # numconc              = 1e9                         # total no. conc of real droplets [m^-3]
 # radiiprobdist = radiiprobdistribs.DiracDelta(dirac0)
@@ -59,37 +60,51 @@ radiiprobdist = radiiprobdistribs.LnNormal(geomeans, geosigs, scalefacs)
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 # numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 # radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
-### ---------------------------------------------------------------- ###
+### --------------------------------------------------------- ###
 
-### ---------- Choice of Superdroplet Coord3 Generator ------------- ###
+### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
-# coord3gen = initattributes.MonoCoordGen(monocoord3)
-coord3gen = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
+# coord3gen            = initattributes.MonoCoordGen(monocoord3)
+coord3gen            = initattributes.SampleCoordGen(True) # sample coord3 range randomly or not
 # coord3gen            = None                        # do not generate superdroplet coord3s
-### ---------------------------------------------------------------- ###
+### ----------------------------------------------- ###
 
-### ---------- Choice of Superdroplet Coord1 Generator ------------- ###
+### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
-# coord1gen = initattributes.MonoCoordGen(monocoord1)
+# coord1gen            = initattributes.MonoCoordGen(monocoord1)
 coord1gen            = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
 # coord1gen            = None                        # do not generate superdroplet coord1s
-### ---------------------------------------------------------------- ###
+### ----------------------------------------------- ###
 
-### ---------- Choice of Superdroplet Coord2 Generator ------------- ###
+### --- Choice of Superdroplet Coord2 Generator --- ###
 # monocoord2           = 1000                        # all SDs have this same coord2 [m] 
-# coord2gen = initattributes.MonoCoordGen(monocoord2)
-# coord2gen             = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord2gen            = initattributes.MonoCoordGen(monocoord2)
+# coord2gen            = initattributes.SampleCoordGen(True) # sample coord1 range randomly or not
 coord2gen            = None                        # do not generate superdroplet coord2s
+### ----------------------------------------------- ###
+
 ### ---------------------------------------------------------------- ###
 
-Path(binpath).mkdir(exist_ok=True) 
-Path(spath).mkdir(exist_ok=True) 
+
+### -------------------- BINARY FILE GENERATION--------------------- ###
+### ensure build, share and bin directories exist
+if path2CLEO == path2build:
+  raise ValueError("build directory cannot be CLEO")
+else:
+  Path(path2build).mkdir(exist_ok=True) 
+  Path(binariespath).mkdir(exist_ok=True) 
+
+### write initial superdrops binary
 initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
                                                coord3gen, coord1gen, coord2gen)
 create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
                                                   configfile, constsfile,
                                                   gridfile, nsupers, numconc)
 
+### plot initial superdrops binary
 if isfigures[0]:
+    if isfigures[1]:
+        Path(savefigpath).mkdir(exist_ok=True) 
     read_initsuperdrops.plot_initdistribs(configfile, constsfile, initSDsfile,
-                                          gridfile, binpath, isfigures[1])
+                                          gridfile, savefigpath, isfigures[1])
+### ---------------------------------------------------------------- ###
