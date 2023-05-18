@@ -30,21 +30,20 @@ gcc="gcc"
 # gcc="gcc-13"
 ### ---------------------------------------------------- ###
 
-### build CLEO (with openMP thread parallelism using Kokkos)
-### e.g. CXX=icpc CC=icc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON 
-# CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON- DKokkos_ENABLE_OPENMP=ON # openMP parallelism
-CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON # in serial
+# ### build CLEO (with openMP thread parallelism using Kokkos)
+# CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_OPENMP=ON # openMP parallelism
+# # CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON # in serial
 
-### it's a good idea to ensure these directories exist
-mkdir ${path2build}bin
-mkdir ${path2build}share
+# ### it's a good idea to ensure these directories exist
+# mkdir ${path2build}bin
+# mkdir ${path2build}share
 
-# # # ### generate input files
-${python} ${path2CLEO}quickcreate_inputbinaries.py ${path2CLEO} $path2build
+# # # # ### generate input files
+# ${python} ${path2CLEO}quickcreate_inputbinaries.py ${path2CLEO} $path2build
 
-### compile and run CLEO
-cd build
-make clean && make -j 16
+# ### compile and run CLEO
+# cd build
+# make clean && make -j 16
 runcmd="${path2build}/src/runCLEO ${path2CLEO}src/config/config.txt ${path2CLEO}libs/claras_SDconstants.hpp"
 echo ${runcmd}
 ${runcmd}
