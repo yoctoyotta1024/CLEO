@@ -3,7 +3,8 @@
 # CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build
 # or CXX=g++ CC=gcc cmake -S ./ -B ./build
 
-cmake_minimum_required(VERSION 3.18.0)
+#cmake_minimum_required(VERSION 3.18.0)
+cmake_minimum_required(VERSION 3.21.1) # for using Kokkos with NVC++ compiler 
 
 # essential CLEO SDM libaries #
 add_subdirectory(initialisation)

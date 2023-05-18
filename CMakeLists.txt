@@ -2,10 +2,11 @@
 #run cmake with these compiler options:
 # CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build
 # CXX=g++ CC=gcc cmake -S ./ -B ./build
-# CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ENABLE_OPENMP=ON -DKokkos_ARCH_NATIVE=ON
+# CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_OPENMP=ON
 # -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON
 
-cmake_minimum_required(VERSION 3.18.0)
+#cmake_minimum_required(VERSION 3.18.0)
+cmake_minimum_required(VERSION 3.21.1) # for using Kokkos with NVC++ compiler 
 
 project(project
   LANGUAGES CXX
