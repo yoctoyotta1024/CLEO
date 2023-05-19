@@ -51,6 +51,24 @@ def sratio2qvap(sratio, press, temp, Mr_ratio):
 
   return qvap
 
+def qparams_to_qvap(method, qparams, Mr_ratio, PRESS, TEMP):
+  ''' determine qvap above and below z (cloud) base '''
+
+  if method == "qvap":
+    return qparams
+  
+  elif method == "sratio":
+    q0 = sratio2qvap(qparams[0], PRESS, TEMP, Mr_ratio)
+    q1 = sratio2qvap(qparams[1], PRESS, TEMP, Mr_ratio)
+    return [q0, q1]
+  
+  elif method == "relh":
+    q0 = relh2qvap(PRESS, TEMP, qparams[0], Mr_ratio)  
+    q1 = relh2qvap(PRESS, TEMP, qparams[1], Mr_ratio)     
+    return [q0, q1]
+  else:
+    raise ValueError("valid method not given to generate qvap")
+    
 def divfree_flowfield2D(wmax, zlength, xlength, 
                         rhotilda_zfaces, rhotilda_xfaces,
                         gbxbounds, ndims):
@@ -135,7 +153,7 @@ class SimpleThermo2Dflowfield:
   = 0.95 below zbase and a 2D (z,x) dependent flow field'''
 
   def __init__(self, configfile, constsfile, PRESS, TEMP, qvapmethod, 
-                zbase, qparam, qcond, WMAX, Zlength, Xlength, VVEL):
+               qvapparams, zbase, qcond, WMAX, Zlength, Xlength, VVEL):
     
     inputs = thermoinputsdict(configfile, constsfile)
     
@@ -143,14 +161,11 @@ class SimpleThermo2Dflowfield:
     self.TEMP = TEMP                          # temperature [T]
     self.qcond = qcond                        # liquid water content []
     
-    # determine qvap above z (cloud) base
+    # determine qvap above & below z (cloud) base
     self.zbase = zbase
-    Mr_ratio = inputs["Mr_ratio"]
-    self.qvap_below = sratio2qvap(0.85, PRESS, TEMP, Mr_ratio) # supersat=0.85 below zbase
-    if qvapmethod == "relh":
-      self.qvap_above = relh2qvap(PRESS, TEMP, qparam, Mr_ratio)     # water vapour content []
-    elif qvapmethod == "sratio":
-      self.qvap_above = sratio2qvap(qparam, self.PRESS, self.TEMP, Mr_ratio)
+    qvaps = qparams_to_qvap(qvapmethod, qvapparams,
+                            inputs["Mr_ratio"], PRESS, TEMP)
+    self.qvap_below, self.qvap_above = qvaps
     
     self.WMAX = WMAX  # max velocities constant
     self.Zlength = Zlength # wavelength of velocity modulation in z direction [m]
@@ -232,36 +247,43 @@ class ConstHydrostaticAdiabat:
   Equations derived from Arabas et al. 2015 (sect 2.1) '''
 
   def __init__(self, configfile, constsfile, PRESSz0, THETA,
-              qvap, qcond, WMAX, Zlength, Xlength, VVEL):
+              qvapmethod, qvapparams, zbase, qcond, WMAX,
+              Zlength, Xlength, VVEL):
     
     inputs = thermoinputsdict(configfile, constsfile)
     
     ### parameters of profile ###
-    self.PRESSz0 = PRESSz0 #pressure at z=0m [Pa]
+    self.PRESSz0 = PRESSz0 # pressure at z=0m [Pa]
     self.THETA = THETA # (constant) dry potential temperature [K]
-    self.qvap = qvap # (constant) vapour mass mixing ratio []
     self.qcond = qcond # liquid mass mixing ratio []
     self.WMAX = WMAX  # max velocities constant
     self.Zlength = Zlength # wavelength of velocity modulation in z direction [m]
     self.Xlength = Xlength # wavelength of velocity modulation in x direction [m]
     self.VVEL = VVEL # horizontal (y) velocity
-
+    
+    # determine qvap above & below z (cloud) base
+    self.zbase = zbase
+    self.qvapmethod, self.qvapparams = qvapmethod, qvapparams
+    self.qvapz0 = qparams_to_qvap(qvapmethod, qvapparams,
+                                  inputs["Mr_ratio"], self.PRESSz0,
+                                  self.THETA)[0]
     ### constants ###
     self.GRAVG = inputs["G"]
     self.CP_DRY = inputs["CP_DRY"]
     self.RGAS_DRY = inputs["RGAS_DRY"]
     self.RGAS_V = inputs["RGAS_V"]
     self.RC_DRY = self.RGAS_DRY / self.CP_DRY
-    self.RCONST = 1 + self.qvap * self.RGAS_V / self.RGAS_DRY
+    self.RCONST = 1 + self.qvapz0 * self.RGAS_V / self.RGAS_DRY
     self.P1000 = 100000 # P_1000 = 1000 hPa [Pa]
     self.CP0 = inputs["CP0"]
     self.RHO0 = inputs["RHO0"]
+    self.Mr_ratio = inputs["Mr_ratio"]
 
     alpha = PRESSz0 / (self.RCONST * self.P1000) 
-    self.TEMP0 = THETA * np.power(alpha, self.RC_DRY) # temperature at z=0m [K]
+    self.TEMPz0 = THETA * np.power(alpha, self.RC_DRY) # temperature at z=0m [K]
 
-    beta = (1+self.qvap) / self.RCONST / self.RGAS_DRY
-    self.RHOz0 = beta * self.PRESSz0 / self.TEMP0
+    beta = (1+self.qvapz0) / self.RCONST / self.RGAS_DRY
+    self.RHOz0 = beta * self.PRESSz0 / self.TEMPz0
 
   def hydrostatic_adiabatic_profile(self, ZCOORDS):
     ''' returns *profile* of density (not the density itself!)
@@ -269,7 +291,7 @@ class ConstHydrostaticAdiabat:
     
     pow = 1/self.RC_DRY - 1
     
-    Aa = (1+self.qvap)*np.power(self.P1000, self.RC_DRY)
+    Aa = (1+self.qvapz0)*np.power(self.P1000, self.RC_DRY)
     Aa = (self.THETA * self.RGAS_DRY / Aa) 
     Aconst = self.RCONST * np.power(Aa, (1 / (1-self.RC_DRY)))
 
@@ -296,7 +318,7 @@ class ConstHydrostaticAdiabat:
     
     PRESS, TEMP = self.hydrostatic_adiabatic_thermo(ZCOORDS)
 
-    RHO_DRY = PRESS / ((self.RGAS_DRY + self.qvap * self.RGAS_V) * TEMP)
+    RHO_DRY = PRESS / ((self.RGAS_DRY + self.qvapz0 * self.RGAS_V) * TEMP)
 
     rhotilda = RHO_DRY/self.RHO0
 
@@ -336,12 +358,16 @@ class ConstHydrostaticAdiabat:
     zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
                                                               ndims)
     PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
+    
+    qvaps = qparams_to_qvap(self.qvapmethod, self.qvapparams,
+                            self.Mr_ratio, PRESS, TEMP)
+    qvap = np.where(zfulls<=self.zbase, qvaps[0], qvaps[1])
 
     shape_cen = int(ntime * np.prod(ndims))
     THERMODATA = {
       "PRESS": np.tile(PRESS, ntime),
       "TEMP": np.tile(TEMP, ntime),
-      "qvap": np.full(shape_cen, self.qvap),
+      "qvap": np.tile(qvap, ntime),
       "qcond": np.full(shape_cen, self.qcond), 
     }
 

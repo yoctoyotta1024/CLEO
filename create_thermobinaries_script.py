@@ -49,15 +49,20 @@ VVEL = None # [m/s]
 Zlength = 1500 # [m]
 Xlength = 1500 # [m]
 
-qvap = 0.0075 # [Kg/Kg]
-gen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
-                                        THETA, qvap, qcond, WMAX, 
-                                        Zlength, Xlength, VVEL)
+# qvapmethod = "sratio"
+qvapmethod = "qvap"
+sratios = [0.85, 1.05]
+sratios = [0.0075, 0.0075]
+zbase = 750
 
-# qvapmethod, sratio = "sratio", 0.85
-# zbase = 750
+# qvap = 0.0075 # [Kg/Kg]
+# qvapmethod = "sratio"
+gen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+                                        THETA, qvapmethod, sratios, zbase,
+                                        qcond, WMAX, Zlength, Xlength,
+                                        VVEL)
 # gen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
-#                                         THETA, "sratio", zbase, sratio,
+#                                         THETA, qvapmethod, sratios, zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL)
 ### ---------------------------------------------------------------- ###

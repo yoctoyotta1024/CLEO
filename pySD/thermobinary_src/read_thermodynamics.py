@@ -162,13 +162,14 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
     gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(gridfile,
                                                             COORD0=inputs["COORD0"],
                                                             return_ndims=True)
-    zhalf, xhalf, yhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds)
-    zfull, xfull, yfull = rgrid.fullcell_fromhalfcoords(zhalf, xhalf, yhalf)
+    xyzhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds) #[m]
+    zhalf, xhalf, yhalf = [half/1000 for half in xyzhalf] #convery [m] to [km]
+    zfull, xfull, yfull = rgrid.fullcell_fromhalfcoords(zhalf, xhalf, yhalf) #[m]
 
     thermodata = get_thermodynamics_from_thermofile(thermofile, ndims,
                                                     inputs=inputs)
 
-    plot_1dprofiles(zfull, thermodata, binpath, savefig)
+    plot_1dprofiles(zfull, thermodata, inputs["Mr_ratio"], binpath, savefig)
 
     if inputs["SDnspace"] > 0: 
       xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
@@ -179,31 +180,42 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
         plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel_cens"],
                       thermodata["uvel_cens"], binpath, savefig)
 
-def plot_1dprofiles(zfull, thermodata, binpath, savefig):
+
+def try1dplot(ax, data, zfull):
+  try:
+    ax.plot(data, zfull, marker="x") # (fails for 0D model)
+  except:
+    ax.scatter(data, zfull, marker="x")
+
+def plot_1dprofiles(zfull, thermodata, Mr_ratio, binpath, savefig):
     
     vars = ["press", "temp", "qvap", "qcond",
             "wvel_cens", "uvel_cens", "vvel_cens"]
     units = [" /Pa", " /K", "", ""]+[" /ms$^{-1}$"]*3
     
-    fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(12, 6))
+    fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(16, 8))
     axs = axs.flatten()
 
     lines = 0
     for v, var in enumerate(vars):
       if var in thermodata.vars:
         profalltime = thermodata.xymean(thermodata[var]) # 1d profile at all times
-        try:
-          axs[v].plot(profalltime.T, zfull[None,:].T, marker="x") # (fails for 0D model)
-        except:
-          axs[v].scatter(profalltime.T, zfull[None,:].T, marker="x")
+        try1dplot(axs[v], profalltime.T, zfull[None,:].T)
         axs[v].set_xlabel(vars[v]+units[v])  
         lines += 1
 
-    axs[0].set_ylabel("z /km")
-    axs[4].set_ylabel("z /km")
-    
+    supersat = relative_humidity(thermodata.xymean(thermodata.press),
+                                  thermodata.xymean(thermodata.temp),
+                                  thermodata.xymean(thermodata.qvap),
+                                  Mr_ratio)[1]
+    try1dplot(axs[lines], supersat.T, zfull[None,:].T)
+    axs[lines].set_xlabel("supersaturation")  
+    lines+=1
+
     for a in range(lines, len(axs), 1):
       axs[a].remove() # delete unused axes
+    axs[0].set_ylabel("z /km")
+    axs[4].set_ylabel("z /km")
 
     fig.tight_layout()
     if savefig:
