@@ -50,7 +50,7 @@ Zlength = 1500 # [m]
 Xlength = 1500 # [m]
 
 qvapmethod = "sratio"
-sratios = [0.95, 1.001]
+sratios = [0.95, 1.0025]
 zbase = 750
 
 # qvap = 0.0075 # [Kg/Kg]
