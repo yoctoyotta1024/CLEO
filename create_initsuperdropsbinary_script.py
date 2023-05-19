@@ -27,7 +27,7 @@ initSDsfile = binariespath+"/dimlessSDsinit.dat" # note this should match config
 ### --- Number of Superdroplets per Gridbox --- ###
 ### ---        (an int or dict of ints)     --- ###
 zlim = 750
-npergbx = 8
+npergbx = 1024
 nsupers = initattributes.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 # nsupers = 1024
 ### ------------------------------------------- ###
