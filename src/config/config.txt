@@ -31,7 +31,7 @@ CONDTSTEP = 1                             # time between SD condensation events 
 COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 5                           # time between SDM motion [s]
 COUPLTSTEP = 60                           # time between SDM observations and between thermodynamic couplings [s]
-T_END = 3600                              # time span of integration [s]
+T_END = 7200                              # time span of integration [s]
 
 # SDs parameters #
 nSDsvec = 3600                          # initial no. elements in SDs' vector (=total initial no. of SDs)
