@@ -177,8 +177,8 @@ superdroplets from combination of those two seperate observers */
 
   const Observer auto obs6 = create_sdmomentsobserver(stores.sdmoments);
 
-  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{};
-  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1;
+  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{};
+  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1;
 
   return observer;
 }
