@@ -27,7 +27,7 @@ model steps using model_step chrono function */
   return std::chrono::round<model_step>(secd{TSTEP / dlc::TIME0}).count();
 }
 
-inline int realtime2dimless(const double TSTEP)
+inline double realtime2dimless(const double TSTEP)
 /* convert TSTEP [seconds] (e.g. a double from Config
 struct) into a dimensionless time  */
 {

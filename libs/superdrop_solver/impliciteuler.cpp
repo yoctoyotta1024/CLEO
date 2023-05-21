@@ -91,10 +91,11 @@ for more details. */
   Convergence may be slower so allow >= 3 Newton Raphson
   iterations (could also refine tolerances) */
   {
-    const ImpIter impit{niters, delt, maxrtol, maxatol,
+    const unsigned int miniters(std::max(niters, (unsigned int)5));
+    const double substepdelt = delt;//std::max(max_uniquedelt, subdelt);
+    const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
-    double init_ziter(impit.initialguess(rprev));
-    return impit.newtonraphson_niterations(rprev, init_ziter);
+    return substep_implicitmethod(substepdelt, delt, impit, rprev);
   }
 }
 

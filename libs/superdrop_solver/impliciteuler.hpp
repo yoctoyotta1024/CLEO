@@ -125,7 +125,7 @@ private:
                                 const double delt,
                                 const ImpIter &impit,
                                 const double rprev) const;
-
+  
 public:
   ImplicitEuler(const unsigned int niters, const double subdelt,
                 const double delt, const double maxrtol, const double maxatol)
