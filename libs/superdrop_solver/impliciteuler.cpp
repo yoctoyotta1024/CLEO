@@ -33,8 +33,7 @@ Matsushima et al. 2023 for more details. */
   /* if supersaturation close to 1.0, activation or
   deactivation might occur so perform subtimestepping */
   {
-    const unsigned int miniters(std::max(niters, (unsigned int)5));
-    const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
+    const ImpIter impit{niters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     return substep_implicitmethod(subdelt, delt, impit, rprev);
   }
@@ -91,8 +90,7 @@ for more details. */
   Convergence may be slower so allow >= 3 Newton Raphson
   iterations (could also refine tolerances) */
   {
-    const unsigned int miniters(std::max(niters, (unsigned int)5));
-    const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
+    const ImpIter impit{niters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     return substep_implicitmethod(subdelt, delt, impit, rprev);
   }
