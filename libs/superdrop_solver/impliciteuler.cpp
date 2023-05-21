@@ -11,18 +11,18 @@
 #include "impliciteuler.hpp"
 
 double ImplicitEuler::solve_condensation(const double s_ratio,
-                                                    const double akoh,
-                                                    const double bkoh,
-                                                    const double fkl,
-                                                    const double fdl,
-                                                    const double rprev) const
+                                         const double akoh,
+                                         const double bkoh,
+                                         const double fkl,
+                                         const double fdl,
+                                         const double rprev) const
 /* forward timestep previous radius 'rprev' by delt using an implicit
 euler method to integrate the condensation/evaporation ODg. Implict
 timestepping equation defined in section 5.1.2 of Shima et al. 2009
 and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
 Newton Raphson iterations are used to converge towards the root of
 g(z) within the tolerances of an ImpIter instance. Tolerances,
-maxium number of iterations and sub-timestepping are adjusted when 
+maxium number of iterations and sub-timestepping are adjusted when
 near to supersaturation=1 (when activation / deactivation may occur).
 Refer to section 5.1.2 Shima et al. 2009 and section 3.3.3 of
 Matsushima et al. 2023 for more details. */
@@ -34,7 +34,6 @@ Matsushima et al. 2023 for more details. */
   deactivation might occur so perform subtimestepping */
   {
     const unsigned int miniters(std::max(niters, (unsigned int)5));
-    const double subdelt(delt / (double)nsubsteps);
     const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     return substep_implicitmethod(subdelt, delt, impit, rprev);
@@ -105,7 +104,8 @@ double ImplicitEuler::substep_implicitmethod(const double subdelt,
                                              const double rprev) const
 {
   double subr(rprev);
-  for (double dt = 0.0; dt < delt; dt += subdelt)
+  const unsigned int nsubs = std::ceil(delt/subdelt);
+  for (unsigned int n=0; n < nsubs; ++n)
   {
     double init_ziter(impit.initialguess(subr));
     subr = impit.newtonraphson_niterations(subr, init_ziter);

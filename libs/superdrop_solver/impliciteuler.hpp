@@ -30,7 +30,7 @@ class ImplicitEuler
 {
 private:
   const unsigned int niters;    // suggested number of iterations for implicit method before testing for convergence
-  const unsigned int nsubsteps; // number of substeps to condensation method when supersat close to 1 (0 = false ie. none)
+  const double subdelt;         // number of substeps to condensation method when supersat close to 1 (0 = false ie. none)
   const double delt;            // timestep of ODE solver (at each step implicit method is called)
   const double maxrtol;         // adjustable relative tolerance for convergence of NR method
   const double maxatol;         // adjustable abolute tolerance for convergence of NR method
@@ -127,9 +127,9 @@ private:
                                 const double rprev) const;
 
 public:
-  ImplicitEuler(const unsigned int niters, const unsigned int nsubsteps,
+  ImplicitEuler(const unsigned int niters, const double subdelt,
                 const double delt, const double maxrtol, const double maxatol)
-      : niters(niters), nsubsteps(nsubsteps), delt(delt),
+      : niters(niters), subdelt(subdelt), delt(delt),
         maxrtol(maxrtol), maxatol(maxatol) {}
 
   double solve_condensation_matsushima(const double s_ratio, const double akoh,

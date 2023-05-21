@@ -5,7 +5,7 @@ coupled with a CVODE ode solver for the thermodynamics
 (p, temp, qv and qc) over time */
 
 // after make/compiling, execute for example via:
-// ./src/cond0D "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
+// ./src/cond0D "../src/config/condconfig.txt" "../libs/claras_SDconstants.hpp"
 
 /* standard library packages */
 #include <vector>
@@ -107,9 +107,10 @@ int main(int argc, char *argv[])
   const Maps4GridBoxes gbxmaps(config.SDnspace, config.grid_filename);
 
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
+  const double cond_subtstep = realtime2dimless(config.cond_SUBTSTEP);
   const auto sdmprocess(CondensationProcess(mdlsteps.condsubstep, &step2dimlesstime,
                                             config.doAlterThermo, config.cond_iters,
-                                            config.cond_nsubsteps, config.cond_rtol,
+                                            cond_subtstep, config.cond_rtol,
                                             config.cond_atol));
   const MoveSuperdropsInDomain sdmmotion(NullMotion{});
 

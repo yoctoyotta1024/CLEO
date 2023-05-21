@@ -117,9 +117,9 @@ void Config::configvariable(const std::string name, const std::string value)
     cond_iters = stoul(value);
     issuccess = true;
   }
-  else if (name == "cond_nsubsteps")
+  else if (name == "cond_SUBTSTEP")
   {
-    cond_nsubsteps = stoul(value);
+    cond_SUBTSTEP = stod(value);
     issuccess = true;
   }
   else if (name == "cond_rtol")
