@@ -92,7 +92,7 @@ for more details. */
   iterations (could also refine tolerances) */
   {
     const unsigned int miniters(std::max(niters, (unsigned int)5));
-    const double substepdelt = delt;//std::max(max_uniquedelt, subdelt);
+    const double substepdelt = std::max(max_uniquedelt, subdelt);
     const ImpIter impit{miniters, subdelt, maxrtol, maxatol,
                         s_ratio, akoh, bkoh, ffactor};
     return substep_implicitmethod(substepdelt, delt, impit, rprev);
