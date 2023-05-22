@@ -86,7 +86,7 @@ def plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
 
     if type(gbxs2plt) == int:
         gbxidxs = [gbxs2plt]
-        savename = binpath+"initGBx"+{gbxs2plt}+"distrib.png"
+        savename = binpath+"initGBx"+str(gbxs2plt)+"distrib.png"
     elif gbxs2plt == "all":
         gbxidxs  = np.unique(attrs.sd_gbxindex)
         savename = binpath+"initallGBxsdistribs.png"

@@ -9,7 +9,7 @@ from pathlib import Path
 
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as  cgrid
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
-from pySD.thermobinary_src import thermogen as gthermo
+from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
 from pySD.initsuperdropsbinary_src import initattributes as iSDs
@@ -95,7 +95,7 @@ rgrid.print_domain_info(constsfile, gridfile)
 
 
 ### ----- write thermodyanmics binaries ----- ###
-thermodyngen = gthermo.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
                                         THETA, qvapmethod, sratios, Zbase,
                                         qcond, WMAX, Zlength, Xlength,
                                         VVEL)
