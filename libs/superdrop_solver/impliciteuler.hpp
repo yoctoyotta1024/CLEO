@@ -121,11 +121,12 @@ private:
     }
   };
 
-  double substep_implicitmethod(const double subdelt,
-                                const double delt,
-                                const ImpIter &impit,
-                                const double rprev) const;
-  
+  double substep_implicitmethod(const double delt, const unsigned int niters,
+                                const double rtol, const double atol,
+                                const double s_ratio, const double akoh,
+                                const double bkoh, const double ffactor,
+                                const double rprev, double subdelt) const;
+
 public:
   ImplicitEuler(const unsigned int niters, const double subdelt,
                 const double delt, const double maxrtol, const double maxatol)

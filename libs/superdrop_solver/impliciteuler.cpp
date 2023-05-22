@@ -34,9 +34,9 @@ Matsushima et al. 2023 for more details. */
   /* if supersaturation close to s_act, activation or
   deactivation might occur so perform subtimestepping */
   {
-    const ImpIter impit{niters, subdelt, maxrtol, maxatol,
-                        s_ratio, akoh, bkoh, ffactor};
-    return substep_implicitmethod(subdelt, delt, impit, rprev);
+    return substep_implicitmethod(delt, niters, maxrtol, maxatol,
+                                  s_ratio, akoh, bkoh, ffactor,
+                                  rprev, subdelt);
   }
 
   else
@@ -91,20 +91,27 @@ for more details. */
   Convergence may be slower so allow >= 3 Newton Raphson
   iterations (could also refine tolerances) */
   {
-    const double subt(std::max(max_uniquedelt, subdelt));
-    const ImpIter impit{niters, subt, maxrtol, maxatol,
-                        s_ratio, akoh, bkoh, ffactor};
-    return substep_implicitmethod(subt, delt, impit, rprev);
+    const double subdelt(std::max(max_uniquedelt, subdelt));
+    return substep_implicitmethod(delt, niters, maxrtol, maxatol,
+                                  s_ratio, akoh, bkoh, ffactor,
+                                  rprev, subdelt);
   }
 }
 
-double ImplicitEuler::substep_implicitmethod(const double subdelt,
-                                             const double delt,
-                                             const ImpIter &impit,
-                                             const double rprev) const
+double ImplicitEuler::
+    substep_implicitmethod(const double delt, const unsigned int niters,
+                           const double rtol, const double atol,
+                           const double s_ratio, const double akoh,
+                           const double bkoh, const double ffactor,
+                           const double rprev, double subdelt) const
 {
-  double subr(rprev);
   const unsigned int nsubs = std::ceil(delt/subdelt);
+  subdelt = delt / (double)nsubs;
+
+  const ImpIter impit{niters, subdelt, maxrtol, maxatol,
+                        s_ratio, akoh, bkoh, ffactor};
+
+  double subr(rprev);
   for (unsigned int n=0; n < nsubs; ++n)
   {
     double init_ziter(impit.initialguess(subr));
