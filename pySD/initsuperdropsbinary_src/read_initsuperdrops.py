@@ -49,15 +49,9 @@ def read_dimless_superdrops_binary(filename):
     
     return attrs
 
-
-def plot_initdistribs(configfile, constsfile, initSDsfile,
-                      gridfile, binpath, savefig):
+def plot_initdistribs(attrs, gbxvols, gbxidxs):
 
     plt.rcParams.update({'font.size': 14})
-
-    gbxvols = get_gbxvols_from_gridfile(gridfile, constsfile=constsfile)
-    attrs = get_superdroplet_attributes(configfile,constsfile, initSDsfile)
-
     fig, axs = figure_setup(attrs.coord3, attrs.coord1, attrs.coord2)
 
     # create nbins evenly spaced in log10(r)
@@ -66,7 +60,6 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
     hedgs = np.linspace(np.log10(minr), np.log10(maxr),
                         nbins+1)  # edges to lnr bins
 
-    gbxidxs  = np.unique(attrs.sd_gbxindex)
     for idx in gbxidxs:
         vol = gbxvols[idx]
         sl = np.s_[attrs.sd_gbxindex==idx]
@@ -74,16 +67,39 @@ def plot_initdistribs(configfile, constsfile, initSDsfile,
                                 attrs.radius[sl], attrs.eps[sl])
         l1 = plot_numconcdistrib(axs[1], hedgs, attrs.eps[sl],
                                  attrs.radius[sl], vol)
-        l3 = plot_masssolutedistrib(axs[2], hedgs, attrs.eps[sl],
+        l2 = plot_masssolutedistrib(axs[2], hedgs, attrs.eps[sl],
                                     attrs.radius[sl], attrs.m_sol[sl],
                                     vol)
         ls = plot_coorddistribs(axs, sl, hedgs, attrs)
         
     fig.tight_layout()
+    
+    return fig, axs, [l0, l1, l2, ls]
+
+def plot_initGBxsdistrib(configfile, constsfile, initSDsfile,
+                        gridfile, binpath, savefig, gbxs2plt):
+    ''' plot initial superdroplet distribution from initSDsfile binary
+    of every gridbox with index in gbx2plts '''
+
+    if type(gbxs2plt) == int:
+        gbxidxs = [gbxs2plt]
+        savename = binpath+"initGBx"+{gbxs2plt}+"distrib.png"
+    elif gbxs2plt == "all":
+        gbxidxs  = np.unique(attrs.sd_gbxindex)
+        savename = binpath+"initallGBxsdistribs.png"
+    else:
+        gbxidxs = gbxs2plt
+        savename = binpath+"initGBxsdistribs.png"
+
+    gbxvols = get_gbxvols_from_gridfile(gridfile, constsfile=constsfile)
+    attrs = get_superdroplet_attributes(configfile,constsfile, initSDsfile) 
+    fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)   
+    
+    fig.tight_layout()
     if savefig:
-        fig.savefig(binpath+"initdistribs.png", dpi=400,
+        fig.savefig(savename, dpi=400,
                     bbox_inches="tight", facecolor='w', format="png")
-        print("Figure .png saved as: "+binpath+"initdistribs.png")
+        print("Figure .png saved as: "+savename)
     plt.show()
 
 def figure_setup(coord3, coord1, coord2):
