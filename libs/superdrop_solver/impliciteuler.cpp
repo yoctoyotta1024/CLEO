@@ -28,8 +28,8 @@ Refer to section 5.1.2 Shima et al. 2009 and section 3.3.3 of
 Matsushima et al. 2023 for more details. */
 {
   const double ffactor(dlc::Rho_l * (fkl + fdl));
-  const double s_act(1 + std::sqrt(4.0 * std::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
 
+  const double s_act(1 + std::sqrt(4.0 * std::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
   if ((s_ratio > 0.999*s_act) && (s_ratio < 1.001*s_act))
   /* if supersaturation close to s_act, activation or
   deactivation might occur so perform subtimestepping */
