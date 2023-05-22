@@ -12,7 +12,7 @@ from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.thermobinary_src import thermogen as gthermo
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
-from pySD.initsuperdropsbinary_src import initattributes as iattrs
+from pySD.initsuperdropsbinary_src import initattributes as iSDs
 from pySD.initsuperdropsbinary_src import radiiprobdistribs as rprobs 
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
@@ -45,19 +45,6 @@ zgrid = [0, 1500, 50]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid = [0, 1500, 50]     # evenly spaced xhalf coords [m]
 ygrid = np.array([0, 50])  # array of yhalf coords [m]
 
-
-### --- settings for 2D Thermodyanmics --- ###
-PRESS0 = 101500 # [Pa]
-THETA = 289 # [K]
-qcond = 0.0 # [Kg/Kg]
-WMAX = 0.6 # [m/s]
-VVEL = None # [m/s]
-Zlength = 1500 # [m]
-Xlength = 1500 # [m]
-qvapmethod = "sratio"
-Zbase = 750 # [m]
-sratios = [0.95, 1.0025] # s_ratio [below, above] Zbase
-
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
 zlim = 750        # max z coord of superdroplets
@@ -73,6 +60,17 @@ geosigs              = [1.4, 1.6]
 scalefacs            = [6e6, 4e6]   
 numconc = np.sum(scalefacs)
 
+### --- settings for 2D Thermodyanmics --- ###
+PRESS0 = 101500 # [Pa]
+THETA = 289 # [K]
+qcond = 0.0 # [Kg/Kg]
+WMAX = 0.6 # [m/s]
+VVEL = None # [m/s]
+Zlength = 1500 # [m]
+Xlength = 1500 # [m]
+qvapmethod = "sratio"
+Zbase = 750 # [m]
+sratios = [0.95, 1.0025] # s_ratio [below, above] Zbase
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -106,14 +104,14 @@ cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
 
 
 ### ----- write initial superdroplets binary ----- ###
-nsupers = iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
-coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
+nsupers = iSDs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+coord3gen = iSDs.SampleCoordGen(True) # sample coord3 randomly
+coord1gen = iSDs.SampleCoordGen(True) # sample coord1 randomly
 coord2gen = None                        # do not generate superdroplet coord2s
 radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
-radiigen = iattrs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
+radiigen = iSDs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
 
-initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
+initattrsgen = iSDs.InitManyAttrsGen(radiigen, radiiprobdist,
                                         coord3gen, coord1gen, coord2gen)
 csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
                                       configfile, constsfile,
