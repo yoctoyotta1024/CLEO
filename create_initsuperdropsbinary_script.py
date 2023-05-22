@@ -11,8 +11,8 @@ path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 
 ### booleans for [making+showing, saving] figures
-# isfigures = [True, True]
-isfigures = [False, False]
+isfigures = [True, True]
+gbxs2plt = "all" # [0]
 
 ### essential paths and filenames
 constsfile = path2CLEO+"libs/claras_SDconstants.hpp"
@@ -106,6 +106,7 @@ iSDs.create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen
 if isfigures[0]:
     if isfigures[1]:
         Path(savefigpath).mkdir(exist_ok=True) 
-    iSDs.read_initsuperdrops.plot_initdistribs(configfile, constsfile, initSDsfile,
-                                          gridfile, savefigpath, isfigures[1])
+    iSDs.read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+                                                   gridfile, savefigpath, isfigures[1],
+                                                   gbxs2plt)
 ### ---------------------------------------------------------------- ###

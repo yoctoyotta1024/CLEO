@@ -24,7 +24,7 @@ from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 path2CLEO = sys.argv[1]  # absolute or relative path of CLEO directory
 path2build = sys.argv[2] # absolute or relative path to build directory
 isfigures = [True, True] # booleans for [making+showing, saving] figures
-isSDfigures = [False, False] # booleans initial superdropets figures (nb. can be very slow)
+SDgbxs2plt = [0] # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
 
 ### --- essential paths and filenames --- ###
 # where to find constants and config files
@@ -47,15 +47,16 @@ ygrid = np.array([0, 50])  # array of yhalf coords [m]
 
 
 ### --- settings for 2D Thermodyanmics --- ###
-PRESS0 = 101500   # [Pa]
-THETA = 289       # [K]
-qvap = 0.0075     # [Kg/Kg]
-qcond = 0.0       # [Kg/Kg]
-WMAX = 0.6        # [m/s]
-Zlength = 1500    # [m]
-Xlength = 1500    # [m]
-VVEL = None       # [m/s]
-
+PRESS0 = 101500 # [Pa]
+THETA = 289 # [K]
+qcond = 0.0 # [Kg/Kg]
+WMAX = 0.6 # [m/s]
+VVEL = None # [m/s]
+Zlength = 1500 # [m]
+Xlength = 1500 # [m]
+qvapmethod = "sratio"
+Zbase = 750 # [m]
+sratios = [0.95, 1.0025] # s_ratio [below, above] Zbase
 
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
@@ -96,10 +97,11 @@ rgrid.print_domain_info(constsfile, gridfile)
 
 
 ### ----- write thermodyanmics binaries ----- ###
-gen = gthermo.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
-                                      THETA, qvap, qcond, WMAX, 
-                                      Zlength, Xlength, VVEL)
-cthermo.write_thermodynamics_binary(thermofile, gen, configfile,
+thermodyngen = gthermo.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+                                        THETA, qvapmethod, sratios, Zbase,
+                                        qcond, WMAX, Zlength, Xlength,
+                                        VVEL)
+cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
 
@@ -126,11 +128,8 @@ if isfigures[0]:
                                savefigpath, isfigures[1])
   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                               thermofile, savefigpath, isfigures[1])
-
-if isSDfigures[0]:
-  if isSDfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True)  
-  rsupers.plot_initdistribs(configfile, constsfile, initSDsfile,
-                            gridfile, savefigpath, isSDfigures[1]) 
+  rsupers.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+                              gridfile, savefigpath, isfigures[1],
+                              SDgbxs2plt) 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

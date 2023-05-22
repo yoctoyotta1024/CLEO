@@ -76,7 +76,7 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
     
     return fig, axs, [l0, l1, l2, ls]
 
-def plot_initGBxsdistrib(configfile, constsfile, initSDsfile,
+def plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
                         gridfile, binpath, savefig, gbxs2plt):
     ''' plot initial superdroplet distribution from initSDsfile binary
     of every gridbox with index in gbx2plts '''
