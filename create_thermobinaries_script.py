@@ -22,7 +22,7 @@ binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 
 gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
-thermofile =  binariespath+"dimlessthermodynamics.dat"
+thermofile =  binariespath+"/dimlessthermodynamics.dat"
 
 
 ### --- Choose Initial Thermodynamic Conditions for Gridboxes  --- ###
@@ -35,7 +35,7 @@ thermofile =  binariespath+"dimlessthermodynamics.dat"
 # W_INIT = 0.0                            # initial vertical (z) velocity [m/s]
 # U_INIT = 0.0                            # initial horizontal x velocity [m/s]
 # V_INIT = 0.0                            # initial horizontal y velocity [m/s]
-# gen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
+# thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
 #                                     qc_init, W_INIT, U_INIT, V_INIT,
 #                                     relh=relh_init, constsfile=constsfile)
 
@@ -50,21 +50,21 @@ Zlength = 1500 # [m]
 Xlength = 1500 # [m]
 
 qvapmethod = "sratio"
-zbase = 750 # [m]
-sratios = [0.95, 1.0025] # s_ratio [below, above] zbase
+Zbase = 750 # [m]
+sratios = [0.95, 1.0025] # s_ratio [below, above] Zbase
 
-gen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
-                                        THETA, qvapmethod, sratios, zbase,
+thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+                                        THETA, qvapmethod, sratios, Zbase,
                                         qcond, WMAX, Zlength, Xlength,
                                         VVEL)
-# gen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
-#                                         THETA, qvapmethod, sratios, zbase,
+# thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
+#                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL)
 ### ---------------------------------------------------------------- ###
 
 ### -------------------- BINARY FILE GENERATION--------------------- ###
-cthermo.write_thermodynamics_binary(thermofile, gen, configfile,
+cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
 if isfigures[0]:

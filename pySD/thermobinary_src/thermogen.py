@@ -150,10 +150,10 @@ class ConstUniformThermo:
 class SimpleThermo2Dflowfield:
   ''' create thermodyanmics that's constant in time 
   with (P,T,qc) uniform throughout the domain with relative humidity
-  = 0.95 below zbase and a 2D (z,x) dependent flow field'''
+  = 0.95 below Zbase and a 2D (z,x) dependent flow field'''
 
   def __init__(self, configfile, constsfile, PRESS, TEMP, qvapmethod, 
-               qvapparams, zbase, qcond, WMAX, Zlength, Xlength, VVEL):
+               qvapparams, Zbase, qcond, WMAX, Zlength, Xlength, VVEL):
     
     inputs = thermoinputsdict(configfile, constsfile)
     
@@ -162,7 +162,7 @@ class SimpleThermo2Dflowfield:
     self.qcond = qcond                        # liquid water content []
     
     # determine qvap above & below z (cloud) base
-    self.zbase = zbase
+    self.Zbase = Zbase
     qvaps = qparams_to_qvap(qvapmethod, qvapparams,
                             inputs["Mr_ratio"], PRESS, TEMP)
     self.qvap_below, self.qvap_above = qvaps
@@ -178,7 +178,7 @@ class SimpleThermo2Dflowfield:
 
   def generate_qvap_profile(self, zfulls):
 
-    qvap = np.where(zfulls >= self.zbase, self.qvap_above, self.qvap_below)
+    qvap = np.where(zfulls >= self.Zbase, self.qvap_above, self.qvap_below)
 
     return qvap
 
@@ -247,7 +247,7 @@ class ConstHydrostaticAdiabat:
   Equations derived from Arabas et al. 2015 (sect 2.1) '''
 
   def __init__(self, configfile, constsfile, PRESSz0, THETA,
-              qvapmethod, qvapparams, zbase, qcond, WMAX,
+              qvapmethod, qvapparams, Zbase, qcond, WMAX,
               Zlength, Xlength, VVEL):
     
     inputs = thermoinputsdict(configfile, constsfile)
@@ -262,7 +262,7 @@ class ConstHydrostaticAdiabat:
     self.VVEL = VVEL # horizontal (y) velocity
     
     # determine qvap above & below z (cloud) base
-    self.zbase = zbase
+    self.Zbase = Zbase
     self.qvapmethod, self.qvapparams = qvapmethod, qvapparams
     self.qvapz0 = qparams_to_qvap(qvapmethod, qvapparams,
                                   inputs["Mr_ratio"], self.PRESSz0,
@@ -361,7 +361,7 @@ class ConstHydrostaticAdiabat:
     
     qvaps = qparams_to_qvap(self.qvapmethod, self.qvapparams,
                             self.Mr_ratio, PRESS, TEMP)
-    qvap = np.where(zfulls<=self.zbase, qvaps[0], qvaps[1])
+    qvap = np.where(zfulls<=self.Zbase, qvaps[0], qvaps[1])
 
     shape_cen = int(ntime * np.prod(ndims))
     THERMODATA = {
