@@ -50,11 +50,9 @@ Zlength = 1500 # [m]
 Xlength = 1500 # [m]
 
 qvapmethod = "sratio"
-sratios = [0.95, 1.0025]
-zbase = 750
+zbase = 750 # [m]
+sratios = [0.95, 1.0025] # s_ratio [below, above] zbase
 
-# qvap = 0.0075 # [Kg/Kg]
-# qvapmethod = "sratio"
 gen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
                                         THETA, qvapmethod, sratios, zbase,
                                         qcond, WMAX, Zlength, Xlength,
