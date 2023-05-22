@@ -3,7 +3,6 @@ import numpy as np
 from pathlib import Path
 
 import pySD.initsuperdropsbinary_src as iSDs
-from pySD.gbxboundariesbinary_src.read_gbxboundaries import get_domainvol_from_gridfile
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
