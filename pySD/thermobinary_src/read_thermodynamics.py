@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import colors
 
 from .create_thermodynamics import thermoinputsdict, DimlessThermodynamics
 from .thermogen import saturation_press
@@ -230,20 +231,24 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
 
   vars = ["press", "temp", "qvap", "qcond"]
   units = [" /Pa", " /K", "", ""]
-  cmaps = ["PRGn", "RdBu", "BrBG", "BrBG"]
-  
+  cmaps = ["PRGn", "RdBu_r", "BrBG", "BrBG"]
+  cmapcens = [np.nanmin(thermodata.press),
+              np.nanmin(thermodata.temp),
+              np.mean(thermodata.qvap), 0.0] 
+
   fig, axs = plt.subplots(nrows=2, ncols=3,  figsize=(13,8))
   axs = axs.flatten()
   
   for v, var in enumerate(vars):
     mean2d = thermodata.ytmean(thermodata[var]) #avg over time and y axes
-    pcm = axs[v].pcolormesh(xxh[:,:], zzh[:,:], mean2d, cmap=cmaps[v])
+    norm=colors.CenteredNorm(vcenter=cmapcens[v])
+    pcm = axs[v].pcolormesh(xxh[:,:], zzh[:,:], mean2d, cmap=cmaps[v], norm=norm)
     plt.colorbar(pcm, ax=axs[v], location="top", label=var+units[v])
 
   relh, supersat = relative_humidity(thermodata.press, thermodata.temp,
                                       thermodata.qvap, inputs["Mr_ratio"])
   
-  cmaps = ["Blues", "Blues"]
+  cmaps = ["Blues", "PuOr"]
   relh_supersat_colomaps([axs[4], axs[5]], zzh, xxh, zzf, xxf, cmaps,
                           thermodata.ytmean(relh), thermodata.ytmean(supersat))
   
@@ -263,15 +268,24 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
       print("Figure .png saved as: "+binpath+savename)
   plt.show()
 
-def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf, cmaps, relh, supersat):
+def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf, cmaps,
+                           relh, supersat):
   
   supersat = supersat*100 # convert supersaturation to %
   
   label = ["relative humidity", "% supersaturation"]
+  norms = [colors.CenteredNorm(vcenter=np.mean(relh)),
+            colors.TwoSlopeNorm(vcenter=0.0)] 
   contour = [1.0, 0.0]
   for v, var in enumerate([relh, supersat]):
-    pcm = axs[v].pcolormesh(xxh, zzh, var, cmap=cmaps[v])                  
+    pcm = axs[v].pcolormesh(xxh, zzh, var, cmap=cmaps[v], norm=norms[v])                  
     cb = plt.colorbar(pcm, ax=axs[v], location="top", label=label[v])
+
+    cbticks = np.linspace(pcm.norm.vmin, pcm.norm.vmax, 5)
+    if v==1: cbticks = [pcm.norm.vmin, pcm.norm.vcenter, pcm.norm.vmax]
+    cb.ax.set_xticks(cbticks) 
+    cb.ax.set_xticklabels(["{:.3g}".format(c) for c in cbticks]) 
+    
     axs[v].contour(xxf, zzf, var, levels=[contour[v]],
                   linestyles=["--"], colors=["grey"])
     cb.ax.plot([contour]*2, [0, 1], color='grey', linewidth=0.95)
