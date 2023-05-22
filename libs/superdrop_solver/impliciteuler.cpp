@@ -91,10 +91,10 @@ for more details. */
   Convergence may be slower so allow >= 3 Newton Raphson
   iterations (could also refine tolerances) */
   {
-    const double subdelt(std::max(max_uniquedelt, subdelt));
+    const double subdt(std::max(max_uniquedelt, subdelt));
     return substep_implicitmethod(delt, niters, maxrtol, maxatol,
                                   s_ratio, akoh, bkoh, ffactor,
-                                  rprev, subdelt);
+                                  rprev, subdt);
   }
 }
 
