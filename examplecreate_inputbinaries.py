@@ -71,6 +71,7 @@ Xlength = 1500 # [m]
 qvapmethod = "sratio"
 Zbase = 750 # [m]
 sratios = [0.95, 1.0025] # s_ratio [below, above] Zbase
+moistlayer=False
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -98,7 +99,7 @@ rgrid.print_domain_info(constsfile, gridfile)
 thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
                                         THETA, qvapmethod, sratios, Zbase,
                                         qcond, WMAX, Zlength, Xlength,
-                                        VVEL)
+                                        VVEL, moistlayer)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 

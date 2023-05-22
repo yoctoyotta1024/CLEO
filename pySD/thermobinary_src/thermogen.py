@@ -248,7 +248,7 @@ class ConstHydrostaticAdiabat:
 
   def __init__(self, configfile, constsfile, PRESSz0, THETA,
               qvapmethod, qvapparams, Zbase, qcond, WMAX,
-              Zlength, Xlength, VVEL):
+              Zlength, Xlength, VVEL, moistlayer):
     
     inputs = thermoinputsdict(configfile, constsfile)
     
@@ -267,6 +267,8 @@ class ConstHydrostaticAdiabat:
     self.qvapz0 = qparams_to_qvap(qvapmethod, qvapparams,
                                   inputs["Mr_ratio"], self.PRESSz0,
                                   self.THETA)[0]
+    self.moistlayer = moistlayer
+    
     ### constants ###
     self.GRAVG = inputs["G"]
     self.CP_DRY = inputs["CP_DRY"]
@@ -352,6 +354,22 @@ class ConstHydrostaticAdiabat:
 
     return THERMODATA
   
+  def generate_qvap(self, zfulls, xfulls, PRESS, TEMP):
+
+    qvaps = qparams_to_qvap(self.qvapmethod, self.qvapparams,
+                            self.Mr_ratio, PRESS, TEMP)
+    qvap = np.where(zfulls<self.Zbase, qvaps[0], qvaps[1])
+
+    if self.moistlayer:
+      z1, z2 = self.moistlayer["z1"], self.moistlayer["z2"]
+      x1, x2 = self.moistlayer["x1"], self.moistlayer["x2"]
+      mlqvap = sratio2qvap(self.moistlayer["mlsratio"], PRESS,
+                           TEMP, self.Mr_ratio)
+      moistregion= (zfulls>=z1) & (zfulls<z2) & (xfulls >=x1) & (xfulls < x2)
+      qvap = np.where(moistregion, mlqvap, qvap)
+
+    return qvap
+
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
     ngridboxes = int(np.prod(ndims))
@@ -359,9 +377,7 @@ class ConstHydrostaticAdiabat:
                                                               ndims)
     PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
     
-    qvaps = qparams_to_qvap(self.qvapmethod, self.qvapparams,
-                            self.Mr_ratio, PRESS, TEMP)
-    qvap = np.where(zfulls<=self.Zbase, qvaps[0], qvaps[1])
+    qvap = self.generate_qvap(zfulls, xfulls, PRESS, TEMP)
 
     shape_cen = int(ntime * np.prod(ndims))
     THERMODATA = {

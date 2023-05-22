@@ -52,11 +52,18 @@ Xlength = 1500 # [m]
 qvapmethod = "sratio"
 Zbase = 750 # [m]
 sratios = [0.95, 1.0025] # s_ratio [below, above] Zbase
-
+# moistlayer = False
+moistlayer = {
+    "z1": 700,
+    "z2": 800,
+    "x1": 0,
+    "x2": 750,
+    "mlsratio": 1.5
+} 
 thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
                                         THETA, qvapmethod, sratios, Zbase,
                                         qcond, WMAX, Zlength, Xlength,
-                                        VVEL)
+                                        VVEL, moistlayer)
 # thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
 #                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
