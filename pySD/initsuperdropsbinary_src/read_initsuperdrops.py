@@ -11,7 +11,7 @@ def get_superdroplet_attributes(configfile, constsfile, initSDsfile):
 
     inputs = initSDsinputsdict(configfile, constsfile)
     
-    attrs = read_dimless_superdrops_binary(initSDsfile)
+    attrs = read_dimless_superdrops_binary(initSDsfile, isprint=False)
 
     # re-dimensionalise SD attributes
     attrs.radius = attrs.radius * inputs["R0"]
