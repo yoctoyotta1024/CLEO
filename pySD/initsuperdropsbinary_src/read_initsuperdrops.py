@@ -23,12 +23,12 @@ def get_superdroplet_attributes(configfile, constsfile, initSDsfile):
     return attrs
 
 
-def read_dimless_superdrops_binary(filename):
+def read_dimless_superdrops_binary(filename, isprint=True):
     ''' return dimenionsless gbx boundaries by reading binary file'''
 
     datatypes = [np.uintc, np.uint, np.double, np.double]
     datatypes += [np.double]*3
-    data, ndata_pervar = readbinary(filename)
+    data, ndata_pervar = readbinary(filename, isprint=isprint)
 
     ll = [0,0,0,0,0,0] # indexs for division of data list between each variable
     for n in range(1, len(ndata_pervar)):

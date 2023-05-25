@@ -13,7 +13,8 @@ binpath = abspath+"build/bin/"
 COORD0 = rgrid.get_COORD0_from_constsfile(constsfile)
 gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(gridfile,
                                                             COORD0=COORD0,
-                                                            return_ndims=True)
+                                                            return_ndims=True,
+                                                            isprint=True)
 zhalf, xhalf, yhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds)
 zfull, xfull, yfull = rgrid.fullcell_fromhalfcoords(zhalf, xhalf, yhalf)
 print(ndims, "ie. shapes should be: ", np.flip(ndims))

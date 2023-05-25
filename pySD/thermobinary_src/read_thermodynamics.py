@@ -94,12 +94,13 @@ class ThermoOnGrid:
     return np.mean(var, axis=(0,1,2)) # dims [z]
 
 def thermovar_from_binary(var, thermofile, shape,
-                          ntime, ndims, dtype):
+                          ntime, ndims, dtype,
+                          isprint=True):
   
   idot = [i for i, ltr in enumerate(thermofile) if ltr == "."][-1]
   filestem, filetype = thermofile[:idot], thermofile[idot:]
   filename = filestem+"_"+var+filetype
-  data, ndata = readbinary(filename)
+  data, ndata = readbinary(filename, isprint=isprint)
 
   if ndata != int(np.prod(shape)):
     err = str(ndata)+" is incorrect data length for "+var+\
@@ -162,7 +163,8 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
     inputs = thermoinputsdict(configfile, constsfile)
     gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(gridfile,
                                                             COORD0=inputs["COORD0"],
-                                                            return_ndims=True)
+                                                            return_ndims=True,
+                                                            isprint=False)
     xyzhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds) #[m]
     zhalf, xhalf, yhalf = [half/1000 for half in xyzhalf] #convery [m] to [km]
     zfull, xfull, yfull = rgrid.fullcell_fromhalfcoords(zhalf, xhalf, yhalf) #[m]
@@ -271,9 +273,9 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
 def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf, cmaps,
                            relh, supersat):
   
-  supersat = supersat*100 # convert supersaturation to %
+  relh = relh * 100 # convert relative humidity to %
   
-  label = ["relative humidity", "% supersaturation"]
+  label = ["% relative humidity", "supersaturation"]
   norms = [colors.CenteredNorm(vcenter=np.mean(relh)),
             colors.TwoSlopeNorm(vcenter=0.0)] 
   contour = [1.0, 0.0]

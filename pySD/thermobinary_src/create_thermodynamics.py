@@ -164,7 +164,8 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   inputs = thermoinputsdict(configfile, constsfile)
   gbxbounds, ndims = read_dimless_gbxboundaries_binary(gridfile,
                                                       COORD0=inputs["COORD0"],
-                                                      return_ndims=True)
+                                                      return_ndims=True,
+                                                      isprint=False)
   thermodata = thermogen.generate_thermo(gbxbounds, ndims, inputs["ntime"])
 
   dth = DimlessThermodynamics(inputs=inputs)

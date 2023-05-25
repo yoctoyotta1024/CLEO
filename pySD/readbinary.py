@@ -3,19 +3,19 @@ import struct
 
 from .writebinary import DataTypeCodes, MetadataPerVariable
 
-def readbinary(filename):
+def readbinary(filename, isprint=True):
   ''' return list of vectors containing dimenionsless
   data read from binary file'''
   
   print("Reading binary file:\n "+filename)
 
-  nvars, metabytes, metapervar = read_metadata(filename)
+  nvars, metabytes, metapervar = read_metadata(filename, isprint=isprint)
 
   data, ndata_pervar = read_data(filename, nvars, metabytes, metapervar)
 
   return data, ndata_pervar
 
-def read_metadata(filename):
+def read_metadata(filename, isprint=True):
   ''' read global metadata and return the variable specific metadata
   in a 2D array with each row being the metadata for a different variable'''
 
@@ -26,7 +26,8 @@ def read_metadata(filename):
   gblmetadata, metapervar = get_metadatapervar(filename, dtc, gblmeta_bytes, 
                                                nvars, metabytes)
   
-  print("Metadata: \n", "'"+gblmetadata+"'")
+  if isprint:
+    print("Metadata: \n", "'"+gblmetadata+"'")
 
   return metapervar.shape[0], metabytes, metapervar
 

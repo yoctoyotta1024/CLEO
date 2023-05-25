@@ -10,7 +10,8 @@ def nsupers_at_domain_base(gridfile, constsfile, nsupers, zlim):
     COORD0 = rgrid.get_COORD0_from_constsfile(constsfile)
     gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(gridfile,
                                                             COORD0=COORD0,
-                                                            return_ndims=True)
+                                                            return_ndims=True,
+                                                            isprint=False)
     nsupersdict = {}
     for ii in gbxbounds.keys():
         gbx_zupper = gbxbounds[ii][1]  # z upper bound of gridbox  

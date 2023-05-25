@@ -234,7 +234,8 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
 
   inputs = initSDsinputsdict(configfile, constsfile)
   gbxbounds = read_dimless_gbxboundaries_binary(gridfile,
-                                                COORD0=inputs["COORD0"])
+                                                COORD0=inputs["COORD0"],
+                                                isprint=False)
   nsupersdict = nsupers_pergridboxdict(nsupers, gbxbounds) 
   
   attrs = create_allsuperdropattrs(nsupersdict, initattrsgen,

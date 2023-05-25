@@ -4,14 +4,16 @@ import matplotlib.pyplot as plt
 from .create_gbxboundaries import get_COORD0_from_constsfile
 from ..readbinary import readbinary
 
-def get_gridboxboundaries(gridfile, COORD0=False, constsfile=""):
+def get_gridboxboundaries(gridfile, COORD0=False,
+                          constsfile="", isprint=True):
     ''' get gridbox boundaries from binary file and 
     re-dimensionalise usign COORD0 const from constsfile '''
 
     if not COORD0:
         COORD0 = get_COORD0_from_constsfile(constsfile)
     
-    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0) 
+    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0,
+                                                   isprint=isprint) 
 
     zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
 
@@ -25,13 +27,15 @@ def get_domainvol_from_gridfile(gridfile, COORD0=False, constsfile=""):
     
     return calc_domainvol(zhalf, xhalf, yhalf)
 
-def get_gbxvols_from_gridfile(gridfile, COORD0=False, constsfile=""):
+def get_gbxvols_from_gridfile(gridfile, COORD0=False,
+                              constsfile="", isprint=True):
     ''' get total domain volume from binary file '''
 
     if not COORD0:
         COORD0 = get_COORD0_from_constsfile(constsfile)
     
-    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0) 
+    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0, 
+                                                   isprint=isprint) 
 
     return calc_gridboxvols(gbxbounds)
 
@@ -84,19 +88,22 @@ def coords_forgridboxfaces(gbxbounds, ndims, face):
         yfaces = np.repeat(yhalf, nz*nx)
         return zfulls, xfulls, yfaces
     
-def allgbxfullcoords_fromgridfile(gridfile, COORD0=False):
+def allgbxfullcoords_fromgridfile(gridfile, COORD0=False, isprint=True):
+    
     gbxbounds, ndims = read_dimless_gbxboundaries_binary(gridfile,
                                                         COORD0=COORD0,
-                                                        return_ndims=True)
+                                                        return_ndims=True,
+                                                        isprint=isprint)
     return fullcoords_forallgridboxes(gbxbounds, ndims)
 
 def read_dimless_gbxboundaries_binary(filename, COORD0=False,
-                                      return_ndims=False):
+                                      return_ndims=False,
+                                      isprint=True):
     ''' return dictionary for gbx indicies to gbx boundaries by
     reading binary file. Return dimensionless version if COORD0
     not give (=False). '''
 
-    data, ndata_pervar = readbinary(filename)
+    data, ndata_pervar = readbinary(filename, isprint=isprint)
     datatypes = [np.uint, np.uintc, np.double]
 
     ll = [0,0] # indexs for division of data list between each variable
@@ -249,7 +256,8 @@ def print_domain_info(constsfile, gridfile):
     superdroplet conditions '''
     
     COORD0 = get_COORD0_from_constsfile(constsfile)
-    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0) 
+    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0,
+                                                   isprint=True) 
     
     domainvol, gridboxvols, num_gridboxes = domaininfo(gbxbounds)
     xtns, spacings, griddims = grid_dimensions(gbxbounds) 
