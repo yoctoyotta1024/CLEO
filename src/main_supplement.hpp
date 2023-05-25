@@ -170,7 +170,7 @@ superdroplets from combination of those two seperate observers */
   const Observer auto obs2a = SDsAttributeObserver(stores.sdzarr);
   const Observer auto obs2b = SDsGbxindexObserver(stores.sdgbxzarr);
 
-  const Observer auto obs3 = ThermoStateObserver(stores.thermozarr);
+  // const Observer auto obs3 = ThermoStateObserver(stores.thermozarr);
   
   const Observer auto obs4 = GridBoxIndexObserver(stores.gbxzarr);
   
@@ -179,7 +179,7 @@ superdroplets from combination of those two seperate observers */
   const Observer auto obs6 = create_sdmomentsobserver(stores.sdmoments);
 
   // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{};
-  const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1;
+  const auto observer = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;
 
   return observer;
 }
