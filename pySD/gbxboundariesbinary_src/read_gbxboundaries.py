@@ -39,18 +39,25 @@ def get_gbxvols_from_gridfile(gridfile, COORD0=False,
 
     return calc_gridboxvols(gbxbounds)
 
-def get_fullcell_and_cellspacing(halfcell):
+def fullcell(halfcell):
+    ''' return fullcell corods (cell centres)
+    given half coords in a direction'''
 
-    fullcell = (halfcell[1:]+halfcell[:-1])/2
-    cellwidth = abs(halfcell[1:]-halfcell[:-1])
+    return (halfcell[1:]+halfcell[:-1])/2
 
-    return fullcell, cellwidth
+def cellwidth(halfcell):
+    ''' return cell spacing (width) given half coords
+    in a direction '''
+
+    delta = abs(halfcell[1:]-halfcell[:-1])
+
+    return delta 
 
 def fullcell_fromhalfcoords(zhalf, xhalf, yhalf):
 
-    zfull = get_fullcell_and_cellspacing(zhalf)[0] 
-    xfull = get_fullcell_and_cellspacing(xhalf)[0] 
-    yfull = get_fullcell_and_cellspacing(yhalf)[0] 
+    zfull = fullcell(zhalf) 
+    xfull = fullcell(xhalf) 
+    yfull = fullcell(yhalf) 
     
     return zfull, xfull, yfull
 
@@ -159,12 +166,10 @@ def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
                                                 constsfile=constsfile)
 
     halfs = [zhalf, xhalf, yhalf]
-    deltas = []
-    fulls = []
+    fulls, deltas = [], []
     for half in halfs:
-        full, delta = get_fullcell_and_cellspacing(half)
-        deltas.append(delta)
-        fulls.append(full)
+        fulls.append(fullcell(half))
+        deltas.append(cellwidth(half))
 
     fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(10, 5))
 
