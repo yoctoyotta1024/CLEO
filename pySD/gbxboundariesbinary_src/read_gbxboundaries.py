@@ -15,7 +15,7 @@ def get_gridboxboundaries(gridfile, COORD0=False,
     gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0,
                                                    isprint=isprint) 
 
-    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=isprint)
 
     return zhalf, xhalf, yhalf
 
@@ -64,7 +64,7 @@ def fullcell_fromhalfcoords(zhalf, xhalf, yhalf):
 def fullcoords_forallgridboxes(gbxbounds, ndims):
     ''' returns (x,y,z) centres of gridboxes in domain '''
 
-    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=False)
     zfull, xfull, yfull = fullcell_fromhalfcoords(zhalf, xhalf, yhalf)
 
     zfullcoords = np.tile(zfull, int(ndims[1]*ndims[2])) # zfull of every gridbox in order of gbxindex
@@ -78,7 +78,7 @@ def coords_forgridboxfaces(gbxbounds, ndims, face):
     in a particular direction '''
 
     ndims = [int(n) for n in ndims]
-    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds)
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=False)
     zfull, xfull, yfull = fullcell_fromhalfcoords(zhalf, xhalf, yhalf)
     
     if face == "z":
@@ -137,7 +137,7 @@ def read_dimless_gbxboundaries_binary(filename, COORD0=False,
     else:
         return gbxbounds
 
-def halfcoords_from_gbxbounds(gbxbounds):
+def halfcoords_from_gbxbounds(gbxbounds, isprint=True):
     ''' returns half coords of gbx boundaries in lists obtained
      from gbxbounds dictionary '''
 
@@ -152,9 +152,10 @@ def halfcoords_from_gbxbounds(gbxbounds):
     yhalf = np.unique(np.sort(boundsdata[:,4]))
     yhalf = np.append(yhalf, np.amax(boundsdata[:,5]))
 
-    print("zhalf: ", zhalf)
-    print("xhalf: ", xhalf)
-    print("yhalf: ", yhalf)
+    if isprint:
+        print("zhalf: ", zhalf)
+        print("xhalf: ", xhalf)
+        print("yhalf: ", yhalf)
 
     return zhalf, xhalf, yhalf
 
@@ -215,9 +216,9 @@ def calc_gridboxvols(gbxbounds):
     
     return gbxvols
 
-def domaininfo(gbxbounds):
+def domaininfo(gbxbounds, isprint=True):
 
-    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds) 
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=isprint)
     domainvol = calc_domainvol(zhalf, xhalf, yhalf)
 
     gridboxvols = calc_gridboxvols(gbxbounds)
@@ -227,7 +228,7 @@ def domaininfo(gbxbounds):
 
 def grid_dimensions(gbxbounds):
 
-    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds) 
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=False) 
     
     if len(zhalf) == 2:
         griddims = 0
@@ -250,11 +251,13 @@ def print_domain_info(constsfile, gridfile):
     required as inputs to create initial 
     superdroplet conditions '''
     
+    isprint=True
     COORD0 = get_COORD0_from_constsfile(constsfile)
     gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0,
-                                                   isprint=True) 
+                                                   isprint=isprint) 
     
-    domainvol, gridboxvols, num_gridboxes = domaininfo(gbxbounds)
+    domainvol, gridboxvols, num_gridboxes = domaininfo(gbxbounds,
+                                                       isprint=isprint)
     xtns, spacings, griddims = grid_dimensions(gbxbounds) 
     ztot = abs(xtns[0][0] - xtns[0][1])
     xtot = abs(xtns[1][0] - xtns[1][1])

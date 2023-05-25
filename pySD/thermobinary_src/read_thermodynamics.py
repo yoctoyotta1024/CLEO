@@ -169,7 +169,7 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
                                                             COORD0=inputs["COORD0"],
                                                             return_ndims=True,
                                                             isprint=False)
-    xyzhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds) #[m]
+    xyzhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds, isprint=isprint) #[m]
     zhalf, xhalf, yhalf = [half/1000 for half in xyzhalf] #convery [m] to [km]
     zfull, xfull, yfull = rgrid.fullcell_fromhalfcoords(zhalf, xhalf, yhalf) #[m]
 
