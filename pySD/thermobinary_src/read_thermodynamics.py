@@ -127,18 +127,22 @@ def read_dimless_thermodynamics_binary(thermofile, ndims,
   datatypes = [np.double]*4
   for v, var in enumerate(vars): 
     thermodata[var] = thermovar_from_binary(var, thermofile, cen,
-                                            ntime, ndims, datatypes[v])
+                                            ntime, ndims, datatypes[v],
+                                            isprint=False)
 
   datatypes = [np.double]*3
   if SDnspace >= 1:
     thermodata["wvel"] = thermovar_from_binary("wvel", thermofile, zface,
-                                              ntime, ndims, datatypes[0]) 
+                                              ntime, ndims, datatypes[0],
+                                              isprint=False)
     if SDnspace >= 2:
       thermodata["uvel"] = thermovar_from_binary("uvel", thermofile, xface,
-                                                ntime, ndims, datatypes[1])
+                                                ntime, ndims, datatypes[1],
+                                                isprint=False)
       if SDnspace >= 3:
         thermodata["vvel"] = thermovar_from_binary("vvel", thermofile, yface,
-                                                  ntime, ndims, datatypes[2])
+                                                  ntime, ndims, datatypes[2],
+                                                  isprint=False)
 
   return thermodata
 
