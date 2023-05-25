@@ -39,6 +39,13 @@ def get_gbxvols_from_gridfile(gridfile, COORD0=False,
 
     return calc_gridboxvols(gbxbounds)
 
+def get_fullcell_and_cellspacing(halfcell):
+
+    fullcell = (halfcell[1:]+halfcell[:-1])/2
+    cellwidth = abs(halfcell[1:]-halfcell[:-1])
+
+    return fullcell, cellwidth
+
 def fullcell_fromhalfcoords(zhalf, xhalf, yhalf):
 
     zfull = get_fullcell_and_cellspacing(zhalf)[0] 
@@ -87,14 +94,6 @@ def coords_forgridboxfaces(gbxbounds, ndims, face):
         xfulls = np.tile(np.repeat(xfull, nz), ny)
         yfaces = np.repeat(yhalf, nz*nx)
         return zfulls, xfulls, yfaces
-    
-def allgbxfullcoords_fromgridfile(gridfile, COORD0=False, isprint=True):
-    
-    gbxbounds, ndims = read_dimless_gbxboundaries_binary(gridfile,
-                                                        COORD0=COORD0,
-                                                        return_ndims=True,
-                                                        isprint=isprint)
-    return fullcoords_forallgridboxes(gbxbounds, ndims)
 
 def read_dimless_gbxboundaries_binary(filename, COORD0=False,
                                       return_ndims=False,
@@ -189,13 +188,6 @@ def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
         print("Figure .png saved as: "+binpath+"gridboxboundaries.png")
     plt.show()
 
-def get_fullcell_and_cellspacing(halfcell):
-
-    fullcell = (halfcell[1:]+halfcell[:-1])/2
-    cellwidth = abs(halfcell[1:]-halfcell[:-1])
-
-    return fullcell, cellwidth
-
 def calc_domainvol(zhalf, xhalf, yhalf):
 
     widths = []
@@ -205,7 +197,6 @@ def calc_domainvol(zhalf, xhalf, yhalf):
     domainvol = np.prod(widths)
 
     return domainvol
-
 
 def calc_gridboxvols(gbxbounds):
 
@@ -218,7 +209,6 @@ def calc_gridboxvols(gbxbounds):
         gbxvols.append(zwidth * xwidth * ywidth )
     
     return gbxvols
-
 
 def domaininfo(gbxbounds):
 
