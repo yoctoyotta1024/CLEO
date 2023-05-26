@@ -50,7 +50,7 @@ namespace dlc = dimless_constants;
 template <SuperdropIntoStoreViaBuffer S>
 struct SomeZarrStores
 {
-  ThermoStateStorage thermozarr;
+  // ThermoStateStorage thermozarr;
   ContiguousRaggedSDStorage<S> sdzarr;
   ContiguousRaggedSDStorage<SdgbxIntoStore> sdgbxzarr;
   SDMomentsStorage sdmoments;
@@ -60,8 +60,8 @@ struct SomeZarrStores
 
 SomeZarrStores(FSStore &fsstore, const int maxchunk,
               const unsigned int ngridboxes, S sdattrs)
-      : thermozarr(fsstore, maxchunk, ngridboxes),
-        sdzarr(fsstore, sdattrs, maxchunk),
+      // : thermozarr(fsstore, maxchunk, ngridboxes),
+      :  sdzarr(fsstore, sdattrs, maxchunk),
         sdgbxzarr(fsstore, SdgbxIntoStore(), maxchunk),
         sdmoments(fsstore, maxchunk, ngridboxes),
         timezarr(fsstore, maxchunk, "time",
