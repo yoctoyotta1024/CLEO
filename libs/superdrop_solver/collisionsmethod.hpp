@@ -81,7 +81,8 @@ private:
     for (int i = 1; i < nsupers; i += 2)
     {
       collide_superdroplet_pair(urbg, span4SDsinGBx[i-1].superdrop,
-                                span4SDsinGBx[i].superdrop, scale_p, VOLUME);
+                                span4SDsinGBx[i].superdrop, scale_p,
+                                VOLUME);
     }
  
   }
