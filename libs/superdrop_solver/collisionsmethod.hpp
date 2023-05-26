@@ -78,7 +78,7 @@ private:
     std::shuffle(span4SDsinGBx.begin(), span4SDsinGBx.end(), urbg);
 
     /* collide all randomly generated pairs of SDs */
-    for (int i = 1; i < (2*nhalf); i += 2)
+    for (int i = 1; i < nsupers; i += 2)
     {
       collide_superdroplet_pair(urbg, span4SDsinGBx[i-1].superdrop,
                                 span4SDsinGBx[i].superdrop, scale_p,
