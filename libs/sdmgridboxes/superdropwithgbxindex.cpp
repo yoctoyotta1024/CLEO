@@ -76,7 +76,7 @@ create_superdropwithgbxindexes(const int nSDsvec, const int SDnspace,
                                                  zxycoords.at(0), zxycoords.at(1),
                                                  zxycoords.at(2), sd_identity));
     
-    print_SDinGBx(SDinGBx);
+    // print_SDinGBx(SDinGBx);
     SDsInGBxs.push_back(SDinGBx);
   }
 
