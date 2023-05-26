@@ -153,7 +153,7 @@ private:
 
   template <class DeviceType>
   size_t monte_carlo_gamma(URBG<DeviceType> &urbg, const double prob,
-                        const size_t eps1, const size_t eps2) const
+                           const size_t eps1, const size_t eps2) const
   /* calculates value of gamma factor in
   Monte Carlo collision-coalescence process
   according to Shima et al. 2009 */
@@ -171,7 +171,7 @@ private:
       gamma = floor(prob);
     }
 
-    const size_t maxgamma = floor((eps1) / (eps2));
+    const size_t maxgamma = floor(eps1 / eps2);
 
     return std::min(gamma, maxgamma);
   }
