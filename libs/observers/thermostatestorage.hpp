@@ -81,8 +81,7 @@ public:
     if (bufferfill != 0)
     {
       // write data in buffer to a chunk in store
-      buffers.writechunks(store, chunkcount);
-      ++chunkcount;
+      chunkcount = buffers.writechunks(store, chunkcount);
     }
 
     // write strictly required metadata to decode chunks (MUST)
