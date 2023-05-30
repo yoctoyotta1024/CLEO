@@ -136,6 +136,22 @@ array in a store, and an array's metadata to a store */
                                             chunknum, chunkcount);
   }
 
+  inline void write_zarrarrayjsons(FSStore &store,
+                                   const std::string name,
+                                   const std::string &metadata,
+                                   const std::string &arrayattrs)
+  /* write .zarray and .zattr json files into store for the
+  metadata of an array of a variable called 'name' */
+  {
+    // strictly required metadata to decode chunks (MUST)
+    store[name + "/.zarray"] = metadata;
+
+    // define dimension names of this array, to make xarray and netCDF happy
+    // (not a MUST, ie. not strictly required, by zarr)
+    // e.g. "{\"_ARRAY_DIMENSIONS\": [\"x\"]}";
+    store[name + "/.zattrs"] = arrayattrs;
+  }
+
   inline std::string metadata(const unsigned int zarr_format,
                               const char order,
                               const std::string &shape,
@@ -197,22 +213,6 @@ array in a store, and an array's metadata to a store */
                                    "\", \"scale_factor\": " +
                                    sfstr.str() + "}";
     return arrayattrs;
-  }
-
-  inline void write_zarrarrayjsons(FSStore &store,
-                                   const std::string name,
-                                   const std::string &metadata,
-                                   const std::string &arrayattrs)
-  /* write .zarray and .zattr json files into store for the
-  metadata of an array of a variable called 'name' */
-  {
-    // strictly required metadata to decode chunks (MUST)
-    store[name + "/.zarray"] = metadata;
-
-    // define dimension names of this array, to make xarray and netCDF happy
-    // (not a MUST, ie. not strictly required, by zarr)
-    //e.g. "{\"_ARRAY_DIMENSIONS\": [\"x\"]}";
-    store[name + "/.zattrs"] = arrayattrs; 
   }
 };
 
