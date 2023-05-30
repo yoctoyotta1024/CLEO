@@ -89,6 +89,7 @@ SuperdropIntoStoreViaBuffer is A1 followed by A2 */
   {
     aah1.writechunk(store, chunkcount);
     aah2.writechunk(store, chunkcount);
+
     return ++chunkcount;
   }
 
@@ -169,7 +170,7 @@ private:
     // write strictly required metadata to decode chunks (MUST)
     const std::string dims = "[\"sdindex\"]";
     const SomeMetadata md(zarr_format, order, ndata, chunksize,
-                            compressor, fill_value, filters, dims);
+                          compressor, fill_value, filters, dims);
     sdbuffers.zarrayjsons(store, md);
   }
 
@@ -191,6 +192,48 @@ private:
                                         count_arrayattrs);
   }
 
+  void sdbuffers_writechunk()
+  /* write data in sdbuffers to chunks of zarrays in store
+  and (re)write associated metadata for zarrays */
+  {
+    chunkcount = sdbuffers.writechunk(store, chunkcount);
+    bufferfill = 0; // reset bufferfill
+   
+    sdbuffers_zarrayjsons();
+  }
+
+  void raggedcount_writechunk()
+  /* write raggedcount data in buffers to a chunk of its
+  zarray in store and (re)write its associated metadata */
+  {
+    raggedcount_chunkcount = storagehelper::
+          writebuffer2chunk(store, raggedcount, raggedcount_name,
+                            raggedcount_chunkcount);
+    raggedcount_bufferfill = 0; // reset bufferfill
+    
+    raggedcount_zarrayjsons();
+  }
+
+  template <typename T>
+  void copy2sdbuffers(const T &value)
+  /* copy data from superdrop to buffer(s) and
+  increment required counting variables */
+  {
+    bufferfill = sdbuffers.copy2buffer(value, bufferfill);
+    ++ndata;
+  }
+
+  void copy2raggedcount(const size_t raggedn)
+  /* write raggedcount data in buffers to a chunk of its
+  zarray in store and (re)write its associated metadata */
+  {
+    // copy double to buffer
+    raggedcount_bufferfill = storagehelper::val2buffer<size_t>(raggedn,
+                                                               raggedcount,
+                                                               raggedcount_bufferfill);
+    ++raggedcount_ndata;
+  }
+
 public:
   ContiguousRaggedSDStorage(FSStore &store,
                             const SDIntoStore sdbuffers_i,
@@ -208,15 +251,12 @@ public:
   {
     if (bufferfill != 0)
     {
-      // write data in buffer to a chunk in store
-      chunkcount = sdbuffers.writechunk(store, chunkcount);
+      sdbuffers_writechunk();
     }
 
     if (raggedcount_bufferfill != 0)
     {
-      raggedcount_chunkcount = storagehelper::
-          writebuffer2chunk(store, raggedcount, raggedcount_name,
-                            raggedcount_chunkcount);
+      raggedcount_writechunk();
     } 
 
     writezarrayjsons();
@@ -254,37 +294,23 @@ public:
   {
     if (bufferfill == chunksize)
     {
-      // write data in buffer to a chunk in store
-      chunkcount = sdbuffers.writechunk(store, chunkcount);
-      bufferfill = 0;
-      sdbuffers_zarrayjsons();
+      sdbuffers_writechunk();
     }
 
-    // copy data from superdrop to buffer(s)
-    bufferfill = sdbuffers.copy2buffer(value, bufferfill);
-
-    ++ndata;
+    copy2sdbuffers(value);    
   }
 
-  void contigraggedarray_count(const size_t n)
+  void contigraggedarray_count(const size_t raggedn)
   /* add element to raggedcount that is number of datapoints
   written to buffer(s) during one event. This is count variable 
   for contiguous ragged representation */
   {
     if (raggedcount_bufferfill == chunksize)
     {
-      // write data in buffer to a chunk in store
-      raggedcount_chunkcount = storagehelper::
-          writebuffer2chunk(store, raggedcount, raggedcount_name,
-                            raggedcount_chunkcount);
-      raggedcount_bufferfill = 0;
-      raggedcount_zarrayjsons();
+      raggedcount_writechunk(); 
     }
-
-    // copy double to buffer
-    raggedcount_bufferfill = storagehelper::
-        val2buffer<size_t>(n, raggedcount, raggedcount_bufferfill);
-    ++raggedcount_ndata;
+    
+    copy2raggedcount(const size_t raggedn);
   }
 };
 
