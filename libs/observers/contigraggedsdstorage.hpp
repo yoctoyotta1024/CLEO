@@ -42,7 +42,7 @@ struct SomeMetadata
 template <typename Aah>
 concept SuperdropIntoStoreViaBuffer = requires(Aah aah, const Superdrop &superdrop,
                                                FSStore &store, const std::string &str,
-                                               const int j, const unsigned int u,
+                                               const unsigned int j, const unsigned int u,
                                                const SomeMetadata &md)
 /* concept SuperdropIntoStoreViaBuffer is all types that have correct
 signatures for these 3 void functions. The motivation is that these functions
@@ -51,7 +51,7 @@ a chunk of array in the store, and writing array metadata and attribute .json fi
 {
   {
     aah.copy2buffer(superdrop, j)
-    } -> std::same_as<void>;
+    } -> std::same_as<unsigned int>;
 
   {
     aah.writechunk(store, j)
@@ -77,10 +77,12 @@ SuperdropIntoStoreViaBuffer is A1 followed by A2 */
   CombinedSuperdropIntoStoreViaBuffer(A1 aah1, A2 aah2)
       : aah1(aah1), aah2(aah2) {}
 
-  void copy2buffer(const Superdrop &superdrop, const int j)
+  unsigned int copy2buffer(const Superdrop &superdrop, const unsigned int j)
   {
     aah1.copy2buffer(superdrop, j);
     aah2.copy2buffer(superdrop, j);
+
+    return ++j;
   }
 
   unsigned int writechunk(FSStore &store, const int chunkcount)
@@ -117,7 +119,11 @@ struct NullSuperdropIntoStoreViaBuffer
 /* Null does nothing at all (is defined for 
 completeness of a Monoid Structure) */
 {
-  void copy2buffer(const Superdrop &superdrop, const int j) const {}
+  unsigned int copy2buffer(const Superdrop &superdrop,
+                           const unsigned int j) const
+  {
+    return j;
+  }
   unsigned int writechunk(FSStore &store, const int chunkcount) const
   {
     return chunkcount;
@@ -255,8 +261,7 @@ public:
     }
 
     // copy data from superdrop to buffer(s)
-    sdbuffers.copy2buffer(value, bufferfill);
-    ++bufferfill;
+    bufferfill = sdbuffers.copy2buffer(value, bufferfill);
 
     ++ndata;
   }
@@ -276,10 +281,10 @@ public:
       raggedcount_zarrayjsons();
     }
 
-  // copy double to buffer
-  storagehelper::val2buffer<size_t>(n, raggedcount, raggedcount_bufferfill);
-  ++raggedcount_bufferfill;
-  ++raggedcount_ndata;
+    // copy double to buffer
+    raggedcount_bufferfill = storagehelper::
+        val2buffer<size_t>(n, raggedcount, raggedcount_bufferfill);
+    ++raggedcount_ndata;
   }
 };
 

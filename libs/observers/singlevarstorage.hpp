@@ -86,8 +86,7 @@ public:
     }
 
     // copy double to buffer
-    storagehelper::val2buffer<T>(val, buffer, bufferfill);
-    ++(bufferfill);
+    bufferfill = storagehelper::val2buffer<T>(val, buffer, bufferfill);
     ++(ndata);
   }
 };

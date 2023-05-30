@@ -94,13 +94,16 @@ namespace storagehelper
 write a double to a buffer, a buffer to a chunk of an
 array in a store, and an array's metadata to a store */
 {
-  
+
   template <typename V>
-  inline void val2buffer(const V val, std::vector<V> &buffer, const int j)
+  inline unsigned int val2buffer(const V val, std::vector<V> &buffer,
+                         const unsigned int j)
   /* copy a type T (e.g. a double) called 'val',
   to appropriate buffer at index j */
   {
     buffer[j] = val;
+
+    return ++j;
   }
 
   template <typename V>

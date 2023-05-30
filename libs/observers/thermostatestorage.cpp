@@ -5,16 +5,20 @@ data from thermostate into orthogonal multidimensional array(s) */
 
 #include "thermostatestorage.hpp"
 
-void ThermoIntoStore::copy2buffers(const ThermoState &state, const int j)
+unsigned int ThermoIntoStore::
+    copy2buffers(const ThermoState &state, const unsigned int j)
 /* copy press, temp, qvap and qcond data in the state to buffers at index j */
 {
   storagehelper::val2buffer(state.press, pressbuffer, j);
   storagehelper::val2buffer(state.temp, tempbuffer, j);
   storagehelper::val2buffer(state.qvap, qvapbuffer, j);
   storagehelper::val2buffer(state.qcond, qcondbuffer, j);
+
+  return ++j
 }
 
-void ThermoIntoStore::writechunks(FSStore &store, const int chunkcount)
+unsigned int ThermoIntoStore::
+    writechunks(FSStore &store, const unsigned int chunkcount)
 /* write buffer vector into attr's store at chunkcount
 and then replace contents of buffer with std::nans */
 {
@@ -23,6 +27,8 @@ and then replace contents of buffer with std::nans */
   storagehelper::writebuffer2chunk(store, tempbuffer, "temp", chunknum);
   storagehelper::writebuffer2chunk(store, qvapbuffer, "qvap", chunknum);
   storagehelper::writebuffer2chunk(store, qcondbuffer, "qcond", chunknum);
+
+  return ++chunkcount;
 }
 
 void ThermoIntoStore::zarrayjsons(FSStore &store,
@@ -50,13 +56,11 @@ when the number of datapoints they contain reaches the chunksize */
   if (bufferfill == chunksize)
   {
     // write data in buffer to a chunk in store
-    buffers.writechunks(store, chunkcount);
-    ++chunkcount;
+    chunkcount = buffers.writechunks(store, chunkcount);
     bufferfill = 0;
   }
 
   // copy data from thermostate to buffers
-  buffers.copy2buffers(state, bufferfill);
-  ++bufferfill;
+  bufferfill = buffers.copy2buffers(state, bufferfill);
   ++ndata;
 }

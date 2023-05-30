@@ -38,8 +38,9 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
       : attr(attr), dtype(dtype), buffer(0) {}
 
   virtual ~AttributeIntoStoreViaBuffer(){};
-  
-  virtual void copy2buffer(const Superdrop &superdrop, const int j) = 0;
+
+  virtual unsigned int copy2buffer(const Superdrop &superdrop,
+                                   const unsigned int j) = 0;
   /* virtual void function placeholding function for
   copying superdrop's data into a buffer vector at j'th index */
 
@@ -79,9 +80,10 @@ struct IdIntoStore : AttributeIntoStoreViaBuffer<size_t>
   IdIntoStore()
       : AttributeIntoStoreViaBuffer("sdindex", "<u8"){};
 
-  void copy2buffer(const Superdrop &superdrop, const int j)
+  unsigned int copy2buffer(const Superdrop &superdrop,
+                           const unsigned int j)
   {
-    storagehelper::val2buffer<size_t>(superdrop.id.value, buffer, j);
+    return storagehelper::val2buffer<size_t>(superdrop.id.value, buffer, j);
   }
 };
 
@@ -90,9 +92,10 @@ struct EpsIntoStore : AttributeIntoStoreViaBuffer<size_t>
   EpsIntoStore()
       : AttributeIntoStoreViaBuffer("eps", "<u8"){};
 
-  void copy2buffer(const Superdrop &superdrop, const int j)
+  unsigned int copy2buffer(const Superdrop &superdrop,
+                           const unsigned int j)
   {
-    storagehelper::val2buffer<size_t>(superdrop.eps, buffer, j);
+    return storagehelper::val2buffer<size_t>(superdrop.eps, buffer, j);
   }
 };
 
@@ -101,9 +104,10 @@ struct RadiusIntoStore : AttributeIntoStoreViaBuffer<double>
   RadiusIntoStore()
       : AttributeIntoStoreViaBuffer("radius", "<f8"){};
 
-  void copy2buffer(const Superdrop &superdrop, const int j)
+  unsigned int copy2buffer(const Superdrop &superdrop,
+                           const unsigned int j)
   {
-    storagehelper::val2buffer<double>(superdrop.radius, buffer, j);
+    return storagehelper::val2buffer<double>(superdrop.radius, buffer, j);
   }
 
   void zarrayjsons(FSStore &store, const SomeMetadata &md) const
@@ -125,9 +129,10 @@ struct M_solIntoStore : AttributeIntoStoreViaBuffer<double>
   M_solIntoStore()
       : AttributeIntoStoreViaBuffer("m_sol", "<f8"){};
 
-  void copy2buffer(const Superdrop &superdrop, const int j)
+  unsigned int copy2buffer(const Superdrop &superdrop,
+                           const unsigned int j)
   {
-    storagehelper::val2buffer<double>(superdrop.m_sol, buffer, j);
+    return storagehelper::val2buffer<double>(superdrop.m_sol, buffer, j);
   }
 
   void zarrayjsons(FSStore &store, const SomeMetadata &md) const
@@ -149,7 +154,8 @@ struct SdCoordIntoStore : AttributeIntoStoreViaBuffer<double>
   SdCoordIntoStore(const std::string attr)
       : AttributeIntoStoreViaBuffer(attr, "<f8"){};
 
-  virtual void copy2buffer(const Superdrop &superdrop, const int j) = 0;
+  virtual unsigned int copy2buffer(const Superdrop &superdrop,
+                                   const unsigned int j) = 0;
 
   void zarrayjsons(FSStore &store, const SomeMetadata &md) const
   /* write metadata for attr's array into store */
@@ -168,9 +174,10 @@ struct Coord3IntoStore : SdCoordIntoStore
 {
   Coord3IntoStore() : SdCoordIntoStore("coord3"){};
 
-  void copy2buffer(const Superdrop &superdrop, const int j)
+  unsigned int copy2buffer(const Superdrop &superdrop,
+                           const unsigned int j)
   {
-    storagehelper::val2buffer<double>(superdrop.coord3, buffer, j);
+    return storagehelper::val2buffer<double>(superdrop.coord3, buffer, j);
   }
 };
 
@@ -178,9 +185,10 @@ struct Coord1IntoStore : SdCoordIntoStore
 {
   Coord1IntoStore() : SdCoordIntoStore("coord1"){};
 
-  void copy2buffer(const Superdrop &superdrop, const int j)
+  unsigned int copy2buffer(const Superdrop &superdrop,
+                           const unsigned int j)
   {
-    storagehelper::val2buffer<double>(superdrop.coord1, buffer, j);
+    return storagehelper::val2buffer<double>(superdrop.coord1, buffer, j);
   }
 };
 
@@ -188,9 +196,10 @@ struct Coord2IntoStore : SdCoordIntoStore
 {
   Coord2IntoStore() : SdCoordIntoStore("coord2"){};
 
-  void copy2buffer(const Superdrop &superdrop, const int j)
+  unsigned int copy2buffer(const Superdrop &superdrop,
+                           const unsigned int j)
   {
-    storagehelper::val2buffer<double>(superdrop.coord2, buffer, j);
+    return storagehelper::val2buffer<double>(superdrop.coord2, buffer, j);
   }
 };
 
@@ -199,11 +208,16 @@ struct SdgbxIntoStore : AttributeIntoStoreViaBuffer<unsigned int>
   SdgbxIntoStore()
       : AttributeIntoStoreViaBuffer("sd_gbxindex", "<u4"){};
 
-  void copy2buffer(const Superdrop &superdrop, const int j) {}
-
-  void copy2buffer(const unsigned int sd_gbxindex, const int j)
+  unsigned int copy2buffer(const Superdrop &superdrop,
+                           const unsigned int j)
   {
-    storagehelper::val2buffer<unsigned int>(sd_gbxindex, buffer, j);
+    return j;
+  }
+
+  unsigned int copy2buffer(const unsigned int sd_gbxindex,
+                           const unsigned int j)
+  {
+    return storagehelper::val2buffer<unsigned int>(sd_gbxindex, buffer, j);
   }
 };
 

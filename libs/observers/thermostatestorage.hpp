@@ -32,10 +32,10 @@ struct ThermoIntoStore
       : pressbuffer(buffersize, std::nan("")), tempbuffer(buffersize, std::nan("")),
         qvapbuffer(buffersize, std::nan("")), qcondbuffer(buffersize, std::nan("")) {}
 
-  void copy2buffers(const ThermoState &state, const int j);
+  unsigned int copy2buffers(const ThermoState &state, const unsigned int j);
   /* copy press, temp, qvap and qcond data in the state to buffers at index j */
 
-  void writechunks(FSStore &store, const int chunkcount);
+  unsigned int writechunks(FSStore &store, const unsigned int chunkcount);
   /* write buffer vector into attr's store at chunkcount
   and then replace contents of buffer with std::nans */
 
