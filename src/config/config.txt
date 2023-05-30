@@ -34,17 +34,17 @@ COUPLTSTEP = 120                          # time between SDM observations and be
 T_END = 10800                             # time span of integration [s]
 
 # SDs parameters #
-nSDsvec = 3600                          # initial no. elements in SDs' vector (=total initial no. of SDs)
+nSDsvec = 24                            # initial no. elements in SDs' vector (=total initial no. of SDs)
 SDnspace = 2                            # no. of spatial coordinates of SDs (=dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state
 thermosolver = fromfile                 # type of thermodynamic solver to configure
 
 ### Read in Thermodynamics File parameters ###
-press_filename = ./share/dimlessthermodynamics_press.dat          # binary filename for pressure
-temp_filename = ./share/dimlessthermodynamics_temp.dat            # binary filename for temperature
-qvap_filename = ./share/dimlessthermodynamics_qvap.dat            # binary filename for vapour mixing ratio
-qcond_filename = ./share/dimlessthermodynamics_qcond.dat          # binary filename for liquid mixing ratio
-wvel_filename = ./share/dimlessthermodynamics_wvel.dat            # binary filename for vertical (z) velocity
-uvel_filename = ./share/dimlessthermodynamics_uvel.dat            # binary filename for horizontal x velocity
-vvel_filename = ./share/dimlessthermodynamics_vvel.dat            # binary filename for horizontal y velocity
+press_filename = ./share/dimlessthermo_press.dat          # binary filename for pressure
+temp_filename = ./share/dimlessthermo_temp.dat            # binary filename for temperature
+qvap_filename = ./share/dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
+qcond_filename = ./share/dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
+wvel_filename = ./share/dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
+uvel_filename = ./share/dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
+vvel_filename = ./share/dimlessthermo_vvel.dat            # binary filename for horizontal y velocity

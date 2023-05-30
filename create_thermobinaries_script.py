@@ -22,7 +22,7 @@ binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 
 gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
-thermofile =  binariespath+"/dimlessthermodynamics.dat"
+thermofile =  binariespath+"/dimlessthermo.dat"
 
 
 ### --- Choose Initial Thermodynamic Conditions for Gridboxes  --- ###
