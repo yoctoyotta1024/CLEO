@@ -1,7 +1,7 @@
 // Author: Clara Bayley
 // File: contigraggedsdstorage.hpp
 /* File for ContiguousRaggedSDStorage
-used to store superdroplet attributes 
+used to store superdroplet attributes
 (see: https://cfconventions.org/Data/cf-conventions/cf-conventions-1.10/cf-conventions.html#_contiguous_ragged_array_representation)
 in a FFStore obeying zarr storage specification verion 2:
 https://zarr.readthedocs.io/en/stable/spec/v2.html */
@@ -51,24 +51,24 @@ a chunk of array in the store, and writing array metadata and attribute .json fi
 {
   {
     aah.copy2buffer(superdrop, j)
-    } -> std::same_as<unsigned int>;
+  } -> std::same_as<unsigned int>;
 
   {
     aah.writechunk(store, j)
-    } -> std::same_as<unsigned int>;
+  } -> std::same_as<unsigned int>;
 
   {
     aah.zarrayjsons(store, md)
-    } -> std::same_as<void>;
-  
+  } -> std::same_as<void>;
+
   {
     aah.set_buffersize(u)
-    } -> std::same_as<void>;
+  } -> std::same_as<void>;
 };
 
 template <SuperdropIntoStoreViaBuffer A1, SuperdropIntoStoreViaBuffer A2>
 struct CombinedSuperdropIntoStoreViaBuffer
-/* combination of two types (A1, A2) that satisfiy 
+/* combination of two types (A1, A2) that satisfiy
 SuperdropIntoStoreViaBuffer is A1 followed by A2 */
 {
   A1 aah1;
@@ -94,8 +94,8 @@ SuperdropIntoStoreViaBuffer is A1 followed by A2 */
   }
 
   void zarrayjsons(FSStore &store,
-                     const SomeMetadata &md)
-                     
+                   const SomeMetadata &md)
+
   {
     aah1.zarrayjsons(store, md);
     aah2.zarrayjsons(store, md);
@@ -110,14 +110,14 @@ SuperdropIntoStoreViaBuffer is A1 followed by A2 */
 
 auto operator>>(SuperdropIntoStoreViaBuffer auto aah1,
                 SuperdropIntoStoreViaBuffer auto aah2)
-/* define ">>" operator that combines two 
+/* define ">>" operator that combines two
 SuperdropIntoStoreViaBuffer types */
 {
   return CombinedSuperdropIntoStoreViaBuffer{aah1, aah2};
 }
 
 struct NullSuperdropIntoStoreViaBuffer
-/* Null does nothing at all (is defined for 
+/* Null does nothing at all (is defined for
 completeness of a Monoid Structure) */
 {
   unsigned int copy2buffer(const Superdrop &superdrop,
@@ -143,9 +143,9 @@ into chunks in their corresponding array stores when number of
 datapoints copied to the buffers reaches chunksize. */
 {
 private:
-  FSStore &store;                  // file system store satisfying zarr store specificaiton v2
-  SDIntoStore sdbuffers;           // buffers and their handler functions for wrting SD data to store
-  std::vector<size_t> rgdcount;    // count variable for contiguous ragged representation of arrays
+  FSStore &store;               // file system store satisfying zarr store specificaiton v2
+  SDIntoStore sdbuffers;        // buffers and their handler functions for wrting SD data to store
+  std::vector<size_t> rgdcount; // count variable for contiguous ragged representation of arrays
 
   const size_t chunksize;  // fixed size of array chunks (=max no. datapoints in buffer before writing)
   unsigned int chunkcount; // number of chunks of array so far written to store
@@ -162,8 +162,8 @@ private:
   const std::string fill_value = "null"; // fill value for empty datapoints in array
   const std::string filters = "null";    // codec configurations for compression
 
-  const std::string rgdcount_name = "raggedcount";    // name of rgdcount zarray in store
-  const std::string rgdcount_dtype = "<u8";              // datatype of rgdcount variable
+  const std::string rgdcount_name = "raggedcount"; // name of rgdcount zarray in store
+  const std::string rgdcount_dtype = "<u8";        // datatype of rgdcount variable
 
   void sdbuffers_zarrayjsons()
   {
@@ -197,7 +197,7 @@ private:
   {
     chunkcount = sdbuffers.writechunk(store, chunkcount);
     bufferfill = 0; // reset bufferfill
-   
+
     sdbuffers_zarrayjsons();
   }
 
@@ -209,7 +209,7 @@ private:
                                                            rgdcount_name,
                                                            rgdcount_chunkcount);
     rgdcount_bufferfill = 0; // reset rgdcount bufferfill
-    
+
     rgdcount_zarrayjsons();
   }
 
@@ -240,7 +240,7 @@ public:
         rgdcount_ndata(0)
   {
     // initialise buffer(s) to size 'chunksize' (filled with numeric limit)
-    sdbuffers.set_buffersize(chunksize);                                                   
+    sdbuffers.set_buffersize(chunksize);
   }
 
   ~ContiguousRaggedSDStorage()
@@ -253,7 +253,7 @@ public:
     if (rgdcount_bufferfill != 0)
     {
       rgdcount_writechunk();
-    } 
+    }
   }
 
   template <typename T>
@@ -268,7 +268,7 @@ public:
       sdbuffers_writechunk();
     }
 
-    copy2sdbuffers(value);    
+    copy2sdbuffers(value);
   }
 
   void raggedarray_count(const size_t raggedn)
@@ -279,9 +279,9 @@ public:
   {
     if (rgdcount_bufferfill == chunksize)
     {
-      rgdcount_writechunk(); 
+      rgdcount_writechunk();
     }
-    
+
     copy2rgdcount(raggedn);
   }
 };
