@@ -97,11 +97,11 @@ array in a store, and an array's metadata to a store */
 
   template <typename V>
   inline unsigned int val2buffer(const V val, std::vector<V> &buffer,
-                         const unsigned int j)
+                                 unsigned int j)
   /* copy a type T (e.g. a double) called 'val',
   to appropriate buffer at index j */
   {
-    buffer[j] = val;
+    buffer.at(j) = val;
 
     return ++j;
   }
@@ -122,13 +122,12 @@ array in a store, and an array's metadata to a store */
   unsigned int writebuffer2chunk(FSStore &store,
                                  std::vector<V> &buffer,
                                  const std::string name,
-                                 const unsigned int chunkcount)
+                                 unsigned int chunkcount)
   /* write buffer vector into attr's store at 'chunkcount' and then
   return incremented chunkcount */
   {
-    const std::string chunknum = std::to_string(raggedcount_chunkcount);
-    storagehelper::writebuffer2chunk(store, raggedcount,
-                                       raggedcount_name, chunknum);
+    const std::string chunknum = std::to_string(chunkcount);
+    storagehelper::writebuffer2chunk(store, buffer, name, chunknum);
 
     return ++chunkcount;
   }

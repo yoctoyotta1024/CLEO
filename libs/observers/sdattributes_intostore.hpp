@@ -40,11 +40,11 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
   virtual ~AttributeIntoStoreViaBuffer(){};
 
   virtual unsigned int copy2buffer(const Superdrop &superdrop,
-                                   const unsigned int j) = 0;
+                                   unsigned int j) = 0;
   /* virtual void function placeholding function for
   copying superdrop's data into a buffer vector at j'th index */
 
-  unsigned int writechunk(FSStore &store, const int chunkcount)
+  unsigned int writechunk(FSStore &store, unsigned int chunkcount)
   /* write buffer vector into attr's store at chunkcount
   and then replace contents of buffer with std::nans */
   {
@@ -81,7 +81,7 @@ struct IdIntoStore : AttributeIntoStoreViaBuffer<size_t>
       : AttributeIntoStoreViaBuffer("sdindex", "<u8"){};
 
   unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j)
+                           unsigned int j)
   {
     return storagehelper::val2buffer<size_t>(superdrop.id.value, buffer, j);
   }
@@ -93,7 +93,7 @@ struct EpsIntoStore : AttributeIntoStoreViaBuffer<size_t>
       : AttributeIntoStoreViaBuffer("eps", "<u8"){};
 
   unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j)
+                           unsigned int j)
   {
     return storagehelper::val2buffer<size_t>(superdrop.eps, buffer, j);
   }
@@ -105,7 +105,7 @@ struct RadiusIntoStore : AttributeIntoStoreViaBuffer<double>
       : AttributeIntoStoreViaBuffer("radius", "<f8"){};
 
   unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j)
+                           unsigned int j)
   {
     return storagehelper::val2buffer<double>(superdrop.radius, buffer, j);
   }
@@ -130,7 +130,7 @@ struct M_solIntoStore : AttributeIntoStoreViaBuffer<double>
       : AttributeIntoStoreViaBuffer("m_sol", "<f8"){};
 
   unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j)
+                           unsigned int j)
   {
     return storagehelper::val2buffer<double>(superdrop.m_sol, buffer, j);
   }
@@ -155,7 +155,7 @@ struct SdCoordIntoStore : AttributeIntoStoreViaBuffer<double>
       : AttributeIntoStoreViaBuffer(attr, "<f8"){};
 
   virtual unsigned int copy2buffer(const Superdrop &superdrop,
-                                   const unsigned int j) = 0;
+                                   unsigned int j) = 0;
 
   void zarrayjsons(FSStore &store, const SomeMetadata &md) const
   /* write metadata for attr's array into store */
@@ -175,7 +175,7 @@ struct Coord3IntoStore : SdCoordIntoStore
   Coord3IntoStore() : SdCoordIntoStore("coord3"){};
 
   unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j)
+                           unsigned int j)
   {
     return storagehelper::val2buffer<double>(superdrop.coord3, buffer, j);
   }
@@ -186,7 +186,7 @@ struct Coord1IntoStore : SdCoordIntoStore
   Coord1IntoStore() : SdCoordIntoStore("coord1"){};
 
   unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j)
+                           unsigned int j)
   {
     return storagehelper::val2buffer<double>(superdrop.coord1, buffer, j);
   }
@@ -197,7 +197,7 @@ struct Coord2IntoStore : SdCoordIntoStore
   Coord2IntoStore() : SdCoordIntoStore("coord2"){};
 
   unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j)
+                           unsigned int j)
   {
     return storagehelper::val2buffer<double>(superdrop.coord2, buffer, j);
   }
@@ -209,13 +209,13 @@ struct SdgbxIntoStore : AttributeIntoStoreViaBuffer<unsigned int>
       : AttributeIntoStoreViaBuffer("sd_gbxindex", "<u4"){};
 
   unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j)
+                           unsigned int j)
   {
     return j;
   }
 
   unsigned int copy2buffer(const unsigned int sd_gbxindex,
-                           const unsigned int j)
+                           unsigned int j)
   {
     return storagehelper::val2buffer<unsigned int>(sd_gbxindex, buffer, j);
   }

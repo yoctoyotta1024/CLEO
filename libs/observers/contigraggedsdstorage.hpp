@@ -42,7 +42,7 @@ struct SomeMetadata
 template <typename Aah>
 concept SuperdropIntoStoreViaBuffer = requires(Aah aah, const Superdrop &superdrop,
                                                FSStore &store, const std::string &str,
-                                               const unsigned int j, const unsigned int u,
+                                               unsigned int j, const unsigned int u,
                                                const SomeMetadata &md)
 /* concept SuperdropIntoStoreViaBuffer is all types that have correct
 signatures for these 3 void functions. The motivation is that these functions
@@ -77,7 +77,7 @@ SuperdropIntoStoreViaBuffer is A1 followed by A2 */
   CombinedSuperdropIntoStoreViaBuffer(A1 aah1, A2 aah2)
       : aah1(aah1), aah2(aah2) {}
 
-  unsigned int copy2buffer(const Superdrop &superdrop, const unsigned int j)
+  unsigned int copy2buffer(const Superdrop &superdrop, unsigned int j)
   {
     aah1.copy2buffer(superdrop, j);
     aah2.copy2buffer(superdrop, j);
@@ -85,7 +85,7 @@ SuperdropIntoStoreViaBuffer is A1 followed by A2 */
     return ++j;
   }
 
-  unsigned int writechunk(FSStore &store, const int chunkcount)
+  unsigned int writechunk(FSStore &store, unsigned int chunkcount)
   {
     aah1.writechunk(store, chunkcount);
     aah2.writechunk(store, chunkcount);
@@ -125,7 +125,7 @@ completeness of a Monoid Structure) */
   {
     return j;
   }
-  unsigned int writechunk(FSStore &store, const int chunkcount) const
+  unsigned int writechunk(FSStore &store, const unsigned int chunkcount) const
   {
     return chunkcount;
   }
@@ -228,9 +228,9 @@ private:
   zarray in store and (re)write its associated metadata */
   {
     // copy double to buffer
-    raggedcount_bufferfill = storagehelper::val2buffer<size_t>(raggedn,
-                                                               raggedcount,
-                                                               raggedcount_bufferfill);
+    raggedcount_bufferfill = storagehelper::
+        val2buffer<size_t>(raggedn, raggedcount,
+                           raggedcount_bufferfill);
     ++raggedcount_ndata;
   }
 
@@ -285,7 +285,7 @@ public:
       raggedcount_writechunk(); 
     }
     
-    copy2raggedcount(const size_t raggedn);
+    copy2raggedcount(raggedn);
   }
 };
 
