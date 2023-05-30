@@ -24,11 +24,13 @@ given by the superdrops in the span passed as an argument */
 }
 
 double rainmassmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                      const double nth_moment, const double rlim)
+                      const double nth_moment)
 /* calculates the nth moment of the (real) raindroplet
 mass distirbution given by all the superdrops which
 have radius >= rlim in the span passed as an argument */
 {
+  constexpr double rlim(40e-6/dlc::R0); // dimless minimum radius of precip
+
   double nthmom = 0.0;
   for (const auto &SDinGBx : span4SDsinGBx)
   {
@@ -39,4 +41,23 @@ have radius >= rlim in the span passed as an argument */
     }
   }
   return nthmom;
+}
+
+double surface_precipitation(const GridBox &gbx, const double coord3lim);
+/* calculates mm of precipitation in a gridbox
+from mass of all superdrops which have
+radius >= rlim and coord3 <= zlim  */
+{
+  constexpr double rlim(40e-6 / dlc::R0);   // dimless minimum radius of precip
+
+  double precip(0.0);
+  const double area = gbx.area;
+  {
+    if r >= rlim && coord3 <= zlim
+    {
+      precip += alknca / area * COORD0 etc. // dimless
+    }
+  }
+  
+  return precip;
 }

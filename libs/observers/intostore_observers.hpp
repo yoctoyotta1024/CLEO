@@ -239,45 +239,53 @@ public:
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
-  {
-    constexpr double rlim(40e-6/dlc::R0); // minimum dimless radius of a raindrop
-    
+  { 
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       zarr.value_to_storage(
-          rainmassmoment(h_gridboxes(ii).span4SDsinGBx, nth_moment, rlim));
+          rainmassmoment(h_gridboxes(ii).span4SDsinGBx, nth_moment));
     }
     ++zarr.nobs;
   }
 };
 
-// class SurfacePrecipObserver
-// /* observe surface precipitation and write it
-// to an array in a zarr storage 'zarr' */
-// {
-// private:
-//   TwoDStorage<double> &zarr;
+class SurfacePrecipObserver
+/* observe surface precipitation and write it
+to an array in a zarr storage 'zarr' */
+{
+private:
+  TwoDStorage<double> &zarr;
+  
+  const double zlim = 5.0 / dlc::COORD0; // dimless maximum z coord of precip
+  std::vector<size_t> surface_gbxindexes; //indexes of gbxs to include as surface
+ 
+public:
+  SurfacePrecipObserver(TwoDStorage<double> &zarr, gbxmaps)
+      : zarr(zarr)
+      {
+        surface_gbxindexes_pushback when gbxindex upper limit within zlim 
+      }
+  {
+    check_zarrname(zarr.get_name(), "surfprecip");
+    TODO: need_to_set_units_and_sf_in_storage_zattrs_too
+  }
 
-// public:
-//   SurfacePrecipObserver(TwoDStorage<double> &zarr)
-//       : zarr(zarr)
-//   {
-//     check_zarrname(zarr.get_name(), "surfprecip");
-//   }
-
-//   void observe_state(const size_t ngbxs,
-//                      const Kokkos::View<GridBox *> h_gridboxes) const
-//   {
-//     constexpr double zlim = 5/dlc::COORD0; // dimless height limit
-//     for (size_t ii(0); ii < ngbxs; ++ii)
-//     {
-//       if zbound < zlim>:
-//         const double gbxarea = h_gridboxes(ii).vol * hght?;
-//         zarr.value_to_storage(
-//             surface_precipitation(h_gridboxes(ii).span4SDsinGBx, gbxarea));
-//     }
-//     ++zarr.nobs;
-//   }
-// };
+  void observe_state(const size_t ngbxs,
+                     const Kokkos::View<GridBox *> h_gridboxes) const
+  {
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      if (gbx.index not in list_of_gbxindexes_to_include zlim)
+      {
+        zarr.value_to_storage(0.0); 
+      }
+      else
+      {
+        zarr.value_to_storage(surface_precipitation(h_gridboxes(ii), zlim));
+      }
+    }
+    ++zarr.nobs;
+  }
+};
 
 #endif // INTOSTORE_OBSERVERS_HPP
