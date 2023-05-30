@@ -23,10 +23,14 @@ unsigned int ThermoIntoStore::
 and then replace contents of buffer with std::nans */
 {
   const std::string chunknum = std::to_string(chunkcount)+".0";
-  storagehelper::writebuffer2chunk(store, pressbuffer, "press", chunknum);
-  storagehelper::writebuffer2chunk(store, tempbuffer, "temp", chunknum);
-  storagehelper::writebuffer2chunk(store, qvapbuffer, "qvap", chunknum);
-  storagehelper::writebuffer2chunk(store, qcondbuffer, "qcond", chunknum);
+  storagehelper::writebuffer2chunk(store, pressbuffer, "press",
+                                   chunknum, chunkcount);
+  storagehelper::writebuffer2chunk(store, tempbuffer, "temp",
+                                   chunknum, chunkcount);
+  storagehelper::writebuffer2chunk(store, qvapbuffer, "qvap",
+                                   chunknum, chunkcount);
+  storagehelper::writebuffer2chunk(store, qcondbuffer, "qcond",
+                                   chunknum, chunkcount);
 
   return ++chunkcount;
 }

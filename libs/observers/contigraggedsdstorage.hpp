@@ -207,8 +207,9 @@ private:
   zarray in store and (re)write its associated metadata */
   {
     raggedcount_chunkcount = storagehelper::
-          writebuffer2chunk(store, raggedcount, raggedcount_name,
-                            raggedcount_chunkcount);
+        writebuffer2chunk(store, raggedcount,
+                          raggedcount_name,
+                          raggedcount_chunkcount);
     raggedcount_bufferfill = 0; // reset bufferfill
     
     raggedcount_zarrayjsons();

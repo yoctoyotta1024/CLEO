@@ -149,10 +149,11 @@ private:
   /* write data in buffer to a chunk in store alongside metadata jsons */
   {
     const std::string chunknum = std::to_string(this->chunkcount)+".0";
-    storagehelper::writebuffer2chunk(this->store, this->buffer,
-                                     this->name, chunknum);
-    ++(this->chunkcount);
-    
+    this->chunkcount = storagehelper::
+        writebuffer2chunk(this->store, this->buffer,
+                          this->name, chunknum,
+                          this->chunkcount);
+
     writezarrayjsons();
     
     return this->chunkcount;
