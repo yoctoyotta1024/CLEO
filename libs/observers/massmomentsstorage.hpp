@@ -38,9 +38,34 @@ struct MassMomentsStorage
                      "massmom2", "<f8", "g^2", pow(sf, 2.0), ngridboxes){};
 };
 
+struct RainMassMomentsStorage
+{
+  const double sf; // scale factor to convert dimensionless masses to grams
+
+  TwoDStorage<double> massmom0zarr;
+  TwoDStorage<double> massmom1zarr;
+  TwoDStorage<double> massmom2zarr;
+
+  MassMomentsStorage(FSStore &store, const unsigned int maxchunk,
+                   const unsigned int ngridboxes)
+      : sf(pow(dlc::R0, 3.0) * dlc::RHO0 * 1000),
+        massmom0zarr(store, maxchunk,
+                     "rainmassmom0", "<f8", " ", 1.0, ngridboxes),
+        massmom1zarr(store, maxchunk,
+                     "rainmassmom1", "<f8", "g", sf, ngridboxes),
+        massmom2zarr(store, maxchunk,
+                     "rainmassmom2", "<f8", "g^2", pow(sf, 2.0), ngridboxes){};
+};
+
 double massmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
                      const double nth_moment);
 /* calculates the nth moment of the (real) droplet mass distirbution
 given by all the superdrops in the span passed as an argument */
+
+double rainmassmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
+                     const double nth_moment);
+/* calculates the nth moment of the (real) raindroplet mass
+distirbution given by all the superdrops which have radius >= rlim
+in the span passed as an argument */
 
 #endif // MASSMOMENTSSTORAGE_HPP

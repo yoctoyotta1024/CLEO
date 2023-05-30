@@ -15,11 +15,30 @@ double massmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
 given by the superdrops in the span passed as an argument */
 {
   double massmoment = 0.0;
-
   for (const auto &SDinGBx : span4SDsinGBx)
   {
-    massmoment += SDinGBx.superdrop.eps * pow(SDinGBx.superdrop.mass(), nth_moment);
+    massmoment += SDinGBx.superdrop.eps *
+                  pow(SDinGBx.superdrop.mass(), nth_moment);
   }
+  return massmoment;
+}
 
+double rainmassmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
+                     const double nth_moment)
+/* calculates the nth moment of the (real) raindroplet mass
+distirbution given by all the superdrops which have radius >= rlim
+in the span passed as an argument */
+{
+  const double rlim(40e-6/dlc::R0); // minimum dimless radius of a raindrop
+
+  double massmoment = 0.0;
+  for (const auto &SDinGBx : span4SDsinGBx)
+  {
+    if (SDinGBx.superdrop.radius >= rlim)
+    {
+      massmoment += SDinGBx.superdrop.eps *
+                    pow(SDinGBx.superdrop.mass(), nth_moment);
+    } 
+  }
   return massmoment;
 }
