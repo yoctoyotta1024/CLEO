@@ -57,14 +57,14 @@ private:
   unsigned int bufferfill; // number of datapoints so far copied into buffer
   unsigned int ndata;      // number of data points that have been observed should = nobs * ngridboxes
 
-  const unsigned int zarr_format = 2;    // storage spec. version 2
-  const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
-  const std::string compressor = "null"; // compression of data when writing to store
-  const std::string fill_value = "null"; // fill value for empty datapoints in array
-  const std::string filters = "null";    // codec configurations for compression
-  const std::string dtype = "<f8";       // datatype stored in arrays
+  constexpr unsigned int zarr_format = 2;    // storage spec. version 2
+  constexpr char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
+  constexpr std::string compressor = "null"; // compression of data when writing to store
+  constexpr std::string fill_value = "null"; // fill value for empty datapoints in array
+  constexpr std::string filters = "null";    // codec configurations for compression
+  constexpr std::string dtype = "<f8";       // datatype stored in arrays
 
-  const unsigned int ngridboxes; // number of output times that have been observed
+  const unsigned int ngridboxes; // number of gridboxes that are observed during each observation
 
   void copy2buffers(const ThermoState &state)
   /* copy data from thermostate to buffers */

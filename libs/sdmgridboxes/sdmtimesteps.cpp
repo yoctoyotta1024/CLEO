@@ -21,7 +21,7 @@ timestep = 0. Substeps for sdmprocess must be larger than steps! */
   if ((condsubstep == 0) | (collsubstep == 0) | (motionstep == 0) |
       (couplstep == 0) | (t_end == 0))
   {
-    const std::string err("A model step = 0, possibly due to bad conversion"
+    constexpr std::string err("A model step = 0, possibly due to bad conversion"
                           " of a real timestep [s]. Consider increasing X in"
                           " std::ratio<1, X> used for definition of model_step");
     throw std::invalid_argument(err);
@@ -31,14 +31,14 @@ timestep = 0. Substeps for sdmprocess must be larger than steps! */
   if ((minstep < condsubstep) |
       (minstep < collsubstep))
   {
-    const std::string err("invalid sdm substepping: an sdm substep is larger"
+    constexpr std::string err("invalid sdm substepping: an sdm substep is larger"
                           " than the smallest step (couplstep or motionstep)");
     throw std::invalid_argument(err);
   }
 
   if (couplstep < motionstep)
   {
-    const std::string err("Warning: coupling step is smaller than the"
+    constexpr std::string err("Warning: coupling step is smaller than the"
                           " sdmmotion step - it's viable but are you"
                           " sure you want this?");
     throw std::invalid_argument(err);

@@ -102,9 +102,10 @@ with supersaturation s_ratio */
   {
     if (iter > maxiters)
     {
-      const std::string err = "Newton Raphson Method did not converge"
-                              " within " + std::to_string(maxiters) +
-                              " iterations to find wet radius\n";
+      const std::string err("Newton Raphson Method did not converge"
+                            " within " +
+                            std::to_string(maxiters) +
+                            " iterations to find wet radius\n");
       throw std::invalid_argument(err);             
     }
     else

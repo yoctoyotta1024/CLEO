@@ -70,8 +70,9 @@ public:
   FSStore(std::filesystem::path basedir) : basedir(basedir)
   {
     // initialize a zarr group (i.e. dataset)
-    const unsigned int zarr_format = 2; // storage spec. version 2
-    const std::string zgroupjson = "{\"zarr_format\": " + std::to_string(zarr_format) + "}";
+    constexpr unsigned int zarr_format = 2; // storage spec. version 2
+    constexpr std::string zgroupjson = "{\"zarr_format\": " +
+                                       std::to_string(zarr_format) + "}";
     (*this)[".zgroup"] = zgroupjson;
 
     // global metadata (optional)

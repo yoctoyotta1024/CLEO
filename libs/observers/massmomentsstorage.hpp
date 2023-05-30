@@ -23,7 +23,7 @@ struct MassMom012Storages
 /* 2D zarr stores for 0th, 1st and 2nd mass moments */
 {
 private:
-  const double sf = pow(dlc::R0, 3.0) * dlc::RHO0 * 1000; // scale factor to convert dimensionless masses to grams
+  constexpr double sf = pow(dlc::R0, 3.0) * dlc::RHO0 * 1000; // scale factor to convert dimensionless masses to grams
 
 public:
   TwoDStorage<double> mom0zarr;
@@ -65,9 +65,9 @@ double massmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
 given by all the superdrops in the span passed as an argument */
 
 double rainmassmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                      const double nth_moment);
-/* calculates the nth moment of the (real) raindroplet mass
-distirbution given by all the superdrops which have radius >= rlim
-in the span passed as an argument */
+                      const double nth_moment, const double rlim);
+/* calculates the nth moment of the (real) raindroplet
+mass distirbution given by all the superdrops which
+have radius >= rlim in the span passed as an argument */
 
 #endif // MASSMOMENTSSTORAGE_HPP

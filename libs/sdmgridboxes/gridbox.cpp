@@ -83,10 +83,10 @@ void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
 
   if (coord < llim || coord >= ulim)
   {
-    const std::string err = "superdrop coord: "+std::to_string(coord)+
+    const std::string err("superdrop coord: "+std::to_string(coord)+
                               " lies outside its gridbox's bounds ["+
                               std::to_string(llim)+", "+
-                              std::to_string(ulim)+"]";
+                              std::to_string(ulim)+"]");
     throw std::invalid_argument(err);
   }
 }

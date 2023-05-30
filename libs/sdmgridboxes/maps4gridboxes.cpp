@@ -54,8 +54,8 @@ whilst the volume is determind by reading the gridfile */
 
   else
   {
-    const std::string errmsg("SDnspace > 3, no method exists "
-                             " for constructing Maps4GridBoxes object");
+    constexpr std::string errmsg = "SDnspace > 3, no method exists "
+                                   " for constructing Maps4GridBoxes object";
     throw std::invalid_argument(errmsg);
   }
 }

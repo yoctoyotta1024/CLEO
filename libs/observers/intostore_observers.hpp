@@ -27,13 +27,16 @@ void check_zarrname(const std::string zarrname,
 {
   if (zarrname != name)
   {
-    const std::string errmsg = "name of storage is called " +
-                               zarrname + ", but should be " + name;
+    const std::string errmsg("name of storage is called " +
+                             zarrname + ", but should be " + name);
     throw std::invalid_argument(errmsg);
   }
 }
 
 class ThermoStateObserver
+/* observe thermostate of each gridbox by
+writing it to arrays in a zarr store as
+determined by the ThermoStateStorage instance */
 {
 private:
   ThermoStateStorage &zarr;
@@ -43,19 +46,74 @@ public:
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
-  /* observe thermostate by writing it to arrays
-  as determined by the ThermoStateStorage instance */
   {
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       zarr.thermodata_to_storage(h_gridboxes(ii).state);
     }
-
     ++zarr.nobs;
   }
 };
 
+template <typename ContiguousRaggedSDStorage>
+class SDsAttributeObserver
+/* observe superdroplets by writing their (attributes')
+data to contigious ragged represented arrays as
+determined by the ContiguousRaggedSDStorage instance */
+{
+private:
+  ContiguousRaggedSDStorage &zarr;
+
+public:
+  SDsAttributeObserver(ContiguousRaggedSDStorage &zarr) : zarr(zarr) {}
+
+  void observe_state(const size_t ngbxs,
+                     const Kokkos::View<GridBox *> h_gridboxes) const
+  {
+    size_t totnsupers(0);
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      for (auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
+      {
+        zarr.data_to_raggedstorage(SDinGBx.superdrop);
+        ++totnsupers;
+      }
+    }
+    zarr.raggedarray_count(totnsupers);
+  }
+};
+
+class SDsGbxindexObserver
+/* observe gridbox index of each superdroplet and write to
+zarr storage in a contigious ragged represented array as
+determined by the ContiguousRaggedSDStorage instance */
+{
+private:
+  ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr;
+
+public:
+  SDsGbxindexObserver(auto &zarr) : zarr(zarr) {}
+
+  void observe_state(const size_t ngbxs,
+                     const Kokkos::View<GridBox *> h_gridboxes) const
+  {
+    size_t totnsupers(0);
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      for (auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
+      {
+        zarr.data_to_raggedstorage<unsigned int>(SDinGBx.sd_gbxindex);
+        ++totnsupers;
+      }
+    }
+    zarr.raggedarray_count(totnsupers);
+  }
+};
+
 class TimeObserver
+/* observe time of 0th gridbox and write it
+to an array 'zarr' store as determined by
+the CoordinateStorage instance */
 {
 private:
   CoordinateStorage<double> &zarr;
@@ -68,8 +126,7 @@ public:
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
-  /* observe time of 0th gridbox and write it to an array
-  as determined by the CoordinateStorage instance */
+
   {
     const auto &gbx = h_gridboxes(0);
     zarr.value_to_storage(gbx.state.time);
@@ -77,6 +134,9 @@ public:
 };
 
 class GridBoxIndexObserver
+/* observe the gbxindex of each gridbox and
+write it to an array 'zarr' store as determined
+by the CoordinateStorage instance */
 {
 private:
   CoordinateStorage<unsigned int> &zarr;
@@ -89,8 +149,6 @@ public:
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
-  /* observe time of 0th gridbox and write it to an array
-  as determined by the CoordinateStorage instance */
   {
     if (zarr.get_ndata() == 0)
     {
@@ -103,6 +161,8 @@ public:
 };
 
 class NsupersPerGridBoxObserver
+/* observe number of superdroplets in each gridbox 
+and write to 'zarr', a 2D array in a zarr store */
 {
 private:
   TwoDStorage<size_t> &zarr;
@@ -115,20 +175,21 @@ public:
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
-  /* observe time of 0th gridbox and write it to an array
-  as determined by the CoordinateStorage instance */
   {
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       size_t nsupers = h_gridboxes(ii).span4SDsinGBx.size();
       zarr.value_to_storage(nsupers);
     }
-
     ++zarr.nobs;
   }
 };
 
 class NthMassMomentObserver
+/* observe nth mass moment of (real) droplets
+distribution in each gridbox through by 
+writing data from 'massmoment' function
+to an array in a zarr storage 'zarr' */
 {
 private:
   const int nth_moment;
@@ -146,21 +207,21 @@ public:
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
-  /* observe time of 0th gridbox and write it to an array
-  as determined by the CoordinateStorage instance */
   {
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      const double mom = massmoment(h_gridboxes(ii).span4SDsinGBx,
-                                       nth_moment);
-      zarr.value_to_storage(mom);
+      zarr.value_to_storage(
+          massmoment(h_gridboxes(ii).span4SDsinGBx, nth_moment));
     }
-
     ++zarr.nobs;
   }
 };
 
 class NthRainMassMomentObserver
+/* observe nth mass moment of raindroplets
+distribution in each gridbox through by 
+writing data from 'rainmassmoment' function
+to an array in a zarr storage 'zarr' */
 {
 private:
   const int nth_moment;
@@ -178,73 +239,45 @@ public:
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
-  /* observe time of 0th gridbox and write it to an array
-  as determined by the CoordinateStorage instance */
   {
+    constexpr double rlim(40e-6/dlc::R0); // minimum dimless radius of a raindrop
+    
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      const double mom = rainmassmoment(h_gridboxes(ii).span4SDsinGBx,
-                                       nth_moment);
-      zarr.value_to_storage(mom);
+      zarr.value_to_storage(
+          rainmassmoment(h_gridboxes(ii).span4SDsinGBx, nth_moment));
     }
-
     ++zarr.nobs;
   }
 };
 
-template <typename ContiguousRaggedSDStorage>
-class SDsAttributeObserver
-{
-private:
-  ContiguousRaggedSDStorage &zarr;
+// class SurfacePrecipObserver
+// /* observe surface precipitation and write it
+// to an array in a zarr storage 'zarr' */
+// {
+// private:
+//   TwoDStorage<double> &zarr;
 
-public:
-  SDsAttributeObserver(ContiguousRaggedSDStorage &zarr) : zarr(zarr) {}
+// public:
+//   SurfacePrecipObserver(TwoDStorage<double> &zarr)
+//       : zarr(zarr)
+//   {
+//     check_zarrname(zarr.get_name(), "surfprecip");
+//   }
 
-  void observe_state(const size_t ngbxs,
-                     const Kokkos::View<GridBox *> h_gridboxes) const
-  /* observe superdroplets by writing their data to contigious
-  ragged represented arrays as determined by the
-  ContiguousRaggedSDStorage instance */
-  {
-    size_t nsupers(0);
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      for (auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
-      {
-        zarr.data_to_raggedstorage(SDinGBx.superdrop);
-        ++nsupers;
-      }
-    }
-    zarr.raggedarray_count(nsupers);
-  }
-};
-
-class SDsGbxindexObserver
-{
-private:
-  ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr;
-
-public:
-  SDsGbxindexObserver(auto &zarr) : zarr(zarr) {}
-
-  void observe_state(const size_t ngbxs,
-                     const Kokkos::View<GridBox *> h_gridboxes) const
-  /* observe superdroplets by writing their data to contigious
-  ragged represented arrays as determined by the
-  ContiguousRaggedSDStorage instance */
-  {
-    size_t nsupers(0);
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      for (auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
-      {
-        zarr.data_to_raggedstorage<unsigned int>(SDinGBx.sd_gbxindex);
-        ++nsupers;
-      }
-    }
-    zarr.raggedarray_count(nsupers);
-  }
-};
+//   void observe_state(const size_t ngbxs,
+//                      const Kokkos::View<GridBox *> h_gridboxes) const
+//   {
+//     constexpr double zlim = 5/dlc::COORD0; // dimless height limit
+//     for (size_t ii(0); ii < ngbxs; ++ii)
+//     {
+//       if zbound < zlim>:
+//         const double gbxarea = h_gridboxes(ii).vol * hght?;
+//         zarr.value_to_storage(
+//             surface_precipitation(h_gridboxes(ii).span4SDsinGBx, gbxarea));
+//     }
+//     ++zarr.nobs;
+//   }
+// };
 
 #endif // INTOSTORE_OBSERVERS_HPP

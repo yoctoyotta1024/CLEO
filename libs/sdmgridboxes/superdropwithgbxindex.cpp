@@ -82,10 +82,11 @@ create_superdropwithgbxindexes(const int nSDsvec, const int SDnspace,
 
   if (SDsInGBxs.size() < initSDs.sd_gbxindex.size())
   {
-    const std::string err = "Fewer superdroplets were created than were"
-                            " read from initialisation file into initSDs"
-                            " ie. "+std::to_string(SDsInGBxs.size())+
-                            " < "+std::to_string(initSDs.sd_gbxindex.size());
+    const std::string err("Fewer superdroplets were created than were"
+                          " read from initialisation file into initSDs"
+                          " ie. " +
+                          std::to_string(SDsInGBxs.size()) + " < " +
+                          std::to_string(initSDs.sd_gbxindex.size()));
     throw std::invalid_argument(err);
   }
 

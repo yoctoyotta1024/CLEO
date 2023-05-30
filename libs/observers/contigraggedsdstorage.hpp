@@ -159,14 +159,14 @@ private:
   unsigned int rgdcount_bufferfill; // number of rgdcount values so far copied into its buffer
   unsigned int rgdcount_ndata;      // number of rgdcount values observed so far
 
-  const unsigned int zarr_format = 2;    // storage spec. version 2
-  const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
-  const std::string compressor = "null"; // compression of data when writing to store
-  const std::string fill_value = "null"; // fill value for empty datapoints in array
-  const std::string filters = "null";    // codec configurations for compression
+  constexpr unsigned int zarr_format = 2; // storage spec. version 2
+  constexpr char order = 'C';                 // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
+  constexpr std::string compressor = "null";  // compression of data when writing to store
+  constexpr std::string fill_value = "null";  // fill value for empty datapoints in array
+  constexpr std::string filters = "null";     // codec configurations for compression
 
-  const std::string rgdcount_name = "raggedcount"; // name of rgdcount zarray in store
-  const std::string rgdcount_dtype = "<u8";        // datatype of rgdcount variable
+  constexpr std::string rgdcount_name = "raggedcount"; // name of rgdcount zarray in store
+  constexpr std::string rgdcount_dtype = "<u8";        // datatype of rgdcount variable
 
   void sdbuffers_writejsons()
   {
@@ -180,7 +180,7 @@ private:
   void rgdcount_writejsons()
   /* write zarray jsons for array of rgdcount variable in store */
   {
-    const std::string
+    constexpr std::string
         count_arrayattrs = "{\"_ARRAY_DIMENSIONS\": [\"time\"],"
                            "\"sample_dimension\": \"superdroplets\"}";
 

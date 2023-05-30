@@ -52,7 +52,7 @@ make InitSdsData object */
   {
     if (sz != sz0)
     {
-      const std::string err("values in 'sizes' vector are not identical");
+      constexpr std::string err("values in 'sizes' vector are not identical");
       throw std::invalid_argument(err);
     }
   }
