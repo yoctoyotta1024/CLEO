@@ -53,7 +53,8 @@ struct SomeZarrStores
   ThermoStateStorage thermozarr;
   ContiguousRaggedSDStorage<S> sdzarr;
   ContiguousRaggedSDStorage<SdgbxIntoStore> sdgbxzarr;
-  MassMomentsStorage massmoments;
+  MassMomStorages massmoms;
+  RainMassMomStorages rainmassmoms;
   CoordinateStorage<double> timezarr;
   CoordinateStorage<unsigned int> gbxzarr;
   TwoDStorage<size_t> nsuperszarr;
@@ -63,7 +64,8 @@ SomeZarrStores(FSStore &fsstore, const int maxchunk,
       : thermozarr(fsstore, maxchunk, ngridboxes),
         sdzarr(fsstore, sdattrs, maxchunk),
         sdgbxzarr(fsstore, SdgbxIntoStore(), maxchunk),
-        massmoments(fsstore, maxchunk, ngridboxes),
+        massmoms(fsstore, maxchunk, ngridboxes),
+        rainmassmoms(fsstore, maxchunk, ngridboxes),
         timezarr(fsstore, maxchunk, "time",
                  "<f8", "s", dlc::TIME0),
         gbxzarr(fsstore, maxchunk, "gbxindex",
@@ -148,15 +150,20 @@ of a superdroplet into zarr storage */
   return attrs;
 }
 
-Observer auto create_massmomentsobserver(MassMomentsStorage &mmzarrs)
+Observer auto create_massmoments_observer(MassMomStorages &mms,
+                                          RainMassMomStorages &rmms)
 {
-  const Observer auto mom0 = NthMassMomentObserver(mmzarrs.massmom0zarr, 0);
-  const Observer auto mom1 = NthMassMomentObserver(mmzarrs.massmom1zarr, 1);
-  const Observer auto mom2 = NthMassMomentObserver(mmzarrs.massmom2zarr, 2);
+  const Observer auto mom0 = NthMassMomentObserver(mms.mom0zarr, 0);
+  const Observer auto mom1 = NthMassMomentObserver(mms.mom1zarr, 1);
+  const Observer auto mom2 = NthMassMomentObserver(mms.mom2zarr, 2);
 
-  const auto massmomentobs = mom2 >> mom1 >> mom0; 
+  const Observer auto rain0 = NthRainMassMomentObserver(rmms.mom0zarr, 0);
+  const Observer auto rain1 = NthRainMassMomentObserver(rmms.mom1zarr, 1);
+  // const Observer auto rain2 = NthRainMassMomentObserver(rmms.mom2zarr, 2);
+  
+  const auto momsobs = rain1 >> rain0 >> mom2 >> mom1 >> mom0; 
 
-  return massmomentobs;
+  return momsobs;
 }
 
 template <SuperdropIntoStoreViaBuffer S>
@@ -176,8 +183,8 @@ superdroplets from combination of those two seperate observers */
   
   const Observer auto obs5 = NsupersPerGridBoxObserver(stores.nsuperszarr);
 
-  const Observer auto obs6 = create_massmomentsobserver(stores.massmoments);
-
+  const Observer auto obs6 = create_massmoments_observer(stores.massmoments);
+  
   // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{};
   const auto observer = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;
 

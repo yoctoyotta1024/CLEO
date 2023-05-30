@@ -19,51 +19,53 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
 namespace dlc = dimless_constants;
 
-struct MassMomentsStorage
+struct MassMom012Storages
+/* 2D zarr stores for 0th, 1st and 2nd mass moments */
 {
-  const double sf; // scale factor to convert dimensionless masses to grams
+private:
+  const double sf = pow(dlc::R0, 3.0) * dlc::RHO0 * 1000; // scale factor to convert dimensionless masses to grams
 
-  TwoDStorage<double> massmom0zarr;
-  TwoDStorage<double> massmom1zarr;
-  TwoDStorage<double> massmom2zarr;
+public:
+  TwoDStorage<double> mom0zarr;
+  TwoDStorage<double> mom1zarr;
+  TwoDStorage<double> mom2zarr;
 
-  MassMomentsStorage(FSStore &store, const unsigned int maxchunk,
-                   const unsigned int ngridboxes)
-      : sf(pow(dlc::R0, 3.0) * dlc::RHO0 * 1000),
-        massmom0zarr(store, maxchunk,
-                     "massmom0", "<f8", " ", 1.0, ngridboxes),
-        massmom1zarr(store, maxchunk,
-                     "massmom1", "<f8", "g", sf, ngridboxes),
-        massmom2zarr(store, maxchunk,
-                     "massmom2", "<f8", "g^2", pow(sf, 2.0), ngridboxes){};
+  MassMom012Storages(FSStore &store, const unsigned int maxchunk,
+                       const unsigned int ngridboxes,
+                       const std::string mom0name,
+                       const std::string mom1name,
+                       const std::string mom2name)
+      : mom0zarr(store, maxchunk, mom0name,
+                 "<f8", " ", 1.0, ngridboxes),
+        mom1zarr(store, maxchunk, mom1name,
+                 "<f8", "g", sf, ngridboxes),
+        mom2zarr(store, maxchunk, mom2name,
+                 "<f8", "g^2", pow(sf, 2.0), ngridboxes){};
 };
 
-struct RainMassMomentsStorage
+struct MassMomStorages : MassMom012Storages
 {
-  const double sf; // scale factor to convert dimensionless masses to grams
+  MassMomStorages(FSStore &store, const unsigned int maxchunk,
+           const unsigned int ngridboxes)
+      : MassMom012Storages(store, maxchunk, ngridboxes,
+                             "mom0", "mom1", "mom2"){};
+};
 
-  TwoDStorage<double> massmom0zarr;
-  TwoDStorage<double> massmom1zarr;
-  TwoDStorage<double> massmom2zarr;
-
-  MassMomentsStorage(FSStore &store, const unsigned int maxchunk,
-                   const unsigned int ngridboxes)
-      : sf(pow(dlc::R0, 3.0) * dlc::RHO0 * 1000),
-        massmom0zarr(store, maxchunk,
-                     "rainmassmom0", "<f8", " ", 1.0, ngridboxes),
-        massmom1zarr(store, maxchunk,
-                     "rainmassmom1", "<f8", "g", sf, ngridboxes),
-        massmom2zarr(store, maxchunk,
-                     "rainmassmom2", "<f8", "g^2", pow(sf, 2.0), ngridboxes){};
+struct RainMassMomStorages : MassMom012Storages
+{
+  RainMassMomStorages(FSStore &store, const unsigned int maxchunk,
+               const unsigned int ngridboxes)
+      : MassMom012Storages(store, maxchunk, ngridboxes,
+                             "rainmom0", "rainmom1", "rainmom2"){};
 };
 
 double massmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                     const double nth_moment);
+                  const double nth_moment);
 /* calculates the nth moment of the (real) droplet mass distirbution
 given by all the superdrops in the span passed as an argument */
 
 double rainmassmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                     const double nth_moment);
+                      const double nth_moment);
 /* calculates the nth moment of the (real) raindroplet mass
 distirbution given by all the superdrops which have radius >= rlim
 in the span passed as an argument */

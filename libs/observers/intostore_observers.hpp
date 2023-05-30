@@ -140,7 +140,7 @@ public:
       : nth_moment(nth_moment),
         zarr(zarr)
   {
-    const std::string name("massmom" + std::to_string(nth_moment));
+    const std::string name("mom" + std::to_string(nth_moment));
     check_zarrname(zarr.get_name(), name);
   }
 
@@ -151,9 +151,41 @@ public:
   {
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      const double moment = massmoment(h_gridboxes(ii).span4SDsinGBx,
+      const double mom = massmoment(h_gridboxes(ii).span4SDsinGBx,
                                        nth_moment);
-      zarr.value_to_storage(moment);
+      zarr.value_to_storage(mom);
+    }
+
+    ++zarr.nobs;
+  }
+};
+
+class NthRainMassMomentObserver
+{
+private:
+  const int nth_moment;
+  TwoDStorage<double> &zarr;
+
+public:
+  NthRainMassMomentObserver(TwoDStorage<double> &zarr,
+                          const int nth_moment)
+      : nth_moment(nth_moment),
+        zarr(zarr)
+  {
+    const std::string name("rainmom" + std::to_string(nth_moment));
+    check_zarrname(zarr.get_name(), name);
+  }
+
+  void observe_state(const size_t ngbxs,
+                     const Kokkos::View<GridBox *> h_gridboxes) const
+  /* observe time of 0th gridbox and write it to an array
+  as determined by the CoordinateStorage instance */
+  {
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      const double mom = rainmassmoment(h_gridboxes(ii).span4SDsinGBx,
+                                       nth_moment);
+      zarr.value_to_storage(mom);
     }
 
     ++zarr.nobs;
