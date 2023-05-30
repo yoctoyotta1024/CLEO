@@ -144,6 +144,23 @@ array in a store, and an array's metadata to a store */
     return metadata;
   }
 
+  inline std::string metadata(const unsigned int zarr_format,
+                              const char order,
+                              const unsigned int ndata,
+                              const size_t chunksize,
+                              const std::string &dtype,
+                              const std::string &compressor,
+                              const std::string &fill_value,
+                              const std::string &filters)
+  /* make string of metadata for an array in a zarr store */
+  {
+    const auto shape("[" + std::to_string(ndata) + "]");
+    const auto chunks("[" + std::to_string(chunksize) + "]");
+
+    return storagehelper::metadata(zarr_format, order, shape, chunks,
+                                   dtype, compressor, fill_value, filters);
+  }
+
   inline std::string arrayattrs(const std::string &dims,
                               const std::string units = " ",
                               const double scale_factor = 1)
