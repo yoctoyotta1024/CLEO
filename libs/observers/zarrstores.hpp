@@ -136,7 +136,7 @@ array in a store, and an array's metadata to a store */
                                             chunknum, chunkcount);
   }
 
-  inline void write_zarrarrayjsons(FSStore &store,
+  inline void writezarrjsons(FSStore &store,
                                    const std::string name,
                                    const std::string &metadata,
                                    const std::string &arrayattrs)

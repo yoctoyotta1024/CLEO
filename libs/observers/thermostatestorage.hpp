@@ -41,9 +41,9 @@ struct ThermoIntoStore
   /* write buffer vector into attr's store at chunkcount
   and then replace contents of buffer with numeric limit */
 
-  void zarrayjsons(FSStore &store, const std::string &metadata) const;
-  /* write same .zarray metadata to a json file for each thermostate array
-  in store alongside distinct .zattrs json files */
+  void writejsons(FSStore &store, const std::string &metadata) const;
+  /* write same .zarray metadata to a json file for each
+  thermostate array in store alongside distinct .zattrs json files */
 };
 
 class ThermoStateStorage
@@ -80,10 +80,10 @@ private:
     chunkcount = buffers.writechunks(store, chunkcount);
     bufferfill = 0;
 
-    zarrayjsons();
+    writejsons();
   }
 
-  void zarrayjsons()
+  void writejsons()
   /* write strictly required metadata to decode chunks (MUST) */
   {
     assert((ndata == nobs*ngridboxes) && "1D data length matches 2D array size");
@@ -99,7 +99,7 @@ private:
                             metadata(zarr_format, order, shape,
                                      chunks, dtype, compressor,
                                      fill_value, filters));
-    buffers.zarrayjsons(store, metadata);
+    buffers.writejsons(store, metadata);
   }
 
 public:
