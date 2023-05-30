@@ -1,5 +1,5 @@
 // Author: Clara Bayley
-// File: "sdmomentsstorage.cpp"
+// File: "massmomentsstorage.cpp"
 /* structs/classes to create an observer for the moments of
 the superdroplet mass distribution that writes
 into 1 dimensional array(s)
@@ -7,10 +7,10 @@ into 1 dimensional array(s)
 in a FFStore obeying zarr storage specification verion 2:
 https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
-#include "sdmomentsstorage.hpp"
+#include "massmomentsstorage.hpp"
 
-double massnthmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                     const double nth_moment)
+double massmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
+                  const double nth_moment)
 /* calculates the nth moment of the (real) droplet mass distirbution
 given by the superdrops in the span passed as an argument */
 {

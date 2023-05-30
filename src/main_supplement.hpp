@@ -53,7 +53,7 @@ struct SomeZarrStores
   ThermoStateStorage thermozarr;
   ContiguousRaggedSDStorage<S> sdzarr;
   ContiguousRaggedSDStorage<SdgbxIntoStore> sdgbxzarr;
-  SDMomentsStorage sdmoments;
+  MassMomentsStorage massmoments;
   CoordinateStorage<double> timezarr;
   CoordinateStorage<unsigned int> gbxzarr;
   TwoDStorage<size_t> nsuperszarr;
@@ -63,7 +63,7 @@ SomeZarrStores(FSStore &fsstore, const int maxchunk,
       : thermozarr(fsstore, maxchunk, ngridboxes),
         sdzarr(fsstore, sdattrs, maxchunk),
         sdgbxzarr(fsstore, SdgbxIntoStore(), maxchunk),
-        sdmoments(fsstore, maxchunk, ngridboxes),
+        massmoments(fsstore, maxchunk, ngridboxes),
         timezarr(fsstore, maxchunk, "time",
                  "<f8", "s", dlc::TIME0),
         gbxzarr(fsstore, maxchunk, "gbxindex",
@@ -148,15 +148,15 @@ of a superdroplet into zarr storage */
   return attrs;
 }
 
-Observer auto create_sdmomentsobserver(SDMomentsStorage &sdmoments)
+Observer auto create_massmomentsobserver(MassMomentsStorage &zarrs)
 {
-  const Observer auto mom0 = SDMassNthMomentObserver(sdmoments.massmom0zarr, 0);
-  const Observer auto mom1 = SDMassNthMomentObserver(sdmoments.massmom1zarr, 1);
-  const Observer auto mom2 = SDMassNthMomentObserver(sdmoments.massmom2zarr, 2);
+  const Observer auto mom0 = NthMassMomentObserver(zarrs.massmom0zarr, 0);
+  const Observer auto mom1 = NthMassMomentObserver(zarrs.massmom1zarr, 1);
+  const Observer auto mom2 = NthMassMomentObserver(zarrs.massmom2zarr, 2);
 
-  const auto sdmomentobs = mom2 >> mom1 >> mom0; 
+  const auto massmomentobs = mom2 >> mom1 >> mom0; 
 
-  return sdmomentobs;
+  return massmomentobs;
 }
 
 template <SuperdropIntoStoreViaBuffer S>
@@ -176,7 +176,7 @@ superdroplets from combination of those two seperate observers */
   
   const Observer auto obs5 = NsupersPerGridBoxObserver(stores.nsuperszarr);
 
-  const Observer auto obs6 = create_sdmomentsobserver(stores.sdmoments);
+  const Observer auto obs6 = create_massmomentsobserver(stores.massmoments);
 
   // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{};
   const auto observer = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;

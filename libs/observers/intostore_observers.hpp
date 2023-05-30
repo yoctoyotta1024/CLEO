@@ -19,7 +19,7 @@ into a (zarr) store on disk */
 #include "./sdattributes_intostore.hpp"
 #include "./contigraggedsdstorage.hpp"
 #include "./singlevarstorage.hpp"
-#include "./sdmomentsstorage.hpp"
+#include "./massmomentsstorage.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 
 void check_zarrname(const std::string zarrname,
@@ -128,14 +128,14 @@ public:
   }
 };
 
-class SDMassNthMomentObserver
+class NthMassMomentObserver
 {
 private:
   const int nth_moment;
   TwoDStorage<double> &zarr;
 
 public:
-  SDMassNthMomentObserver(TwoDStorage<double> &zarr,
+  NthMassMomentObserver(TwoDStorage<double> &zarr,
                           const int nth_moment)
       : nth_moment(nth_moment),
         zarr(zarr)
@@ -151,8 +151,8 @@ public:
   {
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      const double moment = massnthmoment(h_gridboxes(ii).span4SDsinGBx,
-                                          nth_moment);
+      const double moment = massmoment(h_gridboxes(ii).span4SDsinGBx,
+                                       nth_moment);
       zarr.value_to_storage(moment);
     }
 
