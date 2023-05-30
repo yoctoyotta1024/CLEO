@@ -245,7 +245,7 @@ public:
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       zarr.value_to_storage(
-          rainmassmoment(h_gridboxes(ii).span4SDsinGBx, nth_moment));
+          rainmassmoment(h_gridboxes(ii).span4SDsinGBx, nth_moment, rlim));
     }
     ++zarr.nobs;
   }

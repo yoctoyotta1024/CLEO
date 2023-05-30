@@ -84,8 +84,7 @@ for wind velocity components (or not)*/
   }
   else // means SDnspace > 3
   {
-    constexpr std::string errmsg = "SDnspace > 3 is invalid";
-    throw std::invalid_argument(errmsg);
+    throw std::invalid_argument("SDnspace > 3 is invalid");
   }
 }
 

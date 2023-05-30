@@ -41,17 +41,17 @@ void ThermoIntoStore::writejsons(FSStore &store,
 /* write same .zarray metadata to a json file for each
 thermostate array in store alongside distinct .zattrs json files */
 {
-  constexpr std::string dims("[\"time\", \"gbxindex\"]");
+  const std::string dims("[\"time\", \"gbxindex\"]");
 
-  constexpr auto press_a(storagehelper::arrayattrs(dims, "hPa", dlc::P0 / 100));
+  const auto press_a(storagehelper::arrayattrs(dims, "hPa", dlc::P0 / 100));
   storagehelper::writezarrjsons(store, "press", metadata, press_a);
 
-  constexpr auto temp_a(storagehelper::arrayattrs(dims, "K", dlc::TEMP0));
+  const auto temp_a(storagehelper::arrayattrs(dims, "K", dlc::TEMP0));
   storagehelper::writezarrjsons(store, "temp", metadata, temp_a);
 
-  constexpr auto qvap_a(storagehelper::arrayattrs(dims));
+  const auto qvap_a(storagehelper::arrayattrs(dims));
   storagehelper::writezarrjsons(store, "qvap", metadata, qvap_a);
 
-  constexpr auto qcond_a(storagehelper::arrayattrs(dims));
+  const auto qcond_a(storagehelper::arrayattrs(dims));
   storagehelper::writezarrjsons(store, "qcond", metadata, qcond_a);
 }

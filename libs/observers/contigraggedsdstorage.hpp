@@ -14,7 +14,7 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
 struct SomeMetadata
 {
-  unsigned int zarr_format;
+  char zarr_format;
   char order;
   std::string shape;
   std::string chunks;
@@ -23,7 +23,7 @@ struct SomeMetadata
   std::string filters;
   std::string dims;
 
-  SomeMetadata(const unsigned int zarr_format, const char order,
+  SomeMetadata(const char zarr_format, const char order,
                const unsigned int ndata, const size_t chunksize,
                const std::string compressor, const std::string fill_value,
                const std::string filters, const std::string dims)
@@ -159,14 +159,14 @@ private:
   unsigned int rgdcount_bufferfill; // number of rgdcount values so far copied into its buffer
   unsigned int rgdcount_ndata;      // number of rgdcount values observed so far
 
-  constexpr unsigned int zarr_format = 2; // storage spec. version 2
-  constexpr char order = 'C';                 // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
-  constexpr std::string compressor = "null";  // compression of data when writing to store
-  constexpr std::string fill_value = "null";  // fill value for empty datapoints in array
-  constexpr std::string filters = "null";     // codec configurations for compression
+  char zarr_format = '2';          // storage spec. version 2
+  char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
+  std::string compressor = "null"; // compression of data when writing to store
+  std::string fill_value = "null"; // fill value for empty datapoints in array
+  std::string filters = "null";    // codec configurations for compression
 
-  constexpr std::string rgdcount_name = "raggedcount"; // name of rgdcount zarray in store
-  constexpr std::string rgdcount_dtype = "<u8";        // datatype of rgdcount variable
+  std::string rgdcount_name = "raggedcount"; // name of rgdcount zarray in store
+  std::string rgdcount_dtype = "<u8";        // datatype of rgdcount variable
 
   void sdbuffers_writejsons()
   {
@@ -180,9 +180,9 @@ private:
   void rgdcount_writejsons()
   /* write zarray jsons for array of rgdcount variable in store */
   {
-    constexpr std::string
-        count_arrayattrs = "{\"_ARRAY_DIMENSIONS\": [\"time\"],"
-                           "\"sample_dimension\": \"superdroplets\"}";
+    const std::string
+        count_arrayattrs("{\"_ARRAY_DIMENSIONS\": [\"time\"],"
+                         "\"sample_dimension\": \"superdroplets\"}");
 
     const std::string
         count_metadata = storagehelper::

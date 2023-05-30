@@ -18,13 +18,13 @@ given by the superdrops in the span passed as an argument */
   for (const auto &SDinGBx : span4SDsinGBx)
   {
     nthmom += SDinGBx.superdrop.eps *
-                  pow(SDinGBx.superdrop.mass(), nth_moment);
+              pow(SDinGBx.superdrop.mass(), nth_moment);
   }
   return nthmom;
 }
 
 double rainmassmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                      const double nth_moment, const double rlim);
+                      const double nth_moment, const double rlim)
 /* calculates the nth moment of the (real) raindroplet
 mass distirbution given by all the superdrops which
 have radius >= rlim in the span passed as an argument */
@@ -35,8 +35,8 @@ have radius >= rlim in the span passed as an argument */
     if (SDinGBx.superdrop.radius >= rlim)
     {
       nthmom += SDinGBx.superdrop.eps *
-                    pow(SDinGBx.superdrop.mass(), nth_moment);
-    } 
+                pow(SDinGBx.superdrop.mass(), nth_moment);
+    }
   }
   return nthmom;
 }

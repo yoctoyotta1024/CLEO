@@ -70,9 +70,9 @@ public:
   FSStore(std::filesystem::path basedir) : basedir(basedir)
   {
     // initialize a zarr group (i.e. dataset)
-    constexpr unsigned int zarr_format = 2; // storage spec. version 2
-    constexpr std::string zgroupjson = "{\"zarr_format\": " +
-                                       std::to_string(zarr_format) + "}";
+    const std::string zarr_format("2"); // storage spec. version 2
+    const std::string zgroupjson("{\"zarr_format\": " +
+                                   zarr_format + "}");
     (*this)[".zgroup"] = zgroupjson;
 
     // global metadata (optional)
@@ -153,7 +153,7 @@ array in a store, and an array's metadata to a store */
     store[name + "/.zattrs"] = arrayattrs;
   }
 
-  inline std::string metadata(const unsigned int zarr_format,
+  inline std::string metadata(const char zarr_format,
                               const char order,
                               const std::string &shape,
                               const std::string &chunks,
@@ -163,28 +163,27 @@ array in a store, and an array's metadata to a store */
                               const std::string &filters)
   /* make string of metadata for an array in a zarr store */
   {
-    const std::string metadata = "{"
-                                 "\"shape\": " +
-                                 shape + ", "
-                                         "\"chunks\": " +
-                                 chunks + ", "
-                                          "\"dtype\": \"" +
-                                 dtype + "\", "
-                                         "\"order\": \"" +
-                                 order + "\", "
-                                         "\"compressor\": " +
-                                 compressor + ", "
-                                              "\"fill_value\": " +
-                                 fill_value + ", "
-                                              "\"filters\": " +
-                                 filters + ", "
-                                           "\"zarr_format\": " +
-                                 std::to_string(zarr_format) +
-                                 "}";
+    const std::string metadata("{"
+                               "\"shape\": " +
+                               shape + ", "
+                                       "\"chunks\": " +
+                               chunks + ", "
+                                        "\"dtype\": \"" +
+                               dtype + "\", "
+                                       "\"order\": \"" +
+                               order + "\", "
+                                       "\"compressor\": " +
+                               compressor + ", "
+                                            "\"fill_value\": " +
+                               fill_value + ", "
+                                            "\"filters\": " +
+                               filters + ", "
+                                         "\"zarr_format\": " +
+                               zarr_format + "}");
     return metadata;
   }
 
-  inline std::string metadata(const unsigned int zarr_format,
+  inline std::string metadata(const char zarr_format,
                               const char order,
                               const unsigned int ndata,
                               const size_t chunksize,
@@ -202,7 +201,7 @@ array in a store, and an array's metadata to a store */
   }
 
   inline std::string arrayattrs(const std::string &dims,
-                                const std::string units = " ",
+                                const std::string &units = " ",
                                 const double scale_factor = 1)
   /* make string of zattrs attribute information for an array in a zarr store */
   {

@@ -183,8 +183,9 @@ superdroplets from combination of those two seperate observers */
   
   const Observer auto obs5 = NsupersPerGridBoxObserver(stores.nsuperszarr);
 
-  const Observer auto obs6 = create_massmoments_observer(stores.massmoments);
-  
+  const Observer auto obs6 = create_massmoments_observer(stores.massmoms,
+                                                         stores.rainmassmoms);
+
   // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{};
   const auto observer = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;
 

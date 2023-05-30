@@ -35,12 +35,12 @@ protected:
   unsigned int bufferfill; // number of datapoints so far copied into buffer
   unsigned int ndata;      // number of data points that have been observed
 
-  constexpr unsigned int zarr_format = 2;    // storage spec. version 2
-  constexpr char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
-  constexpr std::string compressor = "null"; // compression of data when writing to store
-  constexpr std::string fill_value = "null"; // fill value for empty datapoints in array
-  constexpr std::string filters = "null";    // codec configurations for compression
-  constexpr std::string dtype;               // datatype stored in arrays
+  char zarr_format = '2';    // storage spec. version 2
+  char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
+  std::string compressor = "null"; // compression of data when writing to store
+  std::string fill_value = "null"; // fill value for empty datapoints in array
+  std::string filters = "null";    // codec configurations for compression
+  std::string dtype;               // datatype stored in arrays
 
   void zarrayjsons(const std::string shape,
                    const std::string chunks,
