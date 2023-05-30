@@ -104,13 +104,30 @@ array in a store, and an array's metadata to a store */
   }
 
   template <typename V>
-  void writebuffer2chunk(FSStore &store, std::vector<V> &buffer,
-                        const std::string name, const std::string chunk_num)
+  void writebuffer2chunk(FSStore &store,
+                         std::vector<V> &buffer,
+                         const std::string name,
+                         const std::string chunk_num)
   /* write buffer vector into attr's store at chunk no. 'kk', then
   replace contents of buffer with max numeric limit of type */
   {
     store[name + "/" + chunk_num].operator=<V>(buffer);
     std::fill(buffer.begin(), buffer.end(), std::numeric_limits<V>::max());
+  }
+
+  template <typename V>
+  unsigned int writebuffer2chunk(FSStore &store,
+                                 std::vector<V> &buffer,
+                                 const std::string name,
+                                 const unsigned int chunkcount)
+  /* write buffer vector into attr's store at 'chunkcount' and then
+  return incremented chunkcount */
+  {
+    const std::string chunknum = std::to_string(raggedcount_chunkcount);
+    storagehelper::writebuffer2chunk(store, raggedcount,
+                                       raggedcount_name, chunknum);
+
+    return ++chunkcount;
   }
 
   inline std::string metadata(const unsigned int zarr_format,

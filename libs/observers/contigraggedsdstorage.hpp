@@ -208,11 +208,9 @@ public:
 
     if (raggedcount_bufferfill != 0)
     {
-      // write data in buffer to a chunk in store
-      const std::string chunknum = std::to_string(raggedcount_chunkcount);
-      storagehelper::writebuffer2chunk(store, raggedcount,
-                                       "raggedcount", chunknum);
-      ++raggedcount_chunkcount;
+      raggedcount_chunkcount = storagehelper::
+          writebuffer2chunk(store, raggedcount, raggedcount_name,
+                            raggedcount_chunkcount);
     } 
 
     writezarrayjsons();
@@ -271,10 +269,9 @@ public:
     if (raggedcount_bufferfill == chunksize)
     {
       // write data in buffer to a chunk in store
-      const auto chunknum = std::to_string(raggedcount_chunkcount);
-      storagehelper::writebuffer2chunk(store, raggedcount,
-                            raggedcount_name, chunknum);
-      ++raggedcount_chunkcount;
+      raggedcount_chunkcount = storagehelper::
+          writebuffer2chunk(store, raggedcount, raggedcount_name,
+                            raggedcount_chunkcount);
       raggedcount_bufferfill = 0;
       raggedcount_zarrayjsons();
     }
