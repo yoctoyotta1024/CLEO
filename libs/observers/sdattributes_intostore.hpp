@@ -1,14 +1,14 @@
 // Author: Clara Bayley
 // File: sdattributes_intostore.hpp
-/* structs to create a SDsAttributeObserver that writes 
-data for (any chosen combination of) a superdroplet's 
+/* structs to create a SDsAttributeObserver that writes
+data for (any chosen combination of) a superdroplet's
 attribute(s) into ragged contiguous array(s)
 (see: https://cfconventions.org/Data/cf-conventions/cf-conventions-1.10/cf-conventions.html#_contiguous_ragged_array_representation)
 in a FFStore obeying zarr storage specification verion 2:
 https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
-#ifndef SDATTRIBUTES_INTOSTORE_HPP 
-#define SDATTRIBUTES_INTOSTORE_HPP 
+#ifndef SDATTRIBUTES_INTOSTORE_HPP
+#define SDATTRIBUTES_INTOSTORE_HPP
 
 #include <string>
 #include <vector>
@@ -30,9 +30,9 @@ Useful for putting a superdrop's attribute called attr into a buffer
 (given an implementation of the copy2buffer function) and then writing
 buffer into an array in a Zarr store using writechunk and writemetadata */
 {
-  const std::string attr;                // name of attribute in fsstore
-  const std::string dtype;               // datatype stored in arrays
-  std::vector<T> buffer;                 // buffer to fill before writing to store
+  const std::string attr;  // name of attribute in fsstore
+  const std::string dtype; // datatype stored in arrays
+  std::vector<T> buffer;   // buffer to fill before writing to store
 
   AttributeIntoStoreViaBuffer(const std::string attr,
                               const std::string dtype)
@@ -61,7 +61,7 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
                  md.chunks, dtype, md.compressor,
                  md.fill_value, md.filters);
 
-    const std::string arrayattrs = "{\"_ARRAY_DIMENSIONS\": "+md.dims+"}";
+    const std::string arrayattrs = "{\"_ARRAY_DIMENSIONS\": " + md.dims + "}";
 
     storagehelper::
         write_zarrarrayjsons(store, attr, metadata, arrayattrs);
@@ -73,7 +73,7 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
     {
       buffer = std::vector<T>(csize, std::numeric_limits<T>::max());
     }
-  } 
+  }
 };
 
 struct IdIntoStore : AttributeIntoStoreViaBuffer<size_t>
@@ -124,7 +124,7 @@ struct RadiusIntoStore : AttributeIntoStoreViaBuffer<double>
     const double sf = dlc::R0 * 1e6; // scale factor to convert dimless radius to microns
     const std::string arrayattrs = storagehelper::
         arrayattrs(md.dims, "micro m", sf);
-    store[attr + "/.zattrs"] = arrayattrs; 
+    store[attr + "/.zattrs"] = arrayattrs;
   }
 };
 
@@ -150,7 +150,7 @@ struct M_solIntoStore : AttributeIntoStoreViaBuffer<double>
     const double sf = pow(dlc::R0, 3.0) * dlc::RHO0 * 1000; // scale factor to convert dimless mass to grams
     const std::string arrayattrs = storagehelper::
         arrayattrs(md.dims, "g", sf);
-    store[attr + "/.zattrs"] = arrayattrs; 
+    store[attr + "/.zattrs"] = arrayattrs;
   }
 };
 
@@ -171,7 +171,7 @@ struct SdCoordIntoStore : AttributeIntoStoreViaBuffer<double>
     /* rewrite array .zattrs json */
     const std::string arrayattrs = storagehelper::
         arrayattrs(md.dims, "m", dlc::COORD0);
-    store[attr + "/.zattrs"] = arrayattrs; 
+    store[attr + "/.zattrs"] = arrayattrs;
   }
 };
 
@@ -229,4 +229,4 @@ struct SdgbxIntoStore : AttributeIntoStoreViaBuffer<unsigned int>
   }
 };
 
-#endif // SDATTRIBUTES_INTOSTORE_HPP 
+#endif // SDATTRIBUTES_INTOSTORE_HPP

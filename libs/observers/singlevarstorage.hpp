@@ -5,8 +5,8 @@ useful for using storage clases with buffers to
 write values of 1D data into chunks of arrays
 in a zarr store */
 
-#ifndef SINGLEVARSTORAGE_HPP 
-#define SINGLEVARSTORAGE_HPP 
+#ifndef SINGLEVARSTORAGE_HPP
+#define SINGLEVARSTORAGE_HPP
 
 #include <string>
 #include <vector>
@@ -74,7 +74,7 @@ public:
         bufferfill(0), ndata(0), dtype(dtype) {}
 
   virtual ~SingleVarStorage(){};
-  
+
   std::string get_name() const { return name; }
 
   int get_ndata() const { return ndata; }
@@ -90,7 +90,7 @@ public:
       bufferfill = 0;
     }
 
-    copy2buffer(val); 
+    copy2buffer(val);
   }
 };
 
@@ -100,7 +100,6 @@ struct CoordinateStorage : SingleVarStorage<T>
 equal to name of variable (ie. variable is an xarray coord)*/
 {
 private:
-
   unsigned int writechunk()
   /* write data in buffer to a chunk in store */
   {
@@ -121,7 +120,7 @@ private:
     const auto chunks("[" + std::to_string(this->chunksize) + "]");
     const std::string dims = "[\"" + this->name + "\"]";
 
-    this->writejsons(shape, chunks, dims); 
+    this->writejsons(shape, chunks, dims);
   }
 
 public:
@@ -137,7 +136,7 @@ public:
   {
     if (this->bufferfill != 0)
     {
-      writechunk(); 
+      writechunk();
     }
   }
 };
@@ -146,19 +145,19 @@ template <typename T>
 struct TwoDStorage : SingleVarStorage<T>
 {
 private:
-  const unsigned int ngridboxes; // number of output times that have been observed 
+  const unsigned int ngridboxes; // number of output times that have been observed
 
   void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
   {
-    const std::string chunknum = std::to_string(this->chunkcount)+".0";
+    const std::string chunknum = std::to_string(this->chunkcount) + ".0";
     this->chunkcount = storagehelper::
         writebuffer2chunk(this->store, this->buffer,
                           this->name, chunknum,
                           this->chunkcount);
 
     zarrjsons();
-    
+
     return this->chunkcount;
   }
 
@@ -178,7 +177,7 @@ private:
     const auto shape("[" + nobstr + ", " + ngstr + "]");
     const auto chunks("[" + nchstr + ", " + ngstr + "]");
     const std::string dims = "[\"time\", \"gbxindex\"]";
-    this->writejsons(shape, chunks, dims); 
+    this->writejsons(shape, chunks, dims);
   }
 
 public:
@@ -198,9 +197,9 @@ public:
   {
     if (this->bufferfill != 0)
     {
-      writechunk(); 
+      writechunk();
     }
   }
 };
 
-#endif // SINGLEVARSTORAGE_HPP 
+#endif // SINGLEVARSTORAGE_HPP

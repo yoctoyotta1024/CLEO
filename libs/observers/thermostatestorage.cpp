@@ -22,8 +22,8 @@ unsigned int ThermoIntoStore::
 /* write buffer vector into attr's store at chunkcount
 and then replace contents of buffer with numeric limit */
 {
-  const std::string chunknum = std::to_string(chunkcount)+".0";
-  
+  const std::string chunknum = std::to_string(chunkcount) + ".0";
+
   storagehelper::writebuffer2chunk(store, pressbuffer, "press",
                                    chunknum, chunkcount);
   storagehelper::writebuffer2chunk(store, tempbuffer, "temp",
@@ -37,7 +37,7 @@ and then replace contents of buffer with numeric limit */
 }
 
 void ThermoIntoStore::writejsons(FSStore &store,
-                                  const std::string &metadata) const
+                                 const std::string &metadata) const
 /* write same .zarray metadata to a json file for each
 thermostate array in store alongside distinct .zattrs json files */
 {
@@ -48,10 +48,10 @@ thermostate array in store alongside distinct .zattrs json files */
 
   const auto temp_a(storagehelper::arrayattrs(dims, "K", dlc::TEMP0));
   storagehelper::writezarrjsons(store, "temp", metadata, temp_a);
-  
+
   const auto qvap_a(storagehelper::arrayattrs(dims));
   storagehelper::writezarrjsons(store, "qvap", metadata, qvap_a);
-  
+
   const auto qcond_a(storagehelper::arrayattrs(dims));
   storagehelper::writezarrjsons(store, "qcond", metadata, qcond_a);
 }

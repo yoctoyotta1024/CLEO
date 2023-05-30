@@ -1,13 +1,13 @@
 // Author: Clara Bayley and Tobias Kölling
 // File: zarr_stores.cpp
-/* objects that can be used as stores obyeying the 
+/* objects that can be used as stores obyeying the
 zarr storage specification version 2 (e.g. see FSStore)
 https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
 #include "zarrstores.hpp"
 
 bool FSStore::write(std::string_view key, std::span<const uint8_t> buffer)
-/* write function called by StoreAccessor once data has been converted 
+/* write function called by StoreAccessor once data has been converted
 into a vector of unsigned integer types */
 {
   auto path = basedir / key;

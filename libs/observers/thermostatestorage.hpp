@@ -30,8 +30,8 @@ struct ThermoIntoStore
 
   ThermoIntoStore(const unsigned int buffersize)
       : pressbuffer(buffersize, std::numeric_limits<double>::max()),
-        tempbuffer(buffersize, std::numeric_limits<double>::max()), 
-        qvapbuffer(buffersize, std::numeric_limits<double>::max()), 
+        tempbuffer(buffersize, std::numeric_limits<double>::max()),
+        qvapbuffer(buffersize, std::numeric_limits<double>::max()),
         qcondbuffer(buffersize, std::numeric_limits<double>::max()) {}
 
   unsigned int copy2buffers(const ThermoState &state, unsigned int j);
@@ -64,7 +64,7 @@ private:
   const std::string filters = "null";    // codec configurations for compression
   const std::string dtype = "<f8";       // datatype stored in arrays
 
-  const unsigned int ngridboxes; // number of output times that have been observed 
+  const unsigned int ngridboxes; // number of output times that have been observed
 
   void copy2buffers(const ThermoState &state)
   /* copy data from thermostate to buffers */
@@ -86,15 +86,15 @@ private:
   void writejsons()
   /* write strictly required metadata to decode chunks (MUST) */
   {
-    assert((ndata == nobs*ngridboxes) && "1D data length matches 2D array size");
+    assert((ndata == nobs * ngridboxes) && "1D data length matches 2D array size");
     assert((chunksize % ngridboxes == 0.0) && "chunks are integer multple of number of gridboxes");
-    
+
     const auto ngstr = std::to_string(ngridboxes);
     const auto nobstr = std::to_string(nobs);
     const auto nchstr = std::to_string(chunksize / ngridboxes);
 
     const auto shape("[" + nobstr + ", " + ngstr + "]");
-    const auto chunks("[" + nchstr+ ", " + ngstr + "]");
+    const auto chunks("[" + nchstr + ", " + ngstr + "]");
     const auto metadata(storagehelper::
                             metadata(zarr_format, order, shape,
                                      chunks, dtype, compressor,
@@ -103,16 +103,16 @@ private:
   }
 
 public:
-  unsigned int nobs; // number of output times that have been observed 
-  
+  unsigned int nobs; // number of output times that have been observed
+
   ThermoStateStorage(FSStore &store, const unsigned int maxchunk,
                      const unsigned int ngrid)
-      : store(store), buffers(floor(maxchunk / ngrid)*ngrid), 
-        chunksize(floor(maxchunk / ngrid)*ngrid), chunkcount(0),
+      : store(store), buffers(floor(maxchunk / ngrid) * ngrid),
+        chunksize(floor(maxchunk / ngrid) * ngrid), chunkcount(0),
         bufferfill(0), ndata(0), ngridboxes(ngrid), nobs(0) {}
 
   ~ThermoStateStorage()
-  /* upon destruction write any data leftover in buffers 
+  /* upon destruction write any data leftover in buffers
   to chunks and write arrays' metadata to .json files */
   {
     if (bufferfill != 0)
@@ -135,4 +135,4 @@ public:
   }
 };
 
-#endif // THERMOSTATESTORAGE_HPP 
+#endif // THERMOSTATESTORAGE_HPP

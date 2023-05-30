@@ -27,14 +27,14 @@ namespace dlc = dimless_constants;
 
 template <typename Obs>
 concept Observer = requires(Obs obs, const size_t n,
-                            const Kokkos::View<GridBox*> h_gbxs)
+                            const Kokkos::View<GridBox *> h_gbxs)
 /* concept Observer is all types that have a function
 called observe_state() which take a gridbox type as
 argument and returns a void type */
 {
   {
     obs.observe_state(n, h_gbxs)
-    } -> std::same_as<void>;
+  } -> std::same_as<void>;
 };
 
 template <Observer O1, Observer O2>
