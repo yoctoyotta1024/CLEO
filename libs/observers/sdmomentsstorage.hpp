@@ -21,21 +21,21 @@ namespace dlc = dimless_constants;
 
 struct SDMomentsStorage
 {
-  const double scalefac; // scale factor to convert dimensionless masses to grams
+  const double sf; // scale factor to convert dimensionless masses to grams
  
   TwoDStorage<double> massmom0zarr;
   TwoDStorage<double> massmom1zarr;
   TwoDStorage<double> massmom2zarr;
 
-  SDMomentsStorage(FSStore &store, const unsigned int maxchunk,
+  SDMomentsStorage(FSStore &store const unsigned int maxchunk,
                    const unsigned int ngridboxes)
-      : scalefac(pow(dlc::R0, 3.0) * dlc::RHO0 * 1000),
-        massmom0zarr(store, maxchunk, "massmom0", "<f8",
-                        " ", 1, ngridboxes),
-        massmom1zarr(store, maxchunk, "massmom1", "<f8",
-                        "g", scalefac, ngridboxes),
-        massmom2zarr(store, maxchunk, "massmom2", "<f8",
-                        "g^2", pow(scalefac, 2.0), ngridboxes){};
+      : sf(pow(dlc::R0, 3.0) * dlc::RHO0 * 1000),
+        massmom0zarr(store, maxchunk,
+                     "massmom0", "<f8", " ", 1.0, ngridboxes),
+        massmom1zarr(store, maxchunk,
+                     "massmom1", "<f8", "g", sf, ngridboxes),
+        massmom2zarr(store, maxchunk,
+                     "massmom2", "<f8", "g^2", pow(sf, 2.0), ngridboxes){};
 };
 
 double massnthmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
