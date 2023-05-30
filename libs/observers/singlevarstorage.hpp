@@ -44,28 +44,29 @@ protected:
   void zarrayjsons(const std::string shape,
                    const std::string chunks,
                    const std::string dims)
-  /* upon destruction write any data leftover in buffer
-  to a chunk and write array's metadata to a .json file */
+  /* write array's metadata to .json files */
   {
-    const std::string metadata = storagehelper::metadata(zarr_format, order,
-                                                         shape, chunks, dtype,
-                                                         compressor, fill_value,
-                                                         filters);
+    const std::string metadata = storagehelper::
+        metadata(zarr_format, order, shape, chunks, dtype,
+                 compressor, fill_value, filters);
 
-    const std::string arrayattrs = storagehelper::arrayattrs(dims, units,
-                                                             scale_factor);
-    
+    const std::string arrayattrs = storagehelper::
+        arrayattrs(dims, units, scale_factor);
+
     storagehelper::write_zarrarrayjsons(store, name,
-                                        metadata, arrayattrs);
+                                        metadata,
+                                        arrayattrs);
   }
 
 public:
   SingleVarStorage(FSStore &store, const unsigned int maxchunk,
                    const std::string name, const std::string dtype,
                    const std::string units, const double scale_factor)
-      : store(store), name(name), units(units), scale_factor(scale_factor),
-        buffer(maxchunk, std::numeric_limits<T>::max()), chunksize(maxchunk),
-        chunkcount(0), bufferfill(0), ndata(0), dtype(dtype) {}
+      : store(store), name(name), units(units),
+        scale_factor(scale_factor),
+        buffer(maxchunk, std::numeric_limits<T>::max()),
+        chunksize(maxchunk), chunkcount(0),
+        bufferfill(0), ndata(0), dtype(dtype) {}
 
   virtual ~SingleVarStorage(){};
   
@@ -87,7 +88,7 @@ public:
 
     // copy double to buffer
     bufferfill = storagehelper::val2buffer<T>(val, buffer, bufferfill);
-    ++(ndata);
+    ++ndata;
   }
 };
 
@@ -101,16 +102,31 @@ private:
   unsigned int writechunk()
   /* write data in buffer to a chunk in store */
   {
-    return storagehelper::writebuffer2chunk(this->store, this->buffer,
-                                            this->name, this->chunkcount);
+    this->chunkcount = storagehelper::
+        writebuffer2chunk(this->store, this->buffer,
+                          this->name, this->chunkcount);
+    
+    writezarrayjsons();
+
+    return this->chunkcount
+  }
+
+  void writezarrayjsons()
+  /* write strictly required metadata to decode chunks (MUST) */
+  {
+    const auto shape("[" + std::to_string(this->ndata) + "]");
+    const auto chunks("[" + std::to_string(this->chunksize) + "]");
+    const std::string dims = "[\"" + this->name + "\"]";
+
+    this->zarrayjsons(shape, chunks, dims); 
   }
 
 public:
-  CoordinateStorage(FSStore &store, const unsigned int maxchunk, const std::string name,
-               const std::string dtype, const std::string units,
-               const double scale_factor)
-      : SingleVarStorage<T>(store, maxchunk, name,
-                            dtype, units, scale_factor) {}
+  CoordinateStorage(FSStore &store, const unsigned int maxchunk,
+                    const std::string name, const std::string dtype,
+                    const std::string units, const double scale_factor)
+      : SingleVarStorage<T>(store, maxchunk, name, dtype,
+                            units, scale_factor) {}
 
   ~CoordinateStorage()
   /* upon destruction write any data leftover in buffer
@@ -118,15 +134,8 @@ public:
   {
     if (this->bufferfill != 0)
     {
-      this->chunkcount = writechunk(); 
+      writechunk(); 
     }
-
-    // write strictly required metadata to decode chunks (MUST)
-    const auto shape("[" + std::to_string(this->ndata) + "]");
-    const auto chunks("[" + std::to_string(this->chunksize) + "]");
-    const std::string dims = "[\"" + this->name + "\"]";
-
-    this->zarrayjsons(shape, chunks, dims); 
   }
 };
 
@@ -137,23 +146,46 @@ private:
   const unsigned int ngridboxes; // number of output times that have been observed 
 
   unsigned int writechunk()
-  /* write data in buffer to a chunk in store */
+  /* write data in buffer to a chunk in store alongside metadata jsons */
   {
     const std::string chunknum = std::to_string(this->chunkcount)+".0";
     storagehelper::writebuffer2chunk(this->store, this->buffer,
                                      this->name, chunknum);
+    ++(this->chunkcount);
+    
+    writezarrayjsons();
+    
+    return this->chunkcount;
+  }
 
-    return ++(this->chunkcount);
+  void writezarrayjsons()
+  /* write strictly required metadata to decode chunks (MUST).
+  Assert also check 2D data dimensions is as expected */
+  {
+    assert((this->ndata == nobs * ngridboxes) &&
+           "1D data length matches 2D array size");
+    assert((this->chunksize % ngridboxes == 0.0) &&
+           "chunks are integer multple of number of gridboxes");
+
+    const auto ngstr = std::to_string(ngridboxes);
+    const auto nobstr = std::to_string(nobs);
+    const auto nchstr = std::to_string(this->chunksize / ngridboxes);
+
+    const auto shape("[" + nobstr + ", " + ngstr + "]");
+    const auto chunks("[" + nchstr + ", " + ngstr + "]");
+    const std::string dims = "[\"time\", \"gbxindex\"]";
+    this->zarrayjsons(shape, chunks, dims); 
   }
 
 public:
   unsigned int nobs; // number of output times that have been observed
 
-  TwoDStorage(FSStore &store, const unsigned int maxchunk, const std::string name,
-              const std::string dtype, const std::string units,
-              const double scale_factor, const unsigned int ngrid)
-      : SingleVarStorage<T>(store, floor(maxchunk / ngrid) * ngrid, name,
-                            dtype, units, scale_factor),
+  TwoDStorage(FSStore &store, const unsigned int maxchunk,
+              const std::string name, const std::string dtype,
+              const std::string units, const double scale_factor,
+              const unsigned int ngrid)
+      : SingleVarStorage<T>(store, floor(maxchunk / ngrid) * ngrid,
+                            name, dtype, units, scale_factor),
         ngridboxes(ngrid), nobs(0) {}
 
   ~TwoDStorage()
@@ -162,18 +194,8 @@ public:
   {
     if (this->bufferfill != 0)
     {
-      this->chunkcount = writechunk(); 
+      writechunk(); 
     }
-
-    // write strictly required metadata to decode chunks (MUST)
-    assert((this->ndata == nobs*ngridboxes) && "1D data length matches 2D array size");
-    assert((this->chunksize % ngridboxes == 0.0) && "chunks are integer multple of number of gridboxes");
-    const auto ngstr = std::to_string(ngridboxes);
-    const auto shape("[" + std::to_string(nobs) + ", " + ngstr + "]");
-    const auto chunks("[" + std::to_string(this->chunksize/ngridboxes) + ", " + ngstr + "]");
-    const std::string dims = "[\"time\", \"gbxindex\"]";
-    
-    this->zarrayjsons(shape, chunks, dims); 
   }
 };
 

@@ -34,13 +34,14 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
   const std::string dtype;               // datatype stored in arrays
   std::vector<T> buffer;                 // buffer to fill before writing to store
 
-  AttributeIntoStoreViaBuffer(const std::string attr, const std::string dtype)
+  AttributeIntoStoreViaBuffer(const std::string attr,
+                              const std::string dtype)
       : attr(attr), dtype(dtype), buffer(0) {}
 
   virtual ~AttributeIntoStoreViaBuffer(){};
 
-  virtual unsigned int copy2buffer(const Superdrop &superdrop,
-                                   unsigned int j) = 0;
+  virtual unsigned int
+  copy2buffer(const Superdrop &superdrop, unsigned int j) = 0;
   /* virtual void function placeholding function for
   copying superdrop's data into a buffer vector at j'th index */
 
@@ -55,14 +56,15 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
   void zarrayjsons(FSStore &store, const SomeMetadata &md) const
   /* write metadata for attr's array into store */
   {
-    const std::string metadata = storagehelper::metadata(md.zarr_format, md.order,
-                                                         md.shape, md.chunks, dtype,
-                                                         md.compressor, md.fill_value,
-                                                         md.filters);
-    
+    const std::string metadata = storagehelper::
+        metadata(md.zarr_format, md.order, md.shape,
+                 md.chunks, dtype, md.compressor,
+                 md.fill_value, md.filters);
+
     const std::string arrayattrs = "{\"_ARRAY_DIMENSIONS\": "+md.dims+"}";
-    
-    storagehelper::write_zarrarrayjsons(store, attr, metadata, arrayattrs);
+
+    storagehelper::
+        write_zarrarrayjsons(store, attr, metadata, arrayattrs);
   }
 
   void set_buffersize(const size_t csize)
