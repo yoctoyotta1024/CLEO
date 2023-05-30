@@ -20,7 +20,7 @@ unsigned int ThermoIntoStore::
 unsigned int ThermoIntoStore::
     writechunks(FSStore &store, unsigned int chunkcount)
 /* write buffer vector into attr's store at chunkcount
-and then replace contents of buffer with std::nans */
+and then replace contents of buffer with numeric limit*/
 {
   const std::string chunknum = std::to_string(chunkcount)+".0";
   storagehelper::writebuffer2chunk(store, pressbuffer, "press",
@@ -40,31 +40,17 @@ void ThermoIntoStore::zarrayjsons(FSStore &store,
 /* write same .zarray metadata to a json file for each thermostate array
 in store alongside distinct .zattrs json files */
 {
-  const std::string dims = "[\"time\", \"gbxindex\"]";
-  const std::string pressattrs = storagehelper::arrayattrs(dims, "hPa", dlc::P0/100);
-  const std::string tempattrs = storagehelper::arrayattrs(dims, "K", dlc::TEMP0);
-  const std::string qvapattrs = storagehelper::arrayattrs(dims);
-  const std::string qcondattrs = storagehelper::arrayattrs(dims);
+  const std::string dims("[\"time\", \"gbxindex\"]");
 
-  storagehelper::write_zarrarrayjsons(store, "press", metadata, pressattrs);
-  storagehelper::write_zarrarrayjsons(store, "temp", metadata, tempattrs);
-  storagehelper::write_zarrarrayjsons(store, "qvap", metadata, qvapattrs);
-  storagehelper::write_zarrarrayjsons(store, "qcond", metadata, qcondattrs);
-}
+  const auto press_a(storagehelper::arrayattrs(dims, "hPa", dlc::P0 / 100));
+  storagehelper::write_zarrarrayjsons(store, "press", metadata, press_a);
 
-void ThermoStateStorage::thermodata_to_storage(const ThermoState &state)
-/* write thermo variables from a thermostate in arrays in the zarr store. 
-First copy data to buffers, then write buffers to chunks in the store 
-when the number of datapoints they contain reaches the chunksize */
-{
-  if (bufferfill == chunksize)
-  {
-    // write data in buffer to a chunk in store
-    chunkcount = buffers.writechunks(store, chunkcount);
-    bufferfill = 0;
-  }
-
-  // copy data from thermostate to buffers
-  bufferfill = buffers.copy2buffers(state, bufferfill);
-  ++ndata;
+  const auto temp_a(storagehelper::arrayattrs(dims, "K", dlc::TEMP0));
+  storagehelper::write_zarrarrayjsons(store, "temp", metadata, temp_a);
+  
+  const auto qvap_a(storagehelper::arrayattrs(dims));
+  storagehelper::write_zarrarrayjsons(store, "qvap", metadata, qvap_a);
+  
+  const auto qcond_a(storagehelper::arrayattrs(dims));
+  storagehelper::write_zarrarrayjsons(store, "qcond", metadata, qcond_a);
 }

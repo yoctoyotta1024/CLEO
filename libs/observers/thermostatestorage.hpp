@@ -29,15 +29,17 @@ struct ThermoIntoStore
   std::vector<double> qcondbuffer;
 
   ThermoIntoStore(const unsigned int buffersize)
-      : pressbuffer(buffersize, std::nan("")), tempbuffer(buffersize, std::nan("")),
-        qvapbuffer(buffersize, std::nan("")), qcondbuffer(buffersize, std::nan("")) {}
+      : pressbuffer(buffersize, std::numeric_limits<double>::max()),
+        tempbuffer(buffersize, std::numeric_limits<double>::max()), 
+        qvapbuffer(buffersize, std::numeric_limits<double>::max()), 
+        qcondbuffer(buffersize, std::numeric_limits<double>::max()) {}
 
   unsigned int copy2buffers(const ThermoState &state, unsigned int j);
   /* copy press, temp, qvap and qcond data in the state to buffers at index j */
 
   unsigned int writechunks(FSStore &store, unsigned int chunkcount);
   /* write buffer vector into attr's store at chunkcount
-  and then replace contents of buffer with std::nans */
+  and then replace contents of buffer with numeric limit */
 
   void zarrayjsons(FSStore &store, const std::string &metadata) const;
   /* write same .zarray metadata to a json file for each thermostate array
@@ -65,6 +67,42 @@ private:
 
   const unsigned int ngridboxes; // number of output times that have been observed 
 
+  void copy2buffers(const ThermoState &state)
+  /* copy data from thermostate to buffers */
+  {
+    bufferfill = buffers.copy2buffers(state, bufferfill);
+    ++ndata;
+  }
+
+  void writechunks()
+  /* write data from thermo buffers into chunks in store,
+  then reset bufferfill and write associated metadata */
+  {
+    chunkcount = buffers.writechunks(store, chunkcount);
+    bufferfill = 0;
+
+    writezarrayjsons();
+  }
+
+  void writezarrayjsons()
+  /* write strictly required metadata to decode chunks (MUST) */
+  {
+    assert((ndata == nobs*ngridboxes) && "1D data length matches 2D array size");
+    assert((chunksize % ngridboxes == 0.0) && "chunks are integer multple of number of gridboxes");
+    
+    const auto ngstr = std::to_string(ngridboxes);
+    const auto nobstr = std::to_string(nobs);
+    const auto nchstr = std::to_string(chunksize / ngridboxes);
+
+    const auto shape("[" + nobstr + ", " + ngstr + "]");
+    const auto chunks("[" + nchstr+ ", " + ngstr + "]");
+    const auto metadata(storagehelper::
+                            metadata(zarr_format, order, shape,
+                                     chunks, dtype, compressor,
+                                     fill_value, filters));
+    buffers.zarrayjsons(store, metadata);
+  }
+
 public:
   unsigned int nobs; // number of output times that have been observed 
   
@@ -80,28 +118,22 @@ public:
   {
     if (bufferfill != 0)
     {
-      // write data in buffer to a chunk in store
-      chunkcount = buffers.writechunks(store, chunkcount);
+      writechunks();
     }
-
-    // write strictly required metadata to decode chunks (MUST)
-    assert((ndata == nobs*ngridboxes) && "1D data length matches 2D array size");
-    assert((chunksize % ngridboxes == 0.0) && "chunks are integer multple of number of gridboxes");
-    const auto ngstr = std::to_string(ngridboxes);
-    const auto shape("[" + std::to_string(nobs) + ", " + ngstr + "]");
-    const auto chunks("[" + std::to_string(chunksize/ngridboxes) + ", " + ngstr + "]");
-    const std::string metadata = storagehelper::metadata(zarr_format, order,
-                                                         shape, chunks, dtype,
-                                                         compressor, fill_value,
-                                                         filters);
-    buffers.zarrayjsons(store, metadata);
   }
 
-  void thermodata_to_storage(const ThermoState &state);
-  /* write thermo variables from a thermostate in arrays in the zarr store. 
-  First copy data to buffers, then write buffers to chunks in the store 
+  void thermodata_to_storage(const ThermoState &state)
+  /* write thermo variables from a thermostate in arrays in the zarr store.
+  First copy data to buffers, then write buffers to chunks in the store
   when the number of datapoints they contain reaches the chunksize */
+  {
+    if (bufferfill == chunksize)
+    {
+      writechunks()
+    }
 
+    copy2buffers(state);
+  }
 };
 
 #endif // THERMOSTATESTORAGE_HPP 

@@ -47,7 +47,7 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
 
   unsigned int writechunk(FSStore &store, unsigned int chunkcount)
   /* write buffer vector into attr's store at chunkcount
-  and then replace contents of buffer with std::nans */
+  and then replace contents of buffer with numeric limit */
   {
     return storagehelper::
         writebuffer2chunk(store, buffer, attr, chunkcount);

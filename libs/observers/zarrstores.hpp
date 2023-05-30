@@ -192,17 +192,17 @@ array in a store, and an array's metadata to a store */
     std::ostringstream sfstr;
     sfstr << std::scientific << scale_factor;
 
-    const std::string arrayattrs = "{\"_ARRAY_DIMENSIONS\": " + dims + ", "
-                                                                       "\"units\": " +
-                                   "\""+ units + "\", "
-                                           "\"scale_factor\": " +
+    const std::string arrayattrs = "{\"_ARRAY_DIMENSIONS\": " + dims +
+                                   ", \"units\": " + "\"" + units +
+                                   "\", \"scale_factor\": " +
                                    sfstr.str() + "}";
     return arrayattrs;
   }
 
-  inline void write_zarrarrayjsons(FSStore &store, const std::string name,
-                                const std::string &metadata,
-                                const std::string &arrayattrs)
+  inline void write_zarrarrayjsons(FSStore &store,
+                                   const std::string name,
+                                   const std::string &metadata,
+                                   const std::string &arrayattrs)
   /* write .zarray and .zattr json files into store for the
   metadata of an array of a variable called 'name' */
   {
