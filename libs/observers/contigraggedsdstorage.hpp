@@ -145,16 +145,16 @@ datapoints copied to the buffers reaches chunksize. */
 private:
   FSStore &store;                  // file system store satisfying zarr store specificaiton v2
   SDIntoStore sdbuffers;           // buffers and their handler functions for wrting SD data to store
-  std::vector<size_t> raggedcount; // count variable for contiguous ragged representation of arrays
+  std::vector<size_t> rgdcount;    // count variable for contiguous ragged representation of arrays
 
   const size_t chunksize;  // fixed size of array chunks (=max no. datapoints in buffer before writing)
   unsigned int chunkcount; // number of chunks of array so far written to store
   unsigned int bufferfill; // number of datapoints so far copied into buffer
   unsigned int ndata;      // number of data points that have been observed (= size of array written to store)
 
-  unsigned int raggedcount_chunkcount; // number of chunks of raggedcount array so far written to store
-  unsigned int raggedcount_bufferfill; // number of raggedcount values so far copied into its buffer
-  unsigned int raggedcount_ndata;      // number of raggedcount values observed so far
+  unsigned int rgdcount_chunkcount; // number of chunks of rgdcount array so far written to store
+  unsigned int rgdcount_bufferfill; // number of rgdcount values so far copied into its buffer
+  unsigned int rgdcount_ndata;      // number of rgdcount values observed so far
 
   const unsigned int zarr_format = 2;    // storage spec. version 2
   const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
@@ -162,8 +162,8 @@ private:
   const std::string fill_value = "null"; // fill value for empty datapoints in array
   const std::string filters = "null";    // codec configurations for compression
 
-  const std::string raggedcount_name = "raggedcount"; // name of ragged count variable
-  const std::string count_dtype = "<u8";              // datatype of ragged count variable
+  const std::string rgdcount_name = "raggedcount";    // name of rgdcount zarray in store
+  const std::string rgdcount_dtype = "<u8";              // datatype of rgdcount variable
 
   void sdbuffers_zarrayjsons()
   {
@@ -174,9 +174,8 @@ private:
     sdbuffers.zarrayjsons(store, md);
   }
 
-  void raggedcount_zarrayjsons()
-  /* store count variable array 'raggedcount', 
-  in 1 chunk in store under 'count_ragged'*/
+  void rgdcount_zarrayjsons()
+  /* write zarray jsons for array of rgdcount variable in store */
   {
     const std::string
         count_arrayattrs = "{\"_ARRAY_DIMENSIONS\": [\"time\"],"
@@ -184,10 +183,10 @@ private:
 
     const std::string
         count_metadata = storagehelper::
-            metadata(zarr_format, order, raggedcount_ndata, chunksize,
-                     count_dtype, compressor, fill_value, filters);
+            metadata(zarr_format, order, rgdcount_ndata, chunksize,
+                     rgdcount_dtype, compressor, fill_value, filters);
 
-    storagehelper::write_zarrarrayjsons(store, raggedcount_name,
+    storagehelper::write_zarrarrayjsons(store, rgdcount_name,
                                         count_metadata,
                                         count_arrayattrs);
   }
@@ -202,17 +201,16 @@ private:
     sdbuffers_zarrayjsons();
   }
 
-  void raggedcount_writechunk()
-  /* write raggedcount data in buffers to a chunk of its
+  void rgdcount_writechunk()
+  /* write rgdcount data in buffers to a chunk of its
   zarray in store and (re)write its associated metadata */
   {
-    raggedcount_chunkcount = storagehelper::
-        writebuffer2chunk(store, raggedcount,
-                          raggedcount_name,
-                          raggedcount_chunkcount);
-    raggedcount_bufferfill = 0; // reset bufferfill
+    rgdcount_chunkcount = storagehelper::writebuffer2chunk(store, rgdcount,
+                                                           rgdcount_name,
+                                                           rgdcount_chunkcount);
+    rgdcount_bufferfill = 0; // reset rgdcount bufferfill
     
-    raggedcount_zarrayjsons();
+    rgdcount_zarrayjsons();
   }
 
   template <typename T>
@@ -224,25 +222,22 @@ private:
     ++ndata;
   }
 
-  void copy2raggedcount(const size_t raggedn)
-  /* write raggedcount data in buffers to a chunk of its
-  zarray in store and (re)write its associated metadata */
+  void copy2rgdcount(const size_t raggedn)
+  /* write raggedn into rgdcount buffer */
   {
-    // copy double to buffer
-    raggedcount_bufferfill = storagehelper::
-        val2buffer<size_t>(raggedn, raggedcount,
-                           raggedcount_bufferfill);
-    ++raggedcount_ndata;
+    rgdcount_bufferfill = storagehelper::
+        val2buffer<size_t>(raggedn, rgdcount, rgdcount_bufferfill);
+    ++rgdcount_ndata;
   }
 
 public:
   ContiguousRaggedSDStorage(FSStore &store,
                             const SDIntoStore sdbuffers_i,
                             const size_t csize)
-      : store(store), sdbuffers(sdbuffers_i), raggedcount(csize),
+      : store(store), sdbuffers(sdbuffers_i), rgdcount(csize),
         chunksize(csize), chunkcount(0), bufferfill(0), ndata(0),
-        raggedcount_chunkcount(0), raggedcount_bufferfill(0),
-        raggedcount_ndata(0)
+        rgdcount_chunkcount(0), rgdcount_bufferfill(0),
+        rgdcount_ndata(0)
   {
     // initialise buffer(s) to size 'chunksize' (filled with numeric limit)
     sdbuffers.set_buffersize(chunksize);                                                   
@@ -255,9 +250,9 @@ public:
       sdbuffers_writechunk();
     }
 
-    if (raggedcount_bufferfill != 0)
+    if (rgdcount_bufferfill != 0)
     {
-      raggedcount_writechunk();
+      rgdcount_writechunk();
     } 
   }
 
@@ -277,16 +272,17 @@ public:
   }
 
   void raggedarray_count(const size_t raggedn)
-  /* add element to raggedcount that is number of datapoints
-  written to buffer(s) during one event. This is count variable 
-  for contiguous ragged representation */
+  /* add element 'raggedn' to rgdcount. 'raggedn' should be
+  number of datapoints written to sdbuffer(s) during one event.
+  rgdcount is then count variable for contiguous ragged
+  representation of arrays written to store via sdbuffer(s). */
   {
-    if (raggedcount_bufferfill == chunksize)
+    if (rgdcount_bufferfill == chunksize)
     {
-      raggedcount_writechunk(); 
+      rgdcount_writechunk(); 
     }
     
-    copy2raggedcount(raggedn);
+    copy2rgdcount(raggedn);
   }
 };
 
