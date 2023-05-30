@@ -53,7 +53,7 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
         writebuffer2chunk(store, buffer, attr, chunkcount);
   }
 
-  void zarrayjsons(FSStore &store, const SomeMetadata &md) const
+  void writejsons(FSStore &store, const SomeMetadata &md) const
   /* write metadata for attr's array into store */
   {
     const std::string metadata = storagehelper::
@@ -84,7 +84,8 @@ struct IdIntoStore : AttributeIntoStoreViaBuffer<size_t>
   unsigned int copy2buffer(const Superdrop &superdrop,
                            unsigned int j)
   {
-    return storagehelper::val2buffer<size_t>(superdrop.id.value, buffer, j);
+    return storagehelper::
+        val2buffer<size_t>(superdrop.id.value, buffer, j);
   }
 };
 
@@ -96,7 +97,8 @@ struct EpsIntoStore : AttributeIntoStoreViaBuffer<size_t>
   unsigned int copy2buffer(const Superdrop &superdrop,
                            unsigned int j)
   {
-    return storagehelper::val2buffer<size_t>(superdrop.eps, buffer, j);
+    return storagehelper::
+        val2buffer<size_t>(superdrop.eps, buffer, j);
   }
 };
 
@@ -108,19 +110,20 @@ struct RadiusIntoStore : AttributeIntoStoreViaBuffer<double>
   unsigned int copy2buffer(const Superdrop &superdrop,
                            unsigned int j)
   {
-    return storagehelper::val2buffer<double>(superdrop.radius, buffer, j);
+    return storagehelper::
+        val2buffer<double>(superdrop.radius, buffer, j);
   }
 
-  void zarrayjsons(FSStore &store, const SomeMetadata &md) const
+  void writejsons(FSStore &store, const SomeMetadata &md) const
   /* write metadata for attr's array into store */
   {
-    /* write array metadata (and array attrs) json */
-    AttributeIntoStoreViaBuffer::zarrayjsons(store, md);
+    /* write array metadata (and array .zattrs) json */
+    AttributeIntoStoreViaBuffer::writejsons(store, md);
 
-    /* rewrite array attrs json */
-    const double scale_factor = dlc::R0 * 1e6; // convert radius to microns
-    const std::string arrayattrs = storagehelper::arrayattrs(md.dims, "micro m",
-                                                             scale_factor);
+    /* rewrite array .zattrs json */
+    const double sf = dlc::R0 * 1e6; // scale factor to convert dimless radius to microns
+    const std::string arrayattrs = storagehelper::
+        arrayattrs(md.dims, "micro m", sf);
     store[attr + "/.zattrs"] = arrayattrs; 
   }
 };
@@ -133,19 +136,20 @@ struct M_solIntoStore : AttributeIntoStoreViaBuffer<double>
   unsigned int copy2buffer(const Superdrop &superdrop,
                            unsigned int j)
   {
-    return storagehelper::val2buffer<double>(superdrop.m_sol, buffer, j);
+    return storagehelper::
+        val2buffer<double>(superdrop.m_sol, buffer, j);
   }
 
-  void zarrayjsons(FSStore &store, const SomeMetadata &md) const
+  void writejsons(FSStore &store, const SomeMetadata &md) const
   /* write metadata for attr's array into store */
   {
-    /* write array metadata (and array attrs) json */
-    AttributeIntoStoreViaBuffer::zarrayjsons(store, md);
+    /* write array metadata (and array .zattrs) json */
+    AttributeIntoStoreViaBuffer::writejsons(store, md);
 
-    /* rewrite array attrs json */
-    const double scale_factor = pow(dlc::R0, 3.0) * dlc::RHO0 * 1000; // convert mass to grams
-    const std::string arrayattrs = storagehelper::arrayattrs(md.dims, "g",
-                                                             scale_factor);
+    /* rewrite array .zattrs json */
+    const double sf = pow(dlc::R0, 3.0) * dlc::RHO0 * 1000; // scale factor to convert dimless mass to grams
+    const std::string arrayattrs = storagehelper::
+        arrayattrs(md.dims, "g", sf);
     store[attr + "/.zattrs"] = arrayattrs; 
   }
 };
@@ -158,15 +162,15 @@ struct SdCoordIntoStore : AttributeIntoStoreViaBuffer<double>
   virtual unsigned int copy2buffer(const Superdrop &superdrop,
                                    unsigned int j) = 0;
 
-  void zarrayjsons(FSStore &store, const SomeMetadata &md) const
+  void writejsons(FSStore &store, const SomeMetadata &md) const
   /* write metadata for attr's array into store */
   {
-    /* write array metadata (and array attrs) json */
-    AttributeIntoStoreViaBuffer::zarrayjsons(store, md);
+    /* write array metadata (and array .zattrs) json */
+    AttributeIntoStoreViaBuffer::writejsons(store, md);
 
-    /* rewrite array attrs json */
-    const std::string arrayattrs = storagehelper::arrayattrs(md.dims, "m",
-                                                             dlc::COORD0);
+    /* rewrite array .zattrs json */
+    const std::string arrayattrs = storagehelper::
+        arrayattrs(md.dims, "m", dlc::COORD0);
     store[attr + "/.zattrs"] = arrayattrs; 
   }
 };
@@ -178,7 +182,8 @@ struct Coord3IntoStore : SdCoordIntoStore
   unsigned int copy2buffer(const Superdrop &superdrop,
                            unsigned int j)
   {
-    return storagehelper::val2buffer<double>(superdrop.coord3, buffer, j);
+    return storagehelper::
+        val2buffer<double>(superdrop.coord3, buffer, j);
   }
 };
 
@@ -189,7 +194,8 @@ struct Coord1IntoStore : SdCoordIntoStore
   unsigned int copy2buffer(const Superdrop &superdrop,
                            unsigned int j)
   {
-    return storagehelper::val2buffer<double>(superdrop.coord1, buffer, j);
+    return storagehelper::
+        val2buffer<double>(superdrop.coord1, buffer, j);
   }
 };
 
@@ -200,7 +206,8 @@ struct Coord2IntoStore : SdCoordIntoStore
   unsigned int copy2buffer(const Superdrop &superdrop,
                            unsigned int j)
   {
-    return storagehelper::val2buffer<double>(superdrop.coord2, buffer, j);
+    return storagehelper::
+        val2buffer<double>(superdrop.coord2, buffer, j);
   }
 };
 
@@ -209,8 +216,7 @@ struct SdgbxIntoStore : AttributeIntoStoreViaBuffer<unsigned int>
   SdgbxIntoStore()
       : AttributeIntoStoreViaBuffer("sd_gbxindex", "<u4"){};
 
-  unsigned int copy2buffer(const Superdrop &superdrop,
-                           unsigned int j)
+  unsigned int copy2buffer(const Superdrop &superdrop, unsigned int j)
   {
     return j;
   }
@@ -218,7 +224,8 @@ struct SdgbxIntoStore : AttributeIntoStoreViaBuffer<unsigned int>
   unsigned int copy2buffer(const unsigned int sd_gbxindex,
                            unsigned int j)
   {
-    return storagehelper::val2buffer<unsigned int>(sd_gbxindex, buffer, j);
+    return storagehelper::
+        val2buffer<unsigned int>(sd_gbxindex, buffer, j);
   }
 };
 
