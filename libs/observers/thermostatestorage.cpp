@@ -23,6 +23,7 @@ unsigned int ThermoIntoStore::
 and then replace contents of buffer with numeric limit*/
 {
   const std::string chunknum = std::to_string(chunkcount)+".0";
+  
   storagehelper::writebuffer2chunk(store, pressbuffer, "press",
                                    chunknum, chunkcount);
   storagehelper::writebuffer2chunk(store, tempbuffer, "temp",
