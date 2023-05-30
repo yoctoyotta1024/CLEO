@@ -262,7 +262,7 @@ public:
   }
 
   template <typename T>
-  void data_to_contigraggedarray(const T &value)
+  void data_to_raggedstorage(const T &value)
   /* write 'value' in contiguous ragged representation of an array
   in the zarr store. First copy data to buffer(s), then write buffer(s)
   to chunks in the store when the number of datapoints they contain
@@ -276,7 +276,7 @@ public:
     copy2sdbuffers(value);    
   }
 
-  void contigraggedarray_count(const size_t raggedn)
+  void raggedarray_count(const size_t raggedn)
   /* add element to raggedcount that is number of datapoints
   written to buffer(s) during one event. This is count variable 
   for contiguous ragged representation */

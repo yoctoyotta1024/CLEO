@@ -9,6 +9,7 @@ into a (zarr) store on disk */
 #define INTOSTORE_OBSERVERS_HPP
 
 #include <string>
+#include <string_view>
 #include <stdexcept>
 
 #include <Kokkos_Core.hpp>
@@ -21,6 +22,16 @@ into a (zarr) store on disk */
 #include "./singlevarstorage.hpp"
 #include "./sdmomentsstorage.hpp"
 #include "sdmgridboxes/gridbox.hpp"
+
+void check_zarrname(const std::string_view zarrname,
+                    const std::string_view name)
+{
+  if (zarrname != name)
+  {
+    const std::string errmsg = "name of storage is called " zarrname + ", but should be " + name;
+    throw std::invalid_argument(errmsg);
+  }
+}
 
 class ThermoStateObserver
 {
@@ -52,12 +63,7 @@ class TimeObserver
   public:
     TimeObserver(CoordinateStorage<double> &zarr) : zarr(zarr)
     {
-      if (zarr.get_name() != "time")
-      {
-        const std::string errmsg = "name of storage meant for "
-                                   "timeobserver is not called 'time'";
-        throw std::invalid_argument(errmsg);
-      }
+      check_zarrname(zarr.get_name(), "time");
     }
 
     void observe_state(const size_t ngbxs,
@@ -78,12 +84,7 @@ class GridBoxIndexObserver
   public:
     GridBoxIndexObserver(CoordinateStorage<unsigned int> &zarr) : zarr(zarr)
     {
-      if (zarr.get_name() != "gbxindex")
-      {
-        const std::string errmsg = "name of storage meant for gridbox index"
-                                   " observer is not called 'gbxindex'";
-        throw std::invalid_argument(errmsg);
-      }
+      check_zarrname(zarr.get_name(), "gbxindex");
     }
 
     void observe_state(const size_t ngbxs,
@@ -109,12 +110,7 @@ class NsupersPerGridBoxObserver
   public:
     NsupersPerGridBoxObserver(TwoDStorage<size_t> &zarr) : zarr(zarr)
     {
-      if (zarr.get_name() != "nsupers")
-      {
-        const std::string errmsg = "name of storage meant for no. superdroplets"
-                                   " per gridbox observer is not called 'nsupers'";
-        throw std::invalid_argument(errmsg);
-      }
+      check_zarrname(zarr.get_name(), "nsupers");
     }
 
     void observe_state(const size_t ngbxs,
@@ -144,13 +140,8 @@ class SDMassNthMomentObserver
         : nth_moment(nth_moment),
           zarr(zarr)
     {
-      if (zarr.get_name() != "massmom"+std::to_string(nth_moment))
-      {
-        const std::string errmsg = "name of storage meant for nth "
-                                   "moment of SD mass distirbution "
-                                   "is not called 'massmom[n]'";
-        throw std::invalid_argument(errmsg);
-      }
+      const std::string_view name("massmom"+std::to_string(nth_moment));
+      check_zarrname(zarr.get_name(), name);
     }
 
     void observe_state(const size_t ngbxs,
@@ -189,11 +180,11 @@ public:
     {
       for (auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
       {
-        zarr.data_to_contigraggedarray(SDinGBx.superdrop);
+        zarr.data_to_raggedstorage<Superdrop>(SDinGBx.superdrop);
         ++nsupers;
       }
     }
-    zarr.contigraggedarray_count(nsupers);
+    zarr.raggedarray_count(nsupers);
   }
 };
 
@@ -203,7 +194,7 @@ private:
   ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr;
 
 public:
-  SDsGbxindexObserver(ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr) : zarr(zarr) {}
+  SDsGbxindexObserver(auto &zarr) : zarr(zarr) {}
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -216,11 +207,11 @@ public:
     {
       for (auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
       {
-        zarr.data_to_contigraggedarray<unsigned int>(SDinGBx.sd_gbxindex);
+        zarr.data_to_raggedstorage<unsigned int>(SDinGBx.sd_gbxindex);
         ++nsupers;
       }
     }
-    zarr.contigraggedarray_count(nsupers);
+    zarr.raggedarray_count(nsupers);
   }
 };
 
