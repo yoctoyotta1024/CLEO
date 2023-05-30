@@ -18,7 +18,7 @@ unsigned int ThermoIntoStore::
 }
 
 unsigned int ThermoIntoStore::
-    writechunks(FSStore &store, unsigned int chunkcount)
+    writebuffers2chunks(FSStore &store, unsigned int chunkcount)
 /* write buffer vector into attr's store at chunkcount
 and then replace contents of buffer with numeric limit */
 {
@@ -36,7 +36,7 @@ and then replace contents of buffer with numeric limit */
   return ++chunkcount;
 }
 
-void ThermoIntoStore::writejsons(FSStore &store,
+void ThermoIntoStore::writezarrjsons(FSStore &store,
                                   const std::string &metadata) const
 /* write same .zarray metadata to a json file for each
 thermostate array in store alongside distinct .zattrs json files */

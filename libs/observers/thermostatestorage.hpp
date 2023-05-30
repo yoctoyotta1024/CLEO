@@ -37,11 +37,11 @@ struct ThermoIntoStore
   unsigned int copy2buffers(const ThermoState &state, unsigned int j);
   /* copy press, temp, qvap and qcond data in the state to buffers at index j */
 
-  unsigned int writechunks(FSStore &store, unsigned int chunkcount);
+  unsigned int writebuffers2chunks(FSStore &store, unsigned int chunkcount);
   /* write buffer vector into attr's store at chunkcount
   and then replace contents of buffer with numeric limit */
 
-  void writejsons(FSStore &store, const std::string &metadata) const;
+  void writezarrjsons(FSStore &store, const std::string &metadata) const;
   /* write same .zarray metadata to a json file for each
   thermostate array in store alongside distinct .zattrs json files */
 };
@@ -77,7 +77,7 @@ private:
   /* write data from thermo buffers into chunks in store,
   then reset bufferfill and write associated metadata */
   {
-    chunkcount = buffers.writechunks(store, chunkcount);
+    chunkcount = buffers.writebuffers2chunks(store, chunkcount);
     bufferfill = 0;
 
     writejsons();
@@ -99,7 +99,7 @@ private:
                             metadata(zarr_format, order, shape,
                                      chunks, dtype, compressor,
                                      fill_value, filters));
-    buffers.writejsons(store, metadata);
+    buffers.writezarrjsons(store, metadata);
   }
 
 public:

@@ -41,9 +41,9 @@ protected:
   const std::string filters = "null";    // codec configurations for compression
   const std::string dtype;               // datatype stored in arrays
 
-  void zarrayjsons(const std::string shape,
-                   const std::string chunks,
-                   const std::string dims)
+  void writezarrjsons(const std::string shape,
+                      const std::string chunks,
+                      const std::string dims)
   /* write array's metadata to .json files */
   {
     const std::string metadata = storagehelper::
@@ -53,9 +53,14 @@ protected:
     const std::string arrayattrs = storagehelper::
         arrayattrs(dims, units, scale_factor);
 
-    storagehelper::write_zarrarrayjsons(store, name,
-                                        metadata,
-                                        arrayattrs);
+    storagehelper::writezarrjsons(store, name, metadata, arrayattrs);
+  }
+
+  void copy2buffer(const T val)
+  /* copy value 'val' to buffer */
+  {
+    bufferfill = storagehelper::val2buffer<T>(val, buffer, bufferfill);
+    ++ndata;
   }
 
 public:
@@ -74,8 +79,7 @@ public:
 
   int get_ndata() const { return ndata; }
 
-  template <typename T1>
-  void value_to_storage(const T1 val)
+  void value_to_storage(const T val)
   /* write val in the zarr store. First copy it to a buffer,
   then write buffer to a chunk in the store when the number
   of values in the buffer reaches the chunksize */
@@ -86,9 +90,7 @@ public:
       bufferfill = 0;
     }
 
-    // copy double to buffer
-    bufferfill = storagehelper::val2buffer<T>(val, buffer, bufferfill);
-    ++ndata;
+    copy2buffer(val); 
   }
 };
 
@@ -105,20 +107,21 @@ private:
     this->chunkcount = storagehelper::
         writebuffer2chunk(this->store, this->buffer,
                           this->name, this->chunkcount);
-    
-    writezarrayjsons();
+    this->bufferfill = 0;
+
+    writejsons();
 
     return this->chunkcount
   }
 
-  void writezarrayjsons()
+  void writejsons()
   /* write strictly required metadata to decode chunks (MUST) */
   {
     const auto shape("[" + std::to_string(this->ndata) + "]");
     const auto chunks("[" + std::to_string(this->chunksize) + "]");
     const std::string dims = "[\"" + this->name + "\"]";
 
-    this->zarrayjsons(shape, chunks, dims); 
+    this->writezarrjsons(shape, chunks, dims); 
   }
 
 public:
@@ -145,7 +148,7 @@ struct TwoDStorage : SingleVarStorage<T>
 private:
   const unsigned int ngridboxes; // number of output times that have been observed 
 
-  unsigned int writechunk()
+  void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
   {
     const std::string chunknum = std::to_string(this->chunkcount)+".0";
