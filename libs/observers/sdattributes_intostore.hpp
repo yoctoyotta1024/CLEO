@@ -48,9 +48,8 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
   /* write buffer vector into attr's store at chunkcount
   and then replace contents of buffer with std::nans */
   {
-    const std::string chunknum = std::to_string(chunkcount);
-    storagehelper::writebuffer2chunk(store, buffer, attr, chunknum);
-    return ++chunkcount;
+    return storagehelper::
+        writebuffer2chunk(store, buffer, attr, chunkcount);
   }
 
   void zarrayjsons(FSStore &store, const SomeMetadata &md) const

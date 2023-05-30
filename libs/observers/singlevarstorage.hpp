@@ -101,11 +101,8 @@ private:
   unsigned int writechunk()
   /* write data in buffer to a chunk in store */
   {
-    const std::string chunknum = std::to_string(this->chunkcount);
-    storagehelper::writebuffer2chunk(this->store, this->buffer,
-                                     this->name, chunknum);
-
-    return ++(this->chunkcount);
+    return storagehelper::writebuffer2chunk(this->store, this->buffer,
+                                            this->name, this->chunkcount);
   }
 
 public:
