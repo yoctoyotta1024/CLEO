@@ -23,18 +23,18 @@ struct SDMomentsStorage
 {
   const double scalefac; // scale factor to convert dimensionless masses to grams
  
-  TwoDStorage<double> massmoment0zarr;
-  TwoDStorage<double> massmoment1zarr;
-  TwoDStorage<double> massmoment2zarr;
+  TwoDStorage<double> massmom0zarr;
+  TwoDStorage<double> massmom1zarr;
+  TwoDStorage<double> massmom2zarr;
 
   SDMomentsStorage(FSStore &store, const unsigned int maxchunk,
                    const unsigned int ngridboxes)
       : scalefac(pow(dlc::R0, 3.0) * dlc::RHO0 * 1000),
-        massmoment0zarr(store, maxchunk, "massmoment0", "<f8",
+        massmom0zarr(store, maxchunk, "massmom0", "<f8",
                         " ", 1, ngridboxes),
-        massmoment1zarr(store, maxchunk, "massmoment1", "<f8",
+        massmom1zarr(store, maxchunk, "massmom1", "<f8",
                         "g", scalefac, ngridboxes),
-        massmoment2zarr(store, maxchunk, "massmoment2", "<f8",
+        massmom2zarr(store, maxchunk, "massmom2", "<f8",
                         "g^2", pow(scalefac, 2.0), ngridboxes){};
 };
 

@@ -144,11 +144,11 @@ class SDMassNthMomentObserver
         : nth_moment(nth_moment),
           zarr(zarr)
     {
-      if (zarr.get_name() != "massmoment"+std::to_string(nth_moment))
+      if (zarr.get_name() != "massmom"+std::to_string(nth_moment))
       {
         const std::string errmsg = "name of storage meant for nth "
                                    "moment of SD mass distirbution "
-                                   "is not called 'massmoment[n]'";
+                                   "is not called 'massmom[n]'";
         throw std::invalid_argument(errmsg);
       }
     }

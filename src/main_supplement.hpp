@@ -150,9 +150,9 @@ of a superdroplet into zarr storage */
 
 Observer auto create_sdmomentsobserver(SDMomentsStorage &sdmoments)
 {
-  const Observer auto mom0 = SDMassNthMomentObserver(sdmoments.massmoment0zarr, 0);
-  const Observer auto mom1 = SDMassNthMomentObserver(sdmoments.massmoment1zarr, 1);
-  const Observer auto mom2 = SDMassNthMomentObserver(sdmoments.massmoment2zarr, 2);
+  const Observer auto mom0 = SDMassNthMomentObserver(sdmoments.massmom0zarr, 0);
+  const Observer auto mom1 = SDMassNthMomentObserver(sdmoments.massmom1zarr, 1);
+  const Observer auto mom2 = SDMassNthMomentObserver(sdmoments.massmom2zarr, 2);
 
   const auto sdmomentobs = mom2 >> mom1 >> mom0; 
 
