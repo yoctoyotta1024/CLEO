@@ -21,7 +21,7 @@ class SingleVarStorage
 {
 private:
   virtual void writechunk() = 0;
-  virtual void zarrjsons() = 0;
+  virtual void writejsons() = 0;
 
 protected:
   FSStore &store;            // file system store satisfying zarr store specificaiton v2
@@ -42,9 +42,9 @@ protected:
   const std::string filters = "null";    // codec configurations for compression
   const std::string dtype;               // datatype stored in arrays
 
-  void writejsons(const std::string shape,
-                  const std::string chunks,
-                  const std::string dims)
+  void zarrayjsons(const std::string shape,
+                   const std::string chunks,
+                   const std::string dims)
   /* write array's metadata to .json files */
   {
     const std::string metadata = storagehelper::
@@ -108,17 +108,17 @@ private:
                           this->name, this->chunkcount);
     this->bufferfill = 0;
 
-    zarrjsons();
+    writejsons();
   }
 
-  void zarrjsons()
+  void writejsons()
   /* write strictly required metadata to decode chunks (MUST) */
   {
     const auto shape("[" + std::to_string(this->ndata) + "]");
     const auto chunks("[" + std::to_string(this->chunksize) + "]");
     const std::string dims = "[\"" + this->name + "\"]";
 
-    this->writejsons(shape, chunks, dims);
+    this->zarrayjsons(shape, chunks, dims);
   }
 
 public:
@@ -154,10 +154,10 @@ private:
                           this->name, chunknum,
                           this->chunkcount);
 
-    zarrjsons();
+    writejsons();
   }
 
-  void zarrjsons()
+  void writejsons()
   /* write strictly required metadata to decode chunks (MUST).
   Assert also check 2D data dimensions is as expected */
   {
@@ -173,7 +173,7 @@ private:
     const auto shape("[" + nobstr + ", " + ngstr + "]");
     const auto chunks("[" + nchstr + ", " + ngstr + "]");
     const std::string dims = "[\"time\", \"gbxindex\"]";
-    this->writejsons(shape, chunks, dims);
+    this->zarrayjsons(shape, chunks, dims);
   }
 
 public:

@@ -58,7 +58,7 @@ a chunk of array in the store, and writing array metadata and attribute .json fi
   } -> std::same_as<unsigned int>;
 
   {
-    aah.zarrayjsons(store, md)
+    aah.writejsons(store, md)
   } -> std::same_as<void>;
 
   {
@@ -93,12 +93,12 @@ SuperdropIntoStoreViaBuffer is A1 followed by A2 */
     return ++chunkcount;
   }
 
-  void zarrayjsons(FSStore &store,
+  void writejsons(FSStore &store,
                    const SomeMetadata &md)
 
   {
-    aah1.zarrayjsons(store, md);
-    aah2.zarrayjsons(store, md);
+    aah1.writejsons(store, md);
+    aah2.writejsons(store, md);
   }
 
   void set_buffersize(const size_t csize)
@@ -125,11 +125,14 @@ completeness of a Monoid Structure) */
   {
     return j;
   }
+
   unsigned int writechunk(FSStore &store, const unsigned int chunkcount) const
   {
     return chunkcount;
   }
-  void zarrayjsons(FSStore &store, const SomeMetadata &md) const {}
+
+  void writejsons(FSStore &store, const SomeMetadata &md) const {}
+  
   void set_buffersize(const size_t csize) const {}
 };
 
@@ -165,16 +168,16 @@ private:
   const std::string rgdcount_name = "raggedcount"; // name of rgdcount zarray in store
   const std::string rgdcount_dtype = "<u8";        // datatype of rgdcount variable
 
-  void sdbuffers_zarrayjsons()
+  void sdbuffers_writejsons()
   {
     // write strictly required metadata to decode chunks (MUST)
     const std::string dims = "[\"sdindex\"]";
     const SomeMetadata md(zarr_format, order, ndata, chunksize,
                           compressor, fill_value, filters, dims);
-    sdbuffers.zarrayjsons(store, md);
+    sdbuffers.writejsons(store, md);
   }
 
-  void rgdcount_zarrayjsons()
+  void rgdcount_writejsons()
   /* write zarray jsons for array of rgdcount variable in store */
   {
     const std::string
@@ -198,7 +201,7 @@ private:
     chunkcount = sdbuffers.writechunk(store, chunkcount);
     bufferfill = 0; // reset bufferfill
 
-    sdbuffers_zarrayjsons();
+    sdbuffers_writejsons();
   }
 
   void rgdcount_writechunk()
@@ -210,7 +213,7 @@ private:
                                                            rgdcount_chunkcount);
     rgdcount_bufferfill = 0; // reset rgdcount bufferfill
 
-    rgdcount_zarrayjsons();
+    rgdcount_writejsons();
   }
 
   template <typename T>
