@@ -148,11 +148,11 @@ of a superdroplet into zarr storage */
   return attrs;
 }
 
-Observer auto create_massmomentsobserver(MassMomentsStorage &zarrs)
+Observer auto create_massmomentsobserver(MassMomentsStorage &mmzarrs)
 {
-  const Observer auto mom0 = NthMassMomentObserver(zarrs.massmom0zarr, 0);
-  const Observer auto mom1 = NthMassMomentObserver(zarrs.massmom1zarr, 1);
-  const Observer auto mom2 = NthMassMomentObserver(zarrs.massmom2zarr, 2);
+  const Observer auto mom0 = NthMassMomentObserver(mmzarrs.massmom0zarr, 0);
+  const Observer auto mom1 = NthMassMomentObserver(mmzarrs.massmom1zarr, 1);
+  const Observer auto mom2 = NthMassMomentObserver(mmzarrs.massmom2zarr, 2);
 
   const auto massmomentobs = mom2 >> mom1 >> mom0; 
 
