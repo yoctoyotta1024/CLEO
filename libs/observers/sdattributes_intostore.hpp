@@ -43,12 +43,13 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
   /* virtual void function placeholding function for
   copying superdrop's data into a buffer vector at j'th index */
 
-  void writechunk(FSStore &store, const int chunkcount)
+  unsigned int writechunk(FSStore &store, const int chunkcount)
   /* write buffer vector into attr's store at chunkcount
   and then replace contents of buffer with std::nans */
   {
     const std::string chunknum = std::to_string(chunkcount);
     storagehelper::writebuffer2chunk(store, buffer, attr, chunknum);
+    return ++chunkcount;
   }
 
   void zarrayjsons(FSStore &store, const SomeMetadata &md) const

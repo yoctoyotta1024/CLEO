@@ -55,7 +55,7 @@ a chunk of array in the store, and writing array metadata and attribute .json fi
 
   {
     aah.writechunk(store, j)
-    } -> std::same_as<void>;
+    } -> std::same_as<unsigned int>;
 
   {
     aah.zarrayjsons(store, md)
@@ -83,10 +83,11 @@ SuperdropIntoStoreViaBuffer is A1 followed by A2 */
     aah2.copy2buffer(superdrop, j);
   }
 
-  void writechunk(FSStore &store, const int chunkcount)
+  unsigned int writechunk(FSStore &store, const int chunkcount)
   {
     aah1.writechunk(store, chunkcount);
     aah2.writechunk(store, chunkcount);
+    return ++chunkcount;
   }
 
   void zarrayjsons(FSStore &store,
@@ -117,7 +118,10 @@ struct NullSuperdropIntoStoreViaBuffer
 completeness of a Monoid Structure) */
 {
   void copy2buffer(const Superdrop &superdrop, const int j) const {}
-  void writechunk(FSStore &store, const int chunkcount) const {}
+  unsigned int writechunk(FSStore &store, const int chunkcount) const
+  {
+    return chunkcount;
+  }
   void zarrayjsons(FSStore &store, const SomeMetadata &md) const {}
   void set_buffersize(const size_t csize) const {}
 };
@@ -132,55 +136,51 @@ into chunks in their corresponding array stores when number of
 datapoints copied to the buffers reaches chunksize. */
 {
 private:
-  FSStore &store;        // file system store satisfying zarr store specificaiton v2
-  SDIntoStore sdbuffers; // buffers and their handler functions for wrting SD data to store
+  FSStore &store;                  // file system store satisfying zarr store specificaiton v2
+  SDIntoStore sdbuffers;           // buffers and their handler functions for wrting SD data to store
   std::vector<size_t> raggedcount; // count variable for contiguous ragged representation of arrays
 
-  const size_t chunksize; // fixed size of array chunks (=max no. datapoints in buffer before writing)
-  unsigned int chunkcount;      // number of chunks of array so far written to store
-  unsigned int bufferfill;      // number of datapoints so far copied into buffer
-  unsigned int ndata;           // number of data points that have been observed (= size of array written to store)
+  const size_t chunksize;  // fixed size of array chunks (=max no. datapoints in buffer before writing)
+  unsigned int chunkcount; // number of chunks of array so far written to store
+  unsigned int bufferfill; // number of datapoints so far copied into buffer
+  unsigned int ndata;      // number of data points that have been observed (= size of array written to store)
 
-  unsigned int raggedcount_chunkcount;      // number of chunks of raggedcount array so far written to store
-  unsigned int raggedcount_bufferfill;      // number of raggedcount values so far copied into its buffer
-  unsigned int raggedcount_ndata;           // number of raggedcount values observed so far
+  unsigned int raggedcount_chunkcount; // number of chunks of raggedcount array so far written to store
+  unsigned int raggedcount_bufferfill; // number of raggedcount values so far copied into its buffer
+  unsigned int raggedcount_ndata;      // number of raggedcount values observed so far
 
   const unsigned int zarr_format = 2;    // storage spec. version 2
   const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
   const std::string compressor = "null"; // compression of data when writing to store
   const std::string fill_value = "null"; // fill value for empty datapoints in array
   const std::string filters = "null";    // codec configurations for compression
-  
-  void writezarrayjsons()
+
+  const std::string raggedcount_name = "raggedcount"; // name of ragged count variable
+  const std::string count_dtype = "<u8";              // datatype of ragged count variable
+
+  void sdbuffers_zarrayjsons()
   {
     // write strictly required metadata to decode chunks (MUST)
     const std::string dims = "[\"sdindex\"]";
     const SomeMetadata md(zarr_format, order, ndata, chunksize,
                             compressor, fill_value, filters, dims);
     sdbuffers.zarrayjsons(store, md);
-    
-    // write metadata for count variable of
-    // contiguous ragged representation of arrays
-    raggedcount_zarrayjsons();
   }
 
   void raggedcount_zarrayjsons()
   /* store count variable array 'raggedcount', 
   in 1 chunk in store under 'count_ragged'*/
   {
-    const std::string count_name("raggedcount");
-    const std::string count_dtype("<u8");
+    const std::string
+        count_arrayattrs = "{\"_ARRAY_DIMENSIONS\": [\"time\"],"
+                           "\"sample_dimension\": \"superdroplets\"}";
 
     const std::string
         count_metadata = storagehelper::
             metadata(zarr_format, order, raggedcount_ndata, chunksize,
                      count_dtype, compressor, fill_value, filters);
 
-    const std::string
-        count_arrayattrs = "{\"_ARRAY_DIMENSIONS\": [\"time\"],"
-                           "\"sample_dimension\": \"superdroplets\"}";
-
-    storagehelper::write_zarrarrayjsons(store, count_name,
+    storagehelper::write_zarrarrayjsons(store, raggedcount_name,
                                         count_metadata,
                                         count_arrayattrs);
   }
@@ -203,8 +203,7 @@ public:
     if (bufferfill != 0)
     {
       // write data in buffer to a chunk in store
-      sdbuffers.writechunk(store, chunkcount);
-      ++chunkcount;
+      chunkcount = sdbuffers.writechunk(store, chunkcount);
     }
 
     if (raggedcount_bufferfill != 0)
@@ -252,11 +251,9 @@ public:
     if (bufferfill == chunksize)
     {
       // write data in buffer to a chunk in store
-      sdbuffers.writechunk(store, chunkcount);
-      ++chunkcount;
+      chunkcount = sdbuffers.writechunk(store, chunkcount);
       bufferfill = 0;
-
-      writezarrayjsons();
+      sdbuffers_zarrayjsons();
     }
 
     // copy data from superdrop to buffer(s)
@@ -274,10 +271,12 @@ public:
     if (raggedcount_bufferfill == chunksize)
     {
       // write data in buffer to a chunk in store
-      const std::string chunknum = std::to_string(raggedcount_chunkcount);
-      storagehelper::writebuffer2chunk(store, raggedcount, "raggedcount", chunknum);
+      const auto chunknum = std::to_string(raggedcount_chunkcount);
+      storagehelper::writebuffer2chunk(store, raggedcount,
+                            raggedcount_name, chunknum);
       ++raggedcount_chunkcount;
       raggedcount_bufferfill = 0;
+      raggedcount_zarrayjsons();
     }
 
   // copy double to buffer
