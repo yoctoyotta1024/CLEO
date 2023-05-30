@@ -20,7 +20,8 @@ template <typename T>
 class SingleVarStorage
 {
 private:
-  virtual unsigned int writechunk() = 0;
+  virtual void writechunk() = 0;
+  virtual void zarrjsons() = 0;
 
 protected:
   FSStore &store;            // file system store satisfying zarr store specificaiton v2
@@ -86,8 +87,7 @@ public:
   {
     if (bufferfill == chunksize)
     {
-      chunkcount = writechunk();
-      bufferfill = 0;
+      writechunk();
     }
 
     copy2buffer(val);
@@ -100,7 +100,7 @@ struct CoordinateStorage : SingleVarStorage<T>
 equal to name of variable (ie. variable is an xarray coord)*/
 {
 private:
-  unsigned int writechunk()
+  void writechunk()
   /* write data in buffer to a chunk in store */
   {
     this->chunkcount = storagehelper::
@@ -109,8 +109,6 @@ private:
     this->bufferfill = 0;
 
     zarrjsons();
-
-    return this->chunkcount
   }
 
   void zarrjsons()
@@ -157,8 +155,6 @@ private:
                           this->chunkcount);
 
     zarrjsons();
-
-    return this->chunkcount;
   }
 
   void zarrjsons()

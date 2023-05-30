@@ -128,7 +128,7 @@ public:
   {
     if (bufferfill == chunksize)
     {
-      writechunks()
+      writechunks();
     }
 
     copy2buffers(state);

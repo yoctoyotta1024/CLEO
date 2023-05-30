@@ -27,7 +27,7 @@ struct SDMomentsStorage
   TwoDStorage<double> massmom1zarr;
   TwoDStorage<double> massmom2zarr;
 
-  SDMomentsStorage(FSStore &store const unsigned int maxchunk,
+  SDMomentsStorage(FSStore &store, const unsigned int maxchunk,
                    const unsigned int ngridboxes)
       : sf(pow(dlc::R0, 3.0) * dlc::RHO0 * 1000),
         massmom0zarr(store, maxchunk,

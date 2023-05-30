@@ -186,7 +186,7 @@ private:
             metadata(zarr_format, order, rgdcount_ndata, chunksize,
                      rgdcount_dtype, compressor, fill_value, filters);
 
-    storagehelper::write_zarrarrayjsons(store, rgdcount_name,
+    storagehelper::writezarrjsons(store, rgdcount_name,
                                         count_metadata,
                                         count_arrayattrs);
   }

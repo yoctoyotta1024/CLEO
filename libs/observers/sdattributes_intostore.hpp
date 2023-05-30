@@ -64,7 +64,7 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
     const std::string arrayattrs = "{\"_ARRAY_DIMENSIONS\": " + md.dims + "}";
 
     storagehelper::
-        write_zarrarrayjsons(store, attr, metadata, arrayattrs);
+        writezarrjsons(store, attr, metadata, arrayattrs);
   }
 
   void set_buffersize(const size_t csize)

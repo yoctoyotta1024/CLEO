@@ -9,7 +9,6 @@ into a (zarr) store on disk */
 #define INTOSTORE_OBSERVERS_HPP
 
 #include <string>
-#include <string_view>
 #include <stdexcept>
 
 #include <Kokkos_Core.hpp>
@@ -23,12 +22,13 @@ into a (zarr) store on disk */
 #include "./sdmomentsstorage.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 
-void check_zarrname(const std::string_view zarrname,
-                    const std::string_view name)
+void check_zarrname(const std::string zarrname,
+                    const std::string name)
 {
   if (zarrname != name)
   {
-    const std::string errmsg = "name of storage is called " zarrname + ", but should be " + name;
+    const std::string errmsg = "name of storage is called " +
+                               zarrname + ", but should be " + name;
     throw std::invalid_argument(errmsg);
   }
 }
@@ -140,7 +140,7 @@ public:
       : nth_moment(nth_moment),
         zarr(zarr)
   {
-    const std::string_view name("massmom" + std::to_string(nth_moment));
+    const std::string name("massmom" + std::to_string(nth_moment));
     check_zarrname(zarr.get_name(), name);
   }
 
@@ -180,7 +180,7 @@ public:
     {
       for (auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
       {
-        zarr.data_to_raggedstorage<Superdrop>(SDinGBx.superdrop);
+        zarr.data_to_raggedstorage(SDinGBx.superdrop);
         ++nsupers;
       }
     }
