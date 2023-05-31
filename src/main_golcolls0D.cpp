@@ -1,8 +1,9 @@
 // Author: Clara Bayley
 // File: main.cpp
 /* This file runs the entire superdrop model (SDM)
-coupled with a CVODE ode solver for the thermodynamics
-(p, temp, qv and qc) over time */
+thermodynamics read from binaries files
+(p, temp, qv and qc) over time for golovin's
+collision-coalscence kernel */
 
 // after make/compiling, execute for example via:
 // ./src/golcolls0D "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
