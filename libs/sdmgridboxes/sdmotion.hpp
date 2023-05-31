@@ -181,7 +181,7 @@ public:
   a superdroplet's coordinates using the interpolated 
   wind velocity from a gridbox's thermostate */
   {
-    /* USe predictor-corrector method to get change in SD coords */
+    /* Use predictor-corrector method to get change in SD coords */
     Deltas d{predictor_corrector(gbxmaps, gbx, drop)};
 
     /* CFL check predicted change to SD coords */

@@ -72,6 +72,8 @@ private:
       {
         movesd.change_superdroplet_coords(gbxmaps, gbx, SDinGBx.superdrop);
 
+        gbx.detector.precip(zbounds, SDinGBx.superdrop);
+
         SDinGBx.sd_gbxindex = update_superdrop_gbxindex(gbxmaps,
                                                         gbx.gbxindex,
                                                         zbounds, xbounds, ybounds,
