@@ -71,7 +71,10 @@ to SDM and observation of SDM gridboxes */
   const double time = step2dimlesstime(t_mdl);
   recieve_thermodynamics(ngbxs, time, thermodyn, h_gridboxes);
 
-  observer.observe_gridboxes(ngbxs, h_gridboxes);
+  if observer.on_step(t_mdl)
+  {
+    observer.observe_gridboxes(ngbxs, h_gridboxes);
+  }
 }
 
 inline int proceedto_next_step(int t_mdl, const int couplstep)
