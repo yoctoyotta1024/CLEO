@@ -76,9 +76,8 @@ given current time t_mdl, so that next time
   /* t_next is smaller out of time of next coupl and obs */
   const int next_coupl(next_step(couplstep));
   const int next_obs(next_step(obsstep));
-  const int nextt_mdl(std::min(next_coupl, next_obs));
 
-  return nextt_mdl - t_mdl;
+  return std::min(next_coupl, next_obs) - t_mdl;
 }
 
 inline int start_step(const int t_mdl, const int couplstep,
