@@ -61,7 +61,7 @@ generators used in SDM */
   return Kokkos::Random_XorShift64_Pool<>(std::random_device{}());
 }
 
-inline int next_stepsize(const int t_mdl,
+inline int stepsize(const int t_mdl,
                          const int couplstep,
                          const int obsstep)
 /* returns size of next step of model ('onestep')
@@ -100,7 +100,7 @@ to take given current time t_mdl */
     observer.observe_gridboxes(ngbxs, h_gridboxes);
   }
 
-  return next_stepsize(t_mdl, couplstep, observer.get_interval());
+  return stepsize(t_mdl, couplstep, observer.get_interval());
 }
 
 inline int proceedto_next_step(const int t_mdl, const int onestep)
