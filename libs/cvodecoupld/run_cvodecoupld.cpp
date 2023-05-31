@@ -7,14 +7,14 @@ Coupling is both ways (send and receive) */
 
 #include "./run_cvodecoupld.hpp"
 
-std::vector<double> initcvodethermo(const size_t num_gridboxes,
+std::vector<double> initcvodethermo(const size_t ngridboxes,
                                         const Config &config)
 /* return vector of dimensionless initial conditions
 for thermodyanmic variables (p, temp, qv, qc) to
 initialise cvode thermodynamics solver */
 {
   constexpr int NVARS = 4;                  // no. (distinct) variables per grid box
-  const size_t neq = NVARS * num_gridboxes; // total no. variables
+  const size_t neq = NVARS * ngridboxes; // total no. variables
 
   const double p_init = config.P_INIT / dlc::P0;
   const double temp_init = config.TEMP_INIT / dlc::TEMP0;

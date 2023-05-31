@@ -52,7 +52,7 @@ and return pool of Kokkos' random number generator. Call
 function to set superdroplet radii to equilibrium wet radius
 if wetradiiinit is true. */
 
-std::vector<double> initcvodethermo(const size_t num_gridboxes,
+std::vector<double> initcvodethermo(const size_t ngridboxes,
                                     const Config &config);
 /* return vector of dimensionless initial conditions
 for thermodyanmic variables (p, temp, qv, qc) to

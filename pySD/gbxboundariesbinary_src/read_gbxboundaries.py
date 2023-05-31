@@ -222,9 +222,9 @@ def domaininfo(gbxbounds, isprint=True):
     domainvol = calc_domainvol(zhalf, xhalf, yhalf)
 
     gridboxvols = calc_gridboxvols(gbxbounds)
-    num_gridboxes = len(gridboxvols)
+    ngridboxes = len(gridboxvols)
 
-    return domainvol, gridboxvols, num_gridboxes
+    return domainvol, gridboxvols, ngridboxes
 
 def grid_dimensions(gbxbounds):
 
@@ -256,7 +256,7 @@ def print_domain_info(constsfile, gridfile):
     gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0,
                                                    isprint=isprint) 
     
-    domainvol, gridboxvols, num_gridboxes = domaininfo(gbxbounds,
+    domainvol, gridboxvols, ngridboxes = domaininfo(gbxbounds,
                                                        isprint=isprint)
     xtns, spacings, griddims = grid_dimensions(gbxbounds) 
     ztot = abs(xtns[0][0] - xtns[0][1])
@@ -276,6 +276,6 @@ def print_domain_info(constsfile, gridfile):
     "mean gridbox y spacing: {:3g} m\n".format(np.mean(spacings[2]))+\
     "mean gridbox volume: {:3g}".format(np.mean(gridboxvols))+" m^3\n"+\
     "total domain volume: {:3g} m^3\n".format(domainvol)+\
-    "total no. gridboxes: "+str(num_gridboxes)+\
+    "total no. gridboxes: "+str(ngridboxes)+\
     "\n------------------------------------\n"
     print(inforstr)
