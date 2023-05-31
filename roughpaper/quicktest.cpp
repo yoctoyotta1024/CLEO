@@ -10,10 +10,14 @@ int main()
   const auto ul = std::numeric_limits<unsigned long>::max();
   const auto ull = std::numeric_limits<unsigned long long>::max();
   
+  const auto dbl = std::numeric_limits<double>::max();
+  
   std::cout << "szt max: " << sz << ", bytes:" << sizeof(sz) <<"\n";
   std::cout << "uuu max: " << u << ", bytes:" << sizeof(u) <<"\n";
   std::cout << "luu max: " << ul << ", bytes:" << sizeof(ul) <<"\n";
   std::cout << "llu max: " << ull << ", bytes:" << sizeof(ull) <<"\n";
+  
+  std::cout << "dbl max: " << ull << ", bytes:" << sizeof(dbl) <<"\n";
 
   return 0;
 }

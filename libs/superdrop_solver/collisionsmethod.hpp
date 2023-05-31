@@ -69,16 +69,16 @@ private:
   points to the section of that vector containing the superdroplets involed
   in the collision event. */
   {
-    const int nsupers = span4SDsinGBx.size();
-    const int nhalf = floor(nsupers / 2.0);
-    const int scale_p = nsupers * (nsupers - 1.0) / (2.0 * nhalf);
+    const size_t nsupers(span4SDsinGBx.size());
+    const size_t nhalf(nsupers / 2); // same as floor() positive nsupers
+    const double scale_p(nsupers * (nsupers - 1.0) / (2.0 * nhalf));
 
     /* Randomly shuffle order of superdroplet objects
     in order to generate random pairs */
     std::shuffle(span4SDsinGBx.begin(), span4SDsinGBx.end(), urbg);
 
     /* collide all randomly generated pairs of SDs */
-    for (int i = 1; i < nsupers; i += 2)
+    for (size_t i = 1; i < nsupers; i += 2)
     {
       collide_superdroplet_pair(urbg, span4SDsinGBx[i-1].superdrop,
                                 span4SDsinGBx[i].superdrop, scale_p,
@@ -87,10 +87,9 @@ private:
  
   }
 
-
   template <class DeviceType>
   void collide_superdroplet_pair(URBG<DeviceType> &urbg, Superdrop &dropA,
-                                 Superdrop &dropB, const int scale_p,
+                                 Superdrop &dropB, const double scale_p,
                                  const double VOLUME) const
   /* Monte Carlo Routine according to Shima et al. 2009
   for collision-coalescence of a pair of superdroplets.
@@ -173,7 +172,7 @@ private:
       gamma = floor(prob);
     }
 
-    const unsigned long long maxgamma(floor(eps1 / eps2));
+    const unsigned long long maxgamma(eps1 / eps2); // same as floor() for positive ints
 
     return std::min(gamma, maxgamma);
   }
