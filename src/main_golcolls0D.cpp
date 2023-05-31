@@ -48,8 +48,8 @@ struct SomeZarrStores
   ContiguousRaggedSDStorage<S> sdzarr;
   CoordinateStorage<double> timezarr;
 
-SomeZarrStores(FSStore &fsstore, const int maxchunk,
-              const unsigned int ngridboxes, S sdattrs)
+  SomeZarrStores(FSStore &fsstore, const int maxchunk,
+                 const unsigned int ngridboxes, S sdattrs)
       : thermozarr(fsstore, maxchunk, ngridboxes),
         sdzarr(fsstore, sdattrs, maxchunk),
         timezarr(fsstore, maxchunk, "time",
@@ -79,7 +79,7 @@ superdroplets from combination of those two seperate observers */
   const Observer auto obs3 = ThermoStateObserver(stores.thermozarr);
   const Observer auto obs2 = SDsAttributeObserver(stores.sdzarr);
   const Observer auto obs1 = TimeObserver(stores.timezarr);
-  
+
   const auto observer = obs3 >> obs2 >> obs1 >> PrintObserver{};
 
   return observer;
@@ -101,16 +101,16 @@ int main(int argc, char *argv[])
 
   /* object for time-stepping parameters of coupled model */
   const SDMTimesteps mdlsteps(config.CONDTSTEP, config.COLLTSTEP,
-                                config.MOTIONTSTEP, config.COUPLTSTEP,
-                                config.T_END);
+                              config.MOTIONTSTEP, config.COUPLTSTEP,
+                              config.OBSTSTEP, config.T_END);
 
   /* create map from gridbox index to its coordinate boundaries */
   const Maps4GridBoxes gbxmaps(config.SDnspace, config.grid_filename);
 
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
   const auto sdmprocess(CollisionsProcess(mdlsteps.collsubstep,
-                                       &step2realtime,
-                                       GolovinProb(dlc::R0)));    
+                                          &step2realtime,
+                                          GolovinProb(dlc::R0)));
   const MoveSuperdropsInDomain sdmmotion(NullMotion{});
 
   /* create observer from combination of chosen observers */

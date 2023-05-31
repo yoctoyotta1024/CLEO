@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
 
   /* object for time-stepping parameters of coupled model */
   const SDMTimesteps mdlsteps(config.CONDTSTEP, config.COLLTSTEP,
-                                config.MOTIONTSTEP, config.COUPLTSTEP,
-                                config.T_END);
+                              config.MOTIONTSTEP, config.COUPLTSTEP,
+                              config.OBSTSTEP, config.T_END);
 
   /* create map from gridbox index to its coordinate boundaries */
   const Maps4GridBoxes gbxmaps(config.SDnspace, config.grid_filename);
