@@ -86,18 +86,20 @@ given current time t_mdl, so that next time
   return std::min(next_coupl, next_obs) - t_mdl;
 }
 
-inline std::vector<ThermoState> start_coupldstep(const int t_mdl,
-                                          const int couplstep,
-                                          const size_t ngbxs,
-                                          const Observer auto &observer,
-                                          const CvodeThermoSolver &cvode,
-                                          Kokkos::View<GridBox *> h_gridboxes)
+inline std::vector<ThermoState>
+start_coupldstep(const int t_mdl,
+                 const int couplstep,
+                 const size_t ngbxs,
+                 const Observer auto &observer,
+                 const CvodeThermoSolver &cvode,
+                 Kokkos::View<GridBox *> h_gridboxes)
 /* communication of thermodynamic state from CVODE solver to SDM.
 Sets current thermodynamic state of SDM to match that communicated by
 CVODE solver. Then observes each gridbox and then returns vector
 of current thermodynamic states (for later use in SDM) */
 {
-  receive_thermodynamics(t_mdl, couplstep, ngbxs, cvode, h_gridboxes);
+  auto currentstates = receive_thermodynamics(t_mdl, couplstep,
+                                         ngbxs, cvode, h_gridboxes);
 
   if (observer.on_step(t_mdl))
   {
@@ -108,12 +110,12 @@ of current thermodynamic states (for later use in SDM) */
 }
 
 void timestep_cvodecoupld(const int t_end,
-                       const int couplstep,
-                       const RunSDMStep<auto, auto, auto> &sdm,
-                       CvodeThermoSolver &cvode,
-                       Kokkos::Random_XorShift64_Pool<> &genpool,
-                       Kokkos::vector<GridBox> &gridboxes,
-                       Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
+                          const int couplstep,
+                          const RunSDMStep<auto, auto, auto> &sdm,
+                          CvodeThermoSolver &cvode,
+                          Kokkos::Random_XorShift64_Pool<> &genpool,
+                          Kokkos::vector<GridBox> &gridboxes,
+                          Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* timestep coupled model from t=0 to t=tend. Each coupled step is
 length 'couplstep' and decomposed into 4 parts:
 1) start of step (coupled)
@@ -122,16 +124,17 @@ length 'couplstep' and decomposed into 4 parts:
 4) proceed to next step (coupled) */
 {
   const size_t ngbxs(gridboxes.size());
-  int t_mdl = 0; // model time is incremented by proceedto_next_step
+  int t_mdl = 0; // model time is incremented at proceedto_next_step
   
   while (t_mdl <= t_end)
   {
-    const int onestep = onestep(t_mdl, couplstep,
+    const int onestep = stepsize(t_mdl, couplstep,
                                 sdm.observer.get_interval());
 
     /* start step (in general involves coupling) */
     const std::vector<ThermoState>
-        previousstates = start_coupldstep(ngbxs, sdm.observer, cvode,
+        previousstates = start_coupldstep(t_mdl, couplstep, ngbxs,
+                                          sdm.observer, cvode,
                                           gridboxes.view_host());
 
     /* advance SDM by couplstep (optionally
@@ -146,7 +149,8 @@ length 'couplstep' and decomposed into 4 parts:
 
     /* prepare for next coupled step (in general involves coupling) */
     gridboxes.on_host(); SDsInGBxs.on_host();
-    t_mdl = proceedto_next_step(t_mdl, onestep, couplstep, ngbxs,
+    t_mdl = proceedto_next_step(t_mdl, onestep, couplstep,
+                                ngbxs,
                                 previousstates,
                                 gridboxes.view_host(),
                                 cvode);

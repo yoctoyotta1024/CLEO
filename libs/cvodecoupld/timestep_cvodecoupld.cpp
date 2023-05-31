@@ -20,21 +20,17 @@ solver 'cvode' if on couplstep */
 {
   if (t_mdl % couplstep == 0)
   {
-    return std::vector<ThermoState>
-        currentstates(recieve_thermodynamics_from_cvode(ngbxs, cvode, h_gridboxes));
+    return recieve_thermodynamics_from_cvode(ngbxs, cvode, h_gridboxes);
   }
   else
   {
     const double time = step2dimlesstime(t_mdl);
-    
-    std::vector<ThermoState> currentstates;
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       h_gridboxes(ii).state.time = time;
-      currentstates.push_back(h_gridboxes(ii).state);
     }
-    
-    return currentstates;
+
+    return std::vector<ThermoState>();
   }
 }
 

@@ -175,7 +175,7 @@ length 'couplstep' and is decomposed into 4 parts:
 4) proceed to next step (optionally coupled) */
 {
   const size_t ngbxs(gridboxes.size());
-  int t_mdl = 0; // model time is incremented by proceedto_next_step
+  int t_mdl = 0; // model time is incremented at proceedto_next_step
   
   while (t_mdl <= t_end)
   {
