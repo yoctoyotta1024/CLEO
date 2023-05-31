@@ -9,6 +9,36 @@ Coupling is both ways (send and receive) */
 #include "./timestep_cvodecoupld.hpp"
 
 std::vector<ThermoState>
+receive_thermodynamics(const int t_mdl,
+                       const int couplstep,
+                       const size_t ngbxs,
+                       const CvodeThermoSolver &cvode,
+                       Kokkos::View<GridBox *> h_gridboxes)
+/* updates time in each gbx thermodynamic state to
+match t_mdl and receives thermodynamics from thermodyanmic
+solver 'cvode' if on couplstep */
+{
+  if (t_mdl % couplstep == 0)
+  {
+    return std::vector<ThermoState>
+        currentstates(recieve_thermodynamics_from_cvode(ngbxs, cvode, h_gridboxes));
+  }
+  else
+  {
+    const double time = step2dimlesstime(t_mdl);
+    
+    std::vector<ThermoState> currentstates;
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      h_gridboxes(ii).state.time = time;
+      currentstates.push_back(h_gridboxes(ii).state);
+    }
+    
+    return currentstates;
+  }
+}
+
+std::vector<ThermoState>
 recieve_thermodynamics_from_cvode(const size_t ngbxs,
                                   const CvodeThermoSolver &cvode,
                                   Kokkos::View<GridBox *> h_gridboxes)
@@ -26,19 +56,24 @@ containing all those Thermostates */
   return currentstates;
 }
 
-int proceedtonext_coupldstep(int t_mdl, const int couplstep,
-                             const size_t ngbxs,
-                             const std::vector<ThermoState> &previousstates,
-                             const Kokkos::View<GridBox *> h_gridboxes,
-                             CvodeThermoSolver &cvode)
+int proceedto_next_step(const int t_mdl,
+                        const int onestep,
+                        const int couplstep,
+                        const size_t ngbxs,
+                        const std::vector<ThermoState> &previousstates,
+                        const Kokkos::View<GridBox *> h_gridboxes,
+                        CvodeThermoSolver &cvode)
 /* sends changes in thermodynamics due to SDM microphysics
 to thermodynamics solver (eg. raise in temperature of a
 gridbox due to latent heat release).
 Then increments timestep by couplstep */
 {
-  send_thermodynamics_to_cvode(ngbxs, previousstates, h_gridboxes, cvode);
+  if (t_mdl % couplstep == 0)
+  {
+    send_thermodynamics_to_cvode(ngbxs, previousstates, h_gridboxes, cvode);
+  }
 
-  return t_mdl += couplstep;
+  return t_mdl + onestep;
 }
 
 void send_thermodynamics_to_cvode(const size_t ngbxs,

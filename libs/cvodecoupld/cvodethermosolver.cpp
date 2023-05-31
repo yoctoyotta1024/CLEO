@@ -152,13 +152,17 @@ to use CVODE sundials ODE solver */
   return 0;
 };
 
-int CvodeThermoSolver::run_cvodestep(const double next_t)
-/* Advance ODE solution in time to next_t*/
+int CvodeThermoSolver::
+    run_cvodestep(const int t_mdl, const int couplstep,
+                  const double next_t)
+/* Advance ODE solution in time to (dimless) next_t if on coupl step */
 {
-
-  retval = CVode(cvode_mem, next_t, y, &t, CV_NORMAL);
-  if (check_retval(&retval, "CVode", 1))
-    return 1;
+  if (t_mdl % couplstep == 0)
+  {
+    retval = CVode(cvode_mem, next_t, y, &t, CV_NORMAL);
+    if (check_retval(&retval, "CVode", 1))
+      return 1;
+  }
 
   return 0;
 }

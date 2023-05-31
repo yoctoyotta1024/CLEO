@@ -64,8 +64,10 @@ public:
   /* function does all the setup steps in order
   to use CVODE sundials ODE solver */
 
-  int run_cvodestep(const double next_t);
-  /* Advance ODE solution in time to next_t */
+  int run_cvodestep(const int t_mdl, const int couplstep,
+                    const double next_t);
+  /* Advance ODE solution in time to (dimless)
+  next_t if on coupl step */
 
   int reinitialise(const double next_t,
                    const std::vector<double> &delta_y);
