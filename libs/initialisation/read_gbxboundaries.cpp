@@ -59,7 +59,7 @@ double GridBoxBoundaries::gridboxarea(const unsigned int idx) const
   corresponding to gridbox with gbxidx=idx. First finds position
   of first gbxbound (zmin) from position of idx in gbxidxs */
 {
-  const size_t pos = find_idx_in_gbxidxs(idx) * 6;
+  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6;
 
   const double deltax = gbxbounds[pos + 3] - gbxbounds[pos + 2]; // xmax - xmin
   const double deltay = gbxbounds[pos + 5] - gbxbounds[pos + 4]; // ymax - ymin
@@ -72,7 +72,7 @@ double GridBoxBoundaries::gridboxvol(const unsigned int idx) const
 gridbox with gbxidx=idx. First finds position of first gbxbound (zmin)
 for that gridbox from position of idx in gbxidxs */
 {
-  const size_t pos = find_idx_in_gbxidxs(idx) * 6;
+  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6;
 
   const double deltaz = gbxbounds[pos + 1] - gbxbounds[pos];     // zmax - zmin
   const double deltax = gbxbounds[pos + 3] - gbxbounds[pos + 2]; // xmax - xmin
@@ -81,11 +81,11 @@ for that gridbox from position of idx in gbxidxs */
   return deltaz * deltax * deltay;
 }
 
-size_t GridBoxBoundaries::find_idx_in_gbxidxs(const unsigned int idx) const
+unsigned int GridBoxBoundaries::find_idx_in_gbxidxs(const unsigned int idx) const
 /* returns position in gbxidxs vector
 where idx is found or raises error */
 {
-  size_t pos = 0;
+  unsigned int pos = 0;
   for (const auto gbxidx : gbxidxs)
   {
     if (gbxidx == idx)

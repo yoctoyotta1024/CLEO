@@ -25,7 +25,7 @@ that gridbox which are read from gridfile and used in
 construction of Maps4GridBoxes */
 {
 private:
-  size_t find_idx_in_gbxidxs(const unsigned int idx) const;
+  unsigned int find_idx_in_gbxidxs(const unsigned int idx) const;
 
 public:
   std::vector<size_t> ndims; // number of gridboxes in (z,x,y) dimensions
