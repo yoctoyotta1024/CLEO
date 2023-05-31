@@ -152,6 +152,11 @@ void Config::configvariable(const std::string name, const std::string value)
     COUPLTSTEP = stod(value);
     issuccess = true;
   }
+  else if (name == "OBSTSTEP")
+  {
+    OBSTSTEP = stod(value);
+    issuccess = true;
+  }
   else if (name == "T_END")
   {
     T_END = stod(value);

@@ -22,7 +22,6 @@ def get_superdroplet_attributes(configfile, constsfile, initSDsfile):
 
     return attrs
 
-
 def read_dimless_superdrops_binary(filename, isprint=True):
     ''' return dimenionsless gbx boundaries by reading binary file'''
 
@@ -77,7 +76,7 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
     return fig, axs, [l0, l1, l2, ls]
 
 def plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
-                        gridfile, binpath, savefig, gbxs2plt):
+                          gridfile, binpath, savefig, gbxs2plt):
     ''' plot initial superdroplet distribution from initSDsfile binary
     of every gridbox with index in gbx2plts '''
 

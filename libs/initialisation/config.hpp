@@ -76,7 +76,8 @@ public:
   double CONDTSTEP;            // time between SD condensation events [s]
   double COLLTSTEP;            // time between SD collision events [s]
   double MOTIONTSTEP;          // time between SDM motion [s]
-  double COUPLTSTEP;           // time between SDM observations and between thermodynamic couplings [s]
+  double COUPLTSTEP;           // time between thermodynamic couplings [s]
+  double OBSTSTEP;             // time between SDM observations [s]
   double T_END;                // time span of integration [s]
 
   /* SDs parameters */

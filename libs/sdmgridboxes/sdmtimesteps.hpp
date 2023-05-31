@@ -56,16 +56,18 @@ in running coupled model */
   const int collsubstep;
   const int motionstep;
   const int couplstep;
+  const int obsstep;
   const int t_end;
 
   SDMTimesteps(const double CONDTSTEP, const double COLLTSTEP,
             const double MOTIONTSTEP, const double COUPLTSTEP,
-            const double T_END);
+            const double OBSTSTEP, const double T_END);
   /* (dimensionless) double's that are timesteps in config struct
   are converted into integer values of model timesteps using
-  model_step and secd template functions created using std::chrono library.
-  Throw error if after convertion into model timestep, any
-  timestep = 0 */
+  model_step and secd template functions created using
+  std::chrono library. Throw error if after convertion into
+  model timestep, any timestep = 0 or if a sub-timestep is 
+  longer than a timestep */
 };
 
 #endif // TIMESTEPS_HPP
