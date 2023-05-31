@@ -61,15 +61,19 @@ generators used in SDM */
   return Kokkos::Random_XorShift64_Pool<>(std::random_device{}());
 }
 
-inline void start_step(const int t_mdl, const size_t ngbxs,
+inline void start_step(const int t_mdl, const int couplstep,
+                       const size_t ngbxs,
                        const Observer auto &observer,
                        const ThermodynamicsFromFile &thermodyn,
-                       Kokkos::View<GridBox*> h_gridboxes)
+                       Kokkos::View<GridBox *> h_gridboxes)
 /* communication of thermodynamic state
 to SDM and observation of SDM gridboxes */
 {
-  const double time = step2dimlesstime(t_mdl);
-  recieve_thermodynamics(ngbxs, time, thermodyn, h_gridboxes);
+  if (t_mdl % couplstep == 0)
+  {
+    const double time = step2dimlesstime(t_mdl);
+    recieve_thermodynamics(ngbxs, time, thermodyn, h_gridboxes);
+  }
 
   if (observer.on_step(t_mdl))
   {
@@ -77,13 +81,21 @@ to SDM and observation of SDM gridboxes */
   }
 }
 
-inline int proceedto_next_step(int t_mdl, const int couplstep)
-/* increments timestep of model by couplstep.
-This function is also placeholder for moment when 
-communication from SDM to thermodynamic solver
-about thermodynamic state (changes) is possible. */
+inline int proceedto_next_step(const int t_mdl,
+                               const int couplstep,
+                               const int obsstep)
+/* increments timestep of model to next step. This
+is either obsstep or couplstep. Function is also a
+placeholder for when communication from SDM to
+thermodynamics solver (about changes to thermostates)
+could take place if t_mdl was on couplstep. */
 {
-  return t_mdl + couplstep;
+  const auto nextt = [t_mdl](const int interval)
+  {
+    return ((t_mdl / interval) + 1) * interval;
+  };
+
+  return std::min(nextt(couplstep), nextt(obsstep));
 }
 
 template <class MSDs, SdmProcess P, Observer O>
@@ -151,7 +163,7 @@ length 'couplstep' and is decomposed into 4 parts:
   {
     /* start step (in general involves coupling) */
     gridboxes.on_host(); SDsInGBxs.on_host();
-    start_step(t_mdl, ngbxs, sdm.observer,
+    start_step(t_mdl, couplstep, ngbxs, sdm.observer,
                thermodyn, gridboxes.view_host());
 
     /* advance SDM by couplstep
@@ -159,12 +171,13 @@ length 'couplstep' and is decomposed into 4 parts:
     gridboxes.on_device(); SDsInGBxs.on_device();
     sdm.run_sdmstep(t_mdl, couplstep, genpool, gridboxes, SDsInGBxs);
 
-    /* advance thermodynamics solver by couplstep
+    /* advance thermodynamics solver
     (optionally concurrent to SDM) */
-    thermodyn.run_thermostep();
+    thermodyn.run_thermostep(t_mdl, couplstep);
 
     /* proceed to next step (in general involves coupling) */
-    t_mdl = proceedto_next_step(t_mdl, couplstep);
+    t_mdl = proceedto_next_step(t_mdl, couplstep,
+                                sdm.observer.get_interval());
   }
 }
 

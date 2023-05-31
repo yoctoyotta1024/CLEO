@@ -34,7 +34,7 @@ private:
   time of the sooner event */
   {
     const int next_one = ((t_sdm / onestep) + 1) * onestep; // t of next output
-    const int next_motion = sdmmotion.next_step(t_sdm);           // t of next sdmmotion
+    const int next_motion = sdmmotion.next_step(t_sdm);     // t of next sdmmotion
 
     return std::min(next_one, next_motion);
   }

@@ -81,14 +81,17 @@ public:
                          const std::array<size_t, 3> &ndims,
                          const size_t nsteps);
 
-  void run_thermostep()
+  void run_thermostep(const int t_mdl, const int couplstep)
   /* increment position of thermodata for 0th gridbox to positon
   at next timestep (ie. ngridboxes further along vector) */
   {
-    atpos += ndims[0]*ndims[1]*ndims[2];
-    atpos_zface += (ndims[0]+1)*ndims[1]*ndims[2];
-    atpos_xface += ndims[0]*(ndims[1]+1)*ndims[2];
-    atpos_yface += ndims[0]*ndims[1]*(ndims[2]+1);
+    if (t_mdl % couplstep == 0)
+    {
+      atpos += ndims[0]*ndims[1]*ndims[2];
+      atpos_zface += (ndims[0]+1)*ndims[1]*ndims[2];
+      atpos_xface += ndims[0]*(ndims[1]+1)*ndims[2];
+      atpos_yface += ndims[0]*ndims[1]*(ndims[2]+1);
+    }
   }
 
   double get_press(const unsigned int gbxindex) const
