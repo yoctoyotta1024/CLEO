@@ -49,7 +49,7 @@ public:
 
   int get_interval() const { return on_step.get_interval(); }
 
-  void observe_state(const size_t ngbxs,
+  void observer_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
   {
     for (size_t ii(0); ii < ngbxs; ++ii)
@@ -78,7 +78,7 @@ public:
 
   int get_interval() const { return on_step.get_interval(); }
 
-  void observe_state(const size_t ngbxs,
+  void observer_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
   {
     size_t totnsupers(0);
@@ -110,7 +110,7 @@ public:
 
   int get_interval() const { return on_step.get_interval(); }
 
-  void observe_state(const size_t ngbxs,
+  void observer_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
   {
     size_t totnsupers(0);
@@ -145,7 +145,7 @@ public:
 
   int get_interval() const { return on_step.get_interval(); }
 
-  void observe_state(const size_t ngbxs,
+  void observer_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
 
   {
@@ -174,7 +174,7 @@ public:
 
   int get_interval() const { return on_step.get_interval(); }
 
-  void observe_state(const size_t ngbxs,
+  void observer_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
   {
     if (zarr.get_ndata() == 0)
@@ -206,7 +206,7 @@ public:
 
   int get_interval() const { return on_step.get_interval(); }
 
-  void observe_state(const size_t ngbxs,
+  void observer_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
   {
     for (size_t ii(0); ii < ngbxs; ++ii)
@@ -244,7 +244,7 @@ public:
 
   int get_interval() const { return on_step.get_interval(); }
 
-  void observe_state(const size_t ngbxs,
+  void observer_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
   {
     for (size_t ii(0); ii < ngbxs; ++ii)
@@ -282,7 +282,7 @@ public:
 
   int get_interval() const { return on_step.get_interval(); }
 
-  void observe_state(const size_t ngbxs,
+  void observer_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
   {
     for (size_t ii(0); ii < ngbxs; ++ii)
@@ -315,7 +315,7 @@ public:
 //     TODO: need_to_set_units_and_sf_in_storage_zattrs_too
 //   }
 
-//   void observe_state(const size_t ngbxs,
+//   void observer_gridboxes(const size_t ngbxs,
 //                      const Kokkos::View<GridBox *> h_gridboxes) const
 //   {
 //     for (size_t ii(0); ii < ngbxs; ++ii)

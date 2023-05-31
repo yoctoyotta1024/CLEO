@@ -25,7 +25,7 @@ by "lineend" string with precision "prec" */
             << state.qcond << "]\n";
 }
 
-void PrintObserver::observe_state(const size_t ngbxs,
+void PrintObserver::observer_gridboxes(const size_t ngbxs,
                                   const Kokkos::View<GridBox *> h_gridboxes) const
 /* print t, kinematic data (p, temp, qv, qc) and total
 number of sueprdrops to terminal */

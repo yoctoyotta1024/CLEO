@@ -120,7 +120,7 @@ of current thermodynamic states (for later use in SDM) */
   std::vector<ThermoState>
       currentstates(recieve_thermodynamics_from_cvode(ngbxs, cvode, h_gridboxes));
 
-  observer.observe_state(ngbxs, h_gridboxes);
+  observer.observe_gridboxes(ngbxs, h_gridboxes);
 
   return currentstates;
 }
