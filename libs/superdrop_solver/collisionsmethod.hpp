@@ -183,12 +183,12 @@ private:
   radius and solute mass of each superdroplet in pair
   according to Shima et al. 2009 Section 5.1.3. part (5) */
   {
-    if (drop1.eps == gamma * (drop2.eps))
+    if (drop1.eps - gamma * drop2.eps == 0)
     {
       twin_superdroplet_coalescence(drop1, drop2, gamma);
     }
 
-    else if ((drop1.eps) > gamma * (drop2.eps))
+    else if (drop1.eps - gamma * drop2.eps > 0)
     {
       different_superdroplet_coalescence(drop1, drop2, gamma);
     }
