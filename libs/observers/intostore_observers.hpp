@@ -33,7 +33,7 @@ void check_zarrname(const std::string zarrname,
   }
 }
 
-class ThermoStateObserver : UseConstInterval 
+class ThermoStateObserver
 /* observe thermostate of each gridbox by
 writing it to arrays in a zarr store as
 determined by the ThermoStateStorage instance */
@@ -42,8 +42,12 @@ private:
   ThermoStateStorage &zarr;
 
 public:
+  ConstIntervalStep on_step;
+
   ThermoStateObserver(const int obsstep, ThermoStateStorage &zarr)
-      : UseConstInterval(obsstep), zarr(zarr) {}
+      : zarr(zarr), on_step(obsstep) {}
+
+  int get_interval() const { return on_step.get_interval(); }
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -57,7 +61,7 @@ public:
 };
 
 template <typename ContiguousRaggedSDStorage>
-class SDsAttributeObserver : UseConstInterval 
+class SDsAttributeObserver
 /* observe superdroplets by writing their (attributes')
 data to contigious ragged represented arrays as
 determined by the ContiguousRaggedSDStorage instance */
@@ -66,9 +70,13 @@ private:
   ContiguousRaggedSDStorage &zarr;
 
 public:
+  ConstIntervalStep on_step;
+
   SDsAttributeObserver(const int obsstep,
                        ContiguousRaggedSDStorage &zarr)
-      : UseConstInterval(obsstep), zarr(zarr) {}
+      : zarr(zarr), on_step(obsstep) {}
+
+  int get_interval() const { return on_step.get_interval(); }
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -86,7 +94,7 @@ public:
   }
 };
 
-class SDsGbxindexObserver : UseConstInterval
+class SDsGbxindexObserver
 /* observe gridbox index of each superdroplet and write to
 zarr storage in a contigious ragged represented array as
 determined by the ContiguousRaggedSDStorage instance */
@@ -95,8 +103,12 @@ private:
   ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr;
 
 public:
+  ConstIntervalStep on_step;
+
   SDsGbxindexObserver(const int obsstep, auto &zarr)
-      : UseConstInterval(obsstep), zarr(zarr) {}
+      : zarr(zarr), on_step(obsstep) {}
+
+  int get_interval() const { return on_step.get_interval(); }
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -114,7 +126,7 @@ public:
   }
 };
 
-class TimeObserver : UseConstInterval
+class TimeObserver
 /* observe time of 0th gridbox and write it
 to an array 'zarr' store as determined by
 the CoordinateStorage instance */
@@ -123,11 +135,15 @@ private:
   CoordinateStorage<double> &zarr;
 
 public:
+  ConstIntervalStep on_step;
+
   TimeObserver(const int obsstep, CoordinateStorage<double> &zarr)
-      : UseConstInterval(obsstep), zarr(zarr)
+      : zarr(zarr), on_step(obsstep)
   {
     check_zarrname(zarr.get_name(), "time");
   }
+
+  int get_interval() const { return on_step.get_interval(); }
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -138,7 +154,7 @@ public:
   }
 };
 
-class GridBoxIndexObserver : UseConstInterval
+class GridBoxIndexObserver
 /* observe the gbxindex of each gridbox and
 write it to an array 'zarr' store as determined
 by the CoordinateStorage instance */
@@ -147,12 +163,16 @@ private:
   CoordinateStorage<unsigned int> &zarr;
 
 public:
+  ConstIntervalStep on_step;
+
   GridBoxIndexObserver(const int obsstep,
                        CoordinateStorage<unsigned int> &zarr)
-      : UseConstInterval(obsstep), zarr(zarr)
+      : zarr(zarr), on_step(obsstep)
   {
     check_zarrname(zarr.get_name(), "gbxindex");
   }
+
+  int get_interval() const { return on_step.get_interval(); }
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -167,20 +187,24 @@ public:
   }
 };
 
-class NsupersPerGridBoxObserver : UseConstInterval
-/* observe number of superdroplets in each gridbox 
+class NsupersPerGridBoxObserver
+/* observe number of superdroplets in each gridbox
 and write to 'zarr', a 2D array in a zarr store */
 {
 private:
   TwoDStorage<size_t> &zarr;
 
 public:
+  ConstIntervalStep on_step;
+
   NsupersPerGridBoxObserver(const int obsstep,
                             TwoDStorage<size_t> &zarr)
-      : UseConstInterval(obsstep), zarr(zarr)
+      : zarr(zarr), on_step(obsstep)
   {
     check_zarrname(zarr.get_name(), "nsupers");
   }
+
+  int get_interval() const { return on_step.get_interval(); }
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -194,9 +218,9 @@ public:
   }
 };
 
-class NthMassMomentObserver : UseConstInterval
+class NthMassMomentObserver
 /* observe nth mass moment of (real) droplets
-distribution in each gridbox through by 
+distribution in each gridbox through by
 writing data from 'massmoment' function
 to an array in a zarr storage 'zarr' */
 {
@@ -205,16 +229,20 @@ private:
   TwoDStorage<double> &zarr;
 
 public:
+  ConstIntervalStep on_step;
+
   NthMassMomentObserver(const int obsstep,
                         TwoDStorage<double> &zarr,
                         const int nth_moment)
-      : UseConstInterval(obsstep),
-        nth_moment(nth_moment),
-        zarr(zarr)
+      : nth_moment(nth_moment),
+        zarr(zarr),
+        on_step(obsstep)
   {
     const std::string name("mom" + std::to_string(nth_moment));
     check_zarrname(zarr.get_name(), name);
   }
+
+  int get_interval() const { return on_step.get_interval(); }
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -228,9 +256,9 @@ public:
   }
 };
 
-class NthRainMassMomentObserver : UseConstInterval
+class NthRainMassMomentObserver
 /* observe nth mass moment of raindroplets
-distribution in each gridbox through by 
+distribution in each gridbox through by
 writing data from 'rainmassmoment' function
 to an array in a zarr storage 'zarr' */
 {
@@ -239,20 +267,24 @@ private:
   TwoDStorage<double> &zarr;
 
 public:
+  ConstIntervalStep on_step;
+
   NthRainMassMomentObserver(const int obsstep,
                             TwoDStorage<double> &zarr,
                             const int nth_moment)
-      : UseConstInterval(obsstep),
-        nth_moment(nth_moment),
-        zarr(zarr)
+      : nth_moment(nth_moment),
+        zarr(zarr),
+        on_step(obsstep)
   {
     const std::string name("rainmom" + std::to_string(nth_moment));
     check_zarrname(zarr.get_name(), name);
   }
 
+  int get_interval() const { return on_step.get_interval(); }
+
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
-  { 
+  {
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       zarr.value_to_storage(
@@ -268,15 +300,15 @@ public:
 // {
 // private:
 //   TwoDStorage<double> &zarr;
-  
+
 //   const double zlim = 5.0 / dlc::COORD0; // dimless maximum z coord of precip
 //   std::vector<size_t> surface_gbxindexes; //indexes of gbxs to include as surface
- 
+
 // public:
 //   SurfacePrecipObserver(TwoDStorage<double> &zarr, gbxmaps)
 //       : zarr(zarr)
 //       {
-//         surface_gbxindexes_pushback when gbxindex upper limit within zlim 
+//         surface_gbxindexes_pushback when gbxindex upper limit within zlim
 //       }
 //   {
 //     check_zarrname(zarr.get_name(), "surfprecip");
@@ -290,7 +322,7 @@ public:
 //     {
 //       if (gbx.index not in list_of_gbxindexes_to_include zlim)
 //       {
-//         zarr.value_to_storage(0.0); 
+//         zarr.value_to_storage(0.0);
 //       }
 //       else
 //       {

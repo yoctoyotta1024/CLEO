@@ -150,16 +150,17 @@ of a superdroplet into zarr storage */
   return attrs;
 }
 
-Observer auto create_massmoments_observer(MassMomStorages &mms,
+Observer auto create_massmoments_observer(const int obsstep,
+                                          MassMomStorages &mms,
                                           RainMassMomStorages &rmms)
 {
-  const Observer auto mom0 = NthMassMomentObserver(mms.mom0zarr, 0);
-  const Observer auto mom1 = NthMassMomentObserver(mms.mom1zarr, 1);
-  const Observer auto mom2 = NthMassMomentObserver(mms.mom2zarr, 2);
+  const Observer auto mom0 = NthMassMomentObserver(obsstep, mms.mom0zarr, 0);
+  const Observer auto mom1 = NthMassMomentObserver(obsstep, mms.mom1zarr, 1);
+  const Observer auto mom2 = NthMassMomentObserver(obsstep, mms.mom2zarr, 2);
 
-  const Observer auto rain0 = NthRainMassMomentObserver(rmms.mom0zarr, 0);
-  const Observer auto rain1 = NthRainMassMomentObserver(rmms.mom1zarr, 1);
-  // const Observer auto rain2 = NthRainMassMomentObserver(rmms.mom2zarr, 2);
+  const Observer auto rain0 = NthRainMassMomentObserver(obsstep, rmms.mom0zarr, 0);
+  const Observer auto rain1 = NthRainMassMomentObserver(obsstep, rmms.mom1zarr, 1);
+  // const Observer auto rain2 = NthRainMassMomentObserver(obsstep, rmms.mom2zarr, 2);
   
   const auto momsobs = rain1 >> rain0 >> mom2 >> mom1 >> mom0; 
 

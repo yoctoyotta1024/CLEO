@@ -35,41 +35,52 @@ called 'interval' and a function called observe_state() which
 take a view of gridboxes as an argument and returns a void type */
 {
   {
-    obs.interval
-  } -> std::same_as<int&>;
-  {
     obs.observe_state(n, h_gbxs)
   } -> std::same_as<void>;
+  {
+    obs.get_interval()
+  } -> std::convertible_to<int>;
   {
     obs.on_step(t)
   } -> std::convertible_to<bool>;
 };
 
-struct UseConstInterval
+class ConstIntervalStep
 {
-  const int interval;            // interval (integer timestep) between observations 
+private:
+  const int interval; // interval (integer timestep) between observations
 
-  ConstInterval(const int interval) : interval(interval) {}
+public:
+  ConstIntervalStep(const int interval) : interval(interval) {}
 
-  bool on_step(const int t) const
+  bool operator()(const int t) const
+  /* on_step boolean function */
   {
     return t % interval == 0;
   }
-}
+
+  int get_interval() const { return interval; }
+};
 
 template <Observer O1, Observer O2>
-struct CombinedObserver : UseConstInterval
-/* combination of two observers is observer 1 followed by observer 2 */
+class CombinedObserver
+/* combination of two observers is observer
+'obs1' followed by observer 'obs2' as long as
+'obs1' and 'obs2' have same onstep interval */
 {
-  O1 observer1;
-  O2 observer2;
+private:
+  O1 o1;
+  O2 o2;
+
+public:
+  ConstIntervalStep on_step;
 
   CombinedObserver(const O1 observer1, const O2 observer2)
-      : UseConstInterval(observer1.interval),
-        observer1(observer1), observer2(observer2)
+      : o1(observer1), o2(observer2),
+        on_step(observer1.get_interval())
   {
-    if ((interval != observer1.interval) ||
-        (interval != observer2.interval))
+    const auto intvl = get_interval();
+    if ((intvl != o1.get_interval()) || (intvl != o2.get_interval()))
     {
       throw std::invalid_argument("observer intervals must be equal");
     }
@@ -78,9 +89,11 @@ struct CombinedObserver : UseConstInterval
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gbxs) const
   {
-    observer1.observe_state(ngbxs, h_gbxs);
-    observer2.observe_state(ngbxs, h_gbxs);
+    o1.observe_state(ngbxs, h_gbxs);
+    o2.observe_state(ngbxs, h_gbxs);
   }
+
+  int get_interval() const { return on_step.get_interval(); }
 };
 
 auto operator>>(const Observer auto o1, const Observer auto o2)
@@ -93,10 +106,10 @@ struct NullObserver
 /* NullObserver does nothing at all
 (is defined for a Monoid Structure) */
 {
-  const int interval = std::numeric_limits<int>::max();
-
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const {}
+
+  int get_interval() { return std::numeric_limits<int>::max(); }
 
   bool on_step(const int t) const
   {
@@ -104,18 +117,21 @@ struct NullObserver
   }
 };
 
-struct PrintObserver : UseConstInterval
+struct PrintObserver
 /* this observer prints some details about the
 thermodynamic state and superdroplets to terminal */
 {
+  ConstIntervalStep on_step;
   const int printprec = 4; // precision to print data with
 
-  PrintObserver(const int obsstep) : UseConstInterval(obsstep) {}
+  PrintObserver(const int obsstep) : on_step(obsstep) {}
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const;
   /* print time, thermodynamic data (p, temp, qv, qc)
   and total number of superdrops to terminal */
+
+  int get_interval() const { return on_step.get_interval(); }
 };
 
 #endif // OBSERVERS_HPP
