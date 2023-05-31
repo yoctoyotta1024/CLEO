@@ -89,7 +89,7 @@ struct IdIntoStore : AttributeIntoStoreViaBuffer<size_t>
   }
 };
 
-struct EpsIntoStore : AttributeIntoStoreViaBuffer<size_t>
+struct EpsIntoStore : AttributeIntoStoreViaBuffer<unsigned long long>
 {
   EpsIntoStore()
       : AttributeIntoStoreViaBuffer("eps", "<u8"){};
@@ -98,7 +98,7 @@ struct EpsIntoStore : AttributeIntoStoreViaBuffer<size_t>
                            unsigned int j)
   {
     return storagehelper::
-        val2buffer<size_t>(superdrop.eps, buffer, j);
+        val2buffer<unsigned long long>(superdrop.eps, buffer, j);
   }
 };
 

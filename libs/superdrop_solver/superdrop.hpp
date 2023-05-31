@@ -64,7 +64,7 @@ public:
   using IDType = IntID; // type of ID (from superdrop_ids.hpp) to identify superdrop via integer
   //using IDType = EmptyID; // empty type of ID (for non-existent superdrop identity)
 
-  size_t eps;    // multiplicity of superdroplet
+  unsigned long long eps;    // multiplicity of superdroplet
   double radius; // radius of superdroplet
   double m_sol;  // mass of solute dissovled
   double coord3; // a 3rd spatial coordinate of superdroplet (z)
@@ -73,7 +73,7 @@ public:
   [[no_unique_address]] IDType id; // superdroplet (unique) identity
 
   KOKKOS_FUNCTION Superdrop(const std::shared_ptr<const SoluteProperties> isolute,
-                            const size_t ieps, const double iradius,
+                            const unsigned long long ieps, const double iradius,
                             const double im_sol, const double icoord3,
                             const double icoord1, const double icoord2,
                             const IDType iid)

@@ -86,7 +86,7 @@ gfb.gbxidxs vector, where pos = p*6 */
                                                   gfb.gbxidxs.end()),
                                                   {gfb.ndims.at(0), 1, 1}); 
 
-  size_t pos = 0;
+  unsigned int pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
     idx2bounds_x[idx] = numeric_limit_bounds();
@@ -119,7 +119,7 @@ vector, where pos = p*6 */
                                                         gfb.gbxidxs.end()),
                                       {gfb.ndims.at(0), gfb.ndims.at(1), 1});
 
-  size_t pos = 0;
+  unsigned int pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
     idx2bounds_y[idx] = numeric_limit_bounds(); 
@@ -156,7 +156,7 @@ in the gfb.gbxidxs vector, where pos = p*6 */
                                       {gfb.ndims.at(0), gfb.ndims.at(1),
                                        gfb.ndims.at(2)});
 
-  size_t pos = 0;
+  unsigned int pos = 0;
   for(auto idx : gfb.gbxidxs)
   {
     const double zlow = gfb.gbxbounds[pos];

@@ -66,7 +66,7 @@ create_superdropwithgbxindexes(const int nSDsvec, const int SDnspace,
   {
     const unsigned int sd_gbxindex = initSDs.sd_gbxindex.at(i);
     const auto sd_identity = sdIdGen.next();
-    const size_t eps = (size_t)(initSDs.eps_init.at(i) + 0.5);
+    const unsigned long long eps = (unsigned long long)(initSDs.eps_init.at(i) + 0.5);
     const double radius = initSDs.radius_init.at(i);
     const double m_sol = initSDs.m_sol_init.at(i);
     const std::vector<double> zxycoords = initSDcoords(SDnspace, initSDs, i);

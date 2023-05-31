@@ -21,7 +21,7 @@ from a binary file */
 struct InitSDsData
 {
   std::vector<unsigned int> sd_gbxindex;
-  std::vector<size_t> eps_init;
+  std::vector<unsigned long long> eps_init;
   std::vector<double> radius_init;
   std::vector<double> m_sol_init;
   std::vector<double> coord3_init; 

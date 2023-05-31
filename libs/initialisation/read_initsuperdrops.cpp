@@ -14,8 +14,8 @@ InitSDsData get_initsuperdropsdata(std::string_view initSDsfile)
   std::vector<unsigned int>
       sd_gbxindex(vector_from_binary<unsigned int>(file, meta.at(0)));
   
-  std::vector<size_t>
-      eps(vector_from_binary<size_t>(file, meta.at(1)));
+  std::vector<unsigned long long>
+      eps(vector_from_binary<unsigned long long>(file, meta.at(1)));
 
   std::vector<double>
       radius(vector_from_binary<double>(file, meta.at(2)));
