@@ -38,24 +38,35 @@ take a view of gridboxes as an argument and returns a void type */
     obs.interval
   } -> std::same_as<int&>;
   {
-    obs.on_step(t)
-  } -> std::convertible_to<bool>;
-  {
     obs.observe_state(n, h_gbxs)
   } -> std::same_as<void>;
+  {
+    obs.on_step(t)
+  } -> std::convertible_to<bool>;
 };
 
+struct UseConstInterval
+{
+  const int interval;            // interval (integer timestep) between observations 
+
+  ConstInterval(const int interval) : interval(interval) {}
+
+  bool on_step(const int t) const
+  {
+    return t % interval == 0;
+  }
+}
+
 template <Observer O1, Observer O2>
-struct CombinedObserver
+struct CombinedObserver : UseConstInterval
 /* combination of two observers is observer 1 followed by observer 2 */
 {
   O1 observer1;
   O2 observer2;
-  int interval;
 
   CombinedObserver(const O1 observer1, const O2 observer2)
-      : observer1(observer1), observer2(observer2),
-        interval(observer1.interval)
+      : UseConstInterval(observer1.interval),
+        observer1(observer1), observer2(observer2)
   {
     if ((interval != observer1.interval) ||
         (interval != observer2.interval))
@@ -70,11 +81,6 @@ struct CombinedObserver
     observer1.observe_state(ngbxs, h_gbxs);
     observer2.observe_state(ngbxs, h_gbxs);
   }
-
-  bool on_step(const int t) const
-  {
-    return t % interval == 0;
-  }
 };
 
 auto operator>>(const Observer auto o1, const Observer auto o2)
@@ -87,7 +93,7 @@ struct NullObserver
 /* NullObserver does nothing at all
 (is defined for a Monoid Structure) */
 {
-  int interval = std::numeric_limits<int>::max();
+  const int interval = std::numeric_limits<int>::max();
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const {}
@@ -98,22 +104,18 @@ struct NullObserver
   }
 };
 
-struct PrintObserver
+struct PrintObserver : UseConstInterval
 /* this observer prints some details about the
 thermodynamic state and superdroplets to terminal */
 {
-  int interval;            // interval (integer timestep) between observations 
   const int printprec = 4; // precision to print data with
+
+  PrintObserver(const int obsstep) : UseConstInterval(obsstep) {}
 
   void observe_state(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const;
   /* print time, thermodynamic data (p, temp, qv, qc)
   and total number of superdrops to terminal */
-
-  bool on_step(const int t) const
-  {
-    return t % interval == 0;
-  }
 };
 
 #endif // OBSERVERS_HPP
