@@ -64,37 +64,50 @@ public:
   }
 };
 
-struct DetectionLogbooks
-{
-  std::shared_ptr<LogbookWithGBxIndexes<double>> accumprecip;
-
-  DetectionLogbooks()
-      : accumprecip(std::make_shared<LogbookWithGBxIndexes<double>>()) {}
-};
-
-class PrecipDetector
+template <typename T>
+struct ManageEntryInLogbook
 {
 private:
-  std::shared_ptr<LogbookWithGBxIndexes<double>> accumprecip;    
+  std::shared_ptr<LogbookWithGBxIndexes<T>> logbook;
   size_t recordidx = std::numeric_limits<size_t>::max();
 
 public:
   void create_entry_in_logbook(
-      const std::shared_ptr<LogbookWithGBxIndexes<double>> iaccumprecip,
+      const std::shared_ptr<LogbookWithGBxIndexes<T>> ilogbook,
       const unsigned int gbxindex)
   {
-    accumprecip = iaccumprecip;
-    recordidx = accumprecip -> new_entry(gbxindex);
+    logbook = ilogbook;
+    recordidx = logbook->new_entry(gbxindex);
   }
+
+  auto get_logbook() { return logbook; }
+
+  void operator()(const T val)
+  {
+    logbook -> update_entry(recordidx, val);
+  }
+};
+
+struct AccumPrecipDetector
+{
+  ManageEntryInLogbook<double> manage_entry;
 
   void operator()(const double drop)
   {
-    if (accumprecip)
+    if (manage_entry.get_logbook())
     {
-      double precip_measured(drop);
-      accumprecip -> update_entry(recordidx, precip_measured);
+      double accumulated_precip(drop);
+      manage_entry(accumulated_precip);
     }
   }
+};
+
+struct DetectionLogbooks
+{
+  std::shared_ptr<LogbookWithGBxIndexes<double>> accprecip;
+
+  DetectionLogbooks()
+      : accprecip(std::make_shared<LogbookWithGBxIndexes<double>>()) {}
 };
 
 class Detectors
@@ -103,14 +116,15 @@ private:
   const DetectionLogbooks &logbooks;
 
 public:
-  PrecipDetector precipdtr;
+  AccumPrecipDetector accprecip_dtr;
   
   Detectors(const DetectionLogbooks &logbooks)
       : logbooks(logbooks) {}
 
   void install_precip_detector(const unsigned int gbxindex)
   {
-    precipdtr.create_entry_in_logbook(logbooks.accumprecip, gbxindex);
+    accprecip_dtr.manage_entry.create_entry_in_logbook(logbooks.accprecip,
+                                                       gbxindex);
 
     std::cout << "New entry in accumprecip logbook at for gbx" << gbxindex
               << '\n';
@@ -146,8 +160,8 @@ struct GridBox
 
 void move_superdrops(GridBox &gbx)
 {
-  const double drop(5.4);
-  gbx.detectors -> precipdtr(drop);
+  const double drop(2.4);
+  gbx.detectors -> accprecip_dtr(drop);
 }
 
 int main()
@@ -164,12 +178,12 @@ int main()
     move_superdrops(gbx);
   }
   
-  for (size_t idx=0; idx < logbooks.accumprecip -> get_size(); ++idx)
+  for (size_t idx=0; idx < logbooks.accprecip -> get_size(); ++idx)
   {
     std::cout << "At idx " << idx
-              << " gbx=" << logbooks.accumprecip -> get_gbxindex(idx)
+              << " gbx=" << logbooks.accprecip -> get_gbxindex(idx)
               << ", Record states "
-              << logbooks.accumprecip -> get_from_record(idx)
+              << logbooks.accprecip -> get_from_record(idx)
               << "\n";
   }
 
