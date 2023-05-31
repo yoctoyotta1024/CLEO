@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
   SomeZarrStores zarrstores(fsstore, config.maxchunk,
                             gbxmaps.gbxidxs.size(),
                             sdattrs_to_observe());
-  const auto observer = create_observer(zarrstores);
+  const auto observer = create_observer(zarrstores, mdlsteps.obsstep);
 
   const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 

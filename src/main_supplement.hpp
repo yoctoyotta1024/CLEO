@@ -167,24 +167,25 @@ Observer auto create_massmoments_observer(MassMomStorages &mms,
 }
 
 template <SuperdropIntoStoreViaBuffer S>
-Observer auto create_observer(SomeZarrStores<S> &stores)
+Observer auto create_observer(SomeZarrStores<S> &stores, const int obsstep)
 /* return an Observer type from an amalgamation of other observer types.
 For example return an observer that observes both the thermostate and the
 superdroplets from combination of those two seperate observers */
 {
-  const Observer auto obs1 = TimeObserver(stores.timezarr);
+  const Observer auto obs1 = TimeObserver(stores.timezarr, obsstep);
 
-  const Observer auto obs2a = SDsAttributeObserver(stores.sdzarr);
-  const Observer auto obs2b = SDsGbxindexObserver(stores.sdgbxzarr);
+  const Observer auto obs2a = SDsAttributeObserver(stores.sdzarr, obsstep);
+  const Observer auto obs2b = SDsGbxindexObserver(stores.sdgbxzarr, obsstep);
 
-  // const Observer auto obs3 = ThermoStateObserver(stores.thermozarr);
+  // const Observer auto obs3 = ThermoStateObserver(stores.thermozarr, obsstep);
   
-  const Observer auto obs4 = GridBoxIndexObserver(stores.gbxzarr);
+  const Observer auto obs4 = GridBoxIndexObserver(stores.gbxzarr, obsstep);
   
-  const Observer auto obs5 = NsupersPerGridBoxObserver(stores.nsuperszarr);
+  const Observer auto obs5 = NsupersPerGridBoxObserver(stores.nsuperszarr, obsstep);
 
   const Observer auto obs6 = create_massmoments_observer(stores.massmoms,
-                                                         stores.rainmassmoms);
+                                                         stores.rainmassmoms,
+                                                         obsstep);
 
   // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{};
   const auto observer = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;
