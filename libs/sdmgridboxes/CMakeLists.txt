@@ -40,6 +40,7 @@ set(SOURCES
 "superdropwithgbxindex.cpp"
 "cartesianneighbours.cpp"
 "sdmotion.cpp"
+"detectors.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

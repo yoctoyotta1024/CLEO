@@ -19,6 +19,7 @@ struct */
 #include "../claras_SDconstants.hpp"
 #include "./maps4gridboxes.hpp"
 #include "./superdropwithgbxindex.hpp"
+#include "./detectors.hpp"
 #include "initialisation/config.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/thermostate.hpp"
@@ -35,6 +36,7 @@ coupled thermodynamics */
   unsigned int gbxindex; // index / unique identifier of gridbox
   std::span<SuperdropWithGbxindex> span4SDsinGBx;
   ThermoState state;
+  Detectors detectors;
 
   KOKKOS_INLINE_FUNCTION GridBox() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~GridBox() = default; // Kokkos requirement for a (dual)View

@@ -19,10 +19,10 @@ has exceeded the z lower domain boundary */
   if (at_domainboundary(index, 1, gbxmaps.ndims.at(0))) // SD was at lower z edge of domain (now moving beyond it)
   {
     const double lim1 = gbxmaps.get_bounds_z(nghbour).second; // upper lim of backward nghbour
-    const double lim2 = gbxmaps.get_bounds_z(index).first; // lower lim of gbx
+    const double lim2 = gbxmaps.get_bounds_z(index).first;    // lower lim of gbx
     superdrop.coord3 = coord3_beyondz(superdrop.coord3, lim1, lim2);
   }
-  
+
   return nghbour; // gbxindex of zdown_neighbour
 };
 
