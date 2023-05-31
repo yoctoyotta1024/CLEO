@@ -30,16 +30,16 @@ private:
   int onestep_or_motion(const int t_sdm, const int onestep,
                       const MoveSuperdropsInDomain<M> &sdmmotion) const
   /* given current timestep, t_sdm, work out which event
-  (motion or one complete step) is next to occur and return the
-  time of the sooner event */
+  (motion or one complete step) is next to occur and return
+  the time of the sooner event */
   {
     const auto next_step = [t_sdm](const int interval)
     {
       return ((t_sdm / interval) + 1) * interval;
     };
 
-    const int next_one = next_step(onestep);                // t of next output
-    const int next_motion = sdmmotion.next_step(t_sdm);     // t of next sdmmotion
+    const int next_one(next_step(onestep));                // t of next output
+    const int next_motion(sdmmotion.next_step(t_sdm));     // t of next sdmmotion
 
     return std::min(next_one, next_motion);
   }

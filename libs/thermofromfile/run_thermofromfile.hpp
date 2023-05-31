@@ -178,7 +178,7 @@ length 'couplstep' and is decomposed into 4 parts:
   {
     /* start step (in general involves coupling) */
     gridboxes.on_host(); SDsInGBxs.on_host();
-    onestep = start_step(t_mdl, couplstep, ngbxs, sdm.observer,
+    const int onestep = start_step(t_mdl, couplstep, ngbxs, sdm.observer,
                thermodyn, gridboxes.view_host());
 
     /* advance SDM from t_mdl to t_mdl + onestep
