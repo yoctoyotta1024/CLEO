@@ -38,11 +38,15 @@ public:
     return record.size() - 1;
   }
 
-  void operator()(const size_t idx, const T val)
-  /* returns value in record at
-  position 'idx' in record */
+  void update_entry(const size_t idx, const T val)
+  /* copies value 'val' to record at position 'idx' */
   {
     record.at(idx) = val;
+  }
+
+  size_t get_size()
+  {
+    return record.size(); 
   }
 
   unsigned int get_gbxindex(const size_t idx)
@@ -62,80 +66,97 @@ public:
 
 struct DetectionLogbooks
 {
-  LogbookWithGBxIndexes<double> accumprecip;    
+  std::shared_ptr<LogbookWithGBxIndexes<double>> accumprecip;
+
+  DetectionLogbooks()
+      : accumprecip(std::make_shared<LogbookWithGBxIndexes<double>>()) {}
+};
+
+class PrecipDetector
+{
+private:
+  std::shared_ptr<LogbookWithGBxIndexes<double>> accumprecip;    
+  size_t recordidx = std::numeric_limits<size_t>::max();
+
+public:
+  void create_entry_in_logbook(
+      const std::shared_ptr<LogbookWithGBxIndexes<double>> iaccumprecip,
+      const unsigned int gbxindex)
+  {
+    accumprecip = iaccumprecip;
+    recordidx = accumprecip -> new_entry(gbxindex);
+  }
+
+  void operator()(const double drop)
+  {
+    if (accumprecip)
+    {
+      double precip_measured(drop);
+      accumprecip -> update_entry(recordidx, precip_measured);
+    }
+  }
 };
 
 class Detectors
 {
 private:
-  std::shared_ptr<DetectionLogbooks> logbooks;
-
-  size_t accumprecip_index = std::numeric_limits<size_t>::max();
+  const DetectionLogbooks &logbooks;
 
 public:
-  Detectors(const std::shared_ptr<DetectionLogbooks> logbooks)
+  PrecipDetector precipdtr;
+  
+  Detectors(const DetectionLogbooks &logbooks)
       : logbooks(logbooks) {}
 
-  void new_precip_detector(const unsigned int gbxindex)
+  void install_precip_detector(const unsigned int gbxindex)
   {
-    accumprecip_index = logbooks->accumprecip.new_entry(gbxindex);
-    std::cout << "New entry in accumprecip logbook at "
-              << accumprecip_index << " for gbx"
-              << logbooks->accumprecip.get_gbxindex(accumprecip_index)
+    precipdtr.create_entry_in_logbook(logbooks.accumprecip, gbxindex);
+
+    std::cout << "New entry in accumprecip logbook at for gbx" << gbxindex
               << '\n';
   }
-
-  void precip(const double testval)
-  {
-    if (accumprecip_index != std::numeric_limits<size_t>::max())
-    {
-      double precip_measured(testval);
-      logbooks->accumprecip(accumprecip_index, precip_measured);
-    }
-  }
-
-  void printtest(const size_t gbxindex, const double testval)
-  {
-    std::cout << "At gbx" << gbxindex << ", " << testval
-              << " was detected. Record states "
-              << logbooks->accumprecip.get_from_record(accumprecip_index)
-              << "\n";
-  }
 };
+
+std::unique_ptr<Detectors> create_detectors(const DetectionLogbooks &logbooks,
+                                            const unsigned int gbxindex,
+                                            const double zbound)
+{
+  auto detectors = std::make_unique<Detectors>(logbooks);
+
+  if (zbound < 1.0)
+  {
+    detectors -> install_precip_detector(gbxindex);
+  }
+
+  return detectors;
+}
 
 struct GridBox
 {
   unsigned int gbxindex;
-  Detectors detectors;
+  std::unique_ptr<Detectors> detectors;
 
   GridBox(const unsigned int gbxindex,
-          const std::shared_ptr<DetectionLogbooks> logbooks,
+          const DetectionLogbooks &logbooks,
           const double zbound)
-      : gbxindex(gbxindex), detectors(logbooks)
-  {
-    if (zbound < 1.0)
-    {
-      detectors.new_precip_detector(gbxindex);
-    }
-  }
+      : gbxindex(gbxindex),
+        detectors(create_detectors(logbooks, gbxindex, zbound))
+  {}
 };
 
 void move_superdrops(GridBox &gbx)
 {
-
-  const double testval(5.4);
-  gbx.detectors.precip(testval);
-
-  gbx.detectors.printtest(gbx.gbxindex, testval);
+  const double drop(5.4);
+  gbx.detectors -> precipdtr(drop);
 }
 
 int main()
 { 
   std::cout <<"--- let's make detectors --- \n";
 
-  const auto logbooks(std::make_shared<DetectionLogbooks>());
+  const DetectionLogbooks logbooks;
 
-  const double zbound(0.5);
+  const double zbound(0.9);
 
   for (unsigned int gbxindex=0; gbxindex < 3; ++gbxindex)
   {
@@ -143,5 +164,14 @@ int main()
     move_superdrops(gbx);
   }
   
+  for (size_t idx=0; idx < logbooks.accumprecip -> get_size(); ++idx)
+  {
+    std::cout << "At idx " << idx
+              << " gbx=" << logbooks.accumprecip -> get_gbxindex(idx)
+              << ", Record states "
+              << logbooks.accumprecip -> get_from_record(idx)
+              << "\n";
+  }
+
   return 0;
 }
