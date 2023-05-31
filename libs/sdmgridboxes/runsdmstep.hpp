@@ -33,7 +33,12 @@ private:
   (motion or one complete step) is next to occur and return the
   time of the sooner event */
   {
-    const int next_one = ((t_sdm / onestep) + 1) * onestep; // t of next output
+    const auto next_step = [t_sdm](const int interval)
+    {
+      return ((t_sdm / interval) + 1) * interval;
+    };
+
+    const int next_one = next_step(onestep);                // t of next output
     const int next_motion = sdmmotion.next_step(t_sdm);     // t of next sdmmotion
 
     return std::min(next_one, next_motion);

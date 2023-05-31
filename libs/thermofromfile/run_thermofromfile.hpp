@@ -61,13 +61,34 @@ generators used in SDM */
   return Kokkos::Random_XorShift64_Pool<>(std::random_device{}());
 }
 
-inline void start_step(const int t_mdl, const int couplstep,
+inline int next_interval(const int t_mdl,
+                         const int couplstep,
+                         const int obsstep)
+/* returns size of next step of model ('onestep')
+given current time t_mdl, so that next time
+(t_next = t_mdl + onestep) is time of obs or coupl */
+{
+  const auto next_step = [t_mdl](const int interval)
+  {
+    return ((t_mdl / interval) + 1) * interval;
+  };
+
+  /* t_next is smaller out of time of next coupl and obs */
+  const int next_coupl(next_step(couplstep));
+  const int next_obs(next_step(obsstep));
+  const int nextt_mdl(std::min(next_coupl, next_obs));
+
+  return nextt_mdl - t_mdl;
+}
+
+inline int start_step(const int t_mdl, const int couplstep,
                        const size_t ngbxs,
                        const Observer auto &observer,
                        const ThermodynamicsFromFile &thermodyn,
                        Kokkos::View<GridBox *> h_gridboxes)
-/* communication of thermodynamic state
-to SDM and observation of SDM gridboxes */
+/* optional communication of thermodynamic state
+to SDM and observation of SDM gridboxes. returns step size 
+to take given current time t_mdl */
 {
   if (t_mdl % couplstep == 0)
   {
@@ -79,23 +100,18 @@ to SDM and observation of SDM gridboxes */
   {
     observer.observe_gridboxes(ngbxs, h_gridboxes);
   }
+
+  return interval
 }
 
-inline int proceedto_next_step(const int t_mdl,
-                               const int couplstep,
-                               const int obsstep)
-/* increments timestep of model to next step. This
-is either obsstep or couplstep. Function is also a
-placeholder for when communication from SDM to
-thermodynamics solver (about changes to thermostates)
-could take place if t_mdl was on couplstep. */
+inline int proceedto_next_step(const int t_mdl, const int onestep)
+/* returns incremented timestep 't_mdl' of model
+by 'onestep'. Function is also a placeholder for
+when communication from SDM to thermodynamics
+solver (about changes to thermostates) could
+take place if t_mdl was on couplstep. */
 {
-  const auto nextt = [t_mdl](const int interval)
-  {
-    return ((t_mdl / interval) + 1) * interval;
-  };
-
-  return std::min(nextt(couplstep), nextt(obsstep));
+  return t_mdl + onestep;
 }
 
 template <class MSDs, SdmProcess P, Observer O>
@@ -163,21 +179,20 @@ length 'couplstep' and is decomposed into 4 parts:
   {
     /* start step (in general involves coupling) */
     gridboxes.on_host(); SDsInGBxs.on_host();
-    start_step(t_mdl, couplstep, ngbxs, sdm.observer,
+    onestep = start_step(t_mdl, couplstep, ngbxs, sdm.observer,
                thermodyn, gridboxes.view_host());
 
-    /* advance SDM by couplstep
+    /* advance SDM from t_mdl to t_mdl + onestep
     (optionally concurrent to thermodynamics solver) */
     gridboxes.on_device(); SDsInGBxs.on_device();
-    sdm.run_sdmstep(t_mdl, couplstep, genpool, gridboxes, SDsInGBxs);
+    sdm.run_sdmstep(t_mdl, onestep, genpool, gridboxes, SDsInGBxs);
 
     /* advance thermodynamics solver
     (optionally concurrent to SDM) */
     thermodyn.run_thermostep(t_mdl, couplstep);
 
     /* proceed to next step (in general involves coupling) */
-    t_mdl = proceedto_next_step(t_mdl, couplstep,
-                                sdm.observer.get_interval());
+    t_mdl = proceedto_next_step(t_mdl, onestep);
   }
 }
 
