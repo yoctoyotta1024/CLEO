@@ -28,9 +28,9 @@ real psat to dimensionless psat = psat/P0. */
 
   if (T <= 0.0)
   {
-    const std::string errormsg = "psat ERROR: T must be larger than 0K. T = " +
-                                 std::to_string(T);
-    throw std::invalid_argument(errormsg);
+    const std::string err("psat ERROR: T must be larger than 0K. T = " +
+                            std::to_string(T));
+    throw std::invalid_argument(err);
   }
 
   return (PREF * exp(A * (T - TREF) / (T - B))) / dlc::P0; // dimensionless psat

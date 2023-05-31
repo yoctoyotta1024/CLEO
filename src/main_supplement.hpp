@@ -187,7 +187,7 @@ superdroplets from combination of those two seperate observers */
                                                          stores.rainmassmoms,
                                                          obsstep);
 
-  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{};
+  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1 >> PrintObserver{obsstep};
   const auto observer = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;
 
   return observer;

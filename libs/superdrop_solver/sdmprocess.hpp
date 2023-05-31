@@ -43,10 +43,10 @@ and "next_step" and have a "run_step" function */
 {
   {
     p.next_step(currenttimestep)
-    } -> std::convertible_to<int>;
+  } -> std::convertible_to<int>;
   {
     p.on_step(currenttimestep)
-    } -> std::convertible_to<bool>;
+  } -> std::convertible_to<bool>;
   {
     p.run_step(currenttimestep, span4SDsinGBx, state, urbg)
   };

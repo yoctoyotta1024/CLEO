@@ -80,7 +80,7 @@ superdroplets from combination of those two seperate observers */
   const Observer auto obs2 = SDsAttributeObserver(stores.sdzarr, obsstep);
   const Observer auto obs1 = TimeObserver(stores.timezarr, obsstep);
 
-  const auto observer = obs3 >> obs2 >> obs1 >> PrintObserver{};
+  const auto observer = obs3 >> obs2 >> obs1 >> PrintObserver{obsstep};
 
   return observer;
 }
