@@ -48,7 +48,7 @@ void timestep_thermofromfile(const int t_end,
                             Kokkos::vector<GridBox> &gridboxes,
                             Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs);
 
-void recieve_thermodynamics(const size_t ngbxs, const double time,
+void recieve_thermodynamics_from_thermodyn(const size_t ngbxs,
                             const ThermodynamicsFromFile &thermodyn,
                             Kokkos::View<GridBox*> h_gridboxes);
 /* Sets current thermodynamic state of SDM to match that given
@@ -77,7 +77,28 @@ given current time t_mdl, so that next time
   const int next_coupl(next_step(couplstep));
   const int next_obs(next_step(obsstep));
 
+  std::cout << "t = " << t_mdl << "nextt = " << std::min(next_coupl, next_obs)
+  << ", coupld: " << next_coupl << ", obs: " << next_obs
+  << ", stepsize: " << couplstep << ", " << obsstep << "\n";
+
   return std::min(next_coupl, next_obs) - t_mdl;
+}
+
+
+inline int recieve_thermodynamics(const int t_mdl, const size_t ngbxs, 
+                            const ThermodynamicsFromFile &thermodyn,
+                            Kokkos::View<GridBox*> h_gridboxes)
+{
+  const double time = step2dimlesstime(t_mdl);
+  for (size_t ii(0); ii < ngbxs; ++ii)
+  {
+    h_gridboxes(ii).state.time = time;
+  }
+
+  if (t_mdl % couplstep == 0)
+  {
+    recieve_thermodynamics_from_thermodyn(ngbxs, thermodyn, h_gridboxes);
+  }
 }
 
 inline int start_step(const int t_mdl, const int couplstep,
@@ -89,11 +110,7 @@ inline int start_step(const int t_mdl, const int couplstep,
 to SDM and observation of SDM gridboxes. returns step size 
 to take given current time t_mdl */
 {
-  if (t_mdl % couplstep == 0)
-  {
-    const double time = step2dimlesstime(t_mdl);
-    recieve_thermodynamics(ngbxs, time, thermodyn, h_gridboxes);
-  }
+  recieve_thermodyanmics(t_mdl, ngbxs, thermodyn, h_gridboxes);
 
   if (observer.on_step(t_mdl))
   {
