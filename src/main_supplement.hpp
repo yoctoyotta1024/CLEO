@@ -136,7 +136,7 @@ combined process of those two individual processes */
   // return NullProcess{};
 }
 
-CreateDetectorsPtr auto create_detectors(const DetectorLogbooks &logbooks,
+CreateDetectorsPtr auto specify_detectors(const DetectorLogbooks &logbooks,
                                          const Maps4GridBoxes &gbxmaps)
 {
   // return NullDetectorsPtr{};
