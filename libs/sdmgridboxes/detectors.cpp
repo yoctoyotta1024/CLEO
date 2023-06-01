@@ -15,7 +15,7 @@ when superdroplet is below coord3 = 0.0 */
 {
   if (drop.coord3 < 0.0)
   {
-    return drop.mass() * drop.eps();
+    return drop.mass() * drop.eps;
   }
   
   return 0.0;

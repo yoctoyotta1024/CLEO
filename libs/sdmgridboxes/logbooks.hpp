@@ -109,14 +109,14 @@ public:
 
   auto get_logbook() const { return logbook; }
 
-  void set_to()(const T val) const
+  void set_to(const T val) const
   /* copy value 'val' into logbook
   entry at position 'idx' */
   {
     logbook->set_entry(idx, val);
   }
 
-  void increment_by()(const T val) const
+  void increment_by(const T val) const
   /* increment value at position 'idx'
   in logbook entry by 'val' */
   {
