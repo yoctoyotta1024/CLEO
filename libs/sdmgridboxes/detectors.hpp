@@ -12,6 +12,7 @@ into 'logbooks' */
 #include <memory>
 
 #include "./logbooks.hpp"
+#include "./maps4gridboxes.hpp"
 #include "../claras_SDconstants.hpp"
 #include "../superdrop_solver/superdrop.hpp"
 
@@ -93,8 +94,8 @@ struct DetectorsInstallation
 private:
   DetectionLogbooks &logbooks;
 
-  std::unique_ptr<Detectors> install_precipitation_detectors(
-      const std::unique_ptr<Detectors> detectors,
+  std::shared_ptr<Detectors> install_precipitation_detectors(
+      const std::shared_ptr<Detectors> detectors,
       const unsigned int gbxindex,
       const Maps4GridBoxes &gbxmaps) const;
   /* if upper z boundary of gbx is <= precip_zlim install
@@ -104,7 +105,7 @@ public:
   DetectorsInstallation(DetectionLogbooks &logbooks)
       : logbooks(logbooks) {}
 
-  std::unique_ptr<Detectors> operator()(const unsigned int gbxindex,
+  std::shared_ptr<Detectors> operator()(const unsigned int gbxindex,
                                         const Maps4GridBoxes &gbxmaps) const;
   /* operator creates a unique pointer to a
   detectors struct and installs certain
