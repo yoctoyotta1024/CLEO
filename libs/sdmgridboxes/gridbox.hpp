@@ -35,9 +35,9 @@ and index for finding associated grridbox in
 coupled thermodynamics */
 {
   unsigned int gbxindex; // index (unique identifier) of gridbox
+  std::shared_ptr<Detectors> detectors;
   std::span<SuperdropWithGbxindex> span4SDsinGBx;
   ThermoState state;
-  std::shared_ptr<Detectors> detectors;
 
   KOKKOS_INLINE_FUNCTION GridBox() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~GridBox() = default; // Kokkos requirement for a (dual)View

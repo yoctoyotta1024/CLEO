@@ -99,10 +99,10 @@ that may use these logbooks */
 private:
   struct Logbooks
   {
-    const std::shared_ptr<Logbook<double>> accpp; // logbook for accumulated precipitation
+    std::shared_ptr<Logbook<double>> accpp; // logbook for accumulated precipitation
     
     Logbooks() : accpp(std::make_shared<Logbook<double>>()) {}
-  }
+  };
 
   Logbooks logbooks;
 
