@@ -29,13 +29,20 @@ namespace dlc = dimless_constants;
 
 template <typename Obs>
 concept Observer = requires(Obs obs, const int t, const size_t n,
-                            const Kokkos::View<GridBox *> h_gbxs)
+                            const Kokkos::View<GridBox *> h_gbxs,
+                            const std::vector<int> lgbks)
 /* concept Observer is all types that have an (lvalue) integer
 called 'interval' and a function called observe_gridboxes() which
 take a view of gridboxes as an argument and returns a void type */
 {
   {
+    obs.observe(n, h_gbxs, lgbks)
+  } -> std::same_as<void>;
+  {
     obs.observe_gridboxes(n, h_gbxs)
+  } -> std::same_as<void>;
+  {
+    obs.observe_logbooks(lgbks)
   } -> std::same_as<void>;
   {
     obs.get_interval()
@@ -87,10 +94,24 @@ public:
   }
 
   void observe_gridboxes(const size_t ngbxs,
-                     const Kokkos::View<GridBox *> h_gbxs) const
+                         const Kokkos::View<GridBox *> h_gbxs) const
   {
     o1.observe_gridboxes(ngbxs, h_gbxs);
     o2.observe_gridboxes(ngbxs, h_gbxs);
+  }
+
+  void observe_logbooks(const std::vector<int> lgbks) const
+  {
+    o1.observe_logbooks(lgbks);
+    o2.observe_logbooks(lgbks);
+  }
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gbxs,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gbxs);
+    observe_logbooks(lgbks);
   }
 
   int get_interval() const { return on_step.get_interval(); }
@@ -107,7 +128,13 @@ struct NullObserver
 (is defined for a Monoid Structure) */
 {
   void observe_gridboxes(const size_t ngbxs,
-                     const Kokkos::View<GridBox *> h_gridboxes) const {}
+                         const Kokkos::View<GridBox *> h_gbxs) const {}
+
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gbxs,
+               const std::vector<int> lgbks) const {}
 
   int get_interval() { return std::numeric_limits<int>::max(); }
 
@@ -130,6 +157,15 @@ thermodynamic state and superdroplets to terminal */
                      const Kokkos::View<GridBox *> h_gridboxes) const;
   /* print time, thermodynamic data (p, temp, qv, qc)
   and total number of superdrops to terminal */
+  
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gridboxes);
+  }
 
   int get_interval() const { return on_step.get_interval(); }
 };
