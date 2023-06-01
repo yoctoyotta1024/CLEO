@@ -1,4 +1,4 @@
-// /opt/homebrew/bin/g++-13 quicktest.cpp && ./a.out 
+// /opt/homebrew/bin/g++-13 quicktest.cpp --std=c++20 && ./a.out 
 
 #include <iostream> 
 #include <limits>
