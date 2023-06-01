@@ -75,6 +75,7 @@ coupled thermodynamics */
 
 KOKKOS_FUNCTION Kokkos::vector<GridBox>
 create_gridboxes(const Maps4GridBoxes &gbxmaps,
+                 const InstallDetectors &dtrs,
                  Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs);
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from gbxmaps.gbxidxs, and a span of the

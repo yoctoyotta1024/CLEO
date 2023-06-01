@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
   Kokkos::initialize(argc, argv);
   {
     /* RUN SDM MODEL COUPLED TO CVODE ODE SOLVER */
-    run_cvodecoupld(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+    run_cvodecoupld(config, sdm, dtrs, mdlsteps.t_end, mdlsteps.couplstep);
   }
   Kokkos::finalize();
   std::cout << "  ------ Total Duration: " << kokkostimer.seconds() << "s ----- \n";

@@ -118,13 +118,14 @@ take place if t_mdl was on couplstep. */
 
 template <class MSDs, SdmProcess P, Observer O>
 void run_thermofromfile(const Config &config,
-                    const RunSDMStep<MSDs, P, O> &sdm,
-                    const int t_end, const int couplstep)
+                        const RunSDMStep<MSDs, P, O> &sdm,
+                        const InstallDetectors &dtrs,
+                        const int t_end, const int couplstep)
 /* create superdroplets and gridboxes and then run uncoupled
 superdroplet model (SDM) using thermodynamics read from files */
 {
   Kokkos::Timer kokkostimer;
-  
+
   /* create thermodynamics from file */
   const size_t nsteps = ceil(t_end / couplstep) + 1;
   ThermodynamicsFromFile thermodyn(config, sdm.gbxmaps.ndims, nsteps);
@@ -133,14 +134,15 @@ superdroplet model (SDM) using thermodynamics read from files */
   struct that also holds their associated gridbox index.
   (all superdroplets have same solute properties) */
   const auto solute(std::make_shared<const SoluteProperties>());
-  Kokkos::vector<SuperdropWithGbxindex>
-      SDsInGBxs = create_superdrops_from_initSDsfile(config.initSDs_filename,
-                                              config.nSDsvec,
-                                              config.SDnspace, solute);
+  Kokkos::vector<SuperdropWithGbxindex> SDsInGBxs =
+      create_superdrops_from_initSDsfile(config.initSDs_filename,
+                                         config.nSDsvec,
+                                         config.SDnspace, solute);
   SDsInGBxs.on_device();
 
   /* vector containing all gridboxes in SDM domain */
-  Kokkos::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
+  Kokkos::vector<GridBox> gridboxes =
+      create_gridboxes(sdm.gbxmaps, dtrs, SDsInGBxs);
   gridboxes.on_device(); 
   
   /* prepare model for timestepping */

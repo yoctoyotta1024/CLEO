@@ -70,15 +70,15 @@ private:
   std::shared_ptr<Logbook<T>> logbook;
   size_t idx;
 
-  void create_entry_in_logbook(
+  void new_entry_in_logbook(
       const std::shared_ptr<Logbook<T>> ilogbook,
-      const unsigned int gbxindex)
-  /* create an entry in logbook 'ilogbook'
-  with tag 'gbxindex' and make 'idx' to
+      const unsigned int tag)
+  /* create a new entry in logbook 'ilogbook'
+  with tag 'tag' and change 'idx' to
   be position of entry in that logbook */
   {
     logbook = ilogbook;
-    idx = logbook->new_entry(gbxindex);
+    idx = logbook->new_entry(tag);
   }
 
 public:

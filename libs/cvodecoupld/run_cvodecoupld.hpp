@@ -59,8 +59,9 @@ for thermodyanmic variables (p, temp, qv, qc) to
 initialise cvode thermodynamics solver */
 
 void run_cvodecoupld(const Config &config,
-                  const RunSDMStep<auto, auto, auto> &sdm,
-                  const int t_end, const int couplstep)
+                     const RunSDMStep<auto, auto, auto> &sdm,
+                     const InstallDetectors &dtrs,
+                     const int t_end, const int couplstep)
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 {
@@ -72,13 +73,14 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
   struct that also holds their associated gridbox index.
   (all superdroplets have same solute properties) */
   const auto solute(std::make_shared<const SoluteProperties>());
-  Kokkos::vector<SuperdropWithGbxindex>
-      SDsInGBxs = create_superdrops_from_initSDsfile(config.initSDs_filename,
-                                              config.nSDsvec,
-                                              config.SDnspace, solute);
+  Kokkos::vector<SuperdropWithGbxindex> SDsInGBxs =
+      create_superdrops_from_initSDsfile(config.initSDs_filename,
+                                         config.nSDsvec,
+                                         config.SDnspace, solute);
 
   /* vector containing all gridboxes in SDM domain */
-  Kokkos::vector<GridBox> gridboxes = create_gridboxes(sdm.gbxmaps, SDsInGBxs);
+  Kokkos::vector<GridBox> gridboxes =
+      create_gridboxes(sdm.gbxmaps, dtrs, SDsInGBxs);
 
   /* prepare coupled model for timestepping */
   auto genpool = preparetotimestep(cvode, gridboxes, config.wetradiiinit,

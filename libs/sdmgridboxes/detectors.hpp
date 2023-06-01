@@ -17,7 +17,6 @@ into 'logbooks' */
 #include "superdrop_solver/superdrop.hpp"
 
 using dblLogbook = std::shared_ptr<Logbook<double>>;
-using uptrDetectors = std::unique_ptr<Detectors>;
 
 struct AccumPrecipDetector
 /* detector which stores the value of
@@ -28,10 +27,7 @@ EntryInLogbook instance */
 private:
   EntryInLogbook<double> manage_entry;
 
-  double accumulated_precipitation(const Superdrop &drop) const
-  {
-    return 0.0;
-  }
+  double accumulated_precipitation(const Superdrop &drop) const;
 
 public:
   AccumPrecipDetector() : manage_entry() {}
@@ -89,45 +85,29 @@ public:
 };
 
 struct DetectorsInstallation
-/* operator used to create unique pointer to a
-detectors struct and then install certain
-types of detector in it*/
+/* operator() returns unique pointer to a detectors struct */
 {
 private:
-  DetectionLogbooks &logbooks
+  DetectionLogbooks &logbooks;
   double precip_zlim; // (dimless) maximum z coord of gbxs that detect precipitation
 
-  uptrDetectors install_precipitation_detectors(const uptrDetectors detectors,
-                                                const unsigned int gbxindex,
-                                                const Maps4GridBoxes &gbxmaps) const
+  std::unique_ptr<Detectors> install_precipitation_detectors(
+      const std::unique_ptr<Detectors> detectors,
+      const unsigned int gbxindex,
+      const Maps4GridBoxes &gbxmaps) const;
   /* if upper z boundary of gbx is <= precip_zlim install
-  a detector to detect accumulated precipitation by calling
-  install_accumprecip_detector */
-  {
-    if (gbxmaps.get_bounds_z(gbxindex).second <= precip_zlim)
-    {
-      detectors.install_accumprecip_detector(gbxindex);
-    }
-
-    return detectors
-  }
+  a detector to detect accumulated precipitation */
 
 public:
   InstallDetectors(const DetectionLogbooks &logbooks,
                    const double precip_zlim)
       : logbooks(logbooks), precip_zlim(precip_zlim) {}
 
-  uptrDetectors operator()(const unsigned int gbxindex,
-                           const Maps4GridBoxes &gbxmaps) const
-  {
-    auto detectors = std::make_unique<Detectors>(logbooks);
-
-    detectors = install_precipitation_detectors(detectors,
-                                                gbxindex,
-                                                gbxmaps);
-
-    return detectors;
-  }
+  std::unique_ptr<Detectors> operator()(const unsigned int gbxindex,
+                                        const Maps4GridBoxes &gbxmaps) const;
+  /* operator creates a unique pointer to a
+  detectors struct and installs certain
+  types of detector in it */
 }
 
 #endif // DETECTORS_HPP

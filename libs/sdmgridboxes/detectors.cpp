@@ -7,16 +7,39 @@ into 'logbooks' */
 
 #include "./detectors.hpp"
 
-void Detectors::precipitation(const unsigned int gbxindex, const Superdrop drop)
+double AccumPrecipDetector::
+    accumulated_precipitation(const Superdrop &drop) const
 {
-  // if (unique_pointer_to_position_in_accumulatedprecip) // <- if detector points to a location (e.g. in accumulatde precip vector)
-  // {
-  //   if (drop.coord3 < 0.0)
-  //   {
-  //     position_in_accumulatedprecip += drop.mass();
-  //     // accum_precip_radii.pushback(drop.radius()); // for observing raindrop distribution
-  //     // accum_precip_ndrops += 1;
-  //   }
+  return 0.0;
+}
 
-  // }
+std::unique_ptr<Detectors> DetectorsInstallation::
+    install_precipitation_detectors(const uptrDetectors detectors,
+                                    const unsigned int gbxindex,
+                                    const Maps4GridBoxes &gbxmaps) const
+/* if upper z boundary of gbx is <= precip_zlim install
+a detector to detect accumulated precipitation */
+{
+  if (gbxmaps.get_bounds_z(gbxindex).second <= precip_zlim)
+  {
+    detectors.install_accumprecip_detector(gbxindex);
+  }
+
+  return detectors
+}
+
+std::unique_ptr<Detectors> DetectorsInstallation::
+operator()(const unsigned int gbxindex,
+           const Maps4GridBoxes &gbxmaps) const
+/* operator creates a unique pointer to a
+detectors struct and installs certain
+types of detector in it */
+{
+  auto detectors = std::make_unique<Detectors>(logbooks);
+
+  detectors = install_precipitation_detectors(detectors,
+                                              gbxindex,
+                                              gbxmaps);
+
+  return detectors;
 }

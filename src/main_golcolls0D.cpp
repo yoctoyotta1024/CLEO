@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
   Kokkos::initialize(argc, argv);
   {
     /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */
-    run_thermofromfile(config, sdm, mdlsteps.t_end, mdlsteps.couplstep);
+    run_thermofromfile(config, sdm, dtrs, mdlsteps.t_end, mdlsteps.couplstep);
   }
   Kokkos::finalize();
   std::cout << "  ------ Total Duration: " << kokkostimer.seconds() << "s ----- \n";

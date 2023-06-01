@@ -96,6 +96,7 @@ void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
 
 KOKKOS_FUNCTION Kokkos::vector<GridBox>
 create_gridboxes(const Maps4GridBoxes &gbxmaps,
+                 const InstallDetectors &dtrs,
                  Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from gbxmaps.gbxidxs, and a span of the
@@ -106,7 +107,7 @@ superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
   Kokkos::vector<GridBox> gridboxes;
   for (auto ii : gbxmaps.gbxidxs)
   {
-    gridboxes.push_back(GridBox(ii, gbxmaps, SDsInGBxs));
+    gridboxes.push_back(GridBox(ii, gbxmaps, dtrs, SDsInGBxs));
   }
 
   return gridboxes;
