@@ -185,7 +185,7 @@ superdroplets from combination of those two seperate observers */
   const ObserveGBxs auto obs2a = ObserveSDsAttributes(stores.sdzarr);
   const ObserveGBxs auto obs2b = ObserveSDsGbxindex(stores.sdgbxzarr);
 
-  const ObserveGBxs auto obs3 = ObserveThermoState(stores.thermozarr);
+  // const ObserveGBxs auto obs3 = ObserveThermoState(stores.thermozarr);
   
   const ObserveGBxs auto obs4 = ObserveGridBoxIndex(stores.gbxzarr);
 
@@ -194,12 +194,12 @@ superdroplets from combination of those two seperate observers */
   const ObserveGBxs auto obs6 = create_observegbx_massmoments(stores.massmoms,
                                                               stores.rainmassmoms);
 
-  const auto obsgbxs = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1;
-  // const auto obsgbxs = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;
+  // const auto obsgbxs = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1;
+  const auto obsgbxs = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;
   
-  const Observer auto observer = PrintObserver(obsstep) >>
-                                 ConstIntervalGBxObserver(obsstep, obsgbxs);
-  // const Observer auto observer = ConstIntervalGBxObserver(obsstep, obsgbxs);
+  // const Observer auto observer = PrintObserver(obsstep) >>
+  //                                ConstIntervalGBxObserver(obsstep, obsgbxs);
+  const Observer auto observer = ConstIntervalGBxObserver(obsstep, obsgbxs);
 
   return observer;
 }
