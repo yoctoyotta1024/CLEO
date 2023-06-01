@@ -20,6 +20,7 @@ coords and moving them between gridboxes) */
 #include "./cartesianneighbours.hpp"
 #include "./superdropwithgbxindex.hpp"
 #include "./sdmotion.hpp"
+#include "./detectors.hpp"
 #include "superdrop_solver/superdrop.hpp"
 
 /* ----- function called internally -----

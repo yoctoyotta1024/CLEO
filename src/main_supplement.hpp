@@ -25,6 +25,8 @@ SDM process and observers to use in main.cpp */
 #include "sdmgridboxes/sdmtimesteps.hpp"
 #include "sdmgridboxes/runsdmstep.hpp"
 #include "sdmgridboxes/sdmotion.hpp"
+#include "sdmgridboxes/detectors.hpp"
+#include "sdmgridboxes/logbooks.hpp"
 #include "observers/observers.hpp"
 #include "observers/intostore_observers.hpp"
 #include "observers/sdattributes_intostore.hpp"

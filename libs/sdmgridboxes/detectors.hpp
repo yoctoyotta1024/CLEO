@@ -9,12 +9,13 @@ into 'logbooks' */
 #ifndef DETECTORS_HPP
 #define DETECTORS_HPP
 
-#include <limits>
 #include <memory>
-#include <vector>
 
 #include "./logbooks.hpp"
-#include "superdrop_solver/superdrop.hpp"
+#include "../claras_SDconstants.hpp"
+#include "../superdrop_solver/superdrop.hpp"
+
+namespace dlc = dimless_constants;
 
 struct AccumPrecipDetector
 /* detector which stores the value of
@@ -87,7 +88,6 @@ struct DetectorsInstallation
 {
 private:
   DetectionLogbooks &logbooks;
-  double precip_zlim; // (dimless) maximum z coord of gbxs that detect precipitation
 
   std::unique_ptr<Detectors> install_precipitation_detectors(
       const std::unique_ptr<Detectors> detectors,
@@ -97,9 +97,8 @@ private:
   a detector to detect accumulated precipitation */
 
 public:
-  InstallDetectors(const DetectionLogbooks &logbooks,
-                   const double precip_zlim)
-      : logbooks(logbooks), precip_zlim(precip_zlim) {}
+  DetectorsInstallation(const DetectionLogbooks &logbooks)
+      : logbooks(logbooks) {}
 
   std::unique_ptr<Detectors> operator()(const unsigned int gbxindex,
                                         const Maps4GridBoxes &gbxmaps) const;

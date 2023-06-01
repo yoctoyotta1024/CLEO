@@ -23,6 +23,8 @@ coupled with a CVODE ode solver for the thermodynamics
 #include "sdmgridboxes/sdmtimesteps.hpp"
 #include "sdmgridboxes/runsdmstep.hpp"
 #include "sdmgridboxes/sdmotion.hpp"
+#include "sdmgridboxes/detectors.hpp"
+#include "sdmgridboxes/logbooks.hpp"
 #include "observers/observers.hpp"
 #include "observers/intostore_observers.hpp"
 #include "observers/sdattributes_intostore.hpp"
@@ -120,6 +122,9 @@ int main(int argc, char *argv[])
                             gbxmaps.gbxidxs.size(),
                             sdattrs_to_observe());
   const auto observer = create_observer(mdlsteps.obsstep, zarrstores);
+
+  // DetectionLogbooks logbooks;
+  // const DetectorsInstallation dtrs(logbooks);
 
   const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 

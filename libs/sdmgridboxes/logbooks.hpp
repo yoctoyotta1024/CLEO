@@ -12,7 +12,7 @@ detection data (e.g. of SDM processes)*/
 #include <memory>
 #include <vector>
 
-#include "superdrop_solver/superdrop.hpp"
+#include "../superdrop_solver/superdrop.hpp"
 
 template <typename T>
 struct Logbook

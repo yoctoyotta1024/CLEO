@@ -20,6 +20,8 @@ std::unique_ptr<Detectors> DetectorsInstallation::
 /* if upper z boundary of gbx is <= precip_zlim install
 a detector to detect accumulated precipitation */
 {
+  constexpr double precip_zlim(50 / dlc::COORD0); // (dimless) maximum z coord of gbxs that detect precipitation
+
   if (gbxmaps.get_bounds_z(gbxindex).second <= precip_zlim)
   {
     detectors.install_accumprecip_detector(gbxindex);
