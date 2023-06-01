@@ -29,11 +29,10 @@ private:
   double accumulated_precipitation(const Superdrop &drop) const;
 
 public:
-  KOKKOS_INLINE_FUNCTION AccumPrecipDetector() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~AccumPrecipDetector() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  AccumPrecipDetector() : manage_entry() {}
+  AccumPrecipDetector() : manage_entry() {} // also a Kokkos requirement for a (dual)View
   /* initialise without a logbook */
 
   KOKKOS_INLINE_FUNCTION
