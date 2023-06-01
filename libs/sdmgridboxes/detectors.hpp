@@ -17,6 +17,7 @@ into 'logbooks' */
 #include "superdrop_solver/superdrop.hpp"
 
 using dblLogbook = std::shared_ptr<Logbook<double>>;
+using uptrDetectors = std::unique_ptr<Detectors>;
 
 struct AccumPrecipDetector
 /* detector which stores the value of
@@ -27,7 +28,7 @@ EntryInLogbook instance */
 private:
   EntryInLogbook<double> manage_entry;
 
-  double accumulated_precipitation(const Superdrop drop)
+  double accumulated_precipitation(const Superdrop &drop)
   {
     return 0.0;
   }
@@ -40,7 +41,7 @@ public:
     manage_entry.create_entry(logbook, gbxindex);
   }
 
-  void operator()(const Superdrop drop)
+  void operator()(const Superdrop &drop)
   {
     if (manage_entry.get_logbook())
     {
@@ -62,6 +63,7 @@ private:
   AccumPrecipDetector accpp_dtr;
 
 public:
+
   Detectors(const DetectionLogbooks &logbooks)
       : logbooks(logbooks) {}
 
@@ -71,20 +73,41 @@ public:
   {
     accpp_dtr.create_entry_in_logbook(logbooks.accpp, gbxindex);
   }
-};
 
-std::unique_ptr<Detectors> install_detectors(const unsigned int gbxindex,
-                                             const DetectionLogbooks &logbooks,
-                                             const Maps4GridBoxes &gbxmaps)
-{
-  auto detectors = std::make_unique<Detectors>(logbooks);
-
-  if (gbxmaps.get_bounds_z(gbxindex).second < zLIM_HERE)
+  void detect_precipitation(const Supderdrop &drop)
   {
-    detectors->install_accumprecip_detector(gbxindex);
+    accpp_dtr(drop); 
   }
 
-  return detectors;
+};
+
+struct InstallDetectors
+{
+private:
+  uptrDetectors install_precipitation_detectors()
+  /* if upper z boundary of gbx is <= precip_zlim install
+  a detector to detect accumulated precipitation by calling 
+  install_accumprecip_detector */
+  {
+    if (gbxmaps.get_bounds_z(gbxindex).second <= precip_zlim)
+    {
+      detectors->install_accumprecip_detector(gbxindex);
+    }
+
+  }
+public:
+  double precip_zlim; // (dimless) maximum z coord of gbxs that detect precipitation
+
+  uptrDetectors operator()(const unsigned int gbxindex,
+                           const DetectionLogbooks &logbooks,
+                           const Maps4GridBoxes &gbxmaps)
+  {
+    auto detectors = std::make_unique<Detectors>(logbooks);
+
+    detectors = install_precipitation_detectors();     
+
+    return detectors;
+  }
 }
 
 #endif // DETECTORS_HPP
