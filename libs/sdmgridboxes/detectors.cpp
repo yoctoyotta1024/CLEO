@@ -23,8 +23,7 @@ when superdroplet is below coord3 = 0.0 */
 
 std::shared_ptr<Detectors> DetectorsInstallation::
     install_precipitation_detectors(const std::shared_ptr<Detectors> detectors,
-                                    const unsigned int gbxindex,
-                                    const Maps4GridBoxes &gbxmaps) const
+                                    const unsigned int gbxindex) const
 /* if upper z boundary of gbx is <= precip_zlim install
 a detector to detect accumulated precipitation */
 {
@@ -32,24 +31,18 @@ a detector to detect accumulated precipitation */
 
   if (gbxmaps.get_bounds_z(gbxindex).second <= precip_zlim)
   {
-    detectors -> install_accumprecip_detector(logbooks.accpp, gbxindex);
+    detectors->install_accumprecip_detector(logbooks.accpp, gbxindex);
   }
-
   return detectors;
 }
 
 std::shared_ptr<Detectors> DetectorsInstallation::
-operator()(const unsigned int gbxindex,
-           const Maps4GridBoxes &gbxmaps) const
-/* operator creates a unique pointer to a
-detectors struct and installs certain
-types of detector in it */
+    install_detectors(std::shared_ptr<Detectors> detectors,
+                      const unsigned int gbxindex) const
+/* operator installs certain types of detector in
+detectors struct given its pointer */
 {
-  auto detectors = std::make_shared<Detectors>();
-
-  detectors = install_precipitation_detectors(detectors,
-                                              gbxindex,
-                                              gbxmaps);
+  detectors = install_precipitation_detectors(detectors, gbxindex);
 
   return detectors;
 }

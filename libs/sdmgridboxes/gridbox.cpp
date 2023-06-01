@@ -11,7 +11,7 @@ GridBox::GridBox(const unsigned int ii,
                  const DetectorsInstallation &dtrs,
                  Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
     : gbxindex(ii),
-      detectors(dtrs(gbxindex, gbxmaps)),
+      detectors(dtrs(gbxindex)),
       state(gbxmaps.get_volume(gbxindex))
 /* Volume in Thermostate set using Map4GridBoxes
 idx2vol map (via get_volume function). Other ThermoState variables

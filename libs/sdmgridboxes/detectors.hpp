@@ -97,23 +97,34 @@ vectors pointed to by logbooks */
 {
 private:
   const DetectorLogbooks &logbooks;
+  const Maps4GridBoxes &gbxmaps;
 
-  std::shared_ptr<Detectors> install_precipitation_detectors(
-      const std::shared_ptr<Detectors> detectors,
-      const unsigned int gbxindex,
-      const Maps4GridBoxes &gbxmaps) const;
+  std::shared_ptr<Detectors>
+  install_precipitation_detectors(const std::shared_ptr<Detectors> detectors,
+                                  const unsigned int gbxindex) const;
   /* if upper z boundary of gbx is <= precip_zlim install
   a detector to detect accumulated precipitation */
 
-public:
-  DetectorsInstallation(const DetectorLogbooks &logbooks)
-      : logbooks(logbooks) {}
+  std::shared_ptr<Detectors>
+  install_detectors(std::shared_ptr<Detectors> detectors,
+                    const unsigned int gbxindex) const;
+  /* operator installs certain types of detector in
+  detectors struct given its pointer */
 
-  std::shared_ptr<Detectors> operator()(const unsigned int gbxindex,
-                                        const Maps4GridBoxes &gbxmaps) const;
-  /* operator creates a unique pointer to a
-  detectors struct and installs certain
-  types of detector in it */
+public:
+  DetectorsInstallation(const DetectorLogbooks &logbooks,
+                        const Maps4GridBoxes &gbxmaps)
+      : logbooks(logbooks), gbxmaps(gbxmaps) {}
+
+  std::shared_ptr<Detectors> operator()(const unsigned int gbxindex) const
+  /* operator creates a unique pointer to a detectors struct
+  and installs certain types of detector in it according
+  to install_detectors function */
+  {
+    auto detectors = std::make_shared<Detectors>();
+    
+    return install_detectors(detectors, gbxindex);
+  }
 };
 
 #endif // DETECTORS_HPP
