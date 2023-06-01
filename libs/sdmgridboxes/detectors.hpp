@@ -84,22 +84,27 @@ public:
 struct InstallDetectors
 {
 private:
-  uptrDetectors install_precipitation_detectors()
+  DetectionLogbooks &logbooks
+  double precip_zlim; // (dimless) maximum z coord of gbxs that detect precipitation
+
+  uptrDetectors install_precipitation_detectors(const unsigned int gbxindex,
+                                                const Maps4GridBoxes &gbxmaps)
   /* if upper z boundary of gbx is <= precip_zlim install
-  a detector to detect accumulated precipitation by calling 
+  a detector to detect accumulated precipitation by calling
   install_accumprecip_detector */
   {
     if (gbxmaps.get_bounds_z(gbxindex).second <= precip_zlim)
     {
       detectors->install_accumprecip_detector(gbxindex);
     }
-
   }
+
 public:
-  double precip_zlim; // (dimless) maximum z coord of gbxs that detect precipitation
+  InstallDetectors(const DetectionLogbooks &logbooks,
+                   const double precip_zlim)
+      : logbooks(logbooks), precip_zlim(precip_zlim) {}
 
   uptrDetectors operator()(const unsigned int gbxindex,
-                           const DetectionLogbooks &logbooks,
                            const Maps4GridBoxes &gbxmaps)
   {
     auto detectors = std::make_unique<Detectors>(logbooks);
