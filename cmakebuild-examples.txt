@@ -28,6 +28,9 @@ OPENMP ENABLED build:
 module load gcc
 CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
 
+or:
+CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
+
 GPU (CUDA) ENABLED build:
 module load gcc
 module load nvhpc
