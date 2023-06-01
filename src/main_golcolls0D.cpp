@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
   const auto observer = create_observer(mdlsteps.obsstep, zarrstores);
 
   // DetectionLogbooks logbooks;
-  // NullDetectorsPtr{};
+  const NullDetectorsPtr dtrs{};
 
   const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 
