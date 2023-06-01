@@ -1,7 +1,9 @@
 // Author: Clara Bayley
 // File: "detectors.cpp"
 /* Fucntionality of detectors
-(e.g. of SDM processes) in gridboxes */
+(e.g. of SDM processes) in gridboxes
+which copy data from detections
+into 'logbooks' */
 
 #include "./detectors.hpp"
 
@@ -16,5 +18,5 @@ void Detectors::precipitation(const unsigned int gbxindex, const Superdrop drop)
   //     // accum_precip_ndrops += 1;
   //   }
 
-  // }  
+  // }
 }

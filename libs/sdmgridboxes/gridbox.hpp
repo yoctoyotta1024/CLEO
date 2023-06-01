@@ -19,6 +19,7 @@ struct */
 #include "../claras_SDconstants.hpp"
 #include "./maps4gridboxes.hpp"
 #include "./superdropwithgbxindex.hpp"
+#include "./logbooks.hpp"
 #include "./detectors.hpp"
 #include "initialisation/config.hpp"
 #include "superdrop_solver/superdrop.hpp"
@@ -33,10 +34,10 @@ thermodynamic state temp, pressure, etc. used for SDM,
 and index for finding associated grridbox in
 coupled thermodynamics */
 {
-  unsigned int gbxindex; // index / unique identifier of gridbox
+  unsigned int gbxindex; // index (unique identifier) of gridbox
   std::span<SuperdropWithGbxindex> span4SDsinGBx;
   ThermoState state;
-  Detectors detectors;
+  std::unique_ptr<Detectors> detectors;
 
   KOKKOS_INLINE_FUNCTION GridBox() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~GridBox() = default; // Kokkos requirement for a (dual)View
@@ -44,6 +45,7 @@ coupled thermodynamics */
   KOKKOS_FUNCTION
   GridBox(const unsigned int ii,
           const Maps4GridBoxes &gbxmaps,
+          const DetectionLogbooks &logbooks,
           Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs);
   /* Volume in Thermostate set using Map4GridBoxes
   idx2vol map (via get_volume function). Other ThermoState variables
