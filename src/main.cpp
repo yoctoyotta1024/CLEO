@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   const auto observer = create_observer(mdlsteps.obsstep, zarrstores);
 
   const DetectorLogbooks logbooks;
-  const DetectorsInstallation dtrs(logbooks, gbxmaps);
+  const auto dtrs = create_detectors_method(logbooks, gbxmaps);
 
   const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 

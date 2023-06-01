@@ -41,6 +41,7 @@ set(SOURCES
 "cartesianneighbours.cpp"
 "sdmotion.cpp"
 "detectors.cpp"
+"detectors_ptr.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
