@@ -39,12 +39,6 @@ public:
     return record.size() - 1;
   }
 
-  void update_entry(const size_t idx, const T val)
-  /* copies value 'val' to record at position 'idx' */
-  {
-    record.at(idx) = val;
-  }
-
   unsigned int get_tag(const size_t idx) const
   /* returns tag associated with
   value at position 'idx' in record */
@@ -57,6 +51,19 @@ public:
   position 'idx' in record */
   {
     return record.at(idx);
+  }
+
+  void set_entry(const size_t idx, const T val)
+  /* copies value 'val' to record at position 'idx' */
+  {
+    record.at(idx) = val;
+  }
+
+  void increment_entry(const size_t idx, const T val)
+  /* increment value in record at
+  position 'idx' by value 'val' */
+  {
+    record.at(idx) += val;
   }
 };
 
@@ -102,11 +109,18 @@ public:
 
   auto get_logbook() const { return logbook; }
 
-  void operator()(const T val) const
+  void set_to()(const T val) const
   /* copy value 'val' into logbook
   entry at position 'idx' */
   {
-    logbook->update_entry(idx, val);
+    logbook->set_entry(idx, val);
+  }
+
+  void increment_by()(const T val) const
+  /* increment value at position 'idx'
+  in logbook entry by 'val' */
+  {
+    logbook->increment_entry(idx, val);
   }
 };
 

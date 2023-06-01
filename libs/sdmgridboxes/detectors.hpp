@@ -27,7 +27,7 @@ EntryInLogbook instance */
 private:
   EntryInLogbook<double> manage_entry;
 
-  double accumulated_precipitation(const Superdrop &drop) const;
+  double precipitation(const Superdrop &drop) const;
 
 public:
   KOKKOS_INLINE_FUNCTION ~AccumPrecipDetector() = default; // Kokkos requirement for a (dual)View
@@ -49,7 +49,7 @@ public:
   {
     if (manage_entry.get_logbook())
     {
-      manage_entry(accumulated_precipitation(drop));
+      manage_entry.increment_by(precipitation(drop));
     }
   }
 };
