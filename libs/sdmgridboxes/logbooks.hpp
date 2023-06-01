@@ -68,19 +68,33 @@ logbook given by the shared pointer */
 {
 private:
   std::shared_ptr<Logbook<T>> logbook;
-  size_t idx = std::numeric_limits<size_t>::max();
+  size_t idx;
 
-public:
   void create_entry_in_logbook(
       const std::shared_ptr<Logbook<T>> ilogbook,
       const unsigned int gbxindex)
   /* create an entry in logbook 'ilogbook'
-  with tag 'gbxindex' and update 'idx' to
+  with tag 'gbxindex' and make 'idx' to
   be position of entry in that logbook */
   {
     logbook = ilogbook;
     idx = logbook->new_entry(gbxindex);
   }
+
+public:
+  EntryInLogbook()
+      : logbook(),
+        idx(std::numeric_limits<size_t>::max()) {}
+  /* create nullptr for logbook and
+  max value for position 'idx' */
+
+  EntryInLogbook(const std::shared_ptr<Logbook<T>> logbook,
+                 const unsigned int gbxindex)
+      : logbook(ilogbook),
+        idx(logbook->new_entry(gbxindex)) {}
+  /* create an entry in logbook 'ilogbook'
+  with tag 'gbxindex' and make 'idx' to
+  be position of entry in that logbook */
 
   auto get_logbook() const { return logbook; }
 

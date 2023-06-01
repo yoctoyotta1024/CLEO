@@ -34,16 +34,17 @@ private:
   }
 
 public:
-  AccumPrecipDetector(){}
+  AccumPrecipDetector() : manage_entry() {}
+  /* initialise without a logbook */ 
 
   AccumPrecipDetector(const dblLogbook logbook,
                       const unsigned int gbxindex)
-  /* use the manage_entry to create an entry in logbook */
-  {
-    manage_entry.create_entry_in_logbook(logbooks.accpp, gbxindex);
-  }
+      : manage_entry(logbooks.accpp, gbxindex) {}
+  /* initialise manage_entry with a logbook */ 
 
   void operator()(const Superdrop &drop) const
+  /* if detector has a logbook, use manage_entry to
+  store accumlated precipitation in it */
   {
     if (manage_entry.get_logbook())
     {
@@ -65,9 +66,8 @@ private:
   AccumPrecipDetector accpp_dtr;
 
 public:
-
   Detectors(const DetectionLogbooks &logbooks)
-      : logbooks(logbooks) {}
+      : logbooks(logbooks), accpp_dtr() {}
 
   void install_accumprecip_detector(const unsigned int gbxindex)
   /* install accumulated precipitation detector by creating
@@ -80,7 +80,6 @@ public:
   {
     accpp_dtr(drop); 
   }
-
 };
 
 struct DetectorsInstallation
