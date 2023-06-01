@@ -5,24 +5,6 @@ a gridbox */
 
 #include "gridbox.hpp"
 
-KOKKOS_FUNCTION
-GridBox::GridBox(const unsigned int ii,
-                 const Maps4GridBoxes &gbxmaps,
-                 const CreateDetectorsPtr auto &dtrs,
-                 Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
-    : gbxindex(ii),
-      detectors(dtrs(gbxindex)),
-      state(gbxmaps.get_volume(gbxindex))
-/* Volume in Thermostate set using Map4GridBoxes
-idx2vol map (via get_volume function). Other ThermoState variables
-are default behaviour initialised. */
-{
-  // print_statevolume();
-  
-  set_span(SDsInGBxs);
-  iscorrect_span_for_gbxindex(gbxmaps);
-}
-
 KOKKOS_FUNCTION void GridBox::print_statevolume()
 /* print's dimensionless value for gridbox state's 
 volume. Also prints true volume = volume * COORD0^3 [m^3] */
@@ -92,25 +74,6 @@ void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
                               std::to_string(ulim)+"]");
     throw std::invalid_argument(err);
   }
-}
-
-KOKKOS_FUNCTION Kokkos::vector<GridBox>
-create_gridboxes(const Maps4GridBoxes &gbxmaps,
-                 const CreateDetectorsPtr auto &dtrs,
-                 Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
-/* create domain as a vector of grid boxes such that each grid box
-is initialised with a labels from gbxmaps.gbxidxs, and a span of the
-superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
-{ 
-  sort_superdrops_via_gridboxindex(SDsInGBxs);
-  
-  Kokkos::vector<GridBox> gridboxes;
-  for (auto ii : gbxmaps.gbxidxs)
-  {
-    gridboxes.push_back(GridBox(ii, gbxmaps, dtrs, SDsInGBxs));
-  }
-
-  return gridboxes;
 }
 
 KOKKOS_FUNCTION
