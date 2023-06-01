@@ -39,6 +39,13 @@ public:
     return record.size() - 1;
   }
 
+  size_t get_size() const
+  /* get size of record (ie. number
+  of entries to logbook)*/
+  {
+    return record.size();
+  }
+
   unsigned int get_tag(const size_t idx) const
   /* returns tag associated with
   value at position 'idx' in record */
