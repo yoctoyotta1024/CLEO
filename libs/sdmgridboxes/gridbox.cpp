@@ -8,7 +8,7 @@ a gridbox */
 KOKKOS_FUNCTION
 GridBox::GridBox(const unsigned int ii,
                  const Maps4GridBoxes &gbxmaps,
-                 const DetectorsInstallation &dtrs,
+                 const CreateDetectorsPtr auto &dtrs,
                  Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
     : gbxindex(ii),
       detectors(dtrs(gbxindex)),
@@ -96,7 +96,7 @@ void GridBox::iscoord_within_bounds(const std::pair<double, double> bounds,
 
 KOKKOS_FUNCTION Kokkos::vector<GridBox>
 create_gridboxes(const Maps4GridBoxes &gbxmaps,
-                 const DetectorsInstallation &dtrs,
+                 const CreateDetectorsPtr auto &dtrs,
                  Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from gbxmaps.gbxidxs, and a span of the

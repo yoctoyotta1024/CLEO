@@ -59,7 +59,7 @@ private:
 
 public:
   PrecipDetectorsPtr(const DetectorLogbooks &logbooks,
-                  const Maps4GridBoxes &gbxmaps)
+                     const Maps4GridBoxes &gbxmaps)
       : logbooks(logbooks), gbxmaps(gbxmaps) {}
 
   std::shared_ptr<Detectors> operator()(const unsigned int gbxindex) const

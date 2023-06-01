@@ -26,6 +26,7 @@ SDM process and observers to use in main.cpp */
 #include "sdmgridboxes/runsdmstep.hpp"
 #include "sdmgridboxes/sdmotion.hpp"
 #include "sdmgridboxes/detectors.hpp"
+#include "sdmgridboxes/detectors_ptr.hpp"
 #include "sdmgridboxes/logbooks.hpp"
 #include "observers/observers.hpp"
 #include "observers/intostore_observers.hpp"
@@ -133,6 +134,12 @@ combined process of those two individual processes */
 
   return sdmprocess;
   // return NullProcess{};
+}
+
+CreateDetectorsPtr auto create_detectors(const DetectorLogbooks &logbooks,
+                                         const Maps4GridBoxes &gbxmaps)
+{
+  return NullDetectorsPtr{};
 }
 
 SuperdropIntoStoreViaBuffer auto sdattrs_to_observe()

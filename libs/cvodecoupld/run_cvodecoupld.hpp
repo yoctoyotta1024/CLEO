@@ -31,6 +31,7 @@ Coupling is both ways (send and receive) */
 #include "sdmgridboxes/sdmtimesteps.hpp"
 #include "sdmgridboxes/sdmotion.hpp"
 #include "sdmgridboxes/detectors.hpp"
+#include "sdmgridboxes/detectors_ptr.hpp"
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "superdrop_solver/superdrop.hpp"
@@ -61,7 +62,7 @@ initialise cvode thermodynamics solver */
 
 void run_cvodecoupld(const Config &config,
                      const RunSDMStep<auto, auto, auto> &sdm,
-                     const DetectorsInstallation &dtrs,
+                     const CreateDetectorsPtr auto &dtrs,
                      const int t_end, const int couplstep)
 /* create CVODE thermodynamics solver, superdroplets and gridboxes and
 then run superdroplet model (SDM) coupled to the thermodynamics solver */

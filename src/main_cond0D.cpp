@@ -24,6 +24,7 @@ coupled with a CVODE ode solver for the thermodynamics
 #include "sdmgridboxes/runsdmstep.hpp"
 #include "sdmgridboxes/sdmotion.hpp"
 #include "sdmgridboxes/detectors.hpp"
+#include "sdmgridboxes/detectors_ptr.hpp"
 #include "sdmgridboxes/logbooks.hpp"
 #include "observers/observers.hpp"
 #include "observers/intostore_observers.hpp"
@@ -124,7 +125,7 @@ int main(int argc, char *argv[])
   const auto observer = create_observer(mdlsteps.obsstep, zarrstores);
 
   // DetectionLogbooks logbooks;
-  // const DetectorsInstallation dtrs(logbooks);
+  // NullDetectorsPtr{};
 
   const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 

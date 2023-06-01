@@ -20,6 +20,7 @@ struct */
 #include "./maps4gridboxes.hpp"
 #include "./superdropwithgbxindex.hpp"
 #include "./detectors.hpp"
+#include "./detectors_ptr.hpp"
 #include "./logbooks.hpp"
 #include "initialisation/config.hpp"
 #include "superdrop_solver/superdrop.hpp"
@@ -45,7 +46,7 @@ coupled thermodynamics */
   KOKKOS_FUNCTION
   GridBox(const unsigned int ii,
           const Maps4GridBoxes &gbxmaps,
-          const DetectorsInstallation &dtrs,
+          const CreateDetectorsPtr auto &dtrs,
           Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs);
   /* Volume in Thermostate set using Map4GridBoxes
   idx2vol map (via get_volume function). Other ThermoState variables
@@ -75,7 +76,7 @@ coupled thermodynamics */
 
 KOKKOS_FUNCTION Kokkos::vector<GridBox>
 create_gridboxes(const Maps4GridBoxes &gbxmaps,
-                 const DetectorsInstallation &dtrs,
+                 const CreateDetectorsPtr auto &dtrs,
                  Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs);
 /* create domain as a vector of grid boxes such that each grid box
 is initialised with a labels from gbxmaps.gbxidxs, and a span of the

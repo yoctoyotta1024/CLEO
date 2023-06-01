@@ -29,6 +29,7 @@ are read from file */
 #include "sdmgridboxes/runsdmstep.hpp"
 #include "sdmgridboxes/sdmotion.hpp"
 #include "sdmgridboxes/detectors.hpp"
+#include "sdmgridboxes/detectors_ptr.hpp"
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "superdrop_solver/superdrop.hpp"
@@ -120,7 +121,7 @@ take place if t_mdl was on couplstep. */
 template <class MSDs, SdmProcess P, Observer O>
 void run_thermofromfile(const Config &config,
                         const RunSDMStep<MSDs, P, O> &sdm,
-                        const DetectorsInstallation &dtrs,
+                        const CreateDetectorsPtr auto &dtrs,
                         const int t_end, const int couplstep)
 /* create superdroplets and gridboxes and then run uncoupled
 superdroplet model (SDM) using thermodynamics read from files */
