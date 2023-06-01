@@ -25,7 +25,7 @@ a detector to detect accumulated precipitation */
 
   if (gbxmaps.get_bounds_z(gbxindex).second <= precip_zlim)
   {
-    detectors -> install_accumprecip_detector(logbooks, gbxindex);
+    detectors -> install_accumprecip_detector(logbooks.accpp, gbxindex);
   }
 
   return detectors;

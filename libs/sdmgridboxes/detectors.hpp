@@ -71,13 +71,14 @@ public:
   KOKKOS_INLINE_FUNCTION Detectors() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~Detectors() = default; // Kokkos requirement for a (dual)View
 
-  void install_accumprecip_detector(const DetectionLogbooks &logbooks,
-                                    const unsigned int gbxindex)
+  void install_accumprecip_detector(
+      const std::shared_ptr<Logbook<double>> accpp_logbook,
+      const unsigned int gbxindex)
   /* install accumulated precipitation detector
   (by instanting detector with an entry in the
   accpp logbook that has tag 'gbxindex') */
   {
-    accpp_dtr = AccumPrecipDetector(logbooks.accpp, gbxindex);
+    accpp_dtr = AccumPrecipDetector(accpp_logbook, gbxindex);
   }
 
   void detect_precipitation(const Superdrop &drop) const
@@ -89,10 +90,21 @@ public:
 };
 
 struct DetectorsInstallation
-/* operator() returns unique pointer to a detectors struct */
+/* DetectorsInstallation makes and stores
+shared pointers to various logbook instances
+(for a Detectors instance to use). operator()
+returns a smart pointer to a detectors instance
+that may use these logbooks */
 {
 private:
-  DetectionLogbooks &logbooks;
+  struct Logbooks
+  {
+    const std::shared_ptr<Logbook<double>> accpp; // logbook for accumulated precipitation
+    
+    Logbooks() : accpp(std::make_shared<Logbook<double>>()) {}
+  }
+
+  Logbooks logbooks;
 
   std::shared_ptr<Detectors> install_precipitation_detectors(
       const std::shared_ptr<Detectors> detectors,
@@ -102,8 +114,7 @@ private:
   a detector to detect accumulated precipitation */
 
 public:
-  DetectorsInstallation(DetectionLogbooks &logbooks)
-      : logbooks(logbooks) {}
+  DetectorsInstallation() : logbooks() {}
 
   std::shared_ptr<Detectors> operator()(const unsigned int gbxindex,
                                         const Maps4GridBoxes &gbxmaps) const;
