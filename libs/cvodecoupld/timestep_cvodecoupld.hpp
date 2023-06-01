@@ -103,7 +103,7 @@ of current thermodynamic states (for later use in SDM) */
 
   if (observer.on_step(t_mdl))
   {
-    observer.observe_gridboxes(ngbxs, h_gridboxes);
+    observer.observe(ngbxs, h_gridboxes);
   }
   
   return currentstates;

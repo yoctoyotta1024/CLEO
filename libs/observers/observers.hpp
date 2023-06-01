@@ -52,13 +52,13 @@ take a view of gridboxes as an argument and returns a void type */
   } -> std::convertible_to<bool>;
 };
 
-class ConstIntervalStep
+class ConstInterval
 {
 private:
   const int interval; // interval (integer timestep) between observations
 
 public:
-  ConstIntervalStep(const int interval) : interval(interval) {}
+  ConstInterval(const int interval) : interval(interval) {}
 
   bool operator()(const int t) const
   /* on_step boolean function */
@@ -80,7 +80,7 @@ private:
   O2 o2;
 
 public:
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
 
   CombinedObserver(const O1 observer1, const O2 observer2)
       : o1(observer1), o2(observer2),
@@ -148,15 +148,12 @@ struct PrintObserver
 /* this observer prints some details about the
 thermodynamic state and superdroplets to terminal */
 {
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
   const int printprec = 4; // precision to print data with
 
   PrintObserver(const int obsstep) : on_step(obsstep) {}
 
-  void observe_gridboxes(const size_t ngbxs,
-                     const Kokkos::View<GridBox *> h_gridboxes) const;
-  /* print time, thermodynamic data (p, temp, qv, qc)
-  and total number of superdrops to terminal */
+  int get_interval() const { return on_step.get_interval(); }
   
   void observe_logbooks(const std::vector<int> lgbks) const {}
 
@@ -167,7 +164,10 @@ thermodynamic state and superdroplets to terminal */
     observe_gridboxes(ngbxs, h_gridboxes);
   }
 
-  int get_interval() const { return on_step.get_interval(); }
+  void observe_gridboxes(const size_t ngbxs,
+                     const Kokkos::View<GridBox *> h_gridboxes) const;
+  /* print time, thermodynamic data (p, temp, qv, qc)
+  and total number of superdrops to terminal */
 };
 
 #endif // OBSERVERS_HPP

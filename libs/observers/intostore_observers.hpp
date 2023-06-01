@@ -42,12 +42,21 @@ private:
   ThermoStateStorage &zarr;
 
 public:
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
 
   ThermoStateObserver(const int obsstep, ThermoStateStorage &zarr)
       : zarr(zarr), on_step(obsstep) {}
 
   int get_interval() const { return on_step.get_interval(); }
+
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gridboxes);
+  }
 
   void observe_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -70,13 +79,22 @@ private:
   ContiguousRaggedSDStorage &zarr;
 
 public:
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
 
   SDsAttributeObserver(const int obsstep,
                        ContiguousRaggedSDStorage &zarr)
       : zarr(zarr), on_step(obsstep) {}
 
   int get_interval() const { return on_step.get_interval(); }
+  
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gridboxes);
+  }
 
   void observe_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -103,12 +121,21 @@ private:
   ContiguousRaggedSDStorage<SdgbxIntoStore> &zarr;
 
 public:
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
 
   SDsGbxindexObserver(const int obsstep, auto &zarr)
       : zarr(zarr), on_step(obsstep) {}
 
   int get_interval() const { return on_step.get_interval(); }
+
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gridboxes);
+  }
 
   void observe_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -135,7 +162,7 @@ private:
   CoordinateStorage<double> &zarr;
 
 public:
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
 
   TimeObserver(const int obsstep, CoordinateStorage<double> &zarr)
       : zarr(zarr), on_step(obsstep)
@@ -144,6 +171,15 @@ public:
   }
 
   int get_interval() const { return on_step.get_interval(); }
+  
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gridboxes);
+  }
 
   void observe_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -163,7 +199,7 @@ private:
   CoordinateStorage<unsigned int> &zarr;
 
 public:
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
 
   GridBoxIndexObserver(const int obsstep,
                        CoordinateStorage<unsigned int> &zarr)
@@ -173,6 +209,15 @@ public:
   }
 
   int get_interval() const { return on_step.get_interval(); }
+  
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gridboxes);
+  }
 
   void observe_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -195,7 +240,7 @@ private:
   TwoDStorage<size_t> &zarr;
 
 public:
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
 
   NsupersPerGridBoxObserver(const int obsstep,
                             TwoDStorage<size_t> &zarr)
@@ -205,6 +250,15 @@ public:
   }
 
   int get_interval() const { return on_step.get_interval(); }
+  
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gridboxes);
+  }
 
   void observe_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -229,7 +283,7 @@ private:
   TwoDStorage<double> &zarr;
 
 public:
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
 
   NthMassMomentObserver(const int obsstep,
                         TwoDStorage<double> &zarr,
@@ -243,6 +297,15 @@ public:
   }
 
   int get_interval() const { return on_step.get_interval(); }
+  
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gridboxes);
+  }
 
   void observe_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
@@ -267,7 +330,7 @@ private:
   TwoDStorage<double> &zarr;
 
 public:
-  ConstIntervalStep on_step;
+  ConstInterval on_step;
 
   NthRainMassMomentObserver(const int obsstep,
                             TwoDStorage<double> &zarr,
@@ -281,6 +344,15 @@ public:
   }
 
   int get_interval() const { return on_step.get_interval(); }
+  
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    observe_gridboxes(ngbxs, h_gridboxes);
+  }
 
   void observe_gridboxes(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const

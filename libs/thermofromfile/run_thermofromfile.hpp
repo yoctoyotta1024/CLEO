@@ -102,7 +102,7 @@ to take given current time t_mdl */
 
   if (observer.on_step(t_mdl))
   {
-    observer.observe_gridboxes(ngbxs, h_gridboxes);
+    observer.observe(ngbxs, h_gridboxes);
   }
 
   return stepsize(t_mdl, couplstep, observer.get_interval());
