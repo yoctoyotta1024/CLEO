@@ -46,10 +46,10 @@ public:
   }
 
   unsigned int get_tag(const size_t idx) const
-  /* returns gbxindex associated with
+  /* returns tag associated with
   value at position 'idx' in record */
   {
-    return gbxindexes.at(idx);
+    return tags.at(idx);
   }
 
   T get_from_record(const size_t idx) const
@@ -72,28 +72,32 @@ private:
 
   void new_entry_in_logbook(
       const std::shared_ptr<Logbook<T>> ilogbook,
-      const unsigned int tag)
+      const unsigned int itag)
   /* create a new entry in logbook 'ilogbook'
   with tag 'tag' and change 'idx' to
   be position of entry in that logbook */
   {
     logbook = ilogbook;
-    idx = logbook->new_entry(tag);
+    idx = logbook->new_entry(itag);
   }
 
 public:
+  KOKKOS_INLINE_FUNCTION ~EntryInLogbook() = default; // Default destructor is Kokkos requirement for a (dual)View
+
+  KOKKOS_INLINE_FUNCTION
   EntryInLogbook()
       : logbook(),
-        idx(std::numeric_limits<size_t>::max()) {}
+        idx(std::numeric_limits<size_t>::max()) {} // Default constructor is also Kokkos requirement for a (dual)View
   /* create nullptr for logbook and
   max value for position 'idx' */
 
-  EntryInLogbook(const std::shared_ptr<Logbook<T>> logbook,
-                 const unsigned int gbxindex)
+  KOKKOS_INLINE_FUNCTION
+  EntryInLogbook(const std::shared_ptr<Logbook<T>> ilogbook,
+                 const unsigned int itag)
       : logbook(ilogbook),
-        idx(logbook->new_entry(gbxindex)) {}
+        idx(logbook->new_entry(itag)) {}
   /* create an entry in logbook 'ilogbook'
-  with tag 'gbxindex' and make 'idx' to
+  with tag 'itag' and make 'idx' to
   be position of entry in that logbook */
 
   auto get_logbook() const { return logbook; }

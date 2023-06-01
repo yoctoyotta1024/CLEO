@@ -29,13 +29,19 @@ private:
   double accumulated_precipitation(const Superdrop &drop) const;
 
 public:
+  KOKKOS_INLINE_FUNCTION AccumPrecipDetector() = default;  // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~AccumPrecipDetector() = default; // Kokkos requirement for a (dual)View
+
+  KOKKOS_INLINE_FUNCTION
   AccumPrecipDetector() : manage_entry() {}
   /* initialise without a logbook */
 
+  KOKKOS_INLINE_FUNCTION
   AccumPrecipDetector(const std::shared_ptr<Logbook<double>> logbook,
                       const unsigned int gbxindex)
-      : manage_entry(logbooks.accpp, gbxindex) {}
-  /* initialise manage_entry with a logbook */ 
+      : manage_entry(logbook, gbxindex) {}
+  /* initialise manage_entry with a
+  logbook with tag 'gbxindex'*/
 
   void operator()(const Superdrop &drop) const
   /* if detector has a logbook, use manage_entry to
@@ -59,15 +65,14 @@ function. Likewise detcetor can be used through
 appropriate detect_[...] function */
 {
 private:
-  const DetectionLogbooks &logbooks;
-  
   AccumPrecipDetector accpp_dtr;
 
 public:
-  Detectors(const DetectionLogbooks &logbooks)
-      : logbooks(logbooks), accpp_dtr() {}
+  KOKKOS_INLINE_FUNCTION Detectors() = default;  // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~Detectors() = default; // Kokkos requirement for a (dual)View
 
-  void install_accumprecip_detector(const unsigned int gbxindex)
+  void install_accumprecip_detector(const DetectionLogbooks &logbooks,
+                                    const unsigned int gbxindex)
   /* install accumulated precipitation detector
   (by instanting detector with an entry in the
   accpp logbook that has tag 'gbxindex') */
@@ -75,7 +80,7 @@ public:
     accpp_dtr = AccumPrecipDetector(logbooks.accpp, gbxindex);
   }
 
-  void detect_precipitation(const Supderdrop &drop) const
+  void detect_precipitation(const Superdrop &drop) const
   /* use operators of precipitation detectors
   to detect precipitation  */
   {
@@ -97,7 +102,7 @@ private:
   a detector to detect accumulated precipitation */
 
 public:
-  DetectorsInstallation(const DetectionLogbooks &logbooks)
+  DetectorsInstallation(DetectionLogbooks &logbooks)
       : logbooks(logbooks) {}
 
   std::unique_ptr<Detectors> operator()(const unsigned int gbxindex,
@@ -105,6 +110,6 @@ public:
   /* operator creates a unique pointer to a
   detectors struct and installs certain
   types of detector in it */
-}
+};
 
 #endif // DETECTORS_HPP
