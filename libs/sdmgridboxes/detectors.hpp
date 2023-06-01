@@ -7,20 +7,22 @@ structures related to detectors
 #ifndef DETECTORS_HPP
 #define DETECTORS_HPP
 
+#include <vector>
+
 #include "superdrop_solver/superdrop.hpp"
 
 
 struct DetectionRecords
 {
   std::vector<double> accumulatedprecip; // <- each value here is accum precip of a gbx
-}
+};
 
 struct Detectors
 {
-  unique_pointer_to_position_in_accumulatedprecip;
+  // unique_pointer_to_position_in_accumulatedprecip;
 
-  void precipitation(const unsigned int gbxindex, const const Superdrop drop);
-}
+  void precipitation(const unsigned int gbxindex, const Superdrop drop);
+};
 
 
 #endif // DETECTORS_HPP
