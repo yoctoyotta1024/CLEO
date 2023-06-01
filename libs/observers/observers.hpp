@@ -1,12 +1,11 @@
 // Author: Clara Bayley
 // File: "observers.hpp"
-/* Observer Concept and structures for
-various ways of observing a gridbox of the
-superdroplet model, gridbox contained the
-thermodynamic state and the vector of
-superdroplets' state. Observation is
-for example printing some thermodynamics data
-to terminal or writing them to a datafile */
+/* Observer and ObserveGridBox Concepts
+and related structures for various ways of
+observing gridboxes and logbooks of the
+superdroplet model. An example of an 
+observer is printing some data from a
+gridbox's thermostate to the terminal */
 
 #ifndef OBSERVERS_HPP
 #define OBSERVERS_HPP
@@ -31,9 +30,9 @@ template <typename Obs>
 concept Observer = requires(Obs obs, const int t, const size_t n,
                             const Kokkos::View<GridBox *> h_gbxs,
                             const std::vector<int> lgbks)
-/* concept Observer is all types that have an (lvalue) integer
-called 'interval' and a function called observe_gridboxes() which
-take a view of gridboxes as an argument and returns a void type */
+/* concept Observer is all types that have
+functions with signatures and return types
+required for observing gridboxes and logbooks */
 {
   {
     obs.observe(n, h_gbxs, lgbks)
@@ -52,45 +51,48 @@ take a view of gridboxes as an argument and returns a void type */
   } -> std::convertible_to<bool>;
 };
 
-class ConstInterval
+template <typename Og>
+concept ObserveGBxs = requires(Og og, const int t, const size_t n,
+                               const Kokkos::View<GridBox *> h_gbxs,
+                               const std::vector<int> lgbks)
+/* concept ObserveGBxs is all types that have an operator that 
+has signature of observe_gridboxes() function in Observer concept
+ie. which takes a size_t type and a view of gridboxes as an
+argument and returns void */
+{
+  {
+    og(n, h_gbxs)
+  } -> std::same_as<void>;
+};
+
+template <Observer Obs1, Observer Obs2>
+class CombinedObserver
+/* combination of two observers 'obs1'
+and 'obs2' as long as 'obs1' and 'obs2'
+have return same value from get_interval() */
 {
 private:
   const int interval; // interval (integer timestep) between observations
+  Obs1 o1;
+  Obs2 o2;
 
 public:
-  ConstInterval(const int interval) : interval(interval) {}
-
-  bool operator()(const int t) const
-  /* on_step boolean function */
-  {
-    return t % interval == 0;
-  }
-
-  int get_interval() const { return interval; }
-};
-
-template <Observer O1, Observer O2>
-class CombinedObserver
-/* combination of two observers is observer
-'obs1' followed by observer 'obs2' as long as
-'obs1' and 'obs2' have same onstep interval */
-{
-private:
-  O1 o1;
-  O2 o2;
-
-public:
-  ConstInterval on_step;
-
-  CombinedObserver(const O1 observer1, const O2 observer2)
-      : o1(observer1), o2(observer2),
-        on_step(observer1.get_interval())
+  CombinedObserver(const Obs1 observer1, const Obs2 observer2)
+      : interval(observer1.get_interval()),
+        o1(observer1), o2(observer2)
   {
     const auto intvl = get_interval();
     if ((intvl != o1.get_interval()) || (intvl != o2.get_interval()))
     {
       throw std::invalid_argument("observer intervals must be equal");
     }
+  }
+
+  int get_interval() const { return interval; }
+
+  bool on_step(const int t) const
+  {
+    return t % interval == 0;
   }
 
   void observe_gridboxes(const size_t ngbxs,
@@ -113,20 +115,51 @@ public:
     observe_gridboxes(ngbxs, h_gbxs);
     observe_logbooks(lgbks);
   }
-
-  int get_interval() const { return on_step.get_interval(); }
 };
 
-auto operator>>(const Observer auto o1, const Observer auto o2)
+auto operator>>(const Observer auto obs1,
+                const Observer auto obs2)
 /* define ">>" operator that combines two observers */
 {
-  return CombinedObserver(o1, o2);
+  return CombinedObserver(obs1, obs2);
+}
+
+template <ObserveGBxs Og1, ObserveGBxs Og2>
+class CombinedObserveGBxs
+/* combination of two ObserveGridBox types
+is 'og1' followed by 'og2' */
+{
+private:
+  Og1 og1;
+  Og2 og2;
+
+public:
+  CombinedObserveGBxs(const Og1 og1, const Og2 og2)
+      : og1(og1), og2(og2) {}
+
+  void operator()(const size_t ngbxs,
+                         const Kokkos::View<GridBox *> h_gbxs) const
+  {
+    og1(ngbxs, h_gbxs);
+    og2(ngbxs, h_gbxs);
+  }
+};
+
+auto operator>>(const ObserveGBxs auto og1,
+                const ObserveGBxs auto og2)
+/* define ">>" operator that combines two observe gridbox types */
+{
+  return CombinedObserveGBxs(og1, og2);
 }
 
 struct NullObserver
-/* NullObserver does nothing at all
-(is defined for a Monoid Structure) */
+/* NullObserver (also a NullObserveGBxs)
+does nothing at all. It is defined for
+completion of a Monoid Structure */
 {
+  void operator()(const size_t ngbxs,
+                  const Kokkos::View<GridBox *> h_gbxs) const {}
+
   void observe_gridboxes(const size_t ngbxs,
                          const Kokkos::View<GridBox *> h_gbxs) const {}
 
@@ -144,18 +177,69 @@ struct NullObserver
   }
 };
 
-struct PrintObserver
-/* this observer prints some details about the
-thermodynamic state and superdroplets to terminal */
+template <ObserveGBxs ObsGBxs>
+class ConstIntervalGBxObserver
+/* struct satifying the Observer concept
+that has constant time-step 'interval'
+between obseration of gridboxes and
+takes no action during observe_logbooks */
 {
-  ConstInterval on_step;
+private:
+  const int interval; // interval (integer timestep) between observations
+
+  ObsGBxs obsgbxs;
+
+public:
+  ConstIntervalGBxObserver(const int interval,
+                           const ObsGBxs obsgbxs)
+      : interval(interval), obsgbxs(obsgbxs) {}
+
+  int get_interval() const { return interval; }
+
+  bool on_step(const int t) const
+  {
+    return t % interval == 0;
+  }
+
+  void observe_gridboxes(const size_t ngbxs,
+                         const Kokkos::View<GridBox *> h_gridboxes) const
+  {
+    obsgbxs(ngbxs, h_gridboxes);
+  }
+
+  void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes,
+               const std::vector<int> lgbks) const
+  {
+    obsgbxs(ngbxs, h_gridboxes);
+  }
+};
+
+struct PrintObserver
+/* satisfies Observer concept and
+prints out details about gridboxes'
+thermodynamic states and superdroplets */
+{
+  const int interval;      // interval (integer timestep) between observations
   const int printprec = 4; // precision to print data with
 
-  PrintObserver(const int obsstep) : on_step(obsstep) {}
+  PrintObserver(const int obsstep) : interval(obsstep) {}
 
-  int get_interval() const { return on_step.get_interval(); }
-  
+  int get_interval() const { return interval; }
+
+  bool on_step(const int t) const
+  {
+    return t % interval == 0;
+  }
+
   void observe_logbooks(const std::vector<int> lgbks) const {}
+
+  void observe_gridboxes(const size_t ngbxs,
+                         const Kokkos::View<GridBox *> h_gridboxes) const;
+  /* print time, thermodynamic data (p, temp, qv, qc)
+  and total number of superdrops to terminal */
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes,
@@ -163,11 +247,6 @@ thermodynamic state and superdroplets to terminal */
   {
     observe_gridboxes(ngbxs, h_gridboxes);
   }
-
-  void observe_gridboxes(const size_t ngbxs,
-                     const Kokkos::View<GridBox *> h_gridboxes) const;
-  /* print time, thermodynamic data (p, temp, qv, qc)
-  and total number of superdrops to terminal */
 };
 
 #endif // OBSERVERS_HPP

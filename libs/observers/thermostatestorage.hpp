@@ -1,7 +1,9 @@
 // Author: Clara Bayley
 // File: thermostatestorage.hpp
-/* structs/classes to create a ThermoStateObserver that writes
-data from thermostate into orthogonal multidimensional array(s)
+/* structs/classes used to create 
+ObserveThermoState that writes
+data from thermostate into orthogonal
+multidimensional (2D) array(s)
 (see: https://cfconventions.org/Data/cf-conventions/cf-conventions-1.10/cf-conventions.html#_contiguous_ragged_array_representation)
 in a FFStore obeying zarr storage specification verion 2:
 https://zarr.readthedocs.io/en/stable/spec/v2.html */

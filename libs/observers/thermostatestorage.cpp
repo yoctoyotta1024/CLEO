@@ -1,7 +1,9 @@
 // Author: Clara Bayley
 // File: thermostatestorage.cpp
-/* structs/classes to create a ThermoStateObserver that writes
-data from thermostate into orthogonal multidimensional array(s) */
+/* structs/classes used to create
+ObserveThermoState that writes data
+from thermostate into orthogonal
+multidimensional (2D) array(s) */
 
 #include "thermostatestorage.hpp"
 

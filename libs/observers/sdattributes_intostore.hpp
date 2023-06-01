@@ -1,8 +1,8 @@
 // Author: Clara Bayley
 // File: sdattributes_intostore.hpp
-/* structs to create a SDsAttributeObserver that writes
-data for (any chosen combination of) a superdroplet's
-attribute(s) into ragged contiguous array(s)
+/* structs to create an ObserveSDsAttributes instance
+that writes data for (any chosen combination of)
+a superdroplet's attributes into ragged contiguous array(s)
 (see: https://cfconventions.org/Data/cf-conventions/cf-conventions-1.10/cf-conventions.html#_contiguous_ragged_array_representation)
 in a FFStore obeying zarr storage specification verion 2:
 https://zarr.readthedocs.io/en/stable/spec/v2.html */

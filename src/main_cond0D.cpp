@@ -78,11 +78,13 @@ Observer auto create_observer(const int obsstep, SomeZarrStores<S> &stores)
 For example return an observer that observes both the thermostate and the
 superdroplets from combination of those two seperate observers */
 {
-  const Observer auto obs3 = ThermoStateObserver(obsstep, stores.thermozarr);
-  const Observer auto obs2 = SDsAttributeObserver(obsstep, stores.sdzarr);
-  const Observer auto obs1 = TimeObserver(obsstep, stores.timezarr);
+  const ObserveGBxs auto obs3 = ObserveThermoState(stores.thermozarr);
+  const ObserveGBxs auto obs2 = ObserveSDsAttributes(stores.sdzarr);
+  const ObserveGBxs auto obs1 = ObserveTime(stores.timezarr);
+  const auto obsgbxs = obs3 >> obs2 >> obs1;
 
-  const auto observer = obs3 >> obs2 >> obs1 >> PrintObserver(obsstep);
+  const Observer auto observer = PrintObserver(obsstep) >>
+                                 ConstIntervalGBxObserver(obsstep, obsgbxs);
 
   return observer;
 }

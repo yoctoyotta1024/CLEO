@@ -160,21 +160,18 @@ of a superdroplet into zarr storage */
   return attrs;
 }
 
-Observer auto create_massmoments_observer(const int obsstep,
-                                          MassMomStorages &mms,
+ObserveGBxs auto create_observegbx_massmoments(MassMomStorages &mms,
                                           RainMassMomStorages &rmms)
 {
-  const Observer auto mom0 = NthMassMomentObserver(obsstep, mms.mom0zarr, 0);
-  const Observer auto mom1 = NthMassMomentObserver(obsstep, mms.mom1zarr, 1);
-  const Observer auto mom2 = NthMassMomentObserver(obsstep, mms.mom2zarr, 2);
+  const auto mom0 = ObserveNthMassMoment(mms.mom0zarr, 0);
+  const auto mom1 = ObserveNthMassMoment(mms.mom1zarr, 1);
+  const auto mom2 = ObserveNthMassMoment(mms.mom2zarr, 2);
 
-  const Observer auto rain0 = NthRainMassMomentObserver(obsstep, rmms.mom0zarr, 0);
-  const Observer auto rain1 = NthRainMassMomentObserver(obsstep, rmms.mom1zarr, 1);
-  // const Observer auto rain2 = NthRainMassMomentObserver(obsstep, rmms.mom2zarr, 2);
+  const auto rain0 = ObserveNthRainMassMoment(rmms.mom0zarr, 0);
+  const auto rain1 = ObserveNthRainMassMoment(rmms.mom1zarr, 1);
+  // const auto rain2 = ObserveNthRainMassMoment(rmms.mom2zarr, 2);
   
-  const auto momsobs = rain1 >> rain0 >> mom2 >> mom1 >> mom0; 
-
-  return momsobs;
+  return rain1 >> rain0 >> mom2 >> mom1 >> mom0; 
 }
 
 template <SuperdropIntoStoreViaBuffer S>
@@ -183,25 +180,26 @@ Observer auto create_observer(const int obsstep, SomeZarrStores<S> &stores)
 For example return an observer that observes both the thermostate and the
 superdroplets from combination of those two seperate observers */
 {
-  const Observer auto obs1 = TimeObserver(obsstep, stores.timezarr);
+  const ObserveGBxs auto obs1 = ObserveTime(stores.timezarr);
 
-  const Observer auto obs2a = SDsAttributeObserver(obsstep, stores.sdzarr);
-  const Observer auto obs2b = SDsGbxindexObserver(obsstep, stores.sdgbxzarr);
+  const ObserveGBxs auto obs2a = ObserveSDsAttributes(stores.sdzarr);
+  const ObserveGBxs auto obs2b = ObserveSDsGbxindex(stores.sdgbxzarr);
 
-  // const Observer auto obs3 = ThermoStateObserver(obsstep, stores.thermozarr);
+  const ObserveGBxs auto obs3 = ObserveThermoState(stores.thermozarr);
   
-  const Observer auto obs4 = GridBoxIndexObserver(obsstep, stores.gbxzarr);
+  const ObserveGBxs auto obs4 = ObserveGridBoxIndex(stores.gbxzarr);
+
+  const ObserveGBxs auto obs5 = ObserveNsupersPerGridBox(stores.nsuperszarr);
+
+  const ObserveGBxs auto obs6 = create_observegbx_massmoments(stores.massmoms,
+                                                              stores.rainmassmoms);
+
+  const auto obsgbxs = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1;
+  // const auto obsgbxs = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;
   
-  const Observer auto obs5 = NsupersPerGridBoxObserver(obsstep, stores.nsuperszarr);
-
-  const Observer auto obs6 = create_massmoments_observer(obsstep,
-                                                         stores.massmoms,
-                                                         stores.rainmassmoms);
-
-  // const auto observer = obs6 >> obs5 >> obs4 >> obs3 >>
-  //                       obs2a >> obs2b >> obs1 >> PrintObserver(obsstep);
-  const auto observer = obs6 >> obs5 >> obs4 >>
-                        obs2a >> obs2b >> obs1;
+  const Observer auto observer = PrintObserver(obsstep) >>
+                                 ConstIntervalGBxObserver(obsstep, obsgbxs);
+  // const Observer auto observer = ConstIntervalGBxObserver(obsstep, obsgbxs);
 
   return observer;
 }
