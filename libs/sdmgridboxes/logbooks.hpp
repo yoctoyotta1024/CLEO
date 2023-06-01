@@ -124,4 +124,14 @@ public:
   }
 };
 
+struct DetectorLogbooks
+/* DetectorLogbooks makes and stores
+shared pointers to various logbook instances
+(e.g. for a Detectors instance to use) */
+{
+  std::shared_ptr<Logbook<double>> accpp; // logbook for accumulated precipitation
+
+  DetectorLogbooks() : accpp(std::make_shared<Logbook<double>>()) {}
+};
+
 #endif // LOGBOOKS_HPP

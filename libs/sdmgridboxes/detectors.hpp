@@ -90,21 +90,13 @@ public:
 };
 
 struct DetectorsInstallation
-/* DetectorsInstallation makes and stores
-shared pointers to various logbook instances
-(for a Detectors instance to use). operator()
-returns a smart pointer to a detectors instance
-that may use these logbooks */
+/* DetectorsInstallation operator()
+returns a smart pointer to a detectors
+instance that may modify data in
+vectors pointed to by logbooks */
 {
 private:
-  struct Logbooks
-  {
-    std::shared_ptr<Logbook<double>> accpp; // logbook for accumulated precipitation
-    
-    Logbooks() : accpp(std::make_shared<Logbook<double>>()) {}
-  };
-
-  Logbooks logbooks;
+  const DetectorLogbooks &logbooks;
 
   std::shared_ptr<Detectors> install_precipitation_detectors(
       const std::shared_ptr<Detectors> detectors,
@@ -114,7 +106,8 @@ private:
   a detector to detect accumulated precipitation */
 
 public:
-  DetectorsInstallation() : logbooks() {}
+  DetectorsInstallation(const DetectorLogbooks &logbooks)
+      : logbooks(logbooks) {}
 
   std::shared_ptr<Detectors> operator()(const unsigned int gbxindex,
                                         const Maps4GridBoxes &gbxmaps) const;
