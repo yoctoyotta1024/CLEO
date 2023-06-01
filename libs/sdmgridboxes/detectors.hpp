@@ -16,8 +16,6 @@ into 'logbooks' */
 #include "./logbooks.hpp"
 #include "superdrop_solver/superdrop.hpp"
 
-using dblLogbook = std::shared_ptr<Logbook<double>>;
-
 struct AccumPrecipDetector
 /* detector which stores the value of
 accumulated precipitation in an entry of
@@ -31,9 +29,9 @@ private:
 
 public:
   AccumPrecipDetector() : manage_entry() {}
-  /* initialise without a logbook */ 
+  /* initialise without a logbook */
 
-  AccumPrecipDetector(const dblLogbook logbook,
+  AccumPrecipDetector(const std::shared_ptr<Logbook<double>> logbook,
                       const unsigned int gbxindex)
       : manage_entry(logbooks.accpp, gbxindex) {}
   /* initialise manage_entry with a logbook */ 
