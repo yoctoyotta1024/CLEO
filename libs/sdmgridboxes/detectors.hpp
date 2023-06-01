@@ -56,9 +56,12 @@ public:
 class Detectors
 /* Detectors stores various detector types and 
 a reference to logbook instances found in
-'DetectionLogbooks'. Detectors is interface to 
-control use of detectors (and logbooks) by
-a gridbox */
+'DetectionLogbooks'. Detectors calls default 
+constructor of detector types upon construction.
+Modification of a detector can then
+be done by calling the appropriate install_[...] 
+function. Likewise detcetor can be used through 
+appropriate detect_[...] function */
 {
 private:
   const DetectionLogbooks &logbooks;
@@ -70,21 +73,25 @@ public:
       : logbooks(logbooks), accpp_dtr() {}
 
   void install_accumprecip_detector(const unsigned int gbxindex)
-  /* install accumulated precipitation detector by creating
-  and entry in the accpp logbook with tag 'gbxindex' */
+  /* install accumulated precipitation detector
+  (by instanting detector with an entry in the
+  accpp logbook that has tag 'gbxindex') */
   {
     accpp_dtr = AccumPrecipDetector(logbooks.accpp, gbxindex);
   }
 
   void detect_precipitation(const Supderdrop &drop) const
+  /* use operators of precipitation detectors
+  to detect precipitation  */
   {
     accpp_dtr(drop); 
   }
 };
 
 struct DetectorsInstallation
-/* operator used to create unique pointer to a detectors
-struct with certain detector types installed */
+/* operator used to create unique pointer to a
+detectors struct and then install certain
+types of detector in it*/
 {
 private:
   DetectionLogbooks &logbooks
