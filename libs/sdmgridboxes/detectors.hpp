@@ -28,20 +28,22 @@ EntryInLogbook instance */
 private:
   EntryInLogbook<double> manage_entry;
 
-  double accumulated_precipitation(const Superdrop &drop)
+  double accumulated_precipitation(const Superdrop &drop) const
   {
     return 0.0;
   }
 
 public:
-  void create_entry_in_logbook(const dblLogbook logbook,
-                               const unsigned int gbxindex)
+  AccumPrecipDetector(){}
+
+  AccumPrecipDetector(const dblLogbook logbook,
+                      const unsigned int gbxindex)
   /* use the manage_entry to create an entry in logbook */
   {
-    manage_entry.create_entry(logbook, gbxindex);
+    manage_entry.create_entry_in_logbook(logbooks.accpp, gbxindex);
   }
 
-  void operator()(const Superdrop &drop)
+  void operator()(const Superdrop &drop) const
   {
     if (manage_entry.get_logbook())
     {
@@ -71,32 +73,37 @@ public:
   /* install accumulated precipitation detector by creating
   and entry in the accpp logbook with tag 'gbxindex' */
   {
-    accpp_dtr.create_entry_in_logbook(logbooks.accpp, gbxindex);
+    accpp_dtr = AccumPrecipDetector(logbooks.accpp, gbxindex);
   }
 
-  void detect_precipitation(const Supderdrop &drop)
+  void detect_precipitation(const Supderdrop &drop) const
   {
     accpp_dtr(drop); 
   }
 
 };
 
-struct InstallDetectors
+struct DetectorsInstallation
+/* operator used to create unique pointer to a detectors
+struct with certain detector types installed */
 {
 private:
   DetectionLogbooks &logbooks
   double precip_zlim; // (dimless) maximum z coord of gbxs that detect precipitation
 
-  uptrDetectors install_precipitation_detectors(const unsigned int gbxindex,
-                                                const Maps4GridBoxes &gbxmaps)
+  uptrDetectors install_precipitation_detectors(const uptrDetectors detectors,
+                                                const unsigned int gbxindex,
+                                                const Maps4GridBoxes &gbxmaps) const
   /* if upper z boundary of gbx is <= precip_zlim install
   a detector to detect accumulated precipitation by calling
   install_accumprecip_detector */
   {
     if (gbxmaps.get_bounds_z(gbxindex).second <= precip_zlim)
     {
-      detectors->install_accumprecip_detector(gbxindex);
+      detectors.install_accumprecip_detector(gbxindex);
     }
+
+    return detectors
   }
 
 public:
@@ -105,11 +112,13 @@ public:
       : logbooks(logbooks), precip_zlim(precip_zlim) {}
 
   uptrDetectors operator()(const unsigned int gbxindex,
-                           const Maps4GridBoxes &gbxmaps)
+                           const Maps4GridBoxes &gbxmaps) const
   {
     auto detectors = std::make_unique<Detectors>(logbooks);
 
-    detectors = install_precipitation_detectors();     
+    detectors = install_precipitation_detectors(detectors,
+                                                gbxindex,
+                                                gbxmaps);
 
     return detectors;
   }

@@ -45,14 +45,14 @@ public:
     record.at(idx) = val;
   }
 
-  unsigned int get_tag(const size_t idx)
+  unsigned int get_tag(const size_t idx) const
   /* returns gbxindex associated with
   value at position 'idx' in record */
   {
     return gbxindexes.at(idx);
   }
 
-  T get_from_record(const size_t idx)
+  T get_from_record(const size_t idx) const
   /* returns value in record at
   position 'idx' in record */
   {
@@ -71,7 +71,7 @@ private:
   size_t idx = std::numeric_limits<size_t>::max();
 
 public:
-  void create_entry(
+  void create_entry_in_logbook(
       const std::shared_ptr<Logbook<T>> ilogbook,
       const unsigned int gbxindex)
   /* create an entry in logbook 'ilogbook'
@@ -82,9 +82,9 @@ public:
     idx = logbook->new_entry(gbxindex);
   }
 
-  auto get_logbook() { return logbook; }
+  auto get_logbook() const { return logbook; }
 
-  void operator()(const T val)
+  void operator()(const T val) const
   /* copy value 'val' into logbook
   entry at position 'idx' */
   {

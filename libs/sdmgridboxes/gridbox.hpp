@@ -45,7 +45,7 @@ coupled thermodynamics */
   KOKKOS_FUNCTION
   GridBox(const unsigned int ii,
           const Maps4GridBoxes &gbxmaps,
-          const DetectionLogbooks &logbooks,
+          const InstallDetectors &dtrs,
           Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs);
   /* Volume in Thermostate set using Map4GridBoxes
   idx2vol map (via get_volume function). Other ThermoState variables

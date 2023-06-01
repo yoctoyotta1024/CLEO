@@ -8,11 +8,11 @@ a gridbox */
 KOKKOS_FUNCTION
 GridBox::GridBox(const unsigned int ii,
                  const Maps4GridBoxes &gbxmaps,
-                 const DetectionLogbooks &logbooks,
+                 const InstallDetectors &dtrs,
                  Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
     : gbxindex(ii),
       state(gbxmaps.get_volume(gbxindex)),
-      detectors(install_detectors(gbxindex, logbooks, gbxmaps))
+      detectors(dtrs(gbxindex, gbxmaps))
 /* Volume in Thermostate set using Map4GridBoxes
 idx2vol map (via get_volume function). Other ThermoState variables
 are default behaviour initialised. */
