@@ -31,7 +31,7 @@ ie. which takes a logbooks struct as argument and returns void */
   o(lbks)
   } -> std::same_as<void>;
   {
-    o.prepare()
+    o.prepare(lbks)
   } -> std::same_as<void>;
 };
 
@@ -55,10 +55,10 @@ public:
     o2(lbks);
   }
 
-  void prepare() const
+  void prepare(const DetectorLogbooks &lbks) const
   {
-    o1.prepare();
-    o2.prepare();
+    o1.prepare(lbks);
+    o2.prepare(lbks);
   }
 };
 
@@ -94,9 +94,9 @@ public:
     return t % interval == 0;
   }
 
-  void prepare() const
+  void prepare(const DetectorLogbooks &lbks) const
   {
-    obslbks.prepare();
+    obslbks.prepare(lbks);
   }
 
   void observe_logbooks(const DetectorLogbooks &lbks) const
@@ -136,7 +136,7 @@ prints out details about logbooks */
             << totaccumpp*dlc::MASS0grams << "g"<< '\n';
   }
 
-  void prepare() const {}
+  void prepare(const DetectorLogbooks &lbks) const {}
 
   void operator()(const DetectorLogbooks &logbooks) const
   {

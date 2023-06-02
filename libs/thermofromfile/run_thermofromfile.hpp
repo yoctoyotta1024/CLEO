@@ -71,7 +71,7 @@ preparetotimestep(const RunSDMStep<MSDs, P, O> &sdm)
 /* return pool of Kokkos' random number
 generators used in SDM and prepare observer */
 {
-  sdm.observer.prepare();
+  sdm.observer.prepare(sdm.logbooks);
 
   return Kokkos::Random_XorShift64_Pool<>(std::random_device{}());
 }

@@ -95,7 +95,7 @@ public:
     return t % interval == 0;
   }
 
-  void prepare() const
+  void prepare(const DetectorLogbooks &logbooks) const
   {
     obsgbxs.prepare();
   }

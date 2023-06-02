@@ -52,7 +52,7 @@ required for observing gridboxes and logbooks */
     obs.on_step(t)
   } -> std::convertible_to<bool>;
   {
-    obs.prepare()
+    obs.prepare(lbks)
   } -> std::same_as<void>;
 };
 
@@ -86,10 +86,10 @@ public:
     return t % interval == 0;
   }
   
-  void prepare() const
+  void prepare(const DetectorLogbooks &lbks) const
   {
-    o1.prepare();
-    o2.prepare();
+    o1.prepare(lbks);
+    o2.prepare(lbks);
   }
 
   void observe_gridboxes(const size_t ngbxs,
@@ -138,7 +138,7 @@ completion of a Monoid Structure */
                const Kokkos::View<GridBox *> h_gbxs,
                const DetectorLogbooks &lbks) const {}
 
-  void prepare() const {}
+  void prepare(const DetectorLogbooks &logbooks) const {}
 
   int get_interval() { return std::numeric_limits<int>::max(); }
 
@@ -176,10 +176,10 @@ public:
     return t % interval == 0;
   }
 
-  void prepare() const
+  void prepare(const DetectorLogbooks &lbks) const
   {
     obsgbxs.prepare();
-    obslbks.prepare();
+    obslbks.prepare(lbks);
   }
 
   void observe_gridboxes(const size_t ngbxs,
@@ -223,7 +223,7 @@ and superdroplets */
     return t % interval == 0;
   }
 
-  void prepare() const {}
+  void prepare(const DetectorLogbooks &logbooks) const {}
 
   void observe_logbooks(const DetectorLogbooks &logbooks) const;
 

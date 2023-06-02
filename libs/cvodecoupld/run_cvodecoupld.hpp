@@ -127,7 +127,7 @@ if wetradiiinit is true. Call sdm observer's prepare function */
     set_superdroplets_to_wetradius(gridboxes);
   }
 
-  observer.prepare();
+  sdm.observer.prepare(sdm.logbooks);
   
   return Kokkos::Random_XorShift64_Pool<>(std::random_device{}()); // pool of Kokkos' random number generators
 }
