@@ -15,14 +15,14 @@ logbook to an array in a zarr storage system */
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
-template <typename L>
-concept ObserveLbks = requires(L l, const std::vector<int> lbks)
+template <typename OL>
+concept ObserveLbks = requires(OL o, const std::vector<int> lbks)
 /* concept ObserveLbks is all types that have an operator that
 has signature of observe_logbooks() function (see Observer concept)
 ie. which takes a logbooks struct as argument and returns void */
 {
   {
-  obs(lbks)
+  o(lbks)
   } -> std::same_as<void>;
 };
 
@@ -32,11 +32,11 @@ class CombinedObserveLbks
 is 'og1' followed by 'og2' */
 {
 private:
-  Ol o1;
-  Ol o2;
+  Ol1 o1;
+  Ol2 o2;
 
 public:
-  CombinedObserveLbks(const Ol o1, const Ol o2)
+  CombinedObserveLbks(const Ol1 o1, const Ol2 o2)
       : o1(o1), o2(o2) {}
 
   void operator()(const std::vector<int> lbks) const
