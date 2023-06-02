@@ -23,7 +23,7 @@ struct MassMom012Storages
 /* 2D zarr stores for 0th, 1st and 2nd mass moments */
 {
 private:
-  const double sf = pow(dlc::R0, 3.0) * dlc::RHO0 * 1000; // scale factor to convert dimensionless masses to grams
+  const double sf = dlc::MASS0 * 1000; // scale factor to convert dimensionless masses to grams
 
 public:
   TwoDStorage<double> mom0zarr;

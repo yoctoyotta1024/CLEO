@@ -52,11 +52,12 @@ namespace dimless_constants
   constexpr double CP0 = DC::CP_DRY;              // Heat capacity [J/Kg/K]
   constexpr double MR0 = DC::MR_DRY;              // molecular molar mass [Kg/mol]
   constexpr double R0 = 1e-6;                     // droplet radius lengthscale [m]
-  
-  constexpr double P0 = 100000.0;                 // pressure [Pa]
-  constexpr double TEMP0 = 273.15;                // temperature [K]
-  constexpr double RHO0 = P0 / (CP0 * TEMP0); // density [Kg/m^3]
-  constexpr double F0 = TIME0 / (RHO0 * R0 * R0); // droplet condensation-diffusion factors []
+
+  constexpr double P0 = 100000.0;                    // pressure [Pa]
+  constexpr double TEMP0 = 273.15;                   // temperature [K]
+  constexpr double RHO0 = P0 / (CP0 * TEMP0);        // density [Kg/m^3]
+  constexpr double MASS0 = R0 * R0 * R0 * dlc::RHO0; // mass [Kg]
+  constexpr double F0 = TIME0 / (RHO0 * R0 * R0);    // droplet condensation-diffusion factors []
 
   /* dimensionaless constants */
   constexpr double Mr_ratio = DC::MR_WATER / DC::MR_DRY;
