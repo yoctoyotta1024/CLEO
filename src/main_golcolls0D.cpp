@@ -32,7 +32,7 @@ collision-coalscence kernel */
 #include "observers/observers.hpp"
 #include "observers/observegbxs.hpp"
 #include "observers/observelbks.hpp"
-#include "observers/observegbxs_intostore.hpp"
+#include "observers/gridboxes_intostore.hpp"
 
 #include "singlevarstorage.hpp"
 #include "zarrstorage/sdattributes_intostore.hpp"

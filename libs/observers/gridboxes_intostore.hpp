@@ -1,12 +1,12 @@
 // Author: Clara Bayley
-// File: "observegbxs_intostore.hpp"
+// File: "gridboxes_intostore.hpp"
 /* structures obeying the ObserveGBxs
 concept for various ways of observing
 a gridbox which ends up writing data
 into a (zarr) store on disk */
 
-#ifndef OBSERVEGBXS_INTOSTORE_HPP
-#define OBSERVEGBXS_INTOSTORE_HPP
+#ifndef GRIDBOXES_INTOSTORE_HPP
+#define GRIDBOXES_INTOSTORE_HPP
 
 #include <string>
 #include <stdexcept>
@@ -251,4 +251,4 @@ public:
   }
 };
 
-#endif // OBSERVEGBXS_INTOSTORE_HPP
+#endif // GRIDBOXES_INTOSTORE_HPP
