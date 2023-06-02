@@ -138,11 +138,10 @@ combined process of those two individual processes */
   // return NullProcess{};
 }
 
-CreateDetectorsPtr auto specify_detectors(const DetectorLogbooks &logbooks,
-                                         const Maps4GridBoxes &gbxmaps)
+CreateDetectorsPtr auto specify_detectors(const Maps4GridBoxes &gbxmaps)
 {
   // return NullDetectorsPtr{};
-  return PrecipDetectorsPtr(logbooks, gbxmaps);
+  return PrecipDetectorsPtr(gbxmaps);
 }
 
 SuperdropIntoStoreViaBuffer auto sdattrs_to_observe()

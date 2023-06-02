@@ -49,12 +49,14 @@ private:
 
   std::shared_ptr<Detectors>
   install_precipitation_detectors(const std::shared_ptr<Detectors> detectors,
+                                  const DetectorLogbooks &logbooks,
                                   const unsigned int gbxindex) const;
   /* if upper z boundary of gbx is <= precip_zlim install
   a detector to detect accumulated precipitation */
 
   std::shared_ptr<Detectors>
   install_detectors(std::shared_ptr<Detectors> detectors,
+                    const DetectorLogbooks &logbooks,
                     const unsigned int gbxindex) const;
   /* operator installs certain types of detector in
   detectors struct given its pointer */
