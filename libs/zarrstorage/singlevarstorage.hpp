@@ -84,7 +84,7 @@ public:
 
   virtual ~SingleVarStorage(){};
 
-  void is_name(const std::string goodname)
+  void is_name(const std::string goodname) const
   {
     if (name != goodname)
     {
