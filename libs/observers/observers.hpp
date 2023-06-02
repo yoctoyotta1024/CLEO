@@ -149,11 +149,12 @@ completion of a Monoid Structure */
 };
 
 template <ObserveGBxs ObsGBxs, ObserveLbks ObsLbks>
-class ConstIntervalObserver
+class ConstIntervalDualObserver
 /* struct satifying the Observer concept
 that has constant time-step 'interval'
-between obserations of gridboxes and
-logbooks */
+between obserations and observations of gridboxes are
+done by distinct type 'ObsGBxs' meanwhile 
+observations of logbooks are made by 'Obslbks' */
 {
 private:
   const int interval; // interval (integer timestep) between observations
@@ -162,7 +163,7 @@ private:
   ObsLbks obslbks;
 
 public:
-  ConstIntervalObserver(const int interval,
+  ConstIntervalDualObserver(const int interval,
                         const ObsGBxs observe_gridboxes,
                         const ObsLbks observe_logbooks)
       : interval(interval), obsgbxs(observe_gridboxes),
@@ -183,11 +184,15 @@ public:
 
   void observe_gridboxes(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes) const
+  /* note: obslbks(ngbxs, h_gridboxes) operator is not
+  called even though in general it could exist */
   {
     obsgbxs(ngbxs, h_gridboxes);
   }
 
-   void observe_logbooks(const DetectorLogbooks &logbooks) const
+  void observe_logbooks(const DetectorLogbooks &logbooks) const
+  /* note: obsgbxs(logbooks) operator is not
+  called even though in general it could exist */
   {
     obslbks(logbooks);
   }

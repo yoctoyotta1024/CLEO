@@ -33,6 +33,8 @@ private:
 public:
   ObserveThermoState(ThermoStateStorage &zarr) : zarr(zarr){}
 
+  void prepare() const {}
+
   void operator()(const size_t ngbxs,
                      const Kokkos::View<GridBox *> h_gridboxes) const
   {
@@ -55,6 +57,8 @@ private:
 
 public:
   ObserveSDsAttributes(ContiguousRaggedSDStorage &zarr) : zarr(zarr) {}
+
+  void prepare() const {}
 
   void operator()(const size_t ngbxs,
                   const Kokkos::View<GridBox *> h_gridboxes) const
@@ -82,6 +86,8 @@ private:
 
 public:
   ObserveSDsGbxindex(auto &zarr) : zarr(zarr) {}
+  
+  void prepare() const {}
 
   void operator()(const size_t ngbxs,
                   const Kokkos::View<GridBox *> h_gridboxes) const
@@ -113,6 +119,8 @@ public:
     zarr.is_name("time");
   }
 
+  void prepare() const { zarr.is_name("time"); }
+
   void operator()(const size_t ngbxs,
                   const Kokkos::View<GridBox *> h_gridboxes) const
 
@@ -136,6 +144,8 @@ public:
   {
     zarr.is_name("gbxindex");
   }
+
+  void prepare() const { zarr.is_name("gbxindex"); }
 
   void operator()(const size_t ngbxs,
                   const Kokkos::View<GridBox *> h_gridboxes) const
@@ -165,6 +175,8 @@ public:
     zarr.is_name("nsupers");
     zarr.is_dim1(ngbxs, "gbxindex");
   }
+
+  void prepare() const { zarr.is_name("nsupers"); }
 
   void operator()(const size_t ngbxs,
                   const Kokkos::View<GridBox *> h_gridboxes) const
@@ -200,6 +212,12 @@ public:
     zarr.is_dim1(ngbxs, "gbxindex");
   }
 
+  void prepare() const
+  {
+    const std::string name("mom" + std::to_string(nth_moment));
+    zarr.is_name(name);
+  }
+
   void operator()(const size_t ngbxs,
                   const Kokkos::View<GridBox *> h_gridboxes) const
   {
@@ -233,6 +251,12 @@ public:
     zarr.is_name(name);
     zarr.is_dim1(ngbxs, "gbxindex");
   }
+
+  void prepare() const
+  {
+    const std::string name("rainmom" + std::to_string(nth_moment));
+    zarr.is_name(name);
+  } 
 
   void operator()(const size_t ngbxs,
                   const Kokkos::View<GridBox *> h_gridboxes) const

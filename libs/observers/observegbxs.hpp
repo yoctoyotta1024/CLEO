@@ -29,6 +29,9 @@ argument and returns void */
   {
     og(n, h_gbxs)
   } -> std::same_as<void>;
+  {
+    og.prepare()
+  } -> std::same_as<void>;
 };
 
 template <ObserveGBxs Og1, ObserveGBxs Og2>
@@ -50,6 +53,12 @@ public:
   {
     og1(ngbxs, h_gbxs);
     og2(ngbxs, h_gbxs);
+  }
+
+  void prepare() const
+  {
+    og1.prepare();
+    og2.prepare();
   }
 };
 
@@ -84,6 +93,11 @@ public:
   bool on_step(const int t) const
   {
     return t % interval == 0;
+  }
+
+  void prepare() const
+  {
+    obsgbxs.prepare();
   }
 
   void observe_logbooks(const DetectorLogbooks &lbks) const {}

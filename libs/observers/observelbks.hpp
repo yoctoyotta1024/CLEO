@@ -30,6 +30,9 @@ ie. which takes a logbooks struct as argument and returns void */
   {
   o(lbks)
   } -> std::same_as<void>;
+  {
+    o.prepare()
+  } -> std::same_as<void>;
 };
 
 template <ObserveLbks Ol1, ObserveLbks Ol2>
@@ -50,6 +53,12 @@ public:
   {
     o1(lbks);
     o2(lbks);
+  }
+
+  void prepare() const
+  {
+    o1.prepare();
+    o2.prepare();
   }
 };
 
@@ -83,6 +92,11 @@ public:
   bool on_step(const int t) const
   {
     return t % interval == 0;
+  }
+
+  void prepare() const
+  {
+    obslbks.prepare();
   }
 
   void observe_logbooks(const DetectorLogbooks &lbks) const
@@ -121,6 +135,8 @@ prints out details about logbooks */
             << "tot accum. precip = "
             << totaccumpp*dlc::MASS0grams << "g"<< '\n';
   }
+
+  void prepare() const {}
 
   void operator()(const DetectorLogbooks &logbooks) const
   {
