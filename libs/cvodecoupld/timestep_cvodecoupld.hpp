@@ -92,7 +92,7 @@ start_coupldstep(const int t_mdl,
                  const int couplstep,
                  const size_t ngbxs,
                  const Observer auto &observer,
-                 const DetectorLogbooks &lbks,
+                 const DetectorLogbooks &logbooks,
                  const CvodeThermoSolver &cvode,
                  Kokkos::View<GridBox *> h_gridboxes)
 /* communication of thermodynamic state from CVODE solver to SDM.

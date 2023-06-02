@@ -92,7 +92,7 @@ given current time t_mdl, so that next time
 inline int start_step(const int t_mdl, const int couplstep,
                        const size_t ngbxs,
                        const Observer auto &observer,
-                       const DetectorLogbooks &lbks,
+                       const DetectorLogbooks &logbooks,
                        const ThermodynamicsFromFile &thermodyn,
                        Kokkos::View<GridBox *> h_gridboxes)
 /* optional communication of thermodynamic state

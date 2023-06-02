@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
   const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 
   const auto dtrs = specify_detectors(sdm.logbooks, sdm.gbxmaps);
-  
+
   Kokkos::initialize(argc, argv);
   {
     /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */

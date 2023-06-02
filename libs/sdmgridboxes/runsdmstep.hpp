@@ -68,7 +68,7 @@ private:
   }
 
 public:
-  const DetectorLogbooks logbooks,
+  const DetectorLogbooks logbooks;
   const Maps4GridBoxes &gbxmaps;
   const MoveSuperdropsInDomain<M> &sdmmotion;
   const P &sdmprocess;
