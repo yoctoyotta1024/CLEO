@@ -62,10 +62,9 @@ def initSDsinputsdict(configfile, constsfile):
     # for de-dimensionalising attributes
     "R0":consts["R0"],                          # droplet radius lengthscale [m]
     "RHO0": moreconsts["RHO0"],                 # characteristic density scale [Kg/m^3]
-    "COORD0": moreconsts["COORD0"],                              # z coordinate lengthscale [m]
+    "MASS0": moreconsts["MASS0"],               # characteristic mass scale [Kg]
+    "COORD0": moreconsts["COORD0"],             # z coordinate lengthscale [m]
   }
-
-  inputs["MASS0"] = inputs["RHO0"] * (inputs["R0"]**3)
 
   return inputs
 

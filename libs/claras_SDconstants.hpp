@@ -56,7 +56,7 @@ namespace dimless_constants
   constexpr double P0 = 100000.0;                    // pressure [Pa]
   constexpr double TEMP0 = 273.15;                   // temperature [K]
   constexpr double RHO0 = P0 / (CP0 * TEMP0);        // density [Kg/m^3]
-  constexpr double MASS0 = R0 * R0 * R0 * dlc::RHO0; // mass [Kg]
+  constexpr double MASS0 = R0 * R0 * R0 * RHO0;      // mass [Kg]
   constexpr double F0 = TIME0 / (RHO0 * R0 * R0);    // droplet condensation-diffusion factors []
 
   /* dimensionaless constants */
