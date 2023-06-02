@@ -27,16 +27,14 @@ public:
     zarr.is_dim1(0, "logbooktags");
   }
 
-  ~ObservePrecip()
-  {
-    zarr.is_dim1(logbooks.accumprecip -> get_size(), "logbooktags");
-  }
-
   void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const
   {
     std::vector<double> record = logbook -> get_and_reset_record(0.0);
-    zarr.value_to_storage(record);
+    // zarr.value_to_storage(record);
     ++zarr.nobs;
+    
+    zarr.is_dim1(record.size(), "logbooktags");
+    
   }
 
   void operator()(const DetectorLogbooks &logbooks) const
