@@ -42,11 +42,10 @@ int main(int argc, char *argv[])
                             sdattrs_to_observe());
   const auto observer = create_observer(mdlsteps.obsstep, zarrstores);
 
-  const DetectorLogbooks logbooks;
-  const auto dtrs = specify_detectors(logbooks, gbxmaps);
-
   const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 
+  const auto dtrs = specify_detectors(sdm.logbooks, sdm.gbxmaps);
+  
   Kokkos::initialize(argc, argv);
   {
     /* RUN SDM MODEL WITH THERMODYNAMICS FROM FILE */

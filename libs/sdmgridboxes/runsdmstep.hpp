@@ -67,6 +67,7 @@ private:
   }
 
 public:
+  const DetectorLogbooks logbooks,
   const Maps4GridBoxes &gbxmaps;
   const MoveSuperdropsInDomain<M> &sdmmotion;
   const P &sdmprocess;
@@ -75,9 +76,11 @@ public:
 
   RunSDMStep(const Maps4GridBoxes &gbxmaps,
              const MoveSuperdropsInDomain<M> &sdmmotion,
-             const P &sdmprocess, const O &observer)
-      : gbxmaps(gbxmaps), sdmmotion(sdmmotion), sdmprocess(sdmprocess),
-        observer(observer), ngridboxes(gbxmaps.gbxidxs.size())
+             const P &sdmprocess,
+             const O &observer)
+      : logbooks(), gbxmaps(gbxmaps), sdmmotion(sdmmotion),
+        sdmprocess(sdmprocess), observer(observer),
+        ngridboxes(gbxmaps.gbxidxs.size())
   {
     const size_t ngrid(gbxmaps.ndims[0] * gbxmaps.ndims[1] * gbxmaps.ndims[2]);
     if (ngrid != ngridboxes)
