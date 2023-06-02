@@ -13,6 +13,7 @@ in a zarr store */
 #include <cmath>
 #include <cassert>
 #include <limits>
+#include <algorithm>
 
 #include "./zarrstores.hpp"
 
@@ -64,12 +65,12 @@ protected:
     ++ndata;
   }
 
-  // void copy2buffer(const std::vector<T> vec)
-  // /* copy values of type T in vector 'vec' to buffer */
-  // {
-  //   bufferfill = storagehelper::val2buffer<T>(val, buffer, bufferfill);
-  //   ndata += vec.size();
-  // }
+  void copy2buffer(const std::vector<T> vec)
+  /* copy values of type T in vector 'vec' to buffer */
+  {
+    bufferfill = storagehelper::val2buffer<T>(val, buffer, bufferfill);
+    ndata += vec.size();
+  }
 
 public:
   SingleVarStorage(FSStore &store, const unsigned int maxchunk,
@@ -100,19 +101,19 @@ public:
     copy2buffer(val);
   }
 
-  // void value_to_storage(const std::vector<T> vec)
-  // /* write 'vec' vector of type T in the zarr store.
-  // First copy vector to a buffer, then write buffer to a
-  // chunk in the store when the number of values in
-  // the buffer reaches the chunksize */
-  // {
-  //   if (bufferfill + vec.size() > chunksize)
-  //   {
-  //     writechunk();
-  //   }
+  void value_to_storage(const std::vector<T> vec)
+  /* write 'vec' vector of type T in the zarr store.
+  First copy vector to a buffer, then write buffer to a
+  chunk in the store when the number of values in
+  the buffer reaches the chunksize */
+  {
+    if (bufferfill == chunksize)
+    {
+      writechunk();
+    }
 
-  //   copy2buffer(vec);
-  // }
+    copy2buffer(vec);
+  }
 
 };
 

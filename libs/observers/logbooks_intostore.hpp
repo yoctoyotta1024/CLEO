@@ -82,8 +82,8 @@ private:
 public:  
   void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const
   {
-    // std::vector<double> record = logbook.get_and_reset_record();
-    // zarr.value_to_storage(record);
+    std::vector<double> record = logbook.get_and_reset_record();
+    zarr.value_to_storage(record);
   }
 
   void operator()(const DetectorLogbooks &logbooks) const
