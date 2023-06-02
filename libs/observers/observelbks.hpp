@@ -15,8 +15,11 @@ logbook to an array in a zarr storage system */
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
+#include "../claras_SDconstants.hpp"
 #include "sdmgridboxes/logbooks.hpp"
 #include "sdmgridboxes/gridbox.hpp"
+
+namespace dlc = dimless_constants;
 
 template <typename OL>
 concept ObserveLbks = requires(OL o, const DetectorLogbooks lbks)
