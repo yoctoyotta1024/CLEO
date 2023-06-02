@@ -17,6 +17,7 @@ in a zarr store */
 #include <algorithm>
 #include <utility>
 #include <tuple>
+#include <stdexcept>
 
 #include "./zarrstores.hpp"
 
@@ -27,14 +28,15 @@ private:
   virtual void writechunk() = 0;
   virtual void writejsons() = 0;
 
+  size_t chunksize; // fixed size of array chunks (=max no. datapoints in buffer before writing)
+
 protected:
-  FSStore &store;       // file system store satisfying zarr store specificaiton v2
+  FSStore &store;            // file system store satisfying zarr store specificaiton v2
   const std::string name;    // name to call variable being stored
   const std::string units;   // units of coordinate being stored (for arrayattrs json)
   const double scale_factor; // scale_factor of data (for array .zattrs json)
   std::vector<T> buffer;     // buffer to store values in until writing to array chunk
 
-  const size_t chunksize;  // fixed size of array chunks (=max no. datapoints in buffer before writing)
   unsigned int chunkcount; // number of chunks of array so far written to store
   unsigned int bufferfill; // number of datapoints so far copied into buffer
   unsigned int ndata;      // number of data points that have been observed
@@ -45,6 +47,19 @@ protected:
   const std::string fill_value = "null"; // fill value for empty datapoints in array
   const std::string filters = "null";    // codec configurations for compression
   const std::string dtype;               // datatype stored in arrays
+
+  unsigned int get_chunksize() const {return chunksize;}
+
+  void set_chunksize(const unsigned int i_chunksize)
+  {
+    if (chunksize != 0)
+    {
+      const std::string err("non-zero chunksize cannot be changed");
+      throw std::invalid_argument(err);
+    }
+
+    chunksize = i_chunksize;
+  }
 
   void zarrayjsons(const std::string shape,
                    const std::string chunks,
@@ -79,11 +94,10 @@ public:
   SingleVarStorage(FSStore &store, const unsigned int chunksize,
                    const std::string name, const std::string dtype,
                    const std::string units, const double scale_factor)
-      : store(store), name(name), units(units),
-        scale_factor(scale_factor),
+      : chunksize(chunksize), store(store),
+        name(name), units(units), scale_factor(scale_factor),
         buffer(chunksize, std::numeric_limits<T>::max()),
-        chunksize(chunksize), chunkcount(0),
-        bufferfill(0), ndata(0), dtype(dtype) {}
+        chunkcount(0), bufferfill(0), ndata(0), dtype(dtype) {}
 
   virtual ~SingleVarStorage(){};
 
@@ -148,7 +162,7 @@ private:
   /* write strictly required metadata to decode chunks (MUST) */
   {
     const auto shape("[" + std::to_string(this->ndata) + "]");
-    const auto chunks("[" + std::to_string(this->chunksize) + "]");
+    const auto chunks("[" + std::to_string(this->get_chunksize()) + "]");
     const std::string dims = "[\"" + this->name + "\"]";
 
     this->zarrayjsons(shape, chunks, dims);
@@ -204,17 +218,28 @@ private:
   {
     assert((this->ndata == nobs * ndim1) &&
            "1D data length matches 2D array size");
-    assert((this->chunksize % ndim1 == 0.0) &&
+    assert((this->get_chunksize() % ndim1 == 0.0) &&
            "chunks are integer multiple of 1st dimension of 2-D data");
 
     const auto n1str = std::to_string(ndim1);
     const auto nobstr = std::to_string(nobs);
-    const auto nchstr = std::to_string(this->chunksize / ndim1);
+    const auto nchstr = std::to_string(this->get_chunksize() / ndim1);
 
     const auto shape("[" + nobstr + ", " + n1str + "]");
     const auto chunks("[" + nchstr + ", " + n1str + "]");
     const std::string dims = "[\"time\", \"" + dim1name + "\"]";
     this->zarrayjsons(shape, chunks, dims);
+  }
+
+protected:
+  void set_ndim1(const unsigned int i_ndim1)
+  {
+    if (ndim1 != 0)
+    {
+      const std::string err("non-zero ndim1 cannot be changed");
+      throw std::invalid_argument(err);
+    }
+    ndim1 = i_ndim1;
   }
 
 public:

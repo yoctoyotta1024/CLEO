@@ -9,6 +9,7 @@ into a (zarr) store on disk */
 #define LOGBOOKS_INTOSTORE_HPP
 
 #include <vector>
+#include <memory>
 
 #include "sdmgridboxes/logbooks.hpp"
 #include "zarrstorage/logbooksstorage.hpp"
@@ -29,15 +30,12 @@ public:
 
   void prepare(const DetectorLogbooks &logbooks) const
   {
-    zarr_a.set_ndims_and_chunksize(logbooks.accumprecip -> get_size());
+    zarr_a.set_ndim1_and_chunksize(logbooks.accumprecip -> get_size());
   }
 
   void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const
   {
     std::vector<double> record = logbook -> get_and_reset_record(0.0);
-    
-    // set_ndim1(record.size()); // TO DO: delete this and do in a better way (only once?)
-
     zarr_a.value_to_storage(record);
     ++zarr_a.nobs;
   }

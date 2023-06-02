@@ -8,6 +8,8 @@ in a zarr store */
 #ifndef LOGBOOKSSTORAGE_HPP
 #define LOGBOOKSSTORAGE_HPP
 
+#include <string>
+
 #include "./zarrstores.hpp"
 #include "./singlevarstorage.hpp"
 
@@ -26,14 +28,12 @@ public:
                        scale_factor, i_dim1name, 0),
         maxchunk(maxchunk) {}
 
-  void set_ndims_and_chunksize(const unsigned int size)
+  void set_ndim1_and_chunksize(const unsigned int size)
   /* given 'size' (number of entries in logbook)
   change ndims1 and chunksize of zarr storage */
   {
-    good2Dchunk(const unsigned int maxchunk,
-                                  const unsigned int ndim1)
-
-    zarr.is_dim1(size, "logbooktags");
+    zarr.set_ndim1(size);
+    zarr.set_chunksize(storagehelper::good2Dchunk(maxchunk, size));
   }
 };
 
