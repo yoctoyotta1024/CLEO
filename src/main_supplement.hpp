@@ -64,8 +64,8 @@ struct SomeZarrStores
   ThermoStateStorage thermozarr;
   ContiguousRaggedSDStorage<S> sdzarr;
   ContiguousRaggedSDStorage<SdgbxIntoStore> sdgbxzarr;
-  MomStorages massmoms;
-  RainMomStorages rainmassmoms;
+  MomentsStorages massmoms;
+  RainMomentsStorages rainmassmoms;
   CoordinateStorage<double> timezarr;
   CoordinateStorage<unsigned int> gbxzarr;
   TwoDStorage<size_t> nsuperszarr;
@@ -82,7 +82,7 @@ SomeZarrStores(FSStore &fsstore, const int maxchunk,
         gbxzarr(fsstore, maxchunk, "gbxindex",
                 "<u4", " ", 1),
         nsuperszarr(fsstore, maxchunk, "nsupers",
-                    "<u8", " ", 1, ngbxs) {}
+                    "<u8", " ", 1, ngbxs, "gbxindex") {}
 };
 
 SdMotion auto create_sdmotion(const int motionstep)
@@ -168,22 +168,24 @@ of a superdroplet into zarr storage */
 }
 
 ObserveGBxs auto
-create_observegbx_massmoments(MomStorages &mms,
-                              RainMomStorages &rmms)
+create_observegbx_massmoments(MomentsStorages &mms,
+                              RainMomentsStorages &rmms,
+                              const size_t ngbxs)
 {
-  const auto mom0 = ObserveNthMassMoment(mms.mom0zarr, 0);
-  const auto mom1 = ObserveNthMassMoment(mms.mom1zarr, 1);
-  const auto mom2 = ObserveNthMassMoment(mms.mom2zarr, 2);
+  const auto mom0 = ObserveNthMassMoment(mms.mom0zarr, 0, ngbxs);
+  const auto mom1 = ObserveNthMassMoment(mms.mom1zarr, 1, ngbxs);
+  const auto mom2 = ObserveNthMassMoment(mms.mom2zarr, 2, ngbxs);
 
-  const auto rain0 = ObserveNthRainMassMoment(rmms.mom0zarr, 0);
-  const auto rain1 = ObserveNthRainMassMoment(rmms.mom1zarr, 1);
-  // const auto rain2 = ObserveNthRainMassMoment(rmms.mom2zarr, 2);
+  const auto rain0 = ObserveNthRainMassMoment(rmms.mom0zarr, 0, ngbxs);
+  const auto rain1 = ObserveNthRainMassMoment(rmms.mom1zarr, 1, ngbxs);
+  // const auto rain2 = ObserveNthRainMassMoment(rmms.mom2zarr, 2, ngbxs);
   
   return rain1 >> rain0 >> mom2 >> mom1 >> mom0; 
 }
 
 template <SuperdropIntoStoreViaBuffer S>
-Observer auto create_observer(const int obsstep, SomeZarrStores<S> &stores)
+Observer auto create_observer(SomeZarrStores<S> &stores, const int obsstep,
+                              const size_t ngbxs)
 /* return an Observer type from an amalgamation of other observer types.
 For example return an observer that observes both the thermostate and the
 superdroplets from combination of those two seperate observers */
@@ -197,10 +199,12 @@ superdroplets from combination of those two seperate observers */
   
   const ObserveGBxs auto og4 = ObserveGridBoxIndex(stores.gbxzarr);
 
-  const ObserveGBxs auto og5 = ObserveNsupersPerGridBox(stores.nsuperszarr);
+  const ObserveGBxs auto og5 = ObserveNsupersPerGridBox(stores.nsuperszarr,
+                                                        ngbxs);
 
   const ObserveGBxs auto og6 = create_observegbx_massmoments(stores.massmoms,
-                                                              stores.rainmassmoms);
+                                                            stores.rainmassmoms,
+                                                            ngbxs);
 
   const ObserveLbks auto ol1 = PrintLogbooks{};
 

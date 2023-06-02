@@ -74,7 +74,30 @@ protected:
     ndata += vec.size();
   }
 
-protected:
+public:
+  SingleVarStorage(FSStore &store, const unsigned int maxchunk,
+                   const std::string name, const std::string dtype,
+                   const std::string units, const double scale_factor)
+      : store(store), name(name), units(units),
+        scale_factor(scale_factor),
+        buffer(maxchunk, std::numeric_limits<T>::max()),
+        chunksize(maxchunk), chunkcount(0),
+        bufferfill(0), ndata(0), dtype(dtype) {}
+
+  virtual ~SingleVarStorage(){};
+
+  int get_ndata() const { return ndata; }
+
+  void is_name(const std::string &goodname) const
+  {
+    if (name != goodname)
+    {
+      const std::string errmsg("name of storage is " + name +
+                               ", but should be " + goodname);
+      throw std::invalid_argument(errmsg);
+    }
+  }
+
   void value_to_storage(const T val)
   /* write val in the zarr store. First copy it to a buffer,
   then write buffer to a chunk in the store when the number
@@ -101,30 +124,6 @@ protected:
 
     copy2buffer(vec);
   }
-
-public:
-  SingleVarStorage(FSStore &store, const unsigned int maxchunk,
-                   const std::string name, const std::string dtype,
-                   const std::string units, const double scale_factor)
-      : store(store), name(name), units(units),
-        scale_factor(scale_factor),
-        buffer(maxchunk, std::numeric_limits<T>::max()),
-        chunksize(maxchunk), chunkcount(0),
-        bufferfill(0), ndata(0), dtype(dtype) {}
-
-  virtual ~SingleVarStorage(){};
-
-  void is_name(const std::string &goodname) const
-  {
-    if (name != goodname)
-    {
-      const std::string errmsg("name of storage is " + name +
-                               ", but should be " + goodname);
-      throw std::invalid_argument(errmsg);
-    }
-  }
-
-  int get_ndata() const { return ndata; }
 };
 
 template <typename T>
@@ -174,7 +173,7 @@ public:
 
 template <typename T>
 struct TwoDStorage : SingleVarStorage<T>
-/* 2D storage with dimensions [time, dim1] where 
+/* 2D storage with dimensions [time, dim1] where
 ntime is number of observation events (no. time outputs)
 and ndim1 is the number of elements in 1st dimension
 of 2-D data i.e. no. elements observed for each time.
@@ -183,8 +182,8 @@ an observer observes during 1 observation. Data for values
 of time and dim1 could be output using a CoordinateStorage */
 {
 private:
-  const unsigned int ndim1; // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
-  const std::string dim1name;   // name of 1st dimension (e.g. "gbxindex")
+  const unsigned int ndim1;   // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
+  const std::string dim1name; // name of 1st dimension (e.g. "gbxindex")
 
   void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
@@ -213,7 +212,7 @@ private:
 
     const auto shape("[" + nobstr + ", " + n1str + "]");
     const auto chunks("[" + nchstr + ", " + n1str + "]");
-    const std::string dims = "[\"time\", \""+dim1name+"\"]";
+    const std::string dims = "[\"time\", \"" + dim1name + "\"]";
     this->zarrayjsons(shape, chunks, dims);
   }
 
@@ -243,8 +242,10 @@ public:
   {
     if ((size_t)ndim1 != goodndim1)
     {
-      const std::string errmsg("ndim1 is" + ndim1 +
-                               ", but should be " + goodndim1);
+      const std::string errmsg("ndim1 is" +
+                               std::to_string(ndim1) +
+                               ", but should be " +
+                               std::to_string(goodndim1));
       throw std::invalid_argument(errmsg);
     }
 

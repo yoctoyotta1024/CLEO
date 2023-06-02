@@ -231,7 +231,7 @@ public:
   {
     const std::string name("rainmom" + std::to_string(nth_moment));
     zarr.is_name(name);
-    zar.is_dim1(ngbxs, "gbxindex");
+    zarr.is_dim1(ngbxs, "gbxindex");
   }
 
   void operator()(const size_t ngbxs,

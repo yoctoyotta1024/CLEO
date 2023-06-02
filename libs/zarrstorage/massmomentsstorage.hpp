@@ -31,30 +31,30 @@ public:
   TwoDStorage<double> mom2zarr;
 
   MassMom012Storages(FSStore &store, const unsigned int maxchunk,
-                       const unsigned int ngbxs,
-                       const std::string mom0name,
-                       const std::string mom1name,
-                       const std::string mom2name)
-      : mom0zarr(store, maxchunk, mom0name,
-                 "<f8", " ", 1.0, ngbxs),
-        mom1zarr(store, maxchunk, mom1name,
-                 "<f8", "g", sf, ngbxs),
-        mom2zarr(store, maxchunk, mom2name,
-                 "<f8", "g^2", pow(sf, 2.0), ngbxs){};
+                     const unsigned int ngbxs,
+                     const std::string name0,
+                     const std::string name1,
+                     const std::string name2)
+      : mom0zarr(store, maxchunk, name0, "<f8",
+                 " ", 1.0, ngbxs, "gbxindex"),
+        mom1zarr(store, maxchunk, name1, "<f8",
+                 "g", sf, ngbxs, "gbxindex"),
+        mom2zarr(store, maxchunk, name2, "<f8",
+                 "g^2", pow(sf, 2.0), ngbxs, "gbxindex"){};
 };
 
-struct MomStorages : MassMom012Storages
+struct MomentsStorages : MassMom012Storages
 {
-  MomStorages(FSStore &store, const unsigned int maxchunk,
+  MomentsStorages(FSStore &store, const unsigned int maxchunk,
               const unsigned int ngbxs)
-      : MomStorages(store, maxchunk, ngbxs,
+      : MassMom012Storages(store, maxchunk, ngbxs,
                     "mom0", "mom1", "mom2"){};
 };
 
-struct RainMomStorages : MassMom012Storages
+struct RainMomentsStorages : MassMom012Storages
 {
-  RainMomStorages(FSStore &store, const unsigned int maxchunk,
-                      const unsigned int ngbxs)
+  RainMomentsStorages(FSStore &store, const unsigned int maxchunk,
+                  const unsigned int ngbxs)
       : MassMom012Storages(store, maxchunk, ngbxs,
                            "rainmom0", "rainmom1", "rainmom2"){};
 };

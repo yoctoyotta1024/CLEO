@@ -38,9 +38,19 @@ int main(int argc, char *argv[])
   /* create observer from combination of chosen observers */
   FSStore fsstore(config.zarrbasedir);
   SomeZarrStores zarrstores(fsstore, config.maxchunk,
-                            gbxmaps.gbxidxs.size(),
+                            gbxmaps.ngridboxes,
                             sdattrs_to_observe());
-  const auto observer = create_observer(mdlsteps.obsstep, zarrstores);
+  const auto observer = create_observer(zarrstores, mdlsteps.obsstep,
+                                        gbxmaps.ngridboxes);
+
+
+
+  // LogbookStorage<double> precipzarr(fsstore, 16, "accumprecip", "<f8", " ", 1.0, 3);
+  // const ObserveLbks auto ol1 = ObservePrecip(precipzarr); //PrintLogbooks{};
+  // const Observer auto observer = observ >>
+  //                                ConstIntervalLbksObserver(mdlsteps.obsstep, ol1);
+
+
 
   const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 

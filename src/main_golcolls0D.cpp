@@ -81,7 +81,7 @@ of a superdroplet into zarr storage */
 }
 
 template <SuperdropIntoStoreViaBuffer S>
-Observer auto create_observer(const int obsstep, SomeZarrStores<S> &stores)
+Observer auto create_observer(SomeZarrStores<S> &stores, const int obsstep)
 /* return an Observer type from an amalgamation of other observer types.
 For example return an observer that observes both the thermostate and the
 superdroplets from combination of those two seperate observers */
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
   SomeZarrStores zarrstores(fsstore, config.maxchunk,
                             gbxmaps.ngridboxes,
                             sdattrs_to_observe());
-  const auto observer = create_observer(mdlsteps.obsstep, zarrstores);
+  const auto observer = create_observer(zarrstores, mdlsteps.obsstep);
 
   const NullDetectorsPtr dtrs{};
 
