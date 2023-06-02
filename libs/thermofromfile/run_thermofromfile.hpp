@@ -65,10 +65,14 @@ void receive_thermodynamics_from_thermodyn(const size_t ngbxs,
 /* Sets current thermodynamic state of SDM to match that given
 by the ThermodnamicsFromFile 'thermodyn' */
 
-inline Kokkos::Random_XorShift64_Pool<> preparetotimestep()
+template <class MSDs, SdmProcess P, Observer O>
+inline Kokkos::Random_XorShift64_Pool<>
+preparetotimestep(const RunSDMStep<MSDs, P, O> &sdm)
 /* return pool of Kokkos' random number
-generators used in SDM */
+generators used in SDM and prepare observer */
 {
+  sdm.observer.prepare();
+
   return Kokkos::Random_XorShift64_Pool<>(std::random_device{}());
 }
 
@@ -150,7 +154,7 @@ superdroplet model (SDM) using thermodynamics read from files */
   gridboxes.on_device(); 
   
   /* prepare model for timestepping */
-  auto genpool = preparetotimestep();
+  auto genpool = preparetotimestep(sdm);
   
   const double t1 = kokkostimer.seconds();
   /* run model from t=0 to t=t_end */

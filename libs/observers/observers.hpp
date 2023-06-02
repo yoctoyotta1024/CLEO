@@ -51,6 +51,9 @@ required for observing gridboxes and logbooks */
   {
     obs.on_step(t)
   } -> std::convertible_to<bool>;
+  {
+    obs.prepare()
+  } -> std::same_as<void>;
 };
 
 template <Observer Obs1, Observer Obs2>
