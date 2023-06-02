@@ -136,10 +136,10 @@ private:
   void writechunk()
   /* write data in buffer to a chunk in store */
   {
-    this->chunkcount = storagehelper::
-        writebuffer2chunk(this->store, this->buffer,
-                          this->name, this->chunkcount);
-    this->bufferfill = 0;
+    std::tie(this->chunkcount, this->bufferfill) =
+        storagehelper::
+            writebuffer2chunk(this->store, this->buffer,
+                              this->name, this->chunkcount);
 
     writejsons();
   }
@@ -182,11 +182,10 @@ private:
   /* write data in buffer to a chunk in store alongside metadata jsons */
   {
     const std::string chunknum = std::to_string(this->chunkcount) + ".0";
-    this->chunkcount = storagehelper::
+    std::tie(this->chunkcount, this->bufferfill) = storagehelper::
         writebuffer2chunk(this->store, this->buffer,
                           this->name, chunknum,
                           this->chunkcount);
-    this->bufferfill = 0;
 
     writejsons();
   }

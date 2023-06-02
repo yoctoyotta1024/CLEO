@@ -41,7 +41,8 @@ struct ThermoIntoStore
   unsigned int copy2buffers(const ThermoState &state, unsigned int j);
   /* copy press, temp, qvap and qcond data in the state to buffers at index j */
 
-  unsigned int writechunks(FSStore &store, unsigned int chunkcount);
+  std::pair<unsigned int, unsigned int>
+  writechunks(FSStore &store, unsigned int chunkcount);
   /* write buffer vector into attr's store at chunkcount
   and then replace contents of buffer with numeric limit */
 
@@ -81,8 +82,7 @@ private:
   /* write data from thermo buffers into chunks in store,
   then reset bufferfill and write associated metadata */
   {
-    chunkcount = buffers.writechunks(store, chunkcount);
-    bufferfill = 0;
+    std::tie(chunkcount, bufferfill) = buffers.writechunks(store, chunkcount);
 
     writejsons();
   }

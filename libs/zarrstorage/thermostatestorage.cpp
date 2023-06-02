@@ -19,7 +19,7 @@ unsigned int ThermoIntoStore::
   return ++j;
 }
 
-unsigned int ThermoIntoStore::
+std::pair<unsigned int, unsigned int> ThermoIntoStore::
     writechunks(FSStore &store, unsigned int chunkcount)
 /* write buffer vector into attr's store at chunkcount
 and then replace contents of buffer with numeric limit */
@@ -35,7 +35,7 @@ and then replace contents of buffer with numeric limit */
   storagehelper::writebuffer2chunk(store, qcondbuffer, "qcond",
                                    chunknum, chunkcount);
 
-  return ++chunkcount;
+  return std::pair(++chunkcount, 0); // updated {chunkcount, bufferfill}
 }
 
 void ThermoIntoStore::writejsons(FSStore &store,

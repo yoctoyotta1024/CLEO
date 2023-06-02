@@ -87,12 +87,13 @@ SuperdropIntoStoreViaBuffer is A1 followed by A2 */
     return ++j;
   }
 
-  unsigned int writechunk(FSStore &store, unsigned int chunkcount)
+  std::pair<unsigned int, unsigned int>
+  writechunk(FSStore &store, unsigned int chunkcount)
   {
     aah1.writechunk(store, chunkcount);
     aah2.writechunk(store, chunkcount);
 
-    return ++chunkcount;
+    return std::pair(++chunkcount, 0);
   }
 
   void writejsons(FSStore &store,
@@ -128,9 +129,10 @@ completeness of a Monoid Structure) */
     return j;
   }
 
-  unsigned int writechunk(FSStore &store, const unsigned int chunkcount) const
+  std::pair<unsigned int, unsigned int>
+  writechunk(FSStore &store, const unsigned int chunkcount) const
   {
-    return chunkcount;
+    return std::pair(chunkcount, 0);
   }
 
   void writejsons(FSStore &store, const SomeMetadata &md) const {}
@@ -210,10 +212,10 @@ private:
   /* write rgdcount data in buffers to a chunk of its
   zarray in store and (re)write its associated metadata */
   {
-    rgdcount_chunkcount = storagehelper::writebuffer2chunk(store, rgdcount,
-                                                           rgdcount_name,
-                                                           rgdcount_chunkcount);
-    rgdcount_bufferfill = 0; // reset rgdcount bufferfill
+    std::tie(rgdcount_chunkcount, rgdcount_bufferfill) =
+        storagehelper::writebuffer2chunk(store, rgdcount,
+                                         rgdcount_name,
+                                         rgdcount_chunkcount);
 
     rgdcount_writejsons();
   }

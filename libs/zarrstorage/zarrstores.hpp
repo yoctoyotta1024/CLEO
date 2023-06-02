@@ -118,19 +118,21 @@ array in a store, and an array's metadata to a store */
   but faster for copying a large vector (not iterative) */
   {
     size_t nvalues(vec.size());
-
+ 
     buffer.erase(buffer.end() - nvalues, buffer.end());
     buffer.insert(buffer.begin()+j, vec.begin(), vec.end());
 
-    return j + nvalues;
+    // return j + nvalues;
+    return 0; 
   }
 
   template <typename T>
-  unsigned int writebuffer2chunk(FSStore &store,
-                                 std::vector<T> &buffer,
-                                 const std::string name,
-                                 const std::string chunknum,
-                                 unsigned int chunkcount)
+  std::pair<unsigned int, unsigned int>
+  writebuffer2chunk(FSStore &store,
+                    std::vector<T> &buffer,
+                    const std::string name,
+                    const std::string chunknum,
+                    unsigned int chunkcount)
   /* write buffer vector into attr's store at chunk no. 'kk', then
   replace contents of buffer with max numeric limit of type.
   Return incremented value of chunkcount */
@@ -138,14 +140,15 @@ array in a store, and an array's metadata to a store */
     store[name + "/" + chunknum].operator=<T>(buffer);
     buffer.assign(buffer.size(), std::numeric_limits<T>::max());
 
-    return ++chunkcount;
+    return std::pair(++chunkcount, 0);
   }
 
   template <typename T>
-  unsigned int writebuffer2chunk(FSStore &store,
-                                 std::vector<T> &buffer,
-                                 const std::string name,
-                                 unsigned int chunkcount)
+  std::pair<unsigned int, unsigned int>
+  writebuffer2chunk(FSStore &store,
+                    std::vector<T> &buffer,
+                    const std::string name,
+                    unsigned int chunkcount)
   /* write buffer vector into attr's store at 'chunkcount' and then
   return incremented chunkcount */
   {
