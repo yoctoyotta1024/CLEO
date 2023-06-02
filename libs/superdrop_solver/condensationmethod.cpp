@@ -8,9 +8,10 @@ Lohmann, Luond and Mahrt, 1st edition. */
 
 #include "condensationmethod.hpp"
 
-std::pair<double, double> CondensationMethod::diffusion_factors(const double press,
-                                                                const double temp,
-                                                                const double psat) const
+std::pair<double, double> CondensationMethod::
+    diffusion_factors(const double press,
+                      const double temp,
+                      const double psat) const
 /* Calculate dimensionless Fkl and Fdl
   heat and vapour diffusion factors in
   equation for radial growth of droplets
@@ -33,7 +34,7 @@ std::pair<double, double> CondensationMethod::diffusion_factors(const double pre
   const double fkl = (LATENT_RGAS_V / TEMP - 1.0) * DC::LATENT_V / (THERMK * dlc::F0); // fkl eqn [7.23]
   const double fdl = TEMP / (DIFFUSE_V * PSAT) / dlc::F0;                              // fdl eqn [7.25]
 
-  return std::pair<double, double>(fkl, fdl);
+  return std::pair(fkl, fdl);
 }
 
 double CondensationMethod::superdroplet_growth_by_condensation(const double press,
@@ -48,7 +49,6 @@ double CondensationMethod::superdroplet_growth_by_condensation(const double pres
   using impliciteuler method which iterates condensation-diffusion
   ODE given the previous radius. */
 {
-  /* n.b. Structured bindings require C++17. Can use std::tie for C++11 */
   const double dmdt_const(4.0 * M_PI * drop.get_solute()->rho_l * pow(dlc::R0, 3.0));
   const double akoh(drop.akohler_factor(temp));
   const double bkoh(drop.bkohler_factor());

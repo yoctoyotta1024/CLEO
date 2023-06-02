@@ -130,7 +130,7 @@ containting wvel data from binary file */
     lpos += atpos_zface;
     const size_t uppos(lpos + 1); // position of z upper face
 
-    return std::pair<double, double>{wvel.at(lpos), wvel.at(uppos)};
+    return std::pair(wvel.at(lpos), wvel.at(uppos));
   };
 
   return thermodynamicvar_from_binary(filename);
@@ -151,7 +151,7 @@ containting uvel data from binary file */
     lpos += atpos_xface;
     const size_t uppos(lpos + ndims[0]); // position of x upper face
 
-    return std::pair<double, double>{uvel.at(lpos), uvel.at(uppos)};
+    return std::pair(uvel.at(lpos), uvel.at(uppos));
   };
 
   return thermodynamicvar_from_binary(filename);
@@ -168,7 +168,7 @@ std::vector<double> ThermodynamicsFromFile::
     const size_t lpos((size_t)gbxindex + atpos_yface); // position of y lower face in 1D vvel vector
     const size_t uppos(lpos + ndims[1] * ndims[0]); // position of x upper face
 
-    return std::pair<double, double>{vvel.at(lpos), vvel.at(uppos)};
+    return std::pair(vvel.at(lpos), vvel.at(uppos));
   };
 
   return thermodynamicvar_from_binary(filename);

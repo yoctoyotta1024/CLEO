@@ -65,7 +65,7 @@ public:
     auto subtract = [](const std::pair<double, double> a,
                        const std::pair<double, double> b)
     {
-      return std::pair<double, double>{a.first - b.first, a.second - b.second};
+      return std::pair(a.first - b.first, a.second - b.second);
     };
 
     ThermoState delta_state(volume);

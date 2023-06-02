@@ -45,7 +45,8 @@ buffer into an array in a Zarr store using writechunk and writemetadata */
   /* virtual void function placeholding function for
   copying superdrop's data into a buffer vector at j'th index */
 
-  unsigned int writechunk(FSStore &store, unsigned int chunkcount)
+  std::pair<unsigned int, unsigned int>
+  writechunk(FSStore &store, unsigned int chunkcount)
   /* write buffer vector into attr's store at chunkcount
   and then replace contents of buffer with numeric limit */
   {

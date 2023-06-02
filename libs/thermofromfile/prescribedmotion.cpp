@@ -69,7 +69,7 @@ calculated from a Prescribed2DFlow */
   const double delta3((vel3 + corrvel3) * (delt / 2));
   const double delta1((vel1 + corrvel1) * (delt / 2));
 
-  return std::pair<double, double>(delta3, delta1);
+  return std::pair(delta3, delta1);
 }
 
 std::pair<double, double>
@@ -88,5 +88,5 @@ calculated from a Prescribed2DFlow */
   const double delta3(vel3 * delt);
   const double delta1(vel1 * delt);
 
-  return std::pair<double, double>(delta3, delta1);
+  return std::pair(delta3, delta1);
 }

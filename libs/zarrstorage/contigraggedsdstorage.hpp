@@ -11,6 +11,8 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
 #include <vector>
 #include <string>
+#include <utility>
+#include <tuple>
 
 struct SomeMetadata
 {
@@ -55,7 +57,7 @@ a chunk of array in the store, and writing array metadata and attribute .json fi
 
   {
     aah.writechunk(store, j)
-  } -> std::same_as<unsigned int>;
+  } -> std::same_as<std::pair<unsigned int, unsigned int>>;
 
   {
     aah.writejsons(store, md)
@@ -198,9 +200,9 @@ private:
   /* write data in sdbuffers to chunks of zarrays in store
   and (re)write associated metadata for zarrays */
   {
-    chunkcount = sdbuffers.writechunk(store, chunkcount);
-    bufferfill = 0; // reset bufferfill
-
+    std::tie(chunkcount, bufferfill) =
+        sdbuffers.writechunk(store, chunkcount);
+    
     sdbuffers_writejsons();
   }
 

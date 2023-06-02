@@ -249,7 +249,7 @@ std::pair<bool, double> ImplicitEuler::ImpIter::
   const double newnumerator = ode_gfunc(rprev, ziter);
   const bool do_iter = isnotconverged(newnumerator, numerator);
 
-  return std::pair<bool, double>{do_iter, ziter};
+  return std::pair(do_iter, ziter);
 }
 
 double ImplicitEuler::ImpIter::

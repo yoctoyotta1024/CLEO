@@ -34,7 +34,7 @@ maximum unsigned int */
     forward = std::numeric_limits<unsigned int>::max();
   }
 
-  return {forward, backward};
+  return std::pair(forward, backward);
 }
 
 std::pair<unsigned int, unsigned int>
@@ -61,5 +61,5 @@ lowermost gridboxes in that direction (and vice versa). */
     forward = idx - (ndim-1) * increment;
   }
 
-  return {forward, backward};
+  return std::pair(forward, backward);
 }

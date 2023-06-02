@@ -14,6 +14,8 @@ in a zarr store */
 #include <cassert>
 #include <limits>
 #include <algorithm>
+#include <utility>
+#include <tuple>
 
 #include "./zarrstores.hpp"
 

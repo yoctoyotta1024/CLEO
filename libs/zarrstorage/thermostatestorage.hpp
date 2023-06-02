@@ -16,6 +16,8 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <cmath>
 #include <algorithm>
 #include <cassert>
+#include <utility>
+#include <tuple>
 
 #include "./zarrstores.hpp"
 #include "../claras_SDconstants.hpp"

@@ -12,6 +12,7 @@ struct */
 #include <span>
 #include <string>
 #include <stdexcept>
+#include <utility>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Vector.hpp>
