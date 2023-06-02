@@ -181,26 +181,30 @@ Observer auto create_observer(const int obsstep, SomeZarrStores<S> &stores)
 For example return an observer that observes both the thermostate and the
 superdroplets from combination of those two seperate observers */
 {
-  const ObserveGBxs auto obs1 = ObserveTime(stores.timezarr);
+  const ObserveGBxs auto og1 = ObserveTime(stores.timezarr);
 
-  const ObserveGBxs auto obs2a = ObserveSDsAttributes(stores.sdzarr);
-  const ObserveGBxs auto obs2b = ObserveSDsGbxindex(stores.sdgbxzarr);
+  const ObserveGBxs auto og2a = ObserveSDsAttributes(stores.sdzarr);
+  const ObserveGBxs auto og2b = ObserveSDsGbxindex(stores.sdgbxzarr);
 
-  // const ObserveGBxs auto obs3 = ObserveThermoState(stores.thermozarr);
+  // const ObserveGBxs auto og3 = ObserveThermoState(stores.thermozarr);
   
-  const ObserveGBxs auto obs4 = ObserveGridBoxIndex(stores.gbxzarr);
+  const ObserveGBxs auto og4 = ObserveGridBoxIndex(stores.gbxzarr);
 
-  const ObserveGBxs auto obs5 = ObserveNsupersPerGridBox(stores.nsuperszarr);
+  const ObserveGBxs auto og5 = ObserveNsupersPerGridBox(stores.nsuperszarr);
 
-  const ObserveGBxs auto obs6 = create_observegbx_massmoments(stores.massmoms,
+  const ObserveGBxs auto og6 = create_observegbx_massmoments(stores.massmoms,
                                                               stores.rainmassmoms);
 
-  // const auto obsgbxs = obs6 >> obs5 >> obs4 >> obs3 >> obs2a >> obs2b >> obs1;
-  const auto obsgbxs = obs6 >> obs5 >> obs4 >> obs2a >> obs2b >> obs1;
-  
-  // const Observer auto observer = PrintObserver(obsstep) >>
-  //                                ConstIntervalGBxsObserver(obsstep, obsgbxs);
-  const Observer auto observer = ConstIntervalGBxsObserver(obsstep, obsgbxs);
+  const ObserveLbks auto ol1 = PrintLogbooks{};
+
+  // const auto obsgbxs = og6 >> og5 >> og4 >> og3 >> og2a >> og2b >> og1;
+  const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og2a >> og2b >> og1;
+
+  const Observer auto obs1 = ConstIntervalGBxsObserver(obsstep, obsgbxs);
+  const Observer auto obs2 = ConstIntervalLbksObserver(obsstep, ol1);
+
+  // const Observer auto observer = obs1 >> PrintObserver(obsstep);
+  const Observer auto observer = obs1 >> obs2;
 
   return observer;
 }

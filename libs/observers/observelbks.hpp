@@ -70,8 +70,9 @@ private:
   ObsLbks obslbks;
 
 public:
-  ConstIntervalLbksObserver(const int interval, const ObsLbks obslbks)
-      : interval(interval), obslbks(observe_logbooks){}
+  ConstIntervalLbksObserver(const int interval,
+                            const ObsLbks observe_logbooks)
+      : interval(interval), obslbks(observe_logbooks) {}
 
   int get_interval() const { return interval; }
 
