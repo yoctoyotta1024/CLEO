@@ -28,12 +28,12 @@ public:
                        scale_factor, i_dim1name, 0),
         maxchunk(maxchunk) {}
 
-  void set_ndim1_and_chunksize(const unsigned int size)
+  void set_ndim1_and_chunksize(const unsigned int ndim1)
   /* given 'size' (number of entries in logbook)
   change ndims1 and chunksize of zarr storage */
   {
-    this->set_ndim1(size);
-    this->set_chunksize(storagehelper::good2Dchunk(maxchunk, size));
+    this->set_ndim1(ndim1);
+    this->set_chunksize(storagehelper::good2Dchunk(maxchunk, ndim1));
   }
 };
 

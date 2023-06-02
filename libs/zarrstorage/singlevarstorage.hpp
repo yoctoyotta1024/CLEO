@@ -57,8 +57,8 @@ protected:
       const std::string err("non-zero chunksize cannot be changed");
       throw std::invalid_argument(err);
     }
-
     chunksize = i_chunksize;
+    buffer.assign(chunksize, std::numeric_limits<T>::max());
   }
 
   void zarrayjsons(const std::string shape,
