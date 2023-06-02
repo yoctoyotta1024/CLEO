@@ -53,7 +53,7 @@ public:
     return tags.at(idx);
   }
 
-  T get_from_record(const size_t idx) const
+  T get_entry(const size_t idx) const
   /* returns value in record at
   position 'idx' in record */
   {

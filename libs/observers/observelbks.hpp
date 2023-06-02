@@ -109,7 +109,7 @@ prints out details about logbooks */
     double totaccumpp(0.0);
     for (size_t idx = 0; idx < logbook  -> get_size(); ++idx)
     {
-      totaccumpp += logbook ->get_from_record(idx);
+      totaccumpp += logbook ->get_entry(idx);
     }
     
     constexpr int printprec(4); // precision to print data with
