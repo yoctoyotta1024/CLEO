@@ -1,8 +1,9 @@
 // Author: Clara Bayley
 // File: "singlevarstorage.hpp"
-/* Classes and helper functions in a namespace
-useful for using storage clases with buffers to
-write values of 1D data into chunks of arrays
+/* Classes and helper functions
+writing a single variable (could 
+be 1D or 2D, coordinate etc.) 
+via a buffer into chunks of arrays
 in a zarr store */
 
 #ifndef SINGLEVARSTORAGE_HPP

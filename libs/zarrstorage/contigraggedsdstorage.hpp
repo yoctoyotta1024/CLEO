@@ -14,6 +14,8 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <utility>
 #include <tuple>
 
+#include "./zarrstores.hpp"
+
 struct SomeMetadata
 {
   const char zarr_format;

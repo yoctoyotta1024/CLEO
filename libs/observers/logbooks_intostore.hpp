@@ -11,46 +11,26 @@ into a (zarr) store on disk */
 #include <vector>
 
 #include "sdmgridboxes/logbooks.hpp"
-#include "zarrstorage/singlevarstorage.hpp"
-
-template <typename T>
-struct LogbooksStorage : TwoDStorage<T>
-{
-  LogbooksStorage(FSStore &store, const std::string name,
-                  const std::string dtype, const std::string units,
-                  const double scale_factor, const std::string i_dim1name)
-      : TwoDStorage<T>(store, 0, name, dtype, units,
-                       scale_factor, i_dim1name, 0) {}
-
-  // const unsigned int maxchunks;
-  // bool is_firstobs;
-
-  // void on_firstobs()
-  // {
-  //   if (is_firstobs)
-  //   {
-  //     set_ndim1_and_chunksize(); // if first time observation of logbooks is made,
-  //   }
-  //   zarr.is_dim1(record.size(), "logbooktags");
-  // }
-
-};
+#include "zarrstorage/logbooksstorage.hpp"
 
 struct ObservePrecip
 /* satisfies ObserveLbks concept and
 writes precipation data to zarr storage */
 {
 private:
-  LogbooksStorage<double> &zarr;
+  LogbooksStorage<double> &zarr_a;
 
 public:  
-  ObservePrecip(LogbooksStorage<double> &zarr) : zarr(zarr)
+  ObservePrecip(LogbooksStorage<double> &zarr_a) : zarr_a(zarr_a)
   {
-    zarr.is_name("accumprecip");
-    zarr.is_dim1(0, "logbooktags");
+    zarr_a.is_name("accumprecip");
+    zarr_a.is_dim1(0, "logbooktags");
   }
 
-  void prepare() const {}
+  void prepare(const DetectorLogbooks &logbooks) const
+  {
+    zarr_a.set_ndims_and_chunksize(logbooks.accumprecip -> get_size());
+  }
 
   void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const
   {
@@ -58,8 +38,8 @@ public:
     
     // set_ndim1(record.size()); // TO DO: delete this and do in a better way (only once?)
 
-    zarr.value_to_storage(record);
-    ++zarr.nobs;
+    zarr_a.value_to_storage(record);
+    ++zarr_a.nobs;
   }
 
   void operator()(const DetectorLogbooks &logbooks) const

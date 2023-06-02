@@ -96,7 +96,7 @@ write a double to a buffer, a buffer to a chunk of an
 array in a store, and an array's metadata to a store */
 {
   inline unsigned int good2Dchunk(const unsigned int maxchunk,
-                           const unsigned int ndim1)
+                                  const unsigned int ndim1)
   /* given max chunksize, returns the (largest)
   suitable chunksize such that chunks are always an
   integer multiple of ndim1 (which should be the
