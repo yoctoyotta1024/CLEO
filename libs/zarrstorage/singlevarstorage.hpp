@@ -184,6 +184,7 @@ private:
         writebuffer2chunk(this->store, this->buffer,
                           this->name, chunknum,
                           this->chunkcount);
+    this->bufferfill = 0;
 
     writejsons();
   }
