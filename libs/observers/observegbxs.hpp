@@ -16,6 +16,7 @@ to an array in a zarr storage system */
 #include <Kokkos_DualView.hpp>
 
 #include "sdmgridboxes/gridbox.hpp"
+#include "sdmgridboxes/logbooks.hpp"
 
 template <typename Og>
 concept ObserveGBxs = requires(Og og, const size_t n,
@@ -84,7 +85,7 @@ public:
     return t % interval == 0;
   }
 
-  void observe_logbooks(const std::vector<int> lbks) const {}
+  void observe_logbooks(const DetectorLogbooks &lbks) const {}
 
   void observe_gridboxes(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes) const
@@ -94,7 +95,7 @@ public:
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes,
-               const std::vector<int> lbks) const
+               const DetectorLogbooks &lbks) const
   {
     observe_gridboxes(ngbxs, h_gridboxes);
   }

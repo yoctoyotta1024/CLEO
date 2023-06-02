@@ -15,8 +15,11 @@ logbook to an array in a zarr storage system */
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
+#include "sdmgridboxes/logbooks.hpp"
+#include "sdmgridboxes/gridboxes.hpp"
+
 template <typename OL>
-concept ObserveLbks = requires(OL o, const std::vector<int> lbks)
+concept ObserveLbks = requires(OL o, const DetectorLogbooks lbks)
 /* concept ObserveLbks is all types that have an operator that
 has signature of observe_logbooks() function (see Observer concept)
 ie. which takes a logbooks struct as argument and returns void */
@@ -39,7 +42,7 @@ public:
   CombinedObserveLbks(const Ol1 o1, const Ol2 o2)
       : o1(o1), o2(o2) {}
 
-  void operator()(const std::vector<int> lbks) const
+  void operator()(const DetectorLogbooks &lbks) const
   {
     o1(lbks);
     o2(lbks);
@@ -77,7 +80,7 @@ public:
     return t % interval == 0;
   }
 
-  void observe_logbooks(const std::vector<int> lbks) const
+  void observe_logbooks(const DetectorLogbooks &lbks) const
   {
     obslbks(lbks);
   }
@@ -87,7 +90,7 @@ public:
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes,
-               const std::vector<int> lbks) const
+               const DetectorLogbooks &lbks) const
   {
     observe_logbooks(ngbxs, h_gridboxes);
   }

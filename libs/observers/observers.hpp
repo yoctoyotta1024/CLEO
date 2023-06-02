@@ -23,6 +23,7 @@ from a gridbox's thermostate to the terminal */
 #include "./observelbks.hpp"
 #include "../claras_SDconstants.hpp"
 #include "sdmgridboxes/gridbox.hpp"
+#include "sdmgridboxes/logbooks.hpp"
 #include "superdrop_solver/thermostate.hpp"
 
 namespace dlc = dimless_constants;
@@ -30,7 +31,7 @@ namespace dlc = dimless_constants;
 template <typename Obs>
 concept Observer = requires(Obs obs, const int t, const size_t n,
                             const Kokkos::View<GridBox *> h_gbxs,
-                            const std::vector<int> lbks)
+                            const DetectorLogbooks lbks)
 /* concept Observer is all types that have
 functions with signatures and return types
 required for observing gridboxes and logbooks */
@@ -89,7 +90,7 @@ public:
     o2.observe_gridboxes(ngbxs, h_gbxs);
   }
 
-  void observe_logbooks(const std::vector<int> lbks) const
+  void observe_logbooks(const DetectorLogbooks &lbks) const
   {
     o1.observe_logbooks(lbks);
     o2.observe_logbooks(lbks);
@@ -97,7 +98,7 @@ public:
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gbxs,
-               const std::vector<int> lbks) const
+               const DetectorLogbooks &lbks) const
   {
     observe_gridboxes(ngbxs, h_gbxs);
     observe_logbooks(lbks);
@@ -122,11 +123,11 @@ completion of a Monoid Structure */
   void observe_gridboxes(const size_t ngbxs,
                          const Kokkos::View<GridBox *> h_gbxs) const {}
 
-  void observe_logbooks(const std::vector<int> lbks) const {}
+  void observe_logbooks(const DetectorLogbooks &lbks) const {}
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gbxs,
-               const std::vector<int> lbks) const {}
+               const DetectorLogbooks &lbks) const {}
 
   int get_interval() { return std::numeric_limits<int>::max(); }
 
@@ -169,14 +170,14 @@ public:
     obsgbxs(ngbxs, h_gridboxes);
   }
 
-   void observe_logbooks(const std::vector<int> lbks) const
+   void observe_logbooks(const DetectorLogbooks &lbks) const
   {
     obslbks(lbks);
   }
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes,
-               const std::vector<int> lbks) const
+               const DetectorLogbooks &lbks) const
   {
     observe_gridboxes(ngbxs, h_gridboxes);
     observe_logbooks(lbks);
@@ -200,7 +201,7 @@ thermodynamic states and superdroplets */
     return t % interval == 0;
   }
 
-  void observe_logbooks(const std::vector<int> lbks) const {}
+  void observe_logbooks(const DetectorLogbooks &lbks) const {}
 
   void observe_gridboxes(const size_t ngbxs,
                          const Kokkos::View<GridBox *> h_gridboxes) const;
@@ -209,7 +210,7 @@ thermodynamic states and superdroplets */
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes,
-               const std::vector<int> lbks) const
+               const DetectorLogbooks &lbks) const
   {
     observe_gridboxes(ngbxs, h_gridboxes);
   }
