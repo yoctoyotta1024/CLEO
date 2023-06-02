@@ -32,8 +32,8 @@ public:
   /* given 'size' (number of entries in logbook)
   change ndims1 and chunksize of zarr storage */
   {
-    zarr.set_ndim1(size);
-    zarr.set_chunksize(storagehelper::good2Dchunk(maxchunk, size));
+    this->set_ndim1(size);
+    this->set_chunksize(storagehelper::good2Dchunk(maxchunk, size));
   }
 };
 
