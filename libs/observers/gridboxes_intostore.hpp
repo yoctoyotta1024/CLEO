@@ -158,11 +158,12 @@ private:
   TwoDStorage<size_t> &zarr;
 
 public:
-  ObserveNsupersPerGridBox(TwoDStorage<size_t> &zarr)
+  ObserveNsupersPerGridBox(TwoDStorage<size_t> &zarr,
+                           const size_t ngbxs)
       : zarr(zarr)
   {
     zarr.is_name("nsupers");
-    zarr.is_dim1name("gbxindex");
+    zarr.is_dim1(ngbxs, "gbxindex");
   }
 
   void operator()(const size_t ngbxs,
@@ -189,12 +190,14 @@ private:
 
 public:
   ObserveNthMassMoment(TwoDStorage<double> &zarr,
-                        const int nth_moment)
+                        const int nth_moment,
+                        const size_t ngbxs)
       : nth_moment(nth_moment),
         zarr(zarr)
   {
     const std::string name("mom" + std::to_string(nth_moment));
     zarr.is_name(name);
+    zarr.is_dim1(ngbxs, "gbxindex");
   }
 
   void operator()(const size_t ngbxs,
@@ -221,12 +224,14 @@ private:
 
 public:
   ObserveNthRainMassMoment(TwoDStorage<double> &zarr,
-                            const int nth_moment)
+                            const int nth_moment,
+                            const size_t ngbxs)
       : nth_moment(nth_moment),
         zarr(zarr)
   {
     const std::string name("rainmom" + std::to_string(nth_moment));
     zarr.is_name(name);
+    zar.is_dim1(ngbxs, "gbxindex");
   }
 
   void operator()(const size_t ngbxs,

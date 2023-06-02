@@ -114,7 +114,7 @@ public:
 
   virtual ~SingleVarStorage(){};
 
-  void is_name(const std::string goodname) const
+  void is_name(const std::string &goodname) const
   {
     if (name != goodname)
     {
@@ -238,8 +238,16 @@ public:
     }
   }
 
-  void is_dim1name(const std::string goodname) const
+  void is_dim1(const size_t goodndim1,
+               const std::string &goodname) const
   {
+    if ((size_t)ndim1 != goodndim1)
+    {
+      const std::string errmsg("ndim1 is" + ndim1 +
+                               ", but should be " + goodndim1);
+      throw std::invalid_argument(errmsg);
+    }
+
     if (dim1name != goodname)
     {
       const std::string errmsg("name of dim1 is " + dim1name +
