@@ -120,7 +120,7 @@ array in a store, and an array's metadata to a store */
     size_t nvalues(vec.size());
 
     buffer.erase(buffer.end() - nvalues, buffer.end());
-    buffer.insert(buffer.end(), vec.begin(), vec.end());
+    buffer.insert(buffer.begin()+j, vec.begin(), vec.end());
 
     return j + nvalues;
   }
