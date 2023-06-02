@@ -23,6 +23,7 @@ both ways (send and receive) */
 #include "sdmgridboxes/sdmtimesteps.hpp"
 #include "sdmgridboxes/superdropwithgbxindex.hpp"
 #include "sdmgridboxes/sdmotion.hpp"
+#include "sdmgridboxes/logbooks.hpp"
 #include "superdrop_solver/thermostate.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "observers/observers.hpp"
@@ -91,6 +92,7 @@ start_coupldstep(const int t_mdl,
                  const int couplstep,
                  const size_t ngbxs,
                  const Observer auto &observer,
+                 const DetectorLogbooks &lbks,
                  const CvodeThermoSolver &cvode,
                  Kokkos::View<GridBox *> h_gridboxes)
 /* communication of thermodynamic state from CVODE solver to SDM.
@@ -99,11 +101,11 @@ CVODE solver. Then observes each gridbox and then returns vector
 of current thermodynamic states (for later use in SDM) */
 {
   auto currentstates = receive_thermodynamics(t_mdl, couplstep,
-                                         ngbxs, cvode, h_gridboxes);
+                                              ngbxs, cvode, h_gridboxes);
 
   if (observer.on_step(t_mdl))
   {
-    observer.observe(ngbxs, h_gridboxes);
+    observer.observe(ngbxs, h_gridboxes, logbooks);
   }
   
   return currentstates;
@@ -133,8 +135,9 @@ length 'couplstep' and decomposed into 4 parts:
 
     /* start step (in general involves coupling) */
     const std::vector<ThermoState>
-        previousstates = start_coupldstep(t_mdl, couplstep, ngbxs,
-                                          sdm.observer, cvode,
+        previousstates = start_coupldstep(t_mdl, couplstep,
+                                          ngbxs, sdm.observer,
+                                          sdm.logbooks, cvode,
                                           gridboxes.view_host());
 
     /* advance SDM by couplstep (optionally

@@ -30,6 +30,7 @@ are read from file */
 #include "sdmgridboxes/sdmotion.hpp"
 #include "sdmgridboxes/detectors.hpp"
 #include "sdmgridboxes/detectors_ptr.hpp"
+#include "sdmgridboxes/logbooks.hpp"
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "superdrop_solver/superdrop.hpp"
@@ -91,6 +92,7 @@ given current time t_mdl, so that next time
 inline int start_step(const int t_mdl, const int couplstep,
                        const size_t ngbxs,
                        const Observer auto &observer,
+                       const DetectorLogbooks &lbks,
                        const ThermodynamicsFromFile &thermodyn,
                        Kokkos::View<GridBox *> h_gridboxes)
 /* optional communication of thermodynamic state
@@ -102,7 +104,7 @@ to take given current time t_mdl */
 
   if (observer.on_step(t_mdl))
   {
-    observer.observe(ngbxs, h_gridboxes);
+    observer.observe(ngbxs, h_gridboxes, logbooks);
   }
 
   return stepsize(t_mdl, couplstep, observer.get_interval());
@@ -185,7 +187,8 @@ length 'couplstep' and is decomposed into 4 parts:
   {
     /* start step (in general involves coupling) */
     gridboxes.on_host(); SDsInGBxs.on_host();
-    const int onestep = start_step(t_mdl, couplstep, ngbxs, sdm.observer,
+    const int onestep = start_step(t_mdl, couplstep, ngbxs,
+                                   sdm.observer, sdm.logbooks,
                                    thermodyn, gridboxes.view_host());
 
     /* advance SDM from t_mdl to t_mdl + onestep
