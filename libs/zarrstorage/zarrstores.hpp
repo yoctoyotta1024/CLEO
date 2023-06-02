@@ -136,7 +136,7 @@ array in a store, and an array's metadata to a store */
   Return incremented value of chunkcount */
   {
     store[name + "/" + chunknum].operator=<T>(buffer);
-    std::fill(buffer.begin(), buffer.end(), std::numeric_limits<T>::max());
+    buffer.assign(buffer.size(), std::numeric_limits<T>::max());
 
     return ++chunkcount;
   }
