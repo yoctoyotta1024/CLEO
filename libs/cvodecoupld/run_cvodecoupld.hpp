@@ -68,8 +68,8 @@ void run_cvodecoupld(const Config &config,
 then run superdroplet model (SDM) coupled to the thermodynamics solver */
 {
   /* CVODE thermodynamics solver */
-  const unsigned int ngridboxes = sdm.ngridboxes;
-  CvodeThermoSolver cvode(config, initcvodethermo(ngridboxes, config));
+  CvodeThermoSolver cvode(config,
+                          initcvodethermo(sdm.gbxmaps.ngridboxes, config));
 
   /* vector containing all superdroplets within a
   struct that also holds their associated gridbox index.

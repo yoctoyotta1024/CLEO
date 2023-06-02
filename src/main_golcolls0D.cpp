@@ -59,8 +59,8 @@ struct SomeZarrStores
   CoordinateStorage<double> timezarr;
 
   SomeZarrStores(FSStore &fsstore, const int maxchunk,
-                 const unsigned int ngridboxes, S sdattrs)
-      : thermozarr(fsstore, maxchunk, ngridboxes),
+                 const unsigned int ngbxs, S sdattrs)
+      : thermozarr(fsstore, maxchunk, ngbxs),
         sdzarr(fsstore, sdattrs, maxchunk),
         timezarr(fsstore, maxchunk, "time",
                  "<f8", "s", dlc::TIME0) {}

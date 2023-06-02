@@ -31,32 +31,32 @@ public:
   TwoDStorage<double> mom2zarr;
 
   MassMom012Storages(FSStore &store, const unsigned int maxchunk,
-                       const unsigned int ngridboxes,
+                       const unsigned int ngbxs,
                        const std::string mom0name,
                        const std::string mom1name,
                        const std::string mom2name)
       : mom0zarr(store, maxchunk, mom0name,
-                 "<f8", " ", 1.0, ngridboxes),
+                 "<f8", " ", 1.0, ngbxs),
         mom1zarr(store, maxchunk, mom1name,
-                 "<f8", "g", sf, ngridboxes),
+                 "<f8", "g", sf, ngbxs),
         mom2zarr(store, maxchunk, mom2name,
-                 "<f8", "g^2", pow(sf, 2.0), ngridboxes){};
+                 "<f8", "g^2", pow(sf, 2.0), ngbxs){};
 };
 
-struct MassMomStorages : MassMom012Storages
+struct MomStorages : MassMom012Storages
 {
-  MassMomStorages(FSStore &store, const unsigned int maxchunk,
-           const unsigned int ngridboxes)
-      : MassMom012Storages(store, maxchunk, ngridboxes,
-                             "mom0", "mom1", "mom2"){};
+  MomStorages(FSStore &store, const unsigned int maxchunk,
+              const unsigned int ngbxs)
+      : MomStorages(store, maxchunk, ngbxs,
+                    "mom0", "mom1", "mom2"){};
 };
 
-struct RainMassMomStorages : MassMom012Storages
+struct RainMomStorages : MassMom012Storages
 {
-  RainMassMomStorages(FSStore &store, const unsigned int maxchunk,
-               const unsigned int ngridboxes)
-      : MassMom012Storages(store, maxchunk, ngridboxes,
-                             "rainmom0", "rainmom1", "rainmom2"){};
+  RainMomStorages(FSStore &store, const unsigned int maxchunk,
+                      const unsigned int ngbxs)
+      : MassMom012Storages(store, maxchunk, ngbxs,
+                           "rainmom0", "rainmom1", "rainmom2"){};
 };
 
 double massmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,

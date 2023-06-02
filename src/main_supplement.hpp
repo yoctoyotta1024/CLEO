@@ -64,25 +64,25 @@ struct SomeZarrStores
   ThermoStateStorage thermozarr;
   ContiguousRaggedSDStorage<S> sdzarr;
   ContiguousRaggedSDStorage<SdgbxIntoStore> sdgbxzarr;
-  MassMomStorages massmoms;
-  RainMassMomStorages rainmassmoms;
+  MomStorages massmoms;
+  RainMomStorages rainmassmoms;
   CoordinateStorage<double> timezarr;
   CoordinateStorage<unsigned int> gbxzarr;
   TwoDStorage<size_t> nsuperszarr;
 
 SomeZarrStores(FSStore &fsstore, const int maxchunk,
-              const unsigned int ngridboxes, S sdattrs)
-      : thermozarr(fsstore, maxchunk, ngridboxes),
+              const unsigned int ngbxs, S sdattrs)
+      : thermozarr(fsstore, maxchunk, ngbxs),
         sdzarr(fsstore, sdattrs, maxchunk),
         sdgbxzarr(fsstore, SdgbxIntoStore(), maxchunk),
-        massmoms(fsstore, maxchunk, ngridboxes),
-        rainmassmoms(fsstore, maxchunk, ngridboxes),
+        massmoms(fsstore, maxchunk, ngbxs),
+        rainmassmoms(fsstore, maxchunk, ngbxs),
         timezarr(fsstore, maxchunk, "time",
                  "<f8", "s", dlc::TIME0),
         gbxzarr(fsstore, maxchunk, "gbxindex",
                 "<u4", " ", 1),
         nsuperszarr(fsstore, maxchunk, "nsupers",
-                    "<u8", " ", 1, ngridboxes) {}
+                    "<u8", " ", 1, ngbxs) {}
 };
 
 SdMotion auto create_sdmotion(const int motionstep)
@@ -168,8 +168,8 @@ of a superdroplet into zarr storage */
 }
 
 ObserveGBxs auto
-create_observegbx_massmoments(MassMomStorages &mms,
-                              RainMassMomStorages &rmms)
+create_observegbx_massmoments(MomStorages &mms,
+                              RainMomStorages &rmms)
 {
   const auto mom0 = ObserveNthMassMoment(mms.mom0zarr, 0);
   const auto mom1 = ObserveNthMassMoment(mms.mom1zarr, 1);
