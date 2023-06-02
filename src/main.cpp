@@ -53,6 +53,6 @@ int main(int argc, char *argv[])
   }
   Kokkos::finalize();
   std::cout << " ---- Total Duration: " << kokkostimer.seconds() << "s ---- \n";
-
+  
   return 0;
 }

@@ -96,4 +96,27 @@ public:
   }
 };
 
+
+struct PrintLogbooks
+/* satisfies Observer concept and
+prints out details about gridboxes'
+thermodynamic states and superdroplets */
+{
+  void observe_accumulatedprecip(
+      const std::shared_ptr<Logbook<double>> logbook) const
+  {
+    for (size_t idx = 0; idx < logbook  -> get_size(); ++idx)
+    {
+      std::cout << "tag: " << logbook ->get_tag(idx) << ", "
+                << "record: " << logbook ->get_from_record(idx) << "\n";
+    }
+  }
+
+  void operator()(const DetectorLogbooks &logbooks) const
+  {
+    observe_accumulatedprecip(logbooks.accpp); 
+  }
+
+};
+
 #endif // OBSERVELBKS_HPP
