@@ -16,7 +16,7 @@ logbook to an array in a zarr storage system */
 #include <Kokkos_DualView.hpp>
 
 #include "sdmgridboxes/logbooks.hpp"
-#include "sdmgridboxes/gridboxes.hpp"
+#include "sdmgridboxes/gridbox.hpp"
 
 template <typename OL>
 concept ObserveLbks = requires(OL o, const DetectorLogbooks lbks)
