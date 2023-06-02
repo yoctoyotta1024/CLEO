@@ -50,7 +50,7 @@ protected:
 
   unsigned int get_chunksize() const {return chunksize;}
 
-  void set_chunksize(const unsigned int i_chunksize)
+  void set_buffer_chunksize(const unsigned int i_chunksize)
   {
     if (chunksize != 0)
     {

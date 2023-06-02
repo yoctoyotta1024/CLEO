@@ -33,7 +33,7 @@ public:
   change ndims1 and chunksize of zarr storage */
   {
     this->set_ndim1(ndim1);
-    this->set_chunksize(storagehelper::good2Dchunk(maxchunk, ndim1));
+    this->set_buffer_chunksize(storagehelper::good2Dchunk(maxchunk, ndim1));
   }
 };
 
