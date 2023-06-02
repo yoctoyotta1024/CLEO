@@ -174,9 +174,17 @@ public:
 
 template <typename T>
 struct TwoDStorage : SingleVarStorage<T>
+/* 2D storage with dimensions [time, dim1] where 
+ntime is number of observation events (no. time outputs)
+and ndim1 is the number of elements in 1st dimension
+of 2-D data i.e. no. elements observed for each time.
+For example, ndim1 could equal the number of gridboxes
+an observer observes during 1 observation. Data for values
+of time and dim1 could be output using a CoordinateStorage */
 {
 private:
-  const unsigned int ngridboxes; // number of gridboxes that are observed (at each obs)
+  const unsigned int ndim1; // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
+  const std::string dim1_name;   // name of 1st dimension (e.g. "gbxindex")
 
   void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
@@ -194,18 +202,18 @@ private:
   /* write strictly required metadata to decode chunks (MUST).
   Assert also check 2D data dimensions is as expected */
   {
-    assert((this->ndata == nobs * ngridboxes) &&
+    assert((this->ndata == nobs * ndim1) &&
            "1D data length matches 2D array size");
-    assert((this->chunksize % ngridboxes == 0.0) &&
-           "chunks are integer multple of number of gridboxes");
+    assert((this->chunksize % ndim1 == 0.0) &&
+           "chunks are integer multiple of 1st dimension of 2-D data");
 
-    const auto ngstr = std::to_string(ngridboxes);
+    const auto n1str = std::to_string(ndim1);
     const auto nobstr = std::to_string(nobs);
-    const auto nchstr = std::to_string(this->chunksize / ngridboxes);
+    const auto nchstr = std::to_string(this->chunksize / ndim1);
 
-    const auto shape("[" + nobstr + ", " + ngstr + "]");
-    const auto chunks("[" + nchstr + ", " + ngstr + "]");
-    const std::string dims = "[\"time\", \"gbxindex\"]";
+    const auto shape("[" + nobstr + ", " + n1str + "]");
+    const auto chunks("[" + nchstr + ", " + n1str + "]");
+    const std::string dims = "[\"time\", \""+dim1_name+"\"]";
     this->zarrayjsons(shape, chunks, dims);
   }
 
@@ -215,10 +223,10 @@ public:
   TwoDStorage(FSStore &store, const unsigned int maxchunk,
               const std::string name, const std::string dtype,
               const std::string units, const double scale_factor,
-              const unsigned int ngrid)
-      : SingleVarStorage<T>(store, floor(maxchunk / ngrid) * ngrid,
+              const unsigned int i_ndim1, const std::string i_dim1_name)
+      : SingleVarStorage<T>(store, floor(maxchunk / i_ndim1) * i_ndim1,
                             name, dtype, units, scale_factor),
-        ngridboxes(ngrid), nobs(0) {}
+        ndim1(i_ndim1), dim1_name(i_dim1_name), nobs(0) {}
 
   ~TwoDStorage()
   /* upon destruction write any data leftover in buffer
