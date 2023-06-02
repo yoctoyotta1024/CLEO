@@ -62,14 +62,14 @@ private:
   unsigned int bufferfill; // number of datapoints so far copied into buffer
   unsigned int ndata;      // number of data points that have been observed should = nobs * ngridboxes
 
-  char zarr_format = '2';          // storage spec. version 2
-  char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
-  std::string compressor = "null"; // compression of data when writing to store
-  std::string fill_value = "null"; // fill value for empty datapoints in array
-  std::string filters = "null";    // codec configurations for compression
-  std::string dtype = "<f8";       // datatype stored in arrays
+  const char zarr_format = '2';          // storage spec. version 2
+  const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
+  const std::string compressor = "null"; // compression of data when writing to store
+  const std::string fill_value = "null"; // fill value for empty datapoints in array
+  const std::string filters = "null";    // codec configurations for compression
+  const std::string dtype = "<f8";       // datatype stored in arrays
 
-  const unsigned int ngridboxes; // number of gridboxes that are observed during each observation
+  const unsigned int ngbxs;              // number of gridboxes that are observed during each observation
 
   void copy2buffers(const ThermoState &state)
   /* copy data from thermostate to buffers */
@@ -90,12 +90,12 @@ private:
   void writejsons()
   /* write strictly required metadata to decode chunks (MUST) */
   {
-    assert((ndata == nobs * ngridboxes) && "1D data length matches 2D array size");
-    assert((chunksize % ngridboxes == 0.0) && "chunks are integer multple of number of gridboxes");
+    assert((ndata == nobs * ngbxs) && "1D data length matches 2D array size");
+    assert((chunksize % ngbxs == 0.0) && "chunks are integer multple of number of gridboxes");
 
-    const auto ngstr = std::to_string(ngridboxes);
+    const auto ngstr = std::to_string(ngbxs);
     const auto nobstr = std::to_string(nobs);
-    const auto nchstr = std::to_string(chunksize / ngridboxes);
+    const auto nchstr = std::to_string(chunksize / ngbxs);
 
     const auto shape("[" + nobstr + ", " + ngstr + "]");
     const auto chunks("[" + nchstr + ", " + ngstr + "]");
@@ -105,15 +105,17 @@ private:
                                      fill_value, filters));
     buffers.writejsons(store, metadata);
   }
-
+  
 public:
   unsigned int nobs; // number of output times that have been observed
 
   ThermoStateStorage(FSStore &store, const unsigned int maxchunk,
-                     const unsigned int ngrid)
-      : store(store), buffers(floor(maxchunk / ngrid) * ngrid),
-        chunksize(floor(maxchunk / ngrid) * ngrid), chunkcount(0),
-        bufferfill(0), ndata(0), ngridboxes(ngrid), nobs(0) {}
+                     const unsigned int ngridboxes)
+      : store(store),
+        buffers(storagehelper::good2Dchunk(maxchunk, ngridboxes)),
+        chunksize(storagehelper::good2Dchunk(maxchunk, ngridboxes)),
+        chunkcount(0), bufferfill(0), ndata(0),
+        ngbxs(ngridboxes), nobs(0) {}
 
   ~ThermoStateStorage()
   /* upon destruction write any data leftover in buffers

@@ -27,7 +27,7 @@ private:
   virtual void writejsons() = 0;
 
 protected:
-  FSStore &store;            // file system store satisfying zarr store specificaiton v2
+  FSStore &store;       // file system store satisfying zarr store specificaiton v2
   const std::string name;    // name to call variable being stored
   const std::string units;   // units of coordinate being stored (for arrayattrs json)
   const double scale_factor; // scale_factor of data (for array .zattrs json)
@@ -38,12 +38,12 @@ protected:
   unsigned int bufferfill; // number of datapoints so far copied into buffer
   unsigned int ndata;      // number of data points that have been observed
 
-  char zarr_format = '2';          // storage spec. version 2
-  char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
-  std::string compressor = "null"; // compression of data when writing to store
-  std::string fill_value = "null"; // fill value for empty datapoints in array
-  std::string filters = "null";    // codec configurations for compression
-  std::string dtype;               // datatype stored in arrays
+  const char zarr_format = '2';          // storage spec. version 2
+  const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
+  const std::string compressor = "null"; // compression of data when writing to store
+  const std::string fill_value = "null"; // fill value for empty datapoints in array
+  const std::string filters = "null";    // codec configurations for compression
+  const std::string dtype;               // datatype stored in arrays
 
   void zarrayjsons(const std::string shape,
                    const std::string chunks,
@@ -75,13 +75,13 @@ protected:
   }
 
 public:
-  SingleVarStorage(FSStore &store, const unsigned int maxchunk,
+  SingleVarStorage(FSStore &store, const unsigned int chunksize,
                    const std::string name, const std::string dtype,
                    const std::string units, const double scale_factor)
       : store(store), name(name), units(units),
         scale_factor(scale_factor),
-        buffer(maxchunk, std::numeric_limits<T>::max()),
-        chunksize(maxchunk), chunkcount(0),
+        buffer(chunksize, std::numeric_limits<T>::max()),
+        chunksize(chunksize), chunkcount(0),
         bufferfill(0), ndata(0), dtype(dtype) {}
 
   virtual ~SingleVarStorage(){};
@@ -154,10 +154,10 @@ private:
   }
 
 public:
-  CoordinateStorage(FSStore &store, const unsigned int maxchunk,
+  CoordinateStorage(FSStore &store, const unsigned int chunksize,
                     const std::string name, const std::string dtype,
                     const std::string units, const double scale_factor)
-      : SingleVarStorage<T>(store, maxchunk, name, dtype,
+      : SingleVarStorage<T>(store, chunksize, name, dtype,
                             units, scale_factor) {}
 
   ~CoordinateStorage()
@@ -223,7 +223,7 @@ public:
               const std::string name, const std::string dtype,
               const std::string units, const double scale_factor,
               const std::string i_dim1name, const unsigned int i_ndim1)
-      : SingleVarStorage<T>(store, floor(maxchunk / i_ndim1) * i_ndim1,
+      : SingleVarStorage<T>(store, storagehelper::good2Dchunk(maxchunk, i_ndim1),
                             name, dtype, units, scale_factor),
         dim1name(i_dim1name), ndim1(i_ndim1), nobs(0) {}
 
@@ -237,10 +237,11 @@ public:
     }
   }
 
-  void set_ndim1(const size_t i_ndim1)
-  {
-    ndim1 = i_ndim1;
-  }
+  // void set_ndim1(const size_t i_ndim1)
+  // {
+  //   ndim1 = i_ndim1;
+  //   good2Dchunk(maxchunk, i_ndim1);
+  // }
 
   void is_dim1(const size_t goodndim1,
                const std::string &goodname) const

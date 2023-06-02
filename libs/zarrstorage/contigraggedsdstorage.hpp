@@ -16,14 +16,14 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
 struct SomeMetadata
 {
-  char zarr_format;
-  char order;
-  std::string shape;
-  std::string chunks;
-  std::string compressor;
-  std::string fill_value;
-  std::string filters;
-  std::string dims;
+  const char zarr_format;
+  const char order;
+  const std::string shape;
+  const std::string chunks;
+  const std::string compressor;
+  const std::string fill_value;
+  const std::string filters;
+  const std::string dims;
 
   SomeMetadata(const char zarr_format, const char order,
                const unsigned int ndata, const size_t chunksize,
@@ -163,14 +163,14 @@ private:
   unsigned int rgdcount_bufferfill; // number of rgdcount values so far copied into its buffer
   unsigned int rgdcount_ndata;      // number of rgdcount values observed so far
 
-  char zarr_format = '2';          // storage spec. version 2
-  char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
-  std::string compressor = "null"; // compression of data when writing to store
-  std::string fill_value = "null"; // fill value for empty datapoints in array
-  std::string filters = "null";    // codec configurations for compression
+  const char zarr_format = '2';          // storage spec. version 2
+  const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
+  const std::string compressor = "null"; // compression of data when writing to store
+  const std::string fill_value = "null"; // fill value for empty datapoints in array
+  const std::string filters = "null";    // codec configurations for compression
 
-  std::string rgdcount_name = "raggedcount"; // name of rgdcount zarray in store
-  std::string rgdcount_dtype = "<u8";        // datatype of rgdcount variable
+  const std::string rgdcount_name = "raggedcount"; // name of rgdcount zarray in store
+  const std::string rgdcount_dtype = "<u8";        // datatype of rgdcount variable
 
   void sdbuffers_writejsons()
   {
