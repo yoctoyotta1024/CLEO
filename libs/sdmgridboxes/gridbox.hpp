@@ -46,10 +46,11 @@ coupled thermodynamics */
   KOKKOS_INLINE_FUNCTION
   GridBox(const unsigned int ii,
           const Maps4GridBoxes &gbxmaps,
+          const DetectorLogbooks &logbooks,
           const CreateDetectorsPtr auto &dtrs,
           Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
       : gbxindex(ii),
-        detectors(dtrs(gbxindex)),
+        detectors(dtrs(logbooks, gbxindex)),
         state(gbxmaps.get_volume(gbxindex))
   /* Volume in Thermostate set using Map4GridBoxes
   idx2vol map (via get_volume function). Other ThermoState variables
@@ -85,6 +86,7 @@ coupled thermodynamics */
 
 KOKKOS_FUNCTION Kokkos::vector<GridBox>
 create_gridboxes(const Maps4GridBoxes &gbxmaps,
+                 const DetectorLogbooks &logbooks,
                  const CreateDetectorsPtr auto &dtrs,
                  Kokkos::vector<SuperdropWithGbxindex> &SDsInGBxs)
 /* create domain as a vector of grid boxes such that each grid box
@@ -96,7 +98,7 @@ superdroplet 'SDsInGbxs', and an (uninitialised) thermodynamic state. */
   Kokkos::vector<GridBox> gridboxes;
   for (auto ii : gbxmaps.gbxidxs)
   {
-    gridboxes.push_back(GridBox(ii, gbxmaps, dtrs, SDsInGBxs));
+    gridboxes.push_back(GridBox(ii, gbxmaps, logbooks, dtrs, SDsInGBxs));
   }
 
   return gridboxes;

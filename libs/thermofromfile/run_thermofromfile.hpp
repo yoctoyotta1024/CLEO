@@ -146,7 +146,7 @@ superdroplet model (SDM) using thermodynamics read from files */
 
   /* vector containing all gridboxes in SDM domain */
   Kokkos::vector<GridBox> gridboxes =
-      create_gridboxes(sdm.gbxmaps, dtrs, SDsInGBxs);
+      create_gridboxes(sdm.gbxmaps, sdm.logbooks, dtrs, SDsInGBxs);
   gridboxes.on_device(); 
   
   /* prepare model for timestepping */
