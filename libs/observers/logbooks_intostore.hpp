@@ -56,10 +56,10 @@ public:
   LogbookStorage(FSStore &store, const unsigned int maxchunk,
                   const std::string name, const std::string dtype,
                   const std::string units, const double scale_factor,
-                  const unsigned int ndim0)
-      : SingleVarStorage<T>(store, floor(maxchunk / ngrid) * ngrid,
+                  const unsigned int n0)
+      : SingleVarStorage<T>(store, floor(maxchunk / n0) * n0,
                             name, dtype, units, scale_factor),
-        ndim0(ndim0), nobs(0) {}
+        ndim0(n0), nobs(0) {}
 
   ~LogbookStorage()
   /* upon destruction write any data leftover in buffer
@@ -77,7 +77,7 @@ struct ObservePrecip
 writes precipation data to zarr storage */
 {
 private:
-  LogbookStorage &zarr;
+  LogbookStorage<double> &zarr;
 
 public:  
   ObservePrecip(LogbookStorage<double> &zarr) : zarr(zarr)
@@ -87,7 +87,7 @@ public:
 
   void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const
   {
-    std::vector<double> record = logbook.get_and_reset_record(0.0);
+    std::vector<double> record = logbook -> get_and_reset_record(0.0);
     zarr.value_to_storage(record);
   }
 
