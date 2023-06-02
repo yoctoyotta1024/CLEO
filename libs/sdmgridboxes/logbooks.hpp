@@ -78,6 +78,7 @@ public:
   and returns a copy of record before */
   {
     std::vector<T> record_copy(record);
+    
     record.assign(record.size(), reset_val);
 
     return record_copy;
