@@ -30,7 +30,7 @@ public:
 
   void prepare(const DetectorLogbooks &logbooks) const
   {
-    zarr_a.set_ndim1_and_chunksize(logbooks.accumprecip -> get_size());
+    zarr_a.set_chunks(logbooks.accumprecip -> get_size());
   }
 
   void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const

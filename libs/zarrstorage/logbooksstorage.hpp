@@ -28,7 +28,7 @@ public:
                        scale_factor, i_dim1name, 0),
         maxchunk(maxchunk) {}
 
-  void set_ndim1_and_chunksize(const unsigned int ndim1)
+  void set_chunks(const unsigned int ndim1)
   /* given 'size' (number of entries in logbook)
   change ndims1 and chunksize of zarr storage */
   {
