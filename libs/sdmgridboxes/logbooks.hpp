@@ -72,6 +72,16 @@ public:
   {
     record.at(idx) += val;
   }
+
+  std::vector<T> get_and_reset_record(const T reset_val)
+  /* replaces all the values in record with 'reset_val'
+  and returns a copy of record before */
+  {
+    std::vector<T> record_copy(record);
+    record.assign(record.size(), reset_val);
+
+    return record_copy;
+  }
 };
 
 template <typename T>
