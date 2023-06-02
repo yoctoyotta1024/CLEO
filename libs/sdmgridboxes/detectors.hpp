@@ -56,10 +56,8 @@ public:
 
 class Detectors
 /* Detectors stores various detector types and 
-a reference to logbook instances found in
-'DetectionLogbooks'. Detectors calls default 
-constructor of detector types upon construction.
-Modification of a detector can then
+calls default constructor of them upon construction.
+Installation/Modification of a detector can then
 be done by calling the appropriate install_[...] 
 function. Likewise detcetor can be used through 
 appropriate detect_[...] function */

@@ -68,7 +68,7 @@ private:
   }
 
 public:
-  const DetectorLogbooks logbooks;
+  const DetectorLogbooks logbooks; // shared pointers to logbooks used in SDM
   const Maps4GridBoxes &gbxmaps;
   const MoveSuperdropsInDomain<M> &sdmmotion;
   const P &sdmprocess;

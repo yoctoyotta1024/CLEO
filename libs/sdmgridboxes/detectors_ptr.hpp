@@ -14,7 +14,9 @@ is created in a gridbox */
 #include "./logbooks.hpp"
 
 template <typename F>
-concept CreateDetectorsPtr = requires(F f, const unsigned int ii)
+concept CreateDetectorsPtr = requires(F f,
+                                      const DetectorLogbooks logbooks,
+                                      const unsigned int ii)
 /* concept CreateDetectors is all
 (function-like) types (ie. types that can be
 called with some arguments) which given an
@@ -22,7 +24,7 @@ unsigned int return a shared pointer to a
 Detectors instance */
 {
   {
-    f(ii)
+    f(logbooks, ii)
   } -> std::same_as<std::shared_ptr<Detectors>>;
 };
 
@@ -30,7 +32,8 @@ struct NullDetectorsPtr
 /* operator() returns a smart pointer to
 default instantiated Detectors */
 {
-  std::shared_ptr<Detectors> operator()(const unsigned int gbxindex) const
+  std::shared_ptr<Detectors> operator()(const DetectorLogbooks &logbooks,
+                                        const unsigned int gbxindex) const
   {
     return std::make_shared<Detectors>();
   }
@@ -42,7 +45,6 @@ detectors instance that may modify data in
 vectors pointed to by logbooks */
 {
 private:
-  const DetectorLogbooks &logbooks;
   const Maps4GridBoxes &gbxmaps;
 
   std::shared_ptr<Detectors>
@@ -58,18 +60,18 @@ private:
   detectors struct given its pointer */
 
 public:
-  PrecipDetectorsPtr(const DetectorLogbooks &logbooks,
-                     const Maps4GridBoxes &gbxmaps)
-      : logbooks(logbooks), gbxmaps(gbxmaps) {}
+  PrecipDetectorsPtr(const Maps4GridBoxes &gbxmaps)
+      : gbxmaps(gbxmaps) {}
 
-  std::shared_ptr<Detectors> operator()(const unsigned int gbxindex) const
+  std::shared_ptr<Detectors> operator()(const DetectorLogbooks &logbooks,
+                                        const unsigned int gbxindex) const
   /* operator creates a smart pointer to a detectors struct
   and installs certain types of detector in it according
   to install_detectors function */
   {
     auto detectors = std::make_shared<Detectors>();
 
-    return install_detectors(detectors, gbxindex);
+    return install_detectors(detectors, logbooks, gbxindex);
   }
 };
 
