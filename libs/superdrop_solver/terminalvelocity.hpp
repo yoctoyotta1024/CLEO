@@ -96,7 +96,7 @@ struct SimmelTerminalVelocity
     constexpr double r3 = 1.73892e-3 / dlc::R0;
 
     /* alpha constants converted from [g^-beta m s^-1] into [g^-beta] units */
-    constexpr double MASSCONST = dlc::MASS0 * 1000; // convert dimensionless mass into grams [g]
+    constexpr double MASSCONST = dlc::MASS0grams; // convert dimensionless mass into grams [g]
     constexpr double VELCONST = (100.0 * dlc::W0);                                 // convert from [cm/s] into dimensionless velocity []
     constexpr double a1 = 457950 / VELCONST;
     constexpr double a2 = 4962 / VELCONST;

@@ -148,9 +148,8 @@ struct M_solIntoStore : AttributeIntoStoreViaBuffer<double>
     AttributeIntoStoreViaBuffer::writejsons(store, md);
 
     /* rewrite array .zattrs json */
-    const double sf = dlc::MASS0 * 1000; // scale factor to convert dimless mass to grams
     const std::string arrayattrs = storagehelper::
-        arrayattrs(md.dims, "g", sf);
+        arrayattrs(md.dims, "g", dlc::MASS0grams);
     store[attr + "/.zattrs"] = arrayattrs;
   }
 };

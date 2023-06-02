@@ -116,7 +116,7 @@ prints out details about logbooks */
     std::cout << std::scientific
             << std::setprecision(printprec)
             << "tot accum. precip = "
-            << totaccumpp << '\n';
+            << totaccumpp*dlc::MASS0grams << "g"<< '\n';
   }
 
   void operator()(const DetectorLogbooks &logbooks) const

@@ -71,9 +71,8 @@ struct SomeZarrStores
   TwoDStorage<size_t> nsuperszarr;
   TwoDStorage<double> precipzarr;
 
-SomeZarrStores(FSStore &fsstore, const int maxchunk,
-              const unsigned int ngbxs, S sdattrs,
-              const size_t ndtrs)
+  SomeZarrStores(FSStore &fsstore, const int maxchunk,
+                 const unsigned int ngbxs, S sdattrs)
       : thermozarr(fsstore, maxchunk, ngbxs),
         sdzarr(fsstore, sdattrs, maxchunk),
         sdgbxzarr(fsstore, SdgbxIntoStore(), maxchunk),
@@ -86,7 +85,8 @@ SomeZarrStores(FSStore &fsstore, const int maxchunk,
         nsuperszarr(fsstore, maxchunk, "nsupers",
                     "<u8", " ", 1, ngbxs, "gbxindex"),
         precipzarr(fsstore, maxchunk, "accumprecip",
-                    "<f8", " ", 1.0, ndtrs, "logbooktags") {}
+                   "<f8", "g", dlc::MASS0grams, 0,
+                   "logbooktags") {}
 };
 
 SdMotion auto create_sdmotion(const int motionstep)

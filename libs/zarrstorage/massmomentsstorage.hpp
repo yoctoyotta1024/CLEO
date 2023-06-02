@@ -22,10 +22,6 @@ namespace dlc = dimless_constants;
 struct MassMom012Storages
 /* 2D zarr stores for 0th, 1st and 2nd mass moments */
 {
-private:
-  const double sf = dlc::MASS0 * 1000; // scale factor to convert dimensionless masses to grams
-
-public:
   TwoDStorage<double> mom0zarr;
   TwoDStorage<double> mom1zarr;
   TwoDStorage<double> mom2zarr;
@@ -38,9 +34,9 @@ public:
       : mom0zarr(store, maxchunk, name0, "<f8",
                  " ", 1.0, ngbxs, "gbxindex"),
         mom1zarr(store, maxchunk, name1, "<f8",
-                 "g", sf, ngbxs, "gbxindex"),
+                 "g", dlc::MASS0grams, ngbxs, "gbxindex"),
         mom2zarr(store, maxchunk, name2, "<f8",
-                 "g^2", pow(sf, 2.0), ngbxs, "gbxindex"){};
+                 "g^2", pow(dlc::MASS0grams, 2.0), ngbxs, "gbxindex"){};
 };
 
 struct MomentsStorages : MassMom012Storages
