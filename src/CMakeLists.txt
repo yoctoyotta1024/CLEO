@@ -28,7 +28,7 @@ FetchContent_MakeAvailable(Kokkos)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
 set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
-set(SDMLIBS superdrop_solver initialisation sdmgridboxes observers)
+set(SDMLIBS superdrop_solver initialisation sdmgridboxes observers zarrstorage)
 #set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
 set(compileops -Wall -pedantic -g -gdwarf-4) # less strict without -Werror
 #set(compileops  -Wall -pedantic -g) # cannot use -gdwarf-4 flag for nvc++ compiler 

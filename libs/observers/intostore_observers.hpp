@@ -15,11 +15,11 @@ into a (zarr) store on disk */
 #include <Kokkos_DualView.hpp>
 
 #include "./observegbxs.hpp"
-#include "./thermostatestorage.hpp"
-#include "./sdattributes_intostore.hpp"
-#include "./contigraggedsdstorage.hpp"
-#include "./singlevarstorage.hpp"
-#include "./massmomentsstorage.hpp"
+#include "zarrstorage/thermostatestorage.hpp"
+#include "zarrstorage/sdattributes_intostore.hpp"
+#include "zarrstorage/contigraggedsdstorage.hpp"
+#include "zarrstorage/singlevarstorage.hpp"
+#include "zarrstorage/massmomentsstorage.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 
 void check_zarrname(const std::string zarrname,

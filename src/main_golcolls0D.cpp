@@ -27,14 +27,18 @@ collision-coalscence kernel */
 #include "sdmgridboxes/detectors.hpp"
 #include "sdmgridboxes/detectors_ptr.hpp"
 #include "sdmgridboxes/logbooks.hpp"
+
+/* sdm observers setup */
 #include "observers/observers.hpp"
 #include "observers/observegbxs.hpp"
 #include "observers/observelbks.hpp"
 #include "observers/intostore_observers.hpp"
-#include "observers/sdattributes_intostore.hpp"
-#include "observers/contigraggedsdstorage.hpp"
-#include "observers/thermostatestorage.hpp"
-#include "observers/zarrstores.hpp"
+
+#include "singlevarstorage.hpp"
+#include "zarrstorage/sdattributes_intostore.hpp"
+#include "zarrstorage/contigraggedsdstorage.hpp"
+#include "zarrstorage/thermostatestorage.hpp"
+#include "zarrstorage/zarrstores.hpp"
 
 /* sdm superdroplets setup */
 #include "superdrop_solver/thermodynamic_equations.hpp"

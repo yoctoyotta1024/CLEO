@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.18.0)
 #cmake_minimum_required(VERSION 3.21.1) # for using Kokkos with NVC++ compiler 
 
 # setlibrary name
-set(LIBNAME "observers")
+set(LIBNAME "zarrstorage")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
@@ -33,7 +33,9 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # add executables to library
 set(SOURCES
-"observers.cpp"
+"massmomentsstorage.cpp"
+"thermostatestorage.cpp"
+"zarrstores.cpp"
 )
 add_library(${LIBNAME} SHARED ${SOURCES})
 
@@ -42,7 +44,7 @@ target_include_directories(${LIBNAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PUBLIC "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
-set(LINKLIBS superdrop_solver sdmgridboxes zarrstorage)
+set(LINKLIBS superdrop_solver sdmgridboxes)
 target_link_libraries(${LIBNAME} PRIVATE ${LINKLIBS})
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 

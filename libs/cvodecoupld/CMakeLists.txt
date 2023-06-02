@@ -24,7 +24,8 @@ set(SOURCES
   )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
-target_link_libraries("${LIBNAME}" PRIVATE superdrop_solver initialisation sdmgridboxes observers)
+set(LINKLIBS superdrop_solver initialisation sdmgridboxes observers)
+target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
 
 # add directories to include for targets
 target_include_directories(${LIBNAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")

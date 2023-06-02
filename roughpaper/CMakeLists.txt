@@ -29,7 +29,8 @@ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/superdrop_solver" ${CMAKE_
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/observers" ${CMAKE_CURRENT_BINARY_DIR}/libs/observers)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/sdmgridboxes" ${CMAKE_CURRENT_BINARY_DIR}/libs/sdmgridboxes)
 
-target_link_libraries("${PROJECT_NAME}" PUBLIC superdrop_solver initialisation sdmgridboxes observers)
+set(LINKLIBS superdrop_solver initialisation sdmgridboxes observers)
+target_link_libraries("${PROJECT_NAME}" PUBLIC ${LINKLIBS})
 
 # Kokkos library stuff
 set(CMAKE_CXX_FLAGS_B4 "${CMAKE_CXX_FLAGS}")

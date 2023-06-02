@@ -10,6 +10,7 @@ add_subdirectory(initialisation)
 add_subdirectory(superdrop_solver)
 add_subdirectory(sdmgridboxes)
 add_subdirectory(observers)
+add_subdirectory(zarrstorage)
 
 # libraries particular to certain CLEO configurations #
 add_subdirectory(cvodecoupld EXCLUDE_FROM_ALL)
