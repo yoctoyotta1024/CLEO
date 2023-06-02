@@ -210,8 +210,8 @@ superdroplets from combination of those two seperate observers */
                                                             stores.rainmassmomszarr,
                                                             ngbxs);
 
-  const ObserveLbks auto ol1 = PrintLogbooks{};
-  // const ObserveLbks auto ol1 = ObservePrecip(stores.precipzarr) >> PrintLogbooks{};
+  // const ObserveLbks auto ol1 = PrintLogbooks{};
+  const ObserveLbks auto ol1 = ObservePrecip(stores.precipzarr) >> PrintLogbooks{};
 
   // const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og3 >> og2a >> og2b >> og1;
   const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og2a >> og2b >> og1;

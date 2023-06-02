@@ -32,7 +32,8 @@ public:
     std::vector<double> record = logbook -> get_and_reset_record(0.0);
     // zarr.value_to_storage(record);
     ++zarr.nobs;
-    
+
+    zarr.set_ndim1(record.size()); // TO DO: set this in a better way (only once?)
     zarr.is_dim1(record.size(), "logbooktags");
     
   }
