@@ -83,7 +83,7 @@ public:
 
   void run_thermostep(const int t_mdl, const int couplstep)
   /* increment position of thermodata for 0th gridbox to positon
-  at next timestep (ie. ngridboxes further along vector) */
+  at next timestep (ie. ngridbox_faces further along vector) */
   {
     if (t_mdl % couplstep == 0)
     {

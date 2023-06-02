@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
   /* create observer from combination of chosen observers */
   FSStore fsstore(config.zarrbasedir);
   SomeZarrStores zarrstores(fsstore, config.maxchunk,
-                            gbxmaps.gbxidxs.size(),
+                            gbxmaps.ngridboxes,
                             sdattrs_to_observe());
   const auto observer = create_observer(mdlsteps.obsstep, zarrstores);
 

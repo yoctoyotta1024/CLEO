@@ -167,8 +167,9 @@ of a superdroplet into zarr storage */
   return attrs;
 }
 
-ObserveGBxs auto create_observegbx_massmoments(MassMomStorages &mms,
-                                          RainMassMomStorages &rmms)
+ObserveGBxs auto
+create_observegbx_massmoments(MassMomStorages &mms,
+                              RainMassMomStorages &rmms)
 {
   const auto mom0 = ObserveNthMassMoment(mms.mom0zarr, 0);
   const auto mom1 = ObserveNthMassMoment(mms.mom1zarr, 1);

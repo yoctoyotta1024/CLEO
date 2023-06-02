@@ -30,7 +30,8 @@ whilst the volume is determind by reading the gridfile */
 
   gbxidxs = gfb.gbxidxs;  
   ndims = {gfb.ndims.at(0), gfb.ndims.at(1), gfb.ndims.at(2)};
-  
+  ngridboxes = gbxidxs.size();
+
   if (SDnspace == 0)
   {
     const double domainvol = get_0Ddomainvol_from_gridfile(gfb);
@@ -57,6 +58,19 @@ whilst the volume is determind by reading the gridfile */
     const std::string errmsg = "SDnspace > 3, no method exists "
                                    " for constructing Maps4GridBoxes object";
     throw std::invalid_argument(errmsg);
+  }
+
+  check_ngridboxes();
+}
+
+void Maps4GridBoxes::check_ngridboxes() const
+{
+  const size_t ngridboxes_fromdims(ndims[0] * ndims[1] * ndims[2]);
+  
+  if (ngridboxes != ngridboxes_fromdims)
+  {
+    throw std::invalid_argument("Model dimensions inconsistent "
+                                " with number of gridboxes");
   }
 }
 
