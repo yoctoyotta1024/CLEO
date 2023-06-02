@@ -70,9 +70,4 @@ double rainmassmoment(const std::span<SuperdropWithGbxindex> span4SDsinGBx,
 mass distirbution given by all the superdrops which
 have radius >= rlim in the span passed as an argument */
 
-double surface_precipitation(const GridBox &gbx, const double coord3lim);
-/* calculates mm of precipitation in a gridbox
-from mass of all superdrops which have
-radius >= rlim and coord3 <= zlim  */
-
 #endif // MASSMOMENTSSTORAGE_HPP

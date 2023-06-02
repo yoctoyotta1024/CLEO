@@ -136,9 +136,9 @@ struct DetectorLogbooks
 shared pointers to various logbook instances
 (e.g. for a Detectors instance to use) */
 {
-  std::shared_ptr<Logbook<double>> accpp; // logbook for accumulated precipitation
+  std::shared_ptr<Logbook<double>> accumprecip; // logbook for accumulated precipitation
 
-  DetectorLogbooks() : accpp(std::make_shared<Logbook<double>>()) {}
+  DetectorLogbooks() : accumprecip(std::make_shared<Logbook<double>>()) {}
 };
 
 #endif // LOGBOOKS_HPP

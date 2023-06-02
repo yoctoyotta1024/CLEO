@@ -48,7 +48,7 @@ private:
   const Maps4GridBoxes &gbxmaps;
 
   std::shared_ptr<Detectors>
-  install_precipitation_detectors(const std::shared_ptr<Detectors> detectors,
+  install_precip_detectors(const std::shared_ptr<Detectors> detectors,
                                   const DetectorLogbooks &logbooks,
                                   const unsigned int gbxindex) const;
   /* if upper z boundary of gbx is <= precip_zlim install

@@ -122,7 +122,7 @@ thermodynamic states and superdroplets */
 
   void operator()(const DetectorLogbooks &logbooks) const
   {
-    printprecip(logbooks.accpp); 
+    printprecip(logbooks.accumprecip); 
   }
 };
 

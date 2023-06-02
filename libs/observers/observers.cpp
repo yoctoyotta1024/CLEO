@@ -45,7 +45,7 @@ number of sueprdrops to terminal */
 
 void PrintObserver::observe_logbooks(const DetectorLogbooks &logbooks) const
 {
-  size_t accpp_size(logbooks.accpp->get_size());
+  size_t size(logbooks.accumprecip->get_size());
   std::cout << "no. logbook entries: "
-               "[accpp: " << accpp_size << "]\n";
+               "[accumprecip: " << size << "]\n";
 }

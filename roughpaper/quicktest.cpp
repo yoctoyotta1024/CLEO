@@ -96,8 +96,8 @@ struct AccumPrecipDetector
   {
     if (manage_entry.get_logbook())
     {
-      double accumulated_precip(drop);
-      manage_entry(accumulated_precip);
+      double mass_precipitation(drop);
+      manage_entry(mass_precipitation);
     }
   }
 };

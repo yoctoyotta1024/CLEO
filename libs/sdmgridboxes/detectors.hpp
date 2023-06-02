@@ -27,7 +27,7 @@ EntryInLogbook instance */
 private:
   EntryInLogbook<double> manage_entry;
 
-  double precipitation(const Superdrop &drop) const;
+  double precip_mass(const Superdrop &drop) const;
 
 public:
   KOKKOS_INLINE_FUNCTION ~AccumPrecipDetector() = default; // Kokkos requirement for a (dual)View
@@ -49,7 +49,7 @@ public:
   {
     if (manage_entry.get_logbook())
     {
-      manage_entry.increment_by(precipitation(drop));
+      manage_entry.increment_by(precip_mass(drop));
     }
   }
 };
@@ -63,27 +63,27 @@ function. Likewise detcetor can be used through
 appropriate detect_[...] function */
 {
 private:
-  AccumPrecipDetector accpp_dtr;
+  AccumPrecipDetector detect_accumprecip;
 
 public:
   KOKKOS_INLINE_FUNCTION Detectors() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~Detectors() = default; // Kokkos requirement for a (dual)View
 
   void install_accumprecip_detector(
-      const std::shared_ptr<Logbook<double>> accpp_logbook,
+      const std::shared_ptr<Logbook<double>> accumprecip_logbook,
       const unsigned int gbxindex)
   /* install accumulated precipitation detector
   (by instanting detector with an entry in the
-  accpp logbook that has tag 'gbxindex') */
+  accumprecip logbook that has tag 'gbxindex') */
   {
-    accpp_dtr = AccumPrecipDetector(accpp_logbook, gbxindex);
+    detect_accumprecip = AccumPrecipDetector(accumprecip_logbook, gbxindex);
   }
 
   void detect_precipitation(const Superdrop &drop) const
   /* use operators of precipitation detectors
   to detect precipitation  */
   {
-    accpp_dtr(drop); 
+    detect_accumprecip(drop); 
   }
 };
 
