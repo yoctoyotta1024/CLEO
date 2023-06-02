@@ -8,14 +8,14 @@ from a gridbox's thermostate to the terminal */
 
 #include "observers.hpp"
 
-void print_thermostate_with_precision(const ThermoState &state,
-                                      const int prec)
+void print_thermostate_with_precision(const ThermoState &state)
 /* prints to terminal a datavalue followed
 by "lineend" string with precision "prec" */
 {
-
+  constexpr int printprec(4); // precision to print data with
+ 
   std::cout << std::scientific
-            << std::setprecision(prec)
+            << std::setprecision(printprec)
             << "[P,T,qv,qc]=["
             << state.press << ", "
             << state.temp << ", "
@@ -28,6 +28,8 @@ void PrintObserver::observe_gridboxes(const size_t ngbxs,
 /* print t, kinematic data (p, temp, qv, qc) and total
 number of sueprdrops to terminal */
 {
+  constexpr int printprec(4); // precision to print data with
+
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
     const auto &gbx = h_gridboxes(ii);
@@ -36,6 +38,14 @@ number of sueprdrops to terminal */
               << std::setprecision(printprec)
               << gbx.state.time * dlc::TIME0 << "s, "
               << "nsupers=" << gbx.span4SDsinGBx.size() << ", ";
-    print_thermostate_with_precision(gbx.state, printprec);
+
+    print_thermostate_with_precision(gbx.state);
   }
+}
+
+void PrintObserver::observe_logbooks(const DetectorLogbooks &logbooks) const
+{
+  size_t accpp_size(logbooks.accpp->get_size());
+  std::cout << "no. logbook entries: "
+               "[accpp: " << accpp_size << "]\n";
 }

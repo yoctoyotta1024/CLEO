@@ -104,21 +104,27 @@ struct PrintLogbooks
 prints out details about gridboxes'
 thermodynamic states and superdroplets */
 {
-  void observe_accumulatedprecip(
+  void printprecip(
       const std::shared_ptr<Logbook<double>> logbook) const
   {
+    constexpr int printprec(4); // precision to print data with
+
+    double totaccumpp(0.0);
     for (size_t idx = 0; idx < logbook  -> get_size(); ++idx)
     {
-      std::cout << "tag: " << logbook ->get_tag(idx) << ", "
-                << "record: " << logbook ->get_from_record(idx) << "\n";
+      totaccumpp += logbook ->get_from_record(idx);
     }
+    
+    std::cout << std::scientific
+            << std::setprecision(printprec)
+            << "tot accum. precip = "
+            << totaccumpp << '\n';
   }
 
   void operator()(const DetectorLogbooks &logbooks) const
   {
-    observe_accumulatedprecip(logbooks.accpp); 
+    printprecip(logbooks.accpp); 
   }
-
 };
 
 #endif // OBSERVELBKS_HPP

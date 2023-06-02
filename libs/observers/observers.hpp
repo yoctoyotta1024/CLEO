@@ -170,17 +170,17 @@ public:
     obsgbxs(ngbxs, h_gridboxes);
   }
 
-   void observe_logbooks(const DetectorLogbooks &lbks) const
+   void observe_logbooks(const DetectorLogbooks &logbooks) const
   {
-    obslbks(lbks);
+    obslbks(logbooks);
   }
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes,
-               const DetectorLogbooks &lbks) const
+               const DetectorLogbooks &logbooks) const
   {
     observe_gridboxes(ngbxs, h_gridboxes);
-    observe_logbooks(lbks);
+    observe_logbooks(logbooks);
   }
 };
 
@@ -190,7 +190,6 @@ prints out details about gridboxes'
 thermodynamic states and superdroplets */
 {
   const int interval;      // interval (integer timestep) between observations
-  const int printprec = 4; // precision to print data with
 
   PrintObserver(const int obsstep) : interval(obsstep) {}
 
@@ -201,7 +200,7 @@ thermodynamic states and superdroplets */
     return t % interval == 0;
   }
 
-  void observe_logbooks(const DetectorLogbooks &lbks) const {}
+  void observe_logbooks(const DetectorLogbooks &logbooks) const;
 
   void observe_gridboxes(const size_t ngbxs,
                          const Kokkos::View<GridBox *> h_gridboxes) const;
@@ -210,7 +209,7 @@ thermodynamic states and superdroplets */
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes,
-               const DetectorLogbooks &lbks) const
+               const DetectorLogbooks &logbooks) const
   {
     observe_gridboxes(ngbxs, h_gridboxes);
   }

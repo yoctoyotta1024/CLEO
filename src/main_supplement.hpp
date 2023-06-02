@@ -206,10 +206,10 @@ superdroplets from combination of those two seperate observers */
   const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og2a >> og2b >> og1;
 
   const Observer auto obs1 = ConstIntervalGBxsObserver(obsstep, obsgbxs);
-  const Observer auto obs2 = ConstIntervalLbksObserver(obsstep, ol1);
+  // const Observer auto obs2 = ConstIntervalLbksObserver(obsstep, ol1);
 
-  // const Observer auto observer = obs1 >> PrintObserver(obsstep);
-  const Observer auto observer = obs1 >> obs2;
+  const Observer auto observer = obs1 >> PrintObserver(obsstep);
+  // const Observer auto observer = obs1 >> obs2;
 
   return observer;
 }
