@@ -112,8 +112,7 @@ struct kGridBox
   void iscoord_within_bounds(const std::pair<double, double> bounds,
                              const double coord)
   {
-    const double llim = bounds.first;
-    const double ulim = bounds.second;
+    const auto [llim, ulim] = bounds;
 
     if (coord < llim || coord >= ulim)
     {
