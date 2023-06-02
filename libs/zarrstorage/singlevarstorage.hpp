@@ -68,7 +68,7 @@ protected:
   void copy2buffer(const std::vector<T> vec)
   /* copy values of type T in vector 'vec' to buffer */
   {
-    bufferfill = storagehelper::val2buffer<T>(val, buffer, bufferfill);
+    bufferfill = storagehelper::vec2buffer<T>(vec, buffer, bufferfill);
     ndata += vec.size();
   }
 

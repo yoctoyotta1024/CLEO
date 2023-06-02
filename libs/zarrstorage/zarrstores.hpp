@@ -97,14 +97,32 @@ array in a store, and an array's metadata to a store */
 {
 
   template <typename T>
-  inline unsigned int val2buffer(const T val, std::vector<T> &buffer,
+  inline unsigned int val2buffer(const T val,
+                                 std::vector<T> &buffer,
                                  unsigned int j)
-  /* copy a type T (e.g. a double) called 'val',
-  to appropriate buffer at index j */
+  /* copy a type T (e.g. a double) called
+  'val', to buffer at index j */
   {
     buffer.at(j) = val;
 
     return ++j;
+  }
+
+  template <typename T>
+  inline unsigned int vec2buffer(const std::vector<T> vec,
+                                 std::vector<T> &buffer,
+                                 unsigned int j)
+  /* copy vector of type T (e.g. a double) called
+  'vec', to buffer at index j. Function is equivalent to 
+  std::copy(vec.begin(), vec.end(), buffer.begin()+j);
+  but faster for copying a large vector (not iterative) */
+  {
+    size_t nvalues(vec.size());
+
+    buffer.erase(buffer.end() - nvalues, buffer.end());
+    buffer.insert(buffer.end(), vec.begin(), vec.end());
+
+    return j + nvalues;
   }
 
   template <typename T>
