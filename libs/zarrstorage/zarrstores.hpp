@@ -122,8 +122,7 @@ array in a store, and an array's metadata to a store */
     buffer.erase(buffer.end() - nvalues, buffer.end());
     buffer.insert(buffer.begin()+j, vec.begin(), vec.end());
 
-    // return j + nvalues;
-    return 0; 
+    return j + nvalues;
   }
 
   template <typename T>
