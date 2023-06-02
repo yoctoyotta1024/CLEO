@@ -31,8 +31,9 @@ ie. which takes a logbooks struct as argument and returns void */
 
 template <ObserveLbks Ol1, ObserveLbks Ol2>
 class CombinedObserveLbks
-/* combination of two ObserveGridBox types
-is 'og1' followed by 'og2' */
+/* combination of two types obeying the ObserveLbks
+concept is 'ol1' followed by 'ol2' (resultant
+combination also obeys ObserveLbks concept) */
 {
 private:
   Ol1 o1;

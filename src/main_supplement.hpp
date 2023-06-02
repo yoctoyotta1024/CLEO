@@ -33,7 +33,7 @@ SDM process and observers to use in main.cpp */
 #include "observers/observers.hpp"
 #include "observers/observegbxs.hpp"
 #include "observers/observelbks.hpp"
-#include "observers/intostore_observers.hpp"
+#include "observers/observegbxs_intostore.hpp"
 
 #include "singlevarstorage.hpp"
 #include "massmomentsstorage.hpp"

@@ -33,8 +33,9 @@ argument and returns void */
 
 template <ObserveGBxs Og1, ObserveGBxs Og2>
 class CombinedObserveGBxs
-/* combination of two ObserveGridBox types
-is 'og1' followed by 'og2' */
+/* combination of two types obeying the ObserveGBxs
+concept is 'og1' followed by 'og2' (resultant
+combination also obeys ObserveGBxs concept) */
 {
 private:
   Og1 og1;

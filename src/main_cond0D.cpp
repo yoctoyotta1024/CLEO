@@ -31,7 +31,7 @@ coupled with a CVODE ode solver for the thermodynamics
 #include "observers/observers.hpp"
 #include "observers/observegbxs.hpp"
 #include "observers/observelbks.hpp"
-#include "observers/intostore_observers.hpp"
+#include "observers/observegbxs_intostore.hpp"
 
 #include "singlevarstorage.hpp"
 #include "zarrstorage/sdattributes_intostore.hpp"
