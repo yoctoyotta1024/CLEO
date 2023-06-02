@@ -31,12 +31,12 @@ struct MassMom012Storages
                      const std::string name0,
                      const std::string name1,
                      const std::string name2)
-      : mom0zarr(store, maxchunk, name0, "<f8",
-                 " ", 1.0, ngbxs, "gbxindex"),
-        mom1zarr(store, maxchunk, name1, "<f8",
-                 "g", dlc::MASS0grams, ngbxs, "gbxindex"),
-        mom2zarr(store, maxchunk, name2, "<f8",
-                 "g^2", pow(dlc::MASS0grams, 2.0), ngbxs, "gbxindex"){};
+      : mom0zarr(store, maxchunk, name0, "<f8", " ",
+                 1.0, "gbxindex", ngbxs),
+        mom1zarr(store, maxchunk, name1, "<f8", "g",
+                 dlc::MASS0grams, "gbxindex", ngbxs),
+        mom2zarr(store, maxchunk, name2, "<f8", "g^2",
+                 pow(dlc::MASS0grams, 2.0), "gbxindex", ngbxs){};
 };
 
 struct MomentsStorages : MassMom012Storages

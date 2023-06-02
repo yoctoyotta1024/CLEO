@@ -83,10 +83,10 @@ struct SomeZarrStores
         gbxzarr(fsstore, maxchunk, "gbxindex",
                 "<u4", " ", 1),
         nsuperszarr(fsstore, maxchunk, "nsupers",
-                    "<u8", " ", 1, ngbxs, "gbxindex"),
+                    "<u8", " ", 1, "gbxindex", ngbxs),
         precipzarr(fsstore, maxchunk, "accumprecip",
-                   "<f8", "g", dlc::MASS0grams, 0,
-                   "logbooktags") {}
+                   "<f8", "g", dlc::MASS0grams,
+                   "logbooktags", 0) {}
 };
 
 SdMotion auto create_sdmotion(const int motionstep)

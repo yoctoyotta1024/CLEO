@@ -182,8 +182,8 @@ an observer observes during 1 observation. Data for values
 of time and dim1 could be output using a CoordinateStorage */
 {
 private:
-  const unsigned int ndim1;   // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
   const std::string dim1name; // name of 1st dimension (e.g. "gbxindex")
+  unsigned int ndim1;   // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
 
   void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
@@ -222,10 +222,10 @@ public:
   TwoDStorage(FSStore &store, const unsigned int maxchunk,
               const std::string name, const std::string dtype,
               const std::string units, const double scale_factor,
-              const unsigned int i_ndim1, const std::string i_dim1name)
+              const std::string i_dim1name, const unsigned int i_ndim1)
       : SingleVarStorage<T>(store, floor(maxchunk / i_ndim1) * i_ndim1,
                             name, dtype, units, scale_factor),
-        ndim1(i_ndim1), dim1name(i_dim1name), nobs(0) {}
+        dim1name(i_dim1name), ndim1(i_ndim1), nobs(0) {}
 
   ~TwoDStorage()
   /* upon destruction write any data leftover in buffer
