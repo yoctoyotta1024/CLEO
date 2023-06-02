@@ -162,6 +162,7 @@ public:
       : zarr(zarr)
   {
     zarr.is_name("nsupers");
+    zarr.is_dim1name("gbxindex");
   }
 
   void operator()(const size_t ngbxs,

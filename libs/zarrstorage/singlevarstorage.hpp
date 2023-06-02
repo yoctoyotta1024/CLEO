@@ -38,7 +38,7 @@ protected:
   unsigned int bufferfill; // number of datapoints so far copied into buffer
   unsigned int ndata;      // number of data points that have been observed
 
-  char zarr_format = '2';    // storage spec. version 2
+  char zarr_format = '2';          // storage spec. version 2
   char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
   std::string compressor = "null"; // compression of data when writing to store
   std::string fill_value = "null"; // fill value for empty datapoints in array
@@ -74,30 +74,7 @@ protected:
     ndata += vec.size();
   }
 
-public:
-  SingleVarStorage(FSStore &store, const unsigned int maxchunk,
-                   const std::string name, const std::string dtype,
-                   const std::string units, const double scale_factor)
-      : store(store), name(name), units(units),
-        scale_factor(scale_factor),
-        buffer(maxchunk, std::numeric_limits<T>::max()),
-        chunksize(maxchunk), chunkcount(0),
-        bufferfill(0), ndata(0), dtype(dtype) {}
-
-  virtual ~SingleVarStorage(){};
-
-  void is_name(const std::string goodname) const
-  {
-    if (name != goodname)
-    {
-      const std::string errmsg("name of storage is " + name +
-                               ", but should be " + goodname);
-      throw std::invalid_argument(errmsg);
-    }
-  }
-
-  int get_ndata() const { return ndata; }
-
+protected:
   void value_to_storage(const T val)
   /* write val in the zarr store. First copy it to a buffer,
   then write buffer to a chunk in the store when the number
@@ -125,6 +102,29 @@ public:
     copy2buffer(vec);
   }
 
+public:
+  SingleVarStorage(FSStore &store, const unsigned int maxchunk,
+                   const std::string name, const std::string dtype,
+                   const std::string units, const double scale_factor)
+      : store(store), name(name), units(units),
+        scale_factor(scale_factor),
+        buffer(maxchunk, std::numeric_limits<T>::max()),
+        chunksize(maxchunk), chunkcount(0),
+        bufferfill(0), ndata(0), dtype(dtype) {}
+
+  virtual ~SingleVarStorage(){};
+
+  void is_name(const std::string goodname) const
+  {
+    if (name != goodname)
+    {
+      const std::string errmsg("name of storage is " + name +
+                               ", but should be " + goodname);
+      throw std::invalid_argument(errmsg);
+    }
+  }
+
+  int get_ndata() const { return ndata; }
 };
 
 template <typename T>
@@ -184,7 +184,7 @@ of time and dim1 could be output using a CoordinateStorage */
 {
 private:
   const unsigned int ndim1; // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
-  const std::string dim1_name;   // name of 1st dimension (e.g. "gbxindex")
+  const std::string dim1name;   // name of 1st dimension (e.g. "gbxindex")
 
   void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
@@ -213,7 +213,7 @@ private:
 
     const auto shape("[" + nobstr + ", " + n1str + "]");
     const auto chunks("[" + nchstr + ", " + n1str + "]");
-    const std::string dims = "[\"time\", \""+dim1_name+"\"]";
+    const std::string dims = "[\"time\", \""+dim1name+"\"]";
     this->zarrayjsons(shape, chunks, dims);
   }
 
@@ -223,10 +223,10 @@ public:
   TwoDStorage(FSStore &store, const unsigned int maxchunk,
               const std::string name, const std::string dtype,
               const std::string units, const double scale_factor,
-              const unsigned int i_ndim1, const std::string i_dim1_name)
+              const unsigned int i_ndim1, const std::string i_dim1name)
       : SingleVarStorage<T>(store, floor(maxchunk / i_ndim1) * i_ndim1,
                             name, dtype, units, scale_factor),
-        ndim1(i_ndim1), dim1_name(i_dim1_name), nobs(0) {}
+        ndim1(i_ndim1), dim1name(i_dim1name), nobs(0) {}
 
   ~TwoDStorage()
   /* upon destruction write any data leftover in buffer
@@ -235,6 +235,16 @@ public:
     if (this->bufferfill != 0)
     {
       writechunk();
+    }
+  }
+
+  void is_dim1name(const std::string goodname) const
+  {
+    if (dim1name != goodname)
+    {
+      const std::string errmsg("name of dim1 is " + dim1name +
+                               ", but should be " + goodname);
+      throw std::invalid_argument(errmsg);
     }
   }
 };
