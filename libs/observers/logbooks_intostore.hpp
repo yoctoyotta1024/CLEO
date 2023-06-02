@@ -8,30 +8,87 @@ into a (zarr) store on disk */
 #ifndef LOGBOOKS_INTOSTORE_HPP
 #define LOGBOOKS_INTOSTORE_HPP
 
-struct ObserveAccumPrecip
-/* satisfies Observer concept and
-prints out details about gridboxes'
-thermodynamic states and superdroplets */
+#include <vector>
+
+#include "sdmgridboxes/logbooks.hpp"
+#include "zarrstorage/singlevarstorage.hpp"
+
+template <typename T>
+struct LogbookStorage : SingleVarStorage<T>
 {
-  void printprecip(
-      const std::shared_ptr<Logbook<double>> logbook) const
+private:
+  const unsigned int ndim0;
+
+  void writechunk()
+  /* write data in buffer to a chunk in store alongside metadata jsons */
   {
-    double totaccumpp(0.0);
-    for (size_t idx = 0; idx < logbook  -> get_size(); ++idx)
-    {
-      totaccumpp += logbook ->get_from_record(idx);
-    }
-    
-    constexpr int printprec(4); // precision to print data with
-    std::cout << std::scientific
-            << std::setprecision(printprec)
-            << "tot accum. precip = "
-            << totaccumpp << '\n';
+    // const std::string chunknum = std::to_string(this->chunkcount) + ".0";
+    // this->chunkcount = storagehelper::
+    //     writebuffer2chunk(this->store, this->buffer,
+    //                       this->name, chunknum,
+    //                       this->chunkcount);
+
+    // writejsons();
+  }
+
+  void writejsons()
+  /* write strictly required metadata to decode chunks (MUST).
+  Assert also check 2D data dimensions is as expected */
+  {
+    // assert((this->ndata == nobs * ndim0) &&
+    //        "1D data length matches 2D array size");
+    // assert((this->chunksize % ndim0 == 0.0) &&
+    //        "chunks are integer multple of 0th dimension");
+
+    // const auto ngstr = std::to_string(ndim0);
+    // const auto nobstr = std::to_string(nobs);
+    // const auto nchstr = std::to_string(this->chunksize / ndim0);
+
+    // const auto shape("[" + nobstr + ", " + ngstr + "]");
+    // const auto chunks("[" + nchstr + ", " + ngstr + "]");
+    // // const std::string dims = "[\"time\", \"gbxindex\"]";
+    // // this->zarrayjsons(shape, chunks, dims);
+  }
+
+public:
+  unsigned int nobs; // number of output times that have been observed
+
+  LogbookStorage(FSStore &store, const unsigned int maxchunk,
+                  const std::string name, const std::string dtype,
+                  const std::string units, const double scale_factor,
+                  const unsigned int ndim0)
+      : SingleVarStorage<T>(store, floor(maxchunk / ngrid) * ngrid,
+                            name, dtype, units, scale_factor),
+        ndim0(ndim0), nobs(0) {}
+
+  ~LogbookStorage()
+  /* upon destruction write any data leftover in buffer
+  to a chunk and write array's metadata to a .json file */
+  {
+    // if (this->bufferfill != 0)
+    // {
+    //   writechunk();
+    // }
+  }
+};
+
+struct ObservePrecip
+/* satisfies ObserveLbks concept and
+writes precipation data to zarr storage */
+{
+private:
+  LogbookStorage &zarr;
+
+public:  
+  void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const
+  {
+    // std::vector<double> record = logbook.get_and_reset_record();
+    // zarr.value_to_storage(record);
   }
 
   void operator()(const DetectorLogbooks &logbooks) const
   {
-    printprecip(logbooks.accumprecip); 
+    observe_accumprecip(logbooks.accumprecip); 
   }
 };
 

@@ -100,9 +100,8 @@ public:
 
 
 struct PrintLogbooks
-/* satisfies Observer concept and
-prints out details about gridboxes'
-thermodynamic states and superdroplets */
+/* satisfies ObserveLbks concept and
+prints out details about logbooks */
 {
   void printprecip(
       const std::shared_ptr<Logbook<double>> logbook) const

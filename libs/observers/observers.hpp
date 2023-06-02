@@ -186,8 +186,9 @@ public:
 
 struct PrintObserver
 /* satisfies Observer concept and
-prints out details about gridboxes'
-thermodynamic states and superdroplets */
+prints out details about logbooks 
+and gridboxes' thermodynamic states
+and superdroplets */
 {
   const int interval;      // interval (integer timestep) between observations
 

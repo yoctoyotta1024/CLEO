@@ -96,8 +96,8 @@ write a double to a buffer, a buffer to a chunk of an
 array in a store, and an array's metadata to a store */
 {
 
-  template <typename V>
-  inline unsigned int val2buffer(const V val, std::vector<V> &buffer,
+  template <typename T>
+  inline unsigned int val2buffer(const T val, std::vector<T> &buffer,
                                  unsigned int j)
   /* copy a type T (e.g. a double) called 'val',
   to appropriate buffer at index j */
@@ -107,9 +107,9 @@ array in a store, and an array's metadata to a store */
     return ++j;
   }
 
-  template <typename V>
+  template <typename T>
   unsigned int writebuffer2chunk(FSStore &store,
-                                 std::vector<V> &buffer,
+                                 std::vector<T> &buffer,
                                  const std::string name,
                                  const std::string chunknum,
                                  unsigned int chunkcount)
@@ -117,15 +117,15 @@ array in a store, and an array's metadata to a store */
   replace contents of buffer with max numeric limit of type.
   Return incremented value of chunkcount */
   {
-    store[name + "/" + chunknum].operator=<V>(buffer);
-    std::fill(buffer.begin(), buffer.end(), std::numeric_limits<V>::max());
+    store[name + "/" + chunknum].operator=<T>(buffer);
+    std::fill(buffer.begin(), buffer.end(), std::numeric_limits<T>::max());
 
     return ++chunkcount;
   }
 
-  template <typename V>
+  template <typename T>
   unsigned int writebuffer2chunk(FSStore &store,
-                                 std::vector<V> &buffer,
+                                 std::vector<T> &buffer,
                                  const std::string name,
                                  unsigned int chunkcount)
   /* write buffer vector into attr's store at 'chunkcount' and then
