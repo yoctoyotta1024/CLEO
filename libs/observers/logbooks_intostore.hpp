@@ -13,76 +13,18 @@ into a (zarr) store on disk */
 #include "sdmgridboxes/logbooks.hpp"
 #include "zarrstorage/singlevarstorage.hpp"
 
-template <typename T>
-struct LogbookStorage : SingleVarStorage<T>
-{
-private:
-  const unsigned int ndim0;
-
-  void writechunk()
-  /* write data in buffer to a chunk in store alongside metadata jsons */
-  {
-    // const std::string chunknum = std::to_string(this->chunkcount) + ".0";
-    // this->chunkcount = storagehelper::
-    //     writebuffer2chunk(this->store, this->buffer,
-    //                       this->name, chunknum,
-    //                       this->chunkcount);
-
-    // writejsons();
-  }
-
-  void writejsons()
-  /* write strictly required metadata to decode chunks (MUST).
-  Assert also check 2D data dimensions is as expected */
-  {
-    // assert((this->ndata == nobs * ndim0) &&
-    //        "1D data length matches 2D array size");
-    // assert((this->chunksize % ndim0 == 0.0) &&
-    //        "chunks are integer multple of 0th dimension");
-
-    // const auto ngstr = std::to_string(ndim0);
-    // const auto nobstr = std::to_string(nobs);
-    // const auto nchstr = std::to_string(this->chunksize / ndim0);
-
-    // const auto shape("[" + nobstr + ", " + ngstr + "]");
-    // const auto chunks("[" + nchstr + ", " + ngstr + "]");
-    // // const std::string dims = "[\"time\", \"gbxindex\"]";
-    // // this->zarrayjsons(shape, chunks, dims);
-  }
-
-public:
-  unsigned int nobs; // number of output times that have been observed
-
-  LogbookStorage(FSStore &store, const unsigned int maxchunk,
-                  const std::string name, const std::string dtype,
-                  const std::string units, const double scale_factor,
-                  const unsigned int n0)
-      : SingleVarStorage<T>(store, floor(maxchunk / n0) * n0,
-                            name, dtype, units, scale_factor),
-        ndim0(n0), nobs(0) {}
-
-  ~LogbookStorage()
-  /* upon destruction write any data leftover in buffer
-  to a chunk and write array's metadata to a .json file */
-  {
-    // if (this->bufferfill != 0)
-    // {
-    //   writechunk();
-    // }
-  }
-};
-
 struct ObservePrecip
 /* satisfies ObserveLbks concept and
 writes precipation data to zarr storage */
 {
 private:
-  LogbookStorage<double> &zarr;
+  TwoDStorage<double> &zarr;
 
 public:  
-  ObservePrecip(LogbookStorage<double> &zarr) : zarr(zarr)
+  ObservePrecip(TwoDStorage<double> &zarr) : zarr(zarr)
   {
     zarr.is_name("accumprecip");
+    zarr.is_dim1(0, "logbooktags");
   }
 
   void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const
@@ -94,6 +36,7 @@ public:
   void operator()(const DetectorLogbooks &logbooks) const
   {
     observe_accumprecip(logbooks.accumprecip); 
+    zarr.is_dim1(logbooks.accumprecip -> get_size(), "logbooktags");
   }
 };
 

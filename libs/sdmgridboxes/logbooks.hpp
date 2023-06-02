@@ -40,10 +40,10 @@ public:
   }
 
   size_t get_size() const
-  /* get size of record (ie. number
-  of entries to logbook)*/
+  /* get size of record (= size of tags)
+  (ie. number of entries in logbook) */
   {
-    return record.size();
+    return tags.size();
   }
 
   unsigned int get_tag(const size_t idx) const

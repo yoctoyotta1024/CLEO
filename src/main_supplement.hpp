@@ -64,25 +64,29 @@ struct SomeZarrStores
   ThermoStateStorage thermozarr;
   ContiguousRaggedSDStorage<S> sdzarr;
   ContiguousRaggedSDStorage<SdgbxIntoStore> sdgbxzarr;
-  MomentsStorages massmoms;
-  RainMomentsStorages rainmassmoms;
+  MomentsStorages massmomszarr;
+  RainMomentsStorages rainmassmomszarr;
   CoordinateStorage<double> timezarr;
   CoordinateStorage<unsigned int> gbxzarr;
   TwoDStorage<size_t> nsuperszarr;
+  TwoDStorage<double> precipzarr;
 
 SomeZarrStores(FSStore &fsstore, const int maxchunk,
-              const unsigned int ngbxs, S sdattrs)
+              const unsigned int ngbxs, S sdattrs,
+              const size_t ndtrs)
       : thermozarr(fsstore, maxchunk, ngbxs),
         sdzarr(fsstore, sdattrs, maxchunk),
         sdgbxzarr(fsstore, SdgbxIntoStore(), maxchunk),
-        massmoms(fsstore, maxchunk, ngbxs),
-        rainmassmoms(fsstore, maxchunk, ngbxs),
+        massmomszarr(fsstore, maxchunk, ngbxs),
+        rainmassmomszarr(fsstore, maxchunk, ngbxs),
         timezarr(fsstore, maxchunk, "time",
                  "<f8", "s", dlc::TIME0),
         gbxzarr(fsstore, maxchunk, "gbxindex",
                 "<u4", " ", 1),
         nsuperszarr(fsstore, maxchunk, "nsupers",
-                    "<u8", " ", 1, ngbxs, "gbxindex") {}
+                    "<u8", " ", 1, ngbxs, "gbxindex"),
+        precipzarr(fsstore, maxchunk, "accumprecip",
+                    "<f8", " ", 1.0, ndtrs, "logbooktags") {}
 };
 
 SdMotion auto create_sdmotion(const int motionstep)
@@ -202,20 +206,21 @@ superdroplets from combination of those two seperate observers */
   const ObserveGBxs auto og5 = ObserveNsupersPerGridBox(stores.nsuperszarr,
                                                         ngbxs);
 
-  const ObserveGBxs auto og6 = create_observegbx_massmoments(stores.massmoms,
-                                                            stores.rainmassmoms,
+  const ObserveGBxs auto og6 = create_observegbx_massmoments(stores.massmomszarr,
+                                                            stores.rainmassmomszarr,
                                                             ngbxs);
 
   const ObserveLbks auto ol1 = PrintLogbooks{};
+  // const ObserveLbks auto ol1 = ObservePrecip(stores.precipzarr) >> PrintLogbooks{};
 
   // const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og3 >> og2a >> og2b >> og1;
   const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og2a >> og2b >> og1;
 
   const Observer auto obs1 = ConstIntervalGBxsObserver(obsstep, obsgbxs);
-  // const Observer auto obs2 = ConstIntervalLbksObserver(obsstep, ol1);
+  const Observer auto obs2 = ConstIntervalLbksObserver(obsstep, ol1);
 
   // const Observer auto observer = obs1 >> obs2 >> PrintObserver(obsstep);
-  const Observer auto observer = obs1;
+  const Observer auto observer = obs1 >> obs2;
 
   return observer;
 }

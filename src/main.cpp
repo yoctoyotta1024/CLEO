@@ -43,15 +43,6 @@ int main(int argc, char *argv[])
   const auto observer = create_observer(zarrstores, mdlsteps.obsstep,
                                         gbxmaps.ngridboxes);
 
-
-
-  // LogbookStorage<double> precipzarr(fsstore, 16, "accumprecip", "<f8", " ", 1.0, 3);
-  // const ObserveLbks auto ol1 = ObservePrecip(precipzarr); //PrintLogbooks{};
-  // const Observer auto observer = observ >>
-  //                                ConstIntervalLbksObserver(mdlsteps.obsstep, ol1);
-
-
-
   const RunSDMStep sdm(gbxmaps, sdmmotion, sdmprocess, observer);
 
   const auto dtrs = specify_detectors(sdm.gbxmaps);

@@ -55,7 +55,7 @@ auto operator>>(const ObserveLbks auto o1,
 /* define ">>" operator that combines
 two observe logbooks types */
 {
-  return CombinedObserveGBxs(o1, o2);
+  return CombinedObserveLbks(o1, o2);
 }
 
 template <ObserveLbks ObsLbks>
