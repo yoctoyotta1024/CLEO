@@ -146,21 +146,32 @@ logbooks */
 private:
   const int interval; // interval (integer timestep) between observations
 
-  ObsGBxs observe_gridboxes;
-  ObsLbks observe_logbooks;
+  ObsGBxs obsgbxs;
+  ObsLbks obslbks;
 
 public:
   ConstIntervalObserver(const int interval,
-                        const ObsGBxs obsgbxs,
-                        const ObsLbks obslbks)
-      : interval(interval), observe_gridboxes(obsgbxs),
-        observe_logbooks(obslbks) {}
+                        const ObsGBxs observe_gridboxes,
+                        const ObsLbks observe_logbooks)
+      : interval(interval), obsgbxs(observe_gridboxes),
+        obslbks(observe_logbooks) {}
 
   int get_interval() const { return interval; }
 
   bool on_step(const int t) const
   {
     return t % interval == 0;
+  }
+
+  void observe_gridboxes(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes) const
+  {
+    obsgbxs(ngbxs, h_gridboxes);
+  }
+
+   void observe_logbooks(const std::vector<int> lbks) const
+  {
+    obslbks(lbks);
   }
 
   void observe(const size_t ngbxs,

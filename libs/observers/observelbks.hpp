@@ -64,17 +64,22 @@ takes no action during observe_logbooks */
 private:
   const int interval; // interval (integer timestep) between observations
 
-  ObsLbks observe_logbooks;
+  ObsLbks obslbks;
 
 public:
   ConstIntervalLbksObserver(const int interval, const ObsLbks obslbks)
-      : interval(interval), observe_logbooks(obslbks) {}
+      : interval(interval), obslbks(observe_logbooks){}
 
   int get_interval() const { return interval; }
 
   bool on_step(const int t) const
   {
     return t % interval == 0;
+  }
+
+  void observe_logbooks(const std::vector<int> lbks) const
+  {
+    obslbks(lbks);
   }
 
   void observe_gridboxes(const size_t ngbxs,

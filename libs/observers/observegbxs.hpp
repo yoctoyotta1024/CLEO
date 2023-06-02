@@ -69,11 +69,13 @@ takes no action during observe_logbooks */
 private:
   const int interval; // interval (integer timestep) between observations
 
-  ObsGBxs observe_gridboxes;
+  ObsGBxs obsgbxs;
 
 public:
-  ConstIntervalGBxsObserver(const int interval, const ObsGBxs obsgbxs)
-      : interval(interval), observe_gridboxes(obsgbxs) {}
+  ConstIntervalGBxsObserver(const int interval,
+                            const ObsGBxs observe_gridboxes)
+      : interval(interval),
+        obsgbxs(observe_gridboxes) {}
 
   int get_interval() const { return interval; }
 
@@ -83,6 +85,12 @@ public:
   }
 
   void observe_logbooks(const std::vector<int> lbks) const {}
+
+  void observe_gridboxes(const size_t ngbxs,
+               const Kokkos::View<GridBox *> h_gridboxes) const
+  {
+    obsgbxs(ngbxs, h_gridboxes);
+  }
 
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes,
