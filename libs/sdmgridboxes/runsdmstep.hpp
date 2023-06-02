@@ -19,6 +19,7 @@ run 1 timestep of SDM */
 #include "./maps4gridboxes.hpp"
 #include "./movesuperdropsindomain.hpp"
 #include "./superdropwithgbxindex.hpp"
+#include "./logbooks.hpp"
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "observers/observers.hpp"
