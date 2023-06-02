@@ -80,9 +80,14 @@ private:
   LogbookStorage &zarr;
 
 public:  
+  ObservePrecip(LogbookStorage<double> &zarr) : zarr(zarr)
+  {
+    zarr.is_name("accumprecip");
+  }
+
   void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const
   {
-    std::vector<double> record = logbook.get_and_reset_record();
+    std::vector<double> record = logbook.get_and_reset_record(0.0);
     zarr.value_to_storage(record);
   }
 

@@ -65,7 +65,7 @@ protected:
     ++ndata;
   }
 
-  void copy2buffer(const std::vector<T> vec)
+  void copy2buffer(const std::vector<T> &vec)
   /* copy values of type T in vector 'vec' to buffer */
   {
     bufferfill = storagehelper::vec2buffer<T>(vec, buffer, bufferfill);
@@ -84,7 +84,15 @@ public:
 
   virtual ~SingleVarStorage(){};
 
-  std::string get_name() const { return name; }
+  void is_name(const std::string goodname)
+  {
+    if (name != goodname)
+    {
+      const std::string errmsg("name of storage is " + name +
+                               ", but should be " + goodname);
+      throw std::invalid_argument(errmsg);
+    }
+  }
 
   int get_ndata() const { return ndata; }
 
@@ -101,7 +109,7 @@ public:
     copy2buffer(val);
   }
 
-  void value_to_storage(const std::vector<T> vec)
+  void value_to_storage(const std::vector<T> &vec)
   /* write 'vec' vector of type T in the zarr store.
   First copy vector to a buffer, then write buffer to a
   chunk in the store when the number of values in

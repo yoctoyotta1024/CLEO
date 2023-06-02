@@ -22,17 +22,6 @@ into a (zarr) store on disk */
 #include "zarrstorage/massmomentsstorage.hpp"
 #include "sdmgridboxes/gridbox.hpp"
 
-void check_zarrname(const std::string zarrname,
-                    const std::string name)
-{
-  if (zarrname != name)
-  {
-    const std::string errmsg("name of storage is called " +
-                             zarrname + ", but should be " + name);
-    throw std::invalid_argument(errmsg);
-  }
-}
-
 class ObserveThermoState
 /* observe thermostate of each gridbox by
 writing it to arrays in a zarr store as
@@ -121,7 +110,7 @@ private:
 public:
   ObserveTime(CoordinateStorage<double> &zarr) : zarr(zarr)
   {
-    check_zarrname(zarr.get_name(), "time");
+    zarr.is_name("time");
   }
 
   void operator()(const size_t ngbxs,
@@ -145,7 +134,7 @@ public:
   ObserveGridBoxIndex(CoordinateStorage<unsigned int> &zarr)
       : zarr(zarr)
   {
-    check_zarrname(zarr.get_name(), "gbxindex");
+    zarr.is_name("gbxindex");
   }
 
   void operator()(const size_t ngbxs,
@@ -172,7 +161,7 @@ public:
   ObserveNsupersPerGridBox(TwoDStorage<size_t> &zarr)
       : zarr(zarr)
   {
-    check_zarrname(zarr.get_name(), "nsupers");
+    zarr.is_name("nsupers");
   }
 
   void operator()(const size_t ngbxs,
@@ -204,7 +193,7 @@ public:
         zarr(zarr)
   {
     const std::string name("mom" + std::to_string(nth_moment));
-    check_zarrname(zarr.get_name(), name);
+    zarr.is_name(name);
   }
 
   void operator()(const size_t ngbxs,
@@ -236,7 +225,7 @@ public:
         zarr(zarr)
   {
     const std::string name("rainmom" + std::to_string(nth_moment));
-    check_zarrname(zarr.get_name(), name);
+    zarr.is_name(name);
   }
 
   void operator()(const size_t ngbxs,

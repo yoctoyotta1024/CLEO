@@ -109,7 +109,7 @@ array in a store, and an array's metadata to a store */
   }
 
   template <typename T>
-  inline unsigned int vec2buffer(const std::vector<T> vec,
+  inline unsigned int vec2buffer(const std::vector<T> &vec,
                                  std::vector<T> &buffer,
                                  unsigned int j)
   /* copy vector of type T (e.g. a double) called
