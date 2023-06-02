@@ -85,6 +85,12 @@ public:
   {
     return t % interval == 0;
   }
+  
+  void prepare() const
+  {
+    o1.prepare();
+    o2.prepare();
+  }
 
   void observe_gridboxes(const size_t ngbxs,
                          const Kokkos::View<GridBox *> h_gbxs) const
@@ -132,6 +138,8 @@ completion of a Monoid Structure */
                const Kokkos::View<GridBox *> h_gbxs,
                const DetectorLogbooks &lbks) const {}
 
+  void prepare() const {}
+
   int get_interval() { return std::numeric_limits<int>::max(); }
 
   bool on_step(const int t) const
@@ -144,7 +152,7 @@ template <ObserveGBxs ObsGBxs, ObserveLbks ObsLbks>
 class ConstIntervalObserver
 /* struct satifying the Observer concept
 that has constant time-step 'interval'
-between obseration of gridboxes and
+between obserations of gridboxes and
 logbooks */
 {
 private:
@@ -165,6 +173,12 @@ public:
   bool on_step(const int t) const
   {
     return t % interval == 0;
+  }
+
+  void prepare() const
+  {
+    obsgbxs.prepare();
+    obslbks.prepare();
   }
 
   void observe_gridboxes(const size_t ngbxs,
@@ -203,6 +217,8 @@ and superdroplets */
   {
     return t % interval == 0;
   }
+
+  void prepare() const {}
 
   void observe_logbooks(const DetectorLogbooks &logbooks) const;
 

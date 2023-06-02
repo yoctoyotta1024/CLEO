@@ -237,12 +237,6 @@ public:
     }
   }
 
-  // void set_ndim1(const size_t i_ndim1)
-  // {
-  //   ndim1 = i_ndim1;
-  //   good2Dchunk(maxchunk, i_ndim1);
-  // }
-
   void is_dim1(const size_t goodndim1,
                const std::string &goodname) const
   {
