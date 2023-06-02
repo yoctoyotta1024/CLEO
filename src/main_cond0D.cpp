@@ -27,6 +27,8 @@ coupled with a CVODE ode solver for the thermodynamics
 #include "sdmgridboxes/detectors_ptr.hpp"
 #include "sdmgridboxes/logbooks.hpp"
 #include "observers/observers.hpp"
+#include "observers/observegbxs.hpp"
+#include "observers/observelbks.hpp"
 #include "observers/intostore_observers.hpp"
 #include "observers/sdattributes_intostore.hpp"
 #include "observers/contigraggedsdstorage.hpp"
@@ -84,7 +86,7 @@ superdroplets from combination of those two seperate observers */
   const auto obsgbxs = obs3 >> obs2 >> obs1;
 
   const Observer auto observer = PrintObserver(obsstep) >>
-                                 ConstIntervalGBxObserver(obsstep, obsgbxs);
+                                 ConstIntervalGBxsObserver(obsstep, obsgbxs);
 
   return observer;
 }

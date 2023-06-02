@@ -14,7 +14,7 @@ into a (zarr) store on disk */
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
-#include "./observers.hpp"
+#include "./observegbxs.hpp"
 #include "./thermostatestorage.hpp"
 #include "./sdattributes_intostore.hpp"
 #include "./contigraggedsdstorage.hpp"

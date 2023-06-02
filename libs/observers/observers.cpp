@@ -1,12 +1,10 @@
 // Author: Clara Bayley
 // File: "observers.cpp"
-/* functionality for observer structures. Each
-observer is a way of observing a gridbox of the
-superdroplet model, gridbox contained the
-thermodynamic state and the vector of
-superdroplets' state. Observation is
-for example printing some thermodynamic data
-to terminal or writing them to a csv file */
+/* Observer Concept and related structures 
+for various ways of observing gridboxes 
+and logbooks of the superdroplet model. 
+An example of an observer is printing some data
+from a gridbox's thermostate to the terminal */
 
 #include "observers.hpp"
 

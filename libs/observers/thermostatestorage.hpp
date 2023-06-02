@@ -17,8 +17,8 @@ https://zarr.readthedocs.io/en/stable/spec/v2.html */
 #include <algorithm>
 #include <cassert>
 
-#include "../claras_SDconstants.hpp"
 #include "./zarrstores.hpp"
+#include "../claras_SDconstants.hpp"
 #include "superdrop_solver/thermostate.hpp"
 
 namespace dlc = dimless_constants;
