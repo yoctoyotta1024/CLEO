@@ -27,7 +27,7 @@ private:
   std::map<unsigned int, std::pair<double, double>> idx2bounds_z; // coord limits to each gridbox given its index
   std::map<unsigned int, std::pair<double, double>> idx2bounds_x; // value pair is {lower bound, upper bounds} for gbxindex key
   std::map<unsigned int, std::pair<double, double>> idx2bounds_y;
-  std::map<unsigned int, double> idx2area; // x-y planar area of gridbox given its index
+  std::map<unsigned int, double> idx2area; // horizontal (x-y planar) area of gridbox given its index
   std::map<unsigned int, double> idx2vol; // volume of gridbox given its index
 
   std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nghbour_z; // neigbouring gbxindex to each gridbox given its gbxindex

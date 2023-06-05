@@ -33,7 +33,7 @@ public:
   std::vector<double> gbxbounds;     // corresponding (z,x,y) coords of max and min boundaries
 
   double gridboxarea(const unsigned int idx) const;
-  /* calculates horizontal area of gridbox using boundaries
+  /* calculates horizontal (x-y planar) area of gridbox using boundaries
    corresponding to gridbox with gbxidx=idx. First finds position
    of first gbxbound (zmin) from position of idx in gbxidxs */
 
@@ -49,15 +49,16 @@ GridBoxBoundaries read_gbxboundaries(std::string_view gridfile,
 return GridBoxBoundaries instance created from that data */
 
 inline double get_0Ddomainarea_from_gridfile(const GridBoxBoundaries &gfb)
-/* return the volume of the 0th gridbox by reading the 'gridfile'
-binary. This is the domian volume in the 0D (1 gridbox) model */
+/* return the horizontal (x-y planar) area of the 0th gridbox
+by reading the 'gridfile' binary. This is the domain area in
+the 0D (1 gridbox) model */
 {
   return gfb.gridboxarea(0);
 }
 
 inline double get_0Ddomainvol_from_gridfile(const GridBoxBoundaries &gfb)
 /* return the volume of the 0th gridbox by reading the 'gridfile'
-binary. This is the domian volume in the 0D (1 gridbox) model */
+binary. This is the domain volume in the 0D (1 gridbox) model */
 {
   return gfb.gridboxvol(0);
 }

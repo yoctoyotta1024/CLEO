@@ -55,7 +55,7 @@ return GridBoxBoundaries instance created from that data */
 }
 
 double GridBoxBoundaries::gridboxarea(const unsigned int idx) const
-/* calculates horizontal area of gridbox using boundaries
+/* calculates horizontal (x-y planar) area of gridbox using boundaries
   corresponding to gridbox with gbxidx=idx. First finds position
   of first gbxbound (zmin) from position of idx in gbxidxs */
 {
