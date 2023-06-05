@@ -88,7 +88,7 @@ public:
   }
 };
 
-struct AccumPrecipDetector
+struct SurfPrecipDetector
 {
   ManageEntryInLogbook<double> manage_entry;
 
@@ -116,7 +116,7 @@ private:
   const DetectionLogbooks &logbooks;
 
 public:
-  AccumPrecipDetector accprecip_dtr;
+ SurfPrecipDetector accprecip_dtr;
   
   Detectors(const DetectionLogbooks &logbooks)
       : logbooks(logbooks) {}
@@ -126,7 +126,7 @@ public:
     accprecip_dtr.manage_entry.create_entry_in_logbook(logbooks.accprecip,
                                                        gbxindex);
 
-    std::cout << "New entry in accumprecip logbook at for gbx" << gbxindex
+    std::cout << "New entry in surfpp logbook at for gbx" << gbxindex
               << '\n';
   }
 };

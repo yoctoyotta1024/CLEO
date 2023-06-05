@@ -208,11 +208,22 @@ public:
 
 struct PrintObserver
 /* satisfies Observer concept and
-prints out details about logbooks 
+prints out details about logbooks
 and gridboxes' thermodynamic states
 and superdroplets */
 {
-  const int interval;      // interval (integer timestep) between observations
+private:
+  double sum_surfpp(const std::shared_ptr<Logbook<double>> logbook) const;
+
+  void observe_logbooks(const DetectorLogbooks &logbooks) const;
+
+  void observe_gridboxes(const size_t ngbxs,
+                         const Kokkos::View<GridBox *> h_gridboxes) const;
+  /* print time, thermodynamic data (p, temp, qv, qc)
+  and total number of superdrops to terminal */
+
+public:
+  const int interval; // interval (integer timestep) between observations
 
   PrintObserver(const int obsstep) : interval(obsstep) {}
 
@@ -225,18 +236,12 @@ and superdroplets */
 
   void prepare(const DetectorLogbooks &logbooks) const {}
 
-  void observe_logbooks(const DetectorLogbooks &logbooks) const;
-
-  void observe_gridboxes(const size_t ngbxs,
-                         const Kokkos::View<GridBox *> h_gridboxes) const;
-  /* print time, thermodynamic data (p, temp, qv, qc)
-  and total number of superdrops to terminal */
-
   void observe(const size_t ngbxs,
                const Kokkos::View<GridBox *> h_gridboxes,
                const DetectorLogbooks &logbooks) const
   {
     observe_gridboxes(ngbxs, h_gridboxes);
+    observe_logbooks(logbooks);
   }
 };
 

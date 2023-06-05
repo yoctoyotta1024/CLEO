@@ -123,24 +123,24 @@ prints out details about logbooks */
   void printprecip(
       const std::shared_ptr<Logbook<double>> logbook) const
   {
-    double totaccumpp(0.0);
+    double totpp(0.0);
     for (size_t idx = 0; idx < logbook  -> get_size(); ++idx)
     {
-      totaccumpp += logbook ->get_entry(idx);
+      totpp += logbook ->get_entry(idx);
     }
     
-    constexpr int printprec(4); // precision to print data with
+    constexpr int printprec(6); // precision to print data with
     std::cout << std::scientific
             << std::setprecision(printprec)
-            << "tot accum. precip = "
-            << totaccumpp*dlc::MASS0grams << "g"<< '\n';
+            << "total surfpp = "
+            << totpp*dlc::MASS0grams << "g"<< '\n';
   }
 
   void prepare(const DetectorLogbooks &lbks) const {}
 
   void operator()(const DetectorLogbooks &logbooks) const
   {
-    printprecip(logbooks.accumprecip); 
+    printprecip(logbooks.surfpp); 
   }
 };
 

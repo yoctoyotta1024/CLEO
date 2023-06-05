@@ -7,7 +7,7 @@ into 'logbooks' */
 
 #include "./detectors.hpp"
 
-double AccumPrecipDetector::
+double SurfPrecipDetector::
     precip_mass(const Superdrop &drop) const
 /* returns (dimless) mass of precipitation
 calulated as mass of (real) droplets

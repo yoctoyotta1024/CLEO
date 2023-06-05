@@ -24,16 +24,16 @@ private:
 public:  
   ObservePrecip(LogbooksStorage<double> &zarr_a) : zarr_a(zarr_a)
   {
-    zarr_a.is_name("accumprecip");
+    zarr_a.is_name("surfpp");
     zarr_a.is_dim1(0, "logbooktags");
   }
 
   void prepare(const DetectorLogbooks &logbooks) const
   {
-    zarr_a.set_chunks(logbooks.accumprecip -> get_size());
+    zarr_a.set_chunks(logbooks.surfpp -> get_size());
   }
 
-  void observe_accumprecip(const std::shared_ptr<Logbook<double>> logbook) const
+  void observe_surfprecip(const std::shared_ptr<Logbook<double>> logbook) const
   {
     std::vector<double> record = logbook -> get_and_reset_record(0.0);
     zarr_a.value_to_storage(record);
@@ -42,7 +42,7 @@ public:
 
   void operator()(const DetectorLogbooks &logbooks) const
   {
-    observe_accumprecip(logbooks.accumprecip); 
+    observe_surfprecip(logbooks.surfpp); 
   }
 };
 

@@ -84,7 +84,7 @@ struct SomeZarrStores
                 "<u4", " ", 1),
         nsuperszarr(fsstore, maxchunk, "nsupers",
                     "<u8", " ", 1, "gbxindex", ngbxs),
-        precipzarr(fsstore, maxchunk, "accumprecip", "<f8",
+        precipzarr(fsstore, maxchunk, "surfpp", "<f8",
         "g", dlc::MASS0grams, "logbooktags") {}
 };
 

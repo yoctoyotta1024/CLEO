@@ -18,11 +18,11 @@ into 'logbooks' */
 
 namespace dlc = dimless_constants;
 
-struct AccumPrecipDetector
+struct SurfPrecipDetector
 /* detector which stores the value of
-accumulated precipitation in an entry of
-a logbook controlled by the
-EntryInLogbook instance */
+accumulated precipitation over a time 
+duration in an entry of a logbook controlled
+by the EntryInLogbook instance */
 {
 private:
   EntryInLogbook<double> manage_entry;
@@ -30,22 +30,22 @@ private:
   double precip_mass(const Superdrop &drop) const;
 
 public:
-  KOKKOS_INLINE_FUNCTION ~AccumPrecipDetector() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~SurfPrecipDetector() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  AccumPrecipDetector() : manage_entry() {} // also a Kokkos requirement for a (dual)View
+  SurfPrecipDetector() : manage_entry() {} // also a Kokkos requirement for a (dual)View
   /* initialise without a logbook */
 
   KOKKOS_INLINE_FUNCTION
-  AccumPrecipDetector(const std::shared_ptr<Logbook<double>> logbook,
+  SurfPrecipDetector(const std::shared_ptr<Logbook<double>> logbook,
                       const unsigned int gbxindex)
       : manage_entry(logbook, gbxindex) {}
   /* initialise manage_entry with a
   logbook with tag 'gbxindex'*/
 
   void operator()(const Superdrop &drop) const
-  /* if detector has a logbook, use manage_entry to
-  store accumlated precipitation in it */
+  /* if detector has a logbook, use manage_entry to store
+  accumlated precipitation over some duration in it */
   {
     if (manage_entry.get_logbook())
     {
@@ -63,27 +63,27 @@ function. Likewise detcetor can be used through
 appropriate detect_[...] function */
 {
 private:
-  AccumPrecipDetector detect_accumprecip;
+  SurfPrecipDetector detect_surfprecip;
 
 public:
   KOKKOS_INLINE_FUNCTION Detectors() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~Detectors() = default; // Kokkos requirement for a (dual)View
 
-  void install_accumprecip_detector(
-      const std::shared_ptr<Logbook<double>> accumprecip_logbook,
+  void install_surfprecip_detector(
+      const std::shared_ptr<Logbook<double>> surfpp_logbook,
       const unsigned int gbxindex)
   /* install accumulated precipitation detector
   (by instanting detector with an entry in the
-  accumprecip logbook that has tag 'gbxindex') */
+  surfprecip logbook that has tag 'gbxindex') */
   {
-    detect_accumprecip = AccumPrecipDetector(accumprecip_logbook, gbxindex);
+    detect_surfprecip = SurfPrecipDetector(surfpp_logbook, gbxindex);
   }
 
   void detect_precipitation(const Superdrop &drop) const
   /* use operators of precipitation detectors
   to detect precipitation  */
   {
-    detect_accumprecip(drop); 
+    detect_surfprecip(drop); 
   }
 };
 

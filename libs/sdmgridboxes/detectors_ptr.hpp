@@ -51,8 +51,8 @@ private:
   install_precip_detectors(const std::shared_ptr<Detectors> detectors,
                                   const DetectorLogbooks &logbooks,
                                   const unsigned int gbxindex) const;
-  /* if upper z boundary of gbx is <= precip_zlim install
-  a detector to detect accumulated precipitation */
+  /* if upper z boundary of gbx is <= precip_zlim install a detector
+  to detect accumulated precipitation at surface over 1 timestep */
 
   std::shared_ptr<Detectors>
   install_detectors(std::shared_ptr<Detectors> detectors,
