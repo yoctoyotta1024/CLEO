@@ -13,6 +13,7 @@ into a (zarr) store on disk */
 
 #include "sdmgridboxes/logbooks.hpp"
 #include "zarrstorage/logbooksstorage.hpp"
+#include "zarrstorage/singlevarstorage.hpp"
 
 struct ObservePrecip
 /* satisfies ObserveLbks concept and
@@ -25,7 +26,7 @@ public:
   ObservePrecip(LogbooksStorage<double> &zarr) : zarr(zarr)
   {
     zarr.is_name("surfpp");
-    zarr.is_dim1(0, "logbooktags");
+    zarr.is_dim1(NOTSETVALUE(), "logbooktags");
   }
 
   void prepare(const DetectorLogbooks &logbooks) const

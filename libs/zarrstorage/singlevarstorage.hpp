@@ -21,6 +21,8 @@ in a zarr store */
 
 #include "./zarrstores.hpp"
 
+inline unsigned int NOTSETVALUE(){ return std::numeric_limits<unsigned int>::max();}
+
 template <typename T>
 class SingleVarStorage
 {
@@ -52,9 +54,9 @@ protected:
 
   void set_buffer_chunksize(const unsigned int i_chunksize)
   {
-    if (chunksize != 0)
+    if (chunksize != NOTSETVALUE())
     {
-      const std::string err("non-zero chunksize cannot be changed");
+      const std::string err("chunksize already set; it cannot be changed");
       throw std::invalid_argument(err);
     }
     chunksize = i_chunksize;
@@ -234,9 +236,9 @@ private:
 protected:
   void set_ndim1(const unsigned int i_ndim1)
   {
-    if (ndim1 != 0)
+    if (ndim1 != NOTSETVALUE())
     {
-      const std::string err("non-zero ndim1 cannot be changed");
+      const std::string err("ndim1 already set; it cannot be changed");
       throw std::invalid_argument(err);
     }
     ndim1 = i_ndim1;
