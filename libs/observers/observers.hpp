@@ -212,17 +212,18 @@ prints out details about logbooks
 and gridboxes' thermodynamic states
 and superdroplets */
 {
-private:
-  double sum_surfpp(const std::shared_ptr<Logbook<double>> logbook) const;
+private: 
+  double sum_surfpp(const std::shared_ptr<Logbook<double>> &logbook) const;
 
+public:
   void observe_logbooks(const DetectorLogbooks &logbooks) const;
+  /* print tsize of logbook and total surf precip to terminal */
 
   void observe_gridboxes(const size_t ngbxs,
                          const Kokkos::View<GridBox *> h_gridboxes) const;
   /* print time, thermodynamic data (p, temp, qv, qc)
   and total number of superdrops to terminal */
 
-public:
   const int interval; // interval (integer timestep) between observations
 
   PrintObserver(const int obsstep) : interval(obsstep) {}

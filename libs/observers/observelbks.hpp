@@ -121,19 +121,19 @@ struct PrintLogbooks
 prints out details about logbooks */
 {
   void printprecip(
-      const std::shared_ptr<Logbook<double>> logbook) const
+      const std::shared_ptr<Logbook<double>> &logbook) const
   {
-    double totpp(0.0);
+    constexpr int printprec(6); // precision to print data with
+    
+    std::cout << "surfpp = ";
+
     for (size_t idx = 0; idx < logbook  -> get_size(); ++idx)
     {
-      totpp += logbook ->get_entry(idx);
+      std::cout << std::scientific
+                << std::setprecision(printprec)
+                << logbook->get_entry(idx) * dlc::MASS0grams << ", ";
     }
-    
-    constexpr int printprec(6); // precision to print data with
-    std::cout << std::scientific
-            << std::setprecision(printprec)
-            << "total surfpp = "
-            << totpp*dlc::MASS0grams << "g"<< '\n';
+    std::cout << '\n';
   }
 
   void prepare(const DetectorLogbooks &lbks) const {}

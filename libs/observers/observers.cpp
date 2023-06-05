@@ -13,7 +13,7 @@ void print_thermostate_with_precision(const ThermoState &state)
 by "lineend" string with precision "prec" */
 {
   constexpr int printprec(4); // precision to print data with
- 
+
   std::cout << std::scientific
             << std::setprecision(printprec)
             << "[P,T,qv,qc]=["
@@ -44,7 +44,7 @@ number of sueprdrops to terminal */
 }
 
 double PrintObserver::
-    sum_surfpp(const std::shared_ptr<Logbook<double>> logbook) const
+    sum_surfpp(const std::shared_ptr<Logbook<double>> &logbook) const
 {
   double totpp(0.0);
   for (size_t idx = 0; idx < logbook->get_size(); ++idx)
@@ -52,13 +52,17 @@ double PrintObserver::
     totpp += logbook->get_entry(idx);
   }
 
-  return totpp;
+  return totpp * dlc::MASS0grams; // [grams]
 }
 
 void PrintObserver::observe_logbooks(const DetectorLogbooks &logbooks) const
 {
+  constexpr int printprec(4); // precision to print data with
+
   size_t size(logbooks.surfpp->get_size());
   double totpp(sum_surfpp(logbooks.surfpp));
-  
-  std::cout << "logbooks: [surfpp (" << size << "), " << totpp << "]\n";
+
+  std::cout << "logbooks: [surfpp (" << size << "), "
+            << std::scientific << std::setprecision(printprec)
+            << totpp << "g]\n";
 }
