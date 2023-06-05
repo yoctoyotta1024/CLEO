@@ -12,7 +12,8 @@ std::shared_ptr<Detectors> PrecipDetectorsPtr::
 /* if upper z boundary of gbx is <= precip_zlim install
 a detector to detect accumulated precipitation */
 {
-  constexpr double precip_zlim(500 / dlc::COORD0); // (dimless) maximum z coord of gbxs that detect precipitation
+  // constexpr double precip_zlim(50 / dlc::COORD0); // (dimless) maximum z coord of gbxs that detect precipitation
+  const double precip_zlim(gbxmaps.get_bounds_z(0).second); // z boundary of lowest layer gbxs
 
   if (gbxmaps.get_bounds_z(gbxindex).second <= precip_zlim)
   {
