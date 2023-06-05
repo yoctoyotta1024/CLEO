@@ -56,12 +56,11 @@ struct SomeZarrStores
   ContiguousRaggedSDStorage<S> sdzarr;
   CoordinateStorage<double> timezarr;
 
-  SomeZarrStores(FSStore &fsstore, const int maxchunk,
+  SomeZarrStores(FSStore &store, const int maxchunk,
                  const unsigned int ngbxs, S sdattrs)
-      : thermozarr(fsstore, maxchunk, ngbxs),
-        sdzarr(fsstore, sdattrs, maxchunk),
-        timezarr(fsstore, maxchunk, "time",
-                 "<f8", "s", dlc::TIME0) {}
+      : thermozarr(store, maxchunk, ngbxs),
+        sdzarr(store, sdattrs, maxchunk),
+        timezarr(make_timezarr(store, maxchunk)) {}
 };
 
 SuperdropIntoStoreViaBuffer auto sdattrs_to_observe()

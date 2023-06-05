@@ -69,23 +69,19 @@ struct SomeZarrStores
   CoordinateStorage<double> timezarr;
   CoordinateStorage<unsigned int> gbxzarr;
   TwoDStorage<size_t> nsuperszarr;
-  LogbooksStorage<double> precipzarr;
+  LogbooksStorage<double> lbkszarr;
 
-  SomeZarrStores(FSStore &fsstore, const int maxchunk,
+  SomeZarrStores(FSStore &store, const int maxchunk,
                  const unsigned int ngbxs, S sdattrs)
-      : thermozarr(fsstore, maxchunk, ngbxs),
-        sdzarr(fsstore, sdattrs, maxchunk),
-        sdgbxzarr(fsstore, SdgbxIntoStore(), maxchunk),
-        massmomszarr(fsstore, maxchunk, ngbxs),
-        rainmassmomszarr(fsstore, maxchunk, ngbxs),
-        timezarr(fsstore, maxchunk, "time",
-                 "<f8", "s", dlc::TIME0),
-        gbxzarr(fsstore, maxchunk, "gbxindex",
-                "<u4", " ", 1),
-        nsuperszarr(fsstore, maxchunk, "nsupers",
-                    "<u8", " ", 1, "gbxindex", ngbxs),
-        precipzarr(fsstore, maxchunk, "surfpp", "<f8",
-        "g", dlc::MASS0grams, "logbooktags") {}
+      : thermozarr(store, maxchunk, ngbxs),
+        sdzarr(store, sdattrs, maxchunk),
+        sdgbxzarr(store, SdgbxIntoStore(), maxchunk),
+        massmomszarr(store, maxchunk, ngbxs),
+        rainmassmomszarr(store, maxchunk, ngbxs),
+        timezarr(make_timezarr(store, maxchunk)),
+        gbxzarr(make_gbxzarr(store, maxchunk)),
+        nsuperszarr(make_nsuperszarr(store, maxchunk, ngbxs)),
+        lbkszarr(make_logbookszarr(store, maxchunk)) {}
 };
 
 SdMotion auto create_sdmotion(const int motionstep)
@@ -209,7 +205,7 @@ superdroplets from combination of those two seperate observers */
                                                             stores.rainmassmomszarr,
                                                             ngbxs);
 
-  const ObserveLbks auto ol1 = ObservePrecip(stores.precipzarr);
+  const ObserveLbks auto ol1 = ObservePrecip(stores.lbkszarr);
 
   // const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og3 >> og2a >> og2b >> og1;
   const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og2a >> og2b >> og1;

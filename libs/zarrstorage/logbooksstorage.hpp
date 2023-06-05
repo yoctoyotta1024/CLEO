@@ -19,6 +19,14 @@ struct LogbooksStorage : TwoDStorage<T>
 private:
   const unsigned int maxchunk;
 
+  void set_chunks(const unsigned int ndim1)
+  /* given 'size' (number of entries in logbook)
+  change ndims1 and chunksize of zarr storage */
+  {
+    this->set_ndim1(ndim1);
+    this->set_buffer_chunksize(storagehelper::good2Dchunk(maxchunk, ndim1));
+  }
+
 public:
   LogbooksStorage(FSStore &store, const unsigned int maxchunk,
                   const std::string name, const std::string dtype,
@@ -28,13 +36,25 @@ public:
                        scale_factor, i_dim1name, 0),
         maxchunk(maxchunk) {}
 
-  void set_chunks(const unsigned int ndim1)
-  /* given 'size' (number of entries in logbook)
-  change ndims1 and chunksize of zarr storage */
+
+  void prepare(const size_t chunksize)
   {
-    this->set_ndim1(ndim1);
-    this->set_buffer_chunksize(storagehelper::good2Dchunk(maxchunk, ndim1));
+    set_chunks(chunksize);
   }
 };
+
+LogbooksStorage<double> make_logbookszarr(FSStore &store,
+                                          const unsigned int maxchunk)
+{
+  const std::string name("surfpp");
+  const std::string dtype("<f8");
+  const std::string units("mm");
+  constexpr double r0cubed(dlc::R0 * dlc::R0 * dlc::R0);
+  constexpr double scale_factor(r0cubed / dlc::COORD0 * 1000);
+  const std::string dim1name("logbooktags");
+
+  return LogbooksStorage<double>(store, maxchunk, name, dtype,
+                                 units, scale_factor, dim1name);
+}
 
 #endif // LOGBOOKSSTORAGE_HPP

@@ -284,4 +284,42 @@ public:
   }
 };
 
+CoordinateStorage<double> make_timezarr(FSStore &store,
+                                   const int chunksize)
+{
+  const std::string name("time");
+  const std::string dtype("<f8");
+  const std::string units("s");
+  constexpr double scale_factor(dlc::TIME0);
+
+  return CoordinateStorage<double>(store, chunksize, name,
+                                   dtype, units, scale_factor)
+}
+
+CoordinateStorage<unsigned int> make_gbxzarr(FSStore &store,
+                                   const int chunksize)
+{
+  const std::string name("gbxindex");
+  const std::string dtype("<u4");
+  const std::string units(" ");
+  constexpr double scale_factor(1);
+
+  return CoordinateStorage<unsigned int>(store, chunksize, name,
+                                         dtype, units, scale_factor)
+}
+
+TwoDStorage<size_t> make_nsuperszarr(FSStore &store,
+                                     const int maxchunk,
+                                     const unsigned int ngbxs)
+{
+  const std::string name("nsupers");
+  const std::string dtype("<u8");
+  const std::string units(" ");
+  constexpr double scale_factor(1);
+  const std::string dim1name("gbxindex");
+
+  return TwoDStorage<size_t>(store, maxchunk, name, dtype, units,
+                             scale_factor, dim1name, ngbxs)
+}
+
 #endif // SINGLEVARSTORAGE_HPP
