@@ -293,7 +293,7 @@ CoordinateStorage<double> make_timezarr(FSStore &store,
   constexpr double scale_factor(dlc::TIME0);
 
   return CoordinateStorage<double>(store, chunksize, name,
-                                   dtype, units, scale_factor)
+                                   dtype, units, scale_factor);
 }
 
 CoordinateStorage<unsigned int> make_gbxzarr(FSStore &store,
@@ -305,7 +305,7 @@ CoordinateStorage<unsigned int> make_gbxzarr(FSStore &store,
   constexpr double scale_factor(1);
 
   return CoordinateStorage<unsigned int>(store, chunksize, name,
-                                         dtype, units, scale_factor)
+                                         dtype, units, scale_factor);
 }
 
 TwoDStorage<size_t> make_nsuperszarr(FSStore &store,
@@ -319,7 +319,7 @@ TwoDStorage<size_t> make_nsuperszarr(FSStore &store,
   const std::string dim1name("gbxindex");
 
   return TwoDStorage<size_t>(store, maxchunk, name, dtype, units,
-                             scale_factor, dim1name, ngbxs)
+                             scale_factor, dim1name, ngbxs);
 }
 
 #endif // SINGLEVARSTORAGE_HPP

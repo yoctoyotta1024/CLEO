@@ -46,13 +46,16 @@ number of sueprdrops to terminal */
 double PrintObserver::
     sum_surfpp(const std::shared_ptr<Logbook<double>> &logbook) const
 {
+  constexpr double r0cubed(dlc::R0 * dlc::R0 * dlc::R0);
+  constexpr double scale_factor(r0cubed / dlc::COORD0 * 1000);  
+
   double totpp(0.0);
   for (size_t idx = 0; idx < logbook->get_size(); ++idx)
   {
     totpp += logbook->get_entry(idx);
   }
 
-  return totpp * dlc::MASS0grams; // [grams]
+  return totpp * scale_factor; // [mm]
 }
 
 void PrintObserver::observe_logbooks(const DetectorLogbooks &logbooks) const
@@ -64,5 +67,5 @@ void PrintObserver::observe_logbooks(const DetectorLogbooks &logbooks) const
 
   std::cout << "logbooks: [surfpp (" << size << "), "
             << std::scientific << std::setprecision(printprec)
-            << totpp << "g]\n";
+            << totpp << "mm]\n";
 }

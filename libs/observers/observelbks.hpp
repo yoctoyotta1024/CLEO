@@ -125,13 +125,13 @@ prints out details about logbooks */
   {
     constexpr int printprec(6); // precision to print data with
     
-    std::cout << "surfpp = ";
+    std::cout << "dimless surfpp = ";
 
     for (size_t idx = 0; idx < logbook  -> get_size(); ++idx)
     {
       std::cout << std::scientific
                 << std::setprecision(printprec)
-                << logbook->get_entry(idx) * dlc::MASS0grams << ", ";
+                << logbook->get_entry(idx) << ", ";
     }
     std::cout << '\n';
   }

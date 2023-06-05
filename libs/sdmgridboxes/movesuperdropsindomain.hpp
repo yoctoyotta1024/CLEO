@@ -69,7 +69,7 @@ private:
       const auto zbds(gbxmaps.get_bounds_z(ii));
       const auto xbds(gbxmaps.get_bounds_x(ii));
       const auto ybds(gbxmaps.get_bounds_y(ii));
-      const auto area(gbxmaps.get_area(ii))
+      const auto area(gbxmaps.get_area(ii));
 
       for (auto &SDinGBx : gbx.span4SDsinGBx)
       {
