@@ -50,7 +50,8 @@ LogbooksStorage<double> make_logbookszarr(FSStore &store,
   const std::string dtype("<f8");
   const std::string units("mm");
   constexpr double r0cubed(dlc::R0 * dlc::R0 * dlc::R0);
-  constexpr double scale_factor(r0cubed / dlc::COORD0 * 1000);
+  constexpr double c0sqrd(dlc::COORD0 * dlc::COORD0);
+  constexpr double scale_factor(r0cubed / c0sqrd * 1000);
   const std::string dim1name("logbooktags");
 
   return LogbooksStorage<double>(store, maxchunk, name, dtype,

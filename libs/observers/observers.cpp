@@ -47,7 +47,8 @@ double PrintObserver::
     sum_surfpp(const std::shared_ptr<Logbook<double>> &logbook) const
 {
   constexpr double r0cubed(dlc::R0 * dlc::R0 * dlc::R0);
-  constexpr double scale_factor(r0cubed / dlc::COORD0 * 1000);  
+  constexpr double c0sqrd(dlc::COORD0 * dlc::COORD0);
+  constexpr double scale_factor(r0cubed / c0sqrd * 1000);  // conversion of totpp to mm 
 
   double totpp(0.0);
   for (size_t idx = 0; idx < logbook->get_size(); ++idx)
