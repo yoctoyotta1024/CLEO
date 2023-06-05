@@ -27,13 +27,14 @@ private:
   std::map<unsigned int, std::pair<double, double>> idx2bounds_z; // coord limits to each gridbox given its index
   std::map<unsigned int, std::pair<double, double>> idx2bounds_x; // value pair is {lower bound, upper bounds} for gbxindex key
   std::map<unsigned int, std::pair<double, double>> idx2bounds_y;
+  std::map<unsigned int, double> idx2area; // x-y planar area of gridbox given its index
   std::map<unsigned int, double> idx2vol; // volume of gridbox given its index
 
   std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nghbour_z; // neigbouring gbxindex to each gridbox given its gbxindex
   std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nghbour_x;
   std::map<unsigned int, std::pair<unsigned int, unsigned int>> idx2nghbour_y;
   
-  void set_0Dmodel_maps(const double domainvol);
+  void set_0Dmodel_maps(const double domainarea, const double domainvol);
   /* set vol map using coords read from gridfile */
 
   void set_1Dmodel_maps(const GridBoxBoundaries &gfb);
@@ -55,15 +56,16 @@ public:
   Maps4GridBoxes(const unsigned int SDnspace, std::string_view gridfile);
   /* initilaises idx2bounds_[i] maps (for i = x, y or z) which map
   from every gridbox index to its boundaries in domain coordinates.
-  Also initialises idx2vol map whose values are the volume of a gridbox
-  given the gridbox's index as key. The keys of idx2bounds_[i] map's
-  are also gridbox indexes. The corresponding value is that gridbox's
-  {lower boundary, upper boundary}. In a non-3D case, coordinates of the
-  gridbox boundaries for unused dimensions are the min/max possible
-  doubles of computer (numerical limits), however the volume remains
-  finite. E.g. In the 0-D case, the idx2bounds maps have 1 {key, value}
-  for gridbox 0 which are the upper and lower numerical limits,
-  whilst the volume is determind by reading the gridfile */
+  Also initialises idx2area and idx2vol maps whose values are the
+  area and volume of a gridbox given the gridbox's index as key.
+  The keys of idx2bounds_[i] map's are also gridbox indexes. The
+  corresponding value is that gridbox's {upper boundary, lower boundary}.
+  In a non-3D case, coordinates of the gridbox boundaries for unused
+  dimensions are the min/max possible doubles of computer (numerical
+  limits), however the area and volume remain finite. E.g. In the 0-D
+  case, the idx2bounds maps have 1 {key, value} for gridbox 0 which
+  are the upper and lower numerical limits, whilst the volume is 
+  determined by reading the gridfile */
 
   std::pair<double, double> get_bounds_z(const unsigned int gbxidx) const
   {
@@ -78,6 +80,11 @@ public:
   std::pair<double, double> get_bounds_y(const unsigned int gbxidx) const
   {
     return (*idx2bounds_y.find(gbxidx)).second;
+  }
+
+  double get_area(const unsigned int gbxidx) const
+  {
+    return (*idx2area.find(gbxidx)).second;
   }
 
   double get_volume(const unsigned int gbxidx) const

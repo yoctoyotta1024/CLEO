@@ -57,10 +57,10 @@ coupled thermodynamics */
   idx2vol map (via get_volume function). Other ThermoState variables
   are default behaviour initialised. */
   {
-     // print_statevolume();
-     
-      set_span(SDsInGBxs);
-      iscorrect_span_for_gbxindex(gbxmaps);
+    // print_statevolume();
+
+    set_span(SDsInGBxs);
+    iscorrect_span_for_gbxindex(gbxmaps);
   }
 
   KOKKOS_FUNCTION

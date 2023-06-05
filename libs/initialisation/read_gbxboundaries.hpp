@@ -48,6 +48,13 @@ GridBoxBoundaries read_gbxboundaries(std::string_view gridfile,
 /* read metadata and data in binary file called 'gridfile', then
 return GridBoxBoundaries instance created from that data */
 
+inline double get_0Ddomainarea_from_gridfile(const GridBoxBoundaries &gfb)
+/* return the volume of the 0th gridbox by reading the 'gridfile'
+binary. This is the domian volume in the 0D (1 gridbox) model */
+{
+  return gfb.gridboxarea(0);
+}
+
 inline double get_0Ddomainvol_from_gridfile(const GridBoxBoundaries &gfb)
 /* return the volume of the 0th gridbox by reading the 'gridfile'
 binary. This is the domian volume in the 0D (1 gridbox) model */

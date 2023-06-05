@@ -16,15 +16,16 @@ Maps4GridBoxes::Maps4GridBoxes(const unsigned int SDnspace,
                                    std::string_view gridfile)
 /* initilaises idx2bounds_[i] maps (for i = x, y or z) which map
 from every gridbox index to its boundaries in domain coordinates.
-Also initialises idx2vol map whose values are the volume of a gridbox
-given the gridbox's index as key. The keys of idx2bounds_[i] map's
-are also gridbox indexes. The corresponding value is that gridbox's
-{upper boundary, lower boundary}. In a non-3D case, coordinates of the
-gridbox boundaries for unused dimensions are the min/max possible
-doubles of computer (numerical limits), however the volume remains
-finite. E.g. In the 0-D case, the idx2bounds maps have 1 {key, value}
-for gridbox 0 which are the upper and lower numerical limits,
-whilst the volume is determind by reading the gridfile */
+Also initialises idx2area and idx2vol maps whose values are the
+area and volume of a gridbox given the gridbox's index as key.
+The keys of idx2bounds_[i] map's are also gridbox indexes. The
+corresponding value is that gridbox's {upper boundary, lower boundary}.
+In a non-3D case, coordinates of the gridbox boundaries for unused
+dimensions are the min/max possible doubles of computer (numerical
+limits), however the area and volume remain finite. E.g. In the 0-D
+case, the idx2bounds maps have 1 {key, value} for gridbox 0 which
+are the upper and lower numerical limits, whilst the volume is 
+determined by reading the gridfile */
 {
   const GridBoxBoundaries gfb(read_gbxboundaries(gridfile, SDnspace));
 
@@ -34,8 +35,9 @@ whilst the volume is determind by reading the gridfile */
 
   if (SDnspace == 0)
   {
+    const double domainarea = get_0Ddomainarea_from_gridfile(gfb);
     const double domainvol = get_0Ddomainvol_from_gridfile(gfb);
-    set_0Dmodel_maps(domainvol);
+    set_0Dmodel_maps(domainarea, domainvol);
   }
 
   else if (SDnspace == 1)
@@ -74,7 +76,8 @@ void Maps4GridBoxes::check_ngridboxes() const
   }
 }
 
-void Maps4GridBoxes::set_0Dmodel_maps(const double domainvol)
+void Maps4GridBoxes::set_0Dmodel_maps(const double domainarea,
+                                      const double domainvol)
 /* set idx2bounds_[i] maps to numeical limits. Set volume
  map using coords read from gridfile */
 {
@@ -82,6 +85,7 @@ void Maps4GridBoxes::set_0Dmodel_maps(const double domainvol)
   idx2bounds_x[0] = numeric_limit_bounds();
   idx2bounds_y[0] = numeric_limit_bounds();
   
+  idx2area[0] = domainarea; // dimensionless horizontal area of 0D model
   idx2vol[0] = domainvol; // dimensionless volume of 0D model
 
   idx2nghbour_z[0] = {0, 0}; // 'periodic' BCs in non-existent dimensions 
@@ -110,8 +114,9 @@ gfb.gbxidxs vector, where pos = p*6 */
     const double zup = gfb.gbxbounds[pos+1];
     idx2bounds_z[idx] = {zlow, zup};
 
-    const double vol = (zup - zlow) * gfb.gridboxarea(idx);
-    idx2vol[idx] = vol;
+    const double area = gfb.gridboxarea(idx);
+    idx2area[idx] = area;
+    idx2vol[idx] = (zup - zlow) * area;
 
     idx2nghbour_z[idx] = cni.znghbours_cartesian(idx, gfb.gbxidxs); 
     idx2nghbour_x[idx] = {idx, idx}; // 'periodic' BCs in non-existent dimensions
@@ -147,8 +152,9 @@ vector, where pos = p*6 */
     idx2bounds_x[idx] = {xlow, xup};
 
     const double deltay = gfb.gbxbounds[pos+5] - gfb.gbxbounds[pos+4]; 
-    const double vol = (zup - zlow) * (xup - xlow) * deltay;
-    idx2vol[idx] = vol;
+    const double area = (xup - xlow) * deltay;
+    idx2area[idx] = area;
+    idx2vol[idx] = (zup - zlow) * area;
 
     idx2nghbour_z[idx] = cni.znghbours_cartesian(idx, gbxidxs); 
     idx2nghbour_x[idx] = cni.xnghbours_cartesian(idx, gbxidxs);
@@ -185,8 +191,9 @@ in the gfb.gbxidxs vector, where pos = p*6 */
     const double yup = gfb.gbxbounds[pos+5];
     idx2bounds_y[idx] = {ylow, yup};
 
-    const double vol = (zup - zlow) * (xup - xlow) * (yup - ylow);
-    idx2vol[idx] = vol;
+    const double area = (xup - xlow) * (yup - ylow);
+    idx2area[idx] = area;
+    idx2vol[idx] = (zup - zlow) * area;
 
     idx2nghbour_z[idx] = cni.znghbours_cartesian(idx, gbxidxs); 
     idx2nghbour_x[idx] = cni.xnghbours_cartesian(idx, gbxidxs);
