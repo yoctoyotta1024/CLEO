@@ -27,18 +27,10 @@ by the EntryInLogbook instance */
 private:
   EntryInLogbook<double> manage_entry;
 
-  double precip(const Superdrop &drop) const
-  /* returns (dimless) mass of precipitation
-  calulated as mass of (real) droplets
-  when superdroplet is below coord3 = 0.0 */
-  {
-    if (drop.coord3 < 0.0)
-    {
-      return drop.vol_liq() * drop.eps;
-    }
-
-    return 0.0;
-  }
+  double precip_mm(const double gbxarea, const Superdrop &drop) const;
+  /* returns (dimless) amount of precipitation
+  calculated from volume of liquid from (real)
+  droplets when superdroplet coord3 is below 0.0 */
 
 public:
   KOKKOS_INLINE_FUNCTION ~SurfPrecipDetector() = default; // Kokkos requirement for a (dual)View
@@ -54,13 +46,13 @@ public:
   /* initialise manage_entry with a
   logbook with tag 'gbxindex'*/
 
-  void operator()(const Superdrop &drop) const
+  void operator()(const double gbxarea, const Superdrop &drop) const
   /* if detector has a logbook, use manage_entry to store
   accumlated precipitation over some duration in it */
   {
     if (manage_entry.get_logbook())
     {
-      manage_entry.increment_by(precip_mass(drop));
+      manage_entry.increment_by(precip_mm(gbxarea, drop));
     }
   }
 };
@@ -90,11 +82,11 @@ public:
     detect_surfprecip = SurfPrecipDetector(surfpp_logbook, gbxindex);
   }
 
-  void detect_precipitation(const Superdrop &drop) const
+  void detect_precipitation(const double gbxarea, const Superdrop &drop) const
   /* use operators of precipitation detectors
   to detect precipitation  */
   {
-    detect_surfprecip(drop); 
+    detect_surfprecip(gbxarea, drop); 
   }
 };
 

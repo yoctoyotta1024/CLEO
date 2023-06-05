@@ -65,20 +65,22 @@ private:
   {
     for (auto &gbx : gridboxes)
     {
-      const auto zbounds(gbxmaps.get_bounds_z(gbx.gbxindex));
-      const auto xbounds(gbxmaps.get_bounds_x(gbx.gbxindex));
-      const auto ybounds(gbxmaps.get_bounds_y(gbx.gbxindex));
+      const auto ii(gbx.gbxindex);
+      const auto zbds(gbxmaps.get_bounds_z(ii));
+      const auto xbds(gbxmaps.get_bounds_x(ii));
+      const auto ybds(gbxmaps.get_bounds_y(ii));
+      const auto area(gbxmaps.get_area(ii))
 
       for (auto &SDinGBx : gbx.span4SDsinGBx)
       {
-        movesd.change_superdroplet_coords(gbxmaps, gbx, SDinGBx.superdrop);
+        auto &drop(SDinGBx.superdrop);
+        movesd.change_superdroplet_coords(gbxmaps, gbx, drop);
 
-        gbx.detectors -> detect_precipitation(SDinGBx.superdrop);
+        gbx.detectors -> detect_precipitation(area, drop);
 
-        SDinGBx.sd_gbxindex = update_superdrop_gbxindex(gbxmaps,
-                                                        gbx.gbxindex,
-                                                        zbounds, xbounds, ybounds,
-                                                        SDinGBx.superdrop);
+        SDinGBx.sd_gbxindex = update_superdrop_gbxindex(gbxmaps, ii,
+                                                        zbds, xbds, ybds,
+                                                        drop);
       }
     }
 
