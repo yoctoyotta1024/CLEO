@@ -65,7 +65,7 @@ void PrintObserver::observe_logbooks(const DetectorLogbooks &logbooks) const
   size_t size(logbooks.surfpp->get_size());
   double totpp(sum_surfpp(logbooks.surfpp));
 
-  std::cout << "logbooks: [surfpp (" << size << "), "
+  std::cout << "lbks: [surfpp (" << size << "), "
             << std::scientific << std::setprecision(printprec)
             << totpp << "mm]\n";
 }

@@ -84,7 +84,7 @@ then run superdroplet model (SDM) coupled to the thermodynamics solver */
 
   /* vector containing all gridboxes in SDM domain */
   Kokkos::vector<GridBox> gridboxes =
-      create_gridboxes(sdm.gbxmaps, dtrs, SDsInGBxs);
+      create_gridboxes(sdm.gbxmaps, sdm.logbooks, dtrs, SDsInGBxs);
 
   /* prepare coupled model for timestepping */
   auto genpool = preparetotimestep(sdm,
