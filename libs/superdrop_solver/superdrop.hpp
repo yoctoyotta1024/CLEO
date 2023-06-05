@@ -90,6 +90,14 @@ public:
     return 4.0 / 3.0 * M_PI * pow(radius, 3.0);
   }
 
+  KOKKOS_INLINE_FUNCTION double vol_liq() const
+  /* volume of droplet excluding solute */
+  {
+    const double dryvol(m_sol / solute->rho_sol);
+
+    return vol() - dryvol;
+  }
+
   KOKKOS_FUNCTION double mass() const;
   /* calculate total mass of droplet
   mass = (water + dry areosol)  */
