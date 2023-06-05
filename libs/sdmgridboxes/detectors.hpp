@@ -27,7 +27,18 @@ by the EntryInLogbook instance */
 private:
   EntryInLogbook<double> manage_entry;
 
-  double precip_mass(const Superdrop &drop) const;
+  double precip_mass(const Superdrop &drop) const
+  /* returns (dimless) mass of precipitation
+  calulated as mass of (real) droplets
+  when superdroplet is below coord3 = 0.0 */
+  {
+    if (drop.coord3 < 0.0)
+    {
+      return drop.mass() * drop.eps;
+    }
+
+    return 0.0;
+  }
 
 public:
   KOKKOS_INLINE_FUNCTION ~SurfPrecipDetector() = default; // Kokkos requirement for a (dual)View
