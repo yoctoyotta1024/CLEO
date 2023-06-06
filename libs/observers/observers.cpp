@@ -49,7 +49,7 @@ double PrintObserver::
   constexpr double r0cubed(dlc::R0 * dlc::R0 * dlc::R0);
   constexpr double c0sqrd(dlc::COORD0 * dlc::COORD0);
   constexpr double scale_factor(r0cubed / c0sqrd * 1000);  // conversion of totpp to mm 
-
+  
   double totpp(0.0);
   for (size_t idx = 0; idx < logbook->get_size(); ++idx)
   {

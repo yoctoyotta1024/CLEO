@@ -14,7 +14,7 @@ coord3 is below 0.0. Amount of precip in millimeters
 {
   if (drop.coord3 < 0.0)
   {
-    return drop.vol_liq() * drop.eps / gbxarea; // amount of precip (dimless)
+    return drop.vol() * drop.eps / gbxarea; // amount of precip (dimless)
   }
 
   return 0.0;
