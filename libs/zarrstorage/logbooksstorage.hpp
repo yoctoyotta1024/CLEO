@@ -32,7 +32,7 @@ public:
                   const std::string name, const std::string dtype,
                   const std::string units, const double scale_factor,
                   const std::string i_dim1name)
-      : TwoDStorage<T>(store, NOTSETVALUE(), name, dtype, units,
+      : TwoDStorage<T>(store, NOTSETCHUNKSIZE(), name, dtype, units,
                        scale_factor, i_dim1name, NOTSETVALUE()),
         maxchunk(maxchunk) {}
 

@@ -21,6 +21,7 @@ in a zarr store */
 
 #include "./zarrstores.hpp"
 
+inline unsigned int NOTSETCHUNKSIZE() { return std::numeric_limits<unsigned int>::min(); }
 inline unsigned int NOTSETVALUE() { return std::numeric_limits<unsigned int>::max(); }
 
 template <typename T>
@@ -54,7 +55,7 @@ protected:
 
   void set_buffer_chunksize(const unsigned int i_chunksize)
   {
-    if (chunksize != NOTSETVALUE())
+    if (chunksize != NOTSETCHUNKSIZE())
     {
       const std::string err("chunksize already set; it cannot be changed");
       throw std::invalid_argument(err);

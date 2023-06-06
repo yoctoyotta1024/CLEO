@@ -101,7 +101,7 @@ array in a store, and an array's metadata to a store */
   suitable chunksize such that chunks are always an
   integer multiple of ndim1 (which should be the
   length of the 2nd dimension of 2D data) */
-  {
+  { 
     return floor(maxchunk / ndim1) * ndim1;
   }
 
