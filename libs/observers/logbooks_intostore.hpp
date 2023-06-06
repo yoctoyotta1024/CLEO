@@ -12,8 +12,8 @@ into a (zarr) store on disk */
 #include <memory>
 
 #include "sdmgridboxes/logbooks.hpp"
-#include "zarrstorage/logbooksstorage.hpp"
 #include "zarrstorage/singlevarstorage.hpp"
+#include "zarrstorage/logbooksstorage.hpp"
 
 struct ObservePrecip
 /* satisfies ObserveLbks concept and
@@ -22,7 +22,7 @@ writes precipation data to zarr storage */
 private:
   LogbooksStorage<double> &zarr;
 
-public:  
+public:
   ObservePrecip(LogbooksStorage<double> &zarr) : zarr(zarr)
   {
     zarr.is_name("surfpp");
@@ -31,19 +31,19 @@ public:
 
   void prepare(const DetectorLogbooks &logbooks) const
   {
-    zarr.prepare(logbooks.surfpp -> get_size());
+    zarr.prepare(logbooks.surfpp->get_size());
   }
 
   void observe_surfprecip(const std::shared_ptr<Logbook<double>> &logbook) const
   {
-    std::vector<double> record = logbook -> get_and_reset_record(0.0);
+    std::vector<double> record = logbook->get_and_reset_record(0.0);
     zarr.value_to_storage(record);
     ++zarr.nobs;
   }
 
   void operator()(const DetectorLogbooks &logbooks) const
   {
-    observe_surfprecip(logbooks.surfpp); 
+    observe_surfprecip(logbooks.surfpp);
   }
 };
 

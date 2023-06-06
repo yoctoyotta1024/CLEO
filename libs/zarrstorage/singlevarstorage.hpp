@@ -1,8 +1,8 @@
 // Author: Clara Bayley
 // File: "singlevarstorage.hpp"
 /* Classes and helper functions
-writing a single variable (could 
-be 1D or 2D, coordinate etc.) 
+writing a single variable (could
+be 1D or 2D, coordinate etc.)
 via a buffer into chunks of arrays
 in a zarr store */
 
@@ -21,7 +21,7 @@ in a zarr store */
 
 #include "./zarrstores.hpp"
 
-inline unsigned int NOTSETVALUE(){ return std::numeric_limits<unsigned int>::max();}
+inline unsigned int NOTSETVALUE() { return std::numeric_limits<unsigned int>::max(); }
 
 template <typename T>
 class SingleVarStorage
@@ -50,7 +50,7 @@ protected:
   const std::string filters = "null";    // codec configurations for compression
   const std::string dtype;               // datatype stored in arrays
 
-  unsigned int get_chunksize() const {return chunksize;}
+  unsigned int get_chunksize() const { return chunksize; }
 
   void set_buffer_chunksize(const unsigned int i_chunksize)
   {
@@ -200,7 +200,7 @@ of time and dim1 could be output using a CoordinateStorage */
 {
 private:
   const std::string dim1name; // name of 1st dimension (e.g. "gbxindex")
-  unsigned int ndim1;   // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
+  unsigned int ndim1;         // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
 
   void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
@@ -287,7 +287,7 @@ public:
 };
 
 CoordinateStorage<double> make_timezarr(FSStore &store,
-                                   const int chunksize)
+                                        const int chunksize)
 {
   const std::string name("time");
   const std::string dtype("<f8");
@@ -299,7 +299,7 @@ CoordinateStorage<double> make_timezarr(FSStore &store,
 }
 
 CoordinateStorage<unsigned int> make_gbxzarr(FSStore &store,
-                                   const int chunksize)
+                                             const int chunksize)
 {
   const std::string name("gbxindex");
   const std::string dtype("<u4");
