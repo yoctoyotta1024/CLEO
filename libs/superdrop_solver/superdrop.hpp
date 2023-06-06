@@ -57,8 +57,8 @@ private:
   /* calculates effective density of droplet
   so mass_droplet = m = 4/3*pi*r^3 * rhoeff */
 
-  // KOKKOS_INLINE_FUNCTION double m_liq() const;
-  // /* calculate mass of only water in droplet */
+  KOKKOS_INLINE_FUNCTION double mass_liq() const;
+  /* calculate mass of only water in droplet */
 
 public:
   using IDType = IntID; // type of ID (from superdrop_ids.hpp) to identify superdrop via integer

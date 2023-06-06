@@ -44,14 +44,11 @@ so mass_droplet = m = 4/3*pi*r^3 * rhoeff */
 	return solute->rho_l + effsol;
 }
 
-// double Superdrop::m_liq() const
-// /* mass of only water in droplet */
-// {
-// 	double v_w;
-// 	v_w = 4.0 / 3.0 * M_PI * (pow(radius, 3.0) - pow(dry_radius(), 3.0));
-
-// 	return solute->rho_l * v_w;
-// }
+double Superdrop::mass_liq() const
+/* mass of only water in droplet */
+{
+	return solute->rho_l * vol_liq();
+}
 
 double Superdrop::akohler_factor(const double temp) const
 /* calculate value of a in raoult factor (exp^(a/r))
