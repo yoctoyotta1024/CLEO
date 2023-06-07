@@ -31,7 +31,7 @@ have radius >= rlim in the span passed as an argument */
 {
   constexpr double rlim(40e-6/dlc::R0); // dimless minimum radius of precip
 
-  double nthmom = 0.0;
+  double nthmom(0.0);
   for (const auto &SDinGBx : span4SDsinGBx)
   {
     if (SDinGBx.superdrop.radius >= rlim)

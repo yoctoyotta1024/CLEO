@@ -270,4 +270,43 @@ public:
   }
 };
 
+class ObserveNRainsupersPerGridBox
+/* observe number of superdroplets in each gridbox
+and write to 'zarr', a 2D array in a zarr store */
+{
+private:
+  TwoDStorage<size_t> &zarr;
+
+public:
+  ObserveNRainsupersPerGridBox(TwoDStorage<size_t> &zarr,
+                           const size_t ngbxs)
+      : zarr(zarr)
+  {
+    zarr.is_name("nrainsupers");
+    zarr.is_dim1(ngbxs, "gbxindex");
+  }
+
+  void prepare() const { zarr.is_name("nsupers"); }
+
+  void operator()(const size_t ngbxs,
+                  const Kokkos::View<GridBox *> h_gridboxes) const
+  {
+    constexpr double rlim(40e-6/dlc::R0); // dimless minimum radius of precip
+    
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      size_t nrainsupers(0);
+      for (const auto &SDinGBx : span4SDsinGBx)
+      {
+        if (SDinGBx.superdrop.radius >= rlim)
+        {
+          ++nrainsupers;
+        }
+      }
+      zarr.value_to_storage(nrainsupers);
+    }
+    ++zarr.nobs;
+  }
+};
+
 #endif // GRIDBOXES_INTOSTORE_HPP
