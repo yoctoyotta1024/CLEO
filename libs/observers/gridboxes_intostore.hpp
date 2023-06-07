@@ -296,7 +296,7 @@ public:
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       size_t nrainsupers(0);
-      for (const auto &SDinGBx : span4SDsinGBx)
+      for (const auto &SDinGBx : h_gridboxes(ii).span4SDsinGBx)
       {
         if (SDinGBx.superdrop.radius >= rlim)
         {
