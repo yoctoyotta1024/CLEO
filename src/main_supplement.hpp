@@ -203,17 +203,17 @@ superdroplets from combination of those two seperate observers */
   const ObserveGBxs auto og5 = ObserveNsupersPerGridBox(stores.nsuperszarr,
                                                         ngbxs);
 
-  const ObserveGBxs auto og5 = ObserveNRainsupersPerGridBox(stores.nrainsuperszarr,
+  const ObserveGBxs auto og6 = ObserveNRainsupersPerGridBox(stores.nrainsuperszarr,
                                                             ngbxs);
 
-  const ObserveGBxs auto og6 = create_observegbx_massmoments(stores.massmomszarr,
+  const ObserveGBxs auto og7 = create_observegbx_massmoments(stores.massmomszarr,
                                                             stores.rainmassmomszarr,
                                                             ngbxs);
 
   const ObserveLbks auto ol1 = ObservePrecip(stores.lbkszarr);
 
   // const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og3 >> og2a >> og2b >> og1;
-  const ObserveGBxs auto obsgbxs = og6 >> og5 >> og4 >> og2a >> og2b >> og1;
+  const ObserveGBxs auto obsgbxs = og7 >> og6 >> og5 >> og4 >> og2a >> og2b >> og1;
 
   const Observer auto obs1 = ConstIntervalGBxsObserver(obsstep, obsgbxs);
   const Observer auto obs2 = ConstIntervalLbksObserver(obsstep, ol1);
