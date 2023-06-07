@@ -69,6 +69,7 @@ struct SomeZarrStores
   CoordinateStorage<double> timezarr;
   CoordinateStorage<unsigned int> gbxzarr;
   TwoDStorage<size_t> nsuperszarr;
+  TwoDStorage<size_t> nrainsuperszarr;
   LogbooksStorage<double> lbkszarr;
 
   SomeZarrStores(FSStore &store, const int maxchunk,
@@ -81,6 +82,7 @@ struct SomeZarrStores
         timezarr(make_timezarr(store, maxchunk)),
         gbxzarr(make_gbxzarr(store, maxchunk)),
         nsuperszarr(make_nsuperszarr(store, maxchunk, ngbxs)),
+        nrainsuperszarr(make_nrainsuperszarr(store, maxchunk, ngbxs)),
         lbkszarr(make_logbookszarr(store, maxchunk)) {}
 };
 
@@ -200,6 +202,9 @@ superdroplets from combination of those two seperate observers */
 
   const ObserveGBxs auto og5 = ObserveNsupersPerGridBox(stores.nsuperszarr,
                                                         ngbxs);
+
+  const ObserveGBxs auto og5 = ObserveNRainsupersPerGridBox(stores.nrainsuperszarr,
+                                                            ngbxs);
 
   const ObserveGBxs auto og6 = create_observegbx_massmoments(stores.massmomszarr,
                                                             stores.rainmassmomszarr,

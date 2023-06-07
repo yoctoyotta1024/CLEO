@@ -325,4 +325,18 @@ TwoDStorage<size_t> make_nsuperszarr(FSStore &store,
                              scale_factor, dim1name, ngbxs);
 }
 
+TwoDStorage<size_t> make_nrainsuperszarr(FSStore &store,
+                                     const int maxchunk,
+                                     const unsigned int ngbxs)
+{
+  const std::string name("nrainsupers");
+  const std::string dtype("<u8");
+  const std::string units(" ");
+  constexpr double scale_factor(1);
+  const std::string dim1name("gbxindex");
+
+  return TwoDStorage<size_t>(store, maxchunk, name, dtype, units,
+                             scale_factor, dim1name, ngbxs);
+}
+
 #endif // SINGLEVARSTORAGE_HPP
