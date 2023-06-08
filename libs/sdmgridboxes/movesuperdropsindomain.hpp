@@ -89,9 +89,9 @@ private:
 
   unsigned int update_superdrop_gbxindex(const Maps4GridBoxes &gbxmaps,
                                          const unsigned int gbxindex,
-                                         const std::pair<double, double> zbounds,
-                                         const std::pair<double, double> xbounds,
-                                         const std::pair<double, double> ybounds,
+                                         std::pair<double, double> zbounds,
+                                         std::pair<double, double> xbounds,
+                                         std::pair<double, double> ybounds,
                                          Superdrop &superdrop) const
   /* For each direction (z, then x, then y), gbxmaps's forward and backward
   get_neighbour functions are passed into update_superdrop_ifneighbour
@@ -102,38 +102,82 @@ private:
   for z, then x, then y directions are complete, resultant sd_gbxindex
   is returned. */
   {
-    unsigned int sd_gbxindex(gbxindex);
-    sd_gbxindex = update_superdrop_ifneighbour(gbxmaps,
-                                              zdown, zup,
-                                              zbounds,
-                                              superdrop.coord3,
-                                              sd_gbxindex,
-                                              superdrop);
+    unsigned int current_gbxindex(gbxindex);
 
-    sd_gbxindex = update_superdrop_ifneighbour(gbxmaps,
-                                        xbehind, xinfront,
-                                        xbounds,
-                                        superdrop.coord1,
-                                        sd_gbxindex,
-                                        superdrop);
+    const auto get_zbounds = [&](const auto ii)
+    { return gbxmaps.get_bounds_z(ii); };
+    const auto get_coord3 = [&]()
+    { return superdrop.coord3; };
+    current_gbxindex = update_ifneighbour(gbxmaps, zdown, zup,
+                                          get_zbounds, get_coord3,
+                                          current_gbxindex, zbounds,
+                                          superdrop);
 
-    sd_gbxindex = update_superdrop_ifneighbour(gbxmaps,
-                                                yleft, yright,
-                                                ybounds,
-                                                superdrop.coord2,
-                                                sd_gbxindex,
-                                                superdrop);
+    const auto get_xbounds = [&](const unsigned int ii)
+    { return gbxmaps.get_bounds_x(ii);};
+    const auto get_coord1 = [&]()
+    { return superdrop.coord1; };
+    current_gbxindex = update_ifneighbour(gbxmaps, xbehind, xinfront,
+                                          get_xbounds, get_coord1,
+                                          current_gbxindex, xbounds,
+                                          superdrop);
 
-    return sd_gbxindex;
+    const auto get_ybounds = [&](const unsigned int ii)
+    { return gbxmaps.get_bounds_y(ii);};
+    const auto get_coord2 = [&]()
+    { return superdrop.coord2; };
+    current_gbxindex = update_ifneighbour(gbxmaps, yleft, yright,
+                                          get_ybounds, get_coord2,
+                                          current_gbxindex, ybounds,
+                                          superdrop);
+
+    return current_gbxindex;
+  }
+
+  template <typename BackwardIdxFunc, typename ForwardIdxFunc,
+            typename GetBounds, typename GetSdCoord>
+  unsigned int update_ifneighbour(const Maps4GridBoxes &gbxmaps,
+                                  const BackwardIdxFunc backwards_neighbour,
+                                  const ForwardIdxFunc forwards_neighbour,
+                                  const GetBounds get_bounds,
+                                  const GetSdCoord get_sdcoord,
+                                  unsigned int current_gbxindex,
+                                  std::pair<double, double> bounds,
+                                  Superdrop &superdrop) const
+  /* For a given direction, pass {lower, upper} bounds into
+  update_superdrop_ifneighbour to get updated gbxindex and superdrop
+  (e.g. if superdroplet's coord fromsdcoord function lies outside of
+  bounds given gbxbounds using current_gbxindex). Repeat until
+  superdroplet coord is within the bounds given by the current_gbxindex,
+  or until superdrop leaves domain. */
+  {
+    double coord(get_sdcoord());
+
+    /* loop while coord is within domain but not within bounds
+    break if coord is out of domain (or within bounds). */
+    while ((current_gbxindex != OUTOFDOMAIN()) &&
+           ((coord < bounds.first) | (coord >= bounds.second)))
+    {
+      current_gbxindex = update_superdrop_ifneighbour(gbxmaps,
+                                                      backwards_neighbour,
+                                                      forwards_neighbour,
+                                                      current_gbxindex,
+                                                      bounds, coord,
+                                                      superdrop);
+      bounds = get_bounds(current_gbxindex);
+      coord = get_sdcoord();
+    }
+
+    return current_gbxindex;
   }
 
   template <typename BackwardIdxFunc, typename ForwardIdxFunc>
   unsigned int update_superdrop_ifneighbour(const Maps4GridBoxes &gbxmaps,
                                             const BackwardIdxFunc backwards_neighbour,
                                             const ForwardIdxFunc forwards_neighbour,
+                                            const unsigned int current_gbxindex,
                                             const std::pair<double, double> bounds,
                                             const double coord,
-                                            const unsigned int sd_gbxindex,
                                             Superdrop &superdrop) const
   /* Given bounds = {lowerbound, upperbound} of a gridbox with
   index 'gbxindex', function determines if coord is within bounds
@@ -144,22 +188,22 @@ private:
   already out of domain (ie. value is the maximum unsigned int),
   return out of domain index */
   {
-    if (sd_gbxindex == OUTOFBOUNDS())
+    if (current_gbxindex == OUTOFDOMAIN())
     {
-      return sd_gbxindex; // ignore SDs whose sd_gbxindex is already out of domain
+      return current_gbxindex; // ignore SDs whose sd_gbxindex is already out of domain
     }
 
     if (coord < bounds.first) // lowerbound
     {
-      return backwards_neighbour(gbxmaps, sd_gbxindex, superdrop);
+      return backwards_neighbour(gbxmaps, current_gbxindex, superdrop);
     }
     else if (coord >= bounds.second) // upperbound
     {
-      return forwards_neighbour(gbxmaps, sd_gbxindex, superdrop);
+      return forwards_neighbour(gbxmaps, current_gbxindex, superdrop);
     }
     else
     {
-      return sd_gbxindex; // no change to index if coord within bounds
+      return current_gbxindex; // no change to index if coord within bounds
     }
   }
 

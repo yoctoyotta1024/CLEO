@@ -26,12 +26,12 @@ maximum unsigned int */
 
   if (at_domainboundary(idx, increment, ndim)) // at lower edge of domain
   {
-    backward = OUTOFBOUNDS();
+    backward = OUTOFDOMAIN();
   }
 
   if (at_domainboundary(forward, increment, ndim)) // at upper edge of domain
   {
-    forward = OUTOFBOUNDS();
+    forward = OUTOFDOMAIN();
   }
 
   return std::pair(forward, backward);
