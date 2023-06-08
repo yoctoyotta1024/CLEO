@@ -286,7 +286,7 @@ public:
     zarr.is_dim1(ngbxs, "gbxindex");
   }
 
-  void prepare() const { zarr.is_name("nsupers"); }
+  void prepare() const { zarr.is_name("nrainsupers"); }
 
   void operator()(const size_t ngbxs,
                   const Kokkos::View<GridBox *> h_gridboxes) const
