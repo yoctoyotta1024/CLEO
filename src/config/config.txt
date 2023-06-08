@@ -31,11 +31,11 @@ CONDTSTEP = 1                             # time between SD condensation events 
 COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 5                           # time between SDM motion [s]
 COUPLTSTEP = 10800                        # time between thermodynamic couplings [s]
-OBSTSTEP = 120                            # time between SDM observations [s]
+OBSTSTEP = 180                            # time between SDM observations [s]
 T_END = 10800                             # time span of integration [s]
 
 # SDs parameters #
-nSDsvec = 192                            # initial no. elements in SDs' vector (=total initial no. of SDs)
+nSDsvec = 12000                         # initial no. elements in SDs' vector (=total initial no. of SDs)
 SDnspace = 2                            # no. of spatial coordinates of SDs (=dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state

@@ -16,15 +16,15 @@
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----  and paths for CLEO and build directories  ---- ###
-# module load python3/2022.01-gcc-11.2.0
-# source activate /work/mh1126/m300950/superdropsV2
-# path2CLEO=${HOME}/CLEO/
-# path2build=${HOME}/CLEO/build/
-# python=python
+module load python3/2022.01-gcc-11.2.0
+source activate /work/mh1126/m300950/superdropsV2
+path2CLEO=${HOME}/CLEO/
+path2build=${HOME}/CLEO/build/
+python=python
 
-path2CLEO=${HOME}/Documents/b1_springsummer2023/CLEO/
-path2build=${HOME}/Documents/b1_springsummer2023/CLEO/build/
-python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
+# path2CLEO=${HOME}/Documents/b1_springsummer2023/CLEO/
+# path2build=${HOME}/Documents/b1_springsummer2023/CLEO/build/
+# python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
 ### ---------------------------------------------------- ###
 
 ### it's a good idea to ensure these directories exist

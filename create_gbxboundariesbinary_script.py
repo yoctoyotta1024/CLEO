@@ -24,14 +24,14 @@ gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match co
 ### input parameters for zcoords of gridbox boundaries
 zmax = 1500 # maximum z coord [m]
 zmin = 0 # minimum z coord [m]
-zdelta = 200 # even spacing
+zdelta = 20 # even spacing
 zgrid = [zmin, zmax, zdelta] 
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 1500, 200]
+xgrid = [0, 1500, 20]
 
 ### input parameters for y coords of gridbox boundaries
-ygrid = np.asarray([0, 100])
+ygrid = np.asarray([0, 20])
 # ygrid = [0, 1500, 200]
 ### ---------------------------------------------------------------- ###
 
