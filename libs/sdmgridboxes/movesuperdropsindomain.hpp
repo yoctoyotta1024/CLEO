@@ -125,6 +125,23 @@ private:
     return current_gbxindex;
   }
 
+  void check_inbounds_or_outdomain(const unsigned int current_gbxindex,
+                                   const std::pair<double, double> bounds,
+                                   const double coord) const
+  /* raise error if sd not out of domain or within bounds*/
+  {
+    const bool bad_gbxindex((current_gbxindex != OUTOFDOMAIN()) &&
+                            ((coord < bounds.first) | (coord >= bounds.second)));
+    if (bad_gbxindex)
+    {
+      const std::string err("SD not in previous gbx nor a neighbour."
+                            " Try reducing the motion timestep to"
+                            " satisfy CFL criteria, or use "
+                            " 'update_ifoutside' to update sd_gbxindex");
+      throw std::invalid_argument(err);
+    }
+  }
+
   template <typename BackwardIdxFunc, typename ForwardIdxFunc,
             typename GetBounds, typename GetSdCoord>
   unsigned int update_ifneighbour(const Maps4GridBoxes &gbxmaps,
@@ -141,35 +158,21 @@ private:
   superdroplet coord is within the bounds given by the current_gbxindex,
   or until superdrop leaves domain. */
   {
-    auto coord(get_sdcoord(superdrop));
-    auto bounds(get_bounds(gbxmaps, current_gbxindex));
+    current_gbxindex = update_superdrop_ifneighbour(
+        gbxmaps, backwards_neighbour, forwards_neighbour, current_gbxindex,
+        get_bounds(gbxmaps, current_gbxindex), get_sdcoord(superdrop),
+        superdrop);
 
-    current_gbxindex = update_superdrop_ifneighbour(gbxmaps,
-                                                    backwards_neighbour,
-                                                    forwards_neighbour,
-                                                    current_gbxindex,
-                                                    bounds, coord,
-                                                    superdrop);
-
-    coord = get_sdcoord(superdrop);
-    bounds = get_bounds(gbxmaps, current_gbxindex);
-    const bool bad_gbxindex((current_gbxindex != OUTOFDOMAIN()) &&
-                            ((coord < bounds.first) | (coord >= bounds.second)));
-    if (bad_gbxindex)
-    {
-      const std::string err("SD not in previous gbx nor a neighbour." +
-                            " Try reducing the motion timestep to" +
-                            " satisfy CFL criteria, or use " +
-                            " 'update_ifoutofgbx' to update sd_gbxindex");
-      throw std::invalid_argument(err);
-    }
+    check_inbounds_or_outdomain(current_gbxindex,
+                                get_bounds(gbxmaps, current_gbxindex),
+                                get_sdcoord(superdrop));
 
     return current_gbxindex;
   }
 
   template <typename BackwardIdxFunc, typename ForwardIdxFunc,
             typename GetBounds, typename GetSdCoord>
-  unsigned int update_ifoutofgbx(const Maps4GridBoxes &gbxmaps,
+  unsigned int update_ifoutside(const Maps4GridBoxes &gbxmaps,
                                  const BackwardIdxFunc backwards_neighbour,
                                  const ForwardIdxFunc forwards_neighbour,
                                  const GetBounds get_bounds,
