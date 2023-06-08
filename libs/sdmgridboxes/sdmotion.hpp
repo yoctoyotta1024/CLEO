@@ -13,6 +13,7 @@ coordinates according to equations of motion) */
 #include <stdexcept>
 #include <utility>
 #include <functional>
+#include <algorithm>
 
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/terminalvelocity.hpp"
@@ -32,7 +33,7 @@ bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
 inline bool cfl_criterion(const double gridstep,
                           const double sdstep)
 /* sdstep = change in superdroplet coordinate position.
-returns false if cfl criterion, C = sdstep / gridstep, > 1 */
+returns *false* if cfl criterion, C = sdstep / gridstep, > 1 */
 {
   return (sdstep <= gridstep);
 }
@@ -47,7 +48,7 @@ private:
 
   double interpolate_wind(const std::pair<double, double> bounds,
                           const std::pair<double, double> vel,
-                          const double coord) const;
+                          const double sdcoord) const;
   /* Given [X = z,x or y] wind velocity component, vel, that is
   defined on the faces of a gridbox at {lower, upper} [X] bounds,
   return wind at [X] coord. Method is 'simple' linear interpolation
@@ -195,13 +196,16 @@ public:
 };
 
 inline double WindsAtCoord::interpolate_wind(const std::pair<double, double> bounds,
-                                      const std::pair<double, double> vel,
-                                      const double coord) const
+                                             const std::pair<double, double> vel,
+                                             const double sdcoord) const
 /* Given [X = z,x or y] wind velocity component, vel, that is
 defined on the faces of a gridbox at {lower, upper} [X] bounds,
 return wind at [X] coord. Method is 'simple' linear interpolation
-from Grabowski et al. (2018) */
+from Grabowski et al. (2018). coord use in interpolation is 
+limited to lower_bound <= coord <= upper_bound. */
 {
+  const double coord(std::min(bounds.second, std::max(bounds.first, sdcoord)))  // limit coord to within bounds
+  
   const double alpha((coord - bounds.first) / (bounds.second - bounds.first));
 
   const double interpolated_vel(alpha*vel.second + (1-alpha)*vel.first);
