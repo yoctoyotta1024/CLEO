@@ -14,6 +14,7 @@ coordinates according to equations of motion) */
 #include <utility>
 #include <functional>
 #include <algorithm>
+#include <cmath>
 
 #include "superdrop_solver/superdrop.hpp"
 #include "superdrop_solver/terminalvelocity.hpp"
@@ -35,7 +36,7 @@ inline bool cfl_criterion(const double gridstep,
 /* sdstep = change in superdroplet coordinate position.
 returns *false* if cfl criterion, C = sdstep / gridstep, > 1 */
 {
-  return (sdstep <= gridstep);
+  return (std::abs(sdstep) <= std::abs(gridstep));
 }
 
 struct WindsAtCoord
@@ -204,7 +205,7 @@ return wind at [X] coord. Method is 'simple' linear interpolation
 from Grabowski et al. (2018). coord use in interpolation is 
 limited to lower_bound <= coord <= upper_bound. */
 {
-  const double coord(std::min(bounds.second, std::max(bounds.first, sdcoord)))  // limit coord to within bounds
+  const double coord(std::min(bounds.second, std::max(bounds.first, sdcoord)));  // limit coord to within bounds
   
   const double alpha((coord - bounds.first) / (bounds.second - bounds.first));
 

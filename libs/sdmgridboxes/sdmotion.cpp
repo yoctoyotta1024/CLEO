@@ -22,11 +22,11 @@ bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
 
   gridstep = gbxmaps.get_bounds_x(gbxindex).second -
              gbxmaps.get_bounds_x(gbxindex).first;
-  cfl = cfl_criterion(gridstep, delta1);
+  cfl = (cfl_criterion(gridstep, delta1) && cfl);
 
   gridstep = gbxmaps.get_bounds_y(gbxindex).second -
              gbxmaps.get_bounds_y(gbxindex).first;
-  cfl = cfl_criterion(gridstep, delta2);
+  cfl = (cfl_criterion(gridstep, delta2) && cfl);
 
   if (!cfl)
   {  
