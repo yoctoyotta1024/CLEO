@@ -26,12 +26,12 @@ maximum unsigned int */
 
   if (at_domainboundary(idx, increment, ndim)) // at lower edge of domain
   {
-    backward = std::numeric_limits<unsigned int>::max();
+    backward = OUTOFBOUNDS();
   }
 
   if (at_domainboundary(forward, increment, ndim)) // at upper edge of domain
   {
-    forward = std::numeric_limits<unsigned int>::max();
+    forward = OUTOFBOUNDS();
   }
 
   return std::pair(forward, backward);

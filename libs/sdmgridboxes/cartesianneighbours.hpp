@@ -22,6 +22,13 @@ boundary conditions */
   y: PERIODIC (see ynghbours_cartesian, coord2_beyondyleft and coord2_beyondyright)
 */
 
+inline unsigned int OUTOFDOMAIN()
+/* value to set sd_gbxindex to when
+superdrop is out of domain boundaries */
+{
+  return std::numeric_limits<unsigned int>::max();
+}
+
 inline bool at_domainboundary(const unsigned int idx,
                               const unsigned int increment,
                                const unsigned int ndim)

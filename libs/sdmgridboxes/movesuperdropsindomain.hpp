@@ -144,7 +144,7 @@ private:
   already out of domain (ie. value is the maximum unsigned int),
   return out of domain index */
   {
-    if (sd_gbxindex == std::numeric_limits<unsigned int>::max())
+    if (sd_gbxindex == OUTOFBOUNDS())
     {
       return sd_gbxindex; // ignore SDs whose sd_gbxindex is already out of domain
     }
