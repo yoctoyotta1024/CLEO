@@ -144,7 +144,7 @@ private:
     winds.coord3 += vel3 * delt; // move by w wind + terminal velocity
     winds.coord1 += vel1 * delt; // move by u wind
     winds.coord2 += vel2 * delt; // move by v wind
-
+ 
     /* corrector velocities based on predicted coords */
     const double corrvel3 = winds.interp_wvel() - terminal;
     const double corrvel1 = winds.interp_uvel();

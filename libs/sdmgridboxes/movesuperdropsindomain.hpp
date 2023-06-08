@@ -144,10 +144,61 @@ private:
     auto coord(get_sdcoord(superdrop));
     auto bounds(get_bounds(gbxmaps, current_gbxindex));
 
-    /* loop while coord is within domain but not within bounds
-    break if coord is out of domain (or within bounds). */
-    while ((current_gbxindex != OUTOFDOMAIN()) &&
-           ((coord < bounds.first) | (coord >= bounds.second)))
+    current_gbxindex = update_superdrop_ifneighbour(gbxmaps,
+                                                    backwards_neighbour,
+                                                    forwards_neighbour,
+                                                    current_gbxindex,
+                                                    bounds, coord,
+                                                    superdrop);
+
+    coord = get_sdcoord(superdrop);
+    bounds = get_bounds(gbxmaps, current_gbxindex);
+    const bool bad_gbxindex((current_gbxindex != OUTOFDOMAIN()) &&
+                            ((coord < bounds.first) | (coord >= bounds.second)));
+    if (bad_gbxindex)
+    {
+      const std::string err("SD not in previous gbx nor a neighbour." +
+                            " Try reducing the motion timestep to" +
+                            " satisfy CFL criteria, or use " +
+                            " 'update_ifoutofgbx' to update sd_gbxindex");
+      throw std::invalid_argument(err);
+    }
+
+    return current_gbxindex;
+  }
+
+  template <typename BackwardIdxFunc, typename ForwardIdxFunc,
+            typename GetBounds, typename GetSdCoord>
+  unsigned int update_ifoutofgbx(const Maps4GridBoxes &gbxmaps,
+                                 const BackwardIdxFunc backwards_neighbour,
+                                 const ForwardIdxFunc forwards_neighbour,
+                                 const GetBounds get_bounds,
+                                 const GetSdCoord get_sdcoord,
+                                 unsigned int current_gbxindex,
+                                 Superdrop &superdrop) const
+  /* Similar to update_ifneighbour but valid for if SD moves more than
+  1 gbx in single timestep (ie. even if CFL criteria is not met).
+  For a given direction, pass {lower, upper} bounds into
+  update_superdrop_ifneighbour to get updated gbxindex and superdrop
+  (e.g. if superdroplet's coord fromsdcoord function lies outside of
+  bounds given gbxbounds using current_gbxindex). Repeat until
+  superdroplet coord is within the bounds given by the current_gbxindex,
+  or until superdrop leaves domain. */
+  {
+    auto coord(get_sdcoord(superdrop));
+    auto bounds(get_bounds(gbxmaps, current_gbxindex));
+
+    const auto needto_update = [&]()
+    {
+      return ((current_gbxindex != OUTOFDOMAIN()) &&
+              ((coord < bounds.first) | (coord >= bounds.second)));
+    };
+
+    /* option to loop while coord is within domain but not within
+    bounds of a gbx. break if coord is out of domain (or within bounds).
+    this is required if cfl criterion is not met since then SD may move
+    by more than 1 gbx in a timestep */
+    while (needto_update())
     {
       current_gbxindex = update_superdrop_ifneighbour(gbxmaps,
                                                       backwards_neighbour,
