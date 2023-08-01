@@ -38,12 +38,6 @@ CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags}
 mkdir ${path2build}bin
 mkdir ${path2build}share
 
-### generate input files
-${python} ${path2CLEO}examplecreate_inputbinaries.py ${path2CLEO} $path2build
-
 ### compile and run CLEO
 cd build
 make clean && make -j 16
-runcmd="${path2build}/src/runCLEO ${path2CLEO}src/config/config.txt ${path2CLEO}libs/claras_SDconstants.hpp"
-echo ${runcmd}
-${runcmd}
