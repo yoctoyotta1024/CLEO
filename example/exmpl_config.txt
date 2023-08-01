@@ -1,0 +1,51 @@
+##### CONFIG FILE #####
+# Author: Clara Bayley
+# File: exmple_config.txt
+# File containing configuration of CLEO for example 2D setup
+# SDM = SuperDroplet Model
+# SD(s) = SuperDroplet(s)
+# GBx(s) = GridBox(es)
+
+#  Note: inital superdroplets data (eps, r0 and m_sol (and optionally coord3))
+#  read from file "initSDs_filename" is made with PYSD module using python
+#  script "exmpl_createinputbinaries.py". The same python script is also
+#  used to make the input data in the file file "grid_filename" for the
+#  gridboxmap that defines the gridbox boundaries.
+
+### Initialisation Files parameters ###
+initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initialisation of SDs
+grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for GBx boundaries
+
+### Output Data parameters ###
+setuptxt = ./bin/setup.txt               # name of .txt output file to copy setup to
+zarrbasedir = ./bin/SDMdata.zarr         # zarr store base directory
+maxchunk = 1250000                      # maximum no. of elements in chunks of zarr store array
+
+### SDM parameters ###
+# timestepping parameters #
+cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
+cond_SUBTSTEP = 0.1                       # smallest timestep in cases where substepping occurs [s]
+cond_rtol = 0.0                           # relative tolerance for implicit euler integration
+cond_atol = 0.01                          # abolute tolerance for implicit euler integration
+CONDTSTEP = 1                             # time between SD condensation events [s]
+COLLTSTEP = 1                             # time between SD collision events [s]
+MOTIONTSTEP = 2                           # time between SDM motion [s]
+COUPLTSTEP = 1800                         # time between thermodynamic couplings [s]
+OBSTSTEP = 180                            # time between SDM observations [s]
+T_END = 3600                              # time span of integration [s]
+
+# SDs parameters #
+nSDsvec = 840                          # initial no. elements in SDs' vector (=total initial no. of SDs)
+SDnspace = 2                            # no. of spatial coordinates of SDs (=dimension of model)
+wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
+doAlterThermo = false                   # enable condensation to alter the thermodynamic state
+thermosolver = fromfile                 # type of thermodynamic solver to configure
+
+### Read in Thermodynamics File parameters ###
+press_filename = ./share/dimlessthermo_press.dat          # binary filename for pressure
+temp_filename = ./share/dimlessthermo_temp.dat            # binary filename for temperature
+qvap_filename = ./share/dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
+qcond_filename = ./share/dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
+wvel_filename = ./share/dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
+uvel_filename = ./share/dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
+vvel_filename = ./share/dimlessthermo_vvel.dat            # binary filename for horizontal y velocity

@@ -6,6 +6,7 @@
 import sys
 import numpy as np
 from pathlib import Path
+sys.path.append("..") ### used to include directory containing pySD package in python interpreter PATH
 
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as  cgrid
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -23,27 +24,28 @@ from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 
 path2CLEO = sys.argv[1]  # absolute or relative path of CLEO directory
 path2build = sys.argv[2] # absolute or relative path to build directory
+configfile = sys.argv[3] # absolute or relative path to configuration file
 isfigures = [True, True] # booleans for [making+showing, saving] figures
 SDgbxs2plt = [0] # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
 
 ### --- essential paths and filenames --- ###
 # where to find constants and config files
 constsfile = path2CLEO+"/libs/claras_SDconstants.hpp"
-configfile = path2CLEO+"/src/config/config.txt"
 
 # where to write input files (note these should match configfile)
-gridfile = path2build+"/share/dimlessGBxboundaries.dat"
-thermofile =  path2build+"/share/dimlessthermodynamics.dat"
-initSDsfile = path2build+"/share/dimlessSDsinit.dat"
+path2share = path2build+"/share"
+gridfile = path2share+"/dimlessGBxboundaries.dat"
+thermofile =  path2share+"/dimlessthermo.dat"
+initSDsfile = path2share+"/dimlessSDsinit.dat"
 
 # directory to save figures of initial conditions in
 savefigpath = path2build+"/bin/"
 
 
 ### --- settings for gridbox boundaries --- ###
-zgrid = [0, 1500, 50]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = [0, 1500, 50]     # evenly spaced xhalf coords [m]
-ygrid = np.array([0, 50])  # array of yhalf coords [m]
+zgrid = [0, 1500, 100]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+xgrid = [0, 1500, 100]     # evenly spaced xhalf coords [m]
+ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
