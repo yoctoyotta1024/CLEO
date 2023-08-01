@@ -9,13 +9,13 @@ from pySD.gbxboundariesbinary_src.read_gbxboundaries import *
 ### absolute or relative paths for build and CLEO directories
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
+configfile = sys.argv[3]
 
 ### booleans for [making+showing, saving] figures
 isfigures = [True, True]
 
 ### essential paths and filenames
 constsfile = path2CLEO+"libs/claras_SDconstants.hpp"
-configfile = path2CLEO+"src/config/config.txt"
 binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 
@@ -28,7 +28,7 @@ zdelta = 100 # even spacing
 zgrid = [zmin, zmax, zdelta] 
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 1000, 100]
+xgrid = [0, 1000, 1000]
 
 ### input parameters for y coords of gridbox boundaries
 ygrid = np.asarray([0, 100])

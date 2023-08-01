@@ -160,10 +160,10 @@ of a superdroplet into zarr storage */
   SuperdropIntoStoreViaBuffer auto radius = RadiusIntoStore();
   SuperdropIntoStoreViaBuffer auto m_sol = M_solIntoStore();
   SuperdropIntoStoreViaBuffer auto coord3 = Coord3IntoStore();
-  SuperdropIntoStoreViaBuffer auto coord1 = Coord1IntoStore();
+  // SuperdropIntoStoreViaBuffer auto coord1 = Coord1IntoStore();
   // SuperdropIntoStoreViaBuffer auto coord2 = Coord2IntoStore();
 
-  SuperdropIntoStoreViaBuffer auto attrs = id >> eps >> radius >> m_sol >> coord3 >> coord1;
+  SuperdropIntoStoreViaBuffer auto attrs = id >> eps >> radius >> m_sol >> coord3;
 
   return attrs;
 }

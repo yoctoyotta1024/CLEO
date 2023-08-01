@@ -16,11 +16,13 @@
 ### -------------------  directory using cmake  -------------------- ###
 
 ### ----- You need to edit these lines to set your ----- ###
+### ----- default compiler and python environment   ---- ###
 ### ----  and paths for CLEO and build directories  ---- ###
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
+configfile=${HOME}/CLEO/src/config/config.txt
 python=python
 
 # path2CLEO=${HOME}/Documents/b1_springsummer2023/CLEO/
@@ -37,11 +39,11 @@ cd ${path2build} && pwd
 make -j 16
 
 ### generate input files
-${python} ${path2CLEO}create_gbxboundariesbinary_script.py ${path2CLEO} $path2build
-${python} ${path2CLEO}create_thermobinaries_script.py ${path2CLEO} $path2build
-${python} ${path2CLEO}create_initsuperdropsbinary_script.py ${path2CLEO} $path2build
+${python} ${path2CLEO}create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
+${python} ${path2CLEO}create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}
+${python} ${path2CLEO}create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
 
 ### run CLEO
-runcmd="${path2build}/src/runCLEO ${path2CLEO}src/config/config.txt ${path2CLEO}libs/claras_SDconstants.hpp"
+runcmd="${path2build}/src/runCLEO ${configfile} ${path2CLEO}libs/claras_SDconstants.hpp"
 echo ${runcmd}
 ${runcmd}

@@ -11,13 +11,13 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ---   build and CLEO directories --- ###
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
+configfile = sys.argv[3]
 
 ### booleans for [making+showing, saving] figures
 isfigures = [True, True]
 
 ### essential paths and filenames
 constsfile = path2CLEO+"libs/claras_SDconstants.hpp"
-configfile = path2CLEO+"src/config/config.txt"
 binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 

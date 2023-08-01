@@ -19,14 +19,14 @@ module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/example/build/
-path2config=${HOME}/CLEO/example/exmpl_config.txt
+configfile=${HOME}/CLEO/example/exmpl_config.txt
 python=python
 gxx="g++"
 gcc="gcc"
 
 # path2CLEO=${HOME}/Documents/b1_springsummer2023/CLEO/
 # #path2build=${HOME}/CLEO/example/build/                            ### TODO: correct path for my home dir
-# #path2config=${HOME}/CLEO/example/exampleconfig.txt                ### TODO: correct path for my home dir
+# #configfile=${HOME}/CLEO/example/exampleconfig.txt                ### TODO: correct path for my home dir
 # python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
 # gxx="g++-13"
 # gcc="gcc-13"
@@ -41,7 +41,7 @@ mkdir ${path2build}bin
 mkdir ${path2build}share
 
 ### generate input files
-${python} exmpl_createinputbinaries.py ${path2CLEO} ${path2build} ${path2config}
+${python} exmpl_createinputbinaries.py ${path2CLEO} ${path2build} ${configfile}
 
 ### compile CLEO
 cd ${path2build} && pwd
@@ -50,6 +50,6 @@ make clean && make -j 16
 ### run CLEO
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
-runcmd="${path2build}/src/runCLEO ${path2config} ${path2CLEO}libs/claras_SDconstants.hpp"
+runcmd="${path2build}/src/runCLEO ${configfile} ${path2CLEO}libs/claras_SDconstants.hpp"
 echo ${runcmd}
 ${runcmd}
