@@ -30,14 +30,22 @@ gcc="gcc"
 # gcc="gcc-13"
 ### ---------------------------------------------------- ###
 
-### build CLEO (with openMP thread parallelism using Kokkos)
+### build CLEO using cmake (with openMP thread parallelism through Kokkos)
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON"  # openMP parallelism enabled
 CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags}
 
-### it's a good idea to ensure these directories exist
+### ensure these directories exist (it's a good idea for later use)
 mkdir ${path2build}bin
 mkdir ${path2build}share
 
-### compile and run CLEO
-cd build
+### compile CLEO
+cd ${path2build} 
 make clean && make -j 16
+
+### generate input files
+${python} ${path2CLEO}examplecreate_inputbinaries.py ${path2CLEO} $path2build
+
+### run CLEO
+runcmd="${path2build}/src/runCLEO ${path2CLEO}src/config/config.txt ${path2CLEO}libs/claras_SDconstants.hpp"
+echo ${runcmd}
+${runcmd}
