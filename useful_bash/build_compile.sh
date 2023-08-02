@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=quickrun
+#SBATCH --job-name=compileCLEO
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./build/bin/quickrun_out.%j.out
-#SBATCH --error=./build/bin/quickrun_err.%j.out
+#SBATCH --output=./build/bin/compileCLEO_out.%j.out
+#SBATCH --error=./build/bin/compileCLEO_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###

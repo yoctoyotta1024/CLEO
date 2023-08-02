@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=quickrun
+#SBATCH --job-name=runCLEO
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./build/bin/quickrun_out.%j.out
-#SBATCH --error=./build/bin/quickrun_err.%j.out
+#SBATCH --output=./build/bin/runCLEO_out.%j.out
+#SBATCH --error=./build/bin/runCLEO_err.%j.out
 
 ### ------------- PLEASE NOTE: this script assumes you ------------- ###
 ### ------------- have already built CLEO in path2build ------------ ### 
