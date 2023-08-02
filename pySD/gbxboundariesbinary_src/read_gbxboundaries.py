@@ -218,7 +218,8 @@ def calc_gridboxvols(gbxbounds):
 
 def domaininfo(gbxbounds, isprint=True):
 
-    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=isprint)
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds,
+                                                    isprint=isprint)
     domainvol = calc_domainvol(zhalf, xhalf, yhalf)
 
     gridboxvols = calc_gridboxvols(gbxbounds)
@@ -257,7 +258,7 @@ def print_domain_info(constsfile, gridfile):
                                                    isprint=isprint) 
     
     domainvol, gridboxvols, ngridboxes = domaininfo(gbxbounds,
-                                                       isprint=isprint)
+                                                    isprint=isprint)
     xtns, spacings, griddims = grid_dimensions(gbxbounds) 
     ztot = abs(xtns[0][0] - xtns[0][1])
     xtot = abs(xtns[1][0] - xtns[1][1])

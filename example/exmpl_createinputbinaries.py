@@ -6,7 +6,7 @@
 import sys
 import numpy as np
 from pathlib import Path
-sys.path.append("..") ### used to include directory containing pySD package in python interpreter PATH
+sys.path.append("..") # used to include directory containing pySD package in python interpreter PATH
 
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as  cgrid
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid

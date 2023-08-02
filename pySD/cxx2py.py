@@ -10,7 +10,6 @@ def print_dict_statement(filename, dictname, dict):
     print(c, "=", dict[c])
   print("---------------------------------------------\n")
   
-  
 def remove_excess_line(line):
   """ removes white spaces and 
   and comments from a line """
@@ -19,10 +18,8 @@ def remove_excess_line(line):
   line = line.replace(" ", "")
   if "#" in line:
     line = line[:line.find("#")] 
-    
 
   return line
-
 
 def line_with_assignment(line):
   """ find all the lines in a file 
@@ -41,7 +38,6 @@ def line_with_assignment(line):
   else:
     return False
 
-
 def where_typename_ends(line):
   """finds index where c++ name for 
   variable type ends for a const double, 
@@ -59,14 +55,12 @@ def where_typename_ends(line):
         
   return x
 
-
 def read_cpp_into_floats(filename, is_print=True):
   """returns dictionary of value: float from 
   (const) doubles and (const) ints
   assigned in a c++ file. Also returns
   dictionary of notfloats for values that
   couldn't be converted"""
-
 
   floats = {}
   notfloats = {}
@@ -94,7 +88,6 @@ def read_cpp_into_floats(filename, is_print=True):
 
   return floats, notfloats
 
-
 def derive_more_floats(CONSTS, is_print=True):
   '''return MCONSTS dictionary containing
     some derived key,values from values in
@@ -117,8 +110,6 @@ def derive_more_floats(CONSTS, is_print=True):
     print_dict_statement("CONSTS dict", "derived constants (MCONSTS)", MCONSTS)
 
   return MCONSTS
-
-
 
 def read_configtxt_into_floats(filename, is_print=True):
   """returns dictionary of value: float from 
