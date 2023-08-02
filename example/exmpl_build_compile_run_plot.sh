@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=quickrun
+#SBATCH --job-name=example
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,14 +8,13 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./build/bin/quickrun_out.%j.out
-#SBATCH --error=./build/bin/quickrun_err.%j.out
+#SBATCH --output=./build/bin/example_out.%j.out
+#SBATCH --error=./build/bin/example_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
 ### ----  and paths for CLEO and build directories  ---- ###
 module load gcc/11.2.0-gcc-11.2.0
-module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/example/build/
@@ -30,7 +29,7 @@ gcc="gcc"
 # python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
 # gxx="g++-13"
 # gcc="gcc-13"
-## ---------------------------------------------------- ###
+### ---------------------------------------------------- ###
 
 ### build CLEO using cmake (with openMP thread parallelism through Kokkos)
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON"  # openMP parallelism enabled
@@ -53,3 +52,9 @@ export OMP_PLACES=threads
 runcmd="${path2build}/src/runCLEO ${configfile} ${path2CLEO}libs/claras_SDconstants.hpp"
 echo ${runcmd}
 ${runcmd}
+
+### plot results
+cd ${path2CLEO}example/ && pwd
+plotcmd="${python} exmpl_plots.py ${path2build}bin/SDMdata.zarr/ ${path2build}bin/setup.txt ${path2build}share/dimlessGBxboundaries.dat" 
+echo ${plotcmd}
+${plotcmd}
