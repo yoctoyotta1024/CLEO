@@ -1,5 +1,5 @@
 ### Author: Clara Bayley
-### File: examplecreate_inputbinaries.py
+### File: exmpl_createinputbinaries.py
 ### python script to generate some input
 ### binary files for an example of runing CLEO
 
@@ -72,7 +72,7 @@ Zlength = 1500 # [m]
 Xlength = 1500 # [m]
 qvapmethod = "sratio"
 Zbase = 750 # [m]
-sratios = [0.95, 1.0025] # s_ratio [below, above] Zbase
+sratios = [0.99, 1.0025] # s_ratio [below, above] Zbase
 moistlayer=False
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
