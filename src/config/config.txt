@@ -29,13 +29,13 @@ cond_rtol = 0.0                           # relative tolerance for implicit eule
 cond_atol = 0.01                          # abolute tolerance for implicit euler integration
 CONDTSTEP = 1                             # time between SD condensation events [s]
 COLLTSTEP = 1                             # time between SD collision events [s]
-MOTIONTSTEP = 1.5                         # time between SDM motion [s]
-COUPLTSTEP = 10800                        # time between thermodynamic couplings [s]
+MOTIONTSTEP = 2                           # time between SDM motion [s]
+COUPLTSTEP = 4800                         # time between thermodynamic couplings [s]
 OBSTSTEP = 180                            # time between SDM observations [s]
-T_END = 10800                             # time span of integration [s]
+T_END = 4800                              # time span of integration [s]
 
 # SDs parameters #
-nSDsvec = 80                            # initial no. elements in SDs' vector (=total initial no. of SDs)
+nSDsvec = 2560                          # initial no. elements in SDs' vector (=total initial no. of SDs)
 SDnspace = 1                            # no. of spatial coordinates of SDs (=dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state

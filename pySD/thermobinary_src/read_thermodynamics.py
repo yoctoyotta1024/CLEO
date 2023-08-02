@@ -178,15 +178,12 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
 
     plot_1dprofiles(zfull, thermodata, inputs["Mr_ratio"], binpath, savefig)
 
-    if inputs["SDnspace"] > 0: 
+    if inputs["SDnspace"] > 1: 
       xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
       xxf, zzf = np.meshgrid(xfull, zfull, indexing="ij") # dims [xdims, zdims]
       plot_2dcolormaps(zzh, xxh, zzf, xxf, thermodata, inputs, binpath, savefig)
-    
-      if inputs["SDnspace"] > 1:
-        plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel_cens"],
+      plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel_cens"],
                       thermodata["uvel_cens"], binpath, savefig)
-
 
 def try1dplot(ax, data, zfull):
   try:
