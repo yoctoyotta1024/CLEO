@@ -1,8 +1,8 @@
 ### Author: Clara Bayley
-### File: exmpl_plotssrc.py
-### classes and functions used by
-### exmpl_plot.py to plot some of the
-### output data from the example run of CLEO
+### File: exmpl_figsrc.py
+### classes and functions called by exmpl_plot.py
+### to plot figures of some of the output
+### data from the example run of CLEO
 
 import sys
 import numpy as np

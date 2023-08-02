@@ -12,7 +12,9 @@ import awkward as ak
 import matplotlib.pyplot as plt
 
 from exmpl_plotssrc import *
+from exmpl_anisrc import *
 
+### ----------------------- output data to plot -------------------- ###
 dataset = sys.argv[1]
 setuptxt = sys.argv[2]
 gridfile = sys.argv[3]
@@ -24,7 +26,9 @@ time = get_timemins(dataset)
 massmoms = MassMoments(dataset, setup, gbxs.ndims)
 sddata = SDData(dataset)
 precip = SurfPrecip(dataset, setup, gbxs)
+### ---------------------------------------------------------------- ###
 
+### ----------------------- plot .png figures ---------------------- ###
 savename = "domainmassmoments.png"
 argsdict = {'time': time,
             'massmoms': massmoms}
@@ -46,3 +50,10 @@ argsdict = {'time': time,
 genericplot(plot_surfaceprecip, argsdict,
             figsize=(10,6), savefig=True,
             savedir=savedir, savename=savename)
+### ---------------------------------------------------------------- ###
+
+### --------------------- plot .mp4 animations --------------------- ###
+
+
+
+### ---------------------------------------------------------------- ###
