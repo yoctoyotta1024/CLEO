@@ -1,10 +1,12 @@
 // Author: Clara Bayley
-// File: collisionsmethod.hpp
+// File: collisionsx.hpp
 /* Header file for class that controls
-collision events in superdroplet model */
+collision-[X] events in superdroplet
+model, e.g. collision-coalescences or
+collision-breakups */
 
-#ifndef COLLISIONSMETHOD_HPP
-#define COLLISIONSMETHOD_HPP
+#ifndef COLLISIONSX_HPP
+#define COLLISIONSX_HPP
 
 #include <concepts>
 #include <random>
@@ -41,20 +43,22 @@ something convertible to a double
     } -> std::convertible_to<double>;
 };
 
-template <PairProbability PairCoalescenceProbability>
-class CollisionsMethod
+template <PairProbability PairCollisionXProbability>
+class CollisionsX
 /* class for method to enact collisions between
 superdrops during collision events in SDM */
 {
 private:
   const double DELT; // time interval [s] for which probability of coalescence is calculated
 
-  const PairCoalescenceProbability pair_coalesce_probability;
-  /* object (has operator () that) returns probability a pair of
-  droplets coalesces according to a particular coalescence kernel.
-  Equation is: prob_jk = K(drop1, drop2) delta_t/delta_vol
-  where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|,
-  is coalescence kernel (see Shima 2009 eqn 3) */
+  const PairCollisionXProbability pair_collisionx_probability;
+  /* object (has operator that) returns prob_jk, the probability
+  a pair of droplets undergo some kind of collision process.
+  prob_jk is analogous to prob_jk = K(drop1, drop2) delta_t/delta_vol,
+  where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|
+  is the coalescence kernel (see Shima 2009 eqn 3). For example
+  prob_jk may return the probability of collision-coalescence
+  according to a particular coalescence kernel, or collision-breakup */
 
   template <class DeviceType>
   void collide_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
@@ -239,7 +243,7 @@ private:
   }
 
 public:
-  CollisionsMethod(const double DELT, PairCoalescenceProbability p)
+  CollisionsX(const double DELT, PairCoalescenceProbability p)
       : DELT(DELT), pair_coalesce_probability(p) {}
 
   template <class DeviceType>
@@ -262,7 +266,7 @@ SdmProcess auto CollisionsProcess(const int interval,
                                   const PairCoalescenceProbability p)
 {
   const double realtstep = int2time(interval);
-  return ConstTstepProcess{interval, CollisionsMethod(realtstep, p)};
+  return ConstTstepProcess{interval, CollisionsX(realtstep, p)};
 }
 
-#endif // COLLISIONSMETHOD_HPP
+#endif // COLLISIONSX_HPP
