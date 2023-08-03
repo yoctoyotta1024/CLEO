@@ -220,18 +220,6 @@ public:
   }
 };
 
-template <SDPairProbability CollisionXProbability,
-          SDPairEnactX CollisionXEnactment>
-SdmProcess auto CollisionXProcess(const int interval,
-                                  const std::function<double(int)> int2time,
-                                  const CollisionXProbability p,
-                                  const CollisionXEnactment x)
-{
-  const double realtstep = int2time(interval);
-  return ConstTstepProcess{interval,
-                           CollisionX(realtstep, p, x)};
-}
-
 template <SDPairProbability CollisionXProbability>
 SdmProcess auto CollisionCoalescenceProcess(const int interval,
                                             const std::function<double(int)> int2time,
