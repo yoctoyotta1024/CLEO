@@ -200,8 +200,8 @@ private:
 
 public:
   CollisionX(const double DELT,
-              CollisionXProbability, p,
-              CollisionXEnactment x)
+             CollisionXProbability p,
+             CollisionXEnactment x)
       : DELT(DELT),
         collisionx_probability(p),
         enact_collisionx(x) {}

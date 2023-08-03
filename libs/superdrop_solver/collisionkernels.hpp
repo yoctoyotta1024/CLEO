@@ -53,7 +53,7 @@ struct LongHydrodynamicCoalProb
   const double coaleff;
   const SimmelTerminalVelocity terminalv;
 
-  LongHydrodynamicProb()
+  LongHydrodynamicCoalProb()
       : prob_jk_const(M_PI * pow(dlc::R0, 2.0) * dlc::W0),
         coaleff(1.0),
         terminalv(SimmelTerminalVelocity{}) {}
@@ -94,9 +94,9 @@ struct LongHydrodynamicCoalProb
 
     /* calculate Long's hydrodynamic (i.e. gravitational) 
     collision-coalescence kernel according to Simmel et al. 2002 */
-    const double sumrsqrd = pow((bigr + smallr), 2.0)
+    const double sumrsqrd = pow((bigr + smallr), 2.0);
     const double vdiff = std::abs(terminalv(drop1) - terminalv(drop2));
-    const double longs_kernel = prob_jk_const * eff * sumrsqrd * vdiff
+    const double longs_kernel = prob_jk_const * eff * sumrsqrd * vdiff;
     
     const double prob_jk = longs_kernel * DELT_DELVOL;
     

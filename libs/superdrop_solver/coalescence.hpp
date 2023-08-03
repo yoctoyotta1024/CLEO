@@ -87,6 +87,6 @@ to enact collision-coalescence events in SDM) */
   {
     coalesce_superdroplet_pair(drop1, drop2, gamma);
   }
-}
+};
 
 #endif // COALESCENCE_HPP

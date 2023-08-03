@@ -44,7 +44,8 @@ collision-coalscence kernel */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
 #include "superdrop_solver/collisionkernels.hpp"
-#include "superdrop_solver/collisionsmethod.hpp"
+#include "superdrop_solver/coalescence.hpp"
+#include "superdrop_solver/collisionx.hpp"
 
 /* thermodynamics solver and coupled model setup */
 #include "thermofromfile/run_thermofromfile.hpp"
@@ -119,9 +120,10 @@ int main(int argc, char *argv[])
   const Maps4GridBoxes gbxmaps(config.SDnspace, config.grid_filename);
 
   /* create superdroplet model (SDM) process from combination of chosen SDM processes */
-  const auto sdmprocess(CollisionsProcess(mdlsteps.collsubstep,
-                                          &step2realtime,
-                                          GolovinProb(dlc::R0)));
+  const auto sdmprocess(
+      CollisionCoalescenceProcess(mdlsteps.collsubstep,
+                                  &step2realtime,
+                                  GolovinCoalProb(dlc::R0)));
   const MoveSuperdropsInDomain sdmmotion(NullMotion{});
 
   /* create observer from combination of chosen observers */
