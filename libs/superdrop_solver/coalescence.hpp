@@ -16,7 +16,8 @@ class Coalescence
 /* class is method for coalescence between
 two superdroplets. (Can be used in collisionsx struct
 to enact collision-coalescence events in SDM) */
-{  
+{
+private:
   void coalesce_superdroplet_pair(Superdrop &drop1, Superdrop &drop2,
                                   const unsigned long long gamma) const
   /* coalesce pair of superdroplets by changing multiplicity,
@@ -77,7 +78,8 @@ to enact collision-coalescence events in SDM) */
     drop2.radius = pow(new_rcubed, (1.0 / 3.0));
     drop2.m_sol = drop2.m_sol + gamma * drop1.m_sol;
   }
-
+  
+public:
   void operator()(Superdrop &drop1,
                   Superdrop &drop2,
                   const unsigned long long gamma) const
