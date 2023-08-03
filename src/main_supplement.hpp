@@ -124,11 +124,10 @@ combined process of those two individual processes */
                                             config.cond_atol));
 
   /* create process for collision-coalescene in SDM */
-  // const auto probs{GolovinProb(dlc::R0)};
-  const auto probs{LongHydrodynamicProb()};
-  const auto colls(CollisionsProcess(mdlsteps.collsubstep,
-                                       &step2realtime,
-                                       probs));
+  // const auto probs{GolovinCoalProb(dlc::R0)};
+  const auto probs{LongHydrodynamicCoalProb()};
+  const auto coals(CollisionCoalescenceProcess(mdlsteps.collsubstep,
+                                               &step2realtime, probs));
 
   /* create process for sedimentation in SDM -> n.b. this has moved to sdmmotion*/
   // // const auto terminalv(RogersYauTerminalVelocity{});
@@ -138,9 +137,9 @@ combined process of those two individual processes */
   //                                        terminalv));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  const auto sdmprocess = cond >> colls;
+  const auto sdmprocess = cond >> coals;
   // const auto sdmprocess = cond;
-  // const auto sdmprocess = colls;
+  // const auto sdmprocess = coals;
 
   return sdmprocess;
   // return NullProcess{};
