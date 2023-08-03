@@ -43,18 +43,18 @@ something convertible to a double
   } -> std::convertible_to<double>;
 };
 
-template <typename C>
-concept SDPairEnactX = requires(C c,
-                                const Superdrop &d1,
-                                const Superdrop &d2,
+template <typename X>
+concept SDPairEnactX = requires(X x,
+                                Superdrop &d1,
+                                Superdrop &d2,
                                 const unsigned long long g)
-/* Objects that are of type 'PairProbability'
-take a pair of superdroplets and returns
-something convertible to a double
-(hopefully a probability!) */
+/* Objects that are of type SDPairEnactX 
+takes a pair of superdrops and returns
+void (it may change the properties of
+the superdrops)*/
 {
   {
-    c(d1, d2, g)
+    x(d1, d2, g)
   } -> std::same_as<void>;
 };
 
@@ -114,7 +114,7 @@ private:
                                  const double VOLUME) const
   /* Monte Carlo Routine from Shima et al. 2009 for
   collision-coalescence generalised to any collision-X process
-  for a pair of superdroplets given the pair_collisionx_probability
+  for a pair of superdroplets given the collisionx_probability
   and collisionx_superdroplet_pair */
   {
     /* 1. assign references to each superdrop in pair
@@ -128,7 +128,7 @@ private:
 
     /* 2. calculate scaled probability of pair collision-x
     according to Shima et al. 2009 ("p_alpha" in paper) */
-    const double prob_jk = pair_collisionx_probability(drop1, drop2, DELT, VOLUME);
+    const double prob_jk = collisionx_probability(drop1, drop2, DELT, VOLUME);
     const double prob = scale_p * std::max(eps1, eps2) * prob_jk;
 
     /* 3. Monte Carlo step: randomly determine collision-x gamma factor */
@@ -223,22 +223,26 @@ public:
 template <SDPairProbability CollisionXProbability,
           SDPairEnactX CollisionXEnactment>
 SdmProcess auto CollisionXProcess(const int interval,
-                            const std::function<double(int)> int2time,
-                            const CollisionXProbability p,
-                            const CollisionXEnactment x)
+                                  const std::function<double(int)> int2time,
+                                  const CollisionXProbability p,
+                                  const CollisionXEnactment x)
 {
   const double realtstep = int2time(interval);
-  return ConstTstepProcess{interval, CollisionX(realtstep, p, x)};
+  return ConstTstepProcess{interval,
+                           CollisionX(realtstep, p, x)};
 }
 
 template <SDPairProbability CollisionXProbability>
 SdmProcess auto CollisionCoalescenceProcess(const int interval,
-                            const std::function<double(int)> int2time,
-                            const CollisionXProbability p)
+                                            const std::function<double(int)> int2time,
+                                            const CollisionXProbability p)
 {
   const double realtstep = int2time(interval);
-  return ConstTstepProcess{interval,
-                           CollisionX(realtstep, p, Coalescence{})};
+  
+  CollisionX<CollisionXProbability, Coalescence>
+      coals(realtstep, p, Coalescence{});
+
+  return ConstTstepProcess{interval, coals};
 }
 
 #endif // COLLISIONX_HPP
