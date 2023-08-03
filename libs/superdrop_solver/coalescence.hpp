@@ -7,9 +7,10 @@ superdroplet model using collisions template */
 #ifndef COALESCENCE_HPP
 #define COALESCENCE_HPP
 
+#include <string>
+#include <stdexcept>
+
 #include "./superdrop.hpp"
-#include "./coalescencekernel.hpp"
-#include "./collisions.hpp"
 
 class Coalescence
 /* class is method for coalescence between

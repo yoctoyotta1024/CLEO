@@ -2,8 +2,8 @@
 // File: terminalvelocity.hpp
 /* Header file for terminal velocity
 formulas (used in sedimentation method
-and some coalescence kernels). Formulas
-contained in structures to satisfy
+and some collision-coalescence kernels).
+Formulas contained in structures to satisfy
 requirements for using VelocityFormula
 concept */
 

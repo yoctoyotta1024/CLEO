@@ -46,7 +46,7 @@ SDM process and observers to use in main.cpp */
 /* sdm superdroplets setup */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
-#include "superdrop_solver/coalescencekernel.hpp"
+#include "superdrop_solver/collisionkernels.hpp"
 #include "superdrop_solver/collisionsmethod.hpp"
 #include "superdrop_solver/condensationmethod.hpp"
 #include "superdrop_solver/sedimentationmethod.hpp"

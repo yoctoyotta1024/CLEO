@@ -13,7 +13,6 @@ collision-breakups */
 #include <algorithm>
 #include <string>
 #include <iostream>
-#include <stdexcept>
 #include <span>
 #include <cmath>
 #include <functional>
@@ -230,6 +229,16 @@ SdmProcess auto CollisionXProcess(const int interval,
 {
   const double realtstep = int2time(interval);
   return ConstTstepProcess{interval, CollisionX(realtstep, p, x)};
+}
+
+template <SDPairProbability CollisionXProbability>
+SdmProcess auto CollisionCoalescenceProcess(const int interval,
+                            const std::function<double(int)> int2time,
+                            const CollisionXProbability p)
+{
+  const double realtstep = int2time(interval);
+  return ConstTstepProcess{interval,
+                           CollisionX(realtstep, p, Coalescence{})};
 }
 
 #endif // COLLISIONX_HPP
