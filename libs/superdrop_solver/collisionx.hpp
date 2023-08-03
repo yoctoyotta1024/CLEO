@@ -1,12 +1,12 @@
 // Author: Clara Bayley
-// File: collisionsx.hpp
+// File: collisionx.hpp
 /* Header file for class that controls
 collision-[X] events in superdroplet
 model, e.g. collision-coalescences or
 collision-breakups */
 
-#ifndef COLLISIONSX_HPP
-#define COLLISIONSX_HPP
+#ifndef COLLISIONX_HPP
+#define COLLISIONX_HPP
 
 #include <concepts>
 #include <random>
@@ -61,7 +61,7 @@ something convertible to a double
 
 template <SDPairProbability CollisionXProbability,
           SDPairEnactX CollisionXEnactment>
-class CollisionsX
+class CollisionX
 /* class for method to enact collisions between
 superdrops during collision events in SDM */
 {
@@ -200,12 +200,12 @@ private:
   }
 
 public:
-  CollisionsX(const double DELT,
+  CollisionX(const double DELT,
               CollisionXProbability, p,
-              CollisionXEnactment c)
+              CollisionXEnactment x)
       : DELT(DELT),
         collisionx_probability(p),
-        enact_collisionx(c) {}
+        enact_collisionx(x) {}
 
   template <class DeviceType>
   void operator()(const int currenttimestep,
@@ -221,13 +221,15 @@ public:
   }
 };
 
-// template <PairProbability PairCoalescenceProbability>
-// SdmProcess auto CollisionsProcess(const int interval,
-//                                   const std::function<double(int)> int2time,
-//                                   const PairCoalescenceProbability p)
-// {
-//   const double realtstep = int2time(interval);
-//   return ConstTstepProcess{interval, CollisionsX(realtstep, p)};
-// }
+template <SDPairProbability CollisionXProbability,
+          SDPairEnactX CollisionXEnactment>
+SdmProcess auto CollisionXProcess(const int interval,
+                            const std::function<double(int)> int2time,
+                            const CollisionXProbability p,
+                            const CollisionXEnactment x)
+{
+  const double realtstep = int2time(interval);
+  return ConstTstepProcess{interval, CollisionX(realtstep, p, x)};
+}
 
-#endif // COLLISIONSX_HPP
+#endif // COLLISIONX_HPP
