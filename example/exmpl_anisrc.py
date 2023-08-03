@@ -8,12 +8,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib import animation
-
 from matplotlib.cm import ScalarMappable
-# from pathlib import Path 
 
-def horizontal_average(data4d, frame):
-    return np.mean(data4d[frame,:,:,:], axis=(0,1))
 
 def animate_me(fig, update_frame, frames, plot_init, saveani=False,
               savedir=None, savename=None, fargs=(), fps=5):
@@ -34,7 +30,6 @@ def animate1dprofile(gbxs, mom, time, nframes,
   
   fig, ax, plots, txt, zkm = prepare_1dprofile(gbxs, mom, time,
                                                xlabel, color=color) 
-  fig.suptitle("Horizonally Averaged Profile", fontsize=18)
   
   def init_1dprofile():
     
@@ -68,9 +63,7 @@ def prepare_1dprofile(gbxs, massmom, time, xlabel, color):
   zkm = gbxs.zfull / 1000 # convert m to km
 
   f = 0
-  meanmom = horizontal_average(massmom, frame=f) 
-
-  plots = ax.plot(meanmom, zkm, color=color)[0]
+  plots = ax.plot(massmom[f], zkm, color=color)[0]
 
   timetext = "t = {:.0f}min".format(time[f])
   txt = fig.text(0.7, 0.875, timetext, fontsize=16)
@@ -84,8 +77,7 @@ def prepare_1dprofile(gbxs, massmom, time, xlabel, color):
 
 def update_1dprofileframe(f, plots, txt, zkm, time, massmom):
 
-  meanmom = horizontal_average(massmom, frame=f)  
-  plots.set_data(meanmom, zkm)
+  plots.set_data(massmom[f], zkm)
 
   timetext = "t = {:.0f}min".format(time[f])
   txt.set_text(timetext)
@@ -128,13 +120,14 @@ def prepare_2dplot(gbxs, massmom, time, cmap, cmapnorm):
   
   f=0
   data2d = massmom[f,:,:]
-  plot = ax.pcolormesh(gbxs.xxh/1000, gbxs.zzh/1000,
-                      data2d, cmap=cmap, norm=cmapnorm)
-
+  plot = ax.pcolormesh(gbxs.xxh/1000, gbxs.zzh/1000, data2d,
+                      cmap=cmap, norm=cmapnorm)
+  plot.cmap.set_under("w")
   timetext = "t = {:.0f}min".format(time[f])
   txt = fig.text(0.765, 0.925, timetext, fontsize=16, ha="right")
   
-  cbar = fig.colorbar(ScalarMappable(norm=cmapnorm, cmap=cmap), ax=ax)
+  cbar = fig.colorbar(ScalarMappable(norm=cmapnorm, cmap=cmap),
+                      ax=ax, extend="both")
   cbar.ax.tick_params(labelsize=16, which="both")
   cbar.ax.tick_params(length=10, width=1, which="major")
   cbar.ax.tick_params(length=10/3, width=1, which="minor")

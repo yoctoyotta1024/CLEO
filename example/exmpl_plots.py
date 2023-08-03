@@ -7,10 +7,7 @@
 
 import sys
 import numpy as np
-import xarray as xr
-import awkward as ak
-import matplotlib.pyplot as plt
-from matplotlib.colors import LogNorm
+from matplotlib.colors import LogNorm, Normalize
 
 from exmpl_figsrc import *
 from exmpl_anisrc import *
@@ -21,9 +18,9 @@ setuptxt = sys.argv[2]
 gridfile = sys.argv[3]
 savedir = "./build/bin/"
 
-setup = Setup(setuptxt, isprint=False)
-gbxs = GridBoxes(gridfile, setup, isprint=False)
 time = get_timemins(dataset) 
+setup = Setup(setuptxt, ntime=len(time), isprint=False)
+gbxs = GridBoxes(gridfile, setup, isprint=False)
 massmoms = MassMoments(dataset, setup, gbxs.ndims)
 sddata = SDData(dataset)
 precip = SurfPrecip(dataset, setup, gbxs)
@@ -51,42 +48,76 @@ argsdict = {'time': time,
 genericplot(plot_surfaceprecip, argsdict,
             figsize=(10,6), savefig=True,
             savedir=savedir, savename=savename)
-### ---------------------------------------------------------------- ###
+### -------------------------------------------------------------- ###
 
-### --------------------- plot .gif animations --------------------- ###
+### -------------------- plot 1-D .gif animations ------------------ ###
 nframes = len(time)
 
-mom2ani = massmoms.nsupers
+def horizontal_average(data4d):
+  '''avg 4-D data with dims [time, y, x, z]
+  over x and y dimensions '''
+  return np.mean(data4d, axis=(1,2))
+
+mom2ani = horizontal_average(massmoms.nsupers) 
 xlims = [0, np.amax(mom2ani)]
-savename="nsupers_1dprofile"
-xlabel = "number of superdroplets per gridbox"
+xlabel = "mean number of superdroplets per gridbox"
+savename="nsupers1d"
 animate1dprofile(gbxs, mom2ani, time, nframes, xlabel=xlabel, xlims=xlims,
                  color="blue", saveani=True, savedir=savedir,
                  savename=savename, fps=5)
 
-mom2ani = massmoms.mom1 / gbxs.gbxvols[None,:,:,:]
-xlims = [0, np.amax(np.mean(mom2ani, axis=(0,1)))]
-savename="massconc_1dprofile"
-xlabel = "Mass Concentration /g m$^{-3}$"
+norm = np.sum(gbxs.gbxvols, axis=0)[None,None,:,:] * 1e6 # volume [cm^3]
+mom2ani = horizontal_average(massmoms.mom0/norm) 
+xlims = [0, np.amax(mom2ani)]
+xlabel = "mean number concentration /cm$^{-3}$"
+savename="numconc1d"
 animate1dprofile(gbxs, mom2ani, time, nframes, xlabel=xlabel, xlims=xlims,
                  color="green", saveani=True, savedir=savedir,
                  savename=savename, fps=5)
 
+norm = np.sum(gbxs.gbxvols, axis=0)[None,None,:,:]  # volume [m^3]
+mom2ani = horizontal_average(massmoms.mom1/norm) 
+xlims = [0, np.amax(mom2ani)]
+xlabel = "mean mass concentration /g m$^{-3}$"
+savename="massconc1d"
+animate1dprofile(gbxs, mom2ani, time, nframes, xlabel=xlabel, xlims=xlims,
+                 color="green", saveani=True, savedir=savedir,
+                 savename=savename, fps=5)
+
+### -------------------------------------------------------------- ###
+
+### -------------------- plot 2-D .gif animations ------------------ ###
+nframes = len(time)
+
 mom2ani = np.sum(massmoms.nsupers, axis=1) # sum over y dimension
-cmap="plasma"
-cmapnorm = LogNorm(vmin=1, vmax=np.amax(mom2ani))
+cmap="plasma_r"
+cmapnorm = Normalize(vmin=1, vmax=20)
 cbarlabel="number of superdroplets per gridbox"
-savename="nsupers_2dcmap"
+savename="nsupers2d"
 animate2dcmap(gbxs, mom2ani, time, nframes, 
                   cbarlabel=cbarlabel, cmapnorm=cmapnorm, cmap=cmap,
                   saveani=True, savedir=savedir, savename=savename, fps=5)
 
-mom2ani = np.mean(massmoms.mom1 / gbxs.gbxvols[None,:,:,:], axis=1) # avg over y dimension
+mom2ani = np.sum(massmoms.mom0, axis=1) # sum over y dimension
+norm = np.sum(gbxs.gbxvols, axis=0)[None,:,:] * 1e6 # sum over y dimension and add time dimension for broadcasting [cm^3]
+mom2ani = mom2ani / norm
 cmap="afmhot_r"
-cmapnorm = LogNorm(vmin=1e-3, vmax=1e5)
-savename="massconc_2dcmap"
-xlabel = "Mass Concentration /g m$^{-3}$"
+cmapnorm = Normalize(vmin=0, vmax=10)
+cbarlabel = "number concentration /cm$^{-3}$"
+savename="numconc2d"
 animate2dcmap(gbxs, mom2ani, time, nframes, 
                   cbarlabel=cbarlabel, cmapnorm=cmapnorm, cmap=cmap,
-                  saveani=True, savedir=savedir, savename=savename, fps=5)                
+                  saveani=True, savedir=savedir, savename=savename, fps=5)   
+
+mom2ani = np.sum(massmoms.mom1, axis=1) # sum over y dimension
+norm = np.sum(gbxs.gbxvols, axis=0)[None,:,:] # sum over y dimension and add time dimension for broadcasting [m^3]
+mom2ani = mom2ani / norm
+cmap="bone_r"
+cmapnorm = LogNorm(vmin=1e-6, vmax=1e2)
+cbarlabel = "mass concentration /g m$^{-3}$"
+savename="massconc2d"
+animate2dcmap(gbxs, mom2ani, time, nframes, 
+              cbarlabel=cbarlabel, cmapnorm=cmapnorm, cmap=cmap,
+              saveani=True, savedir=savedir, savename=savename, fps=5)   
+             
 ### ---------------------------------------------------------------- ### 

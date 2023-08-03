@@ -45,16 +45,17 @@ class Setup:
   ''' class for handling dictionary
   containing configuration from setuptxt '''
 
-  def __init__(self, setuptxt, isprint=True):
+  def __init__(self, setuptxt, ntime=None, isprint=True):
 
     print("Reading setuptxt file:\n  "+setuptxt)
     self.setupdict = cxx2py.read_configtxt_into_floats(setuptxt, False)[0]
     self.setupdict.update(cxx2py.read_cpp_into_floats(setuptxt, False)[0])
     self.setupdict.update(cxx2py.derive_more_floats(self.setupdict, False))
    
-    ntime = int(np.ceil(self.setupdict["T_END"]/self.setupdict["OBSTSTEP"]))
+    if not ntime:
+      ntime = int(np.ceil(self.setupdict["T_END"]/self.setupdict["OBSTSTEP"]))
     self.setupdict["ntime"] = ntime
-
+    
     if isprint:
       cxx2py.print_dict_statement(setuptxt, "setup", self.setupdict)
 
