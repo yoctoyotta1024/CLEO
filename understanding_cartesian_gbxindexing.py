@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 
 import pySD.gbxboundariesbinary_src.read_gbxboundaries as rgrid
 
-abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+# abspath = "/Users/yoctoyotta1024/Documents/b1_springsummer2023/CLEO/"
+abspath = "/home/m/m300950/CLEO/"
 constsfile = abspath+"libs/claras_SDconstants.hpp"
 configfile = abspath+"src/config/config.txt"
 
