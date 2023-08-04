@@ -6,7 +6,7 @@ thermodynamics read from binaries files
 collision-coalscence kernel */
 
 // after make/compiling, execute for example via:
-// ./src/golcolls0D "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
+// ./src/golovin0D "../src/config/config.txt" "../libs/claras_SDconstants.hpp"
 
 /* standard library packages */
 #include <vector>

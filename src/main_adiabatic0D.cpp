@@ -5,7 +5,7 @@ coupled with a CVODE ode solver for the thermodynamics
 (p, temp, qv and qc) over time */
 
 // after make/compiling, execute for example via:
-// ./src/cond0D "../src/config/condconfig.txt" "../libs/claras_SDconstants.hpp"
+// ./src/adiabatic0D "../src/config/condconfig.txt" "../libs/claras_SDconstants.hpp"
 
 /* standard library packages */
 #include <vector>
