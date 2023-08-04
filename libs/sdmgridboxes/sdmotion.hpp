@@ -117,7 +117,7 @@ private:
   const int interval; // integer timestep for movement
   const double delt;  // equivalent of interval as dimensionless time
 
-  TerminalVelocity terminalv; // returns terminal velocity given a superdroplet
+  const TerminalVelocity terminalv; // returns terminal velocity given a superdroplet
 
   struct Deltas
   {
