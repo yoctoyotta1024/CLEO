@@ -47,57 +47,89 @@ struct GolovinCoalProb
   }
 };
 
-struct LongHydrodynamicCoalProb
+template <typename E>
+concept KernelEfficiency = requires(E e,
+                                    const Superdrop &d1,
+                                    const Superdrop &d2)
+/* Objects that are of type 'KernelEfficiency'
+take a pair of superdroplets and returns
+something convertible to a double (such as the
+efficiency factor for a collision kernel) */
+{
+  {
+    e(d1, d2)
+  } -> std::convertible_to<double>;
+};
+
+struct SimmelCollCoalEfficiency
+/* Collision-Coalescence Efficiency factor in Long's
+  Hydropdynamic kernel according to Simmel at al. 2002.
+  eff = collision-coalescence efficiency E(R,r) where R>r.
+  eff = colleff(R,r) * coaleff(R,r). Here it's assumed that
+  coaleff(R,r) = 1, which also means that for collisions
+  where R > rlim, eff(R,r) = colleff(R,r) = 1. */
+{
+  double operator()(const Superdrop &drop1,
+                    const Superdrop &drop2)
+  {
+    constexpr double coaleff = 1.0;
+    constexpr double rlim = 5e-5 / dlc::R0;    // 50 micron limit to determine collision-coalescence efficiency (eff)
+    constexpr double colleff_lim = 0.001;      // minimum efficiency if larger droplet's radius < rlim
+    constexpr double A1 = 4.5e4 * dlc::R0 * dlc::R0; // constants in efficiency calc if larger droplet's radius < rlim
+    constexpr double A2 = 3e-4 / dlc::R0;
+
+    const double bigr = std::max(drop1.radius, drop2.radius);
+    const double smallr = std::min(drop1.radius, drop2.radius); 
+
+    /* calculate collision-coalescence efficiency, eff = colleff * coaleff */
+    double colleff(1.0);
+    if (bigr < rlim)
+    {
+      const double colleff_calc = A1 * pow(bigr, 2.0) * (1 - A2/smallr);
+      colleff = std::max(colleff_calc, colleff_lim); // colleff >= colleff_lim
+    }
+    
+    const double eff = colleff * coaleff;
+
+    return eff;
+  }
+};
+
+template <KernelEfficiency EfficiencyFactor>
+struct LongHydrodynamicProb
 {
   const double prob_jk_const;
-  const double coaleff;
+  EfficiencyFactor eff;
   const SimmelTerminalVelocity terminalv;
 
-  LongHydrodynamicCoalProb()
+  LongHydrodynamicProb(EfficiencyFactor e)
       : prob_jk_const(M_PI * pow(dlc::R0, 2.0) * dlc::W0),
-        coaleff(1.0),
+        eff(e),
         terminalv(SimmelTerminalVelocity{}) {}
 
   double operator()(const Superdrop &drop1,
                     const Superdrop &drop2,
                     const double DELT,
                     const double VOLUME) const
-  /* returns probability that a pair of droplets coalescese
-  according to Long's (hydrodynamic i.e. gravitational)
-  collision-coalescence kernel. 
-  Prob equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol where 
-  K(drop1, drop2) := C(drop1, drop2) * |v1−v2|, (see Shima 2009 eqn 3), 
-  and K(drop1, drop2) is Long's collision-coalescence kernel.
-  Kernel equations taken from Simmel at al. 2002.
-  colleff = collision efficiency E(R,r) where R>r.
-  E(R,r) = E_coll(R,r) * E_coal(R,r). Here it's assumed that
-  E_coal(R,r) = 1. This also means for collisions where R > rlim, 
-  E(R,r) = E_coll(R,r) = 1. */
+  /* returns probability that a pair of droplets collide (and coalesce
+  or breakup) according to Long's (hydrodynamic i.e. gravitational)
+  collision-coalescence kernel.
+  Probability equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol
+  where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|,
+  (see Shima 2009 eqn 3), is Long's collision-coalescence kernel,
+  for example as expressed in Simmel at al. 2002 */
   {
-    constexpr double rlim = 5e-5 / dlc::R0; // 50 micron limit to determine collision-coalescence efficiency (eff)
-    constexpr double smallcolleff_max = 0.001; // maximum efficiency if larger droplet's radius < rlim
-    constexpr double A1 = 4.5e4 * dlc::R0 * dlc::R0; // constants in efficiency calc if larger droplet's radius < rlim
-    constexpr double A2 = 3e-4 / dlc::R0;
+    /* time interval / volume for which
+    probability is calculated [s/m^3] */
+    const double DELT_DELVOL = DELT / VOLUME;  
 
-    const double DELT_DELVOL = DELT / VOLUME;                                   // time interval / volume for which collision probability is calculated [s/m^3]
-    const double bigr = std::max(drop1.radius, drop2.radius);
-    const double smallr = std::min(drop1.radius, drop2.radius); 
-
-    /* calculate collision-coalescence efficiency, eff = colleff * coaleff */
-    double colleff(1.0); // 
-    if (bigr < rlim)
-    {
-      const double smallcolleff = A1 * pow(bigr, 2.0) * (1 - A2/smallr);
-      colleff = std::max(smallcolleff, smallcolleff_max);
-    }
-    const double eff = colleff * coaleff;
-
-    /* calculate Long's hydrodynamic (i.e. gravitational) 
-    collision-coalescence kernel according to Simmel et al. 2002 */
-    const double sumrsqrd = pow((bigr + smallr), 2.0);
+    /* calculate Long's Kernel*/                                 
+    const double sumrsqrd = pow((drop1.radius + drop2.radius), 2.0);
     const double vdiff = std::abs(terminalv(drop1) - terminalv(drop2));
-    const double longs_kernel = prob_jk_const * eff * sumrsqrd * vdiff;
-    
+    const double longs_kernel = prob_jk_const * eff(drop1, drop2) *
+                                sumrsqrd * vdiff;
+
+    /* calculate probability prob_jk analogous Shima 2009 eqn 3 */
     const double prob_jk = longs_kernel * DELT_DELVOL;
     
     return prob_jk;
