@@ -17,6 +17,7 @@ concept also used by CollisionX struct */
 #include <algorithm>
 #include <functional>
 #include <concepts>
+#include <cmath>
 
 #include "../claras_SDconstants.hpp"
 #include "./superdrop.hpp"
@@ -162,17 +163,19 @@ a pair of droplets according to Golovin 1963
 };
 
 struct LongKernelEfficiency
-/* Collision-Coalescence Efficiency factor in Long's
+/* Collision-Coalescence Efficiency factor, eff, in Long's
   Hydrodynamic kernel according to Simmel et al. 2002.
   eff = collision-coalescence efficiency E(R,r) where R>r.
-  eff = colleff(R,r) * coaleff(R,r) (see eqn 12 Simmel et al. 2002).
-  Here it's assumed that coaleff(R,r) = 1, which also means that
-  for collisions where R > rlim, eff(R,r) = colleff(R,r) = 1. */
+  eff = colleff(R,r) * coaleff(R,r) (see eqn 12 and 13
+  Simmel et al. 2002). Here it's usually assumed that
+  coaleff(R,r) = 1, ie. eff = colleff. (This would also mean
+  that for collisions where R > rlim, eff(R,r) = colleff(R,r) = 1) */
 {
+  const double coaleff;
+
   double operator()(const Superdrop &drop1,
                     const Superdrop &drop2) const
   {
-    constexpr double coaleff = 1.0;
     constexpr double rlim = 5e-5 / dlc::R0;          // 50 micron limit to determine collision-coalescence efficiency (eff)
     constexpr double colleff_lim = 0.001;            // minimum efficiency if larger droplet's radius < rlim
     constexpr double A1 = 4.5e4 * dlc::R0 * dlc::R0; // constants in efficiency calc if larger droplet's radius < rlim
@@ -194,14 +197,134 @@ struct LongKernelEfficiency
   }
 };
 
+template <VelocityFormula TerminalVelocity>
+struct LowListKernelEfficiency
+/* Collision-Coalescence Efficiency factor, eff, for the
+  Hydrodynamic kernel. eff = colleff(R,r) * coaleff(R,r) where:
+  - colleff is Long's collision efficiency as seen in equation 13
+  of Simmel et al. 2002
+  - coaleff is from equation (4.5) and (4.6) Low and List 1982(a) */
+{
+  TerminalVelocity terminalv;
+  LongKernelEfficiency colleff{1.0};
+
+  double kinetic_energy(const Superdrop &drop1,
+                        const Superdrop &drop2)
+  /* returns cke/ pi, where cke = collision kinetic energy
+  as formulated in Low and List 1982(a) eqn 3.1 */
+  {
+    const double r1(drop1.radius);
+    const double r2(drop2.radius);
+    const double ratio = std::pow(r1, 3.0) / (1 + std::pow(r1/r2, 3.0));
+    
+    const double vdiff = (terminalv(drop1) - terminalv(drop2)) * dlc::W0; // [m/s]
+
+    const double cke_pi = DC::RHO_L / 12.0 * ratio * vdiff * vdiff;
+
+    return cke_pi;
+  }
+
+  double total_surfenergy(const Superdrop &drop1,
+                          const Superdrop &drop2)
+  /* returns total surface energy of drops divided by pi
+  as in equation 4.2 of Low and List 1982 */
+  {
+    constexpr double sigma = 7.28e-2;  // [J/m^-2]
+    constexpr double surfconst = 4.0 * sigma; // [J/m^-2]
+    const double r1(drop1.radius) * dlc::R0; // [m]
+    const double r2(drop2.radius) * dlc::R0; // [m] 
+
+    const double r2sum = (r1 * r1 + r2 * r2);
+    const double tot_surfe_pi =  surfconst * r2sum;
+    
+    return tot_surfe_pi // total surface energy / pi
+  }
+
+  double equivalent_surfenergy(const Superdrop &drop1,
+                               const Superdrop &drop2)
+  /* returns surface energy of single spherical equivalent of
+  drops divided by pi as in equation 4.3 of Low and List 1982 */
+  {
+    constexpr double sigma = 7.28e-2;  // [J/m^-2]
+    constexpr double surfconst = 4.0 * sigma; // [J/m^-2]
+    const double r1(drop1.radius) * dlc::R0; // [m]
+    const double r2(drop2.radius) * dlc::R0; // [m]  
+
+    const double r3sum = std::pow(r1, 3.0) + std::pow(r2, 3.0);
+    const double equiv_surfe_pi = surfconst * std::pow(r3sum, 2.0/3.0); 
+    
+    return equiv_surfe_pi // spherical equivalent surface energy / pi
+  }
+
+  double exponential(const double etot_pi, const double surf_c_pi)
+  /* calc exponential in eqn 4.5 Low and List 1982(a) given
+  total collision energy, etot/pi [J] and equivalent surface
+  energy, surf_c / pi [J] */
+  {
+    constexpr double bconst = -2.62e6; // [J^-2]
+    constexpr double sigma = 7.28e-2;  // [J/m^-2]
+
+    const double exponent = bconst * sigma * std::numbers::pi *
+                              etot_pi * etot_pi / surf_c_pi;
+
+    return std::exp(exponent);
+  }
+
+  double sizeratio_factor(const double r1, const double r2)
+  /* calc factor that takes into accoutn size ratio fo droplets in
+  eqn 4.5 Low and List 1982(a). */
+  {
+    const double alpha(1 + std::min(r1, r2) / std::max(r1, r2)); // alpha = 1 + Ds/Dl 
+    
+    return 1.0 / (alpha * alpha); // alpha^(-2)
+  }
+
+  double operator()(const Superdrop &drop1,
+                    const Superdrop &drop2) const
+  {
+    constexpr double aconst = 0.778;
+    constexpr double energylim = 5e-6 / std::numbers::pi ; // etot limit / pi [J]
+
+    const double surf_t_pi = total_surfenergy(drop1, drop2);        // [J] surft / pi
+    const double surf_c_pi = equivalent_surfenergy(drop1, drop2); // [J] surfc / pi
+    const double etot_pi = kinetic_energy(drop1, drop2) + surf_t - surf_c; // [J] total energy / pi
+
+    if (etot_pi < energylim)
+    {
+      const double exp = exponential(etot, surf_c);
+      const double radiiratio = sizeratio_factor(drop1.radius,
+                                                 drop2.radius);
+      const double coaleff = aconst * radiiratio * exp;
+      
+      const double eff = colleff(drop1, drop2) * coaleff;
+      return eff;
+    }
+    else // coaleff = 0.0
+    {
+      return 0.0;
+    }
+  }
+};
+
 HydrodynamicProb<LongKernelEfficiency, SimmelTerminalVelocity>
 LongCollCoalProb()
 /* returns the probability of collision-coalescence
 using Simmel et al. 2002's formulation of
 Long's Hydrodynamic Kernel */
 {
-  return HydrodynamicProb(LongKernelEfficiency{},
+  return HydrodynamicProb(LongKernelEfficiency{1.0},
                           SimmelTerminalVelocity{});
+}
+
+template <VelocityFormula TerminalVelocity>
+HydrodynamicProb<LowListKernelEfficiency, TerminalVelocity>
+LowListCoalProb(TerminalVelocity terminalv)
+/* returns the probability of collision-coalescence
+using Long's Hydrodynamic Kernel combined with
+the coalescence efficiency from Low and List 1982. */
+{
+  return HydrodynamicProb(LowListKernelEfficiency{terminalv},
+                          terminalv);
 }
 
 template <SDPairProbability CollisionXProbability>

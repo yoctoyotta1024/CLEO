@@ -129,7 +129,7 @@ combined process of those two individual processes */
                                               &step2realtime, probs_coal)); 
 
   // /* create process for collision-breakup in SDM */
-  // const auto probs_bu(LongCollBuProb());
+  // const auto probs_bu(LowListCollBuProb());
   // const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
   //                                       &step2realtime, probs_bu)); 
 
