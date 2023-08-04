@@ -135,7 +135,7 @@ private:
   }
 
   std::pair<Superdrop&, Superdrop&>
-  assign_superdroplet(const Superdrop &dropA, const Superdrop &dropB)
+  assign_superdroplet(const Superdrop &dropA, const Superdrop &dropB) const
   /* compare dropA.eps with dropB.eps and return (non-const)
   references to dropA and dropB in a pair {drop1, drop2}
   such that drop1.eps is always > drop2.eps */

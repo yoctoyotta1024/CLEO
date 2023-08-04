@@ -128,10 +128,10 @@ combined process of those two individual processes */
   const auto coal(CollisionCoalescenceProcess(mdlsteps.collsubstep,
                                               &step2realtime, probs_coal)); 
 
-  /* create process for collision-breakup in SDM */
-  const auto probs_bu(LongCollBuProb());
-  const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
-                                        &step2realtime, probs_bu)); 
+  // /* create process for collision-breakup in SDM */
+  // const auto probs_bu(LongCollBuProb());
+  // const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
+  //                                       &step2realtime, probs_bu)); 
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
   const auto sdmprocess = cond >> coal;
