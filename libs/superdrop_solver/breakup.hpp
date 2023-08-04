@@ -38,7 +38,7 @@ private:
 
     else
     {
-      std::string errormsg = "something undefined occured " +
+      std::string errormsg = "something undefined occured "
                              "during colllision-breakup" +
                              std::to_string(drop1.eps) + " < " +
                              std::to_string(gamma * (drop2.eps));

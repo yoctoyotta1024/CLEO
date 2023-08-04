@@ -49,7 +49,7 @@ private:
 
     else
     {
-      std::string errormsg = "something undefined occured " +
+      std::string errormsg = "something undefined occured "
                              "during colllision-coalescence" +
                              std::to_string(drop1.eps) + " < " +
                              std::to_string(gamma * (drop2.eps));
@@ -93,15 +93,47 @@ private:
     drop2.m_sol = drop2.m_sol + gamma * drop1.m_sol;
   }
 
+  unsigned long long monte_carlo_gamma(const unsigned long long eps1,
+                                       const unsigned long long eps2,
+                                       const double prob,
+                                       const double phi) const
+  /* calculates value of gamma factor in Monte Carlo
+  collision-x process adapted from collision-coalescence
+  process in Shima et al. 2009 */
+  {
+    unsigned long long gamma = 0;
+    if (phi < (prob - floor(prob)))
+    {
+      gamma = floor(prob) + 1;
+    }
+    else if (phi >= (prob - floor(prob)))
+    {
+      gamma = floor(prob);
+    }
+
+    const unsigned long long maxgamma(eps1 / eps2); // same as floor() for positive ints
+
+    return std::min(gamma, maxgamma);
+  }
+
 public:
-  void operator()(Superdrop &drop1,
-                  Superdrop &drop2,
-                  const unsigned long long gamma) const
+  void operator()(Superdrop &drop1, Superdrop &drop2,
+                  const double prob, const double phi) const
   /* this operator is used as an "adaptor" for using Coalescence
   as a function in CollisionsX that satistfies the SDPairEnactX
   concept */
   {
-    coalesce_superdroplet_pair(drop1, drop2, gamma);
+    /* 1. calculate gamma factor for collision-coalescence  */
+    const unsigned long long gamma = monte_carlo_gamma(drop1.eps,
+                                                       drop2.eps,
+                                                       prob, phi);
+
+    /* 2. enact collision-coalescence on pair
+    of superdroplets if gamma is not zero */
+    if (gamma != 0)
+    {
+      coalesce_superdroplet_pair(drop1, drop2, gamma);
+    }
   }
 };
 

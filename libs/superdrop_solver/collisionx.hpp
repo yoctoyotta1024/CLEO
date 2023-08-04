@@ -45,14 +45,15 @@ template <typename X>
 concept SDPairEnactX = requires(X x,
                                 Superdrop &d1,
                                 Superdrop &d2,
-                                const unsigned long long g)
+                                const double p,
+                                const double i)
 /* Objects that are of type SDPairEnactX
 takes a pair of superdrops and returns
 void (it may change the properties of
 the superdrops)*/
 {
   {
-    x(d1, d2, g)
+    x(d1, d2, p, i)
   } -> std::same_as<void>;
 };
 
@@ -120,23 +121,18 @@ private:
     Superdrop &drop1 = assign_superdroplet(dropA, dropB, "drop1");
     Superdrop &drop2 = assign_superdroplet(dropA, dropB, "drop2");
 
-    /* make copies of eps1 and eps2 for ease of use */
-    const unsigned long long eps1 = drop1.eps;
-    const unsigned long long eps2 = drop2.eps;
-
     /* 2. calculate scaled probability of pair collision-x
     according to Shima et al. 2009 ("p_alpha" in paper) */
     const double prob_jk = collisionx_probability(drop1, drop2, DELT, VOLUME);
-    const double prob = scale_p * std::max(eps1, eps2) * prob_jk;
+    const double prob = scale_p *
+                        std::max(drop1.eps, drop2.eps) *
+                        prob_jk;
 
-    /* 3. Monte Carlo step: randomly determine collision-x gamma factor */
-    const unsigned long long gamma = monte_carlo_gamma(urbg, prob, eps1, eps2);
-
-    /* 4. enact collision-x on pair of superdroplets if gamma != 0 */
-    if (gamma != 0)
-    {
-      enact_collisionx(drop1, drop2, gamma);
-    }
+    /* 3. Monte Carlo Step: use random number to enact (or not)
+    collision-x on pair of superdroplets */
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+    const double phi = dis(urbg); // phi is random number in range [0,1]
+    enact_collisionx(drop1, drop2, prob, phi);
   }
 
   Superdrop &assign_superdroplet(Superdrop &dropA, Superdrop &dropB,
@@ -167,33 +163,6 @@ private:
         return dropA;
       }
     }
-  }
-
-  template <class DeviceType>
-  unsigned long long monte_carlo_gamma(URBG<DeviceType> &urbg,
-                                       const double prob,
-                                       const unsigned long long eps1,
-                                       const unsigned long long eps2) const
-  /* calculates value of gamma factor in Monte Carlo
-  collision-x process adapted from collision-coalescence
-  process in Shima et al. 2009 */
-  {
-    std::uniform_real_distribution<> dis(0.0, 1.0);
-    const double phi = dis(urbg); // random number phi in range [0,1]
-
-    unsigned long long gamma = 0;
-    if (phi < (prob - floor(prob)))
-    {
-      gamma = floor(prob) + 1;
-    }
-    else if (phi >= (prob - floor(prob)))
-    {
-      gamma = floor(prob);
-    }
-
-    const unsigned long long maxgamma(eps1 / eps2); // same as floor() for positive ints
-
-    return std::min(gamma, maxgamma);
   }
 
 public:
