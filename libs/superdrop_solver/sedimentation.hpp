@@ -1,10 +1,10 @@
 // Author: Clara Bayley
-// File: sedimentationmethod.hpp
+// File: sedimentation.hpp
 /* Header file for method for
 sedimentation of superdroplets */
 
-#ifndef SEDIMENTATIONMETHOD_HPP
-#define SEDIMENTATIONMETHOD_HPP
+#ifndef SEDIMENTATION_HPP
+#define SEDIMENTATION_HPP
 
 #include <span>
 #include <random>
@@ -18,7 +18,7 @@ sedimentation of superdroplets */
 #include "./randomgen.hpp"
 
 template <VelocityFormula TerminalVelocity>
-class SedimentationMethod
+class Sedimentation
 /* class for implementing superdroplet sedimentation in SDM */
 {
 private:
@@ -33,7 +33,7 @@ private:
   }
 
 public:
-  SedimentationMethod(const double delt,
+  Sedimentation(const double delt,
                       const TerminalVelocity terminalv)
       : delt(delt),
         terminalv(terminalv) {}
@@ -71,7 +71,7 @@ given a function to convert the interval to a (dimensionless) time
 and a terminal velocity formula */
 {
   const double dimlesststep = int2time(interval);
-  return ConstTstepProcess{interval, SedimentationMethod(dimlesststep, v)};
+  return ConstTstepProcess{interval, Sedimentation(dimlesststep, v)};
 }
 
-#endif // SEDIMENTATIONMETHOD_HPP
+#endif // SEDIMENTATION_HPP

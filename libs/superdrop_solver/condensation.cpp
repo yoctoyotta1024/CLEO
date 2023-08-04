@@ -1,14 +1,14 @@
 // Author: Clara Bayley
-// File: condensationmethod.cpp
+// File: condensation.cpp
 /* Functionality for modelling condensation-
 diffusional growth/shrinking of superdroplets. Equations
 referenced as (eqn [X.YY]) are from "An Introduction
 To Clouds From The Microscale to Climate" by
 Lohmann, Luond and Mahrt, 1st edition. */
 
-#include "condensationmethod.hpp"
+#include "condensation.hpp"
 
-std::pair<double, double> CondensationMethod::
+std::pair<double, double> Condensation::
     diffusion_factors(const double press,
                       const double temp,
                       const double psat) const
@@ -37,7 +37,7 @@ std::pair<double, double> CondensationMethod::
   return std::pair(fkl, fdl);
 }
 
-double CondensationMethod::superdroplet_growth_by_condensation(const double press,
+double Condensation::superdroplet_growth_by_condensation(const double press,
                                                                const double temp, const double psat,
                                                                const double s_ratio, const double delt,
                                                                const ImplicitEuler &impliciteuler, Superdrop &drop) const
@@ -64,7 +64,7 @@ double CondensationMethod::superdroplet_growth_by_condensation(const double pres
   return mass_condensed;
 }
 
-void CondensationMethod::condensation_alters_thermostate(ThermoState &state,
+void Condensation::condensation_alters_thermostate(ThermoState &state,
                                                           const double tot_rho_condensed) const
 /* change the thermodynamic variables (temp, qv and qc) of
 ThermoState state given the total change in condensed
@@ -81,7 +81,7 @@ water mass per volume during time interval delt */
   state.qcond += delta_qcond;
 }
 
-void CondensationMethod::condensation_onto_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
+void Condensation::condensation_onto_superdroplets(std::span<SuperdropWithGbxindex> span4SDsinGBx,
                                                          ThermoState &state) const
 /* Change to superdroplet radii and temp, qv and
 qc due to sum of radii changes via diffusion and

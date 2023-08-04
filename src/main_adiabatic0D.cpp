@@ -42,7 +42,7 @@ coupled with a CVODE ode solver for the thermodynamics
 /* sdm superdroplets setup */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
-#include "superdrop_solver/condensationmethod.hpp"
+#include "superdrop_solver/condensation.hpp"
 
 /* thermodynamics solver and coupled model setup */
 #include "cvodecoupld/run_cvodecoupld.hpp"
