@@ -178,8 +178,7 @@ struct LongKernelEfficiency
     constexpr double A1 = 4.5e4 * dlc::R0 * dlc::R0; // constants in efficiency calc if larger droplet's radius < rlim
     constexpr double A2 = 3e-4 / dlc::R0;
 
-    const double bigr = std::max(drop1.radius, drop2.radius);
-    const double smallr = std::min(drop1.radius, drop2.radius);
+    const auto [smallr, bigr] = std::minmax(drop1.radius, drop2.radius);
 
     /* calculate collision-coalescence efficiency, eff = colleff * coaleff */
     double colleff(1.0);
