@@ -47,9 +47,8 @@ private:
   }
 
 public:
-  void operator()(Superdrop &drop1,
-                  Superdrop &drop2,
-                  const unsigned long long gamma) const
+  void operator()(Superdrop &drop1, Superdrop &drop2,
+                  const double prob, const double phi) const
   /* this operator is used as an "adaptor" for using Breakup
   as a function in CollisionsX that satistfies the SDPairEnactX
   concept */
@@ -57,5 +56,18 @@ public:
     superdroplet_pair_breakup(drop1, drop2, gamma);
   }
 };
+
+template <SDPairProbability CollisionXProbability>
+SdmProcess auto CollisionBreakupProcess(const int interval,
+                                        const std::function<double(int)> int2time,
+                                        const CollisionXProbability p)
+{
+  const double realtstep = int2time(interval);
+
+  CollisionX<CollisionXProbability, Breakup>
+      bus(realtstep, p, Breakup{});
+
+  return ConstTstepProcess{interval, bus};
+}
 
 #endif // BREAKUP_HPP
