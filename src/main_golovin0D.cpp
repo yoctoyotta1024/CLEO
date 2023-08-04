@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
   const auto sdmprocess(
       CollisionCoalescenceProcess(mdlsteps.collsubstep,
                                   &step2realtime,
-                                  GolovinCoalProb(dlc::R0)));
+                                  GolovinCollCoalProb()));
   const MoveSuperdropsInDomain sdmmotion(NullMotion{});
 
   /* create observer from combination of chosen observers */

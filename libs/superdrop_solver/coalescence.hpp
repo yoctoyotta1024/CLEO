@@ -111,8 +111,8 @@ a pair of droplets according to Golovin 1963
 {
   const double prob_jk_const;
 
-  GolovinCollCoalProb(const double R0)
-      : prob_jk_const(1.5e3 * (pow(R0, 3.0))) {}
+  GolovinCollCoalProb()
+      : prob_jk_const(1.5e3 * (pow(dlc::R0, 3.0))) {}
 
   double operator()(const Superdrop &drop1,
                           const Superdrop &drop2,
