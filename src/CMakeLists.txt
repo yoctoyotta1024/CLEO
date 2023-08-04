@@ -49,7 +49,7 @@ target_link_libraries(${golovin0D} PUBLIC Kokkos::kokkos)
 target_compile_options(${golovin0D} PRIVATE ${compileops})
 
 # executable for CVODE-CLEO coupled model 0D condensation setup 
-set(adiabatic0D "adiabatic0D0D")
+set(adiabatic0D "adiabatic0D")
 add_executable(${adiabatic0D} EXCLUDE_FROM_ALL "main_adiabatic0D.cpp")
 target_link_libraries(${adiabatic0D} PRIVATE cvodecoupld "${SDMLIBS}")
 target_link_libraries(${adiabatic0D} PUBLIC Kokkos::kokkos)
