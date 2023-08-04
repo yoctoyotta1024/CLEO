@@ -118,8 +118,8 @@ private:
   {
     /* 1. assign references to each superdrop in pair
     that will collide such that (drop1.eps) >= (drop2.eps) */
-    Superdrop &drop1 = assign_superdroplet(dropA, dropB, "drop1");
-    Superdrop &drop2 = assign_superdroplet(dropA, dropB, "drop2");
+    Superdrop &drop1 = assign_superdroplet(dropA, dropB, 1);
+    Superdrop &drop2 = assign_superdroplet(dropA, dropB, 2);
 
     /* 2. calculate scaled probability of pair collision-x
     according to Shima et al. 2009 ("p_alpha" in paper) */
@@ -136,17 +136,17 @@ private:
   }
 
   Superdrop &assign_superdroplet(Superdrop &dropA, Superdrop &dropB,
-                                 const std::string whichdrop) const
+                                 const unsigned int whichdrop) const
   /* compare dropA.eps with dropB.eps and return either
   drop1 or drop2 such that drop1.eps is always > drop2.eps */
   {
     if (dropA.eps > dropB.eps)
     {
-      if (whichdrop == "drop1")
+      if (whichdrop == 1) // "drop1"
       {
         return dropA;
       }
-      else
+      else // "drop2"
       {
         return dropB;
       }
@@ -154,11 +154,11 @@ private:
 
     else
     {
-      if (whichdrop == "drop1")
+      if (whichdrop == 1) // "drop1"
       {
         return dropB;
       }
-      else
+      else // "drop2"
       {
         return dropA;
       }
