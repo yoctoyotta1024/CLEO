@@ -3,7 +3,7 @@
 /* This file runs the entire superdrop model (SDM)
 thermodynamics read from binaries files
 (p, temp, qv and qc) over time for golovin's
-collision-coalscence kernel */
+collision-coalescence kernel */
 
 // after make/compiling, execute for example via:
 // ./src/golovin0D "../src/config/config.txt" "../libs/claras_SDconstants.hpp"

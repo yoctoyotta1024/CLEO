@@ -39,7 +39,7 @@ private:
 
 
   void twin_superdroplet_breakup(Superdrop &drop1,
-                                Superdrop &drop2) const
+                                 Superdrop &drop2) const
   /* if eps1 = gamma*eps2 breakup of same multiplicity SDs 
   produces (non-identical) twin SDs. Similar to
   Shima et al. 2009 Section 5.1.3. part (5) option (b)  */
@@ -103,9 +103,9 @@ SdmProcess auto CollisionBreakupProcess(const int interval,
   const double realtstep = int2time(interval);
 
   CollisionX<CollisionXProbability, Breakup>
-      bus(realtstep, p, Breakup{});
+      bu(realtstep, p, Breakup{});
 
-  return ConstTstepProcess{interval, bus};
+  return ConstTstepProcess{interval, bu};
 }
 
 #endif // BREAKUP_HPP

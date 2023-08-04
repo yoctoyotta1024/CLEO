@@ -124,21 +124,19 @@ combined process of those two individual processes */
 
   /* create process for collision-coalescene in SDM */
   // const auto probs(GolovinCollCoalProb());
-  const auto probs(LongCollCoalProb());
-  const auto coals(CollisionCoalescenceProcess(mdlsteps.collsubstep,
-                                               &step2realtime, probs));
+  const auto probs_coal(LongCollCoalProb());
+  const auto coal(CollisionCoalescenceProcess(mdlsteps.collsubstep,
+                                              &step2realtime, probs_coal)); 
 
-  /* create process for sedimentation in SDM -> n.b. this has moved to sdmmotion*/
-  // // const auto terminalv(RogersYauTerminalVelocity{});
-  // const auto terminalv(SimmelTerminalVelocity{});
-  // const auto sedi(SedimentationProcess(mdlsteps.motionstep,
-  //                                        &step2dimlesstime,
-  //                                        terminalv));
+  /* create process for collision-breakup in SDM */
+  const auto probs_bu(LongCollBuProb());
+  const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
+                                        &step2realtime, probs_bu)); 
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  const auto sdmprocess = cond >> coals;
+  const auto sdmprocess = cond >> coal;
   // const auto sdmprocess = cond;
-  // const auto sdmprocess = coals;
+  // const auto sdmprocess = coal;
 
   return sdmprocess;
   // return NullProcess{};

@@ -66,9 +66,9 @@ template <VelocityFormula TerminalVelocity>
 SdmProcess auto SedimentationProcess(const int interval,
                                      const std::function<double(int)> int2time,
                                      const TerminalVelocity v)
-/* constructs SdmProcess for sedimentation with constant timestep 'interval'
-given a function to convert the interval to a (dimensionless) time
-and a terminal velocity formula */
+/* constructs SdmProcess for sedimentation with constant
+timestep 'interval' given a function to convert the interval
+to a (dimensionless) time and a terminal velocity formula */
 {
   const double dimlesststep = int2time(interval);
   return ConstTstepProcess{interval, Sedimentation(dimlesststep, v)};

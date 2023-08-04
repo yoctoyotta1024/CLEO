@@ -213,9 +213,9 @@ SdmProcess auto CollisionCoalescenceProcess(const int interval,
   const double realtstep = int2time(interval);
 
   CollisionX<CollisionXProbability, Coalescence>
-      coals(realtstep, p, Coalescence{});
+      coal(realtstep, p, Coalescence{});
 
-  return ConstTstepProcess{interval, coals};
+  return ConstTstepProcess{interval, coal};
 }
 
 #endif // COALESCENCE_HPP
