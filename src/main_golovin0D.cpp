@@ -43,9 +43,7 @@ collision-coalscence kernel */
 /* sdm superdroplets setup */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
-#include "superdrop_solver/collisionkernels.hpp"
 #include "superdrop_solver/coalescence.hpp"
-#include "superdrop_solver/collisionx.hpp"
 
 /* thermodynamics solver and coupled model setup */
 #include "thermofromfile/run_thermofromfile.hpp"

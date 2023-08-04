@@ -46,9 +46,7 @@ SDM process and observers to use in main.cpp */
 /* sdm superdroplets setup */
 #include "superdrop_solver/thermodynamic_equations.hpp"
 #include "superdrop_solver/sdmprocess.hpp"
-#include "superdrop_solver/collisionkernels.hpp"
 #include "superdrop_solver/coalescence.hpp"
-#include "superdrop_solver/collisionx.hpp"
 #include "superdrop_solver/condensationmethod.hpp"
 #include "superdrop_solver/sedimentationmethod.hpp"
 #include "superdrop_solver/terminalvelocity.hpp"
@@ -125,7 +123,7 @@ combined process of those two individual processes */
 
   /* create process for collision-coalescene in SDM */
   // const auto probs{GolovinCoalProb(dlc::R0)};
-  const auto probs{LongHydrodynamicCoalProb()};
+  const auto probs(LongHydroCollCoalProb());
   const auto coals(CollisionCoalescenceProcess(mdlsteps.collsubstep,
                                                &step2realtime, probs));
 

@@ -2,15 +2,28 @@
 // File: coalescence.hpp
 /* Header file for class that enacts
 collision-coalescence events in
-superdroplet model using collisions template */
+superdroplet model. Coalescence struct 
+satisfies SDPairEnactX concept used in
+CollisionX struct. Probability calculations
+are contained in structures that satisfy the
+requirements of the SDPairProbability
+concept also used by CollisionX struct */
 
 #ifndef COALESCENCE_HPP
 #define COALESCENCE_HPP
 
 #include <string>
 #include <stdexcept>
+#include <algorithm>
+#include <functional>
+#include <concepts>
 
+#include "../claras_SDconstants.hpp"
 #include "./superdrop.hpp"
+#include "./hydrodynamicprob.hpp"
+#include "./collisionx.hpp"
+
+namespace dlc = dimless_constants;
 
 class Coalescence
 /* class is method for coalescence between
@@ -90,5 +103,91 @@ public:
     coalesce_superdroplet_pair(drop1, drop2, gamma);
   }
 };
+
+struct GolovinCollCoalProb
+/* Probability of collision-coalescence of
+a pair of droplets according to Golovin 1963
+(see e.g. Shima et al. 2009) */
+{
+  const double prob_jk_const;
+
+  GolovinCollCoalProb(const double R0)
+      : prob_jk_const(1.5e3 * (pow(R0, 3.0))) {}
+
+  double operator()(const Superdrop &drop1,
+                          const Superdrop &drop2,
+                          const double DELT,
+                          const double VOLUME) const
+  /* returns probability that a pair of droplets coalesces
+  according to Golovin's (sum of volumes) coalescence kernel. 
+  Prob equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol where 
+  K(drop1, drop2) := C(drop1, drop2) * |v1−v2|, (see Shima 2009 eqn 3),
+  and K(drop1, drop2) is Golovin 1963 (coalescence) kernel */
+  {
+    const double DELT_DELVOL = DELT / VOLUME;                                   // time interval / volume for which collision probability is calculated [s/m^3]
+    const double golovins_kernel = prob_jk_const * (drop1.vol() + drop2.vol()); // Golovin 1963 coalescence kernel
+   
+    const double prob_jk = golovins_kernel * DELT_DELVOL;
+   
+    return prob_jk;
+  }
+};
+
+struct LongKernelEfficiency
+/* Collision-Coalescence Efficiency factor in Long's
+  Hydrodynamic kernel according to Simmel et al. 2002.
+  eff = collision-coalescence efficiency E(R,r) where R>r.
+  eff = colleff(R,r) * coaleff(R,r) (see eqn 12 Simmel et al. 2002).
+  Here it's assumed that coaleff(R,r) = 1, which also means that
+  for collisions where R > rlim, eff(R,r) = colleff(R,r) = 1. */
+{
+  double operator()(const Superdrop &drop1,
+                    const Superdrop &drop2) const
+  {
+    constexpr double coaleff = 1.0;
+    constexpr double rlim = 5e-5 / dlc::R0;          // 50 micron limit to determine collision-coalescence efficiency (eff)
+    constexpr double colleff_lim = 0.001;            // minimum efficiency if larger droplet's radius < rlim
+    constexpr double A1 = 4.5e4 * dlc::R0 * dlc::R0; // constants in efficiency calc if larger droplet's radius < rlim
+    constexpr double A2 = 3e-4 / dlc::R0;
+
+    const double bigr = std::max(drop1.radius, drop2.radius);
+    const double smallr = std::min(drop1.radius, drop2.radius);
+
+    /* calculate collision-coalescence efficiency, eff = colleff * coaleff */
+    double colleff(1.0);
+    if (bigr < rlim)
+    {
+      const double colleff_calc = A1 * pow(bigr, 2.0) * (1 - A2/smallr);
+      colleff = std::max(colleff_calc, colleff_lim); // colleff >= colleff_lim
+    }
+    
+    const double eff = colleff * coaleff;
+
+    return eff;
+  }
+};
+
+HydrodynamicProb<LongKernelEfficiency, SimmelTerminalVelocity>
+LongCollCoalProb()
+/* returns the probability of collision-coalescence
+using Simmel et al. 2002's formulation of
+Long's Hydrodynamic Kernel */
+{
+  return HydrodynamicProb(LongKernelEfficiency{},
+                          SimmelTerminalVelocity{});
+}
+
+template <SDPairProbability CollisionXProbability>
+SdmProcess auto CollisionCoalescenceProcess(const int interval,
+                                            const std::function<double(int)> int2time,
+                                            const CollisionXProbability p)
+{
+  const double realtstep = int2time(interval);
+  
+  CollisionX<CollisionXProbability, Coalescence>
+      coals(realtstep, p, Coalescence{});
+
+  return ConstTstepProcess{interval, coals};
+}
 
 #endif // COALESCENCE_HPP

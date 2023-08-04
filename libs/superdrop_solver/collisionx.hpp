@@ -8,20 +8,18 @@ collision-breakups */
 #ifndef COLLISIONX_HPP
 #define COLLISIONX_HPP
 
-#include <concepts>
-#include <random>
 #include <algorithm>
-#include <string>
-#include <iostream>
-#include <span>
 #include <cmath>
-#include <functional>
 #include <concepts>
+#include <iostream>
+#include <functional>
+#include <random>
+#include <span>
+#include <string>
 
 #include "../claras_SDconstants.hpp"
 #include "./superdrop.hpp"
 #include "./thermostate.hpp"
-#include "./coalescence.hpp"
 #include "./sdmprocess.hpp"
 #include "./randomgen.hpp"
 
@@ -219,18 +217,5 @@ public:
     collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
   }
 };
-
-template <SDPairProbability CollisionXProbability>
-SdmProcess auto CollisionCoalescenceProcess(const int interval,
-                                            const std::function<double(int)> int2time,
-                                            const CollisionXProbability p)
-{
-  const double realtstep = int2time(interval);
-  
-  CollisionX<CollisionXProbability, Coalescence>
-      coals(realtstep, p, Coalescence{});
-
-  return ConstTstepProcess{interval, coals};
-}
 
 #endif // COLLISIONX_HPP
