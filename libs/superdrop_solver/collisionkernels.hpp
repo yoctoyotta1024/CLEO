@@ -61,25 +61,68 @@ efficiency factor for a collision kernel) */
   } -> std::convertible_to<double>;
 };
 
-struct SimmelCollCoalEfficiency
+template <KernelEfficiency Efficiency,
+          VelocityFormula TerminalVelocity>
+struct HydrodynamicProb
+{
+  const double prob_jk_const;
+  const Efficiency eff;
+  const TerminalVelocity terminalv;
+
+  HydrodynamicProb(Efficiency e, TerminalVelocity tv)
+      : prob_jk_const(M_PI * pow(dlc::R0, 2.0) * dlc::W0),
+        eff(e),
+        terminalv(tv) {}
+
+  double operator()(const Superdrop &drop1,
+                    const Superdrop &drop2,
+                    const double DELT,
+                    const double VOLUME) const
+  /* returns probability that a pair of droplets collide (and coalesce
+  or breakup) according to Long's formulation of the 
+  hydrodynamic i.e. gravitational collision-interaction kernel.
+  Probability equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol
+  where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|,
+  (see Shima 2009 eqn 3), is the hydrodynamic collision-interaction
+  kernel, for example expressed in equation 11 of Simmel at al. 2002
+  for collision-coalescence */
+  {
+    /* time interval / volume for which
+    probability is calculated [s/m^3] */
+    const double DELT_DELVOL = DELT / VOLUME;  
+
+    /* calculate Hydrodynamic Kernel*/                                 
+    const double sumrsqrd = pow((drop1.radius + drop2.radius), 2.0);
+    const double vdiff = std::abs(terminalv(drop1) - terminalv(drop2));
+    const double hydro_kernel = prob_jk_const * sumrsqrd *
+                                eff(drop1, drop2) * vdiff;
+
+    /* calculate probability prob_jk analogous Shima 2009 eqn 3 */
+    const double prob_jk = hydro_kernel * DELT_DELVOL;
+    
+    return prob_jk;
+  }
+};
+
+struct LongKernelEfficiency
 /* Collision-Coalescence Efficiency factor in Long's
-  Hydropdynamic kernel according to Simmel at al. 2002.
+  Hydrodynamic kernel according to Simmel et al. 2002.
   eff = collision-coalescence efficiency E(R,r) where R>r.
-  eff = colleff(R,r) * coaleff(R,r). Here it's assumed that
-  coaleff(R,r) = 1, which also means that for collisions
-  where R > rlim, eff(R,r) = colleff(R,r) = 1. */
+  eff = colleff(R,r) * coaleff(R,r) (see eqn 12 Simmel et al. 2002).
+  Here it's assumed that coaleff(R,r) = 1, which also means that
+  for collisions where R > rlim, eff(R,r) = colleff(R,r) = 1. */
 {
   double operator()(const Superdrop &drop1,
                     const Superdrop &drop2)
   {
     constexpr double coaleff = 1.0;
-    constexpr double rlim = 5e-5 / dlc::R0;    // 50 micron limit to determine collision-coalescence efficiency (eff)
-    constexpr double colleff_lim = 0.001;      // minimum efficiency if larger droplet's radius < rlim
+    constexpr double rlim = 5e-5 / dlc::R0;          // 50 micron limit to determine collision-coalescence efficiency (eff)
+    constexpr double colleff_lim = 0.001;            // minimum efficiency if larger droplet's radius < rlim
     constexpr double A1 = 4.5e4 * dlc::R0 * dlc::R0; // constants in efficiency calc if larger droplet's radius < rlim
     constexpr double A2 = 3e-4 / dlc::R0;
 
     const double bigr = std::max(drop1.radius, drop2.radius);
-    const double smallr = std::min(drop1.radius, drop2.radius); 
+    const double smallr = std::min(drop1.radius, drop2.radius);
 
     /* calculate collision-coalescence efficiency, eff = colleff * coaleff */
     double colleff(1.0);
@@ -95,45 +138,11 @@ struct SimmelCollCoalEfficiency
   }
 };
 
-template <KernelEfficiency EfficiencyFactor>
-struct LongHydrodynamicProb
+HydrodynamicProb<LongKernelEfficiency, SimmelTerminalVelocity>
+LongHydrodynamicCollCoalProb()
 {
-  const double prob_jk_const;
-  EfficiencyFactor eff;
-  const SimmelTerminalVelocity terminalv;
-
-  LongHydrodynamicProb(EfficiencyFactor e)
-      : prob_jk_const(M_PI * pow(dlc::R0, 2.0) * dlc::W0),
-        eff(e),
-        terminalv(SimmelTerminalVelocity{}) {}
-
-  double operator()(const Superdrop &drop1,
-                    const Superdrop &drop2,
-                    const double DELT,
-                    const double VOLUME) const
-  /* returns probability that a pair of droplets collide (and coalesce
-  or breakup) according to Long's (hydrodynamic i.e. gravitational)
-  collision-coalescence kernel.
-  Probability equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol
-  where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|,
-  (see Shima 2009 eqn 3), is Long's collision-coalescence kernel,
-  for example as expressed in Simmel at al. 2002 */
-  {
-    /* time interval / volume for which
-    probability is calculated [s/m^3] */
-    const double DELT_DELVOL = DELT / VOLUME;  
-
-    /* calculate Long's Kernel*/                                 
-    const double sumrsqrd = pow((drop1.radius + drop2.radius), 2.0);
-    const double vdiff = std::abs(terminalv(drop1) - terminalv(drop2));
-    const double longs_kernel = prob_jk_const * eff(drop1, drop2) *
-                                sumrsqrd * vdiff;
-
-    /* calculate probability prob_jk analogous Shima 2009 eqn 3 */
-    const double prob_jk = longs_kernel * DELT_DELVOL;
-    
-    return prob_jk;
-  }
-};
+  return HydrodynamicProb(LongKernelEfficiency{},
+                          SimmelTerminalVelocity{});
+}
 
 #endif // COLLISIONKERNELS_HPP 
