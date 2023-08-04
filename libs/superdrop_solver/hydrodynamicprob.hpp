@@ -3,11 +3,11 @@
 /* Header file for calculation of
 probability of collision-coalescence
 or collision-breakup between two
-droplets using the hydrodynamic 
+droplets using the hydrodynamic
 ie. gravitational kernel */
 
-#ifndef HYDRODYNAMICPROB_HPP 
-#define HYDRODYNAMICPROB_HPP 
+#ifndef HYDRODYNAMICPROB_HPP
+#define HYDRODYNAMICPROB_HPP
 
 #include <concepts>
 #include <cmath>
@@ -50,7 +50,7 @@ struct HydrodynamicProb
                     const double DELT,
                     const double VOLUME) const
   /* returns probability that a pair of droplets collide (and coalesce
-  or breakup) according to Long's formulation of the 
+  or breakup) according to Long's formulation of the
   hydrodynamic i.e. gravitational collision-interaction kernel.
   Probability equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol
   where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|,
@@ -60,9 +60,9 @@ struct HydrodynamicProb
   {
     /* time interval / volume for which
     probability is calculated [s/m^3] */
-    const double DELT_DELVOL = DELT / VOLUME;  
+    const double DELT_DELVOL = DELT / VOLUME;
 
-    /* calculate Hydrodynamic Kernel*/                                 
+    /* calculate Hydrodynamic Kernel*/
     const double sumrsqrd = pow((drop1.radius + drop2.radius), 2.0);
     const double vdiff = std::abs(terminalv(drop1) - terminalv(drop2));
     const double hydro_kernel = prob_jk_const * sumrsqrd *
@@ -70,9 +70,9 @@ struct HydrodynamicProb
 
     /* calculate probability prob_jk analogous Shima 2009 eqn 3 */
     const double prob_jk = hydro_kernel * DELT_DELVOL;
-    
+
     return prob_jk;
   }
 };
 
-#endif // HYDRODYNAMICPROB_HPP 
+#endif // HYDRODYNAMICPROB_HPP

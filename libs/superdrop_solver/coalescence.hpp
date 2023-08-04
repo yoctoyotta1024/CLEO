@@ -2,7 +2,7 @@
 // File: coalescence.hpp
 /* Header file for class that enacts
 collision-coalescence events in
-superdroplet model. Coalescence struct 
+superdroplet model. Coalescence struct
 satisfies SDPairEnactX concept used in
 CollisionX struct. Probability calculations
 are contained in structures that satisfy the
@@ -49,9 +49,10 @@ private:
 
     else
     {
-      std::string errormsg = "something undefined occured during colllision-coalescence" +
+      std::string errormsg = "something undefined occured " +
+                             "during colllision-coalescence" +
                              std::to_string(drop1.eps) + " < " +
-                             std::to_string(gamma * (drop2.eps)) + " ?";
+                             std::to_string(gamma * (drop2.eps));
       throw std::invalid_argument(errormsg);
     }
   }
@@ -91,12 +92,12 @@ private:
     drop2.radius = pow(new_rcubed, (1.0 / 3.0));
     drop2.m_sol = drop2.m_sol + gamma * drop1.m_sol;
   }
-  
+
 public:
   void operator()(Superdrop &drop1,
                   Superdrop &drop2,
                   const unsigned long long gamma) const
-  /* this operator is used as an "adaptor" for using Coalescence 
+  /* this operator is used as an "adaptor" for using Coalescence
   as a function in CollisionsX that satistfies the SDPairEnactX
   concept */
   {
@@ -115,20 +116,20 @@ a pair of droplets according to Golovin 1963
       : prob_jk_const(1.5e3 * (pow(dlc::R0, 3.0))) {}
 
   double operator()(const Superdrop &drop1,
-                          const Superdrop &drop2,
-                          const double DELT,
-                          const double VOLUME) const
+                    const Superdrop &drop2,
+                    const double DELT,
+                    const double VOLUME) const
   /* returns probability that a pair of droplets coalesces
-  according to Golovin's (sum of volumes) coalescence kernel. 
-  Prob equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol where 
+  according to Golovin's (sum of volumes) coalescence kernel.
+  Prob equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol where
   K(drop1, drop2) := C(drop1, drop2) * |v1−v2|, (see Shima 2009 eqn 3),
   and K(drop1, drop2) is Golovin 1963 (coalescence) kernel */
   {
     const double DELT_DELVOL = DELT / VOLUME;                                   // time interval / volume for which collision probability is calculated [s/m^3]
     const double golovins_kernel = prob_jk_const * (drop1.vol() + drop2.vol()); // Golovin 1963 coalescence kernel
-   
+
     const double prob_jk = golovins_kernel * DELT_DELVOL;
-   
+
     return prob_jk;
   }
 };
@@ -157,10 +158,10 @@ struct LongKernelEfficiency
     double colleff(1.0);
     if (bigr < rlim)
     {
-      const double colleff_calc = A1 * pow(bigr, 2.0) * (1 - A2/smallr);
+      const double colleff_calc = A1 * pow(bigr, 2.0) * (1 - A2 / smallr);
       colleff = std::max(colleff_calc, colleff_lim); // colleff >= colleff_lim
     }
-    
+
     const double eff = colleff * coaleff;
 
     return eff;
@@ -183,7 +184,7 @@ SdmProcess auto CollisionCoalescenceProcess(const int interval,
                                             const CollisionXProbability p)
 {
   const double realtstep = int2time(interval);
-  
+
   CollisionX<CollisionXProbability, Coalescence>
       coals(realtstep, p, Coalescence{});
 

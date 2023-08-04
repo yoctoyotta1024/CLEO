@@ -46,7 +46,7 @@ concept SDPairEnactX = requires(X x,
                                 Superdrop &d1,
                                 Superdrop &d2,
                                 const unsigned long long g)
-/* Objects that are of type SDPairEnactX 
+/* Objects that are of type SDPairEnactX
 takes a pair of superdrops and returns
 void (it may change the properties of
 the superdrops)*/
@@ -206,9 +206,9 @@ public:
 
   template <class DeviceType>
   void operator()(const int currenttimestep,
-                         std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                         ThermoState &state,
-                         URBG<DeviceType> &urbg) const
+                  std::span<SuperdropWithGbxindex> span4SDsinGBx,
+                  ThermoState &state,
+                  URBG<DeviceType> &urbg) const
   /* this operator is used as an "adaptor" for using a run_step
   function in order to call collide_superdroplets. (*hint* run_step
   is usually found within a type that satisfies the SdmProcess concept) */
