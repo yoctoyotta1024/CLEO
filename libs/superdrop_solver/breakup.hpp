@@ -46,6 +46,26 @@ private:
     }
   }
 
+  unsigned int breakup_gamma(const unsigned long long eps1,
+                             const unsigned long long eps2,
+                             const double prob,
+                             const double phi) const
+  /* calculates value of gamma factor in Monte Carlo
+  collision-breakup, adapted from gamma for collision-
+  coalescence in Shima et al. 2009. Here is is assumed
+  maximally 1 breakup event can occur (gamma = 0 or 1)
+  irrespective of if scaled probability, prob, is > 1 */
+  {
+    if (phi < (prob - floor(prob)))
+    {
+      return 1;
+    }
+    else // if phi >= (prob - floor(prob))
+    {
+      return 0;
+    }
+  }
+
 public:
   void operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const
@@ -53,7 +73,17 @@ public:
   as a function in CollisionsX that satistfies the SDPairEnactX
   concept */
   {
-    superdroplet_pair_breakup(drop1, drop2, gamma);
+    /* 1. calculate gamma factor for collision-breakup  */
+    const unsigned int gamma = breakup_gamma(drop1.eps,
+                                             drop2.eps,
+                                             prob, phi);
+
+    /* 2. enact collision-breakup on pair
+    of superdroplets if gamma is not zero */
+    if (gamma != 0)
+    {
+      superdroplet_pair_breakup(drop1, drop2, gamma);
+    }
   }
 };
 

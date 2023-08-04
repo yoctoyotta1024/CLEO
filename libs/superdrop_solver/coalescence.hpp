@@ -93,22 +93,17 @@ private:
     drop2.m_sol = drop2.m_sol + gamma * drop1.m_sol;
   }
 
-  unsigned long long monte_carlo_gamma(const unsigned long long eps1,
+  unsigned long long coalescence_gamma(const unsigned long long eps1,
                                        const unsigned long long eps2,
                                        const double prob,
                                        const double phi) const
   /* calculates value of gamma factor in Monte Carlo
-  collision-x process adapted from collision-coalescence
-  process in Shima et al. 2009 */
+  collision-coalescence as in Shima et al. 2009 */
   {
-    unsigned long long gamma = 0;
-    if (phi < (prob - floor(prob)))
+    unsigned long long gamma = floor(prob); // if phi >= (prob - floor(prob))
+    if (phi < (prob - gamma))
     {
-      gamma = floor(prob) + 1;
-    }
-    else if (phi >= (prob - floor(prob)))
-    {
-      gamma = floor(prob);
+      ++gamma;
     }
 
     const unsigned long long maxgamma(eps1 / eps2); // same as floor() for positive ints
@@ -124,7 +119,7 @@ public:
   concept */
   {
     /* 1. calculate gamma factor for collision-coalescence  */
-    const unsigned long long gamma = monte_carlo_gamma(drop1.eps,
+    const unsigned long long gamma = coalescence_gamma(drop1.eps,
                                                        drop2.eps,
                                                        prob, phi);
 
