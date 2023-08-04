@@ -118,8 +118,7 @@ private:
   {
     /* 1. assign references to each superdrop in pair
     that will collide such that (drop1.eps) >= (drop2.eps) */
-    Superdrop &drop1 = assign_superdroplet(dropA, dropB, 1);
-    Superdrop &drop2 = assign_superdroplet(dropA, dropB, 2);
+    auto [drop1, drop2] = assign_superdroplet(dropA, dropB);
 
     /* 2. calculate scaled probability of pair collision-x
     according to Shima et al. 2009 ("p_alpha" in paper) */
@@ -135,34 +134,20 @@ private:
     enact_collisionx(drop1, drop2, prob, phi);
   }
 
-  Superdrop &assign_superdroplet(Superdrop &dropA, Superdrop &dropB,
-                                 const unsigned int whichdrop) const
-  /* compare dropA.eps with dropB.eps and return either
-  drop1 or drop2 such that drop1.eps is always > drop2.eps */
+  std::pair<Superdrop&, Superdrop&>
+  assign_superdroplet(const Superdrop &dropA, const Superdrop &dropB)
+  /* compare dropA.eps with dropB.eps and return (non-const)
+  references to dropA and dropB in a pair {drop1, drop2}
+  such that drop1.eps is always > drop2.eps */
   {
-    if (dropA.eps > dropB.eps)
+    auto comp = [](const Superdrop &dropA, const Superdrop &dropB)
     {
-      if (whichdrop == 1) // "drop1"
-      {
-        return dropA;
-      }
-      else // "drop2"
-      {
-        return dropB;
-      }
-    }
+      return dropA.eps < dropB.eps; //returns true if epsA < epsB
+    };
 
-    else
-    {
-      if (whichdrop == 1) // "drop1"
-      {
-        return dropB;
-      }
-      else // "drop2"
-      {
-        return dropA;
-      }
-    }
+    auto [drop2, drop1] = std::minmax(dropA, dropB, comp); // drop2.eps =< drop1.eps
+
+    return {const_cast<Superdrop&>(drop1), const_cast<Superdrop&>(drop2)};
   }
 
 public:

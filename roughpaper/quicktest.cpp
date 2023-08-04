@@ -4,188 +4,81 @@
 #include <limits>
 #include <memory>
 #include <vector>
+#include <algorithm>
 
-void dtype_sizes()
-{ 
-  const auto sz = std::numeric_limits<size_t>::max();
-  const auto u = std::numeric_limits<unsigned int>::max();
-  const auto ul = std::numeric_limits<unsigned long>::max();
-  const auto ull = std::numeric_limits<unsigned long long>::max();
-  
-  const auto dbl = std::numeric_limits<double>::max();
-  
-  std::cout << "szt max: " << sz << ", bytes:" << sizeof(sz) <<"\n";
-  std::cout << "uuu max: " << u << ", bytes:" << sizeof(u) <<"\n";
-  std::cout << "luu max: " << ul << ", bytes:" << sizeof(ul) <<"\n";
-  std::cout << "llu max: " << ull << ", bytes:" << sizeof(ull) <<"\n";
-  
-  std::cout << "dbl max: " << ull << ", bytes:" << sizeof(dbl) <<"\n";
-}
-
-template <typename T>
-struct LogbookWithGBxIndexes
+struct Superdrop
 {
-private:
-  std::vector<unsigned int> gbxindexes;
-  std::vector<T> record;
-
-public:
-  size_t new_entry(const unsigned int gbxindex)
-  {
-    gbxindexes.push_back(gbxindex);
-    record.push_back(0.0);
-
-    return record.size() - 1;
-  }
-
-  void update_entry(const size_t idx, const T val)
-  /* copies value 'val' to record at position 'idx' */
-  {
-    record.at(idx) = val;
-  }
-
-  size_t get_size()
-  {
-    return record.size(); 
-  }
-
-  unsigned int get_gbxindex(const size_t idx)
-  /* returns gbxindex associated with
-  value at position 'idx' in record */
-  {
-    return gbxindexes.at(idx);
-  }
-
-  T get_from_record(const size_t idx)
-  /* returns value in record at
-  position 'idx' in record */
-  {
-    return record.at(idx);
-  }
+  unsigned long long eps;
+  double radius;
 };
 
-template <typename T>
-struct ManageEntryInLogbook
+Superdrop &assign_superdroplet_old(Superdrop &dropA, Superdrop &dropB,
+                                  const unsigned int whichdrop)
+/* compare dropA.eps with dropB.eps and return either
+drop1 or drop2 such that drop1.eps is always > drop2.eps */
 {
-private:
-  std::shared_ptr<LogbookWithGBxIndexes<T>> logbook;
-  size_t recordidx = std::numeric_limits<size_t>::max();
-
-public:
-  void create_entry_in_logbook(
-      const std::shared_ptr<LogbookWithGBxIndexes<T>> ilogbook,
-      const unsigned int gbxindex)
+  if (dropA.eps > dropB.eps)
   {
-    logbook = ilogbook;
-    recordidx = logbook->new_entry(gbxindex);
-  }
-
-  auto get_logbook() { return logbook; }
-
-  void operator()(const T val)
-  {
-    logbook -> update_entry(recordidx, val);
-  }
-};
-
-struct SurfPrecipDetector
-{
-  ManageEntryInLogbook<double> manage_entry;
-
-  void operator()(const double drop)
-  {
-    if (manage_entry.get_logbook())
+    if (whichdrop == 1) // "drop1"
     {
-      double mass_precipitation(drop);
-      manage_entry(mass_precipitation);
+      return dropA;
+    }
+    else // "drop2"
+    {
+      return dropB;
     }
   }
-};
 
-struct DetectionLogbooks
-{
-  std::shared_ptr<LogbookWithGBxIndexes<double>> accprecip;
-
-  DetectionLogbooks()
-      : accprecip(std::make_shared<LogbookWithGBxIndexes<double>>()) {}
-};
-
-class Detectors
-{
-private:
-  const DetectionLogbooks &logbooks;
-
-public:
- SurfPrecipDetector accprecip_dtr;
-  
-  Detectors(const DetectionLogbooks &logbooks)
-      : logbooks(logbooks) {}
-
-  void install_precip_detector(const unsigned int gbxindex)
+  else
   {
-    accprecip_dtr.manage_entry.create_entry_in_logbook(logbooks.accprecip,
-                                                       gbxindex);
-
-    std::cout << "New entry in surfpp logbook at for gbx" << gbxindex
-              << '\n';
+    if (whichdrop == 1) // "drop1"
+    {
+      return dropB;
+    }
+    else // "drop2"
+    {
+      return dropA;
+    }
   }
-};
-
-std::unique_ptr<Detectors> create_detectors(const DetectionLogbooks &logbooks,
-                                            const unsigned int gbxindex,
-                                            const double zbound)
-{
-  auto detectors = std::make_unique<Detectors>(logbooks);
-
-  if (zbound < 1.0)
-  {
-    detectors -> install_precip_detector(gbxindex);
-  }
-
-  return detectors;
 }
 
-struct GridBox
+std::pair<Superdrop&, Superdrop&>
+assign_superdroplet(const Superdrop &dropA, const Superdrop &dropB)
+/* compare dropA.eps with dropB.eps and return (non-const)
+references to dropA and dropB in a pair {drop1, drop2}
+such that drop1.eps is always > drop2.eps */
 {
-  unsigned int gbxindex;
-  std::unique_ptr<Detectors> detectors;
+  auto comp = [](const Superdrop &dropA, const Superdrop &dropB)
+  {
+    return dropA.eps < dropB.eps; //returns true if epsA < epsB
+  };
 
-  GridBox(const unsigned int gbxindex,
-          const DetectionLogbooks &logbooks,
-          const double zbound)
-      : gbxindex(gbxindex),
-        detectors(create_detectors(logbooks, gbxindex, zbound))
-  {}
-};
+  auto [drop2, drop1] = std::minmax(dropA, dropB, comp); // drop2.eps =< drop1.eps
 
-void move_superdrops(GridBox &gbx)
-{
-  const double drop(2.4);
-  gbx.detectors -> accprecip_dtr(drop);
+  return {const_cast<Superdrop&>(drop1), const_cast<Superdrop&>(drop2)};
 }
 
 int main()
 { 
-  std::cout <<"--- let's make detectors --- \n";
+  Superdrop dropA{30000, 1.0}; 
+  Superdrop dropB{10000, 1.0}; 
 
-  const DetectionLogbooks logbooks;
+  Superdrop &drop1o = assign_superdroplet_old(dropA, dropB, 1);
+  Superdrop &drop2o = assign_superdroplet_old(dropA, dropB, 2);
 
-  const double zbound(0.9);
+  std::cout << dropA.eps << ", " << dropB.eps << "\n";
+  std::cout << drop1o.eps << ", " << drop2o.eps << "\n";
 
-  for (unsigned int gbxindex=0; gbxindex < 3; ++gbxindex)
-  {
-    GridBox gbx(gbxindex, logbooks, zbound);
-    move_superdrops(gbx);
-  }
-  
-  for (size_t idx=0; idx < logbooks.accprecip -> get_size(); ++idx)
-  {
-    std::cout << "At idx " << idx
-              << " gbx=" << logbooks.accprecip -> get_gbxindex(idx)
-              << ", Record states "
-              << logbooks.accprecip -> get_from_record(idx)
-              << "\n";
-  }
+  auto [drop1, drop2] = assign_superdroplet(dropA, dropB);
+
+  std::cout << dropA.eps << ", " << dropB.eps << "\n";
+  std::cout << drop1.eps << ", " << drop2.eps << "\n";
+
+  drop1.eps = 4;
+  drop2.eps = 2;
+
+  std::cout << dropA.eps << ", " << dropB.eps << "\n";
+  std::cout << drop1.eps << ", " << drop2.eps << "\n";
 
   return 0;
 }
