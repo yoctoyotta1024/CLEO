@@ -42,16 +42,17 @@ int main()
   const double im_sol = 3.0;
   
   const unsigned long long ieps1 = 3;
-  const double iradius1 = 1.0;
+  const double iradius1 = 100;
   Superdrop drop1(isolute, ieps1, iradius1, im_sol, 0.0, 0.0, 0.0, sdIdGen.next());
 
   const unsigned long long ieps2 = 6;
-  const double iradius2 = 0.25;
+  const double iradius2 = 10;
   Superdrop drop2(isolute, ieps2, iradius2, im_sol, 0.0, 0.0, 0.0, sdIdGen.next());
 
   std::cout <<"drop1: " << drop1.radius <<"\ndrop2: " << drop2.radius << "\n";
 
-  const auto llke(LowListKernelEfficiency{SimmelTerminalVelocity{}});
+  const LowListKernelEfficiency<SimmelTerminalVelocity>
+      llke(SimmelTerminalVelocity{});
 
   std::cout << "llke: " << llke(drop1, drop2) <<"\n";
   return 0;

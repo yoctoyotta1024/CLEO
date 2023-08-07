@@ -148,6 +148,7 @@ struct LowListKernelEfficiency
   of Simmel et al. 2002
   - coaleff is from equation (4.5) and (4.6) Low and List 1982(a) */
 {
+private:
   TerminalVelocity terminalv;
   LongKernelEfficiency colleff{1.0};
 
@@ -221,6 +222,9 @@ struct LowListKernelEfficiency
 
     return 1.0 / (alpha * alpha); // alpha^(-2)
   }
+
+public:
+  LowListKernelEfficiency(TerminalVelocity tv) : terminalv(tv) {}
 
   double operator()(const Superdrop &drop1,
                     const Superdrop &drop2) const
