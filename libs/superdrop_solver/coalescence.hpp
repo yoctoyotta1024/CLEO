@@ -134,9 +134,10 @@ public:
 };
 
 template <SDPairProbability CollisionXProbability>
-SdmProcess auto CollisionCoalescenceProcess(const int interval,
-                                            const std::function<double(int)> int2time,
-                                            const CollisionXProbability p)
+SdmProcess auto
+CollisionCoalescenceProcess(const int interval,
+                            const std::function<double(int)> int2time,
+                            const CollisionXProbability p)
 {
   const double realtstep = int2time(interval);
 

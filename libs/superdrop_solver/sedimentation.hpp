@@ -63,9 +63,10 @@ public:
 };
 
 template <VelocityFormula TerminalVelocity>
-SdmProcess auto SedimentationProcess(const int interval,
-                                     const std::function<double(int)> int2time,
-                                     const TerminalVelocity v)
+SdmProcess auto
+SedimentationProcess(const int interval,
+                     const std::function<double(int)> int2time,
+                     const TerminalVelocity v)
 /* constructs SdmProcess for sedimentation with constant
 timestep 'interval' given a function to convert the interval
 to a (dimensionless) time and a terminal velocity formula */

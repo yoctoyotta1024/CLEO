@@ -103,13 +103,14 @@ public:
   }
 };
 
-SdmProcess auto CondensationProcess(const int interval,
-                                    const std::function<double(int)> int2time,
-                                    const bool doAlterThermo,
-                                    const unsigned int niters,
-                                    const double dimless_subtstep,
-                                    const double rtol,
-                                    const double atol)
+SdmProcess auto
+CondensationProcess(const int interval,
+                    const std::function<double(int)> int2time,
+                    const bool doAlterThermo,
+                    const unsigned int niters,
+                    const double dimless_subtstep,
+                    const double rtol,
+                    const double atol)
 /* constructs SdmProcess for condensation with constant timestep 'interval'
 given a function to convert the interval to a (dimensionless) time
 and the arguments required to construct the condensation method */
