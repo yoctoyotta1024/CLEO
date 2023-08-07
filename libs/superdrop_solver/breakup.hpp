@@ -37,10 +37,9 @@ private:
     }
   }
 
-
   void twin_superdroplet_breakup(Superdrop &drop1,
                                  Superdrop &drop2) const
-  /* if eps1 = gamma*eps2 breakup of same multiplicity SDs 
+  /* if eps1 = gamma*eps2 breakup of same multiplicity SDs
   produces (non-identical) twin SDs. Similar to
   Shima et al. 2009 Section 5.1.3. part (5) option (b)  */
   {
