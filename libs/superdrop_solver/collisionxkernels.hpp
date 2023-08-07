@@ -161,13 +161,14 @@ private:
   /* returns cke/ pi, where cke = collision kinetic energy
   as formulated in Low and List 1982(a) eqn 3.1 */
   {
-    const double r1(drop1.radius);
-    const double r2(drop2.radius);
-    const double ratio = std::pow(r1, 3.0) / (1 + std::pow(r1 / r2, 3.0));
+    constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0; // convert r^3 to [m^3] 
+    const double r1_r2(drop1.radius / drop2.radius);
 
+    const double rratio = R0cubed * std::pow(drop1.radius, 3.0) /
+                          (1 + std::pow(r1_r2, 3.0));
     const double vdiff = (terminalv(drop1) - terminalv(drop2)) * dlc::W0; // [m/s]
 
-    const double cke_pi = DC::RHO_L / 12.0 * ratio * vdiff * vdiff;
+    const double cke_pi = 2.0/3.0 * DC::RHO_L * rratio * vdiff * vdiff;
 
     return cke_pi;
   }

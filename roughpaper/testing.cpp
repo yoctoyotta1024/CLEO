@@ -42,18 +42,29 @@ int main()
   const double im_sol = 3.0;
   
   const unsigned long long ieps1 = 3;
-  const double iradius1 = 100;
+  const double iradius1 = 0.18 / 200.0 / dlc::R0;
   Superdrop drop1(isolute, ieps1, iradius1, im_sol, 0.0, 0.0, 0.0, sdIdGen.next());
 
   const unsigned long long ieps2 = 6;
-  const double iradius2 = 10;
+  const double iradius2 = 0.0715 / 200.0 / dlc::R0;;
   Superdrop drop2(isolute, ieps2, iradius2, im_sol, 0.0, 0.0, 0.0, sdIdGen.next());
 
   std::cout <<"drop1: " << drop1.radius <<"\ndrop2: " << drop2.radius << "\n";
 
-  const LowListKernelEfficiency<SimmelTerminalVelocity>
-      llke(SimmelTerminalVelocity{});
 
+  const auto terminalv(SimmelTerminalVelocity{});
+  const LowListKernelEfficiency<SimmelTerminalVelocity>
+      llke(terminalv);
+
+  const double surf_t_pi = llke.total_surfenergy(drop1, drop2);      // [J] surft / pi
+  const double surf_c_pi = llke.equivalent_surfenergy(drop1, drop2); // [J] surfc / pi
+  const double etot_pi = llke.kinetic_energy(drop1, drop2) +
+                          surf_t_pi - surf_c_pi; // [J] total energy / pi
+
+  std::cout << "surft: " << surf_t_pi * std::numbers::pi << "\n";
+  std::cout << "surfc: " << surf_c_pi * std::numbers::pi << "\n";
+  std::cout << "cke: " << llke.kinetic_energy(drop1, drop2) * std::numbers::pi <<"\n";
+  std::cout << "tote: " << etot_pi * std::numbers::pi << "\n";
   std::cout << "llke: " << llke(drop1, drop2) <<"\n";
   return 0;
 }
