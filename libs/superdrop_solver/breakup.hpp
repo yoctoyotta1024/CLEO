@@ -41,16 +41,20 @@ private:
                                  Superdrop &drop2) const
   /* if eps1 = gamma*eps2 breakup of same multiplicity SDs
   produces (non-identical) twin SDs. Similar to
-  Shima et al. 2009 Section 5.1.3. part (5) option (b)  */
+  Shima et al. 2009 Section 5.1.3. part (5) option (b).
+  Note implicit assumption that gamma factor = 1. */
   {
+    
   }
 
   void different_superdroplet_breakup(Superdrop &drop1,
                                       Superdrop &drop2) const
   /* if eps1 > gamma*eps2 breakup alters drop2 radius and mass
   via decreasing multiplicity of drop1. Similar to
-  Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
+  Shima et al. 2009 Section 5.1.3. part (5) option (a).
+  Note implicit assumption that gamma factor = 1. */
   {
+    
   }
 
   unsigned int breakup_gamma(const unsigned long long eps1,
