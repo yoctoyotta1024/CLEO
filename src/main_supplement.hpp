@@ -136,7 +136,7 @@ combined process of those two individual processes */
                                         &step2realtime, probs_bu)); 
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  const auto sdmprocess = cond >> coal;
+  const auto sdmprocess = cond >> coal >> bu;
   // const auto sdmprocess = cond;
   // const auto sdmprocess = coal;
 
