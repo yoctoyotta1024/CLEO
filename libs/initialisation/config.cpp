@@ -132,6 +132,11 @@ void Config::configvariable(const std::string name, const std::string value)
     cond_atol = stod(value);
     issuccess = true;
   }
+  else if (name == "nfrags")
+  {
+    nfrags = stod(value);
+    issuccess = true;
+  }
   else if (name == "CONDTSTEP")
   {
     CONDTSTEP = stod(value);

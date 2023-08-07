@@ -72,7 +72,8 @@ public:
   unsigned int cond_iters;     // suggested no. iterations of Newton Raphson Method
   double cond_SUBTSTEP;        // smallest timestep in cases where substepping occurs [s]
   double cond_rtol;            // relative tolerance for implicit euler integration
-  double cond_atol;            //  abolute tolerance for implicit euler integration
+  double cond_atol;            // abolute tolerance for implicit euler integration
+  double nfrags;               // expected number of fragments in (real) breakup even, (use -1 for nan value)
   double CONDTSTEP;            // time between SD condensation events [s]
   double COLLTSTEP;            // time between SD collision events [s]
   double MOTIONTSTEP;          // time between SDM motion [s]

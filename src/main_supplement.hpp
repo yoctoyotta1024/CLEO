@@ -136,11 +136,10 @@ combined process of those two individual processes */
 
   /* create process for collision-breakup in SDM */
   const auto probs_bu(CollBuProb_LowList(terminalv));
-  const double nfrags = 5.2;
   const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
                                         &step2realtime,
                                         probs_bu,
-                                        nfrags));
+                                        config.nfrags));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
   const auto sdmprocess = cond >> coal >> bu;
