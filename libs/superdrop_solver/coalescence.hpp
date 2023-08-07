@@ -65,13 +65,14 @@ private:
   with same eps, r and solute mass. According to Shima et al. 2009
   Section 5.1.3. part (5) option (b)  */
   {
-    const unsigned long long new_eps = drop2.eps / 2;
+    const unsigned long long old_eps = drop2.eps // = drop1.eps
+    const unsigned long long new_eps = old_eps / 2;
     const double new_m_sol = drop2.m_sol + gamma * drop1.m_sol;
     const double new_rcubed = pow(drop2.radius, 3.0) + gamma * pow(drop1.radius, 3.0);
     const double new_r = pow(new_rcubed, (1.0 / 3.0));
 
     drop1.eps = new_eps;
-    drop2.eps = drop2.eps - new_eps;
+    drop2.eps = old_eps - new_eps;
 
     drop1.radius = new_r;
     drop2.radius = new_r;

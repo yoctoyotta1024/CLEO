@@ -15,6 +15,8 @@ concept also used by CollisionX struct */
 #include <algorithm>
 #include <functional>
 #include <stdexcept>
+#include <cmath>
+
 #include "./superdrop.hpp"
 
 
@@ -24,7 +26,7 @@ two superdroplets. (Can be used in collisionsx
 struct to enact collision-breakup events in SDM) */
 {
 private:
-  double nfrags;
+  double nfrags; // expected number of fragments from 1 real droplet collision (Omega in my notes)
 
   void superdroplet_pair_breakup(Superdrop &drop1, Superdrop &drop2) const
   /* enact collisional-breakup of droplets by changing multiplicity,
@@ -85,6 +87,10 @@ private:
 
 public:
   Breakup(const double infrags) : nfrags(std::max(infrags, 1.0))
+  /* nfrags = expected number of fragments from one real
+  droplet collision-breakup event (Omega in my notes). Conservative
+  estimate is that nfrags >=1.0 to ensure largest possible 
+  fragment is <= mass1 + mass2 (sum of original drop masses) */
   {
     if (infrags < 0.0)
     {
