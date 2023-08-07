@@ -12,7 +12,11 @@ concept also used by CollisionX struct */
 #ifndef BREAKUP_HPP
 #define BREAKUP_HPP
 
+#include <algorithm>
+#include <functional>
+
 #include "./superdrop.hpp"
+
 
 class Breakup
 /* class is method for enacting collisional-breakup given
@@ -20,6 +24,8 @@ two superdroplets. (Can be used in collisionsx
 struct to enact collision-breakup events in SDM) */
 {
 private:
+  double nfrags;
+
   void superdroplet_pair_breakup(Superdrop &drop1, Superdrop &drop2) const
   /* enact collisional-breakup of droplets by changing multiplicity,
   radius and solute mass of each superdroplet in a pair. Method created
@@ -78,6 +84,8 @@ private:
   }
 
 public:
+  Breakup(const double nfrags) : nfrags(std::max(nfrags, 1.0)) {}
+
   void operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const
   /* this operator is used as an "adaptor" for using Breakup
