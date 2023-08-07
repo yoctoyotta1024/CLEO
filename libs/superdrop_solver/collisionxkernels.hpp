@@ -81,8 +81,10 @@ struct GolovinCollCoalProb
 a pair of droplets according to Golovin 1963
 (see e.g. Shima et al. 2009) */
 {
+private:
   const double prob_jk_const;
 
+public:
   GolovinCollCoalProb()
       : prob_jk_const(1.5e3 * (pow(dlc::R0, 3.0))) {}
 
