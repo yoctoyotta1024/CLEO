@@ -123,15 +123,17 @@ combined process of those two individual processes */
                                             config.cond_atol));
 
   /* create process for collision-coalescene in SDM */
-  // const auto probs(CollCoalProb_Golovin());
-  const auto probs_coal(CollCoalProb_Long());
+  // const auto probs_coal(CollCoalProb_Golovin());
+  // const auto probs_coal(CollCoalProb_Long());
+  const auto terminalv(SimmelTerminalVelocity{});
+  const auto probs_coal(CollCoalProb_LowList(terminalv));
   const auto coal(CollisionCoalescenceProcess(mdlsteps.collsubstep,
                                               &step2realtime, probs_coal)); 
 
-  // /* create process for collision-breakup in SDM */
-  // const auto probs_bu(LowListCollBuProb());
-  // const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
-  //                                       &step2realtime, probs_bu)); 
+  /* create process for collision-breakup in SDM */
+  const auto probs_bu(CollBuProb_LowList(terminalv));
+  const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
+                                        &step2realtime, probs_bu)); 
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
   const auto sdmprocess = cond >> coal;

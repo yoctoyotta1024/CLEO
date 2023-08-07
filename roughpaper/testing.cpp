@@ -34,18 +34,6 @@ could compile with e.g.
 
 namespace dlc = dimless_constants;
 
-template <VelocityFormula TerminalVelocity>
-HydrodynamicProb<LowListCollBuEff<TerminalVelocity>,
-                 TerminalVelocity>
-CollBuProb_LowList(TerminalVelocity terminalv)
-/* returns the probability of collision-coalescence
-using Long's Hydrodynamic Kernel combined with
-the coalescence efficiency from Low and List 1982. */
-{
-  return HydrodynamicProb(LowListCollBuEff(terminalv),
-                          terminalv);
-}
-
 int main()
 {
   auto sdIdGen = Superdrop::IDType::Gen{};
