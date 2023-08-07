@@ -14,7 +14,7 @@ concept also used by CollisionX struct */
 
 #include <algorithm>
 #include <functional>
-
+#include <stdexcept>
 #include "./superdrop.hpp"
 
 
@@ -84,7 +84,15 @@ private:
   }
 
 public:
-  Breakup(const double nfrags) : nfrags(std::max(nfrags, 1.0)) {}
+  Breakup(const double infrags) : nfrags(std::max(infrags, 1.0))
+  {
+    if (infrags < 0.0)
+    {
+      const std::string err("attempted to initialise breakup"
+                            "with invalid value for nfrags");
+      throw std::invalid_argument(err);
+    }
+  }
 
   void operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const
@@ -116,7 +124,7 @@ CollisionBreakupProcess(const int interval,
   const double realtstep = int2time(interval);
 
   CollisionX<CollisionXProbability, Breakup>
-      bu(realtstep, p, Breakup{});
+      bu(realtstep, p, Breakup(nfrags));
 
   return ConstTstepProcess{interval, bu};
 }
