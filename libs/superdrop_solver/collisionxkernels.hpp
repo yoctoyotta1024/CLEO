@@ -292,8 +292,7 @@ public:
 };
 
 template <VelocityFormula TerminalVelocity>
-HydrodynamicProb<LowListCollCoalEff<TerminalVelocity>,
-                 TerminalVelocity>
+HydrodynamicProb<LowListCollCoalEff<TerminalVelocity>, TerminalVelocity>
 CollCoalProb_LowList(TerminalVelocity tv)
 /* returns the probability of collision-coalescence
 using Long's Hydrodynamic Kernel combined with
@@ -327,5 +326,16 @@ public:
     return lle.get_colleff(drop1, drop2) * bueff;
   }
 };
+
+template <VelocityFormula TerminalVelocity>
+HydrodynamicProb<LowListCollBuEff<TerminalVelocity>, TerminalVelocity>
+CollBuProb_LowList(TerminalVelocity tv)
+/* returns the probability of collision-breakup
+using Long's Hydrodynamic Kernel combined with
+the breakup efficient from McFarquhar 2004 obtained from
+the coalescence efficiency given by Low and List 1982. */
+{
+  return HydrodynamicProb(LowListCollBuEff(tv), tv);
+}
 
 #endif // COLLISIONXKERNELS_HPP
