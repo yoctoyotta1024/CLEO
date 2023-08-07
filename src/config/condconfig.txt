@@ -27,6 +27,7 @@ cond_iters = 3                        # no. iterations of Newton Raphson Method 
 cond_SUBTSTEP = 0.1                   # smallest timestep in cases where substepping occurs [s]
 cond_rtol = 0.0                       # relative tolerance for implicit euler integration
 cond_atol = 1e-6                      # abolute tolerance for implicit euler integration
+nfrags = -1.0                         # expected number of fragments in (real) breakup event, (use -1 for nan value)
 CONDTSTEP = 1                         # time between SD condensation events [s]
 COLLTSTEP = 2                         # time between SD collision events [s]
 MOTIONTSTEP = 2                       # time between SDM motion [s]
