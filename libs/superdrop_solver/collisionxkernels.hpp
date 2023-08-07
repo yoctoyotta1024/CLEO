@@ -78,7 +78,7 @@ public:
   }
 };
 
-struct GolovinCollCoalProb
+struct CollCoalProb_Golovin
 /* Probability of collision-coalescence of
 a pair of droplets according to Golovin 1963
 (see e.g. Shima et al. 2009) */
@@ -87,7 +87,7 @@ private:
   const double prob_jk_const;
 
 public:
-  GolovinCollCoalProb()
+  CollCoalProb_Golovin()
       : prob_jk_const(1.5e3 * (pow(dlc::R0, 3.0))) {}
 
   double operator()(const Superdrop &drop1,
@@ -109,7 +109,7 @@ public:
   }
 };
 
-struct LongKernelEfficiency
+struct LongKernelEff
 /* Collision-Coalescence Efficiency factor, eff, in Long's
   Hydrodynamic kernel according to Simmel et al. 2002.
   eff = collision-coalescence efficiency E(R,r) where R>r.
@@ -144,8 +144,18 @@ struct LongKernelEfficiency
   }
 };
 
+HydrodynamicProb<LongKernelEff, SimmelTerminalVelocity>
+CollCoalProb_Long()
+/* returns the probability of collision-coalescence
+using Simmel et al. 2002's formulation of
+Long's Hydrodynamic Kernel */
+{
+  return HydrodynamicProb(LongKernelEff{1.0},
+                          SimmelTerminalVelocity{});
+}
+
 template <VelocityFormula TerminalVelocity>
-struct LowListKernelEfficiency
+struct LowListKernelEff
 /* Collision-Coalescence Efficiency factor, eff, for the
   Hydrodynamic kernel. eff = colleff(R,r) * coaleff(R,r) where:
   - colleff is Long's collision efficiency as seen in equation 13
@@ -154,7 +164,7 @@ struct LowListKernelEfficiency
 {
 private:
   TerminalVelocity terminalv;
-  LongKernelEfficiency colleff{1.0};
+  LongKernelEff colleff{1.0};
 
   double kinetic_energy(const Superdrop &drop1,
                         const Superdrop &drop2) const
@@ -229,7 +239,7 @@ private:
   }
 
 public:
-  LowListKernelEfficiency(TerminalVelocity tv) : terminalv(tv) {}
+  LowListKernelEff(TerminalVelocity tv) : terminalv(tv) {}
 
   double operator()(const Superdrop &drop1,
                     const Superdrop &drop2) const
@@ -259,26 +269,16 @@ public:
   }
 };
 
-HydrodynamicProb<LongKernelEfficiency, SimmelTerminalVelocity>
-LongCollCoalProb()
-/* returns the probability of collision-coalescence
-using Simmel et al. 2002's formulation of
-Long's Hydrodynamic Kernel */
-{
-  return HydrodynamicProb(LongKernelEfficiency{1.0},
-                          SimmelTerminalVelocity{});
-}
-
 template <VelocityFormula TerminalVelocity>
-HydrodynamicProb<
-    LowListKernelEfficiency<TerminalVelocity>, TerminalVelocity>
-LowListCoalProb(TerminalVelocity terminalv)
+HydrodynamicProb<LowListKernelEff<TerminalVelocity>,
+                 TerminalVelocity>
+CollCoalProb_LowList(TerminalVelocity terminalv)
 /* returns the probability of collision-coalescence
 using Long's Hydrodynamic Kernel combined with
 the coalescence efficiency from Low and List 1982. */
 {
-  return HydrodynamicProb(LowListKernelEfficiency{terminalv},
-                          terminalv);
+  return HydrodynamicProb(LowListKernelEff(terminalv), terminalv);
 }
+
 
 #endif // COLLISIONXKERNELS_HPP

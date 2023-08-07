@@ -123,8 +123,8 @@ combined process of those two individual processes */
                                             config.cond_atol));
 
   /* create process for collision-coalescene in SDM */
-  // const auto probs(GolovinCollCoalProb());
-  const auto probs_coal(LongCollCoalProb());
+  // const auto probs(CollCoalProb_Golovin());
+  const auto probs_coal(CollCoalProb_Long());
   const auto coal(CollisionCoalescenceProcess(mdlsteps.collsubstep,
                                               &step2realtime, probs_coal)); 
 

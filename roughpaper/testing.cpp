@@ -34,6 +34,33 @@ could compile with e.g.
 
 namespace dlc = dimless_constants;
 
+template <KernelEfficiency Efficiency,
+          VelocityFormula TerminalVelocity>
+HydrodynamicProb<Efficiency, TerminalVelocity>
+LowListCollBuProb(TerminalVelocity terminalv)
+/* returns the probability of collision-coalescence
+using Long's Hydrodynamic Kernel combined with
+the coalescence efficiency from Low and List 1982. */
+{
+  struct LowListBuEff
+  {
+  private:
+    LowListKernelEff<TerminalVelocity> llke;
+
+  public:
+    LowListBuEff(TerminalVelocity tv) : llke(tv){};
+
+    double operator()(const Superdrop &drop1,
+                      const Superdrop &drop2) const
+    {
+      return 1.0 - llke(drop1, drop2);
+    }
+  };
+
+  return HydrodynamicProb(LowListBuEff(terminalv),
+                          terminalv);
+}
+
 int main()
 {
   auto sdIdGen = Superdrop::IDType::Gen{};
@@ -51,20 +78,16 @@ int main()
 
   std::cout <<"drop1: " << drop1.radius <<"\ndrop2: " << drop2.radius << "\n";
 
-
   const auto terminalv(SimmelTerminalVelocity{});
-  const LowListKernelEfficiency<SimmelTerminalVelocity>
+  const LowListKernelEff<SimmelTerminalVelocity>
       llke(terminalv);
 
-  const double surf_t_pi = llke.total_surfenergy(drop1, drop2);      // [J] surft / pi
-  const double surf_c_pi = llke.equivalent_surfenergy(drop1, drop2); // [J] surfc / pi
-  const double etot_pi = llke.kinetic_energy(drop1, drop2) +
-                          surf_t_pi - surf_c_pi; // [J] total energy / pi
+  std::cout << "llke coal: " << llke(drop1, drop2) <<"\n";
+  std::cout << "llke bu: " << 1-llke(drop1, drop2) <<"\n";
+  
+  const auto llprob = LowListCollBuProb(terminalv);
 
-  std::cout << "surft: " << surf_t_pi * std::numbers::pi << "\n";
-  std::cout << "surfc: " << surf_c_pi * std::numbers::pi << "\n";
-  std::cout << "cke: " << llke.kinetic_energy(drop1, drop2) * std::numbers::pi <<"\n";
-  std::cout << "tote: " << etot_pi * std::numbers::pi << "\n";
-  std::cout << "llke: " << llke(drop1, drop2) <<"\n";
+  std::cout << "llbuke: " << llprob(drop1, drop2) <<"\n";
+  
   return 0;
 }
