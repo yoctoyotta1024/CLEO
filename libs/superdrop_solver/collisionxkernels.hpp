@@ -155,12 +155,13 @@ Long's Hydrodynamic Kernel */
 }
 
 template <VelocityFormula TerminalVelocity>
-struct LowListKernelEff
-/* Collision-Coalescence Efficiency factor, eff, for the
-  Hydrodynamic kernel. eff = colleff(R,r) * coaleff(R,r) where:
-  - colleff is Long's collision efficiency as seen in equation 13
-  of Simmel et al. 2002
-  - coaleff is from equation (4.5) and (4.6) Low and List 1982(a) */
+struct LowListCollCoalEff
+/* coalescence and collision-coalescence efficiency factors
+for the Hydrodynamic kernel. eff = colleff(R,r) * coaleff(R,r)
+where:
+- colleff is Long's collision efficiency as seen in
+  equation 13 of Simmel et al. 2002
+- coaleff is from equation (4.5) and (4.6) Low and List 1982(a) */
 {
 private:
   TerminalVelocity terminalv;
@@ -239,10 +240,22 @@ private:
   }
 
 public:
-  LowListKernelEff(TerminalVelocity tv) : terminalv(tv) {}
+  LowListCollCoalEff(TerminalVelocity tv) : terminalv(tv) {}
 
-  double operator()(const Superdrop &drop1,
-                    const Superdrop &drop2) const
+  double get_colleff(const Superdrop &drop1,
+                     const Superdrop &drop2) const
+  {
+    return colleff(drop1, drop2);
+  }               
+
+  double coaleff(const Superdrop &drop1,
+                 const Superdrop &drop2) const
+  /* returns coaleff, the coalescence efficiency
+  of two droplets (given that they have collided)
+  from equation (4.5) and (4.6) Low and List 1982(a).
+  the total collision-coealescence efficiency, 
+  eff = coaleff * colleff, and the breakup efficiency 
+  bueff = 1 - coaleff */
   {
     constexpr double aconst = 0.778;
     constexpr double energylim = 5e-6 / std::numbers::pi; // etot limit / pi [J]
@@ -259,26 +272,60 @@ public:
                                                  drop2.radius);
       const double coaleff = aconst * radiiratio * exp;
 
-      const double eff = colleff(drop1, drop2) * coaleff;
-      return eff;
+      return coaleff;
     }
     else // coaleff = 0.0
     {
       return 0.0;
     }
   }
+
+  double operator()(const Superdrop &drop1,
+                    const Superdrop &drop2) const
+  /* collision-coalescence efficiency, eff, using
+  eff = colleff * coaleff */
+  {
+    const double eff = coaleff(drop1, drop2) * colleff(drop1, drop2); 
+
+    return eff;
+  }
 };
 
 template <VelocityFormula TerminalVelocity>
-HydrodynamicProb<LowListKernelEff<TerminalVelocity>,
+HydrodynamicProb<LowListCollCoalEff<TerminalVelocity>,
                  TerminalVelocity>
-CollCoalProb_LowList(TerminalVelocity terminalv)
+CollCoalProb_LowList(TerminalVelocity tv)
 /* returns the probability of collision-coalescence
 using Long's Hydrodynamic Kernel combined with
 the coalescence efficiency from Low and List 1982. */
 {
-  return HydrodynamicProb(LowListKernelEff(terminalv), terminalv);
+  return HydrodynamicProb(LowListCollCoalEff(tv), tv);
 }
 
+template <VelocityFormula TerminalVelocity>
+struct LowListCollBuEff
+/* Collision-Breakup Efficiency factor, eff, for the
+Hydrodynamic kernel. eff = colleff(R,r) * coaleff(R,r) where:
+- colleff is Long's collision efficiency as seen in
+  equation 13 of Simmel et al. 2002
+- coaleff is from equation (4.5) and (4.6) Low and List 1982(a) */
+{
+private:
+  LowListCollCoalEff<TerminalVelocity> lle;
+  
+public:
+  LowListCollBuEff(TerminalVelocity tv) : lle(tv){};
+
+  double operator()(const Superdrop &drop1,
+                    const Superdrop &drop2) const
+  /* collision-breakup efficiency, eff, using
+  eff = colleff * bueff, and bueff = 1 - coealeff
+  as in McFarquhar 2004 (see equation (28) therein) */
+  {
+    const double bueff(1.0 - lle.coaleff(drop1, drop2));
+ 
+    return lle.get_colleff(drop1, drop2) * bueff;
+  }
+};
 
 #endif // COLLISIONXKERNELS_HPP

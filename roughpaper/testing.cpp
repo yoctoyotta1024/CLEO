@@ -34,30 +34,15 @@ could compile with e.g.
 
 namespace dlc = dimless_constants;
 
-template <KernelEfficiency Efficiency,
-          VelocityFormula TerminalVelocity>
-HydrodynamicProb<Efficiency, TerminalVelocity>
-LowListCollBuProb(TerminalVelocity terminalv)
+template <VelocityFormula TerminalVelocity>
+HydrodynamicProb<LowListCollBuEff<TerminalVelocity>,
+                 TerminalVelocity>
+CollBuProb_LowList(TerminalVelocity terminalv)
 /* returns the probability of collision-coalescence
 using Long's Hydrodynamic Kernel combined with
 the coalescence efficiency from Low and List 1982. */
 {
-  struct LowListBuEff
-  {
-  private:
-    LowListKernelEff<TerminalVelocity> llke;
-
-  public:
-    LowListBuEff(TerminalVelocity tv) : llke(tv){};
-
-    double operator()(const Superdrop &drop1,
-                      const Superdrop &drop2) const
-    {
-      return 1.0 - llke(drop1, drop2);
-    }
-  };
-
-  return HydrodynamicProb(LowListBuEff(terminalv),
+  return HydrodynamicProb(LowListCollBuEff(terminalv),
                           terminalv);
 }
 
@@ -79,15 +64,15 @@ int main()
   std::cout <<"drop1: " << drop1.radius <<"\ndrop2: " << drop2.radius << "\n";
 
   const auto terminalv(SimmelTerminalVelocity{});
-  const LowListKernelEff<SimmelTerminalVelocity>
+  const LowListCollCoalEff<SimmelTerminalVelocity>
       llke(terminalv);
 
   std::cout << "llke coal: " << llke(drop1, drop2) <<"\n";
-  std::cout << "llke bu: " << 1-llke(drop1, drop2) <<"\n";
-  
-  const auto llprob = LowListCollBuProb(terminalv);
+  std::cout << "llke bu: " << 1.0-llke(drop1, drop2) <<"\n";
 
-  std::cout << "llbuke: " << llprob(drop1, drop2) <<"\n";
+  const auto llprob = CollBuProb_LowList(terminalv);
+
+  std::cout << "llbuke: " << LongKernelEff{1.0}(drop1, drop2) <<"\n";
   
   return 0;
 }
