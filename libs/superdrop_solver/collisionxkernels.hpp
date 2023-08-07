@@ -152,7 +152,7 @@ struct LowListKernelEfficiency
   LongKernelEfficiency colleff{1.0};
 
   double kinetic_energy(const Superdrop &drop1,
-                        const Superdrop &drop2)
+                        const Superdrop &drop2) const
   /* returns cke/ pi, where cke = collision kinetic energy
   as formulated in Low and List 1982(a) eqn 3.1 */
   {
@@ -168,7 +168,7 @@ struct LowListKernelEfficiency
   }
 
   double total_surfenergy(const Superdrop &drop1,
-                          const Superdrop &drop2)
+                          const Superdrop &drop2) const
   /* returns total surface energy of drops divided by pi
   as in equation 4.2 of Low and List 1982 */
   {
@@ -184,7 +184,7 @@ struct LowListKernelEfficiency
   }
 
   double equivalent_surfenergy(const Superdrop &drop1,
-                               const Superdrop &drop2)
+                               const Superdrop &drop2) const
   /* returns surface energy of single spherical equivalent of
   drops divided by pi as in equation 4.3 of Low and List 1982 */
   {
@@ -199,7 +199,7 @@ struct LowListKernelEfficiency
     return equiv_surfe_pi; // spherical equivalent surface energy / pi
   }
 
-  double exponential(const double etot_pi, const double surf_c_pi)
+  double exponential(const double etot_pi, const double surf_c_pi) const
   /* calc exponential in eqn 4.5 Low and List 1982(a) given
   total collision energy, etot/pi [J] and equivalent surface
   energy, surf_c / pi [J] */
@@ -213,7 +213,7 @@ struct LowListKernelEfficiency
     return std::exp(exponent);
   }
 
-  double sizeratio_factor(const double r1, const double r2)
+  double sizeratio_factor(const double r1, const double r2) const
   /* calc factor that takes into accoutn size ratio fo droplets in
   eqn 4.5 Low and List 1982(a). */
   {

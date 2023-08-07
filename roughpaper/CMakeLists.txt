@@ -1,7 +1,7 @@
 # run cmake with " cmake -S [source dir of targerts] -B [build dir for makefile] "
 # e.g. could run cmake with these compiler options:
-# CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
-# CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
+# CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build
+# CXX=g++ CC=gcc cmake -S ./ -B ./build 
 
 # set cmake version
 cmake_minimum_required(VERSION 3.18.0)
@@ -26,6 +26,7 @@ include_directories("${CLEODIR}/libs")
 
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/initialisation" ${CMAKE_CURRENT_BINARY_DIR}/libs/initialisation)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/superdrop_solver" ${CMAKE_CURRENT_BINARY_DIR}/libs/superdrop_solver)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/zarrstorage" ${CMAKE_CURRENT_BINARY_DIR}/libs/zarrstorage)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/observers" ${CMAKE_CURRENT_BINARY_DIR}/libs/observers)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../libs/sdmgridboxes" ${CMAKE_CURRENT_BINARY_DIR}/libs/sdmgridboxes)
 
