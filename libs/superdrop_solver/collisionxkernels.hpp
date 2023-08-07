@@ -37,10 +37,12 @@ template <KernelEfficiency Efficiency,
           VelocityFormula TerminalVelocity>
 struct HydrodynamicProb
 {
+private:
   const double prob_jk_const;
   const Efficiency eff;
   const TerminalVelocity terminalv;
 
+public:
   HydrodynamicProb(Efficiency e, TerminalVelocity tv)
       : prob_jk_const(M_PI * pow(dlc::R0, 2.0) * dlc::W0),
         eff(e),
