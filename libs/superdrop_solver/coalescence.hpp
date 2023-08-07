@@ -67,9 +67,10 @@ private:
   {
     const unsigned long long old_eps = drop2.eps; // = drop1.eps
     const unsigned long long new_eps = old_eps / 2;
-    const double new_m_sol = drop2.m_sol + gamma * drop1.m_sol;
-    const double new_rcubed = std::pow(drop2.radius, 3.0) + gamma * std::pow(drop1.radius, 3.0);
+    const double new_rcubed = std::pow(drop2.radius, 3.0) +
+                              gamma * std::pow(drop1.radius, 3.0);
     const double new_r = std::pow(new_rcubed, (1.0 / 3.0));
+    const double new_m_sol = drop2.m_sol + gamma * drop1.m_sol;
 
     drop1.eps = new_eps;
     drop2.eps = old_eps - new_eps;
@@ -90,7 +91,8 @@ private:
   {
     drop1.eps = drop1.eps - gamma * drop2.eps;
 
-    const double new_rcubed = std::pow(drop2.radius, 3.0) + gamma * std::pow(drop1.radius, 3.0);
+    const double new_rcubed = std::pow(drop2.radius, 3.0) +
+                              gamma * std::pow(drop1.radius, 3.0);
     drop2.radius = std::pow(new_rcubed, (1.0 / 3.0));
     drop2.m_sol = drop2.m_sol + gamma * drop1.m_sol;
   }
