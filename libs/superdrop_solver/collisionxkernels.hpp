@@ -322,8 +322,9 @@ public:
   as in McFarquhar 2004 (see equation (28) therein) */
   {
     const double bueff(1.0 - lle.coaleff(drop1, drop2));
+    const double eff(bueff * lle.get_colleff(drop1, drop2) );
 
-    return lle.get_colleff(drop1, drop2) * bueff;
+    return eff / 100.0; 
   }
 };
 
