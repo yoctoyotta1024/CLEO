@@ -19,7 +19,6 @@ concept also used by CollisionX struct */
 
 #include "./superdrop.hpp"
 
-
 class Breakup
 /* class is method for enacting collisional-breakup given
 two superdroplets. (Can be used in collisionsx
@@ -58,7 +57,7 @@ private:
                              std::pow(drop2.radius, 3.0);
     const double new_r = std::pow(old_eps / new_eps * sumr3, (1.0/3.0));
     const double new_m_sol = old_eps * (drop1.m_sol + drop2.m_sol) / new_eps;
-
+ 
     drop1.eps = new_eps;
     drop2.eps = old_eps - new_eps;
 
