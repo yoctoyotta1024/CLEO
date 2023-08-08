@@ -82,10 +82,11 @@ private:
     const unsigned long long new_eps = std::round(nfrags * old_eps);
     const double sumr3 = std::pow(drop1.radius, 3.0) +
                              std::pow(drop2.radius, 3.0);
-  
-    drop2.radius = std::pow(old_eps / new_eps * sumr3, (1.0/3.0));
+    
+    drop2.eps = new_eps;
+    drop2.radius = std::pow(sumr3 * old_eps / new_eps, (1.0/3.0)); // NOTE: implicit casting of eps from unsigned long long to double here
     drop2.m_sol = old_eps * (drop1.m_sol + drop2.m_sol) / new_eps; 
-  }
+  } 
 
   unsigned int breakup_gamma(const unsigned long long eps1,
                              const unsigned long long eps2,
