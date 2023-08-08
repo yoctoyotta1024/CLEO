@@ -89,8 +89,8 @@ struct SomeZarrStores
 SdMotion auto create_sdmotion(const int motionstep)
 {
   // const auto terminalv = RogersYauTerminalVelocity{};
-  const auto terminalv = SimmelTerminalVelocity{};
   // const auto terminalv = NullTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
   const SdMotion auto movewithsedi = MoveWithSedimentation(motionstep,
                                                           &step2dimlesstime,
                                                           terminalv);
@@ -103,9 +103,9 @@ SdMotion auto create_sdmotion(const int motionstep)
   //                                                 &step2dimlesstime,
   //                                                 flow2d);
   
-  return movewithsedi;
+  // return movewithsedi;
   // return prescribed2d;
-  // return NullMotion{};
+  return NullMotion{};
 }
 
 SdmProcess auto create_sdmprocess(const Config &config,
