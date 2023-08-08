@@ -30,6 +30,7 @@ gcc="gcc"
 # gcc="gcc-13"
 ### ---------------------------------------------------- ###
 
+### ------------------ build_compile.sh ---------------- ###
 ### build CLEO using cmake (with openMP thread parallelism through Kokkos)
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON"  # openMP parallelism enabled
 CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags}
@@ -41,3 +42,4 @@ mkdir ${path2build}share
 ### compile CLEO
 cd ${path2build} && pwd 
 make clean && make -j 16
+### ---------------------------------------------------- ###

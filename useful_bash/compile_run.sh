@@ -30,6 +30,7 @@ python=python
 # python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
 ### ---------------------------------------------------- ###
 
+### ------------------- compile_run.sh ----------------- ###
 ### ensure these directories exist (it's a good idea for later use)
 mkdir ${path2build}bin
 mkdir ${path2build}share
