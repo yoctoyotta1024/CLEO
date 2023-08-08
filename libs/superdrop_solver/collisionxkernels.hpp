@@ -324,7 +324,7 @@ public:
     const double bueff(1.0 - lle.coaleff(drop1, drop2));
     const double eff(bueff * lle.get_colleff(drop1, drop2) );
 
-    return eff / 100.0; 
+    return eff; 
   }
 };
 
