@@ -127,22 +127,23 @@ combined process of those two individual processes */
 
   /* create process for collision-coalescene in SDM */
   // const auto probs_coal(CollCoalProb_Golovin());
-  // const auto probs_coal(CollCoalProb_Long());
-  const auto terminalv(SimmelTerminalVelocity{});
-  const auto probs_coal(CollCoalProb_LowList(terminalv));
+  const auto probs_coal(CollCoalProb_Long());
+  // const auto terminalv(SimmelTerminalVelocity{});
+  // const auto probs_coal(CollCoalProb_LowList(terminalv));
   const auto coal(CollisionCoalescenceProcess(mdlsteps.collsubstep,
                                               &step2realtime,
                                               probs_coal));
 
-  /* create process for collision-breakup in SDM */
-  const auto probs_bu(CollBuProb_LowList(terminalv));
-  const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
-                                        &step2realtime,
-                                        probs_bu,
-                                        config.nfrags));
+  // /* create process for collision-breakup in SDM */
+  // const auto probs_bu(CollBuProb_LowList(terminalv));
+  // const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
+  //                                       &step2realtime,
+  //                                       probs_bu,
+  //                                       config.nfrags));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  const auto sdmprocess = cond >> coal >> bu;
+  const auto sdmprocess = cond >> coal;
+  // const auto sdmprocess = cond >> coal >> bu;
   // const auto sdmprocess = cond;
   // const auto sdmprocess = coal;
 

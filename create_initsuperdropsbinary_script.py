@@ -31,7 +31,7 @@ initSDsfile = binariespath+"/dimlessSDsinit.dat" # note this should match config
 # zlim = 1000
 # npergbx = 8
 # nsupers = iSDs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 256
+nsupers = 8192
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
@@ -52,13 +52,13 @@ radiigen = iSDs.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan
 # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
 # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
 # scalefacs          = [1e9]                       # relative heights of modes         
-# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-# geosigs              = [1.55, 2.3, 2]                    
-# scalefacs            = [1e6, 0.3e6, 0.025e6]   
-geomeans             = [0.02e-6, 0.15e-6]               
-geosigs              = [1.4, 1.6]                    
-scalefacs            = [6e6, 4e6]   
-numconc = np.sum(scalefacs)
+geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
+geosigs              = [1.55, 2.3, 2]                    
+scalefacs            = [1e6, 0.3e6, 0.025e6]   
+# geomeans             = [0.02e-6, 0.15e-6]               
+# geosigs              = [1.4, 1.6]                    
+# scalefacs            = [6e6, 4e6]   
+numconc = np.sum(scalefacs)*10
 radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
  
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
@@ -69,8 +69,8 @@ radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen            = iSDs.MonoCoordGen(monocoord3)
-coord3gen            = iSDs.SampleCoordGen(True) # sample coord3 range randomly or not
-# coord3gen            = None                        # do not generate superdroplet coord3s
+# coord3gen            = iSDs.SampleCoordGen(True) # sample coord3 range randomly or not
+coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
