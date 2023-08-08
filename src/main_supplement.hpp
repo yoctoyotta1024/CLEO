@@ -145,7 +145,7 @@ combined process of those two individual processes */
   // const auto sdmprocess = cond >> coal;
   // const auto sdmprocess = cond >> coal >> bu;
   // const auto sdmprocess = cond;
-  const auto sdmprocess = bu;
+  const auto sdmprocess = bu >> coal;
 
   return sdmprocess;
   // return NullProcess{};
