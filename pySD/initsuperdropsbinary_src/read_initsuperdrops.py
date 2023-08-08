@@ -80,8 +80,12 @@ def plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
     ''' plot initial superdroplet distribution from initSDsfile binary
     of every gridbox with index in gbx2plts '''
 
-    gbxvols = get_gbxvols_from_gridfile(gridfile, constsfile=constsfile)
-    attrs = get_superdroplet_attributes(configfile,constsfile, initSDsfile) 
+    gbxvols = get_gbxvols_from_gridfile(gridfile,
+                                        constsfile=constsfile,
+                                        isprint=False)
+    attrs = get_superdroplet_attributes(configfile,
+                                        constsfile,
+                                        initSDsfile) 
 
     if type(gbxs2plt) == int:
         gbxidxs = [gbxs2plt]

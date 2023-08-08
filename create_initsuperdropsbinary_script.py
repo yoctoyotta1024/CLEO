@@ -100,10 +100,10 @@ else:
 
 ### write initial superdrops binary
 initattrsgen = iSDs.InitManyAttrsGen(radiigen, radiiprobdist,
-                                               coord3gen, coord1gen, coord2gen)
+                                      coord3gen, coord1gen, coord2gen)
 csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
-                                                  configfile, constsfile,
-                                                  gridfile, nsupers, numconc)
+                                    configfile, constsfile,
+                                    gridfile, nsupers, numconc)
 
 ### plot initial superdrops binary
 if isfigures[0]:
