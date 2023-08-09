@@ -24,23 +24,6 @@ struct to enact collision-breakup events in SDM) */
 private:
   double nfrags; // expected number of fragments from 1 real droplet collision (Omega in my notes)
 
-  void superdroplet_pair_breakup(Superdrop &drop1, Superdrop &drop2) const
-  /* enact collisional-breakup of droplets by changing multiplicity,
-  radius and solute mass of each superdroplet in a pair. Method created
-  by Author (no citation yet available). Note implicit assumption that
-  gamma factor = 1. */
-  {
-    if (drop1.eps == drop2.eps)
-    {
-      twin_superdroplet_breakup(drop1, drop2);
-    }
-
-    else
-    {
-      different_superdroplet_breakup(drop1, drop2);
-    }
-  }
-
   void twin_superdroplet_breakup(Superdrop &drop1,
                                  Superdrop &drop2) const
   /* if eps1 = gamma*eps2 breakup of same multiplicity SDs
@@ -134,9 +117,27 @@ public:
     of superdroplets if gamma is not zero */
     if (gamma != 0)
     {
-      superdroplet_pair_breakup(drop1, drop2);
+      breakup_superdroplet_pair(drop1, drop2);
     }
   }
+
+  void breakup_superdroplet_pair(Superdrop &drop1, Superdrop &drop2) const
+  /* enact collisional-breakup of droplets by changing multiplicity,
+  radius and solute mass of each superdroplet in a pair. Method created
+  by Author (no citation yet available). Note implicit assumption that
+  gamma factor = 1. */
+  {
+    if (drop1.eps == drop2.eps)
+    {
+      twin_superdroplet_breakup(drop1, drop2);
+    }
+
+    else
+    {
+      different_superdroplet_breakup(drop1, drop2);
+    }
+  }
+
 };
 
 template <SDPairProbability CollisionXProbability>
