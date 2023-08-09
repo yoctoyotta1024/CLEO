@@ -36,7 +36,8 @@ private:
   CollisionKinetics<TerminalVelocity> ck;
 
   void coalesce_breakup_or_rebound(Superdrop &drop1,
-                                   Superdrop &drop2) const
+                                   Superdrop &drop2,
+                                   const unsigned long long gamma) const
   /* based on the kinetic arguments in section 2.2 of
   Szakáll and Urbich 2018 (neglecting grazing angle considerations),
   function enacts rebound, coalescence or breakup */
@@ -91,7 +92,7 @@ public:
     of superdroplets if gamma is not zero */
     if (gamma != 0)
     {
-      coalesce_breakup_or_rebound(drop1, drop2);
+      coalesce_breakup_or_rebound(drop1, drop2, gamma);
     }
   }
 };
@@ -99,18 +100,21 @@ public:
 template <SDPairProbability CollisionXProbability,
           VelocityFormula TerminalVelocity>
 SdmProcess auto
-CollisionCoalescenceProcess(const int interval,
-                            const std::function<double(int)> int2time,
-                            const CollisionXProbability p,
-                            const TerminalVelocity tv,
-                            const double nfrags)
+CollisionAllProcess(const int interval,
+                    const std::function<double(int)> int2time,
+                    const CollisionXProbability p,
+                    const TerminalVelocity tv,
+                    const double nfrags)
+/* SDM process for collisions of superdroplets 
+followed by coalescence, breakup or rebound */
 {
   const double realtstep = int2time(interval);
 
-  CollisionX<CollisionXProbability, CoalBreakupRebound>
-      coal(realtstep, p, CoalBreakupRebound(tv, nfrags));
+  CollisionX<CollisionXProbability,
+             CoalBreakupRebound<TerminalVelocity>>
+      collall(realtstep, p, CoalBreakupRebound(tv, nfrags));
 
-  return ConstTstepProcess{interval, coal};
+  return ConstTstepProcess{interval, collall};
 };
 
 #endif // COAL_BREAKUP_REBOUND_HPP
