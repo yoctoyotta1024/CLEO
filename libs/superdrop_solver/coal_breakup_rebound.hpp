@@ -34,12 +34,11 @@ private:
   Breakup breakup;
   CollisionKinetics<TerminalVelocity> ck;
 
-  unsigned int which_collisiontype(Superdrop &drop1,
+  void coalesce_breakup_or_rebound(Superdrop &drop1,
                                    Superdrop &drop2) const
   /* based on the kinetic arguments in section 2.2 of
   Szakáll and Urbich 2018 (neglecting grazing angle considerations),
-  returns 0 if rebound should occur, 1 if coalescence
-  and 2 if breakup  */
+  function enacts rebound, coalescence or breakup */
   {
     const double cke(ck.collision_kinetic_energy(drop1, drop2));
 
@@ -49,17 +48,16 @@ private:
     };
     const auto smalldrop = std::min(drop1, drop2, compare); // drop with smaller drop.radius
 
-    if (cke < ck.surfenergy(smalldrop))
+    if (cke >= ck.surfenergy(smalldrop)) // ie. if not rebound
     {
-      return 0; // rebound
-    }
-    else if (cke < ck.coal_surfenergy(drop1, drop2)) // ie. Weber number < 1
-    {
-      return 1; // coalescence
-    }
-    else
-    {
-      return 2; // breakup
+      if (cke < ck.coal_surfenergy(drop1, drop2)) // Weber number < 1 : coalescence
+      {
+        coal.coalesce_superdroplet_pair(drop1, drop2, gamma);
+      }
+      else // Weber > 1 : breakup
+      {
+        breakup.breakup_superdroplet_pair(drop1, drop2, gamma);
+      }
     }
   }
 
@@ -83,27 +81,16 @@ public:
   CoalBreakupRebound as a function in CollisionsX
   that satistfies the SDPairEnactX concept */
   {
-    /* 1. calculate gamma factor for collision-coalescence  */
+    /* 1. calculate gamma factor for collision  */
     const unsigned long long gamma = collision_gamma(drop1.eps,
                                                      drop2.eps,
                                                      prob, phi);
 
-    /* 2. enact collision-coalescence on pair
+    /* 2. enact collision between pair
     of superdroplets if gamma is not zero */
     if (gamma != 0)
     {
-      const unsigned int colltype(which_collisiontype(drop1, drop2));
-
-      if (colltype == 1) // (weber < x)
-      {
-        coal.coalesce_superdroplet_pair(drop1, drop2, gamma);
-      }
-
-      else if (colltype == 2) // do breakup ie. weber > x
-      {
-        breakup.breakup_superdroplet_pair(drop1, drop2, gamma);
-      }
-      // else rebound, no change in superdroplets
+      coalesce_breakup_or_rebound(drop1, drop2);
     }
   }
 };
