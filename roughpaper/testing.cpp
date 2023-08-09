@@ -109,8 +109,8 @@ void coalsurfe_check(const double d1cm,
 
 int main()
 {
-  const double d1cm(0.1); // [cm]
-  const double d2cm(0.36); // [cm]
+  const double d1cm(0.18); // [cm]
+  const double d2cm(0.1); // [cm]
 
   auto sdIdGen = Superdrop::IDType::Gen{};
   
@@ -129,6 +129,9 @@ int main()
   surfe_check(d1cm, d2cm, drop1, drop2);
   totsurfe_check(d1cm, d2cm, drop1, drop2);
   coalsurfe_check(d1cm, d2cm, drop1, drop2);
+
+  auto ll = LowListCollCoalEff(SimmelTerminalVelocity{});
+  std::cout <<"\ncoaleff: " << ll.coaleff(drop1, drop2) << "\n";
 
   return 0;
 }

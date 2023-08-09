@@ -294,10 +294,10 @@ public:
     constexpr double aconst = 0.778;
     constexpr double energylim = 5e-6; // etot limit / pi [J]
 
-    const double surf_t = ck.total_surfenergy(drop1, drop2);      // [J] surft / pi
-    const double surf_c = ck.coal_surfenergy(drop1, drop2); // [J] surfc / pi
-    const double etot = surf_t - surf_c +
-                        ck.kinetic_energy(drop1, drop2); // [J] total energy / pi
+    const double cke(ck.collision_kinetic_energy(drop1, drop2)); 
+    const double surf_t(ck.total_surfenergy(drop1, drop2));      // [J] surft / pi
+    const double surf_c(ck.coal_surfenergy(drop1, drop2)); // [J] surfc / pi
+    const double etot(cke + surf_t - surf_c); // [J] total energy / pi
 
     if (etot < energylim)
     {
