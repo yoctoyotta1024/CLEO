@@ -187,7 +187,6 @@ public:
                           (1 + std::pow(r1_r2, 3.0)); // * R0cubed to convert to [m^3]
 
     const double vdiff = terminalv(drop1) - terminalv(drop2); // * dlc::W0 to convert to [m/s]
-
     const double cke = ckeconst * rratio * vdiff * vdiff;
 
     return cke;

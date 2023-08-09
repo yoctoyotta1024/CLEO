@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 struct Superdrop
 {
@@ -80,5 +81,17 @@ int main()
   std::cout << dropA.eps << ", " << dropB.eps << "\n";
   std::cout << drop1.eps << ", " << drop2.eps << "\n";
 
+  std::cout << "\n---------------------------------\n";
+
+  const double d1(std::pow(1.4015e-05*2.0, 3.0));
+  const double d2(std::pow(6.2649e-05*2.0, 3.0));
+
+  const double dratio(d1 * d2 / (d1 + d2));
+  std::cout << 998.0 * std::numbers::pi / 12.0 * dratio * (-7.0817e-01) * (-7.0817e-01) << "\n"; //cke
+  std::cout << 7.28e-2 * std::numbers::pi * (1.4015e-05*2.0) * (1.4015e-05*2.0) << "\n"; //surft of min radius
   return 0;
 }
+
+// vdiff: -7.0817e-01, 3.7308e-02, 7.4547e-01
+// 1.4015e-05, 6.2649e-05, 1.4015e-05
+//    cke:2.8543e-12, 1.7969e-10
