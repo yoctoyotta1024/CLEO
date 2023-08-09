@@ -158,6 +158,87 @@ Long's Hydrodynamic Kernel */
                           SimmelTerminalVelocity{});
 }
 
+
+template <VelocityFormula TerminalVelocity>
+struct CollisionKinetics
+/* calculations involved in the kinetics of 
+a collision between two superdroplets */
+{
+  TerminalVelocity terminalv;
+
+  double collision_kinetic_energy(const Superdrop &drop1,
+                                  const Superdrop &drop2) const
+  /* returns cke/ pi, where cke = collision kinetic energy
+  as formulated in Low and List 1982(a) eqn 3.1 */
+  {
+    constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0; // convert r^3 to [m^3]
+    constexpr double ckeconst = R0cubed * 2.0 / 3.0 * DC::RHO_L *
+                                std::numbers::pi * dlc::W0;
+    
+    const double r1_r2(drop1.radius / drop2.radius);
+    const double rratio = std::pow(drop1.radius, 3.0) /
+                          (1 + std::pow(r1_r2, 3.0)); // * R0cubed to convert to [m^3]
+
+    const double vdiff = terminalv(drop1) - terminalv(drop2); // * dlc::W0 to convert to [m/s]
+
+    const double cke = ckeconst * rratio * vdiff * vdiff;
+
+    return cke;
+  }
+
+  double surfenergyconst()
+  /* constant required to calculate surface tension energy from
+  dimensionless radius using surface tension of water = sigma */
+  {
+    constexpr double sigma = 7.28e-2;         // [J/m^-2]
+    constexpr double R0sqrd = dlc::R0 * dlc::R0; // convert r^2 to [m^2]
+    
+    return 4.0 * sigma * std::numbers::pi * R0sqrd; // [J/m^-2]
+  }
+
+  double surfenergy(const Superdrop &drop) const
+  /* returns energy due to surface tension of a single
+  drop, analogous to equation 4.2 of Low and List 1982 */
+  {
+    constexpr double surfconst = surfenergyconst();
+    const double rsqrd = drop.radius * drop.radius; // * R0sqrd to convert to [m^2]
+    const double tot_surfe = surfconst * rsqrd;
+
+    return tot_surfe; // total surface energy
+  }
+
+  double total_surfenergy(const Superdrop &drop1,
+                          const Superdrop &drop2) const
+  /* returns total energy due to surface tension of pair 
+  of drops as in equation 4.2 of Low and List 1982 */
+  {
+    constexpr double surfconst = surfenergyconst();
+    const double r1(drop1.radius);  
+    const double r2(drop2.radius);  
+    const double r2sum = (r1 * r1 + r2 * r2); // * R0sqrd to convert to [m^2]
+    
+    const double tot_surfe = surfconst * r2sum;
+
+    return tot_surfe; // total surface energy
+  }
+
+  double coal_surfenergy(const Superdrop &drop1,
+                         const Superdrop &drop2) const
+  /* returns surface energy of single spherical equivalent, ie.
+  coalesced state of two drops, divided by pi as in
+  equation 4.3 of Low and List 1982 */
+  {
+    constexpr double surfconst = surfenergyconst();
+    const double r1(drop1.radius); 
+    const double r2(drop2.radius); 
+    const double r3sum = std::pow(r1, 3.0) + std::pow(r2, 3.0);
+    
+    const double equiv_surfe = surfconst * std::pow(r3sum, 2.0 / 3.0);
+
+    return equiv_surfe; // coalesced (spherical equivalent) surface energy
+  }
+}
+
 template <VelocityFormula TerminalVelocity>
 struct LowListCollCoalEff
 /* coalescence and collision-coalescence efficiency factors
@@ -168,83 +249,37 @@ where:
 - coaleff is from equation (4.5) and (4.6) Low and List 1982(a) */
 {
 private:
-  TerminalVelocity terminalv;
+  CollisionKinetics ck;
   LongKernelEff colleff{1.0};
 
-  double kinetic_energy(const Superdrop &drop1,
-                        const Superdrop &drop2) const
-  /* returns cke/ pi, where cke = collision kinetic energy
-  as formulated in Low and List 1982(a) eqn 3.1 */
-  {
-    constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0; // convert r^3 to [m^3] 
-    const double r1_r2(drop1.radius / drop2.radius);
-
-    const double rratio = R0cubed * std::pow(drop1.radius, 3.0) /
-                          (1 + std::pow(r1_r2, 3.0));
-    const double vdiff = (terminalv(drop1) - terminalv(drop2)) * dlc::W0; // [m/s]
-
-    const double cke_pi = 2.0/3.0 * DC::RHO_L * rratio * vdiff * vdiff;
-
-    return cke_pi;
-  }
-
-  double total_surfenergy(const Superdrop &drop1,
-                          const Superdrop &drop2) const
-  /* returns total surface energy of drops divided by pi
-  as in equation 4.2 of Low and List 1982 */
-  {
-    constexpr double sigma = 7.28e-2;         // [J/m^-2]
-    constexpr double surfconst = 4.0 * sigma; // [J/m^-2]
-    const double r1(drop1.radius * dlc::R0);  // [m]
-    const double r2(drop2.radius * dlc::R0);  // [m]
-
-    const double r2sum = (r1 * r1 + r2 * r2);
-    const double tot_surfe_pi = surfconst * r2sum;
-
-    return tot_surfe_pi; // total surface energy / pi
-  }
-
-  double equivalent_surfenergy(const Superdrop &drop1,
-                               const Superdrop &drop2) const
-  /* returns surface energy of single spherical equivalent of
-  drops divided by pi as in equation 4.3 of Low and List 1982 */
-  {
-    constexpr double sigma = 7.28e-2;         // [J/m^-2]
-    constexpr double surfconst = 4.0 * sigma; // [J/m^-2]
-    const double r1(drop1.radius * dlc::R0);  // [m]
-    const double r2(drop2.radius * dlc::R0);  // [m]
-
-    const double r3sum = std::pow(r1, 3.0) + std::pow(r2, 3.0);
-    const double equiv_surfe_pi = surfconst * std::pow(r3sum, 2.0 / 3.0);
-
-    return equiv_surfe_pi; // spherical equivalent surface energy / pi
-  }
-
-  double exponential(const double etot_pi, const double surf_c_pi) const
+  double exponential(const double etot,
+                     const double surf_c) const
   /* calc exponential in eqn 4.5 Low and List 1982(a) given
-  total collision energy, etot/pi [J] and equivalent surface
-  energy, surf_c / pi [J] */
+  total collision energy, etot [J] and equivalent surface
+  energy, surf_c [J] */
   {
     constexpr double bconst = -2.62e6; // [J^-2]
     constexpr double sigma = 7.28e-2;  // [J/m^-2]
 
-    const double exponent = bconst * sigma * std::numbers::pi *
-                            etot_pi * etot_pi / surf_c_pi;
+    const double exponent = bconst * sigma * etot * etot / surf_c;
 
     return std::exp(exponent);
   }
 
-  double sizeratio_factor(const double r1, const double r2) const
+  double sizeratio_factor(const double r1,
+                          const double r2) const
   /* calc factor that takes into accoutn size ratio fo droplets in
   eqn 4.5 Low and List 1982(a). */
   {
-    const double alpha(1 + std::min(r1, r2) / std::max(r1, r2)); // alpha = 1 + Ds/Dl
+    const double rsmall(std::min(r1, r2));
+    const double rbig(std::max(r1, r2));
+    const double alpha(1 + rsmall / rbig); // alpha = 1 + Ds/Dl
 
     return 1.0 / (alpha * alpha); // alpha^(-2)
   }
 
 public:
-  LowListCollCoalEff(TerminalVelocity tv) : terminalv(tv) {}
+  LowListCollCoalEff(TerminalVelocity tv) : ck{CollisionKinetics{tv}} {}
 
   double get_colleff(const Superdrop &drop1,
                      const Superdrop &drop2) const
@@ -262,16 +297,16 @@ public:
   bueff = 1 - coaleff */
   {
     constexpr double aconst = 0.778;
-    constexpr double energylim = 5e-6 / std::numbers::pi; // etot limit / pi [J]
+    constexpr double energylim = 5e-6; // etot limit / pi [J]
 
-    const double surf_t_pi = total_surfenergy(drop1, drop2);      // [J] surft / pi
-    const double surf_c_pi = equivalent_surfenergy(drop1, drop2); // [J] surfc / pi
-    const double etot_pi = kinetic_energy(drop1, drop2) +
-                           surf_t_pi - surf_c_pi; // [J] total energy / pi
+    const double surf_t = ck.total_surfenergy(drop1, drop2);      // [J] surft / pi
+    const double surf_c = ck.coal_surfenergy(drop1, drop2); // [J] surfc / pi
+    const double etot = surf_t - surf_c +
+                        ck.kinetic_energy(drop1, drop2); // [J] total energy / pi
 
-    if (etot_pi < energylim)
+    if (etot < energylim)
     {
-      const double exp = exponential(etot_pi, surf_c_pi);
+      const double exp = exponential(etot, surf_c);
       const double radiiratio = sizeratio_factor(drop1.radius,
                                                  drop2.radius);
       const double coaleff = aconst * radiiratio * exp;
