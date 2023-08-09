@@ -35,32 +35,44 @@ private:
   Breakup breakup;
   CollisionKinetics<TerminalVelocity> ck;
 
+  void coalesce_or_breakup(Superdrop &drop1,
+                           Superdrop &drop2,
+                           const unsigned long long gamma) const
+  /* based on the kinetic arguments in section 2.2 of
+  Szakáll and Urbich 2018 (neglecting grazing angle considerations),
+  function enacts coalescence or breakup */
+  {
+    const double cke(ck.collision_kinetic_energy(drop1, drop2));
+
+    if (cke < ck.coal_surfenergy(drop1, drop2)) // Weber number < 1 : coalescence
+    {
+      coal.coalesce_superdroplet_pair(drop1, drop2, gamma);
+    }
+    else // Weber > 1 : breakup
+    {
+      breakup.breakup_superdroplet_pair(drop1, drop2);
+    }
+  }
+
   void coalesce_breakup_or_rebound(Superdrop &drop1,
                                    Superdrop &drop2,
                                    const unsigned long long gamma) const
   /* based on the kinetic arguments in section 2.2 of
   Szakáll and Urbich 2018 (neglecting grazing angle considerations),
-  function enacts rebound, coalescence or breakup */
+  function enacts rebound or coalescence/breakup */
   {
-    const double cke(ck.collision_kinetic_energy(drop1, drop2));
-
     auto compare = [](const Superdrop &dropA, const Superdrop &dropB)
     {
       return dropA.radius < dropB.radius; // returns true if epsA < epsB
     };
     const auto smalldrop = std::min(drop1, drop2, compare); // drop with smaller drop.radius
 
+    const double cke(ck.collision_kinetic_energy(drop1, drop2));
+
     if (cke >= ck.surfenergy(smalldrop)) // ie. if not rebound
     {
-      if (cke < ck.coal_surfenergy(drop1, drop2)) // Weber number < 1 : coalescence
-      {
-        coal.coalesce_superdroplet_pair(drop1, drop2, gamma);
-      }
-      else // Weber > 1 : breakup
-      {
-        breakup.breakup_superdroplet_pair(drop1, drop2, gamma);
-      }
-    }
+      coalesce_or_breakup(drop1, drop2, gamma);
+    } 
   }
 
   unsigned long long collision_gamma(const unsigned long long eps1,
