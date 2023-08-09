@@ -140,12 +140,12 @@ private:
   references to dropA and dropB in a pair {drop1, drop2}
   such that drop1.eps is always > drop2.eps */
   {
-    auto comp = [](const Superdrop &dropA, const Superdrop &dropB)
+    auto compare = [](const Superdrop &dropA, const Superdrop &dropB)
     {
       return dropA.eps < dropB.eps; //returns true if epsA < epsB
     };
 
-    auto [drop2, drop1] = std::minmax(dropA, dropB, comp); // drop2.eps =< drop1.eps
+    auto [drop2, drop1] = std::minmax(dropA, dropB, compare); // drop2.eps =< drop1.eps
 
     return {const_cast<Superdrop&>(drop1), const_cast<Superdrop&>(drop2)};
   }
