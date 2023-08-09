@@ -4,10 +4,7 @@
 collision-breakup events in
 superdroplet model. Breakup struct
 satisfies SDPairEnactX concept used in
-CollisionX struct. Probability calculations
-are contained in structures that satisfy the
-requirements of the SDPairProbability
-concept also used by CollisionX struct */
+CollisionX struct */
 
 #ifndef BREAKUP_HPP
 #define BREAKUP_HPP

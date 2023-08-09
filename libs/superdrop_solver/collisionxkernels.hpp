@@ -4,7 +4,11 @@
 of collision-x (e.g collision-coalescence
 or collusion-breakup) between two droplets
 using a specific kernel e.g. Golovin's
-or Long's or Low and List;s. */
+or Long's or Low and List's. Probability
+calculations are contained in structures
+that satisfy the requirements of the
+SDPairProbability concept also used by
+the CollisionX struct */
 
 #ifndef COLLISIONXKERNELS_HPP
 #define COLLISIONXKERNELS_HPP

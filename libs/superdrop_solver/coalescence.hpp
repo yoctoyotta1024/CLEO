@@ -4,10 +4,7 @@
 collision-coalescence events in
 superdroplet model. Coalescence struct
 satisfies SDPairEnactX concept used in
-CollisionX struct. Probability calculations
-are contained in structures that satisfy the
-requirements of the SDPairProbability
-concept also used by CollisionX struct */
+CollisionX struct */
 
 #ifndef COALESCENCE_HPP
 #define COALESCENCE_HPP
@@ -32,32 +29,6 @@ two superdroplets. (Can be used in collisionsx struct
 to enact collision-coalescence events in SDM) */
 {
 private:
-  void coalesce_superdroplet_pair(Superdrop &drop1, Superdrop &drop2,
-                                  const unsigned long long gamma) const
-  /* coalesce pair of superdroplets by changing multiplicity,
-  radius and solute mass of each superdroplet in pair
-  according to Shima et al. 2009 Section 5.1.3. part (5) */
-  {
-    if (drop1.eps - gamma * drop2.eps == 0)
-    {
-      twin_superdroplet_coalescence(drop1, drop2, gamma);
-    }
-
-    else if (drop1.eps - gamma * drop2.eps > 0)
-    {
-      different_superdroplet_coalescence(drop1, drop2, gamma);
-    }
-
-    else
-    {
-      std::string errormsg = "something undefined occured "
-                             "during colllision-coalescence" +
-                             std::to_string(drop1.eps) + " < " +
-                             std::to_string(gamma * (drop2.eps));
-      throw std::invalid_argument(errormsg);
-    }
-  }
-
   void twin_superdroplet_coalescence(Superdrop &drop1,
                                      Superdrop &drop2,
                                      const unsigned long long gamma) const
@@ -97,24 +68,6 @@ private:
     drop2.m_sol = drop2.m_sol + gamma * drop1.m_sol;
   }
 
-  unsigned long long coalescence_gamma(const unsigned long long eps1,
-                                       const unsigned long long eps2,
-                                       const double prob,
-                                       const double phi) const
-  /* calculates value of gamma factor in Monte Carlo
-  collision-coalescence as in Shima et al. 2009 */
-  {
-    unsigned long long gamma = floor(prob); // if phi >= (prob - floor(prob))
-    if (phi < (prob - gamma))
-    {
-      ++gamma;
-    }
-
-    const unsigned long long maxgamma(eps1 / eps2); // same as floor() for positive ints
-
-    return std::min(gamma, maxgamma);
-  }
-
 public:
   void operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const
@@ -134,6 +87,51 @@ public:
       coalesce_superdroplet_pair(drop1, drop2, gamma);
     }
   }
+
+  unsigned long long coalescence_gamma(const unsigned long long eps1,
+                                       const unsigned long long eps2,
+                                       const double prob,
+                                       const double phi) const
+  /* calculates value of gamma factor in Monte Carlo
+  collision-coalescence as in Shima et al. 2009 */
+  {
+    unsigned long long gamma = floor(prob); // if phi >= (prob - floor(prob))
+    if (phi < (prob - gamma))
+    {
+      ++gamma;
+    }
+
+    const unsigned long long maxgamma(eps1 / eps2); // same as floor() for positive ints
+
+    return std::min(gamma, maxgamma);
+  }
+
+  void coalesce_superdroplet_pair(Superdrop &drop1, Superdrop &drop2,
+                                  const unsigned long long gamma) const
+  /* coalesce pair of superdroplets by changing multiplicity,
+  radius and solute mass of each superdroplet in pair
+  according to Shima et al. 2009 Section 5.1.3. part (5) */
+  {
+    if (drop1.eps - gamma * drop2.eps == 0)
+    {
+      twin_superdroplet_coalescence(drop1, drop2, gamma);
+    }
+
+    else if (drop1.eps - gamma * drop2.eps > 0)
+    {
+      different_superdroplet_coalescence(drop1, drop2, gamma);
+    }
+
+    else
+    {
+      std::string errormsg = "something undefined occured "
+                             "during colllision-coalescence" +
+                             std::to_string(drop1.eps) + " < " +
+                             std::to_string(gamma * (drop2.eps));
+      throw std::invalid_argument(errormsg);
+    }
+  }
+
 };
 
 template <SDPairProbability CollisionXProbability>
