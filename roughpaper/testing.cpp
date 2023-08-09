@@ -49,18 +49,13 @@ int main()
   const double iradius2 = 0.0715 / 200.0 / dlc::R0;;
   Superdrop drop2(isolute, ieps2, iradius2, im_sol, 0.0, 0.0, 0.0, sdIdGen.next());
 
-  std::cout <<"drop1: " << drop1.radius <<"\ndrop2: " << drop2.radius << "\n";
-
   const auto terminalv(SimmelTerminalVelocity{});
-  const LowListCollCoalEff<SimmelTerminalVelocity>
-      llke(terminalv);
+  CollisionKinetics ck(terminalv);
 
-  std::cout << "llke coal: " << llke(drop1, drop2) <<"\n";
-  std::cout << "llke bu: " << 1.0-llke(drop1, drop2) <<"\n";
-
-  const auto llprob = CollBuProb_LowList(terminalv);
-
-  std::cout << "llbuke: " << LongKernelEff{1.0}(drop1, drop2) <<"\n";
-  
+  std::cout << ck.collision_kinetic_energy(drop1, drop2) << "\n";
+  std::cout << ck.surfenergy(drop1) << "\n";
+  std::cout << ck.surfenergy(drop2) << "\n";
+  std::cout << ck.total_surfenergy(drop1, drop2) << "\n";
+  std::cout << ck.coal_surfenergy(drop1, drop2) << "\n";
   return 0;
 }
