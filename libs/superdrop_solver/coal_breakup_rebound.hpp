@@ -15,6 +15,7 @@ SDPairEnactX concept used in CollisionX struct */
 
 #include "../claras_SDconstants.hpp"
 #include "./superdrop.hpp"
+#include "./terminalvelocity.hpp"
 #include "./collisionxkernels.hpp"
 #include "./collisionx.hpp"
 #include "./coalescence.hpp"
@@ -95,17 +96,19 @@ public:
   }
 };
 
-template <SDPairProbability CollisionXProbability>
+template <SDPairProbability CollisionXProbability,
+          VelocityFormula TerminalVelocity>
 SdmProcess auto
 CollisionCoalescenceProcess(const int interval,
                             const std::function<double(int)> int2time,
                             const CollisionXProbability p,
+                            const TerminalVelocity tv,
                             const double nfrags)
 {
   const double realtstep = int2time(interval);
 
   CollisionX<CollisionXProbability, CoalBreakupRebound>
-      coal(realtstep, p, CoalBreakupRebound(nfrags));
+      coal(realtstep, p, CoalBreakupRebound(tv, nfrags));
 
   return ConstTstepProcess{interval, coal};
 };
