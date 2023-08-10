@@ -45,6 +45,8 @@ ${python} ${path2CLEO}create_thermobinaries_script.py ${path2CLEO} ${path2build}
 ${python} ${path2CLEO}create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
 
 ### run CLEO
+export OMP_PROC_BIND=spread
+export OMP_PLACES=threads
 runcmd="${path2build}/src/runCLEO ${configfile} ${path2CLEO}libs/claras_SDconstants.hpp"
 echo ${runcmd}
 ${runcmd}
