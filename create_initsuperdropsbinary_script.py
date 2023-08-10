@@ -64,6 +64,24 @@ radiigen = iSDs.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan
 volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
+
+# reff                 = 7e-6                        # effective radius [m]
+reff                 = 7e-3                        # effective radius [m]
+nueff                = 0.08                        # effective variance 
+# radiiprobdist = rprobs.ClouddropsHansenGamma(reff, nueff)
+rdist1 = rprobs.ClouddropsHansenGamma(reff, nueff)
+
+nrain                = 3000                         # raindrop concentration [m^-3]
+qrain                = 0.9                          # rainwater content [g/m^3]
+# dvol                 = 8e-4                         # mean volume diameter [m]
+dvol                 = 0.0016                       # mean volume diameter [m]
+# radiiprobdist = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+rdist2 = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+
+distribs = [rdist1, rdist2]
+scalefacs = [10, 1]
+radiiprobdist = rprobs.CombinedRadiiProbDistribs(distribs, scalefacs)
+
 ### --------------------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord3 Generator --- ###

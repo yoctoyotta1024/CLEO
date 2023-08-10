@@ -1,4 +1,27 @@
 import numpy as np
+from scipy import special 
+
+class CombinedRadiiProbDistribs:
+  ''' probability of radius from the sum of several
+  probability dsitirbutions '''
+
+  def __init__(self, probdistribs, scalefacs):
+    self.probdistribs = probdistribs
+    self.scalefacs = scalefacs
+
+    if len(scalefacs) != len(probdistribs):
+      print("relative height of each distribution" +\
+            "in probdistribs must be given")
+
+  def __call__(self, radii):
+    ''' returns distribution for radii given by the 
+    sum of the distributions in probdistribs list '''
+
+    probs = np.zeros(radii.shape)
+    for distrib, sf in zip(self.probdistribs, self.scalefacs):
+      probs += sf * distrib(radii)
+    
+    return probs / np.sum(probs) # normalise so sum(prob) = 1 
 
 class DiracDelta:
   ''' probability of radius nonzero if it is
@@ -83,7 +106,7 @@ class LnNormal:
       probs += self.lnnormaldist(radii, self.scalefacs[n],
                              self.geomeans[n], self.geosigs[n])
 
-    return probs / np.sum(probs) #normalise so sum(prob) = 1 
+    return probs / np.sum(probs) # normalise so sum(prob) = 1 
 
   def lnnormaldist(self, radii, scalefac, geomean, geosig):
     ''' calculate probability of radii given the paramters of a
@@ -100,3 +123,59 @@ class LnNormal:
     dn_dlnr = norm*np.exp(exponent)                         # eq.5.8 [lohmann intro 2 clouds]
     
     return dn_dlnr
+
+class ClouddropsHansenGamma: 
+  ''' probability of radius according to gamma distribution for 
+  shallow cumuli cloud droplets from Poertge et al. 2023 '''
+
+  def __init__(self, reff, nueff):
+    self.reff = reff
+    self.nueff = nueff
+
+  def __call__(self, radii):
+    ''' return gamma distribution for cloud droplets given
+    radius [m] using parameters from Poertge et al. 2023
+    for shallow cumuli (figure 12).
+    typical values:
+    reff = 7e-6 #[m]
+    nueff = 0.08 # [] '''
+
+    xp = (1-2*self.nueff)/self.nueff
+    n0const = (self.reff*self.nueff)**(-xp)
+    n0const = n0const / special.gamma(xp) 
+
+    term1 = radii**((1-3*self.nueff)/self.nueff)
+    term2 = np.exp(-radii/(self.reff*self.nueff))
+
+    probs = n0const * term1 * term2 # dn_dr [prob m^-1]
+
+    return probs / np.sum(probs) # normalise so sum(prob) = 1 
+
+class RaindropsGeoffroyGamma:
+  ''' probability of radius given gamma distribution for
+  shallow cumuli rain droplets from Geoffroy et al. 2014 '''
+
+  def __init__(self, nrain, qrain, dvol):
+    
+    self.nrain = nrain # raindrop concentration [ndrops/m^3] 
+    self.qrain = qrain  # rainwater content [g/m^3]
+    self.dvol = dvol # volume mean raindrop diameter [m]
+  
+  def __call__(self, radii):
+    ''' returns probability of each radius according to a
+    gamma distribution for rain droplets using parameters
+    from Geoffroy et al. 2014 for precipitating shallow
+    cumuli RICO (see figure 3 and equations 2,3 and 5).
+    typical parameter values:
+    nrain = 3 / 0.001 # [ndrops/m^3]
+    qrain = 0.9 # [g/m^3]
+    dvol = 800e-6 #[m] '''
+
+    nu = 18/((self.nrain*self.qrain)**0.25) # []
+    lamda = (nu*(nu+1)*(nu+2))**(1/3) / self.dvol # [m^-1]
+    const = self.nrain * lamda**nu / special.gamma(nu)
+    
+    diam = 2*radii #[m]
+    probs = const * diam**(nu-1) * np.exp(-lamda*diam) # dn_dr [prob m^-1]
+ 
+    return probs / np.sum(probs) # normalise so sum(prob) = 1 
