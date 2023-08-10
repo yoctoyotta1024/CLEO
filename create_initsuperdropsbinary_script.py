@@ -67,14 +67,12 @@ radiigen = iSDs.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan
 
 reff                 = 7e-6                     # effective radius [m]
 nueff                = 0.08                     # effective variance 
-# reff                 = 3e-5                      # effective radius [m]
-# nueff                = 0.1                        # effective variance 
 # radiiprobdist = rprobs.ClouddropsHansenGamma(reff, nueff)
 rdist1 = rprobs.ClouddropsHansenGamma(reff, nueff)
 
 nrain                = 3000                         # raindrop concentration [m^-3]
 qrain                = 0.9                          # rainwater content [g/m^3]
-dvol                 = 8e-4                       # mean volume diameter [m]
+dvol                 = 8e-4                         # mean volume diameter [m]
 # radiiprobdist = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
 rdist2 = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
 
