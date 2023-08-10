@@ -32,13 +32,16 @@ class VolExponential:
 
   def __init__(self, radius0, rspan):
     
-    self.radius0 = radius0
+    self.radius0 = radius0 # peak of volume exponential distribution [m]
     self.rspan = rspan
 
   def __call__(self, radii):
     ''' Returns probability of eaach radius in radii according to 
     distribution where probability of volume is exponential and bins 
-    or radii are evently spaced in ln(r) ''' 
+    for radii are evently spaced in ln(r).
+    typical parameter values:
+    radius0 = 30.531e-6 # [m]
+    numconc = 2**(23) # [m^-3] ''' 
 
     rwdth = np.log(self.rspan[-1]/self.rspan[0]) # assume equally spaced bins in ln(r)
     
@@ -52,7 +55,12 @@ class LnNormal:
   ''' probability of radius given by lognormal distribution
   as defined by section 5.2.3 of "An Introduction to clouds from
   the Microscale to Climate" by Lohmann, Luond and Mahrt and radii sampled
-  from evenly spaced bins in ln(r)'''
+  from evenly spaced bins in ln(r).
+  typical parameter values:
+  geomeans = [0.02e-6, 0.2e-6, 3.5e-6] # [m]               
+  geosigs = [1.55, 2.3, 2]                    
+  scalefacs = [1e6, 0.3e6, 0.025e6]
+  numconc = 1e9 # [m^-3]'''
 
   def __init__(self, geomeans, geosigs, scalefacs):
     
