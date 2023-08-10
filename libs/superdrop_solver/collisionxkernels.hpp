@@ -285,7 +285,7 @@ public:
   /* returns coaleff, the coalescence efficiency
   of two droplets (given that they have collided)
   from equation (4.5) and (4.6) Low and List 1982(a).
-  the total collision-coealescence efficiency,
+  the total collision-coalescence efficiency,
   eff = coaleff * colleff, and the breakup efficiency
   bueff = 1 - coaleff */
   {
@@ -350,7 +350,7 @@ public:
   double operator()(const Superdrop &drop1,
                     const Superdrop &drop2) const
   /* collision-breakup efficiency, eff, using
-  eff = colleff * bueff, and bueff = 1 - coealeff
+  eff = colleff * bueff, and bueff = 1 - coaleff
   as in McFarquhar 2004 (see equation (28) therein) */
   {
     const double bueff(1.0 - lle.coaleff(drop1, drop2));

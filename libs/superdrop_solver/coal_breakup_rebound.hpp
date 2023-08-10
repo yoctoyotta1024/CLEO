@@ -104,8 +104,8 @@ public:
     of superdroplets if gamma is not zero */
     if (gamma != 0)
     {
-      // coalesce_breakup_or_rebound(drop1, drop2, gamma);
-      coalesce_or_breakup(drop1, drop2, gamma);
+      coalesce_breakup_or_rebound(drop1, drop2, gamma);
+      // coalesce_or_breakup(drop1, drop2, gamma);
     }
   }
 };
