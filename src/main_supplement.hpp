@@ -142,20 +142,25 @@ combined process of those two individual processes */
   //                                       probs_bu,
   //                                       config.nfrags));
 
-  const auto probs_coll(CollCoalProb_Long());
-  const auto terminalv(SimmelTerminalVelocity{});
-  const auto collall(CollisionAllProcess(mdlsteps.collsubstep,
+  // const auto probs_coll(CollCoalProb_Long());
+  // const auto terminalv(SimmelTerminalVelocity{});
+  // const auto collall(CollisionAllProcess(mdlsteps.collsubstep,
+  //                                        &step2realtime,
+  //                                        probs_coll,
+  //                                        terminalv,
+  //                                        config.nfrags));
+
+  const auto djvalid(CollisionDeJongValid(mdlsteps.collsubstep,
                                          &step2realtime,
                                          probs_coll,
                                          terminalv,
                                          config.nfrags));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  // const auto sdmprocess = cond >> coal;
-  // const auto sdmprocess = cond >> coal >> bu;
+  // const auto sdmprocess = cond >> coalall;
   // const auto sdmprocess = cond;
-  // const auto sdmprocess = coal;
-  const auto sdmprocess = collall;
+  // const auto sdmprocess = coalall;
+  const auto sdmprocess = djvalid;
 
   return sdmprocess;
   // return NullProcess{};

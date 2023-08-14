@@ -17,8 +17,8 @@ initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initia
 grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for GBx boundaries
 
 ### Output Data parameters ###
-setuptxt = ./bin/raindistrib/setup_su18coalrebu_x4nfrags.txt               # name of .txt output file to copy setup to
-zarrbasedir = ./bin/raindistrib/SDMdata_su18coalrebu_x4nfrags.zarr         # zarr store base directory
+setuptxt = ./bin/djvalid/setup_djvalid.txt               # name of .txt output file to copy setup to
+zarrbasedir = ./bin/djvalid/SDMdata_djvalid.zarr         # zarr store base directory
 maxchunk = 1250000                                              # maximum no. of elements in chunks of zarr store array
 
 ### SDM parameters ###
