@@ -67,26 +67,6 @@ private:
     drop2.m_sol = old_eps * (drop1.m_sol + drop2.m_sol) / new_eps; 
   } 
 
-  unsigned int breakup_gamma(const unsigned long long eps1,
-                             const unsigned long long eps2,
-                             const double prob,
-                             const double phi) const
-  /* calculates value of gamma factor in Monte Carlo
-  collision-breakup, adapted from gamma for collision-
-  coalescence in Shima et al. 2009. Here is is assumed
-  maximally 1 breakup event can occur (gamma = 0 or 1)
-  irrespective of if scaled probability, prob, is > 1 */
-  {
-    if (phi < (prob - floor(prob)))
-    {
-      return 1;
-    }
-    else // if phi >= (prob - floor(prob))
-    {
-      return 0;
-    }
-  }
-
 public:
   Breakup(const double infrags) : nfrags(std::max(infrags, 1.0))
   /* nfrags = expected number of fragments from one real
@@ -121,6 +101,26 @@ public:
     }
   }
 
+  unsigned int breakup_gamma(const unsigned long long eps1,
+                             const unsigned long long eps2,
+                             const double prob,
+                             const double phi) const
+  /* calculates value of gamma factor in Monte Carlo
+  collision-breakup, adapted from gamma for collision-
+  coalescence in Shima et al. 2009. Here is is assumed
+  maximally 1 breakup event can occur (gamma = 0 or 1)
+  irrespective of if scaled probability, prob, is > 1 */
+  {
+    if (phi < (prob - floor(prob)))
+    {
+      return 1;
+    }
+    else // if phi >= (prob - floor(prob))
+    {
+      return 0;
+    }
+  }
+  
   void breakup_superdroplet_pair(Superdrop &drop1, Superdrop &drop2) const
   /* enact collisional-breakup of droplets by changing multiplicity,
   radius and solute mass of each superdroplet in a pair. Method created

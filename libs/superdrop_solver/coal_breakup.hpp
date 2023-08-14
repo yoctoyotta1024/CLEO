@@ -99,10 +99,11 @@ coaleff (similar to de Jong et al. 2023 sect. 3) */
   const auto collprob(HydrodynamicProb(LongKernelEff{1.0}, terminalv));
 
   CollisionX<HydrodynamicProb<LongKernelEff, SimmelTerminalVelocity>,
-             CoalBreakupRebound<SimmelTerminalVelocity>>
-      collall(realtstep, collprob, CoalBreakupConstEff(nfrags, coaleff));
+             CoalBreakupConstEff>
+      coalbu(realtstep, collprob,
+             CoalBreakupConstEff(nfrags, coaleff));
 
-  return ConstTstepProcess{interval, collall};
+  return ConstTstepProcess{interval, coalbu};
 };
 
 #endif // COAL_BREAKUP_HPP
