@@ -65,7 +65,7 @@ private:
     {
       return dropA.radius < dropB.radius; // returns true if epsA < epsB
     };
-    const auto smalldrop = std::min(drop1, drop2, compare); // drop with smaller drop.radius
+    const auto smalldrop(std::min(drop1, drop2, compare)); // drop with smaller drop.radius
 
     const double cke(ck.collision_kinetic_energy(drop1, drop2));
 
@@ -100,9 +100,9 @@ public:
   NOT probability of collision-coalescence! */
   {
     /* 1. calculate gamma factor for collision  */
-    const unsigned long long gamma = collision_gamma(drop1.eps,
-                                                     drop2.eps,
-                                                     probcoll, phi);
+    const unsigned long long gamma(collision_gamma(drop1.eps,
+                                                   drop2.eps,
+                                                   probcoll, phi));
 
     /* 2. enact collision between pair
     of superdroplets if gamma is not zero */
