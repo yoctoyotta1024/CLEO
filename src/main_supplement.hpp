@@ -150,11 +150,11 @@ combined process of those two individual processes */
   //                                        terminalv,
   //                                        config.nfrags));
 
+  const double coaleff(1.0);
   const auto djvalid(CollisionDeJongValid(mdlsteps.collsubstep,
-                                         &step2realtime,
-                                         probs_coll,
-                                         terminalv,
-                                         config.nfrags));
+                                          &step2realtime,
+                                          config.nfrags,
+                                          coaleff));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
   // const auto sdmprocess = cond >> coalall;
