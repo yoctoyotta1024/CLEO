@@ -16,7 +16,7 @@ configfile = sys.argv[3]
 
 ### booleans for [making+showing, saving] figures
 isfigures = [True, True]
-gbxs2plt = [0]
+gbxs2plt = ["all"]
 
 ### essential paths and filenames
 constsfile = path2CLEO+"libs/claras_SDconstants.hpp"
@@ -31,23 +31,23 @@ initSDsfile = binariespath+"/dimlessSDsinit.dat" # note this should match config
 # zlim = 1000
 # npergbx = 8
 # nsupers = iSDs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 8192
+nsupers = 512
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
 # monor                = 1e-6                        # all SDs have this same radius [m]
 # radiigen  = iSDs.MonoAttrsGen(monor)     # all SDs have the same dryradius [m]
 
-# rspan                = [1e-8, 9e-5]                # min and max range of radii to sample [m]
-rspan                = [1e-6, 1e-3]                # min and max range of radii to sample [m]
+# rspan                = [1e-8, 9e-5]              # min and max range of radii to sample [m]
+rspan                = [0.04, 0.05]                # min and max range of radii to sample [m]
 randomr              = True                        # sample radii range randomly or not
 radiigen = iSDs.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Droplet Radius Probability Distribution --- ###
-# dirac0               = 1e-6                        # radius in sample closest to this value is dirac delta peak
-# numconc              = 1e9                         # total no. conc of real droplets [m^-3]
-# radiiprobdist = iSDs.radiiprobdistribs.DiracDelta(dirac0)
+dirac0               = 0.04910258806               # radius in sample closest to this value is dirac delta peak
+numconc              = 1e6                         # total no. conc of real droplets [m^-3]
+radiiprobdist = iSDs.radiiprobdistribs.DiracDelta(dirac0)
 
 # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
 # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
@@ -65,21 +65,19 @@ radiigen = iSDs.SampleDryradiiGen(rspan, randomr) # radii are sampled from rspan
 # numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 # radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
 
-reff                 = 7e-6                     # effective radius [m]
-nueff                = 0.08                     # effective variance 
-# radiiprobdist = rprobs.ClouddropsHansenGamma(reff, nueff)
-rdist1 = rprobs.ClouddropsHansenGamma(reff, nueff)
-
-nrain                = 3000                         # raindrop concentration [m^-3]
-qrain                = 0.9                          # rainwater content [g/m^3]
-dvol                 = 8e-4                         # mean volume diameter [m]
-# radiiprobdist = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-rdist2 = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-
-numconc = 1e9 # [m^3]
-distribs = [rdist1, rdist2]
-scalefacs = [1000, 1]
-radiiprobdist = rprobs.CombinedRadiiProbDistribs(distribs, scalefacs)
+# reff                 = 7e-6                     # effective radius [m]
+# nueff                = 0.08                     # effective variance 
+# # radiiprobdist = rprobs.ClouddropsHansenGamma(reff, nueff)
+# rdist1 = rprobs.ClouddropsHansenGamma(reff, nueff)
+# nrain                = 3000                         # raindrop concentration [m^-3]
+# qrain                = 0.9                          # rainwater content [g/m^3]
+# dvol                 = 8e-4                         # mean volume diameter [m]
+# # radiiprobdist = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+# rdist2 = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+# numconc = 1e9 # [m^3]
+# distribs = [rdist1, rdist2]
+# scalefacs = [1000, 1]
+# radiiprobdist = rprobs.CombinedRadiiProbDistribs(distribs, scalefacs)
 
 ### --------------------------------------------------------- ###
 
