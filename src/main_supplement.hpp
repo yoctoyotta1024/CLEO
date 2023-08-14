@@ -49,6 +49,7 @@ SDM process and observers to use in main.cpp */
 #include "superdrop_solver/coalescence.hpp"
 #include "superdrop_solver/breakup.hpp"
 #include "superdrop_solver/coal_breakup_rebound.hpp"
+#include "superdrop_solver/coal_breakup.hpp"
 #include "superdrop_solver/condensation.hpp"
 #include "superdrop_solver/sedimentation.hpp"
 #include "superdrop_solver/terminalvelocity.hpp"
@@ -151,7 +152,7 @@ combined process of those two individual processes */
   //                                        config.nfrags));
 
   const double coaleff(1.0);
-  const auto djvalid(CollisionDeJongValid(mdlsteps.collsubstep,
+  const auto djvalid(CollisionCoalBuConst(mdlsteps.collsubstep,
                                           &step2realtime,
                                           config.nfrags,
                                           coaleff));

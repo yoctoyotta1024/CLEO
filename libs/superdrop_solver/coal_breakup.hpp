@@ -86,7 +86,7 @@ public:
 };
 
 SdmProcess auto
-CollisionDeJongValid(const int interval,
+CollisionCoalBuConst(const int interval,
                      const std::function<double(int)> int2time,
                      const double nfrags,
                      const double coaleff)
