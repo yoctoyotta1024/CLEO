@@ -25,10 +25,10 @@ namespace dlc = dimless_constants;
 
 template <VelocityFormula TerminalVelocity>
 class CoalBreakupRebound
-/* class is method for coalescence / breakup between
-two superdroplets. (Can be used in collisionsx struct
-to enact collision-coalescence or collision-breakup
-events in the superdroplet model) */
+/* class is method for coalescence / breakup / rebound
+between two superdroplets. (Can be used in collisionsx
+struct to enact collision-coalescence or collision-breakup
+or collision-rebound events in the superdroplet model) */
 {
 private:
   Coalescence coal;
@@ -77,12 +77,13 @@ private:
 
   unsigned long long collision_gamma(const unsigned long long eps1,
                                      const unsigned long long eps2,
-                                     const double prob,
+                                     const double probcoll,
                                      const double phi) const
   /* calculates value of gamma factor in Monte Carlo
-  collision as in Shima et al. 2009 */
+  collision as in Shima et al. 2009 given probability of
+  collision (note NOT probability of collision-coalescence!) */
   {
-    return coal.coalescence_gamma(eps1, eps2, prob, phi);
+    return coal.coalescence_gamma(eps1, eps2, probcoll, phi);
   }
 
 public:
@@ -90,15 +91,17 @@ public:
       : coal(Coalescence{}), breakup(Breakup(infrags)), ck(tv) {}
 
   void operator()(Superdrop &drop1, Superdrop &drop2,
-                  const double prob, const double phi) const
+                  const double probcoll, const double phi) const
   /* this operator is used as an "adaptor" for using
   CoalBreakupRebound as a function in CollisionsX
-  that satistfies the SDPairEnactX concept */
+  that satistfies the SDPairEnactX concept. NOTE:
+  operator uses probcoll, probability of collision,
+  NOT probability of collision-coalescence! */
   {
     /* 1. calculate gamma factor for collision  */
     const unsigned long long gamma = collision_gamma(drop1.eps,
                                                      drop2.eps,
-                                                     prob, phi);
+                                                     probcoll, phi);
 
     /* 2. enact collision between pair
     of superdroplets if gamma is not zero */
