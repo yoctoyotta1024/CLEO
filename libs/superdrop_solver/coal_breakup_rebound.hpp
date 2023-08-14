@@ -81,7 +81,8 @@ private:
                                      const double phi) const
   /* calculates value of gamma factor in Monte Carlo
   collision as in Shima et al. 2009 given probability of
-  collision (note NOT probability of collision-coalescence!) */
+  collision.
+  *note* argument is NOT probability of collision-coalescence! */
   {
     return coal.coalescence_gamma(eps1, eps2, probcoll, phi);
   }
@@ -94,8 +95,8 @@ public:
                   const double probcoll, const double phi) const
   /* this operator is used as an "adaptor" for using
   CoalBreakupRebound as a function in CollisionsX
-  that satistfies the SDPairEnactX concept. NOTE:
-  operator uses probcoll, probability of collision,
+  that satistfies the SDPairEnactX concept.
+  *note* operator uses probcoll, probability of collision,
   NOT probability of collision-coalescence! */
   {
     /* 1. calculate gamma factor for collision  */
