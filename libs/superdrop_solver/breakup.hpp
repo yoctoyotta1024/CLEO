@@ -82,22 +82,24 @@ public:
     }
   }
 
-  void operator()(Superdrop &drop1, Superdrop &drop2,
+  void operator()(SuperdropWithGbxindex &SDinGBx1,
+                  SuperdropWithGbxindex &SDinGBx2,
                   const double prob, const double phi) const
   /* this operator is used as an "adaptor" for using Breakup
   as a function in CollisionsX that satistfies the SDPairEnactX
   concept */
   {
     /* 1. calculate gamma factor for collision-breakup  */
-    const unsigned int gamma = breakup_gamma(drop1.eps,
-                                             drop2.eps,
+    const unsigned long long eps1(SDinGBx1.superdrop.eps);
+    const unsigned long long eps2(SDinGBx2.superdrop.eps);
+    const unsigned int gamma = breakup_gamma(eps1, eps2,
                                              prob, phi);
 
     /* 2. enact collision-breakup on pair
     of superdroplets if gamma is not zero */
     if (gamma != 0)
     {
-      breakup_superdroplet_pair(drop1, drop2);
+      breakup_superdroplet_pair(SDinGBx1.superdrop, SDinGBx2.superdrop);
     }
   }
 
