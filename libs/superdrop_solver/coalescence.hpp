@@ -34,9 +34,9 @@ private:
   change it's SDinGBx to be value that indicates 
   superdrop is out of domain (ie. no longer exists) */
   {
-    if (SDinGBx.superdrop.eps < 1)
+    if (SDinGBx.superdrop.eps < 1) // ie. eps == 0
     {
-      SDinGBx.sd_gbxindex = SDinGBx.OUTOFDOMAIN();
+      SDinGBx.sd_gbxindex = dlc::OUTOFDOMAIN;
     }
   }
 

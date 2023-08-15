@@ -15,6 +15,7 @@ coords and moving them between gridboxes) */
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Vector.hpp>
 
+#include "../claras_SDconstants.hpp"
 #include "./gridbox.hpp"
 #include "./maps4gridboxes.hpp"
 #include "./cartesianneighbours.hpp"
@@ -22,6 +23,8 @@ coords and moving them between gridboxes) */
 #include "./sdmotion.hpp"
 #include "./detectors.hpp"
 #include "superdrop_solver/superdrop.hpp"
+
+namespace dlc = dimless_constants;
 
 /* ----- function called internally -----
   to update superdrop coord and return
@@ -130,7 +133,7 @@ private:
                                    const double coord) const
   /* raise error if sd not out of domain or within bounds*/
   {
-    const bool bad_gbxindex((current_gbxindex != OUTOFDOMAIN()) &&
+    const bool bad_gbxindex((current_gbxindex != dlc::OUTOFDOMAIN) &&
                             ((coord < bounds.first) | (coord >= bounds.second)));
     if (bad_gbxindex)
     {
@@ -193,7 +196,7 @@ private:
 
     const auto needto_update = [&]()
     {
-      return ((current_gbxindex != OUTOFDOMAIN()) &&
+      return ((current_gbxindex != dlc::OUTOFDOMAIN) &&
               ((coord < bounds.first) | (coord >= bounds.second)));
     };
 
@@ -233,7 +236,7 @@ private:
   already out of domain (ie. value is the maximum unsigned int),
   return out of domain index */
   {
-    if (current_gbxindex == OUTOFDOMAIN())
+    if (current_gbxindex == dlc::OUTOFDOMAIN)
     {
       return current_gbxindex; // ignore SDs whose sd_gbxindex is already out of domain
     }

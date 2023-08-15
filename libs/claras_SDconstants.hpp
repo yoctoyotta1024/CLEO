@@ -73,6 +73,9 @@ namespace dimless_constants
   constexpr double Rho_sol = DC::RHO_SOL / RHO0;
   constexpr double Mr_sol = DC::MR_SOL / MR0;
   constexpr int IONIC = DC::IONIC;
+
+  /* Domain, Gridbox and/or Superdroplet constants */
+  constexpr unsigned int OUTOFDOMAIN = std::numeric_limits<unsigned int>::max(); // value for gbxindex that indicates superdrop is out of domain boundaries (ie. no longer exists)
 }
 
 #endif // CLARAS_SDCONSTANTS_HPP

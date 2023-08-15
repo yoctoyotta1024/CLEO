@@ -16,18 +16,15 @@ boundary conditions */
 #include <limits>
 #include <array>
 
+#include "../claras_SDconstants.hpp"
+
+namespace dlc = dimless_constants;
+
 /* boundary conditions of domain are defined as:
   z: FINITE   (see znghbours_cartesian, coord3_beyondzdown and coord3_beyondzup)
   x: PERIODIC (see xnghbours_cartesian, coord1_beyondxbehind and coord1_beyondxinfront)
   y: PERIODIC (see ynghbours_cartesian, coord2_beyondyleft and coord2_beyondyright)
 */
-
-inline unsigned int OUTOFDOMAIN()
-/* value to set sd_gbxindex to when
-superdrop is out of domain boundaries */
-{
-  return std::numeric_limits<unsigned int>::max();
-}
 
 inline bool at_domainboundary(const unsigned int idx,
                               const unsigned int increment,
