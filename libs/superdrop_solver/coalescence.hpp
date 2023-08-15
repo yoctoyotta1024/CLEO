@@ -67,7 +67,7 @@ private:
     sd1.m_sol = new_m_sol;
     sd2.m_sol = new_m_sol;
 
-    remove_empty_superdrop(SDinGBx2);
+    remove_empty_superdrop(SDinGBx1); // because if eps1 = eps2 = 1 before coalesence, then eps1=0 now
   }
 
   void different_superdroplet_coalescence(Superdrop &sd1,
