@@ -59,6 +59,8 @@ public:
     const unsigned long long eps2(SDinGBx2.superdrop.eps);
 
     /* 1. calculate gamma factor for collision-coalescence  */
+    const unsigned long long eps1(SDinGBx1.superdrop.eps);
+    const unsigned long long eps2(SDinGBx2.superdrop.eps);
     const double probcoal(probcoll * coaleff);
     const unsigned long long gamma_coal(coal.coalescence_gamma(eps1,
                                                                eps2,
