@@ -152,7 +152,7 @@ combined process of those two individual processes */
   //                                        config.nfrags));
 
   const double coalrate(5e-7); // coalescence rate [s^-1]
-  const double burate(0.0);    // breakup rate [s^-1]
+  const double burate(0.0);  // breakup rate [s^-1]
   const auto djvalid(CollisionCoalBuConst(mdlsteps.collsubstep,
                                           &step2realtime,
                                           config.nfrags,
