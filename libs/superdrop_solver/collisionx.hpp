@@ -42,23 +42,23 @@ something convertible to a double
 };
 
 template <typename X>
-concept SDPairEnactX = requires(X x,
-                                Superdrop &d1,
-                                Superdrop &d2,
-                                const double p,
-                                const double i)
+concept SDinGBxPairEnactX = requires(X x,
+                                     SuperdropWithGbxindex &SDinGBx1,
+                                     SuperdropWithGbxindex &SDinGBx2,
+                                     const double p,
+                                     const double i)
 /* Objects that are of type SDPairEnactX
 takes a pair of superdrops and returns
 void (it may change the properties of
 the superdrops)*/
 {
   {
-    x(d1, d2, p, i)
+    x(SDinGBx1, SDinGBx2, p, i)
   } -> std::same_as<void>;
 };
 
 template <SDPairProbability CollisionXProbability,
-          SDPairEnactX CollisionXEnactment>
+          SDinGBxPairEnactX CollisionXEnactment>
 class CollisionX
 /* class for method to enact collisions between
 superdrops during collision events in SDM */
@@ -108,8 +108,10 @@ private:
   }
 
   template <class DeviceType>
-  void collide_superdroplet_pair(URBG<DeviceType> &urbg, Superdrop &dropA,
-                                 Superdrop &dropB, const double scale_p,
+  void collide_superdroplet_pair(URBG<DeviceType> &urbg,
+                                 SuperdropWithGbxindex &SDinGBxA,
+                                 SuperdropWithGbxindex &SDinGBxB,
+                                 const double scale_p,
                                  const double VOLUME) const
   /* Monte Carlo Routine from Shima et al. 2009 for
   collision-coalescence generalised to any collision-X process
@@ -134,20 +136,23 @@ private:
     enact_collisionx(drop1, drop2, prob, phi);
   }
 
-  std::pair<Superdrop&, Superdrop&>
-  assign_superdroplet(const Superdrop &dropA, const Superdrop &dropB) const
+  std::pair<SuperdropWithGbxindex &, SuperdropWithGbxindex &>
+  assign_superdroplet(const SuperdropWithGbxindex &SDinGBxA,
+                      const SuperdropWithGbxindex &SDinGBxB) const
   /* compare dropA.eps with dropB.eps and return (non-const)
   references to dropA and dropB in a pair {drop1, drop2}
   such that drop1.eps is always > drop2.eps */
   {
-    auto compare = [](const Superdrop &dropA, const Superdrop &dropB)
+    auto compare = [](const SuperdropWithGbxindex &SDinGBxA,
+                      const SuperdropWithGbxindex &SDinGBxB)
     {
-      return dropA.eps < dropB.eps; //returns true if epsA < epsB
+      return SDinGBxA.superdrop.eps < SDinGBxB.superdrop.eps; //returns true if epsA < epsB
     };
 
-    auto [drop2, drop1] = std::minmax(dropA, dropB, compare); // drop2.eps =< drop1.eps
+    auto [SDinGBx2, SDinGBx1] = std::minmax(SDinGBxA, SDinGBxB, compare); // drop2.eps =< drop1.eps
 
-    return {const_cast<Superdrop&>(drop1), const_cast<Superdrop&>(drop2)};
+    return {const_cast<SuperdropWithGbxindex &>(SDinGBx1),
+            const_cast<SuperdropWithGbxindex &>(SDinGBx2)};
   }
 
 public:

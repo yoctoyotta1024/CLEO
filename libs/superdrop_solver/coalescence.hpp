@@ -29,6 +29,12 @@ two superdroplets. (Can be used in collisionsx struct
 to enact collision-coalescence events in SDM) */
 {
 private:
+  void remove_null_superdrops(Superdrop &drop2)
+  {
+    sd.gbxindex = limits; //TODO
+  }
+
+
   void twin_superdroplet_coalescence(Superdrop &drop1,
                                      Superdrop &drop2,
                                      const unsigned long long gamma) const
@@ -51,6 +57,8 @@ private:
 
     drop1.m_sol = new_m_sol;
     drop2.m_sol = new_m_sol;
+
+    remove_null_superdrops(drop2);
   }
 
   void different_superdroplet_coalescence(Superdrop &drop1,
