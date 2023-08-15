@@ -154,6 +154,13 @@ private:
             const_cast<SuperdropWithGbxindex &>(SDinGBx2)};
   }
 
+  std::span<SuperdropWithGbxindex>
+  new_span(const unsigned int gbxindex,
+              std::span<SuperdropWithGbxindex> span4SDsinGBx) const
+  {
+    return span4SDsinGBx; //TO DO update span
+  }
+
 public:
   CollisionX(const double DELT,
              CollisionXProbability p,
@@ -163,7 +170,7 @@ public:
         enact_collisionx(x) {}
 
   template <class DeviceType>
-  void operator()(const int currenttimestep,
+  auto operator()(const int currenttimestep, const unsigned int gbxindex,
                   std::span<SuperdropWithGbxindex> span4SDsinGBx,
                   ThermoState &state,
                   URBG<DeviceType> &urbg) const
@@ -173,6 +180,8 @@ public:
   {
     const double VOLUME = state.get_volume() * pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
     collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
+    
+    return new_span(gbxindex, span4SDsinGBx);
   }
 };
 

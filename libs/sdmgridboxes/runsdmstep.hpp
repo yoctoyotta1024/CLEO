@@ -59,8 +59,10 @@ private:
           for (int subt = t_sdm; subt < nextt;
                subt = sdmprocess.next_step(subt))
           {
-            sdmprocess.run_step(subt, d_gridboxes(ii).span4SDsinGBx,
-                                d_gridboxes(ii).state, urbg);
+            d_gridboxes(ii).span4SDsinGBx =
+                sdmprocess.run_step(subt, d_gridboxes(ii).gbxindex,
+                                    d_gridboxes(ii).span4SDsinGBx,
+                                    d_gridboxes(ii).state, urbg);
           }
 
           genpool.free_state(urbg.gen);
