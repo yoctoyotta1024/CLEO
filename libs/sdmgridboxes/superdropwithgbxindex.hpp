@@ -73,16 +73,16 @@ value as sd_gbxindex (ie. max possible value) */
   };
   std::sort(span4SDsinGBx.begin(), span4SDsinGBx.end(), compare);  
 
-  /* 2. Find last instance where sd_gbxindex < OUTOFDOMAIN  */
-  auto upcompare = [](const unsigned int val, const SuperdropWithGbxindex &a)
+  /* 2. Find first instance where sd_gbxindex < OUTOFDOMAIN  */
+  auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
   {
-    return val < a.sd_gbxindex;
+    return a.sd_gbxindex < val;
   };
-  auto up = std::upper_bound(span4SDsinGBx.begin(), span4SDsinGBx.end(),
-                             dlc::OUTOFDOMAIN, upcompare);
+  auto up = std::lower_bound(span4SDsinGBx.begin(), span4SDsinGBx.end(),
+                             dlc::OUTOFDOMAIN, lowcompare);
 
-
-  return span4SDsinGBx; //TODO
+  /* 3. Return subspan that is upto and excluding OUTOFDOMAIN sd_gbxindexes */  
+  return {span4SDsinGBx.begin(), up};
 }
 
 #endif // SUPERDROPWITHGBXINDEX_HPP
