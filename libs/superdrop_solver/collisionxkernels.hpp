@@ -113,6 +113,31 @@ public:
   }
 };
 
+struct CollConstProb
+/* Probability of collision of a pair of droplets
+given a constant collision kernel K = const, e.g.
+K = c + b where c and b are the rate of
+coalescence and breakup (no rebound) */
+{
+private:
+  const double kernel;
+
+public:
+  CollConstProb(const double k) : kernel(k) {}
+
+  double operator()(const Superdrop &drop1,
+                    const Superdrop &drop2,
+                    const double DELT,
+                    const double VOLUME) const
+  /* returns probability that a pair of droplets collide
+  according to constant collision kernel, K(drop1, drop2) = const.
+  Prob equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol */
+  {
+    const double DELT_DELVOL = DELT / VOLUME;                           // time interval / volume for which collision probability is calculated [s/m^3]
+    return kernel * DELT_DELVOL; // prob_jk
+  }
+};
+
 struct LongKernelEff
 /* Collision-Coalescence Efficiency factor, eff, in Long's
   Hydrodynamic kernel according to Simmel et al. 2002.
