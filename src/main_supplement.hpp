@@ -117,15 +117,15 @@ For example return a process that does SDM condensation and collisions from
 combined process of those two individual processes */
 {
   /* create process for condensation in SDM including Implicit
-  // Euler Method for solving condensation ODEs */
-  // const double cond_subtstep = realtime2dimless(config.cond_SUBTSTEP);
-  // const auto cond(CondensationProcess(mdlsteps.condsubstep,
-  //                                     &step2dimlesstime,
-  //                                     config.doAlterThermo,
-  //                                     config.cond_iters,
-  //                                     cond_subtstep,
-  //                                     config.cond_rtol,
-  //                                     config.cond_atol));
+  Euler Method for solving condensation ODEs */
+  const double cond_subtstep = realtime2dimless(config.cond_SUBTSTEP);
+  const auto cond(CondensationProcess(mdlsteps.condsubstep,
+                                      &step2dimlesstime,
+                                      config.doAlterThermo,
+                                      config.cond_iters,
+                                      cond_subtstep,
+                                      config.cond_rtol,
+                                      config.cond_atol));
 
   /* create process for collision-coalescene in SDM */
   // const auto terminalv(SimmelTerminalVelocity{});
@@ -159,7 +159,7 @@ combined process of those two individual processes */
   //                                         coalrate, burate));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  // const auto sdmprocess = cond >> coalall;
+  const auto sdmprocess = cond >> coal;
   // const auto sdmprocess = cond;
   // const auto sdmprocess = coalall;
   // const auto sdmprocess = djvalid;
