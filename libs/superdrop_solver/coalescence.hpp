@@ -36,9 +36,7 @@ private:
   {
     if (SDinGBx.superdrop.eps < 1)
     {
-      constexpr unsigned int
-          OUTOFDOMAIN(std::numeric_limits<unsigned int>::max());
-      SDinGBx.sd_gbxindex = OUTOFDOMAIN;
+      SDinGBx.sd_gbxindex = SDinGBx.OUTOFDOMAIN();
     }
   }
 

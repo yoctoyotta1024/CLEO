@@ -196,6 +196,12 @@ the GBx the SD is associated with */
   KOKKOS_INLINE_FUNCTION SuperdropWithGbxindex() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~SuperdropWithGbxindex() = default; // Kokkos requirement for a (dual)View
 
+  unsigned int OUTOFDOMAIN()
+  /* value for sd_gbxindex that indicates superdrop
+  is out of domain boundaries (ie. no longer exists) */
+  {
+    return std::numeric_limits<unsigned int>::max();
+  }
 };
 
 #endif // SUPERDROP_HPP
