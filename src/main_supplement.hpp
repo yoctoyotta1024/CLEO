@@ -92,10 +92,10 @@ SdMotion auto create_sdmotion(const int motionstep)
 {
   // const auto terminalv = RogersYauTerminalVelocity{};
   // const auto terminalv = NullTerminalVelocity{};
-  const auto terminalv = SimmelTerminalVelocity{};
-  const SdMotion auto movewithsedi = MoveWithSedimentation(motionstep,
-                                                          &step2dimlesstime,
-                                                          terminalv);
+  // const auto terminalv = SimmelTerminalVelocity{};
+  // const SdMotion auto movewithsedi = MoveWithSedimentation(motionstep,
+  //                                                         &step2dimlesstime,
+  //                                                         terminalv);
 
   // auto rhotilda = [](const ThermoState &state)
   // { return state.press / (state.temp * (dlc::Rgas_dry + state.qvap * dlc::Rgas_v)); };
