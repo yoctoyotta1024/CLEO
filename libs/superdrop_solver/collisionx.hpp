@@ -119,21 +119,21 @@ private:
   and collisionx_superdroplet_pair */
   {
     /* 1. assign references to each superdrop in pair
-    that will collide such that (drop1.eps) >= (drop2.eps) */
-    auto [drop1, drop2] = assign_superdroplet(dropA, dropB);
+    that will collide such that (superdrop1.eps) >= (superdrop2.eps) */
+    auto [SDinGBx1, SDinGBx2] = assign_superdroplet(SDinGBxA, SDinGBxB);
 
     /* 2. calculate scaled probability of pair collision-x
     according to Shima et al. 2009 ("p_alpha" in paper) */
-    const double prob_jk = collisionx_probability(drop1, drop2, DELT, VOLUME);
-    const double prob = scale_p *
-                        std::max(drop1.eps, drop2.eps) *
-                        prob_jk;
+    const double prob_jk = collisionx_probability(SDinGBx1.superdrop,
+                                                  SDinGBx1.superdrop,
+                                                  DELT, VOLUME);
+    const double prob = scale_p * SDinGBx1.superdrop.eps * prob_jk; // eps of SDinGBx1 is larger
 
     /* 3. Monte Carlo Step: use random number to enact (or not)
     collision-x on pair of superdroplets */
     std::uniform_real_distribution<> dis(0.0, 1.0);
     const double phi = dis(urbg); // phi is random number in range [0,1]
-    enact_collisionx(drop1, drop2, prob, phi);
+    enact_collisionx(SDinGBx1, SDinGBx2, prob, phi);
   }
 
   std::pair<SuperdropWithGbxindex &, SuperdropWithGbxindex &>
@@ -146,7 +146,7 @@ private:
     auto compare = [](const SuperdropWithGbxindex &SDinGBxA,
                       const SuperdropWithGbxindex &SDinGBxB)
     {
-      return SDinGBxA.superdrop.eps < SDinGBxB.superdrop.eps; //returns true if epsA < epsB
+      return SDinGBxA.superdrop.eps < SDinGBxB.superdrop.eps; // returns true if epsA < epsB
     };
 
     auto [SDinGBx2, SDinGBx1] = std::minmax(SDinGBxA, SDinGBxB, compare); // drop2.eps =< drop1.eps
