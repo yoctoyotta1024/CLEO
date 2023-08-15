@@ -1,4 +1,5 @@
 // /opt/homebrew/bin/g++-13 quicktest.cpp --std=c++20 && ./a.out 
+// g++ quicktest.cpp --std=c++20 && ./a.out 
 
 #include <iostream> 
 #include <limits>
@@ -89,5 +90,16 @@ int main()
   const double dratio(d1 * d2 / (d1 + d2));
   std::cout << 998.0 * std::numbers::pi / 12.0 * dratio * (-7.0817e-01) * (-7.0817e-01) << "\n"; //cke
   std::cout << 7.28e-2 * std::numbers::pi * (1.4015e-05*2.0) * (1.4015e-05*2.0) << "\n"; //surft of min radius
+
+
+  std::cout << "\n----------------------------------\n";
+ 
+  unsigned long long eps(1);
+  std::cout << "eps-1 = " << eps - 1 << "\n";
+  const auto lim(std::numeric_limits<unsigned long long>::max());
+  unsigned long long val(std::min(eps-1, lim-1));
+  std::cout << "val = " << eps - 1 << "\n";
+  std::cout << "new eps = " << val + 1 << "\n";
+
   return 0;
 }

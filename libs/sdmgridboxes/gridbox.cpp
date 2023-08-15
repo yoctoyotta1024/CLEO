@@ -44,7 +44,7 @@ void GridBox::iscorrect_span_for_gbxindex(const Maps4GridBoxes &gbxmaps)
 {
   for (auto &SDinGBx : span4SDsinGBx)
   {
-    if(SDinGBx.sd_gbxindex != gbxindex)
+    if (SDinGBx.sd_gbxindex != gbxindex)
     {
       const std::string err = "span4SDsinGBx incorrectly set."
                               " At least one sd_gbxindex"

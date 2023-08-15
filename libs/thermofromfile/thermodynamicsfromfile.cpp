@@ -182,7 +182,7 @@ void ThermodynamicsFromFile::
   auto is_size = [](const std::vector<double> &vel, const size_t sz)
   { 
     const size_t velsize(vel.size());
-    if( velsize != sz )
+    if ( velsize != sz )
     {
       throw std::invalid_argument(std::to_string(velsize)+ " vector is "
                                 "not consistent with correct size "+
