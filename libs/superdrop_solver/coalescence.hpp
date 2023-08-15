@@ -29,7 +29,7 @@ two superdroplets. (Can be used in collisionsx struct
 to enact collision-coalescence events in SDM) */
 {
 private:
-  void remove_empty_superdrop(SuperdropWithGbxindex &SDinGBx)
+  void remove_empty_superdrop(SuperdropWithGbxindex &SDinGBx) const
   /* if multiplicity of drop = 0, ie. superdrop is empty,
   change it's SDinGBx to be value that indicates 
   superdrop is out of domain (ie. no longer exists) */
@@ -53,7 +53,7 @@ private:
     Superdrop &sd2(SDinGBx2.superdrop);
 
     const unsigned long long new_eps(sd2.eps / 2); // = sd1.eps /2 
-    sd1.eps = new_eps
+    sd1.eps = new_eps;
     sd2.eps = sd2.eps - new_eps;
 
     const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
@@ -134,13 +134,15 @@ public:
   radius and solute mass of each superdroplet in pair
   according to Shima et al. 2009 Section 5.1.3. part (5) */
   {
-    if (drop1.eps - gamma * drop2.eps > 0)
+    Superdrop &sd1(SDinGBx1.superdrop);
+    Superdrop &sd2(SDinGBx2.superdrop); 
+
+    if (sd1.eps - gamma * sd2.eps > 0)
     {
-      different_superdroplet_coalescence(SDinGBx1.superdrop,
-                                         SDinGBx2.superdrop, gamma);
+      different_superdroplet_coalescence(sd1, sd2, gamma);
     }
 
-    else if (drop1.eps - gamma * drop2.eps == 0)
+    else if (sd1.eps - gamma * sd2.eps == 0)
     {
       twin_superdroplet_coalescence(SDinGBx1, SDinGBx2, gamma);
     }

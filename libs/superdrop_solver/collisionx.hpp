@@ -101,9 +101,8 @@ private:
     /* collide all randomly generated pairs of SDs */
     for (size_t i = 1; i < nsupers; i += 2)
     {
-      collide_superdroplet_pair(urbg, span4SDsinGBx[i - 1].superdrop,
-                                span4SDsinGBx[i].superdrop, scale_p,
-                                VOLUME);
+      collide_superdroplet_pair(urbg, span4SDsinGBx[i - 1],
+                                span4SDsinGBx[i], scale_p, VOLUME);
     }
   }
 
