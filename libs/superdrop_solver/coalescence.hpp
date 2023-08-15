@@ -50,18 +50,19 @@ private:
     Superdrop &sd1(SDinGBx1.superdrop);
     Superdrop &sd2(SDinGBx2.superdrop);
 
-    const unsigned long long new_eps(sd2.eps / 2); // = sd1.eps /2 
-    sd1.eps = new_eps;
-    sd2.eps = sd2.eps - new_eps;
+    const unsigned long long old_eps = sd2.eps; // = drop1.eps
+    const unsigned long long new_eps = old_eps / 2;
+    const double new_rcubed = std::pow(sd2.radius, 3.0) +
+                              gamma * std::pow(sd1.radius, 3.0);
+    const double new_r = std::pow(new_rcubed, (1.0 / 3.0));
+    const double new_m_sol = sd2.m_sol + gamma * sd1.m_sol;
 
-    const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
-    const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
-    const double new_rcubed(r2cubed + gamma * r1cubed);
-    const double new_r(std::pow(new_rcubed, (1.0 / 3.0)));
+    sd1.eps = new_eps;
+    sd2.eps = old_eps - new_eps;
+
     sd1.radius = new_r;
     sd2.radius = new_r;
-    
-    const double new_m_sol = sd2.m_sol + gamma * sd1.m_sol;
+
     sd1.m_sol = new_m_sol;
     sd2.m_sol = new_m_sol;
 
