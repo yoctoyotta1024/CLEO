@@ -44,7 +44,7 @@ radiigen  = iSDs.MonoAttrsGen(monor)                  # all SDs have the same dr
 ### ---------------------------------------------- ###
 
 ### --- Choice of Droplet Radius Probability Distribution --- ###
-dirac0               = 0.04910258806               # radius in sample closest to this value is dirac delta peak
+dirac0               = monor               # radius in sample closest to this value is dirac delta peak
 numconc              = 1e6                         # total no. conc of real droplets [m^-3]
 radiiprobdist = rprobs.DiracDelta(dirac0)
 
