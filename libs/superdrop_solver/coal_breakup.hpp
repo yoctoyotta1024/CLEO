@@ -100,9 +100,10 @@ coaleff (similar to de Jong et al. 2023 sect. 3) */
   const double kernel(coalrate + burate);
   const CollConstProb collprob(kernel);
 
-  const double coaleff(coalrate / (coalrate + burate)); 
-  CollisionX auto coalbu(realtstep, collprob,
-                         CoalBreakupConstEff(nfrags, coaleff));
+  const double coaleff(coalrate / (coalrate + burate));
+  CollisionX<CollConstProb, CoalBreakupConstEff>
+      coalbu(realtstep, collprob,
+             CoalBreakupConstEff(nfrags, coaleff));
 
   return ConstTstepProcess{interval, coalbu};
 };
