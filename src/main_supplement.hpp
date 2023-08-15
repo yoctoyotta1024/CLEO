@@ -118,7 +118,7 @@ combined process of those two individual processes */
 {
   /* create process for condensation in SDM including Implicit
   Euler Method for solving condensation ODEs */
-  const double cond_subtstep = realtime2dimless(config.cond_SUBTSTEP);
+  const double cond_subtstep(realtime2dimless(config.cond_SUBTSTEP));
   const auto cond(CondensationProcess(mdlsteps.condsubstep,
                                       &step2dimlesstime,
                                       config.doAlterThermo,
@@ -137,7 +137,8 @@ combined process of those two individual processes */
                                               probs_coal));
 
   // /* create process for collision-breakup in SDM */
-  // const auto probs_bu(CollBuProb_LowList(terminalv));
+  // const auto terminalv = SimmelTerminalVelocity{};
+  // const auto probs_bu = CollBuProb_LowList(terminalv);
   // const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
   //                                       &step2realtime,
   //                                       probs_bu,
@@ -159,7 +160,8 @@ combined process of those two individual processes */
   //                                         coalrate, burate));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  const auto sdmprocess = cond >> coal;
+  // const auto sdmprocess = cond >> coal;
+  const auto sdmprocess = coal;
   // const auto sdmprocess = cond;
   // const auto sdmprocess = coalall;
   // const auto sdmprocess = djvalid;
