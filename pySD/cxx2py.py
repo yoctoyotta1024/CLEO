@@ -49,6 +49,7 @@ def where_typename_ends(line):
   elif line[:8] == "constint": x=8
   elif line[:15] == "constexprdouble": x=15
   elif line[:12] == "constexprint": x=12
+  elif line[:20] == "constexprunsignedint": x=20
   else:
     raise Exception ("variable type not correctly understood or read."+\
       "It should be a (const) int or (const) double.")
