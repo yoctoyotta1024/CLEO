@@ -101,5 +101,9 @@ int main()
   std::cout << "val = " << eps - 1 << "\n";
   std::cout << "new eps = " << val + 1 << "\n";
 
+  std::cout << "\n-----------favsdca-----------------------\n";
+  unsigned long long eps00(1);
+  std::cout << "eps-1 = " << eps00/2 << ", " <<  eps00  - eps00/2 << "\n";
+
   return 0;
 }
