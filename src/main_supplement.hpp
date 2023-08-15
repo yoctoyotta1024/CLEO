@@ -151,11 +151,12 @@ combined process of those two individual processes */
   //                                        terminalv,
   //                                        config.nfrags));
 
-  const double coaleff(1.0);
+  const double coalrate(5e-7); // coalescence rate [s^-1]
+  const double burate(0.0);    // breakup rate [s^-1]
   const auto djvalid(CollisionCoalBuConst(mdlsteps.collsubstep,
                                           &step2realtime,
                                           config.nfrags,
-                                          coaleff));
+                                          coalrate, burate));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
   // const auto sdmprocess = cond >> coalall;

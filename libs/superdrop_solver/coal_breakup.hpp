@@ -89,19 +89,18 @@ SdmProcess auto
 CollisionCoalBuConst(const int interval,
                      const std::function<double(int)> int2time,
                      const double nfrags,
-                     const double coaleff)
+                     const double coalrate,
+                     const double burate)
 /* SDM process for collisions of superdroplets
 followed by coalescence or breakup with constant
 coaleff (similar to de Jong et al. 2023 sect. 3) */
 {
   const double realtstep = int2time(interval);
-  const auto terminalv(SimmelTerminalVelocity{});
-  auto hydrocolleff = [](const Superdrop &d1, const Superdrop &d2)
-  {
-    return 1.0;
-  };
-  const auto collprob(HydrodynamicProb(hydrocolleff, terminalv));
 
+  const double kernel(coalrate + burate);
+  const CollConstProb collprob(kernel);
+
+  const double coaleff(coalrate / (coalrate + burate)); 
   CollisionX auto coalbu(realtstep, collprob,
                          CoalBreakupConstEff(nfrags, coaleff));
 
