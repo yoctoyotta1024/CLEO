@@ -29,9 +29,17 @@ two superdroplets. (Can be used in collisionsx struct
 to enact collision-coalescence events in SDM) */
 {
 private:
-  void remove_null_superdrops(Superdrop &drop2)
+  void remove_empty_superdrop(SuperdropWithGbxindex &SDinGBx)
+  /* if multiplicity of drop = 0, ie. superdrop is empty,
+  change it's SDinGBx to be value that indicates 
+  superdrop is out of domain (ie. no longer exists) */
   {
-    sd.gbxindex = limits; //TODO
+    if (SDinGBx.superdrop.eps < 1)
+    {
+      constexpr unsigned int
+          OUTOFDOMAIN(std::numeric_limits<unsigned int>::max());
+      SDinGBx.sd_gbxindex = OUTOFDOMAIN;
+    }
   }
 
   void twin_superdroplet_coalescence(SuperdropWithGbxindex &SDinGBx1,
@@ -59,7 +67,7 @@ private:
     d1.m_sol = new_m_sol;
     d2.m_sol = new_m_sol;
 
-    remove_null_superdrops(drop2);
+    remove_empty_superdrop(SDinGBx2);
   }
 
   void different_superdroplet_coalescence(Superdrop &d1,
