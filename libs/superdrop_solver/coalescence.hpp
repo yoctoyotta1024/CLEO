@@ -49,42 +49,42 @@ private:
   with same eps, r and solute mass. According to Shima et al. 2009
   Section 5.1.3. part (5) option (b)  */
   {
-    Superdrop &d1(SDinGBx1.superdrop);
-    Superdrop &d2(SDinGBx2.superdrop);
+    Superdrop &sd1(SDinGBx1.superdrop);
+    Superdrop &sd2(SDinGBx2.superdrop);
 
-    const unsigned long long new_eps(d2.eps / 2); // = d1.eps /2 
-    d1.eps = new_eps
-    d2.eps = d2.eps - new_eps;
+    const unsigned long long new_eps(sd2.eps / 2); // = sd1.eps /2 
+    sd1.eps = new_eps
+    sd2.eps = sd2.eps - new_eps;
 
-    const double r2cubed(d2.radius * d2.radius * d2.radius);
-    const double r1cubed(d1.radius * d1.radius * d1.radius);
+    const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
+    const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
     const double new_rcubed(r2cubed + gamma * r1cubed);
     const double new_r(std::pow(new_rcubed, (1.0 / 3.0)));
-    d1.radius = new_r;
-    d2.radius = new_r;
+    sd1.radius = new_r;
+    sd2.radius = new_r;
     
-    const double new_m_sol = d2.m_sol + gamma * d1.m_sol;
-    d1.m_sol = new_m_sol;
-    d2.m_sol = new_m_sol;
+    const double new_m_sol = sd2.m_sol + gamma * sd1.m_sol;
+    sd1.m_sol = new_m_sol;
+    sd2.m_sol = new_m_sol;
 
     remove_empty_superdrop(SDinGBx2);
   }
 
-  void different_superdroplet_coalescence(Superdrop &d1,
-                                          Superdrop &d2,
+  void different_superdroplet_coalescence(Superdrop &sd1,
+                                          Superdrop &sd2,
                                           const unsigned long long gamma) const
-  /* if eps1 > gamma*eps2 coalescence grows d2 radius and mass
-  via decreasing multiplicity of d1. According to
+  /* if eps1 > gamma*eps2 coalescence grows sd2 radius and mass
+  via decreasing multiplicity of sd1. According to
   Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
   {
-    d1.eps = d1.eps - gamma * d2.eps;
+    sd1.eps = sd1.eps - gamma * sd2.eps;
 
-    const double r2cubed(d2.radius * d2.radius * d2.radius);
-    const double r1cubed(d1.radius * d1.radius * d1.radius);
+    const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
+    const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
     const double new_rcubed(r2cubed + gamma * r1cubed);
-    d2.radius = std::pow(new_rcubed, (1.0 / 3.0));
+    sd2.radius = std::pow(new_rcubed, (1.0 / 3.0));
  
-    d2.m_sol = d2.m_sol + gamma * d1.m_sol;
+    sd2.m_sol = sd2.m_sol + gamma * sd1.m_sol;
   }
 
 public:

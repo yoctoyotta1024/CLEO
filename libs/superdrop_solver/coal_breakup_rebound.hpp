@@ -35,43 +35,50 @@ private:
   Breakup breakup;
   CollisionKinetics<TerminalVelocity> ck;
 
-  void coalesce_or_breakup(Superdrop &drop1,
-                           Superdrop &drop2,
+  void coalesce_or_breakup(SuperdropWithGbxindex &SDinGBx1,
+                           SuperdropWithGbxindex &SDinGBx2,
                            const unsigned long long gamma) const
   /* based on the kinetic arguments in section 2.2 of
   Szakáll and Urbich 2018 (neglecting grazing angle considerations),
   function enacts coalescence or breakup */
   {
-    const double cke(ck.collision_kinetic_energy(drop1, drop2));
+    const Superdrop &sd1(SDinGBx1.superdrop);
+    const Superdrop &sd2(SDinGBx2.superdrop);
 
-    if (cke < ck.coal_surfenergy(drop1, drop2)) // Weber number < 1 : coalescence
+    const double cke(ck.collision_kinetic_energy(sd1, sd2));
+
+    if (cke < ck.coal_surfenergy(sd1, sd2)) // Weber number < 1 : coalescence
     {
-      coal.coalesce_superdroplet_pair(drop1, drop2, gamma);
+      coal.coalesce_superdroplet_pair(SDinGBx1, SDinGBx2, gamma);
     }
     else // Weber > 1 : breakup
     {
-      breakup.breakup_superdroplet_pair(drop1, drop2);
+      breakup.breakup_superdroplet_pair(SDinGBx1.superdrop,
+                                        SDinGBx2.superdrop);
     }
   }
 
-  void coalesce_breakup_or_rebound(Superdrop &drop1,
-                                   Superdrop &drop2,
+  void coalesce_breakup_or_rebound(SuperdropWithGbxindex &SDinGBx1,
+                                   SuperdropWithGbxindex &SDinGBx2,
                                    const unsigned long long gamma) const
   /* based on the kinetic arguments in section 2.2 of
   Szakáll and Urbich 2018 (neglecting grazing angle considerations),
   function enacts rebound or coalescence/breakup */
   {
+    const Superdrop &sd1(SDinGBx1.superdrop);
+    const Superdrop &sd2(SDinGBx2.superdrop); 
+
     auto compare = [](const Superdrop &dropA, const Superdrop &dropB)
     {
       return dropA.radius < dropB.radius; // returns true if epsA < epsB
     };
-    const auto smalldrop(std::min(drop1, drop2, compare)); // drop with smaller drop.radius
+    const auto smalldrop(std::min(sd1, sd2, compare)); // drop with smaller drop.radius
 
-    const double cke(ck.collision_kinetic_energy(drop1, drop2));
+    const double cke(ck.collision_kinetic_energy(sd1, sd2));
 
     if (cke >= ck.surfenergy(smalldrop)) // ie. if not rebound
     {
-      coalesce_or_breakup(drop1, drop2, gamma);
+      coalesce_or_breakup(SDinGBx1, SDinGBx2, gamma);
     } 
   }
 
@@ -91,7 +98,8 @@ public:
   CoalBreakupRebound(TerminalVelocity tv, const double infrags)
       : coal(Coalescence{}), breakup(Breakup(infrags)), ck(tv) {}
 
-  void operator()(Superdrop &drop1, Superdrop &drop2,
+  void operator()(SuperdropWithGbxindex &SDinGBx1,
+                  SuperdropWithGbxindex &SDinGBx2,
                   const double probcoll, const double phi) const
   /* this operator is used as an "adaptor" for using
   CoalBreakupRebound as a function in CollisionsX
@@ -100,16 +108,17 @@ public:
   NOT probability of collision-coalescence! */
   {
     /* 1. calculate gamma factor for collision  */
-    const unsigned long long gamma(collision_gamma(drop1.eps,
-                                                   drop2.eps,
+    const unsigned long long eps1(SDinGBx1.superdrop.eps);
+    const unsigned long long eps2(SDinGBx2.superdrop.eps);
+    const unsigned long long gamma(collision_gamma(eps1, eps2,
                                                    probcoll, phi));
 
     /* 2. enact collision between pair
     of superdroplets if gamma is not zero */
     if (gamma != 0)
     {
-      coalesce_breakup_or_rebound(drop1, drop2, gamma);    // include rebound
-      // coalesce_or_breakup(drop1, drop2, gamma);         // no rebound
+      coalesce_breakup_or_rebound(SDinGBx1, SDinGBx2, gamma);    // include rebound
+      // coalesce_or_breakup(SDinGBx1, SDinGBx2, gamma);         // no rebound
     }
   }
 };

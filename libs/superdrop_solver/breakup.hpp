@@ -122,8 +122,9 @@ public:
       return 0;
     }
   }
-  
-  void breakup_superdroplet_pair(Superdrop &drop1, Superdrop &drop2) const
+
+  void breakup_superdroplet_pair(Superdrop &drop1,
+                                 Superdrop &drop2) const
   /* enact collisional-breakup of droplets by changing multiplicity,
   radius and solute mass of each superdroplet in a pair. Method created
   by Author (no citation yet available). Note implicit assumption that

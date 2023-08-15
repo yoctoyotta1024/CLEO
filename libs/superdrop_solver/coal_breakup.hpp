@@ -46,7 +46,8 @@ public:
     }
   }
 
-  void operator()(Superdrop &drop1, Superdrop &drop2,
+  void operator()(SuperdropWithGbxindex &SDinGBx1,
+                  SuperdropWithGbxindex &SDinGBx2,
                   const double probcoll, const double phi) const
   /* this operator is used as an "adaptor" for using
   CoalBreakupConstEff as a function in CollisionsX
@@ -55,31 +56,32 @@ public:
   NOT probability of collision-coalescence! */
   {
     /* 1. calculate gamma factor for collision-coalescence  */
+    const unsigned long long eps1(SDinGBx1.superdrop.eps);
+    const unsigned long long eps2(SDinGBx2.superdrop.eps);
     const double probcoal(probcoll * coaleff);
-    const unsigned long long gamma_coal(coal.coalescence_gamma(drop1.eps,
-                                                               drop2.eps,
+    const unsigned long long gamma_coal(coal.coalescence_gamma(eps1, eps2,
                                                                probcoal,
                                                                phi));
     /* 2. enact collision-coalescence between pair
       of superdroplets if gamma is not zero */
     if (gamma_coal != 0)
     {
-      coal.coalesce_superdroplet_pair(drop1, drop2, gamma_coal);
+      coal.coalesce_superdroplet_pair(SDinGBx1, SDinGBx2, gamma_coal);
     }
 
     else // if not coalescence, check for breakup
     {
       /* 3. calculate gamma factor for collision-breakup  */
       const double probbu(probcoll * bueff);
-      const unsigned long long gamma_bu(breakup.breakup_gamma(drop1.eps,
-                                                              drop2.eps,
+      const unsigned long long gamma_bu(breakup.breakup_gamma(eps1, eps2,
                                                               probbu,
                                                               phi));
       /* 4. enact collision-breakup between pair
         of superdroplets if gamma is not zero */
       if (gamma_bu != 0)
       {
-        breakup.breakup_superdroplet_pair(drop1, drop2);
+        breakup.breakup_superdroplet_pair(SDinGBx1.superdrop,
+                                          SDinGBx2.superdrop);
       }
     }
   }
