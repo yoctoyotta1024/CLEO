@@ -20,7 +20,6 @@ collision-coalescence (see ConstTstepProcess struct) */
 template <typename F>
 concept StepFunc = requires(F f, const int currenttimestep,
                             const unsigned int gbxindex,
-                            const unsigned int gbxindex,
                             std::span<SuperdropWithGbxindex> span4SDsinGBx,
                             ThermoState state,
                             URBG<> &urbg)
@@ -32,13 +31,10 @@ function (see below in SdmProcess) */
   {
     f(currenttimestep, gbxindex, span4SDsinGBx, state, urbg)
   } -> std::convertible_to<std::span<SuperdropWithGbxindex>>;
-    f(currenttimestep, gbxindex, span4SDsinGBx, state, urbg)
-  } -> std::convertible_to<std::span<SuperdropWithGbxindex>>;
 };
 
 template <typename P, typename... Args>
 concept SdmProcess = requires(P p, const int currenttimestep,
-                              const unsigned int gbxindex,
                               const unsigned int gbxindex,
                               std::span<SuperdropWithGbxindex> span4SDsinGBx,
                               ThermoState state,
@@ -54,8 +50,6 @@ and "next_step" and have a "run_step" function */
     p.on_step(currenttimestep)
   } -> std::convertible_to<bool>;
   {
-    p.run_step(currenttimestep, gbxindex, span4SDsinGBx, state, urbg)
-  } -> std::convertible_to<std::span<SuperdropWithGbxindex>>;
     p.run_step(currenttimestep, gbxindex, span4SDsinGBx, state, urbg)
   } -> std::convertible_to<std::span<SuperdropWithGbxindex>>;
 };
@@ -93,7 +87,6 @@ struct CombinedSdmProcess
 
   template <typename DeviceType>
   auto run_step(const int currenttimestep, const unsigned int gbxindex,
-  auto run_step(const int currenttimestep, const unsigned int gbxindex,
                 std::span<SuperdropWithGbxindex> span4SDsinGBx,
                 ThermoState &state,
                 URBG<DeviceType> &urbg) const
@@ -106,18 +99,10 @@ struct CombinedSdmProcess
                                  gbxindex,
                                  span4SDsinGBx,
                                  state, urbg);
-      span4SDsinGBx = a.run_step(currenttimestep,
-                                 gbxindex,
-                                 span4SDsinGBx,
-                                 state, urbg);
     }
 
     if (b.on_step(currenttimestep))
     {
-      span4SDsinGBx = b.run_step(currenttimestep,
-                                 gbxindex,
-                                 span4SDsinGBx,
-                                 state, urbg);
       span4SDsinGBx = b.run_step(currenttimestep,
                                  gbxindex,
                                  span4SDsinGBx,
@@ -150,7 +135,6 @@ struct NullProcess
   }
 
   template <class DeviceType>
-  auto run_step(const int currenttimestep, const unsigned int gbxindex,
   auto run_step(const int currenttimestep, const unsigned int gbxindex,
                 std::span<SuperdropWithGbxindex> span4SDsinGBx,
                 ThermoState &state,

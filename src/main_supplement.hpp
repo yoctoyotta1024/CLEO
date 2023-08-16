@@ -96,10 +96,6 @@ SdMotion auto create_sdmotion(const int motionstep)
   const SdMotion auto movewithsedi = MoveWithSedimentation(motionstep,
                                                           &step2dimlesstime,
                                                           terminalv);
-  const auto terminalv = SimmelTerminalVelocity{};
-  const SdMotion auto movewithsedi = MoveWithSedimentation(motionstep,
-                                                          &step2dimlesstime,
-                                                          terminalv);
 
   // auto rhotilda = [](const ThermoState &state)
   // { return state.press / (state.temp * (dlc::Rgas_dry + state.qvap * dlc::Rgas_v)); };
@@ -110,9 +106,7 @@ SdMotion auto create_sdmotion(const int motionstep)
   //                                                 flow2d);
   
   return movewithsedi;
-  return movewithsedi;
   // return prescribed2d;
-  // return NullMotion{};
   // return NullMotion{};
 }
 

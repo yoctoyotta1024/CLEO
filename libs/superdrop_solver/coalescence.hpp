@@ -42,19 +42,6 @@ private:
 
   void twin_superdroplet_coalescence(SuperdropWithGbxindex &SDinGBx1,
                                      SuperdropWithGbxindex &SDinGBx2,
-  void remove_empty_superdrop(SuperdropWithGbxindex &SDinGBx) const
-  /* if multiplicity of drop = 0, ie. superdrop is empty,
-  change it's SDinGBx to be value that indicates 
-  superdrop is out of domain (ie. no longer exists) */
-  {
-    if (SDinGBx.superdrop.eps < 1) // ie. eps == 0
-    {
-      SDinGBx.sd_gbxindex = dlc::OUTOFDOMAIN;
-    }
-  }
-
-  void twin_superdroplet_coalescence(SuperdropWithGbxindex &SDinGBx1,
-                                     SuperdropWithGbxindex &SDinGBx2,
                                      const unsigned long long gamma) const
   /* if eps1 = gamma*eps2 coalescence makes twin SDs
   with same eps, r and solute mass. According to Shima et al. 2009
@@ -78,24 +65,16 @@ private:
 
     sd1.radius = new_r;
     sd2.radius = new_r;
-    sd1.radius = new_r;
-    sd2.radius = new_r;
 
     sd1.m_sol = new_m_sol;
     sd2.m_sol = new_m_sol;
-    sd1.m_sol = new_m_sol;
-    sd2.m_sol = new_m_sol;
-
+  
     remove_empty_superdrop(SDinGBx1); // because if eps1 = eps2 = 1 before coalesence, then eps1=0 now
   }
 
   void different_superdroplet_coalescence(Superdrop &sd1,
                                           Superdrop &sd2,
-  void different_superdroplet_coalescence(Superdrop &sd1,
-                                          Superdrop &sd2,
                                           const unsigned long long gamma) const
-  /* if eps1 > gamma*eps2 coalescence grows sd2 radius and mass
-  via decreasing multiplicity of sd1. According to
   /* if eps1 > gamma*eps2 coalescence grows sd2 radius and mass
   via decreasing multiplicity of sd1. According to
   Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
@@ -111,8 +90,6 @@ private:
   }
 
 public:
-  void operator()(SuperdropWithGbxindex &SDinGBx1,
-                  SuperdropWithGbxindex &SDinGBx2,
   void operator()(SuperdropWithGbxindex &SDinGBx1,
                   SuperdropWithGbxindex &SDinGBx2,
                   const double prob, const double phi) const
@@ -131,7 +108,6 @@ public:
     of superdroplets if gamma is not zero */
     if (gamma != 0)
     {
-      coalesce_superdroplet_pair(SDinGBx1, SDinGBx2, gamma);
       coalesce_superdroplet_pair(SDinGBx1, SDinGBx2, gamma);
     }
   }
@@ -156,8 +132,6 @@ public:
 
   void coalesce_superdroplet_pair(SuperdropWithGbxindex &SDinGBx1,
                                   SuperdropWithGbxindex &SDinGBx2,
-  void coalesce_superdroplet_pair(SuperdropWithGbxindex &SDinGBx1,
-                                  SuperdropWithGbxindex &SDinGBx2,
                                   const unsigned long long gamma) const
   /* coalesce pair of superdroplets by changing multiplicity,
   radius and solute mass of each superdroplet in pair
@@ -175,7 +149,6 @@ public:
 
     else if (eps1 - gamma * eps2 == 0)
     {
-      twin_superdroplet_coalescence(SDinGBx1, SDinGBx2, gamma);
       twin_superdroplet_coalescence(SDinGBx1, SDinGBx2, gamma);
     }
 

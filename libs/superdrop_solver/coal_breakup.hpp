@@ -70,7 +70,6 @@ public:
     if (gamma_coal != 0)
     {
       coal.coalesce_superdroplet_pair(SDinGBx1, SDinGBx2, gamma_coal);
-      coal.coalesce_superdroplet_pair(SDinGBx1, SDinGBx2, gamma_coal);
     }
 
     else // if not coalescence, check for breakup
@@ -85,8 +84,6 @@ public:
         of superdroplets if gamma is not zero */
       if (gamma_bu != 0)
       {
-        breakup.breakup_superdroplet_pair(SDinGBx1.superdrop,
-                                          SDinGBx2.superdrop);
         breakup.breakup_superdroplet_pair(SDinGBx1.superdrop,
                                           SDinGBx2.superdrop);
       }
