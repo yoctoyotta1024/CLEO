@@ -155,6 +155,13 @@ private:
             const_cast<SuperdropWithGbxindex &>(SDinGBx2)};
   }
 
+  std::span<SuperdropWithGbxindex>
+  new_span(const unsigned int gbxindex,
+              std::span<SuperdropWithGbxindex> span4SDsinGBx) const
+  {
+    return span4SDsinGBx; //TO DO update span
+  }
+
 public:
   CollisionX(const double DELT,
              CollisionXProbability p,
