@@ -146,7 +146,7 @@ private:
     auto compare = [](const SuperdropWithGbxindex &SDinGBxA,
                       const SuperdropWithGbxindex &SDinGBxB)
     {
-      return SDinGBxA.superdrop.eps < SDinGBxB.superdrop.eps; //returns true if epsA < epsB
+      return SDinGBxA.superdrop.eps < SDinGBxB.superdrop.eps; // returns true if epsA < epsB
     };
 
     auto [SDinGBx2, SDinGBx1] = std::minmax(SDinGBxA, SDinGBxB, compare); // drop2.eps =< drop1.eps
