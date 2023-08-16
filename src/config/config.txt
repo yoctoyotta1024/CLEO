@@ -17,8 +17,8 @@ initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initia
 grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for GBx boundaries
 
 ### Output Data parameters ###
-setuptxt = ./bin/djvalid/setup_djvalid.txt               # name of .txt output file to copy setup to
-zarrbasedir = ./bin/djvalid/SDMdata_djvalid.zarr         # zarr store base directory
+setuptxt = ./bin/djvalid/setup_debug.txt               # name of .txt output file to copy setup to
+zarrbasedir = ./bin/djvalid/SDMdata_debug.zarr         # zarr store base directory
 maxchunk = 1250000                                              # maximum no. of elements in chunks of zarr store array
 
 ### SDM parameters ###
@@ -31,12 +31,12 @@ nfrags = 4                                # expected number of fragments in (rea
 CONDTSTEP = 1                             # time between SD condensation events [s]
 COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 2                           # time between SDM motion [s]
-COUPLTSTEP = 2048                         # time between thermodynamic couplings [s]
-OBSTSTEP = 16                             # time between SDM observations [s]
-T_END = 2048                              # time span of integration [s]
+COUPLTSTEP = 2400                         # time between thermodynamic couplings [s]
+OBSTSTEP = 120                            # time between SDM observations [s]
+T_END = 2400                              # time span of integration [s]
 
 # SDs parameters #
-nSDsvec = 512                          # initial no. elements in SDs' vector (=total initial no. of SDs)
+nSDsvec = 1024                          # initial no. elements in SDs' vector (=total initial no. of SDs)
 SDnspace = 0                            # no. of spatial coordinates of SDs (=dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state

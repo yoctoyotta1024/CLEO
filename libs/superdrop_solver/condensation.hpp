@@ -90,7 +90,8 @@ public:
         impliciteuler(niters, subdelt, delt, rtol, atol) {}
 
   template <class DeviceType>
-  inline void operator()(const int currenttimestep,
+  inline auto operator()(const int currenttimestep,
+                         const unsigned int gbxindex,
                          std::span<SuperdropWithGbxindex> span4SDsinGBx,
                          ThermoState &state,
                          URBG<DeviceType> &urbg) const
@@ -100,6 +101,8 @@ public:
   satisfies the SdmProcess concept) */
   {
     condensation_onto_superdroplets(span4SDsinGBx, state);
+
+    return span4SDsinGBx;
   }
 };
 

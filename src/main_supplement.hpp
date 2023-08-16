@@ -130,11 +130,11 @@ combined process of those two individual processes */
   /* create process for collision-coalescene in SDM */
   // const auto terminalv(SimmelTerminalVelocity{});
   // const auto probs_coal(CollCoalProb_LowList(terminalv));
-  // const auto probs_coal(CollCoalProb_Golovin());
+  const auto probs_coal = CollCoalProb_Golovin();
   // const auto probs_coal(CollCoalProb_Long());
-  // const auto coal(CollisionCoalescenceProcess(mdlsteps.collsubstep,
-  //                                             &step2realtime,
-  //                                             probs_coal));
+  const auto coal(CollisionCoalescenceProcess(mdlsteps.collsubstep,
+                                              &step2realtime,
+                                              probs_coal));
 
   // /* create process for collision-breakup in SDM */
   // const auto probs_bu(CollBuProb_LowList(terminalv));
@@ -151,18 +151,19 @@ combined process of those two individual processes */
   //                                        terminalv,
   //                                        config.nfrags));
 
-  const double coalrate(5e-7); // coalescence rate [s^-1]
-  const double burate(0.0);  // breakup rate [s^-1]
-  const auto djvalid(CollisionCoalBuConst(mdlsteps.collsubstep,
-                                          &step2realtime,
-                                          config.nfrags,
-                                          coalrate, burate));
+  // const double coalrate(5e-7); // coalescence rate [s^-1]
+  // const double burate(0.0);  // breakup rate [s^-1]
+  // const auto djvalid(CollisionCoalBuConst(mdlsteps.collsubstep,
+  //                                         &step2realtime,
+  //                                         config.nfrags,
+  //                                         coalrate, burate));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
   // const auto sdmprocess = cond >> coalall;
   // const auto sdmprocess = cond;
   // const auto sdmprocess = coalall;
-  const auto sdmprocess = djvalid;
+  // const auto sdmprocess = djvalid;
+  const auto sdmprocess = coal;
 
   return sdmprocess;
   // return NullProcess{};

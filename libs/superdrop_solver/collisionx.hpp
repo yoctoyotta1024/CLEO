@@ -43,8 +43,8 @@ something convertible to a double
 
 template <typename X>
 concept SDPairEnactX = requires(X x,
-                                Superdrop &d1,
-                                Superdrop &d2,
+                                SuperdropWithGbxindex &SDinGBx1,
+                                SuperdropWithGbxindex &SDinGBx2,
                                 const double p,
                                 const double i)
 /* Objects that are of type SDPairEnactX
@@ -53,7 +53,7 @@ void (it may change the properties of
 the superdrops)*/
 {
   {
-    x(d1, d2, p, i)
+    x(SDinGBx1, SDinGBx2, p, i)
   } -> std::same_as<void>;
 };
 
@@ -101,15 +101,17 @@ private:
     /* collide all randomly generated pairs of SDs */
     for (size_t i = 1; i < nsupers; i += 2)
     {
-      collide_superdroplet_pair(urbg, span4SDsinGBx[i - 1].superdrop,
-                                span4SDsinGBx[i].superdrop, scale_p,
+      collide_superdroplet_pair(urbg, span4SDsinGBx[i - 1],
+                                span4SDsinGBx[i], scale_p,
                                 VOLUME);
     }
   }
 
   template <class DeviceType>
-  void collide_superdroplet_pair(URBG<DeviceType> &urbg, Superdrop &dropA,
-                                 Superdrop &dropB, const double scale_p,
+  void collide_superdroplet_pair(URBG<DeviceType> &urbg,
+                                 SuperdropWithGbxindex &SDinGBxA,
+                                 SuperdropWithGbxindex &SDinGBxB,
+                                 const double scale_p,
                                  const double VOLUME) const
   /* Monte Carlo Routine from Shima et al. 2009 for
   collision-coalescence generalised to any collision-X process
@@ -117,37 +119,43 @@ private:
   and collisionx_superdroplet_pair */
   {
     /* 1. assign references to each superdrop in pair
-    that will collide such that (drop1.eps) >= (drop2.eps) */
-    auto [drop1, drop2] = assign_superdroplet(dropA, dropB);
+    that will collide such that (sd1.eps) >= (sd2.eps) */
+    auto [SDinGBx1, SDinGBx2] = assign_superdroplet(SDinGBxA, SDinGBxB);
 
     /* 2. calculate scaled probability of pair collision-x
     according to Shima et al. 2009 ("p_alpha" in paper) */
-    const double prob_jk = collisionx_probability(drop1, drop2, DELT, VOLUME);
+    const double prob_jk = collisionx_probability(SDinGBx1.superdrop,
+                                                  SDinGBx2.superdrop,
+                                                  DELT, VOLUME);
     const double prob = scale_p *
-                        std::max(drop1.eps, drop2.eps) *
+                        std::max(SDinGBx1.superdrop.eps,
+                                 SDinGBx1.superdrop.eps) *
                         prob_jk;
 
     /* 3. Monte Carlo Step: use random number to enact (or not)
     collision-x on pair of superdroplets */
     std::uniform_real_distribution<> dis(0.0, 1.0);
     const double phi = dis(urbg); // phi is random number in range [0,1]
-    enact_collisionx(drop1, drop2, prob, phi);
+    enact_collisionx(SDinGBx1, SDinGBx2, prob, phi);
   }
 
-  std::pair<Superdrop&, Superdrop&>
-  assign_superdroplet(const Superdrop &dropA, const Superdrop &dropB) const
-  /* compare dropA.eps with dropB.eps and return (non-const)
-  references to dropA and dropB in a pair {drop1, drop2}
-  such that drop1.eps is always > drop2.eps */
+  std::pair<SuperdropWithGbxindex &, SuperdropWithGbxindex &>
+  assign_superdroplet(const SuperdropWithGbxindex &SDinGBxA,
+                      const SuperdropWithGbxindex &SDinGBxB) const
+  /* compare superdropA.eps with superdropB.eps and return (non-const)
+  references to SDinGBxA and SDinGBxB in a pair {SDinGBx1, SDinGBx2}
+  such that superdrop1.eps is always > superdrop2.eps */
   {
-    auto compare = [](const Superdrop &dropA, const Superdrop &dropB)
+    auto compare = [](const SuperdropWithGbxindex &SDinGBxA,
+                      const SuperdropWithGbxindex &SDinGBxB)
     {
-      return dropA.eps < dropB.eps; //returns true if epsA < epsB
+      return SDinGBxA.superdrop.eps < SDinGBxB.superdrop.eps; //returns true if epsA < epsB
     };
 
-    auto [drop2, drop1] = std::minmax(dropA, dropB, compare); // drop2.eps =< drop1.eps
+    auto [SDinGBx2, SDinGBx1] = std::minmax(SDinGBxA, SDinGBxB, compare); // drop2.eps =< drop1.eps
 
-    return {const_cast<Superdrop&>(drop1), const_cast<Superdrop&>(drop2)};
+    return {const_cast<SuperdropWithGbxindex &>(SDinGBx1),
+            const_cast<SuperdropWithGbxindex &>(SDinGBx2)};
   }
 
 public:
@@ -159,16 +167,18 @@ public:
         enact_collisionx(x) {}
 
   template <class DeviceType>
-  void operator()(const int currenttimestep,
-                  std::span<SuperdropWithGbxindex> span4SDsinGBx,
-                  ThermoState &state,
-                  URBG<DeviceType> &urbg) const
+  auto operator()(const int currenttimestep, const unsigned int gbxindex,
+             std::span<SuperdropWithGbxindex> span4SDsinGBx,
+             ThermoState &state,
+             URBG<DeviceType> &urbg) const
   /* this operator is used as an "adaptor" for using a run_step
   function in order to call collide_superdroplets. (*hint* run_step
   is usually found within a type that satisfies the SdmProcess concept) */
   {
     const double VOLUME = state.get_volume() * pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
     collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
+
+    return span4SDsinGBx;
   }
 };
 

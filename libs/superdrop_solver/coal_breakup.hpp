@@ -45,8 +45,9 @@ public:
       throw std::invalid_argument("Invalid coalescence efficiency, coaleff");
     }
   }
-
-  void operator()(Superdrop &drop1, Superdrop &drop2,
+  
+  void operator()(SuperdropWithGbxindex &SDinGBx1,
+                  SuperdropWithGbxindex &SDinGBx2,
                   const double probcoll, const double phi) const
   /* this operator is used as an "adaptor" for using
   CoalBreakupConstEff as a function in CollisionsX
@@ -54,32 +55,35 @@ public:
   *note* operator uses probcoll, probability of collision,
   NOT probability of collision-coalescence! */
   {
+    Superdrop &sd1(SDinGBx1.superdrop);
+    Superdrop &sd2(SDinGBx2.superdrop);
+
     /* 1. calculate gamma factor for collision-coalescence  */
     const double probcoal(probcoll * coaleff);
-    const unsigned long long gamma_coal(coal.coalescence_gamma(drop1.eps,
-                                                               drop2.eps,
+    const unsigned long long gamma_coal(coal.coalescence_gamma(sd1.eps,
+                                                               sd2.eps,
                                                                probcoal,
                                                                phi));
     /* 2. enact collision-coalescence between pair
       of superdroplets if gamma is not zero */
     if (gamma_coal != 0)
     {
-      coal.coalesce_superdroplet_pair(drop1, drop2, gamma_coal);
+      coal.coalesce_superdroplet_pair(sd1, sd2, gamma_coal);
     }
 
     else // if not coalescence, check for breakup
     {
       /* 3. calculate gamma factor for collision-breakup  */
       const double probbu(probcoll * bueff);
-      const unsigned long long gamma_bu(breakup.breakup_gamma(drop1.eps,
-                                                              drop2.eps,
+      const unsigned long long gamma_bu(breakup.breakup_gamma(sd1.eps,
+                                                              sd2.eps,
                                                               probbu,
                                                               phi));
       /* 4. enact collision-breakup between pair
         of superdroplets if gamma is not zero */
       if (gamma_bu != 0)
       {
-        breakup.breakup_superdroplet_pair(drop1, drop2);
+        breakup.breakup_superdroplet_pair(sd1, sd2);
       }
     }
   }

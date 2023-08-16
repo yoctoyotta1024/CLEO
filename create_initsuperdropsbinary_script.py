@@ -32,22 +32,22 @@ initSDsfile = binariespath+"/dimlessSDsinit.dat" # note this should match config
 # zlim = 1000
 # npergbx = 8
 # nsupers = iSDs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 512
+nsupers = 1024
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
-monor                = 0.04910258806                  # all SDs have this same radius [m]
-radiigen  = iSDs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
+# monor                = 0.04910258806                  # all SDs have this same radius [m]
+# radiigen  = iSDs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
 
-# rspan                = [1e-8, 9e-5]                 # min and max range of radii to sample [m]
-# randomr              = True                         # sample radii range randomly or not
-# radiigen = iSDs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
+rspan                = [1e-8, 9e-5]                 # min and max range of radii to sample [m]
+randomr              = True                         # sample radii range randomly or not
+radiigen = iSDs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Droplet Radius Probability Distribution --- ###
-dirac0               = monor               # radius in sample closest to this value is dirac delta peak
-numconc              = 1e6                         # total no. conc of real droplets [m^-3]
-radiiprobdist = rprobs.DiracDelta(dirac0)
+# dirac0               = monor               # radius in sample closest to this value is dirac delta peak
+# numconc              = 1e6                         # total no. conc of real droplets [m^-3]
+# radiiprobdist = rprobs.DiracDelta(dirac0)
 
 # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
 # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
@@ -61,9 +61,9 @@ radiiprobdist = rprobs.DiracDelta(dirac0)
 # numconc = np.sum(scalefacs)
 # radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
  
-# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-# radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
+volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
+numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
+radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
 
 # reff                 = 7e-6                     # effective radius [m]
 # nueff                = 0.08                     # effective variance 

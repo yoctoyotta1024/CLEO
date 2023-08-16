@@ -50,7 +50,8 @@ public:
   }
 
   template <class DeviceType>
-  inline void operator()(const int currenttimestep,
+  inline auto operator()(const int currenttimestep,
+                         const unsigned int gbxindex,
                          std::span<SuperdropWithGbxindex> span4SDsinGBx,
                          ThermoState &state,
                          URBG<DeviceType> &urbg) const
@@ -59,6 +60,8 @@ public:
   usually found within a type that satisfies the SdmProcess concept) */
   {
     sediment_superdroplets(span4SDsinGBx);
+
+    return span4SDsinGBx;
   }
 };
 
