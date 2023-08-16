@@ -66,7 +66,7 @@ private:
     sd1.m_sol = new_m_sol;
     sd2.m_sol = new_m_sol;
 
-    remove_empty_superdrop(SDinGBx1); // because if eps1 = eps2 = 1 before coalesence, then eps1=0 now
+    // remove_empty_superdrop(SDinGBx1); // because if eps1 = eps2 = 1 before coalesence, then eps1=0 now
   }
 
   void different_superdroplet_coalescence(Superdrop &sd1,
@@ -77,12 +77,11 @@ private:
   Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
   {
     sd1.eps = sd1.eps - gamma * sd2.eps;
-
-    const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
-    const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
-    const double new_rcubed(r2cubed + gamma * r1cubed);
-    sd2.radius = std::pow(new_rcubed, (1.0 / 3.0));
  
+    const double new_rcubed = std::pow(sd2.radius, 3.0) +
+                              gamma * std::pow(sd1.radius, 3.0);
+    sd2.radius = std::pow(new_rcubed, (1.0 / 3.0));
+
     sd2.m_sol = sd2.m_sol + gamma * sd1.m_sol;
   }
 
@@ -99,7 +98,6 @@ public:
     const unsigned long long eps2(SDinGBx2.superdrop.eps);
     const unsigned long long gamma = coalescence_gamma(eps1, eps2,
                                                        prob, phi);
-
     /* 2. enact collision-coalescence on pair
     of superdroplets if gamma is not zero */
     if (gamma != 0)
