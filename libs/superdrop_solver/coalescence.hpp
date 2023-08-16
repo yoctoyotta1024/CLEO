@@ -29,18 +29,24 @@ two superdroplets. (Can be used in collisionsx struct
 to enact collision-coalescence events in SDM) */
 {
 private:
-  void twin_superdroplet_coalescence(Superdrop &sd1,
-                                     Superdrop &sd2,
+  void twin_superdroplet_coalescence(SuperdropWithGbxindex &SDinGBx1,
+                                     SuperdropWithGbxindex &SDinGBx2,
                                      const unsigned long long gamma) const
   /* if eps1 = gamma*eps2 coalescence makes twin SDs
   with same eps, r and solute mass. According to Shima et al. 2009
   Section 5.1.3. part (5) option (b)  */
   {
+    Superdrop &sd1(SDinGBx1.superdrop);
+    Superdrop &sd2(SDinGBx2.superdrop);
+
     const unsigned long long old_eps = sd2.eps; // = sd1.eps
     const unsigned long long new_eps = old_eps / 2;
-    const double new_rcubed = std::pow(sd2.radius, 3.0) +
-                              gamma * std::pow(sd1.radius, 3.0);
+
+    const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
+    const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
+    const double new_rcubed = r2cubed + gamma * r1cubed;
     const double new_r = std::pow(new_rcubed, (1.0 / 3.0));
+
     const double new_m_sol = sd2.m_sol + gamma * sd1.m_sol;
 
     sd1.eps = new_eps;
@@ -62,8 +68,10 @@ private:
   {
     sd1.eps = sd1.eps - gamma * sd2.eps;
 
-    const double new_rcubed = std::pow(sd2.radius, 3.0) +
-                              gamma * std::pow(sd1.radius, 3.0);
+    const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
+    const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
+    const double new_rcubed = r2cubed + gamma * r1cubed;
+
     sd2.radius = std::pow(new_rcubed, (1.0 / 3.0));
     sd2.m_sol = sd2.m_sol + gamma * sd1.m_sol;
   }
@@ -76,19 +84,19 @@ public:
   as a function in CollisionsX that satistfies the SDPairEnactX
   concept */
   {
-    Superdrop &sd1(SDinGBx1.superdrop);
-    Superdrop &sd2(SDinGBx2.superdrop);
+    const unsigned long long eps1(SDinGBx1.superdrop.eps);
+    const unsigned long long eps2(SDinGBx2.superdrop.eps);
 
     /* 1. calculate gamma factor for collision-coalescence  */
-    const unsigned long long gamma = coalescence_gamma(sd1.eps,
-                                                       sd2.eps,
+    const unsigned long long gamma = coalescence_gamma(eps1,
+                                                       eps2,
                                                        prob, phi);
 
     /* 2. enact collision-coalescence on pair
     of superdroplets if gamma is not zero */
     if (gamma != 0)
     {
-      coalesce_superdroplet_pair(sd1, sd2, gamma);
+      coalesce_superdroplet_pair(SDinGBx1, SDinGBx2, gamma);
     }
   }
 
@@ -110,15 +118,19 @@ public:
     return std::min(gamma, maxgamma);
   }
 
-  void coalesce_superdroplet_pair(Superdrop &sd1, Superdrop &sd2,
+  void coalesce_superdroplet_pair(SuperdropWithGbxindex &SDinGBx1,
+                                  SuperdropWithGbxindex &SDinGBx2,
                                   const unsigned long long gamma) const
   /* coalesce pair of superdroplets by changing multiplicity,
   radius and solute mass of each superdroplet in pair
   according to Shima et al. 2009 Section 5.1.3. part (5) */
   {
+    Superdrop &sd1(SDinGBx1.superdrop);
+    Superdrop &sd2(SDinGBx2.superdrop);
+
     if (sd1.eps - gamma * sd2.eps == 0)
     {
-      twin_superdroplet_coalescence(sd1, sd2, gamma);
+      twin_superdroplet_coalescence(SDinGBx1, SDinGBx2, gamma);
     }
 
     else if (sd1.eps - gamma * sd2.eps > 0)

@@ -33,9 +33,12 @@ private:
   {
     const unsigned long long old_eps = sd2.eps; // = sd1.eps
     const unsigned long long new_eps = std::round(nfrags * old_eps) / 2;
-    const double sumr3 = std::pow(sd1.radius, 3.0) +
-                             std::pow(sd2.radius, 3.0);
+
+    const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
+    const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
+    const double sumr3(r1cubed + r2cubed);
     const double new_r = std::pow(old_eps / new_eps * sumr3, (1.0/3.0));
+    
     const double new_m_sol = old_eps * (sd1.m_sol + sd2.m_sol) / new_eps;
  
     sd1.eps = new_eps;
@@ -59,8 +62,10 @@ private:
 
     const unsigned long long old_eps = sd2.eps;
     const unsigned long long new_eps = std::round(nfrags * old_eps);
-    const double sumr3 = std::pow(sd1.radius, 3.0) +
-                             std::pow(sd2.radius, 3.0);
+
+    const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
+    const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
+    const double sumr3(r1cubed + r2cubed);
     
     sd2.eps = new_eps;
     sd2.radius = std::pow(sumr3 * old_eps / new_eps, (1.0/3.0)); // NOTE: implicit casting of eps from unsigned long long to double here

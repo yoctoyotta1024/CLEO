@@ -55,35 +55,36 @@ public:
   *note* operator uses probcoll, probability of collision,
   NOT probability of collision-coalescence! */
   {
-    Superdrop &sd1(SDinGBx1.superdrop);
-    Superdrop &sd2(SDinGBx2.superdrop);
+    const unsigned long long eps1(SDinGBx1.superdrop.eps);
+    const unsigned long long eps2(SDinGBx2.superdrop.eps);
 
     /* 1. calculate gamma factor for collision-coalescence  */
     const double probcoal(probcoll * coaleff);
-    const unsigned long long gamma_coal(coal.coalescence_gamma(sd1.eps,
-                                                               sd2.eps,
+    const unsigned long long gamma_coal(coal.coalescence_gamma(eps1,
+                                                               eps2,
                                                                probcoal,
                                                                phi));
     /* 2. enact collision-coalescence between pair
       of superdroplets if gamma is not zero */
     if (gamma_coal != 0)
     {
-      coal.coalesce_superdroplet_pair(sd1, sd2, gamma_coal);
+      coal.coalesce_superdroplet_pair(SDinGBx1, SDinGBx2, gamma_coal);
     }
 
     else // if not coalescence, check for breakup
     {
       /* 3. calculate gamma factor for collision-breakup  */
       const double probbu(probcoll * bueff);
-      const unsigned long long gamma_bu(breakup.breakup_gamma(sd1.eps,
-                                                              sd2.eps,
+      const unsigned long long gamma_bu(breakup.breakup_gamma(eps1,
+                                                              eps2,
                                                               probbu,
                                                               phi));
       /* 4. enact collision-breakup between pair
         of superdroplets if gamma is not zero */
       if (gamma_bu != 0)
       {
-        breakup.breakup_superdroplet_pair(sd1, sd2);
+        breakup.breakup_superdroplet_pair(SDinGBx1.superdrop,
+                                          SDinGBx1.superdrop);
       }
     }
   }
