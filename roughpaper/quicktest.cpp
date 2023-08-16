@@ -52,7 +52,7 @@ such that drop1.eps is always > drop2.eps */
 {
   auto comp = [](const Superdrop &dropA, const Superdrop &dropB)
   {
-    return dropA.eps < dropB.eps; //returns true if epsA < epsB
+    return dropA.eps < dropB.eps; // returns true if epsA < epsB
   };
 
   auto [drop2, drop1] = std::minmax(dropA, dropB, comp); // drop2.eps =< drop1.eps
