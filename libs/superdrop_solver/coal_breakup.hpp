@@ -4,7 +4,7 @@
 collision events in which either coalescence,
 or breakup occurs with fixed efficiency
 Ecoal (and 1 - Ecoal). ConstCoalBreakup
-struct satisfies SDPairEnactX concept used in
+struct satisfies SDinGBxPairEnactX concept used in
 CollisionX struct */
 
 #ifndef COAL_BREAKUP_HPP
@@ -51,7 +51,7 @@ public:
                   const double probcoll, const double phi) const
   /* this operator is used as an "adaptor" for using
   CoalBreakupConstEff as a function in CollisionsX
-  that satistfies the SDPairEnactX concept.
+  that satistfies the SDinGBxPairEnactX concept.
   *note* operator uses probcoll, probability of collision,
   NOT probability of collision-coalescence! */
   {
@@ -64,6 +64,7 @@ public:
                                                                eps2,
                                                                probcoal,
                                                                phi));
+
     /* 2. enact collision-coalescence between pair
       of superdroplets if gamma is not zero */
     if (gamma_coal != 0)
@@ -84,7 +85,7 @@ public:
       if (gamma_bu != 0)
       {
         breakup.breakup_superdroplet_pair(SDinGBx1.superdrop,
-                                          SDinGBx1.superdrop);
+                                          SDinGBx2.superdrop);
       }
     }
   }

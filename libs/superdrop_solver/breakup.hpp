@@ -3,7 +3,7 @@
 /* Header file for class that enacts
 collision-breakup events in
 superdroplet model. Breakup struct
-satisfies SDPairEnactX concept used in
+satisfies SDinGBxPairEnactX concept used in
 CollisionX struct */
 
 #ifndef BREAKUP_HPP
@@ -91,7 +91,7 @@ public:
                   SuperdropWithGbxindex &SDinGBx2,
                   const double prob, const double phi) const
   /* this operator is used as an "adaptor" for using Breakup
-  as a function in CollisionsX that satistfies the SDPairEnactX
+  as a function in CollisionsX that satistfies the SDinGBxPairEnactX 
   concept */
   {
     Superdrop &sd1(SDinGBx1.superdrop);

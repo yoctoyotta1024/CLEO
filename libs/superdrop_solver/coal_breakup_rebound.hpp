@@ -4,7 +4,7 @@
 collision events in which either coalescence,
 breakup, or rebound can occur.
 CoalBreakupRebound struct satisfies
-SDPairEnactX concept used in CollisionX struct */
+SDinGBxPairEnactX concept used in CollisionX struct */
 
 #ifndef COAL_BREAKUP_REBOUND_HPP
 #define COAL_BREAKUP_REBOUND_HPP
@@ -102,7 +102,7 @@ public:
                   const double probcoll, const double phi) const
   /* this operator is used as an "adaptor" for using
   CoalBreakupRebound as a function in CollisionsX
-  that satistfies the SDPairEnactX concept.
+  that satistfies the SDinGBxPairEnactX concept.
   *note* operator uses probcoll, probability of collision,
   NOT probability of collision-coalescence! */
   {
@@ -110,8 +110,7 @@ public:
     const unsigned long long eps2(SDinGBx2.superdrop.eps);
 
     /* 1. calculate gamma factor for collision  */
-    const unsigned long long gamma(collision_gamma(eps1,
-                                                   eps2,
+    const unsigned long long gamma(collision_gamma(eps1, eps2,
                                                    probcoll, phi));
 
     /* 2. enact collision between pair

@@ -42,12 +42,12 @@ something convertible to a double
 };
 
 template <typename X>
-concept SDPairEnactX = requires(X x,
+concept SDinGBxPairEnactX = requires(X x,
                                 SuperdropWithGbxindex &SDinGBx1,
                                 SuperdropWithGbxindex &SDinGBx2,
                                 const double p,
                                 const double i)
-/* Objects that are of type SDPairEnactX
+/* Objects that are of type SDinGBxPairEnactX 
 takes a pair of superdrops and returns
 void (it may change the properties of
 the superdrops)*/
@@ -58,7 +58,7 @@ the superdrops)*/
 };
 
 template <SDPairProbability CollisionXProbability,
-          SDPairEnactX CollisionXEnactment>
+          SDinGBxPairEnactX CollisionXEnactment>
 class CollisionX
 /* class for method to enact collisions between
 superdrops during collision events in SDM */
@@ -178,7 +178,7 @@ public:
     const double VOLUME = state.get_volume() * pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
     collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
 
-    return span4SDsinGBx;
+    return remove_outofdomain_superdrops(span4SDsinGBx);
   }
 };
 

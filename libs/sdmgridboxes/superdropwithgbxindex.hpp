@@ -16,6 +16,7 @@ defined in .cpp implementaiton file */
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
+#include <span>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Vector.hpp>
@@ -59,4 +60,29 @@ of objects with same value of sd_gbxindex can take any order */
   std::sort(SDsInGBxs.begin(), SDsInGBxs.end(), compare);
 }
 
+inline std::span<SuperdropWithGbxindex>
+remove_outofdomain_superdrops(
+    std::span<SuperdropWithGbxindex> &span4SDsinGBx)
+/* sorts span based on sd_gbxindex and then obtains a
+subspan which excludes superdroplets with OUTOFDOMAIN
+value as sd_gbxindex (ie. max possible value) */
+{
+  /* 1. Sort span based on sd_gbxindexes */
+  auto compare = [](SuperdropWithGbxindex &a, SuperdropWithGbxindex &b)
+  {
+    return (a.sd_gbxindex) < (b.sd_gbxindex);
+  };
+  std::sort(span4SDsinGBx.begin(), span4SDsinGBx.end(), compare);  
+
+  /* 2. Find first instance where sd_gbxindex < OUTOFDOMAIN  */
+  auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
+  {
+    return a.sd_gbxindex < val;
+  };
+  auto up = std::lower_bound(span4SDsinGBx.begin(), span4SDsinGBx.end(),
+                             dlc::OUTOFDOMAIN, lowcompare);
+
+  /* 3. Return subspan that is upto and excluding OUTOFDOMAIN sd_gbxindexes */  
+  return {span4SDsinGBx.begin(), up};
+}
 #endif // SUPERDROPWITHGBXINDEX_HPP

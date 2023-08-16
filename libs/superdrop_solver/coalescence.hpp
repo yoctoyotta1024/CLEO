@@ -3,7 +3,7 @@
 /* Header file for class that enacts
 collision-coalescence events in
 superdroplet model. Coalescence struct
-satisfies SDPairEnactX concept used in
+satisfies SDinGBxPairEnactX concept used in
 CollisionX struct */
 
 #ifndef COALESCENCE_HPP
@@ -29,6 +29,17 @@ two superdroplets. (Can be used in collisionsx struct
 to enact collision-coalescence events in SDM) */
 {
 private:
+  void remove_empty_superdrop(SuperdropWithGbxindex &SDinGBx) const
+  /* if multiplicity of drop = 0, ie. superdrop is empty,
+  change it's SDinGBx to be value that indicates 
+  superdrop is out of domain (ie. no longer exists) */
+  {
+    if (SDinGBx.superdrop.eps < 1) // ie. eps == 0
+    {
+      SDinGBx.sd_gbxindex = dlc::OUTOFDOMAIN;
+    }
+  }
+
   void twin_superdroplet_coalescence(SuperdropWithGbxindex &SDinGBx1,
                                      SuperdropWithGbxindex &SDinGBx2,
                                      const unsigned long long gamma) const
@@ -57,6 +68,8 @@ private:
 
     sd1.m_sol = new_m_sol;
     sd2.m_sol = new_m_sol;
+
+    remove_empty_superdrop(SDinGBx1); // because if eps1 = eps2 = 1 before coalesence, then eps1=0 now
   }
 
   void different_superdroplet_coalescence(Superdrop &sd1,
@@ -81,16 +94,15 @@ public:
                   SuperdropWithGbxindex &SDinGBx2,
                   const double prob, const double phi) const
   /* this operator is used as an "adaptor" for using Coalescence
-  as a function in CollisionsX that satistfies the SDPairEnactX
+  as a function in CollisionsX that satistfies the SDinGBxPairEnactX
   concept */
   {
     const unsigned long long eps1(SDinGBx1.superdrop.eps);
     const unsigned long long eps2(SDinGBx2.superdrop.eps);
 
     /* 1. calculate gamma factor for collision-coalescence  */
-    const unsigned long long gamma = coalescence_gamma(eps1,
-                                                       eps2,
-                                                       prob, phi);
+    const unsigned long long gamma(coalescence_gamma(eps1, eps2,
+                                                     prob, phi));
 
     /* 2. enact collision-coalescence on pair
     of superdroplets if gamma is not zero */
@@ -140,10 +152,8 @@ public:
 
     else
     {
-      std::string errormsg = "something undefined occured "
-                             "during colllision-coalescence" +
-                             std::to_string(sd1.eps) + " < " +
-                             std::to_string(gamma * (sd2.eps));
+      std::string errormsg("something undefined occured "
+                           "during colllision-coalescence");
       throw std::invalid_argument(errormsg);
     }
   }
