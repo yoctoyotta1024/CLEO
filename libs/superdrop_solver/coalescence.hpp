@@ -140,14 +140,14 @@ public:
     Superdrop &sd1(SDinGBx1.superdrop);
     Superdrop &sd2(SDinGBx2.superdrop);
 
-    if (sd1.eps - gamma * sd2.eps == 0)
-    {
-      twin_superdroplet_coalescence(SDinGBx1, SDinGBx2, gamma);
-    }
-
-    else if (sd1.eps - gamma * sd2.eps > 0)
+    if (sd1.eps - gamma * sd2.eps > 0)
     {
       different_superdroplet_coalescence(sd1, sd2, gamma);
+    }
+
+    else if (sd1.eps - gamma * sd2.eps == 0)
+    {
+      twin_superdroplet_coalescence(SDinGBx1, SDinGBx2, gamma);
     }
 
     else
