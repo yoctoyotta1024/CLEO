@@ -107,11 +107,7 @@ private:
     }
   }
 
-  template <class DeviceType>
-  void collide_superdroplet_pair(URBG<DeviceType> &urbg,
-                                 SuperdropWithGbxindex &SDinGBxA,
-                                 SuperdropWithGbxindex &SDinGBxB,
-                                 const double scale_p,
+  template <class DeviceType> 
   void collide_superdroplet_pair(URBG<DeviceType> &urbg,
                                  SuperdropWithGbxindex &SDinGBxA,
                                  SuperdropWithGbxindex &SDinGBxB,
