@@ -116,22 +116,22 @@ SdmProcess auto create_sdmprocess(const Config &config,
 For example return a process that does SDM condensation and collisions from
 combined process of those two individual processes */
 {
-  // /* create process for condensation in SDM including Implicit
-  // Euler Method for solving condensation ODEs */
-  // const double cond_subtstep(realtime2dimless(config.cond_SUBTSTEP));
-  // const auto cond(CondensationProcess(mdlsteps.condsubstep,
-  //                                     &step2dimlesstime,
-  //                                     config.doAlterThermo,
-  //                                     config.cond_iters,
-  //                                     cond_subtstep,
-  //                                     config.cond_rtol,
-  //                                     config.cond_atol));
+  /* create process for condensation in SDM including Implicit
+  Euler Method for solving condensation ODEs */
+  const double cond_subtstep(realtime2dimless(config.cond_SUBTSTEP));
+  const auto cond(CondensationProcess(mdlsteps.condsubstep,
+                                      &step2dimlesstime,
+                                      config.doAlterThermo,
+                                      config.cond_iters,
+                                      cond_subtstep,
+                                      config.cond_rtol,
+                                      config.cond_atol));
 
   /* create process for collision-coalescene in SDM */
   // const auto terminalv(SimmelTerminalVelocity{});
   // const auto probs_coal(CollCoalProb_LowList(terminalv));
-  const auto probs_coal = CollCoalProb_Golovin();
-  // const auto probs_coal(CollCoalProb_Long());
+  // const auto probs_coal = CollCoalProb_Golovin();
+  const auto probs_coal(CollCoalProb_Long());
   const auto coal(CollisionCoalescenceProcess(mdlsteps.collsubstep,
                                               &step2realtime,
                                               probs_coal));
@@ -154,20 +154,20 @@ combined process of those two individual processes */
 
   // const double coalrate(5e-7); // coalescence rate [s^-1]
   // const double burate(0.0);  // breakup rate [s^-1]
-  // const auto djvalid(CollisionCoalBuConst(mdlsteps.collsubstep,
+  // const auto collcnst(CollisionCoalBuConst(mdlsteps.collsubstep,
   //                                         &step2realtime,
   //                                         config.nfrags,
   //                                         coalrate, burate));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  // const auto sdmprocess = cond >> coal;
-  const auto sdmprocess = coal;
+  const auto sdmprocess = cond >> coal;
+  // const auto sdmprocess = coal;
   // const auto sdmprocess = cond;
   // const auto sdmprocess = coalall;
-  // const auto sdmprocess = djvalid;
+  // const auto sdmprocess = collcnst;
 
-  return sdmprocess;
   // return NullProcess{};
+  return sdmprocess;
 }
 
 CreateDetectorsPtr auto specify_detectors(const Maps4GridBoxes &gbxmaps)
