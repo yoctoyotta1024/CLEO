@@ -96,6 +96,10 @@ SdMotion auto create_sdmotion(const int motionstep)
   const SdMotion auto movewithsedi = MoveWithSedimentation(motionstep,
                                                           &step2dimlesstime,
                                                           terminalv);
+  const auto terminalv = SimmelTerminalVelocity{};
+  const SdMotion auto movewithsedi = MoveWithSedimentation(motionstep,
+                                                          &step2dimlesstime,
+                                                          terminalv);
 
   // auto rhotilda = [](const ThermoState &state)
   // { return state.press / (state.temp * (dlc::Rgas_dry + state.qvap * dlc::Rgas_v)); };
@@ -106,7 +110,9 @@ SdMotion auto create_sdmotion(const int motionstep)
   //                                                 flow2d);
   
   return movewithsedi;
+  return movewithsedi;
   // return prescribed2d;
+  // return NullMotion{};
   // return NullMotion{};
 }
 
@@ -117,15 +123,15 @@ For example return a process that does SDM condensation and collisions from
 combined process of those two individual processes */
 {
   /* create process for condensation in SDM including Implicit
-  // Euler Method for solving condensation ODEs */
-  // const double cond_subtstep = realtime2dimless(config.cond_SUBTSTEP);
-  // const auto cond(CondensationProcess(mdlsteps.condsubstep,
-  //                                     &step2dimlesstime,
-  //                                     config.doAlterThermo,
-  //                                     config.cond_iters,
-  //                                     cond_subtstep,
-  //                                     config.cond_rtol,
-  //                                     config.cond_atol));
+  Euler Method for solving condensation ODEs */
+  const double cond_subtstep(realtime2dimless(config.cond_SUBTSTEP));
+  const auto cond(CondensationProcess(mdlsteps.condsubstep,
+                                      &step2dimlesstime,
+                                      config.doAlterThermo,
+                                      config.cond_iters,
+                                      cond_subtstep,
+                                      config.cond_rtol,
+                                      config.cond_atol));
 
   /* create process for collision-coalescene in SDM */
   // const auto terminalv(SimmelTerminalVelocity{});
@@ -137,7 +143,8 @@ combined process of those two individual processes */
                                               probs_coal));
 
   // /* create process for collision-breakup in SDM */
-  // const auto probs_bu(CollBuProb_LowList(terminalv));
+  // const auto terminalv = SimmelTerminalVelocity{};
+  // const auto probs_bu = CollBuProb_LowList(terminalv);
   // const auto bu(CollisionBreakupProcess(mdlsteps.collsubstep,
   //                                       &step2realtime,
   //                                       probs_bu,
@@ -157,9 +164,16 @@ combined process of those two individual processes */
   //                                         &step2realtime,
   //                                         config.nfrags,
   //                                         coalrate, burate));
+  // const double coalrate(5e-7); // coalescence rate [s^-1]
+  // const double burate(0.0);  // breakup rate [s^-1]
+  // const auto djvalid(CollisionCoalBuConst(mdlsteps.collsubstep,
+  //                                         &step2realtime,
+  //                                         config.nfrags,
+  //                                         coalrate, burate));
 
   /* choose an amalgamation of sdm processes to make the returned sdmprocess */
-  // const auto sdmprocess = cond >> coalall;
+  // const auto sdmprocess = cond >> coal;
+  const auto sdmprocess = coal;
   // const auto sdmprocess = cond;
   // const auto sdmprocess = coalall;
   // const auto sdmprocess = djvalid;

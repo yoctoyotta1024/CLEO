@@ -89,6 +89,8 @@ public:
 
   void operator()(SuperdropWithGbxindex &SDinGBx1,
                   SuperdropWithGbxindex &SDinGBx2,
+  void operator()(SuperdropWithGbxindex &SDinGBx1,
+                  SuperdropWithGbxindex &SDinGBx2,
                   const double prob, const double phi) const
   /* this operator is used as an "adaptor" for using Breakup
   as a function in CollisionsX that satistfies the SDinGBxPairEnactX 

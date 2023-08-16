@@ -54,10 +54,12 @@ the superdrops)*/
 {
   {
     x(SDinGBx1, SDinGBx2, p, i)
+    x(SDinGBx1, SDinGBx2, p, i)
   } -> std::same_as<void>;
 };
 
 template <SDPairProbability CollisionXProbability,
+          SDinGBxPairEnactX CollisionXEnactment>
           SDinGBxPairEnactX CollisionXEnactment>
 class CollisionX
 /* class for method to enact collisions between
@@ -112,6 +114,10 @@ private:
                                  SuperdropWithGbxindex &SDinGBxA,
                                  SuperdropWithGbxindex &SDinGBxB,
                                  const double scale_p,
+  void collide_superdroplet_pair(URBG<DeviceType> &urbg,
+                                 SuperdropWithGbxindex &SDinGBxA,
+                                 SuperdropWithGbxindex &SDinGBxB,
+                                 const double scale_p,
                                  const double VOLUME) const
   /* Monte Carlo Routine from Shima et al. 2009 for
   collision-coalescence generalised to any collision-X process
@@ -134,6 +140,7 @@ private:
     std::uniform_real_distribution<> dis(0.0, 1.0);
     const double phi = dis(urbg); // phi is random number in range [0,1]
     enact_collisionx(SDinGBx1, SDinGBx2, prob, phi);
+    enact_collisionx(SDinGBx1, SDinGBx2, prob, phi);
   }
 
   std::pair<SuperdropWithGbxindex &, SuperdropWithGbxindex &>
@@ -145,12 +152,18 @@ private:
   {
     auto compare = [](const SuperdropWithGbxindex &SDinGBxA,
                       const SuperdropWithGbxindex &SDinGBxB)
+    auto compare = [](const SuperdropWithGbxindex &SDinGBxA,
+                      const SuperdropWithGbxindex &SDinGBxB)
     {
+      return SDinGBxA.superdrop.eps < SDinGBxB.superdrop.eps; // returns true if epsA < epsB
       return SDinGBxA.superdrop.eps < SDinGBxB.superdrop.eps; // returns true if epsA < epsB
     };
 
     auto [SDinGBx2, SDinGBx1] = std::minmax(SDinGBxA, SDinGBxB, compare); // drop2.eps =< drop1.eps
+    auto [SDinGBx2, SDinGBx1] = std::minmax(SDinGBxA, SDinGBxB, compare); // drop2.eps =< drop1.eps
 
+    return {const_cast<SuperdropWithGbxindex &>(SDinGBx1),
+            const_cast<SuperdropWithGbxindex &>(SDinGBx2)};
     return {const_cast<SuperdropWithGbxindex &>(SDinGBx1),
             const_cast<SuperdropWithGbxindex &>(SDinGBx2)};
   }

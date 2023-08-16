@@ -38,13 +38,21 @@ nsupers = 1024
 ### --- Choice of Superdroplet Radii Generator --- ###
 # monor                = 0.04910258806                  # all SDs have this same radius [m]
 # radiigen  = iSDs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
+# monor                = 0.04910258806                  # all SDs have this same radius [m]
+# radiigen  = iSDs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
 
+rspan                = [1e-8, 9e-5]                 # min and max range of radii to sample [m]
+randomr              = True                         # sample radii range randomly or not
+radiigen = iSDs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
 rspan                = [1e-8, 9e-5]                 # min and max range of radii to sample [m]
 randomr              = True                         # sample radii range randomly or not
 radiigen = iSDs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Droplet Radius Probability Distribution --- ###
+# dirac0               = monor               # radius in sample closest to this value is dirac delta peak
+# numconc              = 1e6                         # total no. conc of real droplets [m^-3]
+# radiiprobdist = rprobs.DiracDelta(dirac0)
 # dirac0               = monor               # radius in sample closest to this value is dirac delta peak
 # numconc              = 1e6                         # total no. conc of real droplets [m^-3]
 # radiiprobdist = rprobs.DiracDelta(dirac0)

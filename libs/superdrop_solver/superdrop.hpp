@@ -195,7 +195,6 @@ the GBx the SD is associated with */
   
   KOKKOS_INLINE_FUNCTION SuperdropWithGbxindex() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~SuperdropWithGbxindex() = default; // Kokkos requirement for a (dual)View
-
 };
 
 #endif // SUPERDROP_HPP
