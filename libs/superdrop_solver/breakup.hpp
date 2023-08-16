@@ -94,19 +94,18 @@ public:
   as a function in CollisionsX that satistfies the SDinGBxPairEnactX 
   concept */
   {
-    Superdrop &sd1(SDinGBx1.superdrop);
-    Superdrop &sd2(SDinGBx2.superdrop);
+    const unsigned long long eps1(SDinGBx1.superdrop.eps);
+    const unsigned long long eps2(SDinGBx2.superdrop.eps);
 
     /* 1. calculate gamma factor for collision-breakup  */
-    const unsigned int gamma = breakup_gamma(sd1.eps,
-                                             sd2.eps,
+    const unsigned int gamma = breakup_gamma(eps1, eps2,
                                              prob, phi);
 
     /* 2. enact collision-breakup on pair
     of superdroplets if gamma is not zero */
     if (gamma != 0)
     {
-      breakup_superdroplet_pair(sd1, sd2);
+      breakup_superdroplet_pair(SDinGBx1.superdrop, SDinGBx2.superdrop);
     }
   }
 

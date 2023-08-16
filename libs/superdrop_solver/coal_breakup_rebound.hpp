@@ -42,8 +42,8 @@ private:
   Szakáll and Urbich 2018 (neglecting grazing angle considerations),
   function enacts coalescence or breakup */
   {
-    Superdrop &sd1(SDinGBx1.superdrop);
-    Superdrop &sd2(SDinGBx2.superdrop);
+    const Superdrop &sd1(SDinGBx1.superdrop);
+    const Superdrop &sd2(SDinGBx2.superdrop);
 
     const double cke(ck.collision_kinetic_energy(sd1, sd2));
 
@@ -53,7 +53,8 @@ private:
     }
     else // Weber > 1 : breakup
     {
-      breakup.breakup_superdroplet_pair(sd1, sd2);
+      breakup.breakup_superdroplet_pair(SDinGBx1.superdrop,
+                                        SDinGBx2.superdrop);
     }
   }
 
@@ -64,8 +65,8 @@ private:
   Szakáll and Urbich 2018 (neglecting grazing angle considerations),
   function enacts rebound or coalescence/breakup */
   {
-    Superdrop &sd1(SDinGBx1.superdrop);
-    Superdrop &sd2(SDinGBx2.superdrop);
+    const Superdrop &sd1(SDinGBx1.superdrop);
+    const Superdrop &sd2(SDinGBx2.superdrop);
 
     auto compare = [](const Superdrop &dropA, const Superdrop &dropB)
     {

@@ -137,15 +137,17 @@ public:
   radius and solute mass of each superdroplet in pair
   according to Shima et al. 2009 Section 5.1.3. part (5) */
   {
-    Superdrop &sd1(SDinGBx1.superdrop);
-    Superdrop &sd2(SDinGBx2.superdrop);
+    const unsigned long long eps1(SDinGBx1.superdrop.eps);
+    const unsigned long long eps2(SDinGBx2.superdrop.eps);
 
-    if (sd1.eps - gamma * sd2.eps > 0)
+    if (eps1 - gamma * eps2 > 0)
     {
-      different_superdroplet_coalescence(sd1, sd2, gamma);
+      different_superdroplet_coalescence(SDinGBx1.superdrop,
+                                         SDinGBx2.superdrop,
+                                         gamma);
     }
 
-    else if (sd1.eps - gamma * sd2.eps == 0)
+    else if (eps1 - gamma * eps2 == 0)
     {
       twin_superdroplet_coalescence(SDinGBx1, SDinGBx2, gamma);
     }
