@@ -23,12 +23,12 @@ sd_gbxindex matching gbxindex in order to set span4SDsinGBx. */
 {
   auto lowcompare = [](const SuperdropWithGbxindex &a, const unsigned int val)
   {
-    return a.sd_gbxindex < val;
+    return a.sd_gbxindex < val; // cast sd_gbxindex to *signed* int
   };
 
   auto upcompare = [](const unsigned int val, const SuperdropWithGbxindex &a)
   {
-    return val < a.sd_gbxindex;
+    return val < a.sd_gbxindex; // cast sd_gbxindex to *signed* int
   };
 
   auto low = std::lower_bound(SDsInGBxs.begin(), SDsInGBxs.end(),
