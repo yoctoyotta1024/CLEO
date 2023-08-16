@@ -127,10 +127,7 @@ private:
     const double prob_jk = collisionx_probability(SDinGBx1.superdrop,
                                                   SDinGBx2.superdrop,
                                                   DELT, VOLUME);
-    const double prob = scale_p *
-                        std::max(SDinGBx1.superdrop.eps,
-                                 SDinGBx1.superdrop.eps) *
-                        prob_jk;
+    const double prob = scale_p * SDinGBx1.superdrop.eps * prob_jk; // note: eps1 >= eps2 here
 
     /* 3. Monte Carlo Step: use random number to enact (or not)
     collision-x on pair of superdroplets */
