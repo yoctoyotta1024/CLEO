@@ -18,3 +18,10 @@
 
 pytest
 sphinx
+numpy
+scipy
+matplotlib
+xarray
+awkward
+random
+struct
