@@ -3,14 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Clara's Shoddy Python Packages' documentation!
+Welcome to Clara's Template for Documentation!
 =========================================================
 
 .. toctree::
-   :maxdepth: 2
-
-   cxx2py 
-   gbxboundariesbinary
+   :maxdepth: 2 
    
 Indices and tables
 ==================

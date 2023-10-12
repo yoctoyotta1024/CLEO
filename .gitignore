@@ -1,9 +1,6 @@
 *.log
 *.png
-*.npy
-*.csv
 *.dat
-*.zip
 *.out
 *.ipynb
 .vscode
