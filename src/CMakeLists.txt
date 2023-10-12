@@ -1,24 +1,3 @@
-/*
- * ----- CLEO -----
- * File: CMakeLists.txt
- * Project: src
- * Created Date: Thursday 12th October 2023
- * Author: Clara Bayley (CB)
- * Additional Contributors:
- * -----
- * Last Modified: Thursday 12th October 2023
- * Modified By: CB
- * -----
- * License: BSD 3-Clause "New" or "Revised" License
- * https://opensource.org/licenses/BSD-3-Clause
- * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
- * File Description:
- * CMake for CLEO main programs
- */
-
-
 # set cmake version
 cmake_minimum_required(VERSION 3.18.0)
 #cmake_minimum_required(VERSION 3.21.1) # for using Kokkos with NVC++ compiler 
@@ -46,7 +25,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
 set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # Set libraries and compiler warnings to use
-set(SDMLIBS superdrop_solver initialisation sdmgridboxes observers zarrstorage)
+set(SDMLIBS initialise observers sdmdomain superdrops zarr)
 #set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
 set(compileops -Wall -pedantic -g -gdwarf-4) # less strict without -Werror
 #set(compileops  -Wall -pedantic -g) # cannot use -gdwarf-4 flag for nvc++ compiler 
