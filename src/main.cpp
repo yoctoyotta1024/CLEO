@@ -23,7 +23,7 @@
 #include <stdexcept>
 #include <string_view>
 
-// #include <Kokkos_Core.hpp>
+#include <Kokkos_Core.hpp>
 
 struct Config
 {
