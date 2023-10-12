@@ -1,10 +1,28 @@
+/*
+ * ----- CLEO -----
+ * File: CITATION.cff
+ * Project: CLEOfire
+ * Created Date: Thursday 12th October 2023
+ * Author: Clara Bayley (CB)
+ * Additional Contributors:
+ * -----
+ * Last Modified: Thursday 12th October 2023
+ * Modified By: CB
+ * -----
+ * License: BSD 3-Clause "New" or "Revised" License
+ * https://opensource.org/licenses/BSD-3-Clause
+ * -----
+ * Copyright (c) 2023 Clara Bayley
+ */
+
+
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
 - family-names: "Bayley"
   given-names: "Clara"
   orcid: "https://orcid.org/0000-0002-4540-9382"
-title: "CLEO, an implementation of a Superdroplet Model"
-version: 1.0
-date-released: 2023-03-17
+title: "CLEO, an implementation of a Super-Droplet Model"
+version: 4.0
+date-released: 12th October 2023
 url: "https://github.com/yoctoyotta1024/CLEO.git"

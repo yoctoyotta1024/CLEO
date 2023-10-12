@@ -1,3 +1,21 @@
+'''
+----- CLEO -----
+File: conf.py
+Project: source
+Created Date: Thursday 12th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Thursday 12th October 2023
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+Copyright (c) 2023 Clara Bayley
+'''
+
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
