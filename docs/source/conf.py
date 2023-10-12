@@ -12,7 +12,7 @@ Modified By: CB
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
-Copyright (c) 2023 Clara Bayley
+Copyright (c) 2023 MPI-M, Clara Bayley
 '''
 
 
