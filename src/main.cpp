@@ -23,40 +23,47 @@
 #include <stdexcept>
 #include <string_view>
 
-#include <Kokkos_Core.hpp>
+// #include <Kokkos_Core.hpp>
 
 struct Config
 {
   Config(const std::string_view configfile) {}
-}
+};
 
 struct FSStore
 {
-}
+};
 
 struct ThermoSolver
 {
-}
+  int run() const
+  {
+    std::cout << "Hi World\n";
+
+    return 0;
+  }
+};
 
 struct GridboxMaps 
 {
-}
+};
 
 struct Microphys
 {
-}
+};
 
 struct Motion
 {
-}
+};
 
 struct Observer
 {
-}
+};
 
 class CLEOSDM
 {
 private:
+  ThermoSolver solver;
   GridboxMaps gbxmaps; // maps from gridbox indexes to domain coordinates
   Microphys microphys; // microphysical process
   Motion motion; // super-droplets' motion
@@ -66,8 +73,17 @@ public:
   int run() const
   {
     std::cout << "Hello World\n";
+
     return 0;
   }
+};
+
+int run_cleo(const CLEOSDM &sdm, const ThermoSolver &solver)
+{
+  solver.run();
+  sdm.run();
+
+  return 0;
 }
 
 int main(int argc, char *argv[])
@@ -84,18 +100,18 @@ int main(int argc, char *argv[])
   const Config config(configfile);
 
   /* create zarr store for writing output to storage */
-  FSStore fsstore();
+  FSStore fsstore;
   
   /* Thermodynamics Solver to couple to CLEO */
-  const ThermoSolver coupl();
+  const ThermoSolver solver;
 
   /* CLEO SDM coupled to a Thermodyanmics Solver */
-  const CLEOSDM cleo(coupl);
+  const CLEOSDM sdm;
 
+  /* run coupled CLEO SDM with Kokkos */
   Kokkos::initialize(argc, argv);
   {
-    /* run coupled CLEO SDM */
-    cleo.run();
+    run_cleo(sdm, solver);
   }
 
   Kokkos::finalize();
