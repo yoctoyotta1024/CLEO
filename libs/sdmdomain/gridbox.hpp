@@ -22,17 +22,35 @@
 #ifndef GRIDBOX_HPP 
 #define GRIDBOX_HPP 
 
+#include <iterator>
+#include <algorithm>
+#include <span>
+#include <string>
+#include <stdexcept>
+#include <utility>
+
+#include "./detectors.hpp"
+#include "./state.hpp"
+#include "superdrops/superdrop.hpp"
+
 struct Gridbox
-/* gridbox contains vector of superdroplets in grid box,
-thermodynamic state temp, pressure, etc. used for SDM,
-and index for finding associated grridbox in
-coupled thermodynamics */
+/* each gridbox has unique identifier and contains a
+reference to superdroplets in gridbox, alongside the
+Gridbox's State (e.g. thermodynamic variables
+used for SDM) and detectors for tracking chosen variables */
 {
-  unsigned int gbxindex; // index (unique identifier) of gridbox
-  std::shared_ptr<Detectors> detectors;
-  std::span<SuperdropWithGbxindex> span4SDsinGBx;
-  ThermoState state;
-};
+  const unsigned int gbxindex;      // index (unique identifier) of gridbox
+  Detectors detectors;              // detectors of various quantities
+  std::span<Superdrop> supersingbx; // superdrops in gridbox
+  State state;                      // dynamical state of gridbox (e.g. thermodynamics)
+
+  KOKKOS_INLINE_FUNCTION GridBox() = default;  // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~GridBox() = default; // Kokkos requirement for a (dual)View
+
+  KOKKOS_INLINE_FUNCTION
+  GridBox(const unsigned int igbxindex)
+      : gbxindex(igbxindex) {}
+}
 
 struct Gridboxes
 {
