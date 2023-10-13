@@ -2,7 +2,7 @@
 ----- CLEO -----
 File: conf.py
 Project: source
-Created Date: Thursday 12th October 2023
+Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
@@ -13,6 +13,9 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 Copyright (c) 2023 MPI-M, Clara Bayley
+-----
+File Description:
+generate docs using sphinx package
 '''
 
 
@@ -39,7 +42,6 @@ project = 'Python Module included in CLEO'
 license = 'BSD 3-Clause'
 copyright = '(2023) MPI-M, Clara Bayley'
 author = 'Clara Bayley & Other Package Developers'
-
 
 # -- General configuration ---------------------------------------------------
 
