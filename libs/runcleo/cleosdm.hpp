@@ -27,6 +27,8 @@
 #include "./coupleddynamics.hpp"
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
+#include "sdmdomain/gridboxmaps.hpp"
+#include "superdrops/microphysicsprocess.hpp"
 
 struct Gridboxes
 {
@@ -34,11 +36,6 @@ struct Gridboxes
 
 struct Superdrops
 {
-};
-
-struct Microphys
-{
-  Microphys(const Config &config, const Timesteps &tsteps){}
 };
 
 struct Motion
@@ -90,7 +87,7 @@ struct CLEOSDM
 
   CLEOSDM(const Config &config, const Timesteps &tsteps,
           const unsigned int coupldynstep)
-      : gbxmaps(config), microphys(config, tsteps),
+      : gbxmaps(config), microphys(),
         motion(config, tsteps), obs(config, tsteps),
         couplstep(tsteps.get_couplstep())
   {
