@@ -35,13 +35,42 @@
 #include "superdrops/microphysicsprocess.hpp"
 #include "observers/observers.hpp"
 
+Gridboxes generate_gridboxes()
+{
+  return Gridboxes{};
+}
+
+Superdrops generate_superdrops()
+{
+  return Superdrops{};
+}
 
 struct CLEOSDM
 {
-  GridboxMaps gbxmaps; // maps from gridbox indexes to domain coordinates
+private:
+  unsigned int next_sdmstep(const unsigned int t_sdm,
+                            const unsigned int stepsize) const;
+  /* given current timestep, t_sdm, work out which event
+  (motion or one complete step) is next to occur and return
+  the time of the sooner event, (ie. next t_move or t_mdl) */
+
+  void superdrops_movement(const unsigned int t_mdl,
+                           Gridboxes &gbxs,
+                           Superdrops &supers) const;
+  /* move superdroplets (including movement between gridboxes)
+  according to movesupers struct */
+
+  void sdm_microphysics(const unsigned int t_sdm,
+                        const unsigned int t_next,
+                        Gridboxes &gbxs) const;
+  /* enact SDM microphysics for each gridbox
+  (using sub-timestepping routine) */
+
+public:
+  GridboxMaps gbxmaps;           // maps from gridbox indexes to domain coordinates
   MicrophysicsProcess microphys; // microphysical process
   MoveSupersInDomain movesupers; // super-droplets' motion in domain
-  Observer obs; // observer
+  Observer obs;                  // observer
   unsigned int couplstep;
 
   CLEOSDM(const Config &config, const Timesteps &tsteps,
@@ -58,23 +87,26 @@ struct CLEOSDM
     }
   }
 
-  Gridboxes generate_gridboxes() const;
-
-  Superdrops generate_superdrops() const;
+  unsigned int get_couplstep() const { return couplstep; }
 
   void prepare_to_timestep(const Gridboxes &gbxs,
-                          const Superdrops &supers) const;
-
-  void run_step(const unsigned int t_mdl,
-                const unsigned int stepsize) const;
+                           const Superdrops &supers) const;
+  /* prepare CLEO SDM for timestepping */
 
   void receive_dynamics(const CoupledDynamics &coupldyn,
                         Gridboxes &gbxs) const;
+  /* update Gridboxes' states using information
+  received from coupldyn */
 
   void send_dynamics(const CoupledDynamics &coupldyn,
                      Gridboxes &gbxs) const;
+  /* send information from Gridboxes' states to coupldyn */
 
-  unsigned int get_couplstep() const { return couplstep; }
+  void run_step(const unsigned int t_mdl,
+                const unsigned int stepsize) const;
+  /* run CLEO SDM from time t_mdl to t_mdl + stepsize with
+  sub-timestepping routine for super-droplets' movement
+  and microphysics */
 };
 
 #endif // CLEOSDM_HPP
