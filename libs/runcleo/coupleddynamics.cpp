@@ -20,12 +20,12 @@
 
 #include "./coupleddynamics.hpp"
 
-int CoupledDynamics::prepare_to_timestep() const
+void CoupledDynamics::prepare_to_timestep() const
 {
-  return 0;
 }
 
-void CoupledDynamics::run_step(const unsigned int t_mdl) const
+void CoupledDynamics::run_dynamics(const unsigned int t_mdl,
+                                   const unsigned int stepsize) const
 {
   std::cout << "Dyn Call @ t=" << t_mdl << "\n";
 }

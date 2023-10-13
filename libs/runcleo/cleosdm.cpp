@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
  * File: cleosdm.cpp
- * Project: run
+ * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -31,13 +31,14 @@ SuperDrops CLEOSDM::generate_superdrops() const
   return SuperDrops{};
 }
 
-int CLEOSDM::prepare_to_timestep(const GridBoxes &GBxs,
-                                 const SuperDrops &SDs) const
+int CLEOSDM::prepare_to_timestep(const GridBoxes &gbxs,
+                                 const SuperDrops &supers) const
 {
   return 0;
 }
 
-void CLEOSDM::run_step(const unsigned int t_mdl) const
+void CLEOSDM::run_step(const unsigned int t_mdl,
+                       const unsigned int stepsize) const
 {
-  std::cout << "SDM Call @ t=" << t_mdl << "\n";
+  std::cout << "SDM Call @ t=" << t_mdl << " (SDM substepping) \n";
 }

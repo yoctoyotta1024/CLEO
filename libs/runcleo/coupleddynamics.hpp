@@ -25,9 +25,36 @@
 
 struct CoupledDynamics
 {
-  int prepare_to_timestep() const;
+private:
+  const unsigned int interval;
 
-  void run_step(const unsigned int t_mdl) const;
+public:
+  CoupledDynamics(const unsigned int couplstep)
+      : interval(couplstep) {}
+
+  void prepare_to_timestep() const;
+
+  bool on_step(const unsigned int t_mdl) const
+  {
+    return t_mdl % interval == 0;
+  }
+
+  void run_dynamics(const unsigned int t_mdl,
+                    const unsigned int stepsize) const;
+
+  void run_step(const unsigned int t_mdl,
+                const unsigned int stepsize) const
+  {
+    if (on_step(t_mdl))
+    {
+      run_dynamics(t_mdl, stepsize);
+    }
+  }
+
+  unsigned int get_couplstep() const
+  {
+    return interval;
+  }
 };
 
 #endif // COUPLEDDYNAMICS_HPP

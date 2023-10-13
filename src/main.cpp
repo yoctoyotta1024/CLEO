@@ -45,16 +45,18 @@ int main(int argc, char *argv[])
   /* Create zarr store for writing output to storage */
   FSStore fsstore(config.zarrbasedir);
   
+  const TimeSteps mdlsteps(config); // timesteps for model (e.g. coupling and end time)
+  
   /* Solver of dynamics coupled to CLEO SDM */
-  const CoupledDynamics coupldyn;
+  const CoupledDynamics coupldyn(mdlsteps.get_couplstep());
 
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const CLEOSDM sdm;
+  const CLEOSDM sdm(config, mdlsteps);
 
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
-    run_cleo(sdm, coupldyn);
+    run_cleo(mdlsteps.get_t_end(), sdm, coupldyn);
   }
 
   Kokkos::finalize();

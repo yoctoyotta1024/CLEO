@@ -24,28 +24,22 @@
 
 #include <iostream>
 
+#include "./coupleddynamics.hpp"
+#include "initialise/config.hpp"
+
 struct TimeSteps
 {
 private:
-  unsigned int t_end = 5;
+  unsigned int t_end; // time to end model
+  unsigned int couplstep; // stepsize between coupling
 public:
+
+  TimeSteps(const Config &config)
+      : t_end(5),
+        couplstep(2) {}
+
   unsigned int get_t_end() const { return t_end; }
-};
-
-struct GridBoxMaps 
-{
-};
-
-struct Microphys
-{
-};
-
-struct Motion
-{
-};
-
-struct Observer
-{
+  unsigned int get_couplstep() const { return couplstep; }
 };
 
 struct GridBoxes
@@ -56,22 +50,80 @@ struct SuperDrops
 {
 };
 
+struct GridBoxMaps 
+{
+  GridBoxMaps(const Config &config){}
+};
+
+struct Microphys
+{
+  Microphys(const Config &config, const TimeSteps &mdlsteps){}
+};
+
+struct Motion
+{
+  Motion(const Config &config, const TimeSteps &mdlsteps){}
+};
+
+struct Observer
+{
+private:
+  unsigned int interval;
+
+public:
+  Observer(const Config &config, const TimeSteps &mdlsteps){}
+  
+  bool on_step(const unsigned int t_mdl) const
+  {
+    return t_mdl % interval == 0;
+  }
+
+  void observe(const unsigned int t_mdl,
+               GridBoxes &gbxs) const
+  {
+    std::cout << "obs gbxs @ t = " << t_mdl << "\n";
+  }
+
+  void observe_startstep(const unsigned int t_mdl,
+                         GridBoxes &gbxs) const
+  {
+    if (on_step(t_mdl))
+    {
+      observe(t_mdl, gbxs);
+    }
+  }
+
+  unsigned int get_obsstep() const
+  {
+    return interval;
+  }
+};
+
 struct CLEOSDM
 {
-  TimeSteps tsteps; // timesteps for model (e.g. coupling and end time)
   GridBoxMaps gbxmaps; // maps from gridbox indexes to domain coordinates
   Microphys microphys; // microphysical process
   Motion motion; // super-droplets' motion
   Observer obs; // observer
 
+  CLEOSDM(const Config &config, const TimeSteps &mdlsteps)
+      : gbxmaps(config), microphys(config, mdlsteps),
+        motion(config, mdlsteps), obs(config, mdlsteps) {}
+
   GridBoxes generate_gridboxes() const;
 
   SuperDrops generate_superdrops() const;
 
-  int prepare_to_timestep(const GridBoxes &GBxs,
-                          const SuperDrops &SDs) const;
+  int prepare_to_timestep(const GridBoxes &gbxs,
+                          const SuperDrops &supers) const;
 
-  void run_step(const unsigned int t_mdl) const;
+  void run_step(const unsigned int t_mdl,
+                const unsigned int stepsize) const;
+
+  void receive_thermodynamics(const CoupledDynamics &coupldyn,
+                              GridBoxes &gbxs) const
+  {
+  }
 };
 
 #endif // CLEOSDM_HPP
