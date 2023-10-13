@@ -31,14 +31,18 @@ Superdrops CLEOSDM::generate_superdrops() const
   return Superdrops{};
 }
 
-int CLEOSDM::prepare_to_timestep(const Gridboxes &gbxs,
+void CLEOSDM::prepare_to_timestep(const Gridboxes &gbxs,
                                  const Superdrops &supers) const
 {
-  return 0;
 }
 
 void CLEOSDM::receive_dynamics(const CoupledDynamics &coupldyn,
-                                     Gridboxes &gbxs) const
+                               Gridboxes &gbxs) const
+{
+}
+
+void CLEOSDM::send_dynamics(const CoupledDynamics &coupldyn,
+                            Gridboxes &gbxs) const
 {
 }
 

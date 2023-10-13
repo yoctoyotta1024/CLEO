@@ -62,7 +62,7 @@ struct CLEOSDM
 
   Superdrops generate_superdrops() const;
 
-  int prepare_to_timestep(const Gridboxes &gbxs,
+  void prepare_to_timestep(const Gridboxes &gbxs,
                           const Superdrops &supers) const;
 
   void run_step(const unsigned int t_mdl,
@@ -70,7 +70,10 @@ struct CLEOSDM
 
   void receive_dynamics(const CoupledDynamics &coupldyn,
                         Gridboxes &gbxs) const;
-  
+
+  void send_dynamics(const CoupledDynamics &coupldyn,
+                     Gridboxes &gbxs) const;
+
   unsigned int get_couplstep() const { return couplstep; }
 };
 

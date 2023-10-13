@@ -26,7 +26,7 @@
 #include "./coupleddynamics.hpp"
 #include "./runtimestats.hpp"
 
-unsigned int next_stepsize(const unsigned int t_mdl,
+unsigned unsigned int next_stepsize(const unsigned int t_mdl,
                                   const CLEOSDM &sdm);
 
 inline unsigned int start_step(const unsigned int t_mdl,
@@ -34,7 +34,11 @@ inline unsigned int start_step(const unsigned int t_mdl,
                                const CoupledDynamics &coupldyn,
                                Gridboxes &gbxs);
 
-inline unsigned int proceed_to_next_step(unsigned int t_mdl);
+inline unsigned int proceed_to_next_step(unsigned int t_mdl,
+                                         unsigned int stepsize,
+                                         const CLEOSDM &sdm,
+                                         const CoupledDynamics &coupldyn,
+                                         Gridboxes &gbxs);
 
 int run_cleo(const unsigned int t_end,
              const CLEOSDM &sdm,
@@ -64,7 +68,7 @@ int run_cleo(const unsigned int t_end,
     coupldyn.run_step(t_mdl, stepsize);
 
     /* proceed to next step (in general involves coupling) */
-    t_mdl = proceed_to_next_step(t_mdl);
+    t_mdl = proceed_to_next_step(t_mdl, stepsize);
   }
   stats.post_timestepping();
   
@@ -82,16 +86,32 @@ inline unsigned int start_step(const unsigned int t_mdl,
 to CLEO's Gridboxes. Followed by observation. Function then 
 returns size of step to take given current timestep, t_mdl */
 {
-  sdm.receive_dynamics(coupldyn, gbxs);
+  if (t_mdl % sdm.couplstep == 0)
+  {
+    sdm.receive_dynamics(coupldyn, gbxs);
+  }
 
   sdm.obs.observe_startstep(t_mdl, gbxs);
 
   return next_stepsize(t_mdl, sdm);
 }
 
-inline unsigned int proceed_to_next_step(unsigned int t_mdl)
+inline unsigned int proceed_to_next_step(const unsigned int t_mdl,
+                                         const unsigned int stepsize,
+                                         const CLEOSDM &sdm,
+                                         const CoupledDynamics &coupldyn,
+                                         Gridboxes &gbxs)
+/* returns incremented timestep 't_mdl' of model
+by 'stepsize'. Point where communication from
+CLEO SDM Gridbox States to coupled dynamics solver
+may occur */
 {
-  return ++t_mdl;
+  if (t_mdl % sdm.couplstep == 0)
+  {
+    sdm.send_dynamics(coupldyn, gbxs);
+  }
+
+  return t_mdl + stepsize;
 }
 
 #endif // RUNCLEO_HPP
