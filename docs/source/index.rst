@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 12th October 2023
+ * Last Modified: Friday 13th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,6 +26,9 @@ Welcome to Clara's Template for Documentation!
 
 .. toctree::
    :maxdepth: 2 
+
+   cxx2py
+   gridboundariesbinary
    
 Indices and tables
 ==================

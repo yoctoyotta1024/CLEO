@@ -6,7 +6,7 @@ Created Date: Thursday 12th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 12th October 2023
+Last Modified: Friday 13th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -35,9 +35,10 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Python in CLEO'
-copyright = '2023, Clara Bayley & Other Package Developers'
-author = 'Clara Bayley'
+project = 'Python Module included in CLEO'
+license = 'BSD 3-Clause'
+copyright = '(2023) MPI-M, Clara Bayley'
+author = 'Clara Bayley & Other Package Developers'
 
 
 # -- General configuration ---------------------------------------------------
