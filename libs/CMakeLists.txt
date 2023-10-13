@@ -10,5 +10,5 @@ add_subdirectory(superdrops)
 add_subdirectory(zarr)
 
 # libraries particular to certain CLEO configurations #
-add_subdirectory(cvode EXCLUDE_FROM_ALL)
-add_subdirectory(thermofromfile EXCLUDE_FROM_ALL)
+add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)
+add_subdirectory(coupldyn_fromfile EXCLUDE_FROM_ALL)

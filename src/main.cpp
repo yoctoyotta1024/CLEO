@@ -25,6 +25,8 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "runcleo.hpp"
+
 struct Config
 {
   Config(const std::string_view configfile) {}
@@ -65,122 +67,6 @@ struct GridBoxes
 struct SuperDrops
 {
 };
-
-struct CLEOSDM
-{
-  TimeSteps tsteps; // timesteps for model (e.g. coupling and end time)
-  GridBoxMaps gbxmaps; // maps from gridbox indexes to domain coordinates
-  Microphys microphys; // microphysical process
-  Motion motion; // super-droplets' motion
-  Observer obs; // observer
-
-  GridBoxes generate_gridboxes() const
-  {
-    return GridBoxes{};
-  }
-
-  SuperDrops generate_superdrops() const
-  {
-    return SuperDrops{};
-  }
-
-  int prepare_to_timestep(const GridBoxes &GBxs,
-                          const SuperDrops &SDs) const
-  {
-    return 0;
-  }
-
-  void run_step(const unsigned int t_mdl) const
-  {
-    std::cout << "SDM Call @ t=" << t_mdl << "\n" ;
-  }
-};
-
-struct CoupledDynamics
-{
-  int prepare_to_timestep(const GridBoxes &GBxs,
-                          const SuperDrops &SDs) const
-  {
-    return 0;
-  }
-
-  void run_step(const unsigned int t_mdl) const
-  {
-    std::cout << "Dyn Call @ t=" << t_mdl << "\n" ;
-  }
-};
-
-struct RunStats
-{
-private:
-  Kokkos::Timer kokkostimer;
-  double time1;
-  double time2;
-
-public:
-  void pre_timestepping()
-  {
-    time1 = kokkostimer.seconds();
-  }
-
-  void post_timestepping()
-  {
-    time2 = kokkostimer.seconds();
-  }
-
-  void summary()
-  {
-    std::cout << "\n ----- CLEO run complete ----- \n"
-              << "       Duration: " << time2 << "s \n"
-              << "       Initialisation: " << time1 << "s \n"
-              << "       Timestepping: " << time2 - time1 << "s \n"
-              << "------------------------------- \n";
-  }
-};
-
-void start_step(const unsigned int t_mdl)
-{}
-
-unsigned int next_step(unsigned int t_mdl)
-{
-  return ++t_mdl;
-}
-
-int run_cleo(const CLEOSDM &sdm, const CoupledDynamics &coupldyn)
-{
-  // generate runtime objects
-  RunStats stats;
-  GridBoxes GBxs(sdm.generate_gridboxes());
-  SuperDrops SDs(sdm.generate_superdrops());
-
-  // prepare CLEO for timestepping
-  coupldyn.prepare_to_timestep(GBxs, SDs);
-  sdm.prepare_to_timestep(GBxs, SDs);
-  stats.pre_timestepping();
-  
-  // timestep CLEO from t=0 to t=t_end
-  int t_mdl = 0;
-  while (t_mdl <= sdm.tsteps.get_t_end())
-  {
-    /* start step (in general involves coupling) */
-    start_step(t_mdl);
-
-    /* advance SDM (optionally concurrent to dynamics solver) */
-    sdm.run_step(t_mdl);
-
-    /* advance dynamics solver (optionally concurrent to SDM) */
-    coupldyn.run_step(t_mdl);
-
-    /* proceed to next step (in general involves coupling) */
-    t_mdl = next_step(t_mdl);
-  }
-  stats.post_timestepping();
-  
-  // summary of runtime statistics
-  stats.summary();
-
-  return 0;
-}
 
 int main(int argc, char *argv[])
 {
