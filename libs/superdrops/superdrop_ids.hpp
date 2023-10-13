@@ -26,6 +26,8 @@
 
 #include <iostream>
 
+#include <Kokkos_Core.hpp>
+
 struct IntID {
   /* struct containing value of SD identity (8bytes integer) */
   size_t value;

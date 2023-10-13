@@ -107,13 +107,13 @@ public:
   KOKKOS_INLINE_FUNCTION Superdrop() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~Superdrop() = default; // Kokkos requirement for a (dual)View
 
-  unsigned int get_sd_gbxindex() { return sd_gbxindex; }
-  double get_coord3() { return coord3; }
-  double get_coord1() { return coord1; }
-  double get_coord2() { return coord2; }
-  double get_radius() { return attrs.radius; }
-  double get_msol() { return attrs.msol; }
-  double get_xi() { return attrs.xi; }
+  KOKKOS_INLINE_FUNCTION unsigned int get_sd_gbxindex() { return sd_gbxindex; }
+  KOKKOS_INLINE_FUNCTION double get_coord3() { return coord3; }
+  KOKKOS_INLINE_FUNCTION double get_coord1() { return coord1; }
+  KOKKOS_INLINE_FUNCTION double get_coord2() { return coord2; }
+  KOKKOS_INLINE_FUNCTION double get_radius() { return attrs.radius; }
+  KOKKOS_INLINE_FUNCTION double get_msol() { return attrs.msol; }
+  KOKKOS_INLINE_FUNCTION double get_xi() { return attrs.xi; }
 };
 
 struct Superdrops
