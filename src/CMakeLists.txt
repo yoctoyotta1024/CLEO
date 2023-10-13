@@ -33,7 +33,8 @@ set(compileops -Wall -pedantic -g -gdwarf-4) # less strict without -Werror
 # primary executable for CLEO sdm
 set(runCLEO "runCLEO")
 add_executable(${runCLEO} "main.cpp")
-target_link_libraries(${runCLEO} PRIVATE coupldyn_fromfile "${SDMLIBS}")
+target_link_libraries(${runCLEO} PRIVATE runcleo)
+# target_link_libraries(${runCLEO} PRIVATE coupldyn_fromfile "${SDMLIBS}")
 target_link_libraries(${runCLEO} PUBLIC Kokkos::kokkos)
 # target_include_directories(${runCLEO} PRIVATE ${PROJECT_SOURCE_DIR})
 target_compile_options(${runCLEO} PRIVATE ${compileops})

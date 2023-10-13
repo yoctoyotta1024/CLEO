@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
  * File: cleosdm.hpp
- * Project: run
+ * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -23,6 +23,38 @@
 #define CLEOSDM_HPP
 
 #include <iostream>
+
+struct TimeSteps
+{
+private:
+  unsigned int t_end = 5;
+public:
+  unsigned int get_t_end() const { return t_end; }
+};
+
+struct GridBoxMaps 
+{
+};
+
+struct Microphys
+{
+};
+
+struct Motion
+{
+};
+
+struct Observer
+{
+};
+
+struct GridBoxes
+{
+};
+
+struct SuperDrops
+{
+};
 
 struct CLEOSDM
 {

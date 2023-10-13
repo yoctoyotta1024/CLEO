@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.18.0)
 # essential CLEO SDM libaries #
 add_subdirectory(initialise)
 add_subdirectory(observers)
+add_subdirectory(runcleo)
 add_subdirectory(sdmdomain)
 add_subdirectory(superdrops)
 add_subdirectory(zarr)

@@ -25,7 +25,7 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "runcleo.hpp"
+#include "runcleo/runcleo.hpp"
 
 struct Config
 {
@@ -33,38 +33,6 @@ struct Config
 };
 
 struct FSStore
-{
-};
-
-struct TimeSteps
-{
-private:
-  unsigned int t_end = 5;
-public:
-  unsigned int get_t_end() const { return t_end; }
-};
-
-struct GridBoxMaps 
-{
-};
-
-struct Microphys
-{
-};
-
-struct Motion
-{
-};
-
-struct Observer
-{
-};
-
-struct GridBoxes
-{
-};
-
-struct SuperDrops
 {
 };
 

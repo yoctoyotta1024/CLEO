@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
  * File: runcleo.hpp
- * Project: run
+ * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -22,6 +22,8 @@
 #ifndef RUNCLEO_HPP 
 #define RUNCLEO_HPP 
 
+#include "./cleosdm.hpp"
+#include "./coupleddynamics.hpp"
 #include "./runstats.hpp"
 
 void start_step(const unsigned int t_mdl)
@@ -40,12 +42,12 @@ int run_cleo(const CLEOSDM &sdm, const CoupledDynamics &coupldyn)
   SuperDrops SDs(sdm.generate_superdrops());
 
   // prepare CLEO for timestepping
-  coupldyn.prepare_to_timestep(GBxs, SDs);
+  coupldyn.prepare_to_timestep();
   sdm.prepare_to_timestep(GBxs, SDs);
   stats.pre_timestepping();
   
   // timestep CLEO from t=0 to t=t_end
-  int t_mdl = 0;
+  unsigned int t_mdl = 0;
   while (t_mdl <= sdm.tsteps.get_t_end())
   {
     /* start step (in general involves coupling) */

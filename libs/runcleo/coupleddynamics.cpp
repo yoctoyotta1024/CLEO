@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
  * File: coupleddynamics.cpp
- * Project: run
+ * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -20,8 +20,7 @@
 
 #include "./coupleddynamics.hpp"
 
-int CoupledDynamics::prepare_to_timestep(const GridBoxes &GBxs,
-                                         const SuperDrops &SDs) const
+int CoupledDynamics::prepare_to_timestep() const
 {
   return 0;
 }
