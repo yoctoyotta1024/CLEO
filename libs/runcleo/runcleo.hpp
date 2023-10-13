@@ -26,46 +26,15 @@
 #include "./coupleddynamics.hpp"
 #include "./runstats.hpp"
 
-inline unsigned int next_stepsize(const unsigned int t_mdl,
-                                  const CLEOSDM &sdm)
-/* returns size of next step of model ('onestep')
-given current time t_mdl, so that next time
-(t_next = t_mdl + onestep) is time of obs or coupl */
-{
-  const unsigned int couplstep(sdm.get_couplstep());
-  const unsigned int obsstep(sdm.obs.get_obsstep());
-
-  const auto next_step = [t_mdl](const unsigned int interval)
-  {
-    return ((t_mdl / interval) + 1) * interval;
-  };
-
-  /* t_next is smaller out of time of next coupl and obs */
-  const unsigned int next_coupl(next_step(couplstep));
-  const unsigned int next_obs(next_step(obsstep));
-
-  return std::min(next_coupl, next_obs) - t_mdl;
-}
+unsigned int next_stepsize(const unsigned int t_mdl,
+                                  const CLEOSDM &sdm);
 
 inline unsigned int start_step(const unsigned int t_mdl,
                                const CLEOSDM &sdm,
                                const CoupledDynamics &coupldyn,
-                               GridBoxes &gbxs)
-/* communication of thermodynamic state from dynamics solver
-to CLEO's Gridboxes. Followed by observation. Function then 
-returns size of step to take given current timestep, t_mdl */
-{
-  sdm.receive_dynamics(coupldyn, gbxs);
+                               GridBoxes &gbxs);
 
-  sdm.obs.observe_startstep(t_mdl, gbxs);
-
-  return next_stepsize(t_mdl, sdm);
-}
-
-unsigned int proceed_to_next_step(unsigned int t_mdl)
-{
-  return ++t_mdl;
-}
+inline unsigned int proceed_to_next_step(unsigned int t_mdl);
 
 int run_cleo(const unsigned int t_end,
              const CLEOSDM &sdm,
@@ -103,6 +72,26 @@ int run_cleo(const unsigned int t_end,
   stats.summary();
 
   return 0;
+}
+
+inline unsigned int start_step(const unsigned int t_mdl,
+                               const CLEOSDM &sdm,
+                               const CoupledDynamics &coupldyn,
+                               GridBoxes &gbxs)
+/* communication of thermodynamic state from dynamics solver
+to CLEO's Gridboxes. Followed by observation. Function then 
+returns size of step to take given current timestep, t_mdl */
+{
+  sdm.receive_dynamics(coupldyn, gbxs);
+
+  sdm.obs.observe_startstep(t_mdl, gbxs);
+
+  return next_stepsize(t_mdl, sdm);
+}
+
+inline unsigned int proceed_to_next_step(unsigned int t_mdl)
+{
+  return ++t_mdl;
 }
 
 #endif // RUNCLEO_HPP
