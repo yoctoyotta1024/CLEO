@@ -45,11 +45,11 @@ int main(int argc, char *argv[])
   /* Create zarr store for writing output to storage */
   FSStore fsstore(config.zarrbasedir);
   
-  /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const CLEOSDM sdm;
-
   /* Solver of dynamics coupled to CLEO SDM */
   const CoupledDynamics coupldyn;
+
+  /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
+  const CLEOSDM sdm;
 
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
