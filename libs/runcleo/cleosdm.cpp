@@ -38,7 +38,7 @@ int CLEOSDM::prepare_to_timestep(const GridBoxes &gbxs,
 }
 
 void CLEOSDM::receive_dynamics(const CoupledDynamics &coupldyn,
-                               GridBoxes &gbxs) const
+                                     GridBoxes &gbxs) const
 {
 }
 
