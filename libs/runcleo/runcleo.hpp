@@ -86,7 +86,7 @@ inline int timestep_cleo(const unsigned int t_end,
   while (t_mdl <= t_end)
   {
     /* start step (in general involves coupling) */
-    const unsigned int stepsize = start_step(t_mdl, sdm, coupldyn, gbxs);
+    const unsigned int stepsize(start_step(t_mdl, sdm, coupldyn, gbxs));
 
     /* advance SDM (optionally concurrent to dynamics solver) */
     sdm.run_step(t_mdl, stepsize);
