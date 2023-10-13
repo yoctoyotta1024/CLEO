@@ -15,6 +15,9 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
+ * Functionality related to moving superdroplets
+ * (both updating their spatial coordinates and
+ * moving them between gridboxes)
  */
 
 

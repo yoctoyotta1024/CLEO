@@ -15,6 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
+ * Functions and structures related to the CLEO gridboxes
  */
 
 
@@ -22,12 +23,20 @@
 #define GRIDBOX_HPP 
 
 struct Gridbox
+/* gridbox contains vector of superdroplets in grid box,
+thermodynamic state temp, pressure, etc. used for SDM,
+and index for finding associated grridbox in
+coupled thermodynamics */
 {
+  unsigned int gbxindex; // index (unique identifier) of gridbox
+  std::shared_ptr<Detectors> detectors;
+  std::span<SuperdropWithGbxindex> span4SDsinGBx;
+  ThermoState state;
 };
 
 struct Gridboxes
 {
-  // kokkos array
+  // kokkos array (dualview)
 };
 
 #endif // GRIDBOX_HPP

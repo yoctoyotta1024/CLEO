@@ -15,6 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
+ * Functions and structures related to the CLEO gridboxes
  */
 
 

@@ -15,7 +15,11 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
+ * objects that can be used as stores obeying the
+ * zarr storage specification version 2 (e.g. see FSStore)
+ * https://zarr.readthedocs.io/en/stable/spec/v2.html
  */
+
 
 #ifndef FSSTORE_HPP
 #define FSSTORE_HPP

@@ -15,7 +15,8 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * objects that can be used as stores obyeying the
+ * some helper functions for writng to buffers and writing
+ * buffers to arrays in stores that obey the 
  * zarr storage specification version 2 (e.g. see FSStore)
  * https://zarr.readthedocs.io/en/stable/spec/v2.html
  */

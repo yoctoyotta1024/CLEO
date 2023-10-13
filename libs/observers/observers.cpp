@@ -15,6 +15,10 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
+ * Observer Concept and related structures for various ways
+ * of observing (outputing data from) CLEO.
+ * An example of an observer is printing some data
+ * from a gridbox's thermostate to the terminal
  */
 
 

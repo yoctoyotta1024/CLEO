@@ -15,6 +15,11 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
+ * Functionality related to Microphysical Process
+ * Concept and structures for various processes
+ * that may occur in CLEO SDM,
+ * eg. condensation or collision-coalescence
+ * (see ConstTstepProcess struct)
  */
 
 

@@ -15,8 +15,8 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * class for making and ouputting statistics related to runtime
- * whilst timestepping CLEO
+ * functionality for making and ouputting statistics
+ * related to runtime whilst timestepping CLEO
  */
 
 
