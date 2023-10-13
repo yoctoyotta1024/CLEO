@@ -22,13 +22,16 @@
 #ifndef CLEOSDM_HPP
 #define CLEOSDM_HPP
 
-#include <iostream>
+#include <string>
+#include <stdexcept>
 
 #include "./coupleddynamics.hpp"
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
 #include "sdmdomain/gridboxmaps.hpp"
+#include "sdmdomain/movesupersindomain.hpp"
 #include "superdrops/microphysicsprocess.hpp"
+#include "observers/observers.hpp"
 
 struct Gridboxes
 {
@@ -38,57 +41,18 @@ struct Superdrops
 {
 };
 
-struct Motion
-{
-  Motion(const Config &config, const Timesteps &tsteps){}
-};
-
-struct Observer
-{
-private:
-  unsigned int interval;
-
-public:
-  Observer(const Config &config, const Timesteps &tsteps){}
-  
-  bool on_step(const unsigned int t_mdl) const
-  {
-    return t_mdl % interval == 0;
-  }
-
-  void observe(const unsigned int t_mdl,
-               Gridboxes &gbxs) const
-  {
-    std::cout << "obs gbxs @ t = " << t_mdl << "\n";
-  }
-
-  void observe_startstep(const unsigned int t_mdl,
-                         Gridboxes &gbxs) const
-  {
-    if (on_step(t_mdl))
-    {
-      observe(t_mdl, gbxs);
-    }
-  }
-
-  unsigned int get_obsstep() const
-  {
-    return interval;
-  }
-};
-
 struct CLEOSDM
 {
   GridboxMaps gbxmaps; // maps from gridbox indexes to domain coordinates
-  Microphys microphys; // microphysical process
-  Motion motion; // super-droplets' motion
+  MicrophysicsProcess microphys; // microphysical process
+  MoveSupersInDomain movesupers; // super-droplets' motion in domain
   Observer obs; // observer
   unsigned int couplstep;
 
   CLEOSDM(const Config &config, const Timesteps &tsteps,
           const unsigned int coupldynstep)
       : gbxmaps(config), microphys(),
-        motion(config, tsteps), obs(config, tsteps),
+        movesupers(config, tsteps), obs(),
         couplstep(tsteps.get_couplstep())
   {
     if (couplstep != coupldynstep)
