@@ -29,8 +29,10 @@
 #include <stdexcept>
 #include <utility>
 
+#include <Kokkos_Core.hpp>
+
 #include "./detectors.hpp"
-#include "./state.hpp"
+#include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
 
 struct Gridbox
