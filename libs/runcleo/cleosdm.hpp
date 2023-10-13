@@ -28,17 +28,12 @@
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
 
-struct GridBoxes
+struct Gridboxes
 {
 };
 
-struct SuperDrops
+struct Superdrops
 {
-};
-
-struct GridBoxMaps 
-{
-  GridBoxMaps(const Config &config){}
 };
 
 struct Microphys
@@ -65,13 +60,13 @@ public:
   }
 
   void observe(const unsigned int t_mdl,
-               GridBoxes &gbxs) const
+               Gridboxes &gbxs) const
   {
     std::cout << "obs gbxs @ t = " << t_mdl << "\n";
   }
 
   void observe_startstep(const unsigned int t_mdl,
-                         GridBoxes &gbxs) const
+                         Gridboxes &gbxs) const
   {
     if (on_step(t_mdl))
     {
@@ -87,7 +82,7 @@ public:
 
 struct CLEOSDM
 {
-  GridBoxMaps gbxmaps; // maps from gridbox indexes to domain coordinates
+  GridboxMaps gbxmaps; // maps from gridbox indexes to domain coordinates
   Microphys microphys; // microphysical process
   Motion motion; // super-droplets' motion
   Observer obs; // observer
@@ -107,18 +102,18 @@ struct CLEOSDM
     }
   }
 
-  GridBoxes generate_gridboxes() const;
+  Gridboxes generate_gridboxes() const;
 
-  SuperDrops generate_superdrops() const;
+  Superdrops generate_superdrops() const;
 
-  int prepare_to_timestep(const GridBoxes &gbxs,
-                          const SuperDrops &supers) const;
+  int prepare_to_timestep(const Gridboxes &gbxs,
+                          const Superdrops &supers) const;
 
   void run_step(const unsigned int t_mdl,
                 const unsigned int stepsize) const;
 
   void receive_dynamics(const CoupledDynamics &coupldyn,
-                        GridBoxes &gbxs) const;
+                        Gridboxes &gbxs) const;
   
   unsigned int get_couplstep() const { return couplstep; }
 };

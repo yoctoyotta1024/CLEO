@@ -32,7 +32,7 @@ unsigned int next_stepsize(const unsigned int t_mdl,
 inline unsigned int start_step(const unsigned int t_mdl,
                                const CLEOSDM &sdm,
                                const CoupledDynamics &coupldyn,
-                               GridBoxes &gbxs);
+                               Gridboxes &gbxs);
 
 inline unsigned int proceed_to_next_step(unsigned int t_mdl);
 
@@ -42,8 +42,8 @@ int run_cleo(const unsigned int t_end,
 {
   // generate runtime objects
   RunStats stats;
-  GridBoxes gbxs(sdm.generate_gridboxes());
-  SuperDrops supers(sdm.generate_superdrops());
+  Gridboxes gbxs(sdm.generate_gridboxes());
+  Superdrops supers(sdm.generate_superdrops());
 
   // prepare CLEO for timestepping
   coupldyn.prepare_to_timestep();
@@ -77,7 +77,7 @@ int run_cleo(const unsigned int t_end,
 inline unsigned int start_step(const unsigned int t_mdl,
                                const CLEOSDM &sdm,
                                const CoupledDynamics &coupldyn,
-                               GridBoxes &gbxs)
+                               Gridboxes &gbxs)
 /* communication of thermodynamic state from dynamics solver
 to CLEO's Gridboxes. Followed by observation. Function then 
 returns size of step to take given current timestep, t_mdl */

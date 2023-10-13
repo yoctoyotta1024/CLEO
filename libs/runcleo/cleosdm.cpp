@@ -21,9 +21,9 @@
 
 #include "./cleosdm.hpp"
 
-GridBoxes CLEOSDM::generate_gridboxes() const
+Gridboxes CLEOSDM::generate_gridboxes() const
 {
-  return GridBoxes{};
+  return Gridboxes{};
 }
 
 SuperDrops CLEOSDM::generate_superdrops() const
@@ -31,14 +31,14 @@ SuperDrops CLEOSDM::generate_superdrops() const
   return SuperDrops{};
 }
 
-int CLEOSDM::prepare_to_timestep(const GridBoxes &gbxs,
+int CLEOSDM::prepare_to_timestep(const Gridboxes &gbxs,
                                  const SuperDrops &supers) const
 {
   return 0;
 }
 
 void CLEOSDM::receive_dynamics(const CoupledDynamics &coupldyn,
-                                     GridBoxes &gbxs) const
+                                     Gridboxes &gbxs) const
 {
 }
 
