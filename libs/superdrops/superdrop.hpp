@@ -24,6 +24,13 @@
 #ifndef SUPERDROP_HPP
 #define SUPERDROP_HPP
 
+#include <cmath>
+#include <memory>
+#include <utility>
+#include <algorithm>
+#include <string>
+#include <stdexcept>
+
 #include <Kokkos_Core.hpp>
 
 #include "../cleoconstants.hpp"
