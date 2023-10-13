@@ -19,15 +19,15 @@
  * (CLEO SDM coupled one-way/two-ways to a Dynamics Solver)
  */
 
-#ifndef RUNCLEO_HPP 
-#define RUNCLEO_HPP 
+#ifndef RUNCLEO_HPP
+#define RUNCLEO_HPP
 
 #include "./cleosdm.hpp"
 #include "./coupleddynamics.hpp"
 #include "./runtimestats.hpp"
 
 unsigned unsigned int next_stepsize(const unsigned int t_mdl,
-                                  const CLEOSDM &sdm);
+                                    const CLEOSDM &sdm);
 
 inline unsigned int start_step(const unsigned int t_mdl,
                                const CLEOSDM &sdm,
@@ -41,11 +41,11 @@ inline unsigned int proceed_to_next_step(unsigned int t_mdl,
                                          Gridboxes &gbxs);
 
 inline int timestep_cleo(const unsigned int t_end,
-                         const CLEOSDM &sdm,
-                         const CoupledDynamics &coupldyn,
-                         RunStats &stats,
-                         Gridboxes &gbxs,
-                         Superdrops &supers);
+                             const CLEOSDM &sdm,
+                             const CoupledDynamics &coupldyn,
+                             RunStats &stats,
+                             Gridboxes &gbxs,
+                             Superdrops &supers);
 
 int run_cleo(const unsigned int t_end,
              const CLEOSDM &sdm,
@@ -63,11 +63,11 @@ to record some runtime statistics */
   coupldyn.prepare_to_timestep();
   sdm.prepare_to_timestep(gbxs, supers);
   stats.pre_timestepping();
-  
-  // timestep CLEO
+
+  // do timestepping of CLEO from t=0 to t=t_end
   timestep_cleo(t_end, sdm, coupldyn, stats, gbxs, supers);
   stats.post_timestepping();
-  
+
   // summary of runtime statistics
   stats.summary();
 
@@ -75,11 +75,11 @@ to record some runtime statistics */
 }
 
 inline int timestep_cleo(const unsigned int t_end,
-                         const CLEOSDM &sdm,
-                         const CoupledDynamics &coupldyn,
-                         RunStats &stats,
-                         Gridboxes &gbxs,
-                         Superdrops &supers)
+                             const CLEOSDM &sdm,
+                             const CoupledDynamics &coupldyn,
+                             RunStats &stats,
+                             Gridboxes &gbxs,
+                             Superdrops &supers)
 /* timestep CLEO from t=0 to t=t_end */
 {
   unsigned int t_mdl(0);
@@ -106,7 +106,7 @@ inline unsigned int start_step(const unsigned int t_mdl,
                                const CoupledDynamics &coupldyn,
                                Gridboxes &gbxs)
 /* communication of thermodynamic state from dynamics solver
-to CLEO's Gridboxes. Followed by observation. Function then 
+to CLEO's Gridboxes. Followed by observation. Function then
 returns size of step to take given current timestep, t_mdl */
 {
   if (t_mdl % sdm.couplstep == 0)
