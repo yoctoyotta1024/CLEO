@@ -23,6 +23,8 @@
 
 #include <iostream>
 
+#include "sdmdomain/gridbox.hpp"
+
 struct Observer
 {
 private:

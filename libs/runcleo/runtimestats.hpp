@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
- * File: runstats.hpp
- * Project: run
+ * File: runtimestats.hpp
+ * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:

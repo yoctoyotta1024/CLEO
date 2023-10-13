@@ -28,14 +28,12 @@
 #include "./coupleddynamics.hpp"
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
+#include "sdmdomain/gridbox.hpp"
 #include "sdmdomain/gridboxmaps.hpp"
 #include "sdmdomain/movesupersindomain.hpp"
+#include "superdrops/superdrop.hpp"
 #include "superdrops/microphysicsprocess.hpp"
 #include "observers/observers.hpp"
-
-struct Gridboxes
-{
-};
 
 struct Superdrops
 {

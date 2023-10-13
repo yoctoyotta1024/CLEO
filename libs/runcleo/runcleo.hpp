@@ -24,7 +24,7 @@
 
 #include "./cleosdm.hpp"
 #include "./coupleddynamics.hpp"
-#include "./runstats.hpp"
+#include "./runtimestats.hpp"
 
 unsigned int next_stepsize(const unsigned int t_mdl,
                                   const CLEOSDM &sdm);

@@ -31,7 +31,8 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 set(SOURCES
 "cleosdm.cpp"
 "coupleddynamics.cpp"
-"runstats.cpp"
+"runcleo.cpp"
+"runtimestats.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

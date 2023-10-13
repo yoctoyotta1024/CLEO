@@ -26,13 +26,13 @@ Gridboxes CLEOSDM::generate_gridboxes() const
   return Gridboxes{};
 }
 
-SuperDrops CLEOSDM::generate_superdrops() const
+Superdrops CLEOSDM::generate_superdrops() const
 {
-  return SuperDrops{};
+  return Superdrops{};
 }
 
 int CLEOSDM::prepare_to_timestep(const Gridboxes &gbxs,
-                                 const SuperDrops &supers) const
+                                 const Superdrops &supers) const
 {
   return 0;
 }

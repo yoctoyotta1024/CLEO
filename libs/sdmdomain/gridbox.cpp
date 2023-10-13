@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
- * File: superdrop.hpp
- * Project: superdrops
+ * File: gridbox.cpp
+ * Project: sdmdomain
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -15,17 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Header file for definition of a superdropet.
- * Equations referenced as (eqn [X.YY]) are from
- * "An Introduction To Clouds From The Microscale
- * to Climate" by Lohmann, Luond and Mahrt, 1st edition.
  */
 
-#ifndef SUPERDROP_HPP
-#define SUPERDROP_HPP
 
-class Superdrop
-{
-};
-
-#endif // SUPERDROP_HPP
+#include "./gridbox.hpp"
