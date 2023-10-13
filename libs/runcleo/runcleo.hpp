@@ -27,13 +27,12 @@
 #include "./runstats.hpp"
 
 inline unsigned int next_stepsize(const unsigned int t_mdl,
-                                  const CLEOSDM &sdm,
-                                  const CoupledDynamics &coupldyn)
+                                  const CLEOSDM &sdm)
 /* returns size of next step of model ('onestep')
 given current time t_mdl, so that next time
 (t_next = t_mdl + onestep) is time of obs or coupl */
 {
-  const unsigned int couplstep(coupldyn.get_couplstep());
+  const unsigned int couplstep(sdm.get_couplstep());
   const unsigned int obsstep(sdm.obs.get_obsstep());
 
   const auto next_step = [t_mdl](const unsigned int interval)
@@ -56,11 +55,11 @@ inline unsigned int start_step(const unsigned int t_mdl,
 to CLEO's Gridboxes. Followed by observation. Function then 
 returns size of step to take given current timestep, t_mdl */
 {
-  sdm.receive_thermodynamics(coupldyn, gbxs);
+  sdm.receive_dynamics(coupldyn, gbxs);
 
   sdm.obs.observe_startstep(t_mdl, gbxs);
 
-  return next_stepsize(t_mdl, sdm, coupldyn);
+  return next_stepsize(t_mdl, sdm);
 }
 
 unsigned int proceed_to_next_step(unsigned int t_mdl)

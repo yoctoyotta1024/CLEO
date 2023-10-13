@@ -23,24 +23,26 @@
 
 #include <iostream>
 
+#include "initialise/config.hpp"
+
 struct CoupledDynamics
 {
 private:
   const unsigned int interval;
 
 public:
-  CoupledDynamics(const unsigned int couplstep)
+  CoupledDynamics(const Config &config, const unsigned int couplstep)
       : interval(couplstep) {}
 
   void prepare_to_timestep() const;
 
+  void run_dynamics(const unsigned int t_mdl,
+                    const unsigned int stepsize) const;
+  
   bool on_step(const unsigned int t_mdl) const
   {
     return t_mdl % interval == 0;
   }
-
-  void run_dynamics(const unsigned int t_mdl,
-                    const unsigned int stepsize) const;
 
   void run_step(const unsigned int t_mdl,
                 const unsigned int stepsize) const

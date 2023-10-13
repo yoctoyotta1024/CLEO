@@ -26,6 +26,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "initialise/config.hpp"
+#include "initialise/timesteps.hpp"
 #include "zarr/fsstore.hpp"
 #include "runcleo/runcleo.hpp"
 
@@ -39,24 +40,23 @@ int main(int argc, char *argv[])
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
-  const std::string_view config_filename = argv[1];    // path to configuration file
+  const std::string_view config_filename(argv[1]);    // path to configuration file
   const Config config(config_filename);
+  const Timesteps tsteps(config); // timesteps for model (e.g. coupling and end time)
 
   /* Create zarr store for writing output to storage */
   FSStore fsstore(config.zarrbasedir);
-  
-  const TimeSteps mdlsteps(config); // timesteps for model (e.g. coupling and end time)
-  
+    
   /* Solver of dynamics coupled to CLEO SDM */
-  const CoupledDynamics coupldyn(mdlsteps.get_couplstep());
+  const CoupledDynamics coupldyn(config, tsteps.get_couplstep());
 
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const CLEOSDM sdm(config, mdlsteps);
+  const CLEOSDM sdm(config, tsteps, coupldyn.get_couplstep());
 
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
-    run_cleo(mdlsteps.get_t_end(), sdm, coupldyn);
+    run_cleo(tsteps.get_t_end(), sdm, coupldyn);
   }
 
   Kokkos::finalize();

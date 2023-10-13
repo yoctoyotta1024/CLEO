@@ -26,21 +26,7 @@
 
 #include "./coupleddynamics.hpp"
 #include "initialise/config.hpp"
-
-struct TimeSteps
-{
-private:
-  unsigned int t_end; // time to end model
-  unsigned int couplstep; // stepsize between coupling
-public:
-
-  TimeSteps(const Config &config)
-      : t_end(5),
-        couplstep(2) {}
-
-  unsigned int get_t_end() const { return t_end; }
-  unsigned int get_couplstep() const { return couplstep; }
-};
+#include "initialise/timesteps.hpp"
 
 struct GridBoxes
 {
@@ -57,12 +43,12 @@ struct GridBoxMaps
 
 struct Microphys
 {
-  Microphys(const Config &config, const TimeSteps &mdlsteps){}
+  Microphys(const Config &config, const Timesteps &tsteps){}
 };
 
 struct Motion
 {
-  Motion(const Config &config, const TimeSteps &mdlsteps){}
+  Motion(const Config &config, const Timesteps &tsteps){}
 };
 
 struct Observer
@@ -71,7 +57,7 @@ private:
   unsigned int interval;
 
 public:
-  Observer(const Config &config, const TimeSteps &mdlsteps){}
+  Observer(const Config &config, const Timesteps &tsteps){}
   
   bool on_step(const unsigned int t_mdl) const
   {
@@ -105,10 +91,21 @@ struct CLEOSDM
   Microphys microphys; // microphysical process
   Motion motion; // super-droplets' motion
   Observer obs; // observer
+  unsigned int couplstep;
 
-  CLEOSDM(const Config &config, const TimeSteps &mdlsteps)
-      : gbxmaps(config), microphys(config, mdlsteps),
-        motion(config, mdlsteps), obs(config, mdlsteps) {}
+  CLEOSDM(const Config &config, const Timesteps &tsteps,
+          const unsigned int coupldynstep)
+      : gbxmaps(config), microphys(config, tsteps),
+        motion(config, tsteps), obs(config, tsteps),
+        couplstep(tsteps.get_couplstep())
+  {
+    if (couplstep != coupldynstep)
+    {
+      const std::string err("coupling timestep of dyanmics "
+                            "solver and CLEO SDM are not equal");
+      throw std::invalid_argument(err);
+    }
+  }
 
   GridBoxes generate_gridboxes() const;
 
@@ -120,10 +117,10 @@ struct CLEOSDM
   void run_step(const unsigned int t_mdl,
                 const unsigned int stepsize) const;
 
-  void receive_thermodynamics(const CoupledDynamics &coupldyn,
-                              GridBoxes &gbxs) const
-  {
-  }
+  void receive_dynamics(const CoupledDynamics &coupldyn,
+                        GridBoxes &gbxs) const;
+  
+  unsigned int get_couplstep() const { return couplstep; }
 };
 
 #endif // CLEOSDM_HPP

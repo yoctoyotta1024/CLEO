@@ -37,6 +37,11 @@ int CLEOSDM::prepare_to_timestep(const GridBoxes &gbxs,
   return 0;
 }
 
+void CLEOSDM::receive_dynamics(const CoupledDynamics &coupldyn,
+                               GridBoxes &gbxs) const
+{
+}
+
 void CLEOSDM::run_step(const unsigned int t_mdl,
                        const unsigned int stepsize) const
 {
