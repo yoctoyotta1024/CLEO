@@ -50,12 +50,12 @@ public:
   std::pair<double, double> uvel; // defined on {lower, upper} x faces of volume
   std::pair<double, double> vvel; // defined on {lower, upper} y faces of volume
 
-  KOKKOS_INLINE_FUNCTION ThermoState() = default; // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~ThermoState() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION State() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~State() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  ThermoState(const double ivolume)
-      : volume(volume){};
+  State(const double ivolume)
+      : volume(ivolume){};
 
   KOKKOS_INLINE_FUNCTION
   double get_volume() const { return volume; }

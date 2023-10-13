@@ -26,7 +26,7 @@
 #include "./coupleddynamics.hpp"
 #include "./runtimestats.hpp"
 
-unsigned unsigned int next_stepsize(const unsigned int t_mdl,
+unsigned int next_stepsize(const unsigned int t_mdl,
                                     const CLEOSDM &sdm);
 
 inline unsigned int start_step(const unsigned int t_mdl,
@@ -61,7 +61,7 @@ to record some runtime statistics */
 
   // prepare CLEO for timestepping
   coupldyn.prepare_to_timestep();
-  sdm.prepare_to_timestep(gbxs, supers);
+  sdm.prepare_to_timestep(coupldyn, gbxs, supers);
   stats.pre_timestepping();
 
   // do timestepping of CLEO from t=0 to t=t_end
@@ -89,13 +89,13 @@ inline int timestep_cleo(const unsigned int t_end,
     const unsigned int stepsize(start_step(t_mdl, sdm, coupldyn, gbxs));
 
     /* advance SDM (optionally concurrent to dynamics solver) */
-    sdm.run_step(t_mdl, stepsize);
+    sdm.run_step(t_mdl, stepsize, gbxs, supers);
 
     /* advance dynamics solver (optionally concurrent to SDM) */
     coupldyn.run_step(t_mdl, stepsize);
 
     /* proceed to next step (in general involves coupling) */
-    t_mdl = proceed_to_next_step(t_mdl, stepsize);
+    t_mdl = proceed_to_next_step(t_mdl, stepsize, sdm, coupldyn, gbxs);
   }
 
   return 0;

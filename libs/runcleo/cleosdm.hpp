@@ -35,16 +35,6 @@
 #include "superdrops/microphysicsprocess.hpp"
 #include "observers/observers.hpp"
 
-Gridboxes generate_gridboxes()
-{
-  return Gridboxes{};
-}
-
-Superdrops generate_superdrops()
-{
-  return Superdrops{};
-}
-
 struct CLEOSDM
 {
 private:
@@ -73,23 +63,29 @@ public:
   Observer obs;                  // observer
   unsigned int couplstep;
 
-  CLEOSDM(const Config &config, const Timesteps &tsteps,
-          const unsigned int coupldynstep)
-      : gbxmaps(config), microphys(),
-        movesupers(config, tsteps), obs(),
-        couplstep(tsteps.get_couplstep())
-  {
-    if (couplstep != coupldynstep)
-    {
-      const std::string err("coupling timestep of dyanmics "
-                            "solver and CLEO SDM are not equal");
-      throw std::invalid_argument(err);
-    }
-  }
+  CLEOSDM(const GridboxMaps gbxmaps,
+          const MicrophysicsProcess microphys,
+          const MoveSupersInDomain movesupers,
+          const Observer obs,
+          const unsigned int couplstep)
+      : gbxmaps(gbxmaps), microphys(microphys),
+        movesupers(movesupers), obs(obs),
+        couplstep(couplstep) {}
 
   unsigned int get_couplstep() const { return couplstep; }
 
-  void prepare_to_timestep(const Gridboxes &gbxs,
+  Gridboxes generate_gridboxes() const
+  {
+    return Gridboxes{};
+  }
+
+  Superdrops generate_superdrops() const
+  {
+    return Superdrops{};
+  }
+
+  void prepare_to_timestep(const CoupledDynamics &coupldyn,
+                           const Gridboxes &gbxs,
                            const Superdrops &supers) const;
   /* prepare CLEO SDM for timestepping */
 
@@ -103,7 +99,9 @@ public:
   /* send information from Gridboxes' states to coupldyn */
 
   void run_step(const unsigned int t_mdl,
-                const unsigned int stepsize) const;
+                const unsigned int stepsize,
+                Gridboxes &gbxs,
+                Superdrops &supers) const;
   /* run CLEO SDM from time t_mdl to t_mdl + stepsize with
   sub-timestepping routine for super-droplets' movement
   and microphysics */

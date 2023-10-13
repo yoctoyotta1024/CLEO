@@ -50,17 +50,17 @@ Timesteps::Timesteps(const Config &config)
                                         motionstep);
   if (minstep < maxsubstep)
   {
-    const std::string err("invalid SDM substepping: an SDM substep"
-                          " is larger than the smallest step"
-                          " (coupling, observation or motion step)");
+    const std::string err("invalid microphysics sub-stepping: "
+                          "a microphysics substep is greater "
+                          "motion / coupling / observation step");
     throw std::invalid_argument(err);
   }
 
   if (std::min(couplstep, obsstep) < motionstep)
   {
-    const std::string err("Warning: coupling / observation step is"
-                          "smaller than the sdmmotion step"
-                          " - are you really sure you want this?");
+    const std::string err("invalid CLEO SDM sub-stepping: "
+                          "motion / microphysics step is greater "
+                          "than coupling / observation step");
     throw std::invalid_argument(err);
   }
 }

@@ -86,8 +86,12 @@ public:
   model timestep, any timestep = 0 or if a sub-timestep is
   longer than a timestep */
 
-  unsigned int get_t_end() const { return t_end; }
+  unsigned int get_condstep() const { return condstep; }
+  unsigned int get_collstep() const { return collstep; }
+  unsigned int get_motionstep() const { return motionstep; }
   unsigned int get_couplstep() const { return couplstep; }
+  unsigned int get_obsstep() const { return obsstep; }
+  unsigned int get_t_end() const { return t_end; }
 };
 
 #endif // TIMESTEPS_HPP

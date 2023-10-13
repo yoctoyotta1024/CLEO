@@ -46,13 +46,13 @@ used for SDM) and detectors for tracking chosen variables */
   std::span<Superdrop> supersingbx; // superdrops in gridbox
   State state;                      // dynamical state of gridbox (e.g. thermodynamics)
 
-  KOKKOS_INLINE_FUNCTION GridBox() = default;  // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~GridBox() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION Gridbox() = default;  // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~Gridbox() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  GridBox(const unsigned int igbxindex)
-      : gbxindex(igbxindex) {}
-}
+  Gridbox(const unsigned int igbxindex, const double ivolume)
+      : gbxindex(igbxindex), state(ivolume) {}
+};
 
 struct Gridboxes
 {

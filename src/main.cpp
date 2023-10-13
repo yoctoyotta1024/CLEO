@@ -31,6 +31,27 @@
 #include "zarr/fsstore.hpp"
 #include "runcleo/runcleo.hpp"
 
+CoupledDynamics
+create_coupldyn(const Config &config,
+                const unsigned int coupldynstep)
+{
+  return CoupledDynamics(config, coupldynstep); 
+}
+
+CLEOSDM
+create_sdm(const Config &config,
+           const Timesteps &tsteps,
+           const unsigned int couplstep)
+{
+  GridboxMaps gbxmaps(config);
+  MicrophysicsProcess microphys;
+  MoveSupersInDomain movesupers(tsteps.get_motionstep());
+  Observer obs(tsteps.get_obsstep());
+
+  return CLEOSDM(gbxmaps, microphys,
+                 movesupers, obs, couplstep);
+}
+
 int main(int argc, char *argv[])
 {
   if (argc < 2)
@@ -49,10 +70,10 @@ int main(int argc, char *argv[])
   FSStore fsstore(config.zarrbasedir);
     
   /* Solver of dynamics coupled to CLEO SDM */
-  const CoupledDynamics coupldyn(config, tsteps.get_couplstep());
+  const auto coupldyn(create_coupldyn(config, tsteps.get_couplstep()));
 
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const CLEOSDM sdm(config, tsteps, coupldyn.get_couplstep());
+  const auto sdm(create_sdm(config, tsteps, coupldyn.get_couplstep()));
 
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);

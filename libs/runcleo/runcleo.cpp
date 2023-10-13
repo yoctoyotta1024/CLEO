@@ -22,7 +22,7 @@
 
 #include "./runcleo.hpp"
 
-unsigned unsigned int next_stepsize(const unsigned int t_mdl,
+unsigned int next_stepsize(const unsigned int t_mdl,
                                     const CLEOSDM &sdm)
 /* returns size of next step of model ('onestep')
 given current time t_mdl, so that next time

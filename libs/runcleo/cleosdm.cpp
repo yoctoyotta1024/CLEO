@@ -21,10 +21,17 @@
 
 #include "./cleosdm.hpp"
 
-void CLEOSDM::prepare_to_timestep(const Gridboxes &gbxs,
+void CLEOSDM::prepare_to_timestep(const CoupledDynamics &coupldyn,
+                                  const Gridboxes &gbxs,
                                   const Superdrops &supers) const
 /* prepare CLEO SDM for timestepping */
 {
+  if (couplstep != coupldyn.get_couplstep())
+  {
+    const std::string err("coupling timestep of dyanmics "
+                          "solver and CLEO SDM are not equal");
+    throw std::invalid_argument(err);
+  }
 }
 
 void CLEOSDM::receive_dynamics(const CoupledDynamics &coupldyn,
@@ -72,7 +79,7 @@ the time of the sooner event, (ie. next t_move or t_mdl) */
   return std::min(next_t_mdl, next_t_move);
 }
 
-void CLEOSDM::superdrops_movement(const unsigned int t_mdl,
+void CLEOSDM::superdrops_movement(const unsigned int t_sdm,
                                   Gridboxes &gbxs,
                                   Superdrops &supers) const
 /* move superdroplets (including movement between gridboxes)
@@ -92,7 +99,7 @@ void CLEOSDM::sdm_microphysics(const unsigned int t_sdm,
     for (unsigned int subt = t_sdm; subt < t_next;
          subt = microphys.next_step(subt))
     {
-      microphys.run_step();
+      microphys.run_step(subt);
     }
   }
 }

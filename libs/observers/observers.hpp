@@ -35,8 +35,9 @@ private:
   unsigned int interval;
 
 public:
-  Observer(){}
-  
+  Observer(const unsigned int obsstep)
+      : interval(obsstep) {}
+
   bool on_step(const unsigned int t_mdl) const
   {
     return t_mdl % interval == 0;
@@ -45,7 +46,7 @@ public:
   void observe(const unsigned int t_mdl,
                Gridboxes &gbxs) const
   {
-    std::cout << "obs gbxs @ t = " << t_mdl << "\n";
+    std::cout << "obs @ t = " << t_mdl << "\n";
   }
 
   void observe_startstep(const unsigned int t_mdl,

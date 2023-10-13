@@ -33,7 +33,6 @@ set(SOURCES
 "gridbox.cpp"
 "gridboxmaps.cpp"
 "movesupersindomain.cpp"
-"state.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

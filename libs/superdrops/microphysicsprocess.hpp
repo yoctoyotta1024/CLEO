@@ -24,9 +24,21 @@
 #ifndef MICROPHYSICSPROCESS_HPP
 #define MICROPHYSICSPROCESS_HPP
 
+#include <iostream>
+
 struct MicrophysicsProcess
 {
   MicrophysicsProcess(){}
+
+  unsigned int next_step(const unsigned int t_sdm)const
+  {
+    return t_sdm + 50;
+  }
+  
+  void run_step(const unsigned int subt) const
+  {
+    std::cout << "microphys @ t = " << subt << "\n";
+  }
 };
 
 #endif // MICROPHYSICSPROCESS_HPP

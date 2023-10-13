@@ -27,5 +27,5 @@ void CoupledDynamics::prepare_to_timestep() const
 void CoupledDynamics::run_dynamics(const unsigned int t_mdl,
                                    const unsigned int stepsize) const
 {
-  std::cout << "Dyn Call @ t=" << t_mdl << "\n";
+  std::cout << "dyn @ t=" << t_mdl << "\n";
 }
