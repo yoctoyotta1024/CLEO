@@ -40,9 +40,19 @@ inline unsigned int proceed_to_next_step(unsigned int t_mdl,
                                          const CoupledDynamics &coupldyn,
                                          Gridboxes &gbxs);
 
+inline int timestep_cleo(const unsigned int t_end,
+                         const CLEOSDM &sdm,
+                         const CoupledDynamics &coupldyn,
+                         RunStats &stats,
+                         Gridboxes &gbxs,
+                         Superdrops &supers);
+
 int run_cleo(const unsigned int t_end,
              const CLEOSDM &sdm,
              const CoupledDynamics &coupldyn)
+/* create gridboxes and superdrops, then
+timestep CLEO until t_end and with option
+to record some runtime statistics */
 {
   // generate runtime objects
   RunStats stats;
@@ -54,7 +64,24 @@ int run_cleo(const unsigned int t_end,
   sdm.prepare_to_timestep(gbxs, supers);
   stats.pre_timestepping();
   
-  // timestep CLEO from t=0 to t=t_end
+  // timestep CLEO
+  timestep_cleo(t_end, sdm, coupldyn, stats, gbxs, supers);
+  stats.post_timestepping();
+  
+  // summary of runtime statistics
+  stats.summary();
+
+  return 0;
+}
+
+inline int timestep_cleo(const unsigned int t_end,
+                         const CLEOSDM &sdm,
+                         const CoupledDynamics &coupldyn,
+                         RunStats &stats,
+                         Gridboxes &gbxs,
+                         Superdrops &supers)
+/* timestep CLEO from t=0 to t=t_end */
+{
   unsigned int t_mdl(0);
   while (t_mdl <= t_end)
   {
@@ -70,10 +97,6 @@ int run_cleo(const unsigned int t_end,
     /* proceed to next step (in general involves coupling) */
     t_mdl = proceed_to_next_step(t_mdl, stepsize);
   }
-  stats.post_timestepping();
-  
-  // summary of runtime statistics
-  stats.summary();
 
   return 0;
 }
