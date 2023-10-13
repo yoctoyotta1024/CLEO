@@ -35,9 +35,6 @@
 #include "superdrops/microphysicsprocess.hpp"
 #include "observers/observers.hpp"
 
-struct Superdrops
-{
-};
 
 struct CLEOSDM
 {

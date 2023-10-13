@@ -41,14 +41,16 @@ namespace dlc = dimless_constants;
 struct SoluteProperties
 {
   const double rho_sol; // (dimensionless) density of solute in droplets
-  const double mrsol;   // (dimensionless) Mr of solute
+  const double mr_sol;   // (dimensionless) Mr of solute
   const double ionic;   // degree ionic dissociation (van't Hoff factor)
 
   /* A Kokkos requirement for use of struct in (dual)View (such as a
   Kokkos::vector) is that default constructor and destructor exist */
   KOKKOS_INLINE_FUNCTION
-  SoluteProperties() : rho_l(dlc::Rho_l), rho_sol(dlc::Rho_sol),
-                       mrsol(dlc::Mr_sol), ionic(dlc::IONIC) {}
+  SoluteProperties()
+      : rho_sol(dlc::Rho_sol),
+        mr_sol(dlc::Mr_sol),
+        ionic(dlc::IONIC) {}
 
   KOKKOS_INLINE_FUNCTION ~SoluteProperties() = default;
 };
@@ -60,7 +62,7 @@ struct SuperdropAttrs
   double msol;                                    // mass of solute dissovled
   unsigned long long xi;                          // multiplicity of superdroplet
   std::shared_ptr<const SoluteProperties> solute; // reference to solute properties
-}
+};
 
 class Superdrop
 {
@@ -106,13 +108,12 @@ public:
   KOKKOS_INLINE_FUNCTION ~Superdrop() = default; // Kokkos requirement for a (dual)View
 
   unsigned int get_sd_gbxindex() { return sd_gbxindex; }
-  double get_coord3() { return attrs.coord3; }
-  double get_coord1() { return attrs.coord1; }
-  double get_coord2() { return attrs.coord2; }
+  double get_coord3() { return coord3; }
+  double get_coord1() { return coord1; }
+  double get_coord2() { return coord2; }
   double get_radius() { return attrs.radius; }
   double get_msol() { return attrs.msol; }
   double get_xi() { return attrs.xi; }
-  SoluteProperties get_solute() { return attrs.solute; }
 };
 
 struct Superdrops
