@@ -53,8 +53,10 @@ public:
   KOKKOS_INLINE_FUNCTION ThermoState() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~ThermoState() = default; // Kokkos requirement for a (dual)View
 
-  ThermoState(const double ivolume) : volume(volume){};
-  
+  KOKKOS_INLINE_FUNCTION
+  ThermoState(const double ivolume)
+      : volume(volume){};
+
   KOKKOS_INLINE_FUNCTION
   double get_volume() const { return volume; }
 
