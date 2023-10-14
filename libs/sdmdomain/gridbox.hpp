@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Saturday 14th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,16 +35,25 @@
 #include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
 
+struct SupersInGridbox
+/* Reference to a chunk of memory
+(e.g. through std::span of Kokkos::subview)
+containing super-droplets in a Gridbox */
+{
+  size_t num;               // number of superdrops in gridbox
+  std::span<Superdrop> sds; // reference to superdrops in gridbox
+};
+
 struct Gridbox
 /* each gridbox has unique identifier and contains a
 reference to superdroplets in gridbox, alongside the
 Gridbox's State (e.g. thermodynamic variables
 used for SDM) and detectors for tracking chosen variables */
 {
-  const unsigned int gbxindex;      // index (unique identifier) of gridbox
-  Detectors detectors;              // detectors of various quantities
-  std::span<Superdrop> supersingbx; // superdrops in gridbox
-  State state;                      // dynamical state of gridbox (e.g. thermodynamics)
+  const unsigned int gbxindex;       // index (unique identifier) of gridbox
+  Detectors detectors;               // detectors of various quantities
+  SupersInGridbox supersingbx;       // reference to superdrops associated with gridbox
+  State state;                       // dynamical state of gridbox (e.g. thermodynamics)
 
   KOKKOS_INLINE_FUNCTION Gridbox() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~Gridbox() = default; // Kokkos requirement for a (dual)View

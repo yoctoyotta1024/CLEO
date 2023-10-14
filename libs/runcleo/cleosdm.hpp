@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Saturday 14th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -84,9 +84,7 @@ public:
     return Superdrops{};
   }
 
-  void prepare_to_timestep(const CoupledDynamics &coupldyn,
-                           const Gridboxes &gbxs,
-                           const Superdrops &supers) const;
+  void prepare_to_timestep(const CoupledDynamics &coupldyn) const;
   /* prepare CLEO SDM for timestepping */
 
   void receive_dynamics(const CoupledDynamics &coupldyn,

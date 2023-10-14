@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Saturday 14th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,9 +22,15 @@
 #ifndef RUNCLEO_HPP
 #define RUNCLEO_HPP
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
+
 #include "./cleosdm.hpp"
 #include "./coupleddynamics.hpp"
 #include "./runtimestats.hpp"
+
+using view_gbx = Kokkos::DualView<Gridbox*>;
+using view_supers = Kokkos::View<Superdrop*>;
 
 unsigned int next_stepsize(const unsigned int t_mdl,
                                     const CLEOSDM &sdm);
@@ -56,12 +62,12 @@ to record some runtime statistics */
 {
   // generate runtime objects
   RunStats stats;
-  Gridboxes gbxs(sdm.generate_gridboxes());
-  Superdrops supers(sdm.generate_superdrops());
+  view_gbx gbxs(sdm.generate_gridboxes());
+  view_supers supers(sdm.generate_superdrops());
 
   // prepare CLEO for timestepping
   coupldyn.prepare_to_timestep();
-  sdm.prepare_to_timestep(coupldyn, gbxs, supers);
+  sdm.prepare_to_timestep(coupldyn);
   stats.pre_timestepping();
 
   // do timestepping of CLEO from t=0 to t=t_end
