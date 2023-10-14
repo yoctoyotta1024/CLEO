@@ -22,6 +22,8 @@
 #ifndef RUNCLEO_HPP
 #define RUNCLEO_HPP
 
+#include <algorithm>
+
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 

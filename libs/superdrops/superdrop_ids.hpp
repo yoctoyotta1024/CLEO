@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Saturday 14th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,7 +24,7 @@
 #ifndef SUPERDROP_IDS_HPP
 #define SUPERDROP_IDS_HPP
 
-#include <iostream>
+#include <ostream> 
 
 #include <Kokkos_Core.hpp>
 

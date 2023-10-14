@@ -22,6 +22,7 @@
 #ifndef CLEOSDM_HPP
 #define CLEOSDM_HPP
 
+#include <algorithm>
 #include <string>
 #include <stdexcept>
 

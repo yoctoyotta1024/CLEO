@@ -24,12 +24,6 @@
 #ifndef STATE_HPP 
 #define STATE_HPP 
 
-#include <iostream>
-#include <stdexcept>
-#include <string>
-#include <map>
-#include <utility>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 
