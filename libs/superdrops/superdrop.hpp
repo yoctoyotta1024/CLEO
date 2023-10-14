@@ -81,21 +81,6 @@ public:
             const double icoord3,
             const double icoord1,
             const double icoord2,
-            const double iradius,
-            const double imsol,
-            const unsigned long long ixi,
-            const std::shared_ptr<const SoluteProperties> isolute,
-            const IDType iid)
-      : sd_gbxindex(isd_gbxindex),
-        coord3(icoord3), coord1(icoord1), coord2(icoord2),
-        attrs({iradius, imsol, ixi, isolute}),
-        id(iid) {}
-
-  KOKKOS_INLINE_FUNCTION
-  Superdrop(const unsigned int isd_gbxindex,
-            const double icoord3,
-            const double icoord1,
-            const double icoord2,
             const SuperdropAttrs iattrs,
             const IDType iid)
       : sd_gbxindex(isd_gbxindex),
