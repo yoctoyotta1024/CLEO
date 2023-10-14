@@ -59,10 +59,9 @@ to record some runtime statistics */
 {
   // generate runtime objects
   RunStats stats;
-  view_gbx k_gbxs(sdm.create_gridboxes());
+  dualview_gbx gbxs(sdm.create_gridboxes());
   view_supers k_supers(sdm.create_superdrops());
 
-  Gridboxes gbxs{};
   Superdrops supers{};
 
   // prepare CLEO for timestepping
@@ -84,7 +83,7 @@ inline int timestep_cleo(const unsigned int t_end,
                              const CLEOSDM &sdm,
                              const CoupledDynamics &coupldyn,
                              RunStats &stats,
-                             Gridboxes &gbxs,
+                             dualview_gbx &gbxs,
                              Superdrops &supers)
 /* timestep CLEO from t=0 to t=t_end */
 {

@@ -75,9 +75,4 @@ public:
   unsigned int get_gbxindex() {return gbxindex;}
 };
 
-struct Gridboxes
-{
-  // kokkos array (dualview)
-};
-
 #endif // GRIDBOX_HPP

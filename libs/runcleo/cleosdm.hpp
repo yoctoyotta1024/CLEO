@@ -38,7 +38,7 @@
 #include "superdrops/microphysicsprocess.hpp"
 #include "observers/observers.hpp"
 
-using view_gbx = Kokkos::DualView<Gridbox*>;
+using dualview_gbx = Kokkos::DualView<Gridbox*>;
 using view_supers = Kokkos::View<Superdrop*>;
 
 struct CLEOSDM
@@ -80,7 +80,7 @@ public:
 
   unsigned int get_couplstep() const { return couplstep; }
 
-  view_gbx create_gridboxes() const;
+  dualview_gbx create_gridboxes() const;
 
   view_supers create_superdrops() const;
 

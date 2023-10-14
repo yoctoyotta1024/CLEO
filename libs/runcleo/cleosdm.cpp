@@ -21,13 +21,13 @@
 
 #include "./cleosdm.hpp"
 
-view_gbx CLEOSDM::create_gridboxes() const
+dualview_gbx CLEOSDM::create_gridboxes() const
 /* create domain as array of Gridboxes such that each Gridbox
 is initialised with a labels from gbxmaps.gbxidxs,
 and a refence to superdrops it contains */
 {
   const size_t ngbxs(10);
-  view_gbx gbxs("Gbxs", ngbxs);
+  dualview_gbx gbxs("Gbxs", ngbxs);
 
   return gbxs;
 }
