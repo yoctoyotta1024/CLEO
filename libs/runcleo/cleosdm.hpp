@@ -50,7 +50,7 @@ private:
 
   void superdrops_movement(const unsigned int t_mdl,
                            viewd_gbx d_gbxs,
-                           Superdrops &supers) const;
+                           viewd_supers supers) const;
   /* move superdroplets (including movement between gridboxes)
   according to movesupers struct */
 
@@ -93,7 +93,7 @@ public:
   void run_step(const unsigned int t_mdl,
                 const unsigned int stepsize,
                 viewd_gbx d_gbxs,
-                Superdrops &supers) const;
+                viewd_supers supers) const;
   /* run CLEO SDM (on device) from time t_mdl to
   t_mdl + stepsize with sub-timestepping routine
   for super-droplets' movement and microphysics */

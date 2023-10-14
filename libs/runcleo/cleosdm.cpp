@@ -49,7 +49,7 @@ void CLEOSDM::send_dynamics(const CoupledDynamics &coupldyn,
 void CLEOSDM::run_step(const unsigned int t_mdl,
                        const unsigned int stepsize,
                        viewd_gbx d_gbxs,
-                       Superdrops &supers) const
+                       viewd_supers supers) const
 /* run CLEO SDM (on device) from time t_mdl to
 t_mdl + stepsize with sub-timestepping routine
 for super-droplets' movement and microphysics */
@@ -80,7 +80,7 @@ the time of the sooner event, (ie. next t_move or t_mdl) */
 
 void CLEOSDM::superdrops_movement(const unsigned int t_sdm,
                                   viewd_gbx d_gbxs,
-                                  Superdrops &supers) const
+                                  viewd_supers supers) const
 /* move superdroplets (including movement between gridboxes)
 according to movesupers struct */
 {

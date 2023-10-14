@@ -116,9 +116,4 @@ public:
   KOKKOS_INLINE_FUNCTION double get_xi() { return attrs.xi; }
 };
 
-struct Superdrops
-{
-  // replace with kokkos vector (view)
-};
-
 #endif // SUPERDROP_HPP

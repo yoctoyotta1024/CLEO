@@ -65,7 +65,7 @@ private:
   void move_supers_in_domain(const unsigned int t_sdm,
                              const GridboxMaps &gbxmaps,
                              viewd_gbx d_gbxs,
-                             Superdrops &supers) const
+                             viewd_supers supers) const
   {
     std::cout << "move @ t = " << t_sdm << "\n";
   }
@@ -82,7 +82,7 @@ public:
   void run_step(const unsigned int t_sdm,
                 const GridboxMaps &gbxmaps,
                 viewd_gbx d_gbxs, 
-                Superdrops &supers) const
+                viewd_supers supers) const
   {
     if (sdmotion.on_step(t_sdm))
     {

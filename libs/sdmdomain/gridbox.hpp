@@ -35,7 +35,7 @@
 #include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
 
-struct SupersInGridbox
+struct SuperdropsInGridbox
 /* Reference to a chunk of memory
 (e.g. through std::span of Kokkos::subview)
 containing super-droplets in a Gridbox */
@@ -43,8 +43,8 @@ containing super-droplets in a Gridbox */
   size_t num;               // number of superdrops in gridbox
   std::span<Superdrop> sds; // reference to superdrops in gridbox
 
-  KOKKOS_INLINE_FUNCTION SupersInGridbox() = default;  // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~SupersInGridbox() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION SuperdropsInGridbox() = default;  // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~SuperdropsInGridbox() = default; // Kokkos requirement for a (dual)View
 };
 
 struct Gridbox
@@ -57,7 +57,7 @@ private:
   unsigned int gbxindex;             // index (unique identifier) of gridbox
 public:
   Detectors detectors;               // detectors of various quantities
-  SupersInGridbox supersingbx;       // reference to superdrops associated with gridbox
+  SuperdropsInGridbox sdsingbx;       // reference to superdrops associated with gridbox
   State state;                       // dynamical state of gridbox (e.g. thermodynamics)
 
   KOKKOS_INLINE_FUNCTION Gridbox() = default;  // Kokkos requirement for a (dual)View
@@ -68,7 +68,7 @@ public:
           const double ivolume)
       : gbxindex(igbxindex),
         detectors(),
-        supersingbx(),
+        sdsingbx(),
         state(ivolume) {}
 
   KOKKOS_INLINE_FUNCTION

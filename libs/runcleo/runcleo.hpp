@@ -25,6 +25,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
+#include "../kokkosaliases.hpp"
 #include "./cleosdm.hpp"
 #include "./coupleddynamics.hpp"
 #include "./runtimestats.hpp"
@@ -34,7 +35,7 @@ dualview_gbx create_gridboxes();
 viewd_supers create_superdrops();
 
 unsigned int next_stepsize(const unsigned int t_mdl,
-                                    const CLEOSDM &sdm);
+                           const CLEOSDM &sdm);
 
 inline unsigned int start_step(const unsigned int t_mdl,
                                const CLEOSDM &sdm,
@@ -45,7 +46,7 @@ inline void sdm_step(const unsigned int t_mdl,
                      const unsigned int stepsize,
                      const CLEOSDM &sdm,
                      dualview_gbx gbxs, 
-                     Superdrops &supers);
+                     viewd_supers supers);
 
 inline void coupldyn_step(const unsigned int t_mdl,
                           const unsigned int stepsize,
@@ -62,21 +63,19 @@ inline int timestep_cleo(const unsigned int t_end,
                              const CoupledDynamics &coupldyn,
                              RunStats &stats,
                              dualview_gbx gbxs,
-                             Superdrops &supers);
+                             viewd_supers supers);
 
 int run_cleo(const unsigned int t_end,
              const CLEOSDM &sdm,
              const CoupledDynamics &coupldyn)
-/* create Gridboxes and Superdrops, then
+/* create gridboxes and superdrops, then
 timestep CLEO until t_end and with option
 to record some runtime statistics */
 {
   // generate runtime objects
   RunStats stats;
   dualview_gbx gbxs(create_gridboxes());
-  viewd_supers k_supers(create_superdrops());
-
-  Superdrops supers{};
+  viewd_supers supers(create_superdrops());
 
   // prepare CLEO for timestepping
   coupldyn.prepare_to_timestep();
@@ -98,7 +97,7 @@ inline int timestep_cleo(const unsigned int t_end,
                              const CoupledDynamics &coupldyn,
                              RunStats &stats,
                              dualview_gbx gbxs,
-                             Superdrops &supers)
+                             viewd_supers supers)
 /* timestep CLEO from t=0 to t=t_end */
 {
   unsigned int t_mdl(0);
@@ -145,7 +144,7 @@ inline void sdm_step(const unsigned int t_mdl,
                      const unsigned int stepsize,
                      const CLEOSDM &sdm,
                      dualview_gbx gbxs, 
-                     Superdrops &supers)
+                     viewd_supers supers)
 /* run CLEO SDM (on device) */
 {
   gbxs.sync_device();

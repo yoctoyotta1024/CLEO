@@ -33,7 +33,7 @@ is two distinct views on host and device memory) */
 }
 
 viewd_supers create_superdrops()
-/* create view of Superdrops */
+/* create view of superdrops */
 {
   const size_t nsupers(100);
   viewd_supers supers("SDs", nsupers);
@@ -42,7 +42,7 @@ viewd_supers create_superdrops()
 }
 
 unsigned int next_stepsize(const unsigned int t_mdl,
-                                    const CLEOSDM &sdm)
+                           const CLEOSDM &sdm)
 /* returns size of next step of model ('onestep')
 given current time t_mdl, so that next time
 (t_next = t_mdl + onestep) is time of obs or coupl */
