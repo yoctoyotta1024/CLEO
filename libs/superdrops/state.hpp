@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Saturday 14th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,6 +31,7 @@
 #include <utility>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 
 struct State
 /* variables which define the state of a certain volume
@@ -39,16 +40,16 @@ are for example thermodynamic variables required for
 CLEO SDM such as temperature, pressure etc. */
 {
 private:
-  const double volume;
+  double volume;
 
 public:
   double press;                   // defined at centre of volume
   double temp;                    // defined at centre of volume
   double qvap;                    // defined at centre of volume
   double qcond;                   // defined at centre of volume
-  std::pair<double, double> wvel; // defined on {lower, upper} z faces of volume
-  std::pair<double, double> uvel; // defined on {lower, upper} x faces of volume
-  std::pair<double, double> vvel; // defined on {lower, upper} y faces of volume
+  Kokkos::pair<double, double> wvel; // defined on {lower, upper} z faces of volume
+  Kokkos::pair<double, double> uvel; // defined on {lower, upper} x faces of volume
+  Kokkos::pair<double, double> vvel; // defined on {lower, upper} y faces of volume
 
   KOKKOS_INLINE_FUNCTION State() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~State() = default; // Kokkos requirement for a (dual)View

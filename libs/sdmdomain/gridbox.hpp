@@ -42,6 +42,9 @@ containing super-droplets in a Gridbox */
 {
   size_t num;               // number of superdrops in gridbox
   std::span<Superdrop> sds; // reference to superdrops in gridbox
+
+  KOKKOS_INLINE_FUNCTION SupersInGridbox() = default;  // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~SupersInGridbox() = default; // Kokkos requirement for a (dual)View
 };
 
 struct Gridbox
@@ -50,7 +53,9 @@ reference to superdroplets in gridbox, alongside the
 Gridbox's State (e.g. thermodynamic variables
 used for SDM) and detectors for tracking chosen variables */
 {
-  const unsigned int gbxindex;       // index (unique identifier) of gridbox
+private:
+  unsigned int gbxindex;             // index (unique identifier) of gridbox
+public:
   Detectors detectors;               // detectors of various quantities
   SupersInGridbox supersingbx;       // reference to superdrops associated with gridbox
   State state;                       // dynamical state of gridbox (e.g. thermodynamics)
@@ -61,7 +66,13 @@ used for SDM) and detectors for tracking chosen variables */
   KOKKOS_INLINE_FUNCTION
   Gridbox(const unsigned int igbxindex,
           const double ivolume)
-      : gbxindex(igbxindex), state(ivolume) {}
+      : gbxindex(igbxindex),
+        detectors(),
+        supersingbx(),
+        state(ivolume) {}
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int get_gbxindex() {return gbxindex;}
 };
 
 struct Gridboxes

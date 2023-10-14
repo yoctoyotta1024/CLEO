@@ -59,7 +59,7 @@ to record some runtime statistics */
 {
   // generate runtime objects
   RunStats stats;
-  // view_gbx k_gbxs(sdm.create_gridboxes());
+  view_gbx k_gbxs(sdm.create_gridboxes());
   view_supers k_supers(sdm.create_superdrops());
 
   Gridboxes gbxs{};
