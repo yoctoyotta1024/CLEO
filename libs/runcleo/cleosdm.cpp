@@ -21,6 +21,28 @@
 
 #include "./cleosdm.hpp"
 
+view_gbx CLEOSDM::create_gridboxes() const
+/* create domain as array of Gridboxes such that each Gridbox
+is initialised with a labels from gbxmaps.gbxidxs,
+and a refence to superdrops it contains */
+{
+  const size_t ngbxs(10);
+  view_gbx gbxs("Gbxs", ngbxs);
+
+  return gbxs;
+}
+
+view_supers CLEOSDM::create_superdrops() const
+/* create domain as array of Gridboxes such that each Gridbox
+is initialised with a labels from gbxmaps.gbxidxs,
+and a refence to superdrops it contains */
+{
+  const size_t nsupers(100);
+  view_supers supers("SDs", nsupers);
+
+  return supers;
+}
+
 void CLEOSDM::prepare_to_timestep(const CoupledDynamics &coupldyn) const
 /* prepare CLEO SDM for timestepping */
 {

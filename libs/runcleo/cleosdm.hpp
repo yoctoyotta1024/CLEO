@@ -25,6 +25,9 @@
 #include <string>
 #include <stdexcept>
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
+
 #include "./coupleddynamics.hpp"
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
@@ -34,6 +37,9 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/microphysicsprocess.hpp"
 #include "observers/observers.hpp"
+
+using view_gbx = Kokkos::DualView<Gridbox*>;
+using view_supers = Kokkos::View<Superdrop*>;
 
 struct CLEOSDM
 {
@@ -61,8 +67,8 @@ public:
   MicrophysicsProcess microphys; // microphysical process
   MoveSupersInDomain movesupers; // super-droplets' motion in domain
   Observer obs;                  // observer
-  unsigned int couplstep;
-
+  unsigned int couplstep;        // coupled timestep
+  
   CLEOSDM(const GridboxMaps gbxmaps,
           const MicrophysicsProcess microphys,
           const MoveSupersInDomain movesupers,
@@ -74,15 +80,9 @@ public:
 
   unsigned int get_couplstep() const { return couplstep; }
 
-  Gridboxes generate_gridboxes() const
-  {
-    return Gridboxes{};
-  }
+  view_gbx create_gridboxes() const;
 
-  Superdrops generate_superdrops() const
-  {
-    return Superdrops{};
-  }
+  view_supers create_superdrops() const;
 
   void prepare_to_timestep(const CoupledDynamics &coupldyn) const;
   /* prepare CLEO SDM for timestepping */

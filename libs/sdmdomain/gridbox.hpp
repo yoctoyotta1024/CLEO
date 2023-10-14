@@ -59,7 +59,8 @@ used for SDM) and detectors for tracking chosen variables */
   KOKKOS_INLINE_FUNCTION ~Gridbox() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  Gridbox(const unsigned int igbxindex, const double ivolume)
+  Gridbox(const unsigned int igbxindex,
+          const double ivolume)
       : gbxindex(igbxindex), state(ivolume) {}
 };
 

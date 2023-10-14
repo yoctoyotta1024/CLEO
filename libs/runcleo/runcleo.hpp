@@ -29,9 +29,6 @@
 #include "./coupleddynamics.hpp"
 #include "./runtimestats.hpp"
 
-using view_gbx = Kokkos::DualView<Gridbox*>;
-using view_supers = Kokkos::View<Superdrop*>;
-
 unsigned int next_stepsize(const unsigned int t_mdl,
                                     const CLEOSDM &sdm);
 
@@ -62,8 +59,11 @@ to record some runtime statistics */
 {
   // generate runtime objects
   RunStats stats;
-  view_gbx gbxs(sdm.generate_gridboxes());
-  view_supers supers(sdm.generate_superdrops());
+  // view_gbx k_gbxs(sdm.create_gridboxes());
+  view_supers k_supers(sdm.create_superdrops());
+
+  Gridboxes gbxs{};
+  Superdrops supers{};
 
   // prepare CLEO for timestepping
   coupldyn.prepare_to_timestep();
