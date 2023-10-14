@@ -32,13 +32,13 @@ and a refence to superdrops it contains */
   return gbxs;
 }
 
-view_supers CLEOSDM::create_superdrops() const
+viewd_supers CLEOSDM::create_superdrops() const
 /* create domain as array of Gridboxes such that each Gridbox
 is initialised with a labels from gbxmaps.gbxidxs,
 and a refence to superdrops it contains */
 {
   const size_t nsupers(100);
-  view_supers supers("SDs", nsupers);
+  viewd_supers supers("SDs", nsupers);
 
   return supers;
 }
@@ -55,33 +55,34 @@ void CLEOSDM::prepare_to_timestep(const CoupledDynamics &coupldyn) const
 }
 
 void CLEOSDM::receive_dynamics(const CoupledDynamics &coupldyn,
-                               Gridboxes &gbxs) const
-/* update Gridboxes' states using information
-received from coupldyn */
+                               viewh_gbx h_gbxs) const
+/* update Gridboxes' states (on host)
+using information received from coupldyn */
 {
 }
 
 void CLEOSDM::send_dynamics(const CoupledDynamics &coupldyn,
-                            Gridboxes &gbxs) const
-/* send information from Gridboxes' states to coupldyn */
+                            viewh_constgbx h_gbxs) const
+/* send information from Gridboxes' states
+(on host) to coupldyn */
 {
 }
 
 void CLEOSDM::run_step(const unsigned int t_mdl,
                        const unsigned int stepsize,
-                       Gridboxes &gbxs,
+                       viewd_gbx d_gbxs,
                        Superdrops &supers) const
-/* run CLEO SDM from time t_mdl to t_mdl + stepsize with
-sub-timestepping routine for super-droplets' movement
-and microphysics */
+/* run CLEO SDM (on device) from time t_mdl to
+t_mdl + stepsize with sub-timestepping routine
+for super-droplets' movement and microphysics */
 {
   unsigned int t_sdm(t_mdl);
   while (t_sdm < t_mdl + stepsize)
   {
     unsigned int t_next(next_sdmstep(t_sdm, stepsize));
 
-    superdrops_movement(t_sdm, gbxs, supers);
-    sdm_microphysics(t_sdm, t_next, gbxs);
+    superdrops_movement(t_sdm, d_gbxs, supers);
+    sdm_microphysics(t_sdm, t_next, d_gbxs);
 
     t_sdm = t_next;
   }
@@ -100,17 +101,17 @@ the time of the sooner event, (ie. next t_move or t_mdl) */
 }
 
 void CLEOSDM::superdrops_movement(const unsigned int t_sdm,
-                                  Gridboxes &gbxs,
+                                  viewd_gbx d_gbxs,
                                   Superdrops &supers) const
 /* move superdroplets (including movement between gridboxes)
 according to movesupers struct */
 {
-  movesupers.run_step(t_sdm, gbxmaps, gbxs, supers);
+  movesupers.run_step(t_sdm, gbxmaps, d_gbxs, supers);
 }
 
 void CLEOSDM::sdm_microphysics(const unsigned int t_sdm,
                                const unsigned int t_next,
-                               Gridboxes &gbxs) const
+                               viewd_gbx d_gbxs) const
 /* enact SDM microphysics for each gridbox
 (using sub-timestepping routine) */
 {

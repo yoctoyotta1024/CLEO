@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Saturday 14th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,6 +32,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "../cleoconstants.hpp"
+#include "../kokkosaliases.hpp"
 #include "./gridbox.hpp"
 #include "./gridboxmaps.hpp"
 #include "superdrops/superdrop.hpp"
@@ -63,7 +64,7 @@ private:
 
   void move_supers_in_domain(const unsigned int t_sdm,
                              const GridboxMaps &gbxmaps,
-                             Gridboxes &gbxs,
+                             viewd_gbx d_gbxs,
                              Superdrops &supers) const
   {
     std::cout << "move @ t = " << t_sdm << "\n";
@@ -80,12 +81,12 @@ public:
 
   void run_step(const unsigned int t_sdm,
                 const GridboxMaps &gbxmaps,
-                Gridboxes &gbxs,
+                viewd_gbx d_gbxs, 
                 Superdrops &supers) const
   {
     if (sdmotion.on_step(t_sdm))
     {
-      move_supers_in_domain(t_sdm, gbxmaps, gbxs, supers);
+      move_supers_in_domain(t_sdm, gbxmaps, d_gbxs, supers);
     }
   };
 };

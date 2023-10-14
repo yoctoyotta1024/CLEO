@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Saturday 14th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,6 +27,9 @@
 
 #include <iostream>
 
+#include <Kokkos_Core.hpp>
+
+#include "../kokkosaliases.hpp"
 #include "sdmdomain/gridbox.hpp"
 
 struct Observer
@@ -44,17 +47,18 @@ public:
   }
 
   void observe(const unsigned int t_mdl,
-               Gridboxes &gbxs) const
+               const viewh_constgbx h_gbxs) const
   {
     std::cout << "obs @ t = " << t_mdl << "\n";
   }
 
   void observe_startstep(const unsigned int t_mdl,
-                         Gridboxes &gbxs) const
+                         const viewh_constgbx h_gbxs) const
+  /* observe Gridboxes (on host) at start of timestep */
   {
     if (on_step(t_mdl))
     {
-      observe(t_mdl, gbxs);
+      observe(t_mdl, h_gbxs);
     }
   }
 

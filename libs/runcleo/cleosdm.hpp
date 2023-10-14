@@ -28,6 +28,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
+#include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
@@ -37,9 +38,6 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/microphysicsprocess.hpp"
 #include "observers/observers.hpp"
-
-using dualview_gbx = Kokkos::DualView<Gridbox*>;
-using view_supers = Kokkos::View<Superdrop*>;
 
 struct CLEOSDM
 {
@@ -51,14 +49,14 @@ private:
   the time of the sooner event, (ie. next t_move or t_mdl) */
 
   void superdrops_movement(const unsigned int t_mdl,
-                           Gridboxes &gbxs,
+                           viewd_gbx d_gbxs,
                            Superdrops &supers) const;
   /* move superdroplets (including movement between gridboxes)
   according to movesupers struct */
 
   void sdm_microphysics(const unsigned int t_sdm,
                         const unsigned int t_next,
-                        Gridboxes &gbxs) const;
+                        viewd_gbx d_gbxs) const;
   /* enact SDM microphysics for each gridbox
   (using sub-timestepping routine) */
 
@@ -82,27 +80,27 @@ public:
 
   dualview_gbx create_gridboxes() const;
 
-  view_supers create_superdrops() const;
+  viewd_supers create_superdrops() const;
 
   void prepare_to_timestep(const CoupledDynamics &coupldyn) const;
   /* prepare CLEO SDM for timestepping */
 
   void receive_dynamics(const CoupledDynamics &coupldyn,
-                        Gridboxes &gbxs) const;
+                        viewh_gbx h_gbxs) const;
   /* update Gridboxes' states using information
   received from coupldyn */
 
   void send_dynamics(const CoupledDynamics &coupldyn,
-                     Gridboxes &gbxs) const;
+                     viewh_constgbx h_gbxs) const;
   /* send information from Gridboxes' states to coupldyn */
 
   void run_step(const unsigned int t_mdl,
                 const unsigned int stepsize,
-                Gridboxes &gbxs,
+                viewd_gbx d_gbxs,
                 Superdrops &supers) const;
-  /* run CLEO SDM from time t_mdl to t_mdl + stepsize with
-  sub-timestepping routine for super-droplets' movement
-  and microphysics */
+  /* run CLEO SDM (on device) from time t_mdl to
+  t_mdl + stepsize with sub-timestepping routine
+  for super-droplets' movement and microphysics */
 };
 
 #endif // CLEOSDM_HPP

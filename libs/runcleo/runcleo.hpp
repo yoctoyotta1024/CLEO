@@ -35,32 +35,42 @@ unsigned int next_stepsize(const unsigned int t_mdl,
 inline unsigned int start_step(const unsigned int t_mdl,
                                const CLEOSDM &sdm,
                                const CoupledDynamics &coupldyn,
-                               Gridboxes &gbxs);
+                               dualview_gbx gbxs);
+
+inline void sdm_step(const unsigned int t_mdl,
+                     const unsigned int stepsize,
+                     const CLEOSDM &sdm,
+                     dualview_gbx gbxs, 
+                     Superdrops &supers);
+
+inline void coupldyn_step(const unsigned int t_mdl,
+                          const unsigned int stepsize,
+                          const CoupledDynamics &coupldyn);
 
 inline unsigned int proceed_to_next_step(unsigned int t_mdl,
                                          unsigned int stepsize,
                                          const CLEOSDM &sdm,
                                          const CoupledDynamics &coupldyn,
-                                         Gridboxes &gbxs);
+                                         dualview_gbx gbxs);
 
 inline int timestep_cleo(const unsigned int t_end,
                              const CLEOSDM &sdm,
                              const CoupledDynamics &coupldyn,
                              RunStats &stats,
-                             Gridboxes &gbxs,
+                             dualview_gbx gbxs,
                              Superdrops &supers);
 
 int run_cleo(const unsigned int t_end,
              const CLEOSDM &sdm,
              const CoupledDynamics &coupldyn)
-/* create gridboxes and superdrops, then
+/* create Gridboxes and Superdrops, then
 timestep CLEO until t_end and with option
 to record some runtime statistics */
 {
   // generate runtime objects
   RunStats stats;
   dualview_gbx gbxs(sdm.create_gridboxes());
-  view_supers k_supers(sdm.create_superdrops());
+  viewd_supers k_supers(sdm.create_superdrops());
 
   Superdrops supers{};
 
@@ -83,7 +93,7 @@ inline int timestep_cleo(const unsigned int t_end,
                              const CLEOSDM &sdm,
                              const CoupledDynamics &coupldyn,
                              RunStats &stats,
-                             dualview_gbx &gbxs,
+                             dualview_gbx gbxs,
                              Superdrops &supers)
 /* timestep CLEO from t=0 to t=t_end */
 {
@@ -94,11 +104,11 @@ inline int timestep_cleo(const unsigned int t_end,
     const unsigned int stepsize(start_step(t_mdl, sdm, coupldyn, gbxs));
 
     /* advance SDM (optionally concurrent to dynamics solver) */
-    sdm.run_step(t_mdl, stepsize, gbxs, supers);
-
+    sdm_step(t_mdl, stepsize, sdm, gbxs, supers);
+    
     /* advance dynamics solver (optionally concurrent to SDM) */
-    coupldyn.run_step(t_mdl, stepsize);
-
+    coupldyn_step(t_mdl, stepsize, coupldyn);
+    
     /* proceed to next step (in general involves coupling) */
     t_mdl = proceed_to_next_step(t_mdl, stepsize, sdm, coupldyn, gbxs);
   }
@@ -109,26 +119,49 @@ inline int timestep_cleo(const unsigned int t_end,
 inline unsigned int start_step(const unsigned int t_mdl,
                                const CLEOSDM &sdm,
                                const CoupledDynamics &coupldyn,
-                               Gridboxes &gbxs)
+                               dualview_gbx gbxs)
 /* communication of thermodynamic state from dynamics solver
 to CLEO's Gridboxes. Followed by observation. Function then
 returns size of step to take given current timestep, t_mdl */
 {
   if (t_mdl % sdm.couplstep == 0)
   {
-    sdm.receive_dynamics(coupldyn, gbxs);
+    gbxs.sync_host();
+    sdm.receive_dynamics(coupldyn, gbxs.view_host());
+    gbxs.modify_host();
   }
 
-  sdm.obs.observe_startstep(t_mdl, gbxs);
+  gbxs.sync_host(); 
+  sdm.obs.observe_startstep(t_mdl, gbxs.view_host());
 
   return next_stepsize(t_mdl, sdm);
+}
+
+inline void sdm_step(const unsigned int t_mdl,
+                     const unsigned int stepsize,
+                     const CLEOSDM &sdm,
+                     dualview_gbx gbxs, 
+                     Superdrops &supers)
+/* run CLEO SDM (on device) */
+{
+  gbxs.sync_device();
+  sdm.run_step(t_mdl, stepsize, gbxs.view_device(), supers);
+  gbxs.modify_device();
+}
+
+inline void coupldyn_step(const unsigned int t_mdl,
+                          const unsigned int stepsize,
+                          const CoupledDynamics &coupldyn)
+/* run coupled dynamics solver (on host) */
+{
+  coupldyn.run_step(t_mdl, stepsize);
 }
 
 inline unsigned int proceed_to_next_step(const unsigned int t_mdl,
                                          const unsigned int stepsize,
                                          const CLEOSDM &sdm,
                                          const CoupledDynamics &coupldyn,
-                                         Gridboxes &gbxs)
+                                         dualview_gbx gbxs)
 /* returns incremented timestep 't_mdl' of model
 by 'stepsize'. Point where communication from
 CLEO SDM Gridbox States to coupled dynamics solver
@@ -136,7 +169,8 @@ may occur */
 {
   if (t_mdl % sdm.couplstep == 0)
   {
-    sdm.send_dynamics(coupldyn, gbxs);
+    gbxs.sync_host();
+    sdm.send_dynamics(coupldyn, gbxs.view_host());
   }
 
   return t_mdl + stepsize;
