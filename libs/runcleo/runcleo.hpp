@@ -29,6 +29,10 @@
 #include "./coupleddynamics.hpp"
 #include "./runtimestats.hpp"
 
+dualview_gbx create_gridboxes();
+
+viewd_supers create_superdrops();
+
 unsigned int next_stepsize(const unsigned int t_mdl,
                                     const CLEOSDM &sdm);
 
@@ -69,8 +73,8 @@ to record some runtime statistics */
 {
   // generate runtime objects
   RunStats stats;
-  dualview_gbx gbxs(sdm.create_gridboxes());
-  viewd_supers k_supers(sdm.create_superdrops());
+  dualview_gbx gbxs(create_gridboxes());
+  viewd_supers k_supers(create_superdrops());
 
   Superdrops supers{};
 

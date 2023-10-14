@@ -77,11 +77,7 @@ public:
         couplstep(couplstep) {}
 
   unsigned int get_couplstep() const { return couplstep; }
-
-  dualview_gbx create_gridboxes() const;
-
-  viewd_supers create_superdrops() const;
-
+ 
   void prepare_to_timestep(const CoupledDynamics &coupldyn) const;
   /* prepare CLEO SDM for timestepping */
 

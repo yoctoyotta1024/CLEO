@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Saturday 14th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,6 +21,25 @@
 
 
 #include "./runcleo.hpp"
+
+dualview_gbx create_gridboxes()
+/* create dualview of gridboxes (in general this
+is two distinct views on host and device memory) */
+{
+  const size_t ngbxs(10);
+  dualview_gbx gbxs("Gbxs", ngbxs);
+
+  return gbxs;
+}
+
+viewd_supers create_superdrops()
+/* create view of Superdrops */
+{
+  const size_t nsupers(100);
+  viewd_supers supers("SDs", nsupers);
+
+  return supers;
+}
 
 unsigned int next_stepsize(const unsigned int t_mdl,
                                     const CLEOSDM &sdm)

@@ -118,7 +118,7 @@ public:
 
 struct Superdrops
 {
-  // replace with kokkos vector (dualview)
+  // replace with kokkos vector (view)
 };
 
 #endif // SUPERDROP_HPP
