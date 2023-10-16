@@ -37,8 +37,9 @@ dualview_gbx create_gridboxes();
 viewd_supers create_superdrops();
 
 template <class SDMM, CoupledDynamics CD>
-struct RunCLEO
+class RunCLEO
 {
+private:
   const SDMM &sdm;
   const CD &coupldyn;
 
@@ -46,8 +47,6 @@ struct RunCLEO
   {
     coupldyn.prepare_to_timestep();
     sdm.prepare_to_timestep();
-
-    check_coupling();
 
     return 0;
   }
@@ -163,6 +162,12 @@ struct RunCLEO
   }
 
 public:
+  RunCLEO(const SDMM &sdm, const CD &coupldyn)
+      : sdm(sdm), coupldyn(coupldyn)
+  {
+    check_coupling(); 
+  }
+
   int operator()(const unsigned int t_end) const
   /* create gridboxes and superdrops, then
   timestep CLEO until t_end and with option

@@ -26,7 +26,7 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # Set libraries and compiler warnings to use
 # set(SDMLIBS initialise observers runcleo sdmdomain superdrops zarr)
-set(SDMLIBS initialise runcleo zarr)
+set(SDMLIBS initialise observers runcleo sdmdomain superdrops zarr)
 #set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
 set(compileops -Wall -pedantic -g -gdwarf-4) # less strict without -Werror
 #set(compileops  -Wall -pedantic -g) # cannot use -gdwarf-4 flag for nvc++ compiler 

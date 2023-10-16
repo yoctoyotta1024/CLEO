@@ -88,15 +88,13 @@ int main(int argc, char *argv[])
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn));
 
-  // /* Run CLEO (SDM coupled to dynamics solver) */
-  // Kokkos::initialize(argc, argv);
-  // {
-  //   const RunCLEO<SDMMethods<FromFileDynamics, auto>,
-  //                 FromFileDynamics>
-  //       runcleo{sdm, coupldyn};
-  //   runcleo(tsteps.get_t_end());
-  // }
-  // Kokkos::finalize();
+  /* Run CLEO (SDM coupled to dynamics solver) */
+  Kokkos::initialize(argc, argv);
+  {
+    const RunCLEO runcleo(sdm, coupldyn);
+    runcleo(tsteps.get_t_end());
+  }
+  Kokkos::finalize();
   
   // const double ttot(kokkostimer.seconds());
   // std::cout << "-----\n Total Program Duration: "
