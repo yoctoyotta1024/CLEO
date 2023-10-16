@@ -29,7 +29,6 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # add executables to library
 set(SOURCES
-"coupleddynamics.cpp"
 "runcleo.cpp"
 "runtimestats.cpp"
 "sdmmethods.cpp"

@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: coupleddynamics.cpp
- * Project: runcleo
+ * File: fromfiledynamics.cpp
+ * Project: coupldyn_fromfile
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Monday 16th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -15,17 +15,19 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * functionality for encasing dyanmics solver which coupled to CLEO SDM
+ * functionality for dynamics solver in CLEO
+ * where coupling is one-way and dynamics
+ * are read from file
  */
 
-#include "./coupleddynamics.hpp"
+#include "./fromfiledynamics.hpp"
 
-void CoupledDynamics::prepare_to_timestep() const
+void FromFileDynamics::prepare_to_timestep() const
 {
 }
 
-void CoupledDynamics::run_dynamics(const unsigned int t_mdl,
+void FromFileDynamics::run_dynamics(const unsigned int t_mdl,
                                    const unsigned int stepsize) const
 {
-  std::cout << "dyn @ t=" << t_mdl << "\n";
+  std::cout << "from file dyn @ t=" << t_mdl << "\n";
 }

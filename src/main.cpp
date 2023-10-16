@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Monday 16th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,20 +26,22 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "coupldyn_fromfile/fromfiledynamics.hpp"
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
 #include "zarr/fsstore.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
-CoupledDynamics
+FromFileDynamics
 create_coupldyn(const Config &config,
                 const unsigned int coupldynstep)
 {
-  return CoupledDynamics(config, coupldynstep); 
+  return FromFileDynamics(config, coupldynstep); 
 }
 
-SDMMethods
+template <typename CD>
+SDMMethods<CD>
 create_sdm(const Config &config,
            const Timesteps &tsteps,
            const unsigned int couplstep)
@@ -49,7 +51,7 @@ create_sdm(const Config &config,
   MoveSupersInDomain movesupers(tsteps.get_motionstep());
   Observer obs(tsteps.get_obsstep());
 
-  return SDMMethods(gbxmaps, microphys,
+  return SDMMethods<CD>(gbxmaps, microphys,
                  movesupers, obs, couplstep);
 }
 
@@ -74,12 +76,13 @@ int main(int argc, char *argv[])
   const auto coupldyn(create_coupldyn(config, tsteps.get_couplstep()));
 
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const auto sdm(create_sdm(config, tsteps, coupldyn.get_couplstep()));
+  const auto sdm(create_sdm<FromFileDynamics>(
+      config, tsteps, coupldyn.get_couplstep()));
 
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
-    const RunCLEO<SDMMethods, CoupledDynamics> runcleo{sdm, coupldyn};
+    const RunCLEO<SDMMethods<FromFileDynamics>, FromFileDynamics> runcleo{sdm, coupldyn};
     runcleo(tsteps.get_t_end());
   }
 
