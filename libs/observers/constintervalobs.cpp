@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: observers.cpp
+ * File: constintervalobs.cpp
  * Project: observers
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Monday 16th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,4 +22,10 @@
  */
 
 
-#include "./observers.hpp"
+#include "./constintervalobs.hpp"
+
+void ConstIntervalObserver::observe_gbxs(const unsigned int t_mdl,
+                                    const viewh_constgbx h_gbxs) const
+{
+  std::cout << "obs @ t = " << t_mdl << "\n";
+}

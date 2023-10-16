@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 14th October 2023
+ * Last Modified: Monday 16th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,47 +25,6 @@
 #ifndef OBSERVERS_HPP
 #define OBSERVERS_HPP
 
-#include <iostream>
-
-#include <Kokkos_Core.hpp>
-
-#include "../kokkosaliases.hpp"
-#include "sdmdomain/gridbox.hpp"
-
-struct Observer
-{
-private:
-  unsigned int interval;
-
-public:
-  Observer(const unsigned int obsstep)
-      : interval(obsstep) {}
-
-  bool on_step(const unsigned int t_mdl) const
-  {
-    return t_mdl % interval == 0;
-  }
-
-  void observe(const unsigned int t_mdl,
-               const viewh_constgbx h_gbxs) const
-  {
-    std::cout << "obs @ t = " << t_mdl << "\n";
-  }
-
-  void observe_startstep(const unsigned int t_mdl,
-                         const viewh_constgbx h_gbxs) const
-  /* observe Gridboxes (on host) at start of timestep */
-  {
-    if (on_step(t_mdl))
-    {
-      observe(t_mdl, h_gbxs);
-    }
-  }
-
-  unsigned int get_obsstep() const
-  {
-    return interval;
-  }
-};
+#include <concepts>
 
 #endif // OBSERVERS_HPP
