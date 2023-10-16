@@ -79,7 +79,8 @@ int main(int argc, char *argv[])
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
-    run_cleo(tsteps.get_t_end(), sdm, coupldyn);
+    const RunCLEO runcleo{sdm, coupldyn};
+    runcleo(tsteps.get_t_end());
   }
 
   Kokkos::finalize();

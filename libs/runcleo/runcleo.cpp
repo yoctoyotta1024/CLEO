@@ -79,8 +79,7 @@ viewd_supers create_superdrops()
   return supers;
 }
 
-unsigned int next_stepsize(const unsigned int t_mdl,
-                           const SDMMethods &sdm)
+unsigned int RunCLEO::next_stepsize(const unsigned int t_mdl) const
 /* returns size of next step of model ('onestep')
 given current time t_mdl, so that next time
 (t_next = t_mdl + onestep) is time of obs or coupl */
