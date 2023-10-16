@@ -39,6 +39,16 @@ viewd_supers create_superdrops();
 unsigned int next_stepsize(const unsigned int t_mdl,
                            const CLEOSDM &sdm);
 
+inline int prepare_timestepping(const CLEOSDM &sdm,
+                                const CoupledDynamics &coupldyn);
+
+inline int timestep_cleo(const unsigned int t_end,
+                             const CLEOSDM &sdm,
+                             const CoupledDynamics &coupldyn,
+                             RunStats &stats,
+                             dualview_gbx gbxs,
+                             viewd_supers supers);
+
 inline unsigned int start_step(const unsigned int t_mdl,
                                const CLEOSDM &sdm,
                                const CoupledDynamics &coupldyn,
@@ -60,13 +70,6 @@ inline unsigned int proceed_to_next_step(unsigned int t_mdl,
                                          const CoupledDynamics &coupldyn,
                                          dualview_gbx gbxs);
 
-inline int timestep_cleo(const unsigned int t_end,
-                             const CLEOSDM &sdm,
-                             const CoupledDynamics &coupldyn,
-                             RunStats &stats,
-                             dualview_gbx gbxs,
-                             viewd_supers supers);
-
 int run_cleo(const unsigned int t_end,
              const CLEOSDM &sdm,
              const CoupledDynamics &coupldyn)
@@ -80,8 +83,7 @@ to record some runtime statistics */
   viewd_supers supers(create_superdrops());
 
   // prepare CLEO for timestepping
-  coupldyn.prepare_to_timestep();
-  sdm.prepare_to_timestep(coupldyn);
+  prepare_timestepping(sdm, coupldyn); 
   stats.pre_timestepping();
 
   // do timestepping of CLEO from t=0 to t=t_end
@@ -94,12 +96,21 @@ to record some runtime statistics */
   return 0;
 }
 
+inline int prepare_timestepping(const CLEOSDM &sdm,
+                                const CoupledDynamics &coupldyn)
+{
+  coupldyn.prepare_to_timestep();
+  sdm.prepare_to_timestep(coupldyn);
+
+  return 0;
+}
+
 inline int timestep_cleo(const unsigned int t_end,
-                             const CLEOSDM &sdm,
-                             const CoupledDynamics &coupldyn,
-                             RunStats &stats,
-                             dualview_gbx gbxs,
-                             viewd_supers supers)
+                         const CLEOSDM &sdm,
+                         const CoupledDynamics &coupldyn,
+                         RunStats &stats,
+                         dualview_gbx gbxs,
+                         viewd_supers supers)
 /* timestep CLEO from t=0 to t=t_end */
 {
   unsigned int t_mdl(0);
