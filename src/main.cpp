@@ -30,6 +30,7 @@
 #include "initialise/timesteps.hpp"
 #include "zarr/fsstore.hpp"
 #include "runcleo/runcleo.hpp"
+#include "runcleo/sdmmethods.hpp"
 
 CoupledDynamics
 create_coupldyn(const Config &config,
