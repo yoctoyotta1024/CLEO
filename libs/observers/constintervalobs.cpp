@@ -24,8 +24,9 @@
 
 #include "./constintervalobs.hpp"
 
-void ConstIntervalObserver::observe_gbxs(const unsigned int t_mdl,
-                                    const viewh_constgbx h_gbxs) const
+void ConstIntervalObs::
+    observe_gbxs(const unsigned int t_mdl,
+                 const viewh_constgbx h_gbxs) const
 {
   std::cout << "obs @ t = " << t_mdl << "\n";
 }

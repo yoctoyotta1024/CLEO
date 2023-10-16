@@ -20,6 +20,8 @@
  * timestep 'interval' between observations
  */
 
+#ifndef CONSTINTERVALOBS_HPP
+#define CONSTINTERVALOBS_HPP
 
 #include <iostream>
 
@@ -28,7 +30,7 @@
 #include "../kokkosaliases.hpp"
 #include "sdmdomain/gridbox.hpp"
 
-struct ConstIntervalObserver
+struct ConstIntervalObs
 {
 private:
   unsigned int interval;
@@ -37,7 +39,7 @@ private:
                const viewh_constgbx h_gbxs) const;
 
 public:
-  ConstIntervalObserver(const unsigned int obsstep)
+  ConstIntervalObs(const unsigned int obsstep)
       : interval(obsstep) {}
 
   unsigned int get_obsstep() const
@@ -47,7 +49,7 @@ public:
 
   bool on_step(const unsigned int t_mdl) const
   {
-    return t_mdl % interval == 0;
+    return (t_mdl % interval == 0);
   }
 
   void observe_startstep(const unsigned int t_mdl,
@@ -60,3 +62,5 @@ public:
     }
   }
 };
+
+#endif // CONSTINTERVALOBS_HPP
