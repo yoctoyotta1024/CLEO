@@ -41,8 +41,8 @@ create_coupldyn(const Config &config,
   return FromFileDynamics(config, coupldynstep); 
 }
 
-template <CoupledDyanmics CD>
-SDMMethods<CD>
+template <CoupledDyanmics CD, Observer Obs>
+SDMMethods<CD, Obs>
 create_sdm(const Config &config,
            const Timesteps &tsteps,
            const unsigned int couplstep)
@@ -83,7 +83,9 @@ int main(int argc, char *argv[])
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
-    const RunCLEO<SDMMethods<FromFileDynamics>, FromFileDynamics> runcleo{sdm, coupldyn};
+    const RunCLEO<SDMMethods<FromFileDynamics, auto>,
+                  FromFileDynamics>
+        runcleo{sdm, coupldyn};
     runcleo(tsteps.get_t_end());
   }
 
