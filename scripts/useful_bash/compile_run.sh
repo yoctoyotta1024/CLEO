@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=runCLEO
+#SBATCH --job-name=runCLEOfire
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -20,9 +20,9 @@
 ### ----  and paths for CLEO and build directories  ---- ###
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
-path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build/
-configfile=${HOME}/CLEO/src/config/config.txt
+path2CLEO=${HOME}/testCLEOfire/
+path2build=${HOME}/testCLEOfire/build/
+configfile=${HOME}/testCLEOfire/src/config/config.txt
 python=python
 
 # path2CLEO=${HOME}/Documents/b2_springsummer2023/CLEO/
