@@ -41,7 +41,7 @@ create_coupldyn(const Config &config,
   return FromFileDynamics(config, coupldynstep); 
 }
 
-template <typename CD>
+template <CoupledDyanmics CD>
 SDMMethods<CD>
 create_sdm(const Config &config,
            const Timesteps &tsteps,
