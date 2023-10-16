@@ -39,10 +39,10 @@ mkdir ${path2build}share
 cd ${path2build} && pwd 
 make -j 16
 
-### generate input files
-${python} ${path2CLEO}create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
-${python} ${path2CLEO}create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}
-${python} ${path2CLEO}create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
+# ### generate input files
+# ${python} ${path2CLEO}create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
+# ${python} ${path2CLEO}create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}
+# ${python} ${path2CLEO}create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
 
 ### run CLEO
 export OMP_PROC_BIND=spread

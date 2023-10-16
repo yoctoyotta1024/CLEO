@@ -43,6 +43,8 @@
 struct CLEOSDM
 {
 private:
+  unsigned int couplstep;        // coupled timestep
+
   unsigned int next_sdmstep(const unsigned int t_sdm,
                             const unsigned int stepsize) const;
   /* given current timestep, t_sdm, work out which event
@@ -66,20 +68,21 @@ public:
   MicrophysicsProcess microphys; // microphysical process
   MoveSupersInDomain movesupers; // super-droplets' motion in domain
   Observer obs;                  // observer
-  unsigned int couplstep;        // coupled timestep
-  
+
   CLEOSDM(const GridboxMaps gbxmaps,
           const MicrophysicsProcess microphys,
           const MoveSupersInDomain movesupers,
           const Observer obs,
           const unsigned int couplstep)
-      : gbxmaps(gbxmaps), microphys(microphys),
-        movesupers(movesupers), obs(obs),
-        couplstep(couplstep) {}
+      : couplstep(couplstep),
+        gbxmaps(gbxmaps),
+        microphys(microphys),
+        movesupers(movesupers),
+        obs(obs) {}
 
   unsigned int get_couplstep() const { return couplstep; }
  
-  void prepare_to_timestep(const CoupledDynamics &coupldyn) const;
+  void prepare_to_timestep() const {}
   /* prepare CLEO SDM for timestepping */
 
   void receive_dynamics(const CoupledDynamics &coupldyn,

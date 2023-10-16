@@ -21,17 +21,6 @@
 
 #include "./cleosdm.hpp"
 
-void CLEOSDM::prepare_to_timestep(const CoupledDynamics &coupldyn) const
-/* prepare CLEO SDM for timestepping */
-{
-  if (couplstep != coupldyn.get_couplstep())
-  {
-    const std::string err("coupling timestep of dyanmics "
-                          "solver and CLEO SDM are not equal");
-    throw std::invalid_argument(err);
-  }
-}
-
 void CLEOSDM::receive_dynamics(const CoupledDynamics &coupldyn,
                                viewh_gbx h_gbxs) const
 /* update Gridboxes' states (on host)

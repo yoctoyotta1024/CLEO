@@ -42,6 +42,9 @@ unsigned int next_stepsize(const unsigned int t_mdl,
 inline int prepare_timestepping(const CLEOSDM &sdm,
                                 const CoupledDynamics &coupldyn);
 
+inline void check_coupling(const CLEOSDM &sdm,
+                           const CoupledDynamics &coupldyn);
+
 inline int timestep_cleo(const unsigned int t_end,
                              const CLEOSDM &sdm,
                              const CoupledDynamics &coupldyn,
@@ -100,9 +103,22 @@ inline int prepare_timestepping(const CLEOSDM &sdm,
                                 const CoupledDynamics &coupldyn)
 {
   coupldyn.prepare_to_timestep();
-  sdm.prepare_to_timestep(coupldyn);
+  sdm.prepare_to_timestep();
+
+  check_coupling(sdm, coupldyn);
 
   return 0;
+}
+
+inline void check_coupling(const CLEOSDM &sdm,
+                           const CoupledDynamics &coupldyn)
+{
+  if (sdm.get_couplstep() != coupldyn.get_couplstep())
+  {
+    const std::string err("coupling timestep of dyanmics "
+                          "solver and CLEO SDM are not equal");
+    throw std::invalid_argument(err);
+  }
 }
 
 inline int timestep_cleo(const unsigned int t_end,
@@ -140,7 +156,7 @@ inline unsigned int start_step(const unsigned int t_mdl,
 to CLEO's Gridboxes. Followed by observation. Function then
 returns size of step to take given current timestep, t_mdl */
 {
-  if (t_mdl % sdm.couplstep == 0)
+  if (t_mdl % sdm.get_couplstep() == 0)
   {
     gbxs.sync_host();
     sdm.receive_dynamics(coupldyn, gbxs.view_host());
@@ -183,7 +199,7 @@ by 'stepsize'. Point where communication from
 CLEO SDM Gridbox States to coupled dynamics solver
 may occur */
 {
-  if (t_mdl % sdm.couplstep == 0)
+  if (t_mdl % sdm.get_couplstep() == 0)
   {
     gbxs.sync_host();
     sdm.send_dynamics(coupldyn, gbxs.view_host());
