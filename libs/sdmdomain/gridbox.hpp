@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 14th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,9 +22,8 @@
 #ifndef GRIDBOX_HPP 
 #define GRIDBOX_HPP 
 
-#include <span>
-
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 
 #include "./detectors.hpp"
 #include "superdrops/state.hpp"
@@ -32,7 +31,7 @@
 
 struct SuperdropsInGridbox
 /* Reference to a chunk of memory
-(e.g. through std::span of Kokkos::subview)
+(e.g. through std::span or Kokkos::subview)
 containing super-droplets in a Gridbox */
 {
 private:

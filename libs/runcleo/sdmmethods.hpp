@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 16th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,16 +23,12 @@
 #define SDMMETHODS_HPP
 
 #include <algorithm>
-#include <string>
-#include <stdexcept>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
-#include "initialise/config.hpp"
-#include "initialise/timesteps.hpp"
 #include "sdmdomain/gridbox.hpp"
 #include "sdmdomain/gridboxmaps.hpp"
 #include "sdmdomain/movesupersindomain.hpp"
