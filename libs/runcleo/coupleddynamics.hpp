@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 16th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,6 @@ concept CoupledDynamics = requires(CD cd, unsigned int t)
 (constraints) of preparation and timestepping functions
 and have constant unsigned int type (for interval) */
 {
-  //TODO : constraint on having const unsigned int interval;
   {
     cd.prepare_to_timestep()
   } -> std::same_as<void>;

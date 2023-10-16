@@ -38,7 +38,6 @@ concept Observer = requires(Obs obs, unsigned int t,
 /* concept Observer is all types that have an operator that
 has signature of observing functions (see Observer concept) */
 {
-  //TODO : constraint on having const unsigned int interval;
   {
     obs.get_obsstep()
   } -> std::convertible_to<unsigned int>;
