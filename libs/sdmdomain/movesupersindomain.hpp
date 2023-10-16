@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 14th October 2023
+ * Last Modified: Monday 16th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,7 +37,7 @@
 struct SuperdropMotion
 {
 private:
-  const unsigned int interval;
+  unsigned int interval;
 
 public:
   SuperdropMotion(const unsigned int motionstep)

@@ -36,6 +36,8 @@
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 #include "sdmdomain/gridboxmaps.hpp"
+#include "superdrops/condensation.hpp"
+#include "superdrops/microphysicalprocess.hpp"
 #include "zarr/fsstore.hpp"
 
 CoupledDynamics auto
@@ -43,6 +45,12 @@ create_coupldyn(const Config &config,
                 const unsigned int coupldynstep)
 {
   return FromFileDynamics(config, coupldynstep); 
+}
+
+MicrophysicalProcess auto
+create_microphysics(const Timesteps &tsteps)
+{
+  return Condensation(tsteps.get_condstep());
 }
 
 Observer auto
@@ -56,7 +64,7 @@ auto create_sdm(const Config &config,
                 const CoupledDynamics auto &coupldyn)
 {
   const GridboxMaps gbxmaps(config);
-  const MicrophysicsProcess microphys;
+  const MicrophysicalProcess auto microphys(create_microphysics(tsteps));
   const MoveSupersInDomain movesupers(tsteps.get_motionstep());
   const Observer auto obs(create_observer(tsteps.get_obsstep()));
 
@@ -91,14 +99,14 @@ int main(int argc, char *argv[])
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
-    const RunCLEO runcleo(sdm, coupldyn);
+    const RunCLEO runcleo(coupldyn, sdm);
     runcleo(tsteps.get_t_end());
   }
   Kokkos::finalize();
   
-  // const double ttot(kokkostimer.seconds());
-  // std::cout << "-----\n Total Program Duration: "
-  //           << ttot << "s \n-----\n";
+  const double ttot(kokkostimer.seconds());
+  std::cout << "-----\n Total Program Duration: "
+            << ttot << "s \n-----\n";
 
   return 0;
 }

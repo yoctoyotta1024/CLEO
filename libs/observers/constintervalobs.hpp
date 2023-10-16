@@ -49,7 +49,7 @@ public:
 
   bool on_step(const unsigned int t_mdl) const
   {
-    return (t_mdl % interval == 0);
+    return t_mdl % interval == 0;
   }
 
   void observe_startstep(const unsigned int t_mdl,
