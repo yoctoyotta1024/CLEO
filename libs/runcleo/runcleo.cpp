@@ -78,24 +78,3 @@ viewd_supers create_superdrops()
 
   return supers;
 }
-
-unsigned int RunCLEO::next_stepsize(const unsigned int t_mdl) const
-/* returns size of next step of model ('onestep')
-given current time t_mdl, so that next time
-(t_next = t_mdl + onestep) is time of obs or coupl */
-{
-  const unsigned int couplstep(sdm.get_couplstep());
-  const unsigned int obsstep(sdm.obs.get_obsstep());
-
-  const auto next_step = [t_mdl](const unsigned int interval)
-  {
-    return ((t_mdl / interval) + 1) * interval;
-  };
-
-  /* t_next is smaller out of time of next coupl and obs */
-  const unsigned int next_coupl(next_step(couplstep));
-  const unsigned int next_obs(next_step(obsstep));
-
-  return std::min(next_coupl, next_obs) - t_mdl;
-}
-
