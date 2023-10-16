@@ -32,16 +32,21 @@ struct FromFileDynamics
 private:
   const unsigned int interval;
 
+  void run_dynamics(const unsigned int t_mdl,
+                    const unsigned int stepsize) const;
+  
 public:
   FromFileDynamics(const Config &config,
                    const unsigned int couplstep)
       : interval(couplstep) {}
 
+  unsigned int get_couplstep() const
+  {
+    return interval;
+  }
+
   void prepare_to_timestep() const;
 
-  void run_dynamics(const unsigned int t_mdl,
-                    const unsigned int stepsize) const;
-  
   bool on_step(const unsigned int t_mdl) const
   {
     return t_mdl % interval == 0;
@@ -56,10 +61,6 @@ public:
     }
   }
 
-  unsigned int get_couplstep() const
-  {
-    return interval;
-  }
 };
 
 #endif // FROMFILEDYNAMICS_HPP

@@ -22,6 +22,27 @@
 #ifndef COUPLEDDYNAMICS_HPP 
 #define COUPLEDDYNAMICS_HPP 
 
-// concept of a coupleddynamics
+#include <concepts>
+
+template <typename CD>
+concept CoupledDynamics = requires(CD cd, unsigned int t)
+/* concept Coupled Dynamics is all types that meet requirements
+(constraints) of preparation and timestepping functions
+and have constant unsigned int type (for interval) */
+{
+  //TODO : constraint on having const unsigned int interval;
+  {
+    cd.prepare_to_timestep()
+  } -> std::same_as<void>;
+  {
+    cd.get_couplstep()
+  } -> std::convertible_to<unsigned int>;
+  {
+    cd.on_step(t)
+  } -> std::same_as<bool>;
+  {
+    cd.run_step(t, t)
+  } -> std::same_as<void>;
+};
 
 #endif // COUPLEDDYNAMICS_HPP  
