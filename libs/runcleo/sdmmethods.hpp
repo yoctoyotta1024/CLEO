@@ -36,12 +36,13 @@
 #include "sdmdomain/gridbox.hpp"
 #include "sdmdomain/gridboxmaps.hpp"
 #include "sdmdomain/movesupersindomain.hpp"
-#include "superdrops/superdrop.hpp"
+#include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/superdrop.hpp"
 #include "observers/observers.hpp"
 
 template <CoupledDynamics CD, MicrophysicalProcess Microphys,
-          Observer Obs>
+          Motion M, Observer Obs>
 struct SDMMethods
 {
 private:
@@ -66,15 +67,15 @@ private:
   (using sub-timestepping routine) */
 
 public:
-  GridboxMaps gbxmaps;           // maps from gridbox indexes to domain coordinates
-  Microphys microphys; // microphysical process
-  MoveSupersInDomain movesupers; // super-droplets' motion in domain
-  Obs obs;                       // observer
+  GridboxMaps gbxmaps;              // maps from gridbox indexes to domain coordinates
+  Microphys microphys;              // microphysical process
+  MoveSupersInDomain<M> movesupers; // super-droplets' motion in domain
+  Obs obs;                          // observer
 
   SDMMethods(const CD &coupldyn,
              const GridboxMaps gbxmaps,
              const Microphys microphys,
-             const MoveSupersInDomain movesupers,
+             const MoveSupersInDomain<M> movesupers,
              const Obs obs)
       : couplstep(coupldyn.get_couplstep()),
         gbxmaps(gbxmaps),
@@ -106,8 +107,8 @@ public:
 };
 
 template <CoupledDynamics CD, MicrophysicalProcess Microphys,
-          Observer Obs>
-void SDMMethods<CD, Microphys, Obs>::run_step(const unsigned int t_mdl,
+          Motion M, Observer Obs>
+void SDMMethods<CD, Microphys, M, Obs>::run_step(const unsigned int t_mdl,
                        const unsigned int stepsize,
                        viewd_gbx d_gbxs,
                        viewd_supers supers) const
@@ -128,8 +129,8 @@ for super-droplets' movement and microphysics */
 }
 
 template <CoupledDynamics CD, MicrophysicalProcess Microphys,
-          Observer Obs>
-unsigned int SDMMethods<CD, Microphys, Obs>::
+          Motion M, Observer Obs>
+unsigned int SDMMethods<CD, Microphys, M, Obs>::
     next_sdmstep(const unsigned int t_sdm,
                  const unsigned int stepsize) const
 /* given current timestep, t_sdm, work out which event
@@ -143,8 +144,8 @@ the time of the sooner event, (ie. next t_move or t_mdl) */
 }
 
 template <CoupledDynamics CD, MicrophysicalProcess Microphys,
-          Observer Obs>
-void SDMMethods<CD, Microphys, Obs>::superdrops_movement(const unsigned int t_sdm,
+          Motion M, Observer Obs>
+void SDMMethods<CD, Microphys, M, Obs>::superdrops_movement(const unsigned int t_sdm,
                                   viewd_gbx d_gbxs,
                                   viewd_supers supers) const
 /* move superdroplets (including movement between gridboxes)
@@ -154,8 +155,8 @@ according to movesupers struct */
 }
 
 template <CoupledDynamics CD, MicrophysicalProcess Microphys,
-          Observer Obs>
-void SDMMethods<CD, Microphys, Obs>::sdm_microphysics(const unsigned int t_sdm,
+          Motion M, Observer Obs>
+void SDMMethods<CD, Microphys, M, Obs>::sdm_microphysics(const unsigned int t_sdm,
                                const unsigned int t_next,
                                viewd_gbx d_gbxs) const
 /* enact SDM microphysics for each gridbox

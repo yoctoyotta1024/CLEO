@@ -38,6 +38,7 @@
 #include "sdmdomain/gridboxmaps.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/predcorrmotion.hpp"
 #include "zarr/fsstore.hpp"
 
 CoupledDynamics auto
@@ -53,6 +54,12 @@ create_microphysics(const Timesteps &tsteps)
   return Condensation(tsteps.get_condstep());
 }
 
+Motion auto
+create_motion(const unsigned int motionstep)
+{
+  return PredCorrMotion(motionstep); 
+}
+
 Observer auto
 create_observer(const unsigned int obsstep)
 {
@@ -65,7 +72,7 @@ auto create_sdm(const Config &config,
 {
   const GridboxMaps gbxmaps(config);
   const MicrophysicalProcess auto microphys(create_microphysics(tsteps));
-  const MoveSupersInDomain movesupers(tsteps.get_motionstep());
+  const MoveSupersInDomain movesupers(create_motion(tsteps.get_motionstep()));
   const Observer auto obs(create_observer(tsteps.get_obsstep()));
 
   return SDMMethods(coupldyn, gbxmaps,

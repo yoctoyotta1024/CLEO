@@ -30,6 +30,7 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 # add executables to library
 set(SOURCES
   "condensation.cpp"
+  "predcorrmotion.cpp"
   "state.cpp"
   "superdrop.cpp"
 )

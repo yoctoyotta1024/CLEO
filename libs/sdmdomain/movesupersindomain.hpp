@@ -24,7 +24,7 @@
 #ifndef MOVESUPERSINDOMAIN_HPP  
 #define MOVESUPERSINDOMAIN_HPP  
 
-#include <iostream>
+#include <concepts>
 
 #include <Kokkos_Core.hpp>
 
@@ -32,48 +32,31 @@
 #include "../kokkosaliases.hpp"
 #include "./gridbox.hpp"
 #include "./gridboxmaps.hpp"
+#include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-struct SuperdropMotion
-{
-private:
-  unsigned int interval;
-
-public:
-  SuperdropMotion(const unsigned int motionstep)
-      : interval(motionstep) {}
-
-  bool on_step(const unsigned int t_sdm) const
-  {
-    return t_sdm % interval == 0;
-  }
-
-  unsigned int next_step(const unsigned int t_sdm) const
-  {
-    return t_sdm + interval;
-  }
-};
-
+template <Motion M>
 struct MoveSupersInDomain
 {
 private:
-  SuperdropMotion sdmotion;
+  M motion;
 
-  void move_supers_in_domain(const unsigned int t_sdm,
-                             const GridboxMaps &gbxmaps,
-                             viewd_gbx d_gbxs,
-                             viewd_supers supers) const
+  void move_superdrops_in_domain(const unsigned int t_sdm,
+                                 const GridboxMaps &gbxmaps,
+                                 viewd_gbx d_gbxs,
+                                 viewd_supers supers) const
   {
-    std::cout << "move @ t = " << t_sdm << "\n";
+    // update sd index etc. fro all SDs in gbxs
+    motion.update_superdrop_coords(t_sdm);
   }
 
 public:
-  MoveSupersInDomain(const unsigned int motionstep)
-      : sdmotion(motionstep) {}
+  MoveSupersInDomain(const M motion)
+      : motion(motion) {}
 
   unsigned int next_step(const unsigned int t_sdm) const
   {
-    return sdmotion.next_step(t_sdm);
+    return motion.next_step(t_sdm);
   }
 
   void run_step(const unsigned int t_sdm,
@@ -81,9 +64,9 @@ public:
                 viewd_gbx d_gbxs, 
                 viewd_supers supers) const
   {
-    if (sdmotion.on_step(t_sdm))
+    if (motion.on_step(t_sdm))
     {
-      move_supers_in_domain(t_sdm, gbxmaps, d_gbxs, supers);
+      move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, supers);
     }
   };
 };

@@ -36,13 +36,13 @@ dualview_gbx create_gridboxes();
 
 viewd_supers create_superdrops();
 
-template <CoupledDynamics CD, MicrophysicalProcess MP,
-          Observer Obs>
+template <CoupledDynamics CD, MicrophysicalProcess Microphys,
+          Motion M, Observer Obs>
 class RunCLEO
 {
 private:
   const CD &coupldyn;
-  const SDMMethods<CD, MP, Obs> &sdm;
+  const SDMMethods<CD, Microphys, M, Obs> &sdm;
 
   int prepare_timestepping() const
   {
@@ -164,7 +164,7 @@ private:
 
 public:
   RunCLEO(const CD &coupldyn,
-          const SDMMethods<CD, MP, Obs> &sdm)
+          const SDMMethods<CD, Microphys, M, Obs> &sdm)
       : coupldyn(coupldyn), sdm(sdm)
   {
     check_coupling(); 
