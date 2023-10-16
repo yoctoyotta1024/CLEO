@@ -27,4 +27,26 @@
 
 #include <concepts>
 
+#include <Kokkos_Core.hpp>
+
+#include "../kokkosaliases.hpp"
+
+template <typename Obs>
+concept Observer = requires(Obs obs, unsigned int t,
+                            viewh_constgbx h_gbxs)
+/* concept Observer is all types that have an operator that
+has signature of observing functions (see Observer concept) */
+{
+  //TODO : constraint on having const unsigned int interval;
+  {
+    obs.get_obsstep()
+  } -> std::convertible_to<unsigned int>;
+  {
+    obs.on_step(t)
+  } -> std::same_as<bool>;
+  {
+    obs.observe_startstep(t, h_gbxs)
+  } -> std::same_as<void>;
+};
+
 #endif // OBSERVERS_HPP
