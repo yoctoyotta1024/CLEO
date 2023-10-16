@@ -31,7 +31,6 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 set(SOURCES
 "runcleo.cpp"
 "runtimestats.cpp"
-"sdmmethods.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
