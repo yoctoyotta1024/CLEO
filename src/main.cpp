@@ -23,16 +23,20 @@
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
+#include <concepts>
 
 #include <Kokkos_Core.hpp>
 
 #include "coupldyn_fromfile/fromfiledynamics.hpp"
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
-#include "zarr/fsstore.hpp"
+#include "observers/constintervalobs.hpp"
+#include "observers/observers.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
+#include "sdmdomain/gridboxmaps.hpp"
+#include "zarr/fsstore.hpp"
 
 CoupledDynamics auto
 create_coupldyn(const Config &config,
@@ -41,19 +45,23 @@ create_coupldyn(const Config &config,
   return FromFileDynamics(config, coupldynstep); 
 }
 
-template <CoupledDyanmics CD, Observer Obs>
-SDMMethods<CD, Obs>
-create_sdm(const Config &config,
-           const Timesteps &tsteps,
-           const unsigned int couplstep)
+Observer auto
+create_observer(const unsigned int obsstep)
 {
-  GridboxMaps gbxmaps(config);
-  MicrophysicsProcess microphys;
-  MoveSupersInDomain movesupers(tsteps.get_motionstep());
-  Observer obs(tsteps.get_obsstep());
+  return ConstIntervalObs(obsstep); 
+}
 
-  return SDMMethods<CD>(gbxmaps, microphys,
-                 movesupers, obs, couplstep);
+auto create_sdm(const Config &config,
+                const Timesteps &tsteps,
+                const CoupledDynamics auto &coupldyn)
+{
+  const GridboxMaps gbxmaps(config);
+  const MicrophysicsProcess microphys;
+  const MoveSupersInDomain movesupers(tsteps.get_motionstep());
+  const Observer auto obs(create_observer(tsteps.get_obsstep()));
+
+  return SDMMethods(coupldyn, gbxmaps,
+                    microphys, movesupers, obs);
 }
 
 int main(int argc, char *argv[])
@@ -74,25 +82,25 @@ int main(int argc, char *argv[])
   FSStore fsstore(config.zarrbasedir);
     
   /* Solver of dynamics coupled to CLEO SDM */
-  const auto coupldyn(create_coupldyn(config, tsteps.get_couplstep()));
+  const CoupledDynamics auto coupldyn(
+      create_coupldyn(config, tsteps.get_couplstep()));
 
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const auto sdm(create_sdm<FromFileDynamics>(
-      config, tsteps, coupldyn.get_couplstep()));
+  const SDMMethods sdm(create_sdm(config, tsteps, coupldyn));
 
-  /* Run CLEO (SDM coupled to dynamics solver) */
-  Kokkos::initialize(argc, argv);
-  {
-    const RunCLEO<SDMMethods<FromFileDynamics, auto>,
-                  FromFileDynamics>
-        runcleo{sdm, coupldyn};
-    runcleo(tsteps.get_t_end());
-  }
-
-  Kokkos::finalize();
-  const double ttot(kokkostimer.seconds());
-  std::cout << "-----\n Total Program Duration: "
-            << ttot << "s \n-----\n";
+  // /* Run CLEO (SDM coupled to dynamics solver) */
+  // Kokkos::initialize(argc, argv);
+  // {
+  //   const RunCLEO<SDMMethods<FromFileDynamics, auto>,
+  //                 FromFileDynamics>
+  //       runcleo{sdm, coupldyn};
+  //   runcleo(tsteps.get_t_end());
+  // }
+  // Kokkos::finalize();
+  
+  // const double ttot(kokkostimer.seconds());
+  // std::cout << "-----\n Total Program Duration: "
+  //           << ttot << "s \n-----\n";
 
   return 0;
 }

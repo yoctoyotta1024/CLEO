@@ -70,12 +70,12 @@ public:
   MoveSupersInDomain movesupers; // super-droplets' motion in domain
   Obs obs;                       // observer
 
-  SDMMethods(const GridboxMaps gbxmaps,
-          const MicrophysicsProcess microphys,
-          const MoveSupersInDomain movesupers,
-          const Obs obs,
-          const unsigned int couplstep)
-      : couplstep(couplstep),
+  SDMMethods(const CD &coupldyn,
+             const GridboxMaps gbxmaps,
+             const MicrophysicsProcess microphys,
+             const MoveSupersInDomain movesupers,
+             const Obs obs)
+      : couplstep(coupldyn.get_couplstep()),
         gbxmaps(gbxmaps),
         microphys(microphys),
         movesupers(movesupers),
