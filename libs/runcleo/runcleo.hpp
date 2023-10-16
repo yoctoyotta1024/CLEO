@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 14th October 2023
+ * Last Modified: Monday 16th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,7 +36,7 @@ dualview_gbx create_gridboxes();
 
 viewd_supers create_superdrops();
 
-template <class SDMM, class CD>
+template <class SDMM, CoupledDynamics CD>
 struct RunCLEO
 {
   const SDMM &sdm;

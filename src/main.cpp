@@ -30,10 +30,11 @@
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
 #include "zarr/fsstore.hpp"
+#include "runcleo/coupleddynamics.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
-FromFileDynamics
+CoupledDynamics auto
 create_coupldyn(const Config &config,
                 const unsigned int coupldynstep)
 {
