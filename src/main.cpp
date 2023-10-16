@@ -38,7 +38,7 @@ create_coupldyn(const Config &config,
   return CoupledDynamics(config, coupldynstep); 
 }
 
-CLEOSDM
+SDMMethods
 create_sdm(const Config &config,
            const Timesteps &tsteps,
            const unsigned int couplstep)
@@ -48,7 +48,7 @@ create_sdm(const Config &config,
   MoveSupersInDomain movesupers(tsteps.get_motionstep());
   Observer obs(tsteps.get_obsstep());
 
-  return CLEOSDM(gbxmaps, microphys,
+  return SDMMethods(gbxmaps, microphys,
                  movesupers, obs, couplstep);
 }
 

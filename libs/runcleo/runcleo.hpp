@@ -28,7 +28,7 @@
 #include <Kokkos_DualView.hpp>
 
 #include "../kokkosaliases.hpp"
-#include "./cleosdm.hpp"
+#include "./sdmmethods.hpp"
 #include "./coupleddynamics.hpp"
 #include "./runtimestats.hpp"
 
@@ -37,29 +37,29 @@ dualview_gbx create_gridboxes();
 viewd_supers create_superdrops();
 
 unsigned int next_stepsize(const unsigned int t_mdl,
-                           const CLEOSDM &sdm);
+                           const SDMMethods &sdm);
 
-inline int prepare_timestepping(const CLEOSDM &sdm,
+inline int prepare_timestepping(const SDMMethods &sdm,
                                 const CoupledDynamics &coupldyn);
 
-inline void check_coupling(const CLEOSDM &sdm,
+inline void check_coupling(const SDMMethods &sdm,
                            const CoupledDynamics &coupldyn);
 
 inline int timestep_cleo(const unsigned int t_end,
-                             const CLEOSDM &sdm,
+                             const SDMMethods &sdm,
                              const CoupledDynamics &coupldyn,
                              RunStats &stats,
                              dualview_gbx gbxs,
                              viewd_supers supers);
 
 inline unsigned int start_step(const unsigned int t_mdl,
-                               const CLEOSDM &sdm,
+                               const SDMMethods &sdm,
                                const CoupledDynamics &coupldyn,
                                dualview_gbx gbxs);
 
 inline void sdm_step(const unsigned int t_mdl,
                      const unsigned int stepsize,
-                     const CLEOSDM &sdm,
+                     const SDMMethods &sdm,
                      dualview_gbx gbxs, 
                      viewd_supers supers);
 
@@ -69,12 +69,12 @@ inline void coupldyn_step(const unsigned int t_mdl,
 
 inline unsigned int proceed_to_next_step(unsigned int t_mdl,
                                          unsigned int stepsize,
-                                         const CLEOSDM &sdm,
+                                         const SDMMethods &sdm,
                                          const CoupledDynamics &coupldyn,
                                          dualview_gbx gbxs);
 
 int run_cleo(const unsigned int t_end,
-             const CLEOSDM &sdm,
+             const SDMMethods &sdm,
              const CoupledDynamics &coupldyn)
 /* create gridboxes and superdrops, then
 timestep CLEO until t_end and with option
@@ -99,7 +99,7 @@ to record some runtime statistics */
   return 0;
 }
 
-inline int prepare_timestepping(const CLEOSDM &sdm,
+inline int prepare_timestepping(const SDMMethods &sdm,
                                 const CoupledDynamics &coupldyn)
 {
   coupldyn.prepare_to_timestep();
@@ -110,7 +110,7 @@ inline int prepare_timestepping(const CLEOSDM &sdm,
   return 0;
 }
 
-inline void check_coupling(const CLEOSDM &sdm,
+inline void check_coupling(const SDMMethods &sdm,
                            const CoupledDynamics &coupldyn)
 {
   if (sdm.get_couplstep() != coupldyn.get_couplstep())
@@ -122,7 +122,7 @@ inline void check_coupling(const CLEOSDM &sdm,
 }
 
 inline int timestep_cleo(const unsigned int t_end,
-                         const CLEOSDM &sdm,
+                         const SDMMethods &sdm,
                          const CoupledDynamics &coupldyn,
                          RunStats &stats,
                          dualview_gbx gbxs,
@@ -149,7 +149,7 @@ inline int timestep_cleo(const unsigned int t_end,
 }
 
 inline unsigned int start_step(const unsigned int t_mdl,
-                               const CLEOSDM &sdm,
+                               const SDMMethods &sdm,
                                const CoupledDynamics &coupldyn,
                                dualview_gbx gbxs)
 /* communication of thermodynamic state from dynamics solver
@@ -171,7 +171,7 @@ returns size of step to take given current timestep, t_mdl */
 
 inline void sdm_step(const unsigned int t_mdl,
                      const unsigned int stepsize,
-                     const CLEOSDM &sdm,
+                     const SDMMethods &sdm,
                      dualview_gbx gbxs, 
                      viewd_supers supers)
 /* run CLEO SDM (on device) */
@@ -191,7 +191,7 @@ inline void coupldyn_step(const unsigned int t_mdl,
 
 inline unsigned int proceed_to_next_step(const unsigned int t_mdl,
                                          const unsigned int stepsize,
-                                         const CLEOSDM &sdm,
+                                         const SDMMethods &sdm,
                                          const CoupledDynamics &coupldyn,
                                          dualview_gbx gbxs)
 /* returns incremented timestep 't_mdl' of model

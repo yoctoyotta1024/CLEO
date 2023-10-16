@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: cleosdm.cpp
+ * File: sdmmethods.cpp
  * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -19,23 +19,23 @@
  * (SDM) part of CLEO to enact on super-droplets and gridboxes
  */
 
-#include "./cleosdm.hpp"
+#include "./sdmmethods.hpp"
 
-void CLEOSDM::receive_dynamics(const CoupledDynamics &coupldyn,
+void SDMMethods::receive_dynamics(const CoupledDynamics &coupldyn,
                                viewh_gbx h_gbxs) const
 /* update Gridboxes' states (on host)
 using information received from coupldyn */
 {
 }
 
-void CLEOSDM::send_dynamics(const CoupledDynamics &coupldyn,
+void SDMMethods::send_dynamics(const CoupledDynamics &coupldyn,
                             viewh_constgbx h_gbxs) const
 /* send information from Gridboxes' states
 (on host) to coupldyn */
 {
 }
 
-void CLEOSDM::run_step(const unsigned int t_mdl,
+void SDMMethods::run_step(const unsigned int t_mdl,
                        const unsigned int stepsize,
                        viewd_gbx d_gbxs,
                        viewd_supers supers) const
@@ -55,7 +55,7 @@ for super-droplets' movement and microphysics */
   }
 }
 
-unsigned int CLEOSDM::next_sdmstep(const unsigned int t_sdm,
+unsigned int SDMMethods::next_sdmstep(const unsigned int t_sdm,
                                    const unsigned int stepsize) const
 /* given current timestep, t_sdm, work out which event
 (motion or one complete step) is next to occur and return
@@ -67,7 +67,7 @@ the time of the sooner event, (ie. next t_move or t_mdl) */
   return std::min(next_t_mdl, next_t_move);
 }
 
-void CLEOSDM::superdrops_movement(const unsigned int t_sdm,
+void SDMMethods::superdrops_movement(const unsigned int t_sdm,
                                   viewd_gbx d_gbxs,
                                   viewd_supers supers) const
 /* move superdroplets (including movement between gridboxes)
@@ -76,7 +76,7 @@ according to movesupers struct */
   movesupers.run_step(t_sdm, gbxmaps, d_gbxs, supers);
 }
 
-void CLEOSDM::sdm_microphysics(const unsigned int t_sdm,
+void SDMMethods::sdm_microphysics(const unsigned int t_sdm,
                                const unsigned int t_next,
                                viewd_gbx d_gbxs) const
 /* enact SDM microphysics for each gridbox

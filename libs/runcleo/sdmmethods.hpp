@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: cleosdm.hpp
+ * File: sdmmethods.hpp
  * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -19,8 +19,8 @@
  * (SDM) part of CLEO to enact on super-droplets and gridboxes
  */
 
-#ifndef CLEOSDM_HPP
-#define CLEOSDM_HPP
+#ifndef SDMMETHODS_HPP
+#define SDMMETHODS_HPP
 
 #include <algorithm>
 #include <string>
@@ -40,7 +40,7 @@
 #include "superdrops/microphysicsprocess.hpp"
 #include "observers/observers.hpp"
 
-struct CLEOSDM
+struct SDMMethods
 {
 private:
   unsigned int couplstep;        // coupled timestep
@@ -69,7 +69,7 @@ public:
   MoveSupersInDomain movesupers; // super-droplets' motion in domain
   Observer obs;                  // observer
 
-  CLEOSDM(const GridboxMaps gbxmaps,
+  SDMMethods(const GridboxMaps gbxmaps,
           const MicrophysicsProcess microphys,
           const MoveSupersInDomain movesupers,
           const Observer obs,
@@ -103,4 +103,4 @@ public:
   for super-droplets' movement and microphysics */
 };
 
-#endif // CLEOSDM_HPP
+#endif // SDMMETHODS_HPP
