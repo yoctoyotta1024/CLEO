@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,6 +31,7 @@
 #include "coupldyn_fromfile/fromfiledynamics.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
+#include "initialise/initconds.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers/constintervalobs.hpp"
 #include "observers/observers.hpp"

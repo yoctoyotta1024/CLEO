@@ -32,7 +32,6 @@
 #include "./createsupers.hpp"
 #include "./runtimestats.hpp"
 #include "./sdmmethods.hpp"
-#include "initialise/initconds.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
 
@@ -173,7 +172,8 @@ public:
     check_coupling(); 
   }
 
-  int operator()(const InitConds &init,
+  template <typename Init>
+  int operator()(const Init &init,
                  const unsigned int t_end) const
   /* create gridboxes and superdrops, then
   timestep CLEO until t_end and with option
