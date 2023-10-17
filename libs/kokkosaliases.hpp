@@ -36,5 +36,6 @@ using viewd_gbx = Kokkos::View<Gridbox *>;        // view in device memory of gr
 using viewd_constgbx = Kokkos::View<const Gridbox *>;        // view in device memory of gridboxes
 
 using viewd_supers = Kokkos::View<Superdrop *>;   // view in device memory of superdroplets
+using viewd_constsupers = Kokkos::View<const Superdrop *>;   // view in device memory of superdroplets
 
 #endif // KOKKOSALIASES_HPP

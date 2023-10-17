@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 14th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,31 +50,4 @@ is two distinct views on host and device memory) */
   }
 
   return gbxs;
-}
-
-viewd_supers create_superdrops()
-/* create view of superdrops */
-{
-  const int nSDsvec(25);
-  viewd_supers supers("SDs", nSDsvec);
-  
-  const auto solute(std::make_shared<const SoluteProperties>());
-  auto sdIdGen = Superdrop::IDType::Gen{};
-  for (int jj(0); jj < nSDsvec; ++jj)
-  {
-    const unsigned int sd_gbxindex = jj;
-    const auto sd_id = sdIdGen.next();
-    const SuperdropAttrs attrs{0.0, 0.0, 0, solute};
-    const std::vector<double> crds{0.0, 0.0, 0.0};
-
-    supers(jj) = Superdrop(sd_gbxindex, crds.at(0), crds.at(1),
-                           crds.at(2), attrs, sd_id);
-  }
-  
-  for (int jj(0); jj < nSDsvec; ++jj)
-  { 
-    std::cout << "sdid: " << supers(jj).id.value << "\n"; 
-  }
-
-  return supers;
 }

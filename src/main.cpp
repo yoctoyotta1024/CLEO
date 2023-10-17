@@ -110,11 +110,14 @@ int main(int argc, char *argv[])
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn));
 
+  /* Method to create Super-droplets using initial conditions */
+  const InitConds initconds;
+
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
     const RunCLEO runcleo(coupldyn, sdm);
-    runcleo(tsteps.get_t_end());
+    runcleo(initconds, tsteps.get_t_end());
   }
   Kokkos::finalize();
   
