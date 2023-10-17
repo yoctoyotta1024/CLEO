@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: gridboxmaps.cpp
- * Project: sdmdomain
+ * File: gridboxmaps.hpp
+ * Project: cartesiandomain
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,5 +19,14 @@
  * between a gridbox indexes and domain coordinates
  */
 
+#ifndef GRIDBOXMAPS_HPP 
+#define GRIDBOXMAPS_HPP 
 
-#include "./gridboxmaps.hpp"
+#include "initialise/config.hpp"
+
+struct GridboxMaps 
+{
+  GridboxMaps(const Config &config){}
+};
+
+#endif // GRIDBOXMAPS_HPP

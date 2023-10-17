@@ -29,9 +29,9 @@
 
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
-#include "sdmdomain/gridbox.hpp"
-#include "sdmdomain/gridboxmaps.hpp"
-#include "sdmdomain/movesupersindomain.hpp"
+#include "cartesiandomain/gridboxmaps.hpp"
+#include "gridboxes/gridbox.hpp"
+#include "gridboxes/movesupersindomain.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/superdrop.hpp"

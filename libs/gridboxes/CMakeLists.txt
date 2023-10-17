@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.18.0)
 #cmake_minimum_required(VERSION 3.21.1) # if using Kokkos with NVC++ compiler 
 
 # setlibrary name
-set(LIBNAME "sdmdomain")
+set(LIBNAME "gridboxes")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
@@ -31,7 +31,6 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 set(SOURCES
 "detectors.cpp"
 "gridbox.cpp"
-"gridboxmaps.cpp"
 "movesupersindomain.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})

@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: movesupersindomain.cpp
- * Project: sdmdomain
+ * File: gridbox.cpp
+ * Project: gridboxes
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -15,10 +15,8 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Functionality related to moving superdroplets
- * (both updating their spatial coordinates and
- * moving them between gridboxes)
+ * Functions and structures related to the CLEO gridboxes
  */
 
 
-#include "./movesupersindomain.hpp"
+#include "./gridbox.hpp"

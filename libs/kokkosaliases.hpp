@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 16th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,7 +24,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
-#include "sdmdomain/gridbox.hpp"
+#include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
 
 using dualview_gbx = Kokkos::DualView<Gridbox *>; // dual view of gridboxes

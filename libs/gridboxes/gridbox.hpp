@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
  * File: gridbox.hpp
- * Project: sdmdomain
+ * Project: gridboxes
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:

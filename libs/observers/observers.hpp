@@ -30,7 +30,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
-#include "sdmdomain/gridbox.hpp"
+#include "gridboxes/gridbox.hpp"
 
 template <typename Obs>
 concept Observer = requires(Obs obs, unsigned int t,

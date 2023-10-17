@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
  * File: detectors.cpp
- * Project: sdmdomain
+ * Project: gridboxes
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License

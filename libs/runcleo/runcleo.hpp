@@ -31,7 +31,7 @@
 #include "./sdmmethods.hpp"
 #include "./coupleddynamics.hpp"
 #include "./runtimestats.hpp"
-#include "sdmdomain/gridbox.hpp"
+#include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
 
 dualview_gbx create_gridboxes();
