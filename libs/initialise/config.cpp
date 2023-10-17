@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -191,9 +191,9 @@ void Config::configvariable(const std::string name, const std::string value)
   }
 
   /* SDs parameters */
-  else if (name == "nSDsvec")
+  else if (name == "totnsupers")
   {
-    nSDsvec = stoi(value);
+    totnsupers = stoi(value);
     issuccess = true;
   }
   else if (name == "SDnspace")
