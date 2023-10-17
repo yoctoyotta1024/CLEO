@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Tuesday 17th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,7 +50,7 @@ OBSTSTEP = 20                             # time between SDM observations [s]
 T_END = 20                                # time span of integration [s]
 
 # SDs parameters #
-nSDsvec = 1024                          # initial no. elements in SDs' vector (=total initial no. of SDs)
+totnsupers = 10                         # initial no. elements in SDs' vector (=total initial no. of SDs)
 SDnspace = 0                            # no. of spatial coordinates of SDs (=dimension of model)
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state

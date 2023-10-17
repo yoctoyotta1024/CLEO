@@ -1,3 +1,23 @@
+'''
+----- CLEO -----
+File: cxx2py.py
+Project: pySD
+Created Date: Friday 13th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Tuesday 17th October 2023
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+Copyright (c) 2023 MPI-M, Clara Bayley
+-----
+File Description:
+'''
+
+
 import numpy as np
 
 ######## function(s) for converting c++ values into python ones  ########
@@ -139,7 +159,7 @@ def read_configtxt_into_floats(filename, is_print=True):
         notfloats[name] = value
 
   try:
-    floats["totnsupers0"] = int(floats["nSDsvec"])              # initial total no. of superdrops 
+    floats["totnsupers0"] = int(floats["totnsupers"])              # initial total no. of superdrops 
   except:
     pass
   try:

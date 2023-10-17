@@ -32,6 +32,7 @@
 #include "./createsupers.hpp"
 #include "./runtimestats.hpp"
 #include "./sdmmethods.hpp"
+#include "initialise/initconds.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
 
@@ -172,7 +173,7 @@ public:
     check_coupling(); 
   }
 
-  int operator()(const InitConds &initconds,
+  int operator()(const InitConds &init,
                  const unsigned int t_end) const
   /* create gridboxes and superdrops, then
   timestep CLEO until t_end and with option
@@ -181,7 +182,7 @@ public:
     // generate runtime objects
     RunStats stats;
     dualview_gbx gbxs(create_gridboxes());
-    viewd_supers supers(CreateSupers(initconds.supers));
+    viewd_supers supers(CreateSupers(init.initsupers)());
 
     // prepare CLEO for timestepping
     prepare_timestepping();
