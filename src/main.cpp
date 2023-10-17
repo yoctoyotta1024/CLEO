@@ -28,19 +28,26 @@
 #include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
+
 #include "coupldyn_fromfile/fromfiledynamics.hpp"
+
 #include "gridboxes/gridboxmaps.hpp"
+
 #include "initialise/config.hpp"
 #include "initialise/initconds.hpp"
 #include "initialise/timesteps.hpp"
+
 #include "observers/constintervalobs.hpp"
 #include "observers/observers.hpp"
+
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
+
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/predcorrmotion.hpp"
+
 #include "zarr/fsstore.hpp"
 
 CoupledDynamics auto
@@ -111,14 +118,14 @@ int main(int argc, char *argv[])
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn));
 
-  /* Method to create Super-droplets using initial conditions */
-  const InitConds init(config);
+  /* Initial conditions for CLEO run */
+  const InitConds initconds(config);
 
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
     const RunCLEO runcleo(coupldyn, sdm);
-    runcleo(init, tsteps.get_t_end());
+    runcleo(initconds, tsteps.get_t_end());
   }
   Kokkos::finalize();
   

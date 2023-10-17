@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -47,6 +47,7 @@ private:
   const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm;
 
   int prepare_timestepping() const
+  /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
   {
     coupldyn.prepare_to_timestep();
     sdm.prepare_to_timestep();
@@ -55,6 +56,8 @@ private:
   }
 
   void check_coupling() const
+  /* check  coupling of CLEO SDM and Coupled Dyanmics is correct.
+  For example ensuring they have the same timestep for coupling */
   {
     if (sdm.get_couplstep() != coupldyn.get_couplstep())
     {
@@ -91,9 +94,9 @@ private:
 
   unsigned int start_step(const unsigned int t_mdl,
                           dualview_gbx gbxs) const
-  /* communication of thermodynamic state from dynamics solver
-  to CLEO's Gridboxes. Followed by observation. Function then
-  returns size of step to take given current timestep, t_mdl */
+  /* Start of every timestep: 1) communication of thermodynamic state
+  from dynamics solver to CLEO's Gridboxes. 2) Make observation.
+  3) Return size of step to take given current timestep, t_mdl */
   {
     if (t_mdl % sdm.get_couplstep() == 0)
     {
@@ -109,9 +112,9 @@ private:
   }
 
   unsigned int next_stepsize(const unsigned int t_mdl) const
-  /* returns size of next step of model ('onestep')
-  given current time t_mdl, so that next time
-  (t_next = t_mdl + onestep) is time of obs or coupl */
+  /* returns size of next step to take given current
+  timestep, t_mdl, such that next timestep is
+  sooner out of next timestep for obs or coupl */
   {
     const unsigned int couplstep(sdm.get_couplstep());
     const unsigned int obsstep(sdm.obs.get_obsstep());
@@ -121,11 +124,11 @@ private:
       return ((t_mdl / interval) + 1) * interval;
     };
 
-    /* t_next is smaller out of time of next coupl and obs */
+    /* t_next is sooner out of time for next coupl or obs */
     const unsigned int next_coupl(next_step(couplstep));
     const unsigned int next_obs(next_step(obsstep));
 
-    return std::min(next_coupl, next_obs) - t_mdl;
+    return std::min(next_coupl, next_obs) - t_mdl; // stepsize = t_next - t_mdl
   }
 
   void sdm_step(const unsigned int t_mdl,
@@ -172,23 +175,23 @@ public:
     check_coupling(); 
   }
 
-  template <typename Init>
-  int operator()(const Init &init,
+  template <typename IC>
+  int operator()(const IC &initconds,
                  const unsigned int t_end) const
-  /* create gridboxes and superdrops, then
-  timestep CLEO until t_end and with option
-  to record some runtime statistics */
+  /* create gridboxes and superdrops using initial conditions,
+  then prepare and do timestepping. Meanwhile there is the
+  option to record some runtime statistics using "stats" */
   {
-    // generate runtime objects
+    // create runtime objects
     RunStats stats;
     dualview_gbx gbxs(create_gridboxes());
-    viewd_supers supers(CreateSupers(init.initsupers)());
+    viewd_supers supers(CreateSupers(initconds.initsupers)());
 
     // prepare CLEO for timestepping
     prepare_timestepping();
     stats.pre_timestepping();
 
-    // do timestepping of CLEO from t=0 to t=t_end
+    // do timestepping from t=0 to t=t_end
     timestep_cleo(t_end, stats, gbxs, supers);
     stats.post_timestepping();
 
