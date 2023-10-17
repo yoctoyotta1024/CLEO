@@ -189,14 +189,11 @@ public:
 
     // prepare CLEO for timestepping
     prepare_timestepping();
-    stats.pre_timestepping();
+    stats.before_timestepping();
 
     // do timestepping from t=0 to t=t_end
     timestep_cleo(t_end, stats, gbxs, supers);
-    stats.post_timestepping();
-
-    // summary of runtime statistics
-    stats.summary();
+    stats.after_timestepping();
 
     return 0;
   }

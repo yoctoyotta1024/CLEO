@@ -46,7 +46,7 @@ private:
   unsigned int couplstep; // coupled timestep
 
   unsigned int next_sdmstep(const unsigned int t_sdm,
-                            const unsigned int stepsize) const;
+                            const unsigned int stepsize) const
   /* given current timestep, t_sdm, work out which event
   (motion or one complete step) is next to occur and return
   the time of the sooner event, (ie. next t_move or t_mdl) */
@@ -57,7 +57,7 @@ private:
     return std::min(next_t_mdl, next_t_move);
   }
 
-  void superdrops_movement(const unsigned int t_mdl,
+  void superdrops_movement(const unsigned int t_sdm,
                            viewd_gbx d_gbxs,
                            viewd_supers supers) const
   /* move superdroplets (including movement between
@@ -68,7 +68,7 @@ private:
 
   void sdm_microphysics(const unsigned int t_sdm,
                         const unsigned int t_next,
-                        viewd_gbx d_gbxs) const;
+                        viewd_gbx d_gbxs) const
   /* enact SDM microphysics for each gridbox
   (using sub-timestepping routine) */
   {
@@ -116,7 +116,7 @@ public:
   void run_step(const unsigned int t_mdl,
                 const unsigned int stepsize,
                 viewd_gbx d_gbxs,
-                viewd_supers supers) const;
+                viewd_supers supers) const
   /* run CLEO SDM (on device) from time t_mdl to
   t_mdl + stepsize with sub-timestepping routine
   for super-droplets' movement and microphysics */

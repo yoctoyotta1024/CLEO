@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * functionality for making and ouputting statistics
+ * Structure for making and ouputting statistics
  * related to runtime whilst timestepping CLEO
  */
 
@@ -35,17 +35,25 @@ private:
   double time2;
 
 public:
-  void pre_timestepping()
+  ~RunStats() { summary(); }
+
+  void before_timestepping()
+  /* record stats before timestepping
+  e.g. current time */
   {
     time1 = kokkostimer.seconds();
   }
 
-  void post_timestepping()
+  void after_timestepping()
+  /* record stats after timestepping
+  e.g. current time */
   {
     time2 = kokkostimer.seconds();
   }
 
   void summary();
+  /* print out summary of runtime
+  stats to terminal window */
 };
 
 #endif // RUNSTATS_HPP
