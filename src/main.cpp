@@ -27,7 +27,9 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "cartesiandomain/cartesianmaps.hpp"
 #include "coupldyn_fromfile/fromfiledynamics.hpp"
+#include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers/constintervalobs.hpp"
@@ -35,7 +37,6 @@
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "cartesiandomain/gridboxmaps.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/predcorrmotion.hpp"
@@ -46,6 +47,12 @@ create_coupldyn(const Config &config,
                 const unsigned int coupldynstep)
 {
   return FromFileDynamics(config, coupldynstep); 
+}
+
+GridboxMaps auto
+create_gbxmaps(const Config &config)
+{
+  return CartesianMaps(config); 
 }
 
 MicrophysicalProcess auto
@@ -70,7 +77,7 @@ auto create_sdm(const Config &config,
                 const Timesteps &tsteps,
                 const CoupledDynamics auto &coupldyn)
 {
-  const GridboxMaps gbxmaps(config);
+  const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(tsteps));
   const MoveSupersInDomain movesupers(create_motion(tsteps.get_motionstep()));
   const Observer auto obs(create_observer(tsteps.get_obsstep()));

@@ -42,7 +42,7 @@ private:
   M motion;
 
   void move_superdrops_in_domain(const unsigned int t_sdm,
-                                 const GridboxMaps &gbxmaps,
+                                 const GridboxMaps auto &gbxmaps,
                                  viewd_gbx d_gbxs,
                                  viewd_supers supers) const
   {
@@ -60,8 +60,8 @@ public:
   }
 
   void run_step(const unsigned int t_sdm,
-                const GridboxMaps &gbxmaps,
-                viewd_gbx d_gbxs, 
+                const GridboxMaps auto &gbxmaps,
+                viewd_gbx d_gbxs,
                 viewd_supers supers) const
   {
     if (motion.on_step(t_sdm))

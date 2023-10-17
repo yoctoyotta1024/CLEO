@@ -29,15 +29,16 @@
 
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
-#include "cartesiandomain/gridboxmaps.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/superdrop.hpp"
 #include "observers/observers.hpp"
 
-template <CoupledDynamics CD, MicrophysicalProcess Microphys,
+template <CoupledDynamics CD, GridboxMaps GbxMaps,
+          MicrophysicalProcess Microphys,
           Motion M, Observer Obs>
 struct SDMMethods
 {
@@ -63,13 +64,13 @@ private:
   (using sub-timestepping routine) */
 
 public:
-  GridboxMaps gbxmaps;              // maps from gridbox indexes to domain coordinates
+  GbxMaps gbxmaps;              // maps from gridbox indexes to domain coordinates
   Microphys microphys;              // microphysical process
   MoveSupersInDomain<M> movesupers; // super-droplets' motion in domain
   Obs obs;                          // observer
 
   SDMMethods(const CD &coupldyn,
-             const GridboxMaps gbxmaps,
+             const GbxMaps gbxmaps,
              const Microphys microphys,
              const MoveSupersInDomain<M> movesupers,
              const Obs obs)
@@ -102,12 +103,14 @@ public:
   for super-droplets' movement and microphysics */
 };
 
-template <CoupledDynamics CD, MicrophysicalProcess Microphys,
+template <CoupledDynamics CD, GridboxMaps GbxMaps,
+          MicrophysicalProcess Microphys,
           Motion M, Observer Obs>
-void SDMMethods<CD, Microphys, M, Obs>::run_step(const unsigned int t_mdl,
-                       const unsigned int stepsize,
-                       viewd_gbx d_gbxs,
-                       viewd_supers supers) const
+void SDMMethods<CD, GbxMaps, Microphys, M, Obs>::
+    run_step(const unsigned int t_mdl,
+             const unsigned int stepsize,
+             viewd_gbx d_gbxs,
+             viewd_supers supers) const
 /* run CLEO SDM (on device) from time t_mdl to
 t_mdl + stepsize with sub-timestepping routine
 for super-droplets' movement and microphysics */
@@ -124,9 +127,10 @@ for super-droplets' movement and microphysics */
   }
 }
 
-template <CoupledDynamics CD, MicrophysicalProcess Microphys,
+template <CoupledDynamics CD, GridboxMaps GbxMaps,
+          MicrophysicalProcess Microphys,
           Motion M, Observer Obs>
-unsigned int SDMMethods<CD, Microphys, M, Obs>::
+unsigned int SDMMethods<CD, GbxMaps, Microphys, M, Obs>::
     next_sdmstep(const unsigned int t_sdm,
                  const unsigned int stepsize) const
 /* given current timestep, t_sdm, work out which event
@@ -139,22 +143,26 @@ the time of the sooner event, (ie. next t_move or t_mdl) */
   return std::min(next_t_mdl, next_t_move);
 }
 
-template <CoupledDynamics CD, MicrophysicalProcess Microphys,
+template <CoupledDynamics CD, GridboxMaps GbxMaps,
+          MicrophysicalProcess Microphys,
           Motion M, Observer Obs>
-void SDMMethods<CD, Microphys, M, Obs>::superdrops_movement(const unsigned int t_sdm,
-                                  viewd_gbx d_gbxs,
-                                  viewd_supers supers) const
+void SDMMethods<CD, GbxMaps, Microphys, M, Obs>::
+    superdrops_movement(const unsigned int t_sdm,
+                        viewd_gbx d_gbxs,
+                        viewd_supers supers) const
 /* move superdroplets (including movement between gridboxes)
 according to movesupers struct */
 {
   movesupers.run_step(t_sdm, gbxmaps, d_gbxs, supers);
 }
 
-template <CoupledDynamics CD, MicrophysicalProcess Microphys,
+template <CoupledDynamics CD, GridboxMaps GbxMaps,
+          MicrophysicalProcess Microphys,
           Motion M, Observer Obs>
-void SDMMethods<CD, Microphys, M, Obs>::sdm_microphysics(const unsigned int t_sdm,
-                               const unsigned int t_next,
-                               viewd_gbx d_gbxs) const
+void SDMMethods<CD, GbxMaps, Microphys, M, Obs>::
+    sdm_microphysics(const unsigned int t_sdm,
+                     const unsigned int t_next,
+                     viewd_gbx d_gbxs) const
 /* enact SDM microphysics for each gridbox
 (using sub-timestepping routine) */
 {

@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: gridboxmaps.hpp
+ * File: cartesianmaps.cpp
  * Project: cartesiandomain
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -16,17 +16,9 @@
  * -----
  * File Description:
  * functions related to creating and using maps to convert
- * between a gridbox indexes and domain coordinates
+ * between a gridbox indexes and domain coordinates for a 
+ * cartesian C grid
  */
 
-#ifndef GRIDBOXMAPS_HPP 
-#define GRIDBOXMAPS_HPP 
 
-#include "initialise/config.hpp"
-
-struct GridboxMaps 
-{
-  GridboxMaps(const Config &config){}
-};
-
-#endif // GRIDBOXMAPS_HPP
+#include "./cartesianmaps.hpp"
