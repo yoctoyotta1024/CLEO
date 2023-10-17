@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,9 +25,12 @@
 #include "./config.hpp"
 
 struct InitSupers
+/* struct containing functions which return data
+for the initial conditions needed to create
+superdroplets e.g. via the CreateSupers struct */
 {
 private:
-  int totnsupers; // total number of superdroplets (in kokkos view on device)
+  int totnsupers; // total number of superdroplets (in kokkos view on device initially)
 
 public:
   InitSupers(const int totnsupers) : totnsupers(totnsupers) {}
@@ -92,6 +95,8 @@ public:
 };
 
 struct InitConds
+/* struct for functions to generate
+intial conditions for CLEO */
 {
   InitSupers initsupers; // initial conditions for creating superdroplets
 
