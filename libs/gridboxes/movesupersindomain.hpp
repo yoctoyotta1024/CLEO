@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,6 +37,10 @@
 
 template <Motion M>
 struct MoveSupersInDomain
+/* struct for functionality to move superdroplets throughtout
+the domain by updating their spatial coordinates (according to 
+some type of Motion) and then moving them between gridboxes 
+after updating their gridbox indexes concordantly */
 {
 private:
   M motion;
@@ -45,6 +49,10 @@ private:
                                  const GridboxMaps auto &gbxmaps,
                                  viewd_gbx d_gbxs,
                                  viewd_supers supers) const
+  /* enact movement of superdroplets throughout domain in three stages:
+  1) update their spatial coords according to type of motion.
+  2) update their sd_gbxindex accordingly
+  3) move superdroplets between gridboxes */
   {
     // update sd index etc. fro all SDs in gbxs
     motion.update_superdrop_coords(t_sdm);
@@ -55,6 +63,8 @@ public:
       : motion(motion) {}
 
   unsigned int next_step(const unsigned int t_sdm) const
+  /* returns time when superdroplet motion is
+  next due to occur given current time, t_sdm */
   {
     return motion.next_step(t_sdm);
   }
@@ -63,6 +73,9 @@ public:
                 const GridboxMaps auto &gbxmaps,
                 viewd_gbx d_gbxs,
                 viewd_supers supers) const
+  /* if current time, t_sdm, is time when superdrop
+  motion should occur, enact movement of
+  superdroplets throughout domain */
   {
     if (motion.on_step(t_sdm))
     {
