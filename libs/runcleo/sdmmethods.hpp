@@ -60,8 +60,8 @@ private:
   void superdrops_movement(const unsigned int t_mdl,
                            viewd_gbx d_gbxs,
                            viewd_supers supers) const
-  /* move superdroplets (including movement between gridboxes)
-  according to movesupers struct */
+  /* move superdroplets (including movement between
+  gridboxes) according to movesupers struct */
   {
     movesupers.run_step(t_sdm, gbxmaps, d_gbxs, supers);
   }
