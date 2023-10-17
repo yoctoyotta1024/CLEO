@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 16th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,6 +28,9 @@
 #include "initialise/config.hpp"
 
 struct FromFileDynamics
+/* type satisfying CoupledDyanmics solver concept
+specifically for thermodynamics and wind velocities
+that are read from binary files */
 {
 private:
   const unsigned int interval;

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,26 +29,27 @@
 #include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
 
-struct SuperdropsInGridbox
-/* Reference to a chunk of memory
-(e.g. through std::span or Kokkos::subview)
-containing super-droplets in a Gridbox */
+struct SupersInGbx
+/* References to identify the chunk of memory
+containing super-droplets occupying a given Gridbox
+(e.g. through std::span or Kokkos::subview) */
 {
 private:
   Kokkos::pair<size_t, size_t> pos; // position in view of (first, last) superdrop that occupies gridbox
+
 public:
-  KOKKOS_INLINE_FUNCTION SuperdropsInGridbox() = default;  // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~SuperdropsInGridbox() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION SupersInGbx() = default;  // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~SupersInGbx() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  SuperdropsInGridbox(const Kokkos::pair<size_t, size_t> ipos)
+  SupersInGbx(const Kokkos::pair<size_t, size_t> ipos)
       : pos(ipos) {}
 
   template <class view_type>
   Kokkos::Subview<view_type, Kokkos::pair<size_t, size_t>>
   operator()(view_type supers)
   /* returns subview from view of superdrops
-  for superdrops which occupy given gridbox */
+  refering to superdrops which occupy given gridbox */
   {
     return Kokkos::subview(supers, pos.first, pos.second);
   }
@@ -61,11 +62,11 @@ Gridbox's State (e.g. thermodynamic variables
 used for SDM) and detectors for tracking chosen variables */
 {
 private:
-  unsigned int gbxindex;             // index (unique identifier) of gridbox
+  unsigned int gbxindex; // index (unique identifier) of gridbox
 public:
-  State state;                       // dynamical state of gridbox (e.g. thermodynamics)
-  SuperdropsInGridbox sdsingbx;       // reference to superdrops associated with gridbox
-  Detectors detectors;               // detectors of various quantities
+  State state;          // dynamical state of gridbox (e.g. thermodynamics)
+  SupersInGbx sdsingbx; // reference(s) to superdrops occupying gridbox
+  Detectors detectors;  // detectors of various quantities
 
   KOKKOS_INLINE_FUNCTION Gridbox() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~Gridbox() = default; // Kokkos requirement for a (dual)View
