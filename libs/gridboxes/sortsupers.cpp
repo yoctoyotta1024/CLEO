@@ -22,10 +22,3 @@
 
 
 #include "./sortsupers.hpp"
-
-viewd_supers sort_supers(viewd_supers supers)
-{
-  std::cout << "sorting";
-
-  return supers;
-}

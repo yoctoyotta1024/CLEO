@@ -47,6 +47,9 @@ public:
     std::vector<unsigned int> sdgbxindex{1, 3, 5, 0, 0,
                                          5, 6, 7, 6, 4};
 
+    // std::vector<unsigned int> sdgbxindex{0, 0, 1, 2, 13,
+    //                                      15, 16, 17, 17, 200};
+
     return sdgbxindex;
   }
 
