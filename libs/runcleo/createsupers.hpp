@@ -60,6 +60,7 @@ private:
     std::vector<unsigned long long> xis;
 
     std::array<double, 3> coords_at(const unsigned int kk) const;  
+    
     inline SuperdropAttrs attrs_at(const unsigned int kk) const;
 
   public:

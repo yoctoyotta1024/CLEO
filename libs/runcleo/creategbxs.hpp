@@ -38,13 +38,13 @@ private:
   {
   private:
     std::unique_ptr<Gridbox::Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
+    std::vector<double> volumes;
 
     inline State state_at(const unsigned int ii) const;
   
   public:
     template <typename FetchInitData>
-    inline GenGridbox(const FetchInitData &fid)
-        : GbxindexGen(std::make_unique<Gridbox::Gbxindex::Gen>()) {}
+    inline GenGridbox(const FetchInitData &fid);
 
     inline Gridbox operator()(const unsigned int ii) const;
   };
@@ -128,6 +128,11 @@ gbxindex, spatial coordinates and attributes */
   return h_gbxs;
 }
 
+template <typename FetchInitData>
+inline GenGridbox(const FetchInitData &fid)
+    : GbxindexGen(std::make_unique<Gridbox::Gbxindex::Gen>()),
+      volumes(fid.volume) {}
+
 inline Gridbox
 CreateGbxs::GenGridbox::operator()(const unsigned int ii) const
 {
@@ -140,16 +145,17 @@ CreateGbxs::GenGridbox::operator()(const unsigned int ii) const
 inline State 
 CreateGbxs::GenGridbox::state_at(const unsigned int ii) const
 {
-  double volume = 0.0;
-  double press = 0.0;                   
-  double temp = 0.0;                    
-  double qvap = 0.0;                    
-  double qcond = 0.0;                   
-  Kokkos::pair<double, double> wvel = {0.0,0.0}; 
-  Kokkos::pair<double, double> uvel = {0.0,0.0};
-  Kokkos::pair<double, double> vvel = {0.0,0.0};
+  double volumes.at(ii);
+  double press(0.0);                   
+  double temp(0.0);                    
+  double qvap(0.0);                    
+  double qcond(0.0);                   
+  Kokkos::make_pair<double, double> wvel(0.0,0.0); 
+  Kokkos::make_pair<double, double> uvel(0.0,0.0);
+  Kokkos::make_pair<double, double> vvel(0.0,0.0);
 
-  return State(volume, press, temp, qvap, qcond, wvel, uvel, vvel); 
+  return State(volumes.at(ii), press, temp,
+               qvap, qcond, wvel, uvel, vvel);
 }
 
 #endif // CREATEGBXS_HPP
