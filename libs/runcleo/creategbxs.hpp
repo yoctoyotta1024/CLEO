@@ -37,9 +37,12 @@ private:
   class GenGridbox
   {
   private:
+    inline State state_at(const unsigned int ii) const;
+    inline SupersInGbx sdsingbx_at(const unsigned int ii) const;
+  
   public:
     template <typename FetchInitData>
-    GenGridbox(const FetchInitData &fid) {}
+    inline GenGridbox(const FetchInitData &fid) {}
 
     inline Gridbox operator()(const unsigned int ii) const;
   };
@@ -58,7 +61,7 @@ private:
   gbxindex, spatial coordinates and attributes */
 
 
-  void ensure_initialisation_complete(dualview_gbx supers,
+  void ensure_initialisation_complete(dualview_gbx gbxs,
                                       const size_t size) const;
 
   void print_gbxs(dualview_gbx gbxs) const;
@@ -127,11 +130,22 @@ inline Gridbox
 CreateGbxs::GenGridbox::operator()(const unsigned int ii) const
 {
   const unsigned int gbxindex(ii);
-  const double volume(0.0);
-  const Kokkos::pair<size_t, size_t> pos = {0, 0};
-
-  return Gridbox(gbxindex, volume, pos);
+  const State state(state_at(ii)); 
+  SupersInGbx sdsingbx(sdsingbx_at(ii));
+  
+  return Gridbox(gbxindex, state, sdsingbx);
 }
 
+inline State 
+CreateGbxs::GenGridbox::state_at(const unsigned int ii) const
+{
+  return State(); 
+}
+
+inline SupersInGbx
+CreateGbxs::GenGridbox::sdsingbx_at(const unsigned int ii) const
+{
+  return SupersInGbx(); 
+}
 
 #endif // CREATEGBXS_HPP

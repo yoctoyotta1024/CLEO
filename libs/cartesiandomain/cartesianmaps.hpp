@@ -37,6 +37,11 @@ private:
 public:
   CartesianMaps(const Config &config){}
 
+  double volume(const unsigned int gbxidx) const
+  {
+    return 0.0;
+  }
+
   Kokkos::pair<double, double>
   coord3bounds(const unsigned int gbxidx) const
   {

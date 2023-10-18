@@ -49,10 +49,6 @@ public:
   KOKKOS_INLINE_FUNCTION ~State() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  State(const double ivolume)
-      : volume(ivolume){};
-
-  KOKKOS_INLINE_FUNCTION
   auto get_volume() const { return volume; }
 
   KOKKOS_INLINE_FUNCTION

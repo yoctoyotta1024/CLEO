@@ -73,11 +73,11 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   Gridbox(const unsigned int igbxindex,
-          const double ivolume,
-          const Kokkos::pair<size_t, size_t> ipos)
+          const State state, 
+          const SupersInGbx sdsingbx)
       : gbxindex(igbxindex),
-        state(ivolume),
-        sdsingbx(ipos),
+        state(state),
+        sdsingbx(sdsingbx),
         detectors() {}
 
   KOKKOS_INLINE_FUNCTION

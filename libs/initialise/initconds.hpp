@@ -107,7 +107,7 @@ gridboxes e.g. via the CreateGbxs struct */
 {
 private:
   int ngbxs;
-  int getsizetmp; //TODO: erradicate
+  int getsizetmp = 5; //TODO: erradicate
 
 public:
   InitGbxs(const Config &config)

@@ -19,9 +19,27 @@
 
 #include "./creategbxs.hpp"
 
-void CreateGbxs::ensure_initialisation_complete(dualview_gbx supers,
+void CreateGbxs::ensure_initialisation_complete(dualview_gbx gbxs,
                                                 const size_t size) const
 {
+  if (!(gbxs.extent(0) == size))
+  {
+    const std::string err("number of gridboxes created not "
+                          "consistent with initialisation data ie. " +
+                          std::to_string(gbxs.extent(0)) + " != " +
+                          std::to_string(size));
+    throw std::invalid_argument(err);
+  }
+
+  for (size_t ii(0); ii < gbxs.extent(0); ++ii)
+  {
+    if (!(gbxs.view_host()(ii).get_gbxindex() ==
+          gbxs.view_device()(ii).get_gbxindex()))
+    {
+      const std::string err("gridboxes on device don't match host");
+      throw std::invalid_argument(err);
+    }
+  }
 }
 
 void CreateGbxs::print_gbxs(dualview_gbx gbxs) const

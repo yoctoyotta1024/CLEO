@@ -59,15 +59,14 @@ private:
     std::vector<double> msols;
     std::vector<unsigned long long> xis;
 
-    std::array<double, 3> coords_at(const unsigned int kk) const;
-    
-    SuperdropAttrs attrs_at(const unsigned int kk) const;
+    std::array<double, 3> coords_at(const unsigned int kk) const;  
+    inline SuperdropAttrs attrs_at(const unsigned int kk) const;
 
   public:
     template <typename FetchInitData>
-    GenSuperdrop(const FetchInitData &fid);
+    inline GenSuperdrop(const FetchInitData &fid);
       
-    Superdrop operator()(const unsigned int kk) const;
+    inline Superdrop operator()(const unsigned int kk) const;
   };
 
   template <typename FetchInitData>
@@ -181,7 +180,7 @@ CreateSupers::GenSuperdrop::operator()(const unsigned int kk) const
   const unsigned int sdgbxindex(sdgbxindexes.at(kk));
   const std::array<double, 3> coords312(coords_at(kk));
   const SuperdropAttrs attrs(attrs_at(kk));
-  const auto sd_id = sdIdGen->next();
+  const auto sd_id(sdIdGen->next());
 
   return Superdrop(sdgbxindex, coords312[0],
                    coords312[1], coords312[2],
