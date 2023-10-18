@@ -43,7 +43,7 @@ public:
                    const unsigned int couplstep)
       : interval(couplstep) {}
 
-  unsigned int get_couplstep() const
+  auto get_couplstep() const
   {
     return interval;
   }

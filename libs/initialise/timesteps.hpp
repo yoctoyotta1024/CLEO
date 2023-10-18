@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -86,12 +86,12 @@ public:
   model timestep, any timestep = 0 or if a sub-timestep is
   longer than a timestep */
 
-  unsigned int get_condstep() const { return condstep; }
-  unsigned int get_collstep() const { return collstep; }
-  unsigned int get_motionstep() const { return motionstep; }
-  unsigned int get_couplstep() const { return couplstep; }
-  unsigned int get_obsstep() const { return obsstep; }
-  unsigned int get_t_end() const { return t_end; }
+  auto get_condstep() const { return condstep; }
+  auto get_collstep() const { return collstep; }
+  auto get_motionstep() const { return motionstep; }
+  auto get_couplstep() const { return couplstep; }
+  auto get_obsstep() const { return obsstep; }
+  auto get_t_end() const { return t_end; }
 };
 
 #endif // TIMESTEPS_HPP

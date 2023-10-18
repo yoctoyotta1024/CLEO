@@ -37,9 +37,9 @@ public:
   InitSupers(const Config &config)
       : totnsupers(config.totnsupers), nspacedims(config.nspacedims) {}
 
-  int get_totnsupers() const { return totnsupers; }
+  auto get_totnsupers() const { return totnsupers; }
   
-  int get_nspacedims() const { return nspacedims; }
+  auto get_nspacedims() const { return nspacedims; }
 
   size_t get_size() const
   {

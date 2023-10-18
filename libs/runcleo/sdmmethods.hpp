@@ -99,7 +99,7 @@ public:
         movesupers(movesupers),
         obs(obs) {}
 
-  unsigned int get_couplstep() const { return couplstep; }
+  auto get_couplstep() const { return couplstep; }
 
   void prepare_to_timestep() const {}
   /* prepare CLEO SDM for timestepping */

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,7 +42,7 @@ public:
   ConstIntervalObs(const unsigned int obsstep)
       : interval(obsstep) {}
 
-  unsigned int get_obsstep() const
+  auto get_obsstep() const
   {
     return interval;
   }

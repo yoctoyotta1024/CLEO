@@ -81,7 +81,7 @@ public:
         detectors() {}
 
   KOKKOS_INLINE_FUNCTION
-  unsigned int get_gbxindex() {return gbxindex;}
+  auto get_gbxindex() {return gbxindex;}
 };
 
 #endif // GRIDBOX_HPP

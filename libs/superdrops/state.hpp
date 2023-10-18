@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 14th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -53,7 +53,7 @@ public:
       : volume(ivolume){};
 
   KOKKOS_INLINE_FUNCTION
-  double get_volume() const { return volume; }
+  auto get_volume() const { return volume; }
 
   KOKKOS_INLINE_FUNCTION
   double wvelcentre() const
