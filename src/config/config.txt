@@ -51,7 +51,7 @@ T_END = 20                                # time span of integration [s]
 
 # SDs parameters #
 totnsupers = 10                         # initial no. elements in SDs' vector (=total initial no. of SDs)
-nspacedims = 0                          # no. of spatial dimensions to model 
+nspacedims = 3                          # no. of spatial dimensions to model 
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state
 thermosolver = fromfile                 # type of thermodynamic solver to configure

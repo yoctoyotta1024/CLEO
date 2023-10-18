@@ -81,7 +81,7 @@ private:
   /* ensure the number of superdrops in the view matches the
   size according to the initial conditions */
 
-  void print_supers(viewd_constsupers supers) const {}
+  inline void print_supers(viewd_constsupers supers) const;
   /* print superdroplet information */
 
 public:
@@ -126,6 +126,20 @@ gbxindex, spatial coordinates and attributes */
   }
 
   return supers;
+}
+
+inline void CreateSupers::print_supers(viewd_constsupers supers) const
+/* print superdroplet information */
+{
+  for (size_t kk(0); kk < supers.extent(0); ++kk)
+  {
+    std::cout << "sdid, gbx, coords: [ "
+              << supers(kk).id.value << ", "
+              << supers(kk).get_sdgbxindex() << ", ("
+              << supers(kk).get_coord3() << ", "
+              << supers(kk).get_coord1() << ", "
+              << supers(kk).get_coord2() << ") ]\n";
+  }
 }
 
 template <typename FetchInitData>

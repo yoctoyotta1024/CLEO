@@ -185,15 +185,15 @@ public:
     // create runtime objects
     RunStats stats;
     dualview_gbx gbxs(create_gridboxes());
-    viewd_supers supers(CreateSupers(initconds.initsupers)());
+    viewd_supers supers(CreateSupers{}(initconds.initsupers));
 
-    // prepare CLEO for timestepping
-    prepare_timestepping();
-    stats.before_timestepping();
+    // // prepare CLEO for timestepping
+    // prepare_timestepping();
+    // stats.before_timestepping();
 
-    // do timestepping from t=0 to t=t_end
-    timestep_cleo(t_end, stats, gbxs, supers);
-    stats.after_timestepping();
+    // // do timestepping from t=0 to t=t_end
+    // timestep_cleo(t_end, stats, gbxs, supers);
+    // stats.after_timestepping();
 
     return 0;
   }

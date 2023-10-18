@@ -48,29 +48,32 @@ public:
 
   std::vector<unsigned int> sdgbxindex() const
   {
-    std::vector<unsigned int> sdgbxindex{1, 3, 5, 0, 0,
-                                         5, 6, 6, 0, 4};
+    // std::vector<unsigned int> sdgbxindex{1, 3, 5, 0, 0,
+    //                                      5, 6, 6, 0, 4};
+
+    std::vector<unsigned int> sdgbxindex{0, 1, 2, 3, 4,
+                                         5, 6, 7, 8, 9};
 
     return sdgbxindex;
   }
 
   std::vector<double> coord3() const
   {
-    std::vector<double> coord3(totnsupers);
+    std::vector<double> coord3(totnsupers, 0.3);
 
     return coord3;
   }
 
   std::vector<double> coord1() const
   {
-    std::vector<double> coord1(totnsupers);
+    std::vector<double> coord1(totnsupers, 0.1);
 
     return coord1;
   }
 
   std::vector<double> coord2() const
   {
-    std::vector<double> coord2(totnsupers);
+    std::vector<double> coord2(totnsupers, 0.2);
 
     return coord2;
   }

@@ -22,6 +22,28 @@
 
 #include "./createsupers.hpp"
 
+void CreateSupers::ensure_initialisation_complete(viewd_constsupers supers,
+                                                  const size_t size) const
+/* ensure the number of superdrops in the view matches the
+size according to the initial conditions */
+{
+  if (supers.extent(0) < size)
+  {
+    const std::string err("Fewer superdroplets were created than were"
+                          " given by initialisation data ie. " +
+                          std::to_string(supers.extent(0)) + " < " +
+                          std::to_string(size));
+    throw std::invalid_argument(err);
+  }
+
+  if (is_sorted(supers) == 0)
+  {
+    const std::string err("supers ordered incorrectly "
+                          "(ie. not sorted by asceding sdgbxindex");
+    throw std::invalid_argument(err);
+  }
+}
+
 std::array<double, 3>
 CreateSupers::GenSuperdrop::coords_at(const unsigned int kk) const
 /* returns superdroplet spatial coordinates. A coordinate is
@@ -48,26 +70,4 @@ only coord3 obtained from vectorr (coord1 = coord2 = 0.0) */
   }
 
   return coords312;
-}
-
-void CreateSupers::ensure_initialisation_complete(viewd_constsupers supers,
-                                                  const size_t size) const
-/* ensure the number of superdrops in the view matches the
-size according to the initial conditions */
-{
-  if (supers.extent(0) < size)
-  {
-    const std::string err("Fewer superdroplets were created than were"
-                          " given by initialisation data ie. " +
-                          std::to_string(supers.extent(0)) + " < " +
-                          std::to_string(size));
-    throw std::invalid_argument(err);
-  }
-
-  if (is_sorted(supers) == 0)
-  {
-    const std::string err("supers ordered incorrectly "
-                          "(ie. not sorted by asceding sdgbxindex");
-    throw std::invalid_argument(err);
-  }
 }
