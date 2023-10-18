@@ -48,6 +48,17 @@ public:
   KOKKOS_INLINE_FUNCTION State() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~State() = default; // Kokkos requirement for a (dual)View
 
+  KOKKOS_INLINE_FUNCTION State(const double volume,
+                               const double press, const double temp,
+                               const double qvap, const double qcond,
+                               const Kokkos::pair<double, double> wvel,
+                               const Kokkos::pair<double, double> uvel,
+                               const Kokkos::pair<double, double> vvel)
+      : volume(volume),
+        press(press), temp(temp),
+        qvap(qvap), qcond(qcond),
+        wvel(wvel), uvel(uvel), vvel(vvel) {}
+
   KOKKOS_INLINE_FUNCTION
   auto get_volume() const { return volume; }
 

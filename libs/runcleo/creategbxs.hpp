@@ -37,12 +37,14 @@ private:
   class GenGridbox
   {
   private:
+    std::unique_ptr<Gridbox::Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
+
     inline State state_at(const unsigned int ii) const;
-    inline SupersInGbx sdsingbx_at(const unsigned int ii) const;
   
   public:
     template <typename FetchInitData>
-    inline GenGridbox(const FetchInitData &fid) {}
+    inline GenGridbox(const FetchInitData &fid)
+        : GbxindexGen(std::make_unique<Gridbox::Gbxindex::Gen>()) {}
 
     inline Gridbox operator()(const unsigned int ii) const;
   };
@@ -129,23 +131,25 @@ gbxindex, spatial coordinates and attributes */
 inline Gridbox
 CreateGbxs::GenGridbox::operator()(const unsigned int ii) const
 {
-  const unsigned int gbxindex(ii);
+  const auto gbxindex(GbxindexGen->next());
   const State state(state_at(ii)); 
-  SupersInGbx sdsingbx(sdsingbx_at(ii));
   
-  return Gridbox(gbxindex, state, sdsingbx);
+  return Gridbox(gbxindex, state);
 }
 
 inline State 
 CreateGbxs::GenGridbox::state_at(const unsigned int ii) const
 {
-  return State(); 
-}
+  double volume = 0.0;
+  double press = 0.0;                   
+  double temp = 0.0;                    
+  double qvap = 0.0;                    
+  double qcond = 0.0;                   
+  Kokkos::pair<double, double> wvel = {0.0,0.0}; 
+  Kokkos::pair<double, double> uvel = {0.0,0.0};
+  Kokkos::pair<double, double> vvel = {0.0,0.0};
 
-inline SupersInGbx
-CreateGbxs::GenGridbox::sdsingbx_at(const unsigned int ii) const
-{
-  return SupersInGbx(); 
+  return State(volume, press, temp, qvap, qcond, wvel, uvel, vvel); 
 }
 
 #endif // CREATEGBXS_HPP
