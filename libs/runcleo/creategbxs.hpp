@@ -40,7 +40,10 @@ private:
   private:
   public:
     template <typename FetchInitData>
-    GenGridbox(const FetchInitData &fid);
+    GenGridbox(const FetchInitData &fid)
+    {
+
+    }
 
     Gridbox operator()(const unsigned int ii) const
     {
@@ -51,6 +54,24 @@ private:
       return Gridbox(gbxindex, volume, pos);
     }
   };
+
+  template <typename FetchInitData>
+  viewh_gbx initialise_gbxs_on_host(const FetchInitData &fid,
+                                    viewh_gbx h_gbxs) const
+  /* initialise a view of superdrops (on device memory)
+  using data from an InitData instance for their initial
+  gbxindex, spatial coordinates and attributes */
+  {
+    const size_t ngbxs(h_gbxs.extent(0));
+    const GenGridbox gen_gridbox(fid);
+  
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      h_gbxs(ii) = gen_gridbox(ii);
+    }
+
+    return h_gbxs;
+  }
 
   template <typename FetchInitData>
   dualview_gbx initialise_gbxs(const FetchInitData &fid) const
@@ -70,24 +91,6 @@ private:
     gbxs.sync_device();
 
     return gbxs;
-  }
-
-  template <typename FetchInitData>
-  viewh_gbx initialise_gbxs_on_host(const FetchInitData &fid,
-                                    viewh_gbx h_gbxs) const
-  /* initialise a view of superdrops (on device memory)
-  using data from an InitData instance for their initial
-  gbxindex, spatial coordinates and attributes */
-  {
-    const size_t ngbxs(h_gbxs.extent(0));
-    const GenGridbox gen_gridbox(fid);
-  
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      h_gbxs(ii) = gen_gridbox(ii);
-    }
-
-    return h_gbxs;
   }
 
   void ensure_initialisation_complete(dualview_gbx supers,

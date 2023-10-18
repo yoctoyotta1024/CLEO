@@ -139,6 +139,11 @@ void Config::configvariable(const std::string name, const std::string value)
     nspacedims = stoi(value);
     issuccess = true;
   }
+  else if (name == "ngbxs")
+  {
+    ngbxs = stoi(value);
+    issuccess = true;
+  }
   else if (name == "totnsupers")
   {
     totnsupers = stoi(value);

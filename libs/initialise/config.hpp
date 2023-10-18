@@ -88,6 +88,7 @@ public:
   /*** SDM Runtime parameters ***/
   /* domain setup */
   int nspacedims; // no. of spatial dimensions to model
+  int ngbxs;      // total number of Gbxs
   int totnsupers; //(initial) total no. of SDs
 
   /* timestepping */
