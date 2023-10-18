@@ -100,7 +100,7 @@ public:
   double T_END;                // time span of integration [s]
 
   /* SDs parameters */
-  int totnsupers;           // initial no. elements in SDs' vector (=total initial no. of SDs)
+  int totnsupers;           // initial total no. of SDs
   int nspacedims;           // no. of spatial dimensions to model
   bool wetradiiinit;        // set initial SD radii to equilibrium wet radius
   bool doAlterThermo;       // enable condensation to alter the thermodynamic state

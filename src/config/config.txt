@@ -25,38 +25,46 @@
  */
 
 
-### Initialisation Files parameters ###
-constants_filename = ../libs/cleoconstants.hpp       # filename containing values of physical constants
+### Initialisation parameters ###
+constants_filename = ../libs/cleoconstants.hpp      # name of file for values of physical constants
 initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initialisation of SDs
-grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for GBx boundaries
+grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 ### Output Data parameters ###
-setuptxt = ./bin/setup.txt                #  name of .txt output file to copy setup to
+setuptxt = ./bin/setup.txt                # .txt filename to copy configuration to
 zarrbasedir = ./bin/SDMdata.zarr          # zarr store base directory
 maxchunk = 1250000                        # maximum no. of elements in chunks of zarr store array
 
-### SDM parameters ###
-# timestepping parameters #
+### Model Runtime parameters ###
+# domain setup #
+nspacedims = 3                          # no. of spatial dimensions to model 
+ngbxs = 5                               # total number of Gbxs
+totnsupers = 10                         # (initial) total no. of SDs
+
+# timestepping #
+CONDTSTEP = 1                             # time between SD condensation events [s]
+COLLTSTEP = 1                             # time between SD collision events [s]
+MOTIONTSTEP = 2                           # time between SDM motion [s]
+COUPLTSTEP = 10                           # time between dynamic couplings [s]
+OBSTSTEP = 20                             # time between SDM observations [s]
+T_END = 20                                # time span of integration from 0 to T_END [s]
+
+# microphysics #
 cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
 cond_SUBTSTEP = 0.1                       # smallest timestep in cases where substepping occurs [s]
 cond_rtol = 0.0                           # relative tolerance for implicit euler integration
 cond_atol = 0.01                          # abolute tolerance for implicit euler integration
-nfrags = 4                                # expected number of fragments in (real) breakup even, (use -1 for nan value)
-CONDTSTEP = 1                             # time between SD condensation events [s]
-COLLTSTEP = 1                             # time between SD collision events [s]
-MOTIONTSTEP = 2                           # time between SDM motion [s]
-COUPLTSTEP = 10                           # time between thermodynamic couplings [s]
-OBSTSTEP = 20                             # time between SDM observations [s]
-T_END = 20                                # time span of integration [s]
+nfrags = -1                               # expected number of fragments in breakup event, (use -1 for nan value)
 
-# SDs parameters #
-totnsupers = 10                         # initial no. elements in SDs' vector (=total initial no. of SDs)
-nspacedims = 3                          # no. of spatial dimensions to model 
+# superdroplets #
 wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state
-thermosolver = fromfile                 # type of thermodynamic solver to configure
 
-### Read in Thermodynamics File parameters ###
+### Coupled Dynamics Solver Parameters ###
+# type of coupling #
+thermosolver = fromfile                                   # dynamics solver to configure
+
+### read in dynamics from file ###
 press_filename = ./share/dimlessthermo_press.dat          # binary filename for pressure
 temp_filename = ./share/dimlessthermo_temp.dat            # binary filename for temperature
 qvap_filename = ./share/dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
