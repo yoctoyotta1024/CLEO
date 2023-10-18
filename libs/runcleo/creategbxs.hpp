@@ -32,28 +32,77 @@
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
 
-class CreateGbxs 
+class CreateGbxs
 {
 private:
+  class GenGridbox
+  {
+  private:
+  public:
+    template <typename FetchInitData>
+    GenGridbox(const FetchInitData &fid);
+
+    Gridbox operator()(const unsigned int ii) const
+    {
+      const unsigned int gbxindex(ii);
+      const double volume(0.0);
+      const Kokkos::pair<size_t, size_t> pos = {0, 0};
+
+      return Gridbox(gbxindex, volume, pos);
+    }
+  };
+
   template <typename FetchInitData>
-  inline dualview_gbx initialise_gbxs(const FetchInitData &fid) const
+  dualview_gbx initialise_gbxs(const FetchInitData &fid) const
   /* initialise a view of superdrops (on device memory)
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
   {
-    const size_t ngbxs(fid.get_ngbxs());
+    // create dualview for gridboxes on device and host memory
+    dualview_gbx gbxs("gbxs", fid.get_ngbxs());
+
+    // initialise gridboxes on host
+    gbxs.sync_host();
+    gbxs.view_host() = initialise_gbxs_on_host(fid, gbxs.view_host());
+    gbxs.modify_host();
     
-    dualview_gbx gbxs("gbxs", ngbxs);
+    // update device gridbox view to match host's gridbox view
+    gbxs.sync_device();
+
+    return gbxs;
+  }
+
+  template <typename FetchInitData>
+  viewh_gbx initialise_gbxs_on_host(const FetchInitData &fid,
+                                    viewh_gbx h_gbxs) const
+  /* initialise a view of superdrops (on device memory)
+  using data from an InitData instance for their initial
+  gbxindex, spatial coordinates and attributes */
+  {
+    const size_t ngbxs(h_gbxs.extent(0));
+    const GenGridbox gen_gridbox(fid);
+  
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      h_gbxs(ii) = gen_gridbox(ii);
+    }
+
+    return h_gbxs;
   }
 
   void ensure_initialisation_complete(dualview_gbx supers,
-                                      const size_t size) const;
+                                      const size_t size) const
+  {
+  }
 
-
-  inline void print_gbxs(dualview_gbx gbxs) const
+  void print_gbxs(dualview_gbx gbxs) const
   /* print gridboxes information */
   {
-    std::cout << "some gbx info\n";
+    for (size_t ii(0); ii < gbxs.extent(0); ++ii)
+    {
+      std::cout << "gbx: " << gbxs.view_host()(ii).get_gbxindex() << "\n";
+      std::cout << "gbx: " << gbxs.view_device()(ii).get_gbxindex() << "\n";
+    }
   }
 
 public:

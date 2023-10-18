@@ -100,14 +100,33 @@ public:
   }
 };
 
+struct InitGbxs
+/* struct containing functions which return data
+for the initial conditions needed to create
+gridboxes e.g. via the CreateGbxs struct */
+{
+private:
+  int ngbxs;
+  int getsizetmp; //TODO: erradicate
+
+public:
+  InitGbxs(const Config &config)
+      : ngbxs(config.ngbxs) {}
+
+  auto get_ngbxs() const { return ngbxs; }
+  size_t get_size() const { return getsizetmp; }
+};
+
 struct InitConds
 /* struct for functions to generate
 intial conditions for CLEO */
 {
   InitSupers initsupers; // initial conditions for creating superdroplets
+  InitGbxs initgbxs; // initial conditions for creating gridboxes
 
   InitConds(const Config &config)
-      : initsupers(config) {}
+      : initsupers(config),
+        initgbxs(config) {}
 };
 
 #endif // INITCONDS_HPP
