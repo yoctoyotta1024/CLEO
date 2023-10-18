@@ -47,7 +47,7 @@ private:
   {
   private:
     std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
-    viewd_solute solutes;                            // view contains pointer to solute(s) which are stored on device memory
+    viewd_solute solutes;                            // solute(s) stored in memory space of viewd_solute
     std::vector<unsigned int> sdgbxindexes;
     std::vector<double> coord3s;
     std::vector<double> coord1s;
@@ -58,7 +58,9 @@ private:
 
     SuperdropAttrs attrs_at(const unsigned int kk) const
     /* helper function to return a superdroplet's attributes
-    at position kk in the initial conditions data */
+    at position kk in the initial conditions data. All 
+    superdroplets created with same shared pointer to a 
+    solute created in memory space of viewd_solute */
     {
       return {radii.at(kk), msols.at(kk), xis.at(kk), solutes(0)};
     }
@@ -75,7 +77,9 @@ private:
           msols(fisd.msol()),
           xis(fisd.xi())
     {
-      solutes(0) = std::make_shared<const SoluteProperties>(); // all superdroplets reference same solute (on device memory)
+      /* all superdroplets reference same solute
+      (in memory space of viewd_solute) */
+      solutes(0) = std::make_shared<const SoluteProperties>();
     }
 
     Superdrop operator()(const unsigned int kk) const
