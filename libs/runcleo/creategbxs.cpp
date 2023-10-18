@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -62,6 +62,12 @@ void CreateGbxs::print_gbxs(dualview_gbx gbxs) const
     std::cout << "gbx: " << h_gbx.get_gbxindex() 
     << ", vol = " << h_gbx.state.get_volume()
     << ", nsupers = " << nsupers << " \n";
-    std::cout << "gbx: " << gbxs.view_device()(ii).get_gbxindex() << "\n";
+
+    for (size_t kk(0); kk < nsupers; ++kk)
+    {
+      std::cout << h_gbx.supersingbx()(kk).id.value << ", ";
+    }
+  
+    std::cout << "\ngbx: " << gbxs.view_device()(ii).get_gbxindex() << "\n";
   }
 }
