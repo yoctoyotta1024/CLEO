@@ -15,8 +15,8 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * file for functions to create a view of
- * superdroplets (on device) from some
+ * file for structure(s) to create a view of
+ * superdroplets (on device) using some
  * initial conditions
  */
 
@@ -65,13 +65,13 @@ private:
 
   public:
     template <typename FetchInitData>
-    GenSuperdrop(const FetchInitData &fisd);
+    GenSuperdrop(const FetchInitData &fid);
       
     Superdrop operator()(const unsigned int kk) const;
   };
 
   template <typename FetchInitData>
-  inline viewd_supers initialise_supers(const FetchInitData &fisd) const;
+  inline viewd_supers initialise_supers(const FetchInitData &fid) const;
   /* initialise a view of superdrops (on device memory)
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
@@ -87,7 +87,7 @@ private:
 public:
 
   template <typename FetchInitData>
-  viewd_supers operator()(const FetchInitData &fisd) const
+  viewd_supers operator()(const FetchInitData &fid) const
   /* create view of "totnsupers" number of superdrops
   (in device memory) which is ordered by the superdrops'
   gridbox indexes using the initial conditions
@@ -95,14 +95,13 @@ public:
   {
     std::cout << "\n--- create superdrops ---"
               << "\ninitialising";
-    viewd_supers supers(initialise_supers(fisd));
+    viewd_supers supers(initialise_supers(fid));
 
     std::cout << "\nsorting";
     supers = sort_supers(supers);
 
+    ensure_initialisation_complete(supers, fid.get_size());
     print_supers(supers);
-
-    ensure_initialisation_complete(supers, fisd.get_size());
     std::cout << "\n--- create superdrops: success ---\n";
 
     return supers;
@@ -111,13 +110,13 @@ public:
 
 template <typename FetchInitData>
 inline viewd_supers
-CreateSupers::initialise_supers(const FetchInitData &fisd) const
+CreateSupers::initialise_supers(const FetchInitData &fid) const
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
 gbxindex, spatial coordinates and attributes */
 {
-  const size_t totnsupers(fisd.get_totnsupers());
-  const GenSuperdrop gen_superdrop(fisd);
+  const size_t totnsupers(fid.get_totnsupers());
+  const GenSuperdrop gen_superdrop(fid);
 
   viewd_supers supers("supers", totnsupers);
   for (size_t kk(0); kk < totnsupers; ++kk)
@@ -149,17 +148,17 @@ inline void CreateSupers::print_supers(viewd_constsupers supers) const
 
 template <typename FetchInitData>
 inline CreateSupers::GenSuperdrop::
-    GenSuperdrop(const FetchInitData &fisd)
-    : nspacedims(fisd.get_nspacedims()),
+    GenSuperdrop(const FetchInitData &fid)
+    : nspacedims(fid.get_nspacedims()),
       sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
       solutes("solute"),
-      sdgbxindexes(fisd.sdgbxindex()),
-      coord3s(fisd.coord3()),
-      coord1s(fisd.coord1()),
-      coord2s(fisd.coord2()),
-      radii(fisd.radius()),
-      msols(fisd.msol()),
-      xis(fisd.xi())
+      sdgbxindexes(fid.sdgbxindex()),
+      coord3s(fid.coord3()),
+      coord1s(fid.coord1()),
+      coord2s(fid.coord2()),
+      radii(fid.radius()),
+      msols(fid.msol()),
+      xis(fid.xi())
 {
   /* all superdroplets reference same solute
   (in memory space of viewd_solute) */

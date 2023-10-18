@@ -15,9 +15,9 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * file for functions to create a view of
- * superdroplets (on device) from some
- * initial conditions
+ * some functionality for structure(s) to 
+ * create a view of superdroplets (on device)
+ * using some initial conditions
  */
 
 #include "./createsupers.hpp"

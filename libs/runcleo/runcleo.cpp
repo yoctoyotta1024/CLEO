@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,7 @@
 
 #include "./runcleo.hpp"
 
-dualview_gbx create_gridboxes()
+create_gridboxes()
 /* create dualview of gridboxes (in general this
 is two distinct views on host and device memory) */
 {

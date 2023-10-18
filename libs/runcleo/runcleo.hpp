@@ -30,12 +30,11 @@
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
 #include "./createsupers.hpp"
+#include "./creategbxs.hpp"
 #include "./runtimestats.hpp"
 #include "./sdmmethods.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
-
-dualview_gbx create_gridboxes();
 
 template <CoupledDynamics CD, GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,
@@ -184,7 +183,7 @@ public:
   {
     // create runtime objects
     RunStats stats;
-    dualview_gbx gbxs(create_gridboxes());
+    dualview_gbx gbxs(CreateGbxs{}(initconds.initgbxs));
     viewd_supers supers(CreateSupers{}(initconds.initsupers));
 
     // // prepare CLEO for timestepping
