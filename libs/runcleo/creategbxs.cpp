@@ -22,16 +22,18 @@
 void CreateGbxs::ensure_initialisation_complete(dualview_gbx gbxs,
                                                 const size_t size) const
 {
-  if (!(gbxs.extent(0) == size))
+  const size_t ngbxs(gbxs.extent(0));
+
+  if (!(ngbxs == size))
   {
     const std::string err("number of gridboxes created not "
                           "consistent with initialisation data ie. " +
-                          std::to_string(gbxs.extent(0)) + " != " +
+                          std::to_string(ngbxs) + " != " +
                           std::to_string(size));
     throw std::invalid_argument(err);
   }
 
-  for (size_t ii(0); ii < gbxs.extent(0); ++ii)
+  for (size_t ii(0); ii < ngbxs; ++ii)
   {
     if (!(gbxs.view_host()(ii).get_gbxindex() ==
           gbxs.view_device()(ii).get_gbxindex()))
@@ -39,17 +41,24 @@ void CreateGbxs::ensure_initialisation_complete(dualview_gbx gbxs,
       const std::string err("gridboxes on device don't match host");
       throw std::invalid_argument(err);
     }
+  
+    if (!(gbxs.view_host()(ii).supersingbx.iscorrect()))
+    {
+      const std::string err("incorrect references to "
+                            "superdrops in gridbox");
+      throw std::invalid_argument(err);
+    }
   }
+
 }
 
-void CreateGbxs::print_gbxs(dualview_gbx gbxs,
-                            viewd_constsupers supers) const
+void CreateGbxs::print_gbxs(dualview_gbx gbxs) const
 /* print gridboxes information */
 {
   for (size_t ii(0); ii < gbxs.extent(0); ++ii)
   {
     auto h_gbx(gbxs.view_host()(ii));
-    const size_t nsupers(h_gbx.sdsingbx(supers).extent(0));
+    const size_t nsupers(h_gbx.supersingbx.nsupers());
     std::cout << "gbx: " << h_gbx.get_gbxindex() 
     << ", vol = " << h_gbx.state.get_volume()
     << ", nsupers = " << nsupers << " \n";
