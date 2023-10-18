@@ -97,12 +97,12 @@ public:
               << "\ninitialising";
     viewd_supers supers(initialise_supers(fid));
 
-    std::cout << "\nsorting";
+    std::cout << "\nsorting\n";
     supers = sort_supers(supers);
 
     ensure_initialisation_complete(supers, fid.get_size());
     print_supers(supers);
-    std::cout << "\n--- create superdrops: success ---\n";
+    std::cout << "--- create superdrops: success ---\n";
 
     return supers;
   }

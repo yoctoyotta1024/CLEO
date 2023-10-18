@@ -73,11 +73,11 @@ public:
               << "\ninitialising";
     dualview_gbx gbxs(initialise_gbxs(fid));
 
-    std::cout << "\nmiddlestep";
+    std::cout << "\nset span?\n";
     
     ensure_initialisation_complete(gbxs, fid.get_size());
     print_gbxs(gbxs);
-    std::cout << "\n--- create gridboxes: success ---\n";
+    std::cout << "--- create gridboxes: success ---\n";
 
     return gbxs;
   }
