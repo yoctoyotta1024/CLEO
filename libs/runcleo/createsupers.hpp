@@ -133,12 +133,17 @@ inline void CreateSupers::print_supers(viewd_constsupers supers) const
 {
   for (size_t kk(0); kk < supers.extent(0); ++kk)
   {
-    std::cout << "sdid, gbx, coords: [ "
-              << supers(kk).id.value << ", "
+    std::cout << "SD: " << supers(kk).id.value
+              << " [gbx, (coords), (attrs)]: [ "
               << supers(kk).get_sdgbxindex() << ", ("
+
               << supers(kk).get_coord3() << ", "
               << supers(kk).get_coord1() << ", "
-              << supers(kk).get_coord2() << ") ]\n";
+              << supers(kk).get_coord2() << "), ("
+              << supers(kk).get_solute() << ", "
+              << supers(kk).get_radius() << ", "
+              << supers(kk).get_msol() << ", "
+              << supers(kk).get_xi() << ") ] \n";
   }
 }
 

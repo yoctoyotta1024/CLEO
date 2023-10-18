@@ -87,13 +87,18 @@ public:
         coord3(icoord3), coord1(icoord1), coord2(icoord2),
         attrs(iattrs), id(iid) {} 
 
-  KOKKOS_INLINE_FUNCTION unsigned int get_sdgbxindex() const { return sdgbxindex; }
-  KOKKOS_INLINE_FUNCTION double get_coord3() const { return coord3; }
-  KOKKOS_INLINE_FUNCTION double get_coord1() const { return coord1; }
-  KOKKOS_INLINE_FUNCTION double get_coord2() const { return coord2; }
-  KOKKOS_INLINE_FUNCTION double get_radius() const { return attrs.radius; }
-  KOKKOS_INLINE_FUNCTION double get_msol() const { return attrs.msol; }
-  KOKKOS_INLINE_FUNCTION double get_xi() const { return attrs.xi; }
+  KOKKOS_INLINE_FUNCTION auto get_sdgbxindex() const { return sdgbxindex; }
+  KOKKOS_INLINE_FUNCTION auto get_coord3() const { return coord3; }
+  KOKKOS_INLINE_FUNCTION auto get_coord1() const { return coord1; }
+  KOKKOS_INLINE_FUNCTION auto get_coord2() const { return coord2; }
+  KOKKOS_INLINE_FUNCTION auto get_radius() const { return attrs.radius; }
+  KOKKOS_INLINE_FUNCTION auto get_msol() const { return attrs.msol; }
+  KOKKOS_INLINE_FUNCTION auto get_xi() const { return attrs.xi; }
+  
+  KOKKOS_INLINE_FUNCTION auto get_solute() const { return attrs.solute;}
+  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return attrs.solute -> rho_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return attrs.solute -> mr_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return attrs.solute -> ionic; }
 };
 
 #endif // SUPERDROP_HPP
