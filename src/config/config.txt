@@ -35,7 +35,7 @@ setuptxt = ./bin/setup.txt                # .txt filename to copy configuration 
 zarrbasedir = ./bin/SDMdata.zarr          # zarr store base directory
 maxchunk = 1250000                        # maximum no. of elements in chunks of zarr store array
 
-### Model Runtime parameters ###
+### SDM Runtime parameters ###
 # domain setup #
 nspacedims = 3                          # no. of spatial dimensions to model 
 ngbxs = 5                               # total number of Gbxs
@@ -47,7 +47,7 @@ COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 2                           # time between SDM motion [s]
 COUPLTSTEP = 10                           # time between dynamic couplings [s]
 OBSTSTEP = 20                             # time between SDM observations [s]
-T_END = 20                                # time span of integration from 0 to T_END [s]
+T_END = 20                                # time span of integration from 0s to T_END [s]
 
 # microphysics #
 cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence

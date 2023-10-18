@@ -100,7 +100,7 @@ void Config::configvariable(const std::string name, const std::string value)
 {
   bool issuccess = false;
 
-  /* Initialisation Files and Output Data parameters */
+  /*** Initialisation and Output Data parameters ***/
   if (name == "constants_filename")
   {
     constants_filename = value;
@@ -132,33 +132,20 @@ void Config::configvariable(const std::string name, const std::string value)
     issuccess = true;
   }
 
-  /* SDM parameters */
-  /* timestepping parameters */
-  else if (name == "cond_iters")
+  /*** SDM Runtime parameters ***/
+  /* domain setup */
+  else if (name == "nspacedims")
   {
-    cond_iters = stoul(value);
+    nspacedims = stoi(value);
     issuccess = true;
   }
-  else if (name == "cond_SUBTSTEP")
+  else if (name == "totnsupers")
   {
-    cond_SUBTSTEP = stod(value);
+    totnsupers = stoi(value);
     issuccess = true;
   }
-  else if (name == "cond_rtol")
-  {
-    cond_rtol = stod(value);
-    issuccess = true;
-  }
-  else if (name == "cond_atol")
-  {
-    cond_atol = stod(value);
-    issuccess = true;
-  }
-  else if (name == "nfrags")
-  {
-    nfrags = stod(value);
-    issuccess = true;
-  }
+
+  /* timestepping */
   else if (name == "CONDTSTEP")
   {
     CONDTSTEP = stod(value);
@@ -190,17 +177,34 @@ void Config::configvariable(const std::string name, const std::string value)
     issuccess = true;
   }
 
-  /* SDs parameters */
-  else if (name == "totnsupers")
+  /* microphysics */
+  else if (name == "cond_iters")
   {
-    totnsupers = stoi(value);
+    cond_iters = stoul(value);
     issuccess = true;
   }
-  else if (name == "nspacedims")
+  else if (name == "cond_SUBTSTEP")
   {
-    nspacedims = stoi(value);
+    cond_SUBTSTEP = stod(value);
     issuccess = true;
   }
+  else if (name == "cond_rtol")
+  {
+    cond_rtol = stod(value);
+    issuccess = true;
+  }
+  else if (name == "cond_atol")
+  {
+    cond_atol = stod(value);
+    issuccess = true;
+  }
+  else if (name == "nfrags")
+  {
+    nfrags = stod(value);
+    issuccess = true;
+  }
+
+  /* superdroplets */
   else if (name == "wetradiiinit")
   {
     wetradiiinit = string2bool(value);
@@ -211,15 +215,16 @@ void Config::configvariable(const std::string name, const std::string value)
     doAlterThermo = string2bool(value);
     issuccess = true;
   }
+
+  /*** Coupled Dynamics Solver Parameters ***/
   else if (name == "thermosolver")
   {
     thermosolver = value;
     issuccess = true;
   }
-
   if (thermosolver == "fromfile")
   {
-    /* Read in Thermodynamics File Parameters */
+    /* read in dynamics from file */
     configvariable_thermosolverfromfile(name, value);
     issuccess = true;
   }

@@ -19,7 +19,6 @@
  * in reading values from config files
  */
 
-
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
@@ -76,8 +75,9 @@ private:
   /* setter function for assigning 'value' to members of
   Config struct called 'name' specifically for members
   involved when thermosolver == 'cvode' */
+
 public:
-  /* Initialisation Files and Output Data parameters */
+  /*** Initialisation and Output Data parameters ***/
   std::string constants_filename;    // filename containing values of physical constants
   std::string initSDs_filename;      // binary filename for initialisation of SDs
   std::string grid_filename;         // binary filename for GBx boundaries
@@ -85,28 +85,34 @@ public:
   std::filesystem::path zarrbasedir; // zarr store base directory
   int maxchunk;                      // maximum no. of elements in chunks of zarr store array
 
-  /* SDM parameters */
-  /* timestepping parameters */
-  unsigned int cond_iters;     // suggested no. iterations of Newton Raphson Method
-  double cond_SUBTSTEP;        // smallest timestep in cases where substepping occurs [s]
-  double cond_rtol;            // relative tolerance for implicit euler integration
-  double cond_atol;            // abolute tolerance for implicit euler integration
-  double nfrags;               // expected number of fragments in (real) breakup even, (use -1 for nan value)
-  double CONDTSTEP;            // time between SD condensation events [s]
-  double COLLTSTEP;            // time between SD collision events [s]
-  double MOTIONTSTEP;          // time between SDM motion [s]
-  double COUPLTSTEP;           // time between thermodynamic couplings [s]
-  double OBSTSTEP;             // time between SDM observations [s]
-  double T_END;                // time span of integration [s]
+  /*** SDM Runtime parameters ***/
+  /* domain setup */
+  int nspacedims; // no. of spatial dimensions to model
+  int totnsupers; //(initial) total no. of SDs
 
-  /* SDs parameters */
-  int totnsupers;           // initial total no. of SDs
-  int nspacedims;           // no. of spatial dimensions to model
-  bool wetradiiinit;        // set initial SD radii to equilibrium wet radius
-  bool doAlterThermo;       // enable condensation to alter the thermodynamic state
-  std::string thermosolver; // type of thermodynamic solver to configure
+  /* timestepping */
+  double CONDTSTEP;   // time between SD condensation events [s]
+  double COLLTSTEP;   // time between SD collision events [s]
+  double MOTIONTSTEP; // time between SDM motion [s]
+  double COUPLTSTEP;  // time between thermodynamic couplings [s]
+  double OBSTSTEP;    // time between SDM observations [s]
+  double T_END;       // time span of integration from 0s to T_END [s]
 
-  /* Read in Thermodynamics File parameters (default to empty) */
+  /* microphysics */
+  unsigned int cond_iters; // suggested no. iterations of Newton Raphson Method
+  double cond_SUBTSTEP;    // smallest timestep in cases where substepping occurs [s]
+  double cond_rtol;        // relative tolerance for implicit euler integration
+  double cond_atol;        // abolute tolerance for implicit euler integration
+  double nfrags;           // expected number of fragments in breakup event, (use -1 for nan value)
+
+  /* superdroplets */
+  bool wetradiiinit;  // set initial SD radii to equilibrium wet radius
+  bool doAlterThermo; // enable condensation to alter the thermodynamic state
+
+  /*** Coupled Dynamics Solver Parameters ***/
+  std::string thermosolver; // type of dynamics solver to configure
+
+  /* read in dynamics from file (default to empty) */
   std::string press_filename = ""; // binary filename for pressure
   std::string temp_filename = "";  // binary filename for temperature
   std::string qvap_filename = "";  // binary filename for vapour mixing ratio
@@ -116,7 +122,7 @@ public:
   std::string vvel_filename = "";  // binary filename for horizontal y velocity
 
   /* CVODE ODE solver parameters (default to type's quiet_NAN) */
-  /* initial (uniform) thermodynamic conditions */
+  /* initial uniform thermodynamics */
   double P_INIT = std::numeric_limits<double>::signaling_NaN();    // initial pressure [Pa]
   double TEMP_INIT = std::numeric_limits<double>::signaling_NaN(); // initial parcel temperature [T]
   double relh_init = std::numeric_limits<double>::signaling_NaN(); // initial relative humidity (%)
