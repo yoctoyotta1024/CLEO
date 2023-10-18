@@ -58,8 +58,12 @@ private:
 
     KOKKOS_INLINE_FUNCTION
     Kokkos::pair<size_t, size_t> set_refs()
+    /* assumes supers is already sorted via sdgbxindex */
     {
-      return Kokkos::make_pair<size_t, size_t>(0,10);
+
+      const size_t ref0(0);
+      const size_t ref1(0);
+      return {ref0, ref1};
     }
 
     KOKKOS_INLINE_FUNCTION supers_subview operator()()
@@ -75,8 +79,9 @@ private:
     }
 
     KOKKOS_INLINE_FUNCTION bool iscorrect()
+    /* assumes supers is already sorted via sdgbxindex */
     {
-      return true; //TODO: do this properly
+      return false; //TODO: do this properly
     }
   };
 
@@ -108,10 +113,13 @@ public:
   Gridbox(const Gbxindex igbxindex,
           const State istate,
           supers_constview_type supers)
+      /* assumes supers view (or subview) already sorted via sdgbxindex */
       : gbxindex(igbxindex),
         state(istate),
         supersingbx(supers),
-        detectors() {}
+        detectors()
+  {
+  }
 
   KOKKOS_INLINE_FUNCTION
   auto get_gbxindex() {return gbxindex.value;}
