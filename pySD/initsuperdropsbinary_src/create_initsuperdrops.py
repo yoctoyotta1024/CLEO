@@ -1,3 +1,23 @@
+'''
+----- CLEO -----
+File: create_initsuperdrops.py
+Project: initsuperdropsbinary_src
+Created Date: Friday 13th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Wednesday 18th October 2023
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+Copyright (c) 2023 MPI-M, Clara Bayley
+-----
+File Description:
+'''
+
+
 import numpy as np
 from os.path import isfile
 from .. import cxx2py, writebinary
@@ -6,7 +26,7 @@ from ..gbxboundariesbinary_src.read_gbxboundaries import read_dimless_gbxboundar
 class ManyInitAttrs:
     '''store for lists of each attribute for all superdroplets ''' 
     def __init__(self):
-        self.sd_gbxindex = []
+        self.sdgbxindex = []
         self.eps = []
         self.radius = []
         self.m_sol = []
@@ -16,7 +36,7 @@ class ManyInitAttrs:
     
     def set_attrlists(self, a, b, c, 
                       d, e, f, g):
-        self.sd_gbxindex = a
+        self.sdgbxindex = a
         self.eps = b
         self.radius = c
         self.m_sol = d
@@ -26,7 +46,7 @@ class ManyInitAttrs:
         
     def extend_attrlists_fromlists(self, a, b, c, 
                                    d, e, f, g):
-        self.sd_gbxindex.extend(a)
+        self.sdgbxindex.extend(a)
         self.eps.extend(b)
         self.radius.extend(c)
         self.m_sol.extend(d)
@@ -37,7 +57,7 @@ class ManyInitAttrs:
     def extend_attrlists(self, mia):
         ''' use an instance of ManyInitAttrs (mia) to
         extend lists in this instance '''
-        self.sd_gbxindex.extend(mia.sd_gbxindex)
+        self.sdgbxindex.extend(mia.sdgbxindex)
         self.eps.extend(mia.eps)
         self.radius.extend(mia.radius)
         self.m_sol.extend(mia.m_sol)
@@ -68,8 +88,8 @@ def initSDsinputsdict(configfile, constsfile):
 
   return inputs
 
-def is_sd_gbxindex_correct(gridboxbounds, coord3, coord1, coord2,
-                           gbxindex, sd_gbxindex):
+def is_sdgbxindex_correct(gridboxbounds, coord3, coord1, coord2,
+                           gbxindex, sdgbxindex):
   ''' rasises error if superdroplet coords [m] lie outside gridbox bounds [m]
     or if gridbox index not equal to superdroplet's. '''
 
@@ -84,7 +104,7 @@ def is_sd_gbxindex_correct(gridboxbounds, coord3, coord1, coord2,
   if errmsg:
     raise ValueError(errmsg)
 
-  elif (sd_gbxindex != gbxindex).any():
+  elif (sdgbxindex != gbxindex).any():
     errmsg = "superdroplet gridbox index not the same as"+\
               " gridbox it should be associated with"
     raise ValueError(errmsg)
@@ -96,7 +116,7 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     make dimensionless superdroplet attributes'''
     
     # generate attributes
-    sd_gbxindex = [gbxindex]*nsupers
+    sdgbxindex = [gbxindex]*nsupers
     eps, radius, m_sol = initattrsgen.generate_attributes(nsupers, 
                                                           inputs["RHO_SOL"],
                                                           NUMCONC,
@@ -104,8 +124,8 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     coord3, coord1, coord2 = initattrsgen.generate_coords(nsupers,
                                                           inputs["SDnspace"],
                                                           gridboxbounds)
-    is_sd_gbxindex_correct(gridboxbounds, coord3, coord1, coord2,
-                           gbxindex, sd_gbxindex)
+    is_sdgbxindex_correct(gridboxbounds, coord3, coord1, coord2,
+                           gbxindex, sdgbxindex)
 
     # de-dimsionalise attributes
     radius = radius / inputs["R0"]
@@ -115,7 +135,7 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     coord2 = coord2 / inputs["COORD0"]
 
     attrs4gbx = ManyInitAttrs() 
-    attrs4gbx.set_attrlists(sd_gbxindex, eps, radius, m_sol,
+    attrs4gbx.set_attrlists(sdgbxindex, eps, radius, m_sol,
                             coord3, coord1, coord2)
 
     return attrs4gbx
@@ -156,12 +176,12 @@ def ctype_compatible_attrs(attrs):
   datatypes = [np.uintc, np.uint, np.double, np.double]
   datatypes += [np.double]*3 # coords datatype
   
-  attrs.sd_gbxindex = list(set_arraydtype(attrs.sd_gbxindex, datatypes[0]))
+  attrs.sdgbxindex = list(set_arraydtype(attrs.sdgbxindex, datatypes[0]))
   attrs.eps = list(set_arraydtype(attrs.eps, datatypes[1]))
   attrs.radius = list(set_arraydtype(attrs.radius, datatypes[2]))
   attrs.m_sol = list(set_arraydtype(attrs.m_sol, datatypes[3]))
   
-  datalist = attrs.sd_gbxindex + attrs.eps + attrs.radius + attrs.m_sol
+  datalist = attrs.sdgbxindex + attrs.eps + attrs.radius + attrs.m_sol
   
   if any(attrs.coord3):
     # make coord3 compatible if there is data for it (>= 1-D model)
@@ -240,7 +260,7 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
   attrs = create_allsuperdropattrs(nsupersdict, initattrsgen,
                                    gbxbounds, inputs, NUMCONC) 
   
-  ndata = [len(dt) for dt in [attrs.sd_gbxindex, attrs.eps,
+  ndata = [len(dt) for dt in [attrs.sdgbxindex, attrs.eps,
                               attrs.radius, attrs.m_sol, attrs.coord3,
                               attrs.coord1, attrs.coord2]]
   
@@ -258,13 +278,13 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
   if initattrsgen.coord3gen: 
     if initattrsgen.coord1gen:
       if initattrsgen.coord2gen: 
-        metastr += ' [sd_gbxindex, eps, radius, m_sol, coord3, coord1, coord2]'
+        metastr += ' [sdgbxindex, eps, radius, m_sol, coord3, coord1, coord2]'
       else:
-        metastr += ' [sd_gbxindex, eps, radius, m_sol, coord3, coord1]'
+        metastr += ' [sdgbxindex, eps, radius, m_sol, coord3, coord1]'
     else:
-      metastr += ' [sd_gbxindex, eps, radius, m_sol, coord3]'
+      metastr += ' [sdgbxindex, eps, radius, m_sol, coord3]'
   else:
-    metastr += ' [sd_gbxindex, eps, radius, m_sol]'
+    metastr += ' [sdgbxindex, eps, radius, m_sol]'
   
   writebinary.writebinary(initSDsfile, data, ndata, datatypes,
                           units, scale_factors, metastr)

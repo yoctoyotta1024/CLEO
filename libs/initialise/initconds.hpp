@@ -39,16 +39,18 @@ public:
 
   size_t get_size() const
   {
-    std::vector<unsigned int> sd_gbxindex(totnsupers);
-
-    return sd_gbxindex.size();
+    return sdgbxindex().size();
   }
 
-  std::vector<unsigned int> sd_gbxindex() const
+  std::vector<unsigned int> sdgbxindex() const
   {
-    std::vector<unsigned int> sd_gbxindex(totnsupers);
+    std::vector<unsigned int> sdgbxindex;
+    for (int kk(0); kk < totnsupers; ++kk)
+    {
+      sdgbxindex.push_back(kk/2);
+    }
 
-    return sd_gbxindex;
+    return sdgbxindex;
   }
 
   std::vector<double> coord3() const

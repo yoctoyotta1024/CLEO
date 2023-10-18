@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 14th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -62,7 +62,7 @@ struct SuperdropAttrs
 class Superdrop
 {
 private:
-  unsigned int sd_gbxindex; // matches index of gridbox the superdrop occupies
+  unsigned int sdgbxindex; // matches index of gridbox the superdrop occupies
   double coord3;            // a 3rd spatial coordinate of superdroplet (z)
   double coord1;            // a 1st spatial coordinate of superdroplet (x)
   double coord2;            // a 2nd spatial coordinate of superdroplet (y)
@@ -77,23 +77,23 @@ public:
   KOKKOS_INLINE_FUNCTION ~Superdrop() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  Superdrop(const unsigned int isd_gbxindex,
+  Superdrop(const unsigned int isdgbxindex,
             const double icoord3,
             const double icoord1,
             const double icoord2,
             const SuperdropAttrs iattrs,
             const IDType iid)
-      : sd_gbxindex(isd_gbxindex),
+      : sdgbxindex(isdgbxindex),
         coord3(icoord3), coord1(icoord1), coord2(icoord2),
         attrs(iattrs), id(iid) {} 
 
-  KOKKOS_INLINE_FUNCTION unsigned int get_sd_gbxindex() { return sd_gbxindex; }
-  KOKKOS_INLINE_FUNCTION double get_coord3() { return coord3; }
-  KOKKOS_INLINE_FUNCTION double get_coord1() { return coord1; }
-  KOKKOS_INLINE_FUNCTION double get_coord2() { return coord2; }
-  KOKKOS_INLINE_FUNCTION double get_radius() { return attrs.radius; }
-  KOKKOS_INLINE_FUNCTION double get_msol() { return attrs.msol; }
-  KOKKOS_INLINE_FUNCTION double get_xi() { return attrs.xi; }
+  KOKKOS_INLINE_FUNCTION unsigned int get_sdgbxindex() const { return sdgbxindex; }
+  KOKKOS_INLINE_FUNCTION double get_coord3() const { return coord3; }
+  KOKKOS_INLINE_FUNCTION double get_coord1() const { return coord1; }
+  KOKKOS_INLINE_FUNCTION double get_coord2() const { return coord2; }
+  KOKKOS_INLINE_FUNCTION double get_radius() const { return attrs.radius; }
+  KOKKOS_INLINE_FUNCTION double get_msol() const { return attrs.msol; }
+  KOKKOS_INLINE_FUNCTION double get_xi() const { return attrs.xi; }
 };
 
 #endif // SUPERDROP_HPP

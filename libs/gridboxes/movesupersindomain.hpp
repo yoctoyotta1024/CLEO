@@ -51,7 +51,7 @@ private:
                                  viewd_supers supers) const
   /* enact movement of superdroplets throughout domain in three stages:
   1) update their spatial coords according to type of motion.
-  2) update their sd_gbxindex accordingly
+  2) update their sdgbxindex accordingly
   3) move superdroplets between gridboxes */
   {
     // update sd index etc. fro all SDs in gbxs

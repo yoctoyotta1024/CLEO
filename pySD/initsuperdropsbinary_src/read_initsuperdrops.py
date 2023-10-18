@@ -1,3 +1,23 @@
+'''
+----- CLEO -----
+File: read_initsuperdrops.py
+Project: initsuperdropsbinary_src
+Created Date: Friday 13th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Wednesday 18th October 2023
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+Copyright (c) 2023 MPI-M, Clara Bayley
+-----
+File Description:
+'''
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -34,7 +54,7 @@ def read_dimless_superdrops_binary(filename, isprint=True):
         ll[n-1] = np.sum(ndata_pervar[:n])
 
     attrs = ManyInitAttrs()
-    attrs.sd_gbxindex = np.asarray(data[:ll[0]], dtype=datatypes[0])
+    attrs.sdgbxindex = np.asarray(data[:ll[0]], dtype=datatypes[0])
     attrs.eps = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1])
     attrs.radius = np.asarray(data[ll[1]:ll[2]], dtype=datatypes[2])
     attrs.m_sol = np.asarray(data[ll[2]:ll[3]], dtype=datatypes[3])
@@ -42,7 +62,7 @@ def read_dimless_superdrops_binary(filename, isprint=True):
     attrs.coord1 = np.asarray(data[ll[4]:ll[5]], dtype=datatypes[5])
     attrs.coord2 = np.asarray(data[ll[5]:], dtype=datatypes[6])
 
-    print("attribute shapes: ", attrs.sd_gbxindex.shape, attrs.eps.shape,
+    print("attribute shapes: ", attrs.sdgbxindex.shape, attrs.eps.shape,
           attrs.radius.shape, attrs.m_sol.shape, attrs.coord3.shape,
           attrs.coord1.shape, attrs.coord2.shape)
     
@@ -61,7 +81,7 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
 
     for idx in gbxidxs:
         vol = gbxvols[idx]
-        sl = np.s_[attrs.sd_gbxindex==idx]
+        sl = np.s_[attrs.sdgbxindex==idx]
         l0 = plot_radiusdistrib(axs[0], hedgs, 
                                 attrs.radius[sl], attrs.eps[sl])
         l1 = plot_numconcdistrib(axs[1], hedgs, attrs.eps[sl],
@@ -91,7 +111,7 @@ def plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
         gbxidxs = [gbxs2plt]
         savename = binpath+"initGBx"+str(gbxs2plt)+"distrib.png"
     elif gbxs2plt == "all":
-        gbxidxs  = np.unique(attrs.sd_gbxindex)
+        gbxidxs  = np.unique(attrs.sdgbxindex)
         savename = binpath+"initallGBxsdistribs.png"
     else:
         gbxidxs = gbxs2plt

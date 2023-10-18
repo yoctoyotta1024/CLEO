@@ -48,7 +48,7 @@ private:
   private:
     std::unique_ptr<Superdrop::IDType::Gen> sdIdGen;
     std::shared_ptr<const SoluteProperties> solutes;
-    std::vector<unsigned int> sd_gbxindexes;
+    std::vector<unsigned int> sdgbxindexes;
     std::vector<double> coord3s;
     std::vector<double> coord1s;
     std::vector<double> coord2s;
@@ -67,7 +67,7 @@ private:
     GenSuperdrop(const FetchInitData &fisd)
         : sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
           solutes(),
-          sd_gbxindexes(fisd.sd_gbxindex()),
+          sdgbxindexes(fisd.sdgbxindex()),
           coord3s(fisd.coord3()),
           coord1s(fisd.coord1()),
           coord2s(fisd.coord2()),
@@ -77,14 +77,14 @@ private:
 
     Superdrop operator()(const unsigned int kk) const
     {
-      const unsigned int sd_gbxindex(sd_gbxindexes.at(kk));
+      const unsigned int sdgbxindex(sdgbxindexes.at(kk));
       const double coord3(coord3s.at(kk));
       const double coord1(coord1s.at(kk));
       const double coord2(coord2s.at(kk));
       const SuperdropAttrs attrs(attrs_at(kk));
       const auto sd_id = sdIdGen->next();
 
-      return Superdrop(sd_gbxindex, coord3,
+      return Superdrop(sdgbxindex, coord3,
                        coord1, coord2,
                        attrs, sd_id);
     }
@@ -128,12 +128,12 @@ private:
   {
     for (size_t kk(0); kk < supers.extent(0); ++kk)
     {
-      std::cout << "sdid: " << supers(kk).id.value << "\n";
+      std::cout << "sdgbxindex: " << supers(kk).get_coord3() << "\n";
     }
   }
 
   viewd_supers sort_supers(viewd_supers supers) const
-  /* sort the view of superdroplets by their sd_gbxindexes */
+  /* sort the view of superdroplets by their sdgbxindexes */
   {
     return supers;
   }
