@@ -66,12 +66,13 @@ private:
   void ensure_initialisation_complete(dualview_gbx gbxs,
                                       const size_t size) const;
 
-  void print_gbxs(dualview_gbx gbxs) const;
+  void print_gbxs(dualview_gbx gbxs, viewd_constsupers supers) const;
   /* print gridboxes information */
 
 public:
   template <typename FetchInitData>
-  dualview_gbx operator()(const FetchInitData fid) const
+  dualview_gbx operator()(const FetchInitData fid,
+                          viewd_constsupers supers) const
   {
 
     std::cout << "\n--- create gridboxes ---"
@@ -81,7 +82,7 @@ public:
     std::cout << "\nset span?\n";
     
     ensure_initialisation_complete(gbxs, fid.get_size());
-    print_gbxs(gbxs);
+    print_gbxs(gbxs, supers);
     std::cout << "--- create gridboxes: success ---\n";
 
     return gbxs;

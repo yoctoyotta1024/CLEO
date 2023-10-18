@@ -58,7 +58,7 @@ private:
     /* returns subview from view of superdrops
     refering to superdrops which occupy given gridbox */
     {
-      return Kokkos::subview(supers, pos.first, pos.second);
+      return Kokkos::subview(supers, pos);
     }
   };
 

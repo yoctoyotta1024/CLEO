@@ -42,13 +42,17 @@ void CreateGbxs::ensure_initialisation_complete(dualview_gbx gbxs,
   }
 }
 
-void CreateGbxs::print_gbxs(dualview_gbx gbxs) const
+void CreateGbxs::print_gbxs(dualview_gbx gbxs,
+                            viewd_constsupers supers) const
 /* print gridboxes information */
 {
   for (size_t ii(0); ii < gbxs.extent(0); ++ii)
   {
-    std::cout << "gbx: " << gbxs.view_host()(ii).get_gbxindex() 
-    << ", vol = " << gbxs.view_host()(ii).state.get_volume() << "\n";
+    auto h_gbx(gbxs.view_host()(ii));
+    const size_t nsupers(h_gbx.sdsingbx(supers).extent(0));
+    std::cout << "gbx: " << h_gbx.get_gbxindex() 
+    << ", vol = " << h_gbx.state.get_volume()
+    << ", nsupers = " << nsupers << " \n";
     std::cout << "gbx: " << gbxs.view_device()(ii).get_gbxindex() << "\n";
   }
 }

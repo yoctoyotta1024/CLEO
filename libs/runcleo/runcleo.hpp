@@ -183,8 +183,8 @@ public:
   {
     // create runtime objects
     RunStats stats;
-    dualview_gbx gbxs(CreateGbxs{}(initconds.initgbxs));
     viewd_supers supers(CreateSupers{}(initconds.initsupers));
+    dualview_gbx gbxs(CreateGbxs{}(initconds.initgbxs, supers));
 
     // // prepare CLEO for timestepping
     // prepare_timestepping();
