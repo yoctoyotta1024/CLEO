@@ -1,3 +1,23 @@
+'''
+----- CLEO -----
+File: initattributes.py
+Project: initsuperdropsbinary_src
+Created Date: Friday 13th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Wednesday 18th October 2023
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+Copyright (c) 2023 MPI-M, Clara Bayley
+-----
+File Description:
+'''
+
+
 import numpy as np
 
 from .radiiprobdistribs import *
@@ -188,11 +208,11 @@ class InitManyAttrsGen:
 
         return np.array(eps, dtype=np.uint)
 
-    def check_coordsgen_matches_modeldimension(self, SDnspace):
+    def check_coordsgen_matches_modeldimension(self, nspacedims):
        
-        if SDnspace != self.ncoordsgen:
+        if nspacedims != self.ncoordsgen:
             errmsg = str(self.ncoordsgen)+" coord generators specified "+\
-                    "but SDnspace = "+str(SDnspace)
+                    "but nspacedims = "+str(nspacedims)
             raise ValueError(errmsg)
 
     def check_totalnumconc(self, multiplicities, NUMCONC, samplevol):
@@ -238,11 +258,11 @@ class InitManyAttrsGen:
          
         return multiplicities, dryradii, mass_solutes # units [], [m], [Kg], [m]
 
-    def generate_coords(self, nsupers, SDnspace, gridboxbounds):
+    def generate_coords(self, nsupers, nspacedims, gridboxbounds):
         ''' generate superdroplets (SDs) attributes that have dimensions
         by calling the appropraite generating functions'''
 
-        self.check_coordsgen_matches_modeldimension(SDnspace)
+        self.check_coordsgen_matches_modeldimension(nspacedims)
        
         coord3, coord1, coord2 = np.array([]), np.array([]), np.array([])
         

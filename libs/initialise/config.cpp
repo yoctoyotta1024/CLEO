@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -196,9 +196,9 @@ void Config::configvariable(const std::string name, const std::string value)
     totnsupers = stoi(value);
     issuccess = true;
   }
-  else if (name == "SDnspace")
+  else if (name == "nspacedims")
   {
-    SDnspace = stoi(value);
+    nspacedims = stoi(value);
     issuccess = true;
   }
   else if (name == "wetradiiinit")

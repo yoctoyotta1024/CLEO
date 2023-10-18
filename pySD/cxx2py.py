@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 17th October 2023
+Last Modified: Wednesday 18th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -163,7 +163,7 @@ def read_configtxt_into_floats(filename, is_print=True):
   except:
     pass
   try:
-    floats["SDnspace"] = int(floats["SDnspace"])              # no spatial coords to SDs
+    floats["nspacedims"] = int(floats["nspacedims"])              # no spatial coords to SDs
   except:
     pass
 

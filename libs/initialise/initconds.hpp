@@ -31,9 +31,11 @@ superdroplets e.g. via the CreateSupers struct */
 {
 private:
   int totnsupers; // total number of superdroplets (in kokkos view on device initially)
+  int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
 
 public:
-  InitSupers(const int totnsupers) : totnsupers(totnsupers) {}
+  InitSupers(const int totnsupers, const int nspacedims)
+      : totnsupers(totnsupers), nspacedims(nspacedims) {}
 
   int get_totnsupers() const { return totnsupers; }
 
@@ -45,10 +47,7 @@ public:
   std::vector<unsigned int> sdgbxindex() const
   {
     std::vector<unsigned int> sdgbxindex{1, 3, 5, 0, 0,
-                                         5, 6, 7, 6, 4};
-
-    // std::vector<unsigned int> sdgbxindex{0, 0, 1, 2, 13,
-    //                                      15, 16, 17, 17, 200};
+                                         5, 6, 6, 0, 4};
 
     return sdgbxindex;
   }
@@ -103,7 +102,7 @@ intial conditions for CLEO */
   InitSupers initsupers; // initial conditions for creating superdroplets
 
   InitConds(const Config &config)
-      : initsupers(config.totnsupers) {}
+      : initsupers(config.totnsupers, config.nspacedims) {}
 };
 
 #endif // INITCONDS_HPP

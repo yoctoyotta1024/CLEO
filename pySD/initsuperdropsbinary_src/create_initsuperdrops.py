@@ -76,7 +76,7 @@ def initSDsinputsdict(configfile, constsfile):
 
   inputs = {
     # for creating SD attribute distirbutions
-    "SDnspace": int(config["SDnspace"]),
+    "nspacedims": int(config["nspacedims"]),
     "RHO_SOL": consts["RHO_SOL"],               # solute density [Kg/m^3]
 
     # for de-dimensionalising attributes
@@ -122,7 +122,7 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
                                                           NUMCONC,
                                                           gridboxbounds) 
     coord3, coord1, coord2 = initattrsgen.generate_coords(nsupers,
-                                                          inputs["SDnspace"],
+                                                          inputs["nspacedims"],
                                                           gridboxbounds)
     is_sdgbxindex_correct(gridboxbounds, coord3, coord1, coord2,
                            gbxindex, sdgbxindex)
@@ -200,17 +200,17 @@ def ctype_compatible_attrs(attrs):
 
   return datalist, datatypes
 
-def check_datashape(data, ndata, SDnspace):
+def check_datashape(data, ndata, nspacedims):
   ''' make sure each superdroplet attribute in data has length stated
   in ndata and that this length is compatible with the nummber of
   attributes and superdroplets expected given ndata'''
   
   err=''
-  if any([n != ndata[0] for n in ndata[:4+SDnspace]]):
+  if any([n != ndata[0] for n in ndata[:4+nspacedims]]):
     
     err += "\n------ ERROR! -----\n"+\
           "not all variables in data are same length, ndata = "+\
-          str(ndata[:4+SDnspace])+"\n---------------------\n"
+          str(ndata[:4+nspacedims])+"\n---------------------\n"
      
   if len(data) != np.sum(ndata): 
     err += "inconsistent dimensions of data: "+str(np.shape(data))+", and"+\
@@ -265,7 +265,7 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
                               attrs.coord1, attrs.coord2]]
   
   data, datatypes = ctype_compatible_attrs(attrs) 
-  check_datashape(data, ndata, inputs["SDnspace"])
+  check_datashape(data, ndata, inputs["nspacedims"])
 
   units = [b' ', b' ', b'm', b'g']
   units += [b'm']*3 # coords units

@@ -1,3 +1,23 @@
+'''
+----- CLEO -----
+File: read_thermodynamics.py
+Project: thermobinary_src
+Created Date: Friday 13th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Wednesday 18th October 2023
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+Copyright (c) 2023 MPI-M, Clara Bayley
+-----
+File Description:
+'''
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import colors
@@ -113,7 +133,7 @@ def thermovar_from_binary(var, thermofile, shape,
   return data
 
 def read_dimless_thermodynamics_binary(thermofile, ndims,
-                                       ntime, SDnspace):
+                                       ntime, nspacedims):
 
   # expected lengths of data defined on gridbox centres or faces 
   cen = [ntime, int(np.prod(ndims))]
@@ -131,15 +151,15 @@ def read_dimless_thermodynamics_binary(thermofile, ndims,
                                             isprint=False)
 
   datatypes = [np.double]*3
-  if SDnspace >= 1:
+  if nspacedims >= 1:
     thermodata["wvel"] = thermovar_from_binary("wvel", thermofile, zface,
                                               ntime, ndims, datatypes[0],
                                               isprint=False)
-    if SDnspace >= 2:
+    if nspacedims >= 2:
       thermodata["uvel"] = thermovar_from_binary("uvel", thermofile, xface,
                                                 ntime, ndims, datatypes[1],
                                                 isprint=False)
-      if SDnspace >= 3:
+      if nspacedims >= 3:
         thermodata["vvel"] = thermovar_from_binary("vvel", thermofile, yface,
                                                   ntime, ndims, datatypes[2],
                                                   isprint=False)
@@ -154,7 +174,7 @@ def get_thermodynamics_from_thermofile(thermofile, ndims, inputs=False,
 
   thermodata = read_dimless_thermodynamics_binary(thermofile, ndims, 
                                                   inputs["ntime"],
-                                                  inputs["SDnspace"]) # dimensionless data [time, gridboxes]
+                                                  inputs["nspacedims"]) # dimensionless data [time, gridboxes]
   thermodata = ThermoOnGrid(thermodata, inputs, ndims) 
 
   return thermodata # data with units in 4D arrays with dims [time, y, x, z]
@@ -178,7 +198,7 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
 
     plot_1dprofiles(zfull, thermodata, inputs["Mr_ratio"], binpath, savefig)
 
-    if inputs["SDnspace"] > 1: 
+    if inputs["nspacedims"] > 1: 
       xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
       xxf, zzf = np.meshgrid(xfull, zfull, indexing="ij") # dims [xdims, zdims]
       plot_2dcolormaps(zzh, xxh, zzf, xxf, thermodata, inputs, binpath, savefig)

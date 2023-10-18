@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 18th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,7 +101,7 @@ public:
 
   /* SDs parameters */
   int totnsupers;           // initial no. elements in SDs' vector (=total initial no. of SDs)
-  int SDnspace;             // no. of spatial coordinates of SDs (=dimension of model)
+  int nspacedims;           // no. of spatial dimensions to model
   bool wetradiiinit;        // set initial SD radii to equilibrium wet radius
   bool doAlterThermo;       // enable condensation to alter the thermodynamic state
   std::string thermosolver; // type of thermodynamic solver to configure
