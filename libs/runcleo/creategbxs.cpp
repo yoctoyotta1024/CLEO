@@ -17,5 +17,19 @@
  * File Description:
  */
 
-
 #include "./creategbxs.hpp"
+
+void CreateGbxs::ensure_initialisation_complete(dualview_gbx supers,
+                                                const size_t size) const
+{
+}
+
+void CreateGbxs::print_gbxs(dualview_gbx gbxs) const
+/* print gridboxes information */
+{
+  for (size_t ii(0); ii < gbxs.extent(0); ++ii)
+  {
+    std::cout << "gbx: " << gbxs.view_host()(ii).get_gbxindex() << "\n";
+    std::cout << "gbx: " << gbxs.view_device()(ii).get_gbxindex() << "\n";
+  }
+}
