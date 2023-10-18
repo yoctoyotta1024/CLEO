@@ -68,12 +68,25 @@ private:
     model. Otherwise coordinate = 0. E.g. if model is 1-D,
     only coord3 obtained from vectorr (coord1 = coord2 = 0.0) */
     {
-      const int nspacedims(fsid.nspacedims);
-      const double coord3(coord3s.at(kk));
-      const double coord1(coord1s.at(kk));
-      const double coord2(coord2s.at(kk));
+      const int nspacedims(fisd.nspacedims);
+      std::array<double, 3> coords312{0.0, 0.0, 0.0};
 
-      return {coord3, coord2, coord1};
+      if (nspacedims > 0)
+      {
+        coords[0] = coord3s.at(kk);
+        
+        if (nspacedims > 1)
+        {
+          coords[1] = coord1s.at(kk);
+        
+          if (nspacedims == 3)
+          {
+            coords[2] = coord2s.at(kk);
+          }
+        }
+      }
+
+      return coords312;
     }
 
     SuperdropAttrs attrs_at(const unsigned int kk) const
@@ -105,12 +118,12 @@ private:
     Superdrop operator()(const unsigned int kk) const
     {
       const unsigned int sdgbxindex(sdgbxindexes.at(kk));
-      const std::array<double, 3> coords(coords_at(kk));
+      const std::array<double, 3> coords312(coords_at(kk));
       const SuperdropAttrs attrs(attrs_at(kk));
       const auto sd_id = sdIdGen->next();
 
-      return Superdrop(sdgbxindex, coords[0],
-                       coords[1], coords[2],
+      return Superdrop(sdgbxindex, coords312[0],
+                       coords312[1], coords312[2],
                        attrs, sd_id);
     }
   };

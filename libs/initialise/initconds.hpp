@@ -34,8 +34,8 @@ private:
   int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
 
 public:
-  InitSupers(const int totnsupers, const int nspacedims)
-      : totnsupers(totnsupers), nspacedims(nspacedims) {}
+  InitSupers(const Config &config)
+      : totnsupers(config.totnsupers), nspacedims(config.nspacedims) {}
 
   int get_totnsupers() const { return totnsupers; }
 
@@ -102,7 +102,7 @@ intial conditions for CLEO */
   InitSupers initsupers; // initial conditions for creating superdroplets
 
   InitConds(const Config &config)
-      : initsupers(config.totnsupers, config.nspacedims) {}
+      : initsupers(config) {}
 };
 
 #endif // INITCONDS_HPP
