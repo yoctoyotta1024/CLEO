@@ -107,14 +107,24 @@ gridboxes e.g. via the CreateGbxs struct */
 {
 private:
   int ngbxs;
-  int getsizetmp = 5; //TODO: erradicate
 
 public:
   InitGbxs(const Config &config)
       : ngbxs(config.ngbxs) {}
 
   auto get_ngbxs() const { return ngbxs; }
-  size_t get_size() const { return getsizetmp; }
+
+  size_t get_size() const
+  {
+    return volume().size();
+  }
+
+  std::vector<double> volume() const
+  {
+    std::vector<double> volume(ngbxs, 1000);
+
+    return volume;
+  }
 };
 
 struct InitConds

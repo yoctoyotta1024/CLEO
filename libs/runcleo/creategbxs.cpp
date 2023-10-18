@@ -47,7 +47,8 @@ void CreateGbxs::print_gbxs(dualview_gbx gbxs) const
 {
   for (size_t ii(0); ii < gbxs.extent(0); ++ii)
   {
-    std::cout << "gbx: " << gbxs.view_host()(ii).get_gbxindex() << "\n";
+    std::cout << "gbx: " << gbxs.view_host()(ii).get_gbxindex() 
+    << ", vol = " << gbxs.view_host()(ii).state.get_volume() << "\n";
     std::cout << "gbx: " << gbxs.view_device()(ii).get_gbxindex() << "\n";
   }
 }
