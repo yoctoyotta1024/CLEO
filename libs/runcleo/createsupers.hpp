@@ -46,8 +46,8 @@ private:
   returns superdrops generated from them */
   {
   private:
-    std::unique_ptr<Superdrop::IDType::Gen> sdIdGen;
-    std::shared_ptr<const SoluteProperties> solutes;
+    std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
+    viewd_solute solutes;                            // view contains pointer to solute(s) which are stored on device memory
     std::vector<unsigned int> sdgbxindexes;
     std::vector<double> coord3s;
     std::vector<double> coord1s;
@@ -60,20 +60,23 @@ private:
     /* helper function to return a superdroplet's attributes
     at position kk in the initial conditions data */
     {
-      return {radii.at(kk), msols.at(kk), xis.at(kk), solutes};
+      return {radii.at(kk), msols.at(kk), xis.at(kk), solutes(0)};
     }
 
   public:
     GenSuperdrop(const FetchInitData &fisd)
         : sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
-          solutes(),
+          solutes("solute"),
           sdgbxindexes(fisd.sdgbxindex()),
           coord3s(fisd.coord3()),
           coord1s(fisd.coord1()),
           coord2s(fisd.coord2()),
           radii(fisd.radius()),
           msols(fisd.msol()),
-          xis(fisd.xi()) {}
+          xis(fisd.xi())
+    {
+      solutes(0) = std::make_shared<const SoluteProperties>(); // all superdroplets reference same solute (on device memory)
+    }
 
     Superdrop operator()(const unsigned int kk) const
     {
@@ -128,7 +131,11 @@ private:
   {
     for (size_t kk(0); kk < supers.extent(0); ++kk)
     {
-      std::cout << "sdgbxindex: " << supers(kk).get_coord3() << "\n";
+      std::cout << "---"
+                   "\nsdid: "
+                << supers(kk).id.value
+                << "\nsdgbxindex: " << supers(kk).get_sdgbxindex()
+                << "\n---\n";
     }
   }
 
