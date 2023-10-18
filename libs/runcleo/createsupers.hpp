@@ -24,10 +24,15 @@
 #define CREATESUPERS_HPP
 
 #include <memory>
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+#include <string>
 
 #include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
+#include "gridboxes/sortsupers.hpp"
 #include "superdrops/superdrop.hpp"
 
 template <typename FetchInitData>
@@ -133,20 +138,12 @@ private:
   void print_supers(viewd_constsupers supers) const
   /* print superdroplet information */
   {
+    std::cout << "\n---\n";
     for (size_t kk(0); kk < supers.extent(0); ++kk)
     {
-      std::cout << "---"
-                   "\nsdid: "
-                << supers(kk).id.value
-                << "\nsdgbxindex: " << supers(kk).get_sdgbxindex()
-                << "\n---\n";
+      std::cout << "(gbx, id): (" << supers(kk).get_sdgbxindex() << ", " << supers(kk).id.value << ")\n";
     }
-  }
-
-  viewd_supers sort_supers(viewd_supers supers) const
-  /* sort the view of superdroplets by their sdgbxindexes */
-  {
-    return supers;
+    std::cout << "\n---\n";
   }
 
 public:

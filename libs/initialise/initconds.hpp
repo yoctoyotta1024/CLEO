@@ -44,11 +44,8 @@ public:
 
   std::vector<unsigned int> sdgbxindex() const
   {
-    std::vector<unsigned int> sdgbxindex;
-    for (int kk(0); kk < totnsupers; ++kk)
-    {
-      sdgbxindex.push_back(kk/2);
-    }
+    std::vector<unsigned int> sdgbxindex{1, 3, 5, 0, 0,
+                                         5, 6, 7, 6, 4};
 
     return sdgbxindex;
   }
