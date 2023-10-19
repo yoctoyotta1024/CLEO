@@ -22,7 +22,6 @@
 #ifndef RUNCLEO_HPP
 #define RUNCLEO_HPP
 
-#include <algorithm>
 #include <string>
 #include <stdexcept>
 #include <concepts>
@@ -120,6 +119,7 @@ private:
     return next_stepsize(t_mdl);
   }
 
+  KOKKOS_INLINE_FUNCTION
   unsigned int next_stepsize(const unsigned int t_mdl) const
   /* returns size of next step to take given current
   timestep, t_mdl, such that next timestep is
@@ -136,8 +136,9 @@ private:
     /* t_next is sooner out of time for next coupl or obs */
     const unsigned int next_coupl(next_step(couplstep));
     const unsigned int next_obs(next_step(obsstep));
-
-    return std::min(next_coupl, next_obs) - t_mdl; // stepsize = t_next - t_mdl
+    const auto t_next((next_coupl < next_obs) ? next_obs : next_coupl); // return smaller of two unsigned ints (see std::min)
+    
+    return t_next - t_mdl;                                              // stepsize = t_next - t_mdl
   }
 
   KOKKOS_INLINE_FUNCTION
