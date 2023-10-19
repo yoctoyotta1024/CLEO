@@ -54,7 +54,7 @@ private:
     const unsigned int next_t_mdl(((t_sdm / stepsize) + 1) * stepsize); // t of next output
     const unsigned int next_t_move(movesupers.next_step(t_sdm));        // t of next sdm movement
 
-    return std::min(next_t_mdl, next_t_move);
+    return !(next_t_mdl < next_t_move) ? next_t_move : next_t_mdl; // return smaller of two unsigned ints (see std::min)
   }
 
   KOKKOS_INLINE_FUNCTION
