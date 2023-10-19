@@ -54,8 +54,8 @@ private:
     template <typename Pred>
     KOKKOS_INLINE_FUNCTION size_t
     find_ref(const Pred pred) const
-    /* returns distance from begining of supers view to
-    the superdroplet that is first in supers to fail
+    /* returns distance from begining of supers view
+    to the superdroplet that is first to fail
     to satisfy given Predicate "pred" */
     {
       namespace KE = Kokkos::Experimental;
@@ -108,10 +108,15 @@ private:
                                        const unsigned int ii)
         : supers(isupers), ii(ii), refs(set_refs()) {}
 
-    KOKKOS_INLINE_FUNCTION Kokkos::pair<size_t, size_t> set_refs()
-    /* assumes supers is already sorted via sdgbxindex */
+    KOKKOS_INLINE_FUNCTION
+    Kokkos::pair<size_t, size_t> set_refs()
+    /* assumes supers is already sorted via sdgbxindex.
+    returns pair which are positions of first and last
+    superdrops in view which have matching sdgbxindex to ii */
     {
       struct Ref0
+      /* predicate to find first superdrop in
+      view which has matching sdgbxindex to ii */
       {
         unsigned int ii;
 
@@ -122,6 +127,8 @@ private:
       };
 
       struct Ref1
+      /* predicate to find last superdrop in
+      view which has matching sdgbxindex to ii */
       {
         unsigned int ii;
 
@@ -134,22 +141,20 @@ private:
       return {find_ref(Ref0{ii}), find_ref(Ref1{ii})};
     }
 
-    KOKKOS_INLINE_FUNCTION supers_subview operator()() const
-    /* returns subview from view of superdrops
-    refering to superdrops which occupy given gridbox */
-    {
-      return Kokkos::subview(supers, refs);
-    }
-
-    KOKKOS_INLINE_FUNCTION size_t nsupers() const
-    {
-      return refs.second - refs.first;
-    }
-
     KOKKOS_INLINE_FUNCTION bool iscorrect() const
-    /* assumes supers is already sorted via sdgbxindex */
+    /* assumes supers is already sorted via sdgbxindex.
+    checks that all superdrops in view which have matching 
+    sdgbxindex to ii are indeed included in (*this) subview
+    (according to refs). Three criteria must be true for
+    iscorrect to return true: (1) all superdrops in current
+    subview have matching index. (2) all superdrops
+    preceeding current subview do not have matching index.
+    (3) all superdrops after current subview also do
+    not have matching index. */
     {
       struct Pred
+      /* predicate to check superdrop
+      has matching sdgbxindex to ii*/
       {
         unsigned int ii;
 
@@ -164,6 +169,22 @@ private:
       const auto crit3(is_prednot(pred, {refs.second, supers.extent(0)}));
 
       return (crit1 && crit2 && crit3);
+    }
+
+    KOKKOS_INLINE_FUNCTION
+    supers_subview operator()() const
+    /* returns subview from view of superdrops
+    referencing superdrops which occupy given
+    gridbox (according to refs) */
+    {
+      return Kokkos::subview(supers, refs);
+    }
+
+    KOKKOS_INLINE_FUNCTION size_t nsupers() const
+    /* returns current number of superdrops in
+    gridbox (according to refs) */
+    {
+      return refs.second - refs.first;
     }
   };
 
