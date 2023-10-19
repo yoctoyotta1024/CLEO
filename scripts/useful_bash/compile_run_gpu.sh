@@ -1,6 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=runCLEO
-#SBATCH --partition=compute
+#SBATCH --job-name=gpurunCLEO
+#SBATCH --partition=gpu
+#SBATCH --gpus=4
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
@@ -8,8 +9,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./build/bin/runCLEO_out.%j.out
-#SBATCH --error=./build/bin/runCLEO_err.%j.out
+#SBATCH --output=./gpurunCLEO_out.%j.out
+#SBATCH --error=./gpurunCLEO_err.%j.out
 
 ### ------------- PLEASE NOTE: this script assumes you ------------- ###
 ### ------------- have already built CLEO in path2build ------------ ### 
@@ -20,35 +21,24 @@
 ### ----  and paths for CLEO and build directories  ---- ###
 module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
+module load nvhpc/23.7-gcc-11.2.0
+spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
 path2CLEO=${HOME}/testCLEOfire/
 path2build=${HOME}/testCLEOfire/build/
-configfile=${HOME}/testCLEOfire/src/config/config.txt
 python=python
-
-# path2CLEO=${HOME}/Documents/b2_springsummer2023/CLEO/
-# path2build=${HOME}/Documents/b2_springsummer2023/CLEO/build/
-# python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
 ### ---------------------------------------------------- ###
 
 ### ------------------- compile_run.sh ----------------- ###
-### ensure these directories exist (it's a good idea for later use)
-mkdir ${path2build}bin
-mkdir ${path2build}share
+### add c++ library used by nvhpc compiler to runtime path
+export LD_LIBRARY_PATH=/sw/spack-levante/gcc-11.2.0-bcn7mb/lib64
 
 ### compile CLEO in ./build directory
 cd ${path2build} && pwd 
 make -j 16
 
-# ### generate input files
-# ${python} ${path2CLEO}create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
-# ${python} ${path2CLEO}create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}
-# ${python} ${path2CLEO}create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
-
 ### run CLEO
-export OMP_PROC_BIND=spread
-export OMP_PLACES=threads
-runcmd="${path2build}/src/runCLEO ${configfile}"
+runcmd="${path2build}/src/runCLEO"
 echo ${runcmd}
 ${runcmd}
 ### ---------------------------------------------------- ###
