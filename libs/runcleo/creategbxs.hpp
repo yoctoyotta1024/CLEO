@@ -74,7 +74,7 @@ private:
   void ensure_initialisation_complete(const dualview_constgbx gbxs,
                                       const size_t size) const;
 
-  void print_gbxs(const dualview_constgbx gbxs) const;
+  void print_gbxs(const viewh_constgbx gbxs) const;
   /* print gridboxes information */
 
 public:
@@ -83,12 +83,14 @@ public:
                           const viewd_constsupers supers) const
   {
 
-    std::cout << "\n--- create gridboxes ---"
-              << "\ninitialising\n";
+    std::cout << "\n--- create gridboxes ---\n"
+              << "initialising\n";
     const dualview_gbx gbxs(initialise_gbxs(fid, supers));
  
-    ensure_initialisation_complete(gbxs, fid.get_size());
-    print_gbxs(gbxs);
+    std::cout << "checking initialisation\n";
+    // ensure_initialisation_complete(gbxs, fid.get_size());
+    print_gbxs(gbxs.view_host());
+
     std::cout << "--- create gridboxes: success ---\n";
 
     return gbxs;

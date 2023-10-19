@@ -41,7 +41,7 @@ void CreateGbxs::ensure_initialisation_complete(const dualview_constgbx gbxs,
       const std::string err("gridboxes on device don't match host");
       throw std::invalid_argument(err);
     }
-  
+
     if (!(gbxs.view_host()(ii).supersingbx.iscorrect()))
     {
       const std::string err("incorrect references to "
@@ -49,19 +49,17 @@ void CreateGbxs::ensure_initialisation_complete(const dualview_constgbx gbxs,
       throw std::invalid_argument(err);
     }
   }
-
 }
 
-void CreateGbxs::print_gbxs(const dualview_constgbx gbxs) const
+void CreateGbxs::print_gbxs(const viewh_constgbx h_gbxs) const
 /* print gridboxes information */
 {
-  for (size_t ii(0); ii < gbxs.extent(0); ++ii)
+  const size_t ngbxs(h_gbxs.extent(0));
+  for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    auto h_gbx(gbxs.view_host()(ii));
-    const size_t nsupers(h_gbx.supersingbx.nsupers());
-    std::cout << "gbx: " << h_gbx.get_gbxindex()
-              << " (dev " << gbxs.view_device()(ii).get_gbxindex()
-              << "), vol = " << h_gbx.state.get_volume()
+    const size_t nsupers(h_gbxs(ii).supersingbx.nsupers());
+    std::cout << "gbx: " << h_gbxs(ii).get_gbxindex()
+              << "), vol = " << h_gbxs(ii).state.get_volume()
               << ", nsupers = " << nsupers << " \n";
   }
 }
