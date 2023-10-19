@@ -73,9 +73,18 @@ private:
 
   template <typename FetchInitData>
   inline viewd_supers initialise_supers(const FetchInitData &fid) const;
-  /* initialise a view of superdrops (on device memory)
-  using data from an InitData instance for their initial
-  gbxindex, spatial coordinates and attributes */
+  /* return an initialised view of superdrops on
+  device memory by copying a host mirror view that
+  is initialised using the FetchInitData instance */
+
+  template <typename FetchInitData>
+  inline viewd_supers::HostMirror
+  initialise_supers_on_host(const viewd_constsupers supers,
+                            const FetchInitData &fid) const;
+  /* return mirror view of superdrops (on host memory)
+  which have been initialised using data from a
+  FetchInitData instance for their initial gbxindex,
+  spatial coordinates and attributes */ 
 
   void ensure_initialisation_complete(const viewd_constsupers supers,
                                       const size_t size) const;
@@ -111,26 +120,47 @@ public:
 template <typename FetchInitData>
 inline viewd_supers
 CreateSupers::initialise_supers(const FetchInitData &fid) const
-/* initialise a view of superdrops (on device memory)
-using data from an InitData instance for their initial
-gbxindex, spatial coordinates and attributes */
+/* return an initialised view of superdrops on
+device memory by copying a host mirror view that
+is initialised using the FetchInitData instance */
 {
-  const size_t totnsupers(fid.get_totnsupers());
-  const GenSuperdrop gen_superdrop(fid);
+  /* create superdrops view on device */
+  viewd_supers supers("supers", fid.get_totnsupers());
+  
+  /* initialise a mirror of supers view on host*/
+  auto h_supers = initialise_supers_on_host(fid, supers);
 
-  viewd_supers supers("supers", totnsupers);
+  /* copy host view to device (h_supers to supers) */
+  Kokkos::deep_copy(supers, h_supers); 
+  
+  return supers;
+}
+
+template <typename FetchInitData>
+inline viewd_supers::HostMirror
+CreateSupers::initialise_supers_on_host(const FetchInitData &fid,
+                                        const viewd_supers supers) const
+/* return mirror view of superdrops (on host memory)
+which have been initialised using data from a
+FetchInitData instance for their initial gbxindex,
+spatial coordinates and attributes */
+{
+  const size_t totnsupers(supers.extent(0));
+  const GenSuperdrop gen_superdrop(fid);
+  
+  auto h_supers = Kokkos::create_mirror_view(supers); // mirror of view in case view is on device
   for (size_t kk(0); kk < totnsupers; ++kk)
   {
-    supers(kk) = gen_superdrop(kk);
+    h_supers(kk) = gen_superdrop(kk);
   }
-
-  return supers;
+  
+  return h_supers;
 }
 
 inline void CreateSupers::print_supers(const viewd_constsupers supers) const
 /* print superdroplet information */
 {
-  for (size_t kk(0); kk < supers.extent(0); ++kk)
+  for (size_t ; kk < supers.extent(0); ++kk)
   {
     std::cout << "SD: " << supers(kk).id.value
               << " [gbx, (coords), (attrs)]: [ "

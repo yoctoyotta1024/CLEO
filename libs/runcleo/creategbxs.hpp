@@ -57,20 +57,19 @@ private:
   };
 
   template <typename FetchInitData>
+  inline dualview_gbx initialise_gbxs(const FetchInitData &fid,
+                                      const viewd_constsupers supers) const;
+  /* initialise a dualview of gridboxes (on host and device 
+  memory) using data from a FetchInitData instance to initialise
+  the host view and then syncing the view to the device */
+
+  template <typename FetchInitData>
   inline void initialise_gbxs_on_host(const FetchInitData &fid,
                                       const viewd_constsupers supers,
                                       const viewh_gbx h_gbxs) const;
-  /* initialise a view of superdrops (on device memory)
-  using data from an InitData instance for their initial
-  gbxindex, spatial coordinates and attributes */
-
-  template <typename FetchInitData>
-  inline dualview_gbx initialise_gbxs(const FetchInitData &fid,
-                                      const viewd_constsupers supers) const;
-  /* initialise a view of superdrops (on device memory)
-  using data from an InitData instance for their initial
-  gbxindex, spatial coordinates and attributes */
-
+  /* initialise the host view of gridboxes
+  using some data from a FetchInitData instance
+  e.g. for each gridbox's volume */
 
   void ensure_initialisation_complete(const dualview_constgbx gbxs,
                                       const size_t size) const;
@@ -122,9 +121,9 @@ template <typename FetchInitData>
 inline void CreateGbxs::initialise_gbxs_on_host(const FetchInitData &fid,
                                                 const viewd_constsupers supers,
                                                 const viewh_gbx h_gbxs) const
-/* initialise a view of superdrops (on device memory)
-using data from an InitData instance for their initial
-gbxindex, spatial coordinates and attributes */
+/* initialise the host view of gridboxes
+using some data from a FetchInitData instance
+e.g. for each gridbox's volume */
 {
   const size_t ngbxs(h_gbxs.extent(0));
   const GenGridbox gen_gridbox(fid);
