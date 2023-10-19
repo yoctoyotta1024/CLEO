@@ -61,13 +61,7 @@ void CreateGbxs::print_gbxs(dualview_gbx gbxs) const
     const size_t nsupers(h_gbx.supersingbx.nsupers());
     std::cout << "gbx: " << h_gbx.get_gbxindex() 
     << ", vol = " << h_gbx.state.get_volume()
-    << ", nsupers = " << nsupers << " \n";
-
-    for (size_t kk(0); kk < nsupers; ++kk)
-    {
-      std::cout << h_gbx.supersingbx()(kk).id.value << ", ";
-    }
-  
-    std::cout << "\ngbx: " << gbxs.view_device()(ii).get_gbxindex() << "\n";
+    << ", nsupers = " << nsupers << " \n"
+    << "\ngbx: " << gbxs.view_device()(ii).get_gbxindex() << "\n";
   }
 }
