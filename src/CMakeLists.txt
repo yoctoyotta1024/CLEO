@@ -27,7 +27,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
 set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # Set libraries and compiler warnings to use
-set(SDMLIBS initialise observers runcleo gridboxes superdrops zarr)
+set(SDMLIBS gridboxes initialise observers runcleo superdrops zarr)
 
 # set(compileops -Wall -pedantic -g -gdwarf-4) # less strict without -Werror
 # set compiler options

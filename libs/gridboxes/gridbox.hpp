@@ -52,19 +52,18 @@ private:
     Kokkos::pair<size_t, size_t> refs = {0, 0}; // position in view of (first, last) superdrop that occupies gridbox
 
     template <typename Pred>
-    KOKKOS_INLINE_FUNCTION size_t find_ref(const Pred pred) const;
+    size_t find_ref(const Pred pred) const;
     /* returns distance from begining of supers view
     to the superdroplet that is first to fail
     to satisfy given Predicate "pred" */
 
     template <typename Pred>
-    KOKKOS_INLINE_FUNCTION bool is_pred(const Pred pred) const;
+    bool is_pred(const Pred pred) const;
     /* returns true if all superdrops in subview
     between refs satisfy the Predicate "pred" */
 
     template <typename Pred>
-    KOKKOS_INLINE_FUNCTION bool
-    is_prednot(const Pred pred,
+    bool is_prednot(const Pred pred,
                const Kokkos::pair<size_t, size_t> refs4pred) const;
     /* returns true if all superdrops in subview
     between r0 and r1 do not satisfy pred */
@@ -146,8 +145,7 @@ public:
 };
 
 template <typename Pred>
-KOKKOS_INLINE_FUNCTION size_t
-Gridbox::SupersInGbx::find_ref(const Pred pred) const
+size_t Gridbox::SupersInGbx::find_ref(const Pred pred) const
 /* returns distance from begining of supers view
 to the superdroplet that is first to fail
 to satisfy given Predicate "pred" */
@@ -167,8 +165,7 @@ to satisfy given Predicate "pred" */
 }
 
 template <typename Pred>
-KOKKOS_INLINE_FUNCTION bool
-Gridbox::SupersInGbx::is_pred(const Pred pred) const
+bool Gridbox::SupersInGbx::is_pred(const Pred pred) const
 /* returns true if all superdrops in subview
 between refs satisfy the Predicate "pred" */
 {
@@ -179,8 +176,7 @@ between refs satisfy the Predicate "pred" */
 }
 
 template <typename Pred>
-KOKKOS_INLINE_FUNCTION bool
-Gridbox::SupersInGbx::
+bool Gridbox::SupersInGbx::
     is_prednot(const Pred pred,
                const Kokkos::pair<size_t, size_t> refs4pred) const
 /* returns true if all superdrops in subview

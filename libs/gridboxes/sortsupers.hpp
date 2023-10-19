@@ -39,7 +39,6 @@ struct SortComparator
   }
 };
 
-KOKKOS_INLINE_FUNCTION
 viewd_supers sort_supers(viewd_supers supers)
 /* sort a view of superdroplets by their sdgbxindexes
 so that superdrops in the view are ordered from
@@ -57,7 +56,6 @@ superdrops with matching sdgbxindex can take any order */
   return supers;
 }
 
-KOKKOS_INLINE_FUNCTION
 bool is_sorted(viewd_constsupers supers)
 /* returns true if superdrops in supers view are
 sorted by their sdgbxindexes in ascending order */

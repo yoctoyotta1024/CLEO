@@ -30,14 +30,13 @@ python=python
 ### ---------------------------------------------------- ###
 
 ### ------------------- compile_run.sh ----------------- ###
-### add c++ library used by nvhpc compiler to runtime path
-export LD_LIBRARY_PATH=/sw/spack-levante/gcc-11.2.0-bcn7mb/lib64
-
 ### compile CLEO in ./build directory
 cd ${path2build} && pwd 
 make -j 16
 
 ### run CLEO
+export OMP_PROC_BIND=spread
+export OMP_PLACES=threads
 runcmd="${path2build}/src/runCLEO"
 echo ${runcmd}
 ${runcmd}

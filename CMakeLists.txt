@@ -13,8 +13,8 @@ project(project
 )
 
 # default compiler options to use in subdirectories
-# set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ compiler
-set(defaultcompileops -Werror -Wall -pedantic -g)               # cannot use -gdwarf-4 flag for nvc++ compiler 
+set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ compiler
+# set(defaultcompileops -Werror -Wall -pedantic -g)           # -gdwarf-4 flag not possible for nvc++ compiler 
 
 add_subdirectory(libs)
 add_subdirectory(src)
