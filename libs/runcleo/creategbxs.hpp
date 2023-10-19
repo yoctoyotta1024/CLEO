@@ -57,16 +57,16 @@ private:
   };
 
   template <typename FetchInitData>
-  viewh_gbx initialise_gbxs_on_host(const FetchInitData &fid,
-                                    viewd_constsupers supers,
-                                    viewh_gbx h_gbxs) const;
+  inline void initialise_gbxs_on_host(const FetchInitData &fid,
+                                      viewd_constsupers supers,
+                                      viewh_gbx h_gbxs) const;
   /* initialise a view of superdrops (on device memory)
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
 
   template <typename FetchInitData>
-  dualview_gbx initialise_gbxs(const FetchInitData &fid,
-                               viewd_constsupers supers) const;
+  inline dualview_gbx initialise_gbxs(const FetchInitData &fid,
+                                      viewd_constsupers supers) const;
   /* initialise a view of superdrops (on device memory)
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
@@ -119,10 +119,9 @@ gbxindex, spatial coordinates and attributes */
 }
 
 template <typename FetchInitData>
-inline viewh_gbx
-CreateGbxs::initialise_gbxs_on_host(const FetchInitData &fid,
-                                    viewd_constsupers supers,
-                                    viewh_gbx h_gbxs) const
+inline void CreateGbxs::initialise_gbxs_on_host(const FetchInitData &fid,
+                                                viewd_constsupers supers,
+                                                viewh_gbx h_gbxs) const
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
 gbxindex, spatial coordinates and attributes */
@@ -134,8 +133,6 @@ gbxindex, spatial coordinates and attributes */
   {
     h_gbxs(ii) = gen_gridbox(ii, supers);
   }
-
-  return h_gbxs;
 }
 
 template <typename FetchInitData>
