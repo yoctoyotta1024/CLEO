@@ -100,6 +100,7 @@ private:
     return 0;
   }
 
+  KOKKOS_INLINE_FUNCTION
   unsigned int start_step(const unsigned int t_mdl,
                           dualview_gbx gbxs) const
   /* Start of every timestep: 1) communication of thermodynamic state

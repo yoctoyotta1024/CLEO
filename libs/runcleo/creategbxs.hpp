@@ -109,8 +109,7 @@ gbxindex, spatial coordinates and attributes */
 
   // initialise gridboxes on host
   gbxs.sync_host();
-  gbxs.view_host() = initialise_gbxs_on_host(fid, supers,
-                                             gbxs.view_host());
+  initialise_gbxs_on_host(fid, supers, gbxs.view_host());
   gbxs.modify_host();
 
   // update device gridbox view to match host's gridbox view
