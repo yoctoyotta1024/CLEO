@@ -72,8 +72,7 @@ private:
   };
 
   template <typename FetchInitData>
-  KOKKOS_INLINE_FUNCTION viewd_supers
-  initialise_supers(const FetchInitData &fid) const;
+  viewd_supers initialise_supers(const FetchInitData &fid) const;
   /* initialise a view of superdrops (on device memory)
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
@@ -110,8 +109,8 @@ public:
 };
 
 template <typename FetchInitData>
-KOKKOS_INLINE_FUNCTION viewd_supers
-CreateSupers::initialise_supers(const FetchInitData &fid) const
+viewd_supers CreateSupers::initialise_supers(
+    const FetchInitData &fid) const
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
 gbxindex, spatial coordinates and attributes */
@@ -173,7 +172,12 @@ at position kk in the initial conditions data. All
 superdroplets created with same shared pointer to a
 solute created in memory space of viewd_solute */
 {
-  return {radii.at(kk), msols.at(kk), xis.at(kk), solutes(0)};
+  const double radius(radii.at(kk));
+  const double msol(msols.at(kk));
+  const unsigned long long xi(xis.at(kk));
+  const auto solute(solutes(0));
+
+  return SuperdropAttrs(radius, msol, xi, solute);
 }
 
 inline Superdrop

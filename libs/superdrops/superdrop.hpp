@@ -36,7 +36,7 @@ namespace dlc = dimless_constants;
 struct SoluteProperties
 {
   const double rho_sol; // (dimensionless) density of solute in droplets
-  const double mr_sol;   // (dimensionless) Mr of solute
+  const double mr_sol;  // (dimensionless) Mr of solute
   const double ionic;   // degree ionic dissociation (van't Hoff factor)
 
   /* A Kokkos requirement for use of struct in (dual)View (such as a
@@ -57,16 +57,30 @@ struct SuperdropAttrs
   double msol;                                    // mass of solute dissovled
   unsigned long long xi;                          // multiplicity of superdroplet
   std::shared_ptr<const SoluteProperties> solute; // reference to solute properties
+
+  KOKKOS_INLINE_FUNCTION SuperdropAttrs()
+      : solute(SoluteProperties());                   // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~SuperdropAttrs() = default; // Kokkos requirement for a (dual)View
+
+  KOKKOS_INLINE_FUNCTION
+  SuperdropAttrs(const double radius,
+                 const double msol,
+                 const unsigned long long xi,
+                 const std::shared_ptr<const SoluteProperties> solute)
+      : radius(radius),
+        msol(msol),
+        xi(xi),
+        solute(solute) {}
 };
 
 class Superdrop
 {
 private:
   unsigned int sdgbxindex; // matches index of gridbox the superdrop occupies
-  double coord3;            // a 3rd spatial coordinate of superdroplet (z)
-  double coord1;            // a 1st spatial coordinate of superdroplet (x)
-  double coord2;            // a 2nd spatial coordinate of superdroplet (y)
-  SuperdropAttrs attrs;     // attributes of a superdroplet
+  double coord3;           // a 3rd spatial coordinate of superdroplet (z)
+  double coord1;           // a 1st spatial coordinate of superdroplet (x)
+  double coord2;           // a 2nd spatial coordinate of superdroplet (y)
+  SuperdropAttrs attrs;    // attributes of a superdroplet
 
 public:
   using IDType = IntID; // type of ID (from superdrop_ids.hpp) to identify superdrop via integer
@@ -84,8 +98,11 @@ public:
             const SuperdropAttrs iattrs,
             const IDType iid)
       : sdgbxindex(isdgbxindex),
-        coord3(icoord3), coord1(icoord1), coord2(icoord2),
-        attrs(iattrs), id(iid) {} 
+        coord3(icoord3),
+        coord1(icoord1),
+        coord2(icoord2),
+        attrs(iattrs),
+        id(iid) {}
 
   KOKKOS_INLINE_FUNCTION auto get_sdgbxindex() const { return sdgbxindex; }
   KOKKOS_INLINE_FUNCTION auto get_coord3() const { return coord3; }
@@ -94,11 +111,11 @@ public:
   KOKKOS_INLINE_FUNCTION auto get_radius() const { return attrs.radius; }
   KOKKOS_INLINE_FUNCTION auto get_msol() const { return attrs.msol; }
   KOKKOS_INLINE_FUNCTION auto get_xi() const { return attrs.xi; }
-  
-  KOKKOS_INLINE_FUNCTION auto get_solute() const { return attrs.solute;}
-  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return attrs.solute -> rho_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return attrs.solute -> mr_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return attrs.solute -> ionic; }
+
+  KOKKOS_INLINE_FUNCTION auto get_solute() const { return attrs.solute; }
+  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return attrs.solute->rho_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return attrs.solute->mr_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return attrs.solute->ionic; }
 };
 
 #endif // SUPERDROP_HPP
