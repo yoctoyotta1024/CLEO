@@ -39,7 +39,7 @@ struct SortComparator
   }
 };
 
-viewd_supers sort_supers(const viewd_supers supers)
+inline viewd_supers sort_supers(const viewd_supers supers)
 /* sort a view of superdroplets by their sdgbxindexes
 so that superdrops in the view are ordered from
 lowest to highest sdgbxindex. Note that sorting of
@@ -56,7 +56,7 @@ superdrops with matching sdgbxindex can take any order */
   return supers;
 }
 
-bool is_sorted(const viewd_constsupers supers)
+inline bool is_sorted(const viewd_constsupers supers)
 /* returns true if superdrops in supers view are
 sorted by their sdgbxindexes in ascending order */
 {

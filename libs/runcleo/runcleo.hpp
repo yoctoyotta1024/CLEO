@@ -100,7 +100,6 @@ private:
     return 0;
   }
 
-  KOKKOS_INLINE_FUNCTION
   unsigned int start_step(const unsigned int t_mdl,
                           dualview_gbx gbxs) const
   /* Start of every timestep: 1) communication of thermodynamic state
@@ -142,7 +141,6 @@ private:
     return t_next - t_mdl;                                              // stepsize = t_next - t_mdl
   }
 
-  KOKKOS_INLINE_FUNCTION
   void sdm_step(const unsigned int t_mdl,
                 unsigned int stepsize,
                 dualview_gbx gbxs,
@@ -188,8 +186,7 @@ public:
   }
 
   template <typename IC>
-  KOKKOS_INLINE_FUNCTION int
-  operator()(const IC &initconds,
+  int operator()(const IC &initconds,
              const unsigned int t_end) const
   /* create gridboxes and superdrops using initial conditions,
   then prepare and do timestepping. Meanwhile there is the

@@ -42,6 +42,7 @@ public:
   ConstIntervalObs(const unsigned int obsstep)
       : interval(obsstep) {}
 
+  KOKKOS_INLINE_FUNCTION
   auto get_obsstep() const
   {
     return interval;

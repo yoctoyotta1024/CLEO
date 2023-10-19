@@ -72,7 +72,7 @@ private:
   };
 
   template <typename FetchInitData>
-  viewd_supers initialise_supers(const FetchInitData &fid) const;
+  inline viewd_supers initialise_supers(const FetchInitData &fid) const;
   /* initialise a view of superdrops (on device memory)
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
@@ -109,7 +109,7 @@ public:
 };
 
 template <typename FetchInitData>
-viewd_supers
+inline viewd_supers
 CreateSupers::initialise_supers(const FetchInitData &fid) const
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
