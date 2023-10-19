@@ -79,8 +79,8 @@ private:
 
   template <typename FetchInitData>
   inline viewd_supers::HostMirror
-  initialise_supers_on_host(const viewd_constsupers supers,
-                            const FetchInitData &fid) const;
+  initialise_supers_on_host(const FetchInitData &fid,
+                            const viewd_supers supers) const;
   /* return mirror view of superdrops (on host memory)
   which have been initialised using data from a
   FetchInitData instance for their initial gbxindex,
@@ -148,7 +148,7 @@ spatial coordinates and attributes */
   const size_t totnsupers(supers.extent(0));
   const GenSuperdrop gen_superdrop(fid);
   
-  auto h_supers = Kokkos::create_mirror_view(supers); // mirror of view in case view is on device
+  auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory 
   for (size_t kk(0); kk < totnsupers; ++kk)
   {
     h_supers(kk) = gen_superdrop(kk);
@@ -157,21 +157,25 @@ spatial coordinates and attributes */
   return h_supers;
 }
 
-inline void CreateSupers::print_supers(const viewd_constsupers supers) const
+inline void
+CreateSupers::print_supers(const viewd_constsupers supers) const
 /* print superdroplet information */
 {
-  for (size_t ; kk < supers.extent(0); ++kk)
+  auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
+  Kokkos::deep_copy(h_supers, supers); 
+
+  for (size_t kk(0); kk < h_supers.extent(0); ++kk)
   {
-    std::cout << "SD: " << supers(kk).id.value
+    std::cout << "SD: " << h_supers(kk).id.value
               << " [gbx, (coords), (attrs)]: [ "
-              << supers(kk).get_sdgbxindex() << ", ("
-              << supers(kk).get_coord3() << ", "
-              << supers(kk).get_coord1() << ", "
-              << supers(kk).get_coord2() << "), ("
-              << supers(kk).is_solute() << ", "
-              << supers(kk).get_radius() << ", "
-              << supers(kk).get_msol() << ", "
-              << supers(kk).get_xi() << ") ] \n";
+              << h_supers(kk).get_sdgbxindex() << ", ("
+              << h_supers(kk).get_coord3() << ", "
+              << h_supers(kk).get_coord1() << ", "
+              << h_supers(kk).get_coord2() << "), ("
+              << h_supers(kk).is_solute() << ", "
+              << h_supers(kk).get_radius() << ", "
+              << h_supers(kk).get_msol() << ", "
+              << h_supers(kk).get_xi() << ") ] \n";
   }
 }
 
