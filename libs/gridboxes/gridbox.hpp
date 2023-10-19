@@ -189,37 +189,37 @@ between r0 and r1 do not satisfy pred */
               supers4pred, pred);
 }
 
+struct SetRefsRef0
+/* predicate to find first superdrop in
+view which has matching sdgbxindex to ii */
+{
+  unsigned int ii;
+
+  KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+  {
+    return op.get_sdgbxindex() < ii;
+  }
+};
+
+struct SetRefsRef1
+/* predicate to find last superdrop in
+view which has matching sdgbxindex to ii */
+{
+  unsigned int ii;
+
+  KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+  {
+    return op.get_sdgbxindex() <= ii;
+  }
+};
+
 inline Kokkos::pair<size_t, size_t>
 Gridbox::SupersInGbx::set_refs()
 /* assumes supers is already sorted via sdgbxindex.
 returns pair which are positions of first and last
 superdrops in view which have matching sdgbxindex to ii */
 {
-  struct Ref0
-  /* predicate to find first superdrop in
-  view which has matching sdgbxindex to ii */
-  {
-    unsigned int ii;
-
-    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
-    {
-      return op.get_sdgbxindex() < ii;
-    }
-  };
-
-  struct Ref1
-  /* predicate to find last superdrop in
-  view which has matching sdgbxindex to ii */
-  {
-    unsigned int ii;
-
-    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
-    {
-      return op.get_sdgbxindex() <= ii;
-    }
-  };
-
-  return {find_ref(Ref0{ii}), find_ref(Ref1{ii})};
+  return {find_ref(SetRefsRef0{ii}), find_ref(SetRefsRef1{ii})};
 }
 
 #endif // GRIDBOX_HPP
