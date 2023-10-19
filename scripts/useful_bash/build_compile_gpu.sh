@@ -23,8 +23,10 @@ source activate /work/mh1126/m300950/condaenvs/cleoenv
 path2CLEO=${HOME}/testCLEOfire/
 path2build=${HOME}/testCLEOfire/build/
 python=python
-gxx="nvc++"
-gcc="nvcc"
+# gxx="nvc++"
+# gcc="nvcc"
+gxx="g++"
+gcc="gcc"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###

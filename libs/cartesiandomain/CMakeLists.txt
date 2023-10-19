@@ -49,7 +49,9 @@ set_target_properties(${LIBNAME} PROPERTIES
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 
-set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
-#set(compileops -Werror -Wall -pedantic -g) # cannot use -gdwarf-4 flag for nvc++ compiler 
+# set compiler options
+if(NOT DEFINED compileops)
+  set(compileops ${defaultcompileops})
+endif()
 
 target_compile_options(${LIBNAME} PRIVATE ${compileops})

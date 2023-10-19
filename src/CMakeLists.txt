@@ -28,9 +28,12 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # Set libraries and compiler warnings to use
 set(SDMLIBS initialise observers runcleo gridboxes superdrops zarr)
-#set(compileops -Werror -Wall -pedantic -g -gdwarf-4)
-set(compileops -Wall -pedantic -g -gdwarf-4) # less strict without -Werror
-#set(compileops  -Wall -pedantic -g) # cannot use -gdwarf-4 flag for nvc++ compiler 
+
+# set(compileops -Wall -pedantic -g -gdwarf-4) # less strict without -Werror
+# set compiler options
+if(NOT DEFINED compileops)
+  set(compileops ${defaultcompileops})
+endif()
 
 # primary executable for CLEO sdm
 set(runCLEO "runCLEO")
