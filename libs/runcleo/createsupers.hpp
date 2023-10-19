@@ -88,8 +88,7 @@ private:
 
 public:
   template <typename FetchInitData>
-  KOKKOS_INLINE_FUNCTION viewd_supers
-  operator()(const FetchInitData &fid) const
+  viewd_supers operator()(const FetchInitData &fid) const
   /* create view of "totnsupers" number of superdrops
   (in device memory) which is ordered by the superdrops'
   gridbox indexes using the initial conditions

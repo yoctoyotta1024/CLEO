@@ -81,7 +81,7 @@ private:
     returns pair which are positions of first and last
     superdrops in view which have matching sdgbxindex to ii */
 
-    KOKKOS_FUNCTION bool iscorrect() const;
+    bool iscorrect() const;
     /* assumes supers is already sorted via sdgbxindex. checks that all 
     superdrops in view which have matching sdgbxindex to ii are indeed
     included in (*this) subview (according to refs). Three criteria must
