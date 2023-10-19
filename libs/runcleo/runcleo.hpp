@@ -53,6 +53,7 @@ private:
   const CD &coupldyn;
   const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm;
 
+  KOKKOS_INLINE_FUNCTION
   int prepare_timestepping() const
   /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
   {
@@ -74,6 +75,7 @@ private:
     }
   }
 
+  KOKKOS_INLINE_FUNCTION
   int timestep_cleo(const unsigned int t_end,
                     RunStats &stats,
                     dualview_gbx gbxs,
@@ -118,6 +120,7 @@ private:
     return next_stepsize(t_mdl);
   }
 
+  KOKKOS_INLINE_FUNCTION
   unsigned int next_stepsize(const unsigned int t_mdl) const
   /* returns size of next step to take given current
   timestep, t_mdl, such that next timestep is
@@ -138,6 +141,7 @@ private:
     return std::min(next_coupl, next_obs) - t_mdl; // stepsize = t_next - t_mdl
   }
 
+  KOKKOS_INLINE_FUNCTION
   void sdm_step(const unsigned int t_mdl,
                 unsigned int stepsize,
                 dualview_gbx gbxs,
@@ -183,8 +187,9 @@ public:
   }
 
   template <typename IC>
-  int operator()(const IC &initconds,
-                 const unsigned int t_end) const
+  KOKKOS_INLINE_FUNCTION int
+  operator()(const IC &initconds,
+             const unsigned int t_end) const
   /* create gridboxes and superdrops using initial conditions,
   then prepare and do timestepping. Meanwhile there is the
   option to record some runtime statistics using "stats" */

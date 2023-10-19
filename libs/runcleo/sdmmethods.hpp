@@ -45,6 +45,7 @@ struct SDMMethods
 private:
   unsigned int couplstep; // coupled timestep
 
+  KOKKOS_INLINE_FUNCTION
   unsigned int next_sdmstep(const unsigned int t_sdm,
                             const unsigned int stepsize) const
   /* given current timestep, t_sdm, work out which event
@@ -57,6 +58,7 @@ private:
     return std::min(next_t_mdl, next_t_move);
   }
 
+  KOKKOS_INLINE_FUNCTION
   void superdrops_movement(const unsigned int t_sdm,
                            viewd_gbx d_gbxs,
                            viewd_supers supers) const
@@ -66,6 +68,7 @@ private:
     movesupers.run_step(t_sdm, gbxmaps, d_gbxs, supers);
   }
 
+  KOKKOS_INLINE_FUNCTION
   void sdm_microphysics(const unsigned int t_sdm,
                         const unsigned int t_next,
                         viewd_gbx d_gbxs) const
@@ -99,8 +102,10 @@ public:
         movesupers(movesupers),
         obs(obs) {}
 
+  KOKKOS_INLINE_FUNCTION
   auto get_couplstep() const { return couplstep; }
 
+  KOKKOS_INLINE_FUNCTION
   void prepare_to_timestep() const {}
   /* prepare CLEO SDM for timestepping */
 
@@ -113,6 +118,7 @@ public:
                      viewh_constgbx h_gbxs) const {}
   /* send information from Gridboxes' states to coupldyn */
 
+  KOKKOS_INLINE_FUNCTION
   void run_step(const unsigned int t_mdl,
                 const unsigned int stepsize,
                 viewd_gbx d_gbxs,

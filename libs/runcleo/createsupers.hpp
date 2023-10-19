@@ -72,7 +72,8 @@ private:
   };
 
   template <typename FetchInitData>
-  inline viewd_supers initialise_supers(const FetchInitData &fid) const;
+  KOKKOS_INLINE_FUNCTION viewd_supers
+  initialise_supers(const FetchInitData &fid) const;
   /* initialise a view of superdrops (on device memory)
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
@@ -86,9 +87,9 @@ private:
   /* print superdroplet information */
 
 public:
-
   template <typename FetchInitData>
-  viewd_supers operator()(const FetchInitData &fid) const
+  KOKKOS_INLINE_FUNCTION viewd_supers
+  operator()(const FetchInitData &fid) const
   /* create view of "totnsupers" number of superdrops
   (in device memory) which is ordered by the superdrops'
   gridbox indexes using the initial conditions
@@ -110,7 +111,7 @@ public:
 };
 
 template <typename FetchInitData>
-inline viewd_supers
+KOKKOS_INLINE_FUNCTION viewd_supers
 CreateSupers::initialise_supers(const FetchInitData &fid) const
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
