@@ -118,9 +118,10 @@ gbxindex, spatial coordinates and attributes */
 }
 
 template <typename FetchInitData>
-inline void CreateGbxs::initialise_gbxs_on_host(const FetchInitData &fid,
-                                                const viewd_constsupers supers,
-                                                const viewh_gbx h_gbxs) const
+inline void CreateGbxs::
+    initialise_gbxs_on_host(const FetchInitData &fid,
+                            const viewd_constsupers supers,
+                            const viewh_gbx h_gbxs) const
 /* initialise the host view of gridboxes
 using some data from a FetchInitData instance
 e.g. for each gridbox's volume */
