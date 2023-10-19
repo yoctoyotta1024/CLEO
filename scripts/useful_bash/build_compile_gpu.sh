@@ -27,13 +27,22 @@ gxx="nvc++"
 gcc="nvcc"
 ### ---------------------------------------------------- ###
 
+### ------------ choose Kokkos configuration ----------- ###
+kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
+kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"                     # flags for device parallelism (e.g. on gpus) 
+kokkoshost=""                                                                             # flags for host parallelism (e.g. using OpenMP)
+# kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                                  # flags for host parallelism (e.g. using OpenMP)
+### ---------------------------------------------------- ###
+
 ### ------------------ build_compile.sh ---------------- ###
 ### add c++ library used by nvhpc compiler to runtime path
 export LD_LIBRARY_PATH=/sw/spack-levante/gcc-11.2.0-bcn7mb/lib64
 
 ### build CLEO using cmake (with optional thread parallelism through Kokkos)
-kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"  # CUDA parallelism enabled
-CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags}
+buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkosdevice} ${kokkoshost}"
+echo ${buildcmd}
+${buildcmd}
+
 
 ### compile CLEO
 cd ${path2build} && pwd 

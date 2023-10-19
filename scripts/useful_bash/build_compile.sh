@@ -30,10 +30,16 @@ gcc="gcc"
 # gcc="gcc-13"
 ### ---------------------------------------------------- ###
 
+### ------------ choose Kokkos configuration ----------- ###
+kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                          # flags for host parallelism (e.g. using OpenMP)
+### ---------------------------------------------------- ###
+
 ### ------------------ build_compile.sh ---------------- ###
 ### build CLEO using cmake (with openMP thread parallelism through Kokkos)
-kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON"  # openMP parallelism enabled
-CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags}
+buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}"
+echo ${buildcmd}
+${buildcmd}
 
 ### ensure these directories exist (it's a good idea for later use)
 mkdir ${path2build}bin
