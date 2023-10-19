@@ -77,8 +77,8 @@ private:
   KOKKOS_INLINE_FUNCTION
   int timestep_cleo(const unsigned int t_end,
                     RunStats &stats,
-                    dualview_gbx gbxs,
-                    viewd_supers supers) const
+                    const dualview_gbx gbxs,
+                    const viewd_supers supers) const
   /* timestep CLEO from t=0 to t=t_end */
   {
     unsigned int t_mdl(0);
@@ -146,7 +146,7 @@ private:
   void sdm_step(const unsigned int t_mdl,
                 unsigned int stepsize,
                 dualview_gbx gbxs,
-                viewd_supers supers) const
+                const viewd_supers supers) const
   /* run CLEO SDM (on device) */
   {
     gbxs.sync_device();

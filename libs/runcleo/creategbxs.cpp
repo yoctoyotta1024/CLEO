@@ -19,7 +19,7 @@
 
 #include "./creategbxs.hpp"
 
-void CreateGbxs::ensure_initialisation_complete(dualview_gbx gbxs,
+void CreateGbxs::ensure_initialisation_complete(const dualview_constgbx gbxs,
                                                 const size_t size) const
 {
   const size_t ngbxs(gbxs.extent(0));
@@ -52,7 +52,7 @@ void CreateGbxs::ensure_initialisation_complete(dualview_gbx gbxs,
 
 }
 
-void CreateGbxs::print_gbxs(dualview_gbx gbxs) const
+void CreateGbxs::print_gbxs(const dualview_constgbx gbxs) const
 /* print gridboxes information */
 {
   for (size_t ii(0); ii < gbxs.extent(0); ++ii)

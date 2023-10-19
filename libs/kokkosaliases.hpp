@@ -30,12 +30,13 @@
 #include "superdrops/superdrop.hpp"
 
 using dualview_gbx = Kokkos::DualView<Gridbox *>; // dual view of gridboxes
+using dualview_constgbx = Kokkos::DualView<const Gridbox *>; // dual view of gridboxes
 
-using viewh_gbx = Kokkos::View<Gridbox *>;        // view in host memory of gridboxes
-using viewh_constgbx = Kokkos::View<const Gridbox *>;        // view in host memory of gridboxes
+using viewh_gbx = dualview_gbx::t_host;                      // view in host memory of gridboxes
+using viewh_constgbx = dualview_constgbx::t_host;        // view in host memory of gridboxes
 
-using viewd_gbx = Kokkos::View<Gridbox *>;        // view in device memory of gridboxes
-using viewd_constgbx = Kokkos::View<const Gridbox *>;        // view in device memory of gridboxes
+using viewd_gbx = dualview_gbx::t_dev;        // view in device memory of gridboxes
+using viewd_constgbx = dualview_constgbx::t_dev;        // view in device memory of gridboxes
 
 using viewd_supers = Kokkos::View<Superdrop *>;   // view in device memory of superdroplets
 using viewd_constsupers = Kokkos::View<const Superdrop *>;   // view in device memory of superdroplets

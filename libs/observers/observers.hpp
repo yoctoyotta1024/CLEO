@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,7 +34,7 @@
 
 template <typename Obs>
 concept Observer = requires(Obs obs, unsigned int t,
-                            viewh_constgbx h_gbxs)
+                            const viewh_constgbx h_gbxs)
 /* concept Observer is all types that have an operator that
 has signature of observing functions (see Observer concept) */
 {

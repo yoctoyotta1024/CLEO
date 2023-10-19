@@ -59,8 +59,8 @@ private:
 
   KOKKOS_INLINE_FUNCTION
   void superdrops_movement(const unsigned int t_sdm,
-                           viewd_gbx d_gbxs,
-                           viewd_supers supers) const
+                           const viewd_gbx d_gbxs,
+                           const viewd_supers supers) const
   /* move superdroplets (including movement between
   gridboxes) according to movesupers struct */
   {
@@ -70,7 +70,7 @@ private:
   KOKKOS_INLINE_FUNCTION
   void sdm_microphysics(const unsigned int t_sdm,
                         const unsigned int t_next,
-                        viewd_gbx d_gbxs) const
+                        const viewd_gbx d_gbxs) const
   /* enact SDM microphysics for each gridbox
   (using sub-timestepping routine) */
   {
@@ -109,19 +109,19 @@ public:
   /* prepare CLEO SDM for timestepping */
 
   void receive_dynamics(const CD &coupldyn,
-                        viewh_gbx h_gbxs) const {}
+                        const viewh_gbx h_gbxs) const {}
   /* update Gridboxes' states using information
   received from coupldyn */
 
   void send_dynamics(const CD &coupldyn,
-                     viewh_constgbx h_gbxs) const {}
+                     const viewh_constgbx h_gbxs) const {}
   /* send information from Gridboxes' states to coupldyn */
 
   KOKKOS_INLINE_FUNCTION
   void run_step(const unsigned int t_mdl,
                 const unsigned int stepsize,
-                viewd_gbx d_gbxs,
-                viewd_supers supers) const
+                const viewd_gbx d_gbxs,
+                const viewd_supers supers) const
   /* run CLEO SDM (on device) from time t_mdl to
   t_mdl + stepsize with sub-timestepping routine
   for super-droplets' movement and microphysics */

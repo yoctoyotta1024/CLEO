@@ -77,12 +77,12 @@ private:
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
 
-  void ensure_initialisation_complete(viewd_constsupers supers,
+  void ensure_initialisation_complete(const viewd_constsupers supers,
                                       const size_t size) const;
   /* ensure the number of superdrops in the view matches the
   size according to the initial conditions */
 
-  inline void print_supers(viewd_constsupers supers) const;
+  inline void print_supers(const viewd_constsupers supers) const;
   /* print superdroplet information */
 
 public:
@@ -109,8 +109,8 @@ public:
 };
 
 template <typename FetchInitData>
-viewd_supers CreateSupers::initialise_supers(
-    const FetchInitData &fid) const
+viewd_supers
+CreateSupers::initialise_supers(const FetchInitData &fid) const
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
 gbxindex, spatial coordinates and attributes */
@@ -127,7 +127,7 @@ gbxindex, spatial coordinates and attributes */
   return supers;
 }
 
-inline void CreateSupers::print_supers(viewd_constsupers supers) const
+inline void CreateSupers::print_supers(const viewd_constsupers supers) const
 /* print superdroplet information */
 {
   for (size_t kk(0); kk < supers.extent(0); ++kk)

@@ -26,6 +26,7 @@ spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
 path2CLEO=${HOME}/testCLEOfire/
 path2build=${HOME}/testCLEOfire/build/
+configfile=${HOME}/testCLEOfire/src/config/config.txt
 python=python
 ### ---------------------------------------------------- ###
 
@@ -37,7 +38,7 @@ make -j 16
 ### run CLEO
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
-runcmd="${path2build}/src/runCLEO"
+runcmd="${path2build}/src/runCLEO ${configfile}"
 echo ${runcmd}
 ${runcmd}
 ### ---------------------------------------------------- ###

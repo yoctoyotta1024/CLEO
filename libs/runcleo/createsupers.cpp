@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,7 @@
 
 #include "./createsupers.hpp"
 
-void CreateSupers::ensure_initialisation_complete(viewd_constsupers supers,
+void CreateSupers::ensure_initialisation_complete(const viewd_constsupers supers,
                                                   const size_t size) const
 /* ensure the number of superdrops in the view matches the
 size according to the initial conditions */

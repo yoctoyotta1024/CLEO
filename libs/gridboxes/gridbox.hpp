@@ -44,9 +44,8 @@ private:
   (e.g. through std::span or Kokkos::subview) */
   {
   private:
-    using supers_subview = Kokkos::
-        Subview<supers_constview_type,
-                Kokkos::pair<size_t, size_t>>;
+    using supers_subview = Kokkos::Subview<supers_constview_type,
+                                           Kokkos::pair<size_t, size_t>>;
     supers_constview_type supers; // reference to all superdrops view
     unsigned int ii;              // value of gbxindex which sdgbxindex of superdrops must match
     Kokkos::pair<size_t, size_t> refs = {0, 0}; // position in view of (first, last) superdrop that occupies gridbox
@@ -64,7 +63,7 @@ private:
 
     template <typename Pred>
     bool is_prednot(const Pred pred,
-               const Kokkos::pair<size_t, size_t> refs4pred) const;
+                    const Kokkos::pair<size_t, size_t> refs4pred) const;
     /* returns true if all superdrops in subview
     between r0 and r1 do not satisfy pred */
 
@@ -72,7 +71,7 @@ private:
     KOKKOS_INLINE_FUNCTION SupersInGbx() = default;  // Kokkos requirement for a (dual)View
     KOKKOS_INLINE_FUNCTION ~SupersInGbx() = default; // Kokkos requirement for a (dual)View
 
-    KOKKOS_INLINE_FUNCTION SupersInGbx(supers_constview_type isupers,
+    KOKKOS_INLINE_FUNCTION SupersInGbx(const supers_constview_type isupers,
                                        const unsigned int ii)
         : supers(isupers), ii(ii), refs(set_refs()) {}
 
@@ -131,7 +130,7 @@ public:
   KOKKOS_INLINE_FUNCTION
   Gridbox(const Gbxindex igbxindex,
           const State istate,
-          supers_constview_type supers)
+          const supers_constview_type supers)
       /* assumes supers view (or subview) already sorted via sdgbxindex */
       : gbxindex(igbxindex),
         state(istate),
@@ -141,7 +140,7 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION
-  auto get_gbxindex() { return gbxindex.value; }
+  auto get_gbxindex() const { return gbxindex.value; }
 };
 
 template <typename Pred>

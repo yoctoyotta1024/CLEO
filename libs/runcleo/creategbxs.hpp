@@ -53,40 +53,40 @@ private:
     inline GenGridbox(const FetchInitData &fid);
 
     inline Gridbox operator()(const unsigned int ii,
-                              viewd_constsupers supers) const;
+                              const viewd_constsupers supers) const;
   };
 
   template <typename FetchInitData>
   inline void initialise_gbxs_on_host(const FetchInitData &fid,
-                                      viewd_constsupers supers,
-                                      viewh_gbx h_gbxs) const;
+                                      const viewd_constsupers supers,
+                                      const viewh_gbx h_gbxs) const;
   /* initialise a view of superdrops (on device memory)
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
 
   template <typename FetchInitData>
   inline dualview_gbx initialise_gbxs(const FetchInitData &fid,
-                                      viewd_constsupers supers) const;
+                                      const viewd_constsupers supers) const;
   /* initialise a view of superdrops (on device memory)
   using data from an InitData instance for their initial
   gbxindex, spatial coordinates and attributes */
 
 
-  void ensure_initialisation_complete(dualview_gbx gbxs,
+  void ensure_initialisation_complete(const dualview_constgbx gbxs,
                                       const size_t size) const;
 
-  void print_gbxs(dualview_gbx gbxs) const;
+  void print_gbxs(const dualview_constgbx gbxs) const;
   /* print gridboxes information */
 
 public:
   template <typename FetchInitData>
   dualview_gbx operator()(const FetchInitData fid,
-                          viewd_constsupers supers) const
+                          const viewd_constsupers supers) const
   {
 
     std::cout << "\n--- create gridboxes ---"
               << "\ninitialising\n";
-    dualview_gbx gbxs(initialise_gbxs(fid, supers));
+    const dualview_gbx gbxs(initialise_gbxs(fid, supers));
  
     ensure_initialisation_complete(gbxs, fid.get_size());
     print_gbxs(gbxs);
@@ -99,7 +99,7 @@ public:
 template <typename FetchInitData>
 inline dualview_gbx
 CreateGbxs::initialise_gbxs(const FetchInitData &fid,
-                            viewd_constsupers supers) const
+                            const viewd_constsupers supers) const
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
 gbxindex, spatial coordinates and attributes */
@@ -120,8 +120,8 @@ gbxindex, spatial coordinates and attributes */
 
 template <typename FetchInitData>
 inline void CreateGbxs::initialise_gbxs_on_host(const FetchInitData &fid,
-                                                viewd_constsupers supers,
-                                                viewh_gbx h_gbxs) const
+                                                const viewd_constsupers supers,
+                                                const viewh_gbx h_gbxs) const
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
 gbxindex, spatial coordinates and attributes */
@@ -143,7 +143,7 @@ inline CreateGbxs::GenGridbox::
 
 inline Gridbox
 CreateGbxs::GenGridbox::operator()(const unsigned int ii,
-                                   viewd_constsupers supers) const
+                                   const viewd_constsupers supers) const
 {
   const auto gbxindex(GbxindexGen->next());
   const State state(state_at(ii)); 

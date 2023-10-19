@@ -48,8 +48,8 @@ private:
   KOKKOS_INLINE_FUNCTION
   void move_superdrops_in_domain(const unsigned int t_sdm,
                                  const GridboxMaps auto &gbxmaps,
-                                 viewd_gbx d_gbxs,
-                                 viewd_supers supers) const
+                                 const viewd_gbx d_gbxs,
+                                 const viewd_supers supers) const
   /* enact movement of superdroplets throughout domain in three stages:
   1) update their spatial coords according to type of motion.
   2) update their sdgbxindex accordingly
@@ -74,8 +74,8 @@ public:
   KOKKOS_INLINE_FUNCTION
   void run_step(const unsigned int t_sdm,
                 const GridboxMaps auto &gbxmaps,
-                viewd_gbx d_gbxs,
-                viewd_supers supers) const
+                const viewd_gbx d_gbxs,
+                const viewd_supers supers) const
   /* if current time, t_sdm, is time when superdrop
   motion should occur, enact movement of
   superdroplets throughout domain */
