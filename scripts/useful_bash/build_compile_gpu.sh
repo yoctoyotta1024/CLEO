@@ -41,7 +41,7 @@ export LD_LIBRARY_PATH=/sw/spack-levante/gcc-11.2.0-bcn7mb/lib64
 ### build CLEO using cmake (with optional thread parallelism through Kokkos)
 buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkosdevice} ${kokkoshost}"
 echo ${buildcmd}
-${buildcmd}
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
 
 ### compile CLEO

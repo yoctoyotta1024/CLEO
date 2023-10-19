@@ -1,8 +1,10 @@
 # set cmake version
-cmake_minimum_required(VERSION 3.18.0)
-#cmake_minimum_required(VERSION 3.21.1) # if using Kokkos with NVC++ compiler 
+if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
+  cmake_minimum_required(VERSION 3.18.0)
+  #cmake_minimum_required(VERSION 3.21.1) # if using Kokkos with NVC++ compiler 
+endif()
 
-# setlibrary name
+# set library name
 set(LIBNAME "initialise")
 
 # print where exactly project source dir is for this CMakeLists.txt

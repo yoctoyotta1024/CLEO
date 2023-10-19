@@ -39,7 +39,7 @@ kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                          # flags for host
 ### build CLEO using cmake (with openMP thread parallelism through Kokkos)
 buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}"
 echo ${buildcmd}
-${buildcmd}
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}
 
 ### ensure these directories exist (it's a good idea for later use)
 mkdir ${path2build}bin
