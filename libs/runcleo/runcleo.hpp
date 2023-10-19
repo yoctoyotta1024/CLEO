@@ -52,7 +52,6 @@ private:
   const CD &coupldyn;
   const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm;
 
-  KOKKOS_INLINE_FUNCTION
   int prepare_timestepping() const
   /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
   {
@@ -74,7 +73,6 @@ private:
     }
   }
 
-  KOKKOS_INLINE_FUNCTION
   int timestep_cleo(const unsigned int t_end,
                     RunStats &stats,
                     const dualview_gbx gbxs,

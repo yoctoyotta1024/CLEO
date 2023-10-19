@@ -37,7 +37,7 @@ used for SDM) and detectors for tracking chosen variables */
 {
 private:
   using supers_constview_type = Kokkos::View<const Superdrop *>; // should match that in kokkosaliases.hpp
-  
+
   struct SupersInGbx
   /* References to identify the chunk of memory
   containing super-droplets occupying a given Gridbox
@@ -46,8 +46,8 @@ private:
   private:
     using supers_subview = Kokkos::Subview<supers_constview_type,
                                            Kokkos::pair<size_t, size_t>>;
-    supers_constview_type supers; // reference to all superdrops view
-    unsigned int ii;              // value of gbxindex which sdgbxindex of superdrops must match
+    supers_constview_type supers;               // reference to all superdrops view
+    unsigned int ii;                            // value of gbxindex which sdgbxindex of superdrops must match
     Kokkos::pair<size_t, size_t> refs = {0, 0}; // position in view of (first, last) superdrop that occupies gridbox
 
     template <typename Pred>
@@ -63,7 +63,7 @@ private:
 
     template <typename Pred>
     inline bool is_prednot(const Pred pred,
-                    const Kokkos::pair<size_t, size_t> refs4pred) const;
+                           const Kokkos::pair<size_t, size_t> refs4pred) const;
     /* returns true if all superdrops in subview
     between r0 and r1 do not satisfy pred */
 
@@ -81,7 +81,7 @@ private:
     superdrops in view which have matching sdgbxindex to ii */
 
     bool iscorrect() const;
-    /* assumes supers is already sorted via sdgbxindex. checks that all 
+    /* assumes supers is already sorted via sdgbxindex. checks that all
     superdrops in view which have matching sdgbxindex to ii are indeed
     included in (*this) subview (according to refs). Three criteria must
     be true for iscorrect to return true: (1) all superdrops in current
@@ -189,29 +189,37 @@ between r0 and r1 do not satisfy pred */
               supers4pred, pred);
 }
 
-struct SetRefsRef0
-/* predicate to find first superdrop in
-view which has matching sdgbxindex to ii */
+namespace SetRefPreds
+/* namespace containing values of
+constants with dimensions */
 {
-  unsigned int ii;
 
-  KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+  struct Ref0
+  /* struct for Gridbox::SupersInGbx::set_refs()
+  predicate to find first superdrop in
+  view which has matching sdgbxindex to ii */
   {
-    return op.get_sdgbxindex() < ii;
-  }
-};
+    unsigned int ii;
 
-struct SetRefsRef1
-/* predicate to find last superdrop in
-view which has matching sdgbxindex to ii */
-{
-  unsigned int ii;
+    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+    {
+      return op.get_sdgbxindex() < ii;
+    }
+  };
 
-  KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+  struct Ref1
+  /* struct for Gridbox::SupersInGbx::set_refs()
+  predicate to find last superdrop in
+  view which has matching sdgbxindex to ii */
   {
-    return op.get_sdgbxindex() <= ii;
-  }
-};
+    unsigned int ii;
+
+    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+    {
+      return op.get_sdgbxindex() <= ii;
+    }
+  };
+}
 
 inline Kokkos::pair<size_t, size_t>
 Gridbox::SupersInGbx::set_refs()
@@ -219,7 +227,8 @@ Gridbox::SupersInGbx::set_refs()
 returns pair which are positions of first and last
 superdrops in view which have matching sdgbxindex to ii */
 {
-  return {find_ref(SetRefsRef0{ii}), find_ref(SetRefsRef1{ii})};
+  namespace SRP = SetRefPreds;
+  return {find_ref(SRP::Ref0{ii}), find_ref(SRP::Ref1{ii})};
 }
 
 #endif // GRIDBOX_HPP
