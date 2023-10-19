@@ -51,7 +51,7 @@ private:
   private:
     size_t nspacedims;
     std::unique_ptr<Superdrop::IDType::Gen> sdIdGen;      // pointer to superdrop id generator
-    std::vector<SuperdropAttrs::SolutePtr> soluteptrs;       // solute(s) stored in device memory space
+    std::vector<SuperdropAttrs::SolutePtr> solutes;       // solute(s) stored in device memory space
     std::vector<unsigned int> sdgbxindexes;
     std::vector<double> coord3s;
     std::vector<double> coord1s;
@@ -138,7 +138,7 @@ inline void CreateSupers::print_supers(viewd_constsupers supers) const
               << supers(kk).get_coord3() << ", "
               << supers(kk).get_coord1() << ", "
               << supers(kk).get_coord2() << "), ("
-              << supers(kk).is_soluteptr() << ", "
+              << supers(kk).is_solute() << ", "
               << supers(kk).get_radius() << ", "
               << supers(kk).get_msol() << ", "
               << supers(kk).get_xi() << ") ] \n";
@@ -150,7 +150,7 @@ inline CreateSupers::GenSuperdrop::
     GenSuperdrop(const FetchInitData &fid)
     : nspacedims(fid.get_nspacedims()),
       sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
-      soluteptrs(0),
+      solutes(0),
       sdgbxindexes(fid.sdgbxindex()),
       coord3s(fid.coord3()),
       coord1s(fid.coord1()),
@@ -161,8 +161,8 @@ inline CreateSupers::GenSuperdrop::
 {
   /* create 1 pointer-like type to solute
   properties which all superdroplets use */
-  SuperdropAttrs::SolutePtr soluteptr("soluteptr");
-  soluteptrs.push_back(soluteptr);
+  SuperdropAttrs::SolutePtr solute("solute");
+  solutes.push_back(solute);
 }
 
 inline SuperdropAttrs
@@ -175,8 +175,9 @@ type to solute properties */
   const double radius(radii.at(kk));
   const double msol(msols.at(kk));
   const unsigned long long xi(xis.at(kk));
-  
-  return SuperdropAttrs(soluteptrs.at(0), xi, radius, msol);
+  const auto solute(solutes.at(0));
+
+  return SuperdropAttrs(solute, xi, radius, msol);
 }
 
 inline Superdrop
