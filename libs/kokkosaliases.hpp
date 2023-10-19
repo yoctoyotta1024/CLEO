@@ -40,7 +40,4 @@ using viewd_constgbx = Kokkos::View<const Gridbox *>;        // view in device m
 using viewd_supers = Kokkos::View<Superdrop *>;   // view in device memory of superdroplets
 using viewd_constsupers = Kokkos::View<const Superdrop *>;   // view in device memory of superdroplets
 
-using viewd_solute = Kokkos::View<               // view to solute properties
-    std::shared_ptr<const SoluteProperties>[1]>; // (stored in device memory and acessed through shared pointer)
-
 #endif // KOKKOSALIASES_HPP

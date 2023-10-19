@@ -22,10 +22,9 @@
 #ifndef SDMMETHODS_HPP
 #define SDMMETHODS_HPP
 
-#include <algorithm>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
+#include <Kokkos_StdAlgorithms.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"

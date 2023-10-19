@@ -35,9 +35,9 @@ namespace dlc = dimless_constants;
 
 struct SoluteProperties
 {
-  const double rho_sol; // (dimensionless) density of solute in droplets
-  const double mr_sol;  // (dimensionless) Mr of solute
-  const double ionic;   // degree ionic dissociation (van't Hoff factor)
+  double rho_sol; // (dimensionless) density of solute in droplets
+  double mr_sol;  // (dimensionless) Mr of solute
+  double ionic;   // degree ionic dissociation (van't Hoff factor)
 
   /* A Kokkos requirement for use of struct in (dual)View (such as a
   Kokkos::vector) is that default constructor and destructor exist */
@@ -53,24 +53,24 @@ struct SoluteProperties
 struct SuperdropAttrs
 /* attributes of a superdroplet*/
 {
-  double radius;                                  // radius of superdroplet
-  double msol;                                    // mass of solute dissovled
-  unsigned long long xi;                          // multiplicity of superdroplet
-  std::shared_ptr<const SoluteProperties> solute; // reference to solute properties
+  using SolutePtr = Kokkos::View<const SoluteProperties[1]>; // pointer-like type to an instance of Solute Properties
+  SolutePtr soluteptr;
+  unsigned long long xi;                            // multiplicity of superdroplet
+  double radius;                                    // radius of superdroplet
+  double msol;                                      // mass of solute dissovled
 
-  KOKKOS_INLINE_FUNCTION SuperdropAttrs()
-      : solute(SoluteProperties());                   // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION SuperdropAttrs() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~SuperdropAttrs() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  SuperdropAttrs(const double radius,
-                 const double msol,
+  SuperdropAttrs(const SolutePtr soluteptr,
                  const unsigned long long xi,
-                 const std::shared_ptr<const SoluteProperties> solute)
-      : radius(radius),
-        msol(msol),
+                 const double radius,
+                 const double msol)
+      : soluteptr(soluteptr),
         xi(xi),
-        solute(solute) {}
+        radius(radius),
+        msol(msol) {}
 };
 
 class Superdrop
@@ -108,14 +108,16 @@ public:
   KOKKOS_INLINE_FUNCTION auto get_coord3() const { return coord3; }
   KOKKOS_INLINE_FUNCTION auto get_coord1() const { return coord1; }
   KOKKOS_INLINE_FUNCTION auto get_coord2() const { return coord2; }
+
+  KOKKOS_INLINE_FUNCTION auto is_soluteptr() const { return attrs.soluteptr.is_allocated(); }
+  KOKKOS_INLINE_FUNCTION auto get_solute() const { return attrs.soluteptr(0); }
+  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return attrs.soluteptr(0).rho_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return attrs.soluteptr(0).mr_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return attrs.soluteptr(0).ionic; }
+
+  KOKKOS_INLINE_FUNCTION auto get_xi() const { return attrs.xi; }
   KOKKOS_INLINE_FUNCTION auto get_radius() const { return attrs.radius; }
   KOKKOS_INLINE_FUNCTION auto get_msol() const { return attrs.msol; }
-  KOKKOS_INLINE_FUNCTION auto get_xi() const { return attrs.xi; }
-
-  KOKKOS_INLINE_FUNCTION auto get_solute() const { return attrs.solute; }
-  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return attrs.solute->rho_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return attrs.solute->mr_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return attrs.solute->ionic; }
 };
 
 #endif // SUPERDROP_HPP

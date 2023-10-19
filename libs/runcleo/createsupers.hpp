@@ -50,8 +50,8 @@ private:
   {
   private:
     size_t nspacedims;
-    std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
-    viewd_solute solutes;                            // solute(s) stored in memory space of viewd_solute
+    std::unique_ptr<Superdrop::IDType::Gen> sdIdGen;      // pointer to superdrop id generator
+    std::vector<SuperdropAttrs::SolutePtr> soluteptrs;       // solute(s) stored in device memory space
     std::vector<unsigned int> sdgbxindexes;
     std::vector<double> coord3s;
     std::vector<double> coord1s;
@@ -135,11 +135,10 @@ inline void CreateSupers::print_supers(viewd_constsupers supers) const
     std::cout << "SD: " << supers(kk).id.value
               << " [gbx, (coords), (attrs)]: [ "
               << supers(kk).get_sdgbxindex() << ", ("
-
               << supers(kk).get_coord3() << ", "
               << supers(kk).get_coord1() << ", "
               << supers(kk).get_coord2() << "), ("
-              << supers(kk).get_solute() << ", "
+              << supers(kk).is_soluteptr() << ", "
               << supers(kk).get_radius() << ", "
               << supers(kk).get_msol() << ", "
               << supers(kk).get_xi() << ") ] \n";
@@ -151,7 +150,7 @@ inline CreateSupers::GenSuperdrop::
     GenSuperdrop(const FetchInitData &fid)
     : nspacedims(fid.get_nspacedims()),
       sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
-      solutes("solute"),
+      soluteptrs(0),
       sdgbxindexes(fid.sdgbxindex()),
       coord3s(fid.coord3()),
       coord1s(fid.coord1()),
@@ -160,24 +159,24 @@ inline CreateSupers::GenSuperdrop::
       msols(fid.msol()),
       xis(fid.xi())
 {
-  /* all superdroplets reference same solute
-  (in memory space of viewd_solute) */
-  solutes(0) = std::make_shared<const SoluteProperties>();
+  /* create 1 pointer-like type to solute
+  properties which all superdroplets use */
+  SuperdropAttrs::SolutePtr soluteptr("soluteptr");
+  soluteptrs.push_back(soluteptr);
 }
 
 inline SuperdropAttrs
 CreateSupers::GenSuperdrop::attrs_at(const unsigned int kk) const
 /* helper function to return a superdroplet's attributes
 at position kk in the initial conditions data. All
-superdroplets created with same shared pointer to a
-solute created in memory space of viewd_solute */
+superdroplets created with same pointer-like
+type to solute properties */
 {
   const double radius(radii.at(kk));
   const double msol(msols.at(kk));
   const unsigned long long xi(xis.at(kk));
-  const auto solute(solutes(0));
-
-  return SuperdropAttrs(radius, msol, xi, solute);
+  
+  return SuperdropAttrs(soluteptrs.at(0), xi, radius, msol);
 }
 
 inline Superdrop
