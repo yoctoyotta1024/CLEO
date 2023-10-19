@@ -71,7 +71,7 @@ private:
   using some data from a FetchInitData instance
   e.g. for each gridbox's volume */
 
-  void ensure_initialisation_complete(const dualview_constgbx gbxs,
+  void ensure_initialisation_complete(dualview_gbx gbxs,
                                       const size_t size) const;
 
   void print_gbxs(const viewh_constgbx gbxs) const;
@@ -88,7 +88,7 @@ public:
     const dualview_gbx gbxs(initialise_gbxs(fid, supers));
  
     std::cout << "checking initialisation\n";
-    // ensure_initialisation_complete(gbxs, fid.get_size());
+    ensure_initialisation_complete(gbxs, fid.get_size());
     print_gbxs(gbxs.view_host());
 
     std::cout << "--- create gridboxes: success ---\n";
