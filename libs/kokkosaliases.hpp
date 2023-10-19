@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,6 +20,8 @@
 
 #ifndef KOKKOSALIASES_HPP
 #define KOKKOSALIASES_HPP
+
+#include <memory>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>

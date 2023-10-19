@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -48,12 +48,13 @@ public:
   KOKKOS_INLINE_FUNCTION State() = default; // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~State() = default; // Kokkos requirement for a (dual)View
 
-  KOKKOS_INLINE_FUNCTION State(const double volume,
-                               const double press, const double temp,
-                               const double qvap, const double qcond,
-                               const Kokkos::pair<double, double> wvel,
-                               const Kokkos::pair<double, double> uvel,
-                               const Kokkos::pair<double, double> vvel)
+  KOKKOS_INLINE_FUNCTION
+  State(const double volume,
+        const double press, const double temp,
+        const double qvap, const double qcond,
+        const Kokkos::pair<double, double> wvel,
+        const Kokkos::pair<double, double> uvel,
+        const Kokkos::pair<double, double> vvel)
       : volume(volume),
         press(press), temp(temp),
         qvap(qvap), qcond(qcond),

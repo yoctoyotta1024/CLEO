@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,6 +45,7 @@
 #include "runcleo/sdmmethods.hpp"
 
 #include "superdrops/condensation.hpp"
+#include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/predcorrmotion.hpp"
 

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,13 +23,19 @@
 #define CREATEGBXS_HPP
 
 #include <iostream>
+#include <memory>
+#include <vector>
+#include <string>
 #include <stdexcept>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <Kokkos_DualView.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "superdrops/superdrop.hpp"
+#include "superdrops/state.hpp"
 
 class CreateGbxs
 {

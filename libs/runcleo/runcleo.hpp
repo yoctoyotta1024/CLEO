@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,6 +23,9 @@
 #define RUNCLEO_HPP
 
 #include <algorithm>
+#include <string>
+#include <stdexcept>
+#include <concepts>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
@@ -34,6 +37,11 @@
 #include "./runtimestats.hpp"
 #include "./sdmmethods.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "gridboxes/gridboxmaps.hpp"
+#include "gridboxes/movesupersindomain.hpp"
+#include "observers/observers.hpp"
+#include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
 template <CoupledDynamics CD, GridboxMaps GbxMaps,
@@ -186,13 +194,13 @@ public:
     viewd_supers supers(CreateSupers{}(initconds.initsupers));
     dualview_gbx gbxs(CreateGbxs{}(initconds.initgbxs, supers));
 
-    // // prepare CLEO for timestepping
-    // prepare_timestepping();
-    // stats.before_timestepping();
+    // prepare CLEO for timestepping
+    prepare_timestepping();
+    stats.before_timestepping();
 
-    // // do timestepping from t=0 to t=t_end
-    // timestep_cleo(t_end, stats, gbxs, supers);
-    // stats.after_timestepping();
+    // do timestepping from t=0 to t=t_end
+    timestep_cleo(t_end, stats, gbxs, supers);
+    stats.after_timestepping();
 
     return 0;
   }

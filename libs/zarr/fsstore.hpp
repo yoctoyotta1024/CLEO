@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,6 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-#include <sstream>
 
 template <typename Store>
 struct StoreAccessor

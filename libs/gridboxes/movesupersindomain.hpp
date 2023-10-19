@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,6 +45,7 @@ after updating their gridbox indexes concordantly */
 private:
   M motion;
 
+  KOKKOS_INLINE_FUNCTION
   void move_superdrops_in_domain(const unsigned int t_sdm,
                                  const GridboxMaps auto &gbxmaps,
                                  viewd_gbx d_gbxs,
@@ -62,6 +63,7 @@ public:
   MoveSupersInDomain(const M motion)
       : motion(motion) {}
 
+  KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const
   /* returns time when superdroplet motion is
   next due to occur given current time, t_sdm */
@@ -69,6 +71,7 @@ public:
     return motion.next_step(t_sdm);
   }
 
+  KOKKOS_INLINE_FUNCTION
   void run_step(const unsigned int t_sdm,
                 const GridboxMaps auto &gbxmaps,
                 viewd_gbx d_gbxs,

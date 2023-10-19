@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 14th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -16,46 +16,51 @@
  * -----
  * File Description:
  * Header file for structs and functions for assignig
- * superdroplets with identifiers (IDs). E.g. and ID may 
- * be a unique number starting from 0, 
- * or non-existant (occupying no memory) 
+ * superdroplets with identifiers (IDs). E.g. and ID may
+ * be a unique number starting from 0,
+ * or non-existant (occupying no memory)
  */
 
 #ifndef SUPERDROP_IDS_HPP
 #define SUPERDROP_IDS_HPP
 
-#include <ostream> 
+#include <ostream>
 
 #include <Kokkos_Core.hpp>
 
-struct IntID {
+struct IntID
+{
   /* struct containing value of SD identity (8bytes integer) */
   size_t value;
 
-  class Gen {
+  class Gen
+  {
   public:
-    IntID next () { return {_id++}; }
+    KOKKOS_INLINE_FUNCTION IntID next() { return {_id++}; }
+
   private:
     size_t _id = 0;
   };
 };
 
-struct EmptyID {
+struct EmptyID
+{
   /* struct for non-existant SD identity */
-  class Gen {
+  class Gen
+  {
   public:
-    EmptyID next () { return {}; }
+    KOKKOS_INLINE_FUNCTION EmptyID next() { return {}; }
   };
 };
 
-inline std::ostream& operator << (std::ostream& os, const IntID &id)
+inline std::ostream &operator<<(std::ostream &os, const IntID &id)
 /* print SD identity given it is an IntID (an integer) */
 {
-   os << id.value;
-   return os;
+  os << id.value;
+  return os;
 }
 
-inline std::ostream& operator << (std::ostream& os, const EmptyID &id)
+inline std::ostream &operator<<(std::ostream &os, const EmptyID &id)
 /* print null statement given SD identity is EmptyID (non-existent) */
 {
   os << "(Undefined) No ID";

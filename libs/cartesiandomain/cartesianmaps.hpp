@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,23 +37,27 @@ private:
 public:
   CartesianMaps(const Config &config){}
 
+  KOKKOS_INLINE_FUNCTION
   double volume(const unsigned int gbxidx) const
   {
     return 0.0;
   }
 
+  KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
   coord3bounds(const unsigned int gbxidx) const
   {
     return {0.0, 1.0};
   }
 
+  KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
   coord1bounds(const unsigned int gbxidx) const
   {
     return {0.0, 1.0}; 
   }
 
+  KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
   coord2bounds(const unsigned int gbxidx) const
   {

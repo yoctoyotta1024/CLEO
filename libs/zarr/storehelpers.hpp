@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling
  * -----
- * Last Modified: Friday 13th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,13 +25,13 @@
 #ifndef STOREHELPERS_HPP
 #define STOREHELPERS_HPP
 
-#include <string>
-#include <utility>
+#include <cmath>
 #include <vector>
+#include <utility>
+#include <string>
 #include <limits>
 #include <sstream>
 #include <iostream>
-#include <cmath>
 
 #include "./fsstore.hpp"
 

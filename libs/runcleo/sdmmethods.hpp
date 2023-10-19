@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,10 +32,10 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
-#include "superdrops/motion.hpp"
-#include "superdrops/microphysicalprocess.hpp"
-#include "superdrops/superdrop.hpp"
 #include "observers/observers.hpp"
+#include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/motion.hpp"
+#include "superdrops/superdrop.hpp"
 
 template <CoupledDynamics CD, GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,

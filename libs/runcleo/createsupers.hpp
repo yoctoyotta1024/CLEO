@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,16 +24,17 @@
 #define CREATESUPERS_HPP
 
 #include <memory>
-#include <iostream>
 #include <vector>
-#include <stdexcept>
+#include <array>
+#include <iostream>
 #include <string>
+#include <stdexcept>
 
 #include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
-#include "gridboxes/sortsupers.hpp"
 #include "superdrops/superdrop.hpp"
+#include "gridboxes/sortsupers.hpp"
 
 class CreateSupers
 /* functions (and struct holding data) to

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 16th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,6 +28,8 @@
 
 #include <iostream>
 
+#include <Kokkos_Core.hpp>
+
 struct PredCorrMotion
 {
 private:
@@ -37,16 +39,19 @@ public:
   PredCorrMotion(const unsigned int motionstep)
       : interval(motionstep) {}
 
+  KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const
   {
     return ((t_sdm / interval) + 1) * interval;
   }
 
+  KOKKOS_INLINE_FUNCTION
   bool on_step(const unsigned int t_sdm) const
   {
     return t_sdm % interval == 0;
   }
 
+  KOKKOS_FUNCTION
   void update_superdrop_coords(const unsigned int t_sdm) const;
 
 };

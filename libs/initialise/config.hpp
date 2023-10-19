@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Thursday 19th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,9 +22,9 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
+#include <fstream>
 #include <string>
 #include <string_view>
-#include <fstream>
 #include <algorithm>
 #include <iostream>
 #include <stdexcept>
