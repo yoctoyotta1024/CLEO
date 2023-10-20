@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -112,7 +112,7 @@ private:
     }
 
     gbxs.sync_host();
-    sdm.obs.observe_startstep(t_mdl, gbxs.view_host());
+    sdm.obs.at_start_step(t_mdl, gbxs.view_host());
 
     return next_stepsize(t_mdl);
   }
@@ -123,17 +123,15 @@ private:
   timestep, t_mdl, such that next timestep is
   sooner out of next timestep for obs or coupl */
   {
-    const unsigned int couplstep(sdm.get_couplstep());
-    const unsigned int obsstep(sdm.obs.get_obsstep());
-
     const auto next_step = [t_mdl](const unsigned int interval)
     {
       return ((t_mdl / interval) + 1) * interval;
     };
 
     /* t_next is sooner out of time for next coupl or obs */
+    const unsigned int couplstep(sdm.get_couplstep());
     const unsigned int next_coupl(next_step(couplstep));
-    const unsigned int next_obs(next_step(obsstep));
+    const unsigned int next_obs(sdm.obs.next_obs(t_mdl));
     const auto t_next((next_coupl < next_obs) ? next_obs : next_coupl); // return smaller of two unsigned ints (see std::min)
     
     return t_next - t_mdl;                                              // stepsize = t_next - t_mdl

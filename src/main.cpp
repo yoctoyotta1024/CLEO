@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,7 +37,7 @@
 #include "initialise/initconds.hpp"
 #include "initialise/timesteps.hpp"
 
-#include "observers/constintervalobs.hpp"
+#include "observers/printobs.hpp"
 #include "observers/observers.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
@@ -53,9 +53,9 @@
 
 CoupledDynamics auto
 create_coupldyn(const Config &config,
-                const unsigned int coupldynstep)
+                const unsigned int couplstep)
 {
-  return FromFileDynamics(config, coupldynstep); 
+  return FromFileDynamics(config, couplstep); 
 }
 
 GridboxMaps auto
@@ -79,7 +79,11 @@ create_motion(const unsigned int motionstep)
 Observer auto
 create_observer(const unsigned int obsstep)
 {
-  return ConstIntervalObs(obsstep); 
+  const Observer auto obs1 = PrintObs(obsstep); 
+  const Observer auto obs2 = PrintObs(obsstep*2); 
+  const Observer auto obs3 = NullObserver{}; 
+
+  return obs1 >> obs2 >> obs3;
 }
 
 auto create_sdm(const Config &config,

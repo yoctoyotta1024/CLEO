@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,5 +28,5 @@ KOKKOS_FUNCTION
 void PredCorrMotion::
     update_superdrop_coords(const unsigned int t_sdm) const
 {
-  std::cout << "motion @ t = " << t_sdm << "\n";
+  // std::cout << "motion @ t = " << t_sdm << "\n";
 }

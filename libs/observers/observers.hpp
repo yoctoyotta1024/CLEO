@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,6 +29,7 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
 
@@ -39,14 +40,82 @@ concept Observer = requires(Obs obs, unsigned int t,
 has signature of observing functions (see Observer concept) */
 {
   {
-    obs.get_obsstep()
+  obs.next_obs(t)
   } -> std::convertible_to<unsigned int>;
   {
     obs.on_step(t)
   } -> std::same_as<bool>;
   {
-    obs.observe_startstep(t, h_gbxs)
+    obs.at_start_step(t, h_gbxs)
   } -> std::same_as<void>;
+};
+
+template <Observer Obs1, Observer Obs2>
+class CombinedObserver
+/* new observer formed from combination
+of two Obervers 'a' and 'b' */
+{
+private:
+  Obs1 a;
+  Obs2 b;
+
+public:
+  CombinedObserver(const Obs1 obs1, const Obs2 obs2)
+      : a(obs1), b(obs2) {}
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int next_obs(const unsigned int t_mdl) const
+   /* for combination of 2 observers, the next obs
+   time is smaller out of the two possible */
+  {
+    const unsigned int t_a(a.next_obs(t_mdl));
+    const unsigned int t_b(b.next_obs(t_mdl));
+
+    return !(t_a < t_b) ? t_b : t_a; // return smaller of two unsigned ints (see std::min)
+  }
+
+  bool on_step(const unsigned int t_mdl) const
+  /* for combination of 2 observers, a tstep
+  is on_step true when either observer is on_step */
+  {
+    return a.on_step(t_mdl) || b.on_step(t_mdl);
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs) const
+  /* for combination of 2 observers, each
+  observer is run sequentially */
+  {
+    a.at_start_step(t_mdl, h_gbxs);
+    b.at_start_step(t_mdl, h_gbxs);
+  }
+};
+
+auto operator>>(const Observer auto obs1,
+                const Observer auto obs2)
+/* define ">>" operator that combines two observers */
+{
+  return CombinedObserver(obs1, obs2);
+}
+
+
+struct NullObserver
+/* NullObserver does nothing at all
+(is defined for a Monoid Structure) */
+{
+  KOKKOS_INLINE_FUNCTION
+  unsigned int next_obs(const unsigned int t_mdl) const
+  {
+    return LIMITVALUES::uintmax;
+  }
+
+  bool on_step(const unsigned int t_mdl) const
+  {
+    return false;
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs) const {}
 };
 
 #endif // OBSERVERS_HPP

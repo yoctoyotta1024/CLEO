@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,8 +45,8 @@ totnsupers = 10                         # (initial) total no. of SDs
 CONDTSTEP = 1                             # time between SD condensation events [s]
 COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 2                           # time between SDM motion [s]
-COUPLTSTEP = 10                           # time between dynamic couplings [s]
-OBSTSTEP = 20                             # time between SDM observations [s]
+COUPLTSTEP = 3                           # time between dynamic couplings [s]
+OBSTSTEP = 5                             # time between SDM observations [s]
 T_END = 20                                # time span of integration from 0s to T_END [s]
 
 # microphysics #

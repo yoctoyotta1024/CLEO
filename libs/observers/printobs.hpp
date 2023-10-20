@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: constintervalobs.hpp
+ * File: printobs.hpp
  * Project: observers
  * Created Date: Monday 16th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,8 +20,8 @@
  * timestep 'interval' between observations
  */
 
-#ifndef CONSTINTERVALOBS_HPP
-#define CONSTINTERVALOBS_HPP
+#ifndef PRINTOBS_HPP
+#define PRINTOBS_HPP
 
 #include <iostream>
 
@@ -30,22 +30,22 @@
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
 
-struct ConstIntervalObs
+struct PrintObs
 {
 private:
   unsigned int interval;
 
-  void observe_gbxs(const unsigned int t_mdl,
-                    const viewh_constgbx h_gbxs) const;
+  void observe_start_step(const unsigned int t_mdl,
+                          const viewh_constgbx h_gbxs) const;
 
 public:
-  ConstIntervalObs(const unsigned int obsstep)
+  PrintObs(const unsigned int obsstep)
       : interval(obsstep) {}
 
   KOKKOS_INLINE_FUNCTION
-  auto get_obsstep() const
+  unsigned int next_obs(const unsigned int t_mdl) const
   {
-    return interval;
+    return ((t_mdl / interval) + 1) * interval;
   }
 
   bool on_step(const unsigned int t_mdl) const
@@ -53,15 +53,15 @@ public:
     return t_mdl % interval == 0;
   }
 
-  void observe_startstep(const unsigned int t_mdl,
-                         const viewh_constgbx h_gbxs) const
+  void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs) const
   /* observe Gridboxes (on host) at start of timestep */
   {
     if (on_step(t_mdl))
     {
-      observe_gbxs(t_mdl, h_gbxs);
+      observe_start_step(t_mdl, h_gbxs);
     }
   }
 };
 
-#endif // CONSTINTERVALOBS_HPP
+#endif // PRINTOBS_HPP

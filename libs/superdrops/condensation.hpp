@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,7 +34,7 @@ private:
   KOKKOS_INLINE_FUNCTION
   void do_condensation(const unsigned int subt) const
   {
-    std::cout << "cond microphys @ t = " << subt << "\n";
+    // std::cout << "cond microphys @ t = " << subt << "\n";
   }
 
 public:

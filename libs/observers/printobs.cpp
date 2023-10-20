@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: constintervalobs.cpp
+ * File: printobs.cpp
  * Project: observers
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 16th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,11 +22,11 @@
  */
 
 
-#include "./constintervalobs.hpp"
+#include "./printobs.hpp"
 
-void ConstIntervalObs::
-    observe_gbxs(const unsigned int t_mdl,
-                 const viewh_constgbx h_gbxs) const
+void PrintObs::
+    observe_start_step(const unsigned int t_mdl,
+                       const viewh_constgbx h_gbxs) const
 {
-  std::cout << "obs @ t = " << t_mdl << "\n";
+  std::cout << "print obs @ t = " << t_mdl << "\n";
 }

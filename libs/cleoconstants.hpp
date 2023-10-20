@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 14th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -88,9 +88,11 @@ namespace dimless_constants
   constexpr double Rho_sol = DC::RHO_SOL / RHO0;
   constexpr double Mr_sol = DC::MR_SOL / MR0;
   constexpr int IONIC = DC::IONIC;
-  
-  /* Domain, Gridbox and/or Superdroplet constants */
-  constexpr unsigned int OUTOFDOMAIN = std::numeric_limits<unsigned int>::max(); // value for gbxindex that indicates superdrop is out of domain boundaries (ie. no longer exists)
+}
+
+namespace LIMITVALUES
+{
+  constexpr unsigned int uintmax = std::numeric_limits<unsigned int>::max();
 }
 
 #endif // CLEOCONSTANTS_HPP
