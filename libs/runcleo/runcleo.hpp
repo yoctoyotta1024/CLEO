@@ -123,7 +123,7 @@ private:
   timestep, t_mdl, such that next timestep is
   sooner out of next timestep for obs or coupl */
   {
-    const auto next_couplstep = [t_mdl]()
+    const auto next_couplstep = [&, t_mdl]()
     {
       const unsigned int interval(sdm.get_couplstep());
       return ((t_mdl / interval) + 1) * interval;
