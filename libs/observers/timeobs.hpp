@@ -34,14 +34,14 @@
 class TimeObs
 /* observe time of 0th gridbox and write it
 to an array 'zarr' store as determined by
-the CoordinateStorage instance */
+the CoordStorage instance */
 {
 private:
-  CoordinateStorage<double> &zarr; // TO DO make unique pointer
+  CoordStorage<double> &zarr; // TO DO make unique pointer
   std::function<double(int)> step2dimlesstime; // function to convert timesteps to real time
 
 public:
-  TimeObs(CoordinateStorage<double> &zarr,
+  TimeObs(CoordStorage<double> &zarr,
           const std::function<double(int)> step2dimlesstime)
       : zarr(zarr), step2dimlesstime(step2dimlesstime)
   {
@@ -60,7 +60,7 @@ public:
 
 inline Observer auto
 TimeObserver(const unsigned int interval,
-             CoordinateStorage<double> &zarr,
+             CoordStorage<double> &zarr,
              const std::function<double(int)> step2dimlesstime)
 /* constructs Microphysical Process for
 condensation/evaporation of superdroplets with a
