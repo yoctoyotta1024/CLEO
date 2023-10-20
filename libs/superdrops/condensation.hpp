@@ -35,7 +35,7 @@ private:
   KOKKOS_INLINE_FUNCTION
   void do_condensation(const unsigned int subt) const
   {
-    std::cout << "cond microphys @ t = " << subt << "\n";
+    // std::cout << "cond microphys @ t = " << subt << "\n";
   }
 
 public:

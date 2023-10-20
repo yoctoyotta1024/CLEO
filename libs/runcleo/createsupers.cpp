@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -88,6 +88,7 @@ void CreateSupers::print_supers(const viewd_constsupers supers) const
               << h_supers(kk).get_coord1() << ", "
               << h_supers(kk).get_coord2() << "), ("
               << h_supers(kk).is_solute() << ", "
+              << h_supers(kk).get_rho_sol() << ", "
               << h_supers(kk).get_radius() << ", "
               << h_supers(kk).get_msol() << ", "
               << h_supers(kk).get_xi() << ") ] \n";

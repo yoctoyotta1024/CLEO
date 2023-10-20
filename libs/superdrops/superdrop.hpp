@@ -35,9 +35,9 @@ namespace dlc = dimless_constants;
 
 struct SoluteProperties
 {
-  const double rho_sol; // (dimensionless) density of solute in droplets
-  const double mr_sol;  // (dimensionless) Mr of solute
-  const double ionic;   // degree ionic dissociation (van't Hoff factor)
+  double rho_sol; // (dimensionless) density of solute in droplets
+  double mr_sol;  // (dimensionless) Mr of solute
+  double ionic;   // degree ionic dissociation (van't Hoff factor)
 
   /* A Kokkos requirement for use of struct in (dual)View (such as a
   Kokkos::vector) is that default constructor and destructor exist */
@@ -53,21 +53,23 @@ struct SoluteProperties
 struct SuperdropAttrs
 /* attributes of a superdroplet*/
 {
-  using SolutePtr = Kokkos::View<SoluteProperties[1]>; // pointer-like type to an instance of Solute Properties
+  using solute_view_type = Kokkos::View<SoluteProperties[1]>;
+  using SolutePtr = Kokkos::Subview<solute_view_type,
+                                    Kokkos::pair<size_t, size_t>>; // pointer-like type to an instance of Solute Properties
   SolutePtr solute;
-  unsigned long long xi;                            // multiplicity of superdroplet
-  double radius;                                    // radius of superdroplet
-  double msol;                                      // mass of solute dissovled
+  unsigned long long xi; // multiplicity of superdroplet
+  double radius;         // radius of superdroplet
+  double msol;           // mass of solute dissovled
 
-  KOKKOS_INLINE_FUNCTION SuperdropAttrs() = default; // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION SuperdropAttrs() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~SuperdropAttrs() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  SuperdropAttrs(const SolutePtr solute,
+  SuperdropAttrs(const solute_view_type isolute,
                  const unsigned long long xi,
                  const double radius,
                  const double msol)
-      : solute(solute),
+      : solute(Kokkos::subview(isolute, Kokkos::ALL)),
         xi(xi),
         radius(radius),
         msol(msol) {}

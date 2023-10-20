@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -51,7 +51,7 @@ private:
   private:
     size_t nspacedims;
     std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
-    std::vector<SuperdropAttrs::SolutePtr> solutes;  // solute(s) stored in device memory space
+    std::vector<SuperdropAttrs::solute_view_type> solutes;  // solute(s) stored in device memory space
     std::vector<unsigned int> sdgbxindexes;
     std::vector<double> coord3s;
     std::vector<double> coord1s;
@@ -175,7 +175,7 @@ inline CreateSupers::GenSuperdrop::
 {
   /* create 1 pointer-like type to solute
   properties which all superdroplets use */
-  SuperdropAttrs::SolutePtr solute("solute");
+  SuperdropAttrs::solute_view_type solute("solute");
   solutes.push_back(solute);
 }
 
