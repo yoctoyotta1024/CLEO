@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: condensation.cpp
+ * File: collisions.cpp
  * Project: superdrops
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -15,16 +15,15 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Functionality related to modelling condensation
- * microphysical process in SDM
+ * struct for modelling collision
+ * microphysical processes in SDM
+ * e.g. collision-coalescence
  */
 
-
-#include "./condensation.hpp"
+#include "./collisions.hpp"
 
 KOKKOS_FUNCTION
-void DoCondensation::do_condensation(const unsigned int subt) const
-/* enact condensation / evaporation microphysical process */
+void DoCollisions::do_collisions(const unsigned int subt) const
 {
-  std::cout << "cond microphys @ t = " << subt << "\n";
+  std::cout << "coll microphys @ t = " << subt << "\n";
 }

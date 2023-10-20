@@ -33,11 +33,7 @@
 struct DoCollisions
 {
 private:
-  KOKKOS_INLINE_FUNCTION
-  void do_collisions(const unsigned int subt) const
-  {
-    // std::cout << "coll microphys @ t = " << subt << "\n";
-  }
+  KOKKOS_FUNCTION void do_collisions(const unsigned int subt) const;
 
 public:
 

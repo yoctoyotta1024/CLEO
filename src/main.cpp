@@ -44,6 +44,7 @@
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
+#include "superdrops/collisions.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
@@ -68,9 +69,10 @@ MicrophysicalProcess auto
 create_microphysics(const Timesteps &tsteps)
 {
   const MicrophysicalProcess auto cond = Condensation(tsteps.get_condstep());
-  const MicrophysicalProcess auto null = NullMicrophysicalProcess{}; 
+  const MicrophysicalProcess auto colls = Collisions(tsteps.get_collstep());
+  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{}; 
   
-  return cond >> null;
+  return cond >> colls;
 }
 
 Motion auto
@@ -83,9 +85,9 @@ Observer auto
 create_observer(const unsigned int obsstep)
 {
   const Observer auto obs1 = PrintObs(obsstep); 
-  const Observer auto null = NullObserver{}; 
+  // const Observer auto null = NullObserver{}; 
 
-  return obs1 >> null;
+  return obs1;
 }
 
 auto create_sdm(const Config &config,

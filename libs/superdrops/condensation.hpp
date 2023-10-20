@@ -35,11 +35,8 @@ struct DoCondensation
 condensation / evaporation microphysical process */
 {
 private:
-  KOKKOS_INLINE_FUNCTION
-  void do_condensation(const unsigned int subt) const
-  {
-    // std::cout << "cond microphys @ t = " << subt << "\n";
-  }
+  KOKKOS_FUNCTION
+  void do_condensation(const unsigned int subt) const;
 
 public:
 
