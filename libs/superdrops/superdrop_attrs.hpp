@@ -64,7 +64,7 @@ struct SuperdropAttrs
         radius(radius),
         msol(msol) {}
 
-  KOKKOS_INLINE_FUNCTION bool is_solute() const { return true; }
+  KOKKOS_INLINE_FUNCTION bool is_solute() const { return true; } // true if solute is "allocated"
   KOKKOS_INLINE_FUNCTION auto get_solute() const { return solute; }
   KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute.rho_sol(); }
   KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol(); }
