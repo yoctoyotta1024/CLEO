@@ -37,8 +37,9 @@
 #include "initialise/initconds.hpp"
 #include "initialise/timesteps.hpp"
 
-#include "observers/printobserver.hpp"
 #include "observers/observers.hpp"
+#include "observers/printobserver.hpp"
+#include "observers/timeobs.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/runcleo.hpp"
@@ -84,10 +85,12 @@ create_motion(const unsigned int motionstep)
 Observer auto
 create_observer(const unsigned int obsstep)
 {
-  const Observer auto obs1 = PrintObserver(obsstep); 
+  const Observer auto obs1 = PrintObserver(obsstep*2); 
+  
+  const Observer auto obs2 = TimeObserver(obsstep); 
   // const Observer auto null = NullObserver{}; 
 
-  return obs1;
+  return obs1 >> obs2;
 }
 
 auto create_sdm(const Config &config,

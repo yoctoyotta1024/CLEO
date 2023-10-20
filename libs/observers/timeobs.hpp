@@ -22,11 +22,13 @@
 #define TIMEOBS_HPP
 
 #include <iostream>
+#include <concepts>
 
 #include <Kokkos_Core.hpp>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
+#include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
 
 class TimeObs
@@ -39,5 +41,15 @@ public:
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const;
 };
+
+Observer auto
+TimeObserver(const unsigned int interval)
+/* constructs Microphysical Process for
+condensation/evaporation of superdroplets with a
+constant timestep 'interval' given the
+"do_condensation" function-like type */
+{
+  return ConstTstepObserver(interval, TimeObs{});
+}
 
 #endif // TIMEOBS_HPP
