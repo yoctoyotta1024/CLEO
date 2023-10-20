@@ -42,7 +42,7 @@ public:
                      const viewh_constgbx h_gbxs) const;
 };
 
-Observer auto
+inline Observer auto
 TimeObserver(const unsigned int interval)
 /* constructs Microphysical Process for
 condensation/evaporation of superdroplets with a

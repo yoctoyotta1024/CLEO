@@ -32,6 +32,7 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 # add executables to library
 set(SOURCES
 "printobserver.cpp"
+"timeobs.cpp"
 )
 add_library(${LIBNAME} SHARED ${SOURCES})
 

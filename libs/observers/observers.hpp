@@ -119,18 +119,18 @@ struct NullObserver
 };
 
 template <typename O>
-concept ObsFunc = requires(O o, unsigned int t,
+concept ObsFuncs = requires(O o, unsigned int t,
                            const viewh_constgbx h_gbxs)
 /* concept for all types that can be called used
 by ConstTstepObserver for 'do_obs' (in order
 to make an Observer type out of a ConstTstepObserver) */
 {
   {
-    obs.at_start_step(t, h_gbxs)
+    o.at_start_step(t, h_gbxs)
   } -> std::same_as<void>;
 };
 
-template <Observation O>
+template <ObsFuncs O>
 struct ConstTstepObserver
 /* this structure is a type that satisfies the concept of
 an observer in SDM and has a constant tstep

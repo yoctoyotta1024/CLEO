@@ -25,15 +25,15 @@
 #include "./printobserver.hpp"
 
 void PrintObserver::
-    observe_start_step(const unsigned int t_mdl,
-                       const viewh_constgbx h_gbxs) const
+    print_statement(const unsigned int t_mdl,
+                    const viewh_constgbx h_gbxs) const
 {
   constexpr int printprec(1); // precision to print data with
   
   const auto gbx = h_gbxs(0);
   std::cout << "t="
             << std::fixed << std::setprecision(printprec)
-            << t_mdl * dlc::TIME0
+            << step2realtime(t_mdl)
             << "s, totnsupers=" << gbx.domaintotnsupers()
             << ", ngbxs=" << h_gbxs.extent(0)
             << ", (Gbx" << gbx.get_gbxindex()

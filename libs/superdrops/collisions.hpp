@@ -49,7 +49,7 @@ public:
 
 };
 
-MicrophysicalProcess auto
+inline MicrophysicalProcess auto
 Collisions(const unsigned int interval)
 /* constructs Microphysical Process for collisions 
 of superdroplets with a constant timestep 'interval'

@@ -85,8 +85,9 @@ create_motion(const unsigned int motionstep)
 Observer auto
 create_observer(const unsigned int obsstep)
 {
-  const Observer auto obs1 = PrintObserver(obsstep*2); 
-  
+  const Observer auto obs1 = PrintObserver(obsstep * 2,
+                                           &step2realtime);
+
   const Observer auto obs2 = TimeObserver(obsstep); 
   // const Observer auto null = NullObserver{}; 
 

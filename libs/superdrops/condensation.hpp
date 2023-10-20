@@ -52,7 +52,7 @@ public:
 
 };
 
-MicrophysicalProcess auto
+inline MicrophysicalProcess auto
 Condensation(const unsigned int interval)
 /* constructs Microphysical Process for
 condensation/evaporation of superdroplets with a

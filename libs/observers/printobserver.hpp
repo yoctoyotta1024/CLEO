@@ -26,6 +26,7 @@
 #include <ios>
 #include <iostream>
 #include <iomanip>
+#include <functional>
 
 #include <Kokkos_Core.hpp>
 
@@ -38,14 +39,16 @@ namespace dlc = dimless_constants;
 struct PrintObserver
 {
 private:
-  unsigned int interval;
+  unsigned int interval;                     // timestep between print statements
+  const std::function<double(int)> step2realtime; // function to convert timesteps to real time
 
-  void observe_start_step(const unsigned int t_mdl,
+  void print_statement(const unsigned int t_mdl,
                           const viewh_constgbx h_gbxs) const;
 
 public:
-  PrintObserver(const unsigned int obsstep)
-      : interval(obsstep) {}
+  PrintObserver(const unsigned int obsstep,
+                const std::function<double(int)> step2realtime)
+      : interval(obsstep), step2realtime(step2realtime) {}
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_obs(const unsigned int t_mdl) const
@@ -64,7 +67,7 @@ public:
   {
     if (on_step(t_mdl))
     {
-      observe_start_step(t_mdl, h_gbxs);
+      print_statement(t_mdl, h_gbxs);
     }
   }
 };
