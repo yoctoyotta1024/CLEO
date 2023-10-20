@@ -129,10 +129,9 @@ private:
     };
 
     /* t_next is sooner out of time for next coupl or obs */
-    const unsigned int couplstep(sdm.get_couplstep());
-    const unsigned int next_coupl(next_step(couplstep));
+    const unsigned int next_coupl(next_step(sdm.get_couplstep()));
     const unsigned int next_obs(sdm.obs.next_obs(t_mdl));
-    const auto t_next((next_coupl < next_obs) ? next_obs : next_coupl); // return smaller of two unsigned ints (see std::min)
+    const auto t_next(!(next_coupl < next_obs) ? next_obs : next_coupl); // return smaller of two unsigned ints (see std::min)
     
     return t_next - t_mdl;                                              // stepsize = t_next - t_mdl
   }

@@ -80,10 +80,9 @@ Observer auto
 create_observer(const unsigned int obsstep)
 {
   const Observer auto obs1 = PrintObs(obsstep); 
-  const Observer auto obs2 = PrintObs(obsstep*2); 
-  const Observer auto obs3 = NullObserver{}; 
+  const Observer auto obsx = NullObserver{}; 
 
-  return obs1 >> obs2 >> obs3;
+  return obs1 >> obsx;
 }
 
 auto create_sdm(const Config &config,
