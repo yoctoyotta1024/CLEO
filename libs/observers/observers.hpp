@@ -51,7 +51,7 @@ has signature of observing functions (see Observer concept) */
 };
 
 template <Observer Obs1, Observer Obs2>
-class CombinedObserver
+struct CombinedObserver
 /* new observer formed from combination
 of two Obervers 'a' and 'b' */
 {
@@ -75,8 +75,8 @@ public:
   }
 
   bool on_step(const unsigned int t_mdl) const
-  /* for combination of 2 observers, a tstep
-  is on_step true when either observer is on_step */
+  /* for combination of 2 observers, a tstep is
+  on_step = true when either observer is on_step */
   {
     return a.on_step(t_mdl) || b.on_step(t_mdl);
   }

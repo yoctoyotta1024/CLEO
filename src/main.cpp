@@ -67,7 +67,10 @@ create_gbxmaps(const Config &config)
 MicrophysicalProcess auto
 create_microphysics(const Timesteps &tsteps)
 {
-  return Condensation(tsteps.get_condstep());
+  const MicrophysicalProcess auto cond = Condensation(tsteps.get_condstep());
+  const MicrophysicalProcess auto null = NullMicrophysicalProcess{}; 
+  
+  return cond >> null;
 }
 
 Motion auto
@@ -80,9 +83,9 @@ Observer auto
 create_observer(const unsigned int obsstep)
 {
   const Observer auto obs1 = PrintObs(obsstep); 
-  const Observer auto obsx = NullObserver{}; 
+  const Observer auto null = NullObserver{}; 
 
-  return obs1 >> obsx;
+  return obs1 >> null;
 }
 
 auto create_sdm(const Config &config,

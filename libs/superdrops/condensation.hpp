@@ -23,41 +23,42 @@
 #define CONDENSATION_HPP
 
 #include <iostream>
+#include <concepts>
 
 #include <Kokkos_Core.hpp>
 
-struct Condensation
+#include "./microphysicalprocess.hpp"
+
+struct DoCondensation
 {
 private:
-  unsigned int interval;
-
   KOKKOS_INLINE_FUNCTION
   void do_condensation(const unsigned int subt) const
   {
-    // std::cout << "cond microphys @ t = " << subt << "\n";
+    std::cout << "cond microphys @ t = " << subt << "\n";
   }
 
 public:
-  Condensation(const unsigned int condstep)
-      : interval(condstep) {}
 
   KOKKOS_INLINE_FUNCTION
-  unsigned int next_step(const unsigned int t_sdm) const
-  {
-    return ((t_sdm / interval) + 1) * interval;
-  }
-  
-  KOKKOS_INLINE_FUNCTION
-  bool on_step(const unsigned int t_sdm) const
-  {
-    return t_sdm % interval == 0;
-  }
-
-  KOKKOS_INLINE_FUNCTION
-  void run_step(const unsigned int subt) const
+  void operator()(const unsigned int subt) const
+  /* this operator is used as an "adaptor" for using
+  condensation as the MicrophysicsFunction type in a
+  ConstTstepMicrophysics instance (*hint* which itself
+  satsifies the MicrophysicalProcess concept) */
   {
     do_condensation(subt);
   }
+
 };
+
+MicrophysicalProcess auto
+Condensation(const unsigned int interval)
+/* constructs SdmProcess for condensation with constant timestep 'interval'
+given a function to convert the interval to a (dimensionless) time
+and the arguments required to construct the condensation method */
+{
+  return ConstTstepMicrophysics(interval, DoCondensation{});
+}
 
 #endif // CONDENSATION_HPP
