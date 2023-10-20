@@ -96,7 +96,7 @@ create_observer(const Config &config,
   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
                                           &step2dimlesstime);
 
-  const Observer auto obs3 = GbxindexObserver(obsstep, store, maxchunk);
+  const Observer auto obs3 = GbxindexObserver(store, maxchunk);
 
   return obs1 >> obs2;
 }

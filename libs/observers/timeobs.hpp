@@ -25,6 +25,7 @@
 #include <concepts>
 #include <memory>
 #include <functional>
+#include <iostream>
 
 #include <Kokkos_Core.hpp>
 
@@ -54,6 +55,11 @@ public:
         step2dimlesstime(step2dimlesstime)
   {
     zarr->is_name("time");
+  }
+
+  void before_timestepping(const viewh_constgbx h_gbxs) const
+  {
+    std::cout << "observer includes TimeObserver\n";
   }
 
   void at_start_step(const unsigned int t_mdl,

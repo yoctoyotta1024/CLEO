@@ -40,6 +40,9 @@ concept Observer = requires(Obs obs, unsigned int t,
 has signature of observing functions (see Observer concept) */
 {
   {
+    obs.before_timestepping(h_gbxs)
+  } -> std::same_as<void>;
+  {
   obs.next_obs(t)
   } -> std::convertible_to<unsigned int>;
   {
@@ -62,6 +65,14 @@ private:
 public:
   CombinedObserver(const Obs1 obs1, const Obs2 obs2)
       : a(obs1), b(obs2) {}
+
+  void before_timestepping(const viewh_constgbx h_gbxs) const
+  /* for combination of 2 observers, each
+  observer is run sequentially */
+  {
+    a.before_timestepping(h_gbxs);
+    b.before_timestepping(h_gbxs);
+  }
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_obs(const unsigned int t_mdl) const
@@ -103,6 +114,8 @@ struct NullObserver
 /* NullObserver does nothing at all
 (is defined for a Monoid Structure) */
 {
+  void before_timestepping(const viewh_constgbx h_gbxs) const {}
+
   KOKKOS_INLINE_FUNCTION
   unsigned int next_obs(const unsigned int t_mdl) const
   {
@@ -126,6 +139,9 @@ by ConstTstepObserver for 'do_obs' (in order
 to make an Observer type out of a ConstTstepObserver) */
 {
   {
+    o.before_timestepping(h_gbxs)
+  } -> std::same_as<void>;
+  {
     o.at_start_step(t, h_gbxs)
   } -> std::same_as<void>;
 };
@@ -145,6 +161,11 @@ private:
 public:
   ConstTstepObserver(const unsigned int interval, const O o)
       : interval(interval), do_obs(o) {}
+
+  void before_timestepping(const viewh_constgbx h_gbxs) const
+  {
+    do_obs.before_timestepping(h_gbxs);
+  }
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_obs(const unsigned int t_mdl) const

@@ -52,11 +52,11 @@ private:
   const CD &coupldyn;
   const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm;
 
-  int prepare_timestepping() const
+  int prepare_to_timestep(const dualview_constgbx gbxs) const
   /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
   {
     coupldyn.prepare_to_timestep();
-    sdm.prepare_to_timestep();
+    sdm.prepare_to_timestep(gbxs.view_host());
 
     return 0;
   }
@@ -193,7 +193,7 @@ public:
     dualview_gbx gbxs(CreateGbxs{}(initconds.initgbxs, supers));
 
     // prepare CLEO for timestepping
-    prepare_timestepping();
+    prepare_to_timestep(gbxs);
     stats.before_timestepping();
 
     // do timestepping from t=0 to t=t_end

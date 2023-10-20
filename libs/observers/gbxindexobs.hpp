@@ -43,15 +43,29 @@ determined by the CoordStorage instance */
 private:
   using store_type = CoordStorage<unsigned int>;
   std::shared_ptr<store_type> zarr;
-  bool already_observed;
 
 public:
   GbxindexObserver(FSStore &store, const int maxchunk)
       : zarr(std::make_shared<store_type>(store, maxchunk, "gbxindex",
-                                          "<u4", " ", 1)),
-        already_observed(false)
+                                          "<u4", " ", 1))
   {
     zarr->is_name("gbxindex");
+  }
+
+  void before_timestepping(const viewh_constgbx h_gbxs) const
+  /* writes gbxindexes to zarr store
+  (only if data has not yet been observed) */
+  {
+    std::cout << "observer includes GbxindexObserver\n";
+
+    if (zarr->get_ndata() == 0)
+    {
+      const size_t ngbxs(h_gbxs.extent(0));
+      for (size_t ii(0); ii < ngbxs; ++ii)
+      {
+        zarr->value_to_storage(h_gbxs(ii).get_gbxindex());
+      }
+    }
   }
 
   unsigned int next_obs(const unsigned int t_mdl) const
@@ -66,21 +80,6 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const {}
-
-  void prepare(const viewh_constgbx h_gbxs) const
-  /* writes gbxindexes to zarr store
-  (only if dat has not yet been observed) */
-  {
-    if !(already_observed)
-    {
-      const size_t ngbxs(h_gbxs.extent(0));
-      for (size_t ii(0); ii < ngbxs; ++ii)
-      {
-        zarr.value_to_storage(h_gridboxes(ii).gbxindex);
-      }
-      already_observed = true;
-    }
-  }
 };
 
 #endif // GBXINDEXOBS_HPP

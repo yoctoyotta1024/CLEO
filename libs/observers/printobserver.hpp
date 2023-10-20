@@ -50,8 +50,13 @@ public:
                 const std::function<double(int)> step2realtime)
       : interval(obsstep), step2realtime(step2realtime) {}
 
+  void before_timestepping(const viewh_constgbx h_gbxs) const
+  {
+      std::cout << "observer includes PrintObserver\n";
+  }
+
   KOKKOS_INLINE_FUNCTION
-  unsigned int next_obs(const unsigned int t_mdl) const
+      unsigned int next_obs(const unsigned int t_mdl) const
   {
     return ((t_mdl / interval) + 1) * interval;
   }

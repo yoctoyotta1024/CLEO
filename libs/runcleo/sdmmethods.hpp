@@ -107,9 +107,11 @@ public:
   KOKKOS_INLINE_FUNCTION
   auto get_couplstep() const { return couplstep; }
 
-  KOKKOS_INLINE_FUNCTION
-  void prepare_to_timestep() const {}
+  void prepare_to_timestep(const viewh_constgbx h_gbxs) const
   /* prepare CLEO SDM for timestepping */
+  {
+    obs.before_timestepping(h_gbxs);
+  }
 
   void receive_dynamics(const CD &coupldyn,
                         const viewh_gbx h_gbxs) const {}
