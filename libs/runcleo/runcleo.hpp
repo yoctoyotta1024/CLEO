@@ -85,11 +85,11 @@ private:
       /* start step (in general involves coupling) */
       const unsigned int stepsize(start_step(t_mdl, gbxs));
 
-      /* advance SDM (optionally concurrent to dynamics solver) */
-      sdm_step(t_mdl, stepsize, gbxs, supers);
-
       /* advance dynamics solver (optionally concurrent to SDM) */
       coupldyn_step(t_mdl, stepsize);
+  
+      /* advance SDM (optionally concurrent to dynamics solver) */
+      sdm_step(t_mdl, stepsize, gbxs, supers);
 
       /* proceed to next step (in general involves coupling) */
       t_mdl = proceed_to_next_step(t_mdl, stepsize, gbxs);

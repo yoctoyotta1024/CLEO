@@ -44,9 +44,9 @@ totnsupers = 10                         # (initial) total no. of SDs
 # timestepping #
 CONDTSTEP = 1                             # time between SD condensation events [s]
 COLLTSTEP = 1                             # time between SD collision events [s]
-MOTIONTSTEP = 2                           # time between SDM motion [s]
-COUPLTSTEP = 9                           # time between dynamic couplings [s]
-OBSTSTEP = 5                             # time between SDM observations [s]
+MOTIONTSTEP = 3                           # time between SDM motion [s]
+COUPLTSTEP = 5                            # time between dynamic couplings [s]
+OBSTSTEP = 8                              # time between SDM observations [s]
 T_END = 20                                # time span of integration from 0s to T_END [s]
 
 # microphysics #
