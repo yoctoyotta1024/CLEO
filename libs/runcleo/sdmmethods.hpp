@@ -46,15 +46,18 @@ private:
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_sdmstep(const unsigned int t_sdm,
-                            const unsigned int stepsize) const
+                            const unsigned int next_mdl) const
   /* given current timestep, t_sdm, work out which event
   (motion or one complete step) is next to occur and return
   the time of the sooner event, (ie. next t_move or t_mdl) */
   {
-    const unsigned int next_t_mdl(((t_sdm / stepsize) + 1) * stepsize); // t of next output
-    const unsigned int next_t_move(movesupers.next_step(t_sdm));        // t of next sdm movement
+    const unsigned int next_move(movesupers.next_step(t_sdm));        // t of next sdm movement
+    const unsigned int t_next(!(next_mdl <
+                                next_move)
+                                  ? next_move
+                                  : next_mdl);
 
-    return !(next_t_mdl < next_t_move) ? next_t_move : next_t_mdl; // return smaller of two unsigned ints (see std::min)
+    return t_next; // return smaller of two unsigned ints (see std::min)
   }
 
   KOKKOS_INLINE_FUNCTION
@@ -126,15 +129,17 @@ public:
   t_mdl + stepsize with sub-timestepping routine
   for super-droplets' movement and microphysics */
   {
+    const unsigned int t_mdl_next(t_mdl + stepsize);
+
     unsigned int t_sdm(t_mdl);
-    while (t_sdm < t_mdl + stepsize)
+    while (t_sdm < t_mdl_next)
     {
-      unsigned int t_next(next_sdmstep(t_sdm, stepsize));
+      unsigned int t_sdm_next(next_sdmstep(t_sdm, t_mdl_next));
 
       superdrops_movement(t_sdm, d_gbxs, supers);
-      sdm_microphysics(t_sdm, t_next, d_gbxs);
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs);
 
-      t_sdm = t_next;
+      t_sdm = t_sdm_next;
     }
   }
 };
