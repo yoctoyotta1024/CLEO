@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: condensation.hpp
+ * File: collisions.hpp
  * Project: superdrops
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -15,13 +15,13 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * struct for modelling condensation
- * and evaporation of water
- * microphysical process in SDM
+ * struct for modelling collision
+ * microphysical processes in SDM
+ * e.g. collision-coalescence
  */
 
-#ifndef CONDENSATION_HPP
-#define CONDENSATION_HPP
+#ifndef COLLISIONS_HPP
+#define COLLISIONS_HPP
 
 #include <iostream>
 #include <concepts>
@@ -30,15 +30,13 @@
 
 #include "./microphysicalprocess.hpp"
 
-struct DoCondensation
-/* function-like type that enacts
-condensation / evaporation microphysical process */
+struct DoCollisions
 {
 private:
   KOKKOS_INLINE_FUNCTION
-  void do_condensation(const unsigned int subt) const
+  void do_collisions(const unsigned int subt) const
   {
-    // std::cout << "cond microphys @ t = " << subt << "\n";
+    // std::cout << "coll microphys @ t = " << subt << "\n";
   }
 
 public:
@@ -46,23 +44,22 @@ public:
   KOKKOS_INLINE_FUNCTION
   void operator()(const unsigned int subt) const
   /* this operator is used as an "adaptor" for using
-  condensation as the MicrophysicsFunction type in a
+  collisions as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    do_condensation(subt);
+    do_collisions(subt);
   }
 
 };
 
 MicrophysicalProcess auto
-Condensation(const unsigned int interval)
-/* constructs Microphysical Process for
-condensation/evaporation of superdroplets with a
-constant timestep 'interval' given the
-"do_condensation" function-like type */
+Collisions(const unsigned int interval)
+/* constructs Microphysical Process for collisions 
+of superdroplets with a constant timestep 'interval'
+given the "do_collisions" function-like type */
 {
-  return ConstTstepMicrophysics(interval, DoCondensation{});
+  return ConstTstepMicrophysics(interval, DoCollisions{});
 }
 
-#endif // CONDENSATION_HPP
+#endif // COLLISIONS_HPP
