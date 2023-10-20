@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,11 +35,13 @@
 
 #include "./fsstore.hpp"
 
-namespace storehelpers
+namespace storehelpers 
 /* namespace for generic helper functions used to
 write a double to a buffer, a buffer to a chunk of an
 array in a store, and an array's metadata to a store */
 {
+  constexpr unsigned int NOTSETCHUNKSIZE = std::numeric_limits<unsigned int>::min();
+  
   inline unsigned int good2Dchunk(const unsigned int maxchunk,
                                   const unsigned int ndim1)
   /* given max chunksize, returns the (largest)

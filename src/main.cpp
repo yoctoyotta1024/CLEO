@@ -92,14 +92,8 @@ create_observer(const Config &config,
 
   const Observer auto obs1 = PrintObserver(obsstep, &step2realtime);
 
-  const std::string name("time");
-  const std::string dtype("<f8");
-  const std::string units("s");
-  constexpr double scale_factor(dlc::TIME0);
-  CoordinateStorage<double> timezarr(store, maxchunk, name,
-                                     dtype, units, scale_factor);
-
-  const Observer auto obs2 = TimeObserver(obsstep, timezarr, &step2dimlesstime); 
+  const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
+                                          &step2dimlesstime);
 
   return obs1 >> obs2;
 }

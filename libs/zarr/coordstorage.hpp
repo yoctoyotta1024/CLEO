@@ -24,6 +24,11 @@
 #ifndef COORDSTORAGE_HPP
 #define COORDSTORAGE_HPP
 
+#include <tuple>
+#include <string>
+
+#include "./singlevarstorage.hpp"
+
 template <typename T>
 struct CoordStorage : SingleVarStorage<T>
 /* storage of a coordinate. Coordinate = a 
@@ -36,7 +41,7 @@ private:
   /* write data in buffer to a chunk in store */
   {
     std::tie(this->chunkcount, this->bufferfill) =
-        storagehelper::
+       storehelpers:: 
             writebuffer2chunk(this->store, this->buffer,
                               this->name, this->chunkcount);
 

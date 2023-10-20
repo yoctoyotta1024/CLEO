@@ -21,9 +21,3 @@
 
 
 #include "./timeobs.hpp"
-
-void TimeObs::at_start_step(const unsigned int t_mdl,
-                    const viewh_constgbx h_gbxs) const
-{
-  std::cout << "obs time\n";
-}

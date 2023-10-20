@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <concepts>
+#include <memory>
 
 #include <Kokkos_Core.hpp>
 
@@ -30,6 +31,7 @@
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "zarr/coordstorage.hpp"
 
 class TimeObs
 /* observe time of 0th gridbox and write it
@@ -37,15 +39,20 @@ to an array 'zarr' store as determined by
 the CoordStorage instance */
 {
 private:
-  CoordStorage<double> &zarr; // TO DO make unique pointer
+  using store_type = CoordStorage<double>;
+  std::shared_ptr<store_type> zarr;
   std::function<double(int)> step2dimlesstime; // function to convert timesteps to real time
 
 public:
-  TimeObs(CoordStorage<double> &zarr,
+  TimeObs(FSStore &store,
+          const int maxchunk,
           const std::function<double(int)> step2dimlesstime)
-      : zarr(zarr), step2dimlesstime(step2dimlesstime)
+      : zarr(std::make_shared<store_type>(store, maxchunk,
+                                          "time", "<f8",
+                                          "s", dlc::TIME0)),
+        step2dimlesstime(step2dimlesstime)
   {
-    zarr.is_name("time");
+    zarr->is_name("time");
   }
 
   void at_start_step(const unsigned int t_mdl,
@@ -53,21 +60,23 @@ public:
   /* converts integer model timestep to dimensionless time,
   then writes to zarr coordinate storage */
   {
-    const double time(stepdimlesstime(t_mdl)); 
-    zarr.value_to_storage(time);
+    const double time(step2dimlesstime(t_mdl));
+    zarr->value_to_storage(time);
   }
 };
 
 inline Observer auto
 TimeObserver(const unsigned int interval,
-             CoordStorage<double> &zarr,
+             FSStore &store,
+             const int maxchunk,
              const std::function<double(int)> step2dimlesstime)
 /* constructs Microphysical Process for
 condensation/evaporation of superdroplets with a
 constant timestep 'interval' given the
 "do_condensation" function-like type */
 {
-  return ConstTstepObserver(interval, TimeObs(zarr, step2dimlesstime));
+  const auto obs(TimeObs(store, maxchunk, step2dimlesstime));
+  return ConstTstepObserver(interval, obs);
 }
 
 #endif // TIMEOBS_HPP

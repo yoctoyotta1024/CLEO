@@ -36,8 +36,6 @@ template <typename T>
 class SingleVarStorage
 {
 private:
-  using NOTSETCHUNKSIZE = std::numeric_limits<unsigned int>::min();
-
   virtual void writechunk() = 0;
   virtual void writejsons() = 0;
 
@@ -65,7 +63,7 @@ protected:
 
   void set_buffer_chunksize(const unsigned int i_chunksize)
   {
-    if (chunksize != NOTSETCHUNKSIZE)
+    if (chunksize != storehelpers::NOTSETCHUNKSIZE)
     {
       const std::string err("chunksize already set; it cannot be changed");
       throw std::invalid_argument(err);
@@ -79,27 +77,27 @@ protected:
                    const std::string dims)
   /* write array's metadata to .json files */
   {
-    const std::string metadata = storagehelper::
+    const std::string metadata = storehelpers::
         metadata(zarr_format, order, shape, chunks, dtype,
                  compressor, fill_value, filters);
 
-    const std::string arrayattrs = storagehelper::
+    const std::string arrayattrs = storehelpers::
         arrayattrs(dims, units, scale_factor);
 
-    storagehelper::writezarrjsons(store, name, metadata, arrayattrs);
+    storehelpers::writezarrjsons(store, name, metadata, arrayattrs);
   }
 
   void copy2buffer(const T val)
   /* copy value 'val' to buffer */
   {
-    bufferfill = storagehelper::val2buffer<T>(val, buffer, bufferfill);
+    bufferfill = storehelpers::val2buffer<T>(val, buffer, bufferfill);
     ++ndata;
   }
 
   void copy2buffer(const std::vector<T> &vec)
   /* copy values of type T in vector 'vec' to buffer */
   {
-    bufferfill = storagehelper::vec2buffer<T>(vec, buffer, bufferfill);
+    bufferfill = storehelpers::vec2buffer<T>(vec, buffer, bufferfill);
     ndata += vec.size();
   }
 
