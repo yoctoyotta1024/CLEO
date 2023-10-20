@@ -182,7 +182,7 @@ public:
 
   template <typename IC>
   int operator()(const IC &initconds,
-             const unsigned int t_end) const
+                 const unsigned int t_end) const
   /* create gridboxes and superdrops using initial conditions,
   then prepare and do timestepping. Meanwhile there is the
   option to record some runtime statistics using "stats" */
@@ -199,7 +199,7 @@ public:
     // do timestepping from t=0 to t=t_end
     timestep_cleo(t_end, stats, gbxs, supers);
     stats.after_timestepping();
-
+    
     return 0;
   }
 };

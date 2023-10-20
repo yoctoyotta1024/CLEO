@@ -109,11 +109,11 @@ public:
   KOKKOS_INLINE_FUNCTION auto get_coord1() const { return coord1; }
   KOKKOS_INLINE_FUNCTION auto get_coord2() const { return coord2; }
 
-  KOKKOS_INLINE_FUNCTION auto is_solute() const { return attrs.solute.is_allocated(); }
-  KOKKOS_INLINE_FUNCTION auto get_solute() const { return attrs.solute(0); }
-  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return attrs.solute(0).rho_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return attrs.solute(0).mr_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return attrs.solute(0).ionic; }
+  KOKKOS_INLINE_FUNCTION auto is_solute() const { return attrs.is_solute(); }
+  KOKKOS_INLINE_FUNCTION auto get_solute() const { return attrs.get_solute(); }
+  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return attrs.get_rho_sol(); }
+  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return attrs.get_mr_sol(); }
+  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return attrs.get_ionic(); }
 
   KOKKOS_INLINE_FUNCTION auto get_xi() const { return attrs.xi; }
   KOKKOS_INLINE_FUNCTION auto get_radius() const { return attrs.radius; }
