@@ -98,7 +98,7 @@ create_observer(const Config &config,
 
   const Observer auto obs3 = GbxindexObserver(store, maxchunk);
 
-  return obs1 >> obs2;
+  return obs1 >> obs2 >> obs3;
 }
 
 auto create_sdm(const Config &config,
