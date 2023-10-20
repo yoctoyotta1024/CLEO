@@ -15,15 +15,16 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Observer to output time to array in zarr storage
+ * Observer to output gbxindx to array in a
+ * zarr file system storage
  */
 
 #ifndef TIMEOBS_HPP
 #define TIMEOBS_HPP
 
-#include <iostream>
 #include <concepts>
 #include <memory>
+#include <functional>
 
 #include <Kokkos_Core.hpp>
 
@@ -33,7 +34,7 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr/coordstorage.hpp"
 
-class TimeObs
+class DoTimeObs
 /* observe time of 0th gridbox and write it
 to an array 'zarr' store as determined by
 the CoordStorage instance */
@@ -44,7 +45,7 @@ private:
   std::function<double(int)> step2dimlesstime; // function to convert timesteps to real time
 
 public:
-  TimeObs(FSStore &store,
+  DoTimeObs(FSStore &store,
           const int maxchunk,
           const std::function<double(int)> step2dimlesstime)
       : zarr(std::make_shared<store_type>(store, maxchunk,
@@ -70,12 +71,11 @@ TimeObserver(const unsigned int interval,
              FSStore &store,
              const int maxchunk,
              const std::function<double(int)> step2dimlesstime)
-/* constructs Microphysical Process for
-condensation/evaporation of superdroplets with a
-constant timestep 'interval' given the
-"do_condensation" function-like type */
+/* constructs observer of time with a
+constant timestep 'interval' using an
+instance of the DoTimeObs class */
 {
-  const auto obs(TimeObs(store, maxchunk, step2dimlesstime));
+  const auto obs(DoTimeObs(store, maxchunk, step2dimlesstime));
   return ConstTstepObserver(interval, obs);
 }
 

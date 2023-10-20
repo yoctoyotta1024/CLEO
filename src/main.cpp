@@ -37,6 +37,7 @@
 #include "initialise/initconds.hpp"
 #include "initialise/timesteps.hpp"
 
+#include "observers/gbxindexobs.hpp"
 #include "observers/observers.hpp"
 #include "observers/printobserver.hpp"
 #include "observers/timeobs.hpp"
@@ -94,6 +95,8 @@ create_observer(const Config &config,
 
   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
                                           &step2dimlesstime);
+
+  const Observer auto obs3 = GbxindexObserver(obsstep, store, maxchunk);
 
   return obs1 >> obs2;
 }
