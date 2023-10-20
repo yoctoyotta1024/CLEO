@@ -51,7 +51,7 @@ private:
   private:
     size_t nspacedims;
     std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
-    std::vector<SoluteProperties> solutes;
+    std::array<SoluteProperties, 1> solutes;
     std::vector<unsigned int> sdgbxindexes;
     std::vector<double> coord3s;
     std::vector<double> coord1s;
@@ -67,7 +67,17 @@ private:
 
   public:
     template <typename FetchInitData>
-    inline GenSuperdrop(const FetchInitData &fid);
+    inline GenSuperdrop(const FetchInitData &fid)
+        : nspacedims(fid.get_nspacedims()),
+          sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
+          solutes({SoluteProperties()}),
+          sdgbxindexes(fid.sdgbxindex()),
+          coord3s(fid.coord3()),
+          coord1s(fid.coord1()),
+          coord2s(fid.coord2()),
+          radii(fid.radius()),
+          msols(fid.msol()),
+          xis(fid.xi()) {}
 
     inline Superdrop
     operator()(const unsigned int kk) const;
@@ -131,7 +141,7 @@ is initialised using the FetchInitData instance */
 {
   /* create superdrops view on device */
   viewd_supers supers("supers", fid.get_totnsupers());
-  
+
   /* initialise a mirror of supers view on host*/
   auto h_supers = initialise_supers_on_host(fid, supers);
 
@@ -163,34 +173,20 @@ spatial coordinates and attributes */
   return h_supers;
 }
 
-template <typename FetchInitData>
-inline CreateSupers::GenSuperdrop::
-    GenSuperdrop(const FetchInitData &fid)
-    : nspacedims(fid.get_nspacedims()),
-      sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
-      solutes(1, SoluteProperties()),
-      sdgbxindexes(fid.sdgbxindex()),
-      coord3s(fid.coord3()),
-      coord1s(fid.coord1()),
-      coord2s(fid.coord2()),
-      radii(fid.radius()),
-      msols(fid.msol()),
-      xis(fid.xi()) {}
-
 inline SuperdropAttrs
 CreateSupers::GenSuperdrop::
     attrs_at(const unsigned int kk) const
 /* helper function to return a superdroplet's attributes
 at position kk in the initial conditions data. All
-superdroplets created with same pointer-like
-type to solute properties */
+superdroplets created with same solute properties */
 {
   const double radius(radii.at(kk));
   const double msol(msols.at(kk));
   const unsigned long long xi(xis.at(kk));
   const SoluteProperties solute(solutes.at(0));
 
-  return SuperdropAttrs(solute, xi, radius, msol);
+
+  return SuperdropAttrs(sv_sol, xi, radius, msol);
 }
 
 inline Superdrop
