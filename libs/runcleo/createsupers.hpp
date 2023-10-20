@@ -70,7 +70,7 @@ private:
     inline GenSuperdrop(const FetchInitData &fid)
         : nspacedims(fid.get_nspacedims()),
           sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
-          solutes({SoluteProperties()}),
+          solutes({SoluteProperties{}}),
           sdgbxindexes(fid.sdgbxindex()),
           coord3s(fid.coord3()),
           coord1s(fid.coord1()),
@@ -185,8 +185,7 @@ superdroplets created with same solute properties */
   const unsigned long long xi(xis.at(kk));
   const SoluteProperties solute(solutes.at(0));
 
-
-  return SuperdropAttrs(sv_sol, xi, radius, msol);
+  return SuperdropAttrs(solute, xi, radius, msol);
 }
 
 inline Superdrop

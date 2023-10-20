@@ -35,28 +35,35 @@ namespace dlc = dimless_constants;
 
 struct SoluteProperties
 {
-  double rho_sol; // (dimensionless) density of solute in droplets
-  double mr_sol;  // (dimensionless) Mr of solute
-  double ionic;   // degree ionic dissociation (van't Hoff factor)
-
-  /* A Kokkos requirement for use of struct in (dual)View (such as a
-  Kokkos::vector) is that default constructor and destructor exist */
   KOKKOS_INLINE_FUNCTION
-  SoluteProperties()
-      : rho_sol(dlc::Rho_sol),
-        mr_sol(dlc::Mr_sol),
-        ionic(dlc::IONIC) {}
+  double rho_sol() const
+  /* (dimensionless) density of solute in droplets */
+  {
+    return dlc::Rho_sol;
+  }
 
-  KOKKOS_INLINE_FUNCTION ~SoluteProperties() = default;
+  KOKKOS_INLINE_FUNCTION
+  double mr_sol() const
+  /* (dimensionless) Mr of solute */
+  {
+    return dlc::Mr_sol;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  double ionic() const
+  /* degree ionic dissociation (van't Hoff factor) */
+  {
+    return dlc::IONIC;
+  }
 };
 
 struct SuperdropAttrs
 /* attributes of a superdroplet*/
 {
-  SoluteProperties solute;
-  unsigned long long xi; // multiplicity of superdroplet
-  double radius;         // radius of superdroplet
-  double msol;           // mass of solute dissovled
+  SoluteProperties solute; // pointer-like reference to properties of solute
+  unsigned long long xi;   // multiplicity of superdroplet
+  double radius;           // radius of superdroplet
+  double msol;             // mass of solute dissovled
 
   KOKKOS_INLINE_FUNCTION SuperdropAttrs() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~SuperdropAttrs() = default; // Kokkos requirement for a (dual)View
@@ -71,17 +78,11 @@ struct SuperdropAttrs
         radius(radius),
         msol(msol) {}
 
-  KOKKOS_INLINE_FUNCTION auto is_solute() const { return 1; }
+  KOKKOS_INLINE_FUNCTION bool is_solute() const { return true; }
   KOKKOS_INLINE_FUNCTION auto get_solute() const { return solute; }
-  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute.rho_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute.ionic; }
-
-  // KOKKOS_INLINE_FUNCTION auto is_solute() const { return solute.is_allocated(); }
-  // KOKKOS_INLINE_FUNCTION auto get_solute() const { return solute(0); }
-  // KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute(0).rho_sol; }
-  // KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute(0).mr_sol; }
-  // KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute(0).ionic; }
+  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute.rho_sol(); }
+  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol(); }
+  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute.ionic(); }
 };
 
 class Superdrop
