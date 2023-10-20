@@ -83,26 +83,36 @@ create_motion(const unsigned int motionstep)
 }
 
 Observer auto
-create_observer(const unsigned int obsstep)
+create_observer(const Config &config,
+                const Timesteps &tsteps,
+                FSStore &store)
 {
-  const Observer auto obs1 = PrintObserver(obsstep * 2,
-                                           &step2realtime);
+  const unsigned int obsstep(tsteps.get_obsstep());
+  const int maxchunk(config.maxchunk);
 
-  
-  const Observer auto obs2 = TimeObserver(obsstep, zarr, &step2realtime); 
-  // const Observer auto null = NullObserver{}; 
+  const Observer auto obs1 = PrintObserver(obsstep, &step2realtime);
+
+  const std::string name("time");
+  const std::string dtype("<f8");
+  const std::string units("s");
+  constexpr double scale_factor(dlc::TIME0);
+  CoordinateStorage<double> timezarr(store, maxchunk, name,
+                                     dtype, units, scale_factor);
+
+  const Observer auto obs2 = TimeObserver(obsstep, timezarr, &step2dimlesstime); 
 
   return obs1 >> obs2;
 }
 
 auto create_sdm(const Config &config,
                 const Timesteps &tsteps,
-                const CoupledDynamics auto &coupldyn)
+                const CoupledDynamics auto &coupldyn,
+                FSStore &store)
 {
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(tsteps));
   const MoveSupersInDomain movesupers(create_motion(tsteps.get_motionstep()));
-  const Observer auto obs(create_observer(tsteps.get_obsstep()));
+  const Observer auto obs(create_observer(config, tsteps, store));
 
   return SDMMethods(coupldyn, gbxmaps,
                     microphys, movesupers, obs);
@@ -130,7 +140,7 @@ int main(int argc, char *argv[])
       create_coupldyn(config, tsteps.get_couplstep()));
 
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const SDMMethods sdm(create_sdm(config, tsteps, coupldyn));
+  const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
   /* Initial conditions for CLEO run */
   const InitConds initconds(config);
