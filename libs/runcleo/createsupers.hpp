@@ -51,7 +51,7 @@ private:
   private:
     size_t nspacedims;
     std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
-    std::vector<SuperdropAttrs::solute_view_type> solutes;  // solute(s) stored in device memory space
+    std::vector<SoluteProperties> solutes;
     std::vector<unsigned int> sdgbxindexes;
     std::vector<double> coord3s;
     std::vector<double> coord1s;
@@ -62,17 +62,20 @@ private:
 
     std::array<double, 3> coords_at(const unsigned int kk) const;
 
-    inline SuperdropAttrs attrs_at(const unsigned int kk) const;
+    inline SuperdropAttrs
+    attrs_at(const unsigned int kk) const;
 
   public:
     template <typename FetchInitData>
     inline GenSuperdrop(const FetchInitData &fid);
 
-    inline Superdrop operator()(const unsigned int kk) const;
+    inline Superdrop
+    operator()(const unsigned int kk) const;
   };
 
   template <typename FetchInitData>
-  inline viewd_supers initialise_supers(const FetchInitData &fid) const;
+  inline viewd_supers
+  initialise_supers(const FetchInitData &fid) const;
   /* return an initialised view of superdrops on
   device memory by copying a host mirror view that
   is initialised using the FetchInitData instance */
@@ -128,7 +131,7 @@ is initialised using the FetchInitData instance */
 {
   /* create superdrops view on device */
   viewd_supers supers("supers", fid.get_totnsupers());
-
+  
   /* initialise a mirror of supers view on host*/
   auto h_supers = initialise_supers_on_host(fid, supers);
 
@@ -140,8 +143,9 @@ is initialised using the FetchInitData instance */
 
 template <typename FetchInitData>
 inline viewd_supers::HostMirror
-CreateSupers::initialise_supers_on_host(const FetchInitData &fid,
-                                        const viewd_supers supers) const
+CreateSupers::
+    initialise_supers_on_host(const FetchInitData &fid,
+                              const viewd_supers supers) const
 /* return mirror view of superdrops (on host memory)
 which have been initialised using data from a
 FetchInitData instance for their initial gbxindex,
@@ -164,23 +168,18 @@ inline CreateSupers::GenSuperdrop::
     GenSuperdrop(const FetchInitData &fid)
     : nspacedims(fid.get_nspacedims()),
       sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
-      solutes(0),
+      solutes(1, SoluteProperties()),
       sdgbxindexes(fid.sdgbxindex()),
       coord3s(fid.coord3()),
       coord1s(fid.coord1()),
       coord2s(fid.coord2()),
       radii(fid.radius()),
       msols(fid.msol()),
-      xis(fid.xi())
-{
-  /* create 1 pointer-like type to solute
-  properties which all superdroplets use */
-  SuperdropAttrs::solute_view_type solute("solute");
-  solutes.push_back(solute);
-}
+      xis(fid.xi()) {}
 
 inline SuperdropAttrs
-CreateSupers::GenSuperdrop::attrs_at(const unsigned int kk) const
+CreateSupers::GenSuperdrop::
+    attrs_at(const unsigned int kk) const
 /* helper function to return a superdroplet's attributes
 at position kk in the initial conditions data. All
 superdroplets created with same pointer-like
@@ -189,13 +188,14 @@ type to solute properties */
   const double radius(radii.at(kk));
   const double msol(msols.at(kk));
   const unsigned long long xi(xis.at(kk));
-  const auto solute(solutes.at(0));
+  const SoluteProperties solute(solutes.at(0));
 
   return SuperdropAttrs(solute, xi, radius, msol);
 }
 
 inline Superdrop
-CreateSupers::GenSuperdrop::operator()(const unsigned int kk) const
+CreateSupers::GenSuperdrop::
+operator()(const unsigned int kk) const
 {
   const unsigned int sdgbxindex(sdgbxindexes.at(kk));
   const std::array<double, 3> coords312(coords_at(kk));

@@ -53,10 +53,7 @@ struct SoluteProperties
 struct SuperdropAttrs
 /* attributes of a superdroplet*/
 {
-  using solute_view_type = Kokkos::View<SoluteProperties[1]>;
-  using SolutePtr = Kokkos::Subview<solute_view_type,
-                                    Kokkos::pair<size_t, size_t>>; // pointer-like type to an instance of Solute Properties
-  SolutePtr solute;
+  SoluteProperties solute;
   unsigned long long xi; // multiplicity of superdroplet
   double radius;         // radius of superdroplet
   double msol;           // mass of solute dissovled
@@ -65,20 +62,26 @@ struct SuperdropAttrs
   KOKKOS_INLINE_FUNCTION ~SuperdropAttrs() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  SuperdropAttrs(const solute_view_type isolute,
+  SuperdropAttrs(const SoluteProperties solute,
                  const unsigned long long xi,
                  const double radius,
                  const double msol)
-      : solute(Kokkos::subview(isolute, Kokkos::ALL)),
+      : solute(solute),
         xi(xi),
         radius(radius),
         msol(msol) {}
 
-  KOKKOS_INLINE_FUNCTION auto is_solute() const { return solute.is_allocated(); }
-  KOKKOS_INLINE_FUNCTION auto get_solute() const { return solute(0); }
-  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute(0).rho_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute(0).mr_sol; }
-  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute(0).ionic; }
+  KOKKOS_INLINE_FUNCTION auto is_solute() const { return 1; }
+  KOKKOS_INLINE_FUNCTION auto get_solute() const { return solute; }
+  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute.rho_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute.ionic; }
+
+  // KOKKOS_INLINE_FUNCTION auto is_solute() const { return solute.is_allocated(); }
+  // KOKKOS_INLINE_FUNCTION auto get_solute() const { return solute(0); }
+  // KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute(0).rho_sol; }
+  // KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute(0).mr_sol; }
+  // KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute(0).ionic; }
 };
 
 class Superdrop
