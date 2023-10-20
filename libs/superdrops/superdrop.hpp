@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -71,6 +71,12 @@ struct SuperdropAttrs
         xi(xi),
         radius(radius),
         msol(msol) {}
+
+  KOKKOS_INLINE_FUNCTION auto is_solute() const { return solute.is_allocated(); }
+  KOKKOS_INLINE_FUNCTION auto get_solute() const { return solute(0); }
+  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute(0).rho_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute(0).mr_sol; }
+  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute(0).ionic; }
 };
 
 class Superdrop
