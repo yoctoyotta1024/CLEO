@@ -37,19 +37,37 @@ to an array 'zarr' store as determined by
 the CoordinateStorage instance */
 {
 private:
+  CoordinateStorage<double> &zarr; // TO DO make unique pointer
+  std::function<double(int)> step2realtime; // function to convert timesteps to real time
+
 public:
+  TimeObs(CoordinateStorage<double> &zarr,
+          const std::function<double(int)> step2realtime)
+      : zarr(zarr), step2realtime(step2realtime)
+  {
+    zarr.is_name("time");
+  }
+
   void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const;
+                     const viewh_constgbx h_gbxs) const
+  /* converts integer model timestep to real time [s],
+  then writes to zarr coordinate storage */
+  {
+    const double realtime(step2realtime(t_mdl)); 
+    zarr.value_to_storage(realtime);
+  }
 };
 
 inline Observer auto
-TimeObserver(const unsigned int interval)
+TimeObserver(const unsigned int interval,
+             CoordinateStorage<double> &zarr,
+             const std::function<double(int)> step2realtime)
 /* constructs Microphysical Process for
 condensation/evaporation of superdroplets with a
 constant timestep 'interval' given the
 "do_condensation" function-like type */
 {
-  return ConstTstepObserver(interval, TimeObs{});
+  return ConstTstepObserver(interval, TimeObs(zarr, step2realtime));
 }
 
 #endif // TIMEOBS_HPP

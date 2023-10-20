@@ -39,8 +39,8 @@ namespace dlc = dimless_constants;
 struct PrintObserver
 {
 private:
-  unsigned int interval;                     // timestep between print statements
-  const std::function<double(int)> step2realtime; // function to convert timesteps to real time
+  unsigned int interval;                          // timestep between print statements
+  std::function<double(int)> step2realtime; // function to convert timesteps to real time
 
   void print_statement(const unsigned int t_mdl,
                           const viewh_constgbx h_gbxs) const;

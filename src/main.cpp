@@ -88,7 +88,8 @@ create_observer(const unsigned int obsstep)
   const Observer auto obs1 = PrintObserver(obsstep * 2,
                                            &step2realtime);
 
-  const Observer auto obs2 = TimeObserver(obsstep); 
+  
+  const Observer auto obs2 = TimeObserver(obsstep, zarr, &step2realtime); 
   // const Observer auto null = NullObserver{}; 
 
   return obs1 >> obs2;
