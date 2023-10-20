@@ -24,66 +24,8 @@
 #ifndef SUPERDROP_HPP
 #define SUPERDROP_HPP
 
-#include <memory>
-
-#include <Kokkos_Core.hpp>
-
-#include "../cleoconstants.hpp"
 #include "./superdrop_ids.hpp"
-
-namespace dlc = dimless_constants;
-
-struct SoluteProperties
-{
-  KOKKOS_INLINE_FUNCTION
-  double rho_sol() const
-  /* (dimensionless) density of solute in droplets */
-  {
-    return dlc::Rho_sol;
-  }
-
-  KOKKOS_INLINE_FUNCTION
-  double mr_sol() const
-  /* (dimensionless) Mr of solute */
-  {
-    return dlc::Mr_sol;
-  }
-
-  KOKKOS_INLINE_FUNCTION
-  double ionic() const
-  /* degree ionic dissociation (van't Hoff factor) */
-  {
-    return dlc::IONIC;
-  }
-};
-
-struct SuperdropAttrs
-/* attributes of a superdroplet*/
-{
-  SoluteProperties solute; // pointer-like reference to properties of solute
-  unsigned long long xi;   // multiplicity of superdroplet
-  double radius;           // radius of superdroplet
-  double msol;             // mass of solute dissovled
-
-  KOKKOS_INLINE_FUNCTION SuperdropAttrs() = default;  // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~SuperdropAttrs() = default; // Kokkos requirement for a (dual)View
-
-  KOKKOS_INLINE_FUNCTION
-  SuperdropAttrs(const SoluteProperties solute,
-                 const unsigned long long xi,
-                 const double radius,
-                 const double msol)
-      : solute(solute),
-        xi(xi),
-        radius(radius),
-        msol(msol) {}
-
-  KOKKOS_INLINE_FUNCTION bool is_solute() const { return true; }
-  KOKKOS_INLINE_FUNCTION auto get_solute() const { return solute; }
-  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute.rho_sol(); }
-  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol(); }
-  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute.ionic(); }
-};
+#include "./superdrop_attrs.hpp"
 
 class Superdrop
 {
