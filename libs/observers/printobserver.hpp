@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: printobs.hpp
+ * File: printobserver.hpp
  * Project: observers
  * Created Date: Monday 16th October 2023
  * Author: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  * timestep 'interval' between observations
  */
 
-#ifndef PRINTOBS_HPP
-#define PRINTOBS_HPP
+#ifndef PRINTOBSERVER_HPP
+#define PRINTOBSERVER_HPP
 
 #include <ios>
 #include <iostream>
@@ -35,7 +35,7 @@
 
 namespace dlc = dimless_constants;
 
-struct PrintObs
+struct PrintObserver
 {
 private:
   unsigned int interval;
@@ -44,7 +44,7 @@ private:
                           const viewh_constgbx h_gbxs) const;
 
 public:
-  PrintObs(const unsigned int obsstep)
+  PrintObserver(const unsigned int obsstep)
       : interval(obsstep) {}
 
   KOKKOS_INLINE_FUNCTION
@@ -69,4 +69,4 @@ public:
   }
 };
 
-#endif // PRINTOBS_HPP
+#endif // PRINTOBSERVER_HPP

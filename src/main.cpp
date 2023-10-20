@@ -37,7 +37,7 @@
 #include "initialise/initconds.hpp"
 #include "initialise/timesteps.hpp"
 
-#include "observers/printobs.hpp"
+#include "observers/printobserver.hpp"
 #include "observers/observers.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
@@ -84,7 +84,7 @@ create_motion(const unsigned int motionstep)
 Observer auto
 create_observer(const unsigned int obsstep)
 {
-  const Observer auto obs1 = PrintObs(obsstep); 
+  const Observer auto obs1 = PrintObserver(obsstep); 
   // const Observer auto null = NullObserver{}; 
 
   return obs1;

@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: printobs.cpp
+ * File: printobserver.cpp
  * Project: observers
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -22,9 +22,9 @@
  */
 
 
-#include "./printobs.hpp"
+#include "./printobserver.hpp"
 
-void PrintObs::
+void PrintObserver::
     observe_start_step(const unsigned int t_mdl,
                        const viewh_constgbx h_gbxs) const
 {
