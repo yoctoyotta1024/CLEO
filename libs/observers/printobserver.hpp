@@ -56,7 +56,7 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION
-      unsigned int next_obs(const unsigned int t_mdl) const
+  unsigned int next_obs(const unsigned int t_mdl) const
   {
     return ((t_mdl / interval) + 1) * interval;
   }

@@ -81,7 +81,7 @@ TimeObserver(const unsigned int interval,
 constant timestep 'interval' using an
 instance of the DoTimeObs class */
 {
-  const auto obs(DoTimeObs(store, maxchunk, step2dimlesstime));
+  const auto obs = DoTimeObs(store, maxchunk, step2dimlesstime);
   return ConstTstepObserver(interval, obs);
 }
 

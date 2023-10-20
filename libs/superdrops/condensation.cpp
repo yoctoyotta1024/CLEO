@@ -26,5 +26,5 @@ KOKKOS_FUNCTION
 void DoCondensation::do_condensation(const unsigned int subt) const
 /* enact condensation / evaporation microphysical process */
 {
-  std::cout << "cond microphys @ t = " << subt << "\n";
+  // std::cout << "cond microphys @@ t = " << subt << "\n";
 }

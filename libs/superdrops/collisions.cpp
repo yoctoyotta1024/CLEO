@@ -25,5 +25,5 @@
 KOKKOS_FUNCTION
 void DoCollisions::do_collisions(const unsigned int subt) const
 {
-  std::cout << "coll microphys @ t = " << subt << "\n";
+  // std::cout << "coll microphys @@ t = " << subt << "\n";
 }
