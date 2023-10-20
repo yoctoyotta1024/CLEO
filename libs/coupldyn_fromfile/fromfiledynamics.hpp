@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,7 +36,7 @@ private:
   const unsigned int interval;
 
   void run_dynamics(const unsigned int t_mdl,
-                    const unsigned int stepsize) const;
+                    const unsigned int t_next) const;
   
 public:
   FromFileDynamics(const Config &config,
@@ -56,11 +56,11 @@ public:
   }
 
   void run_step(const unsigned int t_mdl,
-                const unsigned int stepsize) const
+                const unsigned int t_next) const
   {
     if (on_step(t_mdl))
     {
-      run_dynamics(t_mdl, stepsize);
+      run_dynamics(t_mdl, t_next);
     }
   }
 

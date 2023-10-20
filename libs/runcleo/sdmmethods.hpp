@@ -122,15 +122,13 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   void run_step(const unsigned int t_mdl,
-                const unsigned int stepsize,
+                const unsigned int t_mdl_next,
                 const viewd_gbx d_gbxs,
                 const viewd_supers supers) const
-  /* run CLEO SDM (on device) from time t_mdl to
-  t_mdl + stepsize with sub-timestepping routine
-  for super-droplets' movement and microphysics */
+  /* run CLEO SDM (on device) from time t_mdl to t_mdl_next
+  with sub-timestepping routine for super-droplets'
+  movement and microphysics */
   {
-    const unsigned int t_mdl_next(t_mdl + stepsize);
-
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next)
     {

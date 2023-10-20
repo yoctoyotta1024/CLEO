@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 16th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,7 +27,7 @@ void FromFileDynamics::prepare_to_timestep() const
 }
 
 void FromFileDynamics::run_dynamics(const unsigned int t_mdl,
-                                   const unsigned int stepsize) const
+                                    const unsigned int t_next) const
 {
   std::cout << "from file dyn @ t=" << t_mdl << "\n";
 }

@@ -42,7 +42,7 @@ ngbxs = 5                               # total number of Gbxs
 totnsupers = 10                         # (initial) total no. of SDs
 
 # timestepping #
-CONDTSTEP = 1                             # time between SD condensation events [s]
+CONDTSTEP = 2                             # time between SD condensation events [s]
 COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 3                           # time between SDM motion [s]
 COUPLTSTEP = 5                            # time between dynamic couplings [s]

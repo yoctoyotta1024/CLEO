@@ -83,16 +83,16 @@ private:
     while (t_mdl <= t_end)
     {
       /* start step (in general involves coupling) */
-      const unsigned int stepsize(start_step(t_mdl, gbxs));
+      const unsigned int t_next(start_step(t_mdl, gbxs));
 
       /* advance dynamics solver (optionally concurrent to SDM) */
-      coupldyn_step(t_mdl, stepsize);
+      coupldyn_step(t_mdl, t_next);
   
       /* advance SDM (optionally concurrent to dynamics solver) */
-      sdm_step(t_mdl, stepsize, gbxs, supers);
+      sdm_step(t_mdl, t_next, gbxs, supers);
 
       /* proceed to next step (in general involves coupling) */
-      t_mdl = proceed_to_next_step(t_mdl, stepsize, gbxs);
+      t_mdl = proceed_to_next_step(t_mdl, t_next, gbxs);
     }
 
     return 0;
@@ -114,54 +114,54 @@ private:
     gbxs.sync_host();
     sdm.obs.at_start_step(t_mdl, gbxs.view_host());
 
-    return next_stepsize(t_mdl);
+    return get_next_step(t_mdl);
   }
 
   KOKKOS_INLINE_FUNCTION
-  unsigned int next_stepsize(const unsigned int t_mdl) const
+  unsigned int get_next_step(const unsigned int t_mdl) const
   /* returns size of next step to take given current
   timestep, t_mdl, such that next timestep is
   sooner out of next timestep for obs or coupl */
   {
-    const auto next_step = [t_mdl](const unsigned int interval)
+    const auto next_couplstep = [t_mdl]()
     {
+      const unsigned int interval(sdm.get_couplstep());
       return ((t_mdl / interval) + 1) * interval;
     };
 
     /* t_next is sooner out of time for next coupl or obs */
-    const unsigned int next_coupl(next_step(sdm.get_couplstep()));
+    const unsigned int next_coupl(next_couplstep());
     const unsigned int next_obs(sdm.obs.next_obs(t_mdl));
     const auto t_next(!(next_coupl < next_obs) ? next_obs : next_coupl); // return smaller of two unsigned ints (see std::min)
     
-    return t_next - t_mdl;                                              // stepsize = t_next - t_mdl
+    return t_next;                                                       // stepsize = t_next - t_mdl
   }
 
   void sdm_step(const unsigned int t_mdl,
-                unsigned int stepsize,
+                unsigned int t_next,
                 dualview_gbx gbxs,
                 const viewd_supers supers) const
   /* run CLEO SDM (on device) */
   {
     gbxs.sync_device();
-    sdm.run_step(t_mdl, stepsize, gbxs.view_device(), supers);
+    sdm.run_step(t_mdl, t_next, gbxs.view_device(), supers);
     gbxs.modify_device();
   }
 
   void coupldyn_step(const unsigned int t_mdl,
-                     const unsigned int stepsize) const
+                     const unsigned int t_next) const
   /* run coupled dynamics solver (on host) */
   {
-    coupldyn.run_step(t_mdl, stepsize);
+    coupldyn.run_step(t_mdl, t_next);
   }
 
   unsigned int proceed_to_next_step(unsigned int t_mdl,
-                                    unsigned int stepsize,
+                                    unsigned int t_next,
                                     dualview_gbx gbxs) const
 
-  /* returns incremented timestep 't_mdl' of model
-  by 'stepsize'. Point where communication from
-  CLEO SDM Gridbox States to coupled dynamics solver
-  may occur */
+  /* returns incremented timestep 't_mdl' to 't_next'.
+  Also this is where communication from CLEO SDM Gridbox
+  States to coupled dynamics solver may occur */
   {
     if (t_mdl % sdm.get_couplstep() == 0)
     {
@@ -169,7 +169,7 @@ private:
       sdm.send_dynamics(coupldyn, gbxs.view_host());
     }
 
-    return t_mdl + stepsize;
+    return t_next;
   }
 
 public:

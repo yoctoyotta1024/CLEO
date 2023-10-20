@@ -28,5 +28,5 @@ KOKKOS_FUNCTION
 void PredCorrMotion::
     update_superdrop_coords(const unsigned int t_sdm) const
 {
-  // std::cout << "motion @ t = " << t_sdm << "\n";
+  std::cout << "motion @ t = " << t_sdm << "\n";
 }
