@@ -102,6 +102,12 @@ private:
     {
       return refs.second - refs.first;
     }
+
+    KOKKOS_INLINE_FUNCTION size_t domaintotnsupers() const
+    /* returns current total number of superdrops in domain */
+    {
+      return supers.extent(0);
+    }
   };
 
 public:
@@ -140,6 +146,9 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   auto get_gbxindex() const { return gbxindex.value; }
+
+  KOKKOS_INLINE_FUNCTION
+  size_t domaintotnsupers() const { return supersingbx.domaintotnsupers(); }
 };
 
 template <typename Pred>

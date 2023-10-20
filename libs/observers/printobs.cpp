@@ -28,5 +28,17 @@ void PrintObs::
     observe_start_step(const unsigned int t_mdl,
                        const viewh_constgbx h_gbxs) const
 {
-  std::cout << "print obs @ t = " << t_mdl << "\n";
+  constexpr int printprec(1); // precision to print data with
+  
+  const auto gbx = h_gbxs(0);
+  std::cout << "t="
+            << std::fixed << std::setprecision(printprec)
+            << t_mdl * dlc::TIME0
+            << "s, totnsupers=" << gbx.domaintotnsupers()
+            << ", ngbxs=" << h_gbxs.extent(0)
+            << ", (Gbx" << gbx.get_gbxindex()
+            << ": [T, p, qv] = [" << gbx.state.temp * dlc::TEMP0
+            << "K, " << gbx.state.press * dlc::P0
+            << "Pa, " << gbx.state.qvap
+            << "], nsupers = " << gbx.supersingbx.nsupers() << ")\n";
 }

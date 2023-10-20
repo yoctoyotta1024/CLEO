@@ -23,12 +23,17 @@
 #ifndef PRINTOBS_HPP
 #define PRINTOBS_HPP
 
+#include <ios>
 #include <iostream>
+#include <iomanip>
 
 #include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
+#include "../cleoconstants.hpp"
 #include "gridboxes/gridbox.hpp"
+
+namespace dlc = dimless_constants;
 
 struct PrintObs
 {

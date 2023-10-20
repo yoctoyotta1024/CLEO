@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 20th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -157,13 +157,13 @@ inline State
 CreateGbxs::GenGridbox::state_at(const unsigned int ii) const
 {
   double volume(volumes.at(ii));
-  double press(0.0);                   
-  double temp(0.0);                    
-  double qvap(0.0);                    
-  double qcond(0.0);                   
-  Kokkos::pair<double, double> wvel{0.0,0.0}; 
-  Kokkos::pair<double, double> uvel{0.0,0.0};
-  Kokkos::pair<double, double> vvel{0.0,0.0};
+  double press(1.0);                   
+  double temp(1.0);                    
+  double qvap(1.0);                    
+  double qcond(1.0);                   
+  Kokkos::pair<double, double> wvel{1.0,1.0}; 
+  Kokkos::pair<double, double> uvel{1.0,1.0};
+  Kokkos::pair<double, double> vvel{1.0,1.0};
 
   return State(volume,
                press, temp, qvap, qcond,
