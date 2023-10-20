@@ -118,4 +118,53 @@ struct NullObserver
                      const viewh_constgbx h_gbxs) const {}
 };
 
+template <typename O>
+concept ObsFunc = requires(O o, unsigned int t,
+                           const viewh_constgbx h_gbxs)
+/* concept for all types that can be called used
+by ConstTstepObserver for 'do_obs' (in order
+to make an Observer type out of a ConstTstepObserver) */
+{
+  {
+    obs.at_start_step(t, h_gbxs)
+  } -> std::same_as<void>;
+};
+
+template <Observation O>
+struct ConstTstepObserver
+/* this structure is a type that satisfies the concept of
+an observer in SDM and has a constant tstep
+'interval'. It can be used to create an observer
+with a constant timestep and other functionality 
+determined by the ObsFunc type 'O' */
+{
+private:
+  unsigned int interval;
+  O do_obs;
+
+public:
+  ConstTstepObserver(const unsigned int interval, const O o)
+      : interval(interval), do_obs(o) {}
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int next_obs(const unsigned int t_mdl) const
+  {
+    return ((t_mdl / interval) + 1) * interval;
+  }
+
+  bool on_step(const unsigned int t_mdl) const
+  {
+    return t_mdl % interval == 0;
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs) const
+  {
+    if (on_step(t_mdl))
+    {
+      do_obs.at_start_step(t_mdl, h_gbxs);
+    }
+  }
+};
+
 #endif // OBSERVERS_HPP

@@ -133,10 +133,11 @@ ConstTstepMicrophysics (see below) */
 
 template <MicrophysicsFunc F>
 struct ConstTstepMicrophysics
-/* this structure is a type that satisfies the concept of an SDM
-Process and has a constant tstep 'interval'. It can be used to create
-SDM processes from a constant timestep and a method whose type
-satisfies the StepFunc concept */
+/* this structure is a type that satisfies the concept of
+microphysical process in SDM and has a constant tstep
+'interval'. It can be used to create a microphysical
+processes with a constant timestep and microphysics 
+determined by the MicrophysicsFunc type 'F' */
 {
 private:
   unsigned int interval;
