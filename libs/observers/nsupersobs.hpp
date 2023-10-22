@@ -31,6 +31,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
+#include "superdrops/superdrop.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/twodstorage.hpp"
 
@@ -42,6 +43,25 @@ NsupersObserver(const unsigned int interval,
 /* constructs observer of nsupers in each gridbox
 with a constant timestep 'interval' using an
 instance of the DoNsupersObs class */
+
+inline Observer auto
+NrainsupersObserver(const unsigned int interval,
+                    FSStore &store,
+                    const int maxchunk,
+                    const size_t ngbxs);
+/* constructs observer of nsupers that are raindrops
+(r > rlim) in each gridbox, with a constant timestep
+'interval' using an instance of the DoNrainsupersObs
+class */
+
+inline Observer auto
+TotNsupersObserver(const unsigned int interval,
+                    FSStore &store,
+                    const int maxchunk,
+                    const size_t ngbxs);
+/* constructs observer of nsupers in entire domain,
+with a constant timestep 'interval' using an
+instance of the DoTotNsupersObs class */
 
 class DoNsupersObs
 /* observe nsupers in each gridbox and write
@@ -98,19 +118,11 @@ instance of the DoNSupersObs class */
   return ConstTstepObserver(interval, obs);
 }
 
-inline Observer auto
-NrainsupersObserver(const unsigned int interval,
-                    FSStore &store,
-                    const int maxchunk,
-                    const size_t ngbxs);
-/* constructs observer of nsupers in each gridbox
-with a constant timestep 'interval' using an
-instance of the DoNsupersObs class */
-
 class DoNrainsupersObs
-/* observe nsupers in each gridbox and write
-it to an array 'zarr' store as determined by
-the 2DVarStorage instance */
+/* observation for nsupers that are
+raindrops (r > rlim) in each gridbox
+which writes it to an array 'zarr' store
+as determined by the 2DVarStorage instance */
 {
 private:
   using store_type = TwoDStorage<size_t>;
@@ -144,12 +156,14 @@ public:
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
+      auto d_supers = h_gbxs(ii).supersingbx();
+      auto h_supers = Kokkos::create_mirror_view(d_supers); // mirror of supers in gridbox in case view is on device memory
+      Kokkos::deep_copy(h_supers, d_supers);
+
       size_t nrainsupers(0);
-      const size_t nsupers(h_gbxs(ii).supersingbx.nsupers());
-      const auto supersingbx = h_gbxs(ii).supersingbx();
-      for (size_t kk(0); kk < nsupers; ++kk)
+      for (size_t kk(0); kk < h_supers.extent(0); ++kk)
       {
-        const auto superdrop = supersingbx(kk);
+        const auto superdrop = h_supers(kk);
         if (superdrop.get_radius() >= rlim)
         {
           ++nrainsupers;
@@ -166,12 +180,67 @@ NrainsupersObserver(const unsigned int interval,
                     FSStore &store,
                     const int maxchunk,
                     const size_t ngbxs)
-/* constructs observer of nsupers in each gridbox
-with a constant timestep 'interval' using an
-instance of the DoNSupersObs class */
+/* constructs observer of nsupers that are raindrops
+(r > rlim) in each gridbox, with a constant timestep
+'interval' using an instance of the DoNrainsupersObs
+class */
 {
   const auto obs = DoNrainsupersObs(store, maxchunk, ngbxs);
   return ConstTstepObserver(interval, obs);
 }
+
+//TODO: make OneDStorage
+
+// class DoTotNsupersObs
+// /* observation of total nsupers in domain
+// (same as raggedcount) which writes it to an
+// array 'zarr' store as determined by
+// the 2DVarStorage instance */
+// {
+// private:
+//   using store_type = OneDStorage<size_t>;
+//   std::shared_ptr<store_type> zarr;
+
+// public:
+//   DoTotNsupersObs(FSStore &store,
+//                   const int maxchunk)
+//       : zarr(std::make_shared<store_type>(store, maxchunk,
+//                                           "totnsupers", "<u8",
+//                                           " ", 1))
+//   {
+//     zarr->is_name("totnsupers");
+//   }
+
+//   void before_timestepping(const viewh_constgbx h_gbxs) const
+//   {
+//     std::cout << "observer includes TotNsupersObserver\n";
+//   }
+
+//   void at_start_step(const unsigned int t_mdl,
+//                      const viewh_constgbx h_gbxs) const
+//   /* converts integer model timestep to dimensionless time,
+//   then writes to zarr coordinate storage */
+//   {
+//     const auto gbx0 = h_gbxs(0);
+//     const size_t totnsupers(gbx0.supersingbx.domaintotnsupers());
+
+//     zarr->value_to_storage(totnsupers);
+
+//     ++(zarr->nobs);
+//   }
+// };
+
+
+// inline Observer auto
+// TotNsupersObserver(const unsigned int interval,
+//                     FSStore &store,
+//                     const int maxchunk)
+// /* constructs observer of total nsupers in domain
+// with a constant timestep 'interval' using an
+// instance of the DoTotNsupersObs class */
+// {
+//   const auto obs = DoTotNsupersObs(store, maxchunk);
+//   return ConstTstepObserver(interval, obs);
+// }
 
 #endif // NSUPERSOBS_HPP 
