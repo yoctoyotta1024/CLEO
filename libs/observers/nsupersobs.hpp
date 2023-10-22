@@ -68,7 +68,7 @@ instance of the DoTotNsupersObs class */
 class DoNsupersObs
 /* observe nsupers in each gridbox and write
 it to an array 'zarr' store as determined by
-the 2DVarStorage instance */
+the 2DStorage instance */
 {
 private:
   using store_type = TwoDStorage<size_t>;
@@ -94,8 +94,8 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const
-  /* converts integer model timestep to dimensionless time,
-  then writes to zarr coordinate storage */
+  /* gets number of superdrops for each gridbox and
+  writes it to a 2-D zarr storage */
   {
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
@@ -124,7 +124,7 @@ class DoNrainsupersObs
 /* observation for nsupers that are
 raindrops (r > rlim) in each gridbox
 which writes it to an array 'zarr' store
-as determined by the 2DVarStorage instance */
+as determined by the 2DStorage instance */
 {
 private:
   using store_type = TwoDStorage<size_t>;
@@ -150,15 +150,16 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const
-  /* converts integer model timestep to dimensionless time,
-  then writes to zarr coordinate storage */
+  /* deep copy if necessary (if superdrops are on device not
+  host memory), then counts number of superdrops for each gridbox
+  with radius > rlim and writes total number to 2-D zarr storage */
   {
     constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
 
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      auto d_supers = h_gbxs(ii).supersingbx();
+      auto d_supers = h_gbxs(ii).supersingbx.readonly();
       auto h_supers = Kokkos::create_mirror_view(d_supers); // mirror of supers in gridbox in case view is on device memory
       Kokkos::deep_copy(h_supers, d_supers);
 
@@ -195,7 +196,7 @@ class DoTotNsupersObs
 /* observation of total nsupers in domain
 (same as raggedcount) which writes it to an
 array 'zarr' store as determined by
-the 2DVarStorage instance */
+the 1DStorage instance */
 {
 private:
   using store_type = OneDStorage<size_t>;
@@ -218,8 +219,8 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const
-  /* converts integer model timestep to dimensionless time,
-  then writes to zarr coordinate storage */
+  /* gets number of superdrops in domain (from 0th gridbox 
+  metadata on superdrops) and writes it to a 1-D zarr storage */
   {
     const auto gbx0 = h_gbxs(0);
     const size_t totnsupers(gbx0.supersingbx.domaintotnsupers());

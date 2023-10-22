@@ -41,11 +41,11 @@ using viewd_constgbx = dualview_constgbx::t_dev; // view in device memory of con
 using viewd_supers = Kokkos::View<Superdrop *>;            // view in device memory of superdroplets
 using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets
 
-using subviewd_supers = Kokkos::Subview<viewd_supers,
-                                        Kokkos::pair<size_t, size_t>>; // subview of superdroplets (device)
-using subviewd_constsupers = Kokkos::Subview<viewd_constsupers,
-                                             Kokkos::pair<size_t, size_t>>; // subview of const superdroplets (device)
+// using subviewd_supers = Kokkos::Subview<viewd_supers,
+//                                         Kokkos::pair<size_t, size_t>>; // subview of superdroplets (device)
+// using subviewd_constsupers = Kokkos::Subview<viewd_constsupers,
+//                                              Kokkos::pair<size_t, size_t>>; // subview of const superdroplets (device)
 
-using mirrorh_constsupers = subviewd_constsupers::HostMirror; // mirror view (copy) of subview of superdroplets on host memory
+// using mirrorh_constsupers = subviewd_constsupers::HostMirror; // mirror view (copy) of subview of superdroplets on host memory
 
 #endif // KOKKOSALIASES_HPP

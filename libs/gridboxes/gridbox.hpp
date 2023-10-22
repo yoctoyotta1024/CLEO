@@ -100,6 +100,26 @@ private:
       return Kokkos::subview(supers, refs);
     }
 
+    KOKKOS_INLINE_FUNCTION
+    subview_constsupers readonly() const
+    /* returns subview from view of superdrops referencing superdrops
+    which occupy given gridbox (according to refs) */
+    {
+      return Kokkos::subview(supers, refs);
+    }
+
+    subview_constsupers::HostMirror hostcopy() const
+    /* returns mirror view on host for const supers in
+    gridbox. If supers view is on device memory, a
+    deep copy is performed */
+    {
+      const subview_constsupers d_supers = readonly();
+      auto h_supers = Kokkos::create_mirror_view(d_supers); 
+      Kokkos::deep_copy(h_supers, d_supers);
+
+      return h_supers;
+    }
+
     KOKKOS_INLINE_FUNCTION size_t nsupers() const
     /* returns current number of superdrops referred to by gridbox */
     {
