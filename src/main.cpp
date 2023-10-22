@@ -99,10 +99,13 @@ create_observer(const Config &config,
 
   const Observer auto obs3 = GbxindexObserver(store, maxchunk);
 
-  const Observer auto obs4 = NsupersObserver(obsstep, store,
-                                             maxchunk, config.ngbxs);
+  const Observer auto obs4 = NsupersObserver(obsstep, store, maxchunk,
+                                             config.ngbxs);
 
-  return obs1 >> obs2 >> obs3 >> obs4;
+  const Observer auto obs5 = NrainsupersObserver(obsstep, store, maxchunk,
+                                                 config.ngbxs);
+
+  return obs1 >> obs2 >> obs3 >> obs4 >> obs5;
 }
 
 auto create_sdm(const Config &config,
