@@ -15,8 +15,9 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Observer to output nsupers per gridbox
- * to array in a zarr file system storage
+ * Observers to output nsupers (per gridbox
+ * or total in domain) to array in a zarr
+ * file system storage
  */
 
 #ifndef NSUPERSOBS_HPP 
@@ -224,8 +225,6 @@ public:
     const size_t totnsupers(gbx0.supersingbx.domaintotnsupers());
 
     zarr->value_to_storage(totnsupers);
-
-    ++(zarr->nobs);
   }
 };
 
