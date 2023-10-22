@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Sunday 22nd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,7 +36,8 @@ Gridbox's State (e.g. thermodynamic variables
 used for SDM) and detectors for tracking chosen variables */
 {
 private:
-  using supers_constview_type = Kokkos::View<const Superdrop *>; // should match that in kokkosaliases.hpp
+  using d_supers = Kokkos::View<Superdrop *>;            // should match that in kokkosaliases.hpp
+  using d_constsupers = Kokkos::View<const Superdrop *>; // should match that in kokkosaliases.hpp
 
   struct SupersInGbx
   /* References to identify the chunk of memory
@@ -44,11 +45,13 @@ private:
   (e.g. through std::span or Kokkos::subview) */
   {
   private:
-    using supers_subview = Kokkos::Subview<supers_constview_type,
-                                           Kokkos::pair<size_t, size_t>>;
-    supers_constview_type supers;               // reference to all superdrops view
-    unsigned int ii;                            // value of gbxindex which sdgbxindex of superdrops must match
-    Kokkos::pair<size_t, size_t> refs = {0, 0}; // position in view of (first, last) superdrop that occupies gridbox
+    using kkpair = Kokkos::pair<size_t, size_t>;
+    using subview_supers = Kokkos::Subview<d_supers, kkpair>;
+    using subview_constsupers = Kokkos::Subview<d_constsupers, kkpair>;
+
+    d_supers supers;      // reference to all superdrops view
+    unsigned int ii;      // value of gbxindex which sdgbxindex of superdrops must match
+    kkpair refs = {0, 0}; // position in view of (first, last) superdrop that occupies gridbox
 
     template <typename Pred>
     inline size_t find_ref(const Pred pred) const;
@@ -63,7 +66,7 @@ private:
 
     template <typename Pred>
     inline bool is_prednot(const Pred pred,
-                           const Kokkos::pair<size_t, size_t> refs4pred) const;
+                           const kkpair refs4pred) const;
     /* returns true if all superdrops in subview
     between r0 and r1 do not satisfy pred */
 
@@ -71,11 +74,11 @@ private:
     KOKKOS_INLINE_FUNCTION SupersInGbx() = default;  // Kokkos requirement for a (dual)View
     KOKKOS_INLINE_FUNCTION ~SupersInGbx() = default; // Kokkos requirement for a (dual)View
 
-    SupersInGbx(const supers_constview_type isupers,
+    SupersInGbx(const d_supers isupers,
                 const unsigned int ii)
         : supers(isupers), ii(ii), refs(set_refs()) {}
 
-    inline Kokkos::pair<size_t, size_t> set_refs();
+    inline kkpair set_refs();
     /* assumes supers is already sorted via sdgbxindex.
     returns pair which are positions of first and last
     superdrops in view which have matching sdgbxindex to ii */
@@ -90,7 +93,7 @@ private:
     subview also do not have matching index. */
 
     KOKKOS_INLINE_FUNCTION
-    supers_subview operator()() const
+    subview_supers operator()() const
     /* returns subview from view of superdrops referencing superdrops
     which occupy given gridbox (according to refs) */
     {
@@ -135,7 +138,7 @@ public:
 
   Gridbox(const Gbxindex igbxindex,
           const State istate,
-          const supers_constview_type supers)
+          const viewd_supers supers)
       /* assumes supers view (or subview) already sorted via sdgbxindex */
       : gbxindex(igbxindex),
         state(istate),
@@ -185,11 +188,11 @@ between refs satisfy the Predicate "pred" */
 template <typename Pred>
 inline bool Gridbox::SupersInGbx::
     is_prednot(const Pred pred,
-               const Kokkos::pair<size_t, size_t> refs4pred) const
+               const kkpair refs4pred) const
 /* returns true if all superdrops in subview
 between r0 and r1 do not satisfy pred */
 {
-  const supers_subview
+  const subview_constsupers
       supers4pred(Kokkos::subview(supers, refs4pred));
 
   return Kokkos::Experimental::
@@ -230,8 +233,7 @@ constants with dimensions */
   };
 }
 
-inline Kokkos::pair<size_t, size_t>
-Gridbox::SupersInGbx::set_refs()
+inline kkpair Gridbox::SupersInGbx::set_refs()
 /* assumes supers is already sorted via sdgbxindex.
 returns pair which are positions of first and last
 superdrops in view which have matching sdgbxindex to ii */
