@@ -73,6 +73,13 @@ public:
   /* converts integer model timestep to dimensionless time,
   then writes to zarr coordinate storage */
   {
+    const size_t ngbxs(h_gbxs.extent(0));
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      const size_t nsupers(h_gbxs(ii).nsupersingbx.get_nsupers());
+      zarr->value_to_storage(nsupers);
+    }
+    ++zarr.nobs;
   }
 };
 
