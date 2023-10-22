@@ -32,15 +32,16 @@
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
-#include "zarr/twodvarstorage.hpp"
+#include "zarr/twodstorage.hpp"
 
 inline Observer auto
-NSupersObserver(const unsigned int interval,
+NsupersObserver(const unsigned int interval,
                 FSStore &store,
-                const int maxchunk);
+                const int maxchunk, 
+                const size_t ngbxs);
 /* constructs observer of nsupers in each gridbox
 with a constant timestep 'interval' using an
-instance of the DoNSupersObs class */
+instance of the DoNsupersObs class */
 
 class DoNsupersObs
 /* observe nsupers in each gridbox and write
@@ -53,11 +54,12 @@ private:
   
 public:
   DoNsupersObs(FSStore &store,
-               const int maxchunk)
+               const int maxchunk,
+               const size_t ngbxs)
       : zarr(std::make_shared<store_type>(store, maxchunk,
                                           "nsupers", "<u8",
                                           " ", 1,
-                                          "gbxindex"))
+                                          "gbxindex", ngbxs))
   {
     zarr->is_name("nsupers");
     zarr->is_dim1(ngbxs, "gbxindex");
@@ -76,22 +78,23 @@ public:
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      const size_t nsupers(h_gbxs(ii).nsupersingbx.get_nsupers());
+      const size_t nsupers(h_gbxs(ii).supersingbx.nsupers());
       zarr->value_to_storage(nsupers);
     }
-    ++zarr.nobs;
+    ++(zarr->nobs);
   }
 };
 
 inline Observer auto
-NSupersObserver(const unsigned int interval,
+NsupersObserver(const unsigned int interval,
                 FSStore &store,
-                const int maxchunk)
+                const int maxchunk,
+                const size_t ngbxs)
 /* constructs observer of nsupers in each gridbox
 with a constant timestep 'interval' using an
 instance of the DoNSupersObs class */
 {
-  const auto obs = DoNsupersObs(store, maxchunk);
+  const auto obs = DoNsupersObs(store, maxchunk, ngbxs);
   return ConstTstepObserver(interval, obs);
 }
 

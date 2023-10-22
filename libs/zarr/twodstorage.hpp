@@ -36,7 +36,7 @@ of time and dim1 could be output using a CoordinateStorage */
 {
 private:
   const std::string dim1name; // name of 1st dimension (e.g. "gbxindex")
-  unsigned int ndim1;         // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
+  const size_t ndim1;               // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
 
   void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
@@ -69,24 +69,13 @@ private:
     this->zarrayjsons(shape, chunks, dims);
   }
 
-protected:
-  void set_ndim1(const unsigned int i_ndim1)
-  {
-    if (ndim1 != storehelpers::NOTSETVALUE)
-    {
-      const std::string err("ndim1 already set; it cannot be changed");
-      throw std::invalid_argument(err);
-    }
-    ndim1 = i_ndim1;
-  }
-
 public:
   unsigned int nobs; // number of output times that have been observed
 
   TwoDStorage(FSStore &store, const unsigned int maxchunk,
               const std::string name, const std::string dtype,
               const std::string units, const double scale_factor,
-              const std::string i_dim1name, const unsigned int i_ndim1)
+              const std::string i_dim1name, const size_t i_ndim1)
       : SingleVarStorage<T>(store, storehelpers::good2Dchunk(maxchunk, i_ndim1),
                             name, dtype, units, scale_factor),
         dim1name(i_dim1name), ndim1(i_ndim1), nobs(0) {}
@@ -104,7 +93,7 @@ public:
   void is_dim1(const size_t goodndim1,
                const std::string &goodname) const
   {
-    if ((size_t)ndim1 != goodndim1)
+    if (ndim1 != goodndim1)
     {
       const std::string errmsg("ndim1 is" +
                                std::to_string(ndim1) +

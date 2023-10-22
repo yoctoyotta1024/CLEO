@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: printobserver.cpp
+ * File: printobs.cpp
  * Project: observers
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Sunday 22nd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,7 @@
  */
 
 
-#include "./printobserver.hpp"
+#include "./printobs.hpp"
 
 void PrintObserver::
     print_statement(const unsigned int t_mdl,

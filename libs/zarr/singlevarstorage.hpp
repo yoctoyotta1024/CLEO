@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Sunday 22nd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,7 +39,7 @@ private:
   virtual void writechunk() = 0;
   virtual void writejsons() = 0;
 
-  size_t chunksize; // fixed size of array chunks (=max no. datapoints in buffer before writing)
+  const size_t chunksize; // fixed size of array chunks (=max no. datapoints in buffer before writing)
 
 protected:
   FSStore &store;            // file system store satisfying zarr store specificaiton v2
@@ -60,17 +60,6 @@ protected:
   const std::string dtype;               // datatype stored in arrays
 
   unsigned int get_chunksize() const { return chunksize; }
-
-  void set_buffer_chunksize(const unsigned int i_chunksize)
-  {
-    if (chunksize != storehelpers::NOTSETCHUNKSIZE)
-    {
-      const std::string err("chunksize already set; it cannot be changed");
-      throw std::invalid_argument(err);
-    }
-    chunksize = i_chunksize;
-    buffer.assign(chunksize, std::numeric_limits<T>::max());
-  }
 
   void zarrayjsons(const std::string shape,
                    const std::string chunks,

@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: printobserver.hpp
+ * File: printobs.hpp
  * Project: observers
  * Created Date: Monday 16th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Sunday 22nd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,8 +20,8 @@
  * timestep 'interval' between observations
  */
 
-#ifndef PRINTOBSERVER_HPP
-#define PRINTOBSERVER_HPP
+#ifndef PRINTOBS_HPP
+#define PRINTOBS_HPP
 
 #include <ios>
 #include <iostream>
@@ -77,4 +77,4 @@ public:
   }
 };
 
-#endif // PRINTOBSERVER_HPP
+#endif // PRINTOBS_HPP

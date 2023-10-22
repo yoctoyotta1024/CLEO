@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Sunday 22nd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,8 +38,9 @@
 #include "initialise/timesteps.hpp"
 
 #include "observers/gbxindexobs.hpp"
+#include "observers/nsupersobs.hpp"
 #include "observers/observers.hpp"
-#include "observers/printobserver.hpp"
+#include "observers/printobs.hpp"
 #include "observers/timeobs.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
@@ -98,7 +99,10 @@ create_observer(const Config &config,
 
   const Observer auto obs3 = GbxindexObserver(store, maxchunk);
 
-  return obs1 >> obs2 >> obs3;
+  const Observer auto obs4 = NsupersObserver(obsstep, store,
+                                             maxchunk, config.ngbxs);
+
+  return obs1 >> obs2 >> obs3 >> obs4;
 }
 
 auto create_sdm(const Config &config,
