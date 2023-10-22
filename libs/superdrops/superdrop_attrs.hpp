@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Sunday 22nd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,6 +24,8 @@
 #ifndef SUPERDROP_ATTRS_HPP
 #define SUPERDROP_ATTRS_HPP
 
+#include <cmath>
+
 #include <Kokkos_Core.hpp>
 
 #include "../cleoconstants.hpp"
@@ -34,13 +36,13 @@ struct SoluteProperties
 /* pointer-like object for solute properties of superdrop */
 {
   /* (dimensionless) density of solute in droplets */
-  KOKKOS_INLINE_FUNCTION double rho_sol() const { return dlc::Rho_sol; }
+  KOKKOS_INLINE_FUNCTION constexpr double rho_sol() const { return dlc::Rho_sol; }
 
   /* (dimensionless) molecular mass of solute */
-  KOKKOS_INLINE_FUNCTION double mr_sol() const { return dlc::Mr_sol; }
+  KOKKOS_INLINE_FUNCTION constexpr double mr_sol() const { return dlc::Mr_sol; }
 
   /* degree ionic dissociation (van't Hoff factor) */
-  KOKKOS_INLINE_FUNCTION double ionic() const { return dlc::IONIC; }
+  KOKKOS_INLINE_FUNCTION constexpr double ionic() const { return dlc::IONIC; }
 };
 
 struct SuperdropAttrs
@@ -69,6 +71,9 @@ struct SuperdropAttrs
   KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute.rho_sol(); }
   KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol(); }
   KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute.ionic(); }
+
+  KOKKOS_FUNCTION double SuperdropAttrs::mass() const;
+  /* returns total droplet mass = water + dry areosol  */
 };
 
 #endif // SUPERDROP_ATTRS_HPP
