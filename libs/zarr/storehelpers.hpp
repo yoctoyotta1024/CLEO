@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Sunday 22nd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -41,6 +41,7 @@ write a double to a buffer, a buffer to a chunk of an
 array in a store, and an array's metadata to a store */
 {
   constexpr unsigned int NOTSETCHUNKSIZE = std::numeric_limits<unsigned int>::min();
+  constexpr unsigned int NOTSETVALUE = std::numeric_limits<unsigned int>::max();
   
   inline unsigned int good2Dchunk(const unsigned int maxchunk,
                                   const unsigned int ndim1)
