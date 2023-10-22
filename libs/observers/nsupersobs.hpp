@@ -159,9 +159,7 @@ public:
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      auto d_supers = h_gbxs(ii).supersingbx.readonly();
-      auto h_supers = Kokkos::create_mirror_view(d_supers); // mirror of supers in gridbox in case view is on device memory
-      Kokkos::deep_copy(h_supers, d_supers);
+      auto h_supers = h_gbxs(ii).supersingbx.hostcopy();
 
       size_t nrainsupers(0);
       for (size_t kk(0); kk < h_supers.extent(0); ++kk)

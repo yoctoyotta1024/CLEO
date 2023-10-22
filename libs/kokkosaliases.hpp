@@ -38,14 +38,12 @@ using viewh_constgbx = dualview_constgbx::t_host; // view in host memory of cons
 using viewd_gbx = dualview_gbx::t_dev;           // view in device memory of gridboxes
 using viewd_constgbx = dualview_constgbx::t_dev; // view in device memory of const gridboxes
 
-using viewd_supers = Kokkos::View<Superdrop *>;            // view in device memory of superdroplets
-using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets
+using viewd_supers = Kokkos::View<Superdrop *>;            // should match that in kokkosaliases.hpp
+using viewd_constsupers = Kokkos::View<const Superdrop *>; // should match that in kokkosaliases.hpp
 
-// using subviewd_supers = Kokkos::Subview<viewd_supers,
-//                                         Kokkos::pair<size_t, size_t>>; // subview of superdroplets (device)
-// using subviewd_constsupers = Kokkos::Subview<viewd_constsupers,
-//                                              Kokkos::pair<size_t, size_t>>; // subview of const superdroplets (device)
+using subviewd_supers = Kokkos::Subview<viewd_supers, Kokkos::pair<size_t, size_t>>; // should match that in gridbox.hpp
+using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, Kokkos::pair<size_t, size_t>>; // should match that in gridbox.hpp
 
-// using mirrorh_constsupers = subviewd_constsupers::HostMirror; // mirror view (copy) of subview of superdroplets on host memory
+using mirrorh_constsupers = subviewd_constsupers::HostMirror; // mirror view (copy) of subview of superdroplets on host memory
 
 #endif // KOKKOSALIASES_HPP

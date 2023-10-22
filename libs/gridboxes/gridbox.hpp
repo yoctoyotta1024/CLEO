@@ -36,8 +36,8 @@ Gridbox's State (e.g. thermodynamic variables
 used for SDM) and detectors for tracking chosen variables */
 {
 private:
-  using d_supers = Kokkos::View<Superdrop *>;            // should match that in kokkosaliases.hpp
-  using d_constsupers = Kokkos::View<const Superdrop *>; // should match that in kokkosaliases.hpp
+  using viewd_supers = Kokkos::View<Superdrop *>;            // should match that in kokkosaliases.hpp
+  using viewd_constsupers = Kokkos::View<const Superdrop *>; // should match that in kokkosaliases.hpp
 
   struct SupersInGbx
   /* References to identify the chunk of memory
@@ -46,10 +46,10 @@ private:
   {
   private:
     using kkpair = Kokkos::pair<size_t, size_t>;
-    using subview_supers = Kokkos::Subview<d_supers, kkpair>;
-    using subview_constsupers = Kokkos::Subview<d_constsupers, kkpair>;
+    using subviewd_supers = Kokkos::Subview<viewd_supers, kkpair>;           // should match that in kokkosaliases.hpp
+    using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, kkpair>; // should match that in kokkosaliases.hpp
 
-    d_supers supers;      // reference to all superdrops view
+    viewd_supers supers;  // reference to all superdrops view
     unsigned int ii;      // value of gbxindex which sdgbxindex of superdrops must match
     kkpair refs = {0, 0}; // position in view of (first, last) superdrop that occupies gridbox
 
@@ -74,7 +74,7 @@ private:
     KOKKOS_INLINE_FUNCTION SupersInGbx() = default;  // Kokkos requirement for a (dual)View
     KOKKOS_INLINE_FUNCTION ~SupersInGbx() = default; // Kokkos requirement for a (dual)View
 
-    SupersInGbx(const d_supers isupers,
+    SupersInGbx(const viewd_supers isupers,
                 const unsigned int ii)
         : supers(isupers), ii(ii), refs(set_refs()) {}
 
@@ -93,7 +93,7 @@ private:
     subview also do not have matching index. */
 
     KOKKOS_INLINE_FUNCTION
-    subview_supers operator()() const
+    subviewd_supers operator()() const
     /* returns subview from view of superdrops referencing superdrops
     which occupy given gridbox (according to refs) */
     {
@@ -101,19 +101,19 @@ private:
     }
 
     KOKKOS_INLINE_FUNCTION
-    subview_constsupers readonly() const
+    subviewd_constsupers readonly() const
     /* returns subview from view of superdrops referencing superdrops
     which occupy given gridbox (according to refs) */
     {
       return Kokkos::subview(supers, refs);
     }
 
-    subview_constsupers::HostMirror hostcopy() const
+    subviewd_constsupers::HostMirror hostcopy() const
     /* returns mirror view on host for const supers in
     gridbox. If supers view is on device memory, a
     deep copy is performed */
     {
-      const subview_constsupers d_supers = readonly();
+      const subviewd_constsupers d_supers = readonly();
       auto h_supers = Kokkos::create_mirror_view(d_supers); 
       Kokkos::deep_copy(h_supers, d_supers);
 
@@ -208,11 +208,11 @@ between refs satisfy the Predicate "pred" */
 template <typename Pred>
 inline bool Gridbox::SupersInGbx::
     is_prednot(const Pred pred,
-               const kkpair refs4pred) const
+               const Gridbox::SupersInGbx::kkpair refs4pred) const
 /* returns true if all superdrops in subview
 between r0 and r1 do not satisfy pred */
 {
-  const subview_constsupers
+  const subviewd_constsupers
       supers4pred(Kokkos::subview(supers, refs4pred));
 
   return Kokkos::Experimental::
@@ -253,7 +253,8 @@ constants with dimensions */
   };
 }
 
-inline kkpair Gridbox::SupersInGbx::set_refs()
+inline Gridbox::SupersInGbx::kkpair
+Gridbox::SupersInGbx::set_refs()
 /* assumes supers is already sorted via sdgbxindex.
 returns pair which are positions of first and last
 superdrops in view which have matching sdgbxindex to ii */
