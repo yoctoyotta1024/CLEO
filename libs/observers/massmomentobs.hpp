@@ -45,20 +45,26 @@ MassMomentsObserver(const unsigned int interval,
 timestep 'interval' using an instance of the
 DoMassMomentObs class */
 
-class DoMassMomentsObs 
+class DoMassMomentsObs
 /* observe nth mass moment in each gridbox and
 write it to an array 'zarr' store as determined
 by the 2DStorage instance */
 {
 private:
   std::shared_ptr<MassMomentsStorage<double>> zarr;
-  
+
+  void DoMassMomentsObs::
+      massmoments_to_storage(const mirrorh_constsupers h_supers);
+  /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
+  distribution and then writes them to zarr storage. (I.e.
+  0th, 3rd and 6th moment of the droplet radius distribution) */
+
 public:
-   DoMassMomentsObs(FSStore &store,
-               const int maxchunk,
-               const size_t ngbxs)
+  DoMassMomentsObs(FSStore &store,
+                   const int maxchunk,
+                   const size_t ngbxs)
       : zarr(std::make_shared<store_type>(store, maxchunk,
-                                         "<f8", ngbxs))
+                                          "<f8", ngbxs))
   {
     zarr->is_dim1(ngbxs, "gbxindex");
   }
@@ -81,30 +87,6 @@ public:
     }
     ++(zarr->nobs);
   }
-
-  void massmoments_to_storage(const mirrorh_constsupers h_supers)
-  /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
-  distribution and then writes them to zarr storage. (I.e.
-  0th, 3rd and 6th moment of the droplet radius distribution) */
-  {
-    double mom0(0.0); // 0th moment = number of (real) droplets
-    double mom1(0.0); // 1st moment = mass of (real) droplets
-    double mom2(0.0); // 2nd moment = mass^2 of (real) droplets
-    for (size_t kk(0); kk < h_supers.extent(0); ++kk)
-    {
-      const(double) xi(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
-      const double mass(h_supers(kk).mass());
-      mom0 += xi;
-      mom1 += xi * mass;
-      mom2 += xi * mass * mass;
-    }
-    
-    zarr->mom0_to_storage(mom0);
-    zarr->mom1_to_storage(mom1);
-    zarr->mom2_to_storage(mom2);
-  }
-
 };
 
-
-#endif MASSMOMENTOBS_HPP
+#endif // MASSMOMENTOBS_HPP
