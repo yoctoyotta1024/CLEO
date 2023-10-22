@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Sunday 22nd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,6 +27,7 @@
 #include <tuple>
 #include <string>
 
+#include "./storehelpers.hpp"
 #include "./singlevarstorage.hpp"
 
 template <typename T>
