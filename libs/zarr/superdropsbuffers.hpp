@@ -15,10 +15,10 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * File for concept of buffers used by
- * Contiguous Ragged Array Storage
- * to store superdroplet attributes
- * (see: https://cfconventions.org/Data/cf-conventions/cf-conventions-1.10/cf-conventions.html#_contiguous_ragged_array_representation)
+ * Concept for buffers used by a Contiguous Ragged
+ * Array Storage to write data for (any chosen combination of)
+ * a superdroplet's attributes into ragged contiguous array(s)
+ * in a fsstore. (see: https://cfconventions.org/Data/cf-conventions/cf-conventions-1.10/cf-conventions.html#_contiguous_ragged_array_representation)
  * in a FFStore obeying zarr storage specification verion 2:
  * https://zarr.readthedocs.io/en/stable/spec/v2.html */
 

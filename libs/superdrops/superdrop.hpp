@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Monday 23rd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,7 +39,7 @@ private:
 public:
   using IDType = IntID; // type of ID (from superdrop_ids.hpp) to identify superdrop via integer
   // using IDType = EmptyID; // empty type of ID (for non-existent superdrop identity)
-  [[no_unique_address]] IDType id; // superdroplet (unique) identity
+  [[no_unique_address]] IDType sd_id; // superdroplet (unique) identity
 
   KOKKOS_INLINE_FUNCTION Superdrop() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~Superdrop() = default; // Kokkos requirement for a (dual)View
