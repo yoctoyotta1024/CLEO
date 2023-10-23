@@ -35,6 +35,8 @@
 
 #include "./fsstore.hpp"
 #include "./storehelpers.hpp"
+#include "superdrops/superdrop.hpp"
+#include "gridboxes/gridbox.hpp"
 
 template <typename T>
 struct StateStorage
@@ -44,30 +46,6 @@ nobs is number of observation events (no. time outputs)
 and ngbxs is the number of elements in 1st dimension
 of 2-D data i.e. no. gridboxes observed for each time */
 {
-private:
-  const size_t chunksize;           // fixed size of array chunks (=max no. datapoints in buffer before writing)
-  const size_t ngbxs;               // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
-
-  void writechunk()
-  /* write data in buffer to a chunk in store alongside metadata jsons */
-  {
-    const std::string chunknum = std::to_string(this->chunkcount) + ".0";
-
-    storehelpers::writebuffer2chunk(this->store, this->buffers.mom0,
-                                    get_name("0"), chunknum,
-                                    this->chunkcount);
-
-    storehelpers::writebuffer2chunk(this->store, this->buffers.mom1,
-                                    get_name("1"), chunknum,
-                                    this->chunkcount);
-
-    std::tie(this->chunkcount, this->buffersfill) = storehelpers::
-        writebuffer2chunk(this->store, this->buffers.mom2,
-                          get_name("2"), chunknum,
-                          this->chunkcount);
-
-    writejsons();
-  }
 };
 
 #endif //  STATESTORAGE_HPP  

@@ -80,7 +80,8 @@ public:
               const std::string name, const std::string dtype,
               const std::string units, const double scale_factor,
               const std::string i_dim1name, const size_t i_ndim1)
-      : SingleVarStorage<T>(store, storehelpers::good2Dchunk(maxchunk, i_ndim1),
+      : SingleVarStorage<T>(store,
+                            storehelpers::good2Dchunk(maxchunk, i_ndim1),
                             name, dtype, units, scale_factor),
         dim1name(i_dim1name), ndim1(i_ndim1), nobs(0) {}
 

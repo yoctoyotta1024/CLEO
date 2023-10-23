@@ -75,10 +75,7 @@ public:
                    const int maxchunk,
                    const size_t ngbxs)
       : zarr(std::make_shared<store_type>(store, maxchunk,
-                                          "<f8", ngbxs, ""))
-  {
-    zarr->is_dim1(ngbxs, "gbxindex");
-  }
+                                          "<f8", ngbxs, "")) {}
 
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
@@ -134,10 +131,7 @@ public:
                    const size_t ngbxs)
       : zarr(std::make_shared<store_type>(store, maxchunk,
                                           "<f8", ngbxs,
-                                          "rain"))
-  {
-    zarr->is_dim1(ngbxs, "gbxindex");
-  }
+                                          "rain")) {}
 
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
