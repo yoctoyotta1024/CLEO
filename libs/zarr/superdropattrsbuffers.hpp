@@ -98,16 +98,31 @@ obeying the zarr storage specificatino version 2.0 via
   }
 };
 
-struct IdIntoStore : AttributeIntoStoreViaBuffer<size_t>
+struct SdIdBuffer : SuperdropAttrBuffer<size_t>
 {
-  IdIntoStore()
-      : AttributeIntoStoreViaBuffer("sd_id", "<u8"){};
+  SdIdBuffer() : SuperdropAttrBuffer("sd_id", "<u8"){};
 
-  unsigned int copy2buffer(const Superdrop &superdrop,
-                           unsigned int j)
+  std::pair<unsigned int, unsigned int> 
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j)
+  {
+    return storagehelper::val2buffer<size_t>(superdrop.sd_id.value,
+                                             buffer, ndata, j);
+  }
+};
+
+struct XiBuffer : SuperdropAttrBuffer<unsigned long long>
+{
+  XiBuffer()
+      : SuperdropAttrBuffer("xi", "<u8"){};
+
+  std::pair<unsigned int, unsigned int> 
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j)
   {
     return storagehelper::
-        val2buffer<size_t>(superdrop.sd_id.value, buffer, j);
+        val2buffer<unsigned long long>(superdrop.get_xi(),
+                                       buffer, ndata, j);
   }
 };
 
