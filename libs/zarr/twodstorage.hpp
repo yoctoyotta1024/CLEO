@@ -23,6 +23,7 @@
 #include <cassert>
 #include <string>
 #include <tuple>
+#include <stdexcept>
 
 #include "./storehelpers.hpp"
 #include "./singlevarstorage.hpp"
@@ -119,7 +120,7 @@ template <typename Buffers, typename V>
 struct TwoDMultiVarStorage
 /* 2D storage with dimensions [time, gbxindex] for
 multiple variables in each gridbox over time. Variables
-copied come in type D and how they are copied and
+copied come in type V and how they are copied and
 their metadata etc. is defined by the buffers type.
 nobs is number of observation events (no. time outputs)
 and ngbxs is the number of elements in 1st dimension of

@@ -26,16 +26,16 @@
 #ifndef STATESTORAGE_HPP 
 #define STATESTORAGE_HPP 
 
-#include <limits>
-#include <vector>
 #include <string>
+#include <vector>
+#include <limits>
+#include <array>
 #include <tuple>
-#include <cassert>
-#include <stdexcept>
+#include <utility>
 
 #include "./fsstore.hpp"
 #include "./storehelpers.hpp"
-#include "superdrops/superdrop.hpp"
-#include "gridboxes/gridbox.hpp"
+#include "../cleoconstants.hpp"
+#include "superdrops/state.hpp"
 
 #endif //  STATESTORAGE_HPP  
