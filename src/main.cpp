@@ -87,6 +87,14 @@ create_motion(const unsigned int motionstep)
 }
 
 Observer auto
+create_supersattrs_observer(const unsigned int interval,
+                            FSStore &store,
+                            const int maxchunk)
+{
+  SupersAttrsObserver(interval, store, maxchunk);
+}
+
+Observer auto
 create_observer(const Config &config,
                 const Timesteps &tsteps,
                 FSStore &store)
@@ -118,7 +126,12 @@ create_observer(const Config &config,
   const Observer auto obs9 = StateObserver(obsstep, store, maxchunk,
                                            config.ngbxs);
 
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >> obs7 >> obs8 >> obs9;
+  const Observer auto obs10 = create_supersattrs_observer(obsstep,
+                                                          store,
+                                                          maxchunk);
+
+  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
+         obs6 >> obs7 >> obs8 >> obs9 >> obs10;
 }
 
 auto create_sdm(const Config &config,

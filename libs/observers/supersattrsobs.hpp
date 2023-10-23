@@ -31,30 +31,30 @@
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
+#include "zarr/superdropsbuffers.hpp"
+#include "zarr/superdropattrsbuffers.hpp"
+#include "zarr/contigraggedstorage.hpp"
 
+template <SuperdropsBuffers Buffers>
 inline Observer auto
 SupersAttrsObserver(const unsigned int interval,
-                    FSStore &store,
-                    const int maxchunk);
+                    std::shared_ptr<ContigRaggedStorage<Buffers>> zarr);
 /* constructs observer of the attributes of
 all superdroplets in each gridbox with a
 constant timestep 'interval' using an instance
 of the DoStateObs class */
 
-template <typename ContigRaggedStorage>
+template <SuperdropsBuffers Buffers>
 struct DoSupersAttrsObs
 /* observe superdroplets by writing their (attributes')
 data to contigious ragged represented arrays as
 determined by the ContigRaggedStorage instance */
 {
 private:
-  std::shared_ptr<ContigRaggedStorage> zarr;
+  std::shared_ptr<ContigRaggedStorage<Buffers>> zarr;
 
 public:
-  DoSupersAttrsObs(FSStore &store,
-                   const int maxchunk,
-                   const size_t ngbxs)
-      : zarr(std::make_shared<ContigRaggedStorage>()) {}
+  DoSupersAttrsObs(zarr) : zarr(zarr) {}
   
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
@@ -84,16 +84,16 @@ public:
   }
 };
 
+template <SuperdropsBuffers Buffers>
 inline Observer auto
 SupersAttrsObserver(const unsigned int interval,
-                    FSStore &store,
-                    const int maxchunk)
+                    std::shared_ptr<ContigRaggedStorage<Buffers>> zarr);
 /* constructs observer of the attributes of
 all superdroplets in each gridbox with a
 constant timestep 'interval' using an instance
 of the DoStateObs class */
 {
-  const auto obs = DoSupersAttrsObs(store, maxchunk);
+  const auto obs = DoSupersAttrsObs(zarr);
   return ConstTstepObserver(interval, obs);
 }
 #endif // SUPERSATTRSOBS_HPP

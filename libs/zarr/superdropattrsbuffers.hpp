@@ -21,8 +21,8 @@
  */
 
 
-#ifndef ATTRSBUFFERS_HPP 
-#define ATTRSBUFFERS_HPP 
+#ifndef SUPERDROPATTRSBUFFERS_HPP 
+#define SUPERDROPATTRSBUFFERS_HPP 
 
 #include <concepts>
 #include <string>
@@ -126,4 +126,4 @@ struct XiBuffer : SuperdropAttrBuffer<unsigned long long>
   }
 };
 
-#endif // ATTRSBUFFERS_HPP 
+#endif // SUPDROPRSATTRSBUFFERS_HPP 
