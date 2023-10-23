@@ -34,7 +34,7 @@
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/twodstorage.hpp"
-#include "zarr/statestorage.hpp"
+#include "zarr/statebuffers.hpp"
 
 inline Observer auto
 StateObserver(const unsigned int interval,

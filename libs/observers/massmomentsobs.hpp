@@ -34,7 +34,7 @@
 #include "superdrops/superdrop.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/twodstorage.hpp"
-#include "zarr/massmomentsstorage.hpp"
+#include "zarr/massmomentbuffers.hpp"
 
 inline Observer auto
 MassMomentsObserver(const unsigned int interval,
@@ -59,11 +59,11 @@ of the DoRainMassMomentsObs class */
 class DoMassMomentsObs
 /* observe the 0th, 1st and 2nd mass moments in
 each gridbox and write them to respective arrays
-in a store as determined by the
-MassmomentsStorage instance */
+in a store as determined by the MassmomentBuffers
+and TwoDMulitVarStorage types */
 {
 private:
-  using store_type = TwoDMultiVarStorage<MassMomentsBuffers<double>,
+  using store_type = TwoDMultiVarStorage<MassMomentBuffers<double>,
                                          std::array<double, 3>>;
   std::shared_ptr<store_type> zarr;
 
@@ -119,7 +119,7 @@ write it to an array 'zarr' store as determined
 by the 2DStorage instance */
 {
 private:
-  using store_type = TwoDMultiVarStorage<MassMomentsBuffers<double>,
+  using store_type = TwoDMultiVarStorage<MassMomentBuffers<double>,
                                          std::array<double, 3>>; 
   std::shared_ptr<store_type> zarr;
 
