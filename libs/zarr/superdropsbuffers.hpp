@@ -72,8 +72,8 @@ a buffer, writing buffer to a chunk of array in the store,
 and writing array metadata and attribute .json files */
 {
   {
-    b.copy2buffer(superdrop, u)
-  } -> std::same_as<unsigned int>;
+    b.copy2buffer(superdrop, u, u)
+  } -> std::same_as<std::pair<unsigned int, unsigned int>>;
 
   {
     b.writechunk(store, u)
@@ -99,18 +99,18 @@ SuperdropsBuffers is B1 followed by B2 */
   CombinedSuperdropIntoStoreViaBuffer(B1 a, B2 b)
       : b1(a), b2(b) {}
 
-  unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j)
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j)
   {
     a.copy2buffer(superdrop, j);
     b.copy2buffer(superdrop, j);
 
-    return j + 1; // TODO update this to std:pair with bufferfill and ndata
+    return std::pair(ndata + 1, j + 1); // TODO update this to std:pair with bufferfill and ndata
   }
 
   std::pair<unsigned int, unsigned int>
-  writechunk(FSStore &store,
-             const unsigned int chunkcount)
+  writechunk(FSStore &store, const unsigned int chunkcount)
   {
     a.writechunk(store, chunkcount);
     b.writechunk(store, chunkcount);
@@ -118,18 +118,17 @@ SuperdropsBuffers is B1 followed by B2 */
     return std::pair(chunkcount + 1, 0); // updated {chunkcount, bufferfill}
   }
 
-  void writejsons(FSStore &store,
-                   const SomeMetadata &md)
+  void writejsons(FSStore &store, const SomeMetadata &md)
 
   {
     a.writejsons(store, md);
     b.writejsons(store, md);
   }
 
-  void set_buffersize(const size_t sz)
+  void set_buffersize(const size_t maxchunk)
   {
-    a.set_buffersize(sz);
-    b.set_buffersize(sz);
+    a.set_buffersize(maxchunk);
+    b.set_buffersize(maxchunk);
   }
 };
 
@@ -144,10 +143,11 @@ struct NullSuperdropIntoStoreViaBuffer
 /* Null does nothing at all (is defined for
 completeness of a Monoid Structure) */
 {
-  unsigned int copy2buffer(const Superdrop &superdrop,
-                           const unsigned int j) const
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j) const
   {
-    return j;
+    return std::pair(ndata, j);
   }
 
   std::pair<unsigned int, unsigned int>
@@ -158,7 +158,7 @@ completeness of a Monoid Structure) */
 
   void writejsons(FSStore &store, const SomeMetadata &md) const {}
   
-  void set_buffersize(const size_t csize) const {}
+  void set_buffersize(const size_t maxchunk) const {}
 };
 
 #endif // SUPERDROPSBUFFERS_HPP
