@@ -107,8 +107,9 @@ create_observer(const Config &config,
                                                  config.ngbxs);
 
   const Observer auto obs6 = TotNsupersObserver(obsstep, store, maxchunk);
-  
-  const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk);
+
+  const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk,
+                                                 config.ngbxs);
 
   return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6;
 }

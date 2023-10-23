@@ -30,13 +30,15 @@
 #include <limits>
 #include <vector>
 #include <string>
+#include <tuple>
+#include <cassert>
 #include <stdexcept>
 
 #include "./fsstore.hpp"
 #include "./storehelpers.hpp"
 
 template <typename T>
-struct MassMomentsStorage : SingleVarStorage<T>
+struct MassMomentsStorage
 /* 2D storage with dimensions [time, gbxindex] for 0th, 1st and 
 2nd momments of the (real) droplet mass distirbution.
 nobs is number of observation events (no. time outputs)
@@ -65,7 +67,7 @@ private:
                                     get_name("1"), chunknum,
                                     this->chunkcount);
 
-    std::tie(this->chunkcount, this->bufferfill) = storehelpers::
+    std::tie(this->chunkcount, this->buffersfill) = storehelpers::
         writebuffer2chunk(this->store, this->buffers.mom2,
                           get_name("2"), chunknum,
                           this->chunkcount);
@@ -95,7 +97,7 @@ private:
 protected:
   FSStore &store;            // file system store satisfying zarr store specificaiton v2
   const std::string endname; // name to add to end of massmom[X] being stored
-  struct
+  struct Buffers
   {
     std::vector<T> mom0; // buffer for 0th mass moment data until writing to array chunk
     std::vector<T> mom1; // buffer for 1st mass moment data until writing to array chunk
@@ -125,18 +127,18 @@ protected:
                    const std::string dims)
   /* write array's metadata to .json files */
   {
-    constexpr std::string units0(" ");
-    constexpr double scale_factor0(1.0);
+    const std::string units0 = " ";
+    constexpr double scale_factor0 = 1.0;
     zarrayjsons(shape, chunks, dims,
                 get_name("0"), units0, scale_factor0);
 
-    constexpr std::string units1("g");
-    constexpr double scale_factor1(dlc::MASS0grams); // grams
+    const std::string units1 = "g";
+    constexpr double scale_factor1 = dlc::MASS0grams; // grams
     zarrayjsons(shape, chunks, dims,
                 get_name("1"), units1, scale_factor1);
 
-    constexpr std::string units2("g^2");
-    constexpr double scale_factor2(dlc::MASS0grams * dlc::MASS0grams); // grams squared
+    const std::string units2 = "g^2";
+    constexpr double scale_factor2 = dlc::MASS0grams * dlc::MASS0grams; // grams squared
     zarrayjsons(shape, chunks, dims,
                 get_name("2"), units2, scale_factor2);
   }
@@ -170,11 +172,11 @@ protected:
 
 public:
   unsigned int nobs; // number of output times that have been observed
-  
-  MassMomentsStorage(FSStore &store, const unsigned int chunksize,
-                     const std::string name, const std::string dtype,
-                     const std::string units, const double scale_factor)
-      : chunksize(chunksize), store(store),
+
+  MassMomentsStorage(FSStore &store, const unsigned int maxchunk,
+                     const std::string dtype, const size_t ngbxs)
+      : chunksize(storehelpers::good2Dchunk(maxchunk, ngbxs)),
+        ngbxs(ngbxs), store(store),
         buffers(chunksize), chunkcount(0),
         buffersfill(0), ndata(0), dtype(dtype) {}
 
@@ -190,7 +192,7 @@ public:
 
   int get_ndata() const { return ndata; }
 
-  void value_to_storage(const T mom0, const T mom1, const T mom2)
+  void massmoments_to_storage(const T mom0, const T mom1, const T mom2)
   /* write val in the zarr store. First copy it to a buffer,
   then write buffer to a chunk in the store when the number
   of values in the buffer reaches the chunksize */
@@ -203,6 +205,26 @@ public:
     copy2buffer(mom0, mom1, mom2);
   }
 
+  void is_dim1(const size_t goodndim1,
+               const std::string &goodname) const
+  {
+    if (ngbxs != goodndim1)
+    {
+      const std::string errmsg("ndim1 is" +
+                               std::to_string(ngbxs) +
+                               ", but should be " +
+                               std::to_string(goodndim1));
+      throw std::invalid_argument(errmsg);
+    }
+
+    const std::string dim1name("gbxindex");
+    if (dim1name!= goodname)
+    {
+      const std::string errmsg("name of dim1 is " + dim1name +
+                               ", but should be " + goodname);
+      throw std::invalid_argument(errmsg);
+    }
+  }
 };
 
 #endif // MASSMOMENTSSTORAGE_HPP  

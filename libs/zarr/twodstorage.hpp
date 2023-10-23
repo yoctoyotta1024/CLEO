@@ -21,6 +21,10 @@
 #ifndef TWODSTORAGE_HPP 
 #define TWODSTORAGE_HPP 
 
+#include <cassert>
+#include <string>
+#include <tuple>
+
 #include "./storehelpers.hpp"
 #include "./singlevarstorage.hpp"
 
