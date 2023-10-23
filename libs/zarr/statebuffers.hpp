@@ -47,8 +47,34 @@ private:
   std::vector<T> qvap;       
   std::vector<T> qcond;       
 
-public:
 
+
+public:
+  StateBuffers(const std::string endname,
+               const unsigned int chunksize)
+      : press(chunksize, std::numeric_limits<T>::max()),
+        temp(chunksize, std::numeric_limits<T>::max()),
+        qvap(chunksize, std::numeric_limits<T>::max()),
+        qcond(chunksize, std::numeric_limits<T>::max()) {}
+
+  void writejsons(FSStore &store,
+                  const std::string &metadata) const
+  /* write array's metadata to .json files */
+  {
+    const std::string dims = "[\"time\", \"gbxindex\"]";
+
+    storehelpers::writezarrjsons(store, "press", metadata,
+                                 dims, "hPa", dlc::P0 / 100);
+
+    storehelpers::writezarrjsons(store, "temp", metadata,
+                                 dims, "K", dlc::TEMP0);
+
+    storehelpers::writezarrjsons(store, "qvap", metadata,
+                                 dims, " ", 1.0);
+
+    storehelpers::writezarrjsons(store, "qcond", metadata,
+                                 dims, " ", 1.0);
+  }
 };
 
 

@@ -50,20 +50,6 @@ private:
     return "massmom" + mom + endname;
   }
 
-  void writezarrjsons(FSStore &store,
-                      const std::string &name,
-                      const std::string &metadata,
-                      const std::string &dims,
-                      const std::string &units,
-                      const double scale_factor) const
-  /* write array's metadata to .json files */
-  {
-    const std::string arrayattrs = storehelpers::
-        arrayattrs(dims, units, scale_factor);
-
-    storehelpers::writezarrjsons(store, name, metadata, arrayattrs);
-  }
-
 public:
   MassMomentBuffers(const std::string endname,
                      const unsigned int chunksize)
@@ -72,26 +58,17 @@ public:
         mom1(chunksize, std::numeric_limits<T>::max()),
         mom2(chunksize, std::numeric_limits<T>::max()) {}
 
-  void writejsons(FSStore &store,
-                  const std::string &metadata) const
-  /* write array's metadata to .json files */
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const std::array<T, 3> moms,
+              const unsigned int ndata,
+              const unsigned int buffersfill)
+  /* copy value to mass moments to their respective buffers */
   {
-    const std::string dims = "[\"time\", \"gbxindex\"]";
+    storehelpers::val2buffer<T>(moms.at(0), mom0, ndata, buffersfill);
+    storehelpers::val2buffer<T>(moms.at(1), mom1, ndata, buffersfill);
+    storehelpers::val2buffer<T>(moms.at(2), mom2, ndata, buffersfill);
 
-    const std::string units0 = " ";
-    constexpr double scale_factor0 = 1.0;
-    writezarrjsons(store, get_name("0"), metadata, dims,
-                   units0, scale_factor0);
-
-    const std::string units1 = "g";
-    constexpr double scale_factor1 = dlc::MASS0grams; // grams
-    writezarrjsons(store, get_name("1"), metadata, dims,
-                   units1, scale_factor1);
-
-    const std::string units2 = "g^2";
-    constexpr double scale_factor2 = dlc::MASS0grams * dlc::MASS0grams; // grams squared
-    writezarrjsons(store, get_name("2"), metadata, dims,
-                   units2, scale_factor2);
+    return std::pair(ndata + 1, buffersfill + 1); // updated {ndata, buffersfill}
   }
 
   std::pair<unsigned int, unsigned int>
@@ -112,17 +89,26 @@ public:
     return std::pair(chunkcount + 1, 0); // updated {chunkcount, bufferfill}
   }
 
-  std::pair<unsigned int, unsigned int>
-  copy2buffer(const std::array<T, 3> moms,
-              const unsigned int ndata,
-              const unsigned int buffersfill)
-  /* copy value to mass moments to their respective buffers */
+  void writejsons(FSStore &store,
+                  const std::string &metadata) const
+  /* write array's metadata to .json files */
   {
-    storehelpers::val2buffer<T>(moms.at(0), mom0, ndata, buffersfill);
-    storehelpers::val2buffer<T>(moms.at(1), mom1, ndata, buffersfill);
-    storehelpers::val2buffer<T>(moms.at(2), mom2, ndata, buffersfill);
+    const std::string dims = "[\"time\", \"gbxindex\"]";
 
-    return std::pair(ndata + 1, buffersfill + 1); // updated {ndata, buffersfill}
+    const std::string units0 = " ";
+    constexpr double scale_factor0 = 1.0;
+    storehelpers::writezarrjsons(store, get_name("0"), metadata,
+                                 dims, units0, scale_factor0);
+
+    const std::string units1 = "g";
+    constexpr double scale_factor1 = dlc::MASS0grams; // grams
+    storehelpers::writezarrjsons(store, get_name("1"), metadata,
+                                 dims, units1, scale_factor1);
+
+    const std::string units2 = "g^2";
+    constexpr double scale_factor2 = dlc::MASS0grams * dlc::MASS0grams; // grams squared
+    storehelpers::writezarrjsons(store, get_name("2"), metadata,
+                                 dims, units2, scale_factor2);
   }
 };
 

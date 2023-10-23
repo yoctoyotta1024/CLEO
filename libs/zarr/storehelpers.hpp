@@ -127,6 +127,21 @@ array in a store, and an array's metadata to a store */
     store[name + "/.zattrs"] = arrayattrs;
   }
 
+  inline void writezarrjsons(FSStore &store,
+                      const std::string &name,
+                      const std::string &metadata,
+                      const std::string &dims,
+                      const std::string &units,
+                      const double scale_factor)
+  /* make arrayattrs then write it and array's
+  metadata to .json files */
+  {
+    const std::string arrayattrs(
+        storehelpers::arrayattrs(dims, units, scale_factor));
+
+    storehelpers::writezarrjsons(store, name, metadata, arrayattrs);
+  }
+
   inline std::string metadata(const char zarr_format,
                               const char order,
                               const std::string &shape,
