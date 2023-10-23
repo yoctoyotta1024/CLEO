@@ -49,3 +49,6 @@ mkdir ${path2build}share
 cd ${path2build} && pwd 
 make clean && make -j 16
 ### ---------------------------------------------------- ###
+
+
+# CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON

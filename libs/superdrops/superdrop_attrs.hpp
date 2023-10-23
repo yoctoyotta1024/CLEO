@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Monday 23rd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -72,7 +72,7 @@ struct SuperdropAttrs
   KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol(); }
   KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute.ionic(); }
 
-  KOKKOS_FUNCTION double SuperdropAttrs::mass() const;
+  KOKKOS_FUNCTION double mass() const;
   /* returns total droplet mass = water + dry areosol  */
 };
 
