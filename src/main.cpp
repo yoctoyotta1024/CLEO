@@ -94,7 +94,7 @@ create_supersattrs_observer(const unsigned int interval,
                             FSStore &store,
                             const int maxchunk)
 {
-  SuperdropsBuffers auto buffers = SdIdBuffer();
+  SuperdropsBuffers auto buffers = SdIdBuffer() >> XiBuffer();
   return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }
 

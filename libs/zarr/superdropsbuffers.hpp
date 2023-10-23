@@ -105,8 +105,8 @@ SuperdropsBuffers is A followed by B */
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
-    a.copy2buffer(superdrop, j);
-    b.copy2buffer(superdrop, j);
+    a.copy2buffer(superdrop, ndata, j);
+    b.copy2buffer(superdrop, ndata, j);
 
     return std::pair(ndata + 1, j + 1); // TODO update this to std:pair with bufferfill and ndata
   }
