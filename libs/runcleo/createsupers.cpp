@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -81,7 +81,7 @@ void CreateSupers::print_supers(const viewd_constsupers supers) const
 
   for (size_t kk(0); kk < h_supers.extent(0); ++kk)
   {
-    std::cout << "SD: " << h_supers(kk).id.value
+    std::cout << "SD: " << h_supers(kk).sdId.value
               << " [gbx, (coords), (attrs)]: [ "
               << h_supers(kk).get_sdgbxindex() << ", ("
               << h_supers(kk).get_coord3() << ", "

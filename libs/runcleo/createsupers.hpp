@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -195,11 +195,11 @@ operator()(const unsigned int kk) const
   const unsigned int sdgbxindex(sdgbxindexes.at(kk));
   const std::array<double, 3> coords312(coords_at(kk));
   const SuperdropAttrs attrs(attrs_at(kk));
-  const auto sd_id(sdIdGen->next());
+  const auto sdId(sdIdGen->next());
 
   return Superdrop(sdgbxindex, coords312[0],
                    coords312[1], coords312[2],
-                   attrs, sd_id);
+                   attrs, sdId);
 }
 
 #endif // CREATESUPERS_HPP

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -92,7 +92,7 @@ create_supersattrs_observer(const unsigned int interval,
                             const int maxchunk)
 {
   const auto buffers = SdIdBuffer();
-  SupersAttrsObserver(interval, store, maxchunk, buffers);
+  return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }
 
 Observer auto
@@ -127,8 +127,7 @@ create_observer(const Config &config,
   const Observer auto obs9 = StateObserver(obsstep, store, maxchunk,
                                            config.ngbxs);
 
-  const Observer auto obs10 = create_supersattrs_observer(obsstep,
-                                                          store,
+  const Observer auto obs10 = create_supersattrs_observer(obsstep, store,
                                                           maxchunk);
 
   return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>

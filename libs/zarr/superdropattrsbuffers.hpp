@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -100,13 +100,13 @@ obeying the zarr storage specificatino version 2.0 via
 
 struct SdIdBuffer : SuperdropAttrBuffer<size_t>
 {
-  SdIdBuffer() : SuperdropAttrBuffer("sd_id", "<u8"){};
+  SdIdBuffer() : SuperdropAttrBuffer("sdId", "<u8"){};
 
   std::pair<unsigned int, unsigned int> 
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
-    return storagehelper::val2buffer<size_t>(superdrop.sd_id.value,
+    return storagehelper::val2buffer<size_t>(superdrop.sdId.value,
                                              buffer, ndata, j);
   }
 };

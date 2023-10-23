@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,7 +39,7 @@ private:
 public:
   using IDType = IntID; // type of ID (from superdrop_ids.hpp) to identify superdrop via integer
   // using IDType = EmptyID; // empty type of ID (for non-existent superdrop identity)
-  [[no_unique_address]] IDType sd_id; // superdroplet (unique) identity
+  [[no_unique_address]] IDType sdId; // superdroplet (unique) identity
 
   KOKKOS_INLINE_FUNCTION Superdrop() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~Superdrop() = default; // Kokkos requirement for a (dual)View
@@ -50,13 +50,13 @@ public:
             const double icoord1,
             const double icoord2,
             const SuperdropAttrs iattrs,
-            const IDType iid)
+            const IDType isdId)
       : sdgbxindex(isdgbxindex),
         coord3(icoord3),
         coord1(icoord1),
         coord2(icoord2),
         attrs(iattrs),
-        id(iid) {}
+        sdId(isdId) {}
 
   KOKKOS_INLINE_FUNCTION auto get_sdgbxindex() const { return sdgbxindex; }
   KOKKOS_INLINE_FUNCTION auto get_coord3() const { return coord3; }
