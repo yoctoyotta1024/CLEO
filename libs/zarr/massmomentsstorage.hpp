@@ -36,6 +36,7 @@
 
 #include "./fsstore.hpp"
 #include "./storehelpers.hpp"
+#include "../cleoconstants.hpp"
 
 template <typename T>
 struct MassMomentsStorage
@@ -49,12 +50,12 @@ private:
   const size_t chunksize;           // fixed size of array chunks (=max no. datapoints in buffer before writing)
   const size_t ngbxs;               // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
 
-  std::string get_name(const std::string mom)
+  std::string get_name(const std::string mom) const
   {
     return "massmom" + mom + endname;
   }
 
-  void writechunk()
+  void writechunk() const
   /* write data in buffer to a chunk in store alongside metadata jsons */
   {
     const std::string chunknum = std::to_string(this->chunkcount) + ".0";
@@ -75,7 +76,7 @@ private:
     writejsons();
   }
 
-  void writejsons()
+  void writejsons() const
   /* write strictly required metadata to decode chunks (MUST).
   Assert also check 2D data dimensions is as expected */
   {
@@ -124,7 +125,7 @@ protected:
 
   void massmoments_zarrayjsons(const std::string shape,
                    const std::string chunks,
-                   const std::string dims)
+                   const std::string dims) const
   /* write array's metadata to .json files */
   {
     const std::string units0 = " ";
@@ -148,7 +149,7 @@ protected:
                    const std::string dims,
                    const std::string name,
                    const std::string units,
-                   const double scale_factor)
+                   const double scale_factor) const
   /* write array's metadata to .json files */
   {
     const std::string metadata = storehelpers::
@@ -161,7 +162,7 @@ protected:
     storehelpers::writezarrjsons(store, name, metadata, arrayattrs);
   }
 
-  void copy2buffer(const T mom0, const T mom1, const T mom2)
+  void copy2buffer(const T mom0, const T mom1, const T mom2) const
   /* copy value 'val' to buffer */
   {
     storehelpers::val2buffer<T>(mom0, buffers.mom0, buffersfill);
@@ -193,7 +194,7 @@ public:
 
   int get_ndata() const { return ndata; }
 
-  void massmoments_to_storage(const T mom0, const T mom1, const T mom2)
+  void massmoments_to_storage(const T mom0, const T mom1, const T mom2) const
   /* write val in the zarr store. First copy it to a buffer,
   then write buffer to a chunk in the store when the number
   of values in the buffer reaches the chunksize */

@@ -44,6 +44,32 @@ StateObserver(const unsigned int interval,
 of each gridbox with a constant timestep 'interval'
 using an instance of the DoStateObs class */
 
+struct StateBuffers
+{
+  std::vector<double> press;
+  std::vector<double> temp;
+  std::vector<double> qvap;
+  std::vector<double> qcond;
+
+  StateBuffers(const unsigned int buffersize)
+      : pressbuffer(buffersize, std::numeric_limits<double>::max()),
+        tempbuffer(buffersize, std::numeric_limits<double>::max()),
+        qvapbuffer(buffersize, std::numeric_limits<double>::max()),
+        qcondbuffer(buffersize, std::numeric_limits<double>::max()) {}
+
+  unsigned int copy2buffers(const ThermoState &state, unsigned int j);
+  /* copy press, temp, qvap and qcond data in the state to buffers at index j */
+
+  std::pair<unsigned int, unsigned int>
+  writechunks(FSStore &store, unsigned int chunkcount);
+  /* write buffer vector into attr's store at chunkcount
+  and then replace contents of buffer with numeric limit */
+
+  void writejsons(FSStore &store, const std::string &metadata) const;
+  /* write same .zarray metadata to a json file for each
+  thermostate array in store alongside distinct .zattrs json files */
+};
+
 class DoStateObs
 /* observe variables in the state of each
 gridbox and write them to repspective arrays
