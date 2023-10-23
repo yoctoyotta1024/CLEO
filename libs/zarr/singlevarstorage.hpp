@@ -35,32 +35,18 @@
 template <typename T>
 class SingleVarStorage
 {
-private:
-  virtual void writechunk() = 0;
-  virtual void writejsons() = 0;
-
-  const size_t chunksize; // fixed size of array chunks (=max no. datapoints in buffer before writing)
-
 protected:
   FSStore &store;            // file system store satisfying zarr store specificaiton v2
+  std::vector<T> buffer;     // buffer to store values in until writing to array chunk
   const std::string name;    // name to call variable being stored
   const std::string units;   // units of coordinate being stored (for arrayattrs json)
   const double scale_factor; // scale_factor of data (for array .zattrs json)
-  std::vector<T> buffer;     // buffer to store values in until writing to array chunk
 
+  const size_t chunksize; // fixed size of array chunks (=max no. datapoints in buffer before writing)
   unsigned int chunkcount; // number of chunks of array so far written to store
   unsigned int bufferfill; // number of datapoints so far copied into buffer
   unsigned int ndata;      // number of data points that have been observed
-
-  const char zarr_format = '2';          // storage spec. version 2
-  const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
-  const std::string compressor = "null"; // compression of data when writing to store
-  const std::string fill_value = "null"; // fill value for empty datapoints in array
-  const std::string filters = "null";    // codec configurations for compression
-  const std::string dtype;               // datatype stored in arrays
-
-  unsigned int get_chunksize() const { return chunksize; }
-
+ 
   void zarrayjsons(const std::string shape,
                    const std::string chunks,
                    const std::string dims)
@@ -75,6 +61,17 @@ protected:
 
     storehelpers::writezarrjsons(store, name, metadata, arrayattrs);
   }
+
+private:
+  virtual void writechunk() = 0;
+  virtual void writejsons() = 0;
+
+  const char zarr_format = '2';          // storage spec. version 2
+  const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
+  const std::string compressor = "null"; // compression of data when writing to store
+  const std::string fill_value = "null"; // fill value for empty datapoints in array
+  const std::string filters = "null";    // codec configurations for compression
+  const std::string dtype;               // datatype stored in arrays
 
   void copy2buffer(const T val)
   /* copy value 'val' to buffer */
@@ -91,17 +88,17 @@ protected:
   }
 
 public:
-  SingleVarStorage(FSStore &store, const unsigned int chunksize,
+  SingleVarStorage(FSStore &store, const unsigned int maxchunk,
                    const std::string name, const std::string dtype,
                    const std::string units, const double scale_factor)
-      : chunksize(chunksize), store(store),
+      : store(store), buffer(maxchunk, std::numeric_limits<T>::max()),
         name(name), units(units), scale_factor(scale_factor),
-        buffer(chunksize, std::numeric_limits<T>::max()),
-        chunkcount(0), bufferfill(0), ndata(0), dtype(dtype) {}
+        chunksize(maxchunk), chunkcount(0), bufferfill(0),
+        ndata(0), dtype(dtype) {}
 
   virtual ~SingleVarStorage(){};
 
-  int get_ndata() const { return ndata; }
+  unsigned int get_ndata() const { return ndata; }
 
   void is_name(const std::string &goodname) const
   {

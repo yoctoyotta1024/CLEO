@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Monday 23rd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -52,7 +52,7 @@ private:
   /* write strictly required metadata to decode chunks (MUST) */
   {
     const auto shape("[" + std::to_string(this->ndata) + "]");
-    const auto chunks("[" + std::to_string(this->get_chunksize()) + "]");
+    const auto chunks("[" + std::to_string(this->chunksize) + "]");
     const std::string dims = "[\"time\"]";
 
     this->zarrayjsons(shape, chunks, dims);

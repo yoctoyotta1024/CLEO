@@ -60,12 +60,12 @@ private:
   {
     assert((this->ndata == nobs * ndim1) &&
            "1D data length matches 2D array size");
-    assert((this->get_chunksize() % ndim1 == 0.0) &&
+    assert((this->chunksize % ndim1 == 0.0) &&
            "chunks are integer multiple of 1st dimension of 2-D data");
 
     const auto n1str = std::to_string(ndim1);
     const auto nobstr = std::to_string(nobs);
-    const auto nchstr = std::to_string(this->get_chunksize() / ndim1);
+    const auto nchstr = std::to_string(this->chunksize / ndim1);
 
     const auto shape("[" + nobstr + ", " + n1str + "]");
     const auto chunks("[" + nchstr + ", " + n1str + "]");
