@@ -67,7 +67,7 @@ private:
                                          std::array<double, 3>>;
   std::shared_ptr<store_type> zarr;
 
-  void massmoments(const mirrorh_constsupers h_supers) const;
+  void massmoments_to_storage(const mirrorh_constsupers h_supers) const;
   /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
   distribution and then writes them to zarr storage. (I.e.
   0th, 3rd and 6th moment of the droplet radius distribution) */
@@ -93,7 +93,7 @@ public:
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       auto h_supers = h_gbxs(ii).supersingbx.hostcopy(); // deep copy if supers not on host memory
-      massmoments(h_supers);
+      massmoments_to_storage(h_supers);
     }
     ++(zarr->nobs);
   }
@@ -123,7 +123,8 @@ private:
                                          std::array<double, 3>>; 
   std::shared_ptr<store_type> zarr;
 
-  void rainmassmoments(const mirrorh_constsupers h_supers) const;
+  void rainmassmoments_to_storage(
+      const mirrorh_constsupers h_supers) const;
   /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
   distribution and then writes them to zarr storage. (I.e.
   0th, 3rd and 6th moment of the droplet radius distribution) */
@@ -150,7 +151,7 @@ public:
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       auto h_supers = h_gbxs(ii).supersingbx.hostcopy(); // deep copy if supers not on host memory
-      rainmassmoments(h_supers);
+      rainmassmoments_to_storage(h_supers);
     }
     ++(zarr->nobs);
   }

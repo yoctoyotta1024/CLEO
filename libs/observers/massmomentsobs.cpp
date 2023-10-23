@@ -23,7 +23,7 @@
 #include "./massmomentsobs.hpp"
 
 void DoMassMomentsObs::
-    massmoments(const mirrorh_constsupers h_supers) const
+    massmoments_to_storage(const mirrorh_constsupers h_supers) const
 /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
 distribution and then writes them to zarr storage. (I.e.
 0th, 3rd and 6th moment of the droplet radius distribution) */
@@ -42,7 +42,7 @@ distribution and then writes them to zarr storage. (I.e.
 }
 
 void DoRainMassMomentsObs::
-    rainmassmoments(const mirrorh_constsupers h_supers) const
+    rainmassmoments_to_storage(const mirrorh_constsupers h_supers) const
 /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
 distribution and then writes them to zarr storage. (I.e.
 0th, 3rd and 6th moment of the droplet radius distribution) */
