@@ -94,7 +94,7 @@ create_supersattrs_observer(const unsigned int interval,
                             FSStore &store,
                             const int maxchunk)
 {
-  const auto buffers = SdIdBuffer();
+  SuperdropsBuffers auto buffers = SdIdBuffer();
   return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }
 
@@ -130,7 +130,8 @@ create_observer(const Config &config,
   const Observer auto obs9 = StateObserver(obsstep, store, maxchunk,
                                            config.ngbxs);
 
-  const Observer auto obs10 = create_supersattrs_observer(obsstep, store,
+  const Observer auto obs10 = create_supersattrs_observer(obsstep,
+                                                          store,
                                                           maxchunk);
 
   return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
