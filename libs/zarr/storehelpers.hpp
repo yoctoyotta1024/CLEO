@@ -83,8 +83,8 @@ array in a store, and an array's metadata to a store */
   inline std::pair<unsigned int, unsigned int>
   writebuffer2chunk(FSStore &store,
                     std::vector<T> &buffer,
-                    const std::string name,
-                    const std::string chunknum,
+                    const std::string &name,
+                    const std::string &chunknum,
                     const unsigned int chunkcount)
   /* write buffer vector into attr's store at chunk no. 'kk', then
   replace contents of buffer with max numeric limit of type.
@@ -100,7 +100,7 @@ array in a store, and an array's metadata to a store */
   inline std::pair<unsigned int, unsigned int>
   writebuffer2chunk(FSStore &store,
                     std::vector<T> &buffer,
-                    const std::string name,
+                    const std::string &name,
                     const unsigned int chunkcount)
   /* write buffer vector into attr's store at 'chunkcount' and then
   return incremented chunkcount */
@@ -112,7 +112,7 @@ array in a store, and an array's metadata to a store */
   }
 
   inline void writezarrjsons(FSStore &store,
-                             const std::string name,
+                             const std::string &name,
                              const std::string &metadata,
                              const std::string &arrayattrs)
   /* write .zarray and .zattr json files into store for the

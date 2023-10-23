@@ -38,14 +38,4 @@
 #include "superdrops/superdrop.hpp"
 #include "gridboxes/gridbox.hpp"
 
-template <typename T>
-struct StateStorage
-/* 2D storage with dimensions [time, gbxindex] for
-variables in the state of each gridbox over time.
-nobs is number of observation events (no. time outputs)
-and ngbxs is the number of elements in 1st dimension
-of 2-D data i.e. no. gridboxes observed for each time */
-{
-};
-
 #endif //  STATESTORAGE_HPP  

@@ -33,6 +33,7 @@
 #include "./observers.hpp"
 #include "superdrops/superdrop.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "zarr/twodstorage.hpp"
 #include "zarr/massmomentsstorage.hpp"
 
 inline Observer auto
@@ -62,7 +63,8 @@ in a store as determined by the
 MassmomentsStorage instance */
 {
 private:
-  using store_type = MassMomentsStorage<double>;
+  using store_type = TwoDMultiVarStorage<MassMomentsBuffers<double>,
+                                         std::array<double, 3>>;
   std::shared_ptr<store_type> zarr;
 
   void massmoments(const mirrorh_constsupers h_supers) const;
@@ -117,7 +119,8 @@ write it to an array 'zarr' store as determined
 by the 2DStorage instance */
 {
 private:
-  using store_type = MassMomentsStorage<double>;
+  using store_type = TwoDMultiVarStorage<MassMomentsBuffers<double>,
+                                         std::array<double, 3>>; 
   std::shared_ptr<store_type> zarr;
 
   void rainmassmoments(const mirrorh_constsupers h_supers) const;

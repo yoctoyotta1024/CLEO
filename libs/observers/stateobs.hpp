@@ -33,6 +33,7 @@
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "zarr/twodstorage.hpp"
 #include "zarr/statestorage.hpp"
 
 inline Observer auto

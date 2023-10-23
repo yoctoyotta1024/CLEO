@@ -17,9 +17,8 @@
  * File Description:
  */
 
-
-#ifndef TWODSTORAGE_HPP 
-#define TWODSTORAGE_HPP 
+#ifndef TWODSTORAGE_HPP
+#define TWODSTORAGE_HPP
 
 #include <cassert>
 #include <string>
@@ -40,7 +39,7 @@ of time and dim1 could be output using a CoordinateStorage */
 {
 private:
   const std::string dim1name; // name of 1st dimension (e.g. "gbxindex")
-  const size_t ndim1;               // number elements in 1st dimensin (e.g. number of gridboxes that are observed)
+  const size_t ndim1;         // number elements in 1st dimension (e.g. number of gridboxes that are observed)
 
   void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
@@ -116,4 +115,107 @@ public:
   }
 };
 
-#endif // TWODSTORAGE_HPP 
+template <typename Buffers, typename V>
+struct TwoDMultiVarStorage
+/* 2D storage with dimensions [time, gbxindex] for
+multiple variables in each gridbox over time. Variables
+copied come in type D and how they are copied and
+their metadata etc. is defined by the buffers type.
+nobs is number of observation events (no. time outputs)
+and ngbxs is the number of elements in 1st dimension of
+2-D data i.e. no. gridboxes observed for each time */
+{
+private:
+  FSStore &store; // file system store satisfying zarr store specificaiton v2
+
+  const size_t chunksize;   // fixed size of array chunks (=max no. datapoints in buffer before writing)
+  unsigned int chunkcount;  // number of chunks of array so far written to store
+  unsigned int buffersfill; // number of datapoints so far copied into buffer
+  unsigned int ndata;       // number of data points that have been observed
+
+  const char zarr_format = '2';          // storage spec. version 2
+  const char order = 'C';                // layout of bytes within each chunk of array in storage, can be 'C' or 'F'
+  const std::string compressor = "null"; // compression of data when writing to store
+  const std::string fill_value = "null"; // fill value for empty datapoints in array
+  const std::string filters = "null";    // codec configurations for compression
+  const std::string dtype;               // datatype stored in arrays
+
+  Buffers buffers; // buffers to hold state variables and then copy to store
+  const size_t ngbxs; // number elements in 1st dimension (e.g. number of gridboxes that are observed)
+
+  void writejsons() const
+  /* write strictly required metadata to decode chunks (MUST).
+  Assert also check 2D data dimensions is as expected */
+  {
+    assert((ndata == nobs * ngbxs) &&
+           "1D data length matches 2D array size");
+    assert((chunksize % ngbxs == 0.0) &&
+           "chunks are integer multiple of 1st dimension of 2-D data");
+
+    const auto n1str = std::to_string(ngbxs);
+    const auto nobstr = std::to_string(nobs);
+    const auto nchstr = std::to_string(chunksize / ngbxs);
+
+    const auto shape("[" + nobstr + ", " + n1str + "]");
+    const auto chunks("[" + nchstr + ", " + n1str + "]");
+
+    const std::string metadata = storehelpers::
+        metadata(zarr_format, order, shape, chunks, dtype,
+                 compressor, fill_value, filters);
+
+    buffers.writejsons(store, metadata);
+  }
+
+  void writechunks()
+  /* write data from buffers into chunks in store,
+  then reset buffersfill and write associated metadata */
+  {
+    std::tie(chunkcount, buffersfill) =
+        buffers.writechunks(store, chunkcount);
+
+    writejsons();
+  }
+
+  void copy2buffers(const V values)
+  /* copy data to buffers */
+  {
+    std::tie(ndata, buffersfill) =
+        buffers.copy2buffer(values, ndata, buffersfill);
+  }
+
+public:
+  unsigned int nobs; // number of output times that have been observed
+
+  TwoDMultiVarStorage(FSStore &store, const unsigned int maxchunk,
+                      const std::string dtype, const size_t ngbxs,
+                      const std::string endname)
+      : store(store),
+        chunksize(storehelpers::good2Dchunk(maxchunk, ngbxs)),
+        chunkcount(0), buffersfill(0), ndata(0), dtype(dtype),
+        buffers(endname, chunksize), ngbxs(ngbxs), nobs(0) {}
+
+  ~TwoDMultiVarStorage()
+  /* upon destruction write any data leftover in buffer
+  to a chunk and write array's metadata to a .json file */
+  {
+    if (buffersfill != 0)
+    {
+      writechunks();
+    }
+  }
+
+  void values_to_storage(const V values)
+  /* write val in the zarr store. First copy it to a buffer,
+  then write buffer to a chunk in the store when the number
+  of values in the buffer reaches the chunksize */
+  {
+    if (buffersfill == chunksize)
+    {
+      writechunks();
+    }
+
+    copy2buffers(values);
+  }
+};
+
+#endif // TWODSTORAGE_HPP

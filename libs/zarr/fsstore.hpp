@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Monday 23rd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -79,7 +79,7 @@ private:
   const std::filesystem::path basedir;
 
 public:
-  FSStore(std::filesystem::path basedir) : basedir(basedir)
+  FSStore(const std::filesystem::path basedir) : basedir(basedir)
   {
     // initialize a zarr group (i.e. dataset)
     const std::string zarr_format("2"); // storage spec. version 2
@@ -92,12 +92,12 @@ public:
                          "\"title\": \"store for output of coupled SDM\"}";
   }
 
-  StoreAccessor<FSStore> operator[](std::string_view key)
+  StoreAccessor<FSStore> operator[](const std::string_view key)
   {
     return {*this, key};
   }
 
-  bool write(std::string_view key, std::span<const uint8_t> buffer);
+  bool write(const std::string_view key, const std::span<const uint8_t> buffer);
   /* write function called by StoreAccessor once data has been
   converted into a vector of unsigned integer types */
 };
