@@ -80,9 +80,9 @@ public:
               const unsigned int buffersfill)
   /* copy value to mass moments to their respective buffers */
   {
-    storehelpers::val2buffer<T>(moms.at(0), mom0, buffersfill);
-    storehelpers::val2buffer<T>(moms.at(1), mom1, buffersfill);
-    storehelpers::val2buffer<T>(moms.at(2), mom2, buffersfill);
+    storehelpers::val2buffer<T>(moms.at(0), mom0, ndata, buffersfill);
+    storehelpers::val2buffer<T>(moms.at(1), mom1, ndata, buffersfill);
+    storehelpers::val2buffer<T>(moms.at(2), mom2, ndata, buffersfill);
 
     return std::pair(ndata + 1, buffersfill + 1); // updated {ndata, buffersfill}
   }

@@ -76,15 +76,15 @@ private:
   void copy2buffer(const T val)
   /* copy value 'val' to buffer */
   {
-    bufferfill = storehelpers::val2buffer<T>(val, buffer, bufferfill);
-    ++ndata;
+    std::tie(ndata, bufferfill) =
+        storehelpers::val2buffer<T>(val, buffer, ndata, bufferfill);
   }
 
   void copy2buffer(const std::vector<T> &vec)
   /* copy values of type T in vector 'vec' to buffer */
   {
-    bufferfill = storehelpers::vec2buffer<T>(vec, buffer, bufferfill);
-    ndata += vec.size();
+    std::tie(ndata, bufferfill) =
+        storehelpers::vec2buffer<T>(vec, buffer, ndata, bufferfill);
   }
 
 public:

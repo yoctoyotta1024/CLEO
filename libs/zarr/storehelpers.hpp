@@ -51,21 +51,21 @@ array in a store, and an array's metadata to a store */
   }
 
   template <typename T>
-  inline unsigned int val2buffer(const T val,
-                                 std::vector<T> &buffer,
-                                 const unsigned int j)
+  inline std::pair<unsigned int, unsigned int>
+  val2buffer(const T val, std::vector<T> &buffer,
+             const unsigned int ndata, const unsigned int j)
   /* copy a type T (e.g. a double) called
   'val', to buffer at index j */
   {
     buffer.at(j) = val;
 
-    return j + 1;
+    return std::pair(ndata + 1, j + 1); // updated {ndata, buffersfill}
   }
 
   template <typename T>
-  inline unsigned int vec2buffer(const std::vector<T> &vec,
-                                 std::vector<T> &buffer,
-                                 const unsigned int j)
+  inline std::pair<unsigned int, unsigned int>
+  vec2buffer(const std::vector<T> &vec, std::vector<T> &buffer,
+             const unsigned int ndata, const unsigned int j)
   /* copy vector of type T (e.g. a double) called
   'vec', to buffer at index j. Function is equivalent to 
   std::copy(vec.begin(), vec.end(), buffer.begin()+j);
@@ -76,7 +76,7 @@ array in a store, and an array's metadata to a store */
     buffer.erase(buffer.end() - nvalues, buffer.end());
     buffer.insert(buffer.begin()+j, vec.begin(), vec.end());
 
-    return j + nvalues;
+    return std::pair(ndata + nvalues, j + nvalues);
   }
 
   template <typename T>
