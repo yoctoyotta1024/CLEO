@@ -26,11 +26,11 @@
 KOKKOS_FUNCTION double SuperdropAttrs::mass() const
 /* returns total droplet mass = water + dry areosol  */
 {
-  constexpr double density_factor(1.0 - dlc::Rho_l / solute.rho_sol()); // to account for msol
-  double massconst(4.0 / 3.0 * M_PI * dlc::Rho_l) // 4/3 * pi * density
+  constexpr double massconst(4.0 / 3.0 * M_PI * dlc::Rho_l); // 4/3 * pi * density
+  const double density_factor(1.0 - dlc::Rho_l / solute.rho_sol()); // to account for msol
 
+  const double rcubed(radius * radius * radius); // radius cubed
   double mass(msol * density_factor); // mass contribution of solute
-  double rcubed(radius * radius * radius); // radius cubed
   mass += massconst * rcubed;
 
   return mass;

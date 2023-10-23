@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: massmomentobs.cpp
+ * File: massmomentsobs.cpp
  * Project: observers
  * Created Date: Sunday 22nd October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Monday 23rd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,7 +20,7 @@
  * system storage
  */
 
-#include "./massmomentobs.hpp"
+#include "./massmomentsobs.hpp"
 
 void DoMassMomentsObs::
     massmoments_to_storage(const mirrorh_constsupers h_supers)
@@ -33,7 +33,7 @@ distribution and then writes them to zarr storage. (I.e.
   double mom2(0.0); // 2nd moment = mass^2 of (real) droplets
   for (size_t kk(0); kk < h_supers.extent(0); ++kk)
   {
-    const(double) xi(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
+    const double xi = (double)(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
     const double mass(h_supers(kk).mass());
     mom0 += xi;
     mom1 += xi * mass;

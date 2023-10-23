@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Monday 23rd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,6 +38,7 @@
 #include "initialise/timesteps.hpp"
 
 #include "observers/gbxindexobs.hpp"
+#include "observers/massmomentsobs.hpp"
 #include "observers/nsupersobs.hpp"
 #include "observers/observers.hpp"
 #include "observers/printobs.hpp"
@@ -106,8 +107,10 @@ create_observer(const Config &config,
                                                  config.ngbxs);
 
   const Observer auto obs6 = TotNsupersObserver(obsstep, store, maxchunk);
+  
+  const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk);
 
-    return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6;
+  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6;
 }
 
 auto create_sdm(const Config &config,

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Monday 23rd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,8 +19,8 @@
  * to array in a zarr file system storage
  */
 
-#ifndef MASSMOMENTOBS_HPP
-#define MASSMOMENTOBS_HPP
+#ifndef MASSMOMENTSOBS_HPP
+#define MASSMOMENTSOBS_HPP
 
 #include <concepts>
 #include <memory>
@@ -33,7 +33,7 @@
 #include "./observers.hpp"
 #include "superdrops/superdrop.hpp"
 #include "gridboxes/gridbox.hpp"
-#include "zarr/twodstorage.hpp"
+#include "zarr/massmomentsstorage.hpp"
 
 inline Observer auto
 MassMomentsObserver(const unsigned int interval,
@@ -43,7 +43,7 @@ MassMomentsObserver(const unsigned int interval,
 /* constructs observer of the nth mass moment
 'mom' in each gridbox with a constant
 timestep 'interval' using an instance of the
-DoMassMomentObs class */
+DoMassMomentsObs class */
 
 class DoMassMomentsObs
 /* observe nth mass moment in each gridbox and
@@ -89,4 +89,18 @@ public:
   }
 };
 
-#endif // MASSMOMENTOBS_HPP
+inline Observer auto
+MassMomentsObserver(const unsigned int interval,
+                   FSStore &store,
+                   const int maxchunk,
+                   const size_t ngbxs)
+/* constructs observer of the nth mass moment
+'mom' in each gridbox with a constant
+timestep 'interval' using an instance of the
+DoMassMomentsObs class */
+{
+  const auto obs = DoMassMomentsObs(store, maxchunk, ngbxs);
+  return ConstTstepObserver(interval, obs);
+}
+
+#endif // MASSMOMENTSOBS_HPP
