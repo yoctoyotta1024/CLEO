@@ -56,9 +56,10 @@ constant timestep 'interval' using an instance
 of the DoRainMassMomentsObs class */
 
 class DoMassMomentsObs
-/* observe nth mass moment in each gridbox and
-write it to an array 'zarr' store as determined
-by the 2DStorage instance */
+/* observe the 0th, 1st and 2nd mass moments in
+each gridbox and write them to respective arrays
+in a store as determined by the
+MassmomentsStorage instance */
 {
 private:
   using store_type = MassMomentsStorage<double>;
