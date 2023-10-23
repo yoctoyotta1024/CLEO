@@ -134,7 +134,7 @@ public:
   ContigRaggedStorage(FSStore &store,
                       const size_t maxchunk,
                       Buffers buffers)
-      : store(store), chunksize(maxchunk), rgdcount(maxchunk),
+      : store(store), chunksize(maxchunk), rgdcount(chunksize),
         rgdcount_chunkcount(0), rgdcount_bufferfill(0),
         rgdcount_ndata(0), buffers(buffers),
         chunkcount(0), buffersfill(0), ndata(0)
