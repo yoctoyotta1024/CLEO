@@ -139,7 +139,7 @@ of 2-D data i.e. no. gridboxes observed for each time */
 private:
   FSStore &store;            // file system store satisfying zarr store specificaiton v2
 
-  const size_t chunksize;           // fixed size of array chunks (=max no. datapoints in buffer before writing)
+  const size_t chunksize;   // fixed size of array chunks (=max no. datapoints in buffer before writing)
   unsigned int chunkcount;  // number of chunks of array so far written to store
   unsigned int buffersfill; // number of datapoints so far copied into buffer
   unsigned int ndata;       // number of data points that have been observed
