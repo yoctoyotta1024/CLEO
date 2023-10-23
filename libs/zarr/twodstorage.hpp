@@ -27,7 +27,7 @@
 template <typename T>
 struct TwoDStorage : SingleVarStorage<T>
 /* 2D storage with dimensions [time, dim1] where
-ntime is number of observation events (no. time outputs)
+nobs is number of observation events (no. time outputs)
 and ndim1 is the number of elements in 1st dimension
 of 2-D data i.e. no. elements observed for each time.
 For example, ndim1 could equal the number of gridboxes
