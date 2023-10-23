@@ -21,20 +21,17 @@
  * in a FFStore obeying zarr storage specification verion 2:
  * https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
-#ifndef CONTIGRAGGEDSTORAGE
-#define CONTIGRAGGEDSTORAGE
+#ifndef CONTIGRAGGEDSTORAGE_HPP
+#define CONTIGRAGGEDSTORAGE_HPP
 
 #include <concepts>
 #include <vector>
 #include <string>
-#include <utility>
 #include <tuple>
 
 #include "./fsstore.hpp"
 #include "./storehelpers.hpp"
 #include "./superdropsbuffers.hpp"
-#include "../cleoconstants.hpp"
-#include "superdrops/superdrop.hpp"
 
 template <SuperdropsBuffers Buffers>
 class ContigRaggedStorage
@@ -188,4 +185,4 @@ public:
   }
 }
 
-#endif // CONTIGRAGGEDSTORAGE
+#endif // CONTIGRAGGEDSTORAGE_HPP

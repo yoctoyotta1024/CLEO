@@ -15,8 +15,9 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * File for Contiguous Ragged Array Storage
- * used to store superdroplet attributes
+ * File for concept of buffers used by
+ * Contiguous Ragged Array Storage
+ * to store superdroplet attributes
  * (see: https://cfconventions.org/Data/cf-conventions/cf-conventions-1.10/cf-conventions.html#_contiguous_ragged_array_representation)
  * in a FFStore obeying zarr storage specification verion 2:
  * https://zarr.readthedocs.io/en/stable/spec/v2.html */
@@ -66,10 +67,11 @@ concept SuperdropsBuffers = requires(B b,
                                     std::string &str,
                                     unsigned int u,
                                     SomeMetadata &md)
-/* concept for all types that have correct signatures for
-functions which provide way of copying some superdroplet's data into
-a buffer, writing buffer to a chunk of array in the store,
-and writing array metadata and attribute .json files */
+/* concept for all types that have correct signatures
+for functions which provide way of copying some superdroplet's
+data into a buffer, writing buffer to a chunk of array in the
+store, and writing array metadata and attribute .json files
+using the contigraggedstorage structure */
 {
   {
     b.copy2buffer(superdrop, u, u)
@@ -96,7 +98,7 @@ SuperdropsBuffers is B1 followed by B2 */
   B1 a;
   B2 b;
 
-  CombinedSuperdropIntoStoreViaBuffer(B1 a, B2 b)
+  CombinedSuperdropsBuffers(B1 a, B2 b)
       : b1(a), b2(b) {}
 
   std::pair<unsigned int, unsigned int>
@@ -139,7 +141,7 @@ SuperdropsBuffers types */
   return CombinedSuperdropsBuffers(a, b);
 }
 
-struct NullSuperdropIntoStoreViaBuffer
+struct NullSuperdropsBuffer
 /* Null does nothing at all (is defined for
 completeness of a Monoid Structure) */
 {
@@ -161,4 +163,4 @@ completeness of a Monoid Structure) */
   void set_buffersize(const size_t maxchunk) const {}
 };
 
-#endif // SUPERDROPSBUFFERS_HPP
+#endif //SUPERDROPSBUFFERS_HPP 
