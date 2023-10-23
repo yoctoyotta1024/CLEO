@@ -41,20 +41,20 @@ all superdroplets in each gridbox with a
 constant timestep 'interval' using an instance
 of the DoStateObs class */
 
-template <typename ContiguousRaggedStorage>
+template <typename ContigRaggedStorage>
 struct DoSupersAttrsObs
 /* observe superdroplets by writing their (attributes')
 data to contigious ragged represented arrays as
-determined by the ContiguousRaggedSDStorage instance */
+determined by the ContigRaggedStorage instance */
 {
 private:
-  std::shared_ptr<ContiguousRaggedStorage> zarr;
+  std::shared_ptr<ContigRaggedStorage> zarr;
 
 public:
   DoSupersAttrsObs(FSStore &store,
                    const int maxchunk,
                    const size_t ngbxs)
-      : zarr(std::make_shared<ContiguousRaggedStorage>()) {}
+      : zarr(std::make_shared<ContigRaggedStorage>()) {}
   
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {

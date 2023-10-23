@@ -93,7 +93,7 @@ array in a store, and an array's metadata to a store */
     store[name + "/" + chunknum].operator=<T>(buffer);
     buffer.assign(buffer.size(), std::numeric_limits<T>::max());
 
-    return std::pair(chunkcount + 1, 0);
+    return std::pair(chunkcount + 1, 0); // updated {chunkcount, bufferfill}
   }
 
   template <typename T>
