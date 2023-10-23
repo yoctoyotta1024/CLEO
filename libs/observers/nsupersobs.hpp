@@ -159,7 +159,7 @@ public:
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      auto h_supers = h_gbxs(ii).supersingbx.supersingbx.hostcopy();
+      auto h_supers = h_gbxs(ii).supersingbx.hostcopy();
 
       size_t nrainsupers(0);
       for (size_t kk(0); kk < h_supers.extent(0); ++kk)

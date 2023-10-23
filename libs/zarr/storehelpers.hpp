@@ -85,7 +85,7 @@ array in a store, and an array's metadata to a store */
                     std::vector<T> &buffer,
                     const std::string name,
                     const std::string chunknum,
-                    unsigned int chunkcount)
+                    const unsigned int chunkcount)
   /* write buffer vector into attr's store at chunk no. 'kk', then
   replace contents of buffer with max numeric limit of type.
   Return incremented value of chunkcount */
@@ -93,7 +93,7 @@ array in a store, and an array's metadata to a store */
     store[name + "/" + chunknum].operator=<T>(buffer);
     buffer.assign(buffer.size(), std::numeric_limits<T>::max());
 
-    return std::pair(++chunkcount, 0);
+    return std::pair(chunkcount + 1, 0);
   }
 
   template <typename T>
@@ -101,7 +101,7 @@ array in a store, and an array's metadata to a store */
   writebuffer2chunk(FSStore &store,
                     std::vector<T> &buffer,
                     const std::string name,
-                    unsigned int chunkcount)
+                    const unsigned int chunkcount)
   /* write buffer vector into attr's store at 'chunkcount' and then
   return incremented chunkcount */
   {
