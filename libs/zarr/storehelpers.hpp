@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Monday 23rd October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -53,19 +53,19 @@ array in a store, and an array's metadata to a store */
   template <typename T>
   inline unsigned int val2buffer(const T val,
                                  std::vector<T> &buffer,
-                                 unsigned int j)
+                                 const unsigned int j)
   /* copy a type T (e.g. a double) called
   'val', to buffer at index j */
   {
     buffer.at(j) = val;
 
-    return ++j;
+    return j + 1;
   }
 
   template <typename T>
   inline unsigned int vec2buffer(const std::vector<T> &vec,
                                  std::vector<T> &buffer,
-                                 unsigned int j)
+                                 const unsigned int j)
   /* copy vector of type T (e.g. a double) called
   'vec', to buffer at index j. Function is equivalent to 
   std::copy(vec.begin(), vec.end(), buffer.begin()+j);
