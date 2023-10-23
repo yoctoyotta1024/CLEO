@@ -174,9 +174,10 @@ public:
   unsigned int nobs; // number of output times that have been observed
 
   MassMomentsStorage(FSStore &store, const unsigned int maxchunk,
-                     const std::string dtype, const size_t ngbxs)
+                     const std::string dtype, const size_t ngbxs,
+                     const std::string endname)
       : chunksize(storehelpers::good2Dchunk(maxchunk, ngbxs)),
-        ngbxs(ngbxs), store(store),
+        ngbxs(ngbxs), store(store), endname(endname),
         buffers(chunksize), chunkcount(0),
         buffersfill(0), ndata(0), dtype(dtype) {}
 
