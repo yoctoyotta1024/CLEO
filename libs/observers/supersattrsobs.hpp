@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -57,9 +57,15 @@ private:
   std::shared_ptr<store_type> zarr;
 
 public:
-  DoSupersAttrsObs(FSStore &store, const int maxchunk, Buffers buffers)
-      : zarr(std::make_shared(
-            ContigRaggedStorage(store, maxchunk, buffers))) {}
+  DoSupersAttrsObs(FSStore &store,
+                   const int maxchunk,
+                   Buffers buffers)
+      : zarr(std::make_shared(ContigRaggedStorage(store,
+                                                  maxchunk,
+                                                  buffers))) {}
+
+  DoSupersAttrsObs(const std::shared_ptr<store_type> zarr)
+      : zarr(zarr) {}
 
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
@@ -94,7 +100,7 @@ inline Observer auto
 SupersAttrsObserver(const unsigned int interval,
                     FSStore &store,
                     const int maxchunk,
-                    Buffers buffers);
+                    Buffers buffers)
 /* constructs observer of the attributes of
 all superdroplets in each gridbox with a
 constant timestep 'interval' using an instance

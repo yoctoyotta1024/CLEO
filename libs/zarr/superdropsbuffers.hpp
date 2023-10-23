@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,7 @@
 #include <string>
 #include <utility>
 
-#include "./fsstore.hpp
+#include "./fsstore.hpp"
 #include "superdrops/superdrop.hpp"
 
 struct SomeMetadata
@@ -90,16 +90,16 @@ using the contigraggedstorage structure */
   } -> std::same_as<void>;
 };
 
-template <SuperdropsBuffers B1, SuperdropsBuffers B2>
+template <SuperdropsBuffers A, SuperdropsBuffers B>
 struct CombinedSuperdropsBuffers
-/* combination of two types (B1, B2) that satisfiy
-SuperdropsBuffers is B1 followed by B2 */
+/* combination of two types (A, B) that satisfiy
+SuperdropsBuffers is A followed by B */
 {
-  B1 a;
-  B2 b;
+  A a;
+  B b;
 
-  CombinedSuperdropsBuffers(B1 a, B2 b)
-      : b1(a), b2(b) {}
+  CombinedSuperdropsBuffers(A a, B b)
+      : a(a), b(b) {}
 
   std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,

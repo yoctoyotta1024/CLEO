@@ -27,11 +27,11 @@
 #include <concepts>
 #include <string>
 #include <vector>
-#include <cmath>
-#include <algorithm>
 #include <limits>
 #include <utility>
+#include <algorithm>
 #include <tuple>
+#include <cmath>
 
 #include "../cleoconstants.hpp"
 #include "./fsstore.hpp"
@@ -71,22 +71,21 @@ obeying the zarr storage specificatino version 2.0 via
   /* write buffer vector into attr's store at chunkcount
   and then replace contents of buffer with numeric limit */
   {
-    return storagehelper::
-        writebuffer2chunk(store, buffer, attr, chunkcount);
+    return storehelpers::writebuffer2chunk(store, buffer,
+                                           attr, chunkcount);
   }
 
   void writejsons(FSStore &store, const SomeMetadata &md) const
   /* write metadata for attr's array into store */
   {
-    const std::string metadata = storagehelper::
+    const std::string metadata = storehelpers::
         metadata(md.zarr_format, md.order, md.shape,
                  md.chunks, dtype, md.compressor,
                  md.fill_value, md.filters);
 
     const std::string arrayattrs = "{\"_ARRAY_DIMENSIONS\": " + md.dims + "}";
 
-    storagehelper::
-        writezarrjsons(store, attr, metadata, arrayattrs);
+    storehelpers::writezarrjsons(store, attr, metadata, arrayattrs);
   }
 
   void set_buffersize(const size_t maxchunk)
@@ -106,7 +105,7 @@ struct SdIdBuffer : SuperdropAttrBuffer<size_t>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
-    return storagehelper::val2buffer<size_t>(superdrop.sdId.value,
+    return storehelpers::val2buffer<size_t>(superdrop.sdId.value,
                                              buffer, ndata, j);
   }
 };
@@ -120,7 +119,7 @@ struct XiBuffer : SuperdropAttrBuffer<unsigned long long>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
-    return storagehelper::
+    return storehelpers::
         val2buffer<unsigned long long>(superdrop.get_xi(),
                                        buffer, ndata, j);
   }

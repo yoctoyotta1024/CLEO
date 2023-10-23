@@ -44,6 +44,7 @@
 #include "observers/printobs.hpp"
 #include "observers/stateobs.hpp"
 #include "observers/timeobs.hpp"
+#include "observers/supersattrsobs.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/runcleo.hpp"
@@ -56,6 +57,8 @@
 #include "superdrops/predcorrmotion.hpp"
 
 #include "zarr/fsstore.hpp"
+#include "zarr/superdropattrsbuffers.hpp"
+#include "zarr/superdropsbuffers.hpp"
 
 CoupledDynamics auto
 create_coupldyn(const Config &config,

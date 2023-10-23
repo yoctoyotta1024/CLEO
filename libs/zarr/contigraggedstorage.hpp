@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -100,11 +100,11 @@ private:
                          "\"sample_dimension\": \"superdroplets\"}");
 
     const std::string
-        count_metadata = storagehelper::
+        count_metadata = storehelpers::
             metadata(zarr_format, order, rgdcount_ndata, chunksize,
                      rgdcount_dtype, compressor, fill_value, filters);
 
-    storagehelper::writezarrjsons(store, rgdcount_name,
+    storehelpers::writezarrjsons(store, rgdcount_name,
                                   count_metadata,
                                   count_arrayattrs);
   }
@@ -114,7 +114,7 @@ private:
   zarray in store and (re)write its associated metadata */
   {
     std::tie(rgdcount_chunkcount, rgdcount_bufferfill) =
-        storagehelper::writebuffer2chunk(store, rgdcount,
+        storehelpers::writebuffer2chunk(store, rgdcount,
                                          rgdcount_name,
                                          rgdcount_chunkcount);
 
@@ -133,7 +133,7 @@ private:
 public:
   ContigRaggedStorage(FSStore &store,
                       const size_t maxchunk,
-                      const Buffers buffers)
+                      Buffers buffers)
       : store(store), chunksize(maxchunk), rgdcount(maxchunk),
         rgdcount_chunkcount(0), rgdcount_bufferfill(0),
         rgdcount_ndata(0), buffers(buffers),
@@ -183,6 +183,6 @@ public:
 
     copy2rgdcount(raggedn);
   }
-}
+};
 
 #endif // CONTIGRAGGEDSTORAGE_HPP
