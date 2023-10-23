@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: superdropbuffers.hpp
+ * File: superdropsbuffers.hpp
  * Project: zarr
  * Created Date: Monday 23rd October 2023
  * Author: Clara Bayley (CB)
@@ -22,8 +22,8 @@
  * https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
 
-#ifndef SUPERDROPBUFFERS_HPP 
-#define SUPERDROPBUFFERS_HPP 
+#ifndef SUPERDROPSBUFFERS_HPP 
+#define SUPERDROPSBUFFERS_HPP 
 
 #include <concepts>
 #include <string>
@@ -60,7 +60,7 @@ struct SomeMetadata
 };
 
 template <typename B>
-concept SuperdropBuffers = requires(B b,
+concept SuperdropsBuffers = requires(B b,
                                     Superdrop &superdrop,
                                     FSStore &store,
                                     std::string &str,
@@ -88,10 +88,10 @@ and writing array metadata and attribute .json files */
   } -> std::same_as<void>;
 };
 
-template <SuperdropBuffers B1, SuperdropBuffers B2>
-struct CombinedSuperdropBuffers
+template <SuperdropsBuffers B1, SuperdropsBuffers B2>
+struct CombinedSuperdropsBuffers
 /* combination of two types (B1, B2) that satisfiy
-SuperdropBuffers is B1 followed by B2 */
+SuperdropsBuffers is B1 followed by B2 */
 {
   B1 a;
   B2 b;
@@ -133,11 +133,11 @@ SuperdropBuffers is B1 followed by B2 */
   }
 };
 
-auto operator>>(SuperdropBuffers auto a, SuperdropBuffers auto b)
+auto operator>>(SuperdropsBuffers auto a, SuperdropsBuffers auto b)
 /* define ">>" operator that combines two
-SuperdropBuffers types */
+SuperdropsBuffers types */
 {
-  return CombinedSuperdropBuffers(a, b);
+  return CombinedSuperdropsBuffers(a, b);
 }
 
 struct NullSuperdropIntoStoreViaBuffer
@@ -161,4 +161,4 @@ completeness of a Monoid Structure) */
   void set_buffersize(const size_t csize) const {}
 };
 
-#endif // SUPERDROPBUFFERS_HPP 
+#endif // SUPERDROPSBUFFERS_HPP
