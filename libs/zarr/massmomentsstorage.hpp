@@ -16,7 +16,7 @@
  * -----
  * File Description:
  * Storage similar to singlevarstorage for writing
- * variables to a fsstore vi abuffers and occording
+ * variables to a fsstore via buffers and occording
  * to the Zarr storage specification version 2.0,
  * but extended to more than one variable and with
  * metadata written specifically for the 0th, 1st
