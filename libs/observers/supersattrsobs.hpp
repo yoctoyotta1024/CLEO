@@ -38,7 +38,9 @@
 template <SuperdropsBuffers Buffers>
 inline Observer auto
 SupersAttrsObserver(const unsigned int interval,
-                    const std::shared_ptr<ContigRaggedStorage<Buffers>> zarr);
+                    FSStore &store,
+                    const int maxchunk,
+                    Buffers buffers);
 /* constructs observer of the attributes of
 all superdroplets in each gridbox with a
 constant timestep 'interval' using an instance
@@ -55,8 +57,9 @@ private:
   std::shared_ptr<store_type> zarr;
 
 public:
-  DoSupersAttrsObs(const std::shared_ptr<store_type>
-                       zarr) : zarr(zarr) {}
+  DoSupersAttrsObs(FSStore &store, const int maxchunk, Buffers buffers)
+      : zarr(std::make_shared(
+            ContigRaggedStorage(store, maxchunk, buffers))) {}
 
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
@@ -89,13 +92,15 @@ public:
 template <SuperdropsBuffers Buffers>
 inline Observer auto
 SupersAttrsObserver(const unsigned int interval,
-                    const std::shared_ptr<ContigRaggedStorage<Buffers>> zarr);
+                    FSStore &store,
+                    const int maxchunk,
+                    Buffers buffers);
 /* constructs observer of the attributes of
 all superdroplets in each gridbox with a
 constant timestep 'interval' using an instance
 of the DoStateObs class */
 {
-  const auto obs = DoSupersAttrsObs(zarr);
+  const auto obs = DoSupersAttrsObs(store, maxchunk, buffers);
   return ConstTstepObserver(interval, obs);
 }
 #endif // SUPERSATTRSOBS_HPP
