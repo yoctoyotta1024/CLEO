@@ -42,6 +42,7 @@
 #include "observers/nsupersobs.hpp"
 #include "observers/observers.hpp"
 #include "observers/printobs.hpp"
+#include "observers/stateobs.hpp"
 #include "observers/timeobs.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
@@ -114,7 +115,10 @@ create_observer(const Config &config,
   const Observer auto obs8 = RainMassMomentsObserver(obsstep, store, maxchunk,
                                                  config.ngbxs);
 
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >> obs7 >> obs8;
+  const Observer auto obs9 = StateObserver(obsstep, store, maxchunk,
+                                           config.ngbxs);
+
+  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >> obs7 >> obs8 >> obs9;
 }
 
 auto create_sdm(const Config &config,

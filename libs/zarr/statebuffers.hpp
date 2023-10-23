@@ -47,8 +47,6 @@ private:
   std::vector<T> qvap;       
   std::vector<T> qcond;       
 
-
-
 public:
   StateBuffers(const std::string endname,
                const unsigned int chunksize)
@@ -56,6 +54,41 @@ public:
         temp(chunksize, std::numeric_limits<T>::max()),
         qvap(chunksize, std::numeric_limits<T>::max()),
         qcond(chunksize, std::numeric_limits<T>::max()) {}
+
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const State &state,
+              const unsigned int ndata,
+              const unsigned int buffersfill)
+  /* copy value to mass moments to their respective buffers */
+  {
+    storehelpers::val2buffer<T>(state.press, press, ndata, buffersfill);
+    storehelpers::val2buffer<T>(state.temp, temp, ndata, buffersfill);
+    storehelpers::val2buffer<T>(state.qvap, qvap, ndata, buffersfill);
+    storehelpers::val2buffer<T>(state.qcond, qcond, ndata, buffersfill);
+
+    return std::pair(ndata + 1, buffersfill + 1); // updated {ndata, buffersfill}
+  }
+
+  std::pair<unsigned int, unsigned int>
+  writechunks(FSStore &store, const unsigned int chunkcount)
+  /* write data in buffer to a chunk in store alongside metadata jsons */
+  {
+    const std::string chunknum = std::to_string(chunkcount) + ".0";
+
+    storehelpers::writebuffer2chunk(store, press, "press",
+                                    chunknum, chunkcount);
+
+    storehelpers::writebuffer2chunk(store, temp, "temp",
+                                    chunknum, chunkcount);
+
+    storehelpers::writebuffer2chunk(store, qvap, "qvap",
+                                    chunknum, chunkcount);
+
+    storehelpers::writebuffer2chunk(store, qcond, "qcond",
+                                    chunknum, chunkcount);
+
+    return std::pair(chunkcount + 1, 0); // updated {chunkcount, bufferfill}
+  }
 
   void writejsons(FSStore &store,
                   const std::string &metadata) const
