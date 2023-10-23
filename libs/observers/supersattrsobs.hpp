@@ -38,7 +38,7 @@
 template <SuperdropsBuffers Buffers>
 inline Observer auto
 SupersAttrsObserver(const unsigned int interval,
-                    std::shared_ptr<ContigRaggedStorage<Buffers>> zarr);
+                    const std::shared_ptr<ContigRaggedStorage<Buffers>> zarr);
 /* constructs observer of the attributes of
 all superdroplets in each gridbox with a
 constant timestep 'interval' using an instance
@@ -51,11 +51,13 @@ data to contigious ragged represented arrays as
 determined by the ContigRaggedStorage instance */
 {
 private:
-  std::shared_ptr<ContigRaggedStorage<Buffers>> zarr;
+  using store_type = ContigRaggedStorage<Buffers>;
+  std::shared_ptr<store_type> zarr;
 
 public:
-  DoSupersAttrsObs(zarr) : zarr(zarr) {}
-  
+  DoSupersAttrsObs(const std::shared_ptr<store_type>
+                       zarr) : zarr(zarr) {}
+
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
     std::cout << "observer includes SupersAttrsObserver\n";
@@ -87,7 +89,7 @@ public:
 template <SuperdropsBuffers Buffers>
 inline Observer auto
 SupersAttrsObserver(const unsigned int interval,
-                    std::shared_ptr<ContigRaggedStorage<Buffers>> zarr);
+                    const std::shared_ptr<ContigRaggedStorage<Buffers>> zarr);
 /* constructs observer of the attributes of
 all superdroplets in each gridbox with a
 constant timestep 'interval' using an instance

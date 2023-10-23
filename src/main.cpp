@@ -86,12 +86,15 @@ create_motion(const unsigned int motionstep)
   return PredCorrMotion(motionstep); 
 }
 
+
+
 Observer auto
 create_supersattrs_observer(const unsigned int interval,
                             FSStore &store,
                             const int maxchunk)
 {
-  SupersAttrsObserver(interval, store, maxchunk);
+  std::shared_ptr<ContigRaggedStorage<Buffers>> zarr = 
+  SupersAttrsObserver(interval, zarr);
 }
 
 Observer auto
