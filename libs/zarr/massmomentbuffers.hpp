@@ -72,37 +72,6 @@ public:
         mom1(chunksize, std::numeric_limits<T>::max()),
         mom2(chunksize, std::numeric_limits<T>::max()) {}
 
-  std::pair<unsigned int, unsigned int>
-  copy2buffer(const std::array<T, 3> moms,
-              const unsigned int ndata,
-              const unsigned int buffersfill)
-  /* copy value to mass moments to their respective buffers */
-  {
-    storehelpers::val2buffer<T>(moms.at(0), mom0, ndata, buffersfill);
-    storehelpers::val2buffer<T>(moms.at(1), mom1, ndata, buffersfill);
-    storehelpers::val2buffer<T>(moms.at(2), mom2, ndata, buffersfill);
-
-    return std::pair(ndata + 1, buffersfill + 1); // updated {ndata, buffersfill}
-  }
-
-  std::pair<unsigned int, unsigned int>
-  writechunks(FSStore &store, const unsigned int chunkcount)
-  /* write data in buffer to a chunk in store alongside metadata jsons */
-  {
-    const std::string chunknum = std::to_string(chunkcount) + ".0";
-
-    storehelpers::writebuffer2chunk(store, mom0, get_name("0"),
-                                    chunknum, chunkcount);
-
-    storehelpers::writebuffer2chunk(store, mom1, get_name("1"),
-                                    chunknum, chunkcount);
-
-    storehelpers::writebuffer2chunk(store, mom2, get_name("2"),
-                                    chunknum, chunkcount);
-
-    return std::pair(chunkcount + 1, 0); // updated {chunkcount, bufferfill}
-  }
-
   void writejsons(FSStore &store,
                   const std::string &metadata) const
   /* write array's metadata to .json files */
@@ -123,6 +92,37 @@ public:
     constexpr double scale_factor2 = dlc::MASS0grams * dlc::MASS0grams; // grams squared
     writezarrjsons(store, get_name("2"), metadata, dims,
                    units2, scale_factor2);
+  }
+
+  std::pair<unsigned int, unsigned int>
+  writechunks(FSStore &store, const unsigned int chunkcount)
+  /* write data in buffer to a chunk in store alongside metadata jsons */
+  {
+    const std::string chunknum = std::to_string(chunkcount) + ".0";
+
+    storehelpers::writebuffer2chunk(store, mom0, get_name("0"),
+                                    chunknum, chunkcount);
+
+    storehelpers::writebuffer2chunk(store, mom1, get_name("1"),
+                                    chunknum, chunkcount);
+
+    storehelpers::writebuffer2chunk(store, mom2, get_name("2"),
+                                    chunknum, chunkcount);
+
+    return std::pair(chunkcount + 1, 0); // updated {chunkcount, bufferfill}
+  }
+
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const std::array<T, 3> moms,
+              const unsigned int ndata,
+              const unsigned int buffersfill)
+  /* copy value to mass moments to their respective buffers */
+  {
+    storehelpers::val2buffer<T>(moms.at(0), mom0, ndata, buffersfill);
+    storehelpers::val2buffer<T>(moms.at(1), mom1, ndata, buffersfill);
+    storehelpers::val2buffer<T>(moms.at(2), mom2, ndata, buffersfill);
+
+    return std::pair(ndata + 1, buffersfill + 1); // updated {ndata, buffersfill}
   }
 };
 

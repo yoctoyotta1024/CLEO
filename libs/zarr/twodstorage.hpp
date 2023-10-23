@@ -25,6 +25,7 @@
 #include <tuple>
 #include <stdexcept>
 
+#include "./fsstore.hpp"
 #include "./storehelpers.hpp"
 #include "./singlevarstorage.hpp"
 
