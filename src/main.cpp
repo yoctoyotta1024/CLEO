@@ -64,13 +64,13 @@ CoupledDynamics auto
 create_coupldyn(const Config &config,
                 const unsigned int couplstep)
 {
-  return FromFileDynamics(config, couplstep); 
+  return FromFileDynamics(config, couplstep);
 }
 
 GridboxMaps auto
 create_gbxmaps(const Config &config)
 {
-  return CartesianMaps(config); 
+  return CartesianMaps(config);
 }
 
 MicrophysicalProcess auto
@@ -78,15 +78,15 @@ create_microphysics(const Timesteps &tsteps)
 {
   const MicrophysicalProcess auto cond = Condensation(tsteps.get_condstep());
   const MicrophysicalProcess auto colls = Collisions(tsteps.get_collstep());
-  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{}; 
-  
+  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
+
   return cond >> colls;
 }
 
 Motion auto
 create_motion(const unsigned int motionstep)
 {
-  return PredCorrMotion(motionstep); 
+  return PredCorrMotion(motionstep);
 }
 
 Observer auto
@@ -123,15 +123,14 @@ create_observer(const Config &config,
 
   const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk,
                                                  config.ngbxs);
-  
+
   const Observer auto obs8 = RainMassMomentsObserver(obsstep, store, maxchunk,
-                                                 config.ngbxs);
+                                                     config.ngbxs);
 
   const Observer auto obs9 = StateObserver(obsstep, store, maxchunk,
                                            config.ngbxs);
 
-  const Observer auto obs10 = create_supersattrs_observer(obsstep,
-                                                          store,
+  const Observer auto obs10 = create_supersattrs_observer(obsstep, store,
                                                           maxchunk);
 
   return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
@@ -158,17 +157,17 @@ int main(int argc, char *argv[])
   {
     throw std::invalid_argument("configuration file(s) not specified");
   }
- 
+
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
-  const std::string_view config_filename(argv[1]);    // path to configuration file
+  const std::string_view config_filename(argv[1]); // path to configuration file
   const Config config(config_filename);
   const Timesteps tsteps(config); // timesteps for model (e.g. coupling and end time)
 
   /* Create zarr store for writing output to storage */
   FSStore fsstore(config.zarrbasedir);
-    
+
   /* Solver of dynamics coupled to CLEO SDM */
   const CoupledDynamics auto coupldyn(
       create_coupldyn(config, tsteps.get_couplstep()));
@@ -186,7 +185,7 @@ int main(int argc, char *argv[])
     runcleo(initconds, tsteps.get_t_end());
   }
   Kokkos::finalize();
-  
+
   const double ttot(kokkostimer.seconds());
   std::cout << "-----\n Total Program Duration: "
             << ttot << "s \n-----\n";
