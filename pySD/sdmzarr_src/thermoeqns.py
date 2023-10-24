@@ -90,15 +90,15 @@ def saturation_pressure_murphy_koop(TEMP):
 
   return np.exp(lnpsat)               # psat [Pa]
 
-def dry_pot_temp(Temp, P, qv, CONSTS):
+def dry_pot_temp(Temp, P, qv, consts):
     ''' calculate potential Temperature [K]
     assuming moist (unsaturated) air with
     vapour content qv '''
 
-    Cpdry = CONSTS["CP_DRY"]
-    Cpv = CONSTS["CP_V"], 
-    Rgasdry = CONSTS["RGAS_DRY"]
-    Rgasv = CONSTS["RGAS_V"]
+    Cpdry = consts["CP_DRY"]
+    Cpv = consts["CP_V"] 
+    Rgasdry = consts["RGAS_DRY"]
+    Rgasv = consts["RGAS_V"]
 
     Cp =  Cpdry * (1+qv*Cpv/Cpdry)/(1+qv)
     Rgas = Rgasdry *(1+qv*Rgasv/Rgasdry)/(1+qv)
@@ -107,9 +107,9 @@ def dry_pot_temp(Temp, P, qv, CONSTS):
     
     return Theta
 
-def dry_adiabat(p, temp, CONSTS):
+def dry_adiabat(p, temp, consts):
 
-    gamma = (CONSTS["RGAS_DRY"]/CONSTS["CP_DRY"]) 
+    gamma = (consts["RGAS_DRY"]/consts["CP_DRY"]) 
     dry_adia = temp[0]*(p/p[0])**gamma            # dry adiabatic temp
 
     dry_adia_theta = dry_adia*(p[0]/p)**gamma     # dry adiabatic theta (=const)
@@ -117,12 +117,12 @@ def dry_adiabat(p, temp, CONSTS):
     return dry_adia, dry_adia_theta
 
 
-def specific_moist_static_energy(Z, Temp, qv, CONSTS):
+def specific_moist_static_energy(Z, Temp, qv, consts):
     ''' calculate the specific mass moist static 
     energy, mse, J/Kg. (ie. mse per unit mass). '''
     
-    GRAVG = CONSTS["G"] # [m/s^2]
-    Latent_v = CONSTS["LATENT_V"] # [J/Kg]
-    Cp_dry = CONSTS["CP_DRY"] # [J/Kg/K]
+    GRAVG = consts["G"] # [m/s^2]
+    Latent_v = consts["LATENT_V"] # [J/Kg]
+    Cp_dry = consts["CP_DRY"] # [J/Kg/K]
 
     return  GRAVG*Z + Latent_v*qv + Cp_dry*Temp

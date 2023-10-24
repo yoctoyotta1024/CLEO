@@ -1,3 +1,23 @@
+'''
+----- CLEO -----
+File: create_gbxboundaries.py
+Project: gbxboundariesbinary_src
+Created Date: Monday 16th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Tuesday 24th October 2023
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+Copyright (c) 2023 MPI-M, Clara Bayley
+-----
+File Description:
+'''
+
+
 import numpy as np
 
 from .. import cxx2py, writebinary
@@ -7,7 +27,7 @@ def get_COORD0_from_constsfile(constsfile, returnconsts=False):
   required as inputs to create initial 
   superdroplet conditions '''
 
-  consts = cxx2py.read_cpp_into_floats(constsfile, False)[0]
+  consts = cxx2py.read_cxxconsts_into_floats(constsfile)
   COORD0 = consts["TIME0"]*consts["W0"]
   
   if returnconsts:

@@ -23,7 +23,7 @@ domain
 import numpy as np
 import xarray as xr
 
-import thermoeqns
+from . import thermoeqns
 
 def getds(dataset):
 

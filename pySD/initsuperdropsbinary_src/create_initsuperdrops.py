@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 18th October 2023
+Last Modified: Tuesday 24th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -70,9 +70,9 @@ def initSDsinputsdict(configfile, constsfile):
   required as inputs to create initial 
   superdroplet conditions '''
 
-  consts = cxx2py.read_cpp_into_floats(constsfile, False)[0]
-  moreconsts = cxx2py.derive_more_floats(consts, False)
-  config = cxx2py.read_configtxt_into_floats(configfile, False)[0]
+  consts = cxx2py.read_cxxconsts_into_floats(constsfile)
+  mconsts = cxx2py.derive_more_floats(consts)
+  config = cxx2py.read_configparams_into_floats(configfile)
 
   inputs = {
     # for creating SD attribute distirbutions
@@ -81,9 +81,9 @@ def initSDsinputsdict(configfile, constsfile):
 
     # for de-dimensionalising attributes
     "R0":consts["R0"],                          # droplet radius lengthscale [m]
-    "RHO0": moreconsts["RHO0"],                 # characteristic density scale [Kg/m^3]
-    "MASS0": moreconsts["MASS0"],               # characteristic mass scale [Kg]
-    "COORD0": moreconsts["COORD0"],             # z coordinate lengthscale [m]
+    "RHO0": mconsts["RHO0"],                 # characteristic density scale [Kg/m^3]
+    "MASS0": mconsts["MASS0"],               # characteristic mass scale [Kg]
+    "COORD0": mconsts["COORD0"],             # z coordinate lengthscale [m]
   }
 
   return inputs

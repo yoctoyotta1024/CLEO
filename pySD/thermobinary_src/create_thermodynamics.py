@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 18th October 2023
+Last Modified: Tuesday 24th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -28,18 +28,18 @@ def thermoinputsdict(configfile, constsfile):
   required as inputs to create initial 
   superdroplet conditions '''
 
-  consts = cxx2py.read_cpp_into_floats(constsfile, False)[0]
-  moreconsts = cxx2py.derive_more_floats(consts, False)
-  config = cxx2py.read_configtxt_into_floats(configfile, False)[0]
+  consts = cxx2py.read_cxxconsts_into_floats(constsfile)
+  mconsts = cxx2py.derive_more_floats(consts)
+  config = cxx2py.read_configparams_into_floats(configfile)
 
   inputs = {
     # for creating thermodynamic profiles
     "G": consts["G"],
     "CP_DRY": consts["CP_DRY"],
     "RHO_DRY": consts["RHO_DRY"],               # dry air density [Kg/m^3]
-    "RGAS_DRY": moreconsts["RGAS_DRY"],
-    "RGAS_V": moreconsts["RGAS_V"],
-    "Mr_ratio": moreconsts["Mr_ratio"],
+    "RGAS_DRY": mconsts["RGAS_DRY"],
+    "RGAS_V": mconsts["RGAS_V"],
+    "Mr_ratio": mconsts["Mr_ratio"],
     "COUPLTSTEP": config["COUPLTSTEP"],
     "T_END": config["T_END"],
 
@@ -47,9 +47,9 @@ def thermoinputsdict(configfile, constsfile):
     "W0": consts["W0"],
     "P0": consts["P0"],
     "TEMP0": consts["TEMP0"],
-    "RHO0": moreconsts["RHO0"],               # characteristic density scale [Kg/m^3]
-    "CP0": moreconsts["CP0"],
-    "COORD0": moreconsts["COORD0"],           # z coordinate lengthscale [m]
+    "RHO0": mconsts["RHO0"],               # characteristic density scale [Kg/m^3]
+    "CP0": mconsts["CP0"],
+    "COORD0": mconsts["COORD0"],           # z coordinate lengthscale [m]
 
     # for reading dimless thermodynamics
     "nspacedims": config["nspacedims"]

@@ -24,8 +24,8 @@ import numpy as np
 import xarray as xr
 import awkward as ak
 
-import thermodata
-import pysetuptxt
+from . import thermodata
+from . import pysetuptxt
 
 def get_rawdataset(dataset):
 
@@ -38,7 +38,7 @@ def get_config(setuptxt):
 
   return pysetuptxt.config_dict(setuptxt)
 
-def get_conts(setuptxt):
+def get_consts(setuptxt):
   '''returns dictionary of constants
   read from from setup.txt file '''
 

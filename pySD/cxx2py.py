@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 18th October 2023
+Last Modified: Tuesday 24th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -63,20 +63,18 @@ def where_typename_ends(line):
   variable type ends for a const double, 
   double, int or const int. """
 
-  if line[:3] == "int": x=3
-  elif line[:6] == "double": x=6
-  elif line[:11] == "constdouble": x=11
-  elif line[:8] == "constint": x=8
-  elif line[:15] == "constexprdouble": x=15
-  elif line[:12] == "constexprint": x=12
-  elif line[:20] == "constexprunsignedint": x=20
+  if line[:3] == "int": x="int"
+  elif line[:6] == "double": x="double"
+  elif line[:11] == "constdouble": x="constdouble"
+  elif line[:8] == "constint": x="constint"
+  elif line[:12] == "constexprint": x="constexprint"
+  elif line[:15] == "constexprdouble": x="constexprdouble"
+  elif line[:20] == "constexprunsignedint": x="constexprunsignedint"
   else:
-    raise Exception ("variable type not correctly understood or read."+\
-      "It should be a (const) int or (const) double.")
-        
-  return x
+    raise Exception ("c++ type for variable not understood")
+  return len(x)
 
-def read_cpp_into_floats(filename, is_print=True):
+def read_cxxconsts_into_floats(filename):
   """returns dictionary of value: float from 
   (const) doubles and (const) ints
   assigned in a c++ file. Also returns
@@ -103,36 +101,27 @@ def read_cpp_into_floats(filename, is_print=True):
         except ValueError:
           notfloats[name] = value
 
-  if is_print:
-    print_dict_statement(filename, "floats ", floats)
-    print_dict_statement(filename, "not floats", notfloats)
+  return floats
 
-  return floats, notfloats
-
-def derive_more_floats(CONSTS, is_print=True):
-  '''return MCONSTS dictionary containing
+def derive_more_floats(consts):
+  '''return mconsts dictionary containing
     some derived key,values from values in
-    CONSTS dictionary'''
+    consts dictionary'''
    
-  MCONSTS = {
-    "COORD0"     : CONSTS["TIME0"]*CONSTS["W0"], # characteristic coordinate grid scale [m]
-    "RGAS_DRY"   : CONSTS["RGAS_UNIV"]/CONSTS["MR_DRY"], # specific gas constant for dry air [J/Kg/K]  
-    "RGAS_V"     : CONSTS["RGAS_UNIV"]/CONSTS["MR_WATER"], #specific gas constant for water [J/Kg/K]
-    "CP0"        : CONSTS["CP_DRY"], # characteristic Heat capacity [J/Kg/K]
-    "MR0"        : CONSTS["MR_DRY"], # characteristic molecular molar mass [Kg/mol]
-    "Mr_ratio"   : CONSTS["MR_WATER"]/CONSTS["MR_DRY"],
+  mconsts = {
+    "COORD0"     : consts["TIME0"]*consts["W0"], # characteristic coordinate grid scale [m]
+    "RGAS_DRY"   : consts["RGAS_UNIV"]/consts["MR_DRY"], # specific gas constant for dry air [J/Kg/K]  
+    "RGAS_V"     : consts["RGAS_UNIV"]/consts["MR_WATER"], #specific gas constant for water [J/Kg/K]
+    "CP0"        : consts["CP_DRY"], # characteristic Heat capacity [J/Kg/K]
+    "Mr_ratio"   : consts["MR_WATER"]/consts["MR_DRY"],
   }
   
-  MCONSTS["RHO0"]       = CONSTS["P0"]/(MCONSTS["CP0"]*CONSTS["TEMP0"]) # characteristic density [Kg/m^3]
-  MCONSTS["MASS0"]      = (CONSTS["R0"]**3) * MCONSTS["RHO0"] # characteristic mass [Kg]
-  MCONSTS["Rho_sol"]    =  CONSTS["RHO_SOL"]/MCONSTS["RHO0"]     # dimensionless solute density []
+  mconsts["RHO0"]       = consts["P0"]/(mconsts["CP0"]*consts["TEMP0"]) # characteristic density [Kg/m^3]
+  mconsts["MASS0"]      = (consts["R0"]**3) * mconsts["RHO0"] # characteristic mass [Kg]
 
-  if is_print:
-    print_dict_statement("CONSTS dict", "derived constants (MCONSTS)", MCONSTS)
+  return mconsts 
 
-  return MCONSTS
-
-def read_configtxt_into_floats(filename, is_print=True):
+def read_configparams_into_floats(filename):
   """returns dictionary of value: float from 
   values assigned in a config .txt file. 
   Also returns dictionary of notfloats 
@@ -159,16 +148,8 @@ def read_configtxt_into_floats(filename, is_print=True):
         notfloats[name] = value
 
   try:
-    floats["totnsupers0"] = int(floats["totnsupers"])              # initial total no. of superdrops 
-  except:
-    pass
-  try:
     floats["nspacedims"] = int(floats["nspacedims"])              # no spatial coords to SDs
   except:
     pass
 
-  if is_print:
-    print_dict_statement(filename, "floats ", floats)
-    print_dict_statement(filename, "not floats", notfloats)
-
-  return floats, notfloats
+  return floats
