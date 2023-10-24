@@ -96,6 +96,7 @@ create_supersattrs_observer(const unsigned int interval,
 {
   SuperdropsBuffers auto buffers = SdIdBuffer() >>
                                    XiBuffer() >>
+                                   MsolBuffer() >>
                                    RadiusBuffer();
   return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }

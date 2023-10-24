@@ -109,8 +109,7 @@ struct SdIdBuffer : SuperdropAttrBuffer<size_t>
 
 struct XiBuffer : SuperdropAttrBuffer<unsigned long long>
 {
-  XiBuffer()
-      : SuperdropAttrBuffer("xi", "<u8"){};
+  XiBuffer() : SuperdropAttrBuffer("xi", "<u8"){};
 
   std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,
@@ -124,8 +123,7 @@ struct XiBuffer : SuperdropAttrBuffer<unsigned long long>
 
 struct RadiusBuffer : SuperdropAttrBuffer<double>
 {
-  RadiusBuffer()
-      : SuperdropAttrBuffer("radius", "<f8"){};
+  RadiusBuffer() : SuperdropAttrBuffer("radius", "<f8"){};
 
   std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,
@@ -145,6 +143,31 @@ struct RadiusBuffer : SuperdropAttrBuffer<double>
     scale factor to convert dimless radius to microns */
     constexpr double sf = dlc::R0 * 1e6;
     storehelpers::writezattrsjson(store, attr, md.dims, "micro m", sf);
+  }
+};
+
+struct MsolBuffer : SuperdropAttrBuffer<double>
+{
+  MsolBuffer() : SuperdropAttrBuffer("msol", "<f8"){};
+
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j)
+  {
+    return storagehelper::
+        val2buffer<double>(superdrop.get_msol(), buffer, ndata, j);
+  }
+
+  void writejsons(FSStore &store, const SomeMetadata &md) const
+  /* write metadata for attr's array into store */
+  {
+    /* write array metadata (and array .zattrs) json */
+    SuperdropAttrBuffer::writejsons(store, md);
+
+    /* rewrite array .zattrs json with correct units
+    and scale factor to convert to grams */
+    storehelpers::writezattrsjson(store, attr, md.dims,
+                                  "g", dlc::MASS0grams);
   }
 };
 
