@@ -215,33 +215,33 @@ struct Coord3Buffer : SuperdropCoordBuffer
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
-    return storehelpers::val2buffer<double>(superdrop.get_coord3,
+    return storehelpers::val2buffer<double>(superdrop.get_coord3(),
                                             buffer, ndata, j);
   }
 };
 
-struct Coord1IntoStore : SuperdropCoordBuffer
+struct Coord1Buffer : SuperdropCoordBuffer
 {
-  Coord1IntoStore() : SuperdropCoordBuffer("coord1"){};
+  Coord1Buffer() : SuperdropCoordBuffer("coord1"){};
 
   std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
-    return storehelpers::val2buffer<double>(superdrop.get_coord1,
+    return storehelpers::val2buffer<double>(superdrop.get_coord1(),
                                             buffer, ndata, j);
   }
 };
 
-struct Coord2IntoStore : SuperdropCoordBuffer
+struct Coord2Buffer : SuperdropCoordBuffer
 {
-  Coord2IntoStore() : SuperdropCoordBuffer("coord2"){};
+  Coord2Buffer() : SuperdropCoordBuffer("coord2"){};
 
   std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
-    return storehelpers::val2buffer<double>(superdrop.get_coord2,
+    return storehelpers::val2buffer<double>(superdrop.get_coord2(),
                                             buffer, ndata, j);
   }
 };
