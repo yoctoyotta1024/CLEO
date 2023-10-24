@@ -37,6 +37,7 @@ def get_gridboxes(gridfile, COORD0, isprint=True):
     "ngrid": ngrid, # number of gridboxes 
     "ndims": np.flip(ndims), # dimensions (no. gridboxes in [y,x,z] direction)
     "domainvol": domainvol,
+    "domainarea": domainvol / (np.amax(zhalf) - np.amin(zhalf)), # x-y plane horizontal are
     "gbxvols": gbxvols, # list of vols of each gbx 
     
     "zhalf": zhalf, # half cell coords (boundaries)

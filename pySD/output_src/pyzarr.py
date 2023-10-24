@@ -28,10 +28,16 @@ from . import thermodata
 from . import supersdata
 from . import massmoms
 from . import timedata
-from . import sdtracing
 
 def get_rawdataset(dataset):
   return xr.open_dataset(dataset, engine="zarr", consolidated=False)
+
+def get_rawdata4key(dataset, key):
+  return get_rawdataset(dataset)[key]
+
+def get_rawdata4raggedkey(dataset, key):
+  ds = get_rawdataset(dataset)
+  return ak.unflatten(ds[key].values, ds["rgd_totnsupers"].values)
 
 def raggedvar_fromzarr(ds, raggedcount, var):
   ''' returns ragged ak.Array dims [time, ragged]
@@ -99,3 +105,34 @@ def get_nsupers(dataset, ntime, ndims):
 
 def get_nrainsupers(dataset, ntime, ndims):
   return var4d_fromzarr(dataset, ntime, ndims, "nrainsupers")
+
+def surfaceprecip_estimate(dataset, gbxs):
+  ''' use last radius of SDs before they leave the domain to
+  estimate the volume of precipitation at each timestep.
+  Values should be approx. equal to sum over gbxs (multiplied
+  by area_gbx/area_domain) of logbook values for precip'''
+
+  ds = get_rawdataset(dataset)
+
+  sdId = ak.unflatten(ds["sdId"].values, ds["rgd_totnsupers"].values)
+  radius = ak.unflatten(ds["radius"].values, ds["rgd_totnsupers"].values)
+  xi = ak.unflatten(ds["xi"].values, ds["rgd_totnsupers"].values)
+
+  r3sum = []
+  for ti in range(ds.time.shape[0]-1):
+      sd_ti, r_ti, xi_ti = sdId[ti], radius[ti], xi[ti]
+      sds_gone = set(sd_ti) - set(sdId[ti+1]) # set of SD indexes that have left domain during timestep ti -> ti+1
+      isgone = np.where(np.isin(sd_ti, list(sds_gone))) # indexes in ragged arrays of SDs that leave during timestep ti -> ti+1
+      r3sum.append(np.dot(r_ti[isgone]**3, xi_ti[isgone])) # sum of (real) droplet radii^3 that left domain [microns^3]
+  precipvol = 4/3 * np.pi * np.asarray(r3sum) / (1e18) # volume of water that left domain [m^3]
+
+  domainy = np.amax(gbxs["yhalf"]) - np.amin(gbxs["yhalf"]) # [m]
+  domainx = np.amax(gbxs["xhalf"]) - np.amin(gbxs["xhalf"]) # [m]
+  deltat = np.diff(ds["time"].values) / 60 / 60 # [hrs]
+  preciprate = precipvol * 1000 / (domainx * domainy) / deltat # [mm/hr]
+
+  precipaccum = np.cumsum(preciprate * deltat) # [mm]
+  preciprate = np.insert(preciprate, 0, 0) # at t=0, precip rate = 0
+  precipaccum = np.insert(precipaccum, 0, 0) # at t=0, accumulated precip = 0
+
+  return preciprate, precipaccum # [mm/hr] , [mm]
