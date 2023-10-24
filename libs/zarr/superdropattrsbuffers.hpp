@@ -122,4 +122,31 @@ struct XiBuffer : SuperdropAttrBuffer<unsigned long long>
   }
 };
 
+struct RadiusBuffer : SuperdropAttrBuffer<double>
+{
+  RadiusBuffer()
+      : SuperdropAttrBuffer("radius", "<f8"){};
+
+  std::pair<unsigned int, unsigned int> 
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j)
+  {
+    return storehelpers::val2buffer<double>(superdrop.get_radius(),
+                                            buffer, ndata, j);
+  }
+
+  void writejsons(FSStore &store, const SomeMetadata &md) const
+  /* write metadata for attr's array into store */
+  {
+    /* write array metadata (and array .zattrs) json */
+    SuperdropAttrBuffer::writejsons(store, md);
+
+    /* rewrite array .zattrs json */
+    constexpr double sf = dlc::R0 * 1e6; // scale factor to convert dimless radius to microns
+    const std::string arrayattrs(storehelpers::
+                                     arrayattrs(md.dims, "micro m", sf));
+    store[attr + "/.zattrs"] = arrayattrs;
+  }
+};
+
 #endif // SUPDROPRSATTRSBUFFERS_HPP 
