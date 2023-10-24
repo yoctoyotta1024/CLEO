@@ -60,7 +60,7 @@ public:
   DoSupersAttrsObs(FSStore &store,
                    const int maxchunk,
                    Buffers buffers)
-      : zarr(std::make_shared<store_type>(store, maxchunk, buffers)){}
+      : zarr(std::make_shared<store_type>(store, maxchunk, buffers)) {}
 
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {

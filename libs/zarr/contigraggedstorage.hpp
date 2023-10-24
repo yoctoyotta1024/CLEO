@@ -132,11 +132,11 @@ private:
 
 public:
   ContigRaggedStorage(FSStore &store,
-                      const size_t maxchunk,
-                      Buffers buffers)
-      : store(store), chunksize(maxchunk), rgdcount(chunksize),
+                      const size_t imaxchunk,
+                      const Buffers ibuffers)
+      : store(store), chunksize(imaxchunk), rgdcount(chunksize),
         rgdcount_chunkcount(0), rgdcount_bufferfill(0),
-        rgdcount_ndata(0), buffers(buffers),
+        rgdcount_ndata(0), buffers(ibuffers),
         chunkcount(0), buffersfill(0), ndata(0)
   {
     buffers.set_buffersize(chunksize);
