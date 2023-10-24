@@ -139,7 +139,7 @@ public:
         rgdcount_ndata(0), buffers(ibuffers),
         chunkcount(0), buffersfill(0), ndata(0)
   {
-    buffers.set_buffersize(chunksize);
+    buffers.set_buffer(chunksize);
   }
 
   ~ContigRaggedStorage()

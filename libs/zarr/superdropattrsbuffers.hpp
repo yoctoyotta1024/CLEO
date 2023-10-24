@@ -88,12 +88,9 @@ obeying the zarr storage specificatino version 2.0 via
     storehelpers::writezarrjsons(store, attr, metadata, arrayattrs);
   }
 
-  void set_buffersize(const size_t maxchunk)
+  void set_buffer(const size_t maxchunk)
   {
-    if (buffer.size() != maxchunk)
-    {
-      buffer = std::vector<T>(maxchunk, std::numeric_limits<T>::max());
-    }
+    buffer = std::vector<T>(maxchunk, std::numeric_limits<T>::max());
   }
 };
 

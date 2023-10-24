@@ -86,7 +86,7 @@ using the contigraggedstorage structure */
   } -> std::same_as<void>;
 
   {
-    b.set_buffersize(u)
+    b.set_buffer(u)
   } -> std::same_as<void>;
 };
 
@@ -127,10 +127,10 @@ SuperdropsBuffers is A followed by B */
     b.writejsons(store, md);
   }
 
-  void set_buffersize(const size_t maxchunk)
+  void set_buffer(const size_t maxchunk)
   {
-    a.set_buffersize(maxchunk);
-    b.set_buffersize(maxchunk);
+    a.set_buffer(maxchunk);
+    b.set_buffer(maxchunk);
   }
 };
 
@@ -160,7 +160,7 @@ completeness of a Monoid Structure) */
 
   void writejsons(FSStore &store, const SomeMetadata &md) const {}
   
-  void set_buffersize(const size_t maxchunk) const {}
+  void set_buffer(const size_t maxchunk) const {}
 };
 
 #endif //SUPERDROPSBUFFERS_HPP 
