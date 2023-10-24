@@ -78,6 +78,9 @@ def get_time(dataset):
 def get_massmoms(dataset, ntime, ndims):
   return massmoms.MassMoms(dataset, ntime, ndims)
 
+def get_rainmassmoms(dataset, ntime, ndims):
+  return massmoms.MassMoms(dataset, ntime, ndims, lab="rain")
+
 def get_gbxindex(dataset, ndims):
   return var3d_fromzarr(dataset, ndims, "gbxindex")
 

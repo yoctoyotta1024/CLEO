@@ -23,22 +23,22 @@ domain
 import numpy as np
 import xarray as xr
 
-class MassMoments:
+class MassMoms:
 
   def __init__(self, dataset, ntime, ndims, lab=""):
     
     ds = self.tryopen_dataset(dataset) 
     reshape = [ntime] + list(ndims)
     
-    self.nsupers = self.var4d_fromzarr(ds, reshape, "n"+lab+"supers")      # number of superdroplets in gbxs over time
-    self.mom0 = self.var4d_fromzarr(ds, reshape, "mom0"+lab)               # number of droplets in gbxs over time
-    self.mom1 = self.var4d_fromzarr(ds, reshape, "mom1"+lab)               # total mass of droplets in gbxs over time
-    self.mom2 = self.var4d_fromzarr(ds, reshape, "mom2"+lab)               # 2nd mass moment of droplets (~reflectivity)
+    self.nsupers = self.var4d_fromzarr(ds, reshape, "n"+lab+"supers")          # number of superdroplets in gbxs over time
+    self.mom0 = self.var4d_fromzarr(ds, reshape, "massmom0"+lab)               # number of droplets in gbxs over time
+    self.mom1 = self.var4d_fromzarr(ds, reshape, "massmom1"+lab)               # total mass of droplets in gbxs over time
+    self.mom2 = self.var4d_fromzarr(ds, reshape, "massmom2"+lab)               # 2nd mass moment of droplets (~reflectivity)
     self.effmass = self.effective_mass()
 
-    self.mom1_units = ds["mom1"].units                                # probably grams
-    self.mom2_units = ds["mom2"].units                                # probably grams^2
-    self.effmass_units = ds["mom2"].units + "/" + ds["mom1"].units    # probably grams
+    self.mom1_units = ds["massmom1"].units                                    # probably grams
+    self.mom2_units = ds["massmom2"].units                                    # probably grams^2
+    self.effmass_units = ds["massmom2"].units + "/" + ds["massmom1"].units    # probably grams
 
   def tryopen_dataset(self, dataset):
     
@@ -48,11 +48,11 @@ class MassMoments:
     else:
       return dataset
   
-  def var4d_fromzarr(self, ds, key):
+  def var4d_fromzarr(self, ds, reshape, key):
     '''' returns 4D variable with dims
     [time, y, x, z] from zarr dataset "ds" '''
       
-    return np.reshape(ds[key].values, self.reshape) 
+    return np.reshape(ds[key].values, reshape) 
 
   def effective_mass(self):
     ''' effective mass of droplets '''
