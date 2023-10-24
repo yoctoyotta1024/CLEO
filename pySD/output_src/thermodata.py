@@ -44,9 +44,10 @@ class Thermodata:
     self.temp_units = ds["temp"].units # probably kelvin
     self.theta_units = ds["temp"].units # probably kelvin
 
-  def tryopen_dataset(dataset):
+  def tryopen_dataset(self, dataset):
     
     if type(dataset) == str:
+      print("thermodata dataset: ", dataset)
       return xr.open_dataset(dataset, engine="zarr", consolidated=False) 
     else:
       return dataset
