@@ -154,8 +154,8 @@ struct MsolBuffer : SuperdropAttrBuffer<double>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
-    return storagehelper::
-        val2buffer<double>(superdrop.get_msol(), buffer, ndata, j);
+    return storehelpers::val2buffer<double>(superdrop.get_msol(),
+                                            buffer, ndata, j);
   }
 
   void writejsons(FSStore &store, const SomeMetadata &md) const
@@ -171,4 +171,17 @@ struct MsolBuffer : SuperdropAttrBuffer<double>
   }
 };
 
+struct SdgbxindexBuffer : SuperdropAttrBuffer<unsigned int>
+{
+  SdgbxindexBuffer() : SuperdropAttrBuffer("sd_gbxindex", "<u4"){};
+
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j)
+  {
+    return storehelpers::
+        val2buffer<unsigned int>(superdrop.get_sdgbxindex(),
+                                 buffer, ndata, j);
+  }
+};
 #endif // SUPDROPRSATTRSBUFFERS_HPP
