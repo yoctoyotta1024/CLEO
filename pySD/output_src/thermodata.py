@@ -25,16 +25,11 @@ import xarray as xr
 
 from . import thermoeqns
 
-def getds(dataset):
-
-  return xr.open_dataset(dataset, engine="zarr", consolidated=False)
-
-
 class Thermodata:
 
   def __init__(self, dataset, ntime, ndims, consts):
-    
-    ds = getds(dataset) 
+
+    ds = self.tryopen_dataset(dataset) 
     
     self.consts = consts 
     self.reshape = [ntime] + list(ndims)
@@ -49,6 +44,13 @@ class Thermodata:
     self.temp_units = ds["temp"].units # probably kelvin
     self.theta_units = ds["temp"].units # probably kelvin
 
+  def tryopen_dataset(dataset):
+    
+    if type(dataset) == str:
+      return xr.open_dataset(dataset, engine="zarr", consolidated=False) 
+    else:
+      return dataset
+ 
   def var4d_fromzarr(self, ds, key):
     '''' returns 4D variable with dims
     [time, y, x, z] from zarr dataset "ds" '''

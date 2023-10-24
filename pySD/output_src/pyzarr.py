@@ -25,7 +25,7 @@ import xarray as xr
 import awkward as ak
 
 from . import thermodata
-from . import pysetuptxt
+from . import sddata
 
 def get_rawdataset(dataset):
 
@@ -60,6 +60,10 @@ def get_thermodata(dataset, ntime, ndims, consts):
   the qvap of all gridboxes at the 0th output time '''
 
   return thermodata.Thermodata(dataset, ntime, ndims, consts)
+
+def get_sddata(dataset):
+  
+  return sddata.SdData(dataset)
 
 def get_gbxindex(dataset, ndims):
 
