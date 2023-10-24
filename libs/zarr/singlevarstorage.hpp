@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -59,7 +59,7 @@ protected:
     const std::string arrayattrs = storehelpers::
         arrayattrs(dims, units, scale_factor);
 
-    storehelpers::writezarrjsons(store, name, metadata, arrayattrs);
+    storehelpers::writejsons(store, name, metadata, arrayattrs);
   }
 
 private:

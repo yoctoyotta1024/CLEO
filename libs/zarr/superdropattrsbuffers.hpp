@@ -83,9 +83,10 @@ obeying the zarr storage specificatino version 2.0 via
                  md.chunks, dtype, md.compressor,
                  md.fill_value, md.filters);
 
-    const std::string arrayattrs = "{\"_ARRAY_DIMENSIONS\": " + md.dims + "}";
+    const std::string
+        arrayattrs("{\"_ARRAY_DIMENSIONS\": " + md.dims + "}");
 
-    storehelpers::writezarrjsons(store, attr, metadata, arrayattrs);
+    storehelpers::writejsons(store, attr, metadata, arrayattrs);
   }
 
   void set_buffer(const size_t maxchunk)

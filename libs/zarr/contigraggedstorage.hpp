@@ -104,9 +104,9 @@ private:
             metadata(zarr_format, order, rgdcount_ndata, chunksize,
                      rgdcount_dtype, compressor, fill_value, filters);
 
-    storehelpers::writezarrjsons(store, rgdcount_name,
-                                  count_metadata,
-                                  count_arrayattrs);
+    storehelpers::writejsons(store, rgdcount_name,
+                             count_metadata,
+                             count_arrayattrs);
   }
 
   void rgdcount_writechunk()

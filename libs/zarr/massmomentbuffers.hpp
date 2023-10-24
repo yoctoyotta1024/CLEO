@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -97,17 +97,17 @@ public:
 
     const std::string units0 = " ";
     constexpr double scale_factor0 = 1.0;
-    storehelpers::writezarrjsons(store, get_name("0"), metadata,
+    storehelpers::writejsons(store, get_name("0"), metadata,
                                  dims, units0, scale_factor0);
 
     const std::string units1 = "g";
     constexpr double scale_factor1 = dlc::MASS0grams; // grams
-    storehelpers::writezarrjsons(store, get_name("1"), metadata,
+    storehelpers::writejsons(store, get_name("1"), metadata,
                                  dims, units1, scale_factor1);
 
     const std::string units2 = "g^2";
     constexpr double scale_factor2 = dlc::MASS0grams * dlc::MASS0grams; // grams squared
-    storehelpers::writezarrjsons(store, get_name("2"), metadata,
+    storehelpers::writejsons(store, get_name("2"), metadata,
                                  dims, units2, scale_factor2);
   }
 };

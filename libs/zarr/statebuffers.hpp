@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -96,19 +96,18 @@ public:
   {
     const std::string dims = "[\"time\", \"gbxindex\"]";
 
-    storehelpers::writezarrjsons(store, "press", metadata,
-                                 dims, "hPa", dlc::P0 / 100);
+    storehelpers::writejsons(store, "press", metadata,
+                             dims, "hPa", dlc::P0 / 100);
 
-    storehelpers::writezarrjsons(store, "temp", metadata,
-                                 dims, "K", dlc::TEMP0);
+    storehelpers::writejsons(store, "temp", metadata,
+                             dims, "K", dlc::TEMP0);
 
-    storehelpers::writezarrjsons(store, "qvap", metadata,
-                                 dims, " ", 1.0);
+    storehelpers::writejsons(store, "qvap", metadata,
+                             dims, " ", 1.0);
 
-    storehelpers::writezarrjsons(store, "qcond", metadata,
-                                 dims, " ", 1.0);
+    storehelpers::writejsons(store, "qcond", metadata,
+                             dims, " ", 1.0);
   }
 };
-
 
 #endif //  STATEBUFFERS_HPP  

@@ -187,7 +187,7 @@ array in a store, and an array's metadata to a store */
     store[name + "/.zattrs"] = arrayattrs(dims, units, scale_factor);
   }
 
-  inline void writezarrjsons(FSStore &store,
+  inline void writejsons(FSStore &store,
                              const std::string &name,
                              const std::string &metadata,
                              const std::string &arrayattrs)
@@ -203,7 +203,7 @@ array in a store, and an array's metadata to a store */
     store[name + "/.zattrs"] = arrayattrs;
   }
 
-  inline void writezarrjsons(FSStore &store,
+  inline void writejsons(FSStore &store,
                       const std::string &name,
                       const std::string &metadata,
                       const std::string &dims,
@@ -215,7 +215,7 @@ array in a store, and an array's metadata to a store */
     const std::string arrayattrs(
         storehelpers::arrayattrs(dims, units, scale_factor));
 
-    storehelpers::writezarrjsons(store, name, metadata, arrayattrs);
+    storehelpers::writejsons(store, name, metadata, arrayattrs);
   }
 };
 
