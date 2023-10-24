@@ -94,6 +94,20 @@ obeying the zarr storage specificatino version 2.0 via
   }
 };
 
+struct SdgbxindexBuffer : SuperdropAttrBuffer<unsigned int>
+{
+  SdgbxindexBuffer() : SuperdropAttrBuffer("sdgbxindex", "<u4"){};
+
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j)
+  {
+    return storehelpers::
+        val2buffer<unsigned int>(superdrop.get_sdgbxindex(),
+                                 buffer, ndata, j);
+  }
+};
+
 struct SdIdBuffer : SuperdropAttrBuffer<size_t>
 {
   SdIdBuffer() : SuperdropAttrBuffer("sdId", "<u8"){};
@@ -171,17 +185,65 @@ struct MsolBuffer : SuperdropAttrBuffer<double>
   }
 };
 
-struct SdgbxindexBuffer : SuperdropAttrBuffer<unsigned int>
+struct SuperdropCoordBuffer : SuperdropAttrBuffer<double>
 {
-  SdgbxindexBuffer() : SuperdropAttrBuffer("sd_gbxindex", "<u4"){};
+  SuperdropCoordBuffer(const std::string attr)
+      : SuperdropAttrBuffer(attr, "<f8"){};
+
+  virtual std::pair<unsigned int, unsigned int>
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j) = 0;
+
+  void writejsons(FSStore &store, const SomeMetadata &md) const
+  /* write metadata for attr's array into store */
+  {
+    /* write array metadata (and array .zattrs) json */
+    SuperdropAttrBuffer::writejsons(store, md);
+
+    /* rewrite array .zattrs json with correct units
+    and scale factor to convert to metres */
+    storehelpers::writezattrsjson(store, attr, md.dims,
+                                  "m", dlc::COORD0);
+  }
+};
+
+struct Coord3Buffer : SuperdropCoordBuffer
+{
+  Coord3Buffer() : SuperdropCoordBuffer("coord3"){};
 
   std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
-    return storehelpers::
-        val2buffer<unsigned int>(superdrop.get_sdgbxindex(),
-                                 buffer, ndata, j);
+    return storehelpers::val2buffer<double>(superdrop.get_coord3,
+                                            buffer, ndata, j);
   }
 };
+
+struct Coord1IntoStore : SuperdropCoordBuffer
+{
+  Coord1IntoStore() : SuperdropCoordBuffer("coord1"){};
+
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j)
+  {
+    return storehelpers::val2buffer<double>(superdrop.get_coord1,
+                                            buffer, ndata, j);
+  }
+};
+
+struct Coord2IntoStore : SuperdropCoordBuffer
+{
+  Coord2IntoStore() : SuperdropCoordBuffer("coord2"){};
+
+  std::pair<unsigned int, unsigned int>
+  copy2buffer(const Superdrop &superdrop,
+              const unsigned int ndata, const unsigned int j)
+  {
+    return storehelpers::val2buffer<double>(superdrop.get_coord2,
+                                            buffer, ndata, j);
+  }
+};
+
 #endif // SUPDROPRSATTRSBUFFERS_HPP
