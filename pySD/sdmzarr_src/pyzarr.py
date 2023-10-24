@@ -24,7 +24,18 @@ import numpy as np
 import xarray as xr
 import awkward as ak
 
+import thermodata
+
 def get_rawdataset(dataset):
 
   print("dataset: ", dataset)
   return xr.open_dataset(dataset, engine="zarr", consolidated=False)
+
+def get_thermodata(dataset, setup, ndims):
+  ''' returns a thermodynamic data in a dictionary. The value under 
+  each key is the thermodynamics data in a 2D array 
+  with dimensions [time, gridbox]. E.g. thermo["qvap"][:,0] gives the 
+  timeseries of qvap for the 0th gridbox. thermo["qvap][0] gives 
+  the qvap of all gridboxes at the 0th output time '''
+
+  return thermodata.Thermodata(dataset, setup, ndims)
