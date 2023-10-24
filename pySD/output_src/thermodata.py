@@ -37,24 +37,23 @@ class Thermodata:
     ds = getds(dataset) 
     
     self.consts = consts 
+    self.reshape = [ntime] + list(ndims)
 
-    self.press = self.var4d_fromzarr(ds, ntime, ndims, "press")
-    self.temp = self.var4d_fromzarr(ds, ntime, ndims, "temp")
-    self.qvap = self.var4d_fromzarr(ds, ntime, ndims, "qvap")
-    self.qcond = self.var4d_fromzarr(ds, ntime, ndims, "qcond") 
+    self.press = self.var4d_fromzarr(ds, "press")
+    self.temp = self.var4d_fromzarr(ds, "temp")
+    self.qvap = self.var4d_fromzarr(ds, "qvap")
+    self.qcond = self.var4d_fromzarr(ds, "qcond") 
     self.theta = self.potential_temp() 
 
     self.press_units = ds["press"].units # probably hecto pascals
     self.temp_units = ds["temp"].units # probably kelvin
     self.theta_units = ds["temp"].units # probably kelvin
 
-  def var4d_fromzarr(ds, ntime, ndims, key):
+  def var4d_fromzarr(self, ds, key):
     '''' returns 4D variable with dims
     [time, y, x, z] from zarr dataset "ds" '''
-  
-    reshape = [ntime] + list(ndims)
-    
-    return np.reshape(ds[key].values, reshape) 
+      
+    return np.reshape(ds[key].values, self.reshape) 
 
   def potential_temp(self):
     ''' potential temperature, theta '''

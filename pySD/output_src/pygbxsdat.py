@@ -1,6 +1,6 @@
 '''
 ----- CLEO -----
-File: pygbxdat.py
+File: pygbxsdat.py
 Project: output_src
 Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
@@ -21,16 +21,17 @@ boudnaries binary inputs files
 
 import numpy as np
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
+from ..cxx2py import print_dict_statement
 
 def get_gridboxes(gridfile, COORD0, isprint=True):
 
   gbxbounds, ndims =  rgrid.read_dimless_gbxboundaries_binary(gridfile,
                                                               COORD0=COORD0,
                                                               return_ndims=True,
-                                                              isprint=isprint) 
+                                                              isprint=False) 
   zhalf, xhalf, yhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds,
-                                                        isprint=isprint)
-  domainvol, gbxvols, ngrid = rgrid.domaininfo(gbxbounds, isprint=isprint)
+                                                        isprint=False)
+  domainvol, gbxvols, ngrid = rgrid.domaininfo(gbxbounds, isprint=False)
  
   gbxs = {
     "ngrid": ngrid, # number of gridboxes 
@@ -54,4 +55,7 @@ def get_gridboxes(gridfile, COORD0, isprint=True):
   gbxs["xxh"], gbxs["zzh"] = xxh, zzh
   gbxs["xxf"], gbxs["zzf"] = xxf, zzf
   
+  if isprint:
+    print_dict_statement(gridfile, "gbxs", gbxs)
+
   return gbxs 
