@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
 File: pysetuptxt.py
-Project: sdmzarr_src
+Project: output_src
 Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
