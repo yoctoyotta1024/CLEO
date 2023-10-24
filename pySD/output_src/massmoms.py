@@ -25,15 +25,15 @@ import xarray as xr
 
 class MassMoments:
 
-  def __init__(self, dataset, ntime, ndims):
+  def __init__(self, dataset, ntime, ndims, lab=""):
     
     ds = self.tryopen_dataset(dataset) 
     reshape = [ntime] + list(ndims)
     
-    self.nsupers = self.var4d_fromzarr(ds, reshape, "nsupers")         # number of superdroplets in gbxs over time
-    self.mom0 = self.var4d_fromzarr(ds, reshape, "mom0")               # number of droplets in gbxs over time
-    self.mom1 = self.var4d_fromzarr(ds, reshape, "mom1")               # total mass of droplets in gbxs over time
-    self.mom2 = self.var4d_fromzarr(ds, reshape, "mom2")               # 2nd mass moment of droplets (~reflectivity)
+    self.nsupers = self.var4d_fromzarr(ds, reshape, "n"+lab+"supers")      # number of superdroplets in gbxs over time
+    self.mom0 = self.var4d_fromzarr(ds, reshape, "mom0"+lab)               # number of droplets in gbxs over time
+    self.mom1 = self.var4d_fromzarr(ds, reshape, "mom1"+lab)               # total mass of droplets in gbxs over time
+    self.mom2 = self.var4d_fromzarr(ds, reshape, "mom2"+lab)               # 2nd mass moment of droplets (~reflectivity)
     self.effmass = self.effective_mass()
 
     self.mom1_units = ds["mom1"].units                                # probably grams
