@@ -39,10 +39,11 @@ def var4d_fromzarr(ds, ntime, ndims, key):
 
 class Thermodata:
 
-  def __init__(self, dataset, ntime, ndims, CONSTS):
+  def __init__(self, dataset, ntime, ndims, consts):
     
     ds = getds(dataset) 
-    self.CONSTS = CONSTS
+    
+    self.consts = consts 
 
     self.press = var4d_fromzarr(ds, ntime, ndims, "press")
     self.temp = var4d_fromzarr(ds, ntime, ndims, "temp")
@@ -59,7 +60,7 @@ class Thermodata:
 
     press = self.press*100 # convert from hPa to Pa
     theta = thermoeqns.dry_pot_temp(self.temp, press,
-                                    self.qvap, self.CONSTS)        
+                                    self.qvap, self.consts)        
   
     return theta
   
@@ -74,7 +75,7 @@ class Thermodata:
     '''returns vapour pressure in hectoPascals '''
     
     p_pascals = self.press*100 # convert from hPa to Pa
-    Mr_ratio = self.CONSTS["Mr_ratio"]
+    Mr_ratio = self.consts["Mr_ratio"]
     pvap = thermoeqns.vapour_pressure(p_pascals, self.qvap, Mr_ratio) # [Pa]
    
     return pvap / 100 # [hPa]
@@ -83,7 +84,7 @@ class Thermodata:
     ''' returns relative humidty and supersaturation '''
     
     p_pascals = self.press*100 # convert from hPa to Pa
-    Mr_ratio = self.CONSTS["Mr_ratio"]
+    Mr_ratio = self.consts["Mr_ratio"]
     relh = thermoeqns.relative_humidity(p_pascals, self.temp, 
                                         self.qvap, Mr_ratio)
     return relh
@@ -92,7 +93,7 @@ class Thermodata:
     ''' returns relative humidty and supersaturation '''
     
     p_pascals = self.press*100 # convert from hPa to Pa
-    Mr_ratio = self.CONSTS["Mr_ratio"]
+    Mr_ratio = self.consts["Mr_ratio"]
     supersat = thermoeqns.supersaturation(p_pascals, self.temp, 
                                           self.qvap, Mr_ratio)
     return supersat
