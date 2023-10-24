@@ -28,6 +28,7 @@ from . import thermodata
 from . import supersdata
 from . import massmoms
 from . import timedata
+from . import sdtracing
 
 def get_rawdataset(dataset):
   return xr.open_dataset(dataset, engine="zarr", consolidated=False)

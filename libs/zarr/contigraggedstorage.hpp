@@ -67,7 +67,7 @@ private:
   void buffers_writejsons()
   {
     // write strictly required metadata to decode chunks (MUST)
-    const std::string dims = "[\"sdindex\"]";
+    const std::string dims = "[\"sdId\"]";
     const SomeMetadata md(zarr_format, order, ndata, chunksize,
                           compressor, fill_value, filters, dims);
     buffers.writejsons(store, md);
