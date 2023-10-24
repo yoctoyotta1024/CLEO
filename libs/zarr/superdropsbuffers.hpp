@@ -22,9 +22,8 @@
  * in a FFStore obeying zarr storage specification verion 2:
  * https://zarr.readthedocs.io/en/stable/spec/v2.html */
 
-
-#ifndef SUPERDROPSBUFFERS_HPP 
-#define SUPERDROPSBUFFERS_HPP 
+#ifndef SUPERDROPSBUFFERS_HPP
+#define SUPERDROPSBUFFERS_HPP
 
 #include <concepts>
 #include <string>
@@ -62,11 +61,11 @@ struct SomeMetadata
 
 template <typename B>
 concept SuperdropsBuffers = requires(B b,
-                                    Superdrop &superdrop,
-                                    FSStore &store,
-                                    std::string &str,
-                                    unsigned int u,
-                                    SomeMetadata &md)
+                                     Superdrop &superdrop,
+                                     FSStore &store,
+                                     std::string &str,
+                                     unsigned int u,
+                                     SomeMetadata &md)
 /* concept for all types that have correct signatures
 for functions which provide way of copying some superdroplet's
 data into a buffer, writing buffer to a chunk of array in the
@@ -159,8 +158,8 @@ completeness of a Monoid Structure) */
   }
 
   void writejsons(FSStore &store, const SomeMetadata &md) const {}
-  
+
   void set_buffer(const size_t maxchunk) const {}
 };
 
-#endif //SUPERDROPSBUFFERS_HPP 
+#endif // SUPERDROPSBUFFERS_HPP

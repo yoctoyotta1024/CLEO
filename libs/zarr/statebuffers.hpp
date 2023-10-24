@@ -23,8 +23,8 @@
  * in the state of a gridbox
  */
 
-#ifndef STATEBUFFERS_HPP 
-#define STATEBUFFERS_HPP 
+#ifndef STATEBUFFERS_HPP
+#define STATEBUFFERS_HPP
 
 #include <string>
 #include <vector>
@@ -42,10 +42,10 @@ template <typename T>
 struct StateBuffers
 {
 private:
-  std::vector<T> press;     
-  std::vector<T> temp;       
-  std::vector<T> qvap;       
-  std::vector<T> qcond;       
+  std::vector<T> press;
+  std::vector<T> temp;
+  std::vector<T> qvap;
+  std::vector<T> qcond;
 
 public:
   StateBuffers(const std::string endname,
@@ -110,4 +110,4 @@ public:
   }
 };
 
-#endif //  STATEBUFFERS_HPP  
+#endif //  STATEBUFFERS_HPP

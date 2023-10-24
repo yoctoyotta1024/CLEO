@@ -115,8 +115,8 @@ private:
   {
     std::tie(rgdcount_chunkcount, rgdcount_bufferfill) =
         storehelpers::writebuffer2chunk(store, rgdcount,
-                                         rgdcount_name,
-                                         rgdcount_chunkcount);
+                                        rgdcount_name,
+                                        rgdcount_chunkcount);
 
     rgdcount_writejsons();
   }

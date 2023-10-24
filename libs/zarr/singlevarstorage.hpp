@@ -42,11 +42,11 @@ protected:
   const std::string units;   // units of coordinate being stored (for arrayattrs json)
   const double scale_factor; // scale_factor of data (for array .zattrs json)
 
-  const size_t chunksize; // fixed size of array chunks (=max no. datapoints in buffer before writing)
+  const size_t chunksize;  // fixed size of array chunks (=max no. datapoints in buffer before writing)
   unsigned int chunkcount; // number of chunks of array so far written to store
   unsigned int bufferfill; // number of datapoints so far copied into buffer
   unsigned int ndata;      // number of data points that have been observed
- 
+
   void zarrayjsons(const std::string shape,
                    const std::string chunks,
                    const std::string dims)

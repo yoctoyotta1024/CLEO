@@ -16,13 +16,12 @@
  * -----
  * File Description:
  * structs obeying the superdropsbuffers concept in order to
- * write out superdrop attributes into a ragged array in a 
+ * write out superdrop attributes into a ragged array in a
  * fsstore via a buffer
  */
 
-
-#ifndef SUPERDROPATTRSBUFFERS_HPP 
-#define SUPERDROPATTRSBUFFERS_HPP 
+#ifndef SUPERDROPATTRSBUFFERS_HPP
+#define SUPERDROPATTRSBUFFERS_HPP
 
 #include <concepts>
 #include <string>
@@ -60,7 +59,7 @@ obeying the zarr storage specificatino version 2.0 via
 
   virtual ~SuperdropAttrBuffer(){};
 
-  virtual std::pair<unsigned int, unsigned int> 
+  virtual std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j) = 0;
   /* virtual void function placeholding function for
@@ -99,12 +98,12 @@ struct SdIdBuffer : SuperdropAttrBuffer<size_t>
 {
   SdIdBuffer() : SuperdropAttrBuffer("sdId", "<u8"){};
 
-  std::pair<unsigned int, unsigned int> 
+  std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
     return storehelpers::val2buffer<size_t>(superdrop.sdId.value,
-                                             buffer, ndata, j);
+                                            buffer, ndata, j);
   }
 };
 
@@ -113,7 +112,7 @@ struct XiBuffer : SuperdropAttrBuffer<unsigned long long>
   XiBuffer()
       : SuperdropAttrBuffer("xi", "<u8"){};
 
-  std::pair<unsigned int, unsigned int> 
+  std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
@@ -128,7 +127,7 @@ struct RadiusBuffer : SuperdropAttrBuffer<double>
   RadiusBuffer()
       : SuperdropAttrBuffer("radius", "<f8"){};
 
-  std::pair<unsigned int, unsigned int> 
+  std::pair<unsigned int, unsigned int>
   copy2buffer(const Superdrop &superdrop,
               const unsigned int ndata, const unsigned int j)
   {
@@ -144,9 +143,9 @@ struct RadiusBuffer : SuperdropAttrBuffer<double>
 
     /* rewrite array .zattrs json with correct units and
     scale factor to convert dimless radius to microns */
-    constexpr double sf = dlc::R0 * 1e6; 
+    constexpr double sf = dlc::R0 * 1e6;
     storehelpers::writezattrsjson(store, attr, md.dims, "micro m", sf);
   }
 };
 
-#endif // SUPDROPRSATTRSBUFFERS_HPP 
+#endif // SUPDROPRSATTRSBUFFERS_HPP

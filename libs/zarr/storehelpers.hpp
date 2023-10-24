@@ -16,11 +16,10 @@
  * -----
  * File Description:
  * some helper functions for writng to buffers and writing
- * buffers to arrays in stores that obey the 
+ * buffers to arrays in stores that obey the
  * zarr storage specification version 2 (e.g. see FSStore)
  * https://zarr.readthedocs.io/en/stable/spec/v2.html
  */
-
 
 #ifndef STOREHELPERS_HPP
 #define STOREHELPERS_HPP
@@ -35,18 +34,18 @@
 
 #include "./fsstore.hpp"
 
-namespace storehelpers 
+namespace storehelpers
 /* namespace for generic helper functions used to
 write a double to a buffer, a buffer to a chunk of an
 array in a store, and an array's metadata to a store */
-{ 
+{
   inline unsigned int good2Dchunk(const unsigned int maxchunk,
                                   const size_t ndim1)
   /* given max chunksize, returns the (largest)
   suitable chunksize such that chunks are always an
   integer multiple of ndim1 (which should be the
   length of the 2nd dimension of 2D data) */
-  { 
+  {
     return std::floor(maxchunk / ndim1) * ndim1;
   }
 
@@ -67,14 +66,14 @@ array in a store, and an array's metadata to a store */
   vec2buffer(const std::vector<T> &vec, std::vector<T> &buffer,
              const unsigned int ndata, const unsigned int j)
   /* copy vector of type T (e.g. a double) called
-  'vec', to buffer at index j. Function is equivalent to 
+  'vec', to buffer at index j. Function is equivalent to
   std::copy(vec.begin(), vec.end(), buffer.begin()+j);
   but faster for copying a large vector (not iterative) */
   {
     size_t nvalues(vec.size());
- 
+
     buffer.erase(buffer.end() - nvalues, buffer.end());
-    buffer.insert(buffer.begin()+j, vec.begin(), vec.end());
+    buffer.insert(buffer.begin() + j, vec.begin(), vec.end());
 
     return std::pair(ndata + nvalues, j + nvalues);
   }
@@ -90,7 +89,7 @@ array in a store, and an array's metadata to a store */
   replace contents of buffer with max numeric limit of type.
   Return incremented value of chunkcount */
   {
-    store[name + "/" + chunknum].operator=<T>(buffer);
+    store[name + "/" + chunknum].operator= <T>(buffer);
     buffer.assign(buffer.size(), std::numeric_limits<T>::max());
 
     return std::pair(chunkcount + 1, 0); // updated {chunkcount, bufferfill}
@@ -108,7 +107,7 @@ array in a store, and an array's metadata to a store */
     const std::string chunknum = std::to_string(chunkcount);
 
     return storehelpers::writebuffer2chunk(store, buffer, name,
-                                            chunknum, chunkcount);
+                                           chunknum, chunkcount);
   }
 
   inline std::string metadata(const char zarr_format,
@@ -155,7 +154,7 @@ array in a store, and an array's metadata to a store */
     const auto chunks("[" + std::to_string(chunksize) + "]");
 
     return storehelpers::metadata(zarr_format, order, shape, chunks,
-                                   dtype, compressor, fill_value, filters);
+                                  dtype, compressor, fill_value, filters);
   }
 
   inline std::string arrayattrs(const std::string &dims,
@@ -188,9 +187,9 @@ array in a store, and an array's metadata to a store */
   }
 
   inline void writejsons(FSStore &store,
-                             const std::string &name,
-                             const std::string &metadata,
-                             const std::string &arrayattrs)
+                         const std::string &name,
+                         const std::string &metadata,
+                         const std::string &arrayattrs)
   /* write .zarray and .zattr json files into store for the
   metadata of an array of a variable called 'name' */
   {
@@ -204,11 +203,11 @@ array in a store, and an array's metadata to a store */
   }
 
   inline void writejsons(FSStore &store,
-                      const std::string &name,
-                      const std::string &metadata,
-                      const std::string &dims,
-                      const std::string &units,
-                      const double scale_factor)
+                         const std::string &name,
+                         const std::string &metadata,
+                         const std::string &dims,
+                         const std::string &units,
+                         const double scale_factor)
   /* make arrayattrs then write it and array's
   metadata to .json files */
   {

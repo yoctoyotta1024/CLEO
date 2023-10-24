@@ -52,7 +52,7 @@ private:
 
 public:
   MassMomentBuffers(const std::string endname,
-                     const unsigned int chunksize)
+                    const unsigned int chunksize)
       : endname(endname),
         mom0(chunksize, std::numeric_limits<T>::max()),
         mom1(chunksize, std::numeric_limits<T>::max()),
@@ -98,18 +98,18 @@ public:
     const std::string units0 = " ";
     constexpr double scale_factor0 = 1.0;
     storehelpers::writejsons(store, get_name("0"), metadata,
-                                 dims, units0, scale_factor0);
+                             dims, units0, scale_factor0);
 
     const std::string units1 = "g";
     constexpr double scale_factor1 = dlc::MASS0grams; // grams
     storehelpers::writejsons(store, get_name("1"), metadata,
-                                 dims, units1, scale_factor1);
+                             dims, units1, scale_factor1);
 
     const std::string units2 = "g^2";
     constexpr double scale_factor2 = dlc::MASS0grams * dlc::MASS0grams; // grams squared
     storehelpers::writejsons(store, get_name("2"), metadata,
-                                 dims, units2, scale_factor2);
+                             dims, units2, scale_factor2);
   }
 };
 
-#endif // MASSMOMENTBUFFERS_HPP  
+#endif // MASSMOMENTBUFFERS_HPP
