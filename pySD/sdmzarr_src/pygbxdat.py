@@ -1,6 +1,6 @@
 '''
 ----- CLEO -----
-File: __init__.py
+File: pygbxdat.py
 Project: sdmzarr_src
 Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
@@ -15,11 +15,13 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-init for submodule
+for reading data from gridbox (gbx)
+boudnaries binary inputs files
 '''
 
-__all__ = ["pyzarr",
-           "pysetuptxt",
-           "pygbxdat"]
+def get_gridbounds(gridfile):
+  grid = {
 
-
+  }
+  
+  return grid
