@@ -141,11 +141,10 @@ struct RadiusBuffer : SuperdropAttrBuffer<double>
     /* write array metadata (and array .zattrs) json */
     SuperdropAttrBuffer::writejsons(store, md);
 
-    /* rewrite array .zattrs json */
-    constexpr double sf = dlc::R0 * 1e6; // scale factor to convert dimless radius to microns
-    const std::string arrayattrs(storehelpers::
-                                     arrayattrs(md.dims, "micro m", sf));
-    store[attr + "/.zattrs"] = arrayattrs;
+    /* rewrite array .zattrs json with correct units and
+    scale factor to convert dimless radius to microns */
+    constexpr double sf = dlc::R0 * 1e6; 
+    storehelpers::writezattrsjson(store, attr, md.dims, "micro m", sf);
   }
 };
 

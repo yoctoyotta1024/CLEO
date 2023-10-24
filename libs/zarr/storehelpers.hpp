@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Tuesday 24th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -171,6 +171,20 @@ array in a store, and an array's metadata to a store */
                                    "\", \"scale_factor\": " +
                                    sfstr.str() + "}";
     return arrayattrs;
+  }
+
+  inline void writezattrsjson(FSStore &store,
+                              const std::string &name,
+                              const std::string &dims,
+                              const std::string &units = " ",
+                              const double scale_factor = 1)
+  /* write .zattr json file into store for an array
+  of a variable called 'name' */
+  {
+    // define dimension names of this array, to make xarray and netCDF
+    // happy (not a MUST, ie. not strictly required, by zarr)
+    // e.g. "{\"_ARRAY_DIMENSIONS\": [\"x\"]}";
+    store[name + "/.zattrs"] = arrayattrs(dims, units, scale_factor);
   }
 
   inline void writezarrjsons(FSStore &store,
