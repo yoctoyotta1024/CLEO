@@ -1,12 +1,12 @@
 '''
 ----- CLEO -----
 File: setup.py
-Project: CLEOfire
+Project: testCLEOfire
 Created Date: Thursday 12th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 12th October 2023
+Last Modified: Tuesday 24th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -25,6 +25,13 @@ setup(
     install_requires=[
         'pytest',
         'sphinx',
+        'numpy',
+        'scipy',
         'matplotlib',
+        'xarray',
+        'awkward',
+        'random',
+        'struct',
+        'zarr',
     ],
 )
