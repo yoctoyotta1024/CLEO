@@ -1,7 +1,7 @@
 # set cmake version
 if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
   cmake_minimum_required(VERSION 3.18.0)
-  #cmake_minimum_required(VERSION 3.21.1) # if using Kokkos with NVC++ compiler 
+  #cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler 
 endif()
 
 # set library name
@@ -42,7 +42,9 @@ target_include_directories(${LIBNAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PUBLIC "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
-target_link_libraries(${LIBNAME} PRIVATE initialise gridboxes)
+# Set libraries and compiler warnings to use
+set(SDMLIBS gridboxes initialise observers superdrops zarr)
+target_link_libraries(${LIBNAME} PRIVATE "${SDMLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # some compilation properties
