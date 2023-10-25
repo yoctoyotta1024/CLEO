@@ -96,7 +96,11 @@ public:
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    do_collisions(subt);
+    // TODO
+    // const double VOLUME = state.get_volume() * pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
+    // collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
+
+    // return remove_outofdomain_superdrops(span4SDsinGBx);
   }
 
 };

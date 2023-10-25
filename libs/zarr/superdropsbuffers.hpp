@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -107,7 +107,7 @@ SuperdropsBuffers is A followed by B */
     a.copy2buffer(superdrop, ndata, j);
     b.copy2buffer(superdrop, ndata, j);
 
-    return std::pair(ndata + 1, j + 1); // TODO update this to std:pair with bufferfill and ndata
+    return std::pair(ndata + 1, j + 1); // {ndata, bufferfill}
   }
 
   std::pair<unsigned int, unsigned int>
