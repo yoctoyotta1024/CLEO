@@ -23,7 +23,9 @@
 #include "./condensation.hpp"
 
 KOKKOS_FUNCTION
-void DoCondensation::do_condensation(const unsigned int subt) const
+void DoCondensation::do_condensation(const unsigned int subt,
+                                     const subviewd_supers supers) const
 /* enact condensation / evaporation microphysical process */
 {
+  return supers;
 }

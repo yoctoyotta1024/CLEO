@@ -27,8 +27,10 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "./microphysicalprocess.hpp"
-#include "superdrops/superdrop.hpp"
+#include "../kokkosaliases.hpp"
+#include "./superdrop.hpp"
+#include "./state.hpp"
+#include "./urbg.hpp"
 
 template <typename P>
 concept PairProbability = requires(P p,
@@ -83,26 +85,38 @@ private:
   radius and solute mass of each superdroplet in the pair
   according to Shima et al. 2009 Section 5.1.3. part (5). */
 
-  KOKKOS_FUNCTION void do_collisions(const unsigned int subt) const;
-
-public:
-  DoCollisions(const double DELT, Probability p, EnactCollision x)
-      : DELT(DELT), probability(p), collision(x) {}
-
   KOKKOS_INLINE_FUNCTION
-  void operator()(const unsigned int subt) const
-  /* this operator is used as an "adaptor" for using
-  collisions as the MicrophysicsFunction type in a
-  ConstTstepMicrophysics instance (*hint* which itself
-  satsifies the MicrophysicalProcess concept) */
+  subviewd_supers do_collisions(const unsigned int subt,
+                                const subviewd_supers supers) const
   {
     // TODO
     // const double VOLUME = state.get_volume() * pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
     // collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
 
     // return remove_outofdomain_superdrops(span4SDsinGBx);
+
+    return supers;
   }
 
+public:
+  DoCollisions(const double DELT, Probability p, EnactCollision x)
+      : DELT(DELT), probability(p), collision(x) {}
+
+  KOKKOS_INLINE_FUNCTION
+  template <class DeviceType>
+  subviewd_super operator()(const unsigned int subt,
+                            const subviewd_supers supers,
+                            State &state,
+                            URBG<DeviceType> &urbg) const
+  /* this operator is used as an "adaptor" for using
+  collisions as the MicrophysicsFunction type in a
+  ConstTstepMicrophysics instance (*hint* which itself
+  satsifies the MicrophysicalProcess concept) */
+  {
+    supers = do_collisions(subt, supers);
+
+    return supers;
+  }
 };
 
 #endif // COLLISIONS_HPP

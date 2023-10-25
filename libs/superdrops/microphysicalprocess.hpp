@@ -91,10 +91,10 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   template <class DeviceType>
-  void run_step(const unsigned int subt,
-                const subviewd_supers supers,
-                State &state,
-                URBG<DeviceType> &urbg) const
+  subviewd_supers run_step(const unsigned int subt,
+                           const subviewd_supers supers,
+                           State &state,
+                           URBG<DeviceType> &urbg) const
   /* for combination of 2 proceses, each process
   is called sequentially */
   {
@@ -130,10 +130,10 @@ struct NullMicrophysicalProcess
 
   KOKKOS_INLINE_FUNCTION
   template <class DeviceType>
-  void run_step(const unsigned int subt,
-                const subviewd_supers supers,
-                State &state,
-                URBG<DeviceType> &urbg) const { return supers; }
+  subviewd_supers run_step(const unsigned int subt,
+                           const subviewd_supers supers,
+                           State &state,
+                           URBG<DeviceType> &urbg) const { return supers; }
 };
 
 template <typename F>
@@ -181,10 +181,10 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   template <class DeviceType>
-  void run_step(const unsigned int subt,
-                const subviewd_supers supers,
-                State &state,
-                URBG<DeviceType> &urbg) const
+  subviewd_supers run_step(const unsigned int subt,
+                           const subviewd_supers supers,
+                           State &state,
+                           URBG<DeviceType> &urbg) const
   {
     if (on_step(subt))
     {

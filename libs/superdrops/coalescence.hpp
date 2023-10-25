@@ -25,21 +25,15 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "../kokkosaliases.hpp"
+#include "./microphysicalprocess.hpp"
+#include "./superdrop.hpp"
+
 struct DoCoalescence
 {
 private:
 public:
 };
-
-inline MicrophysicalProcess auto
-CollCoalescence(const unsigned int interval)
-/* constructs Microphysical Process for
-collision-coalescence of superdroplets according to
-Shima et al. 2009 with a constant timestep 'interval'*/
-{
-
-  return ConstTstepMicrophysics(interval, DoCoalescence{});
-}
 
 inline MicrophysicalProcess auto
 Collisions(const unsigned int interval, const Kernel kernel)
@@ -48,7 +42,7 @@ of superdroplets with a constant timestep 'interval'
 given the "do_collisions" function-like type */
 {
   const DoCollisions<Kernel, DoCoalescence> colls(kernel,
-                                                  DoCoalescence{});
+                                                  DoCoalescence{}); // TODO use actualy kernel not double
   return ConstTstepMicrophysics(interval, colls);
 }
 

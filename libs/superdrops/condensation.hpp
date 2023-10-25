@@ -27,7 +27,11 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "../kokkosaliases.hpp"
 #include "./microphysicalprocess.hpp"
+#include "./superdrop.hpp"
+#include "./state.hpp"
+#include "./urbg.hpp"
 
 struct DoCondensation
 /* function-like type that enacts
@@ -35,18 +39,25 @@ condensation / evaporation microphysical process */
 {
 private:
   KOKKOS_FUNCTION
-  void do_condensation(const unsigned int subt) const;
+  subviewd_supers do_condensation(const unsigned int subt,
+                                  const subviewd_supers supers) const;
 
 public:
 
   KOKKOS_INLINE_FUNCTION
-  void operator()(const unsigned int subt) const
+  template <class DeviceType>
+  subviewd_supers operator()(const unsigned int subt,
+                  const subviewd_supers supers,
+                  State &state,
+                  URBG<DeviceType> &urbg) const
   /* this operator is used as an "adaptor" for using
   condensation as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    do_condensation(subt);
+    supers = do_condensation(subt, supers);
+
+    return supers;
   }
 
 };
