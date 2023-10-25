@@ -120,7 +120,6 @@ private:
     return get_next_step(t_mdl);
   }
 
-  KOKKOS_INLINE_FUNCTION
   unsigned int get_next_step(const unsigned int t_mdl) const
   /* returns size of next step to take given current
   timestep, t_mdl, such that next timestep is

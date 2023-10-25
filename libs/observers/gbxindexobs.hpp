@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -68,7 +68,6 @@ public:
     }
   }
 
-  KOKKOS_INLINE_FUNCTION
   unsigned int next_obs(const unsigned int t_mdl) const
   {
     return LIMITVALUES::uintmax;

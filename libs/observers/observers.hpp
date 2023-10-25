@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -74,7 +74,6 @@ public:
     b.before_timestepping(h_gbxs);
   }
 
-  KOKKOS_INLINE_FUNCTION
   unsigned int next_obs(const unsigned int t_mdl) const
    /* for combination of 2 observers, the next obs
    time is smaller out of the two possible */
@@ -116,7 +115,6 @@ struct NullObserver
 {
   void before_timestepping(const viewh_constgbx h_gbxs) const {}
 
-  KOKKOS_INLINE_FUNCTION
   unsigned int next_obs(const unsigned int t_mdl) const
   {
     return LIMITVALUES::uintmax;
@@ -167,7 +165,6 @@ public:
     do_obs.before_timestepping(h_gbxs);
   }
 
-  KOKKOS_INLINE_FUNCTION
   unsigned int next_obs(const unsigned int t_mdl) const
   {
     return ((t_mdl / interval) + 1) * interval;
