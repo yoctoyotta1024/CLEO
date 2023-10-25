@@ -46,7 +46,7 @@ public:
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
   subviewd_supers operator()(const unsigned int subt,
-                             const subviewd_supers supers,
+                             subviewd_supers supers,
                              State &state,
                              URBG<DeviceType> &urbg) const
   /* this operator is used as an "adaptor" for using

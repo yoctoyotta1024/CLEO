@@ -38,7 +38,7 @@
 template <typename P>
 concept MicrophysicalProcess = requires(P p,
                                         const unsigned int t,
-                                        const subviewd_supers supers,
+                                        subviewd_supers supers,
                                         State &state,
                                         URBG<> &urbg)
 /* concept for Microphysical Process is all types that
@@ -92,7 +92,7 @@ public:
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
-                           const subviewd_supers supers,
+                           subviewd_supers supers,
                            State &state,
                            URBG<DeviceType> &urbg) const
   /* for combination of 2 proceses, each process
@@ -131,14 +131,14 @@ struct NullMicrophysicalProcess
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
-                           const subviewd_supers supers,
+                           subviewd_supers supers,
                            State &state,
                            URBG<DeviceType> &urbg) const { return supers; }
 };
 
 template <typename F>
 concept MicrophysicsFunc = requires(F f, const unsigned int subt,
-                                    const subviewd_supers supers,
+                                    subviewd_supers supers,
                                     State &state,
                                     URBG<> &urbg)
 /* concept for all (function-like) types
@@ -182,13 +182,13 @@ public:
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
-                           const subviewd_supers supers,
+                           subviewd_supers supers,
                            State &state,
                            URBG<DeviceType> &urbg) const
   {
     if (on_step(subt))
     {
-      supers = do_microphysics(subt);
+      supers = do_microphysics(subt, supers, state, urbg);
     }
 
     return supers;
