@@ -82,11 +82,12 @@ public: // private except that GPU compatible Kokkos requries public access duri
   (using sub-timestepping routine) */
   {
     const size_t ngbxs(d_gbxs.extent(0));
-    // Kokkos::parallel_for(
-    //     "sdm_microphysics", ngbxs,
-    //     KOKKOS_CLASS_LAMBDA(const size_t ii) 
+    // for (size_t ii(0); ii < ngbxs; ++ii)
     // {
-    for (size_t ii(0); ii < ngbxs; ++ii)
+    Kokkos::parallel_for(
+        "sdm_microphysics",
+        Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+        KOKKOS_CLASS_LAMBDA(const size_t ii) 
     {
       URBG<ExecSpace> urbg(genpool.get_state()); // thread safe random number generator
 
@@ -98,8 +99,8 @@ public: // private except that GPU compatible Kokkos requries public access duri
       }
 
       genpool.free_state(urbg.gen);
-    // });
-    }
+    });
+    // }
   }
 
 public:
@@ -160,3 +161,14 @@ public:
 };
 
 #endif // SDMMETHODS_HPP
+
+
+// /home/m/m300950/testCLEOfire/libs/observers/printobs.hpp(61): warning #20011-D: calling a __host__ function("std::function<double (int)> ::function(const ::std::function<double (int)> &)") from a __host__ __device__ function("PrintObserver::PrintObserver") is not allowed
+
+// Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+// /home/m/m300950/testCLEOfire/libs/observers/./observers.hpp(173): warning #20011-D: calling a __host__ function("std::function<double (int)> ::function(const ::std::function<double (int)> &)") from a __host__ __device__ function("DoTimeObs::DoTimeObs") is not allowed
+
+// /home/m/m300950/testCLEOfire/libs/runcleo/./sdmmethods.hpp(91): warning #20011-D: calling a __host__ function("URBG< ::Kokkos::Cuda> ::URBG( ::Kokkos::Random_XorShift64< ::Kokkos::Cuda> )") from a __host__ __device__ function("SDMMethods<    ::FromFileDynamics,     ::CartesianMaps,     ::ConstTstepMicrophysics<    ::DoCondensation> ,     ::PredCorrMotion,     ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver<    ::PrintObserver,     ::ConstTstepObserver<    ::DoTimeObs> > ,     ::GbxindexObserver> ,  ::ConstTstepObserver<    ::DoNsupersObs> > ,  ::ConstTstepObserver<    ::DoNrainsupersObs> > ,  ::ConstTstepObserver<    ::DoTotNsupersObs> > ,  ::ConstTstepObserver<    ::DoMassMomentsObs> > ,  ::ConstTstepObserver<    ::DoRainMassMomentsObs> > ,  ::ConstTstepObserver<    ::DoStateObs> > ,  ::ConstTstepObserver<    ::DoSupersAttrsObs<    ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers<    ::SdIdBuffer,     ::XiBuffer> ,     ::MsolBuffer> ,     ::RadiusBuffer> ,     ::Coord3Buffer> ,     ::Coord1Buffer> ,     ::Coord2Buffer> ,     ::SdgbxindexBuffer> > > > > ::sdm_microphysics(unsigned int, unsigned int,  ::Kokkos::View<    ::Gridbox *, void, void, void > ,  ::Kokkos::Random_XorShift64_Pool< ::Kokkos::Cuda> ) const::[lambda(unsigned long) (instance 1)]::operator () const") is not allowed
+
+// /home/m/m300950/testCLEOfire/libs/runcleo/runcleo.hpp(132): warning #20011-D: calling a __host__ function("std::_Function_base::~_Function_base()") from a __host__ __device__ function("std::_Function_base::~_Function_base [subobject]") is not allowed
