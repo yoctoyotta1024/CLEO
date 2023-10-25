@@ -21,11 +21,3 @@
 
 #include "./condensation.hpp"
 
-KOKKOS_FUNCTION
-subviewd_supers
-DoCondensation::do_condensation(const unsigned int subt,
-                                const subviewd_supers supers) const
-/* enact condensation / evaporation microphysical process */
-{
-  return supers;
-}

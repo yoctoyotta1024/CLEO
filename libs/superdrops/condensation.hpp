@@ -70,4 +70,15 @@ constant timestep 'interval' given the
   return ConstTstepMicrophysics(interval, DoCondensation{});
 }
 
+/* -----  ----- TODO: move functions below to .cpp file ----- ----- */
+
+KOKKOS_FUNCTION
+subviewd_supers
+DoCondensation::do_condensation(const unsigned int subt,
+                                const subviewd_supers supers) const
+/* enact condensation / evaporation microphysical process */
+{
+  return supers;
+}
+
 #endif // CONDENSATION_HPP
