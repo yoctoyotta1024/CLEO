@@ -51,6 +51,13 @@ private:
   water vapour during timestep delt. Using equations
   from "An Introduction To Clouds...." (see note at top of file) */
 
+  KOKKOS_FUNCTION
+  double condensation_mass_change(Superdrop &drop,
+                                  const double press,
+                                  const double temp,
+                                  const double psat,
+                                  const double s_ratio) const;
+
 public:
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
@@ -96,20 +103,55 @@ from "An Introduction To Clouds...." (see note at top of file) */
   const double psat(saturation_pressure(state.temp));
   const double s_ratio(supersaturation_ratio(state.press, state.qvap, psat));
 
-  double tot_rho_condensed(0.0); // cumulative change to liquid mass in parcel volume
+  double totmass_condensed(0.0); // cumulative change to liquid mass in parcel volume 'dm'
   for (size_t kk(0); kk < supers.extent(0); ++kk)
   {
-    const double mass_condensed = superdroplet_growth_by_condensation(state.press, state.temp,
-                                                                            psat, s_ratio, delt,
-                                                                            impliciteuler, SDinGBx.superdrop);
-    tot_rho_condensed += (mass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
+    const double deltamass_condensed(
+        condensation_mass_change(supers(kk), state.press,
+                                 state.temp, psat, s_ratio));
+    totmass_condensed += deltamass_condensed; // dm += dm_condensed_vapour/dt * delta t
   }
+  const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
 
   // /* resultant effect on thermodynamic state */
   // if (doAlterThermo)
   // {
-  //   condensation_alters_thermostate(state, tot_rho_condensed); // TODO
+  //   condensation_alters_thermostate(state, totrho_condensed); // TODO
   // }
+}
+
+KOKKOS_FUNCTION
+double DoCondensation::condensation_mass_change(Superdrop &drop,
+                                                const double press,
+                                                const double temp,
+                                                const double psat,
+                                                const double s_ratio) const
+/* update superdroplet radius due to radial growth/shrink
+  via condensation and diffusion of water vapour according
+  to equations from "An Introduction To Clouds...." (see
+  note at top of file). Then return mass of liquid that
+  condensed/evaporated onto droplet. New radius is calculated
+  using impliciteuler method which iterates condensation-diffusion
+  ODE given the previous radius. */
+{
+  constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;
+  constexpr double dmdt_const = 4.0 * M_PI * dlc::Rho_l * R0cubed;
+
+  // const double akoh(drop.akohler_factor(temp));
+  // const double bkoh(drop.bkohler_factor());
+  // const auto [fkl, fdl] = diffusion_factors(press, temp, psat);
+
+  /* do not pass r by reference here!! copy value into iterator */
+  // const double newradius = impliciteuler.solve_condensation(s_ratio,
+  //                                                     akoh, bkoh, fkl,
+  //                                                     fdl, drop.radius); // timestepping eqn [7.28] forward
+  // const double delta_radius = drop.change_radius(newradius);
+
+  const double delta_radius(1.0);
+  const double rsqrd(drop.get_radius() * drop.get_radius());
+  const double mass_condensed = (dmdt_const * rsqrd * drop.get_xi() * delta_radius); // eqn [7.22] * delta t
+
+  return mass_condensed;
 }
 
 #endif // CONDENSATION_HPP
