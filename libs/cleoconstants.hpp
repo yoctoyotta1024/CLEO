@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -91,8 +91,12 @@ namespace dimless_constants
 }
 
 namespace LIMITVALUES
+/* max/min values e.g. for using vlaues of c++ standard numeric limits on GPUs */
 {
   constexpr unsigned int uintmax = std::numeric_limits<unsigned int>::max();
+  
+  constexpr unsigned int uint32tmin = std::numeric_limits<uint32_t>::min();
+  constexpr unsigned int uint32tmax = std::numeric_limits<uint32_t>::max();
 }
 
 #endif // CLEOCONSTANTS_HPP
