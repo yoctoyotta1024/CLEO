@@ -30,7 +30,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "../cleoconstants.hpp"
-#include "../kokkosaliases_sd.hpp"
+#include "./kokkosaliases_sd.hpp"
 #include "./superdrop.hpp"
 #include "./state.hpp"
 #include "./urbg.hpp"

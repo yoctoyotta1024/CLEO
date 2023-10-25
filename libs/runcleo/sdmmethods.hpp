@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,7 +26,7 @@
 #include <Kokkos_DualView.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
-#include "../kokkosaliases.hpp"
+#include "./kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"

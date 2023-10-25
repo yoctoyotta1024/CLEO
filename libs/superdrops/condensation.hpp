@@ -27,7 +27,7 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "../kokkosaliases_sd.hpp"
+#include "./kokkosaliases_sd.hpp"
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
 #include "./state.hpp"
