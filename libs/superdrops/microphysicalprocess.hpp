@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,9 +30,17 @@
 #include <Kokkos_Core.hpp>
 
 #include "../cleoconstants.hpp"
+#include "../kokkosaliases.hpp"
+#include "./superdrop.hpp"
+#include "./state.hpp"
+#include "./urbg.hpp"
 
 template <typename P>
-concept MicrophysicalProcess = requires(P p, const unsigned int t)
+concept MicrophysicalProcess = requires(P p,
+                                        const unsigned int t,
+                                        const subviewd_supers supers,
+                                        State &state,
+                                        URBG<> &urbg)
 /* concept for Microphysical Process is all types that
 meet requirements (constraints) of these two timstepping
 functions ()"on_step" and "next_step") as well as the
@@ -45,8 +53,8 @@ constraints on the "run_step" function */
     p.on_step(t)
   } -> std::same_as<bool>;
   {
-    p.run_step(t)
-  } -> std::same_as<void>; 
+    p.run_step(t, supers, state, urbg)
+  } -> std::convertible_to<subviewd_supers>;
 };
 
 template <MicrophysicalProcess Microphys1,
@@ -62,32 +70,37 @@ public:
       : a(a), b(b) {}
 
   KOKKOS_INLINE_FUNCTION
-  unsigned int next_step(const unsigned int t_mdl) const
+  unsigned int next_step(const unsigned int subt) const
    /* for combination of 2 microphysical processes,
    the next timestep is smaller out of the two possible */
   {
-    const unsigned int t_a(a.next_step(t_mdl));
-    const unsigned int t_b(b.next_step(t_mdl));
+    const unsigned int t_a(a.next_step(subt));
+    const unsigned int t_b(b.next_step(subt));
 
     return !(t_a < t_b) ? t_b : t_a; // return smaller of two unsigned ints (see std::min)
   }
 
   KOKKOS_INLINE_FUNCTION
-  bool on_step(const unsigned int t_mdl) const
+  bool on_step(const unsigned int subt) const
   /* for combination of 2 microphysical processes,
   a tstep is on_step = true if either individual
   process is on_step = true */
   {
-    return a.on_step(t_mdl) || b.on_step(t_mdl);
+    return a.on_step(subt) || b.on_step(subt);
   }
 
   KOKKOS_INLINE_FUNCTION
-  void run_step(const unsigned int t_mdl) const
+  template <class DeviceType>
+  void run_step(const unsigned int subt,
+                const subviewd_supers supers,
+                State &state,
+                URBG<DeviceType> &urbg) const
   /* for combination of 2 proceses, each process
   is called sequentially */
   {
-    a.run_step(t_mdl);
-    b.run_step(t_mdl);
+    supers = a.run_step(subt, supers, state, urbg);
+    supers = b.run_step(subt, supers, state, urbg);
+    return supers;
   }
 };
 
@@ -104,31 +117,38 @@ struct NullMicrophysicalProcess
 (is defined for a Monoid Structure) */
 {
   KOKKOS_INLINE_FUNCTION
-  unsigned int next_step(const unsigned int t_mdl) const
+  unsigned int next_step(const unsigned int subt) const
   {
     return LIMITVALUES::uintmax;
   }
   
   KOKKOS_INLINE_FUNCTION
-  bool on_step(const unsigned int t_mdl) const
+  bool on_step(const unsigned int subt) const
   {
     return false;
   }
-  
+
   KOKKOS_INLINE_FUNCTION
-  void run_step(const unsigned int t_mdl) const {}
+  template <class DeviceType>
+  void run_step(const unsigned int subt,
+                const subviewd_supers supers,
+                State &state,
+                URBG<DeviceType> &urbg) const { return supers; }
 };
 
 template <typename F>
-concept MicrophysicsFunc = requires(F f, unsigned int subt)
+concept MicrophysicsFunc = requires(F f, const unsigned int subt,
+                                    const subviewd_supers supers,
+                                    State &state,
+                                    URBG<> &urbg)
 /* concept for all (function-like) types
 (ie. types that can be called with some arguments)
-that can be called by the run_step function in 
+that can be called by the run_step function in
 ConstTstepMicrophysics (see below) */
 {
   {
-    f(subt)
-  } -> std::same_as<void>; 
+    f(subt, supers, state, urbg)
+  } -> std::convertible_to<subviewd_supers>;
 };
 
 template <MicrophysicsFunc F>
@@ -160,12 +180,18 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION
-  void run_step(const unsigned int subt) const
+  template <class DeviceType>
+  void run_step(const unsigned int subt,
+                const subviewd_supers supers,
+                State &state,
+                URBG<DeviceType> &urbg) const
   {
     if (on_step(subt))
     {
-      do_microphysics(subt);
+      supers = do_microphysics(subt);
     }
+
+    return supers;
   }
 };
 
