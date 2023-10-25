@@ -132,12 +132,11 @@ public:
                      const viewh_constgbx h_gbxs) const {}
   /* send information from Gridboxes' states to coupldyn */
 
-  KOKKOS_INLINE_FUNCTION
   void run_step(const unsigned int t_mdl,
                 const unsigned int t_mdl_next,
                 const viewd_gbx d_gbxs,
                 const viewd_supers supers,
-                Kokkos::Random_XorShift64_Pool<> &genpool) const
+                Kokkos::Random_XorShift64_Pool<ExecSpace> &genpool) const
   /* run CLEO SDM (on device) from time t_mdl to t_mdl_next
   with sub-timestepping routine for super-droplets'
   movement and microphysics */

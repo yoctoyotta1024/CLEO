@@ -40,7 +40,7 @@ concept MicrophysicalProcess = requires(P p,
                                         const unsigned int t,
                                         subviewd_supers supers,
                                         State &state,
-                                        URBG<> &urbg)
+                                        URBG<ExecSpace> &urbg)
 /* concept for Microphysical Process is all types that
 meet requirements (constraints) of these two timstepping
 functions ()"on_step" and "next_step") as well as the
@@ -140,7 +140,7 @@ template <typename F>
 concept MicrophysicsFunc = requires(F f, const unsigned int subt,
                                     subviewd_supers supers,
                                     State &state,
-                                    URBG<> &urbg)
+                                    URBG<ExecSpace> &urbg)
 /* concept for all (function-like) types
 (ie. types that can be called with some arguments)
 that can be called by the run_step function in

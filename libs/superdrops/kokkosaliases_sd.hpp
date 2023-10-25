@@ -26,6 +26,8 @@
 
 #include "./superdrop.hpp"
 
+using ExecSpace = Kokkos::DefaultExecutionSpace;
+
 using viewd_supers = Kokkos::View<Superdrop *>;            // view in device memory of superdroplets (should match that in gridbox.hpp) 
 using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets (should match that in gridbox.hpp)
 

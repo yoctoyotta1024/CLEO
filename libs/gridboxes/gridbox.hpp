@@ -185,7 +185,7 @@ to satisfy given Predicate "pred" */
   /* iterator to first superdrop in
   supers that fails to satisfy pred */
   const auto iter(KE::partition_point("findref",
-                                      Kokkos::DefaultExecutionSpace(),
+                                      Kokkos::DefaultExecutionSpace(), // should match kokkosaliases.hpp
                                       supers, pred));
 
   /* distance form start of supers
@@ -201,7 +201,7 @@ between refs satisfy the Predicate "pred" */
 {
   return Kokkos::Experimental::
       all_of("is_pred",
-             Kokkos::DefaultExecutionSpace(),
+             Kokkos::DefaultExecutionSpace(), // should match kokkosaliases.hpp
              (*this)(), pred);
 }
 
@@ -217,7 +217,7 @@ between r0 and r1 do not satisfy pred */
 
   return Kokkos::Experimental::
       none_of("is_prednot",
-              Kokkos::DefaultExecutionSpace(),
+              Kokkos::DefaultExecutionSpace(), // should match kokkosaliases.hpp
               supers4pred, pred);
 }
 

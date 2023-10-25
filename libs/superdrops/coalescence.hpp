@@ -42,7 +42,7 @@ of superdroplets with a constant timestep 'interval'
 given the "do_collisions" function-like type */
 {
   const DoCollisions<Kernel, DoCoalescence> colls(kernel,
-                                                  DoCoalescence{}); // TODO use actualy kernel not double
+                                                  DoCoalescence{}); // TODO use actualy kernel 
   return ConstTstepMicrophysics(interval, colls);
 }
 

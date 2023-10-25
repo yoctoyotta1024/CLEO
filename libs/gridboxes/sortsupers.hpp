@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,7 +45,7 @@ so that superdrops in the view are ordered from
 lowest to highest sdgbxindex. Note that sorting of
 superdrops with matching sdgbxindex can take any order */
 {
-  using TeamPol = Kokkos::TeamPolicy<Kokkos::DefaultExecutionSpace>;
+  using TeamPol = Kokkos::TeamPolicy<ExecSpace>;
 
   Kokkos::parallel_for(
       "sortingsupers", TeamPol(1, Kokkos::AUTO()),
@@ -62,7 +62,7 @@ sorted by their sdgbxindexes in ascending order */
 {
   return Kokkos::Experimental::
       is_sorted("IsSupersSorted",
-                Kokkos::DefaultExecutionSpace(),
+                ExecSpace(),
                 supers,
                 SortComparator{});
 }

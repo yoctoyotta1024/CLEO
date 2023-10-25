@@ -79,7 +79,7 @@ private:
                     RunStats &stats,
                     const dualview_gbx gbxs,
                     const viewd_supers supers,
-                    Kokkos::Random_XorShift64_Pool<> &genpool) const
+                    Kokkos::Random_XorShift64_Pool<ExecSpace> &genpool) const
   /* timestep CLEO from t=0 to t=t_end */
   {
     unsigned int t_mdl(0);
@@ -144,7 +144,7 @@ private:
                 unsigned int t_next,
                 dualview_gbx gbxs,
                 const viewd_supers supers,
-                Kokkos::Random_XorShift64_Pool<> &genpool) const
+                Kokkos::Random_XorShift64_Pool<ExecSpace> &genpool) const
   /* run CLEO SDM (on device) */
   {
     gbxs.sync_device();
@@ -195,7 +195,7 @@ public:
     RunStats stats;
     viewd_supers supers(CreateSupers{}(initconds.initsupers));
     dualview_gbx gbxs(CreateGbxs{}(initconds.initgbxs, supers));
-    Kokkos::Random_XorShift64_Pool<> genpool(std::random_device{}());
+    Kokkos::Random_XorShift64_Pool<ExecSpace> genpool(std::random_device{}());
 
     // prepare CLEO for timestepping
     prepare_to_timestep(gbxs);
