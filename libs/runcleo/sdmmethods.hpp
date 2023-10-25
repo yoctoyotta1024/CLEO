@@ -25,6 +25,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
+#include <Kokkos_Random.hpp>
 
 #include "./kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
@@ -35,6 +36,7 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
+#include "superdrops/urbg.hpp"
 
 template <CoupledDynamics CD, GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,
@@ -73,19 +75,26 @@ private:
   KOKKOS_INLINE_FUNCTION
   void sdm_microphysics(const unsigned int t_sdm,
                         const unsigned int t_next,
-                        const viewd_gbx d_gbxs) const
+                        const viewd_gbx d_gbxs,
+                        Kokkos::Random_XorShift64_Pool<> &genpool) const
   /* enact SDM microphysics for each gridbox
   (using sub-timestepping routine) */
   {
-    for (size_t ii(0); ii < d_gbxs.extent(0); ++ii)
-    {
-      auto gbx = d_gbxs(ii);
-      for (unsigned int subt = t_sdm; subt < t_next;
-           subt = microphys.next_step(subt))
-      {
-        microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg);
-      }
-    }
+    const size_t ngbxs(d_gbxs.extent(0));
+    Kokkos::parallel_for(
+        "sdm_microphysics", ngbxs,
+        KOKKOS_CLASS_LAMBDA(const size_t ii) {
+          URBG urbg(genpool.get_state());
+
+          auto gbx = d_gbxs(ii);
+          for (unsigned int subt = t_sdm; subt < t_next;
+               subt = microphys.next_step(subt))
+          {
+            microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); //TODO use returned supers here
+          }
+
+          genpool.free_state(urbg.gen);
+        });
   }
 
 public:
@@ -127,7 +136,8 @@ public:
   void run_step(const unsigned int t_mdl,
                 const unsigned int t_mdl_next,
                 const viewd_gbx d_gbxs,
-                const viewd_supers supers) const
+                const viewd_supers supers,
+                Kokkos::Random_XorShift64_Pool<> &genpool) const
   /* run CLEO SDM (on device) from time t_mdl to t_mdl_next
   with sub-timestepping routine for super-droplets'
   movement and microphysics */
@@ -138,7 +148,7 @@ public:
       unsigned int t_sdm_next(next_sdmstep(t_sdm, t_mdl_next));
 
       superdrops_movement(t_sdm, d_gbxs, supers);
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs);
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, genpool);
 
       t_sdm = t_sdm_next;
     }
