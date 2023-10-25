@@ -89,8 +89,8 @@ public:
     return a.on_step(subt) || b.on_step(subt);
   }
 
-  KOKKOS_INLINE_FUNCTION
   template <class DeviceType>
+  KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
                            const subviewd_supers supers,
                            State &state,
@@ -128,8 +128,8 @@ struct NullMicrophysicalProcess
     return false;
   }
 
-  KOKKOS_INLINE_FUNCTION
   template <class DeviceType>
+  KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
                            const subviewd_supers supers,
                            State &state,
@@ -179,8 +179,8 @@ public:
     return subt % interval == 0;
   }
 
-  KOKKOS_INLINE_FUNCTION
   template <class DeviceType>
+  KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
                            const subviewd_supers supers,
                            State &state,

@@ -77,12 +77,13 @@ private:
   /* enact SDM microphysics for each gridbox
   (using sub-timestepping routine) */
   {
-    // loop over gbxs for(gbx : gbxs)
+    for (size_t ii(0); ii < d_gbxs.extent(0); ++ii)
     {
+      auto gbx = d_gbxs(ii);
       for (unsigned int subt = t_sdm; subt < t_next;
            subt = microphys.next_step(subt))
       {
-        microphys.run_step(subt);
+        microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg);
       }
     }
   }

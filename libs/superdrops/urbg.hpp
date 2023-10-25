@@ -44,13 +44,13 @@ during collision process */
 
   static constexpr result_type min()
   {
-    return LIMITVALUES::uint32min; 
+    return LIMITVALUES::uint32tmin; 
   }
   static constexpr result_type max()
   /* is equivalent to return 
   Kokkos::Random_XorShift64<DeviceType>::MAX_URAND; */
   {
-    return LIMITVALUES::uint32max;
+    return LIMITVALUES::uint32tmax;
   }
 
   result_type operator()()

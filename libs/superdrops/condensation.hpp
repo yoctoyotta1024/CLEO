@@ -43,8 +43,8 @@ private:
                                   const subviewd_supers supers) const;
 
 public:
-  KOKKOS_INLINE_FUNCTION
   template <class DeviceType>
+  KOKKOS_INLINE_FUNCTION
   subviewd_supers operator()(const unsigned int subt,
                              const subviewd_supers supers,
                              State &state,

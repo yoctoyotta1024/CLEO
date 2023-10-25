@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -77,10 +77,11 @@ MicrophysicalProcess auto
 create_microphysics(const Timesteps &tsteps)
 {
   const MicrophysicalProcess auto cond = Condensation(tsteps.get_condstep());
-  const MicrophysicalProcess auto colls = Collisions(tsteps.get_collstep());
+  // const MicrophysicalProcess auto colls = Collisions(tsteps.get_collstep());
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
-  return cond >> colls;
+  // return cond >> colls;
+  return cond;
 }
 
 Motion auto

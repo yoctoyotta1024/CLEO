@@ -102,9 +102,9 @@ public:
   DoCollisions(const double DELT, Probability p, EnactCollision x)
       : DELT(DELT), probability(p), collision(x) {}
 
-  KOKKOS_INLINE_FUNCTION
   template <class DeviceType>
-  subviewd_super operator()(const unsigned int subt,
+  KOKKOS_INLINE_FUNCTION
+  subviewd_supers operator()(const unsigned int subt,
                             const subviewd_supers supers,
                             State &state,
                             URBG<DeviceType> &urbg) const
