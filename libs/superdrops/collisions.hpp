@@ -61,8 +61,11 @@ the superdrops)*/
 template <PairProbability Probability,
           PairEnactX EnactCollision>
 struct DoCollisions
+/* class for method to enact collisions
+between superdrops e.g. collision-coalescence */
 {
 private:
+  const double DELT; // real time interval [s] for which probability of collision-x is calculated
   
   const Probability probability;
   /* object (has operator that) returns prob_jk, the probability
@@ -73,7 +76,7 @@ private:
   prob_jk may return the probability of collision-coalescence
   according to a particular coalescence kernel, or collision-breakup */
 
-  const EnactCollision collision;
+  const EnactCollision enact_collision;
   /* object (has operator that) enacts a collision-X event on two
   superdroplets. For example it may enact collision-coalescence by
   of a pair of superdroplets by changing the multiplicity,
@@ -83,12 +86,8 @@ private:
   KOKKOS_FUNCTION void do_collisions(const unsigned int subt) const;
 
 public:
-  DoCollisions(const double DELT,
-             CollisionXProbability p,
-             CollisionXEnactment x)
-      : DELT(DELT),
-        collisionx_probability(p),
-        enact_collisionx(x) {}
+  DoCollisions(const double DELT, Probability p, EnactCollision x)
+      : DELT(DELT), probability(p), collision(x) {}
 
   KOKKOS_INLINE_FUNCTION
   void operator()(const unsigned int subt) const
