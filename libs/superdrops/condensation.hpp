@@ -141,15 +141,15 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
   const ImplicitEuler impe{}; // TODO move
   const auto fkl_fdl = diffusion_factors(press, temp, psat); // pair = {fkl, fdl}
   const auto ab_kohler = kohler_factors(drop, temp); // pair = {akoh, bkoh}
-  const double newr(impe.solve_condensation(s_ratio,
-                                            ab_kohler, fkl_fdl,
+  const double newr(impe.solve_condensation(s_ratio, ab_kohler, fkl_fdl,
                                             drop.get_radius())); // timestepping eqn [7.28] forward
   const double delta_radius(drop.change_radius(newr));
 
   constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;
   constexpr double dmdt_const = 4.0 * M_PI * dlc::Rho_l * R0cubed;
   const double rsqrd(drop.get_radius() * drop.get_radius());
-  const double mass_condensed = (dmdt_const * rsqrd * drop.get_xi() * delta_radius); // eqn [7.22] * delta t
+  const double mass_condensed = (dmdt_const * rsqrd *
+                                 drop.get_xi() * delta_radius); // eqn [7.22] * delta t
 
   return mass_condensed;
 }

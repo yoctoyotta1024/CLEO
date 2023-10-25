@@ -35,20 +35,3 @@ KOKKOS_FUNCTION double SuperdropAttrs::mass() const
 
   return mass;
 }
-
-
-KOKKOS_FUNCTION
-double SuperdropAttrs::change_radius(const double newr)
-/* Update droplet radius to newr or dry_radius() and
-return resultant change in radius (delta_radius = newradius-radius). 
-Prevents drops shrinking further once they are size of dry_radius(). */
-{
-	const double oldradius(radius);
-
-	/*  if droplets are dry, do not shrink further */
-  const double dryr(dryradius());
-  radius = (newr < dryr) ? dryr : newr; // larger of two doubles (see std::max)
-	
-  /* return change in radius due to growth/shrinking of droplet */
-	return radius - oldradius;
-}
