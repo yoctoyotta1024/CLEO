@@ -90,21 +90,19 @@ sum of radii changes via diffusion and condensation of
 water vapour during timestep delt. Using equations
 from "An Introduction To Clouds...." (see note at top of file) */
 {
-  constexpr double C0cubed(dlc::COORD0 * dlc::COORD0 * dlc::COORD0);
-
-  const double psat(saturation_pressure(state.temp));
-  // const double s_ratio(supersaturation_ratio(state.press, state.qvap, psat));
-
   /* superdroplet radii changes */
+  constexpr double C0cubed(dlc::COORD0 * dlc::COORD0 * dlc::COORD0);
+  const double VOLUME(state.get_volume() * C0cubed);    // volume in which condensation occurs [m^3]
+  const double psat(saturation_pressure(state.temp));
+  const double s_ratio(supersaturation_ratio(state.press, state.qvap, psat));
+
   double tot_rho_condensed(0.0); // cumulative change to liquid mass in parcel volume
   for (size_t kk(0); kk < supers.extent(0); ++kk)
   {
-    const double delta_mass_condensed(psat); // TODO
-    // const double delta_mass_condensed = superdroplet_growth_by_condensation(state.press, state.temp,
-    //                                                                         psat, s_ratio, delt,
-    //                                                                         impliciteuler, SDinGBx.superdrop);
-    const double VOLUME(state.get_volume() * C0cubed);    // volume in which condensation occurs [m^3]
-    tot_rho_condensed += (delta_mass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
+    const double mass_condensed = superdroplet_growth_by_condensation(state.press, state.temp,
+                                                                            psat, s_ratio, delt,
+                                                                            impliciteuler, SDinGBx.superdrop);
+    tot_rho_condensed += (mass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
   }
 
   // /* resultant effect on thermodynamic state */
