@@ -89,7 +89,7 @@ public: // private except that GPU compatible Kokkos requries public access duri
         Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
         KOKKOS_CLASS_LAMBDA(const size_t ii) 
     {
-      URBG<ExecSpace> urbg(genpool.get_state()); // thread safe random number generator
+      // URBG<ExecSpace> urbg(genpool.get_state()); // thread safe random number generator
 
       auto gbx = d_gbxs(ii);
       for (unsigned int subt = t_sdm; subt < t_next;
@@ -98,7 +98,7 @@ public: // private except that GPU compatible Kokkos requries public access duri
         microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); // TODO use returned supers here
       }
 
-      genpool.free_state(urbg.gen);
+      // genpool.free_state(urbg.gen);
     });
     // }
   }
