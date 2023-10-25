@@ -141,7 +141,7 @@ public:
     class Gen
     {
     public:
-      KOKKOS_INLINE_FUNCTION Gbxindex next() { return {_id++}; }
+      Gbxindex next() { return {_id++}; }
 
     private:
       unsigned int _id = 0;
