@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Struct (for Kokkos compatibility) to 
+ * Struct (for Kokkos compatibility) to
  * generate random numbers for SDM (e.g. to
  * shuffle superdroplet's vector) based on
  * c++11 standard UniformRandomBitGenerator
@@ -29,25 +29,26 @@
 #include <Kokkos_Random.hpp>
 
 template <class DeviceType>
+
 struct URBG
-/* struct wrapping Kokkos random number generator to 
-satisfy requirements of C++11 UniformRandomBitGenerator 
+/* struct wrapping Kokkos random number generator to
+satisfy requirements of C++11 UniformRandomBitGenerator
 bject for a 32 bit unsigned int. Useful e.g. so that
-gen's urand() function can be used in std::shuffle 
+gen's urand() function can be used in std::shuffle
 to generate random pairs of superdroplets
 during collision process */
 {
   using result_type = uint32_t;
   Kokkos::Random_XorShift64<DeviceType> gen;
 
-  URBG(Kokkos::Random_XorShift64<DeviceType> gen) : gen(gen) {};
+  URBG(Kokkos::Random_XorShift64<DeviceType> gen) : gen(gen){};
 
   static constexpr result_type min()
   {
-    return LIMITVALUES::uint32tmin; 
+    return LIMITVALUES::uint32tmin;
   }
   static constexpr result_type max()
-  /* is equivalent to return 
+  /* is equivalent to return
   Kokkos::Random_XorShift64<DeviceType>::MAX_URAND; */
   {
     return LIMITVALUES::uint32tmax;
