@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,6 +28,7 @@
 
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
+#include "superdrops/kokkosaliases_sd.hpp"
 
 using dualview_gbx = Kokkos::DualView<Gridbox *>;            // dual view of gridboxes
 using dualview_constgbx = Kokkos::DualView<const Gridbox *>; // dual view of const gridboxes
@@ -37,13 +38,5 @@ using viewh_constgbx = dualview_constgbx::t_host; // view in host memory of cons
 
 using viewd_gbx = dualview_gbx::t_dev;           // view in device memory of gridboxes
 using viewd_constgbx = dualview_constgbx::t_dev; // view in device memory of const gridboxes
-
-using viewd_supers = Kokkos::View<Superdrop *>;            // view in device memory of superdroplets (should match that in gridbox.hpp) 
-using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets (should match that in gridbox.hpp)
-
-using subviewd_supers = Kokkos::Subview<viewd_supers, Kokkos::pair<size_t, size_t>>; // subiew should match that in gridbox.hpp
-using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, Kokkos::pair<size_t, size_t>>; // subview should match that in gridbox.hpp
-
-using mirrorh_constsupers = subviewd_constsupers::HostMirror; // mirror view (copy) of subview of superdroplets on host memory (should match that in gridbox.hpp)
 
 #endif // KOKKOSALIASES_HPP
