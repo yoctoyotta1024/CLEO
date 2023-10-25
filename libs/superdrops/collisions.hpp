@@ -107,7 +107,7 @@ public:
   subviewd_supers operator()(const unsigned int subt,
                             subviewd_supers supers,
                             State &state,
-                            URBG<DeviceType> &urbg) const
+                            URBG<DeviceType> urbg) const
   /* this operator is used as an "adaptor" for using
   collisions as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself

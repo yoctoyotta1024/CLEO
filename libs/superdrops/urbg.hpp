@@ -38,7 +38,7 @@ to generate random pairs of superdroplets
 during collision process */
 {
   using result_type = uint32_t;
-  Kokkos::Random_XorShift64<DeviceType> &gen;
+  Kokkos::Random_XorShift64<DeviceType> gen;
 
   URBG(Kokkos::Random_XorShift64<DeviceType> gen) : gen(gen) {};
 

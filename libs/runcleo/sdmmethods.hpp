@@ -77,17 +77,18 @@ public: // private except that GPU compatible Kokkos requries public access duri
   void sdm_microphysics(const unsigned int t_sdm,
                         const unsigned int t_next,
                         const viewd_gbx d_gbxs,
-                        Kokkos::Random_XorShift64_Pool<ExecSpace> &genpool) const
+                        Kokkos::Random_XorShift64_Pool<ExecSpace> genpool) const
   /* enact SDM microphysics for each gridbox
   (using sub-timestepping routine) */
   {
-    //TODO parallelise this loop
     const size_t ngbxs(d_gbxs.extent(0));
-    Kokkos::parallel_for(
-        "sdm_microphysics", ngbxs,
-        KOKKOS_CLASS_LAMBDA(const size_t ii) 
+    // Kokkos::parallel_for(
+    //     "sdm_microphysics", ngbxs,
+    //     KOKKOS_CLASS_LAMBDA(const size_t ii) 
+    // {
+    for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      URBG urbg(genpool.get_state()); // thread safe random number generator
+      URBG<ExecSpace> urbg(genpool.get_state()); // thread safe random number generator
 
       auto gbx = d_gbxs(ii);
       for (unsigned int subt = t_sdm; subt < t_next;
@@ -97,7 +98,8 @@ public: // private except that GPU compatible Kokkos requries public access duri
       }
 
       genpool.free_state(urbg.gen);
-    });
+    // });
+    }
   }
 
 public:
@@ -139,7 +141,7 @@ public:
                 const unsigned int t_mdl_next,
                 const viewd_gbx d_gbxs,
                 const viewd_supers supers,
-                Kokkos::Random_XorShift64_Pool<ExecSpace> &genpool) const
+                Kokkos::Random_XorShift64_Pool<ExecSpace> genpool) const
   /* run CLEO SDM (on device) from time t_mdl to t_mdl_next
   with sub-timestepping routine for super-droplets'
   movement and microphysics */

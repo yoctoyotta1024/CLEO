@@ -40,7 +40,7 @@ concept MicrophysicalProcess = requires(P p,
                                         const unsigned int t,
                                         subviewd_supers supers,
                                         State &state,
-                                        URBG<ExecSpace> &urbg)
+                                        URBG<ExecSpace> urbg)
 /* concept for Microphysical Process is all types that
 meet requirements (constraints) of these two timstepping
 functions ()"on_step" and "next_step") as well as the
@@ -94,7 +94,7 @@ public:
   subviewd_supers run_step(const unsigned int subt,
                            subviewd_supers supers,
                            State &state,
-                           URBG<DeviceType> &urbg) const
+                           URBG<DeviceType> urbg) const
   /* for combination of 2 proceses, each process
   is called sequentially */
   {
@@ -133,14 +133,17 @@ struct NullMicrophysicalProcess
   subviewd_supers run_step(const unsigned int subt,
                            subviewd_supers supers,
                            State &state,
-                           URBG<DeviceType> &urbg) const { return supers; }
+                           URBG<DeviceType> urbg) const
+  {
+    return supers;
+  }
 };
 
 template <typename F>
 concept MicrophysicsFunc = requires(F f, const unsigned int subt,
                                     subviewd_supers supers,
                                     State &state,
-                                    URBG<ExecSpace> &urbg)
+                                    URBG<ExecSpace> urbg)
 /* concept for all (function-like) types
 (ie. types that can be called with some arguments)
 that can be called by the run_step function in
@@ -184,7 +187,7 @@ public:
   subviewd_supers run_step(const unsigned int subt,
                            subviewd_supers supers,
                            State &state,
-                           URBG<DeviceType> &urbg) const
+                           URBG<DeviceType> urbg) const
   {
     if (on_step(subt))
     {
