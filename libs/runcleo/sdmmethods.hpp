@@ -43,9 +43,11 @@ template <CoupledDynamics CD, GridboxMaps GbxMaps,
           Motion M, Observer Obs>
 struct SDMMethods
 {
-private:
-  unsigned int couplstep; // coupled timestep
+// private:
+public: // private except that GPU compatible Kokkos requries public access during calls for thread parallelisation
 
+  unsigned int couplstep;           // coupled timestep
+  
   KOKKOS_INLINE_FUNCTION
   unsigned int next_sdmstep(const unsigned int t_sdm,
                             const unsigned int next_mdl) const
@@ -72,29 +74,30 @@ private:
     movesupers.run_step(t_sdm, gbxmaps, d_gbxs, supers);
   }
 
-  KOKKOS_INLINE_FUNCTION
   void sdm_microphysics(const unsigned int t_sdm,
                         const unsigned int t_next,
                         const viewd_gbx d_gbxs,
-                        Kokkos::Random_XorShift64_Pool<> &genpool) const
+                        Kokkos::Random_XorShift64_Pool<ExecSpace> &genpool) const
   /* enact SDM microphysics for each gridbox
   (using sub-timestepping routine) */
   {
+    //TODO parallelise this loop
     const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for(
         "sdm_microphysics", ngbxs,
-        KOKKOS_CLASS_LAMBDA(const size_t ii) {
-          URBG urbg(genpool.get_state());
+        KOKKOS_CLASS_LAMBDA(const size_t ii) 
+    {
+      URBG urbg(genpool.get_state()); // thread safe random number generator
 
-          auto gbx = d_gbxs(ii);
-          for (unsigned int subt = t_sdm; subt < t_next;
-               subt = microphys.next_step(subt))
-          {
-            microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); //TODO use returned supers here
-          }
+      auto gbx = d_gbxs(ii);
+      for (unsigned int subt = t_sdm; subt < t_next;
+           subt = microphys.next_step(subt))
+      {
+        microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); // TODO use returned supers here
+      }
 
-          genpool.free_state(urbg.gen);
-        });
+      genpool.free_state(urbg.gen);
+    });
   }
 
 public:
