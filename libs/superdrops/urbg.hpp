@@ -29,7 +29,6 @@
 #include <Kokkos_Random.hpp>
 
 template <class DeviceType>
-
 struct URBG
 /* struct wrapping Kokkos random number generator to
 satisfy requirements of C++11 UniformRandomBitGenerator
@@ -42,7 +41,7 @@ during collision process */
   Kokkos::Random_XorShift64<DeviceType> gen;
 
   URBG(Kokkos::Random_XorShift64<DeviceType> gen) : gen(gen){};
-
+  
   static constexpr result_type min()
   {
     return LIMITVALUES::uint32tmin;
