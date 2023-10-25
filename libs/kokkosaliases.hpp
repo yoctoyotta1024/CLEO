@@ -25,6 +25,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
+#include <Kokkos_Random.hpp>
 
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
@@ -38,5 +39,7 @@ using viewh_constgbx = dualview_constgbx::t_host; // view in host memory of cons
 
 using viewd_gbx = dualview_gbx::t_dev;           // view in device memory of gridboxes
 using viewd_constgbx = dualview_constgbx::t_dev; // view in device memory of const gridboxes
+
+using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
 
 #endif // KOKKOSALIASES_HPP

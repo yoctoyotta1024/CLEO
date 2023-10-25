@@ -77,7 +77,7 @@ public: // private except that GPU compatible Kokkos requries public access duri
   void sdm_microphysics(const unsigned int t_sdm,
                         const unsigned int t_next,
                         const viewd_gbx d_gbxs,
-                        Kokkos::Random_XorShift64_Pool<ExecSpace> genpool) const
+                        GenRandomPool genpool) const
   /* enact SDM microphysics for each gridbox
   (using sub-timestepping routine) */
   {
@@ -87,17 +87,16 @@ public: // private except that GPU compatible Kokkos requries public access duri
         Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
         KOKKOS_CLASS_LAMBDA(const size_t ii) 
     {
-      // URBG<ExecSpace> urbg(genpool.get_state()); // thread safe random number generator
-      // URBG<ExecSpace> urbg; // thread safe random number generator
+      URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
 
       auto gbx = d_gbxs(ii);
       for (unsigned int subt = t_sdm; subt < t_next;
            subt = microphys.next_step(subt))
       {
-        // microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); // TODO use returned supers here
+        microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); // TODO use returned supers here
       }
 
-      // genpool.free_state(urbg.gen);
+      genpool.free_state(urbg.gen);
     });
   }
 
@@ -140,7 +139,7 @@ public:
                 const unsigned int t_mdl_next,
                 const viewd_gbx d_gbxs,
                 const viewd_supers supers,
-                Kokkos::Random_XorShift64_Pool<ExecSpace> genpool) const
+                GenRandomPool genpool) const
   /* run CLEO SDM (on device) from time t_mdl to t_mdl_next
   with sub-timestepping routine for super-droplets'
   movement and microphysics */
@@ -159,14 +158,3 @@ public:
 };
 
 #endif // SDMMETHODS_HPP
-
-
-// /home/m/m300950/testCLEOfire/libs/observers/printobs.hpp(61): warning #20011-D: calling a __host__ function("std::function<double (int)> ::function(const ::std::function<double (int)> &)") from a __host__ __device__ function("PrintObserver::PrintObserver") is not allowed
-
-// Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
-
-// /home/m/m300950/testCLEOfire/libs/observers/./observers.hpp(173): warning #20011-D: calling a __host__ function("std::function<double (int)> ::function(const ::std::function<double (int)> &)") from a __host__ __device__ function("DoTimeObs::DoTimeObs") is not allowed
-
-// /home/m/m300950/testCLEOfire/libs/runcleo/./sdmmethods.hpp(91): warning #20011-D: calling a __host__ function("URBG< ::Kokkos::Cuda> ::URBG( ::Kokkos::Random_XorShift64< ::Kokkos::Cuda> )") from a __host__ __device__ function("SDMMethods<    ::FromFileDynamics,     ::CartesianMaps,     ::ConstTstepMicrophysics<    ::DoCondensation> ,     ::PredCorrMotion,     ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver< ::CombinedObserver<    ::PrintObserver,     ::ConstTstepObserver<    ::DoTimeObs> > ,     ::GbxindexObserver> ,  ::ConstTstepObserver<    ::DoNsupersObs> > ,  ::ConstTstepObserver<    ::DoNrainsupersObs> > ,  ::ConstTstepObserver<    ::DoTotNsupersObs> > ,  ::ConstTstepObserver<    ::DoMassMomentsObs> > ,  ::ConstTstepObserver<    ::DoRainMassMomentsObs> > ,  ::ConstTstepObserver<    ::DoStateObs> > ,  ::ConstTstepObserver<    ::DoSupersAttrsObs<    ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers< ::CombinedSuperdropsBuffers<    ::SdIdBuffer,     ::XiBuffer> ,     ::MsolBuffer> ,     ::RadiusBuffer> ,     ::Coord3Buffer> ,     ::Coord1Buffer> ,     ::Coord2Buffer> ,     ::SdgbxindexBuffer> > > > > ::sdm_microphysics(unsigned int, unsigned int,  ::Kokkos::View<    ::Gridbox *, void, void, void > ,  ::Kokkos::Random_XorShift64_Pool< ::Kokkos::Cuda> ) const::[lambda(unsigned long) (instance 1)]::operator () const") is not allowed
-
-// /home/m/m300950/testCLEOfire/libs/runcleo/runcleo.hpp(132): warning #20011-D: calling a __host__ function("std::_Function_base::~_Function_base()") from a __host__ __device__ function("std::_Function_base::~_Function_base [subobject]") is not allowed
