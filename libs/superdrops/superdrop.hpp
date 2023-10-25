@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th October 2023
+ * Last Modified: Thursday 26th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -73,7 +73,10 @@ public:
   KOKKOS_INLINE_FUNCTION auto get_radius() const { return attrs.radius; }
   KOKKOS_INLINE_FUNCTION auto get_msol() const { return attrs.msol; }
 
-  KOKKOS_FUNCTION double mass() const { return attrs.mass(); }
+  KOKKOS_INLINE_FUNCTION double mass() const { return attrs.mass(); }
+
+  KOKKOS_INLINE_FUNCTION
+  double change_radius(const double newr) { return attrs.change_radius(newr); }
 };
 
 #endif // SUPERDROP_HPP

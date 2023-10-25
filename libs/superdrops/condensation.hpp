@@ -27,6 +27,7 @@
 #define CONDENSATION_HPP
 
 #include <concepts>
+#include <math.h>
 
 #include <Kokkos_Core.hpp>
 
@@ -136,20 +137,17 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
   calculated using impliciteuler method which iterates
   condensation-diffusion ODE given the previous radius. */
 {
-  constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;
-  constexpr double dmdt_const = 4.0 * M_PI * dlc::Rho_l * R0cubed;
-
-  const auto fkl_fdl = diffusion_factors(press, temp, psat); // pair = {fkl, fdl}
-  const auto ab_kohler = kohler_factors(drop, temp); // pair = {akoh, bkoh}
-
   /* do not pass r by reference here!! copy value into iterator */
   const ImplicitEuler impe{}; // TODO move
-  const double newradius = impe.solve_condensation(s_ratio,
-                                                   ab_kohler, fkl_fdl,
-                                                   drop.get_radius()); // timestepping eqn [7.28] forward
-  // const double delta_radius = drop.change_radius(newradius);
+  const auto fkl_fdl = diffusion_factors(press, temp, psat); // pair = {fkl, fdl}
+  const auto ab_kohler = kohler_factors(drop, temp); // pair = {akoh, bkoh}
+  const double newr(impe.solve_condensation(s_ratio,
+                                            ab_kohler, fkl_fdl,
+                                            drop.get_radius())); // timestepping eqn [7.28] forward
+  const double delta_radius(drop.change_radius(newr));
 
-  const double delta_radius(1.0);
+  constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;
+  constexpr double dmdt_const = 4.0 * M_PI * dlc::Rho_l * R0cubed;
   const double rsqrd(drop.get_radius() * drop.get_radius());
   const double mass_condensed = (dmdt_const * rsqrd * drop.get_xi() * delta_radius); // eqn [7.22] * delta t
 
