@@ -6,11 +6,11 @@ endif()
 
 # essential CLEO SDM libaries #
 add_subdirectory(initialise)
+add_subdirectory(zarr)
+add_subdirectory(superdrops)
+add_subdirectory(gridboxes)
 add_subdirectory(observers)
 add_subdirectory(runcleo)
-add_subdirectory(gridboxes)
-add_subdirectory(superdrops)
-add_subdirectory(zarr)
 
 # libraries particular to certain CLEO configurations #
 add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)
