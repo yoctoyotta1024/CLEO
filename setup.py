@@ -25,13 +25,6 @@ setup(
     install_requires=[
         'pytest',
         'sphinx',
-        'numpy',
-        'scipy',
         'matplotlib',
-        'xarray',
-        'awkward',
-        'random',
-        'struct',
-        'zarr',
     ],
 )
