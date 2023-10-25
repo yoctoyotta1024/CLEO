@@ -82,25 +82,23 @@ public: // private except that GPU compatible Kokkos requries public access duri
   (using sub-timestepping routine) */
   {
     const size_t ngbxs(d_gbxs.extent(0));
-    // for (size_t ii(0); ii < ngbxs; ++ii)
-    // {
     Kokkos::parallel_for(
         "sdm_microphysics",
         Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
         KOKKOS_CLASS_LAMBDA(const size_t ii) 
     {
       // URBG<ExecSpace> urbg(genpool.get_state()); // thread safe random number generator
+      // URBG<ExecSpace> urbg; // thread safe random number generator
 
       auto gbx = d_gbxs(ii);
       for (unsigned int subt = t_sdm; subt < t_next;
            subt = microphys.next_step(subt))
       {
-        microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); // TODO use returned supers here
+        // microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); // TODO use returned supers here
       }
 
       // genpool.free_state(urbg.gen);
     });
-    // }
   }
 
 public:
