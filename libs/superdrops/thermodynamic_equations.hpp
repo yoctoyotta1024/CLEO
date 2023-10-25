@@ -58,31 +58,26 @@ s_ratio = p_vapour/psat (ie. relative humidity) */
 }
 
 KOKKOS_INLINE_FUNCTION
-double akohler_factor(const double temp)
-/* calculate value of a in raoult factor (exp^(a/r))
+Kokkos::pair<double, double>
+kohler_factors(const Superdrop &drop, const double temp)
+/* Calculates a and b factors for kohler curve.
+Calculates value of a in raoult factor (exp^(a/r))
 to account for effect of dissolved solute
-on radial growth of droplet. Using equations from
+on radial growth of droplet. Calculates value of b
+in kelvin factor (1-b/r^3) to account for curvature on
+radial growth of droplet. Using equations from
 "An Introduction To Clouds...." (see note at top of file) */
 {
 	constexpr double akoh_constant = 3.3e-7 / (dlc::TEMP0 * dlc::R0);
+  const double akoh(akoh_constant / temp); // dimensionless version of eqn [6.24]
 
-	return akoh_constant / temp; // dimensionless version of eqn [6.24]
-}
-
-KOKKOS_INLINE_FUNCTION
-double bkohler_factor(const Superdrop &drop)
-/* calculate value of b in kelvin factor (1-b/r^3)
-	to account for curvature on radial growth
-	of droplet. Using equations from "An Introduction
-	To Clouds...." (see note at top of file) */
-{
-	constexpr double bkoh = 4.3e-6 * dlc::RHO0 / dlc::MR0;
-
+  constexpr double bkoh_constant = 4.3e-6 * dlc::RHO0 / dlc::MR0;
   const double msol(drop.get_msol());
   const double ionic(drop.get_ionic());
   const double mr_sol(drop.get_mr_sol());
+	const double bkoh(bkoh_constant * msol * ionic / mr_sol); // dimensionless version of eqn [6.22]
 
-	return bkoh * msol * ionic / mr_sol; // dimensionless version of eqn [6.22]
+	return {akoh, bkoh}; // {a, b} = {raoult, kelvin} kohler factors
 }
 
 KOKKOS_FUNCTION
