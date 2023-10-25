@@ -43,13 +43,12 @@ private:
                                   const subviewd_supers supers) const;
 
 public:
-
   KOKKOS_INLINE_FUNCTION
   template <class DeviceType>
   subviewd_supers operator()(const unsigned int subt,
-                  const subviewd_supers supers,
-                  State &state,
-                  URBG<DeviceType> &urbg) const
+                             const subviewd_supers supers,
+                             State &state,
+                             URBG<DeviceType> &urbg) const
   /* this operator is used as an "adaptor" for using
   condensation as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself
@@ -59,7 +58,6 @@ public:
 
     return supers;
   }
-
 };
 
 inline MicrophysicalProcess auto

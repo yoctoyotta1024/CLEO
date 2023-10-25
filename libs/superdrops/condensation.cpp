@@ -19,7 +19,6 @@
  * microphysical process in SDM
  */
 
-
 #include "./condensation.hpp"
 
 KOKKOS_FUNCTION
