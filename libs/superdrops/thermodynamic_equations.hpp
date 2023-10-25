@@ -16,22 +16,27 @@
  * -----
  * File Description:
  * Header file for functions that return
- * Left Hand Side of thermodynamic equations
+ * Left Hand Side of thermodynamic equations.
+ * Equations referenced as (eqn [X.YY])
+ * are from "An Introduction To Clouds From The 
+ * Microscale to Climate" by Lohmann, Luond
+ * and Mahrt, 1st edition.
  * */
 
 #ifndef THERMODYNAMIC_EQUATIONS_HPP
 #define THERMODYNAMIC_EQUATIONS_HPP
 
 #include <cmath>
-// #include <stdexcept>
 #include <cassert>
-#include <string>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 
 #include "../cleoconstants.hpp"
+#include "./superdrop.hpp"
 
 namespace dlc = dimless_constants;
+namespace DC = dimmed_constants;
 
 KOKKOS_INLINE_FUNCTION
 double moist_specifc_heat(const double qvap, const double qcond)
@@ -50,6 +55,34 @@ mass mixing ratio, qvap. supersaturation ratio = 's_ratio',
 s_ratio = p_vapour/psat (ie. relative humidity) */
 {
   return (press * qvap) / ((dlc::Mr_ratio + qvap) * psat);
+}
+
+KOKKOS_INLINE_FUNCTION
+double akohler_factor(const double temp)
+/* calculate value of a in raoult factor (exp^(a/r))
+to account for effect of dissolved solute
+on radial growth of droplet. Using equations from
+"An Introduction To Clouds...." (see note at top of file) */
+{
+	constexpr double akoh_constant = 3.3e-7 / (dlc::TEMP0 * dlc::R0);
+
+	return akoh_constant / temp; // dimensionless version of eqn [6.24]
+}
+
+KOKKOS_INLINE_FUNCTION
+double bkohler_factor(const Superdrop &drop)
+/* calculate value of b in kelvin factor (1-b/r^3)
+	to account for curvature on radial growth
+	of droplet. Using equations from "An Introduction
+	To Clouds...." (see note at top of file) */
+{
+	constexpr double bkoh = 4.3e-6 * dlc::RHO0 / dlc::MR0;
+
+  const double msol(drop.get_msol());
+  const double ionic(drop.get_ionic());
+  const double mr_sol(drop.get_mr_sol());
+
+	return bkoh * msol * ionic / mr_sol; // dimensionless version of eqn [6.22]
 }
 
 KOKKOS_FUNCTION
@@ -72,7 +105,14 @@ python module typhon.physics.thermodynamics.e_eq_water_mk
 with conversion to real temp /K = T*Temp0 and from
 real psat to dimensionless psat = psat/P0. */
 
-
+KOKKOS_FUNCTION
+Kokkos::pair<double, double>
+diffusion_factors(const double press, const double temp, const double psat);
+/* Calculate dimensionless Fkl and Fdl heat and vapour
+diffusion factors in equation for radial growth of droplets
+according to equations from "An Introduction To Clouds...."
+(see note at top of file). fkl is first item of returned
+pair, fdl is second. */
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
@@ -120,6 +160,33 @@ real psat to dimensionless psat = psat/P0. */
                               9.44523 * log(T) + 0.014025 * T));
 
   return std::exp(lnpsat) / dlc::P0; // dimensionless psat
+}
+
+KOKKOS_FUNCTION
+Kokkos::pair<double, double>
+diffusion_factors(const double press, const double temp, const double psat)
+/* Calculate dimensionless Fkl and Fdl heat and vapour
+diffusion factors in equation for radial growth of droplets
+according to equations from "An Introduction To Clouds...."
+(see note at top of file). fkl is first item of returned
+pair, fdl is second. */
+{
+  constexpr double A = 7.11756e-5;                            // coefficient for T^2 in T*[eq.7.24]
+  constexpr double B = 4.38127686e-3;                         // coefficient for T in T*[eq.7.24]
+  constexpr double LATENT_RGAS_V = DC::LATENT_V / DC::RGAS_V; // for fkl diffusion factor calc
+  constexpr double D = 4.012182971e-5;                        // constants in equation [eq.7.26]
+
+  const double TEMP(temp * dlc::TEMP0);
+  const double PRESS(press * dlc::P0);
+  const double PSAT(psat * dlc::P0);
+
+  const double THERMK(A * pow(TEMP, 2.0) + TEMP * B);                 // K*TEMP with K from [eq.7.24] (for fkl)
+  const double DIFFUSE_V((D / PRESS * pow(TEMP, 1.94)) / DC::RGAS_V); // 1/R_v * D_v from [eq 7.26] (for fdl)
+
+  const double fkl((LATENT_RGAS_V / TEMP - 1.0) * DC::LATENT_V / (THERMK * dlc::F0)); // fkl eqn [7.23]
+  const double fdl(TEMP / (DIFFUSE_V * PSAT) / dlc::F0);                              // fdl eqn [7.25]
+
+  return {fkl, fdl};
 }
 
 #endif // THERMODYNAMIC_EQUATIONS_HPP

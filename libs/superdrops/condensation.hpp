@@ -30,6 +30,7 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "../cleoconstants.hpp"
 #include "./kokkosaliases_sd.hpp"
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
@@ -137,9 +138,11 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
   constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;
   constexpr double dmdt_const = 4.0 * M_PI * dlc::Rho_l * R0cubed;
 
-  // const double akoh(drop.akohler_factor(temp));
-  // const double bkoh(drop.bkohler_factor());
-  // const auto [fkl, fdl] = diffusion_factors(press, temp, psat);
+  const auto fkl_fdl = diffusion_factors(press, temp, psat); // pair = {fkl, fdl}
+  const double fkl(fkl_fdl.first);
+  const double fdl(fkl_fdl.second);
+  const double akoh(akohler_factor(temp));
+  const double bkoh(bkohler_factor(drop));
 
   /* do not pass r by reference here!! copy value into iterator */
   // const double newradius = impliciteuler.solve_condensation(s_ratio,
