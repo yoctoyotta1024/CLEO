@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling
  * -----
- * Last Modified: Tuesday 24th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,6 @@
 #include <string>
 #include <limits>
 #include <sstream>
-#include <iostream>
 
 #include "./fsstore.hpp"
 

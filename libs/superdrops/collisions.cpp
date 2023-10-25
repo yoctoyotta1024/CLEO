@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Wednesday 25th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,5 +25,4 @@
 KOKKOS_FUNCTION
 void DoCollisions::do_collisions(const unsigned int subt) const
 {
-  // std::cout << "coll microphys @@ t = " << subt << "\n";
 }
