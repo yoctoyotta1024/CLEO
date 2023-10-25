@@ -37,7 +37,19 @@ CollCoalescence(const unsigned int interval)
 collision-coalescence of superdroplets according to
 Shima et al. 2009 with a constant timestep 'interval'*/
 {
+
   return ConstTstepMicrophysics(interval, DoCoalescence{});
+}
+
+inline MicrophysicalProcess auto
+Collisions(const unsigned int interval, const Kernel kernel)
+/* constructs Microphysical Process for collisions 
+of superdroplets with a constant timestep 'interval'
+given the "do_collisions" function-like type */
+{
+  const DoCollisions<Kernel, DoCoalescence> colls(kernel,
+                                                  DoCoalescence{});
+  return ConstTstepMicrophysics(interval, colls);
 }
 
 #endif // COLLISIONCOALESCENCE_HPP

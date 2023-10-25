@@ -23,19 +23,72 @@
 #ifndef COLLISIONS_HPP
 #define COLLISIONS_HPP
 
-#include <iostream>
 #include <concepts>
 
 #include <Kokkos_Core.hpp>
 
 #include "./microphysicalprocess.hpp"
+#include "superdrops/superdrop.hpp"
 
+template <typename P>
+concept PairProbability = requires(P p,
+                                   Superdrop &drop,
+                                   double d)
+/* Objects that are of type 'PairProbability'
+take a pair of superdroplets and returns
+something convertible to a double
+(hopefully a probability!) */
+{
+  {
+    p(drop, drop, d, d)
+  } -> std::convertible_to<double>;
+};
+
+template <typename X>
+concept PairEnactX = requires(X x,
+                              Superdrop &drop,
+                              double p)
+/* Objects that are of type PairEnactX
+takes a pair of superdrops and returns
+void (it may change the properties of
+the superdrops)*/
+{
+  {
+    x(drop, drop, p, p)
+  } -> std::same_as<void>;
+};
+
+template <PairProbability Probability,
+          PairEnactX EnactCollision>
 struct DoCollisions
 {
 private:
+  
+  const Probability probability;
+  /* object (has operator that) returns prob_jk, the probability
+  a pair of droplets undergo some kind of collision process.
+  prob_jk is analogous to prob_jk = K(drop1, drop2) delta_t/delta_vol,
+  where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|
+  is the coalescence kernel (see Shima 2009 eqn 3). For example
+  prob_jk may return the probability of collision-coalescence
+  according to a particular coalescence kernel, or collision-breakup */
+
+  const EnactCollision collision;
+  /* object (has operator that) enacts a collision-X event on two
+  superdroplets. For example it may enact collision-coalescence by
+  of a pair of superdroplets by changing the multiplicity,
+  radius and solute mass of each superdroplet in the pair
+  according to Shima et al. 2009 Section 5.1.3. part (5). */
+
   KOKKOS_FUNCTION void do_collisions(const unsigned int subt) const;
 
 public:
+  DoCollisions(const double DELT,
+             CollisionXProbability p,
+             CollisionXEnactment x)
+      : DELT(DELT),
+        collisionx_probability(p),
+        enact_collisionx(x) {}
 
   KOKKOS_INLINE_FUNCTION
   void operator()(const unsigned int subt) const
@@ -48,14 +101,5 @@ public:
   }
 
 };
-
-inline MicrophysicalProcess auto
-Collisions(const unsigned int interval)
-/* constructs Microphysical Process for collisions 
-of superdroplets with a constant timestep 'interval'
-given the "do_collisions" function-like type */
-{
-  return ConstTstepMicrophysics(interval, DoCollisions{});
-}
 
 #endif // COLLISIONS_HPP
