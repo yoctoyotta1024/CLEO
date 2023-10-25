@@ -130,9 +130,9 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
   via condensation and diffusion of water vapour according
   to equations from "An Introduction To Clouds...." (see
   note at top of file). Then return mass of liquid that
-  condensed/evaporated onto droplet. New radius is calculated
-  using impliciteuler method which iterates condensation-diffusion
-  ODE given the previous radius. */
+  condensed onto /evaporated off of droplet. New radius is
+  calculated using impliciteuler method which iterates
+  condensation-diffusion ODE given the previous radius. */
 {
   constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;
   constexpr double dmdt_const = 4.0 * M_PI * dlc::Rho_l * R0cubed;
