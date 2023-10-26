@@ -34,7 +34,17 @@ class ImplicitEuler
   Newton Raphson (NR) root finding method to solve
   the implicit timestepping equation of stiff ODE */
 {
+private:
+  // unsigned int niters;    // suggested number of iterations for implicit method before testing for convergence
+  // double subdelt;         // number of substeps to condensation method when supersat close to 1 (0 = false ie. none)
+  double delt;                     // timestep of ODE solver (at each step implicit method is called)
+  // double maxrtol;         // adjustable relative tolerance for convergence of NR method
+  // double maxatol;         // adjustable abolute tolerance for convergence of NR method
+
 public:
+  ImplicitEuler(const double delt)
+      : delt(delt) {}
+
   KOKKOS_INLINE_FUNCTION
   double solve_condensation_matsushima(const double s_ratio,
                                        const Kokkos::pair<double, double> akoh_bkoh,
@@ -110,7 +120,7 @@ Matsushima et al. 2023 for more details. */
   //   double init_ziter(impit.initialguess(rprev));
   //   return impit.newtonraphson_niterations(rprev, init_ziter);
   // }
-  
+
   return rprev;
 }
 

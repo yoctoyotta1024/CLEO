@@ -46,7 +46,7 @@ condensation / evaporation microphysical process */
 {
 private:
   const bool doAlterThermo;          // whether to make condensation alter ThermoState or not
-  const double delt;                 // dimensionless time interval during which condenstaion occurs
+  const ImplicitEuler impe;                 // implicit euler solver
 
   KOKKOS_FUNCTION
   void do_condensation(const subviewd_supers supers, State &state) const;
@@ -73,7 +73,7 @@ public:
   DoCondensation(const bool doAlterThermo,
                  const double delt)
       : doAlterThermo(doAlterThermo),
-        delt(delt) {}
+        impe(delt) {}
 
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
@@ -103,7 +103,7 @@ constant timestep 'interval' given the
 {
   const double delt = step2dimlesstime(interval); // dimensionless time [] equivlent to interval
   return ConstTstepMicrophysics(interval,
-                                DoCondensation{doAlterThermo, delt});
+                                DoCondensation(doAlterThermo, delt));
 }
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
@@ -137,7 +137,6 @@ from "An Introduction To Clouds...." (see note at top of file) */
   }
   const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
 
-  const bool doAlterThermo(true); //TODO
   /* resultant effect on thermodynamic state */
   if (doAlterThermo)
   {
@@ -159,7 +158,6 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
   condensation-diffusion ODE given the previous radius. */
 {
   /* do not pass r by reference here!! copy value into iterator */
-  const ImplicitEuler impe{}; // TODO move
   const auto ab_kohler = kohler_factors(drop, temp); // pair = {akoh, bkoh}
   const double newr(impe.solve_condensation(s_ratio, ab_kohler, ffactor,
                                             drop.get_radius())); // timestepping eqn [7.28] forward

@@ -25,7 +25,7 @@ module load nvhpc/23.7-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
 path2CLEO=${HOME}/testCLEOfire/
-path2build=${HOME}/testCLEOfire/build/
+path2build=${HOME}/testCLEOfire/buildgpu/
 configfile=${HOME}/testCLEOfire/src/config/config.txt
 python=python
 ### ---------------------------------------------------- ###
