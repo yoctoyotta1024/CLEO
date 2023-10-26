@@ -60,6 +60,13 @@ private:
                                   const double temp,
                                   const double psat,
                                   const double s_ratio) const;
+  
+  KOKKOS_FUNCTION                                
+  void condensation_state_change(const double totrho_condensed,
+                                State &state) const;
+  /* change the thermodynamic variables (temp, qv and qc) of
+  ThermoState state given the total change in condensed
+  water mass per volume during time interval delt */
 
 public:
   template <class DeviceType>
@@ -116,11 +123,12 @@ from "An Introduction To Clouds...." (see note at top of file) */
   }
   const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
 
-  // /* resultant effect on thermodynamic state */
-  // if (doAlterThermo)
-  // {
-  //   condensation_alters_thermostate(state, totrho_condensed); // TODO
-  // }
+  const bool doAlterThermo(true); //TODO
+  /* resultant effect on thermodynamic state */
+  if (doAlterThermo)
+  {
+    condensation_state_change(totrho_condensed, state); // TODO
+  }
 }
 
 KOKKOS_FUNCTION
@@ -152,6 +160,23 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
                                  drop.get_xi() * delta_radius); // eqn [7.22] * delta t
 
   return mass_condensed;
+}
+
+KOKKOS_FUNCTION void
+DoCondensation::condensation_state_change(const double totrho_condensed,
+                                         State &state) const
+/* change the thermodynamic variables (temp, qv and qc) of
+ThermoState state given the total change in condensed
+water mass per volume during time interval delt */
+{
+  const double delta_qcond = totrho_condensed / dlc::Rho_dry;
+  const double delta_temp = (dlc::Latent_v /
+                             moist_specifc_heat(state.qvap, state.qcond)) *
+                            delta_qcond;
+
+  state.temp += delta_temp;
+  state.qvap -= delta_qcond;
+  state.qcond += delta_qcond;
 }
 
 #endif // CONDENSATION_HPP
