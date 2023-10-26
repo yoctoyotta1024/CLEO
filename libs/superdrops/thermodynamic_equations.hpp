@@ -26,7 +26,6 @@
 #ifndef THERMODYNAMIC_EQUATIONS_HPP
 #define THERMODYNAMIC_EQUATIONS_HPP
 
-#include <cmath>
 #include <cassert>
 
 #include <Kokkos_Core.hpp>
@@ -133,7 +132,7 @@ to dimensionless psat = psat/P0. */
 
   const double T(temp * dlc::TEMP0); // real T [K]
 
-  return (PREF * std::exp(A * (T - TREF) / (T - B))) / dlc::P0; // dimensionless psat
+  return (PREF * Kokkos::exp(A * (T - TREF) / (T - B))) / dlc::P0; // dimensionless psat
 }
 
 KOKKOS_FUNCTION
@@ -155,7 +154,7 @@ real psat to dimensionless psat = psat/P0. */
                              (53.878 - 1331.22 / T -
                               9.44523 * log(T) + 0.014025 * T));
 
-  return std::exp(lnpsat) / dlc::P0; // dimensionless psat
+  return Kokkos::exp(lnpsat) / dlc::P0; // dimensionless psat
 }
 
 KOKKOS_FUNCTION

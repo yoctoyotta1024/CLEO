@@ -25,9 +25,14 @@
 #ifndef IMPLICITEULER_HPP
 #define IMPLICITEULER_HPP
 
+#include <math.h>
+
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 
+#include "../cleoconstants.hpp"
+
+namespace dlc = dimless_constants;
 
 struct ImplicitIteration
 {
@@ -41,7 +46,8 @@ struct ImplicitIteration
   double bkoh;
   double ffactor;
 
-  double initialguess(const double rprev) const;
+  KOKKOS_INLINE_FUNCTION double
+  initialguess(const double rprev) const;
   /* returns appropriate initial value (ie. a reasonable guess) for
   'ziter' to use as first iteration of newton raphson method in
   rootfinding algorithm for timestepping condensation/evaporation ODE.
@@ -83,7 +89,7 @@ struct ImplicitIteration
   (which is the radius at timestep 't+subdelt'. Refer to section 5.1.2 Shima
   et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
 
-  std::pair<bool, double>
+  Kokkos::pair<bool, double>
   iterate_rootfinding_algorithm(const double rprev, double ziter) const;
   /* function performs one iteration of Newton Raphson rootfinding
   method and returns updated value of radius^2 alongside a boolean that
@@ -108,8 +114,8 @@ struct ImplicitIteration
   iterations has not yet been met. Criteria is standard local error
   test: |iteration - previous iteration| < RTOL * |iteration| + ATOL */
   {
-    const double converged = rtol * std::abs(gfunciter) + atol;
-    const double currentvalue = std::abs(gfunciter - gfuncprev);
+    const double converged = rtol * Kokkos::abs(gfunciter) + atol;
+    const double currentvalue = Kokkos::abs(gfunciter - gfuncprev);
 
     return (currentvalue >= converged); // true means it's not yet converged
   }
@@ -196,12 +202,12 @@ Matsushima et al. 2023 for more details. */
   const double akoh(kohler_ab.first);
   const double bkoh(kohler_ab.second);
 
-  const double s_act(1 + std::sqrt(4.0 * std::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
+  const double s_act(1 + Kokkos::sqrt(4.0 * Kokkos::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
   if ((s_ratio > 0.999 * s_act) && (s_ratio < 1.001 * s_act))
   /* if supersaturation close to s_act, activation or
   deactivation might occur so perform subtimestepping */
   {
-    const unsigned int nsubs = std::ceil(delt / subdelt);
+    const unsigned int nsubs = Kokkos::ceil(delt / subdelt);
     const double subt = delt / (double)nsubs;
     const ImplicitIteration implit{niters, subt, maxrtol, maxatol,
                                    s_ratio, akoh, bkoh, ffactor};
@@ -232,10 +238,31 @@ ImplicitEuler::substepped_implicitmethod(const ImplicitIteration &implit,
   double subr(rprev);
   for (unsigned int n = 0; n < nsubsteps; ++n)
   {
-    // double init_ziter(implit.initialguess(subr));
+    double init_ziter(implit.initialguess(subr));
     // subr = implit.newtonraphson_niterations(subr, init_ziter);
   }
   return subr;
+}
+
+KOKKOS_INLINE_FUNCTION double
+ImplicitIteration::initialguess(const double rprev) const
+/* returns appropriate initial value (ie. a reasonable guess) for
+'ziter' to use as first iteration of newton raphson method in
+rootfinding algorithm for timestepping condensation/evaporation ODE.
+Criteria is as in SCALE-SDM for making initial guess for given droplet
+much greater than its (activation radius)^2 if the 
+supersaturation > its activation supersaturation  */
+{
+  const double rprevsqrd(rprev * rprev);
+  const double s_act(1 + Kokkos::sqrt(4.0 * Kokkos::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
+
+  if (s_ratio > s_act)
+  {
+    constexpr double bigr(1e-3 / dlc::R0); // large initial guess for radius = 1mm for drop that should already be activated
+    return fmax(bigr * bigr, rprevsqrd);   // Kokkos compatible equivalent to std::max() for floating point numbers
+  }
+
+  return rprevsqrd;
 }
 
 #endif // IMPLICITEULER_HPP

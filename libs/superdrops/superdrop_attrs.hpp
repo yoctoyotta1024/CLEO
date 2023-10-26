@@ -24,7 +24,6 @@
 #ifndef SUPERDROP_ATTRS_HPP
 #define SUPERDROP_ATTRS_HPP
 
-#include <cmath>
 #include <math.h>
 
 #include <Kokkos_Core.hpp>
@@ -82,7 +81,7 @@ struct SuperdropAttrs
   {
     constexpr double vconst = 3.0 / (4.0 * M_PI);
     const double dryrcubed = vconst * msol / solute.rho_sol();
-    return std::pow(dryrcubed, 1.0 / 3.0);
+    return Kokkos::pow(dryrcubed, 1.0 / 3.0);
   }
 
   KOKKOS_INLINE_FUNCTION double change_radius(const double newr);
@@ -103,8 +102,8 @@ Prevents drops shrinking further once they are size of dry_radius(). */
 
 	/*  if droplets are dry, do not shrink further */
   const double dryr(dryradius());
-  radius = (newr < dryr) ? dryr : newr; // larger of two doubles (see std::max)
-	
+  radius = fmax(newr, dryr); // Kokkos compatible equivalent to std::max() for floating point numbers 
+
   /* return change in radius due to growth/shrinking of droplet */
 	return radius - oldradius;
 }
