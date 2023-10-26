@@ -264,10 +264,10 @@ for more details. */
   if (ucrit1 || ucrit2)
   /* at least one criteria is met such that there is unique solution */
   {
-    const ImpIter impit{niters, delt, maxrtol, maxatol,
-                        s_ratio, akoh, bkoh, ffactor};
-    double init_ziter(impit.initialguess(rprev));
-    return impit.newtonraphson_niterations(rprev, init_ziter);
+    const ImplicitIteration implit{niters, delt, maxrtol, maxatol,
+                                   s_ratio, akoh, bkoh, ffactor};
+    double init_ziter(implit.initialguess(rprev));
+    return implit.newtonraphson_niterations(rprev, init_ziter);
   }
 
   else
