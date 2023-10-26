@@ -94,22 +94,24 @@ Matsushima et al. 2023 for more details. */
   /* if supersaturation close to s_act, activation or
   deactivation might occur so perform subtimestepping */
   {
-    return substep_implicitmethod(delt, niters, maxrtol, maxatol,
-                                  s_ratio, akoh, bkoh, ffactor,
-                                  rprev, subdelt);
+    // return substep_implicitmethod(delt, niters, maxrtol, maxatol,
+    //                               s_ratio, akoh, bkoh, ffactor,
+    //                               rprev, subdelt);
   }
 
-  else
-  /* Far from activation / deactivation appropriate choice 
-  of initial guess allows rapid convergence of to correct
-  solution even in cases when spurious solutions exist
-  (see Matsushima et al. 2023 unqiuenss criteria). */
-  {
-    const ImpIter impit{niters, delt, maxrtol, maxatol,
-                        s_ratio, akoh, bkoh, ffactor};
-    double init_ziter(impit.initialguess(rprev));
-    return impit.newtonraphson_niterations(rprev, init_ziter);
-  }
+  // else
+  // /* Far from activation / deactivation appropriate choice 
+  // of initial guess allows rapid convergence of to correct
+  // solution even in cases when spurious solutions exist
+  // (see Matsushima et al. 2023 unqiuenss criteria). */
+  // {
+  //   const ImpIter impit{niters, delt, maxrtol, maxatol,
+  //                       s_ratio, akoh, bkoh, ffactor};
+  //   double init_ziter(impit.initialguess(rprev));
+  //   return impit.newtonraphson_niterations(rprev, init_ziter);
+  // }
+  
+  return rprev;
 }
 
 #endif // IMPLICITEULER_HPP
