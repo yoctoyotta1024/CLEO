@@ -43,7 +43,6 @@ template <CoupledDynamics CD, GridboxMaps GbxMaps,
           Motion M, Observer Obs>
 class SDMMethods
 {
-// public: // TODO private except that GPU compatible Kokkos requries public access during calls for thread parallelisation
 private:
   unsigned int couplstep;           // coupled timestep
   GbxMaps gbxmaps;                  // maps from gridbox indexes to domain coordinates
@@ -80,7 +79,8 @@ public:
   /* operator is call to microphysics 'sdm_microphysics'. struct
   created so that capture by value KOKKOS_CLASS_LAMBDA
   (ie. [=] on CPU) only captures microphysics and not other
-  members of SDMMethods */
+  members of SDMMethods.
+  ()*/
   {
     Microphys microphys; // microphysical process
 
@@ -108,9 +108,8 @@ public:
             genpool.free_state(urbg.gen);
           });
     }
-  }; 
+  } sdm_microphysics; // operator is call for SDM microphysics 
 
-  SDMMicrophysics sdm_microphysics; // operator is call for SDM microphysics
   Obs obs;                          // observer
 
   SDMMethods(const CD &coupldyn,
