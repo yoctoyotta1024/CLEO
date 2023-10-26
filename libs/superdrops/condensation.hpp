@@ -45,8 +45,8 @@ struct DoCondensation
 condensation / evaporation microphysical process */
 {
 private:
-  const bool doAlterThermo;          // whether to make condensation alter ThermoState or not
-  const ImplicitEuler impe;                 // implicit euler solver
+  bool doAlterThermo;          // whether to make condensation alter ThermoState or not
+  ImplicitEuler impe;                 // implicit euler solver
 
   KOKKOS_FUNCTION
   void do_condensation(const subviewd_supers supers, State &state) const;
@@ -61,26 +61,31 @@ private:
                                   const double temp,
                                   const double s_ratio,
                                   const double ffactor) const;
-  
-  KOKKOS_FUNCTION                                
+
+  KOKKOS_FUNCTION
   void condensation_state_change(const double totrho_condensed,
-                                State &state) const;
+                                 State &state) const;
   /* change the thermodynamic variables (temp, qv and qc) of
   ThermoState state given the total change in condensed
   water mass per volume during time interval delt */
 
 public:
   DoCondensation(const bool doAlterThermo,
-                 const double delt)
+                 const unsigned int niters,
+                 const double delt,
+                 const double maxrtol,
+                 const double maxatol,
+                 const double subdelt)
       : doAlterThermo(doAlterThermo),
-        impe(delt) {}
+        impe(niters, delt, maxrtol, maxatol, subdelt) {}
 
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
-  subviewd_supers operator()(const unsigned int subt,
-                             subviewd_supers supers,
-                             State &state,
-                             URBG<DeviceType> urbg) const
+      subviewd_supers
+      operator()(const unsigned int subt,
+                 subviewd_supers supers,
+                 State &state,
+                 URBG<DeviceType> urbg) const
   /* this operator is used as an "adaptor" for using
   condensation as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself
@@ -94,16 +99,27 @@ public:
 
 inline MicrophysicalProcess auto
 Condensation(const unsigned int interval,
+             const bool doAlterThermo,
+             const unsigned int niters,
              const std::function<double(int)> step2dimlesstime,
-             const bool doAlterThermo)
+             const double maxrtol,
+             const double maxatol,
+             const double SUBDELT,
+             const std::function<double(int)> realtime2dimless)
+
 /* constructs Microphysical Process for
 condensation/evaporation of superdroplets with a
 constant timestep 'interval' given the
 "do_condensation" function-like type */
 {
-  const double delt = step2dimlesstime(interval); // dimensionless time [] equivlent to interval
-  return ConstTstepMicrophysics(interval,
-                                DoCondensation(doAlterThermo, delt));
+  const double delt = step2dimlesstime(interval);   // dimensionless time [] equivlent to interval
+  const double subdelt = realtime2dimless(SUBDELT); // dimensionless time [] equivlent to SUBDELT [s]
+
+  const auto do_cond = DoCondensation(doAlterThermo, niters,
+                                      delt, maxrtol, maxatol,
+                                      subdelt);
+
+  return ConstTstepMicrophysics(interval, do_cond);
 }
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */

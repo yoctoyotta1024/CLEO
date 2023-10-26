@@ -74,12 +74,23 @@ create_gbxmaps(const Config &config)
 }
 
 MicrophysicalProcess auto
+config_condensation(const Config &config, const Timesteps &tsteps)
+{
+  return Condensation(tsteps.get_condstep(),
+                      config.doAlterThermo,
+                      config.cond_iters,
+                      &step2dimlesstime,
+                      config.cond_rtol,
+                      config.cond_atol,
+                      config.cond_SUBTSTEP,
+                      &realtime2dimless);
+}
+
+MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  const MicrophysicalProcess auto
-      cond = Condensation(tsteps.get_condstep(),
-                          &step2dimlesstime,
-                          config.doAlterThermo);
+  const MicrophysicalProcess auto cond = config_condensation(config,
+                                                             tsteps);
 
   // const MicrophysicalProcess auto colls = Collisions(tsteps.get_collstep());
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};

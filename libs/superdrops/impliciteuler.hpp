@@ -35,15 +35,32 @@ class ImplicitEuler
   the implicit timestepping equation of stiff ODE */
 {
 private:
-  // unsigned int niters;    // suggested number of iterations for implicit method before testing for convergence
-  // double subdelt;         // number of substeps to condensation method when supersat close to 1 (0 = false ie. none)
-  double delt;                     // timestep of ODE solver (at each step implicit method is called)
-  // double maxrtol;         // adjustable relative tolerance for convergence of NR method
-  // double maxatol;         // adjustable abolute tolerance for convergence of NR method
+  unsigned int niters; // suggested number of iterations for implicit method before testing for convergence
+  double delt;         // timestep of ODE solver (at each step implicit method is called)
+  double maxrtol;      // adjustable relative tolerance for convergence of NR method
+  double maxatol;      // adjustable abolute tolerance for convergence of NR method
+  double subdelt;      // number of substeps to condensation method when supersat close to 1 (0 = false ie. none)
+
+  KOKKOS_INLINE_FUNCTION
+  double substepped_implicitmethod(const unsigned int iters,
+                                   const double delt,
+                                   const double rtol,
+                                   const double atol,
+                                   const double s_ratio,
+                                   const double akoh,
+                                   const double bkoh,
+                                   const double ffactor,
+                                   const double rprev,
+                                   double subdelt) const;
 
 public:
-  ImplicitEuler(const double delt)
-      : delt(delt) {}
+  ImplicitEuler(const unsigned int niters,
+                const double delt,
+                const double maxrtol,
+                const double maxatol,
+                const double subdelt)
+      : niters(niters), delt(delt), maxrtol(maxrtol),
+        maxatol(maxatol), subdelt(subdelt) {}
 
   KOKKOS_INLINE_FUNCTION
   double solve_condensation_matsushima(const double s_ratio,
@@ -100,17 +117,17 @@ Matsushima et al. 2023 for more details. */
   const double bkoh(kohler_ab.second);
 
   const double s_act(1 + std::sqrt(4.0 * std::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
-  if ((s_ratio > 0.999*s_act) && (s_ratio < 1.001*s_act))
+  if ((s_ratio > 0.999 * s_act) && (s_ratio < 1.001 * s_act))
   /* if supersaturation close to s_act, activation or
   deactivation might occur so perform subtimestepping */
   {
-    // return substep_implicitmethod(delt, niters, maxrtol, maxatol,
-    //                               s_ratio, akoh, bkoh, ffactor,
-    //                               rprev, subdelt);
+    return substepped_implicitmethod(niters, delt, maxrtol, maxatol,
+                                     s_ratio, akoh, bkoh, ffactor,
+                                     rprev, subdelt);
   }
 
   // else
-  // /* Far from activation / deactivation appropriate choice 
+  // /* Far from activation / deactivation appropriate choice
   // of initial guess allows rapid convergence of to correct
   // solution even in cases when spurious solutions exist
   // (see Matsushima et al. 2023 unqiuenss criteria). */
@@ -121,7 +138,34 @@ Matsushima et al. 2023 for more details. */
   //   return impit.newtonraphson_niterations(rprev, init_ziter);
   // }
 
-  return rprev;
+  return rprev; // TODO delete
+}
+
+KOKKOS_INLINE_FUNCTION
+double ImplicitEuler::substepped_implicitmethod(const unsigned int iters,
+                                                const double delt,
+                                                const double rtol,
+                                                const double atol,
+                                                const double s_ratio,
+                                                const double akoh,
+                                                const double bkoh,
+                                                const double ffactor,
+                                                const double rprev,
+                                                double subdelt) const
+{
+  const unsigned int nsubs = std::ceil(delt / subdelt);
+  subdelt = delt / (double)nsubs;
+
+  // const ImpIter impit{niters, subdelt, maxrtol, maxatol,
+  //                       s_ratio, akoh, bkoh, ffactor};
+
+  double subr(rprev);
+  // for (unsigned int n=0; n < nsubs; ++n)
+  // {
+  //   double init_ziter(impit.initialguess(subr));
+  //   subr = impit.newtonraphson_niterations(subr, init_ziter);
+  // }
+  return subr;
 }
 
 #endif // IMPLICITEULER_HPP
