@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Thursday 26th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -41,13 +41,14 @@
 template <CoupledDynamics CD, GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,
           Motion M, Observer Obs>
-struct SDMMethods
+class SDMMethods
 {
-// private:
-public: // private except that GPU compatible Kokkos requries public access during calls for thread parallelisation
-
+// public: // TODO private except that GPU compatible Kokkos requries public access during calls for thread parallelisation
+private:
   unsigned int couplstep;           // coupled timestep
-  
+  GbxMaps gbxmaps;                  // maps from gridbox indexes to domain coordinates
+  MoveSupersInDomain<M> movesupers; // super-droplets' motion in domain
+
   KOKKOS_INLINE_FUNCTION
   unsigned int next_sdmstep(const unsigned int t_sdm,
                             const unsigned int next_mdl) const
@@ -74,36 +75,42 @@ public: // private except that GPU compatible Kokkos requries public access duri
     movesupers.run_step(t_sdm, gbxmaps, d_gbxs, supers);
   }
 
-  void sdm_microphysics(const unsigned int t_sdm,
-                        const unsigned int t_next,
-                        const viewd_gbx d_gbxs,
-                        GenRandomPool genpool) const
-  /* enact SDM microphysics for each gridbox
-  (using sub-timestepping routine) */
-  {
-    const size_t ngbxs(d_gbxs.extent(0));
-    Kokkos::parallel_for(
-        "sdm_microphysics",
-        Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
-        KOKKOS_CLASS_LAMBDA(const size_t ii) 
-    {
-      URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
-
-      auto gbx = d_gbxs(ii);
-      for (unsigned int subt = t_sdm; subt < t_next;
-           subt = microphys.next_step(subt))
-      {
-        microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); // TODO use returned supers here
-      }
-
-      genpool.free_state(urbg.gen);
-    });
-  }
-
 public:
-  GbxMaps gbxmaps;                  // maps from gridbox indexes to domain coordinates
-  Microphys microphys;              // microphysical process
-  MoveSupersInDomain<M> movesupers; // super-droplets' motion in domain
+  struct SDMMicrophysics
+  /* operator is call to microphysics 'sdm_microphysics'. struct
+  created so that capture by value KOKKOS_CLASS_LAMBDA
+  (ie. [=] on CPU) only captures microphysics and not other
+  members of SDMMethods */
+  {
+    Microphys microphys; // microphysical process
+
+    void operator()(const unsigned int t_sdm,
+                    const unsigned int t_next,
+                    const viewd_gbx d_gbxs,
+                    GenRandomPool genpool) const
+    /* enact SDM microphysics for each gridbox
+    (using sub-timestepping routine) */
+    {
+      const size_t ngbxs(d_gbxs.extent(0));
+      Kokkos::parallel_for(
+          "sdm_microphysics",
+          Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+          KOKKOS_CLASS_LAMBDA(const size_t ii) {
+            URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
+
+            auto gbx = d_gbxs(ii);
+            for (unsigned int subt = t_sdm; subt < t_next;
+                 subt = microphys.next_step(subt))
+            {
+              microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); // TODO use returned supers here
+            }
+
+            genpool.free_state(urbg.gen);
+          });
+    }
+  }; 
+
+  SDMMicrophysics sdm_microphysics; // operator is call for SDM microphysics
   Obs obs;                          // observer
 
   SDMMethods(const CD &coupldyn,
@@ -113,8 +120,8 @@ public:
              const Obs obs)
       : couplstep(coupldyn.get_couplstep()),
         gbxmaps(gbxmaps),
-        microphys(microphys),
         movesupers(movesupers),
+        sdm_microphysics({microphys}),
         obs(obs) {}
 
   KOKKOS_INLINE_FUNCTION

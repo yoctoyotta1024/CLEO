@@ -35,7 +35,7 @@ class ImplicitEuler
   the implicit timestepping equation of stiff ODE */
 {
 public:
-  KOKKOS_FUNCTION
+  KOKKOS_INLINE_FUNCTION
   double solve_condensation(const double s_ratio,
                             const Kokkos::pair<double, double> akoh_bkoh,
                             const Kokkos::pair<double, double> fkl_fdl,
@@ -54,7 +54,7 @@ public:
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
-KOKKOS_FUNCTION
+KOKKOS_INLINE_FUNCTION
 double ImplicitEuler::solve_condensation(const double s_ratio,
                                          const Kokkos::pair<double, double> kohler_ab,
                                          const Kokkos::pair<double, double> fkl_fdl,
@@ -70,10 +70,10 @@ near to supersaturation=1 (when activation / deactivation may occur).
 Refer to section 5.1.2 Shima et al. 2009 and section 3.3.3 of
 Matsushima et al. 2023 for more details. */
 {
-  const double akoh(kohler_ab.first);
-  const double bkoh(kohler_ab.second);
-  const double fkl(fkl_fdl.first);
-  const double fdl(fkl_fdl.second);
+  // const double akoh(kohler_ab.first);
+  // const double bkoh(kohler_ab.second);
+  // const double fkl(fkl_fdl.first);
+  // const double fdl(fkl_fdl.second);
 
   return rprev;
 }
