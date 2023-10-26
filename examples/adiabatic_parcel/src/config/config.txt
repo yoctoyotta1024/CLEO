@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Friday 27th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,49 +26,52 @@
 
 
 ### Initialisation parameters ###
-constants_filename = ../libs/cleoconstants.hpp      # name of file for values of physical constants
-initSDs_filename = ./share/dimlessSDsinit.dat       # binary filename for initialisation of SDs
-grid_filename = ./share/dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
+constants_filename = ../libs/cleoconstants.hpp                  # name of file for values of physical constants
+initSDs_filename = ./share/adiabatic0D_dimlessSDsinit.dat       # binary filename for initialisation of SDs
+grid_filename = ./share/adiabatic0D_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 ### Output Data parameters ###
-setuptxt = ./bin/setup.txt                # .txt filename to copy configuration to
-zarrbasedir = ./bin/SDMdata.zarr          # zarr store base directory
-maxchunk = 1250000                        # maximum no. of elements in chunks of zarr store array
+setuptxt = ./bin/adiabatic0D_setup.txt               # .txt filename to copy configuration to
+zarrbasedir = ./bin/diabatic0D_SDMdata.zarr          # zarr store base directory
+maxchunk = 1250000                                   # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime parameters ###
 # domain setup #
-nspacedims = 3                          # no. of spatial dimensions to model 
-ngbxs = 5                               # total number of Gbxs
-totnsupers = 10                         # (initial) total no. of SDs
+nspacedims = 0                             # no. of spatial dimensions to model 
+ngbxs = 1                                  # total number of Gbxs
+totnsupers = 5                             # (initial) total no. of SDs
 
 # timestepping #
-CONDTSTEP = 2                             # time between SD condensation events [s]
-COLLTSTEP = 4                             # time between SD collision events [s]
-MOTIONTSTEP = 6                           # time between SDM motion [s]
-COUPLTSTEP = 10                           # time between dynamic couplings [s]
-OBSTSTEP = 20                             # time between SDM observations [s]
-T_END = 40                                # time span of integration from 0s to T_END [s]
+CONDTSTEP = 0.01                           # time between SD condensation events [s]
+COLLTSTEP = 0.5                            # time between SD collision events [s]
+MOTIONTSTEP = 0.5                          # time between SDM motion [s]
+COUPLTSTEP = 0.5                           # time between dynamic couplings [s]
+OBSTSTEP = 5                               # time between SDM observations [s]
+T_END = 150000                             # time span of integration from 0s to T_END [s]
 
 # microphysics #
-cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
-cond_SUBTSTEP = 0.1                       # smallest timestep in cases where substepping occurs [s]
-cond_rtol = 0.0                           # relative tolerance for implicit euler integration
-cond_atol = 0.01                          # abolute tolerance for implicit euler integration
-nfrags = -1                               # expected number of fragments in breakup event, (use -1 for nan value)
+cond_iters = 10                            # no. iterations of Newton Raphson Method before testing for convergence
+cond_SUBTSTEP = 0.1                        # smallest timestep in cases where substepping occurs [s]
+cond_rtol = 0.0                            # relative tolerance for implicit euler integration
+cond_atol = 0.01                           # abolute tolerance for implicit euler integration
+nfrags = -1                                # expected number of fragments in breakup event, (use -1 for nan value)
 
 # superdroplets #
-wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
-doAlterThermo = false                   # enable condensation to alter the thermodynamic state
+wetradiiinit = false                       # set initial SD radii to equilibrium wet radius
+doAlterThermo = true                       # enable condensation to alter the thermodynamic state
 
 ### Coupled Dynamics Solver Parameters ###
 # type of coupling #
-thermosolver = fromfile                                   # dynamics solver to configure
+thermosolver = cvode                       # dynamics solver to configure
 
-### read in dynamics from file ###
-press_filename = ./share/dimlessthermo_press.dat          # binary filename for pressure
-temp_filename = ./share/dimlessthermo_temp.dat            # binary filename for temperature
-qvap_filename = ./share/dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
-qcond_filename = ./share/dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
-wvel_filename = ./share/dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
-uvel_filename = ./share/dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
-vvel_filename = ./share/dimlessthermo_vvel.dat            # binary filename for horizontal y velocity
+### CVODE ODE solver paramters ###
+# initial (uniform) thermodynamic conditions #
+P_INIT = 100000.0                          # initial pressure [Pa]
+TEMP_INIT = 298.15                         # initial parcel temperature [T]
+relh_init = 98                             # initial relative humidity (%) unphyical < 0.0 in this setup to prevent wetradius initialisation
+
+# ODE solver parameters #
+W_AVG = 0.002                              # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
+T_HALF = 75000                             # timescale for w sinusoid, tau = THALF/pi [s]
+cvode_rtol = 1e-6                          # relative tolerance for [P, T, qv, qc] ODEs integration
+cvode_atol = 1e-6                          # absolute tolerance for [P, T, qv, qc] ODEs integration
