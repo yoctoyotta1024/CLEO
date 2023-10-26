@@ -140,7 +140,7 @@ from "An Introduction To Clouds...." (see note at top of file) */
   /* resultant effect on thermodynamic state */
   if (doAlterThermo)
   {
-    condensation_state_change(totrho_condensed, state); // TODO
+    condensation_state_change(totrho_condensed, state);
   }
 }
 
