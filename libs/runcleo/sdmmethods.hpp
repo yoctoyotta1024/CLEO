@@ -91,10 +91,12 @@ public:
                     const viewd_gbx d_gbxs,
                     GenRandomPool genpool) const
     /* enact SDM microphysics for each gridbox
-    (using sub-timestepping routine) */
+    (using sub-timestepping routine). Kokkos::parallel for is
+    parallelised for loop over gridboxes, serial equivalent is:
+    for ( size_t ii(0); ii < ngbx; ++ii) { [...] } */
     {
       const size_t ngbxs(d_gbxs.extent(0));
-      Kokkos::parallel_for(
+      Kokkos::parallel_for( 
           "sdm_microphysics",
           Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
           KOKKOS_CLASS_LAMBDA(const size_t ii) {
