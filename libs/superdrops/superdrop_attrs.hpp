@@ -24,7 +24,7 @@
 #ifndef SUPERDROP_ATTRS_HPP
 #define SUPERDROP_ATTRS_HPP
 
-#include <math.h>
+#include <math.h> // for fmax()
 
 #include <Kokkos_Core.hpp>
 

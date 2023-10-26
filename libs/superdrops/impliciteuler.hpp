@@ -25,7 +25,7 @@
 #ifndef IMPLICITEULER_HPP
 #define IMPLICITEULER_HPP
 
-#include <math.h>
+#include <math.h> // for fmax()
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -55,6 +55,7 @@ struct ImplicitIteration
   much greater than its (activation radius)^2 if the
   supersaturation > its activation supersaturation  */
 
+  KOKKOS_INLINE_FUNCTION
   double initialguess_shima(const double rprev) const;
   /* returns appropriate initial value (ie. a reasonable guess) for
   'ziter' to use as first iteration of newton raphson method in
@@ -63,6 +64,7 @@ struct ImplicitIteration
   Second criteria is that initial guess >= 'r1sqrd', where r1 is the
   equilibrium radius of a given droplet when s_ratio=1  */
 
+  KOKKOS_INLINE_FUNCTION
   double newtonraphson_niterations(const double rprev,
                                    double ziter) const;
   /* Timestep condensation ODE by delt given initial guess for ziter,
@@ -76,6 +78,7 @@ struct ImplicitIteration
   'niters' iterations, convergence criteria is tested and futher
   iterations undertaken if not yet converged. */
 
+  KOKKOS_INLINE_FUNCTION
   double newtonraphson_untilconverged(const unsigned int iterlimit,
                                       const double rprev,
                                       double ziter) const;
@@ -89,12 +92,13 @@ struct ImplicitIteration
   (which is the radius at timestep 't+subdelt'. Refer to section 5.1.2 Shima
   et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
 
-  Kokkos::pair<bool, double>
+  KOKKOS_INLINE_FUNCTION Kokkos::pair<bool, double>
   iterate_rootfinding_algorithm(const double rprev, double ziter) const;
   /* function performs one iteration of Newton Raphson rootfinding
   method and returns updated value of radius^2 alongside a boolean that
   is false if algorithm has converged */
 
+  KOKKOS_INLINE_FUNCTION
   double ode_gfunc(const double rprev, const double rsqrd) const;
   /* returns g(z) / z * delt for g(z) function used in root finding
   Newton Raphson Method for dr/dt condensation / evaporation ODE.
@@ -103,11 +107,13 @@ struct ImplicitIteration
   equations from "An Introduction To Clouds...."
   (see note at top of file). Note: z = ziter = radius^2 */
 
+  KOKKOS_INLINE_FUNCTION
   double ode_gfuncderivative(const double rsqrd) const;
   /* dg(z)/dz * delt, where dg(z)/dz is derivative of g(z) with
   respect to z=rsqrd. g(z) is polynomial to find root of using
   Newton Raphson Method. */
 
+  KOKKOS_INLINE_FUNCTION
   bool isnotconverged(const double gfunciter,
                       const double gfuncprev) const
   /* boolean where True means criteria for ending newton raphson
@@ -263,6 +269,20 @@ supersaturation > its activation supersaturation  */
   }
 
   return rprevsqrd;
+}
+
+KOKKOS_INLINE_FUNCTION double
+ImplicitIteration::initialguess_shima(const double rprev) const
+/* returns appropriate initial value (ie. a reasonable guess) for
+'ziter' to use as first iteration of newton raphson method in
+rootfinding algorithm for timestepping condensation/evaporation ODE.
+Criteria for modifying guess from rprev^2 are adapted from SCALE-SDM.
+Second criteria is that initial guess >= 'r1sqrd', where r1 is the
+equilibrium radius of a given droplet when s_ratio=1  */
+{
+  const double rsqrd(initialguess(rprev));
+  const double r1sqrd(bkoh / akoh);
+  return fmax(rsqrd, r1sqrd); // Kokkos compatible equivalent to std::max() for floating point numbers
 }
 
 #endif // IMPLICITEULER_HPP
