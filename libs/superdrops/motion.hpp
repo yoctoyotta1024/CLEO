@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Thursday 26th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,6 +24,8 @@
 #define MOTION_HPP
 
 #include <concepts>
+
+#include "../cleoconstants.hpp"
 
 template <typename M>
 concept Motion = requires(M m, const unsigned int t)
@@ -43,4 +45,19 @@ constraints on the "update_superdrop_coords" function */
   } -> std::same_as<void>; 
 };
 
+
+struct NullMotion
+{
+  unsigned int next_step(const unsigned int t_mdl) const
+  {
+    return LIMITVALUES::uintmax;
+  }
+
+  bool on_step(const unsigned int t_mdl) const
+  {
+    return false;
+  }
+
+  void change_superdroplet_coords(const unsigned int t_mdl) const {}
+};
 #endif // MOTION_HPP
