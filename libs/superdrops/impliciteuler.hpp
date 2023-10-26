@@ -114,7 +114,7 @@ struct ImplicitIteration
   Newton Raphson Method. */
 
   KOKKOS_INLINE_FUNCTION
-  bool isnotconverged(const double gfunciter,
+  bool isnot_converged(const double gfunciter,
                       const double gfuncprev) const
   /* boolean where True means criteria for ending newton raphson
   iterations has not yet been met. Criteria is standard local error
@@ -242,10 +242,10 @@ ImplicitEuler::substepped_implicitmethod(const ImplicitIteration &implit,
                                          const double rprev) const
 {
   double subr(rprev);
-  for (unsigned int n = 0; n < nsubsteps; ++n)
+  for (unsigned int n(0); n < nsubsteps; ++n)
   {
     double init_ziter(implit.initialguess(subr));
-    // subr = implit.newtonraphson_niterations(subr, init_ziter);
+    subr = implit.newtonraphson_niterations(subr, init_ziter);
   }
   return subr;
 }
@@ -283,6 +283,79 @@ equilibrium radius of a given droplet when s_ratio=1  */
   const double rsqrd(initialguess(rprev));
   const double r1sqrd(bkoh / akoh);
   return fmax(rsqrd, r1sqrd); // Kokkos compatible equivalent to std::max() for floating point numbers
+}
+
+KOKKOS_INLINE_FUNCTION double
+ImplicitIteration::newtonraphson_niterations(const double rprev,
+                                             double ziter) const
+/* Timestep condensation ODE by delt given initial guess for ziter,
+(which is usually radius^squared from previous timestep). Uses newton
+raphson iterative method to find new value of radius that converges
+on the root of the polynomial g(ziter) within the tolerances of the
+ImpIter instance. Uniquesol method assumes that solution to g(ziter)=0
+is unique and therefore Newton Raphson root finding algorithm converges
+quickly. This means method can be used with comparitively large tolerances
+and timesteps, and the maximum number of iterations is small. After
+'niters' iterations, convergence criteria is tested and futher
+iterations undertaken if not yet converged. */
+{
+  // perform 'niters' iterations
+  double numerator(0.0);
+  for (unsigned int iter(0); iter < niters; ++iter)
+  {
+    /* perform one attempted iteration  ziter^(m) -> ziter^(m+1)
+    for iteration m+1 starting at m=1 */
+    numerator = ode_gfunc(rprev, ziter);
+    const double denominator(ode_gfuncderivative(ziter));
+    ziter -= ziter * numerator / denominator; // increment ziter
+    ziter = Kokkos::max(ziter, 1e-8);            // do not allow ziter < 0.0
+  }
+
+  // perform upto 'iterlimit' further iterations if convergence test fails
+  if (!(isnot_converged(ode_gfunc(rprev, ziter), numerator)))
+  {
+    return Kokkos::sqrt(ziter);
+  }
+  // else
+  // {
+  //   const unsigned int iterlimit(50); // maximum number of further iterations
+  //   return newtonraphson_untilconverged(iterlimit, rprev, ziter);
+  // }
+
+  return rprev; //TODO delete
+}
+
+KOKKOS_INLINE_FUNCTION double
+ImplicitIteration::ode_gfunc(const double rprev,
+                             const double rsqrd) const
+/* returns g(z) / z * delt for g(z) function used in root finding
+Newton Raphson Method for dr/dt condensation / evaporation ODE.
+ODE is for radial growth/shrink of each superdroplet due to
+condensation and diffusion of water vapour according to
+equations from "An Introduction To Clouds...."
+(see note at top of file). Note: z = ziter = radius^2 */
+{
+  const double radius(Kokkos::sqrt(rsqrd));
+
+  const double alpha(s_ratio - 1 - akoh / radius + bkoh / Kokkos::pow(radius, 3.0));
+  const double beta(2.0 * subdelt / (rsqrd * ffactor));
+  const double gamma(Kokkos::pow(rprev / radius, 2.0));
+
+  return 1 - gamma - alpha * beta;
+}
+
+KOKKOS_INLINE_FUNCTION double
+ImplicitIteration::ode_gfuncderivative(const double rsqrd) const
+/* dg(z)/dz * delt, where dg(z)/dz is derivative of g(z) with
+respect to z=rsqrd. g(z) is polynomial to find root of using
+Newton Raphson Method. */
+{
+  const double radius(Kokkos::sqrt(rsqrd));
+
+  const double alpha(akoh / radius - 3.0 * bkoh / Kokkos::pow(radius, 3.0));
+  const double beta(subdelt / (rsqrd * ffactor));
+
+  return 1 - alpha * beta;
 }
 
 #endif // IMPLICITEULER_HPP
