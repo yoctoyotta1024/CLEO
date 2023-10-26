@@ -75,6 +75,8 @@ private:
   }
 
 public:
+  Obs obs;                          // observer
+
   struct SDMMicrophysics
   /* operator is call to microphysics 'sdm_microphysics'. struct
   created so that capture by value KOKKOS_CLASS_LAMBDA
@@ -108,9 +110,7 @@ public:
             genpool.free_state(urbg.gen);
           });
     }
-  } sdm_microphysics; // operator is call for SDM microphysics 
-
-  Obs obs;                          // observer
+  } sdm_microphysics; // operator is call for SDM microphysics
 
   SDMMethods(const CD &coupldyn,
              const GbxMaps gbxmaps,
@@ -120,8 +120,8 @@ public:
       : couplstep(coupldyn.get_couplstep()),
         gbxmaps(gbxmaps),
         movesupers(movesupers),
-        sdm_microphysics({microphys}),
-        obs(obs) {}
+        obs(obs),
+        sdm_microphysics({microphys}) {}
 
   KOKKOS_INLINE_FUNCTION
   auto get_couplstep() const { return couplstep; }
