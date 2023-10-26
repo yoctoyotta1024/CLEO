@@ -5,7 +5,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and source directory of .cpp files
-project("CLEOsetups")
+project("adiabatic0D")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
@@ -35,16 +35,15 @@ if(NOT DEFINED compileops)
   set(compileops ${defaultcompileops})
 endif()
 
-# primary executable for CLEO sdm
-set(runCLEO "runCLEO")
-add_executable(${runCLEO} "main.cpp")
-target_link_libraries(${runCLEO} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
-target_link_libraries(${runCLEO} PUBLIC Kokkos::kokkos)
-# target_include_directories(${runCLEO} PRIVATE ${PROJECT_SOURCE_DIR})
-target_compile_options(${runCLEO} PRIVATE ${compileops})
+# executable for CVODE-CLEO coupled model 0D condensation setup 
+set(adiabatic0D "adiabatic0D")
+add_executable(${adiabatic0D} EXCLUDE_FROM_ALL "main_adiabatic0D.cpp")
+target_link_libraries(${adiabatic0D} PRIVATE coupldyn_cvode "${SDMLIBS}")
+target_link_libraries(${adiabatic0D} PUBLIC Kokkos::kokkos)
+target_compile_options(${adiabatic0D} PRIVATE ${compileops}) 
 
 # set compiler properties for target(s)
-set_target_properties(${runCLEO} PROPERTIES
+set_target_properties(${runCLEO} ${adiabatic0D} ${golovin0D} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

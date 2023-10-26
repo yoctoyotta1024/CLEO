@@ -58,6 +58,6 @@ struct NullMotion
     return false;
   }
 
-  void change_superdroplet_coords(const unsigned int t_mdl) const {}
+  void update_superdrop_coords(const unsigned int t_mdl) const {}
 };
 #endif // MOTION_HPP

@@ -26,7 +26,6 @@ target_include_directories(${LIBNAME} PUBLIC "${CMAKE_SOURCE_DIR}/libs")
 # link libraries in libs to this target
 set(LINKLIBS initialise)
 target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
-target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # some compilation properties
 set_target_properties(${LIBNAME} PROPERTIES

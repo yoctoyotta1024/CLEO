@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
- * File: main.cpp
- * Project: adiabatic_parcel
+ * File: main_adiabatic0D.cpp
+ * Project: src
  * Created Date: Thursday 12th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -29,7 +29,7 @@
 
 #include "cartesiandomain/cartesianmaps.hpp"
 
-#include "coupldyn_fromfile/fromfiledynamics.hpp"
+#include "coupldyn_cvode/cvodedynamics.hpp"
 
 #include "gridboxes/gridboxmaps.hpp"
 
@@ -62,7 +62,7 @@ CoupledDynamics auto
 create_coupldyn(const Config &config,
                 const unsigned int couplstep)
 {
-  return FromFileDynamics(config, couplstep);
+  return CvodeDynamics(config, couplstep);
 }
 
 GridboxMaps auto

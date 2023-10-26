@@ -5,7 +5,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and source directory of .cpp files
-project("CLEOsetups")
+project("CLEOsetup")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
