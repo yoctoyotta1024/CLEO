@@ -55,7 +55,7 @@ private:
   (motion or one complete step) is next to occur and return
   the time of the sooner event, (ie. next t_move or t_mdl) */
   {
-    const unsigned int next_move(movesupers.next_step(t_sdm));        // t of next sdm movement
+    const unsigned int next_move(movesupers.next_step(t_sdm)); // t of next sdm movement
     const unsigned int t_next(!(next_mdl <
                                 next_move)
                                   ? next_move
@@ -75,7 +75,7 @@ private:
   }
 
 public:
-  Obs obs;                          // observer
+  Obs obs; // observer
 
   struct SDMMicrophysics
   /* operator is call to microphysics 'sdm_microphysics'. struct
@@ -96,10 +96,11 @@ public:
     for ( size_t ii(0); ii < ngbx; ++ii) { [...] } */
     {
       const size_t ngbxs(d_gbxs.extent(0));
-      Kokkos::parallel_for( 
+      Kokkos::parallel_for(
           "sdm_microphysics",
           Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
           KOKKOS_CLASS_LAMBDA(const size_t ii) {
+            
             URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
 
             auto gbx = d_gbxs(ii);

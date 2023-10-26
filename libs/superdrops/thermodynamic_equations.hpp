@@ -101,8 +101,9 @@ with conversion to real temp /K = T*Temp0 and from
 real psat to dimensionless psat = psat/P0. */
 
 KOKKOS_FUNCTION
-Kokkos::pair<double, double>
-diffusion_factors(const double press, const double temp, const double psat);
+double diffusion_factor(const double press,
+                        const double temp,
+                        const double psat);
 /* Calculate dimensionless Fkl and Fdl heat and vapour
 diffusion factors in equation for radial growth of droplets
 according to equations from "An Introduction To Clouds...."
@@ -158,8 +159,9 @@ real psat to dimensionless psat = psat/P0. */
 }
 
 KOKKOS_FUNCTION
-Kokkos::pair<double, double>
-diffusion_factors(const double press, const double temp, const double psat)
+double diffusion_factor(const double press,
+                         const double temp,
+                         const double psat)
 /* Calculate dimensionless Fkl and Fdl heat and vapour
 diffusion factors in equation for radial growth of droplets
 according to equations from "An Introduction To Clouds...."
@@ -181,7 +183,7 @@ pair, fdl is second. */
   const double fkl((LATENT_RGAS_V / TEMP - 1.0) * DC::LATENT_V / (THERMK * dlc::F0)); // fkl eqn [7.23]
   const double fdl(TEMP / (DIFFUSE_V * PSAT) / dlc::F0);                              // fdl eqn [7.25]
 
-  return {fkl, fdl};
+  return dlc::Rho_l * (fkl + fdl); // total constant from diffusion factors
 }
 
 #endif // THERMODYNAMIC_EQUATIONS_HPP

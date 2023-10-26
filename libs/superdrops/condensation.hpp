@@ -112,13 +112,15 @@ from "An Introduction To Clouds...." (see note at top of file) */
   const double VOLUME(state.get_volume() * C0cubed);    // volume in which condensation occurs [m^3]
   const double psat(saturation_pressure(state.temp));
   const double s_ratio(supersaturation_ratio(state.press, state.qvap, psat));
+  const double ffactor(diffusion_factor(press, temp, psat));
 
   double totmass_condensed(0.0); // cumulative change to liquid mass in parcel volume 'dm'
   for (size_t kk(0); kk < supers.extent(0); ++kk)
   {
     const double deltamass_condensed(
         condensation_mass_change(supers(kk), state.press,
-                                 state.temp, psat, s_ratio));
+                                 state.temp, psat, s_ratio,
+                                 ffactor));
     totmass_condensed += deltamass_condensed; // dm += dm_condensed_vapour/dt * delta t
   }
   const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
@@ -136,7 +138,8 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
                                                 const double press,
                                                 const double temp,
                                                 const double psat,
-                                                const double s_ratio) const
+                                                const double s_ratio,
+                                                const double ffactor) const
 /* update superdroplet radius due to radial growth/shrink
   via condensation and diffusion of water vapour according
   to equations from "An Introduction To Clouds...." (see
@@ -147,9 +150,8 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
 {
   /* do not pass r by reference here!! copy value into iterator */
   const ImplicitEuler impe{}; // TODO move
-  const auto fkl_fdl = diffusion_factors(press, temp, psat); // pair = {fkl, fdl}
   const auto ab_kohler = kohler_factors(drop, temp); // pair = {akoh, bkoh}
-  const double newr(impe.solve_condensation(s_ratio, ab_kohler, fkl_fdl,
+  const double newr(impe.solve_condensation(s_ratio, ab_kohler, ffactor,
                                             drop.get_radius())); // timestepping eqn [7.28] forward
   const double delta_radius(drop.change_radius(newr));
 
