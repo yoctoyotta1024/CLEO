@@ -70,6 +70,11 @@ private:
   water mass per volume during time interval delt */
 
 public:
+  DoCondensation(const bool doAlterThermo,
+                 const double delt)
+      : doAlterThermo(doAlterThermo),
+        delt(delt) {}
+
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
   subviewd_supers operator()(const unsigned int subt,
