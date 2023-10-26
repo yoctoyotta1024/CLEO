@@ -222,19 +222,68 @@ Matsushima et al. 2023 for more details. */
     return substepped_implicitmethod(implit, nsubs, rprev);
   }
 
-  // else
-  // /* Far from activation / deactivation appropriate choice
-  // of initial guess allows rapid convergence of to correct
-  // solution even in cases when spurious solutions exist
-  // (see Matsushima et al. 2023 unqiuenss criteria). */
-  // {
-  //   const ImpIter impit{niters, delt, maxrtol, maxatol,
-  //                       s_ratio, akoh, bkoh, ffactor};
-  //   double init_ziter(impit.initialguess(rprev));
-  //   return impit.newtonraphson_niterations(rprev, init_ziter);
-  // }
+  else
+  /* Far from activation / deactivation appropriate choice
+  of initial guess allows rapid convergence of to correct
+  solution even in cases when spurious solutions exist
+  (see Matsushima et al. 2023 unqiuenss criteria). */
+  {
+    const ImplicitIteration implit{niters, delt, maxrtol, maxatol,
+                                   s_ratio, akoh, bkoh, ffactor};
+    double init_ziter(implit.initialguess(rprev));
+    return implit.newtonraphson_niterations(rprev, init_ziter);
+  }
+}
 
-  return rprev; // TODO delete
+KOKKOS_INLINE_FUNCTION double
+ImplicitEuler::solve_condensation_matsushima(const double s_ratio,
+                                             const Kokkos::pair<double, double> kohler_ab,
+                                             const double ffactor,
+                                             const double rprev) const
+/* forward timestep previous radius 'rprev' by delt using an implicit
+euler method to integrate the condensation/evaporation ODg. Implict
+timestepping equation defined in section 5.1.2 of Shima et al. 2009
+and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
+Newton Raphson iterations are used to converge towards the root of
+g(z) within the tolerances of an ImpIter instance. Tolerances,
+maxium number of iterations and sub-timestepping are adjusted based on
+on the uniqueness criteria of the polynomial g(z). Refer to section
+5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023
+for more details. */
+{
+  const double akoh(kohler_ab.first);
+  const double bkoh(kohler_ab.second);
+
+  const double max_uniquedelt(2.5 * ffactor / akoh *
+                              Kokkos::pow(5.0 * bkoh / akoh, 1.5));
+  const double ract_ratio(rprev * rprev * akoh / 3.0 / bkoh);
+
+  const bool ucrit1((s_ratio <= 1.0 && ract_ratio < 1.0));
+  const bool ucrit2(delt <= max_uniquedelt);
+
+  if (ucrit1 || ucrit2)
+  /* at least one criteria is met such that there is unique solution */
+  {
+    const ImpIter impit{niters, delt, maxrtol, maxatol,
+                        s_ratio, akoh, bkoh, ffactor};
+    double init_ziter(impit.initialguess(rprev));
+    return impit.newtonraphson_niterations(rprev, init_ziter);
+  }
+
+  else
+  /* In general there may be > 0 spurious solutions.
+  Convergence may be slower so allow >= 3 Newton Raphson
+  iterations (could also refine tolerances) */
+  {
+    double subt(fmax(max_uniquedelt, subdelt)); // Kokkos compatible equivalent to std::max() for floating point numbers
+    const unsigned int nsubs = Kokkos::ceil(delt / subt);
+    subt = delt / (double)nsubs;
+
+    const ImplicitIteration implit{niters, subt, maxrtol, maxatol,
+                                   s_ratio, akoh, bkoh, ffactor};
+
+    return substepped_implicitmethod(implit, nsubs, rprev);
+  }
 }
 
 KOKKOS_INLINE_FUNCTION double
@@ -317,13 +366,11 @@ iterations undertaken if not yet converged. */
   {
     return Kokkos::sqrt(ziter);
   }
-  // else
-  // {
-  //   const unsigned int iterlimit(50); // maximum number of further iterations
-  //   return newtonraphson_untilconverged(iterlimit, rprev, ziter);
-  // }
-
-  return rprev; //TODO delete
+  else
+  {
+    const unsigned int iterlimit(50); // maximum number of further iterations
+    return newtonraphson_untilconverged(iterlimit, rprev, ziter);
+  }
 }
 
 KOKKOS_INLINE_FUNCTION double
