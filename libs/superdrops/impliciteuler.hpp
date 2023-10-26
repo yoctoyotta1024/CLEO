@@ -26,6 +26,7 @@
 #define IMPLICITEULER_HPP
 
 #include <math.h> // for fmax()
+#include <cassert>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -356,6 +357,60 @@ Newton Raphson Method. */
   const double beta(subdelt / (rsqrd * ffactor));
 
   return 1 - alpha * beta;
+}
+
+KOKKOS_INLINE_FUNCTION double
+ImplicitIteration::newtonraphson_untilconverged(const unsigned int iterlimit,
+                                                const double rprev,
+                                                double ziter) const
+/*  Timestep condensation ODE by delt given initial guess for ziter,
+(which is usually radius^squared from previous timestep). Uses
+newton raphson iterative method to find new value of radius that
+converges on the root of the polynomial g(ziter) within the tolerances
+of the ImpIter instance. After every iteration, convergence criteria is
+tested and error is raised if method does not converge within
+'iterlimit' iterations. Otherwise returns new value for the radius
+(which is the radius at timestep 't+subdelt'. Refer to section 5.1.2 Shima
+et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
+{
+  bool do_iter(true);
+  unsigned int iter(1);
+
+  // perform newton raphson iterations if convergence test fails
+  // and throw error if not converged within 'iterlimit' iterations
+  while (do_iter)
+  {
+    assert((iter <= iterlimit) && "Newton Raphson Method not converged.");
+
+    /* perform one attempted iteration  ziter^(m) -> ziter^(m+1)
+    for iteration m+1 starting at m=1 and then test for convergence */
+    const auto iterreturn(iterate_rootfinding_algorithm(rprev, ziter));
+    do_iter = iterreturn.first;
+    ziter = fmax(iterreturn.second, 1e-8); // do not allow ziter < 0.0 (fmax ~ std::max())
+    iter += 1;
+  }
+
+  return Kokkos::sqrt(ziter);
+}
+
+KOKKOS_INLINE_FUNCTION
+Kokkos::pair<bool, double>
+ImplicitIteration::iterate_rootfinding_algorithm(const double rprev,
+                                                 double ziter) const
+/* function performs one iteration of Newton Raphson rootfinding
+  method and returns updated value of radius^2 alongside a boolean that
+  is false if algorithm has converged */
+{
+  // increment ziter
+  const double numerator(ode_gfunc(rprev, ziter));
+  const double denominator(ode_gfuncderivative(ziter));
+  ziter = ziter * (1 - numerator / denominator);
+
+  // test for next iteration
+  const double newnumerator(ode_gfunc(rprev, ziter));
+  const bool do_iter(isnot_converged(newnumerator, numerator));
+
+  return {do_iter, ziter};
 }
 
 #endif // IMPLICITEULER_HPP
