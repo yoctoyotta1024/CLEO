@@ -45,6 +45,8 @@ struct DoCondensation
 condensation / evaporation microphysical process */
 {
 private:
+  const bool doAlterThermo;          // whether to make condensation alter ThermoState or not
+  const double delt;                 // dimensionless time interval during which condenstaion occurs
 
   KOKKOS_FUNCTION
   void do_condensation(const subviewd_supers supers, State &state) const;
@@ -86,13 +88,17 @@ public:
 };
 
 inline MicrophysicalProcess auto
-Condensation(const unsigned int interval)
+Condensation(const unsigned int interval,
+             const std::function<double(int)> step2dimlesstime,
+             const bool doAlterThermo)
 /* constructs Microphysical Process for
 condensation/evaporation of superdroplets with a
 constant timestep 'interval' given the
 "do_condensation" function-like type */
 {
-  return ConstTstepMicrophysics(interval, DoCondensation{});
+  const double delt = step2dimlesstime(interval); // dimensionless time [] equivlent to interval
+  return ConstTstepMicrophysics(interval,
+                                DoCondensation{doAlterThermo, delt});
 }
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */

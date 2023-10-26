@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Thursday 26th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -74,9 +74,13 @@ create_gbxmaps(const Config &config)
 }
 
 MicrophysicalProcess auto
-create_microphysics(const Timesteps &tsteps)
+create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  const MicrophysicalProcess auto cond = Condensation(tsteps.get_condstep());
+  const MicrophysicalProcess auto
+      cond = Condensation(tsteps.get_condstep(),
+                          &step2dimlesstime,
+                          config.doAlterThermo);
+
   // const MicrophysicalProcess auto colls = Collisions(tsteps.get_collstep());
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
@@ -151,7 +155,7 @@ auto create_sdm(const Config &config,
                 FSStore &store)
 {
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
-  const MicrophysicalProcess auto microphys(create_microphysics(tsteps));
+  const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const MoveSupersInDomain movesupers(create_motion(tsteps.get_motionstep()));
   const Observer auto obs(create_observer(config, tsteps, store));
 
