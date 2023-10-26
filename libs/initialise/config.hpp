@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Friday 27th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -127,17 +127,12 @@ public:
   double P_INIT = std::numeric_limits<double>::signaling_NaN();    // initial pressure [Pa]
   double TEMP_INIT = std::numeric_limits<double>::signaling_NaN(); // initial parcel temperature [T]
   double relh_init = std::numeric_limits<double>::signaling_NaN(); // initial relative humidity (%)
-  double qc_init = std::numeric_limits<double>::signaling_NaN();   // initial liquid water content []
 
   /* ODE parameters */
-  bool doThermo = std::numeric_limits<bool>::signaling_NaN();         // enable ODEs for adiabatic expansion
   double W_AVG = std::numeric_limits<double>::signaling_NaN();        // average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
   double T_HALF = std::numeric_limits<double>::signaling_NaN();       // timescale for w sinusoid, tau_half = T_HALF/pi [s]
   double cvode_rtol = std::numeric_limits<double>::signaling_NaN();   // relative tolerance for [P, T, qv, qc] ODEs integration
-  double cvode_atol_p = std::numeric_limits<double>::signaling_NaN(); // absolute tolerances for [P, T, qv, qc] ODEs integration
-  double cvode_atol_temp = std::numeric_limits<double>::signaling_NaN();
-  double cvode_atol_qv = std::numeric_limits<double>::signaling_NaN();
-  double cvode_atol_qc = std::numeric_limits<double>::signaling_NaN();
+  double cvode_atol = std::numeric_limits<double>::signaling_NaN();   // absolute tolerances for [P, T, qv, qc] ODEs integration
 
   Config(const std::string_view config_filename)
   /* set input paramters as members of config

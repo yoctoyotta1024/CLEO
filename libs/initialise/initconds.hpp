@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Friday 27th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,8 +50,10 @@ public:
 
   std::vector<unsigned int> sdgbxindex() const
   {
-    std::vector<unsigned int> sdgbxindex{1, 3, 5, 0, 0,
-                                         5, 6, 6, 0, 4};
+    std::vector<unsigned int> sdgbxindex{0, 0, 0, 0, 0};
+
+    // std::vector<unsigned int> sdgbxindex{1, 3, 5, 0, 0,
+    //                                      5, 6, 6, 0, 4};
 
     return sdgbxindex;
   }

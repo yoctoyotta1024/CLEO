@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Friday 27th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -306,16 +306,8 @@ involved when thermosolver == 'cvode' */
   {
     relh_init = stod(value);
   }
-  else if (name == "qc_init")
-  {
-    qc_init = stod(value);
-  }
 
   /* ODE parameters */
-  else if (name == "doThermo")
-  {
-    doThermo = string2bool(value);
-  }
   else if (name == "W_AVG")
   {
     W_AVG = stod(value);
@@ -328,20 +320,8 @@ involved when thermosolver == 'cvode' */
   {
     cvode_rtol = stod(value);
   }
-  else if (name == "cvode_atol_p")
+  else if (name == "cvode_atol")
   {
-    cvode_atol_p = stod(value);
-  }
-  else if (name == "cvode_atol_temp")
-  {
-    cvode_atol_temp = stod(value);
-  }
-  else if (name == "cvode_atol_qv")
-  {
-    cvode_atol_qv = stod(value);
-  }
-  else if (name == "cvode_atol_qc")
-  {
-    cvode_atol_qc = stod(value);
+    cvode_atol = stod(value);
   }
 }
