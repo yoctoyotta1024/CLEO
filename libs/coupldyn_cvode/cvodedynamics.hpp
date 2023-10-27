@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 26th October 2023
+ * Last Modified: Friday 27th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,6 +34,7 @@ of adiabatically expanding parcel (0-D) */
 {
 private:
   const unsigned int interval;
+  std::vector<double> previousstates; // holds states press, temp, qvap and qcond before timestep iterated
 
   void run_dynamics(const unsigned int t_mdl,
                     const unsigned int t_next) const;
