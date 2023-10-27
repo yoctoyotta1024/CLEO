@@ -24,8 +24,18 @@
 #define CVODEDYNAMICS_HPP 
 
 #include <iostream>
+#include <vector>
 
+#include <cvodes/cvodes.h>             /* prototypes for CVODE fcts., consts.  */
+#include <nvector/nvector_serial.h>    /* access to serial N_Vector            */
+#include <sunmatrix/sunmatrix_dense.h> /* access to dense SUNMatrix            */
+#include <sunlinsol/sunlinsol_dense.h> /* access to dense SUNLinearSolver      */
+
+#include "../cleoconstants.hpp"
+#include "./differential_functions.hpp"
 #include "initialise/config.hpp"
+
+namespace dlc = dimless_constants;
 
 struct CvodeDynamics
 /* type satisfying CoupledDyanmics solver
@@ -35,6 +45,26 @@ of adiabatically expanding parcel (0-D) */
 private:
   const unsigned int interval;
   std::vector<double> previousstates; // holds states press, temp, qvap and qcond before timestep iterated
+
+  /* SUNDIALS CVODE solver stuff */
+  SUNContext sunctx;
+  SUNMatrix A;
+  SUNLinearSolver LS;
+  void *cvode_mem;
+  int retval;
+
+  /* ODE problem stuff */
+  static constexpr int NVARS = 4;    // no. of distinct variables (= no. ODEs per grid box)
+  const size_t neq;              // No. of equations/ODEs (= total no. variables across all Grid Boxes)
+  realtype t;
+  realtype RTOL;
+  N_Vector y;
+  N_Vector re_y;
+  N_Vector ATOLS;
+  UserData data;
+
+  int check_retval(void *returnvalue, const char *funcname, int opt);
+  /* Check function return value for memory or sundials CVODE error */
 
   void run_dynamics(const unsigned int t_mdl,
                     const unsigned int t_next) const;

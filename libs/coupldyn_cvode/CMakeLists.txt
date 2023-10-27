@@ -13,6 +13,32 @@ message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 # explicitly set library executables path to /lib in top level of build tree
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
+# CVODE libaries stuff
+include(FetchContent)
+FetchContent_Declare(
+  cvodes
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+  URL https://github.com/LLNL/sundials/releases/download/v6.5.0/cvodes-6.5.0.tar.gz
+  URL_HASH MD5=dc0cd29340599f0f8b027c6f1e0107ba
+)
+FetchContent_MakeAvailable(cvodes)
+
+# Kokkos library stuff
+set(CMAKE_CXX_FLAGS_B4 "${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_STANDARD_B4 "${CMAKE_CXX_STANDARD}")
+include(FetchContent)
+FetchContent_Declare(
+  Kokkos
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.0.01.tar.gz
+  GIT_TAG 62d2b6c879b74b6ae7bd06eb3e5e80139c4708e6
+)
+set(CMAKE_CXX_STANDARD "20")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+FetchContent_MakeAvailable(Kokkos)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
+set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
+
 # add executables to library
 set(SOURCES 
 "cvodecomms.cpp"
@@ -27,6 +53,7 @@ target_include_directories(${LIBNAME} PUBLIC "${CMAKE_SOURCE_DIR}/libs")
 # link libraries in libs to this target
 set(LINKLIBS initialise)
 target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
+target_link_libraries(${LIBNAME} PUBLIC SUNDIALS::cvodes_static Kokkos::kokkos)
 
 # some compilation properties
 set_target_properties(${LIBNAME} PROPERTIES
