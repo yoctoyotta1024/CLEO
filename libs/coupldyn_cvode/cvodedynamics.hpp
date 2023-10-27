@@ -41,8 +41,13 @@ private:
   
 public:
   CvodeDynamics(const Config &config,
-                   const unsigned int couplstep)
-      : interval(couplstep) {}
+                const unsigned int couplstep)
+      : interval(couplstep)
+  {
+    /* CVODE thermodynamics solver */
+    CvodeThermoSolver cvode(config,
+                            initcvodethermo(sdm.gbxmaps.ngridboxes, config));
+  }
 
   auto get_couplstep() const
   {

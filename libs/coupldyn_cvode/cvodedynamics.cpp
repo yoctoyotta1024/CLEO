@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 26th October 2023
+ * Last Modified: Friday 27th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,10 +24,18 @@
 
 void CvodeDynamics::prepare_to_timestep() const
 {
+  print_init_ODEdata(step2dimlesstime(couplstep),
+                     step2dimlesstime(t_end));
 }
 
 void CvodeDynamics::run_dynamics(const unsigned int t_mdl,
                                     const unsigned int t_next) const
 {
+
+  previousstates = //TODO
+  
+  cvode.run_cvodestep(t_mdl, couplstep,
+                        step2dimlesstime(t_mdl + couplstep));
+
   std::cout << "from cvode dyn @ t=" << t_mdl << "\n";
 }
