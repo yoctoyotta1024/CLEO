@@ -15,6 +15,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 # add executables to library
 set(SOURCES 
+"cvodecomms.cpp"
 "cvodedynamics.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})

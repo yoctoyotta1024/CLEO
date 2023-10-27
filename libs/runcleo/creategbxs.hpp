@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Friday 27th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -155,15 +155,16 @@ CreateGbxs::GenGridbox::operator()(const unsigned int ii,
 
 inline State 
 CreateGbxs::GenGridbox::state_at(const unsigned int ii) const
+/* TODO ! */
 {
   double volume(volumes.at(ii));
-  double press(1.0);                   
-  double temp(1.0);                    
-  double qvap(1.0);                    
-  double qcond(1.0);                   
-  Kokkos::pair<double, double> wvel{1.0,1.0}; 
-  Kokkos::pair<double, double> uvel{1.0,1.0};
-  Kokkos::pair<double, double> vvel{1.0,1.0};
+  // double press(1.0);                   
+  // double temp(1.0);                    
+  // double qvap(1.0);                    
+  // double qcond(1.0);                   
+  // Kokkos::pair<double, double> wvel{1.0,1.0}; 
+  // Kokkos::pair<double, double> uvel{1.0,1.0};
+  // Kokkos::pair<double, double> vvel{1.0,1.0};
 
   return State(volume,
                press, temp, qvap, qcond,

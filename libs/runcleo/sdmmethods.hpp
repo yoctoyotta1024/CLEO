@@ -140,7 +140,7 @@ public:
   /* update Gridboxes' states using information
   received from coupldyn */
 
-  void send_dynamics(const CD &coupldyn,
+  void send_dynamics(CD &coupldyn,
                      const viewh_constgbx h_gbxs) const {} //TODO
   /* send information from Gridboxes' states to coupldyn */
 
