@@ -38,6 +38,26 @@ void CvodeDynamics::run_dynamics(const unsigned int t_mdl,
                         step2dimlesstime(t_mdl + couplstep));
 }
 
+int CvodeDynamics::reinitialise(const double next_t,
+                                    const std::vector<double> &delta_y)
+/* Reinitialize the solver after discontinuous change in
+  temp, qv and qc due to condensation */
+{
+  re_y = NULL;
+  re_y = N_VNew_Serial(neq, sunctx);
+
+  for (size_t i = 0; i < neq; ++i)
+  {
+    NV_Ith_S(re_y, i) = NV_Ith_S(y, i) + delta_y[i];
+  }
+
+  retval = CVodeReInit(cvode_mem, next_t, re_y);
+  if (check_retval((void *)&retval, "CVodeReInit", 1))
+    return (1);
+
+  return retval;
+}
+
 CvodeDynamics::CvodeDynamics(const Config &config,
                              const unsigned int couplstep)
     /* construct instance of CVODE ODE solver with initial conditions */
