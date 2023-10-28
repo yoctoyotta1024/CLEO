@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,6 +44,15 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
+
+void receive_dynamics(const CD &coupldyn,
+                      const viewh_gbx h_gbxs) const {} //TODO 
+/* update Gridboxes' states using information
+received from coupldyn */
+
+void send_dynamics(CD &coupldyn,
+                    const viewh_constgbx h_gbxs) const {} //TODO
+/* send information from Gridboxes' states to coupldyn */
 
 template <CoupledDynamics CD, GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,
@@ -110,7 +119,7 @@ private:
     if (t_mdl % sdm.get_couplstep() == 0)
     {
       gbxs.sync_host();
-      sdm.receive_dynamics(coupldyn, gbxs.view_host());
+      receive_dynamics(coupldyn, gbxs.view_host());
       gbxs.modify_host();
     }
 
@@ -169,7 +178,7 @@ private:
     if (t_mdl % sdm.get_couplstep() == 0)
     {
       gbxs.sync_host();
-      sdm.send_dynamics(coupldyn, gbxs.view_host());
+      send_dynamics(coupldyn, gbxs.view_host());
     }
 
     return t_next;

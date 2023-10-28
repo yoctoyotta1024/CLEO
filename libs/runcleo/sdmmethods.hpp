@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -134,15 +134,6 @@ public:
   {
     obs.before_timestepping(h_gbxs);
   }
-
-  void receive_dynamics(const CD &coupldyn,
-                        const viewh_gbx h_gbxs) const {} //TODO 
-  /* update Gridboxes' states using information
-  received from coupldyn */
-
-  void send_dynamics(CD &coupldyn,
-                     const viewh_constgbx h_gbxs) const {} //TODO
-  /* send information from Gridboxes' states to coupldyn */
 
   void run_step(const unsigned int t_mdl,
                 const unsigned int t_mdl_next,
