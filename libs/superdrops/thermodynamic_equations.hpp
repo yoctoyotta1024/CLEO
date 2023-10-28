@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 26th October 2023
+ * Last Modified: Saturday 28th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -176,8 +176,8 @@ pair, fdl is second. */
   const double PRESS(press * dlc::P0);
   const double PSAT(psat * dlc::P0);
 
-  const double THERMK(A * pow(TEMP, 2.0) + TEMP * B);                 // K*TEMP with K from [eq.7.24] (for fkl)
-  const double DIFFUSE_V((D / PRESS * pow(TEMP, 1.94)) / DC::RGAS_V); // 1/R_v * D_v from [eq 7.26] (for fdl)
+  const double THERMK(A * Kokkos::pow(TEMP, 2.0) + TEMP * B);                 // K*TEMP with K from [eq.7.24] (for fkl)
+  const double DIFFUSE_V((D / PRESS * Kokkos::pow(TEMP, 1.94)) / DC::RGAS_V); // 1/R_v * D_v from [eq 7.26] (for fdl)
 
   const double fkl((LATENT_RGAS_V / TEMP - 1.0) * DC::LATENT_V / (THERMK * dlc::F0)); // fkl eqn [7.23]
   const double fdl(TEMP / (DIFFUSE_V * PSAT) / dlc::F0);                              // fdl eqn [7.25]

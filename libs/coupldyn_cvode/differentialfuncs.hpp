@@ -49,6 +49,13 @@ given the vapour pressure, pv = p_v/p_tot and total pressure p_tot */
   return dlc::Mr_ratio * press_vapour / (press - press_vapour);
 }
 
+inline double cvode_moistspecifcheat(const double qv, const double qc)
+/* effective specific heat capacity of moist parcel
+  of air (dry + water vapour + liquid water) */
+{
+  return dlc::Cp_dry + (dlc::Cp_v * qv) + (dlc::C_l * qc);
+}
+
 double cvode_saturationpressure(const double temp);
 /* Calculate the equilibrium vapor pressure of water over liquid
 water ie. the saturation pressure (psat). Equation taken from

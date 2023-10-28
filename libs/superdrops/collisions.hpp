@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Saturday 28th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -90,7 +90,7 @@ private:
                                 const subviewd_supers supers) const
   {
     // TODO
-    // const double VOLUME = state.get_volume() * pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
+    // const double VOLUME = state.get_volume() * std::pow(dlc::COORD0, 3.0); // volume in which collisions occur [m^3]
     // collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
 
     // return remove_outofdomain_superdrops(span4SDsinGBx);
