@@ -41,6 +41,25 @@ typedef struct pUserData
   realtype tauhalf;
 } * UserData;
 
+inline double cvode_massmixingratio(const double press_vapour,
+                                    const double press)
+/* Calculate mass mixing ratio, qv = m_v/m_dry = rho_v/rho_dry
+given the vapour pressure, pv = p_v/p_tot and total pressure p_tot */
+{
+  return dlc::Mr_ratio * press_vapour / (press - press_vapour);
+}
+
+double cvode_saturationpressure(const double temp);
+/* Calculate the equilibrium vapor pressure of water over liquid
+water ie. the saturation pressure (psat). Equation taken from
+Bjorn Steven's "make_tetens" python function from his module
+"moist_thermodynamics.saturation_vapour_pressures" available
+on gitlab. Original paper "Murray, F. W. On the Computation of
+Saturation Vapor Pressure. Journal of Applied Meteorology
+and Climatology 6, 203–204 (1967)." Note function is called
+with conversion to real temp /K = T*Temp0 and from real psat
+to dimensionless psat = psat/P0. */
+
 int odes_func(realtype t, N_Vector y, N_Vector ydot, void *user_data);
 /* Simple function f(t,y, ydot) called by ODE solver to
   integrate ODEs over time. */
