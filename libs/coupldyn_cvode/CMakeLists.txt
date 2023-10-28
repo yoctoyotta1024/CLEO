@@ -43,6 +43,7 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 set(SOURCES 
 "cvodecomms.cpp"
 "cvodedynamics.cpp"
+"differentialfuncs.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

@@ -27,20 +27,49 @@ void receive_dynamics_from_cvode(const CvodeDynamics &cvode,
 information received from CVODE dynanmics
 solver for  press, temp, qvap and qcond */
 {
-  constexpr size_t NVARS = 4;
   const size_t ngbxs(h_gbxs.extent(0));
-
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    const size_t jj(NVARS * ii);
     State &state(h_gbxs(ii).state);
-    const auto cvodestates(cvode.get_state(ii)); // vector of states' [p, t, qv, qc]
+    const auto cvodestate(cvode.get_current_state(ii)); // vector of states' [p, t, qv, qc]
 
-    state.press = cvodestates.at(ii);
-    state.temp = cvodestates.at(ii + 1);
-    state.qvap = cvodestates.at(ii + 2);
-    state.qcond = cvodestates.at(ii + 3);
+    state.press = cvodestate.at(0);
+    state.temp = cvodestate.at(1);
+    state.qvap = cvodestate.at(2);
+    state.qcond = cvodestate.at(3);
   }
+}
+
+std::array<double, 4> state_change(CvodeDynamics &cvode,
+                                   const viewh_constgbx h_gbxs,
+                                   const size_t ii)
+{
+  const State state(h_gbxs(ii).state);
+  const auto prevstate(cvode.get_previous_state(ii)); // [press, temp, qvap, qcond]
+
+  std::array<double, 4> delta;
+  delta.at(0) = 0.0; // assume no change to press
+  delta.at(1) = state.temp - prevstate.at(1);
+  delta.at(2) = state.qvap - prevstate.at(2);
+  delta.at(3) = state.qcond - prevstate.at(3);
+
+  return delta;
+} 
+
+bool is_state_change(const std::array<double, 4> &delta, bool is_delta_y)
+/* change is_delta_y = false to is_delta_y = true
+if delta contains non-zero elements */
+{
+  if (is_delta_y == false)
+  {
+    const std::array<double, 4> nodelta = {0.0, 0.0, 0.0, 0.0};
+    if (delta != nodelta)
+    {
+      is_delta_y = true;
+    }
+  }
+
+  return is_delta_y;
 }
 
 void send_dynamics_to_cvode(CvodeDynamics &cvode,
@@ -49,23 +78,23 @@ void send_dynamics_to_cvode(CvodeDynamics &cvode,
 to CVODE dynanmics solver for  temp, qvap
 and qcond (excludes press) */
 {
-  constexpr size_t NVARS = 4;
-  const size_t ngbxs(h_gbxs.extent(0));
+  std::vector<double> delta_y;
+  bool is_delta_y(false);
 
-  std::vector<double> delta_y(NVARS * ngbxs, 0.0);
+  const size_t ngbxs(h_gbxs.extent(0));
   for (size_t ii(0); ii<ngbxs; ++ii)
   {
-    const size_t jj(NVARS * ii);
-    const State state(h_gbxs(ii).state);
-    const auto prevstates(cvode.get_previousstates()); // vector of previous states' [p, t, qv, qc]
+    const auto delta(state_change(cvode, h_gbxs, ii)); // ii'th [press, temp, qvap, qcond] change
 
-    delta_y.at(jj + 1) = state.temp - prevstates.at(jj + 1);
-    delta_y.at(jj + 2) = state.qvap - prevstates.at(jj + 2);
-    delta_y.at(jj + 3) = state.qcond - prevstates.at(jj + 3);
+    delta_y.push_back(delta.at(0));
+    delta_y.push_back(delta.at(1));
+    delta_y.push_back(delta.at(2));
+    delta_y.push_back(delta.at(3));
+
+    is_delta_y = is_state_change(delta, is_delta_y);
   }
 
-  std::vector<double> nodelta(NVARS * ngbxs, 0.0);
-  if (delta_y != nodelta)
+  if (is_delta_y)
   {
     cvode.reinitialise(cvode.get_time(), delta_y);
   }

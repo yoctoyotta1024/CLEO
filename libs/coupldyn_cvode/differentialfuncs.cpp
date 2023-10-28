@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -52,8 +52,6 @@ static double dp_dt(const double t,
   describing pressure evolution over time.
   note: true dP/dt = dp/dt * P0/TIME0 */
 {
-  double pdot, profile;
-
   constexpr double zg = 0.0 / (dlc::W0 * dlc::TIME0);                    // dimensionless z value at ground level
   constexpr double tempg = 273.15 / dlc::TEMP0;                          // dimensionless temperature at zg
   constexpr double pg = 100000.0 / dlc::P0;                              // dimensionless pressure at zg
@@ -72,8 +70,7 @@ static double dp_dt(const double t,
   double profile(1.0 - lpsrate / tempg * (z - zg)); // characteristic function for pressure profile as
   profile = std::pow(profile, gammafac);              //      a funciton of time (ie. height via z=w*t)
 
-  pdot = dp_dt_const * profile * w;
-
+  double pdot(dp_dt_const * profile * w);
   return pdot;
 }
 

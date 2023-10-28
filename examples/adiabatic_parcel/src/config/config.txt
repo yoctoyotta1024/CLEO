@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 27th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -47,7 +47,8 @@ COLLTSTEP = 0.5                            # time between SD collision events [s
 MOTIONTSTEP = 0.5                          # time between SDM motion [s]
 COUPLTSTEP = 0.5                           # time between dynamic couplings [s]
 OBSTSTEP = 5                               # time between SDM observations [s]
-T_END = 150000                             # time span of integration from 0s to T_END [s]
+#T_END = 150000                            # time span of integration from 0s to T_END [s]
+T_END = 150                                # time span of integration from 0s to T_END [s]
 
 # microphysics #
 cond_iters = 10                            # no. iterations of Newton Raphson Method before testing for convergence

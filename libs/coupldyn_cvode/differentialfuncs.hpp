@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,6 +23,8 @@
 #define DIFFERENTIALFUNCS_HPP
 
 #include <cmath>
+#include <cassert>
+
 #include <nvector/nvector_serial.h> /* access to serial N_Vector            */
 
 #include "cleoconstants.hpp"

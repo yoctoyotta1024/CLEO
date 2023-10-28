@@ -91,10 +91,10 @@ private:
   /* Check function return value for memory or sundials CVODE error */
 
 public:
-  CvodeDynamics(const Config &config, 
+  CvodeDynamics(const Config &config,
                 const unsigned int couplstep,
                 const std::function<double(int)> step2dimlesstime);
-  /* construct instance of CVODE ODE 
+  /* construct instance of CVODE ODE
   solver with initial conditions */
 
   ~CvodeDynamics();
@@ -102,12 +102,36 @@ public:
   terminal screen and free CVODE memory */
 
   auto get_couplstep() const { return interval; }
-  
+
   double get_time() const { return t; }
 
-  auto get_previousstates() const { return previousstates; }
-  
-  std::array<4, double> get_previousstates() const { return previousstates; }
+  std::array<double, 4> get_previous_state(const size_t ii) const
+  /* returns ii'th previous state [press, temp, qvap, qcond] */
+  {
+    const size_t jj(NVARS * ii);
+
+    std::array<double, 4> prevstate;
+    for (size_t n(0); n < 4; ++n) // n = 0,1,2,3
+    {
+      prevstate.at(n) = previousstates.at(jj + n);
+    }
+
+    return prevstate;
+  }
+
+  std::array<double, 4> get_current_state(const size_t ii) const
+  /* returns ii'th [press, temp, qvap, qcond] state */
+  {
+    const size_t jj(NVARS * ii);
+
+    std::array<double, 4> state;
+    for (size_t n(0); n < 4; ++n) // n = 0,1,2,3
+    {
+      state.at(n) = NV_Ith_S(y, jj + n); // state
+    }
+
+    return state;
+  }
 
   int reinitialise(const double next_t,
                    const std::vector<double> &delta_y);
