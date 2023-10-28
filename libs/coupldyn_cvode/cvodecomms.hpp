@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 27th October 2023
+ * Last Modified: Saturday 28th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include "../kokkosaliases"
+#include "../kokkosaliases.hpp"
 #include "./cvodedynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"

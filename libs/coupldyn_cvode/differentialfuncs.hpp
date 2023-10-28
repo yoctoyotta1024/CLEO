@@ -15,9 +15,9 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
-/* Header file for ODEs which are solved by
- CVODE ode solver to model evolution of the
-thermodynamics (p, temp, qv and qc) over time */
+ * Header file for ODEs which are solved by
+ * CVODE ode solver to model evolution of the
+ * thermodynamics (p, temp, qv and qc) over time */
 
 #ifndef DIFFERENTIALFUNCS_HPP
 #define DIFFERENTIALFUNCS_HPP

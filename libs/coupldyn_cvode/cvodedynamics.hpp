@@ -33,7 +33,7 @@
 #include <sunlinsol/sunlinsol_dense.h> /* access to dense SUNLinearSolver      */
 
 #include "../cleoconstants.hpp"
-#include "./differential_functions.hpp"
+#include "./differentialfuncs.hpp"
 #include "initialise/config.hpp"
 
 namespace dlc = dimless_constants;
