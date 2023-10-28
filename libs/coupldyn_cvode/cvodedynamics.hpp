@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 27th October 2023
+ * Last Modified: Saturday 28th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -73,8 +73,9 @@ private:
   for thermodyanmic variables (p, temp, qv, qc) to
   initialise cvode thermodynamics solver */
 
-  void init_userdata(const size_t neq, const bool doThermo,
-                     const double wmax, const double tauhalf);
+  void init_userdata(const size_t neq,
+                     const double wmax,
+                     const double tauhalf);
   /* set values in UserData structure for odes_func */
 
   int setup_ODE_solver(const double i_rtol, const double i_atol);

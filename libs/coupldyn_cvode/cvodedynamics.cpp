@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 27th October 2023
+ * Last Modified: Saturday 28th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -84,11 +84,11 @@ CvodeDynamics::CvodeDynamics(const Config &config,
       ATOLS(NULL)
 {
   data = (UserData)malloc(sizeof *data);
-  previousstates = initial_cvode_conditions(config);
+  previousstates = initial_conditions(config);
 
   const double wmax = (M_PI / 2) * (config.W_AVG / dlc::W0);  // dimensionless w velocity passed to thermo ODEs eg. dp_dt(t,y,ydot,w,...)
   const double tauhalf = (config.T_HALF / dlc::TIME0) / M_PI; // dimensionless timescale for w sinusoid
-  init_userdata(neq, config.doThermo, wmax, tauhalf);
+  init_userdata(neq, wmax, tauhalf);
   setup_ODE_solver(config.cvode_rtol, config.cvode_atol);
 }
 
@@ -135,13 +135,11 @@ initialise cvode thermodynamics solver */
 }
 
 void CvodeDynamics::init_userdata(const size_t neq,
-                                      const bool doThermo,
-                                      const double wmax,
-                                      const double tauhalf)
+                                  const double wmax,
+                                  const double tauhalf)
 /* set values in UserData structure for odes_func */
 {
   data->neq = neq;
-  data->doThermo = doThermo;
   data->wmax = wmax;
   data->tauhalf = tauhalf;
 };
