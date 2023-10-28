@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +25,10 @@
 
 #include <iostream>
 #include <vector>
+#include <array>
 #include <cmath>
+#include <functional>
+#include <stdexcept>
 
 #include <cvodes/cvodes.h>             /* prototypes for CVODE fcts., consts.  */
 #include <nvector/nvector_serial.h>    /* access to serial N_Vector            */
@@ -65,7 +68,7 @@ private:
   UserData data;
   std::vector<double> previousstates; // holds states press, temp, qvap and qcond before timestep iterated
 
-  int print_initODEstatement() const;
+  void print_initODEstatement() const;
   /* print initial ODE setup to the terminal screen */
 
   int run_dynamics(const unsigned int t_next);
@@ -103,6 +106,8 @@ public:
   double get_time() const { return t; }
 
   auto get_previousstates() const { return previousstates; }
+  
+  std::array<4, double> get_previousstates() const { return previousstates; }
 
   int reinitialise(const double next_t,
                    const std::vector<double> &delta_y);
@@ -119,7 +124,7 @@ public:
   }
 
   void run_step(const unsigned int t_mdl,
-                const unsigned int t_next) const
+                const unsigned int t_next)
   {
     if (on_step(t_mdl))
     {

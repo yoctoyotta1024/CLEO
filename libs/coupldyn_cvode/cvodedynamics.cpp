@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,16 +28,13 @@ prints statement about cvode ODEs configuration */
 {
   if (y == NULL)
   {
-    retval = -1;
-    if (check_retval(&retval, "prepare_to_timestep", 1))
-      return (1);
-    return retval;
+    throw std::invalid_argument("Cvode y not initialised");
   }
 
   print_initODEstatement();
 }
 
-int CvodeDynamics::print_initODEstatement() const
+void CvodeDynamics::print_initODEstatement() const
 /* print initial ODE setup to the terminal screen */
 {
   const double dimless_next_t(step2dimlesstime(interval));
@@ -54,14 +51,9 @@ int CvodeDynamics::print_initODEstatement() const
             << "RTOL    = " << RTOL << '\n'
             << "ATOLS   = " << NV_Ith_S(ATOLS, 0) << '\n'
             << "---------------------------------------------\n\n";
-
-  retval = 0;
-  if (check_retval(&retval, "print_initODEstatement", 1))
-    return (1);
-  return retval;
 };
 
-int CvodeDynamics::run_dynamics(const unsigned int t_next) const
+int CvodeDynamics::run_dynamics(const unsigned int t_next)
 /* make y before timestep new previousstate and then
 integrate ODES for y from (dimensionless) time, t to
 next_t = step2dimlesstime(t_next) */
@@ -124,7 +116,7 @@ CvodeDynamics::CvodeDynamics(const Config &config,
   setup_ODE_solver(config.cvode_rtol, config.cvode_atol);
 }
 
-~CvodeDynamics::CvodeDynamics()
+CvodeDynamics::~CvodeDynamics()
 {
   /* print final statistics to the terminal screen */
   std::cout << "\nLast Iteration Statistics:\n";
@@ -148,7 +140,7 @@ initialise cvode thermodynamics solver */
 {
   const double press_i(config.P_INIT / dlc::P0);
   const double temp_i(config.TEMP_INIT / dlc::TEMP0);
-  const double qcond_i(config.qc_init);
+  const double qcond_i(0.0);
 
   const double psat(cvode_saturationpressure(temp_i));
   const double vapp(psat * config.relh_init / 100.0); // initial vapour pressure
@@ -199,7 +191,7 @@ to use CVODE sundials ODE solver */
 
   for (size_t i = 0; i < neq; ++i)
   {
-    NV_Ith_S(ATOLS, i) = i_atol
+    NV_Ith_S(ATOLS, i) = i_atol;
   }
 
   /* 3. initialise y vector with initial conditions */

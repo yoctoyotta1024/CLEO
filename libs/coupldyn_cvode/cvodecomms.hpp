@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,27 +23,18 @@
 #define CVODECOMMS_HPP
 
 #include <vector>
+#include <array>
 
 #include "../kokkosaliases.hpp"
 #include "./cvodedynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 
-inline void receive_dynamics_from_cvode(const CvodeDynamics &cvode,
-                                        const viewh_gbx h_gbxs)
+void receive_dynamics_from_cvode(const CvodeDynamics &cvode,
+                                 const viewh_gbx h_gbxs);
 /* update Gridboxes' states using
 information received from CVODE dynanmics
 solver for  press, temp, qvap and qcond */
-{
-  for (size_t ii(0); ii < ngbxs; ++ii)
-  {
-    State &state(h_gbxs(ii).state);
-    state.press = cvode.get_pressure(ii);
-    state.temp = cvode.get_temperature(ii);
-    state.qvap = cvode.get_qvap(ii);
-    state.qcond = cvode.get_qcond(ii);
-  }
-}
 
 void send_dynamics_to_cvode(CvodeDynamics &cvode,
                             const viewh_constgbx h_gbxs);
