@@ -99,6 +99,8 @@ public:
   terminal screen and free CVODE memory */
 
   auto get_couplstep() const { return interval; }
+  
+  double get_time() const { return t; }
 
   auto get_previousstates() const { return previousstates; }
 
