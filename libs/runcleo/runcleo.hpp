@@ -51,8 +51,8 @@ template <CoupledDynamics CD, GridboxMaps GbxMaps,
 class RunCLEO
 {
 private:
-  const CD &coupldyn;
   const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm;
+  CD &coupldyn;
 
   int prepare_to_timestep(const dualview_constgbx gbxs) const
   /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
@@ -176,9 +176,9 @@ private:
   }
 
 public:
-  RunCLEO(const CD &coupldyn,
-          const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm)
-      : coupldyn(coupldyn), sdm(sdm)
+  RunCLEO(const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm,
+          CD &coupldyn)
+      : sdm(sdm), coupldyn(coupldyn)
   {
     check_coupling(); 
   }

@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
   FSStore fsstore(config.zarrbasedir);
 
   /* Solver of dynamics coupled to CLEO SDM */
-  const CoupledDynamics auto coupldyn(
+  CoupledDynamics auto coupldyn(
       create_coupldyn(config, tsteps.get_couplstep()));
 
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
-    const RunCLEO runcleo(coupldyn, sdm);
+    const RunCLEO runcleo(sdm, coupldyn);
     runcleo(initconds, tsteps.get_t_end());
   }
   Kokkos::finalize();
