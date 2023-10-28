@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,6 +29,7 @@
 
 #include "cartesiandomain/cartesianmaps.hpp"
 
+#include "coupldyn_cvode/cvodecomms.hpp"
 #include "coupldyn_cvode/cvodedynamics.hpp"
 
 #include "gridboxes/gridboxmaps.hpp"
@@ -168,13 +169,16 @@ int main(int argc, char *argv[])
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
+  /* coupling between coupldyn and SDM */
+  const CvodeComms comms;
+
   /* Initial conditions for CLEO run */
   const InitConds initconds(config);
 
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
-    const RunCLEO runcleo(sdm, coupldyn);
+    const RunCLEO runcleo(sdm, coupldyn, comms);
     runcleo(initconds, tsteps.get_t_end());
   }
   Kokkos::finalize();

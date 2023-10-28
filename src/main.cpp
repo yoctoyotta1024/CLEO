@@ -47,7 +47,7 @@
 #include "observers/supersattrsobs.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
-#include "runcleo/coupling.hpp"
+// #include "runcleo/coupling.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
@@ -199,6 +199,7 @@ int main(int argc, char *argv[])
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
+  /* coupling between coupldyn and SDM */
   const NullComms comms(coupldyn); // TODO use a real coupling
 
   /* Initial conditions for CLEO run */

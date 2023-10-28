@@ -30,17 +30,33 @@
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 
-void receive_dynamics_from_cvode(const CvodeDynamics &cvode,
-                                 const viewh_gbx h_gbxs);
-/* update Gridboxes' states using
-information received from CVODE dynanmics
-solver for  press, temp, qvap and qcond */
+struct CvodeComms
+{
+private:
+  std::array<double, 4>
+  state_change(CvodeDynamics &cvode,
+               const viewh_constgbx h_gbxs,
+               const size_t ii) const;
+  /* get change in state since
+  previous time step to current one */
 
-void send_dynamics_to_cvode(const viewh_constgbx h_gbxs,
-                            CvodeDynamics &cvode);
-/* send information from Gridboxes' states
-to CVODE dynanmics solver for  temp, qvap
-and qcond (excludes press) */
+  bool is_state_change(const std::array<double, 4> &delta,
+                       bool is_delta_y) const;
+  /* change is_delta_y = false to is_delta_y = true
+  if delta contains non-zero elements */
 
+public:
+  void receive_dynamics(const CvodeDynamics &cvode,
+                        const viewh_gbx h_gbxs) const;
+  /* update Gridboxes' states using
+  information received from CVODE dynanmics
+  solver for  press, temp, qvap and qcond */
+
+  void send_dynamics(const viewh_constgbx h_gbxs,
+                     CvodeDynamics &cvode) const;
+  /* send information from Gridboxes' states
+  to CVODE dynanmics solver for  temp, qvap
+  and qcond (excludes press) */
+};
 
 #endif // CVODECOMMS_HPP
