@@ -23,61 +23,60 @@
 #include "./cvodedynamics.hpp"
 
 void CvodeDynamics::prepare_to_timestep() const
+/* checks initial y has been set and then
+prints statement about cvode ODEs configuration */
 {
-  print_initODEdata(step2dimlesstime(couplstep),
-                    step2dimlesstime(t_end));
-}
-
-int CvodeThermoSolver::print_init_ODEdata(const double tstep, const double tend)
-/* print initial ODE setup to the terminal screen */
-{
-
   if (y == NULL)
   {
     retval = -1;
-    if (check_retval(&retval, "print_init_ODEdata", 1))
+    if (check_retval(&retval, "prepare_to_timestep", 1))
       return (1);
     return retval;
   }
 
-  std::cout << "-------- CVODE initial conditions ------------\n"
+  print_initODEstatement();
+}
+
+int CvodeDynamics::print_initODEstatement() const
+/* print initial ODE setup to the terminal screen */
+{
+  const double dimless_next_t(step2dimlesstime(interval));
+
+  std::cout << "-------- CVODE ODE configuration ------------\n"
             << "No. Variables (NVARS) = " << NVARS << '\n'
-            << "No. Equations (neq) = " << neq << '\n'
+            << "No. Equations (neq)   = " << neq << '\n'
+            << "integer tstep         = " << interval << '\n'
+            << "dimensionless tstep   = " << dimless_next_t << '\n'
             << "y0      = " << NV_Ith_S(y, 0) << '\n'
             << "y1      = " << NV_Ith_S(y, 1) << '\n'
             << "y2      = " << NV_Ith_S(y, 2) << '\n'
             << "y3      = " << NV_Ith_S(y, 3) << '\n'
-            << "---------------------------------------------\n"
-            << "RTOL        = " << RTOL << '\n'
-            << "ATOLS[0]    = " << NV_Ith_S(ATOLS, 0) << '\n'
-            << "ATOLS[1]    = " << NV_Ith_S(ATOLS, 1) << '\n'
-            << "ATOLS[2]    = " << NV_Ith_S(ATOLS, 2) << '\n'
-            << "ATOLS[3]    = " << NV_Ith_S(ATOLS, 3) << '\n'
-            << "---------------------------------------------\n"
-            << "inital t    = 0.0 \n"
-            << "cvode tstep      = " << tstep << '\n'
-            << "last t = " << tend << '\n'
-            << "nout = " << ceil(tend / tstep) << '\n'
+            << "RTOL    = " << RTOL << '\n'
+            << "ATOLS   = " << NV_Ith_S(ATOLS, 0) << '\n'
             << "---------------------------------------------\n\n";
 
   retval = 0;
-  if (check_retval(&retval, "print_init_ODEdata", 1))
+  if (check_retval(&retval, "print_initODEstatement", 1))
     return (1);
   return retval;
 };
 
-void CvodeDynamics::run_dynamics(const unsigned int t_mdl,
-                                  const unsigned int t_next) const
+int CvodeDynamics::run_dynamics(const unsigned int t_next) const
 /* make y before timestep new previousstate and then
-integrate ODES for y from t_mdl to t_next */
+integrate ODES for y from (dimensionless) time, t to
+next_t = step2dimlesstime(t_next) */
 {
   for (size_t i = 0; i < neq; ++i)
   {
     previousstates.at(i) = NV_Ith_S(y, i); // state 
   }
 
-  cvode.run_cvodestep(t_mdl, couplstep,
-                        step2dimlesstime(t_mdl + couplstep));
+  const double dimless_next_t(step2dimlesstime(t_next));
+  retval = CVode(cvode_mem, dimless_next_t, y, &t, CV_NORMAL);
+  if (check_retval(&retval, "CVode", 1))
+    return 1;
+
+  return 0;
 }
 
 int CvodeDynamics::reinitialise(const double next_t,
@@ -101,9 +100,11 @@ int CvodeDynamics::reinitialise(const double next_t,
 }
 
 CvodeDynamics::CvodeDynamics(const Config &config,
-                             const unsigned int couplstep)
+                             const unsigned int couplstep,
+                             const std::function<double(int)> step2dimlesstime)
     /* construct instance of CVODE ODE solver with initial conditions */
     : interval(couplstep),
+      step2dimlesstime(step2dimlesstime),
       A(NULL),
       LS(NULL),
       cvode_mem(NULL),

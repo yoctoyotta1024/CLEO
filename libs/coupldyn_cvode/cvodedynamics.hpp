@@ -45,6 +45,7 @@ of adiabatically expanding parcel (0-D) */
 {
 private:
   const unsigned int interval;
+  std::function<double(int)> step2dimlesstime; // function to convert timesteps to real time
 
   /* SUNDIALS CVODE solver stuff */
   SUNContext sunctx;
@@ -64,11 +65,12 @@ private:
   UserData data;
   std::vector<double> previousstates; // holds states press, temp, qvap and qcond before timestep iterated
 
-  void run_dynamics(const unsigned int t_mdl,
-                    const unsigned int t_next) const;
+  int print_initODEstatement() const;
+  /* print initial ODE setup to the terminal screen */
 
-  std::vector<double>
-  initial_conditions(const Config &config) const;
+  int run_dynamics(const unsigned int t_next);
+
+  std::vector<double> initial_conditions(const Config &config) const;
   /* return vector of dimensionless initial conditions
   for thermodyanmic variables (p, temp, qv, qc) to
   initialise cvode thermodynamics solver */
@@ -86,8 +88,9 @@ private:
   /* Check function return value for memory or sundials CVODE error */
 
 public:
-  CvodeDynamics(const Config &config,
-                const unsigned int couplstep);
+  CvodeDynamics(const Config &config, 
+                const unsigned int couplstep,
+                const std::function<double(int)> step2dimlesstime);
   /* construct instance of CVODE ODE 
   solver with initial conditions */
 
@@ -95,14 +98,18 @@ public:
   /* print final statistics to the
   terminal screen and free CVODE memory */
 
-  std::vector<double> get_previousstates() const { return previousstates; }
+  auto get_couplstep() const { return interval; }
 
-  auto get_couplstep() const
-  {
-    return interval;
-  }
+  auto get_previousstates() const { return previousstates; }
+
+  int reinitialise(const double next_t,
+                   const std::vector<double> &delta_y);
+  /* Reinitialize the solver after discontinuous change
+  in temp, qv and qc (e.g. due to condensation) */
 
   void prepare_to_timestep() const;
+  /* checks initial y has been set and then
+  prints statement about cvode ODEs configuration */
 
   bool on_step(const unsigned int t_mdl) const
   {
@@ -114,7 +121,7 @@ public:
   {
     if (on_step(t_mdl))
     {
-      run_dynamics(t_mdl, t_next);
+      run_dynamics(t_next);
     }
   }
 

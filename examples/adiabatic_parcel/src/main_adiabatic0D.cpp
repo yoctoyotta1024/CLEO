@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 26th October 2023
+ * Last Modified: Saturday 28th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -62,7 +62,7 @@ CoupledDynamics auto
 create_coupldyn(const Config &config,
                 const unsigned int couplstep)
 {
-  return CvodeDynamics(config, couplstep);
+  return CvodeDynamics(config, couplstep, &step2dimlesstime);
 }
 
 GridboxMaps auto
