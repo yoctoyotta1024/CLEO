@@ -44,16 +44,19 @@
 //   } -> std::same_as<void>;
 // };
 
+template <CoupledDynamics CD>
 struct NullComms
 {
+  NullComms(const CD coupldyn) {}
+
   void receive_dynamics(const CD &coupldyn,
-                        const viewh_gbx h_gbxs) const {} //TODO 
+                        const viewh_gbx h_gbxs) const {}
   /* update Gridboxes' states using information
   received from coupldyn */
 
   void send_dynamics(const viewh_constgbx h_gbxs,
-                     CD &coupldyn) const {} // TODO
+                     CD &coupldyn) const {}
   /* send information from Gridboxes' states to coupldyn */
-}
+};
 
 #endif // COUPLING_HPP  

@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
-  const NullComms comms;
+  const NullComms comms(coupldyn); // TODO use a real coupling
 
   /* Initial conditions for CLEO run */
   const InitConds initconds(config);
