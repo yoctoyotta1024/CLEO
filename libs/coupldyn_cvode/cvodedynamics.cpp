@@ -24,22 +24,64 @@
 
 void CvodeDynamics::prepare_to_timestep() const
 {
-  print_init_ODEdata(step2dimlesstime(couplstep),
-                     step2dimlesstime(t_end));
+  print_initODEdata(step2dimlesstime(couplstep),
+                    step2dimlesstime(t_end));
 }
 
+int CvodeThermoSolver::print_init_ODEdata(const double tstep, const double tend)
+/* print initial ODE setup to the terminal screen */
+{
+
+  if (y == NULL)
+  {
+    retval = -1;
+    if (check_retval(&retval, "print_init_ODEdata", 1))
+      return (1);
+    return retval;
+  }
+
+  std::cout << "-------- CVODE initial conditions ------------\n"
+            << "No. Variables (NVARS) = " << NVARS << '\n'
+            << "No. Equations (neq) = " << neq << '\n'
+            << "y0      = " << NV_Ith_S(y, 0) << '\n'
+            << "y1      = " << NV_Ith_S(y, 1) << '\n'
+            << "y2      = " << NV_Ith_S(y, 2) << '\n'
+            << "y3      = " << NV_Ith_S(y, 3) << '\n'
+            << "---------------------------------------------\n"
+            << "RTOL        = " << RTOL << '\n'
+            << "ATOLS[0]    = " << NV_Ith_S(ATOLS, 0) << '\n'
+            << "ATOLS[1]    = " << NV_Ith_S(ATOLS, 1) << '\n'
+            << "ATOLS[2]    = " << NV_Ith_S(ATOLS, 2) << '\n'
+            << "ATOLS[3]    = " << NV_Ith_S(ATOLS, 3) << '\n'
+            << "---------------------------------------------\n"
+            << "inital t    = 0.0 \n"
+            << "cvode tstep      = " << tstep << '\n'
+            << "last t = " << tend << '\n'
+            << "nout = " << ceil(tend / tstep) << '\n'
+            << "---------------------------------------------\n\n";
+
+  retval = 0;
+  if (check_retval(&retval, "print_init_ODEdata", 1))
+    return (1);
+  return retval;
+};
 
 void CvodeDynamics::run_dynamics(const unsigned int t_mdl,
-                                    const unsigned int t_next) const
+                                  const unsigned int t_next) const
+/* make y before timestep new previousstate and then
+integrate ODES for y from t_mdl to t_next */
 {
-  previousstates = //TODO
-  
+  for (size_t i = 0; i < neq; ++i)
+  {
+    previousstates.at(i) = NV_Ith_S(y, i); // state 
+  }
+
   cvode.run_cvodestep(t_mdl, couplstep,
                         step2dimlesstime(t_mdl + couplstep));
 }
 
 int CvodeDynamics::reinitialise(const double next_t,
-                                    const std::vector<double> &delta_y)
+                                const std::vector<double> &delta_y)
 /* Reinitialize the solver after discontinuous change in
   temp, qv and qc due to condensation */
 {

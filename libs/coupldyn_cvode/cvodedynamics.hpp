@@ -95,6 +95,8 @@ public:
   /* print final statistics to the
   terminal screen and free CVODE memory */
 
+  std::vector<double> get_previousstates() const { return previousstates; }
+
   auto get_couplstep() const
   {
     return interval;

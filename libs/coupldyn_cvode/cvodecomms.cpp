@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 27th October 2023
+ * Last Modified: Saturday 28th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,10 +34,11 @@ and qcond (excludes press) */
   {
     const size_t jj(NVARS * ii)
     const State state(h_gbxs(ii).state);
+    const auto prev(cvode.get_previousstates()); // vector of previous states' [p, t, qv, qc]
 
-    delta_y.at(jj + 1) = state.temp - previousstates.at(jj + 1);
-    delta_y.at(jj + 2) = state.qvap - previousstates.at(jj + 2);
-    delta_y.at(jj + 3) = state.qcond - previousstates.at(jj + 3);
+    delta_y.at(jj + 1) = state.temp - prev.at(jj + 1);
+    delta_y.at(jj + 2) = state.qvap - prev.at(jj + 2);
+    delta_y.at(jj + 3) = state.qcond - prev.at(jj + 3);
   }
 
   std::vector<double> nodelta(NVARS * ngbxs, 0.0);
