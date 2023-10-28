@@ -72,8 +72,8 @@ if delta contains non-zero elements */
   return is_delta_y;
 }
 
-void send_dynamics_to_cvode(CvodeDynamics &cvode,
-                            const viewh_constgbx h_gbxs)
+void send_dynamics_to_cvode(const viewh_constgbx h_gbxs,
+                            CvodeDynamics &cvode)
 /* send information from Gridboxes' states
 to CVODE dynanmics solver for  temp, qvap
 and qcond (excludes press) */

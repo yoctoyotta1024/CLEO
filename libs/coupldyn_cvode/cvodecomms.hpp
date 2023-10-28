@@ -36,10 +36,11 @@ void receive_dynamics_from_cvode(const CvodeDynamics &cvode,
 information received from CVODE dynanmics
 solver for  press, temp, qvap and qcond */
 
-void send_dynamics_to_cvode(CvodeDynamics &cvode,
-                            const viewh_constgbx h_gbxs);
+void send_dynamics_to_cvode(const viewh_constgbx h_gbxs,
+                            CvodeDynamics &cvode);
 /* send information from Gridboxes' states
 to CVODE dynanmics solver for  temp, qvap
 and qcond (excludes press) */
+
 
 #endif // CVODECOMMS_HPP

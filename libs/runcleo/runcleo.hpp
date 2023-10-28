@@ -33,6 +33,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
+#include "./coupling.hpp"
 #include "./createsupers.hpp"
 #include "./creategbxs.hpp"
 #include "./runtimestats.hpp"
@@ -45,23 +46,15 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-void receive_dynamics(const CD &coupldyn,
-                      const viewh_gbx h_gbxs) const {} //TODO 
-/* update Gridboxes' states using information
-received from coupldyn */
-
-void send_dynamics(CD &coupldyn,
-                    const viewh_constgbx h_gbxs) const {} //TODO
-/* send information from Gridboxes' states to coupldyn */
-
 template <CoupledDynamics CD, GridboxMaps GbxMaps,
-          MicrophysicalProcess Microphys,
-          Motion M, Observer Obs>
+          MicrophysicalProcess Microphys, Motion M,
+          Observer Obs, typename Comms> // TODO use coupling concept for comms
 class RunCLEO
 {
 private:
   const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm;
   CD &coupldyn;
+  const Comms &comms;
 
   int prepare_to_timestep(const dualview_constgbx gbxs) const
   /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
@@ -119,7 +112,7 @@ private:
     if (t_mdl % sdm.get_couplstep() == 0)
     {
       gbxs.sync_host();
-      receive_dynamics(coupldyn, gbxs.view_host());
+      comms.receive_dynamics(coupldyn, gbxs.view_host());
       gbxs.modify_host();
     }
 
@@ -178,7 +171,7 @@ private:
     if (t_mdl % sdm.get_couplstep() == 0)
     {
       gbxs.sync_host();
-      send_dynamics(coupldyn, gbxs.view_host());
+      comms.send_dynamics(gbxs.view_host(), coupldyn);
     }
 
     return t_next;
@@ -186,8 +179,8 @@ private:
 
 public:
   RunCLEO(const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm,
-          CD &coupldyn)
-      : sdm(sdm), coupldyn(coupldyn)
+          CD &coupldyn, const Comms &comms)
+      : sdm(sdm), coupldyn(coupldyn), comms(comms)
   {
     check_coupling(); 
   }
