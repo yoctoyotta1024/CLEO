@@ -94,7 +94,8 @@ public:
 
   std::vector<double> msol() const
   {
-    std::vector<double> msol(totnsupers, 0.0);
+    const double m(8.446695447951756e-15 / dlc::MASS0);
+    std::vector<double> msol(totnsupers, m);
 
     return msol;
   }
