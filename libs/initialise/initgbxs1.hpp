@@ -30,6 +30,8 @@
 
 #include "./config.hpp"
 
+// TODO 
+
 struct InitGbxs1
 /* struct containing functions which return data
 for the initial conditions needed to create

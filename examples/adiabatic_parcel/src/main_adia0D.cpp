@@ -31,13 +31,13 @@
 
 #include "coupldyn_cvode/cvodecomms.hpp"
 #include "coupldyn_cvode/cvodedynamics.hpp"
+#include "coupldyn_cvode/initgbxs_cvode.hpp"
 
 #include "gridboxes/gridboxmaps.hpp"
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
 #include "initialise/initsupers1.hpp"
-#include "initialise/initgbxs1.hpp"
 
 #include "observers/gbxindexobs.hpp"
 #include "observers/massmomentsobs.hpp"
