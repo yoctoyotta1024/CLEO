@@ -75,11 +75,11 @@ private:
   std::vector<Kokkos::pair<double, double>> uvels;
   std::vector<Kokkos::pair<double, double>> vvels;
 
-  inline State state_at(const unsigned int ii) const;
+  State state_at(const unsigned int ii) const;
 
 public:
   template <typename FetchInitData>
-  inline GenGridbox(const FetchInitData &fid)
+  GenGridbox(const FetchInitData &fid)
       : GbxindexGen(std::make_unique<Gridbox::Gbxindex::Gen>()),
         volumes(fid.volume()),
         presss(fid.press()),
@@ -90,7 +90,7 @@ public:
         uvels(fid.uvel()),
         vvels(fid.vvel()) {}
 
-  inline Gridbox operator()(const unsigned int ii,
+  Gridbox operator()(const unsigned int ii,
                             const viewd_supers supers) const;
 };
 
@@ -149,27 +149,6 @@ e.g. for each gridbox's volume */
   {
     h_gbxs(ii) = gen(ii, supers);
   }
-}
-
-inline Gridbox
-GenGridbox::operator()(const unsigned int ii,
-                                   const viewd_supers supers) const
-{
-  const auto gbxindex(GbxindexGen->next());
-  const State state(state_at(ii)); 
-  
-  return Gridbox(gbxindex, state, supers);
-}
-
-inline State
-GenGridbox::state_at(const unsigned int ii) const
-/* returns state of ii'th gridbox used
-vectors in GenGridbox struct */
-{
-  return State(volumes.at(ii), presss.at(ii),
-               temps.at(ii), qvaps.at(ii),
-               qconds.at(ii), wvels.at(ii),
-               uvels.at(ii), vvels.at(ii));
 }
 
 #endif // CREATEGBXS_HPP

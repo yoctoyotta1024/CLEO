@@ -58,3 +58,22 @@ void print_gbxs(const viewh_constgbx h_gbxs)
               << ", nsupers = " << nsupers << ")\n";
   }
 }
+
+Gridbox GenGridbox::operator()(const unsigned int ii,
+                               const viewd_supers supers) const
+{
+  const auto gbxindex(GbxindexGen->next());
+  const State state(state_at(ii));
+
+  return Gridbox(gbxindex, state, supers);
+}
+
+State GenGridbox::state_at(const unsigned int ii) const
+/* returns state of ii'th gridbox used
+vectors in GenGridbox struct */
+{
+  return State(volumes.at(ii), presss.at(ii),
+               temps.at(ii), qvaps.at(ii),
+               qconds.at(ii), wvels.at(ii),
+               uvels.at(ii), vvels.at(ii));
+}
