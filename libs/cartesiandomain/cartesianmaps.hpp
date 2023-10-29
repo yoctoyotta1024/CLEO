@@ -30,6 +30,8 @@
 #include "initialise/config.hpp"
 // TODO 
 
+namespace dlc = dimless_constants;
+
 struct CartesianMaps 
 /* type satisfying GridboxMaps concept specifically
 for gridboxes defined on in a cartesian C grid */

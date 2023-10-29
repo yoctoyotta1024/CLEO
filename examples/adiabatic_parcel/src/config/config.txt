@@ -48,7 +48,8 @@ MOTIONTSTEP = 0.5                          # time between SDM motion [s]
 COUPLTSTEP = 0.5                           # time between dynamic couplings [s]
 OBSTSTEP = 5                               # time between SDM observations [s]
 #T_END = 150000                            # time span of integration from 0s to T_END [s]
-T_END = 150                                # time span of integration from 0s to T_END [s]
+T_END = 1500                               # time span of integration from 0s to T_END [s]
+
 
 # microphysics #
 cond_iters = 10                            # no. iterations of Newton Raphson Method before testing for convergence
