@@ -34,7 +34,6 @@
 #include "gridboxes/gridboxmaps.hpp"
 
 #include "initialise/config.hpp"
-#include "initialise/initconds.hpp"
 #include "initialise/timesteps.hpp"
 
 #include "observers/gbxindexobs.hpp"
@@ -50,6 +49,7 @@
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
+#include "runcleo/initconds.hpp"
 
 // #include "superdrops/collisions.hpp"
 #include "superdrops/condensation.hpp"
@@ -175,6 +175,13 @@ auto create_sdm(const Config &config,
                     microphys, movesupers, obs);
 }
 
+InitialConditions auto
+create_initconds(const Config &config)
+{
+
+  return InitConds(IS, Igxbs);
+}
+
 int main(int argc, char *argv[])
 {
   if (argc < 2)
@@ -203,7 +210,7 @@ int main(int argc, char *argv[])
   const CouplingComms<FromFileDynamics> auto comms = NullComms{}; // TODO use a real coupling from file
 
   /* Initial conditions for CLEO run */
-  const InitConds initconds(config);
+  const InitialConditions auto initconds = create_initconds(config);
 
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);

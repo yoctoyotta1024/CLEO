@@ -185,8 +185,7 @@ public:
     check_coupling(); 
   }
 
-  template <typename IC>
-  int operator()(const IC &initconds,
+  int operator()(const InitialConditions auto &initconds,
                  const unsigned int t_end) const
   /* create gridboxes and superdrops using initial conditions,
   then prepare and do timestepping. Meanwhile there is the
