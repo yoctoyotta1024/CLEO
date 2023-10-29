@@ -67,17 +67,17 @@ private:
 
   public:
     template <typename SuperdropInitConds>
-    inline GenSuperdrop(const SuperdropInitConds &sic)
-        : nspacedims(sic.get_nspacedims()),
+    inline GenSuperdrop(const SuperdropInitConds &sdic)
+        : nspacedims(sdic.get_nspacedims()),
           sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
           solutes({SoluteProperties{}}),
-          sdgbxindexes(sic.sdgbxindex()),
-          coord3s(sic.coord3()),
-          coord1s(sic.coord1()),
-          coord2s(sic.coord2()),
-          radii(sic.radius()),
-          msols(sic.msol()),
-          xis(sic.xi()) {}
+          sdgbxindexes(sdic.sdgbxindex()),
+          coord3s(sdic.coord3()),
+          coord1s(sdic.coord1()),
+          coord2s(sdic.coord2()),
+          radii(sdic.radius()),
+          msols(sdic.msol()),
+          xis(sdic.xi()) {}
 
     inline Superdrop
     operator()(const unsigned int kk) const;
@@ -85,14 +85,14 @@ private:
 
   template <typename SuperdropInitConds>
   inline viewd_supers
-  initialise_supers(const SuperdropInitConds &sic) const;
+  initialise_supers(const SuperdropInitConds &sdic) const;
   /* return an initialised view of superdrops on
   device memory by copying a host mirror view that
   is initialised using the SuperdropInitConds instance */
 
   template <typename SuperdropInitConds>
   inline viewd_supers::HostMirror
-  initialise_supers_on_host(const SuperdropInitConds &sic,
+  initialise_supers_on_host(const SuperdropInitConds &sdic,
                             const viewd_supers supers) const;
   /* return mirror view of superdrops (on host memory)
   which have been initialised using data from a
@@ -109,7 +109,7 @@ private:
 
 public:
   template <typename SuperdropInitConds>
-  viewd_supers operator()(const SuperdropInitConds &sic) const
+  viewd_supers operator()(const SuperdropInitConds &sdic) const
   /* create view of "totnsupers" number of superdrops
   (in device memory) which is ordered by the superdrops'
   gridbox indexes using the initial conditions
@@ -117,13 +117,13 @@ public:
   {
     std::cout << "\n--- create superdrops ---\n"
               << "initialising\n";
-    viewd_supers supers(initialise_supers(sic));
+    viewd_supers supers(initialise_supers(sdic));
 
     std::cout << "sorting\n";
     supers = sort_supers(supers);
 
     std::cout << "checking initialisation\n";
-    is_sdsinit_complete(supers, sic.get_size());
+    is_sdsinit_complete(supers, sdic.get_size());
     print_supers(supers);
 
     std::cout << "--- create superdrops: success ---\n";
@@ -134,16 +134,16 @@ public:
 
 template <typename SuperdropInitConds>
 inline viewd_supers
-CreateSupers::initialise_supers(const SuperdropInitConds &sic) const
+CreateSupers::initialise_supers(const SuperdropInitConds &sdic) const
 /* return an initialised view of superdrops on
 device memory by copying a host mirror view that
 is initialised using the SuperdropInitConds instance */
 {
   /* create superdrops view on device */
-  viewd_supers supers("supers", sic.get_totnsupers());
+  viewd_supers supers("supers", sdic.get_totnsupers());
 
   /* initialise a mirror of supers view on host*/
-  auto h_supers = initialise_supers_on_host(sic, supers);
+  auto h_supers = initialise_supers_on_host(sdic, supers);
 
   /* copy host view to device (h_supers to supers) */
   Kokkos::deep_copy(supers, h_supers);
@@ -154,7 +154,7 @@ is initialised using the SuperdropInitConds instance */
 template <typename SuperdropInitConds>
 inline viewd_supers::HostMirror
 CreateSupers::
-    initialise_supers_on_host(const SuperdropInitConds &sic,
+    initialise_supers_on_host(const SuperdropInitConds &sdic,
                               const viewd_supers supers) const
 /* return mirror view of superdrops (on host memory)
 which have been initialised using data from a
