@@ -63,8 +63,11 @@ public:
   }
 
   std::vector<double> volume() const
+  /* (dimless) volume for all gbxs is same as 1st
+  read from gbxbounds file */
   {
-    std::vector<double> volume(ngbxs, 1000); // TODO
+    const double vol(1.0 / dlc::COORD0 / dlc::COORD0 / dlc::COORD0);
+    std::vector<double> volume(ngbxs, vol); // TODO
 
     return volume;
   }
