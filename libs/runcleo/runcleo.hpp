@@ -48,7 +48,7 @@
 
 template <CoupledDynamics CD, GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys, Motion M,
-          Observer Obs, CouplingComms<CD> Comms> // TODO use coupling concept for comms
+          Observer Obs, CouplingComms<CD> Comms> 
 class RunCLEO
 {
 private:

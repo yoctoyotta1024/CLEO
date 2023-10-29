@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
   /* coupling between coupldyn and SDM */
-  const CouplingComms<FromFileDynamics> auto comms = NullComms{}; // TODO use a real coupling
+  const CouplingComms<FromFileDynamics> auto comms = NullComms{}; // TODO use a real coupling from file
 
   /* Initial conditions for CLEO run */
   const InitConds initconds(config);

@@ -29,8 +29,6 @@
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
 
-// TODO finish this concept with templated type CD
-
 template <typename Comms, typename CD>
 concept CouplingComms = requires(Comms s,
                             CD &coupldyn,
