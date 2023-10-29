@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,6 +27,8 @@
 #include <Kokkos_Pair.hpp>
 
 #include "initialise/config.hpp"
+
+// TODO 
 
 struct CartesianMaps 
 /* type satisfying GridboxMaps concept specifically
