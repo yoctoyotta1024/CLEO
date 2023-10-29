@@ -97,7 +97,7 @@ public:
 
 template <typename GbxInitConds>
 dualview_gbx create_gbxs(const GbxInitConds &gbxic,
-                        const viewd_supers supers)
+                         const viewd_supers supers)
 {
 
   std::cout << "\n--- create gridboxes ---\n"

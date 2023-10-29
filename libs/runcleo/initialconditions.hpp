@@ -29,14 +29,40 @@
 
 template <typename IC>
 concept InitialConditions = requires(IC ic, unsigned int t,
-                            const viewh_constgbx h_gbxs)
+                                     const viewh_constgbx h_gbxs)
 /* concept InitialConditions is all types that have
 initsupers and initgbxs structs which can call functions listed */
 {
   {
-  ic.initgbxs.volume()
+    ic.initgbxs.get_ngbxs()
+  } -> std::convertible_to<size_t>;
+  {
+    ic.initgbxs.get_size()
+  } -> std::convertible_to<size_t>;
+  {
+    ic.initgbxs.volume()
   } -> std::convertible_to<std::vector<double>>;
-
+  {
+    ic.initgbxs.press()
+  } -> std::convertible_to<std::vector<double>>;
+  {
+    ic.initgbxs.temp()
+  } -> std::convertible_to<std::vector<double>>;
+  {
+    ic.initgbxs.qvap()
+  } -> std::convertible_to<std::vector<double>>;
+  {
+    ic.initgbxs.qcond()
+  } -> std::convertible_to<std::vector<double>>;
+  {
+    ic.initgbxs.wvel()
+  } -> std::convertible_to<std::vector<std::pair<double, double>>>;
+  {
+    ic.initgbxs.uvel()
+  } -> std::convertible_to<std::vector<std::pair<double, double>>>;
+  {
+    ic.initgbxs.vvel()
+  } -> std::convertible_to<std::vector<std::pair<double, double>>>;
 };
 
 template <typename SuperdropInitConds, typename GbxInitConds>

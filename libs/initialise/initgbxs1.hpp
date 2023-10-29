@@ -36,7 +36,7 @@ for the initial conditions needed to create
 gridboxes e.g. via the create_gbxs function */
 {
 private:
-  int ngbxs;
+  size_t ngbxs;
 
 public:
   InitGbxs(const Config &config)
