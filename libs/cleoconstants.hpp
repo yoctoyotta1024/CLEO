@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -97,6 +97,10 @@ namespace LIMITVALUES
   
   constexpr unsigned int uint32tmin = std::numeric_limits<uint32_t>::min();
   constexpr unsigned int uint32tmax = std::numeric_limits<uint32_t>::max();
+
+  constexpr double llim = -1.0 * std::numeric_limits<double>::max();
+  constexpr double ulim = std::numeric_limits<double>::max();
+
 }
 
 #endif // CLEOCONSTANTS_HPP

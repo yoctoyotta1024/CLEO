@@ -65,42 +65,44 @@ public:
 
   std::vector<double> coord3() const
   {
-    std::vector<double> coord3(totnsupers, 0.3);
+    std::vector<double> coord3(totnsupers, 0.0);
 
     return coord3;
   }
 
   std::vector<double> coord1() const
   {
-    std::vector<double> coord1(totnsupers, 0.1);
+    std::vector<double> coord1(totnsupers, 0.0);
 
     return coord1;
   }
 
   std::vector<double> coord2() const
   {
-    std::vector<double> coord2(totnsupers, 0.2);
+    std::vector<double> coord2(totnsupers, 0.0);
 
     return coord2;
   }
 
   std::vector<double> radius() const
   {
-    std::vector<double> radius(totnsupers, 100);
+    const double r(0.1e-6 / dlc::R0);
+    std::vector<double> radius(totnsupers, r);
 
     return radius;
   }
 
   std::vector<double> msol() const
   {
-    std::vector<double> msol(totnsupers);
+    std::vector<double> msol(totnsupers, 0.0);
 
     return msol;
   }
 
   std::vector<unsigned long long> xi() const
   {
-    std::vector<unsigned long long> xi(totnsupers);
+    const unsigned long long x(500e6);
+    std::vector<unsigned long long> xi(totnsupers, x);
 
     return xi;
   }

@@ -26,8 +26,8 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 
+#include "../cleoconstants.hpp"
 #include "initialise/config.hpp"
-
 // TODO 
 
 struct CartesianMaps 
@@ -42,28 +42,28 @@ public:
   KOKKOS_INLINE_FUNCTION
   double volume(const unsigned int gbxidx) const
   {
-    return 0.0;
+    return 1.0 / dlc::COORD0 / dlc::COORD0 / dlc::COORD0;
   }
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
   coord3bounds(const unsigned int gbxidx) const
   {
-    return {0.0, 1.0};
+    return {LIMITVALUES::llim, LIMITVALUES::ulim};
   }
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
   coord1bounds(const unsigned int gbxidx) const
   {
-    return {0.0, 1.0}; 
+    return {LIMITVALUES::llim, LIMITVALUES::ulim}; 
   }
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
   coord2bounds(const unsigned int gbxidx) const
   {
-    return {0.0, 1.0};
+    return {LIMITVALUES::llim, LIMITVALUES::ulim};
   }
 
 };
