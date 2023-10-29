@@ -35,6 +35,7 @@
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
+#include "initialise/initconds_1.hpp"
 
 #include "observers/gbxindexobs.hpp"
 #include "observers/massmomentsobs.hpp"
@@ -179,7 +180,9 @@ InitialConditions auto
 create_initconds(const Config &config)
 {
 
-  return InitConds(IS, Igxbs);
+  
+
+  return InitConds(sic, gic);
 }
 
 int main(int argc, char *argv[])
