@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
   /* coupling between coupldyn and SDM */
-  const CvodeComms comms;
+  const CouplingComms<CvodeDynamics> auto comms = CvodeComms{};
 
   /* Initial conditions for CLEO run */
   const InitConds initconds(config);

@@ -47,7 +47,7 @@
 #include "observers/supersattrsobs.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
-// #include "runcleo/coupling.hpp"
+#include "runcleo/couplingcomms.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
   /* coupling between coupldyn and SDM */
-  const NullComms comms(coupldyn); // TODO use a real coupling
+  const CouplingComms<FromFileDynamics> auto comms = NullComms{}; // TODO use a real coupling
 
   /* Initial conditions for CLEO run */
   const InitConds initconds(config);

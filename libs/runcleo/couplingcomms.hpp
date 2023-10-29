@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: coupling.hpp
+ * File: couplingcomms.hpp
  * Project: runcleo
  * Created Date: Sunday 29th October 2023
  * Author: Clara Bayley (CB)
@@ -21,42 +21,42 @@
  */
 
 
-#ifndef COUPLING_HPP 
-#define COUPLING_HPP 
+#ifndef COUPLINGCOMMS_HPP 
+#define COUPLINGCOMMS_HPP 
 
 #include <concepts>
 
 #include "../kokkosaliases.hpp"
+#include "./coupleddynamics.hpp"
 
 // TODO finish this concept with templated type CD
 
-// template <typename Comms, CoupledDynamics CD>
-// concept Coupling = requires(Comms comms, CD &coupldyn,
-//                             viewh_gbx h_gbxs)
-// /* concept Coupling is all types that meet requirements
-// (constraints) of communicaiton functions */
-// {
-//   {
-//     comms.send_dynamics(h_gbxs, coupldyn)
-//   } -> std::same_as<void>;
-//   {
-//     comms.receive_dynamics(coupldyn, h_gbxs)
-//   } -> std::same_as<void>;
-// };
+template <typename Comms, typename CD>
+concept CouplingComms = requires(Comms s,
+                            CD &coupldyn,
+                            viewh_gbx h_gbxs) {
+  {
+    s.template send_dynamics<CD>(h_gbxs, coupldyn)
+  } -> std::same_as<void>;
+  {
+    s.template receive_dynamics<CD>(coupldyn, h_gbxs)
+  } -> std::same_as<void>;
+};
 
-template <CoupledDynamics CD>
 struct NullComms
+/* null coupling doesnt send or receive information between
+coupldyn and h_gbxs but still obeys coupling comms concept */
 {
-  NullComms(const CD coupldyn) {}
-
+  template <CoupledDynamics CD>
   void receive_dynamics(const CD &coupldyn,
                         const viewh_gbx h_gbxs) const {}
   /* update Gridboxes' states using information
   received from coupldyn */
 
+  template <CoupledDynamics CD>
   void send_dynamics(const viewh_constgbx h_gbxs,
                      CD &coupldyn) const {}
   /* send information from Gridboxes' states to coupldyn */
 };
 
-#endif // COUPLING_HPP  
+#endif // COUPLINGCOMMS_HPP  

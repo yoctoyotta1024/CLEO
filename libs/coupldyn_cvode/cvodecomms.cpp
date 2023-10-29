@@ -21,53 +21,6 @@
 
 #include "./cvodecomms.hpp"
 
-void CvodeComms::receive_dynamics(const CvodeDynamics &cvode,
-                                 const viewh_gbx h_gbxs) const
-/* update Gridboxes' states using
-information received from CVODE dynanmics
-solver for  press, temp, qvap and qcond */
-{
-  const size_t ngbxs(h_gbxs.extent(0));
-  for (size_t ii(0); ii < ngbxs; ++ii)
-  {
-    State &state(h_gbxs(ii).state);
-    const auto cvodestate(cvode.get_current_state(ii)); // vector of states' [p, t, qv, qc]
-
-    state.press = cvodestate.at(0);
-    state.temp = cvodestate.at(1);
-    state.qvap = cvodestate.at(2);
-    state.qcond = cvodestate.at(3);
-  }
-}
-
-void CvodeComms::send_dynamics(const viewh_constgbx h_gbxs,
-                            CvodeDynamics &cvode) const
-/* send information from Gridboxes' states
-to CVODE dynanmics solver for  temp, qvap
-and qcond (excludes press) */
-{
-  std::vector<double> delta_y;
-  bool is_delta_y(false);
-
-  const size_t ngbxs(h_gbxs.extent(0));
-  for (size_t ii(0); ii<ngbxs; ++ii)
-  {
-    const auto delta(state_change(cvode, h_gbxs, ii)); // ii'th [press, temp, qvap, qcond] change
-
-    delta_y.push_back(delta.at(0));
-    delta_y.push_back(delta.at(1));
-    delta_y.push_back(delta.at(2));
-    delta_y.push_back(delta.at(3));
-
-    is_delta_y = is_state_change(delta, is_delta_y);
-  }
-
-  if (is_delta_y)
-  {
-    cvode.reinitialise(cvode.get_time(), delta_y);
-  }
-}
-
 std::array<double, 4>
 CvodeComms::state_change(CvodeDynamics &cvode,
                          const viewh_constgbx h_gbxs,

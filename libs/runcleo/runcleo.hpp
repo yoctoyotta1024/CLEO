@@ -33,7 +33,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
-#include "./coupling.hpp"
+#include "./couplingcomms.hpp"
 #include "./createsupers.hpp"
 #include "./creategbxs.hpp"
 #include "./runtimestats.hpp"
@@ -48,7 +48,7 @@
 
 template <CoupledDynamics CD, GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys, Motion M,
-          Observer Obs, typename Comms> // TODO use coupling concept for comms
+          Observer Obs, CouplingComms<CD> Comms> // TODO use coupling concept for comms
 class RunCLEO
 {
 private:
