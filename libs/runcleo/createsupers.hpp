@@ -162,7 +162,7 @@ SuperdropInitConds instance for their initial gbxindex,
 spatial coordinates and attributes */
 {
   const size_t totnsupers(supers.extent(0));
-  const GenSuperdrop gen_superdrop(sic);
+  const GenSuperdrop gen_superdrop(sdic);
 
   auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
   for (size_t kk(0); kk < totnsupers; ++kk)

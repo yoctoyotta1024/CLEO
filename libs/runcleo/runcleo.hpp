@@ -36,7 +36,7 @@
 #include "./couplingcomms.hpp"
 #include "./createsupers.hpp"
 #include "./creategbxs.hpp"
-#include "./initconds.hpp"
+#include "./initialconditions.hpp"
 #include "./runtimestats.hpp"
 #include "./sdmmethods.hpp"
 #include "gridboxes/gridbox.hpp"

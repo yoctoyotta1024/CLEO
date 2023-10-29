@@ -35,7 +35,6 @@
 #include "gridboxes/gridboxmaps.hpp"
 
 #include "initialise/config.hpp"
-#include "initialise/initconds.hpp"
 #include "initialise/timesteps.hpp"
 
 #include "observers/gbxindexobs.hpp"
@@ -48,6 +47,7 @@
 #include "observers/supersattrsobs.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
+#include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 

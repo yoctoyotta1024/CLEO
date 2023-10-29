@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,8 +36,8 @@
 template <typename Obs>
 concept Observer = requires(Obs obs, unsigned int t,
                             const viewh_constgbx h_gbxs)
-/* concept Observer is all types that have an operator that
-has signature of observing functions (see Observer concept) */
+/* concept Observer is all types that have functions 
+for timestepping and at_start_step as constrained here */
 {
   {
     obs.before_timestepping(h_gbxs)

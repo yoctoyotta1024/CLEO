@@ -35,7 +35,7 @@
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
-#include "initialise/initconds_1.hpp"
+#include "initialise/initconds1.hpp"
 
 #include "observers/gbxindexobs.hpp"
 #include "observers/massmomentsobs.hpp"
@@ -50,7 +50,7 @@
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "runcleo/initconds.hpp"
+#include "runcleo/initialconditions.hpp"
 
 // #include "superdrops/collisions.hpp"
 #include "superdrops/condensation.hpp"
@@ -179,10 +179,10 @@ auto create_sdm(const Config &config,
 InitialConditions auto
 create_initconds(const Config &config)
 {
+  const InitSupers initsupers(config);
+  const InitGbxs initgbxs(config);
 
-  
-
-  return InitConds(sic, gic);
+  return InitConds(initsupers, initgbxs);
 }
 
 int main(int argc, char *argv[])
