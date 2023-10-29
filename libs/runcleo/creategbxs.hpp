@@ -37,11 +37,9 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
 
-void is_gbxinit_complete(dualview_gbx gbxs,
-                                    const size_t size);
-
-void print_gbxs(const viewh_constgbx gbxs);
-/* print gridboxes information */
+template <typename FetchInitData>
+dualview_gbx create_gbxs(const FetchInitData fid,
+                        const viewd_supers supers);
 
 template <typename FetchInitData>
 inline void initialise_gbxs_on_host(const FetchInitData &fid,
@@ -51,13 +49,18 @@ inline void initialise_gbxs_on_host(const FetchInitData &fid,
 using some data from a FetchInitData instance
 e.g. for each gridbox's volume */
 
-
 template <typename FetchInitData>
 inline dualview_gbx initialise_gbxs(const FetchInitData &fid,
                                     const viewd_supers supers);
 /* initialise a dualview of gridboxes (on host and device
 memory) using data from a FetchInitData instance to initialise
 the host view and then syncing the view to the device */
+
+void is_gbxinit_complete(dualview_gbx gbxs,
+                                    const size_t size);
+
+void print_gbxs(const viewh_constgbx gbxs);
+/* print gridboxes information */
 
 class GenGridbox
 {
@@ -86,7 +89,7 @@ public:
         wvels(fid.wvel()),
         uvels(fid.uvel()),
         vvels(fid.vvel()) {}
-        
+
   inline Gridbox operator()(const unsigned int ii,
                             const viewd_supers supers) const;
 };
