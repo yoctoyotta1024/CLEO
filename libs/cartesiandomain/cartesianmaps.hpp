@@ -42,12 +42,6 @@ public:
   CartesianMaps(const Config &config){}
 
   KOKKOS_INLINE_FUNCTION
-  double volume(const unsigned int gbxidx) const
-  {
-    return 1.0 / dlc::COORD0 / dlc::COORD0 / dlc::COORD0;
-  }
-
-  KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
   coord3bounds(const unsigned int gbxidx) const
   {

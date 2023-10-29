@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 18th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,10 +33,7 @@ template <typename GbxMaps>
 concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int ii)
 /* concept for GridboxMaps is all types that have
 correct signatues for map-like functions */
-{
-  {
-    gbxmaps.volume(ii)
-  } -> std::convertible_to<double>;
+{ 
   {
     gbxmaps.coord3bounds(ii)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
