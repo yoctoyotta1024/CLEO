@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,17 +28,15 @@ void PrintObserver::
     print_statement(const unsigned int t_mdl,
                     const viewh_constgbx h_gbxs) const
 {
-  constexpr int printprec(1); // precision to print data with
-  
   const auto gbx = h_gbxs(0);
   std::cout << "t="
-            << std::fixed << std::setprecision(printprec)
+            << std::fixed << std::setprecision(2)
             << step2realtime(t_mdl)
             << "s, totnsupers=" << gbx.domaintotnsupers()
             << ", ngbxs=" << h_gbxs.extent(0)
             << ", (Gbx" << gbx.get_gbxindex()
             << ": [T, p, qv] = [" << gbx.state.temp * dlc::TEMP0
-            << "K, " << gbx.state.press * dlc::P0
-            << "Pa, " << gbx.state.qvap
+            << "K, " << gbx.state.press * dlc::P0 << "Pa, "
+            << std::setprecision(4) << gbx.state.qvap
             << "], nsupers = " << gbx.supersingbx.nsupers() << ")\n";
 }
