@@ -35,8 +35,8 @@ for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
 {
 private:
-  int totnsupers; // total number of superdroplets (in kokkos view on device initially)
-  int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
+  size_t totnsupers; // total number of superdroplets (in kokkos view on device initially)
+  unsigned int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
 
 public:
   InitSupers(const Config &config)

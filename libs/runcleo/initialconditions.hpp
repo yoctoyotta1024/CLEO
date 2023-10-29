@@ -34,6 +34,37 @@ concept InitialConditions = requires(IC ic, unsigned int t,
 initsupers and initgbxs structs which can call functions listed */
 {
   {
+    ic.initsupers.get_nspacedims()
+  } -> std::convertible_to<unsigned int>;
+  {
+    ic.initsupers.get_totnsupers()
+  } -> std::convertible_to<size_t>;
+  {
+    ic.initsupers.get_size()
+  } -> std::convertible_to<size_t>;
+  {
+    ic.initsupers.sdgbxindex()
+  } -> std::convertible_to<std::vector<unsigned int>>;
+  {
+    ic.initsupers.coord3()
+  } -> std::convertible_to<std::vector<double>>;
+  {
+    ic.initsupers.coord1()
+  } -> std::convertible_to<std::vector<double>>;
+  {
+    ic.initsupers.coord2()
+  } -> std::convertible_to<std::vector<double>>;
+  {
+    ic.initsupers.radius()
+  } -> std::convertible_to<std::vector<double>>;
+  {
+    ic.initsupers.msol()
+  } -> std::convertible_to<std::vector<double>>;
+  {
+    ic.initsupers.xi()
+  } -> std::convertible_to<std::vector<unsigned long long>>;
+
+  {
     ic.initgbxs.get_ngbxs()
   } -> std::convertible_to<size_t>;
   {

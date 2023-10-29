@@ -49,7 +49,7 @@ private:
   returns superdrops generated from them */
   {
   private:
-    size_t nspacedims;
+    unsigned int nspacedims;
     std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
     std::array<SoluteProperties, 1> solutes;
     std::vector<unsigned int> sdgbxindexes;
