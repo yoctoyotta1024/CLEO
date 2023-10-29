@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 27th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -104,7 +104,7 @@ public:
 struct InitGbxs
 /* struct containing functions which return data
 for the initial conditions needed to create
-gridboxes e.g. via the CreateGbxs struct */
+gridboxes e.g. via the create_gbxs function */
 {
 private:
   int ngbxs;

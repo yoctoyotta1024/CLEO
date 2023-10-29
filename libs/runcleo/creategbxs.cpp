@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,9 +19,8 @@
 
 #include "./creategbxs.hpp"
 
-void CreateGbxs::
-    ensure_initialisation_complete(dualview_gbx gbxs,
-                                   const size_t size) const
+void ensure_gbxinit_complete(dualview_gbx gbxs,
+                             const size_t size)
 {
   gbxs.sync_host(); // copy device to host (if prior flag was set)
   const size_t ngbxs(gbxs.extent(0));
@@ -47,7 +46,7 @@ void CreateGbxs::
   }
 }
 
-void CreateGbxs::print_gbxs(const viewh_constgbx h_gbxs) const
+void print_gbxs(const viewh_constgbx h_gbxs)
 /* print gridboxes information */
 {
   const size_t ngbxs(h_gbxs.extent(0));

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,70 +37,66 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
 
-class CreateGbxs
+void ensure_gbxinit_complete(dualview_gbx gbxs,
+                                    const size_t size);
+
+void print_gbxs(const viewh_constgbx gbxs);
+/* print gridboxes information */
+
+template <typename FetchInitData>
+inline void initialise_gbxs_on_host(const FetchInitData &fid,
+                                    const viewd_supers supers,
+                                    const viewh_gbx h_gbxs);
+/* initialise the host view of gridboxes
+using some data from a FetchInitData instance
+e.g. for each gridbox's volume */
+
+
+template <typename FetchInitData>
+inline dualview_gbx initialise_gbxs(const FetchInitData &fid,
+                                    const viewd_supers supers);
+/* initialise a dualview of gridboxes (on host and device
+memory) using data from a FetchInitData instance to initialise
+the host view and then syncing the view to the device */
+
+class GenGridbox
 {
 private:
-  class GenGridbox
-  {
-  private:
-    std::unique_ptr<Gridbox::Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
-    std::vector<double> volumes;
+  std::unique_ptr<Gridbox::Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
+  std::vector<double> volumes;
 
-    inline State state_at(const unsigned int ii) const;
-  
-  public:
-    template <typename FetchInitData>
-    inline GenGridbox(const FetchInitData &fid);
-
-    inline Gridbox operator()(const unsigned int ii,
-                              const viewd_supers supers) const;
-  };
-
-  template <typename FetchInitData>
-  inline dualview_gbx initialise_gbxs(const FetchInitData &fid,
-                                      const viewd_supers supers) const;
-  /* initialise a dualview of gridboxes (on host and device 
-  memory) using data from a FetchInitData instance to initialise
-  the host view and then syncing the view to the device */
-
-  template <typename FetchInitData>
-  inline void initialise_gbxs_on_host(const FetchInitData &fid,
-                                      const viewd_supers supers,
-                                      const viewh_gbx h_gbxs) const;
-  /* initialise the host view of gridboxes
-  using some data from a FetchInitData instance
-  e.g. for each gridbox's volume */
-
-  void ensure_initialisation_complete(dualview_gbx gbxs,
-                                      const size_t size) const;
-
-  void print_gbxs(const viewh_constgbx gbxs) const;
-  /* print gridboxes information */
+  inline State state_at(const unsigned int ii) const;
 
 public:
   template <typename FetchInitData>
-  dualview_gbx operator()(const FetchInitData fid,
-                          const viewd_supers supers) const
-  {
+  inline GenGridbox(const FetchInitData &fid);
 
-    std::cout << "\n--- create gridboxes ---\n"
-              << "initialising\n";
-    const dualview_gbx gbxs(initialise_gbxs(fid, supers));
- 
-    std::cout << "checking initialisation\n";
-    ensure_initialisation_complete(gbxs, fid.get_size());
-    print_gbxs(gbxs.view_host());
-
-    std::cout << "--- create gridboxes: success ---\n";
-
-    return gbxs;
-  }
+  inline Gridbox operator()(const unsigned int ii,
+                            const viewd_supers supers) const;
 };
 
 template <typename FetchInitData>
+dualview_gbx create_gbxs(const FetchInitData fid,
+                        const viewd_supers supers)
+{
+
+  std::cout << "\n--- create gridboxes ---\n"
+            << "initialising\n";
+  const dualview_gbx gbxs(initialise_gbxs(fid, supers));
+
+  std::cout << "checking initialisation\n";
+  ensure_gbxinit_complete(gbxs, fid.get_size());
+  print_gbxs(gbxs.view_host());
+
+  std::cout << "--- create gridboxes: success ---\n";
+
+  return gbxs;
+}
+
+template <typename FetchInitData>
 inline dualview_gbx
-CreateGbxs::initialise_gbxs(const FetchInitData &fid,
-                            const viewd_supers supers) const
+initialise_gbxs(const FetchInitData &fid,
+                            const viewd_supers supers)
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
 gbxindex, spatial coordinates and attributes */
@@ -120,10 +116,9 @@ gbxindex, spatial coordinates and attributes */
 }
 
 template <typename FetchInitData>
-inline void CreateGbxs::
-    initialise_gbxs_on_host(const FetchInitData &fid,
+inline void initialise_gbxs_on_host(const FetchInitData &fid,
                             const viewd_supers supers,
-                            const viewh_gbx h_gbxs) const
+                            const viewh_gbx h_gbxs) 
 /* initialise the host view of gridboxes
 using some data from a FetchInitData instance
 e.g. for each gridbox's volume */
@@ -138,13 +133,13 @@ e.g. for each gridbox's volume */
 }
 
 template <typename FetchInitData>
-inline CreateGbxs::GenGridbox::
+inline GenGridbox::
     GenGridbox(const FetchInitData &fid)
     : GbxindexGen(std::make_unique<Gridbox::Gbxindex::Gen>()),
       volumes(fid.volume()) {}
 
 inline Gridbox
-CreateGbxs::GenGridbox::operator()(const unsigned int ii,
+GenGridbox::operator()(const unsigned int ii,
                                    const viewd_supers supers) const
 {
   const auto gbxindex(GbxindexGen->next());
@@ -154,7 +149,7 @@ CreateGbxs::GenGridbox::operator()(const unsigned int ii,
 }
 
 inline State 
-CreateGbxs::GenGridbox::state_at(const unsigned int ii) const
+GenGridbox::state_at(const unsigned int ii) const
 /* TODO ! */
 {
   double volume(volumes.at(ii));

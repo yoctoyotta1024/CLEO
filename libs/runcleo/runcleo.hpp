@@ -195,7 +195,7 @@ public:
     // create runtime objects
     RunStats stats;
     viewd_supers supers(CreateSupers{}(initconds.initsupers));
-    dualview_gbx gbxs(CreateGbxs{}(initconds.initgbxs, supers));
+    dualview_gbx gbxs(create_gbxs(initconds.initgbxs, supers));
     GenRandomPool genpool(std::random_device{}());
 
     // prepare CLEO for timestepping

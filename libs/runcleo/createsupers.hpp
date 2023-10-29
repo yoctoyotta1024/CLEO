@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th October 2023
+ * Last Modified: Sunday 29th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -99,7 +99,7 @@ private:
   FetchInitData instance for their initial gbxindex,
   spatial coordinates and attributes */
 
-  void ensure_initialisation_complete(const viewd_constsupers supers,
+  void ensure_sdsinit_complete(const viewd_constsupers supers,
                                       const size_t size) const;
   /* ensure the number of superdrops in the view matches the
   size according to the initial conditions */
@@ -123,7 +123,7 @@ public:
     supers = sort_supers(supers);
 
     std::cout << "checking initialisation\n";
-    ensure_initialisation_complete(supers, fid.get_size());
+    ensure_sdsinit_complete(supers, fid.get_size());
     print_supers(supers);
 
     std::cout << "--- create superdrops: success ---\n";

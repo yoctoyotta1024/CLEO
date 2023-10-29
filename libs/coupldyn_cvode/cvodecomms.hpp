@@ -57,7 +57,7 @@ public:
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
       State &state(h_gbxs(ii).state);
-      const auto cvodestate(cvode.get_current_state(ii)); // vector of states' [p, t, qv, qc]
+      const auto cvodestate(cvode.get_current_state(ii)); // ii'th states' [p, t, qv, qc]
 
       state.press = cvodestate.at(0);
       state.temp = cvodestate.at(1);
