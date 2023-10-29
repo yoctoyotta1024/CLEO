@@ -72,8 +72,14 @@ State GenGridbox::state_at(const unsigned int ii) const
 /* returns state of ii'th gridbox used
 vectors in GenGridbox struct */
 {
+  /* type cast from std::pair to Kokkos::pair */
+  Kokkos::pair<double, double> wvel(wvels.at(ii)); 
+  Kokkos::pair<double, double> uvel(uvels.at(ii));
+  Kokkos::pair<double, double> vvel(vvels.at(ii));
+
+  /* return ii'th state from initial conditions */
   return State(volumes.at(ii), presss.at(ii),
                temps.at(ii), qvaps.at(ii),
-               qconds.at(ii), wvels.at(ii),
-               uvels.at(ii), vvels.at(ii));
+               qconds.at(ii),
+               wvel, uvel, vvel);
 }

@@ -27,6 +27,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <utility>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -71,9 +72,9 @@ private:
   std::vector<double> temps;
   std::vector<double> qvaps;
   std::vector<double> qconds;
-  std::vector<Kokkos::pair<double, double>> wvels;
-  std::vector<Kokkos::pair<double, double>> uvels;
-  std::vector<Kokkos::pair<double, double>> vvels;
+  std::vector<std::pair<double, double>> wvels;
+  std::vector<std::pair<double, double>> uvels;
+  std::vector<std::pair<double, double>> vvels;
 
   State state_at(const unsigned int ii) const;
 
@@ -85,10 +86,10 @@ public:
         presss(gbxic.press()),
         temps(gbxic.temp()),
         qvaps(gbxic.qvap()),
-        qconds(gbxic.qcond()) {}
-        // wvels(gbxic.wvel()),
-        // uvels(gbxic.uvel()),
-        // vvels(gbxic.vvel()) {} // TODO
+        qconds(gbxic.qcond()),
+        wvels(gbxic.wvel()),
+        uvels(gbxic.uvel()),
+        vvels(gbxic.vvel()) {} 
 
   Gridbox operator()(const unsigned int ii,
                       const viewd_supers supers) const;
