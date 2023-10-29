@@ -30,7 +30,7 @@
 
 #include "./config.hpp"
 
-struct InitGbxs
+struct InitGbxs1
 /* struct containing functions which return data
 for the initial conditions needed to create
 gridboxes e.g. via the create_gbxs function */
@@ -39,7 +39,7 @@ private:
   size_t ngbxs;
 
 public:
-  InitGbxs(const Config &config)
+  InitGbxs1(const Config &config)
       : ngbxs(config.ngbxs) {}
 
   auto get_ngbxs() const { return ngbxs; }

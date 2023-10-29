@@ -150,8 +150,8 @@ auto create_sdm(const Config &config,
 InitialConditions auto
 create_initconds(const Config &config)
 {
-  const InitSupers initsupers(config);
-  const InitGbxs initgbxs(config);
+  const InitSupers1 initsupers(config);
+  const InitGbxsCvode initgbxs(config);
 
   return InitConds(initsupers, initgbxs);
 }

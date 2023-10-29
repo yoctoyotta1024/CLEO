@@ -29,7 +29,7 @@
 
 #include "./config.hpp"
 
-struct InitSupers
+struct InitSupers1
 /* struct containing functions which return data
 for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
@@ -39,7 +39,7 @@ private:
   unsigned int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
 
 public:
-  InitSupers(const Config &config)
+  InitSupers1(const Config &config)
       : totnsupers(config.totnsupers), nspacedims(config.nspacedims) {}
 
   auto get_totnsupers() const { return totnsupers; }
