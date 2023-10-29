@@ -37,7 +37,7 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
 
-void ensure_gbxinit_complete(dualview_gbx gbxs,
+void is_gbxinit_complete(dualview_gbx gbxs,
                                     const size_t size);
 
 void print_gbxs(const viewh_constgbx gbxs);
@@ -64,13 +64,29 @@ class GenGridbox
 private:
   std::unique_ptr<Gridbox::Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
   std::vector<double> volumes;
+  std::vector<double> presss;
+  std::vector<double> temps;
+  std::vector<double> qvaps;
+  std::vector<double> qconds;
+  std::vector<Kokkos::pair<double, double>> wvels;
+  std::vector<Kokkos::pair<double, double>> uvels;
+  std::vector<Kokkos::pair<double, double>> vvels;
 
   inline State state_at(const unsigned int ii) const;
 
 public:
   template <typename FetchInitData>
-  inline GenGridbox(const FetchInitData &fid);
-
+  inline GenGridbox(const FetchInitData &fid)
+      : GbxindexGen(std::make_unique<Gridbox::Gbxindex::Gen>()),
+        volumes(fid.volume()),
+        presss(fid.press()),
+        temps(fid.temp()),
+        qvaps(fid.qvap()),
+        qconds(fid.qcond()),
+        wvels(fid.wvel()),
+        uvels(fid.uvel()),
+        vvels(fid.vvel()) {}
+        
   inline Gridbox operator()(const unsigned int ii,
                             const viewd_supers supers) const;
 };
@@ -85,7 +101,7 @@ dualview_gbx create_gbxs(const FetchInitData fid,
   const dualview_gbx gbxs(initialise_gbxs(fid, supers));
 
   std::cout << "checking initialisation\n";
-  ensure_gbxinit_complete(gbxs, fid.get_size());
+  is_gbxinit_complete(gbxs, fid.get_size());
   print_gbxs(gbxs.view_host());
 
   std::cout << "--- create gridboxes: success ---\n";
@@ -124,19 +140,13 @@ using some data from a FetchInitData instance
 e.g. for each gridbox's volume */
 {
   const size_t ngbxs(h_gbxs.extent(0));
-  const GenGridbox gen_gridbox(fid);
+  const GenGridbox gen(fid);
 
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    h_gbxs(ii) = gen_gridbox(ii, supers);
+    h_gbxs(ii) = gen(ii, supers);
   }
 }
-
-template <typename FetchInitData>
-inline GenGridbox::
-    GenGridbox(const FetchInitData &fid)
-    : GbxindexGen(std::make_unique<Gridbox::Gbxindex::Gen>()),
-      volumes(fid.volume()) {}
 
 inline Gridbox
 GenGridbox::operator()(const unsigned int ii,
@@ -148,22 +158,15 @@ GenGridbox::operator()(const unsigned int ii,
   return Gridbox(gbxindex, state, supers);
 }
 
-inline State 
+inline State
 GenGridbox::state_at(const unsigned int ii) const
-/* TODO ! */
+/* returns state of ii'th gridbox used
+vectors in GenGridbox struct */
 {
-  double volume(volumes.at(ii));
-  double press(1.0);                   
-  double temp(1.0);                    
-  double qvap(1.0);                    
-  double qcond(1.0);                   
-  Kokkos::pair<double, double> wvel{1.0,1.0}; 
-  Kokkos::pair<double, double> uvel{1.0,1.0};
-  Kokkos::pair<double, double> vvel{1.0,1.0};
-
-  return State(volume,
-               press, temp, qvap, qcond,
-               wvel, uvel, vvel);
+  return State(volumes.at(ii), presss.at(ii),
+               temps.at(ii), qvaps.at(ii),
+               qconds.at(ii), wvels.at(ii),
+               uvels.at(ii), vvels.at(ii));
 }
 
 #endif // CREATEGBXS_HPP

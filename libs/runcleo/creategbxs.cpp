@@ -19,7 +19,7 @@
 
 #include "./creategbxs.hpp"
 
-void ensure_gbxinit_complete(dualview_gbx gbxs,
+void is_gbxinit_complete(dualview_gbx gbxs,
                              const size_t size)
 {
   gbxs.sync_host(); // copy device to host (if prior flag was set)

@@ -51,7 +51,7 @@ only coord3 obtained from vectorr (coord1 = coord2 = 0.0) */
 }
 
 void CreateSupers::
-    ensure_sdsinit_complete(const viewd_constsupers supers,
+    is_sdsinit_complete(const viewd_constsupers supers,
                                    const size_t size) const
 /* ensure the number of superdrops in the view matches the
 size according to the initial conditions */
