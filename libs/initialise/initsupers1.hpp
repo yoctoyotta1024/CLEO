@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -88,7 +88,6 @@ public:
   {
     const double r(0.1e-6 / dlc::R0);
     std::vector<double> radius(totnsupers, r);
-
     return radius;
   }
 

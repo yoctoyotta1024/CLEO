@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,8 +35,10 @@ void PrintObserver::
             << "s, totnsupers=" << gbx.domaintotnsupers()
             << ", ngbxs=" << h_gbxs.extent(0)
             << ", (Gbx" << gbx.get_gbxindex()
-            << ": [T, p, qv] = [" << gbx.state.temp * dlc::TEMP0
+            << ": [T, p, qv, qc] = [" << gbx.state.temp * dlc::TEMP0
             << "K, " << gbx.state.press * dlc::P0 << "Pa, "
-            << std::setprecision(4) << gbx.state.qvap
+            << std::scientific << std::setprecision(4)
+            << gbx.state.qvap
+            << ", " << gbx.state.qcond
             << "], nsupers = " << gbx.supersingbx.nsupers() << ")\n";
 }
