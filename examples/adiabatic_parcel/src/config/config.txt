@@ -68,8 +68,8 @@ thermosolver = cvode                       # dynamics solver to configure
 ### CVODE ODE solver paramters ###
 # initial (uniform) thermodynamic conditions #
 P_INIT = 100000.0                          # initial pressure [Pa]
-TEMP_INIT = 273.15                         # initial parcel temperature [T]
-relh_init = 99.0                           # initial relative humidity (%) unphyical < 0.0 in this setup to prevent wetradius initialisation
+TEMP_INIT = 298.15                         # initial parcel temperature [T]
+relh_init = 98.0                           # initial relative humidity (%) unphyical < 0.0 in this setup to prevent wetradius initialisation
 
 # ODE solver parameters #
 W_AVG = 1                                  # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
