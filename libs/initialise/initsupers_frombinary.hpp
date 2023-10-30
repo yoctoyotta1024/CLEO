@@ -15,10 +15,10 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * struct for superdroplets' 
- * initial conditions for CLEO SDM
- * (e.g. superdroplet attributes)
- * which can be used by InitConds
+ * struct for superdroplets' initial conditions
+ * for CLEO SDM (e.g. superdroplet attributes)
+ * by reading binary file. InitSupersFromBinary 
+ * instance can be used by InitConds
  * struct as SuperdropInitConds type
  */
 
@@ -40,7 +40,8 @@ private:
 
 public:
   InitSupersFromBinary(const Config &config)
-      : totnsupers(config.totnsupers), nspacedims(config.nspacedims) {}
+      : totnsupers(config.totnsupers),
+        nspacedims(config.nspacedims) {}
 
   auto get_totnsupers() const { return totnsupers; }
 

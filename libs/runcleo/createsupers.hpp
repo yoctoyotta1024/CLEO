@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -70,17 +70,23 @@ class GenSuperdrop
 conditions of some superdroplets' properties and
 returns superdrops generated from them */
 {
+public:
+  struct InitSupersData
+  {
+    std::array<SoluteProperties, 1> solutes;
+    std::vector<unsigned int> sdgbxindexes;
+    std::vector<double> coord3s;
+    std::vector<double> coord1s;
+    std::vector<double> coord2s;
+    std::vector<double> radii;
+    std::vector<double> msols;
+    std::vector<unsigned long long> xis;
+  };
+
 private:
   unsigned int nspacedims;
   std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
-  std::array<SoluteProperties, 1> solutes;
-  std::vector<unsigned int> sdgbxindexes;
-  std::vector<double> coord3s;
-  std::vector<double> coord1s;
-  std::vector<double> coord2s;
-  std::vector<double> radii;
-  std::vector<double> msols;
-  std::vector<unsigned long long> xis;
+  InitSupersData initdata;
 
   std::array<double, 3> coords_at(const unsigned int kk) const;
 
@@ -91,14 +97,15 @@ public:
   GenSuperdrop(const SuperdropInitConds &sdic)
       : nspacedims(sdic.get_nspacedims()),
         sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
-        solutes({SoluteProperties{}}),
-        sdgbxindexes(sdic.sdgbxindex()),
-        coord3s(sdic.coord3()),
-        coord1s(sdic.coord1()),
-        coord2s(sdic.coord2()),
-        radii(sdic.radius()),
-        msols(sdic.msol()),
-        xis(sdic.xi()) {}
+        initdata(sdic.initdata()) {}
+        // solutes({SoluteProperties{}}),
+        // sdgbxindexes(sdic.sdgbxindex()),
+        // coord3s(sdic.coord3()),
+        // coord1s(sdic.coord1()),
+        // coord2s(sdic.coord2()),
+        // radii(sdic.radius()),
+        // msols(sdic.msol()),
+        // xis(sdic.xi()) {}
 
   Superdrop operator()(const unsigned int kk) const;
 };
