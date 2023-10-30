@@ -32,6 +32,8 @@ InitSupersData InitSupersFromBinary::fetch_data() const
   init_solutes_data(initdata);
   initdata_from_binary(initdata); 
 
+  check_initdata_sizes(initdata);
+
   return initdata;
 }
 
@@ -51,12 +53,32 @@ void InitSupersFromBinary::
   read_initdata_binary(initdata, file, meta);
 
   file.close();
+};
 
-  // check_vectorsizes({sd_gbxindex.size(), eps.size(),
-  //                   radius.size(), m_sol.size()});
+void InitSupersFromBinary::
+    check_initdata_sizes(const InitSupersData &in)
+{
+  std::vector<size_t> sizes({in.sdgbxindexes.size(),
+                             in.xis.size(),
+                             in.radii.size(),
+                             in.msols.size()});
 
-  // return InitSDsData{sd_gbxindex, eps, radius, m_sol,
-  //                    coord3, coord1, coord2};
+  if (nspacedims > 0)
+  {
+    sizes.push_back(in.coord3s.size());
+
+    if (nspacedims > 1)
+    {
+      sizes.push_back(in.coord1s.size()); 
+
+      if (nspacedims == 3)
+      {
+        sizes.push_back(in.coord2s.size());
+      }
+    }
+  }
+
+  check_vectorsizes(sizes);
 }
 
 void InitSupersFromBinary::

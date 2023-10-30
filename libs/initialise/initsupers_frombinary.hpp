@@ -50,6 +50,8 @@ private:
   void read_initdata_binary(InitSupersData &initdata,
                             std::ifstream &file,
                             const VarMetadata &varmeta) const;
+                            
+  void check_initdata_sizes(const InitSupersData &initdata);
 
 public:
   InitSupersFromBinary(const Config &config)
