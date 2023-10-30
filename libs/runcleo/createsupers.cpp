@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -77,15 +77,15 @@ only coord3 obtained from vectorr (coord1 = coord2 = 0.0) */
 
   if (nspacedims > 0)
   {
-    coords312[0] = coord3s.at(kk);
+    coords312[0] = initdata.coord3s.at(kk);
 
     if (nspacedims > 1)
     {
-      coords312[1] = coord1s.at(kk);
+      coords312[1] = initdata.coord1s.at(kk);
 
       if (nspacedims == 3)
       {
-        coords312[2] = coord2s.at(kk);
+        coords312[2] = initdata.coord2s.at(kk);
       }
     }
   }
@@ -98,17 +98,17 @@ SuperdropAttrs GenSuperdrop::attrs_at(const unsigned int kk) const
 at position kk in the initial conditions data. All
 superdroplets created with same solute properties */
 {
-  const double radius(radii.at(kk));
-  const double msol(msols.at(kk));
-  const unsigned long long xi(xis.at(kk));
-  const SoluteProperties solute(solutes.at(0));
+  const double radius(initdata.radii.at(kk));
+  const double msol(initdata.msols.at(kk));
+  const unsigned long long xi(initdata.xis.at(kk));
+  const SoluteProperties solute(initdata.solutes.at(0));
 
   return SuperdropAttrs(solute, xi, radius, msol);
 }
 
 Superdrop GenSuperdrop::operator()(const unsigned int kk) const
 {
-  const unsigned int sdgbxindex(sdgbxindexes.at(kk));
+  const unsigned int sdgbxindex(initdata.sdgbxindexes.at(kk));
   const std::array<double, 3> coords312(coords_at(kk));
   const SuperdropAttrs attrs(attrs_at(kk));
   const auto sdId(sdIdGen->next());
