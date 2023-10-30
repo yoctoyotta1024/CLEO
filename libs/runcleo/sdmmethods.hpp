@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -103,7 +103,7 @@ public:
             
             URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
 
-            auto gbx = d_gbxs(ii);
+            auto &gbx = d_gbxs(ii);
             for (unsigned int subt = t_sdm; subt < t_next;
                  subt = microphys.next_step(subt))
             {

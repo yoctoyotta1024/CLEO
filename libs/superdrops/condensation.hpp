@@ -92,7 +92,6 @@ public:
   satsifies the MicrophysicalProcess concept) */
   {
     do_condensation(supers, state);
-
     return supers;
   }
 };
