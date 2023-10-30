@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -119,18 +119,15 @@ create_observer(const Config &config,
   const Observer auto obs1 = PrintObserver(obsstep, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
-                                          &step2dimlesstime);
+                                          &step2dimlesstime); 
 
-  const Observer auto obs3 = MassMomentsObserver(obsstep, store, maxchunk,
-                                                 config.ngbxs);
-
-  const Observer auto obs4 = StateObserver(obsstep, store, maxchunk,
+  const Observer auto obs3 = StateObserver(obsstep, store, maxchunk,
                                            config.ngbxs);
 
-  const Observer auto obs5 = create_supersattrs_observer(obsstep, store,
+  const Observer auto obs4 = create_supersattrs_observer(obsstep, store,
                                                           maxchunk);
 
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5;
+  return obs1 >> obs2 >> obs3 >> obs4;
 }
 
 auto create_sdm(const Config &config,

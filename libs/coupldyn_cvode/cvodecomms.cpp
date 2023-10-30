@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,7 +36,7 @@ previous time step to current one */
   delta.at(1) = state.temp - prevstate.at(1);
   delta.at(2) = state.qvap - prevstate.at(2);
   delta.at(3) = state.qcond - prevstate.at(3);
-
+ 
   return delta;
 }
 
