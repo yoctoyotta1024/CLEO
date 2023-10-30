@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Tuesday 31st October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,6 +26,9 @@
 #include "./initsupers_frombinary.hpp"
 
 InitSupersData InitSupersFromBinary::fetch_data() const
+/* return InitSupersData created by reading a binary
+file and creating a SoluteProperties struct.
+Then check that the input data has the correct sizes. */
 {
   InitSupersData initdata;
 
@@ -39,12 +42,16 @@ InitSupersData InitSupersFromBinary::fetch_data() const
 
 void InitSupersFromBinary::
     init_solutes_data(InitSupersData &initdata) const
+/* sets initial data for solutes as
+a single SoluteProprties instance */
 {
   initdata.solutes.at(0) = SoluteProperties{};
 }
 
 void InitSupersFromBinary::
     initdata_from_binary(InitSupersData &initdata) const
+/* sets initial data in initdata using data read
+from a binary file called initsupers_filename */
 {
   std::ifstream file(open_binary(initsupers_filename));
 
@@ -56,7 +63,10 @@ void InitSupersFromBinary::
 };
 
 void InitSupersFromBinary::
-    check_initdata_sizes(const InitSupersData &in)
+    check_initdata_sizes(const InitSupersData &in) const
+/* check all the vectors in the initdata struct all
+have sizes consistent with one another. Include
+coords data in check if nspacedims != 0 */    
 {
   std::vector<size_t> sizes({in.sdgbxindexes.size(),
                              in.xis.size(),
@@ -84,7 +94,8 @@ void InitSupersFromBinary::
 void InitSupersFromBinary::
     read_initdata_binary(InitSupersData &initdata,
                          std::ifstream &file,
-                         const VarMetadata &varmeta) const
+                         const std::vector<VarMetadata> &meta) const
+/* copy data for vectors from binary file to initdata struct */
 {
   initdata.sdgbxindexes = vector_from_binary<unsigned int>(file, meta.at(0));
   
@@ -102,6 +113,15 @@ void InitSupersFromBinary::
 }
 
 size_t InitSupersFromBinary::fetch_data_size() const
+/* data size returned is number of variables as
+declared by the metadata for the first variable 
+in the initsupers file */
 {
-  return 0; //TODO
+  std::ifstream file(open_binary(initsupers_filename));
+  
+  VarMetadata meta(metadata_from_binary(file).at(0)); 
+  
+  file.close();
+   
+  return meta.nvar; //TODO
 }

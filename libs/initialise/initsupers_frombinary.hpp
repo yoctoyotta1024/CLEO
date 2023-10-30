@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Tuesday 31st October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,14 +44,22 @@ private:
   std::string_view initsupers_filename; // name of binary file for some of superdrops' initial conditons
 
   void init_solutes_data(InitSupersData &initdata) const;
+  /* sets initial data for solutes as
+  a single SoluteProprties instance */
 
   void initdata_from_binary(InitSupersData &initdata) const;
+  /* sets initial data in initdata using data read
+  from a binary file called initsupers_filename */
 
   void read_initdata_binary(InitSupersData &initdata,
                             std::ifstream &file,
                             const VarMetadata &varmeta) const;
-                            
-  void check_initdata_sizes(const InitSupersData &initdata);
+  /* copy data for vectors from binary file to initdata struct */
+
+  void check_initdata_sizes(const InitSupersData &initdata) const;
+  /* check all the vectors in the initdata struct all
+  have sizes consistent with one another. Include
+  coords data in check if nspacedims != 0 */    
 
 public:
   InitSupersFromBinary(const Config &config)
@@ -63,9 +71,15 @@ public:
 
   auto get_nspacedims() const { return nspacedims; }
 
-  size_t fetch_data_size() const;
+  size_t fetch_data_size() const { return initdatasize; }
+  /* data size returned is number of variables as
+  declared by the metadata for the first variable
+  in the initsupers file */
 
   InitSupersData fetch_data() const;
+  /* return InitSupersData created by reading a binary
+  file and creating a SoluteProperties struct.
+  Then check that the input data has the correct sizes. */
 };
 
 #endif // INITSUPERS_FROMBINARY_HPP
