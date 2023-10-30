@@ -54,7 +54,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 # zlim = 1000
 # npergbx = 8
 # nsupers = iSDs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 1024
+nsupers = 512
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
@@ -70,7 +70,7 @@ radiigen  = iSDs.MonoAttrsGen(monor)                  # all SDs have the same dr
 ### --- Choice of Droplet Radius Probability Distribution --- ###
 dirac0               = monor                         # radius in sample closest to this value is dirac delta peak
 # numconc              = 1e6                         # total no. conc of real droplets [m^-3]
-numconc              = 500e6                         # total no. conc of real droplets [m^-3]
+numconc              = 512e6                         # total no. conc of real droplets [m^-3]
 radiiprobdist = rprobs.DiracDelta(dirac0)
 
 # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
