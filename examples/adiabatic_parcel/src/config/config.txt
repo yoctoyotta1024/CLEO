@@ -72,7 +72,7 @@ TEMP_INIT = 298.15                         # initial parcel temperature [T]
 relh_init = 98.0                           # initial relative humidity (%) unphyical < 0.0 in this setup to prevent wetradius initialisation
 
 # ODE solver parameters #
-W_AVG = 1                                  # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
+W_AVG = 1.0                                  # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
 T_HALF = 150                               # timescale for w sinusoid, tau = THALF/pi [s]
 cvode_rtol = 1e-6                          # relative tolerance for [P, T, qv, qc] ODEs integration
 cvode_atol = 1e-6                          # absolute tolerance for [P, T, qv, qc] ODEs integration

@@ -93,7 +93,7 @@ public:
 
   std::vector<double> msol() const
   {
-    const double m(8.446695447951756e-15 / dlc::MASS0);
+    const double m(8.446695447951756e-18 / dlc::MASS0);
     std::vector<double> msol(totnsupers, m);
 
     return msol;
@@ -101,7 +101,7 @@ public:
 
   std::vector<unsigned long long> xi() const
   {
-    const unsigned long long x(500e6);
+    const unsigned long long x(100000000);
     std::vector<unsigned long long> xi(totnsupers, x);
 
     return xi;
