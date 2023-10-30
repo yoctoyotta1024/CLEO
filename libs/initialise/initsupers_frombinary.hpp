@@ -29,6 +29,7 @@
 #include <string_view>
 
 #include "./config.hpp"
+#include "./readbinary.hpp"
 #include "runcleo/initialconditions.hpp"
 #include "superdrops/superdrop_attrs.hpp"
 

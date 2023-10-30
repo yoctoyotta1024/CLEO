@@ -44,9 +44,9 @@ void InitSupersFromBinary::
 void InitSupersFromBinary::
     initdata_from_binary(InitSupersData &initdata) const
 {
-  // std::ifstream file(open_binary(initsupers_filename));
+  std::ifstream file(open_binary(initsupers_filename));
 
-  // std::vector<VarMetadata> meta(metadata_from_binary(file));
+  std::vector<VarMetadata> meta(metadata_from_binary(file));
 
   // std::vector<unsigned int>
   //     sd_gbxindex(vector_from_binary<unsigned int>(file, meta.at(0)));
