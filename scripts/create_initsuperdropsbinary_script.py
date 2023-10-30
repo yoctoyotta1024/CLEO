@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 30th October 2023
+Last Modified: Tuesday 31st October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -58,18 +58,20 @@ nsupers = 1024
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
-# monor                = 0.04910258806                  # all SDs have this same radius [m]
-# radiigen  = iSDs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
+# monor                = 0.04910258806                # all SDs have this same radius [m]
+monor                = 0.05e-6                        # all SDs have this same radius [m]
+radiigen  = iSDs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
 
-rspan                = [1e-8, 9e-5]                 # min and max range of radii to sample [m]
-randomr              = True                         # sample radii range randomly or not
-radiigen = iSDs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
+# rspan                = [1e-8, 9e-5]                 # min and max range of radii to sample [m]
+# randomr              = True                         # sample radii range randomly or not
+# radiigen = iSDs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Droplet Radius Probability Distribution --- ###
-# dirac0               = monor               # radius in sample closest to this value is dirac delta peak
+dirac0               = monor                         # radius in sample closest to this value is dirac delta peak
 # numconc              = 1e6                         # total no. conc of real droplets [m^-3]
-# radiiprobdist = rprobs.DiracDelta(dirac0)
+numconc              = 500e6                         # total no. conc of real droplets [m^-3]
+radiiprobdist = rprobs.DiracDelta(dirac0)
 
 # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
 # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
@@ -83,9 +85,9 @@ radiigen = iSDs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rsp
 # numconc = np.sum(scalefacs)
 # radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
  
-volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
+# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
+# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
+# radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
 
 # reff                 = 7e-6                     # effective radius [m]
 # nueff                = 0.08                     # effective variance 
@@ -106,22 +108,22 @@ radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen            = iSDs.MonoCoordGen(monocoord3)
-coord3gen            = iSDs.SampleCoordGen(True) # sample coord3 range randomly or not
-# coord3gen            = None                        # do not generate superdroplet coord3s
+# coord3gen            = iSDs.SampleCoordGen(True) # sample coord3 range randomly or not
+coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
 # coord1gen            = iSDs.MonoCoordGen(monocoord1)
-coord1gen            = iSDs.SampleCoordGen(True) # sample coord1 range randomly or not
-# coord1gen            = None                        # do not generate superdroplet coord1s
+# coord1gen            = iSDs.SampleCoordGen(True) # sample coord1 range randomly or not
+coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
 # monocoord2           = 1000                        # all SDs have this same coord2 [m] 
 # coord2gen            = iSDs.MonoCoordGen(monocoord2)
-coord2gen            = iSDs.SampleCoordGen(True) # sample coord1 range randomly or not
-# coord2gen            = None                        # do not generate superdroplet coord2s
+# coord2gen            = iSDs.SampleCoordGen(True) # sample coord1 range randomly or not
+coord2gen            = None                        # do not generate superdroplet coord2s
 ### ----------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
