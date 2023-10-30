@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,7 +35,7 @@
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
-#include "initialise/initsupers1.hpp"
+#include "initialise/initsupers_frombinary.hpp"
 #include "initialise/initgbxs1.hpp"
 
 #include "observers/gbxindexobs.hpp"
@@ -180,7 +180,7 @@ auto create_sdm(const Config &config,
 InitialConditions auto
 create_initconds(const Config &config)
 {
-  const InitSupers1 initsupers(config);
+  const InitSupersFromBinary initsupers(config);
   const InitGbxs1 initgbxs(config);
 
   return InitConds(initsupers, initgbxs);

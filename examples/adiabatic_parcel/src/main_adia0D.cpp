@@ -37,7 +37,7 @@
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
-#include "initialise/initsupers1.hpp"
+#include "initialise/initsupers_frombinary.hpp"
 
 #include "observers/gbxindexobs.hpp"
 #include "observers/massmomentsobs.hpp"
@@ -147,7 +147,7 @@ auto create_sdm(const Config &config,
 InitialConditions auto
 create_initconds(const Config &config)
 {
-  const InitSupers1 initsupers(config);
+  const InitSupersFromBinary initsupers(config);
   const InitGbxsCvode initgbxs(config);
 
   return InitConds(initsupers, initgbxs);

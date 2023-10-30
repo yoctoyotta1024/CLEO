@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: initsupers1.hpp
+ * File: initsupers_frombinary.hpp
  * Project: initialise
  * Created Date: Tuesday 17th October 2023
  * Author: Clara Bayley (CB)
@@ -22,16 +22,14 @@
  * struct as SuperdropInitConds type
  */
 
-#ifndef INITSUPERS1_HPP
-#define INITSUPERS1_HPP
+#ifndef INITSUPERS_FROMBINARY_HPP
+#define INITSUPERS_FROMBINARY_HPP
 
 #include <vector>
 
 #include "./config.hpp"
 
-// TODO 
-
-struct InitSupers1
+struct InitSupersFromBinary
 /* struct containing functions which return data
 for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
@@ -41,7 +39,7 @@ private:
   unsigned int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
 
 public:
-  InitSupers1(const Config &config)
+  InitSupersFromBinary(const Config &config)
       : totnsupers(config.totnsupers), nspacedims(config.nspacedims) {}
 
   auto get_totnsupers() const { return totnsupers; }
@@ -108,4 +106,4 @@ public:
   }
 };
 
-#endif // INITSUPERS1_HPP
+#endif // INITSUPERS_FROMBINARY_HPP
