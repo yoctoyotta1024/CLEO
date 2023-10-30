@@ -123,5 +123,5 @@ in the initsupers file */
   
   file.close();
    
-  return meta.nvar; //TODO
+  return meta.nvar;
 }
