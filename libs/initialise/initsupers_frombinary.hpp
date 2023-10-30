@@ -43,9 +43,13 @@ private:
   unsigned int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
   std::string_view initsupers_filename; // name of binary file for some of superdrops' initial conditons
 
-  void init_solutes(InitSupersData &initdata) const;
+  void init_solutes_data(InitSupersData &initdata) const;
 
-  void initdata_from_binary(InitSupersData &initdata) const; 
+  void initdata_from_binary(InitSupersData &initdata) const;
+
+  void read_initdata_binary(InitSupersData &initdata,
+                            std::ifstream &file,
+                            const VarMetadata &varmeta) const;
 
 public:
   InitSupersFromBinary(const Config &config)

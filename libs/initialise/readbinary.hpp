@@ -25,20 +25,11 @@
 
 #include <string>
 #include <string_view>
-// #include <iostream>
-// #include <ios>
+#include <iostream>
+#include <ios>
 #include <fstream>
-// #include <istream>
 #include <vector>
 #include <stdexcept>
-
-template <typename T>
-void binary_into_buffer(std::ifstream &file,
-                        std::vector<T> &buffer)
-{
-  file.read(reinterpret_cast<char *>(buffer.data()),
-            buffer.size() * sizeof(T));
-}
 
 struct GblMetadata
 /* Global Metadata is 4 unsigned integers at very
@@ -81,6 +72,20 @@ std::vector<VarMetadata> metadata_from_binary(std::ifstream &file);
 read and print the global metadata string at the start of the file,
 then return a vector containing the metadata that is specific to
 each of the variables in the file */
+
+void check_vectorsizes(const std::vector<size_t> &sizes)
+/* raise error if values in vector 'sizes' are not the same. Useful 
+for checking if vectors are the same size e.g. for vectors of
+SD attributes created from reading initSDsfile and used to
+make InitSdsData object */
+
+template <typename T>
+void binary_into_buffer(std::ifstream &file,
+                        std::vector<T> &buffer)
+{
+  file.read(reinterpret_cast<char *>(buffer.data()),
+            buffer.size() * sizeof(T));
+}
 
 template <typename T>
 std::vector<T> vector_from_binary(std::ifstream &file,

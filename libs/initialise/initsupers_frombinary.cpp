@@ -29,14 +29,14 @@ InitSupersData InitSupersFromBinary::fetch_data() const
 {
   InitSupersData initdata;
 
-  init_solutes(initdata);
+  init_solutes_data(initdata);
   initdata_from_binary(initdata); 
 
   return initdata;
 }
 
 void InitSupersFromBinary::
-    init_solutes(InitSupersData &initdata) const
+    init_solutes_data(InitSupersData &initdata) const
 {
   initdata.solutes.at(0) = SoluteProperties{};
 }
@@ -48,35 +48,36 @@ void InitSupersFromBinary::
 
   std::vector<VarMetadata> meta(metadata_from_binary(file));
 
-  // std::vector<unsigned int>
-  //     sd_gbxindex(vector_from_binary<unsigned int>(file, meta.at(0)));
-  
-  // std::vector<unsigned long long>
-  //     eps(vector_from_binary<unsigned long long>(file, meta.at(1)));
+  read_initdata_binary(initdata, file, meta);
 
-  // std::vector<double>
-  //     radius(vector_from_binary<double>(file, meta.at(2)));
-
-  // std::vector<double>
-  //     m_sol(vector_from_binary<double>(file, meta.at(3)));
-
-  // std::vector<double>
-  //     coord3(vector_from_binary<double>(file, meta.at(4)));
-
-  // std::vector<double>
-  //     coord1(vector_from_binary<double>(file, meta.at(5)));
-  
-  // std::vector<double>
-  //     coord2(vector_from_binary<double>(file, meta.at(6)));
-
-  // file.close();
+  file.close();
 
   // check_vectorsizes({sd_gbxindex.size(), eps.size(),
   //                   radius.size(), m_sol.size()});
 
   // return InitSDsData{sd_gbxindex, eps, radius, m_sol,
   //                    coord3, coord1, coord2};
-};
+}
+
+void InitSupersFromBinary::
+    read_initdata_binary(InitSupersData &initdata,
+                         std::ifstream &file,
+                         const VarMetadata &varmeta) const
+{
+  initdata.sdgbxindexes = vector_from_binary<unsigned int>(file, meta.at(0));
+  
+  initdata.xis = vector_from_binary<unsigned long long>(file, meta.at(1));
+
+  initdata.radii = vector_from_binary<double>(file, meta.at(2));
+
+  inidata.msols = vector_from_binary<double>(file, meta.at(3));
+
+  initdata.coord3s = vector_from_binary<double>(file, meta.at(4));
+
+  initdata.coord1s = vector_from_binary<double>(file, meta.at(5));
+  
+  initdata.coord2s = vector_from_binary<double>(file, meta.at(6));
+}
 
 size_t InitSupersFromBinary::fetch_data_size() const
 {

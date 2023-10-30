@@ -93,3 +93,40 @@ std::ifstream open_binary(std::string_view filename)
 
   return file;
 }
+
+std::vector<VarMetadata> metadata_from_binary(std::ifstream &file)
+/* Given a binary file that follows the correct layout,
+read and print the global metadata string at the start of the file,
+then return a vector containing the metadata that is specific to
+each of the variables in the file */
+{
+  const GblMetadata gblmeta(file);
+
+  unsigned int pos = 4 * sizeof(unsigned int) + gblmeta.charbytes; // position of 1st byte of variable specific metadata
+
+  std::vector<VarMetadata> mdata(0);
+  for (unsigned int i = 0; i < gblmeta.nvars; ++i)
+  {
+    mdata.push_back(VarMetadata(file, pos));
+    pos += gblmeta.mbytes_pervar;
+  }
+  
+  return mdata;
+}
+
+void check_vectorsizes(const std::vector<size_t> &sizes)
+/* raise error if values in vector 'sizes' are not the same. Useful 
+for checking if vectors are the same size e.g. for vectors of
+SD attributes created from reading initSDsfile and used to
+make InitSdsData object */
+{
+  const size_t sz0 = sizes.front();
+  for (auto sz : sizes)
+  {
+    if (sz != sz0)
+    {
+      const std::string err("values in 'sizes' vector are not identical");
+      throw std::invalid_argument(err);
+    }
+  }
+}
