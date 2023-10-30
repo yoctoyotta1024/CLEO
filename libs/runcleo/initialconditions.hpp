@@ -27,8 +27,11 @@
 #include <vector>
 #include <utility>
 
+#include "../kokkosaliases.hpp"
+
 struct InitSupersData
 {
+  std::array<SoluteProperties, 1> solutes;
   std::vector<unsigned int> sdgbxindexes;
   std::vector<double> coord3s;
   std::vector<double> coord1s;
@@ -51,7 +54,7 @@ initsupers and initgbxs structs which can call functions listed */
     ic.initsupers.get_totnsupers()
   } -> std::convertible_to<size_t>;
   {
-    ic.initsupers.get_size()
+    ic.initsupers.fetch_data_size()
   } -> std::convertible_to<size_t>;
   {
     ic.initsupers.fetch_data()

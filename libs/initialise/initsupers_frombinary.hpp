@@ -28,7 +28,7 @@
 #include <vector>
 
 #include "./config.hpp"
-
+#include "runcleo/initialconditions.hpp"
 
 struct InitSupersFromBinary
 /* struct containing functions which return data
@@ -39,20 +39,9 @@ private:
   size_t totnsupers; // total number of superdroplets (in kokkos view on device initially)
   unsigned int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
   
-  struct DataFromBinary
-  /* data from file in a struct that's convertible
-  to an InitSupersData struct (*hint* InitSupersData
-  is constrained type returned by fetch_data() in
-  InitialConditions concept) */
-  {
-    std::vector<unsigned int> sdgbxindexes;
-    std::vector<double> coord3s;
-    std::vector<double> coord1s;
-    std::vector<double> coord2s;
-    std::vector<double> radii;
-    std::vector<double> msols;
-    std::vector<unsigned long long> xis;
-  };
+  void init_solutes(InitSupersData &initdata) const;
+
+  void initdata_from_binary(InitSupersData &initdata) const; 
 
 public:
   InitSupersFromBinary(const Config &config)
@@ -63,12 +52,9 @@ public:
 
   auto get_nspacedims() const { return nspacedims; }
 
-  size_t get_size() const
-  {
-    return sdgbxindex().size();
-  }
+  size_t fetch_data_size() const;
 
-  DataFromBinary fetch_data() const;
+  InitSupersData fetch_data() const;
 };
 
 #endif // INITSUPERS_FROMBINARY_HPP
