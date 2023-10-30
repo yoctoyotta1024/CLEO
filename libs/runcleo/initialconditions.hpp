@@ -29,7 +29,6 @@
 
 struct InitSupersData
 {
-  std::array<SoluteProperties, 1> solutes;
   std::vector<unsigned int> sdgbxindexes;
   std::vector<double> coord3s;
   std::vector<double> coord1s;

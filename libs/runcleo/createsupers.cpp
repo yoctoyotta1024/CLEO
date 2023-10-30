@@ -101,7 +101,7 @@ superdroplets created with same solute properties */
   const double radius(initdata.radii.at(kk));
   const double msol(initdata.msols.at(kk));
   const unsigned long long xi(initdata.xis.at(kk));
-  const SoluteProperties solute(initdata.solutes.at(0));
+  const SoluteProperties solute(solutes.at(0));
 
   return SuperdropAttrs(solute, xi, radius, msol);
 }

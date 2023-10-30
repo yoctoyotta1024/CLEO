@@ -74,6 +74,7 @@ returns superdrops generated from them */
 private:
   unsigned int nspacedims;
   std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
+  std::array<SoluteProperties, 1> solutes;
   InitSupersData initdata;
 
   std::array<double, 3> coords_at(const unsigned int kk) const;
@@ -85,15 +86,8 @@ public:
   GenSuperdrop(const SuperdropInitConds &sdic)
       : nspacedims(sdic.get_nspacedims()),
         sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
+        solutes({SoluteProperties{}}),
         initdata(sdic.fetch_data()) {}
-        // solutes({SoluteProperties{}}),
-        // sdgbxindexes(sdic.sdgbxindex()),
-        // coord3s(sdic.coord3()),
-        // coord1s(sdic.coord1()),
-        // coord2s(sdic.coord2()),
-        // radii(sdic.radius()),
-        // msols(sdic.msol()),
-        // xis(sdic.xi()) {}
 
   Superdrop operator()(const unsigned int kk) const;
 };

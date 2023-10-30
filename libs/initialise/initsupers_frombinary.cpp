@@ -21,3 +21,17 @@
  * instance can be used by InitConds
  * struct as SuperdropInitConds type
  */
+
+
+#include "./initsupers_frombinary.hpp"
+
+InitSupersFromBinary::DataFromBinary
+InitSupersFromBinary::fetch_data() const
+{
+  DataFromBinary initdata;
+
+  initdata.solutes.at(0) = SoluteProperties{};
+
+
+  return initdata;
+}

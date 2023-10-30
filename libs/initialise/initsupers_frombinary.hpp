@@ -38,6 +38,21 @@ superdroplets e.g. via the CreateSupers struct */
 private:
   size_t totnsupers; // total number of superdroplets (in kokkos view on device initially)
   unsigned int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
+  
+  struct DataFromBinary
+  /* data from file in a struct that's convertible
+  to an InitSupersData struct (*hint* InitSupersData
+  is constrained type returned by fetch_data() in
+  InitialConditions concept) */
+  {
+    std::vector<unsigned int> sdgbxindexes;
+    std::vector<double> coord3s;
+    std::vector<double> coord1s;
+    std::vector<double> coord2s;
+    std::vector<double> radii;
+    std::vector<double> msols;
+    std::vector<unsigned long long> xis;
+  };
 
 public:
   InitSupersFromBinary(const Config &config)
@@ -53,59 +68,7 @@ public:
     return sdgbxindex().size();
   }
 
-  std::vector<unsigned int> sdgbxindex() const
-  {
-    std::vector<unsigned int> sdgbxindex{0, 0, 0, 0, 0};
-
-    // std::vector<unsigned int> sdgbxindex{1, 3, 5, 0, 0,
-    //                                      5, 6, 6, 0, 4};
-
-    return sdgbxindex;
-  }
-
-  std::vector<double> coord3() const
-  {
-    std::vector<double> coord3(totnsupers, 0.0);
-
-    return coord3;
-  }
-
-  std::vector<double> coord1() const
-  {
-    std::vector<double> coord1(totnsupers, 0.0);
-
-    return coord1;
-  }
-
-  std::vector<double> coord2() const
-  {
-    std::vector<double> coord2(totnsupers, 0.0);
-
-    return coord2;
-  }
-
-  std::vector<double> radius() const
-  {
-    const double r(0.1e-6 / dlc::R0);
-    std::vector<double> radius(totnsupers, r);
-    return radius;
-  }
-
-  std::vector<double> msol() const
-  {
-    const double m(8.446695447951756e-18 / dlc::MASS0);
-    std::vector<double> msol(totnsupers, m);
-
-    return msol;
-  }
-
-  std::vector<unsigned long long> xi() const
-  {
-    const unsigned long long x(100000000);
-    std::vector<unsigned long long> xi(totnsupers, x);
-
-    return xi;
-  }
+  DataFromBinary fetch_data() const;
 };
 
 #endif // INITSUPERS_FROMBINARY_HPP
