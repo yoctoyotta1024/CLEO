@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Monday 30th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -47,7 +47,7 @@ binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 
 gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
-initSDsfile = binariespath+"/dimlessSDsinit.dat" # note this should match config.txt
+initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match config.txt
 
 ### --- Number of Superdroplets per Gridbox --- ###
 ### ---        (an int or dict of ints)     --- ###
@@ -138,7 +138,7 @@ else:
 ### write initial superdrops binary
 initattrsgen = iSDs.InitManyAttrsGen(radiigen, radiiprobdist,
                                       coord3gen, coord1gen, coord2gen)
-csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+csupers.write_initsuperdrops_binary(initsupersfile, initattrsgen, 
                                     configfile, constsfile,
                                     gridfile, nsupers, numconc)
 
@@ -146,7 +146,7 @@ csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen,
 if isfigures[0]:
     if isfigures[1]:
         Path(savefigpath).mkdir(exist_ok=True) 
-    rsupers.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+    rsupers.plot_initGBxsdistribs(configfile, constsfile, initsupersfile,
                                    gridfile, savefigpath, isfigures[1],
                                    gbxs2plt)
 ### ---------------------------------------------------------------- ###

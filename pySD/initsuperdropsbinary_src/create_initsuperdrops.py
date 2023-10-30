@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Monday 30th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -241,14 +241,14 @@ def nsupers_pergridboxdict(nsupers, gbxbounds):
     raise ValueError(errmsg)
 
 
-def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile, 
+def write_initsuperdrops_binary(initsupersfile, initattrsgen, configfile, 
                                 constsfile, gridfile, nsupers, NUMCONC):
   ''' de-dimensionalise attributes in initattrsgen and then write to 
-  to a binary file, "initSDsfile", with some metadata '''
+  to a binary file, "initsupersfile", with some metadata '''
   
   if not isfile(gridfile):
     errmsg = "gridfile not found, but must be"+\
-              " created before initSDsfile can be"
+              " created before initsupersfile can be"
     raise ValueError(errmsg)
 
   inputs = initSDsinputsdict(configfile, constsfile)
@@ -286,5 +286,5 @@ def write_initsuperdrops_binary(initSDsfile, initattrsgen, configfile,
   else:
     metastr += ' [sdgbxindex, eps, radius, m_sol]'
   
-  writebinary.writebinary(initSDsfile, data, ndata, datatypes,
+  writebinary.writebinary(initsupersfile, data, ndata, datatypes,
                           units, scale_factors, metastr)

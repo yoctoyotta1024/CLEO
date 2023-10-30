@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Monday 30th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -178,7 +178,7 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
 
   if not isfile(gridfile):
     errmsg = "gridfile not found, but must be"+\
-              " created before initSDsfile can be"
+              " created before initsupersfile can be"
     raise ValueError(errmsg)
 
   inputs = thermoinputsdict(configfile, constsfile)

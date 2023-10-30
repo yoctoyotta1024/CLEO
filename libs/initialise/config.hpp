@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 27th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -79,7 +79,7 @@ private:
 public:
   /*** Initialisation and Output Data parameters ***/
   std::string constants_filename;    // filename containing values of physical constants
-  std::string initSDs_filename;      // binary filename for initialisation of SDs
+  std::string initsupers_filename;      // binary filename for initialisation of SDs
   std::string grid_filename;         // binary filename for GBx boundaries
   std::string setuptxt;              // name of .txt output file to copy setup to
   std::filesystem::path zarrbasedir; // zarr store base directory

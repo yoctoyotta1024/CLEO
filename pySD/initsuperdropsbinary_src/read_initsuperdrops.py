@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 18th October 2023
+Last Modified: Monday 30th October 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -25,13 +25,13 @@ from .create_initsuperdrops import initSDsinputsdict, ManyInitAttrs
 from ..readbinary import readbinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import get_gbxvols_from_gridfile
 
-def get_superdroplet_attributes(configfile, constsfile, initSDsfile):
+def get_superdroplet_attributes(configfile, constsfile, initsupersfile):
     ''' get gridbox boundaries from binary file and 
     re-dimensionalise usign COORD0 const from constsfile '''
 
     inputs = initSDsinputsdict(configfile, constsfile)
     
-    attrs = read_dimless_superdrops_binary(initSDsfile, isprint=False)
+    attrs = read_dimless_superdrops_binary(initsupersfile, isprint=False)
 
     # re-dimensionalise SD attributes
     attrs.radius = attrs.radius * inputs["R0"]
@@ -95,9 +95,9 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
     
     return fig, axs, [l0, l1, l2, ls]
 
-def plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+def plot_initGBxsdistribs(configfile, constsfile, initsupersfile,
                           gridfile, binpath, savefig, gbxs2plt):
-    ''' plot initial superdroplet distribution from initSDsfile binary
+    ''' plot initial superdroplet distribution from initsupersfile binary
     of every gridbox with index in gbx2plts '''
 
     gbxvols = get_gbxvols_from_gridfile(gridfile,
@@ -105,7 +105,7 @@ def plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
                                         isprint=False)
     attrs = get_superdroplet_attributes(configfile,
                                         constsfile,
-                                        initSDsfile) 
+                                        initsupersfile) 
 
     if type(gbxs2plt) == int:
         gbxidxs = [gbxs2plt]

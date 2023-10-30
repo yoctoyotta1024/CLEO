@@ -44,7 +44,7 @@ void InitSupersFromBinary::
 void InitSupersFromBinary::
     initdata_from_binary(InitSupersData &initdata) const
 {
-  // std::ifstream file(open_binary(initSDsfile));
+  // std::ifstream file(open_binary(initsupers_filename));
 
   // std::vector<VarMetadata> meta(metadata_from_binary(file));
 

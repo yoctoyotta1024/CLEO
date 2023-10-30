@@ -26,9 +26,11 @@
 #define INITSUPERS_FROMBINARY_HPP
 
 #include <vector>
+#include <string_view>
 
 #include "./config.hpp"
 #include "runcleo/initialconditions.hpp"
+#include "superdrops/superdrop_attrs.hpp"
 
 struct InitSupersFromBinary
 /* struct containing functions which return data
@@ -38,7 +40,8 @@ superdroplets e.g. via the CreateSupers struct */
 private:
   size_t totnsupers; // total number of superdroplets (in kokkos view on device initially)
   unsigned int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
-  
+  std::string_view initsupers_filename; // name of binary file for some of superdrops' initial conditons
+
   void init_solutes(InitSupersData &initdata) const;
 
   void initdata_from_binary(InitSupersData &initdata) const; 
@@ -46,7 +49,8 @@ private:
 public:
   InitSupersFromBinary(const Config &config)
       : totnsupers(config.totnsupers),
-        nspacedims(config.nspacedims) {}
+        nspacedims(config.nspacedims),
+        initsupers_filename(config.initsupers_filename) {}
 
   auto get_totnsupers() const { return totnsupers; }
 

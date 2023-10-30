@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 27th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -106,9 +106,9 @@ void Config::configvariable(const std::string name, const std::string value)
     constants_filename = value;
     issuccess = true;
   }
-  else if (name == "initSDs_filename")
+  else if (name == "initsupers_filename")
   {
-    initSDs_filename = value;
+    initsupers_filename = value;
     issuccess = true;
   }
   else if (name == "grid_filename")

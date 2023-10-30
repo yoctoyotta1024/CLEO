@@ -17,7 +17,7 @@
  * File Description:
  * configuration input parameters for CLEO
  * Note: inital superdroplets data (eps, r0 and m_sol etc.)
- * read from file "initSDs_filename" is made with PYSD module
+ * read from file "initsupers_filename" is made with PYSD module
  * using python script "create_initsuperdropsbinary_script".
  * Likewise data to make gridboxmap from gridbox boundaries is
  * read from file "grid_filename" created using python
@@ -27,7 +27,7 @@
 
 ### Initialisation parameters ###
 constants_filename = ../libs/cleoconstants.hpp                  # name of file for values of physical constants
-initSDs_filename = ./share/adia0D_dimlessSDsinit.dat       # binary filename for initialisation of SDs
+initsupers_filename = ./share/adia0D_dimlessSDsinit.dat       # binary filename for initialisation of SDs
 grid_filename = ./share/adia0D_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 ### Output Data parameters ###
