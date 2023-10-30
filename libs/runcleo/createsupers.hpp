@@ -33,6 +33,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
+#include "./initialconditions.hpp"
 #include "superdrops/superdrop.hpp"
 #include "gridboxes/sortsupers.hpp"
 
@@ -70,19 +71,6 @@ class GenSuperdrop
 conditions of some superdroplets' properties and
 returns superdrops generated from them */
 {
-public:
-  struct InitSupersData
-  {
-    std::array<SoluteProperties, 1> solutes;
-    std::vector<unsigned int> sdgbxindexes;
-    std::vector<double> coord3s;
-    std::vector<double> coord1s;
-    std::vector<double> coord2s;
-    std::vector<double> radii;
-    std::vector<double> msols;
-    std::vector<unsigned long long> xis;
-  };
-
 private:
   unsigned int nspacedims;
   std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
@@ -97,7 +85,7 @@ public:
   GenSuperdrop(const SuperdropInitConds &sdic)
       : nspacedims(sdic.get_nspacedims()),
         sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
-        initdata(sdic.initdata()) {}
+        initdata(sdic.fetch_data()) {}
         // solutes({SoluteProperties{}}),
         // sdgbxindexes(sdic.sdgbxindex()),
         // coord3s(sdic.coord3()),

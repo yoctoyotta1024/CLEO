@@ -29,6 +29,7 @@
 
 #include "./config.hpp"
 
+
 struct InitSupersFromBinary
 /* struct containing functions which return data
 for the initial conditions needed to create

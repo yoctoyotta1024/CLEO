@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Monday 30th October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,6 +27,18 @@
 #include <vector>
 #include <utility>
 
+struct InitSupersData
+{
+  std::array<SoluteProperties, 1> solutes;
+  std::vector<unsigned int> sdgbxindexes;
+  std::vector<double> coord3s;
+  std::vector<double> coord1s;
+  std::vector<double> coord2s;
+  std::vector<double> radii;
+  std::vector<double> msols;
+  std::vector<unsigned long long> xis;
+};
+
 template <typename IC>
 concept InitialConditions = requires(IC ic, unsigned int t,
                                      const viewh_constgbx h_gbxs)
@@ -43,26 +55,8 @@ initsupers and initgbxs structs which can call functions listed */
     ic.initsupers.get_size()
   } -> std::convertible_to<size_t>;
   {
-    ic.initsupers.sdgbxindex()
-  } -> std::convertible_to<std::vector<unsigned int>>;
-  {
-    ic.initsupers.coord3()
-  } -> std::convertible_to<std::vector<double>>;
-  {
-    ic.initsupers.coord1()
-  } -> std::convertible_to<std::vector<double>>;
-  {
-    ic.initsupers.coord2()
-  } -> std::convertible_to<std::vector<double>>;
-  {
-    ic.initsupers.radius()
-  } -> std::convertible_to<std::vector<double>>;
-  {
-    ic.initsupers.msol()
-  } -> std::convertible_to<std::vector<double>>;
-  {
-    ic.initsupers.xi()
-  } -> std::convertible_to<std::vector<unsigned long long>>;
+    ic.initsupers.fetch_data()
+  } -> std::convertible_to<InitSupersData>;
 
   {
     ic.initgbxs.get_ngbxs()
