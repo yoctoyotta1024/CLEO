@@ -43,18 +43,17 @@ totnsupers = 5                             # (initial) total no. of SDs
 
 # timestepping #
 CONDTSTEP = 0.01                           # time between SD condensation events [s]
-COLLTSTEP = 0.5                            # time between SD collision events [s]
-MOTIONTSTEP = 0.5                          # time between SDM motion [s]
+COLLTSTEP = 0.01                           # time between SD collision events [s]
+MOTIONTSTEP = 0.01                         # time between SDM motion [s]
 COUPLTSTEP = 1                             # time between dynamic couplings [s]
 OBSTSTEP = 2                               # time between SDM observations [s]
 T_END = 300                                # time span of integration from 0s to T_END [s]
 
-
 # microphysics #
 cond_iters = 10                            # no. iterations of Newton Raphson Method before testing for convergence
-cond_SUBTSTEP = 0.1                        # smallest timestep in cases where substepping occurs [s]
+cond_SUBTSTEP = 0.01                       # smallest timestep in cases where substepping occurs [s]
 cond_rtol = 0.0                            # relative tolerance for implicit euler integration
-cond_atol = 0.01                           # abolute tolerance for implicit euler integration
+cond_atol = 1e-6                           # abolute tolerance for implicit euler integration
 nfrags = -1                                # expected number of fragments in breakup event, (use -1 for nan value)
 
 # superdroplets #
