@@ -33,6 +33,7 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 set(SOURCES 
   "config.cpp"
   "initsupers_frombinary.cpp"
+  "readbinary.cpp"
   "timesteps.cpp"
   )
 add_library("${LIBNAME}" SHARED ${SOURCES})

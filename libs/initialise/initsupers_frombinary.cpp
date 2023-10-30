@@ -103,7 +103,7 @@ void InitSupersFromBinary::
 
   initdata.radii = vector_from_binary<double>(file, meta.at(2));
 
-  inidata.msols = vector_from_binary<double>(file, meta.at(3));
+  initdata.msols = vector_from_binary<double>(file, meta.at(3));
 
   initdata.coord3s = vector_from_binary<double>(file, meta.at(4));
 

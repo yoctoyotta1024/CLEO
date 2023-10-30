@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Tuesday 31st October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -73,7 +73,7 @@ read and print the global metadata string at the start of the file,
 then return a vector containing the metadata that is specific to
 each of the variables in the file */
 
-void check_vectorsizes(const std::vector<size_t> &sizes)
+void check_vectorsizes(const std::vector<size_t> &sizes);
 /* raise error if values in vector 'sizes' are not the same. Useful 
 for checking if vectors are the same size e.g. for vectors of
 SD attributes created from reading initSDsfile and used to

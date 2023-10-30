@@ -53,7 +53,7 @@ private:
 
   void read_initdata_binary(InitSupersData &initdata,
                             std::ifstream &file,
-                            const VarMetadata &varmeta) const;
+                            const std::vector<VarMetadata> &meta) const;
   /* copy data for vectors from binary file to initdata struct */
 
   void check_initdata_sizes(const InitSupersData &initdata) const;
@@ -71,7 +71,7 @@ public:
 
   auto get_nspacedims() const { return nspacedims; }
 
-  size_t fetch_data_size() const { return initdatasize; }
+  size_t fetch_data_size() const; 
   /* data size returned is number of variables as
   declared by the metadata for the first variable
   in the initsupers file */
