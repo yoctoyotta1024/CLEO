@@ -33,10 +33,9 @@
 struct CvodeComms
 {
 private:
-  std::array<double, 4>
-  state_change(CvodeDynamics &cvode,
-               const viewh_constgbx h_gbxs,
-               const size_t ii) const;
+  std::array<double, 4> state_change(CvodeDynamics &cvode,
+                                     const viewh_constgbx h_gbxs,
+                                     const size_t ii) const;
   /* get change in state since
   previous time step to current one */
 
