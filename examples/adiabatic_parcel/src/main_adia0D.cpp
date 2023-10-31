@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Tuesday 31st October 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -174,11 +174,11 @@ int main(int argc, char *argv[])
   CoupledDynamics auto coupldyn(
       create_coupldyn(config, tsteps.get_couplstep()));
 
-  /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
-
   /* coupling between coupldyn and SDM */
   const CouplingComms<CvodeDynamics> auto comms = CvodeComms{};
+
+  /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
+  const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);

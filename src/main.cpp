@@ -29,6 +29,7 @@
 
 #include "cartesiandomain/cartesianmaps.hpp"
 
+#include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "coupldyn_fromfile/fromfiledynamics.hpp"
 
 #include "gridboxes/gridboxmaps.hpp"
@@ -207,11 +208,11 @@ int main(int argc, char *argv[])
   CoupledDynamics auto coupldyn(
       create_coupldyn(config, tsteps.get_couplstep()));
 
+  /* coupling between coupldyn and SDM */
+  const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
+
   /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
   const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
-
-  /* coupling between coupldyn and SDM */
-  const CouplingComms<FromFileDynamics> auto comms = NullComms{}; // TODO use a real coupling from file
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
