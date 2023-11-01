@@ -60,6 +60,8 @@ private:
   kokkos_uintmap to_back_coord2nghbr;
   kokkos_uintmap to_forward_coord2nghbr;
 
+  viewd_ndims ndims; // number of gridboxes in [coord3, coord1, coord2] directions
+
 public:
   CartesianMaps(TODO) {}
   /* initilaises coord[X]bounds maps (for X = 1, 2, 3,
