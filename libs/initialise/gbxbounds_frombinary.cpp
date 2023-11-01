@@ -22,3 +22,4 @@
  */
 
 
+#include "./gbxbounds_frombinary.hpp"

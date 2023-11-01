@@ -21,4 +21,7 @@
  * for CLEO SDM e.g. a CartesianMaps)
  */
 
+#ifndef GBXBOUNDS_FROMBINARY_HPP
+#define GBXBOUNDS_FROMBINARY_HPP
 
+#endif // GBXBOUNDS_FROMBINARY_HPP
