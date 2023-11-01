@@ -60,6 +60,22 @@ int main(int argc, char *argv[])
                 << " -> (" << map4gbxs.value_at(idx).first << ", "
                 << map4gbxs.value_at(idx).second << ")\n";
     }
+
+    std::cout << "\n---\n";
+    // assume umap is an existing Kokkos::UnorderedMap
+   Kokkos::parallel_for(
+        map4gbxs.capacity(), KOKKOS_LAMBDA(uint32_t i) {
+          if (map4gbxs.valid_at(i))
+          {
+            auto key = map4gbxs.key_at(i);
+            auto value = map4gbxs.value_at(i);
+
+            std::cout << "k: " << key
+                << " -> (" << value.first << ", "
+                << value.second << ")\n";
+
+          }
+        });
   }
   Kokkos::finalize();
 
