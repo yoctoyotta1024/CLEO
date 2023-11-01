@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 31st October 2023
+ * Last Modified: Wednesday 1st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,6 +28,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/createmaps_fromgridfile.hpp"
 
 #include "coupldyn_cvode/cvodecomms.hpp"
 #include "coupldyn_cvode/cvodedynamics.hpp"
@@ -61,20 +62,20 @@
 #include "zarr/superdropattrsbuffers.hpp"
 #include "zarr/superdropsbuffers.hpp"
 
-CoupledDynamics auto
+inline CoupledDynamics auto
 create_coupldyn(const Config &config,
                 const unsigned int couplstep)
 {
   return CvodeDynamics(config, couplstep, &step2dimlesstime);
 }
 
-GridboxMaps auto
+inline GridboxMaps auto
 create_gbxmaps(const Config &config)
 {
-  return CartesianMaps(config);
+  return create_cartesian_maps(config.grid_filename);
 }
 
-MicrophysicalProcess auto
+inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
   const MicrophysicalProcess auto
@@ -89,13 +90,13 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
   return cond;
 }
 
-Motion auto
+inline Motion auto
 create_motion(const unsigned int motionstep)
 {
   return NullMotion{};
 }
 
-Observer auto
+inline Observer auto
 create_supersattrs_observer(const unsigned int interval,
                             FSStore &store,
                             const int maxchunk)
@@ -108,7 +109,7 @@ create_supersattrs_observer(const unsigned int interval,
   return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }
 
-Observer auto
+inline Observer auto
 create_observer(const Config &config,
                 const Timesteps &tsteps,
                 FSStore &store)
@@ -130,7 +131,7 @@ create_observer(const Config &config,
   return obs1 >> obs2 >> obs3 >> obs4;
 }
 
-auto create_sdm(const Config &config,
+inline auto create_sdm(const Config &config,
                 const Timesteps &tsteps,
                 const CoupledDynamics auto &coupldyn,
                 FSStore &store)
@@ -144,7 +145,7 @@ auto create_sdm(const Config &config,
                     microphys, movesupers, obs);
 }
 
-InitialConditions auto
+inline InitialConditions auto
 create_initconds(const Config &config)
 {
   const InitSupersFromBinary initsupers(config);
@@ -177,15 +178,17 @@ int main(int argc, char *argv[])
   /* coupling between coupldyn and SDM */
   const CouplingComms<CvodeDynamics> auto comms = CvodeComms{};
 
-  /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
 
-  /* Run CLEO (SDM coupled to dynamics solver) */
+  /* Initialise Kokkos device and host environments */
   Kokkos::initialize(argc, argv);
   {
+    /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
+    const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
+
+    /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
     runcleo(initconds, tsteps.get_t_end());
   }
