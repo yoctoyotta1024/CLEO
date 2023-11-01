@@ -143,6 +143,46 @@ public:
 
     return to_forward_coord3nghbr.value_at(i); // value returned by map at index i
   }
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord1backward(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the backwards coord1, ie. into page x, direction */
+  {
+    const auto i(to_back_coord1nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+
+    return to_back_coord1nghbr.value_at(i); // value returned by map at index i
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord1forward(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the forwards coord1, ie. out of page x, direction */
+  {
+    const auto i(to_forward_coord1nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+
+    return to_forward_coord1nghbr.value_at(i); // value returned by map at index i
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord2backward(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the backwards coord2, ie. left y, direction */
+  {
+    const auto i(to_back_coord2nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+
+    return to_back_coord2nghbr.value_at(i); // value returned by map at index i
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord2forward(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the forwards coord2, ie. right y, direction */
+  {
+    const auto i(to_forward_coord2nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+
+    return to_forward_coord2nghbr.value_at(i); // value returned by map at index i
+  }
 };
 
 #endif // CARTESIANMAPS_HPP
