@@ -25,6 +25,8 @@
 #define CREATECARTESIANMAPS_HPP
 
 #include <string_view>
+#include <vector>
+#include <stdexcept>
 
 #include <Kokkos_Core.hpp>
 

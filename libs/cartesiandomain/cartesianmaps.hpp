@@ -60,9 +60,9 @@ private:
   kokkos_uintmap to_back_coord2nghbr;
   kokkos_uintmap to_forward_coord2nghbr;
 
+public:
   viewd_ndims ndims; // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions 
 
-public:
   CartesianMaps(TODO) {}
   /* initilaises coord[X]bounds maps (for X = 1, 2, 3,
   corresponding to x, y, z) to map between gbxindexes and
@@ -79,13 +79,13 @@ public:
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  double get_area(const unsigned int gbxidx) const
+  double get_gbxarea(const unsigned int gbxidx) const
   {
     return 0.0;
   } // TODO
 
   KOKKOS_INLINE_FUNCTION
-  double get_volume(const unsigned int gbxidx) const
+  double get_gbxvolume(const unsigned int gbxidx) const
   {
     return 0.0;
   } // TODO
