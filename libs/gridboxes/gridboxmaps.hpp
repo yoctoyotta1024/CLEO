@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Wednesday 1st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,13 +35,23 @@ concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int ii)
 correct signatues for map-like functions */
 { 
   {
-    gbxmaps.coord3bounds(ii)
+    gbxmaps.d_coord3bounds(ii)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
   {
-    gbxmaps.coord1bounds(ii)
+    gbxmaps.d_coord1bounds(ii)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
   {
-    gbxmaps.coord2bounds(ii)
+    gbxmaps.d_coord2bounds(ii)
+  } -> std::convertible_to<Kokkos::pair<double, double>>;
+
+  {
+    gbxmaps.h_coord3bounds(ii)
+  } -> std::convertible_to<Kokkos::pair<double, double>>;
+  {
+    gbxmaps.h_coord1bounds(ii)
+  } -> std::convertible_to<Kokkos::pair<double, double>>;
+  {
+    gbxmaps.h_coord2bounds(ii)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
 };
 
