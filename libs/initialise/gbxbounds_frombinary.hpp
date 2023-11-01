@@ -41,7 +41,7 @@ and used in construction of GridboxMaps */
 {
 private:
   void is_nspacedims_compatible(const unsigned int nspacedims);
-
+  
   bool check_0Dmodel_gbxbounds();
   bool check_1Dmodel_gbxbounds();
   bool check_2Dmodel_gbxbounds();
