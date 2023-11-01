@@ -44,24 +44,36 @@ correct signatues for map-like functions */
   } -> std::convertible_to<double>;
 
   {
-    gbxmaps.d_coord3bounds(ii)
+    gbxmaps.coord3bounds(ii)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
   {
-    gbxmaps.d_coord1bounds(ii)
+    gbxmaps.coord1bounds(ii)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
   {
-    gbxmaps.d_coord2bounds(ii)
+    gbxmaps.coord2bounds(ii)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
 
   {
-    gbxmaps.h_coord3bounds(ii)
-  } -> std::convertible_to<Kokkos::pair<double, double>>;
+    gbxmaps.coord3backward(ii)
+  } -> std::convertible_to<double>;
   {
-    gbxmaps.h_coord1bounds(ii)
-  } -> std::convertible_to<Kokkos::pair<double, double>>;
+    gbxmaps.coord3forward(ii)
+  } -> std::convertible_to<double>;
+
   {
-    gbxmaps.h_coord2bounds(ii)
-  } -> std::convertible_to<Kokkos::pair<double, double>>;
+    gbxmaps.coord1backward(ii)
+  } -> std::convertible_to<double>;
+  {
+    gbxmaps.coord1forward(ii)
+  } -> std::convertible_to<double>;
+
+  {
+    gbxmaps.coord2backward(ii)
+  } -> std::convertible_to<double>;
+  {
+    gbxmaps.coord2forward(ii)
+  } -> std::convertible_to<double>;
+
 };
 
 #endif // GRIDBOXMAPS_HPP

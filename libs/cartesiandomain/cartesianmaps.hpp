@@ -31,7 +31,7 @@
 #include "initialise/config.hpp"
 #include "../kokkosaliases.hpp"
 
-// TODO
+// TODO: host versions? (maps are in exec mem space)
 
 namespace dlc = dimless_constants;
 
@@ -91,7 +91,7 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
-  d_coord3bounds(const unsigned int gbxidx) const
+  coord3bounds(const unsigned int gbxidx) const
   /* returns {lower bound, upper bound}  in coord3
   (z) direction of gridbox with index 'gbxidx'
   on device */
@@ -103,7 +103,7 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
-  d_coord1bounds(const unsigned int gbxidx) const
+  coord1bounds(const unsigned int gbxidx) const
   /* returns {lower bound, upper bound}  in coord1
   (x) direction of gridbox with index 'gbxidx'
   on device */
@@ -115,7 +115,7 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
-  d_coord2bounds(const unsigned int gbxidx) const
+  coord2bounds(const unsigned int gbxidx) const
   /* returns {lower bound, upper bound}  in coord2
   (y) direction of gridbox with index 'gbxidx'
   on device */
