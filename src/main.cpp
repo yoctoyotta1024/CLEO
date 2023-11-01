@@ -74,7 +74,7 @@ create_coupldyn(const Config &config,
 inline GridboxMaps auto
 create_gbxmaps(const Config &config)
 {
-  return CartesianMaps(config);
+  return create_cartesian_maps(config.grid_filename);
 }
 
 inline MicrophysicalProcess auto
