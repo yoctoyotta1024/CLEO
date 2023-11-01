@@ -22,16 +22,16 @@
 
 #include "./createmaps_frombinary.hpp"
 
-void set_gbxmaps_ndims(CartesianMaps &gbxmaps);
+void set_maps_ndims(const std::vector<size_t> &ndims,
+                    CartesianMaps &gbxmaps);
 
 CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
                                     std::string_view grid_filename)
 {
   CartesianMaps gbxmaps;
   const GbxBoundsFromBinary gfb(nspacedims, grid_filename);
-  
-  set_ndims(gbxmaps);
-  gbxmaps.ndims = {gfb.ndims.at(0), gfb.ndims.at(1), gfb.ndims.at(2)};
+
+  set_maps_ndims(gfb.ndims, gbxmaps);
 
   // if (nspacedims == 0)
   // {
@@ -65,7 +65,17 @@ CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
   // return CartesianMaps();
 }
 
-void set_gbxmaps_ndims(CartesianMaps &gbxmaps)
+void set_maps_ndims(const std::vector<size_t> &ndims,
+                    CartesianMaps &gbxmaps)
+/* sets dimensions (ie. number of gridboxes)
+in [coord3, coord1, coord2] directions */
 {
+  auto h_ndims = Kokkos::create_mirror_view(gbxmaps.ndims); // mirror ndims in case view is on device memory
 
+  for (unsigned int m(0); m < 3; ++m)
+  {
+    h_ndims(m) = ndims.at(m);
+  }
+
+  Kokkos::deep_copy(gbxmaps.ndims, h_ndims);
 }

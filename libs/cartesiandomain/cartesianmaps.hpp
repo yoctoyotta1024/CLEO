@@ -60,7 +60,7 @@ private:
   kokkos_uintmap to_back_coord2nghbr;
   kokkos_uintmap to_forward_coord2nghbr;
 
-  viewd_ndims ndims; // dimensions of grid in [coord3, coord1, coord2] directions
+  viewd_ndims ndims; // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions 
 
 public:
   CartesianMaps(TODO) {}
@@ -77,12 +77,6 @@ public:
 
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
-
-  void set_ndims(const size_t dim3,
-                 const size_t dim1,
-                 const size_t dim2);
-  /* sets dimensions (ie. number of gridboxes)
-  in [coord3, coord1, coord2] directions */
 
   KOKKOS_INLINE_FUNCTION
   double get_area(const unsigned int gbxidx) const

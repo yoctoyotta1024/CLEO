@@ -26,6 +26,8 @@
 
 #include <string_view>
 
+#include <Kokkos_Core.hpp>
+
 #include "./cartesianmaps.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
 
