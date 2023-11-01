@@ -1,0 +1,67 @@
+/*
+ * ----- CLEO -----
+ * File: main.cpp
+ * Project: roughpaper
+ * Created Date: Wednesday 1st November 2023
+ * Author: Clara Bayley (CB)
+ * Additional Contributors:
+ * -----
+ * Last Modified: Wednesday 1st November 2023
+ * Modified By: CB
+ * -----
+ * License: BSD 3-Clause "New" or "Revised" License
+ * https://opensource.org/licenses/BSD-3-Clause
+ * -----
+ * Copyright (c) 2023 MPI-M, Clara Bayley
+ * -----
+ * File Description:
+ * rough paper for checking small things
+ */
+
+#include <iostream>
+
+#include <Kokkos_Core.hpp>
+#include <Kokkos_UnorderedMap.hpp>
+
+int main(int argc, char *argv[])
+{
+  Kokkos::initialize(argc, argv);
+  {
+
+    using stdp = Kokkos::pair<double, double>;
+
+    const unsigned int ngbxs = 3;
+
+    std::array<unsigned int, 3> keys = {2, 1, 0};
+    std::array<stdp, 3> vals = {stdp({-1.0, 1.0}),
+                                stdp({-2.0, 2.0}),
+                                stdp({-3.0, 3.0})};
+
+    Kokkos::UnorderedMap<unsigned int, stdp,
+                         Kokkos::DefaultExecutionSpace>
+        map4gbxs(ngbxs);
+
+    for (int i(0); i < ngbxs; ++i)
+    {
+      std::cout << "k: " << keys[i]
+                << " -> ("
+                << vals[i].first << " , "
+                << vals[i].second << ")\n";
+
+      map4gbxs.insert(keys[i], vals[i]);
+    }
+
+    for (int i(0); i < ngbxs; ++i)
+    {
+      const unsigned int k(keys[i]);
+      const auto idx(map4gbxs.find(i));
+      std::cout << "idx: " << idx << "\n";
+      std::cout << "k: " << map4gbxs.key_at(idx)
+                << " -> (" << map4gbxs.value_at(idx).first << ", "
+                << map4gbxs.value_at(idx).second << ")\n";
+    }
+  }
+  Kokkos::finalize();
+
+  return 0;
+}
