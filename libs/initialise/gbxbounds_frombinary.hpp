@@ -24,4 +24,19 @@
 #ifndef GBXBOUNDS_FROMBINARY_HPP
 #define GBXBOUNDS_FROMBINARY_HPP
 
+#include <string_view>
+#include <fstream>
+
+#include "./readbinary.hpp"
+
+struct GridboxBoundsFromBinary
+/* holds vectors containing gridbox indexes and their
+corresponding [zmin, zmax, zmin, xmax, ymin, ymax]
+coordinate boundaries which are read from gridfile
+and used in construction of GridboxMaps */
+{
+  GridboxBoundsFromBinary(const unsigned int nspacedims,
+                          std::string_view gridfile);
+};
+
 #endif // GBXBOUNDS_FROMBINARY_HPP
