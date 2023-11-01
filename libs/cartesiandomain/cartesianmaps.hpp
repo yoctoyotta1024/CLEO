@@ -25,9 +25,13 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <Kokkos_UnorderedMap.hpp>
 
 #include "../cleoconstants.hpp"
 #include "initialise/config.hpp"
+#include "../kokkosaliases.hpp"
+
+
 // TODO 
 
 namespace dlc = dimless_constants;
@@ -38,6 +42,13 @@ for gridboxes defined on in a cartesian C grid with
 equal area and volume for each gridbox */
 {
 private:
+  using kokkosmap = Kokkos::UnorderedMap<unsigned int,
+                                         Kokkos::pair<double, double>,
+                                         ExecSpace>;
+  
+  kokkosmap coord3_to_bounds;
+  kokkosmap coord1_to_bounds;
+  kokkosmap coord2_to_bounds;
 
 public:
   CartesianMaps(const Config &config){}
@@ -54,21 +65,30 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
-  coord3bounds(const unsigned int gbxidx) const
+  d_coord3bounds(const unsigned int gbxidx) const
+  /* returns {lower bound, upper bound}  in coord3
+  (z) direction of gridbox with index 'gbxidx'
+  on device */
   {
     return {LIMITVALUES::llim, LIMITVALUES::ulim};
   }
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
-  coord1bounds(const unsigned int gbxidx) const
+  d_coord1bounds(const unsigned int gbxidx) const
+  /* returns {lower bound, upper bound}  in coord1
+  (x) direction of gridbox with index 'gbxidx'
+  on device */
   {
     return {LIMITVALUES::llim, LIMITVALUES::ulim}; 
   }
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
-  coord2bounds(const unsigned int gbxidx) const
+  d_coord2bounods(const unsigned int gbxidx) const
+  /* returns {lower bound, upper bound}  in coord2
+  (y) direction of gridbox with index 'gbxidx'
+  on device */
   {
     return {LIMITVALUES::llim, LIMITVALUES::ulim};
   }
