@@ -28,7 +28,6 @@
 #include <Kokkos_UnorderedMap.hpp>
 
 #include "../cleoconstants.hpp"
-#include "initialise/config.hpp"
 #include "../kokkosaliases.hpp"
 
 // TODO: host versions? (maps are in exec mem space)
@@ -62,7 +61,7 @@ private:
   kokkos_uintmap to_forward_coord2nghbr;
 
 public:
-  CartesianMaps(const Config &config) {}
+  CartesianMaps(TODO) {}
   /* initilaises coord[X]bounds maps (for X = 1, 2, 3,
   corresponding to x, y, z) to map between gbxindexes and
   gridbox boundaries in a cartiesian domain. The keys of each map

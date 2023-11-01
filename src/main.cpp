@@ -28,6 +28,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/createmaps_fromgridfile.hpp"
 
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "coupldyn_fromfile/fromfiledynamics.hpp"

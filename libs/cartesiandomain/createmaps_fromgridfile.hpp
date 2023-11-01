@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: create_cartesianmaps_from_file.hpp
+ * File: createmaps_fromgridfile.hpp
  * Project: cartesiandomain
  * Created Date: Wednesday 1st November 2023
  * Author: Clara Bayley (CB)
@@ -21,3 +21,11 @@
  */
 
 
+#include <string_view>
+
+#include "./cartesianmaps.hpp"
+
+CartesianMaps create_cartesian_maps(std::string_view grid_filename)
+{
+  
+}
