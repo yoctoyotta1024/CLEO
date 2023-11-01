@@ -74,7 +74,6 @@ create_coupldyn(const Config &config,
 GridboxMaps auto
 create_gbxmaps(const Config &config)
 {
-  
   return CartesianMaps(config);
 }
 
