@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 31st October 2023
+ * Last Modified: Wednesday 1st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -74,6 +74,7 @@ create_coupldyn(const Config &config,
 GridboxMaps auto
 create_gbxmaps(const Config &config)
 {
+  
   return CartesianMaps(config);
 }
 
