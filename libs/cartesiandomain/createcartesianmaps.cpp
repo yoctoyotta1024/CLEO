@@ -22,8 +22,10 @@
 
 #include "./createmaps_frombinary.hpp"
 
-CartesianMaps create_cartesian_maps(std::string_view grid_filename)
+CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
+                                    std::string_view grid_filename)
 {
+  const GridboxBoundsFromBinary gfb(nspacedims, grid_filename);
   
 
   return CartesianMaps();

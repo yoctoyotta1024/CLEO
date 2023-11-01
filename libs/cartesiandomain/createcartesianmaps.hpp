@@ -27,7 +27,9 @@
 #include <string_view>
 
 #include "./cartesianmaps.hpp"
+#include "initialise/gbxbounds_frombinary.hpp"
 
-CartesianMaps create_cartesian_maps(std::string_view grid_filename);
+CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
+                                    std::string_view grid_filename);
 
 #endif // CREATECARTESIANMAPS_HPP
