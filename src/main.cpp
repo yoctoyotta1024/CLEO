@@ -211,8 +211,6 @@ int main(int argc, char *argv[])
   /* coupling between coupldyn and SDM */
   const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
 
-  /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-  const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
@@ -220,6 +218,9 @@ int main(int argc, char *argv[])
   /* Run CLEO (SDM coupled to dynamics solver) */
   Kokkos::initialize(argc, argv);
   {
+    /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
+    const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
+
     const RunCLEO runcleo(sdm, coupldyn, comms);
     runcleo(initconds, tsteps.get_t_end());
   }
