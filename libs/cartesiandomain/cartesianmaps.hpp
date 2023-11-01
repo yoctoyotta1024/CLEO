@@ -70,7 +70,9 @@ public:
   (z) direction of gridbox with index 'gbxidx'
   on device */
   {
-    return {LIMITVALUES::llim, LIMITVALUES::ulim};
+    const auto i(coord3_to_bounds.find(gbxidx)); // index in map of key 'gbxidx'
+
+    return coord3_to_bounds.value_at(i) // value returned by map at index i
   }
 
   KOKKOS_INLINE_FUNCTION
@@ -80,8 +82,11 @@ public:
   (x) direction of gridbox with index 'gbxidx'
   on device */
   {
-    return {LIMITVALUES::llim, LIMITVALUES::ulim}; 
+    const auto i(coord1_to_bounds.find(gbxidx)); // index in map of key 'gbxidx'
+
+    return coord1_to_bounds.value_at(i) // value returned by map at index i
   }
+
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
@@ -90,8 +95,11 @@ public:
   (y) direction of gridbox with index 'gbxidx'
   on device */
   {
-    return {LIMITVALUES::llim, LIMITVALUES::ulim};
+    const auto i(coord2_to_bounds.find(gbxidx)); // index in map of key 'gbxidx'
+
+    return coord2_to_bounds.value_at(i) // value returned by map at index i
   }
+
 
   double get_area(const unsigned int gbxidx) const
   {
