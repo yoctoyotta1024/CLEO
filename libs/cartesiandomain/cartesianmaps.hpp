@@ -85,7 +85,7 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
-  d_coord2bounods(const unsigned int gbxidx) const
+  d_coord2bounds(const unsigned int gbxidx) const
   /* returns {lower bound, upper bound}  in coord2
   (y) direction of gridbox with index 'gbxidx'
   on device */
@@ -93,9 +93,15 @@ public:
     return {LIMITVALUES::llim, LIMITVALUES::ulim};
   }
 
-  double get_area() const { return 0.0; } // TODO
+  double get_area(const unsigned int gbxidx) const
+  {
+    return 0.0;
+  } // TODO
 
-  double get_volume() const { return 0.0; } // TODO
+  double get_volume(const unsigned int gbxidx) const
+  {
+    return 0.0;
+  } // TODO
 };
 
 #endif // CARTESIANMAPS_HPP

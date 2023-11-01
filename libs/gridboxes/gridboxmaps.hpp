@@ -34,6 +34,15 @@ concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int ii)
 /* concept for GridboxMaps is all types that have
 correct signatues for map-like functions */
 { 
+
+  {
+    gbxmaps.get_area(ii)
+  } -> std::convertible_to<double>;
+
+  {
+    gbxmaps.get_volume(ii)
+  } -> std::convertible_to<double>;
+
   {
     gbxmaps.d_coord3bounds(ii)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
