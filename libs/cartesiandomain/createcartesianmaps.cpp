@@ -22,11 +22,50 @@
 
 #include "./createmaps_frombinary.hpp"
 
+void set_gbxmaps_ndims(CartesianMaps &gbxmaps);
+
 CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
                                     std::string_view grid_filename)
 {
+  CartesianMaps gbxmaps;
   const GbxBoundsFromBinary gfb(nspacedims, grid_filename);
   
+  set_ndims(gbxmaps);
+  gbxmaps.ndims = {gfb.ndims.at(0), gfb.ndims.at(1), gfb.ndims.at(2)};
 
-  return CartesianMaps();
+  // if (nspacedims == 0)
+  // {
+  //   const double domainarea = get_0Ddomainarea_from_gridfile(gfb);
+  //   const double domainvol = get_0Ddomainvol_from_gridfile(gfb);
+  //   set_0Dmodel_maps(domainarea, domainvol);
+  // }
+
+  // else if (nspacedims == 1)
+  // {
+  //   set_1Dmodel_maps(gfb);
+  // }
+
+  // else if (nspacedims == 2)
+  // {
+  //   set_2Dmodel_maps(gfb);
+  // }
+
+  // else if (nspacedims == 3)
+  // {
+  //   set_3Dmodel_maps(gfb);
+  // }
+
+  // else
+  // {
+  //   throw std::invalid_argument("nspacedims > 3 is invalid ");
+  // }
+
+  // check_ngridboxes();
+
+  // return CartesianMaps();
+}
+
+void set_gbxmaps_ndims(CartesianMaps &gbxmaps)
+{
+
 }
