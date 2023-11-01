@@ -81,7 +81,7 @@ dimensions (ie. number of gridboxes) in
     h_ndims(m) = ndims.at(m);
   }
 
-  Kokkos::deep_copy(gbxmaps.ndims, h_ndims);
+  gbxmaps.set_ndims_via_copy(h_dims);
 }
 
 void set_0Dmodel_maps(const double domainarea,
@@ -99,10 +99,12 @@ void set_0Dmodel_maps(const double domainarea,
 }
 
 void set_0Dmodel_gbxvolumes()
+/* sets dimensionless horizontal area and volume
+of gridbox in 0-D model (ie. entire domain) */
 {
   const double domainarea = get_0Ddomainarea_from_gridfile(gfb);
   const double domainvol = get_0Ddomainvol_from_gridfile(gfb);
 
-  idx2area[0] = domainarea; // dimensionless horizontal area of 0D model
-  idx2vol[0] = domainvol; // dimensionless volume of 0D model
+  gbxmaps.set_gbxarea(area);
+  gbxmaps.set_gbxvolume(volume);
 }

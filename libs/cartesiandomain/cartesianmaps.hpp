@@ -60,10 +60,12 @@ private:
   kokkos_uintmap to_back_coord2nghbr;
   kokkos_uintmap to_forward_coord2nghbr;
 
-public:
-  viewd_ndims ndims; // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions 
+  viewd_ndims ndims; // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
+  double gbxareas;   // horizontal (x-y planar) area of all gridboxes
+  double gbxvolumes; // volume of all gridboxes
 
-  CartesianMaps(TODO) {}
+public:
+  CartesianMaps([XXX]) {} //TODO  constructor
   /* initilaises coord[X]bounds maps (for X = 1, 2, 3,
   corresponding to x, y, z) to map between gbxindexes and
   gridbox boundaries in a cartiesian domain. The keys of each map
@@ -78,17 +80,32 @@ public:
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
 
+  void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
+  {
+    Kokkos::deep_copy(ndims, h_ndims);
+  }
+
+  void set_gbxarea(const double iarea)
+  {
+    gbxareas = iarea;
+  }
+
+  void set_gbxvolume(const double ivolume)
+  {
+    gbxvolumes = ivolume;
+  }
+
   KOKKOS_INLINE_FUNCTION
   double get_gbxarea(const unsigned int gbxidx) const
   {
-    return 0.0;
-  } // TODO
+    return gbxareas;
+  }
 
   KOKKOS_INLINE_FUNCTION
   double get_gbxvolume(const unsigned int gbxidx) const
   {
-    return 0.0;
-  } // TODO
+    return gbxvolumes;
+  }
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
