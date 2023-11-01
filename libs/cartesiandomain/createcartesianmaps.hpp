@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: createmaps_frombinary.hpp
+ * File: createcartesianmaps.hpp
  * Project: cartesiandomain
  * Created Date: Wednesday 1st November 2023
  * Author: Clara Bayley (CB)
@@ -16,16 +16,18 @@
  * -----
  * File Description:
  * functions for creating a cartesian maps struct
- * from a binary file containing gridbox's indexes and
- * their coordinate (upper and lower) boundaries
+ * from a GridBoxBoundaries struct containing gridbox's
+ * indexes and their coordinate (upper and lower) boundaries
  */
 
+
+#ifndef CREATECARTESIANMAPS_HPP
+#define CREATECARTESIANMAPS_HPP
 
 #include <string_view>
 
 #include "./cartesianmaps.hpp"
 
-CartesianMaps create_cartesian_maps(std::string_view grid_filename)
-{
-  
-}
+CartesianMaps create_cartesian_maps(std::string_view grid_filename);
+
+#endif // CREATECARTESIANMAPS_HPP
