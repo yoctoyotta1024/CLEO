@@ -43,16 +43,14 @@ public:
   CartesianMaps(const Config &config){}
   /* initilaises coord[X]bounds maps (for X = 1, 2, 3,
   corresponding to x, y, z) to map between gbxindexes and
-  gridbox boundaries in a cartiesian domain.
-  The keys of each map are the gridbox indexes. The
-  corresponding value is that gridbox's {upper boundary, lower boundary}.
-  In a non-3D case, coordinates of the gridbox boundaries for unused
-  dimensions are the min/max possible doubles of computer (numerical
-  limits), however the area and volume remain finite. E.g. In the 0-D
-  case, the idx2bounds maps have 1 {key, value} for gridbox 0 which
-  are the upper and lower numerical limits, whilst the volume is 
-  determined by reading the gridfile */
-
+  gridbox boundaries in a cartiesian domain. The keys of each map
+  are the gridbox indexes. The corresponding value of each bounds map
+  is that gridbox's {lower boundary, upper boundary}.
+  In a non-3D case, boundaries for unused dimensions are the min/max 
+  possible (numerical limits), however the area and volume of each
+  gridbox remain finite. E.g. In the 0-D case, the maps have 1
+  {key, value} for gridbox 0 which are numerical limits, whilst the 
+  volume function returns a value determined from the gridfile input */
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
