@@ -26,6 +26,9 @@
 
 #include <string_view>
 #include <fstream>
+#include <string>
+#include <vector>
+#include <stdexcept>
 
 #include "./readbinary.hpp"
 
@@ -35,8 +38,21 @@ corresponding [zmin, zmax, zmin, xmax, ymin, ymax]
 coordinate boundaries which are read from gridfile
 and used in construction of GridboxMaps */
 {
+private:
+  void is_nspacedims_compatible(const unsigned int nspacedims);
+
+  bool check_0Dmodel_gbxbounds();
+  bool check_1Dmodel_gbxbounds();
+  bool check_2Dmodel_gbxbounds();
+  bool check_3Dmodel_gbxbounds();
+
+public:
+  std::vector<size_t> ndims;         // number of gridboxes in [coord3, coord1, coord2] dimensions
+  std::vector<unsigned int> gbxidxs; // gridbox indexes
+  std::vector<double> gbxbounds;     // corresponding [coord3 {l, u}, coord1 {l, u}, coord2 {l, u}] lower and upper coordinate boundaries
+
   GbxBoundsFromBinary(const unsigned int nspacedims,
-                          std::string_view gridfile);
+                      std::string_view grid_filename);
 };
 
 #endif // GBXBOUNDS_FROMBINARY_HPP
