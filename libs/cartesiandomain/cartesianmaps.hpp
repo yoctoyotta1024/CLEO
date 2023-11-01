@@ -42,13 +42,25 @@ for gridboxes defined on in a cartesian C grid with
 equal area and volume for each gridbox */
 {
 private:
-  using kokkosmap = Kokkos::UnorderedMap<unsigned int,
+  using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int,
                                          Kokkos::pair<double, double>,
                                          ExecSpace>;
-  
-  kokkosmap coord3_to_bounds;
-  kokkosmap coord1_to_bounds;
-  kokkosmap coord2_to_bounds;
+  using kokkos_dblmap = Kokkos::UnorderedMap<unsigned int,
+                                             double,
+                                             ExecSpace>;
+
+  /* maps from gbxidx to {lower, upper} coords of gridbox boundaries */
+  kokkos_pairmap gbxidx_to_coord3bounds; 
+  kokkos_pairmap gbxidx_to_coord1bounds;
+  kokkos_pairmap gbxidx_to_coord2bounds;
+
+  /* maps from gbxidx to gbxindx of front / back neighbour */
+  kokkos_dblmap gbxidx_to_front_coord3nghbour;
+  kokkos_dblmap gbxidx_to_back_coord3nghbour;
+  kokkos_dblmap gbxidx_to_front_coord1nghbour;
+  kokkos_dblmap gbxidx_to_back_coord1nghbour;
+  kokkos_dblmap gbxidx_to_front_coord2nghbour;
+  kokkos_dblmap gbxidx_to_back_coord2nghbour;
 
 public:
   CartesianMaps(const Config &config){}
@@ -70,9 +82,9 @@ public:
   (z) direction of gridbox with index 'gbxidx'
   on device */
   {
-    const auto i(coord3_to_bounds.find(gbxidx)); // index in map of key 'gbxidx'
+    const auto i(gbxidx_to_coord3bounds.find(gbxidx)); // index in map of key 'gbxidx'
 
-    return coord3_to_bounds.value_at(i) // value returned by map at index i
+    return gbxidx_to_coord3bounds.value_at(i) // value returned by map at index i
   }
 
   KOKKOS_INLINE_FUNCTION
@@ -82,9 +94,9 @@ public:
   (x) direction of gridbox with index 'gbxidx'
   on device */
   {
-    const auto i(coord1_to_bounds.find(gbxidx)); // index in map of key 'gbxidx'
+    const auto i(gbxidx_to_coord1bounds.find(gbxidx)); // index in map of key 'gbxidx'
 
-    return coord1_to_bounds.value_at(i) // value returned by map at index i
+    return gbxidx_to_coord1bounds.value_at(i) // value returned by map at index i
   }
 
 
@@ -95,9 +107,9 @@ public:
   (y) direction of gridbox with index 'gbxidx'
   on device */
   {
-    const auto i(coord2_to_bounds.find(gbxidx)); // index in map of key 'gbxidx'
+    const auto i(gbxidx_to_coord2bounds.find(gbxidx)); // index in map of key 'gbxidx'
 
-    return coord2_to_bounds.value_at(i) // value returned by map at index i
+    return gbxidx_to_coord2bounds.value_at(i) // value returned by map at index i
   }
 
 
