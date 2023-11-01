@@ -16,12 +16,12 @@
  * -----
  * File Description:
  * functions related to creating and using maps to convert
- * between a gridbox indexes and domain coordinates for a 
+ * between a gridbox indexes and domain coordinates for a
  * cartesian C grid
  */
 
-#ifndef CARTESIANMAPS_HPP 
-#define CARTESIANMAPS_HPP 
+#ifndef CARTESIANMAPS_HPP
+#define CARTESIANMAPS_HPP
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -31,49 +31,63 @@
 #include "initialise/config.hpp"
 #include "../kokkosaliases.hpp"
 
-
-// TODO 
+// TODO
 
 namespace dlc = dimless_constants;
 
-struct CartesianMaps 
+struct CartesianMaps
 /* type satisfying GridboxMaps concept specifically
 for gridboxes defined on in a cartesian C grid with
 equal area and volume for each gridbox */
 {
 private:
   using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int,
-                                         Kokkos::pair<double, double>,
-                                         ExecSpace>;
-  using kokkos_dblmap = Kokkos::UnorderedMap<unsigned int,
-                                             double,
-                                             ExecSpace>;
+                                              Kokkos::pair<double, double>,
+                                              ExecSpace>;
+  using kokkos_uintmap = Kokkos::UnorderedMap<unsigned int,
+                                              unsigned int,
+                                              ExecSpace>;
 
   /* maps from gbxidx to {lower, upper} coords of gridbox boundaries */
-  kokkos_pairmap gbxidx_to_coord3bounds; 
-  kokkos_pairmap gbxidx_to_coord1bounds;
-  kokkos_pairmap gbxidx_to_coord2bounds;
+  kokkos_pairmap to_coord3bounds;
+  kokkos_pairmap to_coord1bounds;
+  kokkos_pairmap to_coord2bounds;
 
   /* maps from gbxidx to gbxindx of front / back neighbour */
-  kokkos_dblmap gbxidx_to_front_coord3nghbour;
-  kokkos_dblmap gbxidx_to_back_coord3nghbour;
-  kokkos_dblmap gbxidx_to_front_coord1nghbour;
-  kokkos_dblmap gbxidx_to_back_coord1nghbour;
-  kokkos_dblmap gbxidx_to_front_coord2nghbour;
-  kokkos_dblmap gbxidx_to_back_coord2nghbour;
+  kokkos_uintmap to_back_coord3nghbr;
+  kokkos_uintmap to_forward_coord3nghbr;
+  kokkos_uintmap to_back_coord1nghbr;
+  kokkos_uintmap to_forward_coord1nghbr;
+  kokkos_uintmap to_back_coord2nghbr;
+  kokkos_uintmap to_forward_coord2nghbr;
 
 public:
-  CartesianMaps(const Config &config){}
+  CartesianMaps(const Config &config) {}
   /* initilaises coord[X]bounds maps (for X = 1, 2, 3,
   corresponding to x, y, z) to map between gbxindexes and
   gridbox boundaries in a cartiesian domain. The keys of each map
   are the gridbox indexes. The corresponding value of each bounds map
   is that gridbox's {lower boundary, upper boundary}.
-  In a non-3D case, boundaries for unused dimensions are the min/max 
+  In a non-3D case, boundaries for unused dimensions are the min/max
   possible (numerical limits), however the area and volume of each
   gridbox remain finite. E.g. In the 0-D case, the maps have 1
-  {key, value} for gridbox 0 which are numerical limits, whilst the 
+  {key, value} for gridbox 0 which are numerical limits, whilst the
   volume function returns a value determined from the gridfile input */
+
+  KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
+
+  KOKKOS_INLINE_FUNCTION
+  double get_area(const unsigned int gbxidx) const
+  {
+    return 0.0;
+  } // TODO
+
+  KOKKOS_INLINE_FUNCTION
+  double get_volume(const unsigned int gbxidx) const
+  {
+    return 0.0;
+  } // TODO
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
@@ -82,9 +96,9 @@ public:
   (z) direction of gridbox with index 'gbxidx'
   on device */
   {
-    const auto i(gbxidx_to_coord3bounds.find(gbxidx)); // index in map of key 'gbxidx'
+    const auto i(to_coord3bounds.find(gbxidx)); // index in map of key 'gbxidx'
 
-    return gbxidx_to_coord3bounds.value_at(i) // value returned by map at index i
+    return to_coord3bounds.value_at(i); // value returned by map at index i
   }
 
   KOKKOS_INLINE_FUNCTION
@@ -94,11 +108,10 @@ public:
   (x) direction of gridbox with index 'gbxidx'
   on device */
   {
-    const auto i(gbxidx_to_coord1bounds.find(gbxidx)); // index in map of key 'gbxidx'
+    const auto i(to_coord1bounds.find(gbxidx)); // index in map of key 'gbxidx'
 
-    return gbxidx_to_coord1bounds.value_at(i) // value returned by map at index i
+    return to_coord1bounds.value_at(i); // value returned by map at index i
   }
-
 
   KOKKOS_INLINE_FUNCTION
   Kokkos::pair<double, double>
@@ -107,21 +120,29 @@ public:
   (y) direction of gridbox with index 'gbxidx'
   on device */
   {
-    const auto i(gbxidx_to_coord2bounds.find(gbxidx)); // index in map of key 'gbxidx'
+    const auto i(to_coord2bounds.find(gbxidx)); // index in map of key 'gbxidx'
 
-    return gbxidx_to_coord2bounds.value_at(i) // value returned by map at index i
+    return to_coord2bounds.value_at(i); // value returned by map at index i
   }
 
-
-  double get_area(const unsigned int gbxidx) const
+  unsigned int coord3backward(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the backwards coord3, ie. downwards z, direction */
   {
-    return 0.0;
-  } // TODO
+    const auto i(to_back_coord3nghbr.find(gbxindex)); // index in map of key 'gbxidx'
 
-  double get_volume(const unsigned int gbxidx) const
+    return to_back_coord3nghbr.value_at(i); // value returned by map at index i
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord3forward(unsigned int gbxindex) const
+  /* given gridbox index, return index of neighbouring
+  gridbox in the forwards coord3, ie. upwards z, direction */
   {
-    return 0.0;
-  } // TODO
+    const auto i(to_forward_coord3nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+
+    return to_forward_coord3nghbr.value_at(i); // value returned by map at index i
+  }
 };
 
 #endif // CARTESIANMAPS_HPP
