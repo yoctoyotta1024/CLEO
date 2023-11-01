@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <array>
 
 #include "./readbinary.hpp"
 

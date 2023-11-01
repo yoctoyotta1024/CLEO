@@ -53,6 +53,9 @@ return GridBoxBoundaries instance created from that data */
 
 void GbxBoundsFromBinary::
     is_nspacedims_compatible(const unsigned int nspacedims)
+/* check that nspacedims is consistent with ndims and then
+calls appropropriate function to check if gbxbounds is also.
+finally throws error if either proves inconsistent */                                       
 {
   bool isgood = false;
 
@@ -61,17 +64,17 @@ void GbxBoundsFromBinary::
     isgood = check_0Dmodel_gbxbounds();
   }
 
-  // else if (nspacedims == 1 &&
-  //          ndims.at(1) == 1 && ndims.at(2) == 1)
-  // {
-  //   isgood = check_1Dmodel_gbxbounds();
-  // }
+  else if (nspacedims == 1 &&
+           ndims.at(1) == 1 && ndims.at(2) == 1)
+  {
+    isgood = check_1Dmodel_gbxbounds();
+  }
 
-  // else if (SDnspace == 2 && ndims.at(2) == 1 )
-  // {
-  //   // 2D model should have constant y coords
-  //   isgood = check_2Dmodel_gbxbounds(gbxbounds);
-  // }
+  else if (nspacedims == 2 && ndims.at(2) == 1 )
+  {
+    // 2D model should have constant y coords
+    isgood = check_2Dmodel_gbxbounds();
+  }
 
   else if (nspacedims == 3)
   {
@@ -106,6 +109,59 @@ has 1 gridbox and hence 6 values in gbxbounds */
   }
 
   return false;
+}
+
+bool GbxBoundsFromBinary::check_1Dmodel_gbxbounds()
+/* returns true if data for gridbox boundaries, gbxbounds,
+is compatible with 1D model. Criteria is that x and y
+coords of all gridbox boundaries are the same. */  
+{
+  const std::array<double, 4> bounds0{gbxbounds[2],
+                                      gbxbounds[3],
+                                      gbxbounds[4],
+                                      gbxbounds[5]};
+
+  size_t ii(2);                      // start at 0th gridbox's xlow (i.e. 3rd value in gbxbounds)
+  while (ii + 4 <= gbxbounds.size()) // loop over each gridbox's bounds
+  {
+    for (int j = 0; j < 4; ++j)
+    {
+      // check x and y bounds are same as given by bounds0
+      if (bounds0[j] != gbxbounds[ii + j])
+      {
+        return false;
+      }
+    }
+
+    ii += 6;
+  }
+
+  return true;
+}
+
+bool GbxBoundsFromBinary::check_2Dmodel_gbxbounds()
+/* returns true if data for gridbox boundaries,
+gbxbounds, is compatible with 2D model. Criteria is
+that y coords of all gridbox boundaries are the same. */  
+{
+  const std::array<double, 2> bounds0{gbxbounds[4], gbxbounds[5]};
+
+  size_t ii(4);                      // start at 0th gridbox's ylow (i.e. 5th value in gbxbounds)
+  while (ii + 2 <= gbxbounds.size()) // loop over each gridbox's bounds
+  {
+    for (int j = 0; j < 2; ++j)
+    {
+      // check y bounds are same as given by bounds0
+      if (bounds0[j] != gbxbounds[ii + j])
+      {
+        return false;
+      }
+    }
+
+    ii += 6;
+  }
+
+  return true;
 }
 
 bool GbxBoundsFromBinary::check_3Dmodel_gbxbounds()
