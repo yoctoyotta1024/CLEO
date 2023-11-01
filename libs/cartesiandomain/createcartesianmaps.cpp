@@ -25,7 +25,7 @@
 CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
                                     std::string_view grid_filename)
 {
-  const GridboxBoundsFromBinary gfb(nspacedims, grid_filename);
+  const GbxBoundsFromBinary gfb(nspacedims, grid_filename);
   
 
   return CartesianMaps();

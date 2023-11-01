@@ -29,13 +29,13 @@
 
 #include "./readbinary.hpp"
 
-struct GridboxBoundsFromBinary
+struct GbxBoundsFromBinary
 /* holds vectors containing gridbox indexes and their
 corresponding [zmin, zmax, zmin, xmax, ymin, ymax]
 coordinate boundaries which are read from gridfile
 and used in construction of GridboxMaps */
 {
-  GridboxBoundsFromBinary(const unsigned int nspacedims,
+  GbxBoundsFromBinary(const unsigned int nspacedims,
                           std::string_view gridfile);
 };
 

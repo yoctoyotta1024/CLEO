@@ -24,8 +24,8 @@
 
 #include "./gbxbounds_frombinary.hpp"
 
-GridboxBoundsFromBinary::
-    GridboxBoundsFromBinary(const unsigned int nspacedims,
+GbxBoundsFromBinary::
+    GbxBoundsFromBinary(const unsigned int nspacedims,
                             std::string_view gridfile)
 /* read metadata and data in binary file called 'gridfile', then
 return GridBoxBoundaries instance created from that data */
