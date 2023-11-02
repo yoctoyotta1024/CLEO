@@ -31,9 +31,8 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # add executables to library
 set(SOURCES
-# "massmomentsobs.cpp"
-# "printobs.cpp"
-"emtpy.cpp"
+"massmomentsobs.cpp"
+"printobs.cpp"
 )
 add_library(${LIBNAME} SHARED ${SOURCES})
 
@@ -41,10 +40,10 @@ add_library(${LIBNAME} SHARED ${SOURCES})
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
-# # link libraries in libs to this target
-# set(LINKLIBS gridboxes superdrops zarr)
-# target_link_libraries(${LIBNAME} PRIVATE ${LINKLIBS})
-# target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
+# link libraries in libs to this target
+set(LINKLIBS gridboxes superdrops zarr)
+target_link_libraries(${LIBNAME} PRIVATE ${LINKLIBS})
+target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # some compilation properties
 set_target_properties(${LIBNAME} PROPERTIES
