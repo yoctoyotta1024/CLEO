@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st November 2023
+ * Last Modified: Thursday 2nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,6 +30,7 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "../cleoconstants.hpp"
 #include "./cartesianmaps.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
 

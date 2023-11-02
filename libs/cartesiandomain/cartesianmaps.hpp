@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st November 2023
+ * Last Modified: Thursday 2nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,9 +35,15 @@
 namespace dlc = dimless_constants;
 
 struct CartesianMaps
-/* type satisfying GridboxMaps concept specifically
-for gridboxes defined on in a cartesian C grid with
-equal area and volume for each gridbox */
+/* type satisfying GridboxMaps concept specifically for gridboxes
+defined on in a cartesian C grid with equal area and volume for each 
+gridbox. coord[X]bounds (for X = 1, 2, 3, corresponding to x, y, z) 
+map between gbxindexes and gridbox boundaries in a cartiesian domain.
+The keys of each map are the gridbox indexes. The corresponding value
+of each bounds map is that gridbox's {lower boundary, upper boundary}.
+to_[direction]_coord[X]nghbr (for direction = back, forward)
+map from a given gbxidx to the gbxidx of a neighbouring gridbox
+in that direction */
 {
 private:
   using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int,
@@ -66,19 +72,17 @@ private:
 
 public:
   CartesianMaps([XXX]) {} //TODO  constructor
-  /* initilaises coord[X]bounds maps (for X = 1, 2, 3,
-  corresponding to x, y, z) to map between gbxindexes and
-  gridbox boundaries in a cartiesian domain. The keys of each map
-  are the gridbox indexes. The corresponding value of each bounds map
-  is that gridbox's {lower boundary, upper boundary}.
-  In a non-3D case, boundaries for unused dimensions are the min/max
-  possible (numerical limits), however the area and volume of each
-  gridbox remain finite. E.g. In the 0-D case, the maps have 1
-  {key, value} for gridbox 0 which are numerical limits, whilst the
-  volume function returns a value determined from the gridfile input */
+
 
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
+
+  void set_boundsmaps_via_copy(const kokkos_pairmap::HostMirror h_3,
+                               const kokkos_pairmap::HostMirror h_1,
+                               const kokkos_pairmap::HostMirror h_2)
+  {
+    Kokkos::deep_copy(to_coord3bounds, h_3);
+  }
 
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
   {
