@@ -63,7 +63,7 @@ volume function returns a value determined from the gridfile input */
   const GbxBoundsFromBinary gfb(nspacedims, grid_filename);
 
   CartesianMaps gbxmaps(gfb.get_ngbxs());
-  
+
   set_maps_ndims(gfb.ndims, gbxmaps);
   
   if (nspacedims == 0)
@@ -122,14 +122,11 @@ void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
 conditions in all directions meaning neighbour of
 single gridbox with gbxidx=0 is itself */
 { 
-  gbxmaps.to_coord3bounds = kokkos_pairmap(1);
-  gbxmaps.to_coord1bounds = kokkos_pairmap(1);
-  gbxmaps.to_coord2bounds = kokkos_pairmap(1);
-
   gbxmaps.to_coord3bounds.insert(0, nullbounds());
   gbxmaps.to_coord1bounds.insert(0, nullbounds());
   gbxmaps.to_coord2bounds.insert(0, nullbounds());
 
+  // TODO (WIP)
   // gbxmaps.set_nghbrsmaps(3, nullnghbr(0), nullnghbr(0));
   // gbxmaps.set_nghbrsmaps(1, nullnghbr(0), nullnghbr(0));
   // gbxmaps.set_nghbrsmaps(2, nullnghbr(0), nullnghbr(0));

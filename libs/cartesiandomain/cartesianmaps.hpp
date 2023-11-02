@@ -66,8 +66,20 @@ public:
   kokkos_uintmap to_forward_coord2nghbr;
 
   CartesianMaps(const size_t ngbxs)
+      : to_coord3bounds(kokkos_pairmap(ngbxs)),
+        to_coord1bounds(kokkos_pairmap(ngbxs)),
+        to_coord2bounds(kokkos_pairmap(ngbxs)),
+        to_back_coord3nghbr(kokkos_uintmap(ngbxs)),
+        to_forward_coord3nghbr(kokkos_uintmap(ngbxs)),
+        to_back_coord1nghbr(kokkos_uintmap(ngbxs)),
+        to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
+        to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
+        to_forward_coord2nghbr(kokkos_uintmap(ngbxs))
+  /* initialise maps with hint for their capacity
+  (ie. total number of keys). Leave values for maps,
+  for ndims, gbxareas and gbxvols undefined
+  upon construction (e.g. null ptr for ndims) */
   {
-
   }
 
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
