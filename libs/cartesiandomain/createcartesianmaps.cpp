@@ -64,7 +64,7 @@ volume function returns a value determined from the gridfile input */
   const GbxBoundsFromBinary gfb(nspacedims, grid_filename);
 
   set_maps_ndims(gfb.ndims, gbxmaps);
-
+  
   if (nspacedims == 0)
   {
     set_0Dmodel_maps(gfb, gbxmaps);
@@ -96,13 +96,22 @@ volume function returns a value determined from the gridfile input */
   return CartesianMaps();
 }
 
-void set_maps_ndims(const std::vector<size_t> &ndims,
+void set_maps_ndims(const std::vector<long unsigned int> &ndims,
                     CartesianMaps &gbxmaps)
 /* copys ndims  to gbxmaps' ndims to set number of
 dimensions (ie. number of gridboxes) in
 [coord3, coord1, coord2] directions */
 {
-  gbxmaps.set_ndims(ndims.at(0), ndims.at(1), ndims.at(2));
+  viewd_ndims d_ndims("ndims"); // view for ndims (on device)
+  auto h_ndims = Kokkos::create_mirror_view(d_ndims); // mirror ndims in case view is on device memory
+
+  for (unsigned int m(0); m < 3; ++m)
+  {
+    h_ndims(m)= ndims.at(m);
+  }
+  Kokkos::deep_copy(d_ndims, h_ndims);
+
+  gbxmaps.set_ndims(d_ndims);
 }
 
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,

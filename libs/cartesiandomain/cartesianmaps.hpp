@@ -82,9 +82,7 @@ public:
                                const kokkos_uintmap::HostMirror h_back,
                                const kokkos_pairmap::HostMirror h_forward);
 
-  void set_ndims(const size_t ndim3,
-                 const size_t ndim1,
-                 const size_t ndim2);
+  void set_ndims(viewd_ndims i_ndims);
 
   void set_gbxarea(const double iarea)
   {

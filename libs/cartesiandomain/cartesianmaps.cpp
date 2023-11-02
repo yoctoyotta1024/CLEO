@@ -25,17 +25,9 @@
 
 // TODO 
 
-void CartesianMaps::set_ndims(const size_t ndim3,
-                              const size_t ndim1,
-                              const size_t ndim2)
+void CartesianMaps::set_ndims(viewd_ndims i_ndims)
 {
-  // auto h_ndims = Kokkos::create_mirror_view(ndims); // mirror ndims in case view is on device memory
-
-  // h_ndims(0) = ndim3;
-  // h_ndims(1) = ndim1;
-  // h_ndims(2) = ndim2;
-
-  // Kokkos::deep_copy(ndims, h_ndims);
+  ndims = i_ndims;
 }
 
 void CartesianMaps::
