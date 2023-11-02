@@ -114,21 +114,23 @@ dimensions (ie. number of gridboxes) in
 
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps)
-/* set idx2bounds_[i] maps to numeical limits. Set volume
- map using coords read from gridfile */
+/* set all coord[X]bounds maps to null values
+(max/min numerical limits). Sets periodic boundary
+conditions in all directions meaning neighbour of
+single gridbox with gbxidx=0 is itself */
 {
   gbxmaps.set_boundsmaps_via_copy(nullbounds(),
                                   nullbounds(),
                                   nullbounds())
   
-  idx2nghbour_z[0] = {0, 0};
-  idx2nghbour_x[0] = {0, 0};
-  idx2nghbour_y[0] = {0, 0};
+  gbxmaps.set_nghbrsmaps_via_copy(3, nullnghbr(0), nullnghbr(0));
+  gbxmaps.set_nghbrsmaps_via_copy(1, nullnghbr(0), nullnghbr(0));
+  gbxmaps.set_nghbrsmaps_via_copy(2, nullnghbr(0), nullnghbr(0));
 }
 
 void set_0Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
                             CartesianMaps &gbxmaps)
-/* sets dimensionless horizontal area and volume
+/* sets (finite) dimensionless horizontal area and volume
 of single gridbox in 0-D model (ie. entire domain) */
 {
   const double domainarea = gfb.gbxarea_fromgridfile(0);
