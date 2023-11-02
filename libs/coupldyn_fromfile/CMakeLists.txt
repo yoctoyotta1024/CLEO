@@ -25,7 +25,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
-set(LINKLIBS initialise)
+set(LINKLIBS initialise gridboxes superdrops)
 target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
 
 # some compilation properties

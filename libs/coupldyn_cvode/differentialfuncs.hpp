@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Thursday 2nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,7 +27,7 @@
 
 #include <nvector/nvector_serial.h> /* access to serial N_Vector            */
 
-#include "cleoconstants.hpp"
+#include "../cleoconstants.hpp"
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;
