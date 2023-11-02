@@ -176,3 +176,16 @@ is that 3-D model should have at least 1 gridbox */
   }
   return false;
 }
+
+double GridBoxBoundaries::gridboxarea(const unsigned int idx) const
+/* calculates horizontal (x-y planar) area of gridbox using boundaries
+  corresponding to gridbox with gbxidx=idx. First finds position 'pos'
+  of first gbxbound (zmin) by finding position of idx in gbxidxs */
+{
+  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6;
+
+  const double deltax = gbxbounds[pos + 3] - gbxbounds[pos + 2]; // xmax - xmin
+  const double deltay = gbxbounds[pos + 5] - gbxbounds[pos + 4]; // ymax - ymin
+
+  return deltax * deltay;
+}
