@@ -28,7 +28,7 @@ GbxBoundsFromBinary::
     GbxBoundsFromBinary(const unsigned int nspacedims,
                             std::string_view grid_filename)
 /* read metadata and data in binary file called 'gridfile', then
-return GridBoxBoundaries instance created from that data */
+return GbxBoundsFromBinary instance created from that data */
 {
   /* open file and read in the metatdata
   for all the variables in gridfile */

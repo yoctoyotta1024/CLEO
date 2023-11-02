@@ -16,8 +16,9 @@
  * -----
  * File Description:
  * functions for creating a cartesian maps struct
- * from a GridBoxBoundaries struct containing gridbox's
- * indexes and their coordinate (upper and lower) boundaries
+ * from a GbxBoundsFromBinary struct containing
+ * vectors of gridbox's indexes and their
+ * coordinate (upper and lower) boundaries
  */
 
 
