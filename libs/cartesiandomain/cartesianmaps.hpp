@@ -77,7 +77,7 @@ public:
   void set_boundsmaps_via_copy(const kokkos_pairmap::HostMirror h_3,
                                const kokkos_pairmap::HostMirror h_1,
                                const kokkos_pairmap::HostMirror h_2);
-                               
+
   void set_nghbrsmaps_via_copy(const unsigned int coord,
                                const kokkos_uintmap::HostMirror h_back,
                                const kokkos_pairmap::HostMirror h_forward);
