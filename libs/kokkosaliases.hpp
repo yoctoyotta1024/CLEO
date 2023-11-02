@@ -26,11 +26,14 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 #include <Kokkos_Random.hpp>
+#include <Kokkos_Pair.hpp>
+#include <Kokkos_UnorderedMap.hpp>
 
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/kokkosaliases_sd.hpp"
 
+/* Gridboxes */
 using dualview_gbx = Kokkos::DualView<Gridbox *>;            // dual view of gridboxes
 using dualview_constgbx = Kokkos::DualView<const Gridbox *>; // dual view of const gridboxes
 
@@ -40,8 +43,16 @@ using viewh_constgbx = dualview_constgbx::t_host; // view in host memory of cons
 using viewd_gbx = dualview_gbx::t_dev;           // view in device memory of gridboxes
 using viewd_constgbx = dualview_constgbx::t_dev; // view in device memory of const gridboxes
 
+/* Random Number Generation */
 using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
 
+/* Gridbox Maps */
 using viewd_ndims = Kokkos::View<size_t[3]>; // view in device memory for number of gridboxes in CartesianMaps
+using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int,
+                                            Kokkos::pair<double, double>,
+                                            ExecSpace>;
+using kokkos_uintmap = Kokkos::UnorderedMap<unsigned int,
+                                            unsigned int,
+                                            ExecSpace>;
 
 #endif // KOKKOSALIASES_HPP

@@ -121,6 +121,7 @@ void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
 conditions in all directions meaning neighbour of
 single gridbox with gbxidx=0 is itself */
 { 
+  kokkos_pairmap 
   gbxmaps.set_boundsmaps_via_copy(nullbounds(),
                                   nullbounds(),
                                   nullbounds())

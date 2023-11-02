@@ -46,13 +46,6 @@ map from a given gbxidx to the gbxidx of a neighbouring gridbox
 in that direction */
 {
 private:
-  using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int,
-                                              Kokkos::pair<double, double>,
-                                              ExecSpace>;
-  using kokkos_uintmap = Kokkos::UnorderedMap<unsigned int,
-                                              unsigned int,
-                                              ExecSpace>;
-
   /* maps from gbxidx to {lower, upper} coords of gridbox boundaries */
   kokkos_pairmap to_coord3bounds;
   kokkos_pairmap to_coord1bounds;
