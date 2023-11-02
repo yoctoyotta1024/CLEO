@@ -23,39 +23,23 @@
 
 #include "./cartesianmaps.hpp"
 
-// TODO 
-
-void CartesianMaps::set_ndims(viewd_ndims i_ndims)
-{
-  ndims = i_ndims;
-}
-
-void CartesianMaps::set_boundsmaps(kokkos_pairmap h_3,
-                                   kokkos_pairmap h_1,
-                                   kokkos_pairmap h_2)
-{
-  to_coord3bounds = h_3;
-  to_coord1bounds = h_1;
-  to_coord2bounds = h_2;
-}
-
-void CartesianMaps::set_nghbrsmaps(const unsigned int coord,
-                                   kokkos_uintmap h_back,
-                                   kokkos_pairmap h_forward)
-{
-  if (coord == 3)
-  {
-    to_back_coord3nghbr = h_back;
-    to_forward_coord3nghbr = h_forward;
-  }
-  else if (coord == 1)
-  {
-    to_back_coord1nghbr = h_back;
-    to_forward_coord1nghbr = h_forward;
-  }
-  else if (coord == 2)
-  {
-    to_back_coord2nghbr = h_back;
-    to_forward_coord2nghbr = h_forward;
-  }
-}
+// void CartesianMaps::set_nghbrsmaps(const unsigned int coord,
+//                                    kokkos_uintmap h_back,
+//                                    kokkos_pairmap h_forward)
+// {
+//   if (coord == 3)
+//   {
+//     to_back_coord3nghbr = h_back;
+//     to_forward_coord3nghbr = h_forward;
+//   }
+//   else if (coord == 1)
+//   {
+//     to_back_coord1nghbr = h_back;
+//     to_forward_coord1nghbr = h_forward;
+//   }
+//   else if (coord == 2)
+//   {
+//     to_back_coord2nghbr = h_back;
+//     to_forward_coord2nghbr = h_forward;
+//   }
+// }

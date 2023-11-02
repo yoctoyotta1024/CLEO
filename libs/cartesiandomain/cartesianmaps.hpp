@@ -46,6 +46,12 @@ map from a given gbxidx to the gbxidx of a neighbouring gridbox
 in that direction */
 {
 private:
+  /* additional gridbox / domain information */
+  viewd_ndims ndims; // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
+  double gbxareas;   // horizontal (x-y planar) area of all gridboxes
+  double gbxvolumes; // volume of all gridboxes
+
+public:
   /* maps from gbxidx to {lower, upper} coords of gridbox boundaries */
   kokkos_pairmap to_coord3bounds;
   kokkos_pairmap to_coord1bounds;
@@ -59,23 +65,13 @@ private:
   kokkos_uintmap to_back_coord2nghbr;
   kokkos_uintmap to_forward_coord2nghbr;
 
-  viewd_ndims ndims; // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
-  double gbxareas;   // horizontal (x-y planar) area of all gridboxes
-  double gbxvolumes; // volume of all gridboxes
-
-public:  
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
 
-  void set_ndims(viewd_ndims i_ndims);
-
-  void set_boundsmaps(kokkos_pairmap h_3,
-                      kokkos_pairmap h_1,
-                      kokkos_pairmap h_2);
-
-  void set_nghbrsmaps(const unsigned int coord,
-                      kokkos_uintmap h_back,
-                      kokkos_pairmap h_forward);
+  void set_ndims(viewd_ndims d_ndims)
+  {
+    ndims = d_ndims;
+  }
 
   void set_gbxarea(const double iarea)
   {

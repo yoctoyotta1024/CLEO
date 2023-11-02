@@ -121,14 +121,17 @@ void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
 conditions in all directions meaning neighbour of
 single gridbox with gbxidx=0 is itself */
 { 
-  kokkos_pairmap 
-  gbxmaps.set_boundsmaps_via_copy(nullbounds(),
-                                  nullbounds(),
-                                  nullbounds())
-  
-  gbxmaps.set_nghbrsmaps_via_copy(3, nullnghbr(0), nullnghbr(0));
-  gbxmaps.set_nghbrsmaps_via_copy(1, nullnghbr(0), nullnghbr(0));
-  gbxmaps.set_nghbrsmaps_via_copy(2, nullnghbr(0), nullnghbr(0));
+  gbxmaps.to_coord3bounds = kokkos_pairmap(1);
+  gbxmaps.to_coord1bounds = kokkos_pairmap(1);
+  gbxmaps.to_coord2bounds = kokkos_pairmap(1);
+
+  gbxmaps.to_coord3bounds.insert(0, nullbounds());
+  gbxmaps.to_coord1bounds.insert(0, nullbounds());
+  gbxmaps.to_coord2bounds.insert(0, nullbounds());
+
+  // gbxmaps.set_nghbrsmaps(3, nullnghbr(0), nullnghbr(0));
+  // gbxmaps.set_nghbrsmaps(1, nullnghbr(0), nullnghbr(0));
+  // gbxmaps.set_nghbrsmaps(2, nullnghbr(0), nullnghbr(0));
 }
 
 void set_0Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
