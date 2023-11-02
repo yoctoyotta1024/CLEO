@@ -96,7 +96,7 @@ volume function returns a value determined from the gridfile input */
   return CartesianMaps();
 }
 
-void set_maps_ndims(const std::vector<long unsigned int> &ndims,
+void set_maps_ndims(const std::vector<size_t> &ndims,
                     CartesianMaps &gbxmaps)
 /* copys ndims  to gbxmaps' ndims to set number of
 dimensions (ie. number of gridboxes) in

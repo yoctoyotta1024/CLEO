@@ -42,6 +42,6 @@ using viewd_constgbx = dualview_constgbx::t_dev; // view in device memory of con
 
 using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
 
-using viewd_ndims = Kokkos::View<long unsigned int[3]>; // view in device memory for number of gridboxes in CartesianMaps
+using viewd_ndims = Kokkos::View<size_t[3]>; // view in device memory for number of gridboxes in CartesianMaps
 
 #endif // KOKKOSALIASES_HPP
