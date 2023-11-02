@@ -20,9 +20,10 @@
 #ifndef INITCONDS_HPP
 #define INITCONDS_HPP
 
-
 #include <array>
 #include <vector>
+
+#include "superdrops/superdrop_attrs.hpp"
 
 struct InitSupersData
 {
