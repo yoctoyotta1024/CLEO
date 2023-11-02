@@ -33,7 +33,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
-#include "initialise/initialconditions.hpp"
+#include "runcleo/initialconditions.hpp"
 #include "superdrops/superdrop.hpp"
 #include "gridboxes/sortsupers.hpp"
 

@@ -58,7 +58,7 @@ initsupers and initgbxs structs which can call functions listed */
   } -> std::convertible_to<size_t>;
   {
     ic.initsupers.fetch_data()
-  } -> std::convertible_to<InitSupersData>;
+  } -> std::same_as<InitSupersData>;
 
   {
     ic.initgbxs.get_ngbxs()
@@ -95,10 +95,10 @@ initsupers and initgbxs structs which can call functions listed */
 template <typename SuperdropInitConds, typename GbxInitConds>
 struct InitConds
 /* struct for functions to generate
-intial conditions for CLEO */
+initial conditions for CLEO */
 {
-  const SuperdropInitConds initsupers; // initial conditions for creating superdroplets
-  const GbxInitConds initgbxs;         // initial conditions for creating gridboxes
+  SuperdropInitConds initsupers; // initial conditions for creating superdroplets
+  GbxInitConds initgbxs;         // initial conditions for creating gridboxes
 
   InitConds(const SuperdropInitConds initsupers,
             const GbxInitConds initgbxs)

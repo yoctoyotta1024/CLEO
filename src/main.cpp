@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
 // #include "initialise/config.hpp"
 // #include "initialise/timesteps.hpp"
 // #include "initialise/initgbxs1.hpp"
-// #include "initialise/initialconditions.hpp"
 // #include "initialise/initsupers_frombinary.hpp"
 
 // #include "observers/gbxindexobs.hpp"
@@ -57,6 +56,7 @@ int main(int argc, char *argv[])
 
 // #include "runcleo/coupleddynamics.hpp"
 // #include "runcleo/couplingcomms.hpp"
+// #include "runcleo/initialconditions.hpp"
 // #include "runcleo/runcleo.hpp"
 // #include "runcleo/sdmmethods.hpp"
 

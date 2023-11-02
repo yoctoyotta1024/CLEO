@@ -29,7 +29,6 @@
 #include <string_view>
 
 #include "./config.hpp"
-#include "./initialconditions.hpp"
 #include "./readbinary.hpp"
 #include "superdrops/superdrop_attrs.hpp"
 
