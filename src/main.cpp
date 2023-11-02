@@ -189,54 +189,49 @@ create_initconds(const Config &config)
   return InitConds(initsupers, initgbxs);
 }
 
-// int main(int argc, char *argv[])
-// {
-//   if (argc < 2)
-//   {
-//     throw std::invalid_argument("configuration file(s) not specified");
-//   }
-
-//   Kokkos::Timer kokkostimer;
-
-//   /* Read input parameters from configuration file(s) */
-//   const std::string_view config_filename(argv[1]); // path to configuration file
-//   const Config config(config_filename);
-//   const Timesteps tsteps(config); // timesteps for model (e.g. coupling and end time)
-
-//   /* Create zarr store for writing output to storage */
-//   FSStore fsstore(config.zarrbasedir);
-
-//   /* Solver of dynamics coupled to CLEO SDM */
-//   CoupledDynamics auto coupldyn(
-//       create_coupldyn(config, tsteps.get_couplstep()));
-
-//   /* coupling between coupldyn and SDM */
-//   const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
-
-
-//   /* Initial conditions for CLEO run */
-//   const InitialConditions auto initconds = create_initconds(config);
-
-//   /* Initialise Kokkos parallel environment */
-//   Kokkos::initialize(argc, argv);
-//   {
-//     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-//     const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
-
-//     /* Run CLEO (SDM coupled to dynamics solver) */
-//     const RunCLEO runcleo(sdm, coupldyn, comms);
-//     runcleo(initconds, tsteps.get_t_end());
-//   }
-//   Kokkos::finalize();
-
-//   const double ttot(kokkostimer.seconds());
-//   std::cout << "-----\n Total Program Duration: "
-//             << ttot << "s \n-----\n";
-
-//   return 0;
-// }
-
 int main(int argc, char *argv[])
 {
-  std::cout << "\n\n Hello World\n\n";
+  if (argc < 2)
+  {
+    throw std::invalid_argument("configuration file(s) not specified");
+  }
+
+  Kokkos::Timer kokkostimer;
+
+  /* Read input parameters from configuration file(s) */
+  const std::string_view config_filename(argv[1]); // path to configuration file
+  const Config config(config_filename);
+  const Timesteps tsteps(config); // timesteps for model (e.g. coupling and end time)
+
+  /* Create zarr store for writing output to storage */
+  FSStore fsstore(config.zarrbasedir);
+
+  /* Solver of dynamics coupled to CLEO SDM */
+  CoupledDynamics auto coupldyn(
+      create_coupldyn(config, tsteps.get_couplstep()));
+
+  /* coupling between coupldyn and SDM */
+  const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
+
+
+  /* Initial conditions for CLEO run */
+  const InitialConditions auto initconds = create_initconds(config);
+
+  /* Initialise Kokkos parallel environment */
+  Kokkos::initialize(argc, argv);
+  {
+    /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
+    const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
+
+    /* Run CLEO (SDM coupled to dynamics solver) */
+    const RunCLEO runcleo(sdm, coupldyn, comms);
+    runcleo(initconds, tsteps.get_t_end());
+  }
+  Kokkos::finalize();
+
+  const double ttot(kokkostimer.seconds());
+  std::cout << "-----\n Total Program Duration: "
+            << ttot << "s \n-----\n";
+
+  return 0;
 }
