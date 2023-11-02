@@ -30,6 +30,8 @@
 #include <vector>
 #include <stdexcept>
 #include <array>
+#include <algorithm>
+#include <iterator>
 
 #include "./readbinary.hpp"
 
@@ -46,6 +48,8 @@ private:
   bool check_1Dmodel_gbxbounds() const;
   bool check_2Dmodel_gbxbounds() const;
   bool check_3Dmodel_gbxbounds() const;
+
+  size_t find_idx_in_gbxidxs(const unsigned int idx) const;
 
 public:
   std::vector<size_t> ndims;         // number of gridboxes in [coord3, coord1, coord2] dimensions

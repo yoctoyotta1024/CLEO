@@ -177,12 +177,32 @@ is that 3-D model should have at least 1 gridbox */
   return false;
 }
 
-double GridBoxBoundaries::gridboxarea(const unsigned int idx) const
+size_t GbxBoundsFromBinary::
+    find_idx_in_gbxidxs(const unsigned int idx) const
+/* returns distance  (number of hops) from start of
+gbxidxs vector to position where gbxidx matches idx
+(ie. *it = idx) */
+{
+  auto it = std::find(gbxidxs.begin(), gbxidxs.end(), idx); //iterator to idx
+  auto pos = std::distance(gbxidxs.begin(), it); // distance from start of gbxidxs to idx
+
+  if (pos > (gbxidxs.size()-1))
+  {
+    /* if pos is larger than the largest valid position
+    in gbxidxs, idx has not been found so throw an error*/
+    throw std::invalid_argument("idx not found in gbxidxs");
+  }
+
+  return pos;
+}
+
+double GbxBoundsFromBinary::
+    gbxarea_fromgridfile(const unsigned int idx) const
 /* calculates horizontal (x-y planar) area of gridbox using boundaries
   corresponding to gridbox with gbxidx=idx. First finds position 'pos'
   of first gbxbound (zmin) by finding position of idx in gbxidxs */
 {
-  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6;
+  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
 
   const double deltax = gbxbounds[pos + 3] - gbxbounds[pos + 2]; // xmax - xmin
   const double deltay = gbxbounds[pos + 5] - gbxbounds[pos + 4]; // ymax - ymin

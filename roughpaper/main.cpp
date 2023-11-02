@@ -31,12 +31,16 @@ int main(int argc, char *argv[])
   std::vector<unsigned int> gbxidx = {0,10,20,30,40,50};
   std::vector<double> bounds = {1.1,2.2,3.3,4.4,5.5,6.6};
 
-  const unsigned int idx(30);
+  const unsigned int idx(10);
 
   auto it = std::find(gbxidx.begin(), gbxidx.end(), idx);
   auto d = std::distance(gbxidx.begin(), it);
 
-  std::cout << "dis: " << d << "\n";
+  std::cout << "dis: " << d <<", "<< gbxidx.size() <<"\n";
+  if (d > (gbxidx.size()-1))
+  {
+    throw std::invalid_argument("idx not found in gbxidxs");
+  }
   std::cout << gbxidx.at(d) << " -> " << bounds.at(d) << "\n";
 
   return 0;
