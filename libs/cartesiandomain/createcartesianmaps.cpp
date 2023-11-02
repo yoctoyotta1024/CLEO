@@ -117,11 +117,11 @@ void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
 /* set idx2bounds_[i] maps to numeical limits. Set volume
  map using coords read from gridfile */
 {
-  idx2bounds_z[0] = nullbounds() 
-  idx2bounds_x[0] = nullbounds()
-  idx2bounds_y[0] = nullbounds()
+  gbxmaps.set_boundsmaps_via_copy(nullbounds(),
+                                  nullbounds(),
+                                  nullbounds())
   
-  idx2nghbour_z[0] = {0, 0}; // 'periodic' BCs in non-existent dimensions 
+  idx2nghbour_z[0] = {0, 0};
   idx2nghbour_x[0] = {0, 0};
   idx2nghbour_y[0] = {0, 0};
 }

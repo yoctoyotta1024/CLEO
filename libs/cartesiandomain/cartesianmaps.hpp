@@ -76,12 +76,11 @@ public:
 
   void set_boundsmaps_via_copy(const kokkos_pairmap::HostMirror h_3,
                                const kokkos_pairmap::HostMirror h_1,
-                               const kokkos_pairmap::HostMirror h_2)
-  {
-    Kokkos::deep_copy(to_coord3bounds, h_3);
-    Kokkos::deep_copy(to_coord1bounds, h_1);
-    Kokkos::deep_copy(to_coord2bounds, h_2);
-  }
+                               const kokkos_pairmap::HostMirror h_2);
+                               
+  void set_nghbrsmaps_via_copy(const unsigned int coord,
+                               const kokkos_uintmap::HostMirror h_back,
+                               const kokkos_pairmap::HostMirror h_forward);
 
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
   {
