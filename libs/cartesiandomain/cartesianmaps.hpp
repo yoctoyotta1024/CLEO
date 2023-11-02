@@ -74,15 +74,15 @@ public:
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
 
-  void set_boundsmaps_via_copy(const kokkos_pairmap::HostMirror h_3,
-                               const kokkos_pairmap::HostMirror h_1,
-                               const kokkos_pairmap::HostMirror h_2);
-
-  void set_nghbrsmaps_via_copy(const unsigned int coord,
-                               const kokkos_uintmap::HostMirror h_back,
-                               const kokkos_pairmap::HostMirror h_forward);
-
   void set_ndims(viewd_ndims i_ndims);
+
+  void set_boundsmaps(kokkos_pairmap h_3,
+                      kokkos_pairmap h_1,
+                      kokkos_pairmap h_2);
+
+  void set_nghbrsmaps(const unsigned int coord,
+                      kokkos_uintmap h_back,
+                      kokkos_pairmap h_forward);
 
   void set_gbxarea(const double iarea)
   {
