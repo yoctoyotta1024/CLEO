@@ -28,22 +28,12 @@
 #include <utility>
 
 #include "../kokkosaliases.hpp"
-
-struct InitSupersData
-{
-  std::array<SoluteProperties, 1> solutes;
-  std::vector<unsigned int> sdgbxindexes;
-  std::vector<double> coord3s;
-  std::vector<double> coord1s;
-  std::vector<double> coord2s;
-  std::vector<double> radii;
-  std::vector<double> msols;
-  std::vector<unsigned long long> xis;
-};
+#include "initialise/initconds.hpp"
 
 template <typename IC>
 concept InitialConditions = requires(IC ic, unsigned int t,
-                                     const viewh_constgbx h_gbxs)
+                                     const viewh_constgbx h_gbxs,
+                                     InitSupersData initdata)
 /* concept InitialConditions is all types that have
 initsupers and initgbxs structs which can call functions listed */
 {
@@ -57,8 +47,8 @@ initsupers and initgbxs structs which can call functions listed */
     ic.initsupers.fetch_data_size()
   } -> std::convertible_to<size_t>;
   {
-    ic.initsupers.fetch_data()
-  } -> std::same_as<InitSupersData>;
+    ic.initsupers.fetch_data(initdata)
+  } -> std::same_as<void>;
 
   {
     ic.initgbxs.get_ngbxs()
@@ -90,20 +80,6 @@ initsupers and initgbxs structs which can call functions listed */
   {
     ic.initgbxs.vvel()
   } -> std::convertible_to<std::vector<std::pair<double, double>>>;
-};
-
-template <typename SuperdropInitConds, typename GbxInitConds>
-struct InitConds
-/* struct for functions to generate
-initial conditions for CLEO */
-{
-  SuperdropInitConds initsupers; // initial conditions for creating superdroplets
-  GbxInitConds initgbxs;         // initial conditions for creating gridboxes
-
-  InitConds(const SuperdropInitConds initsupers,
-            const GbxInitConds initgbxs)
-      : initsupers(initsupers),
-        initgbxs(initgbxs) {}
 };
 
 #endif // INITIALCONDITIONS_HPP
