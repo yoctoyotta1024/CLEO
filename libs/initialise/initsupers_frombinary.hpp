@@ -31,6 +31,7 @@
 #include "./config.hpp"
 #include "./readbinary.hpp"
 #include "superdrops/superdrop_attrs.hpp"
+#include "runcleo/initialconditions.hpp"
 
 struct InitSupersFromBinary
 /* struct containing functions which return data
@@ -75,10 +76,15 @@ public:
   declared by the metadata for the first variable
   in the initsupers file */
 
-  InitSupersData fetch_data() const;
+  void fetch_data(InitSupersData &initdata) const
   /* return InitSupersData created by reading a binary
   file and creating a SoluteProperties struct.
   Then check that the input data has the correct sizes. */
+  {
+  init_solutes_data(initdata);
+  initdata_from_binary(initdata); 
+  check_initdata_sizes(initdata);
+  }
 };
 
 #endif // INITSUPERS_FROMBINARY_HPP

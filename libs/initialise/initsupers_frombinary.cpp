@@ -25,21 +25,6 @@
 
 #include "./initsupers_frombinary.hpp"
 
-InitSupersData InitSupersFromBinary::fetch_data() const
-/* return InitSupersData created by reading a binary
-file and creating a SoluteProperties struct.
-Then check that the input data has the correct sizes. */
-{
-  InitSupersData initdata;
-
-  init_solutes_data(initdata);
-  initdata_from_binary(initdata); 
-
-  check_initdata_sizes(initdata);
-
-  return initdata;
-}
-
 void InitSupersFromBinary::
     init_solutes_data(InitSupersData &initdata) const
 /* sets initial data for solutes as

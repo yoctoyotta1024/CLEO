@@ -84,8 +84,10 @@ public:
   template <typename SuperdropInitConds>
   GenSuperdrop(const SuperdropInitConds &sdic)
       : nspacedims(sdic.get_nspacedims()),
-        sdIdGen(std::make_unique<Superdrop::IDType::Gen>()),
-        initdata(sdic.fetch_data()) {}
+        sdIdGen(std::make_unique<Superdrop::IDType::Gen>())
+        {
+          fetch_data(initdata); 
+        }
 
   Superdrop operator()(const unsigned int kk) const;
 };
