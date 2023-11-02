@@ -52,9 +52,10 @@ of gridbox is itself */
 
 CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
                                     std::string_view grid_filename)
-/* In a non-3D case, boundaries for unused dimensions may be the min/max
-possible (numerical limits), however the area and volume of each
-gridbox remains finite. E.g. In the 0-D case, the maps have 1
+/* creates cartesian maps instance using gridbox bounds read from 
+gridfile. In a non-3D case, boundaries for unused dimensions may be
+the min/max possible (numerical limits), however the area and volume
+of each gridbox remains finite. E.g. In the 0-D case, the maps have 1
 {key, value} for gridbox 0 which are numerical limits, whilst the
 volume function returns a value determined from the gridfile input */
 {
