@@ -193,7 +193,7 @@ public:
   option to record some runtime statistics using "stats" */
   {
 
-    // const auto gbxmaps(sdm.get_gbxmaps());
+    // const auto gbxmaps(sdm.get_gbxmaps()); // TODO 
 
     // create runtime objects
     RunStats stats;
