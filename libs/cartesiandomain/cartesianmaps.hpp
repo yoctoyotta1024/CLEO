@@ -74,13 +74,11 @@ public:
         to_back_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
-        to_forward_coord2nghbr(kokkos_uintmap(ngbxs))
+        to_forward_coord2nghbr(kokkos_uintmap(ngbxs)) {}
   /* initialise maps with hint for their capacity
   (ie. total number of keys). Leave values for maps,
   for ndims, gbxareas and gbxvols undefined
   upon construction (e.g. null ptr for ndims) */
-  {
-  }
 
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
