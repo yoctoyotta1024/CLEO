@@ -209,3 +209,18 @@ double GbxBoundsFromBinary::
 
   return deltax * deltay;
 }
+
+double GbxBoundsFromBinary::
+    gbxvol_fromgridfile(const unsigned int idx) const
+/* calculates volume of gridbox using boundaries corresponding
+to gridbox with gbxidx=idx. First finds position 'pos' of
+first gbxbound (zmin) by finding position of idx in gbxidxs */
+{
+  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
+
+  const double deltaz = gbxbounds[pos + 1] - gbxbounds[pos];     // zmax - zmin
+  const double deltax = gbxbounds[pos + 3] - gbxbounds[pos + 2]; // xmax - xmin
+  const double deltay = gbxbounds[pos + 5] - gbxbounds[pos + 4]; // ymax - ymin
+
+  return deltaz * deltax * deltay;
+}
