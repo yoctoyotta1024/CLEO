@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,9 +60,10 @@ of each gridbox remains finite. E.g. In the 0-D case, the maps have 1
 {key, value} for gridbox 0 which are numerical limits, whilst the
 volume function returns a value determined from the gridfile input */
 {
-  CartesianMaps gbxmaps;
   const GbxBoundsFromBinary gfb(nspacedims, grid_filename);
 
+  CartesianMaps gbxmaps(gfb.get_ngbxs());
+  
   set_maps_ndims(gfb.ndims, gbxmaps);
   
   if (nspacedims == 0)

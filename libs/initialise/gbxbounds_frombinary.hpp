@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -68,6 +68,12 @@ public:
   /* calculates volume of gridbox using boundaries corresponding to
   gridbox with gbxidx=idx. First finds position of first gbxbound (zmin)
   for that gridbox from position of idx in gbxidxs */                  
+
+  size_t get_ngbxs() const
+  /* returns total number of gridboxes = product of dimentions */
+  {
+    return ndims.at(0) * ndims.at(1) * ndims.at(2);
+  }
 };
 
 #endif // GBXBOUNDS_FROMBINARY_HPP

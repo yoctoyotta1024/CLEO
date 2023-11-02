@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -64,6 +64,11 @@ public:
   kokkos_uintmap to_forward_coord1nghbr;
   kokkos_uintmap to_back_coord2nghbr;
   kokkos_uintmap to_forward_coord2nghbr;
+
+  CartesianMaps(const size_t ngbxs)
+  {
+
+  }
 
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
