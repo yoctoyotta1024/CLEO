@@ -40,12 +40,10 @@ set(SOURCES
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
 # add directories to include for targets
-target_include_directories(${LIBNAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(${LIBNAME} PUBLIC "${CMAKE_SOURCE_DIR}/libs")
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
-# set(LINKLIBS runcleo)
-# target_link_libraries(${LIBNAME} PRIVATE ${LINKLIBS})
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # some compilation properties
