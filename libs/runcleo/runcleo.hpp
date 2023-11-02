@@ -192,6 +192,9 @@ public:
   then prepare and do timestepping. Meanwhile there is the
   option to record some runtime statistics using "stats" */
   {
+
+    // const auto gbxmaps(sdm.get_gbxmaps());
+
     // create runtime objects
     RunStats stats;
     viewd_supers supers(create_supers(initconds.initsupers));

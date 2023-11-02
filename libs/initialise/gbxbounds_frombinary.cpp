@@ -183,8 +183,8 @@ size_t GbxBoundsFromBinary::
 gbxidxs vector to position where gbxidx matches idx
 (ie. *it = idx) */
 {
-  auto it = std::find(gbxidxs.begin(), gbxidxs.end(), idx); //iterator to idx
-  auto pos = std::distance(gbxidxs.begin(), it); // distance from start of gbxidxs to idx
+  auto it(std::find(gbxidxs.begin(), gbxidxs.end(), idx)); //iterator to idx
+  size_t pos(std::distance(gbxidxs.begin(), it)); // distance from start of gbxidxs to idx
 
   if (pos > (gbxidxs.size()-1))
   {

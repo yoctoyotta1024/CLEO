@@ -155,6 +155,12 @@ public:
       t_sdm = t_sdm_next;
     }
   }
+
+  // GbxMaps get_gbxmaps() const
+  // {
+  //   return gbxmaps; 
+  // }
+      
 };
 
 #endif // SDMMETHODS_HPP

@@ -21,7 +21,7 @@
  * coordinate (upper and lower) boundaries
  */
 
-#include "./createmaps_frombinary.hpp"
+#include "./createcartesianmaps.hpp"
 
 void set_maps_ndims(const std::vector<size_t> &ndims,
                     CartesianMaps &gbxmaps);
@@ -86,12 +86,12 @@ volume function returns a value determined from the gridfile input */
   //   set_3Dmodel_maps(gfb);
   // }
 
-  else
-  {
-    throw std::invalid_argument("nspacedims > 3 is invalid ");
-  }
+  // else
+  // {
+  //   throw std::invalid_argument("nspacedims > 3 is invalid ");
+  // }
 
-  check_ngridboxes();
+  // check_ngridboxes();
 
   return CartesianMaps();
 }
@@ -102,14 +102,7 @@ void set_maps_ndims(const std::vector<size_t> &ndims,
 dimensions (ie. number of gridboxes) in
 [coord3, coord1, coord2] directions */
 {
-  auto h_ndims = Kokkos::create_mirror_view(gbxmaps.ndims); // mirror ndims in case view is on device memory
-
-  for (unsigned int m(0); m < 3; ++m)
-  {
-    h_ndims(m) = ndims.at(m);
-  }
-
-  gbxmaps.set_ndims_via_copy(h_dims);
+  gbxmaps.set_ndims(ndims.at(0), ndims.at(1), ndims.at(2));
 }
 
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
@@ -119,13 +112,15 @@ void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
 conditions in all directions meaning neighbour of
 single gridbox with gbxidx=0 is itself */
 {
-  gbxmaps.set_boundsmaps_via_copy(nullbounds(),
-                                  nullbounds(),
-                                  nullbounds())
+  // TODO 
   
-  gbxmaps.set_nghbrsmaps_via_copy(3, nullnghbr(0), nullnghbr(0));
-  gbxmaps.set_nghbrsmaps_via_copy(1, nullnghbr(0), nullnghbr(0));
-  gbxmaps.set_nghbrsmaps_via_copy(2, nullnghbr(0), nullnghbr(0));
+  // gbxmaps.set_boundsmaps_via_copy(nullbounds(),
+  //                                 nullbounds(),
+  //                                 nullbounds())
+  
+  // gbxmaps.set_nghbrsmaps_via_copy(3, nullnghbr(0), nullnghbr(0));
+  // gbxmaps.set_nghbrsmaps_via_copy(1, nullnghbr(0), nullnghbr(0));
+  // gbxmaps.set_nghbrsmaps_via_copy(2, nullnghbr(0), nullnghbr(0));
 }
 
 void set_0Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,

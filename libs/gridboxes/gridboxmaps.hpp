@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st November 2023
+ * Last Modified: Thursday 2nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,11 +36,11 @@ correct signatues for map-like functions */
 { 
 
   {
-    gbxmaps.get_area(ii)
+    gbxmaps.get_gbxarea(ii)
   } -> std::convertible_to<double>;
 
   {
-    gbxmaps.get_volume(ii)
+    gbxmaps.get_gbxvolume(ii)
   } -> std::convertible_to<double>;
 
   {

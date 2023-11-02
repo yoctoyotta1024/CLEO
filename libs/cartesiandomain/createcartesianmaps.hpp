@@ -29,8 +29,6 @@
 #include <vector>
 #include <stdexcept>
 
-#include <Kokkos_Core.hpp>
-
 #include "../cleoconstants.hpp"
 #include "./cartesianmaps.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
