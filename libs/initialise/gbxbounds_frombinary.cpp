@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st November 2023
+ * Last Modified: Thursday 2nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -52,7 +52,7 @@ return GridBoxBoundaries instance created from that data */
 }
 
 void GbxBoundsFromBinary::
-    is_nspacedims_compatible(const unsigned int nspacedims)
+    is_nspacedims_compatible(const unsigned int nspacedims) const
 /* check that nspacedims is consistent with ndims and then
 calls appropropriate function to check if gbxbounds is also.
 finally throws error if either proves inconsistent */                                       
@@ -96,7 +96,7 @@ finally throws error if either proves inconsistent */
   }
 }
 
-bool GbxBoundsFromBinary::check_0Dmodel_gbxbounds()
+bool GbxBoundsFromBinary::check_0Dmodel_gbxbounds() const
 /* returns true if data for gridbox boundaries, gbxbounds,
 is compatible with 0-D model. Criteria is that 0-D model
 has 1 gridbox and hence 6 values in gbxbounds */
@@ -111,7 +111,7 @@ has 1 gridbox and hence 6 values in gbxbounds */
   return false;
 }
 
-bool GbxBoundsFromBinary::check_1Dmodel_gbxbounds()
+bool GbxBoundsFromBinary::check_1Dmodel_gbxbounds() const
 /* returns true if data for gridbox boundaries, gbxbounds,
 is compatible with 1D model. Criteria is that x and y
 coords of all gridbox boundaries are the same. */  
@@ -139,7 +139,7 @@ coords of all gridbox boundaries are the same. */
   return true;
 }
 
-bool GbxBoundsFromBinary::check_2Dmodel_gbxbounds()
+bool GbxBoundsFromBinary::check_2Dmodel_gbxbounds() const
 /* returns true if data for gridbox boundaries,
 gbxbounds, is compatible with 2D model. Criteria is
 that y coords of all gridbox boundaries are the same. */  
@@ -164,7 +164,7 @@ that y coords of all gridbox boundaries are the same. */
   return true;
 }
 
-bool GbxBoundsFromBinary::check_3Dmodel_gbxbounds()
+bool GbxBoundsFromBinary::check_3Dmodel_gbxbounds() const
 /* returns true if data for gridbox boundaries,
 gbxbounds, is compatible with 0-D model. Criteria
 is that 3-D model should have at least 1 gridbox */

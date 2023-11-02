@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st November 2023
+ * Last Modified: Thursday 2nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,12 +40,12 @@ coordinate boundaries which are read from gridfile
 and used in construction of GridboxMaps */
 {
 private:
-  void is_nspacedims_compatible(const unsigned int nspacedims);
+  void is_nspacedims_compatible(const unsigned int nspacedims) const;
   
-  bool check_0Dmodel_gbxbounds();
-  bool check_1Dmodel_gbxbounds();
-  bool check_2Dmodel_gbxbounds();
-  bool check_3Dmodel_gbxbounds();
+  bool check_0Dmodel_gbxbounds() const;
+  bool check_1Dmodel_gbxbounds() const;
+  bool check_2Dmodel_gbxbounds() const;
+  bool check_3Dmodel_gbxbounds() const;
 
 public:
   std::vector<size_t> ndims;         // number of gridboxes in [coord3, coord1, coord2] dimensions
@@ -54,6 +54,16 @@ public:
 
   GbxBoundsFromBinary(const unsigned int nspacedims,
                       std::string_view grid_filename);
+
+  double gbxarea_fromgridfile(const unsigned int idx) const;
+  /* calculates horizontal (x-y planar) area of gridbox using boundaries
+   corresponding to gridbox with gbxidx=idx. First finds position
+   of first gbxbound (zmin) from position of idx in gbxidxs */
+
+  double gbxvol_fromgridfile(const unsigned int idx) const;
+  /* calculates volume of gridbox using boundaries corresponding to
+  gridbox with gbxidx=idx. First finds position of first gbxbound (zmin)
+  for that gridbox from position of idx in gbxidxs */                  
 };
 
 #endif // GBXBOUNDS_FROMBINARY_HPP

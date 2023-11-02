@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st November 2023
+ * Last Modified: Thursday 2nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -100,11 +100,11 @@ void set_0Dmodel_maps(const double domainarea,
 
 void set_0Dmodel_gbxvolumes()
 /* sets dimensionless horizontal area and volume
-of gridbox in 0-D model (ie. entire domain) */
+of single gridbox in 0-D model (ie. entire domain) */
 {
-  const double domainarea = get_0Ddomainarea_from_gridfile(gfb);
-  const double domainvol = get_0Ddomainvol_from_gridfile(gfb);
+  const double domainarea = gfb.gbxarea_fromgridfile(0);
+  const double domainvol = gfb.gbxvol_fromgridfile(0);
 
-  gbxmaps.set_gbxarea(area);
-  gbxmaps.set_gbxvolume(volume);
+  gbxmaps.set_gbxarea(domainarea);
+  gbxmaps.set_gbxvolume(domainvol);
 }
