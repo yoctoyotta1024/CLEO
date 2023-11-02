@@ -43,7 +43,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
 # Set libraries and compiler warnings to use
-set(LINKLIBS gridboxes initialise observers superdrops zarr)
+set(LINKLIBS gridboxes observers superdrops zarr)
 target_link_libraries(${LIBNAME} PRIVATE "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
