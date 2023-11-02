@@ -41,7 +41,8 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
-target_link_libraries(${LIBNAME} PRIVATE initialise)
+set(LINKLIBS initialise superdrops gridboxes)
+target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # some compilation properties
