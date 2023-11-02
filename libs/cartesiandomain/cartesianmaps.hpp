@@ -70,10 +70,7 @@ private:
   double gbxareas;   // horizontal (x-y planar) area of all gridboxes
   double gbxvolumes; // volume of all gridboxes
 
-public:
-  CartesianMaps([XXX]) {} //TODO  constructor
-
-
+public:  
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
 
@@ -82,6 +79,8 @@ public:
                                const kokkos_pairmap::HostMirror h_2)
   {
     Kokkos::deep_copy(to_coord3bounds, h_3);
+    Kokkos::deep_copy(to_coord1bounds, h_1);
+    Kokkos::deep_copy(to_coord2bounds, h_2);
   }
 
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
