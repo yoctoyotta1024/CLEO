@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
  * File: initgbxs1.hpp
- * Project: initialise
+ * Project: coupldyn_fromfile
  * Created Date: Tuesday 17th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Thursday 2nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +28,7 @@
 #include <vector>
 #include <utility>
 
-#include "./config.hpp"
+#include "initialise/config.hpp"
 
 // TODO 
 

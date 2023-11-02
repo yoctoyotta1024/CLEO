@@ -24,7 +24,6 @@
 #define CREATESUPERS_HPP
 
 #include <memory>
-#include <vector>
 #include <array>
 #include <iostream>
 #include <string>
@@ -33,7 +32,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
-#include "runcleo/initialconditions.hpp"
+#include "initialise/initconds.hpp"
 #include "superdrops/superdrop.hpp"
 #include "gridboxes/sortsupers.hpp"
 
