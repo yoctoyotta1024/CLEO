@@ -38,6 +38,7 @@
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
 #include "initialise/initsupers_frombinary.hpp"
+#include "initialise/initialconditions.hpp"
 
 #include "observers/gbxindexobs.hpp"
 #include "observers/massmomentsobs.hpp"
@@ -49,7 +50,6 @@
 #include "observers/supersattrsobs.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
-#include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 

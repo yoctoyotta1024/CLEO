@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Thursday 2nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,7 +33,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
-#include "./initialconditions.hpp"
+#include "initialise/initialconditions.hpp"
 #include "superdrops/superdrop.hpp"
 #include "gridboxes/sortsupers.hpp"
 

@@ -42,8 +42,9 @@ int main(int argc, char *argv[])
 
 // #include "initialise/config.hpp"
 // #include "initialise/timesteps.hpp"
-// #include "initialise/initsupers_frombinary.hpp"
 // #include "initialise/initgbxs1.hpp"
+// #include "initialise/initialconditions.hpp"
+// #include "initialise/initsupers_frombinary.hpp"
 
 // #include "observers/gbxindexobs.hpp"
 // #include "observers/massmomentsobs.hpp"
@@ -58,7 +59,6 @@ int main(int argc, char *argv[])
 // #include "runcleo/couplingcomms.hpp"
 // #include "runcleo/runcleo.hpp"
 // #include "runcleo/sdmmethods.hpp"
-// #include "runcleo/initialconditions.hpp"
 
 // // #include "superdrops/collisions.hpp"
 // #include "superdrops/condensation.hpp"
