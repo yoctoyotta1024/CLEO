@@ -45,5 +45,14 @@
 
 CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
                                     std::string_view grid_filename);
+/* creates cartesian maps instance using gridbox bounds read from
+gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite 
+boundary conditions (see note above). In a non-3D case, boundaries
+and neighbours maps for unused dimensions are 'null'
+(ie. return numerical limits), however the area and volume of each
+gridbox remains finite. E.g. In the 0-D case, the bounds maps all
+have 1 {key, value} where key=gbxidx=0 and value = {max, min}
+numerical limits, meanwhile volume function returns a value determined
+from the gridfile 'grid_filename' */
 
 #endif // CREATECARTESIANMAPS_HPP
