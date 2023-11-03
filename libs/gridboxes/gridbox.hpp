@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,7 +50,7 @@ private:
     using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, kkpair>; // should match that in kokkosaliases.hpp
 
     viewd_supers supers;  // reference to all superdrops view
-    unsigned int ii;      // value of gbxindex which sdgbxindex of superdrops must match
+    unsigned int idx;      // value of gbxindex which sdgbxindex of superdrops must match
     kkpair refs = {0, 0}; // position in view of (first, last) superdrop that occupies gridbox
 
     template <typename Pred>
