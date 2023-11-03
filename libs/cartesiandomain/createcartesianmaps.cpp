@@ -72,11 +72,11 @@ volume function returns a value determined from the gridfile input */
     set_0Dmodel_areas_vols(gfb, gbxmaps);
   }
 
-  else if (nspacedims == 1)
-  {
-    set_1Dmodel_maps(gfb);
-    set_1Dmodel_areas_vols(gfb, gbxmaps);
-  }
+  // else if (nspacedims == 1)
+  // {
+  //   set_1Dmodel_maps(gfb);
+  //   set_1Dmodel_areas_vols(gfb, gbxmaps);
+  // }
 
   // else if (nspacedims == 2)
   // {
@@ -160,17 +160,19 @@ vector, the [zmin, zmax] coords of that gridbox are at
 {
   for (auto idx : gfb.gbxidxs)
   {
+    //WIP 
     // gbxmaps.to_coord3bounds.insert(0, nullbounds());
     gbxmaps.to_coord1bounds.insert(idx, nullbounds());
     gbxmaps.to_coord2bounds.insert(idx, nullbounds());
-  }
 
   // gbxmaps.to_back_coord3nghbr.insert(0, nullnghbr(0));
   // gbxmaps.to_forward_coord3nghbr.insert(0, nullnghbr(0));
-  // gbxmaps.to_back_coord1nghbr.insert(0, nullnghbr(0));
-  // gbxmaps.to_forward_coord1nghbr.insert(0, nullnghbr(0));
-  // gbxmaps.to_back_coord2nghbr.insert(0, nullnghbr(0));
-  // gbxmaps.to_forward_coord2nghbr.insert(0, nullnghbr(0));
+    gbxmaps.to_back_coord1nghbr.insert(idx, nullnghbr(0));
+    gbxmaps.to_forward_coord1nghbr.insert(idx, nullnghbr(0));
+    gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
+    gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
+  }
+
 }
 
 void set_1Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
