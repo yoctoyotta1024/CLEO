@@ -139,7 +139,7 @@ function returns a value determined from the gridfile 'grid_filename' */
 
   std::cout << "--- create cartesian gridbox maps: success ---\n";
   
-  return CartesianMaps();
+  return gbxmaps;
 }
 
 void check_ngridboxes(const CartesianMaps &gbxmaps,

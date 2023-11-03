@@ -75,9 +75,10 @@ create_coupldyn(const Config &config,
 inline GridboxMaps auto
 create_gbxmaps(const Config &config)
 {
-  return create_cartesian_maps(config.ngbxs,
-                               config.nspacedims,
-                               config.grid_filename);
+  const auto gbxmaps = create_cartesian_maps(config.ngbxs,
+                                             config.nspacedims,
+                                             config.grid_filename);
+  return gbxmaps;
 }
 
 inline MicrophysicalProcess auto
