@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,50 +30,50 @@
 #include <Kokkos_Pair.hpp>
 
 template <typename GbxMaps>
-concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int ii)
+concept GridboxMaps = requires(GbxMaps gbxmaps,
+                               unsigned int idx)
 /* concept for GridboxMaps is all types that have
 correct signatues for map-like functions */
 { 
 
   {
-    gbxmaps.get_gbxarea(ii)
+    gbxmaps.get_gbxarea(idx)
   } -> std::convertible_to<double>;
 
   {
-    gbxmaps.get_gbxvolume(ii)
+    gbxmaps.get_gbxvolume(idx)
   } -> std::convertible_to<double>;
 
   {
-    gbxmaps.coord3bounds(ii)
+    gbxmaps.coord3bounds(idx)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
   {
-    gbxmaps.coord1bounds(ii)
+    gbxmaps.coord1bounds(idx)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
   {
-    gbxmaps.coord2bounds(ii)
+    gbxmaps.coord2bounds(idx)
   } -> std::convertible_to<Kokkos::pair<double, double>>;
 
   {
-    gbxmaps.coord3backward(ii)
+    gbxmaps.coord3backward(idx)
   } -> std::convertible_to<double>;
   {
-    gbxmaps.coord3forward(ii)
+    gbxmaps.coord3forward(idx)
   } -> std::convertible_to<double>;
 
   {
-    gbxmaps.coord1backward(ii)
+    gbxmaps.coord1backward(idx)
   } -> std::convertible_to<double>;
   {
-    gbxmaps.coord1forward(ii)
+    gbxmaps.coord1forward(idx)
   } -> std::convertible_to<double>;
 
   {
-    gbxmaps.coord2backward(ii)
+    gbxmaps.coord2backward(idx)
   } -> std::convertible_to<double>;
   {
-    gbxmaps.coord2forward(ii)
+    gbxmaps.coord2forward(idx)
   } -> std::convertible_to<double>;
-
 };
 
 #endif // GRIDBOXMAPS_HPP

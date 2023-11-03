@@ -43,7 +43,7 @@ public:
   InitGbxs1(const Config &config)
       : ngbxs(config.ngbxs) {}
 
-  auto get_ngbxs() const { return ngbxs; }
+  size_t get_ngbxs() const { return ngbxs; }
 
   std::vector<double> temp() const
   {

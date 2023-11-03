@@ -79,7 +79,8 @@ private:
   std::vector<std::pair<double, double>> uvels;
   std::vector<std::pair<double, double>> vvels;
 
-  State state_at(const unsigned int ii) const;
+  State state_at(const unsigned int ii,
+                 const double volume) const;
 
 public:
   template <typename GbxInitConds>
@@ -91,10 +92,19 @@ public:
         qconds(gbxic.qcond()),
         wvels(gbxic.wvel()),
         uvels(gbxic.uvel()),
-        vvels(gbxic.vvel()) {} 
+        vvels(gbxic.vvel()) {}
 
   Gridbox operator()(const unsigned int ii,
-                      const viewd_supers supers) const;
+                     const GbxMaps &gbxmaps,
+                     const viewd_supers supers) const
+  {
+    const auto gbxindex(GbxindexGen->next());
+    const double volume(gbxmaps.get_gbxvolume(gbxindex))
+    const State state(state_at(ii, volume));
+
+    return Gridbox(gbxindex, state, supers);
+  }
+
 };
 
 template <GridboxMaps GbxMaps, typename GbxInitConds>
@@ -154,7 +164,7 @@ e.g. for each gridbox's volume */
 
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    h_gbxs(ii) = gen(ii, supers);
+    h_gbxs(ii) = gen(ii, gbxmaps, supers);
   }
 }
 

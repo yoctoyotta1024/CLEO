@@ -61,16 +61,8 @@ void print_gbxs(const viewh_constgbx h_gbxs)
   }
 }
 
-Gridbox GenGridbox::operator()(const unsigned int ii,
-                               const viewd_supers supers) const
-{
-  const auto gbxindex(GbxindexGen->next());
-  const State state(state_at(ii));
-
-  return Gridbox(gbxindex, state, supers);
-}
-
-State GenGridbox::state_at(const unsigned int ii) const
+State GenGridbox::state_at(const unsigned int ii,
+                           const double volume) const
 /* returns state of ii'th gridbox used
 vectors in GenGridbox struct */
 {
@@ -80,8 +72,10 @@ vectors in GenGridbox struct */
   Kokkos::pair<double, double> vvel(vvels.at(ii));
 
   /* return ii'th state from initial conditions */
-  return State(volumes.at(ii), presss.at(ii),
-               temps.at(ii), qvaps.at(ii),
+  return State(volume,
+               presss.at(ii),
+               temps.at(ii),
+               qvaps.at(ii),
                qconds.at(ii),
                wvel, uvel, vvel);
 }

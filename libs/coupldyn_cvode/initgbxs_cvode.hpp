@@ -55,7 +55,7 @@ public:
         relh_init(config.relh_init),
         qcond_i(0.0) {}
 
-  auto get_ngbxs() const { return ngbxs; }
+  size_t get_ngbxs() const { return ngbxs; }
 
   std::vector<double> press() const
   /* pressure for all gbxs is same initial
