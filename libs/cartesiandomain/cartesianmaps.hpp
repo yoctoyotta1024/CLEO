@@ -81,9 +81,6 @@ public:
   for ndims, gbxareas and gbxvols undefined
   upon construction (e.g. null ptr for ndims) */
 
-  KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
-
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
   {
     Kokkos::deep_copy(ndims, h_ndims);
