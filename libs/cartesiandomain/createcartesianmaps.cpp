@@ -32,6 +32,25 @@ void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
 void set_0Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
                             CartesianMaps &gbxmaps);
 
+void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb,
+                      CartesianMaps &gbxmaps);
+
+void set_1Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
+                            CartesianMaps &gbxmaps);
+
+bool at_domainboundary(const unsigned int idx,
+                       const unsigned int increment,
+                       const unsigned int ndim);
+
+std::pair<unsigned int, unsigned int>
+finitedomain_nghbours(const unsigned int idx,
+                      const unsigned int increment,
+                      const unsigned int ndim);
+
+std::pair<unsigned int, unsigned int>
+cartesian_znghbrs(const unsigned int idx,
+                  const std::vector<size_t> &ndims);
+
 std::pair<double, double> nullbounds()
 /* bounds for CartesianMaps of gridboxes along
 directions of model not used e.g. in 1-D model,
@@ -44,7 +63,7 @@ coord2 directions */
 unsigned int nullnghbr(const unsigned int idx)
 /* neighbours for CartesianMaps of gridboxes along
 directions of model not used. Boundaries are
-'periodic' BCs in non-existent dimensions 
+'periodic' BCs in non-existent dimensions
 e.g. in 2-D model, neighbour in coord2 direction
 of gridbox is itself */
 {
@@ -53,7 +72,7 @@ of gridbox is itself */
 
 CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
                                     std::string_view grid_filename)
-/* creates cartesian maps instance using gridbox bounds read from 
+/* creates cartesian maps instance using gridbox bounds read from
 gridfile. In a non-3D case, boundaries for unused dimensions may be
 the min/max possible (numerical limits), however the area and volume
 of each gridbox remains finite. E.g. In the 0-D case, the maps have 1
@@ -65,7 +84,7 @@ volume function returns a value determined from the gridfile input */
   CartesianMaps gbxmaps(gfb.get_ngbxs());
 
   set_maps_ndims(gfb.ndims, gbxmaps);
-  
+
   if (nspacedims == 0)
   {
     set_0Dmodel_maps(gfb, gbxmaps);
@@ -104,12 +123,12 @@ void set_maps_ndims(const std::vector<size_t> &ndims,
 dimensions (ie. number of gridboxes) in
 [coord3, coord1, coord2] directions */
 {
-  viewd_ndims d_ndims("ndims"); // view for ndims (on device)
+  viewd_ndims d_ndims("ndims");                       // view for ndims (on device)
   auto h_ndims = Kokkos::create_mirror_view(d_ndims); // mirror ndims in case view is on device memory
 
   for (unsigned int m(0); m < 3; ++m)
   {
-    h_ndims(m)= ndims.at(m);
+    h_ndims(m) = ndims.at(m);
   }
   Kokkos::deep_copy(d_ndims, h_ndims);
 
@@ -120,9 +139,9 @@ void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps)
 /* gives all coord[X]bounds maps to 1 key with null
 values (max/min numerical limits). Sets periodic
-boundary conditions in all directions meaning neighbour 
+boundary conditions in all directions meaning neighbour
 of single gridbox with gbxidx=0 is itself */
-{ 
+{
   gbxmaps.to_coord3bounds.insert(0, nullbounds());
   gbxmaps.to_coord1bounds.insert(0, nullbounds());
   gbxmaps.to_coord2bounds.insert(0, nullbounds());
@@ -151,7 +170,7 @@ void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps)
 /* Gives all coord[X]bounds maps for X = x or y
 null values (max/min numerical limits) for all gridboxes and
-periodic boundary conditions (meaning neighbour 
+periodic boundary conditions (meaning neighbour
 of gridbox in x or y is itself). coord3bounds, ie. z direction
 maps are set using vecors from gfb. It is assumed that for a
 gridbox with it's index at position 'p' in the gfb.gbxidxs
@@ -164,14 +183,13 @@ vector, the [zmin, zmax] coords of that gridbox are at
     gbxmaps.to_coord1bounds.insert(idx, nullbounds());
     gbxmaps.to_coord2bounds.insert(idx, nullbounds());
 
-  // gbxmaps.to_back_coord3nghbr.insert(0, nullnghbr(0));
-  // gbxmaps.to_forward_coord3nghbr.insert(0, nullnghbr(0));
+    // gbxmaps.to_back_coord3nghbr.insert(0, nullnghbr(0));
+    // gbxmaps.to_forward_coord3nghbr.insert(0, nullnghbr(0));
     gbxmaps.to_back_coord1nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord1nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
   }
-
 }
 
 void set_1Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
@@ -186,14 +204,14 @@ of single gridbox in 0-D model (ie. entire domain) */
   // gbxmaps.set_gbxvolume(domainvol);
 }
 
-inline bool at_domainboundary(const unsigned int idx,
-                              const unsigned int increment,
-                              const unsigned int ndim)
+bool at_domainboundary(const unsigned int idx,
+                       const unsigned int increment,
+                       const unsigned int ndim)
 /* returns true if idx for gridbox is at a domain boundary, given
 neighbouring indexes are +- increment from idx and the number of
 gridboxes making up the domain in that direction (ndim) */
 {
-  return (idx/increment) % ndim == 0;
+  return (idx / increment) % ndim == 0;
 }
 
 std::pair<unsigned int, unsigned int>
@@ -203,7 +221,7 @@ finitedomain_nghbours(const unsigned int idx,
 /* returns {forward, backward} gridbox neighbours with
 treatment of neighbours as if bounds of domain are finite.
 This means that no neighbour exists above highest / below lowest
-gridboxes in a given direction. Non-existent neighbours are 
+gridboxes in a given direction. Non-existent neighbours are
 defined with gbxindex = max unsigned int, meaning in a given
 direction the gbxindex of the backwards / forwards neighbour
 of a gridbox at the edge of the domain is a max unsigned int */
@@ -218,7 +236,7 @@ of a gridbox at the edge of the domain is a max unsigned int */
 
   if (at_domainboundary(forward, increment, ndim)) // at upper edge of domain
   {
-    forward = LIMITVALUES::uintmax; 
+    forward = LIMITVALUES::uintmax;
   }
 
   return {forward, backward};
