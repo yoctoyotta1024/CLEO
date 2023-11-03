@@ -33,6 +33,9 @@
 #include <algorithm>
 #include <iterator>
 
+#include "Kokkos_Core.hpp"
+#include "Kokkos_Pair.hpp"
+
 #include "./readbinary.hpp"
 
 struct GbxBoundsFromBinary
@@ -58,16 +61,32 @@ public:
 
   GbxBoundsFromBinary(const unsigned int nspacedims,
                       std::string_view grid_filename);
+  
+  Kokkos::pair<double, double>
+  get_coord3gbxbounds(const unsigned int idx) const;
+  /* returns coord3 {lower, upper} gridbox bounds 
+  from position in gbxbounds vector which corresponds
+  to position in gbxidxs where gbxidx = idx */
+
+  Kokkos::pair<double, double>
+  get_coord1gbxbounds(const unsigned int idx) const;
+  /* returns coord1 {lower, upper} gridbox bounds 
+  from position in gbxbounds vector which corresponds
+  to position in gbxidxs where gbxidx = idx */
+
+  Kokkos::pair<double, double>
+  get_coord2gbxbounds(const unsigned int idx) const;
+  /* returns coord2 {lower, upper} gridbox bounds 
+  from position in gbxbounds vector which corresponds
+  to position in gbxidxs where gbxidx = idx */
 
   double gbxarea_fromgridfile(const unsigned int idx) const;
-  /* calculates horizontal (x-y planar) area of gridbox using boundaries
-   corresponding to gridbox with gbxidx=idx. First finds position
-   of first gbxbound (zmin) from position of idx in gbxidxs */
+  /* calculates horizontal (x-y planar) area of gridbox
+  using boundaries corresponding to gridbox with gbxidx=idx. */
 
   double gbxvol_fromgridfile(const unsigned int idx) const;
-  /* calculates volume of gridbox using boundaries corresponding to
-  gridbox with gbxidx=idx. First finds position of first gbxbound (zmin)
-  for that gridbox from position of idx in gbxidxs */                  
+  /* calculates volume of gridbox using boundaries
+  corresponding to gridbox with gbxidx=idx. */
 
   size_t get_ngbxs() const
   /* returns total number of gridboxes = product of dimentions */

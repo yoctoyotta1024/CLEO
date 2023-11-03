@@ -28,9 +28,9 @@
 #include <string_view>
 #include <vector>
 #include <stdexcept>
-#include <utility>
 
 #include "Kokkos_Core.hpp"
+#include "Kokkos_Pair.hpp"
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"

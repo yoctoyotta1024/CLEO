@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -179,7 +179,7 @@ is that 3-D model should have at least 1 gridbox */
 
 size_t GbxBoundsFromBinary::
     find_idx_in_gbxidxs(const unsigned int idx) const
-/* returns distance  (number of hops) from start of
+/* returns distance (number of hops) from start of
 gbxidxs vector to position where gbxidx matches idx
 (ie. *it = idx) */
 {

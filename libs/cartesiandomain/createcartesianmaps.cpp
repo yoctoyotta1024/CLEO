@@ -42,16 +42,16 @@ bool at_domainboundary(const unsigned int idx,
                        const unsigned int increment,
                        const unsigned int ndim);
 
-std::pair<unsigned int, unsigned int>
+Kokkos::pair<unsigned int, unsigned int>
 finitedomain_nghbours(const unsigned int idx,
                       const unsigned int increment,
                       const unsigned int ndim);
 
-std::pair<unsigned int, unsigned int>
+Kokkos::pair<unsigned int, unsigned int>
 cartesian_znghbrs(const unsigned int idx,
                   const std::vector<size_t> &ndims);
 
-std::pair<double, double> nullbounds()
+Kokkos::pair<double, double> nullbounds()
 /* bounds for CartesianMaps of gridboxes along
 directions of model not used e.g. in 1-D model,
 these are bounds of gridboxes in coord1 and
@@ -179,7 +179,7 @@ vector, the [zmin, zmax] coords of that gridbox are at
 {
   for (auto idx : gfb.gbxidxs)
   {
-    // gbxmaps.to_coord3bounds.insert(0, nullbounds());
+    gbxmaps.to_coord3bounds.insert(idx, gfb.get_gbxbounds(idx));
     gbxmaps.to_coord1bounds.insert(idx, nullbounds());
     gbxmaps.to_coord2bounds.insert(idx, nullbounds());
 
@@ -214,7 +214,7 @@ gridboxes making up the domain in that direction (ndim) */
   return (idx / increment) % ndim == 0;
 }
 
-std::pair<unsigned int, unsigned int>
+Kokkos::pair<unsigned int, unsigned int>
 finitedomain_nghbours(const unsigned int idx,
                       const unsigned int increment,
                       const unsigned int ndim)
@@ -242,7 +242,7 @@ of a gridbox at the edge of the domain is a max unsigned int */
   return {forward, backward};
 }
 
-std::pair<unsigned int, unsigned int>
+Kokkos::pair<unsigned int, unsigned int>
 cartesian_znghbrs(const unsigned int idx,
                   const std::vector<size_t> &ndims)
 /* returns pair of gbx indexes for {backwards, forwards}
