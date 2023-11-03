@@ -196,31 +196,83 @@ gbxidxs vector to position where gbxidx matches idx
   return pos;
 }
 
-double GbxBoundsFromBinary::
-    gbxarea_fromgridfile(const unsigned int idx) const
-/* calculates horizontal (x-y planar) area of gridbox using boundaries
-  corresponding to gridbox with gbxidx=idx. First finds position 'pos'
-  of first gbxbound (zmin) by finding position of idx in gbxidxs */
+Kokkos::pair<double, double>
+GbxBoundsFromBinary::get_coord3gbxbounds(const unsigned int idx) const
+/* returns coord3 {lower, upper} gridbox bounds
+from position in gbxbounds vector which corresponds
+to position in gbxidxs where gbxidx = idx */
 {
   const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
 
-  const double deltax = gbxbounds[pos + 3] - gbxbounds[pos + 2]; // xmax - xmin
-  const double deltay = gbxbounds[pos + 5] - gbxbounds[pos + 4]; // ymax - ymin
+  return {gbxbounds[pos], gbxbounds[pos + 1]};
+}
+
+Kokkos::pair<double, double>
+GbxBoundsFromBinary::get_coord1gbxbounds(const unsigned int idx) const
+/* returns coord1 {lower, upper} gridbox bounds
+from position in gbxbounds vector which corresponds
+to position in gbxidxs where gbxidx = idx
+'pos' is position of first bound (ie. zmin) for gridbox
+assuming order is [zmin, zmax, xmin, xmax, ymin, ymax] */
+{
+  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
+
+  return {gbxbounds[pos], gbxbounds[pos + 1]};
+}
+
+Kokkos::pair<double, double>
+GbxBoundsFromBinary::get_coord2gbxbounds(const unsigned int idx) const
+/* returns coord2 {lower, upper} gridbox bounds
+from position in gbxbounds vector which corresponds
+to position in gbxidxs where gbxidx = idx
+'pos' is position of first bound (ie. zmin) for gridbox
+assuming order is [zmin, zmax, xmin, xmax, ymin, ymax] */
+{
+  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
+
+  return {gbxbounds[pos + 2], gbxbounds[pos + 3]};
+}
+
+Kokkos::pair<double, double>
+GbxBoundsFromBinary::get_coord2gbxbounds(const unsigned int idx) const
+/* returns coord2 {lower, upper} gridbox bounds
+from position in gbxbounds vector which corresponds
+to position in gbxidxs where gbxidx = idx. 
+'pos' is position of first bound (ie. zmin) for gridbox
+assuming order is [zmin, zmax, xmin, xmax, ymin, ymax] */
+{
+  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
+
+  return {gbxbounds[pos + 4], gbxbounds[pos + 5]};
+}
+
+double GbxBoundsFromBinary::
+    gbxarea_fromgridfile(const unsigned int idx) const
+/* calculates horizontal (x-y planar) area of gridbox
+using boundaries corresponding to gridbox with gbxidx=idx. */
+{
+  const auto xbounds(get_coord1gbxbounds(idx));
+  const auto ybounds(get_coord2gbxbounds(idx));
+
+  const double deltax(xbounds.second - xbounds.first);     // xmax - xmin
+  const double deltay(ybounds.second - ybounds.first);     // ymax - ymin
 
   return deltax * deltay;
 }
 
 double GbxBoundsFromBinary::
     gbxvol_fromgridfile(const unsigned int idx) const
-/* calculates volume of gridbox using boundaries corresponding
-to gridbox with gbxidx=idx. First finds position 'pos' of
-first gbxbound (zmin) by finding position of idx in gbxidxs */
+/* calculates volume of gridbox using boundaries
+corresponding to gridbox with gbxidx=idx. */
 {
-  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
+  const auto zbounds(get_coord3gbxbounds(idx));
+  const auto xbounds(get_coord1gbxbounds(idx));
+  const auto ybounds(get_coord2gbxbounds(idx));
 
-  const double deltaz = gbxbounds[pos + 1] - gbxbounds[pos];     // zmax - zmin
-  const double deltax = gbxbounds[pos + 3] - gbxbounds[pos + 2]; // xmax - xmin
-  const double deltay = gbxbounds[pos + 5] - gbxbounds[pos + 4]; // ymax - ymin
+  const double deltaz(zbounds.second - zbounds.first);     // zmax - zmin
+  const double deltax(xbounds.second - xbounds.first);     // xmax - xmin
+  const double deltay(ybounds.second - ybounds.first);     // ymax - ymin
 
   return deltaz * deltax * deltay;
 }
+
