@@ -76,6 +76,8 @@ of each gridbox remains finite. E.g. In the 0-D case, the maps have 1
 {key, value} for gridbox 0 which are numerical limits, whilst the
 volume function returns a value determined from the gridfile input */
 {
+  std::cout << "\n--- create cartesian gridbox maps ---\n";
+
   const GbxBoundsFromBinary gfb(nspacedims, grid_filename);
 
   CartesianMaps gbxmaps(gfb.get_ngbxs());
@@ -110,6 +112,8 @@ volume function returns a value determined from the gridfile input */
 
   // check_ngridboxes();
 
+  std::cout << "--- create cartesian gridbox maps: success ---\n";
+  
   return CartesianMaps();
 }
 

@@ -29,9 +29,9 @@
 #include <fstream>
 #include <iostream>
 
-void copyfiles2txt(const std::string setup_txt,
+void copyfiles2txt(const std::string setuptxt,
                        const std::vector<std::string> files2copy);
-/* creates new empty file called setup_txt and copies contents
+/* creates new empty file called setuptxt and copies contents
 of files listed in files2copy vector one by one */
 
 #endif // COPYFILES2TXT_HPP

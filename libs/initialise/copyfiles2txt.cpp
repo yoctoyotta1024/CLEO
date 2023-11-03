@@ -23,41 +23,42 @@
 
 #include "./copyfiles2txt.hpp"
 
-void writefile2txt(std::ofstream &wfile,
+void copyfile(std::ofstream &wfile,
                    const std::string filename);
 /* open a file called filename and copy
 text line by line into wfile */
 
-void copyfiles2txt(const std::string setup_txt,
+void copyfiles2txt(const std::string setuptxt,
                        const std::vector<std::string> files2copy)
-/* creates new empty file called setup_txt and copies contents of
+/* creates new empty file called setuptxt and copies contents of
 files listed in files2copy vector one by one */
 {
-  std::cout << "----- copying setup to " << setup_txt <<" -----\n";
+  std::cout << "----- writing to new setuptxt file: "
+            << setuptxt << " -----\n";
 
-  std::ofstream txtfile;
+  std::ofstream wfile;
 
-  txtfile.open(setup_txt, std::ios::out | std::ios::trunc); // clear previous contents
-  txtfile.close();
+  wfile.open(setuptxt, std::ios::out | std::ios::trunc); // clear previous contents
+  wfile.close();
 
-  txtfile.open(setup_txt, std::ios::app); // copy files one by one
+  wfile.open(setuptxt, std::ios::app); // copy files one by one
   for (auto &filename : files2copy)
   {
-    writefile2txt(txtfile, filename);
+    copyfile(wfile, filename);
   }
-  txtfile.close();
+  wfile.close();
 
-  std::cout << "---- copy complete, setup_txt file closed -----\n";
+  std::cout << "---- copy complete, setuptxt file closed -----\n";
 }
 
-void writefile2txt(std::ofstream &wfile,
-                   const std::string filename)
-/* open a file called filename and copy text
-line by line into wfile */
+void copyfile(std::ofstream &wfile,
+              const std::string filename)
+/* open a file called filename and copy
+text line by line into wfile */
 {
   std::ifstream readfile(filename);
 
-  std::cout << " writing " + filename + " to setup_txt file\n";
+  std::cout << " copying " + filename + " to setuptxt file\n";
 
   wfile << "// ----------------------------- //\n";
   wfile << "// --------- " + filename + " --------- //\n";

@@ -138,11 +138,15 @@ public:
   /* set input paramters as members of config
   class instance from txt configuration file */
   {
+    std::cout << "\n--- configuration ---\n";
+    
     loadconfiguration(config_filename);
 
     /* copy setup (config and constants files) to a txt file */
     const std::string filestr(config_filename);
     copyfiles2txt(setuptxt, {filestr, constants_filename});
+    
+    std::cout << "--- configuration: success ---\n";
   };
 };
 

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,6 +26,7 @@
 #include <stdexcept>
 #include <concepts>
 #include <random>
+#include <iostream>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
@@ -60,9 +61,12 @@ private:
   int prepare_to_timestep(const dualview_constgbx gbxs) const
   /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
   {
+    std::cout << "\n--- prepare timestepping ---\n";
+    
     coupldyn.prepare_to_timestep();
     sdm.prepare_to_timestep(gbxs.view_host());
-
+    
+    std::cout << "--- prepare timestepping: success ---\n";
     return 0;
   }
 
@@ -85,6 +89,8 @@ private:
                     GenRandomPool genpool) const
   /* timestep CLEO from t=0 to t=t_end */
   {
+    std::cout << "\n--- timestepping ---\n";
+
     unsigned int t_mdl(0);
     while (t_mdl <= t_end)
     {
@@ -101,6 +107,7 @@ private:
       t_mdl = proceed_to_next_step(t_mdl, t_next, gbxs);
     }
 
+    std::cout << "--- timestepping: success ---\n";
     return 0;
   }
 
