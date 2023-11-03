@@ -108,8 +108,8 @@ radiiprobdist = rprobs.DiracDelta(dirac0)
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen            = iSDs.MonoCoordGen(monocoord3)
-# coord3gen            = iSDs.SampleCoordGen(True) # sample coord3 range randomly or not
-coord3gen            = None                        # do not generate superdroplet coord3s
+coord3gen            = iSDs.SampleCoordGen(True) # sample coord3 range randomly or not
+# coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
