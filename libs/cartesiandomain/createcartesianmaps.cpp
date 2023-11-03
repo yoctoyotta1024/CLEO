@@ -135,25 +135,32 @@ function returns a value determined from the gridfile 'grid_filename' */
     throw std::invalid_argument("nspacedims > 3 is invalid ");
   }
 
-  check_ngridboxes(gfb, gbxmaps);
+  check_ngridboxes(gbxmaps, ngbxs);
 
   std::cout << "--- create cartesian gridbox maps: success ---\n";
   
   return CartesianMaps();
 }
 
-void check_ngridboxes(const GbxBoundsFromBinary &gfb,
-                      const CartesianMaps &gbxmaps)
+void check_ngridboxes(const CartesianMaps &gbxmaps,
+                      const size_t ngbxs)
 /* checks number of gridboxes according to
 maps matches with expected value from gfb */
 {
-  const size_t ngbxs(0);
-  
-  std::cout << "sizes: " << gbxmaps.to_coord1bounds.size() << "\n";
+  const size_t ngbxs_from_ndims(gbxmaps.get_ndim(0) *
+                                gbxmaps.get_ndim(1) *
+                                gbxmaps.get_ndim(2))
 
-  if (ngbxs != gfb.get_ngbxs())
+  if (ngbxs_from_ndims != ngbxs)
   {
-    throw std::invalid_argument("Gridbox maps inconsistent "
+    throw std::invalid_argument("ndims from gridbox maps inconsistent "
+                                " with number of gridboxes");
+  }
+
+  const size_t ngbxs_from_maps(gbxmaps.maps_size());
+  if (ngbxs_from_maps != ngbxs)
+  {
+    throw std::invalid_argument("ndims from gridbox maps inconsistent "
                                 " with number of gridboxes");
   }
 }

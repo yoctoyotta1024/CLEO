@@ -88,7 +88,6 @@ finally throws error if either proves inconsistent */
 
   else if (nspacedims == 2 && ndims.at(2) == 1 )
   {
-    // 2D model should have constant y coords
     isgood = check_2Dmodel_gbxbounds();
   }
 
