@@ -45,11 +45,6 @@ public:
 
   auto get_ngbxs() const { return ngbxs; }
 
-  // size_t get_size() const
-  // {
-  //   return volume().size();
-  // }
-
   std::vector<double> temp() const
   {
     std::vector<double> temp(ngbxs, 1000);

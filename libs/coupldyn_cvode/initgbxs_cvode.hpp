@@ -57,11 +57,6 @@ public:
 
   auto get_ngbxs() const { return ngbxs; }
 
-  // size_t get_size() const
-  // {
-  //   return get_ngbxs(); 
-  // }
-
   std::vector<double> press() const
   /* pressure for all gbxs is same initial
   (dimless) 'press_i' given by PRESS_INIT */

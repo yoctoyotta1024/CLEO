@@ -54,9 +54,6 @@ initsupers and initgbxs structs which can call functions listed */
     ic.initgbxs.get_ngbxs()
   } -> std::convertible_to<size_t>;
   {
-    ic.initgbxs.get_size()
-  } -> std::convertible_to<size_t>;
-  {
     ic.initgbxs.press()
   } -> std::convertible_to<std::vector<double>>;
   {
