@@ -22,3 +22,25 @@
 
 
 #include "./cartesianmaps.hpp"
+
+size_t CartesianMaps::maps_size() const
+/* throws error if maps are not all the same
+size, else returns size of maps */
+{
+  const size_t sz(to_coord3bounds.size());
+
+  if (to_coord1bounds.size() != sz ||
+      to_coord2bounds.size() != sz ||
+      to_back_coord3nghbr.size() != sz ||
+      to_forward_coord3nghbr.size() != sz ||
+      to_back_coord1nghbr.size() != sz ||
+      to_forward_coord1nghbr.size() != sz ||
+      to_back_coord2nghbr.size() != sz ||
+      to_forward_coord2nghbr.size())
+  {
+    throw std::invalid_argument("gridbox maps are not all"
+                                " the same size ");
+  }
+
+  return sz;
+}

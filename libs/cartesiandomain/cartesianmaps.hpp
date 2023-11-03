@@ -30,8 +30,6 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 
-// TODO: host versions? (maps are in exec mem space)
-
 namespace dlc = dimless_constants;
 
 struct CartesianMaps
@@ -97,6 +95,8 @@ public:
   {
     gbxvolumes = ivolume;
   }
+
+  size_t maps_size() const;
 
   KOKKOS_INLINE_FUNCTION
   size_t get_ndim(const unsigned int d) const

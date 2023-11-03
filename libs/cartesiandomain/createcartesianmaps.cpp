@@ -149,7 +149,7 @@ maps matches with expected value from gfb */
 {
   const size_t ngbxs_from_ndims(gbxmaps.get_ndim(0) *
                                 gbxmaps.get_ndim(1) *
-                                gbxmaps.get_ndim(2))
+                                gbxmaps.get_ndim(2));
 
   if (ngbxs_from_ndims != ngbxs)
   {
@@ -160,7 +160,7 @@ maps matches with expected value from gfb */
   const size_t ngbxs_from_maps(gbxmaps.maps_size());
   if (ngbxs_from_maps != ngbxs)
   {
-    throw std::invalid_argument("ndims from gridbox maps inconsistent "
+    throw std::invalid_argument("ngbxs from gridbox maps inconsistent "
                                 " with number of gridboxes");
   }
 }
