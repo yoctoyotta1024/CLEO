@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,25 +26,62 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_UnorderedMap.hpp>
 
+void set_0Dmodel_maps()
+{
+  std::cout << "0-D\n";
+}
+
+void set_1Dmodel_maps()
+{
+  std::cout << "1-D\n";
+}
+
 int main(int argc, char *argv[])
 {
-  std::vector<unsigned int> gbxidx = {0,10,20,30,40,50};
-  std::vector<double> bounds = {1.1,2.2,3.3,4.4,5.5,6.6};
+  const unsigned int nspacedims(3);
 
-  const unsigned int idx(10);
-
-  auto it = std::find(gbxidx.begin(), gbxidx.end(), idx);
-  auto d = std::distance(gbxidx.begin(), it);
-
-  std::cout << "dis: " << d <<", "<< gbxidx.size() <<"\n";
-  if (d > (gbxidx.size()-1))
+  if (nspacedims == 0)
   {
-    throw std::invalid_argument("idx not found in gbxidxs");
+    set_0Dmodel_maps();
   }
-  std::cout << gbxidx.at(d) << " -> " << bounds.at(d) << "\n";
 
-  return 0;
+  else if (nspacedims == 1)
+  {
+    set_1Dmodel_maps();
+  }
+
+  switch (nspacedims)
+  {
+  case 0:
+    set_0Dmodel_maps();
+    break;
+  case 1:
+    set_1Dmodel_maps();
+    break;
+  default:
+    std::cout << "error\n";
+  }
 }
+
+// int main(int argc, char *argv[])
+// {
+//   std::vector<unsigned int> gbxidx = {0,10,20,30,40,50};
+//   std::vector<double> bounds = {1.1,2.2,3.3,4.4,5.5,6.6};
+
+//   const unsigned int idx(10);
+
+//   auto it = std::find(gbxidx.begin(), gbxidx.end(), idx);
+//   auto d = std::distance(gbxidx.begin(), it);
+
+//   std::cout << "dis: " << d <<", "<< gbxidx.size() <<"\n";
+//   if (d > (gbxidx.size()-1))
+//   {
+//     throw std::invalid_argument("idx not found in gbxidxs");
+//   }
+//   std::cout << gbxidx.at(d) << " -> " << bounds.at(d) << "\n";
+
+//   return 0;
+// }
 
 // int main(int argc, char *argv[])
 // {
