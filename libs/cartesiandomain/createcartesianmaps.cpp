@@ -117,19 +117,21 @@ dimensions (ie. number of gridboxes) in
 
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps)
-/* set all coord[X]bounds maps to null values
-(max/min numerical limits). Sets periodic boundary
-conditions in all directions meaning neighbour of
-single gridbox with gbxidx=0 is itself */
+/* gives all coord[X]bounds maps to 1 key with null
+values (max/min numerical limits). Sets periodic
+boundary conditions in all directions meaning neighbour 
+of single gridbox with gbxidx=0 is itself */
 { 
   gbxmaps.to_coord3bounds.insert(0, nullbounds());
   gbxmaps.to_coord1bounds.insert(0, nullbounds());
   gbxmaps.to_coord2bounds.insert(0, nullbounds());
 
-  // TODO (WIP)
-  // gbxmaps.set_nghbrsmaps(3, nullnghbr(0), nullnghbr(0));
-  // gbxmaps.set_nghbrsmaps(1, nullnghbr(0), nullnghbr(0));
-  // gbxmaps.set_nghbrsmaps(2, nullnghbr(0), nullnghbr(0));
+  gbxmaps.to_back_coord3nghbr.insert(0, nullnghbr(0));
+  gbxmaps.to_forward_coord3nghbr.insert(0, nullnghbr(0));
+  gbxmaps.to_back_coord1nghbr.insert(0, nullnghbr(0));
+  gbxmaps.to_forward_coord1nghbr.insert(0, nullnghbr(0));
+  gbxmaps.to_back_coord2nghbr.insert(0, nullnghbr(0));
+  gbxmaps.to_forward_coord2nghbr.insert(0, nullnghbr(0));
 }
 
 void set_0Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
