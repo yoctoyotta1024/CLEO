@@ -23,8 +23,8 @@
 
 #include "./createcartesianmaps.hpp"
 
-void check_ngridboxes(const GbxBoundsFromBinary &gfb,
-                      const CartesianMaps &gbxmaps);
+void check_ngridboxes(const CartesianMaps &gbxmaps,
+                      const size_t ngbxs);
 
 void set_maps_ndims(const std::vector<size_t> &ndims,
                     CartesianMaps &gbxmaps);

@@ -36,7 +36,7 @@ size, else returns size of maps */
       to_back_coord1nghbr.size() != sz ||
       to_forward_coord1nghbr.size() != sz ||
       to_back_coord2nghbr.size() != sz ||
-      to_forward_coord2nghbr.size())
+      to_forward_coord2nghbr.size() != sz)
   {
     throw std::invalid_argument("gridbox maps are not all"
                                 " the same size ");
