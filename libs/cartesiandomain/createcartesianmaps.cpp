@@ -43,7 +43,7 @@ bool at_domainboundary(const unsigned int idx,
                        const unsigned int ndim);
 
 Kokkos::pair<unsigned int, unsigned int>
-finitedomain_nghbours(const unsigned int idx,
+finitedomain_nghbrs(const unsigned int idx,
                       const unsigned int increment,
                       const unsigned int ndim);
 
@@ -219,7 +219,7 @@ gridboxes making up the domain in that direction (ndim) */
 }
 
 Kokkos::pair<unsigned int, unsigned int>
-finitedomain_nghbours(const unsigned int idx,
+finitedomain_nghbrs(const unsigned int idx,
                       const unsigned int increment,
                       const unsigned int ndim)
 /* returns {forward, backward} gridbox neighbours with
@@ -255,6 +255,6 @@ Treatment of neighbours for gridboxes at the edges of the
 domain is either finite (null neighbour) or periodic
 (cyclic neighbour) */
 {
-  return finitedomain_nghbours(idx, 1, ndims.at(0));
-  // return periodicdomain_nghbours(idx, 1, ndims.at(0));
+  return finitedomain_nghbrs(idx, 1, ndims.at(0));
+  // return periodicdomain_nghbrs(idx, 1, ndims.at(0));
 }
