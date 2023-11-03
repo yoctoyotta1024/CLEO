@@ -34,7 +34,7 @@ has matching sdgbxindex to ii*/
 
 bool Gridbox::SupersInGbx::iscorrect() const
 /* assumes supers is already sorted via sdgbxindex. checks that all
-superdrops in view which have matching sdgbxindex to ii are indeed
+superdrops in view which have matching sdgbxindex to gbxindex are indeed
 included in (*this) subview (according to refs). Three criteria must
 be true for iscorrect to return true: (1) all superdrops in current
 subview have matching index. (2) all superdrops preceeding current

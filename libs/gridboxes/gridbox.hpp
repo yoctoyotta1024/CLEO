@@ -81,11 +81,11 @@ private:
     inline kkpair set_refs();
     /* assumes supers is already sorted via sdgbxindex.
     returns pair which are positions of first and last
-    superdrops in view which have matching sdgbxindex to ii */
+    superdrops in view which have matching sdgbxindex to idx */
 
     bool iscorrect() const;
     /* assumes supers is already sorted via sdgbxindex. checks that all
-    superdrops in view which have matching sdgbxindex to ii are indeed
+    superdrops in view which have matching sdgbxindex to idx are indeed
     included in (*this) subview (according to refs). Three criteria must
     be true for iscorrect to return true: (1) all superdrops in current
     subview have matching index. (2) all superdrops preceeding current
@@ -229,26 +229,26 @@ constants with dimensions */
   struct Ref0
   /* struct for Gridbox::SupersInGbx::set_refs()
   predicate to find first superdrop in
-  view which has matching sdgbxindex to ii */
+  view which has matching sdgbxindex to idx */
   {
-    unsigned int ii;
+    unsigned int idx;
 
     KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
     {
-      return op.get_sdgbxindex() < ii;
+      return op.get_sdgbxindex() < idx;
     }
   };
 
   struct Ref1
   /* struct for Gridbox::SupersInGbx::set_refs()
   predicate to find last superdrop in
-  view which has matching sdgbxindex to ii */
+  view which has matching sdgbxindex to idx */
   {
-    unsigned int ii;
+    unsigned int idx;
 
     KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
     {
-      return op.get_sdgbxindex() <= ii;
+      return op.get_sdgbxindex() <= idx;
     }
   };
 }
@@ -257,10 +257,10 @@ inline Gridbox::SupersInGbx::kkpair
 Gridbox::SupersInGbx::set_refs()
 /* assumes supers is already sorted via sdgbxindex.
 returns pair which are positions of first and last
-superdrops in view which have matching sdgbxindex to ii */
+superdrops in view which have matching sdgbxindex to idx */
 {
   namespace SRP = SetRefPreds;
-  return {find_ref(SRP::Ref0{ii}), find_ref(SRP::Ref1{ii})};
+  return {find_ref(SRP::Ref0{idx}), find_ref(SRP::Ref1{idx})};
 }
 
 #endif // GRIDBOX_HPP
