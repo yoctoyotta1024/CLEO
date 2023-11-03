@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 31st October 2023
+Last Modified: Friday 3rd November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -54,7 +54,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 # zlim = 1000
 # npergbx = 8
 # nsupers = iSDs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 512
+nsupers = 10
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###

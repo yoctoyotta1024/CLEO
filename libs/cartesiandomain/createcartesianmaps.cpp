@@ -88,10 +88,10 @@ volume function returns a value determined from the gridfile input */
     set_0Dmodel_maps(gfb, gbxmaps);
   }
 
-  // else if (nspacedims == 1)
-  // {
-  //   set_1Dmodel_maps(gfb);
-  // }
+  else if (nspacedims == 1)
+  {
+    set_1Dmodel_maps(gfb, gbxmaps);
+  }
 
   // else if (nspacedims == 2)
   // {
@@ -133,17 +133,12 @@ dimensions (ie. number of gridboxes) in
 
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb,
                             CartesianMaps &gbxmaps)
-/* sets (finite) dimensionless horizontal area and volume
-of single gridbox in 0-D model (ie. entire domain) */
+/* sets (finite) dimensionless horizontal area and
+volume using area and volume from gfb for gbxidx=0 */
 {
-  for (auto idx : gfb.gbxidxs)
-  {
-    const double domainarea = gfb.gbxarea(0);
-    const double domainvol = gfb.gbxvol(0);
-
-    gbxmaps.set_gbxarea(domainarea);
-    gbxmaps.set_gbxvolume(domainvol);
-  }
+  const unsigned int idx(0);
+  gbxmaps.set_gbxarea(gfb.gbxarea(idx));
+  gbxmaps.set_gbxvolume(gfb.gbxvol(idx));
 }
 
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,

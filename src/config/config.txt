@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,7 +39,7 @@ maxchunk = 1250000                        # maximum no. of elements in chunks of
 # domain setup #
 nspacedims = 0                          # no. of spatial dimensions to model 
 ngbxs = 5                               # total number of Gbxs
-totnsupers = 512                        # (initial) total no. of SDs
+totnsupers = 10                         # (initial) total no. of SDs
 
 # timestepping #
 CONDTSTEP = 2                             # time between SD condensation events [s]
