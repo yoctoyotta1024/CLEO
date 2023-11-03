@@ -116,10 +116,10 @@ bool GbxBoundsFromBinary::check_1Dmodel_gbxbounds() const
 is compatible with 1D model. Criteria is that x and y
 coords of all gridbox boundaries are the same. */  
 {
-  const std::array<double, 4> bounds0{gbxbounds[2],
-                                      gbxbounds[3],
-                                      gbxbounds[4],
-                                      gbxbounds[5]};
+  const std::array<double, 4> bounds0{gbxbounds.at(2),
+                                      gbxbounds.at(3),
+                                      gbxbounds.at(4),
+                                      gbxbounds.at(5)};
 
   size_t ii(2);                      // start at 0th gridbox's xlow (i.e. 3rd value in gbxbounds)
   while (ii + 4 <= gbxbounds.size()) // loop over each gridbox's bounds
@@ -127,7 +127,7 @@ coords of all gridbox boundaries are the same. */
     for (int j = 0; j < 4; ++j)
     {
       // check x and y bounds are same as given by bounds0
-      if (bounds0[j] != gbxbounds[ii + j])
+      if (bounds0.at(j) != gbxbounds.at(ii + j))
       {
         return false;
       }
@@ -144,7 +144,7 @@ bool GbxBoundsFromBinary::check_2Dmodel_gbxbounds() const
 gbxbounds, is compatible with 2D model. Criteria is
 that y coords of all gridbox boundaries are the same. */  
 {
-  const std::array<double, 2> bounds0{gbxbounds[4], gbxbounds[5]};
+  const std::array<double, 2> bounds0{gbxbounds.at(4), gbxbounds.at(5)};
 
   size_t ii(4);                      // start at 0th gridbox's ylow (i.e. 5th value in gbxbounds)
   while (ii + 2 <= gbxbounds.size()) // loop over each gridbox's bounds
@@ -152,7 +152,7 @@ that y coords of all gridbox boundaries are the same. */
     for (int j = 0; j < 2; ++j)
     {
       // check y bounds are same as given by bounds0
-      if (bounds0[j] != gbxbounds[ii + j])
+      if (bounds0.at(j) != gbxbounds.at(ii + j))
       {
         return false;
       }
@@ -204,7 +204,7 @@ to position in gbxidxs where gbxidx = idx */
 {
   const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
 
-  return {gbxbounds[pos], gbxbounds[pos + 1]};
+  return {gbxbounds.at(pos), gbxbounds.at(pos + 1)};
 }
 
 Kokkos::pair<double, double>
@@ -217,20 +217,7 @@ assuming order is [zmin, zmax, xmin, xmax, ymin, ymax] */
 {
   const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
 
-  return {gbxbounds[pos], gbxbounds[pos + 1]};
-}
-
-Kokkos::pair<double, double>
-GbxBoundsFromBinary::get_coord2gbxbounds(const unsigned int idx) const
-/* returns coord2 {lower, upper} gridbox bounds
-from position in gbxbounds vector which corresponds
-to position in gbxidxs where gbxidx = idx
-'pos' is position of first bound (ie. zmin) for gridbox
-assuming order is [zmin, zmax, xmin, xmax, ymin, ymax] */
-{
-  const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
-
-  return {gbxbounds[pos + 2], gbxbounds[pos + 3]};
+  return {gbxbounds.at(pos + 2), gbxbounds.at(pos + 3)};
 }
 
 Kokkos::pair<double, double>
@@ -243,7 +230,7 @@ assuming order is [zmin, zmax, xmin, xmax, ymin, ymax] */
 {
   const unsigned int pos = find_idx_in_gbxidxs(idx) * 6; // position of zmin for gbxidx = idx
 
-  return {gbxbounds[pos + 4], gbxbounds[pos + 5]};
+  return {gbxbounds.at(pos + 4), gbxbounds.at(pos + 5)};
 }
 
 double GbxBoundsFromBinary::
