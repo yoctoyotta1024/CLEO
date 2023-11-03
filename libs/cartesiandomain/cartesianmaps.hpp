@@ -66,7 +66,8 @@ public:
   kokkos_uintmap to_forward_coord2nghbr;
 
   CartesianMaps(const size_t ngbxs)
-      : to_coord3bounds(kokkos_pairmap(ngbxs)),
+      : ndims("ndims"),
+        to_coord3bounds(kokkos_pairmap(ngbxs)),
         to_coord1bounds(kokkos_pairmap(ngbxs)),
         to_coord2bounds(kokkos_pairmap(ngbxs)),
         to_back_coord3nghbr(kokkos_uintmap(ngbxs)),
@@ -83,9 +84,9 @@ public:
   KOKKOS_INLINE_FUNCTION CartesianMaps() = default;  // Kokkos requirement for a (dual)View
   KOKKOS_INLINE_FUNCTION ~CartesianMaps() = default; // Kokkos requirement for a (dual)View
 
-  void set_ndims(viewd_ndims d_ndims)
+  void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
   {
-    ndims = d_ndims;
+    Kokkos::deep_copy(ndims, h_ndims);
   }
 
   void set_gbxarea(const double iarea)
@@ -99,7 +100,15 @@ public:
   }
 
   size_t maps_size() const;
-  
+
+  KOKKOS_INLINE_FUNCTION
+  viewd_ndims get_ndims() const
+  /* returns model dimensions ie. number of gridboxes
+  along [coord3, coord1, coord2] directions */
+  {
+    return ndims;
+  }
+
   KOKKOS_INLINE_FUNCTION
   size_t get_ndim(const unsigned int d) const
   /* returns model dimensions along a direction

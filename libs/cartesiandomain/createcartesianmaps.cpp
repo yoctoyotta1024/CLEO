@@ -171,16 +171,15 @@ void set_maps_ndims(const std::vector<size_t> &ndims,
 dimensions (ie. number of gridboxes) in
 [coord3, coord1, coord2] directions */
 {
-  viewd_ndims d_ndims("ndims");                       // view for ndims (on device)
+  viewd_ndims d_ndims(gbxmaps.get_ndims());           // view for ndims (on device)
   auto h_ndims = Kokkos::create_mirror_view(d_ndims); // mirror ndims in case view is on device memory
 
   for (unsigned int m(0); m < 3; ++m)
   {
     h_ndims(m) = ndims.at(m);
   }
-  Kokkos::deep_copy(d_ndims, h_ndims);
-
-  gbxmaps.set_ndims(d_ndims);
+  
+  gbxmaps.set_ndims_via_copy(h_ndims);
 }
 
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb,
