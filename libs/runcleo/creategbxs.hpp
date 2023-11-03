@@ -116,7 +116,7 @@ dualview_gbx create_gbxs(const GbxInitConds &gbxic,
 template <typename GbxInitConds>
 inline dualview_gbx
 initialise_gbxs(const GbxInitConds &gbxic,
-                            const viewd_supers supers)
+                const viewd_supers supers)
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
 gbxindex, spatial coordinates and attributes */

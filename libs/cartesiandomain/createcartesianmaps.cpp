@@ -23,6 +23,9 @@
 
 #include "./createcartesianmaps.hpp"
 
+void check_ngridboxes(const GbxBoundsFromBinary &gfb,
+                      const CartesianMaps &gbxmaps);
+
 void set_maps_ndims(const std::vector<size_t> &ndims,
                     CartesianMaps &gbxmaps);
 
@@ -143,8 +146,10 @@ void check_ngridboxes(const GbxBoundsFromBinary &gfb,
 /* checks number of gridboxes according to
 maps matches with expected value from gfb */
 {
-  const size_t ngbxs();
+  const size_t ngbxs(0);
   
+  std::cout << "sizes: " << gbxmaps.to_coord1bounds.size() << "\n";
+
   if (ngbxs != gfb.get_ngbxs())
   {
     throw std::invalid_argument("Gridbox maps inconsistent "
@@ -392,7 +397,7 @@ for gridboxes at the edges of the domain is either finite
 
 Kokkos::pair<unsigned int, unsigned int>
 cartesian_ynghbrs(const unsigned int idx,
-                  const std::vector<unsigned int> &gbxidxs)
+                  const std::vector<size_t> &ndims)
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} y direction given a gridbox with
 gbxidx='idx' in a cartesian domain. Treatment of neighbours
