@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -17,9 +17,8 @@
  * File Description:
  * struct for griboxes'
  * initial conditions for CLEO SDM
- * (e.g. volumes and thermodynamics)
- * which can be used by InitConds
- * struct as GbxInitConds type
+ * (e.g. thermodynamics) which can be used 
+ * by InitConds struct as GbxInitConds type
  */
 
 #ifndef INITGBXS1_HPP
@@ -46,17 +45,10 @@ public:
 
   auto get_ngbxs() const { return ngbxs; }
 
-  size_t get_size() const
-  {
-    return volume().size();
-  }
-
-  std::vector<double> volume() const
-  {
-    std::vector<double> volume(ngbxs, 1000);
-
-    return volume;
-  }
+  // size_t get_size() const
+  // {
+  //   return volume().size();
+  // }
 
   std::vector<double> temp() const
   {

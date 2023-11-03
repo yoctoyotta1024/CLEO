@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -16,7 +16,7 @@
  * -----
  * File Description:
  * struct for griboxes' initial conditions
- * for CLEO SDM (e.g. volumes and thermodynamics)
+ * for CLEO SDM (e.g. thermodynamics)
  * when coupled to cvode thermodynamics solver.
  * Struct can be used by InitConds as
  * GbxInitConds type
@@ -57,20 +57,10 @@ public:
 
   auto get_ngbxs() const { return ngbxs; }
 
-  size_t get_size() const
-  {
-    return volume().size();
-  }
-
-  std::vector<double> volume() const
-  /* (dimless) volume for all gbxs is same as 1st
-  read from gbxbounds file */
-  {
-    const double vol(1.0 / dlc::COORD0 / dlc::COORD0 / dlc::COORD0);
-    std::vector<double> volume(ngbxs, vol); // TODO
-
-    return volume;
-  }
+  // size_t get_size() const
+  // {
+  //   return get_ngbxs(); 
+  // }
 
   std::vector<double> press() const
   /* pressure for all gbxs is same initial

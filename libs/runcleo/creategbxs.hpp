@@ -35,23 +35,27 @@
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "gridboxes/gridboxmaps.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
 
-template <typename GbxInitConds>
-dualview_gbx create_gbxs(const GbxInitConds &gbxic,
-                        const viewd_supers supers);
+template <GridboxMaps GbxMaps, typename GbxInitConds>
+dualview_gbx create_gbxs(const GbxMaps &gbxmaps,
+                         const GbxInitConds &gbxic,
+                         const viewd_supers supers);
 
-template <typename GbxInitConds>
-inline void initialise_gbxs_on_host(const GbxInitConds &gbxic,
+template <GridboxMaps GbxMaps, typename GbxInitConds>
+inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps,
+                                    const GbxInitConds &gbxic,
                                     const viewd_supers supers,
                                     const viewh_gbx h_gbxs);
 /* initialise the host view of gridboxes
 using some data from a GbxInitConds instance
 e.g. for each gridbox's volume */
 
-template <typename GbxInitConds>
-inline dualview_gbx initialise_gbxs(const GbxInitConds &gbxic,
+template <GridboxMaps GbxMaps, typename GbxInitConds>
+inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps,
+                                    const GbxInitConds &gbxic,
                                     const viewd_supers supers);
 /* initialise a dualview of gridboxes (on host and device
 memory) using data from a GbxInitConds instance to initialise
@@ -67,7 +71,6 @@ class GenGridbox
 {
 private:
   std::unique_ptr<Gridbox::Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
-  std::vector<double> volumes;
   std::vector<double> presss;
   std::vector<double> temps;
   std::vector<double> qvaps;
@@ -82,7 +85,6 @@ public:
   template <typename GbxInitConds>
   GenGridbox(const GbxInitConds &gbxic)
       : GbxindexGen(std::make_unique<Gridbox::Gbxindex::Gen>()),
-        volumes(gbxic.volume()),
         presss(gbxic.press()),
         temps(gbxic.temp()),
         qvaps(gbxic.qvap()),
@@ -95,14 +97,15 @@ public:
                       const viewd_supers supers) const;
 };
 
-template <typename GbxInitConds>
-dualview_gbx create_gbxs(const GbxInitConds &gbxic,
+template <GridboxMaps GbxMaps, typename GbxInitConds>
+dualview_gbx create_gbxs(const GbxMaps &gbxmaps,
+                         const GbxInitConds &gbxic,
                          const viewd_supers supers)
 {
 
   std::cout << "\n--- create gridboxes ---\n"
             << "initialising\n";
-  const dualview_gbx gbxs(initialise_gbxs(gbxic, supers));
+  const dualview_gbx gbxs(initialise_gbxs(gbxmaps, gbxic, supers));
 
   std::cout << "checking initialisation\n";
   is_gbxinit_complete(gbxs, gbxic.get_size());
@@ -113,9 +116,10 @@ dualview_gbx create_gbxs(const GbxInitConds &gbxic,
   return gbxs;
 }
 
-template <typename GbxInitConds>
+template <GridboxMaps GbxMaps, typename GbxInitConds>
 inline dualview_gbx
-initialise_gbxs(const GbxInitConds &gbxic,
+initialise_gbxs(const GbxMaps &gbxmaps,
+                const GbxInitConds &gbxic,
                 const viewd_supers supers)
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
@@ -126,7 +130,7 @@ gbxindex, spatial coordinates and attributes */
 
   // initialise gridboxes on host
   gbxs.sync_host();
-  initialise_gbxs_on_host(gbxic, supers, gbxs.view_host());
+  initialise_gbxs_on_host(gbxmaps, gbxic, supers, gbxs.view_host());
   gbxs.modify_host();
 
   // update device gridbox view to match host's gridbox view
@@ -135,10 +139,12 @@ gbxindex, spatial coordinates and attributes */
   return gbxs;
 }
 
-template <typename GbxInitConds>
-inline void initialise_gbxs_on_host(const GbxInitConds &gbxic,
-                            const viewd_supers supers,
-                            const viewh_gbx h_gbxs) 
+template <GridboxMaps GbxMaps, typename GbxInitConds>
+inline void
+initialise_gbxs_on_host(const GbxMaps &gbxmaps,
+                        const GbxInitConds &gbxic,
+                        const viewd_supers supers,
+                        const viewh_gbx h_gbxs)
 /* initialise the host view of gridboxes
 using some data from a GbxInitConds instance
 e.g. for each gridbox's volume */

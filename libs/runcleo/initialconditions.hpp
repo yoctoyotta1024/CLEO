@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -56,9 +56,6 @@ initsupers and initgbxs structs which can call functions listed */
   {
     ic.initgbxs.get_size()
   } -> std::convertible_to<size_t>;
-  {
-    ic.initgbxs.volume()
-  } -> std::convertible_to<std::vector<double>>;
   {
     ic.initgbxs.press()
   } -> std::convertible_to<std::vector<double>>;
