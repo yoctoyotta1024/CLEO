@@ -27,7 +27,7 @@ size_t CartesianMaps::maps_size() const
 /* throws error if maps are not all the same
 size, else returns size of maps */
 {
-  const size_t sz = ndims(0) * ndims(1) * ndims(2);
+  const size_t sz(ndims(0) * ndims(1) * ndims(2));
 
   if (to_coord3bounds.size() != sz ||
       to_coord1bounds.size() != sz ||
@@ -39,8 +39,8 @@ size, else returns size of maps */
       to_back_coord2nghbr.size() != sz ||
       to_forward_coord2nghbr.size() != sz)
   {
-    throw std::invalid_argument("gridbox maps are not all"
-                                " the same size ");
+    throw std::invalid_argument("gridbox maps are not"
+                                " all the same size");
   }
 
   return sz;
