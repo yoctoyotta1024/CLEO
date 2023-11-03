@@ -110,29 +110,22 @@ function returns a value determined from the gridfile 'grid_filename' */
 
   set_maps_ndims(gfb.ndims, gbxmaps);
   set_model_areas_vols(gfb, gbxmaps);
-
-  if (nspacedims == 0)
+  
+  switch (nspacedims)
   {
+  case 0:
     set_0Dmodel_maps(gfb, gbxmaps);
-  }
-
-  else if (nspacedims == 1)
-  {
+    break;
+  case 1:
     set_1Dmodel_maps(gfb, gbxmaps);
-  }
-
-  else if (nspacedims == 2)
-  {
+    break;
+  case 2:
     set_2Dmodel_maps(gfb, gbxmaps);
-  }
-
-  else if (nspacedims == 3)
-  {
+    break;
+  case 3:
     set_3Dmodel_maps(gfb, gbxmaps);
-  }
-
-  else
-  {
+    break;
+  default:
     throw std::invalid_argument("nspacedims > 3 is invalid ");
   }
 
