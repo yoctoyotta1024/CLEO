@@ -15,10 +15,10 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * structure for opening files given their filenames and copying their
- * contents line by line into a .txt file. Useful for copying
- * the details of a model setup e.g. configuration and
- * values of constants
+ * functionality to open files given their filenames and
+ * copy their contents line by line into a .txt file.
+ * Useful for copying the details of a model setup
+ * e.g. configuration files and values of constants
  */
 
 #include "./copyfiles2txt.hpp"
