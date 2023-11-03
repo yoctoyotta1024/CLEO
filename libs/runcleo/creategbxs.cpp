@@ -19,11 +19,9 @@
 
 #include "./creategbxs.hpp"
 
-void is_gbxinit_complete(const GbxMaps &gbxmaps,
+void is_gbxinit_complete(const size_t ngbxs_from_maps,
                          dualview_gbx gbxs)
 {
-  const size_t ngbxs_from_maps(gbxmaps.maps_size());
-
   gbxs.sync_host(); // copy device to host (if prior flag was set)
   const size_t ngbxs(gbxs.extent(0));
   const auto h_gbxs(gbxs.view_host());

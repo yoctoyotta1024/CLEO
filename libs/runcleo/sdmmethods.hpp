@@ -45,7 +45,6 @@ class SDMMethods
 {
 private:
   unsigned int couplstep;           // coupled timestep
-  GbxMaps gbxmaps;                  // maps from gridbox indexes to domain coordinates
   MoveSupersInDomain<M> movesupers; // super-droplets' motion in domain
 
   KOKKOS_INLINE_FUNCTION
@@ -75,7 +74,8 @@ private:
   }
 
 public:
-  Obs obs; // observer
+  GbxMaps gbxmaps; // maps from gridbox indexes to domain coordinates
+  Obs obs;         // observer
 
   struct SDMMicrophysics
   /* operator is call to microphysics 'sdm_microphysics'. struct
@@ -121,8 +121,8 @@ public:
              const MoveSupersInDomain<M> movesupers,
              const Obs obs)
       : couplstep(coupldyn.get_couplstep()),
-        gbxmaps(gbxmaps),
         movesupers(movesupers),
+        gbxmaps(gbxmaps),
         obs(obs),
         sdm_microphysics({microphys}) {}
 

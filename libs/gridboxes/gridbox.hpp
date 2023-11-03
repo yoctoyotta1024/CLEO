@@ -75,8 +75,8 @@ private:
     KOKKOS_INLINE_FUNCTION ~SupersInGbx() = default; // Kokkos requirement for a (dual)View
 
     SupersInGbx(const viewd_supers isupers,
-                const unsigned int ii)
-        : supers(isupers), ii(ii), refs(set_refs()) {}
+                const unsigned int idx)
+        : supers(isupers), idx(idx), refs(set_refs()) {}
 
     inline kkpair set_refs();
     /* assumes supers is already sorted via sdgbxindex.

@@ -41,7 +41,7 @@ subview have matching index. (2) all superdrops preceeding current
 subview do not have matching index. (3) all superdrops after current
 subview also do not have matching index. */
 {
-  const Pred pred{ii};
+  const Pred pred{idx};
   const auto crit1(is_pred(pred));
   const auto crit2(is_prednot(pred, {0, refs.first}));
   const auto crit3(is_prednot(pred, {refs.second, supers.extent(0)}));
