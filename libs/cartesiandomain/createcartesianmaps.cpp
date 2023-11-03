@@ -89,7 +89,8 @@ of gridbox is itself */
   return idx;
 }
 
-CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
+CartesianMaps create_cartesian_maps(const unsigned int ngbxs,
+                                    const unsigned int nspacedims,
                                     std::string_view grid_filename)
 /* creates cartesian maps instance using gridbox bounds read from
 gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite 
@@ -102,7 +103,7 @@ function returns a value determined from the gridfile 'grid_filename' */
 {
   std::cout << "\n--- create cartesian gridbox maps ---\n";
 
-  const GbxBoundsFromBinary gfb(nspacedims, grid_filename);
+  const GbxBoundsFromBinary gfb(ngbxs, nspacedims, grid_filename);
 
   CartesianMaps gbxmaps(gfb.get_ngbxs());
 

@@ -25,8 +25,9 @@
 #include "./gbxbounds_frombinary.hpp"
 
 GbxBoundsFromBinary::
-    GbxBoundsFromBinary(const unsigned int nspacedims,
-                            std::string_view grid_filename)
+    GbxBoundsFromBinary(const unsigned int ngbxs,
+                        const unsigned int nspacedims,
+                        std::string_view grid_filename)
 /* read metadata and data in binary file called 'gridfile', then
 return GbxBoundsFromBinary instance created from that data */
 {
@@ -48,7 +49,22 @@ return GbxBoundsFromBinary instance created from that data */
     throw std::invalid_argument(errormsg);
   }
 
+  is_nspacedims_compatible(ngbxs);
   is_nspacedims_compatible(nspacedims);
+}
+
+void GbxBoundsFromBinary::
+    is_ngbxs_compatible(const unsigned int ngbxs) const
+/* Throws error if ngbxs is not consistent with
+number of gridboxes from gridfile as calculated
+via the get_ngbxs() function */
+{
+  if (ngbxs != get_ngbxs())
+  {
+    std::string err = "number of gridboxes read from gridfile"
+                      " not consistent with ngbxs";
+    throw std::invalid_argument(err);
+  }
 }
 
 void GbxBoundsFromBinary::

@@ -45,6 +45,7 @@ coordinate boundaries which are read from gridfile
 and used in construction of GridboxMaps */
 {
 private:
+  void is_ngbxs_compatible(const unsigned int ngbxs) const;
   void is_nspacedims_compatible(const unsigned int nspacedims) const;
   
   bool check_0Dmodel_gbxbounds() const;
@@ -59,9 +60,10 @@ public:
   std::vector<unsigned int> gbxidxs; // gridbox indexes
   std::vector<double> gbxbounds;     // corresponding [coord3 {l, u}, coord1 {l, u}, coord2 {l, u}] lower and upper coordinate boundaries
 
-  GbxBoundsFromBinary(const unsigned int nspacedims,
+  GbxBoundsFromBinary(const unsigned int ngbxs,
+                      const unsigned int nspacedims,
                       std::string_view grid_filename);
-  
+
   Kokkos::pair<double, double>
   get_coord3gbxbounds(const unsigned int idx) const;
   /* returns coord3 {lower, upper} gridbox bounds 

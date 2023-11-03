@@ -43,7 +43,8 @@
   y: PERIODIC (see cartesian_ynghbrs, coord2_beyondyleft and coord2_beyondyright)
 */
 
-CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
+CartesianMaps create_cartesian_maps(const unsigned int ngbxs,
+                                    const unsigned int nspacedims,
                                     std::string_view grid_filename);
 /* creates cartesian maps instance using gridbox bounds read from
 gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite 
