@@ -50,6 +50,11 @@ finitedomain_nghbrs(const unsigned int idx,
                       const unsigned int increment,
                       const unsigned int ndim);
 
+std::pair<unsigned int, unsigned int>
+periodicdomain_nghbrs(const unsigned int idx,
+                        const unsigned int increment,
+                        const unsigned int ndim)
+
 Kokkos::pair<unsigned int, unsigned int>
 cartesian_znghbrs(const unsigned int idx,
                   const std::vector<size_t> &ndims);
@@ -84,11 +89,13 @@ of gridbox is itself */
 CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
                                     std::string_view grid_filename)
 /* creates cartesian maps instance using gridbox bounds read from
-gridfile. In a non-3D case, boundaries for unused dimensions may be
-the min/max possible (numerical limits), however the area and volume
-of each gridbox remains finite. E.g. In the 0-D case, the maps have 1
-{key, value} for gridbox 0 which are numerical limits, whilst the
-volume function returns a value determined from the gridfile input */
+gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite 
+boundary conditions. In a non-3D case, boundaries and neighbours
+maps for unused dimensions are 'null' (ie. return numerical limits), 
+however the area and volume of each gridbox remains finite.
+E.g. In the 0-D case, the bounds maps all have 1 {key, value} where
+key=gbxidx=0 and value = {max, min} numerical limits, meanwhile volume
+function returns a value determined from the gridfile 'grid_filename' */
 {
   std::cout << "\n--- create cartesian gridbox maps ---\n";
 
@@ -372,10 +379,11 @@ for gridboxes at the edges of the domain is either finite
 std::pair<unsigned int, unsigned int>
 cartesian_ynghbrs(const unsigned int idx,
                   const std::vector<unsigned int> &gbxidxs)
-/* returns pair of gbx indexes for {right, left} neighbour
-of a gridbox with index 'idx'. Treatment of neighbours for
-gridboxes at edges of domain is determined by the
-'XXXdomain_nghbours' function */
+/* returns pair for gbx index of neighbour in the
+{backwards, forwards} y direction given a gridbox with
+gbxidx='idx' in a cartesian domain. Treatment of neighbours
+for gridboxes at the edges of the domain is either finite
+(null neighbour) or periodic (cyclic neighbour) */
 {
   const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
   // return finitedomain_nghbrs(idx, nznx, ndims.at(2));
