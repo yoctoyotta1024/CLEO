@@ -201,16 +201,13 @@ neighbours maps (meaning periodic boundary conditions
 in all directions where neighbour of single gridbox
 with gbxidx=0 is itself) */
 {
-  gbxmaps.to_coord3bounds.insert(0, nullbounds());
-  gbxmaps.to_coord1bounds.insert(0, nullbounds());
-  gbxmaps.to_coord2bounds.insert(0, nullbounds());
+  gbxmaps.insert_coord3bounds(0, nullbounds());
+  gbxmaps.insert_coord1bounds(0, nullbounds());
+  gbxmaps.insert_coord2bounds(0, nullbounds());
 
-  gbxmaps.to_back_coord3nghbr.insert(0, nullnghbr(0));
-  gbxmaps.to_forward_coord3nghbr.insert(0, nullnghbr(0));
-  gbxmaps.to_back_coord1nghbr.insert(0, nullnghbr(0));
-  gbxmaps.to_forward_coord1nghbr.insert(0, nullnghbr(0));
-  gbxmaps.to_back_coord2nghbr.insert(0, nullnghbr(0));
-  gbxmaps.to_forward_coord2nghbr.insert(0, nullnghbr(0));
+  gbxmaps.insert_coord3nghbrs(0, nullnghbrs(0));
+  gbxmaps.insert_coord1nghbrs(0, nullnghbrs(0));
+  gbxmaps.insert_coord2nghbrs(0, nullnghbrs(0));
 }
 
 void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb,
@@ -228,18 +225,14 @@ periodic boundary conditions in a cartesian domain */
   for (auto idx : gfb.gbxidxs)
   {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
-    gbxmaps.to_coord3bounds.insert(idx, c3bs);
-
+    gbxmaps.insert_coord3bounds(idx, c3bs);
+    gbxmaps.insert_coord1bounds(idx, nullbounds());
+    gbxmaps.insert_coord2bounds(idx, nullbounds());
+    
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
-    gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
-    gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
-
-    gbxmaps.to_coord1bounds.insert(idx, nullbounds());
-    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
-    gbxmaps.to_back_coord1nghbr.insert(idx, nullnghbr(0));
-    gbxmaps.to_forward_coord1nghbr.insert(idx, nullnghbr(0));
-    gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
-    gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
+    gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
+    gbxmaps.insert_coord1nghbrs(idx, nullnghbrs(0));
+    gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(0));
   }
 }
 
@@ -258,22 +251,16 @@ cartesian domain  */
   for (auto idx : gfb.gbxidxs)
   {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
-    gbxmaps.to_coord3bounds.insert(idx, c3bs);
+    gbxmaps.insert_coord3bounds(idx, c3bs);
+    const auto c1bs(gfb.get_coord1gbxbounds(idx));
+    gbxmaps.insert_coord1bounds(idx, c1bs);
+    gbxmaps.insert_coord2bounds(idx, nullbounds());
 
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
-    gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
-    gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
-
-    const auto c1bs(gfb.get_coord1gbxbounds(idx));
-    gbxmaps.to_coord1bounds.insert(idx, c1bs);
-    
+    gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
     const auto c1nghbrs(cartesian_xnghbrs(idx, ndims));
-    gbxmaps.to_back_coord1nghbr.insert(idx, c1nghbrs.first);
-    gbxmaps.to_forward_coord1nghbr.insert(idx, c1nghbrs.second);
- 
-    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
-    gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
-    gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
+    gbxmaps.insert_coord1nghbrs(idx, c1nghbrs);
+    gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(0));
   }
 }
 
@@ -289,25 +276,19 @@ in cartesian domain */
   for (auto idx : gfb.gbxidxs)
   {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
-    gbxmaps.to_coord3bounds.insert(idx, c3bs);
-
+    gbxmaps.insert_coord3bounds(idx, c3bs);
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
-    gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
-    gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
+    gbxmaps.insert_coord3nghbrs(idx, c3nghbrs); 
 
     const auto c1bs(gfb.get_coord1gbxbounds(idx));
-    gbxmaps.to_coord1bounds.insert(idx, c1bs);
-    
+    gbxmaps.insert_coord1bounds(idx, c1bs);
     const auto c1nghbrs(cartesian_xnghbrs(idx, ndims));
-    gbxmaps.to_back_coord1nghbr.insert(idx, c1nghbrs.first);
-    gbxmaps.to_forward_coord1nghbr.insert(idx, c1nghbrs.second);
+    gbxmaps.insert_coord1nghbrs(idx, c1nghbrs); 
     
     const auto c2bs(gfb.get_coord2gbxbounds(idx));
-    gbxmaps.to_coord2bounds.insert(idx, c2bs);
-    
+    gbxmaps.insert_coord2bounds(idx, c2bs);
     const auto c2nghbrs(cartesian_ynghbrs(idx, ndims));
-    gbxmaps.to_back_coord2nghbr.insert(idx, c2nghbrs.first); 
-    gbxmaps.to_forward_coord2nghbr.insert(idx, c2nghbrs.second); 
+    gbxmaps.insert_coord2nghbrs(idx, c2nghbrs); 
   }
 }
 
