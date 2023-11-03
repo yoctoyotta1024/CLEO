@@ -23,6 +23,8 @@
 #ifndef CARTESIANMAPS_HPP
 #define CARTESIANMAPS_HPP
 
+#include <stdexcept>
+
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_UnorderedMap.hpp>
