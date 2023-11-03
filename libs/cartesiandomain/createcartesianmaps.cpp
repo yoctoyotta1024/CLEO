@@ -50,7 +50,7 @@ finitedomain_nghbrs(const unsigned int idx,
                       const unsigned int increment,
                       const unsigned int ndim);
 
-std::pair<unsigned int, unsigned int>
+Kokkos::pair<unsigned int, unsigned int>
 periodicdomain_nghbrs(const unsigned int idx,
                         const unsigned int increment,
                         const unsigned int ndim)
@@ -322,7 +322,7 @@ of a gridbox at the edge of the domain is a max unsigned int */
   return {forward, backward};
 }
 
-std::pair<unsigned int, unsigned int>
+Kokkos::pair<unsigned int, unsigned int>
 periodicdomain_nghbrs(const unsigned int idx,
                         const unsigned int increment,
                         const unsigned int ndim)
@@ -333,8 +333,8 @@ direction are each others' neighbours. ie. index of neighbour
 forwards of gridboxes at the uppermost edge of domain is the
 lowermost gridbox in that direction (and vice versa). */
 {
-  unsigned int forward = idx + increment;
-  unsigned int backward = idx - increment;
+  unsigned int forward(idx + increment);
+  unsigned int backward(idx - increment);
 
   if (at_domainboundary(idx, increment, ndim)) // at lower edge of domain
   {
@@ -346,7 +346,7 @@ lowermost gridbox in that direction (and vice versa). */
     forward = idx - (ndim-1) * increment;
   }
 
-  return std::pair(forward, backward);
+  return {forward, backward};
 }
 
 Kokkos::pair<unsigned int, unsigned int>
@@ -376,7 +376,7 @@ for gridboxes at the edges of the domain is either finite
   return periodicdomain_nghbrs(idx, nz, ndims.at(1));
 }
 
-std::pair<unsigned int, unsigned int>
+Kokkos::pair<unsigned int, unsigned int>
 cartesian_ynghbrs(const unsigned int idx,
                   const std::vector<unsigned int> &gbxidxs)
 /* returns pair for gbx index of neighbour in the
