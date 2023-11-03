@@ -26,17 +26,14 @@
 void set_maps_ndims(const std::vector<size_t> &ndims,
                     CartesianMaps &gbxmaps);
 
+void set_model_areas_vols(const GbxBoundsFromBinary &gfb,
+                            CartesianMaps &gbxmaps);
+
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps);
 
-void set_0Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
-                            CartesianMaps &gbxmaps);
-
 void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps);
-
-void set_1Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
-                            CartesianMaps &gbxmaps);
 
 bool at_domainboundary(const unsigned int idx,
                        const unsigned int increment,
@@ -84,17 +81,16 @@ volume function returns a value determined from the gridfile input */
   CartesianMaps gbxmaps(gfb.get_ngbxs());
 
   set_maps_ndims(gfb.ndims, gbxmaps);
+  set_model_areas_vols(gfb, gbxmaps);
 
   if (nspacedims == 0)
   {
     set_0Dmodel_maps(gfb, gbxmaps);
-    set_0Dmodel_areas_vols(gfb, gbxmaps);
   }
 
   // else if (nspacedims == 1)
   // {
   //   set_1Dmodel_maps(gfb);
-  //   set_1Dmodel_areas_vols(gfb, gbxmaps);
   // }
 
   // else if (nspacedims == 2)
@@ -135,6 +131,21 @@ dimensions (ie. number of gridboxes) in
   gbxmaps.set_ndims(d_ndims);
 }
 
+void set_model_areas_vols(const GbxBoundsFromBinary &gfb,
+                            CartesianMaps &gbxmaps)
+/* sets (finite) dimensionless horizontal area and volume
+of single gridbox in 0-D model (ie. entire domain) */
+{
+  for (auto idx : gfb.gbxidxs)
+  {
+    const double domainarea = gfb.gbxarea(0);
+    const double domainvol = gfb.gbxvol(0);
+
+    gbxmaps.set_gbxarea(domainarea);
+    gbxmaps.set_gbxvolume(domainvol);
+  }
+}
+
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps)
 /* gives all coord[X]bounds maps to 1 key with null
@@ -152,18 +163,6 @@ of single gridbox with gbxidx=0 is itself */
   gbxmaps.to_forward_coord1nghbr.insert(0, nullnghbr(0));
   gbxmaps.to_back_coord2nghbr.insert(0, nullnghbr(0));
   gbxmaps.to_forward_coord2nghbr.insert(0, nullnghbr(0));
-}
-
-void set_0Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
-                            CartesianMaps &gbxmaps)
-/* sets (finite) dimensionless horizontal area and volume
-of single gridbox in 0-D model (ie. entire domain) */
-{
-  const double domainarea = gfb.gbxarea(0);
-  const double domainvol = gfb.gbxvol(0);
-
-  gbxmaps.set_gbxarea(domainarea);
-  gbxmaps.set_gbxvolume(domainvol);
 }
 
 void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb,
@@ -194,22 +193,6 @@ vector, the [zmin, zmax] coords of that gridbox are at
     gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
   }
-}
-
-void set_1Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
-                            CartesianMaps &gbxmaps)
-/* sets (finite) dimensionless horizontal area and volume
-of single gridbox in 0-D model (ie. entire domain) */
-{
-  const double area(gfb.gbxarea(idx));
-    idx2area[idx] = area;
-    idx2vol[idx] = (zup - zlow) * area;
-
-  // const double domainarea = gfb.gbxarea_fromgridfile(0);
-  // const double domainvol = gfb.gbxvol_fromgridfile(0);
-
-  // gbxmaps.set_gbxarea(domainarea);
-  // gbxmaps.set_gbxvolume(domainvol);
 }
 
 bool at_domainboundary(const unsigned int idx,
