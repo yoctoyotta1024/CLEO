@@ -32,6 +32,7 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 # add executables to library
 set(SOURCES 
   "config.cpp"
+  "copyfiles2txt.cpp"
   "gbxbounds_frombinary.cpp"
   "initsupers_frombinary.cpp"
   "readbinary.cpp"

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -142,7 +142,7 @@ public:
 
     /* copy setup (config and constants files) to a txt file */
     const std::string filestr(config_filename);
-    CopyFiles2Txt()(setuptxt, {filestr, constants_filename});
+    copyfiles2txt(setuptxt, {filestr, constants_filename});
   };
 };
 

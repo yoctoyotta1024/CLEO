@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -242,7 +242,7 @@ void Config::configvariable(const std::string name, const std::string value)
 
   if (issuccess)
   {
-    std::cout << "assigned variable: " << name << " = " << value << '\n';
+    std::cout << "assigned " << name << " = " << value << '\n';
   }
   else
   {
