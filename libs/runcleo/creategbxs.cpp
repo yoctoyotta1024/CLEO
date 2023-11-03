@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,19 +19,21 @@
 
 #include "./creategbxs.hpp"
 
-void is_gbxinit_complete(dualview_gbx gbxs,
-                             const size_t size)
+void is_gbxinit_complete(const GbxMaps &gbxmaps,
+                         dualview_gbx gbxs)
 {
+  const size_t ngbxs_from_maps(gbxmaps.maps_size());
+
   gbxs.sync_host(); // copy device to host (if prior flag was set)
   const size_t ngbxs(gbxs.extent(0));
   const auto h_gbxs(gbxs.view_host());
  
-  if (!(ngbxs == size))
+  if (ngbxs != ngbxs_from_maps)
   {
     const std::string err("number of gridboxes created not "
-                          "consistent with initialisation data ie. " +
+                          "consistent with gridbox maps ie. " +
                           std::to_string(ngbxs) + " != " +
-                          std::to_string(size));
+                          std::to_string(ngbxs_from_maps));
     throw std::invalid_argument(err);
   }
 

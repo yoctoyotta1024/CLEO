@@ -27,9 +27,10 @@ size_t CartesianMaps::maps_size() const
 /* throws error if maps are not all the same
 size, else returns size of maps */
 {
-  const size_t sz(to_coord3bounds.size());
+  const size_t sz(ndims(0) * ndims(1) * ndims(2));
 
-  if (to_coord1bounds.size() != sz ||
+  if (to_coord3bounds.size() != sz ||
+      to_coord1bounds.size() != sz ||
       to_coord2bounds.size() != sz ||
       to_back_coord3nghbr.size() != sz ||
       to_forward_coord3nghbr.size() != sz ||

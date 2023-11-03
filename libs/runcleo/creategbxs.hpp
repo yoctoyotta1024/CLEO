@@ -61,8 +61,8 @@ inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps,
 memory) using data from a GbxInitConds instance to initialise
 the host view and then syncing the view to the device */
 
-void is_gbxinit_complete(dualview_gbx gbxs,
-                                    const size_t size);
+void is_gbxinit_complete(const GbxMaps &gbxmaps,
+                         dualview_gbx gbxs);
 
 void print_gbxs(const viewh_constgbx gbxs);
 /* print gridboxes information */
@@ -108,7 +108,7 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps,
   const dualview_gbx gbxs(initialise_gbxs(gbxmaps, gbxic, supers));
 
   std::cout << "checking initialisation\n";
-  is_gbxinit_complete(gbxs, gbxic.get_ngbxs());
+  is_gbxinit_complete(gbxmaps, gbxs);
   print_gbxs(gbxs.view_host());
 
   std::cout << "--- create gridboxes: success ---\n";
