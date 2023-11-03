@@ -177,7 +177,9 @@ void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb,
 null values (max/min numerical limits) for all gridboxes and
 neighbours maps are null (meaning periodic boundary conditions
 where neighbour of gridbox in x or y direction is itself).
-coord3, ie. z direction, maps are set using vectors from gfb. */
+coord3bounds map, ie. z direction, is set using gfb.
+coord3 back / forward neighbours set using finite or
+periodic boundary conditions in a cartesian domain */
 {
   const auto ndims(gfb.ndims);
 
@@ -185,12 +187,14 @@ coord3, ie. z direction, maps are set using vectors from gfb. */
   {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.to_coord3bounds.insert(idx, c3bs);
+
     gbxmaps.to_coord1bounds.insert(idx, nullbounds());
     gbxmaps.to_coord2bounds.insert(idx, nullbounds());
 
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
     gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
     gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
+
     gbxmaps.to_back_coord1nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord1nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
@@ -201,10 +205,12 @@ coord3, ie. z direction, maps are set using vectors from gfb. */
 void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps)
 /* Gives coordybounds map null values (max/min numerical limits)
-for all gridboxes and y neighbours maps are null
-(meaning periodic boundary conditions where neighbour of gridbox
-in y direction is itself). coord3 and coord1 maps (ie. z and x)
-are set using vectors from gfb. */
+for all gridboxes and y neighbours maps are null (meaning periodic
+boundary conditions where neighbour of gridbox in y direction is
+itself). coord3 and coord1 bounds maps (ie. z and x) are set
+using gfb. coord3 and coord1 neighbours maps call functions for 
+appropriate periodic or finite boundary conditions in a
+cartesian domain  */
 {
   const auto ndims(gfb.ndims);
 
@@ -212,14 +218,52 @@ are set using vectors from gfb. */
   {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.to_coord3bounds.insert(idx, c3bs);
-    gbxmaps.to_coord1bounds.insert();
+
+    const auto c1bs(gfb.get_coord1gbxbounds(idx));
+    gbxmaps.to_coord1bounds.insert(idx, c1bs);
+    
     gbxmaps.to_coord2bounds.insert(idx, nullbounds());
 
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
     gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
     gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
-    gbxmaps.to_back_coord1nghbr.insert();
-    gbxmaps.to_forward_coord1nghbr.insert();
+
+    const auto c1nghbrs(cartesian_xnghbrs(idx, ndims));
+    gbxmaps.to_back_coord1nghbr.insert(idx, c1nghbrs.first);
+    gbxmaps.to_forward_coord1nghbr.insert(idx, c1nghbrs.first);
+
+    gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
+    gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
+  }
+}
+
+void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb,
+                      CartesianMaps &gbxmaps)
+/* Sets all coord[X]bounds maps (for X = x, y, z)
+using gfb data as well as back and forward neighbours
+maps assuming periodic or finite boundary conditions
+in cartesian domain */
+{
+  const auto ndims(gfb.ndims);
+
+  for (auto idx : gfb.gbxidxs)
+  {
+    const auto c3bs(gfb.get_coord3gbxbounds(idx));
+    gbxmaps.to_coord3bounds.insert(idx, c3bs);
+
+    const auto c1bs(gfb.get_coord1gbxbounds(idx));
+    gbxmaps.to_coord1bounds.insert(idx, c1bs);
+    
+    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
+
+    const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
+    gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
+    gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
+
+    const auto c1nghbrs(cartesian_xnghbrs(idx, ndims));
+    gbxmaps.to_back_coord1nghbr.insert(idx, c1nghbrs.first);
+    gbxmaps.to_forward_coord1nghbr.insert(idx, c1nghbrs.first);
+
     gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
   }
