@@ -53,7 +53,7 @@ finitedomain_nghbrs(const unsigned int idx,
 Kokkos::pair<unsigned int, unsigned int>
 periodicdomain_nghbrs(const unsigned int idx,
                         const unsigned int increment,
-                        const unsigned int ndim)
+                        const unsigned int ndim);
 
 Kokkos::pair<unsigned int, unsigned int>
 cartesian_znghbrs(const unsigned int idx,
@@ -118,24 +118,38 @@ function returns a value determined from the gridfile 'grid_filename' */
 
   else if (nspacedims == 2)
   {
-    set_2Dmodel_maps(gfb);
+    set_2Dmodel_maps(gfb, gbxmaps);
   }
 
-  // else if (nspacedims == 3)
-  // {
-  //   set_3Dmodel_maps(gfb);
-  // }
+  else if (nspacedims == 3)
+  {
+    set_3Dmodel_maps(gfb, gbxmaps);
+  }
 
-  // else
-  // {
-  //   throw std::invalid_argument("nspacedims > 3 is invalid ");
-  // }
+  else
+  {
+    throw std::invalid_argument("nspacedims > 3 is invalid ");
+  }
 
-  // check_ngridboxes();
+  check_ngridboxes(gfb, gbxmaps);
 
   std::cout << "--- create cartesian gridbox maps: success ---\n";
   
   return CartesianMaps();
+}
+
+void check_ngridboxes(const GbxBoundsFromBinary &gfb,
+                      const CartesianMaps &gbxmaps)
+/* checks number of gridboxes according to
+maps matches with expected value from gfb */
+{
+  const size_t ngbxs();
+  
+  if (ngbxs != gfb.get_ngbxs())
+  {
+    throw std::invalid_argument("Gridbox maps inconsistent "
+                                " with number of gridboxes");
+  }
 }
 
 void set_maps_ndims(const std::vector<size_t> &ndims,
