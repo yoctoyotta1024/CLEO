@@ -177,14 +177,18 @@ gridbox with it's index at position 'p' in the gfb.gbxidxs
 vector, the [zmin, zmax] coords of that gridbox are at
 [pos, pos+1] in the gfb.gbxidxs vector, where pos = p*6 */
 {
+  const auto ndims(gfb.ndims);
+
   for (auto idx : gfb.gbxidxs)
   {
-    gbxmaps.to_coord3bounds.insert(idx, gfb.get_gbxbounds(idx));
+    const auto c3bs(gfb.get_coord3gbxbounds(idx));
+    gbxmaps.to_coord3bounds.insert(idx, c3bs);
     gbxmaps.to_coord1bounds.insert(idx, nullbounds());
     gbxmaps.to_coord2bounds.insert(idx, nullbounds());
 
-    // gbxmaps.to_back_coord3nghbr.insert(0, nullnghbr(0));
-    // gbxmaps.to_forward_coord3nghbr.insert(0, nullnghbr(0));
+    const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
+    gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
+    gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
     gbxmaps.to_back_coord1nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord1nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
