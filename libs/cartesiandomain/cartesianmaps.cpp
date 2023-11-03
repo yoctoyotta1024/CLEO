@@ -28,7 +28,8 @@ size_t CartesianMaps::maps_size() const
 size, else returns size of maps */
 {
   const auto h_ndims(Kokkos::create_mirror_view(ndims));
-  size_t sz(h_ndims(0) * h_ndims(1) * h_ndims(2));
+  Kokkos::deep_copy(h_ndims, ndims);
+  const size_t sz(h_ndims(0) * h_ndims(1) * h_ndims(2));
 
   if (to_coord3bounds.size() != sz ||
       to_coord1bounds.size() != sz ||
