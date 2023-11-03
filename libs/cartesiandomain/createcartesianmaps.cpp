@@ -35,6 +35,12 @@ void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
 void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps);
 
+void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb,
+                      CartesianMaps &gbxmaps);
+
+void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb,
+                      CartesianMaps &gbxmaps);
+
 bool at_domainboundary(const unsigned int idx,
                        const unsigned int increment,
                        const unsigned int ndim);
@@ -95,10 +101,10 @@ volume function returns a value determined from the gridfile input */
     set_1Dmodel_maps(gfb, gbxmaps);
   }
 
-  // else if (nspacedims == 2)
-  // {
-  //   set_2Dmodel_maps(gfb);
-  // }
+  else if (nspacedims == 2)
+  {
+    set_2Dmodel_maps(gfb);
+  }
 
   // else if (nspacedims == 3)
   // {
@@ -148,9 +154,10 @@ volume using area and volume from gfb for gbxidx=0 */
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps)
 /* gives all coord[X]bounds maps to 1 key with null
-values (max/min numerical limits). Sets periodic
-boundary conditions in all directions meaning neighbour
-of single gridbox with gbxidx=0 is itself */
+values (max/min numerical limits). Also sets null
+neighbours maps (meaning periodic boundary conditions
+in all directions where neighbour of single gridbox
+with gbxidx=0 is itself) */
 {
   gbxmaps.to_coord3bounds.insert(0, nullbounds());
   gbxmaps.to_coord1bounds.insert(0, nullbounds());
@@ -168,12 +175,9 @@ void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps)
 /* Gives all coord[X]bounds maps for X = x or y
 null values (max/min numerical limits) for all gridboxes and
-periodic boundary conditions (meaning neighbour
-of gridbox in x or y is itself). coord3bounds, ie. z direction
-maps are set using vecors from gfb. It is assumed that for a
-gridbox with it's index at position 'p' in the gfb.gbxidxs
-vector, the [zmin, zmax] coords of that gridbox are at
-[pos, pos+1] in the gfb.gbxidxs vector, where pos = p*6 */
+neighbours maps are null (meaning periodic boundary conditions
+where neighbour of gridbox in x or y direction is itself).
+coord3, ie. z direction, maps are set using vectors from gfb. */
 {
   const auto ndims(gfb.ndims);
 
@@ -189,6 +193,33 @@ vector, the [zmin, zmax] coords of that gridbox are at
     gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
     gbxmaps.to_back_coord1nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord1nghbr.insert(idx, nullnghbr(0));
+    gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
+    gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
+  }
+}
+
+void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb,
+                      CartesianMaps &gbxmaps)
+/* Gives coordybounds map null values (max/min numerical limits)
+for all gridboxes and y neighbours maps are null
+(meaning periodic boundary conditions where neighbour of gridbox
+in y direction is itself). coord3 and coord1 maps (ie. z and x)
+are set using vectors from gfb. */
+{
+  const auto ndims(gfb.ndims);
+
+  for (auto idx : gfb.gbxidxs)
+  {
+    const auto c3bs(gfb.get_coord3gbxbounds(idx));
+    gbxmaps.to_coord3bounds.insert(idx, c3bs);
+    gbxmaps.to_coord1bounds.insert();
+    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
+
+    const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
+    gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
+    gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
+    gbxmaps.to_back_coord1nghbr.insert();
+    gbxmaps.to_forward_coord1nghbr.insert();
     gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
   }
