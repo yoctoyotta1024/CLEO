@@ -188,13 +188,12 @@ periodic boundary conditions in a cartesian domain */
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.to_coord3bounds.insert(idx, c3bs);
 
-    gbxmaps.to_coord1bounds.insert(idx, nullbounds());
-    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
-
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
     gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
     gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
 
+    gbxmaps.to_coord1bounds.insert(idx, nullbounds());
+    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
     gbxmaps.to_back_coord1nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord1nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
@@ -219,19 +218,18 @@ cartesian domain  */
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.to_coord3bounds.insert(idx, c3bs);
 
-    const auto c1bs(gfb.get_coord1gbxbounds(idx));
-    gbxmaps.to_coord1bounds.insert(idx, c1bs);
-    
-    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
-
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
     gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
     gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
 
+    const auto c1bs(gfb.get_coord1gbxbounds(idx));
+    gbxmaps.to_coord1bounds.insert(idx, c1bs);
+    
     const auto c1nghbrs(cartesian_xnghbrs(idx, ndims));
     gbxmaps.to_back_coord1nghbr.insert(idx, c1nghbrs.first);
-    gbxmaps.to_forward_coord1nghbr.insert(idx, c1nghbrs.first);
-
+    gbxmaps.to_forward_coord1nghbr.insert(idx, c1nghbrs.second);
+ 
+    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
     gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
     gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
   }
@@ -251,21 +249,23 @@ in cartesian domain */
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.to_coord3bounds.insert(idx, c3bs);
 
-    const auto c1bs(gfb.get_coord1gbxbounds(idx));
-    gbxmaps.to_coord1bounds.insert(idx, c1bs);
-    
-    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
-
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
     gbxmaps.to_back_coord3nghbr.insert(idx, c3nghbrs.first);
     gbxmaps.to_forward_coord3nghbr.insert(idx, c3nghbrs.second);
 
+    const auto c1bs(gfb.get_coord1gbxbounds(idx));
+    gbxmaps.to_coord1bounds.insert(idx, c1bs);
+    
     const auto c1nghbrs(cartesian_xnghbrs(idx, ndims));
     gbxmaps.to_back_coord1nghbr.insert(idx, c1nghbrs.first);
-    gbxmaps.to_forward_coord1nghbr.insert(idx, c1nghbrs.first);
-
-    gbxmaps.to_back_coord2nghbr.insert(idx, nullnghbr(0));
-    gbxmaps.to_forward_coord2nghbr.insert(idx, nullnghbr(0));
+    gbxmaps.to_forward_coord1nghbr.insert(idx, c1nghbrs.second);
+    
+    const auto c2bs(gfb.get_coord2gbxbounds(idx));
+    gbxmaps.to_coord2bounds.insert(idx, c2bs);
+    
+    const auto c2nghbrs(cartesian_ynghbrs(idx, ndims));
+    gbxmaps.to_back_coord2nghbr.insert(idx, c2nghbrs.first); 
+    gbxmaps.to_forward_coord2nghbr.insert(idx, c2nghbrs.second); 
   }
 }
 
