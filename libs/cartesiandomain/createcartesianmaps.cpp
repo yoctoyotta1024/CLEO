@@ -72,10 +72,11 @@ volume function returns a value determined from the gridfile input */
     set_0Dmodel_areas_vols(gfb, gbxmaps);
   }
 
-  // else if (nspacedims == 1)
-  // {
-  //   set_1Dmodel_maps(gfb);
-  // }
+  else if (nspacedims == 1)
+  {
+    set_1Dmodel_maps(gfb);
+    set_1Dmodel_areas_vols(gfb, gbxmaps);
+  }
 
   // else if (nspacedims == 2)
   // {
@@ -144,4 +145,42 @@ of single gridbox in 0-D model (ie. entire domain) */
 
   gbxmaps.set_gbxarea(domainarea);
   gbxmaps.set_gbxvolume(domainvol);
+}
+
+void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb,
+                      CartesianMaps &gbxmaps)
+/* Gives all coord[X]bounds maps for X = x or y
+null values (max/min numerical limits) for all gridboxes and
+periodic boundary conditions (meaning neighbour 
+of gridbox in x or y is itself). coord3bounds, ie. z direction
+maps are set using vecors from gfb. It is assumed that for a
+gridbox with it's index at position 'p' in the gfb.gbxidxs
+vector, the [zmin, zmax] coords of that gridbox are at
+[pos, pos+1] in the gfb.gbxidxs vector, where pos = p*6 */
+{
+  for (auto idx : gfb.gbxidxs)
+  {
+    // gbxmaps.to_coord3bounds.insert(0, nullbounds());
+    gbxmaps.to_coord1bounds.insert(idx, nullbounds());
+    gbxmaps.to_coord2bounds.insert(idx, nullbounds());
+  }
+
+  // gbxmaps.to_back_coord3nghbr.insert(0, nullnghbr(0));
+  // gbxmaps.to_forward_coord3nghbr.insert(0, nullnghbr(0));
+  // gbxmaps.to_back_coord1nghbr.insert(0, nullnghbr(0));
+  // gbxmaps.to_forward_coord1nghbr.insert(0, nullnghbr(0));
+  // gbxmaps.to_back_coord2nghbr.insert(0, nullnghbr(0));
+  // gbxmaps.to_forward_coord2nghbr.insert(0, nullnghbr(0));
+}
+
+void set_1Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
+                            CartesianMaps &gbxmaps)
+/* sets (finite) dimensionless horizontal area and volume
+of single gridbox in 0-D model (ie. entire domain) */
+{
+  // const double domainarea = gfb.gbxarea_fromgridfile(0);
+  // const double domainvol = gfb.gbxvol_fromgridfile(0);
+
+  // gbxmaps.set_gbxarea(domainarea);
+  // gbxmaps.set_gbxvolume(domainvol);
 }
