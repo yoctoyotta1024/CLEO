@@ -44,7 +44,7 @@ savefigpath = path2build+"/bin/"
 gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
 
 ### input parameters for zcoords of gridbox boundaries
-zmax = 5 # maximum z coord [m]
+zmax = 1 # maximum z coord [m]
 zmin = 0 # minimum z coord [m]
 zdelta = 1 # even spacing
 zgrid = [zmin, zmax, zdelta] 
