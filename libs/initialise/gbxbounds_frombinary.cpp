@@ -49,7 +49,7 @@ return GbxBoundsFromBinary instance created from that data */
     throw std::invalid_argument(errormsg);
   }
 
-  is_nspacedims_compatible(ngbxs);
+  is_ngbxs_compatible(ngbxs);
   is_nspacedims_compatible(nspacedims);
 }
 
