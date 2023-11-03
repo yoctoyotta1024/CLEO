@@ -159,8 +159,8 @@ void set_0Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
 /* sets (finite) dimensionless horizontal area and volume
 of single gridbox in 0-D model (ie. entire domain) */
 {
-  const double domainarea = gfb.gbxarea_fromgridfile(0);
-  const double domainvol = gfb.gbxvol_fromgridfile(0);
+  const double domainarea = gfb.gbxarea(0);
+  const double domainvol = gfb.gbxvol(0);
 
   gbxmaps.set_gbxarea(domainarea);
   gbxmaps.set_gbxvolume(domainvol);
@@ -201,6 +201,10 @@ void set_1Dmodel_areas_vols(const GbxBoundsFromBinary &gfb,
 /* sets (finite) dimensionless horizontal area and volume
 of single gridbox in 0-D model (ie. entire domain) */
 {
+  const double area(gfb.gbxarea(idx));
+    idx2area[idx] = area;
+    idx2vol[idx] = (zup - zlow) * area;
+
   // const double domainarea = gfb.gbxarea_fromgridfile(0);
   // const double domainvol = gfb.gbxvol_fromgridfile(0);
 

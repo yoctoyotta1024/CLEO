@@ -234,7 +234,7 @@ assuming order is [zmin, zmax, xmin, xmax, ymin, ymax] */
 }
 
 double GbxBoundsFromBinary::
-    gbxarea_fromgridfile(const unsigned int idx) const
+    gbxarea(const unsigned int idx) const
 /* calculates horizontal (x-y planar) area of gridbox
 using boundaries corresponding to gridbox with gbxidx=idx. */
 {
@@ -248,7 +248,7 @@ using boundaries corresponding to gridbox with gbxidx=idx. */
 }
 
 double GbxBoundsFromBinary::
-    gbxvol_fromgridfile(const unsigned int idx) const
+    gbxvol(const unsigned int idx) const
 /* calculates volume of gridbox using boundaries
 corresponding to gridbox with gbxidx=idx. */
 {

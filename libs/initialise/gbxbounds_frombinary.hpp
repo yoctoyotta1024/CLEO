@@ -80,11 +80,11 @@ public:
   from position in gbxbounds vector which corresponds
   to position in gbxidxs where gbxidx = idx */
 
-  double gbxarea_fromgridfile(const unsigned int idx) const;
+  double gbxarea(const unsigned int idx) const;
   /* calculates horizontal (x-y planar) area of gridbox
   using boundaries corresponding to gridbox with gbxidx=idx. */
 
-  double gbxvol_fromgridfile(const unsigned int idx) const;
+  double gbxvol(const unsigned int idx) const;
   /* calculates volume of gridbox using boundaries
   corresponding to gridbox with gbxidx=idx. */
 
