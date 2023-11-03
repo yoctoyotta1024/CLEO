@@ -37,6 +37,12 @@
 #include "./cartesianmaps.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
 
+/* NOTE: boundary conditions of domain are defined as:
+  z: FINITE   (see cartesian_znghbrs, coord3_beyondzdown and coord3_beyondzup) // TODO beyond funcs
+  x: PERIODIC (see cartesian_xnghbrs, coord1_beyondxbehind and coord1_beyondxinfront)
+  y: PERIODIC (see cartesian_ynghbrs, coord2_beyondyleft and coord2_beyondyright)
+*/
+
 CartesianMaps create_cartesian_maps(const unsigned int nspacedims,
                                     std::string_view grid_filename);
 
