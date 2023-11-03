@@ -79,14 +79,15 @@ coord2 directions */
   return {LIMITVALUES::llim, LIMITVALUES::ulim};
 }
 
-unsigned int nullnghbr(const unsigned int idx)
-/* neighbours for CartesianMaps of gridboxes along
-directions of model not used. Boundaries are
-'periodic' BCs in non-existent dimensions
+Kokkos::pair<unsigned int, unsigned int>
+nullnghbrs(const unsigned int idx)
+/* {back, forward} neighbours for CartesianMaps of
+gridboxes along directions of model not used. Boundaries
+are 'periodic' BCs in non-existent dimensions
 e.g. in 2-D model, neighbour in coord2 direction
 of gridbox is itself */
 {
-  return idx;
+  return {idx, idx};
 }
 
 CartesianMaps create_cartesian_maps(const unsigned int ngbxs,

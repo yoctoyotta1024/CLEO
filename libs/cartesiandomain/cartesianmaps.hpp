@@ -46,12 +46,6 @@ map from a given gbxidx to the gbxidx of a neighbouring gridbox
 in that direction */
 {
 private:
-  /* additional gridbox / domain information */
-  viewd_ndims ndims; // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
-  double gbxareas;   // horizontal (x-y planar) area of all gridboxes
-  double gbxvolumes; // volume of all gridboxes
-
-public:
   /* maps from gbxidx to {lower, upper} coords of gridbox boundaries */
   kokkos_pairmap to_coord3bounds;
   kokkos_pairmap to_coord1bounds;
@@ -65,9 +59,14 @@ public:
   kokkos_uintmap to_back_coord2nghbr;
   kokkos_uintmap to_forward_coord2nghbr;
 
+  /* additional gridbox / domain information */
+  viewd_ndims ndims; // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
+  double gbxareas;   // horizontal (x-y planar) area of all gridboxes
+  double gbxvolumes; // volume of all gridboxes
+
+public:
   CartesianMaps(const size_t ngbxs)
-      : ndims("ndims"),
-        to_coord3bounds(kokkos_pairmap(ngbxs)),
+      : to_coord3bounds(kokkos_pairmap(ngbxs)),
         to_coord1bounds(kokkos_pairmap(ngbxs)),
         to_coord2bounds(kokkos_pairmap(ngbxs)),
         to_back_coord3nghbr(kokkos_uintmap(ngbxs)),
@@ -75,11 +74,69 @@ public:
         to_back_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
-        to_forward_coord2nghbr(kokkos_uintmap(ngbxs)) {}
+        to_forward_coord2nghbr(kokkos_uintmap(ngbxs)),
+        ndims("ndims"), gbxareas(0.0), gbxvolumes(0.0) {}
   /* initialise maps with hint for their capacity
   (ie. total number of keys). Leave values for maps,
   for ndims, gbxareas and gbxvols undefined
   upon construction (e.g. null ptr for ndims) */
+
+  void insert_coord3bounds(const unsigned int idx,
+                           Kokkos::pair<double, double> bounds)
+  /* insert key = idx and value=boudsn into to_coord3bounds map*/
+  {
+    to_coord3bounds.insert(idx, bounds);
+  }
+
+  void insert_coord1bounds(const unsigned int idx,
+                           Kokkos::pair<double, double> bounds)
+  /* insert key = idx and value=boudsn into to_coord1bounds map*/
+  {
+    to_coord1bounds.insert(idx, bounds);
+  }
+
+  void insert_coord2bounds(const unsigned int idx,
+                           Kokkos::pair<double, double> bounds)
+  /* insert key = idx and value=boudsn into to_coord2bounds map*/
+  {
+    to_coord2bounds.insert(idx, bounds);
+  }
+
+  void insert_coord3nghbrs(const unsigned int idx,
+                           Kokkos::pair<unsigned int, unsigned int>
+                               nghbrs)
+  /* insert indexes of neightbouring gridboxes into
+  back and forward neighbour maps for key = idx given
+  neighbours in pair {back, forward},
+  i.e. back=nghbrs.first and forward=nghbrs.second */
+  {
+    to_back_coord3nghbr.insert(idx, nghbrs.first);
+    to_forward_coord3nghbr.insert(idx, nghbrs.second);
+  }
+
+  void insert_coord1nghbrs(const unsigned int idx,
+                           Kokkos::pair<unsigned int, unsigned int>
+                               nghbrs)
+  /* insert indexes of neightbouring gridboxes into
+  back and forward neighbour maps for key = idx given
+  neighbours in pair {back, forward},
+  i.e. back=nghbrs.first and forward=nghbrs.second */
+  {
+    to_back_coord1nghbr.insert(idx, nghbrs.first);
+    to_forward_coord1nghbr.insert(idx, nghbrs.second);
+  }
+
+  void insert_coord2nghbrs(const unsigned int idx,
+                           Kokkos::pair<unsigned int, unsigned int>
+                               nghbrs)
+  /* insert indexes of neightbouring gridboxes into
+  back and forward neighbour maps for key = idx given
+  neighbours in pair {back, forward},
+  i.e. back=nghbrs.first and forward=nghbrs.second */
+  {
+    to_back_coord2nghbr.insert(idx, nghbrs.first);
+    to_forward_coord2nghbr.insert(idx, nghbrs.second);
+  }
 
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
   {
