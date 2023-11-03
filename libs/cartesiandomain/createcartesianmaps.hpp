@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Friday 3rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,6 +28,7 @@
 #include <string_view>
 #include <vector>
 #include <stdexcept>
+#include <utility>
 
 #include "Kokkos_Core.hpp"
 

@@ -160,7 +160,6 @@ vector, the [zmin, zmax] coords of that gridbox are at
 {
   for (auto idx : gfb.gbxidxs)
   {
-    //WIP 
     // gbxmaps.to_coord3bounds.insert(0, nullbounds());
     gbxmaps.to_coord1bounds.insert(idx, nullbounds());
     gbxmaps.to_coord2bounds.insert(idx, nullbounds());
@@ -185,4 +184,55 @@ of single gridbox in 0-D model (ie. entire domain) */
 
   // gbxmaps.set_gbxarea(domainarea);
   // gbxmaps.set_gbxvolume(domainvol);
+}
+
+inline bool at_domainboundary(const unsigned int idx,
+                              const unsigned int increment,
+                              const unsigned int ndim)
+/* returns true if idx for gridbox is at a domain boundary, given
+neighbouring indexes are +- increment from idx and the number of
+gridboxes making up the domain in that direction (ndim) */
+{
+  return (idx/increment) % ndim == 0;
+}
+
+std::pair<unsigned int, unsigned int>
+finitedomain_nghbours(const unsigned int idx,
+                      const unsigned int increment,
+                      const unsigned int ndim)
+/* returns {forward, backward} gridbox neighbours with
+treatment of neighbours as if bounds of domain are finite.
+This means that no neighbour exists above highest / below lowest
+gridboxes in a given direction. Non-existent neighbours are 
+defined with gbxindex = max unsigned int, meaning in a given
+direction the gbxindex of the backwards / forwards neighbour
+of a gridbox at the edge of the domain is a max unsigned int */
+{
+  unsigned int forward(idx + increment);
+  unsigned int backward(idx - increment);
+
+  if (at_domainboundary(idx, increment, ndim)) // at lower edge of domain
+  {
+    backward = LIMITVALUES::uintmax;
+  }
+
+  if (at_domainboundary(forward, increment, ndim)) // at upper edge of domain
+  {
+    forward = LIMITVALUES::uintmax; 
+  }
+
+  return {forward, backward};
+}
+
+std::pair<unsigned int, unsigned int>
+cartesian_znghbrs(const unsigned int idx,
+                  const std::vector<size_t> &ndims)
+/* returns pair of gbx indexes for {backwards, forwards}
+neighbour of a gridbox with index 'idx' in cartesian domain.
+Treatment of neighbours for gridboxes at the edges of the
+domain is either finite (null neighbour) or periodic
+(cyclic neighbour) */
+{
+  return finitedomain_nghbours(idx, 1, ndims.at(0));
+  // return periodicdomain_nghbours(idx, 1, ndims.at(0));
 }
