@@ -99,7 +99,7 @@ public:
   }
 
   size_t maps_size() const;
-
+  
   KOKKOS_INLINE_FUNCTION
   size_t get_ndim(const unsigned int d) const
   /* returns model dimensions along a direction
