@@ -43,19 +43,18 @@ p_gbx0(t1), p_gbx1(t1), ..., p_gbxN(t1), ..., p_gbxN(t_end)]
 current timestep from for the first gridbox (gbx0)  */
 {
 private:
-  std::vector<double> wvel; // w velocity defined on coord3 faces of gridboxes
-  std::vector<double> uvel; // u velocity defined on coord1 faces of gridboxes
-  std::vector<double> vvel; // v velocity defined on coord2 faces of gridboxes
+  std::vector<double> wvel_zface; // w velocity defined on coord3 faces of gridboxes
+  std::vector<double> uvel_xface; // u velocity defined on coord1 faces of gridboxes
+  std::vector<double> vvel_yface; // v velocity defined on coord2 faces of gridboxes
 
-  void set_windvelocity(const Config &config);
+  void set_winds(const Config &config);
   /* depending on nspacedims, read in data
   for 1-D, 2-D or 3-D wind velocity components */
 
-  std::string CartesianDynamics::
-      set_windvelocity_from_binaries(const unsigned int nspacedims,
-                                     std::string_view wvel_filename,
-                                     std::string_view uvel_filename,
-                                     std::string_view vvel_filename);
+  std::string set_winds_from_binaries(const unsigned int nspacedims,
+                                      std::string_view wvel_filename,
+                                      std::string_view uvel_filename,
+                                      std::string_view vvel_filename);
   /* Read in data from binary files for wind
   velocity components in 1D, 2D or 3D model
   and check they have correct size */
@@ -74,10 +73,9 @@ public:
   std::vector<double> qvap;
   std::vector<double> qcond;
   
-  std::function<std::pair<double,double>(const unsigned int)> get_wvelzfaces; // funcs to get velocity defined in construction of class 
-  std::function<std::pair<double,double>(const unsigned int)> get_uvelxfaces; // warning: these functions are not const member funcs by default
-  std::function<std::pair<double,double>(const unsigned int)> get_vvelyfaces;
-
+  std::function<std::pair<double,double>(const unsigned int)> get_wvel; // funcs to get velocity defined in construction of class 
+  std::function<std::pair<double,double>(const unsigned int)> get_uvel; // warning: these functions are not const member funcs by default
+  std::function<std::pair<double,double>(const unsigned int)> get_vvel;
 
   CartesianDynamics(const Config &config,
                     const std::array<size_t, 3> i_ndims);

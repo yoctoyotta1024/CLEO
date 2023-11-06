@@ -55,9 +55,10 @@ of doubles for first variable in that file */
 }
 
 std::function<std::pair<double, double>(const unsigned int)> nullwinds()
-/* function returns {0.0, 0.0} to use in
-case of non-existent wind component
-e.g. uvel when setup is 2-D model */
+/* nullwinds retuns an empty function 'func' that returns
+{0.0, 0.0}. Useful for setting get_[X]vel[Y]faces functions
+in case of non-existent wind component e.g. get_uvelyface
+when setup is 2-D model (x and z only) */
 {
   const auto func = [](const unsigned int ii)
   { return std::pair<double, double>{0.0, 0.0}; };
@@ -68,7 +69,7 @@ e.g. uvel when setup is 2-D model */
 CartesianDynamics::
     CartesianDynamics(const Config &config,
                       const std::array<size_t, 3> i_ndims)
-    : wvel(), uvel(), vvel(),
+    : wvel_zfaces(0), uvel_xfaces(0), vvel_yfaces(0),
       ndims(i_ndims),
       pos(0),
       pos_zface(0),
@@ -78,16 +79,14 @@ CartesianDynamics::
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
       qcond(thermodynamicvar_from_binary(config.qcond_filename)),
-      get_wvelzfaces(nullwinds()),
-      get_uvelxfaces(nullwinds()),
-      get_vvelyfaces(nullwinds())
+      get_wvel(nullwinds()), get_uvel(nullwinds()), get_vvel(nullwinds())
 {
   std::cout << "\nFinished reading thermodynamics from binaries for:\n"
                "  pressure,\n  temperature,\n"
                "  water vapour mass mixing ratio,\n"
                "  liquid water mass mixing ratio,\n";
 
-  set_windvelocity(config);
+  set_winds(config);
 
   // check_thermodyanmics_vectorsizes(config.nspacedims, ndims, nsteps);
 }
@@ -104,7 +103,7 @@ is decomposed into cartesian C grid with dimensions
   pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
-void CartesianDynamics::set_windvelocity(const Config &config)
+void CartesianDynamics::set_winds(const Config &config)
 /* depending on nspacedims, read in data
 for 1-D, 2-D or 3-D wind velocity components */
 {
@@ -120,10 +119,10 @@ for 1-D, 2-D or 3-D wind velocity components */
   case 2:
   case 3: // 1-D, 2-D or 3-D model
     const std::string windstr(
-        set_windvelocity_from_binaries(nspacedims,
-                                       config.wvel_filename,
-                                       config.uvel_filename,
-                                       config.vvel_filename));
+        set_winds_from_binaries(nspacedims,
+                                config.wvel_filename,
+                                config.uvel_filename,
+                                config.vvel_filename));
     std::cout << windstr;
 
   default:
@@ -132,10 +131,10 @@ for 1-D, 2-D or 3-D wind velocity components */
 }
 
 std::string CartesianDynamics::
-    set_windvelocity_from_binaries(const unsigned int nspacedims,
-                                   std::string_view wvel_filename,
-                                   std::string_view uvel_filename,
-                                   std::string_view vvel_filename)
+    set_winds_from_binaries(const unsigned int nspacedims,
+                            std::string_view wvel_filename,
+                            std::string_view uvel_filename,
+                            std::string_view vvel_filename)
 /* Read in data from binary files for wind
 velocity components in 1D, 2D or 3D model
 and check they have correct size */
@@ -147,13 +146,16 @@ and check they have correct size */
   switch (nspacedims)
   {
   case 3: // 3-D model
-    vvel = vvel_from_binary(vvel_filename);
+    vvel_yfaces = get_vvel_from_binary();
+    vvel_yfaces = thermodynamicvar_from_binary(vvel_filename);
     vel = ", u";
   case 2: // 3-D or 2-D model
-    uvel = uvel_from_binary(uvel_filename);
+    uvel_xfaces = get_uvel_from_binary();
+    uvel_xfaces = thermodynamicvar_from_binary(uvel_filename); 
     vel = ", v" + vel;
   case 1: // 3-D, 2-D or 1-D model
-    wvel = wvel_from_binary(wvel_filename);
+    get_wvel = get_wvel_from_binary();
+    wvel_zfaces = thermodynamicvar_from_binary(wvel_filename);
     vel = "w" + vel;
   }
 
