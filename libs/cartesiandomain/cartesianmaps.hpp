@@ -86,6 +86,8 @@ public:
   /* insert 1 value into to_coord3bounds
   map at key = idx with value=bounds */
   {
+    /* parallel for for 1 value so that execution of
+    insert occurs on device if necessary */
     Kokkos::parallel_for(
         "cb3s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
           to_coord3bounds.insert(idx, bounds);
@@ -97,6 +99,8 @@ public:
   /* insert 1 value into to_coord1bounds
   map at key = idx with value=bounds */
   {
+    /* parallel for for 1 value so that execution of
+    insert occurs on device if necessary */
     Kokkos::parallel_for(
         "cb1s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
           to_coord1bounds.insert(idx, bounds);
@@ -108,6 +112,8 @@ public:
   /* insert 1 value into to_coord2bounds
   map at key = idx with value=bounds */
   {
+    /* parallel for for 1 value so that execution of
+    insert occurs on device if necessary */
     Kokkos::parallel_for(
         "cb2s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
           to_coord2bounds.insert(idx, bounds);
@@ -122,6 +128,8 @@ public:
   neighbours in pair {back, forward},
   i.e. back=nghbrs.first and forward=nghbrs.second */
   {
+    /* parallel for for 1 value so that execution of
+    insert occurs on device if necessary */
     Kokkos::parallel_for(
         "nghbr3s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
           to_back_coord3nghbr.insert(idx, nghbrs.first);
@@ -137,6 +145,8 @@ public:
   neighbours in pair {back, forward},
   i.e. back=nghbrs.first and forward=nghbrs.second */
   {
+    /* parallel for for 1 value so that execution of
+    insert occurs on device if necessary */
     Kokkos::parallel_for(
         "nghbr1s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
           to_back_coord1nghbr.insert(idx, nghbrs.first);
@@ -152,6 +162,8 @@ public:
   neighbours in pair {back, forward},
   i.e. back=nghbrs.first and forward=nghbrs.second */
   {
+    /* parallel for for 1 value so that execution of
+    insert occurs on device if necessary */
     Kokkos::parallel_for(
         "nghbr2s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
           to_back_coord2nghbr.insert(idx, nghbrs.first);
