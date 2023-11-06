@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,6 +26,7 @@
 #include <iostream>
 
 #include "initialise/config.hpp"
+
 
 struct FromFileDynamics
 /* type satisfying CoupledDyanmics solver concept

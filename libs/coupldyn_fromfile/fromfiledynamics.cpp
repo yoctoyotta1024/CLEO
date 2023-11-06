@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,6 +28,12 @@ void FromFileDynamics::prepare_to_timestep() const
 
 void FromFileDynamics::run_dynamics(const unsigned int t_mdl,
                                     const unsigned int t_next) const
+/* increment position of thermodata for 0th gridbox
+to positon at next timestep (ie. ngridbox_faces
+further along vector) */
 {
-  std::cout << "from file dyn @ t=" << t_mdl << "\n";
+  // atpos += ndims[0] * ndims[1] * ndims[2];
+  // atpos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
+  // atpos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
+  // atpos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
