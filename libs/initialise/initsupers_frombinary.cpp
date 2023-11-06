@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -51,26 +51,21 @@ void InitSupersFromBinary::
     check_initdata_sizes(const InitSupersData &in) const
 /* check all the vectors in the initdata struct all
 have sizes consistent with one another. Include
-coords data in check if nspacedims != 0 */    
+coords data in check if nspacedims != 0 */
 {
   std::vector<size_t> sizes({in.sdgbxindexes.size(),
                              in.xis.size(),
                              in.radii.size(),
                              in.msols.size()});
 
-  if (nspacedims > 0)
+  switch (nspacedims)
   {
+  case 3: // 3-D model
+    sizes.push_back(in.coord2s.size());
+  case 2: // 3-D or 2-D model
+    sizes.push_back(in.coord1s.size());
+  case 1: // 3-D, 2-D or 1-D model
     sizes.push_back(in.coord3s.size());
-
-    if (nspacedims > 1)
-    {
-      sizes.push_back(in.coord1s.size()); 
-
-      if (nspacedims == 3)
-      {
-        sizes.push_back(in.coord2s.size());
-      }
-    }
   }
 
   check_vectorsizes(sizes);

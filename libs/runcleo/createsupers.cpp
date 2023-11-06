@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -75,19 +75,14 @@ only coord3 obtained from vectorr (coord1 = coord2 = 0.0) */
 {
   std::array<double, 3> coords312{0.0, 0.0, 0.0};
 
-  if (nspacedims > 0)
+  switch (nspacedims)
   {
+  case 3: // 3-D model
+    coords312[2] = initdata.coord2s.at(kk);
+  case 2: // 3-D or 2-D model
+    coords312[1] = initdata.coord1s.at(kk);
+  case 1: // 3-D, 2-D or 1-D model
     coords312[0] = initdata.coord3s.at(kk);
-
-    if (nspacedims > 1)
-    {
-      coords312[1] = initdata.coord1s.at(kk);
-
-      if (nspacedims == 3)
-      {
-        coords312[2] = initdata.coord2s.at(kk);
-      }
-    }
   }
 
   return coords312;
