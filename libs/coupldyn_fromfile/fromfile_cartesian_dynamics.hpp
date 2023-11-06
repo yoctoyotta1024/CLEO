@@ -27,6 +27,7 @@
 #include <vector>
 #include <memory>
 #include <string_view>
+#include <string>
 #include <iostream>
 
 #include "initialise/config.hpp"
@@ -40,6 +41,13 @@ p_gbx0(t1), p_gbx1(t1), ..., p_gbxN(t1), ..., p_gbxN(t_end)]
 "pos[_X]" gives position of variable in a vector to read
 current timestep from for the first gridbox (gbx0)  */
 {
+  /* position in vector for 0th gridbox at current timestep  */
+  const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
+  size_t pos;                        // for variable defined at gridbox centres
+  size_t pos_zface;                  // for variable defined at gridbox coord3 faces
+  size_t pos_xface;                  // for variable defined at gridbox coord1 faces
+  size_t pos_yface;                  // for variable defined at gridbox coord2 faces
+  
   /* (thermo)dynamic variables read from file */
   std::vector<double> press;
   std::vector<double> temp;
@@ -49,17 +57,21 @@ current timestep from for the first gridbox (gbx0)  */
   std::vector<double> uvel; // u velocity defined on coord1 faces of gridboxes
   std::vector<double> vvel; // v velocity defined on coord2 faces of gridboxes
 
-  /* position in vector for 0th gridbox at current timestep  */
-  const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
-  size_t pos;                        // for variable defined at gridbox centres
-  size_t pos_zface;                  // for variable defined at gridbox coord3 faces
-  size_t pos_xface;                  // for variable defined at gridbox coord1 faces
-  size_t pos_yface;                  // for variable defined at gridbox coord2 faces
-
   CartesianDynamics(const Config &config,
                     const std::array<size_t, 3> i_ndims);
 
-  void set_windvelocities(const Config &config);
+  void set_windvelocity(const Config &config);
+  /* depending on nspacedims, read in data
+  for 1-D, 2-D or 3-D wind velocity components */
+
+  std::string CartesianDynamics::
+      set_windvelocity_from_binaries(const unsigned int nspacedims,
+                                     std::string_view wvel_filename,
+                                     std::string_view uvel_filename,
+                                     std::string_view vvel_filename);
+  /* Read in data from binary files for wind
+  velocity components in 1D, 2D or 3D model
+  and check they have correct size */
 
   void increment_position();
   /* updates positions to gbx0 in vector (for
@@ -67,7 +79,6 @@ current timestep from for the first gridbox (gbx0)  */
   is decomposed into cartesian C grid with dimensions
   (ie. number of gridboxes in each dimension) ndims */
 };
-
 
 struct FromFileDynamics
 /* type satisfying CoupledDyanmics solver concept

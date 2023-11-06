@@ -35,17 +35,22 @@ int main(int argc, char *argv[])
 {
   const unsigned int nspacedims(4);
 
+  std::string info(std::to_string(nspacedims) +
+                   "-D model, wind velocity");
+
+  std::string vel;
   switch (nspacedims)
   {
-  case 0:
-    std::cout << "no maps\n";
-    break;
-  case 1: case 2: case 3:
-    set_model_maps();
-    break;
-  default:
-    std::cout << "error\n";
+    case 3: // 3-D model 
+      vel = ", u";
+    case 2: // 3-D or 2-D model 
+      vel = ", v" + vel;
+    case 1: // 3-D, 2-D or 1-D model 
+      vel = "w" + vel;    
   }
+
+  info += " = [" + vel + "]\n";
+  std::cout << info << "\n";
 }
 
 // int main(int argc, char *argv[])

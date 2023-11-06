@@ -44,39 +44,78 @@ CartesianDynamics::
       pos(0),
       pos_zface(0),
       pos_xface(0),
-      pos_yface(0)
+      pos_yface(0),
       press(thermodynamicvar_from_binary(config.press_filename)),
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
       qcond(thermodynamicvar_from_binary(config.qcond_filename)),
-      // wvel(), uvel(), vvel(),
+      wvel(), uvel(), vvel(),
 {
   std::cout << "\nFinished reading thermodynamics from binaries for:\n"
                "  pressure,\n  temperature,\n"
                "  water vapour mass mixing ratio,\n"
                "  liquid water mass mixing ratio,\n";
 
-  set_windvelocities(config);
+  set_windvelocity(config);
 
-  // check_thermodyanmics_vectorsizes(config.SDnspace, ndims, nsteps);
+  // check_thermodyanmics_vectorsizes(config.nspacedims, ndims, nsteps);
 }
 
-void CartesianDynamics::set_windvelocities(const Config &config)
-/* depending on SDnspace, read in data
-for wind velocity components (or not)*/
+void CartesianDynamics::set_windvelocity(const Config &config)
+/* depending on nspacedims, read in data
+for 1-D, 2-D or 3-D wind velocity components */
 {
-  switch (config.nspacedims)
+  const unsigned int nspacedims(config.nspacedims);
+
+  switch (nspacedims)
   {
   case 0:
     std::cout << "0-D model has no wind data\n";
     break;
-  case 1: case 2: case 3: // 1-D, 2-D or 3-D model
-    const std::string windstr(set_windvelocities_frombinaries(config));
+
+  case 1:
+  case 2:
+  case 3: // 1-D, 2-D or 3-D model
+    const std::string windstr(
+        set_windvelocity_from_binaries(nspacedims,
+                                       config.wvel_filename,
+                                       config.uvel_filename,
+                                       config.vvel_filename));
     std::cout << windstr;
 
   default:
     throw std::invalid_argument("nspacedims for wind data is invalid");
   }
+}
+
+std::string CartesianDynamics::
+    set_windvelocity_from_binaries(const unsigned int nspacedims,
+                                   std::string_view wvel_filename,
+                                   std::string_view uvel_filename,
+                                   std::string_view vvel_filename)
+/* Read in data from binary files for wind
+velocity components in 1D, 2D or 3D model
+and check they have correct size */
+{
+  std::string info(std::to_string(nspacedims) +
+                   "-D model, wind velocity");
+
+  std::string vel;
+  switch (nspacedims)
+  {
+    case 3: // 3-D model 
+      vvel = vvel_from_binary(vvel_filename); 
+      vel = ", u";
+    case 2: // 3-D or 2-D model 
+      uvel = uvel_from_binary(uvel_filename);
+      vel = ", v" + vel;
+    case 1: // 3-D, 2-D or 1-D model 
+      wvel = wvel_from_binary(wvel_filename);
+      vel = "w" + vel;    
+  }
+
+  info += " = [" + vel + "]\n";
+  return info;
 }
 
 void CartesianDynamics::increment_position()
