@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +28,6 @@
 #include <Kokkos_Random.hpp>
 
 #include "./kokkosaliases.hpp"
-#include "./coupleddynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
@@ -38,7 +37,7 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/urbg.hpp"
 
-template <CoupledDynamics CD, GridboxMaps GbxMaps,
+template <GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,
           Motion M, Observer Obs>
 class SDMMethods
@@ -115,12 +114,12 @@ public:
     }
   } sdm_microphysics; // operator is call for SDM microphysics
 
-  SDMMethods(const CD &coupldyn,
+  SDMMethods(const unsigned int couplstep,
              const GbxMaps gbxmaps,
              const Microphys microphys,
              const MoveSupersInDomain<M> movesupers,
              const Obs obs)
-      : couplstep(coupldyn.get_couplstep()),
+      : couplstep(couplstep),
         movesupers(movesupers),
         gbxmaps(gbxmaps),
         obs(obs),

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -54,7 +54,7 @@ template <CoupledDynamics CD, GridboxMaps GbxMaps,
 class RunCLEO
 {
 private:
-  const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm;
+  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm;
   CD &coupldyn;
   const Comms &comms;
 
@@ -186,7 +186,7 @@ private:
   }
 
 public:
-  RunCLEO(const SDMMethods<CD, GbxMaps, Microphys, M, Obs> &sdm,
+  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm,
           CD &coupldyn, const Comms &comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms)
   {

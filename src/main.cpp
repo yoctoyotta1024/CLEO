@@ -67,8 +67,9 @@
 
 inline CoupledDynamics auto
 create_coupldyn(const Config &config,
-                const unsigned int couplstep,
-                CartesianMaps &gbxmaps)
+                const CartesianMaps &gbxmaps,
+                const unsigned int couplstep)
+
 {
   const auto h_ndims(gbxmaps.ndims_hostcopy());
   const std::array<size_t, 3>
@@ -175,15 +176,15 @@ create_observer(const Config &config,
 
 inline auto create_sdm(const Config &config,
                        const Timesteps &tsteps,
-                       const CoupledDynamics auto &coupldyn,
                        FSStore &store)
 {
+  const unsigned int couplstep(tsteps.get_couplstep());
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const MoveSupersInDomain movesupers(create_motion(tsteps.get_motionstep()));
   const Observer auto obs(create_observer(config, tsteps, store));
 
-  return SDMMethods(coupldyn, gbxmaps,
+  return SDMMethods(couplstep, gbxmaps,
                     microphys, movesupers, obs);
 }
 
@@ -220,11 +221,11 @@ int main(int argc, char *argv[])
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
+    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(
-        create_coupldyn(config, tsteps.get_couplstep(), sdm.gbxmaps));
+        create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep()));
 
     /* coupling between coupldyn and SDM */
     const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};

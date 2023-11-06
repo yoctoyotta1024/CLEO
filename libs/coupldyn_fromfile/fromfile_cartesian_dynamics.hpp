@@ -93,7 +93,7 @@ public:
     return interval;
   }
 
-  void prepare_to_timestep() const;
+  void prepare_to_timestep() const {}
 
   bool on_step(const unsigned int t_mdl) const
   {
