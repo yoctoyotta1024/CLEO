@@ -42,16 +42,16 @@ current timestep from for the first gridbox (gbx0)  */
   std::vector<double> temp;
   std::vector<double> qvap;
   std::vector<double> qcond;
-  std::vector<double> wvel; // w velocity define of z faces of gridboxes
-  std::vector<double> uvel; // u velocity define of x faces of gridboxes
-  std::vector<double> vvel; // v velocity define of y faces of gridboxes
+  std::vector<double> wvel; // w velocity defined on coord3 faces of gridboxes
+  std::vector<double> uvel; // u velocity defined on coord1 faces of gridboxes
+  std::vector<double> vvel; // v velocity defined on coord2 faces of gridboxes
 
   /* position in vector for 0th gridbox at current timestep  */
   const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
   size_t pos;                        // for variable defined at gridbox centres
-  size_t pos_zface;                  // for variable defined at gridbox z faces
-  size_t pos_xface;                  // for variable defined at gridbox x faces
-  size_t pos_yface;                  // for variable defined at gridbox y faces
+  size_t pos_zface;                  // for variable defined at gridbox coord3 faces
+  size_t pos_xface;                  // for variable defined at gridbox coord1 faces
+  size_t pos_yface;                  // for variable defined at gridbox coord2 faces
 
   CartesianDynamics(const Config &config,
                     const std::array<size_t, 3> i_ndims);
