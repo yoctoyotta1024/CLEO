@@ -29,6 +29,7 @@
 #include <string_view>
 #include <string>
 #include <iostream>
+#include <functional>
 
 #include "initialise/config.hpp"
 #include "initialise/readbinary.hpp"
@@ -36,29 +37,15 @@
 struct CartesianDynamics
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
-e.g. press = [p_gbx0(t0), p_gbx1(t0), ,... , p_gbxN(t0), 
+e.g. press = [p_gbx0(t0), p_gbx1(t0), ,... , p_gbxN(t0),
 p_gbx0(t1), p_gbx1(t1), ..., p_gbxN(t1), ..., p_gbxN(t_end)]
 "pos[_X]" gives position of variable in a vector to read
 current timestep from for the first gridbox (gbx0)  */
 {
-  /* position in vector for 0th gridbox at current timestep  */
-  const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
-  size_t pos;                        // for variable defined at gridbox centres
-  size_t pos_zface;                  // for variable defined at gridbox coord3 faces
-  size_t pos_xface;                  // for variable defined at gridbox coord1 faces
-  size_t pos_yface;                  // for variable defined at gridbox coord2 faces
-  
-  /* (thermo)dynamic variables read from file */
-  std::vector<double> press;
-  std::vector<double> temp;
-  std::vector<double> qvap;
-  std::vector<double> qcond;
+private:
   std::vector<double> wvel; // w velocity defined on coord3 faces of gridboxes
   std::vector<double> uvel; // u velocity defined on coord1 faces of gridboxes
   std::vector<double> vvel; // v velocity defined on coord2 faces of gridboxes
-
-  CartesianDynamics(const Config &config,
-                    const std::array<size_t, 3> i_ndims);
 
   void set_windvelocity(const Config &config);
   /* depending on nspacedims, read in data
@@ -72,6 +59,28 @@ current timestep from for the first gridbox (gbx0)  */
   /* Read in data from binary files for wind
   velocity components in 1D, 2D or 3D model
   and check they have correct size */
+
+public:
+  /* position in vector for 0th gridbox at current timestep  */
+  const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
+  size_t pos;                        // for variable defined at gridbox centres
+  size_t pos_zface;                  // for variable defined at gridbox coord3 faces
+  size_t pos_xface;                  // for variable defined at gridbox coord1 faces
+  size_t pos_yface;                  // for variable defined at gridbox coord2 faces
+
+  /* (thermo)dynamic variables read from file */
+  std::vector<double> press;
+  std::vector<double> temp;
+  std::vector<double> qvap;
+  std::vector<double> qcond;
+  
+  std::function<std::pair<double,double>(const unsigned int)> get_wvelzfaces; // funcs to get velocity defined in construction of class 
+  std::function<std::pair<double,double>(const unsigned int)> get_uvelxfaces; // warning: these functions are not const member funcs by default
+  std::function<std::pair<double,double>(const unsigned int)> get_vvelyfaces;
+
+
+  CartesianDynamics(const Config &config,
+                    const std::array<size_t, 3> i_ndims);
 
   void increment_position();
   /* updates positions to gbx0 in vector (for

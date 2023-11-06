@@ -22,8 +22,25 @@
 
 #include "./fromfile_cartesian_dynamics.hpp"
 
+std::vector<double> wvel_from_binary(std::string_view filename);
+/* returns vector of wvel retrieved from binary
+file called 'filename' where wvel is defined on
+the z-faces (coord3) of gridboxes */
+
+std::vector<double> uvel_from_binary(std::string_view filename);
+/* returns vector of yvel retrieved from binary
+file called 'filename' where uvel is defined on
+the x-faces (coord1) of gridboxes */
+
+std::vector<double> vvel_from_binary(std::string_view filename);
+/* returns vector of vvel retrieved from binary
+file called 'filename' where vvel is defined on
+the y-faces (coord2) of gridboxes */
+
 std::vector<double>
 thermodynamicvar_from_binary(std::string_view filename)
+/* open file called 'filename' and return vector
+of doubles for first variable in that file */
 {
   /* open file and read in the metatdata
   for all the variables in that file */
@@ -37,10 +54,22 @@ thermodynamicvar_from_binary(std::string_view filename)
   return thermovar;
 }
 
+std::function<std::pair<double, double>(const unsigned int)> nullwinds()
+/* function returns {0.0, 0.0} to use in
+case of non-existent wind component
+e.g. uvel when setup is 2-D model */
+{
+  const auto func = [](const unsigned int ii)
+  { return std::pair<double, double>{0.0, 0.0}; };
+
+  return func;
+}
+
 CartesianDynamics::
     CartesianDynamics(const Config &config,
                       const std::array<size_t, 3> i_ndims)
-    : ndims(i_ndims),
+    : wvel(), uvel(), vvel(),
+      ndims(i_ndims),
       pos(0),
       pos_zface(0),
       pos_xface(0),
@@ -49,7 +78,9 @@ CartesianDynamics::
       temp(thermodynamicvar_from_binary(config.temp_filename)),
       qvap(thermodynamicvar_from_binary(config.qvap_filename)),
       qcond(thermodynamicvar_from_binary(config.qcond_filename)),
-      wvel(), uvel(), vvel(),
+      get_wvelzfaces(nullwinds()),
+      get_uvelxfaces(nullwinds()),
+      get_vvelyfaces(nullwinds())
 {
   std::cout << "\nFinished reading thermodynamics from binaries for:\n"
                "  pressure,\n  temperature,\n"
@@ -59,6 +90,18 @@ CartesianDynamics::
   set_windvelocity(config);
 
   // check_thermodyanmics_vectorsizes(config.nspacedims, ndims, nsteps);
+}
+
+void CartesianDynamics::increment_position()
+/* updates positions to gbx0 in vector (for
+acessing value at next timestep). Assumes domain
+is decomposed into cartesian C grid with dimensions
+(ie. number of gridboxes in each dimension) ndims */
+{
+  pos += ndims[0] * ndims[1] * ndims[2];
+  pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
+  pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
+  pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
 void CartesianDynamics::set_windvelocity(const Config &config)
@@ -103,29 +146,17 @@ and check they have correct size */
   std::string vel;
   switch (nspacedims)
   {
-    case 3: // 3-D model 
-      vvel = vvel_from_binary(vvel_filename); 
-      vel = ", u";
-    case 2: // 3-D or 2-D model 
-      uvel = uvel_from_binary(uvel_filename);
-      vel = ", v" + vel;
-    case 1: // 3-D, 2-D or 1-D model 
-      wvel = wvel_from_binary(wvel_filename);
-      vel = "w" + vel;    
+  case 3: // 3-D model
+    vvel = vvel_from_binary(vvel_filename);
+    vel = ", u";
+  case 2: // 3-D or 2-D model
+    uvel = uvel_from_binary(uvel_filename);
+    vel = ", v" + vel;
+  case 1: // 3-D, 2-D or 1-D model
+    wvel = wvel_from_binary(wvel_filename);
+    vel = "w" + vel;
   }
 
   info += " = [" + vel + "]\n";
   return info;
-}
-
-void CartesianDynamics::increment_position()
-/* updates positions to gbx0 in vector (for
-acessing value at next timestep). Assumes domain
-is decomposed into cartesian C grid with dimensions
-(ie. number of gridboxes in each dimension) ndims */
-{
-  pos += ndims[0] * ndims[1] * ndims[2];
-  pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
-  pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
-  pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
