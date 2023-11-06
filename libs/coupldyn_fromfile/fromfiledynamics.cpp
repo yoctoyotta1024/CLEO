@@ -26,14 +26,13 @@ void FromFileDynamics::prepare_to_timestep() const
 {
 }
 
-void FromFileDynamics::run_dynamics(const unsigned int t_mdl,
-                                    const unsigned int t_next) const
+void FromFileDynamics::run_dynamics(const unsigned int t_mdl) const
 /* increment position of thermodata for 0th gridbox
 to positon at next timestep (ie. ngridbox_faces
 further along vector) */
 {
-  // atpos += ndims[0] * ndims[1] * ndims[2];
-  // atpos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
-  // atpos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
-  // atpos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
+  atpos += ndims[0] * ndims[1] * ndims[2];
+  atpos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
+  atpos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
+  atpos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }

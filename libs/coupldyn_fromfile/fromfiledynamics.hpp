@@ -27,6 +27,17 @@
 
 #include "initialise/config.hpp"
 
+struct DynamicsVariables
+/* contains 1-D vector for each (thermo)dynamic
+variable which is ordered by gridbox at every timestep
+e.g. press = [p_gbx0(t0), p_gbx1(t0), ,... , p_gbxN(t0), 
+p_gbx0(t1), p_gbx1(t1), ..., p_gbxN(t1), ..., p_gbxN(t_end)]
+"pos[_X]" gives position of variable in a vector to read
+current timestep from for the first gridbox (gbx0)  */
+{
+
+}
+
 
 struct FromFileDynamics
 /* type satisfying CoupledDyanmics solver concept
@@ -36,8 +47,7 @@ that are read from binary files */
 private:
   const unsigned int interval;
 
-  void run_dynamics(const unsigned int t_mdl,
-                    const unsigned int t_next) const;
+  void run_dynamics(const unsigned int t_mdl) const;
   
 public:
   FromFileDynamics(const Config &config,
@@ -61,7 +71,7 @@ public:
   {
     if (on_step(t_mdl))
     {
-      run_dynamics(t_mdl, t_next);
+      run_dynamics(t_mdl);
     }
   }
 
