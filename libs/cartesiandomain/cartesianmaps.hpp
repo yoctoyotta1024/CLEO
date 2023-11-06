@@ -36,8 +36,8 @@ namespace dlc = dimless_constants;
 
 struct CartesianMaps
 /* type satisfying GridboxMaps concept specifically for gridboxes
-defined on in a cartesian C grid with equal area and volume for each 
-gridbox. coord[X]bounds (for X = 1, 2, 3, corresponding to x, y, z) 
+defined on in a cartesian C grid with equal area and volume for each
+gridbox. coord[X]bounds (for X = 1, 2, 3, corresponding to x, y, z)
 map between gbxindexes and gridbox boundaries in a cartiesian domain.
 The keys of each map are the gridbox indexes. The corresponding value
 of each bounds map is that gridbox's {lower boundary, upper boundary}.
@@ -83,23 +83,35 @@ public:
 
   void insert_coord3bounds(const unsigned int idx,
                            Kokkos::pair<double, double> bounds)
-  /* insert key = idx and value=boudsn into to_coord3bounds map*/
+  /* insert 1 value into to_coord3bounds
+  map at key = idx with value=bounds */
   {
-    to_coord3bounds.insert(idx, bounds);
+    Kokkos::parallel_for(
+        "cb3s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
+          to_coord3bounds.insert(idx, bounds);
+        });
   }
 
   void insert_coord1bounds(const unsigned int idx,
                            Kokkos::pair<double, double> bounds)
-  /* insert key = idx and value=boudsn into to_coord1bounds map*/
+  /* insert 1 value into to_coord1bounds
+  map at key = idx with value=bounds */
   {
-    to_coord1bounds.insert(idx, bounds);
+    Kokkos::parallel_for(
+        "cb1s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
+          to_coord1bounds.insert(idx, bounds);
+        });
   }
 
   void insert_coord2bounds(const unsigned int idx,
                            Kokkos::pair<double, double> bounds)
-  /* insert key = idx and value=boudsn into to_coord2bounds map*/
+  /* insert 1 value into to_coord2bounds
+  map at key = idx with value=bounds */
   {
-    to_coord2bounds.insert(idx, bounds);
+    Kokkos::parallel_for(
+        "cb2s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
+          to_coord2bounds.insert(idx, bounds);
+        });
   }
 
   void insert_coord3nghbrs(const unsigned int idx,
@@ -110,8 +122,11 @@ public:
   neighbours in pair {back, forward},
   i.e. back=nghbrs.first and forward=nghbrs.second */
   {
-    to_back_coord3nghbr.insert(idx, nghbrs.first);
-    to_forward_coord3nghbr.insert(idx, nghbrs.second);
+    Kokkos::parallel_for(
+        "nghbr3s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
+          to_back_coord3nghbr.insert(idx, nghbrs.first);
+          to_forward_coord3nghbr.insert(idx, nghbrs.second);
+        });
   }
 
   void insert_coord1nghbrs(const unsigned int idx,
@@ -122,8 +137,11 @@ public:
   neighbours in pair {back, forward},
   i.e. back=nghbrs.first and forward=nghbrs.second */
   {
-    to_back_coord1nghbr.insert(idx, nghbrs.first);
-    to_forward_coord1nghbr.insert(idx, nghbrs.second);
+    Kokkos::parallel_for(
+        "nghbr1s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
+          to_back_coord1nghbr.insert(idx, nghbrs.first);
+          to_forward_coord1nghbr.insert(idx, nghbrs.second);
+        });
   }
 
   void insert_coord2nghbrs(const unsigned int idx,
@@ -134,8 +152,11 @@ public:
   neighbours in pair {back, forward},
   i.e. back=nghbrs.first and forward=nghbrs.second */
   {
-    to_back_coord2nghbr.insert(idx, nghbrs.first);
-    to_forward_coord2nghbr.insert(idx, nghbrs.second);
+    Kokkos::parallel_for(
+        "nghbr2s", 1, KOKKOS_CLASS_LAMBDA(unsigned int i) {
+          to_back_coord2nghbr.insert(idx, nghbrs.first);
+          to_forward_coord2nghbr.insert(idx, nghbrs.second);
+        });
   }
 
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
@@ -145,11 +166,13 @@ public:
     Kokkos::deep_copy(ndims, h_ndims);
   }
 
+  KOKKOS_INLINE_FUNCTION
   void set_gbxarea(const double iarea)
   {
     gbxareas = iarea;
   }
 
+  KOKKOS_INLINE_FUNCTION
   void set_gbxvolume(const double ivolume)
   {
     gbxvolumes = ivolume;
@@ -170,7 +193,7 @@ public:
   KOKKOS_INLINE_FUNCTION
   size_t get_ndim(const unsigned int d) const
   /* returns model dimensions along a direction
-  ie. number of gridboxes along coord3, coord1 or 
+  ie. number of gridboxes along coord3, coord1 or
   coord2 direction. ndims is a view of the
   dimensions in the order: [coord3, coord1, coord2] */
   {
