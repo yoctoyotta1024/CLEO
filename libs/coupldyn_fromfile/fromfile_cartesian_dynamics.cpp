@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: fromfiledynamics.cpp
+ * File: fromfile_cartesian_dynamics.cpp
  * Project: coupldyn_fromfile
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -26,9 +26,11 @@ void FromFileDynamics::prepare_to_timestep() const
 {
 }
 
-void DynamicsVariables::increment_position()
+void CartesianDynamics::increment_position()
 /* updates positions to gbx0 in vector (for
-acessing value at next timestep) */
+acessing value at next timestep). Assumes domain
+is decomposed into cartesian C grid with dimensions
+(ie. number of gridboxes in each dimension) ndims */
 {
   pos += ndims[0] * ndims[1] * ndims[2];
   pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
@@ -36,7 +38,7 @@ acessing value at next timestep) */
   pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
-DynamicsVariables::DynamicsVariables(const Config &config)
+CartesianDynamics::CartesianDynamics(const Config &config)
     : ndims(ndims),
       atpos(0),
       atpos_zface(0),

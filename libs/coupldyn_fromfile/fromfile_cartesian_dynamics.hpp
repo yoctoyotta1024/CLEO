@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: fromfiledynamics.hpp
+ * File: fromfile_cartesian_dynamics.hpp
  * Project: coupldyn_fromfile
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -29,7 +29,7 @@
 
 #include "initialise/config.hpp"
 
-struct DynamicsVariables
+struct CartesianDynamics
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
 e.g. press = [p_gbx0(t0), p_gbx1(t0), ,... , p_gbxN(t0), 
@@ -47,17 +47,19 @@ current timestep from for the first gridbox (gbx0)  */
   std::vector<double> vvel; // v velocity define of y faces of gridboxes
 
   /* position in vector for 0th gridbox at current timestep  */
-  const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [z,x,y] directions
+  const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
   size_t pos;                        // for variable defined at gridbox centres
   size_t pos_zface;                  // for variable defined at gridbox z faces
   size_t pos_xface;                  // for variable defined at gridbox x faces
   size_t pos_yface;                  // for variable defined at gridbox y faces
 
-  DynamicsVariables(const Config &config);
+  CartesianDynamics(const Config &config);
 
   void increment_position();
   /* updates positions to gbx0 in vector (for
-  acessing value at next timestep) */
+  acessing value at next timestep). Assumes domain
+  is decomposed into cartesian C grid with dimensions
+  (ie. number of gridboxes in each dimension) ndims */
 };
 
 
@@ -68,7 +70,7 @@ that are read from binary files */
 {
 private:
   const unsigned int interval;
-  std::unique_ptr<DynamicsVariables> dynvars; // pointer to (thermo)dyanmic variables
+  std::unique_ptr<CartesianDynamics> dynvars; // pointer to (thermo)dyanmic variables
 
   void run_dynamics(const unsigned int t_mdl) const
   /* increment position of thermodata for 0th gridbox
