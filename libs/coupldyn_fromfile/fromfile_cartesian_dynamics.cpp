@@ -22,16 +22,19 @@
 
 #include "./fromfile_cartesian_dynamics.hpp"
 
-void CartesianDynamics::increment_position()
-/* updates positions to gbx0 in vector (for
-acessing value at next timestep). Assumes domain
-is decomposed into cartesian C grid with dimensions
-(ie. number of gridboxes in each dimension) ndims */
+std::vector<double>
+thermodynamicvar_from_binary(std::string_view filename)
 {
-  pos += ndims[0] * ndims[1] * ndims[2];
-  pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
-  pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
-  pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
+  /* open file and read in the metatdata
+  for all the variables in that file */
+  std::ifstream file(open_binary(filename));
+  std::vector<VarMetadata> meta(metadata_from_binary(file));
+
+  /* read in the data for the 1st variable in the file */
+  std::vector<double>
+      thermovar(vector_from_binary<double>(file, meta.at(0)));
+
+  return thermovar;
 }
 
 CartesianDynamics::
@@ -42,24 +45,50 @@ CartesianDynamics::
       pos_zface(0),
       pos_xface(0),
       pos_yface(0)
-      // press(thermodynamicvar_from_binary(config.press_filename)),
-      // temp(thermodynamicvar_from_binary(config.temp_filename)),
-      // qvap(thermodynamicvar_from_binary(config.qvap_filename)),
-      // qcond(thermodynamicvar_from_binary(config.qcond_filename)),
+      press(thermodynamicvar_from_binary(config.press_filename)),
+      temp(thermodynamicvar_from_binary(config.temp_filename)),
+      qvap(thermodynamicvar_from_binary(config.qvap_filename)),
+      qcond(thermodynamicvar_from_binary(config.qcond_filename)),
       // wvel(), uvel(), vvel(),
-      // get_wvelzfaces([](const unsigned int ii)
-      //                { return std::pair<double, double>{0.0, 0.0}; }),
-      // get_uvelxfaces([](const unsigned int ii)
-      //                { return std::pair<double, double>{0.0, 0.0}; }),
-      // get_vvelyfaces([](const unsigned int ii)
-      //                { return std::pair<double, double>{0.0, 0.0}; })
 {
-  // std::string windstr = set_windvelocities(config);
-  // std::cout << "\nFinished reading thermodynamics from binaries for:\n"
-  //              "  pressure,\n  temperature,\n"
-  //              "  water vapour mass mixing ratio,\n"
-  //              "  liquid water mass mixing ratio,\n  "
-  //           << windstr << '\n';
+  std::cout << "\nFinished reading thermodynamics from binaries for:\n"
+               "  pressure,\n  temperature,\n"
+               "  water vapour mass mixing ratio,\n"
+               "  liquid water mass mixing ratio,\n";
+
+  set_windvelocities(config);
 
   // check_thermodyanmics_vectorsizes(config.SDnspace, ndims, nsteps);
+}
+
+void CartesianDynamics::set_windvelocities(const Config &config)
+/* depending on SDnspace, read in data
+for wind velocity components (or not)*/
+{
+  const int SDnspace(config.SDnspace);
+
+  if (SDnspace == 0)
+  {
+    return "0-D model has no wind data";
+  }
+  else if (SDnspace <= 3) // means 1 <= SDnspace < 4
+  {
+    return set_windvelocities_frombinaries(config);
+  }
+  else // means SDnspace > 3
+  {
+    throw std::invalid_argument("SDnspace > 3 is invalid");
+  }
+}
+
+void CartesianDynamics::increment_position()
+/* updates positions to gbx0 in vector (for
+acessing value at next timestep). Assumes domain
+is decomposed into cartesian C grid with dimensions
+(ie. number of gridboxes in each dimension) ndims */
+{
+  pos += ndims[0] * ndims[1] * ndims[2];
+  pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
+  pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
+  pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }

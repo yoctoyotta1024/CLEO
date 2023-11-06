@@ -26,8 +26,10 @@
 #include <array>
 #include <vector>
 #include <memory>
+#include <string_view>
 
 #include "initialise/config.hpp"
+#include "initialise/readbinary.hpp"
 
 struct CartesianDynamics
 /* contains 1-D vector for each (thermo)dynamic
@@ -55,6 +57,8 @@ current timestep from for the first gridbox (gbx0)  */
 
   CartesianDynamics(const Config &config,
                     const std::array<size_t, 3> i_ndims);
+
+  void set_windvelocities(const Config &config);
 
   void increment_position();
   /* updates positions to gbx0 in vector (for
