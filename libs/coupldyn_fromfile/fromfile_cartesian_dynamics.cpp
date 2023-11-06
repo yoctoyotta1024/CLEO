@@ -45,7 +45,7 @@ kijfromindex(const std::array<size_t, 3> &ndims,
 /* return (k,i,j) indicies from idx for a flattened 3D array
 with ndims [nz, nx, ny]. kij is useful for then getting
 position in of a variable in a flattened array defined on
-the faces of the same grid. E.g for the w velocity defined 
+the faces of the same grid. E.g for the w velocity defined
 on z faces of the grid which therefore has dims [nz+1, nx, ny] */
 {
   const size_t j = index / (ndims[0] * ndims[1]);
@@ -180,6 +180,44 @@ containting wvel data from binary file */
     const size_t uppos(lpos + 1); // position of z upper face
 
     return std::pair(wvel_zfaces.at(lpos), wvel_zfaces.at(uppos));
+  };
+
+  return func;
+}
+
+CartesianDynamics::get_winds_func
+CartesianDynamics::get_uvel_from_binary()
+/* returns vector of yvel retrieved from binary
+file called 'filename' where uvel is defined on
+the x-faces (coord1) of gridboxes */
+{
+  const auto func = [&](const unsigned int gbxindex)
+  {
+    const auto kij = kijfromindex(ndims, (size_t)gbxindex); // [k,i,j] of gridbox centre on 3D grid
+    const size_t nxfaces(ndims[1] + 1);                     // no. x faces to same 3D grid
+
+    size_t lpos(nxfaces * ndims[0] * kij[2] + ndims[0] * kij[1] + kij[0]); // position of x lower face in 1D uvel vector
+    lpos += pos_xface;
+    const size_t uppos(lpos + ndims[0]); // position of x upper face
+
+    return std::pair(uvel_xfaces.at(lpos), uvel_xfaces.at(uppos));
+  };
+
+  return func;
+}
+
+CartesianDynamics::get_winds_func
+CartesianDynamics::get_vvel_from_binary()
+/* returns vector of vvel retrieved from binary
+file called 'filename' where vvel is defined on
+the y-faces (coord2) of gridboxes */
+{
+  const auto func = [&](const unsigned int gbxindex)
+  {
+    const size_t lpos((size_t)gbxindex + pos_yface); // position of y lower face in 1D vvel vector
+    const size_t uppos(lpos + ndims[1] * ndims[0]);    // position of x upper face
+
+    return std::pair(vvel_yfaces.at(lpos), vvel_yfaces.at(uppos));
   };
 
   return func;
