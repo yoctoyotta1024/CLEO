@@ -73,6 +73,7 @@ create_coupldyn(const Config &config,
   const auto h_ndims(gbxmaps.ndims_hostcopy());
   const std::array<size_t, 3>
       ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
+
   return FromFileDynamics(config, couplstep, ndims);
 }
 
@@ -173,9 +174,9 @@ create_observer(const Config &config,
 }
 
 inline auto create_sdm(const Config &config,
-                const Timesteps &tsteps,
-                const CoupledDynamics auto &coupldyn,
-                FSStore &store)
+                       const Timesteps &tsteps,
+                       const CoupledDynamics auto &coupldyn,
+                       FSStore &store)
 {
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
@@ -220,7 +221,7 @@ int main(int argc, char *argv[])
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
-    
+
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(
         create_coupldyn(config, tsteps.get_couplstep(), sdm.gbxmaps));
