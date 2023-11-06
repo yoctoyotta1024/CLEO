@@ -33,7 +33,7 @@ python=python
 ### ------------------- compile_run.sh ----------------- ###
 ### compile CLEO in ./build directory
 cd ${path2build} && pwd 
-make -j 16
+make -j 256
 
 ### run CLEO
 export OMP_PROC_BIND=spread

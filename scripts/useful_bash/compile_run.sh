@@ -38,7 +38,7 @@ mkdir ${path2build}share
 
 ### compile CLEO in ./build directory
 cd ${path2build} && pwd 
-make -j 16
+make -j 256
 
 # ### generate input files
 # ${python} ${path2CLEO}create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
