@@ -53,7 +53,8 @@ current timestep from for the first gridbox (gbx0)  */
   size_t pos_xface;                  // for variable defined at gridbox x faces
   size_t pos_yface;                  // for variable defined at gridbox y faces
 
-  CartesianDynamics(const Config &config);
+  CartesianDynamics(const Config &config,
+                    const std::array<size_t, 3> i_ndims);
 
   void increment_position();
   /* updates positions to gbx0 in vector (for
@@ -82,9 +83,10 @@ private:
 
 public:
   FromFileDynamics(const Config &config,
-                   const unsigned int couplstep)
+                   const unsigned int couplstep,
+                   const std::array<size_t, 3> ndims)
       : interval(couplstep),
-        dynvars(std::make_unique<DynamicsVariables>(config)) {}
+        dynvars(std::make_unique<CartesianDynamics>(config, ndims)) {}
 
   auto get_couplstep() const
   {

@@ -38,8 +38,10 @@ is decomposed into cartesian C grid with dimensions
   pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
-CartesianDynamics::CartesianDynamics(const Config &config)
-    : ndims(ndims),
+CartesianDynamics::
+    CartesianDynamics(const Config &config,
+                      const std::array<size_t, 3> i_ndims)
+    : ndims(i_ndims),
       atpos(0),
       atpos_zface(0),
       atpos_xface(0),

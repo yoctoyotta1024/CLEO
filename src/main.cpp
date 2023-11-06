@@ -70,8 +70,10 @@ create_coupldyn(const Config &config,
                 const unsigned int couplstep,
                 CartesianMaps &gbxmaps)
 {
-
-  return FromFileDynamics(config, couplstep);
+  const auto h_ndims(gbxmaps.ndims_hostcopy());
+  const std::array<size_t, 3>
+      ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
+  return FromFileDynamics(config, couplstep, ndims);
 }
 
 inline GridboxMaps auto
