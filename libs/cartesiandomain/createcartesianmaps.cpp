@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -141,9 +141,14 @@ void check_ngridboxes(const CartesianMaps &gbxmaps,
 /* checks number of gridboxes according to
 maps matches with expected value from gfb */
 {
-  const size_t ngbxs_from_ndims(gbxmaps.get_ndim(0) *
-                                gbxmaps.get_ndim(1) *
-                                gbxmaps.get_ndim(2));
+  /* if gbxmaps ndims is on device, make copy to use on host */
+  const viewd_ndims d_ndims(gbxmaps.get_ndims());     // view for ndims (on device)
+  auto h_ndims = Kokkos::create_mirror_view(d_ndims); // mirror ndims in case view is on device memory
+  Kokkos::deep_copy(h_ndims, d_ndims);
+
+  const size_t ngbxs_from_ndims(h_ndims(0) *
+                                h_ndims(1) *
+                                h_ndims(2));
 
   if (ngbxs_from_ndims != ngbxs)
   {
@@ -159,18 +164,17 @@ maps matches with expected value from gfb */
   }
 }
 
-void set_maps_ndims(const std::vector<size_t> &ndims,
+void set_maps_ndims(const std::vector<size_t> &i_ndims,
                     CartesianMaps &gbxmaps)
 /* copys ndims  to gbxmaps' ndims to set number of
 dimensions (ie. number of gridboxes) in
 [coord3, coord1, coord2] directions */
 {
-  viewd_ndims d_ndims(gbxmaps.get_ndims());           // view for ndims (on device)
-  auto h_ndims = Kokkos::create_mirror_view(d_ndims); // mirror ndims in case view is on device memory
+  auto h_ndims = Kokkos::create_mirror_view(gbxmaps.get_ndims()); // mirror ndims in case view is on device memory
 
   for (unsigned int m(0); m < 3; ++m)
   {
-    h_ndims(m) = ndims.at(m);
+    h_ndims(m) = i_ndims.at(m);
   }
   
   gbxmaps.set_ndims_via_copy(h_ndims);

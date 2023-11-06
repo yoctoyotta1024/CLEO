@@ -203,16 +203,6 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION
-  size_t get_ndim(const unsigned int d) const
-  /* returns model dimensions along a direction
-  ie. number of gridboxes along coord3, coord1 or
-  coord2 direction. ndims is a view of the
-  dimensions in the order: [coord3, coord1, coord2] */
-  {
-    return ndims(d);
-  }
-
-  KOKKOS_INLINE_FUNCTION
   double get_gbxarea(const unsigned int gbxidx) const
   {
     return gbxareas;
