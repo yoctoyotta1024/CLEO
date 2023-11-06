@@ -29,8 +29,10 @@
 #include <string_view>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <functional>
 #include <utility>
+#include <stdexcept>
 
 #include "initialise/config.hpp"
 #include "initialise/readbinary.hpp"

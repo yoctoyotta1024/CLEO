@@ -107,12 +107,14 @@ for 1-D, 2-D or 3-D wind velocity components */
   case 1:
   case 2:
   case 3: // 1-D, 2-D or 3-D model
-    const std::string windstr(
-        set_winds_from_binaries(nspacedims,
-                                config.wvel_filename,
-                                config.uvel_filename,
-                                config.vvel_filename));
+  {
+    const std::string windstr(set_winds_from_binaries(nspacedims,
+                                                      config.wvel_filename,
+                                                      config.uvel_filename,
+                                                      config.vvel_filename));
     std::cout << windstr;
+  }
+  break;
 
   default:
     throw std::invalid_argument("nspacedims for wind data is invalid");
