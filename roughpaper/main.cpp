@@ -33,24 +33,26 @@ void set_model_maps()
 
 int main(int argc, char *argv[])
 {
-  const unsigned int nspacedims(4);
+  const unsigned int nspacedims(1);
 
-  std::string info(std::to_string(nspacedims) +
-                   "-D model, wind velocity");
-
-  std::string vel;
   switch (nspacedims)
   {
-    case 3: // 3-D model 
-      vel = ", u";
-    case 2: // 3-D or 2-D model 
-      vel = ", v" + vel;
-    case 1: // 3-D, 2-D or 1-D model 
-      vel = "w" + vel;    
-  }
+  case 0:
+    std::cout << "0-D model has no wind data\n";
+    break;
 
-  info += " = [" + vel + "]\n";
-  std::cout << info << "\n";
+  case 1:
+  case 2:
+  case 3: // 1-D, 2-D or 3-D model
+  {
+    const std::string windstr("1D, 2D or 3D\n");
+    std::cout << windstr;
+  }
+  break;
+
+  default:
+    throw std::invalid_argument("nspacedims for wind data is invalid");
+  }
 }
 
 // int main(int argc, char *argv[])
