@@ -65,20 +65,23 @@ void CartesianDynamics::set_windvelocities(const Config &config)
 /* depending on SDnspace, read in data
 for wind velocity components (or not)*/
 {
-  const int SDnspace(config.SDnspace);
-
-  if (SDnspace == 0)
+  switch (config.nspacedims)
   {
-    return "0-D model has no wind data";
+  case 0:
+    std::cout << "0-D model has no wind data\n";
+    break;
+  case 1: //TODO 
+
+  default:
+    throw std::invalid_argument("nspacedims for wind data is invalid");
   }
+
   else if (SDnspace <= 3) // means 1 <= SDnspace < 4
   {
-    return set_windvelocities_frombinaries(config);
+    const std::string windstr(set_windvelocities_frombinaries(config));
+    std::cout << windstr;
   }
-  else // means SDnspace > 3
-  {
-    throw std::invalid_argument("SDnspace > 3 is invalid");
-  }
+
 }
 
 void CartesianDynamics::increment_position()

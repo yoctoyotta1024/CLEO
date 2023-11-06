@@ -27,6 +27,7 @@
 #include <vector>
 #include <memory>
 #include <string_view>
+#include <iostream>
 
 #include "initialise/config.hpp"
 #include "initialise/readbinary.hpp"
