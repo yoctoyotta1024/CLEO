@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 31st October 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,7 +24,7 @@
 #define FROMFILECOMMS_HPP
 
 #include "../kokkosaliases.hpp"
-#include "./fromfiledynamics.hpp"
+#include "./fromfile_cartesian_dynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 

@@ -20,8 +20,8 @@
  * one-way and dynamics are read from file
  */
 
-#ifndef FROMFILEDYNAMICS_HPP 
-#define FROMFILEDYNAMICS_HPP 
+#ifndef FROMFILE_CARTESIAN_DYNAMICS_HPP 
+#define FROMFILE_CARTESIAN_DYNAMICS_HPP 
 
 #include <array>
 #include <vector>
@@ -107,4 +107,4 @@ public:
 
 };
 
-#endif // FROMFILEDYNAMICS_HPP
+#endif // FROMFILE_CARTESIAN_DYNAMICS_HPP  

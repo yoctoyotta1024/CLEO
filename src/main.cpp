@@ -31,7 +31,7 @@
 #include "cartesiandomain/createcartesianmaps.hpp"
 
 #include "coupldyn_fromfile/fromfilecomms.hpp"
-#include "coupldyn_fromfile/fromfiledynamics.hpp"
+#include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/initgbxs1.hpp"
 
 #include "gridboxes/gridboxmaps.hpp"
@@ -67,8 +67,10 @@
 
 inline CoupledDynamics auto
 create_coupldyn(const Config &config,
-                const unsigned int couplstep)
+                const unsigned int couplstep,
+                CartesianMaps &gbxmaps)
 {
+
   return FromFileDynamics(config, couplstep);
 }
 
@@ -219,7 +221,7 @@ int main(int argc, char *argv[])
     
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(
-        create_coupldyn(config, tsteps.get_couplstep()));
+        create_coupldyn(config, tsteps.get_couplstep(), sdm.gbxmaps));
 
     /* coupling between coupldyn and SDM */
     const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
