@@ -26,13 +26,6 @@ void FromFileDynamics::prepare_to_timestep() const
 {
 }
 
-void FromFileDynamics::run_dynamics(const unsigned int t_mdl) const
-/* increment position of thermodata for 0th gridbox
-to positon at next timestep (ie. ngridbox_faces
-further along vector) */
-{
-}
-
 void DynamicsVariables::increment_position()
 /* updates positions to gbx0 in vector (for
 acessing value at next timestep) */
@@ -41,4 +34,9 @@ acessing value at next timestep) */
   pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
   pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
   pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
+}
+
+DynamicsVariables::DynamicsVariables(const Config &config)
+{
+
 }

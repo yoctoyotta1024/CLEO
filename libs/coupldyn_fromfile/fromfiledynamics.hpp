@@ -53,6 +53,8 @@ current timestep from for the first gridbox (gbx0)  */
   size_t pos_xface;                  // for variable defined at gridbox x faces
   size_t pos_yface;                  // for variable defined at gridbox y faces
 
+  DynamicsVariables(const Config &config);
+
   void increment_position();
   /* updates positions to gbx0 in vector (for
   acessing value at next timestep) */
@@ -68,12 +70,19 @@ private:
   const unsigned int interval;
   std::unique_ptr<DynamicsVariables> dynvars; // pointer to (thermo)dyanmic variables
 
-  void run_dynamics(const unsigned int t_mdl) const;
-  
+  void run_dynamics(const unsigned int t_mdl) const
+  /* increment position of thermodata for 0th gridbox
+  to positon at next timestep (ie. ngridbox_faces
+  further along vector) */
+  {
+    dynvars->increment_position();
+  }
+
 public:
   FromFileDynamics(const Config &config,
                    const unsigned int couplstep)
-      : interval(couplstep) {}
+      : interval(couplstep),
+        dynvars(std::make_unique<DynamicsVariables>(config)) {}
 
   auto get_couplstep() const
   {
