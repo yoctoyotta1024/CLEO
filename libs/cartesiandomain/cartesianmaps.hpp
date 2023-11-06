@@ -194,6 +194,17 @@ public:
   /* on host device, throws error if maps are not all
   the same size, else returns size of maps */
 
+  viewd_ndims::HostMirror ndims_hostcopy() const
+  /* returns model dimensions ie. number of gridboxes
+  along [coord3, coord1, coord2] directions for use on
+  host. deep copy is made if gbxmaps ndims is on device */
+  {
+    auto h_ndims = Kokkos::create_mirror_view(ndims); // mirror ndims in case view is on device memory
+    Kokkos::deep_copy(h_ndims, ndims);
+
+    return h_ndims;
+  }
+
   KOKKOS_INLINE_FUNCTION
   viewd_ndims get_ndims() const
   /* returns model dimensions ie. number of gridboxes

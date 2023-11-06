@@ -141,11 +141,7 @@ void check_ngridboxes(const CartesianMaps &gbxmaps,
 /* checks number of gridboxes according to
 maps matches with expected value from gfb */
 {
-  /* if gbxmaps ndims is on device, make copy to use on host */
-  const viewd_ndims d_ndims(gbxmaps.get_ndims());     // view for ndims (on device)
-  auto h_ndims = Kokkos::create_mirror_view(d_ndims); // mirror ndims in case view is on device memory
-  Kokkos::deep_copy(h_ndims, d_ndims);
-
+  const auto h_ndims(gbxmaps.ndims_hostcopy());
   const size_t ngbxs_from_ndims(h_ndims(0) *
                                 h_ndims(1) *
                                 h_ndims(2));

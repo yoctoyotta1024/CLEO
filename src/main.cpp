@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -214,7 +214,6 @@ int main(int argc, char *argv[])
 
   /* coupling between coupldyn and SDM */
   const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
-
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
