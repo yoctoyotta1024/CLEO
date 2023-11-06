@@ -70,18 +70,13 @@ for wind velocity components (or not)*/
   case 0:
     std::cout << "0-D model has no wind data\n";
     break;
-  case 1: //TODO 
+  case 1: case 2: case 3: // 1-D, 2-D or 3-D model
+    const std::string windstr(set_windvelocities_frombinaries(config));
+    std::cout << windstr;
 
   default:
     throw std::invalid_argument("nspacedims for wind data is invalid");
   }
-
-  else if (SDnspace <= 3) // means 1 <= SDnspace < 4
-  {
-    const std::string windstr(set_windvelocities_frombinaries(config));
-    std::cout << windstr;
-  }
-
 }
 
 void CartesianDynamics::increment_position()

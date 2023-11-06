@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,37 +26,22 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_UnorderedMap.hpp>
 
-void set_0Dmodel_maps()
+void set_model_maps()
 {
-  std::cout << "0-D\n";
-}
-
-void set_1Dmodel_maps()
-{
-  std::cout << "1-D\n";
+  std::cout << "wind maps\n";
 }
 
 int main(int argc, char *argv[])
 {
-  const unsigned int nspacedims(3);
-
-  if (nspacedims == 0)
-  {
-    set_0Dmodel_maps();
-  }
-
-  else if (nspacedims == 1)
-  {
-    set_1Dmodel_maps();
-  }
+  const unsigned int nspacedims(4);
 
   switch (nspacedims)
   {
   case 0:
-    set_0Dmodel_maps();
+    std::cout << "no maps\n";
     break;
-  case 1:
-    set_1Dmodel_maps();
+  case 1: case 2: case 3:
+    set_model_maps();
     break;
   default:
     std::cout << "error\n";
