@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -139,6 +139,8 @@ public:
   }
 
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
+  /* copies of h_ndims to ndims,
+  possibly into device memory */
   {
     Kokkos::deep_copy(ndims, h_ndims);
   }
@@ -154,6 +156,8 @@ public:
   }
 
   size_t maps_size() const;
+  /* on host device, throws error if maps are not all
+  the same size, else returns size of maps */
 
   KOKKOS_INLINE_FUNCTION
   viewd_ndims get_ndims() const

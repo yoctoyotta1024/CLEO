@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Monday 6th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,8 +24,8 @@
 #include "./cartesianmaps.hpp"
 
 size_t CartesianMaps::maps_size() const
-/* throws error if maps are not all the same
-size, else returns size of maps */
+/* on host, throws error if maps are not all
+the same size, else returns size of maps */
 {
   const auto h_ndims(Kokkos::create_mirror_view(ndims));
   Kokkos::deep_copy(h_ndims, ndims);
