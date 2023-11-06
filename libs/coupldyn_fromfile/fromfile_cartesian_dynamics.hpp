@@ -64,26 +64,30 @@ private:
   velocity components in 1D, 2D or 3D model
   and check they have correct size */
 
-  get_winds_func nullwinds();
+  get_winds_func nullwinds() const;
   /* nullwinds retuns an empty function 'func' that returns
   {0.0, 0.0}. Useful for setting get_[X]vel[Y]faces functions
   in case of non-existent wind component e.g. get_uvelyface
   when setup is 2-D model (x and z only) */
 
-  get_winds_func get_wvel_from_binary();
+  get_winds_func get_wvel_from_binary() const;
   /* returns vector of wvel retrieved from binary
   file called 'filename' where wvel is defined on
   the z-faces (coord3) of gridboxes */
 
-  get_winds_func get_uvel_from_binary();
+  get_winds_func get_uvel_from_binary() const;
   /* returns vector of yvel retrieved from binary
   file called 'filename' where uvel is defined on
   the x-faces (coord1) of gridboxes */
 
-  get_winds_func get_vvel_from_binary();
+  get_winds_func get_vvel_from_binary() const;
   /* returns vector of vvel retrieved from binary
   file called 'filename' where vvel is defined on
   the y-faces (coord2) of gridboxes */
+
+  void check_thermodyanmics_vectorsizes(const unsigned int nspacedims,
+                                        const std::array<size_t, 3> &ndims,
+                                        const size_t nsteps) const;
 
 public:
   /* position in vector for 0th gridbox at current timestep  */

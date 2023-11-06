@@ -89,7 +89,7 @@ CartesianDynamics::
 
   set_winds(config);
 
-  // check_thermodyanmics_vectorsizes(config.nspacedims, ndims, nsteps);
+  check_thermodyanmics_vectorsizes(config.nspacedims, ndims, nsteps);
 }
 
 void CartesianDynamics::set_winds(const Config &config)
@@ -154,7 +154,7 @@ and check they have correct size */
 }
 
 CartesianDynamics::get_winds_func
-CartesianDynamics::nullwinds()
+CartesianDynamics::nullwinds() const
 /* nullwinds retuns an empty function 'func' that returns
 {0.0, 0.0}. Useful for setting get_[X]vel[Y]faces functions
 in case of non-existent wind component e.g. get_uvelyface
@@ -167,7 +167,7 @@ when setup is 2-D model (x and z only) */
 }
 
 CartesianDynamics::get_winds_func
-CartesianDynamics::get_wvel_from_binary()
+CartesianDynamics::get_wvel_from_binary() const
 /* set function for retrieving wvel defined at zfaces of
 a gridbox with index 'gbxindex' and return vector
 containting wvel data from binary file */
@@ -188,7 +188,7 @@ containting wvel data from binary file */
 }
 
 CartesianDynamics::get_winds_func
-CartesianDynamics::get_uvel_from_binary()
+CartesianDynamics::get_uvel_from_binary() const
 /* returns vector of yvel retrieved from binary
 file called 'filename' where uvel is defined on
 the x-faces (coord1) of gridboxes */
@@ -209,7 +209,7 @@ the x-faces (coord1) of gridboxes */
 }
 
 CartesianDynamics::get_winds_func
-CartesianDynamics::get_vvel_from_binary()
+CartesianDynamics::get_vvel_from_binary() const
 /* returns vector of vvel retrieved from binary
 file called 'filename' where vvel is defined on
 the y-faces (coord2) of gridboxes */
@@ -223,4 +223,43 @@ the y-faces (coord2) of gridboxes */
   };
 
   return func;
+}
+
+void CartesianDynamics::
+    check_thermodyanmics_vectorsizes(const unsigned int nspacedims,
+                                     const std::array<size_t, 3> &ndims,
+                                     const size_t nsteps) const
+/* Firstly checks thermodynamics (press, temp, qvap and qcond) are
+1D vectors with length = nsteps * ngbxs. Secondly checks wind
+velocity components are appropriate length given spatial dimension
+of model and definiton on z, x or y faces of gridboxes  */
+{
+  auto is_size = [](const std::vector<double> &vel, const size_t sz)
+  { 
+    const size_t velsize(vel.size());
+    if ( velsize != sz )
+    {
+      throw std::invalid_argument(std::to_string(velsize)+ " vector is "
+                                "not consistent with correct size "+
+                                std::to_string(sz));
+    }
+  };
+
+  const size_t sz(nsteps*ndims.at(0)*ndims.at(1)*ndims.at(2)); // nsteps * ngbxs
+  is_size(press, sz);
+  check_vectorsizes({press.size(), temp.size(),
+                      qvap.size(), qcond.size()});
+
+  switch (nspacedims)
+  {
+  case 3: // 3-D model
+    const size_t vsz = nsteps*ndims[0]*ndims[1]*(ndims[2]+1);
+    is_size(vvel_yfaces, vsz);
+  case 2: // 3-D or 2-D model
+    const size_t usz = nsteps*ndims[0]*(ndims[1]+1)*ndims[2];
+    is_size(uvel_xfaces, usz);
+  case 1: // 3-D, 2-D or 1-D model
+    const size_t wsz = nsteps*(ndims[0]+1)*ndims[1]*ndims[2];
+    is_size(wvel_zfaces, wsz);
+  }
 }
