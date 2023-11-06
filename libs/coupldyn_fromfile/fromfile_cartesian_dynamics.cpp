@@ -22,21 +22,6 @@
 
 #include "./fromfile_cartesian_dynamics.hpp"
 
-std::vector<double> wvel_from_binary(std::string_view filename);
-/* returns vector of wvel retrieved from binary
-file called 'filename' where wvel is defined on
-the z-faces (coord3) of gridboxes */
-
-std::vector<double> uvel_from_binary(std::string_view filename);
-/* returns vector of yvel retrieved from binary
-file called 'filename' where uvel is defined on
-the x-faces (coord1) of gridboxes */
-
-std::vector<double> vvel_from_binary(std::string_view filename);
-/* returns vector of vvel retrieved from binary
-file called 'filename' where vvel is defined on
-the y-faces (coord2) of gridboxes */
-
 std::vector<double>
 thermodynamicvar_from_binary(std::string_view filename)
 /* open file called 'filename' and return vector
@@ -54,16 +39,32 @@ of doubles for first variable in that file */
   return thermovar;
 }
 
-std::function<std::pair<double, double>(const unsigned int)> nullwinds()
-/* nullwinds retuns an empty function 'func' that returns
-{0.0, 0.0}. Useful for setting get_[X]vel[Y]faces functions
-in case of non-existent wind component e.g. get_uvelyface
-when setup is 2-D model (x and z only) */
+std::array<size_t, 3>
+kijfromindex(const std::array<size_t, 3> &ndims,
+             const size_t index)
+/* return (k,i,j) indicies from idx for a flattened 3D array
+with ndims [nz, nx, ny]. kij is useful for then getting
+position in of a variable in a flattened array defined on
+the faces of the same grid. E.g for the w velocity defined 
+on z faces of the grid which therefore has dims [nz+1, nx, ny] */
 {
-  const auto func = [](const unsigned int ii)
-  { return std::pair<double, double>{0.0, 0.0}; };
+  const size_t j = index / (ndims[0] * ndims[1]);
+  const size_t k = index % ndims[0];
+  const size_t i = index / ndims[0] - ndims[1] * j;
 
-  return func;
+  return std::array<size_t, 3>{k, i, j};
+}
+
+void CartesianDynamics::increment_position()
+/* updates positions to gbx0 in vector (for
+acessing value at next timestep). Assumes domain
+is decomposed into cartesian C grid with dimensions
+(ie. number of gridboxes in each dimension) ndims */
+{
+  pos += ndims[0] * ndims[1] * ndims[2];
+  pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
+  pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
+  pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
 CartesianDynamics::
@@ -89,18 +90,6 @@ CartesianDynamics::
   set_winds(config);
 
   // check_thermodyanmics_vectorsizes(config.nspacedims, ndims, nsteps);
-}
-
-void CartesianDynamics::increment_position()
-/* updates positions to gbx0 in vector (for
-acessing value at next timestep). Assumes domain
-is decomposed into cartesian C grid with dimensions
-(ie. number of gridboxes in each dimension) ndims */
-{
-  pos += ndims[0] * ndims[1] * ndims[2];
-  pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
-  pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
-  pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
 void CartesianDynamics::set_winds(const Config &config)
@@ -139,26 +128,59 @@ std::string CartesianDynamics::
 velocity components in 1D, 2D or 3D model
 and check they have correct size */
 {
-  std::string info(std::to_string(nspacedims) +
-                   "-D model, wind velocity");
+  std::string infostart(std::to_string(nspacedims) +
+                        "-D model, wind velocity");
 
-  std::string vel;
+  std::string infoend;
   switch (nspacedims)
   {
   case 3: // 3-D model
-    vvel_yfaces = get_vvel_from_binary();
     vvel_yfaces = thermodynamicvar_from_binary(vvel_filename);
-    vel = ", u";
+    get_vvel = get_vvel_from_binary();
+    infoend = ", u";
   case 2: // 3-D or 2-D model
-    uvel_xfaces = get_uvel_from_binary();
-    uvel_xfaces = thermodynamicvar_from_binary(uvel_filename); 
-    vel = ", v" + vel;
+    uvel_xfaces = thermodynamicvar_from_binary(uvel_filename);
+    get_uvel = get_uvel_from_binary();
+    infoend = ", v" + infoend;
   case 1: // 3-D, 2-D or 1-D model
-    get_wvel = get_wvel_from_binary();
     wvel_zfaces = thermodynamicvar_from_binary(wvel_filename);
-    vel = "w" + vel;
+    get_wvel = get_wvel_from_binary();
+    infoend = "w" + infoend;
   }
 
-  info += " = [" + vel + "]\n";
-  return info;
+  return infostart + " = [" + infoend + "]\n";
+}
+
+CartesianDynamics::get_winds_func
+CartesianDynamics::nullwinds()
+/* nullwinds retuns an empty function 'func' that returns
+{0.0, 0.0}. Useful for setting get_[X]vel[Y]faces functions
+in case of non-existent wind component e.g. get_uvelyface
+when setup is 2-D model (x and z only) */
+{
+  const auto func = [](const unsigned int ii)
+  { return std::pair<double, double>{0.0, 0.0}; };
+
+  return func;
+}
+
+CartesianDynamics::get_winds_func
+CartesianDynamics::get_wvel_from_binary()
+/* set function for retrieving wvel defined at zfaces of
+a gridbox with index 'gbxindex' and return vector
+containting wvel data from binary file */
+{
+  const auto func = [&](const unsigned int gbxindex)
+  {
+    const auto kij = kijfromindex(ndims, (size_t)gbxindex); // [k,i,j] of gridbox centre on 3D grid
+    const size_t nzfaces(ndims[0] + 1);                     // no. z faces to same 3D grid
+
+    size_t lpos(ndims[1] * nzfaces * kij[2] + nzfaces * kij[1] + kij[0]); // position of z lower face in 1D wvel vector
+    lpos += pos_zface;
+    const size_t uppos(lpos + 1); // position of z upper face
+
+    return std::pair(wvel_zfaces.at(lpos), wvel_zfaces.at(uppos));
+  };
+
+  return func;
 }

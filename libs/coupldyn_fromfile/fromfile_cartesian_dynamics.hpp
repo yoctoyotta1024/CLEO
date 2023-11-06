@@ -30,6 +30,7 @@
 #include <string>
 #include <iostream>
 #include <functional>
+#include <utility>
 
 #include "initialise/config.hpp"
 #include "initialise/readbinary.hpp"
@@ -43,9 +44,11 @@ p_gbx0(t1), p_gbx1(t1), ..., p_gbxN(t1), ..., p_gbxN(t_end)]
 current timestep from for the first gridbox (gbx0)  */
 {
 private:
-  std::vector<double> wvel_zface; // w velocity defined on coord3 faces of gridboxes
-  std::vector<double> uvel_xface; // u velocity defined on coord1 faces of gridboxes
-  std::vector<double> vvel_yface; // v velocity defined on coord2 faces of gridboxes
+  using get_winds_func = std::function<std::pair<double,double>(const unsigned int)>;
+
+  std::vector<double> wvel_zfaces; // w velocity defined on coord3 faces of gridboxes
+  std::vector<double> uvel_xfaces; // u velocity defined on coord1 faces of gridboxes
+  std::vector<double> vvel_yfaces; // v velocity defined on coord2 faces of gridboxes
 
   void set_winds(const Config &config);
   /* depending on nspacedims, read in data
@@ -58,6 +61,27 @@ private:
   /* Read in data from binary files for wind
   velocity components in 1D, 2D or 3D model
   and check they have correct size */
+
+  get_winds_func nullwinds();
+  /* nullwinds retuns an empty function 'func' that returns
+  {0.0, 0.0}. Useful for setting get_[X]vel[Y]faces functions
+  in case of non-existent wind component e.g. get_uvelyface
+  when setup is 2-D model (x and z only) */
+
+  get_winds_func get_wvel_from_binary();
+  /* returns vector of wvel retrieved from binary
+  file called 'filename' where wvel is defined on
+  the z-faces (coord3) of gridboxes */
+
+  get_winds_func get_uvel_from_binary();
+  /* returns vector of yvel retrieved from binary
+  file called 'filename' where uvel is defined on
+  the x-faces (coord1) of gridboxes */
+
+  get_winds_func get_vvel_from_binary();
+  /* returns vector of vvel retrieved from binary
+  file called 'filename' where vvel is defined on
+  the y-faces (coord2) of gridboxes */
 
 public:
   /* position in vector for 0th gridbox at current timestep  */
@@ -73,9 +97,9 @@ public:
   std::vector<double> qvap;
   std::vector<double> qcond;
   
-  std::function<std::pair<double,double>(const unsigned int)> get_wvel; // funcs to get velocity defined in construction of class 
-  std::function<std::pair<double,double>(const unsigned int)> get_uvel; // warning: these functions are not const member funcs by default
-  std::function<std::pair<double,double>(const unsigned int)> get_vvel;
+  get_winds_func get_wvel; // funcs to get velocity defined in construction of class 
+  get_winds_func get_uvel; // warning: these functions are not const member funcs by default
+  get_winds_func get_vvel;
 
   CartesianDynamics(const Config &config,
                     const std::array<size_t, 3> i_ndims);
