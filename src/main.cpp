@@ -208,13 +208,6 @@ int main(int argc, char *argv[])
   /* Create zarr store for writing output to storage */
   FSStore fsstore(config.zarrbasedir);
 
-  /* Solver of dynamics coupled to CLEO SDM */
-  CoupledDynamics auto coupldyn(
-      create_coupldyn(config, tsteps.get_couplstep()));
-
-  /* coupling between coupldyn and SDM */
-  const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
-
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
 
@@ -223,6 +216,13 @@ int main(int argc, char *argv[])
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
+    
+    /* Solver of dynamics coupled to CLEO SDM */
+    CoupledDynamics auto coupldyn(
+        create_coupldyn(config, tsteps.get_couplstep()));
+
+    /* coupling between coupldyn and SDM */
+    const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
