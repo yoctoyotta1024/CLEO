@@ -31,8 +31,14 @@ void FromFileDynamics::run_dynamics(const unsigned int t_mdl) const
 to positon at next timestep (ie. ngridbox_faces
 further along vector) */
 {
-  atpos += ndims[0] * ndims[1] * ndims[2];
-  atpos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
-  atpos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
-  atpos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
+}
+
+void DynamicsVariables::increment_position()
+/* updates positions to gbx0 in vector (for
+acessing value at next timestep) */
+{
+  pos += ndims[0] * ndims[1] * ndims[2];
+  pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
+  pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
+  pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }

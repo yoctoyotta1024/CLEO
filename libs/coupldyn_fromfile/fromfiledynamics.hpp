@@ -23,7 +23,9 @@
 #ifndef FROMFILEDYNAMICS_HPP 
 #define FROMFILEDYNAMICS_HPP 
 
-#include <iostream>
+#include <array>
+#include <vector>
+#include <memory>
 
 #include "initialise/config.hpp"
 
@@ -35,8 +37,26 @@ p_gbx0(t1), p_gbx1(t1), ..., p_gbxN(t1), ..., p_gbxN(t_end)]
 "pos[_X]" gives position of variable in a vector to read
 current timestep from for the first gridbox (gbx0)  */
 {
+  /* (thermo)dynamic variables read from file */
+  std::vector<double> press;
+  std::vector<double> temp;
+  std::vector<double> qvap;
+  std::vector<double> qcond;
+  std::vector<double> wvel; // w velocity define of z faces of gridboxes
+  std::vector<double> uvel; // u velocity define of x faces of gridboxes
+  std::vector<double> vvel; // v velocity define of y faces of gridboxes
 
-}
+  /* position in vector for 0th gridbox at current timestep  */
+  const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [z,x,y] directions
+  size_t pos;                        // for variable defined at gridbox centres
+  size_t pos_zface;                  // for variable defined at gridbox z faces
+  size_t pos_xface;                  // for variable defined at gridbox x faces
+  size_t pos_yface;                  // for variable defined at gridbox y faces
+
+  void increment_position();
+  /* updates positions to gbx0 in vector (for
+  acessing value at next timestep) */
+};
 
 
 struct FromFileDynamics
@@ -46,6 +66,7 @@ that are read from binary files */
 {
 private:
   const unsigned int interval;
+  std::unique_ptr<DynamicsVariables> dynvars; // pointer to (thermo)dyanmic variables
 
   void run_dynamics(const unsigned int t_mdl) const;
   
