@@ -63,19 +63,19 @@ private:
       for (size_t kk(0); kk < supers.extent(0); ++kk)
       {
         Superdrop &drop(supers(kk));
-        
+
         /* step (1) */
-        motion.update_superdrop_coords(t_sdm);
+        motion.update_superdrop_coords();
 
         // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
 
         /* step (2) */
-        SDinGBx.sd_gbxindex = update_superdrop_gbxindex(gbxmaps, ii, drop);
+        drop.set_sdgbxindex(update_superdrop_gbxindex());
       }
     }
 
     /* step (3) */
-    move_superdroplets_between_gridboxes(gbxmaps, SDsInGBxs, gridboxes);
+    move_superdroplets_between_gridboxes();
   }
 
 public:
