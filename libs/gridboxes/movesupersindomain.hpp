@@ -35,7 +35,7 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-template <Motion M>
+template <GridboxMaps GbxMaps, Motion<GbxMaps> M>
 struct MoveSupersInDomain
 /* struct for functionality to move superdroplets throughtout
 the domain by updating their spatial coordinates (according to 
@@ -58,7 +58,7 @@ private:
   }
 
   void move_superdrops_in_domain(const unsigned int t_sdm,
-                                 const GridboxMaps auto &gbxmaps,
+                                 const GbxMaps &gbxmaps,
                                  const viewd_gbx d_gbxs,
                                  const viewd_supers totsupers) const
   /* enact movement of superdroplets throughout domain in three stages:
@@ -70,13 +70,15 @@ private:
     const size_t ngbxs(d_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
+      const unsigned int gbxindex(d_gbxs(ii).get_gbxindex());
+      const State &state(d_gbxs(ii).state);
       const subviewd_supers supers(d_gbxs(ii).supersingbx());
       for (size_t kk(0); kk < supers.extent(0); ++kk)
       {
         Superdrop &drop(supers(kk));
 
         /* step (1) */
-        motion.update_superdrop_coords();
+        motion.update_superdrop_coords(gbxindex, gbxmaps, state, drop);
 
         /* optional step (1b) */
         // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
@@ -103,7 +105,7 @@ public:
   }
 
   void run_step(const unsigned int t_sdm,
-                const GridboxMaps auto &gbxmaps,
+                const GbxMaps &gbxmaps,
                 const viewd_gbx d_gbxs,
                 const viewd_supers totsupers) const
   /* if current time, t_sdm, is time when superdrop

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 26th October 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,25 +26,30 @@
 #include <concepts>
 
 #include "../cleoconstants.hpp"
+#include "./state.hpp"
+#include "./superdrop.hpp"
 
-template <typename M>
-concept Motion = requires(M m, const unsigned int t)
+template <typename M, typename GbxMaps>
+concept Motion = requires(M m,
+                          const unsigned int u,
+                          const GbxMaps &gbxmaps,
+                          const State &state,
+                          Superdrop &sd)
 /* concept for superdrop motion is all types that
 meet requirements (constraints) of these two timstepping
 functions ("on_step" and "next_step") as well as the
 constraints on the "update_superdrop_coords" function */
 {
   {
-    m.next_step(t)
+    m.next_step(u)
   } -> std::convertible_to<unsigned int>;
   {
-    m.on_step(t)
+    m.on_step(u)
   } -> std::same_as<bool>;
   {
-    m.update_superdrop_coords(t)
-  } -> std::same_as<void>; 
+    m.update_superdrop_coords(u, gbxmaps, state, sd)
+  } -> std::same_as<void>;
 };
-
 
 struct NullMotion
 {

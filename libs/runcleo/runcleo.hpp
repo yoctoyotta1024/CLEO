@@ -48,9 +48,12 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-template <CoupledDynamics CD, GridboxMaps GbxMaps,
-          MicrophysicalProcess Microphys, Motion M,
-          Observer Obs, CouplingComms<CD> Comms> 
+template <CoupledDynamics CD,
+          GridboxMaps GbxMaps,
+          MicrophysicalProcess Microphys,
+          Motion<GbxMaps> M,
+          Observer Obs,
+          CouplingComms<CD> Comms>
 class RunCLEO
 {
 private:

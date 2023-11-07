@@ -39,12 +39,12 @@
 
 template <GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,
-          Motion M, Observer Obs>
+          Motion<GbxMaps> M, Observer Obs>
 class SDMMethods
 {
 private:
   unsigned int couplstep;           // coupled timestep
-  MoveSupersInDomain<M> movesupers; // super-droplets' motion in domain
+  MoveSupersInDomain<GbxMaps, M> movesupers; // super-droplets' motion in domain
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_sdmstep(const unsigned int t_sdm,
@@ -117,7 +117,7 @@ public:
   SDMMethods(const unsigned int couplstep,
              const GbxMaps gbxmaps,
              const Microphys microphys,
-             const MoveSupersInDomain<M> movesupers,
+             const M movesupers,
              const Obs obs)
       : couplstep(couplstep),
         movesupers(movesupers),
