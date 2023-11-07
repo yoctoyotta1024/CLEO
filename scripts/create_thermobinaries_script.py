@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Tuesday 7th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -62,20 +62,20 @@ thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
                                     qc_init, W_INIT, U_INIT, V_INIT,
                                     relh=relh_init, constsfile=constsfile)
 
-# ### --- 2D Flow Field with Hydrostatic --- ###
-# ### ---       or Simple z Profile      --- ###
-# PRESS0 = 101500 # [Pa]
-# THETA = 289 # [K]
-# qcond = 0.0 # [Kg/Kg]
-# WMAX = 0.6 # [m/s]
-# VVEL = None # [m/s]
-# Zlength = 1500 # [m]
-# Xlength = 1500 # [m]
+### --- 2D Flow Field with Hydrostatic --- ###
+### ---       or Simple z Profile      --- ###
+PRESS0 = 101500 # [Pa]
+THETA = 289 # [K]
+qcond = 0.0 # [Kg/Kg]
+WMAX = 0.6 # [m/s]
+VVEL = None # [m/s]
+Zlength = 1500 # [m]
+Xlength = 1500 # [m]
 
-# qvapmethod = "sratio"
-# Zbase = 750 # [m]
-# sratios = [0.85, 1.0001] # s_ratio [below, above] Zbase
-# # moistlayer = False
+qvapmethod = "sratio"
+Zbase = 750 # [m]
+sratios = [0.85, 1.0001] # s_ratio [below, above] Zbase
+# moistlayer = False
 # moistlayer = {
 #     "z1": 700,
 #     "z2": 800,
@@ -87,10 +87,10 @@ thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
 #                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL, moistlayer)
-# thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
-#                                         THETA, qvapmethod, sratios, Zbase,
-#                                         qcond, WMAX, Zlength, Xlength,
-#                                         VVEL)
+thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
+                                        THETA, qvapmethod, sratios, Zbase,
+                                        qcond, WMAX, Zlength, Xlength,
+                                        VVEL)
 ### ---------------------------------------------------------------- ###
 
 ### -------------------- BINARY FILE GENERATION--------------------- ###

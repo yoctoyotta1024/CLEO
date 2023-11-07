@@ -71,19 +71,21 @@ CartesianDynamics::
     CartesianDynamics(const Config &config,
                       const std::array<size_t, 3> i_ndims,
                       const unsigned int nsteps)
-    : wvel_zfaces(0), uvel_xfaces(0), vvel_yfaces(0),
-      ndims(i_ndims),
+    : ndims(i_ndims),
       pos(0),
       pos_zface(0),
       pos_xface(0),
       pos_yface(0),
-      press(thermodynamicvar_from_binary(config.press_filename)),
-      temp(thermodynamicvar_from_binary(config.temp_filename)),
-      qvap(thermodynamicvar_from_binary(config.qvap_filename)),
-      qcond(thermodynamicvar_from_binary(config.qcond_filename)),
       get_wvel(nullwinds()), get_uvel(nullwinds()), get_vvel(nullwinds())
 {
-  std::cout << "\nFinished reading thermodynamics from binaries for:\n"
+  std::cout << "\n--- coupled cartesian dynamics from file ---\n";
+
+  press = thermodynamicvar_from_binary(config.press_filename);
+  temp = thermodynamicvar_from_binary(config.temp_filename);
+  qvap = thermodynamicvar_from_binary(config.qvap_filename);
+  qcond = thermodynamicvar_from_binary(config.qcond_filename);
+
+  std::cout << "Finished reading thermodynamics from binaries for:\n"
                "  pressure,\n  temperature,\n"
                "  water vapour mass mixing ratio,\n"
                "  liquid water mass mixing ratio,\n";
@@ -91,7 +93,8 @@ CartesianDynamics::
   set_winds(config);
 
 
-  check_thermodyanmics_vectorsizes(config.nspacedims, ndims, nsteps);
+  check_thermodynamics_vectorsizes(config.nspacedims, ndims, nsteps);
+  std::cout << "--- cartesian dynamics from file: success ---\n";
 }
 
 void CartesianDynamics::set_winds(const Config &config)
@@ -228,7 +231,7 @@ the y-faces (coord2) of gridboxes */
 }
 
 void CartesianDynamics::
-    check_thermodyanmics_vectorsizes(const unsigned int nspacedims,
+    check_thermodynamics_vectorsizes(const unsigned int nspacedims,
                                      const std::array<size_t, 3> &ndims,
                                      const unsigned int nsteps) const
 /* Firstly checks thermodynamics (press, temp, qvap and qcond) are

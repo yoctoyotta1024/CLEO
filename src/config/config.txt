@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,9 +37,9 @@ maxchunk = 1250000                        # maximum no. of elements in chunks of
 
 ### SDM Runtime parameters ###
 # domain setup #
-nspacedims = 0                          # no. of spatial dimensions to model 
-ngbxs = 1                               # total number of Gbxs
-totnsupers = 50                         # (initial) total no. of SDs
+nspacedims = 2                          # no. of spatial dimensions to model 
+ngbxs = 15                              # total number of Gbxs
+totnsupers = 15                         # (initial) total no. of SDs
 
 # timestepping #
 CONDTSTEP = 2                             # time between SD condensation events [s]

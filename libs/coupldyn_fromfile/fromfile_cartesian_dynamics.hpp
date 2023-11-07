@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * struct obeying coupleddyanmics concept for
+ * struct obeying coupleddynamics concept for
  * dynamics solver in CLEO where coupling is
  * one-way and dynamics are read from file
  */
@@ -85,7 +85,7 @@ private:
   file called 'filename' where vvel is defined on
   the y-faces (coord2) of gridboxes */
 
-  void check_thermodyanmics_vectorsizes(const unsigned int nspacedims,
+  void check_thermodynamics_vectorsizes(const unsigned int nspacedims,
                                         const std::array<size_t, 3> &ndims,
                                         const unsigned int nsteps) const;
 
@@ -125,7 +125,7 @@ that are read from binary files */
 {
 private:
   const unsigned int interval;
-  std::unique_ptr<CartesianDynamics> dynvars; // pointer to (thermo)dyanmic variables
+  std::unique_ptr<CartesianDynamics> dynvars; // pointer to (thermo)dynamic variables
 
   void run_dynamics(const unsigned int t_mdl) const
   /* increment position of thermodata for 0th gridbox

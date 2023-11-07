@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * functionality for coupleddyanmics concept for
+ * functionality for coupleddynamics concept for
  * dynamics solver in CLEO where coupling is
  * two-way to cvode adiabatic parcel ODE solver
  */
@@ -135,7 +135,7 @@ CvodeDynamics::~CvodeDynamics()
 std::vector<double>
 CvodeDynamics::initial_conditions(const Config &config) const
 /* return vector of dimensionless initial conditions
-for thermodyanmic variables (p, temp, qv, qc) to
+for thermodynamic variables (p, temp, qv, qc) to
 initialise cvode thermodynamics solver */
 {
   const double press_i(config.P_INIT / dlc::P0);

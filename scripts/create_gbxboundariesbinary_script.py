@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 3rd November 2023
+Last Modified: Tuesday 7th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -44,16 +44,16 @@ savefigpath = path2build+"/bin/"
 gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
 
 ### input parameters for zcoords of gridbox boundaries
-zmax = 1 # maximum z coord [m]
+zmax = 5000 # maximum z coord [m]
 zmin = 0 # minimum z coord [m]
-zdelta = 1 # even spacing
+zdelta = 1000 # even spacing
 zgrid = [zmin, zmax, zdelta] 
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 1, 1]
+xgrid = [0, 3000, 1000]
 
 ### input parameters for y coords of gridbox boundaries
-ygrid = np.asarray([0, 1])
+ygrid = np.asarray([0, 1000])
 # ygrid = [0, 1500, 200]
 ### ---------------------------------------------------------------- ###
 

@@ -6,7 +6,7 @@ Created Date: Monday 16th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Tuesday 7th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -109,7 +109,7 @@ def divfree_flowfield2D(wmax, zlength, xlength,
     return WVEL, UVEL
   
 class ConstUniformThermo:
-  ''' create thermodyanmics that's constant in time 
+  ''' create thermodynamics that's constant in time 
   and uniform throughout the domain '''
 
   def __init__(self, PRESS, TEMP, qvap,
@@ -168,7 +168,7 @@ class ConstUniformThermo:
     return THERMODATA
 
 class SimpleThermo2Dflowfield:
-  ''' create thermodyanmics that's constant in time 
+  ''' create thermodynamics that's constant in time 
   with (P,T,qc) uniform throughout the domain with relative humidity
   = 0.95 below Zbase and a 2D (z,x) dependent flow field'''
 
@@ -261,7 +261,7 @@ class SimpleThermo2Dflowfield:
       return THERMODATA
 
 class ConstHydrostaticAdiabat:
-  ''' create thermodyanmics that's constant in time 
+  ''' create thermodynamics that's constant in time 
   and in hydrostatic equillibrium with a dry adiabat 
   accounting for the mass of water vapour in the air.
   Equations derived from Arabas et al. 2015 (sect 2.1) '''

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -76,7 +76,7 @@ private:
   {
     if (sdm.get_couplstep() != coupldyn.get_couplstep())
     {
-      const std::string err("coupling timestep of dyanmics "
+      const std::string err("coupling timestep of dynamics "
                             "solver and CLEO SDM are not equal");
       throw std::invalid_argument(err);
     }
