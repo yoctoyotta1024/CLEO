@@ -109,16 +109,17 @@ public:
   a superdroplet's coordinates using the interpolated
   wind velocity from a gridbox's state */
   {
-    // /* Use predictor-corrector method to get change in SD coords */
-    const DeltaCoords d(gbxindex, gbxmaps, state, drop);
+    /* Use predictor-corrector method to get change in SD coords */
+    // const DeltaCoords d(gbxindex, gbxmaps, state, drop);
 
     /* CFL check on predicted change to SD coords */
-    cfl_criteria(gbxmaps, gbxindex, d.delta3, d.delta1, d.delta2);
+    // cfl_criteria(gbxmaps, gbxindex, d.delta3, d.delta1, d.delta2);
+    cfl_criteria(gbxmaps, gbxindex, 0.0, 0.0, 0.0);
 
-    /* update SD coords */
-    drop.coord3 += d.delta3;
-    drop.coord1 += d.delta1;
-    drop.coord2 += d.delta2;
+    // /* update SD coords */
+    // drop.coord3 += d.delta3;
+    // drop.coord1 += d.delta1;
+    // drop.coord2 += d.delta2;
   }
 };
 

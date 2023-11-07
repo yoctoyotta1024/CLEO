@@ -35,6 +35,7 @@
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 
 #include "gridboxes/gridboxmaps.hpp"
+#include "gridboxes/predcorrmotion.hpp"
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
@@ -60,7 +61,6 @@
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
-#include "superdrops/predcorrmotion.hpp"
 
 #include "zarr/fsstore.hpp"
 #include "zarr/superdropattrsbuffers.hpp"
@@ -120,7 +120,7 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
 inline Motion auto
 create_motion(const unsigned int motionstep)
 {
-  return PredCorrMotion(motionstep);
+  return PredCorrMotion<CartesianMaps>(motionstep);
 }
 
 inline Observer auto

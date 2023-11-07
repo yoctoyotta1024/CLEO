@@ -49,6 +49,7 @@ private:
   unsigned int update_superdrop_gbxindex() const
   {
     // TODO (put into seperate templated struct too)
+    return 0;
   }
 
   void move_superdroplets_between_gridboxes() const
@@ -69,7 +70,7 @@ private:
     const size_t ngbxs(d_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      const subviewd_supers supers(gbx.supersingbx());
+      const subviewd_supers supers(d_gbxs(ii).supersingbx());
       for (size_t kk(0); kk < supers.extent(0); ++kk)
       {
         Superdrop &drop(supers(kk));
