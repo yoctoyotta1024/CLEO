@@ -30,9 +30,10 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "./cfl_criteria.hpp"
+#include "./gridboxmaps.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
-#include "gridboxes/gridboxmaps.hpp"
 
 template <GridboxMaps GbxMaps>
 struct PredCorrMotion
