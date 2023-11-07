@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 26th October 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,18 +45,18 @@ public:
   KOKKOS_INLINE_FUNCTION ~Superdrop() = default; // Kokkos requirement for a (dual)View
 
   KOKKOS_INLINE_FUNCTION
-  Superdrop(const unsigned int isdgbxindex,
-            const double icoord3,
-            const double icoord1,
-            const double icoord2,
-            const SuperdropAttrs iattrs,
-            const IDType isdId)
-      : sdgbxindex(isdgbxindex),
-        coord3(icoord3),
-        coord1(icoord1),
-        coord2(icoord2),
-        attrs(iattrs),
-        sdId(isdId) {}
+  Superdrop(const unsigned int i_sdgbxindex,
+            const double i_coord3,
+            const double i_coord1,
+            const double i_coord2,
+            const SuperdropAttrs i_attrs,
+            const IDType i_sdId)
+      : sdgbxindex(i_sdgbxindex),
+        coord3(i_coord3),
+        coord1(i_coord1),
+        coord2(i_coord2),
+        attrs(i_attrs),
+        sdId(i_sdId) {}
 
   KOKKOS_INLINE_FUNCTION auto get_sdgbxindex() const { return sdgbxindex; }
   KOKKOS_INLINE_FUNCTION auto get_coord3() const { return coord3; }
@@ -76,7 +76,16 @@ public:
   KOKKOS_INLINE_FUNCTION double mass() const { return attrs.mass(); }
 
   KOKKOS_INLINE_FUNCTION
-  double change_radius(const double newr) { return attrs.change_radius(newr); }
+  double change_radius(const double newr)
+  {
+    return attrs.change_radius(newr);
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_sdgbxindex(const unsigned int i_sdgbxindex)
+  {
+    sdgbxindex = i_sdgbxindex;
+  }
 };
 
 #endif // SUPERDROP_HPP
