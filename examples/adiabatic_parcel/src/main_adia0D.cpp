@@ -133,16 +133,16 @@ create_observer(const Config &config,
 }
 
 inline auto create_sdm(const Config &config,
-                const Timesteps &tsteps,
-                const CoupledDynamics auto &coupldyn,
-                FSStore &store)
+                       const Timesteps &tsteps,
+                       FSStore &store)
 {
+  const unsigned int couplstep(tsteps.get_couplstep());
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const MoveSupersInDomain movesupers(create_motion(tsteps.get_motionstep()));
   const Observer auto obs(create_observer(config, tsteps, store));
 
-  return SDMMethods(coupldyn, gbxmaps,
+  return SDMMethods(couplstep, gbxmaps,
                     microphys, movesupers, obs);
 }
 
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, coupldyn, fsstore));
+    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
