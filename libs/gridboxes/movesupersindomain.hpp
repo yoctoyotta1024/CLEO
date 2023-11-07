@@ -43,7 +43,6 @@ some type of Motion) and then moving them between gridboxes
 after updating their gridbox indexes concordantly */
 {
 private:
-  M motion;
 
   KOKKOS_INLINE_FUNCTION
   unsigned int update_superdrop_gbxindex() const
@@ -68,31 +67,40 @@ private:
   (3) move superdroplets between gridboxes */
   {
     const size_t ngbxs(d_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      const unsigned int gbxindex(d_gbxs(ii).get_gbxindex());
-      const State &state(d_gbxs(ii).state);
-      const subviewd_supers supers(d_gbxs(ii).supersingbx());
-      for (size_t kk(0); kk < supers.extent(0); ++kk)
-      {
-        Superdrop &drop(supers(kk));
 
-        /* step (1) */
-        motion.update_superdrop_coords(gbxindex, gbxmaps, state, drop);
+    /* parallelised version of:
+    for (size_t ii(0); ii < ngbxs; ++ii) {[...]} */
+    Kokkos::parallel_for(
+        "move_superdrops_in_domain",
+        Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+        KOKKOS_CLASS_LAMBDA(const size_t ii) {
 
-        /* optional step (1b) */
-        // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
+          const subviewd_supers supers(d_gbxs(ii).supersingbx());
+          std::cout << "moving\n";
+          for (size_t kk(0); kk < supers.extent(0); ++kk)
+          {
+            /* step (1) */
+            std::cout << "moving b \n";
+            motion.update_superdrop_coords(d_gbxs(ii).get_gbxindex(),
+                                           gbxmaps, d_gbxs(ii).state,
+                                           supers(kk));
 
-        /* step (2) */
-        drop.set_sdgbxindex(update_superdrop_gbxindex());
-      }
-    }
+            /* optional step (1b) */
+            // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
+
+            /* step (2) */
+            supers(kk).set_sdgbxindex(update_superdrop_gbxindex());
+          
+          }
+        });
 
     /* step (3) */
     move_superdroplets_between_gridboxes();
   }
 
 public:
+  M motion;
+
   MoveSupersInDomain(const M motion)
       : motion(motion) {}
 
