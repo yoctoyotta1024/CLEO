@@ -20,9 +20,8 @@
  * moving them between gridboxes)
  */
 
-
-#ifndef MOVESUPERSINDOMAIN_HPP  
-#define MOVESUPERSINDOMAIN_HPP  
+#ifndef MOVESUPERSINDOMAIN_HPP
+#define MOVESUPERSINDOMAIN_HPP
 
 #include <concepts>
 
@@ -38,11 +37,11 @@
 template <GridboxMaps GbxMaps, Motion<GbxMaps> M>
 struct MoveSupersInDomain
 /* struct for functionality to move superdroplets throughtout
-the domain by updating their spatial coordinates (according to 
-some type of Motion) and then moving them between gridboxes 
+the domain by updating their spatial coordinates (according to
+some type of Motion) and then moving them between gridboxes
 after updating their gridbox indexes concordantly */
 {
-private:
+  M motion;
 
   KOKKOS_INLINE_FUNCTION
   unsigned int update_superdrop_gbxindex() const
@@ -76,11 +75,9 @@ private:
         KOKKOS_CLASS_LAMBDA(const size_t ii) {
 
           const subviewd_supers supers(d_gbxs(ii).supersingbx());
-          std::cout << "moving\n";
           for (size_t kk(0); kk < supers.extent(0); ++kk)
           {
             /* step (1) */
-            std::cout << "moving b \n";
             motion.update_superdrop_coords(d_gbxs(ii).get_gbxindex(),
                                            gbxmaps, d_gbxs(ii).state,
                                            supers(kk));
@@ -90,16 +87,13 @@ private:
 
             /* step (2) */
             supers(kk).set_sdgbxindex(update_superdrop_gbxindex());
-          
           }
+
         });
 
     /* step (3) */
     move_superdroplets_between_gridboxes();
   }
-
-public:
-  M motion;
 
   MoveSupersInDomain(const M motion)
       : motion(motion) {}
