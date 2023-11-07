@@ -65,11 +65,11 @@ private:
   KOKKOS_INLINE_FUNCTION
   void superdrops_movement(const unsigned int t_sdm,
                            const viewd_gbx d_gbxs,
-                           const viewd_supers supers) const
+                           const viewd_supers totsupers) const
   /* move superdroplets (including movement between
   gridboxes) according to movesupers struct */
   {
-    movesupers.run_step(t_sdm, gbxmaps, d_gbxs, supers);
+    movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers);
   }
 
 public:
@@ -137,7 +137,7 @@ public:
   void run_step(const unsigned int t_mdl,
                 const unsigned int t_mdl_next,
                 const viewd_gbx d_gbxs,
-                const viewd_supers supers,
+                const viewd_supers totsupers,
                 GenRandomPool genpool) const
   /* run CLEO SDM (on device) from time t_mdl to t_mdl_next
   with sub-timestepping routine for super-droplets'
@@ -148,7 +148,7 @@ public:
     {
       unsigned int t_sdm_next(next_sdmstep(t_sdm, t_mdl_next));
 
-      superdrops_movement(t_sdm, d_gbxs, supers);
+      superdrops_movement(t_sdm, d_gbxs, totsupers);
       sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, genpool);
 
       t_sdm = t_sdm_next;
