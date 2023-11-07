@@ -33,8 +33,8 @@ returns *false* if cfl criterion, C = sdstep / gridstep, > 1 */
   return (Kokkos::abs(sdstep) <= Kokkos::abs(gridstep));
 }
 
-KOKKOS_FUNCTION
 template <GridboxMaps GbxMaps>
+KOKKOS_FUNCTION
 bool cfl_criteria(const GbxMaps &gbxmaps,
                   const unsigned int gbxindex,
                   const double delta3,
