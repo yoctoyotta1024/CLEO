@@ -35,6 +35,13 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
 
+struct InterpolateWinds
+/* method to interpolate (w, u, and v) wind velocity components
+defined on (coord3, coord1 and coord2) faces of a gridbox
+to a superdroplet's coordinates at (coord3, coord1, coord2) */
+{
+}
+
 template <GridboxMaps GbxMaps>
 struct PredCorrMotion
 /* change in coordinates calculated by predictor
@@ -47,18 +54,18 @@ private:
 
   KOKKOS_INLINE_FUNCTION
   double delta_coord3(Superdrop &drop
-                      WindsAtCoord &winds)
+                      InterpolateWinds &windinterp)
   {
     const double terminal = terminalv(drop);
 
     /* corrector velocities based on predicted coords */
-    const double vel3 = winds.interp_wvel() - terminal;
+    const double vel3 = windinterp.interp_wvel() - terminal;
 
     /* predictor coords given velocity at previous coords */
-    winds.coord3 += vel3 * delt; // move by w wind + terminal velocity
+    windinterp.coord3 += vel3 * delt; // move by w wind + terminal velocity
 
     /* corrector velocities based on predicted coords */
-    const double corrvel3 = winds.interp_wvel() - terminal;
+    const double corrvel3 = windinterp.interp_wvel() - terminal;
 
     /* predicted-corrected change to superdrop coords */
     const double delta3((vel3 + corrvel3) * (delt / 2));
@@ -66,16 +73,16 @@ private:
 
   KOKKOS_INLINE_FUNCTION
   double delta_coord1(Superdrop &drop
-                      WindsAtCoord &winds)
+                      InterpolateWinds &windinterp)
   {
     /* corrector velocities based on predicted coords */
-    const double vel1 = winds.interp_uvel();
+    const double vel1 = windinterp.interp_uvel();
 
     /* predictor coords given velocity at previous coords */
-    winds.coord1 += vel1 * delt; // move by u wind
+    windinterp.coord1 += vel1 * delt; // move by u wind
 
     /* corrector velocities based on predicted coords */
-    const double corrvel1 = winds.interp_uvel();
+    const double corrvel1 = windinterp.interp_uvel();
 
     /* predicted-corrected change to superdrop coords */
     const double delta1((vel1 + corrvel1) * (delt / 2));
@@ -83,16 +90,16 @@ private:
 
   KOKKOS_INLINE_FUNCTION
   double delta_coord2(Superdrop &drop
-                      WindsAtCoord &winds)
+                      InterpolateWinds &windinterp)
   {
     /* corrector velocities based on predicted coords */
-    const double vel2 = winds.interp_vvel();
+    const double vel2 = windinterp.interp_vvel();
 
     /* predictor coords given velocity at previous coords */
-    winds.coord2 += vel2 * delt; // move by v wind
+    windinterp.coord2 += vel2 * delt; // move by v wind
 
     /* corrector velocities based on predicted coords */
-    const double corrvel2 = winds.interp_vvel();
+    const double corrvel2 = windinterp.interp_vvel();
 
     /* predicted-corrected change to superdrop coords */
     const double delta2((vel2 + corrvel2) * (delt / 2));
@@ -124,11 +131,11 @@ public:
   wind velocity from a gridbox's state */
   {
     /* Use predictor-corrector method to get change in SD coords */
-    WindsAtCoord winds{gbxmaps, state, gbxindex,
-                       drop.coord3, drop.coord1, drop.coord2}; // TODO
-    const double delta3 = deltafucn3(drop, winds);
-    const double delta1 = deltafucn1(drop, winds);
-    const double delta2 = deltafucn2(drop, winds);
+    InterpolateWinds windinterp{gbxmaps, state, gbxindex,
+                                drop.coord3, drop.coord1, drop.coord2}; // TODO
+    const double delta3 = delta_coord3(drop, windinterp);
+    const double delta1 = delta_coord1(drop, windinterp);
+    const double delta2 = delta_coord2(drop, windinterp);
 
     /* CFL check on predicted change to SD coords */
     cfl_criteria(gbxmaps, gbxindex, delta3, delta1, delta2);
