@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <string_view>
 #include <concepts>
+#include <cmath>
 
 #include <Kokkos_Core.hpp>
 
@@ -68,14 +69,17 @@
 inline CoupledDynamics auto
 create_coupldyn(const Config &config,
                 const CartesianMaps &gbxmaps,
-                const unsigned int couplstep)
+                const unsigned int couplstep,
+                const unsigned int t_end)
 
 {
   const auto h_ndims(gbxmaps.ndims_hostcopy());
   const std::array<size_t, 3>
       ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
 
-  return FromFileDynamics(config, couplstep, ndims);
+  const unsigned int nsteps(std::ceil(t_end / couplstep) + 1);
+
+  return FromFileDynamics(config, couplstep, ndims, nsteps);
 }
 
 inline GridboxMaps auto
@@ -225,7 +229,9 @@ int main(int argc, char *argv[])
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(
-        create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep()));
+        create_coupldyn(config, sdm.gbxmaps,
+                        tsteps.get_couplstep(),
+                        tsteps.get_t_end()));
 
     /* coupling between coupldyn and SDM */
     const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};

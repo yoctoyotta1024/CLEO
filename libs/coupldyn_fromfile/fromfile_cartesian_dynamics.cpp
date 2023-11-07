@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -69,7 +69,8 @@ is decomposed into cartesian C grid with dimensions
 
 CartesianDynamics::
     CartesianDynamics(const Config &config,
-                      const std::array<size_t, 3> i_ndims)
+                      const std::array<size_t, 3> i_ndims,
+                      const unsigned int nsteps)
     : wvel_zfaces(0), uvel_xfaces(0), vvel_yfaces(0),
       ndims(i_ndims),
       pos(0),
@@ -88,6 +89,7 @@ CartesianDynamics::
                "  liquid water mass mixing ratio,\n";
 
   set_winds(config);
+
 
   check_thermodyanmics_vectorsizes(config.nspacedims, ndims, nsteps);
 }
@@ -228,7 +230,7 @@ the y-faces (coord2) of gridboxes */
 void CartesianDynamics::
     check_thermodyanmics_vectorsizes(const unsigned int nspacedims,
                                      const std::array<size_t, 3> &ndims,
-                                     const size_t nsteps) const
+                                     const unsigned int nsteps) const
 /* Firstly checks thermodynamics (press, temp, qvap and qcond) are
 1D vectors with length = nsteps * ngbxs. Secondly checks wind
 velocity components are appropriate length given spatial dimension
@@ -245,21 +247,27 @@ of model and definiton on z, x or y faces of gridboxes  */
     }
   };
 
-  const size_t sz(nsteps*ndims.at(0)*ndims.at(1)*ndims.at(2)); // nsteps * ngbxs
+  const size_t sz(nsteps * ndims.at(0) * ndims.at(1) * ndims.at(2)); // nsteps * ngbxs
   is_size(press, sz);
   check_vectorsizes({press.size(), temp.size(),
-                      qvap.size(), qcond.size()});
+                     qvap.size(), qcond.size()});
 
   switch (nspacedims)
   {
   case 3: // 3-D model
-    const size_t vsz = nsteps*ndims[0]*ndims[1]*(ndims[2]+1);
+  {
+    const size_t vsz = nsteps * ndims[0] * ndims[1] * (ndims[2] + 1);
     is_size(vvel_yfaces, vsz);
+  }
   case 2: // 3-D or 2-D model
-    const size_t usz = nsteps*ndims[0]*(ndims[1]+1)*ndims[2];
+  {
+    const size_t usz = nsteps * ndims[0] * (ndims[1] + 1) * ndims[2];
     is_size(uvel_xfaces, usz);
+  }
   case 1: // 3-D, 2-D or 1-D model
-    const size_t wsz = nsteps*(ndims[0]+1)*ndims[1]*ndims[2];
+  {
+    const size_t wsz = nsteps * (ndims[0] + 1) * ndims[1] * ndims[2];
     is_size(wvel_zfaces, wsz);
+  }
   }
 }

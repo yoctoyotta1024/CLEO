@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -87,7 +87,7 @@ private:
 
   void check_thermodyanmics_vectorsizes(const unsigned int nspacedims,
                                         const std::array<size_t, 3> &ndims,
-                                        const size_t nsteps) const;
+                                        const unsigned int nsteps) const;
 
 public:
   /* position in vector for 0th gridbox at current timestep  */
@@ -108,7 +108,8 @@ public:
   get_winds_func get_vvel;
 
   CartesianDynamics(const Config &config,
-                    const std::array<size_t, 3> i_ndims);
+                    const std::array<size_t, 3> i_ndims,
+                    const unsigned int nsteps);
 
   void increment_position();
   /* updates positions to gbx0 in vector (for
@@ -137,9 +138,12 @@ private:
 public:
   FromFileDynamics(const Config &config,
                    const unsigned int couplstep,
-                   const std::array<size_t, 3> ndims)
+                   const std::array<size_t, 3> ndims,
+                   const unsigned int nsteps)
       : interval(couplstep),
-        dynvars(std::make_unique<CartesianDynamics>(config, ndims)) {}
+        dynvars(std::make_unique<CartesianDynamics>(config,
+                                                    ndims,
+                                                    nsteps)) {}
 
   auto get_couplstep() const
   {
