@@ -20,18 +20,22 @@
 #ifndef CFL_CRITERIA_HPP
 #define CFL_CRITERIA_HPP
 
+#include <Kokkos_Core.hpp>
+
 #include "./gridboxmaps.hpp"
 
-inline bool cfl_criterion(const double gridstep,
-                          const double sdstep)
+KOKKOS_INLINE_FUNCTION
+bool cfl_criterion(const double gridstep,
+                   const double sdstep)
 /* sdstep = change in superdroplet coordinate position.
 returns *false* if cfl criterion, C = sdstep / gridstep, > 1 */
 {
-  return (std::abs(sdstep) <= std::abs(gridstep));
+  return (Kokkos::abs(sdstep) <= Kokkos::abs(gridstep));
 }
 
+KOKKOS_FUNCTION
 template <GridboxMaps GbxMaps>
-bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
+bool cfl_criteria(const GbxMaps &gbxmaps,
                   const unsigned int gbxindex,
                   const double delta3,
                   const double delta1,
@@ -53,11 +57,8 @@ bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
              gbxmaps.coord2bounds(gbxindex).first;
   cfl = (cfl_criterion(gridstep, delta2) && cfl);
 
-  if (!cfl)
-  {  
-    throw std::invalid_argument("CFL criteria for SD motion not met."
-                                "Consider reducing sdmotion timestep");
-  }
+  assert((cfl) && "CFL criteria for superdrop motion not met."
+                  "Consider reducing sdmotion timestep");
 
   return cfl;
 }

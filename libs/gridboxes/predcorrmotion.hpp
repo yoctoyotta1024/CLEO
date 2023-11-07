@@ -26,6 +26,8 @@
 #ifndef PREDCORRMOTION_HPP
 #define PREDCORRMOTION_HPP
 
+#include <cassert>
+
 #include <Kokkos_Core.hpp>
 
 #include "superdrops/superdrop.hpp"
@@ -51,7 +53,7 @@ private:
     DeltaCoords(const unsigned int gbxindex,
                 const GbxMaps &gbxmaps,
                 const State &state,
-                Superdrop &drop) const
+                Superdrop &drop)
     {
       // const double terminal = terminalv(drop);
 
