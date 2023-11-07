@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,6 +28,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/createcartesianmaps.hpp"
 
 #include "coupldyn_cvode/cvodecomms.hpp"
 #include "coupldyn_cvode/cvodedynamics.hpp"
@@ -39,9 +40,6 @@
 #include "initialise/timesteps.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 
-#include "observers/gbxindexobs.hpp"
-#include "observers/massmomentsobs.hpp"
-#include "observers/nsupersobs.hpp"
 #include "observers/observers.hpp"
 #include "observers/printobs.hpp"
 #include "observers/stateobs.hpp"
@@ -49,6 +47,7 @@
 #include "observers/supersattrsobs.hpp"
 
 #include "runcleo/coupleddynamics.hpp"
+#include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
@@ -71,7 +70,10 @@ create_coupldyn(const Config &config,
 inline GridboxMaps auto
 create_gbxmaps(const Config &config)
 {
-  return create_cartesian_maps(config.grid_filename);
+  const auto gbxmaps = create_cartesian_maps(config.ngbxs,
+                                             config.nspacedims,
+                                             config.grid_filename);
+  return gbxmaps;
 }
 
 inline MicrophysicalProcess auto
@@ -176,7 +178,6 @@ int main(int argc, char *argv[])
 
   /* coupling between coupldyn and SDM */
   const CouplingComms<CvodeDynamics> auto comms = CvodeComms{};
-
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);

@@ -38,12 +38,13 @@ endif()
 # executable for CVODE-CLEO coupled model 0D condensation setup 
 set(adia0D "adia0D")
 add_executable(${adia0D} EXCLUDE_FROM_ALL "main_adia0D.cpp")
-target_link_libraries(${adia0D} PRIVATE coupldyn_cvode "${SDMLIBS}")
+target_link_libraries(${adia0D} PRIVATE coupldyn_cvode cartesiandomain "${SDMLIBS}")
 target_link_libraries(${adia0D} PUBLIC Kokkos::kokkos)
+target_include_directories(${adia0D} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 target_compile_options(${adia0D} PRIVATE ${compileops}) 
 
 # set compiler properties for target(s)
-set_target_properties(${runCLEO} ${adia0D} ${golovin0D} PROPERTIES
+set_target_properties(${adia0D} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

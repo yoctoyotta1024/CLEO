@@ -53,8 +53,8 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # link libraries in libs to this target
 set(LINKLIBS initialise superdrops gridboxes)
-target_link_libraries("${LIBNAME}" PRIVATE SUNDIALS::cvodes_static ${LINKLIBS})
-target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
+target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
+target_link_libraries("${LIBNAME}" PUBLIC SUNDIALS::cvodes_static Kokkos::kokkos)
 
 # some compilation properties
 set_target_properties(${LIBNAME} PROPERTIES
