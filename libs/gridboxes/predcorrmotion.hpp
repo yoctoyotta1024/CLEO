@@ -111,13 +111,15 @@ public:
   wind velocity from a gridbox's state */
   {
     /* Use predictor-corrector method to get change in SD coords */
-    const DeltaCoords d(gbxindex, gbxmaps, state, drop);
+    const double delta3 = deltafucn3(gbxindex, gbxmaps, state, drop);
+    const double delta1 = deltafucn3(gbxindex, gbxmaps, state, drop);
+    const double delta2 = deltafucn3(gbxindex, gbxmaps, state, drop);
 
     /* CFL check on predicted change to SD coords */
-    cfl_criteria(gbxmaps, gbxindex, d.delta3, d.delta1, d.delta2);
+    cfl_criteria(gbxmaps, gbxindex, delta3, delta1, delta2);
 
     /* update SD coords */
-    drop.increment_coords(d.delta3, d.delta1, d.delta2);
+    drop.increment_coords(delta3, delta1, delta2);
   }
 };
 
