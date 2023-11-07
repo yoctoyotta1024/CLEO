@@ -49,7 +49,7 @@ private:
   void move_superdrops_in_domain(const unsigned int t_sdm,
                                  const GridboxMaps auto &gbxmaps,
                                  const viewd_gbx d_gbxs,
-                                 const viewd_supers supers) const
+                                 const viewd_supers totsupers) const
   /* enact movement of superdroplets throughout domain in three stages:
   (1) update their spatial coords according to type of motion.
   (1b) optional detect precipitation
@@ -92,14 +92,14 @@ public:
   void run_step(const unsigned int t_sdm,
                 const GridboxMaps auto &gbxmaps,
                 const viewd_gbx d_gbxs,
-                const viewd_supers supers) const
+                const viewd_supers totsupers) const
   /* if current time, t_sdm, is time when superdrop
   motion should occur, enact movement of
   superdroplets throughout domain */
   {
     if (motion.on_step(t_sdm))
     {
-      move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, supers);
+      move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, totsupers);
     }
   };
 };
