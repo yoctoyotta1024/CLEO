@@ -42,12 +42,12 @@
 template <GridboxMaps GbxMaps, typename GbxInitConds>
 dualview_gbx create_gbxs(const GbxMaps &gbxmaps,
                          const GbxInitConds &gbxic,
-                         const viewd_supers supers);
+                         const viewd_supers totsupers);
 
 template <GridboxMaps GbxMaps, typename GbxInitConds>
 inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps,
                                     const GbxInitConds &gbxic,
-                                    const viewd_supers supers,
+                                    const viewd_supers totsupers,
                                     const viewh_gbx h_gbxs);
 /* initialise the host view of gridboxes
 using some data from a GbxInitConds instance
@@ -56,7 +56,7 @@ e.g. for each gridbox's volume */
 template <GridboxMaps GbxMaps, typename GbxInitConds>
 inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps,
                                     const GbxInitConds &gbxic,
-                                    const viewd_supers supers);
+                                    const viewd_supers totsupers);
 /* initialise a dualview of gridboxes (on host and device
 memory) using data from a GbxInitConds instance to initialise
 the host view and then syncing the view to the device */
