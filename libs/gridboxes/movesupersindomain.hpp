@@ -59,7 +59,8 @@ private:
     const size_t ngbxs(d_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      for (auto &SDinGBx : gbx.span4SDsinGBx)
+      subviewd_supers supers(gbx.supersingbx());
+      for (size_t kk(0); kk < supers.extent(0); ++kk)
       {
         /* step (1) */
         motion.update_superdrop_coords(t_sdm);

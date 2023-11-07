@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -80,12 +80,11 @@ public:
         impe(niters, delt, maxrtol, maxatol, subdelt) {}
 
   template <class DeviceType>
-  KOKKOS_INLINE_FUNCTION
-      subviewd_supers
-      operator()(const unsigned int subt,
-                 subviewd_supers supers,
-                 State &state,
-                 URBG<DeviceType> urbg) const
+  KOKKOS_INLINE_FUNCTION subviewd_supers
+  operator()(const unsigned int subt,
+             subviewd_supers supers,
+             State &state,
+             URBG<DeviceType> urbg) const
   /* this operator is used as an "adaptor" for using
   condensation as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself
