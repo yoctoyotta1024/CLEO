@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: initgbxs1.hpp
- * Project: coupldyn_fromfile
+ * File: initgbxs_null.hpp
+ * Project: initialise
  * Created Date: Tuesday 17th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,54 +21,53 @@
  * by InitConds struct as GbxInitConds type
  */
 
-#ifndef INITGBXS1_HPP
-#define INITGBXS1_HPP
+#ifndef INITGBXS_NULL_HPP
+#define INITGBXS_NULL_HPP
 
 #include <vector>
 #include <utility>
 
 #include "initialise/config.hpp"
 
-// TODO 
-
-struct InitGbxs1
-/* struct containing functions which return data
-for the initial conditions needed to create
-gridboxes e.g. via the create_gbxs function */
+struct InitGbxsNull
+/* struct containing functions which return zero
+for all initial conditions to create gridboxes'
+states e.g. via the create_gbxs function */
 {
 private:
   size_t ngbxs;
 
 public:
-  InitGbxs1(const Config &config)
+  InitGbxsNull(const Config &config)
       : ngbxs(config.ngbxs) {}
 
   size_t get_ngbxs() const { return ngbxs; }
 
   std::vector<double> temp() const
   {
-    std::vector<double> temp(ngbxs, 1000);
+    std::vector<double> temp(ngbxs, 0.0);
+    
 
     return temp;
   }
 
   std::vector<double> press() const
   {
-    std::vector<double> press(ngbxs, 1000);
+    std::vector<double> press(ngbxs, 0.0);
 
     return press;
   }
 
   std::vector<double> qvap() const
   {
-    std::vector<double> qvap(ngbxs, 1000);
+    std::vector<double> qvap(ngbxs, 0.0);
 
     return qvap;
   }
 
   std::vector<double> qcond() const
   {
-    std::vector<double> qcond(ngbxs, 1000);
+    std::vector<double> qcond(ngbxs, 0.0);
 
     return qcond;
   }
@@ -98,4 +97,4 @@ public:
   }
 };
 
-#endif // INITGBXS1_HPP
+#endif // INITGBXS_NULL_HPP

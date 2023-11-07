@@ -33,12 +33,12 @@
 
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
-#include "coupldyn_fromfile/initgbxs1.hpp"
 
 #include "gridboxes/gridboxmaps.hpp"
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
+#include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 
 #include "observers/gbxindexobs.hpp"
@@ -196,7 +196,7 @@ inline InitialConditions auto
 create_initconds(const Config &config)
 {
   const InitSupersFromBinary initsupers(config);
-  const InitGbxs1 initgbxs(config);
+  const InitGbxsNull initgbxs(config);
 
   return InitConds(initsupers, initgbxs);
 }
