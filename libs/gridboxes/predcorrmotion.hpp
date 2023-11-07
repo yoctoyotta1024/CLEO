@@ -28,7 +28,6 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "./gridbox.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
 #include "gridboxes/gridboxmaps.hpp"
@@ -40,42 +39,46 @@ private:
   unsigned int interval;
 
   struct DeltaCoords
-  /* change in coordinates calculated by predictor corrector method*/
+  /* change in coordinates calculated by predictor
+  corrector method with the wind velocity obtained via 
+  a simple linear interpolation. Methods follows
+  equations in Grabowski et al. 2018 */
   {
     double delta3; // change in coord3
     double delta1; // change in coord1
     double delta2; // change in coord2
 
-    DeltaCoords(const Maps4GridBoxes &gbxmaps,
-                const Gridbox &gbx,
-                const Superdrop &drop) const
+    DeltaCoords(const unsigned int gbxindex,
+                const GbxMaps &gbxmaps,
+                const State &state,
+                Superdrop &drop) const
     {
-      const double terminal = terminalv(drop);
+      // const double terminal = terminalv(drop);
 
-      WindsAtCoord winds{gbxmaps, gbx.state, gbx.gbxindex,
-                         drop.coord3, drop.coord1, drop.coord2};
+      // WindsAtCoord winds{gbxmaps, state, gbxindex,
+      //                    drop.coord3, drop.coord1, drop.coord2};
 
-      /* corrector velocities based on predicted coords */
-      const double vel3 = winds.interp_wvel() - terminal;
-      const double vel1 = winds.interp_uvel();
-      const double vel2 = winds.interp_vvel();
+      // /* corrector velocities based on predicted coords */
+      // const double vel3 = winds.interp_wvel() - terminal;
+      // const double vel1 = winds.interp_uvel();
+      // const double vel2 = winds.interp_vvel();
 
-      /* predictor coords given velocity at previous coords */
-      winds.coord3 += vel3 * delt; // move by w wind + terminal velocity
-      winds.coord1 += vel1 * delt; // move by u wind
-      winds.coord2 += vel2 * delt; // move by v wind
+      // /* predictor coords given velocity at previous coords */
+      // winds.coord3 += vel3 * delt; // move by w wind + terminal velocity
+      // winds.coord1 += vel1 * delt; // move by u wind
+      // winds.coord2 += vel2 * delt; // move by v wind
 
-      /* corrector velocities based on predicted coords */
-      const double corrvel3 = winds.interp_wvel() - terminal;
-      const double corrvel1 = winds.interp_uvel();
-      const double corrvel2 = winds.interp_vvel();
+      // /* corrector velocities based on predicted coords */
+      // const double corrvel3 = winds.interp_wvel() - terminal;
+      // const double corrvel1 = winds.interp_uvel();
+      // const double corrvel2 = winds.interp_vvel();
 
-      /* predicted-corrected change to superdrop coords */
-      const double delta3((vel3 + corrvel3) * (delt / 2));
-      const double delta1((vel1 + corrvel1) * (delt / 2));
-      const double delta2((vel2 + corrvel2) * (delt / 2));
+      // /* predicted-corrected change to superdrop coords */
+      // const double delta3((vel3 + corrvel3) * (delt / 2));
+      // const double delta1((vel1 + corrvel1) * (delt / 2));
+      // const double delta2((vel2 + corrvel2) * (delt / 2));
 
-      return Deltas{delta3, delta1, delta2};
+      // return Deltas{delta3, delta1, delta2};
     }
   };
 
@@ -105,7 +108,7 @@ public:
   wind velocity from a gridbox's state */
   {
     // /* Use predictor-corrector method to get change in SD coords */
-    // DeltaCoords(gbxindex, gbxmaps, state, drop);
+    const DeltaCoords d(gbxindex, gbxmaps, state, drop);
 
     /* CFL check on predicted change to SD coords */
     cfl_criteria(gbxmaps, gbxindex, d.delta3, d.delta1, d.delta2);
