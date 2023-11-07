@@ -33,7 +33,6 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 set(SOURCES
   "condensation.cpp"
   "impliciteuler.cpp"
-  "predcorrmotion.cpp"
   "state.cpp"
   "superdrop_attrs.cpp"
   "superdrop.cpp"

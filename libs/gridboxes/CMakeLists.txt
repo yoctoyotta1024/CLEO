@@ -34,6 +34,7 @@ set(SOURCES
 "detectors.cpp"
 "gridbox.cpp"
 "movesupersindomain.cpp"
+"predcorrmotion.cpp"
 "sortsupers.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
