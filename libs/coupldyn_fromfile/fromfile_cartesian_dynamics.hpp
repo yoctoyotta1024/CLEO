@@ -47,7 +47,20 @@ current timestep from for the first gridbox (gbx0)  */
 {
 private:
   using get_winds_func = std::function<std::pair<double,double>(const unsigned int)>;
+  
+  /* position in vector for 0th gridbox at current timestep  */
+  const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
+  size_t pos;                        // for variable defined at gridbox centres
+  size_t pos_zface;                  // for variable defined at gridbox coord3 faces
+  size_t pos_xface;                  // for variable defined at gridbox coord1 faces
+  size_t pos_yface;                  // for variable defined at gridbox coord2 faces
 
+  /* (thermo)dynamic variables read from file */
+  std::vector<double> press;
+  std::vector<double> temp;
+  std::vector<double> qvap;
+  std::vector<double> qcond;
+  
   std::vector<double> wvel_zfaces; // w velocity defined on coord3 faces of gridboxes
   std::vector<double> uvel_xfaces; // u velocity defined on coord1 faces of gridboxes
   std::vector<double> vvel_yfaces; // v velocity defined on coord2 faces of gridboxes
@@ -90,23 +103,6 @@ private:
                                         const unsigned int nsteps) const;
 
 public:
-  /* position in vector for 0th gridbox at current timestep  */
-  const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
-  size_t pos;                        // for variable defined at gridbox centres
-  size_t pos_zface;                  // for variable defined at gridbox coord3 faces
-  size_t pos_xface;                  // for variable defined at gridbox coord1 faces
-  size_t pos_yface;                  // for variable defined at gridbox coord2 faces
-
-  /* (thermo)dynamic variables read from file */
-  std::vector<double> press;
-  std::vector<double> temp;
-  std::vector<double> qvap;
-  std::vector<double> qcond;
-  
-  get_winds_func get_wvel; // funcs to get velocity defined in construction of class 
-  get_winds_func get_uvel; // warning: these functions are not const member funcs by default
-  get_winds_func get_vvel;
-
   CartesianDynamics(const Config &config,
                     const std::array<size_t, 3> i_ndims,
                     const unsigned int nsteps);
@@ -116,6 +112,10 @@ public:
   acessing value at next timestep). Assumes domain
   is decomposed into cartesian C grid with dimensions
   (ie. number of gridboxes in each dimension) ndims */
+
+  get_winds_func get_wvel; // funcs to get velocity defined in construction of class 
+  get_winds_func get_uvel; // warning: these functions are not const member funcs by default
+  get_winds_func get_vvel;
 };
 
 struct FromFileDynamics
@@ -164,6 +164,26 @@ public:
     {
       run_dynamics(t_mdl);
     }
+  }
+
+    double get_press(const unsigned int gbxindex) const
+  {
+    return get_var(press, (size_t)gbxindex);
+  }
+
+  double get_temp(const unsigned int gbxindex) const
+  {
+    return get_var(temp, (size_t)gbxindex);
+  }
+  
+  double get_qvap(const unsigned int gbxindex) const
+  {
+    return get_var(qvap, (size_t)gbxindex);
+  }
+
+  double get_qcond(const unsigned int gbxindex) const
+  {
+    return get_var(qcond, (size_t)gbxindex);
   }
 
 };
