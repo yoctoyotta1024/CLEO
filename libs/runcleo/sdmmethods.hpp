@@ -62,7 +62,6 @@ private:
     return t_next; // return smaller of two unsigned ints (see std::min)
   }
 
-  KOKKOS_INLINE_FUNCTION
   void superdrops_movement(const unsigned int t_sdm,
                            const viewd_gbx d_gbxs,
                            const viewd_supers totsupers) const
