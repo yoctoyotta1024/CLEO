@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -97,13 +97,13 @@ public:
   template <GridboxMaps GbxMaps>
   Gridbox operator()(const unsigned int ii,
                      const GbxMaps &gbxmaps,
-                     const viewd_supers supers) const
+                     const viewd_supers totsupers) const
   {
     const auto gbxindex(GbxindexGen->next());
     const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
     const State state(state_at(ii, volume));
 
-    return Gridbox(gbxindex, state, supers);
+    return Gridbox(gbxindex, state, totsupers);
   }
 
 };
@@ -111,12 +111,12 @@ public:
 template <GridboxMaps GbxMaps, typename GbxInitConds>
 dualview_gbx create_gbxs(const GbxMaps &gbxmaps,
                          const GbxInitConds &gbxic,
-                         const viewd_supers supers)
+                         const viewd_supers totsupers)
 {
 
   std::cout << "\n--- create gridboxes ---\n"
             << "initialising\n";
-  const dualview_gbx gbxs(initialise_gbxs(gbxmaps, gbxic, supers));
+  const dualview_gbx gbxs(initialise_gbxs(gbxmaps, gbxic, totsupers));
 
   std::cout << "checking initialisation\n";
   is_gbxinit_complete(gbxmaps.maps_size(), gbxs);
@@ -131,7 +131,7 @@ template <GridboxMaps GbxMaps, typename GbxInitConds>
 inline dualview_gbx
 initialise_gbxs(const GbxMaps &gbxmaps,
                 const GbxInitConds &gbxic,
-                const viewd_supers supers)
+                const viewd_supers totsupers)
 /* initialise a view of superdrops (on device memory)
 using data from an InitData instance for their initial
 gbxindex, spatial coordinates and attributes */
@@ -141,7 +141,7 @@ gbxindex, spatial coordinates and attributes */
 
   // initialise gridboxes on host
   gbxs.sync_host();
-  initialise_gbxs_on_host(gbxmaps, gbxic, supers, gbxs.view_host());
+  initialise_gbxs_on_host(gbxmaps, gbxic, totsupers, gbxs.view_host());
   gbxs.modify_host();
 
   // update device gridbox view to match host's gridbox view
@@ -154,7 +154,7 @@ template <GridboxMaps GbxMaps, typename GbxInitConds>
 inline void
 initialise_gbxs_on_host(const GbxMaps &gbxmaps,
                         const GbxInitConds &gbxic,
-                        const viewd_supers supers,
+                        const viewd_supers totsupers,
                         const viewh_gbx h_gbxs)
 /* initialise the host view of gridboxes
 using some data from a GbxInitConds instance
@@ -165,7 +165,7 @@ e.g. for each gridbox's volume */
 
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    h_gbxs(ii) = gen(ii, gbxmaps, supers);
+    h_gbxs(ii) = gen(ii, gbxmaps, totsupers);
   }
 }
 

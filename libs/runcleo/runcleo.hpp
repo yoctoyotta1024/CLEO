@@ -85,7 +85,7 @@ private:
   int timestep_cleo(const unsigned int t_end,
                     RunStats &stats,
                     const dualview_gbx gbxs,
-                    const viewd_supers supers,
+                    const viewd_supers totsupers,
                     GenRandomPool genpool) const
   /* timestep CLEO from t=0 to t=t_end */
   {
@@ -101,7 +101,7 @@ private:
       coupldyn_step(t_mdl, t_next);
   
       /* advance SDM (optionally concurrent to dynamics solver) */
-      sdm_step(t_mdl, t_next, gbxs, supers, genpool);
+      sdm_step(t_mdl, t_next, gbxs, totsupers, genpool);
 
       /* proceed to next step (in general involves coupling) */
       t_mdl = proceed_to_next_step(t_mdl, t_next, gbxs);
@@ -152,12 +152,12 @@ private:
   void sdm_step(const unsigned int t_mdl,
                 unsigned int t_next,
                 dualview_gbx gbxs,
-                const viewd_supers supers,
+                const viewd_supers totsupers,
                 GenRandomPool genpool) const
   /* run CLEO SDM (on device) */
   {
     gbxs.sync_device();
-    sdm.run_step(t_mdl, t_next, gbxs.view_device(), supers, genpool);
+    sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers, genpool);
     gbxs.modify_device();
   }
 
@@ -201,10 +201,10 @@ public:
   {
     // create runtime objects
     RunStats stats;
-    viewd_supers supers(create_supers(initconds.initsupers));
+    viewd_supers totsupers(create_supers(initconds.initsupers)); // all the superdrops in domain
     dualview_gbx gbxs(create_gbxs(sdm.gbxmaps,
                                   initconds.initgbxs,
-                                  supers));
+                                  totsupers));
     GenRandomPool genpool(std::random_device{}());
 
     // prepare CLEO for timestepping
@@ -212,7 +212,7 @@ public:
     stats.before_timestepping();
 
     // do timestepping from t=0 to t=t_end
-    timestep_cleo(t_end, stats, gbxs, supers, genpool);
+    timestep_cleo(t_end, stats, gbxs, totsupers, genpool);
     stats.after_timestepping();
     return 0;
   }
