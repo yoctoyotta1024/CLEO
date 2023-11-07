@@ -86,6 +86,16 @@ public:
   {
     sdgbxindex = i_sdgbxindex;
   }
+
+  KOKKOS_INLINE_FUNCTION
+  void increment_coords(const double delta3,
+                        const double delta1,
+                        const double delta2)
+  {
+    coord3 += delta3;
+    coord1 += delta1;
+    coord2 += delta2;
+  }
 };
 
 #endif // SUPERDROP_HPP

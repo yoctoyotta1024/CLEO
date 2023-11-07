@@ -117,9 +117,7 @@ public:
     cfl_criteria(gbxmaps, gbxindex, d.delta3, d.delta1, d.delta2);
 
     /* update SD coords */
-    drop.coord3 += d.delta3;
-    drop.coord1 += d.delta1;
-    drop.coord2 += d.delta2;
+    drop.increment_coords(d.delta3, d.delta1, d.delta2);
   }
 };
 
