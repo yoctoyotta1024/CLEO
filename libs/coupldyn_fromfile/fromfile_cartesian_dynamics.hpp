@@ -20,8 +20,8 @@
  * one-way and dynamics are read from file
  */
 
-#ifndef FROMFILE_CARTESIAN_DYNAMICS_HPP 
-#define FROMFILE_CARTESIAN_DYNAMICS_HPP 
+#ifndef FROMFILE_CARTESIAN_DYNAMICS_HPP
+#define FROMFILE_CARTESIAN_DYNAMICS_HPP
 
 #include <array>
 #include <vector>
@@ -46,8 +46,8 @@ p_gbx0(t1), p_gbx1(t1), ..., p_gbxN(t1), ..., p_gbxN(t_end)]
 current timestep from for the first gridbox (gbx0)  */
 {
 private:
-  using get_winds_func = std::function<std::pair<double,double>(const unsigned int)>;
-  
+  using get_winds_func = std::function<std::pair<double, double>(const unsigned int)>;
+
   /* position in vector for 0th gridbox at current timestep  */
   const std::array<size_t, 3> ndims; // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
   size_t pos;                        // for variable defined at gridbox centres
@@ -60,7 +60,7 @@ private:
   std::vector<double> temp;
   std::vector<double> qvap;
   std::vector<double> qcond;
-  
+
   std::vector<double> wvel_zfaces; // w velocity defined on coord3 faces of gridboxes
   std::vector<double> uvel_xfaces; // u velocity defined on coord1 faces of gridboxes
   std::vector<double> vvel_yfaces; // v velocity defined on coord2 faces of gridboxes
@@ -107,15 +107,35 @@ public:
                     const std::array<size_t, 3> i_ndims,
                     const unsigned int nsteps);
 
+  get_winds_func get_wvel; // funcs to get velocity defined in construction of class
+  get_winds_func get_uvel; // warning: these functions are not const member funcs by default
+  get_winds_func get_vvel;
+
+  double get_press(const size_t ii) const
+  {
+    return press.at(pos + ii);
+  }
+
+  double get_temp(const size_t ii) const
+  {
+    return temp.at(pos + ii);
+  }
+
+  double get_qvap(const size_t ii) const
+  {
+    return qvap.at(pos + ii);
+  }
+
+  double get_qcond(const size_t ii) const
+  {
+    return qcond.at(pos + ii);
+  }
+
   void increment_position();
   /* updates positions to gbx0 in vector (for
   acessing value at next timestep). Assumes domain
   is decomposed into cartesian C grid with dimensions
   (ie. number of gridboxes in each dimension) ndims */
-
-  get_winds_func get_wvel; // funcs to get velocity defined in construction of class 
-  get_winds_func get_uvel; // warning: these functions are not const member funcs by default
-  get_winds_func get_vvel;
 };
 
 struct FromFileDynamics
@@ -166,26 +186,25 @@ public:
     }
   }
 
-    double get_press(const unsigned int gbxindex) const
+  double get_press(const unsigned int gbxindex) const
   {
-    return get_var(press, (size_t)gbxindex);
+    return dynvars->get_press((size_t)gbxindex);
   }
 
   double get_temp(const unsigned int gbxindex) const
   {
-    return get_var(temp, (size_t)gbxindex);
+    return dynvars->get_temp((size_t)gbxindex);
   }
-  
+
   double get_qvap(const unsigned int gbxindex) const
   {
-    return get_var(qvap, (size_t)gbxindex);
+    return dynvars->get_qvap((size_t)gbxindex);
   }
 
   double get_qcond(const unsigned int gbxindex) const
   {
-    return get_var(qcond, (size_t)gbxindex);
+    return dynvars->get_qcond((size_t)gbxindex);
   }
-
 };
 
 #endif // FROMFILE_CARTESIAN_DYNAMICS_HPP  
