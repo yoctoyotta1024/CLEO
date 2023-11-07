@@ -1,0 +1,169 @@
+/*
+ * ----- CLEO -----
+ * File: predcorrmotion.hpp
+ * Project: gridboxes
+ * Created Date: Monday 16th October 2023
+ * Author: Clara Bayley (CB)
+ * Additional Contributors:
+ * -----
+ * Last Modified: Tuesday 7th November 2023
+ * Modified By: CB
+ * -----
+ * License: BSD 3-Clause "New" or "Revised" License
+ * https://opensource.org/licenses/BSD-3-Clause
+ * -----
+ * Copyright (c) 2023 MPI-M, Clara Bayley
+ * -----
+ * File Description:
+ * Motion of a superdroplet using predictor-corrector
+ * method to update a superdroplet's coordinates given
+ * a formula for its terminal velocity and the wind
+ * velocity obtained via a simple linear interpolation.
+ * Methods follows equations in Grabowski et al. 2018
+ */
+
+
+#ifndef PREDCORRMOTION_HPP
+#define PREDCORRMOTION_HPP
+
+#include <Kokkos_Core.hpp>
+
+#include "./gridbox.hpp"
+#include "superdrops/superdrop.hpp"
+#include "superdrops/state.hpp"
+#include "gridboxes/gridboxmaps.hpp"
+
+template <GridboxMaps GbxMaps>
+bool cfl_criteria(const GbxMaps &gbxmaps,
+                  const unsigned int gbxindex,
+                  const double delta3, const double delta1,
+                  const double delta2);
+/* returns false if any of z, x or y (3,1,2) directions
+  do not meet their cfl criterion. For each direction,
+  Criterion is C = delta[X] / gridstep =< 1 where the
+  gridstep is calculated from the gridbox boundaries map */
+
+inline bool cfl_criterion(const double gridstep,
+                          const double sdstep)
+/* sdstep = change in superdroplet coordinate position.
+returns *false* if cfl criterion, C = sdstep / gridstep, > 1 */
+{
+  return (std::abs(sdstep) <= std::abs(gridstep));
+}
+
+struct PredCorrMotion
+{
+private:
+  unsigned int interval;
+
+  struct DeltaCoords
+  {
+    double delta3; // change in coord3
+    double delta1; // change in coord1
+    double delta2; // change in coord2
+  };
+
+  DeltaCoords predictor_corrector(const Maps4GridBoxes &gbxmaps,
+                                  const Gridbox &gbx,
+                                  const Superdrop &drop) const
+  {
+    const double terminal = terminalv(drop);
+
+    WindsAtCoord winds{gbxmaps, gbx.state, gbx.gbxindex,
+                       drop.coord3, drop.coord1, drop.coord2};
+
+    /* corrector velocities based on predicted coords */
+    const double vel3 = winds.interp_wvel() - terminal;
+    const double vel1 = winds.interp_uvel();
+    const double vel2 = winds.interp_vvel();
+
+    /* predictor coords given velocity at previous coords */
+    winds.coord3 += vel3 * delt; // move by w wind + terminal velocity
+    winds.coord1 += vel1 * delt; // move by u wind
+    winds.coord2 += vel2 * delt; // move by v wind
+
+    /* corrector velocities based on predicted coords */
+    const double corrvel3 = winds.interp_wvel() - terminal;
+    const double corrvel1 = winds.interp_uvel();
+    const double corrvel2 = winds.interp_vvel();
+
+    /* predicted-corrected change to superdrop coords */
+    const double delta3((vel3 + corrvel3) * (delt / 2));
+    const double delta1((vel1 + corrvel1) * (delt / 2));
+    const double delta2((vel2 + corrvel2) * (delt / 2));
+
+    return Deltas{delta3, delta1, delta2};
+  }
+
+public:
+  PredCorrMotion(const unsigned int motionstep)
+      : interval(motionstep) {}
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int next_step(const unsigned int t_sdm) const
+  {
+    return ((t_sdm / interval) + 1) * interval;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  bool on_step(const unsigned int t_sdm) const
+  {
+    return t_sdm % interval == 0;
+  }
+
+  KOKKOS_FUNCTION
+  template <GridboxMaps GbxMaps>
+  void update_superdrop_coords(const unsigned int gbxindex,
+                               const GbxMaps &gbxmaps,
+                               const State &state,
+                               Superdrop &drop) const
+  /* Uses predictor-corrector method to forward timestep
+  a superdroplet's coordinates using the interpolated
+  wind velocity from a gridbox's state */
+  {
+    // /* Use predictor-corrector method to get change in SD coords */
+    // DeltaCoords d{predictor_corrector(gbxindex, gbxmaps, state, drop)};
+
+    /* CFL check on predicted change to SD coords */
+    cfl_criteria(gbxmaps, gbxindex, d.delta3, d.delta1, d.delta2);
+
+    /* update SD coords */
+    drop.coord3 += d.delta3;
+    drop.coord1 += d.delta1;
+    drop.coord2 += d.delta2;
+  }
+};
+
+template <GridboxMaps GbxMaps>
+bool cfl_criteria(const Maps4GridBoxes &gbxmaps,
+                  const unsigned int gbxindex,
+                  const double delta3,
+                  const double delta1,
+                  const double delta2)
+/* returns false if any of z, x or y (3,1,2) directions
+  do not meet their cfl criterion. For each direction,
+  Criterion is C = delta[X] / gridstep =< 1 where the
+  gridstep is calculated from the gridbox boundaries map */
+{
+  double gridstep(gbxmaps.coord3bounds(gbxindex).second -
+                  gbxmaps.coord3bounds(gbxindex).first);
+  bool cfl(cfl_criterion(gridstep, delta3));
+
+  gridstep = gbxmaps.coord1bounds(gbxindex).second -
+             gbxmaps.coord1bounds(gbxindex).first;
+  cfl = (cfl_criterion(gridstep, delta1) && cfl);
+
+  gridstep = gbxmaps.coord2bounds(gbxindex).second -
+             gbxmaps.coord2bounds(gbxindex).first;
+  cfl = (cfl_criterion(gridstep, delta2) && cfl);
+
+  if (!cfl)
+  {  
+    throw std::invalid_argument("CFL criteria for SD motion not met."
+                                "Consider reducing sdmotion timestep");
+  }
+
+  return cfl;
+}
+
+#endif // PREDCORRMOTION_HPP
