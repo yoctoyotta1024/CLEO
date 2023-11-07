@@ -77,6 +77,7 @@ private:
         /* step (1) */
         motion.update_superdrop_coords();
 
+        /* optional step (1b) */
         // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
 
         /* step (2) */
