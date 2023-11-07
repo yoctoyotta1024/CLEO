@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,18 +36,15 @@ receive any back. Struct obeys coupling comms concept */
   template <typename CD = FromFileDynamics>
   void send_dynamics(const viewh_constgbx h_gbxs,
                      FromFileDynamics &ffdyn) const {}
-  /* send information from Gridboxes'
-  states to coupldyn is null */
+  /* send information from Gridboxes' states
+  to coupldyn is null for FromFileDynamics*/
 
   template <typename CD = FromFileDynamics>
   void receive_dynamics(const FromFileDynamics &ffdyn,
-                        const viewh_gbx h_gbxs) const
+                        const viewh_gbx h_gbxs) const;
   /* update Gridboxes' states using information
   received from FromFileDynamics solver for
-  1-way coupled to CLEO SDM */
-  {
-    // TODO 
-  }
+  1-way coupling to CLEO SDM */
 };
 
 #endif // FROMFILECOMMS_HPP

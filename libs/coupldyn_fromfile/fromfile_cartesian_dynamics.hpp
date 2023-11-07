@@ -186,24 +186,39 @@ public:
     }
   }
 
-  double get_press(const unsigned int gbxindex) const
+  double get_press(const size_t ii) const
   {
-    return dynvars->get_press((size_t)gbxindex);
+    return dynvars->get_press(ii);
   }
 
-  double get_temp(const unsigned int gbxindex) const
+  double get_temp(const size_t ii) const
   {
-    return dynvars->get_temp((size_t)gbxindex);
+    return dynvars->get_temp(ii);
   }
 
-  double get_qvap(const unsigned int gbxindex) const
+  double get_qvap(const size_t ii) const
   {
-    return dynvars->get_qvap((size_t)gbxindex);
+    return dynvars->get_qvap(ii);
   }
 
-  double get_qcond(const unsigned int gbxindex) const
+  double get_qcond(const size_t ii) const
   {
-    return dynvars->get_qcond((size_t)gbxindex);
+    return dynvars->get_qcond(ii);
+  }
+
+  std::pair<double, double> get_wvel(const size_t ii) const
+  {
+    return dynvars->get_wvel(ii);
+  }
+
+  std::pair<double, double> get_uvel(const size_t ii) const
+  {
+    return dynvars->get_uvel(ii);
+  }
+
+  std::pair<double, double> get_vvel(const size_t ii) const
+  {
+    return dynvars->get_vvel(ii);
   }
 };
 
