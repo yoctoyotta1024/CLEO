@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 19th October 2023
+ * Last Modified: Tuesday 7th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -51,12 +51,28 @@ private:
                                  const viewd_gbx d_gbxs,
                                  const viewd_supers supers) const
   /* enact movement of superdroplets throughout domain in three stages:
-  1) update their spatial coords according to type of motion.
-  2) update their sdgbxindex accordingly
-  3) move superdroplets between gridboxes */
+  (1) update their spatial coords according to type of motion.
+  (1b) optional detect precipitation
+  (2) update their sdgbxindex accordingly
+  (3) move superdroplets between gridboxes */
   {
-    // update sd index etc. fro all SDs in gbxs
-    motion.update_superdrop_coords(t_sdm);
+    const size_t ngbxs(d_gbxs.extent(0));
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      for (auto &SDinGBx : gbx.span4SDsinGBx)
+      {
+        /* step (1) */
+        motion.update_superdrop_coords(t_sdm);
+
+        // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
+
+        /* step (2) */
+        SDinGBx.sd_gbxindex = update_superdrop_gbxindex(gbxmaps, ii, drop);
+      }
+    }
+
+    /* step (3) */
+    move_superdroplets_between_gridboxes(gbxmaps, SDsInGBxs, gridboxes);
   }
 
 public:

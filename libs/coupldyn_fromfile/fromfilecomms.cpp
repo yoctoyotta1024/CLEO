@@ -22,7 +22,7 @@
 
 #include "./fromfilecomms.hpp"
 
-template <typename CD = FromFileDynamics>
+template <typename CD>
 void FromFileComms::receive_dynamics(const FromFileDynamics &ffdyn,
                                      const viewh_gbx h_gbxs) const
 /* update Gridboxes' states using information
