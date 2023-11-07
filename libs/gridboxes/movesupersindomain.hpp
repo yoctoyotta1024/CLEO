@@ -46,6 +46,16 @@ private:
   M motion;
 
   KOKKOS_INLINE_FUNCTION
+  unsigned int update_superdrop_gbxindex() const
+  {
+    // TODO (put into seperate templated struct too)
+  }
+
+  void move_superdroplets_between_gridboxes() const
+  {
+    // TODO (put into seperate templated struct too)
+  }
+
   void move_superdrops_in_domain(const unsigned int t_sdm,
                                  const GridboxMaps auto &gbxmaps,
                                  const viewd_gbx d_gbxs,
@@ -90,7 +100,6 @@ public:
     return motion.next_step(t_sdm);
   }
 
-  KOKKOS_INLINE_FUNCTION
   void run_step(const unsigned int t_sdm,
                 const GridboxMaps auto &gbxmaps,
                 const viewd_gbx d_gbxs,
