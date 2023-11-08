@@ -143,7 +143,6 @@ public:
   movement and microphysics */
   {
     gbxs.sync_device(); // get device up to date with host
-    const viewd_gbx d_gbxs(gbxs.view_device()); // (already synced) device view of gbxs
 
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next)
@@ -151,7 +150,7 @@ public:
       unsigned int t_sdm_next(next_sdmstep(t_sdm, t_mdl_next));
 
       superdrops_movement(t_sdm, gbxs, totsupers); // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, genpool); // on device 
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs.view_device(), genpool); // on device 
 
       t_sdm = t_sdm_next;
     }
