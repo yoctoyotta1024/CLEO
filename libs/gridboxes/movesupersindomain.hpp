@@ -57,13 +57,13 @@ after updating their gridbox indexes concordantly */
   /* (re)sorting supers based on their gbxindexes and
   then updating the span for each gridbox accordingly */
   {
-    sort_superdrops_via_gridboxindex(totsupers);
+    sort_supers(totsupers);
 
     const size_t ngbxs(d_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      d_gbx(ii).supersingbx.set_refs();
-      d_gbx(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
+      d_gbxs(ii).supersingbx.set_refs();
+      d_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
     }
   }
 
