@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Wednesday 8th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,7 +44,7 @@ subview also do not have matching index. */
   const Pred pred{idx};
   const auto crit1(is_pred(pred));
   const auto crit2(is_prednot(pred, {0, refs.first}));
-  const auto crit3(is_prednot(pred, {refs.second, supers.extent(0)}));
+  const auto crit3(is_prednot(pred, {refs.second, totsupers.extent(0)}));
 
   return (crit1 && crit2 && crit3);
 }
