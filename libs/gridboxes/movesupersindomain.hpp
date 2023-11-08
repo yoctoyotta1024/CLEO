@@ -35,19 +35,23 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-template <typename S>
-concept UpdateSdgbxindex = requires(S s)
+template <typename S, typename GbxMaps>
+concept UpdateSdgbxindex = requires(S s, const unsigned int u,
+                                    const GbxMaps &gbxmaps,
+                                    Superdrop &drop)
 /* concept for all (function-like) types (ie. types
 that can be called with some arguments) that can be
 called by MoveSupersInDomain for the
 "update_superdrop_gbxindex" function (see below) */
 {
   {
-    s()
-  } -> std::same_as<void>
+    s(u, gbxmaps, drop)
+  } -> std::same_as<void>;
 };
 
-template <GridboxMaps GbxMaps, Motion<GbxMaps> M, UpdateSdgbxindex S>
+template <GridboxMaps GbxMaps,
+          Motion<GbxMaps> M,
+          UpdateSdgbxindex<GbxMaps> S>
 struct MoveSupersInDomain
 /* struct for functionality to move superdroplets throughtout
 the domain by updating their spatial coordinates (according to
@@ -90,16 +94,18 @@ after updating their gridbox indexes concordantly */
           const subviewd_supers supers(d_gbxs(ii).supersingbx());
           for (size_t kk(0); kk < supers.extent(0); ++kk)
           {
+            const unsigned int gbxindex(d_gbxs(ii).get_gbxindex());
+            
             /* step (1) */
-            motion.update_superdrop_coords(d_gbxs(ii).get_gbxindex(),
-                                           gbxmaps, d_gbxs(ii).state,
+            motion.update_superdrop_coords(gbxindex, gbxmaps,
+                                           d_gbxs(ii).state,
                                            supers(kk));
 
             /* optional step (1b) */
             // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
 
             /* step (2) */
-            update_superdrop_gbxindex(); // TODO fill in update func
+            update_superdrop_gbxindex(gbxindex, gbxmaps, supers(kk));
             // supers(kk).set_sdgbxindex(update_superdrop_gbxindex()); // TODO fill in update func
           }
         });
