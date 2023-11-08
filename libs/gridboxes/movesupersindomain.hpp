@@ -31,6 +31,7 @@
 #include "../kokkosaliases.hpp"
 #include "./gridbox.hpp"
 #include "./gridboxmaps.hpp"
+#include "./sortsupers.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
@@ -53,9 +54,8 @@ after updating their gridbox indexes concordantly */
   void move_superdroplets_between_gridboxes(const GbxMaps &gbxmaps,
                                             const viewd_gbx d_gbxs,
                                             const viewd_supers totsupers) const
-  /* move superdroplets between gridboxes by changing their associated
-  gridboxindex if necessary, then (re)sorting SDsInGBxs vector and
-  updating spans4SDsInGbx for each gridbox */
+  /* (re)sorting supers based on their gbxindexes and
+  then updating the span for each gridbox accordingly */
   {
     sort_superdrops_via_gridboxindex(totsupers);
     set_gridboxes_superdropletspan(gbxmaps, d_gbxs, totsupers);
