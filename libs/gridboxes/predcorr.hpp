@@ -47,7 +47,7 @@ return wind at [X] coord. Method is 'simple' linear interpolation
 from Grabowski et al. (2018). coord use in interpolation is
 limited to lower_bound <= coord <= upper_bound. */
 
-template <GridboxMaps GbxMaps, VelocityFormula TerminalVelocity>
+template <GridboxMaps GbxMaps, VelocityFormula TV>
 struct PredCorrMotion
 /* change in coordinates calculated by predictor
 corrector method with the wind velocity obtained via
@@ -56,7 +56,7 @@ equations in Grabowski et al. 2018 */
 {
 private:
   const double delt;                // equivalent of motionstep as dimensionless time
-  const TerminalVelocity terminalv; // returns terminal velocity given a superdroplet
+  const TV terminalv; // returns terminal velocity given a superdroplet
 
   KOKKOS_INLINE_FUNCTION
   double interp_wvel(const unsigned int gbxindex,
@@ -173,7 +173,7 @@ private:
 public:
   PredCorrMotion(const unsigned int motionstep,
                  const std::function<double(int)> int2time,
-                 const TerminalVelocity i_terminalv)
+                 const TV i_terminalv)
       : delt(int2time(motionstep)),
         terminalv(i_terminalv) {}
 

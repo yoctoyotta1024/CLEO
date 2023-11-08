@@ -44,7 +44,7 @@ superdroplet sdgbxindex in a cartesian domain */
              Superdrop &drop) const {}
 };
 
-template <VelocityFormula TerminalVelocity>
+template <VelocityFormula TV>
 struct CartesianMotion
 /* satisfies motion concept for motion of a superdroplet
 using a predictor-corrector method to update a superdroplet's
@@ -52,14 +52,12 @@ coordinates and then updating it's sdgbxindex using the
 UpdateSdgbxindex struct for a cartesian domain */
 {
   const unsigned int interval; // integer timestep for movement
-  
-  PredCorrMotion<CartesianMaps> update_superdrop_coords;
-
+  PredCorrMotion<CartesianMaps, TV> update_superdrop_coords;
   UpdateSdgbxindex update_superdrop_gbxindex;
 
   CartesianMotion(const unsigned int motionstep,
                   const std::function<double(int)> int2time,
-                  const TerminalVelocity i_terminalv)
+                  const TV i_terminalv)
       : interval(motionstep),
         update_superdrop_coords(interval, int2time, i_terminalv) {}
 
