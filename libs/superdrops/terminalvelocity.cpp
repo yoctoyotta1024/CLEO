@@ -50,25 +50,24 @@ conditions (rho_dry0) and in current state (rho_dry). */
   constexpr double a3 = 1732 / VELCONST;
   constexpr double a4 = 917 / VELCONST;
 
-  double terminal_velocity(0.0);
-  if (drop.get_radius() < r1)
+  const double radius(drop.get_radius()); // dimensionless droplet radius []
+  const double MASS(drop.mass() * MASSCONST); // droplet mass in grams [g]
+  if (radius < r1)
   {
-    terminal_velocity = a1 * Kokkos::pow((drop.mass() * MASSCONST), 2.0 / 3.0);
+    return a1 * Kokkos::pow(MASS, 2.0 / 3.0); // dimensionless terminal velocity
   }
-  else if (drop.get_radius() < r2)
+  else if (radius < r2)
   {
-    terminal_velocity = a2 * Kokkos::pow((drop.mass() * MASSCONST), 1.0 / 3.0);
+    return a2 * Kokkos::pow(MASS, 1.0 / 3.0); // dimensionless terminal velocity
   }
-  else if (drop.get_radius() < r3)
+  else if (radius < r3)
   {
-    terminal_velocity = a3 * Kokkos::pow((drop.mass() * MASSCONST), 1.0 / 6.0);
+    return a3 * Kokkos::pow(MASS, 1.0 / 6.0); // dimensionless terminal velocity
   }
   else
   {
-    terminal_velocity = a4;
+    return a4;
   }
-
-  return terminal_velocity; // dimensionless velocity
 }
 
 KOKKOS_FUNCTION
@@ -91,20 +90,21 @@ sized droplet = 9m/s. */
   constexpr double k3 = 201 / dlc::W0;                        // k3 in eqn (8.6) in [m^(-1/2)]
   constexpr double k4 = 9 / dlc::W0;                          // k4 is max fall speed [dimensionless]
 
-  if (drop.radius < r1)
+  const double radius(drop.get_radius());
+  if (radius < r1)
   {
-    return k1 * pow(drop.radius, 2.0); // eqn (8.5)
+    return k1 * Kokkos::pow(radius, 2.0); // eqn (8.5)
   }
 
-  else if (drop.radius < r2)
+  else if (radius < r2)
   {
-    return k2 * drop.radius; // eqn (8.8)
+    return k2 * radius; // eqn (8.8)
   }
 
-  else if (drop.radius < r3)
+  else if (radius < r3)
   {
-    return k3 * pow((drop.radius * dlc::R0), 0.5); // eqn (8.6)
+    return k3 * Kokkos::pow((radius * dlc::R0), 0.5); // eqn (8.6)
   }
 
-  return k4; // see text between eqn (8.7) and (8.8)
+  return k4; // dimensionless terminal velocity [see text between eqn (8.7) and (8.8)]
 }
