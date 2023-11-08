@@ -150,13 +150,14 @@ public:
       unsigned int t_sdm_next(next_sdmstep(t_sdm, t_mdl_next));
 
       superdrops_movement(t_sdm, gbxs, totsupers); // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs.view_device(), genpool); // on device 
+      sdm_microphysics(t_sdm, t_sdm_next, gbxs.view_device(), genpool); // on device 
 
       t_sdm = t_sdm_next;
     }
+
+    gbxs.modify_device(); // mark device view of gbxs as modified
   }
 
-  gbxs.modify_device(); // mark device view of gbxs as modified
 };
 
 #endif // SDMMETHODS_HPP
