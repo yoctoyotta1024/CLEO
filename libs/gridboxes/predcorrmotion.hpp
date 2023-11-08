@@ -95,7 +95,7 @@ private:
                          state.vvel, coord2);
   }
 
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   double delta_coord3(const unsigned int gbxindex,
                       const GbxMaps &gbxmaps,
                       const State &state,
@@ -122,7 +122,7 @@ private:
     return delta3;
   }
 
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   double delta_coord1(const unsigned int gbxindex,
                       const GbxMaps &gbxmaps,
                       const State &state,
@@ -145,7 +145,7 @@ private:
     return delta1;
   }
 
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   double delta_coord2(const unsigned int gbxindex,
                       const GbxMaps &gbxmaps,
                       const State &state,
@@ -207,5 +207,30 @@ public:
     drop.increment_coords(delta3, delta1, delta2);
   }
 };
+
+/* -----  ----- TODO: move functions below to .cpp file ----- ----- */
+
+KOKKOS_FUNCTION
+double interpolation(const Kokkos::pair<double, double> bounds,
+                     const Kokkos::pair<double, double> vel,
+                     const double sdcoord)
+/* Given [X = z,x or y] wind velocity component, vel, that is
+defined on the faces of a gridbox at {lower, upper} [X] bounds,
+return wind at [X] coord. Method is 'simple' linear interpolation
+from Grabowski et al. (2018). coord use in interpolation is
+limited to lower_bound <= coord <= upper_bound. */
+{
+  const double coord(Kokkos::fmin(bounds.second,
+                                  Kokkos::fmax(bounds.first,
+                                               sdcoord))); // limit coord to within bounds
+
+  const double alpha((coord - bounds.first) /
+                     (bounds.second - bounds.first));
+
+  const double interp(alpha * vel.second +
+                      (1 - alpha) * vel.first); // simple linear interpolation
+
+  return interp;
+}
 
 #endif // PREDCORRMOTION_HPP
