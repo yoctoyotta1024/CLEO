@@ -90,7 +90,6 @@ after updating their gridbox indexes concordantly */
 
             /* step (2) */
             motion.update_superdrop_gbxindex(gbxindex, gbxmaps, supers(kk));
-            // supers(kk).set_sdgbxindex(update_superdrop_gbxindex()); // TODO fill in update func
           }
         });
   }
