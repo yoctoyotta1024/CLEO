@@ -17,7 +17,6 @@
  * File Description:
  */
 
-
 #include "./cartesianmotion.hpp"
 
 KOKKOS_FUNCTION void
@@ -36,7 +35,7 @@ is returned. */
 {
   unsigned int current_gbxindex(gbxindex);
 
-  current_gbxindex = move_to_coord3neighbour(gbxmaps, gbxindex drop);
+  current_gbxindex = move_to_coord3neighbour(gbxmaps, gbxindex, drop);
 
   // current_gbxindex = update_ifneighbour(
   //     gbxmaps, zdown, zup,
@@ -82,6 +81,36 @@ check_inbounds_or_outdomain(const unsigned int current_gbxindex,
                             " 'update_ifoutside' to update sd_gbxindex");
 }
 
+int is_change_sdgbxinde(const unsigned int current_gbxindex,
+                        const Kokkos::pair<double, double> bounds,
+                        const double coord)
+/* Given bounds = {lowerbound, upperbound} of a gridbox with
+index 'gbxindex', function determines if coord is within bounds
+of that gridbox. (Note: lower bound inclusive, upper bound exclusive).
+If coord not within bounds backwardsidx or forwardsidx function,
+as appropriate, is used to return a neighbouring gridbox's index.
+If coord lies within bounds, gbxindex is returned. If index is
+already out of domain (ie. value is the maximum unsigned int),
+return out of domain index */
+{
+  if (current_gbxindex == LIMITVALUES::uintmax)
+  {
+    return 0; // ignore current_gbxindex that is already out of domain
+  }
+  else if (coord < bounds.first) // lowerbound
+  {
+    return 1; // current_gbxindex -> backwards_neighbour
+  }
+  else if (coord >= bounds.second) // upperbound
+  {
+    return 2; // current_gbxindex -> forwards_neighbour
+  }
+  else
+  {
+    return 0; // no change to current_gbxindex if coord within bounds
+  }
+}
+
 KOKKOS_FUNCTION unsigned int
 move_to_coord3neighbour(const CartesianMaps &gbxmaps,
                         unsigned int current_gbxindex,
@@ -93,50 +122,23 @@ bounds given gbxbounds using current_gbxindex). Repeat until
 superdroplet coord is within the bounds given by the current_gbxindex,
 or until superdrop leaves domain. */
 {
-  current_gbxindex = update_superdrop_ifneighbour(
-      gbxmaps, backwards_neighbour, forwards_neighbour, current_gbxindex,
-      get_bounds(gbxmaps, current_gbxindex), get_sdcoord(superdrop),
-      superdrop);
+  const int val(is_change_sdgbxindex(current_gbxindex,
+                                     gbxmaps.coord3bounds(current_gbxindex),
+                                     drop.get_coord3())); // value != 0 if sdgbxindex needs to change
+
+  switch (val)
+  {
+  case 1:
+    // current_gbxindex = backwards_neighbour_z(gbxmaps, current_gbxindex, superdrop);
+    break;
+  case 2:
+    //  current_gbxindex = forwards_neighbour_z(gbxmaps, current_gbxindex, superdrop);
+    break;
+  }
 
   check_inbounds_or_outdomain(current_gbxindex,
                               gbxmaps.coord3bounds(current_gbxindex),
                               drop.get_coord3());
 
   return current_gbxindex;
-}
-
-template <typename BackwardIdxFunc, typename ForwardIdxFunc>
-unsigned int update_superdrop_ifneighbour(const Maps4GridBoxes &gbxmaps,
-                                          const BackwardIdxFunc backwards_neighbour,
-                                          const ForwardIdxFunc forwards_neighbour,
-                                          const unsigned int current_gbxindex,
-                                          const std::pair<double, double> bounds,
-                                          const double coord,
-                                          Superdrop &superdrop) const
-/* Given bounds = {lowerbound, upperbound} of a gridbox with
-index 'gbxindex', function determines if coord is within bounds
-of that gridbox. (Note: lower bound inclusive, upper bound exclusive).
-If coord not within bounds backwardsidx or forwardsidx function,
-as appropriate, is used to return a neighbouring gridbox's index.
-If coord lies within bounds, gbxindex is returned. If index is
-already out of domain (ie. value is the maximum unsigned int),
-return out of domain index */
-{
-  if (current_gbxindex == dlc::OUTOFDOMAIN)
-  {
-    return current_gbxindex; // ignore SDs whose sd_gbxindex is already out of domain
-  }
-
-  if (coord < bounds.first) // lowerbound
-  {
-    return backwards_neighbour(gbxmaps, current_gbxindex, superdrop);
-  }
-  else if (coord >= bounds.second) // upperbound
-  {
-    return forwards_neighbour(gbxmaps, current_gbxindex, superdrop);
-  }
-  else
-  {
-    return current_gbxindex; // no change to index if coord within bounds
-  }
 }
