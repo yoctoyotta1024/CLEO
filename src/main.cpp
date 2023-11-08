@@ -139,20 +139,6 @@ create_motion(const unsigned int motionstep)
                                           &step2dimlesstime);
 }
 
-inline auto create_sdm(const Config &config,
-                       const Timesteps &tsteps,
-                       FSStore &store)
-{
-  const unsigned int couplstep(tsteps.get_couplstep());
-  const GridboxMaps auto gbxmaps(create_gbxmaps(config));
-  const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
-  const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
-  const Observer auto obs(create_observer(config, tsteps, store));
-
-  return SDMMethods(couplstep, gbxmaps,
-                    microphys, movesupers, obs);
-}
-
 inline Observer auto
 create_supersattrs_observer(const unsigned int interval,
                             FSStore &store,
@@ -206,6 +192,20 @@ create_observer(const Config &config,
 
   return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
          obs6 >> obs7 >> obs8 >> obs9 >> obs10;
+}
+
+inline auto create_sdm(const Config &config,
+                       const Timesteps &tsteps,
+                       FSStore &store)
+{
+  const unsigned int couplstep(tsteps.get_couplstep());
+  const GridboxMaps auto gbxmaps(create_gbxmaps(config));
+  const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
+  const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
+  const Observer auto obs(create_observer(config, tsteps, store));
+
+  return SDMMethods(couplstep, gbxmaps,
+                    microphys, movesupers, obs);
 }
 
 int main(int argc, char *argv[])

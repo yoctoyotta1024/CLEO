@@ -35,23 +35,8 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-template <typename S, typename GbxMaps>
-concept UpdateSdgbxindex = requires(S s, const unsigned int u,
-                                    const GbxMaps &gbxmaps,
-                                    Superdrop &drop)
-/* concept for all (function-like) types (ie. types
-that can be called with some arguments) that can be
-called by MoveSupersInDomain for the
-"update_superdrop_gbxindex" function (see below) */
-{
-  {
-    s(u, gbxmaps, drop)
-  } -> std::same_as<void>;
-};
-
 template <GridboxMaps GbxMaps,
-          Motion<GbxMaps> M,
-          UpdateSdgbxindex<GbxMaps> S>
+          Motion<GbxMaps> M>
 struct MoveSupersInDomain
 /* struct for functionality to move superdroplets throughtout
 the domain by updating their spatial coordinates (according to
@@ -59,17 +44,6 @@ some type of Motion) and then moving them between gridboxes
 after updating their gridbox indexes concordantly */
 {
   M motion;
-  // S update_superdrop_gbxindex;
-
-  KOKKOS_INLINE_FUNCTION
-  void update_superdrop_gbxindex(const unsigned int gbxindex,
-                                 const GbxMaps &gbxmaps,
-                                 Superdrop &drop)
-  /* returns time when superdroplet motion is
-  next due to occur given current time, t_sdm */
-  {
-    // TODO use concept and struct
-  }
 
   void move_supers_between_gridboxes(const viewh_gbx h_gbxs,
                                      const viewd_supers totsupers) const
@@ -115,7 +89,7 @@ after updating their gridbox indexes concordantly */
             // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
 
             /* step (2) */
-            update_superdrop_gbxindex(gbxindex, gbxmaps, supers(kk));
+            motion.update_superdrop_gbxindex(gbxindex, gbxmaps, supers(kk));
             // supers(kk).set_sdgbxindex(update_superdrop_gbxindex()); // TODO fill in update func
           }
         });

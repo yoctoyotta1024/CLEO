@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Wednesday 8th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -49,20 +49,35 @@ constraints on the "update_superdrop_coords" function */
   {
     m.update_superdrop_coords(u, gbxmaps, state, sd)
   } -> std::same_as<void>;
+  {
+    m.update_superdrop_gbxindex(u, gbxmaps, sd)
+  } -> std::same_as<void>;
 };
 
 struct NullMotion
 {
+  KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_mdl) const
   {
     return LIMITVALUES::uintmax;
   }
 
+  KOKKOS_INLINE_FUNCTION
   bool on_step(const unsigned int t_mdl) const
   {
     return false;
   }
 
-  void update_superdrop_coords(const unsigned int t_mdl) const {}
+  KOKKOS_INLINE_FUNCTION
+  void update_superdrop_coords(const unsigned int gbxindex,
+                               const GbxMaps &gbxmaps,
+                               const State &state,
+                               Superdrop &drop) const {}
+
+  KOKKOS_INLINE_FUNCTION
+  void update_superdrop_gbxindex(const unsigned int gbxindex,
+                                 const GbxMaps &gbxmaps,
+                                 Superdrop &drop) const {}
 };
+
 #endif // MOTION_HPP
