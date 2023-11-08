@@ -61,6 +61,7 @@
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/terminalvelocity.hpp"
 
 #include "zarr/fsstore.hpp"
 #include "zarr/superdropattrsbuffers.hpp"
@@ -121,8 +122,8 @@ inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
   // const auto terminalv = RogersYauTerminalVelocity{};
-  // const auto terminalv = NullTerminalVelocity{};
-  const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = NullTerminalVelocity{};
+  // const auto terminalv = SimmelTerminalVelocity{};
 
   return PredCorrMotion<CartesianMaps>(motionstep,
                                        &step2dimlesstime,
