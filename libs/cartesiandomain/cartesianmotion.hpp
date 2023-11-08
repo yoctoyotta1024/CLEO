@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,6 +26,10 @@
 #define CARTESIANMOTION_HPP
 
 #include <functional>
+#include <cassert>
+
+#include "Kokkos_Core.hpp"
+#include "Kokkos_Pair.hpp"
 
 #include "./cartesianmaps.hpp"
 #include "superdrops/superdrop.hpp"
@@ -77,50 +81,5 @@ UpdateSdgbxindex struct for a cartesian domain */
     cartesian_update_superdrop_gbxindex(gbxindex, gbxmaps, drop);
   }
 };
-
-KOKKOS_FUNCTION void
-cartesian_update_superdrop_gbxindex(const unsigned int gbxindex,
-                                    const CartesianMaps &gbxmaps,
-                                    Superdrop &drop)
-/* Updates superdroplet sdgbxindex in a cartesian domain.
-For each direction (z, then x, then y), gbxmaps's forward and backward
-get_neighbour functions are passed into update_superdrop_ifneighbour
-along with superdroplet and the gridbox bounds for that direction.
-(If coord not within bounds, update_superdrop_ifneighbour should call
-appropriate get_neighbour function to update the superdroplet's
-sd_gbxindex (and possibly other attributes if desired). After algorithm
-for z, then x, then y directions are complete, resultant sd_gbxindex
-is returned. */
-{
-  unsigned int current_gbxindex(gbxindex);
-
-  current_gbxindex = update_ifneighbour(
-      gbxmaps, zdown, zup,
-      [](const Maps4GridBoxes &gbxmaps, const auto ii)
-      { return gbxmaps.get_bounds_z(ii); },
-      [](const Superdrop &superdrop)
-      { return superdrop.coord3; },
-      current_gbxindex, superdrop);
-
-  current_gbxindex = update_ifneighbour(
-      gbxmaps, xbehind, xinfront,
-      [](const Maps4GridBoxes &gbxmaps,
-         const unsigned int ii)
-      { return gbxmaps.get_bounds_x(ii); },
-      [](const Superdrop &superdrop)
-      { return superdrop.coord1; },
-      current_gbxindex, superdrop);
-
-  current_gbxindex = update_ifneighbour(
-      gbxmaps, yleft, yright,
-      [](const Maps4GridBoxes &gbxmaps,
-         const unsigned int ii)
-      { return gbxmaps.get_bounds_y(ii); },
-      [](const Superdrop &superdrop)
-      { return superdrop.coord2; },
-      current_gbxindex, superdrop);
-
-  drop.set_sdgbxindex(current_gbxindex);
-}
 
 #endif // CARTESIANMOTION_HPP
