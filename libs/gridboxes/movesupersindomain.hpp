@@ -92,7 +92,7 @@ after updating their gridbox indexes concordantly */
             // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
 
             /* step (2) */
-            supers(kk).set_sdgbxindex(update_superdrop_gbxindex());
+            supers(kk).set_sdgbxindex(update_superdrop_gbxindex()); // TODO fill in update func
           }
 
         });
