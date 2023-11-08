@@ -58,7 +58,13 @@ after updating their gridbox indexes concordantly */
   then updating the span for each gridbox accordingly */
   {
     sort_superdrops_via_gridboxindex(totsupers);
-    set_gridboxes_superdropletspan(gbxmaps, d_gbxs, totsupers);
+
+    const size_t ngbxs(d_gbxs.extent(0));
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      d_gbx(ii).supersingbx.set_refs();
+      d_gbx(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
+    }
   }
 
   void move_superdrops_in_domain(const unsigned int t_sdm,

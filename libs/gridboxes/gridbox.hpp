@@ -51,7 +51,7 @@ private:
 
     viewd_supers totsupers;  // reference to view of all superdrops (in total domain)
     unsigned int idx;      // value of gbxindex which sdgbxindex of superdrops must match
-    kkpair refs = {0, 0}; // position in view of (first, last) superdrop that occupies gridbox
+    kkpair refs;           // position in view of (first, last) superdrop that occupies gridbox
 
     template <typename Pred>
     inline size_t find_ref(const Pred pred) const;
@@ -76,11 +76,14 @@ private:
 
     SupersInGbx(const viewd_supers i_totsupers,
                 const unsigned int i_idx)
-        : totsupers(i_totsupers), idx(i_idx), refs(set_refs()) {}
+        : totsupers(i_totsupers), idx(i_idx), refs({0,0})
+    {
+      set_refs();
+    }
 
-    inline kkpair set_refs();
+    inline void set_refs();
     /* assumes totsupers is already sorted via sdgbxindex.
-    returns pair which are positions of first and last
+    sets 'refs' to pair with positions of first and last
     superdrops in view which have matching sdgbxindex to idx */
 
     bool iscorrect() const;
@@ -253,14 +256,14 @@ constants with dimensions */
   };
 }
 
-inline Gridbox::SupersInGbx::kkpair
+inline void
 Gridbox::SupersInGbx::set_refs()
 /* assumes totsupers is already sorted via sdgbxindex.
-returns pair which are positions of first and last
+sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx */
 {
   namespace SRP = SetRefPreds;
-  return {find_ref(SRP::Ref0{idx}), find_ref(SRP::Ref1{idx})};
+  refs = {find_ref(SRP::Ref0{idx}), find_ref(SRP::Ref1{idx})};
 }
 
 #endif // GRIDBOX_HPP
