@@ -42,6 +42,7 @@ to a double (hopefully a velocity!) */
 
 struct NullTerminalVelocity
 {
+  KOKKOS_INLINE_FUNCTION
   double operator()(const Superdrop &drop) const
   /* returns 0.0 as terminal velocity of a superdroplet */
   {
