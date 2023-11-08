@@ -34,6 +34,7 @@
 #include "./gridboxmaps.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
+#include "superdrops/terminalvelocity.hpp"
 
 KOKKOS_FUNCTION
 double interpolation(const Kokkos::pair<double, double> bounds,
@@ -45,7 +46,7 @@ return wind at [X] coord. Method is 'simple' linear interpolation
 from Grabowski et al. (2018). coord use in interpolation is
 limited to lower_bound <= coord <= upper_bound. */
 
-template <GridboxMaps GbxMaps>
+template <GridboxMaps GbxMaps, VelocityFormula TerminalVelocity>
 struct PredCorrMotion
 /* change in coordinates calculated by predictor
 corrector method with the wind velocity obtained via
@@ -55,6 +56,7 @@ equations in Grabowski et al. 2018 */
 private:
   const unsigned int interval; // integer timestep for movement
   const double delt;           // equivalent of interval as dimensionless time
+  const TerminalVelocity terminalv; // returns terminal velocity given a superdroplet
 
   KOKKOS_INLINE_FUNCTION
   double interp_wvel(const unsigned int gbxindex,
@@ -103,7 +105,7 @@ private:
   {
     double coord3(drop.get_coord3());
 
-    const double terminal = 0.0; // terminalv(drop); TODO
+    const double terminal = terminalv(drop);
 
     /* corrector velocities based on predicted coords */
     double vel3 = interp_wvel(gbxindex, gbxmaps, state, coord3);
@@ -170,9 +172,11 @@ private:
 
 public:
   PredCorrMotion(const unsigned int motionstep,
-                 const std::function<double(int)> int2time)
+                 const std::function<double(int)> int2time,
+                 const TerminalVelocity i_terminalv)
       : interval(motionstep),
-        delt(int2time(interval)) {}
+        delt(int2time(interval)),
+        terminalv(i_terminalv) {}
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const

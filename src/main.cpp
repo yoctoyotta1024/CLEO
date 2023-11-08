@@ -120,8 +120,13 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
+  // const auto terminalv = RogersYauTerminalVelocity{};
+  // const auto terminalv = NullTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
+
   return PredCorrMotion<CartesianMaps>(motionstep,
-                                       &step2dimlesstime);
+                                       &step2dimlesstime,
+                                       terminalv);
 }
 
 inline Observer auto
