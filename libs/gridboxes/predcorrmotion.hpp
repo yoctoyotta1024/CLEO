@@ -26,6 +26,7 @@
 #define PREDCORRMOTION_HPP
 
 #include <cassert>
+#include <functional>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -54,8 +55,7 @@ a simple linear interpolation. Methods follows
 equations in Grabowski et al. 2018 */
 {
 private:
-  const unsigned int interval; // integer timestep for movement
-  const double delt;           // equivalent of interval as dimensionless time
+  const double delt;                // equivalent of motionstep as dimensionless time
   const TerminalVelocity terminalv; // returns terminal velocity given a superdroplet
 
   KOKKOS_INLINE_FUNCTION
@@ -172,31 +172,21 @@ private:
 
 public:
   PredCorrMotion(const unsigned int motionstep,
-                 const std::function<double(int)> int2time)
-      : interval(motionstep),
-        delt(int2time(interval)),
-        terminalv(TerminalVelocity{}) {}
-
-  KOKKOS_INLINE_FUNCTION
-  unsigned int next_step(const unsigned int t_sdm) const
-  {
-    return ((t_sdm / interval) + 1) * interval;
-  }
-
-  KOKKOS_INLINE_FUNCTION
-  bool on_step(const unsigned int t_sdm) const
-  {
-    return t_sdm % interval == 0;
-  }
+                 const std::function<double(int)> int2time,
+                 const TerminalVelocity i_terminalv)
+      : delt(int2time(motionstep)),
+        terminalv(i_terminalv) {}
 
   KOKKOS_FUNCTION
-  void update_superdrop_coords(const unsigned int gbxindex,
-                               const GbxMaps &gbxmaps,
-                               const State &state,
-                               Superdrop &drop) const
-  /* Uses predictor-corrector method to forward timestep
-  a superdroplet's coordinates using the interpolated
-  wind velocity from a gridbox's state */
+  void operator()(const unsigned int gbxindex,
+                  const GbxMaps &gbxmaps,
+                  const State &state,
+                  Superdrop &drop) const
+  /* operator to satisfiy requirements of the
+  "update_superdrop_coords" function in the motion
+  concept. Operator uses predictor-corrector method to 
+  forward timestep a superdroplet's coordinates using
+  the interpolated wind velocity from a gridbox's state */
   {
     /* Use predictor-corrector method to get change in SD coords */
     const double delta3 = delta_coord3(gbxindex, gbxmaps, state, drop);
