@@ -28,10 +28,13 @@
 #include <functional>
 
 #include "./cartesianmaps.hpp"
+#include "superdrops/superdrop.hpp"
+#include "superdrops/terminalvelocity.hpp"
+#include "gridboxes/predictorcorrector.hpp"
 
 struct UpdateSdgbxindex
 /* struct contanies operator to satisfiy
-requirements of "update_suierdrop_gbxindex"
+requirements of "update_superdrop_gbxindex"
 in the motion concept. Operator updates
 superdroplet sdgbxindex in a cartesian domain */
 {
