@@ -139,11 +139,10 @@ bounds given gbxbounds using current_gbxindex). Repeat until
 superdroplet coord is within the bounds given by the current_gbxindex,
 or until superdrop leaves domain. */
 {
-  const int val(flag_sdgbxindex(current_gbxindex,
-                                gbxmaps.coord3bounds(current_gbxindex),
-                                drop.get_coord3())); // value != 0 if sdgbxindex needs to change
-
-  switch (val)
+  const int flag(flag_sdgbxindex(current_gbxindex,
+                                 gbxmaps.coord3bounds(current_gbxindex),
+                                 drop.get_coord3())); // value != 0 if sdgbxindex needs to change
+  switch (flag)
   {
   case 1:
     // current_gbxindex = backwards_neighbour_z(gbxmaps, current_gbxindex, superdrop);
