@@ -20,6 +20,22 @@
 #include "./cartesianmotion.hpp"
 
 KOKKOS_FUNCTION void
+check_inbounds_or_outdomain(const unsigned int current_gbxindex,
+                            const Kokkos::pair<double, double> bounds,
+                            const double coord);
+/* raise error if superdrop not out of domain or within bounds */
+
+KOKKOS_FUNCTION int
+flag_sdgbxindex(const unsigned int current_gbxindex,
+                const Kokkos::pair<double, double> bounds,
+                const double coord);
+
+KOKKOS_FUNCTION unsigned int
+update_if_coord3neighbour(const CartesianMaps &gbxmaps,
+                          unsigned int current_gbxindex,
+                          Superdrop &drop);
+
+KOKKOS_FUNCTION void
 cartesian_update_superdrop_gbxindex(const unsigned int gbxindex,
                                     const CartesianMaps &gbxmaps,
                                     Superdrop &drop)
@@ -35,15 +51,16 @@ is returned. */
 {
   unsigned int current_gbxindex(gbxindex);
 
-  current_gbxindex = move_to_coord3neighbour(gbxmaps, gbxindex, drop);
+  current_gbxindex = update_if_coord3neighbour(gbxmaps, gbxindex, drop);
 
   // current_gbxindex = update_ifneighbour(
-  //     gbxmaps, zdown, zup,
-  //     [](const Maps4GridBoxes &gbxmaps, const auto ii)
-  //     { return gbxmaps.get_bounds_z(ii); },
-  //     [](const Superdrop &superdrop)
-  //     { return superdrop.coord3; },
-  //     current_gbxindex, superdrop);
+  //                   gbxmaps, 
+  //                   backwards_neighbour = zdown,
+  //                   forwards_neighbour = zup,
+  //                   get_bounds = gbxmaps.get_bounds_z(ii),
+  //                   get_sdcoord = superdrop.coord3,
+  //                   current_gbxindex, 
+  //                   superdrop);
 
   // current_gbxindex = update_ifneighbour(
   //     gbxmaps, xbehind, xinfront,
@@ -69,7 +86,7 @@ is returned. */
 KOKKOS_FUNCTION void
 check_inbounds_or_outdomain(const unsigned int current_gbxindex,
                             const Kokkos::pair<double, double> bounds,
-                            const double coord) const
+                            const double coord)
 /* raise error if superdrop not out of domain or within bounds */
 {
   const bool bad_gbxindex((current_gbxindex != LIMITVALUES::uintmax) &&
@@ -81,7 +98,7 @@ check_inbounds_or_outdomain(const unsigned int current_gbxindex,
                             " 'update_ifoutside' to update sd_gbxindex");
 }
 
-int is_change_sdgbxinde(const unsigned int current_gbxindex,
+int flag_sdgbxindex(const unsigned int current_gbxindex,
                         const Kokkos::pair<double, double> bounds,
                         const double coord)
 /* Given bounds = {lowerbound, upperbound} of a gridbox with
@@ -112,7 +129,7 @@ return out of domain index */
 }
 
 KOKKOS_FUNCTION unsigned int
-move_to_coord3neighbour(const CartesianMaps &gbxmaps,
+update_if_coord3neighbour(const CartesianMaps &gbxmaps,
                         unsigned int current_gbxindex,
                         Superdrop &drop)
 /* For a given direction, pass {lower, upper} bounds into
@@ -122,9 +139,9 @@ bounds given gbxbounds using current_gbxindex). Repeat until
 superdroplet coord is within the bounds given by the current_gbxindex,
 or until superdrop leaves domain. */
 {
-  const int val(is_change_sdgbxindex(current_gbxindex,
-                                     gbxmaps.coord3bounds(current_gbxindex),
-                                     drop.get_coord3())); // value != 0 if sdgbxindex needs to change
+  const int val(flag_sdgbxindex(current_gbxindex,
+                                gbxmaps.coord3bounds(current_gbxindex),
+                                drop.get_coord3())); // value != 0 if sdgbxindex needs to change
 
   switch (val)
   {
