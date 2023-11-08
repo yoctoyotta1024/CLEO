@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: predcorrmotion.cpp
+ * File: predcorr.cpp
  * Project: gridboxes
  * Created Date: Monday 16th October 2023
  * Author: Clara Bayley (CB)
@@ -22,4 +22,4 @@
  * Methods follows equations in Grabowski et al. 2018
  */ 
 
-#include "./predcorrmotion.hpp"
+#include "./predcorr.hpp"

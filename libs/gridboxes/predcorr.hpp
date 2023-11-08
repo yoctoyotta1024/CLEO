@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: predcorrmotion.hpp
+ * File: predcorr.hpp
  * Project: gridboxes
  * Created Date: Monday 16th October 2023
  * Author: Clara Bayley (CB)

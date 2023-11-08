@@ -29,13 +29,13 @@
 #include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 
 #include "gridboxes/gridboxmaps.hpp"
-#include "gridboxes/predcorrmotion.hpp"
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
@@ -132,12 +132,12 @@ create_motion(const unsigned int motionstep)
 {
   // using TerminalVelocity = NullTerminalVelocity;
   // using TerminalVelocity = RogersYauTerminalVelocity;
-  // using TerminalVelocity = SimmelTerminalVelocity;
+  using TerminalVelocity = SimmelTerminalVelocity;
 
-  // return PredCorrMotion<CartesianMaps,
-  //                       TerminalVelocity>(motionstep,
-  //                                         &step2dimlesstime);
-  return NullMotion{};                                                                               
+  return CartesianMotion(motionstep,
+                         &step2dimlesstime,
+                         TerminalVelocity{});
+  // return NullMotion{};                                                                               
 }
 
 inline Observer auto

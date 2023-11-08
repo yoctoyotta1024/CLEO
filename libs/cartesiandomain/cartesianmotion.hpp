@@ -30,7 +30,7 @@
 #include "./cartesianmaps.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
-#include "gridboxes/predictorcorrector.hpp"
+#include "gridboxes/predcorr.hpp"
 
 struct UpdateSdgbxindex
 /* struct contanies operator to satisfiy
@@ -53,8 +53,7 @@ UpdateSdgbxindex struct for a cartesian domain */
 {
   const unsigned int interval; // integer timestep for movement
   
-  PredCorrMotion<CartesianMaps, TerminalVelocity>
-      update_superdrop_coords;
+  PredCorrMotion<CartesianMaps> update_superdrop_coords;
 
   UpdateSdgbxindex update_superdrop_gbxindex;
 
