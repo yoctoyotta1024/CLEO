@@ -172,11 +172,10 @@ private:
 
 public:
   PredCorrMotion(const unsigned int motionstep,
-                 const std::function<double(int)> int2time,
-                 const TerminalVelocity i_terminalv)
+                 const std::function<double(int)> int2time)
       : interval(motionstep),
         delt(int2time(interval)),
-        terminalv(i_terminalv) {}
+        terminalv(TerminalVelocity{}) {}
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const
