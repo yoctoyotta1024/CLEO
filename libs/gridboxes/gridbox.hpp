@@ -258,7 +258,7 @@ constants with dimensions */
 
 inline void
 Gridbox::SupersInGbx::set_refs()
-/* assumes totsupers is already sorted via sdgbxindex.
+ /* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx */
 {
