@@ -32,17 +32,13 @@
 #include "superdrops/terminalvelocity.hpp"
 #include "gridboxes/predcorr.hpp"
 
-struct UpdateSdgbxindex
-/* struct contanies operator to satisfiy
-requirements of "update_superdrop_gbxindex"
-in the motion concept. Operator updates
-superdroplet sdgbxindex in a cartesian domain */
+KOKKOS_FUNCTION void
+cartesian_update_superdrop_gbxindex(const unsigned int gbxindex,
+                                    const CartesianMaps &gbxmaps,
+                                    Superdrop &drop)
+/* Updates superdroplet sdgbxindex in a cartesian domain */
 {
-  KOKKOS_INLINE_FUNCTION void
-  operator()(const unsigned int gbxindex,
-             const CartesianMaps &gbxmaps,
-             Superdrop &drop) const {}
-};
+}
 
 template <VelocityFormula TV>
 struct CartesianMotion
@@ -53,7 +49,6 @@ UpdateSdgbxindex struct for a cartesian domain */
 {
   const unsigned int interval; // integer timestep for movement
   PredCorrMotion<CartesianMaps, TV> update_superdrop_coords;
-  UpdateSdgbxindex update_superdrop_gbxindex;
 
   CartesianMotion(const unsigned int motionstep,
                   const std::function<double(int)> int2time,
@@ -71,6 +66,18 @@ UpdateSdgbxindex struct for a cartesian domain */
   bool on_step(const unsigned int t_sdm) const
   {
     return t_sdm % interval == 0;
+  }
+
+  KOKKOS_INLINE_FUNCTION void
+  update_superdrop_gbxindex(const unsigned int gbxindex,
+                            const CartesianMaps &gbxmaps,
+                            Superdrop &drop) const
+  /* function satisfies requirements of 
+  "update_superdrop_gbxindex" in the motion concept.
+  calls function for updating superdroplet sdgbxindex
+  in a cartesian domain */
+  {
+    cartesian_update_superdrop_gbxindex(gbxindex, gbxmaps, drop); 
   }
 };
 
