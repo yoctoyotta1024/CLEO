@@ -68,16 +68,18 @@ struct NullMotion
     return false;
   }
 
-  KOKKOS_INLINE_FUNCTION
-  void update_superdrop_coords(const unsigned int gbxindex,
-                               const GbxMaps &gbxmaps,
-                               const State &state,
-                               Superdrop &drop) const {}
+  template <typename GbxMaps>
+  KOKKOS_INLINE_FUNCTION void
+  update_superdrop_coords(const unsigned int gbxindex,
+                          const GbxMaps &gbxmaps,
+                          const State &state,
+                          Superdrop &drop) const {}
 
-  KOKKOS_INLINE_FUNCTION
-  void update_superdrop_gbxindex(const unsigned int gbxindex,
-                                 const GbxMaps &gbxmaps,
-                                 Superdrop &drop) const {}
+  template <typename GbxMaps>
+  KOKKOS_INLINE_FUNCTION void
+  update_superdrop_gbxindex(const unsigned int gbxindex,
+                            const GbxMaps &gbxmaps,
+                            Superdrop &drop) const {}
 };
 
 #endif // MOTION_HPP

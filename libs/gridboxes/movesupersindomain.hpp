@@ -121,10 +121,6 @@ after updating their gridbox indexes concordantly */
   MoveSupersInDomain(const M i_motion)
       : motion(i_motion) {}
 
-  // MoveSupersInDomain(const M i_motion, const S i_sdgbxfunc)
-  //     : motion(i_motion),
-  //       update_superdrop_gbxindex(i_sdgbxfunc) {}
-
   KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const
   /* returns time when superdroplet motion is

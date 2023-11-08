@@ -132,11 +132,12 @@ create_motion(const unsigned int motionstep)
 {
   // using TerminalVelocity = NullTerminalVelocity;
   // using TerminalVelocity = RogersYauTerminalVelocity;
-  using TerminalVelocity = SimmelTerminalVelocity;
+  // using TerminalVelocity = SimmelTerminalVelocity;
 
-  return PredCorrMotion<CartesianMaps,
-                        TerminalVelocity>(motionstep,
-                                          &step2dimlesstime);
+  // return PredCorrMotion<CartesianMaps,
+  //                       TerminalVelocity>(motionstep,
+  //                                         &step2dimlesstime);
+  return NullMotion{};                                                                               
 }
 
 inline Observer auto
