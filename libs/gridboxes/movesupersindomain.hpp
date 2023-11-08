@@ -51,6 +51,21 @@ after updating their gridbox indexes concordantly */
     return 0;
   }
 
+  void move_superdroplets_between_gridboxes(const viewh_gbx h_gbxs,
+                                            const viewd_supers totsupers) const
+  /* (re)sorting supers based on their gbxindexes and
+  then updating the span for each gridbox accordingly */
+  {
+    sort_supers(totsupers);
+
+    const size_t ngbxs(h_gbxs.extent(0));
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      h_gbxs(ii).supersingbx.set_refs();
+      // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
+    }
+  }
+
   void move_superdrops_in_gridboxes(const GbxMaps &gbxmaps,
                                     const viewd_gbx d_gbxs) const
   /* enact movement of superdroplets throughout domain in three stages:
@@ -83,21 +98,6 @@ after updating their gridbox indexes concordantly */
           }
 
         });
-  }
-
-  void move_superdroplets_between_gridboxes(const viewh_gbx h_gbxs,
-                                            const viewd_supers totsupers) const
-  /* (re)sorting supers based on their gbxindexes and
-  then updating the span for each gridbox accordingly */
-  {
-    sort_supers(totsupers);
-
-    const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      h_gbxs(ii).supersingbx.set_refs();
-      h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
-    }
   }
 
   void move_superdrops_in_domain(const unsigned int t_sdm,
