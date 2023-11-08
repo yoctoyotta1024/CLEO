@@ -51,31 +51,12 @@ after updating their gridbox indexes concordantly */
     return 0;
   }
 
-  void move_superdroplets_between_gridboxes(const GbxMaps &gbxmaps,
-                                            const viewd_gbx d_gbxs,
-                                            const viewd_supers totsupers) const
-  /* (re)sorting supers based on their gbxindexes and
-  then updating the span for each gridbox accordingly */
-  {
-    sort_supers(totsupers);
-
-    const size_t ngbxs(d_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      d_gbxs(ii).supersingbx.set_refs();
-      d_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
-    }
-  }
-
-  void move_superdrops_in_domain(const unsigned int t_sdm,
-                                 const GbxMaps &gbxmaps,
-                                 const viewd_gbx d_gbxs,
-                                 const viewd_supers totsupers) const
+  void move_superdrops_in_gridboxes(const GbxMaps &gbxmaps,
+                                    const viewd_gbx d_gbxs) const
   /* enact movement of superdroplets throughout domain in three stages:
-  (1) update their spatial coords according to type of motion.
-  (1b) optional detect precipitation
-  (2) update their sdgbxindex accordingly
-  (3) move superdroplets between gridboxes */
+  (1) update their spatial coords according to type of motion. (device)
+  (1b) optional detect precipitation (device)
+  (2) update their sdgbxindex accordingly (device) */
   {
     const size_t ngbxs(d_gbxs.extent(0));
 
@@ -102,9 +83,44 @@ after updating their gridbox indexes concordantly */
           }
 
         });
+  }
+
+  void move_superdroplets_between_gridboxes(const viewh_gbx h_gbxs,
+                                            const viewd_supers totsupers) const
+  /* (re)sorting supers based on their gbxindexes and
+  then updating the span for each gridbox accordingly */
+  {
+    sort_supers(totsupers);
+
+    const size_t ngbxs(h_gbxs.extent(0));
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      h_gbxs(ii).supersingbx.set_refs();
+      h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
+    }
+  }
+
+  void move_superdrops_in_domain(const unsigned int t_sdm,
+                                 const GbxMaps &gbxmaps,
+                                 dualview_gbx gbxs,
+                                 const viewd_supers totsupers) const
+  /* enact movement of superdroplets throughout domain in three stages:
+  (1) update their spatial coords according to type of motion. (device)
+  (1b) optional detect precipitation (device)
+  (2) update their sdgbxindex accordingly (device)
+  (3) move superdroplets between gridboxes (host) */
+  {
+    /* steps (1 - 2) */
+    gbxs.sync_device(); // get device up to date with host
+    move_superdrops_in_gridboxes(gbxmaps, gbxs.view_device());
+    gbxs.modify_device(); // mark device view of gbxs as modified
 
     /* step (3) */
-    move_superdroplets_between_gridboxes(gbxmaps, d_gbxs, totsupers);
+    gbxs.sync_host(); // get device up to date with host 
+    move_superdroplets_between_gridboxes(gbxs.view_host(), totsupers);
+    gbxs.modify_host(); // mark device view of gbxs as modified
+    
+    gbxs.sync_device(); // get device up to date with host
   }
 
   MoveSupersInDomain(const M motion)
@@ -120,7 +136,7 @@ after updating their gridbox indexes concordantly */
 
   void run_step(const unsigned int t_sdm,
                 const GbxMaps &gbxmaps,
-                const viewd_gbx d_gbxs,
+                dualview_gbx gbxs,
                 const viewd_supers totsupers) const
   /* if current time, t_sdm, is time when superdrop
   motion should occur, enact movement of
@@ -128,7 +144,7 @@ after updating their gridbox indexes concordantly */
   {
     if (motion.on_step(t_sdm))
     {
-      move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, totsupers);
+      move_superdrops_in_domain(t_sdm, gbxmaps, gbxs, totsupers);
     }
   };
 };

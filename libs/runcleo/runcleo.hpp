@@ -157,11 +157,9 @@ private:
                 dualview_gbx gbxs,
                 const viewd_supers totsupers,
                 GenRandomPool genpool) const
-  /* run CLEO SDM (on device) */
-  {
-    gbxs.sync_device(); // get device up to date with host
-    sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers, genpool); // modify device
-    gbxs.modify_device(); // mark device as modified
+  /* run CLEO SDM (on host and device) */
+  { 
+    sdm.run_step(t_mdl, t_next, gbxs, totsupers, genpool);
   }
 
   void coupldyn_step(const unsigned int t_mdl,
