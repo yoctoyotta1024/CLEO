@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Wednesday 8th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -159,9 +159,9 @@ private:
                 GenRandomPool genpool) const
   /* run CLEO SDM (on device) */
   {
-    gbxs.sync_device();
-    sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers, genpool);
-    gbxs.modify_device();
+    gbxs.sync_device(); // get device up to date with host
+    sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers, genpool); // modify device
+    gbxs.modify_device(); // mark device as modified
   }
 
   void coupldyn_step(const unsigned int t_mdl,
