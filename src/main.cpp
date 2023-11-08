@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Wednesday 8th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -120,7 +120,8 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  return PredCorrMotion<CartesianMaps>(motionstep);
+  return PredCorrMotion<CartesianMaps>(motionstep,
+                                       &step2dimlesstime);
 }
 
 inline Observer auto
