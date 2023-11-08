@@ -35,7 +35,21 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-template <GridboxMaps GbxMaps, Motion<GbxMaps> M>
+template <typename S>
+concept SdgbxindexFunc = requires(S s)
+/* concept for all (function-like) types (ie. types
+that can be called with some arguments) that can be
+called by MoveSupersInDomain for the
+"update_superdrop_gbxindex" function (see below) */
+{
+  {
+    s()
+  } -> std::same_as<void>
+};
+
+template <GridboxMaps GbxMaps,
+          Motion<GbxMaps> M,
+          SdgbxindexFunc UpdateSdgbxindex>
 struct MoveSupersInDomain
 /* struct for functionality to move superdroplets throughtout
 the domain by updating their spatial coordinates (according to
@@ -43,6 +57,7 @@ some type of Motion) and then moving them between gridboxes
 after updating their gridbox indexes concordantly */
 {
   M motion;
+  UpdateSdgbxindex update_superdrop_gbxindex;
 
   KOKKOS_INLINE_FUNCTION
   unsigned int update_superdrop_gbxindex() const
@@ -51,8 +66,8 @@ after updating their gridbox indexes concordantly */
     return 0;
   }
 
-  void move_superdroplets_between_gridboxes(const viewh_gbx h_gbxs,
-                                            const viewd_supers totsupers) const
+  void move_supers_between_gridboxes(const viewh_gbx h_gbxs,
+                                     const viewd_supers totsupers) const
   /* (re)sorting supers based on their gbxindexes and
   then updating the span for each gridbox accordingly */
   {
@@ -66,8 +81,8 @@ after updating their gridbox indexes concordantly */
     }
   }
 
-  void move_superdrops_in_gridboxes(const GbxMaps &gbxmaps,
-                                    const viewd_gbx d_gbxs) const
+  void move_supers_in_gridboxes(const GbxMaps &gbxmaps,
+                                const viewd_gbx d_gbxs) const
   /* enact movement of superdroplets throughout domain in three stages:
   (1) update their spatial coords according to type of motion. (device)
   (1b) optional detect precipitation (device)
@@ -81,7 +96,6 @@ after updating their gridbox indexes concordantly */
         "move_superdrops_in_domain",
         Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
         KOKKOS_CLASS_LAMBDA(const size_t ii) {
-
           const subviewd_supers supers(d_gbxs(ii).supersingbx());
           for (size_t kk(0); kk < supers.extent(0); ++kk)
           {
@@ -94,9 +108,9 @@ after updating their gridbox indexes concordantly */
             // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
 
             /* step (2) */
-            supers(kk).set_sdgbxindex(update_superdrop_gbxindex()); // TODO fill in update func
+            update_superdrop_gbxindex(); // TODO fill in update func
+            // supers(kk).set_sdgbxindex(update_superdrop_gbxindex()); // TODO fill in update func
           }
-
         });
   }
 
@@ -112,14 +126,14 @@ after updating their gridbox indexes concordantly */
   {
     /* steps (1 - 2) */
     gbxs.sync_device(); // get device up to date with host
-    move_superdrops_in_gridboxes(gbxmaps, gbxs.view_device());
+    move_supers_in_gridboxes(gbxmaps, gbxs.view_device());
     gbxs.modify_device(); // mark device view of gbxs as modified
 
     /* step (3) */
-    gbxs.sync_host(); // get device up to date with host 
-    move_superdroplets_between_gridboxes(gbxs.view_host(), totsupers);
+    gbxs.sync_host(); // get device up to date with host
+    move_supers_between_gridboxes(gbxs.view_host(), totsupers);
     gbxs.modify_host(); // mark device view of gbxs as modified
-    
+
     gbxs.sync_device(); // get device up to date with host
   }
 
