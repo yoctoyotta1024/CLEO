@@ -36,6 +36,7 @@ set(SOURCES
   "state.cpp"
   "superdrop_attrs.cpp"
   "superdrop.cpp"
+  "terminalvelocity.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Wednesday 8th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,6 +24,7 @@
 #ifndef CLEOCONSTANTS_HPP 
 #define CLEOCONSTANTS_HPP 
 
+#include <cstdint>
 #include <limits>
 
 namespace dimmed_constants
