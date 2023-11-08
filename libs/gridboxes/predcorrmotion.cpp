@@ -15,11 +15,11 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Functionality for motion using predictor-corrector
- * method to update a superdroplet's coordinates given
- * a formula for its terminal velocity and the wind
+ * Functionality for change in a superdroplet's coords
+ * using predictor-corrector method for motion of droplet
+ * given a formula for its terminal velocity and the wind
  * velocity obtained via a simple linear interpolation.
  * Methods follows equations in Grabowski et al. 2018
- */
+ */ 
 
 #include "./predcorrmotion.hpp"

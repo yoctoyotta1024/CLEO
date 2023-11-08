@@ -15,8 +15,8 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Motion of a superdroplet using predictor-corrector
- * method to update a superdroplet's coordinates given
+ * Change in a superdroplet's coords using predictor-
+ * corrector method for motion of superdroplet given
  * a formula for its terminal velocity and the wind
  * velocity obtained via a simple linear interpolation.
  * Methods follows equations in Grabowski et al. 2018
