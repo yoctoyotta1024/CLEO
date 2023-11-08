@@ -122,8 +122,8 @@ inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
   // using TerminalVelocity = NullTerminalVelocity;
-  using TerminalVelocity = RogersYauTerminalVelocity;
-  // using TerminalVelocity = SimmelTerminalVelocity;
+  // using TerminalVelocity = RogersYauTerminalVelocity;
+  using TerminalVelocity = SimmelTerminalVelocity;
 
   return PredCorrMotion<CartesianMaps,
                         TerminalVelocity>(motionstep,
