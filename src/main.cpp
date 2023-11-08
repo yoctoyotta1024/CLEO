@@ -121,9 +121,9 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  using TerminalVelocity = NullTerminalVelocity;
+  // using TerminalVelocity = NullTerminalVelocity;
   // using TerminalVelocity = RogersYauTerminalVelocity;
-  // using TerminalVelocity = SimmelTerminalVelocity;
+  using TerminalVelocity = SimmelTerminalVelocity;
 
   return PredCorrMotion<CartesianMaps,
                         TerminalVelocity>(motionstep,
