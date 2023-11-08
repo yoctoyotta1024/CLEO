@@ -36,7 +36,7 @@
 #include "superdrops/superdrop.hpp"
 
 template <typename S>
-concept SdgbxindexFunc = requires(S s)
+concept UpdateSdgbxindex = requires(S s)
 /* concept for all (function-like) types (ie. types
 that can be called with some arguments) that can be
 called by MoveSupersInDomain for the
@@ -47,9 +47,7 @@ called by MoveSupersInDomain for the
   } -> std::same_as<void>
 };
 
-template <GridboxMaps GbxMaps,
-          Motion<GbxMaps> M,
-          SdgbxindexFunc UpdateSdgbxindex>
+template <GridboxMaps GbxMaps, Motion<GbxMaps> M, UpdateSdgbxindex S>
 struct MoveSupersInDomain
 /* struct for functionality to move superdroplets throughtout
 the domain by updating their spatial coordinates (according to
@@ -57,14 +55,7 @@ some type of Motion) and then moving them between gridboxes
 after updating their gridbox indexes concordantly */
 {
   M motion;
-  UpdateSdgbxindex update_superdrop_gbxindex;
-
-  KOKKOS_INLINE_FUNCTION
-  unsigned int update_superdrop_gbxindex() const
-  {
-    // TODO (put into seperate templated struct too)
-    return 0;
-  }
+  S update_superdrop_gbxindex;
 
   void move_supers_between_gridboxes(const viewh_gbx h_gbxs,
                                      const viewd_supers totsupers) const
@@ -137,8 +128,9 @@ after updating their gridbox indexes concordantly */
     gbxs.sync_device(); // get device up to date with host
   }
 
-  MoveSupersInDomain(const M motion)
-      : motion(motion) {}
+  MoveSupersInDomain(const M i_motion, const S i_sdgbxfunc)
+      : motion(i_motion),
+        update_superdrop_gbxindex(i_sdgbxfunc) {}
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const
