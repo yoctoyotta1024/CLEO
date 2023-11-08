@@ -130,13 +130,13 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  // using TerminalVelocity = NullTerminalVelocity;
-  // using TerminalVelocity = RogersYauTerminalVelocity;
-  using TerminalVelocity = SimmelTerminalVelocity;
+  // const auto terminalv = NullTerminalVelocity{};
+  // const auto terminalv = RogersYauTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
 
   return CartesianMotion(motionstep,
                          &step2dimlesstime,
-                         TerminalVelocity{});
+                         terminalv);
   // return NullMotion{};                                                                               
 }
 
