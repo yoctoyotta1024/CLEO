@@ -59,7 +59,17 @@ some type of Motion) and then moving them between gridboxes
 after updating their gridbox indexes concordantly */
 {
   M motion;
-  S update_superdrop_gbxindex;
+  // S update_superdrop_gbxindex;
+
+  KOKKOS_INLINE_FUNCTION
+  void update_superdrop_gbxindex(const unsigned int gbxindex,
+                                 const GbxMaps &gbxmaps,
+                                 Superdrop &drop)
+  /* returns time when superdroplet motion is
+  next due to occur given current time, t_sdm */
+  {
+    // TODO use concept and struct
+  }
 
   void move_supers_between_gridboxes(const viewh_gbx h_gbxs,
                                      const viewd_supers totsupers) const
@@ -134,9 +144,12 @@ after updating their gridbox indexes concordantly */
     gbxs.sync_device(); // get device up to date with host
   }
 
-  MoveSupersInDomain(const M i_motion, const S i_sdgbxfunc)
-      : motion(i_motion),
-        update_superdrop_gbxindex(i_sdgbxfunc) {}
+  MoveSupersInDomain(const M i_motion)
+      : motion(i_motion) {}
+
+  // MoveSupersInDomain(const M i_motion, const S i_sdgbxfunc)
+  //     : motion(i_motion),
+  //       update_superdrop_gbxindex(i_sdgbxfunc) {}
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const
