@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Wednesday 8th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,9 +50,15 @@ after updating their gridbox indexes concordantly */
     return 0;
   }
 
-  void move_superdroplets_between_gridboxes() const
+  void move_superdroplets_between_gridboxes(const GbxMaps &gbxmaps,
+                                            const viewd_gbx d_gbxs,
+                                            const viewd_supers totsupers) const
+  /* move superdroplets between gridboxes by changing their associated
+  gridboxindex if necessary, then (re)sorting SDsInGBxs vector and
+  updating spans4SDsInGbx for each gridbox */
   {
-    // TODO (put into seperate templated struct too)
+    sort_superdrops_via_gridboxindex(totsupers);
+    set_gridboxes_superdropletspan(gbxmaps, d_gbxs, totsupers);
   }
 
   void move_superdrops_in_domain(const unsigned int t_sdm,
@@ -92,7 +98,7 @@ after updating their gridbox indexes concordantly */
         });
 
     /* step (3) */
-    move_superdroplets_between_gridboxes();
+    move_superdroplets_between_gridboxes(gbxmaps, d_gbxs, totsupers);
   }
 
   MoveSupersInDomain(const M motion)
