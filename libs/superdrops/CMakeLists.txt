@@ -31,12 +31,12 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # add executables to library
 set(SOURCES
-  "condensation.cpp"
-  "impliciteuler.cpp"
+  # "condensation.cpp"
+  # "impliciteuler.cpp"
   "state.cpp"
-  "superdrop_attrs.cpp"
-  "superdrop.cpp"
-  "terminalvelocity.cpp"
+  # "superdrop_attrs.cpp"
+  # "terminalvelocity.cpp"
+  # "thermodynamic_equations.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

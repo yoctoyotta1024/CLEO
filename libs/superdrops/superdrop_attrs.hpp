@@ -72,7 +72,7 @@ struct SuperdropAttrs
   KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol(); }
   KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute.ionic(); }
 
-  KOKKOS_FUNCTION double mass() const;
+  KOKKOS_INLINE_FUNCTION double mass() const;
   /* returns total droplet mass = water + dry areosol  */
 
   KOKKOS_INLINE_FUNCTION double dryradius() const
@@ -108,7 +108,8 @@ Prevents drops shrinking further once they are size of dry_radius(). */
 	return radius - oldradius;
 }
 
-KOKKOS_FUNCTION double SuperdropAttrs::mass() const
+KOKKOS_INLINE_FUNCTION
+double SuperdropAttrs::mass() const
 /* returns total droplet mass = water + dry areosol  */
 {
   constexpr double massconst(4.0 / 3.0 * M_PI * dlc::Rho_l); // 4/3 * pi * density
