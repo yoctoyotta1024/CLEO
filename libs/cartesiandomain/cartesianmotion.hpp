@@ -37,6 +37,24 @@
 #include "superdrops/terminalvelocity.hpp"
 #include "gridboxes/predcorr.hpp"
 
+KOKKOS_FUNCTION unsigned int
+update_if_coord3nghbr(const CartesianMaps &gbxmaps,
+                      unsigned int idx,
+                      Superdrop &drop);
+KOKKOS_FUNCTION unsigned int
+update_if_coord1nghbr(const CartesianMaps &gbxmaps,
+                      unsigned int idx,
+                      Superdrop &drop);
+KOKKOS_FUNCTION unsigned int
+update_if_coord2nghbr(const CartesianMaps &gbxmaps,
+                      unsigned int idx,
+                      Superdrop &drop);
+
+KOKKOS_FUNCTION void
+check_inbounds_or_outdomain(const unsigned int idx,
+                            const Kokkos::pair<double, double> bounds,
+                            const double coord);
+
 template <VelocityFormula TV>
 struct CartesianMotion
 /* satisfies motion concept for motion of a superdroplet
@@ -65,10 +83,10 @@ UpdateSdgbxindex struct for a cartesian domain */
     return t_sdm % interval == 0;
   }
 
-  KOKKOS_FUNCTION void
+  KOKKOS_INLINE_FUNCTION void
   update_superdrop_gbxindex(const unsigned int gbxindex,
                             const CartesianMaps &gbxmaps,
-                            Superdrop &drop) const;
+                            Superdrop &drop) const
   /* function satisfies requirements of
   "update_superdrop_gbxindex" in the motion concept to update a
   superdroplet if it should move between gridboxes in a
@@ -78,6 +96,23 @@ UpdateSdgbxindex struct for a cartesian domain */
   bounds, forward or backward neighbour functions are called as
   appropriate  to update sdgbxindex (and possibly other superdrop
   attributes) */
+  {
+    unsigned int idx(gbxindex);
+
+    idx = update_if_coord3nghbr(gbxmaps, idx, drop);
+    check_inbounds_or_outdomain(idx, gbxmaps.coord3bounds(idx),
+                                drop.get_coord3());
+
+    idx = update_if_coord1nghbr(gbxmaps, idx, drop);
+    check_inbounds_or_outdomain(idx, gbxmaps.coord1bounds(idx),
+                                drop.get_coord1());
+
+    idx = update_if_coord2nghbr(gbxmaps, idx, drop);
+    check_inbounds_or_outdomain(idx, gbxmaps.coord2bounds(idx),
+                                drop.get_coord2());
+
+    drop.set_sdgbxindex(idx);
+  }
 };
 
 #endif // CARTESIANMOTION_HPP

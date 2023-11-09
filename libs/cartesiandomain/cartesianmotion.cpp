@@ -19,28 +19,10 @@
 
 #include "./cartesianmotion.hpp"
 
-KOKKOS_FUNCTION void
-check_inbounds_or_outdomain(const unsigned int idx,
-                            const Kokkos::pair<double, double> bounds,
-                            const double coord);
-
 KOKKOS_FUNCTION int
 flag_sdgbxindex(const unsigned int idx,
                 const Kokkos::pair<double, double> bounds,
                 const double coord);
-
-KOKKOS_FUNCTION unsigned int
-update_if_coord3nghbr(const CartesianMaps &gbxmaps,
-                      unsigned int idx,
-                      Superdrop &drop);
-KOKKOS_FUNCTION unsigned int
-update_if_coord1nghbr(const CartesianMaps &gbxmaps,
-                      unsigned int idx,
-                      Superdrop &drop);
-KOKKOS_FUNCTION unsigned int
-update_if_coord2nghbr(const CartesianMaps &gbxmaps,
-                      unsigned int idx,
-                      Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
 backwards_coord3idx(const unsigned int idx,
@@ -68,37 +50,6 @@ KOKKOS_FUNCTION unsigned int
 forwards_coord2idx(const unsigned int idx,
                    const CartesianMaps &gbxmaps,
                    Superdrop &drop);
-
-KOKKOS_FUNCTION void
-CartesianMotion::update_superdrop_gbxindex(const unsigned int gbxindex,
-                                           const CartesianMaps &gbxmaps,
-                                           Superdrop &drop) const
-/* function satisfies requirements of
-"update_superdrop_gbxindex" in the motion concept to update a
-superdroplet if it should move between gridboxes in a
-cartesian domain. For each direction (z, then x, then y),
-superdrop coord is compared to gridbox bounds given by gbxmaps
-for the current gbxindex 'idx'. If superdrop coord lies outside
-bounds, forward or backward neighbour functions are called as
-appropriate  to update sdgbxindex (and possibly other superdrop
-attributes) */
-{
-  unsigned int idx(gbxindex);
-
-  idx = update_if_coord3nghbr(gbxmaps, idx, drop);
-  check_inbounds_or_outdomain(idx, gbxmaps.coord3bounds(idx),
-                              drop.get_coord3());
-  
-  idx = update_if_coord1nghbr(gbxmaps, idx, drop);
-  check_inbounds_or_outdomain(idx, gbxmaps.coord1bounds(idx),
-                              drop.get_coord1());
-  
-  idx = update_if_coord2nghbr(gbxmaps, idx, drop);
-  check_inbounds_or_outdomain(idx, gbxmaps.coord2bounds(idx),
-                              drop.get_coord2());
-
-  drop.set_sdgbxindex(idx);
-}
 
 KOKKOS_FUNCTION void
 check_inbounds_or_outdomain(const unsigned int idx,
@@ -284,7 +235,7 @@ coord1 if superdrop has exceeded the x back domain boundary */
   {
     const double lim1 = gbxmaps.coord1bounds(nghbr).second; // upper lim of backward neigghbour
     const double lim2 = gbxmaps.coord1bounds(idx).first;    // lower lim of current gbx
-    superdrop.set_coord1(coord1_beyondx(superdrop.get_coord1(), lim1, lim2));
+    drop.set_coord1(coord1_beyondx(drop.get_coord1(), lim1, lim2));
   }
 
   return nghbr; // gbxindex of x backwards (behind) neighbour
@@ -306,7 +257,7 @@ coord1 if superdrop has exceeded the x front domain boundary */
   {
     const double lim1 = gbxmaps.coord1bounds(nghbr).first; // lower lim of forward nghbour
     const double lim2 = gbxmaps.coord1bounds(idx).second;  // upper lim of gbx
-    superdrop.set_coord1(coord1_beyondx(superdrop.get_coord1(), lim1, lim2));
+    drop.set_coord1(coord1_beyondx(drop.get_coord1(), lim1, lim2));
   }
 
   return nghbr; // gbxindex of x forwards (infront) neighbour
@@ -315,7 +266,7 @@ coord1 if superdrop has exceeded the x front domain boundary */
 KOKKOS_FUNCTION unsigned int
 backwards_coord2idx(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
-                    Superdrop &superdrop)
+                    Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
 in backwards coord2 (y) direction and to update superdrop
 coord2 if superdrop has exceeded the y leftmost domain boundary */
@@ -328,7 +279,7 @@ coord2 if superdrop has exceeded the y leftmost domain boundary */
   {
     const double lim1 = gbxmaps.coord2bounds(nghbr).second; // upper lim of backward nghbour
     const double lim2 = gbxmaps.coord2bounds(idx).first;    // lower lim of gbx
-    superdrop.set_coord2(coord2_beyondy(superdrop.get_coord2(), lim1, lim2));
+    drop.set_coord2(coord2_beyondy(drop.get_coord2(), lim1, lim2));
   }
 
   return nghbr; // gbxindex of y backwards (left) neighbour
@@ -350,7 +301,7 @@ coord2 if superdrop has exceeded the y rightmost domain boundary */
   {
     const double lim1 = gbxmaps.coord2bounds(nghbr).first; // lower lim of forward nghbour
     const double lim2 = gbxmaps.coord2bounds(idx).second;  // upper lim of gbx
-    superdrop.set_coord2(coord2_beyondy(superdrop.get_coord2(), lim1, lim2));
+    drop.set_coord2(coord2_beyondy(drop.get_coord2(), lim1, lim2));
   }
 
   return nghbr; // gbxindex of y forwards (right) neighbour
