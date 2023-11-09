@@ -31,28 +31,43 @@ flag_sdgbxindex(const unsigned int idx,
 
 KOKKOS_FUNCTION unsigned int
 update_if_coord3nghbr(const CartesianMaps &gbxmaps,
-                          unsigned int idx,
-                          Superdrop &drop);
-
+                      unsigned int idx,
+                      Superdrop &drop);
 KOKKOS_FUNCTION unsigned int
 update_if_coord1nghbr(const CartesianMaps &gbxmaps,
                       unsigned int idx,
                       Superdrop &drop);
-
 KOKKOS_FUNCTION unsigned int
 update_if_coord2nghbr(const CartesianMaps &gbxmaps,
                       unsigned int idx,
                       Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord3idx(const unsigned int gbxindex,
-                 const CartesianMaps &gbxmaps,
-                 Superdrop &superdrop);
+backwards_coord3idx(const unsigned int idx,
+                    const CartesianMaps &gbxmaps,
+                    Superdrop &superdrop);
+KOKKOS_FUNCTION unsigned int
+forwards_coord3idx(const unsigned int idx,
+                   const CartesianMaps &gbxmaps,
+                   Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
-forwards_coord3idx(const unsigned int gbxindex,
-                const CartesianMaps &gbxmaps,
-                Superdrop &drop);
+backwards_coord1idx(const unsigned int idx,
+                    const CartesianMaps &gbxmaps,
+                    Superdrop &superdrop);
+KOKKOS_FUNCTION unsigned int
+forwards_coord1idx(const unsigned int idx,
+                   const CartesianMaps &gbxmaps,
+                   Superdrop &drop);
+
+KOKKOS_FUNCTION unsigned int
+backwards_coord2idx(const unsigned int idx,
+                    const CartesianMaps &gbxmaps,
+                    Superdrop &superdrop);
+KOKKOS_FUNCTION unsigned int
+forwards_coord2idx(const unsigned int idx,
+                   const CartesianMaps &gbxmaps,
+                   Superdrop &drop);
 
 KOKKOS_FUNCTION void
 CartesianMotion::update_superdrop_gbxindex(const unsigned int gbxindex,
