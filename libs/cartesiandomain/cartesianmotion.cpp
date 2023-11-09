@@ -152,7 +152,7 @@ be updated to forwards neighbour. */
 }
 
 KOKKOS_FUNCTION unsigned int
-update_if_coord3neighbour(const CartesianMaps &gbxmaps,
+update_if_coord3nghbr(const CartesianMaps &gbxmaps,
                         unsigned int idx,
                         Superdrop &drop)
 /* return updated value of gbxindex in case superdrop should
@@ -172,6 +172,58 @@ superdroplet's attributes e.g. if it leaves the domain. */
     break;
   case 2:
      idx = forwards_coord3idx(idx, gbxmaps, drop);
+    break;
+  }
+  return idx;
+}
+
+KOKKOS_FUNCTION unsigned int
+update_if_coord1nghbr(const CartesianMaps &gbxmaps,
+                          unsigned int idx,
+                          Superdrop &drop)
+/* return updated value of gbxindex in case superdrop should
+move to neighbouring gridbox in coord1 direction. 
+Funciton changes value of idx if flag != 0,
+if flag = 1 idx updated to backwards neighbour gbxindex.
+if flag = 2 idx updated to forwards neighbour gbxindex.
+Note: backwards/forwards functions may change the 
+superdroplet's attributes e.g. if it leaves the domain. */
+{
+  const int flag(flag_sdgbxindex(idx, gbxmaps.coord1bounds(idx),
+                                 drop.get_coord1())); // if value != 0 idx needs to change
+  switch (flag)
+  {
+  case 1:
+    idx = backwards_coord1idx(idx, gbxmaps, drop);
+    break;
+  case 2:
+     idx = forwards_coord1idx(idx, gbxmaps, drop);
+    break;
+  }
+  return idx;
+}
+
+KOKKOS_FUNCTION unsigned int
+update_if_coord2nghbr(const CartesianMaps &gbxmaps,
+                          unsigned int idx,
+                          Superdrop &drop)
+/* return updated value of gbxindex in case superdrop should
+move to neighbouring gridbox in coord2 direction. 
+Funciton changes value of idx if flag != 0,
+if flag = 1 idx updated to backwards neighbour gbxindex.
+if flag = 2 idx updated to forwards neighbour gbxindex.
+Note: backwards/forwards functions may change the 
+superdroplet's attributes e.g. if it leaves the domain. */
+{
+  const int flag(flag_sdgbxindex(idx, gbxmaps.coord2bounds(idx),
+                                 drop.get_coord2())); // if value != 0 idx needs to change
+  switch (flag)
+  {
+  case 1:
+    idx = backwards_coord2idx(idx, gbxmaps, drop);
+    break;
+  case 2:
+     idx = forwards_coord2idx(idx, gbxmaps, drop);
     break;
   }
   return idx;

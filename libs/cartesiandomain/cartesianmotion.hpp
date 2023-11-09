@@ -37,11 +37,6 @@
 #include "superdrops/terminalvelocity.hpp"
 #include "gridboxes/predcorr.hpp"
 
-KOKKOS_FUNCTION void
-cartesian_update_superdrop_gbxindex(const unsigned int gbxindex,
-                                    const CartesianMaps &gbxmaps,
-                                    Superdrop &drop);
-
 template <VelocityFormula TV>
 struct CartesianMotion
 /* satisfies motion concept for motion of a superdroplet
