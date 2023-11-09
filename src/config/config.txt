@@ -39,7 +39,7 @@ maxchunk = 1250000                        # maximum no. of elements in chunks of
 # domain setup #
 nspacedims = 1                          # no. of spatial dimensions to model 
 ngbxs = 15                              # total number of Gbxs
-totnsupers = 75                         # (initial) total no. of SDs
+totnsupers = 15                         # (initial) total no. of SDs
 
 # timestepping #
 CONDTSTEP = 1                             # time between SD condensation events [s]

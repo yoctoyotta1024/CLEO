@@ -119,7 +119,7 @@ superdroplet's attributes e.g. if it leaves the domain. */
     idx = backwards_coord3idx(idx, gbxmaps, drop);
     break;
   case 2:
-     idx = forwards_coord3idx(idx, gbxmaps, drop);
+    idx = forwards_coord3idx(idx, gbxmaps, drop);
     break;
   }
   return idx;
