@@ -296,8 +296,9 @@ coord1 if superdrop has exceeded the x back domain boundary */
 {
   const unsigned int nghbr(gbxmaps.coord1backward(idx));
 
-  const unsigned int incre(gbxmaps.get_ndim(0));                       // increment
-  if (at_cartesiandomainboundary(idx, incre, gbxmaps.get_ndim(1))) // at lower x edge of domain
+  const auto ndims(gbxmaps.get_ndims());
+  const unsigned int incre(ndims(0));                   // increment
+  if (at_cartesiandomainboundary(idx, incre, ndims(1))) // at lower x edge of domain
   {
     const double lim1 = gbxmaps.coord1bounds(nghbr).second; // upper lim of backward neigghbour
     const double lim2 = gbxmaps.coord1bounds(idx).first;    // lower lim of current gbx
@@ -317,13 +318,36 @@ coord1 if superdrop has exceeded the x front domain boundary */
 {
   const unsigned int nghbr(gbxmaps.coord1forward(idx));
 
-  const unsigned int incre(gbxmaps.get_ndim(0)); // increment 
-  if (at_cartesiandomainboundary(idx + incre, incre, gbxmaps.get_ndim(1))) // at lower x edge of domain
+  const auto ndims(gbxmaps.get_ndims());
+  const unsigned int incre(ndims(0));                           // increment
+  if (at_cartesiandomainboundary(idx + incre, incre, ndims(1))) // at lower x edge of domain
   {
     const double lim1 = gbxmaps.coord1bounds(nghbr).first; // lower lim of forward nghbour
     const double lim2 = gbxmaps.coord1bounds(idx).second;  // upper lim of gbx
     superdrop.set_coord1(coord1_beyondx(superdrop.get_coord1(), lim1, lim2));
   }
 
-  return nghbr; // gbxindex of x backwards (behind) neighbour
+  return nghbr; // gbxindex of x forwards (infront) neighbour
+};
+
+KOKKOS_FUNCTION unsigned int
+backwards_coord2idx(const unsigned int idx,
+                    const CartesianMaps &gbxmaps,
+                    Superdrop &superdrop);
+/* function to return gbxindex of neighbouring gridbox
+in backwards coord2 (x) direction and to update superdrop
+coord2 if superdrop has exceeded the y leftmost domain boundary */
+{
+  const unsigned int nghbr(gbxmaps.coord2backward(idx));
+
+  const auto ndims(gbxmaps.get_ndims());
+  const unsigned int incre(ndims(0) * ndims(1));        // no. gridboxes in z direction * no. gridboxes in x direction
+  if (at_cartesiandomainboundary(idx, incre, ndims(2))) // at lower y edge of domain
+  {
+    const double lim1 = gbxmaps.coord2bounds(nghbr).second; // upper lim of backward nghbour
+    const double lim2 = gbxmaps.coord2bounds(idx).first;    // lower lim of gbx
+    superdrop.set_coord2(coord2_beyondy(superdrop.get_coord2(), lim1, lim2));
+  }
+
+  return nghbr; // gbxindex of y backwards (left) neighbour
 };
