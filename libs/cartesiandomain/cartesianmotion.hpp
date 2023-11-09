@@ -41,6 +41,18 @@ cartesian_update_superdrop_gbxindex(const unsigned int gbxindex,
                                     const CartesianMaps &gbxmaps,
                                     Superdrop &drop);
 
+KOKKOS_INLNE_FUNCTION bool
+at_cartesiandomainboundary(const unsigned int gbxindex,
+                           const unsigned int increment,
+                           const size_t ndim)
+/* returns true if idx for gridbox is at a boundary of a
+cartesian domain, given neighbouring indexes are
++- increment from idx and the number of gridboxes
+making up the domain in that direction (ndim) */
+{
+  return (gbxindex / increment) % ndim == 0;
+}
+
 template <VelocityFormula TV>
 struct CartesianMotion
 /* satisfies motion concept for motion of a superdroplet

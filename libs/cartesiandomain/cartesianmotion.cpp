@@ -168,10 +168,10 @@ coord3 if SD has exceeded the lower domain boundary */
 {
   const unsigned int nghbr(gbxmaps.coord3backward(gbxindex));
 
-  if (at_domainboundary(gbxindex, 1, gbxmaps.get_ndim(0))) // SD was at lower z edge of domain (now moving beyond it)
+  if (at_cartesiandomainboundary(gbxindex, 1, gbxmaps.get_ndim(0))) // SD was at lower z edge of domain (now moving beyond it)
   {
-    const double lim1 = gbxmaps.coord3bounds(nghbr).second; // upper lim of backward nghbour
-    const double lim2 = gbxmaps.coord3bounds(gbxindex).first;    // lower lim of gbx
+    const double lim1 = gbxmaps.coord3bounds(nghbr).second;   // upper lim of backward nghbour
+    const double lim2 = gbxmaps.coord3bounds(gbxindex).first; // lower lim of gbx
     superdrop.set_coord3(coord3_beyondz(superdrop.get_coord3(), lim1, lim2));
   }
 
