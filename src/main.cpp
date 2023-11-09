@@ -116,15 +116,23 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 }
 
 inline MicrophysicalProcess auto
+config_collisions(const Config &config, const Timesteps &tsteps)
+{
+  const PairProbability auto prob = GolovinProb();
+  const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
+                                                   &step2realtime,
+                                                   prob);
+  return colls;
+}
+
+inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
   // const MicrophysicalProcess auto cond = config_condensation(config,
   //                                                            tsteps);
 
-  const PairProbability auto prob = GolovinProb();
-  const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
-                                                   &step2realtime,
-                                                   prob);
+  const MicrophysicalProcess auto colls = config_collisions(config,
+                                                            tsteps);
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
   // return cond >> colls;
