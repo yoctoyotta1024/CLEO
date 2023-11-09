@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,10 +25,10 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "./collisions.hpp"
 #include "./kokkosaliases_sd.hpp"
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
-
 struct DoCoalescence
 {
 private:

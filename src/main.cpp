@@ -57,7 +57,7 @@
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
-// #include "superdrops/collisions.hpp"
+#include "superdrops/coalescence.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
@@ -120,7 +120,7 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
   const MicrophysicalProcess auto cond = config_condensation(config,
                                                              tsteps);
 
-  // const MicrophysicalProcess auto colls = Collisions(tsteps.get_collstep());
+  const MicrophysicalProcess auto colls = Collisions(tsteps.get_collstep());
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
   // return cond >> colls;
