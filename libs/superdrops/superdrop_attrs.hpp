@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,9 +24,8 @@
 #ifndef SUPERDROP_ATTRS_HPP
 #define SUPERDROP_ATTRS_HPP
 
-#include <math.h> // for fmax()
-
 #include <Kokkos_Core.hpp>
+#include <Kokkos_MathematicalConstants.hpp> // for pi
 
 #include "../cleoconstants.hpp"
 
@@ -79,9 +78,15 @@ struct SuperdropAttrs
   /* calculate radius as if dry droplet, ie.
   radius if drop was entirely made of solute */
   {
-    constexpr double vconst = 3.0 / (4.0 * M_PI);
+    constexpr double vconst = 3.0 / (4.0 * Kokkos::numbers::pi);
     const double dryrcubed = vconst * msol / solute.rho_sol();
     return Kokkos::pow(dryrcubed, 1.0 / 3.0);
+  }
+
+  KOKKOS_INLINE_FUNCTION double vol() const
+  /* spherical volume of droplet calculated from its radius */
+  {
+    return 4.0 / 3.0 * Kokkos::numbers::pi * radius * radius * radius;
   }
 
   KOKKOS_INLINE_FUNCTION double change_radius(const double newr);
@@ -102,7 +107,7 @@ Prevents drops shrinking further once they are size of dry_radius(). */
 
 	/*  if droplets are dry, do not shrink further */
   const double dryr(dryradius());
-  radius = fmax(newr, dryr); // Kokkos compatible equivalent to std::max() for floating point numbers 
+  radius = Kokkos::fmax(newr, dryr); // Kokkos compatible equivalent to std::max() for floating point numbers 
 
   /* return change in radius due to growth/shrinking of droplet */
 	return radius - oldradius;
@@ -112,7 +117,7 @@ KOKKOS_INLINE_FUNCTION
 double SuperdropAttrs::mass() const
 /* returns total droplet mass = water + dry areosol  */
 {
-  constexpr double massconst(4.0 / 3.0 * M_PI * dlc::Rho_l); // 4/3 * pi * density
+  constexpr double massconst(4.0 / 3.0 * Kokkos::numbers::pi * dlc::Rho_l); // 4/3 * pi * density
   const double density_factor(1.0 - dlc::Rho_l / solute.rho_sol()); // to account for msol
 
   const double rcubed(radius * radius * radius); // radius cubed

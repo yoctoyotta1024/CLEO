@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,9 +27,9 @@
 #define CONDENSATION_HPP
 
 #include <concepts>
-#include <math.h> 
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_MathematicalConstants.hpp> // for pi
 
 #include "../cleoconstants.hpp"
 #include "./impliciteuler.hpp"
@@ -178,7 +178,7 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
   const double delta_radius(drop.change_radius(newr));
 
   constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;
-  constexpr double dmdt_const = 4.0 * M_PI * dlc::Rho_l * R0cubed;
+  constexpr double dmdt_const = 4.0 * Kokkos::numbers::pi * dlc::Rho_l * R0cubed;
   const double rsqrd(drop.get_radius() * drop.get_radius());
   const double mass_condensed = (dmdt_const * rsqrd *
                                  drop.get_xi() * delta_radius); // eqn [7.22] * delta t

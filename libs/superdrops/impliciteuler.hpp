@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 26th October 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +25,6 @@
 #ifndef IMPLICITEULER_HPP
 #define IMPLICITEULER_HPP
 
-#include <math.h> // for fmax()
 #include <cassert>
 
 #include <Kokkos_Core.hpp>
@@ -275,7 +274,7 @@ for more details. */
   Convergence may be slower so allow >= 3 Newton Raphson
   iterations (could also refine tolerances) */
   {
-    double subt(fmax(max_uniquedelt, subdelt)); // Kokkos compatible equivalent to std::max() for floating point numbers
+    double subt(Kokkos::fmax(max_uniquedelt, subdelt)); // Kokkos compatible equivalent to std::max() for floating point numbers
     const unsigned int nsubs = Kokkos::ceil(delt / subt);
     subt = delt / (double)nsubs;
 
@@ -315,7 +314,7 @@ supersaturation > its activation supersaturation  */
   if (s_ratio > s_act)
   {
     constexpr double bigr(1e-3 / dlc::R0); // large initial guess for radius = 1mm for drop that should already be activated
-    return fmax(bigr * bigr, rprevsqrd);   // Kokkos compatible equivalent to std::max() for floating point numbers
+    return Kokkos::fmax(bigr * bigr, rprevsqrd);   // Kokkos compatible equivalent to std::max() for floating point numbers
   }
 
   return rprevsqrd;
@@ -332,7 +331,7 @@ equilibrium radius of a given droplet when s_ratio=1  */
 {
   const double rsqrd(initialguess(rprev));
   const double r1sqrd(bkoh / akoh);
-  return fmax(rsqrd, r1sqrd); // Kokkos compatible equivalent to std::max() for floating point numbers
+  return Kokkos::fmax(rsqrd, r1sqrd); // Kokkos compatible equivalent to std::max() for floating point numbers
 }
 
 KOKKOS_INLINE_FUNCTION double
@@ -433,7 +432,7 @@ et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
     for iteration m+1 starting at m=1 and then test for convergence */
     const auto iterreturn(iterate_rootfinding_algorithm(rprev, ziter));
     do_iter = iterreturn.first;
-    ziter = fmax(iterreturn.second, 1e-8); // do not allow ziter < 0.0 (fmax ~ std::max())
+    ziter = Kokkos::fmax(iterreturn.second, 1e-8); // do not allow ziter < 0.0 (fmax ~ std::max())
     iter += 1;
   }
 
