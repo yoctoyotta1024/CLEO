@@ -58,6 +58,7 @@
 #include "runcleo/sdmmethods.hpp"
 
 #include "superdrops/coalescence.hpp"
+#include "superdrops/collisionprobs.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
@@ -120,7 +121,7 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
   const MicrophysicalProcess auto cond = config_condensation(config,
                                                              tsteps);
 
-  const PairProbability auto prob = 
+  const PairProbability auto prob = GolovinProb();
   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    prob);

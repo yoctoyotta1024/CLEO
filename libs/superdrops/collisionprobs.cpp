@@ -24,7 +24,7 @@
  * PairProbability concept (see collisions.hpp)
 */
 
-#include "./collisionprobs.cpp"
+#include "./collisionprobs.hpp"
 
 namespace dlc = dimless_constants;
 

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -78,7 +78,7 @@ private:
   prob_jk may return the probability of collision-coalescence
   according to a particular coalescence kernel, or collision-breakup */
 
-  const EnactCollision enact_collision;
+  const EnactCollision collision;
   /* object (has operator that) enacts a collision-X event on two
   superdroplets. For example it may enact collision-coalescence by
   of a pair of superdroplets by changing the multiplicity,
