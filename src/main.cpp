@@ -120,7 +120,10 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
   const MicrophysicalProcess auto cond = config_condensation(config,
                                                              tsteps);
 
-  const MicrophysicalProcess auto colls = Collisions(tsteps.get_collstep());
+  const PairProbability auto prob = 
+  const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
+                                                   &step2realtime,
+                                                   prob);
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
   // return cond >> colls;

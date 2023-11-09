@@ -29,20 +29,27 @@
 #include "./kokkosaliases_sd.hpp"
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
+
 struct DoCoalescence
 {
 private:
 public:
 };
 
+template <PairProbability Probability>
 inline MicrophysicalProcess auto
-Collisions(const unsigned int interval, const Kernel kernel)
-/* constructs Microphysical Process for collisions 
-of superdroplets with a constant timestep 'interval'
-given the "do_collisions" function-like type */
+CollCoal(const unsigned int interval,
+         const std::function<double(int)> int2realtime,
+         const Probability collcoalprob)
+/* constructs Microphysical Process for collision-coalescence
+of superdroplets with a constant timestep 'interval' and
+probability of collision-coalescence determined by 'collcoalprob' */
 {
-  const DoCollisions<Kernel, DoCoalescence> colls(kernel,
-                                                  DoCoalescence{}); // TODO use actualy kernel 
+  const double DELT(int2realtime(interval));
+
+  const DoCollisions<Probability, DoCoalescence> colls(DELT,
+                                                       collcoalprob,
+                                                       DoCoalescence{});
   return ConstTstepMicrophysics(interval, colls);
 }
 
