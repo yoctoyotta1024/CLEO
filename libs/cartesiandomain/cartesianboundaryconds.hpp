@@ -50,7 +50,7 @@ making up the domain in that direction (ndim) */
   return (gbxindex / increment) % ndim == 0;
 }
 
-Kokkos::pair<unsigned int, unsigned int>
+inline Kokkos::pair<unsigned int, unsigned int>
 finitedomain_nghbrs(const unsigned int idx,
                     const unsigned int increment,
                     const unsigned int ndim)
@@ -78,7 +78,7 @@ of a gridbox at the edge of the domain is a max unsigned int */
   return {forward, backward};
 }
 
-Kokkos::pair<unsigned int, unsigned int>
+inline Kokkos::pair<unsigned int, unsigned int>
 periodicdomain_nghbrs(const unsigned int idx,
                       const unsigned int increment,
                       const unsigned int ndim)
