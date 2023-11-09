@@ -32,6 +32,8 @@ void set_maps_ndims(const std::vector<size_t> &ndims,
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb,
                           CartesianMaps &gbxmaps);
 
+void set_outofbounds(CartesianMaps &gbxmaps);
+
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps);
 
@@ -84,6 +86,7 @@ function returns a value determined from the gridfile 'grid_filename' */
 
   set_maps_ndims(gfb.ndims, gbxmaps);
   set_model_areas_vols(gfb, gbxmaps);
+  set_outofbounds(gbxmaps);
 
   switch (nspacedims)
   {
@@ -127,7 +130,7 @@ maps matches with expected value from gfb */
   }
 
   const size_t ngbxs_from_maps(gbxmaps.maps_size());
-  if (ngbxs_from_maps != ngbxs)
+  if (ngbxs_from_maps != ngbxs + 1)
   {
     throw std::invalid_argument("ngbxs from gridbox maps inconsistent "
                                 " with number of gridboxes");
@@ -158,6 +161,20 @@ volume using area and volume from gfb for gbxidx=0 */
   const unsigned int idx(0);
   gbxmaps.set_gbxarea(gfb.gbxarea(idx));
   gbxmaps.set_gbxvolume(gfb.gbxvol(idx));
+}
+
+void set_outofbounds(CartesianMaps &gbxmaps)
+/* sets (infinite) coordinate bounds for case
+when outofbounds gbxidx searches map */
+{
+  const unsigned int idx(LIMITVALUES::uintmax);
+  gbxmaps.insert_coord3bounds(idx, nullbounds());
+  gbxmaps.insert_coord1bounds(idx, nullbounds());
+  gbxmaps.insert_coord2bounds(idx, nullbounds());
+
+  gbxmaps.insert_coord3nghbrs(idx, nullnghbrs(idx));
+  gbxmaps.insert_coord1nghbrs(idx, nullnghbrs(idx));
+  gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(idx));
 }
 
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,

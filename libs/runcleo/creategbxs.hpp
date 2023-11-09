@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -119,7 +119,7 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps,
   const dualview_gbx gbxs(initialise_gbxs(gbxmaps, gbxic, totsupers));
 
   std::cout << "checking initialisation\n";
-  is_gbxinit_complete(gbxmaps.maps_size(), gbxs);
+  is_gbxinit_complete(gbxmaps.maps_size() - 1, gbxs);
   print_gbxs(gbxs.view_host());
 
   std::cout << "--- create gridboxes: success ---\n";

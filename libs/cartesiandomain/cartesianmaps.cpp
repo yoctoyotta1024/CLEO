@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,7 +29,7 @@ the same size, else returns size of maps */
 {
   const auto h_ndims(Kokkos::create_mirror_view(ndims));
   Kokkos::deep_copy(h_ndims, ndims);
-  const size_t sz(h_ndims(0) * h_ndims(1) * h_ndims(2));
+  const size_t sz(h_ndims(0) * h_ndims(1) * h_ndims(2) + 1); // ngbxs + 1 for out of bounds key
 
   if (to_coord3bounds.size() != sz ||
       to_coord1bounds.size() != sz ||
