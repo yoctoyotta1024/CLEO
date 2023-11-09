@@ -113,6 +113,32 @@ lowermost gridbox in that direction (and vice versa). */
   return {backward, forward};
 }
 
+KOKKOS_INLINE_FUNCTION double
+coordbeyond_finitedomain(const double coord,
+                         const double lim1,
+                         const double lim2)
+/* Finite domain boundaries don't change superdroplet coord */
+{
+  return coord; // finite domain therefore don't change coord
+}
+
+KOKKOS_INLINE_FUNCTION double
+coordbeyond_periodicdomain(const double coord,
+                           const double lim1,
+                           const double lim2)
+/* In periodic domain, two scenarios:
+a) If superdroplet crosses lower boundary of domain,
+lim1 = upper bound of backwards neighbour from gbx (upper boundary of domain)
+lim2 = lower bound of gridbox (lower boundary of domain) so
+coord -> coord + length_of_domain
+b) If superdroplet crosses upper boundary of domain,
+lim1 = lower bound of forwards neighbour from gbx (lower boundary of domain)
+lim2 = upper bound of gridbox (upper boundary of domain) so
+coord -> coord - length_of_domain */
+{
+  return coord + lim1 - lim2; // periodic domain coord -> coord +/- |length_of_domain|
+}
+
 inline Kokkos::pair<unsigned int, unsigned int>
 cartesian_znghbrs(const unsigned int idx,
                   const std::vector<size_t> &ndims)
@@ -152,32 +178,6 @@ for gridboxes at the edges of the domain is either finite
   const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
   // return finitedomain_nghbrs(idx, nznx, ndims.at(2));
   return periodicdomain_nghbrs(idx, nznx, ndims.at(2));
-}
-
-KOKKOS_INLINE_FUNCTION double
-coordbeyond_finitedomain(const double coord,
-                         const double lim1,
-                         const double lim2)
-/* Finite domain boundaries don't change superdroplet coord */
-{
-  return coord; // finite domain therefore don't change coord
-}
-
-KOKKOS_INLINE_FUNCTION double
-coordbeyond_periodicdomain(const double coord,
-                           const double lim1,
-                           const double lim2)
-/* In periodic domain, two scenarios:
-a) If superdroplet crosses lower boundary of domain,
-lim1 = upper bound of backwards neighbour from gbx (upper boundary of domain)
-lim2 = lower bound of gridbox (lower boundary of domain) so
-coord -> coord + length_of_domain
-b) If superdroplet crosses upper boundary of domain,
-lim1 = lower bound of forwards neighbour from gbx (lower boundary of domain)
-lim2 = upper bound of gridbox (upper boundary of domain) so
-coord -> coord - length_of_domain */
-{
-  return coord + lim1 - lim2; // periodic domain coord -> coord +/- |length_of_domain|
 }
 
 KOKKOS_INLINE_FUNCTION double
