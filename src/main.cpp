@@ -118,8 +118,8 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  const MicrophysicalProcess auto cond = config_condensation(config,
-                                                             tsteps);
+  // const MicrophysicalProcess auto cond = config_condensation(config,
+  //                                                            tsteps);
 
   const PairProbability auto prob = GolovinProb();
   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
@@ -128,7 +128,7 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
   // return cond >> colls;
-  return cond;
+  return colls;
 }
 
 inline Motion<CartesianMaps> auto
