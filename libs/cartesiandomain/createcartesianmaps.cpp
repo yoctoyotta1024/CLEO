@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,7 @@ void set_maps_ndims(const std::vector<size_t> &ndims,
                     CartesianMaps &gbxmaps);
 
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb,
-                            CartesianMaps &gbxmaps);
+                          CartesianMaps &gbxmaps);
 
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps);
@@ -43,32 +43,6 @@ void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb,
 
 void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb,
                       CartesianMaps &gbxmaps);
-
-bool at_domainboundary(const unsigned int idx,
-                       const unsigned int increment,
-                       const unsigned int ndim);
-
-Kokkos::pair<unsigned int, unsigned int>
-finitedomain_nghbrs(const unsigned int idx,
-                      const unsigned int increment,
-                      const unsigned int ndim);
-
-Kokkos::pair<unsigned int, unsigned int>
-periodicdomain_nghbrs(const unsigned int idx,
-                        const unsigned int increment,
-                        const unsigned int ndim);
-
-Kokkos::pair<unsigned int, unsigned int>
-cartesian_znghbrs(const unsigned int idx,
-                  const std::vector<size_t> &ndims);
-
-Kokkos::pair<unsigned int, unsigned int>
-cartesian_xnghbrs(const unsigned int idx,
-                  const std::vector<size_t> &ndims);
-
-Kokkos::pair<unsigned int, unsigned int>
-cartesian_ynghbrs(const unsigned int idx,
-                  const std::vector<size_t> &ndims);
 
 Kokkos::pair<double, double> nullbounds()
 /* bounds for CartesianMaps of gridboxes along
@@ -94,9 +68,9 @@ CartesianMaps create_cartesian_maps(const unsigned int ngbxs,
                                     const unsigned int nspacedims,
                                     std::string_view grid_filename)
 /* creates cartesian maps instance using gridbox bounds read from
-gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite 
+gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite
 boundary conditions. In a non-3D case, boundaries and neighbours
-maps for unused dimensions are 'null' (ie. return numerical limits), 
+maps for unused dimensions are 'null' (ie. return numerical limits),
 however the area and volume of each gridbox remains finite.
 E.g. In the 0-D case, the bounds maps all have 1 {key, value} where
 key=gbxidx=0 and value = {max, min} numerical limits, meanwhile volume
@@ -110,7 +84,7 @@ function returns a value determined from the gridfile 'grid_filename' */
 
   set_maps_ndims(gfb.ndims, gbxmaps);
   set_model_areas_vols(gfb, gbxmaps);
-  
+
   switch (nspacedims)
   {
   case 0:
@@ -132,7 +106,7 @@ function returns a value determined from the gridfile 'grid_filename' */
   check_ngridboxes(gbxmaps, ngbxs);
 
   std::cout << "--- create cartesian gridbox maps: success ---\n";
-  
+
   return gbxmaps;
 }
 
@@ -172,12 +146,12 @@ dimensions (ie. number of gridboxes) in
   {
     h_ndims(m) = i_ndims.at(m);
   }
-  
+
   gbxmaps.set_ndims_via_copy(h_ndims);
 }
 
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb,
-                            CartesianMaps &gbxmaps)
+                          CartesianMaps &gbxmaps)
 /* sets (finite) dimensionless horizontal area and
 volume using area and volume from gfb for gbxidx=0 */
 {
@@ -221,7 +195,7 @@ periodic boundary conditions in a cartesian domain */
     gbxmaps.insert_coord3bounds(idx, c3bs);
     gbxmaps.insert_coord1bounds(idx, nullbounds());
     gbxmaps.insert_coord2bounds(idx, nullbounds());
-    
+
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
     gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
     gbxmaps.insert_coord1nghbrs(idx, nullnghbrs(0));
@@ -235,7 +209,7 @@ void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb,
 for all gridboxes and y neighbours maps are null (meaning periodic
 boundary conditions where neighbour of gridbox in y direction is
 itself). coord3 and coord1 bounds maps (ie. z and x) are set
-using gfb. coord3 and coord1 neighbours maps call functions for 
+using gfb. coord3 and coord1 neighbours maps call functions for
 appropriate periodic or finite boundary conditions in a
 cartesian domain  */
 {
@@ -271,122 +245,16 @@ in cartesian domain */
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.insert_coord3bounds(idx, c3bs);
     const auto c3nghbrs(cartesian_znghbrs(idx, ndims));
-    gbxmaps.insert_coord3nghbrs(idx, c3nghbrs); 
+    gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
 
     const auto c1bs(gfb.get_coord1gbxbounds(idx));
     gbxmaps.insert_coord1bounds(idx, c1bs);
     const auto c1nghbrs(cartesian_xnghbrs(idx, ndims));
-    gbxmaps.insert_coord1nghbrs(idx, c1nghbrs); 
-    
+    gbxmaps.insert_coord1nghbrs(idx, c1nghbrs);
+
     const auto c2bs(gfb.get_coord2gbxbounds(idx));
     gbxmaps.insert_coord2bounds(idx, c2bs);
     const auto c2nghbrs(cartesian_ynghbrs(idx, ndims));
-    gbxmaps.insert_coord2nghbrs(idx, c2nghbrs); 
+    gbxmaps.insert_coord2nghbrs(idx, c2nghbrs);
   }
-}
-
-bool at_domainboundary(const unsigned int idx,
-                       const unsigned int increment,
-                       const unsigned int ndim)
-/* returns true if idx for gridbox is at a domain boundary, given
-neighbouring indexes are +- increment from idx and the number of
-gridboxes making up the domain in that direction (ndim) */
-{
-  return (idx / increment) % ndim == 0;
-}
-
-Kokkos::pair<unsigned int, unsigned int>
-finitedomain_nghbrs(const unsigned int idx,
-                      const unsigned int increment,
-                      const unsigned int ndim)
-/* returns {forward, backward} gridbox neighbours with
-treatment of neighbours as if bounds of domain are finite.
-This means that no neighbour exists above highest / below lowest
-gridboxes in a given direction. Non-existent neighbours are
-defined with gbxindex = max unsigned int, meaning in a given
-direction the gbxindex of the backwards / forwards neighbour
-of a gridbox at the edge of the domain is a max unsigned int */
-{
-  unsigned int forward(idx + increment);
-  unsigned int backward(idx - increment);
-
-  if (at_domainboundary(idx, increment, ndim)) // at lower edge of domain
-  {
-    backward = LIMITVALUES::uintmax;
-  }
-
-  if (at_domainboundary(forward, increment, ndim)) // at upper edge of domain
-  {
-    forward = LIMITVALUES::uintmax;
-  }
-
-  return {forward, backward};
-}
-
-Kokkos::pair<unsigned int, unsigned int>
-periodicdomain_nghbrs(const unsigned int idx,
-                        const unsigned int increment,
-                        const unsigned int ndim)
-/* returns {forward, backward} gridbox neighbours with
-treatment of neighbours as if bounds of domain are periodic.
-This means that highest and lowest gridboxes in a given
-direction are each others' neighbours. ie. index of neighbour
-forwards of gridboxes at the uppermost edge of domain is the
-lowermost gridbox in that direction (and vice versa). */
-{
-  unsigned int forward(idx + increment);
-  unsigned int backward(idx - increment);
-
-  if (at_domainboundary(idx, increment, ndim)) // at lower edge of domain
-  {
-    backward = idx + (ndim-1) * increment;
-  }
-
-  if (at_domainboundary(forward, increment, ndim)) // at upper edge of domain
-  {
-    forward = idx - (ndim-1) * increment;
-  }
-
-  return {forward, backward};
-}
-
-Kokkos::pair<unsigned int, unsigned int>
-cartesian_znghbrs(const unsigned int idx,
-                  const std::vector<size_t> &ndims)
-/* returns pair for gbx index of neighbour in the
-{backwards, forwards} z direction given a gridbox with
-gbxidx='idx' in a cartesian domain. Treatment of neighbours
-for gridboxes at the edges of the domain is either finite
-(null neighbour) or periodic (cyclic neighbour) */
-{
-  return finitedomain_nghbrs(idx, 1, ndims.at(0));
-  // return periodicdomain_nghbrs(idx, 1, ndims.at(0));
-}
-
-Kokkos::pair<unsigned int, unsigned int>
-cartesian_xnghbrs(const unsigned int idx,
-                  const std::vector<size_t> &ndims)
-/* returns pair for gbx index of neighbour in the
-{backwards, forwards} x direction given a gridbox with
-gbxidx='idx' in a cartesian domain. Treatment of neighbours
-for gridboxes at the edges of the domain is either finite
-(null neighbour) or periodic (cyclic neighbour) */
-{
-  const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
-  // return finitedomain_nghbrs(idx, nz, ndims.at(1));
-  return periodicdomain_nghbrs(idx, nz, ndims.at(1));
-}
-
-Kokkos::pair<unsigned int, unsigned int>
-cartesian_ynghbrs(const unsigned int idx,
-                  const std::vector<size_t> &ndims)
-/* returns pair for gbx index of neighbour in the
-{backwards, forwards} y direction given a gridbox with
-gbxidx='idx' in a cartesian domain. Treatment of neighbours
-for gridboxes at the edges of the domain is either finite
-(null neighbour) or periodic (cyclic neighbour) */
-{
-  const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
-  // return finitedomain_nghbrs(idx, nznx, ndims.at(2));
-  return periodicdomain_nghbrs(idx, nznx, ndims.at(2));
 }

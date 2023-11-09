@@ -15,9 +15,9 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * functions that determine the boundary conditions 
+ * functions that determine the boundary conditions
  * at the edges of the cartesian domain e.g. for
- * returning the neighbouring gbxindex and 
+ * returning the neighbouring gbxindex and
  * value of a superdroplet's coord when the superdroplet
  * crosses the domain boundary in a particular direction
  */
@@ -31,9 +31,14 @@
   y: PERIODIC (see cartesian_ynghbrs & coord2_beyondy)
 */
 
-#include <Kokkos_Core.hpp>
+#include <vector>
 
-KOKKOS_INLNE_FUNCTION bool
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
+
+#include "../cleoconstants.hpp"
+
+KOKKOS_INLINE_FUNCTION bool
 at_cartesiandomainboundary(const unsigned int gbxindex,
                            const unsigned int increment,
                            const size_t ndim)
@@ -43,6 +48,102 @@ of cartesian domain, given neighbouring indexes are
 making up the domain in that direction (ndim) */
 {
   return (gbxindex / increment) % ndim == 0;
+}
+
+Kokkos::pair<unsigned int, unsigned int>
+finitedomain_nghbrs(const unsigned int idx,
+                    const unsigned int increment,
+                    const unsigned int ndim)
+/* returns {forward, backward} gridbox neighbours with
+treatment of neighbours as if bounds of domain are finite.
+This means that no neighbour exists above highest / below lowest
+gridboxes in a given direction. Non-existent neighbours are
+defined with gbxindex = max unsigned int, meaning in a given
+direction the gbxindex of the backwards / forwards neighbour
+of a gridbox at the edge of the domain is a max unsigned int */
+{
+  unsigned int forward(idx + increment);
+  unsigned int backward(idx - increment);
+
+  if (at_cartesiandomainboundary(idx, increment, ndim)) // at lower edge of domain
+  {
+    backward = LIMITVALUES::uintmax;
+  }
+
+  if (at_cartesiandomainboundary(forward, increment, ndim)) // at upper edge of domain
+  {
+    forward = LIMITVALUES::uintmax;
+  }
+
+  return {forward, backward};
+}
+
+Kokkos::pair<unsigned int, unsigned int>
+periodicdomain_nghbrs(const unsigned int idx,
+                      const unsigned int increment,
+                      const unsigned int ndim)
+/* returns {forward, backward} gridbox neighbours with
+treatment of neighbours as if bounds of domain are periodic.
+This means that highest and lowest gridboxes in a given
+direction are each others' neighbours. ie. index of neighbour
+forwards of gridboxes at the uppermost edge of domain is the
+lowermost gridbox in that direction (and vice versa). */
+{
+  unsigned int forward(idx + increment);
+  unsigned int backward(idx - increment);
+
+  if (at_cartesiandomainboundary(idx, increment, ndim)) // at lower edge of domain
+  {
+    backward = idx + (ndim - 1) * increment;
+  }
+
+  if (at_cartesiandomainboundary(forward, increment, ndim)) // at upper edge of domain
+  {
+    forward = idx - (ndim - 1) * increment;
+  }
+
+  return {forward, backward};
+}
+
+inline Kokkos::pair<unsigned int, unsigned int>
+cartesian_znghbrs(const unsigned int idx,
+                  const std::vector<size_t> &ndims)
+/* returns pair for gbx index of neighbour in the
+{backwards, forwards} z direction given a gridbox with
+gbxidx='idx' in a cartesian domain. Treatment of neighbours
+for gridboxes at the edges of the domain is either finite
+(null neighbour) or periodic (cyclic neighbour) */
+{
+  return finitedomain_nghbrs(idx, 1, ndims.at(0));
+  // return periodicdomain_nghbrs(idx, 1, ndims.at(0));
+}
+
+inline Kokkos::pair<unsigned int, unsigned int>
+cartesian_xnghbrs(const unsigned int idx,
+                  const std::vector<size_t> &ndims)
+/* returns pair for gbx index of neighbour in the
+{backwards, forwards} x direction given a gridbox with
+gbxidx='idx' in a cartesian domain. Treatment of neighbours
+for gridboxes at the edges of the domain is either finite
+(null neighbour) or periodic (cyclic neighbour) */
+{
+  const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
+  // return finitedomain_nghbrs(idx, nz, ndims.at(1));
+  return periodicdomain_nghbrs(idx, nz, ndims.at(1));
+}
+
+inline Kokkos::pair<unsigned int, unsigned int>
+cartesian_ynghbrs(const unsigned int idx,
+                  const std::vector<size_t> &ndims)
+/* returns pair for gbx index of neighbour in the
+{backwards, forwards} y direction given a gridbox with
+gbxidx='idx' in a cartesian domain. Treatment of neighbours
+for gridboxes at the edges of the domain is either finite
+(null neighbour) or periodic (cyclic neighbour) */
+{
+  const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
+  // return finitedomain_nghbrs(idx, nznx, ndims.at(2));
+  return periodicdomain_nghbrs(idx, nznx, ndims.at(2));
 }
 
 KOKKOS_INLINE_FUNCTION double
@@ -111,4 +212,4 @@ domain's edge/boundary in y rightwards direction */
   return coordbeyond_periodicdomain(coord2, lim1, lim2);
 };
 
-#endif // BOUNDARYCONDITIONS_HPP 
+#endif // BOUNDARYCONDITIONS_HPP
