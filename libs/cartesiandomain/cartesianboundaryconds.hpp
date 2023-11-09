@@ -62,7 +62,7 @@ inline Kokkos::pair<unsigned int, unsigned int>
 finitedomain_nghbrs(const unsigned int idx,
                     const unsigned int increment,
                     const unsigned int ndim)
-/* returns {forward, backward} gridbox neighbours with
+/* returns {backwards, forwards} gridbox neighbours with
 treatment of neighbours as if bounds of domain are finite.
 This means that no neighbour exists above highest / below lowest
 gridboxes in a given direction. Non-existent neighbours are
@@ -83,14 +83,14 @@ of a gridbox at the edge of the domain is a max unsigned int */
     forward = outofbounds_gbxindex();
   }
 
-  return {forward, backward};
+  return {backward, forward};
 }
 
 inline Kokkos::pair<unsigned int, unsigned int>
 periodicdomain_nghbrs(const unsigned int idx,
                       const unsigned int increment,
                       const unsigned int ndim)
-/* returns {forward, backward} gridbox neighbours with
+/* returns {backwards, forwards} gridbox neighbours with
 treatment of neighbours as if bounds of domain are periodic.
 This means that highest and lowest gridboxes in a given
 direction are each others' neighbours. ie. index of neighbour
@@ -110,7 +110,7 @@ lowermost gridbox in that direction (and vice versa). */
     forward = idx - (ndim - 1) * increment;
   }
 
-  return {forward, backward};
+  return {backward, forward};
 }
 
 inline Kokkos::pair<unsigned int, unsigned int>
