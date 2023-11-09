@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -85,6 +85,24 @@ public:
   void set_sdgbxindex(const unsigned int i_sdgbxindex)
   {
     sdgbxindex = i_sdgbxindex;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_coord3(const double i_coord3)
+  {
+    coord3 = i_coord3;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_coord1(const double i_coord1)
+  {
+    coord1 = i_coord1;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_coord2(const double i_coord2)
+  {
+    coord2 = i_coord2;
   }
 
   KOKKOS_INLINE_FUNCTION

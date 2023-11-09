@@ -145,10 +145,10 @@ or until superdrop leaves domain. */
   switch (flag)
   {
   case 1:
-    // current_gbxindex = backwards_neighbour_z(gbxmaps, current_gbxindex, superdrop);
+    current_gbxindex = backwards_coord3(current_gbxindex, gbxmaps, superdrop);
     break;
   case 2:
-    //  current_gbxindex = forwards_neighbour_z(gbxmaps, current_gbxindex, superdrop);
+    //  current_gbxindex = forwards_coord3(gbxmaps, current_gbxindex, superdrop);
     break;
   }
 
@@ -158,3 +158,22 @@ or until superdrop leaves domain. */
 
   return current_gbxindex;
 }
+
+unsigned int backwards_coord3(const unsigned int gbxindex,
+                              const CartesianMaps &gbxmaps,
+                              Superdrop &superdrop)
+/* function to return sdgbxindex of neighbouring gridbox
+in backwards coord3 (z) direction and to update superdrop
+coord3 if SD has exceeded the lower domain boundary */
+{
+  const unsigned int nghbr(gbxmaps.coord3backward(gbxindex));
+
+  if (at_domainboundary(gbxindex, 1, gbxmaps.get_ndim(0))) // SD was at lower z edge of domain (now moving beyond it)
+  {
+    const double lim1 = gbxmaps.coord3bounds(nghbr).second; // upper lim of backward nghbour
+    const double lim2 = gbxmaps.coord3bounds(gbxindex).first;    // lower lim of gbx
+    superdrop.set_coord3(coord3_beyondz(superdrop.get_coord3(), lim1, lim2));
+  }
+
+  return nghbr; // gbxindex of zdown_neighbour
+};

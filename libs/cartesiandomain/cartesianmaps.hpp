@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -211,6 +211,17 @@ public:
   along [coord3, coord1, coord2] directions */
   {
     return ndims;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  size_t get_ndim(const unsigned int d) const
+  /* returns model dimensions ie. number of
+  gridboxes along d'th direction, where:
+  ndims(d=0) = coord3 
+  ndims(d=1) = coord1
+  ndims(d=2) = coord2 */
+  {
+    return ndims(d);
   }
 
   KOKKOS_INLINE_FUNCTION
