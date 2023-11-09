@@ -35,7 +35,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "./cartesianmaps.hpp"
-#include "./boundaryconditions.hpp"
+#include "./cartesianboundaryconds.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
 
 CartesianMaps create_cartesian_maps(const unsigned int ngbxs,

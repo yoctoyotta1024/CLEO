@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: boundaryconditions.hpp
+ * File: cartesianboundaryconds.hpp
  * Project: cartesiandomain
  * Created Date: Thursday 9th November 2023
  * Author: Clara Bayley (CB)
@@ -22,8 +22,8 @@
  * crosses the domain boundary in a particular direction
  */
 
-#ifndef BOUNDARYCONDITIONS_HPP
-#define BOUNDARYCONDITIONS_HPP
+#ifndef CARTESIANBOUNDARYCONDS_HPP
+#define CARTESIANBOUNDARYCONDS_HPP
 
 /* NOTE: boundary conditions of domain are defined as:
   z: FINITE   (see cartesian_znghbrs & coord3_beyondz)
@@ -212,4 +212,4 @@ domain's edge/boundary in y rightwards direction */
   return coordbeyond_periodicdomain(coord2, lim1, lim2);
 };
 
-#endif // BOUNDARYCONDITIONS_HPP
+#endif // CARTESIANBOUNDARYCONDS_HPP

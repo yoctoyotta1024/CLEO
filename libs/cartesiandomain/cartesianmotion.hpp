@@ -32,7 +32,7 @@
 #include <Kokkos_Pair.hpp>
 
 #include "./cartesianmaps.hpp"
-#include "./boundaryconditions.hpp"
+#include "./cartesianboundaryconds.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 #include "gridboxes/predcorr.hpp"
