@@ -34,6 +34,16 @@ struct DoCoalescence
 {
 private:
 public:
+  KOKKOS_FUNCTION
+  void operator()(SuperdropWithGbxindex &SDinGBx1,
+                  SuperdropWithGbxindex &SDinGBx2,
+                  const double prob, const double phi) const
+  /* this operator is used as an "adaptor" for using
+  DoCoalescence as a function in DoCollisions that
+  satistfies the PairEnactX concept */
+  {
+    // TODO
+  }
 };
 
 template <PairProbability Probability>

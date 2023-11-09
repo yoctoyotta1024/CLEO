@@ -49,14 +49,14 @@ something convertible to a double
 template <typename X>
 concept PairEnactX = requires(X x,
                               Superdrop &drop,
-                              double p)
+                              double d)
 /* Objects that are of type PairEnactX
 takes a pair of superdrops and returns
 void (it may change the properties of
 the superdrops)*/
 {
   {
-    x(drop, drop, p, p)
+    x(drop, drop, d, d)
   } -> std::same_as<void>;
 };
 
