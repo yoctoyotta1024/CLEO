@@ -31,6 +31,7 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # add executables to library
 set(SOURCES
+  "collisionprobs.cpp"
   # "condensation.cpp"
   # "impliciteuler.cpp"
   "state.cpp"

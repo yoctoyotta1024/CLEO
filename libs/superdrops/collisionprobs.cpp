@@ -1,0 +1,48 @@
+/*
+ * ----- CLEO -----
+ * File: collisionprobs.cpp
+ * Project: superdrops
+ * Created Date: Thursday 9th November 2023
+ * Author: Clara Bayley (CB)
+ * Additional Contributors:
+ * -----
+ * Last Modified: Thursday 9th November 2023
+ * Modified By: CB
+ * -----
+ * License: BSD 3-Clause "New" or "Revised" License
+ * https://opensource.org/licenses/BSD-3-Clause
+ * -----
+ * Copyright (c) 2023 MPI-M, Clara Bayley
+ * -----
+ * File Description:
+ * functionality to calculate the probability of some
+ * kind of collision event between two (real) droplets
+ * e.g. the probability of collision-coalescence
+ * using the Golovin or Long Kernel. Probability
+ * calculations are contained in structures
+ * that satisfy the requirements of the
+ * PairProbability concept (see collisions.hpp)
+*/
+
+#include "./collisionprobs.cpp"
+
+namespace dlc = dimless_constants;
+
+KOKKOS_FUNCTION
+double GolovinProb::operator()(const Superdrop &drop1,
+                               const Superdrop &drop2,
+                               const double DELT,
+                               const double VOLUME) const
+/* returns probability that a pair of droplets coalesces
+according to Golovin's (sum of volumes) coalescence kernel.
+Prob equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol where
+K(drop1, drop2) := C(drop1, drop2) * |v1−v2|, (see Shima 2009 eqn 3),
+and K(drop1, drop2) is Golovin 1963 (coalescence) kernel */
+{
+  const double DELT_DELVOL = DELT / VOLUME;                                   // time interval / volume for which collision probability is calculated [s/m^3]
+  const double golovins_kernel = prob_jk_const * (drop1.vol() + drop2.vol()); // Golovin 1963 coalescence kernel
+
+  const double prob_jk = golovins_kernel * DELT_DELVOL;
+
+  return prob_jk;
+}
