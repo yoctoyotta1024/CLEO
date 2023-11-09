@@ -167,7 +167,7 @@ void set_outofbounds(CartesianMaps &gbxmaps)
 /* sets (infinite) coordinate bounds for case
 when outofbounds gbxidx searches map */
 {
-  const unsigned int idx(LIMITVALUES::uintmax);
+  const unsigned int idx(outofbounds_gbxindex());
   gbxmaps.insert_coord3bounds(idx, nullbounds());
   gbxmaps.insert_coord1bounds(idx, nullbounds());
   gbxmaps.insert_coord2bounds(idx, nullbounds());

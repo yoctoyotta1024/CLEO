@@ -38,6 +38,14 @@
 
 #include "../cleoconstants.hpp"
 
+KOKKOS_INLINE_FUNCTION unsigned int
+outofbounds_gbxindex()
+/* value to set sdgbxindex to indicate superdrop
+is out of domain (ie. not a valid gbxindex) */
+{
+  return LIMITVALUES::uintmax;
+}
+
 KOKKOS_INLINE_FUNCTION bool
 at_cartesiandomainboundary(const unsigned int gbxindex,
                            const unsigned int increment,
@@ -67,12 +75,12 @@ of a gridbox at the edge of the domain is a max unsigned int */
 
   if (at_cartesiandomainboundary(idx, increment, ndim)) // at lower edge of domain
   {
-    backward = LIMITVALUES::uintmax;
+    backward = outofbounds_gbxindex();
   }
 
   if (at_cartesiandomainboundary(forward, increment, ndim)) // at upper edge of domain
   {
-    forward = LIMITVALUES::uintmax;
+    forward = outofbounds_gbxindex();
   }
 
   return {forward, backward};

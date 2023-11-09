@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,7 +101,6 @@ namespace LIMITVALUES
 
   constexpr double llim = -1.0 * std::numeric_limits<double>::max();
   constexpr double ulim = std::numeric_limits<double>::max();
-
 }
 
 #endif // CLEOCONSTANTS_HPP

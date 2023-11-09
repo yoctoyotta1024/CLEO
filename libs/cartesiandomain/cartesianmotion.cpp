@@ -81,7 +81,7 @@ be updated to backwards neighbour.
 Flag = 2 if coord >= upperbound, indicating idx should 
 be updated to forwards neighbour. */
 {
-  if (idx == LIMITVALUES::uintmax)
+  if (idx == outofbounds_gbxindex())
   {
     return 0; // maintian idx that is already out of domain
   }
