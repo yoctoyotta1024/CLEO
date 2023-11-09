@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,19 +29,14 @@
 #include <vector>
 #include <stdexcept>
 
-#include "Kokkos_Core.hpp"
-#include "Kokkos_Pair.hpp"
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "./cartesianmaps.hpp"
+#include "./boundaryconditions.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
-
-/* NOTE: boundary conditions of domain are defined as:
-  z: FINITE   (see cartesian_znghbrs, coord3_beyondzdown and coord3_beyondzup) // TODO beyond funcs
-  x: PERIODIC (see cartesian_xnghbrs, coord1_beyondxbehind and coord1_beyondxinfront)
-  y: PERIODIC (see cartesian_ynghbrs, coord2_beyondyleft and coord2_beyondyright)
-*/
 
 CartesianMaps create_cartesian_maps(const unsigned int ngbxs,
                                     const unsigned int nspacedims,
