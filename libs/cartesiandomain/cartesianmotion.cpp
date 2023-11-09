@@ -155,15 +155,16 @@ KOKKOS_FUNCTION unsigned int
 update_if_coord3neighbour(const CartesianMaps &gbxmaps,
                         unsigned int idx,
                         Superdrop &drop)
-/* For a given direction, pass {lower, upper} bounds into
-update_superdrop_ifneighbour to get updated gbxindex and superdrop
-(e.g. if superdroplet's coord fromsdcoord function lies outside of
-bounds given gbxbounds using idx). Repeat until
-superdroplet coord is within the bounds given by the idx,
-or until superdrop leaves domain. */
+/* return updated value of gbxindex in case superdrop should
+move to neighbouring gridbox in coord3 direction. 
+Funciton changes value of idx if flag != 0,
+if flag = 1 idx updated to backwards neighbour gbxindex.
+if flag = 2 idx updated to forwards neighbour gbxindex.
+Note: backwards/forwards functions may change the 
+superdroplet's attributes e.g. if it leaves the domain. */
 {
   const int flag(flag_sdgbxindex(idx, gbxmaps.coord3bounds(idx),
-                                 drop.get_coord3())); // value != 0 if sdgbxindex needs to change
+                                 drop.get_coord3())); // if value != 0 idx needs to change
   switch (flag)
   {
   case 1:
@@ -180,7 +181,7 @@ KOKKOS_FUNCTION unsigned int
 backwards_coord3idx(const unsigned int idx,
                  const CartesianMaps &gbxmaps,
                  Superdrop &drop)
-/* function to return sdgbxindex of neighbouring gridbox
+/* function to return gbxindex of neighbouring gridbox
 in backwards coord3 (z) direction and to update superdrop
 coord3 if superdrop has exceeded the z lower domain boundary */
 {
@@ -200,7 +201,7 @@ KOKKOS_FUNCTION unsigned int
 forwards_coord3idx(const unsigned int idx,
                  const CartesianMaps &gbxmaps,
                  Superdrop &drop)
-/* function to return sdgbxindex of neighbouring gridbox in
+/* function to return gbxindex of neighbouring gridbox in
 forwards coord3 (z) direction and to update superdrop coord3
 if superdrop has exceeded the z upper domain boundary */
 {
