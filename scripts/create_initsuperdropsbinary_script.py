@@ -122,8 +122,8 @@ coord1gen            = iSDs.SampleCoordGen(True) # sample coord1 range randomly 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
 # monocoord2           = 1000                        # all SDs have this same coord2 [m] 
 # coord2gen            = iSDs.MonoCoordGen(monocoord2)
-# coord2gen            = iSDs.SampleCoordGen(True) # sample coord1 range randomly or not
-coord2gen            = None                        # do not generate superdroplet coord2s
+coord2gen            = iSDs.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord2gen            = None                        # do not generate superdroplet coord2s
 ### ----------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
