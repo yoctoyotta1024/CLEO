@@ -31,9 +31,19 @@ flag_sdgbxindex(const unsigned int current_gbxindex,
                 const double coord);
 
 KOKKOS_FUNCTION unsigned int
-update_if_coord3neighbour(const CartesianMaps &gbxmaps,
+update_if_coord3nghbr(const CartesianMaps &gbxmaps,
                           unsigned int current_gbxindex,
                           Superdrop &drop);
+
+KOKKOS_FUNCTION unsigned int
+update_if_coord1nghbr(const CartesianMaps &gbxmaps,
+                      unsigned int current_gbxindex,
+                      Superdrop &drop);
+
+KOKKOS_FUNCTION unsigned int
+update_if_coord2nghbr(const CartesianMaps &gbxmaps,
+                      unsigned int current_gbxindex,
+                      Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
 backwards_coord3(const unsigned int gbxindex,
@@ -42,56 +52,50 @@ backwards_coord3(const unsigned int gbxindex,
 
 KOKKOS_FUNCTION unsigned int
 forwards_coord3(const unsigned int gbxindex,
-                 const CartesianMaps &gbxmaps,
-                 Superdrop &drop);
-                 
+                const CartesianMaps &gbxmaps,
+                Superdrop &drop);
 
 KOKKOS_FUNCTION void
-cartesian_update_superdrop_gbxindex(const unsigned int gbxindex,
-                                    const CartesianMaps &gbxmaps,
-                                    Superdrop &drop)
-/* Updates superdroplet sdgbxindex in a cartesian domain.
-For each direction (z, then x, then y), gbxmaps's forward and backward
-get_neighbour functions are passed into update_superdrop_ifneighbour
-along with superdroplet and the gridbox bounds for that direction.
-(If coord not within bounds, update_superdrop_ifneighbour should call
-appropriate get_neighbour function to update the superdroplet's
-sd_gbxindex (and possibly other attributes if desired). After algorithm
-for z, then x, then y directions are complete, resultant sd_gbxindex
-is returned. */
+CartesianMotion::update_superdrop_gbxindex(const unsigned int gbxindex,
+                                           const CartesianMaps &gbxmaps,
+                                           Superdrop &drop) const
+/* function satisfies requirements of
+"update_superdrop_gbxindex" in the motion concept to update a
+superdroplet if it should move between gridboxes in a
+cartesian domain. For each direction (z, then x, then y),
+superdrop coord is compared to gridbox bounds given by gbxmaps
+for the current gbxindex 'idx'. If superdrop coord lies outside
+bounds, forward or backward neighbour functions are called as
+appropriate  to update sdgbxindex (and possibly other superdrop
+attributes) */
 {
-  unsigned int current_gbxindex(gbxindex);
+  unsigned int idx(gbxindex);
 
-  current_gbxindex = update_if_coord3neighbour(gbxmaps, gbxindex, drop);
+  idx = update_if_coord3nghbr(gbxmaps, idx, drop);
+
+  idx = update_if_coord1nghbr(gbxmaps, idx, drop);
+
+  idx = update_if_coord2nghbr(gbxmaps, idx, drop);
 
   // current_gbxindex = update_ifneighbour(
-  //                   gbxmaps, 
-  //                   backwards_neighbour = zdown,
-  //                   forwards_neighbour = zup,
-  //                   get_bounds = gbxmaps.get_bounds_z(ii),
-  //                   get_sdcoord = superdrop.coord3,
-  //                   current_gbxindex, 
+  //                   gbxmaps,
+  //                   backwards_neighbour = xbehind,
+  //                   forwards_neighbour = xinfront,
+  //                   get_bounds = gbxmaps.get_bounds_x(ii),
+  //                   get_sdcoord = superdrop.coord1,
+  //                   current_gbxindex,
   //                   superdrop);
 
   // current_gbxindex = update_ifneighbour(
-  //     gbxmaps, xbehind, xinfront,
-  //     [](const Maps4GridBoxes &gbxmaps,
-  //        const unsigned int ii)
-  //     { return gbxmaps.get_bounds_x(ii); },
-  //     [](const Superdrop &superdrop)
-  //     { return superdrop.coord1; },
-  //     current_gbxindex, superdrop);
+  //                   gbxmaps,
+  //                   backwards_neighbour =  yleft,
+  //                   forwards_neighbour =yright,
+  //                   get_bounds = gbxmaps.get_bounds_y(ii),
+  //                   get_sdcoord = superdrop.coord2,
+  //                   current_gbxindex,
+  //                   superdrop);
 
-  // current_gbxindex = update_ifneighbour(
-  //     gbxmaps, yleft, yright,
-  //     [](const Maps4GridBoxes &gbxmaps,
-  //        const unsigned int ii)
-  //     { return gbxmaps.get_bounds_y(ii); },
-  //     [](const Superdrop &superdrop)
-  //     { return superdrop.coord2; },
-  //     current_gbxindex, superdrop);
-
-  drop.set_sdgbxindex(current_gbxindex);
+  drop.set_sdgbxindex(idx);
 }
 
 KOKKOS_FUNCTION void

@@ -70,17 +70,19 @@ UpdateSdgbxindex struct for a cartesian domain */
     return t_sdm % interval == 0;
   }
 
-  KOKKOS_INLINE_FUNCTION void
+  KOKKOS_FUNCTION void
   update_superdrop_gbxindex(const unsigned int gbxindex,
                             const CartesianMaps &gbxmaps,
-                            Superdrop &drop) const
+                            Superdrop &drop) const;
   /* function satisfies requirements of
-  "update_superdrop_gbxindex" in the motion concept.
-  calls function for updating superdroplet sdgbxindex
-  in a cartesian domain */
-  {
-    cartesian_update_superdrop_gbxindex(gbxindex, gbxmaps, drop);
-  }
+  "update_superdrop_gbxindex" in the motion concept to update a
+  superdroplet if it should move between gridboxes in a
+  cartesian domain. For each direction (z, then x, then y),
+  superdrop coord is compared to gridbox bounds given by gbxmaps
+  for the current gbxindex 'idx'. If superdrop coord lies outside
+  bounds, forward or backward neighbour functions are called as
+  appropriate  to update sdgbxindex (and possibly other superdrop
+  attributes) */
 };
 
 #endif // CARTESIANMOTION_HPP
