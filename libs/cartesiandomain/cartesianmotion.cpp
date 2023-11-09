@@ -58,7 +58,7 @@ check_inbounds_or_outdomain(const unsigned int idx,
 /* raise error if superdrop not either out of domain 
 or within bounds (ie. lower_bound <= coord < upper_bound) */
 {
-  const bool bad_gbxindex((idx != LIMITVALUES::uintmax) &&
+  const bool bad_gbxindex((idx != outofbounds_gbxindex()) &&
                           ((coord < bounds.first) | (coord >= bounds.second)));
 
   assert((!bad_gbxindex) && "SD not in previous gbx nor a neighbour."
