@@ -97,24 +97,6 @@ attributes) */
   check_inbounds_or_outdomain(idx, gbxmaps.coord2bounds(idx),
                               drop.get_coord2());
 
-  // current_gbxindex = update_ifneighbour(
-  //                   gbxmaps,
-  //                   backwards_neighbour = xbehind,
-  //                   forwards_neighbour = xinfront,
-  //                   get_bounds = gbxmaps.get_bounds_x(ii),
-  //                   get_sdcoord = superdrop.coord1,
-  //                   idx,
-  //                   superdrop);
-
-  // current_gbxindex = update_ifneighbour(
-  //                   gbxmaps,
-  //                   backwards_neighbour =  yleft,
-  //                   forwards_neighbour =yright,
-  //                   get_bounds = gbxmaps.get_bounds_y(ii),
-  //                   get_sdcoord = superdrop.coord2,
-  //                   idx,
-  //                   superdrop);
-
   drop.set_sdgbxindex(idx);
 }
 
@@ -357,7 +339,7 @@ forwards_coord2idx(const unsigned int idx,
                    const CartesianMaps &gbxmaps,
                    Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
-in fowards coord2 (y) direction and to update superdrop
+in forwards coord2 (y) direction and to update superdrop
 coord2 if superdrop has exceeded the y rightmost domain boundary */
 {
   const unsigned int nghbr(gbxmaps.coord2forward(idx));
@@ -366,10 +348,10 @@ coord2 if superdrop has exceeded the y rightmost domain boundary */
   const unsigned int incre(ndims(0) * ndims(1));                            // no. gridboxes in z direction * no. gridboxes in x direction
   if (at_cartesiandomainboundary(idx + incre, incre, ndims(2)))             // at upper y edge of domain
   {
-    const double lim1 = gbxmaps.get_bounds_y(nghbr).first; // lower lim of forward nghbour
-    const double lim2 = gbxmaps.get_bounds_y(idx).second;  // upper lim of gbx
+    const double lim1 = gbxmaps.coord2bounds(nghbr).first; // lower lim of forward nghbour
+    const double lim2 = gbxmaps.coord2bounds(idx).second;  // upper lim of gbx
     superdrop.set_coord2(coord2_beyondy(superdrop.get_coord2(), lim1, lim2));
   }
 
-  return nghbr;
+  return nghbr; // gbxindex of y forwards (right) neighbour
 };
