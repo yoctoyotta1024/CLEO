@@ -74,6 +74,7 @@ public:
   KOKKOS_INLINE_FUNCTION auto get_msol() const { return attrs.msol; }
 
   KOKKOS_INLINE_FUNCTION double mass() const { return attrs.mass(); }
+  KOKKOS_INLINE_FUNCTION double vol() const { return attrs.vol(); }
 
   KOKKOS_INLINE_FUNCTION
   double change_radius(const double newr)
