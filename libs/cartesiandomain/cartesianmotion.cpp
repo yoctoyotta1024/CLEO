@@ -23,7 +23,6 @@ KOKKOS_FUNCTION void
 check_inbounds_or_outdomain(const unsigned int idx,
                             const Kokkos::pair<double, double> bounds,
                             const double coord);
-/* raise error if superdrop not out of domain or within bounds */
 
 KOKKOS_FUNCTION int
 flag_sdgbxindex(const unsigned int idx,
@@ -108,7 +107,8 @@ KOKKOS_FUNCTION void
 check_inbounds_or_outdomain(const unsigned int idx,
                             const Kokkos::pair<double, double> bounds,
                             const double coord)
-/* raise error if superdrop not out of domain or within bounds */
+/* raise error if superdrop not either out of domain 
+or within bounds (ie. lower_bound <= coord < upper_bound) */
 {
   const bool bad_gbxindex((idx != LIMITVALUES::uintmax) &&
                           ((coord < bounds.first) | (coord >= bounds.second)));
@@ -122,18 +122,20 @@ check_inbounds_or_outdomain(const unsigned int idx,
 int flag_sdgbxindex(const unsigned int idx,
                     const Kokkos::pair<double, double> bounds,
                     const double coord)
-/* Given bounds = {lowerbound, upperbound} of a gridbox with
-index 'gbxindex', function determines if coord is within bounds
-of that gridbox. (Note: lower bound inclusive, upper bound exclusive).
-If coord not within bounds backwardsidx or forwardsidx function,
-as appropriate, is used to return a neighbouring gridbox's index.
-If coord lies within bounds, gbxindex is returned. If index is
-already out of domain (ie. value is the maximum unsigned int),
-return out of domain index */
+/* returns flag to keep idx the same (flag = 0) or
+update to forwards (flag = 1) or backwards (flag = 2)
+neighbour. Flag = 0 if idx is out of domain value or 
+if coord lies within bounds = {lowerbound, upperbound}.
+(Note: lower bound inclusive and upper bound exclusive,
+ie. lowerbound <= coord < upperbound).
+Flag = 1 if coord < lowerbound, indicating idx should 
+be updated to backwards neighbour.
+Flag = 2 if coord >= upperbound, indicating idx should 
+be updated to forwards neighbour. */
 {
   if (idx == LIMITVALUES::uintmax)
   {
-    return 0; // ignore idx that is already out of domain
+    return 0; // maintian idx that is already out of domain
   }
   else if (coord < bounds.first) // lowerbound
   {
@@ -145,7 +147,7 @@ return out of domain index */
   }
   else
   {
-    return 0; // no change to idx if coord within bounds
+    return 0; // maintain idx if coord within bounds
   }
 }
 
