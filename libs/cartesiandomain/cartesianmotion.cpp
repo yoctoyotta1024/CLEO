@@ -20,29 +20,29 @@
 #include "./cartesianmotion.hpp"
 
 KOKKOS_FUNCTION void
-check_inbounds_or_outdomain(const unsigned int current_gbxindex,
+check_inbounds_or_outdomain(const unsigned int idx,
                             const Kokkos::pair<double, double> bounds,
                             const double coord);
 /* raise error if superdrop not out of domain or within bounds */
 
 KOKKOS_FUNCTION int
-flag_sdgbxindex(const unsigned int current_gbxindex,
+flag_sdgbxindex(const unsigned int idx,
                 const Kokkos::pair<double, double> bounds,
                 const double coord);
 
 KOKKOS_FUNCTION unsigned int
 update_if_coord3nghbr(const CartesianMaps &gbxmaps,
-                          unsigned int current_gbxindex,
+                          unsigned int idx,
                           Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
 update_if_coord1nghbr(const CartesianMaps &gbxmaps,
-                      unsigned int current_gbxindex,
+                      unsigned int idx,
                       Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
 update_if_coord2nghbr(const CartesianMaps &gbxmaps,
-                      unsigned int current_gbxindex,
+                      unsigned int idx,
                       Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
@@ -83,7 +83,7 @@ attributes) */
   //                   forwards_neighbour = xinfront,
   //                   get_bounds = gbxmaps.get_bounds_x(ii),
   //                   get_sdcoord = superdrop.coord1,
-  //                   current_gbxindex,
+  //                   idx,
   //                   superdrop);
 
   // current_gbxindex = update_ifneighbour(
@@ -92,19 +92,19 @@ attributes) */
   //                   forwards_neighbour =yright,
   //                   get_bounds = gbxmaps.get_bounds_y(ii),
   //                   get_sdcoord = superdrop.coord2,
-  //                   current_gbxindex,
+  //                   idx,
   //                   superdrop);
 
   drop.set_sdgbxindex(idx);
 }
 
 KOKKOS_FUNCTION void
-check_inbounds_or_outdomain(const unsigned int current_gbxindex,
+check_inbounds_or_outdomain(const unsigned int idx,
                             const Kokkos::pair<double, double> bounds,
                             const double coord)
 /* raise error if superdrop not out of domain or within bounds */
 {
-  const bool bad_gbxindex((current_gbxindex != LIMITVALUES::uintmax) &&
+  const bool bad_gbxindex((idx != LIMITVALUES::uintmax) &&
                           ((coord < bounds.first) | (coord >= bounds.second)));
 
   assert((!bad_gbxindex) && "SD not in previous gbx nor a neighbour."
@@ -113,9 +113,9 @@ check_inbounds_or_outdomain(const unsigned int current_gbxindex,
                             " 'update_ifoutside' to update sd_gbxindex");
 }
 
-int flag_sdgbxindex(const unsigned int current_gbxindex,
-                        const Kokkos::pair<double, double> bounds,
-                        const double coord)
+int flag_sdgbxindex(const unsigned int idx,
+                    const Kokkos::pair<double, double> bounds,
+                    const double coord)
 /* Given bounds = {lowerbound, upperbound} of a gridbox with
 index 'gbxindex', function determines if coord is within bounds
 of that gridbox. (Note: lower bound inclusive, upper bound exclusive).
@@ -125,53 +125,53 @@ If coord lies within bounds, gbxindex is returned. If index is
 already out of domain (ie. value is the maximum unsigned int),
 return out of domain index */
 {
-  if (current_gbxindex == LIMITVALUES::uintmax)
+  if (idx == LIMITVALUES::uintmax)
   {
-    return 0; // ignore current_gbxindex that is already out of domain
+    return 0; // ignore idx that is already out of domain
   }
   else if (coord < bounds.first) // lowerbound
   {
-    return 1; // current_gbxindex -> backwards_neighbour
+    return 1; // idx -> backwards_neighbour
   }
   else if (coord >= bounds.second) // upperbound
   {
-    return 2; // current_gbxindex -> forwards_neighbour
+    return 2; // idx -> forwards_neighbour
   }
   else
   {
-    return 0; // no change to current_gbxindex if coord within bounds
+    return 0; // no change to idx if coord within bounds
   }
 }
 
 KOKKOS_FUNCTION unsigned int
 update_if_coord3neighbour(const CartesianMaps &gbxmaps,
-                        unsigned int current_gbxindex,
+                        unsigned int idx,
                         Superdrop &drop)
 /* For a given direction, pass {lower, upper} bounds into
 update_superdrop_ifneighbour to get updated gbxindex and superdrop
 (e.g. if superdroplet's coord fromsdcoord function lies outside of
-bounds given gbxbounds using current_gbxindex). Repeat until
-superdroplet coord is within the bounds given by the current_gbxindex,
+bounds given gbxbounds using idx). Repeat until
+superdroplet coord is within the bounds given by the idx,
 or until superdrop leaves domain. */
 {
-  const int flag(flag_sdgbxindex(current_gbxindex,
-                                 gbxmaps.coord3bounds(current_gbxindex),
+  const int flag(flag_sdgbxindex(idx,
+                                 gbxmaps.coord3bounds(idx),
                                  drop.get_coord3())); // value != 0 if sdgbxindex needs to change
   switch (flag)
   {
   case 1:
-    current_gbxindex = backwards_coord3(current_gbxindex, gbxmaps, drop);
+    idx = backwards_coord3(idx, gbxmaps, drop);
     break;
   case 2:
-     current_gbxindex = forwards_coord3(current_gbxindex, gbxmaps, drop);
+     idx = forwards_coord3(idx, gbxmaps, drop);
     break;
   }
 
-  check_inbounds_or_outdomain(current_gbxindex,
-                              gbxmaps.coord3bounds(current_gbxindex),
+  check_inbounds_or_outdomain(idx,
+                              gbxmaps.coord3bounds(idx),
                               drop.get_coord3());
 
-  return current_gbxindex;
+  return idx;
 }
 
 KOKKOS_FUNCTION unsigned int
