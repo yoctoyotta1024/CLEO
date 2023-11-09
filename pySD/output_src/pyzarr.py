@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Thursday 9th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -96,9 +96,9 @@ def get_totnsupers(dataset):
   if type(dataset) == str:
     dataset = get_rawdataset(dataset) 
   try:
-    return dataset["rgd_totnsupers"]
+    return dataset["rgd_totnsupers"].values
   except:
-    return dataset["totnsupers"]
+    return dataset["totnsupers"].values
 
 def get_nsupers(dataset, ntime, ndims):
   return var4d_fromzarr(dataset, ntime, ndims, "nsupers")
