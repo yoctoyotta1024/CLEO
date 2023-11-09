@@ -60,7 +60,7 @@ or within bounds (ie. lower_bound <= coord < upper_bound) */
 {
   const bool bad_gbxindex((idx != outofbounds_gbxindex()) &&
                           ((coord < bounds.first) | (coord >= bounds.second)));
-
+                          
   assert((!bad_gbxindex) && "SD not in previous gbx nor a neighbour."
                             " Try reducing the motion timestep to"
                             " satisfy CFL criteria, or use "
