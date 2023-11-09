@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Thursday 9th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,6 +28,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 
 #include "coupldyn_cvode/cvodecomms.hpp"
@@ -67,6 +68,15 @@ create_coupldyn(const Config &config,
   return CvodeDynamics(config, couplstep, &step2dimlesstime);
 }
 
+inline InitialConditions auto
+create_initconds(const Config &config)
+{
+  const InitSupersFromBinary initsupers(config);
+  const InitGbxsCvode initgbxs(config);
+
+  return InitConds(initsupers, initgbxs);
+}
+
 inline GridboxMaps auto
 create_gbxmaps(const Config &config)
 {
@@ -89,12 +99,6 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
                           config.cond_SUBTSTEP,
                           &realtime2dimless);
   return cond;
-}
-
-inline Motion auto
-create_motion(const unsigned int motionstep)
-{
-  return NullMotion{};
 }
 
 inline Observer auto
@@ -139,20 +143,11 @@ inline auto create_sdm(const Config &config,
   const unsigned int couplstep(tsteps.get_couplstep());
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
-  const MoveSupersInDomain movesupers(create_motion(tsteps.get_motionstep()));
+  const Motion<CartesianMaps> auto movesupers(NullMotion{});
   const Observer auto obs(create_observer(config, tsteps, store));
 
   return SDMMethods(couplstep, gbxmaps,
                     microphys, movesupers, obs);
-}
-
-inline InitialConditions auto
-create_initconds(const Config &config)
-{
-  const InitSupersFromBinary initsupers(config);
-  const InitGbxsCvode initgbxs(config);
-
-  return InitConds(initsupers, initgbxs);
 }
 
 int main(int argc, char *argv[])
