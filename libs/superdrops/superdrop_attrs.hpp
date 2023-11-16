@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -70,6 +70,26 @@ struct SuperdropAttrs
   KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute.rho_sol(); }
   KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol(); }
   KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute.ionic(); }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_xi(const unsigned long long i_xi)
+  {
+    xi = i_xi;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_radius(const double i_radius)
+  /* see also change_radius which prevents
+  drop radius < dry radius */
+  {
+    radius = i_radius;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_msol(const double i_msol)
+  {
+    msol = i_msol;
+  }
 
   KOKKOS_INLINE_FUNCTION double mass() const;
   /* returns total droplet mass = water + dry areosol  */

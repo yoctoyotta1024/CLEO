@@ -77,6 +77,26 @@ public:
   KOKKOS_INLINE_FUNCTION double vol() const { return attrs.vol(); }
 
   KOKKOS_INLINE_FUNCTION
+  void set_xi(const unsigned long long i_xi)
+  {
+    attrs.set_xi(i_xi);
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_radius(const double i_radius)
+  /* see also change_radius which prevents
+  drop radius < dry radius */
+  {
+    attrs.set_radius(i_radius);
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_msol(const double i_msol)
+  {
+    attrs.set_msol(i_msol);
+  }
+
+  KOKKOS_INLINE_FUNCTION
   double change_radius(const double newr)
   {
     return attrs.change_radius(newr);
