@@ -26,6 +26,7 @@
 #include <limits>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 #include <Kokkos_Random.hpp>
 
@@ -34,16 +35,25 @@ struct Superdrop
   size_t xi;
 };
 
-Kokkos::pair<Superdrop, Superdrop>
+KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop &, Superdrop &>
 assign_drops(Superdrop &dropA, Superdrop &dropB)
+/* compare dropA.xi with dropB.xi and return (non-const)
+references to dropA and dropB in a pair {drop1, drop2}
+such that drop1.xi is always >= drop2.xi */
 {
-  if (!(dropA.xi < dropB.xi)) 
+  if (!(dropA.xi < dropB.xi))
   {
+    // Superdrop &drop1(dropA);
+    // Superdrop &drop2(dropB);
+    // return {drop1, drop2};
     return {dropA, dropB};
   }
   else
   {
-    return {dropB, dropA}; 
+    // Superdrop &drop1(dropB);
+    // Superdrop &drop2(dropA);
+    // return {drop1, drop2};
+    return {dropB, dropA};
   }
 }
 
@@ -84,6 +94,10 @@ int main(int argc, char *argv[])
 
         std::cout << "A,B: " << dropA.xi << ", " << dropB.xi << "\n";
         std::cout << "1,2: " << (drops.first).xi << ", " << (drops.second).xi << "\n";
+        
+        drops.first.xi = 10000;
+        drops.second.xi = 0;
+        std::cout << "A,B: " << dropA.xi << ", " << dropB.xi << "\n";
       }
       std::cout << " \n --- --- ---\n ";
 

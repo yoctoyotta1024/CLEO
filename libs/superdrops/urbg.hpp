@@ -27,7 +27,9 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
+#include <Kokkos_StdAlgorithms.hpp>
 
+#include "./superdrop.hpp"
 #include "./kokkosaliases_sd.hpp"
 
 template <class DeviceType>

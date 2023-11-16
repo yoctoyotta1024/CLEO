@@ -133,7 +133,7 @@ private:
 
   }
 
-  Kokkos::pair<Superdrop, Superdrop>
+  KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop&, Superdrop&>
   assign_drops(const Superdrop &dropA, const Superdrop &dropB)
   /* compare dropA.xi with dropB.xi and return (non-const)
   references to dropA and dropB in a pair {drop1, drop2}
