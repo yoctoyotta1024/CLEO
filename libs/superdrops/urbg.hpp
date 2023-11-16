@@ -31,40 +31,18 @@
 template <class DeviceType>
 struct URBG
 /* struct wrapping Kokkos random number generator to
-satisfy requirements of C++11 UniformRandomBitGenerator
-bject for a 32 bit unsigned int. Useful e.g. so that
-gen's urand() function can be used in std::shuffle
-to generate random pairs of superdroplets
-during collision process */
+generate random 64 bit unsigned int in range [start, end].
+Result is analogous to std::uniform_int_distribution with
+params [a,b]=[start, end] and g = C++11 UniformRandomBitGenerator
+is URBG operator called with (start, end) = (0, URAND_MAX).
+Useful so that gen's urand(start, end) function can be used
+to randomly shuffle a kokkos view by swapping elements 
+in range [start, end] e.g. to generate random pairs of
+superdroplets during collision process */
 {
   using result_type = uint64_t;
   Kokkos::Random_XorShift64<DeviceType> gen;
   
-  static constexpr result_type min()
-  {
-    return LIMITVALUES::uint64tmin;
-  }
-  static constexpr result_type max()
-  /* is equivalent to return
-  Kokkos::Random_XorShift64<DeviceType>::MAX_URAND; */
-  {
-    return LIMITVALUES::uint64tmax;
-  }
-
-  result_type operator()()
-  /* draws a random number from uniform
-  distribution in the range [0,MAX_URAND] */
-  {
-    return gen.urand();
-  }
-
-  result_type operator()(const uint64_t range)
-  /* draws a random number from uniform
-  distribution in the range [0, range] */
-  {
-    return gen.urand(range);
-  }
-
   result_type operator()(const uint64_t start,
                          const uint64_t end)
   /* draws a random number from uniform
