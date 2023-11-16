@@ -26,8 +26,10 @@
 #include <limits>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_StdAlgorithms.hpp>
 #include <Kokkos_Random.hpp>
 
+using viewd_supers = Kokkos::View<int *>;
 
 namespace LIMITVALUES
 /* max/min values e.g. for using vlaues of c++ standard numeric limits on GPUs */
@@ -71,7 +73,7 @@ during collision process */
 };
 
 template <class DeviceType>
-void shuffle_supers(std::vector<int> &supers, URBG<DeviceType> urbg)
+void shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
 {
   std::cout << "\nshuffling\n";
 
@@ -80,8 +82,10 @@ void shuffle_supers(std::vector<int> &supers, URBG<DeviceType> urbg)
   typedef std::uniform_int_distribution<diff_t> distr_t;
   typedef typename distr_t::param_type param_t;
  
-  RandomIt last(supers.end());
-  RandomIt first(supers.begin());
+  // RandomIt last(supers.end());
+  // RandomIt first(supers.begin());
+  auto first = Kokkos::Experimental::begin(supers);
+  auto last = Kokkos::Experimental::end(supers);
 
   distr_t D;
   for (diff_t i = last - first - 1; i > 0; --i)
@@ -96,10 +100,20 @@ int main(int argc, char *argv[])
   using ExecSpace = Kokkos::DefaultExecutionSpace;
   using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
 
-  std::vector<int> supers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-  size_t nsupers(supers.size());
+  std::vector<int> i_supers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  size_t nsupers(i_supers.size());
+
   Kokkos::initialize(argc, argv);
   {
+    viewd_supers supers("supers", nsupers);
+
+    auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
+    for (size_t kk(0); kk < nsupers; ++kk)
+    {
+      h_supers(kk) = i_supers.at(kk);
+    }
+    Kokkos::deep_copy(supers, h_supers);
+
     GenRandomPool genpool(std::random_device{}());
     {
       URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
@@ -107,16 +121,16 @@ int main(int argc, char *argv[])
       std::cout << " \n --- b4 ---\n ";
       for (size_t kk(0); kk < nsupers; ++kk)
       {
-        std::cout << supers[kk] << ", ";
+        std::cout << supers(kk) << ", ";
       }
       std::cout << " \n --- --- ---\n ";
 
-      shuffle_supers(supers, urbg);
+      // shuffle_supers(supers, urbg);
 
       std::cout << " \n --- l8r ---\n ";
       for (size_t kk(0); kk < nsupers; ++kk)
       {
-        std::cout << supers[kk] << ", ";
+        std::cout << supers(kk) << ", ";
       }
       std::cout << " \n --- --- ---\n ";
 
