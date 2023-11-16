@@ -52,4 +52,22 @@ superdroplets during collision process */
   }
 };
 
+template <class DeviceType>
+viewd_supers shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
+{
+  namespace KE = Kokkos::Experimental;
+
+  const auto first = KE::begin(supers);
+  const auto last = KE::end(supers);
+  const auto diff = KE::distance(first, last - 1);
+
+  for (auto i(diff); i > 0; --i)
+  {
+    const auto randit = urbg(0, i); // random int equidistributed between [0, i]
+    KE::iter_swap(first + i, first + randit);
+  }
+
+  return supers;
+}
+
 #endif // URBG_HPP
