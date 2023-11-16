@@ -55,6 +55,7 @@ superdroplets during collision process */
 };
 
 template <class DeviceType>
+KOKKOS_INLINE_FUNCTION
 viewd_supers shuffle_supers(const viewd_supers supers,
                             URBG<DeviceType> urbg)
 {

@@ -86,6 +86,7 @@ private:
   according to Shima et al. 2009 Section 5.1.3. part (5). */
 
   template <class DeviceType>
+  KOKKOS_INLINE_FUNCTION
   subviewd_supers do_collisions(subviewd_supers supers,
                                 const State &state,
                                 URBG<DeviceType> urbg) const
@@ -134,6 +135,7 @@ public:
       : DELT(DELT), probability(p), collision(x) {}
 
   template <class DeviceType>
+  KOKKOS_INLINE_FUNCTION
   subviewd_supers operator()(const unsigned int subt,
                             subviewd_supers supers,
                             const State &state,

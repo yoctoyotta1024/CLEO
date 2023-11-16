@@ -90,7 +90,7 @@ public:
   }
 
   template <class DeviceType>
-  // KOKKOS_INLINE_FUNCTION
+  KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
                            subviewd_supers supers,
                            State &state,
@@ -183,7 +183,7 @@ public:
   }
 
   template <class DeviceType>
-  // KOKKOS_INLINE_FUNCTION
+  KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
                            subviewd_supers supers,
                            State &state,
