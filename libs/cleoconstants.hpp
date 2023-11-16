@@ -97,8 +97,8 @@ namespace LIMITVALUES
 {
   constexpr unsigned int uintmax = std::numeric_limits<unsigned int>::max();
  
-  constexpr unsigned int uint32tmin = std::numeric_limits<uint32_t>::min();
-  constexpr unsigned int uint32tmax = std::numeric_limits<uint32_t>::max();
+  constexpr unsigned int uint64tmin = std::numeric_limits<uint64_t>::min();
+  constexpr unsigned int uint64tmax = std::numeric_limits<uint64_t>::max();
 
   constexpr double llim = -1.0 * std::numeric_limits<double>::max();
   constexpr double ulim = std::numeric_limits<double>::max();

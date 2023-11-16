@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,23 +37,40 @@ gen's urand() function can be used in std::shuffle
 to generate random pairs of superdroplets
 during collision process */
 {
-  using result_type = uint32_t;
+  using result_type = uint64_t;
   Kokkos::Random_XorShift64<DeviceType> gen;
   
   static constexpr result_type min()
   {
-    return LIMITVALUES::uint32tmin;
+    return LIMITVALUES::uint64tmin;
   }
   static constexpr result_type max()
   /* is equivalent to return
   Kokkos::Random_XorShift64<DeviceType>::MAX_URAND; */
   {
-    return LIMITVALUES::uint32tmax;
+    return LIMITVALUES::uint64tmax;
   }
 
   result_type operator()()
+  /* draws a random number from uniform
+  distribution in the range [0,MAX_URAND] */
   {
     return gen.urand();
+  }
+
+  result_type operator()(const uint64_t range)
+  /* draws a random number from uniform
+  distribution in the range [0, range] */
+  {
+    return gen.urand(range);
+  }
+
+  result_type operator()(const uint64_t start,
+                         const uint64_t end)
+  /* draws a random number from uniform
+  distribution in the range [start, end] */
+  {
+    return gen.urand(start, end);
   }
 };
 

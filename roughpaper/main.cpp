@@ -31,18 +31,6 @@
 
 using viewd_supers = Kokkos::View<int *>;
 
-namespace LIMITVALUES
-/* max/min values e.g. for using vlaues of c++ standard numeric limits on GPUs */
-{
-  constexpr unsigned int uintmax = std::numeric_limits<unsigned int>::max();
- 
-  constexpr unsigned int uint32tmin = std::numeric_limits<uint32_t>::min();
-  constexpr unsigned int uint32tmax = std::numeric_limits<uint32_t>::max();
-
-  constexpr double llim = -1.0 * std::numeric_limits<double>::max();
-  constexpr double ulim = std::numeric_limits<double>::max();
-}
-
 template <class DeviceType>
 struct URBG
 /* struct wrapping Kokkos random number generator to
@@ -52,23 +40,15 @@ gen's urand() function can be used in std::shuffle
 to generate random pairs of superdroplets
 during collision process */
 {
-  using result_type = uint32_t;
+  using result_type = uint64_t;
   Kokkos::Random_XorShift64<DeviceType> gen;
   
-  static constexpr result_type min()
+  result_type operator()(const uint64_t start,
+                         const uint64_t end)
+  /* draws a random number from uniform
+  distribution in the range [start, end] */
   {
-    return LIMITVALUES::uint32tmin;
-  }
-  static constexpr result_type max()
-  /* is equivalent to return
-  Kokkos::Random_XorShift64<DeviceType>::MAX_URAND; */
-  {
-    return LIMITVALUES::uint32tmax;
-  }
-
-  result_type operator()()
-  {
-    return gen.urand();
+    return gen.urand(start, end);
   }
 };
 
@@ -77,11 +57,6 @@ viewd_supers shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
 {
   std::cout << "\nshuffling\n";
 
-  using RandomIt = std::vector<int>::iterator;
-  typedef typename std::iterator_traits<RandomIt>::difference_type diff_t;
-  typedef std::uniform_int_distribution<diff_t> distr_t;
-  typedef typename distr_t::param_type param_t;
-
   namespace KE = Kokkos::Experimental;
   
   auto first = KE::begin(supers);
@@ -89,33 +64,9 @@ viewd_supers shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
   const auto diff = KE::distance(first, last - 1);
   for (auto i(diff); i > 0; --i)
   {
-    std::cout << *(first + i) << ", " << *first << "\n";
-    // KE::iter_swap(first + i, first);
+    const auto randit = urbg(0, i); // random int equidistributed between [0, i]
+    KE::iter_swap(first + i, first + randit);
   }
-
-  std::vector<int> i_supers = {0, 11, 22, 33, 44, 55, 66, 77, 88, 99};
-  RandomIt i_last(i_supers.end());
-  RandomIt i_first(i_supers.begin());
-  diff_t i_diff = i_last - i_first - 1;
-
-  std::cout << " \n --- --- ---\n ";
-  for (auto i(i_diff); i > 0; --i)
-  {
-    std::cout << *(i_first + i) << ", " << i_first[i] << "\n";
-  }
-  std::cout << " \n --- --- ---\n ";
-  
-  // distr_t D;
-  // for (diff_t i = last - first - 1; i > 0; --i)
-  // {
-  //     std::swap(first[i], first[D(urbg, param_t(0, i))]);
-  // }
-
-  for (size_t kk(0); kk < supers.extent(0); ++kk)
-  {
-    std::cout << supers(kk) << ", ";
-  }
-  std::cout << " \n --- --- ---\n ";
 
   return supers;
 }
