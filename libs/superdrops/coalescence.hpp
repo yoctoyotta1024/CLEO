@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * class that enacts collision-coalescence events
+ * class and function to enact collision-coalescence events
  * in superdroplet model according to Shima et al. 2009.
  * Coalescence struct satisfies SDinGBxPairEnactX concept
  * used in Collisions struct */
@@ -33,16 +33,21 @@
 struct DoCoalescence
 {
 private:
+  KOKKOS_FUNCTION unsigned long long
+  DoCoalescence::coalescence_gamma(const unsigned long long xi1,
+                                   const unsigned long long xi2,
+                                   const double prob,
+                                   const double phi) const;
+  /* calculates value of gamma factor in Monte Carlo
+  collision-coalescence as in Shima et al. 2009 */
+
 public:
   KOKKOS_FUNCTION
   void operator()(Superdrop &drop1, Superdrop &drop2,
-                  const double prob, const double phi) const
+                  const double prob, const double phi) const;
   /* this operator is used as an "adaptor" for using
   DoCoalescence as a function in DoCollisions that
   satistfies the PairEnactX concept */
-  {
-    // TODO
-  }
 };
 
 template <PairProbability Probability>

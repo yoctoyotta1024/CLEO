@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -357,7 +357,7 @@ iterations undertaken if not yet converged. */
     numerator = ode_gfunc(rprev, ziter);
     const double denominator(ode_gfuncderivative(ziter));
     ziter -= ziter * numerator / denominator; // increment ziter
-    ziter = Kokkos::max(ziter, 1e-8);            // do not allow ziter < 0.0
+    ziter = Kokkos::fmax(ziter, 1e-8);            // do not allow ziter < 0.0
   }
 
   // perform upto 'iterlimit' further iterations if convergence test fails
