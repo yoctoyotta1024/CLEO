@@ -23,6 +23,8 @@
 #ifndef COALESCENCE_HPP
 #define COALESCENCE_HPP
 
+#include <cassert>
+
 #include <Kokkos_Core.hpp>
 
 #include "./collisions.hpp"
@@ -34,12 +36,36 @@ struct DoCoalescence
 {
 private:
   KOKKOS_FUNCTION unsigned long long
-  DoCoalescence::coalescence_gamma(const unsigned long long xi1,
-                                   const unsigned long long xi2,
-                                   const double prob,
-                                   const double phi) const;
+  coalescence_gamma(const unsigned long long xi1,
+                    const unsigned long long xi2,
+                    const double prob,
+                    const double phi) const;
   /* calculates value of gamma factor in Monte Carlo
   collision-coalescence as in Shima et al. 2009 */
+
+  KOKKOS_FUNCTION void
+  coalesce_superdroplet_pair(Superdrop &drop1,
+                             Superdrop &drop2,
+                             const unsigned long long gamma) const;
+  /* coalesce pair of superdroplets by changing multiplicity,
+  radius and solute mass of each superdroplet in pair
+  according to Shima et al. 2009 Section 5.1.3. part (5) */
+
+  KOKKOS_FUNCTION void
+  twin_superdroplet_coalescence(Superdrop &drop1,
+                                Superdrop &drop2,
+                                const unsigned long long gamma) const;
+  /* if eps1 = gamma*eps2 coalescence makes twin SDs
+  with same eps, r and solute mass. According to Shima et al. 2009
+  Section 5.1.3. part (5) option (b)  */
+
+  KOKKOS_FUNCTION void
+  different_superdroplet_coalescence(Superdrop &sd1,
+                                     Superdrop &sd2,
+                                     const unsigned long long gamma) const;
+  /* if eps1 > gamma*eps2 coalescence grows sd2 radius and mass
+  via decreasing multiplicity of sd1. According to
+  Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
 
 public:
   KOKKOS_FUNCTION
@@ -61,7 +87,7 @@ probability of collision-coalescence determined by 'collcoalprob' */
 {
   const double DELT(int2realtime(interval));
 
-  const DoCoalescence coal{}; 
+  const DoCoalescence coal{};
 
   const DoCollisions<Probability, DoCoalescence> colls(DELT,
                                                        collcoalprob,
