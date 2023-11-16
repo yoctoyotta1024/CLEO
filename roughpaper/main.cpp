@@ -73,7 +73,7 @@ during collision process */
 };
 
 template <class DeviceType>
-void shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
+viewd_supers shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
 {
   std::cout << "\nshuffling\n";
 
@@ -81,18 +81,29 @@ void shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
   typedef typename std::iterator_traits<RandomIt>::difference_type diff_t;
   typedef std::uniform_int_distribution<diff_t> distr_t;
   typedef typename distr_t::param_type param_t;
- 
+
+  namespace KE = Kokkos::Experimental;
+  
   // RandomIt last(supers.end());
   // RandomIt first(supers.begin());
-  auto first = Kokkos::Experimental::begin(supers);
-  auto last = Kokkos::Experimental::end(supers);
+  auto first = KE::begin(supers);
+  auto last = KE::end(supers) - 1;
 
-  distr_t D;
-  for (diff_t i = last - first - 1; i > 0; --i)
+  KE::iter_swap(first, last);
+
+  // distr_t D;
+  // for (diff_t i = last - first - 1; i > 0; --i)
+  // {
+  //     std::swap(first[i], first[D(urbg, param_t(0, i))]);
+  // }
+
+  for (size_t kk(0); kk < supers.extent(0); ++kk)
   {
-      std::swap(first[i], first[D(urbg, param_t(0, i))]);
+    std::cout << supers(kk) << ", ";
   }
+  std::cout << " \n --- --- ---\n ";
 
+  return supers;
 }
 
 int main(int argc, char *argv[])
@@ -125,7 +136,7 @@ int main(int argc, char *argv[])
       }
       std::cout << " \n --- --- ---\n ";
 
-      // shuffle_supers(supers, urbg);
+      supers = shuffle_supers(supers, urbg);
 
       std::cout << " \n --- l8r ---\n ";
       for (size_t kk(0); kk < nsupers; ++kk)
