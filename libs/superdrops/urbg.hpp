@@ -61,11 +61,11 @@ viewd_supers shuffle_supers(const viewd_supers supers,
   namespace KE = Kokkos::Experimental;
 
   const auto first = KE::begin(supers);
-  const auto diff = KE::distance(first, KE::end(supers) - 1);
+  const auto dist = KE::distance(first, KE::end(supers) - 1); // distance to last element from first
 
-  for (auto i(diff); i > 0; --i)
+  for (auto i(dist); i > 0; --i)
   {
-    const auto randit = urbg(0, i); // random int equidistributed between [0, i]
+    const auto randit = urbg(0, i); // random uint64_t equidistributed between [0, i]
     KE::iter_swap(first + i, first + randit);
   }
 
