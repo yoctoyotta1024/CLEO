@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,9 +45,9 @@ totnsupers = 225                         # (initial) total no. of SDs
 CONDTSTEP = 1                             # time between SD condensation events [s]
 COLLTSTEP = 2                             # time between SD collision events [s]
 MOTIONTSTEP = 5                           # time between SDM motion [s]
-COUPLTSTEP = 250                          # time between dynamic couplings [s]
+COUPLTSTEP = 50                           # time between dynamic couplings [s]
 OBSTSTEP = 5                              # time between SDM observations [s]
-T_END = 500                               # time span of integration from 0s to T_END [s]
+T_END = 100                               # time span of integration from 0s to T_END [s]
 
 # microphysics #
 cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence

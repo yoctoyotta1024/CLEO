@@ -85,6 +85,7 @@ private:
   radius and solute mass of each superdroplet in the pair
   according to Shima et al. 2009 Section 5.1.3. part (5). */
 
+  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
   subviewd_supers do_collisions(subviewd_supers supers,
                                 const State &state,
@@ -101,13 +102,32 @@ private:
 
     /* Randomly shuffle order of superdroplet objects
     in order to generate random pairs */
-    std::shuffle(span4SDsinGBx.begin(), span4SDsinGBx.end(), urbg);
+    shuffle_supers(supers, urbg);
     
-    // collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
+    /* collide all randomly generated pairs of SDs */
+    for (size_t i = 1; i < nsupers; i += 2)
+    {
+      collide_superdroplet_pair(supers(i - 1), supers(i),
+                                urbg, scale_p, VOLUME);
+    }
 
     // return remove_outofdomain_superdrops(span4SDsinGBx);
 
     return supers;
+  }
+
+  template <class DeviceType>
+  KOKKOS_INLINE_FUNCTION void
+  collide_superdroplet_pair(Superdrop &dropA,
+                            Superdrop &dropB,
+                            URBG<DeviceType> &urbg,
+                            const double scale_p,
+                            const double VOLUME) const
+  /* Monte Carlo Routine from Shima et al. 2009 for
+  collision-coalescence generalised to any collision-X
+  process for a pair of superdroplets */
+  {
+
   }
 
 public:
