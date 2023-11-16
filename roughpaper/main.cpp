@@ -35,12 +35,16 @@ struct Superdrop
 };
 
 Kokkos::pair<Superdrop, Superdrop>
-assign_drops(Superdrop &a, Superdrop &b)
+assign_drops(Superdrop &dropA, Superdrop &dropB)
 {
-  auto drop1 = a;
-  auto drop2 = b;
-
-  return {drop1, drop2};
+  if (!(dropA.xi < dropB.xi)) 
+  {
+    return {dropA, dropB};
+  }
+  else
+  {
+    return {dropB, dropA}; 
+  }
 }
 
 int main(int argc, char *argv[])
@@ -58,7 +62,7 @@ int main(int argc, char *argv[])
     auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
     for (size_t kk(0); kk < nsupers; ++kk)
     {
-      h_supers(kk) = Superdrop{100 - kk*10};
+      h_supers(kk) = Superdrop{kk*10+kk};
     }
     Kokkos::deep_copy(supers, h_supers);
 

@@ -129,27 +129,24 @@ private:
   {
     /* 1. assign references to each superdrop in pair
     that will collide such that (sd1.eps) >= (sd2.eps) */
-    auto drops = assign_superdroplet(dropA, dropB);
+    auto drops = assign_drops(dropA, dropB);
 
   }
 
-  Kokkos::pair<Superdrop&, Superdrop &>
-  assign_superdroplet(const Superdrop &dropA,
-                      const Superdrop &dropB) const
+  Kokkos::pair<Superdrop, Superdrop>
+  assign_drops(const Superdrop &dropA, const Superdrop &dropB)
   /* compare dropA.xi with dropB.xi and return (non-const)
   references to dropA and dropB in a pair {drop1, drop2}
   such that drop1.xi is always >= drop2.xi */
-  { 
-    // auto compare = [](const Superdrop &dropA,
-    //                   const Superdrop &dropB)
-    // {
-    //   return dropA.get_xi() < dropB.get_xi(); // returns true if xiA < xiB
-    // };
-
-    // auto drops = std::minmax(dropA, dropB, compare); // drop2.eps =< drop1.eps
-
-    // return {const_cast<Superdrop &>(SDinGBx1),
-    //         const_cast<Superdrop &>(SDinGBx2)};
+  {
+    if (!(dropA.xi < dropB.xi))
+    {
+      return {dropA, dropB};
+    }
+    else
+    {
+      return {dropB, dropA};
+    }
   }
 
 public:
