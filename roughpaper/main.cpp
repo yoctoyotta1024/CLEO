@@ -34,17 +34,20 @@ using viewd_supers = Kokkos::View<int *>;
 template <class DeviceType>
 struct URBG
 /* struct wrapping Kokkos random number generator to
-satisfy requirements of C++11 UniformRandomBitGenerator
-bject for a 32 bit unsigned int. Useful e.g. so that
-gen's urand() function can be used in std::shuffle
-to generate random pairs of superdroplets
-during collision process */
+generate random 64 bit unsigned int in range [start, end].
+Result is analogous to std::uniform_int_distribution with
+params [a,b]=[start, end] and g = C++11 UniformRandomBitGenerator
+is URBG operator called with (start, end) = (0, URAND_MAX).
+Useful so that gen's urand(start, end) function can be used
+to randomly shuffle a kokkos view by swapping elements 
+in range [start, end] e.g. to generate random pairs of
+superdroplets during collision process */
 {
-  using result_type = uint64_t;
   Kokkos::Random_XorShift64<DeviceType> gen;
-  
-  result_type operator()(const uint64_t start,
-                         const uint64_t end)
+
+  KOKKOS_INLINE_FUNCTION
+  uint64_t operator()(const uint64_t start,
+                      const uint64_t end)
   /* draws a random number from uniform
   distribution in the range [start, end] */
   {
@@ -52,20 +55,32 @@ during collision process */
   }
 };
 
+template <class T>
+KOKKOS_INLINE_FUNCTION
+void device_iter_swap(T& a, T& b)
+/* swaps the values of the elements iterators a and b 
+are pointing to like std::iter_swap and Kokkos::iter_swap
+except function works on device as well as host */
+{
+  T c(a);
+  a=b;
+  b=c;
+}
 
 template <class DeviceType>
-viewd_supers shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
+KOKKOS_INLINE_FUNCTION
+viewd_supers shuffle_supers(const viewd_supers supers,
+                            URBG<DeviceType> urbg)
 {
   namespace KE = Kokkos::Experimental;
 
   const auto first = KE::begin(supers);
-  const auto last = KE::end(supers);
-  const auto diff = KE::distance(first, last - 1);
+  const auto dist = KE::distance(first, KE::end(supers) - 1); // distance to last element from first
 
-  for (auto i(diff); i > 0; --i)
+  for (auto iter(dist); iter > 0; --iter)
   {
-    const auto randit = urbg(0, i); // random int equidistributed between [0, i]
-    KE::iter_swap(first + i, first + randit);
+    const auto randiter = urbg(0, iter); // random uint64_t equidistributed between [0, i]
+    device_iter_swap(*(first + iter), *(first + randiter)); // is host functions :/
   }
 
   return supers;

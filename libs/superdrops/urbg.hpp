@@ -54,6 +54,21 @@ superdroplets during collision process */
   }
 };
 
+
+KOKKOS_INLINE_FUNCTION
+void device_swap(Superdrop& a, Superdrop& b)
+/* swaps the values of the superdroplets a and b 
+like C++98 std::swap except function works
+on device as well as host. Note: Involves a copy
+construction and two assignment operations
+=> not efficient way of swapping the contents if 
+Superdrop class stores large quantities of data */
+{
+  Superdrop c(a);
+  a=b;
+  b=c;
+}
+
 template <class DeviceType>
 KOKKOS_INLINE_FUNCTION
 viewd_supers shuffle_supers(const viewd_supers supers,
@@ -67,7 +82,7 @@ viewd_supers shuffle_supers(const viewd_supers supers,
   for (auto iter(dist); iter > 0; --iter)
   {
     const auto randiter = urbg(0, iter); // random uint64_t equidistributed between [0, i]
-    KE::iter_swap(first + iter, first + randiter); // is host functions :/
+    device_swap(*(first + iter), *(first + randiter));
   }
 
   return supers;
