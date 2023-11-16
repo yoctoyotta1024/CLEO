@@ -128,26 +128,48 @@ private:
   process for a pair of superdroplets */
   {
     /* 1. assign references to each superdrop in pair
-    that will collide such that (sd1.eps) >= (sd2.eps) */
-    auto drops = assign_drops(dropA, dropB);
+    that will collide such that (drop1.xi) >= (drop2.xi) */
+    const auto drops = assign_drops(dropA, dropB); // {drop1, drop2}
+
+    /* 2. calculate scaled probability of pair collision-x
+    according to Shima et al. 2009 ("p_alpha" in paper) */
+    const double prob(scaled_probability(drops, scale_p, VOLUME));
+    
 
   }
 
-  KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop&, Superdrop&>
-  assign_drops(const Superdrop &dropA, const Superdrop &dropB)
+  KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop &, Superdrop &>
+  assign_drops(Superdrop &dropA, Superdrop &dropB)
   /* compare dropA.xi with dropB.xi and return (non-const)
   references to dropA and dropB in a pair {drop1, drop2}
   such that drop1.xi is always >= drop2.xi */
   {
     if (!(dropA.xi < dropB.xi))
     {
-      return {dropA, dropB};
+      return {dropA, dropB}; 
     }
     else
     {
       return {dropB, dropA};
     }
   }
+
+  KOKKOS_INLINE_FUNCTION double
+  scaled_probability(Kokkos::pair<Superdrop &, Superdrop &> drops,
+                     const double scale_p,
+                     const double VOLUME)
+  /* calculate probability of pair of superdroplets undergoing
+  collision-x according to Shima et al. 2009 ("p_alpha" in paper).
+  Assumes drops pair is {drop1, drop2} where drop1.xi >= drop2.xi */
+  {
+    const double prob_jk = probability(drops.first, drops.second,
+                                       DELT, VOLUME);
+    
+    const double large_xi = (double)(drops.first.get_xi());
+    const double prob = scale_p * large_xi * prob_jk; 
+
+    return prob;
+  } 
 
 public:
   DoCollisions(const double DELT, Probability p, EnactCollision x)
