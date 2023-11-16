@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -90,7 +90,7 @@ public:
   }
 
   template <class DeviceType>
-  KOKKOS_INLINE_FUNCTION
+  // KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
                            subviewd_supers supers,
                            State &state,
@@ -183,7 +183,7 @@ public:
   }
 
   template <class DeviceType>
-  KOKKOS_INLINE_FUNCTION
+  // KOKKOS_INLINE_FUNCTION
   subviewd_supers run_step(const unsigned int subt,
                            subviewd_supers supers,
                            State &state,

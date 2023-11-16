@@ -44,6 +44,7 @@ superdroplets during collision process */
 {
   Kokkos::Random_XorShift64<DeviceType> gen;
 
+  KOKKOS_INLINE_FUNCTION
   uint64_t operator()(const uint64_t start,
                       const uint64_t end)
   /* draws a random number from uniform
@@ -65,7 +66,7 @@ viewd_supers shuffle_supers(const viewd_supers supers,
   for (auto iter(dist); iter > 0; --iter)
   {
     const auto randiter = urbg(0, iter); // random uint64_t equidistributed between [0, i]
-    KE::iter_swap(first + iter, first + randiter);
+    KE::iter_swap(first + iter, first + randiter); // is host functions :/
   }
 
   return supers;
