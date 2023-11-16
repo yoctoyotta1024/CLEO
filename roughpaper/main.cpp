@@ -43,30 +43,58 @@ such that drop1.xi is always >= drop2.xi */
 {
   if (!(dropA.xi < dropB.xi))
   {
-    // Superdrop &drop1(dropA);
-    // Superdrop &drop2(dropB);
-    // return {drop1, drop2};
     return {dropA, dropB};
   }
   else
   {
-    // Superdrop &drop1(dropB);
-    // Superdrop &drop2(dropA);
-    // return {drop1, drop2};
     return {dropB, dropA};
   }
 }
+
+template <class DeviceType>
+struct URBG
+/* struct wrapping Kokkos random number generator to
+generate random 64 bit unsigned int in range [start, end].
+Result is analogous to std::uniform_int_distribution with
+params [a,b]=[start, end] and g = C++11 UniformRandomBitGenerator
+is URBG operator called with (start, end) = (0, URAND_MAX).
+Useful so that gen's urand(start, end) function can be used
+to randomly shuffle a kokkos view by swapping elements 
+in range [start, end] e.g. to generate random pairs of
+superdroplets during collision process */
+{
+  Kokkos::Random_XorShift64<DeviceType> gen;
+
+  KOKKOS_INLINE_FUNCTION
+  uint64_t operator()(const uint64_t start,
+                      const uint64_t end)
+  /* draws a random 64 bit unsigned int from
+  uniform distribution in the range [start, end] */
+  {
+    return gen.urand(start, end); // unsigned int rand
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  double drand(const double start,
+               const double end)
+  /* draws a random number (double) from uniform
+  distribution in the range [0.0, 1.0] */
+  {
+    return gen.drand(start, end); // double rand
+  }
+};
 
 int main(int argc, char *argv[])
 {
   using viewd_supers = Kokkos::View<Superdrop *>;
   using ExecSpace = Kokkos::DefaultExecutionSpace;
   using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
-
+ 
   size_t nsupers(10);
 
   Kokkos::initialize(argc, argv);
   {
+    GenRandomPool genpool(std::random_device{}());
     viewd_supers supers("supers", nsupers);
 
     auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
@@ -101,6 +129,11 @@ int main(int argc, char *argv[])
       }
       std::cout << " \n --- --- ---\n ";
 
+      URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
+
+      const double phi(urbg.drand(0.0, 1.0));
+      std::cout << "\n phi: " << phi << "\n";
+      genpool.free_state(urbg.gen);
     }
   }
   Kokkos::finalize();

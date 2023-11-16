@@ -49,10 +49,19 @@ superdroplets during collision process */
   KOKKOS_INLINE_FUNCTION
   uint64_t operator()(const uint64_t start,
                       const uint64_t end)
-  /* draws a random number from uniform
-  distribution in the range [start, end] */
+  /* draws a random 64 bit unsigned int from
+  uniform distribution in the range [start, end] */
   {
-    return gen.urand(start, end);
+    return gen.urand(start, end); // unsigned int rand
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  double drand(const double start,
+               const double end)
+  /* draws a random number (double) from uniform
+  distribution in the range [0.0, 1.0] */
+  {
+    return gen.drand(start, end); // double rand
   }
 };
 

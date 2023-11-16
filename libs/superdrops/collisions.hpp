@@ -129,13 +129,18 @@ private:
   {
     /* 1. assign references to each superdrop in pair
     that will collide such that (drop1.xi) >= (drop2.xi) */
-    const auto drops = assign_drops(dropA, dropB); // {drop1, drop2}
+    const auto drops(assign_drops(dropA, dropB)); // {drop1, drop2}
 
-    /* 2. calculate scaled probability of pair collision-x
-    according to Shima et al. 2009 ("p_alpha" in paper) */
-    const double prob(scaled_probability(drops, scale_p, VOLUME));
-    
+    /* 2. calculate scaled probability of
+    collision for pair of superdroplets */
+    const double prob(scaled_probability(drops.first,
+                                         drops.second,
+                                         scale_p, VOLUME));
 
+    /* 3. Monte Carlo Step: use random number to
+    enact (or not) collision of superdroplets pair */
+    const double phi(urbg.drand(0.0, 1.0)); // random number in range [0.0, 1.0]
+    enact_collisionx(drops.first, drops.second, prob, phi);
   }
 
   KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop &, Superdrop &>
@@ -155,18 +160,18 @@ private:
   }
 
   KOKKOS_INLINE_FUNCTION double
-  scaled_probability(Kokkos::pair<Superdrop &, Superdrop &> drops,
+  scaled_probability(const Superdrop &drop1,
+                     const Superdrop &drop2,
                      const double scale_p,
                      const double VOLUME)
-  /* calculate probability of pair of superdroplets undergoing
-  collision-x according to Shima et al. 2009 ("p_alpha" in paper).
-  Assumes drops pair is {drop1, drop2} where drop1.xi >= drop2.xi */
+  /* calculate probability of pair of superdroplets
+  undergoing collision-x according to Shima et al. 2009
+  ("p_alpha" in paper). Assumes drop1.xi >= drop2.xi */
   {
-    const double prob_jk = probability(drops.first, drops.second,
-                                       DELT, VOLUME);
+    const double prob_jk(probability(drop1, drop2, DELT, VOLUME));
+    const double large_xi(drop1.get_xi()); // casting xi to double (!)
     
-    const double large_xi = (double)(drops.first.get_xi());
-    const double prob = scale_p * large_xi * prob_jk; 
+    const double prob(scale_p * large_xi * prob_jk); 
 
     return prob;
   } 
