@@ -32,6 +32,14 @@
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
 
+KOKKOS_INLINE_FUNCTION double
+radiuscubed(const Superdrop &drop)
+{
+  const double radius = drop.get_radius();
+
+  return radius * radius * radius
+}
+
 struct DoCoalescence
 {
 private:
@@ -169,21 +177,45 @@ KOKKOS_INLINE_FUNCTION void
 DoCoalescence::twin_superdroplet_coalescence(const unsigned long long gamma,
                                              Superdrop &drop1,
                                              Superdrop &drop2) const
-/* if eps1 = gamma*eps2 coalescence makes twin SDs
-with same eps, r and solute mass. According to Shima et al. 2009
+/* if xi1 = gamma*xi2 coalescence makes twin SDs
+with same xi, r and solute mass. According to Shima et al. 2009
 Section 5.1.3. part (5) option (b)  */
 {
-  //TODO
+  const unsigned long long old_xi(drop2.xi); // = drop1.eps
+  const unsigned long long new_xi(old_xi / 2);
+
+  const double new_rcubed = radiuscubed(drop2) + gamma * radiuscubed(drop1);
+  const double new_r = Kokkos::pow(new_rcubed, (1.0 / 3.0));
+
+  const double new_m_sol =  drop2.get_msol() + gamma * drop1.get_msol();
+
+  drop1.xi = new_xi;
+  drop2.xi = old_xi - new_xi;
+
+  drop1.radius = new_r;
+  drop2.radius = new_r;
+
+  drop1.msol = new_m_sol;
+  drop2.msol = new_m_sol;
+
+  /* if xi1 = xi2 = 1 before coalesence, then xi1=0 now */
+  // remove_empty_superdrop(drop1); // TODO 
 }
+
 KOKKOS_INLINE_FUNCTION void
 DoCoalescence::different_superdroplet_coalescence(const unsigned long long gamma,
                                                   Superdrop &drop1,
                                                   Superdrop &drop2) const
-/* if eps1 > gamma*eps2 coalescence grows sd2 radius and mass
-via decreasing multiplicity of sd1. According to
+/* if xi1 > gamma*xi2 coalescence grows drop2 radius and mass
+via decreasing multiplicity of drop1. According to
 Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
 {
-  // TODO
+  drop1.xi = drop1.get_xi() - gamma * drop2.get_xi();
+
+  const double new_rcubed = radiuscubed(drop2) + gamma * radiuscubed(drop1);
+
+  drop2.radius = Kokkos::pow(new_rcubed, (1.0 / 3.0));
+  drop2.msol = drop2.get_msol() + gamma * drop1.get_msol();
 }
 
 #endif // COLLISIONCOALESCENCE_HPP
