@@ -28,6 +28,8 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 
+#include "./kokkosaliases_sd.hpp"
+
 template <class DeviceType>
 struct URBG
 /* struct wrapping Kokkos random number generator to
@@ -53,13 +55,13 @@ superdroplets during collision process */
 };
 
 template <class DeviceType>
-viewd_supers shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
+viewd_supers shuffle_supers(const viewd_supers supers,
+                            URBG<DeviceType> urbg)
 {
   namespace KE = Kokkos::Experimental;
 
   const auto first = KE::begin(supers);
-  const auto last = KE::end(supers);
-  const auto diff = KE::distance(first, last - 1);
+  const auto diff = KE::distance(first, KE::end(supers) - 1);
 
   for (auto i(diff); i > 0; --i)
   {
