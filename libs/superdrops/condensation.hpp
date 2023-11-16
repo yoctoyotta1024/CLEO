@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -136,8 +136,7 @@ from "An Introduction To Clouds...." (see note at top of file) */
   const double qvap(state.qvap);
 
   /* superdroplet radii changes */
-  constexpr double C0cubed(dlc::COORD0 * dlc::COORD0 * dlc::COORD0);
-  const double VOLUME(state.get_volume() * C0cubed);    // volume in which condensation occurs [m^3]
+  const double VOLUME(state.get_volume() * dlc::VOL0);    // volume in which condensation occurs [m^3]
   const double psat(saturation_pressure(temp));
   const double s_ratio(supersaturation_ratio(press, qvap, psat));
   const double ffactor(diffusion_factor(press, temp, psat));

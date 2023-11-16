@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -64,6 +64,7 @@ namespace dimless_constants
   constexpr double W0 = 1.0;            // characteristic velocity [m/s]
   constexpr double TIME0 = 1000.0;      // timescale [s]
   constexpr double COORD0 = TIME0 * W0; // coordinate grid scale [m]
+  constexpr double VOL0 = COORD0 * COORD0 * COORD0; // volume scale [m^3]
 
   constexpr double CP0 = DC::CP_DRY;              // Heat capacity [J/Kg/K]
   constexpr double MR0 = DC::MR_DRY;              // molecular molar mass [Kg/mol]
