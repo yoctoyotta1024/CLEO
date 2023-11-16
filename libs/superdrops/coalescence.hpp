@@ -35,7 +35,7 @@
 struct DoCoalescence
 {
 private:
-  KOKKOS_FUNCTION unsigned long long
+  KOKKOS_INLINE_FUNCTION unsigned long long
   coalescence_gamma(const unsigned long long xi1,
                     const unsigned long long xi2,
                     const double prob,
@@ -43,32 +43,32 @@ private:
   /* calculates value of gamma factor in Monte Carlo
   collision-coalescence as in Shima et al. 2009 */
 
-  KOKKOS_FUNCTION void
-  coalesce_superdroplet_pair(Superdrop &drop1,
-                             Superdrop &drop2,
-                             const unsigned long long gamma) const;
+  KOKKOS_INLINE_FUNCTION void
+  coalesce_superdroplet_pair(const unsigned long long gamma,
+                             Superdrop &drop1,
+                             Superdrop &drop2) const;
   /* coalesce pair of superdroplets by changing multiplicity,
   radius and solute mass of each superdroplet in pair
   according to Shima et al. 2009 Section 5.1.3. part (5) */
 
-  KOKKOS_FUNCTION void
-  twin_superdroplet_coalescence(Superdrop &drop1,
-                                Superdrop &drop2,
-                                const unsigned long long gamma) const;
+  KOKKOS_INLINE_FUNCTION void
+  twin_superdroplet_coalescence(const unsigned long long gamma,
+                                Superdrop &drop1,
+                                Superdrop &drop2) const;
   /* if eps1 = gamma*eps2 coalescence makes twin SDs
   with same eps, r and solute mass. According to Shima et al. 2009
   Section 5.1.3. part (5) option (b)  */
 
-  KOKKOS_FUNCTION void
-  different_superdroplet_coalescence(Superdrop &sd1,
-                                     Superdrop &sd2,
-                                     const unsigned long long gamma) const;
+  KOKKOS_INLINE_FUNCTION void
+  different_superdroplet_coalescence(const unsigned long long gamma,
+                                     Superdrop &drop1,
+                                     Superdrop &drop2) const;
   /* if eps1 > gamma*eps2 coalescence grows sd2 radius and mass
   via decreasing multiplicity of sd1. According to
   Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
 
 public:
-  KOKKOS_FUNCTION
+  KOKKOS_INLINE_FUNCTION
   void operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const;
   /* this operator is used as an "adaptor" for using
@@ -93,6 +93,97 @@ probability of collision-coalescence determined by 'collcoalprob' */
                                                        collcoalprob,
                                                        coal);
   return ConstTstepMicrophysics(interval, colls);
+}
+
+/* -----  ----- TODO: move functions below to .cpp file ----- ----- */
+
+KOKKOS_INLINE_FUNCTION void
+DoCoalescence::operator()(Superdrop &drop1, Superdrop &drop2,
+                          const double prob, const double phi) const
+/* this operator is used as an "adaptor" for using
+DoCoalescence as a function in DoCollisions that
+satistfies the PairEnactX concept */
+{
+  /* 1. calculate gamma factor for collision-coalescence  */
+  const unsigned long long xi1(drop1.get_xi());
+  const unsigned long long xi2(drop2.get_xi());
+  const unsigned long long gamma(coalescence_gamma(xi1, xi2,
+                                                   prob, phi));
+
+  /* 2. enact collision-coalescence on pair
+of superdroplets if gamma is not zero */
+  if (gamma != 0)
+  {
+    coalesce_superdroplet_pair(gamma, drop1, drop2);
+  }
+}
+
+KOKKOS_INLINE_FUNCTION unsigned long long
+DoCoalescence::coalescence_gamma(const unsigned long long xi1,
+                                 const unsigned long long xi2,
+                                 const double prob,
+                                 const double phi) const
+/* calculates value of gamma factor in Monte Carlo
+collision-coalescence as in Shima et al. 2009 */
+{
+  unsigned long long gamma = floor(prob); // if phi >= (prob - floor(prob))
+  if (phi < (prob - gamma))
+  {
+    ++gamma;
+  }
+
+  const unsigned long long maxgamma(xi1 / xi2); // same as floor() for positive ints
+
+  return Kokkos::fmin(gamma, maxgamma);
+}
+
+KOKKOS_INLINE_FUNCTION void
+DoCoalescence::coalesce_superdroplet_pair(const unsigned long long gamma,
+                                          Superdrop &drop1,
+                                          Superdrop &drop2) const
+/* coalesce pair of superdroplets by changing multiplicity,
+radius and solute mass of each superdroplet in pair
+according to Shima et al. 2009 Section 5.1.3. part (5) */
+{
+  const unsigned long long xi1(drop1.get_xi());
+  const unsigned long long xi2(drop2.get_xi());
+
+  if (xi1 - gamma * xi2 > 0)
+  {
+    different_superdroplet_coalescence(gamma, drop1, drop2);
+  }
+
+  else if (xi1 - gamma * xi2 == 0)
+  {
+    twin_superdroplet_coalescence(gamma, drop1, drop2);
+  }
+
+  else
+  {
+    assert((xi1 >= gamma * xi2) && "something undefined occured "
+                                   "during colllision-coalescence");
+  }
+}
+
+KOKKOS_INLINE_FUNCTION void
+DoCoalescence::twin_superdroplet_coalescence(const unsigned long long gamma,
+                                             Superdrop &drop1,
+                                             Superdrop &drop2) const
+/* if eps1 = gamma*eps2 coalescence makes twin SDs
+with same eps, r and solute mass. According to Shima et al. 2009
+Section 5.1.3. part (5) option (b)  */
+{
+  //TODO
+}
+KOKKOS_INLINE_FUNCTION void
+DoCoalescence::different_superdroplet_coalescence(const unsigned long long gamma,
+                                                  Superdrop &drop1,
+                                                  Superdrop &drop2) const
+/* if eps1 > gamma*eps2 coalescence grows sd2 radius and mass
+via decreasing multiplicity of sd1. According to
+Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
+{
+  // TODO
 }
 
 #endif // COLLISIONCOALESCENCE_HPP
