@@ -84,13 +84,27 @@ viewd_supers shuffle_supers(const viewd_supers supers, URBG<DeviceType> urbg)
 
   namespace KE = Kokkos::Experimental;
   
-  // RandomIt last(supers.end());
-  // RandomIt first(supers.begin());
   auto first = KE::begin(supers);
-  auto last = KE::end(supers) - 1;
+  auto last = KE::end(supers);
+  const auto diff = KE::distance(first, last - 1);
+  for (auto i(diff); i > 0; --i)
+  {
+    std::cout << *(first + i) << ", " << *first << "\n";
+    // KE::iter_swap(first + i, first);
+  }
 
-  KE::iter_swap(first, last);
+  std::vector<int> i_supers = {0, 11, 22, 33, 44, 55, 66, 77, 88, 99};
+  RandomIt i_last(i_supers.end());
+  RandomIt i_first(i_supers.begin());
+  diff_t i_diff = i_last - i_first - 1;
 
+  std::cout << " \n --- --- ---\n ";
+  for (auto i(i_diff); i > 0; --i)
+  {
+    std::cout << *(i_first + i) << ", " << i_first[i] << "\n";
+  }
+  std::cout << " \n --- --- ---\n ";
+  
   // distr_t D;
   // for (diff_t i = last - first - 1; i > 0; --i)
   // {
