@@ -89,9 +89,20 @@ private:
   subviewd_supers do_collisions(subviewd_supers supers,
                                 const State &state,
                                 URBG<DeviceType> urbg) const
+  /* Superdroplet collision method adapted from collision-coalescence
+  in Shima et al. 2009. This function shuffles supers to get random
+  pairs of superdroplets (SDs) and then calls the collision function
+  for each pair (assuming these SDs are colliding some 'VOLUME' [m^3]) */
   {
     const double VOLUME(state.get_volume() * dlc::VOL0);    // volume in which collisions occur [m^3]
+    const size_t nsupers(supers.extent(0));
+    const size_t nhalf(nsupers / 2); // same as floor() for positive nsupers
+    const double scale_p(nsupers * (nsupers - 1.0) / (2.0 * nhalf));
 
+    /* Randomly shuffle order of superdroplet objects
+    in order to generate random pairs */
+    std::shuffle(span4SDsinGBx.begin(), span4SDsinGBx.end(), urbg);
+    
     // collide_superdroplets(span4SDsinGBx, urbg, VOLUME);
 
     // return remove_outofdomain_superdrops(span4SDsinGBx);

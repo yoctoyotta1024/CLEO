@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,37 +22,108 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <random>
+#include <limits>
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_UnorderedMap.hpp>
+#include <Kokkos_Random.hpp>
 
-void set_model_maps()
+
+namespace LIMITVALUES
+/* max/min values e.g. for using vlaues of c++ standard numeric limits on GPUs */
 {
-  std::cout << "wind maps\n";
+  constexpr unsigned int uintmax = std::numeric_limits<unsigned int>::max();
+ 
+  constexpr unsigned int uint32tmin = std::numeric_limits<uint32_t>::min();
+  constexpr unsigned int uint32tmax = std::numeric_limits<uint32_t>::max();
+
+  constexpr double llim = -1.0 * std::numeric_limits<double>::max();
+  constexpr double ulim = std::numeric_limits<double>::max();
+}
+
+template <class DeviceType>
+struct URBG
+/* struct wrapping Kokkos random number generator to
+satisfy requirements of C++11 UniformRandomBitGenerator
+bject for a 32 bit unsigned int. Useful e.g. so that
+gen's urand() function can be used in std::shuffle
+to generate random pairs of superdroplets
+during collision process */
+{
+  using result_type = uint32_t;
+  Kokkos::Random_XorShift64<DeviceType> gen;
+  
+  static constexpr result_type min()
+  {
+    return LIMITVALUES::uint32tmin;
+  }
+  static constexpr result_type max()
+  /* is equivalent to return
+  Kokkos::Random_XorShift64<DeviceType>::MAX_URAND; */
+  {
+    return LIMITVALUES::uint32tmax;
+  }
+
+  result_type operator()()
+  {
+    return gen.urand();
+  }
+};
+
+template <class DeviceType>
+void shuffle_supers(std::vector<int> &supers, URBG<DeviceType> urbg)
+{
+  std::cout << "\nshuffling\n";
+
+  using RandomIt = std::vector<int>::iterator;
+  typedef typename std::iterator_traits<RandomIt>::difference_type diff_t;
+  typedef std::uniform_int_distribution<diff_t> distr_t;
+  typedef typename distr_t::param_type param_t;
+ 
+  RandomIt last(supers.end());
+  RandomIt first(supers.begin());
+
+  distr_t D;
+  for (diff_t i = last - first - 1; i > 0; --i)
+  {
+      std::swap(first[i], first[D(urbg, param_t(0, i))]);
+  }
+
 }
 
 int main(int argc, char *argv[])
 {
-  const unsigned int nspacedims(1);
+  using ExecSpace = Kokkos::DefaultExecutionSpace;
+  using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
 
-  switch (nspacedims)
+  std::vector<int> supers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  size_t nsupers(supers.size());
+  Kokkos::initialize(argc, argv);
   {
-  case 0:
-    std::cout << "0-D model has no wind data\n";
-    break;
+    GenRandomPool genpool(std::random_device{}());
+    {
+      URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
 
-  case 1:
-  case 2:
-  case 3: // 1-D, 2-D or 3-D model
-  {
-    const std::string windstr("1D, 2D or 3D\n");
-    std::cout << windstr;
-  }
-  break;
+      std::cout << " \n --- b4 ---\n ";
+      for (size_t kk(0); kk < nsupers; ++kk)
+      {
+        std::cout << supers[kk] << ", ";
+      }
+      std::cout << " \n --- --- ---\n ";
 
-  default:
-    throw std::invalid_argument("nspacedims for wind data is invalid");
+      shuffle_supers(supers, urbg);
+
+      std::cout << " \n --- l8r ---\n ";
+      for (size_t kk(0); kk < nsupers; ++kk)
+      {
+        std::cout << supers[kk] << ", ";
+      }
+      std::cout << " \n --- --- ---\n ";
+
+      genpool.free_state(urbg.gen);
+    }
   }
+  Kokkos::finalize();
 }
 
 // int main(int argc, char *argv[])
