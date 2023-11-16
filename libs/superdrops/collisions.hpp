@@ -78,7 +78,7 @@ private:
   prob_jk may return the probability of collision-coalescence
   according to a particular coalescence kernel, or collision-breakup */
 
-  const EnactCollision collision;
+  const EnactCollision enact_collision;
   /* object (has operator that) enacts a collision-X event on two
   superdroplets. For example it may enact collision-coalescence by
   of a pair of superdroplets by changing the multiplicity,
@@ -111,7 +111,7 @@ private:
                                 urbg, scale_p, VOLUME);
     }
 
-    // return remove_outofdomain_superdrops(span4SDsinGBx);
+    // return remove_outofdomain_superdrops(span4SDsinGBx); // TODO
 
     return supers;
   }
@@ -140,7 +140,7 @@ private:
     /* 3. Monte Carlo Step: use random number to
     enact (or not) collision of superdroplets pair */
     const double phi(urbg.drand(0.0, 1.0)); // random number in range [0.0, 1.0]
-    enact_collisionx(drops.first, drops.second, prob, phi);
+    enact_collision(drops.first, drops.second, prob, phi);
   }
 
   KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop &, Superdrop &>
@@ -178,7 +178,7 @@ private:
 
 public:
   DoCollisions(const double DELT, Probability p, EnactCollision x)
-      : DELT(DELT), probability(p), collision(x) {}
+      : DELT(DELT), probability(p), enact_collision(x) {}
 
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
@@ -191,9 +191,7 @@ public:
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    do_collisions(supers, state, urbg);
-
-    return supers;
+    return do_collisions(supers, state, urbg);
   }
 };
 
