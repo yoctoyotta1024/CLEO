@@ -58,7 +58,7 @@ the superdrops)*/
 {
   {
     x(drop, drop, d, d)
-  } -> std::same_as<void>;
+  } -> std::convertible_to<bool>;
 };
 
 template <PairProbability Probability,
@@ -120,7 +120,7 @@ private:
   }
 
   template <class DeviceType>
-  KOKKOS_INLINE_FUNCTION void
+  KOKKOS_INLINE_FUNCTION bool
   collide_superdroplet_pair(Superdrop &dropA,
                             Superdrop &dropB,
                             URBG<DeviceType> &urbg,
@@ -143,7 +143,7 @@ private:
     /* 3. Monte Carlo Step: use random number to
     enact (or not) collision of superdroplets pair */
     const double phi(urbg.drand(0.0, 1.0)); // random number in range [0.0, 1.0]
-    enact_collision(drops.first, drops.second, prob, phi);
+    return enact_collision(drops.first, drops.second, prob, phi);
   }
 
   template <class DeviceType>
@@ -164,15 +164,20 @@ private:
     /* Randomly shuffle order of superdroplet objects
     in order to generate random pairs */
     shuffle_supers(supers, urbg);
-    
+
     /* collide all randomly generated pairs of SDs */
+    size_t nnull(0); // number of null superdrops
     for (size_t i = 1; i < nsupers; i += 2)
     {
-      collide_superdroplet_pair(supers(i - 1), supers(i),
-                                urbg, scale_p, VOLUME);
+      const bool isnull(
+          collide_superdroplet_pair(supers(i - 1), supers(i),
+                                    urbg, scale_p, VOLUME));
+      nnull += (size_t)isnull;
     }
 
-    return remove_null_supers(supers);
+    // return remove_null_supers(supers, nnull);
+    assert((nnull == 0) && "no null superdrops should exist");
+    return supers; 
   }
 
 public:

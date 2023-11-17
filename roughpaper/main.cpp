@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Friday 17th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,11 +29,16 @@
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 #include <Kokkos_Random.hpp>
+#include <Kokkos_NestedSort.hpp>
+
 
 struct Superdrop
 {
   size_t xi;
 };
+
+using viewd_supers = Kokkos::View<Superdrop *>;
+using ExecSpace = Kokkos::DefaultExecutionSpace;
 
 KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop &, Superdrop &>
 assign_drops(Superdrop &dropA, Superdrop &dropB)
@@ -84,10 +89,72 @@ superdroplets during collision process */
   }
 };
 
+KOKKOS_INLINE_FUNCTION
+void device_swap(Superdrop& a, Superdrop& b)
+/* swaps the values of the superdroplets a and b 
+like C++98 std::swap except function works
+on device as well as host. Note: Involves a copy
+construction and two assignment operations
+=> not efficient way of swapping the contents if 
+Superdrop class stores large quantities of data */
+{
+  Superdrop c(a);
+  a=b;
+  b=c;
+}
+
+template <class DeviceType>
+KOKKOS_INLINE_FUNCTION
+viewd_supers shuffle_supers(const viewd_supers supers,
+                            URBG<DeviceType> urbg)
+{
+  namespace KE = Kokkos::Experimental;
+
+  const auto first = KE::begin(supers);
+  const auto dist = KE::distance(first, KE::end(supers) - 1); // distance to last element from first
+
+  for (auto iter(dist); iter > 0; --iter)
+  {
+    const auto randiter = urbg(0, iter); // random uint64_t equidistributed between [0, i]
+    device_swap(*(first + iter), *(first + randiter));
+  }
+
+  return supers;
+}
+
+KOKKOS_INLINE_FUNCTION Kokkos::Subview<viewd_supers,
+                                       Kokkos::pair<size_t, size_t>>
+remove_null_supers(viewd_supers supers, const size_t nnull)
+/* sort view of superdroplets by their sdgbxindexes
+from lowest to highest sdgbxindex. Then set new subview
+excluding supers with sdgbxindex = LIMITVALUES::uintmax */
+{
+  using TeamPol = Kokkos::TeamPolicy<ExecSpace>;
+
+  struct SortComparator
+  /* a precedes b if its sdgbxindex is smaller */
+  {
+    KOKKOS_INLINE_FUNCTION
+    bool operator()(const Superdrop &a, const Superdrop &b) const
+    {
+      return (a.xi) < (b.xi);
+    }
+  };
+
+  Kokkos::parallel_for(
+      "sortingsupers_thread", TeamPol(1, Kokkos::AUTO()),
+      KOKKOS_LAMBDA(const TeamPol::member_type &t) {
+        Kokkos::Experimental::sort_team(t, supers, SortComparator{});
+      });
+
+  const size_t nsupers(supers.extent(0) - nnull); // remove null supers from no. supers
+  const Kokkos::pair<size_t, size_t> refs({0, nsupers});
+  auto new_supers = Kokkos::subview(supers, refs);
+  return new_supers;
+}
+
 int main(int argc, char *argv[])
 {
-  using viewd_supers = Kokkos::View<Superdrop *>;
-  using ExecSpace = Kokkos::DefaultExecutionSpace;
   using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
  
   size_t nsupers(10);
@@ -112,24 +179,26 @@ int main(int argc, char *argv[])
       }
       std::cout << " \n --- --- ---\n ";
 
+      URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
+      shuffle_supers(supers, urbg);
+
       std::cout << " \n --- l8r ---\n ";
-      for (size_t kk(1); kk < nsupers; kk+=2)
+      for (size_t kk(0); kk < nsupers; ++kk)
       {
-        auto dropA = supers(kk-1);
-        auto dropB = supers(kk);
-
-        auto drops = assign_drops(dropA, dropB);
-
-        std::cout << "A,B: " << dropA.xi << ", " << dropB.xi << "\n";
-        std::cout << "1,2: " << (drops.first).xi << ", " << (drops.second).xi << "\n";
-        
-        drops.first.xi = 10000;
-        drops.second.xi = 0;
-        std::cout << "A,B: " << dropA.xi << ", " << dropB.xi << "\n";
+        std::cout << supers(kk).xi << ", ";
       }
       std::cout << " \n --- --- ---\n ";
 
-      URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
+      supers = remove_null_supers(supers, 0);
+
+      size_t new_nsupers(supers.extent(0));
+      std::cout
+          << " \n --- end ---\n ";
+      for (size_t kk(0); kk < new_nsupers; ++kk)
+      {
+        std::cout << supers(kk).xi << ", ";
+      }
+      std::cout << " \n --- --- ---\n ";
 
       const double phi(urbg.drand(0.0, 1.0));
       std::cout << "\n phi: " << phi << "\n";
