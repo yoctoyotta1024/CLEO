@@ -32,8 +32,8 @@
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 
-#include "coupldyn_null/nulldyn.hpp"
-#include "coupldyn_null/nullcomms.hpp"
+#include "coupldyn_null/nulldynamics.hpp"
+#include "coupldyn_null/nulldyncomms.hpp"
 
 #include "gridboxes/gridboxmaps.hpp"
 
@@ -62,16 +62,6 @@
 #include "zarr/superdropattrsbuffers.hpp"
 #include "zarr/superdropsbuffers.hpp"
 
-inline CoupledDynamics auto
-create_coupldyn(const Config &config,
-                const CartesianMaps &gbxmaps,
-                const unsigned int couplstep,
-                const unsigned int t_end)
-
-{
-  return NullDynamics{};
-}
-
 inline InitialConditions auto
 create_initconds(const Config &config)
 {
@@ -91,54 +81,19 @@ create_gbxmaps(const Config &config)
 }
 
 inline MicrophysicalProcess auto
-config_condensation(const Config &config, const Timesteps &tsteps)
-{
-  return Condensation(tsteps.get_condstep(),
-                      config.doAlterThermo,
-                      config.cond_iters,
-                      &step2dimlesstime,
-                      config.cond_rtol,
-                      config.cond_atol,
-                      config.cond_SUBTSTEP,
-                      &realtime2dimless);
-}
-
-inline MicrophysicalProcess auto
-config_collisions(const Config &config, const Timesteps &tsteps)
+create_microphysics(const Config &config, const Timesteps &tsteps)
 {
   const PairProbability auto prob = GolovinProb();
   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
-                                                   prob);
-  return colls;
-}
-
-inline MicrophysicalProcess auto
-create_microphysics(const Config &config, const Timesteps &tsteps)
-{
-  // const MicrophysicalProcess auto cond = config_condensation(config,
-  //                                                            tsteps);
-
-  const MicrophysicalProcess auto colls = config_collisions(config,
-                                                            tsteps);
-                                                            
-  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
-
-  // return cond >> colls;
+                                                   prob);                                                    
   return colls;
 }
 
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  const auto terminalv = NullTerminalVelocity{};
-  // const auto terminalv = RogersYauTerminalVelocity{};
-  // const auto terminalv = SimmelTerminalVelocity{};
-
-  return CartesianMotion(motionstep,
-                         &step2dimlesstime,
-                         terminalv);
-  // return NullMotion{};                                                                               
+  return NullMotion{};                                                                               
 }
 
 inline Observer auto
@@ -149,11 +104,7 @@ create_supersattrs_observer(const unsigned int interval,
   SuperdropsBuffers auto buffers = SdIdBuffer() >>
                                    XiBuffer() >>
                                    MsolBuffer() >>
-                                   RadiusBuffer() >>
-                                   Coord3Buffer() >>
-                                   Coord1Buffer() >>
-                                   Coord2Buffer() >>
-                                   SdgbxindexBuffer();
+                                   RadiusBuffer();
   return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }
 
@@ -170,30 +121,10 @@ create_observer(const Config &config,
   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
                                           &step2dimlesstime);
 
-  const Observer auto obs3 = GbxindexObserver(store, maxchunk);
-
-  const Observer auto obs4 = NsupersObserver(obsstep, store, maxchunk,
-                                             config.ngbxs);
-
-  const Observer auto obs5 = NrainsupersObserver(obsstep, store, maxchunk,
-                                                 config.ngbxs);
-
-  const Observer auto obs6 = TotNsupersObserver(obsstep, store, maxchunk);
-
-  const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk,
-                                                 config.ngbxs);
-
-  const Observer auto obs8 = RainMassMomentsObserver(obsstep, store, maxchunk,
-                                                     config.ngbxs);
-
-  const Observer auto obs9 = StateObserver(obsstep, store, maxchunk,
-                                           config.ngbxs);
-
-  const Observer auto obs10 = create_supersattrs_observer(obsstep, store,
+  const Observer auto obs3 = create_supersattrs_observer(obsstep, store,
                                                           maxchunk);
 
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
-         obs6 >> obs7 >> obs8 >> obs9 >> obs10;
+  return obs1 >> obs2 >> obs3;
 }
 
 inline auto create_sdm(const Config &config,
@@ -227,6 +158,10 @@ int main(int argc, char *argv[])
   /* Create zarr store for writing output to storage */
   FSStore fsstore(config.zarrbasedir);
 
+  /* create coupldyn solver and coupling between coupldyn and SDM */
+  const CoupledDynamics auto coupldyn(NullDynamics{});
+  const CouplingComms<NullDynamics> auto comms = NullDynComms{};
+
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
 
@@ -235,15 +170,6 @@ int main(int argc, char *argv[])
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
-
-    /* Solver of dynamics coupled to CLEO SDM */
-    CoupledDynamics auto coupldyn(
-        create_coupldyn(config, sdm.gbxmaps,
-                        tsteps.get_couplstep(),
-                        tsteps.get_t_end()));
-
-    /* coupling between coupldyn and SDM */
-    const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);

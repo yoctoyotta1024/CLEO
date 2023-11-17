@@ -167,11 +167,9 @@ int main(int argc, char *argv[])
   /* Create zarr store for writing output to storage */
   FSStore fsstore(config.zarrbasedir);
 
-  /* Solver of dynamics coupled to CLEO SDM */
+  /* create coupldyn solver and coupling between coupldyn and SDM */
   CoupledDynamics auto coupldyn(
       create_coupldyn(config, tsteps.get_couplstep()));
-
-  /* coupling between coupldyn and SDM */
   const CouplingComms<CvodeDynamics> auto comms = CvodeComms{};
 
   /* Initial conditions for CLEO run */

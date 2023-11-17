@@ -30,13 +30,13 @@
 struct NullDynamics
 {
   KOKKOS_INLINE_FUNCTION
+  void prepare_to_timestep() const {}
+
+  KOKKOS_INLINE_FUNCTION
   auto get_couplstep() const
   {
     return LIMITVALUES::uintmax;
   }
-
-  KOKKOS_INLINE_FUNCTION
-  void prepare_to_timestep() const {}
 
   KOKKOS_INLINE_FUNCTION
   bool on_step(const unsigned int t_mdl) const { return false; }
