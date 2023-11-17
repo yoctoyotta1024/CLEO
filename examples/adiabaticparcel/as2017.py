@@ -1,6 +1,6 @@
 '''
 ----- CLEO -----
-File: adiabaticparcel.py
+File: as2017.py
 Project: adiabaticparcel
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
@@ -37,7 +37,7 @@ configfile = sys.argv[3]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
-from plotssrc import individSDs, figAS2017
+from plotssrc import individSDs, as2017fig
 from pySD.output_src import sdtracing
 from pySD.output_src import *
 from pySD.initsuperdropsbinary_src import *
@@ -51,12 +51,12 @@ from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-initSDsfile = sharepath+"adia0D_dimlessSDsinit.dat"
-gridfile = sharepath+"adia0D_dimlessGBxboundaries.dat"
+initSDsfile = sharepath+"cuspbifurc_dimlessSDsinit.dat"
+gridfile = sharepath+"cuspbifurc_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
-setupfile = binpath+"adia0Dsetup.txt"
-dataset = binpath+"adia0Dsol.zarr"
+setupfile = binpath+"cuspbifurc_setup.txt"
+dataset = binpath+"cuspbifurc_sol.zarr"
 
 # booleans for [making, showing] initialisation figures
 isfigures = [True, True]
@@ -92,35 +92,35 @@ def displacement(time, w_avg, thalf):
     z = zmax * (1 - np.cos(np.pi * time / thalf))
     return z
 
-# ### 1. create files for gridbox boundaries and initial SD conditions
-# Path(binpath).mkdir(parents=True, exist_ok=True)
-# os.system("rm "+gridfile)
-# os.system("rm "+initSDsfile)
-# cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
-#                                      ygrid, constsfile)
-# rgrid.print_domain_info(constsfile, gridfile)
+### 1. create files for gridbox boundaries and initial SD conditions
+Path(binpath).mkdir(parents=True, exist_ok=True)
+os.system("rm "+gridfile)
+os.system("rm "+initSDsfile)
+cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
+                                     ygrid, constsfile)
+rgrid.print_domain_info(constsfile, gridfile)
 
-# initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
-#                                                coord3gen, coord1gen, coord2gen)
-# create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
-#                                                   configfile, constsfile,
-#                                                   gridfile, nsupers, numconc)
-# read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
+initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
+                                               coord3gen, coord1gen, coord2gen)
+create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
+                                                  configfile, constsfile,
+                                                  gridfile, nsupers, numconc)
+read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
 
-# if isfigures[0]:
-#     rgrid.plot_gridboxboundaries(constsfile, gridfile,
-#                                  binpath, isfigures[1])
-#     read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
-#                                               gridfile, binpath, isfigures[1], "all")
-# plt.close()
+if isfigures[0]:
+    rgrid.plot_gridboxboundaries(constsfile, gridfile,
+                                 binpath, isfigures[1])
+    read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+                                              gridfile, binpath, isfigures[1], "all")
+plt.close()
 
-# # 2. compile and run model
-# os.chdir(path2build)
-# os.system('pwd')
-# os.system('rm -rf '+dataset)
-# os.system("make clean && make -j 64 adia0D")
-# executable = path2build+"/examples/adiabaticparcel/src/adia0D"
-# os.system(executable + " " + configfile)
+# 2. compile and run model
+os.chdir(path2build)
+os.system('pwd')
+os.system('rm -rf '+dataset)
+os.system("make clean && make -j 64 adia0D")
+executable = path2build+"/examples/adiabaticparcel/src/adia0D"
+os.system(executable + " " + configfile)
 
 
 # 3. load and plot results
@@ -144,15 +144,15 @@ sample = [0, int(config["totnsupers"])]
 radii = sdtracing.attribute_for_superdroplets_sample(sddata, "radius",
                                                      minid=sample[0],
                                                      maxid=sample[1])
-savename = binpath + "/adia0D_SDgrowth.png"
+savename = binpath + "/cuspbifurc_SDgrowth.png"
 individSDs.individ_radiusgrowths_figure(time, radii, savename=savename)
 
 attrs = ["radius", "xi", "msol"]
 sd0 = sdtracing.attributes_for1superdroplet(sddata, 0, attrs)
 numconc = np.sum(sddata["xi"][0])/gbxs["domainvol"]/1e6  # [/cm^3]
 
-savename2 = binpath+"/adia0D_validation.png"
-figAS2017.arabas_shima_2017_fig(time, zprof, sd0["radius"], sd0["msol"],
+savename2 = binpath+"/cuspbifurc_validation.png"
+as2017fig.arabas_shima_2017_fig(time, zprof, sd0["radius"], sd0["msol"],
                                 thermo.temp[:, 0, 0, 0],
                                 supersat[:, 0, 0, 0], 
                                 sddata.IONIC, sddata.MR_SOL,

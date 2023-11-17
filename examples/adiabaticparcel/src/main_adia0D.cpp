@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Friday 17th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -122,7 +122,7 @@ create_observer(const Config &config,
   const unsigned int obsstep(tsteps.get_obsstep());
   const int maxchunk(config.maxchunk);
 
-  const Observer auto obs1 = PrintObserver(obsstep, &step2realtime);
+  const Observer auto obs1 = PrintObserver(obsstep*100, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
                                           &step2dimlesstime); 

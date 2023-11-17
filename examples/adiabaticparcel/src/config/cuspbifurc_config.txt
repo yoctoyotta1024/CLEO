@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: config.txt
+ * File: cuspbifurc_config.txt
  * Project: config
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -27,12 +27,12 @@
 
 ### Initialisation parameters ###
 constants_filename = ../libs/cleoconstants.hpp                  # name of file for values of physical constants
-initsupers_filename = ./share/adia0D_dimlessSDsinit.dat       # binary filename for initialisation of SDs
-grid_filename = ./share/adia0D_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
+initsupers_filename = ./share/cuspbifurc_dimlessSDsinit.dat       # binary filename for initialisation of SDs
+grid_filename = ./share/cuspbifurc_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 ### Output Data parameters ###
-setuptxt = ./bin/adia0Dsetup.txt                # .txt filename to copy configuration to
-zarrbasedir = ./bin/adia0Dsol.zarr              # zarr store base directory
+setuptxt = ./bin/cuspbifurc_setup.txt                # .txt filename to copy configuration to
+zarrbasedir = ./bin/cuspbifurc_sol.zarr              # zarr store base directory
 maxchunk = 1250000                              # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime parameters ###
@@ -45,7 +45,7 @@ totnsupers = 1                             # (initial) total no. of SDs
 CONDTSTEP = 0.01                           # time between SD condensation events [s]
 COLLTSTEP = 0.01                           # time between SD collision events [s]
 MOTIONTSTEP = 0.05                         # time between SDM motion [s]
-COUPLTSTEP = 0.5                           # time between dynamic couplings [s]
+COUPLTSTEP = 0.1                           # time between dynamic couplings [s]
 OBSTSTEP = 5                               # time between SDM observations [s]
 T_END = 150000                             # time span of integration from 0s to T_END [s]
 
@@ -53,7 +53,7 @@ T_END = 150000                             # time span of integration from 0s to
 cond_iters = 10                            # no. iterations of Newton Raphson Method before testing for convergence
 cond_SUBTSTEP = 0.1                        # smallest timestep in cases where substepping occurs [s]
 cond_rtol = 0.0                            # relative tolerance for implicit euler integration
-cond_atol = 1e-6                           # abolute tolerance for implicit euler integration
+cond_atol = 1e-3                           # abolute tolerance for implicit euler integration
 nfrags = -1                                # expected number of fragments in breakup event, (use -1 for nan value)
 
 # superdroplets #
