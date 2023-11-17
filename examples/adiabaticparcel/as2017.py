@@ -122,24 +122,24 @@ def displacement(time, w_avg, thalf):
     z = zmax * (1 - np.cos(np.pi * time / thalf))
     return z
 
-# # ### 1. compile model
-# os.chdir(path2build)
-# os.system("pwd")
-# for run_num in range(len(monors)*len(paramslist)):
-#     dataset = binpath+"as2017_sol"+str(run_num)+".zarr"
-#     os.system("rm -rf "+dataset)
-# os.system("make clean && make -j 64 adia0D")
+# ### 1. compile model
+os.chdir(path2build)
+os.system("pwd")
+for run_num in range(len(monors)*len(paramslist)):
+    dataset = binpath+"as2017_sol"+str(run_num)+".zarr"
+    os.system("rm -rf "+dataset)
+os.system("make clean && make -j 64 adia0D")
 
-# # 2a. create file with gridbox boundaries
-# Path(binpath).mkdir(parents=True, exist_ok=True)
-# os.system("rm "+gridfile)
-# cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
-#                                      ygrid, constsfile)
-# rgrid.print_domain_info(constsfile, gridfile)
-# if isfigures[0]:
-#     rgrid.plot_gridboxboundaries(constsfile, gridfile,
-#                                  binpath, isfigures[1])
-# plt.close()
+# 2a. create file with gridbox boundaries
+Path(binpath).mkdir(parents=True, exist_ok=True)
+os.system("rm "+gridfile)
+cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
+                                     ygrid, constsfile)
+rgrid.print_domain_info(constsfile, gridfile)
+if isfigures[0]:
+    rgrid.plot_gridboxboundaries(constsfile, gridfile,
+                                 binpath, isfigures[1])
+plt.close()
 
 runnum = 0
 for i in range(len(monors)):
