@@ -43,9 +43,9 @@ totnsupers = 1                             # (initial) total no. of SDs
 
 # timestepping #
 CONDTSTEP = 0.01                           # time between SD condensation events [s]
-COLLTSTEP = 0.01                           # time between SD collision events [s]
-MOTIONTSTEP = 0.05                         # time between SDM motion [s]
-COUPLTSTEP = 0.1                           # time between dynamic couplings [s]
+COLLTSTEP = 0.1                            # time between SD collision events [s]
+MOTIONTSTEP = 0.5                          # time between SDM motion [s]
+COUPLTSTEP = 0.5                           # time between dynamic couplings [s]
 OBSTSTEP = 5                               # time between SDM observations [s]
 T_END = 150000                             # time span of integration from 0s to T_END [s]
 
@@ -53,11 +53,10 @@ T_END = 150000                             # time span of integration from 0s to
 cond_iters = 10                            # no. iterations of Newton Raphson Method before testing for convergence
 cond_SUBTSTEP = 0.1                        # smallest timestep in cases where substepping occurs [s]
 cond_rtol = 0.0                            # relative tolerance for implicit euler integration
-cond_atol = 1e-3                           # abolute tolerance for implicit euler integration
+cond_atol = 0.01                           # abolute tolerance for implicit euler integration
 nfrags = -1                                # expected number of fragments in breakup event, (use -1 for nan value)
 
 # superdroplets #
-wetradiiinit = false                       # set initial SD radii to equilibrium wet radius
 doAlterThermo = true                       # enable condensation to alter the thermodynamic state
 
 ### Coupled Dynamics Solver Parameters ###

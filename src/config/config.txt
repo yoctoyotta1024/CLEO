@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Friday 17th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -57,7 +57,6 @@ cond_atol = 0.01                          # abolute tolerance for implicit euler
 nfrags = -1                               # expected number of fragments in breakup event, (use -1 for nan value)
 
 # superdroplets #
-wetradiiinit = false                    # set initial SD radii to equilibrium wet radius
 doAlterThermo = false                   # enable condensation to alter the thermodynamic state
 
 ### Coupled Dynamics Solver Parameters ###

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Friday 17th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -107,7 +107,6 @@ public:
   double nfrags;           // expected number of fragments in breakup event, (use -1 for nan value)
 
   /* superdroplets */
-  bool wetradiiinit;  // set initial SD radii to equilibrium wet radius
   bool doAlterThermo; // enable condensation to alter the thermodynamic state
 
   /*** Coupled Dynamics Solver Parameters ***/

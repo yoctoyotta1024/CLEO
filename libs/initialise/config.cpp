@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Friday 17th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -210,11 +210,6 @@ void Config::configvariable(const std::string name, const std::string value)
   }
 
   /* superdroplets */
-  else if (name == "wetradiiinit")
-  {
-    wetradiiinit = string2bool(value);
-    issuccess = true;
-  }
   else if (name == "doAlterThermo")
   {
     doAlterThermo = string2bool(value);

@@ -57,7 +57,6 @@ cond_atol = 1e-3                           # abolute tolerance for implicit eule
 nfrags = -1                                # expected number of fragments in breakup event, (use -1 for nan value)
 
 # superdroplets #
-wetradiiinit = false                       # set initial SD radii to equilibrium wet radius
 doAlterThermo = true                       # enable condensation to alter the thermodynamic state
 
 ### Coupled Dynamics Solver Parameters ###
