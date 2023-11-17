@@ -38,7 +38,7 @@ endif()
 # executable for CVODE-CLEO coupled model 0D condensation setup 
 set(gol0D "gol0D")
 add_executable(${gol0D} EXCLUDE_FROM_ALL "main_gol0D.cpp")
-target_link_libraries(${gol0D} PRIVATE coupldyn_cvode cartesiandomain "${SDMLIBS}")
+target_link_libraries(${gol0D} PRIVATE cartesiandomain "${SDMLIBS}")
 target_link_libraries(${gol0D} PUBLIC Kokkos::kokkos)
 target_include_directories(${gol0D} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 target_compile_options(${gol0D} PRIVATE ${compileops}) 
