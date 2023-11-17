@@ -30,24 +30,30 @@
 #include "./kokkosaliases_sd.hpp"
 #include "./superdrop.hpp"
 
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_INLINE_FUNCTION bool
 is_null_superdrop(const Superdrop &drop)
 /* raise error if multiplicity of
 drop = 0, ie. superdrop is null */
 {
   assert((drop.get_xi() > 0) && "superdrop xi < 1, null drop in coalescence");
+  return 0;
 }
 
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_INLINE_FUNCTION bool
 if_null_superdrop(Superdrop &drop)
 /* if multiplicity of drop = 0, ie. superdrop
-is null, raise error or (uncomment if desired)
-change it's sdgbxindex to be value that indicates
-superdrop is out of domain (ie. no longer exists) */
+is null, so change it's sdgbxindex to be value that
+indicates superdrop is out of domain (ie. no
+longer exists) and return true */
 {
   if (drop.get_xi() < 1) // ie. xi == 0
   {
     drop.set_sdgbxindex(LIMITVALUES::uintmax);
+    return 1;
+  }
+  else
+  {
+    return 0;
   }
 }
 

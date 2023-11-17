@@ -52,7 +52,7 @@ private:
   /* calculates value of gamma factor in Monte Carlo
   collision-coalescence as in Shima et al. 2009 */
 
-  KOKKOS_INLINE_FUNCTION void
+  KOKKOS_INLINE_FUNCTION bool
   coalesce_superdroplet_pair(const unsigned long long gamma,
                              Superdrop &drop1,
                              Superdrop &drop2) const;
@@ -78,7 +78,7 @@ private:
 
 public:
   KOKKOS_INLINE_FUNCTION
-  void operator()(Superdrop &drop1, Superdrop &drop2,
+  bool operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const;
   /* this operator is used as an "adaptor" for using
   DoCoalescence as a function in DoCollisions that
@@ -106,7 +106,7 @@ probability of collision-coalescence determined by 'collcoalprob' */
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_INLINE_FUNCTION bool
 DoCoalescence::operator()(Superdrop &drop1, Superdrop &drop2,
                           const double prob, const double phi) const
 /* this operator is used as an "adaptor" for using
@@ -120,10 +120,14 @@ satistfies the PairEnactX concept */
                                                    prob, phi));
 
   /* 2. enact collision-coalescence on pair
-of superdroplets if gamma is not zero */
+  of superdroplets if gamma is not zero */
   if (gamma != 0)
   {
-    coalesce_superdroplet_pair(gamma, drop1, drop2);
+    return coalesce_superdroplet_pair(gamma, drop1, drop2);
+  }
+  else
+  {
+    return isnull;
   }
 }
 
@@ -146,7 +150,7 @@ collision-coalescence as in Shima et al. 2009 */
   return Kokkos::fmin(gamma, maxgamma);
 }
 
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_INLINE_FUNCTION bool
 DoCoalescence::coalesce_superdroplet_pair(const unsigned long long gamma,
                                           Superdrop &drop1,
                                           Superdrop &drop2) const
@@ -160,11 +164,15 @@ according to Shima et al. 2009 Section 5.1.3. part (5) */
   if (xi1 - gamma * xi2 > 0)
   {
     different_superdroplet_coalescence(gamma, drop1, drop2);
+    return 0;
   }
 
   else if (xi1 - gamma * xi2 == 0)
   {
     twin_superdroplet_coalescence(gamma, drop1, drop2);
+    
+    /* if xi1 = xi2 = 1 before coalesence, then xi1=0 now */
+    return is_null_superdrop(drop1); // return if_null_superdrop(drop1);
   }
 
   else
@@ -174,7 +182,7 @@ according to Shima et al. 2009 Section 5.1.3. part (5) */
   }
 }
 
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_INLINE_FUNCTION bool
 DoCoalescence::twin_superdroplet_coalescence(const unsigned long long gamma,
                                              Superdrop &drop1,
                                              Superdrop &drop2) const
@@ -198,9 +206,6 @@ Section 5.1.3. part (5) option (b)  */
 
   drop1.set_msol(new_m_sol);
   drop2.set_msol(new_m_sol);
-
-  /* if xi1 = xi2 = 1 before coalesence, then xi1=0 now */
-  is_null_superdrop(drop1); // if_null_superdrop(drop1);
 }
 
 KOKKOS_INLINE_FUNCTION void
