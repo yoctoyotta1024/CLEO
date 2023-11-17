@@ -44,14 +44,14 @@ totnsupers = 1                             # (initial) total no. of SDs
 # timestepping #
 CONDTSTEP = 0.01                           # time between SD condensation events [s]
 COLLTSTEP = 0.01                           # time between SD collision events [s]
-MOTIONTSTEP = 0.01                         # time between SDM motion [s]
-COUPLTSTEP = 1                             # time between dynamic couplings [s]
-OBSTSTEP = 2                               # time between SDM observations [s]
-T_END = 300                                # time span of integration from 0s to T_END [s]
+MOTIONTSTEP = 0.05                         # time between SDM motion [s]
+COUPLTSTEP = 0.5                           # time between dynamic couplings [s]
+OBSTSTEP = 5                               # time between SDM observations [s]
+T_END = 150000                             # time span of integration from 0s to T_END [s]
 
 # microphysics #
 cond_iters = 10                            # no. iterations of Newton Raphson Method before testing for convergence
-cond_SUBTSTEP = 0.01                       # smallest timestep in cases where substepping occurs [s]
+cond_SUBTSTEP = 0.1                        # smallest timestep in cases where substepping occurs [s]
 cond_rtol = 0.0                            # relative tolerance for implicit euler integration
 cond_atol = 1e-6                           # abolute tolerance for implicit euler integration
 nfrags = -1                                # expected number of fragments in breakup event, (use -1 for nan value)
@@ -71,7 +71,7 @@ TEMP_INIT = 298.15                         # initial parcel temperature [T]
 relh_init = 98.0                           # initial relative humidity (%) unphyical < 0.0 in this setup to prevent wetradius initialisation
 
 # ODE solver parameters #
-W_AVG = 1.0                                  # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
-T_HALF = 150                               # timescale for w sinusoid, tau = THALF/pi [s]
+W_AVG = 0.002                              # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
+T_HALF = 75000                             # timescale for w sinusoid, tau = THALF/pi [s]
 cvode_rtol = 1e-6                          # relative tolerance for [P, T, qv, qc] ODEs integration
 cvode_atol = 1e-6                          # absolute tolerance for [P, T, qv, qc] ODEs integration

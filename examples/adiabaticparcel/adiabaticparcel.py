@@ -39,6 +39,7 @@ sys.path.append(path2CLEO)
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.initsuperdropsbinary_src import *
+from pySD.output_src import pysetuptxt, pyzarr
 
 ############### INPUTS ##################
 # path and filenames for creating SD initial conditions and for running model
