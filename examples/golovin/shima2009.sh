@@ -44,6 +44,6 @@ mkdir ${path2build}share
 
 ### ------------------- compile & run ------------------ ###
 ### generate input files and run adiabatic parcel example
-${python} cuspbifurc.py ${path2CLEO} ${path2build} ${configfile}
+${python} shima2009.py ${path2CLEO} ${path2build} ${configfile}
 
 ### ---------------------------------------------------- ###

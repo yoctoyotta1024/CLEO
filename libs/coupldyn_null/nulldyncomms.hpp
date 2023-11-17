@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: nullcomms.hpp
+ * File: nulldyncomms.hpp
  * Project: coupldyn_null
  * Created Date: Friday 17th November 2023
  * Author: Clara Bayley (CB)
@@ -33,12 +33,14 @@ struct NullDynComms
 /* empty (no) coupling to/from to CLEO's gridboxes.
 Struct obeys coupling comms concept */
 {
+  template <typename CD = NullDynComms>
   KOKKOS_INLINE_FUNCTION
   void receive_dynamics(const NullDynamics &nulldyn,
                         const viewh_gbx h_gbxs) const {}
   /* receive information from NullDynamics
   solver if null for no coupling to CLEO SDM */
 
+  template <typename CD = NullDynComms>
   KOKKOS_INLINE_FUNCTION
   void send_dynamics(const viewh_constgbx h_gbxs,
                      const NullDynamics &nulldyn) const {}

@@ -29,13 +29,20 @@
 
 struct NullDynamics
 {
+private:
+  const unsigned int interval;
+
+public:
+  NullDynamics(const unsigned int couplstep)
+      : interval(couplstep) {}
+
   KOKKOS_INLINE_FUNCTION
   void prepare_to_timestep() const {}
 
   KOKKOS_INLINE_FUNCTION
   auto get_couplstep() const
   {
-    return LIMITVALUES::uintmax;
+    return interval;
   }
 
   KOKKOS_INLINE_FUNCTION
