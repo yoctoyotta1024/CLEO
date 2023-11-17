@@ -56,7 +56,7 @@ dataset = binpath+"golovin_sol.zarr"
 isfigures = [True, False]
 
 # settings for 0D Model (number of SD and grid coordinates)
-nsupers = {0: 5012}
+nsupers = {0: 2048}
 coord_params = ["false"]
 zgrid = np.asarray([0, 100])
 xgrid = np.asarray([0, 100])
