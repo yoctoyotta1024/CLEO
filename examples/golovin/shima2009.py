@@ -102,8 +102,9 @@ plt.close()
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-os.system("make clean && make -j 64 gol0D")
-executable = path2build+"/examples/golovin/src/gol0D"
+os.system('make -j 64 gol0D')
+# os.system('make clean && make -j 64 gol0D')
+executable = path2build+'/examples/golovin/src/gol0D'
 os.system(executable + ' ' + configfile)
 
 # 3. load and plot results
