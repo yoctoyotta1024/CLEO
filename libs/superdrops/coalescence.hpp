@@ -125,10 +125,8 @@ satistfies the PairEnactX concept */
   {
     return coalesce_superdroplet_pair(gamma, drop1, drop2);
   }
-  else
-  {
-    return isnull;
-  }
+  
+  return 0;
 }
 
 KOKKOS_INLINE_FUNCTION unsigned long long

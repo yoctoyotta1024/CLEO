@@ -143,7 +143,10 @@ private:
     /* 3. Monte Carlo Step: use random number to
     enact (or not) collision of superdroplets pair */
     const double phi(urbg.drand(0.0, 1.0)); // random number in range [0.0, 1.0]
-    return enact_collision(drops.first, drops.second, prob, phi);
+    const bool isnull(enact_collision(drops.first,
+                                      drops.second,
+                                      prob, phi));
+    return isnull;
   }
 
   template <class DeviceType>
