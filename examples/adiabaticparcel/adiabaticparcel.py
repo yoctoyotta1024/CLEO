@@ -45,7 +45,7 @@ from pySD.initsuperdropsbinary_src import *
 constsfile = path2CLEO+"libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-initSDsfile = sharepath+"adai0D_dimlessSDsinit.dat"
+initSDsfile = sharepath+"adia0D_dimlessSDsinit.dat"
 gridfile = sharepath+"adia0D_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
@@ -106,3 +106,11 @@ if isfigures[0]:
     read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
                                               gridfile, binpath, isfigures[1], "all")
 plt.close()
+
+# 2. compile and run model
+os.chdir(path2build)
+os.system('pwd')
+os.system('rm -rf '+dataset)
+os.system("make clean && make -j 64 adia0D")
+executable = path2build+"/examples/adiabaticparcel/src/adia0D"
+os.system(executable + " " + configfile)
