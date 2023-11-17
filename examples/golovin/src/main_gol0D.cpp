@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 
   /* create coupldyn solver and coupling between coupldyn and SDM */
   const CoupledDynamics auto
-      coupldyn(NullDynamics(tsteps.get_couplstep()));
+      coupldyn = NullDynamics(tsteps.get_couplstep());
   const CouplingComms<NullDynamics> auto comms = NullDynComms{};
 
   /* Initial conditions for CLEO run */
