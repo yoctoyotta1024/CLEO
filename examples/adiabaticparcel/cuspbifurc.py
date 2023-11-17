@@ -59,7 +59,7 @@ setupfile = binpath+"cuspbifurc_setup.txt"
 dataset = binpath+"cuspbifurc_sol.zarr"
 
 # booleans for [making, showing] initialisation figures
-isfigures = [True, True]
+isfigures = [True, False]
 
 # settings for 0D Model (number of SD and grid coordinates)
 nsupers = {0: 1}
@@ -114,7 +114,7 @@ if isfigures[0]:
                                               gridfile, binpath, isfigures[1], "all")
 plt.close()
 
-# 2. compile and run model
+# # 2. compile and run model
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
@@ -130,14 +130,10 @@ consts = pysetuptxt.get_consts(setupfile, isprint=True)
 gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
 thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
+supersat = thermo.supersaturation()
 time = pyzarr.get_time(dataset).secs
 sddata = pyzarr.get_supers(dataset, consts)
 zprof = displacement(time, config["W_AVG"], config["T_HALF"])
-
-# relative humidty and supersaturation
-press = thermo.press*100  # convert from hPa to Pa
-relh = thermo.relative_humidity()
-supersat = thermo.supersaturation()
 
 # sample drops to plot from whole range of SD ids
 sample = [0, int(config["totnsupers"])]
