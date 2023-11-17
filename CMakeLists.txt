@@ -18,4 +18,4 @@ set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ com
 
 add_subdirectory(libs)
 add_subdirectory(src)
-add_subdirectory(examples/adiabatic_parcel/src)
+add_subdirectory(examples/adiabaticparcel/src)
