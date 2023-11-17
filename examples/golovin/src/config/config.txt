@@ -15,6 +15,51 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
+ * configuration input parameters for CLEO to run validation of
+ * collision-coalescence with Golovin's collision kernel.
+ * Note: inital superdroplets data (eps, r0 and m_sol etc.)
+ * read from file "initsupers_filename" is made with PYSD module
+ * using python script "create_initsuperdropsbinary_script".
+ * Likewise data to make gridboxmap from gridbox boundaries is
+ * read from file "grid_filename" created using python
+ * "create_gbxboundariesbinary_script" script.
  */
 
 
+### Initialisation parameters ###
+constants_filename = ../libs/cleoconstants.hpp                 # name of file for values of physical constants
+initsupers_filename = ./share/golovin_dimlessSDsinit.dat       # binary filename for initialisation of SDs
+grid_filename = ./share/golovin_dimlessGBxboundaries.dat       # binary filename for initialisation of GBxs / GbxMaps
+
+### Output Data parameters ###
+setuptxt = ./bin/golovin_setup.txt                # .txt filename to copy configuration to
+zarrbasedir = ./bin/golovin_sol.zarr              # zarr store base directory
+maxchunk = 1250000                                # maximum no. of elements in chunks of zarr store array
+
+### SDM Runtime parameters ###
+# domain setup #
+nspacedims = 0                                    # no. of spatial dimensions to model 
+ngbxs = 1                                         # total number of Gbxs
+totnsupers = 2048                                 # (initial) total no. of SDs
+
+# timestepping #
+CONDTSTEP = 2                             # time between SD condensation events [s]
+COLLTSTEP = 1                             # time between SD collision events [s]
+MOTIONTSTEP = 5                           # time between SDM motion [s]
+COUPLTSTEP = 2000                         # time between dynamic couplings [s]
+OBSTSTEP = 200                            # time between SDM observations [s]
+T_END = 4000                              # time span of integration from 0s to T_END [s]
+
+# microphysics #
+cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
+cond_SUBTSTEP = 0.1                       # smallest timestep in cases where substepping occurs [s]
+cond_rtol = 0.001                         # relative tolerance for implicit euler integration
+cond_atol = 0.001                         # abolute tolerance for implicit euler integration
+nfrags = -1                               # expected number of fragments in breakup event, (use -1 for nan value)
+
+# superdroplets #
+doAlterThermo = false                     # enable condensation to alter the thermodynamic state
+
+### Coupled Dynamics Solver Parameters ###
+# type of coupling #
+thermosolver = null                       # dynamics solver to configure
