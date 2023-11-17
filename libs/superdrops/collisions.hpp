@@ -179,8 +179,7 @@ private:
     }
 
     // return remove_null_supers(supers, nnull);
-    assert((nnull == 0) && "no null superdrops should exist");
-    return supers; 
+    return is_null_supers(supers, nnull);
   }
 
 public:

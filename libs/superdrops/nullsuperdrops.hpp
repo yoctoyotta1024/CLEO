@@ -58,10 +58,20 @@ longer exists) and return true */
 }
 
 KOKKOS_INLINE_FUNCTION subviewd_supers
-remove_null_supers(subviewd_supers supers)
+is_null_supers(const subviewd_supers supers,
+               const size_t nnull)
+/* assert no null superdrops and return unchanged supers */
+{
+  assert((nnull == 0) && "no null superdrops should exist");
+  return supers; 
+}
+
+KOKKOS_INLINE_FUNCTION subviewd_supers
+remove_null_supers(subviewd_supers supers,
+                   const size_t nnull)
 /* sort view of superdroplets by their sdgbxindexes
-from lowest to highest sdgbxindex. Then set new subview
-excluding supers with sdgbxindex = LIMITVALUES::uintmax */
+from lowest to highest sdgbxindex. Then set new
+subview excluding 'nnull' number of supers */
 {
   using TeamPol = Kokkos::TeamPolicy<ExecSpace>;
 
@@ -81,7 +91,10 @@ excluding supers with sdgbxindex = LIMITVALUES::uintmax */
         Kokkos::Experimental::sort_thread(t, supers, SortComparator{});
       });
 
-  return new_supers;
+  const size_t nsupers(supers.extent(0) - nnull); // exclude null supers from no. supers
+  const Kokkos::pair<size_t, size_t> new_refs({0, nsupers});
+
+  return Kokkos::subview(supers, new_refs);
 }
 
 #endif // NULLSUPERDROPS_HPP 
