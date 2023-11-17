@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Friday 17th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,11 +101,12 @@ public:
             
             URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
 
-            auto &gbx = d_gbxs(ii);
+            auto &gbx(d_gbxs(ii));
+            auto supers(gbx.supersingbx());
             for (unsigned int subt = t_sdm; subt < t_next;
                  subt = microphys.next_step(subt))
             {
-              microphys.run_step(subt, gbx.supersingbx(), gbx.state, urbg); // TODO use returned supers here
+              supers = microphys.run_step(subt, supers, gbx.state, urbg);
             }
 
             genpool.free_state(urbg.gen);
