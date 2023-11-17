@@ -25,6 +25,7 @@
 #include <cassert>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_NestedSort.hpp>
 
 #include "../cleoconstants.hpp"
 #include "./kokkosaliases_sd.hpp"

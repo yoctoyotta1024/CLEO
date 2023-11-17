@@ -125,7 +125,7 @@ satistfies the PairEnactX concept */
   {
     return coalesce_superdroplet_pair(gamma, drop1, drop2);
   }
-  
+
   return 0;
 }
 
@@ -170,17 +170,16 @@ according to Shima et al. 2009 Section 5.1.3. part (5) */
     twin_superdroplet_coalescence(gamma, drop1, drop2);
     
     /* if xi1 = xi2 = 1 before coalesence, then xi1=0 now */
-    return is_null_superdrop(drop1); // return if_null_superdrop(drop1);
+    return is_null_superdrop(drop1);
+    // return if_null_superdrop(drop1);
   }
 
-  else
-  {
-    assert((xi1 >= gamma * xi2) && "something undefined occured "
+  assert((xi1 >= gamma * xi2) && "something undefined occured "
                                    "during colllision-coalescence");
-  }
+  return 0;                               
 }
 
-KOKKOS_INLINE_FUNCTION bool
+KOKKOS_INLINE_FUNCTION void
 DoCoalescence::twin_superdroplet_coalescence(const unsigned long long gamma,
                                              Superdrop &drop1,
                                              Superdrop &drop2) const
