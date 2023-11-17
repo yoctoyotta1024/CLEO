@@ -34,16 +34,17 @@ path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
 
-
-sys.path.append(path2CLEO) # for imports from pySD package
-from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
-from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
-from pySD.initsuperdropsbinary_src import *
-from pySD.output_src import *
-from pySD.output_src import sdtracing
-
+sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
-from plotssrc import individSDs
+
+from plotssrc import individSDs, figAS2017
+from pySD.output_src import sdtracing
+from pySD.output_src import *
+from pySD.initsuperdropsbinary_src import *
+from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
+from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
+
+
 
 ############### INPUTS ##################
 # path and filenames for creating SD initial conditions and for running model
@@ -81,14 +82,15 @@ coord3gen = None                        # do not generate SD coords
 coord1gen = None
 coord2gen = None
 
-def displacement(time, w_avg, thalf):
-  '''displacement z given velocity, w, is sinusoidal 
-  profile: w = w_avg * pi/2 * np.sin(np.pi * t/thalf)
-  where wmax = pi/2*w_avg and tauhalf = thalf/pi.'''
 
-  zmax = w_avg / 2 * thalf
-  z = zmax * (1 - np.cos(np.pi * time / thalf))
-  return z
+def displacement(time, w_avg, thalf):
+    '''displacement z given velocity, w, is sinusoidal 
+    profile: w = w_avg * pi/2 * np.sin(np.pi * t/thalf)
+    where wmax = pi/2*w_avg and tauhalf = thalf/pi.'''
+
+    zmax = w_avg / 2 * thalf
+    z = zmax * (1 - np.cos(np.pi * time / thalf))
+    return z
 
 # ### 1. create files for gridbox boundaries and initial SD conditions
 # Path(binpath).mkdir(parents=True, exist_ok=True)
@@ -120,6 +122,7 @@ def displacement(time, w_avg, thalf):
 # executable = path2build+"/examples/adiabaticparcel/src/adia0D"
 # os.system(executable + " " + configfile)
 
+
 # 3. load and plot results
 # read in constants and intial setup from setup .txt file
 config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
@@ -144,18 +147,14 @@ radii = sdtracing.attribute_for_superdroplets_sample(sddata, "radius",
 savename = binpath + "/adia0D_SDgrowth.png"
 individSDs.individ_radiusgrowths_figure(time, radii, savename=savename)
 
-# radius = pyzarr.attrtimeseries_for_1superdrop(sddata, 0, "radius")
-# eps = pyzarr.attrtimeseries_for_1superdrop(sddata, 0, "eps")
-# m_sol = pyzarr.attrtimeseries_for_1superdrop(sddata, 0, "m_sol")
+attrs = ["radius", "xi", "msol"]
+sd0 = sdtracing.attributes_for1superdroplet(sddata, 0, attrs)
+numconc = np.sum(sddata["xi"][0])/gbxs["domainvol"]/1e6  # [/cm^3]
 
-# numconc = np.sum(sddata["eps"][0])/grid["domainvol"]/1e6  # [/cm^3]
-
-# fig, axs = ccs.condensation_validation_figure(time, eps, radius, m_sol,
-#                                               thermo.temp.flatten(),
-#                                               supersat.flatten(), zprof, SDprops,
-#                                               setup, numconc)
-# savename = "cond_validation.png"
-# fig.savefig(binpath+savename, dpi=400,
-#             bbox_inches="tight", facecolor='w', format="png")
-# print("Figure .png saved as: "+binpath+savename)
-# plt.show()
+savename2 = binpath+"/adia0D_validation.png"
+figAS2017.arabas_shima_2017_fig(time, zprof, sd0["radius"], sd0["msol"],
+                                thermo.temp[:, 0, 0, 0],
+                                supersat[:, 0, 0, 0], 
+                                sddata.IONIC, sddata.MR_SOL,
+                                config["W_AVG"], numconc,
+                                savename2)

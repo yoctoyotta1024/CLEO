@@ -24,7 +24,7 @@ import numpy as np
 import awkward as ak
 import random 
 
-def attribute_for_superdroplet(sddata, Id, attr):
+def attr_for_superdroplet(sddata, Id, attr):
   '''selects attribute from sddata belonging
   to superdroplet with identitiy 'Id'
   at every output time '''
@@ -42,6 +42,17 @@ def attribute_for_superdroplet(sddata, Id, attr):
   attr4Id = ak.where(num==0, ak.Array([[np.nan]]), attr4Id) # replace empty values with np.nan
 
   return ak.flatten(attr4Id, axis=1) # remove excess dimension
+
+def attributes_for1superdroplet(sddata, Id, attrs):
+  '''selects attributes in 'attrs' from sddata
+  belonging to superdroplet with identitiy 'Id'
+  at every output time '''
+
+  attrs4Id = {}
+  for attr in attrs:
+    attrs4Id[attr] = attr_for_superdroplet(sddata, Id, attr)
+  
+  return attrs4Id
 
 def attribute_for_superdroplets_sample(sddata, attr, ndrops2sample=0,
                                        minid=0, maxid=0, ids=[]):
@@ -62,7 +73,7 @@ def attribute_for_superdroplets_sample(sddata, attr, ndrops2sample=0,
 
   ndrops_attr = []
   for id in sample: 
-    attr4Id = attribute_for_superdroplet(sddata, id, attr)
+    attr4Id = attr_for_superdroplet(sddata, id, attr)
     ndrops_attr.append(attr4Id)
   
   return np.asarray(ndrops_attr).T
