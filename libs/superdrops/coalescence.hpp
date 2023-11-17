@@ -23,12 +23,14 @@
 #ifndef COALESCENCE_HPP
 #define COALESCENCE_HPP
 
+#include <cassert>
 #include <functional>
 
 #include <Kokkos_Core.hpp>
 
 #include "./collisions.hpp"
 #include "./microphysicalprocess.hpp"
+#include "./nullsuperdrops.hpp"
 #include "./superdrop.hpp"
 
 KOKKOS_INLINE_FUNCTION double

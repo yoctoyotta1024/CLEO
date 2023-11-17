@@ -28,6 +28,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "./kokkosaliases_sd.hpp"
+#include "./nullsuperdrops.hpp"
 #include "./superdrop.hpp"
 #include "./state.hpp"
 #include "./urbg.hpp"
@@ -171,7 +172,7 @@ private:
                                 urbg, scale_p, VOLUME);
     }
 
-    return remove_null_superdrops(supers);
+    return remove_null_supers(supers);
   }
 
 public:

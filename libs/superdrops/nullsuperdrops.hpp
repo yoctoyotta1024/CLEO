@@ -27,6 +27,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "../cleoconstants.hpp"
+#include "./kokkosaliases_sd.hpp"
 #include "./superdrop.hpp"
 
 KOKKOS_INLINE_FUNCTION void
@@ -49,6 +50,20 @@ superdrop is out of domain (ie. no longer exists) */
     drop.set_sdgbxindex(LIMITVALUES::uintmax);
   }
 }
+
+KOKKOS_INLINE_FUNCTION void
+remove_null_supers(subviewd_supers supers)
+/* if multiplicity of drop = 0, ie. superdrop
+is null, raise error or (uncomment if desired)
+change it's sdgbxindex to be value that indicates
+superdrop is out of domain (ie. no longer exists) */
+{
+  if (drop.get_xi() < 1) // ie. xi == 0
+  {
+    drop.set_sdgbxindex(LIMITVALUES::uintmax);
+  }
+}
+
 
 #endif // NULLSUPERDROPS_HPP 
 
