@@ -34,7 +34,7 @@ configfile = sys.argv[3]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
-from pySD.output_src import sdtracing
+from plotssrc import shima2009fig
 from pySD.output_src import *
 from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -120,3 +120,9 @@ tplt = [0, 1200, 2400, 3600]
 # 0.2 factor for guassian smoothing
 smoothsig = 0.62*(config["totnsupers"]**(-1/5))
 plotwitherr = True
+
+savename = binpath + "golovin_validation.png"
+fig, ax = shima2009fig.golovin_validation_figure(plotwitherr, time,
+                                    sddata, tplt, gbxs["domainvol"],
+                                    numconc, volexpr0, smoothsig,
+                                    savename=savename)

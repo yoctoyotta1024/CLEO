@@ -19,15 +19,19 @@ functions for plotting similar to
 figure 2(a) from Shima et al. 2009
 '''
 
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.special import iv
 
-def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
-                              SDprops, n_a, r_a, smoothsig):
+sys.path.append("../../../")  # for imports from pySD package
+from pySD.output_src import sdtracing
 
-  attrs2sel = ["radius", "eps"]
-  selsddata = pyzarr.attrs_at_times(sddata, time, tplt, attrs2sel)
+def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
+                              n_a, r_a, smoothsig, savename=""):
+
+  attrs2sel = ["radius", "xi"]
+  selsddata = sdtracing.attributes_at_times(sddata, time, tplt, attrs2sel)
 
   nbins = 500
   rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
@@ -40,13 +44,13 @@ def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
     c = 'C'+str(n)
     
     golsol, hcens = golovin_analytical(rspan, time[ind], nbins, 
-                                         n_a, r_a, SDprops.RHO_L)
+                                         n_a, r_a, sddata.RHO_L)
     plot_golovin_analytical_solution(ax, hcens, golsol, n, c)
 
     radius = selsddata["radius"][n]
-    eps = selsddata["eps"][n]
+    xi = selsddata["xi"][n]
     hist, hcens = plot_golovin_massdens_distrib(ax, rspan, nbins, domainvol,
-                                   eps, radius, SDprops, smoothsig, tlab, c)
+                                   xi, radius, sddata, smoothsig, tlab, c)
     
     if ax_err:
       diff = (hist - golsol)
@@ -55,6 +59,12 @@ def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
   ax.legend()
 
   fig.tight_layout()
+
+  if savename != "":
+    fig.savefig(savename, dpi=400,
+            bbox_inches="tight", facecolor='w', format="png")
+    print("Figure .png saved as: "+savename)
+  plt.show()
 
   return fig, ax
 
@@ -129,10 +139,10 @@ def plot_golovin_analytical_solution(ax, hcens, golsol, n, c):
   return ax
 
 def plot_golovin_massdens_distrib(ax, rspan, nbins, domainvol,
-                                   eps, radius, SDprops, smoothsig, tlab, c):
+                                   xi, radius, sddata, smoothsig, tlab, c):
   
-  m_asif_water = SDprops.vol(radius) * SDprops.RHO_L # superdrops mass as if water [g]
-  weights = eps * m_asif_water * 1000 / domainvol # real droplets [g/m^3]
+  m_asif_water = sddata.vol(radius) * sddata.RHO_L # superdrops mass as if water [g]
+  weights = xi * m_asif_water * 1000 / domainvol # real droplets [g/m^3]
 
   hist, hedges, hcens = logr_distribution(rspan, nbins, radius,
                                           weights, perlogR=True, 
@@ -141,6 +151,19 @@ def plot_golovin_massdens_distrib(ax, rspan, nbins, domainvol,
   ax.plot(hcens, hist, label=tlab, color=c)                                                 
 
   return hist, hcens
+
+def gaussian_kernel_smoothing(hist, hcens, sig):
+
+    smoothhist = []
+    for h in range(len(hist)):
+        kernel = 1/(np.sqrt(2*np.pi)*sig)*np.exp(-(hcens - hcens[h])**2/(2*sig**2))
+        kernel = kernel/np.sum(kernel)
+        smoothhist.append(np.sum(hist*kernel))  
+
+    smoothhist = np.asarray(smoothhist)
+    smoothhist = np.where(smoothhist<1e-16, 0, smoothhist)  
+
+    return smoothhist, hcens
 
 def logr_distribution(rspan, nbins, radius, wghts,
                       perlogR=False, smooth=False):

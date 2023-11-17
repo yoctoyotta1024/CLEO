@@ -64,15 +64,15 @@ private:
   twin_superdroplet_coalescence(const unsigned long long gamma,
                                 Superdrop &drop1,
                                 Superdrop &drop2) const;
-  /* if eps1 = gamma*eps2 coalescence makes twin SDs
-  with same eps, r and solute mass. According to Shima et al. 2009
+  /* if xi1 = gamma*eps2 coalescence makes twin SDs
+  with same xi, r and solute mass. According to Shima et al. 2009
   Section 5.1.3. part (5) option (b)  */
 
   KOKKOS_INLINE_FUNCTION void
   different_superdroplet_coalescence(const unsigned long long gamma,
                                      Superdrop &drop1,
                                      Superdrop &drop2) const;
-  /* if eps1 > gamma*eps2 coalescence grows sd2 radius and mass
+  /* if xi1 > gamma*eps2 coalescence grows sd2 radius and mass
   via decreasing multiplicity of sd1. According to
   Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
 
