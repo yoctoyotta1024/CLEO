@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Friday 17th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -24,121 +24,199 @@ import numpy as np
 import xarray as xr
 import awkward as ak
 
-class SupersData:
-  
-  def __init__(self, dataset):
+
+class SuperdropProperties():
+    '''Contains attributes common to all superdroplets and functions
+    for calculating derived ones'''
+
+    def __init__(self, consts):
+        '''Common attributes shared by superdroplets'''
+
+        # density of liquid in droplets (=density of water at 300K) [Kg/m^3]
+        self.RHO_L = consts["RHO_L"]
+
+        # droplet solute properties
+        self.RHO_SOL = consts["RHO_SOL"]  # density of (dry) solute [Kg/m^3]
+        # Mr of solute [g/mol]
+        self.MR_SOL = consts["MR_SOL"]
+
+        # degree ionic dissociation (van't Hoff factor)
+        self.IONIC = consts["IONIC"]
+
+        self.print_properties()
+
+    def print_properties(self):
+        print("\n---- Superdrop Properties -----")
+        print("RHO_L =", self.RHO_L, "Kg/m^3")
+        print("RHO_SOL =", self.RHO_SOL, "Kg/m^3")
+        print("MR_SOL =", self.MR_SOL, "Kg/mol")
+        print("IONIC =", self.IONIC)
+        print("-------------------------------\n")
+
+    def rhoeff(self, r, m_sol):
+        ''' calculates effective density [g m^-3] of 
+      droplet such that mass_droplet, m = 4/3*pi*r^3 * rhoeff
+      taking into account mass of liquid and mass of
+      solute assuming solute occupies volume it
+      would given its (dry) density, RHO_SOL. '''
+
+        m_sol = m_sol/1000 # convert from grams to Kg
+        r = r/1e6 # convert microns to m
+
+        solfactor = 3*m_sol/(4.0*np.pi*(r**3))
+        rhoeff = self.RHO_L + solfactor*(1-self.RHO_L/self.RHO_SOL)
+
+        return rhoeff * 1000 #[g/m^3]
+
+    def vol(self, r):
+        ''' volume of droplet [m^3] '''
+
+        r = r/1e6 # convert microns to m
+
+        return 4.0/3.0 * np.pi * r**3
+
+    def mass(self, r, m_sol):
+        ''' total mass of droplet (water + (dry) areosol) [g],
+         m =  4/3*pi*rho_l**3 + m_sol(1-rho_l/rho_sol) 
+        ie. m = 4/3*pi*rhoeff*R**3 '''
+
+        m_sol = m_sol/1000 # convert from grams to Kg
+        r = r/1e6 # convert microns to m
+
+        msoleff = m_sol*(1-self.RHO_L/self.RHO_SOL) # effect of solute on mass
+        m = msoleff + 4/3.0*np.pi*(r**3)*self.RHO_L
+
+        return m * 1000 # [g]
+
+    def m_water(self, r, m_sol):
+        ''' mass of only water in droplet [g]'''
+
+        m_sol = m_sol/1000 # convert m_sol from grams to Kg
+        r = r/1e6 # convert microns to m
+
+        v_sol = m_sol/self.RHO_SOL
+        v_w = 4/3.0*np.pi*(r**3) - v_sol
+
+        return self.RHO_L*v_w * 1000 #[g]
     
-    ds = self.tryopen_dataset(dataset) 
-    rgdcount = ds["rgd_totnsupers"].values # ragged count variable
-     
-    self.sdId = self.tryvar(ds, rgdcount, "sdId")
-    self.sdgbxindex = self.tryvar(ds, rgdcount, "sdgbxindex")
-    self.xi = self.tryvar(ds, rgdcount, "xi")
-    self.radius = self.tryvar(ds, rgdcount, "radius")
-    self.m_sol = self.tryvar(ds, rgdcount, "msol")
+class SupersData(SuperdropProperties):
 
-    self.coord3 = self.tryvar(ds, rgdcount, "coord3")
-    self.coord1 = self.tryvar(ds, rgdcount, "coord1")
-    self.coord2 = self.tryvar(ds, rgdcount, "coord2")
+    def __init__(self, dataset, consts):
+        SuperdropProperties.__init__(self, consts)
 
-    self.radius_units = self.tryunits(ds, "radius") # probably microns ie. 'micro m'
-    self.m_sol_units = self.tryunits(ds, "msol") # probably gramms
-    self.coord3_units = self.tryunits(ds, "coord3") # probably meters
-    self.coord1_units = self.tryunits(ds, "coord1") # probably meters
-    self.coord2_units = self.tryunits(ds, "coord2") # probably meters
-  
-  def tryopen_dataset(self, dataset):
-    
-    if type(dataset) == str:
-      print("supers dataset: ", dataset)
-      return xr.open_dataset(dataset, engine="zarr", consolidated=False) 
-    else:
-      return dataset
-    
-  def tryvar(self, ds, raggedcount, var):
-    ''' attempts to return variable in form of ragged array
-    (ak.Array) with dims [time, raggedcount]
-    for a variable "var" in xarray dataset 'ds'.
-    If attempt fails, returns empty array instead '''
-    try:
-      return ak.unflatten(ds[var].values, raggedcount)
-    except:
-      return ak.Array([])
+        ds = self.tryopen_dataset(dataset)
+        rgdcount = ds["rgd_totnsupers"].values  # ragged count variable
 
-  def tryunits(self, ds, var):
-    ''' attempts to return the units of a variable 
-    in xarray dataset 'ds'. If attempt fails, returns null '''
-    try:
-      return ds[var].units
-    except:
-      return ""
+        self.sdId = self.tryvar(ds, rgdcount, "sdId")
+        self.sdgbxindex = self.tryvar(ds, rgdcount, "sdgbxindex")
+        self.xi = self.tryvar(ds, rgdcount, "xi")
+        self.radius = self.tryvar(ds, rgdcount, "radius")
+        self.m_sol = self.tryvar(ds, rgdcount, "msol")
 
-  def __getitem__(self, key):
+        self.coord3 = self.tryvar(ds, rgdcount, "coord3")
+        self.coord1 = self.tryvar(ds, rgdcount, "coord1")
+        self.coord2 = self.tryvar(ds, rgdcount, "coord2")
 
-    if key == "sdId":
-      return self.sdId
-    elif key == "sdgbxindex":
-      return self.sdgbxindex
-    elif key == "xi":
-      return self.xi
-    elif key == "radius":
-      return self.radius
-    elif key == "msol":
-      return self.m_sol
-    elif key == "coord3":
-      return self.coord3
-    elif key == "coord1":
-      return self.coord1
-    elif key == "coord2":
-      return self.coord2
-    else:
-      err = "no known return provided for "+key+" key"
-      raise ValueError(err)
+        # probably microns ie. 'micro m'
+        self.radius_units = self.tryunits(ds, "radius")
+        self.m_sol_units = self.tryunits(ds, "msol")  # probably gramms
+        self.coord3_units = self.tryunits(ds, "coord3")  # probably meters
+        self.coord1_units = self.tryunits(ds, "coord1")  # probably meters
+        self.coord2_units = self.tryunits(ds, "coord2")  # probably meters
 
-class RainSupers:
-  
-  def __init__(self, sddata, rlim=40):
-    ''' return data for (rain)drops with radii > rlim.
-    Default minimum raindrops size is rlim=40microns'''
-    
-    if type(sddata) != SupersData:
-      sddata = SupersData(dataset=sddata)
-    
-    israin = sddata.radius >= rlim # ak array True for raindrops
-    
-    self.totnsupers_rain = ak.num(israin[israin==True])
-    self.sdId = sddata.sdId[israin]
-    self.sdgbxindex = sddata.sdgbxindex[israin] 
-    self.xi = sddata.xi[israin] 
-    self.radius = sddata.radius[israin] 
-    self.m_sol = sddata.m_sol[israin] 
+    def tryopen_dataset(self, dataset):
 
-    if np.any(sddata.coord3):
-      self.coord3 = sddata.coord3[israin] 
-      if np.any(sddata.coord1):
-        self.coord1 = sddata.coord1[israin] 
-        if np.any(sddata.coord2):
-          self.coord2 = sddata.coord2[israin] 
+        if type(dataset) == str:
+            print("supers dataset: ", dataset)
+            return xr.open_dataset(dataset, engine="zarr", consolidated=False)
+        else:
+            return dataset
 
-  def __getitem__(self, key):
-    if key == "totnsupers_rain":
-      return self.totnsupers_rain
-    elif key == "sdId":
-      return self.sdId
-    elif key == "sdgbxindex":
-      return self.sdgbxindex
-    elif key == "xi":
-      return self.xi
-    elif key == "radius":
-      return self.radius
-    elif key == "msol":
-      return self.m_sol
-    elif key == "coord3":
-      return self.coord3
-    elif key == "coord1":
-      return self.coord1
-    elif key == "coord2":
-      return self.coord2
-    else:
-      err = "no known return provided for "+key+" key"
-      raise ValueError(err)
+    def tryvar(self, ds, raggedcount, var):
+        ''' attempts to return variable in form of ragged array
+        (ak.Array) with dims [time, raggedcount]
+        for a variable "var" in xarray dataset 'ds'.
+        If attempt fails, returns empty array instead '''
+        try:
+            return ak.unflatten(ds[var].values, raggedcount)
+        except:
+            return ak.Array([])
+
+    def tryunits(self, ds, var):
+        ''' attempts to return the units of a variable 
+        in xarray dataset 'ds'. If attempt fails, returns null '''
+        try:
+            return ds[var].units
+        except:
+            return ""
+
+    def __getitem__(self, key):
+
+        if key == "sdId":
+            return self.sdId
+        elif key == "sdgbxindex":
+            return self.sdgbxindex
+        elif key == "xi":
+            return self.xi
+        elif key == "radius":
+            return self.radius
+        elif key == "msol":
+            return self.m_sol
+        elif key == "coord3":
+            return self.coord3
+        elif key == "coord1":
+            return self.coord1
+        elif key == "coord2":
+            return self.coord2
+        else:
+            err = "no known return provided for "+key+" key"
+            raise ValueError(err)
+
+
+class RainSupers(SuperdropProperties):
+
+    def __init__(self, sddata, rlim=40):
+        ''' return data for (rain)drops with radii > rlim.
+        Default minimum raindrops size is rlim=40microns'''
+
+        if type(sddata) != SupersData:
+            sddata = SupersData(dataset=sddata)
+
+        israin = sddata.radius >= rlim  # ak array True for raindrops
+
+        self.totnsupers_rain = ak.num(israin[israin == True])
+        self.sdId = sddata.sdId[israin]
+        self.sdgbxindex = sddata.sdgbxindex[israin]
+        self.xi = sddata.xi[israin]
+        self.radius = sddata.radius[israin]
+        self.m_sol = sddata.m_sol[israin]
+
+        if np.any(sddata.coord3):
+            self.coord3 = sddata.coord3[israin]
+            if np.any(sddata.coord1):
+                self.coord1 = sddata.coord1[israin]
+                if np.any(sddata.coord2):
+                    self.coord2 = sddata.coord2[israin]
+
+    def __getitem__(self, key):
+        if key == "totnsupers_rain":
+            return self.totnsupers_rain
+        elif key == "sdId":
+            return self.sdId
+        elif key == "sdgbxindex":
+            return self.sdgbxindex
+        elif key == "xi":
+            return self.xi
+        elif key == "radius":
+            return self.radius
+        elif key == "msol":
+            return self.m_sol
+        elif key == "coord3":
+            return self.coord3
+        elif key == "coord1":
+            return self.coord1
+        elif key == "coord2":
+            return self.coord2
+        else:
+            err = "no known return provided for "+key+" key"
+            raise ValueError(err)

@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 9th November 2023
+Last Modified: Friday 17th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -73,11 +73,11 @@ def get_thermodata(dataset, ntime, ndims, consts):
 
   return thermodata.Thermodata(dataset, ntime, ndims, consts)
 
-def get_supers(dataset):
-  return supersdata.SupersData(dataset)
+def get_supers(dataset, consts):
+  return supersdata.SupersData(dataset, consts)
 
-def get_rainsupers(dataset):
-  return supersdata.RainSupers(dataset)
+def get_rainsupers(dataset, consts):
+  return supersdata.RainSupers(dataset, consts)
 
 def get_time(dataset):
   return timedata.Time(dataset)
