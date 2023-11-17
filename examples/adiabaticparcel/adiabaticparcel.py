@@ -40,6 +40,7 @@ from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.initsuperdropsbinary_src import *
 from pySD.output_src import *
+from pySD.output_src import sdtracing
 
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 from plotssrc import individSDs
@@ -136,12 +137,24 @@ relh = thermo.relative_humidity()
 supersat = thermo.supersaturation()
 
 # sample drops to plot from whole range of SD ids
-minid, maxid = 0, config["totnsupers"]
-ndrops2plot = config["totnsupers"]
-radii = pyzarr.attrtimeseries_for_superdropssample(
-    sddata, "radius", ndrops2plot, minid, maxid)
-fig, ax = individSDs.individ_radiusgrowths_figure(time, radii)
-# savename = "cond_SDgrowth.png"
+sample = [0, int(config["totnsupers"])]
+radii = sdtracing.attribute_for_superdroplets_sample(sddata, "radius",
+                                                     minid=sample[0],
+                                                     maxid=sample[1])
+savename = binpath + "/adia0D_SDgrowth.png"
+individSDs.individ_radiusgrowths_figure(time, radii, savename=savename)
+
+# radius = pyzarr.attrtimeseries_for_1superdrop(sddata, 0, "radius")
+# eps = pyzarr.attrtimeseries_for_1superdrop(sddata, 0, "eps")
+# m_sol = pyzarr.attrtimeseries_for_1superdrop(sddata, 0, "m_sol")
+
+# numconc = np.sum(sddata["eps"][0])/grid["domainvol"]/1e6  # [/cm^3]
+
+# fig, axs = ccs.condensation_validation_figure(time, eps, radius, m_sol,
+#                                               thermo.temp.flatten(),
+#                                               supersat.flatten(), zprof, SDprops,
+#                                               setup, numconc)
+# savename = "cond_validation.png"
 # fig.savefig(binpath+savename, dpi=400,
 #             bbox_inches="tight", facecolor='w', format="png")
 # print("Figure .png saved as: "+binpath+savename)

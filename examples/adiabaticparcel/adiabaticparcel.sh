@@ -31,16 +31,16 @@ kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                          # flags for host parallelism (e.g. using OpenMP)
 ### ---------------------------------------------------- ###
 
-### ------------------------ build --------------------- ###
-### build CLEO using cmake (with openMP thread parallelism through Kokkos)
-buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}"
-echo ${buildcmd}
-CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}
+# ### ------------------------ build --------------------- ###
+# ### build CLEO using cmake (with openMP thread parallelism through Kokkos)
+# buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}"
+# echo ${buildcmd}
+# CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}
 
-### ensure these directories exist (it's a good idea for later use)
-mkdir ${path2build}bin
-mkdir ${path2build}share
-### ---------------------------------------------------- ###
+# ### ensure these directories exist (it's a good idea for later use)
+# mkdir ${path2build}bin
+# mkdir ${path2build}share
+# ### ---------------------------------------------------- ###
 
 ### ------------------- compile & run ------------------ ###
 ### generate input files and run adiabatic parcel example

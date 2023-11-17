@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Friday 17th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -54,6 +54,8 @@ def attribute_for_superdroplets_sample(sddata, attr, ndrops2sample=0,
 
   if ids == []:
     population = list(range(minid, maxid, 1))
+    if ndrops2sample == 0:
+      ndrops2sample = maxid
     sample = random.sample(population, ndrops2sample)
   else:
     sample = ids
