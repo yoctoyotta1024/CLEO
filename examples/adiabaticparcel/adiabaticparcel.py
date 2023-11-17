@@ -43,9 +43,10 @@ from pySD.initsuperdropsbinary_src import *
 ############### INPUTS ##################
 # path and filenames for creating SD initial conditions and for running model
 constsfile = path2CLEO+"libs/cleoconstants.hpp"
-binpath = path2build+"bin/"
-initSDsfile = binpath+"adai0D_dimlessSDsinit.dat"
-gridfile = binpath+"adia0D_dimlessGBxboundaries.dat"
+binpath = path2build+"/bin/"
+sharepath = path2build+"/share/"
+initSDsfile = sharepath+"adai0D_dimlessSDsinit.dat"
+gridfile = sharepath+"adia0D_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
 setupfile = binpath+"adia0Dsetup.txt"
@@ -91,3 +92,17 @@ os.system("rm "+initSDsfile)
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
                                      ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
+
+initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
+                                               coord3gen, coord1gen, coord2gen)
+create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
+                                                  configfile, constsfile,
+                                                  gridfile, nsupers, numconc)
+read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
+
+if isfigures[0]:
+    rgrid.plot_gridboxboundaries(constsfile, gridfile,
+                                 binpath, isfigures[1])
+    read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+                                              gridfile, binpath, isfigures[1], "all")
+plt.close()
