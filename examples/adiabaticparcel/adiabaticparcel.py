@@ -34,16 +34,19 @@ path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
 
-# for imports from pySD package
-sys.path.append(path2CLEO)
+
+sys.path.append(path2CLEO) # for imports from pySD package
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.initsuperdropsbinary_src import *
 from pySD.output_src import *
 
+sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
+from plotssrc import individSDs
+
 ############### INPUTS ##################
 # path and filenames for creating SD initial conditions and for running model
-constsfile = path2CLEO+"libs/cleoconstants.hpp"
+constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
 initSDsfile = sharepath+"adia0D_dimlessSDsinit.dat"
@@ -131,3 +134,15 @@ zprof = displacement(time, config["W_AVG"], config["T_HALF"])
 press = thermo.press*100  # convert from hPa to Pa
 relh = thermo.relative_humidity()
 supersat = thermo.supersaturation()
+
+# sample drops to plot from whole range of SD ids
+minid, maxid = 0, config["totnsupers"]
+ndrops2plot = config["totnsupers"]
+radii = pyzarr.attrtimeseries_for_superdropssample(
+    sddata, "radius", ndrops2plot, minid, maxid)
+fig, ax = individSDs.individ_radiusgrowths_figure(time, radii)
+# savename = "cond_SDgrowth.png"
+# fig.savefig(binpath+savename, dpi=400,
+#             bbox_inches="tight", facecolor='w', format="png")
+# print("Figure .png saved as: "+binpath+savename)
+# plt.show()

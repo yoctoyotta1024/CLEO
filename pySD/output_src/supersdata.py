@@ -46,12 +46,12 @@ class SuperdropProperties():
         self.print_properties()
 
     def print_properties(self):
-        print("\n---- Superdrop Properties -----")
+        print("---- Superdrop Properties -----")
         print("RHO_L =", self.RHO_L, "Kg/m^3")
         print("RHO_SOL =", self.RHO_SOL, "Kg/m^3")
         print("MR_SOL =", self.MR_SOL, "Kg/mol")
         print("IONIC =", self.IONIC)
-        print("-------------------------------\n")
+        print("-------------------------------")
 
     def rhoeff(self, r, m_sol):
         ''' calculates effective density [g m^-3] of 
