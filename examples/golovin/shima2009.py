@@ -56,7 +56,7 @@ dataset = binpath+"golovin_sol.zarr"
 isfigures = [True, False]
 
 # settings for 0D Model (number of SD and grid coordinates)
-nsupers = {0: 2048}
+nsupers = {0: 5012}
 coord_params = ["false"]
 zgrid = np.asarray([0, 100])
 xgrid = np.asarray([0, 100])
@@ -77,34 +77,34 @@ coord3gen = None                        # do not generate superdroplet coords
 coord1gen = None
 coord2gen = None
 
-# ### 1. create files for gridbox boundaries and initial SD conditions
-# os.system("rm "+gridfile)
-# os.system("rm "+initSDsfile)
-# cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
-#                                      ygrid, constsfile)
-# rgrid.print_domain_info(constsfile, gridfile)
+### 1. create files for gridbox boundaries and initial SD conditions
+os.system("rm "+gridfile)
+os.system("rm "+initSDsfile)
+cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
+                                     ygrid, constsfile)
+rgrid.print_domain_info(constsfile, gridfile)
 
-# initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
-#                                                coord3gen, coord1gen, coord2gen)
-# create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
-#                                                   configfile, constsfile,
-#                                                   gridfile, nsupers, numconc)
-# read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
+initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
+                                               coord3gen, coord1gen, coord2gen)
+create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
+                                                  configfile, constsfile,
+                                                  gridfile, nsupers, numconc)
+read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
 
-# if isfigures[0]:
-#     rgrid.plot_gridboxboundaries(constsfile, gridfile,
-#                                  binpath, isfigures[1])
-#     read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
-#                                               gridfile, binpath, isfigures[1], "all")
-# plt.close()
+if isfigures[0]:
+    rgrid.plot_gridboxboundaries(constsfile, gridfile,
+                                 binpath, isfigures[1])
+    read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+                                              gridfile, binpath, isfigures[1], "all")
+plt.close()
 
-# # 2. compile and the run model
-# os.chdir(path2build)
-# os.system('pwd')
-# os.system('rm -rf '+dataset)
-# os.system("make clean && make -j 64 gol0D")
-# executable = path2build+"/examples/golovin/src/gol0D"
-# os.system(executable + ' ' + configfile)
+# 2. compile and the run model
+os.chdir(path2build)
+os.system('pwd')
+os.system('rm -rf '+dataset)
+os.system("make clean && make -j 64 gol0D")
+executable = path2build+"/examples/golovin/src/gol0D"
+os.system(executable + ' ' + configfile)
 
 # 3. load and plot results
 # read in constants and intial setup from setup .txt file
