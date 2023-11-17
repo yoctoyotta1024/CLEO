@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Friday 17th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,12 +23,11 @@
 #ifndef COALESCENCE_HPP
 #define COALESCENCE_HPP
 
-#include <cassert>
+#include <functional>
 
 #include <Kokkos_Core.hpp>
 
 #include "./collisions.hpp"
-#include "./kokkosaliases_sd.hpp"
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
 
@@ -38,27 +37,6 @@ radiuscubed(const Superdrop &drop)
   const double radius = drop.get_radius();
 
   return radius * radius * radius;
-}
-
-KOKKOS_INLINE_FUNCTION void
-is_null_superdrop(const Superdrop &drop) const
-/* raise error if multiplicity of
-drop = 0, ie. superdrop is null */
-{
-  assert((drop.get_xi() > 0) && "superdrop xi < 1, null drop in coalescence");
-}
-
-KOKKOS_INLINE_FUNCTION void
-remove_null_superdrop(Superdrop &drop) const
-/* if multiplicity of drop = 0, ie. superdrop
-is null, raise error or (uncomment if desired)
-change it's sdgbxindex to be value that indicates
-superdrop is out of domain (ie. no longer exists) */
-{
-  if (drop.get_xi() < 1) // ie. xi == 0
-  {
-    drop.set_sdgbxindex(LIMITVALUES::uintmax);
-  }
 }
 
 struct DoCoalescence
@@ -220,8 +198,7 @@ Section 5.1.3. part (5) option (b)  */
   drop2.set_msol(new_m_sol);
 
   /* if xi1 = xi2 = 1 before coalesence, then xi1=0 now */
-  is_null_superdrop(drop1);
-  // remove_null_superdrop(drop1);
+  is_null_superdrop(drop1); // if_null_superdrop(drop1);
 }
 
 KOKKOS_INLINE_FUNCTION void

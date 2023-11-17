@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Friday 17th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -171,9 +171,7 @@ private:
                                 urbg, scale_p, VOLUME);
     }
 
-    // return remove_outofdomain_superdrops(span4SDsinGBx); // TODO
-
-    return supers;
+    return remove_null_superdrops(supers);
   }
 
 public:
@@ -191,9 +189,7 @@ public:
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    supers = do_collisions(supers, state, urbg);
-    
-    return supers;
+    return do_collisions(supers, state, urbg);  
   }
 };
 
