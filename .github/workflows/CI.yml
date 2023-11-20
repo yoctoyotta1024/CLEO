@@ -24,6 +24,7 @@ jobs:
           python3 -m pip install .
           python3 -m pip install -U sphinx
           python3 -m pip install -U numpy 
+          python3 -m pip install -U furo
       - name: Test with pytest
         run: pytest .
 
