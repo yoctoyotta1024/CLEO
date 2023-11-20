@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
 File: supersdata.py
-Project: cleoout_src
+Project: sdmout_src
 Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
