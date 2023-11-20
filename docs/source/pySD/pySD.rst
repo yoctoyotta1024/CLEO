@@ -23,7 +23,7 @@ input files and processing the Zarr output from CLEO.
    editconfigfile
    gbxboundariesbinary_src/gbxboundariesbinary_src
    initsuperdropsbinary_src/initsuperdropsbinary_src
-   output
+   cleoout_src/cleoout_src
    readbinary
    thermobinary
    writebinary
