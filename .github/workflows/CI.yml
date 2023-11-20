@@ -29,7 +29,6 @@ jobs:
 
       - name: Build docs
         run: |
-          python3 -m pip install sphinx furo
           cd docs && make html
       - name: Archive build artifacts (i.e. documentation)
         uses: actions/upload-artifact@v2

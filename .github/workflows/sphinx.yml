@@ -9,6 +9,11 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v4
+    - name: Install package
+        run: |
+          python3 -m pip install -U sphinx
+          python3 -m pip install -U furo
+
     - name: Build HTML
       uses: ammaraskar/sphinx-action@master
     - name: Upload artifacts
