@@ -9,10 +9,21 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v4
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: mypackage
+        environment-file: environment.yml
+        auto-activate-base: false
+    - run: |
+        conda info
+        conda list
     - name: Install package
-        run: |
-          python3 -m pip install -U sphinx
-          python3 -m pip install -U furo
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install .
+        python3 -m pip install -U sphinx
+        python3 -m pip install -U numpy 
+        python3 -m pip install -U furo 
 
     - name: Build HTML
       uses: ammaraskar/sphinx-action@master
