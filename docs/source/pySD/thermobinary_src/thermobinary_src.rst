@@ -3,16 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-CLEOOut
-=======
+ThermoBinary
+============
 
 **CLEO** (/ˌkliːə/ ) is a library for CLEO is a library for
 Super-Droplet Model (SDM) cloud microphysics. 
 PySD is CLEO's Python Module with submodules related to generating
 input files and processing the Zarr output from CLEO.
 
-CLEOOut is a submodule of pySD used for helpful functions related to
-post-processing and plotting output data from CLEO SDM.
+ThermoBinary is a submodule of pySD used for generating binary files
+for CLEO which contains the thermodynamics and wind fields
+for a 0-D, 1-D, 2-D or 3-D cartesian domain. Used when CLEO reads
+dynamics from file for a one-way couplign of SDM to a FromFileDynamics
+dynamics solver.
 
 .. note::
    Please consider that this project is under active development.
@@ -21,11 +24,4 @@ post-processing and plotting output data from CLEO SDM.
    :maxdepth: 1
    :caption: Contents:
 
-   pyzarr
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   create_thermodynamics

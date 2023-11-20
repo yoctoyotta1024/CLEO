@@ -19,13 +19,13 @@ input files and processing the Zarr output from CLEO.
    :maxdepth: 1
    :caption: Contents:
 
-   cxx2py 
-   editconfigfile
    gbxboundariesbinary_src/gbxboundariesbinary_src
    initsuperdropsbinary_src/initsuperdropsbinary_src
+   thermobinary_src/thermobinary_src
    cleoout_src/cleoout_src
+   cxx2py 
+   editconfigfile
    readbinary
-   thermobinary
    writebinary
 
 Indices and tables
