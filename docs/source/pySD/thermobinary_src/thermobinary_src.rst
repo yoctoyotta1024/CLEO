@@ -25,3 +25,5 @@ dynamics solver.
    :caption: Contents:
 
    create_thermodynamics
+   read_thermodynamics
+   thermogen
