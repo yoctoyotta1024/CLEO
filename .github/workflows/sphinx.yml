@@ -22,7 +22,6 @@ jobs:
         python3 -m pip install --upgrade pip
         python3 -m pip install .
         python3 -m pip install -U sphinx
-        python3 -m pip install -U numpy 
         python3 -m pip install -U furo 
 
     - name: Build HTML
@@ -38,3 +37,9 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/build/html
+    - name: Archive build artifacts (i.e. documentation)
+      uses: actions/upload-artifact@v2
+      with:
+        name: docs
+        path: |
+          docs/build
