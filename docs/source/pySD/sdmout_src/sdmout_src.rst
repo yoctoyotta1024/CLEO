@@ -23,6 +23,14 @@ post-processing and plotting output data from CLEO SDM.
    :caption: Contents:
 
    pyzarr
+   pysetuptxt
+   pygbxsdat
+   timedata
+   thermodata
+   supersdata
+   sdtracing
+   massmoms
+   thermoeqns
 
 Indices and tables
 ==================

@@ -76,9 +76,11 @@ class SuperdropProperties():
         return 4.0/3.0 * np.pi * r**3
 
     def mass(self, r, m_sol):
-        ''' total mass of droplet (water + (dry) areosol) [g],
-         m =  4/3*pi*rho_l**3 + m_sol(1-rho_l/rho_sol) 
-        ie. m = 4/3*pi*rhoeff*R**3 '''
+        '''
+        total mass of droplet (water + (dry) areosol) [g],
+        m =  4/3*pi*rho_l**3 + m_sol(1-rho_l/rho_sol) 
+        ie. m = 4/3*pi*rhoeff*R**3
+        '''
 
         m_sol = m_sol/1000 # convert from grams to Kg
         r = r/1e6 # convert microns to m
