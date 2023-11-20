@@ -53,6 +53,7 @@ release = '4.0'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.duration',
+    'furo'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
