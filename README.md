@@ -17,4 +17,4 @@
 
 
 # CLEO
-CLEO is Clara Bayley's implementation of a superdroplet model. The name, CLEO, is a reference to Cleopatra, it is also an acronym - currently CLEO = Clouds in a Lagrangian Exascale superdroplet-mOdel (except that it's not yet exascale...).
+CLEO is a library for Super-Droplet Model (SDM) cloud microphysics. The name, CLEO, is a reference to Cleopatra, it is also an acronym something like CLEO = Clouds in a Lagrangian Exascale mOdel.
