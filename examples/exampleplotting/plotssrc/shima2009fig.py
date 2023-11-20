@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 17th November 2023
+Last Modified: Monday 20th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 from scipy.special import iv
 
 sys.path.append("../../../")  # for imports from pySD package
-from pySD.output_src import sdtracing
+from pySD.cleoout_src import sdtracing
 
 def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
                               n_a, r_a, smoothsig, savename=""):

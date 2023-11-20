@@ -3,14 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-PySD
-====
+GbxBoundariesBinary
+===================
 
 **CLEO** (/ˌkliːə/ ) is a library for CLEO is a library for
-Super-Droplet Model (SDM) cloud microphysics.
-
+Super-Droplet Model (SDM) cloud microphysics. 
 PySD is CLEO's Python Module with submodules related to generating
 input files and processing the Zarr output from CLEO.
+
+GbxBoundariesBinary is a submodule of pySD used for generating an input
+binary file for CLEO which contains the gridbox boundaries of
+a 0-D, 1-D, 2-D or 3-D cartesian domain.
 
 .. note::
    Please consider that this project is under active development.
@@ -19,14 +22,7 @@ input files and processing the Zarr output from CLEO.
    :maxdepth: 1
    :caption: Contents:
 
-   cxx2py 
-   editconfigfile
-   gbxboundariesbinary_src/gbxboundariesbinary_src
-   initsuperdropsbinary_src/initsuperdropsbinary_src
-   output
-   readbinary
-   thermobinary
-   writebinary
+   create_gbxboundaries
 
 Indices and tables
 ==================

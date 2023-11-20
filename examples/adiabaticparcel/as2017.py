@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 17th November 2023
+Last Modified: Monday 20th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -39,8 +39,8 @@ sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from examp
 
 from plotssrc import individSDs, as2017fig
 from pySD import editconfigfile
-from pySD.output_src import sdtracing
-from pySD.output_src import *
+from pySD.cleoout_src import sdtracing
+from pySD.cleoout_src import *
 from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
