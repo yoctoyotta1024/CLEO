@@ -27,15 +27,16 @@ jobs:
       - name: Test with pytest
         run: pytest .
 
-      # - name: Build docs
-      #   run: |
-      #     cd docs && make html
-      # - name: Archive build artifacts (i.e. documentation)
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: docs
-      #     path: |
-      #       docs/build
+      - name: Build docs
+        run: |
+          cd docs && make html
+      - name: Archive build artifacts (i.e. documentation)
+        uses: actions/upload-artifact@v2
+        with:
+          name: docs
+          path: |
+            docs/build
+
   # publish:
   #   needs: build
   #   # Only publish documentation when merging into `origin/main`.`
