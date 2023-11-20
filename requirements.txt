@@ -18,7 +18,7 @@
 
 pytest
 sphinx
-furo=2023.9.10
+furo
 numpy
 scipy
 matplotlib

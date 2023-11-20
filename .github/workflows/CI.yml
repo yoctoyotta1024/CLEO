@@ -5,8 +5,6 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     defaults:
       run:
         shell: bash -l {0}
@@ -31,26 +29,28 @@ jobs:
         run: pytest .
 
       - name: Build docs
-        uses: ammaraskar/sphinx-action@master
-      - name: Upload build artifacts (i.e. documentation)
-        uses: actions/upload-artifact@v3
+        run: |
+          cd docs && make html
+      - name: Archive build artifacts (i.e. documentation)
+        uses: actions/upload-artifact@v2
         with:
-          name: html-docs
-          path: build/docs/build
+          name: docs
+          path: |
+            docs/build
 
-  publish:
-    needs: build
-    # Only publish documentation when merging into `origin/main`.`
-    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download build artifacts (i.e. documentation) 
-        uses: actions/download-artifact@v3
-        with:
-          name: html-docs
-          path: docs/build/html/
-      - name: Publish docs on github pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/build/html
+  # publish:
+  #   needs: build
+  #   # Only publish documentation when merging into `origin/main`.`
+  #   if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download compiled book
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: docs
+  #         path: build
+  #     - name: Publish book on github pages
+  #       uses: peaceiris/actions-gh-pages@v3
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         publish_dir: build/html
