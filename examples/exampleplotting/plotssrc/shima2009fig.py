@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 from scipy.special import iv
 
 sys.path.append("../../../")  # for imports from pySD package
-from pySD.cleoout_src import sdtracing
+from pySD.sdmout_src import sdtracing
 
 def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
                               n_a, r_a, smoothsig, savename=""):
