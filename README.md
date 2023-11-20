@@ -17,4 +17,5 @@
 
 
 # CLEO
-CLEO is a library for Super-Droplet Model (SDM) cloud microphysics. The name, CLEO, is a reference to Cleopatra, it is also an acronym something like CLEO = Clouds in a Lagrangian Exascale mOdel.
+CLEO is a library for Super-Droplet Model microphysics.
+You can read more about CLEO in its documentation: <https://yoctoyotta1024.github.io/CLEO/>.
