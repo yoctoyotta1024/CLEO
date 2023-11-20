@@ -1,18 +1,16 @@
-.. CLEO documentation master file, created by
+.. CLEO PySD documentation master file, created by
    sphinx-quickstart on Mon Nov 20 12:27:54 2023.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to CLEO's Documentation!
-================================
+PySD
+====
 
 **CLEO** (/ˌkliːə/ ) is a library for CLEO is a library for
 Super-Droplet Model (SDM) cloud microphysics.
 
-The name, CLEO, is a reference to Cleopatra <https://www.britannica.com/biography/Cleopatra-queen-of-Egypt>.
-It is also an acronym, something like CLEO = Clouds in a Lagrangian Exascale mOdel.
-
-To jump straight in, check out the :doc:`quickstart section <usage/quickstart>`!.
+PySD is CLEO's Python Module with submodules related to generating
+input files and processing the Zarr output from CLEO.
 
 .. note::
    Please consider that this project is under active development.
@@ -21,10 +19,14 @@ To jump straight in, check out the :doc:`quickstart section <usage/quickstart>`!
    :maxdepth: 1
    :caption: Contents:
 
-   usage/installation
-   usage/quickstart
-
-   pySD/pySD
+   cxx2py 
+   editconfigfile
+   gbxboundariesbinary
+   initsuperdropsbinary
+   output
+   readbinary
+   thermobinary
+   writebinary
 
 Indices and tables
 ==================
