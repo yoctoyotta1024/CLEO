@@ -23,3 +23,4 @@ a 0-D, 1-D, 2-D or 3-D cartesian domain.
    :caption: Contents:
 
    create_gbxboundaries
+   read_gbxboundaries
