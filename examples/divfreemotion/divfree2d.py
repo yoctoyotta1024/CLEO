@@ -45,10 +45,10 @@ from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
+
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
-
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
@@ -104,7 +104,6 @@ sratios = [1.0, 1.0] # s_ratio [below, above] Zbase
 ### ---------------------------------------------------------------- ###
 ### ------------------- BINARY FILES GENERATION--------------------- ###
 ### ---------------------------------------------------------------- ###
-
 ### --- ensure build, share and bin directories exist --- ###
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
@@ -158,14 +157,19 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
+### ---------------------------------------------------------------- ###
+### -------------------- COMPILE AND RUN CLEO ---------------------- ###
+### ---------------------------------------------------------------- ###
 # 2. compile and the run model
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-os.system('make -j 64 divfree2D')
-# os.system('make clean && make -j 64 gol0D')
+os.system('make clean && make -j 64 divfree2D')
 executable = path2build+'/examples/divfreemotion/src/divfree2D'
 os.system(executable + ' ' + configfile)
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
+
 
 # 3. load and plot results
 # read in constants and intial setup from setup .txt file
