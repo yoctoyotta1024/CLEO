@@ -119,7 +119,6 @@ os.system("rm "+thermofile[:-4]+"*")
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
-
 ### ----- write thermodyanmics binaries ----- ###
 thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
                                                 THETA, qvapmethod, sratios, Zbase,
@@ -179,33 +178,21 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
+totnsupers =pyzarr.get_totnsupers(dataset)
 
 # 4. plot results
-savename = binpath + "df2d_nsupers_validation.png"
-### TODO [TODO:] 
+savename = savefigpath + "df2d_nsupers_validation.png"
+pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
 nsample = 250
-savename = binpath + "df2d_randomsample_validation.png"
-individSDs.plot_randomsample_superdrops(time, sddata,
+savename = savefigpath + "df2d_randomsample_validation.png"
+pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
                                         nsample,
                                         savename=savename)
-savename = binpath + "df2d_motion2d_validation.png"
-individSDs.plot_randomsample_superdrops_2dmotion(sddata,
+savename = savefigpath + "df2d_motion2d_validation.png"
+pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  config["totnsupers"],
                                                  nsample,
-                                                 savename=savename)
-
-argsdict = {'time': time,
-            'massmoms': massmoms}
-genericplot(plot_domainmassmoments, argsdict,
-            figsize=(10,6), savefig=True,
-            savedir=savedir, savename=savename)
-
-savename = "randomsampleSDs.png"
-argsdict = {'time': time,
-            'sddata': sddata,
-            'nsample':  50}
-genericplot(plot_randomsampleSDs, argsdict,
-            figsize=(10,6), savefig=True,
-            savedir=savedir, savename=savename)
+                                                 savename=savename,
+                                                 arrows=False)

@@ -108,7 +108,7 @@ def plot_randomsample_superdrops(time, sddata, totnsupers,
   axs[0, 2].set_ylabel('solute mass, msol /g')
   axs[1, 0].set_ylabel('zcoord /km')
   axs[1, 1].set_ylabel('xcoord /km')
-  axs[1, 2].set_ylabel('xcoord /km')
+  axs[1, 2].set_ylabel('ycoord /km')
   for ax in axs[1,:]:
     ax.set_xlabel("time /min")
 
