@@ -38,7 +38,7 @@ from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
-
+from pySD.initsuperdropsbinary_src import initattributes as iattrs
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -56,7 +56,8 @@ thermofile =  sharepath+"/divfree2d_dimlessthermo.dat"
 setupfile = binpath+"divfree2d_setup.txt"
 dataset = binpath+"divfree2d_sol.zarr"
 
-# booleans for [making, showing] initialisation figures
+# directory and booleans for [saving, showing] initialisation figures
+savefigpath = path2build+"/bin/"
 isfigures = [True, False]
 
 ### --- settings for 2-D gridbox boundaries --- ###
@@ -106,27 +107,51 @@ else:
   Path(path2build).mkdir(exist_ok=True) 
   Path(sharepath).mkdir(exist_ok=True) 
   Path(binpath).mkdir(exist_ok=True) 
-
-### 1. create files for gridbox boundaries and initial SD conditions
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
-cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
-                                     ygrid, constsfile)
+os.system("rm "+thermofile[:-4]+"*")
+
+### ----- write gridbox boundaries binary ----- ###
+cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
-initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
-                                               coord3gen, coord1gen, coord2gen)
-create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
-                                                  configfile, constsfile,
-                                                  gridfile, nsupers, numconc)
-read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
 
+### ----- write thermodyanmics binaries ----- ###
+thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+                                        THETA, qvapmethod, sratios, Zbase,
+                                        qcond, WMAX, Zlength, Xlength,
+                                        VVEL, moistlayer)
+cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
+                                    constsfile, gridfile)
+
+
+### ----- write initial superdroplets binary ----- ###
+nsupers = iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
+coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
+coord2gen = None                        # do not generate superdroplet coord2s
+radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
+radiigen = iattrs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
+
+initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
+                                        coord3gen, coord1gen, coord2gen)
+csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+                                      configfile, constsfile,
+                                      gridfile, nsupers, numconc)
+
+### ----- show (and save) plots of binary file data ----- ###
 if isfigures[0]:
-    rgrid.plot_gridboxboundaries(constsfile, gridfile,
-                                 binpath, isfigures[1])
-    read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
-                                              gridfile, binpath, isfigures[1], "all")
-plt.close()
+  if isfigures[1]:
+    Path(savefigpath).mkdir(exist_ok=True) 
+  rgrid.plot_gridboxboundaries(constsfile, gridfile,
+                               savefigpath, isfigures[1])
+  rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
+                              thermofile, savefigpath, isfigures[1])
+  rsupers.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+                              gridfile, savefigpath, isfigures[1],
+                              SDgbxs2plt) 
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
 
 # 2. compile and the run model
 os.chdir(path2build)

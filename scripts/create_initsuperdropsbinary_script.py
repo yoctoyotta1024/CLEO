@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 9th November 2023
+Last Modified: Tuesday 21st November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +25,7 @@ import numpy as np
 from pathlib import Path
 
 sys.path.append(sys.argv[1]) # path to pySD (same as to CLEO)
-from pySD.initsuperdropsbinary_src import initattributes as iSDs
+from pySD.initsuperdropsbinary_src import initattributes as iattrs 
 from pySD.initsuperdropsbinary_src import radiiprobdistribs as rprobs
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
@@ -53,18 +53,18 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 ### ---        (an int or dict of ints)     --- ###
 # zlim = 1000
 # npergbx = 8
-# nsupers = iSDs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+# nsupers =  iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 nsupers = 1
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
 # monor                = 0.04910258806                # all SDs have this same radius [m]
 monor                = 0.05e-6                        # all SDs have this same radius [m]
-radiigen  = iSDs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
+radiigen  =  iattrs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
 
 # rspan                = [1e-8, 9e-5]                 # min and max range of radii to sample [m]
 # randomr              = True                         # sample radii range randomly or not
-# radiigen = iSDs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
+# radiigen =  iattrs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Droplet Radius Probability Distribution --- ###
@@ -107,22 +107,22 @@ radiiprobdist = rprobs.DiracDelta(dirac0)
 
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
-# coord3gen            = iSDs.MonoCoordGen(monocoord3)
-coord3gen            = iSDs.SampleCoordGen(True) # sample coord3 range randomly or not
+# coord3gen            =  iattrs.MonoCoordGen(monocoord3)
+coord3gen            =  iattrs.SampleCoordGen(True) # sample coord3 range randomly or not
 # # coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
-# coord1gen            = iSDs.MonoCoordGen(monocoord1)
-coord1gen            = iSDs.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord1gen            =  iattrs.MonoCoordGen(monocoord1)
+coord1gen            =  iattrs.SampleCoordGen(True) # sample coord1 range randomly or not
 # coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
 # monocoord2           = 1000                        # all SDs have this same coord2 [m] 
-# coord2gen            = iSDs.MonoCoordGen(monocoord2)
-# coord2gen            = iSDs.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord2gen            =  iattrs.MonoCoordGen(monocoord2)
+# coord2gen            =  iattrs.SampleCoordGen(True) # sample coord1 range randomly or not
 coord2gen            = None                        # do not generate superdroplet coord2s
 ### ----------------------------------------------- ###
 
@@ -138,7 +138,7 @@ else:
   Path(binariespath).mkdir(exist_ok=True) 
 
 ### write initial superdrops binary
-initattrsgen = iSDs.InitManyAttrsGen(radiigen, radiiprobdist,
+initattrsgen =  iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
                                       coord3gen, coord1gen, coord2gen)
 csupers.write_initsuperdrops_binary(initsupersfile, initattrsgen, 
                                     configfile, constsfile,
