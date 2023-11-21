@@ -31,10 +31,10 @@ cuda="nvc++"
 
 ### ------------ choose Kokkos configuration ----------- ###
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
-kokkoshost=""                                                     
-# kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                          # flags for host parallelism (e.g. using OpenMP)
-# kokkosdevice=""   # flags for device parallelism (e.g. using CUDA)
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                          # flags for host parallelism (e.g. using OpenMP)
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"   # flags for device parallelism (e.g. using CUDA)
+# kokkoshost=""                                                     
+# kokkosdevice=""   # flags for device parallelism (e.g. using CUDA)
 ### ---------------------------------------------------- ###
 
 ### ------------------------ build --------------------- ###
@@ -53,6 +53,6 @@ mkdir ${path2build}share
 
 ### ------------------- compile & run ------------------ ###
 ### generate input files and run adiabatic parcel example
-${python} shima2009.py ${path2CLEO} ${path2build} ${configfile}
+${python} divfree2d.py ${path2CLEO} ${path2build} ${configfile}
 
 ### ---------------------------------------------------- ###

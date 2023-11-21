@@ -1,12 +1,12 @@
 '''
 ----- CLEO -----
-File: shima2009.py
-Project: golovin
+File: divfree2d.py
+Project: divfreemotion
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 20th November 2023
+Last Modified: Tuesday 21st November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -34,7 +34,6 @@ configfile = sys.argv[3]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
-from plotssrc import shima2009fig
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -45,12 +44,12 @@ from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-initSDsfile = sharepath+"golovin_dimlessSDsinit.dat"
-gridfile = sharepath+"golovin_dimlessGBxboundaries.dat"
+initSDsfile = sharepath+"divfree2d_dimlessSDsinit.dat"
+gridfile = sharepath+"divfree2d_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
-setupfile = binpath+"golovin_setup.txt"
-dataset = binpath+"golovin_sol.zarr"
+setupfile = binpath+"divfree2d_setup.txt"
+dataset = binpath+"divfree2d_sol.zarr"
 
 # booleans for [making, showing] initialisation figures
 isfigures = [True, False]
@@ -102,9 +101,9 @@ plt.close()
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-os.system('make -j 64 gol0D')
+os.system('make -j 64 divfree2D')
 # os.system('make clean && make -j 64 gol0D')
-executable = path2build+'/examples/golovin/src/gol0D'
+executable = path2build+'/examples/divfreemotion/src/divfree2D'
 os.system(executable + ' ' + configfile)
 
 # 3. load and plot results
@@ -117,13 +116,4 @@ time = pyzarr.get_time(dataset).secs
 sddata = pyzarr.get_supers(dataset, consts)
 
 # 4. plot results
-tplt = [0, 1200, 2400, 3600]
-# 0.2 factor for guassian smoothing
-smoothsig = 0.62*(config["totnsupers"]**(-1/5))
-plotwitherr = True
-
-savename = binpath + "golovin_validation.png"
-fig, ax = shima2009fig.golovin_validation_figure(plotwitherr, time,
-                                    sddata, tplt, gbxs["domainvol"],
-                                    numconc, volexpr0, smoothsig,
-                                    savename=savename)
+savename = binpath + "divfree2d_validation.png"
