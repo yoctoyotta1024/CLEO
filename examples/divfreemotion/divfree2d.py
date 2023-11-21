@@ -54,13 +54,13 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-gridfile = sharepath+"divfree2d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath+"divfree2d_dimlessSDsinit.dat"
-thermofile =  sharepath+"/divfree2d_dimlessthermo.dat"
+gridfile = sharepath+"df2d_dimlessGBxboundaries.dat"
+initSDsfile = sharepath+"df2d_dimlessSDsinit.dat"
+thermofile =  sharepath+"/df2d_dimlessthermo.dat"
 
 # path and file names for plotting results
-setupfile = binpath+"divfree2d_setup.txt"
-dataset = binpath+"divfree2d_sol.zarr"
+setupfile = binpath+"df2d_setup.txt"
+dataset = binpath+"df2d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [True, False] # booleans for [saving, showing]
@@ -181,4 +181,4 @@ time = pyzarr.get_time(dataset).secs
 sddata = pyzarr.get_supers(dataset, consts)
 
 # 4. plot results
-savename = binpath + "divfree2d_validation.png"
+savename = binpath + "df2d_validation.png"
