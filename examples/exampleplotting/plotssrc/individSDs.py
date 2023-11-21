@@ -100,7 +100,7 @@ def plot_randomsample_superdrops(time, sddata, totnsupers,
       axs[1, a].plot(time.mins, data, linestyle="",
                    marker=mks, markersize=0.2)
     except:
-       print("WARNING: didn't plot "+attr)
+       print("WARNING: didn't plot "+coord)
     
   axs[0, 0].set_yscale('log')
   axs[0, 0].set_ylabel('radius, r /\u03BCm')
@@ -143,7 +143,7 @@ def plot_randomsample_superdrops_2dmotion(sddata, totnsupers,
   ax.plot(coordx, coordz, linestyle="",  marker=mks, markersize=0.4)
     
   ax.set_ylabel('zcoord /km')
-  ax.set_ylabel('xcoord /km')
+  ax.set_xlabel('xcoord /km')
 
   fig.tight_layout()
 
@@ -154,4 +154,4 @@ def plot_randomsample_superdrops_2dmotion(sddata, totnsupers,
   
   plt.show()
 
-  return fig, axs
+  return fig, ax

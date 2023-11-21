@@ -177,7 +177,7 @@ config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setupfile, isprint=True)
 gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
-time = pyzarr.get_time(dataset).secs
+time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
 
 # 4. plot results
