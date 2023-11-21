@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Tuesday 21st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -99,11 +99,11 @@ inline MicrophysicalProcess auto
 Condensation(const unsigned int interval,
              const bool doAlterThermo,
              const unsigned int niters,
-             const std::function<double(int)> step2dimlesstime,
+             const std::function<double(unsigned int)> step2dimlesstime,
              const double maxrtol,
              const double maxatol,
              const double SUBDELT,
-             const std::function<double(int)> realtime2dimless)
+             const std::function<double(double)> realtime2dimless)
 
 /* constructs Microphysical Process for
 condensation/evaporation of superdroplets with a

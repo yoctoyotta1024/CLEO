@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 22nd October 2023
+ * Last Modified: Tuesday 21st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,7 +39,7 @@ inline Observer auto
 TimeObserver(const unsigned int interval,
              FSStore &store,
              const int maxchunk,
-             const std::function<double(int)> step2dimlesstime);
+             const std::function<double(unsigned int)> step2dimlesstime);
 /* constructs observer of time with a
 constant timestep 'interval' using an
 instance of the DoTimeObs class */
@@ -52,12 +52,12 @@ the CoordStorage instance */
 private:
   using store_type = CoordStorage<double>;
   std::shared_ptr<store_type> zarr;
-  std::function<double(int)> step2dimlesstime; // function to convert timesteps to real time
+  std::function<double(unsigned int)> step2dimlesstime; // function to convert timesteps to real time
 
 public:
   DoTimeObs(FSStore &store,
           const int maxchunk,
-          const std::function<double(int)> step2dimlesstime)
+          const std::function<double(unsigned int)> step2dimlesstime)
       : zarr(std::make_shared<store_type>(store, maxchunk,
                                           "time", "<f8",
                                           "s", dlc::TIME0)),
@@ -85,7 +85,7 @@ inline Observer auto
 TimeObserver(const unsigned int interval,
              FSStore &store,
              const int maxchunk,
-             const std::function<double(int)> step2dimlesstime)
+             const std::function<double(unsigned int)> step2dimlesstime)
 /* constructs observer of time with a
 constant timestep 'interval' using an
 instance of the DoTimeObs class */

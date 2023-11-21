@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Tuesday 21st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -172,7 +172,7 @@ private:
 
 public:
   PredCorrMotion(const unsigned int motionstep,
-                 const std::function<double(int)> int2time,
+                 const std::function<double(unsigned int)> int2time,
                  const TV i_terminalv)
       : delt(int2time(motionstep)),
         terminalv(i_terminalv) {}

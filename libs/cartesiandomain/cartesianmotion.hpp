@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Tuesday 21st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -66,7 +66,7 @@ UpdateSdgbxindex struct for a cartesian domain */
   PredCorrMotion<CartesianMaps, TV> update_superdrop_coords;
 
   CartesianMotion(const unsigned int motionstep,
-                  const std::function<double(int)> int2time,
+                  const std::function<double(unsigned int)> int2time,
                   const TV i_terminalv)
       : interval(motionstep),
         update_superdrop_coords(interval, int2time, i_terminalv) {}

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Tuesday 21st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,14 +40,14 @@ struct PrintObserver
 {
 private:
   unsigned int interval;                          // timestep between print statements
-  std::function<double(int)> step2realtime; // function to convert timesteps to real time
+  std::function<double(unsigned int)> step2realtime; // function to convert timesteps to real time
 
   void print_statement(const unsigned int t_mdl,
                           const viewh_constgbx h_gbxs) const;
 
 public:
   PrintObserver(const unsigned int obsstep,
-                const std::function<double(int)> step2realtime)
+                const std::function<double(unsigned int)> step2realtime)
       : interval(obsstep), step2realtime(step2realtime) {}
 
   void before_timestepping(const viewh_constgbx h_gbxs) const

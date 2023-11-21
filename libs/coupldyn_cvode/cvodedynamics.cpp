@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Tuesday 21st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -93,7 +93,7 @@ int CvodeDynamics::reinitialise(const double next_t,
 
 CvodeDynamics::CvodeDynamics(const Config &config,
                              const unsigned int couplstep,
-                             const std::function<double(int)> step2dimlesstime)
+                             const std::function<double(unsigned int)> step2dimlesstime)
     /* construct instance of CVODE ODE solver with initial conditions */
     : interval(couplstep),
       step2dimlesstime(step2dimlesstime),

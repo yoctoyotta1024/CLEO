@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 17th November 2023
+ * Last Modified: Tuesday 21st November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -88,7 +88,7 @@ public:
 template <PairProbability Probability>
 inline MicrophysicalProcess auto
 CollCoal(const unsigned int interval,
-         const std::function<double(int)> int2realtime,
+         const std::function<double(unsigned int)> int2realtime,
          const Probability collcoalprob)
 /* constructs Microphysical Process for collision-coalescence
 of superdroplets with a constant timestep 'interval' and
