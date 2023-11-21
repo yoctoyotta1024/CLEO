@@ -39,6 +39,12 @@ from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.initsuperdropsbinary_src import initattributes as iattrs
+from pySD.initsuperdropsbinary_src import radiiprobdistribs as rprobs 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.thermobinary_src import thermogen
+from pySD.thermobinary_src import create_thermodynamics as cthermo
+from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -56,9 +62,10 @@ thermofile =  sharepath+"/divfree2d_dimlessthermo.dat"
 setupfile = binpath+"divfree2d_setup.txt"
 dataset = binpath+"divfree2d_sol.zarr"
 
-# directory and booleans for [saving, showing] initialisation figures
-savefigpath = path2build+"/bin/"
-isfigures = [True, False]
+### --- plotting initialisation figures --- ###
+isfigures = [True, False] # booleans for [saving, showing]
+savefigpath = path2build+"/bin/" # directory for saving figures
+SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 2-D gridbox boundaries --- ###
 zgrid = [0, 1500, 100]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -81,18 +88,16 @@ scalefacs            = [6e6, 4e6]
 numconc = np.sum(scalefacs)
 
 ### --- settings for 2D Thermodyanmics --- ###
-PRESS0 = 101500 # [Pa]
-THETA = 289 # [K]
-qcond = 0.0 # [Kg/Kg]
-WMAX = 0.6 # [m/s]
-VVEL = None # [m/s]
-Zlength = 1500 # [m]
-Xlength = 1500 # [m]
+PRESS0 = 100000 # [Pa]
+THETA = 298.15  # [K]
+qcond = 0.0     # [Kg/Kg]
+WMAX = 0.6      # [m/s]
+VVEL = None     # [m/s]
+Zlength = 1500  # [m]
+Xlength = 1500  # [m]
 qvapmethod = "sratio"
-Zbase = 750 # [m]
-sratios = [0.99, 1.0025] # s_ratio [below, above] Zbase
-moistlayer=False
-
+Zbase = 750     # [m]
+sratios = [1.0, 1.0] # s_ratio [below, above] Zbase
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -117,10 +122,10 @@ rgrid.print_domain_info(constsfile, gridfile)
 
 
 ### ----- write thermodyanmics binaries ----- ###
-thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
-                                        THETA, qvapmethod, sratios, Zbase,
-                                        qcond, WMAX, Zlength, Xlength,
-                                        VVEL, moistlayer)
+thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
+                                                THETA, qvapmethod, sratios, Zbase,
+                                                qcond, WMAX, Zlength, Xlength,
+                                                VVEL)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
