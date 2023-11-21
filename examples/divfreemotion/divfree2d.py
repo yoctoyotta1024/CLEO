@@ -39,13 +39,18 @@ from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 
-############### INPUTS ##################
-# path and filenames for creating SD initial conditions and for running model
+### ---------------------------------------------------------------- ###
+### ----------------------- INPUT PARAMETERS ----------------------- ###
+### ---------------------------------------------------------------- ###
+
+### --- essential paths and filenames --- ###
+# path and filenames for creating initial SD conditions
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-initSDsfile = sharepath+"divfree2d_dimlessSDsinit.dat"
 gridfile = sharepath+"divfree2d_dimlessGBxboundaries.dat"
+initSDsfile = sharepath+"divfree2d_dimlessSDsinit.dat"
+thermofile =  sharepath+"/divfree2d_dimlessthermo.dat"
 
 # path and file names for plotting results
 setupfile = binpath+"divfree2d_setup.txt"
@@ -54,27 +59,53 @@ dataset = binpath+"divfree2d_sol.zarr"
 # booleans for [making, showing] initialisation figures
 isfigures = [True, False]
 
-# settings for 0D Model (number of SD and grid coordinates)
-nsupers = {0: 2048}
-coord_params = ["false"]
-zgrid = np.asarray([0, 100])
-xgrid = np.asarray([0, 100])
-ygrid = np.asarray([0, 100])
+### --- settings for 2-D gridbox boundaries --- ###
+zgrid = [0, 1500, 100]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+xgrid = [0, 1500, 100]     # evenly spaced xhalf coords [m]
+ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
-# settings for distirbution from exponential in droplet volume
-# peak of volume exponential distribution [m]
-volexpr0 = 30.531e-6
-numconc = 2**(23)                     # total no. conc of real droplets [m^-3]
-rspan = [1e-8, 9e-5]                # max and min range of radii to sample [m]
-randomr = True                        # sample radii range randomly or not
+### --- settings for initial superdroplets --- ###
+# settings for initial superdroplet coordinates
+zlim = 750        # max z coord of superdroplets
+npergbx = 8       # number of superdroplets per gridbox 
 
-samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
-radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
-radiigen = initattributes.SampleDryradiiGen(
-    rspan, randomr)  # radii are sampled from rspan [m]
-coord3gen = None                        # do not generate superdroplet coords
-coord1gen = None
-coord2gen = None
+# [min, max] range of initial superdroplet radii (and implicitly solute masses)
+rspan                = [3e-9, 3e-6] # [m]
+
+# settings for initial superdroplet multiplicies
+# (from bimodal Lognormal distribution)
+geomeans             = [0.02e-6, 0.15e-6]               
+geosigs              = [1.4, 1.6]                    
+scalefacs            = [6e6, 4e6]   
+numconc = np.sum(scalefacs)
+
+### --- settings for 2D Thermodyanmics --- ###
+PRESS0 = 101500 # [Pa]
+THETA = 289 # [K]
+qcond = 0.0 # [Kg/Kg]
+WMAX = 0.6 # [m/s]
+VVEL = None # [m/s]
+Zlength = 1500 # [m]
+Xlength = 1500 # [m]
+qvapmethod = "sratio"
+Zbase = 750 # [m]
+sratios = [0.99, 1.0025] # s_ratio [below, above] Zbase
+moistlayer=False
+
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
+
+### ---------------------------------------------------------------- ###
+### ------------------- BINARY FILES GENERATION--------------------- ###
+### ---------------------------------------------------------------- ###
+
+### --- ensure build, share and bin directories exist --- ###
+if path2CLEO == path2build:
+  raise ValueError("build directory cannot be CLEO")
+else:
+  Path(path2build).mkdir(exist_ok=True) 
+  Path(path2build+"/share/").mkdir(exist_ok=True) 
+  Path(path2build+"/bin/").mkdir(exist_ok=True) 
 
 ### 1. create files for gridbox boundaries and initial SD conditions
 os.system("rm "+gridfile)
