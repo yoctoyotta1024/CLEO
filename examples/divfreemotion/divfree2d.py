@@ -33,7 +33,7 @@ configfile = sys.argv[3]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
-from plotssrc import individSDs
+from plotssrc import pltsds, pltmoms
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid

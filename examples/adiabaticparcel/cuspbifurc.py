@@ -37,7 +37,7 @@ configfile = sys.argv[3]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
-from plotssrc import individSDs, as2017fig
+from plotssrc import pltsds, as2017fig
 from pySD.sdmout_src import sdtracing
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
@@ -146,7 +146,7 @@ radii = sdtracing.attribute_for_superdroplets_sample(sddata, "radius",
                                                      minid=sample[0],
                                                      maxid=sample[1])
 savename = binpath + "/cuspbifurc_SDgrowth.png"
-individSDs.individ_radiusgrowths_figure(time, radii, savename=savename)
+pltsds.individ_radiusgrowths_figure(time, radii, savename=savename)
 
 attrs = ["radius", "xi", "msol"]
 sd0 = sdtracing.attributes_for1superdroplet(sddata, 0, attrs)

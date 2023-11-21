@@ -37,7 +37,7 @@ configfile = sys.argv[3]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
-from plotssrc import individSDs, as2017fig
+from plotssrc import pltsds, as2017fig
 from pySD import editconfigfile
 from pySD.sdmout_src import sdtracing
 from pySD.sdmout_src import *

@@ -1,6 +1,6 @@
 '''
 ----- CLEO -----
-File: individSDs.py
+File: pltsds.py
 Project: plotssrc
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
