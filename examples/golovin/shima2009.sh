@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=cuspbifurc
+#SBATCH --job-name=shima2009
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./cuspbifurc_out.%j.out
-#SBATCH --error=./cuspbifurc_err.%j.out
+#SBATCH --output=./shima2009_out.%j.out
+#SBATCH --error=./shima2009_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
