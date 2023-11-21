@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 20th November 2023
+Last Modified: Tuesday 21st November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -232,7 +232,7 @@ for i in range(len(monors)):
 
     fig.tight_layout()
 
-    savename = "arabas_shima_condensation_"+str(i)+".png"
+    savename = "as2017fig_"+str(i)+".png"
     fig.savefig(binpath+savename, dpi=400,
                 bbox_inches="tight", facecolor='w', format="png")
     print("Figure .png saved as: "+binpath+savename)
