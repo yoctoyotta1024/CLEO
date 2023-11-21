@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: main_gol0D.cpp
+ * File: main_exmpl2D.cpp
  * Project: src
  * Created Date: Thursday 12th October 2023
  * Author: Clara Bayley (CB)
@@ -97,7 +97,8 @@ create_gbxmaps(const Config &config)
 inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  return NullMicrophysicalProcess{}; 
+  // TODO colls with hydrokernel
+  return cond >> colls; 
 }
 
 inline Motion<CartesianMaps> auto

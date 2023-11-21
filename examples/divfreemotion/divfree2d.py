@@ -68,8 +68,8 @@ savefigpath = path2build+"/bin/" # directory for saving figures
 SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 2-D gridbox boundaries --- ###
-zgrid = [0, 1500, 100]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = [0, 1500, 100]     # evenly spaced xhalf coords [m]
+zgrid = [0, 1500, 50]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+xgrid = [0, 1500, 50]     # evenly spaced xhalf coords [m]
 ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for initial superdroplets --- ###
@@ -184,7 +184,7 @@ totnsupers =pyzarr.get_totnsupers(dataset)
 savename = savefigpath + "df2d_nsupers_validation.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-nsample = 250
+nsample = 500
 savename = savefigpath + "df2d_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  config["totnsupers"],

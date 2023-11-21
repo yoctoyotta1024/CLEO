@@ -42,8 +42,8 @@ ngbxs = 225                              # total number of Gbxs
 totnsupers = 840                         # (initial) total no. of SDs
 
 # timestepping #
-CONDTSTEP = 2                             # time between SD condensation events [s]
-COLLTSTEP = 2                             # time between SD collision events [s]
+CONDTSTEP = 1                             # time between SD condensation events [s]
+COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 3                           # time between SDM motion [s]
 COUPLTSTEP = 3600                         # time between dynamic couplings [s]
 OBSTSTEP = 180                            # time between SDM observations [s]

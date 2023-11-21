@@ -184,7 +184,7 @@ totnsupers =pyzarr.get_totnsupers(dataset)
 savename = savefigpath + "exmpl2d_nsupers_validation.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-nsample = 250
+nsample = 500
 savename = savefigpath + "exmpl2d_randomsample_validation.png"
 pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
