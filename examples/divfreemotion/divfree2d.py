@@ -104,8 +104,8 @@ if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
   Path(path2build).mkdir(exist_ok=True) 
-  Path(path2build+"/share/").mkdir(exist_ok=True) 
-  Path(path2build+"/bin/").mkdir(exist_ok=True) 
+  Path(sharepath).mkdir(exist_ok=True) 
+  Path(binpath).mkdir(exist_ok=True) 
 
 ### 1. create files for gridbox boundaries and initial SD conditions
 os.system("rm "+gridfile)

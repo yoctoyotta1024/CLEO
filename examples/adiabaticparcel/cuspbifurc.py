@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 20th November 2023
+Last Modified: Tuesday 21st November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -93,7 +93,13 @@ def displacement(time, w_avg, thalf):
     return z
 
 ### 1. create files for gridbox boundaries and initial SD conditions
-Path(binpath).mkdir(parents=True, exist_ok=True)
+if path2CLEO == path2build:
+  raise ValueError("build directory cannot be CLEO")
+else:
+  Path(path2build).mkdir(exist_ok=True) 
+  Path(sharepath).mkdir(exist_ok=True) 
+  Path(binpath).mkdir(exist_ok=True) 
+  
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
@@ -121,7 +127,6 @@ os.system('rm -rf '+dataset)
 os.system("make clean && make -j 64 adia0D")
 executable = path2build+"/examples/adiabaticparcel/src/adia0D"
 os.system(executable + " " + configfile)
-
 
 # 3. load and plot results
 # read in constants and intial setup from setup .txt file

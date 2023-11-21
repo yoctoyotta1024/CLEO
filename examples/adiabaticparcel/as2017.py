@@ -131,7 +131,14 @@ for run_num in range(len(monors)*len(paramslist)):
 os.system("make clean && make -j 64 adia0D")
 
 # 2a. create file with gridbox boundaries
-Path(binpath).mkdir(parents=True, exist_ok=True)
+### --- ensure build, share and bin directories exist --- ###
+if path2CLEO == path2build:
+  raise ValueError("build directory cannot be CLEO")
+else:
+  Path(path2build).mkdir(exist_ok=True) 
+  Path(sharepath).mkdir(exist_ok=True) 
+  Path(binpath).mkdir(exist_ok=True) 
+  
 os.system("rm "+gridfile)
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
                                      ygrid, constsfile)
