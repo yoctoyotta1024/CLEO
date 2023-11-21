@@ -38,7 +38,7 @@ endif()
 # executable for CVODE-CLEO coupled model 0D condensation setup 
 set(divfree2D "divfree2D")
 add_executable(${divfree2D} EXCLUDE_FROM_ALL "main_divfree2D.cpp")
-target_link_libraries(${divfree2D} PRIVATE cartesiandomain "${SDMLIBS}")
+target_link_libraries(${divfree2D} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
 target_link_libraries(${divfree2D} PUBLIC Kokkos::kokkos)
 target_include_directories(${divfree2D} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 target_compile_options(${divfree2D} PRIVATE ${compileops}) 

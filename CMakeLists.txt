@@ -16,7 +16,11 @@ project(project
 set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ compiler
 # set(defaultcompileops -Werror -Wall -pedantic -g)           # -gdwarf-4 flag not possible for nvc++ compiler 
 
+# subdirectories of CLEO libray and main program
 add_subdirectory(libs)
 add_subdirectory(src)
+
+# subdirectories for specific examples of CLEO
 add_subdirectory(examples/adiabaticparcel/src)
+add_subdirectory(examples/divfreemotion/src)
 add_subdirectory(examples/golovin/src)

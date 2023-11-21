@@ -33,6 +33,7 @@ configfile = sys.argv[3]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
+from plotssrc import individSDs
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -180,4 +181,31 @@ time = pyzarr.get_time(dataset).secs
 sddata = pyzarr.get_supers(dataset, consts)
 
 # 4. plot results
-savename = binpath + "df2d_validation.png"
+savename = binpath + "df2d_nsupers_validation.png"
+### TODO [TODO:] 
+
+nsample = 250
+savename = binpath + "df2d_randomsample_validation.png"
+individSDs.plot_randomsample_superdrops(time, sddata,
+                                        config["totnsupers"],
+                                        nsample,
+                                        savename=savename)
+savename = binpath + "df2d_motion2d_validation.png"
+individSDs.plot_randomsample_superdrops_2dmotion(sddata,
+                                                 config["totnsupers"],
+                                                 nsample,
+                                                 savename=savename)
+
+argsdict = {'time': time,
+            'massmoms': massmoms}
+genericplot(plot_domainmassmoments, argsdict,
+            figsize=(10,6), savefig=True,
+            savedir=savedir, savename=savename)
+
+savename = "randomsampleSDs.png"
+argsdict = {'time': time,
+            'sddata': sddata,
+            'nsample':  50}
+genericplot(plot_randomsampleSDs, argsdict,
+            figsize=(10,6), savefig=True,
+            savedir=savedir, savename=savename)
