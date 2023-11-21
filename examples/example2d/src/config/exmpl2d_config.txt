@@ -1,0 +1,73 @@
+/*
+ * ----- CLEO -----
+ * File: exmpl2d_config.txt
+ * Project: config
+ * Created Date: Tuesday 21st November 2023
+ * Author: Clara Bayley (CB)
+ * Additional Contributors:
+ * -----
+ * Last Modified: Tuesday 21st November 2023
+ * Modified By: CB
+ * -----
+ * License: BSD 3-Clause "New" or "Revised" License
+ * https://opensource.org/licenses/BSD-3-Clause
+ * -----
+ * Copyright (c) 2023 MPI-M, Clara Bayley
+ * -----
+ * File Description:
+ * configuration input parameters for CLEO divergence free motion example
+ * Note: inital superdroplets data (eps, r0 and m_sol etc.)
+ * read from file "initsupers_filename" is made with PYSD module
+ * using python script "create_initsuperdropsbinary_script".
+ * Likewise data to make gridboxmap from gridbox boundaries is
+ * read from file "grid_filename" created using python
+ * "create_gbxboundariesbinary_script" script.
+ */
+
+
+### Initialisation parameters ###
+constants_filename = ../libs/cleoconstants.hpp                 # name of file for values of physical constants
+initsupers_filename = ./share/exmpl2d_dimlessSDsinit.dat       # binary filename for initialisation of SDs
+grid_filename = ./share/exmpl2d_dimlessGBxboundaries.dat       # binary filename for initialisation of GBxs / GbxMaps
+
+### Output Data parameters ###
+setuptxt = ./bin/exmpl2d_setup.txt                # .txt filename to copy configuration to
+zarrbasedir = ./bin/exmpl2d_sol.zarr              # zarr store base directory
+maxchunk = 1250000                                # maximum no. of elements in chunks of zarr store array
+
+### SDM Runtime parameters ###
+# domain setup #
+nspacedims = 2                           # no. of spatial dimensions to model 
+ngbxs = 225                              # total number of Gbxs
+totnsupers = 840                         # (initial) total no. of SDs
+
+# timestepping #
+CONDTSTEP = 2                             # time between SD condensation events [s]
+COLLTSTEP = 2                             # time between SD collision events [s]
+MOTIONTSTEP = 3                           # time between SDM motion [s]
+COUPLTSTEP = 3600                         # time between dynamic couplings [s]
+OBSTSTEP = 180                            # time between SDM observations [s]
+T_END = 7200                              # time span of integration from 0s to T_END [s]
+
+# microphysics #
+cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
+cond_SUBTSTEP = 0.1                       # smallest timestep in cases where substepping occurs [s]
+cond_rtol = 0.0                           # relative tolerance for implicit euler integration
+cond_atol = 0.01                          # abolute tolerance for implicit euler integration
+nfrags = -1                               # expected number of fragments in breakup event, (use -1 for nan value)
+
+# superdroplets #
+doAlterThermo = false                   # enable condensation to alter the thermodynamic state
+
+### Coupled Dynamics Solver Parameters ###
+# type of coupling #
+thermosolver = fromfile                                   # dynamics solver to configure
+
+### read in dynamics from file ###
+press_filename = ./share/exmpl2d_dimlessthermo_press.dat          # binary filename for pressure
+temp_filename = ./share/exmpl2d_dimlessthermo_temp.dat            # binary filename for temperature
+qvap_filename = ./share/exmpl2d_dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
+qcond_filename = ./share/exmpl2d_dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
+wvel_filename = ./share/exmpl2d_dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
+uvel_filename = ./share/exmpl2d_dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
+vvel_filename = ./share/exmpl2d_dimlessthermo_vvel.dat            # binary filename for horizontal y velocity

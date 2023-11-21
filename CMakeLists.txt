@@ -23,4 +23,5 @@ add_subdirectory(src)
 # subdirectories for specific examples of CLEO
 add_subdirectory(examples/adiabaticparcel/src)
 add_subdirectory(examples/divfreemotion/src)
+add_subdirectory(examples/example2d/src)
 add_subdirectory(examples/golovin/src)

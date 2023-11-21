@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
-File: divfree2d.py
-Project: divfreemotion
+File: example2d.py
+Project: example2d
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -15,9 +15,9 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO divfree2D to create the
-data and plots for divergence free motion of
-superdroplets in a 2-D divergence free wind field
+Script compiles and runs CLEO exmpl2D to create the
+data and plots precipitation example given 2-D flow
+field and constant thermodynamics read from a file
 '''
 
 import os
@@ -54,13 +54,13 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-gridfile = sharepath+"df2d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath+"df2d_dimlessSDsinit.dat"
-thermofile =  sharepath+"/df2d_dimlessthermo.dat"
+gridfile = sharepath+"exmpl2d_dimlessGBxboundaries.dat"
+initSDsfile = sharepath+"exmpl2d_dimlessSDsinit.dat"
+thermofile =  sharepath+"/exmpl2d_dimlessthermo.dat"
 
 # path and file names for plotting results
-setupfile = binpath+"df2d_setup.txt"
-dataset = binpath+"df2d_sol.zarr"
+setupfile = binpath+"exmpl2d_setup.txt"
+dataset = binpath+"exmpl2d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [True, False] # booleans for [saving, showing]
@@ -163,8 +163,8 @@ if isfigures[0]:
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-os.system('make clean && make -j 64 divfree2D')
-executable = path2build+'/examples/divfreemotion/src/divfree2D'
+os.system('make clean && make -j 64 exmpl2D')
+executable = path2build+'/examples/example2d/src/exmpl2D'
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -181,11 +181,16 @@ sddata = pyzarr.get_supers(dataset, consts)
 totnsupers =pyzarr.get_totnsupers(dataset)
 
 # 4. plot results
-savename = savefigpath + "df2d_nsupers_validation.png"
+savename = savefigpath + "exmpl2d_nsupers_validation.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
 nsample = 250
-savename = savefigpath + "df2d_motion2d_validation.png"
+savename = savefigpath + "exmpl2d_randomsample_validation.png"
+pltsds.plot_randomsample_superdrops(time, sddata,
+                                        config["totnsupers"],
+                                        nsample,
+                                        savename=savename)
+savename = savefigpath + "exmpl2d_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  config["totnsupers"],
                                                  nsample,
