@@ -125,7 +125,8 @@ def plot_randomsample_superdrops(time, sddata, totnsupers,
 
 
 def plot_randomsample_superdrops_2dmotion(sddata, totnsupers,
-                                          nsample, savename=""):
+                                          nsample, savename="",
+                                          arrows=False):
   ''' plot timeseries of the attributes of a 
   random sample of superdroplets '''
 
@@ -141,7 +142,25 @@ def plot_randomsample_superdrops_2dmotion(sddata, totnsupers,
                                                       ids=ids2plot)  / 1000 # [km] 
   
   ax.plot(coordx, coordz, linestyle="",  marker=mks, markersize=0.4)
-    
+
+  if arrows:
+    n2plt = min(300, coordx.shape[1])
+    drops2arrow = random.sample(list(range(0, coordx.shape[1], 1)),
+                                n2plt)
+    for n in drops2arrow: # must loop over drops to get nice positioning of arrows
+      x = coordx[:,n][np.logical_not(np.isnan(coordx[:,n]))]
+      z = coordz[:,n][np.logical_not(np.isnan(coordz[:,n]))]
+      
+      u = np.diff(x)
+      w = np.diff(z)
+      norm = np.sqrt(u**2+w**2) 
+      pos_x = x[:-1] + u/2
+      pos_z = z[:-1] + w/2
+      
+      sl = list(range(0, len(pos_x), 100))
+      ax.quiver(pos_x[sl], pos_z[sl], (u/norm)[sl], (w/norm)[sl],
+              angles="xy", zorder=5, pivot="mid", scale=50)
+
   ax.set_ylabel('zcoord /km')
   ax.set_xlabel('xcoord /km')
 
