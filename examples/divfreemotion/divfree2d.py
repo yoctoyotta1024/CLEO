@@ -16,9 +16,8 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
 Script compiles and runs CLEO divfree2D to create the
-data and plots as in Shima et al. 2009 to show
-comparision of SDM 0D box model of collision-
-coalescence with Golovin's analytical solution
+data and plots for divergence free motion of
+superdroplets in a 2-D divergence free wind field
 '''
 
 import os
