@@ -56,7 +56,7 @@
 #include "runcleo/sdmmethods.hpp"
 
 #include "superdrops/coalescence.hpp"
-#include "superdrops/collisionprobs.hpp"
+#include "superdrops/collisionprobs/hydrodynamicprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"

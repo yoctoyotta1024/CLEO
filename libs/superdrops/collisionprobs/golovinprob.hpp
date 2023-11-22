@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
- * File: collisionprobs.hpp
- * Project: superdrops
+ * File: golovinprob.hpp
+ * Project: collisionprobs
  * Created Date: Thursday 9th November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -24,8 +24,8 @@
  * PairProbability concept (see collisions.hpp)
 */
 
-#ifndef COLLISIONPROBS_HPP 
-#define COLLISIONPROBS_HPP 
+#ifndef GOLOVINPROB_HPP 
+#define GOLOVINPROB_HPP 
 
 #include "../cleoconstants.hpp"
 #include "./superdrop.hpp"
@@ -77,4 +77,4 @@ and K(drop1, drop2) is Golovin 1963 (coalescence) kernel */
   return prob_jk;
 }
 
-#endif // COLLISIONPROBS_HPP 
+#endif // GOLOVINPROB_HPP 

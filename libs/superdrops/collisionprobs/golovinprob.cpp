@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: collisionprobs.cpp
- * Project: superdrops
+ * File: golovinprob.cpp
+ * Project: collisionprobs
  * Created Date: Thursday 9th November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,4 +24,4 @@
  * PairProbability concept (see collisions.hpp)
 */
 
-#include "./collisionprobs.hpp"
+#include "./golovinprob.hpp"

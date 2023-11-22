@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -58,7 +58,7 @@
 #include "runcleo/sdmmethods.hpp"
 
 #include "superdrops/coalescence.hpp"
-#include "superdrops/collisionprobs.hpp"
+#include "superdrops/collisionprobs/golovinprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
