@@ -4,6 +4,7 @@
 *.out
 *.ipynb
 *.gif
+*.tar.gz
 .vscode
 .ipynb_checkpoints
 .DS_Store
