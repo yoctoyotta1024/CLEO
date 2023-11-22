@@ -53,7 +53,6 @@ mkdir ${path2build}share
 
 ### ------------------- compile & run ------------------ ###
 ### generate input files and run adiabatic parcel example
-# ${python} shima2009.py ${path2CLEO} ${path2build} ${configfile} "golovin" "long" "lowlist"
-${python} shima2009.py ${path2CLEO} ${path2build} ${configfile} "lowlist"
+${python} shima2009.py ${path2CLEO} ${path2build} ${configfile} "golovin" "long" "lowlist"
 
 ### ---------------------------------------------------- ###

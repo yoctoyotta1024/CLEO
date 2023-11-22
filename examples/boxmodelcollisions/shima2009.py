@@ -128,7 +128,7 @@ if isfigures[0]:
 
 os.chdir(path2build)
 os.system('pwd')
-# os.system('make clean')
+os.system('make clean')
 
 if "golovin" in kernels:
     ### ------------------------------------------------------------ ###
@@ -231,7 +231,7 @@ if "lowlist" in kernels:
     sddata = pyzarr.get_supers(dataset, consts)
 
     # 4. plot results
-    tplt = [0, 600, 1200, 1800]
+    tplt = [0, 600, 1200, 1800, 2400, 3600]
     # 0.2 factor for guassian smoothing
     smoothsig = 0.62*(config["totnsupers"]**(-1/5))
     plotwitherr = True

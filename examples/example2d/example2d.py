@@ -201,6 +201,7 @@ pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
                                         nsample,
                                         savename=savename)
+
 savename = savefigpath + "exmpl2d_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  config["totnsupers"],
