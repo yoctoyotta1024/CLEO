@@ -63,7 +63,7 @@ setupfile = binpath+"df2d_setup.txt"
 dataset = binpath+"df2d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
-isfigures = [True, False] # booleans for [saving, showing]
+isfigures = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving figures
 SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 

@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 21st November 2023
+Last Modified: Wednesday 22nd November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -37,7 +37,7 @@ path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
 
-### booleans for [making+showing, saving] figures
+# booleans for [making, saving] initialisation figures
 isfigures = [True, True]
 gbxs2plt = 0 # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
 

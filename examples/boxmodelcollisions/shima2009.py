@@ -56,8 +56,8 @@ gridfile = sharepath+"shima2009_dimlessGBxboundaries.dat"
 setupfile = binpath+"shima2009_setup.txt"
 dataset = binpath+"shima2009_sol.zarr"
 
-# booleans for [making, showing] initialisation figures
-isfigures = [True, False]
+# booleans for [making, saving] initialisation figures
+isfigures = [True, True]
 savefigpath = path2build+"/bin/" # directory for saving figures
 
 ### --- settings for 0-D Model gridbox boundaries --- ###

@@ -54,11 +54,11 @@ def plot_domainmassmoments(time, massmoms, savename=""):
   meaneffmass = np.mean((massmoms.effmass), axis=(1,2,3))
   axs[4].plot(time.mins, meaneffmass)
 
-  axs[0].set_ylabel("number of superdroplets")
-  axs[1].set_ylabel("$\u03BB^{m}_{0}$, number of  droplets")
-  axs[2].set_ylabel("$\u03BB^{m}_{1}$, droplet mass /g")
-  axs[3].set_ylabel("$\u03BB^{m}_{2}$ ~reflectivity /g$^2$")
-  ylab4 = "mean effective droplet mass,\n<$\u03BB^{m}_{2}$/$\u03BB^{m}_{1}>$ /g"
+  axs[0].set_ylabel("number of\nsuperdroplets")
+  axs[1].set_ylabel("$\u03BB^{m}_{0}$, number\nof droplets")
+  axs[2].set_ylabel("$\u03BB^{m}_{1}$, droplet\nmass /g")
+  axs[3].set_ylabel("$\u03BB^{m}_{2}$\n~reflectivity /g$^2$")
+  ylab4 = "mean effective\ndroplet mass,\n<$\u03BB^{m}_{2}$/$\u03BB^{m}_{1}>$ /g"
   axs[4].set_ylabel(ylab4)
   
   axs[-1].set_xlabel("time /min")

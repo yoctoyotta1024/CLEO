@@ -33,7 +33,7 @@ configfile = sys.argv[3]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
-from plotssrc import pltsds, pltmoms
+from plotssrc import pltsds, pltmoms, animations
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -63,7 +63,7 @@ setupfile = binpath+"exmpl2d_setup.txt"
 dataset = binpath+"exmpl2d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
-isfigures = [True, False] # booleans for [saving, showing]
+isfigures = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving figures
 SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
@@ -88,8 +88,8 @@ scalefacs            = [6e6, 4e6]
 numconc = np.sum(scalefacs)
 
 ### --- settings for 2D Thermodyanmics --- ###
-PRESS0 = 101500 # [Pa]
-THETA = 289 # [K]
+PRESS0 = 101315 # [Pa]
+THETA = 288.15 # [K]
 qcond = 0.0 # [Kg/Kg]
 WMAX = 0.6 # [m/s]
 VVEL = None # [m/s]
@@ -205,5 +205,31 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  savename=savename,
                                                  arrows=False)
 
+# plot 1-D .gif animations 
+nframes = len(time.secs)
+
+def horizontal_average(data4d):
+  '''avg 4-D data with dims [time, y, x, z]
+  over x and y dimensions '''
+  return np.mean(data4d, axis=(1,2))
+
+mom2ani = horizontal_average(massmoms.nsupers) 
+xlims = [0, np.amax(mom2ani)]
+xlabel = "mean number of superdroplets per gridbox"
+savename= savefigpath+"nsupers1d"
+animations.animate1dprofile(gbxs, mom2ani, time, nframes,
+                            xlabel=xlabel, xlims=xlims,
+                            color="blue", saveani=True,
+                            savename=savename, fps=5)
+
+norm = np.sum(gbxs.gbxvols, axis=0)[None,None,:,:] * 1e6 # volume [cm^3]
+mom2ani = horizontal_average(massmoms.mom0/norm) 
+xlims = [0, np.amax(mom2ani)]
+xlabel = "mean number concentration /cm$^{-3}$"
+savename=savefigpath+"numconc1d"
+animations.animate1dprofile(gbxs, mom2ani, time, nframes,
+                            xlabel=xlabel, xlims=xlims,
+                            color="green", saveani=True,
+                            savename=savename, fps=5)
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###                                

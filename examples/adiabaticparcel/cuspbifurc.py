@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 21st November 2023
+Last Modified: Wednesday 22nd November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -58,8 +58,8 @@ gridfile = sharepath+"cuspbifurc_dimlessGBxboundaries.dat"
 setupfile = binpath+"cuspbifurc_setup.txt"
 dataset = binpath+"cuspbifurc_sol.zarr"
 
-# booleans for [making, showing] initialisation figures
-isfigures = [True, False]
+# booleans for [making, saving] initialisation figures
+isfigures = [True, True]
 
 # settings for 0D Model (number of SD and grid coordinates)
 nsupers = {0: 1}
