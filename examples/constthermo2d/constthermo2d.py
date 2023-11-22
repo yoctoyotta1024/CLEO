@@ -186,20 +186,20 @@ totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
 # plot figures
-savename = savefigpath + "exmpl2d_nsupers_validation.png"
+savename = savefigpath + "exmpl2d_nsupers.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-savename = savefigpath + "exmpl2d_massmoms_validation.png"
+savename = savefigpath + "exmpl2d_massmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 500
-savename = savefigpath + "exmpl2d_randomsample_validation.png"
+savename = savefigpath + "exmpl2d_randomsample.png"
 pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
                                         nsample,
                                         savename=savename)
 
-savename = savefigpath + "exmpl2d_motion2d_validation.png"
+savename = savefigpath + "exmpl2d_motion2d.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  config["totnsupers"],
                                                  nsample,
