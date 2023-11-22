@@ -127,14 +127,14 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 
 if "golovin" in kernels:
-    ### ---------------------------------------------------------------- ###
-    ### ------------------- COMPILE AND RUN GOL0D ---------------------- ###
-    ### ---------------------------------------------------------------- ###
+    ### ------------------------------------------------------------ ###
+    ### ------------------- COMPILE AND RUN CLEO ------------------- ###
+    ### ------------------------------------------------------------ ###
     os.chdir(path2build)
     os.system('pwd')
     os.system('rm -rf '+dataset)
-    os.system('make clean && make -j 64 gol0D')
-    executable = path2build+'/examples/collisions0d/shima2009/src/gol0D'
+    os.system('make clean && make -j 64 golcolls')
+    executable = path2build+'/examples/collisions0d/golovin/src/golcolls'
     os.system(executable + ' ' + configfile)
     ### ---------------------------------------------------------------- ###
     ### ---------------------------------------------------------------- ###

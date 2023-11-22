@@ -5,7 +5,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and source directory of .cpp files
-project("gol0D")
+project("golcolls")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
@@ -36,15 +36,15 @@ if(NOT DEFINED compileops)
 endif()
 
 # executable for CVODE-CLEO coupled model 0D condensation setup 
-set(gol0D "gol0D")
-add_executable(${gol0D} EXCLUDE_FROM_ALL "main_gol0D.cpp")
-target_link_libraries(${gol0D} PRIVATE cartesiandomain "${SDMLIBS}")
-target_link_libraries(${gol0D} PUBLIC Kokkos::kokkos)
-target_include_directories(${gol0D} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
-target_compile_options(${gol0D} PRIVATE ${compileops}) 
+set(golcolls "golcolls")
+add_executable(${golcolls} EXCLUDE_FROM_ALL "main_golcolls.cpp")
+target_link_libraries(${golcolls} PRIVATE cartesiandomain "${SDMLIBS}")
+target_link_libraries(${golcolls} PUBLIC Kokkos::kokkos)
+target_include_directories(${golcolls} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_compile_options(${golcolls} PRIVATE ${compileops}) 
 
 # set compiler properties for target(s)
-set_target_properties(${gol0D} PROPERTIES
+set_target_properties(${golcolls} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
