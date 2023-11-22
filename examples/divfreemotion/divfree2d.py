@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 21st November 2023
+Last Modified: Wednesday 22nd November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -111,6 +111,8 @@ else:
   Path(path2build).mkdir(exist_ok=True) 
   Path(sharepath).mkdir(exist_ok=True) 
   Path(binpath).mkdir(exist_ok=True) 
+  if isfigures[1]:
+    Path(savefigpath).mkdir(exist_ok=True) 
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 os.system("rm "+thermofile[:-4]+"*")
@@ -144,8 +146,6 @@ csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen,
 
 ### ----- show (and save) plots of binary file data ----- ###
 if isfigures[0]:
-  if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True) 
   rgrid.plot_gridboxboundaries(constsfile, gridfile,
                                savefigpath, isfigures[1])
   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
@@ -153,13 +153,13 @@ if isfigures[0]:
   rsupers.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
                               gridfile, savefigpath, isfigures[1],
                               SDgbxs2plt) 
+  plt.close()
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
 ### -------------------- COMPILE AND RUN CLEO ---------------------- ###
 ### ---------------------------------------------------------------- ###
-# 2. compile and the run model
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
@@ -170,7 +170,9 @@ os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 
 
-# 3. load and plot results
+### ---------------------------------------------------------------- ###
+### ------------------------- PLOT RESULTS ------------------------- ###
+### ---------------------------------------------------------------- ###
 # read in constants and intial setup from setup .txt file
 config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setupfile, isprint=True)
@@ -191,3 +193,5 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  nsample,
                                                  savename=savename,
                                                  arrows=False)
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
