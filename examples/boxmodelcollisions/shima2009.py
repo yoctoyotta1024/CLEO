@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
 File: shima2009.py
-Project: collisions0d
+Project: boxmodelcollisions
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -128,7 +128,7 @@ if isfigures[0]:
 
 os.chdir(path2build)
 os.system('pwd')
-os.system('make clean')
+# os.system('make clean')
 
 if "golovin" in kernels:
     ### ------------------------------------------------------------ ###
@@ -138,7 +138,7 @@ if "golovin" in kernels:
     os.system('pwd')
     os.system('rm -rf '+dataset)
     os.system('make -j 64 golcolls')
-    executable = path2build+'/examples/collisions0d/golovin/src/golcolls'
+    executable = path2build+'/examples/boxmodelcollisions/golovin/src/golcolls'
     os.system(executable + ' ' + configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
@@ -176,7 +176,7 @@ if "long" in kernels:
     os.system('pwd')
     os.system('rm -rf '+dataset)
     os.system('make -j 64 longcolls')
-    executable = path2build+'/examples/collisions0d/long/src/longcolls'
+    executable = path2build+'/examples/boxmodelcollisions/long/src/longcolls'
     os.system(executable + ' ' + configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
@@ -214,7 +214,7 @@ if "lowlist" in kernels:
     os.system('pwd')
     os.system('rm -rf '+dataset)
     os.system('make -j 64 lowlistcolls')
-    executable = path2build+'/examples/collisions0d/long/src/lowlistcolls'
+    executable = path2build+'/examples/boxmodelcollisions/lowlist/src/lowlistcolls'
     os.system(executable + ' ' + configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###

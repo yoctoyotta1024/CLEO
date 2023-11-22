@@ -6,8 +6,8 @@ endif()
 
 # subdirectories for specific examples of CLEO
 add_subdirectory(adiabaticparcel/src EXCLUDE_FROM_ALL)
-add_subdirectory(collisions0d/golovin/src EXCLUDE_FROM_ALL)
-add_subdirectory(collisions0d/long/src EXCLUDE_FROM_ALL)
-add_subdirectory(collisions0d/lowlist/src EXCLUDE_FROM_ALL)
+add_subdirectory(boxmodelcollisions/golovin/src EXCLUDE_FROM_ALL)
+add_subdirectory(boxmodelcollisions/long/src EXCLUDE_FROM_ALL)
+add_subdirectory(boxmodelcollisions/lowlist/src EXCLUDE_FROM_ALL)
 add_subdirectory(divfreemotion/src EXCLUDE_FROM_ALL)
 add_subdirectory(example2d/src EXCLUDE_FROM_ALL)

@@ -21,7 +21,7 @@ spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 path2CLEO=${HOME}/testCLEOfire/
 path2build=${HOME}/testCLEOfire/build/
-configfile=${path2CLEO}/examples/collisions0d/shima2009_config.txt 
+configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.txt 
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"
@@ -53,6 +53,7 @@ mkdir ${path2build}share
 
 ### ------------------- compile & run ------------------ ###
 ### generate input files and run adiabatic parcel example
-${python} shima2009.py ${path2CLEO} ${path2build} ${configfile} "golovin" "long" "lowlist"
+# ${python} shima2009.py ${path2CLEO} ${path2build} ${configfile} "golovin" "long" "lowlist"
+${python} shima2009.py ${path2CLEO} ${path2build} ${configfile} "lowlist"
 
 ### ---------------------------------------------------- ###
