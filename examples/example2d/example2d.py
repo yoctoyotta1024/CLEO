@@ -69,13 +69,13 @@ savefigpath = path2build+"/bin/" # directory for saving figures
 SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 2-D gridbox boundaries --- ###
-zgrid = [0, 1500, 100]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = [0, 1500, 100]     # evenly spaced xhalf coords [m]
+zgrid = [0, 1500, 75]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+xgrid = [0, 1500, 75]      # evenly spaced xhalf coords [m]
 ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
-zlim = 750        # max z coord of superdroplets
+zlim = 500        # max z coord of superdroplets
 npergbx = 8       # number of superdroplets per gridbox 
 
 # [min, max] range of initial superdroplet radii (and implicitly solute masses)
@@ -104,73 +104,73 @@ moistlayer=False
 ### ---------------------------------------------------------------- ###
 
 
-# ### ---------------------------------------------------------------- ###
-# ### ------------------- BINARY FILES GENERATION--------------------- ###
-# ### ---------------------------------------------------------------- ###
-# ### --- ensure build, share and bin directories exist --- ###
-# if path2CLEO == path2build:
-#   raise ValueError("build directory cannot be CLEO")
-# else:
-#   Path(path2build).mkdir(exist_ok=True) 
-#   Path(sharepath).mkdir(exist_ok=True) 
-#   Path(binpath).mkdir(exist_ok=True) 
-# os.system("rm "+gridfile)
-# os.system("rm "+initSDsfile)
-# os.system("rm "+thermofile[:-4]+"*")
+### ---------------------------------------------------------------- ###
+### ------------------- BINARY FILES GENERATION--------------------- ###
+### ---------------------------------------------------------------- ###
+### --- ensure build, share and bin directories exist --- ###
+if path2CLEO == path2build:
+  raise ValueError("build directory cannot be CLEO")
+else:
+  Path(path2build).mkdir(exist_ok=True) 
+  Path(sharepath).mkdir(exist_ok=True) 
+  Path(binpath).mkdir(exist_ok=True) 
+os.system("rm "+gridfile)
+os.system("rm "+initSDsfile)
+os.system("rm "+thermofile[:-4]+"*")
 
-# ### ----- write gridbox boundaries binary ----- ###
-# cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
-# rgrid.print_domain_info(constsfile, gridfile)
+### ----- write gridbox boundaries binary ----- ###
+cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
+rgrid.print_domain_info(constsfile, gridfile)
 
-# ### ----- write thermodyanmics binaries ----- ###
-# thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
-#                                                  THETA, qvapmethod, sratios, Zbase,
-#                                                  qcond, WMAX, Zlength, Xlength,
-#                                                  VVEL, moistlayer)
-# cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
-#                                     constsfile, gridfile)
+### ----- write thermodyanmics binaries ----- ###
+thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+                                                 THETA, qvapmethod, sratios, Zbase,
+                                                 qcond, WMAX, Zlength, Xlength,
+                                                 VVEL, moistlayer)
+cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
+                                    constsfile, gridfile)
 
 
-# ### ----- write initial superdroplets binary ----- ###
-# nsupers = iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-# coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
-# coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
-# coord2gen = None                        # do not generate superdroplet coord2s
-# radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
-# radiigen = iattrs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
+### ----- write initial superdroplets binary ----- ###
+nsupers = iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
+coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
+coord2gen = None                        # do not generate superdroplet coord2s
+radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
+radiigen = iattrs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
 
-# initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
-#                                         coord3gen, coord1gen, coord2gen)
-# csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
-#                                       configfile, constsfile,
-#                                       gridfile, nsupers, numconc)
+initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
+                                        coord3gen, coord1gen, coord2gen)
+csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+                                      configfile, constsfile,
+                                      gridfile, nsupers, numconc)
 
-# ### ----- show (and save) plots of binary file data ----- ###
-# if isfigures[0]:
-#   if isfigures[1]:
-#     Path(savefigpath).mkdir(exist_ok=True) 
-#   rgrid.plot_gridboxboundaries(constsfile, gridfile,
-#                                savefigpath, isfigures[1])
-#   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
-#                               thermofile, savefigpath, isfigures[1])
-#   rsupers.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
-#                               gridfile, savefigpath, isfigures[1],
-#                               SDgbxs2plt) 
-# ### ---------------------------------------------------------------- ###
-# ### ---------------------------------------------------------------- ###
+### ----- show (and save) plots of binary file data ----- ###
+if isfigures[0]:
+  if isfigures[1]:
+    Path(savefigpath).mkdir(exist_ok=True) 
+  rgrid.plot_gridboxboundaries(constsfile, gridfile,
+                               savefigpath, isfigures[1])
+  rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
+                              thermofile, savefigpath, isfigures[1])
+  rsupers.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+                              gridfile, savefigpath, isfigures[1],
+                              SDgbxs2plt) 
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
 
-# ### ---------------------------------------------------------------- ###
-# ### -------------------- COMPILE AND RUN CLEO ---------------------- ###
-# ### ---------------------------------------------------------------- ###
-# # 2. compile and the run model
-# os.chdir(path2build)
-# os.system('pwd')
-# os.system('rm -rf '+dataset)
-# os.system('make clean && make -j 64 exmpl2D')
-# executable = path2build+'/examples/example2d/src/exmpl2D'
-# os.system(executable + ' ' + configfile)
-# ### ---------------------------------------------------------------- ###
-# ### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
+### -------------------- COMPILE AND RUN CLEO ---------------------- ###
+### ---------------------------------------------------------------- ###
+# 2. compile and the run model
+os.chdir(path2build)
+os.system('pwd')
+os.system('rm -rf '+dataset)
+os.system('make clean && make -j 64 exmpl2D')
+executable = path2build+'/examples/example2d/src/exmpl2D'
+os.system(executable + ' ' + configfile)
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
 
 ### ------------------------------------------------------------ ###
 ### ----------------------- PLOT RESULTS ----------------------- ###
@@ -207,45 +207,43 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  arrows=False)
 
 ### ----- plot 1-D .gif animations ----- ###
-nframes = len(time.secs)
-
 def horizontal_average(data4d):
   '''avg 4-D data with dims [time, y, x, z]
   over x and y dimensions '''
   return np.mean(data4d, axis=(1,2))
 
-norm = np.sum(gbxs.gbxvols, axis=0)[None,None,:,:] * 1e6 # volume [cm^3]
+nframes = len(time.mins)
+norm = np.sum(gbxs["gbxvols"], axis=0)[None,None,:,:] * 1e6 # volume [cm^3]
 mom2ani = horizontal_average(massmoms.mom0/norm) 
 xlims = [0, np.amax(mom2ani)]
 xlabel = "mean number concentration /cm$^{-3}$"
 savename=savefigpath+"numconc1d"
-animations.animate1dprofile(gbxs, mom2ani, time, nframes,
+animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,
                             savename=savename, fps=5)
 
 ### ----- plot 2-D .gif animations ----- ###
-nframes = len(time.secs)
-
+nframes = len(time.mins)
 mom2ani = np.sum(massmoms.nsupers, axis=1) # sum over y dimension
 cmap="plasma_r"
 cmapnorm = Normalize(vmin=1, vmax=20)
 cbarlabel="number of superdroplets per gridbox"
-savename="nsupers2d"
-animations.animate2dcmap(gbxs, mom2ani, time, nframes, 
+savename=savefigpath+"nsupers2d"
+animations.animate2dcmap(gbxs, mom2ani, time.mins, nframes, 
                   cbarlabel=cbarlabel, cmapnorm=cmapnorm, cmap=cmap,
                   saveani=True, savename=savename, fps=5)
 
+nframes = len(time.mins)
 mom2ani = np.sum(massmoms.mom1, axis=1) # sum over y dimension
-norm = np.sum(gbxs.gbxvols, axis=0)[None,:,:] # sum over y dimension and add time dimension for broadcasting [m^3]
+norm = np.sum(gbxs["gbxvols"], axis=0)[None,:,:] # sum over y dimension and add time dimension for broadcasting [m^3]
 mom2ani = mom2ani / norm
 cmap="bone_r"
 cmapnorm = LogNorm(vmin=1e-6, vmax=1e2)
 cbarlabel = "mass concentration /g m$^{-3}$"
-savename="massconc2d"
-animations.animate2dcmap(gbxs, mom2ani, time, nframes, 
+savename=savefigpath+"massconc2d"
+animations.animate2dcmap(gbxs, mom2ani, time.mins, nframes, 
               cbarlabel=cbarlabel, cmapnorm=cmapnorm, cmap=cmap,
               saveani=True, savename=savename, fps=5)   
-             
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###                                

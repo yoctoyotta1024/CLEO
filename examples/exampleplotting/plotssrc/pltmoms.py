@@ -68,5 +68,5 @@ def plot_domainmassmoments(time, massmoms, savename=""):
     fig.savefig(savename, dpi=400, bbox_inches="tight",
                 facecolor='w', format="png")
     print("Figure .png saved as: "+savename)
-  
+
   plt.show()

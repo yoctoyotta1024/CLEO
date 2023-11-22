@@ -136,7 +136,7 @@ def prepare_2dplot(gbxs, massmom, timemins, cmap, cmapnorm):
   
   f=0
   data2d = massmom[f,:,:]
-  plot = ax.pcolormesh(gbxs.xxh/1000, gbxs.zzh/1000, data2d,
+  plot = ax.pcolormesh(gbxs["xxh"]/1000, gbxs["zzh"]/1000, data2d,
                       cmap=cmap, norm=cmapnorm)
   plot.cmap.set_under("w")
   timetext = "t = {:.0f}min".format(timemins[f])
