@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: main_gol0D.cpp
+ * File: main_golcolls.cpp
  * Project: src
  * Created Date: Thursday 12th October 2023
  * Author: Clara Bayley (CB)
