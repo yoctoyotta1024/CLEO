@@ -93,8 +93,8 @@ double LongHydroProb::kerneleff(const Superdrop &drop1,
   constexpr double A1 = 4.5e4 * dlc::R0 * dlc::R0; // constants in efficiency calc if larger droplet's radius < rlim
   constexpr double A2 = 3e-4 / dlc::R0;
 
-  const double smallr(Kokkos::fmin(drop1.radius, drop2.radius));
-  const double bigr(Kokkos::fmax(drop1.radius, drop2.radius));
+  const double smallr(Kokkos::fmin(drop1.get_radius(), drop2.get_radius()));
+  const double bigr(Kokkos::fmax(drop1.get_radius(), drop2.get_radius()));
 
   /* calculate collision-coalescence efficiency, eff = colleff * coaleff */
   double colleff(1.0);

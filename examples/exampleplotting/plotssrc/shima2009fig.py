@@ -27,8 +27,9 @@ from scipy.special import iv
 sys.path.append("../../../")  # for imports from pySD package
 from pySD.sdmout_src import sdtracing
 
-def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
-                              n_a, r_a, smoothsig, savename=""):
+def plot_validation_figure(witherr, time, sddata, tplt, domainvol,
+                           n_a, r_a, smoothsig,
+                           savename="", withgol=False):
 
   attrs2sel = ["radius", "xi"]
   selsddata = sdtracing.attributes_at_times(sddata, time, tplt, attrs2sel)
@@ -36,23 +37,24 @@ def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
   nbins = 500
   rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
 
-  fig, ax, ax_err = setup_golovin_figure(witherr)
+  fig, ax, ax_err = setup_validation_figure(witherr=withgol)
   
   for n in range(len(tplt)):
     ind = np.argmin(abs(time-tplt[n]))    
     tlab = 't = {:.2f}s'.format(time[ind])
     c = 'C'+str(n)
     
-    golsol, hcens = golovin_analytical(rspan, time[ind], nbins, 
+    if withgol:
+      golsol, hcens = golovin_analytical(rspan, time[ind], nbins, 
                                          n_a, r_a, sddata.RHO_L)
-    plot_golovin_analytical_solution(ax, hcens, golsol, n, c)
+      plot_golovin_analytical_solution(ax, hcens, golsol, n, c)
 
     radius = selsddata["radius"][n]
     xi = selsddata["xi"][n]
     hist, hcens = plot_massdens_distrib(ax, rspan, nbins, domainvol,
                                    xi, radius, sddata, smoothsig, tlab, c)
     
-    if ax_err:
+    if withgol:
       diff = (hist - golsol)
       ax_err.plot(hcens, diff, c=c)
   
@@ -68,7 +70,7 @@ def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
 
   return fig, ax
 
-def setup_golovin_figure(witherr):
+def setup_validation_figure(witherr):
 
   if witherr:
     gd = dict(height_ratios=[5,1])
@@ -188,36 +190,3 @@ def logr_distribution(rspan, nbins, radius, wghts,
     hist, hcens = gaussian_kernel_smoothing(hist, hcens, smooth)
 
   return hist, np.exp(hedgs), np.exp(hcens) # units of hedgs and hcens [microns]
-
-def long_validation_figure(witherr, time, sddata, tplt, domainvol,
-                          n_a, r_a, smoothsig, savename=""):
-
-  attrs2sel = ["radius", "xi"]
-  selsddata = sdtracing.attributes_at_times(sddata, time, tplt, attrs2sel)
-
-  nbins = 500
-  rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
-
-  fig, ax, ax_err = setup_golovin_figure(witherr=False)
-  
-  for n in range(len(tplt)):
-    ind = np.argmin(abs(time-tplt[n]))    
-    tlab = 't = {:.2f}s'.format(time[ind])
-    c = 'C'+str(n)
-    
-    radius = selsddata["radius"][n]
-    xi = selsddata["xi"][n]
-    hist, hcens = plot_massdens_distrib(ax, rspan, nbins, domainvol,
-                                   xi, radius, sddata, smoothsig, tlab, c)
-    
-  ax.legend()
-
-  fig.tight_layout()
-
-  if savename != "":
-    fig.savefig(savename, dpi=400,
-            bbox_inches="tight", facecolor='w', format="png")
-    print("Figure .png saved as: "+savename)
-  plt.show()
-
-  return fig, ax
