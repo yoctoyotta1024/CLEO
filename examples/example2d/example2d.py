@@ -88,25 +88,20 @@ scalefacs            = [6e6, 4e6]
 numconc = np.sum(scalefacs)
 
 ### --- settings for 2D Thermodyanmics --- ###
-PRESS0 = 101315 # [Pa]
-THETA = 288.15  # [K]
-qcond = 0.0     # [Kg/Kg]
-WMAX = 0.6      # [m/s]
-VVEL = None     # [m/s]
-Zlength = 1500  # [m]
-Xlength = 1500  # [m]
+PRESS0 = 101500 # [Pa]
+THETA = 289 # [K]
+qcond = 0.0 # [Kg/Kg]
+WMAX = 0.6 # [m/s]
+VVEL = None # [m/s]
+Zlength = 1500 # [m]
+Xlength = 1500 # [m]
 qvapmethod = "sratio"
-Zbase = 750     # [m]
-sratios = [0.85, 1.0001] # s_ratio [below, above] Zbase
-moistlayer = { # s_ratio = mlsratio in (z1< z< z2) && (x1<x<x2)
-    "z1": 700,
-    "z2": 800,
-    "x1": 0,
-    "x2": 750,
-    "mlsratio": 1.005
-}
+Zbase = 750 # [m]
+sratios = [0.99, 1.0025] # s_ratio [below, above] Zbase
+moistlayer=False
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
+
 
 ### ---------------------------------------------------------------- ###
 ### ------------------- BINARY FILES GENERATION--------------------- ###
