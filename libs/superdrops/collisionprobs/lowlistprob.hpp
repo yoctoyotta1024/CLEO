@@ -138,6 +138,7 @@ public:
 };
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
+
 KOKKOS_INLINE_FUNCTION
 double coaleff(const Superdrop &drop1,
                const Superdrop &drop2) const
@@ -151,6 +152,7 @@ Low and List 1982(a) */
 
   const double r1(drop1.get_radius());
   const double r2(drop2.get_radius());
+  const auto terminalv(SimmelTerminalVelocity{});
 
   const double cke(collision_kinetic_energy(r1, r2,
                                             terminalv(drop1),
