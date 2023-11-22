@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
-File: example2d.py
-Project: example2d
+File: constthermo2d.py
+Project: constthermo2d
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -167,7 +167,7 @@ os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
 os.system('make clean && make -j 64 exmpl2D')
-executable = path2build+'/examples/example2d/src/exmpl2D'
+executable = path2build+'/examples/constthermo2d/src/exmpl2D'
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
