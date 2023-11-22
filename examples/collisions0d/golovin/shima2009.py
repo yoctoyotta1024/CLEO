@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 21st November 2023
+Last Modified: Wednesday 22nd November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -103,7 +103,7 @@ os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
 os.system('make clean && make -j 64 gol0D')
-executable = path2build+'/examples/golovin/src/gol0D'
+executable = path2build+'/examples/collisions0d/golovin/src/gol0D'
 os.system(executable + ' ' + configfile)
 
 # 3. load and plot results
