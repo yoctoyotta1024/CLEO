@@ -57,3 +57,5 @@ if(NOT DEFINED compileops)
 endif()
 
 target_compile_options(${LIBNAME} PRIVATE ${compileops})
+
+add_subdirectory(collisionprobs)

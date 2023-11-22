@@ -15,13 +15,13 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * functionality to calculate the probability of some
- * kind of collision event between two (real) droplets
- * e.g. the probability of collision-coalescence
- * using the Golovin or Long Kernel. Probability
+ * functionality to calculate the probability of a
+ * collision-coalescence event between two (real)
+ * droplets using the Golovin Kernel. Probability
  * calculations are contained in structures
  * that satisfy the requirements of the
  * PairProbability concept (see collisions.hpp)
 */
+
 
 #include "./golovinprob.hpp"
