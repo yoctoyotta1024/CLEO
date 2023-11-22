@@ -21,4 +21,4 @@ add_subdirectory(libs)
 add_subdirectory(src)
 
 # subdirectories for specific examples of CLEO
-add_subdirectory(examples)
+add_subdirectory(examples EXCLUDE_FROM_ALL)
