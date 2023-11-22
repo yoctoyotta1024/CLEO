@@ -186,10 +186,10 @@ totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
 # plot figures
-savename = savefigpath + "exmpl2d_nsupers.png"
+savename = savefigpath + "exmpl2d_totnsupers.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-savename = savefigpath + "exmpl2d_massmoms.png"
+savename = savefigpath + "exmpl2d_domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 500

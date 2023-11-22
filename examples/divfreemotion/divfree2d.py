@@ -183,7 +183,7 @@ sddata = pyzarr.get_supers(dataset, consts)
 totnsupers =pyzarr.get_totnsupers(dataset)
 
 # 4. plot results
-savename = savefigpath + "df2d_nsupers_validation.png"
+savename = savefigpath + "df2d_totnsupers_validation.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
 nsample = 500
