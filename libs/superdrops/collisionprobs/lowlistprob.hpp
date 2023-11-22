@@ -140,7 +140,7 @@ public:
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 KOKKOS_INLINE_FUNCTION
-double coaleff(const Superdrop &drop1,
+double LowListCoalProb::coaleff(const Superdrop &drop1,
                const Superdrop &drop2) const
 /* returns coaleff, the coalescence efficiency
 of two droplets (given that they have collided)
@@ -152,7 +152,7 @@ Low and List 1982(a) */
 
   const double r1(drop1.get_radius());
   const double r2(drop2.get_radius());
-  const auto terminalv(SimmelTerminalVelocity{});
+  const auto terminalv = SimmelTerminalVelocity{};
 
   const double cke(collision_kinetic_energy(r1, r2,
                                             terminalv(drop1),
@@ -175,7 +175,7 @@ Low and List 1982(a) */
 }
 
 KOKKOS_INLINE_FUNCTION
-double expon(const double etot,
+double LowListCoalProb::expon(const double etot,
             const double surf_c) const
 /* returns the exponential factor in eqn 4.5
 Low and List 1982(a) given the total collision energy,
@@ -190,7 +190,7 @@ etot [J] and equivalent surface energy, surf_c [J] */
 }
 
 KOKKOS_INLINE_FUNCTION
-double sizeratio_factor(const double r1,
+double LowListCoalProb::sizeratio_factor(const double r1,
                         const double r2) const
 /* returns factor that takes into account the size
 ratio of droplets in eqn 4.5 Low and List 1982(a). */
