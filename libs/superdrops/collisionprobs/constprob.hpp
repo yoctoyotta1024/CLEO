@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * constant probability of collision-coalescence event
+ * constant probability of collisio event
  * between two (real) droplets. Calculations is
  * contained in structure that satisfies the
  * requirements of the PairProbability concept
