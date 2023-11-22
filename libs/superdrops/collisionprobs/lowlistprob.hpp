@@ -149,15 +149,19 @@ Low and List 1982(a) */
   constexpr double aconst = 0.778;
   constexpr double elim = 5e-6; // total energy limit [J]
 
-  const double cke(collision_kinetic_energy(drop1, drop2));
-  const double surf_t(total_surfenergy(drop1, drop2)); // [J] S_t
-  const double surf_c(coal_surfenergy(drop1, drop2));  // [J] S_c
+  const double r1(drop1.get_radius());
+  const double r2(drop2.get_radius());
+
+  const double cke(collision_kinetic_energy(r1, r2,
+                                            terminalv(drop1),
+                                            terminalv(drop2)));
+  const double surf_t(total_surfenergy(r1, r2)); // [J] S_t
+  const double surf_c(coal_surfenergy(r1, r2));  // [J] S_c
   const double etot(cke + surf_t - surf_c);            // [J] total energy
 
   if (etot < elim)
   {
-    const double radiiratio = sizeratio_factor(drop1.get_radius(),
-                                               drop2.get_radius());
+    const double radiiratio = sizeratio_factor(r1, r2);
     const double coaleff = aconst * radiiratio * expon(etot, surf_c);
 
     return coaleff;
