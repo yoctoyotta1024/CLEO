@@ -40,11 +40,11 @@ def animate_me(fig, update_frame, frames, plot_init,
             writer=animation.PillowWriter(fps=fps, bitrate=5000, codec='h264'),
             dpi=100, savefig_kwargs={'transparent': True})
     
-def animate1dprofile(gbxs, mom, time, nframes, 
+def animate1dprofile(gbxs, mom, timemins, nframes, 
                      xlabel=None, xlims=[None, None], color="black",
                      saveani=False, savename=None, fps=5):
   
-  fig, ax, plots, txt, zkm = prepare_1dprofile(gbxs, mom, time,
+  fig, ax, plots, txt, zkm = prepare_1dprofile(gbxs, mom, timemins,
                                                xlabel, color=color) 
   
   def init_1dprofile():
@@ -69,19 +69,19 @@ def animate1dprofile(gbxs, mom, time, nframes,
 
   animate_me(fig, update_1dprofileframe, nframes, init_1dprofile,
            saveani=saveani, savename=savename,
-           fargs=(plots, txt, zkm, time, mom), fps=fps)
+           fargs=(plots, txt, zkm, timemins, mom), fps=fps)
   
-def prepare_1dprofile(gbxs, massmom, time, xlabel, color):
+def prepare_1dprofile(gbxs, massmom, timemins, xlabel, color):
   
   fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(7, 8))
 
   alpha = 0.3
-  zkm = gbxs.zfull / 1000 # convert m to km
+  zkm = gbxs["zfull"] / 1000 # convert m to km
 
   f = 0
   plots = ax.plot(massmom[f], zkm, color=color)[0]
 
-  timetext = "t = {:.0f}min".format(time[f])
+  timetext = "t = {:.0f}min".format(timemins[f])
   txt = fig.text(0.7, 0.875, timetext, fontsize=16)
 
   ax.set_ylabel("z /km", fontsize=16)
@@ -91,20 +91,20 @@ def prepare_1dprofile(gbxs, massmom, time, xlabel, color):
 
   return fig, ax, plots, txt, zkm
 
-def update_1dprofileframe(f, plots, txt, zkm, time, massmom):
+def update_1dprofileframe(f, plots, txt, zkm, timemins, massmom):
 
   plots.set_data(massmom[f], zkm)
 
-  timetext = "t = {:.0f}min".format(time[f])
+  timetext = "t = {:.0f}min".format(timemins[f])
   txt.set_text(timetext)
   
   return plots, txt,
 
-def animate2dcmap(gbxs, mom2ani, time, nframes, 
+def animate2dcmap(gbxs, mom2ani, timemins, nframes, 
                   cbarlabel=None, cmapnorm=None, cmap="viridis",
                   saveani=False, savename=None, fps=5):
   
-  fig, ax, cbar, plot, txt = prepare_2dplot(gbxs, mom2ani, time,
+  fig, ax, cbar, plot, txt = prepare_2dplot(gbxs, mom2ani, timemins,
                                             cmap, cmapnorm)
   cbar.set_label(cbarlabel, fontsize=16)
 
@@ -128,9 +128,9 @@ def animate2dcmap(gbxs, mom2ani, time, nframes,
    
   animate_me(fig, update_2dcmapframe, nframes,
              init_2dcmap, saveani, savename,
-             fargs=(plot, txt, time, mom2ani), fps=fps)
+             fargs=(plot, txt, timemins, mom2ani), fps=fps)
 
-def prepare_2dplot(gbxs, massmom, time, cmap, cmapnorm):
+def prepare_2dplot(gbxs, massmom, timemins, cmap, cmapnorm):
   
   fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 9))
   
@@ -139,7 +139,7 @@ def prepare_2dplot(gbxs, massmom, time, cmap, cmapnorm):
   plot = ax.pcolormesh(gbxs.xxh/1000, gbxs.zzh/1000, data2d,
                       cmap=cmap, norm=cmapnorm)
   plot.cmap.set_under("w")
-  timetext = "t = {:.0f}min".format(time[f])
+  timetext = "t = {:.0f}min".format(timemins[f])
   txt = fig.text(0.765, 0.925, timetext, fontsize=16, ha="right")
   
   cbar = fig.colorbar(ScalarMappable(norm=cmapnorm, cmap=cmap),
@@ -152,11 +152,11 @@ def prepare_2dplot(gbxs, massmom, time, cmap, cmapnorm):
   
   return fig, ax, cbar, plot, txt
 
-def update_2dcmapframe(f, plot, txt, time, massmom):
+def update_2dcmapframe(f, plot, txt, timemins, massmom):
     
   plot.set_array(np.array(massmom[f,:,:]).ravel())
   
-  timetext = "t = {:.0f}min".format(time[f])
+  timetext = "t = {:.0f}min".format(timemins[f])
   txt.set_text(timetext)
   
   return plot, txt
