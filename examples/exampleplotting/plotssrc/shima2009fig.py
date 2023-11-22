@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 20th November 2023
+Last Modified: Wednesday 22nd November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -49,7 +49,7 @@ def golovin_validation_figure(witherr, time, sddata, tplt, domainvol,
 
     radius = selsddata["radius"][n]
     xi = selsddata["xi"][n]
-    hist, hcens = plot_golovin_massdens_distrib(ax, rspan, nbins, domainvol,
+    hist, hcens = plot_massdens_distrib(ax, rspan, nbins, domainvol,
                                    xi, radius, sddata, smoothsig, tlab, c)
     
     if ax_err:
@@ -138,7 +138,7 @@ def plot_golovin_analytical_solution(ax, hcens, golsol, n, c):
 
   return ax
 
-def plot_golovin_massdens_distrib(ax, rspan, nbins, domainvol,
+def plot_massdens_distrib(ax, rspan, nbins, domainvol,
                                    xi, radius, sddata, smoothsig, tlab, c):
   
   m_asif_water = sddata.vol(radius) * sddata.RHO_L # superdrops mass as if water [g]
@@ -188,3 +188,36 @@ def logr_distribution(rspan, nbins, radius, wghts,
     hist, hcens = gaussian_kernel_smoothing(hist, hcens, smooth)
 
   return hist, np.exp(hedgs), np.exp(hcens) # units of hedgs and hcens [microns]
+
+def long_validation_figure(witherr, time, sddata, tplt, domainvol,
+                          n_a, r_a, smoothsig, savename=""):
+
+  attrs2sel = ["radius", "xi"]
+  selsddata = sdtracing.attributes_at_times(sddata, time, tplt, attrs2sel)
+
+  nbins = 500
+  rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
+
+  fig, ax, ax_err = setup_golovin_figure(witherr=False)
+  
+  for n in range(len(tplt)):
+    ind = np.argmin(abs(time-tplt[n]))    
+    tlab = 't = {:.2f}s'.format(time[ind])
+    c = 'C'+str(n)
+    
+    radius = selsddata["radius"][n]
+    xi = selsddata["xi"][n]
+    hist, hcens = plot_massdens_distrib(ax, rspan, nbins, domainvol,
+                                   xi, radius, sddata, smoothsig, tlab, c)
+    
+  ax.legend()
+
+  fig.tight_layout()
+
+  if savename != "":
+    fig.savefig(savename, dpi=400,
+            bbox_inches="tight", facecolor='w', format="png")
+    print("Figure .png saved as: "+savename)
+  plt.show()
+
+  return fig, ax

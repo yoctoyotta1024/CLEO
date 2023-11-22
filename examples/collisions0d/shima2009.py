@@ -126,6 +126,10 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
+os.chdir(path2build)
+os.system('pwd')
+os.system('make clean')
+
 if "golovin" in kernels:
     ### ------------------------------------------------------------ ###
     ### ------------------- COMPILE AND RUN CLEO ------------------- ###
@@ -133,7 +137,7 @@ if "golovin" in kernels:
     os.chdir(path2build)
     os.system('pwd')
     os.system('rm -rf '+dataset)
-    os.system('make clean && make -j 64 golcolls')
+    os.system('make -j 64 golcolls')
     executable = path2build+'/examples/collisions0d/golovin/src/golcolls'
     os.system(executable + ' ' + configfile)
     ### ------------------------------------------------------------ ###
@@ -171,8 +175,34 @@ if "long" in kernels:
     os.chdir(path2build)
     os.system('pwd')
     os.system('rm -rf '+dataset)
-    os.system('make clean && make -j 64 longcolls')
+    os.system("make -j 64 longcolls')
     executable = path2build+'/examples/collisions0d/long/src/longcolls'
     os.system(executable + ' ' + configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
+    
+    ### ------------------------------------------------------------ ###
+    ### ----------------------- PLOT RESULTS ----------------------- ###
+    ### ------------------------------------------------------------ ###
+    # read in constants and intial setup from setup .txt file
+    config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
+    consts = pysetuptxt.get_consts(setupfile, isprint=True)
+    gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+
+    time = pyzarr.get_time(dataset).secs
+    sddata = pyzarr.get_supers(dataset, consts)
+
+    # 4. plot results
+    tplt = [0, 600, 1200, 1800, 2400, 3600]
+    # 0.2 factor for guassian smoothing
+    smoothsig = 0.62*(config["totnsupers"]**(-1/5))
+    plotwitherr = True
+
+    savename = savefigpath + "long_validation.png"
+    fig, ax = shima2009fig.long_validation_figure(plotwitherr, time,
+                                                  sddata, tplt, gbxs["domainvol"],
+                                                  numconc, volexpr0, smoothsig,
+                                                  savename=savename)
+    ### ------------------------------------------------------------ ###
+    ### ------------------------------------------------------------ ###
+
