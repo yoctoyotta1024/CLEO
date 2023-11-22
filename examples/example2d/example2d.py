@@ -187,14 +187,17 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
 totnsupers = pyzarr.get_totnsupers(dataset)
+massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
+nsupers = pyzarr.get_nsupers(dataset, config["ntime"], gbxs["ndims"])
 
-# # TODO 
-# massmoms = 
-# nsuperspergbx = 
-
-# 4. plot results
+# plot figures
 savename = savefigpath + "exmpl2d_nsupers_validation.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
+
+savename = savefigpath + "exmpl2d_massmoms_validation.png"
+pltmoms.plot_domainmassmoments(time, massmoms,
+                               nsupers=nsupers,
+                               savename=savename)
 
 nsample = 500
 savename = savefigpath + "exmpl2d_randomsample_validation.png"
