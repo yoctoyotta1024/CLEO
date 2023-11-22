@@ -15,10 +15,10 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO adia0D to create the
-data and plots as in Shima et al. 2009 to show
-comparision of SDM 0D box model of collision-
-coalescence with Golovin's analytical solution
+Script compiles and runs CLEO for 0-D box model
+of collisions with selected collision kernels (e.g.
+Golovin's or Long's) to create data and plot
+similar to Shima et al. 2009 Fig.2
 '''
 
 import os
@@ -67,7 +67,7 @@ ygrid = np.asarray([0, 100])
 
 ### --- settings for initial superdroplets --- ###
 # settings for superdroplet coordinates
-nsupers = {0: 2048}
+nsupers = {0: 4096}
 coord_params = ["false"]
 
 # settings for distirbution from exponential in droplet volume
@@ -193,7 +193,7 @@ if "long" in kernels:
     sddata = pyzarr.get_supers(dataset, consts)
 
     # 4. plot results
-    tplt = [0, 600, 1200, 1800, 2400, 3600]
+    tplt = [0, 600, 1200, 1800]
     # 0.2 factor for guassian smoothing
     smoothsig = 0.62*(config["totnsupers"]**(-1/5))
     plotwitherr = True
@@ -231,7 +231,7 @@ if "lowlist" in kernels:
     sddata = pyzarr.get_supers(dataset, consts)
 
     # 4. plot results
-    tplt = [0, 600, 1200, 1800, 2400, 3600]
+    tplt = [0, 600, 1200, 1800]
     # 0.2 factor for guassian smoothing
     smoothsig = 0.62*(config["totnsupers"]**(-1/5))
     plotwitherr = True

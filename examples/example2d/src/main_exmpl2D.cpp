@@ -56,7 +56,7 @@
 #include "runcleo/sdmmethods.hpp"
 
 #include "superdrops/coalescence.hpp"
-#include "superdrops/collisionprobs/hydrodynamicprob.hpp"
+#include "superdrops/collisionprobs/longhydroprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
@@ -116,7 +116,7 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
-  const PairProbability auto prob = HydrodynamicProb();
+  const PairProbability auto prob = LongHydroProb();
   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    prob);

@@ -185,7 +185,11 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
-totnsupers =pyzarr.get_totnsupers(dataset)
+totnsupers = pyzarr.get_totnsupers(dataset)
+
+# # TODO 
+# massmoms = 
+# nsuperspergbx = 
 
 # 4. plot results
 savename = savefigpath + "exmpl2d_nsupers_validation.png"
