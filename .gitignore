@@ -3,6 +3,7 @@
 *.dat
 *.out
 *.ipynb
+*.gif
 .vscode
 .ipynb_checkpoints
 .DS_Store
