@@ -50,7 +50,7 @@ drop, analogous to equation 4.2 of Low and List 1982 */
   /* constant required to calculate surface tension
   energy from dimensionless radius using surface
   tension of water = sigma = 7.28e-2 */
-  constexpr double surfconst = 4.0 * 7.28e-2 * std::numbers::pi *
+  constexpr double surfconst = 4.0 * 7.28e-2 * Kokkos::numbers::pi *
                                dlc::R0 * dlc::R0; // [J/m^-2]
 
   return surfconst * radius * radius; // = surfe, droplet surface energy
@@ -65,7 +65,7 @@ equation 4.2 of Low and List 1982 */
   /* constant required to calculate surface tension
   energy from dimensionless radius using surface
   tension of water = sigma = 7.28e-2 */
-  constexpr double surfconst = 4.0 * 7.28e-2 * std::numbers::pi *
+  constexpr double surfconst = 4.0 * 7.28e-2 * Kokkos::numbers::pi *
                                dlc::R0 * dlc::R0; // [J/m^-2]
   
   const double rsqrdsum = ((r1 * r1) + (r2 * r2)); // * R0sqrd to convert to [m^2]
@@ -93,7 +93,7 @@ radii r1 and r2 and terminal velocities of droplets */
 {
   constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0; // convert r^3 to [m^3]
   constexpr double ckeconst = R0cubed * 2.0 / 3.0 * DC::RHO_L *
-                              std::numbers::pi * dlc::W0;
+                              Kokkos::numbers::pi * dlc::W0;
 
   const double r1cubed(r1 * r1* r1);
   const double r1_r2cubed((r1 / r2) * (r1 / r2) * (r1 / r2));
@@ -115,7 +115,7 @@ equation 4.3 of Low and List 1982 */
   /* constant required to calculate surface tension
   energy from dimensionless radius using surface
   tension of water = sigma = 7.28e-2 */
-  constexpr double surfconst = 4.0 * 7.28e-2 * std::numbers::pi *
+  constexpr double surfconst = 4.0 * 7.28e-2 * Kokkos::numbers::pi *
                                dlc::R0 * dlc::R0; // [J/m^-2]
 
   const double r1cubed(r1 * r1 * r1);
