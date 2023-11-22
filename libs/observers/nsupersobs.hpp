@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,6 +36,8 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr/twodstorage.hpp"
 #include "zarr/onedstorage.hpp"
+
+namespace dlc = dimless_constants;
 
 inline Observer auto
 NsupersObserver(const unsigned int interval,

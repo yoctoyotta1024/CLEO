@@ -29,7 +29,6 @@
 #include "../superdrop.hpp"
 #include "../terminalvelocity.hpp"
 
-
 namespace dlc = dimless_constants;
 
 template <VelocityFormula TerminalVelocity>

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,6 +39,8 @@
 #include "./state.hpp"
 #include "./thermodynamic_equations.hpp"
 #include "./urbg.hpp"
+
+namespace dlc = dimless_constants;
 
 struct DoCondensation
 /* function-like type that enacts

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,8 +28,8 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include "./config.hpp"
 #include "../cleoconstants.hpp"
+#include "./config.hpp"
 
 namespace dlc = dimless_constants;
 

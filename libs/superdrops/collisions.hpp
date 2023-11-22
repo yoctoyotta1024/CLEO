@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 17th November 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,11 +27,14 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "../cleoconstants.hpp"
 #include "./kokkosaliases_sd.hpp"
 #include "./nullsuperdrops.hpp"
 #include "./superdrop.hpp"
 #include "./state.hpp"
 #include "./urbg.hpp"
+
+namespace dlc = dimless_constants;
 
 template <typename P>
 concept PairProbability = requires(P p,

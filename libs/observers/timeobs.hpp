@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,6 +34,8 @@
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/coordstorage.hpp"
+
+namespace dlc = dimless_constants;
 
 inline Observer auto
 TimeObserver(const unsigned int interval,

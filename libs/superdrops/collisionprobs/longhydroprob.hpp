@@ -35,6 +35,8 @@
 #include "../terminalvelocity.hpp"
 #include "./hydrodynamicprob.hpp"
 
+namespace dlc = dimless_constants;
+
 struct LongHydroProb
 /* Opertator returns the collision-coalescence probability
   given the efficiency factor, eff = eff(drop1, drop2),

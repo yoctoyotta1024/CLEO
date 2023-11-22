@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,8 +30,8 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "../kokkosaliases.hpp"
 #include "../cleoconstants.hpp"
+#include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
 
 namespace dlc = dimless_constants;

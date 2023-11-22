@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,6 +35,8 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr/twodstorage.hpp"
 #include "zarr/massmomentbuffers.hpp"
+
+namespace dlc = dimless_constants;
 
 inline Observer auto
 MassMomentsObserver(const unsigned int interval,

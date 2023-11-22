@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th October 2023
+ * Last Modified: Wednesday 22nd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,9 +32,11 @@
 #include <tuple>
 #include <utility>
 
+#include "../cleoconstants.hpp"
 #include "./fsstore.hpp"
 #include "./storehelpers.hpp"
-#include "../cleoconstants.hpp"
+
+namespace dlc = dimless_constants;
 
 template <typename T>
 struct MassMomentBuffers
