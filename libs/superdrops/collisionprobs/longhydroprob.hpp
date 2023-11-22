@@ -30,6 +30,7 @@
 #include "../../cleoconstants.hpp"
 #include "../superdrop.hpp"
 #include "../terminalvelocity.hpp"
+#include "./hydrodynamicprob.hpp"
 
 struct LongHydroProb
 /* Opertator returns the collision-coalescence probability
