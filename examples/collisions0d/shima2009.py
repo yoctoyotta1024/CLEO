@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
 File: shima2009.py
-Project: golovin
+Project: collisions0d
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -103,7 +103,7 @@ os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
 os.system('make clean && make -j 64 gol0D')
-executable = path2build+'/examples/collisions0d/golovin/src/gol0D'
+executable = path2build+'/examples/collisions0d/shima2009/src/gol0D'
 os.system(executable + ' ' + configfile)
 
 # 3. load and plot results
