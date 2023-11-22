@@ -1,0 +1,12 @@
+# set cmake version
+if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
+  cmake_minimum_required(VERSION 3.18.0)
+  #cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler 
+endif()
+
+# subdirectories for specific examples of CLEO
+add_subdirectory(adiabaticparcel/src EXCLUDE_FROM_ALL)
+add_subdirectory(collisions0d/golovin/src EXCLUDE_FROM_ALL)
+add_subdirectory(collisions0d/long/src EXCLUDE_FROM_ALL)
+add_subdirectory(divfreemotion/src EXCLUDE_FROM_ALL)
+add_subdirectory(example2d/src EXCLUDE_FROM_ALL)
