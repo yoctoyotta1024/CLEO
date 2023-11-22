@@ -19,7 +19,10 @@
  * between two (real) droplets using the
  * hydrodynamic (i.e. gravitational) kernel
  * according to Simmel et al. 2002's formulation
- * of Long's Hydrodynamic Kernel
+ * of Long's Hydrodynamic Kernel. Probability
+ * calculations are contained in structures
+ * that satisfy the requirements of the
+ * PairProbability concept (see collisions.hpp)
  */
 
 #ifndef LONGHYDROPROB_HPP
