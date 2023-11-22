@@ -15,10 +15,9 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Header file for probability of some kind of
- * collision  event between two (real) droplets
- * using the hydrodynamic (i.e. gravitational)
- * kernel
+ * Probability of some kind of collision  event
+ * between two (real) droplets using the
+ * hydrodynamic (i.e. gravitational) kernel
 */
 
 #ifndef HYDRODYNAMICPROB_HPP 
@@ -33,38 +32,22 @@
 
 namespace dlc = dimless_constants;
 
-template <typename E>
-concept KernelEfficiency = requires(E e,
-                                    const Superdrop &d1,
-                                    const Superdrop &d2)
-/* Objects that are of type 'KernelEfficiency'
-take a pair of superdroplets and returns
-something convertible to a double (such as the
-efficiency factor for the hydrodynamic kernel) */
-{
-  {
-    e(d1, d2)
-  } -> std::convertible_to<double>;
-};
-
-template <KernelEfficiency Efficiency,
-          VelocityFormula TerminalVelocity>
+template <VelocityFormula TerminalVelocity>
 struct HydrodynamicProb
 {
 private:
   const double prob_jk_const;
-  const Efficiency eff;
   const TerminalVelocity terminalv;
 
 public:
-  HydrodynamicProb(Efficiency e, TerminalVelocity tv)
+  HydrodynamicProb(TerminalVelocity tv)
       : prob_jk_const(Kokkos::numbers::pi * dlc::R0 * dlc::R0 * dlc::W0),
-        eff(e),
         terminalv(tv) {}
 
   KOKKOS_INLINE_FUNCTION
   double operator()(const Superdrop &drop1,
                     const Superdrop &drop2,
+                    const double eff,
                     const double DELT,
                     const double VOLUME) const
   /* returns probability that a pair of droplets collide
@@ -84,9 +67,7 @@ public:
     const double sumr(drop1.get_radius() + drop2.get_radius());
     const double sumrsqrd(sumr * sumr);
     const double vdiff(Kokkos::abs(terminalv(drop1) - terminalv(drop2)));
-    const double hydro_kernel(eff(drop1, drop2) *
-                              prob_jk_const *
-                              sumrsqrd * vdiff);
+    const double hydro_kernel(prob_jk_const * eff * sumrsqrd * vdiff);
 
     /* calculate probability prob_jk analogous Shima 2009 eqn 3 */
     const double prob_jk = hydro_kernel * DELT_DELVOL;
