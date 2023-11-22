@@ -5,7 +5,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set library name
-set(LIBNAME "superdrops")
+set(LIBNAME "collisionprobs")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
@@ -31,13 +31,7 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # add executables to library
 set(SOURCES
-  "coalescence.cpp"
-  # "condensation.cpp"
-  # "impliciteuler.cpp"
-  "state.cpp"
-  # "superdrop_attrs.cpp"
-  # "terminalvelocity.cpp"
-  # "thermodynamic_equations.cpp"
+  "collisionprobs.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
