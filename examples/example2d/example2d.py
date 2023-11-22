@@ -176,8 +176,9 @@ os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-
-# 3. load and plot results
+### ------------------------------------------------------------ ###
+### ----------------------- PLOT RESULTS ----------------------- ###
+### ------------------------------------------------------------ ###
 # read in constants and intial setup from setup .txt file
 config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setupfile, isprint=True)
@@ -208,3 +209,6 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  nsample,
                                                  savename=savename,
                                                  arrows=False)
+
+### ------------------------------------------------------------ ###
+### ------------------------------------------------------------ ###                                
