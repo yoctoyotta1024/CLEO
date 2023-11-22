@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 21st November 2023
+Last Modified: Wednesday 22nd November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -88,8 +88,8 @@ scalefacs            = [6e6, 4e6]
 numconc = np.sum(scalefacs)
 
 ### --- settings for 2D Thermodyanmics --- ###
-PRESS0 = 100000 # [Pa]
-THETA = 298.15  # [K]
+PRESS0 = 101315 # [Pa]
+THETA = 288.15  # [K]
 qcond = 0.0     # [Kg/Kg]
 WMAX = 0.6      # [m/s]
 VVEL = None     # [m/s]
@@ -97,7 +97,14 @@ Zlength = 1500  # [m]
 Xlength = 1500  # [m]
 qvapmethod = "sratio"
 Zbase = 750     # [m]
-sratios = [1.0, 1.0] # s_ratio [below, above] Zbase
+sratios = [0.85, 1.0001] # s_ratio [below, above] Zbase
+moistlayer = { # s_ratio = mlsratio in (z1< z< z2) && (x1<x<x2)
+    "z1": 700,
+    "z2": 800,
+    "x1": 0,
+    "x2": 750,
+    "mlsratio": 1.005
+}
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -120,10 +127,10 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodyanmics binaries ----- ###
-thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
-                                                THETA, qvapmethod, sratios, Zbase,
-                                                qcond, WMAX, Zlength, Xlength,
-                                                VVEL)
+thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+                                                 THETA, qvapmethod, sratios, Zbase,
+                                                 qcond, WMAX, Zlength, Xlength,
+                                                 VVEL, moistlayer)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
