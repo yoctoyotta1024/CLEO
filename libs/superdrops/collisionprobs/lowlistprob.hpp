@@ -29,6 +29,7 @@
 
 #include "../superdrop.hpp"
 #include "./longhydroprob.hpp"
+#include "./collisionkinetics.hpp"
 
 struct LowListCoalProb
 /* Probability of collision-coalescence of a pair of
@@ -65,7 +66,7 @@ private:
                           const double r2) const;
   /* returns factor that takes into account the size
   ratio of droplets in eqn 4.5 Low and List 1982(a). */
-  
+
 public:
   LowListCoalProb() : longprob() {}
 
