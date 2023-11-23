@@ -31,6 +31,7 @@
 #include <Kokkos_Core.hpp>
 
 #include "./breakup.hpp"
+#include "./coalescence.hpp"
 #include "./collisions.hpp"
 #include "./collisionkinetics.hpp"
 #include "./microphysicalprocess.hpp"
@@ -41,11 +42,11 @@ struct DoCoalBuRe
 /* ie. DoCoalescenceBreakupRebound */ 
 {
 private:
-  Coalescence coal;
-  Breakup<NFrags> breakup;
+  DoCoalescence coal;
+  DoBreakup<NFrags> breakup;
 
 public:
-  DoCoalBuRe(const NFrags nfrags) : nfrags(nfrags) {}
+  DoCoalBuRe(const NFrags nfrags) : breakup(nfrags) {}
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
