@@ -159,11 +159,11 @@ Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
 Note implicit assumption that gamma factor = 1. */
 {
   const unsigned long long old_xi(drop2.get_xi()); // = drop1.xi
-  const double totnfrags(nfrags(drop1, drop2) * old_eps);
+  const double totnfrags(nfrags(drop1, drop2) * old_xi);
   const unsigned long long new_xi(Kokkos::round(totnfrags) / 2);
 
-  const double sum_rcubed(drop1.rcubed + drop2.rcubed);
-  const double new_rcubed(old_xi / new_xi * sum_rcubed);
+  const double sum_rcubed(drop1.rcubed() + drop2.rcubed());
+  const double new_rcubed(sum_rcubed * old_xi / new_xi);
   const double new_r(Kokkos::pow(new_rcubed, (1.0 / 3.0)));
 
   const double sum_msol(drop1.get_msol() + drop2.get_msol());
@@ -178,4 +178,32 @@ Note implicit assumption that gamma factor = 1. */
   drop1.set_msol(new_msol);
   drop2.set_msol(new_msol);
 }
+
+template <NFragments NFrags>
+KOKKOS_INLINE_FUNCTION void
+DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop &drop1,
+                                                  Superdrop &drop2) const
+/* if xi1 > gamma*xi2 breakup alters drop2 radius and
+mass via decreasing multiplicity of drop1. Similar to
+Shima et al. 2009 Section 5.1.3. part (5) option (a).
+Note implicit assumption that gamma factor = 1. */
+{
+  drop1.set_xi(drop1.get_xi() - drop2.get_xi());
+
+  const unsigned long long old_xi(drop2.get_xi());
+  const double totnfrags(nfrags(drop1, drop2) * old_xi);
+  const unsigned long long new_xi(Kokkos::round(totnfrags));
+
+  const double sum_rcubed(drop1.rcubed() + drop2.rcubed());  
+  const double new_rcubed(sum_rcubed * old_xi / new_xi);
+  const double new_r(Kokkos::pow(new_rcubed, (1.0 / 3.0)));
+
+  const double sum_msol(drop1.get_msol() + drop2.get_msol());
+  const double new_msol(sum_msol * old_xi / new_xi);
+
+  drop2.set_xi(new_xi);
+  drop2.set_radius(new_r); // NOTE: implicit casting of eps from unsigned long long to double here
+  drop2.set_msol(new_msol); 
+  } 
+
 #endif // BREAKUP_HPP
