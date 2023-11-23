@@ -67,7 +67,7 @@ def massdens_distrib(radius, xi, mass, vol, rspan,
                      nbins, perlogR, smooth):
   
   
-  weights = xi * mass * 1000 / vol # real droplets [g/m^3]
+  weights = xi * mass / vol # real droplets [g/m^3]
 
   hist, hedges, hcens = logr_distribution(rspan, nbins, radius,
                                           weights, perlogR=perlogR, 
