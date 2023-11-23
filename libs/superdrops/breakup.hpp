@@ -57,6 +57,22 @@ private:
   (no citation yet available). Note implicit assumption
   that gamma factor = 1. */
 
+  KOKKOS_INLINE_FUNCTION void
+  twin_superdroplet_breakup(Superdrop &drop1,
+                            Superdrop &drop2) const;
+  /* if xi1 = gamma*xi2 breakup of same multiplicity
+  superdroplets produces (non-identical) twin superdroplets.
+  Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
+  Note implicit assumption that gamma factor = 1. */
+
+  KOKKOS_INLINE_FUNCTION void
+  different_superdroplet_breakup(Superdrop &drop1,
+                                 Superdrop &drop2) const;
+  /* if xi1 > gamma*xi2 breakup alters drop2 radius and
+  mass via decreasing multiplicity of drop1. Similar to
+  Shima et al. 2009 Section 5.1.3. part (5) option (a).
+  Note implicit assumption that gamma factor = 1. */
+
 public:
   DoBreakup(const NFrags nfrags) : nfrags(nfrags)
   {
@@ -194,7 +210,7 @@ Note implicit assumption that gamma factor = 1. */
   const double totnfrags(nfrags(drop1, drop2) * old_xi);
   const unsigned long long new_xi(Kokkos::round(totnfrags));
 
-  const double sum_rcubed(drop1.rcubed() + drop2.rcubed());  
+  const double sum_rcubed(drop1.rcubed() + drop2.rcubed());
   const double new_rcubed(sum_rcubed * old_xi / new_xi);
   const double new_r(Kokkos::pow(new_rcubed, (1.0 / 3.0)));
 
@@ -203,7 +219,7 @@ Note implicit assumption that gamma factor = 1. */
 
   drop2.set_xi(new_xi);
   drop2.set_radius(new_r); // NOTE: implicit casting of eps from unsigned long long to double here
-  drop2.set_msol(new_msol); 
-  } 
+  drop2.set_msol(new_msol);
+}
 
 #endif // BREAKUP_HPP
