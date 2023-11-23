@@ -70,6 +70,4 @@ probability of collision-breakup determined by 'collbuprob' */
   return ConstTstepMicrophysics(interval, colls);
 }
 
-/* -----  ----- TODO: move functions below to .cpp file ----- ----- */
-
 #endif // BREAKUP_HPP
