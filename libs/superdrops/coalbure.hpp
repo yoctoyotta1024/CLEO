@@ -171,15 +171,15 @@ section 2.2 of Szakáll and Urbich 2018
   if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
   {
     return 0; // rebound 
-  } 
-  else if 
+  }
+  else if (cke < coal_surfenergy(r1, r2)) // weber number < 1 : coalescence
   {
     return 1; // coalescence
   }
-  else
+  else // Weber > 1 : breakup
   {
     return 2; // breakup
   }
 }
-
+    
 #endif // COALBURE_HPP
