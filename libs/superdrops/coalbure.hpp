@@ -149,4 +149,37 @@ If flag = 2 -> breakup. Otherwise -> rebound. */
   return is_null;
 }
 
+template <NFragments NFrags>
+KOKKOS_FUNCTION unsigned int
+DoCoalBuRe<NFrags>::coalbure_flag(Superdrop &drop1,
+                                  Superdrop &drop2) const
+/*  function returns flag indicating rebound or
+coalescence or breakup. If flag = 1 -> coalescence.
+If flag = 2 -> breakup. Otherwise -> rebound.
+Flag decided based on the kinetic arguments in
+section 2.2 of Szakáll and Urbich 2018
+(neglecting grazing angle considerations) */
+{
+  const double r1(drop1.get_radius());
+  const double r2(drop2.get_radius());
+  const auto terminalv = SimmelTerminalVelocity{};
+
+  const double cke(collision_kinetic_energy(r1, r2,
+                                            terminalv(drop1),
+                                            terminalv(drop2)));
+
+  if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
+  {
+    return 0; // rebound 
+  } 
+  else if 
+  {
+    return 1; // coalescence
+  }
+  else
+  {
+    return 2; // breakup
+  }
+}
+
 #endif // COALBURE_HPP
