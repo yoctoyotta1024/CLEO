@@ -192,7 +192,7 @@ Section 5.1.3. part (5) option (b)  */
   const double new_rcubed = radiuscubed(drop2) + gamma * radiuscubed(drop1);
   const double new_r = Kokkos::pow(new_rcubed, (1.0 / 3.0));
 
-  const double new_m_sol =  drop2.get_msol() + gamma * drop1.get_msol();
+  const double new_msol =  drop2.get_msol() + gamma * drop1.get_msol();
 
   drop1.set_xi(new_xi);
   drop2.set_xi(old_xi - new_xi);
@@ -200,8 +200,8 @@ Section 5.1.3. part (5) option (b)  */
   drop1.set_radius(new_r);
   drop2.set_radius(new_r);
 
-  drop1.set_msol(new_m_sol);
-  drop2.set_msol(new_m_sol);
+  drop1.set_msol(new_msol);
+  drop2.set_msol(new_msol);
 }
 
 KOKKOS_INLINE_FUNCTION void

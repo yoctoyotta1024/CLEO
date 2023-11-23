@@ -16,7 +16,7 @@
  * -----
  * File Description:
  * configuration input parameters for CLEO
- * Note: inital superdroplets data (eps, r0 and m_sol etc.)
+ * Note: inital superdroplets data (xi, r0 and msol etc.)
  * read from file "initsupers_filename" is made with PYSD module
  * using python script "create_initsuperdropsbinary_script".
  * Likewise data to make gridboxmap from gridbox boundaries is

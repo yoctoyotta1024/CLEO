@@ -29,7 +29,7 @@ class ManyInitAttrs:
         self.sdgbxindex = []
         self.eps = []
         self.radius = []
-        self.m_sol = []
+        self.msol = []
         self.coord3 = []
         self.coord1 = []
         self.coord2 = []
@@ -39,7 +39,7 @@ class ManyInitAttrs:
         self.sdgbxindex = a
         self.eps = b
         self.radius = c
-        self.m_sol = d
+        self.msol = d
         self.coord3 = e 
         self.coord1 = f 
         self.coord2 = g 
@@ -49,7 +49,7 @@ class ManyInitAttrs:
         self.sdgbxindex.extend(a)
         self.eps.extend(b)
         self.radius.extend(c)
-        self.m_sol.extend(d)
+        self.msol.extend(d)
         self.coord3.extend(e)
         self.coord1.extend(f) 
         self.coord2.extend(g) 
@@ -60,7 +60,7 @@ class ManyInitAttrs:
         self.sdgbxindex.extend(mia.sdgbxindex)
         self.eps.extend(mia.eps)
         self.radius.extend(mia.radius)
-        self.m_sol.extend(mia.m_sol)
+        self.msol.extend(mia.msol)
         self.coord3.extend(mia.coord3)
         self.coord1.extend(mia.coord1)
         self.coord2.extend(mia.coord2)   
@@ -117,7 +117,7 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     
     # generate attributes
     sdgbxindex = [gbxindex]*nsupers
-    eps, radius, m_sol = initattrsgen.generate_attributes(nsupers, 
+    eps, radius, msol = initattrsgen.generate_attributes(nsupers, 
                                                           inputs["RHO_SOL"],
                                                           NUMCONC,
                                                           gridboxbounds) 
@@ -129,13 +129,13 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
 
     # de-dimsionalise attributes
     radius = radius / inputs["R0"]
-    m_sol = m_sol / inputs["MASS0"]
+    msol = msol / inputs["MASS0"]
     coord3 = coord3 / inputs["COORD0"]
     coord1 = coord1 / inputs["COORD0"]
     coord2 = coord2 / inputs["COORD0"]
 
     attrs4gbx = ManyInitAttrs() 
-    attrs4gbx.set_attrlists(sdgbxindex, eps, radius, m_sol,
+    attrs4gbx.set_attrlists(sdgbxindex, eps, radius, msol,
                             coord3, coord1, coord2)
 
     return attrs4gbx
@@ -171,7 +171,7 @@ def set_arraydtype(arr, dtype):
 def ctype_compatible_attrs(attrs):
   ''' make list from arrays of SD attributes that are compatible
   with c type expected by SDM e.g. unsigned long ints for eps,
-  doubles for radius and m_sol'''   
+  doubles for radius and msol'''   
 
   datatypes = [np.uintc, np.uint, np.double, np.double]
   datatypes += [np.double]*3 # coords datatype
@@ -179,9 +179,9 @@ def ctype_compatible_attrs(attrs):
   attrs.sdgbxindex = list(set_arraydtype(attrs.sdgbxindex, datatypes[0]))
   attrs.eps = list(set_arraydtype(attrs.eps, datatypes[1]))
   attrs.radius = list(set_arraydtype(attrs.radius, datatypes[2]))
-  attrs.m_sol = list(set_arraydtype(attrs.m_sol, datatypes[3]))
+  attrs.msol = list(set_arraydtype(attrs.msol, datatypes[3]))
   
-  datalist = attrs.sdgbxindex + attrs.eps + attrs.radius + attrs.m_sol
+  datalist = attrs.sdgbxindex + attrs.eps + attrs.radius + attrs.msol
   
   if any(attrs.coord3):
     # make coord3 compatible if there is data for it (>= 1-D model)
@@ -261,7 +261,7 @@ def write_initsuperdrops_binary(initsupersfile, initattrsgen, configfile,
                                    gbxbounds, inputs, NUMCONC) 
   
   ndata = [len(dt) for dt in [attrs.sdgbxindex, attrs.eps,
-                              attrs.radius, attrs.m_sol, attrs.coord3,
+                              attrs.radius, attrs.msol, attrs.coord3,
                               attrs.coord1, attrs.coord2]]
   
   data, datatypes = ctype_compatible_attrs(attrs) 
@@ -278,13 +278,13 @@ def write_initsuperdrops_binary(initsupersfile, initattrsgen, configfile,
   if initattrsgen.coord3gen: 
     if initattrsgen.coord1gen:
       if initattrsgen.coord2gen: 
-        metastr += ' [sdgbxindex, eps, radius, m_sol, coord3, coord1, coord2]'
+        metastr += ' [sdgbxindex, xi, radius, msol, coord3, coord1, coord2]'
       else:
-        metastr += ' [sdgbxindex, eps, radius, m_sol, coord3, coord1]'
+        metastr += ' [sdgbxindex, xi, radius, msol, coord3, coord1]'
     else:
-      metastr += ' [sdgbxindex, eps, radius, m_sol, coord3]'
+      metastr += ' [sdgbxindex, xi, radius, msol, coord3]'
   else:
-    metastr += ' [sdgbxindex, eps, radius, m_sol]'
+    metastr += ' [sdgbxindex, xi, radius, msol]'
   
   writebinary.writebinary(initsupersfile, data, ndata, datatypes,
                           units, scale_factors, metastr)

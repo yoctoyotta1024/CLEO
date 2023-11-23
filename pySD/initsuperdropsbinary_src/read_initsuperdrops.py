@@ -35,7 +35,7 @@ def get_superdroplet_attributes(configfile, constsfile, initsupersfile):
 
     # re-dimensionalise SD attributes
     attrs.radius = attrs.radius * inputs["R0"]
-    attrs.m_sol = attrs.m_sol * inputs["MASS0"]
+    attrs.msol = attrs.msol * inputs["MASS0"]
     attrs.coord3 = attrs.coord3 * inputs["COORD0"]
     attrs.coord1 = attrs.coord1 * inputs["COORD0"]
     attrs.coord2 = attrs.coord2 * inputs["COORD0"]
@@ -57,13 +57,13 @@ def read_dimless_superdrops_binary(filename, isprint=True):
     attrs.sdgbxindex = np.asarray(data[:ll[0]], dtype=datatypes[0])
     attrs.eps = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1])
     attrs.radius = np.asarray(data[ll[1]:ll[2]], dtype=datatypes[2])
-    attrs.m_sol = np.asarray(data[ll[2]:ll[3]], dtype=datatypes[3])
+    attrs.msol = np.asarray(data[ll[2]:ll[3]], dtype=datatypes[3])
     attrs.coord3 = np.asarray(data[ll[3]:ll[4]], dtype=datatypes[4])
     attrs.coord1 = np.asarray(data[ll[4]:ll[5]], dtype=datatypes[5])
     attrs.coord2 = np.asarray(data[ll[5]:], dtype=datatypes[6])
 
     print("attribute shapes: ", attrs.sdgbxindex.shape, attrs.eps.shape,
-          attrs.radius.shape, attrs.m_sol.shape, attrs.coord3.shape,
+          attrs.radius.shape, attrs.msol.shape, attrs.coord3.shape,
           attrs.coord1.shape, attrs.coord2.shape)
     
     return attrs
@@ -80,7 +80,7 @@ def print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile):
     eps = attrs.eps.flatten()
     vol = np.sum(gbxvols)
     numconc = np.sum(eps)/vol / 1e6 #[/cm^3]
-    massconc = np.sum(attrs.m_sol.flatten() * eps) / vol * 1000 #[g m^-3]
+    massconc = np.sum(attrs.msol.flatten() * eps) / vol * 1000 #[g m^-3]
     dropvol = 4/3 * np.pi * np.sum((attrs.radius.flatten()**3) * eps) 
     m_w_conc = dropvol * 1000 / vol * 1000 # mass as if drops had density of water=1000Kg/m^3 [g m^3]
 
@@ -110,7 +110,7 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
         l1 = plot_numconcdistrib(axs[1], hedgs, attrs.eps[sl],
                                  attrs.radius[sl], vol)
         l2 = plot_masssolutedistrib(axs[2], hedgs, attrs.eps[sl],
-                                    attrs.radius[sl], attrs.m_sol[sl],
+                                    attrs.radius[sl], attrs.msol[sl],
                                     vol)
         ls = plot_coorddistribs(axs, sl, hedgs, attrs)
         
@@ -235,10 +235,10 @@ def plot_numconcdistrib(ax, hedgs, eps, radius, vol):
     return line
 
 
-def plot_masssolutedistrib(ax, hedgs, eps, radius, m_sol, vol):
+def plot_masssolutedistrib(ax, hedgs, eps, radius, msol, vol):
     ''' get and plot frequency of real droplets in each log10(r) bin '''
 
-    wghts = m_sol*eps/vol * 1000 / 1e6  # [g cm^-3]
+    wghts = msol*eps/vol * 1000 / 1e6  # [g cm^-3]
     hist, hedgs, hwdths, hcens = log10r_frequency_distribution(
         radius, hedgs, wghts)
 

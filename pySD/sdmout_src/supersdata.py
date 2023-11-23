@@ -53,17 +53,17 @@ class SuperdropProperties():
         print("IONIC =", self.IONIC)
         print("-------------------------------")
 
-    def rhoeff(self, r, m_sol):
+    def rhoeff(self, r, msol):
         ''' calculates effective density [g m^-3] of 
       droplet such that mass_droplet, m = 4/3*pi*r^3 * rhoeff
       taking into account mass of liquid and mass of
       solute assuming solute occupies volume it
       would given its (dry) density, RHO_SOL. '''
 
-        m_sol = m_sol/1000 # convert from grams to Kg
+        msol = msol/1000 # convert from grams to Kg
         r = r/1e6 # convert microns to m
 
-        solfactor = 3*m_sol/(4.0*np.pi*(r**3))
+        solfactor = 3*msol/(4.0*np.pi*(r**3))
         rhoeff = self.RHO_L + solfactor*(1-self.RHO_L/self.RHO_SOL)
 
         return rhoeff * 1000 #[g/m^3]
@@ -75,28 +75,28 @@ class SuperdropProperties():
 
         return 4.0/3.0 * np.pi * r**3
 
-    def mass(self, r, m_sol):
+    def mass(self, r, msol):
         '''
         total mass of droplet (water + (dry) areosol) [g],
-        m =  4/3*pi*rho_l**3 + m_sol(1-rho_l/rho_sol) 
+        m =  4/3*pi*rho_l**3 + msol(1-rho_l/rho_sol) 
         ie. m = 4/3*pi*rhoeff*R**3
         '''
 
-        m_sol = m_sol/1000 # convert from grams to Kg
+        msol = msol/1000 # convert from grams to Kg
         r = r/1e6 # convert microns to m
 
-        msoleff = m_sol*(1-self.RHO_L/self.RHO_SOL) # effect of solute on mass
+        msoleff = msol*(1-self.RHO_L/self.RHO_SOL) # effect of solute on mass
         m = msoleff + 4/3.0*np.pi*(r**3)*self.RHO_L
 
         return m * 1000 # [g]
 
-    def m_water(self, r, m_sol):
+    def m_water(self, r, msol):
         ''' mass of only water in droplet [g]'''
 
-        m_sol = m_sol/1000 # convert m_sol from grams to Kg
+        msol = msol/1000 # convert msol from grams to Kg
         r = r/1e6 # convert microns to m
 
-        v_sol = m_sol/self.RHO_SOL
+        v_sol = msol/self.RHO_SOL
         v_w = 4/3.0*np.pi*(r**3) - v_sol
 
         return self.RHO_L*v_w * 1000 #[g]
@@ -113,7 +113,7 @@ class SupersData(SuperdropProperties):
         self.sdgbxindex = self.tryvar(ds, rgdcount, "sdgbxindex")
         self.xi = self.tryvar(ds, rgdcount, "xi")
         self.radius = self.tryvar(ds, rgdcount, "radius")
-        self.m_sol = self.tryvar(ds, rgdcount, "msol")
+        self.msol = self.tryvar(ds, rgdcount, "msol")
 
         self.coord3 = self.tryvar(ds, rgdcount, "coord3")
         self.coord1 = self.tryvar(ds, rgdcount, "coord1")
@@ -121,7 +121,7 @@ class SupersData(SuperdropProperties):
 
         # probably microns ie. 'micro m'
         self.radius_units = self.tryunits(ds, "radius")
-        self.m_sol_units = self.tryunits(ds, "msol")  # probably gramms
+        self.msol_units = self.tryunits(ds, "msol")  # probably gramms
         self.coord3_units = self.tryunits(ds, "coord3")  # probably meters
         self.coord1_units = self.tryunits(ds, "coord1")  # probably meters
         self.coord2_units = self.tryunits(ds, "coord2")  # probably meters
@@ -163,7 +163,7 @@ class SupersData(SuperdropProperties):
         elif key == "radius":
             return self.radius
         elif key == "msol":
-            return self.m_sol
+            return self.msol
         elif key == "coord3":
             return self.coord3
         elif key == "coord1":
@@ -191,7 +191,7 @@ class RainSupers(SuperdropProperties):
         self.sdgbxindex = sddata.sdgbxindex[israin]
         self.xi = sddata.xi[israin]
         self.radius = sddata.radius[israin]
-        self.m_sol = sddata.m_sol[israin]
+        self.msol = sddata.msol[israin]
 
         if np.any(sddata.coord3):
             self.coord3 = sddata.coord3[israin]
@@ -212,7 +212,7 @@ class RainSupers(SuperdropProperties):
         elif key == "radius":
             return self.radius
         elif key == "msol":
-            return self.m_sol
+            return self.msol
         elif key == "coord3":
             return self.coord3
         elif key == "coord1":

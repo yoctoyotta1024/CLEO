@@ -185,9 +185,9 @@ class InitManyAttrsGen:
         ''' return the mass [Kg] of the solute in superdroplets given their 
         dry radii [m] and solute density [Kg m^3]'''
 
-        m_sols = 4.0/3.0 * np.pi * (dryradii**3) * RHO_SOL
+        msols = 4.0/3.0 * np.pi * (dryradii**3) * RHO_SOL
 
-        return m_sols  # [Kg]
+        return msols  # [Kg]
 
     def multiplicities(self, radii, NUMCONC, samplevol):
         ''' Calculate the multiplicity of the dry radius of each

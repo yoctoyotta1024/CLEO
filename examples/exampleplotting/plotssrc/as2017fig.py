@@ -23,7 +23,7 @@ S. Arabas and S. Shima 2017
 import numpy as np
 import matplotlib.pyplot as plt
 
-def kohler_curve(r, m_sol, temp, ionic, Mr_sol, criticalpoints=False):
+def kohler_curve(r, msol, temp, ionic, Mr_sol, criticalpoints=False):
     '''returns size and solute dependent 
     equilibrium saturation ratio, s_eq,
     for droplet according to kohler theory.
@@ -31,13 +31,13 @@ def kohler_curve(r, m_sol, temp, ionic, Mr_sol, criticalpoints=False):
     by Lohmann, Luond and Mahrt, 1st edition'''
 
     r = r/1e6 # convert from micron to m
-    m_sol = m_sol/1000 # convert from g to Kg
+    msol = msol/1000 # convert from g to Kg
 
     # eqn [6.24]
     a = 3.3e-7 / temp
 
     # eqn [6.22]
-    b = 4.3e-6 * ionic * m_sol / Mr_sol
+    b = 4.3e-6 * ionic * msol / Mr_sol
 
     # eqn [6.25]
     s_eq = (a/r) - (b/(r**3))
@@ -99,7 +99,7 @@ def condensation_validation_subplots(axs, time, radius, supersat, zprof,
 
     return axs
 
-def arabas_shima_2017_fig(time, zprof, radius, m_sol, temp, supersat,
+def arabas_shima_2017_fig(time, zprof, radius, msol, temp, supersat,
                           IONIC, MR_SOL, W_AVG, numconc, savename=""):
     ''' plots the same plots as in Figure 5 of 
     "On the CCN (de)activation nonlinearities"
@@ -108,7 +108,7 @@ def arabas_shima_2017_fig(time, zprof, radius, m_sol, temp, supersat,
 
     fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(12, 5))
 
-    plot_kohlercurve_with_criticalpoints(axs[1], radius, m_sol[0],
+    plot_kohlercurve_with_criticalpoints(axs[1], radius, msol[0],
                                          temp[0], IONIC, MR_SOL)
 
     axs = condensation_validation_subplots(axs, time, radius, supersat, zprof)
