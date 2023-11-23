@@ -162,20 +162,20 @@ Note implicit assumption that gamma factor = 1. */
   const double totnfrags(nfrags(drop1, drop2) * old_eps);
   const unsigned long long new_xi(Kokkos::round(totnfrags) / 2);
 
-  const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
-  const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
-  const double sumr3(r1cubed + r2cubed);
-  const double new_r = std::pow(old_eps / new_eps * sumr3, (1.0 / 3.0));
+  const double sum_rcubed(drop1.rcubed + drop2.rcubed);
+  const double new_rcubed(old_xi / new_xi * sum_rcubed);
+  const double new_r(Kokkos::pow(new_rcubed, (1.0 / 3.0)));
 
-  const double new_m_sol = old_eps * (sd1.m_sol + sd2.m_sol) / new_eps;
+  const double sum_msol(drop1.get_msol() + drop2.get_msol());
+  const double new_msol(sum_msol * old_xi / new_xi);
 
-  sd1.eps = new_eps;
-  sd2.eps = old_eps - new_eps;
+  drop1.set_xi(new_xi);
+  drop2.set_xi(old_xi - new_xi);
 
-  sd1.radius = new_r;
-  sd2.radius = new_r;
+  drop1.set_radius(new_r);
+  drop2.set_radius(new_r);
 
-  sd1.m_sol = new_m_sol;
-  sd2.m_sol = new_m_sol;    
+  drop1.set_msol(new_msol);
+  drop2.set_msol(new_msol);    
   }
 #endif // BREAKUP_HPP
