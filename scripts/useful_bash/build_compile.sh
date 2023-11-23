@@ -17,8 +17,8 @@
 module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
-path2CLEO=${HOME}/testCLEOfire/
-path2build=${HOME}/testCLEOfire/build/
+path2CLEO=${HOME}/CLEO/
+path2build=${HOME}/CLEO/build/
 python=python
 gxx="g++"
 gcc="gcc"

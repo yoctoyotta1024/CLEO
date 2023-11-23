@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
 File: setup.py
-Project: testCLEOfire
+Project: CLEO
 Created Date: Thursday 12th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
