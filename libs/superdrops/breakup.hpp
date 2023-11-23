@@ -44,7 +44,7 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
-                  const double prob, const double phi) const;
+                  const double prob, const double phi) const {return 0;}
   /* this operator is used as an "adaptor" for
   using DoBreakup as a function in DoCollisions
   that satistfies the PairEnactX concept */
@@ -55,7 +55,7 @@ inline MicrophysicalProcess auto
 CollBu(const unsigned int interval,
          const std::function<double(unsigned int)> int2realtime,
          const Probability collbuprob,
-         const Nfrags nfrags)
+         const NFrags nfrags)
 /* constructs Microphysical Process for collision-breakup
 of superdroplets with a constant timestep 'interval' and
 probability of collision-breakup determined by 'collbuprob' */
@@ -63,7 +63,7 @@ probability of collision-breakup determined by 'collbuprob' */
   const double DELT(int2realtime(interval));
 
   const DoBreakup bu(nfrags);
-  const DoCollisions<Probability, DoBreakup> colls(DELT,
+  const DoCollisions<Probability, DoBreakup<NFrags>> colls(DELT,
                                                    collbuprob,
                                                    bu);
 

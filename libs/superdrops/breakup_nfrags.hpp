@@ -20,6 +20,9 @@
  * Used e.g. by the DoBreakup struct.
 */
 
+#ifndef BREAKUP_NFRAGS_HPP
+#define BREAKUP_NFRAGS_HPP
+
 #include <concepts>
 
 #include <Kokkos_Core.hpp>
@@ -55,3 +58,5 @@ public:
     return nfrags;
   }
 }
+
+#endif // BREAKUP_NFRAGS_HPP
