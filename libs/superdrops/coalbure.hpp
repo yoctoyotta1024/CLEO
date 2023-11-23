@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * functionality to enact collision- 
+ * functionality to enact collision-
  * coalescence, breakup or rebound events
  * in SDM analagous to to Shima et al. 2009.
  * CoalBuRe struct satisfies PairEnactX
@@ -59,6 +59,16 @@ private:
   }
 
   KOKKOS_FUNCTION
+  unsigned int coalbure_flag(Superdrop &drop1,
+                             Superdrop &drop2) const;
+  /*  function returns flag indicating rebound or
+  coalescence or breakup. If flag = 1 -> coalescence.
+  If flag = 2 -> breakup. Otherwise -> rebound.
+  Flag decided based on the kinetic arguments in
+  section 2.2 of Szakáll and Urbich 2018
+  (neglecting grazing angle considerations) */
+
+  KOKKOS_FUNCTION
   bool coalesce_breakup_or_rebound(const unsigned long long gamma,
                                    Superdrop &drop1,
                                    Superdrop &drop2) const;
@@ -81,9 +91,9 @@ public:
 template <PairProbability Probability, NFragments NFrags>
 inline MicrophysicalProcess auto
 CoalBuRe(const unsigned int interval,
-             const std::function<double(unsigned int)> int2realtime,
-             const Probability collprob,
-             const NFrags nfrags)
+         const std::function<double(unsigned int)> int2realtime,
+         const Probability collprob,
+         const NFrags nfrags)
 /* constructs Microphysical Process for collision-
 coalscence, breakup or rebound of superdroplets with
 a constant timestep 'interval' and probability
@@ -124,6 +134,39 @@ that satistfies the PairEnactX concept */
 }
 
 template <NFragments NFrags>
+KOKKOS_FUNCTION unsigned int
+DoCoalBuRe<NFrags>::coalbure_flag(Superdrop &drop1,
+                                  Superdrop &drop2) const
+/*  function returns flag indicating rebound or
+coalescence or breakup. If flag = 1 -> coalescence.
+If flag = 2 -> breakup. Otherwise -> rebound.
+Flag decided based on the kinetic arguments in
+section 2.2 of Szakáll and Urbich 2018
+(neglecting grazing angle considerations) */
+{
+  const double r1(drop1.get_radius());
+  const double r2(drop2.get_radius());
+  const auto terminalv = SimmelTerminalVelocity{};
+
+  const double cke(collision_kinetic_energy(r1, r2,
+                                            terminalv(drop1),
+                                            terminalv(drop2)));
+
+  if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
+  {
+    return 0; // rebound
+  }
+  else if (cke < coal_surfenergy(r1, r2)) // weber number < 1 : coalescence
+  {
+    return 1; // coalescence
+  }
+  else // Weber > 1 : breakup
+  {
+    return 2; // breakup
+  }
+}
+
+template <NFragments NFrags>
 KOKKOS_FUNCTION bool
 DoCoalBuRe<NFrags>::
     coalesce_breakup_or_rebound(const unsigned long long gamma,
@@ -149,37 +192,4 @@ If flag = 2 -> breakup. Otherwise -> rebound. */
   return is_null;
 }
 
-template <NFragments NFrags>
-KOKKOS_FUNCTION unsigned int
-DoCoalBuRe<NFrags>::coalbure_flag(Superdrop &drop1,
-                                  Superdrop &drop2) const
-/*  function returns flag indicating rebound or
-coalescence or breakup. If flag = 1 -> coalescence.
-If flag = 2 -> breakup. Otherwise -> rebound.
-Flag decided based on the kinetic arguments in
-section 2.2 of Szakáll and Urbich 2018
-(neglecting grazing angle considerations) */
-{
-  const double r1(drop1.get_radius());
-  const double r2(drop2.get_radius());
-  const auto terminalv = SimmelTerminalVelocity{};
-
-  const double cke(collision_kinetic_energy(r1, r2,
-                                            terminalv(drop1),
-                                            terminalv(drop2)));
-
-  if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
-  {
-    return 0; // rebound 
-  }
-  else if (cke < coal_surfenergy(r1, r2)) // weber number < 1 : coalescence
-  {
-    return 1; // coalescence
-  }
-  else // Weber > 1 : breakup
-  {
-    return 2; // breakup
-  }
-}
-    
 #endif // COALBURE_HPP
