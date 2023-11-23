@@ -182,7 +182,7 @@ If flag = 2 -> breakup. Otherwise -> rebound. */
   switch (flag)
   {
   case 1: // coalescence
-    is_null = coalesce_superdroplet_pair(gamma, drop1, drop2);
+    is_null = coal.coalesce_superdroplet_pair(gamma, drop1, drop2);
     break;
   case 2: // breakup
     bu.breakup_superdroplet_pair(drop1, drop2);

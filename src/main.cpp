@@ -59,6 +59,7 @@
 
 #include "superdrops/breakup_nfrags.hpp"
 #include "superdrops/breakup.hpp"
+#include "superdrops/coalbure.hpp"
 #include "superdrops/coalescence.hpp"
 #include "superdrops/collisionprobs/golovinprob.hpp"
 #include "superdrops/collisionprobs/longhydroprob.hpp"
@@ -125,7 +126,7 @@ config_collisions(const Config &config, const Timesteps &tsteps)
 {
   const PairProbability auto collprob = LongHydroProb();
   const NFragments auto nfrags = ConstNFrags(5.0);
-  const MicrophysicalProcess auto colls = CoalBuRe(steps.get_collstep(),
+  const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    collprob,
                                                    nfrags);
