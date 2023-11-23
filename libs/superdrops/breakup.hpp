@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Thursday 23rd November 2023 
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,32 +18,20 @@
  * functionality to enact collision-breakup events
  * in SDM analagous to to Shima et al. 2009.
  * Breakup struct satisfies PairEnactX
- * concept used in Collisions struct */
+ * concept used in Collisions struct
+*/
 
 #ifndef BREAKUP_HPP
 #define BREAKUP_HPP
 
 #include <functional>
+#include <concepts>
 
 #include <Kokkos_Core.hpp>
 
 #include "./collisions.hpp"
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
-
-template <typename F>
-concept NFragments = requires(F f,
-                              const Superdrop &d1,
-                              const Superdrop &d2)
-/* Objects that are of type 'NFragments'
-take a pair of superdroplets and returns
-something convertible to a double (such as
-the number of fragments from a breakup event) */
-{
-  {
-    f(d1, d2)
-  } -> std::convertible_to<double>;
-};
 
 template <NFragments NFrags>
 struct DoBreakup
