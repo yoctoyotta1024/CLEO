@@ -88,7 +88,7 @@ def plot_domainmassdens_distribs(timesecs, sddata, t2plts,
   for t, tplt in enumerate(t2plts):
     
     ind = np.argmin(abs(timesecs-tplt))    
-    tlab = 't = {:.2f}s'.format(time[ind])
+    tlab = 't = {:.2f}s'.format(timesecs[ind])
     c = 'C'+str(t)
     
     radius = data2plt["radius"][t]
@@ -100,7 +100,10 @@ def plot_domainmassdens_distribs(timesecs, sddata, t2plts,
                                    rspan, nbins,
                                    perlogR=True,
                                    smooth=smoothsig) 
-    ax.plot(hcens, hist, label=tlab, color=c)            
+    if smoothsig:
+        ax.plot(hcens, hist, label=tlab, color=c)            
+    else:
+       ax.step(hcens, hist, label=tlab, where='mid', color=c)
 
   ax.set_xscale("log")
   ax.set_xlabel("radius, r, /\u03BCm")

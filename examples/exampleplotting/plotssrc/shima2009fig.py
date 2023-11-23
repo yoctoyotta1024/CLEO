@@ -26,7 +26,7 @@ from scipy.special import iv
 
 sys.path.append("../../../")  # for imports from pySD package
 from pySD.sdmout_src import sdtracing
-from pltdist import logr_distribution
+from .pltdist import logr_distribution
 
 def plot_validation_figure(witherr, time, sddata, tplt, domainvol,
                            n_a, r_a, smoothsig,
