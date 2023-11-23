@@ -38,7 +38,7 @@ the number of fragments from a breakup event) */
   } -> std::convertible_to<double>;
 };
 
-struct ConstFrags
+struct ConstNFrags
 /* operator always returns constant 
 number of fragments 'nfrags'. Struct
 obeys NFragments concept  */
@@ -46,8 +46,8 @@ obeys NFragments concept  */
 private:
   const double nfrags;
 public:
-  ConstFrags(const double nfrags) : nfrags(nfrags) {}
-  
+  ConstNFrags(const double nfrags) : nfrags(nfrags) {}
+
   double operator()(const Superdrop &d1,
                     const Superdrop &d2)
   /* always returns constant number of fragments 'nfrags' */
