@@ -73,21 +73,21 @@ radiigen =  iattrs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from 
 # numconc              = 512e6                         # total no. conc of real droplets [m^-3]
 # radiiprobdist = rprobs.DiracDelta(dirac0)
 
-geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
-geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
-scalefacs          = [1e9]                       # relative heights of modes         
-geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-geosigs              = [1.55, 2.3, 2]                    
-scalefacs            = [1e6, 0.3e6, 0.025e6]   
-geomeans             = [0.02e-6, 0.15e-6]               
-geosigs              = [1.4, 1.6]                    
-scalefacs            = [6e6, 4e6]   
-numconc = np.sum(scalefacs)
-radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
+# geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
+# geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
+# scalefacs          = [1e9]                       # relative heights of modes         
+# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
+# geosigs              = [1.55, 2.3, 2]                    
+# scalefacs            = [1e6, 0.3e6, 0.025e6]   
+# geomeans             = [0.02e-6, 0.15e-6]               
+# geosigs              = [1.4, 1.6]                    
+# scalefacs            = [6e6, 4e6]   
+# numconc = np.sum(scalefacs)
+# radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
  
-# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-# radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
+volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
+numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
+radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
 
 # reff                 = 7e-6                     # effective radius [m]
 # nueff                = 0.08                     # effective variance 
