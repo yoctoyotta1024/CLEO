@@ -38,14 +38,14 @@
 #include "./superdrop.hpp"
 
 template <NFragments NFrags>
-struct DoCoalBuRe 
-/* ie. DoCoalescenceBreakupRebound */ 
+struct DoCoalBuRe
+/* ie. DoCoalescenceBreakupRebound */
 {
 private:
   DoCoalescence coal;
   DoBreakup<NFrags> bu;
 
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   unsigned long long collision_gamma(const unsigned long long xi1,
                                      const unsigned long long xi2,
                                      const double prob,
@@ -57,6 +57,14 @@ private:
   {
     return coal.coalescence_gamma(xi1, xi2, prob, phi);
   }
+
+  KOKKOS_FUNCTION
+  bool coalesce_breakup_or_rebound(const unsigned long long gamma,
+                                   Superdrop &drop1,
+                                   Superdrop &drop2) const;
+  /*  function enacts rebound or coalescence or breakup
+  depending on value of flag. If flag = 1 -> coalescence.
+  If flag = 2 -> breakup. Otherwise -> rebound. */
 
 public:
   DoCoalBuRe(const NFrags nfrags) : bu(nfrags) {}
@@ -92,7 +100,7 @@ of collision determined by 'collprob' */
 }
 
 template <NFragments NFrags>
-KOKKOS_INLINE_FUNCTION bool
+KOKKOS_FUNCTION bool
 DoCoalBuRe<NFrags>::operator()(Superdrop &drop1, Superdrop &drop2,
                                const double prob, const double phi) const
 /* this operator is used as an "adaptor" for
@@ -109,36 +117,36 @@ that satistfies the PairEnactX concept */
   of superdroplets if gamma is not zero */
   if (gamma != 0)
   {
-    return coalesce_breakup_or_rebound(drop1, drop2, gamma);
+    return coalesce_breakup_or_rebound(gamma, drop1, drop2);
   }
 
   return 0;
 }
 
 template <NFragments NFrags>
-KOKKOS_INLINE_FUNCTION bool
-DoCoalBuRe<NFrags>::coalesce_breakup_or_rebound(Superdrop &drop1,
-                                                Superdrop &drop2,
-                                                const unsigned long long gamma) const
+KOKKOS_FUNCTION bool
+DoCoalBuRe<NFrags>::
+    coalesce_breakup_or_rebound(const unsigned long long gamma,
+                                Superdrop &drop1,
+                                Superdrop &drop2) const
 /*  function enacts rebound or coalescence or breakup
 depending on value of flag. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound. */
 {
   const unsigned int flag(coalbure_flag(drop1, drop2));
 
-  bool is_null_superdrop(0);
+  bool is_null(0);
   switch (flag)
   {
   case 1: // coalescence
-    is_null_superdrop = 1;
+    is_null = coalesce_superdroplet_pair(gamma, drop1, drop2);
     break;
   case 2: // breakup
     bu.breakup_superdroplet_pair(drop1, drop2);
-    is_null_superdrop = 0;
     break;
   }
 
-  return is_null_superdrop;
+  return is_null;
 }
 
 #endif // COALBURE_HPP

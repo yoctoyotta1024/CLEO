@@ -36,15 +36,7 @@
 struct DoCoalescence
 {
 private:
-  KOKKOS_INLINE_FUNCTION bool
-  coalesce_superdroplet_pair(const unsigned long long gamma,
-                             Superdrop &drop1,
-                             Superdrop &drop2) const;
-  /* coalesce pair of superdroplets by changing multiplicity,
-  radius and solute mass of each superdroplet in pair
-  according to Shima et al. 2009 Section 5.1.3. part (5) */
-
-  KOKKOS_INLINE_FUNCTION void
+  KOKKOS_FUNCTION void
   twin_superdroplet_coalescence(const unsigned long long gamma,
                                 Superdrop &drop1,
                                 Superdrop &drop2) const;
@@ -52,7 +44,7 @@ private:
   with same xi, r and solute mass. According to Shima et al. 2009
   Section 5.1.3. part (5) option (b)  */
 
-  KOKKOS_INLINE_FUNCTION void
+  KOKKOS_FUNCTION void
   different_superdroplet_coalescence(const unsigned long long gamma,
                                      Superdrop &drop1,
                                      Superdrop &drop2) const;
@@ -61,20 +53,28 @@ private:
   Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
 
 public:
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const;
   /* this operator is used as an "adaptor" for using
   DoCoalescence as a function in DoCollisions that
   satistfies the PairEnactX concept */
 
-  KOKKOS_INLINE_FUNCTION unsigned long long
+  KOKKOS_FUNCTION unsigned long long
   coalescence_gamma(const unsigned long long xi1,
                     const unsigned long long xi2,
                     const double prob,
                     const double phi) const;
   /* calculates value of gamma factor in Monte Carlo
   collision-coalescence as in Shima et al. 2009 */
+
+  KOKKOS_FUNCTION bool
+  coalesce_superdroplet_pair(const unsigned long long gamma,
+                             Superdrop &drop1,
+                             Superdrop &drop2) const;
+  /* coalesce pair of superdroplets by changing multiplicity,
+  radius and solute mass of each superdroplet in pair
+  according to Shima et al. 2009 Section 5.1.3. part (5) */
 };
 
 template <PairProbability Probability>
@@ -97,7 +97,7 @@ probability of collision-coalescence determined by 'collcoalprob' */
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
-KOKKOS_INLINE_FUNCTION bool
+KOKKOS_FUNCTION bool
 DoCoalescence::operator()(Superdrop &drop1, Superdrop &drop2,
                           const double prob, const double phi) const
 /* this operator is used as an "adaptor" for using
@@ -120,7 +120,7 @@ satistfies the PairEnactX concept */
   return 0;
 }
 
-KOKKOS_INLINE_FUNCTION unsigned long long
+KOKKOS_FUNCTION unsigned long long
 DoCoalescence::coalescence_gamma(const unsigned long long xi1,
                                  const unsigned long long xi2,
                                  const double prob,
@@ -139,7 +139,7 @@ collision-coalescence as in Shima et al. 2009 */
   return Kokkos::fmin(gamma, maxgamma);
 }
 
-KOKKOS_INLINE_FUNCTION bool
+KOKKOS_FUNCTION bool
 DoCoalescence::coalesce_superdroplet_pair(const unsigned long long gamma,
                                           Superdrop &drop1,
                                           Superdrop &drop2) const
@@ -170,7 +170,7 @@ according to Shima et al. 2009 Section 5.1.3. part (5) */
   return 0;                               
 }
 
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_FUNCTION void
 DoCoalescence::twin_superdroplet_coalescence(const unsigned long long gamma,
                                              Superdrop &drop1,
                                              Superdrop &drop2) const
@@ -198,7 +198,7 @@ xi values) from unsigned long long to double. */
   drop2.set_msol(new_msol);
 }
 
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_FUNCTION void
 DoCoalescence::different_superdroplet_coalescence(const unsigned long long gamma,
                                                   Superdrop &drop1,
                                                   Superdrop &drop2) const

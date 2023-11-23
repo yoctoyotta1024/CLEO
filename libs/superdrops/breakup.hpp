@@ -40,7 +40,7 @@ struct DoBreakup
 private:
   NFrags nfrags;
 
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   unsigned int breakup_gamma(const double prob,
                              const double phi) const;
   /* calculates value of gamma factor in Monte Carlo
@@ -49,7 +49,7 @@ private:
   maximally 1 breakup event can occur (gamma = 0 or 1)
   irrespective of whether scaled probability, prob > 1 */
 
-  KOKKOS_INLINE_FUNCTION void
+  KOKKOS_FUNCTION void
   twin_superdroplet_breakup(Superdrop &drop1,
                             Superdrop &drop2) const;
   /* if xi1 = gamma*xi2 breakup of same multiplicity
@@ -57,7 +57,7 @@ private:
   Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
   Note implicit assumption that gamma factor = 1. */
 
-  KOKKOS_INLINE_FUNCTION void
+  KOKKOS_FUNCTION void
   different_superdroplet_breakup(Superdrop &drop1,
                                  Superdrop &drop2) const;
   /* if xi1 > gamma*xi2 breakup alters drop2 radius and
@@ -68,14 +68,14 @@ private:
 public:
   DoBreakup(const NFrags nfrags) : nfrags(nfrags) {}
 
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const;
   /* this operator is used as an "adaptor" for
   using DoBreakup as a function in DoCollisions
   that satistfies the PairEnactX concept */
 
-  KOKKOS_INLINE_FUNCTION void
+  KOKKOS_FUNCTION void
   breakup_superdroplet_pair(Superdrop &drop1,
                             Superdrop &drop2) const;
   /* enact collisional-breakup of droplets by changing
@@ -106,7 +106,7 @@ probability of collision-breakup determined by 'collbuprob' */
 }
 
 template <NFragments NFrags>
-KOKKOS_INLINE_FUNCTION bool
+KOKKOS_FUNCTION bool
 DoBreakup<NFrags>::operator()(Superdrop &drop1, Superdrop &drop2,
                               const double prob, const double phi) const
 /* this operator is used as an "adaptor" for
@@ -124,7 +124,7 @@ that satistfies the PairEnactX concept */
 }
 
 template <NFragments NFrags>
-KOKKOS_INLINE_FUNCTION unsigned int
+KOKKOS_FUNCTION unsigned int
 DoBreakup<NFrags>::breakup_gamma(const double prob,
                                  const double phi) const
 /* calculates value of gamma factor in Monte Carlo
@@ -144,7 +144,7 @@ irrespective of whether scaled probability, prob > 1 */
 }
 
 template <NFragments NFrags>
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_FUNCTION void
 DoBreakup<NFrags>::breakup_superdroplet_pair(Superdrop &drop1,
                                              Superdrop &drop2) const
 /* enact collisional-breakup of droplets by changing
@@ -165,7 +165,7 @@ that gamma factor = 1. */
 }
 
 template <NFragments NFrags>
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_FUNCTION void
 DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &drop1,
                                              Superdrop &drop2) const
 /* if xi1 = gamma*xi2 breakup of same multiplicity
@@ -196,7 +196,7 @@ Note: implicit casting of xi from unsigned long long to double. */
 }
 
 template <NFragments NFrags>
-KOKKOS_INLINE_FUNCTION void
+KOKKOS_FUNCTION void
 DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop &drop1,
                                                   Superdrop &drop2) const
 /* if xi1 > gamma*xi2 breakup alters drop2 radius and
