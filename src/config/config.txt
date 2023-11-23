@@ -39,15 +39,15 @@ maxchunk = 1250000                        # maximum no. of elements in chunks of
 # domain setup #
 nspacedims = 1                           # no. of spatial dimensions to model 
 ngbxs = 15                               # total number of Gbxs
-totnsupers = 150                         # (initial) total no. of SDs
+totnsupers = 750                         # (initial) total no. of SDs
 
 # timestepping #
 CONDTSTEP = 1                             # time between SD condensation events [s]
-COLLTSTEP = 2                             # time between SD collision events [s]
+COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 5                           # time between SDM motion [s]
-COUPLTSTEP = 50                           # time between dynamic couplings [s]
+COUPLTSTEP = 1200                         # time between dynamic couplings [s]
 OBSTSTEP = 5                              # time between SDM observations [s]
-T_END = 100                               # time span of integration from 0s to T_END [s]
+T_END = 3600                              # time span of integration from 0s to T_END [s]
 
 # microphysics #
 cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
