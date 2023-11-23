@@ -57,6 +57,6 @@ public:
   {
     return nfrags;
   }
-}
+};
 
 #endif // BREAKUP_NFRAGS_HPP

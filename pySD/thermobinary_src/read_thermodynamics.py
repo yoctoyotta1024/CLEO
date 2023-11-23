@@ -264,9 +264,13 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
   
   for v, var in enumerate(vars):
     mean2d = thermodata.ytmean(thermodata[var]) #avg over time and y axes
-    norm=colors.CenteredNorm(vcenter=cmapcens[v])
-    pcm = axs[v].pcolormesh(xxh[:,:], zzh[:,:], mean2d, cmap=cmaps[v], norm=norm)
-    plt.colorbar(pcm, ax=axs[v], location="top", label=var+units[v])
+    if np.nanmin(mean2d) != np.nanmax(mean2d):
+      norm=colors.CenteredNorm(vcenter=cmapcens[v])
+      pcm = axs[v].pcolormesh(xxh[:,:], zzh[:,:], mean2d, cmap=cmaps[v], norm=norm)
+      plt.colorbar(pcm, ax=axs[v], location="top", label=var+units[v])
+    else:
+      txt=var+" = {:.2f}".format(np.nanmin(mean2d))+units[v]
+      axs[v].text(0.5, 0.5, txt, ha='center')
 
   relh, supersat = relative_humidity(thermodata.press, thermodata.temp,
                                       thermodata.qvap, inputs["Mr_ratio"])
