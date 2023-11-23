@@ -33,14 +33,6 @@
 #include "./nullsuperdrops.hpp"
 #include "./superdrop.hpp"
 
-KOKKOS_INLINE_FUNCTION double
-radiuscubed(const Superdrop &drop)
-{
-  const double radius = drop.get_radius();
-
-  return radius * radius * radius;
-}
-
 struct DoCoalescence
 {
 private:
@@ -186,10 +178,10 @@ DoCoalescence::twin_superdroplet_coalescence(const unsigned long long gamma,
 with same xi, r and solute mass. According to Shima et al. 2009
 Section 5.1.3. part (5) option (b)  */
 {
-  const unsigned long long old_xi(drop2.get_xi()); // = drop1.eps
+  const unsigned long long old_xi(drop2.get_xi()); // = drop1.xi
   const unsigned long long new_xi(old_xi / 2);
 
-  const double new_rcubed = radiuscubed(drop2) + gamma * radiuscubed(drop1);
+  const double new_rcubed = drop2.rcubed() + gamma * drop1.rcubed();
   const double new_r = Kokkos::pow(new_rcubed, (1.0 / 3.0));
 
   const double new_msol =  drop2.get_msol() + gamma * drop1.get_msol();
@@ -214,7 +206,7 @@ Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
 {
   drop1.set_xi(drop1.get_xi() - gamma * drop2.get_xi());
 
-  const double new_rcubed = radiuscubed(drop2) + gamma * radiuscubed(drop1);
+  const double new_rcubed = drop2.rcubed() + gamma * drop1.rcubed();
 
   drop2.set_radius(Kokkos::pow(new_rcubed, (1.0 / 3.0)));
   drop2.set_msol(drop2.get_msol() + gamma * drop1.get_msol());

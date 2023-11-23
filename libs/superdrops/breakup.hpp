@@ -158,8 +158,9 @@ superdroplets produces (non-identical) twin superdroplets.
 Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
 Note implicit assumption that gamma factor = 1. */
 {
-  const unsigned long long old_eps = sd2.eps; // = sd1.eps
-  const unsigned long long new_eps = std::round(nfrags * old_eps) / 2;
+  const unsigned long long old_xi(drop2.get_xi()); // = drop1.xi
+  const double totnfrags(nfrags(drop1, drop2) * old_eps);
+  const unsigned long long new_xi(Kokkos::round(totnfrags) / 2);
 
   const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
   const double r2cubed(sd2.radius * sd2.radius * sd2.radius);

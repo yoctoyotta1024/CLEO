@@ -76,6 +76,8 @@ public:
   KOKKOS_INLINE_FUNCTION double mass() const { return attrs.mass(); }
   KOKKOS_INLINE_FUNCTION double vol() const { return attrs.vol(); }
 
+  KOKKOS_INLINE_FUNCTION double rcubed() const { return attrs.rcubed(); }
+
   KOKKOS_INLINE_FUNCTION
   void set_xi(const unsigned long long i_xi)
   {
