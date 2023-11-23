@@ -14,7 +14,7 @@ Super-Droplet Model (SDM) cloud microphysics.
 
 Questions?
 ----------
-Yes please! Simply :ref:`contact us! <contact>`
+Yes please! Simply :doc:`contact us! <contact>`
 
 .. toctree::
    :maxdepth: 1

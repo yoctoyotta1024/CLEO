@@ -13,8 +13,9 @@ The name, CLEO, is a reference to
 `Cleopatra <https://www.britannica.com/biography/Cleopatra-queen-of-Egypt>`_.
 It is also an acronym, something like CLEO = Clouds in a Lagrangian Exascale mOdel.
 
-To jump straight in, check out the
-:doc:`quickstart<usage/quickstart>` section!.
+Time to get involved! Start by :doc:`installing CLEO<usage/installation>`
+and exploring some examples. Or jump straight in with the
+:doc:`quickstart<usage/quickstart>` section.
 
 .. note::
    Please consider that this project is under active development.
