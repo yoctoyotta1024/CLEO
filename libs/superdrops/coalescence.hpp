@@ -36,14 +36,6 @@
 struct DoCoalescence
 {
 private:
-  KOKKOS_INLINE_FUNCTION unsigned long long
-  coalescence_gamma(const unsigned long long xi1,
-                    const unsigned long long xi2,
-                    const double prob,
-                    const double phi) const;
-  /* calculates value of gamma factor in Monte Carlo
-  collision-coalescence as in Shima et al. 2009 */
-
   KOKKOS_INLINE_FUNCTION bool
   coalesce_superdroplet_pair(const unsigned long long gamma,
                              Superdrop &drop1,
@@ -75,6 +67,14 @@ public:
   /* this operator is used as an "adaptor" for using
   DoCoalescence as a function in DoCollisions that
   satistfies the PairEnactX concept */
+
+  KOKKOS_INLINE_FUNCTION unsigned long long
+  coalescence_gamma(const unsigned long long xi1,
+                    const unsigned long long xi2,
+                    const double prob,
+                    const double phi) const;
+  /* calculates value of gamma factor in Monte Carlo
+  collision-coalescence as in Shima et al. 2009 */
 };
 
 template <PairProbability Probability>
