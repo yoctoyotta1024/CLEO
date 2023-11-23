@@ -6,7 +6,7 @@ Created Date: Monday 20th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 20th November 2023
+Last Modified: Thursday 23rd November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -53,6 +53,7 @@ release = '4.0'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.duration',
+    'sphinx_copybutton',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

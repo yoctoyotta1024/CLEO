@@ -1,4 +1,4 @@
 Quickstart
 ==========
 
-To begin, first follow the steps to :ref:`install CLEO <installation>`.
+Start by following the steps to :ref:`install CLEO <installation>`.

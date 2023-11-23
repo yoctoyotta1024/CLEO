@@ -1,12 +1,12 @@
 '''
 ----- CLEO -----
 File: setup.py
-Project: CLEO
+Project: CLEOfire
 Created Date: Thursday 12th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 3rd November 2023
+Last Modified: Thursday 23rd November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,7 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 from setuptools import setup, find_packages
 
 setup(
-    name='CLEO 4.0',
+    name='CLEO',
     version='4.0',
     packages=find_packages(),
     install_requires=[

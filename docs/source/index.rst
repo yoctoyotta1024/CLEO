@@ -23,7 +23,9 @@ To jump straight in, check out the
    :maxdepth: 1
    :caption: Contents:
 
+   intro/introduction
    usage/installation
+   usage/examples
    usage/quickstart
 
    pySD/pySD
