@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: breakup.hpp
+ * File: coalbure.hpp
  * Project: superdrops
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -43,7 +43,7 @@ struct DoCoalBuRe
 {
 private:
   DoCoalescence coal;
-  DoBreakup<NFrags> breakup;
+  DoBreakup<NFrags> bu;
 
   KOKKOS_INLINE_FUNCTION
   unsigned long long collision_gamma(const unsigned long long xi1,
@@ -59,7 +59,7 @@ private:
   }
 
 public:
-  DoCoalBuRe(const NFrags nfrags) : breakup(nfrags) {}
+  DoCoalBuRe(const NFrags nfrags) : bu(nfrags) {}
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
@@ -84,9 +84,9 @@ of collision determined by 'collprob' */
   const double DELT(int2realtime(interval));
 
   const DoCoalBuRe coalbure(nfrags);
-  const DoCollisions<Probability, DoBreakup<NFrags>> colls(DELT,
-                                                           collprob,
-                                                           coalbure);
+  const DoCollisions<Probability, DoCoalBuRe<NFrags>> colls(DELT,
+                                                            collprob,
+                                                            coalbure);
 
   return ConstTstepMicrophysics(interval, colls);
 }
@@ -120,25 +120,25 @@ KOKKOS_INLINE_FUNCTION bool
 DoCoalBuRe<NFrags>::coalesce_breakup_or_rebound(Superdrop &drop1,
                                                 Superdrop &drop2,
                                                 const unsigned long long gamma) const
-/* based on the kinetic arguments in section 2.2 of
-Szakáll and Urbich 2018 (neglecting grazing angle considerations),
-function enacts rebound or coalescence/breakup */
+/*  function enacts rebound or coalescence or breakup
+depending on value of flag. If flag = 1 -> coalescence.
+If flag = 2 -> breakup. Otherwise -> rebound. */
 {
-  const Superdrop &sd1(SDinGBx1.superdrop);
-  const Superdrop &sd2(SDinGBx2.superdrop);
+  const unsigned int flag(coalbure_flag(drop1, drop2));
 
-  auto compare = [](const Superdrop &dropA, const Superdrop &dropB)
+  bool is_null_superdrop(0);
+  switch (flag)
   {
-    return dropA.radius < dropB.radius; // returns true if epsA < epsB
-  };
-  const auto smalldrop(std::min(sd1, sd2, compare)); // drop with smaller drop.radius
+  case 1: // coalescence
+    is_null_superdrop = 1;
+    break;
+  case 2: // breakup
+    bu.breakup_superdroplet_pair(drop1, drop2);
+    is_null_superdrop = 0;
+    break;
+  }
 
-  const double cke(ck.collision_kinetic_energy(sd1, sd2));
-
-  if (cke >= ck.surfenergy(smalldrop)) // ie. if not rebound
-  {
-    coalesce_or_breakup(SDinGBx1, SDinGBx2, gamma);
-  } 
+  return is_null_superdrop;
 }
 
 #endif // COALBURE_HPP

@@ -50,15 +50,6 @@ private:
   irrespective of whether scaled probability, prob > 1 */
 
   KOKKOS_INLINE_FUNCTION void
-  breakup_superdroplet_pair(Superdrop &drop1,
-                            Superdrop &drop2) const;
-  /* enact collisional-breakup of droplets by changing
-  multiplicity, radius and solute mass of each
-  superdroplet in a pair. Method created by Author
-  (no citation yet available). Note implicit assumption
-  that gamma factor = 1. */
-
-  KOKKOS_INLINE_FUNCTION void
   twin_superdroplet_breakup(Superdrop &drop1,
                             Superdrop &drop2) const;
   /* if xi1 = gamma*xi2 breakup of same multiplicity
@@ -75,9 +66,7 @@ private:
   Note implicit assumption that gamma factor = 1. */
 
 public:
-  DoBreakup(const NFrags nfrags) : nfrags(nfrags)
-  {
-  }
+  DoBreakup(const NFrags nfrags) : nfrags(nfrags) {}
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
@@ -85,6 +74,15 @@ public:
   /* this operator is used as an "adaptor" for
   using DoBreakup as a function in DoCollisions
   that satistfies the PairEnactX concept */
+
+  KOKKOS_INLINE_FUNCTION void
+  breakup_superdroplet_pair(Superdrop &drop1,
+                            Superdrop &drop2) const;
+  /* enact collisional-breakup of droplets by changing
+  multiplicity, radius and solute mass of each
+  superdroplet in a pair. Method created by Author
+  (no citation yet available). Note implicit assumption
+  that gamma factor = 1. */
 };
 
 template <PairProbability Probability, NFragments NFrags>
