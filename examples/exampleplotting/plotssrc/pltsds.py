@@ -130,7 +130,7 @@ def plot_randomsample_superdrops_2dmotion(sddata, totnsupers,
   ''' plot timeseries of the attributes of a 
   random sample of superdroplets '''
 
-  fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(8,8))    
+  fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6,6))    
   
   minid, maxid = 0, int(totnsupers) # largest value of ids to sample
   ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
