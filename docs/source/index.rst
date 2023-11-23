@@ -6,7 +6,7 @@
 Welcome to CLEO's Documentation!
 ================================
 
-**CLEO** (/ˌkliːə/ ) is a library for CLEO is a library for
+**CLEO** (/ˌkliːə/ ) is a library for
 Super-Droplet Model (SDM) cloud microphysics.
 
 The name, CLEO, is a reference to 
@@ -23,7 +23,8 @@ To jump straight in, check out the
    :maxdepth: 1
    :caption: Contents:
 
-   intro/introduction
+   intro/intro
+   usage/requirements
    usage/installation
    usage/examples
    usage/quickstart

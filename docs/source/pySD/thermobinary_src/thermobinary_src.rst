@@ -6,11 +6,6 @@
 ThermoBinary
 ============
 
-**CLEO** (/ˌkliːə/ ) is a library for CLEO is a library for
-Super-Droplet Model (SDM) cloud microphysics. 
-PySD is CLEO's Python Module with submodules related to generating
-input files and processing the Zarr output from CLEO.
-
 ThermoBinary is a submodule of pySD used for generating binary files
 for CLEO which contains the thermodynamics and wind fields
 for a 0-D, 1-D, 2-D or 3-D cartesian domain. Used when CLEO reads

@@ -18,4 +18,5 @@
 
 # CLEO
 CLEO is a library for Super-Droplet Model microphysics.
-You can read more about CLEO in its documentation: <https://yoctoyotta1024.github.io/CLEO/>.
+You can read more about CLEO in its
+documentation: <https://yoctoyotta1024.github.io/CLEO/>.

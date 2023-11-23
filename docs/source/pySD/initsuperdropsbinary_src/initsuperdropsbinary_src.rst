@@ -6,11 +6,6 @@
 InitSuperdropsBinary
 ====================
 
-**CLEO** (/ˌkliːə/ ) is a library for CLEO is a library for
-Super-Droplet Model (SDM) cloud microphysics. 
-PySD is CLEO's Python Module with submodules related to generating
-input files and processing the Zarr output from CLEO.
-
 InitSuperdropsBinary is a submodule of pySD used for generating an
 input binary file for CLEO which contains the initial attributes of
 the superdroplets in a 0-D, 1-D, 2-D or 3-D cartesian domain.
