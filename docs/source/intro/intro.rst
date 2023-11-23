@@ -12,10 +12,6 @@ Super-Droplet Model (SDM) cloud microphysics.
 .. note::
    Please consider that this project is under active development.
 
-Questions?
-----------
-Yes please! Simply :doc:`contact us! <contact>`
-
 .. toctree::
    :maxdepth: 1
    :caption: Contents:

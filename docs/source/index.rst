@@ -20,6 +20,10 @@ and exploring some examples. Or jump straight in with the
 .. note::
    Please consider that this project is under active development.
 
+Questions?
+----------
+Yes please! Simply :ref:`contact us! <contact>`
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
