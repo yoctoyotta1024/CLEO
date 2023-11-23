@@ -50,6 +50,8 @@ constants with dimensions */
   constexpr double RHO_SOL = 2016.5;    // density of (dry) areosol [Kg/m^3] (NaCl from SCALE-SDM)
   constexpr double MR_SOL = 0.05844277; //  molecular mass of areosol [Kg/mol] (NaCl=0.058 from SCALE-SDM)
   constexpr int IONIC = 2;            //  degree ionic dissociation (van't Hoff factor) [dimensionless]
+
+  constexpr double SURFSIGMA = 7.28e-2 // surface tension of water [J/m^-2]
 }
 
 namespace dimless_constants
@@ -90,6 +92,10 @@ namespace dimless_constants
   constexpr double Rho_sol = DC::RHO_SOL / RHO0;
   constexpr double Mr_sol = DC::MR_SOL / MR0;
   constexpr int IONIC = DC::IONIC;
+
+  constexpr double surfconst = 4.0 * DC::SURFSIGMA *
+                               Kokkos::numbers::pi *
+                               dlc::R0 * dlc::R0; // constant for surface tension energy
 }
 
 namespace LIMITVALUES
