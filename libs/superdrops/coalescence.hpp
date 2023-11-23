@@ -17,7 +17,7 @@
  * File Description:
  * class and function to enact collision-coalescence events
  * in superdroplet model according to Shima et al. 2009.
- * Coalescence struct satisfies SDinGBxPairEnactX concept
+ * Coalescence struct satisfies PairEnactX concept
  * used in Collisions struct */
 
 #ifndef COALESCENCE_HPP

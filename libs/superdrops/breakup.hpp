@@ -17,11 +17,23 @@
  * File Description:
  * functionality to enact collision-breakup events
  * in SDM analagous to to Shima et al. 2009.
- * Breakup struct satisfies SDinGBxPairEnactX
+ * Breakup struct satisfies PairEnactX
  * concept used in Collisions struct */
 
 #ifndef BREAKUP_HPP
 #define BREAKUP_HPP
+
+struct DoBreakup
+{
+private:
+public:
+  KOKKOS_INLINE_FUNCTION
+  bool operator()(Superdrop &drop1, Superdrop &drop2,
+                  const double prob, const double phi) const;
+  /* this operator is used as an "adaptor" for
+  using DoBreakup as a function in DoCollisions
+  that satistfies the PairEnactX concept */
+};
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 

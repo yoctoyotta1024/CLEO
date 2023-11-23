@@ -17,7 +17,7 @@
  * File Description:
  * functionality to enact collision-breakup events
  * in SDM analagous to to Shima et al. 2009.
- * Breakup struct satisfies SDinGBxPairEnactX
+ * Breakup struct satisfies PairEnactX
  * concept used in Collisions struct */
 
 #include "./breakup.hpp"
