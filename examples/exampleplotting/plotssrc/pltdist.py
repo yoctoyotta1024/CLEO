@@ -89,7 +89,7 @@ def numconc_distrib(radius, xi, mass, vol, rspan,
                      nbins, perlogR, smooth):
   
   
-  weights = xi / vol # real droplets [/m^3]
+  weights = xi / vol / 1e6 # real droplets [/cm^3]
 
   hist, hedges, hcens = logr_distribution(rspan, nbins, radius,
                                           weights, perlogR=perlogR, 
@@ -140,7 +140,7 @@ def plot_domainmassdens_distribs(timesecs, sddata, t2plts,
   attrs2sel = ["radius", "xi", "msol"]
   data2plt = sdtracing.attributes_at_times(sddata, timesecs,
                                             t2plts, attrs2sel)
-  
+
   plot_dists(ax, massdens_distrib, timesecs,  
              data2plt, t2plts,
              domainvol, rspan, nbins, sddata.mass,
@@ -193,8 +193,8 @@ def plot_domainnumconc_distribs(timesecs, sddata, t2plts,
              smoothsig=smoothsig, perlogR=perlogR)
   
   if perlogR:
-    ax.set_ylabel("real droplet concentration /m$^{-3}$ / unit lnR")
+    ax.set_ylabel("real droplet concentration /cm$^{-3}$ / unit lnR")
   else:
-    ax.set_ylabel("real droplet concentration /m$^{-3}$")
+    ax.set_ylabel("real droplet concentration /cm$^{-3}$")
 
   return fig, ax
