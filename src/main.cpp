@@ -123,18 +123,18 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
-  const PairProbability auto prob = LowListCoalProb();
-  // const PairProbability auto prob = LongHydroProb();
-  // const PairProbability auto prob = GolovinProb();
+  const PairProbability auto coalprob = LowListCoalProb();
+  // const PairProbability auto coalprob = LongHydroProb();
+  // const PairProbability auto coalprob = GolovinProb();
   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
-                                                   prob);
+                                                   coalprob);
 
-  const PairProbability auto prob = LowListBuProb();
-  const NFragments auto nfrags = ConstNFrags(10.0);
+  const PairProbability auto buprob = LowListBuProb();
+  const NFragments auto nfrags = ConstNFrags(5.0);
   const MicrophysicalProcess auto bu = CollBu(tsteps.get_collstep(),
                                               &step2realtime,
-                                              prob,
+                                              buprob,
                                               nfrags);
   return coal >> bu;
 }
