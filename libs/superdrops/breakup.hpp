@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 23rd November 2023 
+ * Last Modified: Thursday 23rd November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,7 @@
  * in SDM analagous to to Shima et al. 2009.
  * Breakup struct satisfies PairEnactX
  * concept used in Collisions struct
-*/
+ */
 
 #ifndef BREAKUP_HPP
 #define BREAKUP_HPP
@@ -84,8 +84,8 @@ probability of collision-breakup determined by 'collbuprob' */
 
   const DoBreakup bu(nfrags);
   const DoCollisions<Probability, DoBreakup<NFrags>> colls(DELT,
-                                                   collbuprob,
-                                                   bu);
+                                                           collbuprob,
+                                                           bu);
 
   return ConstTstepMicrophysics(interval, colls);
 }
@@ -176,6 +176,6 @@ Note implicit assumption that gamma factor = 1. */
   drop2.set_radius(new_r);
 
   drop1.set_msol(new_msol);
-  drop2.set_msol(new_msol);    
-  }
+  drop2.set_msol(new_msol);
+}
 #endif // BREAKUP_HPP
