@@ -176,7 +176,9 @@ DoCoalescence::twin_superdroplet_coalescence(const unsigned long long gamma,
                                              Superdrop &drop2) const
 /* if xi1 = gamma*xi2 coalescence makes twin SDs
 with same xi, r and solute mass. According to Shima et al. 2009
-Section 5.1.3. part (5) option (b)  */
+Section 5.1.3. part (5) option (b).
+Note: implicit casting of gamma (i.e. therefore droplets'
+xi values) from unsigned long long to double. */
 {
   const unsigned long long old_xi(drop2.get_xi()); // = drop1.xi
   const unsigned long long new_xi(old_xi / 2);
@@ -202,7 +204,9 @@ DoCoalescence::different_superdroplet_coalescence(const unsigned long long gamma
                                                   Superdrop &drop2) const
 /* if xi1 > gamma*xi2 coalescence grows drop2 radius and mass
 via decreasing multiplicity of drop1. According to
-Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
+Shima et al. 2009 Section 5.1.3. part (5) option (a)
+Note: implicit casting of gamma (i.e. therefore droplets'
+xi values) from unsigned long long to double. */
 {
   drop1.set_xi(drop1.get_xi() - gamma * drop2.get_xi());
 

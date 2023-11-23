@@ -172,7 +172,8 @@ DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &drop1,
 /* if xi1 = gamma*xi2 breakup of same multiplicity
 superdroplets produces (non-identical) twin superdroplets.
 Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
-Note implicit assumption that gamma factor = 1. */
+Note implicit assumption that gamma factor = 1.
+Note: implicit casting of xi from unsigned long long to double. */
 {
   const unsigned long long old_xi(drop2.get_xi()); // = drop1.xi
   const double totnfrags(nfrags(drop1, drop2) * old_xi);
@@ -202,7 +203,8 @@ DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop &drop1,
 /* if xi1 > gamma*xi2 breakup alters drop2 radius and
 mass via decreasing multiplicity of drop1. Similar to
 Shima et al. 2009 Section 5.1.3. part (5) option (a).
-Note implicit assumption that gamma factor = 1. */
+Note implicit assumption that gamma factor = 1.
+Note: implicit casting of xi from unsigned long long to double. */
 {
   drop1.set_xi(drop1.get_xi() - drop2.get_xi());
 
@@ -218,7 +220,7 @@ Note implicit assumption that gamma factor = 1. */
   const double new_msol(sum_msol * old_xi / new_xi);
 
   drop2.set_xi(new_xi);
-  drop2.set_radius(new_r); // NOTE: implicit casting of eps from unsigned long long to double here
+  drop2.set_radius(new_r); 
   drop2.set_msol(new_msol);
 }
 
