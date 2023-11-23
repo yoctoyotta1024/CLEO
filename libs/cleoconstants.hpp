@@ -21,11 +21,12 @@
  * capitalised indicates value is dimensionless (version of a) constant
  */
 
-#ifndef CLEOCONSTANTS_HPP 
-#define CLEOCONSTANTS_HPP 
+#ifndef CLEOCONSTANTS_HPP
+#define CLEOCONSTANTS_HPP
 
 #include <cstdint>
 #include <limits>
+#include <numbers>
 
 namespace dimmed_constants
 /* namespace containing values of
@@ -49,9 +50,9 @@ constants with dimensions */
 
   constexpr double RHO_SOL = 2016.5;    // density of (dry) areosol [Kg/m^3] (NaCl from SCALE-SDM)
   constexpr double MR_SOL = 0.05844277; //  molecular mass of areosol [Kg/mol] (NaCl=0.058 from SCALE-SDM)
-  constexpr int IONIC = 2;            //  degree ionic dissociation (van't Hoff factor) [dimensionless]
+  constexpr int IONIC = 2;              //  degree ionic dissociation (van't Hoff factor) [dimensionless]
 
-  constexpr double SURFSIGMA = 7.28e-2 // surface tension of water [J/m^-2]
+  constexpr double SURFSIGMA = 7.28e-2; // surface tension of water [J/m^-2]
 }
 
 namespace dimless_constants
@@ -63,21 +64,21 @@ namespace dimless_constants
   namespace DC = dimmed_constants;
 
   /* characterstic scales */
-  constexpr double W0 = 1.0;            // characteristic velocity [m/s]
-  constexpr double TIME0 = 1000.0;      // timescale [s]
-  constexpr double COORD0 = TIME0 * W0; // coordinate grid scale [m]
+  constexpr double W0 = 1.0;                        // characteristic velocity [m/s]
+  constexpr double TIME0 = 1000.0;                  // timescale [s]
+  constexpr double COORD0 = TIME0 * W0;             // coordinate grid scale [m]
   constexpr double VOL0 = COORD0 * COORD0 * COORD0; // volume scale [m^3]
 
-  constexpr double CP0 = DC::CP_DRY;              // Heat capacity [J/Kg/K]
-  constexpr double MR0 = DC::MR_DRY;              // molecular molar mass [Kg/mol]
-  constexpr double R0 = 1e-6;                     // droplet radius lengthscale [m]
+  constexpr double CP0 = DC::CP_DRY; // Heat capacity [J/Kg/K]
+  constexpr double MR0 = DC::MR_DRY; // molecular molar mass [Kg/mol]
+  constexpr double R0 = 1e-6;        // droplet radius lengthscale [m]
 
-  constexpr double P0 = 100000.0;                    // pressure [Pa]
-  constexpr double TEMP0 = 273.15;                   // temperature [K]
-  constexpr double RHO0 = P0 / (CP0 * TEMP0);        // density [Kg/m^3]
-  constexpr double MASS0 = R0 * R0 * R0 * RHO0;      // mass [Kg]
-  constexpr double MASS0grams = MASS0 * 1000;        // mass [g]
-  constexpr double F0 = TIME0 / (RHO0 * R0 * R0);    // droplet condensation-diffusion factors []
+  constexpr double P0 = 100000.0;                 // pressure [Pa]
+  constexpr double TEMP0 = 273.15;                // temperature [K]
+  constexpr double RHO0 = P0 / (CP0 * TEMP0);     // density [Kg/m^3]
+  constexpr double MASS0 = R0 * R0 * R0 * RHO0;   // mass [Kg]
+  constexpr double MASS0grams = MASS0 * 1000;     // mass [g]
+  constexpr double F0 = TIME0 / (RHO0 * R0 * R0); // droplet condensation-diffusion factors []
 
   /* dimensionaless constants */
   constexpr double Mr_ratio = DC::MR_WATER / DC::MR_DRY;
@@ -94,15 +95,14 @@ namespace dimless_constants
   constexpr int IONIC = DC::IONIC;
 
   constexpr double surfconst = 4.0 * DC::SURFSIGMA *
-                               Kokkos::numbers::pi *
-                               dlc::R0 * dlc::R0; // constant for surface tension energy
+                               std::numbers::pi * R0 * R0; // constant for surface tension energy
 }
 
 namespace LIMITVALUES
 /* max/min values e.g. for using vlaues of c++ standard numeric limits on GPUs */
 {
   constexpr unsigned int uintmax = std::numeric_limits<unsigned int>::max();
- 
+
   constexpr double llim = -1.0 * std::numeric_limits<double>::max();
   constexpr double ulim = std::numeric_limits<double>::max();
 }
