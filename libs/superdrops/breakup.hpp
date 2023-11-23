@@ -42,9 +42,25 @@ private:
   KOKKOS_INLINE_FUNCTION
   unsigned int breakup_gamma(const double prob,
                              const double phi) const;
+  /* calculates value of gamma factor in Monte Carlo
+  collision-breakup, adapted from gamma for collision-
+  coalescence in Shima et al. 2009. Here is is assumed
+  maximally 1 breakup event can occur (gamma = 0 or 1)
+  irrespective of whether scaled probability, prob > 1 */
+
+  KOKKOS_INLINE_FUNCTION void
+  breakup_superdroplet_pair(Superdrop &drop1,
+                            Superdrop &drop2) const;
+  /* enact collisional-breakup of droplets by changing
+  multiplicity, radius and solute mass of each
+  superdroplet in a pair. Method created by Author
+  (no citation yet available). Note implicit assumption
+  that gamma factor = 1. */
 
 public:
-  DoBreakup(const NFrags nfrags) : nfrags(nfrags) {}
+  DoBreakup(const NFrags nfrags) : nfrags(nfrags)
+  {
+  }
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
@@ -57,9 +73,9 @@ public:
 template <PairProbability Probability, NFragments NFrags>
 inline MicrophysicalProcess auto
 CollBu(const unsigned int interval,
-         const std::function<double(unsigned int)> int2realtime,
-         const Probability collbuprob,
-         const NFrags nfrags)
+       const std::function<double(unsigned int)> int2realtime,
+       const Probability collbuprob,
+       const NFrags nfrags)
 /* constructs Microphysical Process for collision-breakup
 of superdroplets with a constant timestep 'interval' and
 probability of collision-breakup determined by 'collbuprob' */
@@ -132,4 +148,33 @@ that gamma factor = 1. */
     different_superdroplet_breakup(drop1, drop2);
   }
 }
+
+template <NFragments NFrags>
+KOKKOS_INLINE_FUNCTION void
+DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &drop1,
+                                             Superdrop &drop2) const
+/* if xi1 = gamma*xi2 breakup of same multiplicity
+superdroplets produces (non-identical) twin superdroplets.
+Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
+Note implicit assumption that gamma factor = 1. */
+{
+  const unsigned long long old_eps = sd2.eps; // = sd1.eps
+  const unsigned long long new_eps = std::round(nfrags * old_eps) / 2;
+
+  const double r1cubed(sd1.radius * sd1.radius * sd1.radius);
+  const double r2cubed(sd2.radius * sd2.radius * sd2.radius);
+  const double sumr3(r1cubed + r2cubed);
+  const double new_r = std::pow(old_eps / new_eps * sumr3, (1.0 / 3.0));
+
+  const double new_m_sol = old_eps * (sd1.m_sol + sd2.m_sol) / new_eps;
+
+  sd1.eps = new_eps;
+  sd2.eps = old_eps - new_eps;
+
+  sd1.radius = new_r;
+  sd2.radius = new_r;
+
+  sd1.m_sol = new_m_sol;
+  sd2.m_sol = new_m_sol;    
+  }
 #endif // BREAKUP_HPP
