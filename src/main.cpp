@@ -57,8 +57,13 @@
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
+#include "superdrops/breakup_nfrags.hpp"
+#include "superdrops/breakup.hpp"
 #include "superdrops/coalescence.hpp"
 #include "superdrops/collisionprobs/golovinprob.hpp"
+#include "superdrops/collisionprobs/longhydroprob.hpp"
+#include "superdrops/collisionprobs/lowlistprob.hpp"
+#include "superdrops/collisionprobs/constprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
@@ -118,7 +123,7 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
-  const PairProbability auto prob = GolovinProb();
+  const PairProbability auto prob = LowListCoalProb();
   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    prob);
@@ -126,18 +131,32 @@ config_collisions(const Config &config, const Timesteps &tsteps)
 }
 
 inline MicrophysicalProcess auto
+config_collisions(const Config &config, const Timesteps &tsteps)
+{
+  const PairProbability auto prob = LowListBuProb();
+  const NFragments auto nfrags = ConstNFrags(10.0);
+  const MicrophysicalProcess auto bu = CollBu(tsteps.get_collstep(),
+                                              &step2realtime,
+                                              prob,
+                                              nfrags);
+  return bu;
+}
+
+inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  // const MicrophysicalProcess auto cond = config_condensation(config,
-  //                                                            tsteps);
+  const MicrophysicalProcess auto cond = config_condensation(config,
+                                                             tsteps);
 
   const MicrophysicalProcess auto colls = config_collisions(config,
                                                             tsteps);
-                                                            
+
+  const MicrophysicalProcess auto bu = config_breakup(config,
+                                                      tsteps);
+
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
-  // return cond >> colls;
-  return colls;
+  return bu >> colls >> cond;
 }
 
 inline Motion<CartesianMaps> auto
