@@ -53,14 +53,14 @@ thermofile =  binariespath+"/dimlessthermo.dat"
 ### --- Constant and Uniform --- ###
 P_INIT = 101500.0                       # initial pressure [Pa]
 TEMP_INIT = 288.15                      # initial parcel temperature [T]
-relh_init = 1.001                       # initial relative humidity (%)
+relh_init = 0.999                       # initial relative humidity (%)
 qc_init = 0.0                           # initial liquid water content []
 W_INIT = 0.0                            # initial vertical (z) velocity [m/s]
 U_INIT = 0.0                            # initial horizontal x velocity [m/s]
 V_INIT = 0.0                            # initial horizontal y velocity [m/s]
 thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
-                                            qc_init, W_INIT, U_INIT, V_INIT,
-                                            relh=relh_init, constsfile=constsfile)
+                                    qc_init, W_INIT, U_INIT, V_INIT,
+                                    relh=relh_init, constsfile=constsfile)
 
 ### --- 2D Flow Field with Hydrostatic --- ###
 ### ---       or Simple z Profile      --- ###

@@ -124,22 +124,17 @@ inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
   const PairProbability auto prob = LowListCoalProb();
-  const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
+  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    prob);
-  return colls;
-}
 
-inline MicrophysicalProcess auto
-config_breakup(const Config &config, const Timesteps &tsteps)
-{
   const PairProbability auto prob = LowListBuProb();
   const NFragments auto nfrags = ConstNFrags(10.0);
   const MicrophysicalProcess auto bu = CollBu(tsteps.get_collstep(),
                                               &step2realtime,
                                               prob,
                                               nfrags);
-  return bu;
+  return coal >> bu;
 }
 
 inline MicrophysicalProcess auto
@@ -150,9 +145,6 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
 
   const MicrophysicalProcess auto colls = config_collisions(config,
                                                             tsteps);
-
-  const MicrophysicalProcess auto bu = config_breakup(config,
-                                                      tsteps);
 
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
