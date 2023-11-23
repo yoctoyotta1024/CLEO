@@ -32,6 +32,9 @@ To jump straight in, check out the
 
    pySD/pySD
 
+   GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
+   usage/contact
+
 Indices and tables
 ==================
 
