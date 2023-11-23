@@ -70,41 +70,60 @@ def massdens_distrib(radius, xi, mass, vol, rspan,
   weights = xi * mass * 1000 / vol # real droplets [g/m^3]
 
   hist, hedges, hcens = logr_distribution(rspan, nbins, radius,
-                                          weights, perlogR=True, 
+                                          weights, perlogR=perlogR, 
                                           smooth=smooth)
 
   return hcens, hist  
 
+def plot_dists(ax, distribcalc, timesecs, data2plt, t2plts,
+               vol, rspan, nbins, masscalc=None,
+               smoothsig=False, perlogR=True):
+    
+    for t, tplt in enumerate(t2plts):
+    
+        ind = np.argmin(abs(timesecs-tplt))    
+        tlab = 't = {:.2f}s'.format(timesecs[ind])
+        c = 'C'+str(t)
+        
+        radius = data2plt["radius"][t]
+        xi = data2plt["xi"][t]
+        if masscalc:
+            msol = data2plt["msol"][t]
+            mass = masscalc(radius, msol)
+        else:
+           mass = None
+
+        hcens, hist = distribcalc(radius, xi, mass, vol,
+                                  rspan, nbins,
+                                  perlogR=perlogR,
+                                  smooth=smoothsig) 
+        if smoothsig:
+            ax.plot(hcens, hist, label=tlab, color=c)            
+        else:
+            ax.step(hcens, hist, label=tlab, where='mid', color=c)
+    
+    ax.set_xscale("log")
+    ax.set_xlabel("radius, r, /\u03BCm")
+
+    return ax
+
 def plot_domainmassdens_distribs(timesecs, sddata, t2plts,
                                  domainvol, rspan, nbins,
-                                 smoothsig=False):
+                                 smoothsig=False,
+                                 perlogR=True):
 
   fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8,6))
-      
+  
   attrs2sel = ["radius", "xi", "msol"]
   data2plt = sdtracing.attributes_at_times(sddata, timesecs,
                                             t2plts, attrs2sel)
-
-  for t, tplt in enumerate(t2plts):
-    
-    ind = np.argmin(abs(timesecs-tplt))    
-    tlab = 't = {:.2f}s'.format(timesecs[ind])
-    c = 'C'+str(t)
-    
-    radius = data2plt["radius"][t]
-    xi = data2plt["xi"][t]
-    msol = data2plt["msol"][t]
-    mass = sddata.mass(radius, msol)
-
-    hcens, hist = massdens_distrib(radius, xi, mass, domainvol,
-                                   rspan, nbins,
-                                   perlogR=True,
-                                   smooth=smoothsig) 
-    if smoothsig:
-        ax.plot(hcens, hist, label=tlab, color=c)            
-    else:
-       ax.step(hcens, hist, label=tlab, where='mid', color=c)
-
-  ax.set_xscale("log")
-  ax.set_xlabel("radius, r, /\u03BCm")
-  ax.set_ylabel("droplet mass distribution,\n g(lnR) /g m$^{-3}$ / unit lnR")
+  
+  plot_dists(ax, massdens_distrib, timesecs,  
+             data2plt, t2plts,
+             domainvol, rspan, nbins, sddata.mass
+             smoothsig=smoothsig, perlogR=perlogR)
+  
+  if perlogR:
+    ax.set_ylabel("droplet mass distribution,\n g(lnR) /g m$^{-3}$ / unit lnR")
+  else:
+    ax.set_ylabel("droplet mass distribution,\n M(lnR) /g m$^{-3}$")
