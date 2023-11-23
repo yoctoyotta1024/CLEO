@@ -23,6 +23,14 @@
 #ifndef BREAKUP_HPP
 #define BREAKUP_HPP
 
+#include <functional>
+
+#include <Kokkos_Core.hpp>
+
+#include "./collisions.hpp"
+#include "./microphysicalprocess.hpp"
+#include "./superdrop.hpp"
+
 struct DoBreakup
 {
 private:
@@ -34,6 +42,25 @@ public:
   using DoBreakup as a function in DoCollisions
   that satistfies the PairEnactX concept */
 };
+
+template <PairProbability Probability>
+inline MicrophysicalProcess auto
+CollBu(const unsigned int interval,
+         const std::function<double(unsigned int)> int2realtime,
+         const Probability collbuprob)
+/* constructs Microphysical Process for collision-breakup
+of superdroplets with a constant timestep 'interval' and
+probability of collision-breakup determined by 'collbuprob' */
+{
+  const double DELT(int2realtime(interval));
+
+  const DoBreakup bu{};
+  const DoCollisions<Probability, DoBreakup> colls(DELT,
+                                                   collbuprob,
+                                                   bu);
+
+  return ConstTstepMicrophysics(interval, colls);
+}
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 

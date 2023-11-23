@@ -97,7 +97,6 @@ probability of collision-coalescence determined by 'collcoalprob' */
   const double DELT(int2realtime(interval));
 
   const DoCoalescence coal{};
-
   const DoCollisions<Probability, DoCoalescence> colls(DELT,
                                                        collcoalprob,
                                                        coal);
