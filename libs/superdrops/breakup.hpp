@@ -31,10 +31,29 @@
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
 
+template <typename F>
+concept NFragments = requires(F f,
+                              const Superdrop &d1,
+                              const Superdrop &d2)
+/* Objects that are of type 'NFragments'
+take a pair of superdroplets and returns
+something convertible to a double (such as
+the number of fragments from a breakup event) */
+{
+  {
+    f(d1, d2)
+  } -> std::convertible_to<double>;
+};
+
+template <NFragments NFrags>
 struct DoBreakup
 {
 private:
+  NFrags nfrags;
+
 public:
+  DoBreakup(const NFrags nfrags) : nfrags(nfrags) {}
+
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const;
@@ -43,18 +62,19 @@ public:
   that satistfies the PairEnactX concept */
 };
 
-template <PairProbability Probability>
+template <PairProbability Probability, NFragments NFrags>
 inline MicrophysicalProcess auto
 CollBu(const unsigned int interval,
          const std::function<double(unsigned int)> int2realtime,
-         const Probability collbuprob)
+         const Probability collbuprob,
+         const Nfrags nfrags)
 /* constructs Microphysical Process for collision-breakup
 of superdroplets with a constant timestep 'interval' and
 probability of collision-breakup determined by 'collbuprob' */
 {
   const double DELT(int2realtime(interval));
 
-  const DoBreakup bu{};
+  const DoBreakup bu(nfrags);
   const DoCollisions<Probability, DoBreakup> colls(DELT,
                                                    collbuprob,
                                                    bu);
