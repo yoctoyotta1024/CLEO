@@ -1,6 +1,30 @@
+'''
+----- CLEO -----
+File: pltdist.py
+Project: plotssrc
+Created Date: Thursday 23rd October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Thursday 23rd October 2023
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+Copyright (c) 2023 MPI-M, Clara Bayley
+-----
+File Description:
+mass, number concentration etc. plots against
+radius in evenly spaced ln(radius) bins
+'''
 
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
+
+sys.path.append("../../../")  # for imports from pySD package
+from pySD.sdmout_src import sdtracing
 
 def gaussian_kernel_smoothing(hist, hcens, sig):
 
@@ -38,3 +62,46 @@ def logr_distribution(rspan, nbins, radius, wghts,
     hist, hcens = gaussian_kernel_smoothing(hist, hcens, smooth)
 
   return hist, np.exp(hedgs), np.exp(hcens) # units of hedgs and hcens [microns]
+
+def massdens_distrib(radius, xi, mass, vol, rspan,
+                     nbins, perlogR, smooth):
+  
+  
+  weights = xi * mass * 1000 / vol # real droplets [g/m^3]
+
+  hist, hedges, hcens = logr_distribution(rspan, nbins, radius,
+                                          weights, perlogR=True, 
+                                          smooth=smooth)
+
+  return hcens, hist  
+
+def plot_domainmassdens_distribs(timesecs, sddata, t2plts,
+                                 domainvol, rspan, nbins,
+                                 smoothsig=False):
+
+  fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8,6))
+      
+  attrs2sel = ["radius", "xi", "msol"]
+  data2plt = sdtracing.attributes_at_times(sddata, timesecs,
+                                            t2plts, attrs2sel)
+
+  for t, tplt in enumerate(t2plts):
+    
+    ind = np.argmin(abs(timesecs-tplt))    
+    tlab = 't = {:.2f}s'.format(time[ind])
+    c = 'C'+str(t)
+    
+    radius = data2plt["radius"][t]
+    xi = data2plt["xi"][t]
+    msol = data2plt["msol"][t]
+    mass = sddata.mass(radius, msol)
+
+    hcens, hist = massdens_distrib(radius, xi, mass, domainvol,
+                                   rspan, nbins,
+                                   perlogR=True,
+                                   smooth=smoothsig) 
+    ax.plot(hcens, hist, label=tlab, color=c)            
+
+  ax.set_xscale("log")
+  ax.set_xlabel("radius, r, /\u03BCm")
+  ax.set_ylabel("droplet mass distribution,\n g(lnR) /g m$^{-3}$ / unit lnR")
