@@ -28,6 +28,7 @@ To jump straight in, check out the
    usage/installation
    usage/examples
    usage/quickstart
+   usage/contributing
 
    pySD/pySD
 
