@@ -103,6 +103,11 @@ struct SuperdropAttrs
     return Kokkos::pow(dryrcubed, 1.0 / 3.0);
   }
 
+  KOKKOS_INLINE_FUNCTION double rcubed() const
+  {
+    return radius * radius * radius; 
+  }
+
   KOKKOS_INLINE_FUNCTION double vol() const
   /* spherical volume of droplet calculated from its radius */
   {
@@ -113,11 +118,6 @@ struct SuperdropAttrs
   /* Update droplet radius to newr or dry_radius() and
   return resultant change in radius (delta_radius = newradius-radius).
   Prevents drops shrinking further once they are size of dry_radius(). */
-
-  KOKKOS_INLINE_FUNCTION double rcubed() const
-  {
-    return radius * radius * radius; 
-  }
 };
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
