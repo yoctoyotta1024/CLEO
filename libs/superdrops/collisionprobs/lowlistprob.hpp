@@ -27,9 +27,9 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "../collisionkinetics.hpp"
 #include "../superdrop.hpp"
 #include "./longhydroprob.hpp"
-#include "./collisionkinetics.hpp"
 
 struct LowListCoalProb
 /* Probability of collision-coalescence of a pair of

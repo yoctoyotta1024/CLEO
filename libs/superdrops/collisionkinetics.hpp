@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
  * File: collisionkinetics.hpp
- * Project: collisionprobs
+ * Project: superdrops
  * Created Date: Wednesday 22nd November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:

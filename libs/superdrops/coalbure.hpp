@@ -30,7 +30,9 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "./breakup.hpp"
 #include "./collisions.hpp"
+#include "./collisionkinetics.hpp"
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
 
@@ -39,18 +41,18 @@ struct DoCoalBuRe
 /* ie. DoCoalescenceBreakupRebound */ 
 {
 private:
-  NFrags nfrags;
+  Coalescence coal;
+  Breakup<NFrags> breakup;
 
 public:
-  DoCoalBuRe(const NFrags nfrags) : nfrags(nfrags)
-  {
-  }
+  DoCoalBuRe(const NFrags nfrags) : nfrags(nfrags) {}
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
                   const double prob, const double phi) const;
   /* this operator is used as an "adaptor" for
-  using DoBreakup as a function in DoCollisions
+  using DoCoalBuRe for collision - coalescence,
+  breakup or rebound as a function in DoCollisions
   that satistfies the PairEnactX concept */
 };
 
@@ -73,6 +75,28 @@ of collision determined by 'collprob' */
                                                            coalbure);
 
   return ConstTstepMicrophysics(interval, colls);
+}
+
+template <NFragments NFrags>
+KOKKOS_INLINE_FUNCTION bool
+DoCoalBuRe<NFrags>::operator()(Superdrop &drop1, Superdrop &drop2,
+                               const double prob, const double phi) const
+/* this operator is used as an "adaptor" for
+using DoCoalBuRe for collision - coalescence,
+breakup or rebound as a function in DoCollisions
+that satistfies the PairEnactX concept */
+{
+  /* 1. calculate gamma factor for collision  */
+  const unsigned long long xi1(drop1.get_xi());
+  const unsigned long long xi2(drop2.get_xi());
+  const unsigned long long gamma(collision_gamma(xi1, xi2, prob, phi));
+
+  /* 2. enact collision between pair
+  of superdroplets if gamma is not zero */
+  if (gamma != 0)
+  {
+    coalesce_breakup_or_rebound(drop1, drop2, gamma);
+  }
 }
 
 #endif // COALBURE_HPP

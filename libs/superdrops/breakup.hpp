@@ -32,6 +32,7 @@
 #include "./collisions.hpp"
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
+#include "./breakup_nfrags.hpp"
 
 template <NFragments NFrags>
 struct DoBreakup
