@@ -39,12 +39,16 @@ struct DoBreakup
 private:
   NFrags nfrags;
 
+  KOKKOS_INLINE_FUNCTION
+  unsigned int breakup_gamma(const double prob,
+                             const double phi) const;
+
 public:
   DoBreakup(const NFrags nfrags) : nfrags(nfrags) {}
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
-                  const double prob, const double phi) const {return 0;}
+                  const double prob, const double phi) const;
   /* this operator is used as an "adaptor" for
   using DoBreakup as a function in DoCollisions
   that satistfies the PairEnactX concept */
@@ -70,4 +74,62 @@ probability of collision-breakup determined by 'collbuprob' */
   return ConstTstepMicrophysics(interval, colls);
 }
 
+template <NFragments NFrags>
+KOKKOS_INLINE_FUNCTION bool
+DoBreakup<NFrags>::operator()(Superdrop &drop1, Superdrop &drop2,
+                              const double prob, const double phi) const
+/* this operator is used as an "adaptor" for
+using DoBreakup as a function in DoCollisions
+that satistfies the PairEnactX concept */
+{
+  /* enact collision-breakup on pair of superdroplets if
+  gamma factor for collision-breakup is not zero */
+  if (breakup_gamma(prob, phi) != 0)
+  {
+    breakup_superdroplet_pair(drop1, drop2);
+  }
+
+  return 0;
+}
+
+template <NFragments NFrags>
+KOKKOS_INLINE_FUNCTION unsigned int
+DoBreakup<NFrags>::breakup_gamma(const double prob,
+                                 const double phi) const
+/* calculates value of gamma factor in Monte Carlo
+collision-breakup, adapted from gamma for collision-
+coalescence in Shima et al. 2009. Here is is assumed
+maximally 1 breakup event can occur (gamma = 0 or 1)
+irrespective of whether scaled probability, prob > 1 */
+{
+  if (phi < (prob - floor(prob)))
+  {
+    return 1;
+  }
+  else // if phi >= (prob - floor(prob))
+  {
+    return 0;
+  }
+}
+
+template <NFragments NFrags>
+KOKKOS_INLINE_FUNCTION void
+DoBreakup<NFrags>::breakup_superdroplet_pair(Superdrop &drop1,
+                                             Superdrop &drop2) const
+/* enact collisional-breakup of droplets by changing
+multiplicity, radius and solute mass of each
+superdroplet in a pair. Method created by Author
+(no citation yet available). Note implicit assumption
+that gamma factor = 1. */
+{
+  if (drop1.get_xi() == drop2.get_xi())
+  {
+    twin_superdroplet_breakup(drop1, drop2);
+  }
+
+  else
+  {
+    different_superdroplet_breakup(drop1, drop2);
+  }
+}
 #endif // BREAKUP_HPP
