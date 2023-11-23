@@ -131,7 +131,7 @@ config_collisions(const Config &config, const Timesteps &tsteps)
 }
 
 inline MicrophysicalProcess auto
-config_collisions(const Config &config, const Timesteps &tsteps)
+config_breakup(const Config &config, const Timesteps &tsteps)
 {
   const PairProbability auto prob = LowListBuProb();
   const NFragments auto nfrags = ConstNFrags(10.0);
