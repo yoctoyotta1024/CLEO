@@ -104,7 +104,6 @@ public:
   double cond_SUBTSTEP;    // smallest timestep in cases where substepping occurs [s]
   double cond_rtol;        // relative tolerance for implicit euler integration
   double cond_atol;        // abolute tolerance for implicit euler integration
-  double nfrags;           // expected number of fragments in breakup event, (use -1 for nan value)
 
   /* superdroplets */
   bool doAlterThermo; // enable condensation to alter the thermodynamic state

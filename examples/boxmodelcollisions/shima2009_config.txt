@@ -55,7 +55,6 @@ cond_iters = 2                            # no. iterations of Newton Raphson Met
 cond_SUBTSTEP = 0.1                       # smallest timestep in cases where substepping occurs [s]
 cond_rtol = 0.001                         # relative tolerance for implicit euler integration
 cond_atol = 0.001                         # abolute tolerance for implicit euler integration
-nfrags = -1                               # expected number of fragments in breakup event, (use -1 for nan value)
 
 # superdroplets #
 doAlterThermo = false                     # enable condensation to alter the thermodynamic state
