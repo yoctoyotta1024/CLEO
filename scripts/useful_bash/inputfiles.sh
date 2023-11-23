@@ -23,9 +23,15 @@ path2build=${HOME}/CLEO/build/
 python=python
 
 configfile=$1
+buildgpu=$2
 ### ---------------------------------------------------- ###
 
 echo "config file: ${configfile}"
+if [ "${buildgpu}" ];
+then
+  path2build=${HOME}/CLEO/buildgpu/ 
+fi
+echo "path to build directory: ${path2build}"
 
 ### --------------- create gbx boundaries -------------- ###
 echo "python create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}" 
