@@ -54,7 +54,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 # zlim = 1000
 # npergbx = 8
 # nsupers =  iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 50
+nsupers = 2048
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
@@ -85,31 +85,31 @@ radiigen =  iattrs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from 
 # numconc = np.sum(scalefacs)
 # radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
  
-# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-# radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
+volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
+numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
+radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
 
-reff                 = 7e-6                     # effective radius [m]
-nueff                = 0.08                     # effective variance 
-# radiiprobdist = rprobs.ClouddropsHansenGamma(reff, nueff)
-rdist1 = rprobs.ClouddropsHansenGamma(reff, nueff)
-nrain                = 3000                         # raindrop concentration [m^-3]
-qrain                = 0.9                          # rainwater content [g/m^3]
-dvol                 = 8e-4                         # mean volume diameter [m]
-# radiiprobdist = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-rdist2 = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-numconc = 1e9 # [m^3]
-distribs = [rdist1, rdist2]
-scalefacs = [1000, 1]
-radiiprobdist = rprobs.CombinedRadiiProbDistribs(distribs, scalefacs)
+# reff                 = 7e-6                     # effective radius [m]
+# nueff                = 0.08                     # effective variance 
+# # radiiprobdist = rprobs.ClouddropsHansenGamma(reff, nueff)
+# rdist1 = rprobs.ClouddropsHansenGamma(reff, nueff)
+# nrain                = 3000                         # raindrop concentration [m^-3]
+# qrain                = 0.9                          # rainwater content [g/m^3]
+# dvol                 = 8e-4                         # mean volume diameter [m]
+# # radiiprobdist = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+# rdist2 = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+# numconc = 1e9 # [m^3]
+# distribs = [rdist1, rdist2]
+# scalefacs = [1000, 1]
+# radiiprobdist = rprobs.CombinedRadiiProbDistribs(distribs, scalefacs)
 
 ### --------------------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen            =  iattrs.MonoCoordGen(monocoord3)
-coord3gen            =  iattrs.SampleCoordGen(True) # sample coord3 range randomly or not
-# # coord3gen            = None                        # do not generate superdroplet coord3s
+# coord3gen            =  iattrs.SampleCoordGen(True) # sample coord3 range randomly or not
+coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###

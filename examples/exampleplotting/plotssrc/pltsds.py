@@ -79,7 +79,7 @@ def plot_randomsample_superdrops(time, sddata, totnsupers,
   minid, maxid = 0, int(totnsupers) # largest value of ids to sample
   ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
   
-  attrs = ["radius", "msol", "xi"]
+  attrs = ["radius", "xi", "msol"]
   for a, attr in enumerate(attrs):
     try:
       data = sdtracing.attribute_for_superdroplets_sample(sddata, 

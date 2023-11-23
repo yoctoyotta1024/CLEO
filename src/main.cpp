@@ -123,32 +123,36 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
-  const PairProbability auto prob = LowListCoalProb();
+  // const PairProbability auto prob = LowListCoalProb();
+  // const PairProbability auto prob = LongHydroProb();
+  const PairProbability auto prob = GolovinProb();
   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    prob);
 
-  const PairProbability auto prob = LowListBuProb();
-  const NFragments auto nfrags = ConstNFrags(10.0);
-  const MicrophysicalProcess auto bu = CollBu(tsteps.get_collstep(),
-                                              &step2realtime,
-                                              prob,
-                                              nfrags);
-  return coal >> bu;
+  // const PairProbability auto prob = LowListBuProb();
+  // const NFragments auto nfrags = ConstNFrags(10.0);
+  // const MicrophysicalProcess auto bu = CollBu(tsteps.get_collstep(),
+  //                                             &step2realtime,
+  //                                             prob,
+  //                                             nfrags);
+  // return coal >> bu;
+  return coal;
 }
 
 inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  const MicrophysicalProcess auto cond = config_condensation(config,
-                                                             tsteps);
+  // const MicrophysicalProcess auto cond = config_condensation(config,
+  //                                                            tsteps);
 
   const MicrophysicalProcess auto colls = config_collisions(config,
                                                             tsteps);
 
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
-  return bu >> colls >> cond;
+  // return colls >> cond;
+  return colls;
 }
 
 inline Motion<CartesianMaps> auto
