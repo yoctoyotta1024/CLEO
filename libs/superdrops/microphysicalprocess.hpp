@@ -28,12 +28,12 @@
 #include <concepts>
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Random.hpp>
 
 #include "../cleoconstants.hpp"
 #include "./kokkosaliases_sd.hpp"
 #include "./superdrop.hpp"
 #include "./state.hpp"
+#include "./urbg.hpp"
 
 template <typename P>
 concept MicrophysicalProcess = requires(P p,
@@ -41,7 +41,7 @@ concept MicrophysicalProcess = requires(P p,
                                         const unsigned int t,
                                         subviewd_supers supers,
                                         State &state,
-                                        GenRandomPool gp)
+                                        URBG<ExecSpace> urbg)
 /* concept for Microphysical Process is all types that
 meet requirements (constraints) of these two timstepping
 functions ()"on_step" and "next_step") as well as the
@@ -54,7 +54,7 @@ constraints on the "run_step" function */
     p.on_step(t)
   } -> std::same_as<bool>;
   {
-    p.run_step(tM, t, supers, state, gp)
+    p.run_step(tM, t, supers, state, urbg)
   } -> std::convertible_to<subviewd_supers>;
 };
 
@@ -95,12 +95,12 @@ public:
            const unsigned int subt,
            subviewd_supers supers,
            State &state,
-           GenRandomPool genpool) const
+           URBG<DeviceType> urbg) const
   /* for combination of 2 proceses, each process
   is called sequentially */
   {
-    supers = a.run_step(teamMember, subt, supers, state, genpool);
-    supers = b.run_step(teamMember, subt, supers, state, genpool);
+    supers = a.run_step(teamMember, subt, supers, state, urbg);
+    supers = b.run_step(teamMember, subt, supers, state, urbg);
     return supers;
   }
 };
@@ -134,7 +134,7 @@ struct NullMicrophysicalProcess
            const unsigned int subt,
            subviewd_supers supers,
            State &state,
-           GenRandomPool genpool) const
+           URBG<DeviceType> urbg) const
   {
     return supers;
   }
@@ -146,14 +146,14 @@ concept MicrophysicsFunc = requires(F f,
                                     const unsigned int subt,
                                     subviewd_supers supers,
                                     State &state,
-                                    GenRandomPool gp)
+                                    URBG<ExecSpace> urbg)
 /* concept for all (function-like) types
 (ie. types that can be called with some arguments)
 that can be called by the run_step function in
 ConstTstepMicrophysics (see below) */
 {
   {
-    f(tM, subt, supers, state, gp)
+    f(tM, subt, supers, state, urbg)
   } -> std::convertible_to<subviewd_supers>;
 };
 
@@ -190,12 +190,11 @@ public:
            const unsigned int subt,
            subviewd_supers supers,
            State &state,
-           GenRandomPool genpool) const
+           URBG<DeviceType> urbg) const
   {
     if (on_step(subt))
     {
-      supers = do_microphysics(teamMember, subt, supers,
-                               state, genpool);
+      supers = do_microphysics(teamMember, subt, supers, state, urbg);
     }
 
     return supers;

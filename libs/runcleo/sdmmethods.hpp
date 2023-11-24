@@ -35,6 +35,7 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
+#include "superdrops/urbg.hpp"
 
 template <GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,
@@ -98,6 +99,8 @@ public:
           "sdm_microphysics",
           team_policy(ngbxs, Kokkos::AUTO),
           KOKKOS_CLASS_LAMBDA(const member_type &teamMember) {
+            URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
+
             const int ii = teamMember.league_rank();
 
             auto &gbx(d_gbxs(ii));
@@ -105,12 +108,10 @@ public:
             for (unsigned int subt = t_sdm; subt < t_next;
                  subt = microphys.next_step(subt))
             {
-              supers = microphys.run_step(teamMember,
-                                          subt,
-                                          supers,
-                                          gbx.state,
-                                          genpool);
+              supers = microphys.run_step(teamMember, subt, supers, gbx.state, urbg);
             }
+
+            genpool.free_state(urbg.gen);
           });
     }
   } sdm_microphysics; // operator is call for SDM microphysics
