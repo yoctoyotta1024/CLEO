@@ -3,19 +3,19 @@
 Contact Us!
 ===========
 
-Main Developer: Clara Bayley
-----------------------------
-Email
-#####
-yoctoyotta1024@yahoo.com
+Main Developer 
+--------------
+Email: yoctoyotta1024@yahoo.com
+###############################
+
+
 
 
 Max Planck Institut Für Meteorologie
 ------------------------------------
-Email
-#####
-clara.bayley@mpimet.mpg.de
+Email: clara.bayley@mpimet.mpg.de
+#################################
 
-Phone
-#####
-+494041173317
+
+Phone +494041173317
+###################
