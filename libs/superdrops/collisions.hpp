@@ -164,20 +164,27 @@ private:
   Assumes supers is already randomly shuffled and these
   superdrops are colliding some 'VOLUME' [m^3]). Function
   uses Kokkos nested parallelism for paralelism over supers
-  inside parallelised loop for member 'teamMember'. */
+  inside parallelised loop for member 'teamMember'. In serial
+  Kokkos::parallel_reduce is equivalent to summing nnull
+  over for loop:  for (size_t i = 1; i < nsupers; i += 2) {[...]} */
   {
-    const size_t nsupers(supers.extent(0));
+    const size_t npairs(supers.extent(0) / 2); // no. pairs of superdroplets
 
-    size_t nnull(0);                        // number of null superdrops
-    for (size_t i = 1; i < nsupers; i += 2) // TODO parallelise on default excec space?
-    {
-      const bool isnull(
-          collide_superdroplet_pair(supers(i - 1), supers(i),
-                                    urbg, scale_p, VOLUME));
-      nnull += (size_t)isnull;
-    }
+    size_t totnnull(0); // number of null superdrops
+    Kokkos::parallel_reduce(
+        Kokkos::TeamThreadRange(teamMember, npairs),
+        [=](int jj, size_t &nnull)
+        {
+          const int i(jj * 2);
 
-    return nnull;
+          const bool isnull(
+              collide_superdroplet_pair(supers(i), supers(i + 1),
+                                        urbg, scale_p, VOLUME));
+          n = (size_t)isnull;
+        },
+        totnnull);
+
+    return totnnull;
   }
 
   template <class DeviceType>

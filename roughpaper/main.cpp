@@ -40,170 +40,32 @@ struct Superdrop
 using viewd_supers = Kokkos::View<Superdrop *>;
 using ExecSpace = Kokkos::DefaultExecutionSpace;
 
-KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop &, Superdrop &>
-assign_drops(Superdrop &dropA, Superdrop &dropB)
-/* compare dropA.xi with dropB.xi and return (non-const)
-references to dropA and dropB in a pair {drop1, drop2}
-such that drop1.xi is always >= drop2.xi */
-{
-  if (!(dropA.xi < dropB.xi))
-  {
-    return {dropA, dropB};
-  }
-  else
-  {
-    return {dropB, dropA};
-  }
-}
-
-template <class DeviceType>
-struct URBG
-/* struct wrapping Kokkos random number generator to
-generate random 64 bit unsigned int in range [start, end].
-Result is analogous to std::uniform_int_distribution with
-params [a,b]=[start, end] and g = C++11 UniformRandomBitGenerator
-is URBG operator called with (start, end) = (0, URAND_MAX).
-Useful so that gen's urand(start, end) function can be used
-to randomly shuffle a kokkos view by swapping elements 
-in range [start, end] e.g. to generate random pairs of
-superdroplets during collision process */
-{
-  Kokkos::Random_XorShift64<DeviceType> gen;
-
-  KOKKOS_INLINE_FUNCTION
-  uint64_t operator()(const uint64_t start,
-                      const uint64_t end)
-  /* draws a random 64 bit unsigned int from
-  uniform distribution in the range [start, end] */
-  {
-    return gen.urand(start, end); // unsigned int rand
-  }
-
-  KOKKOS_INLINE_FUNCTION
-  double drand(const double start,
-               const double end)
-  /* draws a random number (double) from uniform
-  distribution in the range [0.0, 1.0] */
-  {
-    return gen.drand(start, end); // double rand
-  }
-};
-
-KOKKOS_INLINE_FUNCTION
-void device_swap(Superdrop& a, Superdrop& b)
-/* swaps the values of the superdroplets a and b 
-like C++98 std::swap except function works
-on device as well as host. Note: Involves a copy
-construction and two assignment operations
-=> not efficient way of swapping the contents if 
-Superdrop class stores large quantities of data */
-{
-  Superdrop c(a);
-  a=b;
-  b=c;
-}
-
-template <class DeviceType>
-KOKKOS_INLINE_FUNCTION
-viewd_supers shuffle_supers(const viewd_supers supers,
-                            URBG<DeviceType> urbg)
-{
-  namespace KE = Kokkos::Experimental;
-
-  const auto first = KE::begin(supers);
-  const auto dist = KE::distance(first, KE::end(supers) - 1); // distance to last element from first
-
-  for (auto iter(dist); iter > 0; --iter)
-  {
-    const auto randiter = urbg(0, iter); // random uint64_t equidistributed between [0, i]
-    device_swap(*(first + iter), *(first + randiter));
-  }
-
-  return supers;
-}
-
-KOKKOS_INLINE_FUNCTION Kokkos::Subview<viewd_supers,
-                                       Kokkos::pair<size_t, size_t>>
-remove_null_supers(viewd_supers supers, const size_t nnull)
-/* sort view of superdroplets by their sdgbxindexes
-from lowest to highest sdgbxindex. Then set new subview
-excluding supers with sdgbxindex = LIMITVALUES::uintmax */
-{
-  using TeamPol = Kokkos::TeamPolicy<ExecSpace>;
-
-  struct SortComparator
-  /* a precedes b if its sdgbxindex is smaller */
-  {
-    KOKKOS_INLINE_FUNCTION
-    bool operator()(const Superdrop &a, const Superdrop &b) const
-    {
-      return (a.xi) < (b.xi);
-    }
-  };
-
-  Kokkos::parallel_for(
-      "sortingsupers_thread", TeamPol(1, Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const TeamPol::member_type &t) {
-        Kokkos::Experimental::sort_team(t, supers, SortComparator{});
-      });
-
-  const size_t nsupers(supers.extent(0) - nnull); // remove null supers from no. supers
-  const Kokkos::pair<size_t, size_t> refs({0, nsupers});
-  auto new_supers = Kokkos::subview(supers, refs);
-  return new_supers;
-}
-
 int main(int argc, char *argv[])
 {
-  using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
  
+  const size_t n(8);
+  std::cout << "n = " << n << ", /2 = " << n/2 << "\n";
+  for (size_t i = 1; i < n; i += 2)
+  {
+    std::cout << "pair: " << i << ", " << i - 1 << "\n";
+  }
+  for (size_t jj = 0; jj < n/2; ++jj)
+  {
+    int i(jj*2);
+    std::cout << "pair: " << i + 1 << ", " << i << "\n";
+  }
+
   size_t nsupers(10);
 
   Kokkos::initialize(argc, argv);
   {
-    GenRandomPool genpool(std::random_device{}());
     viewd_supers supers("supers", nsupers);
-
     auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
     for (size_t kk(0); kk < nsupers; ++kk)
     {
       h_supers(kk) = Superdrop{kk*10+kk};
     }
     Kokkos::deep_copy(supers, h_supers);
-
-    {
-      std::cout << " \n --- b4 ---\n ";
-      for (size_t kk(0); kk < nsupers; ++kk)
-      {
-        std::cout << supers(kk).xi << ", ";
-      }
-      std::cout << " \n --- --- ---\n ";
-
-      URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
-      shuffle_supers(supers, urbg);
-
-      std::cout << " \n --- l8r ---\n ";
-      for (size_t kk(0); kk < nsupers; ++kk)
-      {
-        std::cout << supers(kk).xi << ", ";
-      }
-      std::cout << " \n --- --- ---\n ";
-
-      supers = remove_null_supers(supers, 0);
-
-      size_t new_nsupers(supers.extent(0));
-      std::cout
-          << " \n --- end ---\n ";
-      for (size_t kk(0); kk < new_nsupers; ++kk)
-      {
-        std::cout << supers(kk).xi << ", ";
-      }
-      std::cout << " \n --- --- ---\n ";
-
-      const double phi(urbg.drand(0.0, 1.0));
-      std::cout << "\n phi: " << phi << "\n";
-      genpool.free_state(urbg.gen);
-    }
   }
   Kokkos::finalize();
 }
