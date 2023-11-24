@@ -140,8 +140,8 @@ config_collisions(const Config &config, const Timesteps &tsteps)
   //                                             nfrags);
 
   // const PairProbability auto coalprob = LowListCoalProb();
-  // const PairProbability auto coalprob = LongHydroProb(1.0);
-  const PairProbability auto coalprob = GolovinProb();
+  const PairProbability auto coalprob = LongHydroProb(1.0);
+  // const PairProbability auto coalprob = GolovinProb();
   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    coalprob);
