@@ -30,7 +30,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp> // for pi
-#include <Kokkos_Random.hpp>
 
 #include "../cleoconstants.hpp"
 #include "./impliciteuler.hpp"
@@ -39,6 +38,7 @@
 #include "./superdrop.hpp"
 #include "./state.hpp"
 #include "./thermodynamic_equations.hpp"
+#include "./urbg.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -96,12 +96,13 @@ public:
       : doAlterThermo(doAlterThermo),
         impe(niters, delt, maxrtol, maxatol, subdelt) {}
 
+  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION subviewd_supers
   operator()(const member_type &teamMember,
              const unsigned int subt,
              subviewd_supers supers,
              State &state,
-             GenRandomPool genpool) const
+             URBG<DeviceType> urbg) const
   /* this operator is used as an "adaptor" for using
   condensation as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself

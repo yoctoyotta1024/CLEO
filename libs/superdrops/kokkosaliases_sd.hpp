@@ -23,7 +23,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
-#include <Kokkos_Random.hpp>
 
 #include "./superdrop.hpp"
 
@@ -38,9 +37,6 @@ using subviewd_supers = Kokkos::Subview<viewd_supers, Kokkos::pair<size_t, size_
 using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, Kokkos::pair<size_t, size_t>>; // subview should match that in gridbox.hpp
 
 using mirrorh_constsupers = subviewd_constsupers::HostMirror; // mirror view (copy) of subview of superdroplets on host memory (should match that in gridbox.hpp)
-
-/* Random Number Generation */
-using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
 
 /* Nested Parallelism */
 using team_policy = Kokkos::TeamPolicy<ExecSpace>;

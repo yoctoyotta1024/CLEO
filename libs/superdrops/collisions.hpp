@@ -26,7 +26,6 @@
 #include <concepts>
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Random.hpp>
 
 #include "../cleoconstants.hpp"
 #include "./kokkosaliases_sd.hpp"
@@ -123,10 +122,11 @@ private:
     }
   }
 
+  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION bool
   collide_superdroplet_pair(Superdrop &dropA,
                             Superdrop &dropB,
-                            GenRandomPool genpool,
+                            URBG<DeviceType> &urbg,
                             const double scale_p,
                             const double VOLUME) const
   /* Monte Carlo Routine from Shima et al. 2009 for
@@ -145,9 +145,7 @@ private:
 
     /* 3. Monte Carlo Step: use random number to
     enact (or not) collision of superdroplets pair */
-    URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
     const double phi(urbg.drand(0.0, 1.0)); // random number in range [0.0, 1.0]
-    genpool.free_state(urbg.gen);
     
     const bool isnull(enact_collision(drops.first,
                                       drops.second,
@@ -156,10 +154,11 @@ private:
     return isnull;
   }
 
+  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION size_t
   collide_supers(const member_type &teamMember,
                  subviewd_supers supers,
-                 GenRandomPool genpool,
+                 URBG<DeviceType> urbg,
                  const double scale_p,
                  const double VOLUME) const
   /* Enacts collisions for pairs of superdroplets in supers
@@ -182,7 +181,7 @@ private:
           const bool isnull(
               collide_superdroplet_pair(supers(kk),
                                         supers(kk + 1),
-                                        genpool,
+                                        urbg,
                                         scale_p,
                                         VOLUME));
           nnull += (size_t)isnull;
@@ -192,12 +191,13 @@ private:
     return totnnull;
   }
 
+  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
       subviewd_supers
       do_collisions(const member_type &teamMember,
                     subviewd_supers supers,
                     const State &state,
-                    GenRandomPool genpool) const
+                    URBG<DeviceType> urbg) const
   /* Superdroplet collision method adapted from collision-coalescence
   in Shima et al. 2009. This function shuffles supers to get
   random pairs of superdroplets (SDs) and then calls the
@@ -225,19 +225,20 @@ public:
   DoCollisions(const double DELT, Probability p, EnactCollision x)
       : DELT(DELT), probability(p), enact_collision(x) {}
 
+  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
       subviewd_supers
       operator()(const member_type &teamMember,
                  const unsigned int subt,
                  subviewd_supers supers,
                  const State &state,
-                 GenRandomPool genpool) const
+                 URBG<DeviceType> urbg) const
   /* this operator is used as an "adaptor" for using
   collisions as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    return do_collisions(teamMember, supers, state, genpool);
+    return do_collisions(teamMember, supers, state, urbg);
   }
 };
 
