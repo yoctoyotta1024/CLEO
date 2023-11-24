@@ -146,10 +146,14 @@ private:
 
     /* 3. Monte Carlo Step: use random number to
     enact (or not) collision of superdroplets pair */
+    URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
     const double phi(urbg.drand(0.0, 1.0)); // random number in range [0.0, 1.0]
+    genpool.free_state(urbg.gen);
+    
     const bool isnull(enact_collision(drops.first,
                                       drops.second,
                                       prob, phi));
+
     return isnull;
   }
 
@@ -211,7 +215,9 @@ private:
 
     /* Randomly shuffle order of superdroplet objects
     in order to generate random pairs */
+    URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
     shuffle_supers(supers, urbg);
+    genpool.free_state(urbg.gen);
 
     
     /* collide all randomly generated pairs of SDs */
