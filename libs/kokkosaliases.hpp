@@ -43,9 +43,6 @@ using viewh_constgbx = dualview_constgbx::t_host; // view in host memory of cons
 using viewd_gbx = dualview_gbx::t_dev;           // view in device memory of gridboxes
 using viewd_constgbx = dualview_constgbx::t_dev; // view in device memory of const gridboxes
 
-/* Random Number Generation */
-using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
-
 /* Gridbox Maps */
 using viewd_ndims = Kokkos::View<size_t[3]>; // view in device memory for number of gridboxes in CartesianMaps
 using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int,
