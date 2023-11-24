@@ -1,7 +1,7 @@
 .. _contact:
 
 Contact Us!
-=======
+===========
 
 Main Developer: Clara Bayley
 ----------------------------
