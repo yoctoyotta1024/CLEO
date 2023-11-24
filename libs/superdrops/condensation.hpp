@@ -96,7 +96,6 @@ public:
       : doAlterThermo(doAlterThermo),
         impe(niters, delt, maxrtol, maxatol, subdelt) {}
 
-  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION subviewd_supers
   operator()(const member_type &teamMember,
              const unsigned int subt,
