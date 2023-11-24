@@ -30,7 +30,7 @@ received from FromFileDynamics solver for
 1-way coupling to CLEO SDM */
 {
   const size_t ngbxs(h_gbxs.extent(0));
-  for (size_t ii(0); ii < ngbxs; ++ii)
+  for (size_t ii(0); ii < ngbxs; ++ii) // TODO parallelise on host?
   {
     State &state(h_gbxs(ii).state);
 

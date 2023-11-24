@@ -144,7 +144,7 @@ from "An Introduction To Clouds...." (see note at top of file) */
   const double ffactor(diffusion_factor(press, temp, psat));
 
   double totmass_condensed(0.0); // cumulative change to liquid mass in parcel volume 'dm'
-  for (size_t kk(0); kk < supers.extent(0); ++kk)
+  for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise on default excec space?
   {
     const double deltamass_condensed(
         condensation_mass_change(supers(kk), temp, s_ratio, ffactor));

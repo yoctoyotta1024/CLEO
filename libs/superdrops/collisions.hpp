@@ -173,7 +173,7 @@ private:
 
     /* collide all randomly generated pairs of SDs */
     size_t nnull(0); // number of null superdrops
-    for (size_t i = 1; i < nsupers; i += 2)
+    for (size_t i = 1; i < nsupers; i += 2) // TODO parallelise on default excec space?
     {
       const bool isnull(
           collide_superdroplet_pair(supers(i - 1), supers(i),
