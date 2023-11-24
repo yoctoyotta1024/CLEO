@@ -90,16 +90,18 @@ public:
                     GenRandomPool genpool) const
     /* enact SDM microphysics for each gridbox
     (using sub-timestepping routine). Kokkos::parallel for is
-    parallelised for loop over gridboxes, serial equivalent is:
-    for ( size_t ii(0); ii < ngbx; ++ii) { [...] } */
+    nested parallelism within parallelised loop over gridboxes,
+    serial equivalent is simply:
+    for ( size_t ii(0); ii < ngbxs; ++ii) { [...] } */
     {
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "sdm_microphysics",
-          Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
-          KOKKOS_CLASS_LAMBDA(const size_t ii) {
-            
+          team_policy(ngbxs, KOKKOS::AUTO),
+          KOKKOS_CLASS_LAMBDA(const member_type &teamMember) {
             URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
+
+            const int ii = teamMember.league_rank();
 
             auto &gbx(d_gbxs(ii));
             auto supers(gbx.supersingbx());

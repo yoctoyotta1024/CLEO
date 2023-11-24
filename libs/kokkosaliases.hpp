@@ -55,4 +55,8 @@ using kokkos_uintmap = Kokkos::UnorderedMap<unsigned int,
                                             unsigned int,
                                             ExecSpace>;
 
+/* Nested Parallelism over gbxs and supers */
+using team_policy = Kokkos::TeamPolicy<ExecSpace>;
+using member_type = team_policy::member_type;
+
 #endif // KOKKOSALIASES_HPP
