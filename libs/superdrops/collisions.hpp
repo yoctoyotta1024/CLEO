@@ -238,13 +238,13 @@ public:
                  const unsigned int subt,
                  subviewd_supers supers,
                  const State &state,
-                 URBG<DeviceType> urbg) const
+                 GenRandomPool genpool) const
   /* this operator is used as an "adaptor" for using
   collisions as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    return do_collisions(teamMember, supers, state, urbg);
+    return do_collisions(teamMember, supers, state, genpool);
   }
 };
 
