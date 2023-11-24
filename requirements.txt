@@ -19,6 +19,7 @@
 pytest
 sphinx
 furo
+sphinx_copybutton
 numpy
 scipy
 matplotlib
