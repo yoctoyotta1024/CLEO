@@ -26,8 +26,10 @@
 
 #include "./superdrop.hpp"
 
+/* Default Execution Space for Parallelism */
 using ExecSpace = Kokkos::DefaultExecutionSpace;
 
+/* Superdrop views and subviews */
 using viewd_supers = Kokkos::View<Superdrop *>;            // view in device memory of superdroplets (should match that in gridbox.hpp) 
 using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets (should match that in gridbox.hpp)
 
@@ -35,5 +37,9 @@ using subviewd_supers = Kokkos::Subview<viewd_supers, Kokkos::pair<size_t, size_
 using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, Kokkos::pair<size_t, size_t>>; // subview should match that in gridbox.hpp
 
 using mirrorh_constsupers = subviewd_constsupers::HostMirror; // mirror view (copy) of subview of superdroplets on host memory (should match that in gridbox.hpp)
+
+/* Nested Parallelism */
+using team_policy = Kokkos::TeamPolicy<ExecSpace>;
+using member_type = team_policy::member_type;
 
 #endif // KOKKOSALIASES_SD_HPP
