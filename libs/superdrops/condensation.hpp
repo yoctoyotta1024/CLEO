@@ -143,13 +143,7 @@ from "An Introduction To Clouds...." (see note at top of file) */
   const double s_ratio(supersaturation_ratio(press, qvap, psat));
   const double ffactor(diffusion_factor(press, temp, psat));
 
-  double totmass_condensed(0.0); // cumulative change to liquid mass in parcel volume 'dm'
-  for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise on default excec space?
-  {
-    const double deltamass_condensed(
-        condensation_mass_change(supers(kk), temp, s_ratio, ffactor));
-    totmass_condensed += deltamass_condensed; // dm += dm_condensed_vapour/dt * delta t
-  }
+  double totmass_condensed(superdrops_change());
   const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
 
   /* resultant effect on thermodynamic state */
@@ -157,6 +151,20 @@ from "An Introduction To Clouds...." (see note at top of file) */
   {
     condensation_state_change(totrho_condensed, state);
   }
+}
+
+KOKKOS_FUNCTION
+double DoCondensation::superdrops_change() const
+{
+  double totmass_condensed(0.0); // cumulative change to liquid mass in parcel volume 'dm'
+  for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise on default excec space?
+  {
+    const double deltamass_condensed(
+        condensation_mass_change(supers(kk), temp, s_ratio, ffactor));
+    totmass_condensed += deltamass_condensed; // dm += dm_condensed_vapour/dt * delta t
+  }
+
+  return totmass_condensed; 
 }
 
 KOKKOS_FUNCTION
