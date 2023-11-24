@@ -3,8 +3,8 @@
 Contact Us!
 =======
 
-Main Developer
---------------
+Main Developer: Clara Bayley
+----------------------------
 Email
 #####
 yoctoyotta1024@yahoo.com
