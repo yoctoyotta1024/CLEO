@@ -30,6 +30,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp> // for pi
+#include <Kokkos_Random.hpp>
 
 #include "../cleoconstants.hpp"
 #include "./impliciteuler.hpp"
@@ -38,7 +39,6 @@
 #include "./superdrop.hpp"
 #include "./state.hpp"
 #include "./thermodynamic_equations.hpp"
-#include "./urbg.hpp"
 
 namespace dlc = dimless_constants;
 
