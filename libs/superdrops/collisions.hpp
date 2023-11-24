@@ -154,7 +154,8 @@ private:
 
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION size_t
-  collide_supers(subviewd_supers supers,
+  collide_supers(const member_type &teamMember,
+                 subviewd_supers supers,
                  URBG<DeviceType> urbg,
                  const double scale_p,
                  const double VOLUME) const
@@ -180,7 +181,8 @@ private:
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
       subviewd_supers
-      do_collisions(subviewd_supers supers,
+      do_collisions(const member_type &teamMember,
+                    subviewd_supers supers,
                     const State &state,
                     URBG<DeviceType> urbg) const
   /* Superdroplet collision method adapted from collision-coalescence
@@ -212,7 +214,8 @@ public:
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
       subviewd_supers
-      operator()(const unsigned int subt,
+      operator()(const member_type &teamMember,
+                 const unsigned int subt,
                  subviewd_supers supers,
                  const State &state,
                  URBG<DeviceType> urbg) const
@@ -221,7 +224,7 @@ public:
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    return do_collisions(supers, state, urbg);
+    return do_collisions(teamMember, supers, state, urbg);
   }
 };
 
