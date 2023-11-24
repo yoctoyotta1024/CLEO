@@ -43,19 +43,7 @@ using ExecSpace = Kokkos::DefaultExecutionSpace;
 int main(int argc, char *argv[])
 {
  
-  const size_t n(8);
-  std::cout << "n = " << n << ", /2 = " << n/2 << "\n";
-  for (size_t i = 1; i < n; i += 2)
-  {
-    std::cout << "pair: " << i << ", " << i - 1 << "\n";
-  }
-  for (size_t jj = 0; jj < n/2; ++jj)
-  {
-    int i(jj*2);
-    std::cout << "pair: " << i + 1 << ", " << i << "\n";
-  }
-
-  size_t nsupers(10);
+  const size_t nsupers(10);
 
   Kokkos::initialize(argc, argv);
   {
@@ -63,9 +51,21 @@ int main(int argc, char *argv[])
     auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
     for (size_t kk(0); kk < nsupers; ++kk)
     {
-      h_supers(kk) = Superdrop{kk*10+kk};
+      h_supers(kk) = Superdrop{kk * 10 + kk};
     }
     Kokkos::deep_copy(supers, h_supers);
+    
+    size_t totnnull(0);
+    Kokkos::parallel_reduce(
+        nsupers,
+        [=](int jj, size_t &nnull)
+        {
+          const int isnull(1);
+          nnull += (size_t)isnull;
+        },
+        totnnull);
+
+    std::cout << "totnull: " << totnnull << "\n";
   }
   Kokkos::finalize();
 }

@@ -166,7 +166,7 @@ private:
   uses Kokkos nested parallelism for paralelism over supers
   inside parallelised loop for member 'teamMember'. In serial
   Kokkos::parallel_reduce is equivalent to summing nnull
-  over for loop:  for (size_t i = 1; i < nsupers; i += 2) {[...]} */
+  over for loop:  for (size_t kk = 1; kk < nsupers; kk += 2) {[...]} */
   {
     const size_t npairs(supers.extent(0) / 2); // no. pairs of superdroplets
 
@@ -179,7 +179,7 @@ private:
           const bool isnull(
               collide_superdroplet_pair(supers(kk), supers(kk + 1),
                                         urbg, scale_p, VOLUME));
-          n = (size_t)isnull;
+          nnull += (size_t)isnull;
         },
         totnnull);
 
