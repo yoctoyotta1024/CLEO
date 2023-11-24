@@ -97,7 +97,7 @@ public:
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "sdm_microphysics",
-          team_policy(ngbxs, KOKKOS::AUTO),
+          team_policy(ngbxs, Kokkos::AUTO),
           KOKKOS_CLASS_LAMBDA(const member_type &teamMember) {
             URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
 
