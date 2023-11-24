@@ -175,10 +175,9 @@ private:
         Kokkos::TeamThreadRange(teamMember, npairs),
         [=](int jj, size_t &nnull)
         {
-          const int i(jj * 2);
-
+          const int kk(jj * 2);
           const bool isnull(
-              collide_superdroplet_pair(supers(i), supers(i + 1),
+              collide_superdroplet_pair(supers(kk), supers(kk + 1),
                                         urbg, scale_p, VOLUME));
           n = (size_t)isnull;
         },
