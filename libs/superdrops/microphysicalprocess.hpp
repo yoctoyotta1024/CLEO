@@ -90,7 +90,6 @@ public:
     return a.on_step(subt) || b.on_step(subt);
   }
 
-  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION subviewd_supers
   run_step(const member_type &teamMember,
            const unsigned int subt,
@@ -130,7 +129,6 @@ struct NullMicrophysicalProcess
     return false;
   }
 
-  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION subviewd_supers
   run_step(const member_type &teamMember,
            const unsigned int subt,
@@ -187,7 +185,6 @@ public:
     return subt % interval == 0;
   }
 
-  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION subviewd_supers
   run_step(const member_type &teamMember,
            const unsigned int subt,
