@@ -123,7 +123,6 @@ private:
     }
   }
 
-  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION bool
   collide_superdroplet_pair(Superdrop &dropA,
                             Superdrop &dropB,
@@ -157,7 +156,6 @@ private:
     return isnull;
   }
 
-  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION size_t
   collide_supers(const member_type &teamMember,
                  subviewd_supers supers,
@@ -194,7 +192,6 @@ private:
     return totnnull;
   }
 
-  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
       subviewd_supers
       do_collisions(const member_type &teamMember,
@@ -231,7 +228,6 @@ public:
   DoCollisions(const double DELT, Probability p, EnactCollision x)
       : DELT(DELT), probability(p), enact_collision(x) {}
 
-  template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
       subviewd_supers
       operator()(const member_type &teamMember,
