@@ -95,14 +95,13 @@ public:
                  const double subdelt)
       : doAlterThermo(doAlterThermo),
         impe(niters, delt, maxrtol, maxatol, subdelt) {}
-
-  template <class DeviceType>
+ 
   KOKKOS_INLINE_FUNCTION subviewd_supers
   operator()(const member_type &teamMember,
              const unsigned int subt,
              subviewd_supers supers,
              State &state,
-             URBG<DeviceType> urbg) const
+             GenRandomPool genpool) const
   /* this operator is used as an "adaptor" for using
   condensation as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself

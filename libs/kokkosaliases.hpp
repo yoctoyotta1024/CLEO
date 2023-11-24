@@ -52,7 +52,4 @@ using kokkos_uintmap = Kokkos::UnorderedMap<unsigned int,
                                             unsigned int,
                                             ExecSpace>;
 
-/* Random Number Generation */
-using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
-
 #endif // KOKKOSALIASES_HPP
