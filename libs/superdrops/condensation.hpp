@@ -59,7 +59,10 @@ private:
   from "An Introduction To Clouds...." (see note at top of file) */
 
   KOKKOS_FUNCTION
-  double superdroplets_change() const;
+  double superdroplets_change(const subviewd_supers supers,
+                              const double temp,
+                              const double s_ratio,
+                              const double ffactor) const;
   /* returns total change in liquid water mass
   in parcel volume 'mass_condensed' by enacting
   superdroplets' condensation / evaporation */
@@ -155,7 +158,10 @@ from "An Introduction To Clouds...." (see note at top of file) */
   const double s_ratio(supersaturation_ratio(press, qvap, psat));
   const double ffactor(diffusion_factor(press, temp, psat));
 
-  double totmass_condensed(superdrops_change());
+  double totmass_condensed(superdroplets_change(supers,
+                                                temp,
+                                                s_ratio,
+                                                ffactor));
   const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
 
   /* resultant effect on thermodynamic state */
@@ -166,7 +172,11 @@ from "An Introduction To Clouds...." (see note at top of file) */
 }
 
 KOKKOS_FUNCTION
-double DoCondensation::superdroplets_change() const
+double DoCondensation::
+    superdroplets_change(const subviewd_supers supers,
+                         const double temp,
+                         const double s_ratio,
+                         const double ffactor) const
 /* returns total change in liquid water mass
 in parcel volume 'mass_condensed' by enacting
 superdroplets' condensation / evaporation */
