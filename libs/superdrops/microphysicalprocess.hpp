@@ -37,6 +37,7 @@
 
 template <typename P>
 concept MicrophysicalProcess = requires(P p,
+                                        const member_type &tM,
                                         const unsigned int t,
                                         subviewd_supers supers,
                                         State &state,
@@ -53,7 +54,7 @@ constraints on the "run_step" function */
     p.on_step(t)
   } -> std::same_as<bool>;
   {
-    p.run_step(t, supers, state, urbg)
+    p.run_step(tM, t, supers, state, urbg)
   } -> std::convertible_to<subviewd_supers>;
 };
 
@@ -90,16 +91,17 @@ public:
   }
 
   template <class DeviceType>
-  KOKKOS_INLINE_FUNCTION
-  subviewd_supers run_step(const unsigned int subt,
-                           subviewd_supers supers,
-                           State &state,
-                           URBG<DeviceType> urbg) const
+  KOKKOS_INLINE_FUNCTION subviewd_supers
+  run_step(const member_type &teamMember,
+           const unsigned int subt,
+           subviewd_supers supers,
+           State &state,
+           URBG<DeviceType> urbg) const
   /* for combination of 2 proceses, each process
   is called sequentially */
   {
-    supers = a.run_step(subt, supers, state, urbg);
-    supers = b.run_step(subt, supers, state, urbg);
+    supers = a.run_step(teamMember, subt, supers, state, urbg);
+    supers = b.run_step(teamMember, subt, supers, state, urbg);
     return supers;
   }
 };
@@ -129,18 +131,21 @@ struct NullMicrophysicalProcess
   }
 
   template <class DeviceType>
-  KOKKOS_INLINE_FUNCTION
-  subviewd_supers run_step(const unsigned int subt,
-                           subviewd_supers supers,
-                           State &state,
-                           URBG<DeviceType> urbg) const
+  KOKKOS_INLINE_FUNCTION subviewd_supers
+  run_step(const member_type &teamMember,
+           const unsigned int subt,
+           subviewd_supers supers,
+           State &state,
+           URBG<DeviceType> urbg) const
   {
     return supers;
   }
 };
 
 template <typename F>
-concept MicrophysicsFunc = requires(F f, const unsigned int subt,
+concept MicrophysicsFunc = requires(F f,
+                                    const member_type &tM,
+                                    const unsigned int subt,
                                     subviewd_supers supers,
                                     State &state,
                                     URBG<ExecSpace> urbg)
@@ -150,7 +155,7 @@ that can be called by the run_step function in
 ConstTstepMicrophysics (see below) */
 {
   {
-    f(subt, supers, state, urbg)
+    f(tM, subt, supers, state, urbg)
   } -> std::convertible_to<subviewd_supers>;
 };
 
@@ -183,15 +188,16 @@ public:
   }
 
   template <class DeviceType>
-  KOKKOS_INLINE_FUNCTION
-  subviewd_supers run_step(const unsigned int subt,
-                           subviewd_supers supers,
-                           State &state,
-                           URBG<DeviceType> urbg) const
+  KOKKOS_INLINE_FUNCTION subviewd_supers
+  run_step(const member_type &teamMember,
+           const unsigned int subt,
+           subviewd_supers supers,
+           State &state,
+           URBG<DeviceType> urbg) const
   {
     if (on_step(subt))
     {
-      supers = do_microphysics(subt, supers, state, urbg);
+      supers = do_microphysics(teamMember, subt, supers, state, urbg);
     }
 
     return supers;

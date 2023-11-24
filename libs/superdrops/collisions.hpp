@@ -173,7 +173,7 @@ private:
     size_t totnnull(0); // number of null superdrops
     Kokkos::parallel_reduce(
         Kokkos::TeamThreadRange(teamMember, npairs),
-        [=](int jj, size_t &nnull)
+        KOKKOS_CLASS_LAMBDA(int jj, size_t &nnull)
         {
           const int kk(jj * 2);
           const bool isnull(

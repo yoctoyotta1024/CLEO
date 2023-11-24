@@ -98,7 +98,8 @@ public:
 
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  operator()(const unsigned int subt,
+  operator()(const member_type &teamMember,
+             const unsigned int subt,
              subviewd_supers supers,
              State &state,
              URBG<DeviceType> urbg) const
