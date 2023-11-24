@@ -155,23 +155,25 @@ from "An Introduction To Clouds...." (see note at top of file) */
 
 KOKKOS_FUNCTION
 double DoCondensation::superdrops_change() const
+/* returns total change in liquid water mass
+in parcel volume 'mass_condensed' by enacting
+superdroplets' condensation / evaporation */
 {
-  double totmass_condensed(0.0); // cumulative change to liquid mass in parcel volume 'dm'
+  double mass_condensed(0.0);                     // cumulative change to liquid mass in parcel volume 'dm'
   for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise on default excec space?
   {
-    const double deltamass_condensed(
-        condensation_mass_change(supers(kk), temp, s_ratio, ffactor));
-    totmass_condensed += deltamass_condensed; // dm += dm_condensed_vapour/dt * delta t
+    const double deltamass(superdrop_mass_change(supers(kk), temp, s_ratio, ffactor));
+    mass_condensed += deltamass; // dm += dm_condensed_vapour/dt * delta t
   }
 
-  return totmass_condensed; 
+  return mass_condensed;
 }
 
 KOKKOS_FUNCTION
-double DoCondensation::condensation_mass_change(Superdrop &drop,
-                                                const double temp,
-                                                const double s_ratio,
-                                                const double ffactor) const
+double DoCondensation::superdrop_mass_change(Superdrop &drop,
+                                             const double temp,
+                                             const double s_ratio,
+                                             const double ffactor) const
 /* update superdroplet radius due to radial growth/shrink
   via condensation and diffusion of water vapour according
   to equations from "An Introduction To Clouds...." (see
@@ -192,7 +194,7 @@ double DoCondensation::condensation_mass_change(Superdrop &drop,
   const double mass_condensed = (dmdt_const * rsqrd *
                                  drop.get_xi() * delta_radius); // eqn [7.22] * delta t
 
-  return mass_condensed;
+  return mass_condensed;  
 }
 
 KOKKOS_FUNCTION void
