@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         nsupers,
         [=](int jj, size_t &nnull)
         {
-          const int isnull(1);
+          const bool isnull(1);
           nnull += (size_t)isnull;
         },
         totnnull);

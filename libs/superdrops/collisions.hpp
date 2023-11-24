@@ -177,8 +177,11 @@ private:
         {
           const int kk(jj * 2);
           const bool isnull(
-              collide_superdroplet_pair(supers(kk), supers(kk + 1),
-                                        urbg, scale_p, VOLUME));
+              collide_superdroplet_pair(supers(kk),
+                                        supers(kk + 1),
+                                        urbg,
+                                        scale_p,
+                                        VOLUME));
           nnull += (size_t)isnull;
         },
         totnnull);
