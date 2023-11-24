@@ -105,7 +105,8 @@ public:
             for (unsigned int subt = t_sdm; subt < t_next;
                  subt = microphys.next_step(subt))
             {
-              supers = microphys.run_step(teamMember, subt, supers, gbx.state, urbg);
+              supers = microphys.run_step(teamMember, subt, supers,
+                                          gbx.state, genpool);
             }
           });
     }
