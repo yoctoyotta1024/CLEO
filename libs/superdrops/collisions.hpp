@@ -26,6 +26,7 @@
 #include <concepts>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Random.hpp>
 
 #include "../cleoconstants.hpp"
 #include "./kokkosaliases_sd.hpp"
@@ -126,7 +127,7 @@ private:
   KOKKOS_INLINE_FUNCTION bool
   collide_superdroplet_pair(Superdrop &dropA,
                             Superdrop &dropB,
-                            URBG<DeviceType> &urbg,
+                            GenRandomPool genpool,
                             const double scale_p,
                             const double VOLUME) const
   /* Monte Carlo Routine from Shima et al. 2009 for
@@ -160,7 +161,7 @@ private:
   KOKKOS_INLINE_FUNCTION size_t
   collide_supers(const member_type &teamMember,
                  subviewd_supers supers,
-                 URBG<DeviceType> urbg,
+                 GenRandomPool genpool,
                  const double scale_p,
                  const double VOLUME) const
   /* Enacts collisions for pairs of superdroplets in supers
@@ -183,7 +184,7 @@ private:
           const bool isnull(
               collide_superdroplet_pair(supers(kk),
                                         supers(kk + 1),
-                                        urbg,
+                                        genpool,
                                         scale_p,
                                         VOLUME));
           nnull += (size_t)isnull;
@@ -199,7 +200,7 @@ private:
       do_collisions(const member_type &teamMember,
                     subviewd_supers supers,
                     const State &state,
-                    URBG<DeviceType> urbg) const
+                    GenRandomPool genpool) const
   /* Superdroplet collision method adapted from collision-coalescence
   in Shima et al. 2009. This function shuffles supers to get
   random pairs of superdroplets (SDs) and then calls the
@@ -219,7 +220,8 @@ private:
     genpool.free_state(urbg.gen);
 
     /* collide all randomly generated pairs of SDs */
-    size_t nnull(collide_supers(teamMember, supers, urbg, scale_p, VOLUME)); // number of null superdrops
+    size_t nnull(collide_supers(teamMember, supers, genpool,
+                                scale_p, VOLUME)); // number of null superdrops
 
     // return remove_null_supers(supers, nnull);
     return is_null_supers(supers, nnull);

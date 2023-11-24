@@ -35,7 +35,6 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
-#include "superdrops/urbg.hpp"
 
 template <GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,
@@ -100,7 +99,7 @@ public:
           team_policy(ngbxs, Kokkos::AUTO),
           KOKKOS_CLASS_LAMBDA(const member_type &teamMember) {
             const int ii = teamMember.league_rank();
-            
+
             auto &gbx(d_gbxs(ii));
             auto supers(gbx.supersingbx());
             for (unsigned int subt = t_sdm; subt < t_next;
