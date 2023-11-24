@@ -38,9 +38,6 @@ using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, Kokkos::pair<siz
 
 using mirrorh_constsupers = subviewd_constsupers::HostMirror; // mirror view (copy) of subview of superdroplets on host memory (should match that in gridbox.hpp)
 
-/* Random Number Generation */
-using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for pool of thread safe random number generators
-
 /* Nested Parallelism */
 using team_policy = Kokkos::TeamPolicy<ExecSpace>;
 using member_type = team_policy::member_type;
