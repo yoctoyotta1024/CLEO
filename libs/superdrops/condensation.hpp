@@ -59,14 +59,26 @@ private:
   from "An Introduction To Clouds...." (see note at top of file) */
 
   KOKKOS_FUNCTION
-  double condensation_mass_change(Superdrop &drop,
-                                  const double temp,
-                                  const double s_ratio,
-                                  const double ffactor) const;
+  double superdroplets_change() const;
+  /* returns total change in liquid water mass
+  in parcel volume 'mass_condensed' by enacting
+  superdroplets' condensation / evaporation */
 
   KOKKOS_FUNCTION
-  void condensation_state_change(const double totrho_condensed,
-                                 State &state) const;
+  double superdrop_mass_change(Superdrop &drop,
+                               const double temp,
+                               const double s_ratio,
+                               const double ffactor) const;
+  /* update superdroplet radius due to radial growth/shrink
+  via condensation and diffusion of water vapour according
+  to equations from "An Introduction To Clouds...." (see
+  note at top of file). Then return mass of liquid that
+  condensed onto /evaporated off of droplet. New radius is
+  calculated using impliciteuler method which iterates
+  condensation-diffusion ODE given the previous radius. */
+
+  KOKKOS_FUNCTION
+  void state_change(const double totrho_condensed, State &state) const;
   /* change the thermodynamic variables (temp, qv and qc) of
   ThermoState state given the total change in condensed
   water mass per volume during time interval delt */
@@ -149,12 +161,12 @@ from "An Introduction To Clouds...." (see note at top of file) */
   /* resultant effect on thermodynamic state */
   if (doAlterThermo)
   {
-    condensation_state_change(totrho_condensed, state);
+    state_change(totrho_condensed, state);
   }
 }
 
 KOKKOS_FUNCTION
-double DoCondensation::superdrops_change() const
+double DoCondensation::superdroplets_change() const
 /* returns total change in liquid water mass
 in parcel volume 'mass_condensed' by enacting
 superdroplets' condensation / evaporation */
@@ -198,7 +210,7 @@ double DoCondensation::superdrop_mass_change(Superdrop &drop,
 }
 
 KOKKOS_FUNCTION void
-DoCondensation::condensation_state_change(const double totrho_condensed,
+DoCondensation::state_change(const double totrho_condensed,
                                          State &state) const
 /* change the thermodynamic variables (temp, qv and qc) of
 ThermoState state given the total change in condensed
