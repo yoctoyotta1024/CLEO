@@ -212,11 +212,8 @@ private:
 
     /* Randomly shuffle order of superdroplet objects
     in order to generate random pairs */
-    URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
     shuffle_supers(supers, urbg);
-    genpool.free_state(urbg.gen);
 
-    
     /* collide all randomly generated pairs of SDs */
     size_t nnull(collide_supers(teamMember, supers, urbg, scale_p, VOLUME)); // number of null superdrops
 
