@@ -35,7 +35,6 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
-#include "superdrops/urbg.hpp"
 
 template <GridboxMaps GbxMaps,
           MicrophysicalProcess Microphys,

@@ -28,12 +28,12 @@
 #include <concepts>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Random.hpp>
 
 #include "../cleoconstants.hpp"
 #include "./kokkosaliases_sd.hpp"
 #include "./superdrop.hpp"
 #include "./state.hpp"
-#include "./urbg.hpp"
 
 template <typename P>
 concept MicrophysicalProcess = requires(P p,
