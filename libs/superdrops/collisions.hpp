@@ -162,7 +162,9 @@ private:
   /* Enacts collisions for pairs of superdroplets in supers
   like for collision-coalescence in Shima et al. 2009.
   Assumes supers is already randomly shuffled and these
-  superdrops are colliding some 'VOLUME' [m^3]) */
+  superdrops are colliding some 'VOLUME' [m^3]). Function
+  uses Kokkos nested parallelism for paralelism over supers
+  inside parallelised loop for member 'teamMember'. */
   {
     const size_t nsupers(supers.extent(0));
 
@@ -189,7 +191,8 @@ private:
   in Shima et al. 2009. This function shuffles supers to get
   random pairs of superdroplets (SDs) and then calls the
   collision function for each pair (assuming these superdrops
-  are colliding some 'VOLUME' [m^3]) */
+  are colliding some 'VOLUME' [m^3]). Function is called inside
+  a parallelised loop for member 'teamMember'. */
   {
     const double VOLUME(state.get_volume() * dlc::VOL0); // volume in which collisions occur [m^3]
     const size_t nsupers(supers.extent(0));
@@ -201,7 +204,7 @@ private:
     shuffle_supers(supers, urbg);
 
     /* collide all randomly generated pairs of SDs */
-    size_t nnull(collide_supers(supers, urbg, scale_p, VOLUME)); // number of null superdrops
+    size_t nnull(collide_supers(teamMember, supers, urbg, scale_p, VOLUME)); // number of null superdrops
 
     // return remove_null_supers(supers, nnull);
     return is_null_supers(supers, nnull);
