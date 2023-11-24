@@ -72,7 +72,7 @@ between superdrops e.g. collision-coalescence */
 {
 private:
   const double DELT; // real time interval [s] for which probability of collision-x is calculated
-  
+
   const Probability probability;
   /* object (has operator that) returns prob_jk, the probability
   a pair of droplets undergo some kind of collision process.
@@ -100,11 +100,11 @@ private:
   {
     const double prob_jk(probability(drop1, drop2, DELT, VOLUME));
     const double large_xi(drop1.get_xi()); // casting xi to double (!)
-    
-    const double prob(scale_p * large_xi * prob_jk); 
+
+    const double prob(scale_p * large_xi * prob_jk);
 
     return prob;
-  } 
+  }
 
   KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop &, Superdrop &>
   assign_drops(Superdrop &dropA, Superdrop &dropB) const
@@ -114,7 +114,7 @@ private:
   {
     if (!(dropA.get_xi() < dropB.get_xi()))
     {
-      return {dropA, dropB}; 
+      return {dropA, dropB};
     }
     else
     {
@@ -153,16 +153,43 @@ private:
   }
 
   template <class DeviceType>
-  KOKKOS_INLINE_FUNCTION
-  subviewd_supers do_collisions(subviewd_supers supers,
-                                const State &state,
-                                URBG<DeviceType> urbg) const
-  /* Superdroplet collision method adapted from collision-coalescence
-  in Shima et al. 2009. This function shuffles supers to get random
-  pairs of superdroplets (SDs) and then calls the collision function
-  for each pair (assuming these SDs are colliding some 'VOLUME' [m^3]) */
+  KOKKOS_INLINE_FUNCTION size_t
+  collide_supers(subviewd_supers supers,
+                 URBG<DeviceType> urbg,
+                 const double scale_p,
+                 const double VOLUME) const
+  /* Enacts collisions for pairs of superdroplets in supers
+  like for collision-coalescence in Shima et al. 2009.
+  Assumes supers is already randomly shuffled and these
+  superdrops are colliding some 'VOLUME' [m^3]) */
   {
-    const double VOLUME(state.get_volume() * dlc::VOL0);    // volume in which collisions occur [m^3]
+    const size_t nsupers(supers.extent(0));
+
+    size_t nnull(0);                        // number of null superdrops
+    for (size_t i = 1; i < nsupers; i += 2) // TODO parallelise on default excec space?
+    {
+      const bool isnull(
+          collide_superdroplet_pair(supers(i - 1), supers(i),
+                                    urbg, scale_p, VOLUME));
+      nnull += (size_t)isnull;
+    }
+
+    return nnull;
+  }
+
+  template <class DeviceType>
+  KOKKOS_INLINE_FUNCTION
+      subviewd_supers
+      do_collisions(subviewd_supers supers,
+                    const State &state,
+                    URBG<DeviceType> urbg) const
+  /* Superdroplet collision method adapted from collision-coalescence
+  in Shima et al. 2009. This function shuffles supers to get
+  random pairs of superdroplets (SDs) and then calls the
+  collision function for each pair (assuming these superdrops
+  are colliding some 'VOLUME' [m^3]) */
+  {
+    const double VOLUME(state.get_volume() * dlc::VOL0); // volume in which collisions occur [m^3]
     const size_t nsupers(supers.extent(0));
     const size_t nhalf(nsupers / 2); // same as floor() for positive nsupers
     const double scale_p(nsupers * (nsupers - 1.0) / (2.0 * nhalf));
@@ -172,14 +199,7 @@ private:
     shuffle_supers(supers, urbg);
 
     /* collide all randomly generated pairs of SDs */
-    size_t nnull(0); // number of null superdrops
-    for (size_t i = 1; i < nsupers; i += 2) // TODO parallelise on default excec space?
-    {
-      const bool isnull(
-          collide_superdroplet_pair(supers(i - 1), supers(i),
-                                    urbg, scale_p, VOLUME));
-      nnull += (size_t)isnull;
-    }
+    size_t nnull(collide_supers(supers, urbg, scale_p, VOLUME)); // number of null superdrops
 
     // return remove_null_supers(supers, nnull);
     return is_null_supers(supers, nnull);
@@ -191,16 +211,17 @@ public:
 
   template <class DeviceType>
   KOKKOS_INLINE_FUNCTION
-  subviewd_supers operator()(const unsigned int subt,
-                            subviewd_supers supers,
-                            const State &state,
-                            URBG<DeviceType> urbg) const
+      subviewd_supers
+      operator()(const unsigned int subt,
+                 subviewd_supers supers,
+                 const State &state,
+                 URBG<DeviceType> urbg) const
   /* this operator is used as an "adaptor" for using
   collisions as the MicrophysicsFunction type in a
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    return do_collisions(supers, state, urbg);  
+    return do_collisions(supers, state, urbg);
   }
 };
 
