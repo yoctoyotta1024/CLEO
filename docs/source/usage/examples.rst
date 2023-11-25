@@ -8,7 +8,7 @@ domains, microphysics, coupling, superdroplet motion etc. They can be
 found in the ``CLEO/examples`` directory. 
 
 Each example can be run by building CLEO with the relevant main program
-and then executing the associated python script. For running on
+and then executing the associated Python script. For running on
 DKRZ's Levante HPC, there are bash scripts to help with this. 
 The following instructions are intended to guide you through
 running each example on Levante using their bash scripts.
@@ -215,3 +215,8 @@ e.g.
 Several plots and animations are produced by this example. If
 you would like to compare to reference solutions,
 please :ref:`contact us <contact>`.
+
+Extension
+---------
+Explore the ``exampleplotting`` Python module which
+give examples of how to plot output from CLEO with pySD.

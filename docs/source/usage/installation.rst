@@ -12,7 +12,7 @@ First clone CLEO's github repository:
 
 It’s not essential, but everything will be much easier if you clone
 CLEO in your home directory. If you choose to do otherwise,
-you may have to change some paths in the bash and python scripts.
+you may have to change some paths in the bash and Python scripts.
 
 
 That's it, you're done!
