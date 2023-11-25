@@ -96,7 +96,10 @@ public:
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "sdm_microphysics",
-          team_policy(ngbxs, Kokkos::AUTO),
+          // Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+          // KOKKOS_CLASS_LAMBDA(const size_t ii) {
+          // const size_t teamMember = 0;
+          team_policy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const member_type &teamMember) {
             const int ii = teamMember.league_rank();
 
