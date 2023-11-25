@@ -37,7 +37,7 @@ and exploring some examples. Or jump straight in with the
    usage/contact
 
 Questions?
-==========
+----------
 Yes please! Simply :ref:`contact us! <contact>`
 
 Indices and tables

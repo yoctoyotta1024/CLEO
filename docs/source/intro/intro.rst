@@ -23,5 +23,5 @@ Super-Droplet Model (SDM) cloud microphysics.
    timestepping
 
 Questions?
-==========
+----------
 Yes please! Simply :ref:`contact us! <contact>`
