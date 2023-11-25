@@ -186,3 +186,23 @@ e.g.
 
 4) Constant 2-D Thermodynamics 
 ------------------------------
+
+1. Navigate to the ``constthermo2d/`` directory,
+e.g.
+
+.. code-block:: console
+
+  $ cd ~/CLEO/examples/constthermo2d/
+
+2. Configure the bash script ``constthermo2d.sh`` for your environment.
+
+.. code-block:: console
+
+  $ vim constthermo2d.sh 
+
+3. Execute the bash script ``constthermo2d.sh``. 
+
+.. code-block:: console
+
+  $ ./constthermo2d.sh
+
