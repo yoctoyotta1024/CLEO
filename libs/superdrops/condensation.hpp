@@ -97,7 +97,7 @@ public:
         impe(niters, delt, maxrtol, maxatol, subdelt) {}
  
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  operator()(const member_type &teamMember,
+  operator()(const TeamPolicy::member_type &team_member,
              const unsigned int subt,
              subviewd_supers supers,
              State &state,

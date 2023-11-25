@@ -37,7 +37,7 @@
 
 template <typename P>
 concept MicrophysicalProcess = requires(P p,
-                                        const member_type &tM,
+                                        const TeamPolicy::member_type &tm, 
                                         const unsigned int t,
                                         subviewd_supers supers,
                                         State &state,
@@ -54,7 +54,7 @@ constraints on the "run_step" function */
     p.on_step(t)
   } -> std::same_as<bool>;
   {
-    p.run_step(tM, t, supers, state, gp)
+    p.run_step(tm, t, supers, state, gp)
   } -> std::convertible_to<subviewd_supers>;
 };
 
@@ -91,7 +91,7 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  run_step(const member_type &teamMember,
+  run_step(const TeamPolicy::member_type &team_member,
            const unsigned int subt,
            subviewd_supers supers,
            State &state,
@@ -99,8 +99,8 @@ public:
   /* for combination of 2 proceses, each process
   is called sequentially */
   {
-    supers = a.run_step(teamMember, subt, supers, state, genpool);
-    supers = b.run_step(teamMember, subt, supers, state, genpool);
+    supers = a.run_step(team_member, subt, supers, state, genpool);
+    supers = b.run_step(team_member, subt, supers, state, genpool);
     return supers;
   }
 };
@@ -130,7 +130,7 @@ struct NullMicrophysicalProcess
   }
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  run_step(const member_type &teamMember,
+  run_step(const TeamPolicy::member_type &team_member,
            const unsigned int subt,
            subviewd_supers supers,
            State &state,
@@ -142,7 +142,7 @@ struct NullMicrophysicalProcess
 
 template <typename F>
 concept MicrophysicsFunc = requires(F f,
-                                    const member_type &tM,
+                                    const TeamPolicy::member_type &tm,
                                     const unsigned int subt,
                                     subviewd_supers supers,
                                     State &state,
@@ -153,7 +153,7 @@ that can be called by the run_step function in
 ConstTstepMicrophysics (see below) */
 {
   {
-    f(tM, subt, supers, state, gp)
+    f(tm, subt, supers, state, gp)
   } -> std::convertible_to<subviewd_supers>;
 };
 

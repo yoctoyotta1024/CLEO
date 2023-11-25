@@ -157,7 +157,7 @@ private:
   }
 
   KOKKOS_INLINE_FUNCTION size_t
-  collide_supers(const member_type &teamMember,
+  collide_supers(const TeamPolicy::member_type &team_member,
                  subviewd_supers supers,
                  GenRandomPool genpool, 
                  const double scale_p,
@@ -189,7 +189,7 @@ private:
   }
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  do_collisions(const member_type &teamMember,
+  do_collisions(const TeamPolicy::member_type &team_member,
                 subviewd_supers supers,
                 const State &state,
                 GenRandomPool genpool) const
@@ -212,7 +212,7 @@ private:
     genpool.free_state(urbg.gen);
 
     /* collide all randomly generated pairs of SDs */
-    size_t nnull(collide_supers(teamMember, supers, genpool,
+    size_t nnull(collide_supers(team_member, supers, genpool,
                                 scale_p, VOLUME)); // number of null superdrops
 
     // return remove_null_supers(supers, nnull);
@@ -225,7 +225,7 @@ public:
       : DELT(DELT), probability(p), enact_collision(x) {}
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-      operator()(const member_type &teamMember,
+      operator()(const TeamPolicy::member_type &team_member,
                  const unsigned int subt,
                  subviewd_supers supers,
                  const State &state,
@@ -235,7 +235,7 @@ public:
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    return do_collisions(teamMember, supers, state, genpool);
+    return do_collisions(team_member, supers, state, genpool);
   }
 };
 
