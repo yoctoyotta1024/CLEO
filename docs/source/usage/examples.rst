@@ -103,7 +103,7 @@ using Long's collision efficiency as given by equation 13 of
 Simmel et al. 2002.
 
 The plot produced, 
-``~/CLEO/build/bin/golovin_validation.png``, should be 
+``~/CLEO/build/bin/long_validation.png``, should be 
 similar to Fig.2(b) of Shima et al. 2009.
 
 // TODO cite properly
@@ -114,7 +114,7 @@ This example is a 0-D box model with only collision-coalescence
 using the hydrodynamic kernel with Long's collision efficiency as
 given by equation 13 of Simmel et al. 2002, and the coalescence 
 efficiency from Low and List 1982(a) (see also McFarquhar 2004).
-The example produces a plot ``~/CLEO/build/bin/golovin_validation.png``.
+This example produces a plot ``~/CLEO/build/bin/lowlist_validation.png``.
 
 // TODO cite properly
 
