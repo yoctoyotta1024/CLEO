@@ -103,16 +103,13 @@ public:
           KOKKOS_CLASS_LAMBDA(const TeamPolicy::member_type &team_member) {
             const int ii = team_member.league_rank();
 
-            if (team_member.team_rank() == 0)
+            auto &gbx(d_gbxs(ii));
+            auto supers(gbx.supersingbx());
+            for (unsigned int subt = t_sdm; subt < t_next;
+                 subt = microphys.next_step(subt))
             {
-              auto &gbx(d_gbxs(ii));
-              auto supers(gbx.supersingbx());
-              for (unsigned int subt = t_sdm; subt < t_next;
-                   subt = microphys.next_step(subt))
-              {
-                supers = microphys.run_step(team_member, subt, supers,
-                                            gbx.state, genpool);
-              }
+              supers = microphys.run_step(team_member, subt, supers,
+                                          gbx.state, genpool);
             }
           });
     }
