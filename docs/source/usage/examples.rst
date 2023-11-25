@@ -46,23 +46,66 @@ one you will need to configure it in the following ways:
 
 1) Adiabatic Parcel
 -------------------
+These examples are for a 0-D parcel of air expanding and
+contracting adiabatically with a two-way coupling between
+SDM and the thermodynamics. The setup mimics that in
+Arabas and Shima 2017 section 7. Note that due to numerical
+differences, the conditions for cusp bifurcation and the
+plots will not be exactly identical to this reference.
 
-a) Cusp Bifurcation
-###################
+// TODO cite properly
 
-b) Arabas and Shima 2017
+1. Navigate to the ``adiabaticparcel/`` directory,
+e.g.
+
+.. code-block:: console
+
+  $ cd ~/CLEO/examples/adiabaticparcel/
+
+
+a) Arabas and Shima 2017
 ########################
+2. :ref:`Configure<configurebash>` and execute the bash script ``as2017.sh``. 
 
+.. code-block:: console
+
+  $ vim as2017.sh
+  $ ./as2017.sh
+
+The plots produced, 
+``~/CLEO/build/bin/as2017_fig_[x].png``, should be 
+similar to the columns of figure 5 from Arabas and
+Shima 2017.
+
+// TODO cite properly
+
+b) Cusp Bifurcation
+###################
+2. :ref:`Configure<configurebash>` and execute the bash script ``cuspbifurc.sh``. 
+
+.. code-block:: console
+
+  $ vim cuspbifurc.sh
+  $ ./cuspbifurc.sh
+
+The plots produced, 
+``~/CLEO/build/bin/cuspbifurc_validation.png`` and
+``~/CLEO/build/bin/cuspbifurc_SDgrowth.png`` 
+illustrate an example of cusp bifurcation, analagous to the 
+third column of figure 5 from Arabas and
+Shima 2017.
+
+// TODO cite properly
 
 2) Box Model Collisions
 -----------------------
 
 Due to the randomness of the initial superdroplet conditions and
-the collision-coalescence algorithm, the plots for these examples 
+the collision-coalescence algorithm, each run of these examples
 will not be completely identical, but they should be reasonably
-similar, especially in the mean.
+similar, and have the same mean behaviour.
 
-1. Navigate to the ``CLEO/examples/boxmodelcollisions`` directory,
+1. Navigate to the ``boxmodelcollisions/`` directory,
 e.g.
 
 .. code-block:: console
