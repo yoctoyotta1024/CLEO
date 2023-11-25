@@ -183,6 +183,12 @@ e.g.
 
   $ ./divfree2d.sh
 
+This example plots the motion of superdroplets without
+sedimentation in a 2-D divergence free wind field
+(see ``~/CLEO/build/bin/df2d_motion2d_validation.png``).
+The number of superdroplets in the domain should remain
+constant over time
+(see ``~/CLEO/build/bin/df2d_totnsupers_validation.png``).
 
 4) Constant 2-D Thermodynamics 
 ------------------------------
@@ -206,3 +212,6 @@ e.g.
 
   $ ./constthermo2d.sh
 
+Several plots and animations are produced by this example. If
+you would like to compare to reference solutions,
+please :ref:`contact us <contact>`.
