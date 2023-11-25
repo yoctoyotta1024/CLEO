@@ -164,6 +164,25 @@ This example produces a plot ``~/CLEO/build/bin/lowlist_validation.png``.
 3) Divergence Free Motion
 -------------------------
 
+1. Navigate to the ``divfreemotion/`` directory,
+e.g.
+
+.. code-block:: console
+
+  $ cd ~/CLEO/examples/divfreemotion/
+
+2. Configure the bash script ``divfree2d.sh`` for your environment.
+
+.. code-block:: console
+
+  $ vim divfree2d.sh
+
+3. Execute the bash script ``divfree2d.sh``. 
+
+.. code-block:: console
+
+  $ ./divfree2d.sh
+
 
 4) Constant 2-D Thermodynamics 
 ------------------------------
