@@ -219,4 +219,4 @@ please :ref:`contact us <contact>`.
 Extension
 ---------
 Explore the ``exampleplotting`` Python module which
-give examples of how to plot output from CLEO with pySD.
+gives examples of how to plot output from CLEO with pySD.
