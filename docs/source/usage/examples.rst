@@ -213,7 +213,7 @@ e.g.
   $ ./constthermo2d.sh
 
 Several plots and animations are produced by this example. If
-you would like to compare to reference solutions,
+you would like to compare to reference solutions
 please :ref:`contact us <contact>`.
 
 Extension
