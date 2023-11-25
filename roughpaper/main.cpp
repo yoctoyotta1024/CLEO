@@ -40,6 +40,32 @@ struct Superdrop
 using viewd_supers = Kokkos::View<Superdrop *>;
 using ExecSpace = Kokkos::DefaultExecutionSpace;
 
+struct SDMMicrophysics
+{
+  void operator()(const viewd_supers supers) const
+  {
+    using team_policy = Kokkos::TeamPolicy<ExecSpace>;
+
+    const size_t nsupers(supers.extent(0));
+
+    double result(0);
+    Kokkos::parallel_reduce(
+        "yAx",
+        team_policy(nsupers, Kokkos::AUTO()),
+        KOKKOS_CLASS_LAMBDA(const team_policy::member_type &teamMember, double &update) {
+          int row = teamMember.league_rank();
+
+          if (teamMember.team_rank() == 0)
+          {
+            update += 1.0 * row;
+          }
+        },
+        result);
+
+    std::cout << "results:" << nsupers << " => " << result << "\n";
+  }
+};
+
 int main(int argc, char *argv[])
 {
  
@@ -55,17 +81,9 @@ int main(int argc, char *argv[])
     }
     Kokkos::deep_copy(supers, h_supers);
     
-    size_t totnnull(0);
-    Kokkos::parallel_reduce(
-        nsupers,
-        [=](int jj, size_t &nnull)
-        {
-          const bool isnull(1);
-          nnull += (size_t)isnull;
-        },
-        totnnull);
+    SDMMicrophysics sdmtest{};
 
-    std::cout << "totnull: " << totnnull << "\n";
+    sdmtest(supers);
   }
   Kokkos::finalize();
 }
