@@ -52,7 +52,8 @@ struct SDMMicrophysics
     Kokkos::parallel_reduce(
         "yAx",
         team_policy(nsupers, Kokkos::AUTO()),
-        KOKKOS_CLASS_LAMBDA(const team_policy::member_type &teamMember, double &update) {
+        KOKKOS_CLASS_LAMBDA(const team_policy::member_type &teamMember,
+                            double &update) {
           int row = teamMember.league_rank();
 
           if (teamMember.team_rank() == 0)

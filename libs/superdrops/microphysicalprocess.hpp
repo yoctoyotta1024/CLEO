@@ -186,7 +186,7 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  run_step(const member_type &teamMember,
+  run_step(const TeamPolicy::member_type &team_member,
            const unsigned int subt,
            subviewd_supers supers,
            State &state,
@@ -194,7 +194,7 @@ public:
   {
     if (on_step(subt))
     {
-      supers = do_microphysics(teamMember, subt, supers,
+      supers = do_microphysics(team_member, subt, supers,
                                state, genpool);
     }
 

@@ -103,7 +103,7 @@ public:
           KOKKOS_CLASS_LAMBDA(const TeamPolicy::member_type &team_member) {
             const int ii = team_member.league_rank();
 
-            if (teamMember.team_rank() == 0)
+            // if (teamMember.team_rank() == 0)
             {
               auto &gbx(d_gbxs(ii));
               auto supers(gbx.supersingbx());
