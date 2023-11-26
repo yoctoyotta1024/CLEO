@@ -41,16 +41,16 @@ perspective and the reduced number of assumptions make SDM easier to
 interpret physically, and therefore a more appealing model. Particularly 
 promising is that SDM can readily incorporate the multitude of attributes 
 of real droplets with only linearly increasing computational complexity. 
-As a consequence superdroplets can, for example, naturally convey information 
+As a consequence Super-Droplets can, for example, naturally convey information 
 about different aerosol properties, which could be used to understand how 
 atmospheric emissions impact rainfall or cloud reflectivity (and therefore 
 the Earth’s energy budget). Alternatively SDM is well suited to modelling 
-the plethora of cloud ice structures, as superdroplet attributes could be 
+the plethora of cloud ice structures, as Super-Droplet attributes could be 
 designed so that different ice habits transition seamlessly between one 
 another. This is in stark contrast to the “curse of dimensionality” which 
 has plagued more complex bin and bulk models in recent decades 
 :cite:`grabowski2019`. The convergence properties of SDM are also a big 
-factor in its conceptual appeal. As the number of superdroplets increases, 
+factor in its conceptual appeal. As the number of Super-Droplets increases, 
 SDM tends towards DNS - or in other words the closest model we have to 
 “true” cloud microphysics. This property arises from the mathematical 
 formulation of SDM and is not likewise fundamental to bulk and bin models.
@@ -65,7 +65,7 @@ makes SDM ideally suited to supercomputers with graphics processing units
 The growth of random access memory (RAM) is also favourable for SDM. 
 Not only does it make SDM’s high memory usage less demanding, but it 
 allows for the improvement of the model’s precision by enabling more 
-superdroplets to be simulated in a domain. It also allows more superdroplet 
+Super-Droplets to be simulated in a domain. It also allows more Super-Droplet 
 attributes and microphysical processes to be incorporated into SDM, thus 
 increasing the fidelity of the model to our understanding of cloud 
 microphysics. With regard to HPC, SDM is highly scalable and advances 
