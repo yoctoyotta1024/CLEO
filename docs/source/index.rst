@@ -17,8 +17,8 @@ The name, CLEO, is a reference to
 It is also an acronym, something like CLEO = Clouds in a Lagrangian Exascale mOdel.
 
 Time to get involved! Start by :doc:`installing CLEO<usage/installation>`
-and exploring some examples. Or jump straight in with the
-:doc:`quickstart<usage/quickstart>` section.
+and exploring some :doc:`examples<usage/examples>`. Or jump straight in
+with the :doc:`quickstart<usage/quickstart>`.
 
 .. toctree::
    :maxdepth: 1
