@@ -34,6 +34,7 @@ the spatial and spectral broadening caused by numerical diffusion
 :cite:`dziekan2019` :cite:`arabasshima2013` 
 :cite:`andrejczuk2010` :cite:`andrejczuk2008`.
 
+.. _sdmadvatages:
 
 In comparison with bulk and bin models, SDM has a number of important
 conceptual and computational advantages :cite:`morrison2019`. The Lagrangian 
