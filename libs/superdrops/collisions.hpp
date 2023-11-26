@@ -174,9 +174,6 @@ private:
     const size_t npairs(supers.extent(0) / 2); // no. pairs of superdroplets
 
     size_t totnnull(0); // number of null superdrops
-
-    // for (size_t jj(0); jj < npairs; ++jj)
-    // {
     Kokkos::parallel_reduce(
         Kokkos::TeamThreadRange(team_member, npairs),
         [=, *this](int jj, size_t &nnull)
@@ -190,8 +187,6 @@ private:
           nnull += (size_t)isnull;
         },
         totnnull);
-    //   totnnull += (size_t)isnull;
-    // }
 
     return totnnull;
   }

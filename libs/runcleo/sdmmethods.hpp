@@ -100,13 +100,12 @@ public:
           KOKKOS_CLASS_LAMBDA(const TeamPolicy::member_type &team_member) {
             const int ii = team_member.league_rank();
 
-            auto &gbx(d_gbxs(ii));
-            auto supers(gbx.supersingbx());
+            auto supers(d_gbxs(ii).supersingbx());
             for (unsigned int subt = t_sdm; subt < t_next;
                  subt = microphys.next_step(subt))
             {
               supers = microphys.run_step(team_member, subt, supers,
-                                          gbx.state, genpool);
+                                          d_gbxs(ii).state, genpool);
             }
 
             team_member.team_barrier(); // synchronize threads
