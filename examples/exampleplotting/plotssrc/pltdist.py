@@ -6,7 +6,7 @@ Created Date: Thursday 23rd October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 23rd October 2023
+Last Modified: Sunday 26th November 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -99,7 +99,7 @@ def numconc_distrib(radius, xi, mass, vol, rspan,
 
 def plot_dists(ax, distribcalc, timesecs, data2plt, t2plts,
                vol, rspan, nbins, masscalc=None,
-               smoothsig=False, perlogR=True):
+               smoothsig=False, perlogR=True, ylog=False):
     
     for t, tplt in enumerate(t2plts):
     
@@ -123,17 +123,21 @@ def plot_dists(ax, distribcalc, timesecs, data2plt, t2plts,
             ax.plot(hcens, hist, label=tlab, color=c)            
         else:
             ax.step(hcens, hist, label=tlab, where='mid', color=c)
-    
+
+    if ylog:
+       ax.set_yscale("log") 
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
     ax.legend()
 
     return ax
 
-def plot_domainmassdens_distribs(timesecs, sddata, t2plts,
+def plot_domainmass_distribs(timesecs, sddata, t2plts,
                                  domainvol, rspan, nbins,
                                  smoothsig=False,
-                                 perlogR=True):
+                                 perlogR=True, 
+                                 ylog=False,
+                                 savename=""):
 
   fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8,6))
   
@@ -144,19 +148,30 @@ def plot_domainmassdens_distribs(timesecs, sddata, t2plts,
   plot_dists(ax, massdens_distrib, timesecs,  
              data2plt, t2plts,
              domainvol, rspan, nbins, sddata.mass,
-             smoothsig=smoothsig, perlogR=perlogR)
+             smoothsig=smoothsig, perlogR=perlogR, ylog=ylog)
   
   if perlogR:
     ax.set_ylabel("droplet mass distribution,\n g(lnR) /g m$^{-3}$ / unit lnR")
   else:
     ax.set_ylabel("droplet mass distribution,\n M(lnR) /g m$^{-3}$")
 
+  fig.tight_layout()
+
+  if savename != "":
+    fig.savefig(savename, dpi=400, bbox_inches="tight",
+                facecolor='w', format="png")
+    print("Figure .png saved as: "+savename)
+  
+  plt.show()
+
   return fig, ax
 
 def plot_domainnsupers_distribs(timesecs, sddata, t2plts,
                                  domainvol, rspan, nbins,
                                  smoothsig=False,
-                                 perlogR=True):
+                                 perlogR=True,
+                                 ylog=False,
+                                 savename=""):
 
   fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8,6))
   
@@ -167,19 +182,30 @@ def plot_domainnsupers_distribs(timesecs, sddata, t2plts,
   plot_dists(ax, nsupers_distrib, timesecs,  
              data2plt, t2plts,
              domainvol, rspan, nbins, None,
-             smoothsig=smoothsig, perlogR=perlogR)
+             smoothsig=smoothsig, perlogR=perlogR, ylog=ylog)
   
   if perlogR:
     ax.set_ylabel("number of superdroplets / unit lnR")
   else:
     ax.set_ylabel("number of superdroplets")
 
+  fig.tight_layout()
+
+  if savename != "":
+    fig.savefig(savename, dpi=400, bbox_inches="tight",
+                facecolor='w', format="png")
+    print("Figure .png saved as: "+savename)
+  
+  plt.show()
+
   return fig, ax
 
 def plot_domainnumconc_distribs(timesecs, sddata, t2plts,
                                  domainvol, rspan, nbins,
                                  smoothsig=False,
-                                 perlogR=True):
+                                 perlogR=True,
+                                 ylog=False,
+                                 savename=""):
 
   fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8,6))
   
@@ -190,11 +216,20 @@ def plot_domainnumconc_distribs(timesecs, sddata, t2plts,
   plot_dists(ax, numconc_distrib, timesecs,  
              data2plt, t2plts,
              domainvol, rspan, nbins, None,
-             smoothsig=smoothsig, perlogR=perlogR)
+             smoothsig=smoothsig, perlogR=perlogR, ylog=ylog)
   
   if perlogR:
     ax.set_ylabel("real droplet concentration /cm$^{-3}$ / unit lnR")
   else:
     ax.set_ylabel("real droplet concentration /cm$^{-3}$")
+
+  fig.tight_layout()
+
+  if savename != "":
+    fig.savefig(savename, dpi=400, bbox_inches="tight",
+                facecolor='w', format="png")
+    print("Figure .png saved as: "+savename)
+  
+  plt.show()
 
   return fig, ax
