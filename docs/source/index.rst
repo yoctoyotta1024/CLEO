@@ -6,11 +6,11 @@
 Welcome to CLEO's Documentation!
 ================================
 
-**CLEO** (/ˌkliːə/ ) is a library for
-Super-Droplet Model (SDM) cloud microphysics.
-
 .. note::
    Please consider that this project is under active development.
+
+**CLEO** (/ˌkliːə/ ) is a library for
+Super-Droplet Model (SDM) cloud microphysics.
 
 The name, CLEO, is a reference to 
 `Cleopatra <https://www.britannica.com/biography/Cleopatra-queen-of-Egypt>`_.

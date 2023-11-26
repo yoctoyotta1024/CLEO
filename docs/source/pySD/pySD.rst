@@ -6,11 +6,11 @@
 PySD
 ====
 
-PySD is CLEO's Python Module with submodules related to generating
-input files and processing the Zarr output from CLEO.
-
 .. note::
    Please consider that this project is under active development.
+
+PySD is CLEO's Python Module with submodules related to generating
+input files and processing the Zarr output from CLEO.
 
 .. toctree::
    :maxdepth: 1

@@ -1,4 +1,4 @@
-Background
-==========
+Background to the Super-Droplet Model (SDM)
+===========================================
 
-This is the motivation behind CLEO.
+Here is SDM.

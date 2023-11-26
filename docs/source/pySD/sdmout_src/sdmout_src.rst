@@ -10,9 +10,6 @@ SDMOut
 SDMOut is a submodule of pySD used for helpful functions related to
 post-processing and plotting output data from CLEO SDM.
 
-.. note::
-   Please consider that this project is under active development.
-
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
