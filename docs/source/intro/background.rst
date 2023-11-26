@@ -54,3 +54,19 @@ factor in its conceptual appeal. As the number of superdroplets increases,
 SDM tends towards DNS - or in other words the closest model we have to 
 “true” cloud microphysics. This property arises from the mathematical 
 formulation of SDM and is not likewise fundamental to bulk and bin models.
+
+From a computational perspective, whilst SDM is prohibitively expensive 
+for current global climate simulations, it is ideally suited to future 
+advances in HPC. The underlying simplicity of the model renders it highly 
+parallelisable and well matched to trends favouring the use of many, 
+extremely fast lightweight processors. As has been shown recently, this 
+makes SDM ideally suited to supercomputers with graphics processing units 
+(GPUs) :cite:`bartmanarabas2021` :cite:`dziekan2019` :cite:`arabas2015`. 
+The growth of random access memory (RAM) is also favourable for SDM. 
+Not only does it make SDM’s high memory usage less demanding, but it 
+allows for the improvement of the model’s precision by enabling more 
+superdroplets to be simulated in a domain. It also allows more superdroplet 
+attributes and microphysical processes to be incorporated into SDM, thus 
+increasing the fidelity of the model to our understanding of cloud 
+microphysics. With regard to HPC, SDM is highly scalable and advances 
+in tandem.
