@@ -99,4 +99,24 @@ viewd_supers shuffle_supers(const viewd_supers supers,
   return supers;
 }
 
+KOKKOS_INLINE_FUNCTION viewd_supers
+onemember_shuffle_supers(const TeamPolicy::member_type &team_member,
+                         const viewd_supers supers,
+                         GenRandomPool genpool)
+/* Use only 1 member of team to randomly shuffle order
+of superdroplet objects in 'supers'. Then synchronise
+team and return view of shuffled supers. Uses genpool
+to get team / thread safe random number generator */
+{
+  Kokkos::single(Kokkos::PerTeam(team_member), [=]()
+                 {
+                    URBG<ExecSpace> urbg{genpool.get_state()};
+                    shuffle_supers(supers, urbg);
+                    genpool.free_state(urbg.gen); });
+
+  team_member.team_barrier(); // synchronize threads
+
+  return supers;
+}
+
 #endif // URBG_HPP
