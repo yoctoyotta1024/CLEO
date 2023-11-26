@@ -135,7 +135,7 @@ using Golovin's kernel.
 
 The plot produced, 
 ``~/CLEO/build/bin/golovin_validation.png``, should be 
-similar to Fig.2(a) of :cite:`Shima2009`.
+similar to Fig.2(a) of :cite:`shima2009`.
 
 // TODO cite properly
 
@@ -221,5 +221,6 @@ Extension
 Explore the ``exampleplotting`` Python module which
 gives examples of how to plot output from CLEO with pySD.
 
-
-.. bibliography:: references.bib
+References
+----------
+.. bibliography:: ../references.bib
