@@ -49,9 +49,10 @@ one you will need to configure it in the following ways:
 These examples are for a 0-D parcel of air expanding and
 contracting adiabatically with a two-way coupling between
 SDM and the thermodynamics. The setup mimics that in
-Arabas and Shima 2017 section 7. Note that due to numerical
-differences, the conditions for cusp bifurcation and the
-plots will not be exactly identical to this reference.
+Arabas and Shima 2017 section 7 :cite:`arabasshima2017`.
+Note that due to numerical differences, the conditions
+for cusp bifurcation and the plots will not be exactly
+identical to this reference.
 
 // TODO cite properly
 
@@ -75,9 +76,7 @@ a) Arabas and Shima 2017
 The plots produced, 
 ``~/CLEO/build/bin/as2017_fig_[x].png``, should be 
 similar to the columns of figure 5 from Arabas and
-Shima 2017.
-
-// TODO cite properly
+Shima 2017 :cite:`arabasshima2017`.
 
 b) Cusp Bifurcation
 ###################
@@ -93,9 +92,7 @@ The plots produced,
 ``~/CLEO/build/bin/cuspbifurc_SDgrowth.png`` 
 illustrate an example of cusp bifurcation, analagous to the 
 third column of figure 5 from Arabas and
-Shima 2017.
-
-// TODO cite properly
+Shima 2017 :cite:`arabasshima2017`.
 
 2) Box Model Collisions
 -----------------------
@@ -135,19 +132,17 @@ using Golovin's kernel.
 
 The plot produced, 
 ``~/CLEO/build/bin/golovin_validation.png``, should be 
-similar to Fig.2(a) of :cite:`shima2009`.
-
-// TODO cite properly
+similar to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
 b) Long
 #######
 This example is a 0-D box model with only collision-coalescence 
 using Long's collision efficiency as given by equation 13 of
-Simmel et al. 2002.
+Simmel et al. 2002 :cite:`simmel2002`.
 
 The plot produced, 
 ``~/CLEO/build/bin/long_validation.png``, should be 
-similar to Fig.2(b) of Shima et al. 2009.
+similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
 
 // TODO cite properly
 
@@ -155,8 +150,9 @@ c) Low and List
 ###############
 This example is a 0-D box model with only collision-coalescence 
 using the hydrodynamic kernel with Long's collision efficiency as
-given by equation 13 of Simmel et al. 2002, and the coalescence 
-efficiency from Low and List 1982(a) (see also McFarquhar 2004).
+given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the coalescence 
+efficiency from Low and List 1982(a) :cite:`lowlist1982a`
+(see also McFarquhar 2004 :cite:`mcfarquhar2004`).
 This example produces a plot ``~/CLEO/build/bin/lowlist_validation.png``.
 
 // TODO cite properly

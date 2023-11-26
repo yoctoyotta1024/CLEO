@@ -60,7 +60,7 @@ extensions = [
 
 # configuration of citations using bibtex file(s)
 bibtex_bibfiles = ['./references.bib']
-bibtex_reference_style = 'author_year'
+bibtex_reference_style = 'label'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
