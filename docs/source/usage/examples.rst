@@ -54,8 +54,6 @@ Note that due to numerical differences, the conditions
 for cusp bifurcation and the plots will not be exactly
 identical to this reference.
 
-// TODO cite properly
-
 1. Navigate to the ``adiabaticparcel/`` directory,
 e.g.
 
@@ -144,8 +142,6 @@ The plot produced,
 ``~/CLEO/build/bin/long_validation.png``, should be 
 similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
 
-// TODO cite properly
-
 c) Low and List
 ###############
 This example is a 0-D box model with only collision-coalescence 
@@ -154,8 +150,6 @@ given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the coalescen
 efficiency from Low and List 1982(a) :cite:`lowlist1982a`
 (see also McFarquhar 2004 :cite:`mcfarquhar2004`).
 This example produces a plot ``~/CLEO/build/bin/lowlist_validation.png``.
-
-// TODO cite properly
 
 3) Divergence Free Motion
 -------------------------
