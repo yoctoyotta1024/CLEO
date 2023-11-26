@@ -216,7 +216,3 @@ Extension
 ---------
 Explore the ``exampleplotting`` Python module which
 gives examples of how to plot output from CLEO with pySD.
-
-References
-----------
-.. bibliography:: ../references.bib

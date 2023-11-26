@@ -35,6 +35,7 @@ and exploring some examples. Or jump straight in with the
 
    GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
    usage/contact
+   references
 
 Questions?
 ----------

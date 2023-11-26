@@ -21,6 +21,7 @@ Super-Droplet Model (SDM) cloud microphysics.
    monoids
    coupling
    timestepping
+   kokkos
 
 Questions?
 ----------
