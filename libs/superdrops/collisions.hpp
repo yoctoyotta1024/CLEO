@@ -174,23 +174,24 @@ private:
     const size_t npairs(supers.extent(0) / 2); // no. pairs of superdroplets
 
     size_t totnnull(0); // number of null superdrops
-    for (size_t jj(0); jj < npairs; ++jj)
-    {
-    // Kokkos::parallel_reduce(
-    //     Kokkos::TeamThreadRange(team_member, npairs),
-    //     [=, *this](int jj, size_t &nnull)
-    //     {
+
+    // for (size_t jj(0); jj < npairs; ++jj)
+    // {
+    Kokkos::parallel_reduce(
+        Kokkos::TeamThreadRange(team_member, npairs),
+        [=, *this](int jj, size_t &nnull)
+        {
           const int kk(jj * 2);
           const bool isnull(collide_superdroplet_pair(supers(kk),
                                                       supers(kk + 1),
                                                       genpool,
                                                       scale_p,
                                                       VOLUME));
-          // nnull += (size_t)isnull;
-        // },
-        // totnnull);
-    totnnull += (size_t)isnull;
-    }
+          nnull += (size_t)isnull;
+        },
+        totnnull);
+    //   totnnull += (size_t)isnull;
+    // }
 
     return totnnull;
   }
@@ -214,13 +215,18 @@ private:
 
     /* Randomly shuffle order of superdroplet objects
     in order to generate random pairs */
-    URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
-    shuffle_supers(supers, urbg);
-    genpool.free_state(urbg.gen);
+    if (team_member.team_rank() == 0)
+    {
+      URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
+      shuffle_supers(supers, urbg);
+      genpool.free_state(urbg.gen);
+    }
+    team_member.team_barrier(); // synchronize threads
 
     /* collide all randomly generated pairs of SDs */
     size_t nnull(collide_supers(team_member, supers, genpool,
                                 scale_p, VOLUME)); // number of null superdrops
+  
 
     // return remove_null_supers(supers, nnull);
     return is_null_supers(supers, nnull);

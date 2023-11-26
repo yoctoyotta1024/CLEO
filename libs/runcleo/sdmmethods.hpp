@@ -96,24 +96,20 @@ public:
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "sdm_microphysics",
-          // Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
-          // KOKKOS_CLASS_LAMBDA(const size_t ii) {
-          // const size_t teamMember = 0;
           TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const TeamPolicy::member_type &team_member) {
             const int ii = team_member.league_rank();
 
-            if (team_member.team_rank() == 0)
+            auto &gbx(d_gbxs(ii));
+            auto supers(gbx.supersingbx());
+            for (unsigned int subt = t_sdm; subt < t_next;
+                 subt = microphys.next_step(subt))
             {
-              auto &gbx(d_gbxs(ii));
-              auto supers(gbx.supersingbx());
-              for (unsigned int subt = t_sdm; subt < t_next;
-                   subt = microphys.next_step(subt))
-              {
-                supers = microphys.run_step(team_member, subt, supers,
-                                            gbx.state, genpool);
-              }
+              supers = microphys.run_step(team_member, subt, supers,
+                                          gbx.state, genpool);
             }
+
+            team_member.team_barrier(); // synchronize threads
           });
     }
   } sdm_microphysics; // operator is call for SDM microphysics
