@@ -207,7 +207,7 @@ private:
   {
     /* Randomly shuffle order of superdroplet objects
     in supers in order to generate random pairs */
-    supers = onemember_shuffle_supers(team_member, supers, genpool);
+    supers = one_shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
     size_t nnull(collide_supers(team_member, supers, state, genpool)); // number of null superdrops

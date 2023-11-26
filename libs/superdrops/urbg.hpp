@@ -100,9 +100,9 @@ viewd_supers shuffle_supers(const viewd_supers supers,
 }
 
 KOKKOS_INLINE_FUNCTION viewd_supers
-onemember_shuffle_supers(const TeamPolicy::member_type &team_member,
-                         const viewd_supers supers,
-                         GenRandomPool genpool)
+one_shuffle_supers(const TeamPolicy::member_type &team_member,
+                   const viewd_supers supers,
+                   GenRandomPool genpool)
 /* Use only 1 member of team to randomly shuffle order
 of superdroplet objects in 'supers'. Then synchronise
 team and return view of shuffled supers. Uses genpool
