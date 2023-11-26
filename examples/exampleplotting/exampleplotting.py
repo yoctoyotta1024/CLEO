@@ -66,22 +66,19 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 ds = pyzarr.get_rawdataset(dataset)
 
 time = pyzarr.get_time(ds)
-thermodata = pyzarr.get_thermodata(ds, config["ntime"], gbxs["ndims"], consts)
 sddata = pyzarr.get_supers(ds, consts)
-gbxindex = pyzarr.get_gbxindex(ds, gbxs["ndims"])
-totnsupers = pyzarr.get_totnsupers(ds)
-nsupers = pyzarr.get_nsupers(ds, config["ntime"], gbxs["ndims"])
 ### ---------------------------------------------------------------- ###
 
 ### ----------------- plot individual superdroplets ---------------- ###
 savename = ""
 if savefig:
   savename = savefigpath+"/randomsample_attrs.png"
-pltsds.plot_randomsample_superdrops(time, sddata, totnsupers[0], 
+pltsds.plot_randomsample_superdrops(time, sddata, config["totnsupers"], 
                                     nsample, savename=savename)
 if savefig:
   savename = savefigpath+"/randomsample_2dmotion.png"
-pltsds.plot_randomsample_superdrops_2dmotion(sddata, totnsupers[0], nsample, arrows=False)
+pltsds.plot_randomsample_superdrops_2dmotion(sddata, config["totnsupers"], 
+                                             nsample, arrows=False)
 ### ---------------------------------------------------------------- ###
 
 ### ------------------ plot droplet distributions ------------------ ###
