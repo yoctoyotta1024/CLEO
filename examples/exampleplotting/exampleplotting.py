@@ -37,7 +37,7 @@ setuptxt = "/home/m/m300950/CLEO/build/bin/setup.txt"
 gridfile = "/home/m/m300950/CLEO/build/share/dimlessGBxboundaries.dat"
 
 ### whether and where to save figures
-savefig = True
+savefig = False 
 savefigpath = "./"
 
 ### individual superdroplet plotting parameters
