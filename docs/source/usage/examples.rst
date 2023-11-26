@@ -4,7 +4,7 @@ Examples
 ========
 
 There are several test cases for CLEO, each with different builds,
-domains, microphysics, coupling, superdroplet motion etc. They can be 
+domains, microphysics, coupling, Super-Droplet motion etc. They can be 
 found in the ``CLEO/examples`` directory. 
 
 Each example can be run by building CLEO with the relevant main program
@@ -97,7 +97,7 @@ Shima 2017 :cite:`arabasshima2017`.
 2) Box Model Collisions
 -----------------------
 
-Due to the randomness of the initial superdroplet conditions and
+Due to the randomness of the initial Super-Droplet conditions and
 the collision-coalescence algorithm, each run of these examples
 will not be completely identical, but they should be reasonably
 similar, and have the same mean behaviour.
@@ -179,10 +179,10 @@ e.g.
 
   $ ./divfree2d.sh
 
-This example plots the motion of superdroplets without
+This example plots the motion of Super-Droplets without
 sedimentation in a 2-D divergence free wind field
 (see ``~/CLEO/build/bin/df2d_motion2d_validation.png``).
-The number of superdroplets in the domain should remain
+The number of Super-Droplets in the domain should remain
 constant over time
 (see ``~/CLEO/build/bin/df2d_totnsupers_validation.png``).
 
