@@ -17,14 +17,15 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 File Description:
 '''
 
-
+import os
 import sys
 import numpy as np
 import xarray as xr
 import awkward as ak
 import matplotlib.pyplot as plt
 
-sys.path.append('../..//CLEO/') # path to pySD
+path2pySD = os.path.dirname(os.path.realpath(__file__))+"/../../"
+sys.path.append(path2pySD)
 from pySD.sdmout_src import *
 from pySD.sdmout_src import sdtracing
 from plotssrc import pltmoms, pltsds, pltdist
