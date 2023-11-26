@@ -159,7 +159,7 @@ private:
   KOKKOS_INLINE_FUNCTION size_t
   collide_supers(const TeamPolicy::member_type &team_member,
                  subviewd_supers supers,
-                 const State &state,
+                 const double volume, 
                  GenRandomPool genpool) const
   /* Enacts collisions for pairs of superdroplets in supers
   like for collision-coalescence in Shima et al. 2009.
@@ -173,7 +173,7 @@ private:
     const size_t nsupers(supers.extent(0));
     const size_t npairs(nsupers / 2); // no. pairs of superdroplets (same as floor() for positive nsupers)
     const double scale_p(nsupers * (nsupers - 1.0) / (2.0 * npairs));
-    const double VOLUME(state.get_volume() * dlc::VOL0); // volume in which collisions occur [m^3]
+    const double VOLUME(volume * dlc::VOL0); // volume in which collisions occur [m^3]
 
     size_t totnnull(0); // number of null superdrops
     Kokkos::parallel_reduce(
@@ -196,7 +196,7 @@ private:
   KOKKOS_INLINE_FUNCTION subviewd_supers
   do_collisions(const TeamPolicy::member_type &team_member,
                 subviewd_supers supers,
-                const State &state,
+                const double volume,
                 GenRandomPool genpool) const
   /* Superdroplet collision method adapted from collision-coalescence
   in Shima et al. 2009. This function shuffles supers to get
@@ -210,7 +210,7 @@ private:
     supers = one_shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
-    size_t nnull(collide_supers(team_member, supers, state, genpool)); // number of null superdrops
+    size_t nnull(collide_supers(team_member, supers, volume, genpool)); // number of null superdrops
   
     return is_null_supers(supers, nnull);
   }
@@ -230,7 +230,8 @@ public:
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    return do_collisions(team_member, supers, state, genpool);
+    return do_collisions(team_member, supers,
+                         state.get_volume(), genpool);
   }
 };
 
