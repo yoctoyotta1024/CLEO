@@ -159,9 +159,8 @@ private:
   KOKKOS_INLINE_FUNCTION size_t
   collide_supers(const TeamPolicy::member_type &team_member,
                  subviewd_supers supers,
-                 GenRandomPool genpool, 
-                 const double scale_p,
-                 const double VOLUME) const
+                 const State &state,
+                 GenRandomPool genpool) const
   /* Enacts collisions for pairs of superdroplets in supers
   like for collision-coalescence in Shima et al. 2009.
   Assumes supers is already randomly shuffled and these
@@ -171,7 +170,10 @@ private:
   Kokkos::parallel_reduce is equivalent to summing nnull
   over for loop: for (size_t jj(0); jj < npairs; ++jj) {[...]} */
   {
-    const size_t npairs(supers.extent(0) / 2); // no. pairs of superdroplets
+    const size_t nsupers(supers.extent(0));
+    const size_t npairs(nsupers / 2); // no. pairs of superdroplets (same as floor() for positive nsupers)
+    const double scale_p(nsupers * (nsupers - 1.0) / (2.0 * npairs));
+    const double VOLUME(state.get_volume() * dlc::VOL0); // volume in which collisions occur [m^3]
 
     size_t totnnull(0); // number of null superdrops
     Kokkos::parallel_reduce(
@@ -203,21 +205,13 @@ private:
   are colliding some 'VOLUME' [m^3]). Function is called inside
   a parallelised loop for member 'teamMember'. */
   {
-    const double VOLUME(state.get_volume() * dlc::VOL0); // volume in which collisions occur [m^3]
-    const size_t nsupers(supers.extent(0));
-    const size_t nhalf(nsupers / 2); // same as floor() for positive nsupers
-    const double scale_p(nsupers * (nsupers - 1.0) / (2.0 * nhalf));
-
     /* Randomly shuffle order of superdroplet objects
     in supers in order to generate random pairs */
     supers = onemember_shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
-    size_t nnull(collide_supers(team_member, supers, genpool,
-                                scale_p, VOLUME)); // number of null superdrops
+    size_t nnull(collide_supers(team_member, supers, state, genpool)); // number of null superdrops
   
-
-    // return remove_null_supers(supers, nnull);
     return is_null_supers(supers, nnull);
   }
 
