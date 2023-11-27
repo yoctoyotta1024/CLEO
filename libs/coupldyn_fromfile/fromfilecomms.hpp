@@ -33,6 +33,15 @@ struct FromFileComms
 coupldyn sends information to h_gbxs but doesn't
 receive any back. Struct obeys coupling comms concept */
 {
+private:
+  void update_gridbox_state(const FromFileDynamics &ffdyn,
+                            const size_t ii,
+                            Gridbox &gbx) const;
+  /* updates the state of a gridbox using information
+  received from FromFileDynamics solver for 1-way
+  coupling to CLEO SDM */ 
+
+public:
   template <typename CD = FromFileDynamics>
   void send_dynamics(const viewh_constgbx h_gbxs,
                      FromFileDynamics &ffdyn) const {}
@@ -45,6 +54,8 @@ receive any back. Struct obeys coupling comms concept */
   /* update Gridboxes' states using information
   received from FromFileDynamics solver for
   1-way coupling to CLEO SDM */
+
+
 };
 
 #endif // FROMFILECOMMS_HPP

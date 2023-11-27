@@ -36,20 +36,34 @@ when in serial */
   Kokkos::parallel_for(
       "receive_dynamics",
       Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-      [=](const size_t ii)
+      [=, *this](const size_t ii)
       {
-        State &state(h_gbxs(ii).state);
-
-        state.press = ffdyn.get_press(ii);
-        state.temp = ffdyn.get_temp(ii);
-        state.qvap = ffdyn.get_qvap(ii);
-        state.qcond = ffdyn.get_qcond(ii);
-
-        state.wvel = ffdyn.get_wvel(ii);
-        state.uvel = ffdyn.get_uvel(ii);
-        state.vvel = ffdyn.get_vvel(ii);
+        update_gridbox_state(ffdyn, ii, h_gbxs(ii));
       });
 }
+
+void FromFileComms::update_gridbox_state(const FromFileDynamics &ffdyn,
+                                         const size_t ii,
+                                         Gridbox &gbx) const
+/* updates the state of a gridbox using information
+received from FromFileDynamics solver for 1-way
+coupling to CLEO SDM */
+{
+  State &state(gbx.state);
+
+  state.press = ffdyn.get_press(ii);
+  state.temp = ffdyn.get_temp(ii);
+  state.qvap = ffdyn.get_qvap(ii);
+  state.qcond = ffdyn.get_qcond(ii);
+
+  state.wvel = ffdyn.get_wvel(ii);
+  state.uvel = ffdyn.get_uvel(ii);
+  state.vvel = ffdyn.get_vvel(ii);
+}
+
+template void FromFileComms::
+    send_dynamics<FromFileDynamics>(const viewh_constgbx,
+                                    FromFileDynamics &) const;
 
 template void FromFileComms::
     receive_dynamics<FromFileDynamics>(const FromFileDynamics &,
