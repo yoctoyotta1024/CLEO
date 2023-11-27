@@ -106,7 +106,7 @@ Superdrop GenSuperdrop::operator()(const unsigned int kk) const
   const unsigned int sdgbxindex(initdata.sdgbxindexes.at(kk));
   const std::array<double, 3> coords312(coords_at(kk));
   const SuperdropAttrs attrs(attrs_at(kk));
-  const auto sdId(sdIdGen->next());
+  const auto sdId(sdIdGen->next((size_t)kk));
 
   return Superdrop(sdgbxindex, coords312[0],
                    coords312[1], coords312[2],

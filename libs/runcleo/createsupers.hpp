@@ -72,7 +72,7 @@ returns superdrops generated from them */
 {
 private:
   unsigned int nspacedims;
-  std::unique_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
+  std::shared_ptr<Superdrop::IDType::Gen> sdIdGen; // pointer to superdrop id generator
   InitSupersData initdata;
 
   std::array<double, 3> coords_at(const unsigned int kk) const;
@@ -83,7 +83,7 @@ public:
   template <typename SuperdropInitConds>
   GenSuperdrop(const SuperdropInitConds &sdic)
       : nspacedims(sdic.get_nspacedims()),
-        sdIdGen(std::make_unique<Superdrop::IDType::Gen>())
+        sdIdGen(std::make_shared<Superdrop::IDType::Gen>())
         {
           sdic.fetch_data(initdata); 
         }
@@ -145,10 +145,13 @@ spatial coordinates and attributes */
   const GenSuperdrop gen_superdrop(sdic);
 
   auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
-  for (size_t kk(0); kk < totnsupers; ++kk)
-  {
-    h_supers(kk) = gen_superdrop(kk); // TODO paralellise on host?
-  }
+  Kokkos::parallel_for(
+      "initialise_supers_on_host",
+      Kokkos::RangePolicy<HostSpace>(0, totnsupers),
+      [=](const size_t kk)
+      {
+        h_supers(kk) = gen_superdrop(kk);
+      });
 
   return h_supers;
 }

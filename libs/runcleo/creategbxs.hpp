@@ -165,7 +165,7 @@ each gridbox's volume*/
 
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    h_gbxs(ii) = gen(ii, gbxmaps, totsupers); // TODO parallelise on host?
+    h_gbxs(ii) = gen(ii, gbxmaps, totsupers);
   }
 }
 

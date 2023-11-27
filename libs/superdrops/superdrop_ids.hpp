@@ -37,6 +37,11 @@ struct IntID
   {
   public:
     KOKKOS_INLINE_FUNCTION IntID next() { return {_id++}; }
+    
+    KOKKOS_INLINE_FUNCTION IntID next(const size_t id)
+    {
+      return {id};
+    }
 
   private:
     size_t _id = 0;
@@ -50,6 +55,11 @@ struct EmptyID
   {
   public:
     KOKKOS_INLINE_FUNCTION EmptyID next() { return {}; }
+    
+    KOKKOS_INLINE_FUNCTION EmptyID next(const unsigned int kk)
+    {
+      return {};
+    }
   };
 };
 
