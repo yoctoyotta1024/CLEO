@@ -51,18 +51,21 @@ private:
   ImplicitEuler impe;                 // implicit euler solver
 
   KOKKOS_FUNCTION
-  void do_condensation(const subviewd_supers supers, State &state) const;
+  void do_condensation(const TeamPolicy::member_type &team_member,
+                       const subviewd_supers supers,
+                       State &state) const;
   /* Enacts condensation / evaporation microphysical process.
   Change to superdroplet radii and temp, qv and qc due to
   sum of radii changes via diffusion and condensation of
   water vapour during timestep delt. Using equations
   from "An Introduction To Clouds...." (see note at top of file) */
 
-  KOKKOS_FUNCTION
-  double superdroplets_change(const subviewd_supers supers,
-                              const double temp,
-                              const double s_ratio,
-                              const double ffactor) const;
+  KOKKOS_FUNCTION double
+  superdroplets_change(const TeamPolicy::member_type &team_member,
+                       const subviewd_supers supers,
+                       const double temp,
+                       const double s_ratio,
+                       const double ffactor) const;
   /* returns total change in liquid water mass
   in parcel volume 'mass_condensed' by enacting
   superdroplets' condensation / evaporation */
@@ -107,7 +110,7 @@ public:
   ConstTstepMicrophysics instance (*hint* which itself
   satsifies the MicrophysicalProcess concept) */
   {
-    do_condensation(supers, state);
+    do_condensation(team_member, supers, state);
     return supers;
   }
 };
@@ -140,8 +143,10 @@ constant timestep 'interval' given the
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 KOKKOS_FUNCTION
-void DoCondensation::do_condensation(const subviewd_supers supers,
-                                     State &state) const
+void DoCondensation::
+    do_condensation(const TeamPolicy::member_type &team_member,
+                    const subviewd_supers supers,
+                    State &state) const
 /* Enacts condensation / evaporation microphysical process.
 Change to superdroplet radii and temp, qv and qc due to
 sum of radii changes via diffusion and condensation of
@@ -158,7 +163,8 @@ from "An Introduction To Clouds...." (see note at top of file) */
   const double s_ratio(supersaturation_ratio(press, qvap, psat));
   const double ffactor(diffusion_factor(press, temp, psat));
 
-  double totmass_condensed(superdroplets_change(supers,
+  double totmass_condensed(superdroplets_change(team_member,
+                                                supers,
                                                 temp,
                                                 s_ratio,
                                                 ffactor));
@@ -173,13 +179,15 @@ from "An Introduction To Clouds...." (see note at top of file) */
 
 KOKKOS_FUNCTION
 double DoCondensation::
-    superdroplets_change(const subviewd_supers supers,
+    superdroplets_change(const TeamPolicy::member_type &team_member,
+                         const subviewd_supers supers,
                          const double temp,
                          const double s_ratio,
                          const double ffactor) const
-/* returns total change in liquid water mass
-in parcel volume 'mass_condensed' by enacting
-superdroplets' condensation / evaporation */
+/* returns total change in liquid water mass in parcel volume, 
+'mass_condensed', by enacting superdroplets' condensation / evaporation. 
+Kokkos::parallel_reduce is equivalent to summing deltamass
+over for loop: for (size_t kk(0); kk < nsupers; ++kk) {[...]} */
 {
   const size_t nsupers(supers.extent(0));
   
