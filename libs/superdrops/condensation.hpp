@@ -194,7 +194,7 @@ over for loop: for (size_t kk(0); kk < nsupers; ++kk) {[...]} */
   Kokkos::parallel_reduce(
       "superdroplets_change",
       Kokkos::TeamThreadRange(team_member, nsupers),
-      [=, *this](size_t kk, double &mass_condensed)
+      [=, *this](const size_t kk, double &mass_condensed)
       {
         const double deltamass(superdrop_mass_change(supers(kk), temp,
                                                      s_ratio, ffactor));

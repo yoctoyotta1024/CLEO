@@ -179,7 +179,7 @@ private:
     Kokkos::parallel_reduce(
         "collide_supers",
         Kokkos::TeamThreadRange(team_member, npairs),
-        [=, *this](size_t jj, size_t &nnull)
+        [=, *this](const size_t jj, size_t &nnull)
         {
           const size_t kk(jj * 2);
           const bool isnull(collide_superdroplet_pair(supers(kk),
