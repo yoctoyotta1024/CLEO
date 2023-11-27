@@ -45,10 +45,11 @@ after updating their gridbox indexes concordantly */
 {
   M motion;
 
+  KOKKOS_INLINE_FUNCTION
   void move_supers_in_gbx(const unsigned int gbxindex,
                           const GbxMaps &gbxmaps,
                           const State &state,
-                          const subviewd_supers supers)
+                          const subviewd_supers supers) const
   /* enact steps (1) and (2) movement of superdroplets for 1 gridbox:
   (1) update their spatial coords according to type of motion. (device)
   (1b) optional detect precipitation (device)
