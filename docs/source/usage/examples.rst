@@ -5,7 +5,8 @@ Examples
 
 There are several test cases for CLEO, each with different builds,
 domains, microphysics, coupling, Super-Droplet motion etc. They can be 
-found in the ``CLEO/examples`` directory. 
+found in the ``CLEO/examples`` directory.  If you would like to
+a copy of the reference solutions please :ref:`contact us <contact>`. 
 
 Each example can be run by building CLEO with the relevant main program
 and then executing the associated Python script. For running on
