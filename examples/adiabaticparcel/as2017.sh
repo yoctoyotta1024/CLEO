@@ -27,17 +27,18 @@ gcc="gcc"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
-kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                          # flags for host parallelism (e.g. using OpenMP)
+kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON"                 # serial kokkos
+# kokkoshost=""                                                                 # flags for host parallelism (e.g. using OpenMP)
 # kokkosdevice=""
-kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"   # flags for device parallelism (e.g. using CUDA)
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                          # flags for host parallelism (e.g. using OpenMP)
+kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"           # flags for device parallelism (e.g. using CUDA)
 ### ---------------------------------------------------- ###
 
 ### ------------------------ build --------------------- ###
 ### build CLEO using cmake (with openMP thread parallelism through Kokkos)
-buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}"
+buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
 echo ${buildcmd}
-CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}
+CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}
 
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads

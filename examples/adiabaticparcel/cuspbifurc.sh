@@ -27,8 +27,8 @@ gcc="gcc"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
-kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                          # flags for host parallelism (e.g. using OpenMP)
+kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON"                 # serial kokkos
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                          # flags for host parallelism (e.g. using OpenMP)
 kokkosdevice=""
 ### ---------------------------------------------------- ###
 
