@@ -166,7 +166,8 @@ from "An Introduction To Clouds...." (see note at top of file) */
   double totmass_condensed(superdroplets_change(team_member,
                                                 supers,
                                                 state));
-
+  team_member.team_barrier(); // synchronize threads
+  
   /* resultant effect on thermodynamic state */
   effect_on_thermodynamic_state(team_member, totmass_condensed, state);
 }
