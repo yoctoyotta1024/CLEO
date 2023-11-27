@@ -162,15 +162,7 @@ sum of radii changes via diffusion and condensation of
 water vapour during timestep delt. Using equations
 from "An Introduction To Clouds...." (see note at top of file) */
 {
-  const double press(state.press);
-  const double temp(state.temp);
-  const double qvap(state.qvap);
-
   /* superdroplet radii changes */
-  const double VOLUME(state.get_volume() * dlc::VOL0);    // volume in which condensation occurs [m^3]
-  const double psat(saturation_pressure(temp));
-  const double s_ratio(supersaturation_ratio(press, qvap, psat));
-  const double ffactor(diffusion_factor(press, temp, psat));
 
   double totmass_condensed(superdroplets_change(team_member,
                                                 supers,
@@ -179,20 +171,14 @@ from "An Introduction To Clouds...." (see note at top of file) */
                                                 ffactor));
 
   /* resultant effect on thermodynamic state */
-  if (doAlterThermo)
-  {
-    const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
-    state_change(totrho_condensed, state);
-  }
+  effect_on_thermodynamic_state(team_member, totmass_condensed, state);
 }
 
 KOKKOS_FUNCTION
 double DoCondensation::
     superdroplets_change(const TeamPolicy::member_type &team_member,
                          const subviewd_supers supers,
-                         const double temp,
-                         const double s_ratio,
-                         const double ffactor) const
+                         const State &state) const
 /* returns total change in liquid water mass in parcel volume, 
 'mass_condensed', by enacting superdroplets' condensation / evaporation. 
 Kokkos::parallel_reduce is equivalent to summing deltamass
