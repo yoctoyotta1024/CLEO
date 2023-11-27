@@ -21,14 +21,12 @@
 module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
+
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
 configfile=${HOME}/CLEO/src/config/config.txt
-python=python
 
-# path2CLEO=${HOME}/Documents/b2_springsummer2023/CLEO/
-# path2build=${HOME}/Documents/b2_springsummer2023/CLEO/build/
-# python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
+python=python
 ### ---------------------------------------------------- ###
 
 ### ------------------- compile_run.sh ----------------- ###

@@ -16,7 +16,10 @@
 ### ----  and paths for CLEO and build directories  ---- ###
 module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
+module load nvhpc/23.7-gcc-11.2.0
+spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
+
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
 configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.txt 
@@ -24,14 +27,15 @@ configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.txt
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"
 gcc="gcc"
+cuda="nvc++"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON"                 # serial kokkos
-# kokkoshost=""                                                                 # flags for host parallelism (e.g. using OpenMP)
-# kokkosdevice=""
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                          # flags for host parallelism (e.g. using OpenMP)
+# kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                          # flags for host parallelism (e.g. using OpenMP)
+kokkoshost=""                                                                 # flags for host parallelism (e.g. using OpenMP)
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"           # flags for device parallelism (e.g. using CUDA)
+# kokkosdevice=""
 ### ---------------------------------------------------- ###
 
 ### ------------------------ build --------------------- ###

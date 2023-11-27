@@ -19,6 +19,7 @@ module load python3/2022.01-gcc-11.2.0
 module load nvhpc/23.7-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
+
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
 configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.txt 
@@ -31,10 +32,10 @@ cuda="nvc++"
 
 ### ------------ choose Kokkos configuration ----------- ###
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                          # flags for host parallelism (e.g. using OpenMP)
-kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"   # flags for device parallelism (e.g. using CUDA)
-# kokkoshost=""                                                     
-# kokkosdevice=""   # flags for device parallelism (e.g. using CUDA)
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                          # flags for host parallelism (e.g. using OpenMP)
+# kokkoshost=""                                                                 
+kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"           # flags for device parallelism (e.g. using CUDA)
+# kokkosdevice=""
 ### ---------------------------------------------------- ###
 
 ### ------------------------ build --------------------- ###

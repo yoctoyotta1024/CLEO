@@ -143,7 +143,7 @@ inline auto create_sdm(const Config &config,
   const unsigned int couplstep(tsteps.get_couplstep());
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
-  const Motion<CartesianMaps> auto movesupers(NullMotion{});
+  const Motion<CartesianMaps> auto movesupers = NullMotion{};
   const Observer auto obs(create_observer(config, tsteps, store));
 
   return SDMMethods(couplstep, gbxmaps,
