@@ -46,7 +46,8 @@ after updating their gridbox indexes concordantly */
   M motion;
 
   KOKKOS_INLINE_FUNCTION
-  void move_supers_in_gbx(const unsigned int gbxindex,
+  void move_supers_in_gbx(const TeamPolicy::member_type &team_member,
+                          const unsigned int gbxindex,
                           const GbxMaps &gbxmaps,
                           const State &state,
                           const subviewd_supers supers) const
@@ -55,8 +56,15 @@ after updating their gridbox indexes concordantly */
   (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device) */
   {
-    for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise on device
-    {
+    // for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise on device
+    // {
+    const size_t nsupers(supers.extent(0));
+    Kokkos::parallel_for(
+      "move_superdrops_in_gbx",
+      Kokkos::TeamThreadRange(team_member, nsupers),
+      [=, *this](size_t kk)
+      {
+
       /* step (1) */
       motion.update_superdrop_coords(gbxindex,
                                      gbxmaps,
@@ -70,7 +78,7 @@ after updating their gridbox indexes concordantly */
       motion.update_superdrop_gbxindex(gbxindex,
                                        gbxmaps,
                                        supers(kk));
-    }
+    });
   }
 
   void move_supers_in_gridboxes(const GbxMaps &gbxmaps,
@@ -85,12 +93,19 @@ after updating their gridbox indexes concordantly */
   {
     const size_t ngbxs(d_gbxs.extent(0));
 
+    // Kokkos::parallel_for(
+    //     "move_superdrops_in_domain",
+    //     Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+    //     KOKKOS_CLASS_LAMBDA(const size_t ii) {
     Kokkos::parallel_for(
         "move_superdrops_in_domain",
-        Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
-        KOKKOS_CLASS_LAMBDA(const size_t ii) {
+        TeamPolicy(ngbxs, Kokkos::AUTO()),
+        KOKKOS_CLASS_LAMBDA(const TeamPolicy::member_type &team_member) {
+          const int ii = team_member.league_rank();
+
           auto &gbx(d_gbxs(ii));
-          move_supers_in_gbx(gbx.get_gbxindex(),
+          move_supers_in_gbx(team_member,
+                             gbx.get_gbxindex(),
                              gbxmaps,
                              gbx.state,
                              gbx.supersingbx());
