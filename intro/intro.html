@@ -2,8 +2,8 @@
 <html class="no-js" lang="en" data-content_root="../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Background" href="background.html" /><link rel="prev" title="Welcome to CLEO’s Documentation!" href="../index.html" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Background to the Super-Droplet Model (SDM)" href="background.html" /><link rel="prev" title="Welcome to CLEO’s Documentation!" href="../index.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>Programming Guide - CLEO 4.0 documentation</title>
@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -158,14 +158,15 @@
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Programming Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Programming Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="background.html">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="background.html">Background to the Super-Droplet Model (SDM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="motivation.html">Motivation for CLEO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="monoids.html">Monoids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coupling.html">Coupling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timestepping.html">Timestepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kokkos.html">Kokkos</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#questions">Questions?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
@@ -211,6 +212,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../pySD/pySD.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/contact.html">Contact Us!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
 </div>
@@ -239,7 +241,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -247,26 +249,32 @@
         <article role="main">
           <section id="programming-guide">
 <h1>Programming Guide<a class="headerlink" href="#programming-guide" title="Link to this heading">#</a></h1>
-<p><strong>CLEO</strong> (/ˌkliːə/ ) is a library for
-Super-Droplet Model (SDM) cloud microphysics.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Please consider that this project is under active development.</p>
 </div>
+<p>It seems apparent that a new implementation of SDM is required;
+capable of modelling warm rain in LES with realistic boundary
+conditions and large scale forcings, and capable of application
+in large regional domains, with horizontal extents O(100km). CLEO is
+an attempt to build such a SDM. It strives to be a library for SDM
+to model warm clouds with exceptional computational performance.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="background.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background to the Super-Droplet Model (SDM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation for CLEO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="monoids.html">Monoids</a></li>
 <li class="toctree-l1"><a class="reference internal" href="coupling.html">Coupling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="timestepping.html">Timestepping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kokkos.html">Kokkos</a></li>
 </ul>
 </div>
-</section>
 <section id="questions">
-<h1>Questions?<a class="headerlink" href="#questions" title="Link to this heading">#</a></h1>
+<h2>Questions?<a class="headerlink" href="#questions" title="Link to this heading">#</a></h2>
 <p>Yes please! Simply <a class="reference internal" href="../usage/contact.html#contact"><span class="std std-ref">contact us!</span></a></p>
+</section>
 </section>
 
         </article>
@@ -279,7 +287,7 @@ Super-Droplet Model (SDM) cloud microphysics.</p>
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Background</div>
+                <div class="title">Background to the Super-Droplet Model (SDM)</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -312,8 +320,27 @@ Super-Droplet Model (SDM) cloud microphysics.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Programming Guide</a><ul>
+<li><a class="reference internal" href="#questions">Questions?</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

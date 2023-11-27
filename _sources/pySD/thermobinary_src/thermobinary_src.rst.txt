@@ -12,9 +12,6 @@ for a 0-D, 1-D, 2-D or 3-D cartesian domain. Used when CLEO reads
 dynamics from file for a one-way couplign of SDM to a FromFileDynamics
 dynamics solver.
 
-.. note::
-   Please consider that this project is under active development.
-
 .. toctree::
    :maxdepth: 1
    :caption: Contents:

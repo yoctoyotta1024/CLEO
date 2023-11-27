@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Timestepping" href="timestepping.html" /><link rel="prev" title="Monoids" href="monoids.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Requirements" href="../usage/requirements.html" /><link rel="prev" title="Timestepping" href="timestepping.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>Coupling - CLEO 4.0 documentation</title>
+        <title>Kokkos - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -162,9 +162,9 @@
 <li class="toctree-l2"><a class="reference internal" href="motivation.html">Motivation for CLEO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="monoids.html">Monoids</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coupling.html">Coupling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timestepping.html">Timestepping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="kokkos.html">Kokkos</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Kokkos</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
@@ -247,9 +247,12 @@
           </label>
         </div>
         <article role="main">
-          <section id="coupling">
-<h1>Coupling<a class="headerlink" href="#coupling" title="Link to this heading">#</a></h1>
-<p>This is the coupling of CLEO.</p>
+          <section id="kokkos">
+<h1>Kokkos<a class="headerlink" href="#kokkos" title="Link to this heading">#</a></h1>
+<p>For portable thread parallelism we use
+Kokkos! <span id="id1">[<a class="reference internal" href="../references.html#id17" title="Christian R. Trott, Damien Lebrun-Grandié, Daniel Arndt, Jan Ciesko, Vinh Dang, Nathan Ellingwood, Rahulkumar Gayatri, Evan Harvey, Daisy S. Hollman, Dan Ibanez, Nevin Liber, Jonathan Madsen, Jeff Miles, David Poliakoff, Amy Powell, Sivasankaran Rajamanickam, Mikael Simberg, Dan Sunderland, Bruno Turcksin, and Jeremiah Wilke. Kokkos 3: programming model extensions for the exascale era. IEEE Transactions on Parallel and Distributed Systems, 33(4):805-817, 2022. doi:10.1109/TPDS.2021.3097283.">TLGA+22</a>]</span> <span id="id2">[<a class="reference internal" href="../references.html#id18" title="Christian Trott, Luc Berger-Vergiat, David Poliakoff, Sivasankaran Rajamanickam, Damien Lebrun-Grandie, Jonathan Madsen, Nader Al Awar, Milos Gligoric, Galen Shipman, and Geoff Womeldorff. The kokkos ecosystem: comprehensive performance portability for high performance computing. Computing in Science Engineering, 23(5):10-18, 2021. doi:10.1109/MCSE.2021.3098509.">TBVP+21</a>]</span>, <span id="id3">[<a class="reference internal" href="../references.html#id19" title="H. Carter Edwards, Christian R. Trott, and Daniel Sunderland. Kokkos: enabling manycore performance portability through polymorphic memory access patterns. Journal of Parallel and Distributed Computing, 74(12):3202 - 3216, 2014. Domain-Specific Languages and High-Level Frameworks for High-Performance Computing. URL: http://www.sciencedirect.com/science/article/pii/S0743731514001257, doi:https://doi.org/10.1016/j.jpdc.2014.07.003.">ETS14</a>]</span>.</p>
+<p>It has great documentation, lectures, tutorials and more; all for you to
+enjoy when you explore <a class="reference external" href="https://github.com/kokkos">Kokkos’ github repositories</a>.</p>
 </section>
 
         </article>
@@ -257,23 +260,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="timestepping.html">
+          <a class="next-page" href="../usage/requirements.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Timestepping</div>
+                <div class="title">Requirements</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="monoids.html">
+          <a class="prev-page" href="timestepping.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Monoids</div>
+                <div class="title">Timestepping</div>
                 
               </div>
             </a>

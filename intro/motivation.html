@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Timestepping" href="timestepping.html" /><link rel="prev" title="Monoids" href="monoids.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Memory Layout" href="memorylayout.html" /><link rel="prev" title="Background to the Super-Droplet Model (SDM)" href="background.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>Coupling - CLEO 4.0 documentation</title>
+        <title>Motivation for CLEO - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -159,10 +159,10 @@
 <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="intro.html">Programming Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Programming Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="background.html">Background to the Super-Droplet Model (SDM)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="motivation.html">Motivation for CLEO</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Motivation for CLEO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="monoids.html">Monoids</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coupling.html">Coupling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timestepping.html">Timestepping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kokkos.html">Kokkos</a></li>
 </ul>
@@ -247,9 +247,39 @@
           </label>
         </div>
         <article role="main">
-          <section id="coupling">
-<h1>Coupling<a class="headerlink" href="#coupling" title="Link to this heading">#</a></h1>
-<p>This is the coupling of CLEO.</p>
+          <section id="motivation-for-cleo">
+<h1>Motivation for CLEO<a class="headerlink" href="#motivation-for-cleo" title="Link to this heading">#</a></h1>
+<p>In light of <a class="reference internal" href="background.html#sdmadvatages"><span class="std std-ref">such attractive properties</span></a>, a natural
+question to raise is whether SDM can be used to model warm rain more
+accurately than conventional models. The discrepancies between bulk models
+and observations of tropical warm rain is well documented, for example
+as discussed in Schulz and Stevens 2023 <span id="id1">[<a class="reference internal" href="../references.html#id29" title="Hauke Schulz and Bjorn Stevens. Evaluating large-domain, hecto-meter, large-eddy simulations of trade-wind clouds using eurec4a data. Journal of Advances in Modeling Earth Systems, 15(10):e2023MS003648, 2023. e2023MS003648 2023MS003648. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2023MS003648, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2023MS003648, doi:https://doi.org/10.1029/2023MS003648.">SS23</a>]</span>
+and vanZanten et al. 2011 <span id="id2">[<a class="reference internal" href="../references.html#id37" title="Margreet C vanZanten, Bjorn Stevens, Louise Nuijens, A Pier Siebesma, A. S. Ackerman, F. Burnet, A. Cheng, F. Couvreux, H. Jiang, M. Khairoutdinov, Y. Kogan, D. C. Lewellen, D. Mechem, K. Nakamura, A. Noda, B. J. Shipway, J. Slawinska, S. Wang, and A. Wyszogrodzki. Controls on precipitation and cloudiness in simulations of trade-wind cumulus as observed during rico. Journal of Advances in Modeling Earth Systems, 3(2):, 2011. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2011MS000056, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2011MS000056, doi:https://doi.org/10.1029/2011MS000056.">vSN+11</a>]</span>. Already SDM has been
+used to improve our understanding of how precipitation formation
+depends on small scale influences, for example the choice of turbulent
+scheme, strength of entrainment and mixing, and the CCN size and
+concentration. Such analysis uses domains with horizontal extents up to
+O(10km) and resolutions no coarser than O(100m). What remains unclear is
+the role that cloud microphysics has at larger scales, for example due to
+the interplay between precipitation and mesoscale circulations O(100km).</p>
+<p>By applying SDM to simulations in regional domains O(100km) with realistic
+boundary conditions and large scale forcings, we would, for the first
+time, have an alternative to conventional Eulerian perspectives on the
+role of microphysical processes at these scales. The comparison between
+such fundamentally different models gives us a new tool for assessing the
+behaviour of bulk models, and showing how their use is influencing climate
+simulations. Furthermore, when these simulations are weighed up with
+observations, we could quantify the extent to which SDM is a better
+representation not only warm rain formation, but also cloud organisation
+and evolution. The recent EUREC4A campaign, has provided a multitude of
+exceptionally high quality measurements which could be used for such an
+assessment.</p>
+<p>It therefore seems apparent that a new implementation of SDM is required;
+capable of modelling warm rain in LES with realistic boundary
+conditions and large scale forcings, and capable of application
+in large regional domains, with horizontal extents O(100km). CLEO is
+an attempt to build such a SDM. It strives to be a library for SDM
+to model warm clouds with exceptional computational performance.</p>
 </section>
 
         </article>
@@ -257,23 +287,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="timestepping.html">
+          <a class="next-page" href="memorylayout.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Timestepping</div>
+                <div class="title">Memory Layout</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="monoids.html">
+          <a class="prev-page" href="background.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Monoids</div>
+                <div class="title">Background to the Super-Droplet Model (SDM)</div>
                 
               </div>
             </a>
