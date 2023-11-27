@@ -139,7 +139,10 @@ initialise_supers_on_host(const SuperdropInitConds &sdic,
 /* return mirror view of superdrops (on host memory)
 which have been initialised using data from a
 SuperdropInitConds instance for their initial gbxindex,
-spatial coordinates and attributes */
+spatial coordinates and attributes.
+Kokkos::parallel_for([...]) is equivalent to:
+for (size_t kk(0); kk < totnsupers; ++kk) {[...]}
+when in serial */
 {
   const size_t totnsupers(supers.extent(0));
   const GenSuperdrop gen_superdrop(sdic);
