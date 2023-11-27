@@ -178,9 +178,9 @@ private:
     size_t totnnull(0); // number of null superdrops
     Kokkos::parallel_reduce(
         Kokkos::TeamThreadRange(team_member, npairs),
-        [=, *this](int jj, size_t &nnull)
+        [=, *this](size_t jj, size_t &nnull)
         {
-          const int kk(jj * 2);
+          const size_t kk(jj * 2);
           const bool isnull(collide_superdroplet_pair(supers(kk),
                                                       supers(kk + 1),
                                                       genpool,
