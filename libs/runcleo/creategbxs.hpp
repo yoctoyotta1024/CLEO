@@ -99,7 +99,7 @@ public:
                      const GbxMaps &gbxmaps,
                      const viewd_supers totsupers) const
   {
-    const auto gbxindex(GbxindexGen->next());
+    const auto gbxindex(GbxindexGen->next(ii));
     const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
     const State state(state_at(ii, volume));
 

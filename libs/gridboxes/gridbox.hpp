@@ -145,6 +145,11 @@ public:
     {
     public:
       Gbxindex next() { return {_id++}; }
+      
+      Gbxindex next(const unsigned int id)
+      {
+        return {id};
+      }
 
     private:
       unsigned int _id = 0;
