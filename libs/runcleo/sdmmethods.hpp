@@ -93,6 +93,8 @@ public:
     serial equivalent is simply:
     for ( size_t ii(0); ii < ngbxs; ++ii) { [...] } */
     {
+
+      // TODO parallel region use scratch space?
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "sdm_microphysics",

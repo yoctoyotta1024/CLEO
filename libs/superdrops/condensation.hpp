@@ -192,6 +192,7 @@ over for loop: for (size_t kk(0); kk < nsupers; ++kk) {[...]} */
 
   double totmass_condensed(0.0);                     // cumulative change to liquid mass in parcel volume 'dm'
   Kokkos::parallel_reduce(
+      "superdroplets_change",
       Kokkos::TeamThreadRange(team_member, nsupers),
       [=, *this](size_t kk, double &mass_condensed)
       {

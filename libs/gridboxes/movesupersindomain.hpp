@@ -93,10 +93,6 @@ after updating their gridbox indexes concordantly */
   {
     const size_t ngbxs(d_gbxs.extent(0));
 
-    // Kokkos::parallel_for(
-    //     "move_superdrops_in_domain",
-    //     Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
-    //     KOKKOS_CLASS_LAMBDA(const size_t ii) {
     Kokkos::parallel_for(
         "move_superdrops_in_domain",
         TeamPolicy(ngbxs, Kokkos::AUTO()),
