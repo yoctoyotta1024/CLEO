@@ -156,27 +156,17 @@ initialise_gbxs_on_host(const GbxMaps &gbxmaps,
                         const GbxInitConds &gbxic,
                         const viewd_supers totsupers,
                         const viewh_gbx h_gbxs)
-/* initialise the host view of gridboxes using some data
-from a GbxInitConds instance e.g. for each gridbox's volume.
-Kokkos::parallel_for([...]) (on host) is equivalent to:
-for (size_t ii(0); ii < ngbxs; ++ii){[...]} 
-when in serial */
+/* initialise the host view of gridboxes using
+some data from a GbxInitConds instance e.g. for
+each gridbox's volume*/
 {
   const size_t ngbxs(h_gbxs.extent(0));
   const GenGridbox gen(gbxic);
 
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    h_gbxs(ii) = gen(ii, gbxmaps, totsupers);
+    h_gbxs(ii) = gen(ii, gbxmaps, totsupers); // TODO parallelise on host?
   }
-
-  // Kokkos::parallel_for(
-  //     "initialise_gbxs_on_host",
-  //     Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-  //     [=](const size_t ii)
-  //     {
-  //       h_gbxs(ii) = gen(ii, gbxmaps, totsupers); // TODO parallelise on host?
-  //     });
 }
 
 #endif // CREATEGBXS_HPP
