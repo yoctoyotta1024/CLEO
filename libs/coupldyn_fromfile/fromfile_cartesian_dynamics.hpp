@@ -145,7 +145,7 @@ that are read from binary files */
 {
 private:
   const unsigned int interval;
-  std::unique_ptr<CartesianDynamics> dynvars; // pointer to (thermo)dynamic variables
+  std::shared_ptr<CartesianDynamics> dynvars; // pointer to (thermo)dynamic variables
 
   void run_dynamics(const unsigned int t_mdl) const
   /* increment position of thermodata for 0th gridbox
@@ -161,7 +161,7 @@ public:
                    const std::array<size_t, 3> ndims,
                    const unsigned int nsteps)
       : interval(couplstep),
-        dynvars(std::make_unique<CartesianDynamics>(config,
+        dynvars(std::make_shared<CartesianDynamics>(config,
                                                     ndims,
                                                     nsteps)) {}
 

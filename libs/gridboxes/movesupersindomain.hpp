@@ -54,8 +54,9 @@ after updating their gridbox indexes concordantly */
   (1) update their spatial coords according to type of motion. (device)
   (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device).
-  Kokkos::parallel_for is equivalent to:
-  for (size_t kk(0); kk < supers.extent(0); ++kk) {[...]} in serial */
+  Kokkos::parallel_for([...]) is equivalent to:
+  for (size_t kk(0); kk < supers.extent(0); ++kk) {[...]} 
+  when in serial */
   {
     const size_t nsupers(supers.extent(0));
     Kokkos::parallel_for(
@@ -85,8 +86,9 @@ after updating their gridbox indexes concordantly */
   (1) update their spatial coords according to type of motion. (device)
   (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device).
-  Kokkos::parallel_for is equivalent to:
-  for (size_t ii(0); ii < ngbxs; ++ii) {[...]} in serial */
+  Kokkos::parallel_for([...]) is equivalent to:
+  for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
+  when in serial */
   {
     const size_t ngbxs(d_gbxs.extent(0));
 
@@ -109,8 +111,9 @@ after updating their gridbox indexes concordantly */
                                      const viewd_supers totsupers) const
   /* (re)sorting supers based on their gbxindexes and
   then updating the span for each gridbox accordingly.
-  Kokkos::parallel_for([]...]) (on host) n serial is the
-  same as: for (size_t ii(0); ii < ngbxs; ++ii){[...]} */ // TODO parallelise on host?
+  Kokkos::parallel_for([...]) (on host) is equivalent to:
+  for (size_t ii(0); ii < ngbxs; ++ii){[...]} 
+  when in serial */ // TODO parallelise on host?
   {
     sort_supers(totsupers);
 

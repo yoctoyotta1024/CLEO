@@ -175,10 +175,12 @@ double DoCondensation::
     superdroplets_change(const TeamMember &team_member,
                          const subviewd_supers supers,
                          const State &state) const
-/* returns total change in liquid water mass in parcel volume, 
-'mass_condensed', by enacting superdroplets' condensation / evaporation. 
-Kokkos::parallel_reduce is equivalent to summing deltamass
-over for loop: for (size_t kk(0); kk < nsupers; ++kk) {[...]} */
+/* returns total change in liquid water mass in parcel 
+volume, 'mass_condensed', by enacting superdroplets'
+condensation / evaporation. Kokkos::parallel_reduce([...])
+is equivalent to summing deltamass over for loop:
+for (size_t kk(0); kk < nsupers; ++kk) {[...]} 
+when in serial*/
 {
   const size_t nsupers(supers.extent(0));
   

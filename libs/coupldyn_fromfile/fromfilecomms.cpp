@@ -25,24 +25,30 @@
 template <typename CD>
 void FromFileComms::receive_dynamics(const FromFileDynamics &ffdyn,
                                      const viewh_gbx h_gbxs) const
-/* update Gridboxes' states using information
-received from FromFileDynamics solver for
-1-way coupling to CLEO SDM */
+/* update Gridboxes' states using information received
+from FromFileDynamics solver for 1-way coupling to CLEO SDM.
+Kokkos::parallel_for([...]) (on host) is equivalent to:
+for (size_t ii(0); ii < ngbxs; ++ii){[...]}
+when in serial */
 {
   const size_t ngbxs(h_gbxs.extent(0));
-  for (size_t ii(0); ii < ngbxs; ++ii) // TODO parallelise on host?
-  {
-    State &state(h_gbxs(ii).state);
 
-    state.press = ffdyn.get_press(ii);
-    state.temp = ffdyn.get_temp(ii);
-    state.qvap = ffdyn.get_qvap(ii);
-    state.qcond = ffdyn.get_qcond(ii);
+  Kokkos::parallel_for(
+      "receive_dynamics",
+      Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+      [=](const size_t ii)
+      {
+        State &state(h_gbxs(ii).state);
 
-    state.wvel = ffdyn.get_wvel(ii);
-    state.uvel = ffdyn.get_uvel(ii);
-    state.vvel = ffdyn.get_vvel(ii);
-  }
+        state.press = ffdyn.get_press(ii);
+        state.temp = ffdyn.get_temp(ii);
+        state.qvap = ffdyn.get_qvap(ii);
+        state.qcond = ffdyn.get_qcond(ii);
+
+        state.wvel = ffdyn.get_wvel(ii);
+        state.uvel = ffdyn.get_uvel(ii);
+        state.vvel = ffdyn.get_vvel(ii);
+      });
 }
 
 template void FromFileComms::

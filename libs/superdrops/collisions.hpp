@@ -167,8 +167,9 @@ private:
   superdrops are colliding some 'VOLUME' [m^3]). Function
   uses Kokkos nested parallelism for paralelism over supers
   inside parallelised loop for member 'teamMember'. In serial
-  Kokkos::parallel_reduce is equivalent to summing nnull
-  over for loop: for (size_t jj(0); jj < npairs; ++jj) {[...]} */
+  Kokkos::parallel_reduce([...]) is equivalent to summing nnull
+  over for loop: for (size_t jj(0); jj < npairs; ++jj) {[...]} 
+  when in serial */
   {
     const size_t nsupers(supers.extent(0));
     const size_t npairs(nsupers / 2); // no. pairs of superdroplets (same as floor() for positive nsupers)
