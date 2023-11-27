@@ -168,11 +168,11 @@ from "An Introduction To Clouds...." (see note at top of file) */
                                                 temp,
                                                 s_ratio,
                                                 ffactor));
-  const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
 
   /* resultant effect on thermodynamic state */
   if (doAlterThermo)
   {
+    const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
     state_change(totrho_condensed, state);
   }
 }
