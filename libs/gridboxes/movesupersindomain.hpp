@@ -55,7 +55,7 @@ after updating their gridbox indexes concordantly */
   (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device) */
   {
-    for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise
+    for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise on device
     {
       /* step (1) */
       motion.update_superdrop_coords(gbxindex,
