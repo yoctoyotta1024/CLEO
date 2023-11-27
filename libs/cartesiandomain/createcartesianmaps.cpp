@@ -206,7 +206,7 @@ periodic boundary conditions in a cartesian domain */
 {
   const auto ndims(gfb.ndims);
 
-  for (auto idx : gfb.gbxidxs) // TODO parallelise on host?
+  for (auto idx : gfb.gbxidxs) 
   {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.insert_coord3bounds(idx, c3bs);
@@ -232,7 +232,7 @@ cartesian domain  */
 {
   const auto ndims(gfb.ndims);
 
-  for (auto idx : gfb.gbxidxs) // TODO parallelise on host?
+  for (auto idx : gfb.gbxidxs)
   {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.insert_coord3bounds(idx, c3bs);
@@ -257,7 +257,7 @@ in cartesian domain */
 {
   const auto ndims(gfb.ndims);
 
-  for (auto idx : gfb.gbxidxs) // TODO parallelise on host?
+  for (auto idx : gfb.gbxidxs)
   {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.insert_coord3bounds(idx, c3bs);
