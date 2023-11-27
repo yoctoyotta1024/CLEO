@@ -84,6 +84,15 @@ private:
   condensation-diffusion ODE given the previous radius. */
 
   KOKKOS_FUNCTION
+  void effect_on_thermodynamic_state(
+      const TeamPolicy::member_type &team_member,
+      const double totrho_condensed,
+      State &state);
+  /* if doAlterThermo isn't false, use a single team
+  member to change the state due to the effect
+  of condensation / evaporation */
+
+  KOKKOS_FUNCTION
   void state_change(const double totrho_condensed, State &state) const;
   /* change the thermodynamic variables (temp, qv and qc) of
   ThermoState state given the total change in condensed
@@ -191,6 +200,14 @@ over for loop: for (size_t kk(0); kk < nsupers; ++kk) {[...]} */
 {
   const size_t nsupers(supers.extent(0));
   
+  const double press(state.press);
+  const double temp(state.temp);
+  const double qvap(state.qvap);
+
+  const double psat(saturation_pressure(temp));
+  const double s_ratio(supersaturation_ratio(press, qvap, psat));
+  const double ffactor(diffusion_factor(press, temp, psat));
+
   double totmass_condensed(0.0);                     // cumulative change to liquid mass in parcel volume 'dm'
   // for (size_t kk(0); kk < nsupers; ++kk)
   // {
@@ -237,9 +254,26 @@ double DoCondensation::superdrop_mass_change(Superdrop &drop,
   return mass_condensed;  
 }
 
+KOKKOS_FUNCTION
+void DoCondensation::effect_on_thermodynamic_state(
+    const TeamPolicy::member_type &team_member,
+    const double totrho_condensed,
+    State &state)
+/* if doAlterThermo isn't false, use a single team
+member to change the state due to the effect
+of condensation / evaporation */
+{
+  if (doAlterThermo)
+  {
+    const double VOLUME(state.get_volume() * dlc::VOL0);       // volume in which condensation occurs [m^3]
+    const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
+    state_change(totrho_condensed, state);
+  }
+}
+
 KOKKOS_FUNCTION void
 DoCondensation::state_change(const double totrho_condensed,
-                                         State &state) const
+                             State &state) const
 /* change the thermodynamic variables (temp, qv and qc) of
 ThermoState state given the total change in condensed
 water mass per volume during time interval delt */
