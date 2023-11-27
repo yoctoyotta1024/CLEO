@@ -91,7 +91,7 @@ private:
   of condensation / evaporation */
 
   KOKKOS_FUNCTION
-  void state_change(const double totrho_condensed, State &state) const;
+  State state_change(const double totrho_condensed, State &state) const;
   /* change the thermodynamic variables (temp, qv and qc) of
   ThermoState state given the total change in condensed
   water mass per volume during time interval delt */
@@ -191,8 +191,6 @@ over for loop: for (size_t kk(0); kk < nsupers; ++kk) {[...]} */
   const double ffactor(diffusion_factor(press, temp, psat));
 
   double totmass_condensed(0.0);                     // cumulative change to liquid mass in parcel volume 'dm'
-  // for (size_t kk(0); kk < nsupers; ++kk)
-  // {
   Kokkos::parallel_reduce(
       Kokkos::TeamThreadRange(team_member, nsupers),
       [=, *this](int kk, double &mass_condensed)
@@ -202,9 +200,6 @@ over for loop: for (size_t kk(0); kk < nsupers; ++kk) {[...]} */
         mass_condensed += deltamass;
       },
       totmass_condensed);
-
-  //   totmass_condensed += deltamass; // dm += dm_condensed_vapour/dt * delta t
-  // }
 
   return totmass_condensed;
 }
@@ -246,17 +241,17 @@ void DoCondensation::effect_on_thermodynamic_state(
 member to change the state due to the effect
 of condensation / evaporation */
 {
-  Kokkos::single(Kokkos::PerTeam(team_member), [=, *this]()
+  Kokkos::single(Kokkos::PerTeam(team_member), [=, *this](State &state)
                  {
   if (doAlterThermo)
   {
     const double VOLUME(state.get_volume() * dlc::VOL0);       // volume in which condensation occurs [m^3]
     const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
-    state_change(totrho_condensed, state);
-  } });
+    state = state_change(totrho_condensed, state);
+  } }, state);
 }
 
-KOKKOS_FUNCTION void
+KOKKOS_FUNCTION State
 DoCondensation::state_change(const double totrho_condensed,
                              State &state) const
 /* change the thermodynamic variables (temp, qv and qc) of
@@ -271,6 +266,8 @@ water mass per volume during time interval delt */
   state.temp += delta_temp;
   state.qvap -= delta_qcond;
   state.qcond += delta_qcond;
+
+  return state;
 }
 
 #endif // CONDENSATION_HPP
