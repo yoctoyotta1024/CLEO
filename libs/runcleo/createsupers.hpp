@@ -147,7 +147,7 @@ spatial coordinates and attributes */
   auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
   for (size_t kk(0); kk < totnsupers; ++kk)
   {
-    h_supers(kk) = gen_superdrop(kk);
+    h_supers(kk) = gen_superdrop(kk); // TODO paralellise on host?
   }
 
   return h_supers;
