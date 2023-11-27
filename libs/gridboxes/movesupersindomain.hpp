@@ -113,15 +113,15 @@ after updating their gridbox indexes concordantly */
   then updating the span for each gridbox accordingly.
   Kokkos::parallel_for([...]) (on host) is equivalent to:
   for (size_t ii(0); ii < ngbxs; ++ii){[...]} 
-  when in serial */ // TODO parallelise on host?
+  when in serial */ 
   {
     sort_supers(totsupers);
 
     const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii) 
+    for (size_t ii(0); ii < ngbxs; ++ii) // TODO parallelise on host?
     {
       h_gbxs(ii).supersingbx.set_refs();
-          // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
+      // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
     }
 
     // Kokkos::parallel_for(
