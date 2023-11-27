@@ -28,6 +28,7 @@
 
 /* Default Execution Space for Parallelism */
 using ExecSpace = Kokkos::DefaultExecutionSpace;
+using HostSpace = Kokkos::DefaultHostExecutionSpace;
 
 /* Superdrop views and subviews */
 using viewd_supers = Kokkos::View<Superdrop *>;            // view in device memory of superdroplets (should match that in gridbox.hpp) 

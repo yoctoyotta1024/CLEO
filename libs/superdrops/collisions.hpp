@@ -177,7 +177,6 @@ private:
 
     size_t totnnull(0); // number of null superdrops
     Kokkos::parallel_reduce(
-        "collide_supers",
         Kokkos::TeamThreadRange(team_member, npairs),
         [=, *this](const size_t jj, size_t &nnull)
         {
