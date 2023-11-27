@@ -45,6 +45,57 @@ after updating their gridbox indexes concordantly */
 {
   M motion;
 
+  void move_supers_in_gbx(const unsigned int gbxindex,
+                          const GbxMaps &gbxmaps,
+                          const State &state,
+                          const subviewd_supers supers)
+  /* enact steps (1) and (2) movement of superdroplets for 1 gridbox:
+  (1) update their spatial coords according to type of motion. (device)
+  (1b) optional detect precipitation (device)
+  (2) update their sdgbxindex accordingly (device) */
+  {
+    for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise
+    {
+      /* step (1) */
+      motion.update_superdrop_coords(gbxindex,
+                                     gbxmaps,
+                                     state,
+                                     supers(kk));
+
+      /* optional step (1b) */
+      // gbx.detectors -> detect_precipitation(area, drop); // TODO detectors
+
+      /* step (2) */
+      motion.update_superdrop_gbxindex(gbxindex,
+                                       gbxmaps,
+                                       supers(kk));
+    }
+  }
+
+  void move_supers_in_gridboxes(const GbxMaps &gbxmaps,
+                                const viewd_gbx d_gbxs) const
+  /* enact steps (1) and (2) movement of superdroplets
+  throughout domain (i.e. for all gridboxes):
+  (1) update their spatial coords according to type of motion. (device)
+  (1b) optional detect precipitation (device)
+  (2) update their sdgbxindex accordingly (device).
+  Kokkos::parallel_for is equivalent to:
+  for (size_t ii(0); ii < ngbxs; ++ii) {[...]} in serial */
+  {
+    const size_t ngbxs(d_gbxs.extent(0));
+
+    Kokkos::parallel_for(
+        "move_superdrops_in_domain",
+        Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+        KOKKOS_CLASS_LAMBDA(const size_t ii) {
+          auto &gbx(d_gbxs(ii));
+          move_supers_in_gbx(gbx.get_gbxindex(),
+                             gbxmaps,
+                             gbx.state,
+                             gbx.supersingbx());
+        });
+  }
+
   void move_supers_between_gridboxes(const viewh_gbx h_gbxs,
                                      const viewd_supers totsupers) const
   /* (re)sorting supers based on their gbxindexes and
@@ -58,40 +109,6 @@ after updating their gridbox indexes concordantly */
       h_gbxs(ii).supersingbx.set_refs();
       // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
     }
-  }
-
-  void move_supers_in_gridboxes(const GbxMaps &gbxmaps,
-                                const viewd_gbx d_gbxs) const
-  /* enact movement of superdroplets throughout domain in three stages:
-  (1) update their spatial coords according to type of motion. (device)
-  (1b) optional detect precipitation (device)
-  (2) update their sdgbxindex accordingly (device).
-  Kokkos::parallel_for is equivalent to:
-  for (size_t ii(0); ii < ngbxs; ++ii) {[...]} in serial */
-  {
-    const size_t ngbxs(d_gbxs.extent(0));
-
-    Kokkos::parallel_for(
-        "move_superdrops_in_domain",
-        Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
-        KOKKOS_CLASS_LAMBDA(const size_t ii) {
-          const subviewd_supers supers(d_gbxs(ii).supersingbx());
-          for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise
-          {
-            const unsigned int gbxindex(d_gbxs(ii).get_gbxindex());
-            
-            /* step (1) */
-            motion.update_superdrop_coords(gbxindex, gbxmaps,
-                                           d_gbxs(ii).state,
-                                           supers(kk));
-
-            /* optional step (1b) */
-            // gbx.detectors -> detect_precipitation(area, drop); // TODO (detectors)
-
-            /* step (2) */
-            motion.update_superdrop_gbxindex(gbxindex, gbxmaps, supers(kk));
-          }
-        });
   }
 
   void move_superdrops_in_domain(const unsigned int t_sdm,
