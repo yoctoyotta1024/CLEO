@@ -181,14 +181,24 @@ double DoCondensation::
 in parcel volume 'mass_condensed' by enacting
 superdroplets' condensation / evaporation */
 {
-  double mass_condensed(0.0);                     // cumulative change to liquid mass in parcel volume 'dm'
-  for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise on default excec space?
-  {
-    const double deltamass(superdrop_mass_change(supers(kk), temp, s_ratio, ffactor));
-    mass_condensed += deltamass; // dm += dm_condensed_vapour/dt * delta t
-  }
+  const size_t nsupers(supers.extent(0));
+  
+  double totmass_condensed(0.0);                     // cumulative change to liquid mass in parcel volume 'dm'
+  // for (size_t kk(0); kk < nsupers; ++kk)
+  // {
+  Kokkos::parallel_reduce(
+      Kokkos::TeamThreadRange(team_member, nsupers),
+      [=, *this](int jj, double &mass_condensed)
+      {
+        const double deltamass(superdrop_mass_change(supers(kk), temp, s_ratio, ffactor));
+        mass_condensed += deltamass;
+      },
+      totmass_condensed);
 
-  return mass_condensed;
+  //   totmass_condensed += deltamass; // dm += dm_condensed_vapour/dt * delta t
+  // }
+
+  return totmass_condensed;
 }
 
 KOKKOS_FUNCTION
