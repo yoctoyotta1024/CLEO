@@ -84,7 +84,7 @@ private:
   KOKKOS_FUNCTION
   void effect_on_thermodynamic_state(
       const TeamPolicy::member_type &team_member,
-      const double totrho_condensed,
+      const double totmass_condensed,
       State &state) const;
   /* if doAlterThermo isn't false, use a single team
   member to change the state due to the effect
@@ -240,13 +240,13 @@ double DoCondensation::superdrop_mass_change(Superdrop &drop,
 KOKKOS_FUNCTION
 void DoCondensation::effect_on_thermodynamic_state(
     const TeamPolicy::member_type &team_member,
-    const double totrho_condensed,
+    const double totmass_condensed,
     State &state) const
 /* if doAlterThermo isn't false, use a single team
 member to change the state due to the effect
 of condensation / evaporation */
 {
-  Kokkos::single(Kokkos::PerTeam(team_member), [=]()
+  Kokkos::single(Kokkos::PerTeam(team_member), [=, *this]()
                  {
   if (doAlterThermo)
   {
