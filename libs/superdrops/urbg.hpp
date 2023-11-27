@@ -108,7 +108,7 @@ of superdroplet objects in 'supers'. Then synchronise
 team and return view of shuffled supers. Uses genpool
 to get team / thread safe random number generator */
 {
-  Kokkos::single(Kokkos::PerTeam(team_member), [=]()
+  Kokkos::single(Kokkos::PerTeam(team_member), [&]()
                  {
                     URBG<ExecSpace> urbg{genpool.get_state()};
                     shuffle_supers(supers, urbg);
