@@ -37,7 +37,7 @@
 
 template <typename P>
 concept MicrophysicalProcess = requires(P p,
-                                        const TeamPolicy::member_type &tm, 
+                                        const TeamMember &tm, 
                                         const unsigned int t,
                                         subviewd_supers supers,
                                         State &state,
@@ -91,7 +91,7 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  run_step(const TeamPolicy::member_type &team_member,
+  run_step(const TeamMember &team_member,
            const unsigned int subt,
            subviewd_supers supers,
            State &state,
@@ -130,7 +130,7 @@ struct NullMicrophysicalProcess
   }
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  run_step(const TeamPolicy::member_type &team_member,
+  run_step(const TeamMember &team_member,
            const unsigned int subt,
            subviewd_supers supers,
            State &state,
@@ -142,7 +142,7 @@ struct NullMicrophysicalProcess
 
 template <typename F>
 concept MicrophysicsFunc = requires(F f,
-                                    const TeamPolicy::member_type &tm,
+                                    const TeamMember &tm,
                                     const unsigned int subt,
                                     subviewd_supers supers,
                                     State &state,
@@ -186,7 +186,7 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  run_step(const TeamPolicy::member_type &team_member,
+  run_step(const TeamMember &team_member,
            const unsigned int subt,
            subviewd_supers supers,
            State &state,

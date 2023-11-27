@@ -100,7 +100,7 @@ viewd_supers shuffle_supers(const viewd_supers supers,
 }
 
 KOKKOS_INLINE_FUNCTION viewd_supers
-one_shuffle_supers(const TeamPolicy::member_type &team_member,
+one_shuffle_supers(const TeamMember &team_member,
                    const viewd_supers supers,
                    GenRandomPool genpool)
 /* Use only 1 member of team to randomly shuffle order

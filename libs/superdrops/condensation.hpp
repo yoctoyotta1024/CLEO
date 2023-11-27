@@ -51,7 +51,7 @@ private:
   ImplicitEuler impe;                 // implicit euler solver
 
   KOKKOS_FUNCTION
-  void do_condensation(const TeamPolicy::member_type &team_member,
+  void do_condensation(const TeamMember &team_member,
                        const subviewd_supers supers,
                        State &state) const;
   /* Enacts condensation / evaporation microphysical process.
@@ -61,7 +61,7 @@ private:
   from "An Introduction To Clouds...." (see note at top of file) */
 
   KOKKOS_FUNCTION double
-  superdroplets_change(const TeamPolicy::member_type &team_member,
+  superdroplets_change(const TeamMember &team_member,
                        const subviewd_supers supers,
                        const State &state) const;
   /* returns total change in liquid water mass
@@ -83,7 +83,7 @@ private:
 
   KOKKOS_FUNCTION
   void effect_on_thermodynamic_state(
-      const TeamPolicy::member_type &team_member,
+      const TeamMember &team_member,
       const double totmass_condensed,
       State &state) const;
   /* if doAlterThermo isn't false, use a single team
@@ -107,7 +107,7 @@ public:
         impe(niters, delt, maxrtol, maxatol, subdelt) {}
  
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  operator()(const TeamPolicy::member_type &team_member,
+  operator()(const TeamMember &team_member,
              const unsigned int subt,
              subviewd_supers supers,
              State &state,
@@ -151,7 +151,7 @@ constant timestep 'interval' given the
 
 KOKKOS_FUNCTION
 void DoCondensation::
-    do_condensation(const TeamPolicy::member_type &team_member,
+    do_condensation(const TeamMember &team_member,
                     const subviewd_supers supers,
                     State &state) const
 /* Enacts condensation / evaporation microphysical process.
@@ -172,7 +172,7 @@ from "An Introduction To Clouds...." (see note at top of file) */
 
 KOKKOS_FUNCTION
 double DoCondensation::
-    superdroplets_change(const TeamPolicy::member_type &team_member,
+    superdroplets_change(const TeamMember &team_member,
                          const subviewd_supers supers,
                          const State &state) const
 /* returns total change in liquid water mass in parcel volume, 
@@ -235,7 +235,7 @@ double DoCondensation::superdrop_mass_change(Superdrop &drop,
 
 KOKKOS_FUNCTION
 void DoCondensation::effect_on_thermodynamic_state(
-    const TeamPolicy::member_type &team_member,
+    const TeamMember &team_member,
     const double totmass_condensed,
     State &state) const
 /* if doAlterThermo isn't false, use a single team

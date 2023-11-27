@@ -157,7 +157,7 @@ private:
   }
 
   KOKKOS_INLINE_FUNCTION size_t
-  collide_supers(const TeamPolicy::member_type &team_member,
+  collide_supers(const TeamMember &team_member,
                  subviewd_supers supers,
                  const double volume, 
                  GenRandomPool genpool) const
@@ -195,7 +195,7 @@ private:
   }
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-  do_collisions(const TeamPolicy::member_type &team_member,
+  do_collisions(const TeamMember &team_member,
                 subviewd_supers supers,
                 const double volume,
                 GenRandomPool genpool) const
@@ -221,7 +221,7 @@ public:
       : DELT(DELT), probability(p), enact_collision(x) {}
 
   KOKKOS_INLINE_FUNCTION subviewd_supers
-      operator()(const TeamPolicy::member_type &team_member,
+      operator()(const TeamMember &team_member,
                  const unsigned int subt,
                  subviewd_supers supers,
                  const State &state,

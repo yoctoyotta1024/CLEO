@@ -46,7 +46,7 @@ after updating their gridbox indexes concordantly */
   M motion;
 
   KOKKOS_INLINE_FUNCTION
-  void move_supers_in_gbx(const TeamPolicy::member_type &team_member,
+  void move_supers_in_gbx(const TeamMember &team_member,
                           const unsigned int gbxindex,
                           const GbxMaps &gbxmaps,
                           const State &state,
@@ -95,7 +95,7 @@ after updating their gridbox indexes concordantly */
     Kokkos::parallel_for(
         "move_superdrops_in_domain",
         TeamPolicy(ngbxs, Kokkos::AUTO()),
-        KOKKOS_CLASS_LAMBDA(const TeamPolicy::member_type &team_member) {
+        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
           const int ii = team_member.league_rank();
 
           auto &gbx(d_gbxs(ii));

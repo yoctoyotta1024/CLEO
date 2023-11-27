@@ -43,5 +43,6 @@ using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for poo
 
 /* Nested Parallelism */
 using TeamPolicy = Kokkos::TeamPolicy<ExecSpace>;
+using TeamMember = TeamPolicy::member_type;
 
 #endif // KOKKOSALIASES_SD_HPP

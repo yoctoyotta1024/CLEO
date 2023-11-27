@@ -99,7 +99,7 @@ public:
       Kokkos::parallel_for(
           "sdm_microphysics",
           TeamPolicy(ngbxs, Kokkos::AUTO()),
-          KOKKOS_CLASS_LAMBDA(const TeamPolicy::member_type &team_member) {
+          KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
             const int ii = team_member.league_rank();
 
             auto supers(d_gbxs(ii).supersingbx());
