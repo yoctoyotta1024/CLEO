@@ -106,9 +106,9 @@ public:
             {
               supers = microphys.run_step(team_member, subt, supers,
                                           d_gbxs(ii).state, genpool);
+              team_member.team_barrier(); // synchronize threads
             }
 
-            team_member.team_barrier(); // synchronize threads
           });
     }
   } sdm_microphysics; // operator is call for SDM microphysics
