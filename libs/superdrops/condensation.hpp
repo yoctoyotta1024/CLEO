@@ -163,12 +163,9 @@ water vapour during timestep delt. Using equations
 from "An Introduction To Clouds...." (see note at top of file) */
 {
   /* superdroplet radii changes */
-
   double totmass_condensed(superdroplets_change(team_member,
                                                 supers,
-                                                temp,
-                                                s_ratio,
-                                                ffactor));
+                                                state));
 
   /* resultant effect on thermodynamic state */
   effect_on_thermodynamic_state(team_member, totmass_condensed, state);
@@ -249,12 +246,14 @@ void DoCondensation::effect_on_thermodynamic_state(
 member to change the state due to the effect
 of condensation / evaporation */
 {
+  Kokkos::single(Kokkos::PerTeam(team_member), [=]()
+                 {
   if (doAlterThermo)
   {
     const double VOLUME(state.get_volume() * dlc::VOL0);       // volume in which condensation occurs [m^3]
     const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
     state_change(totrho_condensed, state);
-  }
+  } });
 }
 
 KOKKOS_FUNCTION void
