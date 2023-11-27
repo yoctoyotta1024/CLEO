@@ -63,9 +63,7 @@ private:
   KOKKOS_FUNCTION double
   superdroplets_change(const TeamPolicy::member_type &team_member,
                        const subviewd_supers supers,
-                       const double temp,
-                       const double s_ratio,
-                       const double ffactor) const;
+                       const State &state) const;
   /* returns total change in liquid water mass
   in parcel volume 'mass_condensed' by enacting
   superdroplets' condensation / evaporation */
@@ -87,7 +85,7 @@ private:
   void effect_on_thermodynamic_state(
       const TeamPolicy::member_type &team_member,
       const double totrho_condensed,
-      State &state);
+      State &state) const;
   /* if doAlterThermo isn't false, use a single team
   member to change the state due to the effect
   of condensation / evaporation */
@@ -167,7 +165,7 @@ from "An Introduction To Clouds...." (see note at top of file) */
                                                 supers,
                                                 state));
   team_member.team_barrier(); // synchronize threads
-  
+
   /* resultant effect on thermodynamic state */
   effect_on_thermodynamic_state(team_member, totmass_condensed, state);
 }
@@ -197,9 +195,10 @@ over for loop: for (size_t kk(0); kk < nsupers; ++kk) {[...]} */
   // {
   Kokkos::parallel_reduce(
       Kokkos::TeamThreadRange(team_member, nsupers),
-      [=, *this](int jj, double &mass_condensed)
+      [=, *this](int kk, double &mass_condensed)
       {
-        const double deltamass(superdrop_mass_change(supers(kk), temp, s_ratio, ffactor));
+        const double deltamass(superdrop_mass_change(supers(kk), temp,
+                                                     s_ratio, ffactor));
         mass_condensed += deltamass;
       },
       totmass_condensed);
@@ -242,7 +241,7 @@ KOKKOS_FUNCTION
 void DoCondensation::effect_on_thermodynamic_state(
     const TeamPolicy::member_type &team_member,
     const double totrho_condensed,
-    State &state)
+    State &state) const
 /* if doAlterThermo isn't false, use a single team
 member to change the state due to the effect
 of condensation / evaporation */
