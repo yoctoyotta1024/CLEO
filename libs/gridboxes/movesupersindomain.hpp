@@ -35,8 +35,7 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-template <GridboxMaps GbxMaps,
-          Motion<GbxMaps> M>
+template <GridboxMaps GbxMaps, Motion<GbxMaps> M>
 struct MoveSupersInDomain
 /* struct for functionality to move superdroplets throughtout
 the domain by updating their spatial coordinates (according to
@@ -60,7 +59,6 @@ after updating their gridbox indexes concordantly */
   {
     const size_t nsupers(supers.extent(0));
     Kokkos::parallel_for(
-        "move_supers_in_gbx",
         Kokkos::TeamThreadRange(team_member, nsupers),
         [=, *this](const size_t kk)
         {
