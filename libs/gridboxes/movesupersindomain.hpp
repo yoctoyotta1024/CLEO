@@ -54,31 +54,30 @@ after updating their gridbox indexes concordantly */
   /* enact steps (1) and (2) movement of superdroplets for 1 gridbox:
   (1) update their spatial coords according to type of motion. (device)
   (1b) optional detect precipitation (device)
-  (2) update their sdgbxindex accordingly (device) */
+  (2) update their sdgbxindex accordingly (device).
+  Kokkos::parallel_for is equivalent to:
+  for (size_t kk(0); kk < supers.extent(0); ++kk) {[...]} in serial */
   {
-    // for (size_t kk(0); kk < supers.extent(0); ++kk) // TODO parallelise on device
-    // {
     const size_t nsupers(supers.extent(0));
     Kokkos::parallel_for(
-      "move_superdrops_in_gbx",
-      Kokkos::TeamThreadRange(team_member, nsupers),
-      [=, *this](size_t kk)
-      {
+        "move_superdrops_in_gbx",
+        Kokkos::TeamThreadRange(team_member, nsupers),
+        [=, *this](size_t kk)
+        {
+          /* step (1) */
+          motion.update_superdrop_coords(gbxindex,
+                                         gbxmaps,
+                                         state,
+                                         supers(kk));
 
-      /* step (1) */
-      motion.update_superdrop_coords(gbxindex,
-                                     gbxmaps,
-                                     state,
-                                     supers(kk));
+          /* optional step (1b) */
+          // gbx.detectors -> detect_precipitation(area, drop); // TODO detectors
 
-      /* optional step (1b) */
-      // gbx.detectors -> detect_precipitation(area, drop); // TODO detectors
-
-      /* step (2) */
-      motion.update_superdrop_gbxindex(gbxindex,
-                                       gbxmaps,
-                                       supers(kk));
-    });
+          /* step (2) */
+          motion.update_superdrop_gbxindex(gbxindex,
+                                           gbxmaps,
+                                           supers(kk));
+        });
   }
 
   void move_supers_in_gridboxes(const GbxMaps &gbxmaps,
