@@ -108,12 +108,14 @@ after updating their gridbox indexes concordantly */
   void move_supers_between_gridboxes(const viewh_gbx h_gbxs,
                                      const viewd_supers totsupers) const
   /* (re)sorting supers based on their gbxindexes and
-  then updating the span for each gridbox accordingly */
+  then updating the span for each gridbox accordingly.
+  Kokkos::parallel_for([]...]) (on host) n serial is the
+  same as: for (size_t ii(0); ii < ngbxs; ++ii){[...]} */ // TODO parallelise on host?
   {
     sort_supers(totsupers);
 
     const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii) // TODO parallelise on host?
+    for (size_t ii(0); ii < ngbxs; ++ii) 
     {
       h_gbxs(ii).supersingbx.set_refs();
       // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
