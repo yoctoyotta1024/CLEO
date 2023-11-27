@@ -60,9 +60,9 @@ after updating their gridbox indexes concordantly */
   {
     const size_t nsupers(supers.extent(0));
     Kokkos::parallel_for(
-        "move_superdrops_in_gbx",
+        "move_supers_in_gbx",
         Kokkos::TeamThreadRange(team_member, nsupers),
-        [=](const size_t kk)
+        [=, *this](int &kk)
         {
           /* step (1) */
           motion.update_superdrop_coords(gbxindex,
