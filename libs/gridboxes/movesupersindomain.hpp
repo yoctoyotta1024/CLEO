@@ -93,7 +93,7 @@ after updating their gridbox indexes concordantly */
     const size_t ngbxs(d_gbxs.extent(0));
 
     Kokkos::parallel_for(
-        "move_superdrops_in_domain",
+        "move_supers_in_gridboxes",
         TeamPolicy(ngbxs, Kokkos::AUTO()),
         KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
           const int ii = team_member.league_rank();
@@ -124,7 +124,7 @@ after updating their gridbox indexes concordantly */
         KOKKOS_LAMBDA(const TeamMember &team_member) {
           const int ii = team_member.league_rank();
 
-          d_gbxs(ii).supersingbx.set_refs();
+          d_gbxs(ii).supersingbx.set_refs(team_member);
           // d_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
         });
   }

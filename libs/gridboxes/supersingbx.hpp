@@ -80,7 +80,15 @@ public:
   inline void set_refs();
   /* assumes totsupers is already sorted via sdgbxindex.
   sets 'refs' to pair with positions of first and last
-  superdrops in view which have matching sdgbxindex to idx */
+  superdrops in view which have matching sdgbxindex to idx.
+  Function is outermost level of parallelism. */
+
+  KOKKOS_INLINE_FUNCTION
+  void set_refs(const TeamMember &team_member);
+  /* assumes totsupers is already sorted via sdgbxindex.
+  sets 'refs' to pair with positions of first and last
+  superdrops in view which have matching sdgbxindex to idx.
+  Function is nested within heirarchal parallelism. */
 
   KOKKOS_INLINE_FUNCTION
   subviewd_supers operator()() const
@@ -158,10 +166,23 @@ constants with dimensions */
 inline void SupersInGbx::set_refs()
 /* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
-superdrops in view which have matching sdgbxindex to idx */
+superdrops in view which have matching sdgbxindex to idx.
+Function is outermost level of parallelism. */
 {
   namespace SRP = SetRefPreds;
-  refs = {find_ref(SRP::Ref0{idx}), find_ref(SRP::Ref1{idx})};
+  refs = {find_ref(SRP::Ref0{idx}),
+          find_ref(SRP::Ref1{idx})};
 }
 
+KOKKOS_INLINE_FUNCTION
+void SupersInGbx::set_refs(const TeamMember &team_member)
+/* assumes totsupers is already sorted via sdgbxindex.
+sets 'refs' to pair with positions of first and last
+superdrops in view which have matching sdgbxindex to idx.
+Function is nested within heirarchal parallelism. */
+{
+  namespace SRP = SetRefPreds;
+  refs = {find_ref(team_member, SRP::Ref0{idx}),
+          find_ref(team_member, SRP::Ref1{idx})};
+}
 #endif // SUPERSINGBX_HPP
