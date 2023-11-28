@@ -18,7 +18,7 @@ FetchContent_Declare(
   Kokkos
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
   URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
-  GIT_TAG 62d2b6c879b74b6ae7bd06eb3e5e80139c4708e6
+  GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
 )
 set(CMAKE_CXX_STANDARD "20")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
