@@ -44,7 +44,18 @@ private:
   size_t find_ref(const Pred pred) const;
   /* returns distance from begining of totsupers
   view to the superdroplet that is first to fail
-  to satisfy given Predicate "pred" */
+  to satisfy given Predicate "pred".
+  Function is outermost level of parallelism. */
+
+  template <typename Pred>
+  size_t find_ref(const TeamMember &team_member,
+                  const Pred pred) const;
+  /* returns distance from begining of totsupers
+  view to the superdroplet that is first to fail
+  to satisfy given Predicate "pred".
+  Function is 2nd level of nested parallelism,
+  i.e. is thread parallelism within a league 
+  for a given team_member */
 
   template <typename Pred>
   bool is_pred(const Pred pred) const;
@@ -56,6 +67,18 @@ private:
                   const kkpair refs4pred) const;
   /* returns true if all superdrops in subview
   between r0 and r1 do not satisfy pred */
+
+  template <typename Iter>
+  KOKKOS_INLINE_FUNCTION
+  size_t makeref(const Iter iter) const
+  /* makes ref (to use in refs pair for supers subview) by
+  returning distance from start of totsupers view to
+  position given by iterator 'iter'.
+  Note casting away signd-ness of distance. */
+  {
+    const auto ref0 = KE::distance(KE::begin(totsupers), iter);
+    return static_cast<size_t>(ref0);
+  }
 
 public:
   KOKKOS_INLINE_FUNCTION SupersInGbx() = default;  // Kokkos requirement for a (dual)View
@@ -81,14 +104,15 @@ public:
   /* assumes totsupers is already sorted via sdgbxindex.
   sets 'refs' to pair with positions of first and last
   superdrops in view which have matching sdgbxindex to idx.
-  Function is outermost level of parallelism. */
+  Function is outside of parallelism (ie. in serial code). */
 
   KOKKOS_INLINE_FUNCTION
   void set_refs(const TeamMember &team_member);
   /* assumes totsupers is already sorted via sdgbxindex.
   sets 'refs' to pair with positions of first and last
   superdrops in view which have matching sdgbxindex to idx.
-  Function is nested within heirarchal parallelism. */
+  Function works within 1st layer of heirarchal parallelism
+  for a team_member of a league */
 
   KOKKOS_INLINE_FUNCTION
   subviewd_supers operator()() const
@@ -167,7 +191,7 @@ inline void SupersInGbx::set_refs()
 /* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx.
-Function is outermost level of parallelism. */
+Function is outside of parallelism (ie. in serial code). */
 {
   namespace SRP = SetRefPreds;
   refs = {find_ref(SRP::Ref0{idx}),
@@ -179,7 +203,8 @@ void SupersInGbx::set_refs(const TeamMember &team_member)
 /* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx.
-Function is nested within heirarchal parallelism. */
+Function works within 1st layer of heirarchal parallelism
+for a team_member of a league */
 {
   namespace SRP = SetRefPreds;
   refs = {find_ref(team_member, SRP::Ref0{idx}),
