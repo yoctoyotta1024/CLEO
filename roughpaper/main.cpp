@@ -48,6 +48,89 @@ KOKKOS_INLINE_FUNCTION
 }
 };
 
+using viewd_supers = Kokkos::View<Superdrop *>;
+using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets
+using ExecSpace = Kokkos::DefaultExecutionSpace;
+using kkpair = Kokkos::pair<size_t, size_t>;
+
+size_t find_ref0_new(const unsigned int ii,
+                     viewd_constsupers totsupers)
+{
+  return 0;
+}
+
+size_t find_ref1_new(const unsigned int ii,
+                     viewd_constsupers totsupers)
+{
+  return totsupers.extent(0);
+}
+
+kkpair set_refs_new(const unsigned int ii,
+                    viewd_constsupers totsupers)
+{
+  const kkpair new_refs = {find_ref0_new(ii, totsupers),
+                           find_ref1_new(ii, totsupers)};
+  return new_refs;
+}
+
+void main_new(const size_t nsupers, const size_t ngbxs)
+{
+  std::cout << "\n ========== MAIN NEW ========== \n";
+    viewd_supers supers("supers", nsupers);
+    auto h_supers = Kokkos::create_mirror_view(supers);
+    for (size_t kk(0); kk < nsupers; ++kk)
+    {
+      const unsigned int ii(kk/3+1);
+      h_supers(kk) = Superdrop();
+      h_supers(kk).set_sdgbxindex(ii);
+      std::cout << "ii: " << h_supers(kk).get_sdgbxindex() << "\n";
+    }
+    Kokkos::deep_copy(supers, h_supers);
+
+    Kokkos::View<kkpair *> viewd_refs("gbxs", ngbxs); 
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      kkpair refs{0, 0};
+      refs = set_refs_new(ii, supers);
+      std::cout << "refs: " << refs.first << ", " << refs.second << "\n";
+      
+      viewd_refs(ii) = refs;
+    }
+
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      const auto subview = Kokkos::subview(supers, viewd_refs(ii));
+      const size_t n(subview.extent(0));
+      std::cout << "---- gbx: ii = " << ii << " -----\n"
+                << "refs: " << viewd_refs(ii).first
+                << ", " << viewd_refs(ii).second << "\n";
+
+      for (size_t kk(0); kk < n; ++kk)
+      {
+        std::cout << "ii: " << subview(kk).get_sdgbxindex() << "\n"; 
+      }
+      std::cout << "n = " << n << "\n"; 
+    }
+  std::cout << "\n ========== ========== ========== \n";
+}
+
+void main_old(const size_t nsupers, const size_t ngbxs);
+
+int main(int argc, char *argv[])
+{
+  const size_t nsupers(12);
+  const size_t ngbxs(3);
+
+  Kokkos::initialize(argc, argv);
+  {
+    main_old(nsupers, ngbxs);
+    main_new(nsupers, ngbxs);
+  }
+  Kokkos::finalize();
+}
+
+
+/* --- old algorithm --- */
 namespace SetRefPreds
 /* namespace containing values of
 constants with dimensions */
@@ -80,27 +163,6 @@ constants with dimensions */
   };
 }
 
-using viewd_supers = Kokkos::View<Superdrop *>;
-using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets
-using ExecSpace = Kokkos::DefaultExecutionSpace;
-using kkpair = Kokkos::pair<size_t, size_t>;
-
-void main_old(const size_t nsupers, const size_t ngbxs);
-
-int main(int argc, char *argv[])
-{
-  const size_t nsupers(12);
-  const size_t ngbxs(3);
-
-  Kokkos::initialize(argc, argv);
-  {
-    main_old(nsupers, ngbxs);
-  }
-  Kokkos::finalize();
-}
-
-
-/* --- old algorithm --- */
 kkpair set_refs_old(const unsigned int ii,
                     viewd_constsupers totsupers);
 
@@ -110,6 +172,7 @@ size_t find_ref_old(const Pred pred,
 
 void main_old(const size_t nsupers, const size_t ngbxs)
 {
+  std::cout << "\n ========== MAIN OLD ========== \n";
     viewd_supers supers("supers", nsupers);
     auto h_supers = Kokkos::create_mirror_view(supers);
     for (size_t kk(0); kk < nsupers; ++kk)
@@ -145,6 +208,7 @@ void main_old(const size_t nsupers, const size_t ngbxs)
       }
       std::cout << "n = " << n << "\n"; 
     }
+  std::cout << "\n ========== ========== ========== \n";
 }
 
 kkpair set_refs_old(const unsigned int ii, viewd_constsupers totsupers)
