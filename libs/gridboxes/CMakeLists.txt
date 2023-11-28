@@ -36,6 +36,7 @@ set(SOURCES
 "movesupersindomain.cpp"
 # "predcorr.cpp"
 "sortsupers.cpp"
+"supersingbx.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
