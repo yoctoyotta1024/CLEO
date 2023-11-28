@@ -94,7 +94,8 @@ to satisfy given Predicate "pred" */
   totsupers that fails to satisfy pred */
   const auto iter(KE::partition_point("findref",
                                       ExecSpace(),
-                                      totsupers, pred));
+                                      totsupers,
+                                      pred));
 
   /* distance form start of totsupers
   (casting away signd-ness)*/
