@@ -28,12 +28,13 @@
 #include "./superdrop.hpp"
 
 /* Default Execution Space for Parallelism */
-using ExecSpace = Kokkos::DefaultExecutionSpace;
+// using ExecSpace = Kokkos::DefaultExecutionSpace;
+using ExecSpace = Kokkos::DefaultHostExecutionSpace;
 using HostSpace = Kokkos::DefaultHostExecutionSpace;
 
 /* Superdrop views and subviews */
-using viewd_supers = Kokkos::View<Superdrop *>;            // view in device memory of superdroplets 
-using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets
+using viewd_supers = Kokkos::View<Superdrop *, ExecSpace::memory_space>;            // view in execution space's memory of superdroplets 
+using viewd_constsupers = Kokkos::View<const Superdrop *, ExecSpace::memory_space>; // view in execution space's memory of const superdroplets
 
 using subviewd_supers = Kokkos::Subview<viewd_supers, Kokkos::pair<size_t, size_t>>; // subiew of supers (for instance in a gridbox)
 using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, Kokkos::pair<size_t, size_t>>; // const supers subview (for instance in a gridbox) 
