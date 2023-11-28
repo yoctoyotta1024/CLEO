@@ -89,8 +89,8 @@ void main_old(const size_t nsupers, const size_t ngbxs);
 
 int main(int argc, char *argv[])
 {
-  const size_t nsupers(21);
-  const size_t ngbxs(10);
+  const size_t nsupers(12);
+  const size_t ngbxs(3);
 
   Kokkos::initialize(argc, argv);
   {
@@ -114,7 +114,7 @@ void main_old(const size_t nsupers, const size_t ngbxs)
     auto h_supers = Kokkos::create_mirror_view(supers);
     for (size_t kk(0); kk < nsupers; ++kk)
     {
-      const unsigned int ii(kk/2+1);
+      const unsigned int ii(kk/3+1);
       h_supers(kk) = Superdrop();
       h_supers(kk).set_sdgbxindex(ii);
       std::cout << "ii: " << h_supers(kk).get_sdgbxindex() << "\n";
