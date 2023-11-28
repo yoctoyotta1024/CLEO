@@ -107,37 +107,8 @@ Function is outermost level of parallelism. */
   return makeref(iter);
 }
 
-template <typename Pred>
-KOKKOS_FUNCTION size_t
-SupersInGbx::find_ref(const TeamMember &team_member,
-                      const Pred pred) const
-/* returns distance from begining of totsupers
-view to the superdroplet that is first to fail
-to satisfy given Predicate "pred".
-Function is 2nd level of nested parallelism,
-i.e. is thread parallelism within a league
-for a given team_member */
-{
-  namespace KE = Kokkos::Experimental;
-
-  /* iterator to first superdrop in
-  totsupers that fails to satisfy pred */
-  const auto iter(KE::partition_point(team_member,
-                                      totsupers,
-                                      pred));
-  return makeref(iter);                                   
-}
-
 template size_t SupersInGbx::
     find_ref<SetRefPreds::Ref0>(const SetRefPreds::Ref0) const;
 
 template size_t SupersInGbx::
     find_ref<SetRefPreds::Ref1>(const SetRefPreds::Ref1) const;
-
-template size_t SupersInGbx::
-    find_ref<SetRefPreds::Ref0>(const TeamMember &,
-                                const SetRefPreds::Ref0) const;
-
-template size_t SupersInGbx::
-    find_ref<SetRefPreds::Ref1>(const TeamMember &,
-                                const SetRefPreds::Ref1) const;
