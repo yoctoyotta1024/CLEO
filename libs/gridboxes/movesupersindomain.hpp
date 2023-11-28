@@ -117,22 +117,12 @@ after updating their gridbox indexes concordantly */
   {
     sort_supers(totsupers);
 
-    // const size_t ngbxs(h_gbxs.extent(0));
-    // for (size_t ii(0); ii < ngbxs; ++ii) // TODO parallelise on host?
-    // {
-    //   h_gbxs(ii).supersingbx.set_refs();
-    //   // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
-    // }
-
     const size_t ngbxs(h_gbxs.extent(0));
-    Kokkos::parallel_for(
-        "move_supers_between_gridboxes",
-        Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-        [=, *this](const size_t ii)
-        {
-          h_gbxs(ii).supersingbx.set_refs();
-          // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
-        });
+    for (size_t ii(0); ii < ngbxs; ++ii) // TODO parallelise on host?
+    {
+      h_gbxs(ii).supersingbx.set_refs();
+      // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
+    } 
   }
 
   void move_superdrops_in_domain(const unsigned int t_sdm,
