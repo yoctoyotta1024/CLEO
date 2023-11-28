@@ -35,26 +35,24 @@ containing super-droplets occupying a given Gridbox
 {
 private:
   using kkpair = Kokkos::pair<size_t, size_t>;
-  using subviewd_supers = Kokkos::Subview<viewd_supers, kkpair>;           // should match that in kokkosaliases.hpp
-  using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, kkpair>; // should match that in kokkosaliases.hpp
-
+  
   viewd_supers totsupers; // reference to view of all superdrops (in total domain)
   unsigned int idx;       // value of gbxindex which sdgbxindex of superdrops must match
   kkpair refs;            // position in view of (first, last) superdrop that occupies gridbox
 
   template <typename Pred>
-  inline size_t find_ref(const Pred pred) const;
+  size_t find_ref(const Pred pred) const;
   /* returns distance from begining of totsupers
   view to the superdroplet that is first to fail
   to satisfy given Predicate "pred" */
 
   template <typename Pred>
-  inline bool is_pred(const Pred pred) const;
+  bool is_pred(const Pred pred) const;
   /* returns true if all superdrops in subview
   between refs satisfy the Predicate "pred" */
 
   template <typename Pred>
-  inline bool is_prednot(const Pred pred,
+  bool is_prednot(const Pred pred,
                          const kkpair refs4pred) const;
   /* returns true if all superdrops in subview
   between r0 and r1 do not satisfy pred */
@@ -70,11 +68,6 @@ public:
     set_refs();
   }
 
-  inline void set_refs();
-  /* assumes totsupers is already sorted via sdgbxindex.
-  sets 'refs' to pair with positions of first and last
-  superdrops in view which have matching sdgbxindex to idx */
-
   bool iscorrect() const;
   /* assumes totsupers is already sorted via sdgbxindex. checks that all
   superdrops in view which have matching sdgbxindex to idx are indeed
@@ -83,6 +76,11 @@ public:
   subview have matching index. (2) all superdrops preceeding current
   subview do not have matching index. (3) all superdrops after current
   subview also do not have matching index. */
+
+  inline void set_refs();
+  /* assumes totsupers is already sorted via sdgbxindex.
+  sets 'refs' to pair with positions of first and last
+  superdrops in view which have matching sdgbxindex to idx */
 
   KOKKOS_INLINE_FUNCTION
   subviewd_supers operator()() const
@@ -125,52 +123,6 @@ public:
   }
 };
 
-template <typename Pred>
-inline size_t SupersInGbx::find_ref(const Pred pred) const
-/* returns distance from begining of totsupers
-view to the superdroplet that is first to fail
-to satisfy given Predicate "pred" */
-{
-  namespace KE = Kokkos::Experimental;
-
-  /* iterator to first superdrop in
-  totsupers that fails to satisfy pred */
-  const auto iter(KE::partition_point("findref",
-                                      Kokkos::DefaultExecutionSpace(), // should match kokkosaliases.hpp
-                                      totsupers, pred));
-
-  /* distance form start of totsupers
-  (casting away signd-ness)*/
-  const auto ref0 = KE::distance(KE::begin(totsupers), iter);
-  return static_cast<size_t>(ref0);
-}
-
-template <typename Pred>
-inline bool SupersInGbx::is_pred(const Pred pred) const
-/* returns true if all superdrops in subview
-between refs satisfy the Predicate "pred" */
-{
-  return Kokkos::Experimental::
-      all_of("is_pred",
-             Kokkos::DefaultExecutionSpace(), // should match kokkosaliases.hpp
-             (*this)(), pred);
-}
-
-template <typename Pred>
-inline bool SupersInGbx::is_prednot(const Pred pred,
-                                    const SupersInGbx::kkpair refs4pred) const
-/* returns true if all superdrops in subview
-between r0 and r1 do not satisfy pred */
-{
-  const subviewd_constsupers
-      supers4pred(Kokkos::subview(totsupers, refs4pred));
-
-  return Kokkos::Experimental::
-      none_of("is_prednot",
-              Kokkos::DefaultExecutionSpace(), // should match kokkosaliases.hpp
-              supers4pred, pred);
-}
-
 namespace SetRefPreds
 /* namespace containing values of
 constants with dimensions */
@@ -203,9 +155,8 @@ constants with dimensions */
   };
 }
 
-inline void
-SupersInGbx::set_refs()
- /* assumes totsupers is already sorted via sdgbxindex.
+inline void SupersInGbx::set_refs()
+/* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx */
 {
