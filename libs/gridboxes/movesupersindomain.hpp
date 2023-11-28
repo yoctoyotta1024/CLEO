@@ -124,14 +124,14 @@ after updating their gridbox indexes concordantly */
       // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
     }
 
-    // Kokkos::parallel_for(
-    //     "move_supers_between_gridboxes",
-    //     Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-    //     [=, *this](const size_t ii)
-    //     {
-    //       h_gbxs(ii).supersingbx.set_refs();
-    //       // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
-    //     });
+    Kokkos::parallel_for(
+        "move_supers_between_gridboxes",
+        Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+        [=, *this](const size_t ii)
+        {
+          // h_gbxs(ii).supersingbx.set_refs();
+          // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
+        });
   }
 
   void move_superdrops_in_domain(const unsigned int t_sdm,

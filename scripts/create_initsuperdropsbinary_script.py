@@ -54,7 +54,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 # zlim = 1000
 # npergbx = 8
 # nsupers =  iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 2048
+nsupers = 8
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
@@ -109,15 +109,15 @@ radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
 # coord3gen            =  iattrs.MonoCoordGen(monocoord3)
-# coord3gen            =  iattrs.SampleCoordGen(True) # sample coord3 range randomly or not
-coord3gen            = None                        # do not generate superdroplet coord3s
+coord3gen            =  iattrs.SampleCoordGen(True) # sample coord3 range randomly or not
+# coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
 # coord1gen            =  iattrs.MonoCoordGen(monocoord1)
-# coord1gen            =  iattrs.SampleCoordGen(True) # sample coord1 range randomly or not
-coord1gen            = None                        # do not generate superdroplet coord1s
+coord1gen            =  iattrs.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
