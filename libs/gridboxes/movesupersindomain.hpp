@@ -149,8 +149,7 @@ after updating their gridbox indexes concordantly */
     move_supers_in_gridboxes(gbxmaps, d_gbxs);
 
     /* step (3) */
-    move_supers_between_gridboxes(d_gbxs, totsupers);
-    
+    move_supers_between_gridboxes(d_gbxs, totsupers);    
   }
 
   MoveSupersInDomain(const M i_motion)
