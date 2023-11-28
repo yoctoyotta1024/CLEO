@@ -48,6 +48,38 @@ KOKKOS_INLINE_FUNCTION
 }
 };
 
+namespace SetRefPreds
+/* namespace containing values of
+constants with dimensions */
+{
+
+  struct Ref0
+  /* struct for SupersInGbx::set_refs()
+  predicate to find first superdrop in
+  view which has matching sdgbxindex to idx */
+  {
+    unsigned int idx;
+
+    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+    {
+      return op.get_sdgbxindex() < idx;
+    }
+  };
+
+  struct Ref1
+  /* struct for SupersInGbx::set_refs()
+  predicate to find last superdrop in
+  view which has matching sdgbxindex to idx */
+  {
+    unsigned int idx;
+
+    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+    {
+      return op.get_sdgbxindex() <= idx;
+    }
+  };
+}
+
 using viewd_supers = Kokkos::View<Superdrop *>;
 using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets
 using ExecSpace = Kokkos::DefaultExecutionSpace;
@@ -56,6 +88,22 @@ using kkpair = Kokkos::pair<size_t, size_t>;
 size_t find_ref0_new(const unsigned int ii,
                      viewd_constsupers totsupers)
 {
+
+  const SetRefPreds::Ref0 pred{ii};
+  namespace KE = Kokkos::Experimental;
+
+  /* iterator to first superdrop in
+  totsupers that fails to satisfy pred */
+  using TeamPol = Kokkos::TeamPolicy<ExecSpace>;
+
+  Kokkos::parallel_for(
+      "findref0", TeamPol(1, Kokkos::AUTO()),
+      KOKKOS_LAMBDA(const TeamPol::member_type &team_member) {
+        const auto iter(KE::partition_point(team_member,
+                                            totsupers,
+                                            pred));
+      });
+
   return 0;
 }
 
@@ -131,38 +179,6 @@ int main(int argc, char *argv[])
 
 
 /* --- old algorithm --- */
-namespace SetRefPreds
-/* namespace containing values of
-constants with dimensions */
-{
-
-  struct Ref0
-  /* struct for SupersInGbx::set_refs()
-  predicate to find first superdrop in
-  view which has matching sdgbxindex to idx */
-  {
-    unsigned int idx;
-
-    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
-    {
-      return op.get_sdgbxindex() < idx;
-    }
-  };
-
-  struct Ref1
-  /* struct for SupersInGbx::set_refs()
-  predicate to find last superdrop in
-  view which has matching sdgbxindex to idx */
-  {
-    unsigned int idx;
-
-    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
-    {
-      return op.get_sdgbxindex() <= idx;
-    }
-  };
-}
-
 kkpair set_refs_old(const unsigned int ii,
                     viewd_constsupers totsupers);
 
