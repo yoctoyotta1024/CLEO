@@ -115,16 +115,17 @@ after updating their gridbox indexes concordantly */
   for (size_t ii(0); ii < ngbxs; ++ii){[...]}
   when in serial */
   {
-    sort_supers(totsupers);
+    sort_supers(totsupers); 
 
     const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for(
         "move_supers_between_gridboxes",
         TeamPolicy(ngbxs, Kokkos::AUTO()),
-        KOKKOS_LAMBDA(const TeamMember &team_member) {
+        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
           const int ii = team_member.league_rank();
 
-          d_gbxs(ii).supersingbx.set_refs(team_member);
+          auto &gbx(d_gbxs(ii));
+          gbx.supersingbx.set_refs(team_member); 
         });
 
     // /* optional (expensive!) test to raise error if
@@ -144,12 +145,13 @@ after updating their gridbox indexes concordantly */
   (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host) */
+  // TODO put all team policy loops in these function calls into 1 loop?
   {
     /* steps (1 - 2) */
-    move_supers_in_gridboxes(gbxmaps, d_gbxs);
+    move_supers_in_gridboxes(gbxmaps, d_gbxs); 
 
     /* step (3) */
-    move_supers_between_gridboxes(d_gbxs, totsupers);    
+    move_supers_between_gridboxes(d_gbxs, totsupers);   
   }
 
   MoveSupersInDomain(const M i_motion)

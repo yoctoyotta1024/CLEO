@@ -172,12 +172,14 @@ when in serial */
     h_gbxs(ii) = gen(ii, gbxmaps, totsupers); // TODO parallelise on host?
   }
 
+  // using TeamPol = Kokkos::TeamPolicy<HostSpace>;
+
   // Kokkos::parallel_for(
   //     "initialise_gbxs_on_host",
-  //     Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-  //     [=](const size_t ii)
-  //     {
-  //       h_gbxs(ii) = gen(ii, gbxmaps, totsupers); 
+  //     TeamPol(ngbxs, Kokkos::AUTO()),
+  //     KOKKOS_LAMBDA(const TeamPol::member_type &team_member) {
+  //       const int ii = team_member.league_rank();
+  //       h_gbxs(ii) = gen(ii, gbxmaps, totsupers);
   //     });
 }
 
