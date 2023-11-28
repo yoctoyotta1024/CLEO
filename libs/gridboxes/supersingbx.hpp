@@ -35,7 +35,7 @@ containing super-droplets occupying a given Gridbox
 {
 private:
   using kkpair = Kokkos::pair<size_t, size_t>;
-  
+
   viewd_supers totsupers; // reference to view of all superdrops (in total domain)
   unsigned int idx;       // value of gbxindex which sdgbxindex of superdrops must match
   kkpair refs;            // position in view of (first, last) superdrop that occupies gridbox
@@ -53,7 +53,7 @@ private:
 
   template <typename Pred>
   bool is_prednot(const Pred pred,
-                         const kkpair refs4pred) const;
+                  const kkpair refs4pred) const;
   /* returns true if all superdrops in subview
   between r0 and r1 do not satisfy pred */
 
@@ -98,7 +98,7 @@ public:
     return Kokkos::subview(totsupers, refs);
   }
 
-  subviewd_constsupers::HostMirror hostcopy() const
+  mirrorh_constsupers hostcopy() const
   /* returns mirror view on host for const supers in
   gridbox. If supers view is on device memory, a
   deep copy is performed */
