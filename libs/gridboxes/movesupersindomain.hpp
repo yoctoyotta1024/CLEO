@@ -107,7 +107,7 @@ after updating their gridbox indexes concordantly */
         });
   }
 
-  void move_supers_between_gridboxes(const viewh_gbx h_gbxs,
+  void move_supers_between_gridboxes(const viewd_gbx d_gbxs,
                                      const viewd_supers totsupers) const
   /* (re)sorting supers based on their gbxindexes and
   then updating the span for each gridbox accordingly.
@@ -117,17 +117,21 @@ after updating their gridbox indexes concordantly */
   {
     sort_supers(totsupers);
 
-    const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii) // TODO parallelise on host?
-    {
-      h_gbxs(ii).supersingbx.set_refs();
-      // h_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
-    } 
+    const size_t ngbxs(d_gbxs.extent(0));
+    Kokkos::parallel_for(
+        "move_supers_between_gridboxes",
+        TeamPolicy(ngbxs, Kokkos::AUTO()),
+        KOKKOS_LAMBDA(const TeamMember &team_member) {
+          const int ii = team_member.league_rank();
+
+          d_gbxs(ii).supersingbx.set_refs();
+          // d_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
+        });
   }
 
   void move_superdrops_in_domain(const unsigned int t_sdm,
                                  const GbxMaps &gbxmaps,
-                                 dualview_gbx gbxs,
+                                 viewd_gbx d_gbxs,
                                  const viewd_supers totsupers) const
   /* enact movement of superdroplets throughout domain in three stages:
   (1) update their spatial coords according to type of motion. (device)
@@ -136,16 +140,11 @@ after updating their gridbox indexes concordantly */
   (3) move superdroplets between gridboxes (host) */
   {
     /* steps (1 - 2) */
-    gbxs.sync_device(); // get device up to date with host
-    move_supers_in_gridboxes(gbxmaps, gbxs.view_device());
-    gbxs.modify_device(); // mark device view of gbxs as modified
+    move_supers_in_gridboxes(gbxmaps, d_gbxs);
 
     /* step (3) */
-    gbxs.sync_host(); // get device up to date with host
-    move_supers_between_gridboxes(gbxs.view_host(), totsupers);
-    gbxs.modify_host(); // mark device view of gbxs as modified
-
-    gbxs.sync_device(); // get device up to date with host
+    move_supers_between_gridboxes(d_gbxs, totsupers);
+    
   }
 
   MoveSupersInDomain(const M i_motion)
@@ -161,7 +160,7 @@ after updating their gridbox indexes concordantly */
 
   void run_step(const unsigned int t_sdm,
                 const GbxMaps &gbxmaps,
-                dualview_gbx gbxs,
+                viewd_gbx d_gbxs,
                 const viewd_supers totsupers) const
   /* if current time, t_sdm, is time when superdrop
   motion should occur, enact movement of
@@ -169,7 +168,7 @@ after updating their gridbox indexes concordantly */
   {
     if (motion.on_step(t_sdm))
     {
-      move_superdrops_in_domain(t_sdm, gbxmaps, gbxs, totsupers);
+      move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, totsupers);
     }
   };
 };

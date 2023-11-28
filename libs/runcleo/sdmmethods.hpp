@@ -62,12 +62,12 @@ private:
   }
 
   void superdrops_movement(const unsigned int t_sdm,
-                           dualview_gbx gbxs,
+                           viewd_gbx d_gbxs,
                            const viewd_supers totsupers) const
   /* move superdroplets (including movement between
   gridboxes) according to movesupers struct */
   {
-    movesupers.run_step(t_sdm, gbxmaps, gbxs, totsupers);
+    movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers);
   }
 
 public:
@@ -137,29 +137,24 @@ public:
 
   void run_step(const unsigned int t_mdl,
                 const unsigned int t_mdl_next,
-                dualview_gbx gbxs,
+                viewd_gbx d_gbxs,
                 const viewd_supers totsupers,
                 GenRandomPool genpool) const
   /* run CLEO SDM (on device) from time t_mdl to t_mdl_next
   with sub-timestepping routine for super-droplets'
   movement and microphysics */
   {
-    gbxs.sync_device(); // get device up to date with host
-
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next)
     {
       unsigned int t_sdm_next(next_sdmstep(t_sdm, t_mdl_next));
 
-      superdrops_movement(t_sdm, gbxs, totsupers); // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, gbxs.view_device(), genpool); // on device 
+      superdrops_movement(t_sdm, d_gbxs, totsupers);        // on host and device
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, genpool); // on device
 
       t_sdm = t_sdm_next;
     }
-
-    gbxs.modify_device(); // mark device view of gbxs as modified
   }
-
 };
 
 #endif // SDMMETHODS_HPP
