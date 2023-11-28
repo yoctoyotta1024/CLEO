@@ -108,8 +108,9 @@ Function is outermost level of parallelism. */
 }
 
 template <typename Pred>
-size_t SupersInGbx::find_ref(const TeamMember &team_member,
-                             const Pred pred) const
+KOKKOS_FUNCTION size_t
+SupersInGbx::find_ref(const TeamMember &team_member,
+                      const Pred pred) const
 /* returns distance from begining of totsupers
 view to the superdroplet that is first to fail
 to satisfy given Predicate "pred".

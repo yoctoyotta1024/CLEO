@@ -48,8 +48,9 @@ private:
   Function is outermost level of parallelism. */
 
   template <typename Pred>
-  size_t find_ref(const TeamMember &team_member,
-                  const Pred pred) const;
+  KOKKOS_FUNCTION size_t
+  find_ref(const TeamMember &team_member,
+           const Pred pred) const;
   /* returns distance from begining of totsupers
   view to the superdroplet that is first to fail
   to satisfy given Predicate "pred".
@@ -76,6 +77,8 @@ private:
   position given by iterator 'iter'.
   Note casting away signd-ness of distance. */
   {
+    namespace KE = Kokkos::Experimental;
+    
     const auto ref0 = KE::distance(KE::begin(totsupers), iter);
     return static_cast<size_t>(ref0);
   }
@@ -148,10 +151,16 @@ public:
     return refs.second - refs.first;
   }
 
-  KOKKOS_INLINE_FUNCTION size_t domaintotnsupers() const
+  KOKKOS_INLINE_FUNCTION size_t domain_totnsupers() const
   /* returns current total number of superdrops in domain */
   {
     return totsupers.extent(0);
+  }
+
+  KOKKOS_INLINE_FUNCTION viewd_supers domain_totsupers() const
+  /* returns current total number of superdrops in domain */
+  {
+    return totsupers;
   }
 };
 

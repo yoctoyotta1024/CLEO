@@ -112,8 +112,8 @@ after updating their gridbox indexes concordantly */
   /* (re)sorting supers based on their gbxindexes and
   then updating the span for each gridbox accordingly.
   Kokkos::parallel_for([...]) (on host) is equivalent to:
-  for (size_t ii(0); ii < ngbxs; ++ii){[...]} 
-  when in serial */ 
+  for (size_t ii(0); ii < ngbxs; ++ii){[...]}
+  when in serial */
   {
     sort_supers(totsupers);
 
@@ -125,8 +125,14 @@ after updating their gridbox indexes concordantly */
           const int ii = team_member.league_rank();
 
           d_gbxs(ii).supersingbx.set_refs(team_member);
-          // d_gbxs(ii).supersingbx.iscorrect(); // (expensive!) optional test to raise error if superdrops' gbxindex doesn't match gridbox's gbxindex
         });
+
+    // /* optional (expensive!) test to raise error if
+    // superdrops' gbxindex doesn't match gridbox's gbxindex */
+    // for (size_t ii(0); ii < ngbxs; ++ii)
+    // {
+    //   d_gbxs(ii).supersingbx.iscorrect();
+    // }
   }
 
   void move_superdrops_in_domain(const unsigned int t_sdm,

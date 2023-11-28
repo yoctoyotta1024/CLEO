@@ -223,7 +223,7 @@ public:
   metadata on superdrops) and writes it to a 1-D zarr storage */
   {
     const auto gbx0 = h_gbxs(0);
-    const size_t totnsupers(gbx0.supersingbx.domaintotnsupers());
+    const size_t totnsupers(gbx0.supersingbx.domain_totnsupers());
 
     zarr->value_to_storage(totnsupers);
   }
