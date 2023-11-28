@@ -79,34 +79,6 @@ after updating their gridbox indexes concordantly */
         });
   }
 
-  void move_supers_in_gridboxes(const GbxMaps &gbxmaps,
-                                const viewd_gbx d_gbxs) const
-  /* enact steps (1) and (2) movement of superdroplets
-  throughout domain (i.e. for all gridboxes):
-  (1) update their spatial coords according to type of motion. (device)
-  (1b) optional detect precipitation (device)
-  (2) update their sdgbxindex accordingly (device).
-  Kokkos::parallel_for([...]) is equivalent to:
-  for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
-  when in serial */
-  {
-    const size_t ngbxs(d_gbxs.extent(0));
-
-    Kokkos::parallel_for(
-        "move_supers_in_gridboxes",
-        TeamPolicy(ngbxs, Kokkos::AUTO()),
-        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-          const int ii = team_member.league_rank();
-
-          auto &gbx(d_gbxs(ii));
-          move_supers_in_gbx(team_member,
-                             gbx.get_gbxindex(),
-                             gbxmaps,
-                             gbx.state,
-                             gbx.supersingbx());
-        });
-  }
-
   void move_supers_between_gridboxes(const viewd_gbx d_gbxs,
                                      const viewd_supers totsupers) const
   /* (re)sorting supers based on their gbxindexes and
@@ -140,13 +112,31 @@ after updating their gridbox indexes concordantly */
                                  viewd_gbx d_gbxs,
                                  const viewd_supers totsupers) const
   /* enact movement of superdroplets throughout domain in three stages:
-  (1) update their spatial coords according to type of motion. (device)
-  (1b) optional detect precipitation (device)
-  (2) update their sdgbxindex accordingly (device)
-  (3) move superdroplets between gridboxes (host) */
+  (1) update their spatial coords according to type of motion. 
+  (1b) optional detect precipitation
+  (2) update their sdgbxindex accordingly
+  (3) move superdroplets between gridboxes
+  Kokkos::parallel_for([...]) is equivalent to:
+  for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
+  when in serial */
   {
-    /* steps (1 - 2) */
-    move_supers_in_gridboxes(gbxmaps, d_gbxs);
+    const size_t ngbxs(d_gbxs.extent(0));
+
+    Kokkos::parallel_for(
+        "move_supers_in_domain",
+        TeamPolicy(ngbxs, Kokkos::AUTO()),
+        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+          const int ii = team_member.league_rank();
+
+          auto &gbx = d_gbxs(ii);
+
+          /* steps (1 - 2) */
+          move_supers_in_gbx(team_member,
+                             gbx.get_gbxindex(),
+                             gbxmaps,
+                             gbx.state,
+                             gbx.supersingbx());
+        });
 
     /* step (3) */
     move_supers_between_gridboxes(d_gbxs, totsupers);
