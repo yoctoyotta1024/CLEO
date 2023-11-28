@@ -34,7 +34,7 @@
 #include "superdrops/kokkosaliases_sd.hpp"
 
 /* Gridboxes */
-using dualview_gbx = Kokkos::DualView<Gridbox *>;            // dual view of gridboxes
+using dualview_gbx = Kokkos::DualView<Gridbox *>; // dual view of gridboxes
 using dualview_constgbx = Kokkos::DualView<const Gridbox *>; // dual view of const gridboxes
 
 using viewh_gbx = dualview_gbx::t_host;           // view in host memory of gridboxes

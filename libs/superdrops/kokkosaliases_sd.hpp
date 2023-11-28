@@ -28,8 +28,7 @@
 #include "./superdrop.hpp"
 
 /* Default Execution Space for Parallelism */
-// using ExecSpace = Kokkos::DefaultExecutionSpace;
-using ExecSpace = Kokkos::DefaultHostExecutionSpace;
+using ExecSpace = Kokkos::DefaultExecutionSpace;
 using HostSpace = Kokkos::DefaultHostExecutionSpace;
 
 /* Superdrop views and subviews */
