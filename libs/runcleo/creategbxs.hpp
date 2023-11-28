@@ -34,6 +34,7 @@
 #include <Kokkos_DualView.hpp>
 
 #include "../kokkosaliases.hpp"
+#include "gridboxes/gbxindex.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "superdrops/superdrop.hpp"
@@ -70,7 +71,7 @@ void print_gbxs(const viewh_constgbx gbxs);
 class GenGridbox
 {
 private:
-  std::unique_ptr<Gridbox::Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
+  std::unique_ptr<Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
   std::vector<double> presss;
   std::vector<double> temps;
   std::vector<double> qvaps;
@@ -85,7 +86,7 @@ private:
 public:
   template <typename GbxInitConds>
   GenGridbox(const GbxInitConds &gbxic)
-      : GbxindexGen(std::make_unique<Gridbox::Gbxindex::Gen>()),
+      : GbxindexGen(std::make_unique<Gbxindex::Gen>()),
         presss(gbxic.press()),
         temps(gbxic.temp()),
         qvaps(gbxic.qvap()),

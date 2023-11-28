@@ -23,6 +23,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
+#include <Kokkos_Random.hpp>
 
 #include "./superdrop.hpp"
 

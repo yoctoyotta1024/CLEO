@@ -26,6 +26,8 @@
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
+#include "superdrops/kokkosaliases_sd.hpp"
+
 struct SupersInGbx
 /* References to identify the chunk of memory
 containing super-droplets occupying a given Gridbox

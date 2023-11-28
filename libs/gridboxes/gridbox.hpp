@@ -37,11 +37,6 @@ reference to superdroplets in gridbox, alongside the
 Gridbox's State (e.g. thermodynamic variables
 used for SDM) and detectors for tracking chosen variables */
 {
-private:
-  using viewd_supers = Kokkos::View<Superdrop *>;            // should match that in kokkosaliases.hpp
-  using viewd_constsupers = Kokkos::View<const Superdrop *>; // should match that in kokkosaliases.hpp
-
-public:
   Gbxindex gbxindex;       // index (unique identifier) of gridbox
   State state;             // dynamical state of gridbox (e.g. thermodynamics)
   SupersInGbx supersingbx; // reference(s) to superdrops occupying gridbox

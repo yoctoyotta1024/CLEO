@@ -26,18 +26,19 @@ struct Gbxindex
 /* struct containing gridbox index and its generator struct */
 {
   unsigned int value;
+
   class Gen
   {
   public:
-    Gbxindex next() { return {_id++}; }
+    Gbxindex next() { return {_idx++}; }
 
-    Gbxindex next(const unsigned int id)
+    Gbxindex next(const unsigned int idx)
     {
-      return {id};
+      return {idx};
     }
 
   private:
-    unsigned int _id = 0;
+    unsigned int _idx = 0;
   };
 };
 

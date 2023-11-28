@@ -105,7 +105,7 @@ one_shuffle_supers(const TeamMember &team_member,
                    GenRandomPool genpool)
 /* Use only 1 member of team to randomly shuffle order
 of superdroplet objects in 'supers'. Then synchronise
-team and return view of shuffled supers. Uses genpool
+team and return view of shuffled supers. Uses 
 to get team / thread safe random number generator */
 {
   Kokkos::single(Kokkos::PerTeam(team_member), [&]()
