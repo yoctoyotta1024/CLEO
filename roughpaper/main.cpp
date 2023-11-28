@@ -85,12 +85,7 @@ using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device mem
 using ExecSpace = Kokkos::DefaultExecutionSpace;
 using kkpair = Kokkos::pair<size_t, size_t>;
 
-kkpair set_refs_old(const unsigned int ii,
-                    viewd_constsupers totsupers);
-
-template <typename Pred>
-size_t find_ref_old(const Pred pred,
-                    viewd_constsupers totsupers);
+void main_old(const size_t nsupers, const size_t ngbxs);
 
 int main(int argc, char *argv[])
 {
@@ -99,11 +94,27 @@ int main(int argc, char *argv[])
 
   Kokkos::initialize(argc, argv);
   {
+    main_old(nsupers, ngbxs);
+  }
+  Kokkos::finalize();
+}
+
+
+/* --- old algorithm --- */
+kkpair set_refs_old(const unsigned int ii,
+                    viewd_constsupers totsupers);
+
+template <typename Pred>
+size_t find_ref_old(const Pred pred,
+                    viewd_constsupers totsupers);
+
+void main_old(const size_t nsupers, const size_t ngbxs)
+{
     viewd_supers supers("supers", nsupers);
     auto h_supers = Kokkos::create_mirror_view(supers);
     for (size_t kk(0); kk < nsupers; ++kk)
     {
-      const unsigned int ii(kk/2);
+      const unsigned int ii(kk/2+1);
       h_supers(kk) = Superdrop();
       h_supers(kk).set_sdgbxindex(ii);
       std::cout << "ii: " << h_supers(kk).get_sdgbxindex() << "\n";
@@ -122,11 +133,11 @@ int main(int argc, char *argv[])
 
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      std::cout << "refs: " << viewd_refs(ii).first
-                << ", " << viewd_refs(ii).second << "\n";
       const auto subview = Kokkos::subview(supers, viewd_refs(ii));
       const size_t n(subview.extent(0));
-      std::cout << "---- gbx: ii = " << ii << " -----\n";
+      std::cout << "---- gbx: ii = " << ii << " -----\n"
+                << "refs: " << viewd_refs(ii).first
+                << ", " << viewd_refs(ii).second << "\n";
 
       for (size_t kk(0); kk < n; ++kk)
       {
@@ -134,10 +145,7 @@ int main(int argc, char *argv[])
       }
       std::cout << "n = " << n << "\n"; 
     }
-  }
-  Kokkos::finalize();
 }
-
 
 kkpair set_refs_old(const unsigned int ii, viewd_constsupers totsupers)
 {
