@@ -34,7 +34,7 @@
 #include "superdrops/kokkosaliases_sd.hpp"
 
 /* Gridboxes */
-using dualview_gbx = Kokkos::DualView<Gridbox *>; // dual view of gridboxes
+using dualview_gbx = Kokkos::DualView<Gridbox *>;            // dual view of gridboxes
 using dualview_constgbx = Kokkos::DualView<const Gridbox *>; // dual view of const gridboxes
 
 using viewh_gbx = dualview_gbx::t_host;           // view in host memory of gridboxes
@@ -44,7 +44,7 @@ using viewd_gbx = dualview_gbx::t_dev;           // view in device memory of gri
 using viewd_constgbx = dualview_constgbx::t_dev; // view in device memory of const gridboxes
 
 /* Gridbox Maps */
-using viewd_ndims = Kokkos::View<size_t[3], ExecSpace::memory_space>; // view in device memory for number of gridboxes in CartesianMaps
+using viewd_ndims = Kokkos::View<size_t[3]>; // view in device memory for number of gridboxes in CartesianMaps
 using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int,
                                             Kokkos::pair<double, double>,
                                             ExecSpace>;
