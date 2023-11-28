@@ -216,8 +216,14 @@ Function works within 1st layer of heirarchal parallelism
 for a team_member of a league */
 {
   namespace SRP = SetRefPreds;
-  refs = {find_ref(team_member, SRP::Ref0{idx}),
-          find_ref(team_member, SRP::Ref1{idx})};
+  const kkpair new_refs = {find_ref(team_member, SRP::Ref0{idx}),
+                           find_ref(team_member, SRP::Ref1{idx})};
+
+  Kokkos::single(
+      Kokkos::PerTeam(team_member),
+      [new_refs](kkpair &refs)
+      { refs = new_refs; },
+      refs);
 }
 
 template <typename Pred>
