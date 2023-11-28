@@ -85,39 +85,33 @@ using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device mem
 using ExecSpace = Kokkos::DefaultExecutionSpace;
 using kkpair = Kokkos::pair<size_t, size_t>;
 
-size_t find_ref0_new(const unsigned int ii,
-                     viewd_constsupers totsupers)
-{
+using TeamPolicy = Kokkos::TeamPolicy<ExecSpace>;
+using TeamMember = TeamPolicy::member_type;
 
-  const SetRefPreds::Ref0 pred{ii};
+template <typename Pred>
+size_t find_ref_new(const TeamMember &team_member,
+                    const Pred pred,
+                    viewd_supers totsupers)
+{
   namespace KE = Kokkos::Experimental;
 
   /* iterator to first superdrop in
   totsupers that fails to satisfy pred */
-  using TeamPol = Kokkos::TeamPolicy<ExecSpace>;
+  const auto iter(KE::partition_point(team_member,
+                  totsupers,
+                  pred));
 
-  Kokkos::parallel_for(
-      "findref0", TeamPol(1, Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const TeamPol::member_type &team_member) {
-        const auto iter(KE::partition_point(team_member,
-                                            totsupers,
-                                            pred));
-      });
-
-  return 0;
+  /* distance form start of totsupers (casting away signed-ness) */
+  const auto ref0 = KE::distance(KE::begin(totsupers), iter);
+  return static_cast<size_t>(ref0);
 }
 
-size_t find_ref1_new(const unsigned int ii,
-                     viewd_constsupers totsupers)
+kkpair set_refs_new(const TeamMember &team_member,
+                    const unsigned int ii,
+                    viewd_supers totsupers)
 {
-  return totsupers.extent(0);
-}
-
-kkpair set_refs_new(const unsigned int ii,
-                    viewd_constsupers totsupers)
-{
-  const kkpair new_refs = {find_ref0_new(ii, totsupers),
-                           find_ref1_new(ii, totsupers)};
+  const kkpair new_refs = {find_ref_new(team_member, SetRefPreds::Ref0{ii}, totsupers),
+                           find_ref_new(team_member, SetRefPreds::Ref1{ii}, totsupers)};
   return new_refs;
 }
 
@@ -128,22 +122,26 @@ void main_new(const size_t nsupers, const size_t ngbxs)
     auto h_supers = Kokkos::create_mirror_view(supers);
     for (size_t kk(0); kk < nsupers; ++kk)
     {
-      const unsigned int ii(kk/3+1);
+      const unsigned int ii(kk/2);
       h_supers(kk) = Superdrop();
       h_supers(kk).set_sdgbxindex(ii);
       std::cout << "ii: " << h_supers(kk).get_sdgbxindex() << "\n";
     }
     Kokkos::deep_copy(supers, h_supers);
 
-    Kokkos::View<kkpair *> viewd_refs("gbxs", ngbxs); 
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      kkpair refs{0, 0};
-      refs = set_refs_new(ii, supers);
-      std::cout << "refs: " << refs.first << ", " << refs.second << "\n";
-      
-      viewd_refs(ii) = refs;
-    }
+    Kokkos::View<kkpair *> viewd_refs("gbxs", ngbxs);
+    Kokkos::parallel_for(
+        "move_superdrops_in_domain",
+        TeamPolicy(ngbxs, Kokkos::AUTO()),
+        KOKKOS_LAMBDA(const TeamMember &team_member) {
+          const int ii = team_member.league_rank();
+
+          kkpair refs{0, 0};
+          refs = set_refs_new(team_member, ii, supers);
+          std::cout << "refs: " << refs.first << ", " << refs.second << "\n";
+
+          viewd_refs(ii) = refs;
+        });
 
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
@@ -167,7 +165,7 @@ void main_old(const size_t nsupers, const size_t ngbxs);
 int main(int argc, char *argv[])
 {
   const size_t nsupers(12);
-  const size_t ngbxs(3);
+  const size_t ngbxs(13);
 
   Kokkos::initialize(argc, argv);
   {
