@@ -87,28 +87,3 @@ between r0 and r1 do not satisfy pred */
 
 template bool SupersInGbx::
     is_prednot<Pred>(const Pred, const kkpair_size_t) const;
-
-template <typename Pred>
-size_t SupersInGbx::find_ref(const Pred pred) const
-/* returns distance from begining of totsupers
-view to the superdroplet that is first to fail
-to satisfy given Predicate "pred".
-Function is outermost level of parallelism. */
-{
-  namespace KE = Kokkos::Experimental;
-
-  /* iterator to first superdrop in
-  totsupers that fails to satisfy pred */
-  const auto iter(KE::partition_point("findref",
-                                      ExecSpace(),
-                                      totsupers,
-                                      pred));
-
-  return makeref(iter);
-}
-
-template size_t SupersInGbx::
-    find_ref<SetRefPreds::Ref0>(const SetRefPreds::Ref0) const;
-
-template size_t SupersInGbx::
-    find_ref<SetRefPreds::Ref1>(const SetRefPreds::Ref1) const;
