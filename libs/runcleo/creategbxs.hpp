@@ -99,6 +99,9 @@ public:
   }
 };
 
+kkpair_size_t
+set_refs_on_host(const viewd_constsupers::HostMirror h_totsupers);
+
 template <GridboxMaps GbxMaps>
 inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps,
                                     const GenGridbox &gen,
@@ -186,6 +189,9 @@ when in serial */
   }
   */
 
+  auto h_totsupers = Kokkos::create_mirror_view(totsupers); // mirror totsupers in case view is on device memory
+  Kokkos::deep_copy(h_totsupers, totsupers);
+
   Kokkos::parallel_for(
       "initialise_gbxs_on_host",
       HostTeamPolicy(ngbxs, Kokkos::AUTO()),
@@ -193,7 +199,7 @@ when in serial */
       {
         const int ii = team_member.league_rank();
 
-        const kkpair_size_t refs = {0, 0}; // TODO !
+        const kkpair_size_t refs(set_refs_on_host(h_totsupers)); // TODO !
         const Gridbox gbx(gen(ii, gbxmaps, totsupers, refs));
         
         /* use 1 thread on host to write gbx to view */
