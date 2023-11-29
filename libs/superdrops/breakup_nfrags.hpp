@@ -51,6 +51,7 @@ private:
 public:
   ConstNFrags(const double nfrags) : nfrags(nfrags) {}
 
+  KOKKOS_INLINE_FUNCTION
   double operator()(const Superdrop &d1,
                     const Superdrop &d2) const
   /* always returns constant number of fragments 'nfrags' */
