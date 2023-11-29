@@ -86,15 +86,19 @@ public:
   }
 
   template <GridboxMaps GbxMaps>
-  Gridbox operator()(const unsigned int ii,
+  Gridbox operator()(const HostTeamMember &team_member,
+                     const unsigned int ii,
                      const GbxMaps &gbxmaps,
                      const viewd_supers totsupers,
-                     const kkpair_size_t refs) const
+                     const viewd_constsupers::HostMirror h_totsupers) const
   {
     const auto gbxindex(GbxindexGen->next(ii));
     const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
     const State state(state_at(ii, volume));
-    
+
+    const kkpair_size_t refs(set_refs_on_host(team_member,
+                                              gbxindex.value,
+                                              h_totsupers)); // TODO !
     return Gridbox(gbxindex, state, totsupers, refs);
   }
 };
@@ -199,9 +203,12 @@ when in serial */
       {
         const int ii = team_member.league_rank();
 
-        const kkpair_size_t refs(set_refs_on_host(h_totsupers)); // TODO !
-        const Gridbox gbx(gen(ii, gbxmaps, totsupers, refs));
-        
+        const Gridbox gbx(gen(team_member,
+                              ii,
+                              gbxmaps,
+                              totsupers,
+                              h_totsupers));
+
         /* use 1 thread on host to write gbx to view */
         team_member.team_barrier(); 
         if( team_member.team_rank() == 0 )
