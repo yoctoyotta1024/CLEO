@@ -23,6 +23,8 @@
 #ifndef RUNSTATS_HPP 
 #define RUNSTATS_HPP 
 
+#include <ios>
+#include <iomanip>
 #include <iostream>
 
 #include <Kokkos_Core.hpp>

@@ -24,7 +24,8 @@
 
 void RunStats::summary()
 {
-  std::cout << "\n ----- CLEO run complete ----- \n"
+  std::cout << std::fixed << std::setprecision(4)
+            << "\n ----- CLEO run complete ----- \n"
             << "       Duration: " << time2 << "s \n"
             << "       Initialisation: " << time1 << "s \n"
             << "       Timestepping: " << time2 - time1 << "s \n"
