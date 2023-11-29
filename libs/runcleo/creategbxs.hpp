@@ -99,6 +99,7 @@ public:
     const kkpair_size_t refs(set_refs_on_host(team_member,
                                               gbxindex.value,
                                               h_totsupers)); // TODO !
+
     return Gridbox(gbxindex, state, totsupers, refs);
   }
 };

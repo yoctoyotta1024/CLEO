@@ -79,7 +79,9 @@ vectors in GenGridbox struct */
 }
 
 kkpair_size_t
-set_refs_on_host(const viewd_constsupers::HostMirror h_totsupers)
+set_refs_on_host(const HostTeamMember &team_member,
+                 const unsigned int gbxindex,
+                 const viewd_constsupers::HostMirror h_totsupers)
 {
 
   return {0,0}; // TODO !
