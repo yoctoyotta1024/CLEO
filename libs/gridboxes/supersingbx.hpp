@@ -25,7 +25,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
-#include "./findref.hpp"
+#include "./findrefs.hpp"
 #include "superdrops/kokkosaliases_sd.hpp"
 
 struct SupersInGbx

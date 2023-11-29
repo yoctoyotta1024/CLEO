@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: findref.hpp
+ * File: findrefs.hpp
  * Project: gridboxes
  * Created Date: Wednesday 29th November 2023
  * Author: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  * (see it's use e.g. in supersingbx.hpp)
  */
 
-#ifndef FINDREF_HPP
-#define FINDREF_HPP
+#ifndef FINDREFS_HPP
+#define FINDREFS_HPP
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
@@ -102,7 +102,7 @@ Function is outermost level of parallelism. */
 
   /* iterator to first superdrop in
   totsupers that fails to satisfy pred */
-  const auto iter(KE::partition_point("findref",
+  const auto iter(KE::partition_point("find_ref",
                                       ExecSpace(),
                                       totsupers,
                                       pred));
@@ -146,4 +146,4 @@ Note casting away signd-ness of distance. */
   return static_cast<size_t>(ref0);
 }
 
-#endif // FINDREF_HPP
+#endif // FINDREFS_HPP
