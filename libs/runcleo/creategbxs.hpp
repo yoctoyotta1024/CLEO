@@ -108,6 +108,18 @@ public:
     return Gridbox(gbxindex, state, totsupers);
   }
 
+  template <GridboxMaps GbxMaps>
+  Gridbox operator()(const HostTeamMember &team_member,
+                     const unsigned int ii,
+                     const GbxMaps &gbxmaps,
+                     const viewd_supers totsupers) const
+  {
+    const auto gbxindex(GbxindexGen->next(ii));
+    const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
+    const State state(state_at(ii, volume));
+
+    return Gridbox(team_member, gbxindex, state, totsupers);
+  }
 };
 
 template <GridboxMaps GbxMaps, typename GbxInitConds>
