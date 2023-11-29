@@ -81,12 +81,6 @@ used for SDM) and detectors for tracking chosen variables */
   {
     return supersingbx.domain_totnsupers();
   }
-
-  KOKKOS_INLINE_FUNCTION
-  viewd_supers domain_totsupers() const
-  {
-    return supersingbx.domain_totsupers();
-  }
 };
 
 #endif // GRIDBOX_HPP

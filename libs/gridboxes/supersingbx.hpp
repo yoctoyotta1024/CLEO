@@ -165,12 +165,6 @@ public:
   {
     return totsupers.extent(0);
   }
-
-  KOKKOS_INLINE_FUNCTION viewd_supers domain_totsupers() const
-  /* returns current total number of superdrops in domain */
-  {
-    return totsupers;
-  }
 };
 
 namespace SetRefPreds
