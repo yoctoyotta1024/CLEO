@@ -23,7 +23,7 @@
 #define SORTSUPERS_HPP
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_NestedSort.hpp>
+#include <Kokkos_Sort.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
 #include "../kokkosaliases.hpp"
@@ -45,11 +45,8 @@ so that superdrops in the view are ordered from
 lowest to highest sdgbxindex. Note that sorting of
 superdrops with matching sdgbxindex can take any order */
 {
-  Kokkos::parallel_for(
-      "sortingsupers", TeamPolicy(1, Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const TeamMember &t) {
-        Kokkos::Experimental::sort_team(t, supers, SortComparator{}); // TODO not use team?
-      });
+
+  Kokkos::sort(ExecSpace(), supers, SortComparator{});
 
   return supers;
 }
