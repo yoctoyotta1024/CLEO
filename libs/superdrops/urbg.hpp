@@ -114,7 +114,7 @@ to get team / thread safe random number generator */
                     shuffle_supers(supers, urbg);
                     genpool.free_state(urbg.gen); });
 
-  team_member.team_barrier(); // synchronize threads
+  team_member.team_barrier(); // synchronise threads
 
   return supers;
 }

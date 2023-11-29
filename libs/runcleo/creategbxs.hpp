@@ -195,13 +195,13 @@ when in serial */
 
         const kkpair_size_t refs = {0, 0}; // TODO !
         const Gridbox gbx(gen(ii, gbxmaps, totsupers, refs));
-
-        Kokkos::single(
-            Kokkos::PerTeam(team_member),
-            [=]()
-            {
-              h_gbxs(ii) = gbx;
-            });
+        
+        /* use 1 thread on host to write gbx to view */
+        team_member.team_barrier(); 
+        if( team_member.team_rank() == 0 )
+        {
+          h_gbxs(ii) = gbx;
+        }
       });
 }
 
