@@ -189,8 +189,7 @@ when in serial */
   Kokkos::parallel_for(
       "initialise_gbxs_on_host",
       HostTeamPolicy(ngbxs, Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const HostTeamMember &team_member)
-      {
+      KOKKOS_LAMBDA(const HostTeamMember &team_member) {
         const int ii = team_member.league_rank();
         const Gridbox gbx(gen(team_member, ii, gbxmaps, totsupers));
 
@@ -200,7 +199,6 @@ when in serial */
             {
               h_gbxs(ii) = gbx;
             });
-
       });
 }
 
