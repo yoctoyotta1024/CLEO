@@ -79,8 +79,8 @@ viewd_supers::HostMirror
 initialise_supers_on_host(const GenSuperdrop &gen,
                           const viewd_supers supers);
 /* return mirror view of superdrops (on host memory)
-which have been initialised using data from a
-SuperdropInitConds instance for their initial gbxindex,
+which have been initialised using data from a 
+superdroplet generator 'gen' for their initial gbxindex,
 spatial coordinates and attributes */
 
 void is_sdsinit_complete(const viewd_constsupers supers,

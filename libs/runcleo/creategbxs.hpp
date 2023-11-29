@@ -58,7 +58,6 @@ private:
   std::vector<std::pair<double, double>> uvels;
   std::vector<std::pair<double, double>> vvels;
 
-  KOKKOS_FUNCTION
   State state_at(const unsigned int ii,
                  const double volume) const;
 
@@ -171,9 +170,9 @@ inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps,
                                     const GenGridbox &gen,
                                     const viewd_supers totsupers,
                                     const viewh_gbx h_gbxs)
-/* initialise the host view of gridboxes using
-some data from a GbxInitConds instance e.g. for
-each gridbox's volume. 
+/* initialise the host (!) view of gridboxes
+using some data from gridbox generator 'gen'
+e.g. for each gridbox's volume. 
 Kokkos::parallel_for([...]) is equivalent to:
 for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
 when in serial */
@@ -190,10 +189,11 @@ when in serial */
   Kokkos::parallel_for(
       "initialise_gbxs_on_host",
       HostTeamPolicy(ngbxs, Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const HostTeamMember &team_member) {
+      [=](const HostTeamMember &team_member)
+      {
         const int ii = team_member.league_rank();
 
-        const kkpair_size_t refs = {0,0}; // TODO !
+        const kkpair_size_t refs = {0, 0}; // TODO !
         const Gridbox gbx(gen(ii, gbxmaps, totsupers, refs));
 
         Kokkos::single(
