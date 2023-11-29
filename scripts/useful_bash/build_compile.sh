@@ -22,12 +22,6 @@ path2build=${HOME}/CLEO/build/
 python=python
 gxx="g++"
 gcc="gcc"
-
-# path2CLEO=${HOME}/Documents/b1_springsummer2023/CLEO/
-# path2build=${HOME}/Documents/b1_springsummer2023/CLEO/build/
-# python=${HOME}/opt/anaconda3/envs/superdropsV2/bin/python
-# gxx="g++-13"
-# gcc="gcc-13"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###

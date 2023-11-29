@@ -30,7 +30,11 @@ configfile=$1
 buildgpu=$2
 
 echo "config file: ${configfile}"
-if [ "${buildgpu}" ];
+if [[ "${buildgpu}" == "serial" ]];
+then
+  path2build=${HOME}/CLEO/buildserial/ 
+fi
+if [[ "${buildgpu}" == "gpu" ]];
 then
   path2build=${HOME}/CLEO/buildgpu/ 
 fi
