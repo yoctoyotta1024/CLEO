@@ -45,29 +45,6 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps,
                          const GbxInitConds &gbxic,
                          const viewd_supers totsupers);
 
-template <GridboxMaps GbxMaps, typename GbxInitConds>
-inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps,
-                                    const GbxInitConds &gbxic,
-                                    const viewd_supers totsupers,
-                                    const viewh_gbx h_gbxs);
-/* initialise the host view of gridboxes
-using some data from a GbxInitConds instance
-e.g. for each gridbox's volume */
-
-template <GridboxMaps GbxMaps, typename GbxInitConds>
-inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps,
-                                    const GbxInitConds &gbxic,
-                                    const viewd_supers totsupers);
-/* initialise a dualview of gridboxes (on host and device
-memory) using data from a GbxInitConds instance to initialise
-the host view and then syncing the view to the device */
-
-void is_gbxinit_complete(const size_t ngbxs_from_maps,
-                         dualview_gbx gbxs);
-
-void print_gbxs(const viewh_constgbx gbxs);
-/* print gridboxes information */
-
 class GenGridbox
 {
 private:
@@ -122,6 +99,29 @@ public:
   }
 };
 
+template <GridboxMaps GbxMaps>
+inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps,
+                                    const GenGridbox &gen,
+                                    const viewd_supers totsupers,
+                                    const viewh_gbx h_gbxs);
+/* initialise the host view of gridboxes
+using some data from a GbxInitConds instance
+e.g. for each gridbox's volume */
+
+template <GridboxMaps GbxMaps, typename GbxInitConds>
+inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps,
+                                    const GbxInitConds &gbxic,
+                                    const viewd_supers totsupers);
+/* initialise a dualview of gridboxes (on host and device
+memory) using data from a GbxInitConds instance to initialise
+the host view and then syncing the view to the device */
+
+void is_gbxinit_complete(const size_t ngbxs_from_maps,
+                         dualview_gbx gbxs);
+
+void print_gbxs(const viewh_constgbx gbxs);
+/* print gridboxes information */
+
 template <GridboxMaps GbxMaps, typename GbxInitConds>
 dualview_gbx create_gbxs(const GbxMaps &gbxmaps,
                          const GbxInitConds &gbxic,
@@ -154,8 +154,9 @@ gbxindex, spatial coordinates and attributes */
   dualview_gbx gbxs("gbxs", gbxic.get_ngbxs());
 
   // initialise gridboxes on host
+  const GenGridbox gen(gbxic);
   gbxs.sync_host();
-  initialise_gbxs_on_host(gbxmaps, gbxic, totsupers, gbxs.view_host());
+  initialise_gbxs_on_host(gbxmaps, gen, totsupers, gbxs.view_host());
   gbxs.modify_host();
 
   // update device gridbox view to match host's gridbox view
@@ -164,12 +165,11 @@ gbxindex, spatial coordinates and attributes */
   return gbxs;
 }
 
-template <GridboxMaps GbxMaps, typename GbxInitConds>
-inline void
-initialise_gbxs_on_host(const GbxMaps &gbxmaps,
-                        const GbxInitConds &gbxic,
-                        const viewd_supers totsupers,
-                        const viewh_gbx h_gbxs)
+template <GridboxMaps GbxMaps>
+inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps,
+                                    const GenGridbox &gen,
+                                    const viewd_supers totsupers,
+                                    const viewh_gbx h_gbxs)
 /* initialise the host view of gridboxes using
 some data from a GbxInitConds instance e.g. for
 each gridbox's volume. 
@@ -178,8 +178,7 @@ for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
 when in serial */
 {
   const size_t ngbxs(h_gbxs.extent(0));
-  const GenGridbox gen(gbxic);
-
+  
   /* equivalent serial version of parallel_for loop below
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
