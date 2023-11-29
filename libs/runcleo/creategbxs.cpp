@@ -77,15 +77,3 @@ vectors in GenGridbox struct */
                qconds.at(ii),
                wvel, uvel, vvel);
 }
-
-kkpair_size_t GenGridbox::
-    refs_from_hostsupers(const HostTeamMember &team_member,
-                         const unsigned int gbxindex,
-                         const viewd_constsupers::HostMirror h_totsupers)
-{
-  namespace SRP = SetRefPreds;
-  const size_t ref0 = find_ref(team_member, totsupers, SRP::Ref0{idx});
-  const size_t ref1 = find_ref(team_member, totsupers, SRP::Ref1{idx});
-
-  return {0,0}; // TODO !
-}
