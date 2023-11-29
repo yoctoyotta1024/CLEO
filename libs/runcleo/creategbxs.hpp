@@ -96,7 +96,6 @@ public:
     const auto gbxindex(GbxindexGen->next(ii));
     const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
     const State state(state_at(ii, volume));
-
     const kkpair_size_t refs(find_refs(team_member,
                                        h_totsupers,
                                        gbxindex.value));
