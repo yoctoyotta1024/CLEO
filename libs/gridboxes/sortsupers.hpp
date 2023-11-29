@@ -48,7 +48,7 @@ superdrops with matching sdgbxindex can take any order */
   Kokkos::parallel_for(
       "sortingsupers", TeamPolicy(1, Kokkos::AUTO()),
       KOKKOS_LAMBDA(const TeamMember &t) {
-        Kokkos::Experimental::sort_team(t, supers, SortComparator{});
+        Kokkos::Experimental::sort_team(t, supers, SortComparator{}); // TODO not use team?
       });
 
   return supers;
