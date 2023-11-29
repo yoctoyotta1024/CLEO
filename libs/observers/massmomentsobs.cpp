@@ -23,22 +23,30 @@
 #include "./massmomentsobs.hpp"
 
 void DoMassMomentsObs::
-    massmoments_to_storage(const mirrorh_constsupers h_supers) const
+    massmoments_to_storage(const subviewd_constsupers d_supers) const
 /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
 distribution and then writes them to zarr storage. (I.e.
-0th, 3rd and 6th moment of the droplet radius distribution) */
+0th, 3rd and 6th moment of the droplet radius distribution).
+Kokkos::parallel_for([...]) is equivalent in serial to:
+for (size_t kk(0); kk < d_supers.extent(0); ++kk){[...]} */
 {
-  std::array<double, 3> moms({0.0, 0.0, 0.0}); // 0th, 1st and 2nd mass moments
-  for (size_t kk(0); kk < h_supers.extent(0); ++kk)
-  {
-    const double xi = (double)(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
-    const double mass(h_supers(kk).mass());
-    moms.at(0) += xi;
-    moms.at(1) += xi * mass;
-    moms.at(2) += xi * mass * mass;
-  }
+  const size_t nsupers(d_supers.extent(0));
+  Kokkos::parallel_for(
+      "massmoments_to_storage",
+      Kokkos::RangePolicy<ExecSpace>(0, nsupers),
+      KOKKOS_CLASS_LAMBDA(const size_t kk)
+      {
+        const double xi = (double)(d_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
+        const double mass(d_supers(kk).mass());
+        d_moms(0) = xi;
+        d_moms(1) = mass;
+        // moms.at(0) += xi;
+        // moms.at(1) += xi * mass;
+        // moms.at(2) += xi * mass * mass; // TODO
+      }); 
 
-  zarr->values_to_storage(moms);
+    Kokkos::deep_copy(h_moms, d_moms);
+    zarr->values_to_storage({h_moms(0), h_moms(1), h_moms(2)}); // {0th, 1st, 2nd} mass moments
 }
 
 void DoRainMassMomentsObs::
