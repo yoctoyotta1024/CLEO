@@ -178,21 +178,61 @@ create_motion(const unsigned int motionstep)
   // return NullMotion{};                                                                               
 }
 
-inline Observer auto
-create_supersattrs_observer(const unsigned int interval,
-                            FSStore &store,
-                            const int maxchunk)
-{
-  SuperdropsBuffers auto buffers = SdIdBuffer() >>
-                                   XiBuffer() >>
-                                   MsolBuffer() >>
-                                   RadiusBuffer() >>
-                                   Coord3Buffer() >>
-                                   Coord1Buffer() >>
-                                   Coord2Buffer() >>
-                                   SdgbxindexBuffer();
-  return SupersAttrsObserver(interval, store, maxchunk, buffers);
-}
+// inline Observer auto
+// create_supersattrs_observer(const unsigned int interval,
+//                             FSStore &store,
+//                             const int maxchunk)
+// {
+//   SuperdropsBuffers auto buffers = SdIdBuffer() >>
+//                                    XiBuffer() >>
+//                                    MsolBuffer() >>
+//                                    RadiusBuffer() >>
+//                                    Coord3Buffer() >>
+//                                    Coord1Buffer() >>
+//                                    Coord2Buffer() >>
+//                                    SdgbxindexBuffer();
+//   return SupersAttrsObserver(interval, store, maxchunk, buffers);
+// }
+
+// inline Observer auto
+// create_observer(const Config &config,
+//                 const Timesteps &tsteps,
+//                 FSStore &store)
+// {
+//   const unsigned int obsstep(tsteps.get_obsstep());
+//   const int maxchunk(config.maxchunk);
+
+//   const Observer auto obs1 = PrintObserver(obsstep * 10,
+//                                            &step2realtime);
+
+//   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
+//                                           &step2dimlesstime);
+
+//   const Observer auto obs3 = GbxindexObserver(store, maxchunk);
+
+//   const Observer auto obs4 = NsupersObserver(obsstep, store, maxchunk,
+//                                              config.ngbxs);
+
+//   const Observer auto obs5 = NrainsupersObserver(obsstep, store, maxchunk,
+//                                                  config.ngbxs);
+
+//   const Observer auto obs6 = TotNsupersObserver(obsstep, store, maxchunk);
+
+//   const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk,
+//                                                  config.ngbxs);
+
+//   const Observer auto obs8 = RainMassMomentsObserver(obsstep, store, maxchunk,
+//                                                      config.ngbxs);
+
+//   const Observer auto obs9 = StateObserver(obsstep, store, maxchunk,
+//                                            config.ngbxs);
+
+//   const Observer auto obs10 = create_supersattrs_observer(obsstep, store,
+//                                                           maxchunk);
+
+//   return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
+//          obs6 >> obs7 >> obs8 >> obs9 >> obs10;
+// }
 
 inline Observer auto
 create_observer(const Config &config,
@@ -202,36 +242,10 @@ create_observer(const Config &config,
   const unsigned int obsstep(tsteps.get_obsstep());
   const int maxchunk(config.maxchunk);
 
-  const Observer auto obs1 = PrintObserver(obsstep * 10,
-                                           &step2realtime);
-
-  const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
-                                          &step2dimlesstime);
-
-  const Observer auto obs3 = GbxindexObserver(store, maxchunk);
-
-  const Observer auto obs4 = NsupersObserver(obsstep, store, maxchunk,
-                                             config.ngbxs);
-
-  const Observer auto obs5 = NrainsupersObserver(obsstep, store, maxchunk,
-                                                 config.ngbxs);
-
-  const Observer auto obs6 = TotNsupersObserver(obsstep, store, maxchunk);
-
   const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk,
                                                  config.ngbxs);
 
-  const Observer auto obs8 = RainMassMomentsObserver(obsstep, store, maxchunk,
-                                                     config.ngbxs);
-
-  const Observer auto obs9 = StateObserver(obsstep, store, maxchunk,
-                                           config.ngbxs);
-
-  const Observer auto obs10 = create_supersattrs_observer(obsstep, store,
-                                                          maxchunk);
-
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
-         obs6 >> obs7 >> obs8 >> obs9 >> obs10;
+  return obs7;
 }
 
 inline auto create_sdm(const Config &config,
