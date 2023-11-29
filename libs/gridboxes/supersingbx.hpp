@@ -34,11 +34,9 @@ containing super-droplets occupying a given Gridbox
 (e.g. through std::span or Kokkos::subview) */
 {
 private:
-  using kkpair = Kokkos::pair<size_t, size_t>;
-
   viewd_supers totsupers; // reference to view of all superdrops (in total domain)
   unsigned int idx;       // value of gbxindex which sdgbxindex of superdrops must match
-  kkpair refs;            // position in view of (first, last) superdrop that occupies gridbox
+  kkpair_size_t refs;     // position in view of (first, last) superdrop that occupies gridbox
 
   template <typename Pred>
   size_t find_ref(const Pred pred) const;
@@ -65,7 +63,7 @@ private:
 
   template <typename Pred>
   bool is_prednot(const Pred pred,
-                  const kkpair refs4pred) const;
+                  const kkpair_size_t refs4pred) const;
   /* returns true if all superdrops in subview
   between r0 and r1 do not satisfy pred */
 
@@ -99,7 +97,7 @@ public:
 
   SupersInGbx(const viewd_supers i_totsupers,
               const unsigned int i_idx,
-              const kkpair i_refs)
+              const kkpair_size_t i_refs)
       : totsupers(i_totsupers), idx(i_idx), refs(i_refs) {}
   /* assumes supers view (or subview) already sorted
   via sdgbxindex. Constructor works within parallel
@@ -227,12 +225,12 @@ Function works within 1st layer of heirarchal parallelism
 for a team_member of a league */
 {
   namespace SRP = SetRefPreds;
-  const kkpair new_refs = {find_ref(team_member, SRP::Ref0{idx}),
-                           find_ref(team_member, SRP::Ref1{idx})};
+  const kkpair_size_t new_refs = {find_ref(team_member, SRP::Ref0{idx}),
+                                  find_ref(team_member, SRP::Ref1{idx})};
 
   Kokkos::single(
       Kokkos::PerTeam(team_member),
-      [new_refs](kkpair &refs)
+      [new_refs](kkpair_size_t &refs)
       { refs = new_refs; },
       refs);
 }

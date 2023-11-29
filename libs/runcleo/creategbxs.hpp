@@ -90,7 +90,7 @@ public:
   Gridbox operator()(const unsigned int ii,
                      const GbxMaps &gbxmaps,
                      const viewd_supers totsupers,
-                     const SupersInGbx::kkpair refs) const
+                     const kkpair_size_t refs) const
   {
     const auto gbxindex(GbxindexGen->next(ii));
     const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
@@ -192,8 +192,8 @@ when in serial */
       HostTeamPolicy(ngbxs, Kokkos::AUTO()),
       KOKKOS_LAMBDA(const HostTeamMember &team_member) {
         const int ii = team_member.league_rank();
-        
-        const SupersInGbx::kkpair refs = ?
+
+        const kkpair_size_t refs = {0,0}; // TODO !
         const Gridbox gbx(gen(ii, gbxmaps, totsupers, refs));
 
         Kokkos::single(

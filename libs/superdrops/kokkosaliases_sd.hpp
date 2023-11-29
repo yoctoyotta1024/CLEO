@@ -32,11 +32,12 @@ using ExecSpace = Kokkos::DefaultExecutionSpace;
 using HostSpace = Kokkos::DefaultHostExecutionSpace;
 
 /* Superdrop views and subviews */
-using viewd_supers = Kokkos::View<Superdrop *>;            // view in device memory of superdroplets 
+using viewd_supers = Kokkos::View<Superdrop *>;            // view in device memory of superdroplets
 using viewd_constsupers = Kokkos::View<const Superdrop *>; // view in device memory of const superdroplets
 
-using subviewd_supers = Kokkos::Subview<viewd_supers, Kokkos::pair<size_t, size_t>>; // subiew of supers (for instance in a gridbox)
-using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, Kokkos::pair<size_t, size_t>>; // const supers subview (for instance in a gridbox) 
+using kkpair_size_t = Kokkos::pair<size_t, size_t>;                             // kokkos pair of size_t (see supersingbx refs)
+using subviewd_supers = Kokkos::Subview<viewd_supers, kkpair_size_t>;           // subiew of supers (for instance in a gridbox)
+using subviewd_constsupers = Kokkos::Subview<viewd_constsupers, kkpair_size_t>; // const supers subview (for instance in a gridbox)
 
 using mirrorh_constsupers = subviewd_constsupers::HostMirror; // mirror view (copy) of subview of superdroplets on host memory
 

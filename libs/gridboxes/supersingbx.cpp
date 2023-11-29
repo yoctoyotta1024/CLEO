@@ -69,7 +69,7 @@ template bool SupersInGbx::
 template <typename Pred>
 bool SupersInGbx::
     is_prednot(const Pred pred,
-               const SupersInGbx::kkpair refs4pred) const
+               const kkpair_size_t refs4pred) const
 /* returns true if all superdrops in subview
 between r0 and r1 do not satisfy pred */
 {
@@ -86,7 +86,7 @@ between r0 and r1 do not satisfy pred */
 }
 
 template bool SupersInGbx::
-    is_prednot<Pred>(const Pred, const SupersInGbx::kkpair) const;
+    is_prednot<Pred>(const Pred, const kkpair_size_t) const;
 
 template <typename Pred>
 size_t SupersInGbx::find_ref(const Pred pred) const

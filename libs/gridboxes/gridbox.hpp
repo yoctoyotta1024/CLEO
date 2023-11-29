@@ -30,6 +30,7 @@
 #include "./supersingbx.hpp"
 #include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
+#include "superdrops/kokkosaliases_sd.hpp"
 
 struct Gridbox
 /* each gridbox has unique identifier and contains a
@@ -61,7 +62,7 @@ used for SDM) and detectors for tracking chosen variables */
   Gridbox(const Gbxindex igbxindex,
           const State istate,
           const viewd_supers totsupers,
-          cosnt SupersInGbx::kkpair irefs)
+          const kkpair_size_t irefs)
       /* assumes supers view (or subview) already sorted
       via sdgbxindex. Constructor works within parallel
       team policy on host given member 'team_member' */
