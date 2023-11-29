@@ -37,6 +37,7 @@
 #include "gridboxes/gbxindex.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
+#include "gridboxes/supersingbx.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
 
@@ -86,16 +87,16 @@ public:
   }
 
   template <GridboxMaps GbxMaps>
-  Gridbox operator()(const HostTeamMember &team_member,
-                     const unsigned int ii,
+  Gridbox operator()(const unsigned int ii,
                      const GbxMaps &gbxmaps,
-                     const viewd_supers totsupers) const
+                     const viewd_supers totsupers,
+                     const SupersInGbx::kkpair refs) const
   {
     const auto gbxindex(GbxindexGen->next(ii));
     const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
     const State state(state_at(ii, volume));
-
-    return Gridbox(team_member, gbxindex, state, totsupers);
+    
+    return Gridbox(gbxindex, state, totsupers, refs);
   }
 };
 
@@ -191,7 +192,9 @@ when in serial */
       HostTeamPolicy(ngbxs, Kokkos::AUTO()),
       KOKKOS_LAMBDA(const HostTeamMember &team_member) {
         const int ii = team_member.league_rank();
-        const Gridbox gbx(gen(team_member, ii, gbxmaps, totsupers));
+        
+        const SupersInGbx::kkpair refs = ?
+        const Gridbox gbx(gen(ii, gbxmaps, totsupers, refs));
 
         Kokkos::single(
             Kokkos::PerTeam(team_member),

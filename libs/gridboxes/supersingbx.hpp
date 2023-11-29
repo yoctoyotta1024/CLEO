@@ -97,16 +97,13 @@ public:
     set_refs();
   }
 
-  SupersInGbx(const HostTeamMember &team_member,
-              const viewd_supers i_totsupers,
-              const unsigned int i_idx)
-      : totsupers(i_totsupers), idx(i_idx), refs({0, 0})
+  SupersInGbx(const viewd_supers i_totsupers,
+              const unsigned int i_idx,
+              const kkpair i_refs)
+      : totsupers(i_totsupers), idx(i_idx), refs(i_refs) {}
   /* assumes supers view (or subview) already sorted
   via sdgbxindex. Constructor works within parallel
   team policy on host given member 'team_member' */
-  {
-    set_refs(team_member);
-  }
 
   bool iscorrect() const;
   /* assumes totsupers is already sorted via sdgbxindex. checks that all
