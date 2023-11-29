@@ -251,3 +251,28 @@ size_t find_ref_old(const Pred pred,
   const auto ref0 = KE::distance(KE::begin(totsupers), iter);
   return static_cast<size_t>(ref0);
 }
+
+template <class ExecutionSpace, class DataType, class... Properties>
+void sort([[maybe_unused]] const ExecutionSpace& exec,
+          const Kokkos::View<DataType, Properties...>& view) {...}
+
+template <class DataType, class... Properties>
+void sort(const Kokkos::View<DataType, Properties...>& view) {...}
+
+template <class ExecutionSpace, class ComparatorType, class DataType,
+          class... Properties>
+void sort([[maybe_unused]] const ExecutionSpace& exec,
+          const Kokkos::View<DataType, Properties...>& view,
+          const ComparatorType& comparator) {...}
+
+template <class ComparatorType, class DataType, class... Properties>
+void sort(const Kokkos::View<DataType, Properties...>& view,
+          const ComparatorType& comparator) {...}
+
+template <class ExecutionSpace, class ViewType>
+std::enable_if_t<Kokkos::is_execution_space<ExecutionSpace>::value> sort(
+    const ExecutionSpace& exec, ViewType view, size_t const begin,
+    size_t const end) {...}
+
+template <class ViewType>
+void sort(ViewType view, size_t const begin, size_t const end) {...}
