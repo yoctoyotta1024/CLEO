@@ -56,7 +56,7 @@ cond_rtol = 0.0                           # relative tolerance for implicit eule
 cond_atol = 0.01                          # abolute tolerance for implicit euler integration
 
 # superdroplets #
-doAlterThermo = false                   # enable condensation to alter the thermodynamic state
+doAlterThermo = false                     # enable condensation to alter the thermodynamic state
 
 ### Coupled Dynamics Solver Parameters ###
 # type of coupling #
