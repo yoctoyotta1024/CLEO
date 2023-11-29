@@ -71,7 +71,7 @@ void print_gbxs(const viewh_constgbx gbxs);
 class GenGridbox
 {
 private:
-  std::unique_ptr<Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
+  std::shared_ptr<Gbxindex::Gen> GbxindexGen; // pointer to gridbox index generator
   std::vector<double> presss;
   std::vector<double> temps;
   std::vector<double> qvaps;
@@ -80,13 +80,14 @@ private:
   std::vector<std::pair<double, double>> uvels;
   std::vector<std::pair<double, double>> vvels;
 
+  KOKKOS_FUNCTION
   State state_at(const unsigned int ii,
                  const double volume) const;
 
 public:
   template <typename GbxInitConds>
   GenGridbox(const GbxInitConds &gbxic)
-      : GbxindexGen(std::make_unique<Gbxindex::Gen>()),
+      : GbxindexGen(std::make_shared<Gbxindex::Gen>()),
         presss(gbxic.press()),
         temps(gbxic.temp()),
         qvaps(gbxic.qvap()),
@@ -167,20 +168,21 @@ when in serial */
   const size_t ngbxs(h_gbxs.extent(0));
   const GenGridbox gen(gbxic);
 
+  /* equivalent serial version of parallel_for loop below
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    h_gbxs(ii) = gen(ii, gbxmaps, totsupers); // TODO parallelise on host?
+    h_gbxs(ii) = gen(ii, gbxmaps, totsupers);
   }
+  */
 
-  // using TeamPol = Kokkos::TeamPolicy<HostSpace>;
-
-  // Kokkos::parallel_for(
-  //     "initialise_gbxs_on_host",
-  //     TeamPol(ngbxs, Kokkos::AUTO()),
-  //     KOKKOS_LAMBDA(const TeamPol::member_type &team_member) {
-  //       const int ii = team_member.league_rank();
-  //       h_gbxs(ii) = gen(ii, gbxmaps, totsupers);
-  //     });
+  Kokkos::parallel_for(
+      "initialise_gbxs_on_host",
+      HostTeamPolicy(ngbxs, Kokkos::AUTO()),
+      [=](const HostTeamMember &team_member)
+      {
+        const int ii = team_member.league_rank();
+        h_gbxs(ii) = gen(team_member, ii, gbxmaps, totsupers);
+      });
 }
 
 #endif // CREATEGBXS_HPP

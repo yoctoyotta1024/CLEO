@@ -30,9 +30,17 @@ struct Gbxindex
   class Gen
   {
   public:
-    Gbxindex next() { return {_idx++}; }
+    Gbxindex next()
+    /* note this generator is not thread safe
+    (_idx++ undefined in multi-threaded environment) */
+    {
+      return {_idx++};
+    }
 
+    KOKKOS_INLINE_FUNCTION 
     Gbxindex next(const unsigned int idx)
+    /* note this generator assumes idx was 
+    thread safe generated (ie. is unique) */
     {
       return {idx};
     }

@@ -48,10 +48,26 @@ used for SDM) and detectors for tracking chosen variables */
   Gridbox(const Gbxindex igbxindex,
           const State istate,
           const viewd_supers totsupers)
-      /* assumes supers view (or subview) already sorted via sdgbxindex */
+      /* assumes supers view (or subview) already
+      sorted via sdgbxindex. Constructor works
+      outside of parallelism */
       : gbxindex(igbxindex),
         state(istate),
         supersingbx(totsupers, gbxindex.value),
+        detectors()
+  {
+  }
+
+  Gridbox(const HostTeamMember &team_member,
+          const Gbxindex igbxindex,
+          const State istate,
+          const viewd_supers totsupers)
+      /* assumes supers view (or subview) already sorted
+      via sdgbxindex. Constructor works within parallel
+      team policy on host given member 'team_member' */
+      : gbxindex(igbxindex),
+        state(istate),
+        supersingbx(team_member, totsupers, gbxindex.value),
         detectors()
   {
   }

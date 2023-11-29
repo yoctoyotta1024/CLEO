@@ -147,6 +147,13 @@ when in serial */
   const size_t totnsupers(supers.extent(0));
   const GenSuperdrop gen_superdrop(sdic);
 
+  /* equivalent serial version of parallel_for loop below
+  for (size_t kk(0); kk < totnsupers; ++kk)
+  {
+    h_supers(kk) = gen_superdrop(kk); 
+  }
+  */
+
   auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
   Kokkos::parallel_for(
       "initialise_supers_on_host",

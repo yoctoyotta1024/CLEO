@@ -47,4 +47,7 @@ using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>; // type for poo
 using TeamPolicy = Kokkos::TeamPolicy<ExecSpace>;
 using TeamMember = TeamPolicy::member_type;
 
+using HostTeamPolicy = Kokkos::TeamPolicy<ExecSpace>;
+using HostTeamMember = HostTeamPolicy::member_type;
+
 #endif // KOKKOSALIASES_SD_HPP

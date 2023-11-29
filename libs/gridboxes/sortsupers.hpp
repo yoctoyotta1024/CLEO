@@ -45,11 +45,9 @@ so that superdrops in the view are ordered from
 lowest to highest sdgbxindex. Note that sorting of
 superdrops with matching sdgbxindex can take any order */
 {
-  using TeamPol = Kokkos::TeamPolicy<ExecSpace>;
-
   Kokkos::parallel_for(
-      "sortingsupers", TeamPol(1, Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const TeamPol::member_type &t) {
+      "sortingsupers", TeamPolicy(1, Kokkos::AUTO()),
+      KOKKOS_LAMBDA(const TeamMember &t) {
         Kokkos::Experimental::sort_team(t, supers, SortComparator{});
       });
 

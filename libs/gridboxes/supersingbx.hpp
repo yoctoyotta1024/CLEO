@@ -47,9 +47,9 @@ private:
   to satisfy given Predicate "pred".
   Function is outermost level of parallelism. */
 
-  template <typename Pred>
+  template <typename Pred, typename TeamMemberType>
   KOKKOS_INLINE_FUNCTION size_t
-  find_ref(const TeamMember &team_member,
+  find_ref(const TeamMemberType &team_member,
            const Pred pred) const;
   /* returns distance from begining of totsupers
   view to the superdroplet that is first to fail
@@ -90,8 +90,22 @@ public:
   SupersInGbx(const viewd_supers i_totsupers,
               const unsigned int i_idx)
       : totsupers(i_totsupers), idx(i_idx), refs({0, 0})
+  /* assumes supers view (or subview) already
+  sorted via sdgbxindex. Constructor works
+  outside of parallelism */
   {
     set_refs();
+  }
+
+  SupersInGbx(const HostTeamMember &team_member,
+              const viewd_supers i_totsupers,
+              const unsigned int i_idx)
+      : totsupers(i_totsupers), idx(i_idx), refs({0, 0})
+  /* assumes supers view (or subview) already sorted
+  via sdgbxindex. Constructor works within parallel
+  team policy on host given member 'team_member' */
+  {
+    set_refs(team_member);
   }
 
   bool iscorrect() const;
@@ -109,8 +123,9 @@ public:
   superdrops in view which have matching sdgbxindex to idx.
   Function is outside of parallelism (ie. in serial code). */
 
-  KOKKOS_INLINE_FUNCTION
-  void set_refs(const TeamMember &team_member);
+  template <typename TeamMemberType>
+  KOKKOS_INLINE_FUNCTION void
+  set_refs(const TeamMemberType &team_member);
   /* assumes totsupers is already sorted via sdgbxindex.
   sets 'refs' to pair with positions of first and last
   superdrops in view which have matching sdgbxindex to idx.
@@ -207,8 +222,9 @@ Function is outside of parallelism (ie. in serial code). */
           find_ref(SRP::Ref1{idx})};
 }
 
-KOKKOS_INLINE_FUNCTION
-void SupersInGbx::set_refs(const TeamMember &team_member)
+template <typename TeamMemberType>
+KOKKOS_INLINE_FUNCTION void
+SupersInGbx::set_refs(const TeamMemberType &team_member)
 /* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx.
@@ -226,9 +242,9 @@ for a team_member of a league */
       refs);
 }
 
-template <typename Pred>
+template <typename Pred, typename TeamMemberType>
 KOKKOS_INLINE_FUNCTION size_t
-SupersInGbx::find_ref(const TeamMember &team_member,
+SupersInGbx::find_ref(const TeamMemberType &team_member,
                       const Pred pred) const
 /* returns distance from begining of totsupers
 view to the superdroplet that is first to fail

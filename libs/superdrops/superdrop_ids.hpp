@@ -36,9 +36,16 @@ struct IntID
   class Gen
   {
   public:
-    KOKKOS_INLINE_FUNCTION IntID next() { return {_id++}; }
-    
+    IntID next()
+    /* note this generator is not thread safe
+    (_idx++ undefined in multi-threaded environment) */
+    {
+      return {_id++};
+    }
+
     KOKKOS_INLINE_FUNCTION IntID next(const size_t id)
+    /* note this generator assumes idx was
+    thread safe generated (ie. is unique) */
     {
       return {id};
     }
