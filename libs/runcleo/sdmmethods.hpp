@@ -94,7 +94,7 @@ public:
     for ( size_t ii(0); ii < ngbxs; ++ii) { [...] } */
     {
 
-      // TODO parallel region use scratch space?
+      // TODO use scratch space for parallel region?
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "sdm_microphysics",
