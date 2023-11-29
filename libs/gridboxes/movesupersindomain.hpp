@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th November 2023
+ * Last Modified: Wednesday 29th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -145,7 +145,8 @@ after updating their gridbox indexes concordantly */
   (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host) */
-  // TODO put all team policy loops in these function calls into 1 loop?
+  // TODO use tasking to convert all 3 team policy
+  // loops in these function calls into 1 loop?
   {
     /* steps (1 - 2) */
     move_supers_in_gridboxes(gbxmaps, d_gbxs); 
