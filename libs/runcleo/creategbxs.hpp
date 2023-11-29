@@ -34,6 +34,7 @@
 #include <Kokkos_DualView.hpp>
 
 #include "../kokkosaliases.hpp"
+#include "gridboxes/findref.hpp"
 #include "gridboxes/gbxindex.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"

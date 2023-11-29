@@ -63,9 +63,6 @@ between refs satisfy the Predicate "pred" */
                     pred);
 }
 
-template bool SupersInGbx::
-    is_pred<Pred>(const Pred) const;
-
 template <typename Pred>
 bool SupersInGbx::
     is_prednot(const Pred pred,
@@ -84,6 +81,9 @@ between r0 and r1 do not satisfy pred */
                      supers4pred,
                      pred);
 }
+
+template bool SupersInGbx::
+    is_pred<Pred>(const Pred) const;
 
 template bool SupersInGbx::
     is_prednot<Pred>(const Pred, const kkpair_size_t) const;

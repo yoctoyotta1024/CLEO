@@ -23,38 +23,10 @@
 #define SUPERSINGBX_HPP
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Pair.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
+#include "./findref.hpp"
 #include "superdrops/kokkosaliases_sd.hpp"
-
-template <typename Pred, typename ViewSupers>
-inline size_t find_ref(const ViewSupers totsupers,
-                       const Pred pred) const;
-/* returns distance from begining of totsupers
-view to the superdroplet that is first to fail
-to satisfy given Predicate "pred".
-Function is outermost level of parallelism. */
-
-template <typename Pred, typename TeamMemberType, typename ViewSupers>
-KOKKOS_INLINE_FUNCTION size_t
-find_ref(const TeamMemberType &team_member,
-         const ViewSupers totsupers,
-         const Pred pred) const;
-/* returns distance from begining of totsupers
-view to the superdroplet that is first to fail
-to satisfy given Predicate "pred".
-Function is 2nd level of nested parallelism,
-i.e. is thread parallelism within a league
-for a given team_member */
-
-template <typename Iter>
-KOKKOS_INLINE_FUNCTION size_t
-makeref(const Iter iter) const;
-/* makes ref (to use in refs pair for supers subview) by
-returning distance from start of totsupers view to
-position given by iterator 'iter'.
-Note casting away signd-ness of distance. */
 
 struct SupersInGbx
 /* References to identify the chunk of memory
@@ -202,8 +174,8 @@ superdrops in view which have matching sdgbxindex to idx.
 Function is outside of parallelism (ie. in serial code). */
 {
   namespace SRP = SetRefPreds;
-  refs = {find_ref(SRP::Ref0{totsupers, idx}),
-          find_ref(SRP::Ref1{totsupers, idx})};
+  refs = {find_ref(totsupers, SRP::Ref0{idx}),
+          find_ref(totsupers, SRP::Ref1{idx})};
 }
 
 KOKKOS_INLINE_FUNCTION void
@@ -223,62 +195,6 @@ for a team_member of a league */
       [ref0, ref1](kkpair_size_t &refs)
       { refs = {ref0, ref1}; },
       refs);
-}
-
-template <typename Pred, typename ViewSupers>
-inline size_t find_ref(const ViewSupers totsupers,
-                       const Pred pred) const;
-/* returns distance from begining of totsupers
-view to the superdroplet that is first to fail
-to satisfy given Predicate "pred".
-Function is outermost level of parallelism. */
-{
-  namespace KE = Kokkos::Experimental;
-
-  /* iterator to first superdrop in
-  totsupers that fails to satisfy pred */
-  const auto iter(KE::partition_point("findref",
-                                      ExecSpace(),
-                                      totsupers,
-                                      pred));
-
-  return makeref(iter);
-}
-
-template <typename Pred, typename TeamMemberType, typename ViewSupers>
-KOKKOS_INLINE_FUNCTION size_t
-find_ref(const TeamMemberType &team_member,
-         const ViewSupers totsupers,
-         const Pred pred) const
-/* returns distance from begining of totsupers
-view to the superdroplet that is first to fail
-to satisfy given Predicate "pred".
-Function is 2nd level of nested parallelism,
-i.e. is thread parallelism within a league
-for a given team_member */
-{
-  namespace KE = Kokkos::Experimental;
-
-  /* iterator to first superdrop in
-  totsupers that fails to satisfy pred */
-  const auto iter(KE::partition_point(team_member,
-                                      totsupers,
-                                      pred));
-  return makeref(iter);
-}
-
-template <typename Iter>
-KOKKOS_INLINE_FUNCTION size_t
-makeref(const Iter iter) const
-/* makes ref (to use in refs pair for supers subview) by
-returning distance from start of totsupers view to
-position given by iterator 'iter'.
-Note casting away signd-ness of distance. */
-{
-  namespace KE = Kokkos::Experimental;
-
-  const auto ref0 = KE::distance(KE::begin(totsupers), iter);
-  return static_cast<size_t>(ref0);
 }
 
 #endif // SUPERSINGBX_HPP

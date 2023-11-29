@@ -22,6 +22,7 @@
 #define KOKKOSALIASES_SD_HPP
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <Kokkos_DualView.hpp>
 #include <Kokkos_Random.hpp>
 
