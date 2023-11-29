@@ -68,14 +68,15 @@ that occupies gridbox, ie. that has sdgbxindex == idx.
 Function is outermost level of parallelism. */
 {
   namespace SRP = SetRefPreds;
+  const size_t ref0(find_ref(totsupers, SRP::Ref0{idx}));
+  const size_t ref1(find_ref(totsupers, SRP::Ref1{idx}));
 
-  return { find_ref(totsupers, SRP::Ref0{idx}),
-           find_ref(totsupers, SRP::Ref1{idx}) }
+  return {ref0, ref1};
 }
 
-template <typename ViewSupers>
+template <typename TeamMemberType, typename ViewSupers>
 KOKKOS_INLINE_FUNCTION kkpair_size_t
-find_refs(const TeamMember &team_member,
+find_refs(const TeamMemberType &team_member,
           const ViewSupers totsupers,
           unsigned int idx)
 /* returns position in view of {first, last} superdrop
@@ -84,8 +85,8 @@ Function works within 1st layer of heirarchal
 parallelism for a team_member of a league */
 {
   namespace SRP = SetRefPreds;
-  const size_t ref0 = find_ref(team_member, totsupers, SRP::Ref0{idx});
-  const size_t ref1 = find_ref(team_member, totsupers, SRP::Ref1{idx});
+  const size_t ref0(find_ref(team_member, totsupers, SRP::Ref0{idx}));
+  const size_t ref1(find_ref(team_member, totsupers, SRP::Ref1{idx}));
 
   return {ref0, ref1};
 }
@@ -142,8 +143,8 @@ Note casting away signd-ness of distance. */
 {
   namespace KE = Kokkos::Experimental;
 
-  const auto ref0 = KE::distance(KE::begin(totsupers), iter);
-  return static_cast<size_t>(ref0);
+  const auto ref = KE::distance(KE::begin(totsupers), iter);
+  return static_cast<size_t>(ref);
 }
 
 #endif // FINDREFS_HPP

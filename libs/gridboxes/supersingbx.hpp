@@ -152,7 +152,7 @@ superdrops in view which have matching sdgbxindex to idx.
 Function works within 1st layer of heirarchal
 parallelism for a team_member of a league */
 {
-  new_refs(find_refs(team_member, totsupers, idx));
+  const auto new_refs = find_refs(team_member, totsupers, idx);
 
   Kokkos::single(
       Kokkos::PerTeam(team_member),
