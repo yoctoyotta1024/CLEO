@@ -135,47 +135,13 @@ public:
   }
 };
 
-namespace SetRefPreds
-/* namespace containing values of
-constants with dimensions */
-{
-
-  struct Ref0
-  /* struct for SupersInGbx::set_refs()
-  predicate to find first superdrop in
-  view which has matching sdgbxindex to idx */
-  {
-    unsigned int idx;
-
-    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
-    {
-      return op.get_sdgbxindex() < idx;
-    }
-  };
-
-  struct Ref1
-  /* struct for SupersInGbx::set_refs()
-  predicate to find last superdrop in
-  view which has matching sdgbxindex to idx */
-  {
-    unsigned int idx;
-
-    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
-    {
-      return op.get_sdgbxindex() <= idx;
-    }
-  };
-}
-
 inline void SupersInGbx::set_refs()
 /* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx.
 Function is outside of parallelism (ie. in serial code). */
 {
-  namespace SRP = SetRefPreds;
-  refs = {find_ref(totsupers, SRP::Ref0{idx}),
-          find_ref(totsupers, SRP::Ref1{idx})};
+  refs = find_refs(totsupers, idx);
 }
 
 KOKKOS_INLINE_FUNCTION void
@@ -183,17 +149,15 @@ SupersInGbx::set_refs(const TeamMember &team_member)
 /* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx.
-Function works within 1st layer of heirarchal parallelism
-for a team_member of a league */
+Function works within 1st layer of heirarchal
+parallelism for a team_member of a league */
 {
-  namespace SRP = SetRefPreds;
-  const size_t ref0 = find_ref(team_member, totsupers, SRP::Ref0{idx});
-  const size_t ref1 = find_ref(team_member, totsupers, SRP::Ref1{idx});
+  new_refs(find_refs(team_member, totsupers, idx));
 
   Kokkos::single(
       Kokkos::PerTeam(team_member),
-      [ref0, ref1](kkpair_size_t &refs)
-      { refs = {ref0, ref1}; },
+      [new_refs](kkpair_size_t &refs)
+      { refs = new_refs; },
       refs);
 }
 

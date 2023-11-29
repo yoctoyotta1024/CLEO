@@ -62,6 +62,11 @@ private:
   State state_at(const unsigned int ii,
                  const double volume) const;
 
+  kkpair_size_t
+  refs_from_hostsupers(const HostTeamMember &team_member,
+                       const unsigned int gbxindex,
+                       const viewd_constsupers::HostMirror h_totsupers);
+
 public:
   template <typename GbxInitConds>
   GenGridbox(const GbxInitConds &gbxic)
@@ -97,16 +102,13 @@ public:
     const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
     const State state(state_at(ii, volume));
 
-    const kkpair_size_t refs(set_refs_on_host(team_member,
-                                              gbxindex.value,
-                                              h_totsupers)); // TODO !
+    const kkpair_size_t refs(refs_from_hostsupers(team_member,
+                                                  gbxindex.value,
+                                                  h_totsupers)); // TODO !
 
     return Gridbox(gbxindex, state, totsupers, refs);
   }
 };
-
-kkpair_size_t
-set_refs_on_host(const viewd_constsupers::HostMirror h_totsupers);
 
 template <GridboxMaps GbxMaps>
 inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps,

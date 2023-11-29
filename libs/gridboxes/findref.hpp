@@ -28,6 +28,68 @@
 
 #include "superdrops/kokkosaliases_sd.hpp"
 
+namespace SetRefPreds
+/* namespace containing values of
+constants with dimensions */
+{
+
+  struct Ref0
+  /* struct for SupersInGbx::set_refs()
+  predicate to find first superdrop in
+  view which has matching sdgbxindex to idx */
+  {
+    unsigned int idx;
+
+    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+    {
+      return op.get_sdgbxindex() < idx;
+    }
+  };
+
+  struct Ref1
+  /* struct for SupersInGbx::set_refs()
+  predicate to find last superdrop in
+  view which has matching sdgbxindex to idx */
+  {
+    unsigned int idx;
+
+    KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const
+    {
+      return op.get_sdgbxindex() <= idx;
+    }
+  };
+}
+
+template <typename ViewSupers>
+inline kkpair_size_t find_refs(const ViewSupers totsupers,
+                               unsigned int idx)
+/* returns position in view of {first, last} superdrop
+that occupies gridbox, ie. that has sdgbxindex == idx.
+Function is outermost level of parallelism. */
+{
+  namespace SRP = SetRefPreds;
+
+  return { find_ref(totsupers, SRP::Ref0{idx}),
+           find_ref(totsupers, SRP::Ref1{idx}) }
+}
+
+template <typename ViewSupers>
+KOKKOS_INLINE_FUNCTION kkpair_size_t
+find_refs(const TeamMember &team_member,
+          const ViewSupers totsupers,
+          unsigned int idx)
+/* returns position in view of {first, last} superdrop
+that occupies gridbox, ie. that has sdgbxindex == idx.
+Function works within 1st layer of heirarchal
+parallelism for a team_member of a league */
+{
+  namespace SRP = SetRefPreds;
+  const size_t ref0 = find_ref(team_member, totsupers, SRP::Ref0{idx});
+  const size_t ref1 = find_ref(team_member, totsupers, SRP::Ref1{idx});
+
+  return {ref0, ref1};
+}
+
 template <typename Pred, typename ViewSupers>
 inline size_t find_ref(const ViewSupers totsupers,
                        const Pred pred)
