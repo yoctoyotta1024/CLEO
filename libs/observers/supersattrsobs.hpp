@@ -71,29 +71,27 @@ public:
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const
   {
-    at_start_step(t_mdl, h_gbxs);
+    at_start_step(totsupers);
   }
 
-  void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+  void at_start_step(const viewd_constsupers totsupers) const
   /* writes some variables from gridbox state
   to 2-D zarr storages as determined by the
   StateBuffers struct */
   {
-    const size_t ngbxs(h_gbxs.extent(0));
-    size_t totnsupers(0);
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      auto h_supers = h_gbxs(ii).supersingbx.hostcopy();
+    auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
+    Kokkos::deep_copy(h_supers, supers);
 
-      for (size_t kk(0); kk < h_supers.extent(0); ++kk)
-      {
-        const auto superdrop = h_supers(kk);
-        zarr->data_to_raggedstorage(superdrop);
-        ++totnsupers;
-      }
+    const size_t totnsupers(h_supers.extent(0));
+
+    size_t obs_nsupers(0);
+    for (size_t kk(0); kk < totnsupers; ++kk)
+    {
+      zarr->data_to_raggedstorage(h_supers(kk));
+      ++obs_nsupers;
     }
-    zarr -> raggedarray_count(totnsupers);
+
+    zarr->raggedarray_count(obs_nsupers);
   }
 };
 
