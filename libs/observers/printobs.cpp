@@ -32,7 +32,7 @@ void PrintObserver::
   std::cout << "t="
             << std::fixed << std::setprecision(2)
             << step2realtime(t_mdl)
-            << "s, totnsupers=" << gbx.domain_totnsupers()
+            << "s, totnsupers=" << gbx.supersingbx.domain_totnsupers()
             << ", ngbxs=" << h_gbxs.extent(0)
             << ", (Gbx" << gbx.get_gbxindex()
             << ": [T, p, qv, qc] = [" << gbx.state.temp * dlc::TEMP0

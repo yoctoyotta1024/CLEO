@@ -104,8 +104,10 @@ public:
 
   KOKKOS_INLINE_FUNCTION
   subviewd_constsupers readonly() const
-  /* returns subview from view of superdrops referencing superdrops
-  which occupy given gridbox (according to refs) */
+  /* returns read-only subview from view of superdrops
+  referencing superdrops which occupy given gridbox
+  (according to refs). read-only means superdrops
+  in the subview are const */
   {
     return Kokkos::subview(totsupers, refs);
   }
@@ -132,6 +134,14 @@ public:
   /* returns current total number of superdrops in domain */
   {
     return totsupers.extent(0);
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  viewd_constsupers domain_totsupers_readonly() const
+  /* returns the view of all the superdrops in the domain.
+  read-only means superdrops in the view are const */
+  {
+    return totsupers;
   }
 };
 

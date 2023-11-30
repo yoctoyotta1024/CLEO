@@ -75,12 +75,6 @@ used for SDM) and detectors for tracking chosen variables */
 
   KOKKOS_INLINE_FUNCTION
   auto get_gbxindex() const { return gbxindex.value; }
-
-  KOKKOS_INLINE_FUNCTION
-  size_t domain_totnsupers() const
-  {
-    return supersingbx.domain_totnsupers();
-  }
 };
 
 #endif // GRIDBOX_HPP
