@@ -67,7 +67,7 @@ of the droplet radius distribution) */
     moms.at(1) += xi * mass;
     moms.at(2) += xi * mass * mass;
   }
-  
+
   return moms;
 }
 
