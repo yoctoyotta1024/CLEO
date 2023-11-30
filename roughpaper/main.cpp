@@ -93,19 +93,15 @@ int main(int argc, char *argv[])
 
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      std::array<double, 3> moms({0.0, 0.0, 0.0});
-
-      Kokkos::parallel_reduce(
-          "massmoments_to_storage",
-          Kokkos::RangePolicy<ExecSpace>(0, nsupers),
-          KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1) {
-            m0 += supers(kk).get_sdgbxindex();
-            m1 += supers(kk).get_sdgbxindex() + 10;
-          },
-          moms.at(0), moms.at(1));
+      Kokkos::Timer kokkostimer;
+      const auto moms = calc_massmoments(supers);
+      const double ttot(kokkostimer.seconds());
 
       std::cout << "ii: " << ii << " -> mom = "
                 << moms.at(0) << ", " << moms.at(1) << "\n";
+
+      std::cout << "-----\n Total Program Duration: "
+                << ttot << "s \n-----\n";
     }
   }
   Kokkos::finalize();
