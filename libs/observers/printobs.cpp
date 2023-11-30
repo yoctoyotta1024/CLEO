@@ -26,13 +26,14 @@
 
 void PrintObserver::
     print_statement(const unsigned int t_mdl,
-                    const viewh_constgbx h_gbxs) const
+                    const viewh_constgbx h_gbxs,
+                    const viewd_constsupers totsupers) const
 {
   const auto gbx = h_gbxs(0);
   std::cout << "t="
             << std::fixed << std::setprecision(2)
             << step2realtime(t_mdl)
-            << "s, totnsupers=" << gbx.supersingbx.domain_totnsupers()
+            << "s, totnsupers=" << totsupers.extent(0)
             << ", ngbxs=" << h_gbxs.extent(0)
             << ", (Gbx" << gbx.get_gbxindex()
             << ": [T, p, qv, qc] = [" << gbx.state.temp * dlc::TEMP0

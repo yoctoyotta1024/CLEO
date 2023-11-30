@@ -74,7 +74,13 @@ public:
   }
 
   void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
+  {
+    at_start_step(t_mdl);
+  }
+
+  void at_start_step(const unsigned int t_mdl) const
   /* converts integer model timestep to dimensionless time,
   then writes to zarr coordinate storage */
   {

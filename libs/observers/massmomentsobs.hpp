@@ -87,6 +87,13 @@ public:
   }
 
   void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
+  {
+    at_start_step(t_mdl, h_gbxs);
+  }
+
+  void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const
   /* deep copy if necessary (if superdrops are on device not
   host memory), then writes mass moments to 2-D zarr storages */
@@ -142,6 +149,13 @@ public:
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
     std::cout << "observer includes RainMassMomentsObserver\n";
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
+  {
+    at_start_step(t_mdl, h_gbxs);
   }
 
   void at_start_step(const unsigned int t_mdl,

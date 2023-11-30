@@ -35,21 +35,22 @@
 
 template <typename Obs>
 concept Observer = requires(Obs obs, unsigned int t,
-                            const viewh_constgbx h_gbxs)
-/* concept Observer is all types that have functions 
+                            const viewh_constgbx h_gbxs,
+                            const viewd_constsupers totsupers)
+/* concept Observer is all types that have functions
 for timestepping and at_start_step as constrained here */
 {
   {
     obs.before_timestepping(h_gbxs)
   } -> std::same_as<void>;
   {
-  obs.next_obs(t)
+    obs.next_obs(t)
   } -> std::convertible_to<unsigned int>;
   {
     obs.on_step(t)
   } -> std::same_as<bool>;
   {
-    obs.at_start_step(t, h_gbxs)
+    obs.at_start_step(t, h_gbxs, totsupers)
   } -> std::same_as<void>;
 };
 
@@ -92,12 +93,13 @@ public:
   }
 
   void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
   /* for combination of 2 observers, each
   observer is run sequentially */
   {
-    a.at_start_step(t_mdl, h_gbxs);
-    b.at_start_step(t_mdl, h_gbxs);
+    a.at_start_step(t_mdl, h_gbxs, totsupers);
+    b.at_start_step(t_mdl, h_gbxs, totsupers);
   }
 };
 
@@ -124,14 +126,16 @@ struct NullObserver
   {
     return false;
   }
-
+  
   void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const {}
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const {}
 };
 
 template <typename O>
 concept ObsFuncs = requires(O o, unsigned int t,
-                           const viewh_constgbx h_gbxs)
+                            const viewh_constgbx h_gbxs,
+                            const viewd_constsupers totsupers)
 /* concept for all types that can be called used
 by ConstTstepObserver for 'do_obs' (in order
 to make an Observer type out of a ConstTstepObserver) */
@@ -140,7 +144,7 @@ to make an Observer type out of a ConstTstepObserver) */
     o.before_timestepping(h_gbxs)
   } -> std::same_as<void>;
   {
-    o.at_start_step(t, h_gbxs)
+    o.at_start_step(t, h_gbxs, totsupers)
   } -> std::same_as<void>;
 };
 
@@ -176,11 +180,12 @@ public:
   }
 
   void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
   {
     if (on_step(t_mdl))
     {
-      do_obs.at_start_step(t_mdl, h_gbxs);
+      do_obs.at_start_step(t_mdl, h_gbxs, totsupers);
     }
   }
 };

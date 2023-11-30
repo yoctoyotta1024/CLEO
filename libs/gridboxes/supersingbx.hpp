@@ -130,12 +130,6 @@ public:
     return refs.second - refs.first;
   }
 
-  KOKKOS_INLINE_FUNCTION size_t domain_totnsupers() const
-  /* returns current total number of superdrops in domain */
-  {
-    return totsupers.extent(0);
-  }
-
   KOKKOS_INLINE_FUNCTION
   viewd_constsupers domain_totsupers_readonly() const
   /* returns the view of all the superdrops in the domain.

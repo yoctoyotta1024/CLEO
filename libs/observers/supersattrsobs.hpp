@@ -65,7 +65,14 @@ public:
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
     std::cout << "observer includes SupersAttrsObserver\n";
-  } 
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
+  {
+    at_start_step(t_mdl, h_gbxs);
+  }
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const

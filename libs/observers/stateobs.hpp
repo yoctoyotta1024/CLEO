@@ -69,6 +69,13 @@ public:
   }                                        
 
   void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
+  {
+    at_start_step(t_mdl, h_gbxs);
+  }
+
+  void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const
   /* writes some variables from gridbox state
   to 2-D zarr storages as determined by the

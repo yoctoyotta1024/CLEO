@@ -43,7 +43,8 @@ private:
   std::function<double(unsigned int)> step2realtime; // function to convert timesteps to real time
 
   void print_statement(const unsigned int t_mdl,
-                          const viewh_constgbx h_gbxs) const;
+                       const viewh_constgbx h_gbxs,
+                       const viewd_constsupers totsupers) const;
 
 public:
   PrintObserver(const unsigned int obsstep,
@@ -66,12 +67,13 @@ public:
   }
 
   void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
   /* observe Gridboxes (on host) at start of timestep */
   {
     if (on_step(t_mdl))
     {
-      print_statement(t_mdl, h_gbxs);
+      print_statement(t_mdl, h_gbxs, totsupers);
     }
   }
 };

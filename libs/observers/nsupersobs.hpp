@@ -95,6 +95,13 @@ public:
   }
 
   void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
+  {
+    at_start_step(t_mdl, h_gbxs);
+  }
+
+  void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const
   /* gets number of superdrops for each gridbox and
   writes it to a 2-D zarr storage */
@@ -148,6 +155,13 @@ public:
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
     std::cout << "observer includes NrainsupersObserver\n";
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
+  {
+    at_start_step(t_mdl, h_gbxs);
   }
 
   void at_start_step(const unsigned int t_mdl,
@@ -218,12 +232,18 @@ public:
   }
 
   void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
+  {
+    at_start_step(t_mdl, totsupers);
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const viewd_constsupers totsupers) const
   /* gets number of superdrops in domain (from 0th gridbox 
   metadata on superdrops) and writes it to a 1-D zarr storage */
   {
-    const auto gbx0 = h_gbxs(0);
-    const size_t totnsupers(gbx0.supersingbx.domain_totnsupers());
+    const size_t totnsupers(totsupers.extent(0));
 
     zarr->value_to_storage(totnsupers);
   }
