@@ -80,7 +80,7 @@ void DoNrainsupersObs::
   const size_t ngbxs(h_gbxs.extent(0));
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
-    const size_t nrain(calc_nrainsupers_serial(h_gbxs(ii).supersingbx));
+    const size_t nrain(calc_nrainsupers(h_gbxs(ii).supersingbx));
     zarr->value_to_storage(nrain);
   }
 }
