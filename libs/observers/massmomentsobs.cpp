@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Thursday 30th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +25,7 @@
 void DoMassMomentsObs::
     massmoments_to_storage(const mirrorh_constsupers h_supers) const
 /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
-distribution and then writes them to zarr storage. (I.e.
+distribution and then writes them to zarr storage. (i.e.
 0th, 3rd and 6th moment of the droplet radius distribution) */
 {
   std::array<double, 3> moms({0.0, 0.0, 0.0}); // 0th, 1st and 2nd mass moments
@@ -44,7 +44,7 @@ distribution and then writes them to zarr storage. (I.e.
 void DoRainMassMomentsObs::
     rainmassmoments_to_storage(const mirrorh_constsupers h_supers) const
 /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
-distribution and then writes them to zarr storage. (I.e.
+distribution and then writes them to zarr storage. (i.e.
 0th, 3rd and 6th moment of the droplet radius distribution) */
 {
   constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
