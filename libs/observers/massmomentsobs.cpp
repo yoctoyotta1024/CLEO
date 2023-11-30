@@ -29,7 +29,12 @@ droplet mass distribution, i.e. 0th, 3rd and 6th
 moment of the droplet radius distribution.
 Kokkos::parallel_reduce([...]) is equivalent in serial to:
 for (size_t kk(0); kk < d_supers.extent(0); ++kk){[...]},
-see calc_massmoments_serial */
+see calc_massmoments_serial.
+ * WARNING! * When using OpenMP (d_supers in Host Space)
+ and there are only a few superdroplets in d_supers,
+ calc_massmoments is much slower then calc_massmoments_serial
+ (probably because opening threads is more costly than the
+ time saved in a parallel calculation over few elements) */
 {
   std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
 
@@ -58,7 +63,12 @@ moment of the droplet radius disttribution. Raindrops are
 all droplets with r >= rlim = 40 microns.
 Kokkos::parallel_reduce([...]) is equivalent in serial to:
 for (size_t kk(0); kk < d_supers.extent(0); ++kk){[...]},
-see calc_rainmassmoments_serial */
+see calc_rainmassmoments_serial
+ * WARNING! * When using OpenMP (d_supers in Host Space)
+ and there are only a few superdroplets in d_supers,
+ calc_rainmassmoments is much slower then calc_rainmassmoments_serial
+ (probably because opening threads is more costly than the
+ time saved in a parallel calculation over few elements) */
 {
   constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
 
