@@ -41,19 +41,19 @@ for each gridbox. "raindrop-like" means radius > rlim.
     
   }
 
-  Kokkos::parallel_reduce(
-      "calc_massmoments",
-      Kokkos::RangePolicy<ExecSpace>(0, nsupers),
-      KOKKOS_LAMBDA(const size_t kk, size_t &nrs) {
-        const double xi = (double)(d_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
+  // Kokkos::parallel_reduce(
+  //     "calc_massmoments",
+  //     Kokkos::RangePolicy<ExecSpace>(0, nsupers),
+  //     KOKKOS_LAMBDA(const size_t kk, size_t &nrs) {
+  //       const double xi = (double)(d_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
 
-        const auto radius = d_supers(kk).get_radius();
-        if (radius >= rlim)
-        {
-          ++nrainsupers;
-        }
-      },
-      nrainsupers); // {0th, 1st, 2nd} mass moments
+  //       const auto radius = d_supers(kk).get_radius();
+  //       if (radius >= rlim)
+  //       {
+  //         ++nrainsupers;
+  //       }
+  //     },
+  //     nrainsupers); // {0th, 1st, 2nd} mass moments
 
   return nrainsupers;
 }

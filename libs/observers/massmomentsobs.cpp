@@ -36,9 +36,9 @@ see calc_massmoments_serial.
  (probably because opening threads is more costly than the
  time saved in a parallel calculation over few elements) */
 {
-  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
-
   const size_t nsupers(supers.extent(0));
+
+  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
   Kokkos::parallel_reduce(
       "calc_massmoments",
       Kokkos::RangePolicy<ExecSpace>(0, nsupers),
@@ -71,10 +71,9 @@ see calc_rainmassmoments_serial
  time saved in a parallel calculation over few elements) */
 {
   constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
+  const size_t nsupers(supers.extent(0));
 
   std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} rain mass moments
-
-  const size_t nsupers(supers.extent(0));
   Kokkos::parallel_reduce(
       "calc_rainmassmoments",
       Kokkos::RangePolicy<ExecSpace>(0, nsupers),
@@ -99,10 +98,10 @@ calc_massmoments_serial(const subviewd_constsupers supers)
 droplet mass distribution, i.e. 0th, 3rd and 6th
 moment of the droplet radius distribution */
 {
-  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
-
   auto h_supers = Kokkos::create_mirror_view(supers);
   Kokkos::deep_copy(h_supers, supers);
+  
+  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
   for (size_t kk(0); kk < h_supers.extent(0); ++kk)
   {
     const double xi = (double)(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
@@ -124,15 +123,14 @@ are all droplets with r >= rlim = 40 microns */
 {
   constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
 
-  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
-
   auto h_supers = Kokkos::create_mirror_view(supers);
   Kokkos::deep_copy(h_supers, supers);
+
+  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
   for (size_t kk(0); kk < h_supers.extent(0); ++kk)
   {
     if (h_supers(kk).get_radius() >= rlim)
     {
-
       const double xi = (double)(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
       const double mass(h_supers(kk).mass());
       moms.at(0) += xi;
