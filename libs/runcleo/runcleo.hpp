@@ -128,7 +128,12 @@ private:
     }
 
     gbxs.sync_host();
-    sdm.obs.at_start_step(t_mdl, gbxs.view_host());
+
+    const viewh_constgbx h_gbxs(gbxs.view_host());
+    sdm.obs.at_start_step(t_mdl, h_gbxs);
+
+    const viewd_constsupers totsupers(h_gbxs(0).domain_totsupers_readonly());
+    sdm.obs.at_start_step(t_mdl, totsupers);
 
     return get_next_step(t_mdl);
   }
