@@ -141,27 +141,3 @@ are all droplets with r >= rlim = 40 microns */
 
   return moms;
 }
-
-void DoMassMomentsObs::
-    massmoments_to_storage(const subviewd_constsupers supers) const
-/* calculated 0th, 1st and 2nd moment of the (real) droplet mass
-distribution and then writes them to zarr storage. (I.e.
-0th, 3rd and 6th moment of the droplet radius distribution).
-Kokkos::parallel_for([...]) is equivalent in serial to:
-for (size_t kk(0); kk < supers.extent(0); ++kk){[...]} */
-{
-  const auto moms = calc_massmoments(supers);
-
-  zarr->values_to_storage(moms); // {0th, 1st, 2nd} mass moments
-}
-
-void DoRainMassMomentsObs::rainmassmoments_to_storage(
-    const subviewd_constsupers supers) const
-/* calculated 0th, 1st and 2nd moment of the (real) droplet mass
-distribution and then writes them to zarr storage. (I.e.
-0th, 3rd and 6th moment of the droplet radius distribution) */
-{
-  const auto moms = calc_rainmassmoments(supers);
-
-  zarr->values_to_storage(moms); // {0th, 1st, 2nd} rain mass moments
-}
