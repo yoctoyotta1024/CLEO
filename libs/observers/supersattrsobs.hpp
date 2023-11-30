@@ -74,20 +74,20 @@ public:
     at_start_step(totsupers);
   }
 
-  void at_start_step(const viewd_constsupers totsupers) const
+  void at_start_step(const viewd_constsupers d_totsupers) const
   /* writes some variables from gridbox state
   to 2-D zarr storages as determined by the
   StateBuffers struct */
   {
-    auto h_supers = Kokkos::create_mirror_view(supers); // mirror of supers in case view is on device memory
-    Kokkos::deep_copy(h_supers, supers);
+    auto h_totsupers = Kokkos::create_mirror_view(d_totsupers); // mirror of supers in case view is on device memory
+    Kokkos::deep_copy(h_totsupers, d_totsupers);
 
-    const size_t totnsupers(h_supers.extent(0));
+    const size_t totnsupers(h_totsupers.extent(0));
 
     size_t obs_nsupers(0);
     for (size_t kk(0); kk < totnsupers; ++kk)
     {
-      zarr->data_to_raggedstorage(h_supers(kk));
+      zarr->data_to_raggedstorage(h_totsupers(kk));
       ++obs_nsupers;
     }
 
