@@ -1,0 +1,76 @@
+### --------------------------------------------- ###
+### ------------------- CONFIG ------------------ ###
+### --------------------------------------------- ###
+
+### SDM Runtime parameters ###
+# domain setup #
+nspacedims = 2                            # no. of spatial dimensions to model 
+ngbxs = 25                                # total number of Gbxs
+totnsupers = 200                          # (initial) total no. of SDs
+
+# timestepping #
+CONDTSTEP = 1                             # time between SD condensation events [s]
+COLLTSTEP = 1                             # time between SD collision events [s]
+MOTIONTSTEP = 5                           # time between SDM motion [s]
+COUPLTSTEP = 600                          # time between dynamic couplings [s]
+OBSTSTEP = 5                              # time between SDM observations [s]
+T_END = 4200                              # time span of integration from 0s to T_END [s]
+
+# microphysics #
+cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
+cond_SUBTSTEP = 0.1                       # smallest timestep in cases where substepping occurs [s]
+cond_rtol = 0.0                           # relative tolerance for implicit euler integration
+cond_atol = 0.01                          # abolute tolerance for implicit euler integration
+
+# superdroplets #
+doAlterThermo = false                     # enable condensation to alter the thermodynamic state
+
+# type of coupling #
+thermosolver = fromfile                   # dynamics solver to configure
+
+
+### --------------------------------------------- ###
+### ------------------ RESULTS ------------------ ###
+### --------------------------------------------- ###
+
+### -------------------- Timestepping: [...] /s -------------------- ###
+    SERIAL     OpenMP     CUDA
+(1) 0.00002    0.00013    0.00015               (1) Null 
+(2) 0.00019    0.00114    0.00127               (2) FromFileDynamics
+
+(3a) 0.6517    0.4437    0.0870                 (3a) Motion
+(3b) 0.6366    0.4466    0.0880                 (3b) Motion + Simmel
+(3c) 0.5763    0.4742    0.0859                 (3c) Motion + Rogers&Yau
+
+(4a) 0.7127    0.5012    0.1518                 (4a) Collisions Golovin
+(4b) 0.7097    0.4661    0.1509                 (4b) Collisions Long
+(4c) 0.9000    0.4745    0.1547                 (4c) Collisions LowList
+(4d) 1.5947    0.5143    0.2487                 (4d) Coll+Bu LowList
+(4e) 0.8855    0.4630    0.1534                 (4e) CollBuRe
+
+(5a) 2.9036    0.9066    0.3337                 (5a) Condensation
+(5b) 1.2110    0.5035    0.1782                 (5b) Condensation + no substep
+(5c) 0.8879    0.4869    0.1588                 (5c) Condensation + Collisions Long
+
+(6a) 1.1686    6.5154    8.4816                 (6a) Observer = all
+(6b) 1.1215    4.8073    5.4885                 (6b) Observer, no print, no supers
+(6c) 0.8216    0.4519    0.2287                 (6c) Obs = time, ii, state
+(6d) 0.8047    0.4456    0.2309                 (6d) Obs += nsupers, totnsupers
+(6e) 0.7476    0.4492    0.2401                 (6e) Obs += print
+(6f) 0.9134    1.9505    2.0102                 (6f) Obs += nrainsupers
+(6g) 0.8625    2.0402    1.8875                 (6g) Obs += supers -= nrainsupers
+(6h) 1.0272    3.5306    3.7123                 (6h) Obs += nrainsupers
+(6i) 1.1099    4.8982    5.5402                 (6i) Obs += massmoms
+(6j) 1.1996    4.8243    5.1768                 (6j) Observer = all (+= rainmassmoms)
+
+(7a) 0.9561    2.0147    2.3341                 (7a) Observer = serial massmoms (only)
+(7b) 0.9011    2.9696    0.6506                 (7b) Observer = new massmoms (only)
+(7c) 1.0934    3.6757    4.3629                 (7c) Observer = serial massmoms + rainmassmoms 
+(7d) 0.9691    5.5082    1.1148                 (7d) Observer = new massmoms + rainmassmoms
+(7e) 3.4578    4.5191    4.5687                 (7e) 800 SDs, Observer = serial massmoms + rainmassmoms 
+(7f) 3.3109    6.4281    1.2322                 (7f) 800 SDs, Observer = new massmoms + rainmassmoms
+
+(8a) 1.3011    8.5192    5.6717                 (8a) Observer = all, serial nrainsupers
+(8b) 1.1813    8.5795    4.2446                 (8b) Observer = all, new nrainsupers
+(8c) 1.0754    7.2357    2.1585                 (8c) Observer = all, new sdattrs
+### ---------------------------------------------------------------- ###
