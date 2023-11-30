@@ -76,9 +76,9 @@ of the droplet radius distribution).
 Kokkos::parallel_for([...]) is equivalent in serial to:
 for (size_t kk(0); kk < d_supers.extent(0); ++kk){[...]} */
 {
-  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
-
   const size_t nsupers(d_supers.extent(0));
+
+  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
   Kokkos::parallel_reduce(
       "massmoments_to_storage",
       Kokkos::RangePolicy<ExecSpace>(0, nsupers),
