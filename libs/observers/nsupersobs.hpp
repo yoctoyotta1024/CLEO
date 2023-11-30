@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Thursday 30th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,6 +33,7 @@
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
 #include "superdrops/superdrop.hpp"
+#include "gridboxes/supersingbx.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/twodstorage.hpp"
 #include "zarr/onedstorage.hpp"
@@ -166,27 +167,14 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs) const
-  /* deep copy if necessary (if superdrops are on device not
-  host memory), then counts number of superdrops for each gridbox
-  with radius > rlim and writes total number to 2-D zarr storage */
+  /* Counts number of "raindrop-like" superdrops for each
+  gridbox and writes total number to 2-D zarr storage */
   {
-    constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
-
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      auto h_supers = h_gbxs(ii).supersingbx.hostcopy();
-
-      size_t nrainsupers(0);
-      for (size_t kk(0); kk < h_supers.extent(0); ++kk)
-      {
-        const auto superdrop = h_supers(kk);
-        if (superdrop.get_radius() >= rlim)
-        {
-          ++nrainsupers;
-        }
-      }
-      zarr->value_to_storage(nrainsupers);
+      const size_t nrain(calc_nrainsupers_serial(h_gbxs(ii).supersingbx));
+      zarr->value_to_storage(nrain);
     }
     ++(zarr->nobs);
   }
