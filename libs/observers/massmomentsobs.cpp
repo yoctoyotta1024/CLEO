@@ -35,7 +35,7 @@ see calc_massmoments_serial */
 
   const size_t nsupers(d_supers.extent(0));
   Kokkos::parallel_reduce(
-      "massmoments_to_storage",
+      "calc_massmoments",
       Kokkos::RangePolicy<ExecSpace>(0, nsupers),
       KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
         
@@ -66,10 +66,10 @@ see calc_rainmassmoments_serial */
 
   const size_t nsupers(d_supers.extent(0));
   Kokkos::parallel_reduce(
-      "rainmassmoments_to_storage",
+      "calc_rainmassmoments",
       Kokkos::RangePolicy<ExecSpace>(0, nsupers),
       KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
-        if (h_supers(kk).get_radius() >= rlim)
+        if (d_supers(kk).get_radius() >= rlim)
         {
           const double xi = (double)(d_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
           const double mass(d_supers(kk).mass());
@@ -112,6 +112,8 @@ raindroplet mass distribution, i.e. 0th, 3rd and 6th
 moment of the droplet radius disttribution. Raindrops
 are all droplets with r >= rlim = 40 microns */
 {
+  constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
+
   std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
 
   auto h_supers = Kokkos::create_mirror_view(d_supers);
@@ -145,13 +147,13 @@ for (size_t kk(0); kk < d_supers.extent(0); ++kk){[...]} */
   zarr->values_to_storage(moms); // {0th, 1st, 2nd} mass moments
 }
 
-void DoRainMassMomentsObs::
-    rainmassmoments_to_storage(const mirrorh_constsupers h_supers) const
+void DoRainMassMomentsObs::rainmassmoments_to_storage(
+    const subviewd_constsupers d_supers) const
 /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
 distribution and then writes them to zarr storage. (I.e.
 0th, 3rd and 6th moment of the droplet radius distribution) */
 {
-  const auto moms = calc_rain_massmoments(d_supers);
+  const auto moms = calc_rainmassmoments(d_supers);
 
   zarr->values_to_storage(moms); // {0th, 1st, 2nd} rain mass moments
 }

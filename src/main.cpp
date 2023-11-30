@@ -245,7 +245,9 @@ create_observer(const Config &config,
   const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk,
                                                  config.ngbxs);
 
-  return obs7;
+  const Observer auto obs8 = RainMassMomentsObserver(obsstep, store, maxchunk,
+                                                     config.ngbxs);
+  return obs7 >> obs8;
 }
 
 inline auto create_sdm(const Config &config,
