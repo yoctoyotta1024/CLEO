@@ -27,8 +27,7 @@ size_t CartesianMaps::maps_size() const
 /* on host, throws error if maps are not all
 the same size, else returns size of maps */
 {
-  const auto h_ndims(Kokkos::create_mirror_view(ndims));
-  Kokkos::deep_copy(h_ndims, ndims);
+  const auto h_ndims(ndims_hostcopy());
   const size_t sz(h_ndims(0) * h_ndims(1) * h_ndims(2) + 1); // ngbxs + 1 for out of bounds key
 
   if (to_coord3bounds.size() != sz ||
