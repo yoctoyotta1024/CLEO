@@ -68,6 +68,30 @@ viewd_supers init_supers(const size_t nsupers,
   return supers;
 }
 
+std::array<double, 3>
+calc_massmoments(const viewd_constsupers d_supers)
+/* calculated 0th, 1st and 2nd moment of the
+(real) droplet mass (I.e. 0th, 3rd and 6th moment
+of the droplet radius distribution).
+Kokkos::parallel_for([...]) is equivalent in serial to:
+for (size_t kk(0); kk < d_supers.extent(0); ++kk){[...]} */
+{
+  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
+
+  const size_t nsupers(d_supers.extent(0));
+  Kokkos::parallel_reduce(
+      "massmoments_to_storage",
+      Kokkos::RangePolicy<ExecSpace>(0, nsupers),
+      KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
+        m0 += d_supers(kk).get_sdgbxindex();
+        m1 += d_supers(kk).get_sdgbxindex() + 1;
+        m2 += 0.0;
+      },
+      moms.at(0), moms.at(1), moms.at(2)); // {0th, 1st, 2nd} mass moments
+
+  return moms;
+}
+
 int main(int argc, char *argv[])
 {
   const size_t nsupers(10);
