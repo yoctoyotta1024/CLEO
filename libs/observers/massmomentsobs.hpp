@@ -69,14 +69,10 @@ private:
                                          std::array<double, 3>>;
   std::shared_ptr<store_type> zarr;
 
-  void massmoments_to_storage(const subviewd_constsupers supers) const
+  void massmoments_to_storage(const viewh_constgbx h_gbxs) const;
   /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
   distribution and then writes them to zarr storage, i.e.
   0th, 3rd and 6th moment of the droplet radius distribution) */
-  {
-    const auto moms = calc_massmoments(supers);
-    zarr->values_to_storage(moms); // {0th, 1st, 2nd} mass moments
-  }
 
 public:
   DoMassMomentsObs(FSStore &store,
@@ -94,20 +90,14 @@ public:
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const
   {
-    at_start_step(t_mdl, h_gbxs);
+    at_start_step(h_gbxs);
   }
 
-  void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+  void at_start_step(const viewh_constgbx h_gbxs) const
   /* deep copy if necessary (if superdrops are on device not
   host memory), then writes mass moments to 2-D zarr storages */
   {
-    const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      auto supers = h_gbxs(ii).supersingbx.readonly();
-      massmoments_to_storage(supers);
-    }
+    massmoments_to_storage(h_gbxs);
     ++(zarr->nobs);
   }
 };
@@ -136,15 +126,10 @@ private:
                                          std::array<double, 3>>; 
   std::shared_ptr<store_type> zarr;
 
-  void rainmassmoments_to_storage(
-      const subviewd_constsupers supers) const
+  void rainmassmoments_to_storage(const viewh_constgbx h_gbxs) const;
   /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
   distribution and then writes them to zarr storage. (I.e.
   0th, 3rd and 6th moment of the droplet radius distribution) */
-  {
-    const auto moms = calc_rainmassmoments(supers);
-    zarr->values_to_storage(moms); // {0th, 1st, 2nd} rain mass moments
-  }
 
 public:
   DoRainMassMomentsObs(FSStore &store,
@@ -163,20 +148,14 @@ public:
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const
   {
-    at_start_step(t_mdl, h_gbxs);
+    at_start_step(h_gbxs);
   }
 
-  void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+  void at_start_step(const viewh_constgbx h_gbxs) const
   /* deep copy if necessary (if superdrops are on device not
   host memory), then writes mass moments to 2-D zarr storages */
   {
-    const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      auto supers = h_gbxs(ii).supersingbx.readonly();
-      rainmassmoments_to_storage(supers);
-    }
+    rainmassmoments_to_storage(h_gbxs);
     ++(zarr->nobs);
   }
 };

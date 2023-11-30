@@ -68,20 +68,6 @@ TotNsupersObserver(const unsigned int interval,
 with a constant timestep 'interval' using an
 instance of the DoTotNsupersObs class */
 
-size_t calc_nrainsupers();
-/* returns count of number of "raindrop-like" superdrops
-for each gridbox. "raindrop-like" means radius > rlim.
-  * WARNING! * When using OpenMP (supers in Host Space)
- and there are only a few superdroplets in supers,
- calc_nrainsupers is much slower then calc_nrainsupers_serial
- (probably because opening threads is more costly than the
- time saved in a parallel calculation over few elements) */
-
-size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx);
-/* deep copy if necessary (if superdrops are on device not
-  host memory), then returns count of number of "raindrop-like"
-  superdrops for each gridbox. "raindrop-like" means radius > rlim */
-
 class DoNsupersObs
 /* observe nsupers in each gridbox and write
 it to an array 'zarr' store as determined by
@@ -113,11 +99,10 @@ public:
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const
   {
-    at_start_step(t_mdl, h_gbxs);
+    at_start_step(h_gbxs);
   }
 
-  void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+  void at_start_step(const viewh_constgbx h_gbxs) const
   /* gets number of superdrops for each gridbox and
   writes it to a 2-D zarr storage */
   {
@@ -154,6 +139,8 @@ private:
   using store_type = TwoDStorage<size_t>;
   std::shared_ptr<store_type> zarr;
   
+  void nrainsupers_to_storage(const viewh_constgbx h_gbxs) const;
+
 public:
   DoNrainsupersObs(FSStore &store,
                const int maxchunk,
@@ -176,20 +163,14 @@ public:
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const
   {
-    at_start_step(t_mdl, h_gbxs);
+    at_start_step(h_gbxs);
   }
 
-  void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs) const
+  void at_start_step(const viewh_constgbx h_gbxs) const
   /* Counts number of "raindrop-like" superdrops for each
   gridbox and writes total number to 2-D zarr storage */
   {
-    const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      const size_t nrain(calc_nrainsupers_serial(h_gbxs(ii).supersingbx));
-      zarr->value_to_storage(nrain);
-    }
+    nrainsupers_to_storage(h_gbxs);
     ++(zarr->nobs);
   }
 };
@@ -237,11 +218,10 @@ public:
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const
   {
-    at_start_step(t_mdl, totsupers);
+    at_start_step(totsupers);
   }
 
-  void at_start_step(const unsigned int t_mdl,
-                     const viewd_constsupers totsupers) const
+  void at_start_step(const viewd_constsupers totsupers) const
   /* gets number of superdrops in domain (from 0th gridbox 
   metadata on superdrops) and writes it to a 1-D zarr storage */
   {

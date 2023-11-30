@@ -30,30 +30,24 @@ for each gridbox. "raindrop-like" means radius > rlim.
  calc_nrainsupers is much slower then calc_nrainsupers_serial
  (probably because opening threads is more costly than the
  time saved in a parallel calculation over few elements) */
-{
+{  
   constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
-  
-  const auto h_supers = supersingbx.hostcopy();
+  const subviewd_constsupers supers(supersingbx.readonly());
+  const size_t nsupers(supers.extent(0));
 
   size_t nrainsupers(0);
-  for (size_t kk(0); kk < h_supers.extent(0); ++kk)
-  {
-    
-  }
-
-  // Kokkos::parallel_reduce(
-  //     "calc_massmoments",
-  //     Kokkos::RangePolicy<ExecSpace>(0, nsupers),
-  //     KOKKOS_LAMBDA(const size_t kk, size_t &nrs) {
-  //       const double xi = (double)(d_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
-
-  //       const auto radius = d_supers(kk).get_radius();
-  //       if (radius >= rlim)
-  //       {
-  //         ++nrainsupers;
-  //       }
-  //     },
-  //     nrainsupers); // {0th, 1st, 2nd} mass moments
+  Kokkos::parallel_reduce(
+      "calc_nrainsupers",
+      Kokkos::RangePolicy<ExecSpace>(0, nsupers),
+      KOKKOS_LAMBDA(const size_t kk, size_t &nrain)
+      {
+        const double radius(supers(kk).get_radius()); // cast multiplicity from unsigned int to double
+        if (radius >= rlim)
+        {
+          ++nrain;
+        }
+      },
+      nrainsupers);
 
   return nrainsupers;
 }
@@ -70,7 +64,7 @@ size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx)
   size_t nrainsupers(0);
   for (size_t kk(0); kk < h_supers.extent(0); ++kk)
   {
-    const auto radius = h_supers(kk).get_radius();
+    const double radius(h_supers(kk).get_radius());
     if (radius >= rlim)
     {
       ++nrainsupers;
@@ -78,4 +72,15 @@ size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx)
   }
 
   return nrainsupers;
+}
+
+void DoNrainsupersObs::
+    nrainsupers_to_storage(const viewh_constgbx h_gbxs) const
+{
+  const size_t ngbxs(h_gbxs.extent(0));
+  for (size_t ii(0); ii < ngbxs; ++ii)
+  {
+    const size_t nrain(calc_nrainsupers_serial(h_gbxs(ii).supersingbx));
+    zarr->value_to_storage(nrain);
+  }
 }
