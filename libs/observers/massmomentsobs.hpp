@@ -68,8 +68,8 @@ private:
   using store_type = TwoDMultiVarStorage<MassMomentBuffers<double>,
                                          std::array<double, 3>>;
   std::shared_ptr<store_type> zarr;
-
-  void massmoments_to_storage(const mirrorh_constsupers h_supers) const;
+ 
+  void massmoments_to_storage(const subviewd_constsupers d_supers) const;
   /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
   distribution and then writes them to zarr storage. (I.e.
   0th, 3rd and 6th moment of the droplet radius distribution) */

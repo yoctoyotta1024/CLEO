@@ -30,23 +30,23 @@ distribution and then writes them to zarr storage. (I.e.
 Kokkos::parallel_for([...]) is equivalent in serial to:
 for (size_t kk(0); kk < d_supers.extent(0); ++kk){[...]} */
 {
+  std::array<double, 3> moms({0.0, 0.0, 0.0}); // 0th, 1st and 2nd mass moments
+
   const size_t nsupers(d_supers.extent(0));
-  Kokkos::parallel_for(
+  Kokkos::parallel_reduce(
       "massmoments_to_storage",
       Kokkos::RangePolicy<ExecSpace>(0, nsupers),
-      KOKKOS_CLASS_LAMBDA(const size_t kk)
-      {
+      KOKKOS_CLASS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
+        
         const double xi = (double)(d_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
-        const double mass(d_supers(kk).mass());
-        d_moms(0) = xi;
-        d_moms(1) = mass;
-        // moms.at(0) += xi;
-        // moms.at(1) += xi * mass;
-        // moms.at(2) += xi * mass * mass; // TODO
-      }); 
+        const double mass(d_supers(kk).mass()); 
+        m0 += xi;
+        m1 += xi * mass;
+        m2 += xi * mass * mass;
+      },
+      moms.at(0), moms.at(1), moms.at(2));
 
-    Kokkos::deep_copy(h_moms, d_moms);
-    zarr->values_to_storage({h_moms(0), h_moms(1), h_moms(2)}); // {0th, 1st, 2nd} mass moments
+  zarr->values_to_storage(moms); // {0th, 1st, 2nd} mass moments
 }
 
 void DoRainMassMomentsObs::
