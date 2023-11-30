@@ -61,12 +61,26 @@ class */
 
 inline Observer auto
 TotNsupersObserver(const unsigned int interval,
-                    FSStore &store,
-                    const int maxchunk,
-                    const size_t ngbxs);
+                   FSStore &store,
+                   const int maxchunk,
+                   const size_t ngbxs);
 /* constructs observer of nsupers in entire domain,
 with a constant timestep 'interval' using an
 instance of the DoTotNsupersObs class */
+
+size_t calc_nrainsupers();
+/* returns count of number of "raindrop-like" superdrops
+for each gridbox. "raindrop-like" means radius > rlim.
+  * WARNING! * When using OpenMP (supers in Host Space)
+ and there are only a few superdroplets in supers,
+ calc_nrainsupers is much slower then calc_nrainsupers_serial
+ (probably because opening threads is more costly than the
+ time saved in a parallel calculation over few elements) */
+
+size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx);
+/* deep copy if necessary (if superdrops are on device not
+  host memory), then returns count of number of "raindrop-like"
+  superdrops for each gridbox. "raindrop-like" means radius > rlim */
 
 class DoNsupersObs
 /* observe nsupers in each gridbox and write
