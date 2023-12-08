@@ -135,7 +135,7 @@ cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
 nsupers = iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
 coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
-coord2gen = None                        # do not generate superdroplet coord2s
+coord2gen = iattrs.SampleCoordGen(True) # sample coord2 randomly 
 radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
 radiigen = iattrs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
 
