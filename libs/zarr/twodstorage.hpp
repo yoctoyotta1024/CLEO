@@ -42,6 +42,8 @@ of time and dim1 could be output using a CoordinateStorage */
 private:
   const std::string dim1name; // name of 1st dimension (e.g. "gbxindex")
   const size_t ndim1;         // number elements in 1st dimension (e.g. number of gridboxes that are observed)
+  size_t ndim1obs;            // accumulated number of gridboxes that have been observed
+  unsigned int nobs;          // accumulated number of output times that have been observed
 
   void writechunk()
   /* write data in buffer to a chunk in store alongside metadata jsons */
@@ -115,6 +117,14 @@ public:
       throw std::invalid_argument(errmsg);
     }
   }
+
+  void increment_ndim1obs()
+  /* increment counts of number of observations of gridboxes, ngbxobs,
+  and the number of observations of all gridboxes, nobs */
+  {
+    ++ndim1obs;
+    nobs = ndim1obs / ndim1; // same as floor() for positive integers
+  }
 };
 
 template <typename Buffers, typename V>
@@ -146,7 +156,7 @@ private:
   const size_t ngbxs;     // number elements in 1st dimension (e.g. number of gridboxes that are observed)
   size_t ngbxobs;         // accumulated number of gridboxes that have been observed
   unsigned int nobs;      // accumulated number of output times that have been observed
-  
+
   void writejsons() const
   /* write strictly required metadata to decode chunks (MUST).
   Assert also check 2D data dimensions is as expected */

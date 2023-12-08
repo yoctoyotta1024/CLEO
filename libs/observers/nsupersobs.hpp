@@ -111,7 +111,7 @@ public:
   {
     const size_t nsupers(gbx.supersingbx.nsupers());
     zarr->value_to_storage(nsupers);
-    zarr->increment_ngbxobs();
+    zarr->increment_ndim1obs();
   }
 };
 

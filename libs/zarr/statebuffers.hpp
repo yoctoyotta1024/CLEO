@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Storage similar to twoDstorage for writing
+ * Storage similar to TwoDstorage for writing
  * variables to a fsstore via buffers and occording
  * to the Zarr storage specification version 2.0,
  * but extended to more than one variable and with
