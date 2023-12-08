@@ -28,6 +28,10 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <string>
+#include <stdexcept>
+#include <iostream>
+#include <fstream>
 
 #include <Kokkos_Core.hpp>
 
@@ -64,9 +68,13 @@ private:
   unsigned int interval; // timestep between runtime observations
   std::shared_ptr<RunStats> stats;
 
-  void summary() const;
+  void print_summary() const;
   /* print out summary of runtime
   stats to terminal window */
+
+  void write_to_file() const;
+  /* writes out some of the runtime
+  statistics to the statsfile */
 
 public:
   RunStatsObserver(const unsigned int obsstep)
@@ -84,7 +92,8 @@ public:
   e.g. current time */
   {
     stats->t_end = stats->time_elapsed();
-    summary();
+    print_summary();
+    write_to_file();
   }
 
   unsigned int next_obs(const unsigned int t_mdl) const

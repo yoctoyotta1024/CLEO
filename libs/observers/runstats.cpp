@@ -23,15 +23,42 @@
 
 #include "./runstats.hpp"
 
-void RunStatsObserver::summary() const
+void RunStatsObserver::print_summary() const
 {
   const double t_start(stats -> t_start);
   const double t_end(stats -> t_end);
-  const double time_stepping(t_end - t_start);
+  const double t_stepping(t_end - t_start);
   std::cout << std::fixed << std::setprecision(4)
             << "\n----- CLEO run complete -----\n"
             << "  Initialisation: " << t_start << "s \n"
-            << "  Timestepping: " << time_stepping << "s \n"
+            << "  Timestepping: " << t_stepping << "s \n"
             << "  Total run duration: " << t_end << "s \n"
             << "-----------------------------\n";
+}
+
+void RunStatsObserver::write_to_file() const
+{
+  /* Open statsfile for writing */
+  const std::string statsfile("/home/m/m300950/CLEO/build/bin/stats.txt");
+  std::ofstream file(statsfile);
+
+  if (file.is_open())
+  {
+    const std::string header("### colums are: name duration/s\n"
+                             "###----------------------------\n");
+
+    const double t_start(stats->t_start);
+    const double t_end(stats->t_end);
+    const double t_stepping(t_end - t_start);
+    file << header
+         << "init  " << t_start << "\n"
+         << "tstep " << t_stepping << "\n"
+         << "total " << t_end << "\n";
+
+    file.close();
+  }
+  else
+  {
+    throw std::runtime_error("unable to open statsfile");
+  }
 }
