@@ -27,16 +27,16 @@ python=python
 ### ---------------------------------------------------- ###
 
 configfile=$1
-buildgpu=$2
+buildtype=$2
 
 echo "config file: ${configfile}"
-if [[ "${buildgpu}" == "serial" ]];
+if [[ "${buildtype}" == "serial" ]];
 then
-  path2build=${HOME}/CLEO/buildserial/ 
+  path2build=${HOME}/CLEO/build/serial/ 
 fi
-if [[ "${buildgpu}" == "gpu" ]];
+if [[ "${buildtype}" == "gpu" ]];
 then
-  path2build=${HOME}/CLEO/buildgpu/ 
+  path2build=${HOME}/CLEO/build/gpus_cpus/ 
 fi
 echo "path to build directory: ${path2build}"
 

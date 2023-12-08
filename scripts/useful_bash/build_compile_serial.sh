@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=buildCLEOserial
+#SBATCH --job-name=buildserial
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./buildserial/bin/buildCLEOserial_out.%j.out
-#SBATCH --error=./buildserial/bin/buildCLEOserial_err.%j.out
+#SBATCH --output=./build/bin/buildserial_out.%j.out
+#SBATCH --error=./build/bin/buildserial_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
@@ -18,7 +18,7 @@ module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/cleoenv 
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/buildserial/
+path2build=$1 # get from command line argument
 python=python
 gxx="g++"
 gcc="gcc"

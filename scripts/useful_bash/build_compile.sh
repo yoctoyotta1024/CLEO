@@ -11,38 +11,34 @@
 #SBATCH --output=./build/bin/buildCLEO_out.%j.out
 #SBATCH --error=./build/bin/buildCLEO_err.%j.out
 
-### ----- You need to edit these lines to set your ----- ###
-### ----- default compiler and python environment   ---- ###
-### ----  and paths for CLEO and build directories  ---- ###
-module load gcc/11.2.0-gcc-11.2.0
-module load python3/2022.01-gcc-11.2.0
-source activate /work/mh1126/m300950/condaenvs/cleoenv 
-path2CLEO=${HOME}/CLEO/
+buildtype=$1
 path2build=${HOME}/CLEO/build/
-python=python
-gxx="g++"
-gcc="gcc"
-### ---------------------------------------------------- ###
-
-### ------------ choose Kokkos configuration ----------- ###
-kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                          # flags for host parallelism (e.g. using OpenMP)
-### ---------------------------------------------------- ###
 
 ### ------------------ build_compile.sh ---------------- ###
-### build CLEO using cmake (with openMP thread parallelism through Kokkos)
-buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}"
-echo ${buildcmd}
-CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost}
+if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "cpu" ] && [ "${buildtype}" != "gpu" ];
+then
+  echo "please specify the build type as 'serial', 'cpu' or 'gpu'"
+fi 
 
-### ensure these directories exist (it's a good idea for later use)
-mkdir ${path2build}bin
-mkdir ${path2build}share
+if [ "${buildtype}" == "serial" ] || [ "${buildtype}" == "cpu" ] || [ "${buildtype}" == "gpu" ];
+then
+  echo "build type: ${buildtype}"
+  echo "path to build directory: ${path2build}"
 
-### compile CLEO
-cd ${path2build} && pwd 
-make clean && make -j 16
+  if [[ "${buildtype}" == "serial" ]];
+  then
+    echo "./build_compile_serial.sh ${path2build}"
+    ./build_compile_serial.sh ${path2build}
+
+  elif [[ "${buildtype}" == "cpu" ]];
+  then
+    echo "./build_compile_cpus.sh ${path2build}"
+    ./build_compile_cpus.sh ${path2build}
+
+  elif [[ "${buildtype}" == "gpu" ]];
+  then
+    echo "./build_compile_gpus_cpus.sh ${path2build}"
+    ./build_compile_gpus_cpus.sh ${path2build}
+  fi
+fi
 ### ---------------------------------------------------- ###
-
-
-# CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
