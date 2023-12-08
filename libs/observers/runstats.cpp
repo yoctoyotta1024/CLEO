@@ -37,10 +37,10 @@ void RunStatsObserver::print_summary() const
 }
 
 void RunStatsObserver::write_to_file() const
+  /* open and write some the runtime
+  statistics to a file called 'statsfile' */
 {
-  /* Open statsfile for writing */
-  const std::string statsfile("/home/m/m300950/CLEO/build/bin/stats.txt");
-  std::ofstream file(statsfile);
+  std::ofstream file(stats_filename);
 
   if (file.is_open())
   {

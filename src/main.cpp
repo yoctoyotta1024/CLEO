@@ -202,7 +202,8 @@ create_observer(const Config &config,
   const unsigned int obsstep(tsteps.get_obsstep());
   const int maxchunk(config.maxchunk);
 
-  const Observer auto obs0 = RunStatsObserver(obsstep);
+  const Observer auto obs0 = RunStatsObserver(obsstep,
+                                              config.stats_filename);
 
   const Observer auto obs1 = PrintObserver(obsstep * 10,
                                            &step2realtime);

@@ -67,6 +67,7 @@ class RunStatsObserver
 private:
   unsigned int interval; // timestep between runtime observations
   std::shared_ptr<RunStats> stats;
+  std::string stats_filename;
 
   void print_summary() const;
   /* print out summary of runtime
@@ -77,8 +78,11 @@ private:
   statistics to the statsfile */
 
 public:
-  RunStatsObserver(const unsigned int obsstep)
-      : interval(obsstep), stats(std::make_shared<RunStats>()){}
+  RunStatsObserver(const unsigned int obsstep,
+                   const std::string stats_filename)
+      : interval(obsstep),
+        stats(std::make_shared<RunStats>()),
+        stats_filename(stats_filename) {}
 
   void before_timestepping(const viewh_constgbx h_gbxs) const
   /* record stats before timestepping
