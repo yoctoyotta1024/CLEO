@@ -15,12 +15,11 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO divfree2D to create the
-data and plots for divergence free motion of
-superdroplets in a 2-D divergence free wind field
+Script compiles and runs CLEO speedtest to 
+check performance of CLEO usign different
+build configurations (e.g. serial, OpenmP
+and CUDA parallelism).
 '''
-
-// TODO
 
 import os
 import sys
@@ -56,13 +55,13 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-gridfile = sharepath+"df2d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath+"df2d_dimlessSDsinit.dat"
-thermofile =  sharepath+"/df2d_dimlessthermo.dat"
+gridfile = sharepath+"spd_dimlessGBxboundaries.dat"
+initSDsfile = sharepath+"spd_dimlessSDsinit.dat"
+thermofile =  sharepath+"/spd_dimlessthermo.dat"
 
 # path and file names for plotting results
-setupfile = binpath+"df2d_setup.txt"
-dataset = binpath+"df2d_sol.zarr"
+setupfile = binpath+"spd_setup.txt"
+dataset = binpath+"spd_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [True, True] # booleans for [making, saving] initialisation figures
@@ -72,11 +71,11 @@ SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 ### --- settings for 2-D gridbox boundaries --- ###
 zgrid = [0, 1500, 50]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid = [0, 1500, 50]     # evenly spaced xhalf coords [m]
-ygrid = np.array([0, 20])  # array of yhalf coords [m]
+ygrid = np.array([0, 25, 50])  # array of yhalf coords [m]
 
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
-zlim = 750        # max z coord of superdroplets
+zlim = 1500       # max z coord of superdroplets
 npergbx = 8       # number of superdroplets per gridbox 
 
 # [min, max] range of initial superdroplet radii (and implicitly solute masses)
@@ -89,17 +88,17 @@ geosigs              = [1.4, 1.6]
 scalefacs            = [6e6, 4e6]   
 numconc = np.sum(scalefacs)
 
-### --- settings for 2D Thermodyanmics --- ###
+### --- settings for 3D Thermodyanmics --- ###
 PRESS0 = 100000 # [Pa]
 THETA = 298.15  # [K]
 qcond = 0.0     # [Kg/Kg]
-WMAX = 0.6      # [m/s]
-VVEL = None     # [m/s]
+WMAX = 3.0      # [m/s]
+VVEL = 1.0      # [m/s]
 Zlength = 1500  # [m]
 Xlength = 1500  # [m]
 qvapmethod = "sratio"
 Zbase = 750     # [m]
-sratios = [1.0, 1.0] # s_ratio [below, above] Zbase
+sratios = [0.85, 1.1] # s_ratio [below, above] Zbase
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -165,8 +164,8 @@ if isfigures[0]:
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-os.system('make clean && make -j 64 divfree2D')
-executable = path2build+'/examples/divfreemotion/src/divfree2D'
+os.system('make clean && make -j 64 spdtest')
+executable = path2build+'/examples/speedtest/src/spdtest'
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -180,20 +179,8 @@ config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setupfile, isprint=True)
 gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
-time = pyzarr.get_time(dataset)
-sddata = pyzarr.get_supers(dataset, consts)
-totnsupers =pyzarr.get_totnsupers(dataset)
-
 # 4. plot results
-savename = savefigpath + "df2d_totnsupers_validation.png"
-pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
+# // TODO 
 
-nsample = 500
-savename = savefigpath + "df2d_motion2d_validation.png"
-pltsds.plot_randomsample_superdrops_2dmotion(sddata,
-                                                 config["totnsupers"],
-                                                 nsample,
-                                                 savename=savename,
-                                                 arrows=False)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
