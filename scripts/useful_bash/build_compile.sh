@@ -12,7 +12,9 @@
 #SBATCH --error=./build/bin/buildCLEO_err.%j.out
 
 buildtype=$1
+path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
+path2bashscripts=${path2CLEO}/scripts/useful_bash/ 
 
 ### ------------------ build_compile.sh ---------------- ###
 if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "cpu" ] && [ "${buildtype}" != "gpu" ];
@@ -27,18 +29,18 @@ then
 
   if [[ "${buildtype}" == "serial" ]];
   then
-    echo "./serial_build_compile.sh ${path2build}"
-    ./serial_build_compile.sh ${path2build}
+    echo "${path2bashscripts}/serial_build_compile.sh ${path2build}"
+    ${path2bashscripts}/serial_build_compile.sh ${path2build}
 
   elif [[ "${buildtype}" == "cpu" ]];
   then
-    echo "./cpus_build_compile.sh ${path2build}"
-    ./cpus_build_compile.sh ${path2build}
+    echo "${path2bashscripts}/cpus_build_compile.sh ${path2build}"
+    ${path2bashscripts}/cpus_build_compile.sh ${path2build}
 
   elif [[ "${buildtype}" == "gpu" ]];
   then
-    echo "./gpus_cpus_build_compile.sh ${path2build}"
-    ./gpus_cpus_build_compile.sh ${path2build}
+    echo "${path2bashscripts}/gpus_cpus_build_compile.sh ${path2build}"
+    ${path2bashscripts}/gpus_cpus_build_compile.sh ${path2build}
   fi
 fi
 ### ---------------------------------------------------- ###
