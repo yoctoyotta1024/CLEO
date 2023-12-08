@@ -29,9 +29,9 @@ void RunStatsObserver::summary() const
   const double t_end(stats -> t_end);
   const double time_stepping(t_end - t_start);
   std::cout << std::fixed << std::setprecision(4)
-            << "\n ----- CLEO run complete ----- \n"
-            << "       Initialisation: " << t_start << "s \n"
-            << "       Timestepping: " << time_stepping << "s \n"
-            << "       Total run Duration: " << t_end << "s \n"
-            << "------------------------------- \n";
+            << "\n----- CLEO run complete -----\n"
+            << "  Initialisation: " << t_start << "s \n"
+            << "  Timestepping: " << time_stepping << "s \n"
+            << "  Total run duration: " << t_end << "s \n"
+            << "-----------------------------\n";
 }
