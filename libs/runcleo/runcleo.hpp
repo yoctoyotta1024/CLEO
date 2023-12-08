@@ -127,9 +127,9 @@ private:
       comms.receive_dynamics(coupldyn, gbxs.view_host());
       gbxs.modify_host();
     }
-    
+
     gbxs.sync_host();
-    sdm.at_start_step(gbxs.view_host());
+    sdm.at_start_step(t_mdl, gbxs.view_host());
 
     return get_next_step(t_mdl);
   }

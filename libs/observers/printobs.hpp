@@ -76,6 +76,9 @@ public:
       print_statement(t_mdl, h_gbxs, totsupers);
     }
   }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const {}
 };
 
 #endif // PRINTOBS_HPP

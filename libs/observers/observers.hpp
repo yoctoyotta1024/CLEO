@@ -105,6 +105,13 @@ public:
     a.at_start_step(t_mdl, h_gbxs, totsupers);
     b.at_start_step(t_mdl, h_gbxs, totsupers);
   }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const
+  {
+    a.at_start_step(t_mdl, gbx);
+    b.at_start_step(t_mdl, gbx);
+  }
 };
 
 auto operator>>(const Observer auto obs1,
@@ -134,12 +141,16 @@ struct NullObserver
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {}
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const {}
 };
 
 template <typename O>
 concept ObsFuncs = requires(O o, unsigned int t,
                             const viewh_constgbx h_gbxs,
-                            const viewd_constsupers totsupers)
+                            const viewd_constsupers totsupers,
+                            const Gridbox &gbx)
 /* concept for all types that can be called used
 by ConstTstepObserver for 'do_obs' (in order
 to make an Observer type out of a ConstTstepObserver) */
@@ -150,6 +161,9 @@ to make an Observer type out of a ConstTstepObserver) */
   {
     o.at_start_step(t, h_gbxs, totsupers)
   } -> std::same_as<void>;
+  {
+    o.at_start_step(t, gbx)
+  } -> std::same_as<void>; 
 };
 
 template <ObsFuncs O>
@@ -190,6 +204,15 @@ public:
     if (on_step(t_mdl))
     {
       do_obs.at_start_step(t_mdl, h_gbxs, totsupers);
+    }
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const
+  {
+    if (on_step(t_mdl))
+    {
+      do_obs.at_start_step(t_mdl, gbx);
     }
   }
 };

@@ -87,6 +87,9 @@ public:
     }
     ++(zarr->nobs);
   }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const {}
 };
 
 inline Observer auto

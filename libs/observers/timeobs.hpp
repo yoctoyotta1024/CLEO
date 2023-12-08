@@ -87,6 +87,9 @@ public:
     const double time(step2dimlesstime(t_mdl));
     zarr->value_to_storage(time);
   }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const {}
 };
 
 inline Observer auto

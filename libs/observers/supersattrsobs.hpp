@@ -93,6 +93,9 @@ public:
 
     zarr->raggedarray_count(obs_nsupers);
   }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const {}
 };
 
 template <SuperdropsBuffers Buffers>

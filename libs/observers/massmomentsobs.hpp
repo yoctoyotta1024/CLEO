@@ -100,6 +100,9 @@ public:
     massmoments_to_storage(h_gbxs);
     ++(zarr->nobs);
   }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const {}
 };
 
 inline Observer auto
@@ -158,6 +161,9 @@ public:
     rainmassmoments_to_storage(h_gbxs);
     ++(zarr->nobs);
   }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const {}
 };
 
 inline Observer auto

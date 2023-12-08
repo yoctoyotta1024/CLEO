@@ -135,7 +135,8 @@ public:
     obs.before_timestepping(h_gbxs);
   }
 
-  void at_start_step(const viewh_constgbx h_gbxs) const
+  void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs) const
   {
     const viewd_constsupers
         totsupers(h_gbxs(0).domain_totsupers_readonly());
