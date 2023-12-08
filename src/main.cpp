@@ -292,8 +292,10 @@ int main(int argc, char *argv[])
   Kokkos::finalize();
 
   const double ttot(kokkostimer.seconds());
-  std::cout << "-----\n Total Program Duration: "
-            << ttot << "s \n-----\n";
+  std::cout << "-------------------------------\n"
+               "Total Program Duration: "
+            << ttot
+            << "s \n-------------------------------\n";
 
   return 0;
 }
