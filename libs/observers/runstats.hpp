@@ -21,7 +21,7 @@
  */
 
 
-#ifndef RUNSTATS_HPP 
+#ifndef RUNSTATS_HPP
 #define RUNSTATS_HPP 
 
 #include <ios>
