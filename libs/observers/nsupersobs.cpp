@@ -79,5 +79,4 @@ void DoNrainsupersObs::
 {
   const size_t nrain(calc_nrainsupers(gbx.supersingbx));
   zarr->value_to_storage(nrain);
-  zarr->increment_ndim1obs();
 }

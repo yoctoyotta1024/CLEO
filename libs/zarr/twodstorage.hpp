@@ -76,9 +76,15 @@ private:
     this->zarrayjsons(shape, chunks, dims);
   }
 
+  void increment_ndim1obs()
+  /* increment counts of number of observations of gridboxes, ngbxobs,
+  and the number of observations of all gridboxes, nobs */
+  {
+    ++ndim1obs;
+    nobs = ndim1obs / ndim1; // same as floor() for positive integers
+  }
+  
 public:
-  unsigned int nobs; // number of output times that have been observed
-
   TwoDStorage(FSStore &store, const unsigned int maxchunk,
               const std::string name, const std::string dtype,
               const std::string units, const double scale_factor,
@@ -118,12 +124,12 @@ public:
     }
   }
 
-  void increment_ndim1obs()
-  /* increment counts of number of observations of gridboxes, ngbxobs,
-  and the number of observations of all gridboxes, nobs */
+  void value_to_storage(const T val)
+  /* write val in the zarr store and then increment
+  number of observations counts */
   {
-    ++ndim1obs;
-    nobs = ndim1obs / ndim1; // same as floor() for positive integers
+    SingleVarStorage<T>::value_to_storage(val);
+    increment_ndim1obs();
   }
 };
 
@@ -197,6 +203,14 @@ private:
         buffers.copy2buffer(values, ndata, buffersfill);
   }
 
+  void increment_ngbxobs()
+  /* increment counts of number of observations of gridboxes, ngbxobs,
+  and the number of observations of all gridboxes, nobs */
+  {
+    ++ngbxobs;
+    nobs = ngbxobs / ngbxs; // same as floor() for positive integers
+  }
+
 public: 
   TwoDMultiVarStorage(FSStore &store, const unsigned int maxchunk,
                       const std::string dtype, const size_t ngbxs,
@@ -228,14 +242,7 @@ public:
     }
 
     copy2buffers(values);
-  }
-
-  void increment_ngbxobs()
-  /* increment counts of number of observations of gridboxes, ngbxobs,
-  and the number of observations of all gridboxes, nobs */
-  {
-    ++ngbxobs;
-    nobs = ngbxobs / ngbxs; // same as floor() for positive integers
+    increment_ngbxobs();
   }
 };
 

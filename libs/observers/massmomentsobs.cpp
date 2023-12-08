@@ -154,7 +154,6 @@ for (size_t kk(0); kk < supers.extent(0); ++kk){[...]} */
   const auto moms = calc_massmoments(supers);
 
   zarr->values_to_storage(moms); // {0th, 1st, 2nd} mass moments
-  zarr->increment_ngbxobs();    
 }
 
 void DoRainMassMomentsObs::
@@ -168,5 +167,4 @@ distribution and then writes them to zarr storage. (I.e.
   const auto moms = calc_rainmassmoments(supers);
 
   zarr->values_to_storage(moms); // {0th, 1st, 2nd} rain mass moments
-  zarr->increment_ngbxobs();    
 }

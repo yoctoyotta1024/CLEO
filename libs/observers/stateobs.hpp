@@ -79,7 +79,6 @@ public:
   StateBuffers struct */
   {
     zarr->values_to_storage(gbx.state);
-    zarr->increment_ngbxobs();    
   }
 };
 

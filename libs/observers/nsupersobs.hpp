@@ -97,12 +97,7 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
-                     const viewd_constsupers totsupers) const
-  {
-    at_start_step(h_gbxs);
-  }
-
-  void at_start_step(const viewh_constgbx h_gbxs) const {}
+                     const viewd_constsupers totsupers) const {}
 
   void at_start_step(const unsigned int t_mdl,
                      const Gridbox &gbx) const
@@ -111,7 +106,6 @@ public:
   {
     const size_t nsupers(gbx.supersingbx.nsupers());
     zarr->value_to_storage(nsupers);
-    zarr->increment_ndim1obs();
   }
 };
 
@@ -222,7 +216,6 @@ public:
   metadata on superdrops) and writes it to a 1-D zarr storage */
   {
     const size_t totnsupers(totsupers.extent(0));
-
     zarr->value_to_storage(totnsupers);
   }
 
