@@ -35,9 +35,6 @@
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 
-#include "coupldyn_null/nulldynamics.hpp"
-#include "coupldyn_null/nulldyncomms.hpp"
-
 #include "gridboxes/gridboxmaps.hpp"
 
 #include "initialise/config.hpp"

@@ -79,7 +79,6 @@ create_coupldyn(const Config &config,
                 const CartesianMaps &gbxmaps,
                 const unsigned int couplstep,
                 const unsigned int t_end)
-
 {
   const auto h_ndims(gbxmaps.ndims_hostcopy());
   const std::array<size_t, 3>
