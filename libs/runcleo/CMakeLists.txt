@@ -33,7 +33,6 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 set(SOURCES
 "creategbxs.cpp"
 "createsupers.cpp"
-"runtimestats.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 

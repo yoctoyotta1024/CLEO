@@ -34,6 +34,7 @@ set(SOURCES
 "massmomentsobs.cpp"
 "nsupersobs.cpp"
 "printobs.cpp"
+"runstats.cpp"
 )
 add_library(${LIBNAME} SHARED ${SOURCES})
 

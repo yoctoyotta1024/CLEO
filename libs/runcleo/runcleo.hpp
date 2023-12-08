@@ -38,7 +38,6 @@
 #include "./createsupers.hpp"
 #include "./creategbxs.hpp"
 #include "./initialconditions.hpp"
-#include "./runtimestats.hpp"
 #include "./sdmmethods.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
@@ -86,7 +85,6 @@ private:
   }
 
   int timestep_cleo(const unsigned int t_end,
-                    RunStats &stats,
                     const dualview_gbx gbxs,
                     const viewd_supers totsupers,
                     GenRandomPool genpool) const
@@ -204,12 +202,10 @@ public:
 
   int operator()(const InitialConditions auto &initconds,
                  const unsigned int t_end) const
-  /* create gridboxes and superdrops using initial conditions,
-  then prepare and do timestepping. Meanwhile there is the
-  option to record some runtime statistics using "stats" */
+  /* create gridboxes and superdrops using initial
+  conditions, then prepare and do timestepping. */
   {
     // create runtime objects
-    RunStats stats;
     viewd_supers totsupers(create_supers(initconds.initsupers)); // all the superdrops in domain
     dualview_gbx gbxs(create_gbxs(sdm.gbxmaps,
                                   initconds.initgbxs,
@@ -218,11 +214,10 @@ public:
 
     // prepare CLEO for timestepping
     prepare_to_timestep(gbxs);
-    stats.before_timestepping();
 
     // do timestepping from t=0 to t=t_end
-    timestep_cleo(t_end, stats, gbxs, totsupers, genpool);
-    stats.after_timestepping();
+    timestep_cleo(t_end, gbxs, totsupers, genpool);
+
     return 0;
   }
 };
