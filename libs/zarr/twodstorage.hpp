@@ -142,9 +142,11 @@ private:
   const std::string filters = "null";    // codec configurations for compression
   const std::string dtype;               // datatype stored in arrays
 
-  Buffers buffers; // buffers to hold state variables and then copy to store
-  const size_t ngbxs; // number elements in 1st dimension (e.g. number of gridboxes that are observed)
-
+  Buffers buffers;        // buffers to hold state variables and then copy to store
+  const size_t ngbxs;     // number elements in 1st dimension (e.g. number of gridboxes that are observed)
+  size_t ngbxobs;         // accumulated number of gridboxes that have been observed
+  unsigned int nobs;      // accumulated number of output times that have been observed
+  
   void writejsons() const
   /* write strictly required metadata to decode chunks (MUST).
   Assert also check 2D data dimensions is as expected */
@@ -185,16 +187,15 @@ private:
         buffers.copy2buffer(values, ndata, buffersfill);
   }
 
-public:
-  unsigned int nobs; // number of output times that have been observed
-
+public: 
   TwoDMultiVarStorage(FSStore &store, const unsigned int maxchunk,
                       const std::string dtype, const size_t ngbxs,
                       const std::string endname)
       : store(store),
         chunksize(storehelpers::good2Dchunk(maxchunk, ngbxs)),
         chunkcount(0), buffersfill(0), ndata(0), dtype(dtype),
-        buffers(endname, chunksize), ngbxs(ngbxs), nobs(0) {}
+        buffers(endname, chunksize), ngbxs(ngbxs), ngbxobs(0),
+        nobs(0) {}
 
   ~TwoDMultiVarStorage()
   /* upon destruction write any data leftover in buffer
@@ -217,6 +218,14 @@ public:
     }
 
     copy2buffers(values);
+  }
+
+  void increment_ngbxobs()
+  /* increment counts of number of observations of gridboxes, ngbxobs,
+  and the number of observations of all gridboxes, nobs */
+  {
+    ++ngbxobs;
+    nobs = ngbxobs / ngbxs; // same as floor() for positive integers
   }
 };
 

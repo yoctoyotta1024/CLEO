@@ -75,12 +75,9 @@ size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx)
 }
 
 void DoNrainsupersObs::
-    nrainsupers_to_storage(const viewh_constgbx h_gbxs) const
+    nrainsupers_to_storage(const Gridbox &gbx) const
 {
-  const size_t ngbxs(h_gbxs.extent(0));
-  for (size_t ii(0); ii < ngbxs; ++ii)
-  {
-    const size_t nrain(calc_nrainsupers(h_gbxs(ii).supersingbx));
-    zarr->value_to_storage(nrain);
-  }
+  const size_t nrain(calc_nrainsupers(gbx.supersingbx));
+  zarr->value_to_storage(nrain);
+  zarr->increment_ngbxobs();    
 }

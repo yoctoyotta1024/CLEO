@@ -70,26 +70,17 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
-                     const viewd_constsupers totsupers) const
-  {
-    at_start_step(h_gbxs);
-  }
-
-  void at_start_step(const viewh_constgbx h_gbxs) const
+                     const viewd_constsupers totsupers) const {}
+                     
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const
   /* writes some variables from gridbox state
   to 2-D zarr storages as determined by the
   StateBuffers struct */
   {
-    const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      zarr->values_to_storage(h_gbxs(ii).state);
-    }
-    ++(zarr->nobs);
+    zarr->values_to_storage(gbx.state);
+    zarr->increment_ngbxobs();    
   }
-
-  void at_start_step(const unsigned int t_mdl,
-                     const Gridbox &gbx) const {}
 };
 
 inline Observer auto

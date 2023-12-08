@@ -69,7 +69,7 @@ private:
                                          std::array<double, 3>>;
   std::shared_ptr<store_type> zarr;
 
-  void massmoments_to_storage(const viewh_constgbx h_gbxs) const;
+  void massmoments_to_storage(const Gridbox &gbx) const;
   /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
   distribution and then writes them to zarr storage, i.e.
   0th, 3rd and 6th moment of the droplet radius distribution) */
@@ -88,21 +88,15 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
-                     const viewd_constsupers totsupers) const
-  {
-    at_start_step(h_gbxs);
-  }
+                     const viewd_constsupers totsupers) const {}
 
-  void at_start_step(const viewh_constgbx h_gbxs) const
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const
   /* deep copy if necessary (if superdrops are on device not
   host memory), then writes mass moments to 2-D zarr storages */
   {
-    massmoments_to_storage(h_gbxs);
-    ++(zarr->nobs);
+    massmoments_to_storage(gbx);
   }
-
-  void at_start_step(const unsigned int t_mdl,
-                     const Gridbox &gbx) const {}
 };
 
 inline Observer auto
@@ -128,17 +122,16 @@ private:
   using store_type = TwoDMultiVarStorage<MassMomentBuffers<double>,
                                          std::array<double, 3>>; 
   std::shared_ptr<store_type> zarr;
-  unsigned int nobs_gbxs;
-
-  void rainmassmoments_to_storage(const viewh_constgbx h_gbxs) const;
+  
+  void rainmassmoments_to_storage(const Gridbox &gbx) const;
   /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
   distribution and then writes them to zarr storage. (I.e.
   0th, 3rd and 6th moment of the droplet radius distribution) */
 
 public:
   DoRainMassMomentsObs(FSStore &store,
-                   const int maxchunk,
-                   const size_t ngbxs)
+                        const int maxchunk,
+                        const size_t ngbxs)
       : zarr(std::make_shared<store_type>(store, maxchunk,
                                           "<f8", ngbxs,
                                           "rain")) {}
@@ -154,17 +147,10 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const Gridbox &gbx) const
-  {
-    at_start_step(gbx);
-  }
-
-  void at_start_step(const Gridbox &gbx) const
   /* deep copy if necessary (if superdrops are on device not
   host memory), then writes mass moments to 2-D zarr storages */
   {
     rainmassmoments_to_storage(gbx);
-    ++nobs_gbxs;
-    zarr->nobs += [];
   }
 };
 

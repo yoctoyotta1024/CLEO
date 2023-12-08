@@ -91,7 +91,7 @@ public:
     (using sub-timestepping routine). Kokkos::parallel for is
     nested parallelism within parallelised loop over gridboxes,
     serial equivalent is simply:
-    for ( size_t ii(0); ii < ngbxs; ++ii) { [...] } */
+    for (size_t ii(0); ii < ngbxs; ++ii) { [...] } */
     {
 
       // TODO use scratch space for parallel region?

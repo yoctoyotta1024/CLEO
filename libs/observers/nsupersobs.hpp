@@ -102,21 +102,17 @@ public:
     at_start_step(h_gbxs);
   }
 
-  void at_start_step(const viewh_constgbx h_gbxs) const
-  /* gets number of superdrops for each gridbox and
-  writes it to a 2-D zarr storage */
-  {
-    const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      const size_t nsupers(h_gbxs(ii).supersingbx.nsupers());
-      zarr->value_to_storage(nsupers);
-    }
-    ++(zarr->nobs);
-  }
+  void at_start_step(const viewh_constgbx h_gbxs) const {}
 
   void at_start_step(const unsigned int t_mdl,
-                     const Gridbox &gbx) const {}
+                     const Gridbox &gbx) const
+  /* gets number of superdrops for a gridbox
+  and writes it to a 2-D zarr storage */
+  {
+    const size_t nsupers(gbx.supersingbx.nsupers());
+    zarr->value_to_storage(nsupers);
+    zarr->increment_ngbxobs();
+  }
 };
 
 inline Observer auto
@@ -142,7 +138,7 @@ private:
   using store_type = TwoDStorage<size_t>;
   std::shared_ptr<store_type> zarr;
   
-  void nrainsupers_to_storage(const viewh_constgbx h_gbxs) const;
+  void nrainsupers_to_storage(const Gridbox &gbx) const;
 
 public:
   DoNrainsupersObs(FSStore &store,
@@ -164,21 +160,15 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
-                     const viewd_constsupers totsupers) const
-  {
-    at_start_step(h_gbxs);
-  }
-
-  void at_start_step(const viewh_constgbx h_gbxs) const
-  /* Counts number of "raindrop-like" superdrops for each
-  gridbox and writes total number to 2-D zarr storage */
-  {
-    nrainsupers_to_storage(h_gbxs);
-    ++(zarr->nobs);
-  }
+                     const viewd_constsupers totsupers) const {}
 
   void at_start_step(const unsigned int t_mdl,
-                     const Gridbox &gbx) const {}
+                     const Gridbox &gbx) const
+  /* Counts number of "raindrop-like" superdrops in
+  gridbox and writes total number to 2-D zarr storage */
+  {
+    nrainsupers_to_storage(gbx);
+  }
 };
 
 inline Observer auto
