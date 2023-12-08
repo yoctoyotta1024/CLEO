@@ -116,8 +116,9 @@ private:
 
   unsigned int start_step(const unsigned int t_mdl,
                           dualview_gbx gbxs) const
-  /* Start of every timestep: 1) communication of thermodynamic state
-  from dynamics solver to CLEO's Gridboxes. 2) Make observation.
+  /* Start of every timestep: 1) communication of thermodynamic
+  state from dynamics solver to CLEO's Gridboxes. 2) call
+  sdm at_start_step function (e.g. to make observations).
   3) Return size of step to take given current timestep, t_mdl */
   {
     if (t_mdl % sdm.get_couplstep() == 0)
@@ -126,12 +127,9 @@ private:
       comms.receive_dynamics(coupldyn, gbxs.view_host());
       gbxs.modify_host();
     }
-
+    
     gbxs.sync_host();
-
-    const viewh_constgbx h_gbxs(gbxs.view_host());
-    const viewd_constsupers totsupers(h_gbxs(0).domain_totsupers_readonly());
-    sdm.obs.at_start_step(t_mdl, h_gbxs, totsupers);
+    sdm.at_start_step(gbxs.view_host());
 
     return get_next_step(t_mdl);
   }

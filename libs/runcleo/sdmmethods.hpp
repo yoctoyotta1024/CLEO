@@ -135,6 +135,20 @@ public:
     obs.before_timestepping(h_gbxs);
   }
 
+  void at_start_step(const viewh_constgbx h_gbxs) const
+  {
+    const viewd_constsupers
+        totsupers(h_gbxs(0).domain_totsupers_readonly());
+
+    sdm.obs.at_start_step(t_mdl, h_gbxs, totsupers);
+
+    const size_t ngbxs(h_gbxs.extent(0));
+    for (size_t ii(0); ii < ngbxs; ++ii)
+    {
+      obs.at_start_step(t_mdl, h_gbxs(ii)); 
+    }
+  }
+
   void run_step(const unsigned int t_mdl,
                 const unsigned int t_mdl_next,
                 viewd_gbx d_gbxs,

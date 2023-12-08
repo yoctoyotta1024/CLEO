@@ -36,7 +36,8 @@
 template <typename Obs>
 concept Observer = requires(Obs obs, unsigned int t,
                             const viewh_constgbx h_gbxs,
-                            const viewd_constsupers totsupers)
+                            const viewd_constsupers totsupers,
+                            const Gridbox &gbx)
 /* concept Observer is all types that have functions
 for timestepping and at_start_step as constrained here */
 {
@@ -51,6 +52,9 @@ for timestepping and at_start_step as constrained here */
   } -> std::same_as<bool>;
   {
     obs.at_start_step(t, h_gbxs, totsupers)
+  } -> std::same_as<void>;
+  {
+    obs.at_start_step(t, gbx)
   } -> std::same_as<void>;
 };
 
