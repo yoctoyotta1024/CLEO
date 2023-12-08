@@ -35,7 +35,7 @@ if(NOT DEFINED compileops)
   set(compileops ${defaultcompileops})
 endif()
 
-# executable for CVODE-CLEO coupled model 0D condensation setup 
+# executable for CLEO uncoupled golovin 0D box model
 set(golcolls "golcolls")
 add_executable(${golcolls} EXCLUDE_FROM_ALL "main_golcolls.cpp")
 target_link_libraries(${golcolls} PRIVATE cartesiandomain "${SDMLIBS}")

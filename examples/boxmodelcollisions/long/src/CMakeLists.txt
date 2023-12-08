@@ -35,7 +35,7 @@ if(NOT DEFINED compileops)
   set(compileops ${defaultcompileops})
 endif()
 
-# executable for CVODE-CLEO coupled model 0D condensation setup 
+# executable for CLEO uncoupled long 0D box model
 set(longcolls "longcolls")
 add_executable(${longcolls} EXCLUDE_FROM_ALL "main_longcolls.cpp")
 target_link_libraries(${longcolls} PRIVATE cartesiandomain "${SDMLIBS}")

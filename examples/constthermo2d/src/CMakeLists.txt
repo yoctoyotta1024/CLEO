@@ -35,7 +35,7 @@ if(NOT DEFINED compileops)
   set(compileops ${defaultcompileops})
 endif()
 
-# executable for CVODE-CLEO coupled model 0D condensation setup 
+# executable for CLEO coupled model 2-D example
 set(exmpl2D "exmpl2D")
 add_executable(${exmpl2D} EXCLUDE_FROM_ALL "main_exmpl2D.cpp")
 target_link_libraries(${exmpl2D} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
