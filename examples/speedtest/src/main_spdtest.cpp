@@ -21,8 +21,6 @@
  */
 
 
-// TODO 
-
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
@@ -60,14 +58,8 @@
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
-#include "superdrops/breakup_nfrags.hpp"
-#include "superdrops/breakup.hpp"
-#include "superdrops/coalbure.hpp"
 #include "superdrops/coalescence.hpp"
-#include "superdrops/collisionprobs/golovinprob.hpp"
 #include "superdrops/collisionprobs/longhydroprob.hpp"
-#include "superdrops/collisionprobs/lowlistprob.hpp"
-#include "superdrops/collisionprobs/constprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
@@ -126,58 +118,34 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
-  // const PairProbability auto collprob = LongHydroProb();
-  // const NFragments auto nfrags = ConstNFrags(5.0);
-  // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
-  //                                                  &step2realtime,
-  //                                                  collprob,
-  //                                                  nfrags);
-  // return colls;
-
-  // const PairProbability auto buprob = LowListBuProb();
-  // const NFragments auto nfrags = ConstNFrags(5.0);
-  // const MicrophysicalProcess auto bu = CollBu(tsteps.get_collstep(),
-  //                                             &step2realtime,
-  //                                             buprob,
-  //                                             nfrags);
-
-  // const PairProbability auto coalprob = LowListCoalProb();
-  // const PairProbability auto coalprob = LongHydroProb(1.0);
-  const PairProbability auto coalprob = GolovinProb();
+  const PairProbability auto coalprob = LongHydroProb(1.0);
   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    coalprob);
 
-  // return coal >> bu;
   return coal;
 }
 
 inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  // const MicrophysicalProcess auto cond = config_condensation(config,
-  //                                                            tsteps);
+  const MicrophysicalProcess auto cond = config_condensation(config,
+                                                             tsteps);
 
   const MicrophysicalProcess auto colls = config_collisions(config,
                                                             tsteps);
 
-  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
-
-  // return colls >> cond;
-  return colls;
+  return colls >> cond;
 }
 
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  const auto terminalv = NullTerminalVelocity{};
-  // const auto terminalv = RogersYauTerminalVelocity{};
-  // const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
 
   return CartesianMotion(motionstep,
                          &step2dimlesstime,
                          terminalv);
-  // return NullMotion{};                                                                               
 }
 
 inline Observer auto
@@ -204,8 +172,7 @@ create_observer(const Config &config,
   const unsigned int obsstep(tsteps.get_obsstep());
   const int maxchunk(config.maxchunk);
 
-  const Observer auto obs1 = PrintObserver(obsstep * 10,
-                                           &step2realtime);
+  const Observer auto obs1 = PrintObserver(obsstep, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
                                           &step2dimlesstime);
