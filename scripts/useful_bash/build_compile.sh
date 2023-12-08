@@ -27,18 +27,18 @@ then
 
   if [[ "${buildtype}" == "serial" ]];
   then
-    echo "./build_compile_serial.sh ${path2build}"
-    ./build_compile_serial.sh ${path2build}
+    echo "./serial_build_compile.sh ${path2build}"
+    ./serial_build_compile.sh ${path2build}
 
   elif [[ "${buildtype}" == "cpu" ]];
   then
-    echo "./build_compile_cpus.sh ${path2build}"
-    ./build_compile_cpus.sh ${path2build}
+    echo "./cpus_build_compile.sh ${path2build}"
+    ./cpus_build_compile.sh ${path2build}
 
   elif [[ "${buildtype}" == "gpu" ]];
   then
-    echo "./build_compile_gpus_cpus.sh ${path2build}"
-    ./build_compile_gpus_cpus.sh ${path2build}
+    echo "./gpus_cpus_build_compile.sh ${path2build}"
+    ./gpus_cpus_build_compile.sh ${path2build}
   fi
 fi
 ### ---------------------------------------------------- ###
