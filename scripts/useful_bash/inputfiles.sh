@@ -20,39 +20,35 @@ source activate /work/mh1126/m300950/condaenvs/cleoenv
 
 path2CLEO=${HOME}/CLEO/
 path2scripts=${path2CLEO}/scripts/ 
-path2build=${HOME}/CLEO/build/
-
 python=python
-
 ### ---------------------------------------------------- ###
 
 configfile=$1
-buildtype=$2
+path2build=$2
 
+if [ "${path2build}" == "" ]
+then
+  path2build=${HOME}/CLEO/build/
+fi
 echo "config file: ${configfile}"
-if [[ "${buildtype}" == "serial" ]];
-then
-  path2build=${HOME}/CLEO/build/serial/ 
-fi
-if [[ "${buildtype}" == "gpu" ]];
-then
-  path2build=${HOME}/CLEO/build/gpus_cpus/ 
-fi
 echo "path to build directory: ${path2build}"
 
-### --------------- create gbx boundaries -------------- ###
-echo "python create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}" 
-python ${path2scripts}/create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
-### ---------------------------------------------------- ###
+if [ "${configfile}" != "" ] && [ "${path2build}" != "" ]
+then 
+  ### --------------- create gbx boundaries -------------- ###
+  echo "python create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}" 
+  python ${path2scripts}/create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
+  ### ---------------------------------------------------- ###
 
 
-### -------- create superdrop initial conditions ------- ###
-echo "python create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}" 
-python ${path2scripts}/create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
-### ---------------------------------------------------- ###
+  ### -------- create superdrop initial conditions ------- ###
+  echo "python create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}" 
+  python ${path2scripts}/create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
+  ### ---------------------------------------------------- ###
 
 
-### --------- create thermodynamics (optional) --------- ###
-echo "python create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}" 
-python ${path2scripts}/create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}
-### ---------------------------------------------------- ###
+  ### --------- create thermodynamics (optional) --------- ###
+  echo "python create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}" 
+  python ${path2scripts}/create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}
+  ### ---------------------------------------------------- ###
+fi

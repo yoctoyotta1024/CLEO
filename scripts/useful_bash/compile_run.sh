@@ -33,7 +33,7 @@ python=python
 ### ---------------------------------------------------- ###
 
 ### ------------------- compile_run.sh ----------------- ###
-if [ "${path2build}" != "" ]
+if [ "${path2build}" == "" ]
 then
   path2build=${HOME}/CLEO/build/
 fi
