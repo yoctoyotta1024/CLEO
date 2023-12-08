@@ -197,6 +197,11 @@ public:
     check_coupling(); 
   }
 
+  ~RunCLEO()
+  {
+    sdm.obs.after_timestepping();
+  }
+
   int operator()(const InitialConditions auto &initconds,
                  const unsigned int t_end) const
   /* create gridboxes and superdrops using initial conditions,

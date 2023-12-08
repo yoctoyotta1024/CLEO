@@ -68,6 +68,8 @@ public:
     }
   }
 
+  void after_timestepping() const {}
+
   unsigned int next_obs(const unsigned int t_mdl) const
   {
     return LIMITVALUES::uintmax;

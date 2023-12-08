@@ -45,6 +45,9 @@ for timestepping and at_start_step as constrained here */
     obs.before_timestepping(h_gbxs)
   } -> std::same_as<void>;
   {
+    obs.after_timestepping()
+  } -> std::same_as<void>;
+  {
     obs.next_obs(t)
   } -> std::convertible_to<unsigned int>;
   {
@@ -79,6 +82,14 @@ public:
     b.before_timestepping(h_gbxs);
   }
 
+  void after_timestepping() const
+  /* for combination of 2 observers, each
+  observer is run sequentially */
+  {
+    a.after_timestepping();
+    b.after_timestepping();
+  }
+
   unsigned int next_obs(const unsigned int t_mdl) const
    /* for combination of 2 observers, the next obs
    time is smaller out of the two possible */
@@ -108,6 +119,8 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const Gridbox &gbx) const
+  /* for combination of 2 observers, each
+  observer is run sequentially */
   {
     a.at_start_step(t_mdl, gbx);
     b.at_start_step(t_mdl, gbx);
@@ -128,6 +141,8 @@ struct NullObserver
 {
   void before_timestepping(const viewh_constgbx h_gbxs) const {}
 
+  void after_timestepping() const {}
+  
   unsigned int next_obs(const unsigned int t_mdl) const
   {
     return LIMITVALUES::uintmax;
@@ -144,6 +159,7 @@ struct NullObserver
 
   void at_start_step(const unsigned int t_mdl,
                      const Gridbox &gbx) const {}
+
 };
 
 template <typename O>
@@ -158,6 +174,9 @@ to make an Observer type out of a ConstTstepObserver) */
   {
     o.before_timestepping(h_gbxs)
   } -> std::same_as<void>;
+  {
+    o.after_timestepping()
+  } -> std::same_as<void>; 
   {
     o.at_start_step(t, h_gbxs, totsupers)
   } -> std::same_as<void>;
@@ -185,6 +204,11 @@ public:
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
     do_obs.before_timestepping(h_gbxs);
+  }
+
+  void after_timestepping() const
+  {
+    do_obs.after_timestepping(); 
   }
 
   unsigned int next_obs(const unsigned int t_mdl) const

@@ -68,6 +68,8 @@ public:
     std::cout << "observer includes StateObserver\n";
   }                                        
 
+  void after_timestepping() const {}
+  
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {}

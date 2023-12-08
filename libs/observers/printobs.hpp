@@ -56,6 +56,8 @@ public:
       std::cout << "observer includes PrintObserver\n";
   }
 
+  void after_timestepping() const {}
+
   unsigned int next_obs(const unsigned int t_mdl) const
   {
     return ((t_mdl / interval) + 1) * interval;

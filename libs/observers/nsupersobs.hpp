@@ -95,6 +95,8 @@ public:
     std::cout << "observer includes NsupersObserver\n";
   }
 
+  void after_timestepping() const {}
+
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {}
@@ -152,6 +154,8 @@ public:
     std::cout << "observer includes NrainsupersObserver\n";
   }
 
+  void after_timestepping() const {}
+
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {}
@@ -203,6 +207,8 @@ public:
   {
     std::cout << "observer includes TotNsupersObserver\n";
   }
+  
+  void after_timestepping() const {}
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
