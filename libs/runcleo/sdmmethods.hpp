@@ -141,7 +141,7 @@ public:
     const viewd_constsupers
         totsupers(h_gbxs(0).domain_totsupers_readonly());
 
-    sdm.obs.at_start_step(t_mdl, h_gbxs, totsupers);
+    obs.at_start_step(t_mdl, h_gbxs, totsupers);
 
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)

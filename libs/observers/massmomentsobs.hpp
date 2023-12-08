@@ -128,6 +128,7 @@ private:
   using store_type = TwoDMultiVarStorage<MassMomentBuffers<double>,
                                          std::array<double, 3>>; 
   std::shared_ptr<store_type> zarr;
+  unsigned int nobs_gbxs;
 
   void rainmassmoments_to_storage(const viewh_constgbx h_gbxs) const;
   /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
@@ -149,21 +150,22 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
-                     const viewd_constsupers totsupers) const
+                     const viewd_constsupers totsupers) const {}
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const
   {
-    at_start_step(h_gbxs);
+    at_start_step(gbx);
   }
 
-  void at_start_step(const viewh_constgbx h_gbxs) const
+  void at_start_step(const Gridbox &gbx) const
   /* deep copy if necessary (if superdrops are on device not
   host memory), then writes mass moments to 2-D zarr storages */
   {
-    rainmassmoments_to_storage(h_gbxs);
-    ++(zarr->nobs);
+    rainmassmoments_to_storage(gbx);
+    ++nobs_gbxs;
+    zarr->nobs += [];
   }
-
-  void at_start_step(const unsigned int t_mdl,
-                     const Gridbox &gbx) const {}
 };
 
 inline Observer auto

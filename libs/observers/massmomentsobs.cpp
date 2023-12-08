@@ -143,21 +143,17 @@ are all droplets with r >= rlim = 40 microns */
 }
 
 void DoMassMomentsObs::
-    massmoments_to_storage(const viewh_constgbx h_gbxs) const
+    massmoments_to_storage(const Gridbox &gbx) const
 /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
 distribution and then writes them to zarr storage. (I.e.
 0th, 3rd and 6th moment of the droplet radius distribution).
 Kokkos::parallel_for([...]) is equivalent in serial to:
 for (size_t kk(0); kk < supers.extent(0); ++kk){[...]} */
 {
-  const size_t ngbxs(h_gbxs.extent(0));
-  for (size_t ii(0); ii < ngbxs; ++ii)
-  {
-    auto supers = h_gbxs(ii).supersingbx.readonly();
-    const auto moms = calc_massmoments(supers);
+  auto supers = h_gbxs(ii).supersingbx.readonly();
+  const auto moms = calc_massmoments(supers);
 
-    zarr->values_to_storage(moms); // {0th, 1st, 2nd} mass moments
-  }
+  zarr->values_to_storage(moms); // {0th, 1st, 2nd} mass moments
 }
 
 void DoRainMassMomentsObs::

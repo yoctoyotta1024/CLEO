@@ -68,65 +68,55 @@ viewd_supers init_supers(const size_t nsupers,
   return supers;
 }
 
-std::array<double, 3>
-calc_massmoments(const viewd_constsupers d_supers)
-/* calculated 0th, 1st and 2nd moment of the
-(real) droplet mass (I.e. 0th, 3rd and 6th moment
-of the droplet radius distribution).
-Kokkos::parallel_for([...]) is equivalent in serial to:
-for (size_t kk(0); kk < d_supers.extent(0); ++kk){[...]} */
+unsigned int make_obs_gbx(unsigned int nobs,
+                          unsigned int nobs_gbxs,
+                          const size_t ngbxs)
 {
-  const size_t nsupers(d_supers.extent(0));
 
-  std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
-  Kokkos::parallel_reduce(
-      "massmoments_to_storage",
-      Kokkos::RangePolicy<ExecSpace>(0, nsupers),
-      KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
-        m0 += d_supers(kk).get_sdgbxindex();
-        m1 += d_supers(kk).get_sdgbxindex() + 1;
-        m2 += 0.0;
-      },
-      moms.at(0), moms.at(1), moms.at(2)); // {0th, 1st, 2nd} mass moments
+  ++nobs_gbxs;
 
-  return moms;
+  std::cout << "nobs: " << nobs
+            << " & " << nobs_gbxs << " -> "
+            << nobs_gbxs / ngbxs << "\n";
+
+  nobs = nobs_gbxs / ngbxs;
+
+  return nobs;
+}
+
+unsigned int make_obs_gbxs(unsigned int nobs)
+{
+  return ++nobs;
 }
 
 int main(int argc, char *argv[])
 {
   const size_t nsupers(10);
-  const size_t ngbxs(1);
+  const size_t ngbxs(13);
+  const size_t nobs(1);
 
   Kokkos::initialize(argc, argv);
   {
     auto supers = init_supers(nsupers, ngbxs);
 
-    for (size_t ii(0); ii < ngbxs; ++ii)
+    unsigned int nobs_1(0);
+    unsigned int nobs_2(0);
+    unsigned int nobs_gbxs(0);
+
+    for (size_t jj(0); jj < nobs; ++jj)
     {
-      double mom0(0);
-      double mom1(0);
-      auto h_supers = Kokkos::create_mirror_view(supers);
-      Kokkos::deep_copy(h_supers, supers);
-      for (size_t kk(0); kk < nsupers; ++kk)
+
+      for (size_t ii(0); ii < ngbxs; ++ii)
       {
-        mom0 += h_supers(kk).get_sdgbxindex();
-        mom1 += h_supers(kk).get_sdgbxindex() + 5;
+        nobs_1 = make_obs_gbx(nobs_1, nobs_gbxs, ngbxs);
+        ++nobs_gbxs;
       }
-      std::cout << "ii: " << ii << " -> mom = " << mom0 << ", " << mom1 << "\n";
+
+      nobs_2 = make_obs_gbxs(nobs_2);
     }
 
-    for (size_t ii(0); ii < ngbxs; ++ii)
-    {
-      Kokkos::Timer kokkostimer;
-      const auto moms = calc_massmoments(supers);
-      const double ttot(kokkostimer.seconds());
-
-      std::cout << "ii: " << ii << " -> mom = "
-                << moms.at(0) << ", " << moms.at(1) << "\n";
-
-      std::cout << "-----\n Total Program Duration: "
-                << ttot << "s \n-----\n";
-    }
+    std::cout << "final nobs: " << nobs_1
+              << " == " << nobs_2 << "\n";
   }
   Kokkos::finalize();
 }
