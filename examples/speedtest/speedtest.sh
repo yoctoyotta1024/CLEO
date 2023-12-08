@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=divfree2d
+#SBATCH --job-name=speedtest
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,10 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./divfree2d_out.%j.out
-#SBATCH --error=./divfree2d_err.%j.out
-
-// TODO
+#SBATCH --output=./speedtest_out.%j.out
+#SBATCH --error=./speedtest_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
@@ -24,7 +22,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
-configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.txt 
+configfile=${path2CLEO}/examples/speedtest/src/config/speedtest_config.txt 
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"
@@ -33,29 +31,50 @@ cuda="nvc++"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
-kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                          # flags for host parallelism (e.g. using OpenMP)
-# kokkoshost=""                                                                 
-kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"           # flags for device parallelism (e.g. using CUDA)
-# kokkosdevice=""
-### ---------------------------------------------------- ###
-
-### ------------------------ build --------------------- ###
-### build CLEO using cmake (with openMP thread parallelism through Kokkos)
-buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
-echo ${buildcmd}
-CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}
-
+kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON"
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
-
-### ensure these directories exist (it's a good idea for later use)
-mkdir ${path2build}bin
-mkdir ${path2build}share
 ### ---------------------------------------------------- ###
 
-### ------------------- compile & run ------------------ ###
-### generate input files and run adiabatic parcel example
-${python} divfree2d.py ${path2CLEO} ${path2build} ${configfile}
+### ------------ build gpu CUDA + cpu OpenMP parallelism ----------- ###
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
+kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"        
+buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B" \
+  | "${path2build}gpus_cpus/ ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
+echo ${buildcmd}
+CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build}"gpus_cpus/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}
 
-### ---------------------------------------------------- ###
+### run test for gpus CUDA + cpus OpenMP
+mkdir ${path2build}gpus_cpus/bin
+mkdir ${path2build}gpus_cpus/share
+
+${python} speedtest.py ${path2CLEO} ${path2build}"gpus_cpus/" ${configfile}
+### ---------------------------------------------------------------- ###
+
+### ---------------- build cpu OpenMP parallelism ------------------ ###
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
+buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
+  | "${path2build}serial/ ${kokkosflags} ${kokkoshost}"
+echo ${buildcmd}
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}"cpus/" ${kokkosflags} ${kokkoshost}
+
+### run test for cpus OpenMP
+mkdir ${path2build}cpus/bin
+mkdir ${path2build}cpus/share
+
+${python} speedtest.py ${path2CLEO} ${path2build}"cpus/" ${configfile}
+### ---------------------------------------------------------------- ###
+
+### -------------------------- build serial ------------------------ ###
+kokkoshost="-DKokkos_ENABLE_OPENMP=OFF"                                          
+buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
+  | "${path2build}serial/ ${kokkosflags} ${kokkoshost}"
+echo ${buildcmd}
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}"serial/" ${kokkosflags} ${kokkoshost}
+
+### run test in serial
+mkdir ${path2build}serial/bin
+mkdir ${path2build}serial/share
+
+${python} speedtest.py ${path2CLEO} ${path2build}"serial/" ${configfile}
+### ---------------------------------------------------------------- ###

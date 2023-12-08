@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
-File: divfree2d.py
-Project: divfreemotion
+File: speedtest.py
+Project: speedtest
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:

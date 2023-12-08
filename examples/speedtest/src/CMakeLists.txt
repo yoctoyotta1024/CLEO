@@ -38,7 +38,7 @@ endif()
 # executable for CLEO coupled model speed test
 set(spdtest "spdtest")
 add_executable(${speed} EXCLUDE_FROM_ALL "main_spdtest.cpp")
-target_link_libraries(${speed} PRIVATE cartesiandomain "${SDMLIBS}")
+target_link_libraries(${speed} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
 target_link_libraries(${speed} PUBLIC Kokkos::kokkos)
 target_include_directories(${speed} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 target_compile_options(${speed} PRIVATE ${compileops}) 
