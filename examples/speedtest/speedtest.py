@@ -164,8 +164,8 @@ if isfigures[0]:
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-# os.system('make clean && make -j 64 spdtest')
-os.system('make -j 64 spdtest')
+os.system('make clean && make -j 64 spdtest')
+# os.system('make -j 64 spdtest')
 executable = path2build+'/examples/speedtest/src/spdtest'
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
