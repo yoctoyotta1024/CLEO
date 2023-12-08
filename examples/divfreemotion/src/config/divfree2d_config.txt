@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Saturday 9th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,14 +26,15 @@
 
 
 ### Initialisation parameters ###
-constants_filename = ../libs/cleoconstants.hpp                 # name of file for values of physical constants
+constants_filename = ../libs/cleoconstants.hpp              # name of file for values of physical constants
 initsupers_filename = ./share/df2d_dimlessSDsinit.dat       # binary filename for initialisation of SDs
 grid_filename = ./share/df2d_dimlessGBxboundaries.dat       # binary filename for initialisation of GBxs / GbxMaps
 
 ### Output Data parameters ###
 setuptxt = ./bin/df2d_setup.txt                # .txt filename to copy configuration to
+stats_filename = ./bin/df2d_stats.txt          # .txt file to output runtime statistics to
 zarrbasedir = ./bin/df2d_sol.zarr              # zarr store base directory
-maxchunk = 1250000                                # maximum no. of elements in chunks of zarr store array
+maxchunk = 1250000                             # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime parameters ###
 # domain setup #
