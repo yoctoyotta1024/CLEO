@@ -27,36 +27,90 @@
 #include <ios>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 
 #include <Kokkos_Core.hpp>
 
-class RunStats
+#include "../kokkosaliases.hpp"
+#include "gridboxes/gridbox.hpp"
+
+struct RunStats
 {
 private:
   Kokkos::Timer kokkostimer;
-  double time1;
-  double time2;
 
 public:
-  ~RunStats() { summary(); }
+  double t0; // time of observer creation
+  double t_start;
+  double t_end;
 
-  void before_timestepping()
+  RunStats()
+      : t0(0.0), t_start(0.0), t_end(0.0),
+        kokkostimer(Kokkos::Timer())
+  {
+    t0 = kokkostimer.seconds(); 
+  }
+
+  double time_elapsed() const
+  /* returns tiem elapsed since t0 [s] */
+  {
+    return kokkostimer.seconds() - t0;
+  }
+};
+
+class RunStatsObserver
+{
+private:
+  unsigned int interval; // timestep between runtime observations
+  std::shared_ptr<RunStats> stats;
+
+  void summary() const;
+  /* print out summary of runtime
+  stats to terminal window */
+
+public:
+  RunStatsObserver(const unsigned int obsstep)
+      : interval(obsstep), stats(std::make_shared<RunStats>()){}
+
+  void before_timestepping(const viewh_constgbx h_gbxs) const
   /* record stats before timestepping
   e.g. current time */
   {
-    time1 = kokkostimer.seconds();
+    stats->t_start = stats->time_elapsed();
   }
 
-  void after_timestepping()
+  void after_timestepping() const
   /* record stats after timestepping
   e.g. current time */
   {
-    time2 = kokkostimer.seconds();
+    stats->t_end = stats->time_elapsed();
+    summary();
   }
 
-  void summary();
-  /* print out summary of runtime
-  stats to terminal window */
+  unsigned int next_obs(const unsigned int t_mdl) const
+  {
+    return ((t_mdl / interval) + 1) * interval;
+  }
+
+  bool on_step(const unsigned int t_mdl) const
+  {
+    return t_mdl % interval == 0;
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const viewh_constgbx h_gbxs,
+                     const viewd_constsupers totsupers) const
+  {
+    if (on_step(t_mdl))
+    {
+      at_start_step();
+    }
+  }
+
+  void at_start_step(const unsigned int t_mdl,
+                     const Gridbox &gbx) const {}
+  
+  void at_start_step() const {}
 };
 
 #endif // RUNSTATS_HPP

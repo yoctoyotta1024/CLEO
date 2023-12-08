@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Friday 8th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -47,6 +47,7 @@
 #include "observers/nsupersobs.hpp"
 #include "observers/observers.hpp"
 #include "observers/printobs.hpp"
+#include "observers/runstats.hpp"
 #include "observers/stateobs.hpp"
 #include "observers/timeobs.hpp"
 #include "observers/supersattrsobs.hpp"
@@ -201,6 +202,8 @@ create_observer(const Config &config,
   const unsigned int obsstep(tsteps.get_obsstep());
   const int maxchunk(config.maxchunk);
 
+  const Observer auto obs0 = RunStatsObserver(obsstep);
+
   const Observer auto obs1 = PrintObserver(obsstep * 10,
                                            &step2realtime);
 
@@ -229,8 +232,8 @@ create_observer(const Config &config,
   const Observer auto obs10 = create_supersattrs_observer(obsstep, store,
                                                           maxchunk);
 
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
-         obs6 >> obs7 >> obs8 >> obs9 >> obs10;
+  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >>
+         obs7 >> obs8 >> obs9 >> obs10;
 }
 
 inline auto create_sdm(const Config &config,

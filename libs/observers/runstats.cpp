@@ -23,12 +23,15 @@
 
 #include "./runstats.hpp"
 
-void RunStats::summary()
+void RunStatsObserver::summary() const
 {
+  const double t_start(stats -> t_start);
+  const double t_end(stats -> t_end);
+  const double time_stepping(t_end - t_start);
   std::cout << std::fixed << std::setprecision(4)
             << "\n ----- CLEO run complete ----- \n"
-            << "       Duration: " << time2 << "s \n"
-            << "       Initialisation: " << time1 << "s \n"
-            << "       Timestepping: " << time2 - time1 << "s \n"
+            << "       Initialisation: " << t_start << "s \n"
+            << "       Timestepping: " << time_stepping << "s \n"
+            << "       Total run Duration: " << t_end << "s \n"
             << "------------------------------- \n";
 }
