@@ -45,7 +45,7 @@ void RunStatsObserver::write_to_file() const
   if (file.is_open())
   {
     const std::string header("### colums are: name duration/s\n"
-                             "###----------------------------\n");
+                             "### ---------------------------\n");
 
     const double t_start(stats->t_start);
     const double t_end(stats->t_end);
