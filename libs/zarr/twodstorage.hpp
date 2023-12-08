@@ -92,7 +92,7 @@ public:
       : SingleVarStorage<T>(store,
                             storehelpers::good2Dchunk(maxchunk, i_ndim1),
                             name, dtype, units, scale_factor),
-        dim1name(i_dim1name), ndim1(i_ndim1), nobs(0) {}
+        dim1name(i_dim1name), ndim1(i_ndim1), ndim1obs(0), nobs(0) {}
 
   ~TwoDStorage()
   /* upon destruction write any data leftover in buffer
