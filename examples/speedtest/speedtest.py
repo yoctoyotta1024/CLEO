@@ -32,6 +32,7 @@ path2build = sys.argv[2]
 configfile = sys.argv[3]
 outputdir = sys.argv[4]
 buildtype = sys.argv[5]
+nruns = 3
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
@@ -70,7 +71,7 @@ dataset = binpath+"spd_sol.zarr"
 isfigures = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = outputdir   # directory for saving figures
 SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
-outdatafile = outputdir+"spd_allstats.txt" # file to write out stats to
+outdatafile = outputdir+"/spd_allstats.txt" # file to write out stats to
 
 ### --- settings for 2-D gridbox boundaries --- ###
 zgrid = [0, 1500, 50]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -80,7 +81,7 @@ ygrid = np.array([0, 25, 50])  # array of yhalf coords [m]
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
 zlim = 1500       # max z coord of superdroplets
-npergbx = 8       # number of superdroplets per gridbox 
+npergbx = 4       # number of superdroplets per gridbox 
 
 # [min, max] range of initial superdroplet radii (and implicitly solute masses)
 rspan                = [3e-9, 3e-6] # [m]
@@ -122,7 +123,7 @@ def read_statsfile(statsfile):
   
   return stats
 
-def write_outstats(outdatafile, stats):
+def write_outstats(nruns, n, outdatafile, buildtype, stats):
   ''' if outdatafile doesn't already exist, creates new file with 
   a header. else appends to end of file '''
   
@@ -132,24 +133,32 @@ def write_outstats(outdatafile, stats):
         # Perform operations on the new file if needed
         header = "### Wall Clock time For Timestepping\n"
         header += "### columns are: "
-        header += "Test Number gpus_cpus/s cpus/s serial/s\n"
+        header += "test run gpus_cpus/s cpus/s serial/s"
         file.write(header)
     print(f"--- new stats output: '{outdatafile}' created ---")
   except FileExistsError:
     print(f"stats output file '{outdatafile}' already exists")
 
-  # count existing number of lines in 
+  # write new line at number = existing number of (non-header) lines + 1 
   with open(outdatafile, 'r') as file:
     lines = file.readlines()
     headerlines = [line for line in lines if line.startswith("###")]
+  
+  if buildtype == "gpus_cpus":
     nlines = len(lines)
     nheader = len(headerlines)
-        
-  # write stats["tstep"] value to output file
-  testnumber = int(nlines - nheader)
-  with open(outdatafile, 'a') as file:
-    line = "\n"+str(testnumber)+" "+str(stats["tstep"])
-    file.write(line)
+    testnumber = int(nlines - nheader) // nruns
+
+    line = "\n"+str(testnumber)+" "+str(n)+" "+str(stats["tstep"]) 
+    with open(outdatafile, 'a') as file:
+      file.write(line)
+
+  else:
+    nline = len(lines)-nruns+n
+    lines[nline] = lines[nline].rstrip() + " "+str(stats["tstep"])+"\n"
+    with open(outdatafile, 'w') as file:
+      file.writelines(lines) 
+  
    
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -210,26 +219,24 @@ def write_outstats(outdatafile, stats):
 # ### ---------------------------------------------------------------- ###
 # ### ---------------------------------------------------------------- ###
 
-# ### ---------------------------------------------------------------- ###
-# ### -------------------- COMPILE AND RUN CLEO ---------------------- ###
-# ### ---------------------------------------------------------------- ###
-# os.chdir(path2build)
-# os.system('pwd')
-# os.system('rm -rf '+dataset)
+### ---------------------------------------------------------------- ###
+### ------------ COMPILE, RUN AND WRITE RESULTS TO FILE ------------ ###
+### ---------------------------------------------------------------- ###
+os.chdir(path2build)
+os.system('pwd')
 # os.system('make clean && make -j 64 spdtest')
-# executable = path2build+'/examples/speedtest/src/spdtest'
-# os.system(executable + ' ' + configfile)
-# ### ---------------------------------------------------------------- ###
-# ### ---------------------------------------------------------------- ###
+os.system('make -j 64 spdtest')
 
-### ---------------------------------------------------------------- ###
-### ------------------- WRITE RESULTS TO FILE ---------------------- ###
-### ---------------------------------------------------------------- ###
-print("--- reading runtime statistics ---")     
-stats = read_statsfile(statsfile)
-for key, value in stats.items():
-    print(key+": {:.3f}s".format(value))
-write_outstats(outdatafile, stats)
-print("--- runtime stats written to file ---")
+executable = path2build+'/examples/speedtest/src/spdtest'
+for n in range(nruns):
+  os.system('rm -rf '+dataset)
+  os.system(executable + ' ' + configfile)
+
+  print("--- reading runtime statistics ---")     
+  stats = read_statsfile(statsfile)
+  for key, value in stats.items():
+      print(key+": {:.3f}s".format(value))
+  write_outstats(nruns, n, outdatafile, buildtype, stats)
+  print("--- runtime stats written to file ---")
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

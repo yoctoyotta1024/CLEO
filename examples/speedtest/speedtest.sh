@@ -34,50 +34,52 @@ cuda="nvc++"
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON"
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
+
+mkdir ${path2build}/bin
 ### ---------------------------------------------------- ###
 
 ### ------------ build gpu CUDA + cpu OpenMP parallelism ----------- ###
 buildtype="gpus_cpus"
-# kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
-# kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"        
-# buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B " \
-#   | "${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
-# echo ${buildcmd}
-# CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
+kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"        
+buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B " \
+  | "${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
+echo ${buildcmd}
+CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}
 
 ### run test for gpus CUDA + cpus OpenMP
 mkdir ${path2build}${buildtype}/bin
 mkdir ${path2build}${buildtype}/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${path2build} ${buildtype}
+${python} speedtest.py ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${path2build}"/bin" ${buildtype}
 ### ---------------------------------------------------------------- ###
 
 ### ---------------- build cpu OpenMP parallelism ------------------ ###
 buildtype="cpus"
-# kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
-# buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
-#   | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost}"
-# echo ${buildcmd}
-# CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost}
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
+buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
+  | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost}"
+echo ${buildcmd}
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost}
 
 ### run test for cpus OpenMP
 mkdir ${path2build}${buildtype}/bin
 mkdir ${path2build}${buildtype}/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}"${buildtype}/" ${configfile} ${path2build} ${buildtype}
+${python} speedtest.py ${path2CLEO} ${path2build}"${buildtype}/" ${configfile} ${path2build}"/bin" ${buildtype}
 ### ---------------------------------------------------------------- ###
 
 ### -------------------------- build serial ------------------------ ###
 buildtype="serial"
-# kokkoshost="-DKokkos_ENABLE_OPENMP=OFF"                                          
-# buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
-#   | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost}"
-# echo ${buildcmd}
-# CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost}
+kokkoshost="-DKokkos_ENABLE_OPENMP=OFF"                                          
+buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
+  | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost}"
+echo ${buildcmd}
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost}
 
 ### run test in serial
 mkdir ${path2build}${buildtype}/bin
 mkdir ${path2build}${buildtype}/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}"${buildtype}/" ${configfile} ${path2build} ${buildtype}
+${python} speedtest.py ${path2CLEO} ${path2build}"${buildtype}/" ${configfile} ${path2build}"/bin/" ${buildtype}
 ### ---------------------------------------------------------------- ###
