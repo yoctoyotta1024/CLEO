@@ -30,7 +30,8 @@ from pathlib import Path
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
-buildtype = sys.argv[4]
+outputdir = sys.argv[4]
+buildtype = sys.argv[5]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
@@ -67,9 +68,9 @@ dataset = binpath+"spd_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [True, True] # booleans for [making, saving] initialisation figures
-savefigpath = path2build+"/bin/" # directory for saving figures
+savefigpath = outputdir   # directory for saving figures
 SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
-outdatafile = binpath+"spd_allstats.txt" # file to write out stats to
+outdatafile = outputdir+"spd_allstats.txt" # file to write out stats to
 
 ### --- settings for 2-D gridbox boundaries --- ###
 zgrid = [0, 1500, 50]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -132,7 +133,7 @@ def write_outstats(outdatafile, stats):
         header = "### Wall Clock time For Timestepping\n"
         header += "### columns are: "
         header += "Test Number gpus_cpus/s cpus/s serial/s\n"
-        file.write()
+        file.write(header)
     print(f"--- new stats output: '{outdatafile}' created ---")
   except FileExistsError:
     print(f"stats output file '{outdatafile}' already exists")
@@ -148,7 +149,7 @@ def write_outstats(outdatafile, stats):
   testnumber = int(nlines - nheader)
   with open(outdatafile, 'a') as file:
     line = "\n"+str(testnumber)+" "+str(stats["tstep"])
-    file.write()
+    file.write(line)
    
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
