@@ -37,18 +37,19 @@ export OMP_PLACES=threads
 ### ---------------------------------------------------- ###
 
 ### ------------ build gpu CUDA + cpu OpenMP parallelism ----------- ###
+buildtype="gpus_cpus"
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"        
 buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B" \
   | "${path2build}gpus_cpus/ ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
 echo ${buildcmd}
-CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build}"gpus_cpus/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}
+CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build}${buildtype}/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}
 
 ### run test for gpus CUDA + cpus OpenMP
 mkdir ${path2build}gpus_cpus/bin
 mkdir ${path2build}gpus_cpus/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}"gpus_cpus/" ${configfile}
+${python} speedtest.py ${path2CLEO} ${path2build}"gpus_cpus/" ${configfile} 
 ### ---------------------------------------------------------------- ###
 
 ### ---------------- build cpu OpenMP parallelism ------------------ ###

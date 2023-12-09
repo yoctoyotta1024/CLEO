@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 8th December 2023
+ * Last Modified: Saturday 9th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -49,8 +49,8 @@ public:
   double t_end;
 
   RunStats()
-      : t0(0.0), t_start(0.0), t_end(0.0),
-        kokkostimer(Kokkos::Timer())
+      : kokkostimer(Kokkos::Timer()),
+        t0(0.0), t_start(0.0), t_end(0.0)
   {
     t0 = kokkostimer.seconds(); 
   }

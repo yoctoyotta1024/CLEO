@@ -33,9 +33,7 @@ cuda="nvc++"
 ### ------------ choose Kokkos configuration ----------- ###
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                          # flags for host parallelism (e.g. using OpenMP)
-# kokkoshost=""                                                                 
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"           # flags for device parallelism (e.g. using CUDA)
-# kokkosdevice=""
 ### ---------------------------------------------------- ###
 
 ### ------------------------ build --------------------- ###

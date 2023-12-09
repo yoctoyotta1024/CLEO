@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: main.cpp
+ * File: main_spdtest.cpp
  * Project: src
  * Created Date: Thursday 12th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Saturday 9th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -48,6 +48,7 @@
 #include "observers/nsupersobs.hpp"
 #include "observers/observers.hpp"
 #include "observers/printobs.hpp"
+#include "observers/runstats.hpp"
 #include "observers/stateobs.hpp"
 #include "observers/timeobs.hpp"
 #include "observers/supersattrsobs.hpp"
@@ -165,7 +166,7 @@ create_supersattrs_observer(const unsigned int interval,
 }
 
 inline Observer auto
-create_observer(const Config &config,
+create_other_observer(const Config &config,
                 const Timesteps &tsteps,
                 FSStore &store)
 {
@@ -201,6 +202,21 @@ create_observer(const Config &config,
 
   return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
          obs6 >> obs7 >> obs8 >> obs9 >> obs10;
+}
+
+inline Observer auto
+create_observer(const Config &config,
+                const Timesteps &tsteps,
+                FSStore &store)
+{
+  const Observer auto obs0 = RunStatsObserver(tsteps.get_obsstep(),
+                                              config.stats_filename);
+
+  const Observer auto obs = create_other_observer(config,
+                                                  tsteps,
+                                                  store);
+
+  return obs0 >> obs;
 }
 
 inline auto create_sdm(const Config &config,

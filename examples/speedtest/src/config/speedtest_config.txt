@@ -26,7 +26,7 @@
 
 
 ### Initialisation parameters ###
-constants_filename = ../libs/cleoconstants.hpp           # name of file for values of physical constants
+constants_filename = ../../libs/cleoconstants.hpp           # name of file for values of physical constants
 initsupers_filename = ./share/spd_dimlessSDsinit.dat     # binary filename for initialisation of SDs
 grid_filename = ./share/spd_dimlessGBxboundaries.dat     # binary filename for initialisation of GBxs / GbxMaps
 
