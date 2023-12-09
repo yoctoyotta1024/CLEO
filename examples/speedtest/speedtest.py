@@ -133,7 +133,7 @@ def write_outstats(nruns, n, outdatafile, buildtype, stats):
         # Perform operations on the new file if needed
         header = "### Wall Clock time For Timestepping\n"
         header += "### columns are: "
-        header += "test run gpus_cpus/s cpus/s serial/s"
+        header += "test_run gpus_cpus/s cpus/s serial/s"
         file.write(header)
     print(f"--- new stats output: '{outdatafile}' created ---")
   except FileExistsError:
@@ -142,14 +142,9 @@ def write_outstats(nruns, n, outdatafile, buildtype, stats):
   # write new line at number = existing number of (non-header) lines + 1 
   with open(outdatafile, 'r') as file:
     lines = file.readlines()
-    headerlines = [line for line in lines if line.startswith("###")]
-  
-  if buildtype == "gpus_cpus":
-    nlines = len(lines)
-    nheader = len(headerlines)
-    testnumber = int(nlines - nheader) // nruns
 
-    line = "\n"+str(testnumber)+" "+str(n)+" "+str(stats["tstep"]) 
+  if buildtype == "gpus_cpus":
+    line = "\n"+str(n)+" "+str(stats["tstep"]) 
     with open(outdatafile, 'a') as file:
       file.write(line)
 
@@ -163,69 +158,68 @@ def write_outstats(nruns, n, outdatafile, buildtype, stats):
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-# ### ---------------------------------------------------------------- ###
-# ### ------------------- BINARY FILES GENERATION--------------------- ###
-# ### ---------------------------------------------------------------- ###
-# ### --- ensure build, share and bin directories exist --- ###
-# if path2CLEO == path2build:
-#   raise ValueError("build directory cannot be CLEO")
-# else:
-#   Path(path2build).mkdir(exist_ok=True) 
-#   Path(sharepath).mkdir(exist_ok=True) 
-#   Path(binpath).mkdir(exist_ok=True) 
-#   if isfigures[1]:
-#     Path(savefigpath).mkdir(exist_ok=True) 
-# os.system("rm "+gridfile)
-# os.system("rm "+initSDsfile)
-# os.system("rm "+thermofile[:-4]+"*")
+### ---------------------------------------------------------------- ###
+### ------------------- BINARY FILES GENERATION--------------------- ###
+### ---------------------------------------------------------------- ###
+### --- ensure build, share and bin directories exist --- ###
+if path2CLEO == path2build:
+  raise ValueError("build directory cannot be CLEO")
+else:
+  Path(path2build).mkdir(exist_ok=True) 
+  Path(sharepath).mkdir(exist_ok=True) 
+  Path(binpath).mkdir(exist_ok=True) 
+  if isfigures[1]:
+    Path(savefigpath).mkdir(exist_ok=True) 
+os.system("rm "+gridfile)
+os.system("rm "+initSDsfile)
+os.system("rm "+thermofile[:-4]+"*")
 
-# ### ----- write gridbox boundaries binary ----- ###
-# cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
-# rgrid.print_domain_info(constsfile, gridfile)
+### ----- write gridbox boundaries binary ----- ###
+cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
+rgrid.print_domain_info(constsfile, gridfile)
 
-# ### ----- write thermodyanmics binaries ----- ###
-# thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
-#                                                 THETA, qvapmethod, sratios, Zbase,
-#                                                 qcond, WMAX, Zlength, Xlength,
-#                                                 VVEL)
-# cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
-#                                     constsfile, gridfile)
+### ----- write thermodyanmics binaries ----- ###
+thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
+                                                THETA, qvapmethod, sratios, Zbase,
+                                                qcond, WMAX, Zlength, Xlength,
+                                                VVEL)
+cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
+                                    constsfile, gridfile)
 
 
-# ### ----- write initial superdroplets binary ----- ###
-# nsupers = iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-# coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
-# coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
-# coord2gen = iattrs.SampleCoordGen(True) # sample coord2 randomly 
-# radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
-# radiigen = iattrs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
+### ----- write initial superdroplets binary ----- ###
+nsupers = iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
+coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
+coord2gen = iattrs.SampleCoordGen(True) # sample coord2 randomly 
+radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
+radiigen = iattrs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
 
-# initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
-#                                         coord3gen, coord1gen, coord2gen)
-# csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
-#                                       configfile, constsfile,
-#                                       gridfile, nsupers, numconc)
+initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
+                                        coord3gen, coord1gen, coord2gen)
+csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+                                      configfile, constsfile,
+                                      gridfile, nsupers, numconc)
 
-# ### ----- show (and save) plots of binary file data ----- ###
-# if isfigures[0]:
-#   rgrid.plot_gridboxboundaries(constsfile, gridfile,
-#                                savefigpath, isfigures[1])
-#   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
-#                               thermofile, savefigpath, isfigures[1])
-#   rsupers.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
-#                               gridfile, savefigpath, isfigures[1],
-#                               SDgbxs2plt) 
-#   plt.close()
-# ### ---------------------------------------------------------------- ###
-# ### ---------------------------------------------------------------- ###
+### ----- show (and save) plots of binary file data ----- ###
+if isfigures[0]:
+  rgrid.plot_gridboxboundaries(constsfile, gridfile,
+                               savefigpath, isfigures[1])
+  rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
+                              thermofile, savefigpath, isfigures[1])
+  rsupers.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+                              gridfile, savefigpath, isfigures[1],
+                              SDgbxs2plt) 
+  plt.close()
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
 ### ------------ COMPILE, RUN AND WRITE RESULTS TO FILE ------------ ###
 ### ---------------------------------------------------------------- ###
 os.chdir(path2build)
 os.system('pwd')
-# os.system('make clean && make -j 64 spdtest')
-os.system('make -j 64 spdtest')
+os.system('make clean && make -j 64 spdtest')
 
 executable = path2build+'/examples/speedtest/src/spdtest'
 for n in range(nruns):
