@@ -40,42 +40,44 @@ export OMP_PLACES=threads
 buildtype="gpus_cpus"
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"        
-buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B" \
-  | "${path2build}gpus_cpus/ ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
+buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B " \
+  | "${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
 echo ${buildcmd}
-CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build}${buildtype}/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}
+CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}
 
 ### run test for gpus CUDA + cpus OpenMP
-mkdir ${path2build}gpus_cpus/bin
-mkdir ${path2build}gpus_cpus/share
+mkdir ${path2build}${buildtype}/bin
+mkdir ${path2build}${buildtype}/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}"gpus_cpus/" ${configfile} 
+${python} speedtest.py ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${buildtype}
 ### ---------------------------------------------------------------- ###
 
 ### ---------------- build cpu OpenMP parallelism ------------------ ###
+buildtype="cpus"
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
 buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
-  | "${path2build}serial/ ${kokkosflags} ${kokkoshost}"
+  | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost}"
 echo ${buildcmd}
-CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}"cpus/" ${kokkosflags} ${kokkoshost}
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost}
 
 ### run test for cpus OpenMP
-mkdir ${path2build}cpus/bin
-mkdir ${path2build}cpus/share
+mkdir ${path2build}${buildtype}bin
+mkdir ${path2build}${buildtype}/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}"cpus/" ${configfile}
+${python} speedtest.py ${path2CLEO} ${path2build}"${buildtype}/" ${configfile} ${buildtype}
 ### ---------------------------------------------------------------- ###
 
 ### -------------------------- build serial ------------------------ ###
+buildtype="serial"
 kokkoshost="-DKokkos_ENABLE_OPENMP=OFF"                                          
 buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
-  | "${path2build}serial/ ${kokkosflags} ${kokkoshost}"
+  | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost}"
 echo ${buildcmd}
-CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}"serial/" ${kokkosflags} ${kokkoshost}
+CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost}
 
 ### run test in serial
-mkdir ${path2build}serial/bin
-mkdir ${path2build}serial/share
+mkdir ${path2build}${buildtype}/bin
+mkdir ${path2build}${buildtype}/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}"serial/" ${configfile}
+${python} speedtest.py ${path2CLEO} ${path2build}"${buildtype}/" ${configfile} ${buildtype}
 ### ---------------------------------------------------------------- ###
