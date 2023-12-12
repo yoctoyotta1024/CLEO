@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Saturday 9th December 2023
+Last Modified: Tuesday 12th December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -32,7 +32,7 @@ path2build = sys.argv[2]
 configfile = sys.argv[3]
 outputdir = sys.argv[4]
 buildtype = sys.argv[5]
-nruns = 3
+nruns = 2
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
@@ -58,8 +58,8 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-gridfile = sharepath+"spd_dimlessGBxboundaries.dat"
-initSDsfile = sharepath+"spd_dimlessSDsinit.dat"
+gridfile = sharepath+"/spd_dimlessGBxboundaries.dat"
+initSDsfile = sharepath+"/spd_dimlessSDsinit.dat"
 thermofile =  sharepath+"/spd_dimlessthermo.dat"
 
 # path and file names for plotting results

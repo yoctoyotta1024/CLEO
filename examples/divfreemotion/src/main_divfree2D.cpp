@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: main_gol0D.cpp
+ * File: main_divfree2D.cpp
  * Project: src
  * Created Date: Thursday 12th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Tuesday 12th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License

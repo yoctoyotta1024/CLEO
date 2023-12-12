@@ -43,7 +43,7 @@ buildtype="gpus_cpus"
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"        
 buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B " \
-  | "${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
+  | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
 echo ${buildcmd}
 CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kokkosflags} ${kokkoshost} ${kokkosdevice}
 
@@ -51,7 +51,7 @@ CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build}${buildt
 mkdir ${path2build}${buildtype}/bin
 mkdir ${path2build}${buildtype}/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${path2build}"/bin" ${buildtype}
+${python} speedtest.py ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${path2build}"/bin/" ${buildtype}
 ### ---------------------------------------------------------------- ###
 
 ### ---------------- build cpu OpenMP parallelism ------------------ ###
@@ -66,7 +66,7 @@ CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kok
 mkdir ${path2build}${buildtype}/bin
 mkdir ${path2build}${buildtype}/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}"${buildtype}/" ${configfile} ${path2build}"/bin" ${buildtype}
+${python} speedtest.py ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${path2build}"/bin/" ${buildtype}
 ### ---------------------------------------------------------------- ###
 
 ### -------------------------- build serial ------------------------ ###
@@ -81,5 +81,5 @@ CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B ${path2build}${buildtype}"/" ${kok
 mkdir ${path2build}${buildtype}/bin
 mkdir ${path2build}${buildtype}/share
 
-${python} speedtest.py ${path2CLEO} ${path2build}"${buildtype}/" ${configfile} ${path2build}"/bin/" ${buildtype}
+${python} speedtest.py ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${path2build}"/bin/" ${buildtype}
 ### ---------------------------------------------------------------- ###
