@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -99,10 +99,10 @@ private:
   undergoing collision-x according to Shima et al. 2009
   ("p_alpha" in paper). Assumes drop1.xi >= drop2.xi */
   {
-    const double prob_jk(probability(drop1, drop2, DELT, VOLUME));
-    const double large_xi(drop1.get_xi()); // casting xi to double (!)
+    const auto prob_jk = double{probability(drop1, drop2, DELT, VOLUME)};
+    const auto large_xi = double{drop1.get_xi()}; // casting xi to double (!)
 
-    const double prob(scale_p * large_xi * prob_jk);
+    const auto prob = double{scale_p * large_xi * prob_jk};
 
     return prob;
   }
@@ -139,19 +139,19 @@ private:
 
     /* 2. calculate scaled probability of
     collision for pair of superdroplets */
-    const double prob(scaled_probability(drops.first,
+    const auto prob = scaled_probability(drops.first,
                                          drops.second,
-                                         scale_p, VOLUME));
+                                         scale_p, VOLUME);
 
     /* 3. Monte Carlo Step: use random number to
     enact (or not) collision of superdroplets pair */
     URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
-    const double phi(urbg.drand(0.0, 1.0)); // random number in range [0.0, 1.0]
+    const auto phi = urbg.drand(0.0, 1.0); // random number in range [0.0, 1.0]
     genpool.free_state(urbg.gen);
 
-    const bool isnull(enact_collision(drops.first,
-                                      drops.second,
-                                      prob, phi));
+    const auto isnull = enact_collision(drops.first,
+                                             drops.second,
+                                             prob, phi);
 
     return isnull;
   }
@@ -171,22 +171,22 @@ private:
   over for loop: for (size_t jj(0); jj < npairs; ++jj) {[...]} 
   when in serial */
   {
-    const size_t nsupers(supers.extent(0));
-    const size_t npairs(nsupers / 2); // no. pairs of superdroplets (same as floor() for positive nsupers)
-    const double scale_p(nsupers * (nsupers - 1.0) / (2.0 * npairs));
-    const double VOLUME(volume * dlc::VOL0); // volume in which collisions occur [m^3]
+    const auto nsupers = size_t{supers.extent(0)};
+    const auto npairs = size_t{nsupers / 2}; // no. pairs of superdroplets (same as floor() for positive nsupers)
+    const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
+    const auto VOLUME = double{volume * dlc::VOL0}; // volume in which collisions occur [m^3]
 
-    size_t totnnull(0); // number of null superdrops
+    auto totnnull = size_t{0}; // number of null superdrops
     Kokkos::parallel_reduce(
         Kokkos::TeamThreadRange(team_member, npairs),
         [&, this](const size_t jj, size_t &nnull)
         {
-          const size_t kk(jj * 2);
-          const bool isnull(collide_superdroplet_pair(supers(kk),
-                                                      supers(kk + 1),
-                                                      genpool,
-                                                      scale_p,
-                                                      VOLUME));
+          const auto kk = size_t{jj * 2};
+          const auto isnull = collide_superdroplet_pair(supers(kk),
+                                                        supers(kk + 1),
+                                                        genpool,
+                                                        scale_p,
+                                                        VOLUME);
           nnull += (size_t)isnull;
         },
         totnnull);

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -288,8 +288,8 @@ coord3 if superdrop has exceeded the z lower domain boundary */
   const unsigned int incre(1); // increment
   if (at_cartesiandomainboundary(idx, incre, gbxmaps.get_ndim(0))) // drop was at lower z edge of domain (now moving below it)
   {
-    const double lim1 = gbxmaps.coord3bounds(nghbr).second; // upper lim of backward neighbour
-    const double lim2 = gbxmaps.coord3bounds(idx).first;    // lower lim of current gbx
+    const auto lim1 = double{gbxmaps.coord3bounds(nghbr).second}; // upper lim of backward neighbour
+    const auto lim2 = double{gbxmaps.coord3bounds(idx).first};    // lower lim of current gbx
     drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
   }
 
@@ -309,8 +309,8 @@ if superdrop has exceeded the z upper domain boundary */
   const unsigned int incre(1);                                             // increment
   if (at_cartesiandomainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) // drop was upper z edge of domain (now moving above it)
   {
-    const double lim1 = gbxmaps.coord3bounds(nghbr).first; // lower lim of forward neighbour
-    const double lim2 = gbxmaps.coord3bounds(idx).second;  // upper lim of current gbx
+    const auto lim1 = double{gbxmaps.coord3bounds(nghbr).first}; // lower lim of forward neighbour
+    const auto lim2 = double{gbxmaps.coord3bounds(idx).second};  // upper lim of current gbx
     drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
   }
 
@@ -331,8 +331,8 @@ coord1 if superdrop has exceeded the x back domain boundary */
   const unsigned int incre(ndims(0));                   // increment
   if (at_cartesiandomainboundary(idx, incre, ndims(1))) // at lower x edge of domain
   {
-    const double lim1 = gbxmaps.coord1bounds(nghbr).second; // upper lim of backward neigghbour
-    const double lim2 = gbxmaps.coord1bounds(idx).first;    // lower lim of current gbx
+    const auto lim1 = double{gbxmaps.coord1bounds(nghbr).second}; // upper lim of backward neigghbour
+    const auto lim2 = double{gbxmaps.coord1bounds(idx).first};    // lower lim of current gbx
     drop.set_coord1(coord1_beyondx(drop.get_coord1(), lim1, lim2));
   }
 
@@ -353,8 +353,8 @@ coord1 if superdrop has exceeded the x front domain boundary */
   const unsigned int incre(ndims(0));                           // increment
   if (at_cartesiandomainboundary(idx + incre, incre, ndims(1))) // at lower x edge of domain
   {
-    const double lim1 = gbxmaps.coord1bounds(nghbr).first; // lower lim of forward nghbour
-    const double lim2 = gbxmaps.coord1bounds(idx).second;  // upper lim of gbx
+    const auto lim1 = double{gbxmaps.coord1bounds(nghbr).first}; // lower lim of forward nghbour
+    const auto lim2 = double{gbxmaps.coord1bounds(idx).second};  // upper lim of gbx
     drop.set_coord1(coord1_beyondx(drop.get_coord1(), lim1, lim2));
   }
 
@@ -375,8 +375,8 @@ coord2 if superdrop has exceeded the y leftmost domain boundary */
   const unsigned int incre(ndims(0) * ndims(1));        // no. gridboxes in z direction * no. gridboxes in x direction
   if (at_cartesiandomainboundary(idx, incre, ndims(2))) // at lower y edge of domain
   {
-    const double lim1 = gbxmaps.coord2bounds(nghbr).second; // upper lim of backward nghbour
-    const double lim2 = gbxmaps.coord2bounds(idx).first;    // lower lim of gbx
+    const auto lim1 = double{gbxmaps.coord2bounds(nghbr).second}; // upper lim of backward nghbour
+    const auto lim2 = double{gbxmaps.coord2bounds(idx).first};    // lower lim of gbx
     drop.set_coord2(coord2_beyondy(drop.get_coord2(), lim1, lim2));
   }
 
@@ -397,8 +397,8 @@ coord2 if superdrop has exceeded the y rightmost domain boundary */
   const unsigned int incre(ndims(0) * ndims(1));                            // no. gridboxes in z direction * no. gridboxes in x direction
   if (at_cartesiandomainboundary(idx + incre, incre, ndims(2)))             // at upper y edge of domain
   {
-    const double lim1 = gbxmaps.coord2bounds(nghbr).first; // lower lim of forward nghbour
-    const double lim2 = gbxmaps.coord2bounds(idx).second;  // upper lim of gbx
+    const auto lim1 = double{gbxmaps.coord2bounds(nghbr).first}; // lower lim of forward nghbour
+    const auto lim2 = double{gbxmaps.coord2bounds(idx).second};  // upper lim of gbx
     drop.set_coord2(coord2_beyondy(drop.get_coord2(), lim1, lim2));
   }
 

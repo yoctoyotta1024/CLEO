@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 28th October 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -68,13 +68,13 @@ radial growth of droplet. Using equations from
 "An Introduction To Clouds...." (see note at top of file) */
 {
 	constexpr double akoh_constant = 3.3e-7 / (dlc::TEMP0 * dlc::R0);
-  const double akoh(akoh_constant / temp); // dimensionless version of eqn [6.24]
+  const auto akoh = akoh_constant / temp; // dimensionless version of eqn [6.24]
 
   constexpr double bkoh_constant = 4.3e-6 * dlc::RHO0 / dlc::MR0;
-  const double msol(drop.get_msol());
-  const double ionic(drop.get_ionic());
-  const double mr_sol(drop.get_mr_sol());
-	const double bkoh(bkoh_constant * msol * ionic / mr_sol); // dimensionless version of eqn [6.22]
+  const auto msol = drop.get_msol();
+  const auto ionic = drop.get_ionic();
+  const auto mr_sol = drop.get_mr_sol();
+	const auto bkoh = bkoh_constant * msol * ionic / mr_sol; // dimensionless version of eqn [6.22]
 
 	return {akoh, bkoh}; // {a, b} = {raoult, kelvin} kohler factors
 }
@@ -130,7 +130,7 @@ to dimensionless psat = psat/P0. */
   constexpr double TREF = 273.16;  // Triple point temperature [K] of water
   constexpr double PREF = 611.655; // Triple point pressure [Pa] of water
 
-  const double T(temp * dlc::TEMP0); // real T [K]
+  const auto T = double{temp * dlc::TEMP0}; // real T [K]
 
   return (PREF * Kokkos::exp(A * (T - TREF) / (T - B))) / dlc::P0; // dimensionless psat
 }
@@ -145,14 +145,14 @@ real psat to dimensionless psat = psat/P0. */
 {
   assert((temp > 0) && "psat ERROR: temperature must be larger than 0K.");
 
-  const double T(temp * dlc::TEMP0); // real T [K]
+  const auto T = double{temp * dlc::TEMP0}; // real T [K]
 
-  const double lnpsat = (54.842763 // ln(psat) [Pa]
-                         - 6763.22 / T - 4.21 * log(T) +
-                         0.000367 * T +
-                         tanh(0.0415 * (T - 218.8)) *
-                             (53.878 - 1331.22 / T -
-                              9.44523 * log(T) + 0.014025 * T));
+  const auto lnpsat = double{54.842763 // ln(psat) [Pa]
+                             - 6763.22 / T - 4.21 * log(T) +
+                             0.000367 * T +
+                             tanh(0.0415 * (T - 218.8)) *
+                                 (53.878 - 1331.22 / T -
+                                  9.44523 * log(T) + 0.014025 * T)};
 
   return Kokkos::exp(lnpsat) / dlc::P0; // dimensionless psat
 }
@@ -172,15 +172,15 @@ pair, fdl is second. */
   constexpr double LATENT_RGAS_V = DC::LATENT_V / DC::RGAS_V; // for fkl diffusion factor calc
   constexpr double D = 4.012182971e-5;                        // constants in equation [eq.7.26]
 
-  const double TEMP(temp * dlc::TEMP0);
-  const double PRESS(press * dlc::P0);
-  const double PSAT(psat * dlc::P0);
+  const auto TEMP = double{temp * dlc::TEMP0};
+  const auto PRESS = double{press * dlc::P0};
+  const auto PSAT = double{psat * dlc::P0};
 
-  const double THERMK(A * Kokkos::pow(TEMP, 2.0) + TEMP * B);                 // K*TEMP with K from [eq.7.24] (for fkl)
-  const double DIFFUSE_V((D / PRESS * Kokkos::pow(TEMP, 1.94)) / DC::RGAS_V); // 1/R_v * D_v from [eq 7.26] (for fdl)
+  const auto THERMK = double{A * Kokkos::pow(TEMP, 2.0) + TEMP * B};                 // K*TEMP with K from [eq.7.24] (for fkl)
+  const auto DIFFUSE_V = double{(D / PRESS * Kokkos::pow(TEMP, 1.94)) / DC::RGAS_V}; // 1/R_v * D_v from [eq 7.26] (for fdl)
 
-  const double fkl((LATENT_RGAS_V / TEMP - 1.0) * DC::LATENT_V / (THERMK * dlc::F0)); // fkl eqn [7.23]
-  const double fdl(TEMP / (DIFFUSE_V * PSAT) / dlc::F0);                              // fdl eqn [7.25]
+  const auto fkl = double{(LATENT_RGAS_V / TEMP - 1.0) * DC::LATENT_V / (THERMK * dlc::F0)}; // fkl eqn [7.23]
+  const auto fdl = double{TEMP / (DIFFUSE_V * PSAT) / dlc::F0};                              // fdl eqn [7.25]
 
   return dlc::Rho_l * (fkl + fdl); // total constant from diffusion factors
 }

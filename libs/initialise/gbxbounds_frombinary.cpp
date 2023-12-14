@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -256,8 +256,8 @@ using boundaries corresponding to gridbox with gbxidx=idx. */
   const auto xbounds(get_coord1gbxbounds(idx));
   const auto ybounds(get_coord2gbxbounds(idx));
 
-  const double deltax(xbounds.second - xbounds.first);     // xmax - xmin
-  const double deltay(ybounds.second - ybounds.first);     // ymax - ymin
+  const auto deltax = double{xbounds.second - xbounds.first};     // xmax - xmin
+  const auto deltay = double{ybounds.second - ybounds.first};     // ymax - ymin
 
   return deltax * deltay;
 }
@@ -271,9 +271,9 @@ corresponding to gridbox with gbxidx=idx. */
   const auto xbounds(get_coord1gbxbounds(idx));
   const auto ybounds(get_coord2gbxbounds(idx));
 
-  const double deltaz(zbounds.second - zbounds.first);     // zmax - zmin
-  const double deltax(xbounds.second - xbounds.first);     // xmax - xmin
-  const double deltay(ybounds.second - ybounds.first);     // ymax - ymin
+  const auto deltaz = double{zbounds.second - zbounds.first};     // zmax - zmin
+  const auto deltax = double{xbounds.second - xbounds.first};     // xmax - xmin
+  const auto deltay = double{ybounds.second - ybounds.first};     // ymax - ymin
 
   return deltaz * deltax * deltay;
 }

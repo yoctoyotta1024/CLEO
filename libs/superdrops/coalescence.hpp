@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -86,7 +86,7 @@ CollCoal(const unsigned int interval,
 of superdroplets with a constant timestep 'interval' and
 probability of collision-coalescence determined by 'collcoalprob' */
 {
-  const double DELT(int2realtime(interval));
+  const auto DELT = int2realtime(interval);
 
   const DoCoalescence coal{};
   const DoCollisions<Probability, DoCoalescence> colls(DELT,
@@ -180,13 +180,15 @@ Section 5.1.3. part (5) option (b).
 Note: implicit casting of gamma (i.e. therefore droplets'
 xi values) from unsigned long long to double. */
 {
-  const unsigned long long old_xi(drop2.get_xi()); // = drop1.xi
-  const unsigned long long new_xi(old_xi / 2);
+  const auto old_xi = unsigned long long{drop2.get_xi()}; // = drop1.xi
+  const auto new_xi = unsigned long long{old_xi / 2};
 
-  const double new_rcubed = drop2.rcubed() + gamma * drop1.rcubed();
-  const double new_r = Kokkos::pow(new_rcubed, (1.0 / 3.0));
+  const auto new_rcubed = double{drop2.rcubed() +
+                                 gamma * drop1.rcubed()};
+  const auto new_r = double{Kokkos::pow(new_rcubed, (1.0 / 3.0))};
 
-  const double new_msol =  drop2.get_msol() + gamma * drop1.get_msol();
+  const auto new_msol = double{drop2.get_msol() +
+                               gamma * drop1.get_msol()};
 
   drop1.set_xi(new_xi);
   drop2.set_xi(old_xi - new_xi);
@@ -210,7 +212,8 @@ xi values) from unsigned long long to double. */
 {
   drop1.set_xi(drop1.get_xi() - gamma * drop2.get_xi());
 
-  const double new_rcubed = drop2.rcubed() + gamma * drop1.rcubed();
+  const auto new_rcubed = double{drop2.rcubed() +
+                                 gamma * drop1.rcubed()};
 
   drop2.set_radius(Kokkos::pow(new_rcubed, (1.0 / 3.0)));
   drop2.set_msol(drop2.get_msol() + gamma * drop1.get_msol());

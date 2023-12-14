@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -47,7 +47,7 @@ double surfenergy(const double radius)
 /* returns energy due to surface tension of a single
 drop, analogous to equation 4.2 of Low and List 1982 */
 {
-  const double rsqrd(radius * radius); // * R0sqrd to convert to [m^2]
+  const auto rsqrd = double{radius * radius}; // * R0sqrd to convert to [m^2]
 
   return dlc::surfconst * rsqrd; // = surfe, droplet surface energy
 }
@@ -58,7 +58,7 @@ double total_surfenergy(const double r1, const double r2)
 pair of droplets with radii r1 and r2 as in
 equation 4.2 of Low and List 1982 */
 {
-  const double rsqrdsum((r1 * r1) + (r2 * r2)); // * R0sqrd to convert to [m^2]
+  const auto rsqrdsum = double{(r1 * r1) + (r2 * r2)}; // * R0sqrd to convert to [m^2]
 
   return dlc::surfconst * rsqrdsum; // = tot_surfe, total surface energy
 }
@@ -84,12 +84,12 @@ radii r1 and r2 and terminal velocities of droplets */
   constexpr double ckeconst = R0cubed * 2.0 / 3.0 * DC::RHO_L *
                               Kokkos::numbers::pi * dlc::W0;
 
-  const double r1cubed(r1 * r1 * r1);
-  const double r1_r2cubed((r1 / r2) * (r1 / r2) * (r1 / r2));
-  const double rratio(r1cubed / 1 + r1_r2cubed); // * R0cubed to convert to [m^3]
+  const auto r1cubed = double{r1 * r1 * r1};
+  const auto r1_r2cubed = double{(r1 / r2) * (r1 / r2) * (r1 / r2)};
+  const auto rratio = double{r1cubed / 1 + r1_r2cubed}; // * R0cubed to convert to [m^3]
 
-  const double vdiff(terminalv1 - terminalv2); // * dlc::W0 to convert to [m/s]
-  const double cke(ckeconst * rratio * vdiff * vdiff);
+  const auto vdiff = double{terminalv1 - terminalv2}; // * dlc::W0 to convert to [m/s]
+  const auto cke = double{ckeconst * rratio * vdiff * vdiff};
 
   return cke;
 }
@@ -100,12 +100,12 @@ double coal_surfenergy(const double r1, const double r2)
 coalesced state of two drops, divided by pi as in
 equation 4.3 of Low and List 1982 */
 {
-  const double r1cubed(r1 * r1 * r1);
-  const double r2cubed(r2 * r2 * r2);
-  const double rcubedsum(r1cubed + r2cubed);
+  const auto r1cubed = double{r1 * r1 * r1};
+  const auto r2cubed = double{r2 * r2 * r2};
+  const auto rcubedsum = double{r1cubed + r2cubed};
 
-  const double equiv_surfe(dlc::surfconst *
-                           Kokkos::pow(rcubedsum, 2.0 / 3.0));
+  const auto equiv_surfe = double{dlc::surfconst *
+                           Kokkos::pow(rcubedsum, 2.0 / 3.0)};
 
   return equiv_surfe; // coalesced (spherical equivalent) surface energy
 }

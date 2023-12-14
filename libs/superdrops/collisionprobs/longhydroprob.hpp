@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -72,7 +72,7 @@ public:
   using Simmel et al. 2002's formulation of Long's
   hydrodynamic, ie. gravitational, Kernel */
   {
-    const double eff = kerneleff(drop1, drop2);
+    const auto eff = kerneleff(drop1, drop2);
     return hydroprob(drop1, drop2, eff, DELT, VOLUME);
   }
 };
@@ -93,18 +93,18 @@ double LongHydroProb::kerneleff(const Superdrop &drop1,
   constexpr double A1 = 4.5e4 * dlc::R0 * dlc::R0; // constants in efficiency calc if larger droplet's radius < rlim
   constexpr double A2 = 3e-4 / dlc::R0;
 
-  const double smallr(Kokkos::fmin(drop1.get_radius(), drop2.get_radius()));
-  const double bigr(Kokkos::fmax(drop1.get_radius(), drop2.get_radius()));
+  const auto smallr = double{Kokkos::fmin(drop1.get_radius(), drop2.get_radius())};
+  const auto bigr = double{Kokkos::fmax(drop1.get_radius(), drop2.get_radius())};
 
   /* calculate collision-coalescence efficiency, eff = colleff * coaleff */
-  double colleff(1.0);
+  auto colleff = double{1.0};
   if (bigr < rlim)
   {
-    const double colleff_calc(A1 * bigr * bigr * (1 - A2 / smallr));
+    const auto colleff_calc = double{A1 * bigr * bigr * (1 - A2 / smallr)};
     colleff = Kokkos::fmax(colleff_calc, colleff_lim); // colleff >= colleff_lim
   }
 
-  const double eff = colleff * coaleff;
+  const auto eff = colleff * coaleff;
 
   return eff;
 }

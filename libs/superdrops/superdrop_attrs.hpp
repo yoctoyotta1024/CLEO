@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -99,7 +99,7 @@ struct SuperdropAttrs
   radius if drop was entirely made of solute */
   {
     constexpr double vconst = 3.0 / (4.0 * Kokkos::numbers::pi);
-    const double dryrcubed = vconst * msol / solute.rho_sol();
+    const auto dryrcubed = double{vconst * msol / solute.rho_sol()};
     return Kokkos::pow(dryrcubed, 1.0 / 3.0);
   }
 
@@ -128,10 +128,10 @@ double SuperdropAttrs::change_radius(const double newr)
 return resultant change in radius (delta_radius = newradius-radius). 
 Prevents drops shrinking further once they are size of dry_radius(). */
 {
-	const double oldradius(radius);
+	const auto oldradius = radius;
 
 	/*  if droplets are dry, do not shrink further */
-  const double dryr(dryradius());
+  const auto dryr = dryradius();
   radius = Kokkos::fmax(newr, dryr); // Kokkos compatible equivalent to std::max() for floating point numbers 
 
   /* return change in radius due to growth/shrinking of droplet */
@@ -142,10 +142,12 @@ KOKKOS_INLINE_FUNCTION
 double SuperdropAttrs::mass() const
 /* returns total droplet mass = water + dry areosol  */
 {
-  constexpr double massconst(4.0 / 3.0 * Kokkos::numbers::pi * dlc::Rho_l); // 4/3 * pi * density
-  const double density_factor(1.0 - dlc::Rho_l / solute.rho_sol()); // to account for msol
+  constexpr double massconst(4.0 / 3.0 *
+                             Kokkos::numbers::pi * dlc::Rho_l);            // 4/3 * pi * density
+  const auto density_factor = double{1.0 -
+                                     dlc::Rho_l / solute.rho_sol()}; // to account for msol
 
-  double mass(msol * density_factor); // mass contribution of solute
+  auto mass = double{msol * density_factor}; // mass contribution of solute
   mass += massconst * rcubed();
 
   return mass;

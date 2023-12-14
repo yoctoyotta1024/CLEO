@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 12th December 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,8 +44,8 @@ see calc_massmoments_serial.
       Kokkos::RangePolicy<ExecSpace>(0, nsupers),
       KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
         
-        const double xi = (double)(supers(kk).get_xi()); // cast multiplicity from unsigned int to double
-        const double mass(supers(kk).mass()); 
+        const auto xi = (double)(supers(kk).get_xi()); // cast multiplicity from unsigned int to double
+        const auto mass = supers(kk).mass(); 
         m0 += xi;
         m1 += xi * mass;
         m2 += xi * mass * mass;
@@ -80,8 +80,8 @@ see calc_rainmassmoments_serial
       KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
         if (supers(kk).get_radius() >= rlim)
         {
-          const double xi = (double)(supers(kk).get_xi()); // cast multiplicity from unsigned int to double
-          const double mass(supers(kk).mass());
+          const auto xi = (double)(supers(kk).get_xi()); // cast multiplicity from unsigned int to double
+          const auto mass = supers(kk).mass();
           m0 += xi;
           m1 += xi * mass;
           m2 += xi * mass * mass;
@@ -104,8 +104,8 @@ moment of the droplet radius distribution */
   std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
   for (size_t kk(0); kk < h_supers.extent(0); ++kk)
   {
-    const double xi = (double)(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
-    const double mass(h_supers(kk).mass());
+    const auto xi = (double)(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
+    const auto mass = h_supers(kk).mass();
     moms.at(0) += xi;
     moms.at(1) += xi * mass;
     moms.at(2) += xi * mass * mass;
@@ -131,8 +131,8 @@ are all droplets with r >= rlim = 40 microns */
   {
     if (h_supers(kk).get_radius() >= rlim)
     {
-      const double xi = (double)(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
-      const double mass(h_supers(kk).mass());
+      const auto xi = (double)(h_supers(kk).get_xi()); // cast multiplicity from unsigned int to double
+      const auto mass = h_supers(kk).mass();
       moms.at(0) += xi;
       moms.at(1) += xi * mass;
       moms.at(2) += xi * mass * mass;

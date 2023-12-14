@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -79,8 +79,8 @@ public:
                      const GbxMaps &gbxmaps,
                      const viewd_supers totsupers) const
   {
-    const auto gbxindex(GbxindexGen->next(ii));
-    const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
+    const auto gbxindex = GbxindexGen->next(ii);
+    const auto volume = gbxmaps.get_gbxvolume(gbxindex.value);
     const State state(state_at(ii, volume));
 
     return Gridbox(gbxindex, state, totsupers);
@@ -93,8 +93,8 @@ public:
                      const viewd_supers totsupers,
                      const viewd_constsupers::HostMirror h_totsupers) const
   {
-    const auto gbxindex(GbxindexGen->next(ii));
-    const double volume(gbxmaps.get_gbxvolume(gbxindex.value));
+    const auto gbxindex = GbxindexGen->next(ii);
+    const auto volume = gbxmaps.get_gbxvolume(gbxindex.value);
     const State state(state_at(ii, volume));
     const kkpair_size_t refs(find_refs(team_member,
                                        h_totsupers,

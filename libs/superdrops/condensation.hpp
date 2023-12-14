@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * struct for condensation / evaporation of water
  * causing diffusional growth / shrinking of
  * droplets in SDM. Equations referenced as (eqn [X.YY])
- * are from "An Introduction To Clouds From The 
+ * are from "An Introduction To Clouds From The
  * Microscale to Climate" by Lohmann, Luond
  * and Mahrt, 1st edition.
  */
@@ -47,8 +47,8 @@ struct DoCondensation
 condensation / evaporation microphysical process */
 {
 private:
-  bool doAlterThermo;          // whether to make condensation alter ThermoState or not
-  ImplicitEuler impe;                 // implicit euler solver
+  bool doAlterThermo; // whether to make condensation alter ThermoState or not
+  ImplicitEuler impe; // implicit euler solver
 
   KOKKOS_FUNCTION
   void do_condensation(const TeamMember &team_member,
@@ -105,7 +105,7 @@ public:
                  const double subdelt)
       : doAlterThermo(doAlterThermo),
         impe(niters, delt, maxrtol, maxatol, subdelt) {}
- 
+
   KOKKOS_INLINE_FUNCTION subviewd_supers
   operator()(const TeamMember &team_member,
              const unsigned int subt,
@@ -137,8 +137,8 @@ condensation/evaporation of superdroplets with a
 constant timestep 'interval' given the
 "do_condensation" function-like type */
 {
-  const double delt = step2dimlesstime(interval);   // dimensionless time [] equivlent to interval
-  const double subdelt = realtime2dimless(SUBDELT); // dimensionless time [] equivlent to SUBDELT [s]
+  const auto delt = step2dimlesstime(interval);   // dimensionless time [] equivlent to interval
+  const auto subdelt = realtime2dimless(SUBDELT); // dimensionless time [] equivlent to SUBDELT [s]
 
   const auto do_cond = DoCondensation(doAlterThermo, niters,
                                       delt, maxrtol, maxatol,
@@ -175,30 +175,26 @@ double DoCondensation::
     superdroplets_change(const TeamMember &team_member,
                          const subviewd_supers supers,
                          const State &state) const
-/* returns total change in liquid water mass in parcel 
+/* returns total change in liquid water mass in parcel
 volume, 'mass_condensed', by enacting superdroplets'
 condensation / evaporation. Kokkos::parallel_reduce([...])
 is equivalent to summing deltamass over for loop:
-for (size_t kk(0); kk < nsupers; ++kk) {[...]} 
+for (size_t kk(0); kk < nsupers; ++kk) {[...]}
 when in serial*/
 {
-  const size_t nsupers(supers.extent(0));
-  
-  const double press(state.press);
-  const double temp(state.temp);
-  const double qvap(state.qvap);
+  const auto nsupers = size_t{supers.extent(0)};
 
-  const double psat(saturation_pressure(temp));
-  const double s_ratio(supersaturation_ratio(press, qvap, psat));
-  const double ffactor(diffusion_factor(press, temp, psat));
+  const auto psat = saturation_pressure(state.temp);
+  const auto s_ratio = supersaturation_ratio(state.press, state.qvap, psat);
+  const auto ffactor = diffusion_factor(state.press, state.temp, state.psat);
 
-  double totmass_condensed(0.0);                     // cumulative change to liquid mass in parcel volume 'dm'
+  auto totmass_condensed = double{0.0}; // cumulative change to liquid mass in parcel volume 'dm'
   Kokkos::parallel_reduce(
       Kokkos::TeamThreadRange(team_member, nsupers),
       [&, this](const size_t kk, double &mass_condensed)
       {
-        const double deltamass(superdrop_mass_change(supers(kk), temp,
-                                                     s_ratio, ffactor));
+        const auto deltamass = superdrop_mass_change(supers(kk), state.temp,
+                                                     s_ratio, ffactor);
         mass_condensed += deltamass;
       },
       totmass_condensed);
@@ -221,17 +217,17 @@ double DoCondensation::superdrop_mass_change(Superdrop &drop,
 {
   /* do not pass r by reference here!! copy value into iterator */
   const auto ab_kohler = kohler_factors(drop, temp); // pair = {akoh, bkoh}
-  const double newr(impe.solve_condensation(s_ratio, ab_kohler, ffactor,
-                                            drop.get_radius())); // timestepping eqn [7.28] forward
-  const double delta_radius(drop.change_radius(newr));
+  const auto newr = impe.solve_condensation(s_ratio, ab_kohler, ffactor,
+                                            drop.get_radius()); // timestepping eqn [7.28] forward
+  const auto delta_radius = double{drop.change_radius(newr)};
 
   constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;
   constexpr double dmdt_const = 4.0 * Kokkos::numbers::pi * dlc::Rho_l * R0cubed;
-  const double rsqrd(drop.get_radius() * drop.get_radius());
-  const double mass_condensed = (dmdt_const * rsqrd *
-                                 drop.get_xi() * delta_radius); // eqn [7.22] * delta t
+  const auto rsqrd = double{drop.get_radius() * drop.get_radius()};
+  const auto mass_condensed = double{dmdt_const * rsqrd *
+                                     drop.get_xi() * delta_radius}; // eqn [7.22] * delta t
 
-  return mass_condensed;  
+  return mass_condensed;
 }
 
 KOKKOS_FUNCTION
@@ -243,14 +239,17 @@ void DoCondensation::effect_on_thermodynamic_state(
 member to change the state due to the effect
 of condensation / evaporation */
 {
-  Kokkos::single(Kokkos::PerTeam(team_member), [&, this](State &state)
-                 {
+  Kokkos::single(
+      Kokkos::PerTeam(team_member),
+      [&, this](State &state)
+      {
   if (doAlterThermo)
   {
-    const double VOLUME(state.get_volume() * dlc::VOL0);       // volume in which condensation occurs [m^3]
-    const double totrho_condensed(totmass_condensed / VOLUME); // drho_condensed_vapour/dt * delta t
+    const auto VOLUME = double{state.get_volume() * dlc::VOL0};       // volume in which condensation occurs [m^3]
+    const auto totrho_condensed = double{totmass_condensed / VOLUME}; // drho_condensed_vapour/dt * delta t
     state = state_change(totrho_condensed, state);
-  } }, state);
+  } },
+      state);
 }
 
 KOKKOS_FUNCTION State
@@ -260,10 +259,10 @@ DoCondensation::state_change(const double totrho_condensed,
 ThermoState state given the total change in condensed
 water mass per volume during time interval delt */
 {
-  const double delta_qcond = totrho_condensed / dlc::Rho_dry;
-  const double delta_temp = (dlc::Latent_v /
-                             moist_specifc_heat(state.qvap, state.qcond)) *
-                            delta_qcond;
+  const auto delta_qcond = double{totrho_condensed / dlc::Rho_dry};
+  const auto delta_temp = double{(dlc::Latent_v /
+                                  moist_specifc_heat(state.qvap, state.qcond)) *
+                                 delta_qcond};
 
   state.temp += delta_temp;
   state.qvap -= delta_qcond;

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -108,14 +108,14 @@ conditions (rho_dry0) and in current state (rho_dry). */
   constexpr double a3 = 1732 / VELCONST;
   constexpr double a4 = 917 / VELCONST;
 
-  const double radius(drop.get_radius()); // dimensionless droplet radius []
+  const auto radius = drop.get_radius(); // dimensionless droplet radius []
   if (radius >= r3)
   {
     return a4;
   }
   else
   {
-    const double MASS(drop.mass() * MASSCONST); // droplet mass in grams [g]
+    const auto MASS = drop.mass() * MASSCONST; // droplet mass in grams [g]
 
     if (radius >= r2)
     {
@@ -152,7 +152,7 @@ sized droplet = 9m/s. */
   constexpr double k3 = 201 / dlc::W0;                        // k3 in eqn (8.6) in [m^(-1/2)]
   constexpr double k4 = 9 / dlc::W0;                          // k4 is max fall speed [dimensionless]
 
-  const double radius(drop.get_radius());
+  const auto radius = drop.get_radius();
   if (radius < r1)
   {
     return k1 * Kokkos::pow(radius, 2.0); // eqn (8.5)

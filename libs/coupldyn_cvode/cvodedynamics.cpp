@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,7 +37,7 @@ prints statement about cvode ODEs configuration */
 void CvodeDynamics::print_initODEstatement() const
 /* print initial ODE setup to the terminal screen */
 {
-  const double dimless_next_t(step2dimlesstime(interval));
+  const auto dimless_next_t = double{step2dimlesstime(interval)};
 
   std::cout << "-------- CVODE ODE configuration ------------\n"
             << "No. Variables (NVARS) = " << NVARS << '\n'
@@ -63,7 +63,7 @@ next_t = step2dimlesstime(t_next) */
     previousstates.at(i) = NV_Ith_S(y, i); // state 
   }
 
-  const double dimless_next_t(step2dimlesstime(t_next));
+  const auto dimless_next_t = double{step2dimlesstime(t_next)};
   retval = CVode(cvode_mem, dimless_next_t, y, &t, CV_NORMAL);
   if (check_retval(&retval, "CVode", 1))
     return 1;
@@ -110,8 +110,8 @@ CvodeDynamics::CvodeDynamics(const Config &config,
   data = (UserData)malloc(sizeof *data);
   previousstates = initial_conditions(config);
 
-  const double wmax = (M_PI / 2) * (config.W_AVG / dlc::W0);  // dimensionless w velocity passed to thermo ODEs eg. dp_dt(t,y,ydot,w,...)
-  const double tauhalf = (config.T_HALF / dlc::TIME0) / M_PI; // dimensionless timescale for w sinusoid
+  const auto wmax = double{(M_PI / 2) * (config.W_AVG / dlc::W0)};  // dimensionless w velocity passed to thermo ODEs eg. dp_dt(t,y,ydot,w,...)
+  const auto tauhalf = double{(config.T_HALF / dlc::TIME0) / M_PI}; // dimensionless timescale for w sinusoid
   init_userdata(neq, wmax, tauhalf);
   setup_ODE_solver(config.cvode_rtol, config.cvode_atol);
 }
@@ -138,13 +138,13 @@ CvodeDynamics::initial_conditions(const Config &config) const
 for thermodynamic variables (p, temp, qv, qc) to
 initialise cvode thermodynamics solver */
 {
-  const double press_i(config.P_INIT / dlc::P0);
-  const double temp_i(config.TEMP_INIT / dlc::TEMP0);
-  const double qcond_i(0.0);
+  const auto press_i = double{config.P_INIT / dlc::P0};
+  const auto temp_i = double{config.TEMP_INIT / dlc::TEMP0};
+  const auto qcond_i = double{0.0};
 
-  const double psat(cvode_saturationpressure(temp_i));
-  const double vapp(psat * config.relh_init / 100.0); // initial vapour pressure
-  const double qvap_i(cvode_massmixingratio(vapp, press_i));
+  const auto psat = double{cvode_saturationpressure(temp_i)};
+  const auto vapp = double{psat * config.relh_init / 100.0}; // initial vapour pressure
+  const auto qvap_i = double{cvode_massmixingratio(vapp, press_i)};
 
   std::vector<double> y_init(neq);
   for (size_t k = 0; k < neq; k += NVARS)

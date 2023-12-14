@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 29th October 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,7 +40,7 @@ to dimensionless psat = psat/P0. */
   constexpr double TREF = 273.16;  // Triple point temperature [K] of water
   constexpr double PREF = 611.655; // Triple point pressure [Pa] of water
 
-  const double T(temp * dlc::TEMP0); // real T [K]
+  const auto T = double{temp * dlc::TEMP0}; // real T [K]
 
   return (PREF * std::exp(A * (T - TREF) / (T - B))) / dlc::P0; // dimensionless psat
 }
@@ -104,8 +104,8 @@ int odes_func(realtype t, N_Vector y, N_Vector ydot, void *user_data)
 
   UserData data = (UserData)user_data;
   const size_t neq(data->neq);
-  const double wmax(data->wmax);
-  const double tauhalf(data->tauhalf);
+  const auto wmax = double{data->wmax};
+  const auto tauhalf = double{data->tauhalf};
 
   for (size_t k = 0; k < neq; k += NVARS) // loop over grid boxes
   {

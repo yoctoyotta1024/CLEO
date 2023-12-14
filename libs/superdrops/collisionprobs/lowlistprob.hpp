@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -130,9 +130,9 @@ public:
   hydrodyanmic kernel for the collision probability modified
   by the coalescence efficiency from Low and List 1982(a). */
   {
-    const double bueff(1.0 - ll.get_coaleff(drop1, drop2));
-    const double longprob(ll.get_longprob(drop1, drop2,
-                                          DELT, VOLUME));
+    const auto bueff = double{1.0 - ll.get_coaleff(drop1, drop2)};
+    const auto longprob = double{ll.get_longprob(drop1, drop2,
+                                                 DELT, VOLUME)};
     return longprob * bueff;
   }
 };
@@ -141,7 +141,7 @@ public:
 
 KOKKOS_INLINE_FUNCTION
 double LowListCoalProb::coaleff(const Superdrop &drop1,
-               const Superdrop &drop2) const
+                                const Superdrop &drop2) const
 /* returns coaleff, the coalescence efficiency
 of two droplets (given that they have collided)
 according to equations (4.5) and (4.6)
@@ -150,21 +150,23 @@ Low and List 1982(a) */
   constexpr double aconst = 0.778;
   constexpr double elim = 5e-6; // total energy limit [J]
 
-  const double r1(drop1.get_radius());
-  const double r2(drop2.get_radius());
+  const auto r1 = double{drop1.get_radius()};
+  const auto r2 = double{drop2.get_radius()};
   const auto terminalv = SimmelTerminalVelocity{};
 
-  const double cke(collision_kinetic_energy(r1, r2,
-                                            terminalv(drop1),
-                                            terminalv(drop2)));
-  const double surf_t(total_surfenergy(r1, r2)); // [J] S_t
-  const double surf_c(coal_surfenergy(r1, r2));  // [J] S_c
-  const double etot(cke + surf_t - surf_c);            // [J] total energy
+  const auto cke = double{collision_kinetic_energy(r1, r2,
+                                                   terminalv(drop1),
+                                                   terminalv(drop2))};
+  const auto surf_t = double{total_surfenergy(r1, r2)}; // [J] S_t
+  const auto surf_c = double{coal_surfenergy(r1, r2)};  // [J] S_c
+  const auto etot = double{cke + surf_t - surf_c};      // [J] total energy
 
   if (etot < elim)
   {
-    const double radiiratio = sizeratio_factor(r1, r2);
-    const double coaleff = aconst * radiiratio * expon(etot, surf_c);
+    const auto radiiratio = sizeratio_factor(r1, r2);
+    const auto coaleff = double{aconst *
+                                radiiratio *
+                                expon(etot, surf_c)};
 
     return coaleff;
   }
@@ -176,7 +178,7 @@ Low and List 1982(a) */
 
 KOKKOS_INLINE_FUNCTION
 double LowListCoalProb::expon(const double etot,
-            const double surf_c) const
+                              const double surf_c) const
 /* returns the exponential factor in eqn 4.5
 Low and List 1982(a) given the total collision energy,
 etot [J] and equivalent surface energy, surf_c [J] */
@@ -184,20 +186,20 @@ etot [J] and equivalent surface energy, surf_c [J] */
   constexpr double bconst = -2.62e6; // [J^-2]
   constexpr double sigma = 7.28e-2;  // [J/m^-2]
 
-  const double exponent(bconst * sigma * etot * etot / surf_c);
+  const auto exponen = double{bconst * sigma * etot * etot / surf_c};
 
   return Kokkos::exp(exponent);
 }
 
 KOKKOS_INLINE_FUNCTION
 double LowListCoalProb::sizeratio_factor(const double r1,
-                        const double r2) const
+                                         const double r2) const
 /* returns factor that takes into account the size
 ratio of droplets in eqn 4.5 Low and List 1982(a). */
 {
-  const double rsmall(Kokkos::fmin(r1, r2));
-  const double rbig(Kokkos::fmax(r1, r2));
-  const double alpha(1 + rsmall / rbig); // alpha = 1 + Ds/Dl
+  const auto rsmall = double{Kokkos::fmin(r1, r2)};
+  const auto rbig = double{Kokkos::fmax(r1, r2)};
+  const auto alpha = double{1 + rsmall / rbig}; // alpha = 1 + Ds/Dl
 
   return 1.0 / (alpha * alpha); // alpha^(-2)
 }

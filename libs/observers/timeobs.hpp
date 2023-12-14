@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -86,7 +86,7 @@ public:
   /* converts integer model timestep to dimensionless time,
   then writes to zarr coordinate storage */
   {
-    const double time(step2dimlesstime(t_mdl));
+    const auto time = step2dimlesstime(t_mdl);
     zarr->value_to_storage(time);
   }
 

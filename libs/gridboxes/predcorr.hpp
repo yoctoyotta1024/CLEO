@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -55,7 +55,7 @@ a simple linear interpolation. Methods follows
 equations in Grabowski et al. 2018 */
 {
 private:
-  const double delt;                // equivalent of motionstep as dimensionless time
+  const double delt;  // equivalent of motionstep as dimensionless time
   const TV terminalv; // returns terminal velocity given a superdroplet
 
   KOKKOS_INLINE_FUNCTION
@@ -103,23 +103,23 @@ private:
                       const State &state,
                       const Superdrop &drop) const
   {
-    double coord3(drop.get_coord3());
+    auto coord3 = drop.get_coord3();
 
-    const double terminal = terminalv(drop);
+    const auto terminal = terminalv(drop);
 
     /* corrector velocities based on predicted coords */
-    double vel3 = interp_wvel(gbxindex, gbxmaps, state, coord3);
+    auto vel3 = interp_wvel(gbxindex, gbxmaps, state, coord3);
     vel3 -= terminal;
 
     /* predictor coords given velocity at previous coords */
     coord3 += vel3 * delt; // move by w wind + terminal velocity
 
     /* corrector velocities based on predicted coords */
-    double corrvel3 = interp_wvel(gbxindex, gbxmaps, state, coord3);
+    auto corrvel3 = interp_wvel(gbxindex, gbxmaps, state, coord3);
     corrvel3 -= terminal;
 
     /* predicted-corrected change to superdrop coords */
-    const double delta3((vel3 + corrvel3) * (delt / 2));
+    const auto delta3 = double{(vel3 + corrvel3) * (delt / 2)};
 
     return delta3;
   }
@@ -130,19 +130,19 @@ private:
                       const State &state,
                       const Superdrop &drop) const
   {
-    double coord1(drop.get_coord1());
+    auto coord1 = drop.get_coord1();
 
     /* corrector velocities based on predicted coords */
-    const double vel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
+    const auto vel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
 
     /* predictor coords given velocity at previous coords */
     coord1 += vel1 * delt; // move by u wind
 
     /* corrector velocities based on predicted coords */
-    const double corrvel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
+    const auto corrvel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
 
     /* predicted-corrected change to superdrop coords */
-    const double delta1((vel1 + corrvel1) * (delt / 2));
+    const auto delta1 = double{(vel1 + corrvel1) * (delt / 2)};
 
     return delta1;
   }
@@ -153,19 +153,19 @@ private:
                       const State &state,
                       const Superdrop &drop) const
   {
-    double coord2(drop.get_coord2());
+    auto coord2 = drop.get_coord2();
 
     /* corrector velocities based on predicted coords */
-    const double vel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
+    const auto vel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
 
     /* predictor coords given velocity at previous coords */
     coord2 += vel2 * delt; // move by v wind
 
     /* corrector velocities based on predicted coords */
-    const double corrvel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
+    const auto corrvel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
 
     /* predicted-corrected change to superdrop coords */
-    const double delta2((vel2 + corrvel2) * (delt / 2));
+    const auto delta2 = double{(vel2 + corrvel2) * (delt / 2)};
 
     return delta2;
   }
@@ -184,20 +184,20 @@ public:
                   Superdrop &drop) const
   /* operator to satisfiy requirements of the
   "update_superdrop_coords" function in the motion
-  concept. Operator uses predictor-corrector method to 
+  concept. Operator uses predictor-corrector method to
   forward timestep a superdroplet's coordinates using
   the interpolated wind velocity from a gridbox's state */
   {
     /* Use predictor-corrector method to get change in SD coords */
-    const double delta3 = delta_coord3(gbxindex, gbxmaps, state, drop);
-    const double delta1 = delta_coord1(gbxindex, gbxmaps, state, drop);
-    const double delta2 = delta_coord2(gbxindex, gbxmaps, state, drop);
+    const auto delta3 = delta_coord3(gbxindex, gbxmaps, state, drop);
+    const auto delta1 = delta_coord1(gbxindex, gbxmaps, state, drop);
+    const auto delta2 = delta_coord2(gbxindex, gbxmaps, state, drop);
 
     /* CFL check on predicted change to SD coords */
     cfl_criteria(gbxmaps, gbxindex, delta3, delta1, delta2);
 
     /* update SD coords */
-    drop.increment_coords(delta3, delta1, delta2); 
+    drop.increment_coords(delta3, delta1, delta2);
   }
 };
 
@@ -213,15 +213,15 @@ return wind at [X] coord. Method is 'simple' linear interpolation
 from Grabowski et al. (2018). coord use in interpolation is
 limited to lower_bound <= coord <= upper_bound. */
 {
-  const double coord(Kokkos::fmin(bounds.second,
-                                  Kokkos::fmax(bounds.first,
-                                               sdcoord))); // limit coord to within bounds
+  const auto coord = double{Kokkos::fmin(bounds.second,
+                                         Kokkos::fmax(bounds.first,
+                                                      sdcoord))}; // limit coord to within bounds
 
-  const double alpha((coord - bounds.first) /
-                     (bounds.second - bounds.first));
+  const auto alpha = double{(coord - bounds.first) /
+                            (bounds.second - bounds.first)};
 
-  const double interp(alpha * vel.second +
-                      (1 - alpha) * vel.first); // simple linear interpolation
+  const auto interp = double{alpha * vel.second +
+                             (1 - alpha) * vel.first}; // simple linear interpolation
 
   return interp;
 }

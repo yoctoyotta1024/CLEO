@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -120,8 +120,8 @@ struct ImplicitIteration
   iterations has not yet been met. Criteria is standard local error
   test: |iteration - previous iteration| < RTOL * |iteration| + ATOL */
   {
-    const double converged = rtol * Kokkos::abs(gfunciter) + atol;
-    const double currentvalue = Kokkos::abs(gfunciter - gfuncprev);
+    const auto converged = double{rtol * Kokkos::abs(gfunciter) + atol};
+    const auto currentvalue = double{Kokkos::abs(gfunciter - gfuncprev)};
 
     return (currentvalue >= converged); // true means it's not yet converged
   }
@@ -205,16 +205,18 @@ near to supersaturation=1 (when activation / deactivation may occur).
 Refer to section 5.1.2 Shima et al. 2009 and section 3.3.3 of
 Matsushima et al. 2023 for more details. */
 {
-  const double akoh(kohler_ab.first);
-  const double bkoh(kohler_ab.second);
+  const auto akoh = double{kohler_ab.first};
+  const auto bkoh = double{kohler_ab.second};
 
-  const double s_act(1 + Kokkos::sqrt(4.0 * Kokkos::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
+  const auto s_act = double{1 + Kokkos::sqrt(4.0 / 27.0 *
+                                             Kokkos::pow(akoh, 3.0) /
+                                             bkoh)}; // activation supersaturation
   if ((s_ratio > 0.999 * s_act) && (s_ratio < 1.001 * s_act))
   /* if supersaturation close to s_act, activation or
   deactivation might occur so perform subtimestepping */
   {
-    const unsigned int nsubs = Kokkos::ceil(delt / subdelt);
-    const double subt = delt / (double)nsubs;
+    const auto nsubs =  unsigned int{Kokkos::ceil(delt / subdelt)};
+    const auto subt = double{delt / (double)nsubs};
     const ImplicitIteration implit{niters, subt, maxrtol, maxatol,
                                    s_ratio, akoh, bkoh, ffactor};
 
@@ -229,7 +231,7 @@ Matsushima et al. 2023 for more details. */
   {
     const ImplicitIteration implit{niters, delt, maxrtol, maxatol,
                                    s_ratio, akoh, bkoh, ffactor};
-    double init_ziter(implit.initialguess(rprev));
+    auto init_ziter double{implit.initialguess(rprev)};
     return implit.newtonraphson_niterations(rprev, init_ziter);
   }
 }
@@ -250,22 +252,22 @@ on the uniqueness criteria of the polynomial g(z). Refer to section
 5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023
 for more details. */
 {
-  const double akoh(kohler_ab.first);
-  const double bkoh(kohler_ab.second);
+  const auto akoh = double{kohler_ab.first};
+  const auto bkoh = double{kohler_ab.second};
 
-  const double max_uniquedelt(2.5 * ffactor / akoh *
-                              Kokkos::pow(5.0 * bkoh / akoh, 1.5));
-  const double ract_ratio(rprev * rprev * akoh / 3.0 / bkoh);
+  const auto max_uniquedelt = double{2.5 * ffactor / akoh *
+                                     Kokkos::pow(5.0 * bkoh / akoh, 1.5)};
+  const auto ract_ratio = double{rprev * rprev * akoh / 3.0 / bkoh};
 
-  const bool ucrit1((s_ratio <= 1.0 && ract_ratio < 1.0));
-  const bool ucrit2(delt <= max_uniquedelt);
+  const auto ucrit1 = bool{(s_ratio <= 1.0 && ract_ratio < 1.0)};
+  const auto ucrit2 = bool{delt <= max_uniquedelt};
 
   if (ucrit1 || ucrit2)
   /* at least one criteria is met such that there is unique solution */
   {
     const ImplicitIteration implit{niters, delt, maxrtol, maxatol,
                                    s_ratio, akoh, bkoh, ffactor};
-    double init_ziter(implit.initialguess(rprev));
+    auto init_ziter = double{implit.initialguess(rprev)};
     return implit.newtonraphson_niterations(rprev, init_ziter);
   }
 
@@ -274,8 +276,8 @@ for more details. */
   Convergence may be slower so allow >= 3 Newton Raphson
   iterations (could also refine tolerances) */
   {
-    double subt(Kokkos::fmax(max_uniquedelt, subdelt)); // Kokkos compatible equivalent to std::max() for floating point numbers
-    const unsigned int nsubs = Kokkos::ceil(delt / subt);
+    auto subt = double{Kokkos::fmax(max_uniquedelt, subdelt)}; // Kokkos compatible equivalent to std::max() for floating point numbers
+    const auto nsubs = unsigned int{Kokkos::ceil(delt / subt)};
     subt = delt / (double)nsubs;
 
     const ImplicitIteration implit{niters, subt, maxrtol, maxatol,
@@ -290,10 +292,10 @@ ImplicitEuler::substepped_implicitmethod(const ImplicitIteration &implit,
                                          const unsigned int nsubsteps,
                                          const double rprev) const
 {
-  double subr(rprev);
+  auto subr = rprev;
   for (unsigned int n(0); n < nsubsteps; ++n)
   {
-    double init_ziter(implit.initialguess(subr));
+    auto init_ziter = double{implit.initialguess(subr)};
     subr = implit.newtonraphson_niterations(subr, init_ziter);
   }
   return subr;
@@ -308,8 +310,8 @@ Criteria is as in SCALE-SDM for making initial guess for given droplet
 much greater than its (activation radius)^2 if the 
 supersaturation > its activation supersaturation  */
 {
-  const double rprevsqrd(rprev * rprev);
-  const double s_act(1 + Kokkos::sqrt(4.0 * Kokkos::pow(akoh, 3.0) / 27 / bkoh)); // activation supersaturation
+  const auto rprevsqrd = double{rprev * rprev};
+  const auto s_act = double{1 + Kokkos::sqrt(4.0 * Kokkos::pow(akoh, 3.0) / 27 / bkoh)}; // activation supersaturation
 
   if (s_ratio > s_act)
   {
@@ -329,8 +331,8 @@ Criteria for modifying guess from rprev^2 are adapted from SCALE-SDM.
 Second criteria is that initial guess >= 'r1sqrd', where r1 is the
 equilibrium radius of a given droplet when s_ratio=1  */
 {
-  const double rsqrd(initialguess(rprev));
-  const double r1sqrd(bkoh / akoh);
+  const auto rsqrd = double{initialguess(rprev)};
+  const auto r1sqrd = double{bkoh / akoh};
   return Kokkos::fmax(rsqrd, r1sqrd); // Kokkos compatible equivalent to std::max() for floating point numbers
 }
 
@@ -349,13 +351,13 @@ and timesteps, and the maximum number of iterations is small. After
 iterations undertaken if not yet converged. */
 {
   // perform 'niters' iterations
-  double numerator(0.0);
+  auto numerator = double{0.0};
   for (unsigned int iter(0); iter < niters; ++iter)
   {
     /* perform one attempted iteration  ziter^(m) -> ziter^(m+1)
     for iteration m+1 starting at m=1 */
     numerator = ode_gfunc(rprev, ziter);
-    const double denominator(ode_gfuncderivative(ziter));
+    const auto denominator = ode_gfuncderivative(ziter);
     ziter -= ziter * numerator / denominator; // increment ziter
     ziter = Kokkos::fmax(ziter, 1e-8);            // do not allow ziter < 0.0
   }
@@ -367,7 +369,7 @@ iterations undertaken if not yet converged. */
   }
   else
   {
-    const unsigned int iterlimit(50); // maximum number of further iterations
+    constexpr unsigned int iterlimit = 50; // maximum number of further iterations
     return newtonraphson_untilconverged(iterlimit, rprev, ziter);
   }
 }
@@ -382,11 +384,11 @@ condensation and diffusion of water vapour according to
 equations from "An Introduction To Clouds...."
 (see note at top of file). Note: z = ziter = radius^2 */
 {
-  const double radius(Kokkos::sqrt(rsqrd));
+  const auto radius = double{Kokkos::sqrt(rsqrd)};
 
-  const double alpha(s_ratio - 1 - akoh / radius + bkoh / Kokkos::pow(radius, 3.0));
-  const double beta(2.0 * subdelt / (rsqrd * ffactor));
-  const double gamma(Kokkos::pow(rprev / radius, 2.0));
+  const auto alpha = double{s_ratio - 1 - akoh / radius + bkoh / Kokkos::pow(radius, 3.0)};
+  const auto beta = double{2.0 * subdelt / (rsqrd * ffactor)};
+  const auto gamma = double{Kokkos::pow(rprev / radius, 2.0)};
 
   return 1 - gamma - alpha * beta;
 }
@@ -397,10 +399,11 @@ ImplicitIteration::ode_gfuncderivative(const double rsqrd) const
 respect to z=rsqrd. g(z) is polynomial to find root of using
 Newton Raphson Method. */
 {
-  const double radius(Kokkos::sqrt(rsqrd));
+  const auto radius = double{Kokkos::sqrt(rsqrd)};
 
-  const double alpha(akoh / radius - 3.0 * bkoh / Kokkos::pow(radius, 3.0));
-  const double beta(subdelt / (rsqrd * ffactor));
+  const auto alpha = double{akoh / radius - 3.0 * bkoh /
+                                                Kokkos::pow(radius, 3.0)};
+  const auto beta = double{subdelt / (rsqrd * ffactor)};
 
   return 1 - alpha * beta;
 }
@@ -419,8 +422,8 @@ tested and error is raised if method does not converge within
 (which is the radius at timestep 't+subdelt'. Refer to section 5.1.2 Shima
 et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
 {
-  bool do_iter(true);
-  unsigned int iter(1);
+  auto do_iter = bool{true};
+  auto iter = unsigned int{1};
 
   // perform newton raphson iterations if convergence test fails
   // and throw error if not converged within 'iterlimit' iterations
@@ -448,13 +451,13 @@ ImplicitIteration::iterate_rootfinding_algorithm(const double rprev,
   is false if algorithm has converged */
 {
   // increment ziter
-  const double numerator(ode_gfunc(rprev, ziter));
-  const double denominator(ode_gfuncderivative(ziter));
+  const auto numerator = ode_gfunc(rprev, ziter);
+  const auto denominator = ode_gfuncderivative(ziter);
   ziter = ziter * (1 - numerator / denominator);
 
   // test for next iteration
-  const double newnumerator(ode_gfunc(rprev, ziter));
-  const bool do_iter(isnot_converged(newnumerator, numerator));
+  const auto newnumerator = ode_gfunc(rprev, ziter);
+  const auto do_iter = isnot_converged(newnumerator, numerator);
 
   return {do_iter, ziter};
 }

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,16 +60,16 @@ public:
   {
     /* time interval / volume for which
     probability is calculated [s/m^3] */
-    const double DELT_DELVOL = DELT / VOLUME;
+    const auto DELT_DELVOL = double{DELT / VOLUME};
 
     /* calculate Hydrodynamic Kernel*/
-    const double sumr(drop1.get_radius() + drop2.get_radius());
-    const double sumrsqrd(sumr * sumr);
-    const double vdiff(Kokkos::abs(terminalv(drop1) - terminalv(drop2)));
-    const double hydro_kernel(prob_jk_const * eff * sumrsqrd * vdiff);
+    const auto sumr = double{drop1.get_radius() + drop2.get_radius()};
+    const auto sumrsqrd = double{sumr * sumr};
+    const auto vdiff = double{Kokkos::abs(terminalv(drop1) - terminalv(drop2))};
+    const auto hydro_kernel = double{prob_jk_const * eff * sumrsqrd * vdiff};
 
     /* calculate probability prob_jk analogous Shima 2009 eqn 3 */
-    const double prob_jk = hydro_kernel * DELT_DELVOL;
+    const auto prob_jk = hydro_kernel * DELT_DELVOL;
 
     return prob_jk;
   }

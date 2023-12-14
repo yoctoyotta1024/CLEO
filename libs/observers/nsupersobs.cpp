@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 30th November 2023 
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -41,7 +41,7 @@ for each gridbox. "raindrop-like" means radius > rlim.
       Kokkos::RangePolicy<ExecSpace>(0, nsupers),
       KOKKOS_LAMBDA(const size_t kk, size_t &nrain)
       {
-        const double radius(supers(kk).get_radius()); // cast multiplicity from unsigned int to double
+        const auto radius = supers(kk).get_radius(); // cast multiplicity from unsigned int to double
         if (radius >= rlim)
         {
           ++nrain;
@@ -64,7 +64,7 @@ size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx)
   size_t nrainsupers(0);
   for (size_t kk(0); kk < h_supers.extent(0); ++kk)
   {
-    const double radius(h_supers(kk).get_radius());
+    const auto radius = h_supers(kk).get_radius();
     if (radius >= rlim)
     {
       ++nrainsupers;

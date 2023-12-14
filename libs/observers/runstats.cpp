@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 8th December 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,9 +25,9 @@
 
 void RunStatsObserver::print_summary() const
 {
-  const double t_start(stats -> t_start);
-  const double t_end(stats -> t_end);
-  const double t_stepping(t_end - t_start);
+  const auto t_start = stats -> t_start;
+  const auto t_end = stats -> t_end;
+  const auto t_stepping = t_end - t_start;
   std::cout << std::fixed << std::setprecision(4)
             << "\n----- CLEO run complete -----\n"
             << "  Initialisation: " << t_start << "s \n"
@@ -47,9 +47,9 @@ void RunStatsObserver::write_to_file() const
     const std::string header("### colums are: name duration/s\n"
                              "### ---------------------------\n");
 
-    const double t_start(stats->t_start);
-    const double t_end(stats->t_end);
-    const double t_stepping(t_end - t_start);
+    const auto t_start = stats->t_start;
+    const auto t_end = stats->t_end;
+    const auto t_stepping = t_end - t_start;
     file << header
          << "init  " << t_start << "\n"
          << "tstep " << t_stepping << "\n"

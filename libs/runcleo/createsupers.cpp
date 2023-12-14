@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -93,9 +93,9 @@ SuperdropAttrs GenSuperdrop::attrs_at(const unsigned int kk) const
 at position kk in the initial conditions data. All
 superdroplets created with same solute properties */
 {
-  const double radius(initdata.radii.at(kk));
-  const double msol(initdata.msols.at(kk));
-  const unsigned long long xi(initdata.xis.at(kk));
+  const auto radius = initdata.radii.at(kk);
+  const auto msol = initdata.msols.at(kk);
+  const auto xi = initdata.xis.at(kk);
   const SoluteProperties solute(initdata.solutes.at(0));
 
   return SuperdropAttrs(solute, xi, radius, msol);
@@ -103,10 +103,10 @@ superdroplets created with same solute properties */
 
 Superdrop GenSuperdrop::operator()(const unsigned int kk) const
 {
-  const unsigned int sdgbxindex(initdata.sdgbxindexes.at(kk));
-  const std::array<double, 3> coords312(coords_at(kk));
+  const auto sdgbxindex = initdata.sdgbxindexes.at(kk);
+  const auto coords312 = coords_at(kk);
   const SuperdropAttrs attrs(attrs_at(kk));
-  const auto sdId(sdIdGen->next((size_t)kk));
+  const auto sdId = sdIdGen->next((size_t)kk);
 
   return Superdrop(sdgbxindex, coords312[0],
                    coords312[1], coords312[2],

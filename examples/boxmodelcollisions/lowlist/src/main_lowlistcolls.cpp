@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 12th December 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
   }
   Kokkos::finalize();
 
-  const double ttot(kokkostimer.seconds());
+  const auto ttot = double{kokkostimer.seconds()};
   std::cout << "-----\n Total Program Duration: "
             << ttot << "s \n-----\n";
 

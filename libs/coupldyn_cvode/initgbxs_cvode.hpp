@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -76,9 +76,9 @@ public:
   gbxs is same as given by temp_i, press_i and
   relh_init */
   {
-    const double psat(cvode_saturationpressure(temp_i));
-    const double vapp(psat * relh_init / 100.0); // initial vapour pressure
-    const double qvap_i(cvode_massmixingratio(vapp, press_i));
+    const auto psat = double{cvode_saturationpressure(temp_i)};
+    const auto vapp = double{psat * relh_init / 100.0}; // initial vapour pressure
+    const auto qvap_i = double{cvode_massmixingratio(vapp, press_i)};
 
     return std::vector<double>(ngbxs, qvap_i);
   }

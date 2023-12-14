@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 23rd November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -99,7 +99,7 @@ coalscence, breakup or rebound of superdroplets with
 a constant timestep 'interval' and probability
 of collision determined by 'collprob' */
 {
-  const double DELT(int2realtime(interval));
+  const auto delT = double{int2realtime(interval)};
 
   const DoCoalBuRe coalbure(nfrags);
   const DoCollisions<Probability, DoCoalBuRe<NFrags>> colls(DELT,
@@ -119,9 +119,9 @@ breakup or rebound as a function in DoCollisions
 that satistfies the PairEnactX concept */
 {
   /* 1. calculate gamma factor for collision  */
-  const unsigned long long xi1(drop1.get_xi());
-  const unsigned long long xi2(drop2.get_xi());
-  const unsigned long long gamma(collision_gamma(xi1, xi2, prob, phi));
+  const auto xi1 = unsigned long long{drop1.get_xi()};
+  const auto xi2 = unsigned long long{drop2.get_xi()};
+  const auto gamma = unsigned long long{collision_gamma(xi1, xi2, prob, phi)};
 
   /* 2. enact collision between pair
   of superdroplets if gamma is not zero */
@@ -144,13 +144,13 @@ Flag decided based on the kinetic arguments in
 section 2.2 of Szakáll and Urbich 2018
 (neglecting grazing angle considerations) */
 {
-  const double r1(drop1.get_radius());
-  const double r2(drop2.get_radius());
+  const auto r1 = drop1.get_radius();
+  const auto r2 = drop2.get_radius();
   const auto terminalv = SimmelTerminalVelocity{};
 
-  const double cke(collision_kinetic_energy(r1, r2,
+  const auto cke = collision_kinetic_energy(r1, r2,
                                             terminalv(drop1),
-                                            terminalv(drop2)));
+                                            terminalv(drop2));
 
   if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
   {
@@ -176,7 +176,7 @@ DoCoalBuRe<NFrags>::
 depending on value of flag. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound. */
 {
-  const unsigned int flag(coalbure_flag(drop1, drop2));
+  const auto flag = coalbure_flag(drop1, drop2);
 
   bool is_null(0);
   switch (flag)
