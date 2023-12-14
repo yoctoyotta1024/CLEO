@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th October 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,9 +45,9 @@ Timesteps::Timesteps(const Config &config)
     throw std::invalid_argument(err);
   }
 
-  const unsigned int maxsubstep(std::max(condstep, collstep));
-  const unsigned int minstep = std::min(std::min(couplstep, obsstep),
-                                        motionstep);
+  const auto maxsubstep = unsigned int{std::max(condstep, collstep)};
+  const auto minstep = unsigned int{std::min(std::min(couplstep, obsstep),
+                                             motionstep)};
   if (minstep < maxsubstep)
   {
     const std::string err("invalid microphysics sub-stepping: "

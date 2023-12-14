@@ -209,8 +209,8 @@ if flag = 2 idx updated to forwards neighbour gbxindex.
 Note: backwards/forwards functions may change the 
 superdroplet's attributes e.g. if it leaves the domain. */
 {
-  const int flag(flag_sdgbxindex(idx, gbxmaps.coord3bounds(idx),
-                                 drop.get_coord3())); // if value != 0 idx needs to change
+  const auto flag = flag_sdgbxindex(idx, gbxmaps.coord3bounds(idx),
+                                    drop.get_coord3()); // if value != 0 idx needs to change
   switch (flag)
   {
   case 1:
@@ -235,8 +235,8 @@ if flag = 2 idx updated to forwards neighbour gbxindex.
 Note: backwards/forwards functions may change the 
 superdroplet's attributes e.g. if it leaves the domain. */
 {
-  const int flag(flag_sdgbxindex(idx, gbxmaps.coord1bounds(idx),
-                                 drop.get_coord1())); // if value != 0 idx needs to change
+  const auto flag = flag_sdgbxindex(idx, gbxmaps.coord1bounds(idx),
+                                    drop.get_coord1()); // if value != 0 idx needs to change
   switch (flag)
   {
   case 1:
@@ -261,8 +261,8 @@ if flag = 2 idx updated to forwards neighbour gbxindex.
 Note: backwards/forwards functions may change the 
 superdroplet's attributes e.g. if it leaves the domain. */
 {
-  const int flag(flag_sdgbxindex(idx, gbxmaps.coord2bounds(idx),
-                                 drop.get_coord2())); // if value != 0 idx needs to change
+  const auto flag = flag_sdgbxindex(idx, gbxmaps.coord2bounds(idx),
+                                    drop.get_coord2()); // if value != 0 idx needs to change
   switch (flag)
   {
   case 1:
@@ -283,9 +283,9 @@ backwards_coord3idx(const unsigned int idx,
 in backwards coord3 (z) direction and to update superdrop
 coord3 if superdrop has exceeded the z lower domain boundary */
 {
-  const unsigned int nghbr(gbxmaps.coord3backward(idx));
+  const auto nghbr = unsigned int{gbxmaps.coord3backward(idx)};
 
-  const unsigned int incre(1); // increment
+  const auto incre = unsigned int{1}; // increment
   if (at_cartesiandomainboundary(idx, incre, gbxmaps.get_ndim(0))) // drop was at lower z edge of domain (now moving below it)
   {
     const auto lim1 = double{gbxmaps.coord3bounds(nghbr).second}; // upper lim of backward neighbour
@@ -304,9 +304,9 @@ forwards_coord3idx(const unsigned int idx,
 forwards coord3 (z) direction and to update superdrop coord3
 if superdrop has exceeded the z upper domain boundary */
 {
-  const unsigned int nghbr(gbxmaps.coord3forward(idx));
+  const auto nghbr = unsigned int{gbxmaps.coord3forward(idx)};
 
-  const unsigned int incre(1);                                             // increment
+  const auto incre = unsigned int{1}; // increment
   if (at_cartesiandomainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) // drop was upper z edge of domain (now moving above it)
   {
     const auto lim1 = double{gbxmaps.coord3bounds(nghbr).first}; // lower lim of forward neighbour
@@ -325,10 +325,10 @@ backwards_coord1idx(const unsigned int idx,
 in backwards coord1 (x) direction and to update superdrop
 coord1 if superdrop has exceeded the x back domain boundary */
 {
-  const unsigned int nghbr(gbxmaps.coord1backward(idx));
+  const auto nghbr = unsigned int{gbxmaps.coord1backward(idx)};
 
   const auto ndims(gbxmaps.get_ndims());
-  const unsigned int incre(ndims(0));                   // increment
+  const auto incre = unsigned int{ndims(0)};                   // increment
   if (at_cartesiandomainboundary(idx, incre, ndims(1))) // at lower x edge of domain
   {
     const auto lim1 = double{gbxmaps.coord1bounds(nghbr).second}; // upper lim of backward neigghbour
@@ -347,10 +347,10 @@ forwards_coord1idx(const unsigned int idx,
 in forwards coord1 (x) direction and to update superdrop
 coord1 if superdrop has exceeded the x front domain boundary */
 {
-  const unsigned int nghbr(gbxmaps.coord1forward(idx));
+  const auto nghbr = unsigned int{gbxmaps.coord1forward(idx)};
 
   const auto ndims(gbxmaps.get_ndims());
-  const unsigned int incre(ndims(0));                           // increment
+  const auto incre = unsigned int{ndims(0)};                           // increment
   if (at_cartesiandomainboundary(idx + incre, incre, ndims(1))) // at lower x edge of domain
   {
     const auto lim1 = double{gbxmaps.coord1bounds(nghbr).first}; // lower lim of forward nghbour
@@ -369,10 +369,10 @@ backwards_coord2idx(const unsigned int idx,
 in backwards coord2 (y) direction and to update superdrop
 coord2 if superdrop has exceeded the y leftmost domain boundary */
 {
-  const unsigned int nghbr(gbxmaps.coord2backward(idx));
+  const auto nghbr = unsigned int{gbxmaps.coord2backward(idx)};
 
   const auto ndims(gbxmaps.get_ndims());
-  const unsigned int incre(ndims(0) * ndims(1));        // no. gridboxes in z direction * no. gridboxes in x direction
+  const auto incre = unsigned int{ndims(0) * ndims(1)};        // no. gridboxes in z direction * no. gridboxes in x direction
   if (at_cartesiandomainboundary(idx, incre, ndims(2))) // at lower y edge of domain
   {
     const auto lim1 = double{gbxmaps.coord2bounds(nghbr).second}; // upper lim of backward nghbour
@@ -391,10 +391,10 @@ forwards_coord2idx(const unsigned int idx,
 in forwards coord2 (y) direction and to update superdrop
 coord2 if superdrop has exceeded the y rightmost domain boundary */
 {
-  const unsigned int nghbr(gbxmaps.coord2forward(idx));
+  const auto nghbr = unsigned int{gbxmaps.coord2forward(idx)};
   
   const auto ndims(gbxmaps.get_ndims());
-  const unsigned int incre(ndims(0) * ndims(1));                            // no. gridboxes in z direction * no. gridboxes in x direction
+  const auto incre = unsigned int{ndims(0) * ndims(1)};                            // no. gridboxes in z direction * no. gridboxes in x direction
   if (at_cartesiandomainboundary(idx + incre, incre, ndims(2)))             // at upper y edge of domain
   {
     const auto lim1 = double{gbxmaps.coord2bounds(nghbr).first}; // lower lim of forward nghbour

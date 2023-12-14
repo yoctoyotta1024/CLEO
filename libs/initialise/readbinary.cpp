@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 30th October 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,7 +36,7 @@ GblMetadata::GblMetadata(std::ifstream &file)
   nvars = uints.at(2);
   mbytes_pervar = uints.at(3);
 
-  const unsigned int offset = 4 * sizeof(unsigned int); // offset from start of file to start of metastring
+  const auto offset = unsigned int{4 * sizeof(unsigned int)}; // offset from start of file to start of metastring
   metastr = read_global_metastring(file, offset);
 }
 

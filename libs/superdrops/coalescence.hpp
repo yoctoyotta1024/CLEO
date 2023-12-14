@@ -105,10 +105,10 @@ DoCoalescence as a function in DoCollisions that
 satistfies the PairEnactX concept */
 {
   /* 1. calculate gamma factor for collision-coalescence  */
-  const unsigned long long xi1(drop1.get_xi());
-  const unsigned long long xi2(drop2.get_xi());
-  const unsigned long long gamma(coalescence_gamma(xi1, xi2,
-                                                   prob, phi));
+  const auto xi1 = unsigned long long{drop1.get_xi()};
+  const auto xi2 = unsigned long long{drop2.get_xi()};
+  const auto gamma = unsigned long long{coalescence_gamma(xi1, xi2,
+                                                          prob, phi)};
 
   /* 2. enact collision-coalescence on pair
   of superdroplets if gamma is not zero */
@@ -134,7 +134,7 @@ collision-coalescence as in Shima et al. 2009 */
     ++gamma;
   }
 
-  const unsigned long long maxgamma(xi1 / xi2); // same as floor() for positive ints
+  const auto maxgamma = unsigned long long{xi1 / xi2}; // same as floor() for positive ints
 
   return Kokkos::fmin(gamma, maxgamma);
 }
@@ -147,8 +147,8 @@ DoCoalescence::coalesce_superdroplet_pair(const unsigned long long gamma,
 radius and solute mass of each superdroplet in pair
 according to Shima et al. 2009 Section 5.1.3. part (5) */
 {
-  const unsigned long long xi1(drop1.get_xi());
-  const unsigned long long xi2(drop2.get_xi());
+  const auto xi1 = drop1.get_xi();
+  const auto xi2 = drop2.get_xi();
 
   if (xi1 - gamma * xi2 > 0)
   {

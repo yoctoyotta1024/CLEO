@@ -71,7 +71,7 @@ create_coupldyn(const Config &config,
   const std::array<size_t, 3>
       ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
 
-  const unsigned int nsteps(std::ceil(t_end / couplstep) + 1);
+  const auto nsteps = unsigned int{std::ceil(t_end / couplstep) + 1};
 
   return FromFileDynamics(config, couplstep, ndims, nsteps);
 }
@@ -127,8 +127,8 @@ create_observer(const Config &config,
                 const Timesteps &tsteps,
                 FSStore &store)
 {
-  const unsigned int obsstep(tsteps.get_obsstep());
-  const int maxchunk(config.maxchunk);
+  const auto obsstep = unsigned int{tsteps.get_obsstep()};
+  const auto maxchunk = int{config.maxchunk};
 
   const Observer auto obs1 = PrintObserver(obsstep, &step2realtime);
 
@@ -145,7 +145,7 @@ inline auto create_sdm(const Config &config,
                        const Timesteps &tsteps,
                        FSStore &store)
 {
-  const unsigned int couplstep(tsteps.get_couplstep());
+  const auto couplstep = unsigned int{tsteps.get_couplstep()};
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));

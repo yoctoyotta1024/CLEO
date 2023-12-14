@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 17th November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -52,11 +52,11 @@ private:
   (motion or one complete step) is next to occur and return
   the time of the sooner event, (ie. next t_move or t_mdl) */
   {
-    const unsigned int next_move(movesupers.next_step(t_sdm)); // t of next sdm movement
-    const unsigned int t_next(!(next_mdl <
-                                next_move)
-                                  ? next_move
-                                  : next_mdl);
+    const auto next_move = unsigned int{movesupers.next_step(t_sdm)}; // t of next sdm movement
+    const auto t_next = unsigned int{!(next_mdl <
+                                       next_move)
+                                         ? next_move
+                                         : next_mdl};
 
     return t_next; // return smaller of two unsigned ints (see std::min)
   }

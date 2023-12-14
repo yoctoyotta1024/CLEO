@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -75,8 +75,8 @@ public:
    /* for combination of 2 microphysical processes,
    the next timestep is smaller out of the two possible */
   {
-    const unsigned int t_a(a.next_step(subt));
-    const unsigned int t_b(b.next_step(subt));
+    const auto t_a = unsigned int{a.next_step(subt)};
+    const auto t_b = unsigned int{b.next_step(subt)};
 
     return !(t_a < t_b) ? t_b : t_a; // return smaller of two unsigned ints (see std::min)
   }

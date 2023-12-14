@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 17th November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -58,7 +58,7 @@ viewd_supers init_supers(const size_t nsupers,
     auto h_supers = Kokkos::create_mirror_view(supers);
     for (size_t kk(0); kk < nsupers; ++kk)
     {
-      const unsigned int ii(1);
+      const auto ii = unsigned int(1);
       h_supers(kk) = Superdrop();
       h_supers(kk).set_sdgbxindex(ii);
       std::cout << "ii: " << h_supers(kk).get_sdgbxindex() << "\n";

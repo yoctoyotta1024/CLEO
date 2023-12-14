@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Thursday 14th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -161,7 +161,7 @@ gbxidx='idx' in a cartesian domain. Treatment of neighbours
 for gridboxes at the edges of the domain is either finite
 (null neighbour) or periodic (cyclic neighbour) */
 {
-  const unsigned int nz = ndims.at(0); // no. gridboxes in z direction
+  const auto nz = unsigned int{ndims.at(0)}; // no. gridboxes in z direction
   // return finitedomain_nghbrs(idx, nz, ndims.at(1));
   return periodicdomain_nghbrs(idx, nz, ndims.at(1));
 }
@@ -175,7 +175,7 @@ gbxidx='idx' in a cartesian domain. Treatment of neighbours
 for gridboxes at the edges of the domain is either finite
 (null neighbour) or periodic (cyclic neighbour) */
 {
-  const unsigned int nznx = ndims.at(0) * ndims.at(1); // no. gridboxes in z direction * no. gridboxes in x direction
+  const auto nznx = unsigned int{ndims.at(0) * ndims.at(1)}; // no. gridboxes in z direction * no. gridboxes in x direction
   // return finitedomain_nghbrs(idx, nznx, ndims.at(2));
   return periodicdomain_nghbrs(idx, nznx, ndims.at(2));
 }
