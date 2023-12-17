@@ -108,7 +108,6 @@ public:
             {
               supers = microphys.run_step(team_member, subt, supers,
                                           d_gbxs(ii).state, genpool);
-              team_member.team_barrier(); // synchronise threads
             }
 
           });
