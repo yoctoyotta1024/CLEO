@@ -86,7 +86,7 @@ radii r1 and r2 and terminal velocities of droplets */
 
   const auto r1cubed = double{r1 * r1 * r1};
   const auto r1_r2cubed = double{(r1 / r2) * (r1 / r2) * (r1 / r2)};
-  const auto rratio = double{r1cubed / 1 + r1_r2cubed}; // * R0cubed to convert to [m^3]
+  const auto rratio = double{r1cubed / (1 + r1_r2cubed)}; // * R0cubed to convert to [m^3]
 
   const auto vdiff = double{terminalv1 - terminalv2}; // * dlc::W0 to convert to [m/s]
   const auto cke = double{ckeconst * rratio * vdiff * vdiff};
