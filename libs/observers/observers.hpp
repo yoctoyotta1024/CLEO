@@ -94,8 +94,8 @@ public:
    /* for combination of 2 observers, the next obs
    time is smaller out of the two possible */
   {
-    const auto t_a = unsigned int{a.next_obs(t_mdl)};
-    const auto t_b = unsigned int{b.next_obs(t_mdl)};
+    const auto t_a = a.next_obs(t_mdl);
+    const auto t_b = b.next_obs(t_mdl);
 
     return !(t_a < t_b) ? t_b : t_a; // return smaller of two unsigned ints (see std::min)
   }

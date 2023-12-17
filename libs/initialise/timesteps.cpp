@@ -45,9 +45,8 @@ Timesteps::Timesteps(const Config &config)
     throw std::invalid_argument(err);
   }
 
-  const auto maxsubstep = unsigned int{std::max(condstep, collstep)};
-  const auto minstep = unsigned int{std::min(std::min(couplstep, obsstep),
-                                             motionstep)};
+  const auto maxsubstep = std::max(condstep, collstep);
+  const auto minstep = std::min(std::min(couplstep, obsstep), motionstep);
   if (minstep < maxsubstep)
   {
     const std::string err("invalid microphysics sub-stepping: "

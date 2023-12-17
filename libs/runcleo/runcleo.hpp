@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Sunday 17th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -96,7 +96,7 @@ private:
     while (t_mdl <= t_end)
     {
       /* start step (in general involves coupling) */
-      const auto t_next = unsigned int{start_step(t_mdl, gbxs)};
+      const auto t_next = (unsigned int)start_step(t_mdl, gbxs);
 
       /* advance dynamics solver (optionally concurrent to SDM) */
       coupldyn_step(t_mdl, t_next);
@@ -139,13 +139,13 @@ private:
   {
     const auto next_couplstep = [&, t_mdl]()
     {
-      const auto interval = unsigned int{sdm.get_couplstep()};
+      const auto interval = (unsigned int)sdm.get_couplstep();
       return ((t_mdl / interval) + 1) * interval;
     };
 
     /* t_next is sooner out of time for next coupl or obs */
-    const auto next_coupl = unsigned int{next_couplstep()};
-    const auto next_obs = unsigned int{sdm.obs.next_obs(t_mdl)};
+    const auto next_coupl = (unsigned int)next_couplstep();
+    const auto next_obs = (unsigned int)sdm.obs.next_obs(t_mdl);
     const auto t_next(!(next_coupl < next_obs) ? next_obs : next_coupl); // return smaller of two unsigned ints (see std::min)
     
     return t_next;                                                       // stepsize = t_next - t_mdl

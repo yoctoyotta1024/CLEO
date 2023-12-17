@@ -100,7 +100,7 @@ private:
   ("p_alpha" in paper). Assumes drop1.xi >= drop2.xi */
   {
     const auto prob_jk = double{probability(drop1, drop2, DELT, VOLUME)};
-    const auto large_xi = double{drop1.get_xi()}; // casting xi to double (!)
+    const auto large_xi = (double)drop1.get_xi(); // casting xi to double (!)
 
     const auto prob = double{scale_p * large_xi * prob_jk};
 
@@ -171,7 +171,7 @@ private:
   over for loop: for (size_t jj(0); jj < npairs; ++jj) {[...]} 
   when in serial */
   {
-    const auto nsupers = size_t{supers.extent(0)};
+    const auto nsupers = (size_t)supers.extent(0);
     const auto npairs = size_t{nsupers / 2}; // no. pairs of superdroplets (same as floor() for positive nsupers)
     const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
     const auto VOLUME = double{volume * dlc::VOL0}; // volume in which collisions occur [m^3]

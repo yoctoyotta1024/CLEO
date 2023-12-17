@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Sunday 17th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -186,7 +186,7 @@ etot [J] and equivalent surface energy, surf_c [J] */
   constexpr double bconst = -2.62e6; // [J^-2]
   constexpr double sigma = 7.28e-2;  // [J/m^-2]
 
-  const auto exponen = double{bconst * sigma * etot * etot / surf_c};
+  const auto exponent = double{bconst * sigma * etot * etot / surf_c};
 
   return Kokkos::exp(exponent);
 }

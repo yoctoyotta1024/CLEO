@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Sunday 17th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -164,7 +164,6 @@ from "An Introduction To Clouds...." (see note at top of file) */
   double totmass_condensed(superdroplets_change(team_member,
                                                 supers,
                                                 state));
-  team_member.team_barrier(); // synchronise threads
 
   /* resultant effect on thermodynamic state */
   effect_on_thermodynamic_state(team_member, totmass_condensed, state);
@@ -182,11 +181,11 @@ is equivalent to summing deltamass over for loop:
 for (size_t kk(0); kk < nsupers; ++kk) {[...]}
 when in serial*/
 {
-  const auto nsupers = size_t{supers.extent(0)};
-
+  const auto nsupers = (size_t)supers.extent(0);
+  
   const auto psat = saturation_pressure(state.temp);
   const auto s_ratio = supersaturation_ratio(state.press, state.qvap, psat);
-  const auto ffactor = diffusion_factor(state.press, state.temp, state.psat);
+  const auto ffactor = diffusion_factor(state.press, state.temp, psat);
 
   auto totmass_condensed = double{0.0}; // cumulative change to liquid mass in parcel volume 'dm'
   Kokkos::parallel_reduce(

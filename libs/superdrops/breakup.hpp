@@ -174,9 +174,9 @@ Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
 Note implicit assumption that gamma factor = 1.
 Note: implicit casting of xi from unsigned long long to double. */
 {
-  const auto old_xi = unsigned long long{drop2.get_xi()}; // = drop1.xi
+  const auto old_xi = drop2.get_xi(); // = drop1.xi
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
-  const auto new_xi = unsigned long long{Kokkos::round(totnfrags) / 2};
+  const auto new_xi = (unsigned long long)Kokkos::round(totnfrags) / 2;
 
   const auto sum_rcubed = double{drop1.rcubed() + drop2.rcubed()};
   const auto new_rcubed = double{sum_rcubed * old_xi / new_xi};
@@ -207,9 +207,9 @@ Note: implicit casting of xi from unsigned long long to double. */
 {
   drop1.set_xi(drop1.get_xi() - drop2.get_xi());
 
-  const auto old_xi = unsigned long long{drop2.get_xi()};
+  const auto old_xi = drop2.get_xi();
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
-  const auto new_xi = unsigned long long{Kokkos::round(totnfrags)};
+  const auto new_xi = (unsigned long long)Kokkos::round(totnfrags);
 
   const auto sum_rcubed = double{drop1.rcubed() + drop2.rcubed()};
   const auto new_rcubed = double{sum_rcubed * old_xi / new_xi};

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Sunday 17th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -99,7 +99,7 @@ coalscence, breakup or rebound of superdroplets with
 a constant timestep 'interval' and probability
 of collision determined by 'collprob' */
 {
-  const auto delT = double{int2realtime(interval)};
+  const auto DELT = double{int2realtime(interval)};
 
   const DoCoalBuRe coalbure(nfrags);
   const DoCollisions<Probability, DoCoalBuRe<NFrags>> colls(DELT,
@@ -119,9 +119,9 @@ breakup or rebound as a function in DoCollisions
 that satistfies the PairEnactX concept */
 {
   /* 1. calculate gamma factor for collision  */
-  const auto xi1 = unsigned long long{drop1.get_xi()};
-  const auto xi2 = unsigned long long{drop2.get_xi()};
-  const auto gamma = unsigned long long{collision_gamma(xi1, xi2, prob, phi)};
+  const auto xi1 = drop1.get_xi();
+  const auto xi2 = drop2.get_xi();
+  const auto gamma = collision_gamma(xi1, xi2, prob, phi);
 
   /* 2. enact collision between pair
   of superdroplets if gamma is not zero */

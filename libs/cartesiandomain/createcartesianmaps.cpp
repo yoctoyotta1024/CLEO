@@ -158,7 +158,7 @@ void set_model_areas_vols(const GbxBoundsFromBinary &gfb,
 /* sets (finite) dimensionless horizontal area and
 volume using area and volume from gfb for gbxidx=0 */
 {
-  const auto idx = unsigned int{0};
+  const auto idx = (unsigned int)0;
   gbxmaps.set_gbxarea(gfb.gbxarea(idx));
   gbxmaps.set_gbxvolume(gfb.gbxvol(idx));
 }
@@ -167,7 +167,7 @@ void set_outofbounds(CartesianMaps &gbxmaps)
 /* sets (infinite) coordinate bounds for case
 when outofbounds gbxidx searches map */
 {
-  const auto idx = unsigned int{outofbounds_gbxindex()};
+  const auto idx = (unsigned int)outofbounds_gbxindex();
   gbxmaps.insert_coord3bounds(idx, nullbounds());
   gbxmaps.insert_coord1bounds(idx, nullbounds());
   gbxmaps.insert_coord2bounds(idx, nullbounds());

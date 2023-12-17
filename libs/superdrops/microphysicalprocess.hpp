@@ -75,8 +75,8 @@ public:
    /* for combination of 2 microphysical processes,
    the next timestep is smaller out of the two possible */
   {
-    const auto t_a = unsigned int{a.next_step(subt)};
-    const auto t_b = unsigned int{b.next_step(subt)};
+    const auto t_a = a.next_step(subt);
+    const auto t_b = b.next_step(subt);
 
     return !(t_a < t_b) ? t_b : t_a; // return smaller of two unsigned ints (see std::min)
   }

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Sunday 17th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -119,7 +119,7 @@ create_observer(const Config &config,
                 const Timesteps &tsteps,
                 FSStore &store)
 {
-  const auto obsstep = unsigned int{tsteps.get_obsstep()};
+  const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
   const Observer auto obs1 = PrintObserver(obsstep*100, &step2realtime);
@@ -140,7 +140,7 @@ inline auto create_sdm(const Config &config,
                        const Timesteps &tsteps,
                        FSStore &store)
 {
-  const auto couplstep = unsigned int{tsteps.get_couplstep()};
+  const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const Motion<CartesianMaps> auto movesupers = NullMotion{};

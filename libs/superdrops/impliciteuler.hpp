@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Sunday 17th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -215,7 +215,7 @@ Matsushima et al. 2023 for more details. */
   /* if supersaturation close to s_act, activation or
   deactivation might occur so perform subtimestepping */
   {
-    const auto nsubs =  unsigned int{Kokkos::ceil(delt / subdelt)};
+    const auto nsubs =  (unsigned int)Kokkos::ceil(delt / subdelt);
     const auto subt = double{delt / (double)nsubs};
     const ImplicitIteration implit{niters, subt, maxrtol, maxatol,
                                    s_ratio, akoh, bkoh, ffactor};
@@ -231,7 +231,7 @@ Matsushima et al. 2023 for more details. */
   {
     const ImplicitIteration implit{niters, delt, maxrtol, maxatol,
                                    s_ratio, akoh, bkoh, ffactor};
-    auto init_ziter double{implit.initialguess(rprev)};
+    auto init_ziter = double{implit.initialguess(rprev)};
     return implit.newtonraphson_niterations(rprev, init_ziter);
   }
 }
@@ -277,7 +277,7 @@ for more details. */
   iterations (could also refine tolerances) */
   {
     auto subt = double{Kokkos::fmax(max_uniquedelt, subdelt)}; // Kokkos compatible equivalent to std::max() for floating point numbers
-    const auto nsubs = unsigned int{Kokkos::ceil(delt / subt)};
+    const auto nsubs = (unsigned int)Kokkos::ceil(delt / subt);
     subt = delt / (double)nsubs;
 
     const ImplicitIteration implit{niters, subt, maxrtol, maxatol,
@@ -423,7 +423,7 @@ tested and error is raised if method does not converge within
 et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
 {
   auto do_iter = bool{true};
-  auto iter = unsigned int{1};
+  auto iter = (unsigned int)1;
 
   // perform newton raphson iterations if convergence test fails
   // and throw error if not converged within 'iterlimit' iterations

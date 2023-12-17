@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Sunday 17th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,7 +101,7 @@ void CartesianDynamics::set_winds(const Config &config)
 /* depending on nspacedims, read in data
 for 1-D, 2-D or 3-D wind velocity components */
 {
-  const auto nspacedims = unsigned int{config.nspacedims};
+  const auto nspacedims = (unsigned int)config.nspacedims;
 
   switch (nspacedims)
   {
