@@ -1,3 +1,23 @@
+'''
+----- CLEO -----
+File: radiiprobdistribs.py
+Project: initsuperdropsbinary_src
+Created Date: Wednesday 22nd November 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Monday 18th December 2023
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+Copyright (c) 2023 MPI-M, Clara Bayley
+-----
+File Description:
+Probability distirubtion of radii for different droplet types
+'''
+
 import numpy as np
 from scipy import special 
 
@@ -133,9 +153,9 @@ class ClouddropsHansenGamma:
     self.nueff = nueff
 
   def __call__(self, radii):
-    ''' return gamma distribution for cloud droplets given
-    radius [m] using parameters from Poertge et al. 2023
-    for shallow cumuli (figure 12).
+    ''' return gamma distribution for cloud droplets
+    given radius [m] using parameters from Poertge
+    et al. 2023 for shallow cumuli (figure 12).
     typical values:
     reff = 7e-6 #[m]
     nueff = 0.08 # [] '''
