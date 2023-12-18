@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Monday 18th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,6 +30,8 @@
 #include <Kokkos_StdAlgorithms.hpp>
 #include <Kokkos_Random.hpp>
 #include <Kokkos_NestedSort.hpp>
+
+// ---------------------------------------------------------------- //
 
 struct Superdrop
 {
@@ -68,55 +70,21 @@ viewd_supers init_supers(const size_t nsupers,
   return supers;
 }
 
-unsigned int make_obs_gbx(unsigned int nobs,
-                          unsigned int nobs_gbxs,
-                          const size_t ngbxs)
-{
-
-  ++nobs_gbxs;
-
-  std::cout << "nobs: " << nobs
-            << " & " << nobs_gbxs << " -> "
-            << nobs_gbxs / ngbxs << "\n";
-
-  nobs = nobs_gbxs / ngbxs;
-
-  return nobs;
-}
-
-unsigned int make_obs_gbxs(unsigned int nobs)
-{
-  return ++nobs;
-}
+// ---------------------------------------------------------------- //
 
 int main(int argc, char *argv[])
 {
   const size_t nsupers(10);
   const size_t ngbxs(13);
-  const size_t nobs(1);
 
   Kokkos::initialize(argc, argv);
   {
     auto supers = init_supers(nsupers, ngbxs);
 
-    unsigned int nobs_1(0);
-    unsigned int nobs_2(0);
-    unsigned int nobs_gbxs(0);
-
-    for (size_t jj(0); jj < nobs; ++jj)
+    for (size_t ii(0); ii < ngbxs; ++ii)
     {
-
-      for (size_t ii(0); ii < ngbxs; ++ii)
-      {
-        nobs_1 = make_obs_gbx(nobs_1, nobs_gbxs, ngbxs);
-        ++nobs_gbxs;
-      }
-
-      nobs_2 = make_obs_gbxs(nobs_2);
     }
-
-    std::cout << "final nobs: " << nobs_1
-              << " == " << nobs_2 << "\n";
   }
+  
   Kokkos::finalize();
 }
