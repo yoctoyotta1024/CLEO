@@ -64,7 +64,7 @@ coordinates and then updating it's sdgbxindex using the
 UpdateSdgbxindex struct for a cartesian domain */
 {
   const unsigned int interval; // integer timestep for movement
-  PredCorrMotion<CartesianMaps, TV> superdrop_coords;
+  PredCorr<CartesianMaps, TV> superdrop_coords;
 
   CartesianMotion(const unsigned int motionstep,
                   const std::function<double(unsigned int)> int2time,

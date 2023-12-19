@@ -22,8 +22,8 @@
  * Methods follows equations in Grabowski et al. 2018
  */
 
-#ifndef PREDCORRMOTION_HPP
-#define PREDCORRMOTION_HPP
+#ifndef PREDCORR_HPP
+#define PREDCORR_HPP
 
 #include <cassert>
 #include <functional>
@@ -48,7 +48,7 @@ from Grabowski et al. (2018). coord use in interpolation is
 limited to lower_bound <= coord <= upper_bound. */
 
 template <GridboxMaps GbxMaps, VelocityFormula TV>
-struct PredCorrMotion
+struct PredCorr
 /* change in coordinates calculated by predictor
 corrector method with the wind velocity obtained via
 a simple linear interpolation. Methods follows
@@ -171,9 +171,9 @@ private:
   }
 
 public:
-  PredCorrMotion(const unsigned int motionstep,
-                 const std::function<double(unsigned int)> int2time,
-                 const TV i_terminalv)
+  PredCorr(const unsigned int motionstep,
+           const std::function<double(unsigned int)> int2time,
+           const TV i_terminalv)
       : delt(int2time(motionstep)),
         terminalv(i_terminalv) {}
 
@@ -226,4 +226,4 @@ limited to lower_bound <= coord <= upper_bound. */
   return interp;
 }
 
-#endif // PREDCORRMOTION_HPP
+#endif // PREDCORR_HPP
