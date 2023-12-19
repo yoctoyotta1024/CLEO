@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Tuesday 19th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -183,7 +183,7 @@ public:
                   const State &state,
                   Superdrop &drop) const
   /* operator to satisfiy requirements of the
-  "update_superdrop_coords" function in the motion
+  "superdrop_coords" function in the motion
   concept. Operator uses predictor-corrector method to
   forward timestep a superdroplet's coordinates using
   the interpolated wind velocity from a gridbox's state */

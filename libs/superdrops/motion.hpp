@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th November 2023
+ * Last Modified: Tuesday 19th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,7 +38,7 @@ concept Motion = requires(M m,
 /* concept for superdrop motion is all types that
 meet requirements (constraints) of these two timstepping
 functions ("on_step" and "next_step") as well as the
-constraints on the "update_superdrop_coords" function */
+constraints on the "superdrop_coords" function */
 {
   {
     m.next_step(u)
@@ -47,10 +47,10 @@ constraints on the "update_superdrop_coords" function */
     m.on_step(u)
   } -> std::same_as<bool>;
   {
-    m.update_superdrop_coords(u, gbxmaps, state, sd)
+    m.superdrop_coords(u, gbxmaps, state, sd)
   } -> std::same_as<void>;
   {
-    m.update_superdrop_gbxindex(u, gbxmaps, sd)
+    m.superdrop_gbx(u, gbxmaps, sd)
   } -> std::same_as<void>;
 };
 
@@ -70,16 +70,16 @@ struct NullMotion
 
   template <typename GbxMaps>
   KOKKOS_INLINE_FUNCTION void
-  update_superdrop_coords(const unsigned int gbxindex,
-                          const GbxMaps &gbxmaps,
-                          const State &state,
-                          Superdrop &drop) const {}
+  superdrop_coords(const unsigned int gbxindex,
+                   const GbxMaps &gbxmaps,
+                   const State &state,
+                   Superdrop &drop) const {}
 
   template <typename GbxMaps>
   KOKKOS_INLINE_FUNCTION void
-  update_superdrop_gbxindex(const unsigned int gbxindex,
-                            const GbxMaps &gbxmaps,
-                            Superdrop &drop) const {}
+  superdrop_gbx(const unsigned int gbxindex,
+                const GbxMaps &gbxmaps,
+                Superdrop &drop) const {}
 };
 
 #endif // MOTION_HPP

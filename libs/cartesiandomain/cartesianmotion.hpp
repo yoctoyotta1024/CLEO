@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Tuesday 19th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -63,13 +63,13 @@ coordinates and then updating it's sdgbxindex using the
 UpdateSdgbxindex struct for a cartesian domain */
 {
   const unsigned int interval; // integer timestep for movement
-  PredCorrMotion<CartesianMaps, TV> update_superdrop_coords;
+  PredCorrMotion<CartesianMaps, TV> superdrop_coords;
 
   CartesianMotion(const unsigned int motionstep,
                   const std::function<double(unsigned int)> int2time,
                   const TV i_terminalv)
       : interval(motionstep),
-        update_superdrop_coords(interval, int2time, i_terminalv) {}
+        superdrop_coords(interval, int2time, i_terminalv) {}
 
   KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const
@@ -84,18 +84,17 @@ UpdateSdgbxindex struct for a cartesian domain */
   }
 
   KOKKOS_INLINE_FUNCTION void
-  update_superdrop_gbxindex(const unsigned int gbxindex,
-                            const CartesianMaps &gbxmaps,
-                            Superdrop &drop) const
+  superdrop_gbx(const unsigned int gbxindex,
+                const CartesianMaps &gbxmaps,
+                Superdrop &drop) const
   /* function satisfies requirements of
-  "update_superdrop_gbxindex" in the motion concept to update a
+  "superdrop_gbx" in the motion concept to update a
   superdroplet if it should move between gridboxes in a
   cartesian domain. For each direction (z, then x, then y),
   superdrop coord is compared to gridbox bounds given by gbxmaps
   for the current gbxindex 'idx'. If superdrop coord lies outside
   bounds, forward or backward neighbour functions are called as
-  appropriate  to update sdgbxindex (and possibly other superdrop
-  attributes) */
+  appropriate to update sdgbxindex (and possibly other attributes) */
   {
     unsigned int idx(gbxindex);
 

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 30th November 2023
+ * Last Modified: Tuesday 19th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -64,18 +64,13 @@ after updating their gridbox indexes concordantly */
         [&, this](const size_t kk)
         {
           /* step (1) */
-          motion.update_superdrop_coords(gbxindex,
-                                         gbxmaps,
-                                         state,
-                                         supers(kk));
+          motion.superdrop_coords(gbxindex, gbxmaps, state, supers(kk));
 
           /* optional step (1b) */
           // gbx.detectors -> detect_precipitation(area, drop); // TODO detectors
 
           /* step (2) */
-          motion.update_superdrop_gbxindex(gbxindex,
-                                           gbxmaps,
-                                           supers(kk));
+          motion.superdrop_gbx(gbxindex, gbxmaps, supers(kk));
         });
   }
 
