@@ -41,6 +41,7 @@ KOKKOS_FUNCTION unsigned int
 change_to_coord3nghbr(const CartesianMaps &gbxmaps,
                       unsigned int idx,
                       Superdrop &drop);
+
 KOKKOS_FUNCTION unsigned int
 change_to_coord1nghbr(const CartesianMaps &gbxmaps,
                       unsigned int idx,
@@ -123,30 +124,63 @@ flag_sdgbxindex(const unsigned int idx,
 
 KOKKOS_FUNCTION unsigned int
 change_to_backwards_coord3nghbr(const unsigned int idx,
-                    const CartesianMaps &gbxmaps,
-                    Superdrop &superdrop);
+                                const CartesianMaps &gbxmaps,
+                                Superdrop &superdrop);
+KOKKOS_FUNCTION void
+beyonddomain_backwards_coord3(const CartesianMaps &gbxmaps,
+                              const unsigned int idx,
+                              const unsigned int nghbr,
+                              Superdrop &drop);
+
 KOKKOS_FUNCTION unsigned int
 change_to_forwards_coord3nghbr(const unsigned int idx,
-                   const CartesianMaps &gbxmaps,
-                   Superdrop &drop);
+                               const CartesianMaps &gbxmaps,
+                               Superdrop &drop);
+KOKKOS_FUNCTION void
+beyonddomain_forwards_coord3(const CartesianMaps &gbxmaps,
+                             const unsigned int idx,
+                             const unsigned int nghbr,
+                             Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
 change_to_backwards_coord1nghbr(const unsigned int idx,
-                    const CartesianMaps &gbxmaps,
-                    Superdrop &superdrop);
+                                const CartesianMaps &gbxmaps,
+                                Superdrop &superdrop);
+KOKKOS_FUNCTION void
+beyonddomain_backwards_coord1(const CartesianMaps &gbxmaps,
+                              const unsigned int idx,
+                              const unsigned int nghbr,
+                              Superdrop &drop);
+
 KOKKOS_FUNCTION unsigned int
 change_to_forwards_coord1nghbr(const unsigned int idx,
-                   const CartesianMaps &gbxmaps,
-                   Superdrop &drop);
+                               const CartesianMaps &gbxmaps,
+                               Superdrop &drop);
+KOKKOS_FUNCTION void
+beyonddomain_forwards_coord1(const CartesianMaps &gbxmaps,
+                             const unsigned int idx,
+                             const unsigned int nghbr,
+                             Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
 change_to_backwards_coord2nghbr(const unsigned int idx,
-                    const CartesianMaps &gbxmaps,
-                    Superdrop &superdrop);
+                                const CartesianMaps &gbxmaps,
+                                Superdrop &superdrop);
+KOKKOS_FUNCTION void
+beyonddomain_backwards_coord2(const CartesianMaps &gbxmaps,
+                              const unsigned int idx,
+                              const unsigned int nghbr,
+                              Superdrop &drop);
+
 KOKKOS_FUNCTION unsigned int
 change_to_forwards_coord2nghbr(const unsigned int idx,
-                   const CartesianMaps &gbxmaps,
-                   Superdrop &drop);
+                               const CartesianMaps &gbxmaps,
+                               Superdrop &drop);
+KOKKOS_FUNCTION void
+beyonddomain_forwards_coord2(const CartesianMaps &gbxmaps,
+                             const unsigned int idx,
+                             const unsigned int nghbr,
+                             Superdrop &drop);
 
 KOKKOS_FUNCTION void
 check_inbounds_or_outdomain(const unsigned int idx,
@@ -274,34 +308,20 @@ superdroplet's attributes e.g. if it leaves the domain. */
   return idx;
 }
 
-KOKKOS_FUNCTION void
-drop_beyond_backwards_coord3_boundary(const CartesianMaps &gbxmaps,
-                                      const unsigned int nghbr,
-                                      const unsigned int idx,
-                                      Superdrop &drop)
-/* function updates superdrop that has crossed the domain
-boundary in the backwards coord3 (z) direction (i.e. superdrop
-has exceeded the z lower domain boundary) */
-{
-  const auto lim1 = double{gbxmaps.coord3bounds(nghbr).second}; // upper lim of backward neighbour
-  const auto lim2 = double{gbxmaps.coord3bounds(idx).first};    // lower lim of current gbx
-  drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
-}
-
 KOKKOS_FUNCTION unsigned int
 change_to_backwards_coord3nghbr(const unsigned int idx,
                  const CartesianMaps &gbxmaps,
                  Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
 in backwards coord3 (z) direction and to update superdrop
-coord3 if superdrop has exceeded the z lower domain boundary */
+if its coord3 has exceeded the z lower domain boundary */
 {
   const auto nghbr = (unsigned int)gbxmaps.coord3backward(idx);
 
   const auto incre = (unsigned int)1; // increment
   if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) // drop was at lower z edge of domain (now moving below it)
   {
-    drop_beyond_backwards_coord3_boundary(gbxmaps, drop);
+    beyonddomain_backwards_coord3(gbxmaps, idx, nghbr, drop);
   }
 
   return nghbr; // gbxindex of z backwards (down) neighbour
@@ -320,9 +340,7 @@ if superdrop has exceeded the z upper domain boundary */
   const auto incre = (unsigned int)1; // increment
   if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) // drop was upper z edge of domain (now moving above it)
   {
-    const auto lim1 = double{gbxmaps.coord3bounds(nghbr).first}; // lower lim of forward neighbour
-    const auto lim2 = double{gbxmaps.coord3bounds(idx).second};  // upper lim of current gbx
-    drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
+    beyonddomain_forwards_coord3(gbxmaps, idx, nghbr, drop);
   }
 
   return nghbr; // gbxindex of z forwards (up) neighbour
@@ -342,6 +360,7 @@ coord1 if superdrop has exceeded the x back domain boundary */
   const auto incre = (unsigned int)ndims(0);                   // increment
   if (beyond_domainboundary(idx, incre, ndims(1))) // at lower x edge of domain
   {
+    beyonddomain_backwards_coord1(gbxmaps, idx, nghbr, drop);
     const auto lim1 = double{gbxmaps.coord1bounds(nghbr).second}; // upper lim of backward neigghbour
     const auto lim2 = double{gbxmaps.coord1bounds(idx).first};    // lower lim of current gbx
     drop.set_coord1(coord1_beyondx(drop.get_coord1(), lim1, lim2));
@@ -364,6 +383,7 @@ coord1 if superdrop has exceeded the x front domain boundary */
   const auto incre = (unsigned int)ndims(0);                           // increment
   if (beyond_domainboundary(idx + incre, incre, ndims(1))) // at lower x edge of domain
   {
+    beyonddomain_forwards_coord1(gbxmaps, idx, nghbr, drop);
     const auto lim1 = double{gbxmaps.coord1bounds(nghbr).first}; // lower lim of forward nghbour
     const auto lim2 = double{gbxmaps.coord1bounds(idx).second};  // upper lim of gbx
     drop.set_coord1(coord1_beyondx(drop.get_coord1(), lim1, lim2));
@@ -386,6 +406,7 @@ coord2 if superdrop has exceeded the y leftmost domain boundary */
   const auto incre = (unsigned int)ndims(0) * ndims(1);        // no. gridboxes in z direction * no. gridboxes in x direction
   if (beyond_domainboundary(idx, incre, ndims(2))) // at lower y edge of domain
   {
+    beyonddomain_backwards_coord2(gbxmaps, idx, nghbr, drop);
     const auto lim1 = double{gbxmaps.coord2bounds(nghbr).second}; // upper lim of backward nghbour
     const auto lim2 = double{gbxmaps.coord2bounds(idx).first};    // lower lim of gbx
     drop.set_coord2(coord2_beyondy(drop.get_coord2(), lim1, lim2));
@@ -408,6 +429,7 @@ coord2 if superdrop has exceeded the y rightmost domain boundary */
   const auto incre = (unsigned int)ndims(0) * ndims(1);                            // no. gridboxes in z direction * no. gridboxes in x direction
   if (beyond_domainboundary(idx + incre, incre, ndims(2)))             // at upper y edge of domain
   {
+    beyonddomain_forwards_coord2(gbxmaps, idx, nghbr, drop);
     const auto lim1 = double{gbxmaps.coord2bounds(nghbr).first}; // lower lim of forward nghbour
     const auto lim2 = double{gbxmaps.coord2bounds(idx).second};  // upper lim of gbx
     drop.set_coord2(coord2_beyondy(drop.get_coord2(), lim1, lim2));
@@ -415,5 +437,77 @@ coord2 if superdrop has exceeded the y rightmost domain boundary */
 
   return nghbr; // gbxindex of y forwards (right) neighbour
 };
+
+KOKKOS_FUNCTION void
+beyonddomain_backwards_coord3(const CartesianMaps &gbxmaps,
+                              const unsigned int idx,
+                              const unsigned int nghbr,
+                              Superdrop &drop)
+/* function updates superdrop that has crossed the
+domain boundary in the backwards coord3 (z) direction
+(i.e. superdrop has exceeded the z lower domain boundary) */
+{
+  const auto lim1 = double{gbxmaps.coord3bounds(nghbr).second}; // upper lim of backward neighbour
+  const auto lim2 = double{gbxmaps.coord3bounds(idx).first};    // lower lim of current gbx
+  drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
+}
+
+KOKKOS_FUNCTION void
+beyonddomain_forwards_coord3(const CartesianMaps &gbxmaps,
+                             const unsigned int idx,
+                             const unsigned int nghbr,
+                             Superdrop &drop)
+/* function updates superdrop that has crossed the
+domain boundary in the forwards coord3 (z) direction
+(i.e. superdrop has exceeded the z upper domain boundary) */
+{
+  const auto lim1 = double{gbxmaps.coord3bounds(nghbr).first}; // lower lim of forward neighbour
+  const auto lim2 = double{gbxmaps.coord3bounds(idx).second};  // upper lim of current gbx
+  drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
+}
+
+KOKKOS_FUNCTION void
+beyonddomain_backwards_coord1(const CartesianMaps &gbxmaps,
+                              const unsigned int idx,
+                              const unsigned int nghbr,
+                              Superdrop &drop)
+/* function updates superdrop that has crossed the
+domain boundary in the backwards coord1 (x) direction
+(i.e. superdrop has exceeded the x back domain boundary) */
+{
+}
+
+KOKKOS_FUNCTION void
+beyonddomain_forwards_coord1(const CartesianMaps &gbxmaps,
+                              const unsigned int idx,
+                              const unsigned int nghbr,
+                              Superdrop &drop)
+/* function updates superdrop that has crossed the
+domain boundary in the forwards coord1 (x) direction
+(i.e. superdrop has exceeded the x front domain boundary) */
+{
+}
+
+KOKKOS_FUNCTION void
+beyonddomain_backwards_coord2(const CartesianMaps &gbxmaps,
+                              const unsigned int idx,
+                              const unsigned int nghbr,
+                              Superdrop &drop)
+/* function updates superdrop that has crossed the
+domain boundary in the backwards coord2 (y) direction
+(i.e. superdrop has exceeded the y leftmost domain boundary) */
+{
+}
+
+KOKKOS_FUNCTION void
+beyonddomain_forwards_coord2(const CartesianMaps &gbxmaps,
+                              const unsigned int idx,
+                              const unsigned int nghbr,
+                              Superdrop &drop)
+/* function updates superdrop that has crossed the
+domain boundary in the forwards coord2 (y) direction
+(i.e. superdrop has exceeded the y rightmost domain boundary) */
+{
+}
 
 #endif // CARTESIANMOTION_HPP
