@@ -35,87 +35,88 @@
 #include "./cartesianboundaryconds.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
-#include "gridboxes/predcorr.hpp"
+#include "gridboxes/predcorrmotion.hpp"
 
-KOKKOS_FUNCTION unsigned int
-change_to_coord3nghbr(const CartesianMaps &gbxmaps,
-                      unsigned int idx,
-                      Superdrop &drop);
-
-KOKKOS_FUNCTION unsigned int
-change_to_coord1nghbr(const CartesianMaps &gbxmaps,
-                      unsigned int idx,
-                      Superdrop &drop);
-KOKKOS_FUNCTION unsigned int
-change_to_coord2nghbr(const CartesianMaps &gbxmaps,
-                      unsigned int idx,
-                      Superdrop &drop);
-
-KOKKOS_FUNCTION void
-check_inbounds_or_outdomain(const unsigned int idx,
-                            const Kokkos::pair<double, double> bounds,
-                            const double coord);
-
-template <VelocityFormula TV>
-struct CartesianMotion
-/* satisfies motion concept for motion of a superdroplet
-using a predictor-corrector method to update a superdroplet's
-coordinates and then updating it's sdgbxindex using the
-UpdateSdgbxindex struct for a cartesian domain */
+struct CartesianCheckBounds
+/* wrapper of operator for use of function 
+in PredCorrMotion's CheckBounds type */
 {
-  const unsigned int interval; // integer timestep for movement
-  PredCorr<CartesianMaps, TV> superdrop_coords;
+  KOKKOS_FUNCTION void
+  operator()(const unsigned int idx,
+             const Kokkos::pair<double, double> bounds,
+             const double coord);
+  /* raise error if superdrop not either out of domain
+  or within bounds (ie. lower_bound <= coord < upper_bound) */
+};
 
-  CartesianMotion(const unsigned int motionstep,
-                  const std::function<double(unsigned int)> int2time,
-                  const TV i_terminalv)
-      : interval(motionstep),
-        superdrop_coords(interval, int2time, i_terminalv) {}
-
-  KOKKOS_INLINE_FUNCTION
-  unsigned int next_step(const unsigned int t_sdm) const
+struct CartesianChangeIfNghbr
+/* wrapper of functions for use in PredCorrMotion's
+ChangeToNghbr type for deciding if a superdroplet should move
+to a neighbouring gbx in a cartesian domain and then updating the
+superdroplet appropriately. Struct has three functions, one
+for each direction (coord3 = z, coord1 = x, coord2 = y). For each,
+the superdrop's coord is compared to gridbox bounds given by gbxmaps
+for the current gbxindex 'idx'. If superdrop coord lies outside
+bounds, forward or backward neighbour functions are called to
+update sdgbxindex (and possibly other superdrop attributes) */
+{
+  KOKKOS_FUNCTION unsigned int
+  coord3(const CartesianMaps &gbxmaps,
+         unsigned int idx,
+         Superdrop &drop)
   {
-    return ((t_sdm / interval) + 1) * interval;
+    change_to_coord3nghbr(gbxmaps, idx, drop);
   }
 
-  KOKKOS_INLINE_FUNCTION
-  bool on_step(const unsigned int t_sdm) const
+  KOKKOS_FUNCTION unsigned int
+  coord1(const CartesianMaps &gbxmaps,
+         unsigned int idx,
+         Superdrop &drop)
   {
-    return t_sdm % interval == 0;
+    change_to_coord1nghbr(gbxmaps, idx, drop);
   }
 
-  KOKKOS_INLINE_FUNCTION void
-  superdrop_gbx(const unsigned int gbxindex,
-                const CartesianMaps &gbxmaps,
-                Superdrop &drop) const
-  /* function satisfies requirements of
-  "superdrop_gbx" in the motion concept to update a
-  superdroplet if it should move between gridboxes in a
-  cartesian domain. For each direction (z, then x, then y),
-  superdrop coord is compared to gridbox bounds given by gbxmaps
-  for the current gbxindex 'idx'. If superdrop coord lies outside
-  bounds, forward or backward neighbour functions are called as
-  appropriate to update sdgbxindex (and possibly other attributes) */
+  KOKKOS_FUNCTION unsigned int
+  coord2(const CartesianMaps &gbxmaps,
+         unsigned int idx,
+         Superdrop &drop)
   {
-    unsigned int idx(gbxindex);
-
-    idx = change_to_coord3nghbr(gbxmaps, idx, drop);
-    check_inbounds_or_outdomain(idx, gbxmaps.coord3bounds(idx),
-                                drop.get_coord3());
-
-    idx = change_to_coord1nghbr(gbxmaps, idx, drop);
-    check_inbounds_or_outdomain(idx, gbxmaps.coord1bounds(idx),
-                                drop.get_coord1());
-
-    idx = change_to_coord2nghbr(gbxmaps, idx, drop);
-    check_inbounds_or_outdomain(idx, gbxmaps.coord2bounds(idx),
-                                drop.get_coord2());
-
-    drop.set_sdgbxindex(idx);
+    change_to_coord2nghbr(gbxmaps, idx, drop);
   }
 };
 
+template <VelocityFormula TV>
+inline Motion<CartesianMaps> auto
+CartesianMotion(const unsigned int motionstep,
+                const std::function<double(unsigned int)> int2time,
+                const TV terminalv)
+/* returned type satisfies motion concept for motion of a
+superdroplet using a predictor-corrector method to update
+a superdroplet's coordinates and then updating it's
+sdgbxindex as appropriate for a cartesian domain */
+{
+  return PredCorrMotion(motionstep, int2time, terminalv,
+                        CartesianChangeIfNghbr{},
+                        CartesianCheckBounds{});
+}
+
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
+
+KOKKOS_FUNCTION void
+CartesianCheckBounds::operator()(const unsigned int idx,
+                                 const Kokkos::pair<double, double> bounds,
+                                 const double coord);
+/* raise error if superdrop not either out of domain
+or within bounds (ie. lower_bound <= coord < upper_bound) */
+{
+  const bool bad_gbxindex((idx != outofbounds_gbxindex()) &&
+                          ((coord < bounds.first) | (coord >= bounds.second)));
+
+  assert((!bad_gbxindex) && "SD not in previous gbx nor a neighbour."
+                            " Try reducing the motion timestep to"
+                            " satisfy CFL criteria, or use "
+                            " 'update_ifoutside' to update sd_gbxindex");
+}
 
 KOKKOS_FUNCTION int
 flag_sdgbxindex(const unsigned int idx,
@@ -181,22 +182,6 @@ beyonddomain_forwards_coord2(const CartesianMaps &gbxmaps,
                              const unsigned int idx,
                              const unsigned int nghbr,
                              Superdrop &drop);
-
-KOKKOS_FUNCTION void
-check_inbounds_or_outdomain(const unsigned int idx,
-                            const Kokkos::pair<double, double> bounds,
-                            const double coord)
-/* raise error if superdrop not either out of domain
-or within bounds (ie. lower_bound <= coord < upper_bound) */
-{
-  const bool bad_gbxindex((idx != outofbounds_gbxindex()) &&
-                          ((coord < bounds.first) | (coord >= bounds.second)));
-
-  assert((!bad_gbxindex) && "SD not in previous gbx nor a neighbour."
-                            " Try reducing the motion timestep to"
-                            " satisfy CFL criteria, or use "
-                            " 'update_ifoutside' to update sd_gbxindex");
-}
 
 int flag_sdgbxindex(const unsigned int idx,
                     const Kokkos::pair<double, double> bounds,
