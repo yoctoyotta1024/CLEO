@@ -30,18 +30,17 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "./cartesianmaps.hpp"
 #include "./cartesianboundaryconds.hpp"
+#include "./cartesianmaps.hpp"
+#include "./cartesianmotion.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 #include "gridboxes/predcorrmotion.hpp"
 
-#include "./cartesianmotion.hpp"
-
 KOKKOS_FUNCTION unsigned int
-reset_if_coord3nghbr(const CartesianMaps &gbxmaps,
-                     unsigned int idx,
-                     Superdrop &drop);
+change_if_coord3nghbr_withreset(const CartesianMaps &gbxmaps,
+                                unsigned int idx,
+                                Superdrop &drop);
 
 struct CartesianChangeIfNghbrWithReset
 /* wrapper of functions for use in PredCorrMotion's
@@ -52,14 +51,16 @@ for each direction (coord3 = z, coord1 = x, coord2 = y). For each,
 the superdrop's coord is compared to gridbox bounds given by gbxmaps
 for the current gbxindex 'idx'. If superdrop coord lies outside
 bounds, forward or backward neighbour functions are called to
-update sdgbxindex (and possibly other superdrop attributes) */
+update sdgbxindex (and possibly other superdrop attributes).
+Struct is same as CartesianChangeIfNghbr except for in 
+coord3(...){...} function */
 {
   KOKKOS_INLINE_FUNCTION unsigned int
   coord3(const CartesianMaps &gbxmaps,
          unsigned int idx,
          Superdrop &drop) const
   {
-    return reset_if_coord3nghbr(gbxmaps, idx, drop);
+    return change_if_coord3nghbr_withreset(gbxmaps, idx, drop);
   }
 
   KOKKOS_INLINE_FUNCTION unsigned int
@@ -101,9 +102,20 @@ sdgbxindex as appropriate for a cartesian domain */
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 KOKKOS_FUNCTION unsigned int
-reset_if_coord3nghbr(const CartesianMaps &gbxmaps,
-                     unsigned int idx,
-                     Superdrop &drop)
+change_to_backwards_coord3nghbr_withreset(const unsigned int idx,
+                                const CartesianMaps &gbxmaps,
+                                Superdrop &superdrop);
+
+KOKKOS_FUNCTION void
+beyonddomain_backwards_coord3_withreset(const CartesianMaps &gbxmaps,
+                              const unsigned int idx,
+                              const unsigned int nghbr,
+                              Superdrop &drop);
+
+KOKKOS_FUNCTION unsigned int
+change_if_coord3nghbr_withreset(const CartesianMaps &gbxmaps,
+                                unsigned int idx,
+                                Superdrop &drop)
 /* return updated value of gbxindex in case superdrop should
 move to neighbouring gridbox in coord3 direction.
 Funciton changes value of idx if flag != 0,
@@ -117,14 +129,54 @@ superdroplet's attributes e.g. if it leaves the domain. */
   switch (flag)
   {
   case 1:
-    idx = change_to_backwards_coord3nghbr(idx, gbxmaps, drop);
+    idx = change_to_backwards_coord3nghbr_withreset(idx, gbxmaps, drop);
     break;
   case 2:
-    idx = change_to_forwards_coord3nghbr(idx, gbxmaps, drop);
+    idx = change_to_forwards_coord3nghbr_withreset(idx, gbxmaps, drop);
     break;
   }
   return idx;
 }
+
+KOKKOS_FUNCTION unsigned int
+change_to_backwards_coord3nghbr_withreset(const unsigned int idx,
+                                const CartesianMaps &gbxmaps,
+                                Superdrop &drop)
+/* function to return gbxindex of neighbouring gridbox
+in backwards coord3 (z) direction and to update superdrop
+if its coord3 has exceeded the z lower domain boundary */
+{
+  auto nghbr = (unsigned int)gbxmaps.coord3backward(idx);
+
+  const auto incre = (unsigned int)1;                         // increment
+  if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) // drop was at lower z edge of domain (now moving below it)
+  {
+    nghbr = reset_superdrop(gbxmaps, idx, nghbr, drop);
+  }
+
+  drop.set_sdgbxindex(nghbr);
+  return nghbr; // gbxindex of z backwards (down) neighbour
+};
+
+KOKKOS_FUNCTION unsigned int
+change_to_forwards_coord3nghbr_withreset(const unsigned int idx,
+                               const CartesianMaps &gbxmaps,
+                               Superdrop &drop)
+/* function to return gbxindex of neighbouring gridbox in
+forwards coord3 (z) direction and to update superdrop coord3
+if superdrop has exceeded the z upper domain boundary */
+{
+  auto nghbr = (unsigned int)gbxmaps.coord3forward(idx);
+
+  const auto incre = (unsigned int)1;                                 // increment
+  if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) // drop was upper z edge of domain (now moving above it)
+  {
+    nghbr = reset_superdrop(gbxmaps, idx, nghbr, drop);
+  }
+
+  drop.set_sdgbxindex(nghbr);
+  return nghbr; // gbxindex of z forwards (up) neighbour
+};
 
 #endif // CARTESIANMOTION_WITHRESET_HPP
 
