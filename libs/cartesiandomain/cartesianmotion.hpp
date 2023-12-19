@@ -38,15 +38,15 @@
 #include "gridboxes/predcorr.hpp"
 
 KOKKOS_FUNCTION unsigned int
-update_if_coord3nghbr(const CartesianMaps &gbxmaps,
+change_to_coord3nghbr(const CartesianMaps &gbxmaps,
                       unsigned int idx,
                       Superdrop &drop);
 KOKKOS_FUNCTION unsigned int
-update_if_coord1nghbr(const CartesianMaps &gbxmaps,
+change_to_coord1nghbr(const CartesianMaps &gbxmaps,
                       unsigned int idx,
                       Superdrop &drop);
 KOKKOS_FUNCTION unsigned int
-update_if_coord2nghbr(const CartesianMaps &gbxmaps,
+change_to_coord2nghbr(const CartesianMaps &gbxmaps,
                       unsigned int idx,
                       Superdrop &drop);
 
@@ -98,15 +98,15 @@ UpdateSdgbxindex struct for a cartesian domain */
   {
     unsigned int idx(gbxindex);
 
-    idx = update_if_coord3nghbr(gbxmaps, idx, drop);
+    idx = change_to_coord3nghbr(gbxmaps, idx, drop);
     check_inbounds_or_outdomain(idx, gbxmaps.coord3bounds(idx),
                                 drop.get_coord3());
 
-    idx = update_if_coord1nghbr(gbxmaps, idx, drop);
+    idx = change_to_coord1nghbr(gbxmaps, idx, drop);
     check_inbounds_or_outdomain(idx, gbxmaps.coord1bounds(idx),
                                 drop.get_coord1());
 
-    idx = update_if_coord2nghbr(gbxmaps, idx, drop);
+    idx = change_to_coord2nghbr(gbxmaps, idx, drop);
     check_inbounds_or_outdomain(idx, gbxmaps.coord2bounds(idx),
                                 drop.get_coord2());
 
@@ -197,7 +197,7 @@ be updated to forwards neighbour. */
 }
 
 KOKKOS_FUNCTION unsigned int
-update_if_coord3nghbr(const CartesianMaps &gbxmaps,
+change_to_coord3nghbr(const CartesianMaps &gbxmaps,
                         unsigned int idx,
                         Superdrop &drop)
 /* return updated value of gbxindex in case superdrop should
@@ -223,7 +223,7 @@ superdroplet's attributes e.g. if it leaves the domain. */
 }
 
 KOKKOS_FUNCTION unsigned int
-update_if_coord1nghbr(const CartesianMaps &gbxmaps,
+change_to_coord1nghbr(const CartesianMaps &gbxmaps,
                           unsigned int idx,
                           Superdrop &drop)
 /* return updated value of gbxindex in case superdrop should
@@ -249,7 +249,7 @@ superdroplet's attributes e.g. if it leaves the domain. */
 }
 
 KOKKOS_FUNCTION unsigned int
-update_if_coord2nghbr(const CartesianMaps &gbxmaps,
+change_to_coord2nghbr(const CartesianMaps &gbxmaps,
                           unsigned int idx,
                           Superdrop &drop)
 /* return updated value of gbxindex in case superdrop should
