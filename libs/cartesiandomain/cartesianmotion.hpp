@@ -122,29 +122,29 @@ flag_sdgbxindex(const unsigned int idx,
                 const double coord);
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord3idx(const unsigned int idx,
+backwards_coord3(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &superdrop);
 KOKKOS_FUNCTION unsigned int
-forwards_coord3idx(const unsigned int idx,
+forwards_coord3(const unsigned int idx,
                    const CartesianMaps &gbxmaps,
                    Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord1idx(const unsigned int idx,
+backwards_coord1(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &superdrop);
 KOKKOS_FUNCTION unsigned int
-forwards_coord1idx(const unsigned int idx,
+forwards_coord1(const unsigned int idx,
                    const CartesianMaps &gbxmaps,
                    Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord2idx(const unsigned int idx,
+backwards_coord2(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &superdrop);
 KOKKOS_FUNCTION unsigned int
-forwards_coord2idx(const unsigned int idx,
+forwards_coord2(const unsigned int idx,
                    const CartesianMaps &gbxmaps,
                    Superdrop &drop);
 
@@ -213,10 +213,10 @@ superdroplet's attributes e.g. if it leaves the domain. */
   switch (flag)
   {
   case 1:
-    idx = backwards_coord3idx(idx, gbxmaps, drop);
+    idx = backwards_coord3(idx, gbxmaps, drop);
     break;
   case 2:
-    idx = forwards_coord3idx(idx, gbxmaps, drop);
+    idx = forwards_coord3(idx, gbxmaps, drop);
     break;
   }
   return idx;
@@ -239,10 +239,10 @@ superdroplet's attributes e.g. if it leaves the domain. */
   switch (flag)
   {
   case 1:
-    idx = backwards_coord1idx(idx, gbxmaps, drop);
+    idx = backwards_coord1(idx, gbxmaps, drop);
     break;
   case 2:
-     idx = forwards_coord1idx(idx, gbxmaps, drop);
+    idx = forwards_coord1(idx, gbxmaps, drop);
     break;
   }
   return idx;
@@ -265,17 +265,17 @@ superdroplet's attributes e.g. if it leaves the domain. */
   switch (flag)
   {
   case 1:
-    idx = backwards_coord2idx(idx, gbxmaps, drop);
+    idx = backwards_coord2(idx, gbxmaps, drop);
     break;
   case 2:
-     idx = forwards_coord2idx(idx, gbxmaps, drop);
+    idx = forwards_coord2(idx, gbxmaps, drop);
     break;
   }
   return idx;
 }
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord3idx(const unsigned int idx,
+backwards_coord3(const unsigned int idx,
                  const CartesianMaps &gbxmaps,
                  Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
@@ -317,7 +317,7 @@ if superdrop has exceeded the z upper domain boundary */
 };
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord1idx(const unsigned int idx,
+backwards_coord1(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
@@ -361,7 +361,7 @@ coord1 if superdrop has exceeded the x front domain boundary */
 };
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord2idx(const unsigned int idx,
+backwards_coord2(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
