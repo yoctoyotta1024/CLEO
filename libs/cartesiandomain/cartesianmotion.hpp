@@ -437,7 +437,7 @@ domain boundary in the backwards coord3 (z) direction
 {
   const auto lim1 = double{gbxmaps.coord3bounds(nghbr).second}; // upper lim of backward neighbour
   const auto lim2 = double{gbxmaps.coord3bounds(idx).first};    // lower lim of current gbx
-  drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
+  drop.set_coord3(boundarycond_coord3(drop.get_coord3(), lim1, lim2));
 }
 
 KOKKOS_FUNCTION void
@@ -451,7 +451,7 @@ domain boundary in the forwards coord3 (z) direction
 {
   const auto lim1 = double{gbxmaps.coord3bounds(nghbr).first}; // lower lim of forward neighbour
   const auto lim2 = double{gbxmaps.coord3bounds(idx).second};  // upper lim of current gbx
-  drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
+  drop.set_coord3(boundarycond_coord3(drop.get_coord3(), lim1, lim2));
 }
 
 KOKKOS_FUNCTION void
@@ -465,7 +465,7 @@ domain boundary in the backwards coord1 (x) direction
 {
   const auto lim1 = double{gbxmaps.coord1bounds(nghbr).second}; // upper lim of backward neigghbour
   const auto lim2 = double{gbxmaps.coord1bounds(idx).first};    // lower lim of current gbx
-  drop.set_coord1(coord1_beyondx(drop.get_coord1(), lim1, lim2));
+  drop.set_coord1(boundarycond_coord1(drop.get_coord1(), lim1, lim2));
 }
 
 KOKKOS_FUNCTION void
@@ -479,7 +479,7 @@ domain boundary in the forwards coord1 (x) direction
 {
   const auto lim1 = double{gbxmaps.coord1bounds(nghbr).first}; // lower lim of forward nghbour
   const auto lim2 = double{gbxmaps.coord1bounds(idx).second};  // upper lim of gbx
-  drop.set_coord1(coord1_beyondx(drop.get_coord1(), lim1, lim2));
+  drop.set_coord1(boundarycond_coord1(drop.get_coord1(), lim1, lim2));
 }
 
 KOKKOS_FUNCTION void
@@ -493,7 +493,7 @@ domain boundary in the backwards coord2 (y) direction
 {
   const auto lim1 = double{gbxmaps.coord2bounds(nghbr).second}; // upper lim of backward nghbour
   const auto lim2 = double{gbxmaps.coord2bounds(idx).first};    // lower lim of gbx
-  drop.set_coord2(coord2_beyondy(drop.get_coord2(), lim1, lim2));
+  drop.set_coord2(boundarycond_coord2(drop.get_coord2(), lim1, lim2));
 }
 
 KOKKOS_FUNCTION void
@@ -507,7 +507,7 @@ domain boundary in the forwards coord2 (y) direction
 {
   const auto lim1 = double{gbxmaps.coord2bounds(nghbr).first}; // lower lim of forward nghbour
   const auto lim2 = double{gbxmaps.coord2bounds(idx).second};  // upper lim of gbx
-  drop.set_coord2(coord2_beyondy(drop.get_coord2(), lim1, lim2));
+  drop.set_coord2(boundarycond_coord2(drop.get_coord2(), lim1, lim2));
 }
 
 #endif // CARTESIANMOTION_HPP

@@ -26,9 +26,9 @@
 #define CARTESIANBOUNDARYCONDS_HPP
 
 /* NOTE: boundary conditions of domain are defined as:
-  z: FINITE   (see cartesian_coord3nghbrs & coord3_beyondz)
-  x: PERIODIC (see cartesian_coord3nghbrs & coord1_beyondx)
-  y: PERIODIC (see cartesian_coord3nghbrs & coord2_beyondy)
+  z: FINITE   (see cartesian_coord3nghbrs & boundarycond_coord3)
+  x: PERIODIC (see cartesian_coord3nghbrs & boundarycond_coord1)
+  y: PERIODIC (see cartesian_coord3nghbrs & boundarycond_coord2)
 */
 
 #include <vector>
@@ -181,9 +181,9 @@ for gridboxes at the edges of the domain is either finite
 }
 
 KOKKOS_INLINE_FUNCTION double
-coord3_beyondz(const double coord3,
-               const double lim1,
-               const double lim2)
+boundarycond_coord3(const double coord3,
+                    const double lim1,
+                    const double lim2)
 /* return value is new coord for a superdroplet given that
 coord3 exceedes the domain's lower or upper boundary in z direction.
 (ie. coord3 is below the lower edge of the lowest gridboxes
@@ -195,9 +195,9 @@ gridboxes in the z direction) */
 };
 
 KOKKOS_INLINE_FUNCTION double
-coord1_beyondx(const double coord1,
-               const double lim1,
-               const double lim2)
+boundarycond_coord1(const double coord1,
+                    const double lim1,
+                    const double lim2)
 /* return value is new coord for a superdroplet given
 that coord1 exceedes the domain's backwardsmost boundary
 in x direction, or given that coord1 exceedes the
@@ -208,9 +208,9 @@ domain's forwardmost boundary in x direction */
 };
 
 KOKKOS_INLINE_FUNCTION double
-coord2_beyondy(const double coord2,
-               const double lim1,
-               const double lim2)
+boundarycond_coord2(const double coord2,
+                    const double lim1,
+                    const double lim2)
 /* return value is new coord for a superdroplet given
 that coord2 exceedes the domain's edge/boundary in y
 leftwards direction, or given that coord2 exceedes the
