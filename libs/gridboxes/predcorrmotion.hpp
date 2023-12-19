@@ -28,7 +28,6 @@
 #include <cassert>
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Pair.hpp>
 
 #include "./predcorr.hpp"
 #include "superdrops/superdrop.hpp"
@@ -80,21 +79,17 @@ the appropriate templated type */
   superdrop and idx may be changed if superdrop coord
   lies outside bounds of gridbox in that direction */
   {
-    unsigned int idx(gbxindex);
-
-    idx = change_if_nghbr.coord3(gbxmaps, idx, drop);
-    check_bounds(idx, gbxmaps.coord3bounds(idx),
-                 drop.get_coord3());
+    unsigned int idx = change_if_nghbr.coord3(gbxmaps, gbxindex, drop);
+    check_bounds(idx, gbxmaps.coord3bounds(idx), drop.get_coord3());
 
     idx = change_if_nghbr.coord1(gbxmaps, idx, drop);
-    check_bounds(idx, gbxmaps.coord1bounds(idx),
-                 drop.get_coord1());
+    check_bounds(idx, gbxmaps.coord1bounds(idx), drop.get_coord1());
 
     idx = change_if_nghbr.coord2(gbxmaps, idx, drop);
-    check_bounds(idx, gbxmaps.coord2bounds(idx),
-                 drop.get_coord2());
+    check_bounds(idx, gbxmaps.coord2bounds(idx), drop.get_coord2());
 
-    drop.set_sdgbxindex(idx);
+    assert((drop.get_sdgbxindex() == idx) &&
+           "sdgbxindex not concordant with supposed idx");
   }
 };
 
