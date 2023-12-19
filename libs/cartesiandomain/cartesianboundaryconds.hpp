@@ -26,9 +26,9 @@
 #define CARTESIANBOUNDARYCONDS_HPP
 
 /* NOTE: boundary conditions of domain are defined as:
-  z: FINITE   (see cartesian_znghbrs & coord3_beyondz)
-  x: PERIODIC (see cartesian_xnghbrs & coord1_beyondx)
-  y: PERIODIC (see cartesian_ynghbrs & coord2_beyondy)
+  z: FINITE   (see cartesian_coord3nghbrs & coord3_beyondz)
+  x: PERIODIC (see cartesian_coord3nghbrs & coord1_beyondx)
+  y: PERIODIC (see cartesian_coord3nghbrs & coord2_beyondy)
 */
 
 #include <vector>
@@ -140,7 +140,7 @@ coord -> coord - length_of_domain */
 }
 
 inline Kokkos::pair<unsigned int, unsigned int>
-cartesian_znghbrs(const unsigned int idx,
+cartesian_coord3nghbrs(const unsigned int idx,
                   const std::vector<size_t> &ndims)
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} z direction given a gridbox with
@@ -153,7 +153,7 @@ for gridboxes at the edges of the domain is either finite
 }
 
 inline Kokkos::pair<unsigned int, unsigned int>
-cartesian_xnghbrs(const unsigned int idx,
+cartesian_coord1nghbrs(const unsigned int idx,
                   const std::vector<size_t> &ndims)
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} x direction given a gridbox with
@@ -167,7 +167,7 @@ for gridboxes at the edges of the domain is either finite
 }
 
 inline Kokkos::pair<unsigned int, unsigned int>
-cartesian_ynghbrs(const unsigned int idx,
+cartesian_coord2nghbrs(const unsigned int idx,
                   const std::vector<size_t> &ndims)
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} y direction given a gridbox with
