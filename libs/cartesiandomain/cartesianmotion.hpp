@@ -306,7 +306,7 @@ if superdrop has exceeded the z upper domain boundary */
   const auto nghbr = (unsigned int)gbxmaps.coord3forward(idx);
 
   const auto incre = (unsigned int)1; // increment
-  if (at_cartesiandomainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) // drop was upper z edge of domain (now moving above it)
+  if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) // drop was upper z edge of domain (now moving above it)
   {
     const auto lim1 = double{gbxmaps.coord3bounds(nghbr).first}; // lower lim of forward neighbour
     const auto lim2 = double{gbxmaps.coord3bounds(idx).second};  // upper lim of current gbx
@@ -328,7 +328,7 @@ coord1 if superdrop has exceeded the x back domain boundary */
 
   const auto ndims(gbxmaps.get_ndims());
   const auto incre = (unsigned int)ndims(0);                   // increment
-  if (at_cartesiandomainboundary(idx, incre, ndims(1))) // at lower x edge of domain
+  if (beyond_domainboundary(idx, incre, ndims(1))) // at lower x edge of domain
   {
     const auto lim1 = double{gbxmaps.coord1bounds(nghbr).second}; // upper lim of backward neigghbour
     const auto lim2 = double{gbxmaps.coord1bounds(idx).first};    // lower lim of current gbx
@@ -350,7 +350,7 @@ coord1 if superdrop has exceeded the x front domain boundary */
 
   const auto ndims(gbxmaps.get_ndims());
   const auto incre = (unsigned int)ndims(0);                           // increment
-  if (at_cartesiandomainboundary(idx + incre, incre, ndims(1))) // at lower x edge of domain
+  if (beyond_domainboundary(idx + incre, incre, ndims(1))) // at lower x edge of domain
   {
     const auto lim1 = double{gbxmaps.coord1bounds(nghbr).first}; // lower lim of forward nghbour
     const auto lim2 = double{gbxmaps.coord1bounds(idx).second};  // upper lim of gbx
@@ -372,7 +372,7 @@ coord2 if superdrop has exceeded the y leftmost domain boundary */
 
   const auto ndims(gbxmaps.get_ndims());
   const auto incre = (unsigned int)ndims(0) * ndims(1);        // no. gridboxes in z direction * no. gridboxes in x direction
-  if (at_cartesiandomainboundary(idx, incre, ndims(2))) // at lower y edge of domain
+  if (beyond_domainboundary(idx, incre, ndims(2))) // at lower y edge of domain
   {
     const auto lim1 = double{gbxmaps.coord2bounds(nghbr).second}; // upper lim of backward nghbour
     const auto lim2 = double{gbxmaps.coord2bounds(idx).first};    // lower lim of gbx
@@ -394,7 +394,7 @@ coord2 if superdrop has exceeded the y rightmost domain boundary */
   
   const auto ndims(gbxmaps.get_ndims());
   const auto incre = (unsigned int)ndims(0) * ndims(1);                            // no. gridboxes in z direction * no. gridboxes in x direction
-  if (at_cartesiandomainboundary(idx + incre, incre, ndims(2)))             // at upper y edge of domain
+  if (beyond_domainboundary(idx + incre, incre, ndims(2)))             // at upper y edge of domain
   {
     const auto lim1 = double{gbxmaps.coord2bounds(nghbr).first}; // lower lim of forward nghbour
     const auto lim2 = double{gbxmaps.coord2bounds(idx).second};  // upper lim of gbx

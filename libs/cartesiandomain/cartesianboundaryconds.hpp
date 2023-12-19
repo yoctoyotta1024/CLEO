@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Tuesday 19th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -47,13 +47,13 @@ is out of domain (ie. not a valid gbxindex) */
 }
 
 KOKKOS_INLINE_FUNCTION bool
-at_cartesiandomainboundary(const unsigned int gbxindex,
+beyond_domainboundary(const unsigned int gbxindex,
                            const unsigned int increment,
                            const size_t ndim)
-/* returns true if gbxindex for gridbox is at a boundary
-of cartesian domain, given neighbouring indexes are
-+- increment from gbxindex and the number of gridboxes
-making up the domain in that direction (ndim) */
+/* returns true if gbxindex for gridbox is at/beyond a
+boundary of cartesian domain, given neighbouring indexes
+are +/- increment from gbxindex and the number of
+gridboxes making up the domain in that direction (ndim) */
 {
   return (gbxindex / increment) % ndim == 0;
 }
@@ -73,12 +73,12 @@ of a gridbox at the edge of the domain is a max unsigned int */
   unsigned int forward(idx + increment);
   unsigned int backward(idx - increment);
 
-  if (at_cartesiandomainboundary(idx, increment, ndim)) // at lower edge of domain
+  if (beyond_domainboundary(idx, increment, ndim)) // at lower edge of domain
   {
     backward = outofbounds_gbxindex();
   }
 
-  if (at_cartesiandomainboundary(forward, increment, ndim)) // at upper edge of domain
+  if (beyond_domainboundary(forward, increment, ndim)) // at upper edge of domain
   {
     forward = outofbounds_gbxindex();
   }
@@ -100,12 +100,12 @@ lowermost gridbox in that direction (and vice versa). */
   unsigned int forward(idx + increment);
   unsigned int backward(idx - increment);
 
-  if (at_cartesiandomainboundary(idx, increment, ndim)) // at lower edge of domain
+  if (beyond_domainboundary(idx, increment, ndim)) // at lower edge of domain
   {
     backward = idx + (ndim - 1) * increment;
   }
 
-  if (at_cartesiandomainboundary(forward, increment, ndim)) // at upper edge of domain
+  if (beyond_domainboundary(forward, increment, ndim)) // at upper edge of domain
   {
     forward = idx - (ndim - 1) * increment;
   }
