@@ -122,29 +122,29 @@ flag_sdgbxindex(const unsigned int idx,
                 const double coord);
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord3(const unsigned int idx,
+change_to_backwards_coord3nghbr(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &superdrop);
 KOKKOS_FUNCTION unsigned int
-forwards_coord3(const unsigned int idx,
+change_to_forwards_coord3nghbr(const unsigned int idx,
                    const CartesianMaps &gbxmaps,
                    Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord1(const unsigned int idx,
+change_to_backwards_coord1nghbr(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &superdrop);
 KOKKOS_FUNCTION unsigned int
-forwards_coord1(const unsigned int idx,
+change_to_forwards_coord1nghbr(const unsigned int idx,
                    const CartesianMaps &gbxmaps,
                    Superdrop &drop);
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord2(const unsigned int idx,
+change_to_backwards_coord2nghbr(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &superdrop);
 KOKKOS_FUNCTION unsigned int
-forwards_coord2(const unsigned int idx,
+change_to_forwards_coord2nghbr(const unsigned int idx,
                    const CartesianMaps &gbxmaps,
                    Superdrop &drop);
 
@@ -213,10 +213,10 @@ superdroplet's attributes e.g. if it leaves the domain. */
   switch (flag)
   {
   case 1:
-    idx = backwards_coord3(idx, gbxmaps, drop);
+    idx = change_to_backwards_coord3nghbr(idx, gbxmaps, drop);
     break;
   case 2:
-    idx = forwards_coord3(idx, gbxmaps, drop);
+    idx = change_to_forwards_coord3nghbr(idx, gbxmaps, drop);
     break;
   }
   return idx;
@@ -239,10 +239,10 @@ superdroplet's attributes e.g. if it leaves the domain. */
   switch (flag)
   {
   case 1:
-    idx = backwards_coord1(idx, gbxmaps, drop);
+    idx = change_to_backwards_coord1nghbr(idx, gbxmaps, drop);
     break;
   case 2:
-    idx = forwards_coord1(idx, gbxmaps, drop);
+    idx = change_to_forwards_coord1nghbr(idx, gbxmaps, drop);
     break;
   }
   return idx;
@@ -265,17 +265,31 @@ superdroplet's attributes e.g. if it leaves the domain. */
   switch (flag)
   {
   case 1:
-    idx = backwards_coord2(idx, gbxmaps, drop);
+    idx = change_to_backwards_coord2nghbr(idx, gbxmaps, drop);
     break;
   case 2:
-    idx = forwards_coord2(idx, gbxmaps, drop);
+    idx = change_to_forwards_coord2nghbr(idx, gbxmaps, drop);
     break;
   }
   return idx;
 }
 
+KOKKOS_FUNCTION void
+drop_beyond_backwards_coord3_boundary(const CartesianMaps &gbxmaps,
+                                      const unsigned int nghbr,
+                                      const unsigned int idx,
+                                      Superdrop &drop)
+/* function updates superdrop that has crossed the domain
+boundary in the backwards coord3 (z) direction (i.e. superdrop
+has exceeded the z lower domain boundary) */
+{
+  const auto lim1 = double{gbxmaps.coord3bounds(nghbr).second}; // upper lim of backward neighbour
+  const auto lim2 = double{gbxmaps.coord3bounds(idx).first};    // lower lim of current gbx
+  drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
+}
+
 KOKKOS_FUNCTION unsigned int
-backwards_coord3(const unsigned int idx,
+change_to_backwards_coord3nghbr(const unsigned int idx,
                  const CartesianMaps &gbxmaps,
                  Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
@@ -285,18 +299,16 @@ coord3 if superdrop has exceeded the z lower domain boundary */
   const auto nghbr = (unsigned int)gbxmaps.coord3backward(idx);
 
   const auto incre = (unsigned int)1; // increment
-  if (at_cartesiandomainboundary(idx, incre, gbxmaps.get_ndim(0))) // drop was at lower z edge of domain (now moving below it)
+  if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) // drop was at lower z edge of domain (now moving below it)
   {
-    const auto lim1 = double{gbxmaps.coord3bounds(nghbr).second}; // upper lim of backward neighbour
-    const auto lim2 = double{gbxmaps.coord3bounds(idx).first};    // lower lim of current gbx
-    drop.set_coord3(coord3_beyondz(drop.get_coord3(), lim1, lim2));
+    drop_beyond_backwards_coord3_boundary(gbxmaps, drop);
   }
 
   return nghbr; // gbxindex of z backwards (down) neighbour
 };
 
 KOKKOS_FUNCTION unsigned int
-forwards_coord3idx(const unsigned int idx,
+change_to_forwards_coord3nghbr(const unsigned int idx,
                  const CartesianMaps &gbxmaps,
                  Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox in
@@ -317,7 +329,7 @@ if superdrop has exceeded the z upper domain boundary */
 };
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord1(const unsigned int idx,
+change_to_backwards_coord1nghbr(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
@@ -339,7 +351,7 @@ coord1 if superdrop has exceeded the x back domain boundary */
 };
 
 KOKKOS_FUNCTION unsigned int
-forwards_coord1idx(const unsigned int idx,
+change_to_forwards_coord1nghbr(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
@@ -361,7 +373,7 @@ coord1 if superdrop has exceeded the x front domain boundary */
 };
 
 KOKKOS_FUNCTION unsigned int
-backwards_coord2(const unsigned int idx,
+change_to_backwards_coord2nghbr(const unsigned int idx,
                     const CartesianMaps &gbxmaps,
                     Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
@@ -383,7 +395,7 @@ coord2 if superdrop has exceeded the y leftmost domain boundary */
 };
 
 KOKKOS_FUNCTION unsigned int
-forwards_coord2idx(const unsigned int idx,
+change_to_forwards_coord2nghbr(const unsigned int idx,
                    const CartesianMaps &gbxmaps,
                    Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
