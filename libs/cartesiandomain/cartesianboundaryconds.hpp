@@ -48,8 +48,8 @@ is out of domain (ie. not a valid gbxindex) */
 
 KOKKOS_INLINE_FUNCTION bool
 beyond_domainboundary(const unsigned int gbxindex,
-                           const unsigned int increment,
-                           const size_t ndim)
+                      const unsigned int increment,
+                      const size_t ndim)
 /* returns true if gbxindex for gridbox is at/beyond a
 boundary of cartesian domain, given neighbouring indexes
 are +/- increment from gbxindex and the number of
@@ -141,7 +141,7 @@ coord -> coord - length_of_domain */
 
 inline Kokkos::pair<unsigned int, unsigned int>
 cartesian_coord3nghbrs(const unsigned int idx,
-                  const std::vector<size_t> &ndims)
+                       const std::vector<size_t> &ndims)
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} z direction given a gridbox with
 gbxidx='idx' in a cartesian domain. Treatment of neighbours
@@ -154,7 +154,7 @@ for gridboxes at the edges of the domain is either finite
 
 inline Kokkos::pair<unsigned int, unsigned int>
 cartesian_coord1nghbrs(const unsigned int idx,
-                  const std::vector<size_t> &ndims)
+                       const std::vector<size_t> &ndims)
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} x direction given a gridbox with
 gbxidx='idx' in a cartesian domain. Treatment of neighbours
@@ -168,7 +168,7 @@ for gridboxes at the edges of the domain is either finite
 
 inline Kokkos::pair<unsigned int, unsigned int>
 cartesian_coord2nghbrs(const unsigned int idx,
-                  const std::vector<size_t> &ndims)
+                       const std::vector<size_t> &ndims)
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} y direction given a gridbox with
 gbxidx='idx' in a cartesian domain. Treatment of neighbours
