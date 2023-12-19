@@ -31,8 +31,8 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 
-#include "./cartesianmaps.hpp"
 #include "./cartesianboundaryconds.hpp"
+#include "./cartesianmaps.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 #include "gridboxes/predcorrmotion.hpp"
