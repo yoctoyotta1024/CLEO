@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 22nd November 2023
+Last Modified: Wednesday 20th December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -54,7 +54,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 # zlim = 1000
 # npergbx = 8
 # nsupers =  iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 8
+nsupers = 40
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
@@ -116,8 +116,8 @@ coord3gen            =  iattrs.SampleCoordGen(True) # sample coord3 range random
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
 # coord1gen            =  iattrs.MonoCoordGen(monocoord1)
-coord1gen            =  iattrs.SampleCoordGen(True) # sample coord1 range randomly or not
-# coord1gen            = None                        # do not generate superdroplet coord1s
+# coord1gen            =  iattrs.SampleCoordGen(True) # sample coord1 range randomly or not
+coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###

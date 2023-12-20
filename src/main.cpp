@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Wednesday 20th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -140,14 +140,14 @@ config_collisions(const Config &config, const Timesteps &tsteps)
   //                                             nfrags);
 
   // const PairProbability auto coalprob = LowListCoalProb();
-  // const PairProbability auto coalprob = LongHydroProb(1.0);
-  const PairProbability auto coalprob = GolovinProb();
+  const PairProbability auto coalprob = LongHydroProb(1.0);
+  // const PairProbability auto coalprob = GolovinProb();
   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    coalprob);
 
-  // return coal >> bu;
   return coal;
+  // return coal >> bu;
 }
 
 inline MicrophysicalProcess auto
@@ -168,9 +168,9 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  const auto terminalv = NullTerminalVelocity{};
+  // const auto terminalv = NullTerminalVelocity{};
   // const auto terminalv = RogersYauTerminalVelocity{};
-  // const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
 
   return CartesianMotion(motionstep,
                          &step2dimlesstime,
@@ -215,26 +215,27 @@ create_observer(const Config &config,
 
   const Observer auto obs4 = GbxindexObserver(store, maxchunk);
 
-  const Observer auto obs5 = StateObserver(obsstep, store, maxchunk,
-                                           config.ngbxs);
+  // const Observer auto obs5 = StateObserver(obsstep, store, maxchunk,
+  //                                          config.ngbxs);
 
-  const Observer auto obs6 = NsupersObserver(obsstep, store, maxchunk,
-                                             config.ngbxs);
+  // const Observer auto obs6 = NsupersObserver(obsstep, store, maxchunk,
+  //                                            config.ngbxs);
 
-  const Observer auto obs7 = NrainsupersObserver(obsstep, store, maxchunk,
-                                                 config.ngbxs);
+  // const Observer auto obs7 = NrainsupersObserver(obsstep, store, maxchunk,
+  //                                                config.ngbxs);
 
   const Observer auto obs8 = MassMomentsObserver(obsstep, store, maxchunk,
                                                  config.ngbxs);
 
-  const Observer auto obs9 = RainMassMomentsObserver(obsstep, store, maxchunk,
-                                                     config.ngbxs);
+  // const Observer auto obs9 = RainMassMomentsObserver(obsstep, store, maxchunk,
+  //                                                    config.ngbxs);
 
   const Observer auto obs10 = create_supersattrs_observer(obsstep, store,
                                                           maxchunk);
 
-  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >>
-         obs7 >> obs8 >> obs9 >> obs10;
+  // return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >>
+  //        obs7 >> obs8 >> obs9 >> obs10;
+  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs8 >> obs10;       
 }
 
 inline auto create_sdm(const Config &config,
