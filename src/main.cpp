@@ -30,6 +30,7 @@
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
+#include "cartesiandomain/cartesianmotion_withreset.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 
 #include "coupldyn_fromfile/fromfilecomms.hpp"
@@ -172,9 +173,14 @@ create_motion(const unsigned int motionstep)
   // const auto terminalv = RogersYauTerminalVelocity{};
   const auto terminalv = SimmelTerminalVelocity{};
 
-  return CartesianMotion(motionstep,
-                         &step2dimlesstime,
-                         terminalv);
+  return CartesianMotionWithReset(motionstep,
+                                  &step2dimlesstime,
+                                  terminalv);
+
+  // return CartesianMotion(motionstep,
+  //                        &step2dimlesstime,
+  //                        terminalv);
+
   // return NullMotion{};                                                                               
 }
 

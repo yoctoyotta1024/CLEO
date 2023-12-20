@@ -27,6 +27,7 @@
 #define CARTESIANMOTION_WITHRESET_HPP
 
 #include <functional>
+#include <random>
 
 #include <Kokkos_Core.hpp>
 
@@ -39,26 +40,22 @@
 #include "superdrops/urbg.hpp"
 #include "gridboxes/predcorrmotion.hpp"
 
-KOKKOS_FUNCTION unsigned int
-change_if_coord3nghbr_withreset(const CartesianMaps &gbxmaps,
-                                unsigned int idx,
-                                Superdrop &drop);
-
 struct ResetSuperdrop
 {
-  Kokkos::View<GenRandomPool[1]> genpool4reset(std::random_device{}());
+  Kokkos::View<GenRandomPool[1]> genpool4reset;
 
   ResetSuperdrop()
-      : genpool("genpool4reset")
+      : genpool4reset("genpool4reset")
   { 
     auto h_genpool4reset = Kokkos::create_mirror_view(genpool4reset);
     h_genpool4reset(0) = GenRandomPool(std::random_device{}());
     Kokkos::deep_copy(genpool4reset, h_genpool4reset);
   }
 
+  KOKKOS_FUNCTION unsigned int
   operator()(const unsigned int idx,
              const unsigned int nghbr,
-             Superdrop & drop) const
+             Superdrop &drop) const
   {
     URBG<ExecSpace> urbg{genpool4reset(0).get_state()}; // thread safe random number generator
     const auto phi = urbg(0, 1);               // random uint in range [0, 1]
@@ -67,6 +64,12 @@ struct ResetSuperdrop
     return nghbr;
   }
 };
+
+KOKKOS_FUNCTION unsigned int
+change_if_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+                                const CartesianMaps &gbxmaps,
+                                unsigned int idx,
+                                Superdrop &drop);
 
 struct CartesianChangeIfNghbrWithReset
 /* wrapper of functions for use in PredCorrMotion's
@@ -91,7 +94,8 @@ coord3(...){...} function */
          unsigned int idx,
          Superdrop &drop) const
   {
-    return change_if_coord3nghbr_withreset(gbxmaps, idx, drop);
+    return change_if_coord3nghbr_withreset(reset_superdrop,
+                                           gbxmaps, idx, drop);
   }
 
   KOKKOS_INLINE_FUNCTION unsigned int
@@ -116,35 +120,40 @@ inline PredCorrMotion<CartesianMaps, TV,
                       CartesianChangeIfNghbrWithReset,
                       CartesianCheckBounds>
 CartesianMotionWithReset(const unsigned int motionstep,
-                const std::function<double(unsigned int)> int2time,
-                const TV terminalv)
+                         const std::function<double(unsigned int)> int2time,
+                         const TV terminalv)
 /* returned type satisfies motion concept for motion of a
 superdroplet using a predictor-corrector method to update
 a superdroplet's coordinates and then updating it's
 sdgbxindex as appropriate for a cartesian domain */
 {
+  const auto change_if_nghbr = CartesianChangeIfNghbrWithReset();
   return PredCorrMotion<CartesianMaps, TV,
                         CartesianChangeIfNghbrWithReset,
-                        CartesianCheckBounds>(motionstep, int2time, terminalv,
-                                              CartesianChangeIfNghbr{},
+                        CartesianCheckBounds>(motionstep,
+                                              int2time,
+                                              terminalv,
+                                              change_if_nghbr,
                                               CartesianCheckBounds{});
 }
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 KOKKOS_FUNCTION unsigned int
-change_to_backwards_coord3nghbr_withreset(const unsigned int idx,
-                                const CartesianMaps &gbxmaps,
-                                Superdrop &superdrop);
-
-KOKKOS_FUNCTION void
-beyonddomain_backwards_coord3_withreset(const CartesianMaps &gbxmaps,
-                              const unsigned int idx,
-                              const unsigned int nghbr,
-                              Superdrop &drop);
+change_to_backwards_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+                                          const unsigned int idx,
+                                          const CartesianMaps &gbxmaps,
+                                          Superdrop &superdrop);
 
 KOKKOS_FUNCTION unsigned int
-change_if_coord3nghbr_withreset(const CartesianMaps &gbxmaps,
+change_to_forwards_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+                                         const unsigned int idx,
+                                         const CartesianMaps &gbxmaps,
+                                         Superdrop &superdrop);
+
+KOKKOS_FUNCTION unsigned int
+change_if_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+                                const CartesianMaps &gbxmaps,
                                 unsigned int idx,
                                 Superdrop &drop)
 /* return updated value of gbxindex in case superdrop should
@@ -160,17 +169,20 @@ superdroplet's attributes e.g. if it leaves the domain. */
   switch (flag)
   {
   case 1:
-    idx = change_to_backwards_coord3nghbr_withreset(idx, gbxmaps, drop);
+    idx = change_to_backwards_coord3nghbr_withreset(reset_superdrop,
+                                                    idx, gbxmaps, drop);
     break;
   case 2:
-    idx = change_to_forwards_coord3nghbr_withreset(idx, gbxmaps, drop);
+    idx = change_to_forwards_coord3nghbr_withreset(reset_superdrop,
+                                                   idx, gbxmaps, drop);
     break;
   }
   return idx;
 }
 
 KOKKOS_FUNCTION unsigned int
-change_to_backwards_coord3nghbr_withreset(const unsigned int idx,
+change_to_backwards_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+                                          const unsigned int idx,
                                           const CartesianMaps &gbxmaps,
                                           Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
@@ -190,7 +202,8 @@ if its coord3 has exceeded the z lower domain boundary */
 };
 
 KOKKOS_FUNCTION unsigned int
-change_to_forwards_coord3nghbr_withreset(const unsigned int idx,
+change_to_forwards_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+                                         const unsigned int idx,
                                          const CartesianMaps &gbxmaps,
                                          Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox in
