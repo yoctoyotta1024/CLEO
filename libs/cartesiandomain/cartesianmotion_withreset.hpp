@@ -46,15 +46,23 @@ change_if_coord3nghbr_withreset(const CartesianMaps &gbxmaps,
 
 struct ResetSuperdrop
 {
-  GenRandomPool genpool(std::random_device{}());
+  Kokkos::View<GenRandomPool[1]> genpool4reset(std::random_device{}());
+
+  ResetSuperdrop()
+      : genpool("genpool4reset")
+  { 
+    auto h_genpool4reset = Kokkos::create_mirror_view(genpool4reset);
+    h_genpool4reset(0) = GenRandomPool(std::random_device{}());
+    Kokkos::deep_copy(genpool4reset, h_genpool4reset);
+  }
 
   operator()(const unsigned int idx,
              const unsigned int nghbr,
              Superdrop & drop) const
   {
-    URBG<ExecSpace> urbg{genpool.get_state()}; // thread safe random number generator
+    URBG<ExecSpace> urbg{genpool4reset(0).get_state()}; // thread safe random number generator
     const auto phi = urbg(0, 1);               // random uint in range [0, 1]
-    genpool.free_state(urbg.gen);
+    genpool4reset(0).free_state(urbg.gen);
 
     return nghbr;
   }
@@ -74,6 +82,9 @@ Struct is same as CartesianChangeIfNghbr except for in
 coord3(...){...} function */
 {
   ResetSuperdrop reset_superdrop;
+
+  CartesianChangeIfNghbrWithReset()
+      : reset_superdrop(ResetSuperdrop()) {}
 
   KOKKOS_INLINE_FUNCTION unsigned int
   coord3(const CartesianMaps &gbxmaps,
