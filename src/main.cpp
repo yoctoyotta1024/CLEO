@@ -218,8 +218,8 @@ create_observer(const Config &config,
   // const Observer auto obs5 = StateObserver(obsstep, store, maxchunk,
   //                                          config.ngbxs);
 
-  // const Observer auto obs6 = NsupersObserver(obsstep, store, maxchunk,
-  //                                            config.ngbxs);
+  const Observer auto obs6 = NsupersObserver(obsstep, store, maxchunk,
+                                             config.ngbxs);
 
   // const Observer auto obs7 = NrainsupersObserver(obsstep, store, maxchunk,
   //                                                config.ngbxs);
@@ -235,7 +235,7 @@ create_observer(const Config &config,
 
   // return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >>
   //        obs7 >> obs8 >> obs9 >> obs10;
-  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs8 >> obs10;       
+  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs6 >> obs8 >> obs10;       
 }
 
 inline auto create_sdm(const Config &config,
