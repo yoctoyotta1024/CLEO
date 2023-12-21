@@ -30,6 +30,7 @@
 #include <random>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "./cartesianboundaryconds.hpp"
@@ -44,10 +45,14 @@ struct ResetSuperdrop
 {
   Kokkos::View<GenRandomPool[1]> genpool4reset;
   uint64_t nbins;
+  Kokkos::pair<unsigned int, unsigned int> gbxidxs;
 
-  ResetSuperdrop(const uint64_t i_nbins)
+  ResetSuperdrop(const uint64_t i_nbins,
+                 const unsigned int ngbxs,
+                 const unsigned int ngbxs4reset)
       : genpool4reset("genpool4reset"),
-        nbins(i_nbins)
+        nbins(i_nbins),
+        gbxidxs({ngbxs - ngbxs4reset, ngbxs})
   { 
     auto h_genpool4reset = Kokkos::create_mirror_view(genpool4reset);
     h_genpool4reset(0) = GenRandomPool(std::random_device{}());
@@ -55,21 +60,29 @@ struct ResetSuperdrop
   }
 
   KOKKOS_FUNCTION unsigned int
-  operator()(const unsigned int idx,
+  operator()(const CartesianMaps &gbxmaps,
+             const unsigned int idx,
              const unsigned int nghbr,
              Superdrop &drop) const
   {
     URBG<ExecSpace> urbg{genpool4reset(0).get_state()}; // thread safe random number generator
-    const auto phi = urbg(0, nbins);               // random uint in range [0, 1]
-    std::cout << "phi = " << phi << "\n";
+    const auto bin = urbg(0, nbins);                    // index of randomly selected bin
+    const auto sdgbxindex = urbg(gbxidxs.first,
+                                 gbxidxs.second); // randomly selected gbxindex in range {incl., excl.} 
+    std::cout << "rands: " << bin << ", " << sdgbxindex << "\n";
+    const auto bounds = gbxmaps.coord3bounds(sdgbxindex);
+    const auto coord = urbg.drand(bounds.first, bounds.second); // random coord within gbx bounds
     genpool4reset(0).free_state(urbg.gen);
 
-    return nghbr;
+    drop.set_sdgbxindex(sdgbxindex);
+    drop.set_coord3(coord);
+
+    return sdgbxindex;
   }
 };
 
 KOKKOS_FUNCTION unsigned int
-change_if_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+change_if_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
                                 const CartesianMaps &gbxmaps,
                                 unsigned int idx,
                                 Superdrop &drop);
@@ -89,8 +102,10 @@ coord3(...){...} function */
 {
   ResetSuperdrop reset_superdrop;
 
-  CartesianChangeIfNghbrWithReset(const uint64_t nbins)
-      : reset_superdrop(ResetSuperdrop(nbins)) {}
+  CartesianChangeIfNghbrWithReset(const uint64_t nbins,
+                                  const unsigned int ngbxs,
+                                  const unsigned int ngbxs4reset)
+      : reset_superdrop(ResetSuperdrop(nbins, ngbxs, ngbxs4reset)) {}
 
   KOKKOS_INLINE_FUNCTION unsigned int
   coord3(const CartesianMaps &gbxmaps,
@@ -125,38 +140,40 @@ inline PredCorrMotion<CartesianMaps, TV,
 CartesianMotionWithReset(const unsigned int motionstep,
                          const std::function<double(unsigned int)> int2time,
                          const TV terminalv,
-                         const uint64_t nbins)
+                         const uint64_t nbins,
+                         const unsigned int ngbxs,
+                         const unsigned int ngbxs4reset)
 /* returned type satisfies motion concept for motion of a
 superdroplet using a predictor-corrector method to update
 a superdroplet's coordinates and then updating it's
 sdgbxindex as appropriate for a cartesian domain */
 {
-  const auto change_if_nghbr = CartesianChangeIfNghbrWithReset(nbins);
+  const auto cin = CartesianChangeIfNghbrWithReset(nbins, ngbxs, ngbxs4reset);
   return PredCorrMotion<CartesianMaps, TV,
                         CartesianChangeIfNghbrWithReset,
                         CartesianCheckBounds>(motionstep,
                                               int2time,
                                               terminalv,
-                                              change_if_nghbr,
+                                              cin,
                                               CartesianCheckBounds{});
 }
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 KOKKOS_FUNCTION unsigned int
-change_to_backwards_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+change_to_backwards_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
                                           const unsigned int idx,
                                           const CartesianMaps &gbxmaps,
                                           Superdrop &superdrop);
 
 KOKKOS_FUNCTION unsigned int
-change_to_forwards_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+change_to_forwards_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
                                          const unsigned int idx,
                                          const CartesianMaps &gbxmaps,
                                          Superdrop &superdrop);
 
 KOKKOS_FUNCTION unsigned int
-change_if_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+change_if_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
                                 const CartesianMaps &gbxmaps,
                                 unsigned int idx,
                                 Superdrop &drop)
@@ -185,7 +202,7 @@ superdroplet's attributes e.g. if it leaves the domain. */
 }
 
 KOKKOS_FUNCTION unsigned int
-change_to_backwards_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+change_to_backwards_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
                                           const unsigned int idx,
                                           const CartesianMaps &gbxmaps,
                                           Superdrop &drop)
@@ -198,7 +215,7 @@ if its coord3 has exceeded the z lower domain boundary */
   const auto incre = (unsigned int)1;                         // increment
   if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) // drop was at lower z edge of domain (now moving below it)
   {
-    nghbr = reset_superdrop(idx, nghbr, drop);
+    nghbr = reset_superdrop(gbxmaps, idx, nghbr, drop);
   }
 
   drop.set_sdgbxindex(nghbr);
@@ -206,7 +223,7 @@ if its coord3 has exceeded the z lower domain boundary */
 };
 
 KOKKOS_FUNCTION unsigned int
-change_to_forwards_coord3nghbr_withreset(const ResetSuperdrop reset_superdrop,
+change_to_forwards_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
                                          const unsigned int idx,
                                          const CartesianMaps &gbxmaps,
                                          Superdrop &drop)
@@ -219,7 +236,7 @@ if superdrop has exceeded the z upper domain boundary */
   const auto incre = (unsigned int)1;                                 // increment
   if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) // drop was upper z edge of domain (now moving above it)
   {
-    nghbr = reset_superdrop(idx, nghbr, drop);
+    nghbr = reset_superdrop(gbxmaps, idx, nghbr, drop);
   }
 
   drop.set_sdgbxindex(nghbr);

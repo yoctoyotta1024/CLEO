@@ -173,10 +173,14 @@ create_motion(const unsigned int motionstep)
   const auto terminalv = SimmelTerminalVelocity{};
 
   const auto nbins = uint64_t{100};
+  const auto ngbxs4reset = size_t{1};
+  const ngbxs = (unsigned int)5;
+  const ngbxs4reset = (unsigned int)1;
   return CartesianMotionWithReset(motionstep,
                                   &step2dimlesstime,
                                   terminalv,
-                                  nbins);
+                                  nbins,
+                                  ngbxs4reset);
 
   // return CartesianMotion(motionstep,
   //                        &step2dimlesstime,
