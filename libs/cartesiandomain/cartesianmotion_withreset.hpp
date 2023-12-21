@@ -32,6 +32,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 
+#include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "./cartesianboundaryconds.hpp"
 #include "./cartesianmaps.hpp"
@@ -41,22 +42,37 @@
 #include "superdrops/urbg.hpp"
 #include "gridboxes/predcorrmotion.hpp"
 
+namespace dlc = dimless_constants;
+
 struct ResetSuperdrop
 {
   Kokkos::View<GenRandomPool[1]> genpool4reset;
-  uint64_t nbins;
+  Kokkos::View<double[101]> log10redges; // edges to radius bins
   Kokkos::pair<unsigned int, unsigned int> gbxidxs;
+  uint64_t nbins;
 
-  ResetSuperdrop(const uint64_t i_nbins,
-                 const unsigned int ngbxs,
+  ResetSuperdrop(const unsigned int ngbxs,
                  const unsigned int ngbxs4reset)
       : genpool4reset("genpool4reset"),
-        nbins(i_nbins),
-        gbxidxs({ngbxs - ngbxs4reset, ngbxs})
-  { 
+        log10redges("log10redges"),
+        gbxidxs({ngbxs - ngbxs4reset, ngbxs}),
+        nbins(log10redges.extent(0) - 1)
+  {
+    /* make genpool for reset */
     auto h_genpool4reset = Kokkos::create_mirror_view(genpool4reset);
     h_genpool4reset(0) = GenRandomPool(std::random_device{}());
     Kokkos::deep_copy(genpool4reset, h_genpool4reset);
+
+    /* make redges linearly spaced in log10(R) space */
+    auto h_log10redges = Kokkos::create_mirror_view(log10redges); 
+    const auto log10rmin = double{Kokkos::log10(2e-7 / dlc::R0)}; // lowest edge of radius bins
+    const auto log10rmax = double{Kokkos::log10(3e-5 / dlc::R0)}; // highest edge of radius bins
+    const auto log10deltar = double{(log10rmax - log10rmin)/nbins};
+    for (size_t i(0); i < nbins + 1; ++i)
+    {
+      h_log10redges(i) = log10rmin + i * log10deltar;
+    }
+    Kokkos::deep_copy(log10redges, h_log10redges);
   }
 
   KOKKOS_FUNCTION unsigned int
@@ -73,8 +89,6 @@ struct ResetSuperdrop
     const auto bounds = gbxmaps.coord3bounds(sdgbxindex);
     const auto coord = urbg.drand(bounds.first, bounds.second); // random coord within gbx bounds
 
-    std::cout << "pos: "<< sdgbxindex << ", " << coord <<" \n";
-
     drop.set_sdgbxindex(sdgbxindex);
     drop.set_coord3(coord);
 
@@ -87,8 +101,16 @@ struct ResetSuperdrop
   /* reset radius and multiplicity of superdroplet
   by randomly sampling from binned distributions */
   {
-    const auto bin = urbg(0, nbins);                    // index of randomly selected bin
-    std::cout << "bin: "<< bin <<" \n";
+    const auto bin = urbg(0, nbins); // index of randomly selected bin
+
+    /* random radius from uniform in log10(r) space distrib */
+    const auto frac = urbg.drand(0.0, 1.0);
+    const auto log10rlow = log10redges(bin);
+    const auto log10rup = log10redges(bin + 1);
+    const auto log10r = double{log10rlow + frac * (log10rup - log10rlow)};
+    const auto radius = Kokkos::pow(10, log10r);
+
+    drop.change_radius(radius);
   }
 
   KOKKOS_FUNCTION unsigned int
@@ -127,10 +149,9 @@ coord3(...){...} function */
 {
   ResetSuperdrop reset_superdrop;
 
-  CartesianChangeIfNghbrWithReset(const uint64_t nbins,
-                                  const unsigned int ngbxs,
+  CartesianChangeIfNghbrWithReset(const unsigned int ngbxs,
                                   const unsigned int ngbxs4reset)
-      : reset_superdrop(ResetSuperdrop(nbins, ngbxs, ngbxs4reset)) {}
+      : reset_superdrop(ResetSuperdrop(ngbxs, ngbxs4reset)) {}
 
   KOKKOS_INLINE_FUNCTION unsigned int
   coord3(const CartesianMaps &gbxmaps,
@@ -165,7 +186,6 @@ inline PredCorrMotion<CartesianMaps, TV,
 CartesianMotionWithReset(const unsigned int motionstep,
                          const std::function<double(unsigned int)> int2time,
                          const TV terminalv,
-                         const uint64_t nbins,
                          const unsigned int ngbxs,
                          const unsigned int ngbxs4reset)
 /* returned type satisfies motion concept for motion of a
@@ -173,7 +193,7 @@ superdroplet using a predictor-corrector method to update
 a superdroplet's coordinates and then updating it's
 sdgbxindex as appropriate for a cartesian domain */
 {
-  const auto cin = CartesianChangeIfNghbrWithReset(nbins, ngbxs, ngbxs4reset);
+  const auto cin = CartesianChangeIfNghbrWithReset(ngbxs, ngbxs4reset);
   return PredCorrMotion<CartesianMaps, TV,
                         CartesianChangeIfNghbrWithReset,
                         CartesianCheckBounds>(motionstep,
