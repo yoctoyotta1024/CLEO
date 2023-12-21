@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 28th November 2023
+ * Last Modified: Thursday 21st December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -135,7 +135,8 @@ public:
   /* returns the view of all the superdrops in the domain.
   read-only means superdrops in the view are const */
   {
-    return totsupers;
+    const auto domainrefs = find_domainrefs(totsupers);
+    return Kokkos::subview(totsupers, domainrefs);
   }
 };
 

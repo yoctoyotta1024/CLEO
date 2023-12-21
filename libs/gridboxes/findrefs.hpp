@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 29th November 2023
+ * Last Modified: Thursday 21st December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -68,8 +68,8 @@ that occupies gridbox, ie. that has sdgbxindex == idx.
 Function is outermost level of parallelism. */
 {
   namespace SRP = SetRefPreds;
-  const size_t ref0(find_ref(totsupers, SRP::Ref0{idx}));
-  const size_t ref1(find_ref(totsupers, SRP::Ref1{idx}));
+  const auto ref0 = size_t{find_ref(totsupers, SRP::Ref0{idx})};
+  const auto ref1 = size_t{find_ref(totsupers, SRP::Ref1{idx})};
 
   return {ref0, ref1};
 }
@@ -85,8 +85,8 @@ Function works within 1st layer of heirarchal
 parallelism for a team_member of a league */
 {
   namespace SRP = SetRefPreds;
-  const size_t ref0(find_ref(team_member, totsupers, SRP::Ref0{idx}));
-  const size_t ref1(find_ref(team_member, totsupers, SRP::Ref1{idx}));
+  const auto ref0 = size_t{find_ref(team_member, totsupers, SRP::Ref0{idx})};
+  const auto ref1 = size_t{find_ref(team_member, totsupers, SRP::Ref1{idx})};
 
   return {ref0, ref1};
 }
@@ -103,10 +103,10 @@ Function is outermost level of parallelism. */
 
   /* iterator to first superdrop in
   totsupers that fails to satisfy pred */
-  const auto iter(KE::partition_point("find_ref",
-                                      ExecSpace(),
-                                      totsupers,
-                                      pred));
+  const auto iter = KE::partition_point("find_ref",
+                                        ExecSpace(),
+                                        totsupers,
+                                        pred);
 
   return makeref(totsupers, iter);
 }
@@ -127,9 +127,9 @@ for a given team_member */
 
   /* iterator to first superdrop in
   totsupers that fails to satisfy pred */
-  const auto iter(KE::partition_point(team_member,
-                                      totsupers,
-                                      pred));
+  const auto iter = KE::partition_point(team_member,
+                                        totsupers,
+                                        pred);
   return makeref(totsupers, iter);
 }
 
@@ -145,6 +145,21 @@ Note casting away signd-ness of distance. */
 
   const auto ref = KE::distance(KE::begin(totsupers), iter);
   return static_cast<size_t>(ref);
+}
+
+template <typename ViewSupers>
+inline kkpair_size_t find_domainrefs(const ViewSupers totsupers)
+/* returns position in view of {first, last} superdrop
+that is in domain, ie. that has sdgbxindex < oob_idx.
+Function is outermost level of parallelism. */
+{
+  constexpr unsigned int oob_idx = LIMITVALUES::uintmax; // out of bounds sdgbxindex
+
+  namespace SRP = SetRefPreds;
+  const auto ref0 = size_t{0};
+  const auto ref1 = size_t{find_ref(totsupers, SRP::Ref0{oob_idx})};
+
+  return {ref0, ref1};
 }
 
 #endif // FINDREFS_HPP
