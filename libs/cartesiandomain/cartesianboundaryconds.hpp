@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 19th December 2023
+ * Last Modified: Thursday 21st December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -117,9 +117,10 @@ KOKKOS_INLINE_FUNCTION double
 coordbeyond_finitedomain(const double coord,
                          const double lim1,
                          const double lim2)
-/* Finite domain boundaries don't change superdroplet coord */
+/* Finite domain boundaries don't
+change superdroplet coord */
 {
-  return coord; // finite domain therefore don't change coord
+  return coord;
 }
 
 KOKKOS_INLINE_FUNCTION double
