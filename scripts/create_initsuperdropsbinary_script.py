@@ -62,7 +62,7 @@ nsupers = 40
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
 # radiigen  =  iattrs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
 
-rspan                = [6e-9, 6e-6]                 # min and max range of radii to sample [m]
+rspan                = [7.5e-9, 7.5e-7]                 # min and max range of radii to sample [m]
 randomr              = True                         # sample radii range randomly or not
 radiigen =  iattrs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
@@ -73,12 +73,12 @@ radiigen =  iattrs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from 
 # numconc              = 512e6                         # total no. conc of real droplets [m^-3]
 # radiiprobdist = rprobs.DiracDelta(dirac0)
 
-# geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
-# geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
-# scalefacs          = [1e9]                       # relative heights of modes         
-geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-geosigs              = [1.55, 2.3, 2]                    
-scalefacs            = [1e6, 0.3e6, 0.025e6]   
+geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
+geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
+scalefacs          = [1e9]                       # relative heights of modes         
+# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
+# geosigs              = [1.55, 2.3, 2]                    
+# scalefacs            = [1e6, 0.3e6, 0.025e6]   
 # geomeans             = [0.02e-6, 0.15e-6]               
 # geosigs              = [1.4, 1.6]                    
 # scalefacs            = [6e6, 4e6]   

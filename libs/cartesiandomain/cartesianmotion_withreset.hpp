@@ -65,8 +65,8 @@ struct ResetSuperdrop
 
     /* make redges linearly spaced in log10(R) space */
     auto h_log10redges = Kokkos::create_mirror_view(log10redges); 
-    const auto log10rmin = double{Kokkos::log10(2e-7 / dlc::R0)}; // lowest edge of radius bins
-    const auto log10rmax = double{Kokkos::log10(3e-5 / dlc::R0)}; // highest edge of radius bins
+    const auto log10rmin = double{Kokkos::log10(1e-6 / dlc::R0)}; // lowest edge of radius bins
+    const auto log10rmax = double{Kokkos::log10(5e-5 / dlc::R0)}; // highest edge of radius bins
     const auto log10deltar = double{(log10rmax - log10rmin)/nbins};
     for (size_t i(0); i < nbins + 1; ++i)
     {

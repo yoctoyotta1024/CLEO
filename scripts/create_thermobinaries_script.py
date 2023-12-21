@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 20th December 2023
+Last Modified: Thursday 21st December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -67,7 +67,8 @@ thermofile =  binariespath+"/dimlessthermo.dat"
 PRESS0 = 101500 # [Pa]
 THETA = 289 # [K]
 qcond = 0.0 # [Kg/Kg]
-WMAX = 0.6 # [m/s]
+# WMAX = 0.6 # [m/s]
+WMAX = 0.0 # [m/s]
 VVEL = None # [m/s]
 Zlength = 1500 # [m]
 Xlength = 1500 # [m]
