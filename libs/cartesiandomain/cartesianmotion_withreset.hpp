@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 20th December 2023
+ * Last Modified: Thursday 21st December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -43,9 +43,11 @@
 struct ResetSuperdrop
 {
   Kokkos::View<GenRandomPool[1]> genpool4reset;
+  uint64_t nbins;
 
-  ResetSuperdrop()
-      : genpool4reset("genpool4reset")
+  ResetSuperdrop(const uint64_t i_nbins)
+      : genpool4reset("genpool4reset"),
+        nbins(i_nbins)
   { 
     auto h_genpool4reset = Kokkos::create_mirror_view(genpool4reset);
     h_genpool4reset(0) = GenRandomPool(std::random_device{}());
@@ -58,7 +60,8 @@ struct ResetSuperdrop
              Superdrop &drop) const
   {
     URBG<ExecSpace> urbg{genpool4reset(0).get_state()}; // thread safe random number generator
-    const auto phi = urbg(0, 1);               // random uint in range [0, 1]
+    const auto phi = urbg(0, nbins);               // random uint in range [0, 1]
+    std::cout << "phi = " << phi << "\n";
     genpool4reset(0).free_state(urbg.gen);
 
     return nghbr;
@@ -86,8 +89,8 @@ coord3(...){...} function */
 {
   ResetSuperdrop reset_superdrop;
 
-  CartesianChangeIfNghbrWithReset()
-      : reset_superdrop(ResetSuperdrop()) {}
+  CartesianChangeIfNghbrWithReset(const uint64_t nbins)
+      : reset_superdrop(ResetSuperdrop(nbins)) {}
 
   KOKKOS_INLINE_FUNCTION unsigned int
   coord3(const CartesianMaps &gbxmaps,
@@ -121,13 +124,14 @@ inline PredCorrMotion<CartesianMaps, TV,
                       CartesianCheckBounds>
 CartesianMotionWithReset(const unsigned int motionstep,
                          const std::function<double(unsigned int)> int2time,
-                         const TV terminalv)
+                         const TV terminalv,
+                         const uint64_t nbins)
 /* returned type satisfies motion concept for motion of a
 superdroplet using a predictor-corrector method to update
 a superdroplet's coordinates and then updating it's
 sdgbxindex as appropriate for a cartesian domain */
 {
-  const auto change_if_nghbr = CartesianChangeIfNghbrWithReset();
+  const auto change_if_nghbr = CartesianChangeIfNghbrWithReset(nbins);
   return PredCorrMotion<CartesianMaps, TV,
                         CartesianChangeIfNghbrWithReset,
                         CartesianCheckBounds>(motionstep,

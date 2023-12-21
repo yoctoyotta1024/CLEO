@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 20th December 2023
+ * Last Modified: Thursday 21st December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -141,8 +141,8 @@ config_collisions(const Config &config, const Timesteps &tsteps)
   //                                             nfrags);
 
   // const PairProbability auto coalprob = LowListCoalProb();
-  const PairProbability auto coalprob = LongHydroProb(1.0);
   // const PairProbability auto coalprob = GolovinProb();
+  const PairProbability auto coalprob = LongHydroProb(1.0);
   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
                                                    coalprob);
@@ -157,13 +157,12 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
   // const MicrophysicalProcess auto cond = config_condensation(config,
   //                                                            tsteps);
 
-  const MicrophysicalProcess auto colls = config_collisions(config,
-                                                            tsteps);
+  // const MicrophysicalProcess auto colls = config_collisions(config,
+  //                                                           tsteps);
 
-  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
+  const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
-  // return colls >> cond;
-  return colls;
+  return null;
 }
 
 inline Motion<CartesianMaps> auto
@@ -173,13 +172,15 @@ create_motion(const unsigned int motionstep)
   // const auto terminalv = RogersYauTerminalVelocity{};
   const auto terminalv = SimmelTerminalVelocity{};
 
-  return CartesianMotionWithReset(motionstep,
-                                  &step2dimlesstime,
-                                  terminalv);
+  // const auto nbins = uint64_t{100};
+  // return CartesianMotionWithReset(motionstep,
+  //                                 &step2dimlesstime,
+  //                                 terminalv,
+  //                                 nbins);
 
-  // return CartesianMotion(motionstep,
-  //                        &step2dimlesstime,
-  //                        terminalv);
+  return CartesianMotion(motionstep,
+                         &step2dimlesstime,
+                         terminalv);
 
   // return NullMotion{};                                                                               
 }
