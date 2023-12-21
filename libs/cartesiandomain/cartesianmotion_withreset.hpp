@@ -60,22 +60,47 @@ struct ResetSuperdrop
   }
 
   KOKKOS_FUNCTION unsigned int
-  operator()(const CartesianMaps &gbxmaps,
-             const unsigned int idx,
-             const unsigned int nghbr,
-             Superdrop &drop) const
+  reset_position(const CartesianMaps &gbxmaps,
+                        URBG<ExecSpace> &urbg,
+                        Superdrop &drop) const
+  /* randomly update position of superdroplet by 
+  randomly selecting a gbxindex from gbxidxs and then
+  randomly selecting a coord3 with that gbx's bounds */
   {
-    URBG<ExecSpace> urbg{genpool4reset(0).get_state()}; // thread safe random number generator
-    const auto bin = urbg(0, nbins);                    // index of randomly selected bin
     const auto sdgbxindex = urbg(gbxidxs.first,
                                  gbxidxs.second); // randomly selected gbxindex in range {incl., excl.} 
-    std::cout << "rands: " << bin << ", " << sdgbxindex << "\n";
+   
     const auto bounds = gbxmaps.coord3bounds(sdgbxindex);
     const auto coord = urbg.drand(bounds.first, bounds.second); // random coord within gbx bounds
-    genpool4reset(0).free_state(urbg.gen);
+
+    std::cout << "pos: "<< sdgbxindex << ", " << coord <<" \n";
 
     drop.set_sdgbxindex(sdgbxindex);
     drop.set_coord3(coord);
+
+    return sdgbxindex;
+  }
+
+  KOKKOS_FUNCTION void
+  reset_attributes(URBG<ExecSpace> &urbg,
+                   Superdrop &drop) const
+  /* reset radius and multiplicity of superdroplet
+  by randomly sampling from binned distributions */
+  {
+    const auto bin = urbg(0, nbins);                    // index of randomly selected bin
+    std::cout << "bin: "<< bin <<" \n";
+  }
+
+  KOKKOS_FUNCTION unsigned int
+  operator()(const CartesianMaps &gbxmaps,
+             Superdrop &drop) const
+  {
+    URBG<ExecSpace> urbg{genpool4reset(0).get_state()}; // thread safe random number generator
+    
+    const auto sdgbxindex = reset_position(gbxmaps, urbg, drop);
+    reset_attributes(urbg, drop);
+
+    genpool4reset(0).free_state(urbg.gen);
 
     return sdgbxindex;
   }
@@ -215,7 +240,7 @@ if its coord3 has exceeded the z lower domain boundary */
   const auto incre = (unsigned int)1;                         // increment
   if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) // drop was at lower z edge of domain (now moving below it)
   {
-    nghbr = reset_superdrop(gbxmaps, idx, nghbr, drop);
+    nghbr = reset_superdrop(gbxmaps, drop);
   }
 
   drop.set_sdgbxindex(nghbr);
@@ -236,7 +261,7 @@ if superdrop has exceeded the z upper domain boundary */
   const auto incre = (unsigned int)1;                                 // increment
   if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) // drop was upper z edge of domain (now moving above it)
   {
-    nghbr = reset_superdrop(gbxmaps, idx, nghbr, drop);
+    nghbr = reset_superdrop(gbxmaps, drop);
   }
 
   drop.set_sdgbxindex(nghbr);
