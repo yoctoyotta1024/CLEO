@@ -172,15 +172,15 @@ create_motion(const unsigned int motionstep)
   // const auto terminalv = RogersYauTerminalVelocity{};
   const auto terminalv = SimmelTerminalVelocity{};
 
-  // const auto nbins = uint64_t{100};
-  // return CartesianMotionWithReset(motionstep,
-  //                                 &step2dimlesstime,
-  //                                 terminalv,
-  //                                 nbins);
+  const auto nbins = uint64_t{100};
+  return CartesianMotionWithReset(motionstep,
+                                  &step2dimlesstime,
+                                  terminalv,
+                                  nbins);
 
-  return CartesianMotion(motionstep,
-                         &step2dimlesstime,
-                         terminalv);
+  // return CartesianMotion(motionstep,
+  //                        &step2dimlesstime,
+  //                        terminalv);
 
   // return NullMotion{};                                                                               
 }
