@@ -39,8 +39,8 @@ from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
-from pySD.initsuperdropsbinary_src import initattributes as iattrs
-from pySD.initsuperdropsbinary_src import radiiprobdistribs as rprobs 
+from pySD.initsuperdropsbinary_src import coordgen as iattrs
+from pySD.initsuperdropsbinary_src import probdistribs as rprobs 
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
 from pySD.thermobinary_src import thermogen

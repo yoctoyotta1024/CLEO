@@ -23,7 +23,7 @@ from os.path import isfile
 from .. import cxx2py, writebinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import read_dimless_gbxboundaries_binary
 
-class ManyInitAttrs:
+class ManyAttrs:
     '''store for lists of each attribute for all superdroplets ''' 
     def __init__(self):
         self.sdgbxindex = []
@@ -43,19 +43,9 @@ class ManyInitAttrs:
         self.coord3 = e 
         self.coord1 = f 
         self.coord2 = g 
-        
-    def extend_attrlists_fromlists(self, a, b, c, 
-                                   d, e, f, g):
-        self.sdgbxindex.extend(a)
-        self.xi.extend(b)
-        self.radius.extend(c)
-        self.msol.extend(d)
-        self.coord3.extend(e)
-        self.coord1.extend(f) 
-        self.coord2.extend(g) 
    
     def extend_attrlists(self, mia):
-        ''' use an instance of ManyInitAttrs (mia) to
+        ''' use an instance of ManyAttrs (mia) to
         extend lists in this instance '''
         self.sdgbxindex.extend(mia.sdgbxindex)
         self.xi.extend(mia.xi)
@@ -118,14 +108,15 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     # generate attributes
     sdgbxindex = [gbxindex]*nsupers
     xi, radius, msol = initattrsgen.generate_attributes(nsupers, 
-                                                          inputs["RHO_SOL"],
-                                                          NUMCONC,
-                                                          gridboxbounds) 
+                                                        inputs["RHO_SOL"],
+                                                        NUMCONC,
+                                                        gridboxbounds) 
     coord3, coord1, coord2 = initattrsgen.generate_coords(nsupers,
                                                           inputs["nspacedims"],
                                                           gridboxbounds)
-    is_sdgbxindex_correct(gridboxbounds, coord3, coord1, coord2,
-                           gbxindex, sdgbxindex)
+    is_sdgbxindex_correct(gridboxbounds,
+                          coord3, coord1, coord2,
+                          gbxindex, sdgbxindex)
 
     # de-dimsionalise attributes
     radius = radius / inputs["R0"]
@@ -134,7 +125,7 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     coord1 = coord1 / inputs["COORD0"]
     coord2 = coord2 / inputs["COORD0"]
 
-    attrs4gbx = ManyInitAttrs() 
+    attrs4gbx = ManyAttrs() 
     attrs4gbx.set_attrlists(sdgbxindex, xi, radius, msol,
                             coord3, coord1, coord2)
 
@@ -144,7 +135,7 @@ def create_allsuperdropattrs(nsupersdict, initattrsgen,
                              gbxbounds, inputs, NUMCONC):
   ''' returns lists for attributes of all SDs in domain called attrs'''
 
-  attrs = ManyInitAttrs() # lists of attrs for SDs in domain
+  attrs = ManyAttrs() # lists of attrs for SDs in domain
 
   for gbxindex, gridboxbounds in gbxbounds.items():
 

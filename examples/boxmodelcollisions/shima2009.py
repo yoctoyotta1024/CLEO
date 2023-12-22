@@ -77,8 +77,8 @@ numconc = 2**(23)                     # total no. conc of real droplets [m^-3]
 rspan = [1e-8, 9e-5]                # max and min range of radii to sample [m]
 
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
-radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
-radiigen = initattributes.SampleDryradiiGen(rspan)  # radii are sampled from rspan [m]
+radiiprobdist = xiprobdistribs.VolExponential(volexpr0, rspan)
+radiigen = coordgen.SampleDryradiiGen(rspan)  # radii are sampled from rspan [m]
 coord3gen = None                        # do not generate superdroplet coords
 coord1gen = None
 coord2gen = None
@@ -107,7 +107,7 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write initial superdroplets binary ----- ###
-initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
+initattrsgen = coordgen.InitManyAttrsGen(radiigen, radiiprobdist,
                                                coord3gen, coord1gen, coord2gen)
 create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                                   configfile, constsfile,

@@ -21,7 +21,7 @@ File Description:
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .create_initsuperdrops import initSDsinputsdict, ManyInitAttrs
+from .create_initsuperdrops import initSDsinputsdict, ManyAttrs
 from ..readbinary import readbinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import get_gbxvols_from_gridfile
 
@@ -53,7 +53,7 @@ def read_dimless_superdrops_binary(filename, isprint=True):
     for n in range(1, len(ndata_pervar)):
         ll[n-1] = np.sum(ndata_pervar[:n])
 
-    attrs = ManyInitAttrs()
+    attrs = ManyAttrs()
     attrs.sdgbxindex = np.asarray(data[:ll[0]], dtype=datatypes[0])
     attrs.xi = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1])
     attrs.radius = np.asarray(data[ll[1]:ll[2]], dtype=datatypes[2])

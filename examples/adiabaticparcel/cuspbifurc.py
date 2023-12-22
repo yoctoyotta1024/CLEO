@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 12th December 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -73,8 +73,8 @@ numconc = 0.5e9  # numconc = total no. concentration of droplets [m^-3]
 monor = 0.025e-6  # monor = dry radius of all droplets [m]
 
 # monodisperse droplet radii probability distribution
-radiigen = initattributes.MonoAttrsGen(monor)
-radiiprobdist = radiiprobdistribs.DiracDelta(monor)
+radiigen = coordgen.MonoAttrGen(monor)
+radiiprobdist = xiprobdistribs.DiracDelta(monor)
 
 # volume SD sample occupies (entire domain) [m^3]
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
@@ -106,7 +106,7 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
                                      ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
-initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
+initattrsgen = coordgen.InitManyAttrsGen(radiigen, radiiprobdist,
                                                coord3gen, coord1gen, coord2gen)
 create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                                   configfile, constsfile,

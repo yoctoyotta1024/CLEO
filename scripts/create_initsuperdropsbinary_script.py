@@ -25,8 +25,8 @@ import numpy as np
 from pathlib import Path
 
 sys.path.append(sys.argv[1]) # path to pySD (same as to CLEO)
-from pySD.initsuperdropsbinary_src import initattributes as iattrs 
-from pySD.initsuperdropsbinary_src import radiiprobdistribs as rprobs
+from pySD.initsuperdropsbinary_src import coordgen as iattrs 
+from pySD.initsuperdropsbinary_src import probdistribs as rprobs
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
 
@@ -59,7 +59,7 @@ nsupers = 40
 
 ### --- Choice of Superdroplet Radii Generator --- ###
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
-# radiigen  =  iattrs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
+# radiigen  =  iattrs.MonoAttrGen(monor)                  # all SDs have the same dryradius [m]
 
 rspan                = [7.5e-9, 7.5e-7]                # min and max range of radii to sample [m]
 radiigen =  iattrs.SampleDryradiiGen(rspan)            # radii are sampled from rspan [m]
@@ -136,9 +136,9 @@ else:
   Path(binariespath).mkdir(exist_ok=True) 
 
 ### write initial superdrops binary
-initattrsgen =  iattrs.InitManyAttrsGen(radiigen, dryradiigen, xiprobdist,
-                                      coord3gen, coord1gen, coord2gen)
-csupers.write_initsuperdrops_binary(initsupersfile, initattrsgen, 
+attrsgen =  iattrs.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
+                                  coord3gen, coord1gen, coord2gen)
+csupers.write_initsuperdrops_binary(initsupersfile, attrsgen,
                                     configfile, constsfile,
                                     gridfile, nsupers, numconc)
 

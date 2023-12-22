@@ -68,7 +68,7 @@ ygrid = np.asarray([0, 100])
 # settings for monodisperse droplet radii probability distribution
 monor = 0.025e-6  # monor = dry radius of all droplets [m]
 numconc = 0.5e9  # numconc = total no. concentration of droplets [m^-3]
-radiiprobdist = radiiprobdistribs.DiracDelta(monor)
+radiiprobdist = xiprobdistribs.DiracDelta(monor)
 
 # settings for monodisperse droplet radii
 # [m^-3] total no. concentration of droplets
@@ -151,11 +151,11 @@ for i in range(len(monors)):
     # 2b. create file with initial SDs conditions
     monor, numconc = monors[i], numconcs[i]
     # all SDs have the same dryradius = monor [m]
-    radiigen = initattributes.MonoAttrsGen(monor)
+    radiigen = coordgen.MonoAttrGen(monor)
     # monodisperse droplet radii probability distribution
-    radiiprobdist = radiiprobdistribs.DiracDelta(monor)
+    radiiprobdist = xiprobdistribs.DiracDelta(monor)
 
-    initattrsgen = initattributes.InitManyAttrsGen(radiigen, radiiprobdist,
+    initattrsgen = coordgen.InitManyAttrsGen(radiigen, radiiprobdist,
                                                    coord3gen, coord1gen, coord2gen)
     os.system("rm "+initSDsfile)
     create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
