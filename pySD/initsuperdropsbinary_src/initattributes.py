@@ -89,25 +89,11 @@ class SampleDryradiiGen:
                 return redgs
 
             else:
-                if not self.random:
-                    radii = self.centres_log10rbins(log10redgs)
-
-                else:
-                    radii = self.randomlysample_log10rbins(log10redgs)
-
+                radii = self.randomlysample_log10rbins(log10redgs)
                 return radii  # [m]
         else:
             return np.array([])
         
-    def centres_log10rbins(self, log10redgs):
-        ''' return radii [m] that are at centres of
-        evenly spaced bins of log10(radii /m)'''
-
-        log10rcens = 0.5*(log10redgs[1:] + log10redgs[:-1])
-        rcens = 10**(log10rcens)
-
-        return rcens  # [m]
-
     def randomlysample_log10rbins(self, log10redgs):
         ''' given the bin edges, randomly sample evenly spaced bins
         of log10(radii /m) and return the resultant radii [m]'''
@@ -164,26 +150,31 @@ class SampleCoordGen:
         return coord  # units [m]
 
 class InitManyAttrsGen:
-    ''' class for functions to generate attributes of superdroplets
-    given the generators for independent attributes
-    e.g. for radius and coord3 in substantation of class'''
+    ''' class for functions to generate attributes of
+    superdroplets given the generators for independent
+    attributes e.g. for radius and coord3 in substantation
+    of class'''
 
-    def __init__(self, dryradiigen, radiiprobdist,
+    def __init__(self, radiigen, dryradiigen, xiprobdist, 
                  coord3gen, coord1gen, coord2gen):
 
-        self.dryradiigen = dryradiigen
-        self.radiiprobdist = radiiprobdist
+        self.radiigen = radiigen            # generates radius (solute + water)
+        self.dryradiigen = dryradiigen      # generates dry radius (-> solute mass) 
+        self.xiprobdist = xiprobdist        # droplet size distribution (-> multiplicity)
         
-        self.coord3gen = coord3gen
+        self.coord3gen = coord3gen          # generates spatial coordinate 
         self.coord1gen = coord1gen
         self.coord2gen = coord2gen
 
-        self.ncoordsgen = sum(x is not None for x in [coord3gen, coord2gen, coord1gen])
+        self.ncoordsgen = sum(x is not None for x in
+                               [coord3gen, coord2gen, coord1gen])
 
-    def mass_solutes(self, dryradii, RHO_SOL):
+    def mass_solutes(self, nsupers, radii, RHO_SOL):
         ''' return the mass [Kg] of the solute in superdroplets given their 
         dry radii [m] and solute density [Kg m^3]'''
 
+        dryradii = self.dryradiigen(nsupers) # [m]
+        dryradii = np.where(radii < dryradii, radii, dryradii)
         msols = 4.0/3.0 * np.pi * (dryradii**3) * RHO_SOL
 
         return msols  # [Kg]
@@ -195,15 +186,15 @@ class InitManyAttrsGen:
         is about 'numconc'. Raise an error if any of the calculated
         mulitiplicities are zero '''
 
-        prob = self.radiiprobdist(radii)
+        prob = self.xiprobdist(radii) # normalised prob distrib
         eps = np.rint(prob * NUMCONC * samplevol)
 
         if any(eps == 0):
           num = len(eps[eps==0])
-          warning = "WARNING, "+str(num)+" out of "+str(len(eps))+" SDs"+\
+          errmsg = "ERROR, "+str(num)+" out of "+str(len(eps))+" SDs"+\
             " created with multiplicity = 0. Consider increasing numconc"+\
-            " or decreaing range of radii sampled."
-          raise ValueError(warning)
+            " or changing range of radii sampled."
+          raise ValueError(errmsg)
 
         return np.array(eps, dtype=np.uint)
 
@@ -234,28 +225,29 @@ class InitManyAttrsGen:
             " not consistent with sample volume {:.3g} m^3".format(samplevol)
           raise ValueError(errmsg)
 
-        # else:
-        #   msg = "--- total real droplet concentration = "+\
-        #     "{:0g} m^-3 in {:.3g} m^3 volume --- ".format(calcnumconc, samplevol)
-        #   print(msg)
+        else:
+          msg = "--- total real droplet concentration = "+\
+            "{:0g} m^-3 in {:.3g} m^3 volume --- ".format(calcnumconc, samplevol)
+          print(msg)
 
     def generate_attributes(self, nsupers, RHO_SOL, NUMCONC, gridboxbounds):
         ''' generate superdroplets (SDs) attributes that have dimensions
         by calling the appropraite generating functions'''
 
-        gbxvol = rgrid.calc_domainvol(gridboxbounds[0:2], gridboxbounds[2:4], 
-                                gridboxbounds[4:]) # [m^3]
+        gbxvol = rgrid.calc_domainvol(gridboxbounds[0:2],
+                                      gridboxbounds[2:4], 
+                                      gridboxbounds[4:]) # [m^3]
         
-        dryradii = self.dryradiigen(nsupers) # [m]
+        radii = self.radiigen(nsupers) # [m]
 
-        mass_solutes = self.mass_solutes(dryradii, RHO_SOL)  # [Kg]
+        mass_solutes = self.mass_solutes(nsupers, radii, RHO_SOL)  # [Kg]
 
-        multiplicities = self.multiplicities(dryradii, NUMCONC, gbxvol)
+        multiplicities = self.multiplicities(radii, NUMCONC, gbxvol)
 
         if nsupers > 0:  
             self.check_totalnumconc(multiplicities, NUMCONC, gbxvol) 
          
-        return multiplicities, dryradii, mass_solutes # units [], [m], [Kg], [m]
+        return multiplicities, radii, mass_solutes # units [], [m], [Kg], [m]
 
     def generate_coords(self, nsupers, nspacedims, gridboxbounds):
         ''' generate superdroplets (SDs) attributes that have dimensions
