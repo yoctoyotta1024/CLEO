@@ -136,7 +136,7 @@ else:
   Path(binariespath).mkdir(exist_ok=True) 
 
 ### write initial superdrops binary
-initattrsgen =  iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
+initattrsgen =  iattrs.InitManyAttrsGen(radiigen, dryradiigen, xiprobdist,
                                       coord3gen, coord1gen, coord2gen)
 csupers.write_initsuperdrops_binary(initsupersfile, initattrsgen, 
                                     configfile, constsfile,

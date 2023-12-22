@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 3rd November 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -27,7 +27,7 @@ class ManyInitAttrs:
     '''store for lists of each attribute for all superdroplets ''' 
     def __init__(self):
         self.sdgbxindex = []
-        self.eps = []
+        self.xi = []
         self.radius = []
         self.msol = []
         self.coord3 = []
@@ -37,7 +37,7 @@ class ManyInitAttrs:
     def set_attrlists(self, a, b, c, 
                       d, e, f, g):
         self.sdgbxindex = a
-        self.eps = b
+        self.xi = b
         self.radius = c
         self.msol = d
         self.coord3 = e 
@@ -47,7 +47,7 @@ class ManyInitAttrs:
     def extend_attrlists_fromlists(self, a, b, c, 
                                    d, e, f, g):
         self.sdgbxindex.extend(a)
-        self.eps.extend(b)
+        self.xi.extend(b)
         self.radius.extend(c)
         self.msol.extend(d)
         self.coord3.extend(e)
@@ -58,7 +58,7 @@ class ManyInitAttrs:
         ''' use an instance of ManyInitAttrs (mia) to
         extend lists in this instance '''
         self.sdgbxindex.extend(mia.sdgbxindex)
-        self.eps.extend(mia.eps)
+        self.xi.extend(mia.xi)
         self.radius.extend(mia.radius)
         self.msol.extend(mia.msol)
         self.coord3.extend(mia.coord3)
@@ -117,7 +117,7 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     
     # generate attributes
     sdgbxindex = [gbxindex]*nsupers
-    eps, radius, msol = initattrsgen.generate_attributes(nsupers, 
+    xi, radius, msol = initattrsgen.generate_attributes(nsupers, 
                                                           inputs["RHO_SOL"],
                                                           NUMCONC,
                                                           gridboxbounds) 
@@ -135,7 +135,7 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     coord2 = coord2 / inputs["COORD0"]
 
     attrs4gbx = ManyInitAttrs() 
-    attrs4gbx.set_attrlists(sdgbxindex, eps, radius, msol,
+    attrs4gbx.set_attrlists(sdgbxindex, xi, radius, msol,
                             coord3, coord1, coord2)
 
     return attrs4gbx
@@ -169,19 +169,19 @@ def set_arraydtype(arr, dtype):
   return arr
 
 def ctype_compatible_attrs(attrs):
-  ''' make list from arrays of SD attributes that are compatible
-  with c type expected by SDM e.g. unsigned long ints for eps,
-  doubles for radius and msol'''   
+  ''' make list from arrays of SD attributes that are
+  compatible with c type expected by SDM e.g. unsigned 
+  long ints for xi, doubles for radius and msol'''   
 
   datatypes = [np.uintc, np.uint, np.double, np.double]
   datatypes += [np.double]*3 # coords datatype
   
   attrs.sdgbxindex = list(set_arraydtype(attrs.sdgbxindex, datatypes[0]))
-  attrs.eps = list(set_arraydtype(attrs.eps, datatypes[1]))
+  attrs.xi = list(set_arraydtype(attrs.xi, datatypes[1]))
   attrs.radius = list(set_arraydtype(attrs.radius, datatypes[2]))
   attrs.msol = list(set_arraydtype(attrs.msol, datatypes[3]))
   
-  datalist = attrs.sdgbxindex + attrs.eps + attrs.radius + attrs.msol
+  datalist = attrs.sdgbxindex + attrs.xi + attrs.radius + attrs.msol
   
   if any(attrs.coord3):
     # make coord3 compatible if there is data for it (>= 1-D model)
@@ -260,7 +260,7 @@ def write_initsuperdrops_binary(initsupersfile, initattrsgen, configfile,
   attrs = create_allsuperdropattrs(nsupersdict, initattrsgen,
                                    gbxbounds, inputs, NUMCONC) 
   
-  ndata = [len(dt) for dt in [attrs.sdgbxindex, attrs.eps,
+  ndata = [len(dt) for dt in [attrs.sdgbxindex, attrs.xi,
                               attrs.radius, attrs.msol, attrs.coord3,
                               attrs.coord1, attrs.coord2]]
   

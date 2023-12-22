@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 17th November 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -55,14 +55,14 @@ def read_dimless_superdrops_binary(filename, isprint=True):
 
     attrs = ManyInitAttrs()
     attrs.sdgbxindex = np.asarray(data[:ll[0]], dtype=datatypes[0])
-    attrs.eps = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1])
+    attrs.xi = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1])
     attrs.radius = np.asarray(data[ll[1]:ll[2]], dtype=datatypes[2])
     attrs.msol = np.asarray(data[ll[2]:ll[3]], dtype=datatypes[3])
     attrs.coord3 = np.asarray(data[ll[3]:ll[4]], dtype=datatypes[4])
     attrs.coord1 = np.asarray(data[ll[4]:ll[5]], dtype=datatypes[5])
     attrs.coord2 = np.asarray(data[ll[5]:], dtype=datatypes[6])
 
-    print("attribute shapes: ", attrs.sdgbxindex.shape, attrs.eps.shape,
+    print("attribute shapes: ", attrs.sdgbxindex.shape, attrs.xi.shape,
           attrs.radius.shape, attrs.msol.shape, attrs.coord3.shape,
           attrs.coord1.shape, attrs.coord2.shape)
     
@@ -77,11 +77,11 @@ def print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile):
                                         constsfile,
                                         initSDsfile)  
     
-    eps = attrs.eps.flatten()
+    xi = attrs.xi.flatten()
     vol = np.sum(gbxvols)
-    numconc = np.sum(eps)/vol / 1e6 #[/cm^3]
-    massconc = np.sum(attrs.msol.flatten() * eps) / vol * 1000 #[g m^-3]
-    dropvol = 4/3 * np.pi * np.sum((attrs.radius.flatten()**3) * eps) 
+    numconc = np.sum(xi)/vol / 1e6 #[/cm^3]
+    massconc = np.sum(attrs.msol.flatten() * xi) / vol * 1000 #[g m^-3]
+    dropvol = 4/3 * np.pi * np.sum((attrs.radius.flatten()**3) * xi) 
     m_w_conc = dropvol * 1000 / vol * 1000 # mass as if drops had density of water=1000Kg/m^3 [g m^3]
 
     inforstr = "\n------ DOMAIN SUPERDROPLETS INFO ------\n"+\
@@ -106,10 +106,10 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
         vol = gbxvols[idx]
         sl = np.s_[attrs.sdgbxindex==idx]
         l0 = plot_radiusdistrib(axs[0], hedgs, 
-                                attrs.radius[sl], attrs.eps[sl])
-        l1 = plot_numconcdistrib(axs[1], hedgs, attrs.eps[sl],
+                                attrs.radius[sl], attrs.xi[sl])
+        l1 = plot_numconcdistrib(axs[1], hedgs, attrs.xi[sl],
                                  attrs.radius[sl], vol)
-        l2 = plot_masssolutedistrib(axs[2], hedgs, attrs.eps[sl],
+        l2 = plot_masssolutedistrib(axs[2], hedgs, attrs.xi[sl],
                                     attrs.radius[sl], attrs.msol[sl],
                                     vol)
         ls = plot_coorddistribs(axs, sl, hedgs, attrs)
@@ -191,11 +191,11 @@ def log10r_frequency_distribution(radius, hedgs, wghts):
     return hist, hedgs, hwdths, hcens
 
 
-def plot_radiusdistrib(ax, hedgs, radius, eps):
+def plot_radiusdistrib(ax, hedgs, radius, xi):
     ''' get and plotthe superdroplet radius in each log10(r)
     bin and as a scatter on a twinx axis with their multiplicities'''
 
-    l1 = ax.scatter(radius*1e6, eps, zorder=1,
+    l1 = ax.scatter(radius*1e6, xi, zorder=1,
                     label="multiplicities")
 
     ax2 = ax.twinx()
@@ -217,10 +217,10 @@ def plot_radiusdistrib(ax, hedgs, radius, eps):
     return [l1, l2]
 
 
-def plot_numconcdistrib(ax, hedgs, eps, radius, vol):
+def plot_numconcdistrib(ax, hedgs, xi, radius, vol):
     ''' get and plot frequency of real droplets in each log10(r) bin '''
 
-    wghts = eps / vol / 1e6  # [cm^-3]
+    wghts = xi / vol / 1e6  # [cm^-3]
     hist, hedgs, hwdths, hcens = log10r_frequency_distribution(
                                             radius, hedgs, wghts)
 
@@ -235,7 +235,7 @@ def plot_numconcdistrib(ax, hedgs, eps, radius, vol):
     return line
 
 
-def plot_masssolutedistrib(ax, hedgs, eps, radius, msol, vol):
+def plot_masssolutedistrib(ax, hedgs, xi, radius, msol, vol):
     ''' get and plot frequency of real droplets in each log10(r) bin '''
 
     wghts = msol*eps/vol * 1000 / 1e6  # [g cm^-3]

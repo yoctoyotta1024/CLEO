@@ -187,16 +187,16 @@ class InitManyAttrsGen:
         mulitiplicities are zero '''
 
         prob = self.xiprobdist(radii) # normalised prob distrib
-        eps = np.rint(prob * NUMCONC * samplevol)
+        xi = np.rint(prob * NUMCONC * samplevol)
 
-        if any(eps == 0):
-          num = len(eps[eps==0])
-          errmsg = "ERROR, "+str(num)+" out of "+str(len(eps))+" SDs"+\
+        if any(xi == 0):
+          num = len(xi[xi==0])
+          errmsg = "ERROR, "+str(num)+" out of "+str(len(xi))+" SDs"+\
             " created with multiplicity = 0. Consider increasing numconc"+\
             " or changing range of radii sampled."
           raise ValueError(errmsg)
 
-        return np.array(eps, dtype=np.uint)
+        return np.array(xi, dtype=np.uint)
 
     def check_coordsgen_matches_modeldimension(self, nspacedims):
        
