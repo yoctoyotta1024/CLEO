@@ -67,6 +67,7 @@ def initSDsinputsdict(configfile, constsfile):
   inputs = {
     # for creating SD attribute distirbutions
     "nspacedims": int(config["nspacedims"]),
+    "RHO_L": consts["RHO_L"],                   # liquid density [Kg/m^3]
     "RHO_SOL": consts["RHO_SOL"],               # solute density [Kg/m^3]
 
     # for de-dimensionalising attributes

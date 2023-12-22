@@ -25,6 +25,16 @@ from .create_initsuperdrops import initSDsinputsdict, ManyAttrs
 from ..readbinary import readbinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import get_gbxvols_from_gridfile
 
+def plot_initGBxs_distribs(configfile, constsfile, initsupersfile,
+                          gridfile, binpath, savefig, gbxs2plt):
+    ''' plot initial superdroplet distribution from initsupersfile binary
+    of every gridbox with index in gbx2plts '''
+
+    plot_initGBxs_attrdistribs(configfile, constsfile, initsupersfile,
+                                gridfile, binpath, savefig, gbxs2plt)
+    plot_initGBxs_dropletmasses(configfile, constsfile, initsupersfile,
+                                 gridfile, binpath, savefig, gbxs2plt)
+
 def get_superdroplet_attributes(configfile, constsfile, initsupersfile):
     ''' get gridbox boundaries from binary file and 
     re-dimensionalise usign COORD0 const from constsfile '''
@@ -67,6 +77,14 @@ def read_dimless_superdrops_binary(filename, isprint=True):
           attrs.coord1.shape, attrs.coord2.shape)
     
     return attrs
+
+def totmass(radius, msol, RHO_L , RHO_SOL):
+    ''' droplet totmass = mass of water + solute '''
+    massconst = 4.0 / 3.0 * np.pi  * radius * radius * radius * RHO_L
+    density_factor = 1.0 - RHO_L / RHO_SOL
+    totmass = msol * density_factor + massconst
+
+    return totmass
 
 def print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile):
     gbxvols = np.asarray(get_gbxvols_from_gridfile(gridfile,
@@ -118,8 +136,8 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
     
     return fig, axs, [l0, l1, l2, ls]
 
-def plot_initGBxsdistribs(configfile, constsfile, initsupersfile,
-                          gridfile, binpath, savefig, gbxs2plt):
+def plot_initGBxs_attrdistribs(configfile, constsfile, initsupersfile,
+                                gridfile, binpath, savefig, gbxs2plt):
     ''' plot initial superdroplet distribution from initsupersfile binary
     of every gridbox with index in gbx2plts '''
 
@@ -234,7 +252,6 @@ def plot_numconcdistrib(ax, hedgs, xi, radius, vol):
 
     return line
 
-
 def plot_masssolutedistrib(ax, hedgs, xi, radius, msol, vol):
     ''' get and plot frequency of real droplets in each log10(r) bin '''
 
@@ -246,6 +263,34 @@ def plot_masssolutedistrib(ax, hedgs, xi, radius, msol, vol):
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
     ax.set_ylabel("solute mass per unit volume / g cm$^{-3}$")
+
+    return line
+
+def plot_totmassdistrib(ax, hedgs, xi, radius, msol, vol, RHO_L, RHO_SOL):
+    ''' get and plot frequency of real droplets in each log10(r) bin '''
+
+    mass = totmass(radius, msol, RHO_L , RHO_SOL)
+    wghts = mass*xi/vol * 1000 / 1e6  # [g cm^-3]
+    hist, hedgs, hwdths, hcens = log10r_frequency_distribution(
+        radius, hedgs, wghts)
+
+    line = ax.step(hcens, hist, where='mid')
+    ax.set_xscale("log")
+    ax.set_xlabel("radius, r, /\u03BCm")
+    ax.set_ylabel("droplet mass per unit volume / g cm$^{-3}$")
+
+    return line
+
+def scatter_totmass_solutemass(ax, radius, msol, RHO_L, RHO_SOL):
+    
+    mass = totmass(radius, msol, RHO_L , RHO_SOL) 
+
+    line = ax.scatter(mass*1000, msol*1000, marker="x")
+
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_xlabel("total mass / g")
+    ax.set_ylabel("solute mass / g")
 
     return line
 
@@ -275,3 +320,67 @@ def plot_coorddist(ax, hedgs, coord3, radius, coordnum):
     ax.set_ylabel("superdroplet coord"+str(coordnum)+" / m")
 
     return line
+
+def plot_initGBxs_dropletmasses(configfile, constsfile, initsupersfile,
+                               gridfile, binpath, savefig, gbxs2plt):
+    ''' plot initial superdroplet mass distributions
+    from initsupersfile binary of every gridbox with index
+    in gbx2plts '''
+
+    gbxvols = get_gbxvols_from_gridfile(gridfile,
+                                        constsfile=constsfile,
+                                        isprint=False)
+    attrs = get_superdroplet_attributes(configfile,
+                                        constsfile,
+                                        initsupersfile) 
+    inputs = initSDsinputsdict(configfile, constsfile)
+
+    if type(gbxs2plt) == int:
+        gbxidxs = [gbxs2plt]
+        savename = binpath+"initGBx"+str(gbxs2plt)+"_dropletmasses.png"
+    elif gbxs2plt == "all":
+        gbxidxs  = np.unique(attrs.sdgbxindex)
+        savename = binpath+"initallGBxs_dropletmasses.png"
+    else:
+        gbxidxs = gbxs2plt
+        savename = binpath+"initGBxs_dropletmasses.png"
+    
+    fig, axs, lines = plot_massdistribs(attrs, gbxvols, gbxidxs,
+                                        inputs["RHO_L"], inputs["RHO_SOL"])   
+    
+    fig.tight_layout()
+    if savefig:
+        fig.savefig(savename, dpi=400,
+                    bbox_inches="tight", facecolor='w', format="png")
+        print("Figure .png saved as: "+savename)
+    plt.show()
+
+def plot_massdistribs(attrs, gbxvols, gbxidxs, RHO_L, RHO_SOL):
+
+    plt.rcParams.update({'font.size': 14})
+    fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(14, 4))
+    fig.suptitle("SDM Initial Superdroplet Mass Distributions")
+
+    # create nbins evenly spaced in log10(r)
+    nbins = 20
+    minr, maxr = np.min(attrs.radius)/10, np.max(attrs.radius)*10
+    hedgs = np.linspace(np.log10(minr), np.log10(maxr),
+                        nbins+1)  # edges to lnr bins
+
+    for idx in gbxidxs:
+        vol = gbxvols[idx]
+        sl = np.s_[attrs.sdgbxindex==idx]
+        l0 = plot_totmassdistrib(axs[0], hedgs, attrs.xi[sl],
+                              attrs.radius[sl], attrs.msol[sl],
+                              vol, RHO_L, RHO_SOL)
+        l1 = plot_masssolutedistrib(axs[1], hedgs, attrs.xi[sl],
+                                    attrs.radius[sl], attrs.msol[sl],
+                                    vol)
+        l2 = scatter_totmass_solutemass(axs[2], attrs.radius[sl],
+                                     attrs.msol[sl], RHO_L, RHO_SOL)
+        
+    fig.tight_layout()
+    
+    return fig, axs, [l0, l1, l2]
+
+    

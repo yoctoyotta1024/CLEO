@@ -118,7 +118,7 @@ read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gri
 if isfigures[0]:
     rgrid.plot_gridboxboundaries(constsfile, gridfile,
                                  savefigpath, isfigures[1])
-    read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+    read_initsuperdrops.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                                               gridfile, savefigpath, isfigures[1], "all")
     plt.close()
 ### ---------------------------------------------------------------- ###

@@ -150,7 +150,7 @@ if isfigures[0]:
                                savefigpath, isfigures[1])
   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                               thermofile, savefigpath, isfigures[1])
-  rsupers.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+  rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                               gridfile, savefigpath, isfigures[1],
                               SDgbxs2plt) 
   plt.close()

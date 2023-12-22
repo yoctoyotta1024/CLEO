@@ -153,7 +153,7 @@ csupers.write_initsuperdrops_binary(initsupersfile, attrsgen,
 if isfigures[0]:
     if isfigures[1]:
         Path(savefigpath).mkdir(exist_ok=True) 
-    rsupers.plot_initGBxsdistribs(configfile, constsfile, initsupersfile,
+    rsupers.plot_initGBxs_distribs(configfile, constsfile, initsupersfile,
                                    gridfile, savefigpath, isfigures[1],
                                    gbxs2plt)
 ### ---------------------------------------------------------------- ###

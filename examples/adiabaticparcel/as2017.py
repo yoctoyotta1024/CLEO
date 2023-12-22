@@ -164,7 +164,7 @@ for i in range(len(monors)):
     read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
     
     if isfigures[0]:
-        read_initsuperdrops.plot_initGBxsdistribs(configfile, constsfile, initSDsfile,
+        read_initsuperdrops.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                                               gridfile, binpath, isfigures[1], "all")
         plt.close()
     
