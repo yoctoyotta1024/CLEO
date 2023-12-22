@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 21st December 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -58,13 +58,11 @@ nsupers = 40
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
-# monor                = 0.04910258806                # all SDs have this same radius [m]
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
 # radiigen  =  iattrs.MonoAttrsGen(monor)                  # all SDs have the same dryradius [m]
 
-rspan                = [7.5e-9, 7.5e-7]                 # min and max range of radii to sample [m]
-randomr              = True                         # sample radii range randomly or not
-radiigen =  iattrs.SampleDryradiiGen(rspan, randomr)   # radii are sampled from rspan [m]
+rspan                = [7.5e-9, 7.5e-7]                # min and max range of radii to sample [m]
+radiigen =  iattrs.SampleDryradiiGen(rspan)            # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Droplet Radius Probability Distribution --- ###

@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 12th December 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -65,12 +65,9 @@ zgrid = np.asarray([0, 100])
 xgrid = np.asarray([0, 100])
 ygrid = np.asarray([0, 100])
 
-# settings for monodisperse droplet radii
-numconc = 0.5e9  # numconc = total no. concentration of droplets [m^-3]
+# settings for monodisperse droplet radii probability distribution
 monor = 0.025e-6  # monor = dry radius of all droplets [m]
-
-# monodisperse droplet radii probability distribution
-radiigen = initattributes.MonoAttrsGen(monor)
+numconc = 0.5e9  # numconc = total no. concentration of droplets [m^-3]
 radiiprobdist = radiiprobdistribs.DiracDelta(monor)
 
 # settings for monodisperse droplet radii

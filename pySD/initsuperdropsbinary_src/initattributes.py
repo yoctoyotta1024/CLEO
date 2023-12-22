@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 18th October 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -62,11 +62,10 @@ class SampleDryradiiGen:
     '''method to generate superdroplet radii by sampling bins bewteen
     rspan that are linearly spaced in log10(r) '''
 
-    def __init__(self, rspan, random):
+    def __init__(self, rspan):
 
         self.rspan = rspan
-        self.random = random
-
+        
     def __call__(self, nsupers):
         ''' Returns dryradii for nsupers sampled from rspan [m]'''
 
@@ -76,10 +75,10 @@ class SampleDryradiiGen:
         return dryradii  # units [m]
 
     def generate_dryradiisample(self, edges=False):
-        ''' Divide rspan [m] into evenly spaced bins in log10(r). If edges=True,
-        return values of radii at edges of bins. Else sample each bin randomly to
-        obtain the dry radius of 'nsupers' no. of superdroplets unless random=False.
-        If random=False, return radii evenly distirbuted in log10(r /m) space '''
+        ''' Divide rspan [m] into evenly spaced bins in log10(r).
+        If edges=True, return values of radii at edges of bins.
+        Else sample each bin randomly to obtain the radius
+        of 'nsupers' no. of superdroplets '''
 
         if self.nbins:
             log10redgs = np.linspace(np.log10(self.rspan[0]), np.log10(

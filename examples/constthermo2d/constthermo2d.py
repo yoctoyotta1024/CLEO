@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 12th December 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -137,7 +137,7 @@ coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
 coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
 coord2gen = None                        # do not generate superdroplet coord2s
 radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
-radiigen = iattrs.SampleDryradiiGen(rspan, True) # randomly sample radii from rspan [m]
+radiigen = iattrs.SampleDryradiiGen(rspan) # randomly sample radii from rspan [m]
 
 initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
                                         coord3gen, coord1gen, coord2gen)

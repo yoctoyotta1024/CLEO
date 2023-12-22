@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Sunday 17th December 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -75,12 +75,10 @@ coord_params = ["false"]
 volexpr0 = 30.531e-6
 numconc = 2**(23)                     # total no. conc of real droplets [m^-3]
 rspan = [1e-8, 9e-5]                # max and min range of radii to sample [m]
-randomr = True                        # sample radii range randomly or not
 
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
 radiiprobdist = radiiprobdistribs.VolExponential(volexpr0, rspan)
-radiigen = initattributes.SampleDryradiiGen(
-    rspan, randomr)  # radii are sampled from rspan [m]
+radiigen = initattributes.SampleDryradiiGen(rspan)  # radii are sampled from rspan [m]
 coord3gen = None                        # do not generate superdroplet coords
 coord1gen = None
 coord2gen = None
