@@ -150,13 +150,13 @@ def plot_initGBxs_attrdistribs(configfile, constsfile, initsupersfile,
 
     if type(gbxs2plt) == int:
         gbxidxs = [gbxs2plt]
-        savename = binpath+"initGBx"+str(gbxs2plt)+"distrib.png"
+        savename = binpath+"initGBx"+str(gbxs2plt)+"_distrib.png"
     elif gbxs2plt == "all":
         gbxidxs  = np.unique(attrs.sdgbxindex)
-        savename = binpath+"initallGBxsdistribs.png"
+        savename = binpath+"initallGBxs_distribs.png"
     else:
         gbxidxs = gbxs2plt
-        savename = binpath+"initGBxsdistribs.png"
+        savename = binpath+"initGBxs_distribs.png"
     
     fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)   
     
