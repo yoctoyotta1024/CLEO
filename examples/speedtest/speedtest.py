@@ -193,7 +193,7 @@ coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
 coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
 coord2gen = iattrs.SampleCoordGen(True) # sample coord2 randomly 
 radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
-radiigen = iattrs.SampleDryradiiGen(rspan) # randomly sample radii from rspan [m]
+radiigen = iattrs.SampleLog10RadiiGen(rspan) # randomly sample radii from rspan [m]
 
 initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
                                         coord3gen, coord1gen, coord2gen)

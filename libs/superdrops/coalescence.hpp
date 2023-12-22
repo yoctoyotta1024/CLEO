@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Friday 22nd December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,7 +40,7 @@ private:
   twin_superdroplet_coalescence(const unsigned long long gamma,
                                 Superdrop &drop1,
                                 Superdrop &drop2) const;
-  /* if xi1 = gamma*eps2 coalescence makes twin SDs
+  /* if xi1 = gamma*xi2 coalescence makes twin SDs
   with same xi, r and solute mass. According to Shima et al. 2009
   Section 5.1.3. part (5) option (b)  */
 
@@ -48,7 +48,7 @@ private:
   different_superdroplet_coalescence(const unsigned long long gamma,
                                      Superdrop &drop1,
                                      Superdrop &drop2) const;
-  /* if xi1 > gamma*eps2 coalescence grows sd2 radius and mass
+  /* if xi1 > gamma*xi2 coalescence grows sd2 radius and mass
   via decreasing multiplicity of sd1. According to
   Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
 

@@ -238,7 +238,7 @@ def plot_numconcdistrib(ax, hedgs, xi, radius, vol):
 def plot_masssolutedistrib(ax, hedgs, xi, radius, msol, vol):
     ''' get and plot frequency of real droplets in each log10(r) bin '''
 
-    wghts = msol*eps/vol * 1000 / 1e6  # [g cm^-3]
+    wghts = msol*xi/vol * 1000 / 1e6  # [g cm^-3]
     hist, hedgs, hwdths, hcens = log10r_frequency_distribution(
         radius, hedgs, wghts)
 

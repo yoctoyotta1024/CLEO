@@ -25,10 +25,12 @@ import numpy as np
 from pathlib import Path
 
 sys.path.append(sys.argv[1]) # path to pySD (same as to CLEO)
-from pySD.initsuperdropsbinary_src import coordgen as iattrs 
+from pySD.initsuperdropsbinary_src import radiigen as rgens
+from pySD.initsuperdropsbinary_src import coordgen as cgens
 from pySD.initsuperdropsbinary_src import probdistribs as rprobs
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import attrsgenerator as attrsgen
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
@@ -53,23 +55,28 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 ### ---        (an int or dict of ints)     --- ###
 # zlim = 1000
 # npergbx = 8
-# nsupers =  iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+# nsupers =  cgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 nsupers = 40
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
-# radiigen  =  iattrs.MonoAttrGen(monor)                  # all SDs have the same dryradius [m]
+# radiigen  =  rgens.MonoAttrGen(monor)                  # all SDs have the same radius [m]
 
 rspan                = [7.5e-9, 7.5e-7]                # min and max range of radii to sample [m]
-radiigen =  iattrs.SampleDryradiiGen(rspan)            # radii are sampled from rspan [m]
+radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
+### ---------------------------------------------- ###
+
+### --- Choice of Superdroplet Dry Radii Generator --- ###
+monodryr                = 5e-9                        # all SDs have this same dryradius [m]
+dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Droplet Radius Probability Distribution --- ###
 # dirac0               = monor                         # radius in sample closest to this value is dirac delta peak
 # numconc              = 1e6                         # total no. conc of real droplets [m^-3]
 # numconc              = 512e6                         # total no. conc of real droplets [m^-3]
-# radiiprobdist = rprobs.DiracDelta(dirac0)
+# xiprobdist = rprobs.DiracDelta(dirac0)
 
 geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
 geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
@@ -81,46 +88,46 @@ scalefacs          = [1e9]                       # relative heights of modes
 # geosigs              = [1.4, 1.6]                    
 # scalefacs            = [6e6, 4e6]   
 numconc = np.sum(scalefacs)
-radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
+xiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
  
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 # numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-# radiiprobdist = rprobs.VolExponential(volexpr0, rspan)
+# xiprobdist = rprobs.VolExponential(volexpr0, rspan)
 
 # reff                 = 7e-6                     # effective radius [m]
 # nueff                = 0.08                     # effective variance 
-# # radiiprobdist = rprobs.ClouddropsHansenGamma(reff, nueff)
+# # xiprobdist = rprobs.ClouddropsHansenGamma(reff, nueff)
 # rdist1 = rprobs.ClouddropsHansenGamma(reff, nueff)
 # nrain                = 3000                         # raindrop concentration [m^-3]
 # qrain                = 0.9                          # rainwater content [g/m^3]
 # dvol                 = 8e-4                         # mean volume diameter [m]
-# # radiiprobdist = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+# # xiprobdist = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
 # rdist2 = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
 # numconc = 1e9 # [m^3]
 # distribs = [rdist1, rdist2]
 # scalefacs = [1000, 1]
-# radiiprobdist = rprobs.CombinedRadiiProbDistribs(distribs, scalefacs)
+# xiprobdist = rprobs.CombinedRadiiProbDistribs(distribs, scalefacs)
 
 ### --------------------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
-# coord3gen            =  iattrs.MonoCoordGen(monocoord3)
-coord3gen            =  iattrs.SampleCoordGen(True) # sample coord3 range randomly or not
+# coord3gen            =  cgens.MonoCoordGen(monocoord3)
+coord3gen            =  cgens.SampleCoordGen(True) # sample coord3 range randomly or not
 # coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
-# coord1gen            =  iattrs.MonoCoordGen(monocoord1)
-# coord1gen            =  iattrs.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord1gen            =  cgens.MonoCoordGen(monocoord1)
+# coord1gen            =  cgens.SampleCoordGen(True) # sample coord1 range randomly or not
 coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
 # monocoord2           = 1000                        # all SDs have this same coord2 [m] 
-# coord2gen            =  iattrs.MonoCoordGen(monocoord2)
-# coord2gen            =  iattrs.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord2gen            =  cgens.MonoCoordGen(monocoord2)
+# coord2gen            =  cgens.SampleCoordGen(True) # sample coord1 range randomly or not
 coord2gen            = None                        # do not generate superdroplet coord2s
 ### ----------------------------------------------- ###
 
@@ -136,7 +143,7 @@ else:
   Path(binariespath).mkdir(exist_ok=True) 
 
 ### write initial superdrops binary
-attrsgen =  iattrs.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
+attrsgen =  attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                   coord3gen, coord1gen, coord2gen)
 csupers.write_initsuperdrops_binary(initsupersfile, attrsgen,
                                     configfile, constsfile,

@@ -78,7 +78,7 @@ rspan = [1e-8, 9e-5]                # max and min range of radii to sample [m]
 
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
 radiiprobdist = xiprobdistribs.VolExponential(volexpr0, rspan)
-radiigen = coordgen.SampleDryradiiGen(rspan)  # radii are sampled from rspan [m]
+radiigen = coordgen.SampleLog10RadiiGen(rspan)  # radii are sampled from rspan [m]
 coord3gen = None                        # do not generate superdroplet coords
 coord1gen = None
 coord2gen = None
