@@ -1,12 +1,12 @@
 '''
 ----- CLEO -----
-File: radiiprobdistribs.py
+File: probdistribs.py
 Project: initsuperdropsbinary_src
 Created Date: Wednesday 22nd November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 18th December 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,9 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Probability distirubtion of radii for different droplet types
+Class calls' return normalised probability
+of radii for various probability distributions
+assuming bins are evenly spaced in log10(r)
 '''
 
 import numpy as np
@@ -23,15 +25,15 @@ from scipy import special
 
 class CombinedRadiiProbDistribs:
   ''' probability of radius from the sum of several
-  probability dsitirbutions '''
+  probability distributions '''
 
   def __init__(self, probdistribs, scalefacs):
     self.probdistribs = probdistribs
     self.scalefacs = scalefacs
 
     if len(scalefacs) != len(probdistribs):
-      print("relative height of each distribution" +\
-            "in probdistribs must be given")
+      errmsg = "relative height of each probability distribution must be given"
+      raise ValueError(errmsg)
 
   def __call__(self, radii):
     ''' returns distribution for radii given by the 
@@ -97,8 +99,8 @@ class VolExponential:
 class LnNormal:
   ''' probability of radius given by lognormal distribution
   as defined by section 5.2.3 of "An Introduction to clouds from
-  the Microscale to Climate" by Lohmann, Luond and Mahrt and radii sampled
-  from evenly spaced bins in ln(r).
+  the Microscale to Climate" by Lohmann, Luond and Mahrt and radii
+  sampled from evenly spaced bins in ln(r).
   typical parameter values:
   geomeans = [0.02e-6, 0.2e-6, 3.5e-6] # [m]               
   geosigs = [1.55, 2.3, 2]                    
@@ -168,7 +170,7 @@ class ClouddropsHansenGamma:
     term2 = np.exp(-radii/(self.reff*self.nueff))
 
     probs = n0const * term1 * term2 # dn_dr [prob m^-1]
-
+ 
     return probs / np.sum(probs) # normalise so sum(prob) = 1 
 
 class RaindropsGeoffroyGamma:
