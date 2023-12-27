@@ -33,7 +33,9 @@ jobs:
           python3 -m pip install -U breathe
       - name: Test with pytest
         run: pytest .
-
+      - name: Generate Doxygen Documentation
+        run: doxygen doxygen/doxygen.dox
+        shell: bash
       - name: Build docs
         run: |
           cd docs && make html
