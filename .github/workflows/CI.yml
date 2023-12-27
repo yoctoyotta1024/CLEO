@@ -18,11 +18,9 @@ jobs:
       - run: |
           conda info
           conda list
-      - name: Install Doxygen 
-          run: |
-          apt-get install doxygen
       - name: Install package
         run: |
+          apt-get install doxygen
           python3 -m pip install --upgrade pip
           python3 -m pip install .
           python3 -m pip install -U sphinx
