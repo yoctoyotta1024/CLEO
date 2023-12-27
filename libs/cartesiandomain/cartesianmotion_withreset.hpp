@@ -110,7 +110,10 @@ struct ResetSuperdrop
     const auto log10r = double{log10rlow + frac * (log10rup - log10rlow)};
     const auto radius = Kokkos::pow(10, log10r);
 
+    const unsigned long long xi = // TODO ;
+
     drop.change_radius(radius);
+    drop.set_xi(xi);
   }
 
   KOKKOS_FUNCTION unsigned int
