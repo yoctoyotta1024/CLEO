@@ -87,10 +87,10 @@ struct ResetSuperdrop
                                  gbxidxs.second); // randomly selected gbxindex in range {incl., excl.} 
    
     const auto bounds = gbxmaps.coord3bounds(sdgbxindex);
-    const auto coord = urbg.drand(bounds.first, bounds.second); // random coord within gbx bounds
+    const auto coord3 = urbg.drand(bounds.first, bounds.second); // random coord within gbx bounds
 
     drop.set_sdgbxindex(sdgbxindex);
-    drop.set_coord3(coord);
+    drop.set_coord3(coord3);
 
     return sdgbxindex;
   }
