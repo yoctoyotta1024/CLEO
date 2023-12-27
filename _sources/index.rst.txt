@@ -31,7 +31,8 @@ with the :doc:`quickstart<usage/quickstart>`.
    usage/quickstart
    usage/contributing
 
-   API: pySD <pySD/pySD>
+   pySD/pySD
+   cxx/cxx
 
    GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
    usage/contact
