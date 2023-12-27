@@ -18,7 +18,7 @@ jobs:
       - run: |
           conda info
           conda list
-      - name: Requirements
+      - name: Doxygen 
           run: apt-get install doxygen
       - name: Install package
         run: |
@@ -35,7 +35,7 @@ jobs:
 
       - name: Build docs
         run: |
-          cd docs && doxygen/doxygen.dox && make html
+          cd docs && doxygen doxygen/doxygen.dox && make html
       - name: Archive build artifacts (i.e. documentation)
         uses: actions/upload-artifact@v3
         with:
