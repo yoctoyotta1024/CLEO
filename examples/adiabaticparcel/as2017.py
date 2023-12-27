@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 22nd December 2023
+Last Modified: Wednesday 27th December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -42,10 +42,10 @@ from pySD import editconfigfile
 from pySD.sdmout_src import sdtracing
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
-
-
 
 ############### INPUTS ##################
 # path and filenames for creating SD initial conditions and for running model
@@ -64,11 +64,6 @@ coord_params = ["false"]
 zgrid = np.asarray([0, 100])
 xgrid = np.asarray([0, 100])
 ygrid = np.asarray([0, 100])
-
-# settings for monodisperse droplet radii probability distribution
-monor = 0.025e-6  # monor = dry radius of all droplets [m]
-numconc = 0.5e9  # numconc = total no. concentration of droplets [m^-3]
-radiiprobdist = xiprobdistribs.DiracDelta(monor)
 
 # settings for monodisperse droplet radii
 # [m^-3] total no. concentration of droplets
@@ -151,20 +146,21 @@ for i in range(len(monors)):
     # 2b. create file with initial SDs conditions
     monor, numconc = monors[i], numconcs[i]
     # all SDs have the same dryradius = monor [m]
-    radiigen = coordgen.MonoAttrGen(monor)
+    radiigen = rgens.MonoAttrGen(monor)
+    dryradiigen = radiigen
     # monodisperse droplet radii probability distribution
-    radiiprobdist = xiprobdistribs.DiracDelta(monor)
+    xiprobdist = probdists.DiracDelta(monor)
 
-    initattrsgen = coordgen.InitManyAttrsGen(radiigen, radiiprobdist,
-                                                   coord3gen, coord1gen, coord2gen)
+    initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
+                                           coord3gen, coord1gen, coord2gen)
     os.system("rm "+initSDsfile)
-    create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
+    csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                                       configfile, constsfile,
                                                       gridfile, nsupers, numconc)
-    read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
+    rsupers.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
     
     if isfigures[0]:
-        read_initsuperdrops.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
+        rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                                               gridfile, binpath, isfigures[1], "all")
         plt.close()
     

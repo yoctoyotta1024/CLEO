@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 22nd December 2023
+Last Modified: Wednesday 27th December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -41,6 +41,8 @@ from plotssrc import pltsds, as2017fig
 from pySD.sdmout_src import sdtracing
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 
@@ -73,8 +75,9 @@ numconc = 0.5e9  # numconc = total no. concentration of droplets [m^-3]
 monor = 0.025e-6  # monor = dry radius of all droplets [m]
 
 # monodisperse droplet radii probability distribution
-radiigen = coordgen.MonoAttrGen(monor)
-radiiprobdist = xiprobdistribs.DiracDelta(monor)
+radiigen = rgens.MonoAttrGen(monor)
+dryradiigen = radiigen
+xiprobdist = probdists.DiracDelta(monor)
 
 # volume SD sample occupies (entire domain) [m^3]
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
@@ -106,17 +109,17 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
                                      ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
-initattrsgen = coordgen.InitManyAttrsGen(radiigen, radiiprobdist,
-                                               coord3gen, coord1gen, coord2gen)
-create_initsuperdrops.write_initsuperdrops_binary(initSDsfile, initattrsgen,
+initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
+                                       coord3gen, coord1gen, coord2gen)
+csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                                   configfile, constsfile,
                                                   gridfile, nsupers, numconc)
-read_initsuperdrops.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
+rsupers.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
 
 if isfigures[0]:
     rgrid.plot_gridboxboundaries(constsfile, gridfile,
                                  binpath, isfigures[1])
-    read_initsuperdrops.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
+    rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                                               gridfile, binpath, isfigures[1], "all")
 plt.close()
 

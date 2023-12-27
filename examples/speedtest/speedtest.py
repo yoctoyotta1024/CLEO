@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 22nd December 2023
+Last Modified: Wednesday 27th December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -39,11 +39,9 @@ sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from examp
 
 from plotssrc import pltsds, pltmoms
 from pySD.sdmout_src import *
-from pySD.initsuperdropsbinary_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
-from pySD.initsuperdropsbinary_src import coordgen as iattrs
-from pySD.initsuperdropsbinary_src import probdistribs as rprobs 
+from pySD.initsuperdropsbinary_src import *
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
 from pySD.thermobinary_src import thermogen
@@ -192,10 +190,10 @@ nsupers = iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
 coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
 coord2gen = iattrs.SampleCoordGen(True) # sample coord2 randomly 
-radiiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
+radiiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 radiigen = iattrs.SampleLog10RadiiGen(rspan) # randomly sample radii from rspan [m]
 
-initattrsgen = iattrs.InitManyAttrsGen(radiigen, radiiprobdist,
+initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
 csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
                                       configfile, constsfile,

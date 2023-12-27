@@ -146,7 +146,7 @@ else:
 
 ### write initial superdrops binary
 attrsgen =  attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
-                                  coord3gen, coord1gen, coord2gen)
+                                    coord3gen, coord1gen, coord2gen)
 csupers.write_initsuperdrops_binary(initsupersfile, attrsgen,
                                     configfile, constsfile,
                                     gridfile, nsupers, numconc)
