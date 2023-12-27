@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th November 2023
+ * Last Modified: Wednesday 27th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -76,7 +76,6 @@ used for SDM) and detectors for tracking chosen variables */
   KOKKOS_INLINE_FUNCTION
   auto get_gbxindex() const { return gbxindex.value; }
 
-  KOKKOS_INLINE_FUNCTION
   viewd_constsupers domain_totsupers_readonly() const
   {
     return supersingbx.domain_totsupers_readonly();
