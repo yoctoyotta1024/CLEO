@@ -27,6 +27,7 @@ jobs:
           python3 -m pip install -U furo
           python3 -m pip install -U sphinx_copybutton
           python3 -m pip install -U sphinxcontrib-bibtex
+          python3 -m pip install -U breathe
       - name: Test with pytest
         run: pytest .
 

@@ -6,7 +6,7 @@ Created Date: Monday 20th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Sunday 26th November 2023
+Last Modified: Wednesday 27th December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -31,9 +31,12 @@ configuration for CLEO documentation made using Sphinx
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
 import pathlib
-import sys
+import sys, subprocess
 # sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
+
+# Doxygen
+subprocess.call('doxygen ../doxygen/doxygen.dox ', shell=True)
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -56,6 +59,7 @@ extensions = [
     'sphinx_copybutton',
     'sphinx.ext.intersphinx',
     'sphinxcontrib.bibtex',
+    'breathe'
 ]
 
 # configuration of citations using bibtex file(s)
@@ -70,6 +74,10 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# breathe configuration
+breathe_projects = {
+    "runcleo"          : "../build/doxygen/xml/",
+}
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

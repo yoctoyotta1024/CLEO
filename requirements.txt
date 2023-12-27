@@ -21,6 +21,7 @@ sphinx
 furo
 sphinx_copybutton
 sphinxcontrib-bibtex
+breathe
 numpy
 scipy
 matplotlib
