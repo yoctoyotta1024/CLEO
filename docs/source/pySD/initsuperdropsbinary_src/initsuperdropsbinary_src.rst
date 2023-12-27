@@ -16,5 +16,7 @@ the Super-Droplets in a 0-D, 1-D, 2-D or 3-D cartesian domain.
 
    create_initsuperdrops
    read_initsuperdrops
-   initattributes
-   radiiprobdistribs
+   attrsgen
+   crdgens
+   probdists
+   rgens
