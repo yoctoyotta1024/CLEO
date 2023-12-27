@@ -15,9 +15,8 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-various ways of generatring dry and wet
-radii for the initial conditions of
-superdroplets
+various ways of generatring radii of
+superdroplets for their initial conditions
 '''
 
 import numpy as np
@@ -33,7 +32,10 @@ class MonoAttrGen:
     def __call__(self, nsupers):
         ''' Returns attribute for nsupers all
         with the value of attr0 '''
-
+        
+        if type(nsupers) == np.ndarray:
+            nsupers = np.shape(nsupers)[0]
+        
         attrs = np.full(nsupers, self.attr0)
 
         return attrs

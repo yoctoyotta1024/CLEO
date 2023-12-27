@@ -147,7 +147,7 @@ for i in range(len(monors)):
     monor, numconc = monors[i], numconcs[i]
     # all SDs have the same dryradius = monor [m]
     radiigen = rgens.MonoAttrGen(monor)
-    dryradiigen = radiigen
+    dryradiigen = dryrgens.ScaledRadiiGen(1.0)
     # monodisperse droplet radii probability distribution
     xiprobdist = probdists.DiracDelta(monor)
 

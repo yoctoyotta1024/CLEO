@@ -23,4 +23,5 @@ __all__ = ["create_initsuperdrops",
           "attrsgen",
           "probdists",
           "crdgens",
-          "rgens"]
+          "rgens",
+          "dryrgens"]

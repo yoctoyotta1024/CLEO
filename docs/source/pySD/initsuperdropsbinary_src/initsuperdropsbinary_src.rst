@@ -20,3 +20,4 @@ the Super-Droplets in a 0-D, 1-D, 2-D or 3-D cartesian domain.
    crdgens
    probdists
    rgens
+   dryrgens

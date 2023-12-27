@@ -76,7 +76,7 @@ monor = 0.025e-6  # monor = dry radius of all droplets [m]
 
 # monodisperse droplet radii probability distribution
 radiigen = rgens.MonoAttrGen(monor)
-dryradiigen = radiigen
+dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 xiprobdist = probdists.DiracDelta(monor)
 
 # volume SD sample occupies (entire domain) [m^3]

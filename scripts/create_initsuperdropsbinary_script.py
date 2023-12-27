@@ -68,10 +68,9 @@ radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from
 # monodryr                = 5e-9                        # all SDs have this same dryradius [m]
 # dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
 
-rspan                = [7.5e-12, 7.5e-9]                # min and max range of radii to sample [m]
-dryradiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
+dryr_sf               = 1000           #scale factor for dry radii [m]
+dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf) # dryradii are 1/sf of radii [m]
 
-# dryradiigen = radiigen
 ### ---------------------------------------------- ###
 
 ### --- Choice of Droplet Radius Probability Distribution --- ###

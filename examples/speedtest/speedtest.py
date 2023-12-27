@@ -192,7 +192,7 @@ coord1gen = crdgens.SampleCoordGen(True) # sample coord1 randomly
 coord2gen = crdgens.SampleCoordGen(True) # sample coord2 randomly 
 xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 radiigen = rgens.SampleLog10RadiiGen(rspan) # randomly sample radii from rspan [m]
-dryradiigen = radiigen
+dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
