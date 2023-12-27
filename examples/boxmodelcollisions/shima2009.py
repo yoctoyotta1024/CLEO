@@ -79,8 +79,9 @@ numconc = 2**(23)                     # total no. conc of real droplets [m^-3]
 rspan = [1e-8, 9e-5]                # max and min range of radii to sample [m]
 
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
-radiiprobdist = xiprobdistribs.VolExponential(volexpr0, rspan)
-radiigen = coordgen.SampleLog10RadiiGen(rspan)  # radii are sampled from rspan [m]
+xiprobdist = probdists.VolExponential(volexpr0, rspan)
+radiigen = rgens.SampleLog10RadiiGen(rspan)  # radii are sampled from rspan [m]
+dryradiigen = rgens.SampleLog10RadiiGen([1e-31, 9e-30])  # no solute in drops [m]
 coord3gen = None                        # do not generate superdroplet coords
 coord1gen = None
 coord2gen = None
