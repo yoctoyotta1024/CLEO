@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="ThermoBinary" href="../thermobinary_src/thermobinary_src.html" /><link rel="prev" title="INITATTRIBUTES" href="initattributes.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="DRYRGENS" href="dryrgens.html" /><link rel="prev" title="PROBDISTS" href="probdists.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>RADIIPROBDISTRIBS - CLEO 4.0 documentation</title>
+        <title>RGENS - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -181,8 +181,11 @@
 <li class="toctree-l2 current has-children"><a class="reference internal" href="initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of InitSuperdropsBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="initattributes.html">INITATTRIBUTES</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">RADIIPROBDISTRIBS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="attrsgen.html">ATTRSGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crdgens.html">CRDGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="probdists.html">PROBDISTS</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">RGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dryrgens.html">DRYRGENS</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../thermobinary_src/thermobinary_src.html">ThermoBinary</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of ThermoBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -241,14 +244,63 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="radiiprobdistribs">
-<h1>RADIIPROBDISTRIBS<a class="headerlink" href="#radiiprobdistribs" title="Link to this heading">#</a></h1>
+          <section id="module-pySD.initsuperdropsbinary_src.rgens">
+<span id="rgens"></span><h1>RGENS<a class="headerlink" href="#module-pySD.initsuperdropsbinary_src.rgens" title="Link to this heading">#</a></h1>
+<p>—– CLEO —–
+File: rgens.py
+Project: initsuperdropsbinary_src
+Created Date: Friday 13th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+—–
+Last Modified: Wednesday 27th December 2023
+Modified By: CB
+—–
+License: BSD 3-Clause “New” or “Revised” License
+<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
+—–
+Copyright (c) 2023 MPI-M, Clara Bayley
+—–
+File Description:
+various ways of generatring radii of
+superdroplets for their initial conditions</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.rgens.MonoAttrGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.rgens.</span></span><span class="sig-name descname"><span class="pre">MonoAttrGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.MonoAttrGen" title="Link to this definition">#</a></dt>
+<dd><p>method to generate superdroplets with an
+attribute all equal to attr0</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.rgens.</span></span><span class="sig-name descname"><span class="pre">SampleLog10RadiiGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rspan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen" title="Link to this definition">#</a></dt>
+<dd><p>method to generate superdroplet radii by randomly
+sampling from bins that are linearly spaced in log10(r)
+between rspan[0] and rspan[1]</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample">
+<span class="sig-name descname"><span class="pre">generate_radiisample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbins</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample" title="Link to this definition">#</a></dt>
+<dd><p>Divide rspan [m] into evenly spaced bins in log10(r).
+If edges=True, return values of radii at edges of bins.
+Else sample each bin randomly to obtain the radius
+of ‘nsupers’ no. of superdroplets</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.randomlysample_log10rbins">
+<span class="sig-name descname"><span class="pre">randomlysample_log10rbins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log10redgs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.randomlysample_log10rbins" title="Link to this definition">#</a></dt>
+<dd><p>given the bin edges, randomly sample each bin of
+log10(radius /m) and return the resultant radii [m]</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
         </article>
@@ -256,23 +308,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../thermobinary_src/thermobinary_src.html">
+          <a class="next-page" href="dryrgens.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">ThermoBinary</div>
+                <div class="title">DRYRGENS</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="initattributes.html">
+          <a class="prev-page" href="probdists.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">INITATTRIBUTES</div>
+                <div class="title">PROBDISTS</div>
                 
               </div>
             </a>
@@ -294,8 +346,32 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">RGENS</a><ul>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.rgens.MonoAttrGen"><code class="docutils literal notranslate"><span class="pre">MonoAttrGen</span></code></a></li>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen"><code class="docutils literal notranslate"><span class="pre">SampleLog10RadiiGen</span></code></a><ul>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample"><code class="docutils literal notranslate"><span class="pre">SampleLog10RadiiGen.generate_radiisample()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.randomlysample_log10rbins"><code class="docutils literal notranslate"><span class="pre">SampleLog10RadiiGen.randomlysample_log10rbins()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

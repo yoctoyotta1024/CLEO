@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="RADIIPROBDISTRIBS" href="radiiprobdistribs.html" /><link rel="prev" title="READ_INITSUPERDROPS" href="read_initsuperdrops.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="PROBDISTS" href="probdists.html" /><link rel="prev" title="ATTRSGEN" href="attrsgen.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>INITATTRIBUTES - CLEO 4.0 documentation</title>
+        <title>CRDGENS - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -181,8 +181,11 @@
 <li class="toctree-l2 current has-children"><a class="reference internal" href="initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of InitSuperdropsBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">INITATTRIBUTES</a></li>
-<li class="toctree-l3"><a class="reference internal" href="radiiprobdistribs.html">RADIIPROBDISTRIBS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="attrsgen.html">ATTRSGEN</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">CRDGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="probdists.html">PROBDISTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rgens.html">RGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dryrgens.html">DRYRGENS</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../thermobinary_src/thermobinary_src.html">ThermoBinary</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of ThermoBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -241,14 +244,55 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="initattributes">
-<h1>INITATTRIBUTES<a class="headerlink" href="#initattributes" title="Link to this heading">#</a></h1>
+          <section id="module-pySD.initsuperdropsbinary_src.crdgens">
+<span id="crdgens"></span><h1>CRDGENS<a class="headerlink" href="#module-pySD.initsuperdropsbinary_src.crdgens" title="Link to this heading">#</a></h1>
+<p>—– CLEO —–
+File: crdgens.py
+Project: initsuperdropsbinary_src
+Created Date: Friday 13th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+—–
+Last Modified: Wednesday 27th December 2023
+Modified By: CB
+—–
+License: BSD 3-Clause “New” or “Revised” License
+<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
+—–
+Copyright (c) 2023 MPI-M, Clara Bayley
+—–
+File Description:
+various ways of generating spatial 
+coordinates for superdroplet initial
+conditions</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.crdgens.MonoCoordGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.crdgens.</span></span><span class="sig-name descname"><span class="pre">MonoCoordGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coord0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.crdgens.MonoCoordGen" title="Link to this definition">#</a></dt>
+<dd><p>method to generate superdroplets with 
+coord all equal to coord0</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.crdgens.SampleCoordGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.crdgens.</span></span><span class="sig-name descname"><span class="pre">SampleCoordGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.crdgens.SampleCoordGen" title="Link to this definition">#</a></dt>
+<dd><p>method to generate ‘nsupers’
+no. of superdroplets’ coord [m]
+by sampling in range bewteen coordspan</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.crdgens.nsupers_at_domain_base">
+<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.crdgens.</span></span><span class="sig-name descname"><span class="pre">nsupers_at_domain_base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsupers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.crdgens.nsupers_at_domain_base" title="Link to this definition">#</a></dt>
+<dd><p>create dict for sd initialisation where nsupers
+only occur in gridboxes with upper bound &lt;= zlim</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -256,23 +300,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="radiiprobdistribs.html">
+          <a class="next-page" href="probdists.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">RADIIPROBDISTRIBS</div>
+                <div class="title">PROBDISTS</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="read_initsuperdrops.html">
+          <a class="prev-page" href="attrsgen.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">READ_INITSUPERDROPS</div>
+                <div class="title">ATTRSGEN</div>
                 
               </div>
             </a>
@@ -294,8 +338,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">CRDGENS</a><ul>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.crdgens.MonoCoordGen"><code class="docutils literal notranslate"><span class="pre">MonoCoordGen</span></code></a></li>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.crdgens.SampleCoordGen"><code class="docutils literal notranslate"><span class="pre">SampleCoordGen</span></code></a></li>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.crdgens.nsupers_at_domain_base"><code class="docutils literal notranslate"><span class="pre">nsupers_at_domain_base()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

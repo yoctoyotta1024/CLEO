@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="ATTRSGEN" href="attrsgen.html" /><link rel="prev" title="CREATE_INITSUPERDROPS" href="create_initsuperdrops.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="ThermoBinary" href="../thermobinary_src/thermobinary_src.html" /><link rel="prev" title="RGENS" href="rgens.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>READ_INITSUPERDROPS - CLEO 4.0 documentation</title>
+        <title>DRYRGENS - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -180,12 +180,12 @@
 </li>
 <li class="toctree-l2 current has-children"><a class="reference internal" href="initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of InitSuperdropsBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">READ_INITSUPERDROPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="attrsgen.html">ATTRSGEN</a></li>
 <li class="toctree-l3"><a class="reference internal" href="crdgens.html">CRDGENS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="probdists.html">PROBDISTS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rgens.html">RGENS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dryrgens.html">DRYRGENS</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">DRYRGENS</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../thermobinary_src/thermobinary_src.html">ThermoBinary</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of ThermoBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -250,12 +250,12 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-pySD.initsuperdropsbinary_src.read_initsuperdrops">
-<span id="read-initsuperdrops"></span><h1>READ_INITSUPERDROPS<a class="headerlink" href="#module-pySD.initsuperdropsbinary_src.read_initsuperdrops" title="Link to this heading">#</a></h1>
-<p>—– CLEO —–
-File: read_initsuperdrops.py
+          <section id="dryrgens">
+<h1>DRYRGENS<a class="headerlink" href="#dryrgens" title="Link to this heading">#</a></h1>
+<p id="module-pySD.initsuperdropsbinary_src.dryrgens">—– CLEO —–
+File: dryrgens.py
 Project: initsuperdropsbinary_src
-Created Date: Friday 13th October 2023
+Created Date: Wednesday 27th December 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 —–
@@ -267,81 +267,14 @@ License: BSD 3-Clause “New” or “Revised” License
 —–
 Copyright (c) 2023 MPI-M, Clara Bayley
 —–
-File Description:</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.get_superdroplet_attributes">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">get_superdroplet_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initsupersfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.get_superdroplet_attributes" title="Link to this definition">#</a></dt>
-<dd><p>get gridbox boundaries from binary file and 
-re-dimensionalise usign COORD0 const from constsfile</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.log10r_frequency_distribution">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">log10r_frequency_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hedgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wghts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.log10r_frequency_distribution" title="Link to this definition">#</a></dt>
-<dd><p>get distribution of data with weights ‘wghts’ against 
-log10(r). Uses np.histogram to get frequency of a particular
-value of data that falls in each bin (with each bin defined
-by it’s edges ‘hedgs’). Return distirbution alongside the radius
-bin centers and widths in [m]</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_initGBxs_attrdistribs">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">plot_initGBxs_attrdistribs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initsupersfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gbxs2plt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_initGBxs_attrdistribs" title="Link to this definition">#</a></dt>
-<dd><p>plot initial superdroplet distribution from initsupersfile binary
-of every gridbox with index in gbx2plts</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_initGBxs_distribs">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">plot_initGBxs_distribs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initsupersfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gbxs2plt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_initGBxs_distribs" title="Link to this definition">#</a></dt>
-<dd><p>plot initial superdroplet distribution from initsupersfile binary
-of every gridbox with index in gbx2plts</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_initGBxs_dropletmasses">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">plot_initGBxs_dropletmasses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initsupersfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gbxs2plt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_initGBxs_dropletmasses" title="Link to this definition">#</a></dt>
-<dd><p>plot initial superdroplet mass distributions
-from initsupersfile binary of every gridbox with index
-in gbx2plts</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_masssolutedistrib">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">plot_masssolutedistrib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hedgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_masssolutedistrib" title="Link to this definition">#</a></dt>
-<dd><p>get and plot frequency of real droplets in each log10(r) bin</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_numconcdistrib">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">plot_numconcdistrib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hedgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_numconcdistrib" title="Link to this definition">#</a></dt>
-<dd><p>get and plot frequency of real droplets in each log10(r) bin</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_radiusdistrib">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">plot_radiusdistrib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hedgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_radiusdistrib" title="Link to this definition">#</a></dt>
-<dd><p>get and plotthe superdroplet radius in each log10(r)
-bin and as a scatter on a twinx axis with their multiplicities</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_totmassdistrib">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">plot_totmassdistrib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hedgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RHO_L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RHO_SOL</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_totmassdistrib" title="Link to this definition">#</a></dt>
-<dd><p>get and plot frequency of real droplets in each log10(r) bin</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.read_dimless_superdrops_binary">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">read_dimless_superdrops_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isprint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.read_dimless_superdrops_binary" title="Link to this definition">#</a></dt>
-<dd><p>return dimenionsless gbx boundaries by reading binary file</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.read_initsuperdrops.totmass">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.read_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">totmass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RHO_L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RHO_SOL</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.totmass" title="Link to this definition">#</a></dt>
-<dd><p>droplet totmass = mass of water + solute</p>
+File Description:
+various ways of generating dryradii of
+superdroplets for their initial conditions</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.dryrgens.ScaledRadiiGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.dryrgens.</span></span><span class="sig-name descname"><span class="pre">ScaledRadiiGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.dryrgens.ScaledRadiiGen" title="Link to this definition">#</a></dt>
+<dd><p>method to generate superdroplet dryradii that
+are the radii divided by a scale factor ‘sf’</p>
 </dd></dl>
 
 </section>
@@ -351,23 +284,23 @@ bin and as a scatter on a twinx axis with their multiplicities</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="attrsgen.html">
+          <a class="next-page" href="../thermobinary_src/thermobinary_src.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">ATTRSGEN</div>
+                <div class="title">ThermoBinary</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="create_initsuperdrops.html">
+          <a class="prev-page" href="rgens.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">CREATE_INITSUPERDROPS</div>
+                <div class="title">RGENS</div>
                 
               </div>
             </a>
@@ -401,18 +334,8 @@ bin and as a scatter on a twinx axis with their multiplicities</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">READ_INITSUPERDROPS</a><ul>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.get_superdroplet_attributes"><code class="docutils literal notranslate"><span class="pre">get_superdroplet_attributes()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.log10r_frequency_distribution"><code class="docutils literal notranslate"><span class="pre">log10r_frequency_distribution()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_initGBxs_attrdistribs"><code class="docutils literal notranslate"><span class="pre">plot_initGBxs_attrdistribs()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_initGBxs_distribs"><code class="docutils literal notranslate"><span class="pre">plot_initGBxs_distribs()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_initGBxs_dropletmasses"><code class="docutils literal notranslate"><span class="pre">plot_initGBxs_dropletmasses()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_masssolutedistrib"><code class="docutils literal notranslate"><span class="pre">plot_masssolutedistrib()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_numconcdistrib"><code class="docutils literal notranslate"><span class="pre">plot_numconcdistrib()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_radiusdistrib"><code class="docutils literal notranslate"><span class="pre">plot_radiusdistrib()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.plot_totmassdistrib"><code class="docutils literal notranslate"><span class="pre">plot_totmassdistrib()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.read_dimless_superdrops_binary"><code class="docutils literal notranslate"><span class="pre">read_dimless_superdrops_binary()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.read_initsuperdrops.totmass"><code class="docutils literal notranslate"><span class="pre">totmass()</span></code></a></li>
+<li><a class="reference internal" href="#">DRYRGENS</a><ul>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.dryrgens.ScaledRadiiGen"><code class="docutils literal notranslate"><span class="pre">ScaledRadiiGen</span></code></a></li>
 </ul>
 </li>
 </ul>

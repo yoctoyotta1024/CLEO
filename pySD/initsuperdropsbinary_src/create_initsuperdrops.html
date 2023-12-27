@@ -181,8 +181,11 @@
 <li class="toctree-l2 current has-children"><a class="reference internal" href="initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of InitSuperdropsBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">CREATE_INITSUPERDROPS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="initattributes.html">INITATTRIBUTES</a></li>
-<li class="toctree-l3"><a class="reference internal" href="radiiprobdistribs.html">RADIIPROBDISTRIBS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="attrsgen.html">ATTRSGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crdgens.html">CRDGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="probdists.html">PROBDISTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rgens.html">RGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dryrgens.html">DRYRGENS</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../thermobinary_src/thermobinary_src.html">ThermoBinary</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of ThermoBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -256,7 +259,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 —–
-Last Modified: Friday 3rd November 2023
+Last Modified: Friday 22nd December 2023
 Modified By: CB
 —–
 License: BSD 3-Clause “New” or “Revised” License
@@ -266,13 +269,13 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 —–
 File Description:</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyInitAttrs">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">ManyInitAttrs</span></span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyInitAttrs" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">ManyAttrs</span></span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs" title="Link to this definition">#</a></dt>
 <dd><p>store for lists of each attribute for all superdroplets</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyInitAttrs.extend_attrlists">
-<span class="sig-name descname"><span class="pre">extend_attrlists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mia</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyInitAttrs.extend_attrlists" title="Link to this definition">#</a></dt>
-<dd><p>use an instance of ManyInitAttrs (mia) to
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs.extend_attrlists">
+<span class="sig-name descname"><span class="pre">extend_attrlists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mia</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs.extend_attrlists" title="Link to this definition">#</a></dt>
+<dd><p>use an instance of ManyAttrs (mia) to
 extend lists in this instance</p>
 </dd></dl>
 
@@ -295,9 +298,9 @@ attributes and superdroplets expected given ndata</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.ctype_compatible_attrs">
 <span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">ctype_compatible_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ctype_compatible_attrs" title="Link to this definition">#</a></dt>
-<dd><p>make list from arrays of SD attributes that are compatible
-with c type expected by SDM e.g. unsigned long ints for eps,
-doubles for radius and msol</p>
+<dd><p>make list from arrays of SD attributes that are
+compatible with c type expected by SDM e.g. unsigned 
+long ints for xi, doubles for radius and msol</p>
 </dd></dl>
 
 <dl class="py function">
@@ -388,8 +391,8 @@ to a binary file, “initsupersfile”, with some metadata</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">CREATE_INITSUPERDROPS</a><ul>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyInitAttrs"><code class="docutils literal notranslate"><span class="pre">ManyInitAttrs</span></code></a><ul>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyInitAttrs.extend_attrlists"><code class="docutils literal notranslate"><span class="pre">ManyInitAttrs.extend_attrlists()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs"><code class="docutils literal notranslate"><span class="pre">ManyAttrs</span></code></a><ul>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs.extend_attrlists"><code class="docutils literal notranslate"><span class="pre">ManyAttrs.extend_attrlists()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.check_datashape"><code class="docutils literal notranslate"><span class="pre">check_datashape()</span></code></a></li>

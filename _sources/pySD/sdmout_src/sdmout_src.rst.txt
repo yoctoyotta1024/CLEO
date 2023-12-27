@@ -5,7 +5,7 @@
 .. _output:
 
 SDMOut
-=======
+======
 
 SDMOut is a submodule of pySD used for helpful functions related to
 post-processing and plotting output data from CLEO SDM.
