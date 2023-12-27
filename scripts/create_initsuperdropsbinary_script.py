@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 22nd December 2023
+Last Modified: Wednesday 27th December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -25,12 +25,9 @@ import numpy as np
 from pathlib import Path
 
 sys.path.append(sys.argv[1]) # path to pySD (same as to CLEO)
-from pySD.initsuperdropsbinary_src import radiigen as rgens
-from pySD.initsuperdropsbinary_src import coordgen as cgens
-from pySD.initsuperdropsbinary_src import probdistribs as rprobs
+from pySD.initsuperdropsbinary_src import *
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
-from pySD.initsuperdropsbinary_src import attrsgenerator as attrsgen
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
@@ -55,7 +52,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 ### ---        (an int or dict of ints)     --- ###
 # zlim = 1000
 # npergbx = 8
-# nsupers =  cgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+# nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 nsupers = 40
 ### ------------------------------------------- ###
 
@@ -81,7 +78,7 @@ dryradiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled f
 # dirac0               = monor                         # radius in sample closest to this value is dirac delta peak
 # numconc              = 1e6                         # total no. conc of real droplets [m^-3]
 # numconc              = 512e6                         # total no. conc of real droplets [m^-3]
-# xiprobdist = rprobs.DiracDelta(dirac0)
+# xiprobdist = probdists.DiracDelta(dirac0)
 
 # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
 # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
@@ -93,38 +90,38 @@ scalefacs            = [1e6, 0.3e6, 0.025e6]
 # geosigs              = [1.4, 1.6]                    
 # scalefacs            = [6e6, 4e6]   
 numconc = np.sum(scalefacs)
-xiprobdist = rprobs.LnNormal(geomeans, geosigs, scalefacs)
+xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
  
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 # numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-# xiprobdist = rprobs.VolExponential(volexpr0, rspan)
+# xiprobdist = probdists.VolExponential(volexpr0, rspan)
 
 # reff                 = 7e-6                     # effective radius [m]
 # nueff                = 0.08                     # effective variance 
-# # xiprobdist = rprobs.ClouddropsHansenGamma(reff, nueff)
-# rdist1 = rprobs.ClouddropsHansenGamma(reff, nueff)
+# # xiprobdist = probdists.ClouddropsHansenGamma(reff, nueff)
+# rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
 # nrain                = 3000                         # raindrop concentration [m^-3]
 # qrain                = 0.9                          # rainwater content [g/m^3]
 # dvol                 = 8e-4                         # mean volume diameter [m]
-# # xiprobdist = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-# rdist2 = rprobs.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+# # xiprobdist = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+# rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
 # numconc = 1e9 # [m^3]
 # distribs = [rdist1, rdist2]
 # scalefacs = [1000, 1]
-# xiprobdist = rprobs.CombinedRadiiProbDistribs(distribs, scalefacs)
+# xiprobdist = probdists.CombinedRadiiProbDistribs(distribs, scalefacs)
 
 ### --------------------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m] 
-# coord3gen            =  cgens.MonoCoordGen(monocoord3)
-coord3gen            =  cgens.SampleCoordGen(True) # sample coord3 range randomly or not
+# coord3gen            =  crdgens.MonoCoordGen(monocoord3)
+coord3gen            =  crdgens.SampleCoordGen(True) # sample coord3 range randomly or not
 # coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
-# coord1gen            =  cgens.MonoCoordGen(monocoord1)
+# coord1gen            =  crdgens.MonoCoordGen(monocoord1)
 # coord1gen            =  cgens.SampleCoordGen(True) # sample coord1 range randomly or not
 coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
