@@ -43,11 +43,11 @@ class AttrsGenerator:
         self.ncoordsgen = sum(x is not None for x in
                                [coord3gen, coord2gen, coord1gen])
 
-    def mass_solutes(self, nsupers, radii, RHO_SOL):
+    def mass_solutes(self, radii, RHO_SOL):
         ''' return the mass [Kg] of the solute in superdroplets given their 
         dry radii [m] and solute density [Kg m^3]'''
 
-        dryradii = self.dryradiigen(nsupers) # [m]
+        dryradii = self.dryradiigen(radii) # [m]
         dryradii = np.where(radii < dryradii, radii, dryradii)
         msols = 4.0/3.0 * np.pi * (dryradii**3) * RHO_SOL
 
@@ -114,7 +114,7 @@ class AttrsGenerator:
         
         radii = self.radiigen(nsupers) # [m]
 
-        mass_solutes = self.mass_solutes(nsupers, radii, RHO_SOL)  # [Kg]
+        mass_solutes = self.mass_solutes(radii, RHO_SOL)  # [Kg]
 
         multiplicities = self.multiplicities(radii, NUMCONC, gbxvol)
 
