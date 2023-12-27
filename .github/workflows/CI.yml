@@ -34,7 +34,7 @@ jobs:
       - name: Test with pytest
         run: pytest .
       - name: Generate Doxygen Documentation
-        run: doxygen doxygen/doxygen.dox
+        run: cd docs && doxygen doxygen/doxygen.dox
         shell: bash
       - name: Build docs
         run: |
