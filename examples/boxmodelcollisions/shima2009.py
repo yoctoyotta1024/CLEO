@@ -81,7 +81,8 @@ rspan = [1e-8, 9e-5]                # max and min range of radii to sample [m]
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
 xiprobdist = probdists.VolExponential(volexpr0, rspan)
 radiigen = rgens.SampleLog10RadiiGen(rspan)  # radii are sampled from rspan [m]
-dryradiigen = dryrgens.ScaledRadiiGen(1e30)  # no solute in drops [m]
+dryradiigen = rgens.MonoAttrGen(1e-16)       # all SDs have negligible solute [m]
+
 coord3gen = None                        # do not generate superdroplet coords
 coord1gen = None
 coord2gen = None

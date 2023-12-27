@@ -68,7 +68,7 @@ radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from
 # monodryr                = 5e-9                        # all SDs have this same dryradius [m]
 # dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
 
-dryr_sf               = 1000           #scale factor for dry radii [m]
+dryr_sf               = 1000           # scale factor for dry radii [m]
 dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf) # dryradii are 1/sf of radii [m]
 
 ### ---------------------------------------------- ###
