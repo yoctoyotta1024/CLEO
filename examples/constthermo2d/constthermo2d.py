@@ -130,12 +130,13 @@ cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
 
 
 ### ----- write initial superdroplets binary ----- ###
-nsupers = iattrs.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-coord3gen = iattrs.SampleCoordGen(True) # sample coord3 randomly
-coord1gen = iattrs.SampleCoordGen(True) # sample coord1 randomly
+nsupers = crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+coord3gen = crdgens.SampleCoordGen(True) # sample coord3 randomly
+coord1gen = crdgens.SampleCoordGen(True) # sample coord1 randomly
 coord2gen = None                        # do not generate superdroplet coord2s
-radiiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
-radiigen = iattrs.SampleLog10RadiiGen(rspan) # randomly sample radii from rspan [m]
+xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
+radiigen = rgens.SampleLog10RadiiGen(rspan) # randomly sample radii from rspan [m]
+dryradiigen = radiigen
 
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
