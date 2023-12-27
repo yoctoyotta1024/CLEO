@@ -18,8 +18,9 @@ jobs:
       - run: |
           conda info
           conda list
-      - name: Doxygen 
-          run: apt-get install doxygen
+      - name: Install Doxygen 
+          run: |
+          apt-get install doxygen
       - name: Install package
         run: |
           python3 -m pip install --upgrade pip
