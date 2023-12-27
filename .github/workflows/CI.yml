@@ -19,7 +19,7 @@ jobs:
           conda info
           conda list
       - name: Requirements
-          run: brew install doxygen
+          run: apt-get install doxygen
       - name: Install package
         run: |
           python3 -m pip install --upgrade pip
