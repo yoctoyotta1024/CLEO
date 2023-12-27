@@ -33,7 +33,7 @@ jobs:
 
       - name: Build docs
         run: |
-          cd docs && doxygen doxygen/doxygen.dox && make html
+          cd docs && make html
       - name: Archive build artifacts (i.e. documentation)
         uses: actions/upload-artifact@v3
         with:
