@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-C++ Libraries
-=============
+API: C++ Libraries
+==================
 
 .. note::
    Please consider that this project is under active development.
@@ -16,10 +16,10 @@ a SDM coupled to a Dynamics Solver.
    :maxdepth: 1
    :caption: Contents:
 
-   runcleo/runcleo
+   runcleo/runcleolib
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
