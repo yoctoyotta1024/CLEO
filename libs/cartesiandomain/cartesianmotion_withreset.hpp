@@ -172,7 +172,7 @@ struct ResetSuperdrop
     constexpr double numconc = 100000000; // 100/cm^3;
     const auto rlow = double{Kokkos::pow(10.0, log10rlow)};
     const auto rup = double{Kokkos::pow(10.0, log10rup)};
-    const deltar = double{rup - rlow};
+    const auto deltar = double{rup - rlow};
 
     const auto prob = probdens_distrib(radius) * deltar;
 
