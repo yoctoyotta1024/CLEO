@@ -44,19 +44,53 @@
 
 namespace dlc = dimless_constants;
 
+struct ProbDensDistrib
+{
+private:
+  double reff;
+  double nueff;
+  double n0const;
+
+public:
+  ProbDensDistrib() : reff(7e-6 / dlc::R0), nueff(0.08), n0const(0.0)
+  {
+    const auto xp = double{(1.0-2.0*nueff)/nueff};
+    const auto valxp = double{Kokkos::pow(reff*nueff, -xp)};
+    const auto n0const = valxp / Kokkos::tgamma(xp); 
+  }
+
+  KOKKOS_FUNCTION double operator()(const double radius) const
+  /* returns normalised probability density distribution,
+  ie. probability of radius in range r -> r+ dr, such that
+  integral over all radii = 1. Distribution is gamma
+  distribution for cloud droplets using parameters
+  from Poertge et al. 2023 for shallow cumuli (figure 12), ie.
+  with typical values: reff = 7e-6 m, and nueff = 0.08 */
+  {
+    const auto term1 = double{radius**((1.0-3.0*nueff)/nueff)};
+    const auto term2 = double{Kokkos::exp(-radius/(reff*nueff))};
+
+    const auto probdens = double{n0const * term1 * term2}; // dn_dr [prob m^-1]
+
+    return probdens; // normalised probability in range r -> r+dr
+  }
+}
+
 struct ResetSuperdrop
 {
   Kokkos::View<GenRandomPool[1]> genpool4reset;
   Kokkos::View<double[101]> log10redges; // edges to radius bins
   Kokkos::pair<unsigned int, unsigned int> gbxidxs;
   uint64_t nbins;
+  ProbDensDistrib probdens_distrib;
 
   ResetSuperdrop(const unsigned int ngbxs,
                  const unsigned int ngbxs4reset)
       : genpool4reset("genpool4reset"),
         log10redges("log10redges"),
         gbxidxs({ngbxs - ngbxs4reset, ngbxs}),
-        nbins(log10redges.extent(0) - 1)
+        nbins(log10redges.extent(0) - 1),
+        probdens_distrib(ProbDensDistrib());
   {
     /* make genpool for reset */
     auto h_genpool4reset = Kokkos::create_mirror_view(genpool4reset);
@@ -145,17 +179,6 @@ struct ResetSuperdrop
     const auto xi = double{prob * numconc * gbxvol}; 
 
     return (unsigned long long)Kokkos::round(xi);
-  }
-
-  KOKKOS_FUNCTION double 
-  probdens_distrib(const double radius) const
-  /* returns normalised probability density, ie. 
-  probability of radius in range r -> r+ dr, suhc that
-  integral over all radii = 1*/
-  {
-    probdens =
-
-    return probdens;
   }
 
   KOKKOS_FUNCTION unsigned int
