@@ -56,7 +56,7 @@ public:
   {
     const auto xp = double{(1.0-2.0*nueff)/nueff};
     const auto valxp = double{Kokkos::pow(reff*nueff, -xp)};
-    const auto n0const = valxp / Kokkos::tgamma(xp); 
+    n0const = valxp / Kokkos::tgamma(xp); 
   }
 
   KOKKOS_FUNCTION double operator()(const double radius) const
@@ -67,14 +67,14 @@ public:
   from Poertge et al. 2023 for shallow cumuli (figure 12), ie.
   with typical values: reff = 7e-6 m, and nueff = 0.08 */
   {
-    const auto term1 = double{radius**((1.0-3.0*nueff)/nueff)};
+    const auto term1 = double{Kokkos::pow(radius, ((1.0-3.0*nueff)/nueff))};
     const auto term2 = double{Kokkos::exp(-radius/(reff*nueff))};
 
     const auto probdens = double{n0const * term1 * term2}; // dn_dr [prob m^-1]
 
     return probdens; // normalised probability in range r -> r+dr
   }
-}
+};
 
 struct ResetSuperdrop
 {
@@ -90,7 +90,7 @@ struct ResetSuperdrop
         log10redges("log10redges"),
         gbxidxs({ngbxs - ngbxs4reset, ngbxs}),
         nbins(log10redges.extent(0) - 1),
-        probdens_distrib(ProbDensDistrib());
+        probdens_distrib(ProbDensDistrib())
   {
     /* make genpool for reset */
     auto h_genpool4reset = Kokkos::create_mirror_view(genpool4reset);
@@ -143,7 +143,7 @@ struct ResetSuperdrop
     const auto radius = new_radius(log10rlow, log10rup, urbg);
     const auto xi = new_xi(gbxvol, log10rlow, log10rup, radius);
 
-    drop.change_radius(radius);
+    drop.set_radius(radius);
     drop.set_xi(xi);
   }
 
@@ -188,7 +188,7 @@ struct ResetSuperdrop
     URBG<ExecSpace> urbg{genpool4reset(0).get_state()}; // thread safe random number generator
     
     const auto sdgbxindex = reset_position(gbxmaps, urbg, drop);
-    const auto gbxvol = gbxmaps.get_gbxvolume(sdgbxindex)''
+    const auto gbxvol = gbxmaps.get_gbxvolume(sdgbxindex);
     reset_attributes(gbxvol, urbg, drop);
 
     genpool4reset(0).free_state(urbg.gen);
