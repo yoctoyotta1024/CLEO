@@ -67,7 +67,7 @@ public:
   from Poertge et al. 2023 for shallow cumuli (figure 12), ie.
   with typical values: reff = 7e-6 m, and nueff = 0.08 */
   {
-    const auto RADIUS = radius * dlc::RO;
+    const auto RADIUS = radius * dlc::R0;
 
     const auto term1 = double{Kokkos::pow(RADIUS, ((1.0-3.0*nueff)/nueff))};
     const auto term2 = double{Kokkos::exp(-RADIUS/(REFF*nueff))};
@@ -171,7 +171,7 @@ struct ResetSuperdrop
   /* returns xi given value of normalised probability
   distribution at radius and the bin width */
   {
-    constexpr double numconc = 100000000; // 100/cm^3;
+    constexpr double numconc = 100000000 * dlc::VOL0; //100/cm^3, non-dimensionalised 
     const auto rlow = double{Kokkos::pow(10.0, log10rlow)};
     const auto rup = double{Kokkos::pow(10.0, log10rup)};
     const auto deltar = double{rup - rlow};
