@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Thursday 28th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,6 +23,8 @@
 
 #ifndef SUPERDROP_ATTRS_HPP
 #define SUPERDROP_ATTRS_HPP
+
+#include <cassert>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp> // for pi
@@ -82,6 +84,8 @@ struct SuperdropAttrs
   /* see also change_radius which prevents
   drop radius < dry radius */
   {
+    assert((i_radius >= dryradius()) && "radius cannot be less than dry radius");
+
     radius = i_radius;
   }
 
