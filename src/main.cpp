@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 21st December 2023
+ * Last Modified: Thursday 28th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -172,8 +172,8 @@ create_motion(const unsigned int motionstep)
   // const auto terminalv = RogersYauTerminalVelocity{};
   const auto terminalv = SimmelTerminalVelocity{};
 
-  const auto ngbxs = (unsigned int)5; // total number of gbxs
-  const auto ngbxs4reset = (unsigned int)2; // number of gbxs to randomly select in reset
+  const auto ngbxs = (unsigned int)1; // total number of gbxs
+  const auto ngbxs4reset = (unsigned int)1; // number of gbxs to randomly select in reset
   return CartesianMotionWithReset(motionstep,
                                   &step2dimlesstime,
                                   terminalv,
