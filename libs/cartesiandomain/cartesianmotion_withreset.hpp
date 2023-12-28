@@ -96,7 +96,8 @@ struct ResetSuperdrop
   }
 
   KOKKOS_FUNCTION void
-  reset_attributes(URBG<ExecSpace> &urbg,
+  reset_attributes(const double gbxvol,
+                   URBG<ExecSpace> &urbg,
                    Superdrop &drop) const
   /* reset radius and multiplicity of superdroplet
   by randomly sampling from binned distributions */
@@ -162,7 +163,8 @@ struct ResetSuperdrop
     URBG<ExecSpace> urbg{genpool4reset(0).get_state()}; // thread safe random number generator
     
     const auto sdgbxindex = reset_position(gbxmaps, urbg, drop);
-    reset_attributes(urbg, drop);
+    const auto gbxvol = gbxmaps.get_gbxvolume(sdgbxindex)''
+    reset_attributes(gbxvol, urbg, drop);
 
     genpool4reset(0).free_state(urbg.gen);
 
