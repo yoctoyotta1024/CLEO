@@ -76,6 +76,8 @@ struct SuperdropAttrs
   KOKKOS_INLINE_FUNCTION
   void set_xi(const unsigned long long i_xi)
   {
+    assert((i_xi > 0) && "xi should not be less than 1");
+    
     xi = i_xi;
   }
 
