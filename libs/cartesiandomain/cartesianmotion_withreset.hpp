@@ -107,7 +107,7 @@ struct ResetSuperdrop
     const auto log10rup = log10redges(bin + 1); // upper bound of log10(r)
 
     const auto radius = new_radius(log10rlow, log10rup, urbg);
-    const auto xi = new_xi(log10rlow, log10rup, radius);
+    const auto xi = new_xi(gbxvol, log10rlow, log10rup, radius);
 
     drop.change_radius(radius);
     drop.set_xi(xi);
@@ -128,21 +128,23 @@ struct ResetSuperdrop
   }
 
   KOKKOS_FUNCTION unsigned long long
-  new_xi(const double log10rlow,
+  new_xi(const double gbxvol,
+         const double log10rlow,
          const double log10rup,
          const double radius) const
   /* returns xi given value of normalised probability
   distribution at radius and the bin width */
   {
+    constexpr double numconc = 100000000; // 100/cm^3;
     const auto rlow = double{Kokkos::pow(10.0, log10rlow)};
     const auto rup = double{Kokkos::pow(10.0, log10rup)};
     const deltar = double{rup - rlow};
 
     const auto prob = probdens_distrib(radius) * deltar;
 
-    xi = prob * numconc * vol 
+    const auto xi = double{prob * numconc * gbxvol}; 
 
-    return xi;
+    return (unsigned long long)Kokkos::round(xi);
   }
 
   KOKKOS_FUNCTION double 
