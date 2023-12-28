@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 27th December 2023
+ * Last Modified: Thursday 28th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,19 +101,58 @@ struct ResetSuperdrop
   /* reset radius and multiplicity of superdroplet
   by randomly sampling from binned distributions */
   {
-    const auto bin = urbg(0, nbins); // index of randomly selected bin
+    const auto bin = uint64_t{urbg(0, nbins)}; // index of randomly selected log10(r) bin
+    const auto log10rlow = log10redges(bin); // lower bound of log10(r)
+    const auto log10rup = log10redges(bin + 1); // upper bound of log10(r)
 
-    /* random radius from uniform in log10(r) space distrib */
-    const auto frac = urbg.drand(0.0, 1.0);
-    const auto log10rlow = log10redges(bin);
-    const auto log10rup = log10redges(bin + 1);
-    const auto log10r = double{log10rlow + frac * (log10rup - log10rlow)};
-    const auto radius = Kokkos::pow(10, log10r);
-
-    const unsigned long long xi = // TODO ;
+    const auto radius = new_radius(log10rlow, log10rup, urbg);
+    const auto xi = new_xi(log10rlow, log10rup, radius);
 
     drop.change_radius(radius);
     drop.set_xi(xi);
+  }
+
+  KOKKOS_FUNCTION double
+  new_radius(const double log10rlow,
+             const double log10rup,
+             URBG<ExecSpace> &urbg) const
+  /* returns radius from within bin of uniform
+  distiribution in log10(r) space */
+  {
+    const auto frac = urbg.drand(0.0, 1.0);
+    const auto log10r = double{log10rlow + frac * (log10rup - log10rlow)};
+    const auto radius = double{Kokkos::pow(10.0, log10r)};
+
+    return radius;
+  }
+
+  KOKKOS_FUNCTION unsigned long long
+  new_xi(const double log10rlow,
+         const double log10rup,
+         const double radius) const
+  /* returns xi given value of normalised probability
+  distribution at radius and the bin width */
+  {
+    const auto rlow = double{Kokkos::pow(10.0, log10rlow)};
+    const auto rup = double{Kokkos::pow(10.0, log10rup)};
+    const deltar = double{rup - rlow};
+
+    const auto prob = probdens_distrib(radius) * deltar;
+
+    xi = prob * numconc * vol 
+
+    return xi;
+  }
+
+  KOKKOS_FUNCTION double 
+  probdens_distrib(const double radius) const
+  /* returns normalised probability density, ie. 
+  probability of radius in range r -> r+ dr, suhc that
+  integral over all radii = 1*/
+  {
+    probdens =
+
+    return probdens;
   }
 
   KOKKOS_FUNCTION unsigned int
