@@ -1,12 +1,12 @@
 '''
 ----- CLEO -----
-File: renew_supers_2.py
+File: renew_supers.py
 Project: roughpaper
 Created Date: Monday 18th December 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 18th December 2023
+Last Modified: Thursday 28th December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
