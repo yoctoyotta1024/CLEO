@@ -127,10 +127,12 @@ config_collisions(const Config &config, const Timesteps &tsteps)
 {
   // const PairProbability auto collprob = LongHydroProb();
   // const NFragments auto nfrags = ConstNFrags(5.0);
+  // const CoalBuReFlag = coalbure_flag{};
   // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
   //                                                  &step2realtime,
   //                                                  collprob,
-  //                                                  nfrags);
+  //                                                  nfrags,
+  //                                                  coalbure_flag);
   // return colls;
 
   // const PairProbability auto buprob = LowListBuProb();

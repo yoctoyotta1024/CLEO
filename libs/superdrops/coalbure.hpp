@@ -81,8 +81,9 @@ private:
   If flag = 2 -> breakup. Otherwise -> rebound. */
 
 public:
-  DoCoalBuRe(const NFrags nfrags)
-      : bu(nfrags), coalbure_flag(CoalBuReFlag{}) {}
+  DoCoalBuRe(const NFrags nfrags,
+             const CoalBuReFlag flag)
+      : bu(nfrags), coalbure_flag(flag) {}
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
@@ -98,7 +99,8 @@ inline MicrophysicalProcess auto
 CoalBuRe(const unsigned int interval,
          const std::function<double(unsigned int)> int2realtime,
          const Probability collprob,
-         const NFrags nfrags)
+         const NFrags nfrags,
+         const CoalBuReFlag coalbure_flag)
 /* constructs Microphysical Process for collision-
 coalscence, breakup or rebound of superdroplets with
 a constant timestep 'interval' and probability
@@ -106,7 +108,7 @@ of collision determined by 'collprob' */
 {
   const auto DELT = double{int2realtime(interval)};
 
-  const DoCoalBuRe coalbure(nfrags);
+  const DoCoalBuRe coalbure(nfrags, coalbure_flag);
   const DoCollisions<Probability, DoCoalBuRe<NFrags>> colls(DELT,
                                                             collprob,
                                                             coalbure);
