@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 28th December 2023
+Last Modified: Friday 29th December 2023
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -53,15 +53,15 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 # zlim = 1000
 # npergbx = 8
 # nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 200
+nsupers = 1000
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
-# monor                = 0.05e-6                        # all SDs have this same radius [m]
-# radiigen  =  rgens.MonoAttrGen(monor)                  # all SDs have the same radius [m]
+monor                = 1000e-6                        # all SDs have this same radius [m]
+radiigen  =  rgens.MonoAttrGen(monor)                  # all SDs have the same radius [m]
 
-rspan                = [5e-8, 5e-5]                # min and max range of radii to sample [m]
-radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
+# rspan                = [5e-8, 5e-5]                # min and max range of radii to sample [m]
+# radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Superdroplet Dry Radii Generator --- ###
