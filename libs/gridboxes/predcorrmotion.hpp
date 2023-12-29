@@ -79,7 +79,7 @@ the appropriate templated type */
   superdrop and idx may be changed if superdrop coord
   lies outside bounds of gridbox in that direction */
   {
-    unsigned int idx = change_if_nghbr.coord3(gbxmaps, gbxindex, drop);
+    auto idx = (unsigned int)change_if_nghbr.coord3(gbxmaps, gbxindex, drop);
     check_bounds(idx, gbxmaps.coord3bounds(idx), drop.get_coord3());
 
     idx = change_if_nghbr.coord1(gbxmaps, idx, drop);
