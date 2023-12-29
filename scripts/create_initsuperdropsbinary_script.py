@@ -57,7 +57,7 @@ nsupers = 1000
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
-monor                = 1000e-6                        # all SDs have this same radius [m]
+monor                = 0.05e-6                        # all SDs have this same radius [m]
 radiigen  =  rgens.MonoAttrGen(monor)                  # all SDs have the same radius [m]
 
 # rspan                = [5e-8, 5e-5]                # min and max range of radii to sample [m]
