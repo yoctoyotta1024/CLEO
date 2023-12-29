@@ -61,6 +61,7 @@
 
 #include "superdrops/breakup_nfrags.hpp"
 #include "superdrops/breakup.hpp"
+#include "superdrops/coalbure_flag.hpp"
 #include "superdrops/coalbure.hpp"
 #include "superdrops/coalescence.hpp"
 #include "superdrops/collisionprobs/golovinprob.hpp"
