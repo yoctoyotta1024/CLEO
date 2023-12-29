@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th December 2023
+ * Last Modified: Friday 29th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -121,7 +121,7 @@ struct ResetSuperdrop
   {
     const auto sdgbxindex = urbg(gbxidxs.first,
                                  gbxidxs.second); // randomly selected gbxindex in range {incl., excl.} 
-
+    
     const auto bounds = gbxmaps.coord3bounds(sdgbxindex);
     const auto coord3 = urbg.drand(bounds.first, bounds.second); // random coord within gbx bounds
 

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Friday 29th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,6 +37,19 @@
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
 
+struct CoalBuReFlag
+{
+  KOKKOS_FUNCTION
+  unsigned int operator()(Superdrop &drop1,
+                          Superdrop &drop2) const;
+  /* function returns flag indicating rebound or
+  coalescence or breakup. If flag = 1 -> coalescence.
+  If flag = 2 -> breakup. Otherwise -> rebound.
+  Flag decided based on the kinetic arguments in
+  section 2.2 of Szakáll and Urbich 2018
+  (neglecting grazing angle considerations) */
+};
+
 template <NFragments NFrags>
 struct DoCoalBuRe
 /* ie. DoCoalescenceBreakupRebound */
@@ -44,6 +57,7 @@ struct DoCoalBuRe
 private:
   DoCoalescence coal;
   DoBreakup<NFrags> bu;
+  CoalBuReFlag coalbure_flag;
 
   KOKKOS_FUNCTION
   unsigned long long collision_gamma(const unsigned long long xi1,
@@ -59,16 +73,6 @@ private:
   }
 
   KOKKOS_FUNCTION
-  unsigned int coalbure_flag(Superdrop &drop1,
-                             Superdrop &drop2) const;
-  /*  function returns flag indicating rebound or
-  coalescence or breakup. If flag = 1 -> coalescence.
-  If flag = 2 -> breakup. Otherwise -> rebound.
-  Flag decided based on the kinetic arguments in
-  section 2.2 of Szakáll and Urbich 2018
-  (neglecting grazing angle considerations) */
-
-  KOKKOS_FUNCTION
   bool coalesce_breakup_or_rebound(const unsigned long long gamma,
                                    Superdrop &drop1,
                                    Superdrop &drop2) const;
@@ -77,7 +81,8 @@ private:
   If flag = 2 -> breakup. Otherwise -> rebound. */
 
 public:
-  DoCoalBuRe(const NFrags nfrags) : bu(nfrags) {}
+  DoCoalBuRe(const NFrags nfrags)
+      : bu(nfrags), coalbure_flag(CoalBuReFlag{}) {}
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
@@ -134,9 +139,34 @@ that satistfies the PairEnactX concept */
 }
 
 template <NFragments NFrags>
+KOKKOS_FUNCTION bool
+DoCoalBuRe<NFrags>::
+    coalesce_breakup_or_rebound(const unsigned long long gamma,
+                                Superdrop &drop1,
+                                Superdrop &drop2) const
+/*  function enacts rebound or coalescence or breakup
+depending on value of flag. If flag = 1 -> coalescence.
+If flag = 2 -> breakup. Otherwise -> rebound. */
+{
+  const auto flag = coalbure_flag(drop1, drop2);
+
+  bool is_null(0);
+  switch (flag)
+  {
+  case 1: // coalescence
+    is_null = coal.coalesce_superdroplet_pair(gamma, drop1, drop2);
+    break;
+  case 2: // breakup
+    bu.breakup_superdroplet_pair(drop1, drop2);
+    break;
+  }
+
+  return is_null;
+}
+
 KOKKOS_FUNCTION unsigned int
-DoCoalBuRe<NFrags>::coalbure_flag(Superdrop &drop1,
-                                  Superdrop &drop2) const
+CoalBuReFlag::operator()(Superdrop &drop1,
+                         Superdrop &drop2) const
 /*  function returns flag indicating rebound or
 coalescence or breakup. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound.
@@ -164,32 +194,6 @@ section 2.2 of Szakáll and Urbich 2018
   {
     return 2; // breakup
   }
-}
-
-template <NFragments NFrags>
-KOKKOS_FUNCTION bool
-DoCoalBuRe<NFrags>::
-    coalesce_breakup_or_rebound(const unsigned long long gamma,
-                                Superdrop &drop1,
-                                Superdrop &drop2) const
-/*  function enacts rebound or coalescence or breakup
-depending on value of flag. If flag = 1 -> coalescence.
-If flag = 2 -> breakup. Otherwise -> rebound. */
-{
-  const auto flag = coalbure_flag(drop1, drop2);
-
-  bool is_null(0);
-  switch (flag)
-  {
-  case 1: // coalescence
-    is_null = coal.coalesce_superdroplet_pair(gamma, drop1, drop2);
-    break;
-  case 2: // breakup
-    bu.breakup_superdroplet_pair(drop1, drop2);
-    break;
-  }
-
-  return is_null;
 }
 
 #endif // COALBURE_HPP
