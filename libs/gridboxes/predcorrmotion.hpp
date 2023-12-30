@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 29th December 2023
+ * Last Modified: Saturday 30th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -81,7 +81,7 @@ the appropriate templated type */
   {
     auto idx = (unsigned int)change_if_nghbr.coord3(gbxmaps, gbxindex, drop);
     check_bounds(idx, gbxmaps.coord3bounds(idx), drop.get_coord3());
-
+    
     idx = change_if_nghbr.coord1(gbxmaps, idx, drop);
     check_bounds(idx, gbxmaps.coord1bounds(idx), drop.get_coord1());
 

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Saturday 30th December 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -59,24 +59,24 @@ correct signatues for map-like functions */
 
   {
     gbxmaps.coord3backward(idx)
-  } -> std::convertible_to<double>;
+  } -> std::convertible_to<unsigned int>;
   {
     gbxmaps.coord3forward(idx)
-  } -> std::convertible_to<double>;
+  } -> std::convertible_to<unsigned int>;
 
   {
     gbxmaps.coord1backward(idx)
-  } -> std::convertible_to<double>;
+  } -> std::convertible_to<unsigned int>;
   {
     gbxmaps.coord1forward(idx)
-  } -> std::convertible_to<double>;
+  } -> std::convertible_to<unsigned int>;
 
   {
     gbxmaps.coord2backward(idx)
-  } -> std::convertible_to<double>;
+  } -> std::convertible_to<unsigned int>;
   {
     gbxmaps.coord2forward(idx)
-  } -> std::convertible_to<double>;
+  } -> std::convertible_to<unsigned int>;
 };
 
 #endif // GRIDBOXMAPS_HPP
