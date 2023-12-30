@@ -80,7 +80,7 @@ public:
 
 struct ResetSuperdrop
 {
-  Kokkos::View<GenRandomPool[1]> genpool4reset;
+  GenRandomPool genpool4reset;
   Kokkos::View<double[101]> log10redges; // edges to radius bins
   Kokkos::pair<unsigned int, unsigned int> gbxidxs;
   uint64_t nbins;
@@ -88,17 +88,12 @@ struct ResetSuperdrop
 
   ResetSuperdrop(const unsigned int ngbxs,
                  const unsigned int ngbxs4reset)
-      : genpool4reset("genpool4reset"),
+      : genpool4reset(std::random_device{}()),
         log10redges("log10redges"),
         gbxidxs({ngbxs - ngbxs4reset, ngbxs}),
         nbins(log10redges.extent(0) - 1),
         probdens_distrib(ProbDensDistrib())
   {
-    /* make genpool for reset */
-    auto h_genpool4reset = Kokkos::create_mirror_view(genpool4reset);
-    h_genpool4reset(0) = GenRandomPool(std::random_device{}());
-    Kokkos::deep_copy(genpool4reset, h_genpool4reset);
-
     /* make redges linearly spaced in log10(R) space */
     auto h_log10redges = Kokkos::create_mirror_view(log10redges); 
     const auto log10rmin = double{Kokkos::log10(2e-7 / dlc::R0)}; // lowest edge of radius bins
@@ -187,13 +182,13 @@ struct ResetSuperdrop
   operator()(const CartesianMaps &gbxmaps,
              Superdrop &drop) const
   {
-    URBG<ExecSpace> urbg{genpool4reset(0).get_state()}; // thread safe random number generator
+    URBG<ExecSpace> urbg{genpool4reset.get_state()}; // thread safe random number generator
     
     const auto sdgbxindex = reset_position(gbxmaps, urbg, drop);
     const auto gbxvol = gbxmaps.get_gbxvolume(sdgbxindex);
     reset_attributes(gbxvol, urbg, drop);
 
-    genpool4reset(0).free_state(urbg.gen);
+    genpool4reset.free_state(urbg.gen);
 
     return sdgbxindex;
   }
