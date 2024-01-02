@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 29th December 2023
+Last Modified: Tuesday 2nd January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -55,7 +55,7 @@ P_INIT = 101500.0                       # initial pressure [Pa]
 TEMP_INIT = 288.15                      # initial parcel temperature [T]
 relh_init = 0.999                       # initial relative humidity (%)
 qc_init = 0.0                           # initial liquid water content []
-W_INIT = -5.0                           # initial vertical (z) velocity [m/s]
+W_INIT = 0.0                           # initial vertical (z) velocity [m/s]
 U_INIT = 0.0                            # initial horizontal x velocity [m/s]
 V_INIT = 0.0                            # initial horizontal y velocity [m/s]
 thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
