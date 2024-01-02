@@ -83,10 +83,8 @@ public:
                                               terminalv(drop1),
                                               terminalv(drop2));
 
-    const auto totout = double{1.0 / (alpha - Kokkos::pow(cke, beta))};
-    const auto nfrags = totout - 1.0;
+    const auto nfrags = double{1.0 / (alpha - Kokkos::pow(cke, beta))};
 
-    std::cout <<"nfrags = " << nfrags << "\n";
     return nfrags;
   }
 };
