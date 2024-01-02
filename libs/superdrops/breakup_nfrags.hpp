@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 23rd November 2023 
+ * Last Modified: Tuesday 2nd January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -55,6 +55,22 @@ public:
   double operator()(const Superdrop &d1,
                     const Superdrop &d2) const
   /* always returns constant number of fragments 'nfrags' */
+  {
+    return nfrags;
+  }
+};
+
+struct CollisionKineticEnergyNFrags
+/* operator returns number of fragments based on collision
+kinetic energy. Struct obeys NFragments concept  */
+{
+public:
+  KOKKOS_INLINE_FUNCTION
+  double operator()(const Superdrop &d1,
+                    const Superdrop &d2) const
+  /* returns number of fragments 'nfrags' based on collision
+  kinetic energy of droplets according to parameterisation of total 
+  number of outcomes from Schlottke et al. 2010 (figure 13) */
   {
     return nfrags;
   }
