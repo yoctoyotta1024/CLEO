@@ -175,8 +175,8 @@ create_motion(const unsigned int motionstep)
   // const auto terminalv = RogersYauTerminalVelocity{};
   const auto terminalv = SimmelTerminalVelocity{};
 
-  const auto ngbxs = (unsigned int)1; // total number of gbxs
-  const auto ngbxs4reset = (unsigned int)1; // number of gbxs to randomly select in reset
+  const auto ngbxs = (unsigned int)15; // total number of gbxs
+  const auto ngbxs4reset = (unsigned int)5; // number of gbxs to randomly select in reset
   return CartesianMotionWithReset(motionstep,
                                   &step2dimlesstime,
                                   terminalv,
