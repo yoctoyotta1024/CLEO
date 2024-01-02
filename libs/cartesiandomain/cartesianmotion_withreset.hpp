@@ -20,7 +20,7 @@
  * the sdgbxindex updated accordingly for a
  * cartesian domain with finite/periodic boundary
  * conditions and reset of superdroplets that leave
- * the domain through the lower domain boundary
+ * the domain through coord3 domain boundaries
  */
 
 #ifndef CARTESIANMOTION_WITHRESET_HPP
