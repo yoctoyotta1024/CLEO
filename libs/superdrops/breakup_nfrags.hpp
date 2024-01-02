@@ -27,6 +27,8 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "./collisionkinetics.hpp"
+
 template <typename F>
 concept NFragments = requires(F f,
                               const Superdrop &d1,
@@ -66,12 +68,25 @@ kinetic energy. Struct obeys NFragments concept  */
 {
 public:
   KOKKOS_INLINE_FUNCTION
-  double operator()(const Superdrop &d1,
-                    const Superdrop &d2) const
+  double operator()(const Superdrop &drop1,
+                    const Superdrop &drop2) const
   /* returns number of fragments 'nfrags' based on collision
-  kinetic energy of droplets according to parameterisation of total 
+  kinetic energy of droplets according to parameterisation of total
   number of outcomes from Schlottke et al. 2010 (figure 13) */
   {
+    constexpr double alpha = 1.5;
+    constexpr double beta = 0.135;
+
+    const auto terminalv = SimmelTerminalVelocity{};
+    const auto cke = collision_kinetic_energy(drop1.get_radius(),
+                                              drop2.get_radius(),
+                                              terminalv(drop1),
+                                              terminalv(drop2));
+
+    const auto totout = double{1.0 / (alpha - Kokkos::pow(cke, beta))};
+    const auto nfrags = totout - 1.0;
+
+    std::cout <<"nfrags = " << nfrags << "\n";
     return nfrags;
   }
 };
