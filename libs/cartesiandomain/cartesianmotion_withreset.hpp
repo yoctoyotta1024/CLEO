@@ -83,9 +83,7 @@ public:
   integral of probability density dsitribution over all radii = 1 */
   {
     const auto RADIUS = radius * dlc::R0; // dimensionalised radius [m]
-    const auto RLOW = double{Kokkos::pow(10.0, log10rlow) * dlc::R0}; // [m]
-    const auto RUP = double{Kokkos::pow(10.0, log10rup) * dlc::R0}; // [m]
-    const auto DELTAR = double{RUP - RLOW};
+    const auto DELTAR = (rup - rlow) * dlc::R0; // dimensionalised bin wdith [m]
 
     const auto prob = probdens_distrib(RADIUS) * DELTAR;
 
