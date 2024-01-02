@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 27th December 2023
+Last Modified: Tuesday 2nd January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -111,7 +111,6 @@ class AttrsGenerator:
         gbxvol = rgrid.calc_domainvol(gridboxbounds[0:2],
                                       gridboxbounds[2:4], 
                                       gridboxbounds[4:]) # [m^3]
-        
         radii = self.radiigen(nsupers) # [m]
 
         mass_solutes = self.mass_solutes(radii, RHO_SOL)  # [Kg]

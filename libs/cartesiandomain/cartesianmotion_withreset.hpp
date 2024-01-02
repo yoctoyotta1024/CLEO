@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 30th December 2023
+ * Last Modified: Tuesday 2nd January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,37 +44,52 @@
 
 namespace dlc = dimless_constants;
 
-struct ProbDensDistrib
+struct ProbDistrib
 {
 private:
   double REFF;
   double nueff;
   double n0const;
 
-public:
-  ProbDensDistrib() : REFF(7e-6), nueff(0.08), n0const(0.0)
-  {
-    const auto xp = double{(1.0-2.0*nueff)/nueff};
-    const auto valxp = double{Kokkos::pow(REFF*nueff, -xp)};
-    n0const = valxp / Kokkos::tgamma(xp); 
-  }
-
-  KOKKOS_FUNCTION double operator()(const double radius) const
+  KOKKOS_FUNCTION double probdens_distrib(const double RADIUS) const
   /* returns normalised probability density distribution,
   ie. probability of radius in range r -> r+ dr, such that
   integral over all radii = 1. Distribution is gamma
   distribution for cloud droplets using parameters
   from Poertge et al. 2023 for shallow cumuli (figure 12), ie.
-  with typical values: reff = 7e-6 m, and nueff = 0.08 */
+  with typical values: reff = 7e-6 m, and nueff = 0.08.
+  RADIUS has dimensions [m] */
   {
-    const auto RADIUS = radius * dlc::R0;
-
     const auto term1 = double{Kokkos::pow(RADIUS, ((1.0-3.0*nueff)/nueff))};
     const auto term2 = double{Kokkos::exp(-RADIUS/(REFF*nueff))};
 
     const auto probdens = double{n0const * term1 * term2}; // dn_dr [prob m^-1]
 
     return probdens; // normalised probability in range r -> r+dr
+  }
+
+public:
+  ProbDistrib() : REFF(7e-6), nueff(0.08), n0const(0.0)
+  {
+    const auto xp = double{(1.0-2.0*nueff)/nueff};
+    const auto valxp = double{Kokkos::pow(REFF*nueff, -xp)};
+    n0const = valxp / Kokkos::tgamma(xp); 
+  }
+
+  KOKKOS_FUNCTION double operator()(const double radius,
+                                    const double rlow,
+                                    const double rup) const
+  /* returns probability of radius in range r -> r+ dr, such that
+  integral of probability density dsitribution over all radii = 1 */
+  {
+    const auto RADIUS = radius * dlc::R0; // dimensionalised radius [m]
+    const auto RLOW = double{Kokkos::pow(10.0, log10rlow) * dlc::R0}; // [m]
+    const auto RUP = double{Kokkos::pow(10.0, log10rup) * dlc::R0}; // [m]
+    const auto DELTAR = double{RUP - RLOW};
+
+    const auto prob = probdens_distrib(RADIUS) * DELTAR;
+
+    return prob; // probability of radius
   }
 };
 
@@ -84,7 +99,7 @@ struct ResetSuperdrop
   Kokkos::View<double[101]> log10redges; // edges to radius bins
   Kokkos::pair<unsigned int, unsigned int> gbxidxs;
   uint64_t nbins;
-  ProbDensDistrib probdens_distrib;
+  ProbDistrib prob_distrib;
 
   ResetSuperdrop(const unsigned int ngbxs,
                  const unsigned int ngbxs4reset)
@@ -92,7 +107,7 @@ struct ResetSuperdrop
         log10redges("log10redges"),
         gbxidxs({ngbxs - ngbxs4reset, ngbxs}),
         nbins(log10redges.extent(0) - 1),
-        probdens_distrib(ProbDensDistrib())
+        prob_distrib(ProbDistrib())
   {
     /* make redges linearly spaced in log10(R) space */
     auto h_log10redges = Kokkos::create_mirror_view(log10redges); 
@@ -167,12 +182,11 @@ struct ResetSuperdrop
   distribution at radius and the bin width */
   {
     constexpr double numconc = 100000000 * dlc::VOL0; //100/cm^3, non-dimensionalised 
+
     const auto rlow = double{Kokkos::pow(10.0, log10rlow)};
     const auto rup = double{Kokkos::pow(10.0, log10rup)};
-    const auto deltar = double{rup - rlow};
-
-    const auto prob = probdens_distrib(radius) * deltar;
-
+    
+    const auto prob = prob_distrib(radius, rlow, rup);
     const auto xi = double{prob * numconc * gbxvol}; 
 
     return (unsigned long long)Kokkos::round(xi);
