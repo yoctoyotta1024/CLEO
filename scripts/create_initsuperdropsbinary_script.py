@@ -53,7 +53,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 # zlim = 1000
 # npergbx = 8
 # nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-nsupers = 1000
+nsupers = 50
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###

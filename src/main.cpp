@@ -126,15 +126,15 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
-  // const PairProbability auto collprob = LongHydroProb();
-  // const NFragments auto nfrags = ConstNFrags(5.0);
-  // const CoalBuReFlag = coalbure_flag{};
-  // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
-  //                                                  &step2realtime,
-  //                                                  collprob,
-  //                                                  nfrags,
-  //                                                  coalbure_flag);
-  // return colls;
+  const PairProbability auto collprob = LongHydroProb();
+  const NFragments auto nfrags = ConstNFrags(5.0);
+  const CoalBuReFlag = coalbure_flag{};
+  const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
+                                                   &step2realtime,
+                                                   collprob,
+                                                   nfrags,
+                                                   coalbure_flag);
+  return colls;
 
   // const PairProbability auto buprob = LowListBuProb();
   // const NFragments auto nfrags = ConstNFrags(5.0);
@@ -145,12 +145,12 @@ config_collisions(const Config &config, const Timesteps &tsteps)
 
   // const PairProbability auto coalprob = LowListCoalProb();
   // const PairProbability auto coalprob = GolovinProb();
-  const PairProbability auto coalprob = LongHydroProb(1.0);
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
-                                                   &step2realtime,
-                                                   coalprob);
+  // const PairProbability auto coalprob = LongHydroProb(1.0);
+  // const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
+  //                                                  &step2realtime,
+  //                                                  coalprob);
 
-  return coal;
+  // return coal;
   // return coal >> bu;
 }
 
@@ -160,20 +160,20 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
   // const MicrophysicalProcess auto cond = config_condensation(config,
   //                                                            tsteps);
 
-  // const MicrophysicalProcess auto colls = config_collisions(config,
-  //                                                           tsteps);
+  const MicrophysicalProcess auto colls = config_collisions(config,
+                                                            tsteps);
 
-  const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
+  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
-  return null;
+  return colls;
 }
 
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  const auto terminalv = NullTerminalVelocity{};
+  // const auto terminalv = NullTerminalVelocity{};
   // const auto terminalv = RogersYauTerminalVelocity{};
-  // const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
 
   const auto ngbxs = (unsigned int)1; // total number of gbxs
   const auto ngbxs4reset = (unsigned int)1; // number of gbxs to randomly select in reset
