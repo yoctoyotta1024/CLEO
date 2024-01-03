@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd January 2024
+ * Last Modified: Wednesday 3rd January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,7 +32,21 @@
 #include "./superdrop.hpp"
 #include "./terminalvelocity.hpp"
 
-struct CoalBuReFlag
+template <typename F>
+concept CoalBuReFlag = requires(F f,
+                                const Superdrop &d1,
+                                const Superdrop &d2)
+/* Objects that are of type 'NFragments'
+take a pair of superdroplets and returns
+something convertible to a double (such as
+the number of fragments from a breakup event) */
+{
+  {
+    f(d1, d2)
+  } -> std::convertible_to<unsigned int>;
+};
+
+struct ConstCoalBuReFlag
 {
   KOKKOS_FUNCTION
   unsigned int operator()(Superdrop &drop1,
@@ -48,7 +62,7 @@ struct CoalBuReFlag
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 KOKKOS_FUNCTION unsigned int
-CoalBuReFlag::operator()(Superdrop &drop1,
+ConstCoalBuReFlag::operator()(Superdrop &drop1,
                          Superdrop &drop2) const
 /*  function returns flag indicating rebound or
 coalescence or breakup. If flag = 1 -> coalescence.
