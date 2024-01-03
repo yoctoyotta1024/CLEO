@@ -16,7 +16,7 @@
  * -----
  * File Description:
  * concept and structs that return a flag used
- * in DoCoalBuRe to decide which out of breakup,
+ * in DoCoalBuRe to decide whether breakup,
  * coalescence or rebound should occur.
  */
 
