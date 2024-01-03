@@ -60,7 +60,7 @@ nsupers = 50
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
 # radiigen  =  rgens.MonoAttrGen(monor)                  # all SDs have the same radius [m]
 
-rspan                = [5e-8, 1e-4]                # min and max range of radii to sample [m]
+rspan                = [1e-8, 9e-5]                # min and max range of radii to sample [m]
 radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
