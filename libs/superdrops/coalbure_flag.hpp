@@ -25,6 +25,7 @@
 
 #include <functional>
 #include <concepts>
+#include <random>
 
 #include <Kokkos_Core.hpp>
 
@@ -60,6 +61,24 @@ struct SUCoalBuReFlag
 
 struct TSCoalBuReFlag
 {
+private:
+  GenRandomPool genpool4flag;
+
+  KOKKOS_FUNCTION
+  unsigned int rebound_or_coalescence() const;
+  /* draw random numnber and compare with coalescence
+  efficiency from Straub et al. 2010 to decide whether
+  to return flag that indicates coalescence or rebound */
+
+  KOKKOS_FUNCTION
+  unsigned int coalescence_or_breakup() const;
+  /* draw random numnber and compare with coalescence
+  efficiency from Straub et al. 2010 to decide whether
+  to return flag that indicates coalescence or breakup */
+
+public:
+  TSCoalBuReFlag() : genpool4flag(std::random_device{}()) {}
+
   KOKKOS_FUNCTION
   unsigned int operator()(const Superdrop &drop1,
                           const Superdrop &drop2) const;
@@ -67,7 +86,7 @@ struct TSCoalBuReFlag
   coalescence or breakup. If flag = 1 -> coalescence.
   If flag = 2 -> breakup. Otherwise -> rebound.
   Flag decided based on the kinetic arguments from
-  section 4 of Testik et al. 2011 (figure 12) as well 
+  section 4 of Testik et al. 2011 (figure 12) as well
   as coalescence efficiency from Straub et al. 2010 */
 };
 
@@ -75,7 +94,7 @@ struct TSCoalBuReFlag
 
 KOKKOS_FUNCTION unsigned int
 SUCoalBuReFlag::operator()(const Superdrop &drop1,
-                              const Superdrop &drop2) const
+                           const Superdrop &drop2) const
 /*  function returns flag indicating rebound or
 coalescence or breakup. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound.
@@ -107,7 +126,7 @@ section 2.2 of Szakáll and Urbich 2018
 
 KOKKOS_FUNCTION unsigned int
 TSCoalBuReFlag::operator()(const Superdrop &drop1,
-                              const Superdrop &drop2) const
+                           const Superdrop &drop2) const
 /* function returns flag indicating rebound or
 coalescence or breakup. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound.
@@ -125,7 +144,7 @@ as coalescence efficiency from Straub et al. 2010 */
 
   if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
   {
-    return coalescence_or_rebound(); // below DE2 boundary
+    return rebound_or_coalescence(); // below DE2 boundary
   }
   else if (cke < surfenergy(Kokkos::fmax(r1, r2))) // cke < surface energy of large drop
   {
