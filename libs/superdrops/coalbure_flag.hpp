@@ -80,10 +80,9 @@ private:
   or breakup (flag=2) based on coalescence efficiency
   from Straub et al. 2010 */
 
-  KOKKOS_FUNCTION bool
-  TSCoalBuReFlag::is_coalescence(const Superdrop &drop1,
-                                 const Superdrop &drop2,
-                                 const double cke) const;
+  KOKKOS_FUNCTION bool is_coalescence(const Superdrop &drop1,
+                                      const Superdrop &drop2,
+                                      const double cke) const;
   /* returns truw if comparison of random numnber
   with coalescence efficiency from Straub et al. 2010
   indicates coalescence should occur */
@@ -204,7 +203,7 @@ TSCoalBuReFlag::is_coalescence(const Superdrop &drop1,
 with coalescence efficiency from Straub et al. 2010
 indicates coalescence should occur */
 {
-  const auto ecoal = coalescence_efficiency(drop1, drop2);
+  const auto ecoal = coalescence_efficiency(drop1, drop2, cke);
 
   URBG<ExecSpace> urbg{genpool4flag.get_state()}; // thread safe random number generator
   const auto phi = urbg.drand(0.0, 1.0);          // random number in range [0.0, 1.0]
