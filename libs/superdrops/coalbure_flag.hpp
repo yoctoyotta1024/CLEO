@@ -66,7 +66,8 @@ private:
 
   KOKKOS_FUNCTION
   double coalescence_efficiency(const Superdrop &drop1,
-                                const Superdrop &drop2) const;
+                                const Superdrop &drop2,
+                                const double cke) const;
   /* coalescence efficency given a collision occurs
   according to parameterisation from Straub et al. 2010
   section 3, equation 5 and Schlottke et al. 2010
@@ -74,14 +75,16 @@ private:
 
   KOKKOS_FUNCTION
   unsigned int rebound_or_coalescence(const Superdrop &drop1,
-                                      const Superdrop &drop2) const;
+                                      const Superdrop &drop2,
+                                      const double cke) const;
   /* draw random numnber and compare with coalescence
   efficiency from Straub et al. 2010 to decide whether
   to return flag that indicates coalescence or rebound */
 
   KOKKOS_FUNCTION
   unsigned int coalescence_or_breakup(const Superdrop &drop1,
-                                      const Superdrop &drop2) const;
+                                      const Superdrop &drop2,
+                                      const double cke) const;
   /* draw random numnber and compare with coalescence
   efficiency from Straub et al. 2010 to decide whether
   to return flag that indicates coalescence or breakup */
@@ -118,7 +121,7 @@ section 2.2 of Szakáll and Urbich 2018
 
   const auto cke = collision_kinetic_energy(r1, r2,
                                             terminalv(drop1),
-                                            terminalv(drop2));
+                                            terminalv(drop2)); // [J]
 
   if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
   {
@@ -154,11 +157,11 @@ as coalescence efficiency from Straub et al. 2010 */
 
   if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
   {
-    return rebound_or_coalescence(drop1, drop2); // below DE2 boundary
+    return rebound_or_coalescence(drop1, drop2, cke); // below DE2 boundary
   }
   else if (cke < surfenergy(Kokkos::fmax(r1, r2))) // cke < surface energy of large drop
   {
-    return coalescence_or_breakup(drop1, drop2); // below DE1 boundary
+    return coalescence_or_breakup(drop1, drop2, cke); // below DE1 boundary
   }
   else // above DE1 boundary
   {
@@ -168,19 +171,27 @@ as coalescence efficiency from Straub et al. 2010 */
 
 KOKKOS_FUNCTION double
 TSCoalBuReFlag::coalescence_efficiency(const Superdrop &drop1,
-                                       const Superdrop &drop2) const
+                                       const Superdrop &drop2,
+                                       const double cke) const
 /* coalescence efficency given a collision occurs
 according to parameterisation from Straub et al. 2010
 section 3, equation 5 and Schlottke et al. 2010
 section 4a equation 11 */
 {
-  ecoal = 
+  constexpr double beta = -1.15;
+
+  const auto surf_c = coal_surfenergy(drop1.get_radius(),
+                                      drop2.get_radius()); // [J] S_c
+  const auto weber = double{cke / surf_c};
+  const auto ecoal = double{Kokkos::exp(beta * weber)};
+
   return ecoal;
 }
 
 KOKKOS_FUNCTION unsigned int
 TSCoalBuReFlag::rebound_or_coalescence(const Superdrop &drop1,
-                                       const Superdrop &drop2) const
+                                       const Superdrop &drop2,
+                                       const double cke) const
 /* draw random numnber and compare with coalescence
 efficiency from Straub et al. 2010 to decide whether
 to return flag that indicates coalescence or rebound */
@@ -190,7 +201,8 @@ to return flag that indicates coalescence or rebound */
 
 KOKKOS_FUNCTION unsigned int
 TSCoalBuReFlag::coalescence_or_breakup(const Superdrop &drop1,
-                                       const Superdrop &drop2) const
+                                       const Superdrop &drop2,
+                                       const double cke) const
 /* draw random numnber and compare with coalescence
 efficiency from Straub et al. 2010 to decide whether
 to return flag that indicates coalescence or breakup */
