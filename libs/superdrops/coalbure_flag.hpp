@@ -16,7 +16,7 @@
  * -----
  * File Description:
  * concept and structs that return a flag used
- * in DoCoalBuRe to decide which out of breakup, 
+ * in DoCoalBuRe to decide which out of breakup,
  * coalescence or rebound should occur.
  */
 
@@ -49,8 +49,8 @@ the number of fragments from a breakup event) */
 struct ConstCoalBuReFlag
 {
   KOKKOS_FUNCTION
-  unsigned int operator()(Superdrop &drop1,
-                          Superdrop &drop2) const;
+  unsigned int operator()(const Superdrop &drop1,
+                          const Superdrop &drop2) const;
   /* function returns flag indicating rebound or
   coalescence or breakup. If flag = 1 -> coalescence.
   If flag = 2 -> breakup. Otherwise -> rebound.
@@ -62,8 +62,8 @@ struct ConstCoalBuReFlag
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 KOKKOS_FUNCTION unsigned int
-ConstCoalBuReFlag::operator()(Superdrop &drop1,
-                         Superdrop &drop2) const
+ConstCoalBuReFlag::operator()(const Superdrop &drop1,
+                              const Superdrop &drop2) const
 /*  function returns flag indicating rebound or
 coalescence or breakup. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound.
@@ -94,5 +94,3 @@ section 2.2 of Szakáll and Urbich 2018
 }
 
 #endif // COALBURE_FLAG_HPP
-
-
