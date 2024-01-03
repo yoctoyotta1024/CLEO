@@ -36,17 +36,16 @@ template <typename F>
 concept CoalBuReFlag = requires(F f,
                                 const Superdrop &d1,
                                 const Superdrop &d2)
-/* Objects that are of type 'NFragments'
-take a pair of superdroplets and returns
-something convertible to a double (such as
-the number of fragments from a breakup event) */
+/* operator returns flag indicating rebound or
+coalescence or breakup. If flag = 1 -> coalescence.
+If flag = 2 -> breakup. Otherwise -> rebound. */
 {
   {
     f(d1, d2)
   } -> std::convertible_to<unsigned int>;
 };
 
-struct ConstCoalBuReFlag
+struct SUCoalBuReFlag
 {
   KOKKOS_FUNCTION
   unsigned int operator()(const Superdrop &drop1,
@@ -59,10 +58,23 @@ struct ConstCoalBuReFlag
   (neglecting grazing angle considerations) */
 };
 
+struct TSCoalBuReFlag
+{
+  KOKKOS_FUNCTION
+  unsigned int operator()(const Superdrop &drop1,
+                          const Superdrop &drop2) const;
+  /* function returns flag indicating rebound or
+  coalescence or breakup. If flag = 1 -> coalescence.
+  If flag = 2 -> breakup. Otherwise -> rebound.
+  Flag decided based on the kinetic arguments from
+  section 4 of Testik et al. 2011 (figure 12) as well 
+  as coalescence efficiency from Straub et al. 2010 */
+};
+
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 KOKKOS_FUNCTION unsigned int
-ConstCoalBuReFlag::operator()(const Superdrop &drop1,
+SUCoalBuReFlag::operator()(const Superdrop &drop1,
                               const Superdrop &drop2) const
 /*  function returns flag indicating rebound or
 coalescence or breakup. If flag = 1 -> coalescence.
@@ -83,11 +95,43 @@ section 2.2 of Szakáll and Urbich 2018
   {
     return 0; // rebound
   }
-  else if (cke < coal_surfenergy(r1, r2)) // weber number < 1 : coalescence
+  else if (cke < coal_surfenergy(r1, r2)) // Weber number < 1
   {
     return 1; // coalescence
   }
-  else // Weber > 1 : breakup
+  else // Weber number > 1
+  {
+    return 2; // breakup
+  }
+}
+
+KOKKOS_FUNCTION unsigned int
+TSCoalBuReFlag::operator()(const Superdrop &drop1,
+                              const Superdrop &drop2) const
+/* function returns flag indicating rebound or
+coalescence or breakup. If flag = 1 -> coalescence.
+If flag = 2 -> breakup. Otherwise -> rebound.
+Flag decided based on the kinetic arguments from
+section 4 of Testik et al. 2011 (figure 12) as well
+as coalescence efficiency from Straub et al. 2010 */
+{
+  const auto r1 = drop1.get_radius();
+  const auto r2 = drop2.get_radius();
+  const auto terminalv = SimmelTerminalVelocity{};
+
+  const auto cke = collision_kinetic_energy(r1, r2,
+                                            terminalv(drop1),
+                                            terminalv(drop2));
+
+  if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
+  {
+    return coalescence_or_rebound(); // below DE2 boundary
+  }
+  else if (cke < surfenergy(Kokkos::fmax(r1, r2))) // cke < surface energy of large drop
+  {
+    return coalescence_or_breakup(); // below DE1 boundary
+  }
+  else // above DE1 boundary
   {
     return 2; // breakup
   }
