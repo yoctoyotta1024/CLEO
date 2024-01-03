@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 29th December 2023
+ * Last Modified: Wednesday 3rd January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,14 +39,14 @@
 #include "./microphysicalprocess.hpp"
 #include "./superdrop.hpp"
 
-template <NFragments NFrags>
+template <NFragments NFrags, CoalBuReFlag Flag>
 struct DoCoalBuRe
 /* ie. DoCoalescenceBreakupRebound */
 {
 private:
   DoCoalescence coal;
   DoBreakup<NFrags> bu;
-  CoalBuReFlag coalbure_flag;
+  Flag coalbure_flag;
 
   KOKKOS_FUNCTION
   unsigned long long collision_gamma(const unsigned long long xi1,
@@ -70,8 +70,7 @@ private:
   If flag = 2 -> breakup. Otherwise -> rebound. */
 
 public:
-  DoCoalBuRe(const NFrags nfrags,
-             const CoalBuReFlag flag)
+  DoCoalBuRe(const NFrags nfrags, const Flag flag)
       : bu(nfrags), coalbure_flag(flag) {}
 
   KOKKOS_INLINE_FUNCTION
@@ -83,13 +82,15 @@ public:
   that satistfies the PairEnactX concept */
 };
 
-template <PairProbability Probability, NFragments NFrags>
+template <PairProbability Probability,
+          NFragments NFrags,
+          CoalBuReFlag Flag>
 inline MicrophysicalProcess auto
 CoalBuRe(const unsigned int interval,
          const std::function<double(unsigned int)> int2realtime,
          const Probability collprob,
          const NFrags nfrags,
-         const CoalBuReFlag coalbure_flag)
+         const Flag coalbure_flag)
 /* constructs Microphysical Process for collision-
 coalscence, breakup or rebound of superdroplets with
 a constant timestep 'interval' and probability
@@ -97,17 +98,17 @@ of collision determined by 'collprob' */
 {
   const auto DELT = double{int2realtime(interval)};
 
-  const DoCoalBuRe coalbure(nfrags, coalbure_flag);
-  const DoCollisions<Probability, DoCoalBuRe<NFrags>> colls(DELT,
-                                                            collprob,
-                                                            coalbure);
+  const DoCoalBuRe<NFrags, Flag> coalbure(nfrags, coalbure_flag);
+  const DoCollisions<Probability, DoCoalBuRe<NFrags, Flag>> colls(DELT,
+                                                                  collprob,
+                                                                  coalbure);
 
   return ConstTstepMicrophysics(interval, colls);
 }
 
-template <NFragments NFrags>
+template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool
-DoCoalBuRe<NFrags>::operator()(Superdrop &drop1, Superdrop &drop2,
+DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Superdrop &drop2,
                                const double prob, const double phi) const
 /* this operator is used as an "adaptor" for
 using DoCoalBuRe for collision - coalescence,
@@ -129,9 +130,9 @@ that satistfies the PairEnactX concept */
   return 0;
 }
 
-template <NFragments NFrags>
+template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool
-DoCoalBuRe<NFrags>::
+DoCoalBuRe<NFrags, Flag>::
     coalesce_breakup_or_rebound(const unsigned long long gamma,
                                 Superdrop &drop1,
                                 Superdrop &drop2) const
