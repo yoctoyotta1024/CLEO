@@ -65,13 +65,23 @@ private:
   GenRandomPool genpool4flag;
 
   KOKKOS_FUNCTION
-  unsigned int rebound_or_coalescence() const;
+  double coalescence_efficiency(const Superdrop &drop1,
+                                const Superdrop &drop2) const;
+  /* coalescence efficency given a collision occurs
+  according to parameterisation from Straub et al. 2010
+  section 3, equation 5 and Schlottke et al. 2010
+  section 4a equation 11 */
+
+  KOKKOS_FUNCTION
+  unsigned int rebound_or_coalescence(const Superdrop &drop1,
+                                      const Superdrop &drop2) const;
   /* draw random numnber and compare with coalescence
   efficiency from Straub et al. 2010 to decide whether
   to return flag that indicates coalescence or rebound */
 
   KOKKOS_FUNCTION
-  unsigned int coalescence_or_breakup() const;
+  unsigned int coalescence_or_breakup(const Superdrop &drop1,
+                                      const Superdrop &drop2) const;
   /* draw random numnber and compare with coalescence
   efficiency from Straub et al. 2010 to decide whether
   to return flag that indicates coalescence or breakup */
@@ -156,4 +166,31 @@ as coalescence efficiency from Straub et al. 2010 */
   }
 }
 
+KOKKOS_FUNCTION double
+TSCoalBuReFlag::coalescence_efficiency(const Superdrop &drop1,
+                                       const Superdrop &drop2) const
+/* coalescence efficency given a collision occurs
+according to parameterisation from Straub et al. 2010
+section 3, equation 5 and Schlottke et al. 2010
+section 4a equation 11 */
+{
+}
+
+KOKKOS_FUNCTION unsigned int
+TSCoalBuReFlag::rebound_or_coalescence(const Superdrop &drop1,
+                                       const Superdrop &drop2) const
+/* draw random numnber and compare with coalescence
+efficiency from Straub et al. 2010 to decide whether
+to return flag that indicates coalescence or rebound */
+{
+}
+
+KOKKOS_FUNCTION unsigned int
+TSCoalBuReFlag::coalescence_or_breakup(const Superdrop &drop1,
+                                       const Superdrop &drop2) const
+/* draw random numnber and compare with coalescence
+efficiency from Straub et al. 2010 to decide whether
+to return flag that indicates coalescence or breakup */
+{
+}
 #endif // COALBURE_FLAG_HPP
