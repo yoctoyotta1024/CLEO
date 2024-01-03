@@ -208,7 +208,7 @@ indicates coalescence should occur */
   URBG<ExecSpace> urbg{genpool4flag.get_state()}; // thread safe random number generator
   const auto phi = urbg.drand(0.0, 1.0);          // random number in range [0.0, 1.0]
   genpool4flag.free_state(urbg.gen);
-
+  
   if (phi < ecoal)
   {
     return true;
