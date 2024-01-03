@@ -154,11 +154,11 @@ as coalescence efficiency from Straub et al. 2010 */
 
   if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
   {
-    return rebound_or_coalescence(); // below DE2 boundary
+    return rebound_or_coalescence(drop1, drop2); // below DE2 boundary
   }
   else if (cke < surfenergy(Kokkos::fmax(r1, r2))) // cke < surface energy of large drop
   {
-    return coalescence_or_breakup(); // below DE1 boundary
+    return coalescence_or_breakup(drop1, drop2); // below DE1 boundary
   }
   else // above DE1 boundary
   {
@@ -174,6 +174,8 @@ according to parameterisation from Straub et al. 2010
 section 3, equation 5 and Schlottke et al. 2010
 section 4a equation 11 */
 {
+  ecoal = 
+  return ecoal;
 }
 
 KOKKOS_FUNCTION unsigned int
@@ -183,6 +185,7 @@ TSCoalBuReFlag::rebound_or_coalescence(const Superdrop &drop1,
 efficiency from Straub et al. 2010 to decide whether
 to return flag that indicates coalescence or rebound */
 {
+  const auto ecoal = coalescence_efficiency(drop1, drop2);
 }
 
 KOKKOS_FUNCTION unsigned int
@@ -192,5 +195,6 @@ TSCoalBuReFlag::coalescence_or_breakup(const Superdrop &drop1,
 efficiency from Straub et al. 2010 to decide whether
 to return flag that indicates coalescence or breakup */
 {
+  const auto ecoal = coalescence_efficiency(drop1, drop2);
 }
 #endif // COALBURE_FLAG_HPP
