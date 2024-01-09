@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 3rd January 2024
+Last Modified: Tuesday 9th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -52,7 +52,8 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 ### ---        (an int or dict of ints)     --- ###
 # zlim = 1000
 # npergbx = 8
-# nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+# nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim) # supers where z <= zlim
+# nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # supers where z >= zlim
 nsupers = 50
 ### ------------------------------------------- ###
 

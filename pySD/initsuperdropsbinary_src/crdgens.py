@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 27th December 2023
+Last Modified: Tuesday 9th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -37,6 +37,25 @@ def nsupers_at_domain_base(gridfile, constsfile, nsupers, zlim):
     for ii in gbxbounds.keys():
         gbx_zupper = gbxbounds[ii][1]  # z upper bound of gridbox  
         if (gbx_zupper <= zlim):
+            nsupersdict[ii] = nsupers
+        else:
+            nsupersdict[ii] = 0
+    
+    return nsupersdict
+
+def nsupers_at_domain_top(gridfile, constsfile, nsupers, zlim):
+    ''' create dict for sd initialisation where nsupers
+    only occur in gridboxes with lower bound >= zlim '''
+    
+    COORD0 = rgrid.get_COORD0_from_constsfile(constsfile)
+    gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(gridfile,
+                                                            COORD0=COORD0,
+                                                            return_ndims=True,
+                                                            isprint=False)
+    nsupersdict = {}
+    for ii in gbxbounds.keys():
+        gbx_zlower = gbxbounds[ii][0]  # z lower bound of gridbox  
+        if (gbx_zlower >= zlim):
             nsupersdict[ii] = nsupers
         else:
             nsupersdict[ii] = 0
