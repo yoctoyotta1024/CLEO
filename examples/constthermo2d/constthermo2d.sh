@@ -51,7 +51,7 @@ mkdir ${path2build}share
 ### ---------------------------------------------------- ###
 
 ### ------------------- compile & run ------------------ ###
-### generate input files and run adiabatic parcel example
+### generate input files and run 2d domain example 
 ${python} constthermo2d.py ${path2CLEO} ${path2build} ${configfile}
 
 ### ---------------------------------------------------- ###
