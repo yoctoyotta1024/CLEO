@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 27th December 2023
+Last Modified: Tuesday 9th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -91,7 +91,7 @@ geosigs              = [1.4, 1.6]
 scalefacs            = [6e6, 4e6]   
 numconc = np.sum(scalefacs)
 
-### --- settings for 3D Thermodyanmics --- ###
+### --- settings for 3D Thermodynamics --- ###
 PRESS0 = 100000 # [Pa]
 THETA = 298.15  # [K]
 qcond = 0.0     # [Kg/Kg]
@@ -176,7 +176,7 @@ os.system("rm "+thermofile[:-4]+"*")
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
-### ----- write thermodyanmics binaries ----- ###
+### ----- write thermodynamics binaries ----- ###
 thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
                                                 THETA, qvapmethod, sratios, Zbase,
                                                 qcond, WMAX, Zlength, Xlength,

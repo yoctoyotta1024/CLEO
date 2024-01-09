@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Tuesday 9th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -93,7 +93,7 @@ public:
                     const double VOLUME) const
   /* returns probability of collision-coalescence for a
   pair of droplets according to Long's formulation of the
-  hydrodyanmic kernel for the collision probability modified
+  hydrodynamic kernel for the collision probability modified
   by the coalescence efficiency from Low and List 1982(a). */
   {
     return longprob(drop1, drop2, DELT, VOLUME) * coaleff(drop1, drop2);
@@ -127,7 +127,7 @@ public:
                     const double VOLUME) const
   /* returns probability of collision-coalescence for a
   pair of droplets according to Long's formulation of the
-  hydrodyanmic kernel for the collision probability modified
+  hydrodynamic kernel for the collision probability modified
   by the coalescence efficiency from Low and List 1982(a). */
   {
     const auto bueff = double{1.0 - ll.get_coaleff(drop1, drop2)};

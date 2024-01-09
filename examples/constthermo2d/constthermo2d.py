@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 27th December 2023
+Last Modified: Tuesday 9th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -86,16 +86,16 @@ geosigs              = [1.4, 1.6]
 scalefacs            = [6e6, 4e6]   
 numconc = np.sum(scalefacs)
 
-### --- settings for 2D Thermodyanmics --- ###
-PRESS0 = 101315 # [Pa]
-THETA = 288.15 # [K]
-qcond = 0.0 # [Kg/Kg]
-WMAX = 0.6 # [m/s]
-VVEL = None # [m/s]
-Zlength = 1500 # [m]
-Xlength = 1500 # [m]
+### --- settings for 2D Thermodynamics --- ###
+PRESS0 = 101315     # [Pa]
+THETA = 288.15      # [K]
+qcond = 0.0         # [Kg/Kg]
+WMAX = 0.6          # [m/s]
+VVEL = None         # [m/s]
+Zlength = 1500      # [m]
+Xlength = 1500      # [m]
 qvapmethod = "sratio"
-Zbase = 750 # [m]
+Zbase = 750         # [m]
 sratios = [0.99, 1.0025] # s_ratio [below, above] Zbase
 moistlayer=False
 ### ---------------------------------------------------------------- ###
@@ -120,7 +120,7 @@ os.system("rm "+thermofile[:-4]+"*")
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
-### ----- write thermodyanmics binaries ----- ###
+### ----- write thermodynamics binaries ----- ###
 thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
                                                  THETA, qvapmethod, sratios, Zbase,
                                                  qcond, WMAX, Zlength, Xlength,

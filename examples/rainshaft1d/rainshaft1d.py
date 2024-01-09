@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO exmpl2D to create the
+Script compiles and runs CLEO rain1D to create the
 data and plots precipitation example given constant 
 1-D rainshaft thermodynamics read from a file
 '''
@@ -120,7 +120,7 @@ os.system("rm "+thermofile[:-4]+"*")
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
-### ----- write thermodyanmics binaries ----- ###
+### ----- write thermodynamics binaries ----- ###
 thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
                                                  THETA, qvapmethod, sratios, Zbase,
                                                  qcond, WMAX, Zlength, Xlength,
