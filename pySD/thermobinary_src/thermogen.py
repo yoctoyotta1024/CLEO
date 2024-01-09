@@ -418,7 +418,8 @@ class ConstDryHydrostaticAdiabat:
       "qcond": np.full(shape_cen, self.qcond), 
     }
 
-    THERMODATA = self.generate_winds(gbxbounds, ndims, ntime, THERMODATA)
+    THERMODATA = self.generate_winds(gbxbounds, ndims,
+                                     ntime, THERMODATA)
     
     return THERMODATA 
 
@@ -450,21 +451,19 @@ class ConstHydrostaticLapseRates:
 
     zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
                                                               ndims)
-    # PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
     
-    # qvap = self.generate_qvap(zfulls, xfulls, PRESS, TEMP)
+    PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
+    
+    qvap = self.generate_qvap(zfulls, xfulls, PRESS, TEMP)
 
     shape_cen = int(ntime * np.prod(ndims))
     THERMODATA = {
-      # "PRESS": np.tile(PRESS, ntime),
-      # "TEMP": np.tile(TEMP, ntime),
-      # "qvap": np.tile(qvap, ntime),
-      "PRESS": np.full(shape_cen, self.PRESS0), 
-      "TEMP": np.full(shape_cen, self.THETA0), 
-      "qvap": np.full(shape_cen, self.qvap0), 
+      "PRESS": np.tile(PRESS, ntime),
+      "TEMP": np.tile(TEMP, ntime),
+      "qvap": np.tile(qvap, ntime),
       "qcond": np.full(shape_cen, self.qcond), 
     }
 
-    THERMODATA = self.generate_winds(gbxbounds, ndims, ntime, THERMODATA)
+    THERMODATA = self.generate_winds(ndims, ntime, THERMODATA)
     
     return THERMODATA 
