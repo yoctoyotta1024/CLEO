@@ -177,7 +177,7 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
+thermodyngen = thermogen.SimpleThermo2DFlowField(configfile, constsfile, PRESS0,
                                                 THETA, qvapmethod, sratios, Zbase,
                                                 qcond, WMAX, Zlength, Xlength,
                                                 VVEL)

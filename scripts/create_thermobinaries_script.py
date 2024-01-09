@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 2nd January 2024
+Last Modified: Tuesday 9th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -87,7 +87,7 @@ thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
 #                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL, moistlayer)
-# thermodyngen = thermogen.SimpleThermo2Dflowfield(configfile, constsfile, PRESS0,
+# thermodyngen = thermogen.SimpleThermo2DFlowField(configfile, constsfile, PRESS0,
 #                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL)
