@@ -432,15 +432,14 @@ class ConstHydrostaticLapseRates:
     self.PRESS0 = PRESS0                      # surface pressure [Pa]
     self.THETA0 = THETA0                      # surface temperature [T]
     self.qvap0 = qvap0                        # surface water vapour content [Kg/Kg]
+    self.Zbase = Zbase                        # cloud base height [m]
     self.thetalapses = thetalapses            # theta lapse rates [below, above] Zbase
     self.qvlapses = qvlapses                  # qv lapse rates [below, above] Zbase
-    self.Zbase = Zbase                        # cloud base height [m]
 
     self.qcond = qcond                        # liquid water content [Kg/Kg]
     self.WVEL = WVEL                          # vertical (z) velocity [m/s]
     self.UVEL = UVEL                          # horizontal x velocity [m/s]
     self.VVEL = VVEL                          # horizontal y velocity [m/s]
-
   
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
