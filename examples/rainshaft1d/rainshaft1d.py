@@ -73,15 +73,12 @@ ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
 PRESS0 = 101315 # [Pa]
-THETA = 298.15  # [K]
+THETA0 = 298.15  # [K]
 qcond = 0.0     # [Kg/Kg]
-WMAX = 0.6      # [m/s]
-VVEL = None     # [m/s]
-Zlength = 1500  # [m]
-Xlength = 1500  # [m]
-qvapmethod = "sratio"
+WVEL = 0.0      # [m/s]
+qvapmethod = "qvap"
 Zbase = 750 # [m]
-sratios = [0.99, 1.0025] # s_ratio [below, above] Zbase
+qvap0 = [0.99, 1.0025] # s_ratio [below, above] Zbase
 moistlayer=False
 
 ### --- settings for initial superdroplets --- ###
@@ -129,10 +126,9 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0, 
-                                                 THETA, qvapmethod, sratios, Zbase,
-                                                 qcond, WMAX, Zlength, Xlength,
-                                                 VVEL, moistlayer)
+thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile, PRESS0, 
+                                                    THETA0, qvapmethod, sratios, Zbase,
+                                                    qcond, WVEL, VVEL, UVEL)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 

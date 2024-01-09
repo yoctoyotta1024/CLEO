@@ -71,21 +71,26 @@ def sratio2qvap(sratio, press, temp, Mr_ratio):
 
   return qvap
 
-def qparams_to_qvap(method, qparams, Mr_ratio, PRESS, TEMP):
-  ''' determine qvap above and below z (cloud) base '''
+def qparams_to_qvap(method, params, Mr_ratio, PRESS, TEMP):
+  ''' returns qvaps given list of qvaps, supersaturation ratios
+  or relative humidities '''
 
   if method == "qvap":
+    qparams = params
     return qparams
   
   elif method == "sratio":
-    q0 = sratio2qvap(qparams[0], PRESS, TEMP, Mr_ratio)
-    q1 = sratio2qvap(qparams[1], PRESS, TEMP, Mr_ratio)
-    return [q0, q1]
+    qparams = []
+    for sratio in params:
+      qparams.append(sratio2qvap(sratio, PRESS, TEMP, Mr_ratio))
+    return qparams
   
   elif method == "relh":
-    q0 = relh2qvap(PRESS, TEMP, qparams[0], Mr_ratio)  
-    q1 = relh2qvap(PRESS, TEMP, qparams[1], Mr_ratio)     
-    return [q0, q1]
+    qparams = []
+    for relh in params:
+      qparams.append(relh2qvap(PRESS, TEMP, relh, Mr_ratio))
+    return qparams
+  
   else:
     raise ValueError("valid method not given to generate qvap")
 
@@ -188,7 +193,7 @@ class SimpleThermo2DFlowField:
     self.TEMP = TEMP                          # temperature [T]
     self.qcond = qcond                        # liquid water content []
     
-    # determine qvap above & below z (cloud) base
+    # determine qvap [below, above] z (cloud) base
     self.Zbase = Zbase
     qvaps = qparams_to_qvap(qvapmethod, qvapparams,
                             inputs["Mr_ratio"], PRESS, TEMP)
@@ -288,7 +293,7 @@ class ConstDryHydrostaticAdiabat:
     self.Xlength = Xlength # wavelength of velocity modulation in x direction [m]
     self.VVEL = VVEL # horizontal (y) velocity
     
-    # determine qvap above & below z (cloud) base
+    # determine qvap [below, above] z (cloud) base
     self.Zbase = Zbase
     self.qvapmethod, self.qvapparams = qvapmethod, qvapparams
     self.qvapz0 = qparams_to_qvap(qvapmethod, qvapparams,
@@ -422,6 +427,21 @@ class ConstHydrostaticLapseRates:
   and in hydrostatic equillibrium and following adiabats
   with constant lapse rates above/below zbase. '''
 
+  def __init__(self, PRESS0, THETA0, qvap0, Zbase,
+               thetalapses, qvlapses, qcond, WVEL, UVEL, VVEL):
+    self.PRESS0 = PRESS0                      # surface pressure [Pa]
+    self.THETA0 = THETA0                      # surface temperature [T]
+    self.qvap0 = qvap0                        # surface water vapour content [Kg/Kg]
+    self.thetalapses = thetalapses            # theta lapse rates [below, above] Zbase
+    self.qvlapses = qvlapses                  # qv lapse rates [below, above] Zbase
+    self.Zbase = Zbase                        # cloud base height [m]
+
+    self.qcond = qcond                        # liquid water content [Kg/Kg]
+    self.WVEL = WVEL                          # vertical (z) velocity [m/s]
+    self.UVEL = UVEL                          # horizontal x velocity [m/s]
+    self.VVEL = VVEL                          # horizontal y velocity [m/s]
+
+  
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
     zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
