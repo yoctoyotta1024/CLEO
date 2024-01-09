@@ -410,9 +410,3 @@ class ConstHydrostaticAdiabat:
     THERMODATA = self.generate_winds(gbxbounds, ndims, ntime, THERMODATA)
     
     return THERMODATA 
-
-class ConstHydrostaticAdiabat2DFlowField::
-  ''' create thermodynamics that's constant in time 
-  and in hydrostatic equillibrium with a dry adiabat 
-  accounting for the mass of water vapour in the air.
-  Equations derived from Arabas et al. 2015 (sect 2.1) '''
