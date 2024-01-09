@@ -452,13 +452,19 @@ class ConstHydrostaticLapseRates:
     self.RGAS_DRY = inputs["RGAS_DRY"]
 
   def temp1(self, z):
-
-    return self.TEMP0 - self.TEMPlapses[0] * z
+    
+    temp1 = self.TEMP0 - self.TEMPlapses[0] * z
+    if np.any((temp1 <= 0.0)):
+      raise ValueError("TEMP > 0.0K")
+    return temp1
   
   def temp2(self, z):
     
     T_Zbase = self.temp1(self.Zbase) # TEMP at Zbase
-    return T_Zbase - self.TEMPlapses[1] * (z - self.Zbase)
+    temp2 = T_Zbase - self.TEMPlapses[1] * (z - self.Zbase)
+    if np.any((temp2 <= 0.0)):
+      raise ValueError("TEMP > 0.0K")
+    return temp2
 
   def hydrostatic_pressure(self, P0, integral):
     
@@ -479,12 +485,17 @@ class ConstHydrostaticLapseRates:
   
   def qvap1(self, z):
 
-    return self.qvap0 - self.qvaplapses[0] * z
+    qvap1 = self.qvap0 - self.qvaplapses[0] * z
+    if np.any((qvap1 <= 0.0)):
+      raise ValueError("TEMP > 0.0K")
+    return qvap1 
   
   def qvap2(self, z):
-
     qvap_Zbase = self.qvap1(self.Zbase) # qvap at Zbase
-    return qvap_Zbase - self.qvaplapses[1] * (z - self.Zbase)
+    qvap2 = qvap_Zbase - self.qvaplapses[1] * (z - self.Zbase)
+    if np.any((qvap2 <= 0.0)):
+      raise ValueError("TEMP > 0.0K")
+    return qvap2
  
   def below_above_zbase(self, zfulls, func1, func2):
     
