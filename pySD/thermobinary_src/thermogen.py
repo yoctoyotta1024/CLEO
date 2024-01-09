@@ -460,21 +460,22 @@ class ConstHydrostaticLapseRates:
     T_Zbase = self.temp1(self.Zbase) # TEMP at Zbase
     return T_Zbase - self.TEMPlapses[1] * (z - self.Zbase)
 
-  def hydrostatic_pressure(self, P0, z0, z):
+  def hydrostatic_pressure(self, P0, integral):
     
-    integral = 0.0
     exponent = - self.GRAVG / self.RGAS_DRY * integral
     return P0 * np.exp(exponent)
 
   def press1(self, z):
-
-    Z0 = 0.0
-    return self.hydrostatic_pressure(self.PRESS0, Z0, z)
+    ''' hydrostatic pressure for value z where z <= self.Zbase'''
+    P0 = self.PRESS0
+    integral = integrate.quad(lambda x: 1/self.temp1(x), 0.0, z)[0]
+    return self.hydrostatic_pressure(P0, integral) 
 
   def press2(self, z):
-
-    PRESS_Zbase = self.press1(self.Zbase) 
-    return self.hydrostatic_pressure(PRESS_Zbase, self.Zbase, z)
+    ''' hydrostatic pressure for value z where z > self.Zbase'''
+    P0 = self.press1(self.Zbase)
+    integral = integrate.quad(lambda x: 1/self.temp2(x), self.Zbase, z)[0]
+    return self.hydrostatic_pressure(P0, integral)
   
   def qvap1(self, z):
 
@@ -489,10 +490,21 @@ class ConstHydrostaticLapseRates:
     
     return np.where(zfulls <= self.Zbase, func1(zfulls), func2(zfulls))
 
+  def below_above_zbase_pressure(self, zfulls):
+    
+    PRESS = []
+    for z in zfulls:
+      if z <= self.Zbase:
+        PRESS.append(self.press1(z))
+      else:
+        PRESS.append(self.press2(z))
+
+    return np.asarray(PRESS)
+  
   def hydrostatic_lapserates_thermo(self, zfulls):
     
     TEMP = self.below_above_zbase(zfulls, self.temp1, self.temp2)
-    PRESS = self.below_above_zbase(zfulls, self.press1, self.press2)
+    PRESS = self.below_above_zbase_pressure(zfulls)
     qvap = self.below_above_zbase(zfulls, self.qvap1, self.qvap2) 
 
     return TEMP, PRESS, qvap
