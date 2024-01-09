@@ -73,7 +73,7 @@ ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
 PRESS0 = 101315         # [Pa]
-THETA0 = 297.9          # [K]
+TEMP0 = 297.9          # [K]
 qvap0 = 0.013816        # [Kg/Kg]
 Zbase = 750             # [m]
 thetalapses = [0, 0.01]  # [K m^-1]
@@ -126,7 +126,7 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstHydrostaticLapseRates(PRESS0, THETA0, qvap0,
+thermodyngen = thermogen.ConstHydrostaticLapseRates(PRESS0, TEMP0, qvap0,
                                                     Zbase, thetalapses,
                                                     qvlapses, qcond,
                                                     WVEL, None, None)

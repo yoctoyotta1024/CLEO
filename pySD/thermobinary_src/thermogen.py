@@ -17,8 +17,8 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 File Description:
 '''
 
-
 import numpy as np
+from scipy import integrate
 from .. import cxx2py
 from .create_thermodynamics import thermoinputsdict
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -428,10 +428,10 @@ class ConstHydrostaticLapseRates:
   and in hydrostatic equillibrium and following adiabats
   with constant lapse rates above/below zbase. '''
 
-  def __init__(self, PRESS0, THETA0, qvap0, Zbase,
+  def __init__(self, PRESS0, TEMP0, qvap0, Zbase,
                thetalapses, qvlapses, qcond, WVEL, UVEL, VVEL):
     self.PRESS0 = PRESS0                      # surface pressure [Pa]
-    self.THETA0 = THETA0                      # surface temperature [T]
+    self.TEMP0 = TEMP0                       # surface temperature [T]
     self.qvap0 = qvap0                        # surface water vapour content [Kg/Kg]
     self.Zbase = Zbase                        # cloud base height [m]
     self.thetalapses = thetalapses            # theta lapse rates [below, above] Zbase
