@@ -88,7 +88,30 @@ def qparams_to_qvap(method, qparams, Mr_ratio, PRESS, TEMP):
     return [q0, q1]
   else:
     raise ValueError("valid method not given to generate qvap")
-    
+
+def constant_winds(ndims, ntime, THERMODATA, WVEL, UVEL, VVEL):
+  ''' add arrays to thermodata dictionary for winds, array are
+  empty by default, or given constant values WVEl, UVEL and VVEL.
+  Here, shape_[X]face = no. data for wind velocity component
+  defined on gridbox [X] faces '''
+  
+  for VEL in ["WVEL", "UVEL", "VVEL"]:
+    THERMODATA[VEL] = np.array([])
+
+  if WVEL != None:
+    shape_zface = int((ndims[0]+1)*ndims[1]*ndims[2]*ntime)
+    THERMODATA["WVEL"] =  np.full(shape_zface, WVEL)
+
+    if UVEL != None:
+      shape_xface = int((ndims[1]+1)*ndims[2]*ndims[0]*ntime)
+      THERMODATA["UVEL"] =  np.full(shape_xface, UVEL)
+
+      if VVEL != None:
+        shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1]*ntime)
+        THERMODATA["VVEL"] =  np.full(shape_yface, VVEL)
+
+  return THERMODATA 
+
 def divfree_flowfield2D(wmax, zlength, xlength, 
                         rhotilda_zfaces, rhotilda_xfaces,
                         gbxbounds, ndims):
@@ -133,24 +156,8 @@ class ConstUniformThermo:
 
   def generate_winds(self, ndims, ntime, THERMODATA):
 
-    for VEL in ["WVEL", "UVEL", "VVEL"]:
-      THERMODATA[VEL] = np.array([])
-
-    # shape_[X]face = no. data for var defined at gridbox [X] faces
-    shape_zface = int((ndims[0]+1)*ndims[1]*ndims[2]*ntime)
-    shape_xface = int((ndims[1]+1)*ndims[2]*ndims[0]*ntime)
-    shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1]*ntime)
-
-    if self.WVEL != None:
-      THERMODATA["WVEL"] =  np.full(shape_zface, self.WVEL)
-
-      if self.UVEL != None:
-        THERMODATA["UVEL"] =  np.full(shape_xface, self.UVEL)
-
-        if self.VVEL != None:
-          THERMODATA["VVEL"] =  np.full(shape_yface, self.VVEL)
-
-    return THERMODATA
+    return constant_winds(ndims, ntime, THERMODATA, 
+                          self.WVEL, self.UVEL, self.VVEL)
 
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
@@ -389,6 +396,32 @@ class ConstDryHydrostaticAdiabat:
       qvap = np.where(moistregion, mlqvap, qvap)
 
     return qvap
+
+  def generate_thermo(self, gbxbounds, ndims, ntime):
+
+    ngridboxes = int(np.prod(ndims))
+    zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
+                                                              ndims)
+    PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
+    
+    qvap = self.generate_qvap(zfulls, xfulls, PRESS, TEMP)
+
+    shape_cen = int(ntime * np.prod(ndims))
+    THERMODATA = {
+      "PRESS": np.tile(PRESS, ntime),
+      "TEMP": np.tile(TEMP, ntime),
+      "qvap": np.tile(qvap, ntime),
+      "qcond": np.full(shape_cen, self.qcond), 
+    }
+
+    THERMODATA = self.generate_winds(gbxbounds, ndims, ntime, THERMODATA)
+    
+    return THERMODATA 
+
+class ConstHydrostaticLapseRates:
+  ''' create thermodynamics that's constant in time 
+  and in hydrostatic equillibrium and following adiabats
+  with constant lapse rates above/below zbase. '''
 
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
