@@ -90,7 +90,7 @@ zlim = 1000       # min z coord of superdroplets
 npergbx = 256    # number of superdroplets per gridbox 
 
 # [min, max] range of initial superdroplet radii (and implicitly solute masses)
-rspan                = [1e-8, 1e-4]                  # random sample of radii in this range [m]
+rspan                = [5e-7, 1e-3]                  # random sample of radii in this range [m]
 monodryr             = 1e-8                          # all SDs have this same dryradius [m]
 
 # settings for initial superdroplet multiplicies
