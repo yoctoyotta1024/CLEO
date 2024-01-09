@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 12th December 2023
+ * Last Modified: Tuesday 9th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -16,13 +16,6 @@
  * -----
  * File Description:
  * configuration input parameters for CLEO to run validation of
- * collision-coalescence with e..g Golovin or Long's collision kernel.
- * Note: inital superdroplets data (xi, r0 and msol etc.)
- * read from file "initsupers_filename" is made with PYSD module
- * using python script "create_initsuperdropsbinary_script".
- * Likewise data to make gridboxmap from gridbox boundaries is
- * read from file "grid_filename" created using python
- * "create_gbxboundariesbinary_script" script.
  */
 
 

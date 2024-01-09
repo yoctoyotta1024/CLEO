@@ -16,12 +16,6 @@
  * -----
  * File Description:
  * configuration input parameters for CLEO cusp bifurcation example
- * Note: inital superdroplets data (xi, r0 and msol etc.)
- * read from file "initsupers_filename" is made with PYSD module
- * using python script "create_initsuperdropsbinary_script".
- * Likewise data to make gridboxmap from gridbox boundaries is
- * read from file "grid_filename" created using python
- * "create_gbxboundariesbinary_script" script.
  */
 
 

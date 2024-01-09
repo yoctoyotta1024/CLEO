@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: exmpl2d_config.txt
+ * File: rain1d_config.txt
  * Project: config
  * Created Date: Tuesday 21st November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 12th December 2023
+ * Last Modified: Tuesday 9th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -15,13 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * configuration input parameters for CLEO divergence free motion example
- * Note: inital superdroplets data (xi, r0 and msol etc.)
- * read from file "initsupers_filename" is made with PYSD module
- * using python script "create_initsuperdropsbinary_script".
- * Likewise data to make gridboxmap from gridbox boundaries is
- * read from file "grid_filename" created using python
- * "create_gbxboundariesbinary_script" script.
+ * configuration input parameters for CLEO 1-D rainshaft example
  */
 
 
