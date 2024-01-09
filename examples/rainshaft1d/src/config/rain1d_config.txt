@@ -2,7 +2,7 @@
  * ----- CLEO -----
  * File: rain1d_config.txt
  * Project: config
- * Created Date: Tuesday 21st November 2023
+ * Created Date: Tuesday 9th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
