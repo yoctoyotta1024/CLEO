@@ -68,7 +68,7 @@ SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 1-D gridbox boundaries --- ###
 zgrid = [0, 1500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = [0, 20]            # array of xhalf coords [m]
+xgrid = np.array([0, 20])  # array of xhalf coords [m]
 ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
