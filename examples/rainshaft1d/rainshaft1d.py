@@ -67,9 +67,9 @@ savefigpath = path2build+"/bin/" # directory for saving figures
 SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid = [0, 1600, 10]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = [0, 10]            # array of xhalf coords [m]
-ygrid = np.array([0, 10])  # array of yhalf coords [m]
+zgrid = [0, 1500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+xgrid = [0, 20]            # array of xhalf coords [m]
+ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
 PRESS0 = 101315 # [Pa]
@@ -86,8 +86,8 @@ moistlayer=False
 
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
-zlim = 500        # max z coord of superdroplets
-npergbx = 1024    # number of superdroplets per gridbox 
+zlim = 1000       # min z coord of superdroplets
+npergbx = 256    # number of superdroplets per gridbox 
 
 # [min, max] range of initial superdroplet radii (and implicitly solute masses)
 rspan                = [1e-8, 1e-4]                  # random sample of radii in this range [m]
