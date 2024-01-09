@@ -399,7 +399,6 @@ class ConstDryHydrostaticAdiabat:
 
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
-    ngridboxes = int(np.prod(ndims))
     zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
                                                               ndims)
     PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
@@ -425,7 +424,6 @@ class ConstHydrostaticLapseRates:
 
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
-    ngridboxes = int(np.prod(ndims))
     zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
                                                               ndims)
     PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
