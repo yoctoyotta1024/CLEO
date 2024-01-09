@@ -428,20 +428,75 @@ class ConstHydrostaticLapseRates:
   and in hydrostatic equillibrium and following adiabats
   with constant lapse rates above/below zbase. '''
 
-  def __init__(self, PRESS0, TEMP0, qvap0, Zbase,
-               thetalapses, qvlapses, qcond, WVEL, UVEL, VVEL):
+  def __init__(self, configfile, constsfile,
+               PRESS0, TEMP0, qvap0, Zbase,
+               TEMPlapses, qvaplapses, qcond, WVEL, UVEL, VVEL):
+    ''' note unit conversion of input lapse rates:
+    templapse rate = -dT/dz [K km^-1]  -->  [K m^-1]
+    qvaplapse rate = -dqvap/dz [g/Kg km^-1]  -->  [m^-1]'''
+
     self.PRESS0 = PRESS0                      # surface pressure [Pa]
-    self.TEMP0 = TEMP0                       # surface temperature [T]
+    self.TEMP0 = TEMP0                        # surface temperature [T]
     self.qvap0 = qvap0                        # surface water vapour content [Kg/Kg]
     self.Zbase = Zbase                        # cloud base height [m]
-    self.thetalapses = thetalapses            # theta lapse rates [below, above] Zbase
-    self.qvlapses = qvlapses                  # qv lapse rates [below, above] Zbase
+    self.TEMPlapses = [l/1000 for l in TEMPlapses] # temp lapse rates [below, above] Zbase [K m^-1]
+    self.qvaplapses = [l/1e6 for l in qvaplapses]  # qvap lapse rates [below, above] Zbase [m^-1]
 
     self.qcond = qcond                        # liquid water content [Kg/Kg]
     self.WVEL = WVEL                          # vertical (z) velocity [m/s]
     self.UVEL = UVEL                          # horizontal x velocity [m/s]
     self.VVEL = VVEL                          # horizontal y velocity [m/s]
+
+    inputs = thermoinputsdict(configfile, constsfile)
+    self.GRAVG = inputs["G"]
+    self.RGAS_DRY = inputs["RGAS_DRY"]
+
+  def temp1(self, z):
+
+    return self.TEMP0 - self.TEMPlapses[0] * z
   
+  def temp2(self, z):
+    
+    T_Zbase = self.temp1(self.Zbase) # TEMP at Zbase
+    return T_Zbase - self.TEMPlapses[1] * (z - self.Zbase)
+
+  def hydrostatic_pressure(self, P0, z0, z):
+    
+    integral = 0.0
+    exponent = - self.GRAVG / self.RGAS_DRY * integral
+    return P0 * np.exp(exponent)
+
+  def press1(self, z):
+
+    Z0 = 0.0
+    return self.hydrostatic_pressure(self.PRESS0, Z0, z)
+
+  def press2(self, z):
+
+    PRESS_Zbase = self.press1(self.Zbase) 
+    return self.hydrostatic_pressure(PRESS_Zbase, self.Zbase, z)
+  
+  def qvap1(self, z):
+
+    return self.qvap0 - self.qvaplapses[0] * z
+  
+  def qvap2(self, z):
+
+    qvap_Zbase = self.qvap1(self.Zbase) # qvap at Zbase
+    return qvap_Zbase - self.qvaplapses[1] * (z - self.Zbase)
+ 
+  def below_above_zbase(self, zfulls, func1, func2):
+    
+    return np.where(zfulls <= self.Zbase, func1(zfulls), func2(zfulls))
+
+  def hydrostatic_lapserates_thermo(self, zfulls):
+    
+    TEMP = self.below_above_zbase(zfulls, self.temp1, self.temp2)
+    PRESS = self.below_above_zbase(zfulls, self.press1, self.press2)
+    qvap = self.below_above_zbase(zfulls, self.qvap1, self.qvap2) 
+
+    return TEMP, PRESS, qvap
+
   def generate_winds(self, ndims, ntime, THERMODATA):
 
     return constant_winds(ndims, ntime, THERMODATA, 
@@ -452,10 +507,8 @@ class ConstHydrostaticLapseRates:
     zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
                                                               ndims)
     
-    PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
+    TEMP, PRESS, qvap = self.hydrostatic_lapserates_thermo(zfulls)
     
-    qvap = self.generate_qvap(zfulls, xfulls, PRESS, TEMP)
-
     shape_cen = int(ntime * np.prod(ndims))
     THERMODATA = {
       "PRESS": np.tile(PRESS, ntime),

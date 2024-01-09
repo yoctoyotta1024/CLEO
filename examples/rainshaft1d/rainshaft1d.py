@@ -67,17 +67,17 @@ savefigpath = path2build+"/bin/" # directory for saving figures
 SDgbxs2plt = [74] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid = [0, 1500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+zgrid = [0, 2000, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid = np.array([0, 20])  # array of xhalf coords [m]
 ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
 PRESS0 = 101315         # [Pa]
-TEMP0 = 297.9          # [K]
-qvap0 = 0.013816        # [Kg/Kg]
-Zbase = 750             # [m]
-thetalapses = [0, 0.01]  # [K m^-1]
-qvlapses = [0, -0.0001] # [Kg/Kg m^-1]
+TEMP0 = 297.9           # [K]
+qvap0 = 0.016           # [Kg/Kg]
+Zbase = 500             # [m]
+TEMPlapses = [9.8, 6.5]  # -dT/dz [K/km]
+qvaplapses = [2.97, 4.52] # -dvap/dz [g/Kg km^-1]
 qcond = 0.0             # [Kg/Kg]
 WVEL = 0.0              # [m/s]
 
@@ -126,9 +126,10 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstHydrostaticLapseRates(PRESS0, TEMP0, qvap0,
-                                                    Zbase, thetalapses,
-                                                    qvlapses, qcond,
+thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
+                                                    PRESS0, TEMP0, qvap0,
+                                                    Zbase, TEMPlapses,
+                                                    qvaplapses, qcond,
                                                     WVEL, None, None)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
