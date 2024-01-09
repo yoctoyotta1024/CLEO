@@ -66,38 +66,46 @@ isfigures = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving figures
 SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
-### --- settings for 2-D gridbox boundaries --- ###
-zgrid = [0, 1500, 75]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = [0, 1500, 75]      # evenly spaced xhalf coords [m]
-ygrid = np.array([0, 20])  # array of yhalf coords [m]
+### --- settings for 1-D gridbox boundaries --- ###
+zgrid = [0, 1600, 10]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+xgrid = [0, 10]            # array of xhalf coords [m]
+ygrid = np.array([0, 10])  # array of yhalf coords [m]
 
-### --- settings for initial superdroplets --- ###
-# settings for initial superdroplet coordinates
-zlim = 500        # max z coord of superdroplets
-npergbx = 8       # number of superdroplets per gridbox 
-
-# [min, max] range of initial superdroplet radii (and implicitly solute masses)
-rspan                = [3e-9, 3e-6] # [m]
-
-# settings for initial superdroplet multiplicies
-# (from bimodal Lognormal distribution)
-geomeans             = [0.02e-6, 0.15e-6]               
-geosigs              = [1.4, 1.6]                    
-scalefacs            = [6e6, 4e6]   
-numconc = np.sum(scalefacs)
-
-### --- settings for 2D Thermodyanmics --- ###
+### --- settings for 1-D Thermodynamics --- ###
 PRESS0 = 101315 # [Pa]
-THETA = 288.15 # [K]
-qcond = 0.0 # [Kg/Kg]
-WMAX = 0.6 # [m/s]
-VVEL = None # [m/s]
-Zlength = 1500 # [m]
-Xlength = 1500 # [m]
+THETA = 298.15  # [K]
+qcond = 0.0     # [Kg/Kg]
+WMAX = 0.6      # [m/s]
+VVEL = None     # [m/s]
+Zlength = 1500  # [m]
+Xlength = 1500  # [m]
 qvapmethod = "sratio"
 Zbase = 750 # [m]
 sratios = [0.99, 1.0025] # s_ratio [below, above] Zbase
 moistlayer=False
+
+### --- settings for initial superdroplets --- ###
+# settings for initial superdroplet coordinates
+zlim = 500        # max z coord of superdroplets
+npergbx = 1024    # number of superdroplets per gridbox 
+
+# [min, max] range of initial superdroplet radii (and implicitly solute masses)
+rspan                = [1e-9, 1e-4]                  # random sample of radii in this range [m]
+monodryr             = 1e-12                         # all SDs have this same dryradius [m]
+
+# settings for initial superdroplet multiplicies
+reff                 = 7e-6                     # effective radius [m]
+nueff                = 0.08                     # effective variance 
+rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
+
+nrain                = 3000                         # raindrop concentration [m^-3]
+qrain                = 0.9                          # rainwater content [g/m^3]
+dvol                 = 8e-4                         # mean volume diameter [m]
+rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+
+distribs = [rdist1, rdist2]
+scalefacs = [1000, 1]                               # relative abundance of 2 distributions
+numconc = 1e9                                       # [m^3]
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -134,9 +142,10 @@ nsupers = crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 coord3gen = crdgens.SampleCoordGen(True) # sample coord3 randomly
 coord1gen = crdgens.SampleCoordGen(True) # sample coord1 randomly
 coord2gen = None                        # do not generate superdroplet coord2s
-xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
+
+xiprobdist = probdists.CombinedRadiiProbDistribs(distribs, scalefacs)
 radiigen = rgens.SampleLog10RadiiGen(rspan) # randomly sample radii from rspan [m]
-dryradiigen = dryrgens.ScaledRadiiGen(1.0)
+dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
 
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
