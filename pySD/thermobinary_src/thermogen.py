@@ -260,7 +260,7 @@ class SimpleThermo2DFlowField:
     
       return THERMODATA
 
-class ConstHydrostaticAdiabat:
+class ConstDryHydrostaticAdiabat:
   ''' create thermodynamics that's constant in time 
   and in hydrostatic equillibrium with a dry adiabat 
   accounting for the mass of water vapour in the air.

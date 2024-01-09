@@ -64,7 +64,7 @@ dataset = binpath+"rain1d_sol.zarr"
 ### --- plotting initialisation figures --- ###
 isfigures = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving figures
-SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
+SDgbxs2plt = [74] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 1-D gridbox boundaries --- ###
 zgrid = [0, 1500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -129,7 +129,7 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0, 
                                                  THETA, qvapmethod, sratios, Zbase,
                                                  qcond, WMAX, Zlength, Xlength,
                                                  VVEL, moistlayer)

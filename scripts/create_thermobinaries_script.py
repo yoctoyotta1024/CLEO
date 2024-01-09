@@ -83,7 +83,7 @@ thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
 #     "x2": 750,
 #     "mlsratio": 1.005
 # }
-# thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+# thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0, 
 #                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL, moistlayer)

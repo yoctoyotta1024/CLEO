@@ -121,10 +121,10 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstHydrostaticAdiabat(configfile, constsfile, PRESS0, 
-                                                 THETA, qvapmethod, sratios, Zbase,
-                                                 qcond, WMAX, Zlength, Xlength,
-                                                 VVEL, moistlayer)
+thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+                                                    THETA, qvapmethod, sratios, Zbase,
+                                                    qcond, WMAX, Zlength, Xlength,
+                                                    VVEL, moistlayer)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
