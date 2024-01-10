@@ -104,7 +104,7 @@ rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
 
 distribs = [rdist1, rdist2]
 scalefacs = [1000, 1]                               # relative abundance of 2 distributions
-numconc = 1e9                                       # [m^3]
+numconc = 1e8                                       # [m^3]
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 

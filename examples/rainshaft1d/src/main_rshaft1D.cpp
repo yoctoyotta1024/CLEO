@@ -42,6 +42,9 @@
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 
+#include "observers/gbxindexobs.hpp"
+#include "observers/massmomentsobs.hpp"
+#include "observers/nsupersobs.hpp"
 #include "observers/observers.hpp"
 #include "observers/printobs.hpp"
 #include "observers/timeobs.hpp"
@@ -53,8 +56,11 @@
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
+#include "superdrops/coalescence.hpp"
+#include "superdrops/collisionprobs/longhydroprob.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/terminalvelocity.hpp"
 
 #include "zarr/fsstore.hpp"
 #include "zarr/superdropattrsbuffers.hpp"
