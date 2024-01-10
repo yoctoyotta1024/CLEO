@@ -286,6 +286,64 @@ def plot_1dprofiles(zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY,
         print("Figure .png saved as: "+binpath+savename)
     plt.show()
 
+def plot_2dmean(ax, meanfunc, xxh, zzh, var, label, unit, norm, cmap):
+  
+  mean2d = meanfunc(var) #avg over time and y axes
+  if np.nanmin(mean2d) != np.nanmax(mean2d):
+    pcm = ax.pcolormesh(xxh[:,:], zzh[:,:], mean2d, cmap=cmap, norm=norm)
+    cb = plt.colorbar(pcm, ax=ax, location="top", label=label+unit)
+    return mean2d, pcm, cb
+  else:
+    txt=label+" = {:.2f}".format(np.nanmin(mean2d))+unit
+    ax.text(0.5, 0.5, txt, ha='center')
+    return np.nanmin(mean2d), False, False
+
+def plot_2dcontour(ax, xxf, zzf, mean2d, contour, cb, cbticks):
+  
+  cb.ax.set_xticks(cbticks) 
+  cb.ax.set_xticklabels(["{:.3g}".format(c) for c in cbticks]) 
+
+  try:
+    ax.contour(xxf, zzf, mean2d, levels=[contour],
+                linestyles=["--"], colors=["grey"])
+  except:
+    print("WARNING: contour not plotted")
+
+  cb.ax.plot([contour]*2, [0, 1], color='grey', linewidth=0.95)
+
+def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf,
+                           thermodata, Mr_ratio):
+
+  relh, supersat = relative_humidity(thermodata.press,
+                                     thermodata.temp,
+                                     thermodata.qvap,
+                                     Mr_ratio)
+  relh = relh * 100 # convert relative humidity to %
+  
+  vars = [relh, supersat]
+  labels = ["% relative humidity", "supersaturation"]
+  units = ["", ""]
+  cmaps = ["Blues", "PuOr"]
+  norms = [colors.CenteredNorm(vcenter=np.mean(relh)),
+            colors.TwoSlopeNorm(vcenter=0.0)] 
+  contours = [1.0, 0.0]
+
+  n = 0
+  for var, label, unit, norm, cmap, cont in zip(vars, labels,
+                                                   units, norms,
+                                                   cmaps, contours):
+    mean2d, pcm, cb = plot_2dmean(axs[n], thermodata.ytmean, xxh, zzh,
+                              var, label, unit, norm, cmap)
+
+    if pcm != False:
+      if n == 1:
+        cbticks = [pcm.norm.vmin, pcm.norm.vcenter, pcm.norm.vmax]
+      else:
+        cbticks = np.linspace(pcm.norm.vmin, pcm.norm.vmax, 5)
+      plot_2dcontour(axs[n], xxf, zzf, mean2d, cont, cb, cbticks)
+    
+    n += 1
+
 def plot_2dcolormaps(zzh, xxh, zzf, xxf,
                      thermodata, inputs, binpath, savefig):
 
@@ -294,27 +352,21 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
   cmaps = ["PRGn", "RdBu_r", "BrBG", "BrBG"]
   cmapcens = [np.nanmin(thermodata.press),
               np.nanmin(thermodata.temp),
-              np.mean(thermodata.qvap), 0.0] 
+              np.mean(thermodata.qvap),
+              0.0] 
 
   fig, axs = plt.subplots(nrows=2, ncols=3,  figsize=(13,8))
   axs = axs.flatten()
   
-  for v, var in enumerate(vars):
-    mean2d = thermodata.ytmean(thermodata[var]) #avg over time and y axes
-    if np.nanmin(mean2d) != np.nanmax(mean2d):
-      norm=colors.CenteredNorm(vcenter=cmapcens[v])
-      pcm = axs[v].pcolormesh(xxh[:,:], zzh[:,:], mean2d, cmap=cmaps[v], norm=norm)
-      plt.colorbar(pcm, ax=axs[v], location="top", label=var+units[v])
-    else:
-      txt=var+" = {:.2f}".format(np.nanmin(mean2d))+units[v]
-      axs[v].text(0.5, 0.5, txt, ha='center')
-
-  relh, supersat = relative_humidity(thermodata.press, thermodata.temp,
-                                      thermodata.qvap, inputs["Mr_ratio"])
+  n = 0
+  for var, unit, cmapcen, cmap in zip(vars, units, cmapcens, cmaps):
+    norm=colors.CenteredNorm(vcenter=cmapcen)
+    plot_2dmean(axs[n], thermodata.ytmean, xxh, zzh, thermodata[var],
+                var, unit, norm, cmap)
+    n += 1
   
-  cmaps = ["Blues", "PuOr"]
-  relh_supersat_colomaps([axs[4], axs[5]], zzh, xxh, zzf, xxf, cmaps,
-                          thermodata.ytmean(relh), thermodata.ytmean(supersat))
+  relh_supersat_colomaps([axs[4], axs[5]], zzh, xxh, zzf, xxf,
+                          thermodata, inputs["Mr_ratio"])
   
   for ax in axs:
     ax.set_aspect("equal")
@@ -331,28 +383,6 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
                   bbox_inches="tight", facecolor='w', format="png")
       print("Figure .png saved as: "+binpath+savename)
   plt.show()
-
-def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf, cmaps,
-                           relh, supersat):
-  
-  relh = relh * 100 # convert relative humidity to %
-  
-  label = ["% relative humidity", "supersaturation"]
-  norms = [colors.CenteredNorm(vcenter=np.mean(relh)),
-            colors.TwoSlopeNorm(vcenter=0.0)] 
-  contour = [1.0, 0.0]
-  for v, var in enumerate([relh, supersat]):
-    pcm = axs[v].pcolormesh(xxh, zzh, var, cmap=cmaps[v], norm=norms[v])                  
-    cb = plt.colorbar(pcm, ax=axs[v], location="top", label=label[v])
-
-    cbticks = np.linspace(pcm.norm.vmin, pcm.norm.vmax, 5)
-    if v==1: cbticks = [pcm.norm.vmin, pcm.norm.vcenter, pcm.norm.vmax]
-    cb.ax.set_xticks(cbticks) 
-    cb.ax.set_xticklabels(["{:.3g}".format(c) for c in cbticks]) 
-    
-    axs[v].contour(xxf, zzf, var, levels=[contour[v]],
-                  linestyles=["--"], colors=["grey"])
-    cb.ax.plot([contour]*2, [0, 1], color='grey', linewidth=0.95)
 
 def plot_2dwindfield(zzh, xxh, zzf, xxf, wvel_cens, uvel_cens, 
                      binpath, savefig):

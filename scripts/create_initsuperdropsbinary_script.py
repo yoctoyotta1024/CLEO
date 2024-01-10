@@ -122,15 +122,15 @@ coord3gen            =  crdgens.SampleCoordGen(True) # sample coord3 range rando
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m] 
 # coord1gen            =  crdgens.MonoCoordGen(monocoord1)
-# coord1gen            =  cgens.SampleCoordGen(True) # sample coord1 range randomly or not
-coord1gen            = None                        # do not generate superdroplet coord1s
+coord1gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
 # monocoord2           = 1000                        # all SDs have this same coord2 [m] 
-# coord2gen            =  cgens.MonoCoordGen(monocoord2)
-# coord2gen            =  cgens.SampleCoordGen(True) # sample coord1 range randomly or not
-coord2gen            = None                        # do not generate superdroplet coord2s
+# coord2gen            =  crdgens.MonoCoordGen(monocoord2)
+coord2gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord2gen            = None                        # do not generate superdroplet coord2s
 ### ----------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
