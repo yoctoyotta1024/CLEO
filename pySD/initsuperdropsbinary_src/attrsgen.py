@@ -114,12 +114,12 @@ class AttrsGenerator:
             
             return totmass * 1000 # [g]
         
-        numconc = np.sum(multiplicities)/samplevol
+        numconc = np.sum(multiplicities) / samplevol / 1e6 # [cm^-3]
         totmass = np.sum(totmass(radii, mass_solutes, RHO_SOL))
-        massconc = totmass /samplevol / 1e6 # [g/cm^3]
+        massconc = totmass /samplevol # [g/m^3]
 
         msg = "--- total droplet concentration = "+\
-          "{:1g}m^-3 => {:.1g}g/cm^3".format(numconc, massconc) +\
+          "{:1g}cm^-3 => {:.1g}g/m^3".format(numconc, massconc) +\
         ", in {:.3g}m^3 volume --- ".format(samplevol)
         
         print(msg)
