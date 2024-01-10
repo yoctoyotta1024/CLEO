@@ -213,11 +213,14 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
       plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel_cens"],
                       thermodata["uvel_cens"], binpath, savefig)
 
-def try1dplot(ax, nplots, data, zfull):
+def try1dplot(ax, nplots, data, zfull, label):
+  
   try:
     ax.plot(data, zfull, marker="x") # (fails for 0D model)
   except:
     ax.scatter(data, zfull, marker="x")
+
+  ax.set_xlabel(label)   
   
   return nplots + 1
 
@@ -230,20 +233,20 @@ def plot_1dthermodynamics(axs, n, zfull ,thermodata,
   for var, unit in zip(vars, units):
     if var in thermodata.vars:
       profalltime = thermodata.xymean(thermodata[var]) # 1d profile at all times
-      n = try1dplot(axs[n], n, profalltime.T, zfull[None,:].T)
-      axs[n].set_xlabel(var+unit)  
+      label=var+unit
+      n = try1dplot(axs[n], n, profalltime.T, zfull[None,:].T, label)
 
   pressxy = thermodata.xymean(thermodata.press)
   tempxy = thermodata.xymean(thermodata.temp)
   qvapxy = thermodata.xymean(thermodata.qvap)
   supersat = relative_humidity(pressxy, tempxy, qvapxy, Mr_ratio)[1]
-  axs[n].set_xlabel("supersaturation")  
-  n = try1dplot(axs[n], n, supersat.T, zfull[None,:].T)
+  label = "supersaturation" 
+  n = try1dplot(axs[n], n, supersat.T, zfull[None,:].T, label)
 
   theta = potential_temperature(pressxy, tempxy, pressxy[0],
                                 RGAS_DRY, CP_DRY)
-  axs[n].set_xlabel("\u03F4 /K")  
-  n = try1dplot(axs[n], n, theta.T, zfull[None,:].T)
+  label="\u03F4 /K"
+  n = try1dplot(axs[n], n, theta.T, zfull[None,:].T, label)
 
   return n
 
@@ -255,8 +258,8 @@ def plot_1dwindprofiles(axs, n, zfull, thermodata):
   for var, unit in zip(vars, units):
     if var in thermodata.vars:
       profalltime = thermodata.xymean(thermodata[var]) # 1d profile at all times
-      n = try1dplot(axs[n], n, profalltime.T, zfull[None,:].T)
-      axs[n].set_xlabel(var+unit)  
+      label=var+unit
+      n = try1dplot(axs[n], n, profalltime.T, zfull[None,:].T, label)
 
   return n
 
@@ -268,7 +271,7 @@ def plot_1dprofiles(zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY,
 
     nplots = plot_1dthermodynamics(axs, 0, zfull ,thermodata,
                                    Mr_ratio, RGAS_DRY, CP_DRY)
-    plots = plot_1dwindprofiles(axs, nplots, zfull ,thermodata)
+    nplots = plot_1dwindprofiles(axs, nplots, zfull ,thermodata)
 
     for a in range(nplots, len(axs), 1):
       axs[a].remove() # delete unused axes
