@@ -448,6 +448,7 @@ class ConstHydrostaticLapseRates:
     inputs = thermoinputsdict(configfile, constsfile)
     self.GRAVG = inputs["G"]
     self.RGAS_DRY = inputs["RGAS_DRY"]
+    self.Mr_ratio = inputs["Mr_ratio"]
 
   def temp1(self, z):
     ''' note unit conversion of input lapse rates:
@@ -489,7 +490,13 @@ class ConstHydrostaticLapseRates:
     ''' note unit conversion of input lapse rates:
     qvaplapse rate = -dqvap/dz [g/Kg km^-1]  -->  [m^-1]'''
 
-    qvap1 = self.qvap0 - self.qvaplapses[0]/1e6 * z
+    if self.qvaplapses[0] == "saturated":
+      sratio = 1.001
+      qvap2 = sratio2qvap(sratio, self.press2(z),
+                          self.temp2(z), self.Mr_ratio) 
+    else:
+      qvap1 = self.qvap0 - self.qvaplapses[0]/1e6 * z
+
     if np.any((qvap1 <= 0.0)):
       raise ValueError("TEMP > 0.0K")
     return qvap1 
@@ -497,22 +504,39 @@ class ConstHydrostaticLapseRates:
   def qvap2(self, z):
     ''' note unit conversion of input lapse rates:
     qvaplapse rate = -dqvap/dz [g/Kg km^-1]  -->  [m^-1]'''
-    
-    qvap_Zbase = self.qvap1(self.Zbase) # qvap at Zbase
-    qvap2 = qvap_Zbase - self.qvaplapses[1]/1e6 * (z - self.Zbase)
+    if self.qvaplapses[1] == "saturated":
+      sratio = 1.001
+      qvap2 = sratio2qvap(sratio, self.press2(z),
+                          self.temp2(z), self.Mr_ratio) 
+    else:
+      qvap_Zbase = self.qvap1(self.Zbase) # qvap at Zbase
+      qvap2 = qvap_Zbase - self.qvaplapses[1]/1e6 * (z - self.Zbase)
+
     if np.any((qvap2 <= 0.0)):
       raise ValueError("TEMP > 0.0K")
     return qvap2
  
   def below_above_zbase(self, zfulls, func1, func2):
     
-    return np.where(zfulls <= self.Zbase, func1(zfulls), func2(zfulls))
+    return np.where(zfulls <= self.Zbase,
+                    func1(zfulls), func2(zfulls))
 
+  def below_above_zbase_qvap(self, zfulls):
+    
+    qvap = []
+    for z in zfulls:
+      if z < self.Zbase:
+        qvap.append(self.qvap1(z))
+      else:
+        qvap.append(self.qvap2(z))
+
+    return np.asarray(qvap)
+  
   def below_above_zbase_pressure(self, zfulls):
     
     PRESS = []
     for z in zfulls:
-      if z <= self.Zbase:
+      if z < self.Zbase:
         PRESS.append(self.press1(z))
       else:
         PRESS.append(self.press2(z))
@@ -523,7 +547,7 @@ class ConstHydrostaticLapseRates:
     
     TEMP = self.below_above_zbase(zfulls, self.temp1, self.temp2)
     PRESS = self.below_above_zbase_pressure(zfulls)
-    qvap = self.below_above_zbase(zfulls, self.qvap1, self.qvap2) 
+    qvap = self.below_above_zbase_qvap(zfulls) 
 
     return TEMP, PRESS, qvap
 
