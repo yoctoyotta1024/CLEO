@@ -42,7 +42,6 @@
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 
-#include "observers/gbxindexobs.hpp"
 #include "observers/massmomentsobs.hpp"
 #include "observers/nsupersobs.hpp"
 #include "observers/observers.hpp"

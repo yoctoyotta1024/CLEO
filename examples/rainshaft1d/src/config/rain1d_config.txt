@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th January 2024
+ * Last Modified: Wednesday 10th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,8 +33,8 @@ maxchunk = 1250000                                # maximum no. of elements in c
 ### SDM Runtime parameters ###
 # domain setup #
 nspacedims = 1                           # no. of spatial dimensions to model 
-ngbxs = 75                               # total number of Gbxs
-totnsupers = 6400                        # (initial) total no. of SDs
+ngbxs = 125                               # total number of Gbxs
+totnsupers = 21760                        # (initial) total no. of SDs
 
 # timestepping #
 CONDTSTEP = 1                             # time between SD condensation events [s]

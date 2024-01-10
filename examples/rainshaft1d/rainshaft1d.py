@@ -55,7 +55,7 @@ binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
 gridfile = sharepath+"rain1d_dimlessGBxboundaries.dat"
 initSDsfile = sharepath+"rain1d_dimlessSDsinit.dat"
-thermofile =  sharepath+"rain12d_dimlessthermo.dat"
+thermofile =  sharepath+"rain1d_dimlessthermo.dat"
 
 # path and file names for plotting results
 setupfile = binpath+"rain1d_setup.txt"
@@ -103,7 +103,7 @@ dvol                 = 8e-4                         # mean volume diameter [m]
 rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
 
 distribs = [rdist1, rdist2]
-scalefacs = [1000, 1]                               # relative abundance of 2 distributions
+scalefacs = [5000, 1]                               # relative abundance of 2 distributions
 numconc = 1e8                                       # [m^3]
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
