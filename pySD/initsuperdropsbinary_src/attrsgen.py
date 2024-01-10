@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 2nd January 2024
+Last Modified: Wednesday 10th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -98,11 +98,31 @@ class AttrsGenerator:
           errmsg = "total no. real droplets, {:0g},".format(calcnreals)+\
             " not consistent with sample volume {:.3g} m^3".format(samplevol)
           raise ValueError(errmsg)
+        
+    def print_totalconc(self, multiplicities, radii,
+                        mass_solutes, RHO_SOL, samplevol):
+        ''' print statement of total num conc and mass conc '''
+      
+        def totmass(radius, msol, RHO_SOL):
+            ''' total mass of droplets represented by a superdroplet 
+            droplet totmass = mass of water + solute '''
 
-        else:
-          msg = "--- total real droplet concentration = "+\
-            "{:0g} m^-3 in {:.3g} m^3 volume --- ".format(calcnumconc, samplevol)
-          print(msg)
+            RHO_L = 998.203 # density of liquid water [kg/m^3]
+            massconst = 4.0 / 3.0 * np.pi  * radius * radius * radius * RHO_L
+            density_factor = 1.0 - RHO_L / RHO_SOL
+            totmass = msol * density_factor + massconst
+            
+            return totmass * 1000 # [g]
+        
+        numconc = np.sum(multiplicities)/samplevol
+        totmass = np.sum(totmass(radii, mass_solutes, RHO_SOL))
+        massconc = totmass /samplevol / 1e6 # [g/cm^3]
+
+        msg = "--- total droplet concentration = "+\
+          "{:1g}m^-3 => {:.1g}g/cm^3".format(numconc, massconc) +\
+        ", in {:.3g}m^3 volume --- ".format(samplevol)
+        
+        print(msg)
 
     def generate_attributes(self, nsupers, RHO_SOL, NUMCONC, gridboxbounds):
         ''' generate superdroplets (SDs) attributes that have dimensions
@@ -118,7 +138,9 @@ class AttrsGenerator:
         multiplicities = self.multiplicities(radii, NUMCONC, gbxvol)
 
         if nsupers > 0:  
-            self.check_totalnumconc(multiplicities, NUMCONC, gbxvol) 
+            self.check_totalnumconc(multiplicities, NUMCONC, gbxvol)
+            self.print_totalconc(multiplicities, radii, mass_solutes,
+                                 RHO_SOL, gbxvol) 
          
         return multiplicities, radii, mass_solutes # units [], [m], [Kg], [m]
 
