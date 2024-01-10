@@ -6,7 +6,7 @@ Created Date: Monday 16th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th January 2024
+Last Modified: Wednesday 10th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -431,16 +431,14 @@ class ConstHydrostaticLapseRates:
   def __init__(self, configfile, constsfile,
                PRESS0, TEMP0, qvap0, Zbase,
                TEMPlapses, qvaplapses, qcond, WVEL, UVEL, VVEL):
-    ''' note unit conversion of input lapse rates:
-    templapse rate = -dT/dz [K km^-1]  -->  [K m^-1]
-    qvaplapse rate = -dqvap/dz [g/Kg km^-1]  -->  [m^-1]'''
+    
 
     self.PRESS0 = PRESS0                      # surface pressure [Pa]
     self.TEMP0 = TEMP0                        # surface temperature [T]
     self.qvap0 = qvap0                        # surface water vapour content [Kg/Kg]
     self.Zbase = Zbase                        # cloud base height [m]
-    self.TEMPlapses = [l/1000 for l in TEMPlapses] # temp lapse rates [below, above] Zbase [K m^-1]
-    self.qvaplapses = [l/1e6 for l in qvaplapses]  # qvap lapse rates [below, above] Zbase [m^-1]
+    self.TEMPlapses = TEMPlapses              # temp lapse rates [below, above] Zbase [K km^-1]
+    self.qvaplapses = qvaplapses              # qvap lapse rates [below, above] Zbase [g/Kg km^-1]
 
     self.qcond = qcond                        # liquid water content [Kg/Kg]
     self.WVEL = WVEL                          # vertical (z) velocity [m/s]
@@ -452,16 +450,20 @@ class ConstHydrostaticLapseRates:
     self.RGAS_DRY = inputs["RGAS_DRY"]
 
   def temp1(self, z):
+    ''' note unit conversion of input lapse rates:
+    templapse rate = -dT/dz [K km^-1]  -->  [K m^-1] '''
     
-    temp1 = self.TEMP0 - self.TEMPlapses[0] * z
+    temp1 = self.TEMP0 - self.TEMPlapses[0]/1000 * z
     if np.any((temp1 <= 0.0)):
       raise ValueError("TEMP > 0.0K")
     return temp1
   
   def temp2(self, z):
+    ''' note unit conversion of input lapse rates:
+    templapse rate = -dT/dz [K km^-1]  -->  [K m^-1]'''
     
     T_Zbase = self.temp1(self.Zbase) # TEMP at Zbase
-    temp2 = T_Zbase - self.TEMPlapses[1] * (z - self.Zbase)
+    temp2 = T_Zbase - self.TEMPlapses[1]/1000 * (z - self.Zbase)
     if np.any((temp2 <= 0.0)):
       raise ValueError("TEMP > 0.0K")
     return temp2
@@ -484,15 +486,20 @@ class ConstHydrostaticLapseRates:
     return self.hydrostatic_pressure(P0, integral)
   
   def qvap1(self, z):
+    ''' note unit conversion of input lapse rates:
+    qvaplapse rate = -dqvap/dz [g/Kg km^-1]  -->  [m^-1]'''
 
-    qvap1 = self.qvap0 - self.qvaplapses[0] * z
+    qvap1 = self.qvap0 - self.qvaplapses[0]/1e6 * z
     if np.any((qvap1 <= 0.0)):
       raise ValueError("TEMP > 0.0K")
     return qvap1 
   
   def qvap2(self, z):
+    ''' note unit conversion of input lapse rates:
+    qvaplapse rate = -dqvap/dz [g/Kg km^-1]  -->  [m^-1]'''
+    
     qvap_Zbase = self.qvap1(self.Zbase) # qvap at Zbase
-    qvap2 = qvap_Zbase - self.qvaplapses[1] * (z - self.Zbase)
+    qvap2 = qvap_Zbase - self.qvaplapses[1]/1e6 * (z - self.Zbase)
     if np.any((qvap2 <= 0.0)):
       raise ValueError("TEMP > 0.0K")
     return qvap2
