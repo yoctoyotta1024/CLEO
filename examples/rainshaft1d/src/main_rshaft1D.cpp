@@ -97,13 +97,17 @@ create_gbxmaps(const Config &config)
 inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  return NullMicrophysicalProcess{}; 
+  const PairProbability auto coalprob = LongHydroProb(1.0);
+  const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
+                                                  &step2realtime,
+                                                  coalprob);
+  return colls;
 }
 
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  const auto terminalv = NullTerminalVelocity{};
+  const auto terminalv = SimmelTerminalVelocity{};
   
   return CartesianMotion(motionstep,
                          &step2dimlesstime,
@@ -116,8 +120,10 @@ create_supersattrs_observer(const unsigned int interval,
                             const int maxchunk)
 {
   SuperdropsBuffers auto buffers = SdIdBuffer() >>
+                                   XiBuffer() >>
+                                   MsolBuffer() >>
+                                   RadiusBuffer() >>
                                    Coord3Buffer() >>
-                                   Coord1Buffer() >>
                                    SdgbxindexBuffer();
   return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }
@@ -130,15 +136,21 @@ create_observer(const Config &config,
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  const Observer auto obs1 = PrintObserver(obsstep, &step2realtime);
+  const Observer auto obs1 = PrintObserver(obsstep * 10, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
                                           &step2dimlesstime);
 
-  const Observer auto obs3 = create_supersattrs_observer(obsstep, store,
+  const Observer auto obs3 = NsupersObserver(obsstep, store, maxchunk,
+                                             config.ngbxs);
+
+  const Observer auto obs4 = MassMomentsObserver(obsstep, store, maxchunk,
+                                                 config.ngbxs);
+
+  const Observer auto obs5 = create_supersattrs_observer(obsstep, store,
                                                           maxchunk);
 
-  return obs1 >> obs2 >> obs3;
+  return obs1 >> obs2 >> obs3 >> obs4 >> obs5;
 }
 
 inline auto create_sdm(const Config &config,
