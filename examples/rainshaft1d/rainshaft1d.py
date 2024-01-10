@@ -174,7 +174,7 @@ os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
 os.system('make clean && make -j 64 rshaft1D')
-executable = path2build+'/examples/constthermo2d/src/rshaft1D'
+executable = path2build+'/examples/rainshaft1d/src/rshaft1D'
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -219,7 +219,7 @@ animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
 
 nframes = len(time.mins)
 norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
-mom2ani = np.sum(massmoms.mom0, axis=(1,2)) / norm[None,:]
+mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "number concentration /cm$^{-3}$"
 savename=savefigpath+"rain1d_numconc1d"
@@ -230,7 +230,7 @@ animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
 
 nframes = len(time.mins)
 norm = gbxs["gbxvols"] # volume [m^3]
-mom2ani = np.sum(massmoms.mom1, axis=(1,2)) / norm[None,:]
+mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "mass concentration /g m$^{-3}$"
 savename=savefigpath+"rain1d_massconc1d"
