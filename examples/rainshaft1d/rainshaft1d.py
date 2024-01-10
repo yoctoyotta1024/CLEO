@@ -23,7 +23,7 @@ data and plots precipitation example given constant
 import os
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
+import random 
 from pathlib import Path
 from matplotlib.colors import LogNorm, Normalize
 
@@ -64,7 +64,8 @@ dataset = binpath+"rain1d_sol.zarr"
 ### --- plotting initialisation figures --- ###
 isfigures = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving figures
-SDgbxs2plt = [74] # gbxindex of SDs to plot (nb. "all" can be very slow)
+SDgbxs2plt = list(range(39, 124))
+SDgbxs2plt = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot 
 
 ### --- settings for 1-D gridbox boundaries --- ###
 zgrid = [0, 2500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
