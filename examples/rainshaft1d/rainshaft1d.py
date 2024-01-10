@@ -173,8 +173,8 @@ if isfigures[0]:
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-os.system('make clean && make -j 64 rain1D')
-executable = path2build+'/examples/constthermo2d/src/rain1D'
+os.system('make clean && make -j 64 rhaft1D')
+executable = path2build+'/examples/constthermo2d/src/rshaft1D'
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
