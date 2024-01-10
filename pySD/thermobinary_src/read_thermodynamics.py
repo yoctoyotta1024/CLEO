@@ -202,7 +202,9 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
     thermodata = get_thermodynamics_from_thermofile(thermofile, ndims,
                                                     inputs=inputs)
 
-    plot_1dprofiles(zfull, thermodata, inputs["Mr_ratio"], binpath, savefig)
+    plot_1dprofiles(zfull, thermodata, inputs["Mr_ratio"],
+                    inputs["RGAS_DRY"], inputs["CP_DRY"],
+                    binpath, savefig)
 
     if inputs["nspacedims"] > 1: 
       xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
@@ -211,41 +213,67 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
       plot_2dwindfield(zzh, xxh, zzf, xxf, thermodata["wvel_cens"],
                       thermodata["uvel_cens"], binpath, savefig)
 
-def try1dplot(ax, data, zfull):
+def try1dplot(ax, nplots, data, zfull):
   try:
     ax.plot(data, zfull, marker="x") # (fails for 0D model)
   except:
     ax.scatter(data, zfull, marker="x")
+  
+  return nplots + 1
 
-def plot_1dprofiles(zfull, thermodata, Mr_ratio, binpath, savefig):
+def plot_1dthermodynamics(axs, n, zfull ,thermodata,
+                           Mr_ratio, RGAS_DRY, CP_DRY):
+
+  vars = ["press", "temp", "qvap", "qcond"]
+  units = [" /Pa", " /K", "", ""]
+
+  for var, unit in zip(vars, units):
+    if var in thermodata.vars:
+      profalltime = thermodata.xymean(thermodata[var]) # 1d profile at all times
+      n = try1dplot(axs[n], n, profalltime.T, zfull[None,:].T)
+      axs[n].set_xlabel(var+unit)  
+
+  pressxy = thermodata.xymean(thermodata.press)
+  tempxy = thermodata.xymean(thermodata.temp)
+  qvapxy = thermodata.xymean(thermodata.qvap)
+  supersat = relative_humidity(pressxy, tempxy, qvapxy, Mr_ratio)[1]
+  axs[n].set_xlabel("supersaturation")  
+  n = try1dplot(axs[n], n, supersat.T, zfull[None,:].T)
+
+  theta = potential_temperature(pressxy, tempxy, pressxy[0],
+                                RGAS_DRY, CP_DRY)
+  axs[n].set_xlabel("\u03F4 /K")  
+  n = try1dplot(axs[n], n, theta.T, zfull[None,:].T)
+
+  return n
+
+def plot_1dwindprofiles(axs, n, zfull, thermodata):
+  
+  vars = ["wvel_cens", "uvel_cens", "vvel_cens"]
+  units = [" /ms$^{-1}$"]*3
+
+  for var, unit in zip(vars, units):
+    if var in thermodata.vars:
+      profalltime = thermodata.xymean(thermodata[var]) # 1d profile at all times
+      n = try1dplot(axs[n], n, profalltime.T, zfull[None,:].T)
+      axs[n].set_xlabel(var+unit)  
+
+  return n
+
+def plot_1dprofiles(zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY,
+                    binpath, savefig):
     
-    vars = ["press", "temp", "qvap", "qcond",
-            "wvel_cens", "uvel_cens", "vvel_cens"]
-    units = [" /Pa", " /K", "", ""]+[" /ms$^{-1}$"]*3
-    
-    fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(16, 8))
+    fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(16, 8))
     axs = axs.flatten()
 
-    lines = 0
-    for v, var in enumerate(vars):
-      if var in thermodata.vars:
-        profalltime = thermodata.xymean(thermodata[var]) # 1d profile at all times
-        try1dplot(axs[v], profalltime.T, zfull[None,:].T)
-        axs[v].set_xlabel(vars[v]+units[v])  
-        lines += 1
+    nplots = plot_1dthermodynamics(axs, 0, zfull ,thermodata,
+                                   Mr_ratio, RGAS_DRY, CP_DRY)
+    plots = plot_1dwindprofiles(axs, nplots, zfull ,thermodata)
 
-    supersat = relative_humidity(thermodata.xymean(thermodata.press),
-                                  thermodata.xymean(thermodata.temp),
-                                  thermodata.xymean(thermodata.qvap),
-                                  Mr_ratio)[1]
-    try1dplot(axs[lines], supersat.T, zfull[None,:].T)
-    axs[lines].set_xlabel("supersaturation")  
-    lines+=1
-
-    for a in range(lines, len(axs), 1):
+    for a in range(nplots, len(axs), 1):
       axs[a].remove() # delete unused axes
-    axs[0].set_ylabel("z /km")
-    axs[4].set_ylabel("z /km")
+    for ax in [axs[0], axs[3], axs[6]]:
+      ax.set_ylabel("z /km")
 
     fig.tight_layout()
     if savefig:
