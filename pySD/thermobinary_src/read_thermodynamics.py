@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 18th October 2023
+Last Modified: Wednesday 10th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -28,15 +28,21 @@ from ..readbinary import readbinary
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid 
 
 def relative_humidity(press, temp, qvap, Mr_ratio):
+  
+  pv = qvap*press/(Mr_ratio + qvap) # vapour pressure
+  psat = saturation_press(temp)
+  relh = pv/psat
+  
+  qsat = Mr_ratio * psat/(press-pv) 
+  supersat = qvap/qsat - 1
+  
+  return relh, supersat
 
-    pv = qvap*press/(Mr_ratio + qvap) # vapour pressure
-    psat = saturation_press(temp)
-    relh = pv/psat
-    
-    qsat = Mr_ratio * psat/(press-pv) 
-    supersat = qvap/qsat - 1  
+def potential_temperature(press, temp, press_ref, RGAS, CP):
 
-    return relh, supersat
+  theta = temp * (press_ref / press) ** (RGAS / CP)
+
+  return theta
 
 class ThermoOnGrid:
 
