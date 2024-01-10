@@ -243,7 +243,7 @@ def plot_1dthermodynamics(axs, n, zfull ,thermodata,
   label = "supersaturation" 
   n = try1dplot(axs[n], n, supersat.T, zfull[None,:].T, label)
 
-  press_ref = pressxy[0] 
+  press_ref = pressxy[0, 0] 
   theta = potential_temperature(pressxy, tempxy, press_ref,
                                 RGAS_DRY, CP_DRY)
   label="\u03F4 /K"
@@ -321,7 +321,7 @@ def relh_supersat_theta_colomaps(axs, zzh, xxh, zzf, xxf, thermodata,
                                      Mr_ratio)
   relh = relh * 100 # convert relative humidity to %
 
-  press_ref = thermodata.xymean(thermodata.press)[0] 
+  press_ref = thermodata.xymean(thermodata.press)[0, 0]
   theta = potential_temperature(thermodata.press, thermodata.temp,
                                 press_ref, RGAS_DRY, CP_DRY)
 

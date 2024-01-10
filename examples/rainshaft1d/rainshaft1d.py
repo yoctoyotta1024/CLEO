@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th January 2024
+Last Modified: Wednesday 10th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -67,7 +67,7 @@ savefigpath = path2build+"/bin/" # directory for saving figures
 SDgbxs2plt = [74] # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid = [0, 2000, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+zgrid = [0, 2500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid = np.array([0, 20])  # array of xhalf coords [m]
 ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
@@ -75,7 +75,7 @@ ygrid = np.array([0, 20])  # array of yhalf coords [m]
 PRESS0 = 101315         # [Pa]
 TEMP0 = 297.9           # [K]
 qvap0 = 0.016           # [Kg/Kg]
-Zbase = 500             # [m]
+Zbase = 800             # [m]
 TEMPlapses = [9.8, 6.5]  # -dT/dz [K/km]
 qvaplapses = [2.97, 4.52] # -dvap/dz [g/Kg km^-1]
 qcond = 0.0             # [Kg/Kg]
@@ -83,7 +83,7 @@ WVEL = 0.0              # [m/s]
 
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
-zlim = 1000       # min z coord of superdroplets
+zlim = 800       # min z coord of superdroplets [m]
 npergbx = 256    # number of superdroplets per gridbox 
 
 # [min, max] range of initial superdroplet radii (and implicitly solute masses)
