@@ -181,7 +181,33 @@ The number of Super-Droplets in the domain should remain
 constant over time
 (see ``~/CLEO/build/bin/df2d_totnsupers_validation.png``).
 
-4) Constant 2-D Thermodynamics 
+4) 1-D Rainshaft
+------------------------------
+
+1. Navigate to the ``rainshaft1d/`` directory,
+e.g.
+
+.. code-block:: console
+
+  $ cd ~/CLEO/examples/rainshaft1d/
+
+2. Configure the bash script ``rainshaft1d.sh`` for your environment.
+
+.. code-block:: console
+
+  $ vim rainshaft1d.sh 
+
+3. Execute the bash script ``rainshaft1d.sh``. 
+
+.. code-block:: console
+
+  $ ./rainshaft1d.sh
+
+Several plots and animations are produced by this example. If
+you would like to compare to reference solutions
+please :ref:`contact us <contact>`.
+
+5) Constant 2-D Thermodynamics 
 ------------------------------
 
 1. Navigate to the ``constthermo2d/`` directory,
