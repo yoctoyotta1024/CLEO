@@ -83,14 +83,14 @@ moistlayer = {
     "x2": 750,
     "mlsratio": 1.005
 }
-# thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0, 
-#                                         THETA, qvapmethod, sratios, Zbase,
-#                                         qcond, WMAX, Zlength, Xlength,
-#                                         VVEL, moistlayer)
-thermodyngen = thermogen.SimpleThermo2DFlowField(configfile, constsfile, PRESS0,
+thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0, 
                                         THETA, qvapmethod, sratios, Zbase,
                                         qcond, WMAX, Zlength, Xlength,
-                                        VVEL)
+                                        VVEL, moistlayer)
+# thermodyngen = thermogen.SimpleThermo2DFlowField(configfile, constsfile, PRESS0,
+#                                         THETA, qvapmethod, sratios, Zbase,
+#                                         qcond, WMAX, Zlength, Xlength,
+#                                         VVEL)
 ### ---------------------------------------------------------------- ###
 
 ### -------------------- BINARY FILE GENERATION--------------------- ###

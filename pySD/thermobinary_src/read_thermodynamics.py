@@ -243,7 +243,8 @@ def plot_1dthermodynamics(axs, n, zfull ,thermodata,
   label = "supersaturation" 
   n = try1dplot(axs[n], n, supersat.T, zfull[None,:].T, label)
 
-  theta = potential_temperature(pressxy, tempxy, pressxy[0],
+  press_ref = pressxy[0] 
+  theta = potential_temperature(pressxy, tempxy, press_ref,
                                 RGAS_DRY, CP_DRY)
   label="\u03F4 /K"
   n = try1dplot(axs[n], n, theta.T, zfull[None,:].T, label)
@@ -311,22 +312,27 @@ def plot_2dcontour(ax, xxf, zzf, mean2d, contour, cb, cbticks):
 
   cb.ax.plot([contour]*2, [0, 1], color='grey', linewidth=0.95)
 
-def relh_supersat_colomaps(axs, zzh, xxh, zzf, xxf,
-                           thermodata, Mr_ratio):
+def relh_supersat_theta_colomaps(axs, zzh, xxh, zzf, xxf, thermodata,
+                                 Mr_ratio, RGAS_DRY, CP_DRY):
 
   relh, supersat = relative_humidity(thermodata.press,
                                      thermodata.temp,
                                      thermodata.qvap,
                                      Mr_ratio)
   relh = relh * 100 # convert relative humidity to %
-  
-  vars = [relh, supersat]
-  labels = ["% relative humidity", "supersaturation"]
-  units = ["", ""]
-  cmaps = ["Blues", "PuOr"]
+
+  press_ref = thermodata.xymean(thermodata.press)[0] 
+  theta = potential_temperature(thermodata.press, thermodata.temp,
+                                press_ref, RGAS_DRY, CP_DRY)
+
+  vars = [relh, supersat, theta]
+  labels = ["% relative humidity", "supersaturation", "\u03F4"]
+  units = ["", "", " /K"]
+  cmaps = ["Blues", "PuOr", "RdBu_r"]
   norms = [colors.CenteredNorm(vcenter=np.mean(relh)),
-            colors.TwoSlopeNorm(vcenter=0.0)] 
-  contours = [1.0, 0.0]
+           colors.TwoSlopeNorm(vcenter=0.0),
+           colors.CenteredNorm(vcenter=np.nanmin(theta))] 
+  contours = [1.0, 0.0, None]
 
   n = 0
   for var, label, unit, norm, cmap, cont in zip(vars, labels,
@@ -355,8 +361,9 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
               np.mean(thermodata.qvap),
               0.0] 
 
-  fig, axs = plt.subplots(nrows=2, ncols=3,  figsize=(13,8))
+  fig, axs = plt.subplots(nrows=2, ncols=4,  figsize=(13,8))
   axs = axs.flatten()
+  axs[-1].remove()
   
   n = 0
   for var, unit, cmapcen, cmap in zip(vars, units, cmapcens, cmaps):
@@ -365,8 +372,10 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
                 var, unit, norm, cmap)
     n += 1
   
-  relh_supersat_colomaps([axs[4], axs[5]], zzh, xxh, zzf, xxf,
-                          thermodata, inputs["Mr_ratio"])
+  relh_supersat_theta_colomaps([axs[4], axs[5], axs[6]],
+                               zzh, xxh, zzf, xxf, thermodata,
+                               inputs["Mr_ratio"], inputs["RGAS_DRY"],
+                               inputs["CP_DRY"])
   
   for ax in axs:
     ax.set_aspect("equal")
