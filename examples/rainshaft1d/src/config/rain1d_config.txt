@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 10th January 2024
+ * Last Modified: Thursday 11th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,8 +45,8 @@ OBSTSTEP = 120                            # time between SDM observations [s]
 T_END = 2400                              # time span of integration from 0s to T_END [s]
 
 # microphysics #
-cond_iters = 1                            # no. iterations of Newton Raphson Method before testing for convergence
-cond_SUBTSTEP = 1                         # smallest timestep in cases where substepping occurs [s]
+cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
+cond_SUBTSTEP = 0.1                       # smallest timestep in cases where substepping occurs [s]
 cond_rtol = 0.0                           # relative tolerance for implicit euler integration
 cond_atol = 0.01                          # abolute tolerance for implicit euler integration
 

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 10th January 2024
+ * Last Modified: Thursday 11th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -102,11 +102,20 @@ create_gbxmaps(const Config &config)
 inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
+  const MicrophysicalProcess auto cond = Condensation(tsteps.get_condstep(),
+                                                      config.doAlterThermo,
+                                                      config.cond_iters,
+                                                      &step2dimlesstime,
+                                                      config.cond_rtol,
+                                                      config.cond_atol,
+                                                      config.cond_SUBTSTEP,
+                                                      &realtime2dimless);
+
   const PairProbability auto coalprob = LongHydroProb(1.0);
   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
                                                   &step2realtime,
                                                   coalprob);
-  return colls;
+  return cond >> colls;
 }
 
 inline Motion<CartesianMaps> auto
