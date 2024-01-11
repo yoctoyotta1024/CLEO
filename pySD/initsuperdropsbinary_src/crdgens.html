@@ -265,7 +265,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 —–
-Last Modified: Wednesday 27th December 2023
+Last Modified: Wednesday 10th January 2024
 Modified By: CB
 —–
 License: BSD 3-Clause “New” or “Revised” License
@@ -297,6 +297,13 @@ by sampling in range bewteen coordspan</p>
 <span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.crdgens.</span></span><span class="sig-name descname"><span class="pre">nsupers_at_domain_base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsupers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.crdgens.nsupers_at_domain_base" title="Link to this definition">#</a></dt>
 <dd><p>create dict for sd initialisation where nsupers
 only occur in gridboxes with upper bound &lt;= zlim</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.crdgens.nsupers_at_domain_top">
+<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.crdgens.</span></span><span class="sig-name descname"><span class="pre">nsupers_at_domain_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsupers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.initsuperdropsbinary_src.crdgens.nsupers_at_domain_top" title="Link to this definition">#</a></dt>
+<dd><p>create dict for sd initialisation where nsupers
+only occur in gridboxes with lower bound &gt;= zlim</p>
 </dd></dl>
 
 </section>
@@ -360,6 +367,7 @@ only occur in gridboxes with upper bound &lt;= zlim</p>
 <li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.crdgens.MonoCoordGen"><code class="docutils literal notranslate"><span class="pre">MonoCoordGen</span></code></a></li>
 <li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.crdgens.SampleCoordGen"><code class="docutils literal notranslate"><span class="pre">SampleCoordGen</span></code></a></li>
 <li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.crdgens.nsupers_at_domain_base"><code class="docutils literal notranslate"><span class="pre">nsupers_at_domain_base()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.crdgens.nsupers_at_domain_top"><code class="docutils literal notranslate"><span class="pre">nsupers_at_domain_top()</span></code></a></li>
 </ul>
 </li>
 </ul>

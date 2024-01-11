@@ -267,6 +267,13 @@ and then executing the associated Python script. For running on
 DKRZ’s Levante HPC, there are bash scripts to help with this.
 The following instructions are intended to guide you through
 running each example on Levante using their bash scripts.</p>
+<p>Note most of the build configurations chosen in the bash scripts
+use GPUs. To execute these scripts sucesfully you will therefore
+need to be on a node in the gpu partition of Levante
+(<a class="reference external" href="https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html">see here</a></p>
+<blockquote>
+<div><p>for documentation on Levante’s partitions).</p>
+</div></blockquote>
 <section id="configure-the-bash-script">
 <span id="configurebash"></span><h2>Configure the Bash Script<a class="headerlink" href="#configure-the-bash-script" title="Link to this heading">#</a></h2>
 <p>The bash script for every example follows the same layout and to use
@@ -418,8 +425,31 @@ The number of Super-Droplets in the domain should remain
 constant over time
 (see <code class="docutils literal notranslate"><span class="pre">~/CLEO/build/bin/df2d_totnsupers_validation.png</span></code>).</p>
 </section>
+<section id="d-rainshaft">
+<h2>4) 1-D Rainshaft<a class="headerlink" href="#d-rainshaft" title="Link to this heading">#</a></h2>
+<p>1. Navigate to the <code class="docutils literal notranslate"><span class="pre">rainshaft1d/</span></code> directory,
+e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/rainshaft1d/
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Configure the bash script <code class="docutils literal notranslate"><span class="pre">rainshaft1d.sh</span></code> for your environment.</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vim<span class="w"> </span>rainshaft1d.sh
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">rainshaft1d.sh</span></code>.</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./rainshaft1d.sh
+</pre></div>
+</div>
+<p>Several plots and animations are produced by this example. If
+you would like to compare to reference solutions
+please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
+</section>
 <section id="constant-2-d-thermodynamics">
-<h2>4) Constant 2-D Thermodynamics<a class="headerlink" href="#constant-2-d-thermodynamics" title="Link to this heading">#</a></h2>
+<h2>5) Constant 2-D Thermodynamics<a class="headerlink" href="#constant-2-d-thermodynamics" title="Link to this heading">#</a></h2>
 <p>1. Navigate to the <code class="docutils literal notranslate"><span class="pre">constthermo2d/</span></code> directory,
 e.g.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/constthermo2d/
@@ -519,7 +549,8 @@ script.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#divergence-free-motion">3) Divergence Free Motion</a></li>
-<li><a class="reference internal" href="#constant-2-d-thermodynamics">4) Constant 2-D Thermodynamics</a></li>
+<li><a class="reference internal" href="#d-rainshaft">4) 1-D Rainshaft</a></li>
+<li><a class="reference internal" href="#constant-2-d-thermodynamics">5) Constant 2-D Thermodynamics</a></li>
 <li><a class="reference internal" href="#extension">Extension</a></li>
 </ul>
 </li>

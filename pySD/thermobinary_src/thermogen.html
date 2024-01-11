@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -250,99 +250,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="module-pySD.thermobinary_src.thermogen">
-<span id="thermogen"></span><h1>THERMOGEN<a class="headerlink" href="#module-pySD.thermobinary_src.thermogen" title="Link to this heading">#</a></h1>
-<p>—– CLEO —–
-File: thermogen.py
-Project: thermobinary_src
-Created Date: Monday 16th October 2023
-Author: Clara Bayley (CB)
-Additional Contributors:
-—–
-Last Modified: Tuesday 7th November 2023
-Modified By: CB
-—–
-License: BSD 3-Clause “New” or “Revised” License
-<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
-—–
-Copyright (c) 2023 MPI-M, Clara Bayley
-—–
-File Description:</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.thermogen.ConstHydrostaticAdiabat">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.thermogen.</span></span><span class="sig-name descname"><span class="pre">ConstHydrostaticAdiabat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PRESSz0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">THETA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qvapmethod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qvapparams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qcond</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WMAX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zlength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Xlength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VVEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moistlayer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.thermobinary_src.thermogen.ConstHydrostaticAdiabat" title="Link to this definition">#</a></dt>
-<dd><p>create thermodynamics that’s constant in time 
-and in hydrostatic equillibrium with a dry adiabat 
-accounting for the mass of water vapour in the air.
-Equations derived from Arabas et al. 2015 (sect 2.1)</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.thermogen.ConstHydrostaticAdiabat.hydrostatic_adiabatic_profile">
-<span class="sig-name descname"><span class="pre">hydrostatic_adiabatic_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ZCOORDS</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.thermobinary_src.thermogen.ConstHydrostaticAdiabat.hydrostatic_adiabatic_profile" title="Link to this definition">#</a></dt>
-<dd><p>returns <em>profile</em> of density (not the density itself!)
-rho = rhoprofile^((1-RC_DRY)/RC_DRY) = profile^pow</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.thermogen.ConstHydrostaticAdiabat.rhotilda">
-<span class="sig-name descname"><span class="pre">rhotilda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ZCOORDS</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.thermobinary_src.thermogen.ConstHydrostaticAdiabat.rhotilda" title="Link to this definition">#</a></dt>
-<dd><p>returns dimensionless rho_dry profile for use in stream function</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.thermogen.ConstUniformThermo">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.thermogen.</span></span><span class="sig-name descname"><span class="pre">ConstUniformThermo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">PRESS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TEMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qvap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qcond</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WVEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UVEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VVEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.thermobinary_src.thermogen.ConstUniformThermo" title="Link to this definition">#</a></dt>
-<dd><p>create thermodynamics that’s constant in time 
-and uniform throughout the domain</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.thermogen.SimpleThermo2Dflowfield">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.thermogen.</span></span><span class="sig-name descname"><span class="pre">SimpleThermo2Dflowfield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PRESS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TEMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qvapmethod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qvapparams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qcond</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WMAX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zlength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Xlength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VVEL</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.thermobinary_src.thermogen.SimpleThermo2Dflowfield" title="Link to this definition">#</a></dt>
-<dd><p>create thermodynamics that’s constant in time 
-with (P,T,qc) uniform throughout the domain with relative humidity
-= 0.95 below Zbase and a 2D (z,x) dependent flow field</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.thermogen.SimpleThermo2Dflowfield.rhotilda">
-<span class="sig-name descname"><span class="pre">rhotilda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ZCOORDS</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.thermobinary_src.thermogen.SimpleThermo2Dflowfield.rhotilda" title="Link to this definition">#</a></dt>
-<dd><p>returns dimensionless rho_dry profile for use in stream function</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.thermogen.qparams_to_qvap">
-<span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.thermogen.</span></span><span class="sig-name descname"><span class="pre">qparams_to_qvap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qparams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mr_ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PRESS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TEMP</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.thermobinary_src.thermogen.qparams_to_qvap" title="Link to this definition">#</a></dt>
-<dd><p>determine qvap above and below z (cloud) base</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.thermogen.relh2qvap">
-<span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.thermogen.</span></span><span class="sig-name descname"><span class="pre">relh2qvap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">press</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mr_ratio</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.thermobinary_src.thermogen.relh2qvap" title="Link to this definition">#</a></dt>
-<dd><p>convert relative humidity [%] (relh) into vapour mass
-mixing ratio (qvap) given ambient temperature and pressure
-and ratio of molecular masses: vapour/air</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.thermogen.saturation_press">
-<span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.thermogen.</span></span><span class="sig-name descname"><span class="pre">saturation_press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TEMP</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pySD.thermobinary_src.thermogen.saturation_press" title="Link to this definition">#</a></dt>
-<dd><p>Calculate the equilibrium vapor pressure of water over
-liquid water ie. the saturation pressure (psat) given the
-temperature [K]. Equation from Bjorn Steven’s “make_tetens”
-function in module “moist_thermodynamics.saturation_vapour_pressures”
-available on gitlab. Original paper “Murray, F. W. On the
-Computation of Saturation Vapor Pressure. Journal of Applied
-Meteorology and Climatology 6, 203–204 (1967).</p>
-</dd></dl>
-
+          <section id="thermogen">
+<h1>THERMOGEN<a class="headerlink" href="#thermogen" title="Link to this heading">#</a></h1>
 </section>
 
         </article>
@@ -388,39 +303,8 @@ Meteorology and Climatology 6, 203–204 (1967).</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">THERMOGEN</a><ul>
-<li><a class="reference internal" href="#pySD.thermobinary_src.thermogen.ConstHydrostaticAdiabat"><code class="docutils literal notranslate"><span class="pre">ConstHydrostaticAdiabat</span></code></a><ul>
-<li><a class="reference internal" href="#pySD.thermobinary_src.thermogen.ConstHydrostaticAdiabat.hydrostatic_adiabatic_profile"><code class="docutils literal notranslate"><span class="pre">ConstHydrostaticAdiabat.hydrostatic_adiabatic_profile()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.thermobinary_src.thermogen.ConstHydrostaticAdiabat.rhotilda"><code class="docutils literal notranslate"><span class="pre">ConstHydrostaticAdiabat.rhotilda()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#pySD.thermobinary_src.thermogen.ConstUniformThermo"><code class="docutils literal notranslate"><span class="pre">ConstUniformThermo</span></code></a></li>
-<li><a class="reference internal" href="#pySD.thermobinary_src.thermogen.SimpleThermo2Dflowfield"><code class="docutils literal notranslate"><span class="pre">SimpleThermo2Dflowfield</span></code></a><ul>
-<li><a class="reference internal" href="#pySD.thermobinary_src.thermogen.SimpleThermo2Dflowfield.rhotilda"><code class="docutils literal notranslate"><span class="pre">SimpleThermo2Dflowfield.rhotilda()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#pySD.thermobinary_src.thermogen.qparams_to_qvap"><code class="docutils literal notranslate"><span class="pre">qparams_to_qvap()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.thermobinary_src.thermogen.relh2qvap"><code class="docutils literal notranslate"><span class="pre">relh2qvap()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.thermobinary_src.thermogen.saturation_press"><code class="docutils literal notranslate"><span class="pre">saturation_press()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
