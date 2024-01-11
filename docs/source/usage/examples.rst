@@ -14,6 +14,11 @@ DKRZ's Levante HPC, there are bash scripts to help with this.
 The following instructions are intended to guide you through
 running each example on Levante using their bash scripts.
 
+Note most of the build configurations chosen in the bash scripts 
+use GPUs. To execute these scripts sucesfully you will therefore
+need to be on a node in the gpu partition of Levante
+(`see here <https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html>`_
+ for documentation on Levante's partitions).
 
 .. _configurebash:
 
