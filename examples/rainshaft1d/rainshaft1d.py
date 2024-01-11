@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 10th January 2024
+Last Modified: Thursday 11th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -50,61 +50,52 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-constsfile = path2CLEO+"/libs/cleoconstants.hpp"
-binpath = path2build+"/bin/"
-sharepath = path2build+"/share/"
-gridfile = sharepath+"rain1d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath+"rain1d_dimlessSDsinit.dat"
-thermofile =  sharepath+"rain1d_dimlessthermo.dat"
+constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
+binpath       = path2build+"/bin/"
+sharepath     = path2build+"/share/"
+gridfile      = sharepath+"rain1d_dimlessGBxboundaries.dat"
+initSDsfile   = sharepath+"rain1d_dimlessSDsinit.dat"
+thermofile    =  sharepath+"rain1d_dimlessthermo.dat"
 
 # path and file names for plotting results
-setupfile = binpath+"rain1d_setup.txt"
-dataset = binpath+"rain1d_sol.zarr"
+setupfile     = binpath+"rain1d_setup.txt"
+dataset       = binpath+"rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
-isfigures = [True, True] # booleans for [making, saving] initialisation figures
+isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving figures
-SDgbxs2plt = list(range(39, 124))
-SDgbxs2plt = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot 
+SDgbxs2plt  = list(range(39, 124))
+SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot 
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid = [0, 2500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = np.array([0, 20])  # array of xhalf coords [m]
-ygrid = np.array([0, 20])  # array of yhalf coords [m]
+zgrid       = [0, 2000, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+xgrid       = np.array([0, 20])  # array of xhalf coords [m]
+ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
-PRESS0 = 101315         # [Pa]
-TEMP0 = 297.9           # [K]
-qvap0 = 0.016           # [Kg/Kg]
-Zbase = 800             # [m]
-TEMPlapses = [9.8, 6.5]  # -dT/dz [K/km]
-# qvaplapses = [2.97, 4.52] # -dvap/dz [g/Kg km^-1]
-qvaplapses = [2.97, "saturated"] # -dvap/dz [g/Kg km^-1]
-qcond = 0.0             # [Kg/Kg]
-WVEL = 0.0              # [m/s]
+PRESS0      = 101315                # [Pa]
+TEMP0       = 297.9                 # [K]
+qvap0       = 0.016                 # [Kg/Kg]
+Zbase       = 800                   # [m]
+TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
+qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
+qcond       = 0.0                   # [Kg/Kg]
+WVEL        = 0.0                   # [m/s]
 
 ### --- settings for initial superdroplets --- ###
-# settings for initial superdroplet coordinates
-zlim = 800       # min z coord of superdroplets [m]
-npergbx = 256    # number of superdroplets per gridbox 
+# initial superdroplet coordinates
+zlim        = 800       # min z coord of superdroplets [m]
+npergbx     = 256       # number of superdroplets per gridbox 
 
-# [min, max] range of initial superdroplet radii (and implicitly solute masses)
-rspan                = [5e-7, 1e-3]                  # random sample of radii in this range [m]
-monodryr             = 1e-8                          # all SDs have this same dryradius [m]
+# initial superdroplet radii (and implicitly solute masses)
+rspan       = [1e-8, 1e-4]                      # min and max range of radii to sample [m]
+dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
-reff                 = 7e-6                     # effective radius [m]
-nueff                = 0.08                     # effective variance 
-rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
-
-nrain                = 3000                         # raindrop concentration [m^-3]
-qrain                = 0.9                          # rainwater content [g/m^3]
-dvol                 = 8e-4                         # mean volume diameter [m]
-rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-
-distribs = [rdist1, rdist2]
-scalefacs = [5000, 1]                               # relative abundance of 2 distributions
-numconc = 1e8                                       # [m^3]
+geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
+geosigs              = [1.55, 2.3, 2]                    
+scalefacs            = [1e6, 0.3e6, 0.025e6]   
+numconc = np.sum(scalefacs)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -142,9 +133,9 @@ coord3gen = crdgens.SampleCoordGen(True) # sample coord3 randomly
 coord1gen = None                        # do not generate superdroplet coord2s
 coord2gen = None                        # do not generate superdroplet coord2s
 
-xiprobdist = probdists.CombinedRadiiProbDistribs(distribs, scalefacs)
-radiigen = rgens.SampleLog10RadiiGen(rspan) # randomly sample radii from rspan [m]
-dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
+xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
+radiigen = rgens.SampleLog10RadiiGen(rspan)
+dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf)
 
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
