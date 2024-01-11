@@ -40,7 +40,7 @@ add_library(${LIBNAME} SHARED ${SOURCES})
 
 # add directories to include for target
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../libs")
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../libs")
 
 # link libraries in libs to this target
 set(LINKLIBS gridboxes superdrops zarr)
