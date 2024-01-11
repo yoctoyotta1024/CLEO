@@ -18,7 +18,7 @@ Note most of the build configurations chosen in the bash scripts
 use GPUs. To execute these scripts sucesfully you will therefore
 need to be on a node in the gpu partition of Levante
 (`see here <https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html>`_
- for documentation on Levante's partitions).
+for documentation on Levante's partitions).
 
 .. _configurebash:
 
