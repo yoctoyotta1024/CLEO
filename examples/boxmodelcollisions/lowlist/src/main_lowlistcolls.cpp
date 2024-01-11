@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Thursday 11th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -17,7 +17,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM)
  * after make/compiling, execute for example via:
- * ./src/runCLEO ../src/config/config.txt
+ * ./src/lowlistcolls ../src/config/config.txt
  */
 
 #include <iostream>

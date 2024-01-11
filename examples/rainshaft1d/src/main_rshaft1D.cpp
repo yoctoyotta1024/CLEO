@@ -17,7 +17,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM)
  * after make/compiling, execute for example via:
- * ./src/runCLEO ../src/config/config.txt
+ * ./src/rshaft1D ../src/config/config.txt
  */
 
 #include <iostream>
