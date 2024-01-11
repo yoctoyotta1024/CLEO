@@ -57,6 +57,7 @@
 
 #include "superdrops/coalescence.hpp"
 #include "superdrops/collisionprobs/longhydroprob.hpp"
+#include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/terminalvelocity.hpp"
