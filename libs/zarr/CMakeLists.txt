@@ -21,7 +21,7 @@ add_library(${LIBNAME} SHARED ${SOURCES})
 
 # add directories to include for target
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../libs")
 
 # some compilation properties
 set_target_properties(${LIBNAME} PROPERTIES
