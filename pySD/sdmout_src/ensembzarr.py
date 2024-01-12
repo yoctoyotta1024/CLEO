@@ -94,9 +94,10 @@ def ensemble_data(func, datasets, var):
   
   return func(data4ensemb)
 
-def  write_matchingarray_to_storage(arrayname, arr, refz):
+def  write_matchingarray_to_storage(arrayname, arr, refz, zattrs):
   ''' write array 'arr' to zarr storage under
-  'arrayname' using same metadata as refz '''
+  'arrayname' using same metadata as refz and
+  copying zattrs to .zattrs file '''
   
   if arr.shape != refz.shape:
     err = "arr and reference for metadata must have same shape"
@@ -112,6 +113,8 @@ def  write_matchingarray_to_storage(arrayname, arr, refz):
                   order=refz.order)
   z[:] = arr
 
+  os.system('cp '+zattrs+' '+arrayname+'/.zattrs')
+
 def write_meanvars_to_ensembzarr(ensembdataset, vars4ensemb,
                                  datasets, refset):
   ''' write mean over ensemble of datasets for
@@ -122,8 +125,11 @@ def write_meanvars_to_ensembzarr(ensembdataset, vars4ensemb,
     meanname = ensembdataset+"/"+var
     meanvar = ensemble_data(lambda x : np.mean(x, axis=0),
                             datasets, var)
+    
+    zattrs = refset+"/"+var+"/.zattrs"
     write_matchingarray_to_storage(meanname, meanvar,
-                                   zarr.open(refset)[var])
+                                   zarr.open(refset)[var],
+                                   zattrs)
 
 def write_stdvars_to_ensembzarr(ensembdataset, vars4ensemb,
                                  datasets, refset):
@@ -135,8 +141,11 @@ def write_stdvars_to_ensembzarr(ensembdataset, vars4ensemb,
     stdname = ensembdataset+"/"+var+"_std"
     stdvar = ensemble_data(lambda x : np.std(x, axis=0),
                             datasets, var)
+
+    zattrs = refset+"/"+var+"/.zattrs"                      
     write_matchingarray_to_storage(stdname, stdvar,
-                                   zarr.open(refset)[var])
+                                   zarr.open(refset)[var],
+                                   zattrs)
 
 def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
   ''' create zarr storage called 'ensembdataset' 
