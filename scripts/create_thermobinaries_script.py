@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 10th January 2024
+Last Modified: Monday 15th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -51,16 +51,31 @@ thermofile =  binariespath+"/dimlessthermo.dat"
 ### --- Choose Initial Thermodynamic Conditions for Gridboxes  --- ###
 
 ### --- Constant and Uniform --- ###
-P_INIT = 101500.0                       # initial pressure [Pa]
-TEMP_INIT = 288.15                      # initial parcel temperature [T]
-relh_init = 0.999                       # initial relative humidity (%)
-qc_init = 0.0                           # initial liquid water content []
-W_INIT = 0.0                           # initial vertical (z) velocity [m/s]
-U_INIT = 0.0                            # initial horizontal x velocity [m/s]
-V_INIT = 0.0                            # initial horizontal y velocity [m/s]
-thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
-                                    qc_init, W_INIT, U_INIT, V_INIT,
-                                    relh=relh_init, constsfile=constsfile)
+# P_INIT = 101500.0                       # initial pressure [Pa]
+# TEMP_INIT = 288.15                      # initial parcel temperature [T]
+# relh_init = 0.999                       # initial relative humidity (%)
+# qc_init = 0.0                           # initial liquid water content []
+# W_INIT = 0.0                           # initial vertical (z) velocity [m/s]
+# U_INIT = 0.0                            # initial horizontal x velocity [m/s]
+# V_INIT = 0.0                            # initial horizontal y velocity [m/s]
+# thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
+#                                     qc_init, W_INIT, U_INIT, V_INIT,
+#                                     relh=relh_init, constsfile=constsfile)
+
+### --- 1-D T and qv set by Lapse Rates --- ###
+PRESS0      = 101315                # [Pa]
+TEMP0       = 297.9                 # [K]
+qvap0       = 0.016                 # [Kg/Kg]
+Zbase       = 800                   # [m]
+TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
+qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
+qcond       = 0.0                   # [Kg/Kg]
+WVEL        = 0.0                   # [m/s]
+thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
+                                                    PRESS0, TEMP0, qvap0,
+                                                    Zbase, TEMPlapses,
+                                                    qvaplapses, qcond,
+                                                    WVEL, None, None)
 
 ### --- 2D Flow Field with Hydrostatic --- ###
 ### ---       or Simple z Profile      --- ###
