@@ -70,12 +70,14 @@ Zbase       = 800                   # [m]
 TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
 qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
-WVEL        = 0.0                   # [m/s]
+WMAX        = 1.0                   # [m/s]
+constW      = False                 # use constant W or sinusoidal 1-D profile below cloud base
 thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
                                                     PRESS0, TEMP0, qvap0,
                                                     Zbase, TEMPlapses,
                                                     qvaplapses, qcond,
-                                                    WVEL, None, None)
+                                                    WMAX, None, None,
+                                                    constW)
 
 ### --- 2D Flow Field with Hydrostatic --- ###
 ### ---       or Simple z Profile      --- ###

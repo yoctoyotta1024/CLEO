@@ -6,7 +6,7 @@ Created Date: Monday 16th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 10th January 2024
+Last Modified: Wednesday 17th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -430,8 +430,8 @@ class ConstHydrostaticLapseRates:
 
   def __init__(self, configfile, constsfile,
                PRESS0, TEMP0, qvap0, Zbase,
-               TEMPlapses, qvaplapses, qcond, WVEL, UVEL, VVEL):
-
+               TEMPlapses, qvaplapses, qcond,
+               WMAX, UVEL, VVEL, constW):
 
     self.PRESS0 = PRESS0                      # surface pressure [Pa]
     self.TEMP0 = TEMP0                        # surface temperature [T]
@@ -441,7 +441,7 @@ class ConstHydrostaticLapseRates:
     self.qvaplapses = qvaplapses              # qvap lapse rates [below, above] Zbase [g/Kg km^-1]
 
     self.qcond = qcond                        # liquid water content [Kg/Kg]
-    self.WVEL = WVEL                          # vertical (z) velocity [m/s]
+    self.WMAX = WMAX                          # vertical (z) velocity [m/s]
     self.UVEL = UVEL                          # horizontal x velocity [m/s]
     self.VVEL = VVEL                          # horizontal y velocity [m/s]
 
@@ -551,10 +551,18 @@ class ConstHydrostaticLapseRates:
 
     return TEMP, PRESS, qvap
 
+  def wvel_profile(self):
+
+
+
   def generate_winds(self, ndims, ntime, THERMODATA):
 
-    return constant_winds(ndims, ntime, THERMODATA,
-                          self.WVEL, self.UVEL, self.VVEL)
+    THERMODATA = constant_winds(ndims, ntime, THERMODATA, 
+                          self.WMAX, self.UVEL, self.VVEL)
+    if self.constW:
+      THERMODATA["WVEL"] = self.wvel_profile()
+
+    return THERMODATA
 
   def generate_thermo(self, gbxbounds, ndims, ntime):
 

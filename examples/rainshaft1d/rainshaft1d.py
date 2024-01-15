@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 11th January 2024
+Last Modified: Monday 15th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -81,6 +81,7 @@ TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
 qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
 WVEL        = 0.0                   # [m/s]
+constW      = True                  # use constant W or sinusoidal 1-D profile below cloud base
 
 ### --- settings for initial superdroplets --- ###
 # initial superdroplet coordinates
@@ -123,7 +124,8 @@ thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
                                                     PRESS0, TEMP0, qvap0,
                                                     Zbase, TEMPlapses,
                                                     qvaplapses, qcond,
-                                                    WVEL, None, None)
+                                                    WVEL, None, None,
+                                                    constW)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
