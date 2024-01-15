@@ -74,11 +74,12 @@ public:
   kinetic energy of droplets according to parameterisation of total
   number of outcomes from Schlottke et al. 2010 (figure 13). 
   Note: nfrags diverges at cke = alpha^(1/beta), so here cke is
-  capped at <= ckemax which is value just less than alpha^(1/beta) */
+  capped at <= ckemax which is value less than alpha^(1/beta) 
+  such that nfrags <= 25 */
   {
     constexpr double alpha = 1.5;
     constexpr double beta = 0.135;
-    constexpr double ckemax = 20.154856;
+    constexpr double ckemax = 16.49789599;
 
     const auto terminalv = SimmelTerminalVelocity{};
     const auto cke = collision_kinetic_energy(drop1.get_radius(),
