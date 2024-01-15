@@ -431,7 +431,7 @@ class ConstHydrostaticLapseRates:
   def __init__(self, configfile, constsfile,
                PRESS0, TEMP0, qvap0, Zbase,
                TEMPlapses, qvaplapses, qcond,
-               WMAX, UVEL, VVEL, constW):
+               WMAX, UVEL, VVEL, Wlength):
 
     self.PRESS0 = PRESS0                      # surface pressure [Pa]
     self.TEMP0 = TEMP0                        # surface temperature [T]
@@ -444,6 +444,7 @@ class ConstHydrostaticLapseRates:
     self.WMAX = WMAX                          # vertical (z) velocity [m/s]
     self.UVEL = UVEL                          # horizontal x velocity [m/s]
     self.VVEL = VVEL                          # horizontal y velocity [m/s]
+    self.Wlength = Wlength                    # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
     inputs = thermoinputsdict(configfile, constsfile)
     self.GRAVG = inputs["G"]
@@ -551,16 +552,24 @@ class ConstHydrostaticLapseRates:
 
     return TEMP, PRESS, qvap
 
-  def wvel_profile(self):
+  def wvel_profile(self, gbxbounds, ndims, ntime):
+    ''' returns WVEL=0.0 above cloud base, and sinusoidal profile
+    with amplitude WMAX and wavelength 2*Wlength below cloud base'''
+
+    zfaces = rgrid.coords_forgridboxfaces(gbxbounds, ndims, "z")[0]
+    WVEL = self.WMAX * np.sin(np.pi * zfaces/(2*self.Wlength))
+    
+    WVEL = np.where(zfaces < self.Zbase, WVEL, 0.0)
+    
+    return np.tile(WVEL, ntime)
 
 
-
-  def generate_winds(self, ndims, ntime, THERMODATA):
+  def generate_winds(self, gbxbounds, ndims, ntime, THERMODATA):
 
     THERMODATA = constant_winds(ndims, ntime, THERMODATA, 
                           self.WMAX, self.UVEL, self.VVEL)
-    if self.constW:
-      THERMODATA["WVEL"] = self.wvel_profile()
+    if self.Wlength > 0.0:
+      THERMODATA["WVEL"] = self.wvel_profile(gbxbounds, ndims, ntime)
 
     return THERMODATA
 
@@ -579,6 +588,6 @@ class ConstHydrostaticLapseRates:
       "qcond": np.full(shape_cen, self.qcond),
     }
 
-    THERMODATA = self.generate_winds(ndims, ntime, THERMODATA)
-
-    return THERMODATA
+    THERMODATA = self.generate_winds(gbxbounds, ndims, ntime, THERMODATA)
+    
+    return THERMODATA 

@@ -81,7 +81,7 @@ TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
 qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
 WVEL        = 0.0                   # [m/s]
-constW      = True                  # use constant W or sinusoidal 1-D profile below cloud base
+Wlength     = 0.0                   # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
 ### --- settings for initial superdroplets --- ###
 # initial superdroplet coordinates
@@ -125,7 +125,7 @@ thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
                                                     Zbase, TEMPlapses,
                                                     qvaplapses, qcond,
                                                     WVEL, None, None,
-                                                    constW)
+                                                    Wlength)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
