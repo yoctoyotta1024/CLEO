@@ -126,17 +126,17 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
-  // const PairProbability auto collprob = LongHydroProb();
-  // // const NFragments auto nfrags = ConstNFrags(5.0);
-  // const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-  // // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
-  // const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
-  // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
-  //                                                  &step2realtime,
-  //                                                  collprob,
-  //                                                  nfrags,
-  //                                                  coalbure_flag);
-  // return colls;
+  const PairProbability auto collprob = LongHydroProb();
+  // const NFragments auto nfrags = ConstNFrags(5.0);
+  const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+  // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
+  const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+  const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
+                                                   &step2realtime,
+                                                   collprob,
+                                                   nfrags,
+                                                   coalbure_flag);
+  return colls;
 
   // const PairProbability auto buprob = LowListBuProb();
   // const NFragments auto nfrags = ConstNFrags(5.0);
@@ -145,14 +145,14 @@ config_collisions(const Config &config, const Timesteps &tsteps)
   //                                             buprob,
   //                                             nfrags);
 
-  // const PairProbability auto coalprob = LowListCoalProb();
-  // const PairProbability auto coalprob = GolovinProb();
-  const PairProbability auto coalprob = LongHydroProb(1.0);
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
-                                                   &step2realtime,
-                                                   coalprob);
+  // // const PairProbability auto coalprob = LowListCoalProb();
+  // // const PairProbability auto coalprob = GolovinProb();
+  // const PairProbability auto coalprob = LongHydroProb(1.0);
+  // const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
+  //                                                  &step2realtime,
+  //                                                  coalprob);
 
-  return coal;
+  // return coal;
   // return coal >> bu;
 }
 
