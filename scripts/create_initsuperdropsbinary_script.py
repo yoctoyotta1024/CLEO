@@ -38,7 +38,7 @@ configfile = sys.argv[3]
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
-gbxs2plt = 0 # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
+gbxs2plt = "all" # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
 
 ### essential paths and filenames
 constsfile = path2CLEO+"libs/cleoconstants.hpp"
