@@ -58,7 +58,7 @@ private:
   Flag decided based on the kinetic arguments in
   section 2.2 of Szakáll and Urbich 2018
   (neglecting grazing angle considerations) */
-  
+
 public:
   KOKKOS_FUNCTION
   unsigned int operator()(const double phi,
@@ -73,11 +73,10 @@ public:
 struct TSCoalBuReFlag
 {
 private:
-  GenRandomPool genpool4flag;
-
   KOKKOS_FUNCTION
   unsigned int rebound_or_coalescence(const Superdrop &drop1,
                                       const Superdrop &drop2,
+                                      const double phi,
                                       const double cke) const;
   /* returns flag that indicates coalescence (flag=1)
   or rebound (flag=0) based on coalescence efficiency
@@ -86,6 +85,7 @@ private:
   KOKKOS_FUNCTION
   unsigned int coalescence_or_breakup(const Superdrop &drop1,
                                       const Superdrop &drop2,
+                                      const double phi,
                                       const double cke) const;
   /* returns flag that indicates coalescence (flag=1)
   or breakup (flag=2) based on coalescence efficiency
@@ -93,6 +93,7 @@ private:
 
   KOKKOS_FUNCTION bool is_coalescence(const Superdrop &drop1,
                                       const Superdrop &drop2,
+                                      const double phi,
                                       const double cke) const;
   /* returns truw if comparison of random numnber
   with coalescence efficiency from Straub et al. 2010
@@ -107,8 +108,12 @@ private:
   section 3, equation 5 and Schlottke et al. 2010
   section 4a equation 11 */
 
+public:
+  TSCoalBuReFlag() {}
+
   KOKKOS_FUNCTION
-  unsigned int operator()(const Superdrop &drop1,
+  unsigned int operator()(const double phi,
+                          const Superdrop &drop1,
                           const Superdrop &drop2) const;
   /* function returns flag indicating rebound or
   coalescence or breakup. If flag = 1 -> coalescence.
@@ -116,18 +121,6 @@ private:
   Flag decided based on the kinetic arguments from
   section 4 of Testik et al. 2011 (figure 12) as well
   as coalescence efficiency from Straub et al. 2010 */
-
-public:
-  TSCoalBuReFlag() : genpool4flag(std::random_device{}()) {}
-
-  KOKKOS_FUNCTION
-  unsigned int operator()(const double phi,
-                          const Superdrop &drop1,
-                          const Superdrop &drop2) const
-  /* adaptor of operator to satisfy CoalBuReFlag concept */
-  {
-    return operator()(drop1, drop2);
-  }
 };
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
@@ -165,7 +158,8 @@ section 2.2 of Szakáll and Urbich 2018
 }
 
 KOKKOS_FUNCTION unsigned int
-TSCoalBuReFlag::operator()(const Superdrop &drop1,
+TSCoalBuReFlag::operator()(const double phi,
+                           const Superdrop &drop1,
                            const Superdrop &drop2) const
 /* function returns flag indicating rebound or
 coalescence or breakup. If flag = 1 -> coalescence.
@@ -184,11 +178,11 @@ as coalescence efficiency from Straub et al. 2010 */
 
   if (cke < surfenergy(Kokkos::fmin(r1, r2))) // cke < surface energy of small drop
   {
-    return rebound_or_coalescence(drop1, drop2, cke); // below DE2 boundary
+    return rebound_or_coalescence(drop1, drop2, phi, cke); // below DE2 boundary
   }
   else if (cke < surfenergy(Kokkos::fmax(r1, r2))) // cke < surface energy of large drop
   {
-    return coalescence_or_breakup(drop1, drop2, cke); // below DE1 boundary
+    return coalescence_or_breakup(drop1, drop2, phi, cke); // below DE1 boundary
   }
   else // above DE1 boundary
   {
@@ -218,16 +212,13 @@ section 4a equation 11 */
 KOKKOS_FUNCTION bool
 TSCoalBuReFlag::is_coalescence(const Superdrop &drop1,
                                const Superdrop &drop2,
+                               const double phi,
                                const double cke) const
 /* returns truw if comparison of random numnber
 with coalescence efficiency from Straub et al. 2010
 indicates coalescence should occur */
 {
   const auto ecoal = coalescence_efficiency(drop1, drop2, cke);
-
-  URBG<ExecSpace> urbg{genpool4flag.get_state()}; // thread safe random number generator
-  const auto phi = urbg.drand(0.0, 1.0);          // random number in range [0.0, 1.0]
-  genpool4flag.free_state(urbg.gen);
 
   if (phi < ecoal)
   {
@@ -242,12 +233,13 @@ indicates coalescence should occur */
 KOKKOS_FUNCTION unsigned int
 TSCoalBuReFlag::rebound_or_coalescence(const Superdrop &drop1,
                                        const Superdrop &drop2,
+                                       const double phi,
                                        const double cke) const
 /* returns flag that indicates coalescence (flag=1)
 or rebound (flag=0) based on coalescence efficiency
 from Straub et al. 2010 */
 {
-  if (is_coalescence(drop1, drop2, cke))
+  if (is_coalescence(drop1, drop2, phi, cke))
   {
     return 1; // coalescence
   }
@@ -260,12 +252,13 @@ from Straub et al. 2010 */
 KOKKOS_FUNCTION unsigned int
 TSCoalBuReFlag::coalescence_or_breakup(const Superdrop &drop1,
                                        const Superdrop &drop2,
+                                       const double phi,
                                        const double cke) const
 /* returns flag that indicates coalescence (flag=1)
 or breakup (flag=2) based on coalescence efficiency
 from Straub et al. 2010 */
 {
-  if (is_coalescence(drop1, drop2, cke))
+  if (is_coalescence(drop1, drop2, phi, cke))
   {
     return 1; // coalescence
   }
