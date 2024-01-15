@@ -34,7 +34,7 @@
 #include "./terminalvelocity.hpp"
 
 template <typename F>
-concept CoalBuReFlag = requires(F f,
+concept CoalBuReFlag = requires(F f, const double phi,
                                 const Superdrop &d1,
                                 const Superdrop &d2)
 /* operator returns flag indicating rebound or
@@ -42,12 +42,13 @@ coalescence or breakup. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound. */
 {
   {
-    f(d1, d2)
+    f(phi, d1, d2)
   } -> std::convertible_to<unsigned int>;
 };
 
 struct SUCoalBuReFlag
 {
+private:
   KOKKOS_FUNCTION
   unsigned int operator()(const Superdrop &drop1,
                           const Superdrop &drop2) const;
@@ -57,6 +58,16 @@ struct SUCoalBuReFlag
   Flag decided based on the kinetic arguments in
   section 2.2 of Szakáll and Urbich 2018
   (neglecting grazing angle considerations) */
+  
+public:
+  KOKKOS_FUNCTION
+  unsigned int operator()(const double phi,
+                          const Superdrop &drop1,
+                          const Superdrop &drop2) const
+  /* adaptor of operator to satisfy CoalBuReFlag concept */
+  {
+    return operator()(drop1, drop2);
+  }
 };
 
 struct TSCoalBuReFlag
@@ -96,9 +107,6 @@ private:
   section 3, equation 5 and Schlottke et al. 2010
   section 4a equation 11 */
 
-public:
-  TSCoalBuReFlag() : genpool4flag(std::random_device{}()) {}
-
   KOKKOS_FUNCTION
   unsigned int operator()(const Superdrop &drop1,
                           const Superdrop &drop2) const;
@@ -108,6 +116,18 @@ public:
   Flag decided based on the kinetic arguments from
   section 4 of Testik et al. 2011 (figure 12) as well
   as coalescence efficiency from Straub et al. 2010 */
+
+public:
+  TSCoalBuReFlag() : genpool4flag(std::random_device{}()) {}
+
+  KOKKOS_FUNCTION
+  unsigned int operator()(const double phi,
+                          const Superdrop &drop1,
+                          const Superdrop &drop2) const
+  /* adaptor of operator to satisfy CoalBuReFlag concept */
+  {
+    return operator()(drop1, drop2);
+  }
 };
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
