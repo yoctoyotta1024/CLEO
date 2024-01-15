@@ -72,10 +72,13 @@ public:
                     const Superdrop &drop2) const
   /* returns number of fragments 'nfrags' based on collision
   kinetic energy of droplets according to parameterisation of total
-  number of outcomes from Schlottke et al. 2010 (figure 13) */
+  number of outcomes from Schlottke et al. 2010 (figure 13). 
+  Note: nfrags diverges at cke = alpha^(1/beta), so here cke is
+  capped at <= ckemax which is value just less than alpha^(1/beta) */
   {
     constexpr double alpha = 1.5;
     constexpr double beta = 0.135;
+    constexpr double ckemax = 20.154856;
 
     const auto terminalv = SimmelTerminalVelocity{};
     const auto cke = collision_kinetic_energy(drop1.get_radius(),
@@ -83,7 +86,8 @@ public:
                                               terminalv(drop1),
                                               terminalv(drop2));
 
-    const auto nfrags = double{1.0 / (alpha - Kokkos::pow(cke, beta))};
+    const auto cke_cap = double{Kokkos::fmin(ckemax, cke)};                      // limit cke to less than ckemax
+    const auto nfrags = double{1.0 / (alpha - Kokkos::pow(cke_cap, beta))};
 
     return nfrags;
   }
