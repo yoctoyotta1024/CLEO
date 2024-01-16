@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 15th January 2024
+Last Modified: Tuesday 16th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -104,7 +104,7 @@ scalefacs            = [0.1, 0.03, 0.0025]
 # # geomeans             = [0.02e-6, 0.15e-6]               
 # # geosigs              = [1.4, 1.6]                    
 # # scalefacs            = [0.06, 0.04]   
-numconc = np.sum(scalefacs) * 1e9
+numconc = np.sum(scalefacs) * 5e9
 xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
  
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
