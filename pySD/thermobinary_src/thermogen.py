@@ -553,8 +553,8 @@ class ConstHydrostaticLapseRates:
     return TEMP, PRESS, qvap
 
   def wvel_profile(self, gbxbounds, ndims, ntime):
-    ''' returnssinusoidal profile with amplitude WMAX
-    and wavelength 2*Wlength '''
+    ''' returns updraught (w always >=0.0) sinusoidal
+    profile with amplitude WMAX and wavelength 2*Wlength'''
 
     zfaces = rgrid.coords_forgridboxfaces(gbxbounds, ndims, "z")[0]
     WVEL = self.WMAX * np.sin(np.pi * zfaces/(2*self.Wlength))
