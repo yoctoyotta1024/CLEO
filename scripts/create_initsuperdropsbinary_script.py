@@ -104,7 +104,7 @@ scalefacs            = [1, 0.3, 0.025]
 # # geomeans             = [0.02e-6, 0.15e-6]               
 # # geosigs              = [1.4, 1.6]                    
 # # scalefacs            = [0.06, 0.04]   
-numconc = np.sum(scalefacs) * 1e9
+numconc = np.sum(scalefacs) * 5e8
 xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
  
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
