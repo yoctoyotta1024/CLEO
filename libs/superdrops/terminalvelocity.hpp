@@ -40,7 +40,7 @@ to a double (hopefully a velocity!) */
 {
   {
     v(drop)
-    } -> std::convertible_to<double>;
+  } -> std::convertible_to<double>;
 };
 
 struct NullTerminalVelocity
