@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Tuesday 16th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -56,6 +56,11 @@ struct NullTerminalVelocity
 struct SimmelTerminalVelocity
 {
   KOKKOS_FUNCTION
+  double watermass(const double radius) const;
+  /* returns mass of a superdroplet as if it' s all water[g],
+  for use as 'x' in Simmel et al. 2002 equation (14) */
+
+  KOKKOS_FUNCTION
   double operator()(const Superdrop &drop) const;
   /* returns (dimensionless) terminal velocity of a superdroplet
   according to Simmel et al. 2002. This is semi-empirical formula
@@ -81,6 +86,18 @@ struct RogersYauTerminalVelocity
 };
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
+KOKKOS_FUNCTION
+double SimmelTerminalVelocity::watermass(const double radius) const
+/* returns mass of a superdroplet as if it' s all water[g],
+for use as 'x' in Simmel et al. 2002 equation (14) */
+{
+  constexpr double massconst(4.0 / 3.0 *
+                             Kokkos::numbers::pi * dlc::Rho_l); // 4/3 * pi * density
+
+  const auto mass = massconst * radius * radius * radius;
+  
+  return mass * dlc::MASS0grams;  // convert dimensionless mass into grams [g]
+}
 
 KOKKOS_FUNCTION
 double SimmelTerminalVelocity::
@@ -101,7 +118,6 @@ conditions (rho_dry0) and in current state (rho_dry). */
   constexpr double r3 = 1.73892e-3 / dlc::R0;
 
   /* alpha constants converted from [g^-beta m s^-1] into [g^-beta] units */
-  constexpr double MASSCONST = dlc::MASS0grams;  // convert dimensionless mass into grams [g]
   constexpr double VELCONST = (100.0 * dlc::W0); // convert from [cm/s] into dimensionless velocity []
   constexpr double a1 = 457950 / VELCONST;
   constexpr double a2 = 4962 / VELCONST;
@@ -115,7 +131,7 @@ conditions (rho_dry0) and in current state (rho_dry). */
   }
   else
   {
-    const auto MASS = drop.mass() * MASSCONST; // droplet mass in grams [g]
+    const auto MASS = watermass(radius); // droplet mass in grams [g]
 
     if (radius >= r2)
     {
