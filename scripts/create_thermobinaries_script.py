@@ -71,7 +71,7 @@ TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
 qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
 WMAX        = 9.0                   # [m/s]
-Wlength     = 1200                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
+Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
 thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
                                                     PRESS0, TEMP0, qvap0,
