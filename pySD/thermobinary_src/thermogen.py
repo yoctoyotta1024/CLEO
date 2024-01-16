@@ -559,6 +559,8 @@ class ConstHydrostaticLapseRates:
     zfaces = rgrid.coords_forgridboxfaces(gbxbounds, ndims, "z")[0]
     WVEL = self.WMAX * np.sin(np.pi * zfaces/(2*self.Wlength))
     
+    WVEL[WVEL < 0.0] = 0.0
+
     return np.tile(WVEL, ntime)
 
   def generate_winds(self, gbxbounds, ndims, ntime, THERMODATA):
