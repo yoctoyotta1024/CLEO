@@ -307,7 +307,7 @@ ImplicitIteration::initialguess(const double rprev) const
 'ziter' to use as first iteration of newton raphson method in
 rootfinding algorithm for timestepping condensation/evaporation ODE.
 Criteria is as in SCALE-SDM for making initial guess for given droplet
-much greater than its (activation radius)^2 if the 
+much greater than its (activation radius)^2 if the
 supersaturation > its activation supersaturation  */
 {
   const auto rprevsqrd = double{rprev * rprev};

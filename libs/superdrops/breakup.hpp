@@ -219,7 +219,7 @@ Note: implicit casting of xi from unsigned long long to double. */
   const auto new_msol = double{sum_msol * old_xi / new_xi};
 
   drop2.set_xi(new_xi);
-  drop2.set_radius(new_r); 
+  drop2.set_radius(new_r);
   drop2.set_msol(new_msol);
 }
 

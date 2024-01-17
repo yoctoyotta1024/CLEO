@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 20th November 2023
+Last Modified: Wednesday 17th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,7 @@ e.g. for tracing their trajectories
 
 import numpy as np
 import awkward as ak
-import random 
+import random
 
 def attr_for_superdroplet(sddata, Id, attr):
   '''selects attribute from sddata belonging
@@ -51,16 +51,16 @@ def attributes_for1superdroplet(sddata, Id, attrs):
   attrs4Id = {}
   for attr in attrs:
     attrs4Id[attr] = attr_for_superdroplet(sddata, Id, attr)
-  
+
   return attrs4Id
 
 def attribute_for_superdroplets_sample(sddata, attr, ndrops2sample=0,
                                        minid=0, maxid=0, ids=[]):
   ''' returns 2D array with dimensions [time, SD]
-  containing attribute data over time for a sample of 
+  containing attribute data over time for a sample of
   superdroplets. Sample is either for superdroplets with
-  specific Ids in 'ids' list, or sample if 'ndrops2sample'
-  randomly selected superdrops with Ids in the range 
+  specific Ids in 'ids' list, or sample of 'ndrops2sample'
+  randomly selected superdrops with Ids in the range
   [minid, maxid] '''
 
   if ids == []:
@@ -72,10 +72,10 @@ def attribute_for_superdroplets_sample(sddata, attr, ndrops2sample=0,
     sample = ids
 
   ndrops_attr = []
-  for id in sample: 
+  for id in sample:
     attr4Id = attr_for_superdroplet(sddata, id, attr)
     ndrops_attr.append(attr4Id)
-  
+
   return np.asarray(ndrops_attr).T
 
 def attr_at_times(attrdata, time, times2sel):
@@ -93,10 +93,33 @@ def attributes_at_times(sddata, time, times2sel, attrs2sel):
   sddata (for all superdroplets in sddata)'''
 
   selected_data = {} # dict containting selected attributes at selected times
-  
+
   for attr in attrs2sel:
-    
+
     selattr_data = attr_at_times(sddata[attr], time, times2sel)
     selected_data[attr] = selattr_data
-  
+
   return selected_data
+
+def attrs_for_superdroplets_sample(sddata, attrs, ndrops2sample=0,
+                                    minid=0, maxid=0, ids=[]):
+  ''' returns dictionary of 2D arrays (with dimensions [time, SD])
+  for each attribute in 'attrs' list for a sample of
+  superdroplets. Sample is either for superdroplets with
+  specific Ids in 'ids' list, or sample of 'ndrops2sample'
+  randomly selected superdrops with Ids in the range
+  [minid, maxid] '''
+
+  if ids == []:
+    population = list(range(minid, maxid, 1))
+    if ndrops2sample == 0:
+      ndrops2sample = maxid
+    sample = random.sample(population, ndrops2sample)
+  else:
+    sample = ids
+
+  data = {}
+  for a in attrs:
+    data[a] = attribute_for_superdroplets_sample(sddata, a, ids=sample)
+
+  return data

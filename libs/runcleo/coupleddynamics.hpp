@@ -19,8 +19,8 @@
  * dynamics solver that coupled to SDM in CLEO
  */
 
-#ifndef COUPLEDDYNAMICS_HPP 
-#define COUPLEDDYNAMICS_HPP 
+#ifndef COUPLEDDYNAMICS_HPP
+#define COUPLEDDYNAMICS_HPP
 
 #include <concepts>
 
@@ -44,4 +44,4 @@ and have constant unsigned int type (for interval) */
   } -> std::same_as<void>;
 };
 
-#endif // COUPLEDDYNAMICS_HPP  
+#endif // COUPLEDDYNAMICS_HPP

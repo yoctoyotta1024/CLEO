@@ -20,8 +20,8 @@
  * two-way to cvode adiabatic parcel ODE solver
  */
 
-#ifndef CVODEDYNAMICS_HPP 
-#define CVODEDYNAMICS_HPP 
+#ifndef CVODEDYNAMICS_HPP
+#define CVODEDYNAMICS_HPP
 
 #include <iostream>
 #include <vector>

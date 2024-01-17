@@ -18,7 +18,7 @@
  * Header file for functions that return
  * Left Hand Side of thermodynamic equations.
  * Equations referenced as (eqn [X.YY])
- * are from "An Introduction To Clouds From The 
+ * are from "An Introduction To Clouds From The
  * Microscale to Climate" by Lohmann, Luond
  * and Mahrt, 1st edition.
  * */
@@ -50,7 +50,7 @@ double supersaturation_ratio(const double press,
                              const double psat)
 /* calculate the superaturation ratio given the saturaion
 pressure, psat, the ambient pressure, press, and the vapour
-mass mixing ratio, qvap. supersaturation ratio = 's_ratio', 
+mass mixing ratio, qvap. supersaturation ratio = 's_ratio',
 s_ratio = p_vapour/psat (ie. relative humidity) */
 {
   return (press * qvap) / ((dlc::Mr_ratio + qvap) * psat);

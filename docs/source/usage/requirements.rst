@@ -13,7 +13,7 @@ CMake
 -----
 CMake minimum version 3.18.0.
 
-On Levante it's best to use version 
+On Levante it's best to use version
 3.23.1 which can be loaded e.g. via the command
 
 .. code-block:: console
@@ -42,7 +42,7 @@ Python
 ------
 To use PySD you need Python minimum version 3.10.4.
 
-On Levante it's a good idea to load the python3 module, e.g. via 
+On Levante it's a good idea to load the python3 module, e.g. via
 
 .. code-block:: console
 
@@ -51,7 +51,7 @@ On Levante it's a good idea to load the python3 module, e.g. via
 To use PySD and to run CLEO's examples, ``matplotlib``, ``numpy``,
 ``scipy``, ``xarray``, ``zarr``, and ``awkward`` must be installed.
 If there are other dependencies not listed here, you will have to
-install them too. We kindly ask that you also 
+install them too. We kindly ask that you also
 :ref:`contact us <contact>` if this is the case.
 
 You can install packages to your conda environment e.g. via

@@ -42,7 +42,7 @@ CartesianMaps create_cartesian_maps(const unsigned int ngbxs,
                                     const unsigned int nspacedims,
                                     std::string_view grid_filename);
 /* creates cartesian maps instance using gridbox bounds read from
-gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite 
+gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite
 boundary conditions (see note above). In a non-3D case, boundaries
 and neighbours maps for unused dimensions are 'null'
 (ie. return numerical limits), however the area and volume of each

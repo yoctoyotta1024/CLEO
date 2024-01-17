@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th January 2024
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -142,7 +142,7 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = RogersGKTerminalVelocity{};
 
   return CartesianMotion(motionstep,
                          &step2dimlesstime,
@@ -166,7 +166,7 @@ create_supersattrs_observer(const unsigned int interval,
 }
 
 inline Observer auto
-create_other_observer(const Config &config,
+create_bulk_observer(const Config &config,
                 const Timesteps &tsteps,
                 FSStore &store)
 {
@@ -188,10 +188,21 @@ create_other_observer(const Config &config,
   const Observer auto obs6 = NsupersObserver(obsstep, store, maxchunk,
                                              config.ngbxs);
 
-  const Observer auto obs7 = NrainsupersObserver(obsstep, store, maxchunk,
+  const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk,
                                                  config.ngbxs);
 
-  const Observer auto obs8 = MassMomentsObserver(obsstep, store, maxchunk,
+  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >> obs7;
+}
+
+inline Observer auto
+create_superdrops_observer(const Config &config,
+                const Timesteps &tsteps,
+                FSStore &store)
+{
+  const auto obsstep = (unsigned int)tsteps.get_obsstep();
+  const auto maxchunk = int{config.maxchunk};
+
+  const Observer auto obs8 = NrainsupersObserver(obsstep, store, maxchunk,
                                                  config.ngbxs);
 
   const Observer auto obs9 = RainMassMomentsObserver(obsstep, store, maxchunk,
@@ -200,8 +211,7 @@ create_other_observer(const Config &config,
   const Observer auto obs10 = create_supersattrs_observer(obsstep, store,
                                                           maxchunk);
 
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >>
-         obs6 >> obs7 >> obs8 >> obs9 >> obs10;
+  return obs8 >> obs9 >> obs10;
 }
 
 inline Observer auto
@@ -212,11 +222,15 @@ create_observer(const Config &config,
   const Observer auto obs0 = RunStatsObserver(tsteps.get_obsstep(),
                                               config.stats_filename);
 
-  const Observer auto obs = create_other_observer(config,
-                                                  tsteps,
-                                                  store);
+  const Observer auto obs_blk = create_bulk_observer(config,
+                                                    tsteps,
+                                                    store);
 
-  return obs0 >> obs;
+  const Observer auto obs_sd = create_superdrops_observer(config,
+                                                          tsteps,
+                                                          store);
+
+  return obs0 >> obs_blk >> obs_sd;
 }
 
 inline auto create_sdm(const Config &config,

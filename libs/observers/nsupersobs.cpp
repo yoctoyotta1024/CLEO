@@ -30,7 +30,7 @@ for each gridbox. "raindrop-like" means radius > rlim.
  calc_nrainsupers is much slower then calc_nrainsupers_serial
  (probably because opening threads is more costly than the
  time saved in a parallel calculation over few elements) */
-{  
+{
   constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
   const subviewd_constsupers supers(supersingbx.readonly());
   const size_t nsupers(supers.extent(0));
@@ -54,11 +54,11 @@ for each gridbox. "raindrop-like" means radius > rlim.
 
 size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx)
 /* deep copy if necessary (if superdrops are on device not
-  host memory), then returns count of number of "raindrop-like" 
+  host memory), then returns count of number of "raindrop-like"
   superdrops for each gridbox. "raindrop-like" means radius > rlim */
 {
   constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
-  
+
   const auto h_supers = supersingbx.hostcopy();
 
   size_t nrainsupers(0);

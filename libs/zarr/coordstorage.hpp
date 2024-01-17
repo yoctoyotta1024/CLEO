@@ -32,9 +32,9 @@
 
 template <typename T>
 struct CoordStorage : SingleVarStorage<T>
-/* storage of a coordinate. Coordinate = a 
+/* storage of a coordinate. Coordinate = a
 1-D variable with dimensions 'dims' in
-.zattrs metadata that matches the name of the 
+.zattrs metadata that matches the name of the
 variable (ie. variable is an xarray coord) */
 {
 private:
@@ -42,7 +42,7 @@ private:
   /* write data in buffer to a chunk in store */
   {
     std::tie(this->chunkcount, this->bufferfill) =
-       storehelpers:: 
+       storehelpers::
             writebuffer2chunk(this->store, this->buffer,
                               this->name, this->chunkcount);
 

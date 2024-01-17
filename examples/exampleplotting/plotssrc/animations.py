@@ -6,7 +6,7 @@ Created Date: Wednesday 22nd November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 22nd November 2023
+Last Modified: Wednesday 17th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -29,7 +29,7 @@ from matplotlib.cm import ScalarMappable
 
 def animate_me(fig, update_frame, frames, plot_init,
                saveani=False, savename=None, fargs=(), fps=5):
-  
+
   print("making animation")
   ani = FuncAnimation(fig, update_frame, frames=range(0, frames),
                       init_func=plot_init, fargs=fargs)
@@ -39,21 +39,22 @@ def animate_me(fig, update_frame, frames, plot_init,
     ani.save(savename+".gif",
             writer=animation.PillowWriter(fps=fps, bitrate=5000, codec='h264'),
             dpi=100, savefig_kwargs={'transparent': True})
-    
-def animate1dprofile(gbxs, mom, timemins, nframes, 
+
+def animate1dprofile(gbxs, mom, timemins, nframes,
                      xlabel=None, xlims=[None, None], color="black",
                      saveani=False, savename=None, fps=5):
-  
+
   fig, ax, plots, txt, zkm = prepare_1dprofile(gbxs, mom, timemins,
-                                               xlabel, color=color) 
-  
+                                               xlabel, color=color)
+
   def init_1dprofile():
-    
+
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
-    
-    ax.set_ylim([0, 1.5])
-    yticks = [0, 0.75, 1.5]
+
+    ylims = [0, ax.get_ylim()[1]]
+    ax.set_ylim(ylims)
+    yticks = np.arange(ylims[0], ylims[1], 0.5)
     ax.set_yticks(yticks, yticks, fontsize=16)
 
     ax.set_xlim([xlims[0], xlims[1]*1.1])
@@ -64,15 +65,15 @@ def animate1dprofile(gbxs, mom, timemins, nframes,
     ax.tick_params(length=10, width=1)
 
     fig.tight_layout()
-    
+
     return plots, txt,
 
   animate_me(fig, update_1dprofileframe, nframes, init_1dprofile,
            saveani=saveani, savename=savename,
            fargs=(plots, txt, zkm, timemins, mom), fps=fps)
-  
+
 def prepare_1dprofile(gbxs, massmom, timemins, xlabel, color):
-  
+
   fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(7, 8))
 
   alpha = 0.3
@@ -97,43 +98,43 @@ def update_1dprofileframe(f, plots, txt, zkm, timemins, massmom):
 
   timetext = "t = {:.0f}min".format(timemins[f])
   txt.set_text(timetext)
-  
+
   return plots, txt,
 
-def animate2dcmap(gbxs, mom2ani, timemins, nframes, 
+def animate2dcmap(gbxs, mom2ani, timemins, nframes,
                   cbarlabel=None, cmapnorm=None, cmap="viridis",
                   saveani=False, savename=None, fps=5):
-  
+
   fig, ax, cbar, plot, txt = prepare_2dplot(gbxs, mom2ani, timemins,
                                             cmap, cmapnorm)
   cbar.set_label(cbarlabel, fontsize=16)
 
   def init_2dcmap():
-    
+
     ax.set_aspect("equal")
     ax.set_xlim([0, 1.5])
     ax.set_ylim([0, 1.5])
-    
-    ax.set_xlabel("x / km", fontsize=16) 
-    ax.set_ylabel("z / km", fontsize=16) 
+
+    ax.set_xlabel("x / km", fontsize=16)
+    ax.set_ylabel("z / km", fontsize=16)
 
     ticks = [0, 0.75, 1.5]
     ax.set_xticks(ticks, ticks, fontsize=16)
     ax.set_yticks(ticks, ticks, fontsize=16)
-    
+
     ax.tick_params(length=10, width=1)
 
     fig.tight_layout()
     return plot
-   
+
   animate_me(fig, update_2dcmapframe, nframes,
              init_2dcmap, saveani, savename,
              fargs=(plot, txt, timemins, mom2ani), fps=fps)
 
 def prepare_2dplot(gbxs, massmom, timemins, cmap, cmapnorm):
-  
+
   fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 9))
-  
+
   f=0
   data2d = massmom[f,:,:]
   plot = ax.pcolormesh(gbxs["xxh"]/1000, gbxs["zzh"]/1000, data2d,
@@ -141,7 +142,7 @@ def prepare_2dplot(gbxs, massmom, timemins, cmap, cmapnorm):
   plot.cmap.set_under("w")
   timetext = "t = {:.0f}min".format(timemins[f])
   txt = fig.text(0.765, 0.925, timetext, fontsize=16, ha="right")
-  
+
   cbar = fig.colorbar(ScalarMappable(norm=cmapnorm, cmap=cmap),
                       ax=ax, extend="both")
   cbar.ax.tick_params(labelsize=16, which="both")
@@ -149,14 +150,14 @@ def prepare_2dplot(gbxs, massmom, timemins, cmap, cmapnorm):
   cbar.ax.tick_params(length=10/3, width=1, which="minor")
 
   fig.tight_layout()
-  
+
   return fig, ax, cbar, plot, txt
 
 def update_2dcmapframe(f, plot, txt, timemins, massmom):
-    
+
   plot.set_array(np.array(massmom[f,:,:]).ravel())
-  
+
   timetext = "t = {:.0f}min".format(timemins[f])
   txt.set_text(timetext)
-  
+
   return plot, txt

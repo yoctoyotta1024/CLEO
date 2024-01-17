@@ -44,9 +44,9 @@ def maxmin_radii_label(r, allradii):
 def individ_radiusgrowths_figure(time, radii, savename=""):
   ''' plots of droplet radii growth given array of radii
   of shape [time, SDs] '''
-  
+
   fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 8))
-  
+
   for i in range(radii.shape[1]):
       label = maxmin_radii_label(radii[0,i], radii[0,:])
       ax.plot(time, radii[:,i], linewidth=0.8, label=label)
@@ -63,28 +63,28 @@ def individ_radiusgrowths_figure(time, radii, savename=""):
     fig.savefig(savename, dpi=400,
                 bbox_inches="tight", facecolor='w', format="png")
     print("Figure .png saved as: "+savename)
-  
+
   plt.show()
 
   return fig, ax
 
 def plot_randomsample_superdrops(time, sddata, totnsupers,
                                  nsample, savename=""):
-  ''' plot timeseries of the attributes of a 
+  ''' plot timeseries of the attributes of a
   random sample of superdroplets '''
 
-  fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(10,6))    
+  fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(10,6))
   fig.suptitle("Time Evolution of a Random Sample of Superdroplets")
 
   minid, maxid = 0, int(totnsupers) # largest value of ids to sample
   ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
-  
+
   attrs = ["radius", "xi", "msol"]
   for a, attr in enumerate(attrs):
     try:
-      data = sdtracing.attribute_for_superdroplets_sample(sddata, 
+      data = sdtracing.attribute_for_superdroplets_sample(sddata,
                                                           attr,
-                                                          ids=ids2plot) 
+                                                          ids=ids2plot)
       axs[0, a].plot(time.mins, data, linewidth=0.8)
     except:
        print("WARNING: didn't plot "+attr)
@@ -95,13 +95,13 @@ def plot_randomsample_superdrops(time, sddata, totnsupers,
     try:
       data = sdtracing.attribute_for_superdroplets_sample(sddata,
                                                         coord,
-                                                        ids=ids2plot) 
-      data = data / 1000 # [km] 
+                                                        ids=ids2plot)
+      data = data / 1000 # [km]
       axs[1, a].plot(time.mins, data, linestyle="",
                    marker=mks, markersize=0.2)
     except:
        print("WARNING: didn't plot "+coord)
-    
+
   axs[0, 0].set_yscale('log')
   axs[0, 0].set_ylabel('radius, r /\u03BCm')
   axs[0, 1].set_ylabel('multiplicity, \u03BE')
@@ -118,7 +118,7 @@ def plot_randomsample_superdrops(time, sddata, totnsupers,
     fig.savefig(savename, dpi=400, bbox_inches="tight",
                 facecolor='w', format="png")
     print("Figure .png saved as: "+savename)
-  
+
   plt.show()
 
   return fig, axs
@@ -127,20 +127,20 @@ def plot_randomsample_superdrops(time, sddata, totnsupers,
 def plot_randomsample_superdrops_2dmotion(sddata, totnsupers,
                                           nsample, savename="",
                                           arrows=False):
-  ''' plot timeseries of the attributes of a 
+  ''' plot timeseries of the attributes of a
   random sample of superdroplets '''
 
-  fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6,6))    
-  
+  fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6,6))
+
   minid, maxid = 0, int(totnsupers) # largest value of ids to sample
   ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
-  
+
   mks = MarkerStyle('o', fillstyle='full')
   coordz = sdtracing.attribute_for_superdroplets_sample(sddata, "coord3",
-                                                      ids=ids2plot)  / 1000 # [km] 
+                                                      ids=ids2plot)  / 1000 # [km]
   coordx = sdtracing.attribute_for_superdroplets_sample(sddata, "coord1",
-                                                      ids=ids2plot)  / 1000 # [km] 
-  
+                                                      ids=ids2plot)  / 1000 # [km]
+
   ax.plot(coordx, coordz, linestyle="",  marker=mks, markersize=0.4)
 
   if arrows:
@@ -150,13 +150,13 @@ def plot_randomsample_superdrops_2dmotion(sddata, totnsupers,
     for n in drops2arrow: # must loop over drops to get nice positioning of arrows
       x = coordx[:,n][np.logical_not(np.isnan(coordx[:,n]))]
       z = coordz[:,n][np.logical_not(np.isnan(coordz[:,n]))]
-      
+
       u = np.diff(x)
       w = np.diff(z)
-      norm = np.sqrt(u**2+w**2) 
+      norm = np.sqrt(u**2+w**2)
       pos_x = x[:-1] + u/2
       pos_z = z[:-1] + w/2
-      
+
       sl = list(range(0, len(pos_x), 100))
       ax.quiver(pos_x[sl], pos_z[sl], (u/norm)[sl], (w/norm)[sl],
               angles="xy", zorder=5, pivot="mid", scale=50)
@@ -170,7 +170,7 @@ def plot_randomsample_superdrops_2dmotion(sddata, totnsupers,
     fig.savefig(savename, dpi=400, bbox_inches="tight",
                 facecolor='w', format="png")
     print("Figure .png saved as: "+savename)
-  
+
   plt.show()
 
   return fig, ax

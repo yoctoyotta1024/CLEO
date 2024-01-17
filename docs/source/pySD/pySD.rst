@@ -20,7 +20,7 @@ input files and processing the Zarr output from CLEO.
    initsuperdropsbinary_src/initsuperdropsbinary_src
    thermobinary_src/thermobinary_src
    sdmout_src/sdmout_src
-   cxx2py 
+   cxx2py
    editconfigfile
    readbinary
    writebinary

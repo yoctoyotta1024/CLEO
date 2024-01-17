@@ -21,8 +21,8 @@
  */
 
 
-#ifndef NULLCOMMS_HPP 
-#define NULLCOMMS_HPP 
+#ifndef NULLCOMMS_HPP
+#define NULLCOMMS_HPP
 
 #include <Kokkos_Core.hpp>
 
@@ -48,4 +48,4 @@ Struct obeys coupling comms concept */
   to coupldyn is null for NullDynamics */
 };
 
-#endif // NULLCOMMS_HPP 
+#endif // NULLCOMMS_HPP

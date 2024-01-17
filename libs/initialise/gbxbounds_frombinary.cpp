@@ -37,8 +37,8 @@ return GbxBoundsFromBinary instance created from that data */
   std::vector<VarMetadata> meta(metadata_from_binary(file));
 
   ndims = vector_from_binary<size_t>(file, meta.at(0));
-  gbxidxs = vector_from_binary<unsigned int>(file, meta.at(1)); 
-  gbxbounds = vector_from_binary<double>(file, meta.at(2)); 
+  gbxidxs = vector_from_binary<unsigned int>(file, meta.at(1));
+  gbxbounds = vector_from_binary<double>(file, meta.at(2));
 
   file.close();
 
@@ -71,7 +71,7 @@ void GbxBoundsFromBinary::
     is_nspacedims_compatible(const unsigned int nspacedims) const
 /* check that nspacedims is consistent with ndims and then
 calls appropropriate function to check if gbxbounds is also.
-finally throws error if either proves inconsistent */                                       
+finally throws error if either proves inconsistent */
 {
   bool isgood = false;
 
@@ -93,7 +93,7 @@ finally throws error if either proves inconsistent */
 
   else if (nspacedims == 3)
   {
-    isgood = check_3Dmodel_gbxbounds(); 
+    isgood = check_3Dmodel_gbxbounds();
   }
 
   else
@@ -129,7 +129,7 @@ has 1 gridbox and hence 6 values in gbxbounds */
 bool GbxBoundsFromBinary::check_1Dmodel_gbxbounds() const
 /* returns true if data for gridbox boundaries, gbxbounds,
 is compatible with 1D model. Criteria is that x and y
-coords of all gridbox boundaries are the same. */  
+coords of all gridbox boundaries are the same. */
 {
   const std::array<double, 4> bounds0{gbxbounds.at(2),
                                       gbxbounds.at(3),
@@ -157,7 +157,7 @@ coords of all gridbox boundaries are the same. */
 bool GbxBoundsFromBinary::check_2Dmodel_gbxbounds() const
 /* returns true if data for gridbox boundaries,
 gbxbounds, is compatible with 2D model. Criteria is
-that y coords of all gridbox boundaries are the same. */  
+that y coords of all gridbox boundaries are the same. */
 {
   const std::array<double, 2> bounds0{gbxbounds.at(4), gbxbounds.at(5)};
 
@@ -239,7 +239,7 @@ Kokkos::pair<double, double>
 GbxBoundsFromBinary::get_coord2gbxbounds(const unsigned int idx) const
 /* returns coord2 {lower, upper} gridbox bounds
 from position in gbxbounds vector which corresponds
-to position in gbxidxs where gbxidx = idx. 
+to position in gbxidxs where gbxidx = idx.
 'pos' is position of first bound (ie. zmin) for gridbox
 assuming order is [zmin, zmax, xmin, xmax, ymin, ymax] */
 {
@@ -277,4 +277,3 @@ corresponding to gridbox with gbxidx=idx. */
 
   return deltaz * deltax * deltay;
 }
-

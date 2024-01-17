@@ -25,17 +25,17 @@ from matplotlib import colors
 from .create_thermodynamics import thermoinputsdict, DimlessThermodynamics
 from .thermogen import saturation_press
 from ..readbinary import readbinary
-from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid 
+from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 def relative_humidity(press, temp, qvap, Mr_ratio):
-  
+
   pv = qvap*press/(Mr_ratio + qvap) # vapour pressure
   psat = saturation_press(temp)
   relh = pv/psat
-  
-  qsat = Mr_ratio * psat/(press-pv) 
+
+  qsat = Mr_ratio * psat/(press-pv)
   supersat = qvap/qsat - 1
-  
+
   return relh, supersat
 
 def potential_temperature(press, temp, press_ref, RGAS, CP):
@@ -50,7 +50,7 @@ class ThermoOnGrid:
 
     dth = DimlessThermodynamics(inputs=inputs)
     thermodata = dth.redimensionalise(thermodata)
-    
+
     ntime = inputs["ntime"]
     ndims = [int(n) for n in ndims]
     cen = [inputs["ntime"]] + list(np.flip(ndims))
@@ -59,28 +59,28 @@ class ThermoOnGrid:
     yface = [ntime, ndims[2]+1, ndims[1], ndims[0]]
 
     self.vars = ["press", "temp", "qvap", "qcond"]
-    self.press = np.reshape(thermodata["press"], cen) 
-    self.temp = np.reshape(thermodata["temp"], cen) 
-    self.qvap= np.reshape(thermodata["qvap"], cen) 
-    self.qcond = np.reshape(thermodata["qcond"], cen) 
+    self.press = np.reshape(thermodata["press"], cen)
+    self.temp = np.reshape(thermodata["temp"], cen)
+    self.qvap= np.reshape(thermodata["qvap"], cen)
+    self.qcond = np.reshape(thermodata["qcond"], cen)
 
     if "wvel" in thermodata.keys():
-        self.wvel = np.reshape(thermodata["wvel"], zface) 
+        self.wvel = np.reshape(thermodata["wvel"], zface)
         self.wvel_cens = (self.wvel[:,:,:,1:] + self.wvel[:,:,:,:-1])/2
         self.vars += ["wvel", "wvel_cens"]
         if "uvel" in thermodata.keys():
-            self.uvel = np.reshape(thermodata["uvel"], xface) 
+            self.uvel = np.reshape(thermodata["uvel"], xface)
             self.uvel_cens = (self.uvel[:,:,1:,:] + self.uvel[:,:,:-1,:])/2
             self.vars += ["uvel", "uvel_cens"]
             if "vvel" in thermodata.keys():
-                self.vvel = np.reshape(thermodata["vvel"], yface)  
+                self.vvel = np.reshape(thermodata["vvel"], yface)
                 self.vvel_cens = (self.vvel[:,1:,:,:] + self.vvel[:,:-1,:,:])/2
                 self.vars += ["vvel", "vvel_cens"]
 
   def __getitem__(self, key):
     if key not in self.vars:
       err = "no variable "+key+" in ThermoOnGrid"
-      raise ValueError(err)         
+      raise ValueError(err)
     elif key == "press":
       return self.press
     elif key == "temp":
@@ -89,7 +89,7 @@ class ThermoOnGrid:
       return self.qvap
     elif key == "qcond":
       return self.qcond
-    
+
     elif key == "wvel":
       return self.wvel
     elif key == "uvel":
@@ -103,12 +103,12 @@ class ThermoOnGrid:
       return self.uvel_cens
     elif key == "vvel_cens":
       return self.vvel_cens
-    
+
   def xymean(self, var):
     '''mean over x and y'''
 
     return np.mean(var, axis=(1,2)) #d ims [time, z]
-    
+
   def ytmean(self, var):
     '''mean over time and y'''
 
@@ -122,7 +122,7 @@ class ThermoOnGrid:
 def thermovar_from_binary(var, thermofile, shape,
                           ntime, ndims, dtype,
                           isprint=True):
-  
+
   idot = [i for i, ltr in enumerate(thermofile) if ltr == "."][-1]
   filestem, filetype = thermofile[:idot], thermofile[idot:]
   filename = filestem+"_"+var+filetype
@@ -135,23 +135,23 @@ def thermovar_from_binary(var, thermofile, shape,
     raise ValueError(err)
   else:
     data = np.reshape(np.asarray(data, dtype=dtype), shape)
-  
+
   return data
 
 def read_dimless_thermodynamics_binary(thermofile, ndims,
                                        ntime, nspacedims):
 
-  # expected lengths of data defined on gridbox centres or faces 
+  # expected lengths of data defined on gridbox centres or faces
   cen = [ntime, int(np.prod(ndims))]
   zface = [ntime, int(ndims[2] * ndims[1] * (ndims[0]+1))]
   xface = [ntime, int(ndims[2] * (ndims[1]+1) * ndims[0])]
   yface = [ntime, int((ndims[2]+1) * ndims[1] * ndims[0])]
 
-  thermodata = {} 
-  
+  thermodata = {}
+
   vars = ["press", "temp", "qvap", "qcond"]
   datatypes = [np.double]*4
-  for v, var in enumerate(vars): 
+  for v, var in enumerate(vars):
     thermodata[var] = thermovar_from_binary(var, thermofile, cen,
                                             ntime, ndims, datatypes[v],
                                             isprint=False)
@@ -175,13 +175,13 @@ def read_dimless_thermodynamics_binary(thermofile, ndims,
 def get_thermodynamics_from_thermofile(thermofile, ndims, inputs=False,
                                        constsfile="", configfile=""):
 
-  if not inputs:  
+  if not inputs:
     inputs = thermoinputsdict(configfile, constsfile)
 
-  thermodata = read_dimless_thermodynamics_binary(thermofile, ndims, 
+  thermodata = read_dimless_thermodynamics_binary(thermofile, ndims,
                                                   inputs["ntime"],
                                                   inputs["nspacedims"]) # dimensionless data [time, gridboxes]
-  thermodata = ThermoOnGrid(thermodata, inputs, ndims) 
+  thermodata = ThermoOnGrid(thermodata, inputs, ndims)
 
   return thermodata # data with units in 4D arrays with dims [time, y, x, z]
 
@@ -206,7 +206,7 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
                     inputs["RGAS_DRY"], inputs["CP_DRY"],
                     binpath, savefig)
 
-    if inputs["nspacedims"] > 1: 
+    if inputs["nspacedims"] > 1:
       xxh, zzh = np.meshgrid(xhalf, zhalf, indexing="ij") # dims [xdims, zdims]
       xxf, zzf = np.meshgrid(xfull, zfull, indexing="ij") # dims [xdims, zdims]
       plot_2dcolormaps(zzh, xxh, zzf, xxf, thermodata, inputs, binpath, savefig)
@@ -214,14 +214,14 @@ def plot_thermodynamics(constsfile, configfile, gridfile,
                       thermodata["uvel_cens"], binpath, savefig)
 
 def try1dplot(ax, nplots, data, zfull, label):
-  
+
   try:
     ax.plot(data, zfull, marker="x") # (fails for 0D model)
   except:
     ax.scatter(data, zfull, marker="x")
 
-  ax.set_xlabel(label)   
-  
+  ax.set_xlabel(label)
+
   return nplots + 1
 
 def plot_1dthermodynamics(axs, n, zfull ,thermodata,
@@ -240,10 +240,10 @@ def plot_1dthermodynamics(axs, n, zfull ,thermodata,
   tempxy = thermodata.xymean(thermodata.temp)
   qvapxy = thermodata.xymean(thermodata.qvap)
   supersat = relative_humidity(pressxy, tempxy, qvapxy, Mr_ratio)[1]
-  label = "supersaturation" 
+  label = "supersaturation"
   n = try1dplot(axs[n], n, supersat.T, zfull[None,:].T, label)
 
-  press_ref = pressxy[0, 0] 
+  press_ref = pressxy[0, 0]
   theta = potential_temperature(pressxy, tempxy, press_ref,
                                 RGAS_DRY, CP_DRY)
   label="\u03F4 /K"
@@ -252,7 +252,7 @@ def plot_1dthermodynamics(axs, n, zfull ,thermodata,
   return n
 
 def plot_1dwindprofiles(axs, n, zfull, thermodata):
-  
+
   vars = ["wvel_cens", "uvel_cens", "vvel_cens"]
   units = [" /ms$^{-1}$"]*3
 
@@ -266,7 +266,7 @@ def plot_1dwindprofiles(axs, n, zfull, thermodata):
 
 def plot_1dprofiles(zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY,
                     binpath, savefig):
-    
+
     fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(16, 8))
     axs = axs.flatten()
 
@@ -288,7 +288,7 @@ def plot_1dprofiles(zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY,
     plt.show()
 
 def plot_2dmean(ax, meanfunc, xxh, zzh, var, label, unit, norm, cmap):
-  
+
   mean2d = meanfunc(var) #avg over time and y axes
   if np.nanmin(mean2d) != np.nanmax(mean2d):
     pcm = ax.pcolormesh(xxh[:,:], zzh[:,:], mean2d, cmap=cmap, norm=norm)
@@ -300,9 +300,9 @@ def plot_2dmean(ax, meanfunc, xxh, zzh, var, label, unit, norm, cmap):
     return np.nanmin(mean2d), False, False
 
 def plot_2dcontour(ax, xxf, zzf, mean2d, contour, cb, cbticks):
-  
-  cb.ax.set_xticks(cbticks) 
-  cb.ax.set_xticklabels(["{:.3g}".format(c) for c in cbticks]) 
+
+  cb.ax.set_xticks(cbticks)
+  cb.ax.set_xticklabels(["{:.3g}".format(c) for c in cbticks])
 
   try:
     ax.contour(xxf, zzf, mean2d, levels=[contour],
@@ -331,7 +331,7 @@ def relh_supersat_theta_colomaps(axs, zzh, xxh, zzf, xxf, thermodata,
   cmaps = ["Blues", "PuOr", "RdBu_r"]
   norms = [colors.CenteredNorm(vcenter=np.mean(relh)),
            colors.TwoSlopeNorm(vcenter=0.0),
-           colors.CenteredNorm(vcenter=np.nanmin(theta))] 
+           colors.CenteredNorm(vcenter=np.nanmin(theta))]
   contours = [1.0, 0.0, None]
 
   n = 0
@@ -347,7 +347,7 @@ def relh_supersat_theta_colomaps(axs, zzh, xxh, zzf, xxf, thermodata,
       else:
         cbticks = np.linspace(pcm.norm.vmin, pcm.norm.vmax, 5)
       plot_2dcontour(axs[n], xxf, zzf, mean2d, cont, cb, cbticks)
-    
+
     n += 1
 
 def plot_2dcolormaps(zzh, xxh, zzf, xxf,
@@ -359,24 +359,24 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
   cmapcens = [np.nanmin(thermodata.press),
               np.nanmin(thermodata.temp),
               np.mean(thermodata.qvap),
-              0.0] 
+              0.0]
 
   fig, axs = plt.subplots(nrows=2, ncols=4,  figsize=(13,8))
   axs = axs.flatten()
   axs[-1].remove()
-  
+
   n = 0
   for var, unit, cmapcen, cmap in zip(vars, units, cmapcens, cmaps):
     norm=colors.CenteredNorm(vcenter=cmapcen)
     plot_2dmean(axs[n], thermodata.ytmean, xxh, zzh, thermodata[var],
                 var, unit, norm, cmap)
     n += 1
-  
+
   relh_supersat_theta_colomaps([axs[4], axs[5], axs[6]],
                                zzh, xxh, zzf, xxf, thermodata,
                                inputs["Mr_ratio"], inputs["RGAS_DRY"],
                                inputs["CP_DRY"])
-  
+
   for ax in axs:
     ax.set_aspect("equal")
 
@@ -393,9 +393,9 @@ def plot_2dcolormaps(zzh, xxh, zzf, xxf,
       print("Figure .png saved as: "+binpath+savename)
   plt.show()
 
-def plot_2dwindfield(zzh, xxh, zzf, xxf, wvel_cens, uvel_cens, 
+def plot_2dwindfield(zzh, xxh, zzf, xxf, wvel_cens, uvel_cens,
                      binpath, savefig):
-  
+
   wcen = np.mean(wvel_cens, axis=(0,1)) # avg over y and time axes
   ucen = np.mean(uvel_cens, axis=(0,1))
   norm = np.sqrt(wcen**2 + ucen**2)
@@ -408,9 +408,9 @@ def plot_2dwindfield(zzh, xxh, zzf, xxf, wvel_cens, uvel_cens,
   cmaps = ["coolwarm"]*3
   for v, vel in enumerate([wcen, ucen, norm]):
     pcm = axs[v].pcolormesh(xxh, zzh, vel, cmap=cmaps[v])
-    plt.colorbar(pcm, ax=axs[v], location="top", label=label[v]+units) 
+    plt.colorbar(pcm, ax=axs[v], location="top", label=label[v]+units)
   axs[2].quiver(xxf, zzf, ucen, wcen)
-  
+
   axs[0].set_ylabel("z /km")
   for ax in axs:
     ax.set_xlabel("x /km")

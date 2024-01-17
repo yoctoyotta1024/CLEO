@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd January 2024
+ * Last Modified: Monday 15th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -63,6 +63,7 @@ private:
 
   KOKKOS_FUNCTION
   bool coalesce_breakup_or_rebound(const unsigned long long gamma,
+                                   const double phi,
                                    Superdrop &drop1,
                                    Superdrop &drop2) const;
   /*  function enacts rebound or coalescence or breakup
@@ -109,7 +110,7 @@ of collision determined by 'collprob' */
 template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool
 DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Superdrop &drop2,
-                               const double prob, const double phi) const
+                                     const double prob, const double phi) const
 /* this operator is used as an "adaptor" for
 using DoCoalBuRe for collision - coalescence,
 breakup or rebound as a function in DoCollisions
@@ -124,7 +125,7 @@ that satistfies the PairEnactX concept */
   of superdroplets if gamma is not zero */
   if (gamma != 0)
   {
-    return coalesce_breakup_or_rebound(gamma, drop1, drop2);
+    return coalesce_breakup_or_rebound(gamma, phi, drop1, drop2);
   }
 
   return 0;
@@ -134,13 +135,14 @@ template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool
 DoCoalBuRe<NFrags, Flag>::
     coalesce_breakup_or_rebound(const unsigned long long gamma,
+                                const double phi,
                                 Superdrop &drop1,
                                 Superdrop &drop2) const
 /*  function enacts rebound or coalescence or breakup
 depending on value of flag. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound. */
 {
-  const auto flag = coalbure_flag(drop1, drop2);
+  const auto flag = coalbure_flag(phi, drop1, drop2);
 
   bool is_null(0);
   switch (flag)

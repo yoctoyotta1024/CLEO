@@ -24,7 +24,7 @@ from .. import cxx2py, writebinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import read_dimless_gbxboundaries_binary
 
 class ManyAttrs:
-    '''store for lists of each attribute for all superdroplets ''' 
+    '''store for lists of each attribute for all superdroplets '''
     def __init__(self):
         self.sdgbxindex = []
         self.xi = []
@@ -33,17 +33,17 @@ class ManyAttrs:
         self.coord3 = []
         self.coord1 = []
         self.coord2 = []
-    
-    def set_attrlists(self, a, b, c, 
+
+    def set_attrlists(self, a, b, c,
                       d, e, f, g):
         self.sdgbxindex = a
         self.xi = b
         self.radius = c
         self.msol = d
-        self.coord3 = e 
-        self.coord1 = f 
-        self.coord2 = g 
-   
+        self.coord3 = e
+        self.coord1 = f
+        self.coord2 = g
+
     def extend_attrlists(self, mia):
         ''' use an instance of ManyAttrs (mia) to
         extend lists in this instance '''
@@ -53,11 +53,11 @@ class ManyAttrs:
         self.msol.extend(mia.msol)
         self.coord3.extend(mia.coord3)
         self.coord1.extend(mia.coord1)
-        self.coord2.extend(mia.coord2)   
+        self.coord2.extend(mia.coord2)
 
 def initSDsinputsdict(configfile, constsfile):
   ''' create values from constants file & config file
-  required as inputs to create initial 
+  required as inputs to create initial
   superdroplet conditions '''
 
   consts = cxx2py.read_cxxconsts_into_floats(constsfile)
@@ -91,7 +91,7 @@ def is_sdgbxindex_correct(gridboxbounds, coord3, coord1, coord2,
                 " limit of gridbox it's associated with"
     elif (coord >= gridboxbounds[2*i+1]).any():
       errmsg = "superdroplet coord"+str(i+1)+" above upper"+\
-                " limit of gridbox it's associated with"    
+                " limit of gridbox it's associated with"
   if errmsg:
     raise ValueError(errmsg)
 
@@ -105,13 +105,13 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     ''' use superdroplet attribute generator "initattrsgen"
     and settings from config and consts files to
     make dimensionless superdroplet attributes'''
-    
+
     # generate attributes
     sdgbxindex = [gbxindex]*nsupers
-    xi, radius, msol = initattrsgen.generate_attributes(nsupers, 
+    xi, radius, msol = initattrsgen.generate_attributes(nsupers,
                                                         inputs["RHO_SOL"],
                                                         NUMCONC,
-                                                        gridboxbounds) 
+                                                        gridboxbounds)
     coord3, coord1, coord2 = initattrsgen.generate_coords(nsupers,
                                                           inputs["nspacedims"],
                                                           gridboxbounds)
@@ -126,7 +126,7 @@ def dimless_superdropsattrs(nsupers, initattrsgen, inputs, gbxindex,
     coord1 = coord1 / inputs["COORD0"]
     coord2 = coord2 / inputs["COORD0"]
 
-    attrs4gbx = ManyAttrs() 
+    attrs4gbx = ManyAttrs()
     attrs4gbx.set_attrlists(sdgbxindex, xi, radius, msol,
                             coord3, coord1, coord2)
 
@@ -151,30 +151,30 @@ def create_allsuperdropattrs(nsupersdict, initattrsgen,
 def set_arraydtype(arr, dtype):
 
   og = type(arr[0])
-  if og != dtype: 
+  if og != dtype:
     arr = np.array(arr, dtype=dtype)
 
     warning = "WARNING! dtype of attributes is being changed!"+\
                 " from "+str(og)+" to "+str(dtype)
-    raise ValueError(warning) 
+    raise ValueError(warning)
 
   return arr
 
 def ctype_compatible_attrs(attrs):
   ''' make list from arrays of SD attributes that are
-  compatible with c type expected by SDM e.g. unsigned 
-  long ints for xi, doubles for radius and msol'''   
+  compatible with c type expected by SDM e.g. unsigned
+  long ints for xi, doubles for radius and msol'''
 
   datatypes = [np.uintc, np.uint, np.double, np.double]
   datatypes += [np.double]*3 # coords datatype
-  
+
   attrs.sdgbxindex = list(set_arraydtype(attrs.sdgbxindex, datatypes[0]))
   attrs.xi = list(set_arraydtype(attrs.xi, datatypes[1]))
   attrs.radius = list(set_arraydtype(attrs.radius, datatypes[2]))
   attrs.msol = list(set_arraydtype(attrs.msol, datatypes[3]))
-  
+
   datalist = attrs.sdgbxindex + attrs.xi + attrs.radius + attrs.msol
-  
+
   if any(attrs.coord3):
     # make coord3 compatible if there is data for it (>= 1-D model)
     attrs.coord3 = list(set_arraydtype(attrs.coord3, datatypes[4]))
@@ -184,7 +184,7 @@ def ctype_compatible_attrs(attrs):
       # make coord1 compatible if there is data for it and coord3 (>= 2-D model)
       attrs.coord1 = list(set_arraydtype(attrs.coord1, datatypes[4]))
       datalist += attrs.coord1
-    
+
       if any(attrs.coord2):
         # make coord2 compatible if there is data for it and coord3 and coord2 (>= 3-D model)
         attrs.coord2 = list(set_arraydtype(attrs.coord2, datatypes[4]))
@@ -196,25 +196,25 @@ def check_datashape(data, ndata, nspacedims):
   ''' make sure each superdroplet attribute in data has length stated
   in ndata and that this length is compatible with the nummber of
   attributes and superdroplets expected given ndata'''
-  
+
   err=''
   if any([n != ndata[0] for n in ndata[:4+nspacedims]]):
-    
+
     err += "\n------ ERROR! -----\n"+\
           "not all variables in data are same length, ndata = "+\
           str(ndata[:4+nspacedims])+"\n---------------------\n"
-     
-  if len(data) != np.sum(ndata): 
+
+  if len(data) != np.sum(ndata):
     err += "inconsistent dimensions of data: "+str(np.shape(data))+", and"+\
           " data per attribute: "+str(ndata)+". data should be 1D with"+\
           " shape: num_attributes * nsupers. data should be list of"+\
-          " [nsupers]*num_attributes."     
+          " [nsupers]*num_attributes."
 
-  if err: 
+  if err:
     raise ValueError(err)
 
 def nsupers_pergridboxdict(nsupers, gbxbounds):
-  
+
   if type(nsupers) == int:
     nsupersdict = {}
     for key in gbxbounds.keys():
@@ -227,17 +227,17 @@ def nsupers_pergridboxdict(nsupers, gbxbounds):
       raise ValueError(errmsg)
     else:
       return nsupers
-      
+
   else:
     errmsg = "nsupers must be either dict or int"
     raise ValueError(errmsg)
 
 
-def write_initsuperdrops_binary(initsupersfile, initattrsgen, configfile, 
+def write_initsuperdrops_binary(initsupersfile, initattrsgen, configfile,
                                 constsfile, gridfile, nsupers, NUMCONC):
-  ''' de-dimensionalise attributes in initattrsgen and then write to 
+  ''' de-dimensionalise attributes in initattrsgen and then write to
   to a binary file, "initsupersfile", with some metadata '''
-  
+
   if not isfile(gridfile):
     errmsg = "gridfile not found, but must be"+\
               " created before initsupersfile can be"
@@ -247,29 +247,29 @@ def write_initsuperdrops_binary(initsupersfile, initattrsgen, configfile,
   gbxbounds = read_dimless_gbxboundaries_binary(gridfile,
                                                 COORD0=inputs["COORD0"],
                                                 isprint=False)
-  nsupersdict = nsupers_pergridboxdict(nsupers, gbxbounds) 
-  
+  nsupersdict = nsupers_pergridboxdict(nsupers, gbxbounds)
+
   attrs = create_allsuperdropattrs(nsupersdict, initattrsgen,
-                                   gbxbounds, inputs, NUMCONC) 
-  
+                                   gbxbounds, inputs, NUMCONC)
+
   ndata = [len(dt) for dt in [attrs.sdgbxindex, attrs.xi,
                               attrs.radius, attrs.msol, attrs.coord3,
                               attrs.coord1, attrs.coord2]]
-  
-  data, datatypes = ctype_compatible_attrs(attrs) 
+
+  data, datatypes = ctype_compatible_attrs(attrs)
   check_datashape(data, ndata, inputs["nspacedims"])
 
   units = [b' ', b' ', b'm', b'g']
   units += [b'm']*3 # coords units
-  
+
   scale_factors = [1.0, 1.0, inputs["R0"], inputs["MASS0"]]
   scale_factors += [inputs["COORD0"]]*3 # coords scale factors
   scale_factors = np.asarray(scale_factors, dtype=np.double)
 
   metastr = 'Variables in this file are Superdroplet attributes:'
-  if initattrsgen.coord3gen: 
+  if initattrsgen.coord3gen:
     if initattrsgen.coord1gen:
-      if initattrsgen.coord2gen: 
+      if initattrsgen.coord2gen:
         metastr += ' [sdgbxindex, xi, radius, msol, coord3, coord1, coord2]'
       else:
         metastr += ' [sdgbxindex, xi, radius, msol, coord3, coord1]'
@@ -277,6 +277,6 @@ def write_initsuperdrops_binary(initsupersfile, initattrsgen, configfile,
       metastr += ' [sdgbxindex, xi, radius, msol, coord3]'
   else:
     metastr += ' [sdgbxindex, xi, radius, msol]'
-  
+
   writebinary.writebinary(initsupersfile, data, ndata, datatypes,
                           units, scale_factors, metastr)

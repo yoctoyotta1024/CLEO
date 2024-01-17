@@ -17,7 +17,7 @@
  * File Description:
  * struct for superdroplets' initial conditions
  * for CLEO SDM (e.g. superdroplet attributes)
- * by reading binary file. InitSupersFromBinary 
+ * by reading binary file. InitSupersFromBinary
  * instance can be used by InitConds
  * struct as SuperdropInitConds type
  */
@@ -60,7 +60,7 @@ private:
   void check_initdata_sizes(const InitSupersData &initdata) const;
   /* check all the vectors in the initdata struct all
   have sizes consistent with one another. Include
-  coords data in check if nspacedims != 0 */    
+  coords data in check if nspacedims != 0 */
 
 public:
   InitSupersFromBinary(const Config &config)
@@ -72,7 +72,7 @@ public:
 
   auto get_nspacedims() const { return nspacedims; }
 
-  size_t fetch_data_size() const; 
+  size_t fetch_data_size() const;
   /* data size returned is number of variables as
   declared by the metadata for the first variable
   in the initsupers file */

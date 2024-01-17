@@ -75,5 +75,3 @@ int odes_func(realtype t, N_Vector y, N_Vector ydot, void *user_data);
 
 
 #endif // DIFFERENTIALFUNCS_HPP
-
-

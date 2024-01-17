@@ -83,7 +83,7 @@ private:
     ++ndim1obs;
     nobs = ndim1obs / ndim1; // same as floor() for positive integers
   }
-  
+
 public:
   TwoDStorage(FSStore &store, const unsigned int maxchunk,
               const std::string name, const std::string dtype,
@@ -211,7 +211,7 @@ private:
     nobs = ngbxobs / ngbxs; // same as floor() for positive integers
   }
 
-public: 
+public:
   TwoDMultiVarStorage(FSStore &store, const unsigned int maxchunk,
                       const std::string dtype, const size_t ngbxs,
                       const std::string endname)

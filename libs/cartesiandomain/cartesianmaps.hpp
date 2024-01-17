@@ -217,7 +217,7 @@ public:
   size_t get_ndim(const unsigned int d) const
   /* returns model dimensions ie. number of
   gridboxes along d'th direction, where:
-  ndims(d=0) = coord3 
+  ndims(d=0) = coord3
   ndims(d=1) = coord1
   ndims(d=2) = coord2 */
   {

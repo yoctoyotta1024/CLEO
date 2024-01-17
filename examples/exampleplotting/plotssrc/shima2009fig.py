@@ -39,14 +39,14 @@ def plot_validation_figure(witherr, time, sddata, tplt, domainvol,
   rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
 
   fig, ax, ax_err = setup_validation_figure(witherr=withgol)
-  
+
   for n in range(len(tplt)):
-    ind = np.argmin(abs(time-tplt[n]))    
+    ind = np.argmin(abs(time-tplt[n]))
     tlab = 't = {:.2f}s'.format(time[ind])
     c = 'C'+str(n)
-    
+
     if withgol:
-      golsol, hcens = golovin_analytical(rspan, time[ind], nbins, 
+      golsol, hcens = golovin_analytical(rspan, time[ind], nbins,
                                          n_a, r_a, sddata.RHO_L)
       plot_golovin_analytical_solution(ax, hcens, golsol, n, c)
 
@@ -54,11 +54,11 @@ def plot_validation_figure(witherr, time, sddata, tplt, domainvol,
     xi = selsddata["xi"][n]
     hist, hcens = plot_massdens_distrib(ax, rspan, nbins, domainvol,
                                    xi, radius, sddata, smoothsig, tlab, c)
-    
+
     if withgol:
       diff = (hist - golsol)
       ax_err.plot(hcens, diff, c=c)
-  
+
   ax.legend()
 
   fig.tight_layout()
@@ -75,26 +75,26 @@ def setup_validation_figure(witherr):
 
   if witherr:
     gd = dict(height_ratios=[5,1])
-    fig, [ax, ax_err] = plt.subplots(ncols=1, nrows=2, 
+    fig, [ax, ax_err] = plt.subplots(ncols=1, nrows=2,
                 figsize=(8,7), gridspec_kw=gd)
   else:
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8,6))
-    
+
   xlims = [10, 5000]
   ax.set_xscale("log")
   ax.set_xlim(xlims)
   ax.set_xlabel("radius, r, /\u03BCm")
-  
+
   ax.set_ylabel("mass density distribution,\n g(lnR) /g m$^{-3}$ / unit lnR")
   ax.set_ylim([0,1.8])
-  
+
   if witherr:
     ax_err.set_xscale("log")
-    ax_err.set_xlim(xlims) 
+    ax_err.set_xlim(xlims)
     ax_err.set_xlabel("radius, r, /\u03BCm")
     ax.set_xlabel(None)
     ax.set_xticklabels([])
-   
+
     ax_err.set_ylabel("error /g m$^{-3}$\n/ unit lnR")
     ax_err.set_ylim([-0.25,0.25])
 
@@ -104,17 +104,17 @@ def setup_validation_figure(witherr):
     return fig, ax, []
 
 def golovin_analytical(rspan, t, nbins, n_a, r_a, RHO_L):
-  
+
   b = 1500
   rspan = [r/1e6 for r in rspan] # convert from microns to m
 
-  if t < 1e-16: 
+  if t < 1e-16:
     t=1e-10
 
   hedgs = np.linspace(np.log(rspan[0]), np.log(rspan[1]), nbins+1)             # edges to lnr bins
   hcens = (hedgs[1:]+hedgs[:-1])/2                                             # lnr bin centres
   r = np.exp(hcens)
-  
+
   vol_a = 4/3*np.pi*r_a**3
   x = 4/3*np.pi*r**3/vol_a
   tau = 1-np.exp(-b*n_a*vol_a*t)
@@ -136,24 +136,21 @@ def plot_golovin_analytical_solution(ax, hcens, golsol, n, c):
     # add legend to analytical solution
     glab = "analytical solution"
     ax.plot(hcens, golsol, label=glab, color='k', linestyle='--')
-  
+
   ax.plot(hcens, golsol, label=None, color=c, linestyle='--')
 
   return ax
 
 def plot_massdens_distrib(ax, rspan, nbins, domainvol,
                                    xi, radius, sddata, smoothsig, tlab, c):
-  
+
   m_asif_water = sddata.vol(radius) * sddata.RHO_L # superdrops mass as if water [g]
   weights = xi * m_asif_water * 1000 / domainvol # real droplets [g/m^3]
 
   hist, hedges, hcens = logr_distribution(rspan, nbins, radius,
-                                          weights, perlogR=True, 
+                                          weights, perlogR=True,
                                           smooth=smoothsig)
 
-  ax.plot(hcens, hist, label=tlab, color=c)                                                 
+  ax.plot(hcens, hist, label=tlab, color=c)
 
   return hist, hcens
-
-
-

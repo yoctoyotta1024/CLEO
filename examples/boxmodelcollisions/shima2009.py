@@ -38,8 +38,8 @@ sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from examp
 from plotssrc import shima2009fig
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 
@@ -97,11 +97,11 @@ coord2gen = None
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(sharepath).mkdir(exist_ok=True) 
-  Path(binpath).mkdir(exist_ok=True) 
+  Path(path2build).mkdir(exist_ok=True)
+  Path(sharepath).mkdir(exist_ok=True)
+  Path(binpath).mkdir(exist_ok=True)
   if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True) 
+    Path(savefigpath).mkdir(exist_ok=True)
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 
@@ -182,7 +182,7 @@ if "long" in kernels:
     os.system(executable + ' ' + configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
-    
+
     ### ------------------------------------------------------------ ###
     ### ----------------------- PLOT RESULTS ----------------------- ###
     ### ------------------------------------------------------------ ###
@@ -220,7 +220,7 @@ if "lowlist" in kernels:
     os.system(executable + ' ' + configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
-    
+
     ### ------------------------------------------------------------ ###
     ### ----------------------- PLOT RESULTS ----------------------- ###
     ### ------------------------------------------------------------ ###
@@ -245,4 +245,3 @@ if "lowlist" in kernels:
                                                   savename=savename)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
-   

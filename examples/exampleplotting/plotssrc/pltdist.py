@@ -32,16 +32,16 @@ def gaussian_kernel_smoothing(hist, hcens, sig):
     for h in range(len(hist)):
         kernel = 1/(np.sqrt(2*np.pi)*sig)*np.exp(-(hcens - hcens[h])**2/(2*sig**2))
         kernel = kernel/np.sum(kernel)
-        smoothhist.append(np.sum(hist*kernel))  
+        smoothhist.append(np.sum(hist*kernel))
 
     smoothhist = np.asarray(smoothhist)
-    smoothhist = np.where(smoothhist<1e-16, 0, smoothhist)  
+    smoothhist = np.where(smoothhist<1e-16, 0, smoothhist)
 
     return smoothhist, hcens
 
 def logr_distribution(rspan, nbins, radius, wghts,
                       perlogR=False, smooth=False):
-  ''' get distribution of data with weights 'wghts' against 
+  ''' get distribution of data with weights 'wghts' against
   logr. Uses np.histogram to get frequency of a particular
   value of data that falls in each ln(r) -> ln(r) + dln(r) bin.
   Apply gaussian kernel smoothing if wanted. Note log base e not 10! '''
@@ -52,9 +52,9 @@ def logr_distribution(rspan, nbins, radius, wghts,
   hcens = np.log((np.exp(hedgs[1:])+np.exp(hedgs[:-1]))/2)          # lnr bin centres
 
   # get number frequency in each bin
-  hist, hedgs = np.histogram(np.log(radius), bins=hedgs, 
+  hist, hedgs = np.histogram(np.log(radius), bins=hedgs,
                               weights=wghts, density=None)
-  
+
   if perlogR == True: # get frequency / bin width
       hist = hist/logrwdths
 
@@ -65,48 +65,48 @@ def logr_distribution(rspan, nbins, radius, wghts,
 
 def massdens_distrib(radius, xi, mass, vol, rspan,
                      nbins, perlogR, smooth):
-  
-  
+
+
   weights = xi * mass / vol # real droplets [g/m^3]
 
   hist, hedges, hcens = logr_distribution(rspan, nbins, radius,
-                                          weights, perlogR=perlogR, 
+                                          weights, perlogR=perlogR,
                                           smooth=smooth)
 
-  return hcens, hist  
+  return hcens, hist
 
 def nsupers_distrib(radius, xi, mass, vol, rspan,
                      nbins, perlogR, smooth):
-  
+
   weights = None # number superdroplets []
   hist, hedges, hcens = logr_distribution(rspan, nbins, radius,
-                                          weights, perlogR=perlogR, 
+                                          weights, perlogR=perlogR,
                                           smooth=smooth)
 
-  return hcens, hist 
+  return hcens, hist
 
 def numconc_distrib(radius, xi, mass, vol, rspan,
                      nbins, perlogR, smooth):
-  
-  
+
+
   weights = xi / vol / 1e6 # real droplets [/cm^3]
 
   hist, hedges, hcens = logr_distribution(rspan, nbins, radius,
-                                          weights, perlogR=perlogR, 
+                                          weights, perlogR=perlogR,
                                           smooth=smooth)
 
-  return hcens, hist  
+  return hcens, hist
 
 def plot_dists(ax, distribcalc, timesecs, data2plt, t2plts,
                vol, rspan, nbins, masscalc=None,
                smoothsig=False, perlogR=True, ylog=False):
-    
+
     for t, tplt in enumerate(t2plts):
-    
-        ind = np.argmin(abs(timesecs-tplt))    
+
+        ind = np.argmin(abs(timesecs-tplt))
         tlab = 't = {:.2f}s'.format(timesecs[ind])
         c = 'C'+str(t)
-        
+
         radius = data2plt["radius"][t]
         xi = data2plt["xi"][t]
         if masscalc:
@@ -118,14 +118,14 @@ def plot_dists(ax, distribcalc, timesecs, data2plt, t2plts,
         hcens, hist = distribcalc(radius, xi, mass, vol,
                                   rspan, nbins,
                                   perlogR=perlogR,
-                                  smooth=smoothsig) 
+                                  smooth=smoothsig)
         if smoothsig:
-            ax.plot(hcens, hist, label=tlab, color=c)            
+            ax.plot(hcens, hist, label=tlab, color=c)
         else:
             ax.step(hcens, hist, label=tlab, where='mid', color=c)
 
     if ylog:
-       ax.set_yscale("log") 
+       ax.set_yscale("log")
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
     ax.legend()
@@ -135,21 +135,21 @@ def plot_dists(ax, distribcalc, timesecs, data2plt, t2plts,
 def plot_domainmass_distribs(timesecs, sddata, t2plts,
                                  domainvol, rspan, nbins,
                                  smoothsig=False,
-                                 perlogR=True, 
+                                 perlogR=True,
                                  ylog=False,
                                  savename=""):
 
   fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8,6))
-  
+
   attrs2sel = ["radius", "xi", "msol"]
   data2plt = sdtracing.attributes_at_times(sddata, timesecs,
                                             t2plts, attrs2sel)
 
-  plot_dists(ax, massdens_distrib, timesecs,  
+  plot_dists(ax, massdens_distrib, timesecs,
              data2plt, t2plts,
              domainvol, rspan, nbins, sddata.mass,
              smoothsig=smoothsig, perlogR=perlogR, ylog=ylog)
-  
+
   if perlogR:
     ax.set_ylabel("droplet mass distribution,\n g(lnR) /g m$^{-3}$ / unit lnR")
   else:
@@ -161,7 +161,7 @@ def plot_domainmass_distribs(timesecs, sddata, t2plts,
     fig.savefig(savename, dpi=400, bbox_inches="tight",
                 facecolor='w', format="png")
     print("Figure .png saved as: "+savename)
-  
+
   plt.show()
 
   return fig, ax
@@ -174,16 +174,16 @@ def plot_domainnsupers_distribs(timesecs, sddata, t2plts,
                                  savename=""):
 
   fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8,6))
-  
+
   attrs2sel = ["radius", "xi", "msol"]
   data2plt = sdtracing.attributes_at_times(sddata, timesecs,
                                             t2plts, attrs2sel)
-  
-  plot_dists(ax, nsupers_distrib, timesecs,  
+
+  plot_dists(ax, nsupers_distrib, timesecs,
              data2plt, t2plts,
              domainvol, rspan, nbins, None,
              smoothsig=smoothsig, perlogR=perlogR, ylog=ylog)
-  
+
   if perlogR:
     ax.set_ylabel("number of superdroplets / unit lnR")
   else:
@@ -195,7 +195,7 @@ def plot_domainnsupers_distribs(timesecs, sddata, t2plts,
     fig.savefig(savename, dpi=400, bbox_inches="tight",
                 facecolor='w', format="png")
     print("Figure .png saved as: "+savename)
-  
+
   plt.show()
 
   return fig, ax
@@ -208,16 +208,16 @@ def plot_domainnumconc_distribs(timesecs, sddata, t2plts,
                                  savename=""):
 
   fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8,6))
-  
+
   attrs2sel = ["radius", "xi", "msol"]
   data2plt = sdtracing.attributes_at_times(sddata, timesecs,
                                             t2plts, attrs2sel)
-  
-  plot_dists(ax, numconc_distrib, timesecs,  
+
+  plot_dists(ax, numconc_distrib, timesecs,
              data2plt, t2plts,
              domainvol, rspan, nbins, None,
              smoothsig=smoothsig, perlogR=perlogR, ylog=ylog)
-  
+
   if perlogR:
     ax.set_ylabel("real droplet concentration /cm$^{-3}$ / unit lnR")
   else:
@@ -229,7 +229,7 @@ def plot_domainnumconc_distribs(timesecs, sddata, t2plts,
     fig.savefig(savename, dpi=400, bbox_inches="tight",
                 facecolor='w', format="png")
     print("Figure .png saved as: "+savename)
-  
+
   plt.show()
 
   return fig, ax

@@ -20,6 +20,6 @@
  * given a formula for its terminal velocity and the wind
  * velocity obtained via a simple linear interpolation.
  * Methods follows equations in Grabowski et al. 2018
- */ 
+ */
 
 #include "./predcorr.hpp"
