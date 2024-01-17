@@ -97,16 +97,16 @@ volexpr0             = 30.531e-6                   # peak of volume exponential 
 numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 xiprobdist = probdists.VolExponential(volexpr0, rspan)
 =======
-# # scalefacs          = [1]                         # relative heights of modes         
-geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-geosigs              = [1.55, 2.3, 2]                    
-scalefacs            = [1, 0.3, 0.025]   
-# # geomeans             = [0.02e-6, 0.15e-6]               
-# # geosigs              = [1.4, 1.6]                    
-# # scalefacs            = [0.06, 0.04]   
+# # scalefacs          = [1]                         # relative heights of modes
+geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
+geosigs              = [1.55, 2.3, 2]
+scalefacs            = [1, 0.3, 0.025]
+# # geomeans             = [0.02e-6, 0.15e-6]
+# # geosigs              = [1.4, 1.6]
+# # scalefacs            = [0.06, 0.04]
 numconc = np.sum(scalefacs) * 5e8
 xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
- 
+
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 # numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 # xiprobdist = probdists.VolExponential(volexpr0, rspan)

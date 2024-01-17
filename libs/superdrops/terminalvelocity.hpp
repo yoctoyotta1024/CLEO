@@ -90,7 +90,7 @@ struct RogersGKTerminalVelocity
   KOKKOS_FUNCTION
   double operator()(const Superdrop &drop) const;
   /* returns (dimensionless) terminal velocity of a superdroplet.
-  See "Comparison of Raindrop Size Distributions Measured by 
+  See "Comparison of Raindrop Size Distributions Measured by
   Radar Wind Profiler and by Airplane" by  R. R. Rogers,
   D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993).
   formulation is apporximation of Gunn and Kinzer (1949)
@@ -107,7 +107,7 @@ for use as 'x' in Simmel et al. 2002 equation (14) */
                              Kokkos::numbers::pi * dlc::Rho_l); // 4/3 * pi * density
 
   const auto mass = massconst * radius * radius * radius;
-  
+
   return mass * dlc::MASS0grams;  // convert dimensionless mass into grams [g]
 }
 

@@ -65,7 +65,7 @@ dataset       = binpath+"rain1d_sol.zarr"
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving figures
 SDgbxs2plt  = list(range(39, 124))
-SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot 
+SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
 zgrid       = [0, 2500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -93,9 +93,9 @@ rspan       = [3e-9, 5e-5]                      # min and max range of radii to 
 dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
-geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-geosigs              = [1.55, 2.3, 2]                    
-scalefacs            = [1e6, 0.3e6, 0.025e6]   
+geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
+geosigs              = [1.55, 2.3, 2]
+scalefacs            = [1e6, 0.3e6, 0.025e6]
 numconc = np.sum(scalefacs) * 1000
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

@@ -72,9 +72,9 @@ public:
                     const Superdrop &drop2) const
   /* returns number of fragments 'nfrags' based on collision
   kinetic energy of droplets according to parameterisation of total
-  number of outcomes from Schlottke et al. 2010 (figure 13). 
+  number of outcomes from Schlottke et al. 2010 (figure 13).
   Note: nfrags diverges at cke = alpha^(1/beta), so here cke is
-  capped at <= ckemax which is value less than alpha^(1/beta) 
+  capped at <= ckemax which is value less than alpha^(1/beta)
   such that nfrags <= 25 */
   {
     constexpr double alpha = 1.5;

@@ -51,7 +51,7 @@ def animate1dprofile(gbxs, mom, timemins, nframes,
 
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
-    
+
     ylims = [0, ax.get_ylim()[1]]
     ax.set_ylim(ylims)
     yticks = np.arange(ylims[0], ylims[1], 0.5)
