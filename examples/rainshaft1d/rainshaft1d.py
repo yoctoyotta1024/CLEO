@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 15th January 2024
+Last Modified: Wednesday 17th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -64,11 +64,11 @@ dataset       = binpath+"rain1d_sol.zarr"
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving figures
-SDgbxs2plt  = list(range(39, 99))
-SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
+SDgbxs2plt  = list(range(39, 124))
+SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot 
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid       = [0, 2000, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+zgrid       = [0, 2500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid       = np.array([0, 20])  # array of xhalf coords [m]
 ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
@@ -80,8 +80,8 @@ Zbase       = 800                   # [m]
 TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
 qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
-WVEL        = 0.0                   # [m/s]
-Wlength     = 0.0                   # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
+WVEL        = 4.0                   # [m/s]
+Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
 ### --- settings for initial superdroplets --- ###
 # initial superdroplet coordinates
@@ -93,10 +93,10 @@ rspan       = [3e-9, 5e-5]                      # min and max range of radii to 
 dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
-geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
-geosigs              = [1.55, 2.3, 2]
-scalefacs            = [1e6, 0.3e6, 0.025e6]
-numconc = np.sum(scalefacs) * 100
+geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
+geosigs              = [1.55, 2.3, 2]                    
+scalefacs            = [1e6, 0.3e6, 0.025e6]   
+numconc = np.sum(scalefacs) * 1000
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
