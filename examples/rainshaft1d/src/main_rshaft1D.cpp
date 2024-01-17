@@ -123,7 +123,7 @@ inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
   const auto terminalv = RogersGKTerminalVelocity{};
-  
+
   return CartesianMotion(motionstep,
                          &step2dimlesstime,
                          terminalv);
