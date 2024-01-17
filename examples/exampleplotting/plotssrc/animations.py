@@ -6,7 +6,7 @@ Created Date: Wednesday 22nd November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 22nd November 2023
+Last Modified: Wednesday 17th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -51,9 +51,10 @@ def animate1dprofile(gbxs, mom, timemins, nframes,
 
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
-
-    ax.set_ylim([0, 1.5])
-    yticks = [0, 0.75, 1.5]
+    
+    ylims = [0, ax.get_ylim()[1]]
+    ax.set_ylim(ylims)
+    yticks = np.arange(ylims[0], ylims[1], 0.5)
     ax.set_yticks(yticks, yticks, fontsize=16)
 
     ax.set_xlim([xlims[0], xlims[1]*1.1])

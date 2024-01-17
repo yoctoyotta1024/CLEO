@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 15th January 2024
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -126,17 +126,17 @@ config_condensation(const Config &config, const Timesteps &tsteps)
 inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
-  const PairProbability auto collprob = LongHydroProb();
-  // const NFragments auto nfrags = ConstNFrags(5.0);
-  const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-  // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
-  const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
-  const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
-                                                   &step2realtime,
-                                                   collprob,
-                                                   nfrags,
-                                                   coalbure_flag);
-  return colls;
+  // const PairProbability auto collprob = LongHydroProb();
+  // // const NFragments auto nfrags = ConstNFrags(5.0);
+  // const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+  // // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
+  // const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+  // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
+  //                                                  &step2realtime,
+  //                                                  collprob,
+  //                                                  nfrags,
+  //                                                  coalbure_flag);
+  // return colls;
 
   // const PairProbability auto buprob = LowListBuProb();
   // const NFragments auto nfrags = ConstNFrags(5.0);
@@ -147,27 +147,27 @@ config_collisions(const Config &config, const Timesteps &tsteps)
 
   // const PairProbability auto coalprob = LowListCoalProb();
   // const PairProbability auto coalprob = GolovinProb();
-  // const PairProbability auto coalprob = LongHydroProb(1.0);
-  // const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
-  //                                                  &step2realtime,
-  //                                                  coalprob);
+  const PairProbability auto coalprob = LongHydroProb(1.0);
+  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(),
+                                                   &step2realtime,
+                                                   coalprob);
 
-  // return coal;
+  return coal;
   // return coal >> bu;
 }
 
 inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  // const MicrophysicalProcess auto cond = config_condensation(config,
-  //                                                            tsteps);
+  const MicrophysicalProcess auto cond = config_condensation(config,
+                                                             tsteps);
 
   const MicrophysicalProcess auto colls = config_collisions(config,
                                                             tsteps);
 
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
-  return colls;
+  return colls >> cond;
 }
 
 inline Motion<CartesianMaps> auto
@@ -175,7 +175,8 @@ create_motion(const unsigned int motionstep)
 {
   // const auto terminalv = NullTerminalVelocity{};
   // const auto terminalv = RogersYauTerminalVelocity{};
-  const auto terminalv = SimmelTerminalVelocity{};
+  // const auto terminalv = SimmelTerminalVelocity{};
+  const auto RogersGKTerminalVelocity{};
 
   // const auto ngbxs = (unsigned int)15; // total number of gbxs
   // const auto ngbxs4reset = (unsigned int)5; // number of gbxs to randomly select in reset

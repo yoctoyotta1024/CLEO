@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th December 2023
+ * Last Modified: Tuesday 16th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -146,7 +146,7 @@ Prevents drops shrinking further once they are size of dry_radius(). */
 
 KOKKOS_INLINE_FUNCTION
 double SuperdropAttrs::mass() const
-/* returns total droplet mass = water + dry areosol  */
+/* returns (dimensionless) total droplet mass = water + dry areosol  */
 {
   constexpr double massconst(4.0 / 3.0 *
                              Kokkos::numbers::pi * dlc::Rho_l);            // 4/3 * pi * density
