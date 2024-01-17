@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: temp_spd_allstats.txt
+ * File: speedtest_allstats.txt
  * Project: speedtest
  * Created Date: Tuesday 12th December 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,8 +22,11 @@
 
 ### Wall Clock time For Timestepping, columns are:
 ### test_run gpus_cpus/s cpus/s serial/s
-A0 14.6392 54.6415 166.347           # all observers, 3-D domain w/ complete constthermo2D setup
-A1 14.6466 52.8141 167.262           # all observers, 3-D domain w/ complete constthermo2D setup
+A0 14.6392 54.6415 166.347           # setup with all observers (stats, bulk and superdrops)
+A1 14.6466 52.8141 167.262            # setup with all observers (stats, bulk and superdrops)
 
-B0 0.244817 8.63166 162.860          # no observers, all microphysics, motion, coupling etc.
-B1 0.249448 8.62775 164.900          # no observers, all microphysics, motion, coupling etc.
+B0 5.18293 28.5032             # setup with only stats and bulk observer (no superdrops)
+B1 5.50010 28.9400             # setup with only stats and bulk observer (no superdrops)
+
+C0 0.244817 8.63166 162.860          # setup with only stats observer (no bulk and superdrops)
+C1 0.249448 8.62775 164.900          # setup with only stats observer (no bulk and superdrops)

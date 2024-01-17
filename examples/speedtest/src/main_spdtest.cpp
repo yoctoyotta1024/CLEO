@@ -222,16 +222,15 @@ create_observer(const Config &config,
   const Observer auto obs0 = RunStatsObserver(tsteps.get_obsstep(),
                                               config.stats_filename);
 
-  // const Observer auto obs_blk = create_bulk_observer(config,
-  //                                                   tsteps,
-  //                                                   store);
+  const Observer auto obs_blk = create_bulk_observer(config,
+                                                    tsteps,
+                                                    store);
 
-  // const Observer auto obs_sd = create_superdrops_observer(config,
-  //                                                         tsteps,
-  //                                                         store);
+  const Observer auto obs_sd = create_superdrops_observer(config,
+                                                          tsteps,
+                                                          store);
 
-  // return obs0 >> obs_blk >> obs_sd;
-  return obs0;
+  return obs0 >> obs_blk >> obs_sd;
 }
 
 inline auto create_sdm(const Config &config,
