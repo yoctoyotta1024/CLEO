@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd January 2024
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -152,9 +152,21 @@ struct ResetSuperdrop
 
     const auto radius = new_radius(log10rlow, log10rup, urbg);
     const auto xi = new_xi(gbxvol, log10rlow, log10rup, radius);
+    const auto msol = new_msol(radius);
 
+    drop.set_msol(msol);
     drop.set_radius(radius);
     drop.set_xi(xi);
+  }
+
+  KOKKOS_FUNCTION double
+  new_msol(const double dryradius) const
+  /* returns msol given dry radius */
+  {
+    constexpr double msolconst = 4.0 * Kokkos::numbers::pi *
+                                 dlc::Rho_sol / 3.0;
+
+    return msolconst * dryradius * dryradius * dryradius;
   }
 
   KOKKOS_FUNCTION double
