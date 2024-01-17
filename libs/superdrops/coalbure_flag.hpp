@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th January 2024
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -137,7 +137,7 @@ section 2.2 of Szakáll and Urbich 2018
 {
   const auto r1 = drop1.get_radius();
   const auto r2 = drop2.get_radius();
-  const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = RogersGKTerminalVelocity{};
 
   const auto cke = collision_kinetic_energy(r1, r2,
                                             terminalv(drop1),
@@ -170,7 +170,7 @@ as coalescence efficiency from Straub et al. 2010 */
 {
   const auto r1 = drop1.get_radius();
   const auto r2 = drop2.get_radius();
-  const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = RogersGKTerminalVelocity{};
 
   const auto cke = collision_kinetic_energy(r1, r2,
                                             terminalv(drop1),

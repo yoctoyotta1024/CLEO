@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th January 2024
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -175,7 +175,8 @@ create_motion(const unsigned int motionstep)
 {
   // const auto terminalv = NullTerminalVelocity{};
   // const auto terminalv = RogersYauTerminalVelocity{};
-  const auto terminalv = SimmelTerminalVelocity{};
+  // const auto terminalv = SimmelTerminalVelocity{};
+  const auto RogersGKTerminalVelocity{};
 
   // const auto ngbxs = (unsigned int)15; // total number of gbxs
   // const auto ngbxs4reset = (unsigned int)5; // number of gbxs to randomly select in reset

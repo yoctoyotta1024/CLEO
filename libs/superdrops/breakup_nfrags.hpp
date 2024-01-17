@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 15th January 2024
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -81,7 +81,7 @@ public:
     constexpr double beta = 0.135;
     constexpr double ckemax = 16.49789599;
 
-    const auto terminalv = SimmelTerminalVelocity{};
+    const auto terminalv = RogersGKTerminalVelocity{};
     const auto cke = collision_kinetic_energy(drop1.get_radius(),
                                               drop2.get_radius(),
                                               terminalv(drop1),
