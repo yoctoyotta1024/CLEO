@@ -145,7 +145,7 @@ public:
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii)
     {
-      obs.at_start_step(t_mdl, h_gbxs(ii)); 
+      obs.at_start_step(t_mdl, h_gbxs(ii));
     }
   }
 

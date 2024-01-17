@@ -1,7 +1,7 @@
 # set cmake version
 if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
   cmake_minimum_required(VERSION 3.18.0)
-  # cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler 
+  # cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler
 endif()
 
 # set project name and source directory of .cpp files
@@ -41,7 +41,7 @@ add_executable(${longcolls} EXCLUDE_FROM_ALL "main_longcolls.cpp")
 target_link_libraries(${longcolls} PRIVATE cartesiandomain "${SDMLIBS}")
 target_link_libraries(${longcolls} PUBLIC Kokkos::kokkos)
 target_include_directories(${longcolls} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
-target_compile_options(${longcolls} PRIVATE ${compileops}) 
+target_compile_options(${longcolls} PRIVATE ${compileops})
 
 # set compiler properties for target(s)
 set_target_properties(${longcolls} PROPERTIES

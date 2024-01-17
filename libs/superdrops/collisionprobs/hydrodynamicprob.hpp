@@ -20,8 +20,8 @@
  * hydrodynamic (i.e. gravitational) kernel
 */
 
-#ifndef HYDRODYNAMICPROB_HPP 
-#define HYDRODYNAMICPROB_HPP 
+#ifndef HYDRODYNAMICPROB_HPP
+#define HYDRODYNAMICPROB_HPP
 
 #include <Kokkos_Core.hpp>
 
@@ -53,7 +53,7 @@ public:
   (and coalesce or breakup etc.) according to the hydrodynamic,
   i.e. gravitational, collision kernel. Probability is given by
   prob_jk = K(drop1, drop2) * delta_t/delta_vol, (see Shima 2009 eqn 3)
-  where the kernel, K(drop1, drop2) := eff * pi * (r1 + r2)^2 * |v1−v2|, 
+  where the kernel, K(drop1, drop2) := eff * pi * (r1 + r2)^2 * |v1−v2|,
   given the efficiency factor eff = eff(drop1, drop2), for
   example as expressed in equation 11 of Simmel at al. 2002 for
   collision-coalescence */
@@ -78,4 +78,4 @@ public:
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 
-#endif // HYDRODYNAMICPROB_HPP 
+#endif // HYDRODYNAMICPROB_HPP

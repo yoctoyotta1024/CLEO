@@ -28,24 +28,24 @@ def get_gridboxes(gridfile, COORD0, isprint=True):
   gbxbounds, ndims =  rgrid.read_dimless_gbxboundaries_binary(gridfile,
                                                               COORD0=COORD0,
                                                               return_ndims=True,
-                                                              isprint=False) 
+                                                              isprint=False)
   zhalf, xhalf, yhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds,
                                                         isprint=False)
   domainvol, gbxvols, ngrid = rgrid.domaininfo(gbxbounds, isprint=False)
- 
+
   gbxs = {
-    "ngrid": ngrid, # number of gridboxes 
+    "ngrid": ngrid, # number of gridboxes
     "ndims": np.flip(ndims), # dimensions (no. gridboxes in [y,x,z] direction)
     "domainvol": domainvol,
     "domainarea": domainvol / (np.amax(zhalf) - np.amin(zhalf)), # x-y plane horizontal are
-    "gbxvols": gbxvols, # list of vols of each gbx 
-    
+    "gbxvols": gbxvols, # list of vols of each gbx
+
     "zhalf": zhalf, # half cell coords (boundaries)
     "zfull": rgrid.fullcell(zhalf), # full cell coords (centres)
-    
+
     "xhalf": xhalf, # half cell coords (boundaries)
     "xfull": rgrid.fullcell(xhalf), # full cell coords (centres)
-    
+
     "yhalf": yhalf, # half cell coords (boundaries)
     "yfull": rgrid.fullcell(yhalf), # full cell coords (centres)
   }
@@ -55,8 +55,8 @@ def get_gridboxes(gridfile, COORD0, isprint=True):
   xxf, zzf = np.meshgrid(gbxs["xfull"], gbxs["zfull"], indexing="ij") # dims [xdims, zdims] [m]
   gbxs["xxh"], gbxs["zzh"] = xxh, zzh
   gbxs["xxf"], gbxs["zzf"] = xxf, zzf
-  
+
   if isprint:
     print_dict_statement(gridfile, "gbxs", gbxs)
 
-  return gbxs 
+  return gbxs

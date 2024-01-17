@@ -62,7 +62,7 @@ struct EmptyID
   {
   public:
     KOKKOS_INLINE_FUNCTION EmptyID next() { return {}; }
-    
+
     KOKKOS_INLINE_FUNCTION EmptyID next(const unsigned int kk)
     {
       return {};

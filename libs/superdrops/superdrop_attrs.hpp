@@ -77,7 +77,7 @@ struct SuperdropAttrs
   void set_xi(const unsigned long long i_xi)
   {
     assert((i_xi > 0) && "xi should not be less than 1");
-    
+
     xi = i_xi;
   }
 
@@ -111,7 +111,7 @@ struct SuperdropAttrs
 
   KOKKOS_INLINE_FUNCTION double rcubed() const
   {
-    return radius * radius * radius; 
+    return radius * radius * radius;
   }
 
   KOKKOS_INLINE_FUNCTION double vol() const
@@ -131,14 +131,14 @@ struct SuperdropAttrs
 KOKKOS_INLINE_FUNCTION
 double SuperdropAttrs::change_radius(const double newr)
 /* Update droplet radius to newr or dry_radius() and
-return resultant change in radius (delta_radius = newradius-radius). 
+return resultant change in radius (delta_radius = newradius-radius).
 Prevents drops shrinking further once they are size of dry_radius(). */
 {
 	const auto oldradius = radius;
 
 	/*  if droplets are dry, do not shrink further */
   const auto dryr = dryradius();
-  radius = Kokkos::fmax(newr, dryr); // Kokkos compatible equivalent to std::max() for floating point numbers 
+  radius = Kokkos::fmax(newr, dryr); // Kokkos compatible equivalent to std::max() for floating point numbers
 
   /* return change in radius due to growth/shrinking of droplet */
 	return radius - oldradius;

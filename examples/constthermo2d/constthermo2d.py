@@ -39,8 +39,8 @@ from pySD.sdmout_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.initsuperdropsbinary_src import *
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
@@ -74,16 +74,16 @@ ygrid = np.array([0, 20])  # array of yhalf coords [m]
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
 zlim = 500        # max z coord of superdroplets
-npergbx = 8       # number of superdroplets per gridbox 
+npergbx = 8       # number of superdroplets per gridbox
 
 # [min, max] range of initial superdroplet radii (and implicitly solute masses)
 rspan                = [3e-9, 3e-6] # [m]
 
 # settings for initial superdroplet multiplicies
 # (from bimodal Lognormal distribution)
-geomeans             = [0.02e-6, 0.15e-6]               
-geosigs              = [1.4, 1.6]                    
-scalefacs            = [6e6, 4e6]   
+geomeans             = [0.02e-6, 0.15e-6]
+geosigs              = [1.4, 1.6]
+scalefacs            = [6e6, 4e6]
 numconc = np.sum(scalefacs)
 
 ### --- settings for 2D Thermodynamics --- ###
@@ -109,9 +109,9 @@ moistlayer=False
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(sharepath).mkdir(exist_ok=True) 
-  Path(binpath).mkdir(exist_ok=True) 
+  Path(path2build).mkdir(exist_ok=True)
+  Path(sharepath).mkdir(exist_ok=True)
+  Path(binpath).mkdir(exist_ok=True)
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 os.system("rm "+thermofile[:-4]+"*")
@@ -121,7 +121,7 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0,
                                                     THETA, qvapmethod, sratios, Zbase,
                                                     qcond, WMAX, Zlength, Xlength,
                                                     VVEL, moistlayer)
@@ -140,21 +140,21 @@ dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
-csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                       configfile, constsfile,
                                       gridfile, nsupers, numconc)
 
 ### ----- show (and save) plots of binary file data ----- ###
 if isfigures[0]:
   if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True) 
+    Path(savefigpath).mkdir(exist_ok=True)
   rgrid.plot_gridboxboundaries(constsfile, gridfile,
                                savefigpath, isfigures[1])
   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                               thermofile, savefigpath, isfigures[1])
   rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                               gridfile, savefigpath, isfigures[1],
-                              SDgbxs2plt) 
+                              SDgbxs2plt)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -213,7 +213,7 @@ def horizontal_average(data4d):
 
 nframes = len(time.mins)
 norm = np.sum(gbxs["gbxvols"], axis=0)[None,None,:,:] * 1e6 # volume [cm^3]
-mom2ani = horizontal_average(massmoms.mom0/norm) 
+mom2ani = horizontal_average(massmoms.mom0/norm)
 xlims = [0, np.amax(mom2ani)]
 xlabel = "mean number concentration /cm$^{-3}$"
 savename=savefigpath+"exmpl2d_numconc1d"
@@ -229,7 +229,7 @@ cmap="plasma_r"
 cmapnorm = Normalize(vmin=1, vmax=20)
 cbarlabel="number of superdroplets per gridbox"
 savename=savefigpath+"exmpl2d_nsupers2d"
-animations.animate2dcmap(gbxs, mom2ani, time.mins, nframes, 
+animations.animate2dcmap(gbxs, mom2ani, time.mins, nframes,
                   cbarlabel=cbarlabel, cmapnorm=cmapnorm, cmap=cmap,
                   saveani=True, savename=savename, fps=5)
 
@@ -241,8 +241,8 @@ cmap="bone_r"
 cmapnorm = LogNorm(vmin=1e-6, vmax=1e2)
 cbarlabel = "mass concentration /g m$^{-3}$"
 savename=savefigpath+"exmpl2d_massconc2d"
-animations.animate2dcmap(gbxs, mom2ani, time.mins, nframes, 
+animations.animate2dcmap(gbxs, mom2ani, time.mins, nframes,
               cbarlabel=cbarlabel, cmapnorm=cmapnorm, cmap=cmap,
-              saveani=True, savename=savename, fps=5)   
+              saveani=True, savename=savename, fps=5)
 ### ------------------------------------------------------------ ###
-### ------------------------------------------------------------ ###                                
+### ------------------------------------------------------------ ###

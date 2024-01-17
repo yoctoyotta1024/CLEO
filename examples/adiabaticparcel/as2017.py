@@ -42,8 +42,8 @@ from pySD import editconfigfile
 from pySD.sdmout_src import sdtracing
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 
@@ -106,7 +106,7 @@ params3 = {
 paramslist = [params1, params2, params3]
 
 def displacement(time, w_avg, thalf):
-    '''displacement z given velocity, w, is sinusoidal 
+    '''displacement z given velocity, w, is sinusoidal
     profile: w = w_avg * pi/2 * np.sin(np.pi * t/thalf)
     where wmax = pi/2*w_avg and tauhalf = thalf/pi.'''
 
@@ -127,10 +127,10 @@ os.system("make clean && make -j 64 adia0D")
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(sharepath).mkdir(exist_ok=True) 
-  Path(binpath).mkdir(exist_ok=True) 
-  
+  Path(path2build).mkdir(exist_ok=True)
+  Path(sharepath).mkdir(exist_ok=True)
+  Path(binpath).mkdir(exist_ok=True)
+
 os.system("rm "+gridfile)
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
                                      ygrid, constsfile)
@@ -158,12 +158,12 @@ for i in range(len(monors)):
                                                       configfile, constsfile,
                                                       gridfile, nsupers, numconc)
     rsupers.print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile)
-    
+
     if isfigures[0]:
         rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                                               gridfile, binpath, isfigures[1], "all")
         plt.close()
-    
+
     fig, axs = plt.subplots(nrows=3, ncols=1, figsize=(5, 16))
     for params in paramslist:
 
@@ -189,7 +189,7 @@ for i in range(len(monors)):
         consts = pysetuptxt.get_consts(setupfile, isprint=True)
         gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"],
                                        isprint=True)
-        
+
         thermo = pyzarr.get_thermodata(dataset, config["ntime"],
                                        gbxs["ndims"], consts)
         supersat = thermo.supersaturation()
@@ -204,16 +204,16 @@ for i in range(len(monors)):
         # 5. plot results
         wlab = "<w> = {:.1f}".format(config["W_AVG"]*100)+"cm s$^{-1}$"
         axs = as2017fig.condensation_validation_subplots(axs, time, sd0["radius"],
-                                                   supersat[:, 0, 0, 0], 
+                                                   supersat[:, 0, 0, 0],
                                                    zprof,
                                                    lwdth=params["lwdth"],
                                                    lab=wlab)
 
         runnum += 1
-    
+
     as2017fig.plot_kohlercurve_with_criticalpoints(axs[1], sd0["radius"],
                                                    sd0["msol"][0],
-                                             thermo.temp[0, 0, 0, 0], 
+                                             thermo.temp[0, 0, 0, 0],
                                              sddata.IONIC, sddata.MR_SOL)
 
     textlab = "N = "+str(numconc)+"cm$^{-3}$\n" +\

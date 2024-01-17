@@ -1,7 +1,7 @@
 # set cmake version
 if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
   cmake_minimum_required(VERSION 3.18.0)
-  #cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler 
+  #cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler
 endif()
 
 # set library name
@@ -14,7 +14,7 @@ message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 # add executables to library
-set(SOURCES 
+set(SOURCES
 "fromfilecomms.cpp"
 "fromfile_cartesian_dynamics.cpp"
 )

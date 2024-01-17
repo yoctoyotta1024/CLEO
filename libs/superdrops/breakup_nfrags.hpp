@@ -44,7 +44,7 @@ the number of fragments from a breakup event) */
 };
 
 struct ConstNFrags
-/* operator always returns constant 
+/* operator always returns constant
 number of fragments 'nfrags'. Struct
 obeys NFragments concept  */
 {

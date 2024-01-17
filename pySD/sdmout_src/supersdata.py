@@ -54,7 +54,7 @@ class SuperdropProperties():
         print("-------------------------------")
 
     def rhoeff(self, r, msol):
-        ''' calculates effective density [g m^-3] of 
+        ''' calculates effective density [g m^-3] of
       droplet such that mass_droplet, m = 4/3*pi*r^3 * rhoeff
       taking into account mass of liquid and mass of
       solute assuming solute occupies volume it
@@ -78,7 +78,7 @@ class SuperdropProperties():
     def mass(self, r, msol):
         '''
         total mass of droplet (water + (dry) areosol) [g],
-        m =  4/3*pi*rho_l**3 + msol(1-rho_l/rho_sol) 
+        m =  4/3*pi*rho_l**3 + msol(1-rho_l/rho_sol)
         ie. m = 4/3*pi*rhoeff*R**3
         '''
 
@@ -100,7 +100,7 @@ class SuperdropProperties():
         v_w = 4/3.0*np.pi*(r**3) - v_sol
 
         return self.RHO_L*v_w * 1000 #[g]
-    
+
 class SupersData(SuperdropProperties):
 
     def __init__(self, dataset, consts):
@@ -145,7 +145,7 @@ class SupersData(SuperdropProperties):
             return ak.Array([])
 
     def tryunits(self, ds, var):
-        ''' attempts to return the units of a variable 
+        ''' attempts to return the units of a variable
         in xarray dataset 'ds'. If attempt fails, returns null '''
         try:
             return ds[var].units

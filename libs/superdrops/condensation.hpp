@@ -182,7 +182,7 @@ for (size_t kk(0); kk < nsupers; ++kk) {[...]}
 when in serial*/
 {
   const auto nsupers = (size_t)supers.extent(0);
-  
+
   const auto psat = saturation_pressure(state.temp);
   const auto s_ratio = supersaturation_ratio(state.press, state.qvap, psat);
   const auto ffactor = diffusion_factor(state.press, state.temp, psat);

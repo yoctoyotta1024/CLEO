@@ -22,7 +22,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
-configfile=${path2CLEO}/examples/speedtest/src/config/speedtest_config.txt 
+configfile=${path2CLEO}/examples/speedtest/src/config/speedtest_config.txt
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"
@@ -40,8 +40,8 @@ mkdir ${path2build}/bin
 
 ### ------------ build gpu CUDA + cpu OpenMP parallelism ----------- ###
 buildtype="gpus_cpus"
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
-kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"        
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
+kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"
 buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B " \
   | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
 echo ${buildcmd}
@@ -56,7 +56,7 @@ ${python} speedtest.py ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} $
 
 ### ---------------- build cpu OpenMP parallelism ------------------ ###
 buildtype="cpus"
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"  
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
   | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost}"
 echo ${buildcmd}
@@ -71,7 +71,7 @@ ${python} speedtest.py ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} $
 
 ### -------------------------- build serial ------------------------ ###
 buildtype="serial"
-kokkoshost="-DKokkos_ENABLE_OPENMP=OFF"                                          
+kokkoshost="-DKokkos_ENABLE_OPENMP=OFF"
 buildcmd="CXX=${gxx} CC=${gcc} cmake -S ${path2CLEO} -B" \
   | "${path2build}${buildtype}/ ${kokkosflags} ${kokkoshost}"
 echo ${buildcmd}

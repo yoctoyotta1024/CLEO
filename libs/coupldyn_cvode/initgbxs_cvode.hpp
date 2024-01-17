@@ -61,7 +61,7 @@ public:
   /* pressure for all gbxs is same initial
   (dimless) 'press_i' given by PRESS_INIT */
   {
-    return std::vector<double>(ngbxs, press_i); 
+    return std::vector<double>(ngbxs, press_i);
   }
 
   std::vector<double> temp() const
@@ -85,9 +85,9 @@ public:
 
   std::vector<double> qcond() const
   /* liquid mass mixing ratio, 'qcond'
-  for all gbxs is qcond_i (= 0.0 by default) */ 
+  for all gbxs is qcond_i (= 0.0 by default) */
   {
-    return std::vector<double>(ngbxs, qcond_i); 
+    return std::vector<double>(ngbxs, qcond_i);
   }
 
   std::vector<std::pair<double, double>> wvel() const
@@ -98,14 +98,14 @@ public:
   }
 
   std::vector<std::pair<double, double>> uvel() const
-  /* wind velocity for al gbxs = 0.0 */ 
+  /* wind velocity for al gbxs = 0.0 */
   {
     std::pair<double, double> uvel_i(0.0, 0.0);
     return std::vector<std::pair<double, double>>(ngbxs, uvel_i);
   }
 
   std::vector<std::pair<double, double>> vvel() const
-  /* wind velocity for al gbxs = 0.0 */ 
+  /* wind velocity for al gbxs = 0.0 */
   {
     std::pair<double, double> vvel_i(0.0, 0.0);
     return std::vector<std::pair<double, double>>(ngbxs, vvel_i);

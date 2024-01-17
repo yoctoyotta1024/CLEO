@@ -47,7 +47,7 @@ and used in construction of GridboxMaps */
 private:
   void is_ngbxs_compatible(const unsigned int ngbxs) const;
   void is_nspacedims_compatible(const unsigned int nspacedims) const;
-  
+
   bool check_0Dmodel_gbxbounds() const;
   bool check_1Dmodel_gbxbounds() const;
   bool check_2Dmodel_gbxbounds() const;
@@ -66,19 +66,19 @@ public:
 
   Kokkos::pair<double, double>
   get_coord3gbxbounds(const unsigned int idx) const;
-  /* returns coord3 {lower, upper} gridbox bounds 
+  /* returns coord3 {lower, upper} gridbox bounds
   from position in gbxbounds vector which corresponds
   to position in gbxidxs where gbxidx = idx */
 
   Kokkos::pair<double, double>
   get_coord1gbxbounds(const unsigned int idx) const;
-  /* returns coord1 {lower, upper} gridbox bounds 
+  /* returns coord1 {lower, upper} gridbox bounds
   from position in gbxbounds vector which corresponds
   to position in gbxidxs where gbxidx = idx */
 
   Kokkos::pair<double, double>
   get_coord2gbxbounds(const unsigned int idx) const;
-  /* returns coord2 {lower, upper} gridbox bounds 
+  /* returns coord2 {lower, upper} gridbox bounds
   from position in gbxbounds vector which corresponds
   to position in gbxidxs where gbxidx = idx */
 

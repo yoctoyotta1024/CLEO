@@ -142,7 +142,7 @@ struct NullObserver
   void before_timestepping(const viewh_constgbx h_gbxs) const {}
 
   void after_timestepping() const {}
-  
+
   unsigned int next_obs(const unsigned int t_mdl) const
   {
     return LIMITVALUES::uintmax;
@@ -152,7 +152,7 @@ struct NullObserver
   {
     return false;
   }
-  
+
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {}
@@ -176,13 +176,13 @@ to make an Observer type out of a ConstTstepObserver) */
   } -> std::same_as<void>;
   {
     o.after_timestepping()
-  } -> std::same_as<void>; 
+  } -> std::same_as<void>;
   {
     o.at_start_step(t, h_gbxs, totsupers)
   } -> std::same_as<void>;
   {
     o.at_start_step(t, gbx)
-  } -> std::same_as<void>; 
+  } -> std::same_as<void>;
 };
 
 template <ObsFuncs O>
@@ -190,7 +190,7 @@ struct ConstTstepObserver
 /* this structure is a type that satisfies the concept of
 an observer in SDM and has a constant tstep
 'interval'. It can be used to create an observer
-with a constant timestep and other functionality 
+with a constant timestep and other functionality
 determined by the ObsFunc type 'O' */
 {
 private:
@@ -208,7 +208,7 @@ public:
 
   void after_timestepping() const
   {
-    do_obs.after_timestepping(); 
+    do_obs.after_timestepping();
   }
 
   unsigned int next_obs(const unsigned int t_mdl) const

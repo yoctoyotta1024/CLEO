@@ -2,7 +2,7 @@
 
 # set cmake version
 cmake_minimum_required(VERSION 3.18.0)
-# cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler 
+# cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler
 
 # set project name and source directory of .cpp files
 project("test")
@@ -31,7 +31,7 @@ set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # default compiler options to use in subdirectories
 set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ compiler
-# set(defaultcompileops -Werror -Wall -pedantic -g)           # -gdwarf-4 flag not possible for nvc++ compiler 
+# set(defaultcompileops -Werror -Wall -pedantic -g)           # -gdwarf-4 flag not possible for nvc++ compiler
 
 # primary executable for CLEO sdm
 set(test "test")

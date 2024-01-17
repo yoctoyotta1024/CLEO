@@ -83,7 +83,7 @@ thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
 #     "x2": 750,
 #     "mlsratio": 1.005
 # }
-# thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0, 
+# thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0,
 #                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL, moistlayer)
@@ -99,7 +99,7 @@ cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
 
 if isfigures[0]:
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True) 
+        Path(savefigpath).mkdir(exist_ok=True)
     rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                                           thermofile, savefigpath,
                                           isfigures[1])

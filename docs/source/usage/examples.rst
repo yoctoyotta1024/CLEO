@@ -4,17 +4,17 @@ Examples
 ========
 
 There are several test cases for CLEO, each with different builds,
-domains, microphysics, coupling, Super-Droplet motion etc. They can be 
+domains, microphysics, coupling, Super-Droplet motion etc. They can be
 found in the ``CLEO/examples`` directory.  If you would like to
-a copy of the reference solutions please :ref:`contact us <contact>`. 
+a copy of the reference solutions please :ref:`contact us <contact>`.
 
 Each example can be run by building CLEO with the relevant main program
 and then executing the associated Python script. For running on
-DKRZ's Levante HPC, there are bash scripts to help with this. 
+DKRZ's Levante HPC, there are bash scripts to help with this.
 The following instructions are intended to guide you through
 running each example on Levante using their bash scripts.
 
-Note most of the build configurations chosen in the bash scripts 
+Note most of the build configurations chosen in the bash scripts
 use GPUs. To execute these scripts sucesfully you will therefore
 need to be on a node in the gpu partition of Levante
 (`see here <https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html>`_
@@ -40,8 +40,8 @@ one you will need to configure it in the following ways:
 
   * (Optional) choose your build configuration:
 
-    choose which thread parallelism to utilise by modifying the 
-    ``kokkoshost`` and ``kokkosdevice`` flags. Please note that 
+    choose which thread parallelism to utilise by modifying the
+    ``kokkoshost`` and ``kokkosdevice`` flags. Please note that
     to use CUDA parallelism you need to build and execute CLEO
     on Levante's gpu partition.
 
@@ -70,31 +70,31 @@ e.g.
 
 a) Arabas and Shima 2017
 ########################
-2. :ref:`Configure<configurebash>` and execute the bash script ``as2017.sh``. 
+2. :ref:`Configure<configurebash>` and execute the bash script ``as2017.sh``.
 
 .. code-block:: console
 
   $ vim as2017.sh
   $ ./as2017.sh
 
-The plots produced, 
-``~/CLEO/build/bin/as2017_fig_[x].png``, should be 
+The plots produced,
+``~/CLEO/build/bin/as2017_fig_[x].png``, should be
 similar to the columns of figure 5 from Arabas and
 Shima 2017 :cite:`arabasshima2017`.
 
 b) Cusp Bifurcation
 ###################
-2. :ref:`Configure<configurebash>` and execute the bash script ``cuspbifurc.sh``. 
+2. :ref:`Configure<configurebash>` and execute the bash script ``cuspbifurc.sh``.
 
 .. code-block:: console
 
   $ vim cuspbifurc.sh
   $ ./cuspbifurc.sh
 
-The plots produced, 
+The plots produced,
 ``~/CLEO/build/bin/cuspbifurc_validation.png`` and
-``~/CLEO/build/bin/cuspbifurc_SDgrowth.png`` 
-illustrate an example of cusp bifurcation, analagous to the 
+``~/CLEO/build/bin/cuspbifurc_SDgrowth.png``
+illustrate an example of cusp bifurcation, analagous to the
 third column of figure 5 from Arabas and
 Shima 2017 :cite:`arabasshima2017`.
 
@@ -119,7 +119,7 @@ e.g.
 
   $ vim shima2009.sh
 
-3. Execute the bash script ``shima2009.sh``. 
+3. Execute the bash script ``shima2009.sh``.
 
 .. code-block:: console
 
@@ -131,28 +131,28 @@ and run. You can change this by editing the arguments given to
 
 a) Golovin
 ##########
-This example is a 0-D box model with only collision-coalescence 
+This example is a 0-D box model with only collision-coalescence
 using Golovin's kernel.
 
-The plot produced, 
-``~/CLEO/build/bin/golovin_validation.png``, should be 
+The plot produced,
+``~/CLEO/build/bin/golovin_validation.png``, should be
 similar to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
 b) Long
 #######
-This example is a 0-D box model with only collision-coalescence 
+This example is a 0-D box model with only collision-coalescence
 using Long's collision efficiency as given by equation 13 of
 Simmel et al. 2002 :cite:`simmel2002`.
 
-The plot produced, 
-``~/CLEO/build/bin/long_validation.png``, should be 
+The plot produced,
+``~/CLEO/build/bin/long_validation.png``, should be
 similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
 
 c) Low and List
 ###############
-This example is a 0-D box model with only collision-coalescence 
+This example is a 0-D box model with only collision-coalescence
 using the hydrodynamic kernel with Long's collision efficiency as
-given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the coalescence 
+given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the coalescence
 efficiency from Low and List 1982(a) :cite:`lowlist1982a`
 (see also McFarquhar 2004 :cite:`mcfarquhar2004`).
 This example produces a plot ``~/CLEO/build/bin/lowlist_validation.png``.
@@ -173,7 +173,7 @@ e.g.
 
   $ vim divfree2d.sh
 
-3. Execute the bash script ``divfree2d.sh``. 
+3. Execute the bash script ``divfree2d.sh``.
 
 .. code-block:: console
 
@@ -200,9 +200,9 @@ e.g.
 
 .. code-block:: console
 
-  $ vim rainshaft1d.sh 
+  $ vim rainshaft1d.sh
 
-3. Execute the bash script ``rainshaft1d.sh``. 
+3. Execute the bash script ``rainshaft1d.sh``.
 
 .. code-block:: console
 
@@ -212,7 +212,7 @@ Several plots and animations are produced by this example. If
 you would like to compare to reference solutions
 please :ref:`contact us <contact>`.
 
-5) Constant 2-D Thermodynamics 
+5) Constant 2-D Thermodynamics
 ------------------------------
 
 1. Navigate to the ``constthermo2d/`` directory,
@@ -226,9 +226,9 @@ e.g.
 
 .. code-block:: console
 
-  $ vim constthermo2d.sh 
+  $ vim constthermo2d.sh
 
-3. Execute the bash script ``constthermo2d.sh``. 
+3. Execute the bash script ``constthermo2d.sh``.
 
 .. code-block:: console
 
@@ -241,6 +241,6 @@ please :ref:`contact us <contact>`.
 Extension
 ---------
 Explore the ``exampleplotting/plotssrc`` Python module which
-gives examples of how to plot output from CLEO with pySD, a few of 
-which are demonstrated in the ``exampleplotting/exampleplotting.py`` 
+gives examples of how to plot output from CLEO with pySD, a few of
+which are demonstrated in the ``exampleplotting/exampleplotting.py``
 script.

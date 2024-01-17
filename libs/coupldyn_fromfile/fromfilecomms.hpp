@@ -39,7 +39,7 @@ private:
                             Gridbox &gbx) const;
   /* updates the state of a gridbox using information
   received from FromFileDynamics solver for 1-way
-  coupling to CLEO SDM */ 
+  coupling to CLEO SDM */
 
 public:
   template <typename CD = FromFileDynamics>

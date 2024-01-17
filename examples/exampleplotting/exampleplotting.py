@@ -37,13 +37,13 @@ setuptxt = "/home/m/m300950/CLEO/build/bin/setup.txt"
 gridfile = "/home/m/m300950/CLEO/build/share/dimlessGBxboundaries.dat"
 
 ### whether and where to save figures
-savefig = False 
+savefig = False
 savefigpath = "./"
 
 ### individual superdroplet plotting parameters
-nsample = 50 
+nsample = 50
 
-### droplet distributions plotting parameters 
+### droplet distributions plotting parameters
 t2plts = [0, 100, 200, 600, 1200, 1800, 2400, 3600]
 rspan = ["min", "max"]
 nbins = 100
@@ -73,11 +73,11 @@ sddata = pyzarr.get_supers(ds, consts)
 savename = ""
 if savefig:
   savename = savefigpath+"/randomsample_attrs.png"
-pltsds.plot_randomsample_superdrops(time, sddata, config["totnsupers"], 
+pltsds.plot_randomsample_superdrops(time, sddata, config["totnsupers"],
                                     nsample, savename=savename)
 if savefig:
   savename = savefigpath+"/randomsample_2dmotion.png"
-pltsds.plot_randomsample_superdrops_2dmotion(sddata, config["totnsupers"], 
+pltsds.plot_randomsample_superdrops_2dmotion(sddata, config["totnsupers"],
                                              nsample, arrows=False)
 ### ---------------------------------------------------------------- ###
 
@@ -89,7 +89,7 @@ if smoothsig_mass:
   smoothsig_mass = smoothsig_mass*(config["totnsupers"]**(-1/5))
 if savefig:
   savename = savefigpath+"/domain_mass_distrib.png"
-fig, ax = pltdist.plot_domainmass_distribs(time.secs, sddata, t2plts, 
+fig, ax = pltdist.plot_domainmass_distribs(time.secs, sddata, t2plts,
                                      gbxs["domainvol"], rspan, nbins,
                                      smoothsig=smoothsig_mass,
                                      perlogR=perlogR_mass,
@@ -100,7 +100,7 @@ if smoothsig_num:
   smoothsig_num = smoothsig_num*(config["totnsupers"]**(-1/5))
 if savefig:
   savename = savefigpath+"/domain_numconc_distrib.png"
-fig, ax = pltdist.plot_domainnumconc_distribs(time.secs, sddata, t2plts, 
+fig, ax = pltdist.plot_domainnumconc_distribs(time.secs, sddata, t2plts,
                                      gbxs["domainvol"], rspan, nbins,
                                      smoothsig=smoothsig_num,
                                      perlogR=perlogR_num,

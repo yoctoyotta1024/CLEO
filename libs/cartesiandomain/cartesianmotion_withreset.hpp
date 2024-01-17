@@ -73,7 +73,7 @@ public:
   {
     const auto xp = double{(1.0-2.0*nueff)/nueff};
     const auto valxp = double{Kokkos::pow(REFF*nueff, -xp)};
-    n0const = valxp / Kokkos::tgamma(xp); 
+    n0const = valxp / Kokkos::tgamma(xp);
   }
 
   KOKKOS_FUNCTION double operator()(const double radius,
@@ -108,7 +108,7 @@ struct ResetSuperdrop
         prob_distrib(ProbDistrib())
   {
     /* make redges linearly spaced in log10(R) space */
-    auto h_log10redges = Kokkos::create_mirror_view(log10redges); 
+    auto h_log10redges = Kokkos::create_mirror_view(log10redges);
     const auto log10rmin = double{Kokkos::log10(2e-7 / dlc::R0)}; // lowest edge of radius bins
     const auto log10rmax = double{Kokkos::log10(3e-5 / dlc::R0)}; // highest edge of radius bins
     const auto log10deltar = double{(log10rmax - log10rmin)/nbins};
@@ -123,13 +123,13 @@ struct ResetSuperdrop
   reset_position(const CartesianMaps &gbxmaps,
                         URBG<ExecSpace> &urbg,
                         Superdrop &drop) const
-  /* randomly update position of superdroplet by 
+  /* randomly update position of superdroplet by
   randomly selecting a gbxindex from gbxidxs and then
   randomly selecting a coord3 with that gbx's bounds */
   {
     const auto sdgbxindex = urbg(gbxidxs.first,
-                                 gbxidxs.second); // randomly selected gbxindex in range {incl., excl.} 
-    
+                                 gbxidxs.second); // randomly selected gbxindex in range {incl., excl.}
+
     const auto bounds = gbxmaps.coord3bounds(sdgbxindex);
     const auto coord3 = urbg.drand(bounds.first, bounds.second); // random coord within gbx bounds
 
@@ -179,13 +179,13 @@ struct ResetSuperdrop
   /* returns xi given value of normalised probability
   distribution at radius and the bin width */
   {
-    constexpr double numconc = 100000000 * dlc::VOL0; //100/cm^3, non-dimensionalised 
+    constexpr double numconc = 100000000 * dlc::VOL0; //100/cm^3, non-dimensionalised
 
     const auto rlow = double{Kokkos::pow(10.0, log10rlow)};
     const auto rup = double{Kokkos::pow(10.0, log10rup)};
-    
+
     const auto prob = prob_distrib(radius, rlow, rup);
-    const auto xi = double{prob * numconc * gbxvol}; 
+    const auto xi = double{prob * numconc * gbxvol};
 
     return (unsigned long long)Kokkos::round(xi);
   }
@@ -195,7 +195,7 @@ struct ResetSuperdrop
              Superdrop &drop) const
   {
     URBG<ExecSpace> urbg{genpool4reset.get_state()}; // thread safe random number generator
-    
+
     const auto sdgbxindex = reset_position(gbxmaps, urbg, drop);
     const auto gbxvol = gbxmaps.get_gbxvolume(sdgbxindex);
     reset_attributes(gbxvol, urbg, drop);
@@ -222,7 +222,7 @@ the superdrop's coord is compared to gridbox bounds given by gbxmaps
 for the current gbxindex 'idx'. If superdrop coord lies outside
 bounds, forward or backward neighbour functions are called to
 update sdgbxindex (and possibly other superdrop attributes).
-Struct is same as CartesianChangeIfNghbr except for in 
+Struct is same as CartesianChangeIfNghbr except for in
 coord3(...){...} function */
 {
   ResetSuperdrop reset_superdrop;
@@ -367,4 +367,3 @@ if superdrop has exceeded the z upper domain boundary */
 };
 
 #endif // CARTESIANMOTION_WITHRESET_HPP
-

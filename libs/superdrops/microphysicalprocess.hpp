@@ -17,7 +17,7 @@
  * File Description:
  * Microphysical Process Concept as well as
  * helpers for creating structures that obey the
- * concept to model microphysics in SDM, 
+ * concept to model microphysics in SDM,
  * eg. condensation or collision-coalescence
  * (see ConstTstepProcess struct)
  */
@@ -37,7 +37,7 @@
 
 template <typename P>
 concept MicrophysicalProcess = requires(P p,
-                                        const TeamMember &tm, 
+                                        const TeamMember &tm,
                                         const unsigned int t,
                                         subviewd_supers supers,
                                         State &state,
@@ -122,7 +122,7 @@ struct NullMicrophysicalProcess
   {
     return LIMITVALUES::uintmax;
   }
-  
+
   KOKKOS_INLINE_FUNCTION
   bool on_step(const unsigned int subt) const
   {
@@ -162,7 +162,7 @@ struct ConstTstepMicrophysics
 /* this structure is a type that satisfies the concept of
 microphysical process in SDM and has a constant tstep
 'interval'. It can be used to create a microphysical
-processes with a constant timestep and microphysics 
+processes with a constant timestep and microphysics
 determined by the MicrophysicsFunc type 'F' */
 {
 private:

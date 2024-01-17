@@ -36,11 +36,11 @@ def plot_initGBxs_distribs(configfile, constsfile, initsupersfile,
                                  gridfile, binpath, savefig, gbxs2plt)
 
 def get_superdroplet_attributes(configfile, constsfile, initsupersfile):
-    ''' get gridbox boundaries from binary file and 
+    ''' get gridbox boundaries from binary file and
     re-dimensionalise usign COORD0 const from constsfile '''
 
     inputs = initSDsinputsdict(configfile, constsfile)
-    
+
     attrs = read_dimless_superdrops_binary(initsupersfile, isprint=False)
 
     # re-dimensionalise SD attributes
@@ -75,7 +75,7 @@ def read_dimless_superdrops_binary(filename, isprint=True):
     print("attribute shapes: ", attrs.sdgbxindex.shape, attrs.xi.shape,
           attrs.radius.shape, attrs.msol.shape, attrs.coord3.shape,
           attrs.coord1.shape, attrs.coord2.shape)
-    
+
     return attrs
 
 def totmass(radius, msol, RHO_L , RHO_SOL):
@@ -90,16 +90,16 @@ def print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile):
     gbxvols = np.asarray(get_gbxvols_from_gridfile(gridfile,
                                         constsfile=constsfile,
                                         isprint=False))
-    
+
     attrs = get_superdroplet_attributes(configfile,
                                         constsfile,
-                                        initSDsfile)  
-    
+                                        initSDsfile)
+
     xi = attrs.xi.flatten()
     vol = np.sum(gbxvols)
     numconc = np.sum(xi)/vol / 1e6 #[/cm^3]
     massconc = np.sum(attrs.msol.flatten() * xi) / vol * 1000 #[g m^-3]
-    dropvol = 4/3 * np.pi * np.sum((attrs.radius.flatten()**3) * xi) 
+    dropvol = 4/3 * np.pi * np.sum((attrs.radius.flatten()**3) * xi)
     m_w_conc = dropvol * 1000 / vol * 1000 # mass as if drops had density of water=1000Kg/m^3 [g m^3]
 
     inforstr = "\n------ DOMAIN SUPERDROPLETS INFO ------\n"+\
@@ -123,7 +123,7 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
     for idx in gbxidxs:
         vol = gbxvols[idx]
         sl = np.s_[attrs.sdgbxindex==idx]
-        l0 = plot_radiusdistrib(axs[0], hedgs, 
+        l0 = plot_radiusdistrib(axs[0], hedgs,
                                 attrs.radius[sl], attrs.xi[sl])
         l1 = plot_numconcdistrib(axs[1], hedgs, attrs.xi[sl],
                                  attrs.radius[sl], vol)
@@ -131,9 +131,9 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
                                     attrs.radius[sl], attrs.msol[sl],
                                     vol)
         ls = plot_coorddistribs(axs, sl, hedgs, attrs)
-        
+
     fig.tight_layout()
-    
+
     return fig, axs, [l0, l1, l2, ls]
 
 def plot_initGBxs_attrdistribs(configfile, constsfile, initsupersfile,
@@ -146,7 +146,7 @@ def plot_initGBxs_attrdistribs(configfile, constsfile, initsupersfile,
                                         isprint=False)
     attrs = get_superdroplet_attributes(configfile,
                                         constsfile,
-                                        initsupersfile) 
+                                        initsupersfile)
 
     if type(gbxs2plt) == int:
         gbxidxs = [gbxs2plt]
@@ -157,9 +157,9 @@ def plot_initGBxs_attrdistribs(configfile, constsfile, initsupersfile,
     else:
         gbxidxs = gbxs2plt
         savename = binpath+"initGBxs_distribs.png"
-    
-    fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)   
-    
+
+    fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)
+
     fig.tight_layout()
     if savefig:
         fig.savefig(savename, dpi=400,
@@ -168,9 +168,9 @@ def plot_initGBxs_attrdistribs(configfile, constsfile, initsupersfile,
     plt.show()
 
 def figure_setup(coord3, coord1, coord2):
-    
+
     ncoords = 3-sum(not x.any() for x in [coord3, coord2, coord1])
-    
+
     if ncoords == 0:
         fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(14, 4))
     elif ncoords == 1:
@@ -182,12 +182,12 @@ def figure_setup(coord3, coord1, coord2):
     axs = axs.flatten()
     if ncoords == 2:
         axs[-1].remove()
-            
+
 
     return fig, axs
 
 def log10r_frequency_distribution(radius, hedgs, wghts):
-    ''' get distribution of data with weights 'wghts' against 
+    ''' get distribution of data with weights 'wghts' against
     log10(r). Uses np.histogram to get frequency of a particular
     value of data that falls in each bin (with each bin defined
     by it's edges 'hedgs'). Return distirbution alongside the radius
@@ -246,7 +246,7 @@ def plot_numconcdistrib(ax, hedgs, xi, radius, vol):
     ax.set_xscale("log")
     ax.set_xlabel("radius, r, /\u03BCm")
     ax.set_ylabel("real droplet number\nconcentration / cm$^{-3}$")
-    
+
     if not ax.get_legend():
         ax.legend(loc="lower left")
 
@@ -282,8 +282,8 @@ def plot_totmassdistrib(ax, hedgs, xi, radius, msol, vol, RHO_L, RHO_SOL):
     return line
 
 def scatter_totmass_solutemass(ax, radius, msol, RHO_L, RHO_SOL):
-    
-    mass = totmass(radius, msol, RHO_L , RHO_SOL) 
+
+    mass = totmass(radius, msol, RHO_L , RHO_SOL)
 
     line = ax.scatter(mass*1000, msol*1000, marker="x")
 
@@ -304,9 +304,9 @@ def plot_coorddistribs(axs, i2plt, hedgs, attrs):
                 ls.append(plot_coorddist(axs[4], hedgs, attrs.coord1[i2plt],
                                         attrs.radius[i2plt], 1))
                 if attrs.coord2.any():
-                    ls.append(plot_coorddist(axs[5], hedgs, 
+                    ls.append(plot_coorddist(axs[5], hedgs,
                                             attrs.coord2[i2plt],
-                                            attrs.radius[i2plt], 2))                        
+                                            attrs.radius[i2plt], 2))
     return ls
 
 def plot_coorddist(ax, hedgs, coord3, radius, coordnum):
@@ -332,7 +332,7 @@ def plot_initGBxs_dropletmasses(configfile, constsfile, initsupersfile,
                                         isprint=False)
     attrs = get_superdroplet_attributes(configfile,
                                         constsfile,
-                                        initsupersfile) 
+                                        initsupersfile)
     inputs = initSDsinputsdict(configfile, constsfile)
 
     if type(gbxs2plt) == int:
@@ -344,10 +344,10 @@ def plot_initGBxs_dropletmasses(configfile, constsfile, initsupersfile,
     else:
         gbxidxs = gbxs2plt
         savename = binpath+"initGBxs_dropletmasses.png"
-    
+
     fig, axs, lines = plot_massdistribs(attrs, gbxvols, gbxidxs,
-                                        inputs["RHO_L"], inputs["RHO_SOL"])   
-    
+                                        inputs["RHO_L"], inputs["RHO_SOL"])
+
     fig.tight_layout()
     if savefig:
         fig.savefig(savename, dpi=400,
@@ -378,9 +378,7 @@ def plot_massdistribs(attrs, gbxvols, gbxidxs, RHO_L, RHO_SOL):
                                     vol)
         l2 = scatter_totmass_solutemass(axs[2], attrs.radius[sl],
                                      attrs.msol[sl], RHO_L, RHO_SOL)
-        
-    fig.tight_layout()
-    
-    return fig, axs, [l0, l1, l2]
 
-    
+    fig.tight_layout()
+
+    return fig, axs, [l0, l1, l2]

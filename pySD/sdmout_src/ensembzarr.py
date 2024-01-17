@@ -16,7 +16,7 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
 functions to write a new zarr dataset and
-setuptxt file for an ensemble of datasets 
+setuptxt file for an ensemble of datasets
 '''
 
 import os
@@ -38,7 +38,7 @@ def write_ensemble_info(ensembsetupfile, setupfile, datasets):
 
   datasets_str = "\ndatasets in ensemble: \n     "+\
                 "\n     ".join(datasets) + "\n"
-        
+
   setup_str = "\nsetup copied from: \n     "+setupfile+"\n"
 
   with open(ensembsetupfile, "a") as file:
@@ -54,7 +54,7 @@ def write_ensemb_setupfile(ensembsetupfile, setupfile, datasets):
   os.system('cp '+setupfile+" "+ensembsetupfile)
   params = {
     "initsupers_filename" : "[ensemble, see below]",
-    "setuptxt" : "[ensemble, see below]", 
+    "setuptxt" : "[ensemble, see below]",
     "zarrbasedir" : "[ensemble, see below]",
     "stats_filename" : "[ensemble, see below]"
     }
@@ -65,7 +65,7 @@ def write_ensemb_setupfile(ensembsetupfile, setupfile, datasets):
 def check_dataset_for_ensemb(dataset, refset):
   '''returns xarray dataset after checking that
   time is consistent with the refset'''
-  
+
   time = pyzarr.get_rawdataset(refset)["time"].values
   ds = pyzarr.get_rawdataset(dataset)
 
@@ -83,22 +83,22 @@ def write_time_to_ensembzarr(ensembdataset, dataset):
 def ensemble_data(func, datasets, var):
   ''' call func on ensemble of var from datasets.
   Note: if var has dimensions [a,b, ...] then data4ensemb
-  passed into func has dimensions [n, a, b, ...] 
+  passed into func has dimensions [n, a, b, ...]
   when n is the number of datasets in the ensemble'''
-  
+
   data4ensemb = []
   for dataset in datasets:
     v = pyzarr.get_rawdataset(dataset)[var].values
     data4ensemb.append(v)
   data4ensemb = np.asarray(data4ensemb)
-  
+
   return func(data4ensemb)
 
 def  write_matchingarray_to_storage(arrayname, arr, refz, zattrs):
   ''' write array 'arr' to zarr storage under
   'arrayname' using same metadata as refz and
   copying zattrs to .zattrs file '''
-  
+
   if arr.shape != refz.shape:
     err = "arr and reference for metadata must have same shape"
     raise ValueError(err)
@@ -107,7 +107,7 @@ def  write_matchingarray_to_storage(arrayname, arr, refz, zattrs):
                   shape=refz.shape,
                   chunks=refz.chunks,
                   compressor=refz.compressor,
-                  dtype=refz.dtype, 
+                  dtype=refz.dtype,
                   fill_value=refz.fill_value,
                   filters=refz.filters,
                   order=refz.order)
@@ -120,12 +120,12 @@ def write_meanvars_to_ensembzarr(ensembdataset, vars4ensemb,
   ''' write mean over ensemble of datasets for
   each var in vars4ensemb into zarr array also
   called 'var' in ensembdataset'''
-  
+
   for var in vars4ensemb:
     meanname = ensembdataset+"/"+var
     meanvar = ensemble_data(lambda x : np.mean(x, axis=0),
                             datasets, var)
-    
+
     zattrs = refset+"/"+var+"/.zattrs"
     write_matchingarray_to_storage(meanname, meanvar,
                                    zarr.open(refset)[var],
@@ -136,22 +136,22 @@ def write_stdvars_to_ensembzarr(ensembdataset, vars4ensemb,
   ''' write standard deviation over ensemble of datasets
   for each var in vars4ensemb into zarr array also
   called 'var' in ensembdataset'''
-  
+
   for var in vars4ensemb:
     stdname = ensembdataset+"/"+var+"_std"
     stdvar = ensemble_data(lambda x : np.std(x, axis=0),
                             datasets, var)
 
-    zattrs = refset+"/"+var+"/.zattrs"                      
+    zattrs = refset+"/"+var+"/.zattrs"
     write_matchingarray_to_storage(stdname, stdvar,
                                    zarr.open(refset)[var],
                                    zattrs)
 
 def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
-  ''' create zarr storage called 'ensembdataset' 
+  ''' create zarr storage called 'ensembdataset'
   for an ensemble of zarr datasets 'datasets'
-  containing their time data alongside their 
-  mean and standard deviation for the variables listed in 
+  containing their time data alongside their
+  mean and standard deviation for the variables listed in
   'vars4ensemb' '''
 
   refset = datasets[0] # reference dataset
@@ -162,7 +162,7 @@ def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
 
   write_meanvars_to_ensembzarr(ensembdataset, vars4ensemb,
                                datasets, refset)
-  
+
   write_stdvars_to_ensembzarr(ensembdataset, vars4ensemb,
                                datasets, refset)
 

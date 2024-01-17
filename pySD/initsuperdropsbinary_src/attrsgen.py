@@ -29,14 +29,14 @@ class AttrsGenerator:
     attributes e.g. for radius and coord3 in substantation
     of class'''
 
-    def __init__(self, radiigen, dryradiigen, xiprobdist, 
+    def __init__(self, radiigen, dryradiigen, xiprobdist,
                  coord3gen, coord1gen, coord2gen):
 
         self.radiigen = radiigen            # generates radius (solute + water)
-        self.dryradiigen = dryradiigen      # generates dry radius (-> solute mass) 
+        self.dryradiigen = dryradiigen      # generates dry radius (-> solute mass)
         self.xiprobdist = xiprobdist        # droplet size distribution (-> multiplicity)
-        
-        self.coord3gen = coord3gen          # generates spatial coordinate 
+
+        self.coord3gen = coord3gen          # generates spatial coordinate
         self.coord1gen = coord1gen
         self.coord2gen = coord2gen
 
@@ -44,7 +44,7 @@ class AttrsGenerator:
                                [coord3gen, coord2gen, coord1gen])
 
     def mass_solutes(self, radii, RHO_SOL):
-        ''' return the mass [Kg] of the solute in superdroplets given their 
+        ''' return the mass [Kg] of the solute in superdroplets given their
         dry radii [m] and solute density [Kg m^3]'''
 
         dryradii = self.dryradiigen(radii) # [m]
@@ -73,7 +73,7 @@ class AttrsGenerator:
         return np.array(xi, dtype=np.uint)
 
     def check_coordsgen_matches_modeldimension(self, nspacedims):
-       
+
         if nspacedims != self.ncoordsgen:
             errmsg = str(self.ncoordsgen)+" coord generators specified "+\
                     "but nspacedims = "+str(nspacedims)
@@ -88,7 +88,7 @@ class AttrsGenerator:
         nreals = np.rint(NUMCONC * samplevol)
         calcnreals = np.rint(np.sum(multiplicities))
         calcnumconc = np.rint(calcnreals/samplevol)
-        
+
         if np.rint(NUMCONC) != calcnumconc:
           errmsg = "total real droplet concentration"+\
                     " {:0g} != numconc, {:0g}".format(calcnumconc, NUMCONC)
@@ -98,22 +98,22 @@ class AttrsGenerator:
           errmsg = "total no. real droplets, {:0g},".format(calcnreals)+\
             " not consistent with sample volume {:.3g} m^3".format(samplevol)
           raise ValueError(errmsg)
-        
+
     def print_totalconc(self, multiplicities, radii,
                         mass_solutes, RHO_SOL, samplevol):
         ''' print statement of total num conc and mass conc '''
-      
+
         def totmass(radius, msol, RHO_SOL):
-            ''' total mass of droplets represented by a superdroplet 
+            ''' total mass of droplets represented by a superdroplet
             droplet totmass = mass of water + solute '''
 
             RHO_L = 998.203 # density of liquid water [kg/m^3]
             massconst = 4.0 / 3.0 * np.pi  * radius * radius * radius * RHO_L
             density_factor = 1.0 - RHO_L / RHO_SOL
             totmass = msol * density_factor + massconst
-            
+
             return totmass * 1000 # [g]
-        
+
         numconc = np.sum(multiplicities) / samplevol / 1e6 # [cm^-3]
         totmass = np.sum(totmass(radii, mass_solutes, RHO_SOL) * multiplicities)
         massconc = totmass /samplevol # [g/m^3]
@@ -121,7 +121,7 @@ class AttrsGenerator:
         msg = "--- total droplet concentration = "+\
           "{:1g}cm^-3 => {:.1g}g/m^3".format(numconc, massconc) +\
         ", in {:.3g}m^3 volume --- ".format(samplevol)
-        
+
         print(msg)
 
     def generate_attributes(self, nsupers, RHO_SOL, NUMCONC, gridboxbounds):
@@ -129,7 +129,7 @@ class AttrsGenerator:
         by calling the appropraite generating functions'''
 
         gbxvol = rgrid.calc_domainvol(gridboxbounds[0:2],
-                                      gridboxbounds[2:4], 
+                                      gridboxbounds[2:4],
                                       gridboxbounds[4:]) # [m^3]
         radii = self.radiigen(nsupers) # [m]
 
@@ -137,11 +137,11 @@ class AttrsGenerator:
 
         multiplicities = self.multiplicities(radii, NUMCONC, gbxvol)
 
-        if nsupers > 0:  
+        if nsupers > 0:
             self.check_totalnumconc(multiplicities, NUMCONC, gbxvol)
             self.print_totalconc(multiplicities, radii, mass_solutes,
-                                 RHO_SOL, gbxvol) 
-         
+                                 RHO_SOL, gbxvol)
+
         return multiplicities, radii, mass_solutes # units [], [m], [Kg], [m]
 
     def generate_coords(self, nsupers, nspacedims, gridboxbounds):
@@ -149,9 +149,9 @@ class AttrsGenerator:
         by calling the appropraite generating functions'''
 
         self.check_coordsgen_matches_modeldimension(nspacedims)
-       
+
         coord3, coord1, coord2 = np.array([]), np.array([]), np.array([])
-        
+
         if self.coord3gen:
             coord3range = [gridboxbounds[0], gridboxbounds[1]] # [min,max] coord3 to sample within
             coord3 = self.coord3gen(nsupers, coord3range)

@@ -1,4 +1,4 @@
-Memory Layout 
+Memory Layout
 =============
 
 This is the structure of CLEO.

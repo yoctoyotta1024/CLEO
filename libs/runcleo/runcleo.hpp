@@ -64,10 +64,10 @@ private:
   /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
   {
     std::cout << "\n--- prepare timestepping ---\n";
-    
+
     coupldyn.prepare_to_timestep();
     sdm.prepare_to_timestep(gbxs.view_host());
-    
+
     std::cout << "--- prepare timestepping: success ---\n";
     return 0;
   }
@@ -100,7 +100,7 @@ private:
 
       /* advance dynamics solver (optionally concurrent to SDM) */
       coupldyn_step(t_mdl, t_next);
-  
+
       /* advance SDM (optionally concurrent to dynamics solver) */
       sdm_step(t_mdl, t_next, gbxs, totsupers, genpool);
 
@@ -147,7 +147,7 @@ private:
     const auto next_coupl = (unsigned int)next_couplstep();
     const auto next_obs = (unsigned int)sdm.obs.next_obs(t_mdl);
     const auto t_next(!(next_coupl < next_obs) ? next_obs : next_coupl); // return smaller of two unsigned ints (see std::min)
-    
+
     return t_next;                                                       // stepsize = t_next - t_mdl
   }
 
@@ -157,7 +157,7 @@ private:
                 const viewd_supers totsupers,
                 GenRandomPool genpool) const
   /* run CLEO SDM (on host and device) */
-  { 
+  {
     gbxs.sync_device(); // get device up to date with host
     sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers, genpool);
     gbxs.modify_device(); // mark device view of gbxs as modified
@@ -192,7 +192,7 @@ public:
           CD &coupldyn, const Comms &comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms)
   {
-    check_coupling(); 
+    check_coupling();
   }
 
   ~RunCLEO()

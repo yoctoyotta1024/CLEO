@@ -18,14 +18,14 @@ File Description:
 '''
 
 import numpy as np
-from scipy import special 
+from scipy import special
 import matplotlib.pyplot as plt
 
 def Log10Redges(rspan, nbins):
- 
+
   return np.linspace(np.log10(rspan[0]),
                                    np.log10(rspan[1]),
-                                   nbins+1)  # log10(r) bin edges  
+                                   nbins+1)  # log10(r) bin edges
 
 def random_gbxindex(gbxindexes):
   ''' returns [lower, upper] limits of
@@ -33,7 +33,7 @@ def random_gbxindex(gbxindexes):
   distributed in log10(r) space '''
 
   i = np.random.randint(0, len(gbxindexes))
- 
+
   return gbxindexes[i]
 
 def random_radiusbin(log10redges):
@@ -42,7 +42,7 @@ def random_radiusbin(log10redges):
   distributed in log10(r) space '''
 
   i = np.random.randint(0, len(log10redges)-1)
- 
+
   return log10redges[i], log10redges[i+1]
 
 def sample_radius(log10rlow, log10rup):
@@ -65,7 +65,7 @@ class SampleXi:
   def __init__(self, prob_distrib):
 
     self.prob_distrib = prob_distrib
-  
+
   def __call__(self, log10rlow, log10rup, numconc, vol):
 
     rlow, rup = 10**log10rlow, 10**log10rup
@@ -73,24 +73,24 @@ class SampleXi:
 
     log10r = 0.5*(log10rup + log10rlow)
     radius = 10**log10r
-    
+
     prob = self.prob_distrib(radius) * deltar
 
-    xi = prob * numconc * vol 
+    xi = prob * numconc * vol
 
     return xi
-  
+
 class ProbDistrib:
 
   def __init__(self):
-    
+
     self.reff = 7e-6                     # effective radius [m]
-    self.nueff = 0.08                    # effective variance 
+    self.nueff = 0.08                    # effective variance
 
   def normalised_prob_distrib(self, radius):
     ''' return gamma distribution for cloud droplets given
     radius [m] using parameters from Poertge et al. 2023
-    for shallow cumuli (figure 12). normalised such that 
+    for shallow cumuli (figure 12). normalised such that
     integral of probs over dr = 1.
     typical values:
     reff = 7e-6 #[m]
@@ -98,7 +98,7 @@ class ProbDistrib:
 
     xp = (1-2*self.nueff)/self.nueff
     n0const = (self.reff*self.nueff)**(-xp)
-    n0const = n0const / special.gamma(xp) 
+    n0const = n0const / special.gamma(xp)
 
     term1 = radius**((1-3*self.nueff)/self.nueff)
     term2 = np.exp(-radius/(self.reff*self.nueff))
@@ -118,7 +118,7 @@ class RenewSuperdrop:
     self.gbxindexes = gbxindexes
     self.log10redges = Log10Redges(rspan, nbins)
     self.numconc = numconc
-    
+
   def __call__(self, gbxmaps):
 
     coord3bounds = gbxmaps[0]
@@ -130,7 +130,7 @@ class RenewSuperdrop:
     log10rlow, log10rup = random_radiusbin(self.log10redges)
     radius = sample_radius(log10rlow, log10rup)
     xi = sample_xi(log10rlow, log10rup, numconc, gbxvols[gbxindex])
-  
+
     return Superdroplet(xi, radius, gbxindex, coord3)
 
 ##### ------------------------------------------------------------ #####
@@ -161,7 +161,7 @@ class Superdroplet:
     self.coord3 = coord3
 
 ##### ------------------------------------------------------------ #####
-    
+
 nsupers = 100
 ngbxs = 5
 rspan = [2e-7, 3e-5] # [m]
@@ -191,7 +191,7 @@ for i in range(nsupers):
   superdrops.append(movesupers.backwards_coord3idx(True, drop))
 
 ##### ------------------------------------------------------------ #####
-    
+
 fig, axs = plt.subplots(nrows=2, ncols=4)
 axs = axs.flatten()
 sd_gbxindex = []
@@ -199,10 +199,10 @@ sd_coord3 = []
 sd_radius = []
 sd_xi = []
 for i in range(nsupers):
-  sd_gbxindex.append(superdrops[i].gbxindex) 
-  sd_coord3.append(superdrops[i].coord3) 
-  sd_radius.append(superdrops[i].radius) 
-  sd_xi.append(superdrops[i].xi) 
+  sd_gbxindex.append(superdrops[i].gbxindex)
+  sd_coord3.append(superdrops[i].coord3)
+  sd_radius.append(superdrops[i].radius)
+  sd_xi.append(superdrops[i].xi)
 sd_gbxindex = np.asarray(sd_gbxindex).flatten()
 sd_coord3 = np.asarray(sd_coord3).flatten()
 sd_radius = np.asarray(sd_radius).flatten()

@@ -86,14 +86,14 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
   const PairProbability auto prob = LongHydroProb();
   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
                                                    &step2realtime,
-                                                   prob);                                                    
+                                                   prob);
   return colls;
 }
 
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  return NullMotion{};                                                                               
+  return NullMotion{};
 }
 
 inline Observer auto

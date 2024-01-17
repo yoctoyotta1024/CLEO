@@ -47,7 +47,7 @@ gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match co
 zmax = 1500 # maximum z coord [m]
 zmin = 0 # minimum z coord [m]
 zdelta = 100 # even spacing
-zgrid = [zmin, zmax, zdelta] 
+zgrid = [zmin, zmax, zdelta]
 
 ### input parameters for x coords of gridbox boundaries
 xgrid = [0, 100, 200]
@@ -62,8 +62,8 @@ ygrid = np.asarray([0, 100])
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(binariespath).mkdir(exist_ok=True) 
+  Path(path2build).mkdir(exist_ok=True)
+  Path(binariespath).mkdir(exist_ok=True)
 
 ### write gridbox boundaries binary
 write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
@@ -72,6 +72,6 @@ print_domain_info(constsfile, gridfile)
 ### plot gridbox boundaries binary
 if isfigures[0]:
   if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True) 
+    Path(savefigpath).mkdir(exist_ok=True)
   plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
 ### ---------------------------------------------------------------- ###
