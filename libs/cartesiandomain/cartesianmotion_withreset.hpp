@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd January 2024
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -109,8 +109,8 @@ struct ResetSuperdrop
   {
     /* make redges linearly spaced in log10(R) space */
     auto h_log10redges = Kokkos::create_mirror_view(log10redges);
-    const auto log10rmin = double{Kokkos::log10(2e-7 / dlc::R0)}; // lowest edge of radius bins
-    const auto log10rmax = double{Kokkos::log10(3e-5 / dlc::R0)}; // highest edge of radius bins
+    const auto log10rmin = double{Kokkos::log10(5e-6 / dlc::R0)}; // lowest edge of radius bins
+    const auto log10rmax = double{Kokkos::log10(1.5e-5 / dlc::R0)}; // highest edge of radius bins
     const auto log10deltar = double{(log10rmax - log10rmin)/nbins};
     for (size_t i(0); i < nbins + 1; ++i)
     {
@@ -152,9 +152,21 @@ struct ResetSuperdrop
 
     const auto radius = new_radius(log10rlow, log10rup, urbg);
     const auto xi = new_xi(gbxvol, log10rlow, log10rup, radius);
+    const auto msol = new_msol(radius);
 
-    drop.set_radius(radius);
+    drop.set_msol(msol);
+    drop.set_radius(radius*1.00000001); // radius 1e-6 % larger than sampled dryradius
     drop.set_xi(xi);
+  }
+
+  KOKKOS_FUNCTION double
+  new_msol(const double dryradius) const
+  /* returns msol given dry radius */
+  {
+    constexpr double msolconst = 4.0 * Kokkos::numbers::pi *
+                                 dlc::Rho_sol / 3.0;
+
+    return msolconst * dryradius * dryradius * dryradius;
   }
 
   KOKKOS_FUNCTION double
