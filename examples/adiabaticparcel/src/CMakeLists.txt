@@ -1,7 +1,7 @@
 # set cmake version
 if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
   cmake_minimum_required(VERSION 3.18.0)
-  # cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler 
+  # cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler
 endif()
 
 # set project name and source directory of .cpp files
@@ -35,13 +35,13 @@ if(NOT DEFINED compileops)
   set(compileops ${defaultcompileops})
 endif()
 
-# executable for CVODE-CLEO coupled model 0D condensation setup 
+# executable for CVODE-CLEO coupled model 0D condensation setup
 set(adia0D "adia0D")
 add_executable(${adia0D} EXCLUDE_FROM_ALL "main_adia0D.cpp")
 target_link_libraries(${adia0D} PRIVATE coupldyn_cvode cartesiandomain "${SDMLIBS}")
 target_link_libraries(${adia0D} PUBLIC Kokkos::kokkos)
 target_include_directories(${adia0D} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
-target_compile_options(${adia0D} PRIVATE ${compileops}) 
+target_compile_options(${adia0D} PRIVATE ${compileops})
 
 # set compiler properties for target(s)
 set_target_properties(${adia0D} PROPERTIES

@@ -24,11 +24,11 @@ import numpy as np
 class ScaledRadiiGen:
   '''method to generate superdroplet dryradii that
   are the radii divided by a scale factor 'sf' '''
-  
+
   def __init__(self, scale_factor):
 
-      self.sf = scale_factor 
-      
+      self.sf = scale_factor
+
   def __call__(self, radii):
       ''' Returns dryradii for nsupers [m]'''
 

@@ -159,7 +159,7 @@ private:
   KOKKOS_INLINE_FUNCTION size_t
   collide_supers(const TeamMember &team_member,
                  subviewd_supers supers,
-                 const double volume, 
+                 const double volume,
                  GenRandomPool genpool) const
   /* Enacts collisions for pairs of superdroplets in supers
   like for collision-coalescence in Shima et al. 2009.
@@ -168,7 +168,7 @@ private:
   uses Kokkos nested parallelism for paralelism over supers
   inside parallelised loop for member 'teamMember'. In serial
   Kokkos::parallel_reduce([...]) is equivalent to summing nnull
-  over for loop: for (size_t jj(0); jj < npairs; ++jj) {[...]} 
+  over for loop: for (size_t jj(0); jj < npairs; ++jj) {[...]}
   when in serial */
   {
     const auto nsupers = (size_t)supers.extent(0);
@@ -212,7 +212,7 @@ private:
 
     /* collide all randomly generated pairs of SDs */
     size_t nnull(collide_supers(team_member, supers, volume, genpool)); // number of null superdrops
-  
+
     return is_null_supers(supers, nnull);
   }
 

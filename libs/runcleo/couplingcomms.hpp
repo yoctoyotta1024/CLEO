@@ -16,13 +16,13 @@
  * -----
  * File Description:
  * concept defining types which can be used for the
- * coupling between SDMMethods and a dynamics solver 
+ * coupling between SDMMethods and a dynamics solver
  * in RunCLEO
  */
 
 
-#ifndef COUPLINGCOMMS_HPP 
-#define COUPLINGCOMMS_HPP 
+#ifndef COUPLINGCOMMS_HPP
+#define COUPLINGCOMMS_HPP
 
 #include <concepts>
 
@@ -57,4 +57,4 @@ coupldyn and h_gbxs but still obeys coupling comms concept */
   /* send information from Gridboxes' states to coupldyn */
 };
 
-#endif // COUPLINGCOMMS_HPP  
+#endif // COUPLINGCOMMS_HPP

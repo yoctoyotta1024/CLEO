@@ -6,14 +6,14 @@ from ..readbinary import readbinary
 
 def get_gridboxboundaries(gridfile, COORD0=False,
                           constsfile="", isprint=True):
-    ''' get gridbox boundaries from binary file and 
+    ''' get gridbox boundaries from binary file and
     re-dimensionalise usign COORD0 const from constsfile '''
 
     if not COORD0:
         COORD0 = get_COORD0_from_constsfile(constsfile)
-    
+
     gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0,
-                                                   isprint=isprint) 
+                                                   isprint=isprint)
 
     zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=isprint)
 
@@ -24,7 +24,7 @@ def get_domainvol_from_gridfile(gridfile, COORD0=False, constsfile=""):
 
     zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile, COORD0=COORD0,
                                                constsfile=constsfile)
-    
+
     return calc_domainvol(zhalf, xhalf, yhalf)
 
 def get_gbxvols_from_gridfile(gridfile, COORD0=False,
@@ -33,9 +33,9 @@ def get_gbxvols_from_gridfile(gridfile, COORD0=False,
 
     if not COORD0:
         COORD0 = get_COORD0_from_constsfile(constsfile)
-    
-    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0, 
-                                                   isprint=isprint) 
+
+    gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0,
+                                                   isprint=isprint)
 
     return calc_gridboxvols(gbxbounds)
 
@@ -51,14 +51,14 @@ def cellwidth(halfcell):
 
     delta = abs(halfcell[1:]-halfcell[:-1])
 
-    return delta 
+    return delta
 
 def fullcell_fromhalfcoords(zhalf, xhalf, yhalf):
 
-    zfull = fullcell(zhalf) 
-    xfull = fullcell(xhalf) 
-    yfull = fullcell(yhalf) 
-    
+    zfull = fullcell(zhalf)
+    xfull = fullcell(xhalf)
+    yfull = fullcell(yhalf)
+
     return zfull, xfull, yfull
 
 def fullcoords_forallgridboxes(gbxbounds, ndims):
@@ -73,28 +73,28 @@ def fullcoords_forallgridboxes(gbxbounds, ndims):
 
     return zfullcoords, xfullcoords, yfullcoords
 
-def coords_forgridboxfaces(gbxbounds, ndims, face): 
+def coords_forgridboxfaces(gbxbounds, ndims, face):
     ''' returns (x,y,z) coordinates of gridboxes faces
     in a particular direction '''
 
     ndims = [int(n) for n in ndims]
     zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=False)
     zfull, xfull, yfull = fullcell_fromhalfcoords(zhalf, xhalf, yhalf)
-    
+
     if face == "z":
         nz, nx, ny = ndims[0]+1, ndims[1], ndims[2]
         zfaces = np.tile(zhalf, nx*ny) # zfull of every gridbox in order of gbxindex
         xfulls = np.tile(np.repeat(xfull, nz), ny)
         yfulls = np.repeat(yfull, nz*nx)
         return zfaces, xfulls, yfulls
-    
+
     elif face == "x":
         nz, nx, ny = ndims[0], ndims[1]+1, ndims[2]
         zfulls = np.tile(zfull, nx*ny) # zfull of every gridbox in order of gbxindex
         xfaces = np.tile(np.repeat(xhalf, nz), ny)
         yfulls = np.repeat(yfull, nz*nx)
         return zfulls, xfaces, yfulls
-    
+
     elif face == "y":
         nz, nx, ny = ndims[0], ndims[1], ndims[2]+1
         zfulls = np.tile(zfull, nx*ny) # zfull of every gridbox in order of gbxindex
@@ -115,23 +115,23 @@ def read_dimless_gbxboundaries_binary(filename, COORD0=False,
     ll = [0,0] # indexs for division of data list between each variable
     for n in range(1, len(ndata_pervar)):
         ll[n-1] = np.sum(ndata_pervar[:n])
-    
+
     ndims = np.asarray(data[:ll[0]], dtype=datatypes[0])
-    gbxidxs = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1]) 
+    gbxidxs = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1])
 
     ngridboxes = int(np.prod(ndims))
     if len(gbxidxs) != ngridboxes:
         err = "number of gridbox indexes not consistent with (z,x,y) dims"
         raise ValueError(err)
-    
+
     boundsdata = np.asarray(data[ll[1]:], dtype=datatypes[2])
     boundsdata = np.reshape(boundsdata, [ngridboxes, len(boundsdata)//ngridboxes])
-     
+
     if COORD0:
         boundsdata = boundsdata * COORD0
-    
+
     gbxbounds = {gbxidxs[i]: boundsdata[i] for i in range(ngridboxes)}
-    
+
     if return_ndims:
         return gbxbounds, ndims
     else:
@@ -142,7 +142,7 @@ def halfcoords_from_gbxbounds(gbxbounds, isprint=True):
      from gbxbounds dictionary '''
 
     boundsdata = np.asarray(list(gbxbounds.values()))
-    
+
     zhalf = np.unique(np.sort(boundsdata[:,0]))
     zhalf = np.append(zhalf, np.amax(boundsdata[:,1]))
 
@@ -163,7 +163,7 @@ def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
 
     plt.rcParams.update({'font.size': 14})
 
-    zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile, 
+    zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile,
                                                 constsfile=constsfile)
 
     halfs = [zhalf, xhalf, yhalf]
@@ -211,9 +211,9 @@ def calc_gridboxvols(gbxbounds):
         zwidth = bounds[1] - bounds[0]
         xwidth = bounds[3] - bounds[2]
         ywidth = bounds[5] - bounds[4]
-        
+
         gbxvols.append(zwidth * xwidth * ywidth )
-    
+
     return gbxvols
 
 def domaininfo(gbxbounds, isprint=True):
@@ -229,8 +229,8 @@ def domaininfo(gbxbounds, isprint=True):
 
 def grid_dimensions(gbxbounds):
 
-    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=False) 
-    
+    zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=False)
+
     if len(zhalf) == 2:
         griddims = 0
     elif len(xhalf) == 2:
@@ -239,27 +239,27 @@ def grid_dimensions(gbxbounds):
         griddims = 2
     else:
         griddims = 3
-    
+
     extents, spacings = [], []
     for half in [zhalf, xhalf, yhalf]:
         extents.append([np.amin(half), np.amax(half)])
         spacings.append(abs(half[1:]-half[:-1]))
-    
+
     return extents, spacings, griddims
 
 def print_domain_info(constsfile, gridfile):
     ''' create values from constants file & config file
-    required as inputs to create initial 
+    required as inputs to create initial
     superdroplet conditions '''
-    
+
     isprint=True
     COORD0 = get_COORD0_from_constsfile(constsfile)
     gbxbounds =  read_dimless_gbxboundaries_binary(gridfile, COORD0,
-                                                   isprint=isprint) 
-    
+                                                   isprint=isprint)
+
     domainvol, gridboxvols, ngridboxes = domaininfo(gbxbounds,
                                                     isprint=isprint)
-    xtns, spacings, griddims = grid_dimensions(gbxbounds) 
+    xtns, spacings, griddims = grid_dimensions(gbxbounds)
     ztot = abs(xtns[0][0] - xtns[0][1])
     xtot = abs(xtns[1][0] - xtns[1][1])
     ytot = abs(xtns[2][0] - xtns[2][1])

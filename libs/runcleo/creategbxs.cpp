@@ -25,7 +25,7 @@ void is_gbxinit_complete(const size_t ngbxs_from_maps,
   gbxs.sync_host(); // copy device to host (if prior flag was set)
   const size_t ngbxs(gbxs.extent(0));
   const auto h_gbxs(gbxs.view_host());
- 
+
   if (ngbxs != ngbxs_from_maps)
   {
     const std::string err("number of gridboxes created not "
@@ -65,7 +65,7 @@ State GenGridbox::state_at(const unsigned int ii,
 vectors in GenGridbox struct */
 {
   /* type cast from std::pair to Kokkos::pair */
-  Kokkos::pair<double, double> wvel(wvels.at(ii)); 
+  Kokkos::pair<double, double> wvel(wvels.at(ii));
   Kokkos::pair<double, double> uvel(uvels.at(ii));
   Kokkos::pair<double, double> vvel(vvels.at(ii));
 

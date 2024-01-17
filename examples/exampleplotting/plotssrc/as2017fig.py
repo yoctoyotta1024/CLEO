@@ -17,17 +17,17 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 File Description:
 functions for plotting similar to figure 5 of
 "On the CCN (de)activation nonlinearities"
-S. Arabas and S. Shima 2017 
+S. Arabas and S. Shima 2017
 '''
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 def kohler_curve(r, msol, temp, ionic, Mr_sol, criticalpoints=False):
-    '''returns size and solute dependent 
+    '''returns size and solute dependent
     equilibrium saturation ratio, s_eq,
     for droplet according to kohler theory.
-    Equations from An Introduction to Clouds 
+    Equations from An Introduction to Clouds
     by Lohmann, Luond and Mahrt, 1st edition'''
 
     r = r/1e6 # convert from micron to m
@@ -63,8 +63,8 @@ def plot_kohlercurve_with_criticalpoints(ax, r, solutemass,
 
 def condensation_validation_subplots(axs, time, radius, supersat, zprof,
                                      lwdth=1, lab=""):
-    '''adds the subplots of displacement, supersaturation 
-    and radial growth from Figure 5 of "On the CCN (de)activation 
+    '''adds the subplots of displacement, supersaturation
+    and radial growth from Figure 5 of "On the CCN (de)activation
     nonlinearities" S. Arabas and S. Shima 2017'''
 
     hlf = len(time)//2
@@ -101,9 +101,9 @@ def condensation_validation_subplots(axs, time, radius, supersat, zprof,
 
 def arabas_shima_2017_fig(time, zprof, radius, msol, temp, supersat,
                           IONIC, MR_SOL, W_AVG, numconc, savename=""):
-    ''' plots the same plots as in Figure 5 of 
+    ''' plots the same plots as in Figure 5 of
     "On the CCN (de)activation nonlinearities"
-    S. Arabas and S. Shima 2017 to check radius 
+    S. Arabas and S. Shima 2017 to check radius
     growth due to condensation is correct '''
 
     fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(12, 5))
@@ -136,7 +136,7 @@ def arabas_shima_2017_fig(time, zprof, radius, msol, temp, supersat,
       fig.savefig(savename, dpi=400, bbox_inches="tight",
                   facecolor='w', format="png")
       print("Figure .png saved as: "+savename)
-        
+
     plt.show()
 
     return fig, axs

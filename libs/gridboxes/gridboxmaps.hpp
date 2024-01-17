@@ -34,7 +34,7 @@ concept GridboxMaps = requires(GbxMaps gbxmaps,
                                unsigned int idx)
 /* concept for GridboxMaps is all types that have
 correct signatues for map-like functions */
-{ 
+{
   {
     gbxmaps.maps_size()
   } -> std::same_as<size_t>;

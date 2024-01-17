@@ -97,17 +97,17 @@ create_gbxmaps(const Config &config)
 inline MicrophysicalProcess auto
 create_microphysics(const Config &config, const Timesteps &tsteps)
 {
-  return NullMicrophysicalProcess{}; 
+  return NullMicrophysicalProcess{};
 }
 
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
   const auto terminalv = NullTerminalVelocity{};
-  
+
   return CartesianMotion(motionstep,
                          &step2dimlesstime,
-                         terminalv);                                                                            
+                         terminalv);
 }
 
 inline Observer auto
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
 
     /* coupling between coupldyn and SDM */
     const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
-    
+
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
     runcleo(initconds, tsteps.get_t_end());

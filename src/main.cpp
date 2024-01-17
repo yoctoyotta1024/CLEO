@@ -189,7 +189,7 @@ create_motion(const unsigned int motionstep)
                          &step2dimlesstime,
                          terminalv);
 
-  // return NullMotion{};                                                                               
+  // return NullMotion{};
 }
 
 inline Observer auto
@@ -249,7 +249,7 @@ create_observer(const Config &config,
 
   // return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >>
   //        obs7 >> obs8 >> obs9 >> obs10;
-  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs6 >> obs8 >> obs10;       
+  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs6 >> obs8 >> obs10;
 }
 
 inline auto create_sdm(const Config &config,

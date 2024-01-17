@@ -37,9 +37,9 @@ struct Gbxindex
       return {_idx++};
     }
 
-    KOKKOS_INLINE_FUNCTION 
+    KOKKOS_INLINE_FUNCTION
     Gbxindex next(const unsigned int idx)
-    /* note this generator assumes idx was 
+    /* note this generator assumes idx was
     thread safe generated (ie. is unique) */
     {
       return {idx};

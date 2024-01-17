@@ -40,7 +40,7 @@ Result is analogous to std::uniform_int_distribution with
 params [a,b]=[start, end] and g = C++11 UniformRandomBitGenerator
 is URBG operator called with (start, end) = (0, URAND_MAX).
 Useful so that gen's urand(start, end) function can be used
-to randomly shuffle a kokkos view by swapping elements 
+to randomly shuffle a kokkos view by swapping elements
 in range [start, end] e.g. to generate random pairs of
 superdroplets during collision process */
 {
@@ -68,11 +68,11 @@ superdroplets during collision process */
 
 KOKKOS_INLINE_FUNCTION
 void device_swap(Superdrop& a, Superdrop& b)
-/* swaps the values of the superdroplets a and b 
+/* swaps the values of the superdroplets a and b
 like C++98 std::swap except function works
 on device as well as host. Note: Involves a copy
 construction and two assignment operations
-=> not efficient way of swapping the contents if 
+=> not efficient way of swapping the contents if
 Superdrop class stores large quantities of data */
 {
   Superdrop c(a);
@@ -105,7 +105,7 @@ one_shuffle_supers(const TeamMember &team_member,
                    GenRandomPool genpool)
 /* Use only 1 member of team to randomly shuffle order
 of superdroplet objects in 'supers'. Then synchronise
-team and return view of shuffled supers. Uses 
+team and return view of shuffled supers. Uses
 to get team / thread safe random number generator */
 {
   Kokkos::single(Kokkos::PerTeam(team_member), [&]()

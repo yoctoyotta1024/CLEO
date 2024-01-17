@@ -20,8 +20,8 @@
  * file system storage
  */
 
-#ifndef NSUPERSOBS_HPP 
-#define NSUPERSOBS_HPP 
+#ifndef NSUPERSOBS_HPP
+#define NSUPERSOBS_HPP
 
 #include <concepts>
 #include <memory>
@@ -43,7 +43,7 @@ namespace dlc = dimless_constants;
 inline Observer auto
 NsupersObserver(const unsigned int interval,
                 FSStore &store,
-                const int maxchunk, 
+                const int maxchunk,
                 const size_t ngbxs);
 /* constructs observer of nsupers in each gridbox
 with a constant timestep 'interval' using an
@@ -76,7 +76,7 @@ the 2DStorage instance */
 private:
   using store_type = TwoDStorage<size_t>;
   std::shared_ptr<store_type> zarr;
-  
+
 public:
   DoNsupersObs(FSStore &store,
                const int maxchunk,
@@ -133,7 +133,7 @@ as determined by the 2DStorage instance */
 private:
   using store_type = TwoDStorage<size_t>;
   std::shared_ptr<store_type> zarr;
-  
+
   void nrainsupers_to_storage(const Gridbox &gbx) const;
 
 public:
@@ -207,7 +207,7 @@ public:
   {
     std::cout << "observer includes TotNsupersObserver\n";
   }
-  
+
   void after_timestepping() const {}
 
   void at_start_step(const unsigned int t_mdl,
@@ -218,7 +218,7 @@ public:
   }
 
   void at_start_step(const viewd_constsupers totsupers) const
-  /* gets number of superdrops in domain (from 0th gridbox 
+  /* gets number of superdrops in domain (from 0th gridbox
   metadata on superdrops) and writes it to a 1-D zarr storage */
   {
     const size_t totnsupers(totsupers.extent(0));
@@ -242,4 +242,4 @@ instance of the DoTotNsupersObs class */
   return ConstTstepObserver(interval, obs);
 }
 
-#endif // NSUPERSOBS_HPP 
+#endif // NSUPERSOBS_HPP

@@ -14,13 +14,13 @@
 buildtype=$1
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
-path2bashscripts=${path2CLEO}/scripts/useful_bash/ 
+path2bashscripts=${path2CLEO}/scripts/useful_bash/
 
 ### ------------------ build_compile.sh ---------------- ###
 if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "cpu" ] && [ "${buildtype}" != "gpu" ];
 then
   echo "please specify the build type as 'serial', 'cpu' or 'gpu'"
-fi 
+fi
 
 if [ "${buildtype}" == "serial" ] || [ "${buildtype}" == "cpu" ] || [ "${buildtype}" == "gpu" ];
 then

@@ -21,7 +21,7 @@ to model warm clouds with exceptional computational performance.
    :caption: Contents:
 
    background
-   motivation 
+   motivation
    memorylayout
    monoids
    coupling

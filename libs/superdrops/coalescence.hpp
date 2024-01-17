@@ -158,7 +158,7 @@ according to Shima et al. 2009 Section 5.1.3. part (5) */
   else if (xi1 - gamma * xi2 == 0)
   {
     twin_superdroplet_coalescence(gamma, drop1, drop2);
-    
+
     /* if xi1 = xi2 = 1 before coalesence, then xi1=0 now */
     return is_null_superdrop(drop1);
     // return if_null_superdrop(drop1);
@@ -166,7 +166,7 @@ according to Shima et al. 2009 Section 5.1.3. part (5) */
 
   assert((xi1 >= gamma * xi2) && "something undefined occured "
                                    "during colllision-coalescence");
-  return 0;                               
+  return 0;
 }
 
 KOKKOS_FUNCTION void

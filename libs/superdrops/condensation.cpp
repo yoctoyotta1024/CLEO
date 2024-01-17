@@ -20,4 +20,3 @@
  */
 
 #include "./condensation.hpp"
-

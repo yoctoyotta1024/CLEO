@@ -22,7 +22,7 @@
 
 
 #ifndef RUNSTATS_HPP
-#define RUNSTATS_HPP 
+#define RUNSTATS_HPP
 
 #include <ios>
 #include <iomanip>
@@ -52,7 +52,7 @@ public:
       : kokkostimer(Kokkos::Timer()),
         t0(0.0), t_start(0.0), t_end(0.0)
   {
-    t0 = kokkostimer.seconds(); 
+    t0 = kokkostimer.seconds();
   }
 
   double time_elapsed() const
@@ -122,7 +122,7 @@ public:
 
   void at_start_step(const unsigned int t_mdl,
                      const Gridbox &gbx) const {}
-  
+
   void at_start_step() const {}
 };
 

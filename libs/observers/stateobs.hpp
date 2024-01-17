@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * Observers to output variables from 
+ * Observers to output variables from
  * gridboxes' state to arrays in a zarr
  * file system storage
  */
@@ -42,7 +42,7 @@ StateObserver(const unsigned int interval,
               FSStore &store,
               const int maxchunk,
               const size_t ngbxs);
-/* constructs observer of variables in the state 
+/* constructs observer of variables in the state
 of each gridbox with a constant timestep 'interval'
 using an instance of the DoStateObs class */
 
@@ -55,25 +55,25 @@ and TwoDMulitVarStorage types */
 private:
   using store_type = TwoDMultiVarStorage<StateBuffers<double>, State>;
   std::shared_ptr<store_type> zarr;
-  
+
 public:
   DoStateObs(FSStore &store,
              const int maxchunk,
              const size_t ngbxs)
       : zarr(std::make_shared<store_type>(store, maxchunk,
                                           "<f8", ngbxs, "")) {}
-  
+
   void before_timestepping(const viewh_constgbx h_gbxs) const
   {
     std::cout << "observer includes StateObserver\n";
-  }                                        
+  }
 
   void after_timestepping() const {}
-  
+
   void at_start_step(const unsigned int t_mdl,
                      const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {}
-                     
+
   void at_start_step(const unsigned int t_mdl,
                      const Gridbox &gbx) const
   /* writes some variables from gridbox state
@@ -89,7 +89,7 @@ StateObserver(const unsigned int interval,
               FSStore &store,
               const int maxchunk,
               const size_t ngbxs)
-/* constructs observer of variables in the state 
+/* constructs observer of variables in the state
 of each gridbox with a constant timestep 'interval'
 using an instance of the DoStateObs class */
 {

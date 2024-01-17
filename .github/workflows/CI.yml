@@ -26,7 +26,7 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install .
           python3 -m pip install -U sphinx
-          python3 -m pip install -U numpy 
+          python3 -m pip install -U numpy
           python3 -m pip install -U furo
           python3 -m pip install -U sphinx_copybutton
           python3 -m pip install -U sphinxcontrib-bibtex
@@ -34,9 +34,9 @@ jobs:
       - name: Test with pytest
         run: pytest .
       - name: Generate Doxygen Documentation
-        run: cd docs && 
-          mkdir build && 
-          mkdir build/doxygen && 
+        run: cd docs &&
+          mkdir build &&
+          mkdir build/doxygen &&
           doxygen doxygen/doxygen.dox
         shell: bash
       - name: Build docs

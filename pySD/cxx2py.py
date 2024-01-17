@@ -24,43 +24,43 @@ import numpy as np
 
 def print_dict_statement(filename, dictname, dict):
   ''' print key, value pairs for dictionary created by reading filename '''
-  
+
   print("\n---- "+dictname+" from ", filename, "-----")
   for c in dict:
     print(c, "=", dict[c])
   print("---------------------------------------------\n")
-  
+
 def remove_excess_line(line):
-  """ removes white spaces and 
+  """ removes white spaces and
   and comments from a line """
-  
+
   line = line.strip()
   line = line.replace(" ", "")
   if "#" in line:
-    line = line[:line.find("#")] 
+    line = line[:line.find("#")]
 
   return line
 
 def line_with_assignment(line):
-  """ find all the lines in a file 
+  """ find all the lines in a file
   which have form [...] = [...] ;
   ie. lines which assign variables. return
   list of these lines truncatd at ; """
 
   line = line.replace(" ", "")
-  if "double" in line or "int" in line: 
+  if "double" in line or "int" in line:
     ind1 = line.find("=")
     ind2 = line.find(";")
     if ind2 != -1 and ind1 != -1 and line[0] != "/":
       goodline = line[:ind2+1]
       return goodline
-    
+
   else:
     return False
 
 def where_typename_ends(line):
-  """finds index where c++ name for 
-  variable type ends for a const double, 
+  """finds index where c++ name for
+  variable type ends for a const double,
   double, int or const int. """
 
   if line[:3] == "int": x="int"
@@ -75,7 +75,7 @@ def where_typename_ends(line):
   return len(x)
 
 def read_cxxconsts_into_floats(filename):
-  """returns dictionary of value: float from 
+  """returns dictionary of value: float from
   (const) doubles and (const) ints
   assigned in a c++ file. Also returns
   dictionary of notfloats for values that
@@ -90,13 +90,13 @@ def read_cxxconsts_into_floats(filename):
         goodline = line_with_assignment(line)
         if goodline:
           rlines.append(goodline)
-      
+
       for line in rlines:
         x = where_typename_ends(line)
         name =  line[x:line.find("=")]
         value =  line[line.find("=")+1 : line.find(";")]
-        
-        try: 
+
+        try:
           floats[name] = float(value)
         except ValueError:
           notfloats[name] = value
@@ -107,24 +107,24 @@ def derive_more_floats(consts):
   '''return mconsts dictionary containing
     some derived key,values from values in
     consts dictionary'''
-   
+
   mconsts = {
     "COORD0"     : consts["TIME0"]*consts["W0"], # characteristic coordinate grid scale [m]
-    "RGAS_DRY"   : consts["RGAS_UNIV"]/consts["MR_DRY"], # specific gas constant for dry air [J/Kg/K]  
+    "RGAS_DRY"   : consts["RGAS_UNIV"]/consts["MR_DRY"], # specific gas constant for dry air [J/Kg/K]
     "RGAS_V"     : consts["RGAS_UNIV"]/consts["MR_WATER"], #specific gas constant for water [J/Kg/K]
     "CP0"        : consts["CP_DRY"], # characteristic Heat capacity [J/Kg/K]
     "Mr_ratio"   : consts["MR_WATER"]/consts["MR_DRY"],
   }
-  
+
   mconsts["RHO0"]       = consts["P0"]/(mconsts["CP0"]*consts["TEMP0"]) # characteristic density [Kg/m^3]
   mconsts["MASS0"]      = (consts["R0"]**3) * mconsts["RHO0"] # characteristic mass [Kg]
 
-  return mconsts 
+  return mconsts
 
 def read_configparams_into_floats(filename):
-  """returns dictionary of value: float from 
-  values assigned in a config .txt file. 
-  Also returns dictionary of notfloats 
+  """returns dictionary of value: float from
+  values assigned in a config .txt file.
+  Also returns dictionary of notfloats
   for values that couldn't be converted. """
 
   floats = {}
@@ -136,13 +136,13 @@ def read_configparams_into_floats(filename):
       if line[0] != "#" and line[0] != "/" and "=" in line:
         goodline = remove_excess_line(line)
         rlines.append(goodline)
-    
+
     for line in rlines:
       ind = line.find("=")
       name =  line[:ind]
       value =  line[ind+1:]
-      
-      try: 
+
+      try:
         floats[name] = float(value)
       except ValueError:
         notfloats[name] = value

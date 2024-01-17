@@ -41,8 +41,8 @@ from plotssrc import pltsds, as2017fig
 from pySD.sdmout_src import sdtracing
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 
@@ -87,7 +87,7 @@ coord2gen = None
 
 
 def displacement(time, w_avg, thalf):
-    '''displacement z given velocity, w, is sinusoidal 
+    '''displacement z given velocity, w, is sinusoidal
     profile: w = w_avg * pi/2 * np.sin(np.pi * t/thalf)
     where wmax = pi/2*w_avg and tauhalf = thalf/pi.'''
 
@@ -99,10 +99,10 @@ def displacement(time, w_avg, thalf):
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(sharepath).mkdir(exist_ok=True) 
-  Path(binpath).mkdir(exist_ok=True) 
-  
+  Path(path2build).mkdir(exist_ok=True)
+  Path(sharepath).mkdir(exist_ok=True)
+  Path(binpath).mkdir(exist_ok=True)
+
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
@@ -158,7 +158,7 @@ numconc = np.sum(sddata["xi"][0])/gbxs["domainvol"]/1e6  # [/cm^3]
 savename2 = binpath+"/cuspbifurc_validation.png"
 as2017fig.arabas_shima_2017_fig(time, zprof, sd0["radius"], sd0["msol"],
                                 thermo.temp[:, 0, 0, 0],
-                                supersat[:, 0, 0, 0], 
+                                supersat[:, 0, 0, 0],
                                 sddata.IONIC, sddata.MR_SOL,
                                 config["W_AVG"], numconc,
                                 savename2)

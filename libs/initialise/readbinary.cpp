@@ -50,7 +50,7 @@ to print to terminal. Return current position in file (after reading) */
   const size_t nchars = charbytes / sizeof(char);
   std::string metastr(nchars, ' ');
   file.read(&metastr[0], nchars);
-  
+
   std::cout << "----------------- gridfile global metastring -----------------\n"
             << metastr
             << "\n--------------------------------------------------------------\n";
@@ -64,13 +64,13 @@ VarMetadata::VarMetadata(std::ifstream &file, const int off)
 
   std::vector<unsigned int> uints(3, 0);
   binary_into_buffer<unsigned int>(file, uints);
-  
+
   char chars[2];
   file.read(chars, 2 * sizeof(char));
-  
+
   double dbl;
   file.read(reinterpret_cast<char *>(&dbl), sizeof(double));
-  
+
   b0 = uints.front();
   bsize = uints.at(1);
   nvar = uints.back();
@@ -110,12 +110,12 @@ each of the variables in the file */
     mdata.push_back(VarMetadata(file, pos));
     pos += gblmeta.mbytes_pervar;
   }
-  
+
   return mdata;
 }
 
 void check_vectorsizes(const std::vector<size_t> &sizes)
-/* raise error if values in vector 'sizes' are not the same. Useful 
+/* raise error if values in vector 'sizes' are not the same. Useful
 for checking if vectors are the same size e.g. for vectors of
 SD attributes created from reading initSDsfile and used to
 make InitSdsData object */

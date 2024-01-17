@@ -63,7 +63,7 @@ public:
       : nspacedims(sdic.get_nspacedims()),
         sdIdGen(std::make_shared<Superdrop::IDType::Gen>())
         {
-          sdic.fetch_data(initdata); 
+          sdic.fetch_data(initdata);
         }
 
   Superdrop operator()(const unsigned int kk) const;
@@ -79,7 +79,7 @@ viewd_supers::HostMirror
 initialise_supers_on_host(const GenSuperdrop &gen,
                           const viewd_supers supers);
 /* return mirror view of superdrops (on host memory)
-which have been initialised using data from a 
+which have been initialised using data from a
 superdroplet generator 'gen' for their initial gbxindex,
 spatial coordinates and attributes */
 
@@ -149,7 +149,7 @@ when in serial */
   /* equivalent serial version of parallel_for loop below
   for (size_t kk(0); kk < totnsupers; ++kk)
   {
-    h_supers(kk) = gen(kk); 
+    h_supers(kk) = gen(kk);
   }
   */
 

@@ -208,7 +208,7 @@ indicates coalescence should occur */
   URBG<ExecSpace> urbg{genpool4flag.get_state()}; // thread safe random number generator
   const auto phi = urbg.drand(0.0, 1.0);          // random number in range [0.0, 1.0]
   genpool4flag.free_state(urbg.gen);
-  
+
   if (phi < ecoal)
   {
     return true;
@@ -229,7 +229,7 @@ from Straub et al. 2010 */
 {
   if (is_coalescence(drop1, drop2, cke))
   {
-    return 1; // coalescence 
+    return 1; // coalescence
   }
   else
   {
@@ -247,7 +247,7 @@ from Straub et al. 2010 */
 {
   if (is_coalescence(drop1, drop2, cke))
   {
-    return 1; // coalescence 
+    return 1; // coalescence
   }
   else
   {

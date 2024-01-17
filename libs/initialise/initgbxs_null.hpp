@@ -17,7 +17,7 @@
  * File Description:
  * struct for griboxes'
  * initial conditions for CLEO SDM
- * (e.g. thermodynamics) which can be used 
+ * (e.g. thermodynamics) which can be used
  * by InitConds struct as GbxInitConds type
  */
 
@@ -46,7 +46,7 @@ public:
   std::vector<double> temp() const
   {
     std::vector<double> temp(ngbxs, 0.0);
-    
+
 
     return temp;
   }

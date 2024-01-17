@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO speedtest to 
+Script compiles and runs CLEO speedtest to
 check performance of CLEO usign different
 build configurations (e.g. serial, OpenmP
 and CUDA parallelism).
@@ -42,8 +42,8 @@ from pySD.sdmout_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.initsuperdropsbinary_src import *
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
@@ -79,16 +79,16 @@ ygrid = np.array([0, 25, 50])  # array of yhalf coords [m]
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
 zlim = 1500       # max z coord of superdroplets
-npergbx = 4       # number of superdroplets per gridbox 
+npergbx = 4       # number of superdroplets per gridbox
 
 # [min, max] range of initial superdroplet radii (and implicitly solute masses)
 rspan                = [3e-9, 3e-6] # [m]
 
 # settings for initial superdroplet multiplicies
 # (from bimodal Lognormal distribution)
-geomeans             = [0.02e-6, 0.15e-6]               
-geosigs              = [1.4, 1.6]                    
-scalefacs            = [6e6, 4e6]   
+geomeans             = [0.02e-6, 0.15e-6]
+geosigs              = [1.4, 1.6]
+scalefacs            = [6e6, 4e6]
 numconc = np.sum(scalefacs)
 
 ### --- settings for 3D Thermodynamics --- ###
@@ -118,13 +118,13 @@ def read_statsfile(statsfile):
                 # Process the line
                 line = line.strip().split()
                 stats[line[0]] = float(line[1])
-  
+
   return stats
 
 def write_outstats(nruns, n, outdatafile, buildtype, stats):
-  ''' if outdatafile doesn't already exist, creates new file with 
+  ''' if outdatafile doesn't already exist, creates new file with
   a header. else appends to end of file '''
-  
+
   try:
     # Try to open the file for exclusive creation
     with open(outdatafile, 'x') as file:
@@ -137,12 +137,12 @@ def write_outstats(nruns, n, outdatafile, buildtype, stats):
   except FileExistsError:
     print(f"stats output file '{outdatafile}' already exists")
 
-  # write new line at number = existing number of (non-header) lines + 1 
+  # write new line at number = existing number of (non-header) lines + 1
   with open(outdatafile, 'r') as file:
     lines = file.readlines()
 
   if buildtype == "gpus_cpus":
-    line = "\n"+str(n)+" "+str(stats["tstep"]) 
+    line = "\n"+str(n)+" "+str(stats["tstep"])
     with open(outdatafile, 'a') as file:
       file.write(line)
 
@@ -150,9 +150,9 @@ def write_outstats(nruns, n, outdatafile, buildtype, stats):
     nline = len(lines)-nruns+n
     lines[nline] = lines[nline].rstrip() + " "+str(stats["tstep"])+"\n"
     with open(outdatafile, 'w') as file:
-      file.writelines(lines) 
-  
-   
+      file.writelines(lines)
+
+
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -163,11 +163,11 @@ def write_outstats(nruns, n, outdatafile, buildtype, stats):
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(sharepath).mkdir(exist_ok=True) 
-  Path(binpath).mkdir(exist_ok=True) 
+  Path(path2build).mkdir(exist_ok=True)
+  Path(sharepath).mkdir(exist_ok=True)
+  Path(binpath).mkdir(exist_ok=True)
   if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True) 
+    Path(savefigpath).mkdir(exist_ok=True)
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 os.system("rm "+thermofile[:-4]+"*")
@@ -189,14 +189,14 @@ cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
 nsupers = crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
 coord3gen = crdgens.SampleCoordGen(True) # sample coord3 randomly
 coord1gen = crdgens.SampleCoordGen(True) # sample coord1 randomly
-coord2gen = crdgens.SampleCoordGen(True) # sample coord2 randomly 
+coord2gen = crdgens.SampleCoordGen(True) # sample coord2 randomly
 xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 radiigen = rgens.SampleLog10RadiiGen(rspan) # randomly sample radii from rspan [m]
 dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
-csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                       configfile, constsfile,
                                       gridfile, nsupers, numconc)
 
@@ -208,7 +208,7 @@ if isfigures[0]:
                               thermofile, savefigpath, isfigures[1])
   rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                               gridfile, savefigpath, isfigures[1],
-                              SDgbxs2plt) 
+                              SDgbxs2plt)
   plt.close()
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -225,7 +225,7 @@ for n in range(nruns):
   os.system('rm -rf '+dataset)
   os.system(executable + ' ' + configfile)
 
-  print("--- reading runtime statistics ---")     
+  print("--- reading runtime statistics ---")
   stats = read_statsfile(statsfile)
   for key, value in stats.items():
       print(key+": {:.3f}s".format(value))

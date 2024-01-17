@@ -240,7 +240,7 @@ velocity components are appropriate length given spatial dimension
 of model and definiton on z, x or y faces of gridboxes  */
 {
   auto is_size = [](const std::vector<double> &vel, const size_t sz)
-  { 
+  {
     const size_t velsize(vel.size());
     if ( velsize != sz )
     {

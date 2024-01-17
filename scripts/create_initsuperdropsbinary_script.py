@@ -26,8 +26,8 @@ from pathlib import Path
 
 sys.path.append(sys.argv[1]) # path to pySD (same as to CLEO)
 from pySD.initsuperdropsbinary_src import *
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
@@ -80,24 +80,24 @@ dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same 
 # numconc              = 512e6                         # total no. conc of real droplets [m^-3]
 # xiprobdist = probdists.DiracDelta(dirac0)
 
-# # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
+# # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m]
 # # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
-# # scalefacs          = [1e9]                       # relative heights of modes         
-# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-# geosigs              = [1.55, 2.3, 2]                    
-# scalefacs            = [1e6, 0.3e6, 0.025e6]   
-# # geomeans             = [0.02e-6, 0.15e-6]               
-# # geosigs              = [1.4, 1.6]                    
-# # scalefacs            = [6e6, 4e6]   
+# # scalefacs          = [1e9]                       # relative heights of modes
+# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
+# geosigs              = [1.55, 2.3, 2]
+# scalefacs            = [1e6, 0.3e6, 0.025e6]
+# # geomeans             = [0.02e-6, 0.15e-6]
+# # geosigs              = [1.4, 1.6]
+# # scalefacs            = [6e6, 4e6]
 # numconc = np.sum(scalefacs)
 # xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
- 
+
 volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 xiprobdist = probdists.VolExponential(volexpr0, rspan)
 
 # reff                 = 7e-6                     # effective radius [m]
-# nueff                = 0.08                     # effective variance 
+# nueff                = 0.08                     # effective variance
 # # xiprobdist = probdists.ClouddropsHansenGamma(reff, nueff)
 # rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
 # nrain                = 3000                         # raindrop concentration [m^-3]
@@ -113,21 +113,21 @@ xiprobdist = probdists.VolExponential(volexpr0, rspan)
 ### --------------------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord3 Generator --- ###
-# monocoord3           = 1000                        # all SDs have this same coord3 [m] 
+# monocoord3           = 1000                        # all SDs have this same coord3 [m]
 # coord3gen            =  crdgens.MonoCoordGen(monocoord3)
 coord3gen            =  crdgens.SampleCoordGen(True) # sample coord3 range randomly or not
 # coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
-# monocoord1           = 200                        # all SDs have this same coord1 [m] 
+# monocoord1           = 200                        # all SDs have this same coord1 [m]
 # coord1gen            =  crdgens.MonoCoordGen(monocoord1)
 coord1gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
 # coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
-# monocoord2           = 1000                        # all SDs have this same coord2 [m] 
+# monocoord2           = 1000                        # all SDs have this same coord2 [m]
 # coord2gen            =  crdgens.MonoCoordGen(monocoord2)
 # coord2gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
 coord2gen            = None                        # do not generate superdroplet coord2s
@@ -141,8 +141,8 @@ coord2gen            = None                        # do not generate superdrople
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(binariespath).mkdir(exist_ok=True) 
+  Path(path2build).mkdir(exist_ok=True)
+  Path(binariespath).mkdir(exist_ok=True)
 
 ### write initial superdrops binary
 attrsgen =  attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
@@ -154,7 +154,7 @@ csupers.write_initsuperdrops_binary(initsupersfile, attrsgen,
 ### plot initial superdrops binary
 if isfigures[0]:
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True) 
+        Path(savefigpath).mkdir(exist_ok=True)
     rsupers.plot_initGBxs_distribs(configfile, constsfile, initsupersfile,
                                    gridfile, savefigpath, isfigures[1],
                                    gbxs2plt)

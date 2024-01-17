@@ -25,7 +25,7 @@ from ..gbxboundariesbinary_src.read_gbxboundaries import read_dimless_gbxboundar
 
 def thermoinputsdict(configfile, constsfile):
   ''' create values from constants file & config file
-  required as inputs to create initial 
+  required as inputs to create initial
   superdroplet conditions '''
 
   consts = cxx2py.read_cxxconsts_into_floats(constsfile)
@@ -72,7 +72,7 @@ class DimlessThermodynamics:
     self.qvap0 = 1.0
     self.qcond0 = 1.0
     self.VEL0 = inputs["W0"]
-    
+
   def makedimless(self, THERMO):
 
     thermodata = {
@@ -84,14 +84,14 @@ class DimlessThermodynamics:
         "uvel": THERMO["UVEL"] / self.VEL0,
         "vvel": THERMO["VVEL"] / self.VEL0
       }
- 
+
     sfs = [self.PRESS0, self.TEMP0, 1.0, 1.0]
     sfs += [self.VEL0]*3
-    
+
     return thermodata, sfs
 
   def redimensionalise(self, thermo):
-    
+
     THERMODATA = {
         "press": thermo["press"] * self.PRESS0,
         "temp":thermo["temp"] * self.TEMP0,
@@ -103,20 +103,20 @@ class DimlessThermodynamics:
     if "uvel" in thermo.keys():
         THERMODATA["uvel"] = thermo["uvel"] * self.VEL0
     if "vvel" in thermo.keys():
-        THERMODATA["vvel"] = thermo["vvel"] * self.VEL0 
-    
+        THERMODATA["vvel"] = thermo["vvel"] * self.VEL0
+
     return THERMODATA
 
 def set_arraydtype(arr, dtype):
-   
+
   if any(arr):
     og = type(arr[0])
-    if og != dtype: 
+    if og != dtype:
       arr = np.array(arr, dtype=dtype)
 
       warning = "WARNING! dtype of attributes is being changed!"+\
                   " from "+str(og)+" to "+str(dtype)
-      raise ValueError(warning) 
+      raise ValueError(warning)
 
   return list(arr)
 
@@ -129,7 +129,7 @@ def ctype_compatible_thermodynamics(thermodata):
   for k, key in enumerate(thermodata.keys()):
 
     thermodata[key] = set_arraydtype(thermodata[key], datatypes[k])
-  
+
   return thermodata, datatypes
 
 
@@ -138,12 +138,12 @@ def check_datashape(thermodata, ndata, ndims, ntime):
   in ndata and that this length is compatible with the nummber of
   attributes and superdroplets expected given ndata'''
 
-  # expected lengths of data defined on gridbox centres or faces 
+  # expected lengths of data defined on gridbox centres or faces
   cen = int(ntime*np.prod(ndims))
   zface = int(ntime * ndims[2] * ndims[1] * (ndims[0]+1))
   xface = int(ntime * ndims[2] * (ndims[1]+1) * ndims[0])
   yface = int(ntime * (ndims[2]+1) * ndims[1] * ndims[0])
-  
+
   vars = ["press", "temp", "qvap", "qcond"]
   for var in vars:
     lenvar = len(thermodata[var])
@@ -153,7 +153,7 @@ def check_datashape(thermodata, ndata, ndims, ntime):
               " expected length: ntimesteps*ngridboxes = "+str(cen)+\
               "\n---------------------\n"
       raise ValueError(err)
-   
+
   vars = ["wvel", "uvel", "vvel"]
   for var, face in zip(vars, [zface, xface, yface]):
     lenvar = len(thermodata[var])
@@ -163,12 +163,12 @@ def check_datashape(thermodata, ndata, ndims, ntime):
               " expected length: ntimesteps*nfaces = "+str(face)+\
               "\n---------------------\n"
           raise ValueError(err)
- 
+
   lens = [len(d) for d in thermodata.values()]
   if lens != ndata:
     err = "inconsistent dimensions of thermodynamic data: "+\
-            str(lens)+" compared with given lengths: "+str(ndata)   
-    raise ValueError(err) 
+            str(lens)+" compared with given lengths: "+str(ndata)
+    raise ValueError(err)
 
 def write_thermodynamics_binary(thermofile, thermogen, configfile,
                                 constsfile, gridfile):
@@ -192,8 +192,8 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
   thermodata, scale_factors = dth.makedimless(thermodata)
 
   ndata = [len(dt) for dt in thermodata.values()]
-  
-  thermodata, datatypes = ctype_compatible_thermodynamics(thermodata) 
+
+  thermodata, datatypes = ctype_compatible_thermodynamics(thermodata)
   check_datashape(thermodata, ndata, ndims, inputs["ntime"])
 
   units = [b'P', b'K', b' ', b' ']
@@ -216,4 +216,3 @@ def write_thermodynamics_binary(thermofile, thermogen, configfile,
                               [ndata[v]], [datatypes[v]],
                               [units[v]], [scale_factors[v]],
                               metastr)
-  

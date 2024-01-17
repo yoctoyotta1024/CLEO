@@ -17,7 +17,7 @@
  * File Description:
  * Header file for terminal velocity
  * formulas (used by some types of superdroplet
- * motion and collision kernels). Formulas are 
+ * motion and collision kernels). Formulas are
  * contained in structures which satisfy
  * requirements of the VelocityFormula concept
 */
