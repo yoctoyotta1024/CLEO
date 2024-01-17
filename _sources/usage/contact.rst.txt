@@ -3,7 +3,7 @@
 Contact Us!
 ===========
 
-Main Developer 
+Main Developer
 --------------
 Email: yoctoyotta1024@yahoo.com
 ###############################

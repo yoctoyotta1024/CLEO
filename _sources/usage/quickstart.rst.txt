@@ -4,12 +4,12 @@ Quickstart
 Start by following the steps to :doc:`install CLEO <installation>`.
 
 To use CLEO as an SDM coupled to a dynamics solver, essentially your
-task is to contruct a ``main.cpp`` file. 
+task is to contruct a ``main.cpp`` file.
 
-Have a look at ``src/main.cpp`` for inspiration. Depending on the 
+Have a look at ``src/main.cpp`` for inspiration. Depending on the
 setup you desire, you need to include different instantiations of
 the core concepts of CLEO in your ``main.cpp``. For example you
-need to specify the type of Super-Droplet motion, microphysics, 
+need to specify the type of Super-Droplet motion, microphysics,
 dynamics solver and coupling.
 
 Once you've done that, your should have constructed all the
