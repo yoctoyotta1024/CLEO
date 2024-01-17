@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th January 2024
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -83,6 +83,18 @@ struct RogersYauTerminalVelocity
   but here formula is used beyond validity. For drops with
   radius >= 2mm, terminal velocity is that of a 2mm
   sized droplet = 9m/s. */
+};
+
+struct RogersGKTerminalVelocity
+{
+  KOKKOS_FUNCTION
+  double operator()(const Superdrop &drop) const;
+  /* returns (dimensionless) terminal velocity of a superdroplet.
+  See "Comparison of Raindrop Size Distributions Measured by 
+  Radar Wind Profiler and by Airplane" by  R. R. Rogers,
+  D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund.
+  formulation is apporximation of Gunn and Kinzer (1949)
+  tabulated values  */
 };
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
@@ -187,6 +199,35 @@ sized droplet = 9m/s. */
   else // radius >= r3
   {
     return k4; // see text between eqn (8.7) and (8.8)
+  }
+}
+
+KOKKOS_FUNCTION
+double RogersGKTerminalVelocity::
+operator()(const Superdrop &drop) const
+/* returns (dimensionless) terminal velocity of a superdroplet.
+See "Comparison of Raindrop Size Distributions Measured by
+Radar Wind Profiler and by Airplane" by  R. R. Rogers,
+D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund.
+formulation is apporximation of Gunn and Kinzer (1949)
+tabulated values. Note formulation in terms of radius not diameter */
+{
+  constexpr double radius0 = 3.725 * 1e-4 / dlc::R0;             // dimensionless conversion of D_0 [mm] (to radius)
+  constexpr double kcaps = 2.0 * 4.0 * 1000 * dlc::R0 / dlc::W0; // dimensionless conversion of K [m/s /mm] (for radius)
+  constexpr double smallk = -1.0 * 2.0 * 12.0 * 1000 * dlc::R0;  // dimensionless conversion of k [mm^(-1)]
+  constexpr double acaps = 9.65 / dlc::W0;                       // dimensionless conversion of A [m/s]
+  constexpr double bcaps = 10.43 / dlc::W0;                      // dimensionless conversion of B [m/s]
+  constexpr double ccaps = -1.0 * 2.0 * 0.6 * 1000 * dlc::R0;    // dimensionless conversion of C [mm^(-1)]
+
+  const auto radius = drop.get_radius();
+  if (radius < radius0)
+  {
+    const auto term = double{1.0 -  Kokkos::exp(smallk * radius)};
+    return term * kcaps * radius;
+  }
+  else
+  {
+    return acaps - bcaps * Kokkos::exp(ccaps * radius);
   }
 }
 
