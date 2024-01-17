@@ -92,7 +92,7 @@ struct RogersGKTerminalVelocity
   /* returns (dimensionless) terminal velocity of a superdroplet.
   See "Comparison of Raindrop Size Distributions Measured by 
   Radar Wind Profiler and by Airplane" by  R. R. Rogers,
-  D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund.
+  D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993).
   formulation is apporximation of Gunn and Kinzer (1949)
   tabulated values  */
 };
