@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: cleoconstants.hpp
  * Project: libs
@@ -11,8 +12,6 @@
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
- * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
  * header file with namespaces for (physical) constants used by CLEO

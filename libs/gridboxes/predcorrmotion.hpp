@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: predcorrmotion.hpp
  * Project: gridboxes

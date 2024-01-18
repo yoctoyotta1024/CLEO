@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: sdmmethods.hpp
  * Project: runcleo
@@ -11,8 +12,6 @@
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
- * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
  * struct wrapping the core ingredients of the Super-droplet Model
