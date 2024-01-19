@@ -71,7 +71,7 @@ concept SuperdropsBuffers =
       { b.writejsons(store, md) } -> std::same_as<void>;
 
       { b.set_buffer(u) } -> std::same_as<void>;
-    }
+    };
 
 /* combination of two types (A, B) that satisfiy
 SuperdropsBuffers is A followed by B */
