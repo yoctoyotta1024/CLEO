@@ -68,7 +68,7 @@ SDgbxs2plt  = list(range(39, 124))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid       = [0, 1200, 10]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+zgrid       = [0, 2500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid       = np.array([0, 20])  # array of xhalf coords [m]
 ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
@@ -80,7 +80,7 @@ Zbase       = 800                   # [m]
 TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
 qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
-WVEL        = 0.5                   # [m/s]
+WVEL        = 0.0                   # [m/s]
 Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
 ### --- settings for initial superdroplets --- ###
