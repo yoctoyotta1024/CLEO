@@ -23,6 +23,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 echo "============================================"
 echo "START NEW RUN"
 date
+echo "git hash: $(git rev-parse HEAD)"
 echo "--------------------------------------------"
 
 path2CLEO=${HOME}/CLEO/
