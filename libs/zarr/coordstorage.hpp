@@ -19,38 +19,32 @@
  * via inherited features from SingleVarStorage
  */
 
+#ifndef LIBS_ZARR_COORDSTORAGE_HPP_
+#define LIBS_ZARR_COORDSTORAGE_HPP_
 
-#ifndef COORDSTORAGE_HPP
-#define COORDSTORAGE_HPP
-
-#include <tuple>
 #include <string>
+#include <tuple>
 
-#include "./storehelpers.hpp"
 #include "./singlevarstorage.hpp"
+#include "./storehelpers.hpp"
 
-template <typename T>
-struct CoordStorage : SingleVarStorage<T>
 /* storage of a coordinate. Coordinate = a
 1-D variable with dimensions 'dims' in
 .zattrs metadata that matches the name of the
 variable (ie. variable is an xarray coord) */
-{
-private:
-  void writechunk()
+template <typename T>
+struct CoordStorage : SingleVarStorage<T> {
+ private:
   /* write data in buffer to a chunk in store */
-  {
+  void writechunk() {
     std::tie(this->chunkcount, this->bufferfill) =
-       storehelpers::
-            writebuffer2chunk(this->store, this->buffer,
-                              this->name, this->chunkcount);
+        storehelpers::writebuffer2chunk(this->store, this->buffer, this->name, this->chunkcount);
 
     writejsons();
   }
 
-  void writejsons()
   /* write strictly required metadata to decode chunks (MUST) */
-  {
+  void writejsons() {
     const auto shape("[" + std::to_string(this->ndata) + "]");
     const auto chunks("[" + std::to_string(this->chunksize) + "]");
     const std::string dims = "[\"" + this->name + "\"]";
@@ -58,22 +52,18 @@ private:
     this->zarrayjsons(shape, chunks, dims);
   }
 
-public:
-  CoordStorage(FSStore &store, const unsigned int chunksize,
-                    const std::string name, const std::string dtype,
-                    const std::string units, const double scale_factor)
-      : SingleVarStorage<T>(store, chunksize, name, dtype,
-                            units, scale_factor) {}
+ public:
+  CoordStorage(FSStore &store, const unsigned int chunksize, const std::string name,
+               const std::string dtype, const std::string units, const double scale_factor)
+      : SingleVarStorage<T>(store, chunksize, name, dtype, units, scale_factor) {}
 
-  ~CoordStorage()
   /* upon destruction write any data leftover in buffer
   to a chunk and write array's metadata to a .json file */
-  {
-    if (this->bufferfill != 0)
-    {
+  ~CoordStorage() {
+    if (this->bufferfill != 0) {
       writechunk();
     }
   }
 };
 
-#endif // COORDSTORAGE_HPP
+#endif  // LIBS_ZARR_COORDSTORAGE_HPP_
