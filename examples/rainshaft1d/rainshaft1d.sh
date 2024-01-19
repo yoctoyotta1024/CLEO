@@ -20,6 +20,11 @@ module load nvhpc/23.7-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
+echo "============================================"
+echo "START NEW RUN"
+date
+echo "--------------------------------------------"
+
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
 configfile=${path2CLEO}/examples/rainshaft1d/src/config/rain1d_config.txt
@@ -55,3 +60,8 @@ mkdir ${path2build}share
 ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile}
 
 ### ---------------------------------------------------- ###
+
+echo "--------------------------------------------"
+echo "END RUN"
+date
+echo "============================================"
