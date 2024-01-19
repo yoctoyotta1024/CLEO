@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: createcartesianmaps.hpp
  * Project: cartesiandomain
@@ -11,8 +12,6 @@
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
- * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
  * functions for creating a cartesian maps struct
