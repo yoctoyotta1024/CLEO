@@ -69,8 +69,8 @@ SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
 zgrid       = [0, 1200, 50]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid       = np.array([0, 20])  # array of xhalf coords [m]
-ygrid       = np.array([0, 20])  # array of yhalf coords [m]
+xgrid       = np.array([0, 100])  # array of xhalf coords [m]
+ygrid       = np.array([0, 100])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
 PRESS0      = 101315                # [Pa]
@@ -89,7 +89,7 @@ zlim        = 800       # min z coord of superdroplets [m]
 npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan       = [1e-6, 5e-5]                      # min and max range of radii to sample [m]
+rspan       = [1e-7, 5e-5]                      # min and max range of radii to sample [m]
 dryr_sf     = 1e6                               # Dry radii scalling factor: dryradii are 1/dryr_sf of radii [m]
 
 # settings for initial superdroplet multiplicies
@@ -238,5 +238,7 @@ animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,
                             savename=savename, fps=5)
+
+print(savefigpath)
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###
