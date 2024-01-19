@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 12th January 2024
+Last Modified: Friday 19th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -66,11 +66,16 @@ def check_dataset_for_ensemb(dataset, refset):
   '''returns xarray dataset after checking that
   time is consistent with the refset'''
 
-  time = pyzarr.get_rawdataset(refset)["time"].values
+  reftime = pyzarr.get_rawdataset(refset)["time"].values
   ds = pyzarr.get_rawdataset(dataset)
 
-  if np.any(ds["time"].values != time):
-    raise ValueError("data for time in datasets must be the same")
+  try:
+    time = ds["time"].values
+    if np.any(time != reftime):
+      print("refset: "+refset+", dataset: "+dataset)
+      raise ValueError("data for time in dataset must be same as reference")
+  except:
+    raise ValueError("no time data in dataset "+dataset)
 
 def write_time_to_ensembzarr(ensembdataset, dataset):
   ''' create or replace time group in ensembdataset
