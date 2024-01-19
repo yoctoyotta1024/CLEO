@@ -31,9 +31,9 @@ class MassMoms:
     reshape = [ntime] + list(ndims)
 
     try:
-      self.nsupers = self.var4d_fromzarr(ds, reshape, "n"+lab+"supers")          # number of superdroplets in gbxs over time
+      self.nsupers = self.var4d_fromzarr(ds, reshape, "n"+lab+"supers")        # number of superdroplets in gbxs over time
     except:
-      self.nsupers = self.var4d_fromzarr(ds, reshape, "nsupers"+lab)          # number of superdroplets in gbxs over time
+      self.nsupers = self.var4d_fromzarr(ds, reshape, "nsupers"+lab)           # number of superdroplets in gbxs over time
 
     self.mom0 = self.var4d_fromzarr(ds, reshape, "massmom0"+lab)               # number of droplets in gbxs over time
     self.mom1 = self.var4d_fromzarr(ds, reshape, "massmom1"+lab)               # total mass of droplets in gbxs over time
