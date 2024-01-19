@@ -146,6 +146,7 @@ def write_stdvars_to_ensembzarr(ensembdataset, vars4ensemb,
     stdname = ensembdataset+"/"+var+"_std"
     stdvar = ensemble_data(lambda x : np.std(x, axis=0),
                             datasets, var)
+    stdvar = stdvar / np.sqrt(len(datasets))
 
     zattrs = refset+"/"+var+"/.zattrs"
     write_matchingarray_to_storage(stdname, stdvar,
