@@ -32,7 +32,7 @@ maxchunk = 1250000                                                      # maximu
 
 ### SDM Runtime parameters ###
 # domain setup #
-nspacedims = 0                             # no. of spatial dimensions to model 
+nspacedims = 0                             # no. of spatial dimensions to model
 ngbxs = 1                                  # total number of Gbxs
 totnsupers = 64                            # (initial) total no. of SDs
 

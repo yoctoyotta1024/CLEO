@@ -12,5 +12,5 @@ __pycache__
 build*
 bin
 docs/source/_autosummary
-
+examples/examplesolutions/
 *.egg-info/*

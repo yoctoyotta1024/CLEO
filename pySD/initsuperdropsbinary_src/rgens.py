@@ -32,10 +32,10 @@ class MonoAttrGen:
     def __call__(self, nsupers):
         ''' Returns attribute for nsupers all
         with the value of attr0 '''
-        
+
         if type(nsupers) == np.ndarray:
             nsupers = np.shape(nsupers)[0]
-        
+
         attrs = np.full(nsupers, self.attr0)
 
         return attrs
@@ -48,7 +48,7 @@ class SampleLog10RadiiGen:
     def __init__(self, rspan):
 
         self.rspan = rspan
-        
+
     def __call__(self, nsupers):
         ''' Returns radii for nsupers sampled from rspan [m]'''
 
@@ -69,7 +69,7 @@ class SampleLog10RadiiGen:
             return radii  # [m]
         else:
             return np.array([])
-        
+
     def randomlysample_log10rbins(self, nbins, log10redgs):
         ''' given the bin edges, randomly sample each bin of
         log10(radius /m) and return the resultant radii [m]'''

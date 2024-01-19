@@ -13,7 +13,7 @@
 #SBATCH --error=./gpurunCLEO_err.%j.out
 
 ### ------------- PLEASE NOTE: this script assumes you ------------- ###
-### ------------- have already built CLEO in path2build ------------ ### 
+### ------------- have already built CLEO in path2build ------------ ###
 ### -------------------  directory using cmake  -------------------- ###
 
 ### ----- You need to edit these lines to set your ----- ###
@@ -23,7 +23,7 @@ module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
 module load nvhpc/23.7-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-source activate /work/mh1126/m300950/condaenvs/cleoenv 
+source activate /work/mh1126/m300950/condaenvs/cleoenv
 
 path2CLEO=${HOME}/CLEO/
 path2build=$1 # get from command line args
@@ -40,7 +40,7 @@ fi
 
 ### compile CLEO in ./build directory
 echo "path to build directory: ${path2build}"
-cd ${path2build} && pwd 
+cd ${path2build} && pwd
 make -j 128
 
 ### run CLEO

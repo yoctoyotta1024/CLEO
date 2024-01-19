@@ -74,7 +74,7 @@ then return a vector containing the metadata that is specific to
 each of the variables in the file */
 
 void check_vectorsizes(const std::vector<size_t> &sizes);
-/* raise error if values in vector 'sizes' are not the same. Useful 
+/* raise error if values in vector 'sizes' are not the same. Useful
 for checking if vectors are the same size e.g. for vectors of
 SD attributes created from reading initSDsfile and used to
 make InitSdsData object */
@@ -91,7 +91,7 @@ template <typename T>
 std::vector<T> vector_from_binary(std::ifstream &file,
                                   const VarMetadata &varmeta)
 /* return vector of data read from ifstream file for
-one variable in a binary file given that variable's 
+one variable in a binary file given that variable's
 metadata is given by the VarMetadata instance, 'varmeta' */
 {
   file.seekg(varmeta.b0, std::ios::beg);
@@ -103,5 +103,3 @@ metadata is given by the VarMetadata instance, 'varmeta' */
 
 
 #endif // READBINARY_HPP
-
-

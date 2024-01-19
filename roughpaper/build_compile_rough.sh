@@ -19,7 +19,7 @@ module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
 module load nvhpc/23.7-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-source activate /work/mh1126/m300950/condaenvs/cleoenv 
+source activate /work/mh1126/m300950/condaenvs/cleoenv
 path2build=${HOME}/CLEO/roughpaper/build/
 python=python
 gxx="g++"
@@ -29,7 +29,7 @@ cuda="nvc++"
 
 ### ------------ choose Kokkos configuration ----------- ###
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
-# kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"                     # flags for device parallelism (e.g. on gpus) 
+# kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"                     # flags for device parallelism (e.g. on gpus)
 kokkoshost=""                                                                             # flags for host parallelism (e.g. using OpenMP)
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                                  # flags for host parallelism (e.g. using OpenMP)
 ### ---------------------------------------------------- ###
@@ -41,6 +41,6 @@ echo ${buildcmd}
 CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ./ -B ${path2build} ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
 ### compile CLEO
-cd ${path2build} && pwd 
+cd ${path2build} && pwd
 make -j 16
 ### ---------------------------------------------------- ###

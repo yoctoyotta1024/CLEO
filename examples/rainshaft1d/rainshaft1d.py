@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 11th January 2024
+Last Modified: Wednesday 17th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -16,14 +16,14 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
 Script compiles and runs CLEO rain1D to create the
-data and plots precipitation example given constant 
+data and plots precipitation example given constant
 1-D rainshaft thermodynamics read from a file
 '''
 
 import os
 import sys
 import numpy as np
-import random 
+import random
 from pathlib import Path
 from matplotlib.colors import LogNorm, Normalize
 
@@ -39,8 +39,8 @@ from pySD.sdmout_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.initsuperdropsbinary_src import *
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
@@ -64,11 +64,11 @@ dataset       = binpath+"rain1d_sol.zarr"
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving figures
-SDgbxs2plt  = list(range(39, 99))
-SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot 
+SDgbxs2plt  = list(range(39, 124))
+SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid       = [0, 2000, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+zgrid       = [0, 2500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid       = np.array([0, 20])  # array of xhalf coords [m]
 ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
@@ -80,12 +80,13 @@ Zbase       = 800                   # [m]
 TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
 qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
-WVEL        = 0.0                   # [m/s]
+WVEL        = 4.0                   # [m/s]
+Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
 ### --- settings for initial superdroplets --- ###
 # initial superdroplet coordinates
 zlim        = 800       # min z coord of superdroplets [m]
-npergbx     = 256       # number of superdroplets per gridbox 
+npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
 rspan       = [1e-6, 5e-5]                      # min and max range of radii to sample [m]
@@ -101,7 +102,6 @@ dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 geomeans = [2.00e-08, 1.00e-07, 3.77e-06, ]
 geosigs = [1.55e+00, 1.55e+00, 1.38e+00, ]
 scalefacs = [3.00e+02, 2.00e+02, 3.49e0, ]
-
 numconc = np.sum(scalefacs) * 1e9
 
 ### ---------------------------------------------------------------- ###
@@ -115,9 +115,9 @@ numconc = np.sum(scalefacs) * 1e9
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(sharepath).mkdir(exist_ok=True) 
-  Path(binpath).mkdir(exist_ok=True) 
+  Path(path2build).mkdir(exist_ok=True)
+  Path(sharepath).mkdir(exist_ok=True)
+  Path(binpath).mkdir(exist_ok=True)
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 os.system("rm "+thermofile[:-4]+"*")
@@ -131,7 +131,8 @@ thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
                                                     PRESS0, TEMP0, qvap0,
                                                     Zbase, TEMPlapses,
                                                     qvaplapses, qcond,
-                                                    WVEL, None, None)
+                                                    WVEL, None, None,
+                                                    Wlength)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
@@ -147,21 +148,21 @@ dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf)
 
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
-csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                       configfile, constsfile,
                                       gridfile, nsupers, numconc)
 
 ### ----- show (and save) plots of binary file data ----- ###
 if isfigures[0]:
   if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True) 
+    Path(savefigpath).mkdir(exist_ok=True)
   rgrid.plot_gridboxboundaries(constsfile, gridfile,
                                savefigpath, isfigures[1])
   rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                               thermofile, savefigpath, isfigures[1])
   rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                               gridfile, savefigpath, isfigures[1],
-                              SDgbxs2plt) 
+                              SDgbxs2plt)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -214,7 +215,7 @@ savename=savefigpath+"rain1d_nsupers1d"
 animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,
-                            savename=savename, fps=5)   
+                            savename=savename, fps=5)
 
 nframes = len(time.mins)
 norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
@@ -236,6 +237,6 @@ savename=savefigpath+"rain1d_massconc1d"
 animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,
-                            savename=savename, fps=5)                        
+                            savename=savename, fps=5)
 ### ------------------------------------------------------------ ###
-### ------------------------------------------------------------ ###                                
+### ------------------------------------------------------------ ###

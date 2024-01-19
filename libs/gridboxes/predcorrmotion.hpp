@@ -14,15 +14,15 @@
  * -----
  * -----
  * File Description:
- * Generic struct satisfying Motion concept for 
+ * Generic struct satisfying Motion concept for
  * a superdroplet using predictor-corrector
  * method to update a superdroplet's coordinates and
  * updating gbx according to templated functions
  */
 
 
-#ifndef PREDCORRMOTION_HPP 
-#define PREDCORRMOTION_HPP 
+#ifndef PREDCORRMOTION_HPP
+#define PREDCORRMOTION_HPP
 
 #include <functional>
 #include <cassert>
@@ -81,7 +81,7 @@ the appropriate templated type */
   {
     auto idx = (unsigned int)change_if_nghbr.coord3(gbxmaps, gbxindex, drop);
     check_bounds(idx, gbxmaps.coord3bounds(idx), drop.get_coord3());
-    
+
     idx = change_if_nghbr.coord1(gbxmaps, idx, drop);
     check_bounds(idx, gbxmaps.coord1bounds(idx), drop.get_coord1());
 
@@ -93,4 +93,4 @@ the appropriate templated type */
   }
 };
 
-#endif // PREDCORRMOTION_HPP  
+#endif // PREDCORRMOTION_HPP

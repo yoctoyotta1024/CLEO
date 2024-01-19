@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 10th January 2024
+Last Modified: Tuesday 16th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -26,8 +26,8 @@ from pathlib import Path
 
 sys.path.append(sys.argv[1]) # path to pySD (same as to CLEO)
 from pySD.initsuperdropsbinary_src import *
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
@@ -38,7 +38,7 @@ configfile = sys.argv[3]
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
-gbxs2plt = 0 # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
+gbxs2plt = "all" # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
 
 ### essential paths and filenames
 constsfile = path2CLEO+"libs/cleoconstants.hpp"
@@ -50,27 +50,27 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 
 ### --- Number of Superdroplets per Gridbox --- ###
 ### ---        (an int or dict of ints)     --- ###
-# zlim = 1000
-# npergbx = 8
+zlim = 800
+npergbx = 256
 # nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim) # supers where z <= zlim
-# nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # supers where z >= zlim
-nsupers = 50
+nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # supers where z >= zlim
+# nsupers = 100
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
 # radiigen  =  rgens.MonoAttrGen(monor)                  # all SDs have the same radius [m]
 
-rspan                = [1e-8, 9e-5]                # min and max range of radii to sample [m]
+rspan                = [3e-9, 5e-5]                # min and max range of radii to sample [m]
 radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Superdroplet Dry Radii Generator --- ###
-monodryr                = 1e-12                         # all SDs have this same dryradius [m]
-dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
+# monodryr                = 1e-12                         # all SDs have this same dryradius [m]
+# dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
 
-# dryr_sf               = 1000           # scale factor for dry radii [m]
-# dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf) # dryradii are 1/sf of radii [m]
+dryr_sf               = 1.0                     # scale factor for dry radii [m]
+dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf) # dryradii are 1/sf of radii [m]
 
 ### ---------------------------------------------- ###
 
@@ -80,24 +80,40 @@ dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same 
 # numconc              = 512e6                         # total no. conc of real droplets [m^-3]
 # xiprobdist = probdists.DiracDelta(dirac0)
 
-# # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m] 
+# # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m]
 # # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
-# # scalefacs          = [1e9]                       # relative heights of modes         
-# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-# geosigs              = [1.55, 2.3, 2]                    
-# scalefacs            = [1e6, 0.3e6, 0.025e6]   
-# # geomeans             = [0.02e-6, 0.15e-6]               
-# # geosigs              = [1.4, 1.6]                    
-# # scalefacs            = [6e6, 4e6]   
+<<<<<<< HEAD
+# # scalefacs          = [1e9]                       # relative heights of modes
+# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
+# geosigs              = [1.55, 2.3, 2]
+# scalefacs            = [1e6, 0.3e6, 0.025e6]
+# # geomeans             = [0.02e-6, 0.15e-6]
+# # geosigs              = [1.4, 1.6]
+# # scalefacs            = [6e6, 4e6]
 # numconc = np.sum(scalefacs)
 # xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
- 
+
 volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 xiprobdist = probdists.VolExponential(volexpr0, rspan)
+=======
+# # scalefacs          = [1]                         # relative heights of modes
+geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
+geosigs              = [1.55, 2.3, 2]
+scalefacs            = [1, 0.3, 0.025]
+# # geomeans             = [0.02e-6, 0.15e-6]
+# # geosigs              = [1.4, 1.6]
+# # scalefacs            = [0.06, 0.04]
+numconc = np.sum(scalefacs) * 5e8
+xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
+
+# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
+# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
+# xiprobdist = probdists.VolExponential(volexpr0, rspan)
+>>>>>>> 4d114b6 (1D rainshaft setup in main example)
 
 # reff                 = 7e-6                     # effective radius [m]
-# nueff                = 0.08                     # effective variance 
+# nueff                = 0.08                     # effective variance
 # # xiprobdist = probdists.ClouddropsHansenGamma(reff, nueff)
 # rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
 # nrain                = 3000                         # raindrop concentration [m^-3]
@@ -113,21 +129,21 @@ xiprobdist = probdists.VolExponential(volexpr0, rspan)
 ### --------------------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord3 Generator --- ###
-# monocoord3           = 1000                        # all SDs have this same coord3 [m] 
+# monocoord3           = 1000                        # all SDs have this same coord3 [m]
 # coord3gen            =  crdgens.MonoCoordGen(monocoord3)
 coord3gen            =  crdgens.SampleCoordGen(True) # sample coord3 range randomly or not
 # coord3gen            = None                        # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
-# monocoord1           = 200                        # all SDs have this same coord1 [m] 
+# monocoord1           = 200                        # all SDs have this same coord1 [m]
 # coord1gen            =  crdgens.MonoCoordGen(monocoord1)
-coord1gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
-# coord1gen            = None                        # do not generate superdroplet coord1s
+# coord1gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
+coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
-# monocoord2           = 1000                        # all SDs have this same coord2 [m] 
+# monocoord2           = 1000                        # all SDs have this same coord2 [m]
 # coord2gen            =  crdgens.MonoCoordGen(monocoord2)
 # coord2gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
 coord2gen            = None                        # do not generate superdroplet coord2s
@@ -141,8 +157,8 @@ coord2gen            = None                        # do not generate superdrople
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(binariespath).mkdir(exist_ok=True) 
+  Path(path2build).mkdir(exist_ok=True)
+  Path(binariespath).mkdir(exist_ok=True)
 
 ### write initial superdrops binary
 attrsgen =  attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
@@ -154,7 +170,7 @@ csupers.write_initsuperdrops_binary(initsupersfile, attrsgen,
 ### plot initial superdrops binary
 if isfigures[0]:
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True) 
+        Path(savefigpath).mkdir(exist_ok=True)
     rsupers.plot_initGBxs_distribs(configfile, constsfile, initsupersfile,
                                    gridfile, savefigpath, isfigures[1],
                                    gbxs2plt)

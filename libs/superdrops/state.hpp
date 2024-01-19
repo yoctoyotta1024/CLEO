@@ -21,8 +21,8 @@
  */
 
 
-#ifndef STATE_HPP 
-#define STATE_HPP 
+#ifndef STATE_HPP
+#define STATE_HPP
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -85,4 +85,4 @@ public:
   }
 };
 
-#endif // STATE_HPP 
+#endif // STATE_HPP

@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Monday 15th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -82,7 +82,7 @@ radii r1 and r2 and terminal velocities of droplets */
 {
   constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0; // convert r^3 to [m^3]
   constexpr double ckeconst = R0cubed * 2.0 / 3.0 * DC::RHO_L *
-                              Kokkos::numbers::pi * dlc::W0;
+                              Kokkos::numbers::pi * dlc::W0 * dlc::W0;
 
   const auto r1cubed = double{r1 * r1 * r1};
   const auto r1_r2cubed = double{(r1 / r2) * (r1 / r2) * (r1 / r2)};

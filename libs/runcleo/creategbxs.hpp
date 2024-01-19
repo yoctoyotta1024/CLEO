@@ -177,13 +177,13 @@ inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps,
                                     const viewh_gbx h_gbxs)
 /* initialise the host (!) view of gridboxes
 using some data from gridbox generator 'gen'
-e.g. for each gridbox's volume. 
+e.g. for each gridbox's volume.
 Kokkos::parallel_for([...]) is equivalent to:
 for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
 when in serial */
 {
   const size_t ngbxs(h_gbxs.extent(0));
-  
+
   /* equivalent serial version of parallel_for loop below
   for (size_t ii(0); ii < ngbxs; ++ii)
   {
@@ -208,7 +208,7 @@ when in serial */
                               h_totsupers));
 
         /* use 1 thread on host to write gbx to view */
-        team_member.team_barrier(); 
+        team_member.team_barrier();
         if( team_member.team_rank() == 0 )
         {
           h_gbxs(ii) = gbx;

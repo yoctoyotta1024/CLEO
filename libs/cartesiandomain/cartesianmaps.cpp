@@ -16,7 +16,7 @@
  * -----
  * File Description:
  * functions related to creating and using maps to convert
- * between a gridbox indexes and domain coordinates for a 
+ * between a gridbox indexes and domain coordinates for a
  * cartesian C grid
  */
 

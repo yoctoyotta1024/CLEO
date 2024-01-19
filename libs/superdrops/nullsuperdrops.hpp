@@ -15,12 +15,12 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * functions for handling null / empty 
+ * functions for handling null / empty
  * superdrops ie. with multiplicity, xi, = 0
  */
 
-#ifndef NULLSUPERDROPS_HPP 
-#define NULLSUPERDROPS_HPP 
+#ifndef NULLSUPERDROPS_HPP
+#define NULLSUPERDROPS_HPP
 
 #include <cassert>
 
@@ -46,8 +46,7 @@ is_null_supers(const subviewd_supers supers,
 /* assert no null superdrops and return unchanged supers */
 {
   assert((nnull == 0) && "no null superdrops should exist");
-  return supers; 
+  return supers;
 }
 
-#endif // NULLSUPERDROPS_HPP 
-
+#endif // NULLSUPERDROPS_HPP

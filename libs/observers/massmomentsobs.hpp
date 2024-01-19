@@ -122,9 +122,9 @@ by the 2DStorage instance */
 {
 private:
   using store_type = TwoDMultiVarStorage<MassMomentBuffers<double>,
-                                         std::array<double, 3>>; 
+                                         std::array<double, 3>>;
   std::shared_ptr<store_type> zarr;
-  
+
   void rainmassmoments_to_storage(const Gridbox &gbx) const;
   /* calculated 0th, 1st and 2nd moment of the (real) droplet mass
   distribution and then writes them to zarr storage. (I.e.

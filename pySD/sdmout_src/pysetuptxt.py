@@ -34,9 +34,9 @@ def get_consts(setuptxt, isprint=True):
   return consts_dict(setuptxt, isprint=isprint)
 
 def config_dict(setuptxt, nattrs, isprint):
-  
+
   config = cxx2py.read_configparams_into_floats(setuptxt)
-  config["numSDattrs"] = config["nspacedims"] + nattrs         
+  config["numSDattrs"] = config["nspacedims"] + nattrs
   config["ntime"] = round(config["T_END"]/config["OBSTSTEP"])+1
 
   if isprint:
@@ -47,9 +47,8 @@ def config_dict(setuptxt, nattrs, isprint):
 def consts_dict(setuptxt, isprint):
   consts = cxx2py.read_cxxconsts_into_floats(setuptxt)
   consts.update(cxx2py.derive_more_floats(consts))
-  
+
   if isprint:
     cxx2py.print_dict_statement(setuptxt, "consts", consts)
 
   return consts
-

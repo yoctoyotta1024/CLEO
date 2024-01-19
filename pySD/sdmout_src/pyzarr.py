@@ -43,7 +43,7 @@ def raggedvar_fromzarr(ds, raggedcount, var):
   ''' returns ragged ak.Array dims [time, ragged]
   for a variable "var" in zarr ds '''
   if type(ds) == str:
-    ds = get_rawdataset(ds) 
+    ds = get_rawdataset(ds)
 
   return ak.unflatten(ds[var].values, raggedcount)
 
@@ -51,24 +51,24 @@ def var4d_fromzarr(ds, ntime, ndims, key):
   '''' returns 4D variable with dims
   [time, y, x, z] from zarr dataset "ds" '''
   if type(ds) == str:
-    ds = get_rawdataset(ds) 
+    ds = get_rawdataset(ds)
 
   reshape = [ntime] + list(ndims)
-  return np.reshape(ds[key].values, reshape) 
+  return np.reshape(ds[key].values, reshape)
 
 def var3d_fromzarr(ds, ndims, key):
   '''' returns 3D variable with dims
   [y, x, z] from zarr dataset "ds" '''
   if type(ds) == str:
-    ds = get_rawdataset(ds) 
+    ds = get_rawdataset(ds)
 
-  return np.reshape(ds[key].values, ndims) 
+  return np.reshape(ds[key].values, ndims)
 
 def get_thermodata(dataset, ntime, ndims, consts):
-  ''' returns a thermodynamic data in a dictionary. The value under 
-  each key is the thermodynamics data in a 2D array 
-  with dimensions [time, gridbox]. E.g. thermo["qvap"][:,0] gives the 
-  timeseries of qvap for the 0th gridbox. thermo["qvap][0] gives 
+  ''' returns a thermodynamic data in a dictionary. The value under
+  each key is the thermodynamics data in a 2D array
+  with dimensions [time, gridbox]. E.g. thermo["qvap"][:,0] gives the
+  timeseries of qvap for the 0th gridbox. thermo["qvap][0] gives
   the qvap of all gridboxes at the 0th output time '''
 
   return thermodata.Thermodata(dataset, ntime, ndims, consts)
@@ -92,9 +92,9 @@ def get_gbxindex(dataset, ndims):
   return var3d_fromzarr(dataset, ndims, "gbxindex")
 
 def get_totnsupers(dataset):
-  
+
   if type(dataset) == str:
-    dataset = get_rawdataset(dataset) 
+    dataset = get_rawdataset(dataset)
   try:
     return dataset["rgd_totnsupers"].values
   except:

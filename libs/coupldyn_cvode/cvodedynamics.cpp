@@ -60,7 +60,7 @@ next_t = step2dimlesstime(t_next) */
 {
   for (size_t i = 0; i < neq; ++i)
   {
-    previousstates.at(i) = NV_Ith_S(y, i); // state 
+    previousstates.at(i) = NV_Ith_S(y, i); // state
   }
 
   const auto dimless_next_t = double{step2dimlesstime(t_next)};
@@ -290,4 +290,3 @@ int CvodeDynamics::check_retval(void *returnvalue,
 
   return (0);
 }
-

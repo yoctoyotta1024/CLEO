@@ -22,7 +22,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
-configfile=${path2CLEO}/examples/constthermo2d/src/config/exmpl2d_config.txt 
+configfile=${path2CLEO}/examples/constthermo2d/src/config/exmpl2d_config.txt
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"
@@ -51,7 +51,7 @@ mkdir ${path2build}share
 ### ---------------------------------------------------- ###
 
 ### ------------------- compile & run ------------------ ###
-### generate input files and run 2d domain example 
+### generate input files and run 2d domain example
 ${python} constthermo2d.py ${path2CLEO} ${path2build} ${configfile}
 
 ### ---------------------------------------------------- ###

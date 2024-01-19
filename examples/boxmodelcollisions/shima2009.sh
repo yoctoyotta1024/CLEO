@@ -22,7 +22,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
-configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.txt 
+configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.txt
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"

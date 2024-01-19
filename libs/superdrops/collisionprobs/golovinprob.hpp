@@ -23,8 +23,8 @@
  * PairProbability concept (see collisions.hpp)
 */
 
-#ifndef GOLOVINPROB_HPP 
-#define GOLOVINPROB_HPP 
+#ifndef GOLOVINPROB_HPP
+#define GOLOVINPROB_HPP
 
 #include "../../cleoconstants.hpp"
 #include "../superdrop.hpp"

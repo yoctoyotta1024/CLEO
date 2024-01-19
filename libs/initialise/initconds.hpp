@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * various structures used to make an 
+ * various structures used to make an
  * InitConds instance which satifies
  * the InitialConditions concept
  */

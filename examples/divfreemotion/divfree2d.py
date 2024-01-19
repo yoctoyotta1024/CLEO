@@ -38,8 +38,8 @@ from pySD.sdmout_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.initsuperdropsbinary_src import *
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
@@ -73,16 +73,16 @@ ygrid = np.array([0, 20])  # array of yhalf coords [m]
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
 zlim = 750        # max z coord of superdroplets
-npergbx = 8       # number of superdroplets per gridbox 
+npergbx = 8       # number of superdroplets per gridbox
 
 # [min, max] range of initial superdroplet radii (and implicitly solute masses)
 rspan                = [3e-9, 3e-6] # [m]
 
 # settings for initial superdroplet multiplicies
 # (from bimodal Lognormal distribution)
-geomeans             = [0.02e-6, 0.15e-6]               
-geosigs              = [1.4, 1.6]                    
-scalefacs            = [6e6, 4e6]   
+geomeans             = [0.02e-6, 0.15e-6]
+geosigs              = [1.4, 1.6]
+scalefacs            = [6e6, 4e6]
 numconc = np.sum(scalefacs)
 
 ### --- settings for 2D Thermodynamics --- ###
@@ -106,11 +106,11 @@ sratios = [1.0, 1.0] # s_ratio [below, above] Zbase
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(sharepath).mkdir(exist_ok=True) 
-  Path(binpath).mkdir(exist_ok=True) 
+  Path(path2build).mkdir(exist_ok=True)
+  Path(sharepath).mkdir(exist_ok=True)
+  Path(binpath).mkdir(exist_ok=True)
   if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True) 
+    Path(savefigpath).mkdir(exist_ok=True)
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 os.system("rm "+thermofile[:-4]+"*")
@@ -139,7 +139,7 @@ dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
-csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
+csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                       configfile, constsfile,
                                       gridfile, nsupers, numconc)
 
@@ -151,7 +151,7 @@ if isfigures[0]:
                               thermofile, savefigpath, isfigures[1])
   rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
                               gridfile, savefigpath, isfigures[1],
-                              SDgbxs2plt) 
+                              SDgbxs2plt)
   plt.close()
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

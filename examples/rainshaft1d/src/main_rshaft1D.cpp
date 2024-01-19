@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th January 2024
+ * Last Modified: Wednesday 17th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -122,11 +122,11 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  const auto terminalv = SimmelTerminalVelocity{};
-  
+  const auto terminalv = RogersGKTerminalVelocity{};
+
   return CartesianMotion(motionstep,
                          &step2dimlesstime,
-                         terminalv);                                                                            
+                         terminalv);
 }
 
 inline Observer auto
@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
 
     /* coupling between coupldyn and SDM */
     const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
-    
+
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
     runcleo(initconds, tsteps.get_t_end());

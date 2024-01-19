@@ -21,5 +21,3 @@ init for submodule
 __all__ = ["pyzarr",
            "pysetuptxt",
            "pygbxsdat"]
-
-

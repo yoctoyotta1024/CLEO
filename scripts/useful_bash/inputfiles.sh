@@ -16,10 +16,10 @@
 ### ----- default compiler and python environment   ---- ###
 ### ----  and paths for CLEO and build directories  ---- ###
 module load python3/2022.01-gcc-11.2.0
-source activate /work/mh1126/m300950/condaenvs/cleoenv 
+source activate /work/mh1126/m300950/condaenvs/cleoenv
 
 path2CLEO=${HOME}/CLEO/
-path2scripts=${path2CLEO}/scripts/ 
+path2scripts=${path2CLEO}/scripts/
 python=python
 ### ---------------------------------------------------- ###
 
@@ -34,21 +34,21 @@ echo "config file: ${configfile}"
 echo "path to build directory: ${path2build}"
 
 if [ "${configfile}" != "" ] && [ "${path2build}" != "" ]
-then 
+then
   ### --------------- create gbx boundaries -------------- ###
-  echo "python create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}" 
+  echo "python create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}"
   python ${path2scripts}/create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
   ### ---------------------------------------------------- ###
 
 
   ### -------- create superdrop initial conditions ------- ###
-  echo "python create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}" 
+  echo "python create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}"
   python ${path2scripts}/create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
   ### ---------------------------------------------------- ###
 
 
   ### --------- create thermodynamics (optional) --------- ###
-  echo "python create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}" 
+  echo "python create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}"
   python ${path2scripts}/create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}
   ### ---------------------------------------------------- ###
 fi

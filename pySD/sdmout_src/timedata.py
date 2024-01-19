@@ -23,11 +23,11 @@ in various formats
 import xarray as xr
 
 class Time:
-  
+
   def __init__(self, dataset):
-    
+
     timeds = self.tryopen_time(dataset) # time from dataset
-    
+
     if timeds.units != 's':
       raise ValueError("units of time in dataset must be seconds")
 
@@ -37,16 +37,16 @@ class Time:
 
   def tryopen_time(self, dataset):
     ''' returns time variable (with metadata) from xarray dataset '''
-    
+
     if type(dataset) == str:
       print("time from dataset: ", dataset)
       timeds = xr.open_dataset(dataset, engine="zarr",
-                                consolidated=False)["time"] 
+                                consolidated=False)["time"]
     else:
       timeds =  dataset["time"]
 
     return timeds
-    
+
   def __getitem__(self, key):
     if key == "secs":
       return self.secs
@@ -57,4 +57,3 @@ class Time:
     else:
       err = "no known return provided for "+key+" key"
       raise ValueError(err)
-

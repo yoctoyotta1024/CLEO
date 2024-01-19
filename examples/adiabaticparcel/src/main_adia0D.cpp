@@ -125,7 +125,7 @@ create_observer(const Config &config,
   const Observer auto obs1 = PrintObserver(obsstep*100, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
-                                          &step2dimlesstime); 
+                                          &step2dimlesstime);
 
   const Observer auto obs3 = StateObserver(obsstep, store, maxchunk,
                                            config.ngbxs);
@@ -193,5 +193,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-
-

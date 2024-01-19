@@ -15,7 +15,7 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * functionality to calculate and output mass moments 
+ * functionality to calculate and output mass moments
  * of droplet distribution to array in a zarr file
  * system storage
  */
@@ -43,9 +43,9 @@ see calc_massmoments_serial.
       "calc_massmoments",
       Kokkos::RangePolicy<ExecSpace>(0, nsupers),
       KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
-        
+
         const auto xi = (double)(supers(kk).get_xi()); // cast multiplicity from unsigned int to double
-        const auto mass = supers(kk).mass(); 
+        const auto mass = supers(kk).mass();
         m0 += xi;
         m1 += xi * mass;
         m2 += xi * mass * mass;
@@ -59,7 +59,7 @@ std::array<double, 3>
 calc_rainmassmoments(const subviewd_constsupers supers)
 /* calculated 0th, 1st and 2nd moment of the
 (real) raindroplet mass distribution, i.e. 0th, 3rd and 6th
-moment of the droplet radius disttribution. Raindrops are 
+moment of the droplet radius disttribution. Raindrops are
 all droplets with r >= rlim = 40 microns.
 Kokkos::parallel_reduce([...]) is equivalent in serial to:
 for (size_t kk(0); kk < supers.extent(0); ++kk){[...]},
@@ -100,7 +100,7 @@ moment of the droplet radius distribution */
 {
   auto h_supers = Kokkos::create_mirror_view(supers);
   Kokkos::deep_copy(h_supers, supers);
-  
+
   std::array<double, 3> moms({0.0, 0.0, 0.0}); // {0th, 1st, 2nd} mass moments
   for (size_t kk(0); kk < h_supers.extent(0); ++kk)
   {

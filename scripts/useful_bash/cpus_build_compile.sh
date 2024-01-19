@@ -16,7 +16,7 @@
 ### ----  and paths for CLEO and build directories  ---- ###
 module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
-source activate /work/mh1126/m300950/condaenvs/cleoenv 
+source activate /work/mh1126/m300950/condaenvs/cleoenv
 path2CLEO=${HOME}/CLEO/
 path2build=$1 # get from command line argument
 python=python
@@ -40,6 +40,6 @@ mkdir ${path2build}bin
 mkdir ${path2build}share
 
 ### compile CLEO
-cd ${path2build} && pwd 
+cd ${path2build} && pwd
 make clean && make -j 16
 ### ---------------------------------------------------- ###
