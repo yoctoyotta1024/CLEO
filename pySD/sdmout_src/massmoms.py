@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 20th December 2023
+Last Modified: Friday 19th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,11 @@ class MassMoms:
     ds = self.tryopen_dataset(dataset)
     reshape = [ntime] + list(ndims)
 
-    self.nsupers = self.var4d_fromzarr(ds, reshape, "n"+lab+"supers")          # number of superdroplets in gbxs over time
+    try:
+      self.nsupers = self.var4d_fromzarr(ds, reshape, "n"+lab+"supers")          # number of superdroplets in gbxs over time
+    except:
+      self.nsupers = self.var4d_fromzarr(ds, reshape, "nsupers"+lab)          # number of superdroplets in gbxs over time
+
     self.mom0 = self.var4d_fromzarr(ds, reshape, "massmom0"+lab)               # number of droplets in gbxs over time
     self.mom1 = self.var4d_fromzarr(ds, reshape, "massmom1"+lab)               # total mass of droplets in gbxs over time
     self.mom2 = self.var4d_fromzarr(ds, reshape, "massmom2"+lab)               # 2nd mass moment of droplets (~reflectivity)
