@@ -90,7 +90,7 @@ npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
 rspan       = [1e-6, 5e-5]                      # min and max range of radii to sample [m]
-dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
+dryr_sf     = 1e6                               # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
 # geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
