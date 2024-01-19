@@ -1,5 +1,14 @@
-name: enviropy3
+name: CLEO-install-env
+channels:
+  - defaults
+#   - conda-forge
 dependencies:
-    - python>=3.9
+    - python>=3.12
     - pytest
-    - sphinx
+    # packages to install CLEO pySD
+    - pip
+    - numpy
+    - scipy
+    - matplotlib
+    - netcdf4
+    - xarray
