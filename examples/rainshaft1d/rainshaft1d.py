@@ -89,14 +89,21 @@ zlim        = 800       # min z coord of superdroplets [m]
 npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan       = [3e-9, 5e-5]                      # min and max range of radii to sample [m]
+rspan       = [1e-6, 5e-5]                      # min and max range of radii to sample [m]
 dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
-geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
-geosigs              = [1.55, 2.3, 2]
-scalefacs            = [1e6, 0.3e6, 0.025e6]
-numconc = np.sum(scalefacs) * 1000
+# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
+# geosigs              = [1.55, 2.3, 2]                    
+# scalefacs            = [1e6, 0.3e6, 0.025e6]   
+# numconc = np.sum(scalefacs) * 100
+
+# settings for initial superdroplet multiplicies with ATR and Aerosol from Lohmann et. al 2016 Fig. 5.5
+geomeans = [2.00e-08, 1.00e-07, 3.77e-06, ]
+geosigs = [1.55e+00, 1.55e+00, 1.38e+00, ]
+scalefacs = [3.00e+02, 2.00e+02, 3.49e0, ]
+numconc = np.sum(scalefacs) * 1e9
+
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -192,7 +199,7 @@ pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 savename = savefigpath + "rain1d_domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
-nsample = 500
+nsample = 25
 savename = savefigpath + "rain1d_randomsample.png"
 pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
