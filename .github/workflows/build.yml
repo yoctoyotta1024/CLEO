@@ -17,8 +17,29 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y cmake
 
-    - name: Build
+    - name: Build main
       run: |
         mkdir build && cd build
-        cmake -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON ..
+        cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON ..
         make
+
+    - name: Build example adia0D
+      run: cd build && make adia0D
+
+    - name: Build example golcolls
+      run: cd build && make golcolls
+
+    - name: Build example longcolls
+      run: cd build && make longcolls
+
+    - name: Build example lowlistcolls
+      run: cd build && make lowlistcolls
+
+    - name: Build example exmpl2D
+      run: cd build && make exmpl2D
+
+    - name: Build example divfree2D
+      run: cd build && make exmpl2D
+
+    - name: Build example rshaft1D
+      run: cd build && make rshaft1D
