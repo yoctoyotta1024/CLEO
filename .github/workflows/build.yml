@@ -1,9 +1,6 @@
 name: Build
 
-on:
-  pull_request:
-  push:
-    branches: [ci_build]
+on: pull_request
 
 jobs:
   build:
