@@ -92,17 +92,13 @@ npergbx     = 256       # number of superdroplets per gridbox
 rspan       = [3e-9, 5e-5]                      # min and max range of radii to sample [m]
 dryr_sf     = 1e0                               # Dry radii scalling factor: dryradii are 1/dryr_sf of radii [m]
 
-# settings for initial superdroplet multiplicies
-geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-geosigs              = [1.55, 2.3, 2]                    
-scalefacs            = [1e6, 0.3e6, 0.025e6]   
-numconc = np.sum(scalefacs) * 1000              # [m^-3]
 
 # settings for initial superdroplet multiplicies with ATR and Aerosol from Lohmann et. al 2016 Fig. 5.5
-# geomeans = [2.00e-08, 1.00e-07, 3.77e-06, ]
-# geosigs = [1.55e+00, 1.55e+00, 1.38e+00, ]
-# scalefacs = [3.00e+02, 2.00e+02, 3.49e0, ]
-# numconc = np.sum(scalefacs) * 1e9
+geomeans = [2.00e-08, 2.00e-07, 3.77e-06, ]  # [m]
+geosigs = [1.55e+00, 2.30e+00, 1.38e+00, ]   # [m]
+scalefacs = [1.00e+09, 3.00e+08, 2.73e+08, ] # [m^-3]
+numconc = np.sum(scalefacs)                  # [#]
+
 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
