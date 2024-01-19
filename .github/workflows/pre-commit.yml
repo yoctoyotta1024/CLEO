@@ -2,8 +2,6 @@ name: pre-commit
 
 on:
   pull_request:
-  push:
-    branches: [feature_linter_ci]
 
 jobs:
   pre-commit:
