@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 12th January 2024
+Last Modified: Friday 19th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -141,6 +141,7 @@ def write_stdvars_to_ensembzarr(ensembdataset, vars4ensemb,
     stdname = ensembdataset+"/"+var+"_std"
     stdvar = ensemble_data(lambda x : np.std(x, axis=0),
                             datasets, var)
+    stdvar = stdvar / np.sqrt(len(datasets))
 
     zattrs = refset+"/"+var+"/.zattrs"
     write_matchingarray_to_storage(stdname, stdvar,
