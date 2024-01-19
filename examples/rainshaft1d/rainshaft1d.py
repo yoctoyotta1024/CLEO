@@ -63,7 +63,7 @@ dataset       = binpath+"rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
-savefigpath = path2build+"/bin/" # directory for saving figures
+savefigpath = path2CLEO+"/examples/examplesolutions/" # directory for saving figures
 SDgbxs2plt  = list(range(39, 124))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
@@ -90,7 +90,7 @@ npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
 rspan       = [1e-6, 5e-5]                      # min and max range of radii to sample [m]
-dryr_sf     = 1e6                               # dryradii are 1/sf of radii [m]
+dryr_sf     = 1e6                               # Dry radii scalling factor: dryradii are 1/dryr_sf of radii [m]
 
 # settings for initial superdroplet multiplicies
 # geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
