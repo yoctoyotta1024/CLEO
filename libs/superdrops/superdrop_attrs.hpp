@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th January 2024
+ * Last Modified: Thursday 18th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -86,7 +86,9 @@ struct SuperdropAttrs
   /* see also change_radius which prevents
   drop radius < dry radius */
   {
-    assert((i_radius >= dryradius()) && "radius cannot be less than dry radius");
+    assert((i_radius - dryradius() > -1e-12 / dlc::R0) &&
+           "radius cannot be less than dry radius " &&
+           "(within 1e-6 micron tolerance)");
 
     radius = i_radius;
   }

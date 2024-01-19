@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 16th January 2024
+Last Modified: Wednesday 17th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -82,35 +82,19 @@ dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf) # dryradii are 1/sf of radii [m]
 
 # # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m]
 # # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
-<<<<<<< HEAD
-# # scalefacs          = [1e9]                       # relative heights of modes
+# # scalefacs          = [1]                         # relative heights of modes
 # geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
 # geosigs              = [1.55, 2.3, 2]
-# scalefacs            = [1e6, 0.3e6, 0.025e6]
-# # geomeans             = [0.02e-6, 0.15e-6]
-# # geosigs              = [1.4, 1.6]
-# # scalefacs            = [6e6, 4e6]
-# numconc = np.sum(scalefacs)
+# scalefacs            = [1, 0.3, 0.025]
+# # # geomeans             = [0.02e-6, 0.15e-6]
+# # # geosigs              = [1.4, 1.6]
+# # # scalefacs            = [0.06, 0.04]
+# numconc = np.sum(scalefacs) * 5e8
 # xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 
 volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 xiprobdist = probdists.VolExponential(volexpr0, rspan)
-=======
-# # scalefacs          = [1]                         # relative heights of modes
-geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
-geosigs              = [1.55, 2.3, 2]
-scalefacs            = [1, 0.3, 0.025]
-# # geomeans             = [0.02e-6, 0.15e-6]
-# # geosigs              = [1.4, 1.6]
-# # scalefacs            = [0.06, 0.04]
-numconc = np.sum(scalefacs) * 5e8
-xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
-
-# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-# xiprobdist = probdists.VolExponential(volexpr0, rspan)
->>>>>>> 4d114b6 (1D rainshaft setup in main example)
 
 # reff                 = 7e-6                     # effective radius [m]
 # nueff                = 0.08                     # effective variance
