@@ -165,7 +165,7 @@ create_observer(const Config &config,
   const Observer auto obs5 = create_supersattrs_observer(obsstep, store,
                                                           maxchunk);
 
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5;
+  return obs2 >> obs3 >> obs4 >> obs5;
 }
 
 inline auto create_sdm(const Config &config,
