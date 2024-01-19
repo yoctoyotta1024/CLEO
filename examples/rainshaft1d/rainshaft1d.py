@@ -63,7 +63,7 @@ dataset       = binpath+"rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
-savefigpath = path2CLEO+"/examples/examplesolutions/" # directory for saving figures
+savefigpath = path2CLEO+"/results/examplesolutions/" # directory for saving figures
 SDgbxs2plt  = list(range(39, 124))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
