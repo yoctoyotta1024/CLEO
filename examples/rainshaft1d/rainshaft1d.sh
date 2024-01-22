@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
 #SBATCH --time=00:30:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
+#SBATCH --mail-user=nils-ole.niebaum@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
 #SBATCH --output=./rain1d_out.%j.out
