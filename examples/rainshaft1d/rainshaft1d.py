@@ -63,7 +63,7 @@ dataset       = binpath+"rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
-savefigpath = path2CLEO+"/results/examplesolutions/" # directory for saving figures
+savefigpath = path2CLEO+"/results/examplesolutions/cloud_1421" # directory for saving figures
 SDgbxs2plt  = list(range(39, 55))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
@@ -94,10 +94,10 @@ dryr_sf     = 1e0                               # Dry radii scalling factor: dry
 
 
 # settings for initial superdroplet multiplicies with ATR and Aerosol from Lohmann et. al 2016 Fig. 5.5
-geomeans = [2.00e-08, 2.00e-07, 6.87e-06, 6.25e-05, ]
-geosigs = [1.55e+00, 2.30e+00, 1.05e+00, 8.86e+00, ]
-scalefacs = [1.00e+09, 3.00e+08, 1.29e+08, 5.35e+03, ]
-numconc = 1.43e+09
+geomeans = [2.00e-08, 2.00e-07, 3.77e-06, ]
+geosigs = [1.55e+00, 2.30e+00, 1.38e+00, ]
+scalefacs = [1.00e+09, 3.00e+08, 2.73e+08, ]
+numconc = 1.57e+09
 
 
 ### ---------------------------------------------------------------- ###
