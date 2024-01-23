@@ -69,8 +69,8 @@ SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
 zgrid       = [0, 1200, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid       = np.array([0, 200])  # array of xhalf coords [m]
-ygrid       = np.array([0, 200])  # array of yhalf coords [m]
+xgrid       = np.array([0, 20])  # array of xhalf coords [m]
+ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
 PRESS0      = 101315                # [Pa]
@@ -89,15 +89,15 @@ zlim        = 800       # min z coord of superdroplets [m]
 npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan       = [3e-9, 5e-4]                      # min and max range of radii to sample [m]
+rspan       = [3e-9, 5e-5]                      # min and max range of radii to sample [m]
 dryr_sf     = 1e0                               # Dry radii scalling factor: dryradii are 1/dryr_sf of radii [m]
 
 
 # settings for initial superdroplet multiplicies with ATR and Aerosol from Lohmann et. al 2016 Fig. 5.5
 geomeans = [2.00e-08, 2.00e-07, 3.77e-06, ]
 geosigs = [1.55e+00, 2.30e+00, 1.38e+00, ]
-scalefacs = [1.00e+09, 3.00e+08, 2.73e+08, ]
-numconc = 1.57e+09
+scalefacs = [0, 0, 2.73e+08, ]
+numconc = 2.73e+08
 
 
 ### ---------------------------------------------------------------- ###
