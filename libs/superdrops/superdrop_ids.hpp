@@ -20,67 +20,52 @@
  * or non-existant (occupying no memory)
  */
 
-#ifndef SUPERDROP_IDS_HPP
-#define SUPERDROP_IDS_HPP
+#ifndef LIBS_SUPERDROPS_SUPERDROP_IDS_HPP_
+#define LIBS_SUPERDROPS_SUPERDROP_IDS_HPP_
 
 #include <ostream>
 
 #include <Kokkos_Core.hpp>
 
-struct IntID
-{
-  /* struct containing value of SD identity (8bytes integer) */
+/* struct containing value of SD identity (8bytes integer) */
+struct IntID {
   size_t value;
 
-  class Gen
-  {
-  public:
-    IntID next()
+  class Gen {
+   public:
     /* note this generator is not thread safe
     (_idx++ undefined in multi-threaded environment) */
-    {
-      return {_id++};
-    }
+    IntID next() { return {_id++}; }
 
-    KOKKOS_INLINE_FUNCTION IntID next(const size_t id)
     /* note this generator assumes idx was
     thread safe generated (ie. is unique) */
-    {
-      return {id};
-    }
+    KOKKOS_INLINE_FUNCTION IntID next(const size_t id) { return {id}; }
 
-  private:
+   private:
     size_t _id = 0;
   };
 };
 
-struct EmptyID
-{
-  /* struct for non-existant SD identity */
-  class Gen
-  {
-  public:
+/* struct for non-existant SD identity */
+struct EmptyID {
+  class Gen {
+   public:
     KOKKOS_INLINE_FUNCTION EmptyID next() { return {}; }
 
-    KOKKOS_INLINE_FUNCTION EmptyID next(const unsigned int kk)
-    {
-      return {};
-    }
+    KOKKOS_INLINE_FUNCTION EmptyID next(const unsigned int kk) { return {}; }
   };
 };
 
-inline std::ostream &operator<<(std::ostream &os, const IntID &id)
 /* print SD identity given it is an IntID (an integer) */
-{
+inline std::ostream &operator<<(std::ostream &os, const IntID &id) {
   os << id.value;
   return os;
 }
 
-inline std::ostream &operator<<(std::ostream &os, const EmptyID &id)
 /* print null statement given SD identity is EmptyID (non-existent) */
-{
+inline std::ostream &operator<<(std::ostream &os, const EmptyID &id) {
   os << "(Undefined) No ID";
   return os;
 }
 
-#endif // SUPERDROP_IDS_HPP
+#endif  // LIBS_SUPERDROPS_SUPERDROP_IDS_HPP_
