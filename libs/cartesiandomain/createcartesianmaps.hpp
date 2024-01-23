@@ -20,26 +20,22 @@
  * coordinate (upper and lower) boundaries
  */
 
+#ifndef LIBS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
+#define LIBS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
 
-#ifndef CREATECARTESIANMAPS_HPP
-#define CREATECARTESIANMAPS_HPP
-
+#include <stdexcept>
 #include <string_view>
 #include <vector>
-#include <stdexcept>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./cartesianmaps.hpp"
-#include "./cartesianboundaryconds.hpp"
+#include "cartesiandomain/cartesianboundaryconds.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
 
-CartesianMaps create_cartesian_maps(const unsigned int ngbxs,
-                                    const unsigned int nspacedims,
-                                    std::string_view grid_filename);
 /* creates cartesian maps instance using gridbox bounds read from
 gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite
 boundary conditions (see note above). In a non-3D case, boundaries
@@ -49,5 +45,7 @@ gridbox remains finite. E.g. In the 0-D case, the bounds maps all
 have 1 {key, value} where key=gbxidx=0 and value = {max, min}
 numerical limits, meanwhile volume function returns a value determined
 from the gridfile 'grid_filename' */
+CartesianMaps create_cartesian_maps(const unsigned int ngbxs, const unsigned int nspacedims,
+                                    std::string_view grid_filename);
 
-#endif // CREATECARTESIANMAPS_HPP
+#endif  // LIBS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
