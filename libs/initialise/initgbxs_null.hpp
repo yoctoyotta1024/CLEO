@@ -20,75 +20,65 @@
  * by InitConds struct as GbxInitConds type
  */
 
-#ifndef INITGBXS_NULL_HPP
-#define INITGBXS_NULL_HPP
+#ifndef LIBS_INITIALISE_INITGBXS_NULL_HPP_
+#define LIBS_INITIALISE_INITGBXS_NULL_HPP_
 
-#include <vector>
 #include <utility>
+#include <vector>
 
 #include "initialise/config.hpp"
 
-struct InitGbxsNull
 /* struct containing functions which return zero
 for all initial conditions to create gridboxes'
 states e.g. via the create_gbxs function */
-{
-private:
+struct InitGbxsNull {
+ private:
   size_t ngbxs;
 
-public:
-  InitGbxsNull(const Config &config)
-      : ngbxs(config.ngbxs) {}
+ public:
+  explicit InitGbxsNull(const Config &config) : ngbxs(config.ngbxs) {}
 
   size_t get_ngbxs() const { return ngbxs; }
 
-  std::vector<double> temp() const
-  {
+  std::vector<double> temp() const {
     std::vector<double> temp(ngbxs, 0.0);
-
 
     return temp;
   }
 
-  std::vector<double> press() const
-  {
+  std::vector<double> press() const {
     std::vector<double> press(ngbxs, 0.0);
 
     return press;
   }
 
-  std::vector<double> qvap() const
-  {
+  std::vector<double> qvap() const {
     std::vector<double> qvap(ngbxs, 0.0);
 
     return qvap;
   }
 
-  std::vector<double> qcond() const
-  {
+  std::vector<double> qcond() const {
     std::vector<double> qcond(ngbxs, 0.0);
 
     return qcond;
   }
 
-  std::vector<std::pair<double, double>> wvel() const
-  {
+  std::vector<std::pair<double, double>> wvel() const {
     auto w = std::make_pair<double, double>(0.0, 0.0);
     std::vector<std::pair<double, double>> wvel(ngbxs, w);
 
     return wvel;
   }
 
-  std::vector<std::pair<double, double>> uvel() const
-  {
+  std::vector<std::pair<double, double>> uvel() const {
     auto u = std::make_pair<double, double>(0.0, 0.0);
     std::vector<std::pair<double, double>> uvel(ngbxs, u);
 
     return uvel;
   }
 
-  std::vector<std::pair<double, double>> vvel() const
-  {
+  std::vector<std::pair<double, double>> vvel() const {
     auto v = std::make_pair<double, double>(0.0, 0.0);
     std::vector<std::pair<double, double>> vvel(ngbxs, v);
 
@@ -96,4 +86,4 @@ public:
   }
 };
 
-#endif // INITGBXS_NULL_HPP
+#endif  // LIBS_INITIALISE_INITGBXS_NULL_HPP_

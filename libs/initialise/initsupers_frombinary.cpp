@@ -21,22 +21,17 @@
  * struct as SuperdropInitConds type
  */
 
+#include "initialise/initsupers_frombinary.hpp"
 
-#include "./initsupers_frombinary.hpp"
-
-void InitSupersFromBinary::
-    init_solutes_data(InitSupersData &initdata) const
 /* sets initial data for solutes as
 a single SoluteProprties instance */
-{
+void InitSupersFromBinary::init_solutes_data(InitSupersData &initdata) const {
   initdata.solutes.at(0) = SoluteProperties{};
 }
 
-void InitSupersFromBinary::
-    initdata_from_binary(InitSupersData &initdata) const
 /* sets initial data in initdata using data read
 from a binary file called initsupers_filename */
-{
+void InitSupersFromBinary::initdata_from_binary(InitSupersData &initdata) const {
   std::ifstream file(open_binary(initsupers_filename));
 
   std::vector<VarMetadata> meta(metadata_from_binary(file));
@@ -44,41 +39,33 @@ from a binary file called initsupers_filename */
   read_initdata_binary(initdata, file, meta);
 
   file.close();
-};
+}
 
-void InitSupersFromBinary::
-    check_initdata_sizes(const InitSupersData &in) const
 /* check all the vectors in the initdata struct all
 have sizes consistent with one another. Include
 coords data in check if nspacedims != 0 */
-{
-  std::vector<size_t> sizes({in.sdgbxindexes.size(),
-                             in.xis.size(),
-                             in.radii.size(),
-                             in.msols.size()});
+void InitSupersFromBinary::check_initdata_sizes(const InitSupersData &in) const {
+  std::vector<size_t> sizes(
+      {in.sdgbxindexes.size(), in.xis.size(), in.radii.size(), in.msols.size()});
 
-  switch (nspacedims)
-  {
-  case 3: // 3-D model
-    sizes.push_back(in.coord2s.size());
-  case 2: // 3-D or 2-D model
-    sizes.push_back(in.coord1s.size());
-  case 1: // 3-D, 2-D or 1-D model
-    sizes.push_back(in.coord3s.size());
+  switch (nspacedims) {
+    case 3:  // 3-D model
+      sizes.push_back(in.coord2s.size());
+    case 2:  // 3-D or 2-D model
+      sizes.push_back(in.coord1s.size());
+    case 1:  // 3-D, 2-D or 1-D model
+      sizes.push_back(in.coord3s.size());
   }
 
   check_vectorsizes(sizes);
 }
 
-void InitSupersFromBinary::
-    read_initdata_binary(InitSupersData &initdata,
-                         std::ifstream &file,
-                         const std::vector<VarMetadata> &meta) const
 /* copy data for vectors from binary file to initdata struct */
-{
+void InitSupersFromBinary::read_initdata_binary(InitSupersData &initdata, std::ifstream &file,
+                                                const std::vector<VarMetadata> &meta) const {
   initdata.sdgbxindexes = vector_from_binary<unsigned int>(file, meta.at(0));
 
-  initdata.xis = vector_from_binary<unsigned long long>(file, meta.at(1));
+  initdata.xis = vector_from_binary<uint64_t>(file, meta.at(1));
 
   initdata.radii = vector_from_binary<double>(file, meta.at(2));
 
@@ -91,11 +78,10 @@ void InitSupersFromBinary::
   initdata.coord2s = vector_from_binary<double>(file, meta.at(6));
 }
 
-size_t InitSupersFromBinary::fetch_data_size() const
 /* data size returned is number of variables as
 declared by the metadata for the first variable
 in the initsupers file */
-{
+size_t InitSupersFromBinary::fetch_data_size() const {
   std::ifstream file(open_binary(initsupers_filename));
 
   VarMetadata meta(metadata_from_binary(file).at(0));
