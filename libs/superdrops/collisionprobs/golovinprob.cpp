@@ -20,7 +20,6 @@
  * calculations are contained in structures
  * that satisfy the requirements of the
  * PairProbability concept (see collisions.hpp)
-*/
-
+ */
 
 #include "./golovinprob.hpp"

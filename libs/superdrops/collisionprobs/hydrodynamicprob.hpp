@@ -17,10 +17,10 @@
  * Probability of some kind of collision  event
  * between two (real) droplets using the
  * hydrodynamic (i.e. gravitational) kernel
-*/
+ */
 
-#ifndef HYDRODYNAMICPROB_HPP
-#define HYDRODYNAMICPROB_HPP
+#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_HYDRODYNAMICPROB_HPP_
+#define LIBS_SUPERDROPS_COLLISIONPROBS_HYDRODYNAMICPROB_HPP_
 
 #include <Kokkos_Core.hpp>
 
@@ -31,23 +31,15 @@
 namespace dlc = dimless_constants;
 
 template <VelocityFormula TerminalVelocity>
-struct HydrodynamicProb
-{
-private:
+struct HydrodynamicProb {
+ private:
   const double prob_jk_const;
   const TerminalVelocity terminalv;
 
-public:
-  HydrodynamicProb(TerminalVelocity tv)
-      : prob_jk_const(Kokkos::numbers::pi * dlc::R0 * dlc::R0 * dlc::W0),
-        terminalv(tv) {}
+ public:
+  explicit HydrodynamicProb(TerminalVelocity tv)
+      : prob_jk_const(Kokkos::numbers::pi * dlc::R0 * dlc::R0 * dlc::W0), terminalv(tv) {}
 
-  KOKKOS_INLINE_FUNCTION
-  double operator()(const Superdrop &drop1,
-                    const Superdrop &drop2,
-                    const double eff,
-                    const double DELT,
-                    const double VOLUME) const
   /* returns probability that a pair of droplets collide
   (and coalesce or breakup etc.) according to the hydrodynamic,
   i.e. gravitational, collision kernel. Probability is given by
@@ -56,7 +48,9 @@ public:
   given the efficiency factor eff = eff(drop1, drop2), for
   example as expressed in equation 11 of Simmel at al. 2002 for
   collision-coalescence */
-  {
+  KOKKOS_INLINE_FUNCTION
+  double operator()(const Superdrop &drop1, const Superdrop &drop2, const double eff,
+                    const double DELT, const double VOLUME) const {
     /* time interval / volume for which
     probability is calculated [s/m^3] */
     const auto DELT_DELVOL = double{DELT / VOLUME};
@@ -76,5 +70,4 @@ public:
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
-
-#endif // HYDRODYNAMICPROB_HPP
+#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_HYDRODYNAMICPROB_HPP_
