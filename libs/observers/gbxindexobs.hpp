@@ -18,8 +18,8 @@
  * zarr file system storage
  */
 
-#ifndef GBXINDEXOBS_HPP
-#define GBXINDEXOBS_HPP
+#ifndef LIBS_OBSERVERS_GBXINDEXOBS_HPP_
+#define LIBS_OBSERVERS_GBXINDEXOBS_HPP_
 
 #include <concepts>
 #include <memory>
@@ -32,36 +32,29 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr/coordstorage.hpp"
 
-
-class GbxindexObserver
 /* Observer which makes 1 observation to
 observe the gbxindex of each gridbox and
 write it to an array 'zarr' store as
 determined by the CoordStorage instance */
-{
-private:
+class GbxindexObserver {
+ private:
   using store_type = CoordStorage<unsigned int>;
   std::shared_ptr<store_type> zarr;
 
-public:
+ public:
   GbxindexObserver(FSStore &store, const int maxchunk)
-      : zarr(std::make_shared<store_type>(store, maxchunk, "gbxindex",
-                                          "<u4", " ", 1))
-  {
+      : zarr(std::make_shared<store_type>(store, maxchunk, "gbxindex", "<u4", " ", 1)) {
     zarr->is_name("gbxindex");
   }
 
-  void before_timestepping(const viewh_constgbx h_gbxs) const
   /* writes gbxindexes to zarr store
   (only if data has not yet been observed) */
-  {
+  void before_timestepping(const viewh_constgbx h_gbxs) const {
     std::cout << "observer includes GbxindexObserver\n";
 
-    if (zarr->get_ndata() == 0)
-    {
+    if (zarr->get_ndata() == 0) {
       const size_t ngbxs(h_gbxs.extent(0));
-      for (size_t ii(0); ii < ngbxs; ++ii)
-      {
+      for (size_t ii(0); ii < ngbxs; ++ii) {
         zarr->value_to_storage(h_gbxs(ii).get_gbxindex());
       }
     }
@@ -69,22 +62,14 @@ public:
 
   void after_timestepping() const {}
 
-  unsigned int next_obs(const unsigned int t_mdl) const
-  {
-    return LIMITVALUES::uintmax;
-  }
+  unsigned int next_obs(const unsigned int t_mdl) const { return LIMITVALUES::uintmax; }
 
-  bool on_step(const unsigned int t_mdl) const
-  {
-    return false;
-  }
+  bool on_step(const unsigned int t_mdl) const { return false; }
 
-  void at_start_step(const unsigned int t_mdl,
-                     const viewh_constgbx h_gbxs,
+  void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {}
 
-  void at_start_step(const unsigned int t_mdl,
-                     const Gridbox &gbx) const {}
+  void at_start_step(const unsigned int t_mdl, const Gridbox &gbx) const {}
 };
 
-#endif // GBXINDEXOBS_HPP
+#endif  // LIBS_OBSERVERS_GBXINDEXOBS_HPP_
