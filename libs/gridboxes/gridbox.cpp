@@ -17,4 +17,4 @@
  * Functions and structures related to the CLEO gridboxes
  */
 
-#include "./gridbox.hpp"
+#include "gridboxes/gridbox.hpp"

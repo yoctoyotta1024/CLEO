@@ -21,4 +21,4 @@
  * Methods follows equations in Grabowski et al. 2018
  */
 
-#include "./predcorr.hpp"
+#include "gridboxes/predcorr.hpp"

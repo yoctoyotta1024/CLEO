@@ -19,16 +19,14 @@
  * in gridboxes
  */
 
-
-#ifndef DETECTORS_HPP
-#define DETECTORS_HPP
+#ifndef LIBS_GRIDBOXES_DETECTORS_HPP_
+#define LIBS_GRIDBOXES_DETECTORS_HPP_
 
 #include <Kokkos_Core.hpp>
 
-struct Detectors
-{
-  KOKKOS_INLINE_FUNCTION Detectors() = default;  // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~Detectors() = default; // Kokkos requirement for a (dual)View
+struct Detectors {
+  KOKKOS_INLINE_FUNCTION Detectors() = default;   // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~Detectors() = default;  // Kokkos requirement for a (dual)View
 };
 
-#endif // DETECTORS_HPP
+#endif  // LIBS_GRIDBOXES_DETECTORS_HPP_

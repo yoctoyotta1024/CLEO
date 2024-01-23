@@ -18,8 +18,8 @@
  * handling superdroplets inside CLEO's gridboxes
  */
 
-#ifndef SUPERSINGBX_HPP
-#define SUPERSINGBX_HPP
+#ifndef LIBS_GRIDBOXES_SUPERSINGBX_HPP_
+#define LIBS_GRIDBOXES_SUPERSINGBX_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
@@ -27,15 +27,14 @@
 #include "./findrefs.hpp"
 #include "superdrops/kokkosaliases_sd.hpp"
 
-struct SupersInGbx
 /* References to identify the chunk of memory
 containing super-droplets occupying a given Gridbox
 (e.g. through std::span or Kokkos::subview) */
-{
-private:
-  viewd_supers totsupers; // reference to view of all superdrops (in total domain)
-  unsigned int idx;       // value of gbxindex which sdgbxindex of superdrops must match
-  kkpair_size_t refs;     // position in view of (first, last) superdrop that occupies gridbox
+struct SupersInGbx {
+ private:
+  viewd_supers totsupers;  // reference to view of all superdrops (in total domain)
+  unsigned int idx;        // value of gbxindex which sdgbxindex of superdrops must match
+  kkpair_size_t refs;      // position in view of (first, last) superdrop that occupies gridbox
 
   template <typename Pred>
   bool is_pred(const Pred pred) const;
@@ -43,34 +42,28 @@ private:
   between refs satisfy the Predicate "pred" */
 
   template <typename Pred>
-  bool is_prednot(const Pred pred,
-                  const kkpair_size_t refs4pred) const;
+  bool is_prednot(const Pred pred, const kkpair_size_t refs4pred) const;
   /* returns true if all superdrops in subview
   between r0 and r1 do not satisfy pred */
 
-public:
-  KOKKOS_INLINE_FUNCTION SupersInGbx() = default;  // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~SupersInGbx() = default; // Kokkos requirement for a (dual)View
+ public:
+  KOKKOS_INLINE_FUNCTION SupersInGbx() = default;   // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~SupersInGbx() = default;  // Kokkos requirement for a (dual)View
 
-  SupersInGbx(const viewd_supers i_totsupers,
-              const unsigned int i_idx)
-      : totsupers(i_totsupers), idx(i_idx), refs({0, 0})
   /* assumes supers view (or subview) already
   sorted via sdgbxindex. Constructor works
   outside of parallelism */
-  {
+  SupersInGbx(const viewd_supers i_totsupers, const unsigned int i_idx)
+      : totsupers(i_totsupers), idx(i_idx), refs({0, 0}) {
     set_refs();
   }
 
-  SupersInGbx(const viewd_supers i_totsupers,
-              const unsigned int i_idx,
-              const kkpair_size_t i_refs)
-      : totsupers(i_totsupers), idx(i_idx), refs(i_refs) {}
   /* assumes supers view (or subview) already sorted
   via sdgbxindex. Constructor works within parallel
   team policy on host given member 'team_member' */
+  SupersInGbx(const viewd_supers i_totsupers, const unsigned int i_idx, const kkpair_size_t i_refs)
+      : totsupers(i_totsupers), idx(i_idx), refs(i_refs) {}
 
-  bool iscorrect() const;
   /* assumes totsupers is already sorted via sdgbxindex. checks that all
   superdrops in view which have matching sdgbxindex to idx are indeed
   included in (*this) subview (according to refs). Three criteria must
@@ -78,44 +71,37 @@ public:
   subview have matching index. (2) all superdrops preceeding current
   subview do not have matching index. (3) all superdrops after current
   subview also do not have matching index. */
+  bool iscorrect() const;
 
-  inline void set_refs();
   /* assumes totsupers is already sorted via sdgbxindex.
   sets 'refs' to pair with positions of first and last
   superdrops in view which have matching sdgbxindex to idx.
   Function is outside of parallelism (ie. in serial code). */
+  inline void set_refs();
 
-  KOKKOS_INLINE_FUNCTION void
-  set_refs(const TeamMember &team_member);
   /* assumes totsupers is already sorted via sdgbxindex.
   sets 'refs' to pair with positions of first and last
   superdrops in view which have matching sdgbxindex to idx.
   Function works within 1st layer of heirarchal parallelism
   for a team_member of a league */
+  KOKKOS_INLINE_FUNCTION void set_refs(const TeamMember &team_member);
 
-  KOKKOS_INLINE_FUNCTION
-  subviewd_supers operator()() const
   /* returns subview from view of superdrops referencing superdrops
   which occupy given gridbox (according to refs) */
-  {
-    return Kokkos::subview(totsupers, refs);
-  }
-
   KOKKOS_INLINE_FUNCTION
-  subviewd_constsupers readonly() const
+  subviewd_supers operator()() const { return Kokkos::subview(totsupers, refs); }
+
   /* returns read-only subview from view of superdrops
   referencing superdrops which occupy given gridbox
   (according to refs). read-only means superdrops
   in the subview are const */
-  {
-    return Kokkos::subview(totsupers, refs);
-  }
+  KOKKOS_INLINE_FUNCTION
+  subviewd_constsupers readonly() const { return Kokkos::subview(totsupers, refs); }
 
-  mirrorh_constsupers hostcopy() const
   /* returns mirror view on host for const supers in
   gridbox. If supers view is on device memory, a
   deep copy is performed */
-  {
+  mirrorh_constsupers hostcopy() const {
     const subviewd_constsupers d_supers = readonly();
     auto h_supers = Kokkos::create_mirror_view(d_supers);
     Kokkos::deep_copy(h_supers, d_supers);
@@ -123,45 +109,33 @@ public:
     return h_supers;
   }
 
-  KOKKOS_INLINE_FUNCTION size_t nsupers() const
   /* returns current number of superdrops referred to by gridbox */
-  {
-    return refs.second - refs.first;
-  }
+  KOKKOS_INLINE_FUNCTION size_t nsupers() const { return refs.second - refs.first; }
 
-  viewd_constsupers domain_totsupers_readonly() const
   /* returns the view of all the superdrops in the domain.
   read-only means superdrops in the view are const */
-  {
+  viewd_constsupers domain_totsupers_readonly() const {
     const auto domainrefs = find_domainrefs(totsupers);
     return Kokkos::subview(totsupers, domainrefs);
   }
 };
 
-inline void SupersInGbx::set_refs()
 /* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx.
 Function is outside of parallelism (ie. in serial code). */
-{
-  refs = find_refs(totsupers, idx);
-}
+inline void SupersInGbx::set_refs() { refs = find_refs(totsupers, idx); }
 
-KOKKOS_INLINE_FUNCTION void
-SupersInGbx::set_refs(const TeamMember &team_member)
 /* assumes totsupers is already sorted via sdgbxindex.
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx.
 Function works within 1st layer of heirarchal
 parallelism for a team_member of a league */
-{
+KOKKOS_INLINE_FUNCTION void SupersInGbx::set_refs(const TeamMember &team_member) {
   const auto new_refs = find_refs(team_member, totsupers, idx);
 
   Kokkos::single(
-      Kokkos::PerTeam(team_member),
-      [new_refs](kkpair_size_t &refs)
-      { refs = new_refs; },
-      refs);
+      Kokkos::PerTeam(team_member), [new_refs](kkpair_size_t &refs) { refs = new_refs; }, refs);
 }
 
-#endif // SUPERSINGBX_HPP
+#endif  // LIBS_GRIDBOXES_SUPERSINGBX_HPP_

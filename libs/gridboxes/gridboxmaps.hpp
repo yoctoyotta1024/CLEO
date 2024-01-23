@@ -19,63 +19,36 @@
  * by CLEO SDM
  */
 
-
-#ifndef GRIDBOXMAPS_HPP
-#define GRIDBOXMAPS_HPP
+#ifndef LIBS_GRIDBOXES_GRIDBOXMAPS_HPP_
+#define LIBS_GRIDBOXES_GRIDBOXMAPS_HPP_
 
 #include <concepts>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 
-template <typename GbxMaps>
-concept GridboxMaps = requires(GbxMaps gbxmaps,
-                               unsigned int idx)
 /* concept for GridboxMaps is all types that have
 correct signatues for map-like functions */
-{
-  {
-    gbxmaps.maps_size()
-  } -> std::same_as<size_t>;
+template <typename GbxMaps>
+concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int idx) {
+  { gbxmaps.maps_size() } -> std::same_as<size_t>;
 
-  {
-    gbxmaps.get_gbxarea(idx)
-  } -> std::convertible_to<double>;
+  { gbxmaps.get_gbxarea(idx) } -> std::convertible_to<double>;
 
-  {
-    gbxmaps.get_gbxvolume(idx)
-  } -> std::convertible_to<double>;
+  { gbxmaps.get_gbxvolume(idx) } -> std::convertible_to<double>;
 
-  {
-    gbxmaps.coord3bounds(idx)
-  } -> std::convertible_to<Kokkos::pair<double, double>>;
-  {
-    gbxmaps.coord1bounds(idx)
-  } -> std::convertible_to<Kokkos::pair<double, double>>;
-  {
-    gbxmaps.coord2bounds(idx)
-  } -> std::convertible_to<Kokkos::pair<double, double>>;
+  { gbxmaps.coord3bounds(idx) } -> std::convertible_to<Kokkos::pair<double, double>>;
+  { gbxmaps.coord1bounds(idx) } -> std::convertible_to<Kokkos::pair<double, double>>;
+  { gbxmaps.coord2bounds(idx) } -> std::convertible_to<Kokkos::pair<double, double>>;
 
-  {
-    gbxmaps.coord3backward(idx)
-  } -> std::convertible_to<unsigned int>;
-  {
-    gbxmaps.coord3forward(idx)
-  } -> std::convertible_to<unsigned int>;
+  { gbxmaps.coord3backward(idx) } -> std::convertible_to<unsigned int>;
+  { gbxmaps.coord3forward(idx) } -> std::convertible_to<unsigned int>;
 
-  {
-    gbxmaps.coord1backward(idx)
-  } -> std::convertible_to<unsigned int>;
-  {
-    gbxmaps.coord1forward(idx)
-  } -> std::convertible_to<unsigned int>;
+  { gbxmaps.coord1backward(idx) } -> std::convertible_to<unsigned int>;
+  { gbxmaps.coord1forward(idx) } -> std::convertible_to<unsigned int>;
 
-  {
-    gbxmaps.coord2backward(idx)
-  } -> std::convertible_to<unsigned int>;
-  {
-    gbxmaps.coord2forward(idx)
-  } -> std::convertible_to<unsigned int>;
+  { gbxmaps.coord2backward(idx) } -> std::convertible_to<unsigned int>;
+  { gbxmaps.coord2forward(idx) } -> std::convertible_to<unsigned int>;
 };
 
-#endif // GRIDBOXMAPS_HPP
+#endif  // LIBS_GRIDBOXES_GRIDBOXMAPS_HPP_
