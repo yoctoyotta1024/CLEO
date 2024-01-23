@@ -21,8 +21,8 @@
 
 #include <concepts>
 #include <iostream>
-#include <stdexcept>
 #include <string_view>
+#include <stdexcept>
 
 #include <Kokkos_Core.hpp>
 

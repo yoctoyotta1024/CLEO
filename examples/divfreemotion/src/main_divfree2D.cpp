@@ -19,9 +19,9 @@
  * ./src/df2D ../src/config/config.txt
  */
 
-#include <cmath>
 #include <concepts>
 #include <iostream>
+#include <cmath>
 #include <stdexcept>
 #include <string_view>
 
