@@ -69,8 +69,8 @@ SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
 zgrid       = [0, 1200, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid       = np.array([0, 20])  # array of xhalf coords [m]
-ygrid       = np.array([0, 20])  # array of yhalf coords [m]
+xgrid       = np.array([0, 200])  # array of xhalf coords [m]
+ygrid       = np.array([0, 200])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
 PRESS0      = 101315                # [Pa]
@@ -175,66 +175,66 @@ os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-### ------------------------------------------------------------ ###
-### ----------------------- PLOT RESULTS ----------------------- ###
-### ------------------------------------------------------------ ###
-# read in constants and intial setup from setup .txt file
-config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-consts = pysetuptxt.get_consts(setupfile, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+# ### ------------------------------------------------------------ ###
+# ### ----------------------- PLOT RESULTS ----------------------- ###
+# ### ------------------------------------------------------------ ###
+# # read in constants and intial setup from setup .txt file
+# config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
+# consts = pysetuptxt.get_consts(setupfile, isprint=True)
+# gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
-time = pyzarr.get_time(dataset)
-sddata = pyzarr.get_supers(dataset, consts)
-totnsupers = pyzarr.get_totnsupers(dataset)
-massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
+# time = pyzarr.get_time(dataset)
+# sddata = pyzarr.get_supers(dataset, consts)
+# totnsupers = pyzarr.get_totnsupers(dataset)
+# massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
-# plot figures
-savename = savefigpath + "rain1d_totnsupers.png"
-pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
+# # plot figures
+# savename = savefigpath + "rain1d_totnsupers.png"
+# pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-savename = savefigpath + "rain1d_domainmassmoms.png"
-pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
+# savename = savefigpath + "rain1d_domainmassmoms.png"
+# pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
-nsample = 25
-savename = savefigpath + "rain1d_randomsample.png"
-pltsds.plot_randomsample_superdrops(time, sddata,
-                                        config["totnsupers"],
-                                        nsample,
-                                        savename=savename)
+# nsample = 25
+# savename = savefigpath + "rain1d_randomsample.png"
+# pltsds.plot_randomsample_superdrops(time, sddata,
+#                                         config["totnsupers"],
+#                                         nsample,
+#                                         savename=savename)
 
-### ----- plot 1-D .gif animations ----- ###
-nframes = len(time.mins)
-mom2ani = np.sum(massmoms.nsupers, axis=(1,2))
-xlims = [0, np.amax(mom2ani)]
-xlabel = "number of super-droplets"
-savename=savefigpath+"rain1d_nsupers1d"
-animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-                            xlabel=xlabel, xlims=xlims,
-                            color="green", saveani=True,
-                            savename=savename, fps=5)
+# ### ----- plot 1-D .gif animations ----- ###
+# nframes = len(time.mins)
+# mom2ani = np.sum(massmoms.nsupers, axis=(1,2))
+# xlims = [0, np.amax(mom2ani)]
+# xlabel = "number of super-droplets"
+# savename=savefigpath+"rain1d_nsupers1d"
+# animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
+#                             xlabel=xlabel, xlims=xlims,
+#                             color="green", saveani=True,
+#                             savename=savename, fps=5)
 
-nframes = len(time.mins)
-norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
-mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
-xlims = [0, np.amax(mom2ani)]
-xlabel = "number concentration /cm$^{-3}$"
-savename=savefigpath+"rain1d_numconc1d"
-animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-                            xlabel=xlabel, xlims=xlims,
-                            color="green", saveani=True,
-                            savename=savename, fps=5)
+# nframes = len(time.mins)
+# norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
+# mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
+# xlims = [0, np.amax(mom2ani)]
+# xlabel = "number concentration /cm$^{-3}$"
+# savename=savefigpath+"rain1d_numconc1d"
+# animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
+#                             xlabel=xlabel, xlims=xlims,
+#                             color="green", saveani=True,
+#                             savename=savename, fps=5)
 
-nframes = len(time.mins)
-norm = gbxs["gbxvols"] # volume [m^3]
-mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
-xlims = [0, np.amax(mom2ani)]
-xlabel = "mass concentration /g m$^{-3}$"
-savename=savefigpath+"rain1d_massconc1d"
-animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-                            xlabel=xlabel, xlims=xlims,
-                            color="green", saveani=True,
-                            savename=savename, fps=5)
+# nframes = len(time.mins)
+# norm = gbxs["gbxvols"] # volume [m^3]
+# mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
+# xlims = [0, np.amax(mom2ani)]
+# xlabel = "mass concentration /g m$^{-3}$"
+# savename=savefigpath+"rain1d_massconc1d"
+# animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
+#                             xlabel=xlabel, xlims=xlims,
+#                             color="green", saveani=True,
+#                             savename=savename, fps=5)
 
-print(savefigpath)
-### ------------------------------------------------------------ ###
-### ------------------------------------------------------------ ###
+# print(savefigpath)
+# ### ------------------------------------------------------------ ###
+# ### ------------------------------------------------------------ ###
