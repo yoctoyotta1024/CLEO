@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: breakup.hpp
@@ -7,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Tuesday 23rd January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,6 +26,7 @@
 
 #include <functional>
 #include <concepts>
+#include <cassert>
 
 #include <Kokkos_Core.hpp>
 
@@ -175,7 +177,10 @@ Note: implicit casting of xi from unsigned long long to double. */
 {
   const auto old_xi = drop2.get_xi(); // = drop1.xi
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
-  const auto new_xi = (unsigned long long)Kokkos::round(totnfrags) / 2;
+  const auto new_xi = (unsigned long long)Kokkos::round(totnfrags);
+
+  assert((new_xi > old_xi) &&
+         "nfrags must increase multiplicity during breakup");
 
   const auto sum_rcubed = double{drop1.rcubed() + drop2.rcubed()};
   const auto new_rcubed = double{sum_rcubed * old_xi / new_xi};
@@ -184,8 +189,11 @@ Note: implicit casting of xi from unsigned long long to double. */
   const auto sum_msol = double{drop1.get_msol() + drop2.get_msol()};
   const auto new_msol = double{sum_msol * old_xi / new_xi};
 
-  drop1.set_xi(new_xi);
-  drop2.set_xi(old_xi - new_xi);
+  const auto new_xi_1 = new_xi / 2; // same as floor() for positive ints
+  const auto new_xi_2 = new_xi - new_xi_1;
+
+  drop1.set_xi(new_xi_1);
+  drop2.set_xi(new_xi_2);
 
   drop1.set_radius(new_r);
   drop2.set_radius(new_r);
@@ -209,6 +217,9 @@ Note: implicit casting of xi from unsigned long long to double. */
   const auto old_xi = drop2.get_xi();
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
   const auto new_xi = (unsigned long long)Kokkos::round(totnfrags);
+
+  assert((new_xi > old_xi) &&
+         "nfrags must increase multiplicity during breakup");
 
   const auto sum_rcubed = double{drop1.rcubed() + drop2.rcubed()};
   const auto new_rcubed = double{sum_rcubed * old_xi / new_xi};

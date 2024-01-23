@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: coalescence.hpp
@@ -7,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 22nd December 2023
+ * Last Modified: Tuesday 23rd January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -17,7 +18,8 @@
  * class and function to enact collision-coalescence events
  * in superdroplet model according to Shima et al. 2009.
  * Coalescence struct satisfies PairEnactX concept
- * used in Collisions struct */
+ * used in Collisions struct
+ */
 
 #ifndef COALESCENCE_HPP
 #define COALESCENCE_HPP
@@ -174,12 +176,17 @@ DoCoalescence::twin_superdroplet_coalescence(const unsigned long long gamma,
                                              Superdrop &drop2) const
 /* if xi1 = gamma*xi2 coalescence makes twin SDs
 with same xi, r and solute mass. According to Shima et al. 2009
-Section 5.1.3. part (5) option (b).
+Section 5.1.3. part (5) option (b). In rare case where
+xi1 = xi2 = gamma = 1, new_xi of drop1 = 0 and drop1 should be removed
+from domain.
 Note: implicit casting of gamma (i.e. therefore droplets'
 xi values) from unsigned long long to double. */
 {
   const auto old_xi = drop2.get_xi(); // = drop1.xi
   const auto new_xi = old_xi / 2; // same as floor() for positive ints
+
+  assert((new_xi < old_xi) &&
+         "coalescence must decrease multiplicity");
 
   const auto new_rcubed = double{drop2.rcubed() +
                                  gamma * drop1.rcubed()};
@@ -208,7 +215,12 @@ Shima et al. 2009 Section 5.1.3. part (5) option (a)
 Note: implicit casting of gamma (i.e. therefore droplets'
 xi values) from unsigned long long to double. */
 {
-  drop1.set_xi(drop1.get_xi() - gamma * drop2.get_xi());
+  const auto new_xi =  drop1.get_xi() - gamma * drop2.get_xi();
+
+  assert((new_xi < drop1.get_xi()) &&
+         "coalescence must decrease multiplicity");
+
+  drop1.set_xi(new_xi);
 
   const auto new_rcubed = double{drop2.rcubed() +
                                  gamma * drop1.rcubed()};
