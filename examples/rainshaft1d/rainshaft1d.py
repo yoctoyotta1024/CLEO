@@ -89,7 +89,7 @@ zlim        = 800       # min z coord of superdroplets [m]
 npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan       = [3e-9, 5e-5]                      # min and max range of radii to sample [m]
+rspan       = [3e-9, 5e-4]                      # min and max range of radii to sample [m]
 dryr_sf     = 1e0                               # Dry radii scalling factor: dryradii are 1/dryr_sf of radii [m]
 
 
