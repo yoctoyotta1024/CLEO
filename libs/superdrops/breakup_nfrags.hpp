@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: breakup_nfrags.hpp
@@ -7,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th January 2024
+ * Last Modified: Wednesday 24th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -57,10 +58,14 @@ struct CollisionKineticEnergyNFrags {
  public:
   /* returns number of fragments 'nfrags' based on collision
   kinetic energy of droplets according to parameterisation of total
-  number of outcomes from Schlottke et al. 2010 (figure 13).
-  Note: nfrags diverges at cke = alpha^(1/beta), so here cke is
+  number of outcomes from Schlottke et al. 2010 (figure 13) with
+  modifications:
+  1) nfrags diverges at cke = alpha^(1/beta), so here cke is
   capped at <= ckemax which is value less than alpha^(1/beta)
-  such that nfrags <= 25 */
+  such that nfrags <= 25
+  2) as cke -> 0, original formulation tends to
+  nfrags -> 2/3 < 2.5 formula multiplied by 3.75
+  to make limit nfrags -> 2.5 instead */
   KOKKOS_INLINE_FUNCTION
   double operator()(const Superdrop &drop1, const Superdrop &drop2) const {
     constexpr double alpha = 1.5;
@@ -72,7 +77,8 @@ struct CollisionKineticEnergyNFrags {
                                               terminalv(drop1), terminalv(drop2));
 
     const auto cke_cap = double{Kokkos::fmin(ckemax, cke)};  // limit cke to less than ckemax
-    const auto nfrags = double{1.0 / (alpha - Kokkos::pow(cke_cap, beta))};
+    const auto gamma = double{alpha - Kokkos::pow(cke_cap, beta)};
+    const auto nfrags = double{3.75 / gamma};
 
     return nfrags;
   }
