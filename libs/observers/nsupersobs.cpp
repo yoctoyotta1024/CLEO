@@ -19,9 +19,8 @@
  * to array in a zarr file system storage
  */
 
-#include "./nsupersobs.hpp"
+#include "observers/nsupersobs.hpp"
 
-size_t calc_nrainsupers(const SupersInGbx &supersingbx)
 /* returns count of number of "raindrop-like" superdrops
 for each gridbox. "raindrop-like" means radius > rlim.
   * WARNING! * When using OpenMP (supers in Host Space)
@@ -29,20 +28,18 @@ for each gridbox. "raindrop-like" means radius > rlim.
  calc_nrainsupers is much slower then calc_nrainsupers_serial
  (probably because opening threads is more costly than the
  time saved in a parallel calculation over few elements) */
-{
-  constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
+size_t calc_nrainsupers(const SupersInGbx &supersingbx) {
+  constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
   const subviewd_constsupers supers(supersingbx.readonly());
   const size_t nsupers(supers.extent(0));
 
   size_t nrainsupers(0);
   Kokkos::parallel_reduce(
-      "calc_nrainsupers",
-      Kokkos::RangePolicy<ExecSpace>(0, nsupers),
-      KOKKOS_LAMBDA(const size_t kk, size_t &nrain)
-      {
-        const auto radius = supers(kk).get_radius(); // cast multiplicity from unsigned int to double
-        if (radius >= rlim)
-        {
+      "calc_nrainsupers", Kokkos::RangePolicy<ExecSpace>(0, nsupers),
+      KOKKOS_LAMBDA(const size_t kk, size_t &nrain) {
+        const auto radius =
+            supers(kk).get_radius();  // cast multiplicity from unsigned int to double
+        if (radius >= rlim) {
           ++nrain;
         }
       },
@@ -51,21 +48,18 @@ for each gridbox. "raindrop-like" means radius > rlim.
   return nrainsupers;
 }
 
-size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx)
 /* deep copy if necessary (if superdrops are on device not
   host memory), then returns count of number of "raindrop-like"
   superdrops for each gridbox. "raindrop-like" means radius > rlim */
-{
-  constexpr double rlim(40e-6 / dlc::R0); // dimless minimum radius of raindrop
+size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx) {
+  constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
 
   const auto h_supers = supersingbx.hostcopy();
 
   size_t nrainsupers(0);
-  for (size_t kk(0); kk < h_supers.extent(0); ++kk)
-  {
+  for (size_t kk(0); kk < h_supers.extent(0); ++kk) {
     const auto radius = h_supers(kk).get_radius();
-    if (radius >= rlim)
-    {
+    if (radius >= rlim) {
       ++nrainsupers;
     }
   }
@@ -73,9 +67,7 @@ size_t calc_nrainsupers_serial(const SupersInGbx &supersingbx)
   return nrainsupers;
 }
 
-void DoNrainsupersObs::
-    nrainsupers_to_storage(const Gridbox &gbx) const
-{
+void DoNrainsupersObs::nrainsupers_to_storage(const Gridbox &gbx) const {
   const size_t nrain(calc_nrainsupers(gbx.supersingbx));
   zarr->value_to_storage(nrain);
 }

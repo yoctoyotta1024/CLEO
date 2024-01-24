@@ -18,8 +18,10 @@
  * e.g. based on their gridbox indexes
  */
 
-#ifndef SORTSUPERS_HPP
-#define SORTSUPERS_HPP
+#ifndef LIBS_GRIDBOXES_SORTSUPERS_HPP_
+#define LIBS_GRIDBOXES_SORTSUPERS_HPP_
+
+#include <algorithm>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Sort.hpp>
@@ -28,37 +30,28 @@
 #include "../kokkosaliases.hpp"
 #include "superdrops/superdrop.hpp"
 
-struct SortComparator
 /* a precedes b if its sdgbxindex is smaller */
-{
+struct SortComparator {
   KOKKOS_INLINE_FUNCTION
-  bool operator()(const Superdrop &a, const Superdrop &b) const
-  {
+  bool operator()(const Superdrop &a, const Superdrop &b) const {
     return (a.get_sdgbxindex()) < (b.get_sdgbxindex());
   }
 };
 
-inline viewd_supers sort_supers(const viewd_supers supers)
 /* sort a view of superdroplets by their sdgbxindexes
 so that superdrops in the view are ordered from
 lowest to highest sdgbxindex. Note that sorting of
 superdrops with matching sdgbxindex can take any order */
-{
-
+inline viewd_supers sort_supers(const viewd_supers supers) {
   Kokkos::sort(ExecSpace(), supers, SortComparator{});
 
   return supers;
 }
 
-inline bool is_sorted(const viewd_constsupers supers)
 /* returns true if superdrops in supers view are
 sorted by their sdgbxindexes in ascending order */
-{
-  return Kokkos::Experimental::
-      is_sorted("IsSupersSorted",
-                ExecSpace(),
-                supers,
-                SortComparator{});
+inline bool is_sorted(const viewd_constsupers supers) {
+  return Kokkos::Experimental::is_sorted("IsSupersSorted", ExecSpace(), supers, SortComparator{});
 }
 
-#endif // SORTSUPERS_HPP
+#endif  // LIBS_GRIDBOXES_SORTSUPERS_HPP_

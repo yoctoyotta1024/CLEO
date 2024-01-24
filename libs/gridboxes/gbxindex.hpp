@@ -18,35 +18,27 @@
  * the unique indexes that label CLEO's gridboxes
  */
 
-#ifndef GBXINDEX_HPP
-#define GBXINDEX_HPP
+#ifndef LIBS_GRIDBOXES_GBXINDEX_HPP_
+#define LIBS_GRIDBOXES_GBXINDEX_HPP_
 
-struct Gbxindex
 /* struct containing gridbox index and its generator struct */
-{
+struct Gbxindex {
   unsigned int value;
 
-  class Gen
-  {
-  public:
-    Gbxindex next()
+  class Gen {
+   public:
     /* note this generator is not thread safe
     (_idx++ undefined in multi-threaded environment) */
-    {
-      return {_idx++};
-    }
+    Gbxindex next() { return {_idx++}; }
 
-    KOKKOS_INLINE_FUNCTION
-    Gbxindex next(const unsigned int idx)
     /* note this generator assumes idx was
     thread safe generated (ie. is unique) */
-    {
-      return {idx};
-    }
+    KOKKOS_INLINE_FUNCTION
+    Gbxindex next(const unsigned int idx) { return {idx}; }
 
-  private:
+   private:
     unsigned int _idx = 0;
   };
 };
 
-#endif // GBXINDEX_HPP
+#endif  // LIBS_GRIDBOXES_GBXINDEX_HPP_

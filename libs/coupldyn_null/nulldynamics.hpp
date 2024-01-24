@@ -19,33 +19,27 @@
  * is no dynamics nor coupling to SDM
  */
 
-#ifndef NULLDYNAMICS_HPP
-#define NULLDYNAMICS_HPP
+#ifndef LIBS_COUPLDYN_NULL_NULLDYNAMICS_HPP_
+#define LIBS_COUPLDYN_NULL_NULLDYNAMICS_HPP_
 
 #include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
 
-struct NullDynamics
-{
-private:
+struct NullDynamics {
+ private:
   const unsigned int interval;
 
-public:
-  NullDynamics(const unsigned int couplstep)
-      : interval(couplstep) {}
+ public:
+  explicit NullDynamics(const unsigned int couplstep) : interval(couplstep) {}
 
   void prepare_to_timestep() const {}
 
-  unsigned int get_couplstep() const
-  {
-    return interval;
-  }
+  unsigned int get_couplstep() const { return interval; }
 
   bool on_step(const unsigned int t_mdl) const { return false; }
 
-  void run_step(const unsigned int t_mdl,
-                const unsigned int t_next) const {}
+  void run_step(const unsigned int t_mdl, const unsigned int t_next) const {}
 };
 
-#endif // NULLDYNAMICS_HPP
+#endif  // LIBS_COUPLDYN_NULL_NULLDYNAMICS_HPP_

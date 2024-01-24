@@ -21,48 +21,47 @@
  * struct as SuperdropInitConds type
  */
 
-#ifndef INITSUPERS_FROMBINARY_HPP
-#define INITSUPERS_FROMBINARY_HPP
+#ifndef LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
+#define LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
 
-#include <vector>
-#include <string_view>
 #include <fstream>
+#include <string_view>
+#include <vector>
 
 #include "./config.hpp"
 #include "./initconds.hpp"
 #include "./readbinary.hpp"
 #include "superdrops/superdrop_attrs.hpp"
 
-struct InitSupersFromBinary
 /* struct containing functions which return data
 for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
-{
-private:
-  size_t totnsupers; // total number of superdroplets (in kokkos view on device initially)
-  unsigned int nspacedims; // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
-  std::string_view initsupers_filename; // name of binary file for some of superdrops' initial conditons
+struct InitSupersFromBinary {
+ private:
+  size_t totnsupers;        // total number of superdroplets (in kokkos view on device initially)
+  unsigned int nspacedims;  // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
+  std::string_view
+      initsupers_filename;  // name of binary file for some of superdrops' initial conditons
 
-  void init_solutes_data(InitSupersData &initdata) const;
   /* sets initial data for solutes as
   a single SoluteProprties instance */
+  void init_solutes_data(InitSupersData &initdata) const;
 
-  void initdata_from_binary(InitSupersData &initdata) const;
   /* sets initial data in initdata using data read
   from a binary file called initsupers_filename */
+  void initdata_from_binary(InitSupersData &initdata) const;
 
-  void read_initdata_binary(InitSupersData &initdata,
-                            std::ifstream &file,
-                            const std::vector<VarMetadata> &meta) const;
   /* copy data for vectors from binary file to initdata struct */
+  void read_initdata_binary(InitSupersData &initdata, std::ifstream &file,
+                            const std::vector<VarMetadata> &meta) const;
 
-  void check_initdata_sizes(const InitSupersData &initdata) const;
   /* check all the vectors in the initdata struct all
   have sizes consistent with one another. Include
   coords data in check if nspacedims != 0 */
+  void check_initdata_sizes(const InitSupersData &initdata) const;
 
-public:
-  InitSupersFromBinary(const Config &config)
+ public:
+  explicit InitSupersFromBinary(const Config &config)
       : totnsupers(config.totnsupers),
         nspacedims(config.nspacedims),
         initsupers_filename(config.initsupers_filename) {}
@@ -71,20 +70,19 @@ public:
 
   auto get_nspacedims() const { return nspacedims; }
 
-  size_t fetch_data_size() const;
   /* data size returned is number of variables as
   declared by the metadata for the first variable
   in the initsupers file */
+  size_t fetch_data_size() const;
 
-  void fetch_data(InitSupersData &initdata) const
   /* return InitSupersData created by reading a binary
   file and creating a SoluteProperties struct.
   Then check that the input data has the correct sizes. */
-  {
+  void fetch_data(InitSupersData &initdata) const {
     init_solutes_data(initdata);
     initdata_from_binary(initdata);
     check_initdata_sizes(initdata);
   }
 };
 
-#endif // INITSUPERS_FROMBINARY_HPP
+#endif  // LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_

@@ -18,6 +18,4 @@
  * e.g. based on their gridbox indexes
  */
 
-
-
-#include "./sortsupers.hpp"
+#include "gridboxes/sortsupers.hpp"

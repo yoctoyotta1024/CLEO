@@ -24,5 +24,4 @@
  * PairProbability concept (see collisions.hpp)
  */
 
-
 #include "./longhydroprob.hpp"

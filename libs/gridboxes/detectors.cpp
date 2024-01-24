@@ -19,4 +19,4 @@
  * in gridboxes
  */
 
-#include "./detectors.hpp"
+#include "gridboxes/detectors.hpp"

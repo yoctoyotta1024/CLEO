@@ -21,8 +21,8 @@
  * Methods follows equations in Grabowski et al. 2018
  */
 
-#ifndef PREDCORR_HPP
-#define PREDCORR_HPP
+#ifndef LIBS_GRIDBOXES_PREDCORR_HPP_
+#define LIBS_GRIDBOXES_PREDCORR_HPP_
 
 #include <cassert>
 #include <functional>
@@ -32,76 +32,59 @@
 
 #include "./cfl_criteria.hpp"
 #include "./gridboxmaps.hpp"
-#include "superdrops/superdrop.hpp"
 #include "superdrops/state.hpp"
+#include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
-KOKKOS_FUNCTION
-double interpolation(const Kokkos::pair<double, double> bounds,
-                     const Kokkos::pair<double, double> vel,
-                     const double sdcoord);
 /* Given [X = z,x or y] wind velocity component, vel, that is
 defined on the faces of a gridbox at {lower, upper} [X] bounds,
 return wind at [X] coord. Method is 'simple' linear interpolation
 from Grabowski et al. (2018). coord use in interpolation is
 limited to lower_bound <= coord <= upper_bound. */
+KOKKOS_FUNCTION
+double interpolation(const Kokkos::pair<double, double> bounds,
+                     const Kokkos::pair<double, double> vel, const double sdcoord);
 
-template <GridboxMaps GbxMaps, VelocityFormula TV>
-struct PredCorr
 /* change in coordinates calculated by predictor
 corrector method with the wind velocity obtained via
 a simple linear interpolation. Methods follows
 equations in Grabowski et al. 2018 */
-{
-private:
-  const double delt;  // equivalent of motionstep as dimensionless time
-  const TV terminalv; // returns terminal velocity given a superdroplet
+template <GridboxMaps GbxMaps, VelocityFormula TV>
+struct PredCorr {
+ private:
+  const double delt;   // equivalent of motionstep as dimensionless time
+  const TV terminalv;  // returns terminal velocity given a superdroplet
 
-  KOKKOS_INLINE_FUNCTION
-  double interp_wvel(const unsigned int gbxindex,
-                     const GbxMaps &gbxmaps,
-                     const State &state,
-                     const double coord3) const
   /* method to interpolate coord3 wind velocity component (w)
   defined on coord3 faces of a gridbox to a superdroplet's
   coordinates at (coord3, coord1, coord2) */
-  {
-    return interpolation(gbxmaps.coord3bounds(gbxindex),
-                         state.wvel, coord3);
+  KOKKOS_INLINE_FUNCTION
+  double interp_wvel(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+                     const double coord3) const {
+    return interpolation(gbxmaps.coord3bounds(gbxindex), state.wvel, coord3);
   }
 
-  KOKKOS_INLINE_FUNCTION
-  double interp_uvel(const unsigned int gbxindex,
-                     const GbxMaps &gbxmaps,
-                     const State &state,
-                     const double coord1) const
   /* method to interpolate coord1 wind velocity component (u)
   defined on coord1 faces of a gridbox to a superdroplet's
   coordinates at (coord3, coord1, coord2) */
-  {
-    return interpolation(gbxmaps.coord1bounds(gbxindex),
-                         state.uvel, coord1);
+  KOKKOS_INLINE_FUNCTION
+  double interp_uvel(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+                     const double coord1) const {
+    return interpolation(gbxmaps.coord1bounds(gbxindex), state.uvel, coord1);
   }
 
-  KOKKOS_INLINE_FUNCTION
-  double interp_vvel(const unsigned int gbxindex,
-                     const GbxMaps &gbxmaps,
-                     const State &state,
-                     const double coord2) const
   /* method to interpolate coord2 wind velocity component (v)
   defined on coord2 faces of a gridbox to a superdroplet's
   coordinates at (coord3, coord1, coord2) */
-  {
-    return interpolation(gbxmaps.coord2bounds(gbxindex),
-                         state.vvel, coord2);
+  KOKKOS_INLINE_FUNCTION
+  double interp_vvel(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+                     const double coord2) const {
+    return interpolation(gbxmaps.coord2bounds(gbxindex), state.vvel, coord2);
   }
 
   KOKKOS_FUNCTION
-  double delta_coord3(const unsigned int gbxindex,
-                      const GbxMaps &gbxmaps,
-                      const State &state,
-                      const Superdrop &drop) const
-  {
+  double delta_coord3(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+                      const Superdrop &drop) const {
     auto coord3 = drop.get_coord3();
 
     const auto terminal = terminalv(drop);
@@ -111,7 +94,7 @@ private:
     vel3 -= terminal;
 
     /* predictor coords given velocity at previous coords */
-    coord3 += vel3 * delt; // move by w wind + terminal velocity
+    coord3 += vel3 * delt;  // move by w wind + terminal velocity
 
     /* corrector velocities based on predicted coords */
     auto corrvel3 = interp_wvel(gbxindex, gbxmaps, state, coord3);
@@ -124,18 +107,15 @@ private:
   }
 
   KOKKOS_FUNCTION
-  double delta_coord1(const unsigned int gbxindex,
-                      const GbxMaps &gbxmaps,
-                      const State &state,
-                      const Superdrop &drop) const
-  {
+  double delta_coord1(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+                      const Superdrop &drop) const {
     auto coord1 = drop.get_coord1();
 
     /* corrector velocities based on predicted coords */
     const auto vel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
 
     /* predictor coords given velocity at previous coords */
-    coord1 += vel1 * delt; // move by u wind
+    coord1 += vel1 * delt;  // move by u wind
 
     /* corrector velocities based on predicted coords */
     const auto corrvel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
@@ -147,18 +127,15 @@ private:
   }
 
   KOKKOS_FUNCTION
-  double delta_coord2(const unsigned int gbxindex,
-                      const GbxMaps &gbxmaps,
-                      const State &state,
-                      const Superdrop &drop) const
-  {
+  double delta_coord2(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+                      const Superdrop &drop) const {
     auto coord2 = drop.get_coord2();
 
     /* corrector velocities based on predicted coords */
     const auto vel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
 
     /* predictor coords given velocity at previous coords */
-    coord2 += vel2 * delt; // move by v wind
+    coord2 += vel2 * delt;  // move by v wind
 
     /* corrector velocities based on predicted coords */
     const auto corrvel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
@@ -169,24 +146,19 @@ private:
     return delta2;
   }
 
-public:
-  PredCorr(const unsigned int motionstep,
-           const std::function<double(unsigned int)> int2time,
+ public:
+  PredCorr(const unsigned int motionstep, const std::function<double(unsigned int)> int2time,
            const TV i_terminalv)
-      : delt(int2time(motionstep)),
-        terminalv(i_terminalv) {}
+      : delt(int2time(motionstep)), terminalv(i_terminalv) {}
 
-  KOKKOS_FUNCTION
-  void operator()(const unsigned int gbxindex,
-                  const GbxMaps &gbxmaps,
-                  const State &state,
-                  Superdrop &drop) const
   /* operator to satisfiy requirements of the
   "superdrop_coords" function in the motion
   concept. Operator uses predictor-corrector method to
   forward timestep a superdroplet's coordinates using
   the interpolated wind velocity from a gridbox's state */
-  {
+  KOKKOS_FUNCTION
+  void operator()(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+                  Superdrop &drop) const {
     /* Use predictor-corrector method to get change in SD coords */
     const auto delta3 = delta_coord3(gbxindex, gbxmaps, state, drop);
     const auto delta1 = delta_coord1(gbxindex, gbxmaps, state, drop);
@@ -202,27 +174,23 @@ public:
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
-KOKKOS_FUNCTION
-double interpolation(const Kokkos::pair<double, double> bounds,
-                     const Kokkos::pair<double, double> vel,
-                     const double sdcoord)
 /* Given [X = z,x or y] wind velocity component, vel, that is
 defined on the faces of a gridbox at {lower, upper} [X] bounds,
 return wind at [X] coord. Method is 'simple' linear interpolation
 from Grabowski et al. (2018). coord use in interpolation is
 limited to lower_bound <= coord <= upper_bound. */
-{
-  const auto coord = double{Kokkos::fmin(bounds.second,
-                                         Kokkos::fmax(bounds.first,
-                                                      sdcoord))}; // limit coord to within bounds
+KOKKOS_FUNCTION
+double interpolation(const Kokkos::pair<double, double> bounds,
+                     const Kokkos::pair<double, double> vel, const double sdcoord) {
+  const auto coord = double{Kokkos::fmin(
+      bounds.second, Kokkos::fmax(bounds.first, sdcoord))};  // limit coord to within bounds
 
-  const auto alpha = double{(coord - bounds.first) /
-                            (bounds.second - bounds.first)};
+  const auto alpha = double{(coord - bounds.first) / (bounds.second - bounds.first)};
 
-  const auto interp = double{alpha * vel.second +
-                             (1 - alpha) * vel.first}; // simple linear interpolation
+  const auto interp =
+      double{alpha * vel.second + (1 - alpha) * vel.first};  // simple linear interpolation
 
   return interp;
 }
 
-#endif // PREDCORR_HPP
+#endif  // LIBS_GRIDBOXES_PREDCORR_HPP_
