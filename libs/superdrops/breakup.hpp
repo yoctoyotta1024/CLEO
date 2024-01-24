@@ -148,8 +148,8 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &dro
   const auto old_xi = drop2.get_xi();  // = drop1.xi
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
 
-  const auto new_xi1 = uint64_t{Kokkos::round(totnfrags / 2)};
-  const auto new_xi2 = uint64_t{Kokkos::round(totnfrags - new_xi1)};
+  const auto new_xi1 = (uint64_t)Kokkos::round(totnfrags / 2); // cast double to uint64_t
+  const auto new_xi2 = (uint64_t)Kokkos::round(totnfrags - new_xi1); // cast double to uint64_t
   const auto new_xitot = new_xi1 + new_xi2;
   assert((new_xi2 > old_xi) && "nfrags must increase the drop2's multiplicity during breakup");
   assert((new_xitot > (old_xi*2)) && "nfrags must increase total multiplicity during breakup");
@@ -186,7 +186,7 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop
   drop1.set_xi(new_xi1);
 
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi2};
-  const auto new_xi2 = uint64_t{Kokkos::round(totnfrags)};
+  const auto new_xi2 = (uint64_t)Kokkos::round(totnfrags); // cast double to uint64_t
 
   assert((new_xi2 > old_xi2) && "nfrags must increase the drop2's multiplicity during breakup");
   assert(((new_xi1 + new_xi2) > (old_xi1 + old_xi2)) &&
