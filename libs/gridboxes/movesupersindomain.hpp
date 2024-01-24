@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: movesupersindomain.hpp
@@ -7,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 19th December 2023
+ * Last Modified: Wednesday 24th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -119,7 +120,7 @@ struct MoveSupersInDomain {
   (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host) */
-  // TODO(all) use tasking to convert all 3 team policy
+  // TODO (all) use tasking to convert all 3 team policy
   // loops in these function calls into 1 loop?
   void move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
                                  const viewd_supers totsupers) const {
