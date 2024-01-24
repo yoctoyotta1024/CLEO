@@ -58,10 +58,11 @@ struct CollisionKineticEnergyNFrags {
  public:
   /* returns number of fragments 'nfrags' based on collision
   kinetic energy of droplets according to parameterisation of total
-  number of outcomes from Schlottke et al. 2010 (figure 13) with
+  number of outcomes from Schlottke et al. 2010 (figure 13) using
+  collision kinetic energy in micro-Joules, with
   modifications:
-  1) nfrags diverges at cke = alpha^(1/beta), so here cke is
-  capped at <= ckemax which is value less than alpha^(1/beta)
+  1) nfrags diverges at cke = alpha^(1/beta)*1e-6 [Joules], so here
+  cke is capped at <= ckemax which is value less than alpha^(1/beta)
   such that nfrags <= 25
   2) as cke -> 0, original formulation tends to
   nfrags -> 2/3 < 2.5 formula multiplied by 3.75
@@ -70,15 +71,16 @@ struct CollisionKineticEnergyNFrags {
   double operator()(const Superdrop &drop1, const Superdrop &drop2) const {
     constexpr double alpha = 1.5;
     constexpr double beta = 0.135;
-    constexpr double ckemax = 16.49789599;
+    constexpr double ckemax = 16.49789599/1000000; // [J]
 
     const auto terminalv = RogersGKTerminalVelocity{};
     const auto cke = collision_kinetic_energy(drop1.get_radius(), drop2.get_radius(),
                                               terminalv(drop1), terminalv(drop2));
 
     const auto cke_cap = double{Kokkos::fmin(ckemax, cke)};  // limit cke to less than ckemax
-    const auto gamma = double{alpha - Kokkos::pow(cke_cap, beta)};
-    const auto nfrags = double{3.75 / gamma};
+
+    const auto gamma = double{Kokkos::pow(cke_cap*1e6, beta)}; // cke in micro-Joules
+    const auto nfrags = double{3.75 / (alpha - gamma)};
 
     return nfrags;
   }
