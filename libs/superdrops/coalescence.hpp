@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 23rd January 2024
+ * Last Modified: Wednesday 24th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -149,7 +149,7 @@ Section 5.1.3. part (5) option (b). In rare case where
 xi1 = xi2 = gamma = 1, new_xi of drop1 = 0 and drop1 should be removed
 from domain.
 Note: implicit casting of gamma (i.e. therefore droplets'
-xi values) from unsigned long long to double. */
+xi values) from uint64_t to double. */
 KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t gamma,
                                                                   Superdrop &drop1,
                                                                   Superdrop &drop2) const {
@@ -177,7 +177,7 @@ KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t
 via decreasing multiplicity of drop1. According to
 Shima et al. 2009 Section 5.1.3. part (5) option (a)
 Note: implicit casting of gamma (i.e. therefore droplets'
-xi values) from unsigned long long to double. */
+xi values) from uint64_t to double. */
 KOKKOS_FUNCTION void DoCoalescence::different_superdroplet_coalescence(const uint64_t gamma,
                                                                        Superdrop &drop1,
                                                                        Superdrop &drop2) const {
