@@ -39,8 +39,8 @@ std::array<double, 3> calc_massmoments(const subviewd_constsupers supers) {
   Kokkos::parallel_reduce(
       "calc_massmoments", Kokkos::RangePolicy<ExecSpace>(0, nsupers),
       KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
-        const auto xi =
-            (double)(supers(kk).get_xi());  // cast multiplicity from unsigned int to double
+        const auto xi = static_cast<double>(
+            supers(kk).get_xi());  // cast multiplicity from unsigned int to double
         const auto mass = supers(kk).mass();
         m0 += xi;
         m1 += xi * mass;
@@ -72,8 +72,8 @@ std::array<double, 3> calc_rainmassmoments(const subviewd_constsupers supers) {
       "calc_rainmassmoments", Kokkos::RangePolicy<ExecSpace>(0, nsupers),
       KOKKOS_LAMBDA(const size_t kk, double &m0, double &m1, double &m2) {
         if (supers(kk).get_radius() >= rlim) {
-          const auto xi =
-              (double)(supers(kk).get_xi());  // cast multiplicity from unsigned int to double
+          const auto xi = static_cast<double>(
+              supers(kk).get_xi());  // cast multiplicity from unsigned int to double
           const auto mass = supers(kk).mass();
           m0 += xi;
           m1 += xi * mass;
@@ -94,8 +94,8 @@ std::array<double, 3> calc_massmoments_serial(const subviewd_constsupers supers)
 
   std::array<double, 3> moms({0.0, 0.0, 0.0});  // {0th, 1st, 2nd} mass moments
   for (size_t kk(0); kk < h_supers.extent(0); ++kk) {
-    const auto xi =
-        (double)(h_supers(kk).get_xi());  // cast multiplicity from unsigned int to double
+    const auto xi = static_cast<double>(
+        h_supers(kk).get_xi());  // cast multiplicity from unsigned int to double
     const auto mass = h_supers(kk).mass();
     moms.at(0) += xi;
     moms.at(1) += xi * mass;
@@ -118,8 +118,8 @@ std::array<double, 3> calc_rainmassmoments_serial(const subviewd_constsupers sup
   std::array<double, 3> moms({0.0, 0.0, 0.0});  // {0th, 1st, 2nd} mass moments
   for (size_t kk(0); kk < h_supers.extent(0); ++kk) {
     if (h_supers(kk).get_radius() >= rlim) {
-      const auto xi =
-          (double)(h_supers(kk).get_xi());  // cast multiplicity from unsigned int to double
+      const auto xi = static_cast<double>(
+          h_supers(kk).get_xi());  // cast multiplicity from unsigned int to double
       const auto mass = h_supers(kk).mass();
       moms.at(0) += xi;
       moms.at(1) += xi * mass;
