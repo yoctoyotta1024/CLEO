@@ -64,14 +64,17 @@ struct CollisionKineticEnergyNFrags {
   1) nfrags diverges at cke = alpha^(1/beta)*1e-6 [Joules], so here
   cke is capped at <= ckemax which is value less than alpha^(1/beta)
   such that nfrags <= 25
-  2) as cke -> 0, original formulation tends to
-  nfrags -> 2/3 < 2.5 formula multiplied by 3.75
-  to make limit nfrags -> 2.5 instead */
+  2) as cke -> 0, original formulation tends to nfrags -> 2/3 < 2.5.
+  Additional constant epsilon = 5/2 - 2/3 = 11/6, therefore
+  added to formula to make limit nfrags -> 2.5 instead, and
+  parameterisation still reasonably fitted to observations in
+  figure 13 of Schlottke et al. 2010 (within their error bars) */
   KOKKOS_INLINE_FUNCTION
   double operator()(const Superdrop &drop1, const Superdrop &drop2) const {
     constexpr double alpha = 1.5;
     constexpr double beta = 0.135;
     constexpr double ckemax = 16.49789599/1000000; // [J]
+    constexpr double epsilon = 11.0 / 6.0; // = 2.5 - 2/3
 
     const auto terminalv = RogersGKTerminalVelocity{};
     const auto cke = collision_kinetic_energy(drop1.get_radius(), drop2.get_radius(),
@@ -79,8 +82,8 @@ struct CollisionKineticEnergyNFrags {
 
     const auto cke_cap = double{Kokkos::fmin(ckemax, cke)};  // limit cke to less than ckemax
 
-    const auto gamma = double{Kokkos::pow(cke_cap*1e6, beta)}; // cke in micro-Joules
-    const auto nfrags = double{3.75 / (alpha - gamma)};
+    const auto gamma = double{Kokkos::pow(cke_cap*1e6, beta)}; // cke converted to micro-Joules
+    const auto nfrags = double{1.0 / (alpha - gamma) + epsilon};
 
     return nfrags;
   }
