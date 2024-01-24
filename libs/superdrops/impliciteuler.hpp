@@ -198,7 +198,7 @@ KOKKOS_INLINE_FUNCTION double ImplicitEuler::solve_condensation(
   deactivation might occur so perform subtimestepping */
   if ((s_ratio > 0.999 * s_act) && (s_ratio < 1.001 * s_act)) {
     const auto nsubs = (unsigned int)Kokkos::ceil(delt / subdelt);
-    const auto subt = double{delt / (double)nsubs};
+    const auto subt = double{delt / static_cast<double>(nsubs)};
     const ImplicitIteration implit{niters, subt, maxrtol, maxatol, s_ratio, akoh, bkoh, ffactor};
 
     return substepped_implicitmethod(implit, nsubs, rprev);
@@ -250,7 +250,7 @@ KOKKOS_INLINE_FUNCTION double ImplicitEuler::solve_condensation_matsushima(
         max_uniquedelt,
         subdelt)};  // Kokkos compatible equivalent to std::max() for floating point numbers
     const auto nsubs = (unsigned int)Kokkos::ceil(delt / subt);
-    subt = delt / (double)nsubs;
+    subt = delt / static_cast<double>(nsubs);
 
     const ImplicitIteration implit{niters, subt, maxrtol, maxatol, s_ratio, akoh, bkoh, ffactor};
 
