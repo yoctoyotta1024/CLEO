@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 23rd January 2024
+ * Last Modified: Wednesday 24th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -141,28 +141,28 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::breakup_superdroplet_pair(Superdrop &dro
 superdroplets produces (non-identical) twin superdroplets.
 Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
 Note implicit assumption that gamma factor = 1.
-Note: implicit casting of xi from unsigned long long to double. */
+Note: implicit casting of xi from uint64_t to double. */
 template <NFragments NFrags>
 KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &drop1,
                                                                   Superdrop &drop2) const {
   const auto old_xi = drop2.get_xi();  // = drop1.xi
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
-  const auto new_xi = (uint64_t)Kokkos::round(totnfrags);
 
-  assert((new_xi > old_xi) && "nfrags must increase multiplicity during breakup");
+  const auto new_xi1 = uint64_t{Kokkos::round(totnfrags / 2)};
+  const auto new_xi2 = uint64_t{Kokkos::round(totnfrags - new_xi1)};
+  const auto new_xitot = new_xi1 + new_xi2;
+  assert((new_xi2 > old_xi) && "nfrags must increase the drop2's multiplicity during breakup");
+  assert((new_xitot > (old_xi*2)) && "nfrags must increase total multiplicity during breakup");
 
   const auto sum_rcubed = double{drop1.rcubed() + drop2.rcubed()};
-  const auto new_rcubed = double{sum_rcubed * old_xi / new_xi};
+  const auto new_rcubed = double{sum_rcubed * old_xi / new_xitot};
   const auto new_r = double{Kokkos::pow(new_rcubed, (1.0 / 3.0))};
 
   const auto sum_msol = double{drop1.get_msol() + drop2.get_msol()};
-  const auto new_msol = double{sum_msol * old_xi / new_xi};
+  const auto new_msol = double{sum_msol * old_xi / new_xitot};
 
-  const auto new_xi_1 = new_xi / 2;  // same as floor() for positive ints
-  const auto new_xi_2 = new_xi - new_xi_1;
-
-  drop1.set_xi(new_xi_1);
-  drop2.set_xi(new_xi_2);
+  drop1.set_xi(new_xi1);
+  drop2.set_xi(new_xi2);
 
   drop1.set_radius(new_r);
   drop2.set_radius(new_r);
@@ -175,26 +175,31 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &dro
 mass via decreasing multiplicity of drop1. Similar to
 Shima et al. 2009 Section 5.1.3. part (5) option (a).
 Note implicit assumption that gamma factor = 1.
-Note: implicit casting of xi from unsigned long long to double. */
+Note: implicit casting of xi from uint64_t to double. */
 template <NFragments NFrags>
 KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop &drop1,
                                                                        Superdrop &drop2) const {
-  drop1.set_xi(drop1.get_xi() - drop2.get_xi());
+  const auto old_xi1 = drop1.get_xi();
+  const auto old_xi2 = drop2.get_xi();
 
-  const auto old_xi = drop2.get_xi();
-  const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
-  const auto new_xi = (uint64_t)Kokkos::round(totnfrags);
+  const auto new_xi1 = old_xi1 - old_xi2;
+  drop1.set_xi(new_xi1);
 
-  assert((new_xi > old_xi) && "nfrags must increase multiplicity during breakup");
+  const auto totnfrags = double{nfrags(drop1, drop2) * old_xi2};
+  const auto new_xi2 = uint64_t{Kokkos::round(totnfrags)};
+
+  assert((new_xi2 > old_xi2) && "nfrags must increase the drop2's multiplicity during breakup");
+  assert(((new_xi1 + new_xi2) > (old_xi1 + old_xi2)) &&
+         "nfrags must increase the total multiplicity during breakup");
 
   const auto sum_rcubed = double{drop1.rcubed() + drop2.rcubed()};
-  const auto new_rcubed = double{sum_rcubed * old_xi / new_xi};
+  const auto new_rcubed = double{sum_rcubed * old_xi2 / new_xi2};
   const auto new_r = double{Kokkos::pow(new_rcubed, (1.0 / 3.0))};
 
   const auto sum_msol = double{drop1.get_msol() + drop2.get_msol()};
-  const auto new_msol = double{sum_msol * old_xi / new_xi};
+  const auto new_msol = double{sum_msol * old_xi2 / new_xi2};
 
-  drop2.set_xi(new_xi);
+  drop2.set_xi(new_xi2);
   drop2.set_radius(new_r);
   drop2.set_msol(new_msol);
 }
