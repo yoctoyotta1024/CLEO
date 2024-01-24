@@ -53,7 +53,7 @@ viewd_supers init_supers(const size_t nsupers, const size_t ngbxs) {
   viewd_supers supers("supers", nsupers);
   auto h_supers = Kokkos::create_mirror_view(supers);
   for (size_t kk(0); kk < nsupers; ++kk) {
-    const auto ii = unsigned int(1);
+    const auto ii = static_cast<unsigned int>(1);
     h_supers(kk) = Superdrop();
     h_supers(kk).set_sdgbxindex(ii);
     std::cout << "ii: " << h_supers(kk).get_sdgbxindex() << "\n";

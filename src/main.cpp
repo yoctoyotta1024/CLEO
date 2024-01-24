@@ -19,11 +19,11 @@
  * ./src/runCLEO ../src/config/config.txt
  */
 
-#include <cmath>
 #include <concepts>
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
+#include <cmath>
 
 #include <Kokkos_Core.hpp>
 
