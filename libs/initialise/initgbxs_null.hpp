@@ -65,21 +65,21 @@ struct InitGbxsNull {
   }
 
   std::vector<std::pair<double, double>> wvel() const {
-    auto w = std::make_pair<double, double>(0.0, 0.0);
+    auto w = std::make_pair(0.0, 0.0);
     std::vector<std::pair<double, double>> wvel(ngbxs, w);
 
     return wvel;
   }
 
   std::vector<std::pair<double, double>> uvel() const {
-    auto u = std::make_pair<double, double>(0.0, 0.0);
+    auto u = std::make_pair(0.0, 0.0);
     std::vector<std::pair<double, double>> uvel(ngbxs, u);
 
     return uvel;
   }
 
   std::vector<std::pair<double, double>> vvel() const {
-    auto v = std::make_pair<double, double>(0.0, 0.0);
+    auto v = std::make_pair(0.0, 0.0);
     std::vector<std::pair<double, double>> vvel(ngbxs, v);
 
     return vvel;
