@@ -33,16 +33,15 @@
 /* concept Observer is all types that have functions
 for timestepping and at_start_step as constrained here */
 template <typename Obs>
-concept Observer =
-    requires(Obs obs, unsigned int t, const viewh_constgbx h_gbxs,
-             const viewd_constsupers totsupers, const Gridbox &gbx) {
-      { obs.before_timestepping(h_gbxs) } -> std::same_as<void>;
-      { obs.after_timestepping() } -> std::same_as<void>;
-      { obs.next_obs(t) } -> std::convertible_to<unsigned int>;
-      { obs.on_step(t) } -> std::same_as<bool>;
-      { obs.at_start_step(t, h_gbxs, totsupers) } -> std::same_as<void>;
-      { obs.at_start_step(t, gbx) } -> std::same_as<void>;
-    };
+concept Observer = requires(Obs obs, unsigned int t, const viewh_constgbx h_gbxs,
+                            const viewd_constsupers totsupers, const Gridbox &gbx) {
+  { obs.before_timestepping(h_gbxs) } -> std::same_as<void>;
+  { obs.after_timestepping() } -> std::same_as<void>;
+  { obs.next_obs(t) } -> std::convertible_to<unsigned int>;
+  { obs.on_step(t) } -> std::same_as<bool>;
+  { obs.at_start_step(t, h_gbxs, totsupers) } -> std::same_as<void>;
+  { obs.at_start_step(t, gbx) } -> std::same_as<void>;
+};
 
 /* new observer formed from combination
 of two Obervers 'a' and 'b' */
@@ -124,14 +123,13 @@ struct NullObserver {
 by ConstTstepObserver for 'do_obs' (in order
 to make an Observer type out of a ConstTstepObserver) */
 template <typename O>
-concept ObsFuncs =
-    requires(O o, unsigned int t, const viewh_constgbx h_gbxs, const viewd_constsupers totsupers,
-             const Gridbox &gbx) {
-      { o.before_timestepping(h_gbxs) } -> std::same_as<void>;
-      { o.after_timestepping() } -> std::same_as<void>;
-      { o.at_start_step(t, h_gbxs, totsupers) } -> std::same_as<void>;
-      { o.at_start_step(t, gbx) } -> std::same_as<void>;
-    };
+concept ObsFuncs = requires(O o, unsigned int t, const viewh_constgbx h_gbxs,
+                            const viewd_constsupers totsupers, const Gridbox &gbx) {
+  { o.before_timestepping(h_gbxs) } -> std::same_as<void>;
+  { o.after_timestepping() } -> std::same_as<void>;
+  { o.at_start_step(t, h_gbxs, totsupers) } -> std::same_as<void>;
+  { o.at_start_step(t, gbx) } -> std::same_as<void>;
+};
 
 /* this structure is a type that satisfies the concept of
 an observer in SDM and has a constant tstep

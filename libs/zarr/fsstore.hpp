@@ -22,12 +22,12 @@
 #ifndef LIBS_ZARR_FSSTORE_HPP_
 #define LIBS_ZARR_FSSTORE_HPP_
 
-#include <filesystem>
-#include <fstream>
-#include <iostream>
 #include <span>
 #include <string>
 #include <string_view>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
 
 /* functions for converting types (e.g. vectors of
 unsigned integers or doubles) into vectors of single bytes to

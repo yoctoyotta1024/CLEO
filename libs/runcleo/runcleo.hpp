@@ -176,7 +176,7 @@ class RunCLEO {
     // create runtime objects
     viewd_supers totsupers(create_supers(initconds.initsupers));  // all the superdrops in domain
     dualview_gbx gbxs(create_gbxs(sdm.gbxmaps, initconds.initgbxs, totsupers));
-    GenRandomPool genpool(std::random_device{}());
+    GenRandomPool genpool(std::random_device {}());
 
     // prepare CLEO for timestepping
     prepare_to_timestep(gbxs);

@@ -84,7 +84,7 @@ struct DoCollisions {
                                                    const double scale_p,
                                                    const double VOLUME) const {
     const auto prob_jk = double{probability(drop1, drop2, DELT, VOLUME)};
-    const auto large_xi = (double)drop1.get_xi();  // casting xi to double (!)
+    const auto large_xi = static_cast<double>(drop1.get_xi());  // casting xi to double (!)
 
     const auto prob = double{scale_p * large_xi * prob_jk};
 
@@ -140,7 +140,7 @@ struct DoCollisions {
   KOKKOS_INLINE_FUNCTION size_t collide_supers(const TeamMember &team_member,
                                                subviewd_supers supers, const double volume,
                                                GenRandomPool genpool) const {
-    const auto nsupers = (size_t)supers.extent(0);
+    const auto nsupers = static_cast<size_t>(supers.extent(0));
     const auto npairs =
         size_t{nsupers / 2};  // no. pairs of superdroplets (same as floor() for positive nsupers)
     const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
@@ -153,7 +153,7 @@ struct DoCollisions {
           const auto kk = size_t{jj * 2};
           const auto isnull =
               collide_superdroplet_pair(supers(kk), supers(kk + 1), genpool, scale_p, VOLUME);
-          nnull += (size_t)isnull;
+          nnull += static_cast<size_t>(isnull);
         },
         totnnull);
 

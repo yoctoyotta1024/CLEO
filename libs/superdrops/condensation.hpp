@@ -149,7 +149,7 @@ KOKKOS_FUNCTION
 double DoCondensation::superdroplets_change(const TeamMember &team_member,
                                             const subviewd_supers supers,
                                             const State &state) const {
-  const auto nsupers = (size_t)supers.extent(0);
+  const auto nsupers = static_cast<size_t>(supers.extent(0));
 
   const auto psat = saturation_pressure(state.temp);
   const auto s_ratio = supersaturation_ratio(state.press, state.qvap, psat);
