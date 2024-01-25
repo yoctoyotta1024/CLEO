@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 24th January 2024
+ * Last Modified: Thursday 25th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -147,6 +147,7 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &dro
                                                                   Superdrop &drop2) const {
   const auto old_xi = drop2.get_xi();  // = drop1.xi
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
+  assert(((totnfrags  / old_xi) > 2.5) && "nfrags must be > 2.5");
 
   const auto new_xi1 = (uint64_t)Kokkos::round(totnfrags / 2); // cast double to uint64_t
   const auto new_xi2 = (uint64_t)Kokkos::round(totnfrags - new_xi1); // cast double to uint64_t
@@ -187,6 +188,7 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop
 
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi2};
   const auto new_xi2 = (uint64_t)Kokkos::round(totnfrags); // cast double to uint64_t
+  assert(((totnfrags  / old_xi2) > 2.5) && "nfrags must be > 2.5");
 
   assert((new_xi2 > old_xi2) && "nfrags must increase the drop2's multiplicity during breakup");
   assert(((new_xi1 + new_xi2) > (old_xi1 + old_xi2)) &&
