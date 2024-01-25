@@ -120,7 +120,7 @@ struct MoveSupersInDomain {
   (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host) */
-  // TODO (all) use tasking to convert all 3 team policy
+  // TODO(all) use tasking to convert all 3 team policy
   // loops in these function calls into 1 loop?
   void move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
                                  const viewd_supers totsupers) const {
