@@ -15,8 +15,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Generic functions for timestepping CLEO coupled model
- * (CLEO SDM coupled one-way/two-ways to a Dynamics Solver)
+ * Generic templated class for timestepping CLEO SDM coupled (one-way/two-way)
+ * a Dynamics Solver
  */
 
 #ifndef LIBS_RUNCLEO_RUNCLEO_HPP_
@@ -47,13 +47,31 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
+/**
+ * @class RunCLEO
+ * @brief Generic templated class for timestepping CLEO SDM coupled
+ * (one-way/two-way) a Dynamics Solver
+ *
+ * This class provides generic functions for timestepping CLEO coupled model,
+ * which consists of a CLEO SDM (Subgrid Dynamics Model) coupled one-way/two-ways
+ * to a Dynamics Solver.
+ *
+ * @tparam CD Type of CoupledDynamics.
+ * @tparam GbxMaps Type of GridboxMaps.
+ * @tparam Microphys Type of MicrophysicalProcess.
+ * @tparam M Type of Motion.
+ * @tparam Obs Type of Observer.
+ * @tparam Comms Type of CouplingComms.
+ */
 template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphys,
           Motion<GbxMaps> M, Observer Obs, CouplingComms<CD> Comms>
 class RunCLEO {
  private:
-  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm;
-  CD &coupldyn;
-  const Comms &comms;
+  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm; /**< TODO(CB) Reference SDMMethods object. */
+  CD &coupldyn; /**< TODO(CB) Reference to the CoupledDynamics object. */
+  const Comms &comms; /**< TODO(CB) Reference to the CouplingComms object. */
+
+  // TODO(CB) private member func docstrings
 
   /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
   int prepare_to_timestep(const dualview_constgbx gbxs) const {
@@ -119,42 +137,42 @@ class RunCLEO {
   }
 
  /**
- * @brief Get the size of the next timestep.
- *
- * This function calculates and returns the next step size to take based on the
- * current model time, `t_mdl` and the coupling and obs times
- * obtained from the `sdm` object; `t_coupl` and `t_obs` respectively.
- *
- * @param t_mdl The current timestep of the model.
- * @return The size of the next timestep.
- *
- * @details
- * The next timestep is determined by finding the smaller out of the step to the
- * next coupling time and the next observation time. The next coupling time is
- * calculated after receiving the size of the coupling timestep (a constant)
- * using the `sdm.get_couplstep()` function. The time of the next observation
- * is obtained from the `sdm.obs.next_obs()` function.
- *
- * The calculation for the step size to the next coupling is performed as follows:
- * \code{.cpp}
- * const auto next_couplstep = [&, t_mdl]() {
- *     const auto interval = static_cast<unsigned int>(sdm.get_couplstep());
- *     return ((t_mdl / interval) + 1) * interval;
- * };
- *
- * const auto next_coupl = static_cast<unsigned int>(next_couplstep());
- * const auto next_obs = static_cast<unsigned int>(sdm.obs.next_obs(t_mdl));
- * const auto t_next = !(next_coupl < next_obs) ? next_obs : next_coupl;
- * \endcode
- *
- * The size of the next timestep is then calculated as `t_next - t_mdl`,
- * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
- * and `next_obs`. The function uses Kokkos' version of C++ standard
- * library's `std::min` to find `t_next` (also GPU compatible).
- *
- * @see SDMMethods::get_couplstep()
- * @see SDMMethods::ObsClass::next_obs() // TODO(CB) docs
- */
+  * @brief Get the size of the next timestep.
+  *
+  * This function calculates and returns the next step size to take based on the
+  * current model time, `t_mdl` and the coupling and obs times
+  * obtained from the `sdm` object; `t_coupl` and `t_obs` respectively.
+  *
+  * @param t_mdl The current timestep of the model.
+  * @return The size of the next timestep.
+  *
+  * @details
+  * The next timestep is determined by finding the smaller out of the step to the
+  * next coupling time and the next observation time. The next coupling time is
+  * calculated after receiving the size of the coupling timestep (a constant)
+  * using the `sdm.get_couplstep()` function. The time of the next observation
+  * is obtained from the `sdm.obs.next_obs()` function.
+  *
+  * The calculation for the step size to the next coupling is performed as follows:
+  * \code{.cpp}
+  * const auto next_couplstep = [&, t_mdl]() {
+  *     const auto interval = static_cast<unsigned int>(sdm.get_couplstep());
+  *     return ((t_mdl / interval) + 1) * interval;
+  * };
+  *
+  * const auto next_coupl = static_cast<unsigned int>(next_couplstep());
+  * const auto next_obs = static_cast<unsigned int>(sdm.obs.next_obs(t_mdl));
+  * const auto t_next = !(next_coupl < next_obs) ? next_obs : next_coupl;
+  * \endcode
+  *
+  * The size of the next timestep is then calculated as `t_next - t_mdl`,
+  * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
+  * and `next_obs`. The function uses Kokkos' version of C++ standard
+  * library's `std::min` to find `t_next` (also GPU compatible).
+  *
+  * @see SDMMethods::get_couplstep()
+  * @see SDMMethods::ObsClass::next_obs() // TODO(CB) docs
+  */
   unsigned int get_next_step(const unsigned int t_mdl) const {
     const auto next_couplstep = [&, t_mdl]() {
       const auto interval = (unsigned int)sdm.get_couplstep();
@@ -198,15 +216,39 @@ class RunCLEO {
   }
 
  public:
+  /**
+   * @brief Constructor for RunCLEO.
+   *
+   * Initializes the RunCLEO object with the provided SDMMethods, CoupledDynamics,
+   * and CouplingComms objects. Checks if coupling between SDM and Dynamics is correct.
+   *
+   * @param sdm TODO(CB) Reference to the SDMMethods object.
+   * @param coupldyn TODO(CB) Reference to the CoupledDynamics object.
+   * @param comms TODO(CB) Reference to the CouplingComms object.
+   */
   RunCLEO(const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm, CD &coupldyn, const Comms &comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms) {
     check_coupling();
   }
 
+  /**
+   * @brief Destructor for RunCLEO.
+   *
+   * Calls the after_timestepping function of the SDM observer.
+   */
   ~RunCLEO() { sdm.obs.after_timestepping(); }
 
-  /* create gridboxes and superdrops using initial
-  conditions, then prepare and do timestepping. */
+  /* create  then prepare and do timestepping. */
+  /**
+   * @brief Operator () for RunCLEO.
+   *
+   * Creates runtime objects, gridboxes, superdrops and random number generators
+   * using initial conditions, then prepares and performs CLEO timestepping.
+   *
+   * @param initconds InitialConditions object containing initial conditions.
+   * @param t_end End time for timestepping.
+   * @return 0 on success.
+   */
   int operator()(const InitialConditions auto &initconds, const unsigned int t_end) const {
     // create runtime objects
     viewd_supers totsupers(create_supers(initconds.initsupers));  // all the superdrops in domain
