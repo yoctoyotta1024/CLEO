@@ -3,8 +3,8 @@
 Contact Us!
 ===========
 
-Main Developer
---------------
+Main Developers
+---------------
 Email: yoctoyotta1024@yahoo.com
 ###############################
 via GitHub: `create GitHub issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_
