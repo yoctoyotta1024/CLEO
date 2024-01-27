@@ -42,8 +42,8 @@ CLEO can be one-way or two-way coupled to a dyanmical core capable of advection.
 Nevertheless, such a dynamical core is not a necessity. There are many ways for CLEO to receive
 dynamics, which may even just involve reading data from binary files.
 
-Thread Parallelism
-------------------
+Kokkos Thread Parallelism
+-------------------------
 For performance portable thread parallelism we embrace Kokkos. As a consequence,
 Kokkos' macros and functions are littered throughout our code and many of our key data structures,
 for example Gridboxes and super-droplets, are contained within Kokkos Views. For those seeking
