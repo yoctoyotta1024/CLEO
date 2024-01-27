@@ -49,7 +49,13 @@ Kokkos' macros and functions are littered throughout our code and many of our ke
 for example Gridboxes and super-droplets, are contained within Kokkos Views. For those seeking
 advanced understanding, we defer to Kokkos' github repositories and documentation therein.
 
-TODO: a bit of schpiel on the final time-stepping of the model
+Timestepping
+------------
+As mentioned above, CLEO's monoidal structures are designed to allow adaptive-timestepping,
+meaning different microphysical processes and observers may have arbitrary time-steps which bare
+no relation to one another and can in general change during run-time. This flexibility is contained
+in a sub-timestepping routine which is part of CLEO's larger timestepping routine to run SDM
+coupled to dynamics.
 
 .. toctree::
    :maxdepth: 1
