@@ -101,7 +101,7 @@ class RunCLEO {
     return 0;
   }
 
-  /** Start of every timestep: 1) communication of thermodynamic
+  /* Start of every timestep: 1) communication of thermodynamic
   state from dynamics solver to CLEO's Gridboxes. 2) call
   sdm at_start_step function (e.g. to make observations).
   3) Return size of step to take given current timestep, t_mdl */
@@ -118,11 +118,43 @@ class RunCLEO {
     return get_next_step(t_mdl);
   }
 
-  /**
-  * returns size of next step to take given current
-  * timestep, t_mdl, such that next timestep is
-  * sooner out of next timestep for obs or coupl
-  */
+ /**
+ * @brief Get the size of the next timestep.
+ *
+ * This function calculates and returns the next step size to take based on the
+ * current model time, `t_mdl` and the coupling and obs times
+ * obtained from the `sdm` object; `t_coupl` and `t_obs` respectively.
+ *
+ * @param t_mdl The current timestep of the model.
+ * @return The size of the next timestep.
+ *
+ * @details
+ * The next timestep is determined by finding the smaller out of the step to the
+ * next coupling time and the next observation time. The next coupling time is
+ * calculated after receiving the size of the coupling timestep (a constant)
+ * using the `sdm.get_couplstep()` function. The time of the next observation
+ * is obtained from the `sdm.obs.next_obs()` function.
+ *
+ * The calculation for the step size to the next coupling is performed as follows:
+ * \code{.cpp}
+ * const auto next_couplstep = [&, t_mdl]() {
+ *     const auto interval = static_cast<unsigned int>(sdm.get_couplstep());
+ *     return ((t_mdl / interval) + 1) * interval;
+ * };
+ *
+ * const auto next_coupl = static_cast<unsigned int>(next_couplstep());
+ * const auto next_obs = static_cast<unsigned int>(sdm.obs.next_obs(t_mdl));
+ * const auto t_next = !(next_coupl < next_obs) ? next_obs : next_coupl;
+ * \endcode
+ *
+ * The size of the next timestep is then calculated as `t_next - t_mdl`,
+ * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
+ * and `next_obs`. The function uses Kokkos' version of C++ standard
+ * library's `std::min` to find `t_next` (also GPU compatible).
+ *
+ * @see SDMMethods::get_couplstep()
+ * @see SDMMethods::ObsClass::next_obs()
+ */
   unsigned int get_next_step(const unsigned int t_mdl) const {
     const auto next_couplstep = [&, t_mdl]() {
       const auto interval = (unsigned int)sdm.get_couplstep();
