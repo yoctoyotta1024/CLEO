@@ -21,6 +21,6 @@ in your preferred browser. E.g.
 
 If you would like to contribute to the documentation, have questions or
 would like clarification or addition to the documentation about
-a particular topic, please :ref:`contact us! <contact>` or `open an
+a particular topic, please :ref:`contact us! <contact>` or `open a new
 issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on
 our GitHub repository.
