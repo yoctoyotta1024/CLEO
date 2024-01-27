@@ -31,6 +31,7 @@ with the :doc:`quickstart<usage/quickstart>`.
    usage/examples
    usage/quickstart
    usage/contributing
+   usage/ourdocs
 
    pySD/pySD
    cxx/cxx
