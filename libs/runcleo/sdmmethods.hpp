@@ -40,8 +40,9 @@
  * @class SDMMethods
  * @brief Struct wrapping the core ingredients of the Super-droplet Model (SDM) part of CLEO.
  *
- * This struct encapsulates the essential components of the Super-droplet Model (SDM) in the CLEO coupled model.
- * It includes components for handling gridboxes, super-droplets' motion, microphysics, and observers.
+ * This struct encapsulates the essential components of the Super-droplet Model (SDM)
+ * in the CLEO coupled model. It includes components for handling gridboxes,
+ * super-droplets' motion, microphysics, and observers.
  *
  * @tparam GbxMaps Type of the GridboxMaps.
  * @tparam Microphys Type of the MicrophysicalProcess.
