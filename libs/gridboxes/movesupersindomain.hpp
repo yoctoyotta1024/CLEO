@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 24th January 2024
+ * Last Modified: Saturday 27th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,7 +60,7 @@ struct MoveSupersInDomain {
       motion.superdrop_coords(gbxindex, gbxmaps, state, supers(kk));
 
       /* optional step (1b) */
-      // gbx.detectors -> detect_precipitation(area, drop); // TODO detectors
+      // gbx.detectors -> detect_precipitation(area, drop); // TODO(CB) detectors
 
       /* step (2) */
       motion.superdrop_gbx(gbxindex, gbxmaps, supers(kk));

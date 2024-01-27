@@ -153,7 +153,7 @@ class RunCLEO {
  * library's `std::min` to find `t_next` (also GPU compatible).
  *
  * @see SDMMethods::get_couplstep()
- * @see SDMMethods::ObsClass::next_obs()
+ * @see SDMMethods::ObsClass::next_obs() // TODO(CB) docs
  */
   unsigned int get_next_step(const unsigned int t_mdl) const {
     const auto next_couplstep = [&, t_mdl]() {
