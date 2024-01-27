@@ -16,24 +16,38 @@ in large regional domains, with horizontal extents O(100km). CLEO is an attempt 
 a SDM. It strives to be a library for SDM to model warm clouds with exceptional computational
 performance.
 
+Memory Layout
+-------------
 The fundamental basis for computational performance in CLEO is through efficient memory access
 patterns. Primarily this is acheived by ensuring super-droplets which occupy the same gridbox are
-always located contiguously in memory. We also try to avoid new memory allocation and we use
-parallelised loops over gridboxes and super-droplets and simplistic microphysics for low cost
-at run-time.
+always located contiguously in memory. We also try to avoid new memory allocation and cache misses
+through our organisation of gridboxes and super-droplets and we use simplistic microphysics for
+low cost at run-time.
 
+Monoids
+-------
 A key novel feature of CLEO is the construction of monoids. We use C++20 concepts to constrain
 templated types for microphysics and observers. This ensures they satisfy monoid set properties
 and can be combined in well-defined ways. The purpose is to allow for several microphysics
-processes (and observers) to be combined easily and with adaptive-timestepping whilst avoiding
-the use of conditional branches in the code. This enables massive model flexibility without
-additional run-time cost. It also helps with maintaining readable and modifyable code.
+processes (and likewise observers) to be combined simply and flexibly whilst ensuring
+adaptive-timestepping and avoiding the use of conditional branches in the code. This enables
+extra-ordinary model flexibility without additional run-time cost. It also helps with maintaining
+readable and modifyable code.
 
-For portable performance portable thread parallelism we embrace Kokkos. As a consequence,
+Coupling to a Dynamics Solver
+-----------------------------
+Whilst CLEO handles the transport of super-droplets throughout the domain, it cannot perform
+advection of Gridboxes' dyanmic variables itself (temperature, pressure, winds etc.). Instead,
+CLEO can be one-way or two-way coupled to a dyanmical core capable of advection.
+Nevertheless, such a dynamical core is not a necessity. There are many ways for CLEO to receive
+dynamics, which may even just involve reading data from binary files.
+
+Thread Parallelism
+------------------
+For performance portable thread parallelism we embrace Kokkos. As a consequence,
 Kokkos' macros and functions are littered throughout our code and many of our key data structures,
 for example Gridboxes and super-droplets, are contained within Kokkos Views. For those seeking
-advanced understanding, we refer to `Kokkos' github repositories <https://github.com/kokkos>`_
-and documentation therein.
+advanced understanding, we defer to Kokkos' github repositories and documentation therein.
 
 TODO: a bit of schpiel on coupling and dynamics solver
 
