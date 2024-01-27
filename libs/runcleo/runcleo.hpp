@@ -6,7 +6,7 @@
  * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Tobias Kölling (TK)
  * -----
  * Last Modified: Saturday 27th January 2024
  * Modified By: CB
@@ -52,9 +52,9 @@
  * @brief Generic templated class for timestepping CLEO SDM coupled
  * (one-way/two-way) a Dynamics Solver
  *
- * This class provides generic functions for timestepping CLEO coupled model,
- * which consists of a CLEO SDM (Subgrid Dynamics Model) coupled one-way/two-ways
- * to a Dynamics Solver.
+ * This class orchestrates the timestepping of CLEO coupled model,
+ * which consists of `SDM Methods` coupled one-way or two-way
+ * to `Coupled Dynamics` with communication handled by `Coupling Comms`.
  *
  * @tparam CD Type of CoupledDynamics.
  * @tparam GbxMaps Type of GridboxMaps.
@@ -71,9 +71,15 @@ class RunCLEO {
   CD &coupldyn; /**< Reference to the CoupledDynamics object. TODO(CB)  */
   const Comms &comms; /**< Reference to the CouplingComms object. TODO(CB)  */
 
-  // TODO(CB) private member func docstrings
-
-  /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
+  /**
+   * @brief Prepare SDM and Coupled Dynamics for timestepping.
+   *
+   * This function prepares the SDM and Coupled Dynamics for timestepping. It calls the
+   * `prepare_to_timestep` function of both the Coupled Dynamics and SDMMethods objects.
+   *
+   * @param gbxs DualView of gridboxes.
+   * @return 0 on success.
+   */
   int prepare_to_timestep(const dualview_constgbx gbxs) const {
     std::cout << "\n--- prepare timestepping ---\n";
 
@@ -84,8 +90,12 @@ class RunCLEO {
     return 0;
   }
 
-  /* check  coupling of CLEO SDM and Coupled Dyanmics is correct.
-  For example ensuring they have the same timestep for coupling */
+  /**
+   * @brief Check if coupling between SDM and Coupled Dynamics is correct.
+   *
+   * This function checks if the coupling timestep of the Dynamics Solver and SDM
+   * are equal. Throws an exception if they are not.
+   */
   void check_coupling() const {
     if (sdm.get_couplstep() != coupldyn.get_couplstep()) {
       const std::string err(
@@ -95,7 +105,20 @@ class RunCLEO {
     }
   }
 
-  /* timestep CLEO from t=0 to t=t_end */
+  /**
+   * @brief Timestep CLEO from t=0 to t=t_end.
+   *
+   * This function performs the main timestepping loop for CLEO from the initial time (t_mdl=0)
+   * to the specified end time (t_mdl=t_end). It calls RunCLEO's `start_step`,
+   * `coupldyn_step`, `sdm_step`, and `proceed_to_next_step` functions
+   * in a loop until timestepping is complete.
+   *
+   * @param t_end End time for timestepping.
+   * @param gbxs DualView of gridboxes.
+   * @param totsupers View of total superdroplets.
+   * @param genpool Random number generator pool.
+   * @return 0 on success.
+   */
   int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs, const viewd_supers totsupers,
                     GenRandomPool genpool) const {
     std::cout << "\n--- timestepping ---\n";

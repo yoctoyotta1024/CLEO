@@ -6,7 +6,7 @@
  * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Tobias Kölling (TK)
  * -----
  * Last Modified: Saturday 27th January 2024
  * Modified By: CB
