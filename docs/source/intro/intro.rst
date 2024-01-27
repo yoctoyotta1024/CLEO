@@ -34,8 +34,8 @@ adaptive-timestepping and avoiding the use of conditional branches in the code. 
 extra-ordinary model flexibility without additional run-time cost. It also helps with maintaining
 readable and modifyable code.
 
-Coupling to a Dynamics Solver
------------------------------
+Coupling to Dynamics
+--------------------
 Whilst CLEO handles the transport of super-droplets throughout the domain, it cannot perform
 advection of Gridboxes' dyanmic variables itself (temperature, pressure, winds etc.). Instead,
 CLEO can be one-way or two-way coupled to a dyanmical core capable of advection.
@@ -48,8 +48,6 @@ For performance portable thread parallelism we embrace Kokkos. As a consequence,
 Kokkos' macros and functions are littered throughout our code and many of our key data structures,
 for example Gridboxes and super-droplets, are contained within Kokkos Views. For those seeking
 advanced understanding, we defer to Kokkos' github repositories and documentation therein.
-
-TODO: a bit of schpiel on coupling and dynamics solver
 
 TODO: a bit of schpiel on the final time-stepping of the model
 
