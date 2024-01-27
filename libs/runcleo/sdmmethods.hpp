@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: sdmmethods.hpp
@@ -7,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Saturday 27th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,6 +102,14 @@ class SDMMethods {
         obs(obs),
         sdm_microphysics({microphys}) {}
 
+  /**
+   * @brief Get the coupling step value.
+   *
+   * This function retrieves and returns the size of the coupling timestep.
+   *
+   * @return The coupling timestep value.
+   *
+   */
   KOKKOS_INLINE_FUNCTION
   auto get_couplstep() const { return couplstep; }
 
