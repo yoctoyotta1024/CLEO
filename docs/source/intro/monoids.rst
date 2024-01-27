@@ -1,4 +1,4 @@
 Monoids
 =======
 
-This is the use of monoids in CLEO.
+The use of monoids of CLEO... comming soon!
