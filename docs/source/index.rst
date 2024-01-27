@@ -7,7 +7,8 @@ Welcome to CLEO's Documentation!
 ================================
 
 .. note::
-   Please consider that this project is under active development.
+   Please consider that this project is under active development
+   and our documentation is a work in progress.
 
 **CLEO** (/ˌkliːə/ ) is a library for
 Super-Droplet Model (SDM) cloud microphysics.

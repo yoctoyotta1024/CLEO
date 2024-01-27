@@ -7,7 +7,8 @@ Programming Guide
 =================
 
 .. note::
-   Please consider that this project is under active development.
+   Please consider that this project is under active development
+   and our documentation is a work in progress.
 
 It seems apparent that a new implementation of SDM is required;
 capable of modelling warm rain in LES with realistic boundary
