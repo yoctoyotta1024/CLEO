@@ -15,8 +15,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct wrapping the core ingredients of the Super-droplet Model
- * (SDM) part of CLEO to enact on super-droplets and gridboxes
+ * struct wrapping the core ingredients of CLEO's Super-droplet Model (SDM)
+ * the microphysical process, motion etc. to enact on super-droplets and gridboxes
  */
 
 #ifndef LIBS_RUNCLEO_SDMMETHODS_HPP_
@@ -51,44 +51,83 @@
 template <GridboxMaps GbxMaps, MicrophysicalProcess Microphys, Motion<GbxMaps> M, Observer Obs>
 class SDMMethods {
  private:
-  unsigned int couplstep;                     // coupled timestep
-  MoveSupersInDomain<GbxMaps, M> movesupers;  // super-droplets' motion in domain
+  unsigned int couplstep;                     /**< Coupling timestep. */
+  MoveSupersInDomain<GbxMaps, M> movesupers;  /**< Reference super-droplets' movement. TODO(CB) */
 
-  /* given current timestep, t_sdm, work out which event
-  (motion or one complete step) is next to occur and return
-  the time of the sooner event, (ie. next t_move or t_mdl) */
+  /**
+   * @brief Get the next timestep for SDM.
+   *
+   * Given the current timestep for SDM (`t_sdm`) and the next timestep for the
+   * coupled model (`next_mdl`), this function determines which event
+   * (motion or one complete step) will be the next to occur and returns the
+   * time of the sooner event (i.e., next `t_move` or `t_mdl`).
+   *
+   * @param t_sdm Current timestep of SDM.
+   * @param next_mdl Next timestep of the coupled model.
+   * @return The timestep of the sooner event.
+   */
   KOKKOS_INLINE_FUNCTION
   unsigned int next_sdmstep(const unsigned int t_sdm, const unsigned int next_mdl) const {
-    const auto next_move = (unsigned int)movesupers.next_step(t_sdm);  // t of next sdm movement
+    const auto next_move = (unsigned int)movesupers.next_step(t_sdm);
+
+    /* return smaller of two unsigned ints (see std::min) */
     const auto t_next = (unsigned int)(!(next_mdl < next_move) ? next_move : next_mdl);
 
-    return t_next;  // return smaller of two unsigned ints (see std::min)
+    return t_next;
   }
 
   /* move superdroplets (including movement between
   gridboxes) according to movesupers struct */
+  /**
+   * @brief Move superdroplets according to the `movesupers` struct.
+   *
+   * This function moves superdroplets, including their movement between
+   * gridboxes, according to the `movesupers` struct. `movesupers` is an
+   * instance of the MoveSupersInDomain templated type with a certain type of
+   * GridboxMaps and Motion
+   *
+   * @param t_sdm Current timestep for SDM.
+   * @param d_gbxs View of gridboxes on device.
+   * @param totsupers View of total superdroplets.
+   */
   void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs,
                            const viewd_supers totsupers) const {
     movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers);
   }
 
  public:
-  GbxMaps gbxmaps;  // maps from gridbox indexes to domain coordinates
-  Obs obs;          // observer
+  GbxMaps gbxmaps;  /**< Reference Maps from index to coordinate-dependent properties. TODO(CB) */
+  Obs obs;          /**< Reference Observer. TODO(CB) */
 
-  /* operator is call to microphysics 'sdm_microphysics'. struct
-  created so that capture by value KOKKOS_CLASS_LAMBDA
-  (ie. [=] on CPU) only captures microphysics and not other
-  members of SDMMethods.
-  ()*/
+  /**
+   * @struct SDMMicrophysics
+   * @brief Structure for encapsulating the microphysics process in SDM.
+   *
+   * The `operator()` is called for SDM microphysics, and it uses Kokkos
+   * parallel_for for parallelized execution. struct required so that
+   * capture by value KOKKOS_CLASS_LAMBDA (ie. [=] on CPU) only captures
+   * objects relevant to microphysics and not other members of SDMMethods
+   * (which may not be GPU compatible).
+   *
+   * @tparam Microphys Type of the MicrophysicalProcess.
+   */
   struct SDMMicrophysics {
-    Microphys microphys;  // microphysical process
+    Microphys microphys;  /**< Microphysical process. TODO(CB) */
 
-    /* enact SDM microphysics for each gridbox
-    (using sub-timestepping routine). Kokkos::parallel for is
-    nested parallelism within parallelised loop over gridboxes,
-    serial equivalent is simply:
-    for (size_t ii(0); ii < ngbxs; ++ii) { [...] } */
+    /* .*/
+
+    /**
+     * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
+     *
+     * This function runs SDM microphysics for each gridbox using a sub-timestepping routine.
+     *  Kokkos::parallel_for is nested parallelism within parallelised loop over gridboxes,
+     * serial equivalent is simply: `for (size_t ii(0); ii < ngbxs; ++ii) { [...] }`
+     *
+     * @param t_sdm Current timestep for SDM.
+     * @param t_next Next timestep for SDM.
+     * @param d_gbxs View of gridboxes on device.
+     * @param genpool Random number generator pool.
+     */
     void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
                     GenRandomPool genpool) const {
       // TODO(all) use scratch space for parallel region?
@@ -104,8 +143,20 @@ class SDMMethods {
             }
           });
     }
-  } sdm_microphysics;  // operator is call for SDM microphysics
+  } sdm_microphysics;  /**< Operator is call for SDM microphysics. */
 
+  /**
+   * @brief Constructor for SDMMethods.
+   *
+   * Initializes SDMMethods with the provided coupling timestep, gridbox maps,
+   * microphysics, motion, and observer.
+   *
+   * @param couplstep Coupling timestep.
+   * @param gbxmaps Gridbox maps.
+   * @param microphys Microphysical process.
+   * @param movesupers Super-droplets' motion.
+   * @param obs Observer.
+   */
   SDMMethods(const unsigned int couplstep, const GbxMaps gbxmaps, const Microphys microphys,
              const M movesupers, const Obs obs)
       : couplstep(couplstep),
@@ -120,14 +171,30 @@ class SDMMethods {
    * This function retrieves and returns the size of the coupling timestep.
    *
    * @return The coupling timestep value.
-   *
    */
   KOKKOS_INLINE_FUNCTION
   auto get_couplstep() const { return couplstep; }
 
-  /* prepare CLEO SDM for timestepping */
+  /**
+   * @brief Prepare CLEO SDM for timestepping.
+   *
+   * This function prepares the CLEO SDM for timestepping by
+   * calling the `before_timestepping` function of the observer.
+   *
+   * @param h_gbxs View of gridboxes on host.
+   */
   void prepare_to_timestep(const viewh_constgbx h_gbxs) const { obs.before_timestepping(h_gbxs); }
 
+  /**
+   * @brief Execute at the start of each coupled model timestep.
+   *
+   * This function is called at the start of each coupled model timestep
+   * (i.e. at start of `t_mdl`) and includes calls to the observer's `at_start_step`
+   * function for both the domain and individual gridboxes.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param h_gbxs View of gridboxes on host.
+   */
   void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs) const {
     const viewd_constsupers totsupers(h_gbxs(0).domain_totsupers_readonly());
 
@@ -139,9 +206,19 @@ class SDMMethods {
     }
   }
 
-  /* run CLEO SDM (on device) from time t_mdl to t_mdl_next
-  with sub-timestepping routine for super-droplets'
-  movement and microphysics */
+  /**
+   * @brief Run CLEO SDM for a specified timestep range.
+   *
+   * This function runs CLEO SDM on the device from time `t_mdl` to `t_mdl_next`,
+   * with a sub-timestepping routine for the super-droplets' movement
+   * and microphysics.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param t_mdl_next Next timestep of the coupled model.
+   * @param d_gbxs View of gridboxes on device.
+   * @param totsupers View of total superdroplets.
+   * @param genpool Random number generator pool.
+   */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
                 const viewd_supers totsupers, GenRandomPool genpool) const {
     unsigned int t_sdm(t_mdl);

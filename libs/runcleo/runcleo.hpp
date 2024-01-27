@@ -67,9 +67,9 @@ template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphy
           Motion<GbxMaps> M, Observer Obs, CouplingComms<CD> Comms>
 class RunCLEO {
  private:
-  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm; /**< TODO(CB) Reference SDMMethods object. */
-  CD &coupldyn; /**< TODO(CB) Reference to the CoupledDynamics object. */
-  const Comms &comms; /**< TODO(CB) Reference to the CouplingComms object. */
+  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm; /**< Reference SDMMethods object. TODO(CB) */
+  CD &coupldyn; /**< Reference to the CoupledDynamics object. TODO(CB)  */
+  const Comms &comms; /**< Reference to the CouplingComms object. TODO(CB)  */
 
   // TODO(CB) private member func docstrings
 
