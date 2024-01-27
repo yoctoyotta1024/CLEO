@@ -14,8 +14,7 @@ in your preferred browser. E.g.
 .. code-block:: console
 
   $ cd ~/CLEO/docs && mkdir build && mkdir build/doxygen
-  $ doxygen doxygen/doxygen.dox
-  $ make html
+  $ doxygen doxygen/doxygen.dox && make html
   $ open build/html/index.html
 
 
