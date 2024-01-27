@@ -60,3 +60,15 @@ You can install packages to your conda environment e.g. via
 
   $ conda activate [your conda environment]
   $ python -m pip install [package name(s)]
+
+Pre-Commit
+----------
+
+We use pre-commit to check our code for simple issues before
+submission to code review, such as before
+pushing to a GitHub repository, and we reccomend you use it too.
+Pre-Commit fixes for example missing semicolons, trailing whitespaces
+etc., and ensures you conform to a chosen industry standard linter.
+
+You can learn more by checking out
+`pre-commit <https://pre-commit.com/>`_'s comprehensive documentation.
