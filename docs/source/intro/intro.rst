@@ -29,6 +29,16 @@ processes (and observers) to be combined easily and with adaptive-timestepping w
 the use of conditional branches in the code. This enables massive model flexibility without
 additional run-time cost. It also helps with maintaining readable and modifyable code.
 
+For portable performance portable thread parallelism we embrace Kokkos. As a consequence,
+Kokkos' macros and functions are littered throughout our code and many of our key data structures,
+for example Gridboxes and super-droplets, are contained within Kokkos Views. For those seeking
+advanced understanding, we refer to `Kokkos' github repositories <https://github.com/kokkos>`_
+and documentation therein.
+
+TODO: a bit of schpiel on coupling and dynamics solver
+
+TODO: a bit of schpiel on the final time-stepping of the model
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
