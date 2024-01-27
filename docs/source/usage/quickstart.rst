@@ -10,7 +10,7 @@ Have a look at ``src/main.cpp`` for inspiration. Depending on the
 setup you desire, you need to include different instantiations of
 the core concepts of CLEO in your ``main.cpp``. For example you
 need to specify the type of super-droplet motion, microphysics,
-dynamics solver, coupling and observer (output).
+observer (output), and coupled dynamics.
 
 Once you've done that, your should have constructed all the
 necesary ingredients for CLEO so that the end of
@@ -21,10 +21,10 @@ your ``main.cpp`` can look something like this:
   /* Initialise Kokkos parallel environment */
   Kokkos::initialize(argc, argv);
   {
-    /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
+    /* CLEO Super-Droplet Model (excluding 'coupldyn' coupled dynamics) */
     const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
 
-    /* Run CLEO (SDM coupled to dynamics solver) */
+    /* Run CLEO (SDM coupled to dynamics via comms) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
     runcleo(initconds, t_end);
   }
