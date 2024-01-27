@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: runcleo.hpp
@@ -7,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Saturday 27th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -100,7 +101,7 @@ class RunCLEO {
     return 0;
   }
 
-  /* Start of every timestep: 1) communication of thermodynamic
+  /** Start of every timestep: 1) communication of thermodynamic
   state from dynamics solver to CLEO's Gridboxes. 2) call
   sdm at_start_step function (e.g. to make observations).
   3) Return size of step to take given current timestep, t_mdl */
@@ -117,9 +118,11 @@ class RunCLEO {
     return get_next_step(t_mdl);
   }
 
-  /* returns size of next step to take given current
-  timestep, t_mdl, such that next timestep is
-  sooner out of next timestep for obs or coupl */
+  /**
+  * returns size of next step to take given current
+  * timestep, t_mdl, such that next timestep is
+  * sooner out of next timestep for obs or coupl
+  */
   unsigned int get_next_step(const unsigned int t_mdl) const {
     const auto next_couplstep = [&, t_mdl]() {
       const auto interval = (unsigned int)sdm.get_couplstep();
