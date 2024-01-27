@@ -1,7 +1,7 @@
 Monoids
 =======
 
-C++ Concepts for Templated-Types
+Concepts for Templated-Types
 --------------------------------
 C++ concepts are used abundantly in CLEO. At its simplest, a C++ concept is used to define a set
 of constraints on a template. If a certain type satisfies these constraints, it can be called one
@@ -10,16 +10,16 @@ it satisfies the concept of a microphysical process, then “Cond” is a microp
 Likewise another class ‘Colls’ which models collisions is also a microphysical process if it too
 satisfies the concept of a microphysical process.
 
-Use of Concepts to Create Monoids
----------------------------------
+The Use of Concepts to Create Monoids
+-------------------------------------
 Within CLEO, a monoid can be thought of as a type that has three essential properties:
 
-(1) it can be created.
+1. it can be created.
 
-(2) it can be combined with a monoid of its kind to produce a new monoid of that kind
-(i.e. a monoid + a monoid = a monoid).
+2. it can be combined with a monoid of its kind to produce a new
+monoid of that kind (i.e. a monoid + a monoid = a monoid).
 
-(3) it can be null (a structure which does nothing).
+3. it can be null (a structure which does nothing).
 
 As suggested by point (2), there are various kinds of monoids. The different kinds of monoids
 differ over the specifics of these three properties. For example the kind of monoid which enacts
@@ -35,6 +35,8 @@ satisfying a given concept, from the combination of several types which also
 satisfy that concept. For example, a microphysical process of type ‘CC’ could be created from the
 combination of the ‘Cond’ and ‘Colls’ types which are microphysical processes themselves.
 
+A Good Analogy
+--------------
 The analogy I like to give is mixing paint. Suppose there are a variety of colours;
 blue, yellow, red, green, orange etc.. Let’s say that the blue, yellow and red colours
 satisfy all the requirements in order for them to be defined as 'wet oil paint' - in other
