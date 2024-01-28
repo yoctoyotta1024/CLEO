@@ -9,8 +9,6 @@ RunCLEO
 RunCLEO is the library of CLEO which contains the most generic
 templated types used to construct CLEO SDM coupled to a Dynamics Solver.
 
-// TODO(CB) add links to source code
-
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
