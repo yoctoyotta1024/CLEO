@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Saturday 27th January 2024
+ * Last Modified: Sunday 28th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -136,7 +136,7 @@ class RunCLEO {
       sdm_step(t_mdl, t_next, gbxs, totsupers, genpool);
 
       /* proceed to next step (in general involves coupling) */
-      t_mdl = proceed_to_next_step(t_mdl, t_next, gbxs);
+      t_mdl = proceed_to_next_step(t_next, gbxs);
     }
 
     std::cout << "--- timestepping: success ---\n";
@@ -243,18 +243,16 @@ class RunCLEO {
   /**
    * @brief Proceed to the next timestep.
    *
-   * This function returns the incremented timestep `t_mdl` to `t_next`.
+   * This function returns the incremented timestep (`t_mdl` to `t_next`).
    * It is also where communication from the States of CLEO's
    * Gridboxes to the Coupled Dynamics may occur.
    *
-   * @param t_mdl Current timestep of the coupled model.
    * @param t_next Next timestep of the coupled model.
    * @param gbxs DualView of gridboxes.
    * @return Incremented timestep.
    */
-  unsigned int proceed_to_next_step(unsigned int t_mdl, unsigned int t_next,
-                                    dualview_gbx gbxs) const {
-    if (t_mdl % sdm.get_couplstep() == 0) {
+  unsigned int proceed_to_next_step(unsigned int t_next, dualview_gbx gbxs) const {
+    if (t_next % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
       comms.send_dynamics(gbxs.view_host(), coupldyn);
     }
