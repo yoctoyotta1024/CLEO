@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Saturday 27th January 2024
+ * Last Modified: Sunday 28th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -224,7 +224,7 @@ class SDMMethods {
                 const viewd_supers totsupers, GenRandomPool genpool) const {
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
-      unsigned int t_sdm_next(next_sdmstep(t_sdm, t_mdl_next));
+      const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
 
       superdrops_movement(t_sdm, d_gbxs, totsupers);         // on host and device
       sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, genpool);  // on device
