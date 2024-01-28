@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Contact Us!" href="../../usage/contact.html" /><link rel="prev" title="RunCLEO" href="runcleolib.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="SDMMethods" href="sdmmethods.html" /><link rel="prev" title="RunCLEO" href="runcleolib.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>RUNCLEO - CLEO 4.0 documentation</title>
@@ -162,9 +162,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../../intro/motivation.html">Motivation for CLEO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../intro/memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../intro/monoids.html">Monoids</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../intro/coupling.html">Coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/coupling.html">Coupling to Dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../intro/timestepping.html">Timestepping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../intro/kokkos.html">Kokkos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
@@ -172,6 +172,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../pySD/pySD.html">API: PySD</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: PySD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pySD/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
@@ -216,6 +217,7 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../cxx.html">API: C++ Libraries</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Libraries</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="runcleolib.html">RunCLEO</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">RUNCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
 </ul>
 </li>
 </ul>
@@ -262,7 +264,227 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO">
 <span id="_CPPv3I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO"></span><span id="_CPPv2I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">CoupledDynamics</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CD</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">MicrophysicalProcess</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Microphys</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Motion</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">M</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Observer</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">CouplingComms</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::CD"><span class="n"><span class="pre">CD</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Comms</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classRunCLEO"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunCLEO</span></span></span><a class="headerlink" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="Link to this definition">#</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Generic templated class for timestepping CLEO SDM coupled (one-way/two-way) a Dynamics Solver. </p>
+<p>This class orchestrates the timestepping of CLEO coupled model, which consists of <code class="docutils literal notranslate"><span class="pre">SDM</span> <span class="pre">Methods</span></code> coupled one-way or two-way to <code class="docutils literal notranslate"><span class="pre">Coupled</span> <span class="pre">Dynamics</span></code> with communication handled by <code class="docutils literal notranslate"><span class="pre">Coupling</span> <span class="pre">Comms</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>CD</strong> – Type of CoupledDynamics. </p></li>
+<li><p><strong>GbxMaps</strong> – Type of GridboxMaps. </p></li>
+<li><p><strong>Microphys</strong> – Type of MicrophysicalProcess. </p></li>
+<li><p><strong>M</strong> – Type of Motion. </p></li>
+<li><p><strong>Obs</strong> – Type of Observer. </p></li>
+<li><p><strong>Comms</strong> – Type of CouplingComms. </p></li>
+</ul>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7RunCLEO7RunCLEOERK10SDMMethodsI7GbxMaps9Microphys1M3ObsER2CDRK5Comms">
+<span id="_CPPv3N7RunCLEO7RunCLEOERK10SDMMethodsI7GbxMaps9Microphys1M3ObsER2CDRK5Comms"></span><span id="_CPPv2N7RunCLEO7RunCLEOERK10SDMMethodsI7GbxMaps9Microphys1M3ObsER2CDRK5Comms"></span><span id="RunCLEO::RunCLEO__SDMMethods:GbxMaps.Microphys.M.Obs:CR.CDR.CommsCR"></span><span class="target" id="classRunCLEO_1a240eee3afb79dc36dcd6f1f525a6003d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunCLEO</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="sdmmethods.html#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods"><span class="n"><span class="pre">SDMMethods</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::Microphys"><span class="n"><span class="pre">Microphys</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::M"><span class="n"><span class="pre">M</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::Obs"><span class="n"><span class="pre">Obs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sdm</span></span>, <a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::CD"><span class="n"><span class="pre">CD</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coupldyn</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::Comms"><span class="n"><span class="pre">Comms</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">comms</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7RunCLEO7RunCLEOERK10SDMMethodsI7GbxMaps9Microphys1M3ObsER2CDRK5Comms" title="Link to this definition">#</a><br /></dt>
+<dd><p>Constructor for <a class="reference internal" href="#classRunCLEO"><span class="std std-ref">RunCLEO</span></a>. </p>
+<p>Initializes the <a class="reference internal" href="#classRunCLEO"><span class="std std-ref">RunCLEO</span></a> object with the provided <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a>, CoupledDynamics, and CouplingComms objects. Checks if coupling between SDM and Dynamics is correct.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sdm</strong> – TODO(CB) Reference to the <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> object. </p></li>
+<li><p><strong>coupldyn</strong> – TODO(CB) Reference to the CoupledDynamics object. </p></li>
+<li><p><strong>comms</strong> – TODO(CB) Reference to the CouplingComms object. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7RunCLEOD0Ev">
+<span id="_CPPv3N7RunCLEOD0Ev"></span><span id="_CPPv2N7RunCLEOD0Ev"></span><span id="RunCLEO::~RunCLEO"></span><span class="target" id="classRunCLEO_1adeae692bf692ab12179d4812b35d449c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~RunCLEO</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7RunCLEOD0Ev" title="Link to this definition">#</a><br /></dt>
+<dd><p>Destructor for <a class="reference internal" href="#classRunCLEO"><span class="std std-ref">RunCLEO</span></a>. </p>
+<p>Calls the after_timestepping function of the SDM observer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEOclERK17InitialConditionsKj">
+<span id="_CPPv3NK7RunCLEOclERK17InitialConditionsKj"></span><span id="_CPPv2NK7RunCLEOclERK17InitialConditionsKj"></span><span id="RunCLEO::call-operator__InitialConditionsCR.unsigned-iCC"></span><span class="target" id="classRunCLEO_1a9443c6c05d0b3548cc275004f88f6ef6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">InitialConditions</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initconds</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_end</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEOclERK17InitialConditionsKj" title="Link to this definition">#</a><br /></dt>
+<dd><p>Operator () for <a class="reference internal" href="#classRunCLEO"><span class="std std-ref">RunCLEO</span></a>. </p>
+<p>Creates runtime objects, gridboxes, superdrops and random number generators using initial conditions, then prepares and performs CLEO timestepping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initconds</strong> – InitialConditions object containing initial conditions. </p></li>
+<li><p><strong>t_end</strong> – End time for timestepping. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>0 on success. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx">
+<span id="_CPPv3NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx"></span><span id="_CPPv2NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx"></span><span id="RunCLEO::prepare_to_timestep__dualview_constgbxCC"></span><span class="target" id="classRunCLEO_1a1845f86eb11ee877df502cafbbc3c4b1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">prepare_to_timestep</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dualview_constgbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx" title="Link to this definition">#</a><br /></dt>
+<dd><p>Prepare SDM and Coupled Dynamics for timestepping. </p>
+<p>This function prepares the SDM and Coupled Dynamics for timestepping. It calls the <code class="docutils literal notranslate"><span class="pre">prepare_to_timestep</span></code> function of both the Coupled Dynamics and <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gbxs</strong> – DualView of gridboxes. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>0 on success. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO14check_couplingEv">
+<span id="_CPPv3NK7RunCLEO14check_couplingEv"></span><span id="_CPPv2NK7RunCLEO14check_couplingEv"></span><span id="RunCLEO::check_couplingC"></span><span class="target" id="classRunCLEO_1a3478f0d8c2d24f934150144a02f403b5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_coupling</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO14check_couplingEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Check if coupling between SDM and Coupled Dynamics is correct. </p>
+<p>This function checks if the coupling timestep of the Dynamics Solver and SDM are equal. Throws an exception if they are not. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO13timestep_cleoEKjK12dualview_gbxK12viewd_supers13GenRandomPool">
+<span id="_CPPv3NK7RunCLEO13timestep_cleoEKjK12dualview_gbxK12viewd_supers13GenRandomPool"></span><span id="_CPPv2NK7RunCLEO13timestep_cleoEKjK12dualview_gbxK12viewd_supers13GenRandomPool"></span><span id="RunCLEO::timestep_cleo__unsigned-iC.dualview_gbxC.viewd_supersC.GenRandomPoolC"></span><span class="target" id="classRunCLEO_1a19ca100df40cfbab8d59fc112daf186b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timestep_cleo</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_end</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dualview_gbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span>, <span class="n"><span class="pre">GenRandomPool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">genpool</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO13timestep_cleoEKjK12dualview_gbxK12viewd_supers13GenRandomPool" title="Link to this definition">#</a><br /></dt>
+<dd><p>Timestep CLEO from t=0 to t=t_end. </p>
+<p>This function performs the main timestepping loop for CLEO from the initial time (t_mdl=0) to the specified end time (t_mdl=t_end). It calls <a class="reference internal" href="#classRunCLEO"><span class="std std-ref">RunCLEO</span></a>’s <code class="docutils literal notranslate"><span class="pre">start_step</span></code>, <code class="docutils literal notranslate"><span class="pre">coupldyn_step</span></code>, <code class="docutils literal notranslate"><span class="pre">sdm_step</span></code>, and <code class="docutils literal notranslate"><span class="pre">proceed_to_next_step</span></code> functions in a loop until timestepping is complete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_end</strong> – End time for timestepping. </p></li>
+<li><p><strong>gbxs</strong> – DualView of gridboxes. </p></li>
+<li><p><strong>totsupers</strong> – View of total superdroplets. </p></li>
+<li><p><strong>genpool</strong> – Random number generator pool. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>0 on success. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO10start_stepEKj12dualview_gbx">
+<span id="_CPPv3NK7RunCLEO10start_stepEKj12dualview_gbx"></span><span id="_CPPv2NK7RunCLEO10start_stepEKj12dualview_gbx"></span><span id="RunCLEO::start_step__unsigned-iC.dualview_gbxC"></span><span class="target" id="classRunCLEO_1ab5af480175e7292ef4cfcddab8c50a68"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="n"><span class="pre">dualview_gbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO10start_stepEKj12dualview_gbx" title="Link to this definition">#</a><br /></dt>
+<dd><p>Start of every timestep. </p>
+<p>This function is called at the start of every timestep. It includes 1) communication of dynamics fields from the Dynamics Solver to the States of CLEO’s Gridboxes, 2) calling the <code class="docutils literal notranslate"><span class="pre">at_start_step</span></code> function of <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> (e.g. to make observations), and 3) returning the size of the timestep to take now given the current timestep <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
+<li><p><strong>gbxs</strong> – DualView of gridboxes. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Size of the next timestep. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO13get_next_stepEKj">
+<span id="_CPPv3NK7RunCLEO13get_next_stepEKj"></span><span id="_CPPv2NK7RunCLEO13get_next_stepEKj"></span><span id="RunCLEO::get_next_step__unsigned-iCC"></span><span class="target" id="classRunCLEO_1a1f1d3bd65a7061b08adeb9953b21315c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_next_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO13get_next_stepEKj" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get the size of the next timestep. </p>
+<p>This function calculates and returns the next step size to take based on the current model time, <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code> and the coupling and obs times obtained from the <code class="docutils literal notranslate"><span class="pre">sdm</span></code> object; <code class="docutils literal notranslate"><span class="pre">t_coupl</span></code> and <code class="docutils literal notranslate"><span class="pre">t_obs</span></code> respectively.</p>
+<p>
+The size of the next timestep is determined by finding the smaller out of the step to the next coupling time and the next observation time. The next coupling time is calculated after receiving the size of the coupling timestep (a constant) using the <code class="docutils literal notranslate"><span class="pre">sdm.get_couplstep()</span></code> function. The time of the next observation is obtained from the <code class="docutils literal notranslate"><span class="pre">sdm.obs.next_obs()</span></code> function.</p>
+<p>The size of the next timestep is then calculated as <code class="docutils literal notranslate"><span class="pre">t_next</span> <span class="pre">-</span> <span class="pre">t_mdl</span></code>, where <code class="docutils literal notranslate"><span class="pre">t_next</span></code> is the time closer to <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code> out of <code class="docutils literal notranslate"><span class="pre">next_coupl</span></code> and <code class="docutils literal notranslate"><span class="pre">next_obs</span></code>. The function uses Kokkos’ version of C++ standard library’s <code class="docutils literal notranslate"><span class="pre">std::min</span></code> to find <code class="docutils literal notranslate"><span class="pre">t_next</span></code> (also GPU compatible).</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="sdmmethods.html#classSDMMethods_1ae3c1636226cb3b943302143c5a0a023f"><span class="std std-ref">SDMMethods::get_couplstep()</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>SDMMethods::ObsClass::next_obs() // TODO(CB) fill in and reference “ObsClass” docs </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t_mdl</strong> – The current timestep of the model. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The size of the next timestep.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO8sdm_stepEKjj12dualview_gbxK12viewd_supers13GenRandomPool">
+<span id="_CPPv3NK7RunCLEO8sdm_stepEKjj12dualview_gbxK12viewd_supers13GenRandomPool"></span><span id="_CPPv2NK7RunCLEO8sdm_stepEKjj12dualview_gbxK12viewd_supers13GenRandomPool"></span><span id="RunCLEO::sdm_step__unsigned-iC.unsigned-i.dualview_gbx.viewd_supersC.GenRandomPoolC"></span><span class="target" id="classRunCLEO_1ac89c9384991f7d06c4923adc0ef30969"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdm_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_next</span></span>, <span class="n"><span class="pre">dualview_gbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span>, <span class="n"><span class="pre">GenRandomPool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">genpool</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO8sdm_stepEKjj12dualview_gbxK12viewd_supers13GenRandomPool" title="Link to this definition">#</a><br /></dt>
+<dd><p>Run timestep of CLEO’s Super-Droplet Model (SDM). </p>
+<p>This function runs SDM on both host and device from <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code> to <code class="docutils literal notranslate"><span class="pre">t_next</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
+<li><p><strong>t_next</strong> – Next timestep of the coupled model. </p></li>
+<li><p><strong>gbxs</strong> – DualView of gridboxes. </p></li>
+<li><p><strong>totsupers</strong> – View of total superdroplets. </p></li>
+<li><p><strong>genpool</strong> – Random number generator pool. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO13coupldyn_stepEKjKj">
+<span id="_CPPv3NK7RunCLEO13coupldyn_stepEKjKj"></span><span id="_CPPv2NK7RunCLEO13coupldyn_stepEKjKj"></span><span id="RunCLEO::coupldyn_step__unsigned-iC.unsigned-iCC"></span><span class="target" id="classRunCLEO_1a423588ed1e776ae5a42bfb94eb4b3a3c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coupldyn_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_next</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO13coupldyn_stepEKjKj" title="Link to this definition">#</a><br /></dt>
+<dd><p>Run timestep of Coupled Dynamics. </p>
+<p>This function runs the Coupled Dynamics on host from t_mdl to t_next.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
+<li><p><strong>t_next</strong> – Next timestep of the coupled model. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO20proceed_to_next_stepEj12dualview_gbx">
+<span id="_CPPv3NK7RunCLEO20proceed_to_next_stepEj12dualview_gbx"></span><span id="_CPPv2NK7RunCLEO20proceed_to_next_stepEj12dualview_gbx"></span><span id="RunCLEO::proceed_to_next_step__unsigned-i.dualview_gbxC"></span><span class="target" id="classRunCLEO_1afbf262e9ab1e724114100f0e9b676922"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">proceed_to_next_step</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_next</span></span>, <span class="n"><span class="pre">dualview_gbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO20proceed_to_next_stepEj12dualview_gbx" title="Link to this definition">#</a><br /></dt>
+<dd><p>Proceed to the next timestep. </p>
+<p>This function returns the incremented timestep (<code class="docutils literal notranslate"><span class="pre">t_mdl</span></code> to <code class="docutils literal notranslate"><span class="pre">t_next</span></code>). It is also where communication from the States of CLEO’s Gridboxes to the Coupled Dynamics may occur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_next</strong> – Next timestep of the coupled model. </p></li>
+<li><p><strong>gbxs</strong> – DualView of gridboxes. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Incremented timestep. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7RunCLEO3sdmE">
+<span id="_CPPv3N7RunCLEO3sdmE"></span><span id="_CPPv2N7RunCLEO3sdmE"></span><span id="RunCLEO::sdm__SDMMethods:GbxMaps.Microphys.M.Obs:CR"></span><span class="target" id="classRunCLEO_1a7eeeb101df59c7a20731703a9d453ad0"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="sdmmethods.html#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods"><span class="n"><span class="pre">SDMMethods</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::Microphys"><span class="n"><span class="pre">Microphys</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::M"><span class="n"><span class="pre">M</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::Obs"><span class="n"><span class="pre">Obs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">sdm</span></span></span><a class="headerlink" href="#_CPPv4N7RunCLEO3sdmE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Reference <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> object. TODO(CB) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7RunCLEO8coupldynE">
+<span id="_CPPv3N7RunCLEO8coupldynE"></span><span id="_CPPv2N7RunCLEO8coupldynE"></span><span id="RunCLEO::coupldyn__CDR"></span><span class="target" id="classRunCLEO_1a0ebb1ff1bf861a8f787f27302959b42f"></span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::CD"><span class="n"><span class="pre">CD</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">coupldyn</span></span></span><a class="headerlink" href="#_CPPv4N7RunCLEO8coupldynE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Reference to the CoupledDynamics object. TODO(CB) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7RunCLEO5commsE">
+<span id="_CPPv3N7RunCLEO5commsE"></span><span id="_CPPv2N7RunCLEO5commsE"></span><span id="RunCLEO::comms__CommsCR"></span><span class="target" id="classRunCLEO_1ab92560831ae99bc92195aeace041cb7f"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::Comms"><span class="n"><span class="pre">Comms</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">comms</span></span></span><a class="headerlink" href="#_CPPv4N7RunCLEO5commsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Reference to the CouplingComms object. TODO(CB) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
 
 </section>
 
@@ -271,12 +493,12 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../../usage/contact.html">
+          <a class="next-page" href="sdmmethods.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Contact Us!</div>
+                <div class="title">SDMMethods</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -322,7 +544,23 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">RUNCLEO</a><ul>
-<li><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO"><code class="docutils literal notranslate"><span class="pre">RunCLEO</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO"><code class="docutils literal notranslate"><span class="pre">RunCLEO</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N7RunCLEO7RunCLEOERK10SDMMethodsI7GbxMaps9Microphys1M3ObsER2CDRK5Comms"><code class="docutils literal notranslate"><span class="pre">RunCLEO::RunCLEO()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7RunCLEOD0Ev"><code class="docutils literal notranslate"><span class="pre">RunCLEO::~RunCLEO()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEOclERK17InitialConditionsKj"><code class="docutils literal notranslate"><span class="pre">RunCLEO::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx"><code class="docutils literal notranslate"><span class="pre">RunCLEO::prepare_to_timestep()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEO14check_couplingEv"><code class="docutils literal notranslate"><span class="pre">RunCLEO::check_coupling()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEO13timestep_cleoEKjK12dualview_gbxK12viewd_supers13GenRandomPool"><code class="docutils literal notranslate"><span class="pre">RunCLEO::timestep_cleo()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEO10start_stepEKj12dualview_gbx"><code class="docutils literal notranslate"><span class="pre">RunCLEO::start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEO13get_next_stepEKj"><code class="docutils literal notranslate"><span class="pre">RunCLEO::get_next_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEO8sdm_stepEKjj12dualview_gbxK12viewd_supers13GenRandomPool"><code class="docutils literal notranslate"><span class="pre">RunCLEO::sdm_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEO13coupldyn_stepEKjKj"><code class="docutils literal notranslate"><span class="pre">RunCLEO::coupldyn_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEO20proceed_to_next_stepEj12dualview_gbx"><code class="docutils literal notranslate"><span class="pre">RunCLEO::proceed_to_next_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7RunCLEO3sdmE"><code class="docutils literal notranslate"><span class="pre">RunCLEO::sdm</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7RunCLEO8coupldynE"><code class="docutils literal notranslate"><span class="pre">RunCLEO::coupldyn</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7RunCLEO5commsE"><code class="docutils literal notranslate"><span class="pre">RunCLEO::comms</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

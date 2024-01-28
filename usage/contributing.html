@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="API: PySD" href="../pySD/pySD.html" /><link rel="prev" title="Quickstart" href="quickstart.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Our Docs" href="ourdocs.html" /><link rel="prev" title="Quickstart" href="quickstart.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>Contributing - CLEO 4.0 documentation</title>
@@ -162,9 +162,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro/motivation.html">Motivation for CLEO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../intro/memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../intro/monoids.html">Monoids</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../intro/coupling.html">Coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro/coupling.html">Coupling to Dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../intro/timestepping.html">Timestepping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../intro/kokkos.html">Kokkos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
@@ -172,6 +172,7 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../pySD/pySD.html">API: PySD</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: PySD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../pySD/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pySD/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
@@ -216,6 +217,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../cxx/cxx.html">API: C++ Libraries</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Libraries</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../cxx/runcleo/runcleolib.html">RunCLEO</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../cxx/runcleo/runcleo.html">RUNCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cxx/runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
 </li>
 </ul>
@@ -260,7 +262,7 @@
           <section id="contributing">
 <h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">#</a></h1>
 <p>Yes please!</p>
-<p>CLEO is a completely open source code, freely available and entirely
+<p>CLEO is a completely open source code and entirely
 open development. If you have ideas or would like to collaborate,
 simply <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>!</p>
 <p>We welcome your interest and are enthusiastic about both CLEO’s
@@ -272,12 +274,12 @@ computational development and its use for scientific research.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../pySD/pySD.html">
+          <a class="next-page" href="ourdocs.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">API: PySD</div>
+                <div class="title">Our Docs</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>

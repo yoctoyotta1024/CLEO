@@ -162,9 +162,9 @@
 <li class="toctree-l2"><a class="reference internal" href="intro/motivation.html">Motivation for CLEO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="intro/memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="intro/monoids.html">Monoids</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro/coupling.html">Coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro/coupling.html">Coupling to Dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="intro/timestepping.html">Timestepping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro/kokkos.html">Kokkos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="usage/requirements.html">Requirements</a></li>
@@ -172,6 +172,7 @@
 <li class="toctree-l1"><a class="reference internal" href="usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="pySD/pySD.html">API: PySD</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: PySD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="pySD/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="pySD/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
@@ -216,6 +217,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="cxx/cxx.html">API: C++ Libraries</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Libraries</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="cxx/runcleo/runcleolib.html">RunCLEO</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/runcleo.html">RUNCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
 </li>
 </ul>
@@ -261,16 +263,20 @@
 <h1>Welcome to CLEO’s Documentation!<a class="headerlink" href="#welcome-to-cleo-s-documentation" title="Link to this heading">#</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Please consider that this project is under active development.</p>
+<p>Please consider that this project is under active development
+and our documentation is a work in progress.</p>
+<p>This documentation is built from the latest code in the main branch of CLEO’s
+GitHub repository. It does not necessarily reflect a released version of CLEO, and there may be
+short-commings with respect to the on-going code development. If you have queries related to
+this or if there is anything you wish to report please do <a class="reference internal" href="usage/contact.html#contact"><span class="std std-ref">contact us</span></a> or
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/issues/new">open a new issue</a> on our repository.</p>
 </div>
-<p><strong>CLEO</strong> (/ˌkliːə/ ) is a library for
-Super-Droplet Model (SDM) cloud microphysics.</p>
+<p><strong>CLEO</strong> (/ˌkliːə/ ) is a library for Super-Droplet Model (SDM) cloud microphysics.</p>
 <p>The name, CLEO, is a reference to
 <a class="reference external" href="https://www.britannica.com/biography/Cleopatra-queen-of-Egypt">Cleopatra</a>.
 It is also an acronym, something like CLEO = Clouds in a Lagrangian Exascale mOdel.</p>
-<p>Time to get involved! Start by <a class="reference internal" href="usage/installation.html"><span class="doc">installing CLEO</span></a>
-and exploring some <a class="reference internal" href="usage/examples.html"><span class="doc">examples</span></a>. Or jump straight in
-with the <a class="reference internal" href="usage/quickstart.html"><span class="doc">quickstart</span></a>.</p>
+<p>Time to get involved! Start by <a class="reference internal" href="usage/installation.html"><span class="doc">installing CLEO</span></a> and exploring some
+<a class="reference internal" href="usage/examples.html"><span class="doc">examples</span></a>. Or jump straight in with the <a class="reference internal" href="usage/quickstart.html"><span class="doc">quickstart</span></a>.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -280,6 +286,7 @@ with the <a class="reference internal" href="usage/quickstart.html"><span class=
 <li class="toctree-l1"><a class="reference internal" href="usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pySD/pySD.html">API: PySD</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cxx/cxx.html">API: C++ Libraries</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
@@ -299,6 +306,7 @@ with the <a class="reference internal" href="usage/quickstart.html"><span class=
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+<p>// TODO(CB) include date of last visit (currently 27th January 2024)</p>
 </section>
 
         </article>

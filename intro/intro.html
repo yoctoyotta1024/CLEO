@@ -162,9 +162,9 @@
 <li class="toctree-l2"><a class="reference internal" href="motivation.html">Motivation for CLEO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="monoids.html">Monoids</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coupling.html">Coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coupling.html">Coupling to Dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timestepping.html">Timestepping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="kokkos.html">Kokkos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
@@ -172,6 +172,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../pySD/pySD.html">API: PySD</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: PySD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../pySD/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pySD/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
@@ -216,6 +217,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../cxx/cxx.html">API: C++ Libraries</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Libraries</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../cxx/runcleo/runcleolib.html">RunCLEO</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../cxx/runcleo/runcleo.html">RUNCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cxx/runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
 </li>
 </ul>
@@ -261,14 +263,54 @@
 <h1>Programming Guide<a class="headerlink" href="#programming-guide" title="Link to this heading">#</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Please consider that this project is under active development.</p>
+<p>Please consider that this project is under active development
+and our documentation is a work in progress.</p>
 </div>
-<p>It seems apparent that a new implementation of SDM is required;
-capable of modelling warm rain in LES with realistic boundary
-conditions and large scale forcings, and capable of application
-in large regional domains, with horizontal extents O(100km). CLEO is
-an attempt to build such a SDM. It strives to be a library for SDM
-to model warm clouds with exceptional computational performance.</p>
+<p>It seems apparent that a new implementation of SDM is required; capable of modelling warm rain
+in LES with realistic boundary conditions and large scale forcings, and capable of application
+in large regional domains, with horizontal extents O(100km). CLEO is an attempt to build such
+a SDM. It strives to be a library for SDM to model warm clouds with exceptional computational
+performance.</p>
+<section id="memory-layout">
+<h2>Memory Layout<a class="headerlink" href="#memory-layout" title="Link to this heading">#</a></h2>
+<p>The fundamental basis for computational performance in CLEO is through efficient memory access
+patterns. Primarily this is acheived by ensuring super-droplets which occupy the same gridbox are
+always located contiguously in memory. We also try to avoid new memory allocation and cache misses
+through our organisation of gridboxes and super-droplets and we use simplistic microphysics for
+low cost at run-time.</p>
+</section>
+<section id="monoids">
+<h2>Monoids<a class="headerlink" href="#monoids" title="Link to this heading">#</a></h2>
+<p>A key novel feature of CLEO is the construction of monoids. We use C++20 concepts to constrain
+templated types for microphysics and observers. This ensures they satisfy monoid set properties
+and can be combined in well-defined ways. The purpose is to allow for several microphysics
+processes (and likewise observers) to be combined simply and flexibly whilst ensuring
+adaptive-timestepping and avoiding the use of conditional branches in the code. This enables
+extra-ordinary model flexibility without additional run-time cost. It also helps with maintaining
+readable and modifyable code.</p>
+</section>
+<section id="coupling-to-dynamics">
+<h2>Coupling to Dynamics<a class="headerlink" href="#coupling-to-dynamics" title="Link to this heading">#</a></h2>
+<p>Whilst CLEO handles the transport of super-droplets throughout the domain, it cannot perform
+advection of Gridboxes’ dyanmic variables itself (temperature, pressure, winds etc.). Instead,
+CLEO can be one-way or two-way coupled to a dyanmical core capable of advection.
+Nevertheless, such a dynamical core is not a necessity. There are many ways for CLEO to receive
+dynamics, which may even just involve reading data from binary files.</p>
+</section>
+<section id="kokkos-thread-parallelism">
+<h2>Kokkos Thread Parallelism<a class="headerlink" href="#kokkos-thread-parallelism" title="Link to this heading">#</a></h2>
+<p>For performance portable thread parallelism we embrace Kokkos. As a consequence,
+Kokkos’ macros and functions are littered throughout our code and many of our key data structures,
+for example Gridboxes and super-droplets, are contained within Kokkos Views. For those seeking
+advanced understanding, we defer to Kokkos’ github repositories and documentation therein.</p>
+</section>
+<section id="timestepping">
+<h2>Timestepping<a class="headerlink" href="#timestepping" title="Link to this heading">#</a></h2>
+<p>As mentioned above, CLEO’s monoidal structures are designed to allow adaptive-timestepping,
+meaning different microphysical processes and observers may have arbitrary time-steps which bare
+no relation to one another and can in general change during run-time. This flexibility is contained
+in a sub-timestepping routine which is part of CLEO’s larger timestepping routine to run SDM
+coupled to dynamics.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -276,11 +318,12 @@ to model warm clouds with exceptional computational performance.</p>
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation for CLEO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="monoids.html">Monoids</a></li>
-<li class="toctree-l1"><a class="reference internal" href="coupling.html">Coupling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coupling.html">Coupling to Dynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="timestepping.html">Timestepping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kokkos.html">Kokkos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </div>
+</section>
 <section id="questions">
 <h2>Questions?<a class="headerlink" href="#questions" title="Link to this heading">#</a></h2>
 <p>Yes please! Simply <a class="reference internal" href="../usage/contact.html#contact"><span class="std std-ref">contact us!</span></a></p>
@@ -343,6 +386,11 @@ to model warm clouds with exceptional computational performance.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Programming Guide</a><ul>
+<li><a class="reference internal" href="#memory-layout">Memory Layout</a></li>
+<li><a class="reference internal" href="#monoids">Monoids</a></li>
+<li><a class="reference internal" href="#coupling-to-dynamics">Coupling to Dynamics</a></li>
+<li><a class="reference internal" href="#kokkos-thread-parallelism">Kokkos Thread Parallelism</a></li>
+<li><a class="reference internal" href="#timestepping">Timestepping</a></li>
 <li><a class="reference internal" href="#questions">Questions?</a></li>
 </ul>
 </li>

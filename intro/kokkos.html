@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Requirements" href="../usage/requirements.html" /><link rel="prev" title="Timestepping" href="timestepping.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>Kokkos - CLEO 4.0 documentation</title>
+        <title>Kokkos Thread Parallelism - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -162,9 +162,9 @@
 <li class="toctree-l2"><a class="reference internal" href="motivation.html">Motivation for CLEO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memorylayout.html">Memory Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="monoids.html">Monoids</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coupling.html">Coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coupling.html">Coupling to Dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timestepping.html">Timestepping</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Kokkos</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
@@ -172,6 +172,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../pySD/pySD.html">API: PySD</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: PySD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../pySD/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pySD/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
@@ -216,6 +217,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../cxx/cxx.html">API: C++ Libraries</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Libraries</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../cxx/runcleo/runcleolib.html">RunCLEO</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../cxx/runcleo/runcleo.html">RUNCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cxx/runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
 </li>
 </ul>
@@ -257,12 +259,13 @@
           </label>
         </div>
         <article role="main">
-          <section id="kokkos">
-<h1>Kokkos<a class="headerlink" href="#kokkos" title="Link to this heading">#</a></h1>
-<p>For portable thread parallelism we use
+          <section id="kokkos-thread-parallelism">
+<h1>Kokkos Thread Parallelism<a class="headerlink" href="#kokkos-thread-parallelism" title="Link to this heading">#</a></h1>
+<p>For performance portable thread parallelism as well as thread safe random number generation we use
 Kokkos! <span id="id1">[<a class="reference internal" href="../references.html#id17" title="Christian R. Trott, Damien Lebrun-Grandié, Daniel Arndt, Jan Ciesko, Vinh Dang, Nathan Ellingwood, Rahulkumar Gayatri, Evan Harvey, Daisy S. Hollman, Dan Ibanez, Nevin Liber, Jonathan Madsen, Jeff Miles, David Poliakoff, Amy Powell, Sivasankaran Rajamanickam, Mikael Simberg, Dan Sunderland, Bruno Turcksin, and Jeremiah Wilke. Kokkos 3: programming model extensions for the exascale era. IEEE Transactions on Parallel and Distributed Systems, 33(4):805-817, 2022. doi:10.1109/TPDS.2021.3097283.">TLGA+22</a>]</span> <span id="id2">[<a class="reference internal" href="../references.html#id18" title="Christian Trott, Luc Berger-Vergiat, David Poliakoff, Sivasankaran Rajamanickam, Damien Lebrun-Grandie, Jonathan Madsen, Nader Al Awar, Milos Gligoric, Galen Shipman, and Geoff Womeldorff. The kokkos ecosystem: comprehensive performance portability for high performance computing. Computing in Science Engineering, 23(5):10-18, 2021. doi:10.1109/MCSE.2021.3098509.">TBVP+21</a>]</span>, <span id="id3">[<a class="reference internal" href="../references.html#id19" title="H. Carter Edwards, Christian R. Trott, and Daniel Sunderland. Kokkos: enabling manycore performance portability through polymorphic memory access patterns. Journal of Parallel and Distributed Computing, 74(12):3202 - 3216, 2014. Domain-Specific Languages and High-Level Frameworks for High-Performance Computing. URL: http://www.sciencedirect.com/science/article/pii/S0743731514001257, doi:https://doi.org/10.1016/j.jpdc.2014.07.003.">ETS14</a>]</span>.</p>
-<p>It has great documentation, lectures, tutorials and more; all for you to
-enjoy when you explore <a class="reference external" href="https://github.com/kokkos">Kokkos’ github repositories</a>.</p>
+<p>It has great documentation, lectures, tutorials and more, all of which
+you can enjoy when you explore
+<a class="reference external" href="https://github.com/kokkos">Kokkos’ github repositories</a>.</p>
 </section>
 
         </article>

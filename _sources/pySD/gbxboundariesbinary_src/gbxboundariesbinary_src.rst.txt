@@ -7,7 +7,8 @@ GbxBoundariesBinary
 ===================
 
 .. note::
-   Please consider that this project is under active development.
+   Please consider that this project is under active development
+   and our documentation is a work in progress.
 
 GbxBoundariesBinary is a submodule of pySD used for generating an input
 binary file for CLEO which contains the gridbox boundaries of
