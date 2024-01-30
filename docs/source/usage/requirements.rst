@@ -3,7 +3,9 @@ Requirements
 
 The following requirements ensure CLEO's build, compilation and
 execution on DKRZ's Levante HPC. If they do not work,
-please :ref:`contact us <contact>`.
+please :ref:`contact us <contact>` or `open a new
+issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on
+our GitHub repository.
 
 Of course other architectures,
 other compilers, versions etc. are possible, but we leave
@@ -52,7 +54,9 @@ To use PySD and to run CLEO's examples, ``matplotlib``, ``numpy``,
 ``scipy``, ``xarray``, ``zarr``, and ``awkward`` must be installed.
 If there are other dependencies not listed here, you will have to
 install them too. We kindly ask that you also
-:ref:`contact us <contact>` if this is the case.
+:ref:`contact us <contact>` or `open a new
+issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on
+our GitHub repository if this is the case.
 
 You can install packages to your conda environment e.g. via
 
@@ -60,3 +64,15 @@ You can install packages to your conda environment e.g. via
 
   $ conda activate [your conda environment]
   $ python -m pip install [package name(s)]
+
+Pre-Commit
+----------
+
+We use pre-commit to check our code for simple issues before
+submission to code review, such as before
+pushing to a GitHub repository, and we reccomend you use it too.
+Pre-Commit fixes for example missing semicolons, trailing whitespaces
+etc., and ensures you conform to a chosen industry standard linter.
+
+You can learn more by checking out
+`pre-commit <https://pre-commit.com/>`_'s comprehensive documentation.

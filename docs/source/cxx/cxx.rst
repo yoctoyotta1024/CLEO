@@ -7,7 +7,8 @@ API: C++ Libraries
 ==================
 
 .. note::
-   Please consider that this project is under active development.
+   Please consider that this project is under active development
+   and our documentation is a work in progress.
 
 This is the API for CLEO's various C++ libraries for making
 a SDM coupled to a Dynamics Solver.

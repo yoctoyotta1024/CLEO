@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: cartesianmotion_withreset.hpp
  * Project: cartesiandomain
@@ -12,8 +13,6 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * Motion of a superdroplet using predictor-corrector
  * method to update a superdroplet's coordinates and
@@ -23,8 +22,8 @@
  * the domain through coord3 domain boundaries
  */
 
-#ifndef CARTESIANMOTION_WITHRESET_HPP
-#define CARTESIANMOTION_WITHRESET_HPP
+#ifndef LIBS_CARTESIANDOMAIN_CARTESIANMOTION_WITHRESET_HPP_
+#define LIBS_CARTESIANDOMAIN_CARTESIANMOTION_WITHRESET_HPP_
 
 #include <functional>
 #include <random>
@@ -34,24 +33,22 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./cartesianboundaryconds.hpp"
-#include "./cartesianmaps.hpp"
-#include "./cartesianmotion.hpp"
+#include "cartesiandomain/cartesianboundaryconds.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/cartesianmotion.hpp"
+#include "gridboxes/predcorrmotion.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 #include "superdrops/urbg.hpp"
-#include "gridboxes/predcorrmotion.hpp"
 
 namespace dlc = dimless_constants;
 
-struct ProbDistrib
-{
-private:
+struct ProbDistrib {
+ private:
   double REFF;
   double nueff;
   double n0const;
 
-  KOKKOS_FUNCTION double probdens_distrib(const double RADIUS) const
   /* returns normalised probability density distribution,
   ie. probability of radius in range r -> r+ dr, such that
   integral over all radii = 1. Distribution is gamma
@@ -59,79 +56,70 @@ private:
   from Poertge et al. 2023 for shallow cumuli (figure 12), ie.
   with typical values: reff = 7e-6 m, and nueff = 0.08.
   RADIUS has dimensions [m] */
-  {
-    const auto term1 = double{Kokkos::pow(RADIUS, ((1.0-3.0*nueff)/nueff))};
-    const auto term2 = double{Kokkos::exp(-RADIUS/(REFF*nueff))};
+  KOKKOS_FUNCTION double probdens_distrib(const double RADIUS) const {
+    const auto term1 = double{Kokkos::pow(RADIUS, ((1.0 - 3.0 * nueff) / nueff))};
+    const auto term2 = double{Kokkos::exp(-RADIUS / (REFF * nueff))};
 
-    const auto probdens = double{n0const * term1 * term2}; // dn_dr [prob m^-1]
+    const auto probdens = double{n0const * term1 * term2};  // dn_dr [prob m^-1]
 
-    return probdens; // normalised probability in range r -> r+dr
+    return probdens;  // normalised probability in range r -> r+dr
   }
 
-public:
-  ProbDistrib() : REFF(7e-6), nueff(0.08), n0const(0.0)
-  {
-    const auto xp = double{(1.0-2.0*nueff)/nueff};
-    const auto valxp = double{Kokkos::pow(REFF*nueff, -xp)};
+ public:
+  ProbDistrib() : REFF(7e-6), nueff(0.08), n0const(0.0) {
+    const auto xp = double{(1.0 - 2.0 * nueff) / nueff};
+    const auto valxp = double{Kokkos::pow(REFF * nueff, -xp)};
     n0const = valxp / Kokkos::tgamma(xp);
   }
 
-  KOKKOS_FUNCTION double operator()(const double radius,
-                                    const double rlow,
-                                    const double rup) const
   /* returns probability of radius in range r -> r+ dr, such that
   integral of probability density dsitribution over all radii = 1 */
-  {
-    const auto RADIUS = radius * dlc::R0; // dimensionalised radius [m]
-    const auto DELTAR = (rup - rlow) * dlc::R0; // dimensionalised bin wdith [m]
+  KOKKOS_FUNCTION double operator()(const double radius, const double rlow,
+                                    const double rup) const {
+    const auto RADIUS = radius * dlc::R0;        // dimensionalised radius [m]
+    const auto DELTAR = (rup - rlow) * dlc::R0;  // dimensionalised bin wdith [m]
 
     const auto prob = probdens_distrib(RADIUS) * DELTAR;
 
-    return prob; // probability of radius
+    return prob;  // probability of radius
   }
 };
 
-struct ResetSuperdrop
-{
+struct ResetSuperdrop {
   GenRandomPool genpool4reset;
-  Kokkos::View<double[101]> log10redges; // edges to radius bins
+  Kokkos::View<double[101]> log10redges;  // edges to radius bins
   Kokkos::pair<unsigned int, unsigned int> gbxidxs;
   uint64_t nbins;
   ProbDistrib prob_distrib;
 
-  ResetSuperdrop(const unsigned int ngbxs,
-                 const unsigned int ngbxs4reset)
-      : genpool4reset(std::random_device{}()),
+  ResetSuperdrop(const unsigned int ngbxs, const unsigned int ngbxs4reset)
+      : genpool4reset(std::random_device {}()),
         log10redges("log10redges"),
         gbxidxs({ngbxs - ngbxs4reset, ngbxs}),
         nbins(log10redges.extent(0) - 1),
-        prob_distrib(ProbDistrib())
-  {
+        prob_distrib(ProbDistrib()) {
     /* make redges linearly spaced in log10(R) space */
     auto h_log10redges = Kokkos::create_mirror_view(log10redges);
-    const auto log10rmin = double{Kokkos::log10(5e-6 / dlc::R0)}; // lowest edge of radius bins
-    const auto log10rmax = double{Kokkos::log10(1.5e-5 / dlc::R0)}; // highest edge of radius bins
-    const auto log10deltar = double{(log10rmax - log10rmin)/nbins};
-    for (size_t i(0); i < nbins + 1; ++i)
-    {
+    const auto log10rmin = double{Kokkos::log10(5e-6 / dlc::R0)};    // lowest edge of radius bins
+    const auto log10rmax = double{Kokkos::log10(1.5e-5 / dlc::R0)};  // highest edge of radius bins
+    const auto log10deltar = double{(log10rmax - log10rmin) / nbins};
+    for (size_t i(0); i < nbins + 1; ++i) {
       h_log10redges(i) = log10rmin + i * log10deltar;
     }
     Kokkos::deep_copy(log10redges, h_log10redges);
   }
 
-  KOKKOS_FUNCTION unsigned int
-  reset_position(const CartesianMaps &gbxmaps,
-                        URBG<ExecSpace> &urbg,
-                        Superdrop &drop) const
   /* randomly update position of superdroplet by
   randomly selecting a gbxindex from gbxidxs and then
   randomly selecting a coord3 with that gbx's bounds */
-  {
-    const auto sdgbxindex = urbg(gbxidxs.first,
-                                 gbxidxs.second); // randomly selected gbxindex in range {incl., excl.}
+  KOKKOS_FUNCTION unsigned int reset_position(const CartesianMaps &gbxmaps, URBG<ExecSpace> &urbg,
+                                              Superdrop &drop) const {
+    const auto sdgbxindex =
+        urbg(gbxidxs.first,
+             gbxidxs.second);  // randomly selected gbxindex in range {incl., excl.}
 
     const auto bounds = gbxmaps.coord3bounds(sdgbxindex);
-    const auto coord3 = urbg.drand(bounds.first, bounds.second); // random coord within gbx bounds
+    const auto coord3 = urbg.drand(bounds.first, bounds.second);  // random coord within gbx bounds
 
     drop.set_sdgbxindex(sdgbxindex);
     drop.set_coord3(coord3);
@@ -139,43 +127,34 @@ struct ResetSuperdrop
     return sdgbxindex;
   }
 
-  KOKKOS_FUNCTION void
-  reset_attributes(const double gbxvol,
-                   URBG<ExecSpace> &urbg,
-                   Superdrop &drop) const
   /* reset radius and multiplicity of superdroplet
   by randomly sampling from binned distributions */
-  {
-    const auto bin = uint64_t{urbg(0, nbins)}; // index of randomly selected log10(r) bin
-    const auto log10rlow = log10redges(bin); // lower bound of log10(r)
-    const auto log10rup = log10redges(bin + 1); // upper bound of log10(r)
+  KOKKOS_FUNCTION void reset_attributes(const double gbxvol, URBG<ExecSpace> &urbg,
+                                        Superdrop &drop) const {
+    const auto bin = uint64_t{urbg(0, nbins)};   // index of randomly selected log10(r) bin
+    const auto log10rlow = log10redges(bin);     // lower bound of log10(r)
+    const auto log10rup = log10redges(bin + 1);  // upper bound of log10(r)
 
     const auto radius = new_radius(log10rlow, log10rup, urbg);
     const auto xi = new_xi(gbxvol, log10rlow, log10rup, radius);
     const auto msol = new_msol(radius);
 
     drop.set_msol(msol);
-    drop.set_radius(radius*1.00000001); // radius 1e-6 % larger than sampled dryradius
+    drop.set_radius(radius * 1.00000001);  // radius 1e-6 % larger than sampled dryradius
     drop.set_xi(xi);
   }
 
-  KOKKOS_FUNCTION double
-  new_msol(const double dryradius) const
   /* returns msol given dry radius */
-  {
-    constexpr double msolconst = 4.0 * Kokkos::numbers::pi *
-                                 dlc::Rho_sol / 3.0;
+  KOKKOS_FUNCTION double new_msol(const double dryradius) const {
+    constexpr double msolconst = 4.0 * Kokkos::numbers::pi * dlc::Rho_sol / 3.0;
 
     return msolconst * dryradius * dryradius * dryradius;
   }
 
-  KOKKOS_FUNCTION double
-  new_radius(const double log10rlow,
-             const double log10rup,
-             URBG<ExecSpace> &urbg) const
   /* returns radius from within bin of uniform
   distiribution in log10(r) space */
-  {
+  KOKKOS_FUNCTION double new_radius(const double log10rlow, const double log10rup,
+                                    URBG<ExecSpace> &urbg) const {
     const auto frac = urbg.drand(0.0, 1.0);
     const auto log10r = double{log10rlow + frac * (log10rup - log10rlow)};
     const auto radius = double{Kokkos::pow(10.0, log10r)};
@@ -183,15 +162,11 @@ struct ResetSuperdrop
     return radius;
   }
 
-  KOKKOS_FUNCTION unsigned long long
-  new_xi(const double gbxvol,
-         const double log10rlow,
-         const double log10rup,
-         const double radius) const
   /* returns xi given value of normalised probability
   distribution at radius and the bin width */
-  {
-    constexpr double numconc = 100000000 * dlc::VOL0; //100/cm^3, non-dimensionalised
+  KOKKOS_FUNCTION uint64_t new_xi(const double gbxvol, const double log10rlow,
+                                            const double log10rup, const double radius) const {
+    constexpr double numconc = 100000000 * dlc::VOL0;  // 100/cm^3, non-dimensionalised
 
     const auto rlow = double{Kokkos::pow(10.0, log10rlow)};
     const auto rup = double{Kokkos::pow(10.0, log10rup)};
@@ -199,14 +174,11 @@ struct ResetSuperdrop
     const auto prob = prob_distrib(radius, rlow, rup);
     const auto xi = double{prob * numconc * gbxvol};
 
-    return (unsigned long long)Kokkos::round(xi);
+    return (uint64_t) Kokkos::round(xi);
   }
 
-  KOKKOS_FUNCTION unsigned int
-  operator()(const CartesianMaps &gbxmaps,
-             Superdrop &drop) const
-  {
-    URBG<ExecSpace> urbg{genpool4reset.get_state()}; // thread safe random number generator
+  KOKKOS_FUNCTION unsigned int operator()(const CartesianMaps &gbxmaps, Superdrop &drop) const {
+    URBG<ExecSpace> urbg{genpool4reset.get_state()};  // thread safe random number generator
 
     const auto sdgbxindex = reset_position(gbxmaps, urbg, drop);
     const auto gbxvol = gbxmaps.get_gbxvolume(sdgbxindex);
@@ -218,13 +190,10 @@ struct ResetSuperdrop
   }
 };
 
-KOKKOS_FUNCTION unsigned int
-change_if_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
-                                const CartesianMaps &gbxmaps,
-                                unsigned int idx,
-                                Superdrop &drop);
+KOKKOS_FUNCTION unsigned int change_if_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
+                                                             const CartesianMaps &gbxmaps,
+                                                             unsigned int idx, Superdrop &drop);
 
-struct CartesianChangeIfNghbrWithReset
 /* wrapper of functions for use in PredCorrMotion's
 ChangeToNghbr type for deciding if a superdroplet should move
 to a neighbouring gbx in a cartesian domain and then updating the
@@ -236,82 +205,52 @@ bounds, forward or backward neighbour functions are called to
 update sdgbxindex (and possibly other superdrop attributes).
 Struct is same as CartesianChangeIfNghbr except for in
 coord3(...){...} function */
-{
+struct CartesianChangeIfNghbrWithReset {
   ResetSuperdrop reset_superdrop;
 
-  CartesianChangeIfNghbrWithReset(const unsigned int ngbxs,
-                                  const unsigned int ngbxs4reset)
+  CartesianChangeIfNghbrWithReset(const unsigned int ngbxs, const unsigned int ngbxs4reset)
       : reset_superdrop(ResetSuperdrop(ngbxs, ngbxs4reset)) {}
 
-  KOKKOS_INLINE_FUNCTION unsigned int
-  coord3(const CartesianMaps &gbxmaps,
-         unsigned int idx,
-         Superdrop &drop) const
-  {
-    return change_if_coord3nghbr_withreset(reset_superdrop,
-                                           gbxmaps, idx, drop);
+  KOKKOS_INLINE_FUNCTION unsigned int coord3(const CartesianMaps &gbxmaps, unsigned int idx,
+                                             Superdrop &drop) const {
+    return change_if_coord3nghbr_withreset(reset_superdrop, gbxmaps, idx, drop);
   }
 
-  KOKKOS_INLINE_FUNCTION unsigned int
-  coord1(const CartesianMaps &gbxmaps,
-         unsigned int idx,
-         Superdrop &drop) const
-  {
+  KOKKOS_INLINE_FUNCTION unsigned int coord1(const CartesianMaps &gbxmaps, unsigned int idx,
+                                             Superdrop &drop) const {
     return change_if_coord1nghbr(gbxmaps, idx, drop);
   }
 
-  KOKKOS_INLINE_FUNCTION unsigned int
-  coord2(const CartesianMaps &gbxmaps,
-         unsigned int idx,
-         Superdrop &drop) const
-  {
+  KOKKOS_INLINE_FUNCTION unsigned int coord2(const CartesianMaps &gbxmaps, unsigned int idx,
+                                             Superdrop &drop) const {
     return change_if_coord2nghbr(gbxmaps, idx, drop);
   }
 };
 
-template <VelocityFormula TV>
-inline PredCorrMotion<CartesianMaps, TV,
-                      CartesianChangeIfNghbrWithReset,
-                      CartesianCheckBounds>
-CartesianMotionWithReset(const unsigned int motionstep,
-                         const std::function<double(unsigned int)> int2time,
-                         const TV terminalv,
-                         const unsigned int ngbxs,
-                         const unsigned int ngbxs4reset)
 /* returned type satisfies motion concept for motion of a
 superdroplet using a predictor-corrector method to update
 a superdroplet's coordinates and then updating it's
 sdgbxindex as appropriate for a cartesian domain */
-{
+template <VelocityFormula TV>
+inline PredCorrMotion<CartesianMaps, TV, CartesianChangeIfNghbrWithReset, CartesianCheckBounds>
+CartesianMotionWithReset(const unsigned int motionstep,
+                         const std::function<double(unsigned int)> int2time, const TV terminalv,
+                         const unsigned int ngbxs, const unsigned int ngbxs4reset) {
   const auto cin = CartesianChangeIfNghbrWithReset(ngbxs, ngbxs4reset);
-  return PredCorrMotion<CartesianMaps, TV,
-                        CartesianChangeIfNghbrWithReset,
-                        CartesianCheckBounds>(motionstep,
-                                              int2time,
-                                              terminalv,
-                                              cin,
-                                              CartesianCheckBounds{});
+  return PredCorrMotion<CartesianMaps, TV, CartesianChangeIfNghbrWithReset, CartesianCheckBounds>(
+      motionstep, int2time, terminalv, cin, CartesianCheckBounds{});
 }
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
-KOKKOS_FUNCTION unsigned int
-change_to_backwards_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
-                                          const unsigned int idx,
-                                          const CartesianMaps &gbxmaps,
-                                          Superdrop &superdrop);
+KOKKOS_FUNCTION unsigned int change_to_backwards_coord3nghbr_withreset(
+    const ResetSuperdrop &reset_superdrop, const unsigned int idx, const CartesianMaps &gbxmaps,
+    Superdrop &superdrop);
 
-KOKKOS_FUNCTION unsigned int
-change_to_forwards_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
-                                         const unsigned int idx,
-                                         const CartesianMaps &gbxmaps,
-                                         Superdrop &superdrop);
+KOKKOS_FUNCTION unsigned int change_to_forwards_coord3nghbr_withreset(
+    const ResetSuperdrop &reset_superdrop, const unsigned int idx, const CartesianMaps &gbxmaps,
+    Superdrop &superdrop);
 
-KOKKOS_FUNCTION unsigned int
-change_if_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
-                                const CartesianMaps &gbxmaps,
-                                unsigned int idx,
-                                Superdrop &drop)
 /* return updated value of gbxindex in case superdrop should
 move to neighbouring gridbox in coord3 direction.
 Funciton changes value of idx if flag != 0,
@@ -319,63 +258,56 @@ if flag = 1 idx updated to backwards neighbour gbxindex.
 if flag = 2 idx updated to forwards neighbour gbxindex.
 Note: backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
-{
+KOKKOS_FUNCTION unsigned int change_if_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
+                                                             const CartesianMaps &gbxmaps,
+                                                             unsigned int idx, Superdrop &drop) {
   const auto flag = flag_sdgbxindex(idx, gbxmaps.coord3bounds(idx),
-                                    drop.get_coord3()); // if value != 0 idx needs to change
-  switch (flag)
-  {
-  case 1:
-    idx = change_to_backwards_coord3nghbr_withreset(reset_superdrop,
-                                                    idx, gbxmaps, drop);
-    break;
-  case 2:
-    idx = change_to_forwards_coord3nghbr_withreset(reset_superdrop,
-                                                   idx, gbxmaps, drop);
-    break;
+                                    drop.get_coord3());  // if value != 0 idx needs to change
+  switch (flag) {
+    case 1:
+      idx = change_to_backwards_coord3nghbr_withreset(reset_superdrop, idx, gbxmaps, drop);
+      break;
+    case 2:
+      idx = change_to_forwards_coord3nghbr_withreset(reset_superdrop, idx, gbxmaps, drop);
+      break;
   }
   return idx;
 }
 
-KOKKOS_FUNCTION unsigned int
-change_to_backwards_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
-                                          const unsigned int idx,
-                                          const CartesianMaps &gbxmaps,
-                                          Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox
 in backwards coord3 (z) direction and to update superdrop
 if its coord3 has exceeded the z lower domain boundary */
-{
+KOKKOS_FUNCTION unsigned int change_to_backwards_coord3nghbr_withreset(
+    const ResetSuperdrop &reset_superdrop, const unsigned int idx, const CartesianMaps &gbxmaps,
+    Superdrop &drop) {
   auto nghbr = (unsigned int)gbxmaps.coord3backward(idx);
 
-  const auto incre = (unsigned int)1;                         // increment
-  if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) // drop was at lower z edge of domain (now moving below it)
-  {
+  const auto incre = (unsigned int)1;  // increment
+  // drop was at lower z edge of domain (now moving below it)
+  if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) {
     nghbr = reset_superdrop(gbxmaps, drop);
   }
 
   drop.set_sdgbxindex(nghbr);
-  return nghbr; // gbxindex of z backwards (down) neighbour
-};
+  return nghbr;  // gbxindex of z backwards (down) neighbour
+}
 
-KOKKOS_FUNCTION unsigned int
-change_to_forwards_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
-                                         const unsigned int idx,
-                                         const CartesianMaps &gbxmaps,
-                                         Superdrop &drop)
 /* function to return gbxindex of neighbouring gridbox in
 forwards coord3 (z) direction and to update superdrop coord3
 if superdrop has exceeded the z upper domain boundary */
-{
+KOKKOS_FUNCTION unsigned int change_to_forwards_coord3nghbr_withreset(
+    const ResetSuperdrop &reset_superdrop, const unsigned int idx, const CartesianMaps &gbxmaps,
+    Superdrop &drop) {
   auto nghbr = (unsigned int)gbxmaps.coord3forward(idx);
 
-  const auto incre = (unsigned int)1;                                 // increment
-  if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) // drop was upper z edge of domain (now moving above it)
-  {
+  const auto incre = (unsigned int)1;  // increment
+  // drop was upper z edge of domain (now moving above it)
+  if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) {
     nghbr = reset_superdrop(gbxmaps, drop);
   }
 
   drop.set_sdgbxindex(nghbr);
-  return nghbr; // gbxindex of z forwards (up) neighbour
-};
+  return nghbr;  // gbxindex of z forwards (up) neighbour
+}
 
-#endif // CARTESIANMOTION_WITHRESET_HPP
+#endif  // LIBS_CARTESIANDOMAIN_CARTESIANMOTION_WITHRESET_HPP_

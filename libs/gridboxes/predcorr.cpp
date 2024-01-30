@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: predcorr.cpp
  * Project: gridboxes
@@ -12,8 +13,6 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * Functionality for change in a superdroplet's coords
  * using predictor-corrector method for motion of droplet
@@ -22,4 +21,4 @@
  * Methods follows equations in Grabowski et al. 2018
  */
 
-#include "./predcorr.hpp"
+#include "gridboxes/predcorr.hpp"

@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: gridbox.cpp
  * Project: gridboxes
@@ -12,10 +13,8 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * Functions and structures related to the CLEO gridboxes
  */
 
-#include "./gridbox.hpp"
+#include "gridboxes/gridbox.hpp"

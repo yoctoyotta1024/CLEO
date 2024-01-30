@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: cartesianmotion.cpp
  * Project: cartesiandomain
@@ -12,9 +13,7 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  */
 
-#include "./cartesianmotion.hpp"
+#include "cartesiandomain/cartesianmotion.hpp"

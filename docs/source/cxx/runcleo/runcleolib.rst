@@ -14,3 +14,4 @@ templated types used to construct CLEO SDM coupled to a Dynamics Solver.
    :caption: Contents:
 
    runcleo
+   sdmmethods

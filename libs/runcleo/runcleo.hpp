@@ -1,32 +1,32 @@
 /*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: runcleo.hpp
  * Project: runcleo
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Sunday 28th January 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
- * Generic functions for timestepping CLEO coupled model
- * (CLEO SDM coupled one-way/two-ways to a Dynamics Solver)
+ * Generic templated class for timestepping CLEO SDM coupled (one-way/two-way)
+ * a Dynamics Solver
  */
 
-#ifndef RUNCLEO_HPP
-#define RUNCLEO_HPP
+#ifndef LIBS_RUNCLEO_RUNCLEO_HPP_
+#define LIBS_RUNCLEO_RUNCLEO_HPP_
 
-#include <string>
-#include <stdexcept>
 #include <concepts>
-#include <random>
 #include <iostream>
+#include <random>
+#include <stdexcept>
+#include <string>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
@@ -35,8 +35,8 @@
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
 #include "./couplingcomms.hpp"
-#include "./createsupers.hpp"
 #include "./creategbxs.hpp"
+#include "./createsupers.hpp"
 #include "./initialconditions.hpp"
 #include "./sdmmethods.hpp"
 #include "gridboxes/gridbox.hpp"
@@ -47,22 +47,41 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-template <CoupledDynamics CD,
-          GridboxMaps GbxMaps,
-          MicrophysicalProcess Microphys,
-          Motion<GbxMaps> M,
-          Observer Obs,
-          CouplingComms<CD> Comms>
-class RunCLEO
-{
-private:
-  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm;
-  CD &coupldyn;
-  const Comms &comms;
+/**
+ * @class RunCLEO
+ * @brief Generic templated class for timestepping CLEO SDM coupled
+ * (one-way/two-way) a Dynamics Solver
+ *
+ * This class orchestrates the timestepping of CLEO coupled model,
+ * which consists of `SDM Methods` coupled one-way or two-way
+ * to `Coupled Dynamics` with communication handled by `Coupling Comms`.
+ *
+ * @tparam CD Type of CoupledDynamics.
+ * @tparam GbxMaps Type of GridboxMaps.
+ * @tparam Microphys Type of MicrophysicalProcess.
+ * @tparam M Type of Motion.
+ * @tparam Obs Type of Observer.
+ * @tparam Comms Type of CouplingComms.
+ */
+template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphys,
+          Motion<GbxMaps> M, Observer Obs, CouplingComms<CD> Comms>
+class RunCLEO {
+ private:
+  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm; /**< Reference SDMMethods object. TODO(CB) */
+  CD &coupldyn; /**< Reference to the CoupledDynamics object. TODO(CB)  */
+  const Comms &comms; /**< Reference to the CouplingComms object. TODO(CB)  */
 
-  int prepare_to_timestep(const dualview_constgbx gbxs) const
-  /* prepare CLEO SDM and Coupled Dyanmics for timestepping */
-  {
+  /**
+   * @brief Prepare SDM and Coupled Dynamics for timestepping.
+   *
+   * This function prepares the SDM and Coupled Dynamics for timestepping. It
+   * calls the `prepare_to_timestep` function of both the Coupled Dynamics and
+   * SDMMethods objects.
+   *
+   * @param gbxs DualView of gridboxes.
+   * @return 0 on success.
+   */
+  int prepare_to_timestep(const dualview_constgbx gbxs) const {
     std::cout << "\n--- prepare timestepping ---\n";
 
     coupldyn.prepare_to_timestep();
@@ -72,29 +91,41 @@ private:
     return 0;
   }
 
-  void check_coupling() const
-  /* check  coupling of CLEO SDM and Coupled Dyanmics is correct.
-  For example ensuring they have the same timestep for coupling */
-  {
-    if (sdm.get_couplstep() != coupldyn.get_couplstep())
-    {
-      const std::string err("coupling timestep of dynamics "
-                            "solver and CLEO SDM are not equal");
+  /**
+   * @brief Check if coupling between SDM and Coupled Dynamics is correct.
+   *
+   * This function checks if the coupling timestep of the Dynamics Solver and
+   * SDM are equal. Throws an exception if they are not.
+   */
+  void check_coupling() const {
+    if (sdm.get_couplstep() != coupldyn.get_couplstep()) {
+      const std::string err(
+          "coupling timestep of dynamics "
+          "solver and CLEO SDM are not equal");
       throw std::invalid_argument(err);
     }
   }
 
-  int timestep_cleo(const unsigned int t_end,
-                    const dualview_gbx gbxs,
-                    const viewd_supers totsupers,
-                    GenRandomPool genpool) const
-  /* timestep CLEO from t=0 to t=t_end */
-  {
+  /**
+   * @brief Timestep CLEO from t=0 to t=t_end.
+   *
+   * This function performs the main timestepping loop for CLEO from the initial
+   * time (t_mdl=0) to the specified end time (t_mdl=t_end). It calls RunCLEO's
+   * `start_step`, `coupldyn_step`, `sdm_step`, and `proceed_to_next_step`
+   * functions in a loop until timestepping is complete.
+   *
+   * @param t_end End time for timestepping.
+   * @param gbxs DualView of gridboxes.
+   * @param totsupers View of total superdroplets.
+   * @param genpool Random number generator pool.
+   * @return 0 on success.
+   */
+  int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs, const viewd_supers totsupers,
+                    GenRandomPool genpool) const {
     std::cout << "\n--- timestepping ---\n";
 
     unsigned int t_mdl(0);
-    while (t_mdl <= t_end)
-    {
+    while (t_mdl <= t_end) {
       /* start step (in general involves coupling) */
       const auto t_next = (unsigned int)start_step(t_mdl, gbxs);
 
@@ -105,22 +136,28 @@ private:
       sdm_step(t_mdl, t_next, gbxs, totsupers, genpool);
 
       /* proceed to next step (in general involves coupling) */
-      t_mdl = proceed_to_next_step(t_mdl, t_next, gbxs);
+      t_mdl = proceed_to_next_step(t_next, gbxs);
     }
 
     std::cout << "--- timestepping: success ---\n";
     return 0;
   }
 
-  unsigned int start_step(const unsigned int t_mdl,
-                          dualview_gbx gbxs) const
-  /* Start of every timestep: 1) communication of thermodynamic
-  state from dynamics solver to CLEO's Gridboxes. 2) call
-  sdm at_start_step function (e.g. to make observations).
-  3) Return size of step to take given current timestep, t_mdl */
-  {
-    if (t_mdl % sdm.get_couplstep() == 0)
-    {
+  /**
+   * @brief Start of every timestep.
+   *
+   * This function is called at the start of every timestep. It includes
+   * 1) communication of dynamics fields from the Dynamics Solver to the States
+   * of CLEO's Gridboxes, 2) calling the `at_start_step` function of SDMMethods
+   * (e.g. to make observations), and 3) returning the size of the timestep to
+   * take now given the current timestep `t_mdl`.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param gbxs DualView of gridboxes.
+   * @return Size of the next timestep.
+   */
+  unsigned int start_step(const unsigned int t_mdl, dualview_gbx gbxs) const {
+    if (t_mdl % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
       comms.receive_dynamics(coupldyn, gbxs.view_host());
       gbxs.modify_host();
@@ -132,13 +169,33 @@ private:
     return get_next_step(t_mdl);
   }
 
-  unsigned int get_next_step(const unsigned int t_mdl) const
-  /* returns size of next step to take given current
-  timestep, t_mdl, such that next timestep is
-  sooner out of next timestep for obs or coupl */
-  {
-    const auto next_couplstep = [&, t_mdl]()
-    {
+ /**
+  * @brief Get the size of the next timestep.
+  *
+  * This function calculates and returns the next step size to take based on the
+  * current model time, `t_mdl` and the coupling and obs times
+  * obtained from the `sdm` object; `t_coupl` and `t_obs` respectively.
+  *
+  * @param t_mdl The current timestep of the model.
+  * @return The size of the next timestep.
+  *
+  * @details
+  * The size of the next timestep is determined by finding the smaller out of the
+  * step to the next coupling time and the next observation time. The next coupling
+  * time is calculated after receiving the size of the coupling timestep (a constant)
+  * using the `sdm.get_couplstep()` function. The time of the next observation
+  * is obtained from the `sdm.obs.next_obs()` function.
+  *
+  * The size of the next timestep is then calculated as `t_next - t_mdl`,
+  * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
+  * and `next_obs`. The function uses Kokkos' version of C++ standard
+  * library's `std::min` to find `t_next` (also GPU compatible).
+  *
+  * @see SDMMethods::get_couplstep()
+  * @see SDMMethods::ObsClass::next_obs() // TODO(CB) fill in and reference "ObsClass" docs
+  */
+  unsigned int get_next_step(const unsigned int t_mdl) const {
+    const auto next_couplstep = [&, t_mdl]() {
       const auto interval = (unsigned int)sdm.get_couplstep();
       return ((t_mdl / interval) + 1) * interval;
     };
@@ -146,40 +203,56 @@ private:
     /* t_next is sooner out of time for next coupl or obs */
     const auto next_coupl = (unsigned int)next_couplstep();
     const auto next_obs = (unsigned int)sdm.obs.next_obs(t_mdl);
-    const auto t_next(!(next_coupl < next_obs) ? next_obs : next_coupl); // return smaller of two unsigned ints (see std::min)
+    const auto t_next(!(next_coupl < next_obs)
+                          ? next_obs
+                          : next_coupl);  // return smaller of two unsigned ints (see std::min)
 
-    return t_next;                                                       // stepsize = t_next - t_mdl
+    return t_next;  // stepsize = t_next - t_mdl
   }
 
-  void sdm_step(const unsigned int t_mdl,
-                unsigned int t_next,
-                dualview_gbx gbxs,
-                const viewd_supers totsupers,
-                GenRandomPool genpool) const
-  /* run CLEO SDM (on host and device) */
-  {
-    gbxs.sync_device(); // get device up to date with host
+  /**
+   * @brief Run timestep of CLEO's Super-Droplet Model (SDM).
+   *
+   * This function runs SDM on both host and device from `t_mdl` to `t_next`.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param t_next Next timestep of the coupled model.
+   * @param gbxs DualView of gridboxes.
+   * @param totsupers View of total superdroplets.
+   * @param genpool Random number generator pool.
+   */
+  void sdm_step(const unsigned int t_mdl, unsigned int t_next, dualview_gbx gbxs,
+                const viewd_supers totsupers, GenRandomPool genpool) const {
+    gbxs.sync_device();  // get device up to date with host
     sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers, genpool);
-    gbxs.modify_device(); // mark device view of gbxs as modified
+    gbxs.modify_device();  // mark device view of gbxs as modified
   }
 
-  void coupldyn_step(const unsigned int t_mdl,
-                     const unsigned int t_next) const
-  /* run coupled dynamics solver (on host) */
-  {
+  /**
+   * @brief Run timestep of Coupled Dynamics.
+   *
+   * This function runs the Coupled Dynamics on host from t_mdl to t_next.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param t_next Next timestep of the coupled model.
+   */
+  void coupldyn_step(const unsigned int t_mdl, const unsigned int t_next) const {
     coupldyn.run_step(t_mdl, t_next);
   }
 
-  unsigned int proceed_to_next_step(unsigned int t_mdl,
-                                    unsigned int t_next,
-                                    dualview_gbx gbxs) const
-
-  /* returns incremented timestep 't_mdl' to 't_next'.
-  Also this is where communication from CLEO SDM Gridbox
-  States to coupled dynamics solver may occur */
-  {
-    if (t_mdl % sdm.get_couplstep() == 0)
-    {
+  /**
+   * @brief Proceed to the next timestep.
+   *
+   * This function returns the incremented timestep (`t_mdl` to `t_next`).
+   * It is also where communication from the States of CLEO's
+   * Gridboxes to the Coupled Dynamics may occur.
+   *
+   * @param t_next Next timestep of the coupled model.
+   * @param gbxs DualView of gridboxes.
+   * @return Incremented timestep.
+   */
+  unsigned int proceed_to_next_step(unsigned int t_next, dualview_gbx gbxs) const {
+    if (t_next % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
       comms.send_dynamics(gbxs.view_host(), coupldyn);
     }
@@ -187,30 +260,45 @@ private:
     return t_next;
   }
 
-public:
-  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm,
-          CD &coupldyn, const Comms &comms)
-      : sdm(sdm), coupldyn(coupldyn), comms(comms)
-  {
+ public:
+  /**
+   * @brief Constructor for RunCLEO.
+   *
+   * Initializes the RunCLEO object with the provided SDMMethods, CoupledDynamics,
+   * and CouplingComms objects. Checks if coupling between SDM and Dynamics is correct.
+   *
+   * @param sdm TODO(CB) Reference to the SDMMethods object.
+   * @param coupldyn TODO(CB) Reference to the CoupledDynamics object.
+   * @param comms TODO(CB) Reference to the CouplingComms object.
+   */
+  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm, CD &coupldyn, const Comms &comms)
+      : sdm(sdm), coupldyn(coupldyn), comms(comms) {
     check_coupling();
   }
 
-  ~RunCLEO()
-  {
-    sdm.obs.after_timestepping();
-  }
+  /**
+   * @brief Destructor for RunCLEO.
+   *
+   * Calls the after_timestepping function of the SDM observer.
+   */
+  ~RunCLEO() { sdm.obs.after_timestepping(); }
 
-  int operator()(const InitialConditions auto &initconds,
-                 const unsigned int t_end) const
-  /* create gridboxes and superdrops using initial
-  conditions, then prepare and do timestepping. */
-  {
+  /* create  then prepare and do timestepping. */
+  /**
+   * @brief Operator () for RunCLEO.
+   *
+   * Creates runtime objects, gridboxes, superdrops and random number generators
+   * using initial conditions, then prepares and performs CLEO timestepping.
+   *
+   * @param initconds InitialConditions object containing initial conditions.
+   * @param t_end End time for timestepping.
+   * @return 0 on success.
+   */
+  int operator()(const InitialConditions auto &initconds, const unsigned int t_end) const {
     // create runtime objects
-    viewd_supers totsupers(create_supers(initconds.initsupers)); // all the superdrops in domain
-    dualview_gbx gbxs(create_gbxs(sdm.gbxmaps,
-                                  initconds.initgbxs,
-                                  totsupers));
-    GenRandomPool genpool(std::random_device{}());
+    viewd_supers totsupers(create_supers(initconds.initsupers));  // all the superdrops in domain
+    dualview_gbx gbxs(create_gbxs(sdm.gbxmaps, initconds.initgbxs, totsupers));
+    GenRandomPool genpool(std::random_device {}());
 
     // prepare CLEO for timestepping
     prepare_to_timestep(gbxs);
@@ -222,4 +310,4 @@ public:
   }
 };
 
-#endif // RUNCLEO_HPP
+#endif  // LIBS_RUNCLEO_RUNCLEO_HPP_
