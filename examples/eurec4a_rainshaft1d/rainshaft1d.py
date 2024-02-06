@@ -73,9 +73,8 @@ zATR = 831.45         # [m]
 zlim        = 780       # min z coord of superdroplets [m]
 npergbx     = 256       # number of superdroplets per gridbox
 
-zgrid = np.arange(0,900,20)
-num_zboxes = len(zgrid)
-active_boxes = np.sum(zgrid >= 780 )
+num_zboxes = len(zgrid) - 1
+active_boxes = np.sum(np.array(zgrid) >= 780 )
 # active_boxes = 7
 number_of_SD = active_boxes * 256
 print(f"No of total boxes: {num_zboxes}")
