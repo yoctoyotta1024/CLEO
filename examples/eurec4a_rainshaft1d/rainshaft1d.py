@@ -68,7 +68,7 @@ SDgbxs2plt  = list(range(39, 55))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid       = [0, 900, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+zgrid       = [0, 880, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid       = np.array([0, 20])  # array of xhalf coords [m]
 ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
@@ -87,15 +87,14 @@ Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinus
 # initial superdroplet coordinates
 
 # Height of ATR measurements
-zATR = 831.45           # [m]
+zATR = 831.45         # [m]
 
-zlim = 770              # [m]
-
+zlim        = 780       # min z coord of superdroplets [m]
 npergbx     = 512       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
 rspan       = [1e-6, 5e-3]                      # min and max range of radii to sample [m]
-dryr_sf     = 1e-3                               # Dry radii scalling factor: dryradii are 1/dryr_sf of radii [m]
+dryr_sf     = 1e0                               # Dry radii scalling factor: dryradii are 1/dryr_sf of radii [m]
 
 
 # settings for initial superdroplet multiplicies with ATR and Aerosol from Lohmann et. al 2016 Fig. 5.5
