@@ -5,10 +5,17 @@ channels:
 dependencies:
     - python>=3.12
     - pytest
-    # packages to install CLEO pySD
-    - pip
+    - sphinx
+    - furo
+    - sphinx_copybutton
+    - sphinxcontrib-bibtex
+    - breathe
     - numpy
     - scipy
     - matplotlib
     - netcdf4
     - xarray
+    - awkward
+    - random
+    - struct
+    - zarr
