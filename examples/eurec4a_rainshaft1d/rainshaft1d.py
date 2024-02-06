@@ -68,7 +68,7 @@ SDgbxs2plt  = list(range(39, 55))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid       = [0, 880, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+zgrid       = [0, 900, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid       = np.array([0, 20])  # array of xhalf coords [m]
 ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
