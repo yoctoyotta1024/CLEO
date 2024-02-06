@@ -61,31 +61,16 @@ thermofile    =  sharepath+"rain1d_dimlessthermo.dat"
 setupfile     = binpath+"rain1d_setup.txt"
 dataset       = binpath+"rain1d_sol.zarr"
 
-
-### --- settings for 1-D gridbox boundaries --- ###
-zgrid       = [0, 900, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid       = np.array([0, 20])  # array of xhalf coords [m]
-ygrid       = np.array([0, 20])  # array of yhalf coords [m]
-
-# initial superdroplet coordinates
-# Height of ATR measurements
-zATR = 831.45         # [m]
-zlim        = 780       # min z coord of superdroplets [m]
-npergbx     = 256       # number of superdroplets per gridbox
-
-num_zboxes = len(zgrid) - 1
-active_boxes = np.sum(np.array(zgrid) >= 780 )
-# active_boxes = 7
-number_of_SD = active_boxes * 256
-print(f"No of total boxes: {num_zboxes}")
-print(f"No of active boxes: {active_boxes}")
-print(f"Total number of SD: {number_of_SD}")
-
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2CLEO+"/results/examplesolutions/rain" # directory for saving figures
-SDgbxs2plt  = [43]
+SDgbxs2plt  = list(range(39, 55))
+SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
+### --- settings for 1-D gridbox boundaries --- ###
+zgrid       = [0, 1200, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+xgrid       = np.array([0, 20])  # array of xhalf coords [m]
+ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
 ### --- settings for 1-D Thermodynamics --- ###
 PRESS0      = 101315                # [Pa]
@@ -99,6 +84,9 @@ WVEL        = 0.0                   # [m/s]
 Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
 ### --- settings for initial superdroplets --- ###
+# initial superdroplet coordinates
+zlim        = 800       # min z coord of superdroplets [m]
+npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
 rspan       = [1e-6, 5e-3]                      # min and max range of radii to sample [m]
