@@ -67,7 +67,7 @@ dataset       = binpath / "rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
-savefigpath = path2CLEO / "results/examplesolutions/rain/" # directory for saving figures
+savefigpath = path2CLEO / "results/examplesolutions/rain_thin_cloud/" # directory for saving figures
 savefigpath.mkdir(exist_ok=True)
 
 SDgbxs2plt  = list(range(39, 45))
@@ -86,35 +86,35 @@ massmoms = pyzarr.get_massmoms(str(dataset), config["ntime"], gbxs["ndims"])
 
 
 
-simple_ds = xr.open_dataset(dataset, engine="zarr",
-                                consolidated=False)
+# simple_ds = xr.open_dataset(dataset, engine="zarr",
+#                                 consolidated=False)
 
-# %%
-# To extract the data of all superdroplets, one needs to use the from pySD.sdmout_src import sdtracing
+# # %%
+# # To extract the data of all superdroplets, one needs to use the from pySD.sdmout_src import sdtracing
 
-from pySD.sdmout_src import sdtracing
-all_sd_ids = np.arange(0, 10) # int(config["totnsupers"]))
+# from pySD.sdmout_src import sdtracing
+# all_sd_ids = np.arange(0, 10) # int(config["totnsupers"]))
 
-attributes = ["xi", "radius", "coord3"]
+# attributes = ["xi", "radius", "coord3"]
 
-list_dataarrays = []
-for attr in attributes:
-    data = sdtracing.attribute_for_superdroplets_sample(
-        sddata,
-        attr,
-        ids=list(all_sd_ids)
-    )
-    da = xr.DataArray(
-        data=data,
-        dims=["time", "sd_id"],
-        coords={"time": simple_ds.time, "sd_id": all_sd_ids}
-    )
-    da.name = attr
-    list_dataarrays.append(da)
+# list_dataarrays = []
+# for attr in attributes:
+#     data = sdtracing.attribute_for_superdroplets_sample(
+#         sddata,
+#         attr,
+#         ids=list(all_sd_ids)
+#     )
+#     da = xr.DataArray(
+#         data=data,
+#         dims=["time", "sd_id"],
+#         coords={"time": simple_ds.time, "sd_id": all_sd_ids}
+#     )
+#     da.name = attr
+#     list_dataarrays.append(da)
 
 
-# %%
-ds = xr.merge(list_dataarrays)
+# # %%
+# ds = xr.merge(list_dataarrays)
 
 # %%
 ### ------------------------------------------------------------ ###
