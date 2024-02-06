@@ -85,10 +85,7 @@ print(f"Total number of SD: {number_of_SD}")
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2CLEO+"/results/examplesolutions/rain" # directory for saving figures
-SDgbxs2plt  = list(np.arange(
-  num_zboxes - active_boxes, num_zboxes, 1
-))
-SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
+SDgbxs2plt  = [43]
 
 
 ### --- settings for 1-D Thermodynamics --- ###
