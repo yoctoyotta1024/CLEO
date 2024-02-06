@@ -33,7 +33,7 @@ maxchunk = 1250000                                # maximum no. of elements in c
 ### SDM Runtime parameters ###
 # domain setup #
 nspacedims = 1                            # no. of spatial dimensions to model
-ngbxs = 45                               # total number of Gbxs
+ngbxs = 44                               # total number of Gbxs
 totnsupers = 1536                        # (initial) total no. of SDs
 
 # timestepping #
