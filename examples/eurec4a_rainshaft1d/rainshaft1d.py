@@ -64,7 +64,7 @@ dataset       = binpath+"rain1d_sol.zarr"
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2CLEO+"/results/examplesolutions/rain" # directory for saving figures
-SDgbxs2plt  = list(range(39, 55))
+SDgbxs2plt  = list(range(39, 42))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
@@ -90,7 +90,7 @@ Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinus
 zATR = 831.45         # [m]
 
 zlim        = 780       # min z coord of superdroplets [m]
-npergbx     = 512       # number of superdroplets per gridbox
+npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
 rspan       = [1e-6, 5e-3]                      # min and max range of radii to sample [m]
