@@ -95,7 +95,7 @@ class GenSuperdrop {
 /**
  * @brief Create a view of super-droplets in (device) memory.
  *
- * This function creates a view of superdrops in device memory, where the number
+ * This function creates an ordered view of superdrops in device memory, where the number
  * of superdrops is specified by the parameter `totnsupers`. The superdrops are
  * ordered by the gridbox indexes and generated using a generator which uses
  * the initial conditions referenced by the `SuperdropInitConds` type.
@@ -130,7 +130,7 @@ void print_supers(const viewd_constsupers supers);
 /**
  * @brief Create a view of super-droplets in (device) memory.
  *
- * This function creates a view of superdrops in device memory, where the number
+ * This function creates an ordered view of superdrops in device memory, where the number
  * of superdrops is specified by the parameter `totnsupers`. The superdrops are
  * ordered by the gridbox indexes and generated using a generator which uses
  * the initial conditions referenced by the `SuperdropInitConds` type.
