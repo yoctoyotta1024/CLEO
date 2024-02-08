@@ -141,22 +141,16 @@ void print_supers(const viewd_constsupers supers);
  */
 template <typename SuperdropInitConds>
 viewd_supers create_supers(const SuperdropInitConds &sdic) {
-  // Log message indicating the start of the superdrop creation process
+  // Log message and create superdrops using the initial conditions
   std::cout << "\n--- create superdrops ---\ninitialising\n";
-
-  // Initialize superdrops using the provided initial conditions
   viewd_supers supers(initialise_supers(sdic));
 
-  // Log message indicating the sorting of superdrops
+  // Log message and sort the view of superdrops
   std::cout << "sorting\n";
-
-  // Sort view of superdrops
   supers = sort_supers(supers);
 
-  // Log message indicating the completion of the superdrop initialisation
+  // Log message and perform checks on the initialisation of superdrops
   std::cout << "checking initialisation\n";
-
-  // Perform checks on the initialisation of superdrops
   is_sdsinit_complete(supers, sdic.fetch_data_size());
 
   // Print information about the created superdrops
@@ -165,7 +159,6 @@ viewd_supers create_supers(const SuperdropInitConds &sdic) {
   // Log message indicating the successful creation of superdrops
   std::cout << "--- create superdrops: success ---\n";
 
-  // Return the created superdrops
   return supers;
 }
 
