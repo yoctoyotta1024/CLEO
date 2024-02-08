@@ -105,9 +105,11 @@ class Superdrop {
   KOKKOS_INLINE_FUNCTION auto get_coord2() const { return coord2; }
 
   /**
-   * @brief Returns 'true' if super-droplet has solute.
+   * @brief Returns 'true' if the super-droplet has solute.
    *
-   * @return boolean for existance of solute.
+   * This function checks whether the super-droplet contains solute.
+   *
+   * @return true if the super-droplet has solute, false otherwise.
    */
   KOKKOS_INLINE_FUNCTION auto is_solute() const { return attrs.is_solute(); }
 
@@ -229,15 +231,25 @@ class Superdrop {
   void set_coord1(const double i_coord1) { coord1 = i_coord1; }
 
   /**
-   * @brief Set the 2nd spatial coordinate of the superdroplet.
+   * @brief Sets the value of the 2nd coordinate.
+   *
+   * This function sets the value of coord2 of the super-droplet
+   * to the specified value.
+   *
+   * @param i_coord2 The value to set for coord2.
    */
   KOKKOS_INLINE_FUNCTION
   void set_coord2(const double i_coord2) { coord2 = i_coord2; }
 
   /**
-   * @brief Increments to the spatial coordinates of the superdroplet.
+   * @brief Increments the coordinates by the specified deltas.
    *
-   * Add delta 3, 2 and 1 to coord3, 2 and 1 respectively.
+   * This function increments the coordinates of the super-droplet by the specified
+   * deltas along each dimension.
+   *
+   * @param delta3 The delta for the third coordinate (coord3).
+   * @param delta1 The delta for the first coordinate (coord1).
+   * @param delta2 The delta for the second coordinate (coord2).
    */
   KOKKOS_INLINE_FUNCTION
   void increment_coords(const double delta3, const double delta1, const double delta2) {
