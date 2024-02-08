@@ -1,5 +1,5 @@
-CreateGBxs Sub-Module
-=====================
+Create Gridboxes Sub-Module
+===========================
 
 Header file: ``<libs/runcleo/creategbxs.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/creategbxs.hpp>`_
