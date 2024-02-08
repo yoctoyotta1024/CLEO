@@ -36,26 +36,59 @@
 #include "initialise/initconds.hpp"
 #include "superdrops/superdrop.hpp"
 
-/* struct holds vectors for data for the initial
-conditions of some superdroplets' properties and
-returns superdrops generated from them */
+/**
+ * @brief Struct that holds data for the initial conditions of super-droplets.
+ *
+ * This struct holds data for the initial conditions of some properties of super-droplets
+ * and provides an operator which returns a super-droplet generated using them.
+ */
 class GenSuperdrop {
  private:
-  unsigned int nspacedims;
-  std::shared_ptr<Superdrop::IDType::Gen> sdIdGen;  // pointer to superdrop id generator
-  InitSupersData initdata;
+  unsigned int nspacedims;   ///< Number of spatial dimensions.
+  std::shared_ptr<Superdrop::IDType::Gen> sdIdGen;   ///< Pointer to super-droplet ID generator.
+  InitSupersData initdata;   ///< Data for initialising superdrops.
 
+  /**
+   * @brief Get the spatial coordinates of the kk'th superdrop.
+   *
+   * @param kk The index of the superdrop (0 <= kk < total number of superdrops).
+   * @return The spatial coordinates of the superdrop at index 'kk'.
+   */
   std::array<double, 3> coords_at(const unsigned int kk) const;
 
+  /**
+   * @brief Get the attributes of the kk'th superdrop.
+   *
+   * @param kk The index of the superdrop (0 <= kk < total number of superdrops).
+   * @return The attributes of the superdrop at index 'kk'.
+   */
   SuperdropAttrs attrs_at(const unsigned int kk) const;
 
  public:
+  /**
+   * @brief Constructs a GenSuperdrop instance.
+   *
+   * This constructor initializes a GenSuperdrop instance using the provided
+   * SuperdropInitConds instance to fetch initial data.
+   *
+   * @tparam SuperdropInitConds The type of the data for super-droplets' initial conditions.
+   * @param sdic The instance of the data for super-droplets' initial conditions.
+   */
   template <typename SuperdropInitConds>
   explicit GenSuperdrop(const SuperdropInitConds &sdic)
       : nspacedims(sdic.get_nspacedims()), sdIdGen(std::make_shared<Superdrop::IDType::Gen>()) {
     sdic.fetch_data(initdata);
   }
 
+  /**
+   * @brief Generate a superdrop using initial data for the kk'th superdrop.
+   *
+   * This function returns a superdrop generated using the initial conditions
+   * for the kk'th superdrop.
+   *
+   * @param kk The index of the superdrop to generate.
+   * @return The generated superdrop.
+   */
   Superdrop operator()(const unsigned int kk) const;
 };
 
