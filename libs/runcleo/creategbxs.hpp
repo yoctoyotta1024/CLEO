@@ -53,14 +53,14 @@ class GenGridbox {
   std::shared_ptr<Gbxindex::Gen> GbxindexGen;   /**< Pointer to gridbox index generator */
   std::vector<double> presss;   /**< Vector of pressures for each gridbox */
   std::vector<double> temps;    /**< Vector of temperatures for each gridbox */
-  std::vector<double> qvaps;    /**< Vector of vapor specific humidities for each gridbox */
-  std::vector<double> qconds;   /**< Vector of condensed specific humidities for each gridbox */
-  /**< Vector of vertical (coord3) wind velocities for each gridbox */
+  std::vector<double> qvaps;    /**< Vector of vapor mass mixing ratio for each gridbox */
+  std::vector<double> qconds;   /**< Vector of condensed water mass mixing ratio for each gridbox */
   std::vector<std::pair<double, double>> wvels;
-  /**< Vector of eastward (coord1) wind velocities for each gridbox */
+  /**< Vector of vertical (coord3) wind velocities for each gridbox */
   std::vector<std::pair<double, double>> uvels;
-  /**< Vector of northward (coord2) wind velocities for each gridbox */
+  /**< Vector of eastward (coord1) wind velocities for each gridbox */
   std::vector<std::pair<double, double>> vvels;
+  /**< Vector of northward (coord2) wind velocities for each gridbox */
 
   /**
    * @brief Get the state of a specified Gridbox from the initial conditions.
