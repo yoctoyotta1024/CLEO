@@ -1,4 +1,4 @@
-Create Super-Droplets Sub-Module
+Create Super-droplets Sub-Module
 ================================
 
 Header file: ``<libs/runcleo/createsupers.hpp>``
