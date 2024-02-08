@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 16th January 2024
+Last Modified: Friday 9th February 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -55,9 +55,9 @@ thermofile =  binariespath+"/dimlessthermo.dat"
 # TEMP_INIT = 288.15                      # initial parcel temperature [T]
 # relh_init = 0.999                       # initial relative humidity (%)
 # qc_init = 0.0                           # initial liquid water content []
-# W_INIT = 0.0                           # initial vertical (z) velocity [m/s]
-# U_INIT = 0.0                            # initial horizontal x velocity [m/s]
-# V_INIT = 0.0                            # initial horizontal y velocity [m/s]
+# W_INIT = 0.0                           # initial vertical (coord3) velocity [m/s]
+# U_INIT = 0.0                            # initial eastwards (coord1) velocity [m/s]
+# V_INIT = 0.0                            # initial northwards (coord2) velocity [m/s]
 # thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
 #                                     qc_init, W_INIT, U_INIT, V_INIT,
 #                                     relh=relh_init, constsfile=constsfile)

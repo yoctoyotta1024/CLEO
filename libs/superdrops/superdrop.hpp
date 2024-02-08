@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 8th February 2024
+ * Last Modified: Friday 9th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,9 +36,9 @@
 class Superdrop {
  private:
   unsigned int sdgbxindex;  /**< Index of the gridbox the superdrop occupies */
-  double coord3;            /**< 3rd spatial coordinate of the superdroplet (z) */
-  double coord1;            /**< 1st spatial coordinate of the superdroplet (x) */
-  double coord2;            /**< 2nd spatial coordinate of the superdroplet (y) */
+  double coord3;            /**< 3rd spatial coordinate of the superdroplet (vertical) */
+  double coord1;            /**< 1st spatial coordinate of the superdroplet (eastwards) */
+  double coord2;            /**< 2nd spatial coordinate of the superdroplet (northwards) */
   SuperdropAttrs attrs;     /**< Attributes of the superdroplet */
 
  public:
@@ -181,32 +181,64 @@ class Superdrop {
    */
   KOKKOS_INLINE_FUNCTION double rcubed() const { return attrs.rcubed(); }
 
+  /**
+   * @brief Set the multiplicity 'xi' of the super-droplet.
+   */
   KOKKOS_INLINE_FUNCTION
   void set_xi(const uint64_t i_xi) { attrs.set_xi(i_xi); }
 
-  /* see also change_radius which prevents
-  drop radius < dry radius */
+  /**
+   * @brief Set the radius of the super-droplet.
+   *
+   * Note: see also  change_radius which prevents setting super-droplet
+   * radius less than its dry radius
+   */
   KOKKOS_INLINE_FUNCTION
   void set_radius(const double i_radius) { attrs.set_radius(i_radius); }
 
+  /**
+   * @brief Set the mass of solute in the super-droplet.
+   */
   KOKKOS_INLINE_FUNCTION
   void set_msol(const double i_msol) { attrs.set_msol(i_msol); }
 
+  /**
+   * @brief Set the radius of the super-droplet no less than its dry radius.
+   *
+   * Note: see also set_radius which allows super-droplet radius less than its dry radius
+   */
   KOKKOS_INLINE_FUNCTION
   double change_radius(const double newr) { return attrs.change_radius(newr); }
 
+  /**
+   * @brief Set the Gridbox Index of the super-droplet.
+   */
   KOKKOS_INLINE_FUNCTION
   void set_sdgbxindex(const unsigned int i_sdgbxindex) { sdgbxindex = i_sdgbxindex; }
 
+  /**
+   * @brief Set the 3rd spatial coordinate of the superdroplet.
+   */
   KOKKOS_INLINE_FUNCTION
   void set_coord3(const double i_coord3) { coord3 = i_coord3; }
 
+  /**
+   * @brief Set the 1st spatial coordinate of the superdroplet.
+   */
   KOKKOS_INLINE_FUNCTION
   void set_coord1(const double i_coord1) { coord1 = i_coord1; }
 
+  /**
+   * @brief Set the 2nd spatial coordinate of the superdroplet.
+   */
   KOKKOS_INLINE_FUNCTION
   void set_coord2(const double i_coord2) { coord2 = i_coord2; }
 
+  /**
+   * @brief Increments to the spatial coordinates of the superdroplet.
+   *
+   * Add delta 3, 2 and 1 to coord3, 2 and 1 respectively.
+   */
   KOKKOS_INLINE_FUNCTION
   void increment_coords(const double delta3, const double delta1, const double delta2) {
     coord3 += delta3;
