@@ -16,3 +16,4 @@ and collision-coalescence.
    :caption: Contents:
 
    superdrop
+   superdrop_ids
