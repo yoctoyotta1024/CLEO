@@ -56,18 +56,24 @@ class GenSuperdrop {
    * to 0.0. For example, if the model is 1-D, only coord3 is obtained from the initial data vector;
    * coord1 and coord2 are set to 0.0.
    *
-   * @param kk The index of the superdroplet in the initial
+   * @param kk The index of the super-droplet in the initial
    * data (0 <= kk < total number of superdrops).
    * @return An array containing the kk'th superdroplet's spatial
    * coordinates (coord3, coord1, coord2).
    */
   std::array<double, 3> coords_at(const unsigned int kk) const;
 
+  /* helper function to return a superdroplet's attributes
+  at position kk in the initial conditions data. All
+  superdroplets created with same solute properties */
   /**
-   * @brief Get the attributes of the kk'th superdrop.
+   * @brief Function returns a superdroplet's attributes
+   * from position 'kk' in the initial conditions data. All
+   * super-droplets have the same solute properties.
    *
-   * @param kk The index of the superdrop (0 <= kk < total number of superdrops).
-   * @return The attributes of the superdrop at index 'kk'.
+   * @param kk The index of the super-droplet in the initial
+   * data (0 <= kk < total number of superdrops).
+   * @return The attributes of the superdrop from index 'kk'.
    */
   SuperdropAttrs attrs_at(const unsigned int kk) const;
 
@@ -88,13 +94,13 @@ class GenSuperdrop {
   }
 
   /**
-   * @brief Generate a superdrop using initial data for the kk'th superdrop.
+   * @brief Generate a super-droplet using initial data for the kk'th superdrop.
    *
-   * This function returns a superdrop generated using the initial conditions
-   * for the kk'th superdrop.
+   * This function returns a superdrop generated from the specified position
+   * 'kk' in the initial conditions data.
    *
    * @param kk The index of the superdrop to generate.
-   * @return The generated superdrop.
+   * @return The generated super-droplet.
    */
   Superdrop operator()(const unsigned int kk) const;
 };
