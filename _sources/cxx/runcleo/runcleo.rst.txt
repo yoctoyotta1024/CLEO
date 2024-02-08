@@ -1,4 +1,4 @@
-RUNCLEO
+RunCLEO
 =======
 
 Header file: ``<libs/runcleo/runcleo.hpp>``

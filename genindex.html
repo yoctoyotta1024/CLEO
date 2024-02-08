@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 --><title>Index - CLEO 4.0 documentation</title>
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 --><title>Index - CLEO 4.0 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -212,10 +212,15 @@
 <li class="toctree-l2"><a class="reference internal" href="pySD/writebinary.html">WRITEBINARY</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="cxx/cxx.html">API: C++ Libraries</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Libraries</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="cxx/runcleo/runcleolib.html">RunCLEO</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/runcleo.html">RUNCLEO</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="cxx/cxx.html">API: C++ Library</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="cxx/runcleo/runcleomod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/runcleo.html">RunCLEO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/sdmmethods.html">SDMMethods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cxx/runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
 </ul>
 </li>
 </ul>
@@ -287,13 +292,17 @@
 </li>
         <li><a href="pySD/initsuperdropsbinary_src/attrsgen.html#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.check_totalnumconc">check_totalnumconc() (pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator method)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="pySD/writebinary.html#pySD.writebinary.check_validinputs">check_validinputs() (in module pySD.writebinary)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="pySD/gbxboundariesbinary_src/read_gbxboundaries.html#pySD.gbxboundariesbinary_src.read_gbxboundaries.coords_forgridboxfaces">coords_forgridboxfaces() (in module pySD.gbxboundariesbinary_src.read_gbxboundaries)</a>
 </li>
         <li><a href="pySD/initsuperdropsbinary_src/create_initsuperdrops.html#pySD.initsuperdropsbinary_src.create_initsuperdrops.create_allsuperdropattrs">create_allsuperdropattrs() (in module pySD.initsuperdropsbinary_src.create_initsuperdrops)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers">create_gbxs (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds">create_supers (C++ function)</a>
 </li>
         <li><a href="pySD/initsuperdropsbinary_src/create_initsuperdrops.html#pySD.initsuperdropsbinary_src.create_initsuperdrops.ctype_compatible_attrs">ctype_compatible_attrs() (in module pySD.initsuperdropsbinary_src.create_initsuperdrops)</a>
 </li>
@@ -361,14 +370,54 @@
 </li>
         <li><a href="pySD/initsuperdropsbinary_src/rgens.html#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample">generate_radiisample() (pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen method)</a>
 </li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv410GenGridbox">GenGridbox (C++ class)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4N10GenGridbox11GbxindexGenE">GenGridbox::GbxindexGen (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4I0EN10GenGridbox10GenGridboxERK12GbxInitConds">GenGridbox::GenGridbox (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxKjRK7GbxMapsK12viewd_supers">GenGridbox::operator() (C++ function)</a>, <a href="cxx/runcleo/creategbxs.html#_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxRK14HostTeamMemberKjRK7GbxMapsK12viewd_supersKN17viewd_constsupers10HostMirrorE">[1]</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4N10GenGridbox6presssE">GenGridbox::presss (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4N10GenGridbox6qcondsE">GenGridbox::qconds (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4N10GenGridbox5qvapsE">GenGridbox::qvaps (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4NK10GenGridbox8state_atEKjKd">GenGridbox::state_at (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4N10GenGridbox5tempsE">GenGridbox::temps (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4N10GenGridbox5uvelsE">GenGridbox::uvels (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4N10GenGridbox5vvelsE">GenGridbox::vvels (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4N10GenGridbox5wvelsE">GenGridbox::wvels (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv412GenSuperdrop">GenSuperdrop (C++ class)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv4NK12GenSuperdrop8attrs_atEKj">GenSuperdrop::attrs_at (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv4NK12GenSuperdrop9coords_atEKj">GenSuperdrop::coords_at (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv4I0EN12GenSuperdrop12GenSuperdropERK18SuperdropInitConds">GenSuperdrop::GenSuperdrop (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv4N12GenSuperdrop8initdataE">GenSuperdrop::initdata (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv4N12GenSuperdrop10nspacedimsE">GenSuperdrop::nspacedims (C++ member)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv4NK12GenSuperdropclEKj">GenSuperdrop::operator() (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv4N12GenSuperdrop7sdIdGenE">GenSuperdrop::sdIdGen (C++ member)</a>
+</li>
         <li><a href="pySD/sdmout_src/pysetuptxt.html#pySD.sdmout_src.pysetuptxt.get_config">get_config() (in module pySD.sdmout_src.pysetuptxt)</a>
 </li>
         <li><a href="pySD/sdmout_src/pysetuptxt.html#pySD.sdmout_src.pysetuptxt.get_consts">get_consts() (in module pySD.sdmout_src.pysetuptxt)</a>
 </li>
         <li><a href="pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.get_COORD0_from_constsfile">get_COORD0_from_constsfile() (in module pySD.gbxboundariesbinary_src.create_gbxboundaries)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.get_dimless_halfcoords">get_dimless_halfcoords() (in module pySD.gbxboundariesbinary_src.create_gbxboundaries)</a>
 </li>
         <li><a href="pySD/gbxboundariesbinary_src/read_gbxboundaries.html#pySD.gbxboundariesbinary_src.read_gbxboundaries.get_domainvol_from_gridfile">get_domainvol_from_gridfile() (in module pySD.gbxboundariesbinary_src.read_gbxboundaries)</a>
@@ -399,11 +448,23 @@
   <h2>I</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="pySD/initsuperdropsbinary_src/create_initsuperdrops.html#pySD.initsuperdropsbinary_src.create_initsuperdrops.initSDsinputsdict">initSDsinputsdict() (in module pySD.initsuperdropsbinary_src.create_initsuperdrops)</a>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers">initialise_gbxs (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv4I_11GridboxMapsE23initialise_gbxs_on_hostvRK7GbxMapsRK10GenGridboxK12viewd_supersK9viewh_gbx">initialise_gbxs_on_host (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv4I0E17initialise_supers12viewd_supersRK18SuperdropInitConds">initialise_supers (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv425initialise_supers_on_hostRK12GenSuperdropK12viewd_supers">initialise_supers_on_host (C++ function)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="pySD/initsuperdropsbinary_src/create_initsuperdrops.html#pySD.initsuperdropsbinary_src.create_initsuperdrops.initSDsinputsdict">initSDsinputsdict() (in module pySD.initsuperdropsbinary_src.create_initsuperdrops)</a>
+</li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv419is_gbxinit_completeK6size_t12dualview_gbx">is_gbxinit_complete (C++ function)</a>
+</li>
         <li><a href="pySD/initsuperdropsbinary_src/create_initsuperdrops.html#pySD.initsuperdropsbinary_src.create_initsuperdrops.is_sdgbxindex_correct">is_sdgbxindex_correct() (in module pySD.initsuperdropsbinary_src.create_initsuperdrops)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv419is_sdsinit_completeK17viewd_constsupersK6size_t">is_sdsinit_complete (C++ function)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -518,6 +579,10 @@
 </li>
         <li><a href="pySD/gbxboundariesbinary_src/read_gbxboundaries.html#pySD.gbxboundariesbinary_src.read_gbxboundaries.print_domain_info">print_domain_info() (in module pySD.gbxboundariesbinary_src.read_gbxboundaries)</a>
 </li>
+        <li><a href="cxx/runcleo/creategbxs.html#_CPPv410print_gbxsK14viewh_constgbx">print_gbxs (C++ function)</a>
+</li>
+        <li><a href="cxx/runcleo/createsupers.html#_CPPv412print_supersK17viewd_constsupers">print_supers (C++ function)</a>
+</li>
         <li><a href="pySD/initsuperdropsbinary_src/attrsgen.html#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.print_totalconc">print_totalconc() (pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator method)</a>
 </li>
         <li>
@@ -555,6 +620,8 @@
           <li><a href="pySD/initsuperdropsbinary_src/attrsgen.html#module-pySD.initsuperdropsbinary_src.attrsgen">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     pySD.initsuperdropsbinary_src.crdgens
 
@@ -562,8 +629,6 @@
           <li><a href="pySD/initsuperdropsbinary_src/crdgens.html#module-pySD.initsuperdropsbinary_src.crdgens">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     pySD.initsuperdropsbinary_src.create_initsuperdrops
 
