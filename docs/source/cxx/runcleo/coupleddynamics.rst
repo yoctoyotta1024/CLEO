@@ -6,5 +6,3 @@ Header file: ``<libs/runcleo/coupleddynamics.hpp>``
 
 .. doxygenconcept:: CoupledDynamics
    :project: runcleo
-   :outline:
-   :no-link:
