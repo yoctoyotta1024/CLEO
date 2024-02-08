@@ -15,9 +15,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * file for structure(s) to create a view of
- * superdroplets (on device) using some
- * initial conditions
+ * classes and templated functions required by RunCLEO to create a view of superdroplets
+ * (on device) using some initial conditions
  */
 
 #ifndef LIBS_RUNCLEO_CREATESUPERS_HPP_
@@ -44,9 +43,9 @@
  */
 class GenSuperdrop {
  private:
-  unsigned int nspacedims;   ///< Number of spatial dimensions.
-  std::shared_ptr<Superdrop::IDType::Gen> sdIdGen;   ///< Pointer to super-droplet ID generator.
-  InitSupersData initdata;   ///< Data for initialising superdrops.
+  unsigned int nspacedims;   /**< Number of spatial dimensions. */
+  std::shared_ptr<Superdrop::IDType::Gen> sdIdGen;   /**< Pointer to super-droplet ID generator. */
+  InitSupersData initdata;   /**< Data for initialising superdrops. */
 
   /**
    * @brief Returns initial spatial coordinates of the kk'th super-droplet.

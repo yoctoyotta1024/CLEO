@@ -15,8 +15,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * some functionality for structure(s) to
- * create a view of superdroplets (on device)
+ * non-templated functionality required by RunCLEO to create a view of superdroplets (on device)
  * using some initial conditions
  */
 
