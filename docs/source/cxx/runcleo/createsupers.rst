@@ -1,5 +1,5 @@
-CreateSupers Module
-===================
+CreateSupers Sub-Module
+=======================
 
 Header file: ``<libs/runcleo/createsupers.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/createsupers.hpp>`_

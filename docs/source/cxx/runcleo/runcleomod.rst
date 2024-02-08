@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-RunCLEO Library
-===============
+RunCLEO Module
+==============
 
-This library of CLEO contains the most generic templated types used to
+This module of CLEO contains the most generic templated types used to
 construct and run CLEO as a Super-Droplet Model (SDM) coupled to a Dynamics Solver.
 
 .. toctree::
