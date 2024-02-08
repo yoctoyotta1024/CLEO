@@ -107,9 +107,17 @@ class GenSuperdrop {
 template <typename SuperdropInitConds>
 viewd_supers create_supers(const SuperdropInitConds &sdic);
 
-/* return an initialised view of superdrops on
-device memory by copying a host mirror view that
-is initialised using the SuperdropInitConds instance */
+/**
+ * @brief Return an initialised view of superdrops in device memory.
+ *
+ * This function initialises a view of superdrops in device memory by creating
+ * a view on the device and copying a host mirror view that is initialised using
+ * the `SuperdropInitConds` instance.
+ *
+ * @tparam SuperdropInitConds The type of the super-droplets' initial conditions data.
+ * @param sdic The instance of the super-droplets' initial conditions data.
+ * @return A view of superdrops in device memory.
+ */
 template <typename SuperdropInitConds>
 viewd_supers initialise_supers(const SuperdropInitConds &sdic);
 
@@ -162,19 +170,27 @@ viewd_supers create_supers(const SuperdropInitConds &sdic) {
   return supers;
 }
 
-/* return an initialised view of superdrops on
-device memory by copying a host mirror view that
-is initialised using the SuperdropInitConds instance */
+/**
+ * @brief Return an initialised view of superdrops in device memory.
+ *
+ * This function initialises a view of superdrops in device memory by creating
+ * a view on the device and copying a host mirror view that is initialised using
+ * the `SuperdropInitConds` instance.
+ *
+ * @tparam SuperdropInitConds The type of the super-droplets' initial conditions data.
+ * @param sdic The instance of the super-droplets' initial conditions data.
+ * @return A view of superdrops in device memory.
+ */
 template <typename SuperdropInitConds>
 viewd_supers initialise_supers(const SuperdropInitConds &sdic) {
-  /* create superdrops view on device */
+  // create superdrops view on device
   viewd_supers supers("supers", sdic.get_totnsupers());
 
-  /* initialise a mirror of supers view on host*/
+  // initialise a mirror of superdrops view on host
   const GenSuperdrop gen(sdic);
   auto h_supers = initialise_supers_on_host(gen, supers);
 
-  /* copy host view to device (h_supers to supers) */
+  // Copy host view to device (h_supers to supers)
   Kokkos::deep_copy(supers, h_supers);
 
   return supers;
