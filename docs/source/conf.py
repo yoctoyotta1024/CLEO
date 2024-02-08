@@ -6,7 +6,7 @@ Created Date: Monday 20th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Sunday 28th January 2024
+Last Modified: Thursday 8th February 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -75,9 +75,10 @@ exclude_patterns = []
 # Integrate doxygen with sphinx via breathe
 breathe_projects = {
     "runcleo"          : "../build/doxygen/xml/",
+    "superdrops"       : "../build/doxygen/xml/",
 }
 
-breathe_default_project = 'myproject'
+breathe_default_project = 'proj'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
