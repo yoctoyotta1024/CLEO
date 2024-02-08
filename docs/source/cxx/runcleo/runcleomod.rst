@@ -19,3 +19,4 @@ construct and run CLEO as a Super-Droplet Model (SDM) coupled to a Dynamics Solv
    couplingcomms
    initialconditions
    createsupers
+   creategbxs

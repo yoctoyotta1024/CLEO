@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: creategbxs.hpp
@@ -7,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Thursday 8th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,10 +41,6 @@
 #include "gridboxes/supersingbx.hpp"
 #include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
-
-template <GridboxMaps GbxMaps, typename GbxInitConds>
-dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
-                         const viewd_supers totsupers);
 
 class GenGridbox {
  private:
@@ -92,6 +89,10 @@ class GenGridbox {
     return Gridbox(gbxindex, state, totsupers, refs);
   }
 };
+
+template <GridboxMaps GbxMaps, typename GbxInitConds>
+dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
+                         const viewd_supers totsupers);
 
 /* initialise the host view of gridboxes
 using some data from a GbxInitConds instance
