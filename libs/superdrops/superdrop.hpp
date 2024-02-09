@@ -198,8 +198,7 @@ class Superdrop {
    *
    * This function sets the value of the super-droplet's radius to the specified value.
    *
-   * Note: see also  change_radius which prevents setting super-droplet
-   * radius less than its dry radius.
+   * Note: see also change_radius which limits super-droplet radius to its dry radius.
    *
    * @param i_radius The value to set for radius.
    */
