@@ -185,6 +185,10 @@ class Superdrop {
 
   /**
    * @brief Set the multiplicity 'xi' of the super-droplet.
+   *
+   * This function sets the value of the super-droplet's multiplicity 'xi' to the specified value.
+   *
+   * @param i_xi The value to set for xi
    */
   KOKKOS_INLINE_FUNCTION
   void set_xi(const uint64_t i_xi) { attrs.set_xi(i_xi); }
@@ -192,14 +196,22 @@ class Superdrop {
   /**
    * @brief Set the radius of the super-droplet.
    *
+   * This function sets the value of the super-droplet's radius to the specified value.
+   *
    * Note: see also  change_radius which prevents setting super-droplet
-   * radius less than its dry radius
+   * radius less than its dry radius.
+   *
+   * @param i_radius The value to set for radius.
    */
   KOKKOS_INLINE_FUNCTION
   void set_radius(const double i_radius) { attrs.set_radius(i_radius); }
 
   /**
-   * @brief Set the mass of solute in the super-droplet.
+   * @brief Sets the value of the super-droplet's mass of solute.
+   *
+   * This function sets the value of the super-droplet's solute mass to the specified value.
+   *
+   * @param i_msol The value to set for msol.
    */
   KOKKOS_INLINE_FUNCTION
   void set_msol(const double i_msol) { attrs.set_msol(i_msol); }
@@ -207,25 +219,43 @@ class Superdrop {
   /**
    * @brief Set the radius of the super-droplet no less than its dry radius.
    *
+   * This function sets the value of the super-droplet's radius to the specified value
+   * if its new radius >= its dry radius. Return is difference in radius.
+   *
    * Note: see also set_radius which allows super-droplet radius less than its dry radius
+   *
+   * @param newr The value to set the radius >= dry radius.
+   * @return change in radius of the super-droplet.
    */
   KOKKOS_INLINE_FUNCTION
   double change_radius(const double newr) { return attrs.change_radius(newr); }
 
   /**
-   * @brief Set the Gridbox Index of the super-droplet.
+   * @brief Sets the value of the super-droplet's Gridbox index.
+   *
+   * This function sets the value of the super-droplet's sdgbxindex to the specified value.
+   *
+   * @param i_sdgbxindex The value to set for sdgbxindex.
    */
   KOKKOS_INLINE_FUNCTION
   void set_sdgbxindex(const unsigned int i_sdgbxindex) { sdgbxindex = i_sdgbxindex; }
 
   /**
-   * @brief Set the 3rd spatial coordinate of the superdroplet.
+   * @brief Sets the value of the 3rd coordinate.
+   *
+   * This function sets the value of coord3 of the super-droplet to the specified value.
+   *
+   * @param i_coord3 The value to set for coord3.
    */
   KOKKOS_INLINE_FUNCTION
   void set_coord3(const double i_coord3) { coord3 = i_coord3; }
 
   /**
-   * @brief Set the 1st spatial coordinate of the superdroplet.
+   * @brief Sets the value of the 1st coordinate.
+   *
+   * This function sets the value of coord1 of the super-droplet to the specified value.
+   *
+   * @param i_coord1 The value to set for coord1.
    */
   KOKKOS_INLINE_FUNCTION
   void set_coord1(const double i_coord1) { coord1 = i_coord1; }
@@ -233,8 +263,7 @@ class Superdrop {
   /**
    * @brief Sets the value of the 2nd coordinate.
    *
-   * This function sets the value of coord2 of the super-droplet
-   * to the specified value.
+   * This function sets the value of coord2 of the super-droplet to the specified value.
    *
    * @param i_coord2 The value to set for coord2.
    */
@@ -244,8 +273,8 @@ class Superdrop {
   /**
    * @brief Increments the coordinates by the specified deltas.
    *
-   * This function increments the coordinates of the super-droplet by the specified
-   * deltas along each dimension.
+   * This function increments the coordinates of the super-droplet by the specified deltas along
+   * each dimension.
    *
    * @param delta3 The delta for the third coordinate (coord3).
    * @param delta1 The delta for the first coordinate (coord1).
