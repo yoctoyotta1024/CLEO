@@ -6,3 +6,21 @@ Header file: ``<libs/superdrops/thermodynamic_equations.hpp>``
 
 .. doxygenfile:: thermodynamic_equations.hpp
    :project: superdrops
+
+.. doxygen:: moist_specifc_heat
+   :project: superdrops
+
+.. doxygenfunction:: supersaturation_ratio
+   :project: superdrops
+
+.. doxygenfunction:: kohler_factors
+   :project: superdrops
+
+.. doxygenfunction:: saturation_pressure
+   :project: superdrops
+
+.. doxygenfunction:: saturation_pressure_murphy_koop
+   :project: superdrops
+
+.. doxygenfunction:: diffusion_factor
+   :project: superdrops
