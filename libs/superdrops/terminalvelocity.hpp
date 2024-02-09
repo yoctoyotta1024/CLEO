@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: terminalvelocity.hpp
@@ -7,18 +8,16 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th January 2024
+ * Last Modified: Friday 9th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Header file for terminal velocity
- * formulas (used by some types of superdroplet
- * motion and collision kernels). Formulas are
- * contained in structures which satisfy
- * requirements of the VelocityFormula concept
+ * Header file for terminal velocity formulas (for example used by some types of super-droplet
+ * motion and collision kernels). Formulas are contained in structures which satisfy the
+ * constraints of the VelocityFormula concept
  */
 
 #ifndef LIBS_SUPERDROPS_TERMINALVELOCITY_HPP_
@@ -31,98 +30,149 @@
 
 namespace dlc = dimless_constants;
 
-/* Objects that are of type 'VelocityFormula'
-take a superdroplet and returns something convertible
-to a double (hopefully a velocity!) */
+/**
+ * @brief Concept representing a velocity formula for calculating a droplet's terminal velocity.
+ *
+ * Objects that are of type 'VelocityFormula' take a superdroplet and return something
+ * convertible to a double (should be its terminal velocity!).
+ */
 template <typename V>
 concept VelocityFormula = requires(V v, const Superdrop &drop) {
   { v(drop) } -> std::convertible_to<double>;
 };
 
+/**
+ * @brief Null terminal velocity formula returning zero velocity.
+ */
 struct NullTerminalVelocity {
-  /* returns 0.0 as terminal velocity of a superdroplet */
+  /**
+   * @brief Returns zero as the terminal velocity of a droplet.
+   *
+   * @param drop The super-droplet.
+   * @return 0.0
+   */
   KOKKOS_INLINE_FUNCTION
   double operator()(const Superdrop &drop) const { return 0.0; }
 };
 
+/**
+ * @brief Terminal velocity formula as in Simmel et al. (2002).
+ */
 struct SimmelTerminalVelocity {
-  /* returns mass of a superdroplet as if it' s all water[g],
-  for use as 'x' in Simmel et al. 2002 equation (14) */
+  /**
+   * @brief Returns the mass of a droplet as if it's all water [gramms] to use as 'x' according to
+   * Simmel et al. 2002 equation (14).
+   *
+   * @param radius The radius of the droplet.
+   * @return The mass of the droplet as if it's all water [gramms].
+   */
   KOKKOS_FUNCTION
   double watermass(const double radius) const;
 
-  /* returns (dimensionless) terminal velocity of a superdroplet
-  according to Simmel et al. 2002. This is semi-empirical formula
-  adapted  from work of Gunn and Kinzer, 1949 and Beard, 1976.
-  Used in Simmel's form for Long 1974's hydrodynamic kernel.
-  Note: Improvement can be made by following Arabas et al. 2015 and
-  Morrison et al. 2005 in multiplying this terminal velocity by the
-  density ratio, rho_dry0/rho_dry, of dry air under standard
-  conditions (rho_dry0) and in current state (rho_dry). */
+  /**
+   * @brief Returns the (dimensionless) terminal velocity of a droplet according to
+   * Simmel et al. (2002).
+   *
+   * Simmel et al. 2002 formula is a semi-empirical adapted from the work of Gunn and Kinzer (1949)
+   * and Beard (1976) and used in Simmel's parmeterisation of Long 1974's hydrodynamic collision
+   * kernel. For drops with radius >= 1.74mm, terminal velocity is 9.17m/s.
+   *
+   * Note: Improvement could be made by following Arabas et al. 2015 and Morrison et al. 2005 in
+   * multiplying the terminal velocity by the density ratio, rho_dry0/rho_dry, of dry air under
+   * standard conditions (rho_dry0) and in current state (rho_dry).
+   *
+   * @param drop The superdroplet.
+   * @return The (dimensionless) terminal velocity.
+   */
   KOKKOS_FUNCTION
   double operator()(const Superdrop &drop) const;
 };
 
+/**
+ * @brief Terminal velocity formula based on Rogers and Yau (1989) textbook.
+ */
 struct RogersYauTerminalVelocity {
-  /* returns (dimensionless) terminal velocity of a superdroplet
-  according to formulas based off Stokes' terminal velocity.
-  See Rogers and Yau 1989 textbook "a short course in cloud physics"
-  chapter 8. Formula valid at low Reynolds No.s for spherical droplets
-  but here formula is used beyond validity. For drops with
-  radius >= 2mm, terminal velocity is that of a 2mm
-  sized droplet = 9m/s. */
+  /**
+   * @brief Returns the terminal velocity of a superdroplet according to Rogers and Yau (1989).
+   *
+   * Formula from Rogers and Yau 1989 textbook "a short course in cloud physics" chapter 8. For
+   * small droplets formula parameterises Stokes' terminal velocity (valid at low Reynolds numbers
+   * for spherical droplets). For drops with radius >= 2mm, terminal velocity is 9m/s.
+   *
+   * @param drop The superdroplet.
+   * @return The (dimensionless) terminal velocity.
+   */
   KOKKOS_FUNCTION
   double operator()(const Superdrop &drop) const;
 };
 
+/**
+ * @brief Terminal velocity formula based on Rogers et al. (1993).
+ */
 struct RogersGKTerminalVelocity {
-  /* returns (dimensionless) terminal velocity of a superdroplet.
-  See "Comparison of Raindrop Size Distributions Measured by
-  Radar Wind Profiler and by Airplane" by  R. R. Rogers,
-  D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993).
-  formulation is apporximation of Gunn and Kinzer (1949)
-  tabulated values  */
+  /**
+   * @brief Returns the terminal velocity of a droplet according to Rogers et al. (1993).
+   *
+   * See "Comparison of Raindrop Size Distributions Measured by Radar Wind Profiler and by Airplane"
+   * by  R. R. Rogers, D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993).
+   * Formulation is approximation of Gunn and Kinzer (1949) tabulated values.
+   *
+   * @param drop The superdroplet.
+   * @return The (dimensionless) terminal velocity.
+   */
   KOKKOS_FUNCTION
   double operator()(const Superdrop &drop) const;
 };
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
-/* returns mass of a superdroplet as if it' s all water[g],
-for use as 'x' in Simmel et al. 2002 equation (14) */
+/**
+ * @brief Returns the mass of a droplet as if it's all water [gramms] to use as 'x' according to
+ * Simmel et al. 2002 equation (14).
+ *
+ * @param radius The radius of the droplet.
+ * @return The mass of the droplet as if it's all water [gramms].
+ */
 KOKKOS_FUNCTION
 double SimmelTerminalVelocity::watermass(const double radius) const {
-  constexpr double massconst(4.0 / 3.0 * Kokkos::numbers::pi * dlc::Rho_l);  // 4/3 * pi * density
+  // constant = 4.0/3.0 * pi * density of liquid water
+  constexpr double massconst(4.0 / 3.0 * Kokkos::numbers::pi * dlc::Rho_l);
 
   const auto mass = massconst * radius * radius * radius;
 
   return mass * dlc::MASS0grams;  // convert dimensionless mass into grams [g]
 }
 
-/* returns (dimensionless) terminal velocity of a superdroplet
-according to Simmel et al. 2002. This is semi-empirical formula
-adapted  from work of Gunn and Kinzer, 1949 and Beard, 1976.
-Used in Simmel's form for Long 1974's hydrodynamic kernel.
-Note: Improvement can be made by following Arabas et al. 2015 and
-Morrison et al. 2005 in multiplying this terminal velocity by the
-density ratio, rho_dry0/rho_dry, of dry air under standard
-conditions (rho_dry0) and in current state (rho_dry). */
+/**
+ * @brief Returns the (dimensionless) terminal velocity of a droplet according to
+ * Simmel et al. (2002).
+ *
+ * Simmel et al. 2002 formula is a semi-empirical adapted from the work of Gunn and Kinzer (1949)
+ * and Beard (1976) and used in Simmel's parmeterisation of Long 1974's hydrodynamic collision
+ * kernel. For drops with radius >= 1.74mm, terminal velocity is 9.17m/s.
+ *
+ * Note: Improvement could be made by following Arabas et al. 2015 and Morrison et al. 2005 in
+ * multiplying the terminal velocity by the density ratio, rho_dry0/rho_dry, of dry air under
+ * standard conditions (rho_dry0) and in current state (rho_dry).
+ *
+ * @param drop The superdroplet.
+ * @return The (dimensionless) terminal velocity.
+ */
 KOKKOS_FUNCTION
 double SimmelTerminalVelocity::operator()(const Superdrop &drop) const {
-  /* For reference, see table 2 of Simmel et al. 2002 */
-  /* dimensionless values for radii thresholds*/
+  /* dimensionless values for radii thresholds, For reference, see table 2 of Simmel et al. 2002 */
   constexpr double r1 = 6.7215e-5 / dlc::R0;
   constexpr double r2 = 7.5582e-4 / dlc::R0;
   constexpr double r3 = 1.73892e-3 / dlc::R0;
 
   /* alpha constants converted from [g^-beta m s^-1] into [g^-beta] units */
   constexpr double VELCONST =
-      (100.0 * dlc::W0);  // convert from [cm/s] into dimensionless velocity []
+      (100.0 * dlc::W0);  // convert from [cm/s] into dimensionless velocity
   constexpr double a1 = 457950 / VELCONST;
   constexpr double a2 = 4962 / VELCONST;
   constexpr double a3 = 1732 / VELCONST;
   constexpr double a4 = 917 / VELCONST;
 
-  const auto radius = drop.get_radius();  // dimensionless droplet radius []
+  const auto radius = drop.get_radius();  // dimensionless droplet radius
   if (radius >= r3) {
     return a4;
   } else {
@@ -138,13 +188,16 @@ double SimmelTerminalVelocity::operator()(const Superdrop &drop) const {
   }
 }
 
-/* returns (dimensionless) terminal velocity of a superdroplet
-according to formulas based off Stokes' terminal velocity.
-See Rogers and Yau 1989 textbook "a short course in cloud physics"
-chapter 8. Formula valid at low Reynolds No.s for spherical droplets
-but here formula is used beyond validity. For drops with
-radius >= 2mm, terminal velocity is that of a 2mm
-sized droplet = 9m/s. */
+/**
+ * @brief Returns the terminal velocity of a droplet according to Rogers et al. (1993).
+ *
+ * See "Comparison of Raindrop Size Distributions Measured by Radar Wind Profiler and by Airplane"
+ * by  R. R. Rogers, D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993).
+ * Formulation is approximation of Gunn and Kinzer (1949) tabulated values.
+ *
+ * @param drop The superdroplet.
+ * @return The (dimensionless) terminal velocity.
+ */
 KOKKOS_FUNCTION
 double RogersYauTerminalVelocity::operator()(const Superdrop &drop) const {
   constexpr double r1 = 3e-5 / dlc::R0;
@@ -169,12 +222,16 @@ double RogersYauTerminalVelocity::operator()(const Superdrop &drop) const {
   }
 }
 
-/* returns (dimensionless) terminal velocity of a superdroplet.
-See "Comparison of Raindrop Size Distributions Measured by
-Radar Wind Profiler and by Airplane" by  R. R. Rogers,
-D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund.
-formulation is apporximation of Gunn and Kinzer (1949)
-tabulated values. Note formulation in terms of radius not diameter */
+/**
+ * @brief Returns the terminal velocity of a droplet according to Rogers et al. (1993).
+ *
+ * See "Comparison of Raindrop Size Distributions Measured by Radar Wind Profiler and by Airplane"
+ * by  R. R. Rogers, D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993).
+ * Formulation is approximation of Gunn and Kinzer (1949) tabulated values.
+ *
+ * @param drop The superdroplet.
+ * @return The (dimensionless) terminal velocity.
+ */
 KOKKOS_FUNCTION
 double RogersGKTerminalVelocity::operator()(const Superdrop &drop) const {
   constexpr double radius0 =
