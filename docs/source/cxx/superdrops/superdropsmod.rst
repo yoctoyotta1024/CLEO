@@ -17,3 +17,4 @@ and collision-coalescence.
 
    superdrop
    superdrop_ids
+   superdrop_attrs
