@@ -1,5 +1,5 @@
-MicrophysicalProcess
-====================
+Microphysical Process
+=====================
 
 Header file: ``<libs/superdrops/microphysicalprocess.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/microphysicalprocess.hpp>`_
