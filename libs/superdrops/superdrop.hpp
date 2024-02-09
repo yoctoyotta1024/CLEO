@@ -220,7 +220,8 @@ class Superdrop {
    * @brief Set the radius of the super-droplet no less than its dry radius.
    *
    * This function sets the value of the super-droplet's radius to the specified value
-   * if its new radius >= its dry radius. Return is difference in radius.
+   * if its new radius >= its dry radius. Return is difference in radius accoding to super-droplet's
+   * attributes struct.
    *
    * Note: see also set_radius which allows super-droplet radius less than its dry radius
    *
