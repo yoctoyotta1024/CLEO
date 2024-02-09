@@ -44,7 +44,7 @@
  */
 template <class DeviceType>
 struct URBG {
-  Kokkos::Random_XorShift64<DeviceType> gen;
+  Kokkos::Random_XorShift64<DeviceType> gen;   /**< Kokkos random number generator */
 
   /**
    * @brief Draws a random 64-bit unsigned integer (uint64_t) from a uniform distribution in the
