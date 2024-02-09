@@ -15,7 +15,7 @@ and collision-coalescence.
    :maxdepth: 1
    :caption: Contents:
 
-   motion
+   microphysical_process
    state
    superdrop
    superdrop_ids
