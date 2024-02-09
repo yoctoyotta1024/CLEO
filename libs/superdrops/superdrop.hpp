@@ -36,10 +36,10 @@
 class Superdrop {
  private:
   unsigned int sdgbxindex;  /**< Index of the gridbox the superdrop occupies */
-  double coord3;            /**< 3rd spatial coordinate of the superdroplet (vertical) */
-  double coord1;            /**< 1st spatial coordinate of the superdroplet (eastwards) */
-  double coord2;            /**< 2nd spatial coordinate of the superdroplet (northwards) */
-  SuperdropAttrs attrs;     /**< Attributes of the superdroplet */
+  double coord3;            /**< 3rd spatial coordinate of the superdrop (vertical) */
+  double coord1;            /**< 1st spatial coordinate of the superdrop (eastwards) */
+  double coord2;            /**< 2nd spatial coordinate of the superdrop (northwards) */
+  SuperdropAttrs attrs;     /**< Attributes of the superdrop */
 
  public:
   using IDType = IntID;     /**< Type of ID to identify superdrop via 8 byte integer */
