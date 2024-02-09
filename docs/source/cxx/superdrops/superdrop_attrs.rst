@@ -1,4 +1,4 @@
-SuperdropAttriibutes
+Superdrop Attributes
 ====================
 
 Header file: ``<libs/superdrops/superdrop_attrs.hpp>``

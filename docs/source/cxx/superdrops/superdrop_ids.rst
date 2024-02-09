@@ -1,5 +1,5 @@
-SuperdropIDs
-============
+Superdrop IDs
+=============
 
 Header file: ``<libs/superdrops/superdrop_ids.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/superdrop_ids.hpp>`_
