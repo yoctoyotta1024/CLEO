@@ -15,6 +15,7 @@ and collision-coalescence.
    :maxdepth: 1
    :caption: Contents:
 
+   motion
    state
    superdrop
    superdrop_ids
