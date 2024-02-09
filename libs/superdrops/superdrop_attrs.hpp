@@ -220,23 +220,35 @@ struct SuperdropAttrs {
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
-/* Update droplet radius to newr or dry_radius() and
-return resultant change in radius (delta_radius = newradius-radius).
-Prevents drops shrinking further once they are size of dry_radius(). */
+/**
+ * @brief Change the radius of droplet.
+ *
+ * Update droplet radius to larger out of new radius 'newr' or dry radius and return the
+ * resultant change in radius = new radius - old radius. Prevents drops shrinking further once
+ * they are size of dry radius.
+ *
+ * @param newr The new radius to set.
+ * @return The change in radius.
+ */
 KOKKOS_INLINE_FUNCTION
 double SuperdropAttrs::change_radius(const double newr) {
   const auto oldradius = radius;
 
-  /*  if droplets are dry, do not shrink further */
+  /* if droplets are dry, do not shrink further */
   const auto dryr = dryradius();
-  radius = Kokkos::fmax(
-      newr, dryr);  // Kokkos compatible equivalent to std::max() for floating point numbers
+  radius = Kokkos::fmax(newr, dryr);  // Kokkos equivalent to std::max() for floats (gpu compatible)
 
   /* return change in radius due to growth/shrinking of droplet */
   return radius - oldradius;
 }
 
-/* returns (dimensionless) total droplet mass = water + dry areosol  */
+/**
+ * @brief Get the total droplet mass.
+ *
+ * Calculates and returns total droplet mass = water + dry areosol.
+ *
+ * @return The total droplet mass.
+ */
 KOKKOS_INLINE_FUNCTION
 double SuperdropAttrs::mass() const {
   constexpr double massconst(4.0 / 3.0 * Kokkos::numbers::pi * dlc::Rho_l);  // 4/3 * pi * density
