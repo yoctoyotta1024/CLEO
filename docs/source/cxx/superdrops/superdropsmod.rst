@@ -19,3 +19,4 @@ and collision-coalescence.
    superdrop_ids
    superdrop_attrs
    terminalvelocity
+   thermodynamic_equations
