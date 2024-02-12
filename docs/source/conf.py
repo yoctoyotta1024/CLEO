@@ -6,7 +6,7 @@ Created Date: Monday 20th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 8th February 2024
+Last Modified: Monday 12th February 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -92,3 +92,8 @@ html_theme = 'furo'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# To include the date of the last visit in Sphinx documentation, use the last
+# updated feature of Sphinx. This feature automatically adds the last modification
+# date of the source file to the rendered HTML output.
+html_last_updated_fmt = '%d %B %Y'
