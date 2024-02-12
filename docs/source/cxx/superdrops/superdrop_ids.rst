@@ -18,5 +18,8 @@ Header file: ``<libs/superdrops/superdrop_ids.hpp>``
    :members:
    :undoc-members:
 
-.. doxygenfunction:: operator<< // WIP TODO(CB) fix error
+.. doxygenfunction:: operator<<(std::ostream &os, const EmptyID &id)
+   :project: superdrops
+
+.. doxygenfunction:: operator<<(std::ostream &os, const IntID &id)
    :project: superdrops
