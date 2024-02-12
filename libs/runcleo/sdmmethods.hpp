@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Sunday 28th January 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -46,14 +46,14 @@
  *
  * @tparam GbxMaps Type of the GridboxMaps.
  * @tparam Microphys Type of the MicrophysicalProcess.
- * @tparam M Type of the Motion.
+ * @tparam M Type of super-droplets' Motion.
  * @tparam Obs Type of the Observer.
  */
 template <GridboxMaps GbxMaps, MicrophysicalProcess Microphys, Motion<GbxMaps> M, Observer Obs>
 class SDMMethods {
  private:
   unsigned int couplstep;                     /**< Coupling timestep. */
-  MoveSupersInDomain<GbxMaps, M> movesupers;  /**< Reference super-droplets' movement. TODO(CB) */
+  MoveSupersInDomain<GbxMaps, M> movesupers;  /**< object for super-droplets' MoveSupersInDomain. */
 
   /**
    * @brief Get the next timestep for SDM.
@@ -84,8 +84,8 @@ class SDMMethods {
    *
    * This function moves superdroplets, including their movement between
    * gridboxes, according to the `movesupers` struct. `movesupers` is an
-   * instance of the MoveSupersInDomain templated type with a certain type of
-   * GridboxMaps and Motion
+   * instance of the MoveSupersInDomain templated type with a certain instance of a type of
+   * GridboxMaps and super-droplets' Motion.
    *
    * @param t_sdm Current timestep for SDM.
    * @param d_gbxs View of gridboxes on device.
@@ -97,8 +97,8 @@ class SDMMethods {
   }
 
  public:
-  GbxMaps gbxmaps;  /**< Reference Maps from index to coordinate-dependent properties. TODO(CB) */
-  Obs obs;          /**< Reference Observer. TODO(CB) */
+  GbxMaps gbxmaps;  /**< object that is type of GridboxMaps. */
+  Obs obs;          /**< object that is type of Observer. */
 
   /**
    * @struct SDMMicrophysics
@@ -113,9 +113,7 @@ class SDMMethods {
    * @tparam Microphys Type of the MicrophysicalProcess.
    */
   struct SDMMicrophysics {
-    Microphys microphys;  /**< Microphysical process. TODO(CB) */
-
-    /* .*/
+    Microphys microphys;  /**< object that is type of MicrophysicalProcess. */
 
     /**
      * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
@@ -153,10 +151,10 @@ class SDMMethods {
    * microphysics, motion, and observer.
    *
    * @param couplstep Coupling timestep.
-   * @param gbxmaps Gridbox maps.
-   * @param microphys Microphysical process.
-   * @param movesupers Super-droplets' motion.
-   * @param obs Observer.
+   * @param gbxmaps object that is type of GridboxMaps.
+   * @param microphys object that is type of MicrophysicalProcess.
+   * @param movesupers object that is type of super-droplets' Motion.
+   * @param obs object that is type of Observer.
    */
   SDMMethods(const unsigned int couplstep, const GbxMaps gbxmaps, const Microphys microphys,
              const M movesupers, const Obs obs)

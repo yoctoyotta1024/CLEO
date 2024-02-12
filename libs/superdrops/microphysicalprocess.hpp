@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 9th February 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -204,7 +204,7 @@ template <MicrophysicsFunc F>
 struct ConstTstepMicrophysics {
  private:
   unsigned int interval;   /**< The constant time step between calls to microphysics. */
-  F do_microphysics;       /**< Function-like microphysics */
+  F do_microphysics;       /**< Function-like microphysics is type of MicrophysicsFunc*/
 
  public:
   /**

@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 8th February 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,7 +44,8 @@
 class GenSuperdrop {
  private:
   unsigned int nspacedims;   /**< Number of spatial dimensions. */
-  std::shared_ptr<Superdrop::IDType::Gen> sdIdGen;   /**< Pointer to super-droplet ID generator. */
+  std::shared_ptr<Superdrop::IDType::Gen> sdIdGen;
+  /**< Pointer to super-droplet ID generator, Superdrop::IDType object. */
   InitSupersData initdata;   /**< Data for initialising superdrops. */
 
   /**

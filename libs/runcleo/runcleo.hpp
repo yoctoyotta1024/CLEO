@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Sunday 28th January 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -67,9 +67,9 @@ template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphy
           Motion<GbxMaps> M, Observer Obs, CouplingComms<CD> Comms>
 class RunCLEO {
  private:
-  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm; /**< Reference SDMMethods object. TODO(CB) */
-  CD &coupldyn; /**< Reference to the CoupledDynamics object. TODO(CB)  */
-  const Comms &comms; /**< Reference to the CouplingComms object. TODO(CB)  */
+  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm; /**< SDMMethods object. */
+  CD &coupldyn; /**< CoupledDynamics object.  */
+  const Comms &comms; /**< CouplingComms object. */
 
   /**
    * @brief Prepare SDM and Coupled Dynamics for timestepping.
@@ -267,9 +267,9 @@ class RunCLEO {
    * Initializes the RunCLEO object with the provided SDMMethods, CoupledDynamics,
    * and CouplingComms objects. Checks if coupling between SDM and Dynamics is correct.
    *
-   * @param sdm TODO(CB) Reference to the SDMMethods object.
-   * @param coupldyn TODO(CB) Reference to the CoupledDynamics object.
-   * @param comms TODO(CB) Reference to the CouplingComms object.
+   * @param sdm SDMMethods object.
+   * @param coupldyn CoupledDynamics object.
+   * @param comms CouplingComms object.
    */
   RunCLEO(const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm, CD &coupldyn, const Comms &comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms) {
