@@ -32,6 +32,7 @@ configfile=${path2CLEO}/examples/eurec4a_rainshaft1d/src/config/rain1d_config.tx
 yamlfile=${HOME}/repositories/sdm-eurec4a/data/model/input/example_input.yaml
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
+pythonPySD=/work/mh1126/m301096/conda/envs/sdm_pysd_env312/bin/python
 gxx="g++"
 gcc="gcc"
 cuda="nvc++"
@@ -63,7 +64,7 @@ ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile}
 
 echo "--------------------------------------------"
 echo "Plot results"
-${python} rainshaft_1d_plot.py
+${pythonPySD} rainshaft_1d_plot.py
 
 ### ---------------------------------------------------- ###
 

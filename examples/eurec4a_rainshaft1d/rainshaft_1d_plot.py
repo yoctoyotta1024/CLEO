@@ -42,8 +42,8 @@ with open(yaml_config_file, 'r') as f:
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO / "examples/exampleplotting") # for imports from example plotting package
 
-from plotssrc import pltsds, pltmoms, animations
-# from pySD.plotssrc import pltsds, pltmoms, animations
+# from plotssrc import pltsds, pltmoms, animations
+from pySD.plotssrc import pltsds, pltmoms, animations
 from pySD.sdmout_src import *
 
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
