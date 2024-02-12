@@ -24,6 +24,7 @@ import sys
 import numpy as np
 import random
 from pathlib import Path
+import yaml
 
 import xarray as xr
 import matplotlib.pyplot as plt
@@ -31,6 +32,12 @@ import matplotlib.pyplot as plt
 path2CLEO = Path("/home/m/m301096/CLEO")
 path2build = path2CLEO / "build"
 configfile = path2CLEO / "examples/eurec4a_rainshaft1d/src/config/rain1d_config.txt"
+
+yaml_config_file = Path("/home/m/m301096/repositories/sdm-eurec4a/data/model/input/example_input.yaml")
+with open(yaml_config_file, 'r') as f:
+    config_yaml = yaml.safe_load(f)
+
+
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO / "examples/exampleplotting/rain") # for imports from example plotting package
@@ -67,7 +74,7 @@ dataset       = binpath / "rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
-savefigpath = path2CLEO / "results/examplesolutions/rain_thin_cloud/" # directory for saving figures
+savefigpath = path2CLEO / "results/examplesolutions/clouds/" / yaml_config_file["cloud"]["cloud_id"] # directory for saving figures
 savefigpath.mkdir(exist_ok=True)
 
 SDgbxs2plt  = list(range(39, 45))

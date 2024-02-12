@@ -29,6 +29,7 @@ echo "--------------------------------------------"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
 configfile=${path2CLEO}/examples/eurec4a_rainshaft1d/src/config/rain1d_config.txt
+yamlfile=${HOME}/repositories/sdm-eurec4a/data/model/input/example_input.yaml
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"
@@ -58,7 +59,11 @@ mkdir ${path2build}share
 
 ### ------------------- compile & run ------------------ ###
 ### generate input files and run 1-D rainshaft example
-${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile}
+${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile}
+
+echo "--------------------------------------------"
+echo "Plot results"
+${python} rainshaft_1d_plot.py
 
 ### ---------------------------------------------------- ###
 
