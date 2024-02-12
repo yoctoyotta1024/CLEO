@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Create Gridboxes Sub-Module" href="creategbxs.html" /><link rel="prev" title="InitialConditions" href="initialconditions.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="InitialConditions" href="initialconditions.html" /><link rel="prev" title="Create Gridboxes Sub-Module" href="creategbxs.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>Create Super-droplets Sub-Module - CLEO 4.0 documentation</title>
@@ -216,13 +216,25 @@
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../cxx.html">API: C++ Library</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="runcleomod.html">RunCLEO Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="runcleo.html">RunCLEO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="coupleddynamics.html">CoupledDynamics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="couplingcomms.html">CouplingComms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Create Super-droplets Sub-Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../superdrops/superdropsmod.html">Superdrops Module</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/condensation.html">Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop.html">Superdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_ids.html">Superdrop IDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_attrs.html">Superdrop Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/terminalvelocity.html">Terminal Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
 </ul>
@@ -294,7 +306,7 @@ super-droplets in Kokkos view (on device).</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK12GenSuperdropclEKj">
-<span id="_CPPv3NK12GenSuperdropclEKj"></span><span id="_CPPv2NK12GenSuperdropclEKj"></span><span id="GenSuperdrop::call-operator__unsigned-iCC"></span><span class="target" id="classGenSuperdrop_1a304c1ceb4d548316e2ed46af87307bb9"></span><span class="n"><span class="pre">Superdrop</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12GenSuperdropclEKj" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK12GenSuperdropclEKj"></span><span id="_CPPv2NK12GenSuperdropclEKj"></span><span id="GenSuperdrop::call-operator__unsigned-iCC"></span><span class="target" id="classGenSuperdrop_1a304c1ceb4d548316e2ed46af87307bb9"></span><a class="reference internal" href="../superdrops/superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12GenSuperdropclEKj" title="Link to this definition">#</a><br /></dt>
 <dd><p>Generate a super-droplet using initial data for the kk’th superdrop. </p>
 <p>This function returns a superdrop generated from the specified position ‘kk’ in the initial conditions data.</p>
 <dl class="field-list simple">
@@ -327,7 +339,7 @@ super-droplets in Kokkos view (on device).</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK12GenSuperdrop8attrs_atEKj">
-<span id="_CPPv3NK12GenSuperdrop8attrs_atEKj"></span><span id="_CPPv2NK12GenSuperdrop8attrs_atEKj"></span><span id="GenSuperdrop::attrs_at__unsigned-iCC"></span><span class="target" id="classGenSuperdrop_1a6477ac878ff75ab6b73831bcf7b1b38e"></span><span class="n"><span class="pre">SuperdropAttrs</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">attrs_at</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12GenSuperdrop8attrs_atEKj" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK12GenSuperdrop8attrs_atEKj"></span><span id="_CPPv2NK12GenSuperdrop8attrs_atEKj"></span><span id="GenSuperdrop::attrs_at__unsigned-iCC"></span><span class="target" id="classGenSuperdrop_1a6477ac878ff75ab6b73831bcf7b1b38e"></span><a class="reference internal" href="../superdrops/superdrop_attrs.html#_CPPv414SuperdropAttrs" title="SuperdropAttrs"><span class="n"><span class="pre">SuperdropAttrs</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">attrs_at</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12GenSuperdrop8attrs_atEKj" title="Link to this definition">#</a><br /></dt>
 <dd><p>Function returns a superdroplet’s attributes from position ‘kk’ in the initial conditions data. All super-droplets have the same solute properties. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -350,14 +362,14 @@ super-droplets in Kokkos view (on device).</p>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N12GenSuperdrop7sdIdGenE">
-<span id="_CPPv3N12GenSuperdrop7sdIdGenE"></span><span id="_CPPv2N12GenSuperdrop7sdIdGenE"></span><span id="GenSuperdrop::sdIdGen__std::shared_ptr:Superdrop::IDType::Gen:"></span><span class="target" id="classGenSuperdrop_1aa92c9ae024cabb68afb4ec39e2f7f223"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Superdrop</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">IDType</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Gen</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdIdGen</span></span></span><a class="headerlink" href="#_CPPv4N12GenSuperdrop7sdIdGenE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Pointer to super-droplet ID generator. </p>
+<span id="_CPPv3N12GenSuperdrop7sdIdGenE"></span><span id="_CPPv2N12GenSuperdrop7sdIdGenE"></span><span id="GenSuperdrop::sdIdGen__std::shared_ptr:Superdrop::IDType::Gen:"></span><span class="target" id="classGenSuperdrop_1aa92c9ae024cabb68afb4ec39e2f7f223"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../superdrops/superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../superdrops/superdrop.html#_CPPv4N9Superdrop6IDTypeE" title="Superdrop::IDType"><span class="n"><span class="pre">IDType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Gen</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdIdGen</span></span></span><a class="headerlink" href="#_CPPv4N12GenSuperdrop7sdIdGenE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Pointer <a class="reference internal" href="../superdrops/superdrop.html#classSuperdrop_1aebcbeafd43e6a898d84c580e5ee3f2be"><span class="std std-ref">Superdrop::IDType</span></a> object for super-droplet ID generation. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N12GenSuperdrop8initdataE">
 <span id="_CPPv3N12GenSuperdrop8initdataE"></span><span id="_CPPv2N12GenSuperdrop8initdataE"></span><span id="GenSuperdrop::initdata__InitSupersData"></span><span class="target" id="classGenSuperdrop_1a5304e47fd7155fc4b63398b1e71b47ec"></span><span class="n"><span class="pre">InitSupersData</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initdata</span></span></span><a class="headerlink" href="#_CPPv4N12GenSuperdrop8initdataE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Data for initialising superdrops. </p>
+<dd><p>instance of InitSupersData for initialising superdrops. </p>
 </dd></dl>
 
 </div>
@@ -461,23 +473,23 @@ super-droplets in Kokkos view (on device).</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="creategbxs.html">
+          <a class="next-page" href="initialconditions.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Create Gridboxes Sub-Module</div>
+                <div class="title">InitialConditions</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="initialconditions.html">
+          <a class="prev-page" href="creategbxs.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">InitialConditions</div>
+                <div class="title">Create Gridboxes Sub-Module</div>
                 
               </div>
             </a>
@@ -490,7 +502,8 @@ super-droplets in Kokkos view (on device).</p>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
+            <div class="last-updated">
+              Last updated on 12 February 2024</div>
           </div>
           <div class="right-details">
             

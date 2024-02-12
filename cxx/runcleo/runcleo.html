@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="SDMMethods" href="sdmmethods.html" /><link rel="prev" title="RunCLEO Module" href="runcleomod.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="SDMMethods" href="sdmmethods.html" /><link rel="prev" title="InitialConditions" href="initialconditions.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>RunCLEO - CLEO 4.0 documentation</title>
@@ -216,13 +216,25 @@
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../cxx.html">API: C++ Library</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="runcleomod.html">RunCLEO Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">RunCLEO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="coupleddynamics.html">CoupledDynamics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="couplingcomms.html">CouplingComms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="createsupers.html">Create Super-droplets Sub-Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../superdrops/superdropsmod.html">Superdrops Module</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/condensation.html">Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop.html">Superdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_ids.html">Superdrop IDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_attrs.html">Superdrop Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/terminalvelocity.html">Terminal Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
 </ul>
@@ -295,9 +307,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sdm</strong> – TODO(CB) Reference to the <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> object. </p></li>
-<li><p><strong>coupldyn</strong> – TODO(CB) Reference to the CoupledDynamics object. </p></li>
-<li><p><strong>comms</strong> – TODO(CB) Reference to the CouplingComms object. </p></li>
+<li><p><strong>sdm</strong> – <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> object. </p></li>
+<li><p><strong>coupldyn</strong> – CoupledDynamics object. </p></li>
+<li><p><strong>comms</strong> – CouplingComms object. </p></li>
 </ul>
 </dd>
 </dl>
@@ -401,7 +413,7 @@ The size of the next timestep is determined by finding the smaller out of the st
 <p>The size of the next timestep is then calculated as <code class="docutils literal notranslate"><span class="pre">t_next</span> <span class="pre">-</span> <span class="pre">t_mdl</span></code>, where <code class="docutils literal notranslate"><span class="pre">t_next</span></code> is the time closer to <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code> out of <code class="docutils literal notranslate"><span class="pre">next_coupl</span></code> and <code class="docutils literal notranslate"><span class="pre">next_obs</span></code>. The function uses Kokkos’ version of C++ standard library’s <code class="docutils literal notranslate"><span class="pre">std::min</span></code> to find <code class="docutils literal notranslate"><span class="pre">t_next</span></code> (also GPU compatible).</p>
 <p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="sdmmethods.html#classSDMMethods_1ae3c1636226cb3b943302143c5a0a023f"><span class="std std-ref">SDMMethods::get_couplstep()</span></a></p>
+<p><a class="reference internal" href="sdmmethods.html#classSDMMethods_1a03e95e2bfe0c56752c516dcfb4b98465"><span class="std std-ref">SDMMethods::get_couplstep()</span></a></p>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -475,19 +487,19 @@ The size of the next timestep is determined by finding the smaller out of the st
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N7RunCLEO3sdmE">
 <span id="_CPPv3N7RunCLEO3sdmE"></span><span id="_CPPv2N7RunCLEO3sdmE"></span><span id="RunCLEO::sdm__SDMMethods:GbxMaps.Microphys.M.Obs:CR"></span><span class="target" id="classRunCLEO_1a7eeeb101df59c7a20731703a9d453ad0"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="sdmmethods.html#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods"><span class="n"><span class="pre">SDMMethods</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::Microphys"><span class="n"><span class="pre">Microphys</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::M"><span class="n"><span class="pre">M</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::Obs"><span class="n"><span class="pre">Obs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">sdm</span></span></span><a class="headerlink" href="#_CPPv4N7RunCLEO3sdmE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Reference <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> object. TODO(CB) </p>
+<dd><p><a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> object. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N7RunCLEO8coupldynE">
 <span id="_CPPv3N7RunCLEO8coupldynE"></span><span id="_CPPv2N7RunCLEO8coupldynE"></span><span id="RunCLEO::coupldyn__CDR"></span><span class="target" id="classRunCLEO_1a0ebb1ff1bf861a8f787f27302959b42f"></span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::CD"><span class="n"><span class="pre">CD</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">coupldyn</span></span></span><a class="headerlink" href="#_CPPv4N7RunCLEO8coupldynE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Reference to the CoupledDynamics object. TODO(CB) </p>
+<dd><p>CoupledDynamics object. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N7RunCLEO5commsE">
 <span id="_CPPv3N7RunCLEO5commsE"></span><span id="_CPPv2N7RunCLEO5commsE"></span><span id="RunCLEO::comms__CommsCR"></span><span class="target" id="classRunCLEO_1ab92560831ae99bc92195aeace041cb7f"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15CoupledDynamics_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8Observer_13CouplingCommsI2CDEE7RunCLEO" title="RunCLEO::Comms"><span class="n"><span class="pre">Comms</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">comms</span></span></span><a class="headerlink" href="#_CPPv4N7RunCLEO5commsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Reference to the CouplingComms object. TODO(CB) </p>
+<dd><p>CouplingComms object. </p>
 </dd></dl>
 
 </div>
@@ -509,14 +521,14 @@ The size of the next timestep is determined by finding the smaller out of the st
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="runcleomod.html">
+          <a class="prev-page" href="initialconditions.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">RunCLEO Module</div>
+                <div class="title">InitialConditions</div>
                 
               </div>
             </a>
@@ -529,7 +541,8 @@ The size of the next timestep is determined by finding the smaller out of the st
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
+            <div class="last-updated">
+              Last updated on 12 February 2024</div>
           </div>
           <div class="right-details">
             

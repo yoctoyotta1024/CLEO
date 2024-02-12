@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Contact Us!" href="../../usage/contact.html" /><link rel="prev" title="Create Super-droplets Sub-Module" href="createsupers.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Create Super-droplets Sub-Module" href="createsupers.html" /><link rel="prev" title="CouplingComms" href="couplingcomms.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>Create Gridboxes Sub-Module - CLEO 4.0 documentation</title>
@@ -216,13 +216,25 @@
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../cxx.html">API: C++ Library</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="runcleomod.html">RunCLEO Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="runcleo.html">RunCLEO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="coupleddynamics.html">CoupledDynamics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="couplingcomms.html">CouplingComms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="createsupers.html">Create Super-droplets Sub-Module</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../superdrops/superdropsmod.html">Superdrops Module</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/condensation.html">Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop.html">Superdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_ids.html">Superdrop IDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_attrs.html">Superdrop Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/terminalvelocity.html">Terminal Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
 </ul>
@@ -343,7 +355,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10GenGridbox8state_atEKjKd">
-<span id="_CPPv3NK10GenGridbox8state_atEKjKd"></span><span id="_CPPv2NK10GenGridbox8state_atEKjKd"></span><span id="GenGridbox::state_at__unsigned-iC.doubleCC"></span><span class="target" id="classGenGridbox_1aa72605d81b3050986f609f44b2808961"></span><span class="n"><span class="pre">State</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">state_at</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ii</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">volume</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10GenGridbox8state_atEKjKd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK10GenGridbox8state_atEKjKd"></span><span id="_CPPv2NK10GenGridbox8state_atEKjKd"></span><span id="GenGridbox::state_at__unsigned-iC.doubleCC"></span><span class="target" id="classGenGridbox_1aa72605d81b3050986f609f44b2808961"></span><a class="reference internal" href="../superdrops/state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">state_at</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ii</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">volume</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10GenGridbox8state_atEKjKd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the state of a specified Gridbox from the initial conditions. </p>
 <p>This function returns the state of the Gridbox at the ii’th index in the initial conditions given by the <a class="reference internal" href="#classGenGridbox"><span class="std std-ref">GenGridbox</span></a> struct.</p>
 <dl class="field-list simple">
@@ -354,7 +366,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The State of the Gridbox. </p>
+<dd class="field-even"><p>The <a class="reference internal" href="../superdrops/state.html#structState"><span class="std std-ref">State</span></a> of the Gridbox. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -365,7 +377,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N10GenGridbox11GbxindexGenE">
 <span id="_CPPv3N10GenGridbox11GbxindexGenE"></span><span id="_CPPv2N10GenGridbox11GbxindexGenE"></span><span id="GenGridbox::GbxindexGen__std::shared_ptr:Gbxindex::Gen:"></span><span class="target" id="classGenGridbox_1a8d4e9570b109b6aa8a9bb77dcf79c434"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Gbxindex</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Gen</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxindexGen</span></span></span><a class="headerlink" href="#_CPPv4N10GenGridbox11GbxindexGenE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Pointer to gridbox index generator </p>
+<dd><p>Pointer to gridbox index generator, Gbxindex::Gen object </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -442,7 +454,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 <dt class="sig sig-object cpp" id="_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers">
 <span id="_CPPv3I_11GridboxMaps0E15initialise_gbxsRK7GbxMapsRK12GbxInitCondsK12viewd_supers"></span><span id="_CPPv2I_11GridboxMaps0E15initialise_gbxsRK7GbxMapsRK12GbxInitCondsK12viewd_supers"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="creategbxs_8hpp_1a729d7e8cc823c9c3240d09a8be5454f5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">dualview_gbx</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialise_gbxs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="initialise_gbxs::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="initialise_gbxs::GbxInitConds"><span class="n"><span class="pre">GbxInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxic</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="Link to this definition">#</a><br /></dt>
 <dd><p>Initialise a view of Gridboxes. </p>
-<p>This function initialises a view of gridboxes in device memory using data from an instance of GbxInitConds for each Gridbox’s index, initial State and view of super-droplets.</p>
+<p>This function initialises a view of gridboxes in device memory using data from an instance of GbxInitConds for each Gridbox’s index, initial <a class="reference internal" href="../superdrops/state.html#structState"><span class="std std-ref">State</span></a> and view of super-droplets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -524,23 +536,23 @@ initialise Gridboxes (i.e. GBxs).</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../../usage/contact.html">
+          <a class="next-page" href="createsupers.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Contact Us!</div>
+                <div class="title">Create Super-droplets Sub-Module</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="createsupers.html">
+          <a class="prev-page" href="couplingcomms.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Create Super-droplets Sub-Module</div>
+                <div class="title">CouplingComms</div>
                 
               </div>
             </a>
@@ -553,7 +565,8 @@ initialise Gridboxes (i.e. GBxs).</p>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
+            <div class="last-updated">
+              Last updated on 12 February 2024</div>
           </div>
           <div class="right-details">
             

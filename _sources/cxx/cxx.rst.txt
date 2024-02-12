@@ -18,6 +18,7 @@ a SDM coupled to a Dynamics Solver.
    :caption: Contents:
 
    runcleo/runcleomod
+   superdrops/superdropsmod
 
 Indices and tables
 ------------------
