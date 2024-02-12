@@ -64,8 +64,8 @@ concept MicrophysicalProcess = requires(P p, const TeamMember &tm, const unsigne
 template <MicrophysicalProcess Microphys1, MicrophysicalProcess Microphys2>
 struct CombinedMicrophysicalProcess {
  private:
-  Microphys1 a;   /**< The first microphysical process. */
-  Microphys2 b;   /**< The second microphysical process. */
+  Microphys1 a;   /**< The first instance of type of MicrophysicalProcess. */
+  Microphys2 b;   /**< The second instance of type of MicrophysicalProcess. */
 
  public:
   /**

@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 9th February 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,12 +39,13 @@ class Superdrop {
   double coord3;            /**< 3rd spatial coordinate of the superdrop (vertical) */
   double coord1;            /**< 1st spatial coordinate of the superdrop (eastwards) */
   double coord2;            /**< 2nd spatial coordinate of the superdrop (northwards) */
-  SuperdropAttrs attrs;     /**< Attributes of the superdrop */
+  SuperdropAttrs attrs;     /**< instance of SuperdropAttrs for attributes of the super-droplet */
 
  public:
   using IDType = IntID;     /**< Type of ID to identify superdrop via 8 byte integer */
-  // using IDType = EmptyID; // Type of ID (for non-existent superdrop identity)
-  [[no_unique_address]] IDType sdId;  // superdroplet (unique) identity
+  // using IDType = EmptyID;   /**< Type of ID for non-existent superdrop identity */
+  [[no_unique_address]] IDType sdId;
+  /**< instance of super-droplet identity of Superdrop::IDType */
 
   /**
    * @brief Default constructor requirement for use of Superdrop in Kokkos View

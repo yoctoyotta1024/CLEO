@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Shin-ichiro Shima (SiS)
  * -----
- * Last Modified: Friday 9th February 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -47,7 +47,7 @@ namespace dlc = dimless_constants;
 struct DoCondensation {
  private:
   bool doAlterThermo;   /**< Whether to make condensation alter State or not */
-  ImplicitEuler impe;   /**< Implicit Euler solver */
+  ImplicitEuler impe;   /**< instance of ImplicitEuler ODE solver */
 
   /**
    * @brief Enacts condensation / evaporation microphysics.

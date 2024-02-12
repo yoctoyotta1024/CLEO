@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Thursday 8th February 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -88,7 +88,9 @@ struct EmptyID {
 };
 
 /**
- * @brief Output stream operator for printing SD identity (IntID).
+ * @brief Output stream operator for printing super-droplet identity when it is IntID type.
+ *
+ * Statement is of value of super-droplet identity, IntID::value.
  *
  * @param os Output stream.
  * @param id SD identity to print.
@@ -100,8 +102,11 @@ inline std::ostream &operator<<(std::ostream &os, const IntID &id) {
 }
 
 /**
- * @brief Output stream operator for printing null statement when SD
- * identity is EmptyID (non-existent).
+ * @brief Output stream operator for printing null statement when super-droplet
+ * identity is instance of EmptyID (non-existent) type.
+ *
+ *
+ * Null statement reads "(Undefined) No ID".
  *
  * @param os Output stream.
  * @param id SD identity to print.

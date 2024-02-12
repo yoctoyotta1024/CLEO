@@ -45,8 +45,8 @@ class GenSuperdrop {
  private:
   unsigned int nspacedims;   /**< Number of spatial dimensions. */
   std::shared_ptr<Superdrop::IDType::Gen> sdIdGen;
-  /**< Pointer to super-droplet ID generator, Superdrop::IDType object. */
-  InitSupersData initdata;   /**< Data for initialising superdrops. */
+  /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
+  InitSupersData initdata;   /**< instance of InitSupersData for initialising superdrops. */
 
   /**
    * @brief Returns initial spatial coordinates of the kk'th super-droplet.

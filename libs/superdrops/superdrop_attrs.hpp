@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 9th February 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -62,7 +62,8 @@ struct SoluteProperties {
  * @brief Struct representing the attributes of a super-droplet.
  */
 struct SuperdropAttrs {
-  SoluteProperties solute;  /**< Pointer-like reference to properties of superdrop's solute. */
+  SoluteProperties solute;
+  /**< instance of SoluteProperties for pointer-like reference to superdrop's solute properties. */
   uint64_t xi;              /**< Multiplicity of superdrop. */
   double radius;            /**< Radius of superdrop. */
   double msol;              /**< Mass of solute dissolved in superdrop. */

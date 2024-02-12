@@ -53,7 +53,8 @@ template <GridboxMaps GbxMaps, MicrophysicalProcess Microphys, Motion<GbxMaps> M
 class SDMMethods {
  private:
   unsigned int couplstep;                     /**< Coupling timestep. */
-  MoveSupersInDomain<GbxMaps, M> movesupers;  /**< object for super-droplets' MoveSupersInDomain. */
+  MoveSupersInDomain<GbxMaps, M> movesupers;
+  /**< object for super-droplets' MoveSupersInDomain with certain type of Motion. */
 
   /**
    * @brief Get the next timestep for SDM.
@@ -113,7 +114,7 @@ class SDMMethods {
    * @tparam Microphys Type of the MicrophysicalProcess.
    */
   struct SDMMicrophysics {
-    Microphys microphys;  /**< object that is type of MicrophysicalProcess. */
+    Microphys microphys;  /**< type of MicrophysicalProcess. */
 
     /**
      * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
@@ -142,7 +143,8 @@ class SDMMethods {
             }
           });
     }
-  } sdm_microphysics;  /**< Operator is call for SDM microphysics. */
+  } sdm_microphysics;
+  /**< instance of SDMMicrophysics, operator is call of SDM microphysics */
 
   /**
    * @brief Constructor for SDMMethods.
