@@ -40,9 +40,10 @@ with open(yaml_config_file, 'r') as f:
 
 
 sys.path.append(path2CLEO)  # for imports from pySD package
-sys.path.append(path2CLEO / "examples/exampleplotting/rain") # for imports from example plotting package
+sys.path.append(path2CLEO / "examples/exampleplotting") # for imports from example plotting package
 
-from pySD.plotssrc import pltsds, pltmoms, animations
+from plotssrc import pltsds, pltmoms, animations
+# from pySD.plotssrc import pltsds, pltmoms, animations
 from pySD.sdmout_src import *
 
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -74,7 +75,8 @@ dataset       = binpath / "rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
-savefigpath = path2CLEO / "results/examplesolutions/clouds/" / yaml_config_file["cloud"]["cloud_id"] # directory for saving figures
+cloud_id = config_yaml['cloud']['cloud_id']
+savefigpath = path2CLEO / "results/examplesolutions/yaml_config/" / f"cloud_{cloud_id}" # directory for saving figures
 savefigpath.mkdir(exist_ok=True)
 
 SDgbxs2plt  = list(range(39, 45))
@@ -205,3 +207,5 @@ animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
 print(savefigpath)
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###
+
+# %%

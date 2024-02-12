@@ -82,9 +82,9 @@ air_temperature_params = config_yaml["thermodynamics"]["air_temperature"]["param
 specific_humidity_params = config_yaml["thermodynamics"]["specific_humidity"]["parameters"]
 ### --- settings for 1-D Thermodynamics --- ###
 PRESS0      = 101315                # [Pa]
-TEMP0       = air_temperature_params["f_0"]               # [K]
+TEMP0       = air_temperature_params["f_0"][0]               # [K]
 TEMPlapses  = - np.array(air_temperature_params["slopes"])*1e3            # -dT/dz [K/km]
-qvap0       = specific_humidity_params["f_0"]*1e-3                 # [Kg/Kg]
+qvap0       = specific_humidity_params["f_0"][0]*1e-3                 # [Kg/Kg]
 qvaplapses  = - np.array(specific_humidity_params["slopes"])*1e3   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
 WVEL        = 0.0                   # [m/s]
