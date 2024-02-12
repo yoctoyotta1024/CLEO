@@ -6,7 +6,7 @@ Created Date: Monday 16th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th January 2024
+Last Modified: Friday 9th February 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -154,9 +154,9 @@ class ConstUniformThermo:
       self.qvap = qvap
 
     self.qcond = qcond                        # liquid water content []
-    self.WVEL = WVEL                          # vertical (z) velocity [m/s]
-    self.UVEL = UVEL                          # horizontal x velocity [m/s]
-    self.VVEL = VVEL                          # horizontal y velocity [m/s]
+    self.WVEL = WVEL                          # vertical velocity [m/s]
+    self.UVEL = UVEL                          # horizontal eastwards velocity [m/s]
+    self.VVEL = VVEL                          # horizontal northwards velocity [m/s]
 
 
   def generate_winds(self, ndims, ntime, THERMODATA):
@@ -441,9 +441,9 @@ class ConstHydrostaticLapseRates:
     self.qvaplapses = qvaplapses              # qvap lapse rates [below, above] Zbase [g/Kg km^-1]
 
     self.qcond = qcond                        # liquid water content [Kg/Kg]
-    self.WMAX = WMAX                          # vertical (z) velocity [m/s]
-    self.UVEL = UVEL                          # horizontal x velocity [m/s]
-    self.VVEL = VVEL                          # horizontal y velocity [m/s]
+    self.WMAX = WMAX                          # vertical (coord3) velocity [m/s]
+    self.UVEL = UVEL                          # horizontal eastwards (coord1) velocity [m/s]
+    self.VVEL = VVEL                          # horizontal northwards (coord2) velocity [m/s]
     self.Wlength = Wlength                    # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
     inputs = thermoinputsdict(configfile, constsfile)

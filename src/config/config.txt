@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th January 2024
+ * Last Modified: Friday 9th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -68,6 +68,6 @@ press_filename = ./share/dimlessthermo_press.dat          # binary filename for 
 temp_filename = ./share/dimlessthermo_temp.dat            # binary filename for temperature
 qvap_filename = ./share/dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
 qcond_filename = ./share/dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
-wvel_filename = ./share/dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
-uvel_filename = ./share/dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
-vvel_filename = ./share/dimlessthermo_vvel.dat            # binary filename for horizontal y velocity
+wvel_filename = ./share/dimlessthermo_wvel.dat            # binary filename for vertical (coord3) velocity
+uvel_filename = ./share/dimlessthermo_uvel.dat            # binary filename for eastwards (coord1) velocity
+vvel_filename = ./share/dimlessthermo_vvel.dat            # binary filename for northwards (coord2) velocity

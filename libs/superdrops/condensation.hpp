@@ -1,25 +1,24 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: condensation.hpp
  * Project: superdrops
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Shin-ichiro Shima (SiS)
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct for condensation / evaporation of water
- * causing diffusional growth / shrinking of
- * droplets in SDM. Equations referenced as (eqn [X.YY])
- * are from "An Introduction To Clouds From The
- * Microscale to Climate" by Lohmann, Luond
- * and Mahrt, 1st edition.
+ * struct and functions for makign microphyiscal process that enacts condensation / evaporation of
+ * water via diffusional growth / shrinking of droplets in SDM. Equations referenced as
+ * (eqn [X.YY]) are from "An Introduction To Clouds From The Microscale to Climate" by Lohmann,
+ * Luond and Mahrt, 1st edition.
  */
 
 #ifndef LIBS_SUPERDROPS_CONDENSATION_HPP_
@@ -41,62 +40,135 @@
 
 namespace dlc = dimless_constants;
 
-/* function-like type that enacts
-condensation / evaporation microphysical process */
+/**
+ * @struct DoCondensation
+ * @brief Implements condensation and evaporation microphysics for super-droplets.
+ */
 struct DoCondensation {
  private:
-  bool doAlterThermo;  // whether to make condensation alter ThermoState or not
-  ImplicitEuler impe;  // implicit euler solver
+  bool doAlterThermo;   /**< Whether to make condensation alter State or not */
+  ImplicitEuler impe;   /**< instance of ImplicitEuler ODE solver */
 
-  /* Enacts condensation / evaporation microphysical process.
-  Change to superdroplet radii and temp, qv and qc due to
-  sum of radii changes via diffusion and condensation of
-  water vapour during timestep delt. Using equations
-  from "An Introduction To Clouds...." (see note at top of file) */
+  /**
+   * @brief Enacts condensation / evaporation microphysics.
+   *
+   * Enacts condensation / evaporation microphysics. Change to superdroplet radius, and
+   * optionally thermodynamics of the State due to sum of water condensed via diffusion and
+   * condensation / evporation of water vapour during a given timestep delt. Using equations
+   * (eqn [X.YY]) from "An Introduction To Clouds From The Microscale to Climate" by Lohmann,
+   * Luond and Mahrt, 1st edition.
+   *
+   * @param team_member The Kokkos team member.
+   * @param supers The superdroplets.
+   * @param state The state.
+   */
   KOKKOS_FUNCTION
   void do_condensation(const TeamMember &team_member, const subviewd_supers supers,
                        State &state) const;
 
-  /* returns total change in liquid water mass
-  in parcel volume 'mass_condensed' by enacting
-  superdroplets' condensation / evaporation */
+  /**
+   * @brief Changes super-droplet radii according to condensation / evaporation and returns the
+   * total change in liquid water mass in volume as a result.
+   *
+   * returns total change in liquid water mass (dimensionless) in volume, 'mass_condensed', due to
+   * condensation onto / evaporation of super-droplets.
+   *
+   * The equivalent serial version of Kokkos::parallel_reduce([...]) is summing deltamass over loop:
+   * @code
+   * for (size_t ii(0); ii < ngbxs; ++ii)
+   * {
+   *  [...]
+   *  totmass_condensed += deltamass;
+   * }
+   * @endcode
+   *
+   * @param team_member The Kokkos team member.
+   * @param supers The superdroplets.
+   * @param state The state.
+   * @return The total change in liquid water mass.
+   */
   KOKKOS_FUNCTION double superdroplets_change(const TeamMember &team_member,
                                               const subviewd_supers supers,
                                               const State &state) const;
 
-  /* update superdroplet radius due to radial growth/shrink
-  via condensation and diffusion of water vapour according
-  to equations from "An Introduction To Clouds...." (see
-  note at top of file). Then return mass of liquid that
-  condensed onto /evaporated off of droplet. New radius is
-  calculated using impliciteuler method which iterates
-  condensation-diffusion ODE given the previous radius. */
+  /**
+   * @brief Updates the super-droplet radius and returns the mass of liquid condensed or evaporated.
+   *
+   *
+   * Updates the super-droplet radius due to radial growth/shrink via condensation and diffusion of
+   * water vapour according to equations from "An Introduction To Clouds From The Microscale to
+   * Climate" by Lohmann, Luond and Mahrt, 1st edition. New radius is calculated using 'impe'
+   * ImplicitEuler instance which iteratively solves forward integration of condensation-diffusion
+   * ODE. Return mass of liquid that condensed onto / evaporated off of droplet.
+   *
+   * @param drop The super-droplet.
+   * @param temp The ambient temperature.
+   * @param s_ratio The saturation ratio.
+   * @param ffactor The sum of the diffusion factors.
+   * @return The mass of liquid condensed or evaporated.
+  */
   KOKKOS_FUNCTION
   double superdrop_mass_change(Superdrop &drop, const double temp, const double s_ratio,
                                const double ffactor) const;
 
-  /* if doAlterThermo isn't false, use a single team
-  member to change the state due to the effect
-  of condensation / evaporation */
+  /**
+   * @brief Applies the effect of condensation / evaporation on the thermodynamics of the State.
+   *
+   * if doAlterThermo is true, use a single team member to change the thermodynamics of the
+   * State due to the effect of condensation / evaporation.
+   *
+   * @param team_member The Kokkos team member.
+   * @param totmass_condensed The total mass of liquid condensed.
+   * @param state The State of the volume containing the super-droplets
+   * (prior to condensation / evaporation).
+   */
   KOKKOS_FUNCTION
   void effect_on_thermodynamic_state(const TeamMember &team_member, const double totmass_condensed,
                                      State &state) const;
 
-  /* change the thermodynamic variables (temp, qv and qc) of
-  ThermoState state given the total change in condensed
-  water mass per volume during time interval delt */
+  /**
+   * @brief Changes the thermodynamic variables of the State.
+   *
+   * Changes the thermodynamic variables, temperature, vapour and liquid mass mixing ratios
+   * (qvap and qcond respectively) of the State given the total change in condensed water mass
+   * in its volume.
+   *
+   * @param totrho_condensed The total condensed water mass in volume of State.
+   * @param state The State of the volume containing the super-droplets
+   * (prior to condensation / evaporation).
+   * @return The updated State.
+   */
   KOKKOS_FUNCTION
   State state_change(const double totrho_condensed, State &state) const;
 
  public:
+  /**
+   * @brief Constructs a DoCondensation object.
+   * @param doAlterThermo Whether to alter the thermodynamics of the State.
+   * @param niters Number of iterations of implicit Euler method.
+   * @param delt Time step to integrate ODE using implcit Euler method.
+   * @param maxrtol Maximum relative tolerance for implicit Euler method.
+   * @param maxatol Maximum absolute tolerance for implicit Euler method.
+   * @param subdelt Sub-time step size in implicit Euler method.
+   */
   DoCondensation(const bool doAlterThermo, const unsigned int niters, const double delt,
                  const double maxrtol, const double maxatol, const double subdelt)
       : doAlterThermo(doAlterThermo), impe(niters, delt, maxrtol, maxatol, subdelt) {}
 
-  /* this operator is used as an "adaptor" for using
-  condensation as the MicrophysicsFunction type in a
-  ConstTstepMicrophysics instance (*hint* which itself
-  satsifies the MicrophysicalProcess concept) */
+  /**
+   * @brief Operator used as an "adaptor" for using condensation as the function-like type
+   * satisfying the MicrophysicsFunction concept.
+   *
+   * This operator is an "adaptor" for using condensation as the MicrophysicsFunction type in a
+   * ConstTstepMicrophysics instance (*hint* which satsifies the MicrophysicalProcess concept).
+   *
+   * @param team_member The Kokkos team member.
+   * @param subt The microphysics time step.
+   * @param supers The view of super-droplets.
+   * @param state The State.
+   * @param genpool The Kokkos thread-safe random number generator pool.
+   * @return The updated view super-droplets.
+   */
   KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
                                                     const unsigned int subt, subviewd_supers supers,
                                                     State &state, GenRandomPool genpool) const {
@@ -105,17 +177,27 @@ struct DoCondensation {
   }
 };
 
-/* constructs Microphysical Process for
-condensation/evaporation of superdroplets with a
-constant timestep 'interval' given the
-"do_condensation" function-like type */
+/**
+ * @brief Constructs a microphysical process for condensation / evaporation of super-droplets
+ * with a constant time-step 'interval'.
+ *
+ * @param interval The constant time-step for condensation.
+ * @param doAlterThermo Whether to alter the thermodynamic state after condensation / evaporation.
+ * @param niters Number of iterations of implicit Euler method.
+ * @param step2dimlesstime A function to convert 'interval' time-step to a dimensionless time.
+ * @param maxrtol Maximum relative tolerance for implicit Euler method.
+ * @param maxatol Maximum absolute tolerance for implicit Euler method.
+ * @param SUBDELT The sub-time step of implicit Euler method.
+ * @param realtime2dimless A function to convert a real-time to a dimensionless time.
+ * @return The constructed microphysical process for condensation / evaporation.
+ */
 inline MicrophysicalProcess auto Condensation(
     const unsigned int interval, const bool doAlterThermo, const unsigned int niters,
     const std::function<double(unsigned int)> step2dimlesstime, const double maxrtol,
     const double maxatol, const double SUBDELT,
     const std::function<double(double)> realtime2dimless) {
-  const auto delt = step2dimlesstime(interval);    // dimensionless time [] equivlent to interval
-  const auto subdelt = realtime2dimless(SUBDELT);  // dimensionless time [] equivlent to SUBDELT [s]
+  const auto delt = step2dimlesstime(interval);    // dimensionless time equivlent to interval
+  const auto subdelt = realtime2dimless(SUBDELT);  // dimensionless time equivlent to SUBDELT [s]
 
   const auto do_cond = DoCondensation(doAlterThermo, niters, delt, maxrtol, maxatol, subdelt);
 
@@ -124,11 +206,19 @@ inline MicrophysicalProcess auto Condensation(
 
 /* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
-/* Enacts condensation / evaporation microphysical process.
-Change to superdroplet radii and temp, qv and qc due to
-sum of radii changes via diffusion and condensation of
-water vapour during timestep delt. Using equations
-from "An Introduction To Clouds...." (see note at top of file) */
+/**
+ * @brief Enacts condensation / evaporation microphysics.
+ *
+ * Enacts condensation / evaporation microphysics. Change to superdroplet radius, and
+ * optionally thermodynamics of the State due to sum of water condensed via diffusion and
+ * condensation / evporation of water vapour during a given timestep delt. Using equations
+ * (eqn [X.YY]) from "An Introduction To Clouds From The Microscale to Climate" by Lohmann,
+ * Luond and Mahrt, 1st edition.
+ *
+ * @param team_member The Kokkos team member.
+ * @param supers The superdroplets.
+ * @param state The state.
+ */
 KOKKOS_FUNCTION
 void DoCondensation::do_condensation(const TeamMember &team_member, const subviewd_supers supers,
                                      State &state) const {
@@ -139,12 +229,27 @@ void DoCondensation::do_condensation(const TeamMember &team_member, const subvie
   effect_on_thermodynamic_state(team_member, totmass_condensed, state);
 }
 
-/* returns total change in liquid water mass in parcel
-volume, 'mass_condensed', by enacting superdroplets'
-condensation / evaporation. Kokkos::parallel_reduce([...])
-is equivalent to summing deltamass over for loop:
-for (size_t kk(0); kk < nsupers; ++kk) {[...]}
-when in serial*/
+/**
+ * @brief Changes super-droplet radii according to condensation / evaporation and returns the
+ * total change in liquid water mass in volume as a result.
+ *
+ * returns total change in liquid water mass (dimensionless) in volume, 'mass_condensed', due to
+ * condensation onto / evaporation of super-droplets.
+ *
+ * The equivalent serial version of Kokkos::parallel_reduce([...]) is summing deltamass over loop:
+ * @code
+ * for (size_t ii(0); ii < ngbxs; ++ii)
+ * {
+ *  [...]
+ *  totmass_condensed += deltamass;
+ * }
+ * @endcode
+ *
+ * @param team_member The Kokkos team member.
+ * @param supers The superdroplets.
+ * @param state The state.
+ * @return The total change in liquid water mass.
+ */
 KOKKOS_FUNCTION
 double DoCondensation::superdroplets_change(const TeamMember &team_member,
                                             const subviewd_supers supers,
@@ -167,13 +272,22 @@ double DoCondensation::superdroplets_change(const TeamMember &team_member,
   return totmass_condensed;
 }
 
-/* update superdroplet radius due to radial growth/shrink
-  via condensation and diffusion of water vapour according
-  to equations from "An Introduction To Clouds...." (see
-  note at top of file). Then return mass of liquid that
-  condensed onto /evaporated off of droplet. New radius is
-  calculated using impliciteuler method which iterates
-  condensation-diffusion ODE given the previous radius. */
+/**
+ * @brief Updates the super-droplet radius and returns the mass of liquid condensed or evaporated.
+ *
+ *
+ * Updates the super-droplet radius due to radial growth/shrink via condensation and diffusion of
+ * water vapour according to equations from "An Introduction To Clouds From The Microscale to
+ * Climate" by Lohmann, Luond and Mahrt, 1st edition. New radius is calculated using 'impe'
+ * ImplicitEuler instance which iteratively solves forward integration of condensation-diffusion
+ * ODE. Return mass of liquid that condensed onto / evaporated off of droplet.
+ *
+ * @param drop The super-droplet.
+ * @param temp The ambient temperature.
+ * @param s_ratio The saturation ratio.
+ * @param ffactor The sum of the diffusion factors.
+ * @return The mass of liquid condensed or evaporated.
+*/
 KOKKOS_FUNCTION
 double DoCondensation::superdrop_mass_change(Superdrop &drop, const double temp,
                                              const double s_ratio, const double ffactor) const {
@@ -192,9 +306,17 @@ double DoCondensation::superdrop_mass_change(Superdrop &drop, const double temp,
   return mass_condensed;
 }
 
-/* if doAlterThermo isn't false, use a single team
-member to change the state due to the effect
-of condensation / evaporation */
+/**
+ * @brief Applies the effect of condensation / evaporation on the thermodynamics of the State.
+ *
+ * if doAlterThermo is true, use a single team member to change the thermodynamics of the
+ * State due to the effect of condensation / evaporation.
+ *
+ * @param team_member The Kokkos team member.
+ * @param totmass_condensed The total mass of liquid condensed.
+ * @param state The State of the volume containing the super-droplets
+ * (prior to condensation / evaporation).
+ */
 KOKKOS_FUNCTION
 void DoCondensation::effect_on_thermodynamic_state(const TeamMember &team_member,
                                                    const double totmass_condensed,
@@ -213,9 +335,18 @@ void DoCondensation::effect_on_thermodynamic_state(const TeamMember &team_member
       state);
 }
 
-/* change the thermodynamic variables (temp, qv and qc) of
-ThermoState state given the total change in condensed
-water mass per volume during time interval delt */
+/**
+ * @brief Changes the thermodynamic variables of the State.
+ *
+ * Changes the thermodynamic variables, temperature, vapour and liquid mass mixing ratios
+ * (qvap and qcond respectively) of the State given the total change in condensed water mass
+ * in its volume.
+ *
+ * @param totrho_condensed The total condensed water mass in volume of State.
+ * @param state The State of the volume containing the super-droplets
+ * (prior to condensation / evaporation).
+ * @return The updated State.
+ */
 KOKKOS_FUNCTION State DoCondensation::state_change(const double totrho_condensed,
                                                    State &state) const {
   const auto delta_qcond = double{totrho_condensed / dlc::Rho_dry};

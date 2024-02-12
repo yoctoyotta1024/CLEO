@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 8th February 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,7 +50,8 @@
  */
 class GenGridbox {
  private:
-  std::shared_ptr<Gbxindex::Gen> GbxindexGen;   /**< Pointer to gridbox index generator */
+  std::shared_ptr<Gbxindex::Gen> GbxindexGen;
+  /**< Pointer to gridbox index generator, Gbxindex::Gen object */
   std::vector<double> presss;   /**< Vector of pressures for each gridbox */
   std::vector<double> temps;    /**< Vector of temperatures for each gridbox */
   std::vector<double> qvaps;    /**< Vector of vapor mass mixing ratio for each gridbox */
