@@ -4,9 +4,6 @@ Randomness Generation
 Header file: ``<libs/superdrops/urbg.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/urbg.hpp>`_
 
-.. doxygenfile:: urbg.hpp
-   :project: superdrops
-
 .. doxygenstruct:: URBG
    :project: superdrops
    :private-members:
