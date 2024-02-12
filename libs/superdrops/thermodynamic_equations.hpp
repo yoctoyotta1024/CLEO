@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 9th February 2024
+ * Last Modified: Monday 12th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,11 +35,15 @@ namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;
 
 /**
- * @brief Calculate the specific heat capacity of a moist parcel of air.
+ * @brief Calculate the specific heat capacity of moist air.
+ *
+ * This function calculates the specific heat capacity of a moist parcel of air using the specific
+ * heat of dry air, the specific heat of water vapor, and the specific heat of condensed water, and
+ * the vapour and liquid mass mixing ratios for that parcel of air.
  *
  * @param qvap The vapor mass mixing ratio.
- * @param qcond The condensate mass mixing ratio.
- * @return The (dimensionless) specific heat capacity.
+ * @param qcond The liquid (condensate) mass mixing ratio.
+ * @return The specific heat capacity of the air parcel.
  */
 KOKKOS_INLINE_FUNCTION
 double moist_specifc_heat(const double qvap, const double qcond) {
