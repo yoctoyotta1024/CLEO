@@ -84,7 +84,7 @@ specific_humidity_params = config_yaml["thermodynamics"]["specific_humidity"]["p
 PRESS0      = 101315                # [Pa]
 TEMP0       = air_temperature_params["f_0"][0]               # [K]
 TEMPlapses  = - np.array(air_temperature_params["slopes"])*1e3            # -dT/dz [K/km]
-qvap0       = specific_humidity_params["f_0"][0]*1e-3                 # [Kg/Kg]
+qvap0       = specific_humidity_params["f_0"][0]                 # [Kg/Kg]
 qvaplapses  = - np.array(specific_humidity_params["slopes"])*1e3   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
 WVEL        = 0.0                   # [m/s]
@@ -103,7 +103,7 @@ zlim        = 800       # min z coord of superdroplets [m]
 npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan       = [1e-6, 1e-3]                      # min and max range of radii to sample [m]
+rspan       = [1e-7, 1e-3]                      # min and max range of radii to sample [m]
 dryr_sf     = 1e0                               # Dry radii scalling factor: dryradii are 1/dryr_sf of radii [m]
 
 
