@@ -19,7 +19,7 @@ jobs:
           conda info
           conda list
       - name: Install Doxygen
-        run: sudo apt-get install doxygen -y
+        run: sudo apt-get install doxygen=1.10.0 -y
         shell: bash
       - name: Install package
         run: |
