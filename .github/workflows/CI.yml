@@ -35,7 +35,7 @@ jobs:
         run: cd docs &&
           mkdir build &&
           mkdir build/doxygen &&
-          conda info --env
+          conda info --env &&
           doxygen doxygen/doxygen.dox
         shell: bash
       - name: Build docs
