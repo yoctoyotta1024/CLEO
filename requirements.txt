@@ -9,6 +9,4 @@ scipy
 matplotlib
 xarray
 awkward
-random
-struct
 zarr
