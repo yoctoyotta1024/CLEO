@@ -6,4 +6,4 @@ dependencies:
     - conda-forge::doxygen>=1.10.0
     - pip
     - pip:
-      - -r file:requirements.txt
+      - -r file://requirements.txt
