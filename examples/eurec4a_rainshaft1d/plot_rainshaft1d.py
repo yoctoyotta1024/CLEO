@@ -76,8 +76,8 @@ dataset       = binpath / "rain1d_sol.zarr"
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 cloud_id = config_yaml['cloud']['cloud_id']
-savefigpath = path2CLEO / "results/examplesolutions/yaml_config/" / f"cloud_{cloud_id}" # directory for saving figures
-savefigpath.mkdir(exist_ok=True)
+savefigpath = path2CLEO / "results/plots/yaml_config/" / f"cloud_{cloud_id}" # directory for saving figures
+savefigpath.mkdir(exist_ok=True, parents=True)
 
 SDgbxs2plt  = list(range(39, 45))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot

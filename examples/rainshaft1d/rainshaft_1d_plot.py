@@ -30,7 +30,7 @@ path2build = path2CLEO / "build"
 configfile = path2CLEO / "examples/rainshaft1d/src/config/rain1d_config.txt"
 
 sys.path.append(path2CLEO)  # for imports from pySD package
-sys.path.append(path2CLEO / "examples/exampleplotting/") # for imports from example plotting package
+sys.path.append(path2CLEO / "examples/exampleplotting/rain") # for imports from example plotting package
 
 from pySD.plotssrc import pltsds, pltmoms, animations
 from pySD.sdmout_src import *
@@ -64,7 +64,7 @@ dataset       = binpath / "rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
-savefigpath = path2CLEO / "results/examplesolutions/no_aerosol/" # directory for saving figures
+savefigpath = path2CLEO / "results/examplesolutions/rain/" # directory for saving figures
 savefigpath.mkdir(exist_ok=True)
 
 SDgbxs2plt  = list(range(39, 45))
