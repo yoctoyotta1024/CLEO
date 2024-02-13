@@ -18,9 +18,8 @@ jobs:
       - run: |
           conda info
           conda list
-          conda activate mypackage
       - name: Install Doxygen
-        run: conda install conda-forge::doxygen && doxygen --version
+        run: conda activate mypackage && doxygen --version
         shell: bash
       - name: Install package
         run: |
