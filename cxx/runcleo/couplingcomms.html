@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,7 +270,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -280,10 +280,27 @@
 <h1>CouplingComms<a class="headerlink" href="#couplingcomms" title="Link to this heading">#</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/runcleo/couplingcomms.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/couplingcomms.hpp">[source]</a></p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “CouplingComms” in doxygen xml output for project “runcleo” from directory: ../build/doxygen/xml/</p>
-</div>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00E13CouplingComms">
+<span id="_CPPv3I00E13CouplingComms"></span><span id="_CPPv2I00E13CouplingComms"></span><span class="target" id="conceptCouplingComms"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Comms</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CD</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CouplingComms</span></span></span><a class="headerlink" href="#_CPPv4I00E13CouplingComms" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;couplingcomms.hpp&gt;</em></div>
+<p>Concept representing types that handle communication between SDM and coupled dynamics solver.</p>
+<p>A type satisfies the <a class="reference internal" href="#conceptCouplingComms"><span class="std std-ref">CouplingComms</span></a> concept if it provides the following functions:<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">send_dynamics(h_gbxs,</span> <span class="pre">coupldyn)</span></code>: Sends dynamics information from SDM view of Gridboxes <code class="docutils literal notranslate"><span class="pre">h_gbxs</span></code> to coupled dynamics solver <code class="docutils literal notranslate"><span class="pre">coupldyn</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">receive_dynamics(coupldyn,</span> <span class="pre">h_gbxs)</span></code>: Receives dynamics information from coupled dynamics solver <code class="docutils literal notranslate"><span class="pre">coupldyn</span></code> into SDM view of Gridboxes <code class="docutils literal notranslate"><span class="pre">h_gbxs</span></code>.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">tparam Comms<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type for communication to check against the <a class="reference internal" href="#conceptCouplingComms"><span class="std std-ref">CouplingComms</span></a> concept. </p>
+</dd>
+<dt class="field-even">tparam CD<span class="colon">:</span></dt>
+<dd class="field-even"><p>The type for the dyanmics solver to check against the <a class="reference internal" href="coupleddynamics.html#conceptCoupledDynamics"><span class="std std-ref">CoupledDynamics</span></a> concept. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
         </article>
@@ -330,8 +347,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">CouplingComms</a><ul>
+<li><a class="reference internal" href="#_CPPv4I00E13CouplingComms"><code class="docutils literal notranslate"><span class="pre">CouplingComms</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

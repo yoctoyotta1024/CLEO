@@ -282,14 +282,14 @@
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/sdmmethods.hpp">[source]</a></p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods">
-<span id="_CPPv3I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods"></span><span id="_CPPv2I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">MicrophysicalProcess</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Microphys</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Motion</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">M</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Observer</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classSDMMethods"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SDMMethods</span></span></span><a class="headerlink" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods"></span><span id="_CPPv2I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/microphysical_process.html#_CPPv4I0E20MicrophysicalProcess" title="MicrophysicalProcess"><span class="n"><span class="pre">MicrophysicalProcess</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Microphys</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Motion</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">M</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Observer</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classSDMMethods"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SDMMethods</span></span></span><a class="headerlink" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="Link to this definition">#</a><br /></dt>
 <dd><p>Struct wrapping the core ingredients of the Super-droplet Model (SDM) part of CLEO. </p>
 <p>This struct encapsulates the essential components of the Super-droplet Model (SDM) in the CLEO coupled model. It includes components for handling gridboxes, super-droplets’ motion, microphysics, and observers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>GbxMaps</strong> – Type of the GridboxMaps. </p></li>
-<li><p><strong>Microphys</strong> – Type of the MicrophysicalProcess. </p></li>
+<li><p><strong>Microphys</strong> – Type of the <a class="reference internal" href="../superdrops/microphysical_process.html#conceptMicrophysicalProcess"><span class="std std-ref">MicrophysicalProcess</span></a>. </p></li>
 <li><p><strong>M</strong> – Type of super-droplets’ Motion. </p></li>
 <li><p><strong>Obs</strong> – Type of the Observer. </p></li>
 </ul>
@@ -307,7 +307,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>couplstep</strong> – Coupling timestep. </p></li>
 <li><p><strong>gbxmaps</strong> – object that is type of GridboxMaps. </p></li>
-<li><p><strong>microphys</strong> – object that is type of MicrophysicalProcess. </p></li>
+<li><p><strong>microphys</strong> – object that is type of <a class="reference internal" href="../superdrops/microphysical_process.html#conceptMicrophysicalProcess"><span class="std std-ref">MicrophysicalProcess</span></a>. </p></li>
 <li><p><strong>movesupers</strong> – object that is type of super-droplets’ Motion. </p></li>
 <li><p><strong>obs</strong> – object that is type of Observer. </p></li>
 </ul>
@@ -453,7 +453,7 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">operator()</span></code> is called for SDM microphysics, and it uses Kokkos parallel_for for parallelized execution. struct required so that capture by value KOKKOS_CLASS_LAMBDA (ie. [=] on CPU) only captures objects relevant to microphysics and not other members of <a class="reference internal" href="#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> (which may not be GPU compatible).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>Microphys</strong> – Type of the MicrophysicalProcess. </p>
+<dd class="field-odd"><p><strong>Microphys</strong> – Type of the <a class="reference internal" href="../superdrops/microphysical_process.html#conceptMicrophysicalProcess"><span class="std std-ref">MicrophysicalProcess</span></a>. </p>
 </dd>
 </dl>
 <div class="breathe-sectiondef docutils container">
@@ -481,7 +481,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N10SDMMethods15SDMMicrophysics9microphysE">
 <span id="_CPPv3N10SDMMethods15SDMMicrophysics9microphysE"></span><span id="_CPPv2N10SDMMethods15SDMMicrophysics9microphysE"></span><span id="SDMMethods::SDMMicrophysics::microphys__Microphys"></span><span class="target" id="structSDMMethods_1_1SDMMicrophysics_1afa71fa5a58529b341a6a759da9c37e38"></span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::Microphys"><span class="n"><span class="pre">Microphys</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">microphys</span></span></span><a class="headerlink" href="#_CPPv4N10SDMMethods15SDMMicrophysics9microphysE" title="Link to this definition">#</a><br /></dt>
-<dd><p>type of MicrophysicalProcess. </p>
+<dd><p>type of <a class="reference internal" href="../superdrops/microphysical_process.html#conceptMicrophysicalProcess"><span class="std std-ref">MicrophysicalProcess</span></a>. </p>
 </dd></dl>
 
 </div>

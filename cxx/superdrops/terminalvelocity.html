@@ -280,10 +280,15 @@
 <h1>Terminal Velocities<a class="headerlink" href="#terminal-velocities" title="Link to this heading">#</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/terminalvelocity.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/terminalvelocity.hpp">[source]</a></p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “VelocityFormula” in doxygen xml output for project “runcleo” from directory: ../build/doxygen/xml/</p>
-</div>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I0E15VelocityFormula">
+<span id="_CPPv3I0E15VelocityFormula"></span><span id="_CPPv2I0E15VelocityFormula"></span><span class="target" id="conceptVelocityFormula"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">V</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VelocityFormula</span></span></span><a class="headerlink" href="#_CPPv4I0E15VelocityFormula" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;terminalvelocity.hpp&gt;</em></div>
+<p>Concept representing a velocity formula for calculating a droplet’s terminal velocity. </p>
+<p>Objects that are of type ‘<a class="reference internal" href="#conceptVelocityFormula"><span class="std std-ref">VelocityFormula</span></a>’ take a superdroplet and return something convertible to a double (should be its terminal velocity!). </p>
+</dd></dl>
+
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv420NullTerminalVelocity">
 <span id="_CPPv320NullTerminalVelocity"></span><span id="_CPPv220NullTerminalVelocity"></span><span id="NullTerminalVelocity"></span><span class="target" id="structNullTerminalVelocity"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NullTerminalVelocity</span></span></span><a class="headerlink" href="#_CPPv420NullTerminalVelocity" title="Link to this definition">#</a><br /></dt>
@@ -462,6 +467,7 @@ See “Comparison of Raindrop Size Distributions Measured by Radar Wind Profiler
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Terminal Velocities</a><ul>
+<li><a class="reference internal" href="#_CPPv4I0E15VelocityFormula"><code class="docutils literal notranslate"><span class="pre">VelocityFormula</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv420NullTerminalVelocity"><code class="docutils literal notranslate"><span class="pre">NullTerminalVelocity</span></code></a><ul>
 <li><a class="reference internal" href="#_CPPv4NK20NullTerminalVelocityclERK9Superdrop"><code class="docutils literal notranslate"><span class="pre">NullTerminalVelocity::operator()()</span></code></a></li>
 </ul>
