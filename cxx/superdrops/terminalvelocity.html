@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,7 +270,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -282,24 +282,127 @@
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/terminalvelocity.hpp">[source]</a></p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+<p>doxygenconcept: Cannot find concept “VelocityFormula” in doxygen xml output for project “runcleo” from directory: ../build/doxygen/xml/</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenstruct: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv420NullTerminalVelocity">
+<span id="_CPPv320NullTerminalVelocity"></span><span id="_CPPv220NullTerminalVelocity"></span><span id="NullTerminalVelocity"></span><span class="target" id="structNullTerminalVelocity"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NullTerminalVelocity</span></span></span><a class="headerlink" href="#_CPPv420NullTerminalVelocity" title="Link to this definition">#</a><br /></dt>
+<dd><p>Null terminal velocity formula returning zero velocity. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK20NullTerminalVelocityclERK9Superdrop">
+<span id="_CPPv3NK20NullTerminalVelocityclERK9Superdrop"></span><span id="_CPPv2NK20NullTerminalVelocityclERK9Superdrop"></span><span id="NullTerminalVelocity::call-operator__SuperdropCRC"></span><span class="target" id="structNullTerminalVelocity_1a3e93fd5a553aa0858efd173bc81496a8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK20NullTerminalVelocityclERK9Superdrop" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns zero as the terminal velocity of a droplet. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>drop</strong> – The super-droplet. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>0.0 </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenstruct: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422SimmelTerminalVelocity">
+<span id="_CPPv322SimmelTerminalVelocity"></span><span id="_CPPv222SimmelTerminalVelocity"></span><span id="SimmelTerminalVelocity"></span><span class="target" id="structSimmelTerminalVelocity"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SimmelTerminalVelocity</span></span></span><a class="headerlink" href="#_CPPv422SimmelTerminalVelocity" title="Link to this definition">#</a><br /></dt>
+<dd><p>Terminal velocity formula as in Simmel et al. (2002). </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK22SimmelTerminalVelocity9watermassEKd">
+<span id="_CPPv3NK22SimmelTerminalVelocity9watermassEKd"></span><span id="_CPPv2NK22SimmelTerminalVelocity9watermassEKd"></span><span id="SimmelTerminalVelocity::watermass__doubleCC"></span><span class="target" id="structSimmelTerminalVelocity_1a25fcaf9513186c23e7a657cce1c04ae3"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">watermass</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK22SimmelTerminalVelocity9watermassEKd" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the mass of a droplet as if it’s all water [gramms] to use as ‘x’ according to Simmel et al. 2002 equation (14). </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>radius</strong> – The radius of the droplet. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mass of the droplet as if it’s all water [gramms]. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK22SimmelTerminalVelocityclERK9Superdrop">
+<span id="_CPPv3NK22SimmelTerminalVelocityclERK9Superdrop"></span><span id="_CPPv2NK22SimmelTerminalVelocityclERK9Superdrop"></span><span id="SimmelTerminalVelocity::call-operator__SuperdropCRC"></span><span class="target" id="structSimmelTerminalVelocity_1acd78d5c855889ed9680c5b0508cd04a6"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK22SimmelTerminalVelocityclERK9Superdrop" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the (dimensionless) terminal velocity of a droplet according to Simmel et al. (2002). </p>
+<p>Simmel et al. 2002 formula is a semi-empirical adapted from the work of Gunn and Kinzer (1949) and Beard (1976) and used in Simmel’s parmeterisation of Long 1974’s hydrodynamic collision kernel. For drops with radius &gt;= 1.74mm, terminal velocity is 9.17m/s.</p>
+<p>Note: Improvement could be made by following Arabas et al. 2015 and Morrison et al. 2005 in multiplying the terminal velocity by the density ratio, rho_dry0/rho_dry, of dry air under standard conditions (rho_dry0) and in current state (rho_dry).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>drop</strong> – The superdroplet. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The (dimensionless) terminal velocity. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenstruct: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv425RogersYauTerminalVelocity">
+<span id="_CPPv325RogersYauTerminalVelocity"></span><span id="_CPPv225RogersYauTerminalVelocity"></span><span id="RogersYauTerminalVelocity"></span><span class="target" id="structRogersYauTerminalVelocity"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RogersYauTerminalVelocity</span></span></span><a class="headerlink" href="#_CPPv425RogersYauTerminalVelocity" title="Link to this definition">#</a><br /></dt>
+<dd><p>Terminal velocity formula based on Rogers and Yau (1989) textbook. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK25RogersYauTerminalVelocityclERK9Superdrop">
+<span id="_CPPv3NK25RogersYauTerminalVelocityclERK9Superdrop"></span><span id="_CPPv2NK25RogersYauTerminalVelocityclERK9Superdrop"></span><span id="RogersYauTerminalVelocity::call-operator__SuperdropCRC"></span><span class="target" id="structRogersYauTerminalVelocity_1a55052e33a86af6acc649699a2bca92eb"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK25RogersYauTerminalVelocityclERK9Superdrop" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the terminal velocity of a superdroplet according to Rogers and Yau (1989). </p>
+<p>Returns the terminal velocity of a droplet according to Rogers et al. (1993).</p>
+<p>Formula from Rogers and Yau 1989 textbook “a short course in cloud physics” chapter 8. For small droplets formula parameterises Stokes’ terminal velocity (valid at low Reynolds numbers for spherical droplets). For drops with radius &gt;= 2mm, terminal velocity is 9m/s.</p>
+<p>
+See “Comparison of Raindrop Size Distributions Measured by Radar Wind Profiler and by Airplane” by R. R. Rogers, D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993). Formulation is approximation of Gunn and Kinzer (1949) tabulated values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>drop</strong> – The superdroplet. </p></li>
+<li><p><strong>drop</strong> – The superdroplet. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The (dimensionless) terminal velocity.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The (dimensionless) terminal velocity. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenstruct: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv424RogersGKTerminalVelocity">
+<span id="_CPPv324RogersGKTerminalVelocity"></span><span id="_CPPv224RogersGKTerminalVelocity"></span><span id="RogersGKTerminalVelocity"></span><span class="target" id="structRogersGKTerminalVelocity"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RogersGKTerminalVelocity</span></span></span><a class="headerlink" href="#_CPPv424RogersGKTerminalVelocity" title="Link to this definition">#</a><br /></dt>
+<dd><p>Terminal velocity formula based on Rogers et al. (1993). </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK24RogersGKTerminalVelocityclERK9Superdrop">
+<span id="_CPPv3NK24RogersGKTerminalVelocityclERK9Superdrop"></span><span id="_CPPv2NK24RogersGKTerminalVelocityclERK9Superdrop"></span><span id="RogersGKTerminalVelocity::call-operator__SuperdropCRC"></span><span class="target" id="structRogersGKTerminalVelocity_1a525516848b6403875344b4895d55ccd7"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK24RogersGKTerminalVelocityclERK9Superdrop" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the terminal velocity of a droplet according to Rogers et al. (1993). </p>
+<p>See “Comparison of Raindrop Size Distributions Measured by Radar Wind Profiler and by Airplane” by R. R. Rogers, D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993). Formulation is approximation of Gunn and Kinzer (1949) tabulated values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>drop</strong> – The superdroplet. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The (dimensionless) terminal velocity. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
+</dd></dl>
+
 </section>
 
         </article>
@@ -346,8 +449,43 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Terminal Velocities</a><ul>
+<li><a class="reference internal" href="#_CPPv420NullTerminalVelocity"><code class="docutils literal notranslate"><span class="pre">NullTerminalVelocity</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4NK20NullTerminalVelocityclERK9Superdrop"><code class="docutils literal notranslate"><span class="pre">NullTerminalVelocity::operator()()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#_CPPv422SimmelTerminalVelocity"><code class="docutils literal notranslate"><span class="pre">SimmelTerminalVelocity</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4NK22SimmelTerminalVelocity9watermassEKd"><code class="docutils literal notranslate"><span class="pre">SimmelTerminalVelocity::watermass()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK22SimmelTerminalVelocityclERK9Superdrop"><code class="docutils literal notranslate"><span class="pre">SimmelTerminalVelocity::operator()()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#_CPPv425RogersYauTerminalVelocity"><code class="docutils literal notranslate"><span class="pre">RogersYauTerminalVelocity</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4NK25RogersYauTerminalVelocityclERK9Superdrop"><code class="docutils literal notranslate"><span class="pre">RogersYauTerminalVelocity::operator()()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#_CPPv424RogersGKTerminalVelocity"><code class="docutils literal notranslate"><span class="pre">RogersGKTerminalVelocity</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4NK24RogersGKTerminalVelocityclERK9Superdrop"><code class="docutils literal notranslate"><span class="pre">RogersGKTerminalVelocity::operator()()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

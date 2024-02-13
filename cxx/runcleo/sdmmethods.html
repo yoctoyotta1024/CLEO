@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,7 +270,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -280,10 +280,215 @@
 <h1>SDMMethods<a class="headerlink" href="#sdmmethods" title="Link to this heading">#</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/runcleo/sdmmethods.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/sdmmethods.hpp">[source]</a></p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenclass: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods">
+<span id="_CPPv3I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods"></span><span id="_CPPv2I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">MicrophysicalProcess</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Microphys</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Motion</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">M</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Observer</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classSDMMethods"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SDMMethods</span></span></span><a class="headerlink" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="Link to this definition">#</a><br /></dt>
+<dd><p>Struct wrapping the core ingredients of the Super-droplet Model (SDM) part of CLEO. </p>
+<p>This struct encapsulates the essential components of the Super-droplet Model (SDM) in the CLEO coupled model. It includes components for handling gridboxes, super-droplets’ motion, microphysics, and observers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>GbxMaps</strong> – Type of the GridboxMaps. </p></li>
+<li><p><strong>Microphys</strong> – Type of the MicrophysicalProcess. </p></li>
+<li><p><strong>M</strong> – Type of super-droplets’ Motion. </p></li>
+<li><p><strong>Obs</strong> – Type of the Observer. </p></li>
+</ul>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SDMMethods10SDMMethodsEKjK7GbxMapsK9MicrophysK1MK3Obs">
+<span id="_CPPv3N10SDMMethods10SDMMethodsEKjK7GbxMapsK9MicrophysK1MK3Obs"></span><span id="_CPPv2N10SDMMethods10SDMMethodsEKjK7GbxMapsK9MicrophysK1MK3Obs"></span><span id="SDMMethods::SDMMethods__unsigned-iC.GbxMapsC.MicrophysC.MC.ObsC"></span><span class="target" id="classSDMMethods_1aa3a6e3c7accae9c627d16586a02d0c1c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SDMMethods</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">couplstep</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::Microphys"><span class="n"><span class="pre">Microphys</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">microphys</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::M"><span class="n"><span class="pre">M</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">movesupers</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::Obs"><span class="n"><span class="pre">Obs</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">obs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10SDMMethods10SDMMethodsEKjK7GbxMapsK9MicrophysK1MK3Obs" title="Link to this definition">#</a><br /></dt>
+<dd><p>Constructor for <a class="reference internal" href="#classSDMMethods"><span class="std std-ref">SDMMethods</span></a>. </p>
+<p>Initializes <a class="reference internal" href="#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> with the provided coupling timestep, gridbox maps, microphysics, motion, and observer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>couplstep</strong> – Coupling timestep. </p></li>
+<li><p><strong>gbxmaps</strong> – object that is type of GridboxMaps. </p></li>
+<li><p><strong>microphys</strong> – object that is type of MicrophysicalProcess. </p></li>
+<li><p><strong>movesupers</strong> – object that is type of super-droplets’ Motion. </p></li>
+<li><p><strong>obs</strong> – object that is type of Observer. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SDMMethods13get_couplstepEv">
+<span id="_CPPv3NK10SDMMethods13get_couplstepEv"></span><span id="_CPPv2NK10SDMMethods13get_couplstepEv"></span><span id="SDMMethods::get_couplstepC"></span><span class="target" id="classSDMMethods_1a03e95e2bfe0c56752c516dcfb4b98465"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_couplstep</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10SDMMethods13get_couplstepEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get the coupling step value. </p>
+<p>This function retrieves and returns the size of the coupling timestep.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The coupling timestep value. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SDMMethods19prepare_to_timestepEK14viewh_constgbx">
+<span id="_CPPv3NK10SDMMethods19prepare_to_timestepEK14viewh_constgbx"></span><span id="_CPPv2NK10SDMMethods19prepare_to_timestepEK14viewh_constgbx"></span><span id="SDMMethods::prepare_to_timestep__viewh_constgbxCC"></span><span class="target" id="classSDMMethods_1a4680f69411844eca94683a1158b711e3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">prepare_to_timestep</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewh_constgbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10SDMMethods19prepare_to_timestepEK14viewh_constgbx" title="Link to this definition">#</a><br /></dt>
+<dd><p>Prepare CLEO SDM for timestepping. </p>
+<p>This function prepares the CLEO SDM for timestepping by calling the <code class="docutils literal notranslate"><span class="pre">before_timestepping</span></code> function of the observer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>h_gbxs</strong> – View of gridboxes on host. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SDMMethods13at_start_stepEKjK14viewh_constgbx">
+<span id="_CPPv3NK10SDMMethods13at_start_stepEKjK14viewh_constgbx"></span><span id="_CPPv2NK10SDMMethods13at_start_stepEKjK14viewh_constgbx"></span><span id="SDMMethods::at_start_step__unsigned-iC.viewh_constgbxCC"></span><span class="target" id="classSDMMethods_1a2566b30009b7860dc87dcba12482ac6b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewh_constgbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10SDMMethods13at_start_stepEKjK14viewh_constgbx" title="Link to this definition">#</a><br /></dt>
+<dd><p>Execute at the start of each coupled model timestep. </p>
+<p>This function is called at the start of each coupled model timestep (i.e. at start of <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code>) and includes calls to the observer’s <code class="docutils literal notranslate"><span class="pre">at_start_step</span></code> function for both the domain and individual gridboxes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
+<li><p><strong>h_gbxs</strong> – View of gridboxes on host. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SDMMethods8run_stepEKjKj9viewd_gbxK12viewd_supers13GenRandomPool">
+<span id="_CPPv3NK10SDMMethods8run_stepEKjKj9viewd_gbxK12viewd_supers13GenRandomPool"></span><span id="_CPPv2NK10SDMMethods8run_stepEKjKj9viewd_gbxK12viewd_supers13GenRandomPool"></span><span id="SDMMethods::run_step__unsigned-iC.unsigned-iC.viewd_gbx.viewd_supersC.GenRandomPoolC"></span><span class="target" id="classSDMMethods_1ac942aafd94b47bf050ae0dbcd20de43a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl_next</span></span>, <span class="n"><span class="pre">viewd_gbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span>, <span class="n"><span class="pre">GenRandomPool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">genpool</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10SDMMethods8run_stepEKjKj9viewd_gbxK12viewd_supers13GenRandomPool" title="Link to this definition">#</a><br /></dt>
+<dd><p>Run CLEO SDM for a specified timestep range. </p>
+<p>This function runs CLEO SDM on the device from time <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code> to <code class="docutils literal notranslate"><span class="pre">t_mdl_next</span></code>, with a sub-timestepping routine for the super-droplets’ movement and microphysics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
+<li><p><strong>t_mdl_next</strong> – Next timestep of the coupled model. </p></li>
+<li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
+<li><p><strong>totsupers</strong> – View of total superdroplets. </p></li>
+<li><p><strong>genpool</strong> – Random number generator pool. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10SDMMethods7gbxmapsE">
+<span id="_CPPv3N10SDMMethods7gbxmapsE"></span><span id="_CPPv2N10SDMMethods7gbxmapsE"></span><span id="SDMMethods::gbxmaps__GbxMaps"></span><span class="target" id="classSDMMethods_1adc794607e7372f1ac542fee7432ae1d2"></span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gbxmaps</span></span></span><a class="headerlink" href="#_CPPv4N10SDMMethods7gbxmapsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>object that is type of GridboxMaps. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10SDMMethods3obsE">
+<span id="_CPPv3N10SDMMethods3obsE"></span><span id="_CPPv2N10SDMMethods3obsE"></span><span id="SDMMethods::obs__Obs"></span><span class="target" id="classSDMMethods_1a175dd850fa3a38223fdc5884312022fe"></span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::Obs"><span class="n"><span class="pre">Obs</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">obs</span></span></span><a class="headerlink" href="#_CPPv4N10SDMMethods3obsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>object that is type of Observer. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10SDMMethods16sdm_microphysicsE">
+<span id="_CPPv3N10SDMMethods16sdm_microphysicsE"></span><span id="_CPPv2N10SDMMethods16sdm_microphysicsE"></span><span id="SDMMethods::sdm_microphysics__SDMMethods::SDMMicrophysics"></span><span class="target" id="classSDMMethods_1ae284ca0e8693b81a1c3b8762b8d20a38"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods"><span class="n"><span class="pre">SDMMethods</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N10SDMMethods15SDMMicrophysicsE" title="SDMMethods::SDMMicrophysics"><span class="n"><span class="pre">SDMMicrophysics</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdm_microphysics</span></span></span><a class="headerlink" href="#_CPPv4N10SDMMethods16sdm_microphysicsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>instance of <a class="reference internal" href="#structSDMMethods_1_1SDMMicrophysics"><span class="std std-ref">SDMMicrophysics</span></a>, operator is call of SDM microphysics </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SDMMethods12next_sdmstepEKjKj">
+<span id="_CPPv3NK10SDMMethods12next_sdmstepEKjKj"></span><span id="_CPPv2NK10SDMMethods12next_sdmstepEKjKj"></span><span id="SDMMethods::next_sdmstep__unsigned-iC.unsigned-iCC"></span><span class="target" id="classSDMMethods_1a5b39c428404d1156c5ef6ea63bbac54a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next_sdmstep</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_sdm</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">next_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10SDMMethods12next_sdmstepEKjKj" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get the next timestep for SDM. </p>
+<p>Given the current timestep for SDM (<code class="docutils literal notranslate"><span class="pre">t_sdm</span></code>) and the next timestep for the coupled model (<code class="docutils literal notranslate"><span class="pre">next_mdl</span></code>), this function determines which event (motion or one complete step) will be the next to occur and returns the time of the sooner event (i.e., next <code class="docutils literal notranslate"><span class="pre">t_move</span></code> or <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_sdm</strong> – Current timestep of SDM. </p></li>
+<li><p><strong>next_mdl</strong> – Next timestep of the coupled model. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The timestep of the sooner event. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SDMMethods19superdrops_movementEKj9viewd_gbxK12viewd_supers">
+<span id="_CPPv3NK10SDMMethods19superdrops_movementEKj9viewd_gbxK12viewd_supers"></span><span id="_CPPv2NK10SDMMethods19superdrops_movementEKj9viewd_gbxK12viewd_supers"></span><span id="SDMMethods::superdrops_movement__unsigned-iC.viewd_gbx.viewd_supersCC"></span><span class="target" id="classSDMMethods_1ac0547e05bc0ab9f8522684bad11e0756"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">superdrops_movement</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_sdm</span></span>, <span class="n"><span class="pre">viewd_gbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10SDMMethods19superdrops_movementEKj9viewd_gbxK12viewd_supers" title="Link to this definition">#</a><br /></dt>
+<dd><p>Move superdroplets according to the <code class="docutils literal notranslate"><span class="pre">movesupers</span></code> struct. </p>
+<p>This function moves superdroplets, including their movement between gridboxes, according to the <code class="docutils literal notranslate"><span class="pre">movesupers</span></code> struct. <code class="docutils literal notranslate"><span class="pre">movesupers</span></code> is an instance of the MoveSupersInDomain templated type with a certain instance of a type of GridboxMaps and super-droplets’ Motion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_sdm</strong> – Current timestep for SDM. </p></li>
+<li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
+<li><p><strong>totsupers</strong> – View of total superdroplets. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10SDMMethods9couplstepE">
+<span id="_CPPv3N10SDMMethods9couplstepE"></span><span id="_CPPv2N10SDMMethods9couplstepE"></span><span id="SDMMethods::couplstep__unsigned-i"></span><span class="target" id="classSDMMethods_1a840927112d87283fc134998ec255e923"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">couplstep</span></span></span><a class="headerlink" href="#_CPPv4N10SDMMethods9couplstepE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Coupling timestep. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10SDMMethods10movesupersE">
+<span id="_CPPv3N10SDMMethods10movesupersE"></span><span id="_CPPv2N10SDMMethods10movesupersE"></span><span id="SDMMethods::movesupers__MoveSupersInDomain:GbxMaps.M:"></span><span class="target" id="classSDMMethods_1a9f3420ae889b315d47deb57f87c979ca"></span><span class="n"><span class="pre">MoveSupersInDomain</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::M"><span class="n"><span class="pre">M</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">movesupers</span></span></span><a class="headerlink" href="#_CPPv4N10SDMMethods10movesupersE" title="Link to this definition">#</a><br /></dt>
+<dd><p>object for super-droplets’ MoveSupersInDomain with certain type of Motion. </p>
+</dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N10SDMMethods15SDMMicrophysicsE">
+<span id="_CPPv3N10SDMMethods15SDMMicrophysicsE"></span><span id="_CPPv2N10SDMMethods15SDMMicrophysicsE"></span><span id="SDMMethods::SDMMicrophysics"></span><span class="target" id="structSDMMethods_1_1SDMMicrophysics"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SDMMicrophysics</span></span></span><a class="headerlink" href="#_CPPv4N10SDMMethods15SDMMicrophysicsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Structure for encapsulating the microphysics process in SDM. </p>
+<p>The <code class="docutils literal notranslate"><span class="pre">operator()</span></code> is called for SDM microphysics, and it uses Kokkos parallel_for for parallelized execution. struct required so that capture by value KOKKOS_CLASS_LAMBDA (ie. [=] on CPU) only captures objects relevant to microphysics and not other members of <a class="reference internal" href="#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> (which may not be GPU compatible).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Microphys</strong> – Type of the MicrophysicalProcess. </p>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SDMMethods15SDMMicrophysicsclEKjKjK9viewd_gbx13GenRandomPool">
+<span id="_CPPv3NK10SDMMethods15SDMMicrophysicsclEKjKjK9viewd_gbx13GenRandomPool"></span><span id="_CPPv2NK10SDMMethods15SDMMicrophysicsclEKjKjK9viewd_gbx13GenRandomPool"></span><span id="SDMMethods::SDMMicrophysics::call-operator__unsigned-iC.unsigned-iC.viewd_gbxC.GenRandomPoolC"></span><span class="target" id="structSDMMethods_1_1SDMMicrophysics_1a1607bef17141abc953ac487fdb82fc3d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_sdm</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_next</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_gbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="n"><span class="pre">GenRandomPool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">genpool</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10SDMMethods15SDMMicrophysicsclEKjKjK9viewd_gbx13GenRandomPool" title="Link to this definition">#</a><br /></dt>
+<dd><p>run SDM microphysics for each gridbox (using sub-timestepping routine). </p>
+<p>This function runs SDM microphysics for each gridbox using a sub-timestepping routine. Kokkos::parallel_for is nested parallelism within parallelised loop over gridboxes, serial equivalent is simply: <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">(size_t</span> <span class="pre">ii(0);</span> <span class="pre">ii</span> <span class="pre">&lt;</span> <span class="pre">ngbxs;</span> <span class="pre">++ii)</span> <span class="pre">{</span> <span class="pre">[...]</span> <span class="pre">}</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_sdm</strong> – Current timestep for SDM. </p></li>
+<li><p><strong>t_next</strong> – Next timestep for SDM. </p></li>
+<li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
+<li><p><strong>genpool</strong> – Random number generator pool. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10SDMMethods15SDMMicrophysics9microphysE">
+<span id="_CPPv3N10SDMMethods15SDMMicrophysics9microphysE"></span><span id="_CPPv2N10SDMMethods15SDMMicrophysics9microphysE"></span><span id="SDMMethods::SDMMicrophysics::microphys__Microphys"></span><span class="target" id="structSDMMethods_1_1SDMMicrophysics_1afa71fa5a58529b341a6a759da9c37e38"></span><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods" title="SDMMethods::Microphys"><span class="n"><span class="pre">Microphys</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">microphys</span></span></span><a class="headerlink" href="#_CPPv4N10SDMMethods15SDMMicrophysics9microphysE" title="Link to this definition">#</a><br /></dt>
+<dd><p>type of MicrophysicalProcess. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
         </article>
@@ -330,8 +535,46 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SDMMethods</a><ul>
+<li><a class="reference internal" href="#_CPPv4I_11GridboxMaps_20MicrophysicalProcess_6MotionI7GbxMapsE_8ObserverE10SDMMethods"><code class="docutils literal notranslate"><span class="pre">SDMMethods</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N10SDMMethods10SDMMethodsEKjK7GbxMapsK9MicrophysK1MK3Obs"><code class="docutils literal notranslate"><span class="pre">SDMMethods::SDMMethods()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SDMMethods13get_couplstepEv"><code class="docutils literal notranslate"><span class="pre">SDMMethods::get_couplstep()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SDMMethods19prepare_to_timestepEK14viewh_constgbx"><code class="docutils literal notranslate"><span class="pre">SDMMethods::prepare_to_timestep()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SDMMethods13at_start_stepEKjK14viewh_constgbx"><code class="docutils literal notranslate"><span class="pre">SDMMethods::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SDMMethods8run_stepEKjKj9viewd_gbxK12viewd_supers13GenRandomPool"><code class="docutils literal notranslate"><span class="pre">SDMMethods::run_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SDMMethods7gbxmapsE"><code class="docutils literal notranslate"><span class="pre">SDMMethods::gbxmaps</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SDMMethods3obsE"><code class="docutils literal notranslate"><span class="pre">SDMMethods::obs</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SDMMethods16sdm_microphysicsE"><code class="docutils literal notranslate"><span class="pre">SDMMethods::sdm_microphysics</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SDMMethods12next_sdmstepEKjKj"><code class="docutils literal notranslate"><span class="pre">SDMMethods::next_sdmstep()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SDMMethods19superdrops_movementEKj9viewd_gbxK12viewd_supers"><code class="docutils literal notranslate"><span class="pre">SDMMethods::superdrops_movement()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SDMMethods9couplstepE"><code class="docutils literal notranslate"><span class="pre">SDMMethods::couplstep</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SDMMethods10movesupersE"><code class="docutils literal notranslate"><span class="pre">SDMMethods::movesupers</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SDMMethods15SDMMicrophysicsE"><code class="docutils literal notranslate"><span class="pre">SDMMethods::SDMMicrophysics</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4NK10SDMMethods15SDMMicrophysicsclEKjKjK9viewd_gbx13GenRandomPool"><code class="docutils literal notranslate"><span class="pre">SDMMethods::SDMMicrophysics::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SDMMethods15SDMMicrophysics9microphysE"><code class="docutils literal notranslate"><span class="pre">SDMMethods::SDMMicrophysics::microphys</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

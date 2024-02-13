@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,7 +270,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -282,30 +282,190 @@
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/createsupers.hpp">[source]</a></p>
 <p>This sub-module defines functions and classes called by RunCLEO to create and initialise
 super-droplets in Kokkos view (on device).</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenclass: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv412GenSuperdrop">
+<span id="_CPPv312GenSuperdrop"></span><span id="_CPPv212GenSuperdrop"></span><span id="GenSuperdrop"></span><span class="target" id="classGenSuperdrop"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GenSuperdrop</span></span></span><a class="headerlink" href="#_CPPv412GenSuperdrop" title="Link to this definition">#</a><br /></dt>
+<dd><p>Struct that holds data for the initial conditions of super-droplets. </p>
+<p>This struct holds data for the initial conditions of some properties of super-droplets and provides an operator which returns a super-droplet generated using them. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN12GenSuperdrop12GenSuperdropERK18SuperdropInitConds">
+<span id="_CPPv3I0EN12GenSuperdrop12GenSuperdropERK18SuperdropInitConds"></span><span id="_CPPv2I0EN12GenSuperdrop12GenSuperdropERK18SuperdropInitConds"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classGenSuperdrop_1aa3515fd8c25405778cc2ced1419a03c8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GenSuperdrop</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN12GenSuperdrop12GenSuperdropERK18SuperdropInitConds" title="GenSuperdrop::GenSuperdrop::SuperdropInitConds"><span class="n"><span class="pre">SuperdropInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sdic</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN12GenSuperdrop12GenSuperdropERK18SuperdropInitConds" title="Link to this definition">#</a><br /></dt>
+<dd><p>Constructs a <a class="reference internal" href="#classGenSuperdrop"><span class="std std-ref">GenSuperdrop</span></a> instance. </p>
+<p>This constructor initializes a <a class="reference internal" href="#classGenSuperdrop"><span class="std std-ref">GenSuperdrop</span></a> instance using the provided SuperdropInitConds instance to fetch initial data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>SuperdropInitConds</strong> – The type of the data for super-droplets’ initial conditions. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sdic</strong> – The instance of the data for super-droplets’ initial conditions. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12GenSuperdropclEKj">
+<span id="_CPPv3NK12GenSuperdropclEKj"></span><span id="_CPPv2NK12GenSuperdropclEKj"></span><span id="GenSuperdrop::call-operator__unsigned-iCC"></span><span class="target" id="classGenSuperdrop_1a304c1ceb4d548316e2ed46af87307bb9"></span><a class="reference internal" href="../superdrops/superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12GenSuperdropclEKj" title="Link to this definition">#</a><br /></dt>
+<dd><p>Generate a super-droplet using initial data for the kk’th superdrop. </p>
+<p>This function returns a superdrop generated from the specified position ‘kk’ in the initial conditions data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kk</strong> – The index of the superdrop to generate. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated super-droplet. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12GenSuperdrop9coords_atEKj">
+<span id="_CPPv3NK12GenSuperdrop9coords_atEKj"></span><span id="_CPPv2NK12GenSuperdrop9coords_atEKj"></span><span id="GenSuperdrop::coords_at__unsigned-iCC"></span><span class="target" id="classGenSuperdrop_1adf0173567bf2cbd16df3a5513de2898a"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coords_at</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12GenSuperdrop9coords_atEKj" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns initial spatial coordinates of the kk’th super-droplet. </p>
+<p>A coordinate is only copied from the corresponding coords vector if that coordinate is consistent with the number of spatial dimensions of the model. Otherwise, the coordinate is set to 0.0. For example, if the model is 1-D, only coord3 is obtained from the initial data vector; coord1 and coord2 are set to 0.0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kk</strong> – The index of the super-droplet in the initial data (0 &lt;= kk &lt; total number of superdrops). </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array containing the kk’th superdroplet’s spatial coordinates (coord3, coord1, coord2). </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12GenSuperdrop8attrs_atEKj">
+<span id="_CPPv3NK12GenSuperdrop8attrs_atEKj"></span><span id="_CPPv2NK12GenSuperdrop8attrs_atEKj"></span><span id="GenSuperdrop::attrs_at__unsigned-iCC"></span><span class="target" id="classGenSuperdrop_1a6477ac878ff75ab6b73831bcf7b1b38e"></span><a class="reference internal" href="../superdrops/superdrop_attrs.html#_CPPv414SuperdropAttrs" title="SuperdropAttrs"><span class="n"><span class="pre">SuperdropAttrs</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">attrs_at</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12GenSuperdrop8attrs_atEKj" title="Link to this definition">#</a><br /></dt>
+<dd><p>Function returns a superdroplet’s attributes from position ‘kk’ in the initial conditions data. All super-droplets have the same solute properties. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kk</strong> – The index of the super-droplet in the initial data (0 &lt;= kk &lt; total number of superdrops). </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The attributes of the superdrop from index ‘kk’. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N12GenSuperdrop10nspacedimsE">
+<span id="_CPPv3N12GenSuperdrop10nspacedimsE"></span><span id="_CPPv2N12GenSuperdrop10nspacedimsE"></span><span id="GenSuperdrop::nspacedims__unsigned-i"></span><span class="target" id="classGenSuperdrop_1a4b6831a57d615e576446085aa1591f2c"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nspacedims</span></span></span><a class="headerlink" href="#_CPPv4N12GenSuperdrop10nspacedimsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Number of spatial dimensions. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N12GenSuperdrop7sdIdGenE">
+<span id="_CPPv3N12GenSuperdrop7sdIdGenE"></span><span id="_CPPv2N12GenSuperdrop7sdIdGenE"></span><span id="GenSuperdrop::sdIdGen__std::shared_ptr:Superdrop::IDType::Gen:"></span><span class="target" id="classGenSuperdrop_1aa92c9ae024cabb68afb4ec39e2f7f223"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../superdrops/superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../superdrops/superdrop.html#_CPPv4N9Superdrop6IDTypeE" title="Superdrop::IDType"><span class="n"><span class="pre">IDType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Gen</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdIdGen</span></span></span><a class="headerlink" href="#_CPPv4N12GenSuperdrop7sdIdGenE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Pointer <a class="reference internal" href="../superdrops/superdrop.html#classSuperdrop_1aebcbeafd43e6a898d84c580e5ee3f2be"><span class="std std-ref">Superdrop::IDType</span></a> object for super-droplet ID generation. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N12GenSuperdrop8initdataE">
+<span id="_CPPv3N12GenSuperdrop8initdataE"></span><span id="_CPPv2N12GenSuperdrop8initdataE"></span><span id="GenSuperdrop::initdata__InitSupersData"></span><span class="target" id="classGenSuperdrop_1a5304e47fd7155fc4b63398b1e71b47ec"></span><span class="n"><span class="pre">InitSupersData</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initdata</span></span></span><a class="headerlink" href="#_CPPv4N12GenSuperdrop8initdataE" title="Link to this definition">#</a><br /></dt>
+<dd><p>instance of InitSupersData for initialising superdrops. </p>
+</dd></dl>
+
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds">
+<span id="_CPPv3I0E13create_supersRK18SuperdropInitConds"></span><span id="_CPPv2I0E13create_supersRK18SuperdropInitConds"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="createsupers_8hpp_1a81b08e4a28f3a27f87c0b7c9b1df2b3a"></span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_supers</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds" title="create_supers::SuperdropInitConds"><span class="n"><span class="pre">SuperdropInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sdic</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds" title="Link to this definition">#</a><br /></dt>
+<dd><p>Create a view of super-droplets in (device) memory. </p>
+<p>This function creates an ordered view of superdrops in device memory, where the number of superdrops is specified by the parameter <code class="docutils literal notranslate"><span class="pre">totnsupers</span></code>. The superdrops are ordered by the gridbox indexes and generated using a generator which uses the initial conditions referenced by the <code class="docutils literal notranslate"><span class="pre">SuperdropInitConds</span></code> type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>SuperdropInitConds</strong> – The type of the super-droplets’ initial conditions data. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sdic</strong> – The instance of the super-droplets’ initial conditions data. </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A view of super-droplets in device memory. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0E17initialise_supers12viewd_supersRK18SuperdropInitConds">
+<span id="_CPPv3I0E17initialise_supersRK18SuperdropInitConds"></span><span id="_CPPv2I0E17initialise_supersRK18SuperdropInitConds"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="createsupers_8hpp_1a5686cff9b80fb9f0271565bc487e61fe"></span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialise_supers</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E17initialise_supers12viewd_supersRK18SuperdropInitConds" title="initialise_supers::SuperdropInitConds"><span class="n"><span class="pre">SuperdropInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sdic</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E17initialise_supers12viewd_supersRK18SuperdropInitConds" title="Link to this definition">#</a><br /></dt>
+<dd><p>Return an initialised view of superdrops in device memory. </p>
+<p>This function initialises a view of superdrops in device memory by creating a view on the device and copying a host mirror view that is initialised using the <code class="docutils literal notranslate"><span class="pre">SuperdropInitConds</span></code> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>SuperdropInitConds</strong> – The type of the super-droplets’ initial conditions data. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sdic</strong> – The instance of the super-droplets’ initial conditions data. </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A view of superdrops in device memory. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425initialise_supers_on_hostRK12GenSuperdropK12viewd_supers">
+<span id="_CPPv325initialise_supers_on_hostRK12GenSuperdropK12viewd_supers"></span><span id="_CPPv225initialise_supers_on_hostRK12GenSuperdropK12viewd_supers"></span><span id="initialise_supers_on_host__GenSuperdropCR.viewd_supersC"></span><span class="target" id="createsupers_8hpp_1ac7ccf7711e299740da994abfdfd164c1"></span><span class="n"><span class="pre">viewd_supers</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialise_supers_on_host</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv412GenSuperdrop" title="GenSuperdrop"><span class="n"><span class="pre">GenSuperdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gen</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425initialise_supers_on_hostRK12GenSuperdropK12viewd_supers" title="Link to this definition">#</a><br /></dt>
+<dd><p>Return a mirror view of superdrops on host memory. </p>
+<p>This function initialises a mirror view of superdrops on host memory, using the super-droplet generator instance <code class="docutils literal notranslate"><a class="reference internal" href="#classGenSuperdrop"><span class="std std-ref"><span class="pre">GenSuperdrop</span></span></a></code> to generate the kk’th super-droplet with their initial Gridbox index, spatial coordinates, and attributes. Kokkos::parallel_for is used to perform parallel initialisation of the mirror view, where each superdrop is generated by the provided <code class="docutils literal notranslate"><span class="pre">gen</span></code> function object.</p>
+<p>The equivalent serial version of the Kokkos::parallel_for([…]) is: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">kk</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">kk</span> <span class="o">&lt;</span> <span class="n">totnsupers</span><span class="p">;</span> <span class="o">++</span><span class="n">kk</span><span class="p">)</span>
+<span class="p">{</span>
+ <span class="n">h_supers</span><span class="p">(</span><span class="n">kk</span><span class="p">)</span> <span class="o">=</span> <span class="n">gen</span><span class="p">(</span><span class="n">kk</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
-</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gen</strong> – The generator function object used to initialize the superdrops. </p></li>
+<li><p><strong>supers</strong> – The view of superdrops on device memory. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A mirror view of superdrops on host memory. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419is_sdsinit_completeK17viewd_constsupersK6size_t">
+<span id="_CPPv319is_sdsinit_completeK17viewd_constsupersK6size_t"></span><span id="_CPPv219is_sdsinit_completeK17viewd_constsupersK6size_t"></span><span id="is_sdsinit_complete__viewd_constsupersC.sC"></span><span class="target" id="createsupers_8hpp_1ab098af113f8a4a1fea56d481357c158e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_sdsinit_complete</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_constsupers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419is_sdsinit_completeK17viewd_constsupersK6size_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Check if superdroplets initialisation is complete and sorted. </p>
+<p>This function checks if the initialisation of supers view is complete and if the super-droplets are sorted by ascending superdroplet Gridbox index. If the initialisation is incomplete or the superdroplets are not sorted, it throws an exception with an appropriate error message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>supers</strong> – The view of super-droplets in device memory. </p></li>
+<li><p><strong>size</strong> – The expected number of super-droplets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – If the initialisation is incomplete or super-droplets are not ordered correctly. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412print_supersK17viewd_constsupers">
+<span id="_CPPv312print_supersK17viewd_constsupers"></span><span id="_CPPv212print_supersK17viewd_constsupers"></span><span id="print_supers__viewd_constsupersC"></span><span class="target" id="createsupers_8hpp_1a1ab415fa520eaad436d8829f19c3f84f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print_supers</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_constsupers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412print_supersK17viewd_constsupers" title="Link to this definition">#</a><br /></dt>
+<dd><p>Print statement about initialised super-droplets. </p>
+<p>This function prints information about each superdroplet, including its ID, Gridbox index, spatial coordinates, and attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>supers</strong> – The view of super-droplets in device memory. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
         </article>
@@ -352,8 +512,41 @@ super-droplets in Kokkos view (on device).</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Create Super-droplets Sub-Module</a><ul>
+<li><a class="reference internal" href="#_CPPv412GenSuperdrop"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4I0EN12GenSuperdrop12GenSuperdropERK18SuperdropInitConds"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::GenSuperdrop()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12GenSuperdropclEKj"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12GenSuperdrop9coords_atEKj"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::coords_at()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12GenSuperdrop8attrs_atEKj"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::attrs_at()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12GenSuperdrop10nspacedimsE"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::nspacedims</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12GenSuperdrop7sdIdGenE"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::sdIdGen</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12GenSuperdrop8initdataE"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::initdata</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds"><code class="docutils literal notranslate"><span class="pre">create_supers()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0E17initialise_supers12viewd_supersRK18SuperdropInitConds"><code class="docutils literal notranslate"><span class="pre">initialise_supers()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv425initialise_supers_on_hostRK12GenSuperdropK12viewd_supers"><code class="docutils literal notranslate"><span class="pre">initialise_supers_on_host()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv419is_sdsinit_completeK17viewd_constsupersK6size_t"><code class="docutils literal notranslate"><span class="pre">is_sdsinit_complete()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv412print_supersK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">print_supers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
