@@ -19,7 +19,7 @@ jobs:
           conda info
           conda list
       - name: Install Doxygen
-        run: conda info --envs && sudo apt-get install doxygen -y && doxygen --version && /usr/share/miniconda/envs/mypackage/doxygen --version
+        run: /usr/share/miniconda/envs/mypackage/bin/doxygen --version && doxygen --version
         shell: bash
       - name: Install package
         run: |
