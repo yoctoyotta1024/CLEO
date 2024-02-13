@@ -25,7 +25,7 @@ jobs:
           conda activate /usr/share/miniconda/envs/myenv
           conda info --envs
       - name: Install Doxygen
-        run: doxygen --version
+        run: /usr/share/miniconda/envs/myenv/bin/doxygen --version
         shell: bash
       - name: Test with pytest
         run: pytest .
@@ -33,7 +33,7 @@ jobs:
         run: cd docs &&
           mkdir build &&
           mkdir build/doxygen &&
-          doxygen doxygen/doxygen.dox
+          /usr/share/miniconda/envs/myenv/bin/doxygen doxygen/doxygen.dox
         shell: bash
       - name: Build docs
         run: |
