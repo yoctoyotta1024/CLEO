@@ -81,19 +81,19 @@ ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 air_temperature_params = config_yaml["thermodynamics"]["air_temperature"]["parameters"]
 specific_humidity_params = config_yaml["thermodynamics"]["specific_humidity"]["parameters"]
 ### --- settings for 1-D Thermodynamics --- ###
-PRESS0      = 101315                # [Pa]
-TEMP0       = air_temperature_params["f_0"][0]               # [K]
-TEMPlapses  = - np.array(air_temperature_params["slopes"])*1e3            # -dT/dz [K/km]
-qvap0       = specific_humidity_params["f_0"][0]                 # [Kg/Kg]
-qvaplapses  = - np.array(specific_humidity_params["slopes"])   # -dvap/dz [g/Kg km^-1]
-qcond       = 0.0                   # [Kg/Kg]
-WVEL        = 0.0                   # [m/s]
-Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
+PRESS0      = 101315                                                # [Pa]
+TEMP0       = air_temperature_params["f_0"][0]                      # [K]
+TEMPlapses  = np.array(air_temperature_params["slopes"])* -1e3      # -1e3 due to conversion from dT/dz [K/m] to -dT/dz [K/km]
+qvap0       = specific_humidity_params["f_0"][0]                    # [Kg/Kg]
+qvaplapses  = np.array(specific_humidity_params["slopes"])* -1e6    # -1e6 due to conversion from dvap/dz [kg/kg m^-1] to -dvap/dz [g/Kg km^-1]
+qcond       = 0.0                                                   # [Kg/Kg]
+WVEL        = 0.0                                                   # [m/s]
+Wlength     = 1000                                                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
 z_split_temp = air_temperature_params["x_split"]                    # [m]
-z_split_qvap = specific_humidity_params["x_split"]                    # [m]
+z_split_qvap = specific_humidity_params["x_split"]                  # [m]
 
-Zbase       = np.mean([z_split_temp, z_split_qvap])                    # [m]
+Zbase       = np.mean([z_split_temp, z_split_qvap])                 # [m]
 
 
 
