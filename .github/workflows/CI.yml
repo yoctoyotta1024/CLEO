@@ -20,29 +20,19 @@ jobs:
           conda list
       - name: Activate Conda Environment
         run: |
-          conda init
+          conda init && source /home/runner/.bashrc &&
           conda activate /usr/share/miniconda/envs/myenv
           conda info --envs
       - name: Install Doxygen
         run: /usr/share/miniconda/envs/myenv/bin/doxygen --version
         shell: bash
-      - name: Install package
-        run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install .
-          python3 -m pip install -U sphinx
-          python3 -m pip install -U numpy
-          python3 -m pip install -U furo
-          python3 -m pip install -U sphinx_copybutton
-          python3 -m pip install -U sphinxcontrib-bibtex
-          python3 -m pip install -U breathe
       - name: Test with pytest
         run: pytest .
       - name: Generate Doxygen Documentation
         run: cd docs &&
           mkdir build &&
           mkdir build/doxygen &&
-          /usr/share/miniconda/envs/mypackage/bin/doxygen doxygen/doxygen.dox
+          /usr/share/miniconda/envs/myenv/bin/doxygen doxygen/doxygen.dox
         shell: bash
       - name: Build docs
         run: |
