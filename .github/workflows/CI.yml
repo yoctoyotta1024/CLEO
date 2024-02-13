@@ -20,11 +20,12 @@ jobs:
           conda list
       - name: Activate Conda Environment
         run: |
-          conda init && source /home/runner/.bashrc &&
+          conda init
+          source /home/runner/.bashrc
           conda activate /usr/share/miniconda/envs/myenv
           conda info --envs
       - name: Install Doxygen
-        run: /usr/share/miniconda/envs/myenv/bin/doxygen --version
+        run: doxygen --version
         shell: bash
       - name: Test with pytest
         run: pytest .
@@ -32,7 +33,7 @@ jobs:
         run: cd docs &&
           mkdir build &&
           mkdir build/doxygen &&
-          /usr/share/miniconda/envs/myenv/bin/doxygen doxygen/doxygen.dox
+          doxygen doxygen/doxygen.dox
         shell: bash
       - name: Build docs
         run: |
