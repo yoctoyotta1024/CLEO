@@ -19,7 +19,9 @@ jobs:
           conda info
           conda list
       - name: Activate Conda Environment
-        run: conda init && conda activate myenv
+        run: |
+          conda init
+          conda activate /usr/share/miniconda/envs/myenv
       - name: Install Doxygen
         run: /usr/share/miniconda/envs/myenv/bin/doxygen --version && doxygen --version
         shell: bash
