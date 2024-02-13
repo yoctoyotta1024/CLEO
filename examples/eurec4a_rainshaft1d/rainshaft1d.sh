@@ -67,7 +67,7 @@ echo "--------------------------------------------"
 echo "Plot results"
 source activate /work/mh1126/m301096/conda/envs/sdm_pysd_env312
 
-${pythonPySD} rainshaft_1d_plot.py
+${pythonPySD} ${path2CLEO}/examples/eurec4a_rainshaft1d/plot_rainshaft1d.py
 
 ### ---------------------------------------------------- ###
 
