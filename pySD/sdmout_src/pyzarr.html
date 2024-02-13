@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,14 +270,73 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="pyzarr">
-<h1>PYZARR<a class="headerlink" href="#pyzarr" title="Link to this heading">#</a></h1>
+          <section id="module-pySD.sdmout_src.pyzarr">
+<span id="pyzarr"></span><h1>PYZARR<a class="headerlink" href="#module-pySD.sdmout_src.pyzarr" title="Link to this heading">#</a></h1>
+<p>—– CLEO —–
+File: pyzarr.py
+Project: sdmout_src
+Created Date: Tuesday 24th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+—–
+Last Modified: Monday 20th November 2023
+Modified By: CB
+—–
+License: BSD 3-Clause “New” or “Revised” License
+<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
+—–
+Copyright (c) 2023 MPI-M, Clara Bayley
+—–
+File Description:
+functions to return zarr data in useful
+formats for plotting e.g. for handling
+ragged arrays of superdroplet attributes</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.pyzarr.get_thermodata">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.pyzarr.</span></span><span class="sig-name descname"><span class="pre">get_thermodata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ntime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/pyzarr.html#get_thermodata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.pyzarr.get_thermodata" title="Link to this definition">#</a></dt>
+<dd><p>returns a thermodynamic data in a dictionary. The value under
+each key is the thermodynamics data in a 2D array
+with dimensions [time, gridbox]. E.g. thermo[“qvap”][:,0] gives the
+timeseries of qvap for the 0th gridbox. thermo[“qvap][0] gives
+the qvap of all gridboxes at the 0th output time</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.pyzarr.raggedvar_fromzarr">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.pyzarr.</span></span><span class="sig-name descname"><span class="pre">raggedvar_fromzarr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raggedcount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/pyzarr.html#raggedvar_fromzarr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.pyzarr.raggedvar_fromzarr" title="Link to this definition">#</a></dt>
+<dd><p>returns ragged ak.Array dims [time, ragged]
+for a variable “var” in zarr ds</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.pyzarr.surfaceprecip_estimate">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.pyzarr.</span></span><span class="sig-name descname"><span class="pre">surfaceprecip_estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gbxs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/pyzarr.html#surfaceprecip_estimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.pyzarr.surfaceprecip_estimate" title="Link to this definition">#</a></dt>
+<dd><p>use last radius of SDs before they leave the domain to
+estimate the volume of precipitation at each timestep.
+Values should be approx. equal to sum over gbxs (multiplied
+by area_gbx/area_domain) of logbook values for precip</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.pyzarr.var3d_fromzarr">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.pyzarr.</span></span><span class="sig-name descname"><span class="pre">var3d_fromzarr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/pyzarr.html#var3d_fromzarr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.pyzarr.var3d_fromzarr" title="Link to this definition">#</a></dt>
+<dd><p>‘ returns 3D variable with dims
+[y, x, z] from zarr dataset “ds”</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.pyzarr.var4d_fromzarr">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.pyzarr.</span></span><span class="sig-name descname"><span class="pre">var4d_fromzarr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ntime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/pyzarr.html#var4d_fromzarr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.pyzarr.var4d_fromzarr" title="Link to this definition">#</a></dt>
+<dd><p>‘ returns 4D variable with dims
+[time, y, x, z] from zarr dataset “ds”</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -324,8 +383,31 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">PYZARR</a><ul>
+<li><a class="reference internal" href="#pySD.sdmout_src.pyzarr.get_thermodata"><code class="docutils literal notranslate"><span class="pre">get_thermodata()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.pyzarr.raggedvar_fromzarr"><code class="docutils literal notranslate"><span class="pre">raggedvar_fromzarr()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.pyzarr.surfaceprecip_estimate"><code class="docutils literal notranslate"><span class="pre">surfaceprecip_estimate()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.pyzarr.var3d_fromzarr"><code class="docutils literal notranslate"><span class="pre">var3d_fromzarr()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.pyzarr.var4d_fromzarr"><code class="docutils literal notranslate"><span class="pre">var4d_fromzarr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

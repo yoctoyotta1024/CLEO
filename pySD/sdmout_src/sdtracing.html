@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,14 +270,85 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="sdtracing">
-<h1>SDTRACING<a class="headerlink" href="#sdtracing" title="Link to this heading">#</a></h1>
+          <section id="module-pySD.sdmout_src.sdtracing">
+<span id="sdtracing"></span><h1>SDTRACING<a class="headerlink" href="#module-pySD.sdmout_src.sdtracing" title="Link to this heading">#</a></h1>
+<p>—– CLEO —–
+File: sdtracing.py
+Project: sdmout_src
+Created Date: Tuesday 24th October 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+—–
+Last Modified: Wednesday 17th January 2024
+Modified By: CB
+—–
+License: BSD 3-Clause “New” or “Revised” License
+<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
+—–
+Copyright (c) 2023 MPI-M, Clara Bayley
+—–
+File Description:
+functions to extract attribute data for
+specifc superdroplets based on the sdIds
+e.g. for tracing their trajectories</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.sdtracing.attr_at_times">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.sdtracing.</span></span><span class="sig-name descname"><span class="pre">attr_at_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times2sel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/sdtracing.html#attr_at_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.sdtracing.attr_at_times" title="Link to this definition">#</a></dt>
+<dd><p>selects attribute (for all superdroplets)
+at times closest to ‘times2sel’</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.sdtracing.attr_for_superdroplet">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.sdtracing.</span></span><span class="sig-name descname"><span class="pre">attr_for_superdroplet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sddata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/sdtracing.html#attr_for_superdroplet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.sdtracing.attr_for_superdroplet" title="Link to this definition">#</a></dt>
+<dd><p>selects attribute from sddata belonging
+to superdroplet with identitiy ‘Id’
+at every output time</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.sdtracing.attribute_for_superdroplets_sample">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.sdtracing.</span></span><span class="sig-name descname"><span class="pre">attribute_for_superdroplets_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sddata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndrops2sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/sdtracing.html#attribute_for_superdroplets_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.sdtracing.attribute_for_superdroplets_sample" title="Link to this definition">#</a></dt>
+<dd><p>returns 2D array with dimensions [time, SD]
+containing attribute data over time for a sample of
+superdroplets. Sample is either for superdroplets with
+specific Ids in ‘ids’ list, or sample of ‘ndrops2sample’
+randomly selected superdrops with Ids in the range
+[minid, maxid]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.sdtracing.attributes_at_times">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.sdtracing.</span></span><span class="sig-name descname"><span class="pre">attributes_at_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sddata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times2sel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs2sel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/sdtracing.html#attributes_at_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.sdtracing.attributes_at_times" title="Link to this definition">#</a></dt>
+<dd><p>selects attributes at given times from
+sddata (for all superdroplets in sddata)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.sdtracing.attributes_for1superdroplet">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.sdtracing.</span></span><span class="sig-name descname"><span class="pre">attributes_for1superdroplet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sddata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/sdtracing.html#attributes_for1superdroplet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.sdtracing.attributes_for1superdroplet" title="Link to this definition">#</a></dt>
+<dd><p>selects attributes in ‘attrs’ from sddata
+belonging to superdroplet with identitiy ‘Id’
+at every output time</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.sdtracing.attrs_for_superdroplets_sample">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.sdtracing.</span></span><span class="sig-name descname"><span class="pre">attrs_for_superdroplets_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sddata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndrops2sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/sdtracing.html#attrs_for_superdroplets_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.sdtracing.attrs_for_superdroplets_sample" title="Link to this definition">#</a></dt>
+<dd><p>returns dictionary of 2D arrays (with dimensions [time, SD])
+for each attribute in ‘attrs’ list for a sample of
+superdroplets. Sample is either for superdroplets with
+specific Ids in ‘ids’ list, or sample of ‘ndrops2sample’
+randomly selected superdrops with Ids in the range
+[minid, maxid]</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -324,8 +395,32 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SDTRACING</a><ul>
+<li><a class="reference internal" href="#pySD.sdmout_src.sdtracing.attr_at_times"><code class="docutils literal notranslate"><span class="pre">attr_at_times()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.sdtracing.attr_for_superdroplet"><code class="docutils literal notranslate"><span class="pre">attr_for_superdroplet()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.sdtracing.attribute_for_superdroplets_sample"><code class="docutils literal notranslate"><span class="pre">attribute_for_superdroplets_sample()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.sdtracing.attributes_at_times"><code class="docutils literal notranslate"><span class="pre">attributes_at_times()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.sdtracing.attributes_for1superdroplet"><code class="docutils literal notranslate"><span class="pre">attributes_for1superdroplet()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.sdtracing.attrs_for_superdroplets_sample"><code class="docutils literal notranslate"><span class="pre">attrs_for_superdroplets_sample()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

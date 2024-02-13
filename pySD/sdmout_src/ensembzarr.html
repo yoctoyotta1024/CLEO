@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,14 +270,103 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="ensembzarr">
-<h1>ENSEMBZARR<a class="headerlink" href="#ensembzarr" title="Link to this heading">#</a></h1>
+          <section id="module-pySD.sdmout_src.ensembzarr">
+<span id="ensembzarr"></span><h1>ENSEMBZARR<a class="headerlink" href="#module-pySD.sdmout_src.ensembzarr" title="Link to this heading">#</a></h1>
+<p>—– CLEO —–
+File: ensembzarr.py
+Project: sdmout_src
+Created Date: Friday 17th November 2023
+Author: Clara Bayley (CB)
+Additional Contributors:
+—–
+Last Modified: Friday 19th January 2024
+Modified By: CB
+—–
+License: BSD 3-Clause “New” or “Revised” License
+<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
+—–
+Copyright (c) 2023 MPI-M, Clara Bayley
+—–
+File Description:
+functions to write a new zarr dataset and
+setuptxt file for an ensemble of datasets</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.ensembzarr.check_dataset_for_ensemb">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.ensembzarr.</span></span><span class="sig-name descname"><span class="pre">check_dataset_for_ensemb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/ensembzarr.html#check_dataset_for_ensemb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.ensembzarr.check_dataset_for_ensemb" title="Link to this definition">#</a></dt>
+<dd><p>returns xarray dataset after checking that
+time is consistent with the refset</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.ensembzarr.ensemble_data">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.ensembzarr.</span></span><span class="sig-name descname"><span class="pre">ensemble_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/ensembzarr.html#ensemble_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.ensembzarr.ensemble_data" title="Link to this definition">#</a></dt>
+<dd><p>call func on ensemble of var from datasets.
+Note: if var has dimensions [a,b, …] then data4ensemb
+passed into func has dimensions [n, a, b, …]
+when n is the number of datasets in the ensemble</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.ensembzarr.write_ensemb_setupfile">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.ensembzarr.</span></span><span class="sig-name descname"><span class="pre">write_ensemb_setupfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ensembsetupfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setupfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/ensembzarr.html#write_ensemb_setupfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.ensembzarr.write_ensemb_setupfile" title="Link to this definition">#</a></dt>
+<dd><p>copy setupfile to ensembsetupfile and then edit / add
+information relevant to datasets used to make ensemble</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.ensembzarr.write_ensemb_zarr">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.ensembzarr.</span></span><span class="sig-name descname"><span class="pre">write_ensemb_zarr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ensembdataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars4ensemb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/ensembzarr.html#write_ensemb_zarr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.ensembzarr.write_ensemb_zarr" title="Link to this definition">#</a></dt>
+<dd><p>create zarr storage called ‘ensembdataset’
+for an ensemble of zarr datasets ‘datasets’
+containing their time data alongside their
+mean and standard deviation for the variables listed in
+‘vars4ensemb’</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.ensembzarr.write_ensemble_info">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.ensembzarr.</span></span><span class="sig-name descname"><span class="pre">write_ensemble_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ensembsetupfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setupfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/ensembzarr.html#write_ensemble_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.ensembzarr.write_ensemble_info" title="Link to this definition">#</a></dt>
+<dd><p>add extra information in ensembsetupfile about
+which datasets and setuptxt file were used to make ensemble</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.ensembzarr.write_matchingarray_to_storage">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.ensembzarr.</span></span><span class="sig-name descname"><span class="pre">write_matchingarray_to_storage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arrayname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zattrs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/ensembzarr.html#write_matchingarray_to_storage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.ensembzarr.write_matchingarray_to_storage" title="Link to this definition">#</a></dt>
+<dd><p>write array ‘arr’ to zarr storage under
+‘arrayname’ using same metadata as refz and
+copying zattrs to .zattrs file</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.ensembzarr.write_meanvars_to_ensembzarr">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.ensembzarr.</span></span><span class="sig-name descname"><span class="pre">write_meanvars_to_ensembzarr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ensembdataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars4ensemb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/ensembzarr.html#write_meanvars_to_ensembzarr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.ensembzarr.write_meanvars_to_ensembzarr" title="Link to this definition">#</a></dt>
+<dd><p>write mean over ensemble of datasets for
+each var in vars4ensemb into zarr array also
+called ‘var’ in ensembdataset</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.ensembzarr.write_stdvars_to_ensembzarr">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.ensembzarr.</span></span><span class="sig-name descname"><span class="pre">write_stdvars_to_ensembzarr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ensembdataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars4ensemb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/ensembzarr.html#write_stdvars_to_ensembzarr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.ensembzarr.write_stdvars_to_ensembzarr" title="Link to this definition">#</a></dt>
+<dd><p>write standard deviation over ensemble of datasets
+for each var in vars4ensemb into zarr array also
+called ‘var’ in ensembdataset</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.ensembzarr.write_time_to_ensembzarr">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.ensembzarr.</span></span><span class="sig-name descname"><span class="pre">write_time_to_ensembzarr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ensembdataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/ensembzarr.html#write_time_to_ensembzarr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.ensembzarr.write_time_to_ensembzarr" title="Link to this definition">#</a></dt>
+<dd><p>create or replace time group in ensembdataset
+zarr storage with time group copied from dataset</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -324,8 +413,35 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">ENSEMBZARR</a><ul>
+<li><a class="reference internal" href="#pySD.sdmout_src.ensembzarr.check_dataset_for_ensemb"><code class="docutils literal notranslate"><span class="pre">check_dataset_for_ensemb()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.ensembzarr.ensemble_data"><code class="docutils literal notranslate"><span class="pre">ensemble_data()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.ensembzarr.write_ensemb_setupfile"><code class="docutils literal notranslate"><span class="pre">write_ensemb_setupfile()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.ensembzarr.write_ensemb_zarr"><code class="docutils literal notranslate"><span class="pre">write_ensemb_zarr()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.ensembzarr.write_ensemble_info"><code class="docutils literal notranslate"><span class="pre">write_ensemble_info()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.ensembzarr.write_matchingarray_to_storage"><code class="docutils literal notranslate"><span class="pre">write_matchingarray_to_storage()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.ensembzarr.write_meanvars_to_ensembzarr"><code class="docutils literal notranslate"><span class="pre">write_meanvars_to_ensembzarr()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.ensembzarr.write_stdvars_to_ensembzarr"><code class="docutils literal notranslate"><span class="pre">write_stdvars_to_ensembzarr()</span></code></a></li>
+<li><a class="reference internal" href="#pySD.sdmout_src.ensembzarr.write_time_to_ensembzarr"><code class="docutils literal notranslate"><span class="pre">write_time_to_ensembzarr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
