@@ -33,7 +33,7 @@ path2CLEO = Path("/home/m/m301096/CLEO")
 path2build = path2CLEO / "build"
 configfile = path2CLEO / "examples/eurec4a_rainshaft1d/src/config/rain1d_config.txt"
 
-yaml_config_file = Path("/home/m/m301096/repositories/sdm-eurec4a/data/model/input/example_input.yaml")
+yaml_config_file = sys.argv[1]
 with open(yaml_config_file, 'r') as f:
     config_yaml = yaml.safe_load(f)
 
@@ -76,7 +76,9 @@ dataset       = binpath / "rain1d_sol.zarr"
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 cloud_id = config_yaml['cloud']['cloud_id']
-savefigpath = path2CLEO / "results/plots/yaml_config/" / f"cloud_{cloud_id}" # directory for saving figures
+print(config_yaml['cloud'])
+identification_type = config_yaml['cloud']['identification_type']
+savefigpath = path2CLEO / "results/plots/eurec4a_rainshaft1d/yaml_config/" / f"{identification_type}_{cloud_id}" # directory for saving figures
 savefigpath.mkdir(exist_ok=True, parents=True)
 
 SDgbxs2plt  = list(range(39, 45))
