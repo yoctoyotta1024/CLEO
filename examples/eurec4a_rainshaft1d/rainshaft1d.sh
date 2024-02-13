@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=rain1d
+#SBATCH --job-name=sdm_eueurec4a_rain1d
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -19,6 +19,7 @@ module load python3/2022.01-gcc-11.2.0
 module load nvhpc/23.7-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
+logfile=${HOME}/CLEO/results/logging/rain1d_yaml.log
 
 echo "============================================"
 echo "START NEW RUN"
@@ -64,6 +65,8 @@ ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile}
 
 echo "--------------------------------------------"
 echo "Plot results"
+source activate /work/mh1126/m301096/conda/envs/sdm_pysd_env312
+
 ${pythonPySD} rainshaft_1d_plot.py
 
 ### ---------------------------------------------------- ###
