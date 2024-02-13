@@ -20,9 +20,9 @@ jobs:
           conda list
       - name: Activate Conda Environment
         run: |
-          conda init
-          exec bash
+          conda init && source /home/runner/.bashrc &&
           conda activate /usr/share/miniconda/envs/myenv
+          conda info --envs
       - name: Install Doxygen
         run: /usr/share/miniconda/envs/myenv/bin/doxygen --version && doxygen --version
         shell: bash
