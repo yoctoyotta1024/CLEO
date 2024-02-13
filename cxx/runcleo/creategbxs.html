@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,7 +270,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -282,253 +282,30 @@
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/creategbxs.hpp">[source]</a></p>
 <p>This sub-module defines functions and classes called by RunCLEO to create and
 initialise Gridboxes (i.e. GBxs).</p>
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv410GenGridbox">
-<span id="_CPPv310GenGridbox"></span><span id="_CPPv210GenGridbox"></span><span id="GenGridbox"></span><span class="target" id="classGenGridbox"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GenGridbox</span></span></span><a class="headerlink" href="#_CPPv410GenGridbox" title="Link to this definition">#</a><br /></dt>
-<dd><p>A generator for initial Gridboxes. </p>
-<p>This class provides functionality to generate Gridbox instances based on the gridbox maps and on the initial conditions stored in this struct’s vectors. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN10GenGridbox10GenGridboxERK12GbxInitConds">
-<span id="_CPPv3I0EN10GenGridbox10GenGridboxERK12GbxInitConds"></span><span id="_CPPv2I0EN10GenGridbox10GenGridboxERK12GbxInitConds"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classGenGridbox_1a4254f830fe41e240ff95c76971417bac"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GenGridbox</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN10GenGridbox10GenGridboxERK12GbxInitConds" title="GenGridbox::GenGridbox::GbxInitConds"><span class="n"><span class="pre">GbxInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxic</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN10GenGridbox10GenGridboxERK12GbxInitConds" title="Link to this definition">#</a><br /></dt>
-<dd><p>Constructs a <a class="reference internal" href="#classGenGridbox"><span class="std std-ref">GenGridbox</span></a> object. </p>
-<p>Constructs a <a class="reference internal" href="#classGenGridbox"><span class="std std-ref">GenGridbox</span></a> object based on the provided initial conditions in ‘GbxInitConds’.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>GbxInitConds</strong> – Type of the Gridboxes’ initial conditions. </p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>gbxic</strong> – The initial conditions for the Gridboxes. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxKjRK7GbxMapsK12viewd_supers">
-<span id="_CPPv3I_11GridboxMapsENK10GenGridboxclEKjRK7GbxMapsK12viewd_supers"></span><span id="_CPPv2I_11GridboxMapsENK10GenGridboxclEKjRK7GbxMapsK12viewd_supers"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classGenGridbox_1a7937c26247fe6b1fca0de3078edb6e4d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">Gridbox</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ii</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxKjRK7GbxMapsK12viewd_supers" title="GenGridbox::operator()::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxKjRK7GbxMapsK12viewd_supers" title="Link to this definition">#</a><br /></dt>
-<dd><p>Serial version of operator to generate a Gridbox from the data at the ii’th position of the initial conditions data. </p>
-<p>This function generates a Gridbox corresponding to the ii’th position in the initial conditions data and using the gridbox maps and view of (all) superdroplets.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>GbxMaps</strong> – Type of the Gridbox Maps. </p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>ii</strong> – The index of the Gridbox. </p></li>
-<li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
-<li><p><strong>totsupers</strong> – The view of (all) super-droplets. </p></li>
-</ul>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The generated Gridbox. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxRK14HostTeamMemberKjRK7GbxMapsK12viewd_supersKN17viewd_constsupers10HostMirrorE">
-<span id="_CPPv3I_11GridboxMapsENK10GenGridboxclERK14HostTeamMemberKjRK7GbxMapsK12viewd_supersKN17viewd_constsupers10HostMirrorE"></span><span id="_CPPv2I_11GridboxMapsENK10GenGridboxclERK14HostTeamMemberKjRK7GbxMapsK12viewd_supersKN17viewd_constsupers10HostMirrorE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classGenGridbox_1a20e0092201632f93130e4ed139ee09da"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">Gridbox</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">HostTeamMember</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">team_member</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ii</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxRK14HostTeamMemberKjRK7GbxMapsK12viewd_supersKN17viewd_constsupers10HostMirrorE" title="GenGridbox::operator()::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_constsupers</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxRK14HostTeamMemberKjRK7GbxMapsK12viewd_supersKN17viewd_constsupers10HostMirrorE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Parallel-safe version of operator to generate a Gridbox from the data at the ii’th position of the initial conditions data. </p>
-<p>This function generates a gridbox at the specified index using gridbox maps, total superdroplets, and host team member. Given a Kokkos team thread (‘team_member’), this function generates a Gridbox corresponding to the ii’th position in the initial conditions data and using the gridbox maps and view of (all) superdroplets on device and host.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>GbxMaps</strong> – Type of the Gridbox Maps. </p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>team_member</strong> – The host team member reference. </p></li>
-<li><p><strong>ii</strong> – The index of the Gridbox. </p></li>
-<li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
-<li><p><strong>totsupers</strong> – The view of (all) super-droplets. </p></li>
-<li><p><strong>h_totsupers</strong> – The host mirror of (all) super-droplets. </p></li>
-</ul>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The generated Gridbox. </p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK10GenGridbox8state_atEKjKd">
-<span id="_CPPv3NK10GenGridbox8state_atEKjKd"></span><span id="_CPPv2NK10GenGridbox8state_atEKjKd"></span><span id="GenGridbox::state_at__unsigned-iC.doubleCC"></span><span class="target" id="classGenGridbox_1aa72605d81b3050986f609f44b2808961"></span><a class="reference internal" href="../superdrops/state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">state_at</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ii</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">volume</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10GenGridbox8state_atEKjKd" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get the state of a specified Gridbox from the initial conditions. </p>
-<p>This function returns the state of the Gridbox at the ii’th index in the initial conditions given by the <a class="reference internal" href="#classGenGridbox"><span class="std std-ref">GenGridbox</span></a> struct.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ii</strong> – The index of the Gridbox in the initial conditions data. </p></li>
-<li><p><strong>volume</strong> – The volume of the Gridbox. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The <a class="reference internal" href="../superdrops/state.html#structState"><span class="std std-ref">State</span></a> of the Gridbox. </p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N10GenGridbox11GbxindexGenE">
-<span id="_CPPv3N10GenGridbox11GbxindexGenE"></span><span id="_CPPv2N10GenGridbox11GbxindexGenE"></span><span id="GenGridbox::GbxindexGen__std::shared_ptr:Gbxindex::Gen:"></span><span class="target" id="classGenGridbox_1a8d4e9570b109b6aa8a9bb77dcf79c434"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Gbxindex</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Gen</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxindexGen</span></span></span><a class="headerlink" href="#_CPPv4N10GenGridbox11GbxindexGenE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Pointer to gridbox index generator, Gbxindex::Gen object </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N10GenGridbox6presssE">
-<span id="_CPPv3N10GenGridbox6presssE"></span><span id="_CPPv2N10GenGridbox6presssE"></span><span id="GenGridbox::presss__std::vector:double:"></span><span class="target" id="classGenGridbox_1a9984a0ef935a475ca08ea7a6593a8fb6"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">presss</span></span></span><a class="headerlink" href="#_CPPv4N10GenGridbox6presssE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vector of pressures for each gridbox </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N10GenGridbox5tempsE">
-<span id="_CPPv3N10GenGridbox5tempsE"></span><span id="_CPPv2N10GenGridbox5tempsE"></span><span id="GenGridbox::temps__std::vector:double:"></span><span class="target" id="classGenGridbox_1a278800a96c5a4ef63426a5891f9646c1"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">temps</span></span></span><a class="headerlink" href="#_CPPv4N10GenGridbox5tempsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vector of temperatures for each gridbox </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N10GenGridbox5qvapsE">
-<span id="_CPPv3N10GenGridbox5qvapsE"></span><span id="_CPPv2N10GenGridbox5qvapsE"></span><span id="GenGridbox::qvaps__std::vector:double:"></span><span class="target" id="classGenGridbox_1ade89f0798dd72352cefc6215b0e2e221"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">qvaps</span></span></span><a class="headerlink" href="#_CPPv4N10GenGridbox5qvapsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vector of vapor mass mixing ratio for each gridbox </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N10GenGridbox6qcondsE">
-<span id="_CPPv3N10GenGridbox6qcondsE"></span><span id="_CPPv2N10GenGridbox6qcondsE"></span><span id="GenGridbox::qconds__std::vector:double:"></span><span class="target" id="classGenGridbox_1add852fda8606c4886e6a80428dbf5f0c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">qconds</span></span></span><a class="headerlink" href="#_CPPv4N10GenGridbox6qcondsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vector of condensed water mass mixing ratio for each gridbox </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N10GenGridbox5wvelsE">
-<span id="_CPPv3N10GenGridbox5wvelsE"></span><span id="_CPPv2N10GenGridbox5wvelsE"></span><span id="GenGridbox::wvels__std::vector:std::pair:double.double::"></span><span class="target" id="classGenGridbox_1ae7763e9700b9053d9bcd4abdf48452a0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wvels</span></span></span><a class="headerlink" href="#_CPPv4N10GenGridbox5wvelsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vector of vertical (coord3) wind velocities for each gridbox </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N10GenGridbox5uvelsE">
-<span id="_CPPv3N10GenGridbox5uvelsE"></span><span id="_CPPv2N10GenGridbox5uvelsE"></span><span id="GenGridbox::uvels__std::vector:std::pair:double.double::"></span><span class="target" id="classGenGridbox_1ac870822d521d92cbe7aaf8a644ccb90c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uvels</span></span></span><a class="headerlink" href="#_CPPv4N10GenGridbox5uvelsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vector of eastward (coord1) wind velocities for each gridbox </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N10GenGridbox5vvelsE">
-<span id="_CPPv3N10GenGridbox5vvelsE"></span><span id="_CPPv2N10GenGridbox5vvelsE"></span><span id="GenGridbox::vvels__std::vector:std::pair:double.double::"></span><span class="target" id="classGenGridbox_1a45b890c0286bd06df5658ebf043cca98"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vvels</span></span></span><a class="headerlink" href="#_CPPv4N10GenGridbox5vvelsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vector of northward (coord2) wind velocities for each gridbox </p>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers">
-<span id="_CPPv3I_11GridboxMaps0E11create_gbxsRK7GbxMapsRK12GbxInitCondsK12viewd_supers"></span><span id="_CPPv2I_11GridboxMaps0E11create_gbxsRK7GbxMapsRK12GbxInitCondsK12viewd_supers"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="creategbxs_8hpp_1a52c25ef943e7ca2d53e54ec873a73225"></span><span class="n"><span class="pre">dualview_gbx</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_gbxs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="create_gbxs::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="create_gbxs::GbxInitConds"><span class="n"><span class="pre">GbxInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxic</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="Link to this definition">#</a><br /></dt>
-<dd><p>Create Gridboxes from initial conditions. </p>
-<p>This function creates Gridboxes based on the provided gridbox maps and initial conditions, and given super-droplets.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>GbxMaps</strong> – Type representing Gridbox Maps. </p></li>
-<li><p><strong>GbxInitConds</strong> – Type representing Gridbox initial conditions.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
-<li><p><strong>gbxic</strong> – The Gridbox initial conditions. </p></li>
-<li><p><strong>totsupers</strong> – The view of super-droplets.</p></li>
-</ul>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The view of initialised Gridboxes. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers">
-<span id="_CPPv3I_11GridboxMaps0E15initialise_gbxsRK7GbxMapsRK12GbxInitCondsK12viewd_supers"></span><span id="_CPPv2I_11GridboxMaps0E15initialise_gbxsRK7GbxMapsRK12GbxInitCondsK12viewd_supers"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="creategbxs_8hpp_1a729d7e8cc823c9c3240d09a8be5454f5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">dualview_gbx</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialise_gbxs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="initialise_gbxs::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="initialise_gbxs::GbxInitConds"><span class="n"><span class="pre">GbxInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxic</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="Link to this definition">#</a><br /></dt>
-<dd><p>Initialise a view of Gridboxes. </p>
-<p>This function initialises a view of gridboxes in device memory using data from an instance of GbxInitConds for each Gridbox’s index, initial <a class="reference internal" href="../superdrops/state.html#structState"><span class="std std-ref">State</span></a> and view of super-droplets.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>GbxMaps</strong> – Type representing Gridbox Maps. </p></li>
-<li><p><strong>GbxInitConds</strong> – Type representing Gridbox initial conditions.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
-<li><p><strong>gbxic</strong> – The initial conditions for the Gridboxes. </p></li>
-<li><p><strong>totsupers</strong> – The view of super-droplets.</p></li>
-</ul>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The initialised view of Gridboxes. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I_11GridboxMapsE23initialise_gbxs_on_hostvRK7GbxMapsRK10GenGridboxK12viewd_supersK9viewh_gbx">
-<span id="_CPPv3I_11GridboxMapsE23initialise_gbxs_on_hostRK7GbxMapsRK10GenGridboxK12viewd_supersK9viewh_gbx"></span><span id="_CPPv2I_11GridboxMapsE23initialise_gbxs_on_hostRK7GbxMapsRK10GenGridboxK12viewd_supersK9viewh_gbx"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="creategbxs_8hpp_1a3e6e9b9a0c3a9ec77a8927c43b485e29"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialise_gbxs_on_host</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMapsE23initialise_gbxs_on_hostvRK7GbxMapsRK10GenGridboxK12viewd_supersK9viewh_gbx" title="initialise_gbxs_on_host::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410GenGridbox" title="GenGridbox"><span class="n"><span class="pre">GenGridbox</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gen</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewh_gbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_gbxs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_11GridboxMapsE23initialise_gbxs_on_hostvRK7GbxMapsRK10GenGridboxK12viewd_supersK9viewh_gbx" title="Link to this definition">#</a><br /></dt>
-<dd><p>Initialise host view of Gridboxes. </p>
-<p>This function initialises Gridboxes in host memory using data from Gridbox Maps, a Gridbox generator, and a view of super-droplets.</p>
-<p>The equivalent serial version of Kokkos::parallel_for([…]) loop is: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">ii</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">ii</span> <span class="o">&lt;</span> <span class="n">ngbxs</span><span class="p">;</span> <span class="o">++</span><span class="n">ii</span><span class="p">)</span>
-<span class="p">{</span>
- <span class="n">h_gbxs</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">gen</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span> <span class="n">gbxmaps</span><span class="p">,</span> <span class="n">totsupers</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-</p>
-<dl class="field-list simple">
-<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>GbxMaps</strong> – Type representing Gridbox Maps.</p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
-<li><p><strong>gen</strong> – The Gridbox generator. </p></li>
-<li><p><strong>totsupers</strong> – The view of super-droplets. </p></li>
-<li><p><strong>h_gbxs</strong> – The view of Gridboxes on the host. </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv419is_gbxinit_completeK6size_t12dualview_gbx">
-<span id="_CPPv319is_gbxinit_completeK6size_t12dualview_gbx"></span><span id="_CPPv219is_gbxinit_completeK6size_t12dualview_gbx"></span><span id="is_gbxinit_complete__sC.dualview_gbx"></span><span class="target" id="creategbxs_8hpp_1a0033fab49387c9892120538c4e684afe"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_gbxinit_complete</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ngbxs_from_maps</span></span>, <span class="n"><span class="pre">dualview_gbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419is_gbxinit_completeK6size_t12dualview_gbx" title="Link to this definition">#</a><br /></dt>
-<dd><p>Check if gridbox initialisation is complete. </p>
-<p>This function checks if the number of created gridboxes is consistent with the number of gridboxes from gridbox maps and if each gridbox has correct references to superdroplets.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ngbxs_from_maps</strong> – The number of gridboxes from gridbox maps. </p></li>
-<li><p><strong>gbxs</strong> – The dualview containing gridboxes. </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410print_gbxsK14viewh_constgbx">
-<span id="_CPPv310print_gbxsK14viewh_constgbx"></span><span id="_CPPv210print_gbxsK14viewh_constgbx"></span><span id="print_gbxs__viewh_constgbxC"></span><span class="target" id="creategbxs_8hpp_1ae68259108df12474abd11ceb16412799"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print_gbxs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewh_constgbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410print_gbxsK14viewh_constgbx" title="Link to this definition">#</a><br /></dt>
-<dd><p>Print some information about initial Gridboxes. </p>
-<p>This function prints information about each Gridbox, including its index, volume, and number of super-droplets.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>h_gbxs</strong> – The host view of Gridboxes. </p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
+</div>
 </section>
 
         </article>
@@ -575,46 +352,8 @@ initialise Gridboxes (i.e. GBxs).</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Create Gridboxes Sub-Module</a><ul>
-<li><a class="reference internal" href="#_CPPv410GenGridbox"><code class="docutils literal notranslate"><span class="pre">GenGridbox</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4I0EN10GenGridbox10GenGridboxERK12GbxInitConds"><code class="docutils literal notranslate"><span class="pre">GenGridbox::GenGridbox()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxKjRK7GbxMapsK12viewd_supers"><code class="docutils literal notranslate"><span class="pre">GenGridbox::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I_11GridboxMapsENK10GenGridboxclE7GridboxRK14HostTeamMemberKjRK7GbxMapsK12viewd_supersKN17viewd_constsupers10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">GenGridbox::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10GenGridbox8state_atEKjKd"><code class="docutils literal notranslate"><span class="pre">GenGridbox::state_at()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10GenGridbox11GbxindexGenE"><code class="docutils literal notranslate"><span class="pre">GenGridbox::GbxindexGen</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10GenGridbox6presssE"><code class="docutils literal notranslate"><span class="pre">GenGridbox::presss</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10GenGridbox5tempsE"><code class="docutils literal notranslate"><span class="pre">GenGridbox::temps</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10GenGridbox5qvapsE"><code class="docutils literal notranslate"><span class="pre">GenGridbox::qvaps</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10GenGridbox6qcondsE"><code class="docutils literal notranslate"><span class="pre">GenGridbox::qconds</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10GenGridbox5wvelsE"><code class="docutils literal notranslate"><span class="pre">GenGridbox::wvels</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10GenGridbox5uvelsE"><code class="docutils literal notranslate"><span class="pre">GenGridbox::uvels</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10GenGridbox5vvelsE"><code class="docutils literal notranslate"><span class="pre">GenGridbox::vvels</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers"><code class="docutils literal notranslate"><span class="pre">create_gbxs()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E15initialise_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers"><code class="docutils literal notranslate"><span class="pre">initialise_gbxs()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I_11GridboxMapsE23initialise_gbxs_on_hostvRK7GbxMapsRK10GenGridboxK12viewd_supersK9viewh_gbx"><code class="docutils literal notranslate"><span class="pre">initialise_gbxs_on_host()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv419is_gbxinit_completeK6size_t12dualview_gbx"><code class="docutils literal notranslate"><span class="pre">is_gbxinit_complete()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv410print_gbxsK14viewh_constgbx"><code class="docutils literal notranslate"><span class="pre">print_gbxs()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

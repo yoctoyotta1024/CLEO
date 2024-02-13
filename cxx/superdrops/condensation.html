@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,7 +270,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -280,194 +280,14 @@
 <h1>Condensation<a class="headerlink" href="#condensation" title="Link to this heading">#</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/condensation.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/condensation.hpp">[source]</a></p>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv414DoCondensation">
-<span id="_CPPv314DoCondensation"></span><span id="_CPPv214DoCondensation"></span><span id="DoCondensation"></span><span class="target" id="structDoCondensation"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DoCondensation</span></span></span><a class="headerlink" href="#_CPPv414DoCondensation" title="Link to this definition">#</a><br /></dt>
-<dd><p>Implements condensation and evaporation microphysics for super-droplets. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N14DoCondensation14DoCondensationEKbKjKdKdKdKd">
-<span id="_CPPv3N14DoCondensation14DoCondensationEKbKjKdKdKdKd"></span><span id="_CPPv2N14DoCondensation14DoCondensationEKbKjKdKdKdKd"></span><span id="DoCondensation::DoCondensation__bC.unsigned-iC.doubleC.doubleC.doubleC.doubleC"></span><span class="target" id="structDoCondensation_1aa49bb7436ea65c052ecece95e9bb0b4a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DoCondensation</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">doAlterThermo</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">niters</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">delt</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxrtol</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxatol</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">subdelt</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14DoCondensation14DoCondensationEKbKjKdKdKdKd" title="Link to this definition">#</a><br /></dt>
-<dd><p>Constructs a <a class="reference internal" href="#structDoCondensation"><span class="std std-ref">DoCondensation</span></a> object. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>doAlterThermo</strong> – Whether to alter the thermodynamics of the <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p></li>
-<li><p><strong>niters</strong> – Number of iterations of implicit Euler method. </p></li>
-<li><p><strong>delt</strong> – Time step to integrate ODE using implcit Euler method. </p></li>
-<li><p><strong>maxrtol</strong> – Maximum relative tolerance for implicit Euler method. </p></li>
-<li><p><strong>maxatol</strong> – Maximum absolute tolerance for implicit Euler method. </p></li>
-<li><p><strong>subdelt</strong> – Sub-time step size in implicit Euler method. </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK14DoCondensationclERK10TeamMemberKj15subviewd_supersR5State13GenRandomPool">
-<span id="_CPPv3NK14DoCondensationclERK10TeamMemberKj15subviewd_supersR5State13GenRandomPool"></span><span id="_CPPv2NK14DoCondensationclERK10TeamMemberKj15subviewd_supersR5State13GenRandomPool"></span><span id="DoCondensation::call-operator__TeamMemberCR.unsigned-iC.subviewd_supers.StateR.GenRandomPoolC"></span><span class="target" id="structDoCondensation_1ac193bd16d7a7c5eeb45a9dceb4add92b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">subviewd_supers</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">TeamMember</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">team_member</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">subt</span></span>, <span class="n"><span class="pre">subviewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span>, <a class="reference internal" href="state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">state</span></span>, <span class="n"><span class="pre">GenRandomPool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">genpool</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14DoCondensationclERK10TeamMemberKj15subviewd_supersR5State13GenRandomPool" title="Link to this definition">#</a><br /></dt>
-<dd><p>Operator used as an “adaptor” for using condensation as the function-like type satisfying the MicrophysicsFunction concept. </p>
-<p>This operator is an “adaptor” for using condensation as the MicrophysicsFunction type in a <a class="reference internal" href="microphysical_process.html#structConstTstepMicrophysics"><span class="std std-ref">ConstTstepMicrophysics</span></a> instance (<em>hint</em> which satsifies the MicrophysicalProcess concept).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>team_member</strong> – The Kokkos team member. </p></li>
-<li><p><strong>subt</strong> – The microphysics time step. </p></li>
-<li><p><strong>supers</strong> – The view of super-droplets. </p></li>
-<li><p><strong>state</strong> – The <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p></li>
-<li><p><strong>genpool</strong> – The Kokkos thread-safe random number generator pool. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The updated view super-droplets. </p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenstruct: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK14DoCondensation15do_condensationERK10TeamMemberK15subviewd_supersR5State">
-<span id="_CPPv3NK14DoCondensation15do_condensationERK10TeamMemberK15subviewd_supersR5State"></span><span id="_CPPv2NK14DoCondensation15do_condensationERK10TeamMemberK15subviewd_supersR5State"></span><span id="DoCondensation::do_condensation__TeamMemberCR.subviewd_supersC.StateRC"></span><span class="target" id="structDoCondensation_1a752eef65eb15eb21addfa6836e7bda8b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">do_condensation</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">TeamMember</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">team_member</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">subviewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span>, <a class="reference internal" href="state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14DoCondensation15do_condensationERK10TeamMemberK15subviewd_supersR5State" title="Link to this definition">#</a><br /></dt>
-<dd><p>Enacts condensation / evaporation microphysics. </p>
-<p>Enacts condensation / evaporation microphysics. Change to superdroplet radius, and optionally thermodynamics of the <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a> due to sum of water condensed via diffusion and condensation / evporation of water vapour during a given timestep delt. Using equations (eqn [X.YY]) from “An Introduction To Clouds From The Microscale to Climate” by Lohmann, Luond and Mahrt, 1st edition.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>team_member</strong> – The Kokkos team member. </p></li>
-<li><p><strong>supers</strong> – The superdroplets. </p></li>
-<li><p><strong>state</strong> – The state. </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK14DoCondensation20superdroplets_changeERK10TeamMemberK15subviewd_supersRK5State">
-<span id="_CPPv3NK14DoCondensation20superdroplets_changeERK10TeamMemberK15subviewd_supersRK5State"></span><span id="_CPPv2NK14DoCondensation20superdroplets_changeERK10TeamMemberK15subviewd_supersRK5State"></span><span id="DoCondensation::superdroplets_change__TeamMemberCR.subviewd_supersC.StateCRC"></span><span class="target" id="structDoCondensation_1adf0ed4e2f2ef8b0a47e8f2391f1e28a7"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">superdroplets_change</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">TeamMember</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">team_member</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">subviewd_supers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14DoCondensation20superdroplets_changeERK10TeamMemberK15subviewd_supersRK5State" title="Link to this definition">#</a><br /></dt>
-<dd><p>Changes super-droplet radii according to condensation / evaporation and returns the total change in liquid water mass in volume as a result. </p>
-<p>returns total change in liquid water mass (dimensionless) in volume, ‘mass_condensed’, due to condensation onto / evaporation of super-droplets.</p>
-<p>The equivalent serial version of Kokkos::parallel_reduce([…]) is summing deltamass over loop: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">ii</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">ii</span> <span class="o">&lt;</span> <span class="n">ngbxs</span><span class="p">;</span> <span class="o">++</span><span class="n">ii</span><span class="p">)</span>
-<span class="p">{</span>
- <span class="p">[</span><span class="o">...</span><span class="p">]</span>
- <span class="n">totmass_condensed</span> <span class="o">+=</span> <span class="n">deltamass</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>team_member</strong> – The Kokkos team member. </p></li>
-<li><p><strong>supers</strong> – The superdroplets. </p></li>
-<li><p><strong>state</strong> – The state. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The total change in liquid water mass. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd">
-<span id="_CPPv3NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd"></span><span id="_CPPv2NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd"></span><span id="DoCondensation::superdrop_mass_change__SuperdropR.doubleC.doubleC.doubleCC"></span><span class="target" id="structDoCondensation_1a86faab079b5ec6a6fc2873d8d970bfc0"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">superdrop_mass_change</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">temp</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">s_ratio</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ffactor</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd" title="Link to this definition">#</a><br /></dt>
-<dd><p>Updates the super-droplet radius and returns the mass of liquid condensed or evaporated. </p>
-<p><p>Updates the super-droplet radius due to radial growth/shrink via condensation and diffusion of water vapour according to equations from “An Introduction To Clouds From The Microscale to</p>
-<p>Climate” by Lohmann, Luond and Mahrt, 1st edition. New radius is calculated using ‘impe’</p>
-ImplicitEuler instance which iteratively solves forward integration of condensation-diffusion ODE. Return mass of liquid that condensed onto / evaporated off of droplet.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>drop</strong> – The super-droplet. </p></li>
-<li><p><strong>temp</strong> – The ambient temperature. </p></li>
-<li><p><strong>s_ratio</strong> – The saturation ratio. </p></li>
-<li><p><strong>ffactor</strong> – The sum of the diffusion factors. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The mass of liquid condensed or evaporated. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State">
-<span id="_CPPv3NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State"></span><span id="_CPPv2NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State"></span><span id="DoCondensation::effect_on_thermodynamic_state__TeamMemberCR.doubleC.StateRC"></span><span class="target" id="structDoCondensation_1a06d3a1c2c2e0a193b8ddb1cd798c49d7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">effect_on_thermodynamic_state</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">TeamMember</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">team_member</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totmass_condensed</span></span>, <a class="reference internal" href="state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State" title="Link to this definition">#</a><br /></dt>
-<dd><p>Applies the effect of condensation / evaporation on the thermodynamics of the <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p>
-<p>if doAlterThermo is true, use a single team member to change the thermodynamics of the <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a> due to the effect of condensation / evaporation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>team_member</strong> – The Kokkos team member. </p></li>
-<li><p><strong>totmass_condensed</strong> – The total mass of liquid condensed. </p></li>
-<li><p><strong>state</strong> – The <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a> of the volume containing the super-droplets (prior to condensation / evaporation). </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK14DoCondensation12state_changeEKdR5State">
-<span id="_CPPv3NK14DoCondensation12state_changeEKdR5State"></span><span id="_CPPv2NK14DoCondensation12state_changeEKdR5State"></span><span id="DoCondensation::state_change__doubleC.StateRC"></span><span class="target" id="structDoCondensation_1a4bdd1fcddda4530d0264a8b202931712"></span><a class="reference internal" href="state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">state_change</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totrho_condensed</span></span>, <a class="reference internal" href="state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14DoCondensation12state_changeEKdR5State" title="Link to this definition">#</a><br /></dt>
-<dd><p>Changes the thermodynamic variables of the <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p>
-<p>Changes the thermodynamic variables, temperature, vapour and liquid mass mixing ratios (qvap and qcond respectively) of the <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a> given the total change in condensed water mass in its volume.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>totrho_condensed</strong> – The total condensed water mass in volume of <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p></li>
-<li><p><strong>state</strong> – The <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a> of the volume containing the super-droplets (prior to condensation / evaporation). </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The updated <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N14DoCondensation13doAlterThermoE">
-<span id="_CPPv3N14DoCondensation13doAlterThermoE"></span><span id="_CPPv2N14DoCondensation13doAlterThermoE"></span><span id="DoCondensation::doAlterThermo__b"></span><span class="target" id="structDoCondensation_1a06a5c942f156dca1c0808aee9c7940bb"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">doAlterThermo</span></span></span><a class="headerlink" href="#_CPPv4N14DoCondensation13doAlterThermoE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether to make condensation alter <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a> or not </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N14DoCondensation4impeE">
-<span id="_CPPv3N14DoCondensation4impeE"></span><span id="_CPPv2N14DoCondensation4impeE"></span><span id="DoCondensation::impe__ImplicitEuler"></span><span class="target" id="structDoCondensation_1ac4016241307c2c497c066ee5db3722ce"></span><span class="n"><span class="pre">ImplicitEuler</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">impe</span></span></span><a class="headerlink" href="#_CPPv4N14DoCondensation4impeE" title="Link to this definition">#</a><br /></dt>
-<dd><p>instance of ImplicitEuler ODE solver </p>
-</dd></dl>
-
-</div>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv412CondensationKjKbKjKNSt8functionIFdjEEEKdKdKdKNSt8functionIFddEEE">
-<span id="_CPPv312CondensationKjKbKjKNSt8functionIFdjEEEKdKdKdKNSt8functionIFddEEE"></span><span id="_CPPv212CondensationKjKbKjKNSt8functionIFdjEEEKdKdKdKNSt8functionIFddEEE"></span><span class="target" id="condensation_8hpp_1a0e442f4d909954b746da1dd8ace909f1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">MicrophysicalProcess</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Condensation</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">doAlterThermo</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">niters</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">step2dimlesstime</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxrtol</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxatol</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">SUBDELT</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">realtime2dimless</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412CondensationKjKbKjKNSt8functionIFdjEEEKdKdKdKNSt8functionIFddEEE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Constructs a microphysical process for condensation / evaporation of super-droplets with a constant time-step ‘interval’. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>interval</strong> – The constant time-step for condensation. </p></li>
-<li><p><strong>doAlterThermo</strong> – Whether to alter the thermodynamic state after condensation / evaporation. </p></li>
-<li><p><strong>niters</strong> – Number of iterations of implicit Euler method. </p></li>
-<li><p><strong>step2dimlesstime</strong> – A function to convert ‘interval’ time-step to a dimensionless time. </p></li>
-<li><p><strong>maxrtol</strong> – Maximum relative tolerance for implicit Euler method. </p></li>
-<li><p><strong>maxatol</strong> – Maximum absolute tolerance for implicit Euler method. </p></li>
-<li><p><strong>SUBDELT</strong> – The sub-time step of implicit Euler method. </p></li>
-<li><p><strong>realtime2dimless</strong> – A function to convert a real-time to a dimensionless time. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The constructed microphysical process for condensation / evaporation. </p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
         </article>
@@ -514,39 +334,8 @@ ImplicitEuler instance which iteratively solves forward integration of condensat
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Condensation</a><ul>
-<li><a class="reference internal" href="#_CPPv414DoCondensation"><code class="docutils literal notranslate"><span class="pre">DoCondensation</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N14DoCondensation14DoCondensationEKbKjKdKdKdKd"><code class="docutils literal notranslate"><span class="pre">DoCondensation::DoCondensation()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14DoCondensationclERK10TeamMemberKj15subviewd_supersR5State13GenRandomPool"><code class="docutils literal notranslate"><span class="pre">DoCondensation::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14DoCondensation15do_condensationERK10TeamMemberK15subviewd_supersR5State"><code class="docutils literal notranslate"><span class="pre">DoCondensation::do_condensation()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14DoCondensation20superdroplets_changeERK10TeamMemberK15subviewd_supersRK5State"><code class="docutils literal notranslate"><span class="pre">DoCondensation::superdroplets_change()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd"><code class="docutils literal notranslate"><span class="pre">DoCondensation::superdrop_mass_change()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State"><code class="docutils literal notranslate"><span class="pre">DoCondensation::effect_on_thermodynamic_state()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14DoCondensation12state_changeEKdR5State"><code class="docutils literal notranslate"><span class="pre">DoCondensation::state_change()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14DoCondensation13doAlterThermoE"><code class="docutils literal notranslate"><span class="pre">DoCondensation::doAlterThermo</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14DoCondensation4impeE"><code class="docutils literal notranslate"><span class="pre">DoCondensation::impe</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#_CPPv412CondensationKjKbKjKNSt8functionIFdjEEEKdKdKdKNSt8functionIFddEEE"><code class="docutils literal notranslate"><span class="pre">Condensation()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

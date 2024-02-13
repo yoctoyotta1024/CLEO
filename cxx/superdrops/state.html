@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,7 +270,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -280,145 +280,10 @@
 <h1>State<a class="headerlink" href="#state" title="Link to this heading">#</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/state.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/state.hpp">[source]</a></p>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv45State">
-<span id="_CPPv35State"></span><span id="_CPPv25State"></span><span id="State"></span><span class="target" id="structState"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">State</span></span></span><a class="headerlink" href="#_CPPv45State" title="Link to this definition">#</a><br /></dt>
-<dd><p>Struct representing the state of a certain volume at a given time. </p>
-<p>Variables which define the state of a certain volume (e.g., inside a gridbox) at a given time. <a class="reference internal" href="#structState"><span class="std std-ref">State</span></a> variables are, for example, thermodynamic variables required for SDM such as temperature, pressure, etc. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5State5StateEv">
-<span id="_CPPv3N5State5StateEv"></span><span id="_CPPv2N5State5StateEv"></span><span id="State::State"></span><span class="target" id="structState_1a95aa2ca390f05627acf00149efd568c7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">State</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N5State5StateEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Default constructor requirement for use of <a class="reference internal" href="#structState"><span class="std std-ref">State</span></a> in Kokkos View. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5StateD0Ev">
-<span id="_CPPv3N5StateD0Ev"></span><span id="_CPPv2N5StateD0Ev"></span><span id="State::~State"></span><span class="target" id="structState_1a4c9aa4830a9c86e9198eb125287b5ac7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~State</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N5StateD0Ev" title="Link to this definition">#</a><br /></dt>
-<dd><p>Default destructor requirement for use of <a class="reference internal" href="#structState"><span class="std std-ref">State</span></a> in Kokkos View. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5State5StateEKdKdKdKdKdKN6Kokkos4pairIddEEKN6Kokkos4pairIddEEKN6Kokkos4pairIddEE">
-<span id="_CPPv3N5State5StateEKdKdKdKdKdKN6Kokkos4pairIddEEKN6Kokkos4pairIddEEKN6Kokkos4pairIddEE"></span><span id="_CPPv2N5State5StateEKdKdKdKdKdKN6Kokkos4pairIddEEKN6Kokkos4pairIddEEKN6Kokkos4pairIddEE"></span><span id="State::State__doubleC.doubleC.doubleC.doubleC.doubleC.Kokkos::pair:double.double:C.Kokkos::pair:double.double:C.Kokkos::pair:double.double:C"></span><span class="target" id="structState_1aae413fd7853f9055c8694c2c780c7c13"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">State</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">volume</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">press</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">temp</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">qvap</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">qcond</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">wvel</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">uvel</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vvel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5State5StateEKdKdKdKdKdKN6Kokkos4pairIddEEKN6Kokkos4pairIddEEKN6Kokkos4pairIddEE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Constructor with parameters. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>volume</strong> – The volume of the state. </p></li>
-<li><p><strong>press</strong> – The pressure defined at the center of the volume. </p></li>
-<li><p><strong>temp</strong> – The temperature defined at the center of the volume. </p></li>
-<li><p><strong>qvap</strong> – The vapor mass mixing ratio defined at the center of the volume. </p></li>
-<li><p><strong>qcond</strong> – The liquid (condensate) mass mixing ratio defined at the center of the volume. </p></li>
-<li><p><strong>wvel</strong> – The vertical velocity (coord3 direction) defined on {lower, upper} coord3 faces of the volume. </p></li>
-<li><p><strong>uvel</strong> – The horizontal eastwards velocity (coord1 direction) defined on {lower, upper} coord1 faces of the volume. </p></li>
-<li><p><strong>vvel</strong> – The horizontal northwards velocity (coord2 direction) defined on {lower, upper} coord2 faces of the volume. </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5State10get_volumeEv">
-<span id="_CPPv3NK5State10get_volumeEv"></span><span id="_CPPv2NK5State10get_volumeEv"></span><span id="State::get_volumeC"></span><span class="target" id="structState_1a39c7d0e1de815310595522ca8a794b6f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_volume</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5State10get_volumeEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get the volume of the state. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The volume of the state. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5State10wvelcentreEv">
-<span id="_CPPv3NK5State10wvelcentreEv"></span><span id="_CPPv2NK5State10wvelcentreEv"></span><span id="State::wvelcentreC"></span><span class="target" id="structState_1a6a06952a4ce848e80d290039d4b34a24"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wvelcentre</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5State10wvelcentreEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get the vertical velocity (in the coord3 direction) defined at the center of volume. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The vertical velocity component ‘w’ defined at the center of volume. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5State10uvelcentreEv">
-<span id="_CPPv3NK5State10uvelcentreEv"></span><span id="_CPPv2NK5State10uvelcentreEv"></span><span id="State::uvelcentreC"></span><span class="target" id="structState_1ad386d37a48768258a74df8b55b9fa9b9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uvelcentre</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5State10uvelcentreEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get the horizontal eastwards velocity (in the coord1 direction) defined at the center of volume. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The horizontal eastwards velocity component ‘u’ defined at the center of volume. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5State10vvelcentreEv">
-<span id="_CPPv3NK5State10vvelcentreEv"></span><span id="_CPPv2NK5State10vvelcentreEv"></span><span id="State::vvelcentreC"></span><span class="target" id="structState_1a948bdb5a84d0eebf864fbf298a71f768"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vvelcentre</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5State10vvelcentreEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get the horizontal northwards velocity (in the coord2 direction) defined at the center of volume. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The horizontal northwards velocity component ‘v’ defined at the center of volume. </p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenstruct: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5State5pressE">
-<span id="_CPPv3N5State5pressE"></span><span id="_CPPv2N5State5pressE"></span><span id="State::press__double"></span><span class="target" id="structState_1aee671f9d26f9e5d634f7b312825d890b"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">press</span></span></span><a class="headerlink" href="#_CPPv4N5State5pressE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Pressure defined at the center of volume. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5State4tempE">
-<span id="_CPPv3N5State4tempE"></span><span id="_CPPv2N5State4tempE"></span><span id="State::temp__double"></span><span class="target" id="structState_1a8fd51ca45a0bdd935be94fa3a899dcde"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">temp</span></span></span><a class="headerlink" href="#_CPPv4N5State4tempE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Temperature defined at the center of volume. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5State4qvapE">
-<span id="_CPPv3N5State4qvapE"></span><span id="_CPPv2N5State4qvapE"></span><span id="State::qvap__double"></span><span class="target" id="structState_1a312a7688c56212f5cc39ef52777158b6"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">qvap</span></span></span><a class="headerlink" href="#_CPPv4N5State4qvapE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vapor mass mixing ratio at the center of volume. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5State5qcondE">
-<span id="_CPPv3N5State5qcondE"></span><span id="_CPPv2N5State5qcondE"></span><span id="State::qcond__double"></span><span class="target" id="structState_1aa494e29a1f618680874e006227e00c06"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">qcond</span></span></span><a class="headerlink" href="#_CPPv4N5State5qcondE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Liquid mass mixing ratio at the center of volume. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5State4wvelE">
-<span id="_CPPv3N5State4wvelE"></span><span id="_CPPv2N5State4wvelE"></span><span id="State::wvel__Kokkos::pair:double.double:"></span><span class="target" id="structState_1a27b89acca76fe46d92085a602701d423"></span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wvel</span></span></span><a class="headerlink" href="#_CPPv4N5State4wvelE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vertical velocity (coord3 direction) defined on {lower, upper} coord3 faces of volume. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5State4uvelE">
-<span id="_CPPv3N5State4uvelE"></span><span id="_CPPv2N5State4uvelE"></span><span id="State::uvel__Kokkos::pair:double.double:"></span><span class="target" id="structState_1a73fdad60ebd439111641a4ccc56c57ea"></span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uvel</span></span></span><a class="headerlink" href="#_CPPv4N5State4uvelE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Eastwards velocity (coord1 direction) defined on {lower, upper} coord1 faces of volume. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5State4vvelE">
-<span id="_CPPv3N5State4vvelE"></span><span id="_CPPv2N5State4vvelE"></span><span id="State::vvel__Kokkos::pair:double.double:"></span><span class="target" id="structState_1aa6c144f50ea6a6e7b19058d5019e7551"></span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vvel</span></span></span><a class="headerlink" href="#_CPPv4N5State4vvelE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Northwards velocity (coord2 direction) defined on {lower, upper} coord2 faces of volume. </p>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5State6volumeE">
-<span id="_CPPv3N5State6volumeE"></span><span id="_CPPv2N5State6volumeE"></span><span id="State::volume__double"></span><span class="target" id="structState_1ae42103bde4c7bb7fe363953089104758"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">volume</span></span></span><a class="headerlink" href="#_CPPv4N5State6volumeE" title="Link to this definition">#</a><br /></dt>
-<dd></dd></dl>
-
-</div>
-</dd></dl>
-
 </section>
 
         </article>
@@ -465,44 +330,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">State</a><ul>
-<li><a class="reference internal" href="#_CPPv45State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N5State5StateEv"><code class="docutils literal notranslate"><span class="pre">State::State()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5StateD0Ev"><code class="docutils literal notranslate"><span class="pre">State::~State()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5State5StateEKdKdKdKdKdKN6Kokkos4pairIddEEKN6Kokkos4pairIddEEKN6Kokkos4pairIddEE"><code class="docutils literal notranslate"><span class="pre">State::State()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK5State10get_volumeEv"><code class="docutils literal notranslate"><span class="pre">State::get_volume()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK5State10wvelcentreEv"><code class="docutils literal notranslate"><span class="pre">State::wvelcentre()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK5State10uvelcentreEv"><code class="docutils literal notranslate"><span class="pre">State::uvelcentre()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK5State10vvelcentreEv"><code class="docutils literal notranslate"><span class="pre">State::vvelcentre()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5State5pressE"><code class="docutils literal notranslate"><span class="pre">State::press</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5State4tempE"><code class="docutils literal notranslate"><span class="pre">State::temp</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5State4qvapE"><code class="docutils literal notranslate"><span class="pre">State::qvap</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5State5qcondE"><code class="docutils literal notranslate"><span class="pre">State::qcond</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5State4wvelE"><code class="docutils literal notranslate"><span class="pre">State::wvel</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5State4uvelE"><code class="docutils literal notranslate"><span class="pre">State::uvel</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5State4vvelE"><code class="docutils literal notranslate"><span class="pre">State::vvel</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5State6volumeE"><code class="docutils literal notranslate"><span class="pre">State::volume</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

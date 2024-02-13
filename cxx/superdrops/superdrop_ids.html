@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,7 +270,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -280,142 +280,22 @@
 <h1>Superdrop IDs<a class="headerlink" href="#superdrop-ids" title="Link to this heading">#</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/superdrop_ids.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/superdrop_ids.hpp">[source]</a></p>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv45IntID">
-<span id="_CPPv35IntID"></span><span id="_CPPv25IntID"></span><span id="IntID"></span><span class="target" id="structIntID"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IntID</span></span></span><a class="headerlink" href="#_CPPv45IntID" title="Link to this definition">#</a><br /></dt>
-<dd><p>Struct containing value of SD identity (8 bytes integer). </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5IntID5valueE">
-<span id="_CPPv3N5IntID5valueE"></span><span id="_CPPv2N5IntID5valueE"></span><span id="IntID::value__s"></span><span class="target" id="structIntID_1a9623661d69ab0a660161651ab482a59f"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5IntID5valueE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Value of the SD identity. </p>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenstruct: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N5IntID3GenE">
-<span id="_CPPv3N5IntID3GenE"></span><span id="_CPPv2N5IntID3GenE"></span><span id="IntID::Gen"></span><span class="target" id="classIntID_1_1Gen"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Gen</span></span></span><a class="headerlink" href="#_CPPv4N5IntID3GenE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Class for generating unique SD identity. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5IntID3Gen4nextEv">
-<span id="_CPPv3N5IntID3Gen4nextEv"></span><span id="_CPPv2N5IntID3Gen4nextEv"></span><span id="IntID::Gen::next"></span><span class="target" id="classIntID_1_1Gen_1acc0bdb38e30541f2a284ca55092af738"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv45IntID" title="IntID"><span class="n"><span class="pre">IntID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5IntID3Gen4nextEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Generate the next SD identity. </p>
-<p>Note: This generator is not thread-safe (_id++ is undefined in a multi-threaded environment).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SD identity. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5IntID3Gen4nextEK6size_t">
-<span id="_CPPv3N5IntID3Gen4nextEK6size_t"></span><span id="_CPPv2N5IntID3Gen4nextEK6size_t"></span><span id="IntID::Gen::next__sC"></span><span class="target" id="classIntID_1_1Gen_1a80d04753e50b94ea547a5052111722cd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv45IntID" title="IntID"><span class="n"><span class="pre">IntID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5IntID3Gen4nextEK6size_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Generate the next SD identity using given value ‘id’. </p>
-<p>Note: This generator assumes the ID was thread-safe generated (i.e., is unique).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>id</strong> – The value to use for generating the next SD identity. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>SD identity. </p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenstruct: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5IntID3Gen3_idE">
-<span id="_CPPv3N5IntID3Gen3_idE"></span><span id="_CPPv2N5IntID3Gen3_idE"></span><span id="IntID::Gen::_id__s"></span><span class="target" id="classIntID_1_1Gen_1a12732d534267f822902e558b9a63f38f"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">_id</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5IntID3Gen3_idE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Internal counter for generating SD identities. </p>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv47EmptyID">
-<span id="_CPPv37EmptyID"></span><span id="_CPPv27EmptyID"></span><span id="EmptyID"></span><span class="target" id="structEmptyID"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EmptyID</span></span></span><a class="headerlink" href="#_CPPv47EmptyID" title="Link to this definition">#</a><br /></dt>
-<dd><p>Struct for non-existent (no memory) SD identity. </p>
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N7EmptyID3GenE">
-<span id="_CPPv3N7EmptyID3GenE"></span><span id="_CPPv2N7EmptyID3GenE"></span><span id="EmptyID::Gen"></span><span class="target" id="classEmptyID_1_1Gen"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Gen</span></span></span><a class="headerlink" href="#_CPPv4N7EmptyID3GenE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Class for generating empty SD identity. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7EmptyID3Gen4nextEv">
-<span id="_CPPv3N7EmptyID3Gen4nextEv"></span><span id="_CPPv2N7EmptyID3Gen4nextEv"></span><span id="EmptyID::Gen::next"></span><span class="target" id="classEmptyID_1_1Gen_1ac0fe1392e98b84ac4167b72645acd8b7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47EmptyID" title="EmptyID"><span class="n"><span class="pre">EmptyID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7EmptyID3Gen4nextEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Generate an empty SD identity. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Empty SD identity. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7EmptyID3Gen4nextEKj">
-<span id="_CPPv3N7EmptyID3Gen4nextEKj"></span><span id="_CPPv2N7EmptyID3Gen4nextEKj"></span><span id="EmptyID::Gen::next__unsigned-iC"></span><span class="target" id="classEmptyID_1_1Gen_1a12fb61fa534e010903ee261ce4a1bbf0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47EmptyID" title="EmptyID"><span class="n"><span class="pre">EmptyID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7EmptyID3Gen4nextEKj" title="Link to this definition">#</a><br /></dt>
-<dd><p>Generate an empty SD identity. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kk</strong> – A parameter possibly used for generating SD identity. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Empty SD identity. </p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Cannot find file: /home/runner/work/CLEO/CLEO/docs/build/doxygen/xml/index.xml</p>
 </div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4lsRNSt7ostreamERK7EmptyID">
-<span id="_CPPv3lsRNSt7ostreamERK7EmptyID"></span><span id="_CPPv2lsRNSt7ostreamERK7EmptyID"></span><span id="lshift-operator__osR.EmptyIDCR"></span><span class="target" id="superdrop__ids_8hpp_1ad65f19a079ea4a731f6afd7fcbd1770d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47EmptyID" title="EmptyID"><span class="n"><span class="pre">EmptyID</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4lsRNSt7ostreamERK7EmptyID" title="Link to this definition">#</a><br /></dt>
-<dd><p>Output stream operator for printing null statement when super-droplet identity is instance of <a class="reference internal" href="#structEmptyID"><span class="std std-ref">EmptyID</span></a> (non-existent) type. </p>
-<p>Null statement reads “(Undefined) No ID”.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>os</strong> – Output stream. </p></li>
-<li><p><strong>id</strong> – SD identity to print. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Reference to the output stream. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4lsRNSt7ostreamERK5IntID">
-<span id="_CPPv3lsRNSt7ostreamERK5IntID"></span><span id="_CPPv2lsRNSt7ostreamERK5IntID"></span><span id="lshift-operator__osR.IntIDCR"></span><span class="target" id="superdrop__ids_8hpp_1a3b18eaa71ff41a57e04ad09346d4613d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv45IntID" title="IntID"><span class="n"><span class="pre">IntID</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4lsRNSt7ostreamERK5IntID" title="Link to this definition">#</a><br /></dt>
-<dd><p>Output stream operator for printing super-droplet identity when it is <a class="reference internal" href="#structIntID"><span class="std std-ref">IntID</span></a> type. </p>
-<p>Statement is of value of super-droplet identity, <a class="reference internal" href="#structIntID_1a9623661d69ab0a660161651ab482a59f"><span class="std std-ref">IntID::value</span></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>os</strong> – Output stream. </p></li>
-<li><p><strong>id</strong> – SD identity to print. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Reference to the output stream. </p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
         </article>
@@ -462,46 +342,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Superdrop IDs</a><ul>
-<li><a class="reference internal" href="#_CPPv45IntID"><code class="docutils literal notranslate"><span class="pre">IntID</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N5IntID5valueE"><code class="docutils literal notranslate"><span class="pre">IntID::value</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5IntID3GenE"><code class="docutils literal notranslate"><span class="pre">IntID::Gen</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N5IntID3Gen4nextEv"><code class="docutils literal notranslate"><span class="pre">IntID::Gen::next()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5IntID3Gen4nextEK6size_t"><code class="docutils literal notranslate"><span class="pre">IntID::Gen::next()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5IntID3Gen3_idE"><code class="docutils literal notranslate"><span class="pre">IntID::Gen::_id</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#_CPPv47EmptyID"><code class="docutils literal notranslate"><span class="pre">EmptyID</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N7EmptyID3GenE"><code class="docutils literal notranslate"><span class="pre">EmptyID::Gen</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N7EmptyID3Gen4nextEv"><code class="docutils literal notranslate"><span class="pre">EmptyID::Gen::next()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7EmptyID3Gen4nextEKj"><code class="docutils literal notranslate"><span class="pre">EmptyID::Gen::next()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#_CPPv4lsRNSt7ostreamERK7EmptyID"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4lsRNSt7ostreamERK5IntID"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
