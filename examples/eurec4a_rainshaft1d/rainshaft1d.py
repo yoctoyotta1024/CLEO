@@ -85,7 +85,7 @@ PRESS0      = 101315                # [Pa]
 TEMP0       = air_temperature_params["f_0"][0]               # [K]
 TEMPlapses  = - np.array(air_temperature_params["slopes"])*1e3            # -dT/dz [K/km]
 qvap0       = specific_humidity_params["f_0"][0]                 # [Kg/Kg]
-qvaplapses  = - np.array(specific_humidity_params["slopes"])*1e6   # -dvap/dz [g/Kg km^-1]
+qvaplapses  = - np.array(specific_humidity_params["slopes"])   # -dvap/dz [g/Kg km^-1]
 qcond       = 0.0                   # [Kg/Kg]
 WVEL        = 0.0                   # [m/s]
 Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
