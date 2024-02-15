@@ -30,7 +30,7 @@ echo "--------------------------------------------"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
 configfile=${path2CLEO}/examples/eurec4a_rainshaft1d/src/config/rain1d_config.txt
-yamlfile=${HOME}/repositories/sdm-eurec4a/results/CLEO/create_input/clusters_211/input_CLEO.yaml
+yamlfile=${HOME}/repositories/sdm-eurec4a/data/model/input/example_input_301.yaml
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 pythonPySD=/work/mh1126/m301096/conda/envs/sdm_pysd_env312/bin/python
