@@ -35,11 +35,14 @@ monoid get combined with one another to produce another member (rule(2)); and we
 member of each monoid by making a structure which satisfies the C++ concepts for that monoid but
 which does nothing (rule(3)).
 
-We then use these monoids to ensure a templated type does certain things (e.g. microphysics or
+We then use our monoids to ensure a templated type does certain things (e.g. microphysics or
 observing) and can be combined with other types that also do those things. In this way, we can
 create a type, satisfying a given concept, from the combination of several types which also
-satisfy that concept. For example, a microphysical process of type ‘CC’ could be created from the
+satisfy that concept and we can use it throughout the code by instantiaing a template
+upon compilation. For example, a microphysical process of type ‘CC’ could be created from the
 combination of the ‘Cond’ and ‘Colls’ types which are microphysical processes themselves.
+Upon compilation, a templated type 'Z' can then be instantiated with 'CC', or 'Cond', or 'Colls'
+(or any other member of the microphysics monoid) depending on what we want to model.
 
 A Good Analogy
 --------------
