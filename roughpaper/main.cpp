@@ -1,13 +1,15 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
- * ----- CLEO -----
+ *
+ * * ----- CLEO -----
  * File: main.cpp
  * Project: roughpaper
- * Created Date: Wednesday 1st November 2023
+ * Created Date: Monday 29th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 18th December 2023
+ * Last Modified: Friday 1st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -16,6 +18,7 @@
  * File Description:
  * rough paper for checking small things
  */
+
 
 #include <algorithm>
 #include <iostream>
