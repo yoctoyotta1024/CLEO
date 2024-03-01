@@ -38,7 +38,7 @@ add_executable(${test} "main.cpp")
 target_link_libraries(${test} PRIVATE "${SDMLIBS}")
 target_link_libraries(${test} PUBLIC Kokkos::kokkos)
 target_compile_options(${test} PRIVATE ${compileops})
-target_include_directories(${test} PRIVATE "${CMAKE_SOURCE_DIR}/../libs")
+target_include_directories(${test} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # set compiler properties for target(s)
 set_target_properties(${test} PROPERTIES
