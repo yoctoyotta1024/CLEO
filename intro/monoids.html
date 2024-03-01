@@ -171,8 +171,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../usage/contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../pySD/pySD.html">API: PySD</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: PySD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../pySD/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pySD/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
@@ -239,6 +237,8 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
@@ -289,39 +289,48 @@ satisfies the concept of a microphysical process.</p>
 </section>
 <section id="the-use-of-concepts-to-create-monoids">
 <h2>The Use of Concepts to Create Monoids<a class="headerlink" href="#the-use-of-concepts-to-create-monoids" title="Link to this heading">#</a></h2>
-<p>Within CLEO, a monoid can be thought of as a type that has three essential properties:</p>
+<p>In essence, a monoid is a complete set of members (i.e. elements/types) where each member of the set
+has three essential properties:</p>
 <ol class="arabic simple">
 <li><p>it can be created.</p></li>
 </ol>
-<p>2. it can be combined with a monoid of its kind to produce a new
-monoid of that kind (i.e. a monoid + a monoid = a monoid).</p>
+<p>2. it can be combined with another member of the monoid set to produce another member of that
+monoid set (i.e. monoid member + monoid member = monoid member).</p>
 <ol class="arabic simple" start="3">
-<li><p>it can be null (a structure which does nothing).</p></li>
+<li><p>it can be null (a member which does nothing).</p></li>
 </ol>
-<p>As suggested by point (2), there are various kinds of monoids. The different kinds of monoids
-differ over the specifics of these three properties. For example the kind of monoid which enacts
-microphysics is different to the kind of monoid that does observation because what it means for
-a microphysics monoid to (1)”be created”, (2)”be combined” and (3)”be nothing” is not the same
-as what it means for an observation monoid.</p>
-<p>For each kind of monoid, we use C++ concepts when we want to make certain a templated type is
-of that kind. In these situations, the rule for combining that kind of monoid is implemented by
-some function and the concepts are used to ensure that only types which obey that rule are allowed
-to declare themselves as that kind of monoid. By doing this, we can then create a monoid,
-satisfying a given concept, from the combination of several types which also
-satisfy that concept. For example, a microphysical process of type ‘CC’ could be created from the
-combination of the ‘Cond’ and ‘Colls’ types which are microphysical processes themselves.</p>
+<p>As suggested by point (2), there are various different monoids which differ from one another through
+their specific definition of these three properties. For example a monoid used to define
+“milkshakes” is different to the monoid that defines “melted chocolate” because what it means for (a
+member of) the milkshakes to (1)”be created”, (2)”be combined” and (3)”be nothing” is not the same
+as what it means for (a member of) the melted chocolate.</p>
+<p>In CLEO, we make monoids for various different things such as microphysics and observers. We use C++
+concepts to ensure only certain types can declare themselves as a member of a particular monoid
+(rule(1)); we use some function or structure to define how types which are members of a particular
+monoid get combined with one another to produce another member (rule(2)); and we create a null
+member of each monoid by making a structure which satisfies the C++ concepts for that monoid but
+which does nothing (rule(3)).</p>
+<p>We then use our monoids to ensure a templated type does certain things (e.g. microphysics or
+observing) and can be combined with other types that also do those things. In this way, we can
+create a type, satisfying a given concept, from the combination of several types which also
+satisfy that concept and we can use it throughout the code by instantiaing a template
+upon compilation. For example, a microphysical process of type ‘CC’ could be created from the
+combination of the ‘Cond’ and ‘Colls’ types which are microphysical processes themselves.
+Upon compilation, a templated type ‘Z’ can then be instantiated with ‘CC’, or ‘Cond’, or ‘Colls’
+(or any other member of the microphysics monoid) depending on what we want to model.</p>
 </section>
 <section id="a-good-analogy">
 <h2>A Good Analogy<a class="headerlink" href="#a-good-analogy" title="Link to this heading">#</a></h2>
 <p>The analogy I like to give is mixing paint. Suppose there are a variety of colours;
 blue, yellow, red, green, orange etc.. Let’s say that the blue, yellow and red colours
 satisfy all the requirements in order for them to be defined as ‘wet oil paint’ - in other
-words, these three colours are wet oil paint. Meanwhile let’s say all the other colours
-are crayons. The wet oil paints can be mixed in any combination to create a new wet oil paint -
-maybe it’s brown, maybe it’s violet, maybe it’s something we’ve never seen before, nevertheless
-it’s certainly wet oil paint. Now of course the red wet oil paint cannot be mixed with the
-green crayon to make a new wet oil paint, because clearly the crayon is not a wet oil paint. To
-make the analogy explicit, the requirements used to define wet oil paint and a crayon
+words, these three colours are wet oil paint.</p>
+<p>Meanwhile let’s say all the other colours are crayons. The wet oil paints can be mixed in any
+combination to create a new wet oil paint - maybe it’s brown, maybe it’s violet, maybe it’s
+something we’ve never seen before, nevertheless it’s certainly wet oil paint. Now of course the red
+wet oil paint cannot be mixed with the green crayon to make a new wet oil paint, because clearly
+the crayon is not a wet oil paint.</p>
+<p>To make the analogy explicit, the requirements used to define wet oil paint and a crayon
 are like the C++ concepts used to define a microphysical process or an observer. The
 colors are analogous to types satisfying a particular concept, for example ‘Cond’ and
 ‘Colls’ satisfying the microphysical process. The wet oil paints (and likewise microphysical
@@ -368,7 +377,7 @@ doesn’t do anything.)</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 13 February 2024</div>
+              Last updated on 01 March 2024</div>
           </div>
           <div class="right-details">
             

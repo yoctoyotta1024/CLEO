@@ -34,11 +34,12 @@ Time to get involved! Start by :doc:`installing CLEO<usage/installation>` and ex
    usage/installation
    usage/examples
    usage/quickstart
-   usage/contributing
-   usage/ourdocs
 
    pySD/pySD
    cxx/cxx
+
+   usage/contributing
+   usage/ourdocs
 
    GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
    usage/contact
