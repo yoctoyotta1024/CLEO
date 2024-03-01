@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: exmpl2d_config.txt
+ * File: const2d_config.txt
  * Project: config
  * Created Date: Tuesday 21st November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th January 2024
+ * Last Modified: Friday 1st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,13 +21,13 @@
 
 ### Initialisation parameters ###
 constants_filename = ../libs/cleoconstants.hpp                 # name of file for values of physical constants
-initsupers_filename = ./share/exmpl2d_dimlessSDsinit.dat       # binary filename for initialisation of SDs
-grid_filename = ./share/exmpl2d_dimlessGBxboundaries.dat       # binary filename for initialisation of GBxs / GbxMaps
+initsupers_filename = ./share/const2d_dimlessSDsinit.dat       # binary filename for initialisation of SDs
+grid_filename = ./share/const2d_dimlessGBxboundaries.dat       # binary filename for initialisation of GBxs / GbxMaps
 
 ### Output Data parameters ###
-setuptxt = ./bin/exmpl2d_setup.txt                # .txt filename to copy configuration to
-stats_filename = ./bin/exmpl2d_stats.txt          # .txt file to output runtime statistics to
-zarrbasedir = ./bin/exmpl2d_sol.zarr              # zarr store base directory
+setuptxt = ./bin/const2d_setup.txt                # .txt filename to copy configuration to
+stats_filename = ./bin/const2d_stats.txt          # .txt file to output runtime statistics to
+zarrbasedir = ./bin/const2d_sol.zarr              # zarr store base directory
 maxchunk = 1250000                                # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime parameters ###
@@ -58,10 +58,10 @@ doAlterThermo = false                   # enable condensation to alter the therm
 thermosolver = fromfile                                   # dynamics solver to configure
 
 ### read in dynamics from file ###
-press_filename = ./share/exmpl2d_dimlessthermo_press.dat          # binary filename for pressure
-temp_filename = ./share/exmpl2d_dimlessthermo_temp.dat            # binary filename for temperature
-qvap_filename = ./share/exmpl2d_dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
-qcond_filename = ./share/exmpl2d_dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
-wvel_filename = ./share/exmpl2d_dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
-uvel_filename = ./share/exmpl2d_dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
-vvel_filename = ./share/exmpl2d_dimlessthermo_vvel.dat            # binary filename for horizontal y velocity
+press_filename = ./share/const2d_dimlessthermo_press.dat          # binary filename for pressure
+temp_filename = ./share/const2d_dimlessthermo_temp.dat            # binary filename for temperature
+qvap_filename = ./share/const2d_dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
+qcond_filename = ./share/const2d_dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
+wvel_filename = ./share/const2d_dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
+uvel_filename = ./share/const2d_dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
+vvel_filename = ./share/const2d_dimlessthermo_vvel.dat            # binary filename for horizontal y velocity

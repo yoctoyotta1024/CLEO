@@ -5,7 +5,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and source directory of .cpp files
-project("exmpl2D")
+project("const2D")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
@@ -36,15 +36,15 @@ if(NOT DEFINED compileops)
 endif()
 
 # executable for CLEO coupled model 2-D example
-set(exmpl2D "exmpl2D")
-add_executable(${exmpl2D} EXCLUDE_FROM_ALL "main_exmpl2D.cpp")
-target_link_libraries(${exmpl2D} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
-target_link_libraries(${exmpl2D} PUBLIC Kokkos::kokkos)
-target_include_directories(${exmpl2D} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
-target_compile_options(${exmpl2D} PRIVATE ${compileops})
+set(const2D "const2D")
+add_executable(${const2D} EXCLUDE_FROM_ALL "main_const2D.cpp")
+target_link_libraries(${const2D} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
+target_link_libraries(${const2D} PUBLIC Kokkos::kokkos)
+target_include_directories(${const2D} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_compile_options(${const2D} PRIVATE ${compileops})
 
 # set compiler properties for target(s)
-set_target_properties(${exmpl2D} PROPERTIES
+set_target_properties(${const2D} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

@@ -1,15 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=exmpl2d
+#SBATCH --job-name=const2d
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
+#SBATCH --gpus=2
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
-#SBATCH --time=00:30:00
+#SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./exmpl2d_out.%j.out
-#SBATCH --error=./exmpl2d_err.%j.out
+#SBATCH --output=./const2d_out.%j.out
+#SBATCH --error=./const2d_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
@@ -22,7 +23,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
-configfile=${path2CLEO}/examples/constthermo2d/src/config/exmpl2d_config.txt
+configfile=${path2CLEO}/examples/constthermo2d/src/config/const2d_config.txt
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"
