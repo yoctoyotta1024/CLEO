@@ -21,7 +21,7 @@
  */
 
 
-#include "./collisionkinetics.cpp"
+#include "./collisionkinetics.hpp"
 
 /* returns cke, where cke = collision kinetic energy
 as formulated in Low and List 1982(a) eqn 3.1 given
