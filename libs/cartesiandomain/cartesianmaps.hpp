@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: cartesianmaps.hpp
  * Project: cartesiandomain
@@ -12,16 +13,14 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * functions related to creating and using maps to convert
  * between a gridbox indexes and domain coordinates for a
  * cartesian C grid
  */
 
-#ifndef CARTESIANMAPS_HPP
-#define CARTESIANMAPS_HPP
+#ifndef LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_
+#define LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_
 
 #include <stdexcept>
 
@@ -34,7 +33,6 @@
 
 namespace dlc = dimless_constants;
 
-struct CartesianMaps
 /* type satisfying GridboxMaps concept specifically for gridboxes
 defined on in a cartesian C grid with equal area and volume for each
 gridbox. coord[X]bounds (for X = 1, 2, 3, corresponding to x, y, z)
@@ -44,8 +42,8 @@ of each bounds map is that gridbox's {lower boundary, upper boundary}.
 to_[direction]_coord[X]nghbr (for direction = back, forward)
 map from a given gbxidx to the gbxidx of a neighbouring gridbox
 in that direction */
-{
-private:
+struct CartesianMaps {
+ private:
   /* maps from gbxidx to {lower, upper} coords of gridbox boundaries */
   kokkos_pairmap to_coord3bounds;
   kokkos_pairmap to_coord1bounds;
@@ -60,12 +58,16 @@ private:
   kokkos_uintmap to_forward_coord2nghbr;
 
   /* additional gridbox / domain information */
-  viewd_ndims ndims; // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
-  double gbxareas;   // horizontal (x-y planar) area of all gridboxes
-  double gbxvolumes; // volume of all gridboxes
+  viewd_ndims ndims;  // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
+  double gbxareas;    // horizontal (x-y planar) area of all gridboxes
+  double gbxvolumes;  // volume of all gridboxes
 
-public:
-  CartesianMaps(const size_t ngbxs)
+ public:
+  /* initialise maps with hint for their capacity
+  (ie. total number of keys). Leave values for maps,
+  for ndims, gbxareas and gbxvols undefined
+  upon construction (e.g. null ptr for ndims) */
+  explicit CartesianMaps(const size_t ngbxs)
       : to_coord3bounds(kokkos_pairmap(ngbxs)),
         to_coord1bounds(kokkos_pairmap(ngbxs)),
         to_coord2bounds(kokkos_pairmap(ngbxs)),
@@ -75,59 +77,46 @@ public:
         to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
         to_forward_coord2nghbr(kokkos_uintmap(ngbxs)),
-        ndims("ndims"), gbxareas(0.0), gbxvolumes(0.0) {}
-  /* initialise maps with hint for their capacity
-  (ie. total number of keys). Leave values for maps,
-  for ndims, gbxareas and gbxvols undefined
-  upon construction (e.g. null ptr for ndims) */
+        ndims("ndims"),
+        gbxareas(0.0),
+        gbxvolumes(0.0) {}
 
-  void insert_coord3bounds(const unsigned int idx,
-                           Kokkos::pair<double, double> bounds)
   /* insert 1 value into to_coord3bounds
   map at key = idx with value=bounds */
-  {
+  void insert_coord3bounds(const unsigned int idx, Kokkos::pair<double, double> bounds) {
     /* parallel for for 1 value so that execution of
     insert occurs on device if necessary */
     Kokkos::parallel_for(
-        "cb3s", 1, KOKKOS_CLASS_LAMBDA(const unsigned int i) {
-          to_coord3bounds.insert(idx, bounds);
-        });
+        "cb3s", 1,
+        KOKKOS_CLASS_LAMBDA(const unsigned int i) { to_coord3bounds.insert(idx, bounds); });
   }
 
-  void insert_coord1bounds(const unsigned int idx,
-                           Kokkos::pair<double, double> bounds)
   /* insert 1 value into to_coord1bounds
   map at key = idx with value=bounds */
-  {
+  void insert_coord1bounds(const unsigned int idx, Kokkos::pair<double, double> bounds) {
     /* parallel for for 1 value so that execution of
     insert occurs on device if necessary */
     Kokkos::parallel_for(
-        "cb1s", 1, KOKKOS_CLASS_LAMBDA(const unsigned int i) {
-          to_coord1bounds.insert(idx, bounds);
-        });
+        "cb1s", 1,
+        KOKKOS_CLASS_LAMBDA(const unsigned int i) { to_coord1bounds.insert(idx, bounds); });
   }
 
-  void insert_coord2bounds(const unsigned int idx,
-                           Kokkos::pair<double, double> bounds)
   /* insert 1 value into to_coord2bounds
   map at key = idx with value=bounds */
-  {
+  void insert_coord2bounds(const unsigned int idx, Kokkos::pair<double, double> bounds) {
     /* parallel for for 1 value so that execution of
     insert occurs on device if necessary */
     Kokkos::parallel_for(
-        "cb2s", 1, KOKKOS_CLASS_LAMBDA(const unsigned int i) {
-          to_coord2bounds.insert(idx, bounds);
-        });
+        "cb2s", 1,
+        KOKKOS_CLASS_LAMBDA(const unsigned int i) { to_coord2bounds.insert(idx, bounds); });
   }
 
-  void insert_coord3nghbrs(const unsigned int idx,
-                           Kokkos::pair<unsigned int, unsigned int>
-                               nghbrs)
   /* insert indexes of neightbouring gridboxes into
   back and forward neighbour maps for key = idx given
   neighbours in pair {back, forward},
   i.e. back=nghbrs.first and forward=nghbrs.second */
-  {
+  void insert_coord3nghbrs(const unsigned int idx,
+                           Kokkos::pair<unsigned int, unsigned int> nghbrs) {
     /* parallel for for 1 value so that execution of
     insert occurs on device if necessary */
     Kokkos::parallel_for(
@@ -137,14 +126,12 @@ public:
         });
   }
 
-  void insert_coord1nghbrs(const unsigned int idx,
-                           Kokkos::pair<unsigned int, unsigned int>
-                               nghbrs)
   /* insert indexes of neightbouring gridboxes into
   back and forward neighbour maps for key = idx given
   neighbours in pair {back, forward},
   i.e. back=nghbrs.first and forward=nghbrs.second */
-  {
+  void insert_coord1nghbrs(const unsigned int idx,
+                           Kokkos::pair<unsigned int, unsigned int> nghbrs) {
     /* parallel for for 1 value so that execution of
     insert occurs on device if necessary */
     Kokkos::parallel_for(
@@ -154,14 +141,12 @@ public:
         });
   }
 
-  void insert_coord2nghbrs(const unsigned int idx,
-                           Kokkos::pair<unsigned int, unsigned int>
-                               nghbrs)
   /* insert indexes of neightbouring gridboxes into
   back and forward neighbour maps for key = idx given
   neighbours in pair {back, forward},
   i.e. back=nghbrs.first and forward=nghbrs.second */
-  {
+  void insert_coord2nghbrs(const unsigned int idx,
+                           Kokkos::pair<unsigned int, unsigned int> nghbrs) {
     /* parallel for for 1 value so that execution of
     insert occurs on device if necessary */
     Kokkos::parallel_for(
@@ -171,166 +156,135 @@ public:
         });
   }
 
-  void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims)
   /* copies of h_ndims to ndims,
   possibly into device memory */
-  {
+  void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims) {
     Kokkos::deep_copy(ndims, h_ndims);
   }
 
   KOKKOS_INLINE_FUNCTION
-  void set_gbxarea(const double iarea)
-  {
-    gbxareas = iarea;
-  }
+  void set_gbxarea(const double iarea) { gbxareas = iarea; }
 
   KOKKOS_INLINE_FUNCTION
-  void set_gbxvolume(const double ivolume)
-  {
-    gbxvolumes = ivolume;
-  }
+  void set_gbxvolume(const double ivolume) { gbxvolumes = ivolume; }
 
-  size_t maps_size() const;
   /* on host device, throws error if maps are not all
   the same size, else returns size of maps */
+  size_t maps_size() const;
 
-  viewd_ndims::HostMirror ndims_hostcopy() const
   /* returns model dimensions ie. number of gridboxes
   along [coord3, coord1, coord2] directions for use on
   host. deep copy is made if gbxmaps ndims is on device */
-  {
-    auto h_ndims = Kokkos::create_mirror_view(ndims); // mirror ndims in case view is on device memory
+  viewd_ndims::HostMirror ndims_hostcopy() const {
+    auto h_ndims =
+        Kokkos::create_mirror_view(ndims);  // mirror ndims in case view is on device memory
     Kokkos::deep_copy(h_ndims, ndims);
 
     return h_ndims;
   }
 
-  KOKKOS_INLINE_FUNCTION
-  viewd_ndims get_ndims() const
   /* returns model dimensions ie. number of gridboxes
   along [coord3, coord1, coord2] directions */
-  {
-    return ndims;
-  }
-
   KOKKOS_INLINE_FUNCTION
-  size_t get_ndim(const unsigned int d) const
+  viewd_ndims get_ndims() const { return ndims; }
+
   /* returns model dimensions ie. number of
   gridboxes along d'th direction, where:
   ndims(d=0) = coord3
   ndims(d=1) = coord1
   ndims(d=2) = coord2 */
-  {
-    return ndims(d);
-  }
+  KOKKOS_INLINE_FUNCTION
+  size_t get_ndim(const unsigned int d) const { return ndims(d); }
 
   KOKKOS_INLINE_FUNCTION
-  double get_gbxarea(const unsigned int gbxidx) const
-  {
-    return gbxareas;
-  }
+  double get_gbxarea(const unsigned int gbxidx) const { return gbxareas; }
 
   KOKKOS_INLINE_FUNCTION
-  double get_gbxvolume(const unsigned int gbxidx) const
-  {
-    return gbxvolumes;
-  }
+  double get_gbxvolume(const unsigned int gbxidx) const { return gbxvolumes; }
 
-  KOKKOS_INLINE_FUNCTION
-  Kokkos::pair<double, double>
-  coord3bounds(const unsigned int gbxidx) const
   /* returns {lower bound, upper bound}  in coord3
   (z) direction of gridbox with index 'gbxidx'
   on device */
-  {
-    const auto i(to_coord3bounds.find(gbxidx)); // index in map of key 'gbxidx'
+  KOKKOS_INLINE_FUNCTION
+  Kokkos::pair<double, double> coord3bounds(const unsigned int gbxidx) const {
+    const auto i(to_coord3bounds.find(gbxidx));  // index in map of key 'gbxidx'
 
-    return to_coord3bounds.value_at(i); // value returned by map at index i
+    return to_coord3bounds.value_at(i);  // value returned by map at index i
   }
 
-  KOKKOS_INLINE_FUNCTION
-  Kokkos::pair<double, double>
-  coord1bounds(const unsigned int gbxidx) const
   /* returns {lower bound, upper bound}  in coord1
   (x) direction of gridbox with index 'gbxidx'
   on device */
-  {
-    const auto i(to_coord1bounds.find(gbxidx)); // index in map of key 'gbxidx'
+  KOKKOS_INLINE_FUNCTION
+  Kokkos::pair<double, double> coord1bounds(const unsigned int gbxidx) const {
+    const auto i(to_coord1bounds.find(gbxidx));  // index in map of key 'gbxidx'
 
-    return to_coord1bounds.value_at(i); // value returned by map at index i
+    return to_coord1bounds.value_at(i);  // value returned by map at index i
   }
 
-  KOKKOS_INLINE_FUNCTION
-  Kokkos::pair<double, double>
-  coord2bounds(const unsigned int gbxidx) const
   /* returns {lower bound, upper bound}  in coord2
   (y) direction of gridbox with index 'gbxidx'
   on device */
-  {
-    const auto i(to_coord2bounds.find(gbxidx)); // index in map of key 'gbxidx'
+  KOKKOS_INLINE_FUNCTION
+  Kokkos::pair<double, double> coord2bounds(const unsigned int gbxidx) const {
+    const auto i(to_coord2bounds.find(gbxidx));  // index in map of key 'gbxidx'
 
-    return to_coord2bounds.value_at(i); // value returned by map at index i
+    return to_coord2bounds.value_at(i);  // value returned by map at index i
   }
 
-  KOKKOS_INLINE_FUNCTION
-  unsigned int coord3backward(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in the backwards coord3, ie. downwards z, direction */
-  {
-    const auto i(to_back_coord3nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord3backward(unsigned int gbxindex) const {
+    const auto i(to_back_coord3nghbr.find(gbxindex));  // index in map of key 'gbxidx'
 
-    return to_back_coord3nghbr.value_at(i); // value returned by map at index i
+    return to_back_coord3nghbr.value_at(i);  // value returned by map at index i
   }
 
-  KOKKOS_INLINE_FUNCTION
-  unsigned int coord3forward(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in the forwards coord3, ie. upwards z, direction */
-  {
-    const auto i(to_forward_coord3nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord3forward(unsigned int gbxindex) const {
+    const auto i(to_forward_coord3nghbr.find(gbxindex));  // index in map of key 'gbxidx'
 
-    return to_forward_coord3nghbr.value_at(i); // value returned by map at index i
+    return to_forward_coord3nghbr.value_at(i);  // value returned by map at index i
   }
 
-  KOKKOS_INLINE_FUNCTION
-  unsigned int coord1backward(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in the backwards coord1, ie. into page x, direction */
-  {
-    const auto i(to_back_coord1nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord1backward(unsigned int gbxindex) const {
+    const auto i(to_back_coord1nghbr.find(gbxindex));  // index in map of key 'gbxidx'
 
-    return to_back_coord1nghbr.value_at(i); // value returned by map at index i
+    return to_back_coord1nghbr.value_at(i);  // value returned by map at index i
   }
 
-  KOKKOS_INLINE_FUNCTION
-  unsigned int coord1forward(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in the forwards coord1, ie. out of page x, direction */
-  {
-    const auto i(to_forward_coord1nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord1forward(unsigned int gbxindex) const {
+    const auto i(to_forward_coord1nghbr.find(gbxindex));  // index in map of key 'gbxidx'
 
-    return to_forward_coord1nghbr.value_at(i); // value returned by map at index i
+    return to_forward_coord1nghbr.value_at(i);  // value returned by map at index i
   }
 
-  KOKKOS_INLINE_FUNCTION
-  unsigned int coord2backward(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in the backwards coord2, ie. left y, direction */
-  {
-    const auto i(to_back_coord2nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord2backward(unsigned int gbxindex) const {
+    const auto i(to_back_coord2nghbr.find(gbxindex));  // index in map of key 'gbxidx'
 
-    return to_back_coord2nghbr.value_at(i); // value returned by map at index i
+    return to_back_coord2nghbr.value_at(i);  // value returned by map at index i
   }
 
-  KOKKOS_INLINE_FUNCTION
-  unsigned int coord2forward(unsigned int gbxindex) const
   /* given gridbox index, return index of neighbouring
   gridbox in the forwards coord2, ie. right y, direction */
-  {
-    const auto i(to_forward_coord2nghbr.find(gbxindex)); // index in map of key 'gbxidx'
+  KOKKOS_INLINE_FUNCTION
+  unsigned int coord2forward(unsigned int gbxindex) const {
+    const auto i(to_forward_coord2nghbr.find(gbxindex));  // index in map of key 'gbxidx'
 
-    return to_forward_coord2nghbr.value_at(i); // value returned by map at index i
+    return to_forward_coord2nghbr.value_at(i);  // value returned by map at index i
   }
 };
 
-#endif // CARTESIANMAPS_HPP
+#endif  // LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_

@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: longhydroprob.cpp
  * Project: collisionprobs
@@ -12,8 +13,6 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * functionality for probability of collision-coalescence
  * event between two (real) droplets using the
@@ -24,6 +23,5 @@
  * that satisfy the requirements of the
  * PairProbability concept (see collisions.hpp)
  */
-
 
 #include "./longhydroprob.hpp"

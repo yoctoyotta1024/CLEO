@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: timesteps.hpp
  * Project: initialise
@@ -12,21 +13,19 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * Structs for handling model timesteps and
  * their conversions to/from real times
  */
 
-#ifndef TIMESTEPS_HPP
-#define TIMESTEPS_HPP
+#ifndef LIBS_INITIALISE_TIMESTEPS_HPP_
+#define LIBS_INITIALISE_TIMESTEPS_HPP_
 
+#include <algorithm>
 #include <chrono>
 #include <ratio>
-#include <string>
 #include <stdexcept>
-#include <algorithm>
+#include <string>
 
 #include "../cleoconstants.hpp"
 #include "./config.hpp"
@@ -36,40 +35,33 @@ namespace dlc = dimless_constants;
 using model_step = std::chrono::duration<int, std::ratio<1, 100000>>;
 using secd = std::chrono::duration<double>;
 
-inline unsigned int realtime2step(const double TSTEP)
 /* convert TSTEP [seconds] (e.g. a double from Config struct)
 into a dimensionless time and then into an integer no. of
 model steps using model_step chrono function */
-{
+inline unsigned int realtime2step(const double TSTEP) {
   auto step(std::chrono::round<model_step>(secd{TSTEP / dlc::TIME0}));
   return step.count();
 }
 
-inline double realtime2dimless(const double TSTEP)
 /* convert TSTEP [seconds] (e.g. a double from Config
 struct) into a dimensionless time  */
-{
-  return TSTEP / dlc::TIME0;
-}
+inline double realtime2dimless(const double TSTEP) { return TSTEP / dlc::TIME0; }
 
-inline double step2realtime(const unsigned int mdlstep)
 /* convert model step (integer) into a time [seconds]
 given secd and model_step chrono functions */
-{
+inline double step2realtime(const unsigned int mdlstep) {
   return secd{model_step{mdlstep}}.count() * dlc::TIME0;
 }
 
-inline double step2dimlesstime(const unsigned int mdlstep)
 /* convert model timestep (integer) into a dimensionless
 time given secd and model_step chrono functions */
-{
+inline double step2dimlesstime(const unsigned int mdlstep) {
   return secd{model_step{mdlstep}}.count();
 }
 
-class Timesteps
 /* integer intervals (timesteps) involved in running CLEO model */
-{
-private:
+class Timesteps {
+ private:
   const unsigned int condstep;
   const unsigned int collstep;
   const unsigned int motionstep;
@@ -77,14 +69,14 @@ private:
   const unsigned int obsstep;
   const unsigned int t_end;
 
-public:
-  Timesteps(const Config &config);
+ public:
   /* (dimensionless) double's that are timesteps in config struct
   are converted into integer values of model timesteps using
   model_step and secd template functions created using
   std::chrono library. Throw error if after convertion into
   model timestep, any timestep = 0 or if a sub-timestep is
   longer than a timestep */
+  explicit Timesteps(const Config &config);
 
   auto get_condstep() const { return condstep; }
   auto get_collstep() const { return collstep; }
@@ -94,4 +86,4 @@ public:
   auto get_t_end() const { return t_end; }
 };
 
-#endif // TIMESTEPS_HPP
+#endif  // LIBS_INITIALISE_TIMESTEPS_HPP_

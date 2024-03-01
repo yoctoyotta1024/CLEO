@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: copyfiles2txt.cpp
  * Project: initialise
@@ -12,8 +13,6 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * functionality to open files given their filenames and
  * copy their contents line by line into a .txt file.
@@ -21,29 +20,24 @@
  * e.g. configuration files and values of constants
  */
 
-#include "./copyfiles2txt.hpp"
+#include "initialise/copyfiles2txt.hpp"
 
-void copyfile(std::ofstream &wfile,
-                   const std::string filename);
 /* open a file called filename and copy
 text line by line into wfile */
+void copyfile(std::ofstream &wfile, const std::string filename);
 
-void copyfiles2txt(const std::string setuptxt,
-                       const std::vector<std::string> files2copy)
 /* creates new empty file called setuptxt and copies contents of
 files listed in files2copy vector one by one */
-{
-  std::cout << "----- writing to new setuptxt file: "
-            << setuptxt << " -----\n";
+void copyfiles2txt(const std::string setuptxt, const std::vector<std::string> files2copy) {
+  std::cout << "----- writing to new setuptxt file: " << setuptxt << " -----\n";
 
   std::ofstream wfile;
 
-  wfile.open(setuptxt, std::ios::out | std::ios::trunc); // clear previous contents
+  wfile.open(setuptxt, std::ios::out | std::ios::trunc);  // clear previous contents
   wfile.close();
 
-  wfile.open(setuptxt, std::ios::app); // copy files one by one
-  for (auto &filename : files2copy)
-  {
+  wfile.open(setuptxt, std::ios::app);  // copy files one by one
+  for (auto &filename : files2copy) {
     copyfile(wfile, filename);
   }
   wfile.close();
@@ -51,11 +45,9 @@ files listed in files2copy vector one by one */
   std::cout << "---- copy complete, setuptxt file closed -----\n";
 }
 
-void copyfile(std::ofstream &wfile,
-              const std::string filename)
 /* open a file called filename and copy
 text line by line into wfile */
-{
+void copyfile(std::ofstream &wfile, const std::string filename) {
   std::ifstream readfile(filename);
 
   std::cout << " copying " + filename + " to setuptxt file\n";
@@ -65,9 +57,9 @@ text line by line into wfile */
   wfile << "// ----------------------------- //\n";
 
   std::string line;
-  while (getline(readfile, line)) // read file line by line
-  {
-    wfile << line << '\n'; // output lines to .txt file on disk
+  // read file line by line
+  while (getline(readfile, line)) {
+    wfile << line << '\n';  // output lines to .txt file on disk
   }
 
   wfile << "// ----------------------------- //\n\n\n\n";

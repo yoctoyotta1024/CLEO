@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: detectors.hpp
  * Project: gridboxes
@@ -12,24 +13,20 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * Header file for functions and structures related to detectors
  * which track data for output (e.g. of microphysical processes)
  * in gridboxes
  */
 
-
-#ifndef DETECTORS_HPP
-#define DETECTORS_HPP
+#ifndef LIBS_GRIDBOXES_DETECTORS_HPP_
+#define LIBS_GRIDBOXES_DETECTORS_HPP_
 
 #include <Kokkos_Core.hpp>
 
-struct Detectors
-{
-  KOKKOS_INLINE_FUNCTION Detectors() = default;  // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~Detectors() = default; // Kokkos requirement for a (dual)View
+struct Detectors {
+  KOKKOS_INLINE_FUNCTION Detectors() = default;   // Kokkos requirement for a (dual)View
+  KOKKOS_INLINE_FUNCTION ~Detectors() = default;  // Kokkos requirement for a (dual)View
 };
 
-#endif // DETECTORS_HPP
+#endif  // LIBS_GRIDBOXES_DETECTORS_HPP_

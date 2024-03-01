@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: initconds.hpp
  * Project: initialise
@@ -12,24 +13,21 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * various structures used to make an
  * InitConds instance which satifies
  * the InitialConditions concept
  */
 
-#ifndef INITCONDS_HPP
-#define INITCONDS_HPP
+#ifndef LIBS_INITIALISE_INITCONDS_HPP_
+#define LIBS_INITIALISE_INITCONDS_HPP_
 
 #include <array>
 #include <vector>
 
 #include "superdrops/superdrop_attrs.hpp"
 
-struct InitSupersData
-{
+struct InitSupersData {
   std::array<SoluteProperties, 1> solutes;
   std::vector<unsigned int> sdgbxindexes;
   std::vector<double> coord3s;
@@ -37,21 +35,18 @@ struct InitSupersData
   std::vector<double> coord2s;
   std::vector<double> radii;
   std::vector<double> msols;
-  std::vector<unsigned long long> xis;
+  std::vector<uint64_t> xis;
 };
 
-template <typename SuperdropInitConds, typename GbxInitConds>
-struct InitConds
 /* struct for functions to generate
 initial conditions for CLEO */
-{
-  SuperdropInitConds initsupers; // initial conditions for creating superdroplets
-  GbxInitConds initgbxs;         // initial conditions for creating gridboxes
+template <typename SuperdropInitConds, typename GbxInitConds>
+struct InitConds {
+  SuperdropInitConds initsupers;  // initial conditions for creating superdroplets
+  GbxInitConds initgbxs;          // initial conditions for creating gridboxes
 
-  InitConds(const SuperdropInitConds initsupers,
-            const GbxInitConds initgbxs)
-      : initsupers(initsupers),
-        initgbxs(initgbxs) {}
+  InitConds(const SuperdropInitConds initsupers, const GbxInitConds initgbxs)
+      : initsupers(initsupers), initgbxs(initgbxs) {}
 };
 
-#endif // INITCONDS_HPP
+#endif  // LIBS_INITIALISE_INITCONDS_HPP_

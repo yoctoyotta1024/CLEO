@@ -7,7 +7,8 @@ API: PySD
 =========
 
 .. note::
-   Please consider that this project is under active development.
+   Please consider that this project is under active development
+   and our documentation is a work in progress.
 
 PySD is CLEO's Python Module with submodules related to generating
 input files and processing the Zarr output from CLEO.

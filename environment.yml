@@ -19,3 +19,7 @@ dependencies:
     - random
     - struct
     - zarr
+    - conda-forge::doxygen>=1.10.0
+    - pip
+    - pip:
+      - -r requirements.txt

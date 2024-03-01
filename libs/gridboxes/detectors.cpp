@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: detectors.cpp
  * Project: gridboxes
@@ -12,12 +13,10 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * Header file for functions and structures related to detectors
  * which track data for output (e.g. of microphysical processes)
  * in gridboxes
  */
 
-#include "./detectors.hpp"
+#include "gridboxes/detectors.hpp"

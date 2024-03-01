@@ -9,7 +9,7 @@
 .ipynb_checkpoints
 .DS_Store
 __pycache__
-build*
+build
 bin
 docs/source/_autosummary
 examples/examplesolutions/

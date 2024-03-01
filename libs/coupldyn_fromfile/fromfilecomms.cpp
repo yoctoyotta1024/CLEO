@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: fromfilecomms.cpp
  * Project: coupldyn_fromfile
@@ -12,43 +13,33 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * send and receive dynamics functions
  * for SDM when coupled to the fromfile
  * dynamics solver
  */
 
-#include "./fromfilecomms.hpp"
+#include "coupldyn_fromfile/fromfilecomms.hpp"
 
-template <typename CD>
-void FromFileComms::receive_dynamics(const FromFileDynamics &ffdyn,
-                                     const viewh_gbx h_gbxs) const
 /* update Gridboxes' states using information received
 from FromFileDynamics solver for 1-way coupling to CLEO SDM.
 Kokkos::parallel_for([...]) (on host) is equivalent to:
 for (size_t ii(0); ii < ngbxs; ++ii){[...]}
 when in serial */
-{
+template <typename CD>
+void FromFileComms::receive_dynamics(const FromFileDynamics &ffdyn, const viewh_gbx h_gbxs) const {
   const size_t ngbxs(h_gbxs.extent(0));
 
   Kokkos::parallel_for(
-      "receive_dynamics",
-      Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-      [=, *this](const size_t ii)
-      {
-        update_gridbox_state(ffdyn, ii, h_gbxs(ii));
-      });
+      "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+      [=, *this](const size_t ii) { update_gridbox_state(ffdyn, ii, h_gbxs(ii)); });
 }
 
-void FromFileComms::update_gridbox_state(const FromFileDynamics &ffdyn,
-                                         const size_t ii,
-                                         Gridbox &gbx) const
 /* updates the state of a gridbox using information
 received from FromFileDynamics solver for 1-way
 coupling to CLEO SDM */
-{
+void FromFileComms::update_gridbox_state(const FromFileDynamics &ffdyn, const size_t ii,
+                                         Gridbox &gbx) const {
   State &state(gbx.state);
 
   state.press = ffdyn.get_press(ii);
@@ -61,10 +52,8 @@ coupling to CLEO SDM */
   state.vvel = ffdyn.get_vvel(ii);
 }
 
-template void FromFileComms::
-    send_dynamics<FromFileDynamics>(const viewh_constgbx,
-                                    FromFileDynamics &) const;
+template void FromFileComms::send_dynamics<FromFileDynamics>(const viewh_constgbx,
+                                                             FromFileDynamics &) const;
 
-template void FromFileComms::
-    receive_dynamics<FromFileDynamics>(const FromFileDynamics &,
-                                       const viewh_gbx) const;
+template void FromFileComms::receive_dynamics<FromFileDynamics>(const FromFileDynamics &,
+                                                                const viewh_gbx) const;

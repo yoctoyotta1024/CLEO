@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: copyfiles2txt.hpp
  * Project: initialise
@@ -12,8 +13,6 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * function(s) to open files given their filenames and
  * copy their contents line by line into a .txt file.
@@ -21,17 +20,16 @@
  * e.g. configuration files and values of constants
  */
 
-#ifndef COPYFILES2TXT_HPP
-#define COPYFILES2TXT_HPP
+#ifndef LIBS_INITIALISE_COPYFILES2TXT_HPP_
+#define LIBS_INITIALISE_COPYFILES2TXT_HPP_
 
-#include <string>
-#include <vector>
 #include <fstream>
 #include <iostream>
+#include <string>
+#include <vector>
 
-void copyfiles2txt(const std::string setuptxt,
-                       const std::vector<std::string> files2copy);
 /* creates new empty file called setuptxt and copies contents
 of files listed in files2copy vector one by one */
+void copyfiles2txt(const std::string setuptxt, const std::vector<std::string> files2copy);
 
-#endif // COPYFILES2TXT_HPP
+#endif  // LIBS_INITIALISE_COPYFILES2TXT_HPP_

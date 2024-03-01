@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: movesupersindomain.cpp
  * Project: gridboxes
@@ -12,13 +13,10 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * Functionality related to moving superdroplets
  * (both updating their spatial coordinates and
  * moving them between gridboxes)
  */
 
-
-#include "./movesupersindomain.hpp"
+#include "gridboxes/movesupersindomain.hpp"

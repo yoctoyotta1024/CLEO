@@ -1,4 +1,5 @@
-/*
+/* Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  * ----- CLEO -----
  * File: massmomentbuffers.hpp
  * Project: zarr
@@ -12,8 +13,6 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * Copyright (c) 2023 MPI-M, Clara Bayley
- * -----
  * File Description:
  * Buffers to use in TwoDMultiVarstorage for writing
  * 0th, 1st and 2nd mass moments to a fsstore via
@@ -22,15 +21,15 @@
  * these moments of the (real) droplet mass distribution
  */
 
-#ifndef MASSMOMENTBUFFERS_HPP
-#define MASSMOMENTBUFFERS_HPP
+#ifndef LIBS_ZARR_MASSMOMENTBUFFERS_HPP_
+#define LIBS_ZARR_MASSMOMENTBUFFERS_HPP_
 
-#include <string>
-#include <vector>
-#include <limits>
 #include <array>
+#include <limits>
+#include <string>
 #include <tuple>
 #include <utility>
+#include <vector>
 
 #include "../cleoconstants.hpp"
 #include "./fsstore.hpp"
@@ -39,79 +38,62 @@
 namespace dlc = dimless_constants;
 
 template <typename T>
-struct MassMomentBuffers
-{
-private:
-  const std::string endname; // name to add to end of massmom[X] being stored
-  std::vector<T> mom0;       // buffer for 0th mass moment data until writing to array chunk
-  std::vector<T> mom1;       // buffer for 1st mass moment data until writing to array chunk
-  std::vector<T> mom2;       // buffer for 2nd mass moment data until writing to array chunk
+struct MassMomentBuffers {
+ private:
+  const std::string endname;  // name to add to end of massmom[X] being stored
+  std::vector<T> mom0;        // buffer for 0th mass moment data until writing to array chunk
+  std::vector<T> mom1;        // buffer for 1st mass moment data until writing to array chunk
+  std::vector<T> mom2;        // buffer for 2nd mass moment data until writing to array chunk
 
-  std::string get_name(const std::string mom) const
-  {
-    return "massmom" + mom + endname;
-  }
+  std::string get_name(const std::string mom) const { return "massmom" + mom + endname; }
 
-public:
-  MassMomentBuffers(const std::string endname,
-                    const unsigned int chunksize)
+ public:
+  MassMomentBuffers(const std::string endname, const unsigned int chunksize)
       : endname(endname),
         mom0(chunksize, std::numeric_limits<T>::max()),
         mom1(chunksize, std::numeric_limits<T>::max()),
         mom2(chunksize, std::numeric_limits<T>::max()) {}
 
-  std::pair<unsigned int, unsigned int>
-  copy2buffer(const std::array<T, 3> moms,
-              const unsigned int ndata,
-              const unsigned int buffersfill)
   /* copy value to mass moments to their respective buffers */
-  {
+  std::pair<unsigned int, unsigned int> copy2buffer(const std::array<T, 3> moms,
+                                                    const unsigned int ndata,
+                                                    const unsigned int buffersfill) {
     storehelpers::val2buffer<T>(moms.at(0), mom0, ndata, buffersfill);
     storehelpers::val2buffer<T>(moms.at(1), mom1, ndata, buffersfill);
     storehelpers::val2buffer<T>(moms.at(2), mom2, ndata, buffersfill);
 
-    return std::pair(ndata + 1, buffersfill + 1); // updated {ndata, buffersfill}
+    return std::pair(ndata + 1, buffersfill + 1);  // updated {ndata, buffersfill}
   }
 
-  std::pair<unsigned int, unsigned int>
-  writechunks(FSStore &store, const unsigned int chunkcount)
   /* write data in buffer to a chunk in store alongside metadata jsons */
-  {
+  std::pair<unsigned int, unsigned int> writechunks(FSStore &store, const unsigned int chunkcount) {
     const std::string chunknum = std::to_string(chunkcount) + ".0";
 
-    storehelpers::writebuffer2chunk(store, mom0, get_name("0"),
-                                    chunknum, chunkcount);
+    storehelpers::writebuffer2chunk(store, mom0, get_name("0"), chunknum, chunkcount);
 
-    storehelpers::writebuffer2chunk(store, mom1, get_name("1"),
-                                    chunknum, chunkcount);
+    storehelpers::writebuffer2chunk(store, mom1, get_name("1"), chunknum, chunkcount);
 
-    storehelpers::writebuffer2chunk(store, mom2, get_name("2"),
-                                    chunknum, chunkcount);
+    storehelpers::writebuffer2chunk(store, mom2, get_name("2"), chunknum, chunkcount);
 
-    return std::pair(chunkcount + 1, 0); // updated {chunkcount, bufferfill}
+    return std::pair(chunkcount + 1, 0);  // updated {chunkcount, bufferfill}
   }
 
-  void writejsons(FSStore &store,
-                  const std::string &metadata) const
   /* write array's metadata to .json files */
-  {
+  void writejsons(FSStore &store, const std::string &metadata) const {
     const std::string dims = "[\"time\", \"gbxindex\"]";
 
     const std::string units0 = " ";
     constexpr double scale_factor0 = 1.0;
-    storehelpers::writejsons(store, get_name("0"), metadata,
-                             dims, units0, scale_factor0);
+    storehelpers::writejsons(store, get_name("0"), metadata, dims, units0, scale_factor0);
 
     const std::string units1 = "g";
-    constexpr double scale_factor1 = dlc::MASS0grams; // grams
-    storehelpers::writejsons(store, get_name("1"), metadata,
-                             dims, units1, scale_factor1);
+    constexpr double scale_factor1 = dlc::MASS0grams;  // grams
+    storehelpers::writejsons(store, get_name("1"), metadata, dims, units1, scale_factor1);
 
     const std::string units2 = "g^2";
-    constexpr double scale_factor2 = dlc::MASS0grams * dlc::MASS0grams; // grams squared
-    storehelpers::writejsons(store, get_name("2"), metadata,
-                             dims, units2, scale_factor2);
+    constexpr double scale_factor2 = dlc::MASS0grams * dlc::MASS0grams;  // grams squared
+    storehelpers::writejsons(store, get_name("2"), metadata, dims, units2, scale_factor2);
   }
 };
 
-#endif // MASSMOMENTBUFFERS_HPP
+#endif  // LIBS_ZARR_MASSMOMENTBUFFERS_HPP_

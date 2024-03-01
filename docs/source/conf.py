@@ -6,7 +6,7 @@ Created Date: Monday 20th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 27th December 2023
+Last Modified: Monday 12th February 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -56,7 +56,8 @@ extensions = [
     'sphinx_copybutton',
     'sphinx.ext.intersphinx',
     'sphinxcontrib.bibtex',
-    'breathe'
+    'breathe',
+    "sphinx.ext.viewcode",
 ]
 
 # configuration of citations using bibtex file(s)
@@ -71,10 +72,13 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
-# breathe configuration
+# Integrate doxygen with sphinx via breathe
 breathe_projects = {
     "runcleo"          : "../build/doxygen/xml/",
+    "superdrops"       : "../build/doxygen/xml/",
 }
+
+breathe_default_project = 'proj'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -88,3 +92,8 @@ html_theme = 'furo'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# To include the date of the last visit in Sphinx documentation, use the last
+# updated feature of Sphinx. This feature automatically adds the last modification
+# date of the source file to the rendered HTML output.
+html_last_updated_fmt = '%d %B %Y'
