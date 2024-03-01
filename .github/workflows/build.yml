@@ -36,7 +36,7 @@ jobs:
       run: cd build && make exmpl2D
 
     - name: Build example divfree2D
-      run: cd build && make exmpl2D
+      run: cd build && make divfree2D
 
     - name: Build example rshaft1D
       run: cd build && make rshaft1D
