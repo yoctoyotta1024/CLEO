@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th January 2024
+Last Modified: Friday 1st March 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -51,7 +51,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 ### --- Number of Superdroplets per Gridbox --- ###
 ### ---        (an int or dict of ints)     --- ###
 zlim = 800
-npergbx = 256
+npergbx = 8
 # nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim) # supers where z <= zlim
 nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # supers where z >= zlim
 # nsupers = 100
@@ -122,8 +122,8 @@ coord3gen            =  crdgens.SampleCoordGen(True) # sample coord3 range rando
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m]
 # coord1gen            =  crdgens.MonoCoordGen(monocoord1)
-# coord1gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
-coord1gen            = None                        # do not generate superdroplet coord1s
+coord1gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
+# coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###

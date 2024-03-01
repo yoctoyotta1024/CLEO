@@ -50,7 +50,7 @@ zdelta = 100 # even spacing
 zgrid = [zmin, zmax, zdelta]
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 20, 20]
+xgrid = [0, 40, 20]
 
 ### input parameters for y coords of gridbox boundaries
 ygrid = np.asarray([0, 20])
