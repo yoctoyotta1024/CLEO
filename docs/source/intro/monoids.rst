@@ -12,7 +12,7 @@ satisfies the concept of a microphysical process.
 
 The Use of Concepts to Create Monoids
 -------------------------------------
-Within CLEO, a monoid can be thought of as a type that has three essential properties:
+A monoid in CLEO can be thought of as a type that has three essential properties:
 
 1. it can be created.
 
