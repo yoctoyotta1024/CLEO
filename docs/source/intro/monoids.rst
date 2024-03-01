@@ -49,12 +49,15 @@ A Good Analogy
 The analogy I like to give is mixing paint. Suppose there are a variety of colours;
 blue, yellow, red, green, orange etc.. Let’s say that the blue, yellow and red colours
 satisfy all the requirements in order for them to be defined as 'wet oil paint' - in other
-words, these three colours are wet oil paint. Meanwhile let's say all the other colours
-are crayons. The wet oil paints can be mixed in any combination to create a new wet oil paint -
-maybe it’s brown, maybe it's violet, maybe it's something we've never seen before, nevertheless
-it's certainly wet oil paint. Now of course the red wet oil paint cannot be mixed with the
-green crayon to make a new wet oil paint, because clearly the crayon is not a wet oil paint. To
-make the analogy explicit, the requirements used to define wet oil paint and a crayon
+words, these three colours are wet oil paint.
+
+Meanwhile let's say all the other colours are crayons. The wet oil paints can be mixed in any
+combination to create a new wet oil paint - maybe it’s brown, maybe it's violet, maybe it's
+something we've never seen before, nevertheless it's certainly wet oil paint. Now of course the red
+wet oil paint cannot be mixed with the green crayon to make a new wet oil paint, because clearly
+the crayon is not a wet oil paint.
+
+To make the analogy explicit, the requirements used to define wet oil paint and a crayon
 are like the C++ concepts used to define a microphysical process or an observer. The
 colors are analogous to types satisfying a particular concept, for example ‘Cond’ and
 ‘Colls’ satisfying the microphysical process. The wet oil paints (and likewise microphysical
