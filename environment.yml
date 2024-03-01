@@ -13,6 +13,19 @@ dependencies:
     - netcdf4
     - xarray
     - sphinx
+    - furo
+    - sphinx_copybutton
+    - sphinxcontrib-bibtex
+    - breathe
+    - numpy
+    - scipy
+    - matplotlib
+    - netcdf4
+    - xarray
+    - awkward
+    - random
+    - struct
+    - zarr
     - conda-forge::doxygen>=1.10.0
     - pip
     - pip:
