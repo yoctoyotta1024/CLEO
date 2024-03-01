@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=gpubuildCLEO
+#SBATCH --job-name=roughCLEO
 #SBATCH --partition=gpu
-#SBATCH --gpus=4
+#SBATCH --gpus=1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
@@ -30,8 +30,8 @@ cuda="nvc++"
 ### ------------ choose Kokkos configuration ----------- ###
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON" # serial kokkos
 # kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"                     # flags for device parallelism (e.g. on gpus)
+# kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                                  # flags for host parallelism (e.g. using OpenMP)
 kokkoshost=""                                                                             # flags for host parallelism (e.g. using OpenMP)
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                                  # flags for host parallelism (e.g. using OpenMP)
 ### ---------------------------------------------------- ###
 
 ### ------------------ build_compile.sh ---------------- ###

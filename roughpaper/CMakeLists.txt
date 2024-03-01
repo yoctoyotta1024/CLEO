@@ -27,18 +27,18 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
 set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
 
 # # Set libraries and compiler warnings to use
-# set(SDMLIBS superdrops)
+set(SDMLIBS superdrops)
 
 # default compiler options to use in subdirectories
 set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ compiler
-# set(defaultcompileops -Werror -Wall -pedantic -g)           # -gdwarf-4 flag not possible for nvc++ compiler
 
 # primary executable for CLEO sdm
 set(test "test")
 add_executable(${test} "main.cpp")
-# target_link_libraries(${test} PRIVATE "${SDMLIBS}")
+target_link_libraries(${test} PRIVATE "${SDMLIBS}")
 target_link_libraries(${test} PUBLIC Kokkos::kokkos)
 target_compile_options(${test} PRIVATE ${compileops})
+target_include_directories(${test} PRIVATE "${CMAKE_SOURCE_DIR}/../libs")
 
 # set compiler properties for target(s)
 set_target_properties(${test} PROPERTIES

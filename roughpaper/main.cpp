@@ -33,38 +33,40 @@
 #include <Kokkos_Random.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
+#include "superdrops/collisionkinetics.hpp"
+
 // ---------------------------------------------------------------- //
 
-struct Superdrop {
- private:
-  unsigned int sdgbxindex;
+// struct Superdrop {
+//  private:
+//   unsigned int sdgbxindex;
 
- public:
-  KOKKOS_INLINE_FUNCTION
-  void set_sdgbxindex(const unsigned int ii) { sdgbxindex = ii; }
+//  public:
+//   KOKKOS_INLINE_FUNCTION
+//   void set_sdgbxindex(const unsigned int ii) { sdgbxindex = ii; }
 
-  KOKKOS_INLINE_FUNCTION
-  unsigned int get_sdgbxindex() const { return sdgbxindex; }
-};
+//   KOKKOS_INLINE_FUNCTION
+//   unsigned int get_sdgbxindex() const { return sdgbxindex; }
+// };
 
-using viewd_supers = Kokkos::View<Superdrop *>;
-using viewd_constsupers =
-    Kokkos::View<const Superdrop *>;  // view in device memory of const superdroplets
-using ExecSpace = Kokkos::DefaultExecutionSpace;
+// using viewd_supers = Kokkos::View<Superdrop *>;
+// using viewd_constsupers =
+//     Kokkos::View<const Superdrop *>;  // view in device memory of const superdroplets
+// using ExecSpace = Kokkos::DefaultExecutionSpace;
 
-viewd_supers init_supers(const size_t nsupers, const size_t ngbxs) {
-  viewd_supers supers("supers", nsupers);
-  auto h_supers = Kokkos::create_mirror_view(supers);
-  for (size_t kk(0); kk < nsupers; ++kk) {
-    const auto ii = static_cast<unsigned int>(1);
-    h_supers(kk) = Superdrop();
-    h_supers(kk).set_sdgbxindex(ii);
-    std::cout << "ii: " << h_supers(kk).get_sdgbxindex() << "\n";
-  }
-  Kokkos::deep_copy(supers, h_supers);
+// viewd_supers init_supers(const size_t nsupers, const size_t ngbxs) {
+//   viewd_supers supers("supers", nsupers);
+//   auto h_supers = Kokkos::create_mirror_view(supers);
+//   for (size_t kk(0); kk < nsupers; ++kk) {
+//     const auto ii = static_cast<unsigned int>(1);
+//     h_supers(kk) = Superdrop();
+//     h_supers(kk).set_sdgbxindex(ii);
+//     std::cout << "ii: " << h_supers(kk).get_sdgbxindex() << "\n";
+//   }
+//   Kokkos::deep_copy(supers, h_supers);
 
-  return supers;
-}
+//   return supers;
+// }
 
 // ---------------------------------------------------------------- //
 
@@ -72,13 +74,16 @@ int main(int argc, char *argv[]) {
   const size_t nsupers(10);
   const size_t ngbxs(13);
 
+  const auto r1 = 2.3;
+  const auto r2 = 2.3;
+
   Kokkos::initialize(argc, argv);
   {
-    auto supers = init_supers(nsupers, ngbxs);
-
-    for (size_t ii(0); ii < ngbxs; ++ii) {
-    }
+    Kokkos::parallel_for(
+        "test", 5, KOKKOS_LAMBDA(const unsigned int i) {
+          const auto a = coal_surfenergy(r1, r2);
+          assert((a == 7.68216e-12) && "a check");
+        });
   }
-
   Kokkos::finalize();
 }
