@@ -89,16 +89,20 @@ zlim        = 800       # min z coord of superdroplets [m]
 npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan       = [1e-6, 5e-3]                      # min and max range of radii to sample [m]
-dryr_sf     = 1e0                               # Dry radii scalling factor: dryradii are 1/dryr_sf of radii [m]
+rspan       = [1e-6, 5e-5]                      # min and max range of radii to sample [m]
+dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 
+# settings for initial superdroplet multiplicies
+# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
+# geosigs              = [1.55, 2.3, 2]                    
+# scalefacs            = [1e6, 0.3e6, 0.025e6]   
+# numconc = np.sum(scalefacs) * 100
 
 # settings for initial superdroplet multiplicies with ATR and Aerosol from Lohmann et. al 2016 Fig. 5.5
-geomeans = [3.77e-06, 6.25e-05, ]
-geosigs = [1.38e+00, 8.86e+00, ]
-scalefacs = [2.73e+08, 5.35e+03, ]
-numconc = 2.73e+08
-
+geomeans = [2.00e-08, 1.00e-07, 3.77e-06, ]
+geosigs = [1.55e+00, 1.55e+00, 1.38e+00, ]
+scalefacs = [3.00e+02, 2.00e+02, 3.49e0, ]
+numconc = np.sum(scalefacs) * 1e9
 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -175,66 +179,64 @@ os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-# ### ------------------------------------------------------------ ###
-# ### ----------------------- PLOT RESULTS ----------------------- ###
-# ### ------------------------------------------------------------ ###
-# # read in constants and intial setup from setup .txt file
-# config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-# consts = pysetuptxt.get_consts(setupfile, isprint=True)
-# gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+### ------------------------------------------------------------ ###
+### ----------------------- PLOT RESULTS ----------------------- ###
+### ------------------------------------------------------------ ###
+# read in constants and intial setup from setup .txt file
+config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
+consts = pysetuptxt.get_consts(setupfile, isprint=True)
+gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
-# time = pyzarr.get_time(dataset)
-# sddata = pyzarr.get_supers(dataset, consts)
-# totnsupers = pyzarr.get_totnsupers(dataset)
-# massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
+time = pyzarr.get_time(dataset)
+sddata = pyzarr.get_supers(dataset, consts)
+totnsupers = pyzarr.get_totnsupers(dataset)
+massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
-# # plot figures
-# savename = savefigpath + "rain1d_totnsupers.png"
-# pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
+# plot figures
+savename = savefigpath + "rain1d_totnsupers.png"
+pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-# savename = savefigpath + "rain1d_domainmassmoms.png"
-# pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
+savename = savefigpath + "rain1d_domainmassmoms.png"
+pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
-# nsample = 25
-# savename = savefigpath + "rain1d_randomsample.png"
-# pltsds.plot_randomsample_superdrops(time, sddata,
-#                                         config["totnsupers"],
-#                                         nsample,
-#                                         savename=savename)
+nsample = 25
+savename = savefigpath + "rain1d_randomsample.png"
+pltsds.plot_randomsample_superdrops(time, sddata,
+                                        config["totnsupers"],
+                                        nsample,
+                                        savename=savename)
 
-# ### ----- plot 1-D .gif animations ----- ###
-# nframes = len(time.mins)
-# mom2ani = np.sum(massmoms.nsupers, axis=(1,2))
-# xlims = [0, np.amax(mom2ani)]
-# xlabel = "number of super-droplets"
-# savename=savefigpath+"rain1d_nsupers1d"
-# animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-#                             xlabel=xlabel, xlims=xlims,
-#                             color="green", saveani=True,
-#                             savename=savename, fps=5)
+### ----- plot 1-D .gif animations ----- ###
+nframes = len(time.mins)
+mom2ani = np.sum(massmoms.nsupers, axis=(1,2))
+xlims = [0, np.amax(mom2ani)]
+xlabel = "number of super-droplets"
+savename=savefigpath+"rain1d_nsupers1d"
+animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
+                            xlabel=xlabel, xlims=xlims,
+                            color="green", saveani=True,
+                            savename=savename, fps=5)
 
-# nframes = len(time.mins)
-# norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
-# mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
-# xlims = [0, np.amax(mom2ani)]
-# xlabel = "number concentration /cm$^{-3}$"
-# savename=savefigpath+"rain1d_numconc1d"
-# animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-#                             xlabel=xlabel, xlims=xlims,
-#                             color="green", saveani=True,
-#                             savename=savename, fps=5)
+nframes = len(time.mins)
+norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
+mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
+xlims = [0, np.amax(mom2ani)]
+xlabel = "number concentration /cm$^{-3}$"
+savename=savefigpath+"rain1d_numconc1d"
+animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
+                            xlabel=xlabel, xlims=xlims,
+                            color="green", saveani=True,
+                            savename=savename, fps=5)
 
-# nframes = len(time.mins)
-# norm = gbxs["gbxvols"] # volume [m^3]
-# mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
-# xlims = [0, np.amax(mom2ani)]
-# xlabel = "mass concentration /g m$^{-3}$"
-# savename=savefigpath+"rain1d_massconc1d"
-# animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-#                             xlabel=xlabel, xlims=xlims,
-#                             color="green", saveani=True,
-#                             savename=savename, fps=5)
-
-# print(savefigpath)
-# ### ------------------------------------------------------------ ###
-# ### ------------------------------------------------------------ ###
+nframes = len(time.mins)
+norm = gbxs["gbxvols"] # volume [m^3]
+mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
+xlims = [0, np.amax(mom2ani)]
+xlabel = "mass concentration /g m$^{-3}$"
+savename=savefigpath+"rain1d_massconc1d"
+animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
+                            xlabel=xlabel, xlims=xlims,
+                            color="green", saveani=True,
+                            savename=savename, fps=5)
+### ------------------------------------------------------------ ###
+### ------------------------------------------------------------ ###

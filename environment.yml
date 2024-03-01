@@ -5,6 +5,13 @@ channels:
 dependencies:
     - python>=3.12
     - pytest
+    # packages to install CLEO pySD
+    - pip
+    - numpy
+    - scipy
+    - matplotlib
+    - netcdf4
+    - xarray
     - sphinx
     - furo
     - sphinx_copybutton
