@@ -2,6 +2,7 @@
 #SBATCH --job-name=exmpl2d
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
+#SBATCH --gpus=2
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
 #SBATCH --time=00:10:00

@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=shima2009
 #SBATCH --partition=gpu
+#SBATCH --gpus=1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
