@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
+ *
  * ----- CLEO -----
  * File: superdrop.hpp
  * Project: superdrops
@@ -8,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 12th February 2024
+ * Last Modified: Friday 1st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,12 +51,12 @@ class Superdrop {
   /**
    * @brief Default constructor requirement for use of Superdrop in Kokkos View
    */
-  KOKKOS_INLINE_FUNCTION Superdrop() = default;
+  Superdrop() = default;
 
   /**
    * @brief Default destructor requirement for use of Superdrop in Kokkos View
    */
-  KOKKOS_INLINE_FUNCTION ~Superdrop() = default;
+  ~Superdrop() = default;
 
   /**
    * @brief Parameterized constructor.

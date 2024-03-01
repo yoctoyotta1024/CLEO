@@ -1,13 +1,15 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
- * ----- CLEO -----
+ *
+ * * ----- CLEO -----
  * File: gridbox.hpp
  * Project: gridboxes
- * Created Date: Friday 13th October 2023
+ * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 27th December 2023
+ * Last Modified: Friday 1st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -16,6 +18,7 @@
  * File Description:
  * Functions and structures related to the CLEO gridboxes
  */
+
 
 #ifndef LIBS_GRIDBOXES_GRIDBOX_HPP_
 #define LIBS_GRIDBOXES_GRIDBOX_HPP_
@@ -41,8 +44,8 @@ struct Gridbox {
   SupersInGbx supersingbx;  // reference(s) to superdrops occupying gridbox
   Detectors detectors;      // detectors of various quantities
 
-  KOKKOS_INLINE_FUNCTION Gridbox() = default;   // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~Gridbox() = default;  // Kokkos requirement for a (dual)View
+  Gridbox() = default;   // Kokkos requirement for a (dual)View
+  ~Gridbox() = default;  // Kokkos requirement for a (dual)View
 
   /* assumes supers view (or subview) already
   sorted via sdgbxindex. Constructor works

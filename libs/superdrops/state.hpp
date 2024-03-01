@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
+ *
  * ----- CLEO -----
  * File: state.hpp
  * Project: superdrops
@@ -8,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 9th February 2024
+ * Last Modified: Friday 1st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -51,12 +52,12 @@ struct State {
   /**
    * @brief Default constructor requirement for use of State in Kokkos View
    */
-  KOKKOS_INLINE_FUNCTION State() = default;
+  State() = default;
 
   /**
    * @brief Default destructor requirement for use of State in Kokkos View
    */
-  KOKKOS_INLINE_FUNCTION ~State() = default;
+  ~State() = default;
 
   /**
    * @brief Constructor with parameters.
