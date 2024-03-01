@@ -32,8 +32,8 @@ jobs:
     - name: Build example lowlistcolls
       run: cd build && make lowlistcolls
 
-    - name: Build example exmpl2D
-      run: cd build && make exmpl2D
+    - name: Build example const2D
+      run: cd build && make const2D
 
     - name: Build example divfree2D
       run: cd build && make divfree2D

@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th January 2024
+Last Modified: Friday 1st March 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO exmpl2D to create the
+Script compiles and runs CLEO const2D to create the
 data and plots precipitation example given 2-D flow
 field and constant thermodynamics read from a file
 '''
@@ -53,13 +53,13 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-gridfile = sharepath+"exmpl2d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath+"exmpl2d_dimlessSDsinit.dat"
-thermofile =  sharepath+"/exmpl2d_dimlessthermo.dat"
+gridfile = sharepath+"const2d_dimlessGBxboundaries.dat"
+initSDsfile = sharepath+"const2d_dimlessSDsinit.dat"
+thermofile =  sharepath+"/const2d_dimlessthermo.dat"
 
 # path and file names for plotting results
-setupfile = binpath+"exmpl2d_setup.txt"
-dataset = binpath+"exmpl2d_sol.zarr"
+setupfile = binpath+"const2d_setup.txt"
+dataset = binpath+"const2d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [True, True] # booleans for [making, saving] initialisation figures
@@ -165,8 +165,8 @@ if isfigures[0]:
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-os.system('make clean && make -j 64 exmpl2D')
-executable = path2build+'/examples/constthermo2d/src/exmpl2D'
+os.system('make clean && make -j 64 const2D')
+executable = path2build+'/examples/constthermo2d/src/const2D'
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -185,20 +185,20 @@ totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
 # plot figures
-savename = savefigpath + "exmpl2d_totnsupers.png"
+savename = savefigpath + "const2d_totnsupers.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-savename = savefigpath + "exmpl2d_domainmassmoms.png"
+savename = savefigpath + "const2d_domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 500
-savename = savefigpath + "exmpl2d_randomsample.png"
+savename = savefigpath + "const2d_randomsample.png"
 pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
                                         nsample,
                                         savename=savename)
 
-savename = savefigpath + "exmpl2d_motion2d.png"
+savename = savefigpath + "const2d_motion2d.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                                  config["totnsupers"],
                                                  nsample,
@@ -216,7 +216,7 @@ norm = np.sum(gbxs["gbxvols"], axis=0)[None,None,:,:] * 1e6 # volume [cm^3]
 mom2ani = horizontal_average(massmoms.mom0/norm)
 xlims = [0, np.amax(mom2ani)]
 xlabel = "mean number concentration /cm$^{-3}$"
-savename=savefigpath+"exmpl2d_numconc1d"
+savename=savefigpath+"const2d_numconc1d"
 animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,
@@ -228,7 +228,7 @@ mom2ani = np.sum(massmoms.nsupers, axis=1) # sum over y dimension
 cmap="plasma_r"
 cmapnorm = Normalize(vmin=1, vmax=20)
 cbarlabel="number of superdroplets per gridbox"
-savename=savefigpath+"exmpl2d_nsupers2d"
+savename=savefigpath+"const2d_nsupers2d"
 animations.animate2dcmap(gbxs, mom2ani, time.mins, nframes,
                   cbarlabel=cbarlabel, cmapnorm=cmapnorm, cmap=cmap,
                   saveani=True, savename=savename, fps=5)
@@ -240,7 +240,7 @@ mom2ani = mom2ani / norm
 cmap="bone_r"
 cmapnorm = LogNorm(vmin=1e-6, vmax=1e2)
 cbarlabel = "mass concentration /g m$^{-3}$"
-savename=savefigpath+"exmpl2d_massconc2d"
+savename=savefigpath+"const2d_massconc2d"
 animations.animate2dcmap(gbxs, mom2ani, time.mins, nframes,
               cbarlabel=cbarlabel, cmapnorm=cmapnorm, cmap=cmap,
               saveani=True, savename=savename, fps=5)

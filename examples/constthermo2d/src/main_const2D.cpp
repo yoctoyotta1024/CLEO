@@ -1,13 +1,14 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
- * File: main_exmpl2D.cpp
+ * File: main_const2D.cpp
  * Project: src
- * Created Date: Thursday 12th October 2023
+ * Created Date: Monday 29th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th January 2024
+ * Last Modified: Friday 1st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -16,8 +17,9 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM)
  * after make/compiling, execute for example via:
- * ./src/exmpl2D ../src/config/config.txt
+ * ./src/const2D ../src/config/config.txt
  */
+
 
 #include <concepts>
 #include <iostream>
