@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: creategbxs.cpp
@@ -7,19 +8,31 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Thursday 8th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
+ * non-templated functionality for creating initialised view of Gridboxes from some
+ * initial conditions
  */
 
 #include "runcleo/creategbxs.hpp"
 
+/**
+ * @brief Check if gridbox initialisation is complete.
+ *
+ * This function checks if the number of created gridboxes is consistent with
+ * the number of gridboxes from gridbox maps and if each gridbox has correct
+ * references to superdroplets.
+ *
+ * @param ngbxs_from_maps The number of gridboxes from gridbox maps.
+ * @param gbxs The dualview containing gridboxes.
+ */
 void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
-  gbxs.sync_host();  // copy device to host (if prior flag was set)
+  gbxs.sync_host();  // copy device to host (if sync flag was modified prior)
   const size_t ngbxs(gbxs.extent(0));
   const auto h_gbxs(gbxs.view_host());
 
@@ -41,7 +54,14 @@ void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
   }
 }
 
-/* print gridboxes information */
+/**
+ * @brief Print some information about initial Gridboxes.
+ *
+ * This function prints information about each Gridbox, including its index,
+ * volume, and number of super-droplets.
+ *
+ * @param h_gbxs The host view of Gridboxes.
+ */
 void print_gbxs(const viewh_constgbx h_gbxs) {
   const size_t ngbxs(h_gbxs.extent(0));
   for (size_t ii(0); ii < ngbxs; ++ii) {
@@ -51,14 +71,22 @@ void print_gbxs(const viewh_constgbx h_gbxs) {
   }
 }
 
-/* returns state of ii'th gridbox used
-vectors in GenGridbox struct */
+/**
+ * @brief Get the state of a specified Gridbox from the initial conditions.
+ *
+ * This function returns the state of the Gridbox at the ii'th index in the initial conditions
+ * given by the GenGridbox struct.
+ *
+ * @param ii The index of the Gridbox in the initial conditions data.
+ * @param volume The volume of the Gridbox.
+ * @return The State of the Gridbox.
+ */
 State GenGridbox::state_at(const unsigned int ii, const double volume) const {
-  /* type cast from std::pair to Kokkos::pair */
+  /* Type cast from std::pair to Kokkos::pair */
   Kokkos::pair<double, double> wvel(wvels.at(ii));
   Kokkos::pair<double, double> uvel(uvels.at(ii));
   Kokkos::pair<double, double> vvel(vvels.at(ii));
 
-  /* return ii'th state from initial conditions */
+  /* Return ii'th State from the initial conditions */
   return State(volume, presss.at(ii), temps.at(ii), qvaps.at(ii), qconds.at(ii), wvel, uvel, vvel);
 }

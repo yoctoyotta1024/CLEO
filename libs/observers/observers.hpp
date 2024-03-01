@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: observers.hpp
@@ -7,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Friday 9th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License

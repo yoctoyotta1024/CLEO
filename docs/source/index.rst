@@ -20,7 +20,7 @@ Welcome to CLEO's Documentation!
 
 The name, CLEO, is a reference to
 `Cleopatra <https://www.britannica.com/biography/Cleopatra-queen-of-Egypt>`_.
-It is also an acronym, something like CLEO = Clouds in a Lagrangian Exascale mOdel.
+It is also an acronym, something like CLEO = Clouds made Lagrangian, Exascale, and Open-source.
 
 Time to get involved! Start by :doc:`installing CLEO<usage/installation>` and exploring some
 :doc:`examples<usage/examples>`. Or jump straight in with the :doc:`quickstart<usage/quickstart>`.
@@ -54,5 +54,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-// TODO(CB) include date of last visit (currently 27th January 2024)

@@ -1,4 +1,5 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
  * File: createsupers.cpp
@@ -7,22 +8,32 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Thursday 8th February 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * some functionality for structure(s) to
- * create a view of superdroplets (on device)
+ * non-templated functionality required by RunCLEO to create a view of superdroplets (on device)
  * using some initial conditions
  */
 
 #include "runcleo/createsupers.hpp"
 
-/* ensure the number of superdrops in the view matches the
-size according to the initial conditions */
+/**
+ * @brief Check if superdroplets initialisation is complete and sorted.
+ *
+ * This function checks if the initialisation of supers view is complete and if the super-droplets
+ * are sorted by ascending superdroplet Gridbox index. If the initialisation is incomplete
+ * or the superdroplets are not sorted, it throws an exception with an appropriate error message.
+ *
+ * @param supers The view of super-droplets in device memory.
+ * @param size The expected number of super-droplets.
+ *
+ * @throws std::invalid_argument If the initialisation is incomplete or super-droplets
+ * are not ordered correctly.
+ */
 void is_sdsinit_complete(const viewd_constsupers supers, const size_t size) {
   if (supers.extent(0) < size) {
     const std::string err(
@@ -40,7 +51,14 @@ void is_sdsinit_complete(const viewd_constsupers supers, const size_t size) {
   }
 }
 
-/* print superdroplet information */
+/**
+ * @brief Print statement about initialised super-droplets.
+ *
+ * This function prints information about each superdroplet, including its ID, Gridbox index,
+ * spatial coordinates, and attributes.
+ *
+ * @param supers The view of super-droplets in device memory.
+ */
 void print_supers(const viewd_constsupers supers) {
   auto h_supers =
       Kokkos::create_mirror_view(supers);  // mirror of supers in case view is on device memory
@@ -55,11 +73,19 @@ void print_supers(const viewd_constsupers supers) {
   }
 }
 
-/* returns superdroplet spatial coordinates. A coordinate is
-only copied from the corresponding coords vector if that
-coordinate is consistent with number of spatial dimensions of
-model. Otherwise coordinate = 0. E.g. if model is 1-D,
-only coord3 obtained from vectorr (coord1 = coord2 = 0.0) */
+/**
+ * @brief Returns initial spatial coordinates of the kk'th super-droplet.
+ *
+ * A coordinate is only copied from the corresponding coords vector if that coordinate is
+ * consistent with the number of spatial dimensions of the model. Otherwise, the coordinate is set
+ * to 0.0. For example, if the model is 1-D, only coord3 is obtained from the initial data vector;
+ * coord1 and coord2 are set to 0.0.
+ *
+ * @param kk The index of the super-droplet in the initial
+ * data (0 <= kk < total number of superdrops).
+ * @return An array containing the kk'th superdroplet's spatial
+ * coordinates (coord3, coord1, coord2).
+ */
 std::array<double, 3> GenSuperdrop::coords_at(const unsigned int kk) const {
   std::array<double, 3> coords312{0.0, 0.0, 0.0};
 
@@ -78,6 +104,15 @@ std::array<double, 3> GenSuperdrop::coords_at(const unsigned int kk) const {
 /* helper function to return a superdroplet's attributes
 at position kk in the initial conditions data. All
 superdroplets created with same solute properties */
+/**
+ * @brief Function returns a superdroplet's attributes
+ * from position 'kk' in the initial conditions data. All
+ * super-droplets have the same solute properties.
+ *
+ * @param kk The index of the super-droplet in the initial
+ * data (0 <= kk < total number of superdrops).
+ * @return The attributes of the superdrop from index 'kk'.
+ */
 SuperdropAttrs GenSuperdrop::attrs_at(const unsigned int kk) const {
   const auto radius = initdata.radii.at(kk);
   const auto msol = initdata.msols.at(kk);
@@ -87,6 +122,15 @@ SuperdropAttrs GenSuperdrop::attrs_at(const unsigned int kk) const {
   return SuperdropAttrs(solute, xi, radius, msol);
 }
 
+/**
+ * @brief Generate a super-droplet using initial data for the kk'th superdrop.
+ *
+ * This function returns a superdrop generated from the specified position
+ * 'kk' in the initial conditions data.
+ *
+ * @param kk The index of the superdrop to generate.
+ * @return The generated super-droplet.
+ */
 Superdrop GenSuperdrop::operator()(const unsigned int kk) const {
   const auto sdgbxindex = initdata.sdgbxindexes.at(kk);
   const auto coords312 = coords_at(kk);

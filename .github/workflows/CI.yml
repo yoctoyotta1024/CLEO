@@ -10,34 +10,30 @@ jobs:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
-          activate-environment: mypackage
+          activate-environment: myenv
           environment-file: environment.yml
           auto-activate-base: false
       - run: |
           conda info
           conda list
-      - name: Install Doxygen
-        run: sudo apt-get install doxygen -y
-        shell: bash
-      - name: Install package
+      - name: Activate Conda Environment
         run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install .
-          python3 -m pip install -U sphinx
-          python3 -m pip install -U numpy
-          python3 -m pip install -U furo
-          python3 -m pip install -U sphinx_copybutton
-          python3 -m pip install -U sphinxcontrib-bibtex
-          python3 -m pip install -U breathe
+          conda init
+          source /home/runner/.bashrc
+          conda activate /usr/share/miniconda/envs/myenv
+          conda info --envs
+      - name: Install Doxygen
+        run: /usr/share/miniconda/envs/myenv/bin/doxygen --version
+        shell: bash
       - name: Test with pytest
         run: pytest .
       - name: Generate Doxygen Documentation
         run: cd docs &&
           mkdir build &&
           mkdir build/doxygen &&
-          doxygen doxygen/doxygen.dox
+          /usr/share/miniconda/envs/myenv/bin/doxygen doxygen/doxygen.dox
         shell: bash
       - name: Build docs
         run: |
