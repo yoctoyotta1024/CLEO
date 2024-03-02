@@ -34,8 +34,8 @@ https://kokkos.org/kokkos-core-wiki/ProgrammingGuide/Compiling.html?highlight=wr
   message(STATUS "wrapper default (CXX) compiler set to: ${NVCC_WRAPPER_DEFAULT_COMPILER}")
   message(STATUS "wrapper nvcc compiler: ${CUDA_ROOT}/bin/nvcc")
 else()
-  set(CMAKE_CXX_COMPILER ${CLEO_CXX_COMPILER} "C++ compiler" FORCE)
-  set(CMAKE_CC_COMPILER ${CLEO_CC_COMPILER} "CC compiler" FORCE)
+  set(CMAKE_CXX_COMPILER ${CLEO_CXX_COMPILER} CACHE STRING "C++ compiler" FORCE)
+  set(CMAKE_CC_COMPILER ${CLEO_CC_COMPILER} CACHE STRING "CC compiler" FORCE)
   message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
   message(STATUS "CC compiler: ${CMAKE_CC_COMPILER}")
 endif()
@@ -44,9 +44,9 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CLEO_CXX_FLAGS}")
 
 # subdirectories of CLEO libray and main program
-# add_subdirectory(libs)
+add_subdirectory(libs)
 add_subdirectory(src)
-# add_subdirectory(roughpaper)
+#add_subdirectory(roughpaper)
 
 # subdirectories for specific examples of CLEO
-# add_subdirectory(examples EXCLUDE_FROM_ALL)
+add_subdirectory(examples EXCLUDE_FROM_ALL)

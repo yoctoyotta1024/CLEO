@@ -21,8 +21,8 @@ spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/cleoenv
 path2CLEO=${HOME}/CLEO/
 path2build=$1 # get from command line argument
-gxx="g++"
-gcc="gcc"
+gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
+gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 ### ---------------------------------------------------- ###
 
 ### ---------------------------------------------------- ###
@@ -32,8 +32,8 @@ gcc="gcc"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose extra compiler flags ----------- ###
-# flags="-g -O0 -mpc64"                                        # correctness
-flags="-O3"                                                    # performance
+# CLEO_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+CLEO_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
@@ -48,19 +48,19 @@ kokkosdevice=""
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###
-echo "CXX=${gxx} CC=${gcc}"
-echo "CUDA=${CUDA_ROOT}/bin/nvcc (via Kokkos nvcc wrapper)"
-echo "KOKKOS NVCC WRAPPER=${nvcc_wrapper}"
+echo "CLEO_CXX_COMPILER=${gxx} CLEO_CC_COMPILER=${gcc}"
+echo "CUDA=${CLEO_CUDA_ROOT}/bin/nvcc (via Kokkos nvcc wrapper)"
+echo "CLEO_NVCC_WRAPPER=${CLEO_NVCC_WRAPPER}"
 echo "BUILD_DIR: ${path2build}"
 echo "KOKKOS_FLAGS: ${kokkosflags}"
 echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
 echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
-echo "CXX_COMPILER_FLAGS: ${flags}"
+echo "CLEO_CXX_FLAGS: ${CLEO_CXX_FLAGS}"
 
 # build then compile in parallel
-cmake -DCMAKE_CXX_COMPILER=${gxx} \
-    -DCMAKE_CC_COMPILER=${gcc} \
-    -DCMAKE_CXX_FLAGS="${flags}" \
+cmake -DCLEO_CXX_COMPILER=${gxx} \
+    -DCLEO_CC_COMPILER=${gcc} \
+    -DCLEO_CXX_FLAGS="${CLEO_CXX_FLAGS}" \
     -S ${path2CLEO} -B ${path2build} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
     cmake --build ${path2build} --parallel
