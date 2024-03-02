@@ -5,7 +5,7 @@ endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
 project("runCLEO")
-message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # # Kokkos library stuff
 # set(CMAKE_CXX_FLAGS_B4 "${CMAKE_CXX_FLAGS}")
@@ -29,10 +29,12 @@ set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 # create primary executable "runCLEO"
 set(runCLEO "runCLEO")
 add_executable(${runCLEO} "main.cpp")
-target_link_libraries(${runCLEO} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
-target_link_libraries(${runCLEO} PUBLIC Kokkos::kokkos)
+
+# Add directories and libraries for target
 target_include_directories(${runCLEO} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 # target_include_directories(${runCLEO} PRIVATE ${PROJECT_SOURCE_DIR})
+target_link_libraries(${runCLEO} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
+target_link_libraries(${runCLEO} PUBLIC Kokkos::kokkos)
 
 # set C++ compiler options for target
 target_compile_options(${runCLEO} PRIVATE ${CMAKE_CXX_FLAGS})
