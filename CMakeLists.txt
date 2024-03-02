@@ -17,12 +17,8 @@ set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ com
 
 message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
 if(${Kokkos_ENABLE_CUDA})
-
-  set(NVCC_WRAPPER_DEFAULT_COMPILER ${CMAKE_CXX_COMPILER})
   message(STATUS "Kokkos nvcc wrapper default compiler set to ${NVCC_WRAPPER_DEFAULT_COMPILER}")
   message(STATUS "nvcc compiler: ${CUDA_ROOT}/bin/nvcc")
-
-  set(CMAKE_CXX_COMPILER ${KOKKOS_NVCC_WRAPPER})
   message(STATUS "Using nvcc wrapper (see:\
   https://kokkos.org/kokkos-core-wiki/ProgrammingGuide/Compiling.html?highlight=wrapper#building-for-cuda  )")
 endif()
