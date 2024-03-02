@@ -37,7 +37,6 @@ gcc="gcc"
 # set path to Kokkos nvcc wrapper (usually Kokkos bin directory of kokkos after installation)
 nvcc_wrapper="${HOME}/CLEO/build/_deps/kokkos-src/bin/nvcc_wrapper"
 default_compiler=${gxx}
-gxx=${nvcc_wrapper}
 
 # set nvcc compiler used by Kokkos nvcc wrapper as CUDA_ROOT/bin/nvcc
 # NOTE(!) this path should correspond to the loaded nvhpc module.
@@ -59,7 +58,7 @@ kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 
 # flags for device parallelism (e.g. on gpus)
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=O -DKokkos_ENABLE_CUDA_CONSTEXPR=ON \
--DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${default_compiler}"
+-DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER=${nvcc_wrapper} -DNVCC_WRAPPER_DEFAULT_COMPILER=${default_compiler}"
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###

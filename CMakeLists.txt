@@ -17,10 +17,11 @@ set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ com
 
 message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
 if(${Kokkos_ENABLE_CUDA})
-  message(STATUS "Kokkos nvcc wrapper default compiler set to ${NVCC_WRAPPER_DEFAULT_COMPILER}")
-  message(STATUS "nvcc compiler: ${CUDA_ROOT}/bin/nvcc")
-  message(STATUS "Using nvcc wrapper (see:\
+  message(STATUS "Using Kokkos nvcc wrapper (see:\
   https://kokkos.org/kokkos-core-wiki/ProgrammingGuide/Compiling.html?highlight=wrapper#building-for-cuda  )")
+  set(CMAKE_CXX_COMPILER ${NVCC_WRAPPER})
+  message(STATUS "wrapper default compiler set to: ${NVCC_WRAPPER_DEFAULT_COMPILER}")
+  message(STATUS "nvcc compiler: ${CUDA_ROOT}/bin/nvcc")
 endif()
 
 # subdirectories of CLEO libray and main program
