@@ -12,25 +12,34 @@
 #SBATCH --output=./build/bin/buildgpu_out.%j.out
 #SBATCH --error=./build/bin/buildgpu_err.%j.out
 
-### ----- You need to edit these lines to set your ----- ###
-### ----- default compiler and python environment   ---- ###
+### ---------------------------------------------------- ###
+### ------- You MUST edit these lines to set your ------ ###
+### --- default compiler(s) (and python environment) --- ###
 ### ----  and paths for CLEO and build directories  ---- ###
+### ---------------------------------------------------- ###
 module load gcc/11.2.0-gcc-11.2.0
 module load nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/cleoenv
 path2CLEO=${HOME}/CLEO/
-path2build=$1 # get from command line argument
+path2build=$1             # get from command line argument(s)
 gxx="g++"
 gcc="gcc"
 ### ---------------------------------------------------- ###
 
-### ------------ choose CUDA compiler ----------- ###
+### ---------------------------------------------------- ###
+### ------- You can optionally edit the following ------ ###
+### -------- lines to customise your compiler(s) ------- ###
+###  ------------ and build configuration  ------------- ###
+### ---------------------------------------------------- ###
+
+### --------------- choose CUDA compiler --------------- ###
 # set path to Kokkos nvcc wrapper (usually Kokkos bin directory of kokkos after installation)
 nvcc_wrapper="${HOME}/CLEO/build/_deps/kokkos-src/bin/nvcc_wrapper"
 
 # set nvcc compiler used by Kokkos nvcc wrapper as CUDA_ROOT/bin/nvcc
-# NOTE(!) this path should correspond to the loaded nvhpc module. Get path e.g. via 'spack find -p nvhpc@23.9'
+# NOTE(!) this path should correspond to the loaded nvhpc module.
+# you can get a clue for the correct path e.g. via 'spack find -p nvhpc@23.9'
 CUDA_ROOT="/sw/spack-levante/nvhpc-23.9-xpxqeo/Linux_x86_64/23.9/cuda/"
 ### ---------------------------------------------------- ###
 

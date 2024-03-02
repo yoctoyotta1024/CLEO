@@ -26,7 +26,7 @@ spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/cleoenv
 
 path2CLEO=${HOME}/CLEO/
-path2build=$1 # get from command line args
+path2build=$1 # get from command line argument(s)
 configfile=${HOME}/CLEO/src/config/config.txt
 
 python=python
