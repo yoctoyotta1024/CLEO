@@ -46,13 +46,13 @@ echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}}"
 echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
 echo "CXX_COMPILER_FLAGS: ${flags}"
 
-CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -DCMAKE_CXX_COMPILER=${gxx} \
-                                      -DCMAKE_CC_COMPILER=${gcc} \
-                                      -DCMAKE_CUDA_COMPILER=${cuda} \
-                                      -DCMAKE_CXX_FLAGS="${flags}" \
-                                      -S ../ -B ${path2build} \
-                                      ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
-                                      cmake --build ${path2build}  --parallel
+cmake -DCMAKE_CXX_COMPILER=${gxx} \
+    -DCMAKE_CC_COMPILER=${gcc} \
+    -DCMAKE_CUDA_COMPILER=${cuda} \
+    -DCMAKE_CXX_FLAGS="${flags}" \
+    -S ../ -B ${path2build} \
+    ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
+    cmake --build ${path2build}  --parallel
 
 ### compile CLEO
 cd ${path2build} && pwd
