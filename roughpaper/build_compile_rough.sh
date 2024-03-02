@@ -25,15 +25,24 @@ gcc="gcc"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose CUDA compiler ----------- ###
+# set path to Kokkos nvcc wrapper (usually Kokkos bin directory of kokkos after installation)
+nvcc_wrapper="${HOME}/CLEO/roughpaper/build/_deps/kokkos-src/bin/nvcc_wrapper"
+
 # set nvcc compiler used by Kokkos nvcc wrapper as CUDA_ROOT/bin/nvcc
 # NOTE(!) this path should correspond to the loaded nvhpc module. Get path e.g. via 'spack find -p nvhpc@23.9'
 CUDA_ROOT="/sw/spack-levante/nvhpc-23.9-xpxqeo/Linux_x86_64/23.9/cuda/"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
-kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON"                 # serial kokkos
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                                                  # flags for host parallelism (e.g. using OpenMP)
-kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DCUDA_ROOT=${CUDA_ROOT}" # flags for device parallelism (e.g. on gpus)
+# flags for serial kokkos
+kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON"
+
+# flags for host parallelism (e.g. using OpenMP)
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
+
+# flags for device parallelism (e.g. on gpus)
+kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=O -DKokkos_ENABLE_CUDA_CONSTEXPR=ON \
+-DCUDA_ROOT=${CUDA_ROOT} -DKOKKOS_NVCC_WRAPPER=${nvcc_wrapper}"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose extra compiler flags ----------- ###
@@ -41,10 +50,10 @@ flags="-g -O0 -mpc64"                                            # correctness
 # flags="-O3"                                                    # performance
 ### ---------------------------------------------------- ###
 
-### ------------------ build_compile.sh ---------------- ###
-### build CLEO using cmake (with optional thread parallelism through Kokkos)
+### ------------ build and compile with cmake ---------- ###
 echo "CXX=${gxx} CC=${gcc}"
 echo "CUDA=${CUDA_ROOT}/bin/nvcc (via Kokkos nvcc wrapper)"
+echo "KOKKOS NVCC WRAPPER=${nvcc_wrapper}"
 echo "BUILD_DIR: ${path2build}"
 echo "KOKKOS_FLAGS: ${kokkosflags}"
 echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
@@ -57,8 +66,4 @@ cmake -DCMAKE_CXX_COMPILER=${gxx} \
     -S ../ -B ${path2build} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
     cmake --build ${path2build}  --parallel
-
-### compile CLEO
-cd ${path2build} && pwd
-make -j 16
 ### ---------------------------------------------------- ###

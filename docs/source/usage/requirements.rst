@@ -38,7 +38,7 @@ e.g. via
 
 .. code-block:: console
 
-  $ module load nvhpc/23.7-gcc-11.2.0
+  $ module load nvhpc/23.9-gcc-11.2.0
 
 Python
 ------

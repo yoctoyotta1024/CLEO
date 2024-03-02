@@ -22,7 +22,7 @@ if(${Kokkos_ENABLE_CUDA})
   message(STATUS "Kokkos nvcc wrapper default compiler set to ${NVCC_WRAPPER_DEFAULT_COMPILER}")
   message(STATUS "nvcc compiler: ${CUDA_ROOT}/bin/nvcc")
 
-  set(CMAKE_CXX_COMPILER /home/m/m300950/CLEO/roughpaper/build/_deps/kokkos-src/bin/nvcc_wrapper)
+  set(CMAKE_CXX_COMPILER ${KOKKOS_NVCC_WRAPPER})
   message(STATUS "Using nvcc wrapper (see:\
   https://kokkos.org/kokkos-core-wiki/ProgrammingGuide/Compiling.html?highlight=wrapper#building-for-cuda  )")
 endif()
@@ -30,6 +30,7 @@ endif()
 # subdirectories of CLEO libray and main program
 add_subdirectory(libs)
 add_subdirectory(src)
+# add_subdirectory(roughpaper)
 
 # subdirectories for specific examples of CLEO
 add_subdirectory(examples EXCLUDE_FROM_ALL)
