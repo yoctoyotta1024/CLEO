@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 1st March 2024
+ * Last Modified: Saturday 2nd March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -71,9 +71,6 @@
 // ---------------------------------------------------------------- //
 
 int main(int argc, char *argv[]) {
-  const size_t nsupers(10);
-  const size_t ngbxs(13);
-
   const auto r1 = 2.3;
   const auto r2 = 2.3;
 

@@ -21,7 +21,7 @@ target_compile_options(${test} PRIVATE ${compileops})
 target_include_directories(${test} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # set specific C++ compiler options for target (optional)
-target_compile_options(${runCLEO} PRIVATE -Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64)
+target_compile_options(${test} PRIVATE -Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64)
 
 # set C++ properties for target
 set_target_properties(${runCLEO} PROPERTIES
