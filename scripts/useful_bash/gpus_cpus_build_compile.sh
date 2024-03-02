@@ -43,6 +43,11 @@ nvcc_wrapper="${HOME}/CLEO/build/_deps/kokkos-src/bin/nvcc_wrapper"
 CUDA_ROOT="/sw/spack-levante/nvhpc-23.9-xpxqeo/Linux_x86_64/23.9/cuda/"
 ### ---------------------------------------------------- ###
 
+### ------------ choose extra compiler flags ----------- ###
+# flags="-g -O0 -mpc64"                                        # correctness
+flags="-O3"                                                    # performance
+### ---------------------------------------------------- ###
+
 ### ------------ choose Kokkos configuration ----------- ###
 # flags for serial kokkos
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON"
@@ -53,11 +58,6 @@ kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 # flags for device parallelism (e.g. on gpus)
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=O -DKokkos_ENABLE_CUDA_CONSTEXPR=ON \
 -DCUDA_ROOT=${CUDA_ROOT} -DKOKKOS_NVCC_WRAPPER=${nvcc_wrapper}"
-### ---------------------------------------------------- ###
-
-### ------------ choose extra compiler flags ----------- ###
-# flags="-g -O0 -mpc64"                                        # correctness
-flags="-O3"                                                    # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###

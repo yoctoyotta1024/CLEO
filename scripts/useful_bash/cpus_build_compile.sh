@@ -11,16 +11,29 @@
 #SBATCH --output=./build/bin/buildcpu_out.%j.out
 #SBATCH --error=./build/bin/buildcpu_err.%j.out
 
-### ----- You need to edit these lines to set your ----- ###
-### ----- default compiler and python environment   ---- ###
+### ---------------------------------------------------- ###
+### ------- You MUST edit these lines to set your ------ ###
+### --- default compiler(s) (and python environment) --- ###
 ### ----  and paths for CLEO and build directories  ---- ###
+### ---------------------------------------------------- ###
 module load gcc/11.2.0-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/cleoenv
 path2CLEO=${HOME}/CLEO/
-path2build=$1 # get from command line argument
+path2build=$1             # get from command line argument(s)
 gxx="g++"
 gcc="gcc"
+### ---------------------------------------------------- ###
+
+### ---------------------------------------------------- ###
+### ------- You can optionally edit the following ------ ###
+### -------- lines to customise your compiler(s) ------- ###
+###  ------------ and build configuration  ------------- ###
+### ---------------------------------------------------- ###
+
+### ------------ choose extra compiler flags ----------- ###
+# flags="-g -O0 -mpc64"                                        # correctness
+flags="-O3"                                                    # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
@@ -32,11 +45,6 @@ kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 
 # flags for device parallelism (e.g. on gpus)
 kokkosdevice=""
-### ---------------------------------------------------- ###
-
-### ------------ choose extra compiler flags ----------- ###
-# flags="-g -O0 -mpc64"                                        # correctness
-flags="-O3"                                                    # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###
