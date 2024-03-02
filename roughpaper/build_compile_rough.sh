@@ -32,8 +32,8 @@ CUDA_ROOT="/sw/spack-levante/nvhpc-23.9-xpxqeo/Linux_x86_64/23.9/cuda/"
 
 ### ------------ choose Kokkos configuration ----------- ###
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON"                 # serial kokkos
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                                                  # flags for host parallelism (e.g. using OpenMP)
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DCUDA_ROOT=${CUDA_ROOT}" # flags for device parallelism (e.g. on gpus)
-# kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                                                  # flags for host parallelism (e.g. using OpenMP)
 ### ---------------------------------------------------- ###
 
 ### ------------ choose extra compiler flags ----------- ###
@@ -47,7 +47,7 @@ echo "CXX=${gxx} CC=${gcc}"
 echo "CUDA=${CUDA_ROOT}/bin/nvcc (via Kokkos nvcc wrapper)"
 echo "BUILD_DIR: ${path2build}"
 echo "KOKKOS_FLAGS: ${kokkosflags}"
-echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}}"
+echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
 echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
 echo "CXX_COMPILER_FLAGS: ${flags}"
 
