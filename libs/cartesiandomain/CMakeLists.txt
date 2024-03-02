@@ -3,7 +3,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
   cmake_minimum_required(VERSION 3.18.0)
 endif()
 
-# set library name and print directory of this CMakeLists.txt (source directory of library)
+# set library name and print directory of this CMakeLists.txt (source directory of library) and print directory of this CMakeLists.txt (source directory of library)
 set(LIBNAME "cartesiandomain")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
@@ -18,11 +18,11 @@ set(SOURCES
 )
 add_library(${LIBNAME} SHARED ${SOURCES})
 
-# Add directories for target
+# Add directories for target library
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../libs")
 
-# Link libraries to target
+# Link libraries to target library
 set(LINKLIBS initialise superdrops gridboxes)
 target_link_libraries(${LIBNAME} PRIVATE ${LINKLIBS})
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)

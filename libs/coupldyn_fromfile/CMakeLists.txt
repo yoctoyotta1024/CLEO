@@ -1,42 +1,35 @@
 # set cmake version
 if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
   cmake_minimum_required(VERSION 3.18.0)
-  #cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler
 endif()
 
-# set library name
+# set library name and print directory of this CMakeLists.txt (source directory of library) and print directory of this CMakeLists.txt (source directory of library)
 set(LIBNAME "coupldyn_fromfile")
-
-# print where exactly project source dir is for this CMakeLists.txt
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
-# add executables to library
+# Add executables and create library target
 set(SOURCES
 "fromfilecomms.cpp"
 "fromfile_cartesian_dynamics.cpp"
 )
 add_library("${LIBNAME}" SHARED ${SOURCES})
 
-# add directories to include for target
+# Add directories for target library
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../libs")
 
-# link libraries in libs to this target
+# Link libraries to target library
 set(LINKLIBS initialise gridboxes superdrops)
 target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
 
-# some compilation properties
+# set specific C++ compiler options for target (optional)
+#target_compile_options(${runCLEO} PRIVATE)
+
+# set C++ properties for target
 set_target_properties(${LIBNAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
-
-# set compiler options
-if(NOT DEFINED compileops)
-  set(compileops ${defaultcompileops})
-endif()
-
-target_compile_options(${LIBNAME} PRIVATE ${compileops})

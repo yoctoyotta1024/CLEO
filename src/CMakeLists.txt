@@ -14,7 +14,7 @@ set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 set(runCLEO "runCLEO")
 add_executable(${runCLEO} "main.cpp")
 
-# Add directories and libraries for target
+# Add directories and link libraries to target
 target_link_libraries(${runCLEO} PRIVATE coupldyn_fromfile cartesiandomain ${CLEOLIBS})
 target_link_libraries(${runCLEO} PUBLIC Kokkos::kokkos)
 target_include_directories(${runCLEO} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
