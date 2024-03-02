@@ -41,7 +41,9 @@ flags="-g -O0 -mpc64"                                            # correctness
 ### build CLEO using cmake (with optional thread parallelism through Kokkos)
 echo "CXX=${gxx} CC=${gcc} CUDA=${cuda}"
 echo "BUILD_DIR: ${path2build}"
-echo "KOKKOS_FLAGS: ${kokkosflags} ${kokkosdevice} ${kokkoshost}"
+echo "KOKKOS_FLAGS: ${kokkosflags}"
+echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}}"
+echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
 echo "CXX_COMPILER_FLAGS: ${flags}"
 
 CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -DCMAKE_CXX_COMPILER=${gxx} \
