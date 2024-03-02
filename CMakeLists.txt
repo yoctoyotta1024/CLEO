@@ -15,6 +15,18 @@ project(project
 # default compiler options to use in subdirectories
 set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ compiler (note -gdwarf-4 not possible for nvc++)
 
+message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
+if(${Kokkos_ENABLE_CUDA})
+  message(STATUS "CUDA_ROOT: ${CUDA_ROOT}")
+
+  set(NVCC_WRAPPER_DEFAULT_COMPILER ${CMAKE_CXX_COMPILER})
+  message(STATUS "Kokkos nvcc wrapper default compiler set to ${NVCC_WRAPPER_DEFAULT_COMPILER}")
+
+  set(CMAKE_CXX_COMPILER /home/m/m300950/CLEO/roughpaper/build/_deps/kokkos-src/bin/nvcc_wrapper)
+  message(STATUS "Using nvcc wrapper (see:\
+  https://kokkos.org/kokkos-core-wiki/ProgrammingGuide/Compiling.html?highlight=wrapper#building-for-cuda  )")
+endif()
+
 # subdirectories of CLEO libray and main program
 add_subdirectory(libs)
 add_subdirectory(src)
