@@ -77,9 +77,8 @@ cmake -DCMAKE_CXX_COMPILER=${gxx} \
     -DCLEO_CC_COMPILER=${gcc} \
     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
     -S ${path2CLEO} -B ${path2build} \
-    ${kokkosflags} ${kokkosdevice} ${kokkoshost}
-    #&& \
-    # cmake --build ${path2build} --parallel
+    ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
+    cmake --build ${path2build} --parallel
 
 # ensure these directories exist (it's a good idea for later use)
 mkdir ${path2build}bin
