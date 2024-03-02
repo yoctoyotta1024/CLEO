@@ -16,7 +16,7 @@ set(SOURCES
 "cartesianmotion.cpp"
 "createcartesianmaps.cpp"
 )
-add_library("${LIBNAME}" SHARED ${SOURCES})
+add_library(${LIBNAME} SHARED ${SOURCES})
 
 # Add directories for target
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -24,11 +24,11 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../..
 
 # Link libraries to target
 set(LINKLIBS initialise superdrops gridboxes)
-target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
+target_link_libraries(${LIBNAME} PRIVATE ${LINKLIBS})
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
-# set C++ compiler options for target
-target_compile_options(${LIBNAME} PRIVATE ${CMAKE_CXX_FLAGS})
+# set specific C++ compiler options for target (optional)
+#target_compile_options(${runCLEO} PRIVATE)
 
 # set C++ properties for target
 set_target_properties(${LIBNAME} PROPERTIES

@@ -13,6 +13,7 @@ project(project
 )
 
 # fetch and make Kokkos library available
+set(CMAKE_CXX_STANDARD "20")
 include(FetchContent)
 FetchContent_Declare(
   Kokkos
@@ -20,7 +21,10 @@ FetchContent_Declare(
   URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
   GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
 )
+set(FLAGS_B4 "${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 FetchContent_MakeAvailable(Kokkos)
+set(CMAKE_CXX_FLAGS "${FLAGS_B4}")
 
 if(${Kokkos_ENABLE_CUDA})
   message(STATUS "Using Kokkos nvcc wrapper (see: \
@@ -40,8 +44,8 @@ else()
   message(STATUS "CC compiler: ${CMAKE_CC_COMPILER}")
 endif()
 
-# default compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CLEO_CXX_FLAGS}")
+# print default cmake compiler flags
+message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
 # subdirectories of CLEO libray and main program
 add_subdirectory(libs)
