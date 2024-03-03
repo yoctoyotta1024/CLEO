@@ -12,19 +12,30 @@ project(project
   VERSION 1.0
 )
 
-# fetch and make Kokkos library available
 set(CMAKE_CXX_STANDARD "20")
-include(FetchContent)
-FetchContent_Declare(
-  Kokkos
-  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
-  GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
-)
-set(FLAGS_B4 "${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-FetchContent_MakeAvailable(Kokkos)
-set(CMAKE_CXX_FLAGS "${FLAGS_B4}")
+
+# install Kokkos for project
+set(Kokkos_COMMON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern/kokkos)
+if(EXISTS ${Kokkos_COMMON_SOURCE_DIR})
+  # use existing Kokkos library available
+  add_subdirectory(${Kokkos_COMMON_SOURCE_DIR} Kokkos)
+  message(STATUS "Using kokkos installation from: ${Kokkos_COMMON_SOURCE_DIR}")
+else()
+  # fetch and make Kokkos library available
+  include(FetchContent)
+  FetchContent_Declare(
+    Kokkos
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
+    GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
+  )
+  set(FLAGS_B4 "${CMAKE_CXX_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+  FetchContent_MakeAvailable(Kokkos)
+  set(CMAKE_CXX_FLAGS "${FLAGS_B4}")
+  set(Kokkos_COMMON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/_deps/Kokkos)
+  message(STATUS "Using kokkos installation from: ${Kokkos_COMMON_SOURCE_DIR}")
+endif()
 
 if(${Kokkos_ENABLE_CUDA})
   message(STATUS "Using Kokkos nvcc wrapper (see: \
