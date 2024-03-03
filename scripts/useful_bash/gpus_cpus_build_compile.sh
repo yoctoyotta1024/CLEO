@@ -56,8 +56,9 @@ kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_S
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 
 # flags for device parallelism (e.g. on gpus)
-kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=O -DKokkos_ENABLE_CUDA_CONSTEXPR=ON \
--DCLEO_CUDA_ROOT=${CLEO_CUDA_ROOT} -DCLEO_NVCC_WRAPPER=${CLEO_NVCC_WRAPPER}"
+kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=O \
+-DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON \
+-DCLEO_CUDA_ROOT=${CLEO_CUDA_ROOT} -DCLEO_NVCC_WRAPPER=${CLEO_NVCC_WRAPPER} "
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###
