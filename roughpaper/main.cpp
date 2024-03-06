@@ -33,7 +33,7 @@
 #include <Kokkos_Random.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
-#include "src/collisionkinetics.hpp"
+#include "superdrops/collisionkinetics.hpp"
 
 int main(int argc, char *argv[]) {
   const auto r1 = 2.3;

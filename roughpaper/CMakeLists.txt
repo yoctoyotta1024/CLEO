@@ -1,32 +1,28 @@
 # module load gcc && CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
 
 # set cmake version
-cmake_minimum_required(VERSION 3.21.1)
+if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
+  cmake_minimum_required(VERSION 3.18.0)
+endif()
 
-project(project
-  LANGUAGES CXX
-  DESCRIPTION "roughpaper test space"
-  VERSION 1.0
-)
-
+# set project name and print directory of this CMakeLists.txt (source directory of project)
+project("roughpaper/test")
 message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 #set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall -pedantic -g -gdwarf-4")
 
-# add kokkos
-add_subdirectory(extern/kokkos)
-
-# add local sources
-add_subdirectory(src)
+# Set libraries from CLEO to link with executable
+set(CLEOLIBS superdrops)
 
 # create primary executable "test"
 add_executable(test main.cpp)
 
 # Add directories and link libraries to target
-target_link_libraries(test PUBLIC src)
+target_link_libraries(test PRIVATE ${CLEOLIBS})
 target_link_libraries(test PUBLIC Kokkos::kokkos)
-target_include_directories(test PRIVATE "${CMAKE_SOURCE_DIR}/src")
+target_include_directories(test PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_include_directories(test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # set C++ properties for target
 set_target_properties(test PROPERTIES
