@@ -5,13 +5,13 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
-project("divfree2D")
+project("divfreemotion")
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
-# create primary executable for CLEO uncoupled model golovin kernel box model setup
+# create primary executable for CLEO in 2-D coupled to thermodynamics from file setup
 add_executable(divfree2D EXCLUDE_FROM_ALL "main_divfree2D.cpp")
 
 # Add directories and link libraries to target

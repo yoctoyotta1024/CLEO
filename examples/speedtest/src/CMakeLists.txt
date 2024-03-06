@@ -11,7 +11,7 @@ message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
-# create primary executable for CLEO uncoupled model long kernel box model setup
+# create primary executable for CLEO in serial, gpu and cpu speed tests
 add_executable(spdtest EXCLUDE_FROM_ALL "main_spdtest.cpp")
 
 # Add directories and link libraries to target

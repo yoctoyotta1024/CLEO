@@ -10,7 +10,7 @@ message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
-# create primary executable "cleocoupledsdm"
+# create primary executable "cleocoupledsdm" for cleo sdm coupled to dynamics solver
 add_executable(cleocoupledsdm main.cpp)
 
 # Add directories and link libraries to target
