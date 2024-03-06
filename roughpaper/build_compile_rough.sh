@@ -33,10 +33,13 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 ###  ------------ and build configuration  ------------- ###
 ### ---------------------------------------------------- ###
 
-### ------------ choose C and C++ compilers ------------ ###
+### --------- choose C/C++ compiler and flags ---------- ###
 CC=${gcc}               # C
 CXX=${gxx}              # C++
-#CXX=${HOME}/CLEO/extern/kokkos/bin/nvcc_wrapper              # C++
+
+CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
+### ---------------------------------------------------- ###
 
 ### --------------- choose CUDA compiler --------------- ###
 # set nvcc compiler used by Kokkos nvcc wrapper as CLEO_CUDA_ROOT/bin/nvcc
@@ -49,8 +52,8 @@ NVCC_WRAPPER_DEFAULT_COMPILER=${gxx}
 ### ---------------------------------------------------- ###
 
 ### ------------ choose extra compiler flags ----------- ###
-CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64 -fPIC"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-#CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                               # performance
+CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+#CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                         # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
@@ -62,8 +65,8 @@ kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 
 # flags for device parallelism (e.g. on gpus)
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=O \
--DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON"
-#-DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${NVCC_WRAPPER_DEFAULT_COMPILER}"
+-DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON \
+-DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${NVCC_WRAPPER_DEFAULT_COMPILER}"
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###
