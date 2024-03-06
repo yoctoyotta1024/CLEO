@@ -3,7 +3,7 @@
  *
  * ----- CLEO -----
  * File: collisionkinetics.cpp
- * Project: superdrops
+ * Project: src
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -26,9 +26,8 @@
 /* returns cke, where cke = collision kinetic energy
 as formulated in Low and List 1982(a) eqn 3.1 given
 radii r1 and r2 and terminal velocities of droplets */
-KOKKOS_FUNCTION
-double collision_kinetic_energy(const double r1, const double r2, const double terminalv1,
-                                const double terminalv2) {
+KOKKOS_FUNCTION double collision_kinetic_energy(const double r1, const double r2,
+                                                const double terminalv1, const double terminalv2) {
   constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;  // convert r^3 to [m^3]
   constexpr double ckeconst =
       R0cubed * 2.0 / 3.0 * DC::RHO_L * Kokkos::numbers::pi * dlc::W0 * dlc::W0;
@@ -46,8 +45,7 @@ double collision_kinetic_energy(const double r1, const double r2, const double t
 /* returns surface energy of single spherical equivalent, ie.
 coalesced state of two drops, divided by pi as in
 equation 4.3 of Low and List 1982 */
-KOKKOS_FUNCTION
-double coal_surfenergy(const double r1, const double r2) {
+KOKKOS_FUNCTION double coal_surfenergy(const double r1, const double r2) {
   const auto r1cubed = double{r1 * r1 * r1};
   const auto r2cubed = double{r2 * r2 * r2};
   const auto rcubedsum = double{r1cubed + r2cubed};

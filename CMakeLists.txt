@@ -4,7 +4,7 @@
 
 # set cmake version
 cmake_minimum_required(VERSION 3.18.0)
-#cmake_minimum_required(VERSION 3.21.1) ### if using Kokkos with nvc++ compiler on Levante
+# cmake_minimum_required(VERSION 3.21.1) ### if using Kokkos with nvc++ compiler on Levante
 
 project(project
   LANGUAGES CXX
@@ -18,8 +18,8 @@ set(CMAKE_CXX_STANDARD "20")
 set(Kokkos_COMMON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern/kokkos)
 if(EXISTS ${Kokkos_COMMON_SOURCE_DIR})
   # use existing Kokkos library available
-  add_subdirectory(${Kokkos_COMMON_SOURCE_DIR} Kokkos)
-  message(STATUS "Using kokkos installation from: ${Kokkos_COMMON_SOURCE_DIR}")
+  add_subdirectory(${Kokkos_COMMON_SOURCE_DIR} ${CMAKE_BINARY_DIR}/extern/Kokkos)
+  message(STATUS "Kokkos installation in: ${CMAKE_BINARY_DIR}/extern/Kokkos")
 else()
   # fetch and make Kokkos library available
   include(FetchContent)
@@ -33,24 +33,17 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
   FetchContent_MakeAvailable(Kokkos)
   set(CMAKE_CXX_FLAGS "${FLAGS_B4}")
-  set(Kokkos_COMMON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/_deps/Kokkos)
-  message(STATUS "Using kokkos installation from: ${Kokkos_COMMON_SOURCE_DIR}")
+  message(STATUS "Kokkos installation in: ${CMAKE_BINARY_DIR}/_deps/Kokkos")
 endif()
 
 if(${Kokkos_ENABLE_CUDA})
   message(STATUS "Using Kokkos nvcc wrapper (see: \
 https://kokkos.org/kokkos-core-wiki/ProgrammingGuide/Compiling.html?highlight=wrapper#building-for-cuda)")
-  set(CMAKE_CXX_COMPILER ${CLEO_NVCC_WRAPPER} CACHE STRING "C++ compiler" FORCE)
-  set(CMAKE_CC_COMPILER ${CLEO_CC_COMPILER} CACHE STRING "CC compiler" FORCE)
-  set(NVCC_WRAPPER_DEFAULT_COMPILER ${CLEO_CXX_COMPILER})
-  set(CUDA_ROOT ${CLEO_CUDA_ROOT})
   message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
   message(STATUS "CC compiler: ${CMAKE_CC_COMPILER}")
-  message(STATUS "wrapper default (CXX) compiler set to: ${NVCC_WRAPPER_DEFAULT_COMPILER}")
-  message(STATUS "wrapper nvcc compiler: ${CUDA_ROOT}/bin/nvcc")
+  message(STATUS "wrapper default (C++) compiler: ${NVCC_WRAPPER_DEFAULT_COMPILER}")
+  message(STATUS "wrapper CUDA compiler: ${CUDA_ROOT}/bin/nvcc")
 else()
-  set(CMAKE_CXX_COMPILER ${CLEO_CXX_COMPILER} CACHE STRING "C++ compiler" FORCE)
-  set(CMAKE_CC_COMPILER ${CLEO_CC_COMPILER} CACHE STRING "CC compiler" FORCE)
   message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
   message(STATUS "CC compiler: ${CMAKE_CC_COMPILER}")
 endif()

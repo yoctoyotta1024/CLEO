@@ -3,7 +3,7 @@
  *
  * ----- CLEO -----
  * File: collisionkinetics.hpp
- * Project: superdrops
+ * Project: src
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -22,14 +22,12 @@
  */
 
 
-#ifndef LIBS_SUPERDROPS_COLLISIONKINETICS_HPP_
-#define LIBS_SUPERDROPS_COLLISIONKINETICS_HPP_
+#ifndef ROUGHPAPER_SRC_COLLISIONKINETICS_HPP_
+#define ROUGHPAPER_SRC_COLLISIONKINETICS_HPP_
 
 #include <Kokkos_Core.hpp>
 
-#include "../cleoconstants.hpp"
-#include "./superdrop.hpp"
-#include "./terminalvelocity.hpp"
+#include "./cleoconstants.hpp"
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;
@@ -37,15 +35,13 @@ namespace DC = dimmed_constants;
 /* returns cke, where cke = collision kinetic energy
 as formulated in Low and List 1982(a) eqn 3.1 given
 radii r1 and r2 and terminal velocities of droplets */
-KOKKOS_FUNCTION
-double collision_kinetic_energy(const double r1, const double r2, const double terminalv1,
-                                const double terminalv2);
+KOKKOS_FUNCTION double collision_kinetic_energy(const double r1, const double r2,
+                                                const double terminalv1, const double terminalv2);
 
 /* returns surface energy of single spherical equivalent, ie.
 coalesced state of two drops, divided by pi as in
 equation 4.3 of Low and List 1982 */
-KOKKOS_FUNCTION
-double coal_surfenergy(const double r1, const double r2);
+KOKKOS_FUNCTION double coal_surfenergy(const double r1, const double r2);
 
 /* returns energy due to surface tension of a single
 drop, analogous to equation 4.2 of Low and List 1982 */
@@ -66,4 +62,4 @@ double total_surfenergy(const double r1, const double r2) {
   return dlc::surfconst * rsqrdsum;  // = tot_surfe, total surface energy
 }
 
-#endif  // LIBS_SUPERDROPS_COLLISIONKINETICS_HPP_
+#endif  // ROUGHPAPER_SRC_COLLISIONKINETICS_HPP_

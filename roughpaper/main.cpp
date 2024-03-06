@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 2nd March 2024
+ * Last Modified: Tuesday 5th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,7 +33,7 @@
 #include <Kokkos_Random.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
-#include "superdrops/collisionkinetics.hpp"
+#include "src/collisionkinetics.hpp"
 
 // ---------------------------------------------------------------- //
 
