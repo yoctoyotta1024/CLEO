@@ -10,7 +10,7 @@ message("Library 'src' LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 add_library(src STATIC collisionkinetics.cpp)
 
 # Add directories and link libraries for target library
-target_include_directories(src PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(src PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(src PUBLIC Kokkos::kokkos)
 
 # set C++ properties for target

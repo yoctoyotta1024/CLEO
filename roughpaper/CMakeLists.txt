@@ -26,7 +26,7 @@ add_executable(test main.cpp)
 # Add directories and link libraries to target
 target_link_libraries(test PUBLIC src)
 target_link_libraries(test PUBLIC Kokkos::kokkos)
-target_include_directories(test PUBLIC "${CMAKE_SOURCE_DIR}/src")
+target_include_directories(test PRIVATE "${CMAKE_SOURCE_DIR}/src")
 
 # set C++ properties for target
 set_target_properties(test PROPERTIES

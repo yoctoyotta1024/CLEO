@@ -28,7 +28,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO
 
 # Link libraries to target library
 set(LINKLIBS superdrops)
-target_link_libraries(${LIBNAME} PRIVATE "${LINKLIBS}")
+target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # set specific C++ compiler options for target (optional)

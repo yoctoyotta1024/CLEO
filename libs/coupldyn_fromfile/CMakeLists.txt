@@ -24,7 +24,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO
 
 # Link libraries to target library
 set(LINKLIBS initialise gridboxes superdrops)
-target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
+target_link_libraries("${LIBNAME}" PUBLIC ${LINKLIBS})
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)
