@@ -26,11 +26,12 @@ set(SOURCES
 "cvodedynamics.cpp"
 "differentialfuncs.cpp"
 )
-add_library("${LIBNAME}" SHARED ${SOURCES})
+# must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
+add_library("${LIBNAME}" STATIC ${SOURCES})
 
 # Add directories for target library
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../libs")
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library
 set(LINKLIBS initialise superdrops gridboxes)

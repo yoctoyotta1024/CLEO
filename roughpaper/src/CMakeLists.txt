@@ -7,7 +7,7 @@ endif()
 message("Library 'src' LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Add executables and create library target
-add_library(src collisionkinetics.cpp)
+add_library(src STATIC collisionkinetics.cpp)
 
 # Add directories and link libraries for target library
 target_include_directories(src PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
