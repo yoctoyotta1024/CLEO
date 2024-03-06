@@ -12,49 +12,20 @@ project(project
   VERSION 1.0
 )
 
+# use C++20 standard
 set(CMAKE_CXX_STANDARD "20")
 
 # install Kokkos for project
-set(Kokkos_COMMON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern/kokkos)
-if(EXISTS ${Kokkos_COMMON_SOURCE_DIR})
-  # use existing Kokkos library available
-  add_subdirectory(${Kokkos_COMMON_SOURCE_DIR} ${CMAKE_BINARY_DIR}/extern/Kokkos)
-  message(STATUS "Kokkos installation in: ${CMAKE_BINARY_DIR}/extern/Kokkos")
-else()
-  # fetch and make Kokkos library available
-  include(FetchContent)
-  FetchContent_Declare(
-    Kokkos
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
-    GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
-  )
-  set(FLAGS_B4 "${CMAKE_CXX_FLAGS}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-  FetchContent_MakeAvailable(Kokkos)
-  set(CMAKE_CXX_FLAGS "${FLAGS_B4}")
-  message(STATUS "Kokkos installation in: ${CMAKE_BINARY_DIR}/_deps/Kokkos")
-endif()
+message(STATUS "Using Kokkos installation from: ${CMAKE_SOURCE_DIR}/extern/kokkos")
+add_subdirectory(${CMAKE_SOURCE_DIR}/extern/kokkos)
 
-if(${Kokkos_ENABLE_CUDA})
-  message(STATUS "Using Kokkos nvcc wrapper (see: \
-https://kokkos.org/kokkos-core-wiki/ProgrammingGuide/Compiling.html?highlight=wrapper#building-for-cuda)")
-  message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
-  message(STATUS "CC compiler: ${CMAKE_CC_COMPILER}")
-  message(STATUS "wrapper default (C++) compiler: ${NVCC_WRAPPER_DEFAULT_COMPILER}")
-  message(STATUS "wrapper CUDA compiler: ${CUDA_ROOT}/bin/nvcc")
-else()
-  message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
-  message(STATUS "CC compiler: ${CMAKE_CC_COMPILER}")
-endif()
-
-# print default cmake compiler flags
+# print default compiler flags
 message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
-# subdirectories of CLEO libray and main program
+# add directories of CLEO libray and main program
 add_subdirectory(libs)
 add_subdirectory(src)
 #add_subdirectory(roughpaper)
 
-# subdirectories for specific examples of CLEO
+# add directories for specific examples of CLEO
 add_subdirectory(examples EXCLUDE_FROM_ALL)
