@@ -4,24 +4,17 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set library name and print directory of this CMakeLists.txt (source directory of library)
-set(LIBNAME "src")
-message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
-
-# explicitly set library executables path to /lib in top level of build tree
-set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR})
+message("Library 'src' LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Add executables and create library target
-set(SOURCES
-  "collisionkinetics.cpp"
-)
-add_library("${LIBNAME}" SHARED ${SOURCES})
+add_library(src collisionkinetics.cpp)
 
 # Add directories and link libraries for target library
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
+target_include_directories(src PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(src PUBLIC Kokkos::kokkos)
 
 # set C++ properties for target
-set_target_properties(${LIBNAME} PROPERTIES
+set_target_properties(src PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

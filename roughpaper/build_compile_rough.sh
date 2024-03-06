@@ -36,6 +36,7 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 ### ------------ choose C and C++ compilers ------------ ###
 CC=${gcc}               # C
 CXX=${gxx}              # C++
+#CXX=${HOME}/CLEO/extern/kokkos/bin/nvcc_wrapper              # C++
 
 ### --------------- choose CUDA compiler --------------- ###
 # set nvcc compiler used by Kokkos nvcc wrapper as CLEO_CUDA_ROOT/bin/nvcc
@@ -48,8 +49,8 @@ NVCC_WRAPPER_DEFAULT_COMPILER=${gxx}
 ### ---------------------------------------------------- ###
 
 ### ------------ choose extra compiler flags ----------- ###
-CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-#CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                        # performance
+CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64 -fPIC"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+#CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                               # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
