@@ -15,7 +15,8 @@ set(SOURCES
   "golovinprob.cpp"
   "longhydroprob.cpp"
 )
-add_library("${LIBNAME}" SHARED ${SOURCES})
+# must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
+add_library("${LIBNAME}" STATIC ${SOURCES})
 
 # Add directories and link libraries for target library
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
