@@ -20,7 +20,7 @@ target_link_libraries(adia0D PUBLIC Kokkos::kokkos)
 target_include_directories(adia0D PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${LIBNAME} PRIVATE)
+#target_compile_options(adia0D PRIVATE)
 
 # set compiler properties for target(s)
 set_target_properties(adia0D PROPERTIES

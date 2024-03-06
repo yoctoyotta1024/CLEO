@@ -20,7 +20,7 @@ target_link_libraries(const2D PUBLIC Kokkos::kokkos)
 target_include_directories(const2D PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${LIBNAME} PRIVATE)
+#target_compile_options(const2D PRIVATE)
 
 # set compiler properties for target(s)
 set_target_properties(const2D PROPERTIES

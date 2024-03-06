@@ -20,7 +20,7 @@ target_link_libraries(lowlistcolls PUBLIC Kokkos::kokkos)
 target_include_directories(lowlistcolls PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${LIBNAME} PRIVATE)
+#target_compile_options(lowlistcolls PRIVATE)
 
 # set compiler properties for target(s)
 set_target_properties(lowlistcolls PROPERTIES

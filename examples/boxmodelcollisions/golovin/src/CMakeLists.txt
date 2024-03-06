@@ -20,7 +20,7 @@ target_link_libraries(golcolls PUBLIC Kokkos::kokkos)
 target_include_directories(golcolls PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${LIBNAME} PRIVATE)
+#target_compile_options(golcolls PRIVATE)
 
 # set compiler properties for target(s)
 set_target_properties(golcolls PROPERTIES

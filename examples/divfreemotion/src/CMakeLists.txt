@@ -18,10 +18,9 @@ add_executable(divfree2D EXCLUDE_FROM_ALL "main_divfree2D.cpp")
 target_link_libraries(divfree2D PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
 target_link_libraries(divfree2D PUBLIC Kokkos::kokkos)
 target_include_directories(divfree2D PRIVATE "${CMAKE_SOURCE_DIR}/libs")
-target_compile_options(divfree2D PUBLIC ${compileops})
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${LIBNAME} PRIVATE)
+#target_compile_options(divfree2D PRIVATE)
 
 # set compiler properties for target(s)
 set_target_properties(divfree2D PROPERTIES
