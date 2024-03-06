@@ -5,13 +5,13 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
-project("adia0D")
+project("adiabaticparcel")
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
-# create primary executable for CVODE-CLEO coupled model 0D condensation setup
+# create primary executable for CVODE-CLEO coupled model adiabatic parcel setup
 add_executable(adia0D EXCLUDE_FROM_ALL "main_adia0D.cpp")
 
 # Add directories and link libraries to target
