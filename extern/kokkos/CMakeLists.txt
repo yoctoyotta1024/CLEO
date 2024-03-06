@@ -12,7 +12,7 @@ FetchContent_Declare(
   URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
   GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
 )
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC") # Kokkos needs -fPIC flag
 FetchContent_MakeAvailable(Kokkos)
 set(CMAKE_CXX_FLAGS "${FLAGS_B4}")
 

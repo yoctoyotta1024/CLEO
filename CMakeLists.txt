@@ -12,8 +12,11 @@ project(project
   VERSION 1.0
 )
 
-# use C++20 standard
+# use -fPIC flag and C++20 standard with extensions
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_CXX_STANDARD "20")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CXX_EXTENSIONS ON)
 
 # install Kokkos for project
 message(STATUS "Using Kokkos installation from: ${CMAKE_SOURCE_DIR}/extern/kokkos")

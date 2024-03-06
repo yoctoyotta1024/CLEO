@@ -33,6 +33,14 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 ###  ------------ and build configuration  ------------- ###
 ### ---------------------------------------------------- ###
 
+### --------- choose C/C++ compiler and flags ---------- ###
+CC=${gcc}               # C
+CXX=${gxx}              # C++
+
+# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
+### ---------------------------------------------------- ###
+
 ### --------------- choose CUDA compiler --------------- ###
 # set nvcc compiler used by Kokkos nvcc wrapper as CUDA_ROOT/bin/nvcc
 # NOTE(!) this path should correspond to the loaded nvhpc module.
@@ -45,11 +53,6 @@ CUDA_ROOT="/sw/spack-levante/nvhpc-23.9-xpxqeo/Linux_x86_64/23.9/cuda/"
 NVCC_WRAPPER_DEFAULT_COMPILER=${gxx}
 ### ---------------------------------------------------- ###
 
-### --------- choose C/C++ compiler and flags ---------- ###
-# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
-### ---------------------------------------------------- ###
-
 ### ------------ choose Kokkos configuration ----------- ###
 # flags for serial kokkos
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON"
@@ -60,7 +63,7 @@ kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 # flags for device parallelism (e.g. on gpus)
 kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=O \
 -DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON"
-# -DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${gxx}"
+# -DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${CXX}"
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###
