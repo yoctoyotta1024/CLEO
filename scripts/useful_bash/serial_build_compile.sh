@@ -31,9 +31,12 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 ###  ------------ and build configuration  ------------- ###
 ### ---------------------------------------------------- ###
 
-### ------------ choose extra compiler flags ----------- ###
-CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
+### --------- choose C/C++ compiler and flags ---------- ###
+CC=${gcc}               # C
+CXX=${gxx}              # C++
+
+# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
@@ -48,9 +51,8 @@ kokkosdevice=""
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###
-echo "CLEO_CXX_COMPILER=${gxx} CLEO_CC_COMPILER=${gcc}"
-echo "CUDA=${CLEO_CUDA_ROOT}/bin/nvcc (via Kokkos nvcc wrapper)"
-echo "CLEO_NVCC_WRAPPER=${CLEO_NVCC_WRAPPER}"
+echo "CXX_COMPILER=${CXX} CC_COMPILER=${CC}"
+echo "CLEO_DIR: ${path2CLEO}"
 echo "BUILD_DIR: ${path2build}"
 echo "KOKKOS_FLAGS: ${kokkosflags}"
 echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
@@ -58,10 +60,8 @@ echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
 echo "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}"
 
 # build then compile in parallel
-cmake -DCMAKE_CXX_COMPILER=${gxx} \
-    -DCMAKE_CC_COMPILER=${gcc} \
-    -DCLEO_CXX_COMPILER=${gxx} \
-    -DCLEO_CC_COMPILER=${gcc} \
+cmake -DCMAKE_CXX_COMPILER=${CXX} \
+    -DCMAKE_CC_COMPILER=${CC} \
     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
     -S ${path2CLEO} -B ${path2build} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
