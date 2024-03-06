@@ -30,7 +30,7 @@ add_subdirectory(libs)
 add_subdirectory(src)
 
 # add directories for specific examples of CLEO
-#add_subdirectory(examples EXCLUDE_FROM_ALL)
+add_subdirectory(examples EXCLUDE_FROM_ALL)
 
 # add directory for roughpaper / quick tests
 add_subdirectory(roughpaper EXCLUDE_FROM_ALL)
