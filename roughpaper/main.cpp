@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 5th March 2024
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,41 +34,6 @@
 #include <Kokkos_StdAlgorithms.hpp>
 
 #include "src/collisionkinetics.hpp"
-
-// ---------------------------------------------------------------- //
-
-// struct Superdrop {
-//  private:
-//   unsigned int sdgbxindex;
-
-//  public:
-//   KOKKOS_INLINE_FUNCTION
-//   void set_sdgbxindex(const unsigned int ii) { sdgbxindex = ii; }
-
-//   KOKKOS_INLINE_FUNCTION
-//   unsigned int get_sdgbxindex() const { return sdgbxindex; }
-// };
-
-// using viewd_supers = Kokkos::View<Superdrop *>;
-// using viewd_constsupers =
-//     Kokkos::View<const Superdrop *>;  // view in device memory of const superdroplets
-// using ExecSpace = Kokkos::DefaultExecutionSpace;
-
-// viewd_supers init_supers(const size_t nsupers, const size_t ngbxs) {
-//   viewd_supers supers("supers", nsupers);
-//   auto h_supers = Kokkos::create_mirror_view(supers);
-//   for (size_t kk(0); kk < nsupers; ++kk) {
-//     const auto ii = static_cast<unsigned int>(1);
-//     h_supers(kk) = Superdrop();
-//     h_supers(kk).set_sdgbxindex(ii);
-//     std::cout << "ii: " << h_supers(kk).get_sdgbxindex() << "\n";
-//   }
-//   Kokkos::deep_copy(supers, h_supers);
-
-//   return supers;
-// }
-
-// ---------------------------------------------------------------- //
 
 int main(int argc, char *argv[]) {
   const auto r1 = 2.3;

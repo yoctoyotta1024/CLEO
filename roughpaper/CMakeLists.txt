@@ -20,12 +20,15 @@ add_subdirectory(extern/kokkos)
 # add local sources
 add_subdirectory(src)
 
+# Set libraries from CLEO to link with executable
+set(LIBS src)
+
 # create primary executable "test"
 set(test "test")
 add_executable(${test} "main.cpp")
 
 # Add directories and link libraries to target
-target_link_libraries(${test} PUBLIC "${SDMLIBS}")
+target_link_libraries(${test} PUBLIC "${LIBS}")
 target_link_libraries(${test} PUBLIC Kokkos::kokkos)
 target_include_directories(${test} PUBLIC "${CMAKE_SOURCE_DIR}/src")
 
