@@ -70,7 +70,7 @@ kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=O \
 -DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${CXX}"
 ### ---------------------------------------------------- ###
 
-### ------------ build and compile with cmake ---------- ###
+### ------------------ build with cmake ---------------- ###
 echo "CXX_COMPILER=${CXX} CC_COMPILER=${CC}"
 echo "CUDA=${CUDA_ROOT}/bin/nvcc (via Kokkos nvcc wrapper)"
 echo "NVCC_WRAPPER_DEFAULT_COMPILER=${NVCC_WRAPPER_DEFAULT_COMPILER}"
@@ -86,8 +86,7 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
     -DCMAKE_CC_COMPILER=${CC} \
     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
     -S ${path2CLEO} -B ${path2build} \
-    ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
-    cmake --build ${path2build} --parallel
+    ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
 # ensure these directories exist (it's a good idea for later use)
 mkdir ${path2build}bin
@@ -100,6 +99,7 @@ export OMP_PLACES=threads
 
 ### ------------------- compile & run ------------------ ###
 ### generate input files and run 1D box model example(s)
-${python} shima2009.py ${path2CLEO} ${path2build} ${configfile} "golovin" "long" "lowlist"
+${python} ${path2CLEO}/examples/boxmodelcollisions/shima2009.py \
+    ${path2CLEO} ${path2build} ${configfile} "golovin" "long" "lowlist"
 
 ### ---------------------------------------------------- ###
