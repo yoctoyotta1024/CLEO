@@ -14,23 +14,23 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(SOURCES
 "cartesianmaps.cpp"
 "cartesianmotion.cpp"
+#"cartesianmotion_withreset.cpp" # TODO(CB) decide to delete file
 "createcartesianmaps.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})
 
 # Add directories for target library
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
-
+target_include_directories(${LIBNAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(${LIBNAME} PUBLIC "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library
 set(LINKLIBS initialise superdrops gridboxes)
-target_link_libraries(${LIBNAME} PRIVATE ${LINKLIBS})
+target_link_libraries(${LIBNAME} PUBLIC ${LINKLIBS})
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${LIBNAME} PRIVATE)
+#target_compile_options(${LIBNAME} PUBLIC)
 
 # set C++ properties for target
 set_target_properties(${LIBNAME} PROPERTIES

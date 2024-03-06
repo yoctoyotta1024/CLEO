@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 9th February 2024
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -66,7 +66,7 @@ struct SimmelTerminalVelocity {
    * @param radius The radius of the droplet.
    * @return The mass of the droplet as if it's all water [gramms].
    */
-  KOKKOS_FUNCTION
+  KOKKOS_INLINE_FUNCTION
   double watermass(const double radius) const;
 
   /**
@@ -84,7 +84,7 @@ struct SimmelTerminalVelocity {
    * @param drop The superdroplet.
    * @return The (dimensionless) terminal velocity.
    */
-  KOKKOS_FUNCTION
+  KOKKOS_INLINE_FUNCTION
   double operator()(const Superdrop &drop) const;
 };
 
@@ -102,7 +102,7 @@ struct RogersYauTerminalVelocity {
    * @param drop The superdroplet.
    * @return The (dimensionless) terminal velocity.
    */
-  KOKKOS_FUNCTION
+  KOKKOS_INLINE_FUNCTION
   double operator()(const Superdrop &drop) const;
 };
 
@@ -120,7 +120,7 @@ struct RogersGKTerminalVelocity {
    * @param drop The superdroplet.
    * @return The (dimensionless) terminal velocity.
    */
-  KOKKOS_FUNCTION
+  KOKKOS_INLINE_FUNCTION
   double operator()(const Superdrop &drop) const;
 };
 
@@ -132,7 +132,7 @@ struct RogersGKTerminalVelocity {
  * @param radius The radius of the droplet.
  * @return The mass of the droplet as if it's all water [gramms].
  */
-KOKKOS_FUNCTION
+KOKKOS_INLINE_FUNCTION
 double SimmelTerminalVelocity::watermass(const double radius) const {
   // constant = 4.0/3.0 * pi * density of liquid water
   constexpr double massconst(4.0 / 3.0 * Kokkos::numbers::pi * dlc::Rho_l);
@@ -157,7 +157,7 @@ double SimmelTerminalVelocity::watermass(const double radius) const {
  * @param drop The superdroplet.
  * @return The (dimensionless) terminal velocity.
  */
-KOKKOS_FUNCTION
+KOKKOS_INLINE_FUNCTION
 double SimmelTerminalVelocity::operator()(const Superdrop &drop) const {
   /* dimensionless values for radii thresholds, For reference, see table 2 of Simmel et al. 2002 */
   constexpr double r1 = 6.7215e-5 / dlc::R0;
@@ -198,7 +198,7 @@ double SimmelTerminalVelocity::operator()(const Superdrop &drop) const {
  * @param drop The superdroplet.
  * @return The (dimensionless) terminal velocity.
  */
-KOKKOS_FUNCTION
+KOKKOS_INLINE_FUNCTION
 double RogersYauTerminalVelocity::operator()(const Superdrop &drop) const {
   constexpr double r1 = 3e-5 / dlc::R0;
   constexpr double r2 = 6e-4 / dlc::R0;
@@ -232,7 +232,7 @@ double RogersYauTerminalVelocity::operator()(const Superdrop &drop) const {
  * @param drop The superdroplet.
  * @return The (dimensionless) terminal velocity.
  */
-KOKKOS_FUNCTION
+KOKKOS_INLINE_FUNCTION
 double RogersGKTerminalVelocity::operator()(const Superdrop &drop) const {
   constexpr double radius0 =
       3.725 * 1e-4 / dlc::R0;  // dimensionless conversion of D_0 [mm] (to radius)

@@ -2,7 +2,7 @@
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  *
- * * ----- CLEO -----
+ * ----- CLEO -----
  * File: cleoconstants.hpp
  * Project: src
  * Created Date: Tuesday 5th March 2024
@@ -10,25 +10,6 @@
  * Additional Contributors:
  * -----
  * Last Modified: Wednesday 6th March 2024
- * Modified By: CB
- * -----
- * License: BSD 3-Clause "New" or "Revised" License
- * https://opensource.org/licenses/BSD-3-Clause
- * -----
- * File Description:
- */
-
-
-/* Copyright (c) 2023 MPI-M, Clara Bayley
- *
- * ----- CLEO -----
- * File: cleoconstants.hpp
- * Project: libs
- * Created Date: Friday 13th October 2023
- * Author: Clara Bayley (CB)
- * Additional Contributors:
- * -----
- * Last Modified: Thursday 16th November 2023
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License

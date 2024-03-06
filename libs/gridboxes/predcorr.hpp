@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: predcorr.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 19th December 2023
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -41,7 +43,7 @@ defined on the faces of a gridbox at {lower, upper} [X] bounds,
 return wind at [X] coord. Method is 'simple' linear interpolation
 from Grabowski et al. (2018). coord use in interpolation is
 limited to lower_bound <= coord <= upper_bound. */
-KOKKOS_FUNCTION
+KOKKOS_INLINE_FUNCTION
 double interpolation(const Kokkos::pair<double, double> bounds,
                      const Kokkos::pair<double, double> vel, const double sdcoord);
 
@@ -179,7 +181,7 @@ defined on the faces of a gridbox at {lower, upper} [X] bounds,
 return wind at [X] coord. Method is 'simple' linear interpolation
 from Grabowski et al. (2018). coord use in interpolation is
 limited to lower_bound <= coord <= upper_bound. */
-KOKKOS_FUNCTION
+KOKKOS_INLINE_FUNCTION
 double interpolation(const Kokkos::pair<double, double> bounds,
                      const Kokkos::pair<double, double> vel, const double sdcoord) {
   const auto coord = double{Kokkos::fmin(

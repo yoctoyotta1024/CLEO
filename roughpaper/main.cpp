@@ -2,7 +2,7 @@
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  *
- * * ----- CLEO -----
+ * ----- CLEO -----
  * File: main.cpp
  * Project: roughpaper
  * Created Date: Monday 29th January 2024

@@ -2,14 +2,14 @@
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  *
- * * ----- CLEO -----
+ * ----- CLEO -----
  * File: supersingbx.hpp
  * Project: gridboxes
- * Created Date: Wednesday 24th January 2024
+ * Created Date: Wednesday 8th November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 1st March 2024
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
