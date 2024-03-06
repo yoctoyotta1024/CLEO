@@ -12,7 +12,7 @@ message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
 # create primary executable for CLEO uncoupled model lowlist kernel box model setup
-add_executable(lowlistcolls EXCLUDE_FROM_ALL "main_golcolls.cpp")
+add_executable(lowlistcolls EXCLUDE_FROM_ALL "main_lowlistcolls.cpp")
 
 # Add directories and link libraries to target
 target_link_libraries(lowlistcolls PRIVATE cartesiandomain "${CLEOLIBS}")
@@ -23,7 +23,7 @@ target_include_directories(lowlistcolls PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 #target_compile_options(${LIBNAME} PRIVATE)
 
 # set compiler properties for target(s)
-set_target_properties(${lowlistcolls} PROPERTIES
+set_target_properties(lowlistcolls PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
