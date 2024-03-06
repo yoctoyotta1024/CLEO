@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 1st March 2024
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM)
  * after make/compiling, execute for example via:
- * ./src/runCLEO ../src/config/config.txt
+ * ./src/cleocoupledsdm ../src/config/config.txt
  */
 
 

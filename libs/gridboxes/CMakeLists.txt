@@ -31,7 +31,7 @@ target_link_libraries(${LIBNAME} PRIVATE "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${runCLEO} PRIVATE)
+#target_compile_options(${LIBNAME} PRIVATE)
 
 # set C++ properties for target
 set_target_properties(${LIBNAME} PROPERTIES

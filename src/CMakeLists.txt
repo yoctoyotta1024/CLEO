@@ -4,27 +4,26 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
-project("runCLEO")
+project("cleocoupledsdm")
 message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
-# create primary executable "runCLEO"
-set(runCLEO "runCLEO")
-add_executable(${runCLEO} "main.cpp")
+# create primary executable "cleocoupledsdm"
+add_executable(cleocoupledsdm main.cpp)
 
 # Add directories and link libraries to target
-target_link_libraries(${runCLEO} PRIVATE coupldyn_fromfile cartesiandomain ${CLEOLIBS})
-target_link_libraries(${runCLEO} PUBLIC Kokkos::kokkos)
-target_include_directories(${runCLEO} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
-#target_include_directories(${runCLEO} PRIVATE ${PROJECT_SOURCE_DIR})
+target_link_libraries(cleocoupledsdm PRIVATE coupldyn_fromfile cartesiandomain ${CLEOLIBS})
+target_link_libraries(cleocoupledsdm PUBLIC Kokkos::kokkos)
+target_include_directories(cleocoupledsdm PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+#target_include_directories(cleocoupledsdm PRIVATE ${PROJECT_SOURCE_DIR})
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${runCLEO} PRIVATE)
+#target_compile_options(cleocoupledsdm PRIVATE)
 
 # set C++ properties for target
-set_target_properties(${runCLEO} PROPERTIES
+set_target_properties(cleocoupledsdm PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

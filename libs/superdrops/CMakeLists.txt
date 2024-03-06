@@ -28,7 +28,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${runCLEO} PRIVATE)
+#target_compile_options(${LIBNAME} PRIVATE)
 
 # set C++ properties for target
 set_target_properties(${LIBNAME} PROPERTIES

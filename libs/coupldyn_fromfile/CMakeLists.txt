@@ -26,7 +26,7 @@ set(LINKLIBS initialise gridboxes superdrops)
 target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${runCLEO} PRIVATE)
+#target_compile_options(${LIBNAME} PRIVATE)
 
 # set C++ properties for target
 set_target_properties(${LIBNAME} PROPERTIES

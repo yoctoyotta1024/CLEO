@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 8th February 2024
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -16,7 +16,7 @@
  * -----
  * File Description:
  * concept for generator of initial conditions for
- * super-droplets and Gridboxes in runCLEO
+ * super-droplets and Gridboxes in RunCLEO
  */
 
 #ifndef LIBS_RUNCLEO_INITIALCONDITIONS_HPP_
@@ -32,7 +32,7 @@
 /**
  * @concept InitialConditions
  * Concept representing types that provide initial conditions used by operator
- * call of runCLEO.
+ * call of RunCLEO.
  *
  * A type satisfies the InitialConditions concept if it provides the following structures:
  * - `initsupers`: Struct that can call functions related to initialising super-droplets.
