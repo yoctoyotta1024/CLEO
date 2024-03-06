@@ -12,7 +12,7 @@ project(project
   VERSION 1.0
 )
 
-# use -fPIC flag and C++20 standard with extensions
+# ensure C++ compiler uses certain settings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_CXX_STANDARD "20")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
