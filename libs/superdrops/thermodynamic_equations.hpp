@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 12th February 2024
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,8 @@
  * Header file for functions that return Left Hand Side of thermodynamic equations. Unless stated
  * otherwise, equations referenced as (eqn [X.YY]) are from "An Introduction To Clouds From The
  * Microscale to Climate" by Lohmann, Luond and Mahrt, 1st edition.
- * */
+ */
+
 
 #ifndef LIBS_SUPERDROPS_THERMODYNAMIC_EQUATIONS_HPP_
 #define LIBS_SUPERDROPS_THERMODYNAMIC_EQUATIONS_HPP_

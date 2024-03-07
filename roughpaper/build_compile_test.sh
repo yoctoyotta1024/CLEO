@@ -1,15 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=as2017
-#SBATCH --partition=compute
+#SBATCH --job-name=roughCLEO
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
-#SBATCH --time=00:10:00
+#SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./as2017_out.%j.out
-#SBATCH --error=./as2017_err.%j.out
+#SBATCH --output=./gpubuildCLEO_out.%j.out
+#SBATCH --error=./gpubuildCLEO_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------- You MUST edit these lines to set your ------ ###
@@ -17,13 +18,11 @@
 ### ----  and paths for CLEO and build directories  ---- ###
 ### ---------------------------------------------------- ###
 module load gcc/11.2.0-gcc-11.2.0
-module load python3/2022.01-gcc-11.2.0
+module load nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-source activate /work/mh1126/m300950/condaenvs/superdropsenv
+source activate /work/mh1126/m300950/condaenvs/cleoenv
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build/
-configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.txt
-python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
+path2build=${HOME}/CLEO/roughpaper/build/
 gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
 gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 ### ---------------------------------------------------- ###
@@ -38,8 +37,23 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 CC=${gcc}               # C
 CXX=${gxx}              # C++
 
-# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
+CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
+### ---------------------------------------------------- ###
+
+### --------------- choose CUDA compiler --------------- ###
+# set nvcc compiler used by Kokkos nvcc wrapper as CLEO_CUDA_ROOT/bin/nvcc
+# NOTE(!) this path should correspond to the loaded nvhpc module.
+# you can get a clue for the correct path e.g. via 'spack find -p nvhpc@23.9'
+CUDA_ROOT="/sw/spack-levante/nvhpc-23.9-xpxqeo/Linux_x86_64/23.9/cuda/"
+
+# set path to Kokkos nvcc wrapper (usually Kokkos bin directory of kokkos after installation)
+NVCC_WRAPPER_DEFAULT_COMPILER=${gxx}
+### ---------------------------------------------------- ###
+
+### ------------ choose extra compiler flags ----------- ###
+CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+#CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                         # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
@@ -50,12 +64,15 @@ kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_S
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 
 # flags for device parallelism (e.g. on gpus)
-kokkosdevice=""
+kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=O \
+-DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON \
+-DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${NVCC_WRAPPER_DEFAULT_COMPILER}"
 ### ---------------------------------------------------- ###
 
-### ------------------ build with cmake ---------------- ###
+### ------------ build and compile with cmake ---------- ###
 echo "CXX_COMPILER=${CXX} CC_COMPILER=${CC}"
-echo "CLEO_DIR: ${path2CLEO}"
+echo "CUDA=${CUDA_ROOT}/bin/nvcc (via Kokkos nvcc wrapper)"
+echo "NVCC_WRAPPER_DEFAULT_COMPILER=${NVCC_WRAPPER_DEFAULT_COMPILER}"
 echo "BUILD_DIR: ${path2build}"
 echo "KOKKOS_FLAGS: ${kokkosflags}"
 echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
@@ -67,20 +84,6 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
     -DCMAKE_CC_COMPILER=${CC} \
     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
     -S ${path2CLEO} -B ${path2build} \
-    ${kokkosflags} ${kokkosdevice} ${kokkoshost}
-
-# ensure these directories exist (it's a good idea for later use)
-mkdir ${path2build}bin
-mkdir ${path2build}share
-
-# good settings for Kokkos OpenMP at runtime
-export OMP_PROC_BIND=spread
-export OMP_PLACES=threads
-### ---------------------------------------------------- ###
-
-### ------------------- compile & run ------------------ ###
-### generate input files and run adiabatic parcel example
-${python} ${path2CLEO}/examples/adiabaticparcel/as2017.py \
-  ${path2CLEO} ${path2build} ${configfile}
-
+    ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
+    cmake --build ${path2build} --target test --parallel
 ### ---------------------------------------------------- ###

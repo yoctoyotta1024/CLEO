@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
+ *
  * ----- CLEO -----
  * File: superdrop_attrs.hpp
  * Project: superdrops
@@ -8,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 12th February 2024
+ * Last Modified: Friday 1st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -71,12 +72,12 @@ struct SuperdropAttrs {
   /**
    * @brief Default constructor requirement for use of SuperdropAttrs in Kokkos View
    */
-  KOKKOS_INLINE_FUNCTION SuperdropAttrs() = default;
+  SuperdropAttrs() = default;
 
   /**
    * @brief Default destructor requirement for use of SuperdropAttrs in Kokkos View
    */
-  KOKKOS_INLINE_FUNCTION ~SuperdropAttrs() = default;
+  ~SuperdropAttrs() = default;
 
   /**
    * @brief Constructor with parameters.

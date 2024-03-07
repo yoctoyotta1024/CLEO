@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=buildCLEO
+#SBATCH --job-name=build_cleocoupledsdm
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128

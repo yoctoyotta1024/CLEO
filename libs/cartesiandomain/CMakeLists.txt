@@ -1,60 +1,39 @@
 # set cmake version
 if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
   cmake_minimum_required(VERSION 3.18.0)
-  #cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler
 endif()
 
-# set library name
+# set library name and print directory of this CMakeLists.txt (source directory of library) and print directory of this CMakeLists.txt (source directory of library)
 set(LIBNAME "cartesiandomain")
-
-# print where exactly project source dir is for this CMakeLists.txt
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
-# Kokkos library stuff
-set(CMAKE_CXX_FLAGS_B4 "${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_STANDARD_B4 "${CMAKE_CXX_STANDARD}")
-include(FetchContent)
-FetchContent_Declare(
-  Kokkos
-  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
-  GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
-)
-set(CMAKE_CXX_STANDARD "20")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-FetchContent_MakeAvailable(Kokkos)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
-set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
-
-# add executables to library
+# Add executables and create library target
 set(SOURCES
 "cartesianmaps.cpp"
 "cartesianmotion.cpp"
+#"cartesianmotion_withreset.cpp" # TODO(CB) decide to delete file
 "createcartesianmaps.cpp"
 )
-add_library("${LIBNAME}" SHARED ${SOURCES})
+# must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
+add_library("${LIBNAME}" STATIC ${SOURCES})
 
-# add directories to include for target
+# Add directories for target library
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../libs")
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
-# link libraries in libs to this target
+# Link libraries to target library
 set(LINKLIBS initialise superdrops gridboxes)
-target_link_libraries("${LIBNAME}" PRIVATE ${LINKLIBS})
+target_link_libraries(${LIBNAME} PUBLIC ${LINKLIBS})
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
-# some compilation properties
+# set specific C++ compiler options for target (optional)
+#target_compile_options(${LIBNAME} PRIVATE)
+
+# set C++ properties for target
 set_target_properties(${LIBNAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
-
-# set compiler options
-if(NOT DEFINED compileops)
-  set(compileops ${defaultcompileops})
-endif()
-
-target_compile_options(${LIBNAME} PRIVATE ${compileops})
