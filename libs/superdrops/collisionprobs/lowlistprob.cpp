@@ -75,5 +75,3 @@ double LowListCoalProb::sizeratio_factor(const double r1, const double r2) const
 
   return 1.0 / (alpha * alpha);  // alpha^(-2)
 }
-
-#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_LOWLISTPROB_HPP_
