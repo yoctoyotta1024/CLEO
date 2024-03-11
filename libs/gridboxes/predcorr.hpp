@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -54,8 +54,8 @@ equations in Grabowski et al. 2018 */
 template <GridboxMaps GbxMaps, VelocityFormula TV>
 struct PredCorr {
  private:
-  const double delt;   // equivalent of motionstep as dimensionless time
-  const TV terminalv;  // returns terminal velocity given a superdroplet
+  const double delt;    // equivalent of motionstep as dimensionless time
+  const TV terminalv;   // returns terminal velocity given a superdroplet
 
   /* method to interpolate coord3 wind velocity component (w)
   defined on coord3 faces of a gridbox to a superdroplet's
@@ -78,7 +78,7 @@ struct PredCorr {
   /* method to interpolate coord2 wind velocity component (v)
   defined on coord2 faces of a gridbox to a superdroplet's
   coordinates at (coord3, coord1, coord2) */
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   double interp_vvel(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
                      const double coord2) const {
     return interpolation(gbxmaps.coord2bounds(gbxindex), state.vvel, coord2);
@@ -96,7 +96,7 @@ struct PredCorr {
     vel3 -= terminal;
 
     /* predictor coords given velocity at previous coords */
-    coord3 += vel3 * delt;  // move by w wind + terminal velocity
+    coord3 += vel3 * delt;   // move by w wind + terminal velocity
 
     /* corrector velocities based on predicted coords */
     auto corrvel3 = interp_wvel(gbxindex, gbxmaps, state, coord3);
@@ -117,7 +117,7 @@ struct PredCorr {
     const auto vel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
 
     /* predictor coords given velocity at previous coords */
-    coord1 += vel1 * delt;  // move by u wind
+    coord1 += vel1 * delt;   // move by u wind
 
     /* corrector velocities based on predicted coords */
     const auto corrvel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
@@ -137,7 +137,7 @@ struct PredCorr {
     const auto vel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
 
     /* predictor coords given velocity at previous coords */
-    coord2 += vel2 * delt;  // move by v wind
+    coord2 += vel2 * delt;   // move by v wind
 
     /* corrector velocities based on predicted coords */
     const auto corrvel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
@@ -174,25 +174,4 @@ struct PredCorr {
   }
 };
 
-/* -----  ----- TODO: move functions below to .cpp file ----- ----- */
-
-/* Given [X = z,x or y] wind velocity component, vel, that is
-defined on the faces of a gridbox at {lower, upper} [X] bounds,
-return wind at [X] coord. Method is 'simple' linear interpolation
-from Grabowski et al. (2018). coord use in interpolation is
-limited to lower_bound <= coord <= upper_bound. */
-KOKKOS_INLINE_FUNCTION
-double interpolation(const Kokkos::pair<double, double> bounds,
-                     const Kokkos::pair<double, double> vel, const double sdcoord) {
-  const auto coord = double{Kokkos::fmin(
-      bounds.second, Kokkos::fmax(bounds.first, sdcoord))};  // limit coord to within bounds
-
-  const auto alpha = double{(coord - bounds.first) / (bounds.second - bounds.first)};
-
-  const auto interp =
-      double{alpha * vel.second + (1 - alpha) * vel.first};  // simple linear interpolation
-
-  return interp;
-}
-
-#endif  // LIBS_GRIDBOXES_PREDCORR_HPP_
+#endif   // LIBS_GRIDBOXES_PREDCORR_HPP_
