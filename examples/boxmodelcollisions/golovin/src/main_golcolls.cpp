@@ -21,6 +21,7 @@
  * ./src/golcolls ../src/config/config.txt
  */
 
+
 #include <concepts>
 #include <iostream>
 #include <cmath>
@@ -48,8 +49,8 @@
 #include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "superdrops/collisionprobs/coalescence.hpp"
-#include "superdrops/collisionprobs/golovinprob.hpp"
+#include "superdrops/collisions/coalescence.hpp"
+#include "superdrops/collisions/golovinprob.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "zarr/fsstore.hpp"

@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: collisions.hpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -20,8 +20,8 @@
  */
 
 
-#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_COLLISIONS_HPP_
-#define LIBS_SUPERDROPS_COLLISIONPROBS_COLLISIONS_HPP_
+#ifndef LIBS_SUPERDROPS_COLLISIONS_COLLISIONS_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_COLLISIONS_HPP_
 
 #include <concepts>
 
@@ -197,4 +197,4 @@ struct DoCollisions {
   }
 };
 
-#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_COLLISIONS_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_COLLISIONS_HPP_

@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: longhydroprob.cpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Wednesday 22nd November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:

@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: golovinprob.cpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Thursday 9th November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:

@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: lowlistprob.hpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Wednesday 22nd November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -21,8 +21,9 @@
  * concept (see collisions.hpp)
  */
 
-#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_LOWLISTPROB_HPP_
-#define LIBS_SUPERDROPS_COLLISIONPROBS_LOWLISTPROB_HPP_
+
+#ifndef LIBS_SUPERDROPS_COLLISIONS_LOWLISTPROB_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_LOWLISTPROB_HPP_
 
 #include <Kokkos_Core.hpp>
 
@@ -119,4 +120,4 @@ struct LowListBuProb {
   }
 };
 
-#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_LOWLISTPROB_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_LOWLISTPROB_HPP_

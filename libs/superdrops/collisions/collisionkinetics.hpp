@@ -3,7 +3,7 @@
  *
  * ----- CLEO -----
  * File: collisionkinetics.hpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -22,8 +22,8 @@
  */
 
 
-#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_COLLISIONKINETICS_HPP_
-#define LIBS_SUPERDROPS_COLLISIONPROBS_COLLISIONKINETICS_HPP_
+#ifndef LIBS_SUPERDROPS_COLLISIONS_COLLISIONKINETICS_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_COLLISIONKINETICS_HPP_
 
 #include <Kokkos_Core.hpp>
 
@@ -66,4 +66,4 @@ double total_surfenergy(const double r1, const double r2) {
   return dlc::surfconst * rsqrdsum;  // = tot_surfe, total surface energy
 }
 
-#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_COLLISIONKINETICS_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_COLLISIONKINETICS_HPP_

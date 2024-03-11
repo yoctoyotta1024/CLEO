@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: coalescence.cpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:

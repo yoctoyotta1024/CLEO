@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: coalbure_flag.cpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:

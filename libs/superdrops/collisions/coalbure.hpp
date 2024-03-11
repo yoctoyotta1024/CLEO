@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: coalbure.hpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -24,8 +24,8 @@
  */
 
 
-#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_COALBURE_HPP_
-#define LIBS_SUPERDROPS_COLLISIONPROBS_COALBURE_HPP_
+#ifndef LIBS_SUPERDROPS_COLLISIONS_COALBURE_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_COALBURE_HPP_
 
 #include <concepts>
 #include <functional>
@@ -139,4 +139,4 @@ KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::coalesce_breakup_or_rebound(const
   return is_null;
 }
 
-#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_COALBURE_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_COALBURE_HPP_

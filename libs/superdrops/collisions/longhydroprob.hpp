@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: longhydroprob.hpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Wednesday 22nd November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -23,8 +23,8 @@
  */
 
 
-#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_LONGHYDROPROB_HPP_
-#define LIBS_SUPERDROPS_COLLISIONPROBS_LONGHYDROPROB_HPP_
+#ifndef LIBS_SUPERDROPS_COLLISIONS_LONGHYDROPROB_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_LONGHYDROPROB_HPP_
 
 #include <Kokkos_Core.hpp>
 
@@ -69,4 +69,4 @@ struct LongHydroProb {
   }
 };
 
-#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_LONGHYDROPROB_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_LONGHYDROPROB_HPP_

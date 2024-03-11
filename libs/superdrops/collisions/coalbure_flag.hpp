@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: coalbure_flag.hpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -22,8 +22,8 @@
  */
 
 
-#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_COALBURE_FLAG_HPP_
-#define LIBS_SUPERDROPS_COLLISIONPROBS_COALBURE_FLAG_HPP_
+#ifndef LIBS_SUPERDROPS_COLLISIONS_COALBURE_FLAG_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_COALBURE_FLAG_HPP_
 
 #include <concepts>
 #include <functional>
@@ -107,4 +107,4 @@ struct TSCoalBuReFlag {
   unsigned int operator()(const double phi, const Superdrop &drop1, const Superdrop &drop2) const;
 };
 
-#endif   // LIBS_SUPERDROPS_COLLISIONPROBS_COALBURE_FLAG_HPP_
+#endif   // LIBS_SUPERDROPS_COLLISIONS_COALBURE_FLAG_HPP_

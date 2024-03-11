@@ -1,28 +1,29 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: constprob.hpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Wednesday 22nd November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * constant probability of collisio event
- * between two (real) droplets. Calculations is
- * contained in structure that satisfies the
- * requirements of the PairProbability concept
+ * constant probability of collisio event between two (real) droplets. Calculations is
+ * contained in structure that satisfies the requirements of the PairProbability concept
  * (see collisions.hpp)
  */
 
-#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_CONSTPROB_HPP_
-#define LIBS_SUPERDROPS_COLLISIONPROBS_CONSTPROB_HPP_
+
+#ifndef LIBS_SUPERDROPS_COLLISIONS_CONSTPROB_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_CONSTPROB_HPP_
 
 #include <Kokkos_Core.hpp>
 
@@ -51,4 +52,4 @@ struct ConstProb {
   }
 };
 
-#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_CONSTPROB_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_CONSTPROB_HPP_

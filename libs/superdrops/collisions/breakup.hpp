@@ -3,7 +3,7 @@
  *
  * ----- CLEO -----
  * File: breakup.hpp
- * Project: collisionprobs
+ * Project: collisions
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -21,8 +21,9 @@
  * concept used in Collisions struct
  */
 
-#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_BREAKUP_HPP_
-#define LIBS_SUPERDROPS_COLLISIONPROBS_BREAKUP_HPP_
+
+#ifndef LIBS_SUPERDROPS_COLLISIONS_BREAKUP_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_BREAKUP_HPP_
 
 #include <concepts>
 #include <cassert>
@@ -206,4 +207,4 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop
   drop2.set_msol(new_msol);
 }
 
-#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_BREAKUP_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_BREAKUP_HPP_
