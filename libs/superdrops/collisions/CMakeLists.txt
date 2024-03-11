@@ -4,7 +4,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set library name and print directory of this CMakeLists.txt (source directory of library)
-set(LIBNAME "collisionprobs")
+set(LIBNAME "collisions")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
@@ -12,8 +12,12 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
+  "coalbure_flag.cpp"
+  "coalescence.cpp"
+  "collisionkinetics.cpp"
   "golovinprob.cpp"
   "longhydroprob.cpp"
+  "lowlistprob.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})

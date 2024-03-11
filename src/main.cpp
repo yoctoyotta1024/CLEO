@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -55,15 +55,15 @@
 #include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "superdrops/breakup.hpp"
-#include "superdrops/breakup_nfrags.hpp"
-#include "superdrops/coalbure.hpp"
-#include "superdrops/coalbure_flag.hpp"
-#include "superdrops/coalescence.hpp"
-#include "superdrops/collisionprobs/constprob.hpp"
-#include "superdrops/collisionprobs/golovinprob.hpp"
-#include "superdrops/collisionprobs/longhydroprob.hpp"
-#include "superdrops/collisionprobs/lowlistprob.hpp"
+#include "superdrops/collisions/breakup.hpp"
+#include "superdrops/collisions/breakup_nfrags.hpp"
+#include "superdrops/collisions/coalbure.hpp"
+#include "superdrops/collisions/coalescence.hpp"
+#include "superdrops/collisions/coalbure_flag.hpp"
+#include "superdrops/collisions/constprob.hpp"
+#include "superdrops/collisions/golovinprob.hpp"
+#include "superdrops/collisions/longhydroprob.hpp"
+#include "superdrops/collisions/lowlistprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
@@ -103,17 +103,17 @@ inline MicrophysicalProcess auto config_condensation(const Config &config,
 }
 
 inline MicrophysicalProcess auto config_collisions(const Config &config, const Timesteps &tsteps) {
-  const PairProbability auto collprob = LongHydroProb();
-  // const NFragments auto nfrags = ConstNFrags(5.0);
-  const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-  // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
-  const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
-  const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
-                                                   &step2realtime,
-                                                   collprob,
-                                                   nfrags,
-                                                   coalbure_flag);
-  return colls;
+  // const PairProbability auto collprob = LongHydroProb();
+  // // const NFragments auto nfrags = ConstNFrags(5.0);
+  // const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+  // // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
+  // const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+  // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
+  //                                                  &step2realtime,
+  //                                                  collprob,
+  //                                                  nfrags,
+  //                                                  coalbure_flag);
+  // return colls;
 
   // const PairProbability auto buprob = LowListBuProb();
   // const NFragments auto nfrags = ConstNFrags(5.0);
@@ -124,11 +124,11 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
 
   // const PairProbability auto coalprob = LowListCoalProb();
   // const PairProbability auto coalprob = GolovinProb();
-  // const PairProbability auto coalprob = LongHydroProb(1.0);
-  // const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
-                                                  // coalprob);
+  const PairProbability auto coalprob = LongHydroProb(1.0);
+  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
+                                                  coalprob);
 
-  // return coal;
+  return coal;
   // return coal >> bu;
 }
 

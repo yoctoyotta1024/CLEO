@@ -15,7 +15,7 @@ set(SOURCES
 "detectors.cpp"
 "gridbox.cpp"
 "movesupersindomain.cpp"
-# "predcorr.cpp"
+"predcorr.cpp"
 "sortsupers.cpp"
 "supersingbx.cpp"
 )

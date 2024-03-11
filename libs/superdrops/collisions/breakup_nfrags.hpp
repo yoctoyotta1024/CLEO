@@ -3,12 +3,12 @@
  *
  * ----- CLEO -----
  * File: breakup_nfrags.hpp
- * Project: superdrops
+ * Project: collisions
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 24th January 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,8 +20,9 @@
  * Used e.g. by the DoBreakup struct.
  */
 
-#ifndef LIBS_SUPERDROPS_BREAKUP_NFRAGS_HPP_
-#define LIBS_SUPERDROPS_BREAKUP_NFRAGS_HPP_
+
+#ifndef LIBS_SUPERDROPS_COLLISIONS_BREAKUP_NFRAGS_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_BREAKUP_NFRAGS_HPP_
 
 #include <concepts>
 #include <Kokkos_Core.hpp>
@@ -89,4 +90,4 @@ struct CollisionKineticEnergyNFrags {
   }
 };
 
-#endif  // LIBS_SUPERDROPS_BREAKUP_NFRAGS_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_BREAKUP_NFRAGS_HPP_

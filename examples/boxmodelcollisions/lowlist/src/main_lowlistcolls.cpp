@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: main_lowlistcolls.cpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th January 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,6 +20,7 @@
  * after make/compiling, execute for example via:
  * ./src/lowlistcolls ../src/config/config.txt
  */
+
 
 #include <concepts>
 #include <iostream>
@@ -46,8 +49,8 @@
 #include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "superdrops/coalescence.hpp"
-#include "superdrops/collisionprobs/lowlistprob.hpp"
+#include "superdrops/collisions/coalescence.hpp"
+#include "superdrops/collisions/lowlistprob.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "zarr/fsstore.hpp"

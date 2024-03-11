@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
+ *
  * ----- CLEO -----
  * File: main_const2D.cpp
  * Project: src
@@ -8,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 1st March 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,8 +51,8 @@
 #include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "superdrops/coalescence.hpp"
-#include "superdrops/collisionprobs/longhydroprob.hpp"
+#include "superdrops/collisions/coalescence.hpp"
+#include "superdrops/collisions/longhydroprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"

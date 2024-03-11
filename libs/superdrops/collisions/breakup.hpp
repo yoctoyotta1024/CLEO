@@ -3,12 +3,12 @@
  *
  * ----- CLEO -----
  * File: breakup.hpp
- * Project: superdrops
+ * Project: collisions
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 25th January 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,8 +21,9 @@
  * concept used in Collisions struct
  */
 
-#ifndef LIBS_SUPERDROPS_BREAKUP_HPP_
-#define LIBS_SUPERDROPS_BREAKUP_HPP_
+
+#ifndef LIBS_SUPERDROPS_COLLISIONS_BREAKUP_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_BREAKUP_HPP_
 
 #include <concepts>
 #include <cassert>
@@ -32,8 +33,8 @@
 
 #include "./breakup_nfrags.hpp"
 #include "./collisions.hpp"
-#include "./microphysicalprocess.hpp"
-#include "./superdrop.hpp"
+#include "../microphysicalprocess.hpp"
+#include "../superdrop.hpp"
 
 template <NFragments NFrags>
 struct DoBreakup {
@@ -206,4 +207,4 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop
   drop2.set_msol(new_msol);
 }
 
-#endif  // LIBS_SUPERDROPS_BREAKUP_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_BREAKUP_HPP_

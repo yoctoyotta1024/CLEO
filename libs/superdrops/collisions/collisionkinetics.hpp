@@ -3,12 +3,12 @@
  *
  * ----- CLEO -----
  * File: collisionkinetics.hpp
- * Project: superdrops
+ * Project: collisions
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,14 +22,14 @@
  */
 
 
-#ifndef LIBS_SUPERDROPS_COLLISIONKINETICS_HPP_
-#define LIBS_SUPERDROPS_COLLISIONKINETICS_HPP_
+#ifndef LIBS_SUPERDROPS_COLLISIONS_COLLISIONKINETICS_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_COLLISIONKINETICS_HPP_
 
 #include <Kokkos_Core.hpp>
 
-#include "../cleoconstants.hpp"
-#include "./superdrop.hpp"
-#include "./terminalvelocity.hpp"
+#include "../../cleoconstants.hpp"
+#include "../superdrop.hpp"
+#include "../terminalvelocity.hpp"
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;
@@ -66,4 +66,4 @@ double total_surfenergy(const double r1, const double r2) {
   return dlc::surfconst * rsqrdsum;  // = tot_surfe, total surface energy
 }
 
-#endif  // LIBS_SUPERDROPS_COLLISIONKINETICS_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_COLLISIONKINETICS_HPP_

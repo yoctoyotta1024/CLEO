@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 1st March 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,21 +42,21 @@ struct SoluteProperties {
    *
    * @return Solute density.
    */
-  KOKKOS_INLINE_FUNCTION constexpr double rho_sol() const { return dlc::Rho_sol; }
+  KOKKOS_FUNCTION constexpr double rho_sol() const { return dlc::Rho_sol; }
 
   /**
    * @brief Get the molecular mass of solute (dimensionless).
    *
    * @return The molecular mass of solute.
    */
-  KOKKOS_INLINE_FUNCTION constexpr double mr_sol() const { return dlc::Mr_sol; }
+  KOKKOS_FUNCTION constexpr double mr_sol() const { return dlc::Mr_sol; }
 
   /**
    * @brief Get the degree ionic dissociation (van't Hoff factor) (dimensionless).
    *
    * @return The degree ionic dissociation.
    */
-  KOKKOS_INLINE_FUNCTION constexpr double ionic() const { return dlc::IONIC; }
+  KOKKOS_FUNCTION constexpr double ionic() const { return dlc::IONIC; }
 };
 
 /**
@@ -87,7 +87,7 @@ struct SuperdropAttrs {
    * @param radius The radius of superdroplet.
    * @param msol The mass of solute dissolved.
    */
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   SuperdropAttrs(const SoluteProperties solute, const uint64_t xi, const double radius,
                  const double msol)
       : solute(solute), xi(xi), radius(radius), msol(msol) {}
@@ -97,35 +97,35 @@ struct SuperdropAttrs {
    *
    * @return True
    */
-  KOKKOS_INLINE_FUNCTION bool is_solute() const { return true; }
+  KOKKOS_FUNCTION bool is_solute() const { return true; }
 
   /**
    * @brief Get the solute properties.
    *
    * @return The solute properties.
    */
-  KOKKOS_INLINE_FUNCTION auto get_solute() const { return solute; }
+  KOKKOS_FUNCTION auto get_solute() const { return solute; }
 
   /**
    * @brief Get the density of solute.
    *
    * @return The solute density.
    */
-  KOKKOS_INLINE_FUNCTION auto get_rho_sol() const { return solute.rho_sol(); }
+  KOKKOS_FUNCTION auto get_rho_sol() const { return solute.rho_sol(); }
 
   /**
    * @brief Get the molecular mass of the solute.
    *
    * @return The molecular mass of the solute.
    */
-  KOKKOS_INLINE_FUNCTION auto get_mr_sol() const { return solute.mr_sol(); }
+  KOKKOS_FUNCTION auto get_mr_sol() const { return solute.mr_sol(); }
 
   /**
    * @brief Get the degree ionic dissociation (van't Hoff factor).
    *
    * @return The ionic dissociation (van't Hoff factor).
    */
-  KOKKOS_INLINE_FUNCTION auto get_ionic() const { return solute.ionic(); }
+  KOKKOS_FUNCTION auto get_ionic() const { return solute.ionic(); }
 
   /**
    * @brief Set the multiplicity of superdroplet.
@@ -134,7 +134,7 @@ struct SuperdropAttrs {
    *
    * @param i_xi The multiplicity to set.
    */
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   void set_xi(const uint64_t i_xi) {
     assert((i_xi > 0) && "xi should not be less than 1");
 
@@ -151,7 +151,7 @@ struct SuperdropAttrs {
    *
    * @param i_radius The value to set for radius.
    */
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   void set_radius(const double i_radius) {
     assert((i_radius - dryradius() > -1e-12 / dlc::R0) &&
            "radius cannot be less than dry radius (within 1e-6 micron tolerance)");
@@ -166,7 +166,7 @@ struct SuperdropAttrs {
    *
    * @param i_msol The value to set for msol.
    */
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   void set_msol(const double i_msol) { msol = i_msol; }
 
   /**
@@ -176,7 +176,7 @@ struct SuperdropAttrs {
    *
    * @return The total droplet mass.
    */
-  KOKKOS_INLINE_FUNCTION double mass() const;
+  KOKKOS_FUNCTION double mass() const;
 
   /**
    * @brief Get the dry radius of droplet.
@@ -185,7 +185,7 @@ struct SuperdropAttrs {
    *
    * @return The dry radius of droplet.
    */
-  KOKKOS_INLINE_FUNCTION double dryradius() const {
+  KOKKOS_FUNCTION double dryradius() const {
     constexpr double vconst = 3.0 / (4.0 * Kokkos::numbers::pi);
     const auto dryrcubed = double{vconst * msol / solute.rho_sol()};
     return Kokkos::pow(dryrcubed, 1.0 / 3.0);
@@ -196,7 +196,7 @@ struct SuperdropAttrs {
    *
    * @return The cubed radius of droplet.
    */
-  KOKKOS_INLINE_FUNCTION double rcubed() const { return radius * radius * radius; }
+  KOKKOS_FUNCTION double rcubed() const { return radius * radius * radius; }
 
   /**
    * @brief Get the spherical volume of droplet.
@@ -205,7 +205,7 @@ struct SuperdropAttrs {
    *
    * @return The spherical volume of droplet.
    */
-  KOKKOS_INLINE_FUNCTION double vol() const { return 4.0 / 3.0 * Kokkos::numbers::pi * rcubed(); }
+  KOKKOS_FUNCTION double vol() const { return 4.0 / 3.0 * Kokkos::numbers::pi * rcubed(); }
 
   /**
    * @brief Change the radius of droplet.
@@ -217,49 +217,7 @@ struct SuperdropAttrs {
    * @param newr The new radius to set.
    * @return The change in radius.
    */
-  KOKKOS_INLINE_FUNCTION double change_radius(const double newr);
+  KOKKOS_FUNCTION double change_radius(const double newr);
 };
-
-/* -----  ----- TODO: move functions below to .cpp file ----- ----- */
-
-/**
- * @brief Change the radius of droplet.
- *
- * Update droplet radius to larger out of new radius 'newr' or dry radius and return the
- * resultant change in radius = new radius - old radius. Prevents drops shrinking further once
- * they are size of dry radius.
- *
- * @param newr The new radius to set.
- * @return The change in radius.
- */
-KOKKOS_INLINE_FUNCTION
-double SuperdropAttrs::change_radius(const double newr) {
-  const auto oldradius = radius;
-
-  /* if droplets are dry, do not shrink further */
-  const auto dryr = dryradius();
-  radius = Kokkos::fmax(newr, dryr);  // Kokkos equivalent to std::max() for floats (gpu compatible)
-
-  /* return change in radius due to growth/shrinking of droplet */
-  return radius - oldradius;
-}
-
-/**
- * @brief Get the total droplet mass.
- *
- * Calculates and returns total droplet mass = water + dry areosol.
- *
- * @return The total droplet mass.
- */
-KOKKOS_INLINE_FUNCTION
-double SuperdropAttrs::mass() const {
-  constexpr double massconst(4.0 / 3.0 * Kokkos::numbers::pi * dlc::Rho_l);  // 4/3 * pi * density
-  const auto density_factor = double{1.0 - dlc::Rho_l / solute.rho_sol()};   // to account for msol
-
-  auto mass = double{msol * density_factor};  // mass contribution of solute
-  mass += massconst * rcubed();
-
-  return mass;
-}
 
 #endif  // LIBS_SUPERDROPS_SUPERDROP_ATTRS_HPP_
