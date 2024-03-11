@@ -30,9 +30,9 @@
 #include <Kokkos_Core.hpp>
 
 #include "./collisions.hpp"
-#include "./microphysicalprocess.hpp"
-#include "./nullsuperdrops.hpp"
-#include "./superdrop.hpp"
+#include "../microphysicalprocess.hpp"
+#include "../nullsuperdrops.hpp"
+#include "../superdrop.hpp"
 
 struct DoCoalescence {
  private:
