@@ -1,38 +1,39 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: collisions.hpp
- * Project: superdrops
+ * Project: collisionprobs
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 21st December 2023
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct for modelling collision
- * microphysical processes in SDM
- * e.g. collision-coalescence
+ * struct for modelling collision microphysical processes in SDM e.g. collision-coalescence
  */
 
-#ifndef LIBS_SUPERDROPS_COLLISIONS_HPP_
-#define LIBS_SUPERDROPS_COLLISIONS_HPP_
+
+#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_COLLISIONS_HPP_
+#define LIBS_SUPERDROPS_COLLISIONPROBS_COLLISIONS_HPP_
 
 #include <concepts>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 
-#include "../cleoconstants.hpp"
-#include "./kokkosaliases_sd.hpp"
-#include "./nullsuperdrops.hpp"
-#include "./state.hpp"
-#include "./superdrop.hpp"
-#include "./urbg.hpp"
+#include "../../cleoconstants.hpp"
+#include "../kokkosaliases_sd.hpp"
+#include "../nullsuperdrops.hpp"
+#include "../state.hpp"
+#include "../superdrop.hpp"
+#include "../urbg.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -196,4 +197,4 @@ struct DoCollisions {
   }
 };
 
-#endif  // LIBS_SUPERDROPS_COLLISIONS_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_COLLISIONS_HPP_
