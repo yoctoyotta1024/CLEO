@@ -23,7 +23,7 @@ module load nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build/
+path2build=${HOME}/CLEO/build4/
 configfile=${path2CLEO}/examples/rainshaft1d/src/config/rain1d_config.txt
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
