@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: hydrodynamicprob.hpp
@@ -7,17 +9,17 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Probability of some kind of collision  event
- * between two (real) droplets using the
- * hydrodynamic (i.e. gravitational) kernel
+ * Probability of some kind of collision  event between two (real) droplets
+ * using the hydrodynamic (i.e. gravitational) kernel
  */
+
 
 #ifndef LIBS_SUPERDROPS_COLLISIONPROBS_HYDRODYNAMICPROB_HPP_
 #define LIBS_SUPERDROPS_COLLISIONPROBS_HYDRODYNAMICPROB_HPP_
@@ -48,7 +50,7 @@ struct HydrodynamicProb {
   given the efficiency factor eff = eff(drop1, drop2), for
   example as expressed in equation 11 of Simmel at al. 2002 for
   collision-coalescence */
-  KOKKOS_INLINE_FUNCTION
+  KOKKOS_FUNCTION
   double operator()(const Superdrop &drop1, const Superdrop &drop2, const double eff,
                     const double DELT, const double VOLUME) const {
     /* time interval / volume for which
@@ -67,7 +69,5 @@ struct HydrodynamicProb {
     return prob_jk;
   }
 };
-
-/* -----  ----- TODO: move functions below to .cpp file ----- ----- */
 
 #endif  // LIBS_SUPERDROPS_COLLISIONPROBS_HYDRODYNAMICPROB_HPP_
