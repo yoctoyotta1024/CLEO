@@ -130,5 +130,3 @@ KOKKOS_FUNCTION unsigned int TSCoalBuReFlag::coalescence_or_breakup(const Superd
     return 2;   // breakup
   }
 }
-
-#endif   // LIBS_SUPERDROPS_COALBURE_FLAG_HPP_

@@ -43,7 +43,7 @@ defined on the faces of a gridbox at {lower, upper} [X] bounds,
 return wind at [X] coord. Method is 'simple' linear interpolation
 from Grabowski et al. (2018). coord use in interpolation is
 limited to lower_bound <= coord <= upper_bound. */
-KOKKOS_INLINE_FUNCTION
+KOKKOS_FUNCTION
 double interpolation(const Kokkos::pair<double, double> bounds,
                      const Kokkos::pair<double, double> vel, const double sdcoord);
 
