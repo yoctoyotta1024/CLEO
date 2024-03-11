@@ -26,9 +26,9 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "../collisionkinetics.hpp"
-#include "../superdrop.hpp"
+#include "./collisionkinetics.hpp"
 #include "./longhydroprob.hpp"
+#include "../superdrop.hpp"
 
 /* Probability of collision-coalescence of a pair of
 droplets as formulated in Shima et al. 2009 equation 3,

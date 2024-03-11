@@ -1,13 +1,15 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: coalbure.hpp
- * Project: superdrops
+ * Project: collisionprobs
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 15th January 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,8 +23,9 @@
  * concept used in Collisions struct
  */
 
-#ifndef LIBS_SUPERDROPS_COALBURE_HPP_
-#define LIBS_SUPERDROPS_COALBURE_HPP_
+
+#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_COALBURE_HPP_
+#define LIBS_SUPERDROPS_COLLISIONPROBS_COALBURE_HPP_
 
 #include <concepts>
 #include <functional>
@@ -35,8 +38,8 @@
 #include "./coalescence.hpp"
 #include "./collisionkinetics.hpp"
 #include "./collisions.hpp"
-#include "./microphysicalprocess.hpp"
-#include "./superdrop.hpp"
+#include "../microphysicalprocess.hpp"
+#include "../superdrop.hpp"
 
 /* ie. DoCoalescenceBreakupRebound */
 template <NFragments NFrags, CoalBuReFlag Flag>
@@ -136,4 +139,4 @@ KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::coalesce_breakup_or_rebound(const
   return is_null;
 }
 
-#endif  // LIBS_SUPERDROPS_COALBURE_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONPROBS_COALBURE_HPP_

@@ -3,12 +3,12 @@
  *
  * ----- CLEO -----
  * File: collisionkinetics.cpp
- * Project: superdrops
+ * Project: collisionprobs
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
