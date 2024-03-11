@@ -19,7 +19,7 @@ set(SOURCES
   "impliciteuler.cpp"
   "state.cpp"
   "superdrop_attrs.cpp"
-  # "terminalvelocity.cpp"
+  "terminalvelocity.cpp"
   "thermodynamic_equations.cpp"
 )
 
