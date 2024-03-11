@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: coalescence.cpp
- * Project: superdrops
+ * Project: collisionprobs
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -21,6 +21,7 @@
  * Coalescence struct satisfies PairEnactX concept
  * used in Collisions struct
  */
+
 
 #include "./coalescence.hpp"
 

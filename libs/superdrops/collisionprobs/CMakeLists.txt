@@ -12,6 +12,9 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
+  "coalbure_flag.cpp"
+  "coalescence.cpp"
+  "collisionkinetics.cpp"
   "golovinprob.cpp"
   "longhydroprob.cpp"
   "lowlistprob.cpp"

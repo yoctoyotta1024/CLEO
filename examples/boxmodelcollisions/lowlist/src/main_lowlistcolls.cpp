@@ -49,7 +49,7 @@
 #include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "superdrops/coalescence.hpp"
+#include "superdrops/collisionprobs/coalescence.hpp"
 #include "superdrops/collisionprobs/lowlistprob.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"

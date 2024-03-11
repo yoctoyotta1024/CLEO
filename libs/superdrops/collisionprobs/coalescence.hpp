@@ -3,7 +3,7 @@
  *
  * ----- CLEO -----
  * File: coalescence.hpp
- * Project: superdrops
+ * Project: collisionprobs
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -21,8 +21,8 @@
  * used in Collisions struct
  */
 
-#ifndef LIBS_SUPERDROPS_COALESCENCE_HPP_
-#define LIBS_SUPERDROPS_COALESCENCE_HPP_
+#ifndef LIBS_SUPERDROPS_COLLISIONPROBS_COALESCENCE_HPP_
+#define LIBS_SUPERDROPS_COLLISIONPROBS_COALESCENCE_HPP_
 
 #include <cassert>
 #include <functional>
@@ -82,4 +82,4 @@ inline MicrophysicalProcess auto CollCoal(const unsigned int interval,
   return ConstTstepMicrophysics(interval, colls);
 }
 
-#endif   // LIBS_SUPERDROPS_COALESCENCE_HPP_
+#endif   // LIBS_SUPERDROPS_COLLISIONPROBS_COALESCENCE_HPP_
