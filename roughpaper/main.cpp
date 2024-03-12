@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
     auto data = observer();
 
     // output data to zarr arrays via buffer
-    zarr.write_array(data);
+    zarr.write_array(data.view_host());
   }
   Kokkos::finalize();
 }
