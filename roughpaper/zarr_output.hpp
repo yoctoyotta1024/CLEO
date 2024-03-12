@@ -35,10 +35,10 @@ struct Buffer{
   std::array<double, 10> array;
 
  public:
-  void write_to_buffer(const dualview_type data) {
+  void write_to_buffer(const dualview_type::t_host h_data) {
     std::cout << "buffer fill: " << fill << "\n";
     std::cout << "buffer max: " << array.size() << "\n";
-    std::cout << "data to add: " << data.extent(0) << "\n";
+    std::cout << "data to add: " << h_data.extent(0) << "\n";
   }
 };
 
@@ -52,9 +52,9 @@ class ZarrArrayViaBuffer {
     std::cout << "flushing buffer to output\n";
   };
 
-  void write_array(const dualview_type data) {
+  void write_array(const dualview_type::t_host h_data) {
     std::cout << "writing data to buffer / output\n";
-    buffer.write_to_buffer(data);
+    buffer.write_to_buffer(h_data);
   };
 };
 
