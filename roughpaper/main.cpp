@@ -48,7 +48,7 @@ dualview_type observer() {
 int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
-    auto zarr = ZarrArrayViaBuffer();
+    auto zarr = ZarrArrayViaBuffer(8);
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
