@@ -20,7 +20,7 @@
  */
 
 #include <iostream>
-#include <array>
+#include <vector>
 
 #include <Kokkos_Core.hpp>
 
@@ -32,14 +32,14 @@ int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
     // arrays of data returned by observer (maybe on device)
-    auto data1 = std::array<double, 100>{};
-    data1.fill(1.1);
+    auto data1 = std::vector<double>(100, 1.1);
+    auto data2 = std::vector<double>(1000, 22.22);
+    auto data3 = std::vector<double>(5000, 333.333);
 
-    auto data2 = std::array<double, 1000>{};
-    data2.fill(10.0);
-
-    auto data3 = std::array<double, 5000>{};
-    data3.fill(222.222);
+    // output data to zarr arrays via buffer
+    zarr.write_array(data1);
+    zarr.write_array(data2);
+    zarr.write_array(data3);
   }
   Kokkos::finalize();
 }

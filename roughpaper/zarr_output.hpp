@@ -21,6 +21,9 @@
 #ifndef ROUGHPAPER_ZARR_OUTPUT_HPP_
 #define ROUGHPAPER_ZARR_OUTPUT_HPP_
 
+#include <iostream>
+#include <vector>
+
 #include <Kokkos_Core.hpp>
 
 class ZarrArrayViaBuffer {
@@ -28,6 +31,15 @@ class ZarrArrayViaBuffer {
   std::array<double, 1000> buffer;
 
   ZarrArrayViaBuffer() : buffer{} {};
+
+  ~ZarrArrayViaBuffer() {
+    std::cout << "flushing buffer to output\n";
+  };
+
+  void write_array(const std::vector<double> &data) {
+    std::cout << "writing data to buffer / output\n";
+    std::cout << "size: " << data.size() << "\n";
+  };
 };
 
 #endif    // ROUGHPAPER_ZARR_OUTPUT_HPP_
