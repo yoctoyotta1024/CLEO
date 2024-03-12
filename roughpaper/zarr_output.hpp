@@ -36,22 +36,30 @@ using subview_type = Kokkos::Subview<dualview_type::t_host, kkpair_size_t>;  // 
 struct Buffer{
  private:
   size_t fill;
-  std::array<double, 2> array;
+  std::array<double, 8> array;
 
  public:
     subview_type write_to_buffer(const dualview_type::t_host h_data) {
       std::cout << "buffer fill: " << fill << "\n";
       std::cout << "buffer max: " << array.size() << "\n";
-      std::cout << "data to add: " << h_data.extent(0) << "\n";
 
       const auto space = size_t{array.size() - fill};
+      const auto to_buffer = Kokkos::fmin(space, h_data.extent(0));
+
       std::cout << "buffer space: " << space << "\n";
-      // TODO(CB): copy "space" elements from h_data to buffer
+      std::cout << "copy to buffer: " << to_buffer << "\n";
 
-      const auto leftover = Kokkos::fmin(space, h_data.extent(0));
-      kkpair_size_t refs = {space, ??};
+      for (size_t jj = fill; jj < fill+to_buffer; ++jj) {
+        array.at(jj) = h_data(jj);
+      }
+      fill = fill + to_buffer;
 
-      return h_data;
+      kkpair_size_t refs = {to_buffer, h_data.extent(0)};
+
+      std::cout << "refs: " << to_buffer << ", " << h_data.extent(0)<< "\n";
+      std::cout << "buffer fill : " << fill << "\n";
+
+      return Kokkos::subview(h_data, refs);
     }
 };
 
@@ -67,7 +75,12 @@ class ZarrArrayViaBuffer {
 
   void write_array(const dualview_type::t_host h_data) {
     std::cout << "writing data to buffer / output\n";
-    buffer.write_to_buffer(h_data);
+
+    std::cout << "initial data to add: " << h_data.extent(0) << "\n";
+
+    const auto h_data_left = buffer.write_to_buffer(h_data);
+
+    std::cout << "remaining data: " << h_data_left.extent(0)<< "\n";
   };
 };
 
