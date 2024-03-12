@@ -23,23 +23,38 @@
 #include <vector>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
 
 #include "./zarr_output.hpp"
 
-int main(int argc, char *argv[]) {
-  auto zarr = ZarrArrayViaBuffer();
+dualview_type observer() {
+  auto data = dualview_type("data", 5);
 
+  // initialise data in host view
+  auto h_data = data.view_host();
+  h_data(0) = 1.1;
+  h_data(1) = 2.2;
+  h_data(2) = 3.3;
+  h_data(3) = 4.4;
+  h_data(4) = 5.5;
+  data.modify_host();
+
+  // match device data with host
+  data.sync_device();
+
+  return data;
+}
+
+int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
+    auto zarr = ZarrArrayViaBuffer();
+
     // arrays of data returned by observer (maybe on device)
-    auto data1 = std::vector<double>(100, 1.1);
-    auto data2 = std::vector<double>(1000, 22.22);
-    auto data3 = std::vector<double>(5000, 333.333);
+    auto data = observer();
 
     // output data to zarr arrays via buffer
-    zarr.write_array(data1);
-    zarr.write_array(data2);
-    zarr.write_array(data3);
+    zarr.write_array(data);
   }
   Kokkos::finalize();
 }

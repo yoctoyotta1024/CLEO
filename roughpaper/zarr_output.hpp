@@ -25,10 +25,26 @@
 #include <vector>
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
+
+using dualview_type = Kokkos::DualView<double *>;             // dual view of doubles
+
+struct Buffer{
+ private:
+  size_t fill;
+  std::array<double, 10> array;
+
+ public:
+  void write_to_buffer(const dualview_type data) {
+    std::cout << "buffer fill: " << fill << "\n";
+    std::cout << "buffer max: " << array.size() << "\n";
+    std::cout << "data to add: " << data.extent(0) << "\n";
+  }
+};
 
 class ZarrArrayViaBuffer {
  public:
-  std::array<double, 1000> buffer;
+  Buffer buffer;
 
   ZarrArrayViaBuffer() : buffer{} {};
 
@@ -36,9 +52,9 @@ class ZarrArrayViaBuffer {
     std::cout << "flushing buffer to output\n";
   };
 
-  void write_array(const std::vector<double> &data) {
+  void write_array(const dualview_type data) {
     std::cout << "writing data to buffer / output\n";
-    std::cout << "size: " << data.size() << "\n";
+    buffer.write_to_buffer(data);
   };
 };
 
