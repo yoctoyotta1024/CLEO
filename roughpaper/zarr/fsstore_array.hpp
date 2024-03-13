@@ -45,7 +45,7 @@ using viewh_buffer = Kokkos::View<double*, HostSpace::memory_space>;   // view f
 
 /* converts vector of strings, e.g. for names of dimensions, into a single list
 written as a string */
-inline std::string vecstr_to_string(const std::vector<std::string> dims) {
+inline std::string vecstr_to_string(const std::vector<std::string> &dims) {
   auto dims_str = std::string{ "[" };
   for (const auto& d : dims) { dims_str += "\"" + d + "\","; }
   dims_str.pop_back();    // delete last ","
@@ -56,7 +56,7 @@ inline std::string vecstr_to_string(const std::vector<std::string> dims) {
 
 /* converts vector of integers, e.g. for shape of chunks and array in zarr_metadata, into a single
 list written as a string */
-inline std::string vec_to_string(const std::vector<size_t> vals) {
+inline std::string vec_to_string(const std::vector<size_t> &vals) {
   auto vals_str = std::string{ "[" };
   for (const auto& v : vals) { vals_str += std::to_string(v) + ", "; }
   vals_str.erase(vals_str.size() - 2);    // delete last ", "
@@ -67,7 +67,7 @@ inline std::string vec_to_string(const std::vector<size_t> vals) {
 
 struct Buffer {
  public:
-  size_t chunksize;
+  const size_t chunksize;
 
   explicit Buffer(const size_t chunksize) : chunksize(chunksize), fill(0),
     buffer("buffer", chunksize) {
@@ -164,12 +164,11 @@ struct ArrayChunks {
     return chunksize;
   }
 
-  /* returns string describing shape of a chunk */
-  std::string get_chunkshape_str() {
-    return vec_to_string(chunkshape);   // TODO(CB) delete
+  std::vector<size_t> get_chunkshape() {
+    return chunkshape;
   }
 
-  void write_chunk(Buffer& buffer) {
+  void write_chunk(Buffer buffer) {
     const auto chunk_str = chunkcount_to_string();
     // buffer.write_buffer_to_chunk(store, name, chunk_str);  // TODO(CB) write buffer chunk
     update_chunks();
@@ -188,37 +187,10 @@ class FSStoreArrayViaBuffer {
   ArrayChunks chunks;             // information about chunks written in FSStore array
   Buffer buffer;                  // buffer for holding data before writing chunks to FSStore array
   std::string_view name;          // name to call variable being stored
-  std::string_view dtype;         // datatype stored in arrays
-  std::string_view compressor;    // compression of data when writing to store
-  std::string_view fill_value;    // fill value for empty datapoints in array
-  std::string_view filters;       // codec configurations for compression
-  const char zarr_format;         // storage spec. version 2
-  const char order;               // layout of bytes in each chunk of array in storage ('C' or 'F')
+  std::string partial_metadata;   // metadata excluding shape required for zarr array
 
   /* make string of metadata for array in zarr store */
   std::string zarr_metadata() {
-    const auto partial_metadata = std::string(   // constant parts of metadata for zarr array
-      "\"chunks\": " +
-      chunks.get_chunkshape_str() +
-      ",\n"
-      "\"dtype\": \"" +
-      std::string(dtype) +
-      "\",\n"
-      "\"order\": \"" +
-      order +
-      "\",\n"
-      "\"compressor\": " +
-      std::string(compressor) +
-      ",\n"
-      "\"fill_value\": " +
-      std::string(fill_value) +
-      ",\n"
-      "\"filters\": " +
-      std::string(filters) +
-      ",\n"
-      "\"zarr_format\": " +
-      zarr_format);    // TODO(CB) move to constructor
-
     const auto metadata = std::string(
       "{\n"
       "\"shape\": " +
@@ -246,6 +218,9 @@ class FSStoreArrayViaBuffer {
       chunks.write_chunk(Kokkos::subview(h_data, refs));
     }
 
+    // update zarry json with new metadata
+    write_zarray_json(store, name, zarr_metadata());
+
     // return remainder of data not written to chunks
     const auto n_to_chunks = nchunks_data * buffer.chunksize;
     const auto refs = kkpair_size_t({ n_to_chunks, h_data.extent(0) });
@@ -255,13 +230,41 @@ class FSStoreArrayViaBuffer {
  public:
   FSStoreArrayViaBuffer(FSStore& store, const std::vector<size_t> &chunkshape,
     const std::string_view name, const std::string_view units, const double scale_factor,
-    const std::string_view dtype, const std::vector<std::string> dims)
-    : store(store), chunks(chunkshape), buffer(chunks.get_chunksize()), name(name), dtype(dtype),
-    compressor("null"), fill_value("null"), filters("null"), zarr_format('2'), order('C') {
+    const std::string_view dtype, const std::vector<std::string>& dims)
+    : store(store), chunks(chunkshape), buffer(chunks.get_chunksize()), name(name) {
     /* number of names of dimensions must match number of chunks' dimensions,
     and size of buffer must match size of an array chunk */
     assert(dims.size() == chunkshape.size());
     assert(buffer.chunksize == chunks.get_chunksize());
+
+    /* make string of zarray metadata for array in zarr store (incomplete because missing shape) */
+    const auto order = 'C';      // layout of bytes in each chunk of array in storage ('C' or 'F')
+    const auto compressor = std::string{ "null" };   // compression of data when writing to store
+    const auto fill_value = std::string{ "null" };   // fill value for empty datapoints in array
+    const auto filters = std::string{ "null" };      // codec configurations for compression
+    const auto zarr_format = '2';                    // storage spec. version 2
+
+    partial_metadata = std::string(
+      "\"chunks\": " +
+      vec_to_string(chunks.get_chunkshape()) +
+      ",\n"
+      "\"dtype\": \"" +
+      std::string(dtype) +  // dtype = datatype stored in arrays e.g. "<f8"
+      "\",\n"
+      "\"order\": \"" +
+      order +
+      "\",\n"
+      "\"compressor\": " +
+      compressor +
+      ",\n"
+      "\"fill_value\": " +
+      fill_value +
+      ",\n"
+      "\"filters\": " +
+      filters +
+      ",\n"
+      "\"zarr_format\": " +
+      zarr_format);
 
     /* make string of zattrs attribute information for array in zarr store */
     const auto arrayattrs = std::string(
