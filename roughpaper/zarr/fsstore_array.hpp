@@ -163,6 +163,62 @@ class FSStoreArrayViaBuffer {
     }
   };
 
+  /* make string of metadata for array in zarr store */
+  std::string_view metadata() {
+    const auto shape_str = "[" + "shape" + "]";
+    const auto chunks_str = "[" + "chunks" + "]";
+
+    const auto metadata = std::string_view(
+      "{\n"
+      "\"shape\": " +
+      shape_str +
+      ",\n"
+      "\"chunks\": " +
+      chunks_str +
+      ",\n"
+      "\"dtype\": \"" +
+      dtype +
+      "\",\n"
+      "\"order\": \"" +
+      order +
+      "\",\n"
+      "\"compressor\": " +
+      compressor +
+      ",\n"
+      "\"fill_value\": " +
+      fill_value +
+      ",\n"
+      "\"filters\": " +
+      filters +
+      ",\n"
+      "\"zarr_format\": " +
+      zarr_format +
+      "\n}");
+    return metadata;
+  }
+
+  /* make string of zattrs attribute information for array in zarr store */
+  std::string_view arrayattrs() {
+    std::ostringstream sfstr;
+    sfstr << std::scientific << scale_factor;
+
+    const auto dims_str = "[" + "dims" + "]";
+
+    const auto arrayattrs  = std::string_view(
+      "{\n"
+      "\"_ARRAY_DIMENSIONS\": " +
+      dims_str +
+      ",\n"
+      "\"units\": " +
+      "\"" + units + "\"" +
+      ",\n"
+      "\"scale_factor\": " +
+      sfstr.str()
+      "\n}");
+
+    return arrayattrs;
+  }
+
   void write_array(const dualview_type::t_host h_data) {
     std::cout << "writing data to buffer / output\n";
 
