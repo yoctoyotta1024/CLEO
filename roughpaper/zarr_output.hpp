@@ -69,7 +69,6 @@ struct Buffer{
   void write_chunk() {
     std::cout << "TODO(CB) write buffer to chunk\n";
     reset_buffer();
-    fill = 0;
   }
 
  private:
@@ -83,6 +82,7 @@ struct Buffer{
         KOKKOS_CLASS_LAMBDA(const size_t &jj) {
           buffer(jj) = std::numeric_limits<double>::max();
         });
+    fill = 0;
   }
 
   /* parallel loop on host to fill buffer from start of empty spaces (i.e. from index "fill")
