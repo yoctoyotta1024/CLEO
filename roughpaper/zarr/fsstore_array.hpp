@@ -189,7 +189,7 @@ class FSStoreArrayViaBuffer {
   subview_type write_chunks_to_store(const subview_type h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
-      const auto chunknum = std::string_view(std::to_string(chunkcount) + ".0");
+      // const auto chunknum = std::string_view(std::to_string(chunkcount) + ".0");
       buffer.write_buffer_to_chunk(store, name, chunknum);
       write_chunk_to_array();
     }
@@ -221,9 +221,9 @@ class FSStoreArrayViaBuffer {
   ~FSStoreArrayViaBuffer() {
     // write buffer to chunk if it isn't empty
     if (buffer.get_space() < buffer.chunksize) {
-      const auto chunknum = std::string_view(std::to_string(chunkcount) + ".0");
+      // const auto chunknum = std::string_view(std::to_string(chunkcount) + ".0");
       buffer.write_buffer_to_chunk(store, name, chunknum);
-      ++chunkcount;
+      write_chunk_to_array();
     }
   };
 
