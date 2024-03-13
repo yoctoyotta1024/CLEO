@@ -146,12 +146,6 @@ class FSStoreArrayViaBuffer {
   size_t ndata;                   // total number of data points in array (= product of shape)
   std::vector<size_t> shape;      // size of array along each dimension
 
-  void write_chunk_to_array() {
-    std::cout << "writing chunk to array \n";
-    write_zarray_json(store, name, zarr_metadata());
-    ++chunkcount;
-  }
-
   /* make string of metadata for array in zarr store */
   std::string zarr_metadata() {
     const auto metadata = std::string(
@@ -183,19 +177,25 @@ class FSStoreArrayViaBuffer {
     return metadata;
   }
 
-  subview_type write_chunks_to_store(const subview_type h_data) {
+  void write_chunk() {
+    std::cout << "writing chunk to array \n";
+    write_zarray_json(store, name, zarr_metadata());
+    ++chunkcount;
+  }
+
+  subview_type write_chunks_in_store(const subview_type h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
       // const auto chunknum = std::string_view(std::to_string(chunkcount) + ".0");
       // buffer.write_buffer_to_chunk(store, name, chunknum);
-      write_chunk_to_array();
+      write_chunk();
     }
 
     // write whole chunks of h_data_remaining
     const auto nchunks_data = size_t{ h_data.extent(0) / buffer.chunksize };
     std::cout << "nchunks from h_data: " << nchunks_data << "\n";
     for (size_t jj = 0; jj < nchunks_data; ++jj) {
-      write_chunk_to_array();
+      write_chunk();
     }
 
     // return remainder of data not written to chunks
@@ -229,6 +229,7 @@ class FSStoreArrayViaBuffer {
       ",\n}");
 
     write_zattrs_json(store, name, arrayattrs);
+    write_zarray_json(store, name, zarr_metadata());
   };
 
   ~FSStoreArrayViaBuffer() {
@@ -240,7 +241,7 @@ class FSStoreArrayViaBuffer {
     }
   };
 
-  void write_array(const dualview_type::t_host h_data) {
+  void write_data_to_zarr_array(const dualview_type::t_host h_data) {
     std::cout << "writing data to buffer / output\n";
 
     std::cout << "buffer size: " << buffer.chunksize << "\n";
@@ -252,7 +253,7 @@ class FSStoreArrayViaBuffer {
     std::cout << "after copy to buffer: " << h_data_rem.extent(0) << "\n";
     std::cout << "buffer space: " << buffer.get_space() << "\n";
 
-    h_data_rem = write_chunks_to_store(h_data_rem);
+    h_data_rem = write_chunks_in_store(h_data_rem);
 
     std::cout << "after writing to chunks: " << h_data_rem.extent(0) << "\n";
     std::cout << "buffer space: " << buffer.get_space() << "\n";
