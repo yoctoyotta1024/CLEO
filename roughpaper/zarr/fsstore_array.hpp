@@ -71,7 +71,7 @@ struct Buffer {
 
   explicit Buffer(const std::vector<size_t> &chunks) : chunksize(1), fill(0),
     buffer("buffer", chunksize) {
-    for (const auto& c : chunks) { chunksize += c; }
+    for (const auto& c : chunks) { chunksize *= c; }
     Kokkos::resize(buffer, chunksize);
     reset_buffer();
   }
@@ -177,25 +177,36 @@ class FSStoreArrayViaBuffer {
     return metadata;
   }
 
-  void write_chunk() {
-    std::cout << "writing chunk to array \n";
+  size_t write_chunk(Buffer& buffer) {
+    const auto chunknum = std::to_string(chunkcount);   //+ ".0"; TODO(CB) deal with multi-D chunks
+    // buffer.write_buffer_to_chunk(store, name, chunknum);  // TODO(CB) write buffer chunk
     write_zarray_json(store, name, zarr_metadata());
     ++chunkcount;
+    return chunkcount;
+  }
+
+  size_t write_chunk(const std::string_view chunknum, const subview_type h_data_chunk) {
+    // write_data_to_chunk(store, name, chunknum, h_data_chunk);   // TODO(CB) write subview chunk
+    write_zarray_json(store, name, zarr_metadata());
+    ++chunkcount;
+    return chunkcount;
   }
 
   subview_type write_chunks_in_store(const subview_type h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
-      // const auto chunknum = std::string_view(std::to_string(chunkcount) + ".0");
-      // buffer.write_buffer_to_chunk(store, name, chunknum);
-      write_chunk();
+      chunkcount = write_chunk(buffer);
     }
 
     // write whole chunks of h_data_remaining
     const auto nchunks_data = size_t{ h_data.extent(0) / buffer.chunksize };
     std::cout << "nchunks from h_data: " << nchunks_data << "\n";
     for (size_t jj = 0; jj < nchunks_data; ++jj) {
-      write_chunk();
+      const auto chunknum = std::to_string(chunkcount);
+      const auto start = size_t{jj * buffer.chunksize};
+      const auto end = size_t{start + buffer.chunksize};
+      const auto refs = kkpair_size_t({ start, end });
+      chunkcount = write_chunk(chunknum, Kokkos::subview(h_data, refs));
     }
 
     // return remainder of data not written to chunks
@@ -235,9 +246,7 @@ class FSStoreArrayViaBuffer {
   ~FSStoreArrayViaBuffer() {
     // write buffer to chunk if it isn't empty
     if (buffer.get_space() < buffer.chunksize) {
-      // const auto chunknum = std::string_view(std::to_string(chunkcount) + ".0");
-      // buffer.write_buffer_to_chunk(store, name, chunknum);
-      write_chunk_to_array();
+      chunkcount = write_chunk(buffer);
     }
   };
 
