@@ -78,7 +78,7 @@ class FSStore {
     // global metadata (optional)
     (*this)[".zattrs"] =
       "{\"creator\": \"Clara Bayley\", "
-      "\"title\": \"Zarr File System Storage for Output Data from CLEO\"}";
+      "\"title\": \"Zarr File System Store for Output Data from CLEO\"}";
   }
 
   StoreAccessor<FSStore> operator[](const std::string_view key) { return { *this, key }; }
