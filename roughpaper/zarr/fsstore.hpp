@@ -112,16 +112,20 @@ inline bool FSStore::write(std::string_view key, std::span<const uint8_t> buffer
   return true;
 }
 
-/* write .zarray and .zattr json files into store for the
-metadata and attributes of an array called 'name' */
-inline void writejsons(FSStore& store, std::string_view name, std::string_view metadata,
-  std::string_view arrayattrs) {
-  // strictly required metadata to decode chunks (MUST)
-  store[name + "/.zarray"] = metadata;
+/* write .zarray json file into store for the metadata of an array called 'name'. This metadata MUST
+exist in order to decode chunks of an array in a Zarr FSStore. */
+inline void write_zarray_json(FSStore& store, std::string_view name,
+  std::string_view zarr_metadata) {
+  store[std::string(name) + "/.zarray"] = zarr_metadata;
+}
 
-  // define dimension names of this array, to make xarray and netCDF happy,
-  // e.g. "{\"_ARRAY_DIMENSIONS\": [\"x\"]}"; (not a MUST, ie. not strictly required, by zarr)
-  store[name + "/.zattrs"] = arrayattrs;
+/* write .zattr json file into store for the attributes of an array or group called 'name'. attrs
+is optional, i.e. not strictly required by Zarr storage specification, but can be useful. For
+example attrs can define a group of arrays. Or attrs can define the names of the dimensions of an
+array in order to make xarray and netCDF happy e.g. "{\"_ARRAY_DIMENSIONS\": [\"x\"]}"; */
+inline void write_zattrs_json(FSStore& store, std::string_view name, std::string_view attrs) {
+  std::cout << attrs << "\n";
+  store[std::string(name) + "/.zattrs"] = attrs;
 }
 
 #endif   // ROUGHPAPER_ZARR_FSSTORE_HPP_

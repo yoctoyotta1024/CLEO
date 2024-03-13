@@ -153,7 +153,7 @@ class FSStoreArrayViaBuffer {
     fill_value("null"), filters("null"), dtype(dtype), scale_factor(scale_factor),
     zarr_format('2'), order('C'), dims(dims), chunkcount(0), ndata(0),
     shape(std::vector<size_t>(dims.size(), 0)) {
-      arrayattrs();
+      write_zattrs_json(store, name, arrayattrs());
     };
 
   ~FSStoreArrayViaBuffer() {
@@ -166,11 +166,11 @@ class FSStoreArrayViaBuffer {
   };
 
   /* make string of metadata for array in zarr store */
-  std::string_view metadata() {
+  std::string metadata() {
     const auto shape_str = std::string("[" "shape" "]");
     const auto chunks_str = std::string("[" "chunks" "]");
 
-    const auto metadata = std::string_view(
+    const auto metadata = std::string(
       "{\n"
       "\"shape\": " +
       shape_str +
@@ -195,18 +195,18 @@ class FSStoreArrayViaBuffer {
       ",\n"
       "\"zarr_format\": " +
       zarr_format +
-      "\n}");
+      ",\n}");
     return metadata;
   }
 
   /* make string of zattrs attribute information for array in zarr store */
-  std::string_view arrayattrs() {
+  std::string arrayattrs() {
     std::ostringstream sfstr;
     sfstr << std::scientific << scale_factor;
 
     const auto dims_str = std::string("[" "dims" "]");
 
-    const auto arrayattrs  = std::string_view(
+    const auto arrayattrs  = std::string(
       "{\n"
       "\"_ARRAY_DIMENSIONS\": " +
       dims_str +
@@ -216,7 +216,7 @@ class FSStoreArrayViaBuffer {
       ",\n"
       "\"scale_factor\": " +
       sfstr.str() +
-      "\n}");
+      ",\n}");
 
     return arrayattrs;
   }
