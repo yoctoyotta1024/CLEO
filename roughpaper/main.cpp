@@ -48,18 +48,17 @@ dualview_type observer() {
 int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
-    const auto chunks = std::vector<size_t>({8});
-    const auto dims = std::vector<std::string>({ "sdId"});
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/");
     auto store = FSStore(basedir);
-    auto zarr = FSStoreArrayViaBuffer(store, chunks, "radius", "micro-m",
-      10.0, "<f8", dims);
+
+    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({8}), "radius", "micro-m", 10.0,
+      "<f8", std::vector<std::string>({ "sdId" }));
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
 
     // output data to zarr arrays via buffer
-    zarr.write_array(data.view_host());
+    zarr.write_data_to_zarr_array(data.view_host());
     std::cout << "--\n";
   }
   Kokkos::finalize();
