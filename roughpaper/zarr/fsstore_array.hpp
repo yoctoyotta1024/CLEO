@@ -94,10 +94,11 @@ struct Buffer {
     return Kokkos::subview(h_data, refs);
   }
 
-  /* write out data from buffer to chunk called "chunknum" in an array called "name" in a (zarr)
+  /* write out data from buffer to chunk called "chunk_str" in an array called "name" in a (zarr)
   file system store. Then reset buffer. */
-  void write_buffer_to_chunk(FSStore& store, std::string_view name, std::string_view chunknum) {
-    // store[name + "/" + chunknum].operator= <T>(buffer);
+  void write_buffer_to_chunk(FSStore& store, std::string_view name, std::string_view chunk_str) {
+    std::cout << "--> writing buffer to chunk: " << chunk_str << "\n";
+    // store[name + "/" + chunk_str].operator= <T>(buffer); // TODO(CB) write buffer chunk
     reset_buffer();
   }
 
@@ -168,14 +169,15 @@ struct ArrayChunks {
     return chunkshape;
   }
 
-  void write_chunk(Buffer buffer) {
+  void write_chunk(FSStore& store, std::string_view name, Buffer buffer) {
     const auto chunk_str = chunkcount_to_string();
-    // buffer.write_buffer_to_chunk(store, name, chunk_str);  // TODO(CB) write buffer chunk
+    buffer.write_buffer_to_chunk(store, name, chunk_str);
     update_chunks();
   }
 
-  void write_chunk(const subview_type h_data_chunk) {
+  void write_chunk(FSStore& store, std::string_view name, const subview_type h_data_chunk) {
     const auto chunk_str = chunkcount_to_string();
+    std::cout << "--> writing h_data to chunk: " << chunk_str << "\n";
     // write_data_to_chunk(store, name, chunk_str, h_data_chunk);   // TODO(CB) write subview chunk
     update_chunks();
   }
@@ -205,7 +207,7 @@ class FSStoreArrayViaBuffer {
   subview_type write_chunks_in_store(const subview_type h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
-      chunks.write_chunk(buffer);
+      chunks.write_chunk(store, name, buffer);
     }
 
     // write whole chunks of h_data_remaining
@@ -215,7 +217,7 @@ class FSStoreArrayViaBuffer {
       const auto start = size_t{ bb * buffer.chunksize };
       const auto end = size_t{start + buffer.chunksize};
       const auto refs = kkpair_size_t({ start, end });
-      chunks.write_chunk(Kokkos::subview(h_data, refs));
+      chunks.write_chunk(store, name, Kokkos::subview(h_data, refs));
     }
 
     // update zarry json with new metadata
@@ -286,7 +288,7 @@ class FSStoreArrayViaBuffer {
   ~FSStoreArrayViaBuffer() {
     // write buffer to chunk if it isn't empty
     if (buffer.get_space() < buffer.chunksize) {
-      chunks.write_chunk(buffer);
+      chunks.write_chunk(store, name, buffer);
     }
   };
 
