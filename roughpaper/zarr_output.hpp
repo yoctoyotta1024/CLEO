@@ -24,6 +24,7 @@
 #include <iostream>
 #include <limits>
 #include <algorithm>
+#include <cassert>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -147,6 +148,8 @@ class ZarrArrayViaBuffer {
     std::cout << "buffer space: " << buffer.get_space() << "\n";
 
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
+
+    assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
 
     std::cout << "final remaining data: " << h_data_rem.extent(0)<< "\n";
     std::cout << "buffer space: " << buffer.get_space() << "\n";
