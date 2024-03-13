@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 12th March 2024
+ * Last Modified: Wednesday 13th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +25,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
-#include "./zarr_output.hpp"
+#include "./zarr/fsstore_array.hpp"
 
 dualview_type observer() {
   auto data = dualview_type("data", 5);
@@ -48,7 +48,9 @@ dualview_type observer() {
 int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
-    auto zarr = ZarrArrayViaBuffer(8);
+    const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/");
+    auto store = FSStore(basedir);
+    auto zarr = FSStoreArrayViaBuffer(store, 8, "radius", "micro-m", 10.0, "<f8", {"sdId"});
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
