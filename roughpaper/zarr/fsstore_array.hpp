@@ -142,7 +142,7 @@ struct ArrayChunks {
   }
 
   void update_chunks() {
-    for (auto aa = 0; aa < chunkshape.size(); ++aa) {
+    for (size_t aa = 0; aa < chunkshape.size(); ++aa) {
       chunkcount.at(0) += 1;             //+ ".0"; TODO(CB) deal with multi-D chunks
       shape.at(aa) += chunkshape.at(aa);
     }
@@ -175,7 +175,7 @@ struct ArrayChunks {
     update_chunks();
   }
 
-  void write_chunk(const std::string_view chunknum, const subview_type h_data_chunk) {
+  void write_chunk(const subview_type h_data_chunk) {
     const auto chunk_str = chunkcount_to_string();
     // write_data_to_chunk(store, name, chunk_str, h_data_chunk);   // TODO(CB) write subview chunk
     update_chunks();
@@ -223,7 +223,7 @@ class FSStoreArrayViaBuffer {
       "{\n"
       "\"shape\": " +
       vec_to_string(chunks.shape) +
-      ",\n"
+      ",\n" +
       partial_metadata +
       ",\n}");
 
