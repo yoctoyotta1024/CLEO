@@ -48,18 +48,18 @@ written as a string */
 inline std::string vecstr_to_string(const std::vector<std::string> dims) {
   auto dims_str = std::string{ "[" };
   for (const auto& d : dims) { dims_str += "\"" + d + "\","; }
-  dims_str.pop_back();
+  dims_str.pop_back();    // delete last ","
   dims_str += "]";
 
   return dims_str;
 }
 
-/* converts vector of floats, e.g. for shape of chunks and array in zarr_metadata, into a single
+/* converts vector of integers, e.g. for shape of chunks and array in zarr_metadata, into a single
 list written as a string */
 inline std::string vec_to_string(const std::vector<size_t> vals) {
   auto vals_str = std::string{ "[" };
   for (const auto& v : vals) { vals_str += std::to_string(v) + ", "; }
-  vals_str.erase(vals_str.size() - 2);
+  vals_str.erase(vals_str.size() - 2);    // delete last ", "
   vals_str += "]";
 
   return vals_str;
@@ -69,10 +69,8 @@ struct Buffer {
  public:
   size_t chunksize;
 
-  explicit Buffer(const std::vector<size_t> &chunk_shape) : chunksize(1), fill(0),
+  explicit Buffer(const size_t chunksize) : chunksize(chunksize), fill(0),
     buffer("buffer", chunksize) {
-    for (const auto& c : chunk_shape) { chunksize *= c; }
-    Kokkos::resize(buffer, chunksize);
     reset_buffer();
   }
 
@@ -131,18 +129,63 @@ struct Buffer {
 
 
 struct ArrayChunks {
- public:
-  const std::vector<size_t> chunk_shape;   // shape of chunks of array along each dimension
-
-  std::vector<size_t> chunkcount;          // number of chunks of array so far written to store
-  size_t ndata;                            // total number of elements in array (= product of shape)
-  std::vector<size_t> shape;               // size of array along each dimension
  private:
+  const std::vector<size_t> chunkshape;    // shape of chunks of array along each dimension
+
+  /* converts vector of integers for chunkcount into string to use to name a chunk */
+  std::string chunkcount_to_string() {
+    auto chunk_str = std::string{ "" };
+    for (const auto& c : chunkcount) { chunk_str += std::to_string(c) + "."; }
+    chunk_str.pop_back();   // delete last "."
+
+    return chunk_str;
+  }
+
+  void update_chunks() {
+    for (auto aa = 0; aa < chunkshape.size(); ++aa) {
+      chunkcount.at(0) += 1;             //+ ".0"; TODO(CB) deal with multi-D chunks
+      shape.at(aa) += chunkshape.at(aa);
+    }
+  }
+
+ public:
+  std::vector<size_t> chunkcount;          // number of chunks along each dimension written in store
+  std::vector<size_t> shape;               // number of elements in array along each dimension
+
+  explicit ArrayChunks(const std::vector<size_t>& cs) : chunkshape(cs),
+    chunkcount(std::vector<size_t>(cs.size(), 0)),
+    shape(std::vector<size_t>(cs.size(), 0)) {}
+
+  /* returns chunksize, the total number of elements in a chunk, which is the product of the number
+  of elements along each dimension ie. the product of a chunk's shape. */
+  size_t get_chunksize() {
+    auto chunksize = size_t{1};
+    for (const auto& c : chunkshape) { chunksize *= c; }
+    return chunksize;
+  }
+
+  /* returns string describing shape of a chunk */
+  std::string get_chunkshape_str() {
+    return vec_to_string(chunkshape);   // TODO(CB) delete
+  }
+
+  void write_chunk(Buffer& buffer) {
+    const auto chunk_str = chunkcount_to_string();
+    // buffer.write_buffer_to_chunk(store, name, chunk_str);  // TODO(CB) write buffer chunk
+    update_chunks();
+  }
+
+  void write_chunk(const std::string_view chunknum, const subview_type h_data_chunk) {
+    const auto chunk_str = chunkcount_to_string();
+    // write_data_to_chunk(store, name, chunk_str, h_data_chunk);   // TODO(CB) write subview chunk
+    update_chunks();
+  }
 };
 
 class FSStoreArrayViaBuffer {
  private:
   FSStore& store;                 // file system store satisfying zarr store specificaiton v2
+  ArrayChunks chunks;             // information about chunks written in FSStore array
   Buffer buffer;                  // buffer for holding data before writing chunks to FSStore array
   std::string_view name;          // name to call variable being stored
   std::string_view dtype;         // datatype stored in arrays
@@ -154,13 +197,9 @@ class FSStoreArrayViaBuffer {
 
   /* make string of metadata for array in zarr store */
   std::string zarr_metadata() {
-    const auto metadata = std::string(
-      "{\n"
-      "\"shape\": " +
-      vec_to_string(shape) +
-      ",\n"
+    const auto partial_metadata = std::string(   // constant parts of metadata for zarr array
       "\"chunks\": " +
-      vec_to_string(chunk_shape) +
+      chunks.get_chunkshape_str() +
       ",\n"
       "\"dtype\": \"" +
       std::string(dtype) +
@@ -178,51 +217,33 @@ class FSStoreArrayViaBuffer {
       std::string(filters) +
       ",\n"
       "\"zarr_format\": " +
-      zarr_format +
+      zarr_format);    // TODO(CB) move to constructor
+
+    const auto metadata = std::string(
+      "{\n"
+      "\"shape\": " +
+      vec_to_string(chunks.shape) +
+      ",\n"
+      partial_metadata +
       ",\n}");
+
     return metadata;
-  }
-
-  void write_chunk_metadata(const size_t csize) {
-    auto chunk_size = size_t{1};
-    for (const auto& c : chunk_shape) { chunk_size *= c; }
-    assert(csize == chunk_size);
-
-    for (auto aa = 0; aa < chunk_shape.size(); ++aa) {
-      shape.at(aa) += chunk_shape.at(aa);
-    }
-    write_zarray_json(store, name, zarr_metadata());
-
-    ++chunkcount;
-    ndata += chunk_size;
-  }
-
-  void write_chunk(Buffer& buffer) {
-    const auto chunknum = std::to_string(chunkcount);   //+ ".0"; TODO(CB) deal with multi-D chunks
-    // buffer.write_buffer_to_chunk(store, name, chunknum);  // TODO(CB) write buffer chunk
-    write_chunk_metadata(buffer.chunksize);
-  }
-
-  void write_chunk(const std::string_view chunknum, const subview_type h_data_chunk) {
-    // write_data_to_chunk(store, name, chunknum, h_data_chunk);   // TODO(CB) write subview chunk
-    write_chunk_metadata(h_data_chunk.extent(0));
   }
 
   subview_type write_chunks_in_store(const subview_type h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
-      write_chunk(buffer);
+      chunks.write_chunk(buffer);
     }
 
     // write whole chunks of h_data_remaining
     const auto nchunks_data = size_t{ h_data.extent(0) / buffer.chunksize };
     std::cout << "nchunks from h_data: " << nchunks_data << "\n";
     for (size_t bb = 0; bb < nchunks_data; ++bb) {
-      const auto chunknum = std::to_string(chunkcount);
-      const auto start = size_t{bb * buffer.chunksize};
+      const auto start = size_t{ bb * buffer.chunksize };
       const auto end = size_t{start + buffer.chunksize};
       const auto refs = kkpair_size_t({ start, end });
-      write_chunk(chunknum, Kokkos::subview(h_data, refs));
+      chunks.write_chunk(Kokkos::subview(h_data, refs));
     }
 
     // return remainder of data not written to chunks
@@ -232,19 +253,15 @@ class FSStoreArrayViaBuffer {
   }
 
  public:
-  FSStoreArrayViaBuffer(FSStore& store, const std::vector<size_t> &chunk_shape,
+  FSStoreArrayViaBuffer(FSStore& store, const std::vector<size_t> &chunkshape,
     const std::string_view name, const std::string_view units, const double scale_factor,
     const std::string_view dtype, const std::vector<std::string> dims)
-    : store(store), buffer(chunk_shape), name(name), dtype(dtype), compressor("null"),
-    fill_value("null"), filters("null"), chunk_shape(chunk_shape), zarr_format('2'),
-    order('C'), chunkcount(0), ndata(0), shape(std::vector<size_t>(dims.size(), 0)) {
-    /* number of dimensions of chunks must match number of dimensions of array shape and array dims,
-    and size of buffer must match total size of one chunk (product of size along each dimension) */
-    assert(chunks.size() == dims.size());
-    assert(chunks.size() == shape.size());
-    const auto chunk_size = size_t{ 1 };
-    for (const auto& c : chunk_shape) { chunk_size *= c; }
-    assert(buffer.chunksize == chunk_size);
+    : store(store), chunks(chunkshape), buffer(chunks.get_chunksize()), name(name), dtype(dtype),
+    compressor("null"), fill_value("null"), filters("null"), zarr_format('2'), order('C') {
+    /* number of names of dimensions must match number of chunks' dimensions,
+    and size of buffer must match size of an array chunk */
+    assert(dims.size() == chunkshape.size());
+    assert(buffer.chunksize == chunks.get_chunksize());
 
     /* make string of zattrs attribute information for array in zarr store */
     const auto arrayattrs = std::string(
@@ -266,7 +283,7 @@ class FSStoreArrayViaBuffer {
   ~FSStoreArrayViaBuffer() {
     // write buffer to chunk if it isn't empty
     if (buffer.get_space() < buffer.chunksize) {
-      write_chunk(buffer);
+      chunks.write_chunk(buffer);
     }
   };
 
