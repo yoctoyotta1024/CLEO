@@ -134,11 +134,11 @@ class FSStoreArrayViaBuffer {
   FSStore& store;                 // file system store satisfying zarr store specificaiton v2
   Buffer buffer;                  // buffer for holding data before writing chunks to FSStore array
   std::string_view name;          // name to call variable being stored
-  std::string_view chunks_shape;  // shape of chunks of array along each dimension
   std::string_view dtype;         // datatype stored in arrays
   std::string_view compressor;    // compression of data when writing to store
   std::string_view fill_value;    // fill value for empty datapoints in array
   std::string_view filters;       // codec configurations for compression
+  std::string chunks_shape;       // shape of chunks of array along each dimension
   const char zarr_format;         // storage spec. version 2
   const char order;               // layout of bytes in each chunk of array in storage ('C' or 'F')
 
@@ -208,9 +208,9 @@ class FSStoreArrayViaBuffer {
   FSStoreArrayViaBuffer(FSStore& store, const std::vector<size_t> &chunks,
     const std::string_view name, const std::string_view units, const double scale_factor,
     const std::string_view dtype, const std::vector<std::string> dims)
-    : store(store), buffer(chunks), name(name), chunks_shape(vec_to_string(chunks)), dtype(dtype),
-    compressor("null"), fill_value("null"), filters("null"), zarr_format('2'), order('C'),
-    chunkcount(0), ndata(0), shape(std::vector<size_t>(dims.size(), 0)) {
+    : store(store), buffer(chunks), name(name), dtype(dtype), compressor("null"),
+    fill_value("null"), filters("null"), chunks_shape(vec_to_string(chunks)), zarr_format('2'),
+    order('C'), chunkcount(0), ndata(0), shape(std::vector<size_t>(dims.size(), 0)) {
     /* number of dimensions of chunks must match number of dimensions of array */
     assert(chunks.size() == dims.size());
     assert(chunks.size() == shape.size());
