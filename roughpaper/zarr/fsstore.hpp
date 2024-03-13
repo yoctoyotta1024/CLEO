@@ -71,7 +71,7 @@ class FSStore {
  public:
   explicit FSStore(const std::filesystem::path basedir) : basedir(basedir) {
     // initialize a zarr group (i.e. dataset)
-    const std::string zarr_format("2");  // storage spec. version 2
+    const std::string zarr_format("2");   // storage spec. version 2
     const std::string zgroupjson("{\"zarr_format\": " + zarr_format + "}");
     (*this)[".zgroup"] = zgroupjson;
 
@@ -112,4 +112,16 @@ inline bool FSStore::write(std::string_view key, std::span<const uint8_t> buffer
   return true;
 }
 
-#endif  // ROUGHPAPER_ZARR_FSSTORE_HPP_
+/* write .zarray and .zattr json files into store for the
+metadata and attributes of an array called 'name' */
+inline void writejsons(FSStore& store, std::string_view name, std::string_view metadata,
+  std::string_view arrayattrs) {
+  // strictly required metadata to decode chunks (MUST)
+  store[name + "/.zarray"] = metadata;
+
+  // define dimension names of this array, to make xarray and netCDF happy,
+  // e.g. "{\"_ARRAY_DIMENSIONS\": [\"x\"]}"; (not a MUST, ie. not strictly required, by zarr)
+  store[name + "/.zattrs"] = arrayattrs;
+}
+
+#endif   // ROUGHPAPER_ZARR_FSSTORE_HPP_
