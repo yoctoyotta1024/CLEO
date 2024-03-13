@@ -142,6 +142,7 @@ struct ArrayChunks {
     return chunk_str;
   }
 
+  /* update numbers of chunks and shape of array along each dimension */
   void update_chunks(const std::vector<size_t> &chunk_incre) {
     for (size_t aa = 0; aa < chunkshape.size(); ++aa) {
       chunkcount.at(aa) += chunk_incre.at(aa);
@@ -291,6 +292,7 @@ class FSStoreArrayViaBuffer {
     // write buffer to chunk if it isn't empty
     if (buffer.get_space() < buffer.chunksize) {
       chunks.write_chunk(store, name, buffer);
+      write_zarray_json(store, name, zarr_metadata());
     }
   };
 
