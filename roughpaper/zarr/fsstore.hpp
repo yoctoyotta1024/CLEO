@@ -75,7 +75,7 @@ class FSStore {
     const std::string zgroupjson("{\"zarr_format\": " + zarr_format + "}");
     (*this)[".zgroup"] = zgroupjson;
 
-    // global metadata (optional)
+    // global metadata (optional) TODO(CB) use write_zattrs_json func
     (*this)[".zattrs"] =
       "{\"creator\": \"Clara Bayley\", "
       "\"title\": \"Zarr File System Store for Output Data from CLEO\"}";

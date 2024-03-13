@@ -152,7 +152,9 @@ class FSStoreArrayViaBuffer {
     : store(store), buffer(chunksize), name(name), units(units), compressor("null"),
     fill_value("null"), filters("null"), dtype(dtype), scale_factor(scale_factor),
     zarr_format('2'), order('C'), dims(dims), chunkcount(0), ndata(0),
-    shape(std::vector<size_t>(dims.size(), 0)) {};
+    shape(std::vector<size_t>(dims.size(), 0)) {
+      arrayattrs();
+    };
 
   ~FSStoreArrayViaBuffer() {
     // write buffer to chunk if it isn't empty
@@ -165,8 +167,8 @@ class FSStoreArrayViaBuffer {
 
   /* make string of metadata for array in zarr store */
   std::string_view metadata() {
-    const auto shape_str = "[" + "shape" + "]";
-    const auto chunks_str = "[" + "chunks" + "]";
+    const auto shape_str = std::string("[" "shape" "]");
+    const auto chunks_str = std::string("[" "chunks" "]");
 
     const auto metadata = std::string_view(
       "{\n"
@@ -177,19 +179,19 @@ class FSStoreArrayViaBuffer {
       chunks_str +
       ",\n"
       "\"dtype\": \"" +
-      dtype +
+      std::string(dtype) +
       "\",\n"
       "\"order\": \"" +
       order +
       "\",\n"
       "\"compressor\": " +
-      compressor +
+      std::string(compressor) +
       ",\n"
       "\"fill_value\": " +
-      fill_value +
+      std::string(fill_value) +
       ",\n"
       "\"filters\": " +
-      filters +
+      std::string(filters) +
       ",\n"
       "\"zarr_format\": " +
       zarr_format +
@@ -202,7 +204,7 @@ class FSStoreArrayViaBuffer {
     std::ostringstream sfstr;
     sfstr << std::scientific << scale_factor;
 
-    const auto dims_str = "[" + "dims" + "]";
+    const auto dims_str = std::string("[" "dims" "]");
 
     const auto arrayattrs  = std::string_view(
       "{\n"
@@ -210,10 +212,10 @@ class FSStoreArrayViaBuffer {
       dims_str +
       ",\n"
       "\"units\": " +
-      "\"" + units + "\"" +
+      "\"" + std::string(units) + "\"" +
       ",\n"
       "\"scale_factor\": " +
-      sfstr.str()
+      sfstr.str() +
       "\n}");
 
     return arrayattrs;
