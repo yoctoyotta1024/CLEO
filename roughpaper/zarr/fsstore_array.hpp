@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 13th March 2024
+ * Last Modified: Thursday 14th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -142,9 +142,9 @@ struct ArrayChunks {
     return chunk_str;
   }
 
-  void update_chunks() {
+  void update_chunks(const std::vector<size_t> &chunk_incre) {
     for (size_t aa = 0; aa < chunkshape.size(); ++aa) {
-      chunkcount.at(0) += 1;             //+ ".0"; TODO(CB) deal with multi-D chunks
+      chunkcount.at(aa) += chunk_incre.at(aa);
       shape.at(aa) += chunkshape.at(aa);
     }
   }
@@ -169,17 +169,19 @@ struct ArrayChunks {
     return chunkshape;
   }
 
-  void write_chunk(FSStore& store, std::string_view name, Buffer buffer) {
+  void write_chunk(FSStore& store, std::string_view name, Buffer &buffer) {
     const auto chunk_str = chunkcount_to_string();
+    const auto chunk_incre = std::vector<size_t>({1, 0});    // TODO(CB) deal with multi-D chunks
     buffer.write_buffer_to_chunk(store, name, chunk_str);
-    update_chunks();
+    update_chunks(chunk_incre);
   }
 
   void write_chunk(FSStore& store, std::string_view name, const subview_type h_data_chunk) {
     const auto chunk_str = chunkcount_to_string();
+    const auto chunk_incre = std::vector<size_t>({1, 0});    // TODO(CB) deal with multi-D chunks
     std::cout << "--> writing h_data to chunk: " << chunk_str << "\n";
     // write_data_to_chunk(store, name, chunk_str, h_data_chunk);   // TODO(CB) write subview chunk
-    update_chunks();
+    update_chunks(chunk_incre);
   }
 };
 
