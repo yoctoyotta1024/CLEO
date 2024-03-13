@@ -48,8 +48,8 @@ dualview_type observer() {
 int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
-    const auto chunks = std::vector<size_t>({8, 100});
-    const auto dims = std::vector<std::string>({ "sdId", "time" });
+    const auto chunks = std::vector<size_t>({8});
+    const auto dims = std::vector<std::string>({ "sdId"});
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/");
     auto store = FSStore(basedir);
     auto zarr = FSStoreArrayViaBuffer(store, chunks, "radius", "micro-m",
