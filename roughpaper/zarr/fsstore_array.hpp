@@ -47,8 +47,10 @@ struct Buffer {
  public:
   size_t chunksize;
 
-  explicit Buffer(const std::vector<size_t>& chunks) : chunksize(i_chunksize), fill(0),
+  explicit Buffer(const std::vector<size_t>& chunks) : chunksize(1), fill(0),
     buffer("buffer", chunksize) {
+    for (const auto& c : chunks) { chunksize += c; }
+    Kokkos::resize(buffer, chunksize);
     reset_buffer();
   }
 
@@ -128,20 +130,22 @@ class FSStoreArrayViaBuffer {
     ++chunkcount;
   }
 
-  /* converts vector of strings for name of dimensions into a single list written in a string */
-  std::string dims_to_string(const std::vector<std::string> dims) {
+  /* converts vector of strings, e.g. for names of dimensions, into a single list
+  written as a string */
+  std::string strvec_to_string(const std::vector<std::string> dims) {
     auto dims_str = std::string{ "[" };
-    for (auto d : dims) { dims_str += "\"" + d + "\","; }
+    for (const auto &d : dims) { dims_str += "\"" + d + "\","; }
     dims_str.pop_back();
     dims_str += "]";
 
     return dims_str;
   }
 
-  /* converts vector of floats for zarr_metadata into a single list written in a string */
+  /* converts vector of floats, e.g. for shape of chunks and array in zarr_metadata, into a single
+  list written as a string */
   std::string vec_to_string(const std::vector<size_t> vals) {
     auto vals_str = std::string{ "[" };
-    for (auto v : vals) { vals_str += std::to_string(v) + ", "; }
+    for (const auto &v : vals) { vals_str += std::to_string(v) + ", "; }
     vals_str.erase(vals_str.size() - 2);
     vals_str += "]";
 
@@ -156,7 +160,7 @@ class FSStoreArrayViaBuffer {
       vec_to_string(shape) +
       ",\n"
       "\"chunks\": " +
-      vec_to_string(chunks) +
+      std::string(chunks_shape) +
       ",\n"
       "\"dtype\": \"" +
       std::string(dtype) +
