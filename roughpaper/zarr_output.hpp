@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 12th March 2024
+ * Last Modified: Wednesday 13th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,6 @@
 #define ROUGHPAPER_ZARR_OUTPUT_HPP_
 
 #include <iostream>
-#include <vector>
 #include <limits>
 #include <algorithm>
 
@@ -35,25 +34,21 @@ using dualview_type = Kokkos::DualView<double *>;             // dual view of do
 using kkpair_size_t = Kokkos::pair<size_t, size_t>;
 using subview_type = Kokkos::Subview<dualview_type::t_host, kkpair_size_t>;  // subview of host view
 
+using HostSpace = Kokkos::DefaultHostExecutionSpace;
+using viewh_buffer = Kokkos::View<double *, HostSpace::memory_space>;   // view for buffer on host
+
 struct Buffer{
  public:
   size_t chunksize;
 
   explicit Buffer(const size_t i_chunksize) : chunksize(i_chunksize), fill(0),
-                                              buffer(chunksize,
-                                                     std::numeric_limits<double>::max()) {}
+                                              buffer("buffer", chunksize) {
+    reset_buffer();
+  }
 
   /* returns number of spaces in buffer currently not filled with data */
   size_t get_space() {
     return chunksize - fill;
-  }
-
-  /* fills "n_to_copy" empty spaces in buffer with elements from data */
-  void copy_ndata_to_buffer(const size_t n_to_copy, const dualview_type::t_host h_data) {
-    for (size_t jj = fill; jj < fill + n_to_copy; ++jj) {
-      buffer.at(jj) = h_data(jj);
-    }
-    fill = fill + n_to_copy;
   }
 
   /* copies as many as possible elements of data to buffer until either all the data is written to
@@ -73,13 +68,33 @@ struct Buffer{
 
   void write_chunk() {
     std::cout << "TODO(CB) write buffer to chunk\n";
-    buffer.assign(chunksize, std::numeric_limits<double>::max());
+    reset_buffer();
     fill = 0;
   }
 
  private:
   size_t fill;
-  std::vector<double> buffer;
+  viewh_buffer buffer;
+
+  /* parallel loop on host to fill buffer with nan (numerical limit) values */
+  void reset_buffer() {
+    Kokkos::parallel_for(
+        "init_buffer", Kokkos::RangePolicy<HostSpace>(0, chunksize),
+        KOKKOS_CLASS_LAMBDA(const size_t &jj) {
+          buffer(jj) = std::numeric_limits<double>::max();
+        });
+  }
+
+  /* parallel loop on host to fill buffer from start of empty spaces (i.e. from index "fill")
+  with "n_to_copy" elements from data */
+  void copy_ndata_to_buffer(const size_t n_to_copy, const dualview_type::t_host h_data) {
+    Kokkos::parallel_for(
+        "copy_ndata_to_buffer", Kokkos::RangePolicy<HostSpace>(fill, fill + n_to_copy),
+        KOKKOS_CLASS_LAMBDA(const size_t &jj) {
+          buffer(jj) = h_data(jj);
+        });
+    fill = fill + n_to_copy;
+  }
 };
 
 class ZarrArrayViaBuffer {
