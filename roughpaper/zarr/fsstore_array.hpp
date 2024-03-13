@@ -74,6 +74,10 @@ struct Buffer {
     reset_buffer();
   }
 
+  size_t get_fill() {
+    return fill;
+  }
+
   /* returns number of spaces in buffer currently not filled with data */
   size_t get_space() {
     return chunksize - fill;
@@ -132,6 +136,7 @@ struct Buffer {
 struct ArrayChunks {
  private:
   const std::vector<size_t> chunkshape;    // shape of chunks of array along each dimension
+  std::vector<size_t> chunkcount;          // number of chunks along each dimension written in store
 
   /* converts vector of integers for chunkcount into string to use to name a chunk */
   std::string chunkcount_to_string() {
@@ -143,15 +148,15 @@ struct ArrayChunks {
   }
 
   /* update numbers of chunks and shape of array along each dimension */
-  void update_chunks(const std::vector<size_t> &chunk_incre) {
+  void update_chunks(const std::vector<size_t>& shape_incre,
+    const std::vector<size_t>& chunk_incre) {
     for (size_t aa = 0; aa < chunkshape.size(); ++aa) {
       chunkcount.at(aa) += chunk_incre.at(aa);
-      shape.at(aa) += chunkshape.at(aa);
+      shape.at(aa) += shape_incre.at(aa);    // TODO(CB) deal with mulit-D shape increment
     }
   }
 
  public:
-  std::vector<size_t> chunkcount;          // number of chunks along each dimension written in store
   std::vector<size_t> shape;               // number of elements in array along each dimension
 
   explicit ArrayChunks(const std::vector<size_t>& cs) : chunkshape(cs),
@@ -172,17 +177,19 @@ struct ArrayChunks {
 
   void write_chunk(FSStore& store, std::string_view name, Buffer &buffer) {
     const auto chunk_str = chunkcount_to_string();
-    const auto chunk_incre = std::vector<size_t>({1, 0});    // TODO(CB) deal with multi-D chunks
+    const auto chunk_incre = std::vector<size_t>({1});    // TODO(CB) deal with multi-D chunks
+    const auto shape_incre = std::vector<size_t>({buffer.get_fill()});
     buffer.write_buffer_to_chunk(store, name, chunk_str);
-    update_chunks(chunk_incre);
+    update_chunks(shape_incre, chunk_incre);
   }
 
   void write_chunk(FSStore& store, std::string_view name, const subview_type h_data_chunk) {
     const auto chunk_str = chunkcount_to_string();
-    const auto chunk_incre = std::vector<size_t>({1, 0});    // TODO(CB) deal with multi-D chunks
+    const auto chunk_incre = std::vector<size_t>({1});    // TODO(CB) deal with multi-D chunks
+    const auto shape_incre = std::vector<size_t>({h_data_chunk.extent(0)});
     std::cout << "--> writing h_data to chunk: " << chunk_str << "\n";
     // write_data_to_chunk(store, name, chunk_str, h_data_chunk);   // TODO(CB) write subview chunk
-    update_chunks(chunk_incre);
+    update_chunks(shape_incre, chunk_incre);
   }
 };
 
@@ -290,7 +297,7 @@ class FSStoreArrayViaBuffer {
 
   ~FSStoreArrayViaBuffer() {
     // write buffer to chunk if it isn't empty
-    if (buffer.get_space() < buffer.chunksize) {
+    if (buffer.get_fill() > 0) {
       chunks.write_chunk(store, name, buffer);
       write_zarray_json(store, name, zarr_metadata());
     }
