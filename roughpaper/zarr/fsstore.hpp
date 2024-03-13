@@ -124,7 +124,6 @@ is optional, i.e. not strictly required by Zarr storage specification, but can b
 example attrs can define a group of arrays. Or attrs can define the names of the dimensions of an
 array in order to make xarray and netCDF happy e.g. "{\"_ARRAY_DIMENSIONS\": [\"x\"]}"; */
 inline void write_zattrs_json(FSStore& store, std::string_view name, std::string_view attrs) {
-  std::cout << attrs << "\n";
   store[std::string(name) + "/.zattrs"] = attrs;
 }
 

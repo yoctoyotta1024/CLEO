@@ -47,7 +47,7 @@ struct Buffer {
  public:
   size_t chunksize;
 
-  explicit Buffer(const size_t i_chunksize) : chunksize(i_chunksize), fill(0),
+  explicit Buffer(const std::vector<size_t>& chunks) : chunksize(i_chunksize), fill(0),
     buffer("buffer", chunksize) {
     reset_buffer();
   }
@@ -101,7 +101,7 @@ struct Buffer {
       KOKKOS_CLASS_LAMBDA(const size_t & jj) {
       buffer(jj) = h_data(jj);
     });
-    fill = fill + n_to_copy;
+    fill += n_to_copy;
   }
 };
 
@@ -110,38 +110,53 @@ class FSStoreArrayViaBuffer {
   FSStore& store;                 // file system store satisfying zarr store specificaiton v2
   Buffer buffer;                  // buffer for holding data before writing chunks to FSStore array
   std::string_view name;          // name to call variable being stored
-  std::string_view units;         // units of coordinate being stored (for arrayattrs json)
+  std::string_view chunks_shape;  // shape of chunks of array along each dimension
+  std::string_view dtype;         // datatype stored in arrays
   std::string_view compressor;    // compression of data when writing to store
   std::string_view fill_value;    // fill value for empty datapoints in array
   std::string_view filters;       // codec configurations for compression
-  std::string_view dtype;         // datatype stored in arrays
-  const double scale_factor;      // scale_factor of data (for array .zattrs json)
   const char zarr_format;         // storage spec. version 2
   const char order;               // layout of bytes in each chunk of array in storage ('C' or 'F')
-  std::vector<std::string> dims;  // names of each dimension of array
 
   size_t chunkcount;              // number of chunks of array so far written to store
   size_t ndata;                   // total number of data points in array (= product of shape)
   std::vector<size_t> shape;      // size of array along each dimension
 
-  write_chunk_to_array() {
+  void write_chunk_to_array() {
     std::cout << "writing chunk to array \n";
-    write_zarray_json(store, name, zarr_metadata);
+    write_zarray_json(store, name, zarr_metadata());
     ++chunkcount;
   }
 
-  /* make string of metadata for array in zarr store */
-  std::string metadata() {
-    const auto shape_str = std::string("[" "shape" "]");
-    const auto chunks_str = std::string("[" "chunks" "]");
+  /* converts vector of strings for name of dimensions into a single list written in a string */
+  std::string dims_to_string(const std::vector<std::string> dims) {
+    auto dims_str = std::string{ "[" };
+    for (auto d : dims) { dims_str += "\"" + d + "\","; }
+    dims_str.pop_back();
+    dims_str += "]";
 
+    return dims_str;
+  }
+
+  /* converts vector of floats for zarr_metadata into a single list written in a string */
+  std::string vec_to_string(const std::vector<size_t> vals) {
+    auto vals_str = std::string{ "[" };
+    for (auto v : vals) { vals_str += std::to_string(v) + ", "; }
+    vals_str.erase(vals_str.size() - 2);
+    vals_str += "]";
+
+    return vals_str;
+  }
+
+  /* make string of metadata for array in zarr store */
+  std::string zarr_metadata() {
     const auto metadata = std::string(
       "{\n"
       "\"shape\": " +
-      shape_str +
+      vec_to_string(shape) +
       ",\n"
       "\"chunks\": " +
-      chunks_str +
+      vec_to_string(chunks) +
       ",\n"
       "\"dtype\": \"" +
       std::string(dtype) +
@@ -164,33 +179,11 @@ class FSStoreArrayViaBuffer {
     return metadata;
   }
 
-  /* make string of zattrs attribute information for array in zarr store */
-  std::string arrayattrs() {
-    std::ostringstream sfstr;
-    sfstr << std::scientific << scale_factor;
-
-    const auto dims_str = std::string("[" "dims" "]");
-
-    const auto arrayattrs  = std::string(
-      "{\n"
-      "\"_ARRAY_DIMENSIONS\": " +
-      dims_str +
-      ",\n"
-      "\"units\": " +
-      "\"" + std::string(units) + "\"" +
-      ",\n"
-      "\"scale_factor\": " +
-      sfstr.str() +
-      ",\n}");
-
-    return arrayattrs;
-  }
-
   subview_type write_chunks_to_store(const subview_type h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
       // const auto chunknum = std::string_view(std::to_string(chunkcount) + ".0");
-      buffer.write_buffer_to_chunk(store, name, chunknum);
+      // buffer.write_buffer_to_chunk(store, name, chunknum);
       write_chunk_to_array();
     }
 
@@ -208,21 +201,37 @@ class FSStoreArrayViaBuffer {
   }
 
  public:
-  FSStoreArrayViaBuffer(FSStore& store, const size_t chunksize, const std::string_view name,
-    const std::string_view units, const double scale_factor,
+  FSStoreArrayViaBuffer(FSStore& store, const std::vector<size_t> &chunks,
+    const std::string_view name, const std::string_view units, const double scale_factor,
     const std::string_view dtype, const std::vector<std::string> dims)
-    : store(store), buffer(chunksize), name(name), units(units), compressor("null"),
-    fill_value("null"), filters("null"), dtype(dtype), scale_factor(scale_factor),
-    zarr_format('2'), order('C'), dims(dims), chunkcount(0), ndata(0),
-    shape(std::vector<size_t>(dims.size(), 0)) {
-      write_zattrs_json(store, name, arrayattrs());
-    };
+    : store(store), buffer(chunks), name(name), chunks_shape(vec_to_string(chunks)), dtype(dtype),
+    compressor("null"), fill_value("null"), filters("null"), zarr_format('2'), order('C'),
+    chunkcount(0), ndata(0), shape(std::vector<size_t>(dims.size(), 0)) {
+    /* number of dimensions of chunks must match number of dimensions of array */
+    assert(chunks.size() == dims.size());
+    assert(chunks.size() == shape.size());
+
+    /* make string of zattrs attribute information for array in zarr store */
+    const auto arrayattrs = std::string(
+      "{\n"
+      "\"_ARRAY_DIMENSIONS\": " +
+      dims_to_string(dims) +                // names of each dimension of array
+      ",\n"
+      "\"units\": " +
+      "\"" + std::string(units) + "\"" +    // units of coordinate being stored
+      ",\n"
+      "\"scale_factor\": " +
+      std::to_string(scale_factor) +        // scale_factor of data
+      ",\n}");
+
+    write_zattrs_json(store, name, arrayattrs);
+  };
 
   ~FSStoreArrayViaBuffer() {
     // write buffer to chunk if it isn't empty
     if (buffer.get_space() < buffer.chunksize) {
       // const auto chunknum = std::string_view(std::to_string(chunkcount) + ".0");
-      buffer.write_buffer_to_chunk(store, name, chunknum);
+      // buffer.write_buffer_to_chunk(store, name, chunknum);
       write_chunk_to_array();
     }
   };
