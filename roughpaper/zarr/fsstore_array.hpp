@@ -43,11 +43,33 @@ using subview_type = Kokkos::Subview<dualview_type::t_host, kkpair_size_t>;  // 
 using HostSpace = Kokkos::DefaultHostExecutionSpace;
 using viewh_buffer = Kokkos::View<double*, HostSpace::memory_space>;   // view for buffer on host
 
+/* converts vector of strings, e.g. for names of dimensions, into a single list
+written as a string */
+inline std::string vecstr_to_string(const std::vector<std::string> dims) {
+  auto dims_str = std::string{ "[" };
+  for (const auto& d : dims) { dims_str += "\"" + d + "\","; }
+  dims_str.pop_back();
+  dims_str += "]";
+
+  return dims_str;
+}
+
+/* converts vector of floats, e.g. for shape of chunks and array in zarr_metadata, into a single
+list written as a string */
+inline std::string vec_to_string(const std::vector<size_t> vals) {
+  auto vals_str = std::string{ "[" };
+  for (const auto& v : vals) { vals_str += std::to_string(v) + ", "; }
+  vals_str.erase(vals_str.size() - 2);
+  vals_str += "]";
+
+  return vals_str;
+}
+
 struct Buffer {
  public:
   size_t chunksize;
 
-  explicit Buffer(const std::vector<size_t>& chunks) : chunksize(1), fill(0),
+  explicit Buffer(const std::vector<size_t> &chunks) : chunksize(1), fill(0),
     buffer("buffer", chunksize) {
     for (const auto& c : chunks) { chunksize += c; }
     Kokkos::resize(buffer, chunksize);
@@ -130,28 +152,6 @@ class FSStoreArrayViaBuffer {
     ++chunkcount;
   }
 
-  /* converts vector of strings, e.g. for names of dimensions, into a single list
-  written as a string */
-  std::string strvec_to_string(const std::vector<std::string> dims) {
-    auto dims_str = std::string{ "[" };
-    for (const auto &d : dims) { dims_str += "\"" + d + "\","; }
-    dims_str.pop_back();
-    dims_str += "]";
-
-    return dims_str;
-  }
-
-  /* converts vector of floats, e.g. for shape of chunks and array in zarr_metadata, into a single
-  list written as a string */
-  std::string vec_to_string(const std::vector<size_t> vals) {
-    auto vals_str = std::string{ "[" };
-    for (const auto &v : vals) { vals_str += std::to_string(v) + ", "; }
-    vals_str.erase(vals_str.size() - 2);
-    vals_str += "]";
-
-    return vals_str;
-  }
-
   /* make string of metadata for array in zarr store */
   std::string zarr_metadata() {
     const auto metadata = std::string(
@@ -219,7 +219,7 @@ class FSStoreArrayViaBuffer {
     const auto arrayattrs = std::string(
       "{\n"
       "\"_ARRAY_DIMENSIONS\": " +
-      dims_to_string(dims) +                // names of each dimension of array
+      vecstr_to_string(dims) +                // names of each dimension of array
       ",\n"
       "\"units\": " +
       "\"" + std::string(units) + "\"" +    // units of coordinate being stored

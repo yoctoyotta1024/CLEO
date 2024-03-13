@@ -50,7 +50,8 @@ int main(int argc, char *argv[]) {
   {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/");
     auto store = FSStore(basedir);
-    auto zarr = FSStoreArrayViaBuffer(store, 8, "radius", "micro-m", 10.0, "<f8", {"sdId"});
+    auto zarr = FSStoreArrayViaBuffer(store, chunks, "radius", "micro-m",
+      10.0, "<f8", dims);
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
