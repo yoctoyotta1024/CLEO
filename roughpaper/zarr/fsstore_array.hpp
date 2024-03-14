@@ -139,8 +139,9 @@ struct Buffer {
 
 struct ChunkWriter {
  private:
-  std::vector<size_t> chunkcount;          // number of chunks along each dimension written in store
-  std::vector<size_t> arrayshape;          // number of elements in array along each dimension
+  std::vector<size_t> reduced_nchunks;   // final number of chunks along all but outermost dimension
+  std::vector<size_t> chunkcount;        // number of chunks along each dimension written in store
+  std::vector<size_t> arrayshape;        // number of elements in array along each dimension
 
   /* converts vector of integers for chunkcount into string to use to name a chunk */
   std::string chunkcount_to_string() {
@@ -161,8 +162,25 @@ struct ChunkWriter {
   }
 
  public:
-  explicit ChunkWriter(const size_t ndims) : chunkcount(std::vector<size_t>(ndims, 0)),
-    arrayshape(std::vector<size_t>(ndims, 0)) {}
+  ChunkWriter(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
+    : reduced_nchunks(reduced_arrayshape.size(), 0), chunkcount(chunkshape.size(), 0),
+    arrayshape(chunkshape.size(), 0) {
+    /* number of dimensions for number of chunks along all but the outermost (1st) dimension must
+    be one less then number of dimensions of array (and array dimension = chunks dimension) */
+    assert((chunkcount.size() == arrayshape.size()));
+    assert((reduced_nchunks.size() + 1 == arrayshape.size()) &&
+      "dimension of nchunks along all but outermost dimension must be 1 less than array dimension");
+
+    /* shape of chunks along all but outermost (1st) dimension must be completely divisible by
+    array's final shape along that dimension */
+    for (size_t aa = 0; aa < reduced_arrayshape.size(); ++aa) {
+      assert((reduced_arrayshape.at(aa) % chunkshape.at(aa+1) == 0) &&
+        "along all but outermost dimension, arrayshape must be completely divisible by chunkshape");
+      reduced_nchunks.at(aa) = reduced_arrayshape.at(aa) / chunkshape.at(aa+1);
+      std::cout << "dim: " << aa+1 << " : " << reduced_arrayshape.at(aa) << ", " <<
+      chunkshape.at(aa+1) << " = " << reduced_nchunks.at(aa) << "\n";
+    }
+  }
 
   std::string get_arrayshape_str() {
     return vec_to_string(arrayshape);
@@ -192,7 +210,6 @@ class FSStoreArrayViaBuffer {
   Buffer buffer;                   // buffer for holding data before writing chunks to FSStore array
   ChunkWriter chunks;              // information about chunks written in FSStore array
   std::string_view name;           // name to call variable being stored
-  std::vector<size_t> chunkshape;  // shape of chunks of array along each dimension
   std::string partial_metadata;    // metadata excluding shape required for zarr array
 
   /* make string of metadata for array in zarr store */
@@ -243,7 +260,7 @@ class FSStoreArrayViaBuffer {
   * chunks along all but first (outermost) dimension.
   *
   * @param store The FSStore where the array will be stored.
-  * @param chunkshape The shape of individual data chunks.
+  * @param chunkshape The shape of individual data chunks along each dimension.
   * @param reduced_arrayshape The shape of the array along all but the first dimension.
   * @param name The name of the array.
   * @param units The units of the array's coordinates.
@@ -254,15 +271,12 @@ class FSStoreArrayViaBuffer {
   FSStoreArrayViaBuffer(FSStore& store, const std::vector<size_t>& chunkshape,
     const std::string_view name, const std::string_view units, const double scale_factor,
     const std::string_view dtype, const std::vector<std::string>& dims,
-    const std::vector<std::size_t> reduced_arrayshape = std::vector<std::size_t>({}))
-    : store(store), buffer(chunkshape), chunks(dims.size()), name(name), chunkshape(chunkshape) {
-
+    const std::vector<std::size_t>& reduced_arrayshape = std::vector<std::size_t>({}))
+    : store(store), buffer(chunkshape), chunks(chunkshape, reduced_arrayshape), name(name) {
     /* number of names of dimensions must match number of chunks' dimensions
     the number of dimensions of the reduced array's shape + 1 */
     assert((chunkshape.size() == dims.size()) &&
       "number of named dimensions of array must match number dimensinos of chunks");
-    assert((reduced_arrayshape.size() + 1 == dims.size()) &&
-      "along all but the outermost (1st) dimension, the shape of the array must be specified");
 
     /* chunksize according to buffer must match total size of a (shaped) chunk */
     auto chunksize = size_t{1};
@@ -270,14 +284,8 @@ class FSStoreArrayViaBuffer {
     assert((buffer.get_chunksize() == chunksize) &&
       "buffer's chunksize must be consistent with chunk shape");
 
-    /* shape of chunks along all but first dimension must be integer fractions of array's shape */
-    for (size_t aa{0}; aa < reduced_arrayshape.size(); ++aa) {
-      assert((reduced_arrayshape.at(aa) % chunkshape.at(aa+1) == 0) &&
-        "along all but outermost dimension, arrayshape must be completely divisible by chunkshape");
-    }
-
     /* make string of zarray metadata for array in zarr store (incomplete because missing shape) */
-    const auto order = 'C';      // layout of bytes in each chunk of array in storage ('C' or 'F')
+    const auto order = 'C';        // layout of bytes in each chunk of array in storage ('C' or 'F')
     const auto compressor = std::string{ "null" };   // compression of data when writing to store
     const auto fill_value = std::string{ "null" };   // fill value for empty datapoints in array
     const auto filters = std::string{ "null" };      // codec configurations for compression
