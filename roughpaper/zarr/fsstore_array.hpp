@@ -43,6 +43,15 @@ using subview_type = Kokkos::Subview<dualview_type::t_host, kkpair_size_t>;  // 
 using HostSpace = Kokkos::DefaultHostExecutionSpace;
 using viewh_buffer = Kokkos::View<double*, HostSpace::memory_space>;   // view for buffer on host
 
+/* returns product of a vector of size_t numbers */
+inline vec_product(const std::vector<size_t>& vec) {
+  auto value = size_t{1};
+  for (const auto& v : vec) {
+    value *= v;
+  }
+  return value;
+}
+
 /* converts vector of strings, e.g. for names of dimensions, into a single list
 written as a string */
 inline std::string vecstr_to_string(const std::vector<std::string> &dims) {
@@ -50,7 +59,6 @@ inline std::string vecstr_to_string(const std::vector<std::string> &dims) {
   for (const auto& d : dims) { dims_str += "\"" + d + "\","; }
   dims_str.pop_back();    // delete last ","
   dims_str += "]";
-
   return dims_str;
 }
 
@@ -61,7 +69,6 @@ inline std::string vec_to_string(const std::vector<size_t> &vals) {
   for (const auto& v : vals) { vals_str += std::to_string(v) + ", "; }
   vals_str.erase(vals_str.size() - 2);    // delete last ", "
   vals_str += "]";
-
   return vals_str;
 }
 
@@ -93,10 +100,8 @@ struct Buffer {
   }
 
  public:
-  explicit Buffer(const std::vector<size_t>& chunkshape) : chunksize(1), fill(0),
-    buffer("buffer", chunksize) {
-    for (const auto& c : chunkshape) { chunksize *= c; }
-    Kokkos::resize(buffer, chunksize);
+  explicit Buffer(const std::vector<size_t>& chunkshape) : chunksize(vec_product(chunkshape)),
+    fill(0), buffer("buffer", chunksize) {
     reset_buffer();
   }
 
@@ -153,12 +158,10 @@ struct ChunkWriter {
   }
 
   /* update numbers of chunks and shape of array along each dimension */
-  void update_chunks_and_shape(const size_t ndata) {
+  void update_chunkcount_and_shape(std::vector<size_t>& data_shape) {
     for (size_t aa = 0; aa < chunkcount.size(); ++aa) {
-      arrayshape.at(aa+1) += reduced_chunkshape.at(aa);
+      arrayshape.at(aa) += data_shape.at(aa);
     }
-
-    if chunkcount
   }
 
  public:
@@ -184,15 +187,17 @@ struct ChunkWriter {
     return vec_to_string(arrayshape);
   }
 
-  void write_chunk(FSStore& store, std::string_view name, Buffer &buffer) {
+  void write_chunk(FSStore& store, std::string_view name, Buffer &buffer,
+    std::vector<size_t>& data_shape) {
     buffer.write_buffer_to_chunk(store, name, chunkcount_to_string(););
-    update_chunks_and_shape(buffer.get_fill());
+    update_chunkcount_and_arrayshape(data_shape);
   }
 
-  void write_chunk(FSStore& store, std::string_view name, const subview_type h_data_chunk) {
+  void write_chunk(FSStore& store, std::string_view name, const subview_type h_data,
+    std::vector<size_t>& data_shape) {
     std::cout << "--> writing h_data to chunk: " << chunkcount_to_string() << "\n";
     // write_data_to_chunk(store, name, chunkcount_to_string(), h_data_chunk);   // TODO(CB)
-    update_chunks_and_shape(h_data_chunk.extent(0));
+    update_chunkcount_and_arrayshape(data_shape);
   }
 };
 
@@ -271,9 +276,7 @@ class FSStoreArrayViaBuffer {
       "number of named dimensions of array must match number dimensinos of chunks");
 
     /* chunksize according to buffer must match total size of a (shaped) chunk */
-    auto chunksize = size_t{1};
-    for (const auto& c : chunks.get_chunkshape()) { chunksize *= c; }
-    assert((buffer.get_chunksize() == chunksize) &&
+    assert((buffer.get_chunksize() == vec_product(chunks.get_chunkshape())) &&
       "buffer's chunksize must be consistent with chunk shape");
 
     /* make string of zarray metadata for array in zarr store (incomplete because missing shape) */
