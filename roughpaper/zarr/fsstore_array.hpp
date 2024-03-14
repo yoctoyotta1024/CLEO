@@ -259,17 +259,21 @@ class FSStoreArrayViaBuffer {
 
     /* number of names of dimensions must match number of chunks' dimensions
     the number of dimensions of the reduced array's shape + 1 */
-    assert(chunkshape.size() == dims.size());
-    assert(reduced_arrayshape.size() + 1 == dims.size());
+    assert((chunkshape.size() == dims.size()) &&
+      "number of named dimensions of array must match number dimensinos of chunks");
+    assert((reduced_arrayshape.size() + 1 == dims.size()) &&
+      "along all but outermost dimension, the shape of the array must be specified");
 
     /* chunksize according to buffer must match total size of a (shaped) chunk */
     auto chunksize = size_t{1};
     for (const auto& c : chunkshape) { chunksize *= c; }
-    assert(buffer.get_chunksize() == chunksize);
+    assert((buffer.get_chunksize() == chunksize) &&
+      "buffer's chunksize must be consistent with chunk shape");
 
     /* shape of chunks along all but first dimension must be integer fractions of array's shape */
     for (size_t aa{0}; aa < reduced_arrayshape.size(); ++aa) {
-      assert(reduced_arrayshape.at(aa) % chunkshape.at(aa+1) == 0);
+      assert((reduced_arrayshape.at(aa) % chunkshape.at(aa+1) == 0) &&
+        "along all but outermost dimension, arrayshape must be completely divisible by chunkshape");
     }
 
     /* make string of zarray metadata for array in zarr store (incomplete because missing shape) */
