@@ -52,9 +52,12 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/");
     auto store = FSStore(basedir);
 
-    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({ 1, 3 }), "radius",
-      "micro-m", 10.0, "<f8", std::vector<std::string>({"time", "sdId"}),
-      std::vector<size_t>({6}));
+    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({4}), "radius",
+      "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
+
+    // auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({ 1, 6 }), "radius",
+    //   "micro-m", 10.0, "<f8", std::vector<std::string>({"time", "sdId"}),
+    //   std::vector<size_t>({6}));
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
