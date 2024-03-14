@@ -262,7 +262,7 @@ class FSStoreArrayViaBuffer {
     assert((chunkshape.size() == dims.size()) &&
       "number of named dimensions of array must match number dimensinos of chunks");
     assert((reduced_arrayshape.size() + 1 == dims.size()) &&
-      "along all but outermost dimension, the shape of the array must be specified");
+      "along all but the outermost (1st) dimension, the shape of the array must be specified");
 
     /* chunksize according to buffer must match total size of a (shaped) chunk */
     auto chunksize = size_t{1};
