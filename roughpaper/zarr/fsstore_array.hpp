@@ -93,10 +93,8 @@ struct Buffer {
   }
 
  public:
-  explicit Buffer(const std::vector<size_t>& chunkshape) : chunksize(1), fill(0),
+  explicit Buffer(const size_t chunksize) : chunksize(chunksize), fill(0),   // WIP
     buffer("buffer", chunksize) {
-    for (const auto& c : chunkshape) { chunksize *= c; }
-    Kokkos::resize(buffer, chunksize);
     reset_buffer();
   }
 
