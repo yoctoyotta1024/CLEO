@@ -44,7 +44,7 @@ using HostSpace = Kokkos::DefaultHostExecutionSpace;
 using viewh_buffer = Kokkos::View<double*, HostSpace::memory_space>;   // view for buffer on host
 
 /* returns product of a vector of size_t numbers */
-inline vec_product(const std::vector<size_t>& vec) {
+inline size_t vec_product(const std::vector<size_t>& vec) {
   auto value = size_t{1};
   for (const auto& v : vec) {
     value *= v;
@@ -158,9 +158,9 @@ struct ChunkWriter {
   }
 
   /* update numbers of chunks and shape of array along each dimension */
-  void update_chunkcount_and_shape(std::vector<size_t>& data_shape) {
+  void update_chunkcount_and_arrayshape(const std::vector<size_t>& shape_increment) {
     for (size_t aa = 0; aa < chunkcount.size(); ++aa) {
-      arrayshape.at(aa) += data_shape.at(aa);
+      arrayshape.at(aa) += shape_increment.at(aa);
     }
   }
 
@@ -187,17 +187,17 @@ struct ChunkWriter {
     return vec_to_string(arrayshape);
   }
 
-  void write_chunk(FSStore& store, std::string_view name, Buffer &buffer,
-    std::vector<size_t>& data_shape) {
-    buffer.write_buffer_to_chunk(store, name, chunkcount_to_string(););
-    update_chunkcount_and_arrayshape(data_shape);
+  void write_chunk(FSStore& store, std::string_view name, Buffer& buffer,
+    const std::vector<size_t>& shape) {
+    buffer.write_buffer_to_chunk(store, name, chunkcount_to_string());
+    update_chunkcount_and_arrayshape(shape);
   }
 
   void write_chunk(FSStore& store, std::string_view name, const subview_type h_data,
-    std::vector<size_t>& data_shape) {
+    const std::vector<size_t>& shape) {
     std::cout << "--> writing h_data to chunk: " << chunkcount_to_string() << "\n";
     // write_data_to_chunk(store, name, chunkcount_to_string(), h_data_chunk);   // TODO(CB)
-    update_chunkcount_and_arrayshape(data_shape);
+    update_chunkcount_and_arrayshape(shape);
   }
 };
 
@@ -328,8 +328,12 @@ class FSStoreArrayViaBuffer {
   ~FSStoreArrayViaBuffer() {
     // write buffer to chunk if it isn't empty
     if (buffer.get_fill() > 0) {
-      const auto data_shape != chunks.get_chunkshape();   // TODO(CB)
-      chunks.write_chunk(store, name, buffer, data_shape);
+      const auto chunkshape = chunks.get_chunkshape();
+      auto shape = std::vector<size_t>(chunkshape.begin() + 1, chunkshape.end());
+      assert((buffer.get_fill() % vec_product(shape) == 0) &&
+        "data in buffer should be completely divisible by reduced chunkshape");
+      shape.insert(shape.begin(), buffer.get_fill() / vec_product(shape));
+      chunks.write_chunk(store, name, buffer, shape);
       write_zarray_json(store, name, zarr_metadata());
     }
   };
