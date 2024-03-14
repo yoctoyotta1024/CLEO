@@ -234,16 +234,43 @@ class FSStoreArrayViaBuffer {
   }
 
  public:
-  FSStoreArrayViaBuffer(FSStore& store, const std::vector<size_t> &chunkshape,
+  /**
+  * @brief Writes a zarr array to a specified file system storafe via a buffer.
+  *
+  * Initializes an empty array in the provided FSStore in order to writes chunks of array to the
+  * store via a buffer. The assertions in this constructor ensure chunks are an appropriate size and
+  * shape for the array such that the final array dimensions are exactly integer multiples of its
+  * chunks along all but first (outermost) dimension.
+  *
+  * @param store The FSStore where the array will be stored.
+  * @param chunkshape The shape of individual data chunks.
+  * @param reduced_arrayshape The shape of the array along all but the first dimension.
+  * @param name The name of the array.
+  * @param units The units of the array's coordinates.
+  * @param scale_factor The scale factor of the data.
+  * @param dtype The data type stored in the arrays (e.g., "<f8").
+  * @param dims The names of each dimension of the array.
+  */
+  FSStoreArrayViaBuffer(FSStore& store, const std::vector<size_t>& chunkshape,
     const std::string_view name, const std::string_view units, const double scale_factor,
-    const std::string_view dtype, const std::vector<std::string>& dims)
+    const std::string_view dtype, const std::vector<std::string>& dims,
+    const std::vector<std::size_t> reduced_arrayshape = std::vector<std::size_t>({}))
     : store(store), buffer(chunkshape), chunks(dims.size()), name(name), chunkshape(chunkshape) {
-    /* number of names of dimensions must match number of chunks' dimensions,
-    and chunksize according to buffer must match total size of a (shaped) chunk */
+
+    /* number of names of dimensions must match number of chunks' dimensions
+    the number of dimensions of the reduced array's shape + 1 */
     assert(chunkshape.size() == dims.size());
+    assert(reduced_arrayshape.size() + 1 == dims.size());
+
+    /* chunksize according to buffer must match total size of a (shaped) chunk */
     auto chunksize = size_t{1};
     for (const auto& c : chunkshape) { chunksize *= c; }
     assert(buffer.get_chunksize() == chunksize);
+
+    /* shape of chunks along all but first dimension must be integer fractions of array's shape */
+    for (size_t aa{0}; aa < reduced_arrayshape.size(); ++aa) {
+      assert(reduced_arrayshape.at(aa) % chunkshape.at(aa+1) == 0);
+    }
 
     /* make string of zarray metadata for array in zarr store (incomplete because missing shape) */
     const auto order = 'C';      // layout of bytes in each chunk of array in storage ('C' or 'F')
