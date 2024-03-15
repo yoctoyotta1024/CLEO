@@ -35,13 +35,13 @@
 
 #include "./fsstore.hpp"
 
-using dualview_type = Kokkos::DualView<double*>;             // dual view of doubles
+using dualview_type = Kokkos::DualView<double*>;                             // dual view of doubles
 
 using kkpair_size_t = Kokkos::pair<size_t, size_t>;
 using subview_type = Kokkos::Subview<dualview_type::t_host, kkpair_size_t>;  // subview of host view
 
 using HostSpace = Kokkos::DefaultHostExecutionSpace;
-using viewh_buffer = Kokkos::View<double*, HostSpace::memory_space>;   // view for buffer on host
+using viewh_buffer = Kokkos::View<double*, HostSpace::memory_space>;      // view for buffer on host
 
 /* returns product of a vector of size_t numbers */
 inline size_t vec_product(const std::vector<size_t>& vec) {
@@ -135,9 +135,8 @@ struct Buffer {
 
   /* write out data from buffer to chunk called "chunk_str" in an array called "name" in a (zarr)
   file system store. Then reset buffer. */
-  void write_buffer_to_chunk(FSStore& store, std::string_view name, std::string_view chunk_str) {
-    std::cout << "--> writing buffer to chunk: " << chunk_str << "\n";
-    // store[name + "/" + chunk_str].operator= <T>(buffer); // TODO(CB) write buffer chunk
+  void write_buffer_to_chunk(FSStore& store, std::string_view name, const std::string &chunk_str) {
+    store[std::string(name) + '/' + chunk_str].operator=(buffer);
     reset_buffer();
   }
 };
@@ -252,8 +251,8 @@ struct ChunkWriter {
   void write_chunk(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const subview_type h_data_chunk,
     const std::vector<size_t>& shape) {
-    std::cout << "--> writing h_data to chunk: " << chunkcount_to_string() << "\n";
-    // write_data_to_chunk(store, name, chunkcount_to_string(), h_data_chunk);   // TODO(CB)
+    const auto chunk_str = chunkcount_to_string();
+    store[std::string(name) + '/' + chunk_str].operator=(h_data_chunk);
     update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
   }
 };
