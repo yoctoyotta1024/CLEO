@@ -54,10 +54,10 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/dataset.zarr");
     auto store = FSStore(basedir);
 
-    // auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({12}), "radius",
+    // auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({12}), "radius",
     //   "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
 
-    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({8, 2}), "massmom",
+    auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({8, 2}), "massmom",
       "", 1.0, "<f8", std::vector<std::string>({"time", "gbx"}),
       std::vector<size_t>({2}));
 

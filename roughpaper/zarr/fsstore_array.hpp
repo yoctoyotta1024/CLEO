@@ -35,13 +35,11 @@
 
 #include "./fsstore.hpp"
 
-using dualview_type = Kokkos::DualView<double*>;                             // dual view of doubles
-
+using dualview_type = Kokkos::DualView<double*>;       // dual view of doubles
 using kkpair_size_t = Kokkos::pair<size_t, size_t>;
 using subview_type = Kokkos::Subview<dualview_type::t_host, kkpair_size_t>;  // subview of host view
 
-using HostSpace = Kokkos::DefaultHostExecutionSpace;
-using viewh_buffer = Kokkos::View<double*, HostSpace::memory_space>;      // view for buffer on host
+using HostSpace = Kokkos::DefaultHostExecutionSpace;   // TODO(CB) (re-)move definitions
 
 /* returns product of a vector of size_t numbers */
 inline size_t vec_product(const std::vector<size_t>& vec) {
@@ -72,18 +70,20 @@ inline std::string vec_to_string(const std::vector<size_t> &vals) {
   return vals_str;
 }
 
+template <typename T>
 struct Buffer {
  private:
+  using viewh_buffer = Kokkos::View<T*, HostSpace::memory_space>;
   size_t chunksize;                        // total chunk size = product of shape of chunks
   size_t fill;                             // number of elements of buffer currently filled
-  viewh_buffer buffer;
+  viewh_buffer buffer;                     // view for buffer in host memory
 
   /* parallel loop on host to fill buffer with nan (numerical limit) values */
   void reset_buffer() {
     Kokkos::parallel_for(
       "init_buffer", Kokkos::RangePolicy<HostSpace>(0, chunksize),
       KOKKOS_CLASS_LAMBDA(const size_t & jj) {
-      buffer(jj) = std::numeric_limits<double>::max();
+      buffer(jj) = std::numeric_limits<T>::max();
     });
     fill = 0;
   }
@@ -136,7 +136,7 @@ struct Buffer {
   /* write out data from buffer to chunk called "chunk_str" in an array called "name" in a (zarr)
   file system store. Then reset buffer. */
   void write_buffer_to_chunk(FSStore& store, std::string_view name, const std::string &chunk_str) {
-    store[std::string(name) + '/' + chunk_str].operator=<double>(buffer);
+    store[std::string(name) + '/' + chunk_str].operator=<T>(buffer);
     reset_buffer();
   }
 };
@@ -242,8 +242,9 @@ struct ChunkWriter {
     return metadata;
   }
 
+  template <typename T>
   void write_chunk(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, Buffer& buffer, const std::vector<size_t>& shape) {
+    const std::string_view partial_metadata, Buffer<T>& buffer, const std::vector<size_t>& shape) {
     buffer.write_buffer_to_chunk(store, name, chunkcount_to_string());
     update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
   }
@@ -257,11 +258,12 @@ struct ChunkWriter {
   }
 };
 
+template <typename T>
 class FSStoreArrayViaBuffer {
  private:
   FSStore& store;                  // file system store satisfying zarr store specificaiton v2
   ChunkWriter chunks;              // information about chunks written in FSStore array
-  Buffer buffer;                   // buffer for holding data before writing chunks to FSStore array
+  Buffer<T> buffer;                // buffer for holding data before writing chunks to FSStore array
   std::string_view name;           // name to call variable being stored
   std::string partial_metadata;    // metadata excluding shape required for zarr array
 
