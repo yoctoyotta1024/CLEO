@@ -27,11 +27,12 @@
 
 #include "./zarr/fsstore_array.hpp"
 
-dualview_type observer() {
-  auto data = dualview_type("data", 8);
+using viewh_type = Kokkos::View<double *, HostSpace::memory_space>;  // view of doubles data
+
+viewh_type observer() {
+  auto h_data = viewh_type("data", 8);
 
   // initialise data in host view
-  auto h_data = data.view_host();
   h_data(0) = 1.1;
   h_data(1) = 2.2;
   h_data(2) = 3.3;
@@ -40,12 +41,8 @@ dualview_type observer() {
   h_data(5) = 6.6;
   h_data(6) = 7.7;
   h_data(7) = 8.8;
-  data.modify_host();
 
-  // match device data with host
-  data.sync_device();
-
-  return data;
+  return h_data;
 }
 
 int main(int argc, char *argv[]) {
@@ -54,18 +51,18 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/dataset.zarr");
     auto store = FSStore(basedir);
 
-    // auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({12}), "radius",
-    //   "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
+    auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({12}), "radius",
+      "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
 
-    auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({8, 2}), "massmom",
-      "", 1.0, "<f8", std::vector<std::string>({"time", "gbx"}),
-      std::vector<size_t>({2}));
+    // auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({8, 2}), "massmom",
+    //   "", 1.0, "<f8", std::vector<std::string>({"time", "gbx"}),
+    //   std::vector<size_t>({2}));
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
 
     // output data to zarr arrays via buffer
-    zarr.write_data_to_zarr_array(data.view_host());
+    zarr.write_data_to_zarr_array(data);
     std::cout << "--\n";
   }
   Kokkos::finalize();
