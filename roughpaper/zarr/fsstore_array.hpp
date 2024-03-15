@@ -158,24 +158,30 @@ struct ChunkWriter {
     return chunk_str;
   }
 
+  void update_arrayshape(FSStore& store, const std::string_view name,
+    const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
+    for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
+      arrayshape.at(aa) = reduced_arrayshape.at(aa - 1);
+    }
+    arrayshape.at(0) += shape_increment.at(0);
+    write_zarray_json(store, name, zarr_metadata(partial_metadata));   // update metadata shape
+  }
+
   /* update numbers of chunks and shape of array for 1-D array */
   void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
     const auto ndims = arrayshape.size();
     if (ndims == 1) {
-      arrayshape.at(0) += shape_increment.at(0);
-      write_zarray_json(store, name, zarr_metadata(partial_metadata));   // update metadata shape
-      ++chunkcount.at(0);
+      update_arrayshape(store, name, partial_metadata, shape_increment);
+      chunkcount.back() += 1;
     } else if (ndims == 2) {
       const auto nchunks_dim1 = size_t{(chunkcount.at(1) + 1) * chunkshape.at(1)};
-      if (nchunks_dim1 == reduced_arrayshape.at(0)) {  // dim1 chunk now complete
-        arrayshape.at(1) = reduced_arrayshape.at(0);
-        arrayshape.at(0) += shape_increment.at(0);
-        write_zarray_json(store, name, zarr_metadata(partial_metadata));   // update metadata shape
-        chunkcount.at(1) = 0;
+      if (nchunks_dim1 == reduced_arrayshape.at(0)) {  // chunks along outermost dimension complete
+        update_arrayshape(store, name, partial_metadata, shape_increment);
         ++chunkcount.at(0);
+        chunkcount.at(1) = 0;
       } else {
-        ++chunkcount.at(1);
+        chunkcount.back() += 1;
       }
     }
   }
