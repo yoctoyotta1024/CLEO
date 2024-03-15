@@ -81,13 +81,15 @@ class FSStore {
   explicit FSStore(const std::filesystem::path basedir) : basedir(basedir) {
     // initialize a zarr group (i.e. dataset)
     const std::string zarr_format("2");   // storage spec. version 2
-    const std::string zgroupjson("{\"zarr_format\": " + zarr_format + "}");
+    const std::string zgroupjson("{\n  \"zarr_format\": " + zarr_format + "\n}");
     (*this)[".zgroup"] = zgroupjson;
 
     // global metadata (optional)
     (*this)[".zattrs"] =
-      "{\"creator\": \"Clara Bayley\", "
-      "\"title\": \"Zarr File System Store for Output Data from CLEO\"}";
+      "{\n"
+      "  \"creator\": \"Clara Bayley\",\n"
+      "  \"title\": \"Zarr File System Store for Output Data from CLEO\""
+      "\n}";
   }
 
   StoreAccessor<FSStore> operator[](const std::string_view key) { return { *this, key }; }

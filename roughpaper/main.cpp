@@ -49,7 +49,7 @@ dualview_type observer() {
 int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
-    const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/");
+    const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/dataset.zarr");
     auto store = FSStore(basedir);
 
     auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({2}), "radius",
