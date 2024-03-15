@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th March 2024
+ * Last Modified: Friday 15th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -144,7 +144,8 @@ struct Buffer {
 
 struct ChunkWriter {
  private:
-  std::vector<size_t> chunkshape;       // shape of chunks along each dimension (constant)
+  const std::vector<size_t> chunkshape;          // shape of chunks along each dimension
+  const std::vector<size_t> reduced_arrayshape;  // shape of array along all but outermost dimension
   std::vector<size_t> chunkcount;       // number of chunks along each dimension written in store
   std::vector<size_t> arrayshape;       // number of elements in array along each dimension in store
 
@@ -157,19 +158,30 @@ struct ChunkWriter {
     return chunk_str;
   }
 
-  /* update numbers of chunks and shape of array along each dimension */
+  /* update numbers of chunks and shape of array for 1-D array */
   void update_chunkcount_and_arrayshape(const std::vector<size_t>& shape_increment) {
-    for (size_t aa = 0; aa < chunkcount.size(); ++aa) {
-      arrayshape.at(aa) += shape_increment.at(aa);
+    const auto ndims = arrayshape.size();
+    if (ndims == 1) {
+      arrayshape.at(0) += shape_increment.at(0);
+      chunkcount.at(0) += 1;
+    } else if (ndims == 2) {
+      if (chunkcount.at(1) == reduced_arrayshape.at(1)) {
+        std::cout << HERE << "\n";
+      }  // at new chunk
     }
   }
 
  public:
   ChunkWriter(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
-    : chunkshape(chunkshape), chunkcount(chunkshape.size(), 0), arrayshape(chunkshape.size(), 0) {
+    : chunkshape(chunkshape), reduced_arrayshape(reduced_arrayshape),
+    chunkcount(chunkshape.size(), 0), arrayshape(chunkshape.size(), 0) {
     /* number of dimensions for number of chunks must match number of dimensions of array */
     assert((chunkshape.size() == arrayshape.size()));
     assert((chunkcount.size() == arrayshape.size()));
+
+    /* number of dimensions of reduced array is 1 less than actual array */
+    assert((reduced_arrayshape.size() + 1 == arrayshape.size()) &&
+      "reduced array 1 less dimension than array (excludes outermost (1st) dimension");
 
     /* Along all but outermost (1st) dimension, the length of a chunk must be completely
     divisible by the array's final length along that dimension in order to ensure good chunking */
