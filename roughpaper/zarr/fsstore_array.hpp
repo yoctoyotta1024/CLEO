@@ -170,39 +170,43 @@ struct ChunkWriter {
     write_zarray_json(store, name, zarr_metadata(partial_metadata));
   }
 
-  /* update numbers of chunks and shape of array for 1-D array */
-  void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
+  /* update numbers of chunks and shape of array for 1-D (1-dimensional) array */
+  void update_chunkcount_and_arrayshape_1dim(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const size_t shape_increment) {
     update_arrayshape(store, name, partial_metadata, shape_increment);
-    chunkcount.back() += 1;
+    chunkcount.at(0) += 1;
   }
 
-  /* update numbers of chunks and shape of array for 2-D array */
-  void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, const std::array<size_t, 2> shape_increment) {
-    const auto nchunks_dim1 = size_t{ (chunkcount.at(1) + 1) * chunkshape.at(1) };
-    if (nchunks_dim1 == reduced_arrayshape.at(0)) {
-      /* 1 column of chunks is complete, start new one and update shape */
-      update_arrayshape(store, name, partial_metadata, shape_increment.at(0));
-      chunkcount.front() += 1;
-      chunkcount.at(1) = 0;
-    } else {
-      chunkcount.back() += 1;
+  /* update numbers of chunks and shape of array for N-D (multi-dimensional) array */
+  void update_chunkcount_and_arrayshape_multidim(FSStore& store, const std::string_view name,
+    const std::string_view partial_metadata, const size_t shape_increment) {
+
+    auto complete_block = false;
+    for (size_t aa = arrayshape.size() - 1; aa > 0; --aa) {
+      /* length of chunks (number of elements in chunks) written along aa'th dimension */
+      const auto chunkslength = size_t{ (chunkcount.at(aa) + 1) * chunkshape.at(aa) };
+      if (chunkslength == reduced_arrayshape.at(aa - 1)) {
+        chunkcount.at(aa - 1) += 1;
+        chunkcount.at(aa) = 0;
+        complete_block = true;
+      } else {
+        chunkcount.at(aa) += 1;
+        complete_block = false;
+      }
+    }
+
+    if (complete_block) {
+      update_arrayshape(store, name, partial_metadata, shape_increment);
     }
   }
 
   /* update numbers of chunks and shape of 1-D or 2-D array */
   void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const std::vector<size_t>& shape) {
-    const auto ndims = arrayshape.size();
-    if (ndims == 1) {
-      const auto shape_increment = size_t{ shape.at(0) };
-      update_chunkcount_and_arrayshape(store, name, partial_metadata, shape_increment);
-    } else if (ndims == 2) {
-      const auto shape_increment = std::array<size_t, 2>({shape.at(0), shape.at(1)});
-      update_chunkcount_and_arrayshape(store, name, partial_metadata, shape_increment);
+    if (arrayshape.size() == 1) {
+      update_chunkcount_and_arrayshape_1dim(store, name, partial_metadata, shape.at(0));
     } else {
-      throw std::invalid_argument("No method provided for updating metadata for > 2-D array");
+      update_chunkcount_and_arrayshape_multidim(store, name, partial_metadata, shape.at(0));
     }
   }
 
@@ -266,7 +270,7 @@ class FSStoreArrayViaBuffer {
   std::string_view name;           // name to call variable being stored
   std::string partial_metadata;    // metadata excluding shape required for zarr array
 
-  subview_type write_chunks_in_store(const subview_type h_data) {
+  subview_type write_chunks_to_store(const subview_type h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
       chunks.write_chunk(store, name, partial_metadata, buffer, chunks.get_chunkshape());
@@ -391,7 +395,7 @@ class FSStoreArrayViaBuffer {
     std::cout << "after copy to buffer: " << h_data_rem.extent(0) << "\n";
     std::cout << "buffer space: " << buffer.get_space() << "\n";
 
-    h_data_rem = write_chunks_in_store(h_data_rem);
+    h_data_rem = write_chunks_to_store(h_data_rem);
 
     std::cout << "after writing to chunks: " << h_data_rem.extent(0) << "\n";
     std::cout << "buffer space: " << buffer.get_space() << "\n";
