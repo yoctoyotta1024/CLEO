@@ -63,7 +63,6 @@ int main(int argc, char *argv[]) {
 
     // output data to zarr arrays via buffer
     zarr.write_data_to_zarr_array(data);
-    std::cout << "--\n";
   }
   Kokkos::finalize();
 }

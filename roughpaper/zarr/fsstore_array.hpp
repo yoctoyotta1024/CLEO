@@ -279,11 +279,9 @@ class FSStoreArrayViaBuffer {
 
     // write whole chunks of h_data_remaining
     const auto nchunks_data = size_t{ h_data.extent(0) / buffer.get_chunksize() };
-    std::cout << "nchunks from h_data: " << nchunks_data << "\n";
-    for (size_t bb = 0; bb < nchunks_data; ++bb) {
-      const auto start = size_t{ bb * buffer.get_chunksize() };
-      const auto end = size_t{start + buffer.get_chunksize()};
-      const auto refs = kkpair_size_t({ start, end });
+    for (size_t nn = 0; nn < nchunks_data; ++nn) {
+      const auto csz = buffer.get_chunksize();
+      const auto refs = kkpair_size_t({ nn * csz, (nn + 1) * csz });
       chunks.write_chunk<T>(store, name, partial_metadata, Kokkos::subview(h_data, refs),
         chunks.get_chunkshape());
     }
@@ -385,28 +383,13 @@ class FSStoreArrayViaBuffer {
   };
 
   void write_data_to_zarr_array(const viewh_buffer h_data) {
-    std::cout << "writing data to buffer / output\n";
-
-    std::cout << "buffer size: " << buffer.get_chunksize() << "\n";
-    std::cout << "buffer space: " << buffer.get_space() << "\n";
-    std::cout << "initial data to add: " << h_data.extent(0) << "\n";
-
     auto h_data_rem = buffer.copy_to_buffer(h_data);
 
-    std::cout << "after copy to buffer: " << h_data_rem.extent(0) << "\n";
-    std::cout << "buffer space: " << buffer.get_space() << "\n";
-
     h_data_rem = write_chunks_to_store(h_data_rem);
-
-    std::cout << "after writing to chunks: " << h_data_rem.extent(0) << "\n";
-    std::cout << "buffer space: " << buffer.get_space() << "\n";
 
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
 
     assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
-
-    std::cout << "final remaining data: " << h_data_rem.extent(0) << "\n";
-    std::cout << "buffer space: " << buffer.get_space() << "\n";
   };
 };
 
