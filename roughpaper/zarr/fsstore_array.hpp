@@ -159,21 +159,23 @@ struct ChunkWriter {
   }
 
   /* update numbers of chunks and shape of array for 1-D array */
-  void update_chunkcount_and_arrayshape(const std::vector<size_t>& shape_increment) {
+  void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
+    const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
     const auto ndims = arrayshape.size();
     if (ndims == 1) {
       arrayshape.at(0) += shape_increment.at(0);
-      chunkcount.at(0) += 1;
+      write_zarray_json(store, name, zarr_metadata(partial_metadata));   // update metadata shape
+      ++chunkcount.at(0);
     } else if (ndims == 2) {
-      if (chunkcount.at(1) < reduced_arrayshape.at(0) * chunkshape.at(1)) {
-        ++chunkcount.at(1);
-        if (chunkcount.at(1) == reduced_arrayshape.at(0) * chunkshape.at(1)) {
-          ++arrayshape.at(1);
-        }
-      } else {
+      const auto nchunks_dim1 = size_t{(chunkcount.at(1) + 1) * chunkshape.at(1)};
+      if (nchunks_dim1 == reduced_arrayshape.at(0)) {  // dim1 chunk now complete
+        arrayshape.at(1) = reduced_arrayshape.at(0);
+        arrayshape.at(0) += shape_increment.at(0);
+        write_zarray_json(store, name, zarr_metadata(partial_metadata));   // update metadata shape
         chunkcount.at(1) = 0;
-        ++arrayshape.at(0);
         ++chunkcount.at(0);
+      } else {
+        ++chunkcount.at(1);
       }
     }
   }
@@ -202,21 +204,31 @@ struct ChunkWriter {
     return chunkshape;
   }
 
-  std::string get_arrayshape_str() {
-    return vec_to_string(arrayshape);
+  /* make string of metadata for array in zarr store */
+  std::string zarr_metadata(const std::string_view partial_metadata) {
+    const auto metadata = std::string(
+      "{\n"
+      "\"shape\": " +
+      vec_to_string(arrayshape) +
+      ",\n" +
+      std::string(partial_metadata) +
+      ",\n}");
+
+    return metadata;
   }
 
-  void write_chunk(FSStore& store, std::string_view name, Buffer& buffer,
-    const std::vector<size_t>& shape) {
+  void write_chunk(FSStore& store, const std::string_view name,
+    const std::string_view partial_metadata, Buffer& buffer, const std::vector<size_t>& shape) {
     buffer.write_buffer_to_chunk(store, name, chunkcount_to_string());
-    update_chunkcount_and_arrayshape(shape);
+    update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
   }
 
-  void write_chunk(FSStore& store, std::string_view name, const subview_type h_data,
+  void write_chunk(FSStore& store, const std::string_view name,
+    const std::string_view partial_metadata, const subview_type h_data_chunk,
     const std::vector<size_t>& shape) {
     std::cout << "--> writing h_data to chunk: " << chunkcount_to_string() << "\n";
     // write_data_to_chunk(store, name, chunkcount_to_string(), h_data_chunk);   // TODO(CB)
-    update_chunkcount_and_arrayshape(shape);
+    update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
   }
 };
 
@@ -228,23 +240,10 @@ class FSStoreArrayViaBuffer {
   std::string_view name;           // name to call variable being stored
   std::string partial_metadata;    // metadata excluding shape required for zarr array
 
-  /* make string of metadata for array in zarr store */
-  std::string zarr_metadata() {
-    const auto metadata = std::string(
-      "{\n"
-      "\"shape\": " +
-      chunks.get_arrayshape_str() +
-      ",\n" +
-      partial_metadata +
-      ",\n}");
-
-    return metadata;
-  }
-
   subview_type write_chunks_in_store(const subview_type h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
-      chunks.write_chunk(store, name, buffer, chunks.get_chunkshape());
+      chunks.write_chunk(store, name, partial_metadata, buffer, chunks.get_chunkshape());
     }
 
     // write whole chunks of h_data_remaining
@@ -254,11 +253,9 @@ class FSStoreArrayViaBuffer {
       const auto start = size_t{ bb * buffer.get_chunksize() };
       const auto end = size_t{start + buffer.get_chunksize()};
       const auto refs = kkpair_size_t({ start, end });
-      chunks.write_chunk(store, name, Kokkos::subview(h_data, refs), chunks.get_chunkshape());
+      chunks.write_chunk(store, name, partial_metadata, Kokkos::subview(h_data, refs),
+        chunks.get_chunkshape());
     }
-
-    // update zarry json with new metadata now chunks have been written
-    write_zarray_json(store, name, zarr_metadata());
 
     // return remainder of data not written to chunks
     const auto n_to_chunks = nchunks_data * buffer.get_chunksize();
@@ -341,7 +338,7 @@ class FSStoreArrayViaBuffer {
       ",\n}");
 
     write_zattrs_json(store, name, arrayattrs);
-    write_zarray_json(store, name, zarr_metadata());
+    write_zarray_json(store, name, chunks.zarr_metadata(partial_metadata));
   };
 
   ~FSStoreArrayViaBuffer() {
@@ -352,8 +349,7 @@ class FSStoreArrayViaBuffer {
       assert((buffer.get_fill() % vec_product(shape) == 0) &&
         "data in buffer should be completely divisible by reduced chunkshape");
       shape.insert(shape.begin(), buffer.get_fill() / vec_product(shape));
-      chunks.write_chunk(store, name, buffer, shape);
-      write_zarray_json(store, name, zarr_metadata());
+      chunks.write_chunk(store, name, partial_metadata, buffer, shape);
     }
   };
 

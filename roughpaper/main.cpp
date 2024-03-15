@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th March 2024
+ * Last Modified: Friday 15th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -52,12 +52,12 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/");
     auto store = FSStore(basedir);
 
-    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({4}), "radius",
-      "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
+    // auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({3}), "radius",
+    //   "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
 
-    // auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({1, 2}), "radius",
-    //   "micro-m", 10.0, "<f8", std::vector<std::string>({"time", "sdId"}),
-    //   std::vector<size_t>({6}));
+    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({1, 2}), "radius",
+      "micro-m", 10.0, "<f8", std::vector<std::string>({"time", "sdId"}),
+      std::vector<size_t>({2}));
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
