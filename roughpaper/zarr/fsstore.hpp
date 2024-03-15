@@ -28,7 +28,7 @@
 #include <fstream>
 #include <iostream>
 
- /* functions for converting types (e.g. vectors of
+ /* functions for converting types (e.g. vectors or Kokkos view's of
  unsigned integers or doubles) into vectors of single bytes to
  write to store under a given key. Store can be anything that
  satisfies the zarr storage specifcaiton version 2 */
@@ -62,9 +62,10 @@ struct StoreAccessor {
 
   /* re-interpret range of memory representing vector of type T as
   a range of memory representing uint8_ts, then write to store */
-  StoreAccessor& operator=(const Kokkos::View<double*, HostSpace::memory_space> buffer) {
+  template <typename T>
+  StoreAccessor& operator=(const Kokkos::View<T*, HostSpace::memory_space> buffer) {
     return operator=(std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()),
-      buffer.extent(0) * sizeof(double)));
+      buffer.extent(0) * sizeof(T)));
   }
 };
 

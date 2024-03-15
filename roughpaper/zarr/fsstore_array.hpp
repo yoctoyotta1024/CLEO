@@ -136,7 +136,7 @@ struct Buffer {
   /* write out data from buffer to chunk called "chunk_str" in an array called "name" in a (zarr)
   file system store. Then reset buffer. */
   void write_buffer_to_chunk(FSStore& store, std::string_view name, const std::string &chunk_str) {
-    store[std::string(name) + '/' + chunk_str].operator=(buffer);
+    store[std::string(name) + '/' + chunk_str].operator=<double>(buffer);
     reset_buffer();
   }
 };
@@ -252,7 +252,7 @@ struct ChunkWriter {
     const std::string_view partial_metadata, const subview_type h_data_chunk,
     const std::vector<size_t>& shape) {
     const auto chunk_str = chunkcount_to_string();
-    store[std::string(name) + '/' + chunk_str].operator=(h_data_chunk);
+    store[std::string(name) + '/' + chunk_str].operator=<double>(h_data_chunk);
     update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
   }
 };
