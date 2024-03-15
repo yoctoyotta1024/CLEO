@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
     // auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({12}), "radius",
     //   "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
 
-    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({3, 2}), "massmom",
+    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({8, 2}), "massmom",
       "", 1.0, "<f8", std::vector<std::string>({"time", "gbx"}),
       std::vector<size_t>({2}));
 
