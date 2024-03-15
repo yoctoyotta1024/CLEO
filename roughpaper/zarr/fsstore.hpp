@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 13th March 2024
+ * Last Modified: Friday 15th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,6 +34,8 @@
  satisfies the zarr storage specifcaiton version 2 */
 template <typename Store>
 struct StoreAccessor {
+  using HostSpace = Kokkos::DefaultHostExecutionSpace;    // TODO(CB) (re-)move definitions
+
   Store& store;
   std::string_view key;
 
@@ -56,6 +58,13 @@ struct StoreAccessor {
   StoreAccessor& operator=(std::span<const T> buffer) {
     return operator=(std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()),
       buffer.size() * sizeof(T)));
+  }
+
+  /* re-interpret range of memory representing vector of type T as
+  a range of memory representing uint8_ts, then write to store */
+  StoreAccessor& operator=(const Kokkos::View<double*, HostSpace::memory_space> buffer) {
+    return operator=(std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()),
+      buffer.extent(0) * sizeof(double)));
   }
 };
 
