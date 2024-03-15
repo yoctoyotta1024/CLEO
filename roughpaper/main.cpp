@@ -28,7 +28,7 @@
 #include "./zarr/fsstore_array.hpp"
 
 dualview_type observer() {
-  auto data = dualview_type("data", 6);
+  auto data = dualview_type("data", 8);
 
   // initialise data in host view
   auto h_data = data.view_host();
@@ -38,6 +38,8 @@ dualview_type observer() {
   h_data(3) = 4.4;
   h_data(4) = 5.5;
   h_data(5) = 6.6;
+  h_data(6) = 7.7;
+  h_data(7) = 8.8;
   data.modify_host();
 
   // match device data with host
@@ -52,12 +54,12 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/dataset.zarr");
     auto store = FSStore(basedir);
 
-    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({2}), "radius",
-      "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
+    // auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({12}), "radius",
+    //   "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
 
-    // auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({4, 2}), "radius",
-    //   "micro-m", 10.0, "<f8", std::vector<std::string>({"time", "sdId"}),
-    //   std::vector<size_t>({2}));
+    auto zarr = FSStoreArrayViaBuffer(store, std::vector<size_t>({3, 2}), "massmom",
+      "", 1.0, "<f8", std::vector<std::string>({"time", "gbx"}),
+      std::vector<size_t>({2}));
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
