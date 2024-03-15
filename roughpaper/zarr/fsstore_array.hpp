@@ -165,9 +165,16 @@ struct ChunkWriter {
       arrayshape.at(0) += shape_increment.at(0);
       chunkcount.at(0) += 1;
     } else if (ndims == 2) {
-      if (chunkcount.at(1) == reduced_arrayshape.at(1)) {
-        std::cout << HERE << "\n";
-      }  // at new chunk
+      if (chunkcount.at(1) < reduced_arrayshape.at(0) * chunkshape.at(1)) {
+        ++chunkcount.at(1);
+        if (chunkcount.at(1) == reduced_arrayshape.at(0) * chunkshape.at(1)) {
+          ++arrayshape.at(1);
+        }
+      } else {
+        chunkcount.at(1) = 0;
+        ++arrayshape.at(0);
+        ++chunkcount.at(0);
+      }
     }
   }
 
