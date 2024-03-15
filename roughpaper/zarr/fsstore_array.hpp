@@ -158,31 +158,50 @@ struct ChunkWriter {
     return chunk_str;
   }
 
+  /* increment shape of outermost dimension of N-Dimensional array and update the array's metadata
+  .zarray json correspondingly. Function should be called only when chunks complete the reduced
+  shape of the array (i.e. all the dimensions of the array except for the outermost) */
   void update_arrayshape(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
     for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
       arrayshape.at(aa) = reduced_arrayshape.at(aa - 1);
     }
     arrayshape.at(0) += shape_increment.at(0);
-    write_zarray_json(store, name, zarr_metadata(partial_metadata));   // update metadata shape
+    write_zarray_json(store, name, zarr_metadata(partial_metadata));
   }
 
   /* update numbers of chunks and shape of array for 1-D array */
+  void update_chunkcount_and_arrayshape_1dim(FSStore& store, const std::string_view name,
+    const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
+    update_arrayshape(store, name, partial_metadata, shape_increment);
+    chunkcount.back() += 1;
+  }
+
+  /* update numbers of chunks and shape of array for 2-D array */
+  void update_chunkcount_and_arrayshape_2dims(FSStore& store, const std::string_view name,
+    const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
+    const auto nchunks_dim1 = size_t{ (chunkcount.at(1) + 1) * chunkshape.at(1) };
+    if (nchunks_dim1 == reduced_arrayshape.at(0)) {
+      /* 1 column of chunks is complete, start new one and update shape */
+      update_arrayshape(store, name, partial_metadata, shape_increment);
+      chunkcount.front() += 1;
+      chunkcount.at(1) = 0;
+    } else {
+      chunkcount.back() += 1;
+    }
+  }
+
+  /* update numbers of chunks and shape of 1-D or 2-D array */
   void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
     const auto ndims = arrayshape.size();
     if (ndims == 1) {
-      update_arrayshape(store, name, partial_metadata, shape_increment);
-      chunkcount.back() += 1;
+      update_chunkcount_and_arrayshape_1dim(store, name, partial_metadata, shape_increment);
     } else if (ndims == 2) {
-      const auto nchunks_dim1 = size_t{(chunkcount.at(1) + 1) * chunkshape.at(1)};
-      if (nchunks_dim1 == reduced_arrayshape.at(0)) {  // chunks along outermost dimension complete
-        update_arrayshape(store, name, partial_metadata, shape_increment);
-        ++chunkcount.at(0);
-        chunkcount.at(1) = 0;
-      } else {
-        chunkcount.back() += 1;
-      }
+      update_chunkcount_and_arrayshape_2dims(store, name, partial_metadata, shape_increment);
+    } else {
+      const std::string("No method provided to update chunkcount for non 1-D or 2-D array")
+      throw std::invalid_argument(err);
     }
   }
 
