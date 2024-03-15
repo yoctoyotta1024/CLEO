@@ -233,11 +233,11 @@ struct ChunkWriter {
   std::string zarr_metadata(const std::string_view partial_metadata) {
     const auto metadata = std::string(
       "{\n"
-      "\"shape\": " +
+      "  \"shape\": " +
       vec_to_string(arrayshape) +
       ",\n" +
       std::string(partial_metadata) +
-      ",\n}");
+      "\n}");
 
     return metadata;
   }
@@ -328,39 +328,39 @@ class FSStoreArrayViaBuffer {
     const auto zarr_format = '2';                    // storage spec. version 2
 
     partial_metadata = std::string(
-      "\"chunks\": " +
+      "  \"chunks\": " +
       vec_to_string(chunkshape) +
       ",\n"
-      "\"dtype\": \"" +
+      "  \"dtype\": \"" +
       std::string(dtype) +  // dtype = datatype stored in arrays e.g. "<f8"
       "\",\n"
-      "\"order\": \"" +
+      "  \"order\": \"" +
       order +
       "\",\n"
-      "\"compressor\": " +
+      "  \"compressor\": " +
       compressor +
       ",\n"
-      "\"fill_value\": " +
+      "  \"fill_value\": " +
       fill_value +
       ",\n"
-      "\"filters\": " +
+      "  \"filters\": " +
       filters +
       ",\n"
-      "\"zarr_format\": " +
+      "  \"zarr_format\": " +
       zarr_format);
 
     /* make string of zattrs attribute information for array in zarr store */
     const auto arrayattrs = std::string(
       "{\n"
-      "\"_ARRAY_DIMENSIONS\": " +
+      "  \"_ARRAY_DIMENSIONS\": " +
       vecstr_to_string(dims) +                // names of each dimension of array
       ",\n"
-      "\"units\": " +
+      "  \"units\": " +
       "\"" + std::string(units) + "\"" +    // units of coordinate being stored
       ",\n"
-      "\"scale_factor\": " +
+      "  \"scale_factor\": " +
       std::to_string(scale_factor) +        // scale_factor of data
-      ",\n}");
+      "\n}");
 
     write_zattrs_json(store, name, arrayattrs);
     write_zarray_json(store, name, chunks.zarr_metadata(partial_metadata));
