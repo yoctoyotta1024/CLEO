@@ -28,6 +28,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <stdexcept>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -35,11 +36,8 @@
 
 #include "./fsstore.hpp"
 
-using dualview_type = Kokkos::DualView<double*>;       // dual view of doubles
-using kkpair_size_t = Kokkos::pair<size_t, size_t>;
-using subview_type = Kokkos::Subview<dualview_type::t_host, kkpair_size_t>;  // subview of host view
-
-using HostSpace = Kokkos::DefaultHostExecutionSpace;   // TODO(CB) (re-)move definitions
+using HostSpace = Kokkos::DefaultHostExecutionSpace;     // TODO(CB) (re-)move definitions
+using kkpair_size_t = Kokkos::pair<size_t, size_t>;      // TODO(CB) (re-)move definitions
 
 /* returns product of a vector of size_t numbers */
 inline size_t vec_product(const std::vector<size_t>& vec) {
@@ -72,8 +70,11 @@ inline std::string vec_to_string(const std::vector<size_t> &vals) {
 
 template <typename T>
 struct Buffer {
+ public:
+  using viewh_buffer = Kokkos::View<T*, HostSpace::memory_space>;     // view of buffer type on host
+  using subviewh_buffer = Kokkos::Subview<viewh_buffer, kkpair_size_t>;  // subview of host view
+
  private:
-  using viewh_buffer = Kokkos::View<T*, HostSpace::memory_space>;
   size_t chunksize;                        // total chunk size = product of shape of chunks
   size_t fill;                             // number of elements of buffer currently filled
   viewh_buffer buffer;                     // view for buffer in host memory
@@ -90,7 +91,7 @@ struct Buffer {
 
   /* parallel loop on host to fill buffer from start of empty spaces (i.e. from index "fill")
   with "n_to_copy" elements from data */
-  void copy_ndata_to_buffer(const size_t n_to_copy, const dualview_type::t_host h_data) {
+  void copy_ndata_to_buffer(const size_t n_to_copy, const viewh_buffer h_data) {
     Kokkos::parallel_for(
       "copy_ndata_to_buffer", Kokkos::RangePolicy<HostSpace>(fill, fill + n_to_copy),
       KOKKOS_CLASS_LAMBDA(const size_t & jj) {
@@ -121,7 +122,7 @@ struct Buffer {
   /* copies as many as possible elements of data to buffer until either all the data is written to
   the buffer, or all the spaces in the buffer are filled. Returns view of remaining data not copied
   to buffer (empty if all the data is copied). */
-  subview_type copy_to_buffer(const dualview_type::t_host h_data) {
+  subviewh_buffer copy_to_buffer(const viewh_buffer h_data) {
     // number of elements of data to copy to buffer
     const auto n_to_copy = size_t{ std::min(get_space(), h_data.extent(0)) };
 
@@ -249,11 +250,12 @@ struct ChunkWriter {
     update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
   }
 
+  template <typename T>
   void write_chunk(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, const subview_type h_data_chunk,
+    const std::string_view partial_metadata, const Buffer<T>::subviewh_buffer h_data_chunk,
     const std::vector<size_t>& shape) {
     const auto chunk_str = chunkcount_to_string();
-    store[std::string(name) + '/' + chunk_str].operator=<double>(h_data_chunk);
+    store[std::string(name) + '/' + chunk_str].operator=<T>(h_data_chunk);
     update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
   }
 };
@@ -261,16 +263,18 @@ struct ChunkWriter {
 template <typename T>
 class FSStoreArrayViaBuffer {
  private:
+  using viewh_buffer = Buffer<T>::viewh_buffer;
+  using subviewh_buffer = Buffer<T>::subviewh_buffer;
   FSStore& store;                  // file system store satisfying zarr store specificaiton v2
   ChunkWriter chunks;              // information about chunks written in FSStore array
   Buffer<T> buffer;                // buffer for holding data before writing chunks to FSStore array
   std::string_view name;           // name to call variable being stored
   std::string partial_metadata;    // metadata excluding shape required for zarr array
 
-  subview_type write_chunks_to_store(const subview_type h_data) {
+  subviewh_buffer write_chunks_to_store(const subviewh_buffer h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
-      chunks.write_chunk(store, name, partial_metadata, buffer, chunks.get_chunkshape());
+      chunks.write_chunk<T>(store, name, partial_metadata, buffer, chunks.get_chunkshape());
     }
 
     // write whole chunks of h_data_remaining
@@ -280,7 +284,7 @@ class FSStoreArrayViaBuffer {
       const auto start = size_t{ bb * buffer.get_chunksize() };
       const auto end = size_t{start + buffer.get_chunksize()};
       const auto refs = kkpair_size_t({ start, end });
-      chunks.write_chunk(store, name, partial_metadata, Kokkos::subview(h_data, refs),
+      chunks.write_chunk<T>(store, name, partial_metadata, Kokkos::subview(h_data, refs),
         chunks.get_chunkshape());
     }
 
@@ -311,7 +315,7 @@ class FSStoreArrayViaBuffer {
   FSStoreArrayViaBuffer(FSStore& store, const std::vector<size_t>& chunkshape,
     const std::string_view name, const std::string_view units, const double scale_factor,
     const std::string_view dtype, const std::vector<std::string>& dims,
-    const std::vector<std::size_t>& reduced_arrayshape = std::vector<std::size_t>({}))
+    const std::vector<size_t>& reduced_arrayshape = std::vector<size_t>({}))
     : store(store), chunks(chunkshape, reduced_arrayshape), buffer(chunks.get_chunkshape()),
     name(name) {
     /* number of names of dimensions must match number of dimensions of chunks */
@@ -376,11 +380,11 @@ class FSStoreArrayViaBuffer {
       assert((buffer.get_fill() % vec_product(shape) == 0) &&
         "data in buffer should be completely divisible by reduced chunkshape");
       shape.insert(shape.begin(), buffer.get_fill() / vec_product(shape));
-      chunks.write_chunk(store, name, partial_metadata, buffer, shape);
+      chunks.write_chunk<T>(store, name, partial_metadata, buffer, shape);
     }
   };
 
-  void write_data_to_zarr_array(const dualview_type::t_host h_data) {
+  void write_data_to_zarr_array(const viewh_buffer h_data) {
     std::cout << "writing data to buffer / output\n";
 
     std::cout << "buffer size: " << buffer.get_chunksize() << "\n";
