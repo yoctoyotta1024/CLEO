@@ -162,28 +162,28 @@ struct ChunkWriter {
   .zarray json correspondingly. Function should be called only when chunks complete the reduced
   shape of the array (i.e. all the dimensions of the array except for the outermost) */
   void update_arrayshape(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
+    const std::string_view partial_metadata, const size_t outermost_shape_increment) {
     for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
-      arrayshape.at(aa) = reduced_arrayshape.at(aa - 1);
+      arrayshape.at(aa) = reduced_arrayshape.at(aa - 1);   // shape of inner dimensions
     }
-    arrayshape.at(0) += shape_increment.at(0);
+    arrayshape.at(0) += outermost_shape_increment;   // increase shape of outermost dimension
     write_zarray_json(store, name, zarr_metadata(partial_metadata));
   }
 
   /* update numbers of chunks and shape of array for 1-D array */
-  void update_chunkcount_and_arrayshape_1dim(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
+  void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
+    const std::string_view partial_metadata, const size_t shape_increment) {
     update_arrayshape(store, name, partial_metadata, shape_increment);
     chunkcount.back() += 1;
   }
 
   /* update numbers of chunks and shape of array for 2-D array */
-  void update_chunkcount_and_arrayshape_2dims(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
+  void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
+    const std::string_view partial_metadata, const std::array<size_t, 2> shape_increment) {
     const auto nchunks_dim1 = size_t{ (chunkcount.at(1) + 1) * chunkshape.at(1) };
     if (nchunks_dim1 == reduced_arrayshape.at(0)) {
       /* 1 column of chunks is complete, start new one and update shape */
-      update_arrayshape(store, name, partial_metadata, shape_increment);
+      update_arrayshape(store, name, partial_metadata, shape_increment.at(0));
       chunkcount.front() += 1;
       chunkcount.at(1) = 0;
     } else {
@@ -193,15 +193,16 @@ struct ChunkWriter {
 
   /* update numbers of chunks and shape of 1-D or 2-D array */
   void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, const std::vector<size_t>& shape_increment) {
+    const std::string_view partial_metadata, const std::vector<size_t>& shape) {
     const auto ndims = arrayshape.size();
     if (ndims == 1) {
-      update_chunkcount_and_arrayshape_1dim(store, name, partial_metadata, shape_increment);
+      const auto shape_increment = size_t{ shape.at(0) };
+      update_chunkcount_and_arrayshape(store, name, partial_metadata, shape_increment);
     } else if (ndims == 2) {
-      update_chunkcount_and_arrayshape_2dims(store, name, partial_metadata, shape_increment);
+      const auto shape_increment = std::array<size_t, 2>({shape.at(0), shape.at(1)});
+      update_chunkcount_and_arrayshape(store, name, partial_metadata, shape_increment);
     } else {
-      const std::string("No method provided to update chunkcount for non 1-D or 2-D array")
-      throw std::invalid_argument(err);
+      throw std::invalid_argument("No method provided for updating metadata for > 2-D array");
     }
   }
 
