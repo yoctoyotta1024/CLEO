@@ -178,35 +178,31 @@ struct ChunkWriter {
   }
 
   /* update numbers of chunks and shape of array for N-D (multi-dimensional) array */
-  void update_chunkcount_and_arrayshape_multidim(FSStore& store, const std::string_view name,
+  void update_chunkcount_and_arrayshape_2dims(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const size_t shape_increment) {
-
-    auto complete_block = false;
-    for (size_t aa = arrayshape.size() - 1; aa > 0; --aa) {
-      /* length of chunks (number of elements in chunks) written along aa'th dimension */
-      const auto chunkslength = size_t{ (chunkcount.at(aa) + 1) * chunkshape.at(aa) };
-      if (chunkslength == reduced_arrayshape.at(aa - 1)) {
-        chunkcount.at(aa - 1) += 1;
-        chunkcount.at(aa) = 0;
-        complete_block = true;
-      } else {
-        chunkcount.at(aa) += 1;
-        complete_block = false;
-      }
-    }
-
-    if (complete_block) {
+    /* length of chunks (number of elements in chunks) written along 2nd dimension */
+    const auto chunkslength = size_t{ (chunkcount.at(1) + 1) * chunkshape.at(1) };
+    if (chunkslength == reduced_arrayshape.at(0)) {
       update_arrayshape(store, name, partial_metadata, shape_increment);
+      chunkcount.at(0) += 1;
+      chunkcount.at(1) = 0;
+    } else {
+      chunkcount.at(1) += 1;
     }
   }
 
   /* update numbers of chunks and shape of 1-D or 2-D array */
   void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const std::vector<size_t>& shape) {
-    if (arrayshape.size() == 1) {
+    switch (arrayshape.size()) {
+    case 1:
       update_chunkcount_and_arrayshape_1dim(store, name, partial_metadata, shape.at(0));
-    } else {
-      update_chunkcount_and_arrayshape_multidim(store, name, partial_metadata, shape.at(0));
+      break;
+    case 2:
+      update_chunkcount_and_arrayshape_2dims(store, name, partial_metadata, shape.at(0));
+      break;
+    default:
+      throw std::invalid_argument("No method provided to write chunks for > 2-D array");
     }
   }
 
