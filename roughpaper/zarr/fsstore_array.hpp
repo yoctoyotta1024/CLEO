@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 15th March 2024
+ * Last Modified: Monday 18th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -146,11 +146,12 @@ struct ChunkWriter {
  private:
   const std::vector<size_t> chunkshape;          // shape of chunks along each dimension
   const std::vector<size_t> reduced_arrayshape;  // shape of array along all but outermost dimension
-  std::vector<size_t> chunkcount;       // number of chunks along each dimension written in store
   std::vector<size_t> arrayshape;       // number of elements in array along each dimension in store
+  size_t nchunks;
 
   /* converts vector of integers for chunkcount into string to use to name a chunk */
-  std::string chunkcount_to_string() {
+  std::string chunks_string() {
+    std::vector<size_t> chunkcount;   // TODO(CB) # of chunks along each dimension written in store
     auto chunk_str = std::string{ "" };
     for (const auto& c : chunkcount) { chunk_str += std::to_string(c) + "."; }
     chunk_str.pop_back();   // delete last "."
@@ -194,25 +195,15 @@ struct ChunkWriter {
   /* update numbers of chunks and shape of 1-D or 2-D array */
   void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const std::vector<size_t>& shape) {
-    switch (arrayshape.size()) {
-    case 1:
-      update_chunkcount_and_arrayshape_1dim(store, name, partial_metadata, shape.at(0));
-      break;
-    case 2:
-      update_chunkcount_and_arrayshape_2dims(store, name, partial_metadata, shape.at(0));
-      break;
-    default:
-      throw std::invalid_argument("No method provided to write chunks for > 2-D array");
-    }
+      // TODO(CB)
   }
 
  public:
   ChunkWriter(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
     : chunkshape(chunkshape), reduced_arrayshape(reduced_arrayshape),
-    chunkcount(chunkshape.size(), 0), arrayshape(chunkshape.size(), 0) {
+    arrayshape(chunkshape.size(), 0), nchunks(0) {
     /* number of dimensions for number of chunks must match number of dimensions of array */
     assert((chunkshape.size() == arrayshape.size()));
-    assert((chunkcount.size() == arrayshape.size()));
 
     /* number of dimensions of reduced array is 1 less than actual array */
     assert((reduced_arrayshape.size() + 1 == arrayshape.size()) &&
@@ -246,7 +237,7 @@ struct ChunkWriter {
   template <typename T>
   void write_chunk(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, Buffer<T>& buffer, const std::vector<size_t>& shape) {
-    buffer.write_buffer_to_chunk(store, name, chunkcount_to_string());
+    buffer.write_buffer_to_chunk(store, name, chunks_string());
     update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
   }
 
@@ -254,7 +245,7 @@ struct ChunkWriter {
   void write_chunk(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const Buffer<T>::subviewh_buffer h_data_chunk,
     const std::vector<size_t>& shape) {
-    const auto chunk_str = chunkcount_to_string();
+    const auto chunk_str = chunks_string();
     store[std::string(name) + '/' + chunk_str].operator=<T>(h_data_chunk);
     update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
   }
