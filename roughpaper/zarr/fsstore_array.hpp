@@ -162,23 +162,22 @@ struct ChunkWriter {
   size_t nchunks;
   /**< total number of chunks written in store */
 
-  /* converts vector of integers for label for chunks along each dimension of array into
-  a string to use to name a chunk in the store */
-  std::string chunks_string() {
-    auto chunks = std::vector<size_t>(chunkshape.size(), 0);
-    chunks.at(0) = nchunks / vec_product(reducedarray_nchunks);
+  /* converts vector of integers for label of chunk along each dimension of array
+  into a string to use to name a chunk in the store */
+  std::string chunk_label() {
+    auto chunk_num = std::vector<size_t>(chunkshape.size(), 0);
+    chunk_num.at(0) = nchunks / vec_product(reducedarray_nchunks);
 
-    const auto ndims = chunkshape.size();
-    for (auto aa = 1; aa < ndims; ++aa) {
-      chunks.at(aa) = (nchunks / vec_product(reducedarray_nchunks, aa)) %
+    for (size_t aa = 1; aa < chunkshape.size(); ++aa) {
+      chunk_num.at(aa) = (nchunks/ vec_product(reducedarray_nchunks, aa)) %
         reducedarray_nchunks.at(aa - 1);
     }
 
-    auto chunk_str = std::string{ "" };
-    for (const auto& c : chunkcount) { chunk_str += std::to_string(c) + "."; }
-    chunk_str.pop_back();   // delete last "."
+    auto chunk_lab = std::string{ "" };
+    for (const auto& c : chunk_num) { chunk_lab += std::to_string(c) + "."; }
+    chunk_lab.pop_back();   // delete last "."
 
-    return chunk_str;
+    return chunk_lab;
   }
 
   /* increment shape of outermost dimension of N-Dimensional array and update the array's metadata
@@ -239,19 +238,18 @@ struct ChunkWriter {
 
   template <typename T>
   void write_chunk(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, Buffer<T>& buffer, const std::vector<size_t>& shape) {
-    buffer.write_buffer_to_chunk(store, name, chunks_string());
-    update_arrayshape(store, name, partial_metadata, shape);
+    const std::string_view partial_metadata, Buffer<T>& buffer, const size_t shape_increment) {
+    buffer.write_buffer_to_chunk(store, name, chunk_label());
+    update_arrayshape(store, name, partial_metadata, shape_increment);
     ++nchunks;
   }
 
   template <typename T>
   void write_chunk(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const Buffer<T>::subviewh_buffer h_data_chunk,
-    const std::vector<size_t>& shape) {
-    const auto chunk_str = chunks_string();
-    store[std::string(name) + '/' + chunk_str].operator=<T>(h_data_chunk);
-    update_arrayshape(store, name, partial_metadata, shape);
+    const size_t shape_increment) {
+    store[std::string(name) + '/' + chunk_label()].operator=<T>(h_data_chunk);
+    update_arrayshape(store, name, partial_metadata, shape_increment);
     ++nchunks;
   }
 };
@@ -270,7 +268,7 @@ class FSStoreArrayViaBuffer {
   subviewh_buffer write_chunks_to_store(const subviewh_buffer h_data) {
     // write buffer to chunk if it's full
     if (buffer.get_space() == 0) {
-      chunks.write_chunk<T>(store, name, partial_metadata, buffer, chunks.get_chunkshape());
+      chunks.write_chunk<T>(store, name, partial_metadata, buffer, chunks.get_chunkshape().at(0));
     }
 
     // write whole chunks of h_data_remaining
@@ -279,7 +277,7 @@ class FSStoreArrayViaBuffer {
       const auto csz = buffer.get_chunksize();
       const auto refs = kkpair_size_t({ nn * csz, (nn + 1) * csz });
       chunks.write_chunk<T>(store, name, partial_metadata, Kokkos::subview(h_data, refs),
-        chunks.get_chunkshape());
+        chunks.get_chunkshape().at(0));
     }
 
     // return remainder of data not written to chunks
@@ -367,14 +365,13 @@ class FSStoreArrayViaBuffer {
   };
 
   ~FSStoreArrayViaBuffer() {
-    // write buffer to chunk if it isn't empty
+    /* write buffer to chunk if it isn't empty */
     if (buffer.get_fill() > 0) {
-      const auto chunkshape = chunks.get_chunkshape();
-      auto shape = std::vector<size_t>(chunkshape.begin() + 1, chunkshape.end());
-      assert((buffer.get_fill() % vec_product(shape) == 0) &&
-        "data in buffer should be completely divisible by reduced chunkshape");
-      shape.insert(shape.begin(), buffer.get_fill() / vec_product(shape));
-      chunks.write_chunk<T>(store, name, partial_metadata, buffer, shape);
+      const auto reduced_size = vec_product(chunks.get_chunkshape(), 1);    // exclude outermost dim
+      assert((buffer.get_fill() % reduced_size == 0) &&
+        "data in buffer should be completely divisible by number of elements of reduced chunk");
+      const auto shape_increment = buffer.get_fill() / reduced_size;
+      chunks.write_chunk<T>(store, name, partial_metadata, buffer, shape_increment);
     }
   };
 
