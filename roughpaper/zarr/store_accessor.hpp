@@ -23,16 +23,9 @@
 #define ROUGHPAPER_ZARR_STORE_ACCESSOR_HPP_
 
 #include <span>
-#include <string>
 #include <string_view>
-#include <filesystem>
-#include <fstream>
-#include <iostream>
 
-/* functions for converting types (e.g. vectors or Kokkos view's of
-unsigned integers or doubles) into vectors of single bytes to
-write to store under a given key. Store can be anything that
-satisfies the zarr storage specifcaiton version 2 */
+#include <Kokkos_Core.hpp>
 
 /**
  * @brief A template class for converting types into vectors of single bytes to write to a "store"
