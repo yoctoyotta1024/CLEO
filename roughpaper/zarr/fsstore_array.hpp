@@ -164,42 +164,22 @@ struct ChunkWriter {
   }
 
   /* increment shape of outermost dimension of N-Dimensional array and update the array's metadata
-  .zarray json correspondingly. Function should be called only when chunks complete the reduced
-  shape of the array (i.e. all the dimensions of the array except for the outermost) */
+  .zarray json correspondingly. Function only updates shape and metadata when the number of chunks
+  (nchunks) indicates the reduced array shape is complete, i.e. the array along all but its
+  outermost dimension is full of data elements */
   void update_arrayshape(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, const size_t outermost_shape_increment) {
-    for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
-      arrayshape.at(aa) = reduced_arrayshape.at(aa - 1);   // shape of inner dimensions
-    }
-    arrayshape.at(0) += outermost_shape_increment;   // increase shape of outermost dimension
-    write_zarray_json(store, name, zarr_metadata(partial_metadata));
-  }
-
-  /* update numbers of chunks and shape of array for 1-D (1-dimensional) array */
-  void update_chunkcount_and_arrayshape_1dim(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const size_t shape_increment) {
-    update_arrayshape(store, name, partial_metadata, shape_increment);
-    chunkcount.at(0) += 1;
-  }
-
-  /* update numbers of chunks and shape of array for N-D (multi-dimensional) array */
-  void update_chunkcount_and_arrayshape_2dims(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, const size_t shape_increment) {
-    /* length of chunks (number of elements in chunks) written along 2nd dimension */
-    const auto chunkslength = size_t{ (chunkcount.at(1) + 1) * chunkshape.at(1) };
-    if (chunkslength == reduced_arrayshape.at(0)) {
-      update_arrayshape(store, name, partial_metadata, shape_increment);
-      chunkcount.at(0) += 1;
-      chunkcount.at(1) = 0;
-    } else {
-      chunkcount.at(1) += 1;
+    if (nchunks % vec_product(reducedarray_nchunks) == 0) {
+      arrayshape.at(0) += shape_increment;   // increase in shape of outermost dimension
+      write_zarray_json(store, name, zarr_metadata(partial_metadata));   // update metadata
     }
   }
 
-  /* update numbers of chunks and shape of 1-D or 2-D array */
-  void update_chunkcount_and_arrayshape(FSStore& store, const std::string_view name,
+  /* update numbers of chunks and shape of N-D (multi-dimensional) array */
+  void update_nchunks_and_arrayshape(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, const std::vector<size_t>& shape) {
-      // TODO(CB)
+    update_arrayshape(store, name, partial_metadata, shape.at(0));
+    ++nchunks;
   }
 
  public:
@@ -212,8 +192,8 @@ struct ChunkWriter {
     assert((reduced_arrayshape.size() + 1 == arrayshape.size()) &&
       "reduced array 1 less dimension than array (excludes outermost (0th) dimension");
 
-    /* set number of chunks of array along all but its outermost dimension given chunkshape and
-    reduced_arrayshape */
+    /* set shape of array and number of chunks along all but array's outermost dimension given
+    the shape of each chunk and expected shape of final array along those dimensions */
     for (size_t aa = 1; aa < chunkshape.size(); ++aa) {
       /* Along all but outermost (0th) dimension, the length of a chunk must be completely
       divisible by the array's expected final length along that dimension in order to ensure
@@ -222,6 +202,10 @@ struct ChunkWriter {
         "along all but outermost dimension, arrayshape must be completely divisible by chunkshape");
       /* reducedarray_nchunks = number of chunks along all but outermost dimension of array */
       reducedarray_nchunks.push_back(reduced_arrayshape.at(aa - 1) / chunkshape.at(aa));
+
+      /* set array shape along all but outermost dimension to number of elements given by
+      the number and shape of chunks along that dimension */
+      arrayshape.at(aa) = reduced_arrayshape.at(aa - 1);
     }
   }
 
@@ -246,7 +230,7 @@ struct ChunkWriter {
   void write_chunk(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, Buffer<T>& buffer, const std::vector<size_t>& shape) {
     buffer.write_buffer_to_chunk(store, name, chunks_string());
-    update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
+    update_nchunks_and_arrayshape(store, name, partial_metadata, shape);
   }
 
   template <typename T>
@@ -255,7 +239,7 @@ struct ChunkWriter {
     const std::vector<size_t>& shape) {
     const auto chunk_str = chunks_string();
     store[std::string(name) + '/' + chunk_str].operator=<T>(h_data_chunk);
-    update_chunkcount_and_arrayshape(store, name, partial_metadata, shape);
+    update_nchunks_and_arrayshape(store, name, partial_metadata, shape);
   }
 };
 
