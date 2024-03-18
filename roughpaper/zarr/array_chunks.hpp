@@ -50,20 +50,20 @@ class ArrayChunks {
    * chunk along each dimension of an array into a string which can be used to name the current
    * chunk that is next to be written to the store.
    *
-   * @param totnchunks The total number of chunks written to the array.
+   * @param chunk_num The number of the chunk to write to the array (i.e. the n'th chunk).
    * @return A string representing the label of the current chunk to write.
    */
-  std::string chunk_label(const size_t totnchunks) const {
-    auto chunk_num = std::vector<size_t>(chunkshape.size(), 0);
-    chunk_num.at(0) = totnchunks / vec_product(reducedarray_nchunks);
+  std::string chunk_label(const size_t chunk_num) const {
+    auto chunk_labnums = std::vector<size_t>(chunkshape.size(), 0);
+    chunk_labnums.at(0) = chunk_num / vec_product(reducedarray_nchunks);
 
     for (size_t aa = 1; aa < chunkshape.size(); ++aa) {
-      chunk_num.at(aa) = (totnchunks / vec_product(reducedarray_nchunks, aa)) %
+      chunk_labnums.at(aa) = (chunk_num / vec_product(reducedarray_nchunks, aa)) %
         reducedarray_nchunks.at(aa - 1);
     }
 
     auto chunk_lab = std::string{ "" };
-    for (const auto& c : chunk_num) { chunk_lab += std::to_string(c) + "."; }
+    for (const auto& c : chunk_labnums) { chunk_lab += std::to_string(c) + "."; }
     chunk_lab.pop_back();   // delete last "."
 
     return chunk_lab;
