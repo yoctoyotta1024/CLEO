@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: fsstore.hpp
+ * File: dataset.hpp
  * Project: zarr
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
@@ -19,7 +19,7 @@
  */
 
 
-#ifndef ROUGHPAPER_ZARR_FSSTORE_HPP_
-#define ROUGHPAPER_ZARR_FSSTORE_HPP_
+#ifndef ROUGHPAPER_ZARR_DATASET_HPP_
+#define ROUGHPAPER_ZARR_DATASET_HPP_
 
-#endif   // ROUGHPAPER_ZARR_FSSTORE_HPP_
+#endif   // ROUGHPAPER_ZARR_DATASET_HPP_
