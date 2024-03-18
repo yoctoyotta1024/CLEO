@@ -43,8 +43,6 @@ class ArrayChunks {
   std::vector<size_t> reducedarray_nchunks;
   /**< Number chunks of array along all but outermost dimension of array (constant) */
 
-  /* converts vector of integers for label of chunk along each dimension of array into a string
-  to use to name a chunk in the store */
   /**
    * @brief Create label for a chunk given current number of chunks written to array.
    *
@@ -52,6 +50,7 @@ class ArrayChunks {
    * chunk along each dimension of an array into a string which can be used to name the current
    * chunk that is next to be written to the store.
    *
+   * @param totnchunks The total number of chunks written to the array.
    * @return A string representing the label of the current chunk to write.
    */
   std::string chunk_label(const size_t totnchunks) const {
@@ -99,10 +98,31 @@ class ArrayChunks {
     }
   }
 
+  /**
+   * @brief Gets the shape of a chunk.
+   *
+   * @return A vector containing the shape (number of data elements) of a chunk
+   * along each dimension.
+   */
   std::vector<size_t> get_chunkshape() const {
     return chunkshape;
   }
 
+  /**
+   * @brief Writes a chunk to the store and increments the total number of chunks written.
+   *
+   * This function writes the data held in a buffer in the specified store to a chunk identified by
+   * "chunk_label" of an array called "name" given the number of chunks of the array already
+   * existing. After writing the chunk, the total number of chunks is incremented.
+   *
+   * @tparam Store The type of the store.
+   * @tparam T The type of the data elements stored in the buffer.
+   * @param store Reference to the store where the chunk will be written.
+   * @param name Name of the array in the store where the chunk will be written.
+   * @param totnchunks The total number of chunks of the array already written.
+   * @param buffer The buffer containing the data to be written to the chunk.
+   * @return The updated total number of chunks after writing.
+   */
   template <typename Store, typename T>
   size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
     Buffer<T>& buffer) const {
@@ -110,6 +130,21 @@ class ArrayChunks {
     return ++totnchunks;
   }
 
+  /**
+   * @brief Writes a chunk to the store and increments the total number of chunks written.
+   *
+   * This function writes the data stored in the Kokkos view (in host memory) in the specified store
+   * to a chunk identified by "chunk_label" of an array called "name" given the number of chunks of
+   * the array already existing. After writing the chunk, the total number of chunks is incremented.
+   *
+   * @tparam Store The type of the store.
+   * @tparam T The type of the data elements stored in the buffer.
+   * @param store Reference to the store where the chunk will be written.
+   * @param name Name of the array in the store where the chunk will be written.
+   * @param totnchunks The total number of chunks of the array already written.
+   * @param h_data_chunk The view containing the data in host memory to be written to the chunk.
+   * @return The updated total number of chunks after writing.
+   */
   template <typename Store, typename T>
   size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
     const Buffer<T>::subviewh_buffer h_data_chunk) const {
