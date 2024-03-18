@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: fsstore.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 23rd October 2023
+ * Last Modified: Monday 18th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,6 +20,7 @@
  * zarr storage specification version 2 (e.g. see FSStore)
  * https://zarr.readthedocs.io/en/stable/spec/v2.html
  */
+
 
 #ifndef LIBS_ZARR_FSSTORE_HPP_
 #define LIBS_ZARR_FSSTORE_HPP_
