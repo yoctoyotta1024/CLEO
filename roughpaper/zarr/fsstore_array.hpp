@@ -48,6 +48,15 @@ inline size_t vec_product(const std::vector<size_t>& vec) {
   return value;
 }
 
+/* returns product of a vector of size_t numbers starting from aa'th index of vector */
+inline size_t vec_product(const std::vector<size_t>& vec, const size_t aa) {
+  auto value = size_t{1};
+  for (auto it = vec.begin() + aa; it != vec.end(); ++it) {
+    value *= *it;
+  }
+  return value;
+}
+
 /* converts vector of strings, e.g. for names of dimensions, into a single list
 written as a string */
 inline std::string vecstr_to_string(const std::vector<std::string> &dims) {
@@ -153,9 +162,18 @@ struct ChunkWriter {
   size_t nchunks;
   /**< total number of chunks written in store */
 
-  /* converts vector of integers for chunkcount into string to use to name a chunk */
+  /* converts vector of integers for label for chunks along each dimension of array into
+  a string to use to name a chunk in the store */
   std::string chunks_string() {
-    std::vector<size_t> chunkcount;   // TODO(CB) # of chunks along each dimension written in store
+    auto chunks = std::vector<size_t>(chunkshape.size(), 0);
+    chunks.at(0) = nchunks / vec_product(reducedarray_nchunks);
+
+    const auto ndims = chunkshape.size();
+    for (auto aa = 1; aa < ndims; ++aa) {
+      chunks.at(aa) = (nchunks / vec_product(reducedarray_nchunks, aa)) %
+        reducedarray_nchunks.at(aa - 1);
+    }
+
     auto chunk_str = std::string{ "" };
     for (const auto& c : chunkcount) { chunk_str += std::to_string(c) + "."; }
     chunk_str.pop_back();   // delete last "."
@@ -182,7 +200,7 @@ struct ChunkWriter {
     assert((chunkshape.size() == arrayshape.size()));
 
     /* number of dimensions of reduced array is 1 less than actual array */
-    assert((reduced_arrayshape.size() + 1 == arrayshape.size()) &&
+    assert((reduced_arrayshape.size() + 1 == chunkshape.size()) &&
       "reduced array 1 less dimension than array (excludes outermost (0th) dimension");
 
     /* set shape of array and number of chunks along all but array's outermost dimension given
