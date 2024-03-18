@@ -45,23 +45,15 @@ class ZarrGroup {
   * @brief Constructs a ZarrGroup with the specified store object.
   *
   * This constructor initializes a ZarrGroup with the provided store object.
-  * It also writes the required metatdata for the group in order to obey the Zarr storage
+  * It also writes the compulsory metatdata for the group in order to obey the Zarr storage
   * specification version 2 (https://zarr.readthedocs.io/en/stable/spec/v2.html).
   *
   * @param store The store object associated with the Zarr group.
   */
   explicit ZarrGroup(const Store store) : store(store) {
-    /* write compulsory metadata for Zarr group */
     const std::string zarr_format("2");   // storage specification version 2
     const std::string zgroupjson("{\n  \"zarr_format\": " + zarr_format + "\n}");
     store[".zgroup"] = zgroupjson;
-
-    /* write optional metadata about group (maybe useful for xarray and netCDF compatibility) */
-    store[".zattrs"] =
-      "{\n"
-      "  \"creator\": \"Clara Bayley\",\n"
-      "  \"title\": \"Zarr Group for Data Output from CLEO\""
-      "\n}";
   }
 };
 
