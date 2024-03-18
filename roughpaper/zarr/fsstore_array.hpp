@@ -144,10 +144,14 @@ struct Buffer {
 
 struct ChunkWriter {
  private:
-  const std::vector<size_t> chunkshape;          // shape of chunks along each dimension
-  const std::vector<size_t> reduced_arrayshape;  // shape of array along all but outermost dimension
-  std::vector<size_t> arrayshape;       // number of elements in array along each dimension in store
+  std::vector<size_t> chunkshape;
+  /**< shape of chunks along each dimension (constant after construction) */
+  std::vector<size_t> reducedarray_nchunks;
+  /**< number chunks of array along all but outermost dimension (constant after construction) */
+  std::vector<size_t> arrayshape;
+  /**< number of elements in array along each dimension in store */
   size_t nchunks;
+  /**< total number of chunks written in store */
 
   /* converts vector of integers for chunkcount into string to use to name a chunk */
   std::string chunks_string() {
@@ -200,20 +204,24 @@ struct ChunkWriter {
 
  public:
   ChunkWriter(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
-    : chunkshape(chunkshape), reduced_arrayshape(reduced_arrayshape),
-    arrayshape(chunkshape.size(), 0), nchunks(0) {
+    : chunkshape(chunkshape), arrayshape(chunkshape.size(), 0), nchunks(0) {
     /* number of dimensions for number of chunks must match number of dimensions of array */
     assert((chunkshape.size() == arrayshape.size()));
 
     /* number of dimensions of reduced array is 1 less than actual array */
     assert((reduced_arrayshape.size() + 1 == arrayshape.size()) &&
-      "reduced array 1 less dimension than array (excludes outermost (1st) dimension");
+      "reduced array 1 less dimension than array (excludes outermost (0th) dimension");
 
-    /* Along all but outermost (1st) dimension, the length of a chunk must be completely
-    divisible by the array's final length along that dimension in order to ensure good chunking */
+    /* set number of chunks of array along all but its outermost dimension given chunkshape and
+    reduced_arrayshape */
     for (size_t aa = 1; aa < chunkshape.size(); ++aa) {
+      /* Along all but outermost (0th) dimension, the length of a chunk must be completely
+      divisible by the array's expected final length along that dimension in order to ensure
+      good chunking */
       assert((reduced_arrayshape.at(aa - 1) % chunkshape.at(aa) == 0) &&
         "along all but outermost dimension, arrayshape must be completely divisible by chunkshape");
+      /* reducedarray_nchunks = number of chunks along all but outermost dimension of array */
+      reducedarray_nchunks.push_back(reduced_arrayshape.at(aa - 1) / chunkshape.at(aa));
     }
   }
 
@@ -290,11 +298,11 @@ class FSStoreArrayViaBuffer {
   * Initializes an empty array in the provided FSStore in order to writes chunks of array to the
   * store via a buffer. The assertions in this constructor ensure chunks are an appropriate size and
   * shape for the array such that the final array dimensions are exactly integer multiples of its
-  * chunks along all but first (outermost) dimension.
+  * chunks along all but outermost (0th) dimension.
   *
   * @param store The FSStore where the array will be stored.
   * @param chunkshape The shape of individual data chunks along each dimension.
-  * @param reduced_arrayshape The shape of the array along all but the first dimension.
+  * @param reduced_arrayshape The shape of the array along all but the outermost (0th) dimension.
   * @param name The name of the array.
   * @param units The units of the array's coordinates.
   * @param scale_factor The scale factor of the data.
