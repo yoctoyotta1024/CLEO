@@ -46,11 +46,11 @@ class ArrayChunks {
   /**
    * @brief Create label for a chunk given current number of chunks written to array.
    *
-   * This function creates and converts a vector of integers representing the label of a
-   * chunk along each dimension of an array into a string which can be used to name the current
-   * chunk that is next to be written to the store.
+   * This function creates a vector of integers for the number of a chunk along each dimension of
+   * an array given the chunk is the n'th chunk to be written to the store (starting at n=0). The
+   * vector is then converted into a string which can be used to label the chunk.
    *
-   * @param chunk_num The number of the chunk to write to the array (i.e. the n'th chunk).
+   * @param chunk_num The number of the chunk to write to the array.
    * @return A string representing the label of the current chunk to write.
    */
   std::string chunk_label(const size_t chunk_num) const {
