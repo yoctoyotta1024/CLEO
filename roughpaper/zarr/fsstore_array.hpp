@@ -175,13 +175,6 @@ struct ChunkWriter {
     }
   }
 
-  /* update numbers of chunks and shape of N-D (multi-dimensional) array */
-  void update_nchunks_and_arrayshape(FSStore& store, const std::string_view name,
-    const std::string_view partial_metadata, const std::vector<size_t>& shape) {
-    update_arrayshape(store, name, partial_metadata, shape.at(0));
-    ++nchunks;
-  }
-
  public:
   ChunkWriter(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
     : chunkshape(chunkshape), arrayshape(chunkshape.size(), 0), nchunks(0) {
@@ -230,7 +223,8 @@ struct ChunkWriter {
   void write_chunk(FSStore& store, const std::string_view name,
     const std::string_view partial_metadata, Buffer<T>& buffer, const std::vector<size_t>& shape) {
     buffer.write_buffer_to_chunk(store, name, chunks_string());
-    update_nchunks_and_arrayshape(store, name, partial_metadata, shape);
+    update_arrayshape(store, name, partial_metadata, shape);
+    ++nchunks;
   }
 
   template <typename T>
@@ -239,7 +233,8 @@ struct ChunkWriter {
     const std::vector<size_t>& shape) {
     const auto chunk_str = chunks_string();
     store[std::string(name) + '/' + chunk_str].operator=<T>(h_data_chunk);
-    update_nchunks_and_arrayshape(store, name, partial_metadata, shape);
+    update_arrayshape(store, name, partial_metadata, shape);
+    ++nchunks;
   }
 };
 
