@@ -59,7 +59,7 @@ class FSStore {
    * @param key The key for which the StoreAccessor is accessed.
    * @return A StoreAccessor object associated with the specified key.
    */
-  StoreAccessor<FSStore> operator[](const std::string_view key) { return { *this, key }; }
+  StoreAccessor<FSStore> operator[](const std::string_view key) const { return { *this, key }; }
 
   /**
    * @brief Write function called by StoreAccessor to write data to file system storage after the
@@ -72,7 +72,7 @@ class FSStore {
    * @param buffer A span representing the range of memory containing the unsigned bytes to be written.
    * @return True if the write operation is successful, false otherwise.
    */
-  inline bool write(const std::string_view key, const std::span<const uint8_t> buffer);
+  inline bool write(const std::string_view key, const std::span<const uint8_t> buffer) const;
 };
 
 /**
@@ -88,7 +88,7 @@ class FSStore {
  * @param buffer A span representing the range of memory containing the unsigned bytes to be written.
  * @return True if the write operation is successful, false otherwise.
  */
-inline bool FSStore::write(std::string_view key, std::span<const uint8_t> buffer) {
+inline bool FSStore::write(std::string_view key, std::span<const uint8_t> buffer) const {
   auto path = basedir / key;
   auto mode = std::ios::out | std::ios::binary;
   std::ofstream out(path, mode);
