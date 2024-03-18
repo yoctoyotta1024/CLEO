@@ -29,24 +29,6 @@
 #include <string>
 #include <string_view>
 
-/* returns product of a vector of size_t numbers */
-inline size_t vec_product(const std::vector<size_t>& vec) {
-  auto value = size_t{1};
-  for (const auto& v : vec) {
-    value *= v;
-  }
-  return value;
-}
-
-/* returns product of a vector of size_t numbers starting from aa'th index of vector */
-inline size_t vec_product(const std::vector<size_t>& vec, const size_t aa) {
-  auto value = size_t{1};
-  for (auto it = vec.begin() + aa; it != vec.end(); ++it) {
-    value *= *it;
-  }
-  return value;
-}
-
 /**
  * @brief A class template for managing a buffer of elements of data type T.
  *
@@ -104,9 +86,9 @@ struct Buffer {
    *
    * Initializes the buffer with size of given chunkshape.
    *
-   * @param chunkshape Vector representing the shape of array chunks.
+   * @param chunksize number of elements of data in 1 chunk of an array.
    */
-  explicit Buffer(const std::vector<size_t>& chunkshape) : chunksize(vec_product(chunkshape)),
+  explicit Buffer(const size_t chunksize) : chunksize(chunksize),
     fill(0), buffer("buffer", chunksize) {
     reset_buffer();
   }

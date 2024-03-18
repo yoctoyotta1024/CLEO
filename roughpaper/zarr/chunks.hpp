@@ -30,6 +30,24 @@
 
 #include "./buffer.hpp"
 
+/* returns product of a vector of size_t numbers */
+inline size_t vec_product(const std::vector<size_t>& vec) {
+  auto value = size_t{1};
+  for (const auto& v : vec) {
+    value *= v;
+  }
+  return value;
+}
+
+/* returns product of a vector of size_t numbers starting from aa'th index of vector */
+inline size_t vec_product(const std::vector<size_t>& vec, const size_t aa) {
+  auto value = size_t{1};
+  for (auto it = vec.begin() + aa; it != vec.end(); ++it) {
+    value *= *it;
+  }
+  return value;
+}
+
 /**
  * @brief A class template for managing and writing chunks of an array.
  *
