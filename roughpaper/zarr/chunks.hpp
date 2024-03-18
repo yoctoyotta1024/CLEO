@@ -26,6 +26,7 @@
 #include <vector>
 #include <string>
 #include <string_view>
+#include <cassert>
 
 #include "./buffer.hpp"
 
@@ -34,9 +35,7 @@
  *
  * This class provides functionality for writing chunks of an array to a store.
  *
- * @tparam T The type of data elements stored in the buffer.
  */
-template <typename T>
 class Chunks {
  private:
   std::vector<size_t> chunkshape;   /**< Shape of chunks along each dimension (constant) */
@@ -79,7 +78,7 @@ class Chunks {
    * @param chunkshape The shape of chunks along each dimension.
    * @param reduced_arrayshape The shape of the reduced array along each dimension.
    */
-  ChunkWriter(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
+  Chunks(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
     : chunkshape(chunkshape), reducedarray_nchunks(chunkshape.size() - 1, 0) {
 
     /* number of dimensions of reduced array is 1 less than actual array ( = array's chunks) */
