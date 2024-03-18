@@ -7,7 +7,7 @@
  * Project: zarr
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Tobias Kölling (TB)
  * -----
  * Last Modified: Monday 18th March 2024
  * Modified By: CB
@@ -116,7 +116,7 @@ struct StoreAccessor {
  * write metadata under .zarray key in store for an array called 'name'. The key and metadata
  * could be anything, but for example .zarray could be a json file in a file system store
  * (see FSStore) for the metadata which must exist in order to decode chunks of an array according
- * to zarr storage specification version 2 (https://zarr.readthedocs.io/en/stable/spec/v2.html),
+ * to Zarr storage specification version 2 (https://zarr.readthedocs.io/en/stable/spec/v2.html),
  *
  * @tparam Store The type of the store object where the metadata will be written.
  * @param store The store object where the metadata will be written.
@@ -134,7 +134,7 @@ inline void write_zarray_json(Store& store, std::string_view name, std::string_v
  * Write some data under .zattrs key in store for an array called 'name'. The key and attrs data
  * could be anything, but for example .zattrs could be a json file in a file system store
  * (see FSStore) for the extra metadata which must exist in order to make xarray and netCDF
- * happy when opening a zarr dataset, e.g. by naming the dimensions of the
+ * happy when opening a Zarr dataset, e.g. by naming the dimensions of the
  * "{\"_ARRAY_DIMENSIONS\": [\"dimension_name\"]}";.
  *
  * @tparam Store The type of the store object where the metadata will be written.
