@@ -32,6 +32,24 @@
 #include "./buffer.hpp"
 #include "./chunks.hpp"
 
+/**
+ * @brief Write metadata string to a store under a .zarray key.
+ *
+ * write metadata under .zarray key in store for an array called 'name'. The key and metadata
+ * could be anything, but for example .zarray could be a json file in a file system store
+ * (see FSStore) for the metadata which must exist in order to decode chunks of an array according
+ * to Zarr storage specification version 2 (https://zarr.readthedocs.io/en/stable/spec/v2.html),
+ *
+ * @tparam Store The type of the store object where the metadata will be written.
+ * @param store The store object where the metadata will be written.
+ * @param name The name under which the .zarray key will be stored in the store.
+ * @param metadata The metadata to write for the .zarray key.
+ */
+template <typename Store>
+inline void write_zarray_json(Store& store, std::string_view name, std::string_view metadata) {
+  store[std::string(name) + "/.zarray"] = metadata;
+}
+
 /* converts vector of integers, e.g. for shape of chunks and array in zarr_metadata, into a single
 list written as a string */
 inline std::string vec_to_string(const std::vector<size_t> &vals) {
