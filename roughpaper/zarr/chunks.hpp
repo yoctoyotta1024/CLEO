@@ -126,6 +126,16 @@ class Chunks {
   }
 
   /**
+   * @brief Gets the number of chunks of the reduced array.
+   *
+   * @return A vector containing the number of chunks of an array along its dimensions except for
+   * its outermost one.
+   */
+  std::vector<size_t> get_reducedarray_nchunks() const {
+    return reducedarray_nchunks;
+  }
+
+  /**
    * @brief Writes a chunk to the store and increments the total number of chunks written.
    *
    * This function writes the data held in a buffer in the specified store to a chunk identified by
