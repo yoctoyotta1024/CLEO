@@ -23,6 +23,8 @@
 #ifndef ROUGHPAPER_ZARR_DATASET_HPP_
 #define ROUGHPAPER_ZARR_DATASET_HPP_
 
+#include "./zarr_group.hpp"
+
 /**
 * @brief A class representing a dataset made from a Zarr group (i.e. collection of Zarr arrays)
 * in a storage system.
