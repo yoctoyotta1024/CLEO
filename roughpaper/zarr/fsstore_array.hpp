@@ -372,8 +372,13 @@ class FSStoreArrayViaBuffer {
     /* write buffer to chunk if it isn't empty */
     if (buffer.get_fill() > 0) {
       const auto reduced_arraysize = chunks.get_reduced_arraysize();   // excluding outer dimension
-      assert((buffer.get_fill() % reduced_arraysize == 0) &&
-        "data in buffer should be completely divisible by number of elements of reduced chunk");
+      if (buffer.get_fill() % reduced_arraysize != 0) {
+        const auto warning = std::string_view("WARNING: number of data elements in the buffer"
+        " should be completely divisible by the number of elements in the array excluding its"
+        " outermost dimension.\n         Some data in this array is missing and will be assigned"
+        " null / nan fill value.\n");
+        std::cout << warning;
+      }
       const auto shape_increment = buffer.get_fill() / reduced_arraysize;
       chunks.write_chunk<T>(store, name, partial_metadata, buffer, shape_increment);
     }
