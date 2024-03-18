@@ -16,6 +16,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
+ * Template class for converting types into vectors of single bytes to
+ * write to some kind of memory store under a given key.
  */
 
 
