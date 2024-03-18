@@ -39,9 +39,9 @@
 template <typename T>
 class ArrayChunks {
  private:
-  std::vector<size_t> chunkshape;   /**< Shape of chunks along each dimension */
+  std::vector<size_t> chunkshape;   /**< Shape of chunks along each dimension (constant) */
   std::vector<size_t> reducedarray_nchunks;
-  /**< Number chunks of array along all but outermost dimension of array */
+  /**< Number chunks of array along all but outermost dimension of array (constant) */
 
   /* converts vector of integers for label of chunk along each dimension of array into a string
   to use to name a chunk in the store */
@@ -54,12 +54,12 @@ class ArrayChunks {
    *
    * @return A string representing the label of the current chunk to write.
    */
-  std::string chunk_label(const size_t totnchunks) {
+  std::string chunk_label(const size_t totnchunks) const {
     auto chunk_num = std::vector<size_t>(chunkshape.size(), 0);
     chunk_num.at(0) = totnchunks / vec_product(reducedarray_nchunks);
 
     for (size_t aa = 1; aa < chunkshape.size(); ++aa) {
-      chunk_num.at(aa) = (totnchunks/ vec_product(reducedarray_nchunks, aa)) %
+      chunk_num.at(aa) = (totnchunks / vec_product(reducedarray_nchunks, aa)) %
         reducedarray_nchunks.at(aa - 1);
     }
 
@@ -99,20 +99,20 @@ class ArrayChunks {
     }
   }
 
-  std::vector<size_t> get_chunkshape() {
+  std::vector<size_t> get_chunkshape() const {
     return chunkshape;
   }
 
   template <typename Store, typename T>
   size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
-    Buffer<T>& buffer) {
+    Buffer<T>& buffer) const {
     buffer.write_buffer_to_chunk(store, name, chunk_label(totnchunks));
     return ++totnchunks;
   }
 
   template <typename Store, typename T>
   size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
-    const Buffer<T>::subviewh_buffer h_data_chunk) {
+    const Buffer<T>::subviewh_buffer h_data_chunk) const {
     store[std::string(name) + '/' + chunk_label(totnchunks)].operator=<T>(h_data_chunk);
     return ++totnchunks;
   }
