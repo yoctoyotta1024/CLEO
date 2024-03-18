@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: fsstore_array.hpp
+ * File: wip_fsstore_array.hpp
  * Project: zarr
  * Created Date: Tuesday 12th March 2024
  * Author: Clara Bayley (CB)
@@ -18,8 +18,8 @@
  * File Description:
  */
 
-#ifndef ROUGHPAPER_ZARR_FSSTORE_ARRAY_HPP_
-#define ROUGHPAPER_ZARR_FSSTORE_ARRAY_HPP_
+#ifndef ROUGHPAPER_ZARR_WIP_FSSTORE_ARRAY_HPP_
+#define ROUGHPAPER_ZARR_WIP_FSSTORE_ARRAY_HPP_
 
 #include <algorithm>
 #include <cassert>
@@ -395,4 +395,4 @@ class FSStoreArrayViaBuffer {
   };
 };
 
-#endif    // ROUGHPAPER_ZARR_FSSTORE_ARRAY_HPP_
+#endif    // ROUGHPAPER_ZARR_WIP_FSSTORE_ARRAY_HPP_
