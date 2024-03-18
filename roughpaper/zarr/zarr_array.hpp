@@ -24,8 +24,23 @@
 #ifndef ROUGHPAPER_ZARR_ZARR_ARRAY_HPP_
 #define ROUGHPAPER_ZARR_ZARR_ARRAY_HPP_
 
+#include <iostream>
+#include <string>
+#include <string_view>
+#include <vector>
+
 #include "./buffer.hpp"
 #include "./chunks.hpp"
+
+/* converts vector of integers, e.g. for shape of chunks and array in zarr_metadata, into a single
+list written as a string */
+inline std::string vec_to_string(const std::vector<size_t> &vals) {
+  auto vals_str = std::string{ "[" };
+  for (const auto& v : vals) { vals_str += std::to_string(v) + ", "; }
+  vals_str.erase(vals_str.size() - 2);    // delete last ", "
+  vals_str += "]";
+  return vals_str;
+}
 
 template <typename Store, typename T>
 class ZarrArray {
@@ -33,6 +48,7 @@ class ZarrArray {
   // TODO(CB) (1st move then) use aliases in aliases.hpp
   using viewh_buffer = Buffer<T>::viewh_buffer;
   using subviewh_buffer = Buffer<T>::subviewh_buffer;
+  Store &store                      ///< store in which to write Zarr array
   std::string_view name             ///< Name of array to write in store.
   size_t totnchunks                 ///< Total number of chunks of array written to store.
   std::vector<size_t> arrayshape;   ///< Number of elements in array along each dimension in store.
@@ -67,12 +83,12 @@ class ZarrArray {
   /* increment shape of outermost dimension of N-Dimensional array and update the array's metadata
   .zarray json correspondingly. Function should only be called if is_arrayshape_change flag is
   curerntly true */
-  void update_arrayshape(Store& store, const size_t shape_increment) {
+  void update_arrayshape(const size_t shape_increment) {
     arrayshape.at(0) += shape_increment;   // increase in shape of outermost dimension
     write_zarray_json(store, name, zarr_metadata());   // update metadata
   }
 
-  subviewh_buffer write_chunks_to_store(Store& store, const subviewh_buffer h_data) {
+  subviewh_buffer write_chunks_to_store(const subviewh_buffer h_data) {
     auto shape_increment = size_t{ 0 };
 
     // write buffer to chunk if it's full
@@ -105,12 +121,12 @@ class ZarrArray {
   /**
   * @brief Writes a zarr array to a specified store via a buffer.
   *
-  * Initializes an empty array in the provided FSStore in order to writes chunks of array to the
+  * Initializes an empty array in the provided store in order to writes chunks of array to the
   * store via a buffer. The assertions in this constructor ensure chunks are an appropriate size and
   * shape for the array such that the final array dimensions are exactly integer multiples of its
   * chunks along all but outermost (0th) dimension.
   *
-  * @param store The FSStore where the array will be stored.
+  * @param store The store where the array will be stored.
   * @param chunkshape The shape of individual data chunks along each dimension.
   * @param reduced_arrayshape The shape of the array along all but the outermost (0th) dimension.
   * @param name The name of the array.
@@ -123,7 +139,7 @@ class ZarrArray {
     const double scale_factor, const std::string_view dtype, const std::vector<std::string>& dims,
     const std::vector<size_t>& chunkshape,
     const std::vector<size_t>& reduced_arrayshape = std::vector<size_t>({}))
-    : name(name), totnchunks(0), arrayshape(chunkshape.size(), 0),
+    : store(store), name(name), totnchunks(0), arrayshape(chunkshape.size(), 0),
     chunks(chunkshape, reduced_arrayshape), buffer(vec_product(chunks.get_chunkshape())) {
     /* number of names of dimensions must match number of dimensions of chunks */
     assert((chunkshape.size() == dims.size()) &&
@@ -139,7 +155,6 @@ class ZarrArray {
     const auto fill_value = std::string{ "null" };   // fill value for empty datapoints in array
     const auto filters = std::string{ "null" };      // codec configurations for compression
     const auto zarr_format = '2';                    // storage spec. version 2
-
 
     /* set array shape along all but the outermost dimension to the number of
     elements given by the reduced array shape along that same dimension */
