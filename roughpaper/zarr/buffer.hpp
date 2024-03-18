@@ -64,7 +64,7 @@ struct Buffer {
   using subviewh_buffer = Kokkos::Subview<viewh_buffer, kkpair_size_t>;   ///< Subview of host view
 
  private:
-  size_t chunksize;                        ///< Total chunk size = product of shape of chunks
+  const size_t chunksize;                  ///< Total chunk size = product of shape of chunks
   size_t fill;                             ///< Number of elements of buffer currently filled
   viewh_buffer buffer;                     ///< View for buffer in host memory
 
@@ -116,7 +116,7 @@ struct Buffer {
    *
    * @return The total chunk size.
    */
-  size_t get_chunksize() {
+  size_t get_chunksize() const {
     return chunksize;
   }
 
@@ -125,7 +125,7 @@ struct Buffer {
    *
    * @return The number of elements of buffer filled.
    */
-  size_t get_fill() {
+  size_t get_fill() const {
     return fill;
   }
 
@@ -134,7 +134,7 @@ struct Buffer {
    *
    * @return The number of spaces in the buffer currently not filled with data.
    */
-  size_t get_space() {
+  size_t get_space() const {
     return chunksize - fill;
   }
 
