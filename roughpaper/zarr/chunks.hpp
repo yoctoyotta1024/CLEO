@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: array_chunks.hpp
+ * File: chunks.hpp
  * Project: zarr
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  */
 
 
-#ifndef ROUGHPAPER_ZARR_ARRAY_CHUNKS_HPP_
-#define ROUGHPAPER_ZARR_ARRAY_CHUNKS_HPP_
+#ifndef ROUGHPAPER_ZARR_CHUNKS_HPP_
+#define ROUGHPAPER_ZARR_CHUNKS_HPP_
 
 #include <vector>
 #include <string>
@@ -37,7 +37,7 @@
  * @tparam T The type of data elements stored in the buffer.
  */
 template <typename T>
-class ArrayChunks {
+class Chunks {
  private:
   std::vector<size_t> chunkshape;   /**< Shape of chunks along each dimension (constant) */
   std::vector<size_t> reducedarray_nchunks;
@@ -71,9 +71,9 @@ class ArrayChunks {
 
  public:
   /**
-   * @brief Constructor for the ArrayChunks class.
+   * @brief Constructor for the Chunks class.
    *
-   * Initializes the ArrayChunks with the provided chunk shape and reduced array shape. Reduced
+   * Initializes the Chunks with the provided chunk shape and reduced array shape. Reduced
    * array shape is the shape of the array along all but the outermost dimensions of the array.
    *
    * @param chunkshape The shape of chunks along each dimension.
@@ -153,4 +153,4 @@ class ArrayChunks {
   }
 };
 
-#endif   // ROUGHPAPER_ZARR_ARRAY_CHUNKS_HPP_
+#endif   // ROUGHPAPER_ZARR_CHUNKS_HPP_
