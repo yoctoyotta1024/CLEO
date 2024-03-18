@@ -16,7 +16,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Class to count and write chunks of data to an array in a given memory store.
+ * Class to manage and write chunks of data to an array in a given memory store.
  */
 
 
@@ -29,19 +29,32 @@
 
 #include "./buffer.hpp"
 
+/**
+ * @brief A class template for managing and writing chunks of an array.
+ *
+ * This class provides functionality for writing chunks of an array to a store.
+ *
+ * @tparam T The type of data elements stored in the buffer.
+ */
 template <typename T>
 class ArrayChunks {
  private:
-  size_t totnchunks;
-  /**< total number of chunks written in store */
-  std::vector<size_t> chunkshape;
-  /**< shape of chunks along each dimension (constant) */
+  std::vector<size_t> chunkshape;   /**< Shape of chunks along each dimension */
   std::vector<size_t> reducedarray_nchunks;
-  /**< number chunks of array along all but outermost dimension of array (constant) */
+  /**< Number chunks of array along all but outermost dimension of array */
 
   /* converts vector of integers for label of chunk along each dimension of array into a string
   to use to name a chunk in the store */
-  std::string chunk_label() {
+  /**
+   * @brief Create label for a chunk given current number of chunks written to array.
+   *
+   * This function creates and converts a vector of integers representing the label of a
+   * chunk along each dimension of an array into a string which can be used to name the current
+   * chunk that is next to be written to the store.
+   *
+   * @return A string representing the label of the current chunk to write.
+   */
+  std::string chunk_label(const size_t totnchunks) {
     auto chunk_num = std::vector<size_t>(chunkshape.size(), 0);
     chunk_num.at(0) = totnchunks / vec_product(reducedarray_nchunks);
 
@@ -58,8 +71,17 @@ class ArrayChunks {
   }
 
  public:
+  /**
+   * @brief Constructor for the ArrayChunks class.
+   *
+   * Initializes the ArrayChunks with the provided chunk shape and reduced array shape. Reduced
+   * array shape is the shape of the array along all but the outermost dimensions of the array.
+   *
+   * @param chunkshape The shape of chunks along each dimension.
+   * @param reduced_arrayshape The shape of the reduced array along each dimension.
+   */
   ChunkWriter(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
-    : totnchunks(0), chunkshape(chunkshape), reducedarray_nchunks(chunkshape.size() - 1, 0) {
+    : chunkshape(chunkshape), reducedarray_nchunks(chunkshape.size() - 1, 0) {
 
     /* number of dimensions of reduced array is 1 less than actual array ( = array's chunks) */
     assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
@@ -82,16 +104,17 @@ class ArrayChunks {
   }
 
   template <typename Store, typename T>
-  void write_chunk(Store& store, const std::string_view name, Buffer<T>& buffer) {
-    buffer.write_buffer_to_chunk(store, name, chunk_label());
-    ++totnchunks;
+  size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
+    Buffer<T>& buffer) {
+    buffer.write_buffer_to_chunk(store, name, chunk_label(totnchunks));
+    return ++totnchunks;
   }
 
   template <typename Store, typename T>
-  void write_chunk(Store& store, const std::string_view name,
+  size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
     const Buffer<T>::subviewh_buffer h_data_chunk) {
-    store[std::string(name) + '/' + chunk_label()].operator=<T>(h_data_chunk);
-    ++totnchunks;
+    store[std::string(name) + '/' + chunk_label(totnchunks)].operator=<T>(h_data_chunk);
+    return ++totnchunks;
   }
 };
 
