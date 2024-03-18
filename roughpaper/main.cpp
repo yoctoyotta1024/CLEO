@@ -54,9 +54,13 @@ int main(int argc, char *argv[]) {
     // auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({6}), "radius",
     //   "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
 
-    auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({5, 1}), "massmom",
-      "", 1.0, "<f8", std::vector<std::string>({"time", "gbx"}),
-      std::vector<size_t>({2}));
+    // auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({5, 1}), "massmom",
+    //   "", 1.0, "<f8", std::vector<std::string>({"time", "gbx"}),
+    //   std::vector<size_t>({2}));
+
+    auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({12, 2, 1}), "radius3d",
+      "", 1.0, "<f8", std::vector<std::string>({"time", "gbx", "sdId"}),
+      std::vector<size_t>({2, 1}));
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();

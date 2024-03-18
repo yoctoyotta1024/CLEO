@@ -375,7 +375,7 @@ class FSStoreArrayViaBuffer {
       if (buffer.get_fill() % reduced_arraysize != 0) {
         const auto warning = std::string_view("WARNING: number of data elements in the buffer"
         " should be completely divisible by the number of elements in the array excluding its"
-        " outermost dimension.\n         Some data in this array is missing and will be assigned"
+        " outermost dimension.\n         Some data in this array may be ignored or filled with"
         " null / nan fill value.\n");
         std::cout << warning;
       }
