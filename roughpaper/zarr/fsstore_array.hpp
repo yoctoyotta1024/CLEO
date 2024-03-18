@@ -223,6 +223,10 @@ struct ChunkWriter {
     return chunkshape;
   }
 
+  size_t get_reduced_arraysize() {
+    return vec_product(arrayshape, 1);
+  }
+
   /* make string of metadata for array in zarr store */
   std::string zarr_metadata(const std::string_view partial_metadata) {
     const auto metadata = std::string(
@@ -367,10 +371,10 @@ class FSStoreArrayViaBuffer {
   ~FSStoreArrayViaBuffer() {
     /* write buffer to chunk if it isn't empty */
     if (buffer.get_fill() > 0) {
-      const auto reduced_size = vec_product(chunks.get_chunkshape(), 1);    // exclude outermost dim
-      assert((buffer.get_fill() % reduced_size == 0) &&
+      const auto reduced_arraysize = chunks.get_reduced_arraysize();   // excluding outer dimension
+      assert((buffer.get_fill() % reduced_arraysize == 0) &&
         "data in buffer should be completely divisible by number of elements of reduced chunk");
-      const auto shape_increment = buffer.get_fill() / reduced_size;
+      const auto shape_increment = buffer.get_fill() / reduced_arraysize;
       chunks.write_chunk<T>(store, name, partial_metadata, buffer, shape_increment);
     }
   };
