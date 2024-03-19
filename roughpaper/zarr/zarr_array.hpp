@@ -290,11 +290,16 @@ class ZarrArray {
   };
 
   /**
-   * @brief Writes data to the Zarr array via a buffer.
+   * @brief Writes data from Kokkos view in host memory to chunks of a Zarr array in a store
+   * via a buffer.
    *
-   * Copies data from TODO WIP
+   * Copies some data from the view to a buffer (until number of elements in buffer = chunksize),
+   * then may write chunks of the array alongside the necessary metadata for a Zarr array into
+   * a store. Finall copies any leftover data, number of elements < chunksize, into the buffer.
+   * Assertion checks there is no remainng data unattended to.
    *
-   * @param h_data The data to write to the array.
+   * @param h_data The data in a Kokkos vie win host memory which should be written to the array in
+   * a store.
    */
   void write_data_to_zarr_array(const viewh_buffer h_data) {
     auto h_data_rem = buffer.copy_to_buffer(h_data);
