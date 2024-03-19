@@ -191,7 +191,8 @@ class ZarrArray {
   }
 
   /**
-   * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store.
+   * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store
+   * and updates .zarray json file for Zarr metadata about shape of array accordingly.
    *
    * First writes the buffer to a chunk of the array if it's full. Secondly writes whole chunks
    * directly from the Kokkos view if the view contains enough elements for whole chunk(s) to be
@@ -203,7 +204,7 @@ class ZarrArray {
    * @return The remaining data that was not written to chunks.
    */
   subviewh_buffer
-  write_chunks_to_store(const subviewh_buffer h_data) {
+  write_chunks_to_store_with_metadata(const subviewh_buffer h_data) {
     auto shape_increment = size_t{0};
 
     if (buffer.get_space() == 0) {
@@ -304,10 +305,10 @@ class ZarrArray {
    * a store.
    */
   void
-  write_data_to_zarr_array(const viewh_buffer h_data) {
+  write_to_zarr_array(const viewh_buffer h_data) {
     auto h_data_rem = buffer.copy_to_buffer(h_data);
 
-    h_data_rem = write_chunks_to_store(h_data_rem);
+    h_data_rem = write_chunks_to_store_with_metadata(h_data_rem);
 
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
 
