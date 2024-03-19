@@ -60,6 +60,18 @@ class XarrayZarrArray {
 
     write_zattrs_json(store, name, arrayattrs);
   }
+
+  void
+  write_to_xarray_zarr_array(const viewh_buffer h_data) {
+    auto h_data_rem = zarr.buffer.copy_to_buffer(h_data);
+
+    h_data_rem = write_chunks_to_store(h_data_rem);
+    chunk_metadata();
+
+    h_data_rem = buffer.copy_to_buffer(h_data_rem);
+
+    assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
+  };
 };
 
 #endif  // ROUGHPAPER_ZARR_XARRAY_ZARR_ARRAY_HPP_
