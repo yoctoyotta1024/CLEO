@@ -25,7 +25,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
-#include <Kokkos_UnorderedMap.hpp>
+#include <map>
 
 #include "./zarr_array.hpp"
 
@@ -37,23 +37,55 @@
 template <typename Store, typename T>
 class XarrayZarrArray {
  private:
+  // TODO(CB) move aliases to aliases.hpp
   ZarrArray<Store, T> zarr;
-  std::vector<std::string> dims;
+  std::map<std::string, size_t> dims;
+
+  /**
+   * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store.
+   *
+   * Calls write_chunks_to_store to write whole chunks of data into store. Then updates the shape of
+   * each of the dimensions of the array to be consistent with the accumulated change in shape of
+   * the array (due to the chunks that have been written). Note however, this function does not
+   * (re-)write the .zarray json file's metadata for the shape of the array.
+   * Function returns a (sub)view of the remaining data not written to a chunk (number of elements
+   * in subview < chunksize).
+   *
+   * @param h_data Kokkos view of the data to write to the store in host memory.
+   * @return The remaining data that was not written to chunks.
+   */
+  subviewh_buffer write_chunks_with_xarray_metadata(const subviewh_buffer h_data) {
+    const auto shape_increment = write_chunks_to_store(h_data);
+
+    if (shape_increment) {
+      update_dims(store, shape_increment);
+    }
+
+    const auto n_to_chunks = nchunks_data * buffer.get_chunksize();
+    const auto refs = kkpair_size_t({n_to_chunks, h_data.extent(0)});
+    return Kokkos::subview(h_data, refs);
+  }
 
  public:
   XarrayZarrArray(Store& store, const std::string_view name, const std::string_view units,
                   const double scale_factor, const std::string_view dtype,
-                  const std::vector<std::string>& dims, const std::vector<size_t>& chunkshape,
+                  const std::vector<std::string>& dimnames, const std::vector<size_t>& chunkshape,
                   const std::vector<size_t>& reduced_arrayshape = std::vector<size_t>({}))
-      : ZarrArray(store, name, dtype, chunkshape, reduced_arrayshape), dims(dims) {
-    assert((chunkshape.size() == dims.size()) &&
+      : ZarrArray(store, name, dtype, chunkshape, reduced_arrayshape),
+        dims(maph_dims(dimnames.size())) {
+    assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensinos of chunks");
+
+    dims.insert({dimnames.at(0), 0});
+    for (size_t aa = 1; aa < dimnames.size(); ++aa) {
+      dims.insert({dimnames.at(aa), reduced_arrayshape.at(aa - 1)});
+    }  // TODO(CB) match with zarr_array shape
 
     /* make string of zattrs attribute information for array in zarr store */
     const auto arrayattrs = std::string(
         "{\n"
         "  \"_ARRAY_DIMENSIONS\": " +
-        vecstr_to_string(dims) +  // names of each dimension of array
+        vecstr_to_string(dimnames) +  // names of each dimension of array
         ",\n"
         "  \"units\": " +
         "\"" + std::string(units) + "\"" +  // units of coordinate being stored
