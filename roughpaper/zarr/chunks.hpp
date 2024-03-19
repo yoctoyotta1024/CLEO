@@ -19,14 +19,13 @@
  * Class to manage and write chunks of data to an array in a given memory store.
  */
 
-
 #ifndef ROUGHPAPER_ZARR_CHUNKS_HPP_
 #define ROUGHPAPER_ZARR_CHUNKS_HPP_
 
-#include <vector>
+#include <cassert>
 #include <string>
 #include <string_view>
-#include <cassert>
+#include <vector>
 
 #include "./buffer.hpp"
 
@@ -36,7 +35,8 @@
  * @param vec The vector of size_t numbers.
  * @return The product of all the elements in the vector.
  */
-inline size_t vec_product(const std::vector<size_t>& vec) {
+inline size_t
+vec_product(const std::vector<size_t>& vec) {
   auto value = size_t{1};
   for (const auto& v : vec) {
     value *= v;
@@ -52,7 +52,8 @@ inline size_t vec_product(const std::vector<size_t>& vec) {
  * @param aa The starting index from which to calculate the product.
  * @return The product of elements from the aa'th index in the vector.
  */
-inline size_t vec_product(const std::vector<size_t>& vec, const size_t aa) {
+inline size_t
+vec_product(const std::vector<size_t>& vec, const size_t aa) {
   auto value = size_t{1};
   for (auto it = vec.begin() + aa; it != vec.end(); ++it) {
     value *= *it;
@@ -68,7 +69,7 @@ inline size_t vec_product(const std::vector<size_t>& vec, const size_t aa) {
  */
 class Chunks {
  private:
-  std::vector<size_t> chunkshape;   /**< Shape of chunks along each dimension (constant) */
+  std::vector<size_t> chunkshape; /**< Shape of chunks along each dimension (constant) */
   std::vector<size_t> reducedarray_nchunks;
   /**< Number chunks of array along all but outermost dimension of array (constant) */
 
@@ -82,18 +83,21 @@ class Chunks {
    * @param chunk_num The number of the chunk to write to the array.
    * @return A string representing the label of the current chunk to write.
    */
-  std::string chunk_label(const size_t chunk_num) const {
-    auto chunk_labnums = std::vector<size_t>(chunkshape.size(), 0);
+  std::string
+  chunk_label(const size_t chunk_num) const {
+    auto chunk_labnums  = std::vector<size_t>(chunkshape.size(), 0);
     chunk_labnums.at(0) = chunk_num / vec_product(reducedarray_nchunks);
 
     for (size_t aa = 1; aa < chunkshape.size(); ++aa) {
-      chunk_labnums.at(aa) = (chunk_num / vec_product(reducedarray_nchunks, aa)) %
-        reducedarray_nchunks.at(aa - 1);
+      chunk_labnums.at(aa) =
+          (chunk_num / vec_product(reducedarray_nchunks, aa)) % reducedarray_nchunks.at(aa - 1);
     }
 
-    auto chunk_lab = std::string{ "" };
-    for (const auto& c : chunk_labnums) { chunk_lab += std::to_string(c) + "."; }
-    chunk_lab.pop_back();   // delete last "."
+    auto chunk_lab = std::string{""};
+    for (const auto& c : chunk_labnums) {
+      chunk_lab += std::to_string(c) + ".";
+    }
+    chunk_lab.pop_back();  // delete last "."
 
     return chunk_lab;
   }
@@ -109,11 +113,10 @@ class Chunks {
    * @param reduced_arrayshape The shape of the reduced array along each dimension.
    */
   Chunks(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
-    : chunkshape(chunkshape), reducedarray_nchunks(chunkshape.size() - 1, 0) {
-
+      : chunkshape(chunkshape), reducedarray_nchunks(chunkshape.size() - 1, 0) {
     /* number of dimensions of reduced array is 1 less than actual array ( = array's chunks) */
     assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
-      "reduced array 1 less dimension than array (excludes outermost (0th) dimension");
+           "reduced array 1 less dimension than array (excludes outermost (0th) dimension");
 
     /* set number of chunks along all but array's outermost dimension given
     the shape of each chunk and expected shape of final array along those dimensions */
@@ -121,7 +124,8 @@ class Chunks {
       /* Assert the chunk size is completely divisible by the array's expected size along that
       dimension in order to ensure good chunking */
       assert((reduced_arrayshape.at(aa - 1) % chunkshape.at(aa) == 0) &&
-        "along all but outermost dimension, arrayshape must be completely divisible by chunkshape");
+             "along all but outermost dimension, arrayshape must be completely divisible by "
+             "chunkshape");
       /* reducedarray_nchunks = number of chunks along all but outermost dimension of array */
       reducedarray_nchunks.push_back(reduced_arrayshape.at(aa - 1) / chunkshape.at(aa));
     }
@@ -133,7 +137,8 @@ class Chunks {
    * @return A vector containing the shape (number of data elements) of a chunk
    * along each dimension.
    */
-  std::vector<size_t> get_chunkshape() const {
+  std::vector<size_t>
+  get_chunkshape() const {
     return chunkshape;
   }
 
@@ -143,7 +148,8 @@ class Chunks {
    * @return A vector containing the number of chunks of an array along its dimensions except for
    * its outermost one.
    */
-  std::vector<size_t> get_reducedarray_nchunks() const {
+  std::vector<size_t>
+  get_reducedarray_nchunks() const {
     return reducedarray_nchunks;
   }
 
@@ -163,8 +169,9 @@ class Chunks {
    * @return The updated total number of chunks after writing.
    */
   template <typename Store, typename T>
-  size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
-    Buffer<T>& buffer) const {
+  size_t
+  write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
+              Buffer<T>& buffer) const {
     buffer.write_buffer_to_chunk(store, name, chunk_label(totnchunks));
     return ++totnchunks;
   }
@@ -185,11 +192,12 @@ class Chunks {
    * @return The updated total number of chunks after writing.
    */
   template <typename Store, typename T>
-  size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
-    const Buffer<T>::subviewh_buffer h_data_chunk) const {
-    store[std::string(name) + '/' + chunk_label(totnchunks)].operator=<T>(h_data_chunk);
+  size_t
+  write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
+              const Buffer<T>::subviewh_buffer h_data_chunk) const {
+    store[std::string(name) + '/' + chunk_label(totnchunks)].operator= <T>(h_data_chunk);
     return ++totnchunks;
   }
 };
 
-#endif   // ROUGHPAPER_ZARR_CHUNKS_HPP_
+#endif  // ROUGHPAPER_ZARR_CHUNKS_HPP_

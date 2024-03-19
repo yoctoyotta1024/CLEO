@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TB)
  * -----
- * Last Modified: Monday 18th March 2024
+ * Last Modified: Tuesday 19th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,15 +19,14 @@
  * Class for writing memory in a a file system store under a given key.
  */
 
-
 #ifndef ROUGHPAPER_ZARR_FSSTORE_HPP_
 #define ROUGHPAPER_ZARR_FSSTORE_HPP_
 
 #include <filesystem>
-#include <string_view>
-#include <span>
 #include <fstream>
 #include <iostream>
+#include <span>
+#include <string_view>
 
 #include "./store_accessor.hpp"
 
@@ -41,7 +40,7 @@
  */
 class FSStore {
  private:
-  const std::filesystem::path basedir;   /**< The root directory of the file system store. */
+  const std::filesystem::path basedir; /**< The root directory of the file system store. */
 
  public:
   /**
@@ -49,7 +48,8 @@ class FSStore {
    *
    * @param basedir The root directory of the file system store.
    */
-  explicit FSStore(const std::filesystem::path basedir) : basedir(basedir) {}
+  explicit FSStore(const std::filesystem::path basedir) : basedir(basedir) {
+  }
 
   /**
    * @brief Operator to use a StoreAccessor to write values under a given key.
@@ -59,7 +59,10 @@ class FSStore {
    * @param key The key for which the StoreAccessor is accessed.
    * @return A StoreAccessor object associated with the specified key.
    */
-  StoreAccessor<FSStore> operator[](const std::string_view key) const { return { *this, key }; }
+  StoreAccessor<FSStore>
+  operator[](const std::string_view key) const {
+    return {*this, key};
+  }
 
   /**
    * @brief Write function called by StoreAccessor to write data to file system storage after the
@@ -69,7 +72,8 @@ class FSStore {
    * unsigned integer types to the file system store under the specified key.
    *
    * @param key The key under which the data will be stored in the file system store.
-   * @param buffer A span representing the range of memory containing the unsigned bytes to be written.
+   * @param buffer A span representing the range of memory containing the unsigned bytes to be
+   * written.
    * @return True if the write operation is successful, false otherwise.
    */
   inline bool write(const std::string_view key, const std::span<const uint8_t> buffer) const;
@@ -85,17 +89,19 @@ class FSStore {
  * TODO(ALL): move this function to a .cpp file
  *
  * @param key The key under which the data will be stored in the file system store.
- * @param buffer A span representing the range of memory containing the unsigned bytes to be written.
+ * @param buffer A span representing the range of memory containing the unsigned bytes to be
+ * written.
  * @return True if the write operation is successful, false otherwise.
  */
-inline bool FSStore::write(std::string_view key, std::span<const uint8_t> buffer) const {
-  auto path = basedir / key;
-  auto mode = std::ios::out | std::ios::binary;
+inline bool
+FSStore::write(std::string_view key, std::span<const uint8_t> buffer) const {
+  auto          path = basedir / key;
+  auto          mode = std::ios::out | std::ios::binary;
   std::ofstream out(path, mode);
 
   if (!out.good()) {
-    std::cout << "couldn't open " << path << ",\n "
-      << "making directory " << path.parent_path() << "\n";
+    std::cout << "couldn't open " << path << ",\n " << "making directory " << path.parent_path()
+              << "\n";
     std::filesystem::create_directories(path.parent_path());
     out.open(path, mode);
   }
@@ -109,4 +115,4 @@ inline bool FSStore::write(std::string_view key, std::span<const uint8_t> buffer
   return true;
 }
 
-#endif   // ROUGHPAPER_ZARR_FSSTORE_HPP_
+#endif  // ROUGHPAPER_ZARR_FSSTORE_HPP_

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TB)
  * -----
- * Last Modified: Monday 18th March 2024
+ * Last Modified: Tuesday 19th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,14 +20,12 @@
  * write to some kind of memory store under a given key.
  */
 
-
 #ifndef ROUGHPAPER_ZARR_STORE_ACCESSOR_HPP_
 #define ROUGHPAPER_ZARR_STORE_ACCESSOR_HPP_
 
+#include <Kokkos_Core.hpp>
 #include <span>
 #include <string_view>
-
-#include <Kokkos_Core.hpp>
 
 /**
  * @brief A template class for converting types into vectors of single bytes to write to a "store"
@@ -42,10 +40,10 @@
  */
 template <typename Store>
 struct StoreAccessor {
-  using HostSpace = Kokkos::DefaultHostExecutionSpace;    // TODO(CB) (re-)move definitions
+  using HostSpace = Kokkos::DefaultHostExecutionSpace;  // TODO(CB) (re-)move definitions
 
-  Store& store;   ///< Reference to the store object.
-  std::string_view key;   ///< The key under which data will be stored in the store.
+  Store&           store;  ///< Reference to the store object.
+  std::string_view key;    ///< The key under which data will be stored in the store.
 
   /**
    * @brief Write a range of memory representing unsigned bytes (uint8_t) to the store.
@@ -53,7 +51,8 @@ struct StoreAccessor {
    * @param buffer A span representing the range of memory containing the unsigned bytes.
    * @return A reference to the current StoreAccessor object.
    */
-  StoreAccessor& operator=(std::span<const uint8_t> buffer) const {
+  StoreAccessor&
+  operator=(std::span<const uint8_t> buffer) const {
     store.write(key, buffer);
     return *this;
   }
@@ -68,9 +67,10 @@ struct StoreAccessor {
    * @param buffer The string to be converted and written to the store.
    * @return A reference to the current StoreAccessor object.
    */
-  StoreAccessor& operator=(std::string_view buffer) const {
+  StoreAccessor&
+  operator=(std::string_view buffer) const {
     return operator=(
-      std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()), buffer.size()));
+        std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()), buffer.size()));
   }
 
   /**
@@ -85,9 +85,10 @@ struct StoreAccessor {
    * @return A reference to the current StoreAccessor object.
    */
   template <typename T>
-  StoreAccessor& operator=(std::span<const T> buffer) const {
+  StoreAccessor&
+  operator=(std::span<const T> buffer) const {
     return operator=(std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()),
-      buffer.size() * sizeof(T)));
+                                              buffer.size() * sizeof(T)));
   }
 
   /**
@@ -103,10 +104,11 @@ struct StoreAccessor {
    * @return A reference to the current StoreAccessor object.
    */
   template <typename T>
-  StoreAccessor& operator=(const Kokkos::View<T*, HostSpace::memory_space> buffer) const {
+  StoreAccessor&
+  operator=(const Kokkos::View<T*, HostSpace::memory_space> buffer) const {
     return operator=(std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()),
-      buffer.extent(0) * sizeof(T)));
+                                              buffer.extent(0) * sizeof(T)));
   }
 };
 
-#endif   // ROUGHPAPER_ZARR_STORE_ACCESSOR_HPP_
+#endif  // ROUGHPAPER_ZARR_STORE_ACCESSOR_HPP_
