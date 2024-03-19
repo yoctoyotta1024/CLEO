@@ -56,9 +56,7 @@ class Dataset {
         "\n}";
   }
 
-  void
-  create_zarr_array() {
-  }
+  void create_zarr_array() {}
 };
 
 #endif  // ROUGHPAPER_ZARR_DATASET_HPP_

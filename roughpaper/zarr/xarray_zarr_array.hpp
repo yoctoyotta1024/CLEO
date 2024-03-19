@@ -23,6 +23,10 @@
 #ifndef ROUGHPAPER_ZARR_XARRAY_ZARR_ARRAY_HPP_
 #define ROUGHPAPER_ZARR_XARRAY_ZARR_ARRAY_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
+#include <Kokkos_UnorderedMap.hpp>
+
 #include "./zarr_array.hpp"
 
 /** Zarr array with additional metadata and constraining of shape of array to shape of dimensions

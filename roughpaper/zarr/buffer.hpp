@@ -22,6 +22,8 @@
 #ifndef ROUGHPAPER_ZARR_BUFFER_HPP_
 #define ROUGHPAPER_ZARR_BUFFER_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <algorithm>
 #include <limits>
 #include <string>
@@ -52,8 +54,7 @@ struct Buffer {
   /**
    * @brief Parallel loop on host to fill buffer with NaN (numerical limit).
    */
-  void
-  reset_buffer() {
+  void reset_buffer() {
     Kokkos::parallel_for(
         "init_buffer", Kokkos::RangePolicy<HostSpace>(0, chunksize),
         KOKKOS_CLASS_LAMBDA(const size_t& jj) { buffer(jj) = std::numeric_limits<T>::max(); });
@@ -69,8 +70,7 @@ struct Buffer {
    * @param n_to_copy maximum number of elements to copy to the buffer.
    * @param h_data View containing the data to copy.
    */
-  void
-  copy_ndata_to_buffer(const size_t n_to_copy, const viewh_buffer h_data) {
+  void copy_ndata_to_buffer(const size_t n_to_copy, const viewh_buffer h_data) {
     Kokkos::parallel_for(
         "copy_ndata_to_buffer", Kokkos::RangePolicy<HostSpace>(fill, fill + n_to_copy),
         KOKKOS_CLASS_LAMBDA(const size_t& jj) { buffer(jj) = h_data(jj); });
@@ -95,30 +95,21 @@ struct Buffer {
    *
    * @return The total chunk size.
    */
-  size_t
-  get_chunksize() const {
-    return chunksize;
-  }
+  size_t get_chunksize() const { return chunksize; }
 
   /**
    * @brief Gets the number of elements currently in the buffer.
    *
    * @return The number of elements of buffer filled.
    */
-  size_t
-  get_fill() const {
-    return fill;
-  }
+  size_t get_fill() const { return fill; }
 
   /**
    * @brief Returns the number of empty spaces in the buffer.
    *
    * @return The number of spaces in the buffer currently not filled with data.
    */
-  size_t
-  get_space() const {
-    return chunksize - fill;
-  }
+  size_t get_space() const { return chunksize - fill; }
 
   /**
    * @brief Copies as many elements as possible from data to buffer.
@@ -130,8 +121,7 @@ struct Buffer {
    * @param h_data View containing the data to copy.
    * @return Subview containing the remaining data not copied to the buffer.
    */
-  subviewh_buffer
-  copy_to_buffer(const viewh_buffer h_data) {
+  subviewh_buffer copy_to_buffer(const viewh_buffer h_data) {
     const auto n_to_copy = size_t{std::min(get_space(), h_data.extent(0))};
 
     copy_ndata_to_buffer(n_to_copy, h_data);
@@ -152,8 +142,7 @@ struct Buffer {
    * @param chunk_str Name of the chunk of the array to write in the store.
    */
   template <typename Store>
-  void
-  write_buffer_to_chunk(Store& store, std::string_view name, const std::string& chunk_label) {
+  void write_buffer_to_chunk(Store& store, std::string_view name, const std::string& chunk_label) {
     store[std::string(name) + '/' + chunk_label].operator= <T>(buffer);
     reset_buffer();
   }

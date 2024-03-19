@@ -53,15 +53,13 @@ using kkpair_size_t = Kokkos::pair<size_t, size_t>;   // TODO(CB) (re-)move defi
  * @param metadata The metadata to write for the .zarray key.
  */
 template <typename Store>
-inline void
-write_zattrs_json(Store& store, std::string_view name, std::string_view attrs) {
+inline void write_zattrs_json(Store& store, std::string_view name, std::string_view attrs) {
   store[std::string(name) + "/.zattrs"] = attrs;
 }
 
 /* converts vector of strings, e.g. for names of dimensions, into a single list
 written as a string */
-inline std::string
-vecstr_to_string(const std::vector<std::string>& dims) {
+inline std::string vecstr_to_string(const std::vector<std::string>& dims) {
   auto dims_str = std::string{"["};
   for (const auto& d : dims) {
     dims_str += "\"" + d + "\",";
