@@ -85,7 +85,7 @@ class Chunks {
    */
   std::string
   chunk_label(const size_t chunk_num) const {
-    auto chunk_labnums  = std::vector<size_t>(chunkshape.size(), 0);
+    auto chunk_labnums = std::vector<size_t>(chunkshape.size(), 0);
     chunk_labnums.at(0) = chunk_num / vec_product(reducedarray_nchunks);
 
     for (size_t aa = 1; aa < chunkshape.size(); ++aa) {

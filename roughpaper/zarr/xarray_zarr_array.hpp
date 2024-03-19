@@ -34,13 +34,14 @@ template <typename Store, typename T>
 class XarrayZarrArray {
  private:
   ZarrArray<Store, T> zarr;
+  std::vector<std::string> dims;
 
  public:
   XarrayZarrArray(Store& store, const std::string_view name, const std::string_view units,
                   const double scale_factor, const std::string_view dtype,
                   const std::vector<std::string>& dims, const std::vector<size_t>& chunkshape,
                   const std::vector<size_t>& reduced_arrayshape = std::vector<size_t>({}))
-      : ZarrArray(store, name, dtype, chunkshape, reduced_arrayshape) {
+      : ZarrArray(store, name, dtype, chunkshape, reduced_arrayshape), dims(dims) {
     assert((chunkshape.size() == dims.size()) &&
            "number of named dimensions of array must match number dimensinos of chunks");
 

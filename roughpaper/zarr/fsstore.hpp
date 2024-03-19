@@ -95,8 +95,8 @@ class FSStore {
  */
 inline bool
 FSStore::write(std::string_view key, std::span<const uint8_t> buffer) const {
-  auto          path = basedir / key;
-  auto          mode = std::ios::out | std::ios::binary;
+  auto path = basedir / key;
+  auto mode = std::ios::out | std::ios::binary;
   std::ofstream out(path, mode);
 
   if (!out.good()) {

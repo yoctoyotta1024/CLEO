@@ -35,8 +35,8 @@
 
 #include "./fsstore.hpp"
 
-using HostSpace     = Kokkos::DefaultHostExecutionSpace;  // TODO(CB) (re-)move definitions
-using kkpair_size_t = Kokkos::pair<size_t, size_t>;       // TODO(CB) (re-)move definitions
+using HostSpace = Kokkos::DefaultHostExecutionSpace;  // TODO(CB) (re-)move definitions
+using kkpair_size_t = Kokkos::pair<size_t, size_t>;   // TODO(CB) (re-)move definitions
 
 /**
  * @brief Write attributes string to a store under a .zattrs key.
