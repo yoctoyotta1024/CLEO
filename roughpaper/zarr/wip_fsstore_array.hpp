@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 18th March 2024
+ * Last Modified: Tuesday 19th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,23 +21,22 @@
 #ifndef ROUGHPAPER_ZARR_WIP_FSSTORE_ARRAY_HPP_
 #define ROUGHPAPER_ZARR_WIP_FSSTORE_ARRAY_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
+#include <Kokkos_Pair.hpp>
 #include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <limits>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <vector>
-#include <stdexcept>
-
-#include <Kokkos_Core.hpp>
-#include <Kokkos_Pair.hpp>
-#include <Kokkos_DualView.hpp>
 
 #include "./fsstore.hpp"
 
-using HostSpace = Kokkos::DefaultHostExecutionSpace;     // TODO(CB) (re-)move definitions
-using kkpair_size_t = Kokkos::pair<size_t, size_t>;      // TODO(CB) (re-)move definitions
+using HostSpace     = Kokkos::DefaultHostExecutionSpace;  // TODO(CB) (re-)move definitions
+using kkpair_size_t = Kokkos::pair<size_t, size_t>;       // TODO(CB) (re-)move definitions
 
 /**
  * @brief Write attributes string to a store under a .zattrs key.
@@ -54,34 +53,38 @@ using kkpair_size_t = Kokkos::pair<size_t, size_t>;      // TODO(CB) (re-)move d
  * @param metadata The metadata to write for the .zarray key.
  */
 template <typename Store>
-inline void write_zattrs_json(Store& store, std::string_view name, std::string_view attrs) {
+inline void
+write_zattrs_json(Store& store, std::string_view name, std::string_view attrs) {
   store[std::string(name) + "/.zattrs"] = attrs;
 }
 
 /* converts vector of strings, e.g. for names of dimensions, into a single list
 written as a string */
-inline std::string vecstr_to_string(const std::vector<std::string> &dims) {
-  auto dims_str = std::string{ "[" };
-  for (const auto& d : dims) { dims_str += "\"" + d + "\","; }
-  dims_str.pop_back();    // delete last ","
+inline std::string
+vecstr_to_string(const std::vector<std::string>& dims) {
+  auto dims_str = std::string{"["};
+  for (const auto& d : dims) {
+    dims_str += "\"" + d + "\",";
+  }
+  dims_str.pop_back();  // delete last ","
   dims_str += "]";
   return dims_str;
 }
 
-    // TODO(CB) move xarray metadata to dataset
-    // /* make string of zattrs attribute information for array in zarr store */
-    // const auto arrayattrs = std::string(
-    //   "{\n"
-    //   "  \"_ARRAY_DIMENSIONS\": " +
-    //   vecstr_to_string(dims) +                // names of each dimension of array
-    //   ",\n"
-    //   "  \"units\": " +
-    //   "\"" + std::string(units) + "\"" +    // units of coordinate being stored
-    //   ",\n"
-    //   "  \"scale_factor\": " +
-    //   std::to_string(scale_factor) +        // scale_factor of data
-    //   "\n}");
+// TODO(CB) move xarray metadata to dataset
+// /* make string of zattrs attribute information for array in zarr store */
+// const auto arrayattrs = std::string(
+//   "{\n"
+//   "  \"_ARRAY_DIMENSIONS\": " +
+//   vecstr_to_string(dims) +                // names of each dimension of array
+//   ",\n"
+//   "  \"units\": " +
+//   "\"" + std::string(units) + "\"" +    // units of coordinate being stored
+//   ",\n"
+//   "  \"scale_factor\": " +
+//   std::to_string(scale_factor) +        // scale_factor of data
+//   "\n}");
 
-    // write_zattrs_json(store, name, arrayattrs);
+// write_zattrs_json(store, name, arrayattrs);
 
-#endif    // ROUGHPAPER_ZARR_WIP_FSSTORE_ARRAY_HPP_
+#endif  // ROUGHPAPER_ZARR_WIP_FSSTORE_ARRAY_HPP_
