@@ -35,7 +35,6 @@
 
 #include "initialise/config.hpp"
 #include "initialise/readbinary.hpp"
-#include "yac_interface.h"
 
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
