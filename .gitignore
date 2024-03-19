@@ -9,7 +9,7 @@
 .ipynb_checkpoints
 .DS_Store
 __pycache__
-.editorconfig
+.clang-format
 build
 bin
 docs/source/_autosummary
