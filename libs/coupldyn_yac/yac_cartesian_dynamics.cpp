@@ -21,6 +21,10 @@
 
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
 
+extern "C" {
+  #include "yac_interface.h"
+}
+
 /* open file called 'filename' and return vector
 of doubles for first variable in that file */
 std::vector<double> thermodynamicvar_from_binary(std::string_view filename) {
@@ -71,10 +75,109 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
       get_vvel(nullwinds()) {
   std::cout << "\n--- coupled cartesian dynamics from file ---\n";
 
-  press = thermodynamicvar_from_binary(config.press_filename);
-  temp = thermodynamicvar_from_binary(config.temp_filename);
-  qvap = thermodynamicvar_from_binary(config.qvap_filename);
-  qcond = thermodynamicvar_from_binary(config.qcond_filename);
+  yac_cinit();
+
+  yac_cdef_calendar(YAC_PROLEPTIC_GREGORIAN);
+  yac_cdef_datetime("1850-01-01T00:00:00", "1850-12-31T00:00:00");
+
+  // component definition
+  std::string component_name = "cleo";
+  int component_id = -1;
+  yac_cdef_comp(component_name.c_str(), &component_id);
+
+  // grid definition
+  int grid_id = -1;
+  std::string cleo_grid_name = "cleo_grid";
+  auto longitudes = std::vector<double>(75, 0);
+  auto latitudes = std::vector<double>(36, 0);
+
+  int total_vertices[2] = {75, 36};
+  int cyclic_dimension[2] = {1, 0};
+
+  for (size_t i = 0; i < longitudes.size(); i++) {
+    longitudes[i] = i * (2 * std::numbers::pi / 76);
+    if (i < latitudes.size())
+      latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / 38);
+  }
+
+  yac_cdef_grid_reg2d(cleo_grid_name.c_str(), total_vertices,
+                      cyclic_dimension, longitudes.data(),
+                      latitudes.data(), &grid_id);
+
+  // Points definitions
+  int corner_point_id = -1;
+  yac_cdef_points_reg2d(grid_id, total_vertices, YAC_LOCATION_CORNER,
+                        longitudes.data(), latitudes.data(), &corner_point_id);
+
+  // Interpolation stack
+  int interp_stack_id;
+  yac_cget_interp_stack_config(&interp_stack_id);
+  yac_cadd_interp_stack_config_nnn(interp_stack_id, YAC_NNN_AVG, 1, 1.0);
+
+  // Field definition
+  int pressure_id, temp_id, qvap_id, qcond_id;
+  int num_point_sets = 1;
+  int collection_size = 1;
+  int point_ids[num_point_sets] = {corner_point_id};
+
+  yac_cdef_field("pressure", component_id, point_ids,
+                 num_point_sets, collection_size, "PT15M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &pressure_id);
+
+  yac_cdef_field("temperature", component_id, point_ids,
+                 num_point_sets, collection_size, "PT15M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &temp_id);
+
+  yac_cdef_field("qvap", component_id, point_ids,
+                 num_point_sets, collection_size, "PT15M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &qvap_id);
+
+  yac_cdef_field("qcond", component_id, point_ids,
+                 num_point_sets, collection_size, "PT15M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &qcond_id);
+
+
+  // Field couplings
+  yac_cdef_couple("yac_reader", "yac_reader_grid", "pressure",
+                  "cleo", "cleo_grid", "pressure",
+                  "PT15M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+
+  yac_cdef_couple("yac_reader", "yac_reader_grid", "temperature",
+                  "cleo", "cleo_grid", "temperature",
+                  "PT15M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+
+  yac_cdef_couple("yac_reader", "yac_reader_grid", "qvap",
+                  "cleo", "cleo_grid", "qvap",
+                  "PT15M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+
+  yac_cdef_couple("yac_reader", "yac_reader_grid", "qcond",
+                  "cleo", "cleo_grid", "qcond",
+                  "PT15M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+
+  yac_cenddef();
+
+  // Receiving data from YAC
+  int info, error;
+  auto yac_field_data = std::vector<double>(total_vertices[0] * total_vertices[1]);
+  double * yac_raw_data = yac_field_data.data();
+
+  yac_cget(pressure_id, 1, &yac_raw_data, &info, &error);
+  press = yac_field_data;
+
+  yac_cget(temp_id, 1, &yac_raw_data, &info, &error);
+  temp = yac_field_data;
+
+  yac_cget(qvap_id, 1, &yac_raw_data, &info, &error);
+  qvap = yac_field_data;
+
+  yac_cget(qcond_id, 1, &yac_raw_data, &info, &error);
+  qcond = yac_field_data;
+
+  yac_cfinalize();
 
   std::cout << "Finished reading thermodynamics from binaries for:\n"
                "  pressure,\n  temperature,\n"
