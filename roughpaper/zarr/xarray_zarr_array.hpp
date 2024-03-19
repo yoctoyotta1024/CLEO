@@ -26,6 +26,8 @@
 
 #include "./zarr_array.hpp"
 
+/* Zarr array with additional metadata and constraining of shape of array to shape of dimensions
+in order to ensure Zarr array is compatibile with NetCDF and Xarray */
 template <typename Store, typename T>
 class XarrayZarrArray {
  private:
@@ -37,20 +39,20 @@ class XarrayZarrArray {
     const std::vector<size_t>& chunkshape,
     const std::vector<size_t>& reduced_arrayshape = std::vector<size_t>({}))
     : ZarrArray(store, name, units, scale_factor, dtype, dims, chunkshape, reduced_arrayshape) {
-    // /* make string of zattrs attribute information for array in zarr store */
-    // const auto arrayattrs = std::string(
-    //   "{\n"
-    //   "  \"_ARRAY_DIMENSIONS\": " +
-    //   vecstr_to_string(dims) +                // names of each dimension of array
-    //   ",\n"
-    //   "  \"units\": " +
-    //   "\"" + std::string(units) + "\"" +    // units of coordinate being stored
-    //   ",\n"
-    //   "  \"scale_factor\": " +
-    //   std::to_string(scale_factor) +        // scale_factor of data
-    //   "\n}");
+    /* make string of zattrs attribute information for array in zarr store */
+    const auto arrayattrs = std::string(
+      "{\n"
+      "  \"_ARRAY_DIMENSIONS\": " +
+      vecstr_to_string(dims) +                // names of each dimension of array
+      ",\n"
+      "  \"units\": " +
+      "\"" + std::string(units) + "\"" +    // units of coordinate being stored
+      ",\n"
+      "  \"scale_factor\": " +
+      std::to_string(scale_factor) +        // scale_factor of data
+      "\n}");
 
-    // write_zattrs_json(store, name, arrayattrs);
+    write_zattrs_json(store, name, arrayattrs);
     }
 };
 
