@@ -22,6 +22,8 @@
 #ifndef ROUGHPAPER_ZARR_DATASET_HPP_
 #define ROUGHPAPER_ZARR_DATASET_HPP_
 
+#include <Kokkos_Core.hpp>
+
 #include "./zarr_group.hpp"
 
 /**
