@@ -191,20 +191,18 @@ class ZarrArray {
   }
 
   /**
-   * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store
-   * and updates .zarray json file for Zarr metadata about shape of array accordingly.
+   * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store.
    *
-   * First writes the buffer to a chunk of the array if it's full. Secondly writes whole chunks
+   * First writes the buffer to a chunk of the array if it's full. Then writes whole chunks
    * directly from the Kokkos view if the view contains enough elements for whole chunk(s) to be
-   * written. Thirdly updates the shape of the array with the cumulative change in shape of the
-   * array due to the chunks that have been written. Finally returns a (sub)view of the remaining
-   * data not written to a chunk (number of elements in subview < chunksize).
+   * written. Returns the change in shape of the outermost dimension of the array in the store due
+   * to the accumulated change in the chunks that have been written.
    *
    * @param h_data Kokkos view of the data to write to the store in host memory.
-   * @return The remaining data that was not written to chunks.
+   * @return The increment in the shape of the array's outermost dimension.
    */
-  subviewh_buffer
-  write_chunks_to_store_with_metadata(const subviewh_buffer h_data) {
+  size_t
+  write_chunks_to_store(const subviewh_buffer h_data) {
     auto shape_increment = size_t{0};
 
     if (buffer.get_space() == 0) {
@@ -219,6 +217,25 @@ class ZarrArray {
       shape_increment += arrayshape_change(totnchunks, chunks.get_chunkshape().at(0));
       totnchunks = chunks.write_chunk<T>(store, name, totnchunks, Kokkos::subview(h_data, refs));
     }
+
+    return shape_increment
+  }
+
+  /**
+   * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store
+   * and updates .zarray json file for Zarr metadata about shape of array accordingly.
+   *
+   * Calls write_chunks_to_store to write whole chunks of data into store. Then updates the shape of
+   * the array with the accumulated change in shape of the array due to the chunks that have been
+   * written. Finally returns a (sub)view of the remaining data not written to a chunk (number of
+   * elements in subview < chunksize).
+   *
+   * @param h_data Kokkos view of the data to write to the store in host memory.
+   * @return The remaining data that was not written to chunks.
+   */
+  subviewh_buffer
+  write_chunks_with_zarr_metadata(const subviewh_buffer h_data) {
+    const auto shape_increment = write_chunks_to_store(h_data);
 
     if (shape_increment) {
       update_arrayshape(store, shape_increment);
@@ -308,7 +325,7 @@ class ZarrArray {
   write_to_zarr_array(const viewh_buffer h_data) {
     auto h_data_rem = buffer.copy_to_buffer(h_data);
 
-    h_data_rem = write_chunks_to_store_with_metadata(h_data_rem);
+    h_data_rem = write_chunks_with_zarr_metadata(h_data_rem);
 
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
 
