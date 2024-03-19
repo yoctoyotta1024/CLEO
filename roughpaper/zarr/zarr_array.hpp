@@ -23,6 +23,8 @@
 #ifndef ROUGHPAPER_ZARR_ZARR_ARRAY_HPP_
 #define ROUGHPAPER_ZARR_ZARR_ARRAY_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <cassert>
 #include <iostream>
 #include <string>

@@ -22,6 +22,8 @@
 #ifndef ROUGHPAPER_ZARR_CHUNKS_HPP_
 #define ROUGHPAPER_ZARR_CHUNKS_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <cassert>
 #include <string>
 #include <string_view>

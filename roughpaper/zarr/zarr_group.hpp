@@ -23,6 +23,7 @@
 #ifndef ROUGHPAPER_ZARR_ZARR_GROUP_HPP_
 #define ROUGHPAPER_ZARR_ZARR_GROUP_HPP_
 
+#include <Kokkos_Core.hpp>
 #include <string>
 
 /**
