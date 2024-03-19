@@ -61,12 +61,23 @@ class XarrayZarrArray {
     write_zattrs_json(store, name, arrayattrs);
   }
 
+  /**
+   * @brief Writes data from Kokkos view in host memory to chunks of a Zarr array in a store
+   * via a buffer.
+   *
+   * Copies some data from the view to a buffer (until number of elements in buffer = chunksize),
+   * then may write chunks of the array alongside the necessary metadata for a Zarr array into
+   * a store. Finall copies any leftover data, number of elements < chunksize, into the buffer.
+   * Assertion checks there is no remainng data unattended to.
+   *
+   * @param h_data The data in a Kokkos vie win host memory which should be written to the array in
+   * a store.
+   */
   void
-  write_to_xarray_zarr_array(const viewh_buffer h_data) {
-    auto h_data_rem = zarr.buffer.copy_to_buffer(h_data);
+  write_to_array(const viewh_buffer h_data) {
+    auto h_data_rem = buffer.copy_to_buffer(h_data);
 
-    h_data_rem = write_chunks_to_store(h_data_rem);
-    chunk_metadata();
+    h_data_rem = write_chunks_with_xarray_metadata(h_data_rem);
 
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
 
