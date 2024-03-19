@@ -46,7 +46,7 @@ struct Buffer {
 
  private:
   const size_t chunksize;  ///< Total chunk size = product of shape of chunks
-  size_t       fill;       ///< Number of elements of buffer currently filled
+  size_t fill;             ///< Number of elements of buffer currently filled
   viewh_buffer buffer;     ///< View for buffer in host memory
 
   /**

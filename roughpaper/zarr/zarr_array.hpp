@@ -63,11 +63,11 @@ write_zarray_json(Store& store, std::string_view name, std::string_view metadata
  */
 inline std::string_view
 make_part_metadata(const std::vector<size_t>& chunkshape, const std::string_view dtype) {
-  const auto order       = 'C';  // layout of bytes in each chunk of array in storage ('C' or 'F')
-  const auto compressor  = std::string{"null"};  // compression of data when writing to store
-  const auto fill_value  = std::string{"null"};  // fill value for empty datapoints in array
-  const auto filters     = std::string{"null"};  // codec configurations for compression
-  const auto zarr_format = '2';                  // storage spec. version 2
+  const auto order = 'C';  // layout of bytes in each chunk of array in storage ('C' or 'F')
+  const auto compressor = std::string{"null"};  // compression of data when writing to store
+  const auto fill_value = std::string{"null"};  // fill value for empty datapoints in array
+  const auto filters = std::string{"null"};     // codec configurations for compression
+  const auto zarr_format = '2';                 // storage spec. version 2
 
   const auto part_metadata = std::string_view("  \"chunks\": " + vec_to_string(chunkshape) +
                                               ",\n"
@@ -127,15 +127,15 @@ template <typename Store, typename T>
 class ZarrArray {
  private:
   // TODO(CB) (1st move then) use aliases in aliases.hpp
-  using viewh_buffer    = Buffer<T>::viewh_buffer;
+  using viewh_buffer = Buffer<T>::viewh_buffer;
   using subviewh_buffer = Buffer<T>::subviewh_buffer;
   Store& store               ///< store in which to write Zarr array
       std::string_view name  ///< Name of array to write in store.
           size_t totnchunks  ///< Total number of chunks of array written to store.
-                   std::vector<size_t>
-                   arrayshape;     ///< Number of elements in array along each dimension in store.
-  Chunks           chunks;         ///< Method to write chunks of array in store.
-  Buffer<T>        buffer;         ///< Buffer to hold data before writing chunks to store.
+              std::vector<size_t>
+                  arrayshape;      ///< Number of elements in array along each dimension in store.
+  Chunks chunks;                   ///< Method to write chunks of array in store.
+  Buffer<T> buffer;                ///< Buffer to hold data before writing chunks to store.
   std::string_view part_metadata;  ///< Metadata required for zarr array excluding array's shape
 
   /**
@@ -213,7 +213,7 @@ class ZarrArray {
 
     const auto nchunks_data = size_t{h_data.extent(0) / buffer.get_chunksize()};
     for (size_t nn = 0; nn < nchunks_data; ++nn) {
-      const auto csz  = buffer.get_chunksize();
+      const auto csz = buffer.get_chunksize();
       const auto refs = kkpair_size_t({nn * csz, (nn + 1) * csz});
       shape_increment += arrayshape_change(totnchunks, chunks.get_chunkshape().at(0));
       totnchunks = chunks.write_chunk<T>(store, name, totnchunks, Kokkos::subview(h_data, refs));
@@ -224,7 +224,7 @@ class ZarrArray {
     }
 
     const auto n_to_chunks = nchunks_data * buffer.get_chunksize();
-    const auto refs        = kkpair_size_t({n_to_chunks, h_data.extent(0)});
+    const auto refs = kkpair_size_t({n_to_chunks, h_data.extent(0)});
     return Kokkos::subview(h_data, refs);
   }
 
@@ -285,8 +285,8 @@ class ZarrArray {
       }
 
       auto shape_increment = buffer.get_fill() / reduced_arraysize;
-      shape_increment      = arrayshape_change(totnchunks, shape_increment);
-      totnchunks           = chunks.write_chunk<T>(store, name, totnchunks, buffer);
+      shape_increment = arrayshape_change(totnchunks, shape_increment);
+      totnchunks = chunks.write_chunk<T>(store, name, totnchunks, buffer);
       update_arrayshape(store, shape_increment);
     }
   };
