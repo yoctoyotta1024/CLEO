@@ -46,8 +46,7 @@
  * @param metadata The metadata to write for the .zarray key.
  */
 template <typename Store>
-inline void
-write_zarray_json(Store& store, std::string_view name, std::string_view metadata) {
+inline void write_zarray_json(Store& store, std::string_view name, std::string_view metadata) {
   store[std::string(name) + "/.zarray"] = metadata;
 }
 
@@ -61,8 +60,8 @@ write_zarray_json(Store& store, std::string_view name, std::string_view metadata
  * @param dtype The data type stored in the arrays (e.g., "<f8").
  * @return A string view containing the partial metadata for the Zarr array.
  */
-inline std::string_view
-make_part_metadata(const std::vector<size_t>& chunkshape, const std::string_view dtype) {
+inline std::string_view make_part_metadata(const std::vector<size_t>& chunkshape,
+                                           const std::string_view dtype) {
   const auto order = 'C';  // layout of bytes in each chunk of array in storage ('C' or 'F')
   const auto compressor = std::string{"null"};  // compression of data when writing to store
   const auto fill_value = std::string{"null"};  // fill value for empty datapoints in array
@@ -103,8 +102,7 @@ make_part_metadata(const std::vector<size_t>& chunkshape, const std::string_view
  * @param vals The vector values of a type convertible to a string.
  * @return A string representation of the vector.
  */
-inline std::string
-vec_to_string(const std::vector<size_t>& vals) {
+inline std::string vec_to_string(const std::vector<size_t>& vals) {
   auto vals_str = std::string{"["};
   for (const auto& v : vals) {
     vals_str += std::to_string(v) + ", ";
@@ -143,8 +141,7 @@ class ZarrArray {
    *
    * @return A string containing the metadata for the Zarr array.
    */
-  std::string
-  zarr_metadata() const {
+  std::string zarr_metadata() const {
     const auto metadata = std::string(
         "{\n"
         "  \"shape\": " +
@@ -166,8 +163,7 @@ class ZarrArray {
    * @param shape_increment The increment to add to the array's outermost dimesion if necessary.
    * @return The increment to add to the shape of the array's outermost dimesion.
    */
-  size_t
-  arrayshape_change(const size_t chunk_num, const size_t shape_increment) const {
+  size_t arrayshape_change(const size_t chunk_num, const size_t shape_increment) const {
     if (chunk_num % vec_product(chunks.get_reducedarray_nchunks()) == 0) {
       return shape_increment;  // true
     } else {
@@ -184,8 +180,7 @@ class ZarrArray {
    *
    * @param shape_increment The increment to add to the shape of the array's outermost dimension.
    */
-  void
-  update_arrayshape(const size_t shape_increment) {
+  void update_arrayshape(const size_t shape_increment) {
     arrayshape.at(0) += shape_increment;
     write_zarray_json(store, name, zarr_metadata());
   }
@@ -202,8 +197,7 @@ class ZarrArray {
    * @param h_data Kokkos view of the data to write to the store in host memory.
    * @return The remaining data that was not written to chunks.
    */
-  subviewh_buffer
-  write_chunks_with_zarr_metadata(const subviewh_buffer h_data) {
+  subviewh_buffer write_chunks_with_zarr_metadata(const subviewh_buffer h_data) {
     const auto shape_increment = write_chunks_to_store(h_data);
 
     if (shape_increment) {
@@ -289,8 +283,7 @@ class ZarrArray {
    * @param h_data Kokkos view of the data to write to the store in host memory.
    * @return The increment in the shape of the array's outermost dimension.
    */
-  size_t
-  write_chunks_to_store(const subviewh_buffer h_data) {
+  size_t write_chunks_to_store(const subviewh_buffer h_data) {
     auto shape_increment = size_t{0};
 
     if (buffer.get_space() == 0) {
@@ -321,8 +314,7 @@ class ZarrArray {
    * @param h_data The data in a Kokkos vie win host memory which should be written to the array in
    * a store.
    */
-  void
-  write_to_array(const viewh_buffer h_data) {
+  void write_to_array(const viewh_buffer h_data) {
     auto h_data_rem = buffer.copy_to_buffer(h_data);
 
     h_data_rem = write_chunks_with_zarr_metadata(h_data_rem);

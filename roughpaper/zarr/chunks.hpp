@@ -35,8 +35,7 @@
  * @param vec The vector of size_t numbers.
  * @return The product of all the elements in the vector.
  */
-inline size_t
-vec_product(const std::vector<size_t>& vec) {
+inline size_t vec_product(const std::vector<size_t>& vec) {
   auto value = size_t{1};
   for (const auto& v : vec) {
     value *= v;
@@ -52,8 +51,7 @@ vec_product(const std::vector<size_t>& vec) {
  * @param aa The starting index from which to calculate the product.
  * @return The product of elements from the aa'th index in the vector.
  */
-inline size_t
-vec_product(const std::vector<size_t>& vec, const size_t aa) {
+inline size_t vec_product(const std::vector<size_t>& vec, const size_t aa) {
   auto value = size_t{1};
   for (auto it = vec.begin() + aa; it != vec.end(); ++it) {
     value *= *it;
@@ -83,8 +81,7 @@ class Chunks {
    * @param chunk_num The number of the chunk to write to the array.
    * @return A string representing the label of the current chunk to write.
    */
-  std::string
-  chunk_label(const size_t chunk_num) const {
+  std::string chunk_label(const size_t chunk_num) const {
     auto chunk_labnums = std::vector<size_t>(chunkshape.size(), 0);
     chunk_labnums.at(0) = chunk_num / vec_product(reducedarray_nchunks);
 
@@ -137,10 +134,7 @@ class Chunks {
    * @return A vector containing the shape (number of data elements) of a chunk
    * along each dimension.
    */
-  std::vector<size_t>
-  get_chunkshape() const {
-    return chunkshape;
-  }
+  std::vector<size_t> get_chunkshape() const { return chunkshape; }
 
   /**
    * @brief Gets the number of chunks of the reduced array.
@@ -148,10 +142,7 @@ class Chunks {
    * @return A vector containing the number of chunks of an array along its dimensions except for
    * its outermost one.
    */
-  std::vector<size_t>
-  get_reducedarray_nchunks() const {
-    return reducedarray_nchunks;
-  }
+  std::vector<size_t> get_reducedarray_nchunks() const { return reducedarray_nchunks; }
 
   /**
    * @brief Writes a chunk to the store and increments the total number of chunks written.
@@ -169,9 +160,8 @@ class Chunks {
    * @return The updated total number of chunks after writing.
    */
   template <typename Store, typename T>
-  size_t
-  write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
-              Buffer<T>& buffer) const {
+  size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
+                     Buffer<T>& buffer) const {
     buffer.write_buffer_to_chunk(store, name, chunk_label(totnchunks));
     return ++totnchunks;
   }
@@ -192,9 +182,8 @@ class Chunks {
    * @return The updated total number of chunks after writing.
    */
   template <typename Store, typename T>
-  size_t
-  write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
-              const Buffer<T>::subviewh_buffer h_data_chunk) const {
+  size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
+                     const Buffer<T>::subviewh_buffer h_data_chunk) const {
     store[std::string(name) + '/' + chunk_label(totnchunks)].operator= <T>(h_data_chunk);
     return ++totnchunks;
   }
