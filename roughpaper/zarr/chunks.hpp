@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 18th March 2024
+ * Last Modified: Tuesday 19th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,12 @@
 
 #include "./buffer.hpp"
 
-/* returns product of a vector of size_t numbers */
+/**
+ * @brief Calculates the product of all elements in a vector of size_t numbers.
+ *
+ * @param vec The vector of size_t numbers.
+ * @return The product of all the elements in the vector.
+ */
 inline size_t vec_product(const std::vector<size_t>& vec) {
   auto value = size_t{1};
   for (const auto& v : vec) {
@@ -39,7 +44,14 @@ inline size_t vec_product(const std::vector<size_t>& vec) {
   return value;
 }
 
-/* returns product of a vector of size_t numbers starting from aa'th index of vector */
+/**
+ * @brief Calculates the product of elements in a vector of size_t numbers
+ * starting from the aa'th index of the vector.
+ *
+ * @param vec The vector of size_t numbers.
+ * @param aa The starting index from which to calculate the product.
+ * @return The product of elements from the aa'th index in the vector.
+ */
 inline size_t vec_product(const std::vector<size_t>& vec, const size_t aa) {
   auto value = size_t{1};
   for (auto it = vec.begin() + aa; it != vec.end(); ++it) {
