@@ -109,7 +109,7 @@ class XarrayZarrArray {
 
   /* set the shape of the array and its dimensions
   given the dimensions in the dataset and order of dims in dimnames */
-  void set_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
+  void set_arrayshape_write_json(const std::unordered_map<std::string, size_t>& datasetdims) {
     auto arrayshape_from_dims = std::vector<size_t>({});
 
     for (auto& dim : dimnames) {
@@ -117,7 +117,17 @@ class XarrayZarrArray {
       arrayshape_from_dims.push_back(it->second);
     }
 
-    zarr.set_arrayshape(arrayshape_from_dims);
+    zarr.set_arrayshape_write_json(arrayshape_from_dims);
+  }
+
+  std::unordered_map<std::string, size_t> get_arraydims() const {
+    auto arraydims = std::unordered_map<std::string, size_t>();
+    auto arrayshape = zarr.get_arrayshape();
+    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
+      arraydims.insert({dimnames.at(aa), arrayshape.at(aa)})
+    }
+
+    return arraydims;
   }
 
   /**
@@ -138,7 +148,7 @@ class XarrayZarrArray {
     const auto shape_increment = write_chunks_to_store(h_data);
 
     if (shape_increment) {
-      update_arraydims(datasetdims, store, shape_increment);
+      update_xarray_arrayshape(datasetdims, store, shape_increment);
     }
 
     const auto n_to_chunks = nchunks_data * buffer.get_chunksize();
@@ -157,7 +167,7 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
-    set_arrayshape(datasetdims);
+    set_arrayshape_write_json(datasetdims);
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
   }
@@ -190,7 +200,7 @@ class XarrayZarrArray {
 
     assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
 
-    return arraydims;
+    return get_arraydims();  // TODO(CB) don't return but rather use this call in dataset
   };
 };
 
