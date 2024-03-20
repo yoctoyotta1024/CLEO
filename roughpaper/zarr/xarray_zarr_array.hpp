@@ -173,23 +173,15 @@ class XarrayZarrArray {
    * @param h_data The data in a Kokkos view in host memory which should be written to the array
    * in a store.
    */
-  std::unordered_map<std::string, size_t> write_to_xarray_zarr_array(
-      const std::unordered_map<std::string, size_t>& datasetdims, const viewh_buffer h_data) {
-    auto h_data_rem = buffer.copy_to_buffer(h_data);
+  void write_to_xarray_zarr_array(const std::unordered_map<std::string, size_t>& datasetdims,
+                                  const viewh_buffer h_data) {
+    zarr.write_to_array(h_data);
+    set_write_arrayshape(datasetdims);
 
-    h_data_rem = write_chunks_with_xarray_metadata(datasetdims, h_data_rem);
-
-    h_data_rem = buffer.copy_to_buffer(h_data_rem);
+    // TODO(CB) call set_write_arrayshape(i_arrayshape); after this function call in dataset once
+    // dimensions of dataset have been consolidated
 
     /* TODO(CB) docstrings */
-    /* TODO(CB) update .zarray json file for Zarr metadata about shape of array according to
-     * shape of dimensions as required for xarray and NetCDF compatibility -> eventually call
-     something like "set_arrayshape(shape) and write_zarray_json(store, name, zarr_metadata());"
-   */
-
-    assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
-
-    return get_arraydims();  // TODO(CB) don't return but rather use this call in dataset
   };
 };
 
