@@ -66,20 +66,4 @@ inline std::string vecstr_to_string(const std::vector<std::string>& dims) {
   return dims_str;
 }
 
-// TODO(CB) move xarray metadata to dataset
-// /* make string of zattrs attribute information for array in zarr store */
-// const auto arrayattrs = std::string(
-//   "{\n"
-//   "  \"_ARRAY_DIMENSIONS\": " +
-//   vecstr_to_string(dims) +                // names of each dimension of array
-//   ",\n"
-//   "  \"units\": " +
-//   "\"" + std::string(units) + "\"" +    // units of coordinate being stored
-//   ",\n"
-//   "  \"scale_factor\": " +
-//   std::to_string(scale_factor) +        // scale_factor of data
-//   "\n}");
-
-// write_zattrs_json(store, name, arrayattrs);
-
 #endif  // ROUGHPAPER_ZARR_WIP_FSSTORE_ARRAY_HPP_
