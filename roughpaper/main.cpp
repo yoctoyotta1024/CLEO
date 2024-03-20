@@ -28,7 +28,7 @@
 #include "./zarr/fsstore.hpp"
 #include "./zarr/zarr_array.hpp"
 
-using viewh_type = Kokkos::View<double *, HostSpace::memory_space>;  // view of doubles data
+using viewh_type = Kokkos::View<double *, Kokkos::HostSpace>;  // view of doubles data
 
 viewh_type observer() {
   auto h_data = viewh_type("data", 8);

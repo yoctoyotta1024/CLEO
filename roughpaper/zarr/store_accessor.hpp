@@ -40,8 +40,6 @@
  */
 template <typename Store>
 struct StoreAccessor {
-  using HostSpace = Kokkos::DefaultHostExecutionSpace;  // TODO(CB) (re-)move definitions
-
   Store& store;          ///< Reference to the store object.
   std::string_view key;  ///< The key under which data will be stored in the store.
 
@@ -66,7 +64,7 @@ struct StoreAccessor {
    * @param buffer The string to be converted and written to the store.
    * @return A reference to the current StoreAccessor object.
    */
-  StoreAccessor& operator=(std::string_view buffer) const {
+  StoreAccessor& operator=(std::string_view buffer) {
     return operator=(
         std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()), buffer.size()));
   }
@@ -83,7 +81,7 @@ struct StoreAccessor {
    * @return A reference to the current StoreAccessor object.
    */
   template <typename T>
-  StoreAccessor& operator=(std::span<const T> buffer) const {
+  StoreAccessor& operator=(const std::span<const T> buffer) {
     return operator=(std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()),
                                               buffer.size() * sizeof(T)));
   }
@@ -101,7 +99,7 @@ struct StoreAccessor {
    * @return A reference to the current StoreAccessor object.
    */
   template <typename T>
-  StoreAccessor& operator=(const Kokkos::View<T*, HostSpace::memory_space> buffer) const {
+  StoreAccessor& operator=(const Kokkos::View<T*, Kokkos::HostSpace> buffer) {
     return operator=(std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()),
                                               buffer.extent(0) * sizeof(T)));
   }
