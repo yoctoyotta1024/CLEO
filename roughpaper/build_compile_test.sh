@@ -92,5 +92,9 @@ else
   cd ${path2build} && make -j 64 test
 fi
 
+# good settings for Kokkos OpenMP at runtime
+export OMP_PROC_BIND=spread
+export OMP_PLACES=threads
+
 ${path2CLEO}/roughpaper/build/roughpaper/test
 ### ---------------------------------------------------- ###
