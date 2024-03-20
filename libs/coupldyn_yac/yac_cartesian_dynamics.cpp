@@ -121,41 +121,41 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int point_ids[num_point_sets] = {corner_point_id};
 
   yac_cdef_field("pressure", component_id, point_ids,
-                 num_point_sets, collection_size, "PT15M",
+                 num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &pressure_id);
 
   yac_cdef_field("temperature", component_id, point_ids,
-                 num_point_sets, collection_size, "PT15M",
+                 num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &temp_id);
 
   yac_cdef_field("qvap", component_id, point_ids,
-                 num_point_sets, collection_size, "PT15M",
+                 num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qvap_id);
 
   yac_cdef_field("qcond", component_id, point_ids,
-                 num_point_sets, collection_size, "PT15M",
+                 num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qcond_id);
 
 
   // Field couplings
   yac_cdef_couple("yac_reader", "yac_reader_grid", "pressure",
                   "cleo", "cleo_grid", "pressure",
-                  "PT15M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
   yac_cdef_couple("yac_reader", "yac_reader_grid", "temperature",
                   "cleo", "cleo_grid", "temperature",
-                  "PT15M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
   yac_cdef_couple("yac_reader", "yac_reader_grid", "qvap",
                   "cleo", "cleo_grid", "qvap",
-                  "PT15M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
   yac_cdef_couple("yac_reader", "yac_reader_grid", "qcond",
                   "cleo", "cleo_grid", "qcond",
-                  "PT15M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
   yac_cenddef();
