@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TB)
  * -----
- * Last Modified: Tuesday 19th March 2024
+ * Last Modified: Wednesday 20th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -58,7 +58,7 @@ class FSStore {
    * @param key The key for which the StoreAccessor is accessed.
    * @return A StoreAccessor object associated with the specified key.
    */
-  StoreAccessor<FSStore> operator[](const std::string_view key) const { return {*this, key}; }
+  StoreAccessor<FSStore> operator[](const std::string_view key) { return {*this, key}; }
 
   /**
    * @brief Write function called by StoreAccessor to write data to file system storage after the

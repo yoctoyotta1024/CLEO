@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 19th March 2024
+ * Last Modified: Wednesday 20th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,6 +50,27 @@
 template <typename Store>
 inline void write_zarray_json(Store& store, std::string_view name, std::string_view metadata) {
   store[std::string(name) + "/.zarray"] = metadata;
+}
+
+/**
+ * @brief Converts a vector of integers into a single list written as a string.
+ *
+ * Given vector of a type convertible to a string with values [a, b, c, ..., z], function returns
+ * the string "[a, b, c, ..., z]" with elements separated by commas and enclosed in square brackets.
+ * Function is useful for converting vectors representing the shape of chunks and arrays etc. into
+ * a string format for metadata json files.
+ *
+ * @param vals The vector values of a type convertible to a string.
+ * @return A string representation of the vector.
+ */
+inline std::string vec_to_string(const std::vector<size_t>& vals) {
+  auto vals_str = std::string{"["};
+  for (const auto& v : vals) {
+    vals_str += std::to_string(v) + ", ";
+  }
+  vals_str.erase(vals_str.size() - 2);  // delete last ", "
+  vals_str += "]";
+  return vals_str;
 }
 
 /**
@@ -94,27 +115,6 @@ inline std::string_view make_part_metadata(const std::vector<size_t>& chunkshape
 }
 
 /**
- * @brief Converts a vector of integers into a single list written as a string.
- *
- * Given vector of a type convertible to a string with values [a, b, c, ..., z], function returns
- * the string "[a, b, c, ..., z]" with elements separated by commas and enclosed in square brackets.
- * Function is useful for converting vectors representing the shape of chunks and arrays etc. into
- * a string format for metadata json files.
- *
- * @param vals The vector values of a type convertible to a string.
- * @return A string representation of the vector.
- */
-inline std::string vec_to_string(const std::vector<size_t>& vals) {
-  auto vals_str = std::string{"["};
-  for (const auto& v : vals) {
-    vals_str += std::to_string(v) + ", ";
-  }
-  vals_str.erase(vals_str.size() - 2);  // delete last ", "
-  vals_str += "]";
-  return vals_str;
-}
-
-/**
  * @brief A template class representing a Zarr array.
  *
  * This class provides functionality to write an array to a specified store via a buffer according
@@ -129,11 +129,10 @@ class ZarrArray {
   // TODO(CB) (1st move then) use aliases in aliases.hpp
   using viewh_buffer = Buffer<T>::viewh_buffer;
   using subviewh_buffer = Buffer<T>::subviewh_buffer;
-  Store& store               ///< store in which to write Zarr array
-      std::string_view name  ///< Name of array to write in store.
-          size_t totnchunks  ///< Total number of chunks of array written to store.
-              std::vector<size_t>
-                  arrayshape;      ///< Number of elements in array along each dimension in store.
+  Store& store;                    ///< store in which to write Zarr array
+  std::string_view name;           ///< Name of array to write in store.
+  size_t totnchunks;               ///< Total number of chunks of array written to store.
+  std::vector<size_t> arrayshape;  ///< Number of elements in array along each dimension in store.
   Chunks chunks;                   ///< Method to write chunks of array in store.
   Buffer<T> buffer;                ///< Buffer to hold data before writing chunks to store.
   std::string_view part_metadata;  ///< Metadata required for zarr array excluding array's shape
