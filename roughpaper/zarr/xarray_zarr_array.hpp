@@ -104,16 +104,16 @@ template <typename Store, typename T>
 class XarrayZarrArray {
  private:
   // TODO(CB) move aliases to aliases.hpp
-  ZarrArray<Store, T> zarr;
-  std::vector<std::string> dimnames;
+  ZarrArray<Store, T> zarr;           ///< zarr array in store
+  std::vector<std::string> dimnames;  ///< ordered list of names of each dimenion of array
 
   /* set the shape of the array and its dimensions
   given the dimensions in the dataset and order of dims in dimnames */
   void set_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
     auto arrayshape_from_dims = std::vector<size_t>({});
 
-    for (auto& dname : dimnames) {
-      const auto it = datasetdims.find(dname);
+    for (auto& dim : dimnames) {
+      const auto it = datasetdims.find(dim);
       arrayshape_from_dims.push_back(it->second);
     }
 
