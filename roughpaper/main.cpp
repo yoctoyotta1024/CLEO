@@ -52,11 +52,12 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/dataset.zarr");
     auto store = FSStore(basedir);
 
-    // auto zarr = ZarrArray<FSStore, double>(store, "radius", "<f8", std::vector<size_t>({9}));
+    auto zarr = ZarrArray<FSStore, double>(store, "radius", "<f8", std::vector<size_t>({9}));
     // auto zarr = ZarrArray<FSStore, double>(store, "massmom", "<f8", std::vector<size_t>({3, 1}),
     //  std::vector<size_t>({2}));
-    auto zarr = ZarrArray<FSStore, double>(store, "test3d", "<f8", std::vector<size_t>({1, 4, 1}),
-                                           std::vector<size_t>({8, 1}));
+    // auto zarr = ZarrArray<FSStore, double>(store, "test3d", "<f8", std::vector<size_t>({1, 4,
+    // 1}),
+    //                                        std::vector<size_t>({8, 1}));
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
