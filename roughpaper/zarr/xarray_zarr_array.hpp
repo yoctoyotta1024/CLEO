@@ -141,34 +141,19 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
-    set_write_arrayshape(datasetdims);
+    set_write_arrayshape(datasetdims);  // overwrite zarr array shape with xarray dataset dimensions
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
   }
 
-  // TODO(CB) sort docstrings
-  /**
-   * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store.
-   *
-   * Calls write_chunks_to_store to write whole chunks of data into store. Then updates the shape
-   * of each of the dimensions of the array to be consistent with the accumulated change in shape
-   * of the array (due to the chunks that have been written). Note however, this function does not
-   * (re-)write the .zarray json file's metadata for the shape of the array.
-   * Function returns a (sub)view of the remaining data not written to a chunk (number of elements
-   * in subview < chunksize).
-   *
-   * @param h_data Kokkos view of the data to write to the store in host memory.
-   * @return The remaining data that was not written to chunks.
-   */
-
   /**
    * @brief Writes data from Kokkos view in host memory to chunks of a Zarr array in a store
-   * via a buffer.
+   * via a buffer such that Zarr array in compatible with NetCDF and Xarray.
    *
-   * Copies some data from the view to a buffer (until number of elements in buffer = chunksize),
-   * then may write chunks of the array alongside the necessary metadata for a Zarr array into
-   * a store. Finall copies any leftover data, number of elements < chunksize, into the buffer.
-   * Assertion checks there is no remainng data unattended to.
+   * Calls ZarrArray's write_to_array function to write data from Kokkos view in host memory to
+   * chunks of a Zarr array in a store. Then overwrites the arrayshape and corresponding metadata
+   * to ensure the shape of the array is consistent with the dimensions of the dataset, as required
+   * by Xarray and NetCDF.
    *
    * @param h_data The data in a Kokkos view in host memory which should be written to the array
    * in a store.
@@ -176,12 +161,14 @@ class XarrayZarrArray {
   void write_to_xarray_zarr_array(const std::unordered_map<std::string, size_t>& datasetdims,
                                   const viewh_buffer h_data) {
     zarr.write_to_array(h_data);
-    set_write_arrayshape(datasetdims);
+    set_write_arrayshape(datasetdims);  // overwrite zarr array shape with xarray dataset dimensions
 
     // TODO(CB) call set_write_arrayshape(i_arrayshape); after this function call in dataset once
     // dimensions of dataset have been consolidated
 
     /* TODO(CB) docstrings */
+
+    // TODO(CB) test creation of this class and dimensions of array
   };
 };
 
