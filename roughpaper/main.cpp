@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 18th March 2024
+ * Last Modified: Wednesday 20th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,13 +19,13 @@
  * rough paper for checking small things
  */
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
 #include <iostream>
 #include <vector>
 
-#include <Kokkos_Core.hpp>
-#include <Kokkos_DualView.hpp>
-
-#include "./zarr/fsstore_array.hpp"
+#include "./zarr/fsstore.hpp"
+#include "./zarr/zarr_array.hpp"
 
 using viewh_type = Kokkos::View<double *, HostSpace::memory_space>;  // view of doubles data
 
@@ -51,22 +51,14 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/dataset.zarr");
     auto store = FSStore(basedir);
 
-    // auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({6}), "radius",
-    //   "micro-m", 10.0, "<f8", std::vector<std::string>({"sdId"}));
-
-    // auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({5, 1}), "massmom",
-    //   "", 1.0, "<f8", std::vector<std::string>({"time", "gbx"}),
-    //   std::vector<size_t>({2}));
-
-    auto zarr = FSStoreArrayViaBuffer<double>(store, std::vector<size_t>({12, 2, 1}), "radius3d",
-      "", 1.0, "<f8", std::vector<std::string>({"time", "gbx", "sdId"}),
-      std::vector<size_t>({2, 1}));
+    auto zarr = ZarrArray(store, "radius", "<f8", std::vector<size_t>({6}));
+    auto zarr = ZarrArray(store, "m", "<f8", std::vector<size_t>({3, 2}), std::vector<size_t>({2}));
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
 
     // output data to zarr arrays via buffer
-    zarr.write_data_to_zarr_array(data);
+    zarr.write_to_array(data);
   }
   Kokkos::finalize();
 }
