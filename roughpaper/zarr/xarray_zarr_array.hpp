@@ -76,10 +76,10 @@ inline std::string vecstr_to_string(const std::vector<std::string>& dims) {
   return dims_str;
 }
 
+/* make string of array attributes metadata for .zattrs json for making zarr array
+compatible with xarray and NetCDF */
 inline std::string make_xarray_metadata(const std::string_view units, const double scale_factor,
                                         const std::vector<std::string>& dimnames) {
-  /* make string of array attributes metadata for .zattrs json for making zarr array
-  compatible with xarray and NetCDF */
   const auto zattrs = std::string(
       "{\n"
       "  \"_ARRAY_DIMENSIONS\": " +
@@ -107,12 +107,15 @@ class XarrayZarrArray {
   ZarrArray<Store, T> zarr;
   std::unordered_map<std::string, size_t> arraydims;
 
+  /* set the shape of the array and its dimensions
+  given the dimensions in the dataset and order of dims in dimnames */
   void set_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims,
                       const std::vector<std::string>& dimnames) {
     auto arrayshape_from_dims = std::vector<size_t>({});
 
     for (auto& dname : dimnames) {
       const auto it = datasetdims.find(dname);
+      arraydims.at(it->first) = it->second;
       arrayshape_from_dims.push_back(it->second);
     }
 
@@ -156,11 +159,13 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
+    /* initialise arraydims map using dataset dims */
     for (size_t aa = 0; aa < dimnames.size(); ++aa) {
       const auto it = datasetdims.find(dimnames.at(aa));
       arraydims.insert(*it);
     }
-    set_arrayshape();
+
+    set_arrayshape(datasetdims, dimnames);
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
   }
