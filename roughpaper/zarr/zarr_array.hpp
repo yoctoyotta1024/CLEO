@@ -199,13 +199,14 @@ class ZarrArray {
    * @return The remaining data that was not written to chunks.
    */
   subviewh_buffer write_chunks_with_zarr_metadata(const subviewh_buffer h_data) {
-    const auto shape_increment = write_chunks_to_store(h_data);
+    const auto h_data_nchunks = size_t{h_data.extent(0) / buffer.get_chunksize()};
+    const auto shape_increment = write_chunks_to_store(h_data, h_data_nchunks);
 
     if (shape_increment) {
       update_arrayshape(store, shape_increment);
     }
 
-    const auto n_to_chunks = nchunks_data * buffer.get_chunksize();
+    const auto n_to_chunks = h_data_nchunks * buffer.get_chunksize();
     const auto refs = kkpair_size_t({n_to_chunks, h_data.extent(0)});
     return Kokkos::subview(h_data, refs);
   }
@@ -284,7 +285,7 @@ class ZarrArray {
    * @param h_data Kokkos view of the data to write to the store in host memory.
    * @return The increment in the shape of the array's outermost dimension.
    */
-  size_t write_chunks_to_store(const subviewh_buffer h_data) {
+  size_t write_chunks_to_store(const subviewh_buffer h_data, const size_t h_data_nchunks) {
     auto shape_increment = size_t{0};
 
     if (buffer.get_space() == 0) {
@@ -292,8 +293,7 @@ class ZarrArray {
       totnchunks = chunks.write_chunk<T>(store, name, totnchunks, buffer);
     }
 
-    const auto nchunks_data = size_t{h_data.extent(0) / buffer.get_chunksize()};
-    for (size_t nn = 0; nn < nchunks_data; ++nn) {
+    for (size_t nn = 0; nn < h_data_nchunks; ++nn) {
       const auto csz = buffer.get_chunksize();
       const auto refs = kkpair_size_t({nn * csz, (nn + 1) * csz});
       shape_increment += arrayshape_change(totnchunks, chunks.get_chunkshape().at(0));
