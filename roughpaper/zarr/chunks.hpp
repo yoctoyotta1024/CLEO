@@ -119,14 +119,14 @@ class Chunks {
 
     /* set number of chunks along all but array's outermost dimension given
     the shape of each chunk and expected shape of final array along those dimensions */
-    for (size_t aa = 1; aa < chunkshape.size(); ++aa) {
+    for (size_t aa = 0; aa < reduced_arrayshape.size(); ++aa) {
       /* Assert the chunk size is completely divisible by the array's expected size along that
       dimension in order to ensure good chunking */
-      assert((reduced_arrayshape.at(aa - 1) % chunkshape.at(aa) == 0) &&
+      assert((reduced_arrayshape.at(aa) % chunkshape.at(aa + 1) == 0) &&
              "along all but outermost dimension, arrayshape must be completely divisible by "
              "chunkshape");
       /* reducedarray_nchunks = number of chunks along all but outermost dimension of array */
-      reducedarray_nchunks.push_back(reduced_arrayshape.at(aa - 1) / chunkshape.at(aa));
+      reducedarray_nchunks.at(aa) = (reduced_arrayshape.at(aa) / chunkshape.at(aa + 1));
     }
   }
 
