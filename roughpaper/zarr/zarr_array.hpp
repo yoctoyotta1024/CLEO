@@ -191,7 +191,8 @@ class ZarrArray {
    * written. Then updates the shape of the array along its outermost dimension with the accumulated
    * change in shape of the array due to the chunks that have been written. Finally returns a
    * (sub)view of the remaining data not written to a chunk (number of elements in
-   * subview < chunksize).
+   * subview < chunksize). Note that this function does not ensure the .zarray json file metadata
+   * is kept up-to-date with changes to the arrayshape that may occur during this function call.
    *
    * @param h_data Kokkos view of the data to write to the store in host memory.
    * @return The remaining data that was not written to chunks.
@@ -309,7 +310,7 @@ class ZarrArray {
    * @param h_data The data in a Kokkos view in host memory which should be written to the array in
    * a store.
    */
-  void write_to_array(const viewh_buffer h_data) {
+  void write_to_zarr_array(const viewh_buffer h_data) {
     auto h_data_rem = buffer.copy_to_buffer(h_data);
 
     h_data_rem = write_chunks_to_store(h_data_rem);
