@@ -130,32 +130,6 @@ class XarrayZarrArray {
     return arraydims;
   }
 
-  /**
-   * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store.
-   *
-   * Calls write_chunks_to_store to write whole chunks of data into store. Then updates the shape
-   * of each of the dimensions of the array to be consistent with the accumulated change in shape
-   * of the array (due to the chunks that have been written). Note however, this function does not
-   * (re-)write the .zarray json file's metadata for the shape of the array.
-   * Function returns a (sub)view of the remaining data not written to a chunk (number of elements
-   * in subview < chunksize).
-   *
-   * @param h_data Kokkos view of the data to write to the store in host memory.
-   * @return The remaining data that was not written to chunks.
-   */
-  subviewh_buffer write_chunks_with_xarray_metadata(
-      const std::unordered_map<std::string, size_t>& datasetdims, const subviewh_buffer h_data) {
-    const auto shape_increment = write_chunks_to_store(h_data);
-
-    if (shape_increment) {
-      update_xarray_arrayshape(datasetdims, store, shape_increment);
-    }
-
-    const auto n_to_chunks = nchunks_data * buffer.get_chunksize();
-    const auto refs = kkpair_size_t({n_to_chunks, h_data.extent(0)});
-    return Kokkos::subview(h_data, refs);
-  }
-
  public:
   XarrayZarrArray(Store& store, const std::unordered_map<std::string, size_t>& datasetdims,
                   const std::string_view name, const std::string_view units,
@@ -172,6 +146,21 @@ class XarrayZarrArray {
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
   }
 
+  // TODO(CB) sort docstrings
+  /**
+   * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store.
+   *
+   * Calls write_chunks_to_store to write whole chunks of data into store. Then updates the shape
+   * of each of the dimensions of the array to be consistent with the accumulated change in shape
+   * of the array (due to the chunks that have been written). Note however, this function does not
+   * (re-)write the .zarray json file's metadata for the shape of the array.
+   * Function returns a (sub)view of the remaining data not written to a chunk (number of elements
+   * in subview < chunksize).
+   *
+   * @param h_data Kokkos view of the data to write to the store in host memory.
+   * @return The remaining data that was not written to chunks.
+   */
+
   /**
    * @brief Writes data from Kokkos view in host memory to chunks of a Zarr array in a store
    * via a buffer.
@@ -184,7 +173,7 @@ class XarrayZarrArray {
    * @param h_data The data in a Kokkos view in host memory which should be written to the array
    * in a store.
    */
-  std::unordered_map<std::string, size_t> write_to_array(
+  std::unordered_map<std::string, size_t> write_to_xarray_zarr_array(
       const std::unordered_map<std::string, size_t>& datasetdims, const viewh_buffer h_data) {
     auto h_data_rem = buffer.copy_to_buffer(h_data);
 
