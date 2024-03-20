@@ -186,7 +186,7 @@ class Chunks {
   template <typename Store, typename T>
   size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
                      const Buffer<T>::subviewh_buffer h_data_chunk) const {
-    store[std::string(name) + '/' + chunk_label(totnchunks)].operator= <T>(h_data_chunk);
+    store[std::string(name) + '/' + chunk_label(totnchunks)] = (h_data_chunk);
     return totnchunks + 1;
   }
 };

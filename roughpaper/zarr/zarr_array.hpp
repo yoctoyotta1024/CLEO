@@ -246,7 +246,7 @@ class ZarrArray {
       arrayshape.at(aa + 1) = reduced_arrayshape.at(aa);
     }
 
-    write_zarray_json(store, name, zarr_metadata());
+    write_zarray_json(store, name, zarr_metadata());  // TODO(CB) make consistent with xarray array
   };
 
   /**
@@ -323,7 +323,6 @@ class ZarrArray {
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
 
     assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
-  };
+  }
 };
-
 #endif  // ROUGHPAPER_ZARR_ZARR_ARRAY_HPP_
