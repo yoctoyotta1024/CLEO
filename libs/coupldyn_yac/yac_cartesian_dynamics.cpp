@@ -20,6 +20,7 @@
  */
 
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
+#include <iostream>
 
 extern "C" {
   #include "yac_interface.h"
@@ -63,6 +64,27 @@ void CartesianDynamics::increment_position() {
   pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
+void CartesianDynamics::receive_fields_from_yac() {
+  int info, error;
+  double * yac_raw_data = NULL;
+
+  std::cout << "STARTED RECEIVING DATA FROM YAC" << std::endl;
+
+  yac_raw_data = press.data();
+  yac_cget(pressure_yac_id, 1, &yac_raw_data, &info, &error);
+
+  yac_raw_data = temp.data();
+  yac_cget(temp_yac_id, 1, &yac_raw_data, &info, &error);
+
+  yac_raw_data = qvap.data();
+  yac_cget(qvap_yac_id, 1, &yac_raw_data, &info, &error);
+
+  yac_raw_data = qcond.data();
+  yac_cget(qcond_yac_id, 1, &yac_raw_data, &info, &error);
+
+  std::cout << "FINISHED RECEIVING DATA FROM YAC" << std::endl;
+}
+
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
                                      const unsigned int nsteps)
     : ndims(i_ndims),
@@ -88,16 +110,24 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // grid definition
   int grid_id = -1;
   std::string cleo_grid_name = "cleo_grid";
-  auto longitudes = std::vector<double>(75, 0);
-  auto latitudes = std::vector<double>(36, 0);
+  int total_vertices[2] = {31, 31};
+  int total_cells[2] = {30, 30};
+  int cyclic_dimension[2] = {0, 0};
 
-  int total_vertices[2] = {75, 36};
-  int cyclic_dimension[2] = {1, 0};
+  auto longitudes = std::vector<double>(31, 0);
+  auto latitudes = std::vector<double>(31, 0);
+  auto cell_center_longitudes = std::vector<double>(30);
+  auto cell_center_latitudes = std::vector<double>(30);
 
   for (size_t i = 0; i < longitudes.size(); i++) {
-    longitudes[i] = i * (2 * std::numbers::pi / 76);
+    longitudes[i] = i * (2 * std::numbers::pi / 32);
     if (i < latitudes.size())
-      latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / 38);
+      latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / 33);
+  }
+
+  for (size_t i = 0; i < cell_center_longitudes.size(); i++) {
+    cell_center_longitudes[i] = longitudes[i] + std::numbers::pi / 32;
+    cell_center_latitudes[i]  = latitudes[i] + std::numbers::pi / 66;
   }
 
   yac_cdef_grid_reg2d(cleo_grid_name.c_str(), total_vertices,
@@ -105,9 +135,10 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                       latitudes.data(), &grid_id);
 
   // Points definitions
-  int corner_point_id = -1;
-  yac_cdef_points_reg2d(grid_id, total_vertices, YAC_LOCATION_CORNER,
-                        longitudes.data(), latitudes.data(), &corner_point_id);
+  int cell_point_id = -1;
+  yac_cdef_points_reg2d(grid_id, total_cells, YAC_LOCATION_CELL,
+                        cell_center_longitudes.data(), cell_center_latitudes.data(),
+                        &cell_point_id);
 
   // Interpolation stack
   int interp_stack_id;
@@ -115,26 +146,25 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   yac_cadd_interp_stack_config_nnn(interp_stack_id, YAC_NNN_AVG, 1, 1.0);
 
   // Field definition
-  int pressure_id, temp_id, qvap_id, qcond_id;
   int num_point_sets = 1;
   int collection_size = 1;
-  int point_ids[num_point_sets] = {corner_point_id};
+  int point_ids[num_point_sets] = {cell_point_id};
 
   yac_cdef_field("pressure", component_id, point_ids,
                  num_point_sets, collection_size, "PT1M",
-                 YAC_TIME_UNIT_ISO_FORMAT, &pressure_id);
+                 YAC_TIME_UNIT_ISO_FORMAT, &pressure_yac_id);
 
   yac_cdef_field("temperature", component_id, point_ids,
                  num_point_sets, collection_size, "PT1M",
-                 YAC_TIME_UNIT_ISO_FORMAT, &temp_id);
+                 YAC_TIME_UNIT_ISO_FORMAT, &temp_yac_id);
 
   yac_cdef_field("qvap", component_id, point_ids,
                  num_point_sets, collection_size, "PT1M",
-                 YAC_TIME_UNIT_ISO_FORMAT, &qvap_id);
+                 YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id);
 
   yac_cdef_field("qcond", component_id, point_ids,
                  num_point_sets, collection_size, "PT1M",
-                 YAC_TIME_UNIT_ISO_FORMAT, &qcond_id);
+                 YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id);
 
 
   // Field couplings
@@ -160,24 +190,12 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   yac_cenddef();
 
-  // Receiving data from YAC
-  int info, error;
-  auto yac_field_data = std::vector<double>(total_vertices[0] * total_vertices[1]);
-  double * yac_raw_data = yac_field_data.data();
+  press = std::vector<double>(total_cells[0] * total_cells[1], 0);
+  temp  = std::vector<double>(total_cells[0] * total_cells[1], 0);
+  qvap  = std::vector<double>(total_cells[0] * total_cells[1], 0);
+  qcond = std::vector<double>(total_cells[0] * total_cells[1], 0);
 
-  yac_cget(pressure_id, 1, &yac_raw_data, &info, &error);
-  press = yac_field_data;
-
-  yac_cget(temp_id, 1, &yac_raw_data, &info, &error);
-  temp = yac_field_data;
-
-  yac_cget(qvap_id, 1, &yac_raw_data, &info, &error);
-  qvap = yac_field_data;
-
-  yac_cget(qcond_id, 1, &yac_raw_data, &info, &error);
-  qcond = yac_field_data;
-
-  yac_cfinalize();
+  receive_fields_from_yac();
 
   std::cout << "Finished reading thermodynamics from binaries for:\n"
                "  pressure,\n  temperature,\n"
@@ -186,9 +204,11 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   set_winds(config);
 
-  check_thermodynamics_vectorsizes(config.nspacedims, ndims, nsteps);
+  // check_thermodynamics_vectorsizes(config.nspacedims, ndims, nsteps);
   std::cout << "--- cartesian dynamics from file: success ---\n";
 }
+
+CartesianDynamics::~CartesianDynamics() { yac_cfinalize(); }
 
 /* depending on nspacedims, read in data
 for 1-D, 2-D or 3-D wind velocity components */

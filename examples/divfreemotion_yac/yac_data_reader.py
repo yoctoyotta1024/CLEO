@@ -59,27 +59,40 @@ component = yac.def_comp(component_name)
 
 def_calendar(Calendar.PROLEPTIC_GREGORIAN)
 
-x = np.linspace(0,2*np.pi,76)[:-1]
-y = np.linspace(-0.5*np.pi,0.5*np.pi, 38)[1:-1]
-grid = Reg2dGrid(f"yac_reader_grid", x, y)
-points = grid.def_points(Location.CORNER, x, y)
+lon = np.linspace(0,2*np.pi,32)[:-1]
+lat = np.linspace(-0.5*np.pi,0.5*np.pi, 33)[1:-1]
+cell_centers_lon = (lon + np.pi/32)[:-1]
+cell_centers_lat = (lat + np.pi/66)[:-1]
 
-press = Field.create("pressure", component, points, 1, "PT1M", TimeUnit.ISO_FORMAT)
-temp  = Field.create("temperature", component, points, 1, "PT1M", TimeUnit.ISO_FORMAT)
-qvap  = Field.create("qvap", component, points, 1, "PT1M", TimeUnit.ISO_FORMAT)
-qcond = Field.create("qcond", component, points, 1, "PT1M", TimeUnit.ISO_FORMAT)
+grid = Reg2dGrid(f"yac_reader_grid", lon, lat)
+cell_centers = grid.def_points(Location.CELL, cell_centers_lon, cell_centers_lat)
+
+press = Field.create("pressure", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
+temp  = Field.create("temperature", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
+qvap  = Field.create("qvap", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
+qcond = Field.create("qcond", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 
 yac.enddef()
 np.set_printoptions(threshold=np.inf)
 
 press_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_press.dat")
-press.put(press_values)
-
 temp_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_temp.dat")
-temp.put(temp_values)
-
 qvap_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qvap.dat")
-qvap.put(qvap_values)
-
 qcond_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qcond.dat")
-qcond.put(qcond_values)
+
+press.put(press_values[0:900])
+temp.put(temp_values[0:900])
+qvap.put(qvap_values[0:900])
+qcond.put(qcond_values[0:900])
+
+press.put(press_values[900:1800])
+temp.put(temp_values[900:1800])
+qvap.put(qvap_values[900:1800])
+qcond.put(qcond_values[900:1800])
+
+press.put(press_values[1800:2700])
+temp.put(temp_values[1800:2700])
+qvap.put(qvap_values[1800:2700])
+qcond.put(qcond_values[1800:2700])
+
+del yac

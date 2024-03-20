@@ -64,6 +64,9 @@ struct CartesianDynamics {
   std::vector<double> uvel_xfaces;  // u velocity defined on coord1 faces of gridboxes
   std::vector<double> vvel_yfaces;  // v velocity defined on coord2 faces of gridboxes
 
+  // YAC field ids
+  int pressure_yac_id, temp_yac_id, qvap_yac_id, qcond_yac_id;
+
   /* depending on nspacedims, read in data
   for 1-D, 2-D or 3-D wind velocity components */
   void set_winds(const Config &config);
@@ -103,24 +106,26 @@ struct CartesianDynamics {
  public:
   CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
                     const unsigned int nsteps);
+  ~CartesianDynamics();
 
   get_winds_func get_wvel;  // funcs to get velocity defined in construction of class
   get_winds_func get_uvel;  // warning: these functions are not const member funcs by default
   get_winds_func get_vvel;
 
-  double get_press(const size_t ii) const { return press.at(pos + ii); }
+  double get_press(const size_t ii) const { return press.at(ii); }
 
-  double get_temp(const size_t ii) const { return temp.at(pos + ii); }
+  double get_temp(const size_t ii) const { return temp.at(ii); }
 
-  double get_qvap(const size_t ii) const { return qvap.at(pos + ii); }
+  double get_qvap(const size_t ii) const { return qvap.at(ii); }
 
-  double get_qcond(const size_t ii) const { return qcond.at(pos + ii); }
+  double get_qcond(const size_t ii) const { return qcond.at(ii); }
 
   /* updates positions to gbx0 in vector (for
   acessing value at next timestep). Assumes domain
   is decomposed into cartesian C grid with dimensions
   (ie. number of gridboxes in each dimension) ndims */
   void increment_position();
+  void receive_fields_from_yac();
 };
 
 /* type satisfying CoupledDyanmics solver concept
@@ -129,17 +134,22 @@ that are read from binary files */
 struct YacDynamics {
  private:
   const unsigned int interval;
+  const unsigned int end_time;
   std::shared_ptr<CartesianDynamics> dynvars;  // pointer to (thermo)dynamic variables
 
   /* increment position of thermodata for 0th gridbox
   to positon at next timestep (ie. ngridbox_faces
   further along vector) */
-  void run_dynamics(const unsigned int t_mdl) const { dynvars->increment_position(); }
+  void run_dynamics(const unsigned int t_mdl) const {
+    dynvars->increment_position();
+    dynvars->receive_fields_from_yac();
+  }
 
  public:
   YacDynamics(const Config &config, const unsigned int couplstep,
                    const std::array<size_t, 3> ndims, const unsigned int nsteps)
-      : interval(couplstep), dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps)) {}
+      : interval(couplstep), end_time(config.T_END),
+        dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps)) {}
 
   auto get_couplstep() const { return interval; }
 
@@ -148,7 +158,9 @@ struct YacDynamics {
   bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }
 
   void run_step(const unsigned int t_mdl, const unsigned int t_next) const {
-    if (on_step(t_mdl)) {
+    // Temporary simple solution to prevent a 4th coupling with yac from happening
+    if (on_step(t_mdl) && t_mdl != end_time * 100) {
+      std::cout << "END_TIME: " << end_time << " " << t_mdl << std::endl;
       run_dynamics(t_mdl);
     }
   }
