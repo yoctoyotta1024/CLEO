@@ -299,11 +299,11 @@ class ZarrArray {
 
   /**
    * @brief Writes data from Kokkos view in host memory to chunks of a Zarr array in a store
-   * via a buffer.
+   * via a buffer and keep metadata in zarray .json file up-to-date with written chunks.
    *
    * First copies some data from the view to a buffer (until number of elements in
    * buffer = chunksize). Second writes any whole chunks of the array into a store. Thirdly updates
-   * the .zarray json file for the Zarr metadata about the shape of the array accordingly. Finaly
+   * the .zarray json file for the Zarr metadata about the shape of the array accordingly. Finally
    * copies any leftover data, number of elements < chunksize, into the buffer.
    * Assertion checks there is no remainng data unattended to.
    *
@@ -315,6 +315,28 @@ class ZarrArray {
 
     h_data_rem = write_chunks_to_store(h_data_rem);
     write_zarray_json(store, name, zarr_metadata());  // ensure shape of array is up-to-date
+
+    h_data_rem = buffer.copy_to_buffer(h_data_rem);
+
+    assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
+  }
+
+  /**
+   * @brief Writes data from Kokkos view in host memory to chunks of Zarr array in a store
+   * via a buffer. Function does *not* write metadata to zarray .json file.
+   *
+   * First copies some data from the view to a buffer (until number of elements in
+   * buffer = chunksize), then writes any whole chunks of the array into a store. Finally
+   * copies any leftover data, number of elements < chunksize, into the buffer.
+   * Assertion checks there is no remainng data unattended to.
+   *
+   * @param h_data The data in a Kokkos view in host memory which should be written to the array in
+   * a store.
+   */
+  void write_to_array(const viewh_buffer h_data) {
+    auto h_data_rem = buffer.copy_to_buffer(h_data);
+
+    h_data_rem = write_chunks_to_store(h_data_rem);
 
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
 
