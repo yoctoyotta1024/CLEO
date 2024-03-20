@@ -83,8 +83,8 @@ inline std::string vec_to_string(const std::vector<size_t>& vals) {
  * @param dtype The data type stored in the arrays (e.g., "<f8").
  * @return A string view containing the partial metadata for the Zarr array.
  */
-inline std::string make_part_metadata(const std::vector<size_t>& chunkshape,
-                                      const std::string_view dtype) {
+inline std::string make_part_zarrmetadata(const std::vector<size_t>& chunkshape,
+                                          const std::string_view dtype) {
   const auto chunkshape_str = vec_to_string(chunkshape);  // shape of each chunk of array
   const auto order = 'C';  // layout of bytes in each chunk of array in storage ('C' or 'F')
   const auto compressor = std::string{"null"};  // compression of data when writing to store
@@ -92,26 +92,26 @@ inline std::string make_part_metadata(const std::vector<size_t>& chunkshape,
   const auto filters = std::string{"null"};     // codec configurations for compression
   const auto zarr_format = '2';                 // storage spec. version 2
 
-  const auto part_metadata = std::string("  \"chunks\": " + chunkshape_str +
-                                         ",\n"
-                                         "  \"dtype\": \"" +
-                                         std::string(dtype) +
-                                         "\",\n"
-                                         "  \"order\": \"" +
-                                         order +
-                                         "\",\n"
-                                         "  \"compressor\": " +
-                                         compressor +
-                                         ",\n"
-                                         "  \"fill_value\": " +
-                                         fill_value +
-                                         ",\n"
-                                         "  \"filters\": " +
-                                         filters +
-                                         ",\n"
-                                         "  \"zarr_format\": " +
-                                         zarr_format);
-  return part_metadata;
+  const auto part_zarrmetadata = std::string("  \"chunks\": " + chunkshape_str +
+                                             ",\n"
+                                             "  \"dtype\": \"" +
+                                             std::string(dtype) +
+                                             "\",\n"
+                                             "  \"order\": \"" +
+                                             order +
+                                             "\",\n"
+                                             "  \"compressor\": " +
+                                             compressor +
+                                             ",\n"
+                                             "  \"fill_value\": " +
+                                             fill_value +
+                                             ",\n"
+                                             "  \"filters\": " +
+                                             filters +
+                                             ",\n"
+                                             "  \"zarr_format\": " +
+                                             zarr_format);
+  return part_zarrmetadata;
 }
 
 /**
@@ -135,7 +135,7 @@ class ZarrArray {
   std::vector<size_t> arrayshape;  ///< Number of elements in array along each dimension in store.
   Chunks chunks;                   ///< Method to write chunks of array in store.
   Buffer<T> buffer;                ///< Buffer to hold data before writing chunks to store.
-  std::string part_metadata;       ///< Metadata required for zarr array excluding array's shape
+  std::string part_zarrmetadata;   ///< Metadata required for zarr array excluding array's shape
 
   /**
    * @brief Generates the compulsory metadata for the Zarr array .zarray json file.
@@ -146,7 +146,7 @@ class ZarrArray {
     const auto metadata = std::string(
         "{\n"
         "  \"shape\": " +
-        vec_to_string(arrayshape) + ",\n" + std::string(part_metadata) + "\n}");
+        vec_to_string(arrayshape) + ",\n" + std::string(part_zarrmetadata) + "\n}");
 
     return metadata;
   }
@@ -236,7 +236,7 @@ class ZarrArray {
         arrayshape(chunkshape.size(), 0),
         chunks(chunkshape, reduced_arrayshape),
         buffer(vec_product(chunks.get_chunkshape())),
-        part_metadata(make_part_metadata(chunkshape, dtype)) {
+        part_zarrmetadata(make_part_zarrmetadata(chunkshape, dtype)) {
     assert((chunkshape.size() == arrayshape.size()) &&
            "number of dimensions of chunks must match number of dimensions of array");
 
@@ -273,6 +273,13 @@ class ZarrArray {
                      " array may have hidden or missing (null / nan) values.\n";
       }
     }
+  }
+
+  void set_arrayshape(std::vector<size_t>& i_arrayshape) {
+    assert((arrayshape.size() == i_arrayshape.size()) &&
+           "number of dimensions of array must not change");
+    arrayshape = i_arrayshape;
+    write_zarray_json(store, name, zarr_metadata());
   }
 
   /**
