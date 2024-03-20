@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TB)
  * -----
- * Last Modified: Tuesday 19th March 2024
+ * Last Modified: Wednesday 20th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -51,7 +51,7 @@ struct StoreAccessor {
    * @param buffer A span representing the range of memory containing the unsigned bytes.
    * @return A reference to the current StoreAccessor object.
    */
-  StoreAccessor& operator=(std::span<const uint8_t> buffer) const {
+  StoreAccessor& operator=(std::span<const uint8_t> buffer) {
     store.write(key, buffer);
     return *this;
   }
