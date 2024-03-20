@@ -181,10 +181,7 @@ class ZarrArray {
    *
    * @param shape_increment The increment to add to the shape of the array's outermost dimension.
    */
-  void increment_arrayshape_write_json(const size_t shape_increment) {
-    arrayshape.at(0) += shape_increment;
-    write_zarray_json(store, name, zarr_metadata());
-  }
+  void increment_arrayshape(const size_t shape_increment) { arrayshape.at(0) += shape_increment; }
 
   /**
    * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store
@@ -203,7 +200,8 @@ class ZarrArray {
     const auto shape_increment = write_chunks_to_store(h_data, h_data_nchunks);
 
     if (shape_increment) {
-      increment_arrayshape_write_json(shape_increment);
+      increment_arrayshape(shape_increment);
+      write_zarray_json(store, name, zarr_metadata());
     }
 
     const auto n_to_chunks = h_data_nchunks * buffer.get_chunksize();
@@ -265,7 +263,8 @@ class ZarrArray {
       auto shape_increment = buffer.get_fill() / reduced_chunksize;
       shape_increment = arrayshape_change(totnchunks, shape_increment);
       totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, buffer);
-      increment_arrayshape_write_json(shape_increment);  // TODO(CB) make consistent with xarray
+      increment_arrayshape(shape_increment);
+      write_zarray_json(store, name, zarr_metadata());  // TODO(CB) make consistent with xarray
 
       const auto totnchunks_reduced = vec_product(chunks.get_reducedarray_nchunks());
       if (totnchunks % totnchunks_reduced != 0) {
@@ -277,7 +276,7 @@ class ZarrArray {
 
   std::vector<size_t> get_arrayshape() const { return arrayshape; }
 
-  void set_arrayshape_write_json(const std::vector<size_t>& i_arrayshape) {
+  void set_write_arrayshape(const std::vector<size_t>& i_arrayshape) {
     assert((arrayshape.size() == i_arrayshape.size()) &&
            "number of dimensions of array must not change");
     arrayshape = i_arrayshape;

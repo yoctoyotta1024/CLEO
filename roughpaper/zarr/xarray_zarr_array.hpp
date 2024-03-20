@@ -109,7 +109,7 @@ class XarrayZarrArray {
 
   /* set the shape of the array and its dimensions
   given the dimensions in the dataset and order of dims in dimnames */
-  void set_arrayshape_write_json(const std::unordered_map<std::string, size_t>& datasetdims) {
+  void set_write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
     auto arrayshape_from_dims = std::vector<size_t>({});
 
     for (auto& dim : dimnames) {
@@ -117,7 +117,7 @@ class XarrayZarrArray {
       arrayshape_from_dims.push_back(it->second);
     }
 
-    zarr.set_arrayshape_write_json(arrayshape_from_dims);
+    zarr.set_write_arrayshape(arrayshape_from_dims);
   }
 
   std::unordered_map<std::string, size_t> get_arraydims() const {
@@ -167,7 +167,7 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
-    set_arrayshape_write_json(datasetdims);
+    set_write_arrayshape(datasetdims);
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
   }
