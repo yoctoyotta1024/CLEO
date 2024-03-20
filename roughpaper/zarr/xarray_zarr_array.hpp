@@ -25,9 +25,22 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
-#include <map>
+#include <unordered_map>
 
 #include "./zarr_array.hpp"
+
+inline std::vector<size_t> reduced_arrayshape_from_dims(
+    const std::unordered_map<std::string, size_t>& datasetdims,
+    const std::vector<std::string>& dimnames) {
+  auto reduced_arrayshape = std::vector<size_t>({});
+
+  for (size_t aa = 1; aa < dimnames.size(); ++aa) {
+    const auto it = datasetdims.find(dimnames.at(aa));
+    reduced_arrayshape.push_back(it->second);
+  }
+
+  return reduced_arrayshape;
+}
 
 /** Zarr array with additional metadata and constraining of shape of array to shape of dimensions
  * in order to ensure Zarr array is compatibile with NetCDF and Xarray
@@ -39,18 +52,9 @@ class XarrayZarrArray {
  private:
   // TODO(CB) move aliases to aliases.hpp
   ZarrArray<Store, T> zarr;
-  std::map<std::string, size_t> arraydims;
+  std::unordered_map<std::string, size_t> arraydims;
 
-  /**
-   * @brief Updates the array dimensions given shape of the array and along its outermost dimension.
-   *
-   * Increase the shape of the outermost dimension of an N-Dimensional array by "shape_increment",
-   * and then update the .zarray json file for the array's metadata accordingly. Function should
-   * only be called if the return of arrayshape_change is true.
-   *
-   * @param shape_increment The increment to add to the shape of the array's outermost dimension.
-   */
-  void update_arrayshape(const size_t shape_increment) { arrayshape.at(0) += shape_increment; }
+  void set_arrayshape_from_dims() {}
 
   /**
    * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store.
@@ -66,7 +70,7 @@ class XarrayZarrArray {
    * @return The remaining data that was not written to chunks.
    */
   subviewh_buffer write_chunks_with_xarray_metadata(
-      const std::map<std::string, size_t>& datasetdims, const subviewh_buffer h_data) {
+      const std::unordered_map<std::string, size_t>& datasetdims, const subviewh_buffer h_data) {
     const auto shape_increment = write_chunks_to_store(h_data);
 
     if (shape_increment) {
@@ -79,18 +83,15 @@ class XarrayZarrArray {
   }
 
  public:
-  XarrayZarrArray(Store& store, const std::string_view name, const std::string_view units,
-                  const double scale_factor, const std::string_view dtype,
-                  const std::vector<std::string>& dimnames, const std::vector<size_t>& chunkshape,
-                  const std::vector<size_t>& reduced_arrayshape = std::vector<size_t>({}))
-      : ZarrArray(store, name, dtype, chunkshape, reduced_arrayshape), arraydims() {
+  XarrayZarrArray(Store& store, const std::unordered_map<std::string, size_t>& datasetdims,
+                  const std::string_view name, const std::string_view units,
+                  const std::string_view dtype, const double scale_factor,
+                  const std::vector<size_t>& chunkshape, const std::vector<std::string>& dimnames)
+      : ZarrArray(store, name, dtype, chunkshape,
+                  reduced_arrayshape_from_dims(datasetdims, dimnames)),
+        arraydims() {
     assert((chunkshape.size() == dimnames.size()) &&
-           "number of named dimensions of array must match number dimensinos of chunks");
-
-    arraydims.insert({dimnames.at(0), 0});
-    for (size_t aa = 1; aa < dimnames.size(); ++aa) {
-      arraydims.insert({dimnames.at(aa), reduced_arrayshape.at(aa - 1)});
-    }  // TODO(CB) match with zarr_array shape
+           "number of named dimensions of array must match number dimensions of chunks");
 
     /* make string of zattrs attribute information for array in zarr store */
     const auto arrayattrs = std::string(
@@ -106,6 +107,11 @@ class XarrayZarrArray {
         "\n}");
 
     write_zattrs_json(store, name, arrayattrs);
+
+    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
+      const auto it = datasetdims.find(dimnames.at(aa));
+      arraydims.insert(*it);
+    }
   }
 
   /**
@@ -120,8 +126,8 @@ class XarrayZarrArray {
    * @param h_data The data in a Kokkos view in host memory which should be written to the array in
    * a store.
    */
-  std::map<std::string, size_t> write_to_array(const std::map<std::string, size_t>& datasetdims,
-                                               const viewh_buffer h_data) {
+  std::unordered_map<std::string, size_t> write_to_array(
+      const std::unordered_map<std::string, size_t>& datasetdims, const viewh_buffer h_data) {
     auto h_data_rem = buffer.copy_to_buffer(h_data);
 
     h_data_rem = write_chunks_with_xarray_metadata(datasetdims, h_data_rem);
