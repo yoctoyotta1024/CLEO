@@ -98,24 +98,22 @@ inline std::string make_xarray_metadata(const std::string_view units, const doub
 /** Zarr array with additional metadata and constraining of shape of array to shape of dimensions
  * in order to ensure Zarr array is compatibile with NetCDF and Xarray
  * @param units The units of the array's coordinates.
- * @param arraydims The names of each dimension of the array.
+ * @param dimnames The names of each dimension of the array.
  */
 template <typename Store, typename T>
 class XarrayZarrArray {
  private:
   // TODO(CB) move aliases to aliases.hpp
   ZarrArray<Store, T> zarr;
-  std::unordered_map<std::string, size_t> arraydims;
+  std::vector<std::string> dimnames;
 
   /* set the shape of the array and its dimensions
   given the dimensions in the dataset and order of dims in dimnames */
-  void set_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims,
-                      const std::vector<std::string>& dimnames) {
+  void set_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
     auto arrayshape_from_dims = std::vector<size_t>({});
 
     for (auto& dname : dimnames) {
       const auto it = datasetdims.find(dname);
-      arraydims.at(it->first) = it->second;
       arrayshape_from_dims.push_back(it->second);
     }
 
@@ -155,17 +153,11 @@ class XarrayZarrArray {
                   const std::vector<size_t>& chunkshape, const std::vector<std::string>& dimnames)
       : ZarrArray(store, name, dtype, chunkshape,
                   reduced_arrayshape_from_dims(datasetdims, dimnames)),
-        arraydims() {
+        dimnames(dimnames) {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
-    /* initialise arraydims map using dataset dims */
-    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
-      const auto it = datasetdims.find(dimnames.at(aa));
-      arraydims.insert(*it);
-    }
-
-    set_arrayshape(datasetdims, dimnames);
+    set_arrayshape(datasetdims);
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
   }
