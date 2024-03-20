@@ -58,9 +58,11 @@ struct Buffer {
    * @brief Parallel loop on host to fill buffer with NaN (numerical limit).
    */
   void reset_buffer() {
+    auto buffer_ = buffer;  // Copy of view for lambda functions using buffer
+
     Kokkos::parallel_for(
         "init_buffer", Kokkos::RangePolicy<HostSpace>(0, chunksize),
-        KOKKOS_CLASS_LAMBDA(const size_t& jj) { buffer(jj) = std::numeric_limits<T>::max(); });
+        [buffer_](const size_t& jj) { buffer_(jj) = std::numeric_limits<T>::max(); });
     fill = 0;
   }
 
@@ -74,9 +76,11 @@ struct Buffer {
    * @param h_data View containing the data to copy.
    */
   void copy_ndata_to_buffer(const size_t n_to_copy, const viewh_buffer h_data) {
-    Kokkos::parallel_for(
-        "copy_ndata_to_buffer", Kokkos::RangePolicy<HostSpace>(fill, fill + n_to_copy),
-        KOKKOS_CLASS_LAMBDA(const size_t& jj) { buffer(jj) = h_data(jj); });
+    auto buffer_ = buffer;  // Copy of view for lambda functions using buffer
+
+    Kokkos::parallel_for("copy_ndata_to_buffer",
+                         Kokkos::RangePolicy<HostSpace>(fill, fill + n_to_copy),
+                         [buffer_, h_data](const size_t& jj) { buffer_(jj) = h_data(jj); });
     fill += n_to_copy;
   }
 
