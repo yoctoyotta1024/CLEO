@@ -150,7 +150,7 @@ struct Buffer {
    */
   template <typename Store>
   void write_buffer_to_chunk(Store& store, std::string_view name, const std::string& chunk_label) {
-    store[std::string(name) + '/' + chunk_label] = (buffer);
+    store[std::string(name) + '/' + chunk_label] = buffer;
     reset_buffer();
   }
 };
