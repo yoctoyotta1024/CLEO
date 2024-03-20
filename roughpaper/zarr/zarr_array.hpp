@@ -313,7 +313,7 @@ class ZarrArray {
    * a store. Finall copies any leftover data, number of elements < chunksize, into the buffer.
    * Assertion checks there is no remainng data unattended to.
    *
-   * @param h_data The data in a Kokkos vie win host memory which should be written to the array in
+   * @param h_data The data in a Kokkos view in host memory which should be written to the array in
    * a store.
    */
   void write_to_array(const viewh_buffer h_data) {
