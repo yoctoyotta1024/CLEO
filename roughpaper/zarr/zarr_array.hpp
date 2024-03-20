@@ -257,22 +257,23 @@ class ZarrArray {
    */
   ~ZarrArray() {
     if (buffer.get_fill() > 0) {
-      const auto reduced_arraysize = chunks.get_reduced_arraysize();  // excluding outer dimension
-      if (buffer.get_fill() % reduced_arraysize != 0) {
-        const auto warning = std::string_view(
-            "WARNING: number of data elements in the buffer"
-            " should be completely divisible by the number of elements in the array excluding its"
-            " outermost dimension.\n         Some data in this array may be ignored or filled with"
-            " null / nan fill value.\n");  // TODO(CB) check this
-        std::cout << warning;
-      }
+      const auto reduced_chunksize = vec_product(get_chunkshape(), 1);
+      assert((buffer.get_fill() % reduced_chunksize == 0) &&
+             "Number of data elements in the buffer should be completely divisible by the"
+             "number of elements in a chunk excluding its outermost dimension");
 
-      auto shape_increment = buffer.get_fill() / reduced_arraysize;
+      auto shape_increment = buffer.get_fill() / reduced_chunksize;
       shape_increment = arrayshape_change(totnchunks, shape_increment);
       totnchunks = chunks.write_chunk<T>(store, name, totnchunks, buffer);
-      update_arrayshape(store, shape_increment);
+      update_arrayshape(store, shape_increment);  // TODO(CB) make consistent with xarray array
+
+      const auto totnchunks_reduced = vec_product(chunks.get_reducedarray_nchunks());
+      if (totnchunks % totnchunks_reduced != 0) {
+        std::cout << "WARNING: number of chunks along outermost dimension is not complete,"
+                     " array may have hidden or missing (null / nan) values."
+      }
     }
-  };
+  }
 
   /**
    * @brief Writes chunks of data from a kokkos view in host memory to the Zarr array in a store.
