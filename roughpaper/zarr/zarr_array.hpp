@@ -275,7 +275,7 @@ class ZarrArray {
     }
   }
 
-  void set_arrayshape(std::vector<size_t>& i_arrayshape) {
+  void set_arrayshape(const std::vector<size_t>& i_arrayshape) {
     assert((arrayshape.size() == i_arrayshape.size()) &&
            "number of dimensions of array must not change");
     arrayshape = i_arrayshape;
