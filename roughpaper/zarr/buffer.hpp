@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 19th March 2024
+ * Last Modified: Wednesday 20th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,6 +29,9 @@
 #include <string>
 #include <string_view>
 #include <vector>
+
+using HostSpace = Kokkos::DefaultHostExecutionSpace;  // TODO(CB) (re-)move definitions
+using kkpair_size_t = Kokkos::pair<size_t, size_t>;   // TODO(CB) (re-)move definitions
 
 /**
  * @brief A class template for managing a buffer of elements of data type T.

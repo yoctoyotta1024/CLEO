@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 19th March 2024
+ * Last Modified: Wednesday 20th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -165,7 +165,7 @@ class Chunks {
   size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
                      Buffer<T>& buffer) const {
     buffer.write_buffer_to_chunk(store, name, chunk_label(totnchunks));
-    return ++totnchunks;
+    return totnchunks + 1;
   }
 
   /**
@@ -187,7 +187,7 @@ class Chunks {
   size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
                      const Buffer<T>::subviewh_buffer h_data_chunk) const {
     store[std::string(name) + '/' + chunk_label(totnchunks)].operator= <T>(h_data_chunk);
-    return ++totnchunks;
+    return totnchunks + 1;
   }
 };
 
