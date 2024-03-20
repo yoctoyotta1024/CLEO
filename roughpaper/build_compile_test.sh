@@ -60,13 +60,13 @@ CMAKE_CXX_FLAGS="-Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and
 # flags for serial kokkos
 kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON"
 
-# # flags for host parallelism (e.g. using OpenMP)
-# kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
+# flags for host parallelism (e.g. using OpenMP)
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 
-# flags for device parallelism (e.g. on gpus)
-kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON \
--DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON \
--DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${NVCC_WRAPPER_DEFAULT_COMPILER}"
+# # flags for device parallelism (e.g. on gpus)
+# kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON \
+# -DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON \
+# -DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${NVCC_WRAPPER_DEFAULT_COMPILER}"
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###
@@ -87,7 +87,7 @@ then
       -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
       -S ${path2CLEO} -B ${path2build} \
       ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
-      cmake --build --target test --parallel
+      cmake --build ${path2build} --target test --parallel
 else
   cd ${path2build} && make -j 64 test
 fi
