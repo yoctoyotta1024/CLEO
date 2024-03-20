@@ -257,7 +257,7 @@ class ZarrArray {
    */
   ~ZarrArray() {
     if (buffer.get_fill() > 0) {
-      const auto reduced_chunksize = vec_product(get_chunkshape(), 1);
+      const auto reduced_chunksize = vec_product(chunks.get_chunkshape(), 1);
       assert((buffer.get_fill() % reduced_chunksize == 0) &&
              "Number of data elements in the buffer should be completely divisible by the"
              "number of elements in a chunk excluding its outermost dimension");
@@ -270,7 +270,7 @@ class ZarrArray {
       const auto totnchunks_reduced = vec_product(chunks.get_reducedarray_nchunks());
       if (totnchunks % totnchunks_reduced != 0) {
         std::cout << "WARNING: number of chunks along outermost dimension is not complete,"
-                     " array may have hidden or missing (null / nan) values."
+                     " array may have hidden or missing (null / nan) values.\n";
       }
     }
   }
