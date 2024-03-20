@@ -83,34 +83,34 @@ inline std::string vec_to_string(const std::vector<size_t>& vals) {
  * @param dtype The data type stored in the arrays (e.g., "<f8").
  * @return A string view containing the partial metadata for the Zarr array.
  */
-inline std::string_view make_part_metadata(const std::vector<size_t>& chunkshape,
-                                           const std::string_view dtype) {
+inline std::string make_part_metadata(const std::vector<size_t>& chunkshape,
+                                      const std::string_view dtype) {
+  const auto chunkshape_str = vec_to_string(chunkshape);  // shape of each chunk of array
   const auto order = 'C';  // layout of bytes in each chunk of array in storage ('C' or 'F')
   const auto compressor = std::string{"null"};  // compression of data when writing to store
   const auto fill_value = std::string{"null"};  // fill value for empty datapoints in array
   const auto filters = std::string{"null"};     // codec configurations for compression
   const auto zarr_format = '2';                 // storage spec. version 2
 
-  const auto part_metadata = std::string_view("  \"chunks\": " + vec_to_string(chunkshape) +
-                                              ",\n"
-                                              "  \"dtype\": \"" +
-                                              std::string(dtype) +
-                                              "\",\n"
-                                              "  \"order\": \"" +
-                                              order +
-                                              "\",\n"
-                                              "  \"compressor\": " +
-                                              compressor +
-                                              ",\n"
-                                              "  \"fill_value\": " +
-                                              fill_value +
-                                              ",\n"
-                                              "  \"filters\": " +
-                                              filters +
-                                              ",\n"
-                                              "  \"zarr_format\": " +
-                                              zarr_format);
-
+  const auto part_metadata = std::string("  \"chunks\": " + chunkshape_str +
+                                         ",\n"
+                                         "  \"dtype\": \"" +
+                                         std::string(dtype) +
+                                         "\",\n"
+                                         "  \"order\": \"" +
+                                         order +
+                                         "\",\n"
+                                         "  \"compressor\": " +
+                                         compressor +
+                                         ",\n"
+                                         "  \"fill_value\": " +
+                                         fill_value +
+                                         ",\n"
+                                         "  \"filters\": " +
+                                         filters +
+                                         ",\n"
+                                         "  \"zarr_format\": " +
+                                         zarr_format);
   return part_metadata;
 }
 
@@ -135,7 +135,7 @@ class ZarrArray {
   std::vector<size_t> arrayshape;  ///< Number of elements in array along each dimension in store.
   Chunks chunks;                   ///< Method to write chunks of array in store.
   Buffer<T> buffer;                ///< Buffer to hold data before writing chunks to store.
-  std::string_view part_metadata;  ///< Metadata required for zarr array excluding array's shape
+  std::string part_metadata;       ///< Metadata required for zarr array excluding array's shape
 
   /**
    * @brief Generates the compulsory metadata for the Zarr array .zarray json file.
