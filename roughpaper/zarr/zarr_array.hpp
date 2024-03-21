@@ -27,7 +27,6 @@
 #include <Kokkos_Pair.hpp>
 #include <cassert>
 #include <iostream>
-#include <ranges>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -231,7 +230,7 @@ class ZarrArray {
     /* Along all but the outermost dimension, initial array shape is reduced array shape.
     Number of elements along outermost dimension = 0 (array initially empty) */
     auto arrayshape = reduced_arrayshape;
-    std::ranges::prepend(arrayshape, 0);
+    arrayshape.insert(arrayshape.begin(), 0);
     write_arrayshape(arrayshape);
   };
 
