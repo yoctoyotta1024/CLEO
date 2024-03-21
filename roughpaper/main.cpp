@@ -56,6 +56,17 @@ void test_1d(FSStore &store, const viewh_type data, const std::string_view name,
   zarr.write_to_zarr_array(data);
 }
 
+void test_multid(FSStore &store, const viewh_type data, const std::string_view name,
+                 const std::vector<size_t> &chunkshape,
+                 const std::vector<size_t> &reduced_arrayshape) {
+  // create array
+  const auto dtype = std::string_view("<f8");
+  auto zarr = ZarrArray<FSStore, double>(store, name, dtype, chunkshape, reduced_arrayshape);
+
+  // output data to array
+  zarr.write_to_zarr_array(data);
+}
+
 int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
