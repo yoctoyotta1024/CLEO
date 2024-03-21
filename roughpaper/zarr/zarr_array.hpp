@@ -26,6 +26,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <string>
 #include <string_view>
@@ -155,13 +156,16 @@ class ZarrArray {
     auto arrayshape = std::vector<size_t>(chunks.get_chunkshape().size(), 0);
 
     const auto reduced_arrayshape = chunks.get_reduced_arrayshape();
-    arrayshape.at(0) = totndata / vec_product(reduced_arrayshape);
+    const auto reduced_arraysize = vec_product(reduced_arrayshape);
+    const auto c0 = chunks.get_chunkshape().at(0);
+    arrayshape.at(0) = (totndata / reduced_arraysize) * c0 + (totndata % reduced_arraysize);
 
     for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
-      arrayshape.at(aa) =
-          (totndata / vec_product(reduced_arrayshape, aa)) % reduced_arrayshape.at(aa - 1);
+      arrayshape.at(aa) = reduced_arrayshape.at(aa - 1);
     }
 
+    std::cout << "gshape: [" << arrayshape.at(0) << ", " << arrayshape.at(1) << "]: " << totndata
+              << ", " << vec_product(reduced_arrayshape) << "\n";
     return arrayshape;
   }
 
