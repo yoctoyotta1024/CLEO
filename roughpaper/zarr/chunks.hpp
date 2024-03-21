@@ -113,7 +113,11 @@ class Chunks {
    */
   Chunks(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
       : chunkshape(chunkshape), reducedarray_nchunks(chunkshape.size() - 1, 0) {
-    /* number of dimensions of reduced array is 1 less than actual array ( = array's chunks) */
+    /* number of dimensions (ndims) of actual array = ndims of array's chunks, is 1 more than
+    ndims of reduced array <- reduced array excludes outermost (0th) dimension). */
+    assert((chunkshape.size() == reduced_arrayshape.size() + 1) &&
+           "number of dimensions of chunks is 1 more than that of reduced array");
+
     assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
            "reduced array 1 less dimension than array (excludes outermost (0th) dimension");
 

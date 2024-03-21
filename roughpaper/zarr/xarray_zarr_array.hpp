@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 20th March 2024
+ * Last Modified: Thursday 21st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -109,15 +109,15 @@ class XarrayZarrArray {
 
   /* set the shape of the array and its dimensions
   given the dimensions in the dataset and order of dims in dimnames */
-  void set_write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
-    auto arrayshape_from_dims = std::vector<size_t>({});
+  void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
+    auto arrayshape = std::vector<size_t>({});
 
     for (auto& dim : dimnames) {
       const auto it = datasetdims.find(dim);
-      arrayshape_from_dims.push_back(it->second);
+      arrayshape.push_back(it->second);
     }
 
-    zarr.set_write_arrayshape(arrayshape_from_dims);
+    zarr.write_arrayshape(arrayshape);
   }
 
   std::unordered_map<std::string, size_t> get_arraydims() const {
@@ -141,7 +141,7 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
-    set_write_arrayshape(datasetdims);  // overwrite zarr array shape with xarray dataset dimensions
+    write_arrayshape(datasetdims);  // overwrite zarr array shape with xarray dataset dimensions
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
   }
@@ -161,12 +161,12 @@ class XarrayZarrArray {
   void write_to_xarray_zarr_array(const std::unordered_map<std::string, size_t>& datasetdims,
                                   const viewh_buffer h_data) {
     zarr.write_to_array(h_data);
-    set_write_arrayshape(datasetdims);  // overwrite zarr array shape with xarray dataset dimensions
+    write_arrayshape(datasetdims);  // overwrite zarr array shape with xarray dataset dimensions
 
-    // TODO(CB) call set_write_arrayshape(i_arrayshape); after this function call in dataset once
+    // TODO(CB) call write_arrayshape(datasetdims); after this function call in dataset once
     // dimensions of dataset have been consolidated
 
-    /* TODO(CB) docstrings */
+    // TODO(CB) docstrings
 
     // TODO(CB) test creation of this class and dimensions of array
   };
