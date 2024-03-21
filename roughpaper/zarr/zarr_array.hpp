@@ -193,6 +193,8 @@ class ZarrArray {
           chunks.write_chunk<Store, T>(store, name, totnchunks, Kokkos::subview(h_data, refs));
     }
 
+    totndata = totnchunks * buffer.get_chunksize();
+
     const auto n_to_chunks = h_data_nchunks * buffer.get_chunksize();
     const auto refs = kkpair_size_t({n_to_chunks, h_data.extent(0)});
     return Kokkos::subview(h_data, refs);
@@ -247,6 +249,7 @@ class ZarrArray {
              "Number of data elements in the buffer should be completely divisible by the"
              "number of elements in a chunk excluding its outermost dimension");
 
+      totndata = totnchunks * buffer.get_chunksize() + buffer.get_fill();
       totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, buffer);
       write_arrayshape(get_arrayshape());  // TODO(CB) make consistent with xarray
 

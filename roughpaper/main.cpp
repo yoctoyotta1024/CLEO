@@ -53,7 +53,7 @@ void test_1d(FSStore &store, const viewh_type data, const std::string_view name,
   auto zarr = ZarrArray<FSStore, double>(store, name, dtype, chunkshape);
 
   // output data to array
-  zarr.write_to_array(data);
+  zarr.write_to_zarr_array(data);
 }
 
 int main(int argc, char *argv[]) {
