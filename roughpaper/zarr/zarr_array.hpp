@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 20th March 2024
+ * Last Modified: Thursday 21st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -129,13 +129,13 @@ class ZarrArray {
   // TODO(CB) (1st move then) use aliases in aliases.hpp
   using viewh_buffer = Buffer<T>::viewh_buffer;
   using subviewh_buffer = Buffer<T>::subviewh_buffer;
-  Store& store;                    ///< store in which to write Zarr array
-  std::string_view name;           ///< Name of array to write in store.
-  size_t totnchunks;               ///< Total number of chunks of array written to store.
-  std::vector<size_t> arrayshape;  ///< Number of elements in array along each dimension in store.
-  Chunks chunks;                   ///< Method to write chunks of array in store.
-  Buffer<T> buffer;                ///< Buffer to hold data before writing chunks to store.
-  std::string part_zarrmetadata;   ///< Metadata required for zarr array excluding array's shape
+  Store& store;                   ///< store in which to write Zarr array
+  std::string_view name;          ///< Name of array to write in store.
+  size_t totnchunks;              ///< Total number of chunks of array written to store.
+  size_t totndata;                ///< Total number of elements of data in array written to store.
+  Chunks chunks;                  ///< Method to write chunks of array in store.
+  Buffer<T> buffer;               ///< Buffer to hold data before writing chunks to store.
+  std::string part_zarrmetadata;  ///< Metadata required for zarr array excluding array's shape
 
   /**
    * @brief Generates the compulsory metadata for the Zarr array .zarray json file.
@@ -288,7 +288,19 @@ class ZarrArray {
     }
   }
 
-  std::vector<size_t> get_arrayshape() const { return arrayshape; }
+  std::vector<size_t> get_arrayshape() const {
+    auto arrayshape = std::vector<size_t>(chunks.get_chunkshape().size(), 0);
+
+    const auto reduced_arrayshape = chunks.get_reduced_arrayshape();
+    arrayshape.at(0) = totndata / vec_product(reduced_arrayshape);
+
+    for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
+      arrayshape.at(aa) =
+          (totndata / vec_product(reduced_arrayshape, aa)) % reduced_arrayshape.at(aa - 1);
+    }
+
+    return arrayshape;
+  }
 
   void set_write_arrayshape(const std::vector<size_t>& i_arrayshape) {
     assert((arrayshape.size() == i_arrayshape.size()) &&

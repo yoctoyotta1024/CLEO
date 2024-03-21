@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 20th March 2024
+ * Last Modified: Thursday 21st March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -145,6 +145,20 @@ class Chunks {
    * its outermost one.
    */
   std::vector<size_t> get_reducedarray_nchunks() const { return reducedarray_nchunks; }
+
+  /**
+   * @brief Gets complete shape of the array excluding its outermost dimension.
+   *
+   * @return A vector containing the shape (number of data elements) of the array when complete
+   * along all but its outermost dimension.
+   */
+  std::vector<size_t> get_reduced_arrayshape() const {
+    auto reduced_arrayshape = std::vector<size_t>(reducedarray_nchunks.size(), 0);
+    for (size_t aa = 0; aa < reduced_arrayshape.size(); ++aa) {
+      reduced_arrayshape.at(aa) = chunkshape.at(aa + 1) * reducedarray_nchunks.at(aa);
+    }
+    return reduced_arrayshape;
+  }
 
   /**
    * @brief Writes a chunk to the store and increments the total number of chunks written.
