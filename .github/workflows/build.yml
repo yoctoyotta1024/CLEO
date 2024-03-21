@@ -12,12 +12,40 @@ jobs:
     - name: Setup
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake
+        sudo apt-get install -y \
+        cmake libnetcdff-dev liblapack-dev python3-dev \
+        python3-numpy python3-mpi4py python3-pip curl \
+        libfyaml-dev libopenmpi-dev openmpi-bin
+
+    - name: Build YAXT
+      run: |
+        curl -s -L https://swprojects.dkrz.de/redmine/attachments/download/529/yaxt-0.10.0.tar.gz | tar xvz
+        cd yaxt-0.10.0
+        ./configure --without-regard-for-quality --without-example-programs --without-perf-programs --with-pic \
+        --prefix=$HOME/yaxt
+        make -j 4
+        make install
+
+    - name: Build YAC
+      run: |
+        curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/release-3.0.3_p2/yac-release-3.0.3_p2.tar.gz | tar xvz
+        cd yac-release-3.0.3_p2
+        ./configure CFLAGS="-fPIC" CC=mpicc FC=mpif90 --disable-mpi-checks --with-yaxt-root=${HOME}/yaxt \
+        --prefix=$HOME/yac
+        make -j 4
+        make install
 
     - name: Build main
       run: |
         mkdir build && cd build
-        cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON ..
+        cmake \
+        -DCMAKE_C_COMPILER=gcc \
+        -DCMAKE_CXX_COMPILER=g++ \
+        -DKokkos_ARCH_NATIVE=ON \
+        -DKokkos_ENABLE_SERIAL=ON \
+        -DYAXT_ROOT=${HOME}/yaxt \
+        -DYAC_ROOT=${HOME}/yac \
+        -DCMAKE_MODULE_PATH=${PWD}/../libs/coupldyn_yac/cmake ..
         make
 
     - name: Build example adia0D
