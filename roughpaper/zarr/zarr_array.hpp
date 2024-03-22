@@ -167,9 +167,11 @@ class ZarrArray {
     }
 
     const auto reduced_arrayndata = size_t{std::max(vec_product(arrayshape, 1), size_t{1})};
-    const auto whole_shape0 = size_t{totndata / reduced_arrayndata};
-    const auto remainder_ndata = totndata % reduced_arrayndata;
-    const auto remainder_shape0 = std::ceil(remainder_ndata / vec_product(reducedarray_nchunks));
+    const auto wholeblocksize = (reduced_arrayndata * chunkshape.at(0));
+    const auto whole_shape0 = (totndata / wholeblocksize) * chunkshape.at(0);
+
+    const auto remainder_ndata = totndata - (whole_shape0 * reduced_arrayndata);
+    const auto remainder_shape0 = std::min(remainder_ndata, chunkshape.at(0));
     arrayshape.at(0) = whole_shape0 + remainder_shape0;
 
     assert((totndata <= vec_product(arrayshape)) &&
