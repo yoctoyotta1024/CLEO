@@ -67,35 +67,31 @@ savefigpath = path2build+"/bin/"  # directory for saving figures
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 2-D gridbox boundaries --- ###
-zgrid = [0, 1500, 50]     # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = [0, 1500, 50]     # evenly spaced xhalf coords [m]
-ygrid = np.array([0, 20])  # array of yhalf coords [m]
+zgrid = [0, 1500, 100]          # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+xgrid = [0, 1500, 100]          # evenly spaced xhalf coords [m]
+ygrid = np.array([0, 10, 20])   # array of yhalf coords [m]
 
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
-zlim = 750        # max z coord of superdroplets
-npergbx = 8       # number of superdroplets per gridbox
+zlim = 1000             # max z coord of superdroplets
+npergbx = 2             # number of superdroplets per gridbox
 
-# [min, max] range of initial superdroplet radii (and implicitly solute masses)
-rspan = [3e-9, 3e-6]  # [m]
-
-# settings for initial superdroplet multiplicies
-# (from bimodal Lognormal distribution)
-geomeans = [0.02e-6, 0.15e-6]
-geosigs = [1.4, 1.6]
-scalefacs = [6e6, 4e6]
-numconc = np.sum(scalefacs)
+monor = 1e-6            # all SDs have this same radius [m]
+dryr_sf = 1.0           # scale factor for dry radii [m]
+numconc = 5e8           # total no. conc of real droplets [m^-3]
+randcoord = False       # sample SD spatial coordinates randomly or not
 
 ### --- settings for 2D Thermodynamics --- ###
-PRESS0 = 100000  # [Pa]
+PRESS0 = 100000 # [Pa]
 THETA = 298.15  # [K]
 qcond = 0.0     # [Kg/Kg]
 WMAX = 0.6      # [m/s]
-VVEL = None     # [m/s]
+VVEL = 2.0      # [m/s]
 Zlength = 1500  # [m]
 Xlength = 1500  # [m]
 qvapmethod = "sratio"
 Zbase = 750     # [m]
+moistlayer = False
 sratios = [1.0, 1.0]  # s_ratio [below, above] Zbase
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -121,23 +117,21 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.SimpleThermo2DFlowField(configfile, constsfile, PRESS0,
-                                                 THETA, qvapmethod, sratios, Zbase,
-                                                 qcond, WMAX, Zlength, Xlength,
-                                                 VVEL)
+thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0,
+                                        THETA, qvapmethod, sratios, Zbase,
+                                        qcond, WMAX, Zlength, Xlength,
+                                        VVEL, moistlayer)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
-
 ### ----- write initial superdroplets binary ----- ###
 nsupers = crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
-coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 randomly
-coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 randomly
-coord2gen = None                        # do not generate superdroplet coord2s
-xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
-# randomly sample radii from rspan [m]
-radiigen = rgens.SampleLog10RadiiGen(rspan)
-dryradiigen = dryrgens.ScaledRadiiGen(1.0)
+radiigen  =  rgens.MonoAttrGen(monor)                 # all SDs have the same radius [m]
+dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf)       # dryradii are 1/sf of radii [m]
+coord3gen =  crdgens.SampleCoordGen(randcoord)        # (not) random coord3 of SDs
+coord1gen =  crdgens.SampleCoordGen(randcoord)        # (not) random coord1 of SDs
+coord2gen =  crdgens.SampleCoordGen(randcoord)        # (not) random coord2 of SDs
+xiprobdist = probdists.DiracDelta(monor)              # monodisperse droplet probability distrib
 
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                        coord3gen, coord1gen, coord2gen)
