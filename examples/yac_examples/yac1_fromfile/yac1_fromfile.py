@@ -64,7 +64,6 @@ dataset = binpath+"yac1_sol.zarr"
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
 savefigpath = path2build+"/bin/"  # directory for saving figures
-SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 2-D gridbox boundaries --- ###
 zgrid = [0, 1500, 60]           # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -145,9 +144,6 @@ if isfigures[0]:
                                  savefigpath, isfigures[1])
     rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
                                 thermofile, savefigpath, isfigures[1])
-    rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
-                                   gridfile, savefigpath, isfigures[1],
-                                   SDgbxs2plt)
     plt.close()
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
