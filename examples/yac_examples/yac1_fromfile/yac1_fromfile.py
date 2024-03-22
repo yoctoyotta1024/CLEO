@@ -190,3 +190,9 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                              arrows=False)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
+
+# TODO(CB): make superdroplet 2dmotion plot not a random sample
+# TODO(CB): plot thermodata
+# TODO(CB): plot winds
+# TODO(CB): make thermo and winds time varying
+# TODO(CB): turn off initial conditions plots for thermo
