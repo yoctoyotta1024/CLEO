@@ -40,6 +40,7 @@
 #include "initialise/timesteps.hpp"
 #include "observers/observers.hpp"
 #include "observers/printobs.hpp"
+#include "observers/stateobs.hpp"
 #include "observers/supersattrsobs.hpp"
 #include "observers/timeobs.hpp"
 #include "runcleo/coupleddynamics.hpp"
@@ -90,7 +91,7 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
 inline Observer auto create_supersattrs_observer(const unsigned int interval, FSStore &store,
                                                  const int maxchunk) {
   SuperdropsBuffers auto buffers =
-      SdIdBuffer() >> Coord3Buffer() >> Coord1Buffer() >> Coord2Buffer() >> SdgbxindexBuffer();
+      SdIdBuffer() >> Coord3Buffer() >> Coord1Buffer() >> Coord2Buffer();
   return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }
 
