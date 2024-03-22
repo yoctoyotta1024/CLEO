@@ -52,13 +52,13 @@ sys.path.append(path2CLEO+"/examples/exampleplotting/")
 constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binpath = path2build+"/bin/"
 sharepath = path2build+"/share/"
-gridfile = sharepath+"df2d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath+"df2d_dimlessSDsinit.dat"
-thermofile = sharepath+"/df2d_dimlessthermo.dat"
+gridfile = sharepath+"yac1_dimlessGBxboundaries.dat"
+initSDsfile = sharepath+"yac1_dimlessSDsinit.dat"
+thermofile = sharepath+"/yac1_dimlessthermo.dat"
 
 # path and file names for plotting results
-setupfile = binpath+"df2d_setup.txt"
-dataset = binpath+"df2d_sol.zarr"
+setupfile = binpath+"yac1_setup.txt"
+dataset = binpath+"yac1_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 # booleans for [making, saving] initialisation figures
@@ -184,11 +184,11 @@ sddata = pyzarr.get_supers(dataset, consts)
 totnsupers = pyzarr.get_totnsupers(dataset)
 
 # 4. plot results
-savename = savefigpath + "df2d_totnsupers_validation.png"
+savename = savefigpath + "yac1_totnsupers_validation.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
 nsample = 500
-savename = savefigpath + "df2d_motion2d_validation.png"
+savename = savefigpath + "yac1_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                              config["totnsupers"],
                                              nsample,

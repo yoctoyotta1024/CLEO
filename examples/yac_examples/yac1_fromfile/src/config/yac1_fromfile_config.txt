@@ -21,13 +21,13 @@
 
 ### Initialisation parameters ###
 constants_filename = ../libs/cleoconstants.hpp              # name of file for values of physical constants
-initsupers_filename = ./share/df2d_dimlessSDsinit.dat       # binary filename for initialisation of SDs
-grid_filename = ./share/df2d_dimlessGBxboundaries.dat       # binary filename for initialisation of GBxs / GbxMaps
+initsupers_filename = ./share/yac1_dimlessSDsinit.dat       # binary filename for initialisation of SDs
+grid_filename = ./share/yac1_dimlessGBxboundaries.dat       # binary filename for initialisation of GBxs / GbxMaps
 
 ### Output Data parameters ###
-setuptxt = ./bin/df2d_setup.txt                # .txt filename to copy configuration to
-stats_filename = ./bin/df2d_stats.txt          # .txt file to output runtime statistics to
-zarrbasedir = ./bin/df2d_sol.zarr              # zarr store base directory
+setuptxt = ./bin/yac1_setup.txt                # .txt filename to copy configuration to
+stats_filename = ./bin/yac1_stats.txt          # .txt file to output runtime statistics to
+zarrbasedir = ./bin/yac1_sol.zarr              # zarr store base directory
 maxchunk = 1250000                             # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime parameters ###
@@ -58,10 +58,10 @@ doAlterThermo = false                   # enable condensation to alter the therm
 thermosolver = fromfile                                   # dynamics solver to configure
 
 ### read in dynamics from file ###
-press_filename = ./share/df2d_dimlessthermo_press.dat          # binary filename for pressure
-temp_filename = ./share/df2d_dimlessthermo_temp.dat            # binary filename for temperature
-qvap_filename = ./share/df2d_dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
-qcond_filename = ./share/df2d_dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
-wvel_filename = ./share/df2d_dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
-uvel_filename = ./share/df2d_dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
-vvel_filename = ./share/df2d_dimlessthermo_vvel.dat            # binary filename for horizontal y velocity
+press_filename = ./share/yac1_dimlessthermo_press.dat          # binary filename for pressure
+temp_filename = ./share/yac1_dimlessthermo_temp.dat            # binary filename for temperature
+qvap_filename = ./share/yac1_dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
+qcond_filename = ./share/yac1_dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
+wvel_filename = ./share/yac1_dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
+uvel_filename = ./share/yac1_dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
+vvel_filename = ./share/yac1_dimlessthermo_vvel.dat            # binary filename for horizontal y velocity

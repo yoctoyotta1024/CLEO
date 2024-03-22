@@ -23,7 +23,7 @@ module load nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build3/
+path2build=${HOME}/CLEO/build6/
 configfile=${path2CLEO}/examples/yac_examples/yac1_fromfile/src/config/yac1_fromfile_config.txt
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
@@ -97,7 +97,7 @@ export OMP_PLACES=threads
 ### ---------------------------------------------------- ###
 
 ### ------------------- compile & run ------------------ ###
-### generate input files and run divergence free motion example
+### generate input files and run yac test 1 example
 ${python} ${path2CLEO}/examples/yac_examples/yac1_fromfile/yac1_fromfile.py \
   ${path2CLEO} ${path2build} ${configfile}
 
