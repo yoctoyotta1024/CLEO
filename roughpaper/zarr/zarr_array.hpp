@@ -152,7 +152,9 @@ class ZarrArray {
     return metadata;
   }
 
-  /* assumes writing of chunks always fill inner dimensions first */
+  /* assumes writing of chunks always fill inner dimensions first. Array shape is always at
+  least large enough to display all the elments fo data in the array to far
+  (i.e. arraysize >= totndata). */
   std::vector<size_t> get_arrayshape() const {
     const auto chunkshape = chunks.get_chunkshape();
     const auto reducedarray_nchunks = chunks.get_reducedarray_nchunks();
