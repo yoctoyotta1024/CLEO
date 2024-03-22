@@ -120,9 +120,9 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   auto cell_center_latitudes = std::vector<double>(30);
 
   for (size_t i = 0; i < longitudes.size(); i++) {
-    longitudes[i] = i * (2 * std::numbers::pi / 32);
+    longitudes[i] = i * (2 * std::numbers::pi / 31);
     if (i < latitudes.size())
-      latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / 33);
+      latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / 32);
   }
 
   for (size_t i = 0; i < cell_center_longitudes.size(); i++) {
