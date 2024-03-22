@@ -74,26 +74,35 @@ int main(int argc, char *argv[]) {
 
     // arrays of data returned by observer (maybe on device)
     auto data = observer();
-    test_1d(store, data, "r1d_8", std::vector<size_t>({8}));
-    test_1d(store, data, "r1d_2", std::vector<size_t>({2}));
-    test_1d(store, data, "r1d_6", std::vector<size_t>({6}));
-    test_1d(store, data, "r1d_11", std::vector<size_t>({11}));
+    // test_1d(store, data, "r1d_8", std::vector<size_t>({8}));  // shape = [8], chunks = 0
+    // test_1d(store, data, "r1d_2", std::vector<size_t>({2}));  // shape = [8], chunks = 0,1,2,3
+    // test_1d(store, data, "r1d_6", std::vector<size_t>({6}));  // shape = [8], chunks = 0,1
+    // test_1d(store, data, "r1d_11", std::vector<size_t>({11}));  // shape = [8], chunks = 0
 
-    // test_multid(store, data, "m2d_4p2", std::vector<size_t>({4, 2}), std::vector<size_t>({2}));
-    // test_multid(store, data, "m2d_2p2", std::vector<size_t>({2, 2}), std::vector<size_t>({2}));
-    // test_multid(store, data, "m2d_5p2", std::vector<size_t>({5, 2}), std::vector<size_t>({2}));
-    // test_multid(store, data, "m2d_8p1", std::vector<size_t>({8, 1}), std::vector<size_t>({2}));
-    // test_multid(store, data, "m2d_4p1", std::vector<size_t>({4, 1}), std::vector<size_t>({2}));
+    // test_multid(store, data, "m2d_4p2", std::vector<size_t>({4, 2}),
+    //             std::vector<size_t>({2}));  // shape = [4,2], chunks = 0.0
+    // test_multid(store, data, "m2d_2p2", std::vector<size_t>({2, 2}),
+    //             std::vector<size_t>({2}));  // shape = [4,2], chunks = 0.0, 1.0
+    // test_multid(store, data, "m2d_4p1", std::vector<size_t>({4, 1}),
+    //             std::vector<size_t>({2}));  // shape = [4,2], chunks = 0.0, 0.1
+    // test_multid(store, data, "m2d_8p1", std::vector<size_t>({8, 1}),
+    //             std::vector<size_t>({2}));  // shape = [8,1], chunks = 0.0 WARNING
+    // test_multid(store, data, "m2d_5p2", std::vector<size_t>({5, 2}),
+    //             std::vector<size_t>({2}));  // shape = [5,2], chunks = 0.0 WARNING
 
     // test_multid(store, data, "m2d_3p1", std::vector<size_t>({3, 1}),
-    //             std::vector<size_t>({2}));  // good example of array shape problem
+    //             std::vector<size_t>({2}));  // shape = [5,2], chunks = 0.0, 0.1, 1.0 WARNING
     // test_multid(store, data, "m2d_11p1", std::vector<size_t>({11, 1}),
-    //             std::vector<size_t>({2}));  // another example of array shape problem
+    //             std::vector<size_t>({2}));  // shape = [8,1], chunks = 0.0 WARNING
     // test_multid(store, data, "m2d_3p2", std::vector<size_t>({3, 2}),
-    //             std::vector<size_t>({2}));  // another example of array shape problem
+    //             std::vector<size_t>({2}));  // shape = [5,1], chunks = 0.0, 1.0 WARNING
 
-    // test_multid(store, data, "n2d_51", std::vector<size_t>({5, 1}), std::vector<size_t>({1}));
-    // test_multid(store, data, "n2d_81", std::vector<size_t>({8, 1}), std::vector<size_t>({1}));
+    test_multid(store, data, "n2d_5p1", std::vector<size_t>({5, 1}),
+                std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0, 1.0
+    test_multid(store, data, "n2d_8p1", std::vector<size_t>({8, 1}),
+                std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0
+    test_multid(store, data, "n2d_11p1", std::vector<size_t>({11, 1}),
+                std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0
   }
   Kokkos::finalize();
 }
