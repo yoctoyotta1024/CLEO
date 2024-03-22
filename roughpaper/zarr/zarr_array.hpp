@@ -161,12 +161,12 @@ class ZarrArray {
 
     auto arrayshape = std::vector<size_t>(chunkshape.size(), 0);
     for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
-      const auto nchunks = vec_product(reducedarray_nchunks, aa + 1);  // nchunks along inner dims
-      const auto maxnchunks = (totnchunks + nchunks - 1) / nchunks;    // round up int division
+      const auto nchunks = vec_product(reducedarray_nchunks, aa);    // nchunks along inner dims
+      const auto maxnchunks = (totnchunks + nchunks - 1) / nchunks;  // round up int division
       arrayshape.at(aa) = std::min(maxnchunks, reducedarray_nchunks.at(aa - 1)) * chunkshape.at(aa);
     }
 
-    const auto reduced_arrayndata = size_t{std::min(vec_product(arrayshape, 1), size_t{1})};
+    const auto reduced_arrayndata = size_t{std::max(vec_product(arrayshape, 1), size_t{1})};
     const auto whole_shape0 = size_t{totndata / reduced_arrayndata};
     const auto remainder_ndata = totndata % reduced_arrayndata;
     const auto remainder_shape0 = std::ceil(remainder_ndata / vec_product(reducedarray_nchunks));
@@ -260,19 +260,19 @@ class ZarrArray {
 
       totndata = totnchunks * buffer.get_chunksize() + buffer.get_fill();
       totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, buffer);
-      const auto arrayshape = get_arrayshape();
-      write_arrayshape(arrayshape);  // TODO(CB) make consistent with xarray
+      write_arrayshape(get_arrayshape());  // TODO(CB) make consistent with xarray
+    }
 
-      const auto reduced_arrayshape = chunks.get_reduced_arrayshape();
-      for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
-        if (arrayshape.at(aa) < reduced_arrayshape.at(aa - 1)) {
-          std::cout << "WARNING: array is not complete along inner dimension: " << aa << "\n";
-        }
+    const auto arrayshape = get_arrayshape();
+    const auto reduced_arrayshape = chunks.get_reduced_arrayshape();
+    for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
+      if (arrayshape.at(aa) < reduced_arrayshape.at(aa - 1)) {
+        std::cout << "WARNING: array is not complete along inner dimension: " << aa << "\n";
       }
-      if (totndata < vec_product(arrayshape)) {
-        std::cout << "WARNING: array is larger than total number of elements of data in it. Array"
-                     "will have missing (i.e. null / nan) values.\n";
-      }
+    }
+    if (totndata < vec_product(arrayshape)) {
+      std::cout << "WARNING: array is larger than total number of elements of data in it. Array"
+                   "will have missing (i.e. null / nan) values.\n";
     }
   }
 
