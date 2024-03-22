@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 21st March 2024
+ * Last Modified: Friday 22nd March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -152,16 +152,26 @@ class ZarrArray {
     return metadata;
   }
 
+  /* assumes writing of chunks always fill inner dimensions first */
   std::vector<size_t> get_arrayshape() const {
-    auto arrayshape = std::vector<size_t>(chunks.get_chunkshape().size(), 0);
+    const auto chunkshape = chunks.get_chunkshape();
+    const auto reducedarray_nchunks = chunks.get_reducedarray_nchunks();
 
-    const auto reduced_arrayshape = chunks.get_reduced_arrayshape();
-    arrayshape.at(0) = totndata / vec_product(reduced_arrayshape);
-
+    auto arrayshape = std::vector<size_t>(chunkshape.size(), 0);
     for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
-      arrayshape.at(aa) = reduced_arrayshape.at(aa - 1);
+      const auto reduced_totnchunks = vec_product(reducedarray_nchunks, aa + 1);
+      const auto maxnchunks = std::ceil(totnchunks / reduced_totnchunks);
+      arrayshape.at(aa) = std::min(maxnchunks, reducedarray_nchunks.at(aa - 1)) * chunkshape.at(aa);
     }
 
+    const auto reduced_arrayndata = vec_product(arrayshape, 1);
+    const auto whole_shape0 = size_t{totndata / reduced_arrayndata};
+    const auto remainder_ndata = totndata % reduced_arrayndata;
+    const auto remainder_shape0 = std::ceil(remainder_ndata / vec_product(reducedarray_nchunks));
+    arrayshape.at(0) = whole_shape0 + remainder_shape0;
+
+    assert((totndata <= vec_product(arrayshape)) &&
+           "elements of data must not be hiddden by array shape");
     return arrayshape;
   }
 
@@ -245,18 +255,24 @@ class ZarrArray {
   ~ZarrArray() {
     if (buffer.get_fill() > 0) {
       const auto reduced_chunksize = vec_product(chunks.get_chunkshape(), 1);
-      assert((buffer.get_fill() % reduced_chunksize == 0) &&
-             "Number of data elements in the buffer should be completely divisible by the"
-             "number of elements in a chunk excluding its outermost dimension");
+      if (buffer.get_fill() % reduced_chunksize != 0) {
+        std::cout << "WARNING: The number of data elements in the buffer is not completely"
+                     "divisible by the number of elements in a chunk along its inner dimensions\n";
+      }
 
       totndata = totnchunks * buffer.get_chunksize() + buffer.get_fill();
       totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, buffer);
       write_arrayshape(get_arrayshape());  // TODO(CB) make consistent with xarray
 
-      const auto totnchunks_reduced = vec_product(chunks.get_reducedarray_nchunks());
-      if (totnchunks % totnchunks_reduced != 0) {
-        std::cout << "WARNING: number of chunks along outermost dimension is not complete,"
-                     " array may have hidden or missing (null / nan) values.\n";
+      const auto reduced_arrayshape = chunks.get_reduced_arrayshape();
+      for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
+        if (arrayshape.at(aa) < reduced_arrayshape.at(aa - 1)) {
+          std::cout << "WARNING: array is not complete along all of the inner dimensions.\n"
+        }
+      }
+      if (totndata < vec_product(arrayshape)) {
+        std::cout << "WARNING: array is larger than total number of elements of data in it. Array"
+                     "will have missing (i.e. null / nan) values.\n";
       }
     }
   }
