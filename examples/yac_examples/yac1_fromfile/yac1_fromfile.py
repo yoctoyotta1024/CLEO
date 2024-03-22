@@ -19,16 +19,6 @@ Script compiles and runs CLEO for 3D example with time varying thermodynamics
 read from binary files to test that YAC can send the data to CLEO correctly.
 '''
 
-from pySD.thermobinary_src import read_thermodynamics as rthermo
-from pySD.thermobinary_src import create_thermodynamics as cthermo
-from pySD.thermobinary_src import thermogen
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
-from pySD.initsuperdropsbinary_src import *
-from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
-from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
-from pySD.sdmout_src import *
-from plotssrc import pltsds, pltmoms
 import os
 import sys
 import numpy as np
@@ -43,6 +33,16 @@ sys.path.append(path2CLEO)  # for imports from pySD package
 # for imports from example plotting package
 sys.path.append(path2CLEO+"/examples/exampleplotting/")
 
+from plotssrc import pltsds, pltmoms
+from pySD.sdmout_src import *
+from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
+from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
+from pySD.initsuperdropsbinary_src import *
+from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
+from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
+from pySD.thermobinary_src import thermogen
+from pySD.thermobinary_src import create_thermodynamics as cthermo
+from pySD.thermobinary_src import read_thermodynamics as rthermo
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
