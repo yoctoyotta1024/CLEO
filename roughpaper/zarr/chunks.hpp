@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 21st March 2024
+ * Last Modified: Friday 22nd March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -77,8 +77,9 @@ class Chunks {
    * @brief Create label for a chunk given current number of chunks written to array.
    *
    * This function creates a vector of integers for the number of a chunk along each dimension of
-   * an array given the chunk is the n'th chunk to be written to the store (starting at n=0). The
-   * vector is then converted into a string which can be used to label the chunk.
+   * an array given the chunk is the n'th chunk to be written to the store (starting at n=0 and
+   * incrementing along the innermost dimensions first). The vector is then converted into a
+   * string which can be used to label the chunk.
    *
    * @param chunk_num The number of the chunk to write to the array.
    * @return A string representing the label of the current chunk to write.
@@ -105,8 +106,10 @@ class Chunks {
   /**
    * @brief Constructor for the Chunks class.
    *
-   * Initializes the Chunks with the provided chunk shape and reduced array shape. Reduced
-   * array shape is the shape of the array along all but the outermost dimensions of the array.
+   * Initializes the Chunks with the provided chunk shape and shape of reduced array. Reduced
+   * array shape is the shape of the array excluding its outermost (0th) dimension. The chunkshape
+   * along all the inner dimensions must be factor of the reduced array shape (completely divisible)
+   * to ensure good chunking.
    *
    * @param chunkshape The shape of chunks along each dimension.
    * @param reduced_arrayshape The shape of the reduced array along each dimension.
@@ -114,12 +117,9 @@ class Chunks {
   Chunks(const std::vector<size_t>& chunkshape, const std::vector<size_t>& reduced_arrayshape)
       : chunkshape(chunkshape), reducedarray_nchunks(chunkshape.size() - 1, 0) {
     /* number of dimensions (ndims) of actual array = ndims of array's chunks, is 1 more than
-    ndims of reduced array <- reduced array excludes outermost (0th) dimension). */
-    assert((chunkshape.size() == reduced_arrayshape.size() + 1) &&
-           "number of dimensions of chunks is 1 more than that of reduced array");
-
+    ndims of reduced arrayshape (because reduced arrayshape excludes outermost (0th) dimension)). */
     assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
-           "reduced array 1 less dimension than array (excludes outermost (0th) dimension");
+           "number of dimensions of reduced array must be 1 less than that of chunks (i.e. array)");
 
     /* set number of chunks along all but array's outermost dimension given
     the shape of each chunk and expected shape of final array along those dimensions */

@@ -164,7 +164,7 @@ class ZarrArray {
       arrayshape.at(aa) = std::min(maxnchunks, reducedarray_nchunks.at(aa - 1)) * chunkshape.at(aa);
     }
 
-    const auto reduced_arrayndata = vec_product(arrayshape, 1);
+    const auto reduced_arrayndata = std::min(vec_product(arrayshape, 1), 1);
     const auto whole_shape0 = size_t{totndata / reduced_arrayndata};
     const auto remainder_ndata = totndata % reduced_arrayndata;
     const auto remainder_shape0 = std::ceil(remainder_ndata / vec_product(reducedarray_nchunks));
@@ -239,11 +239,8 @@ class ZarrArray {
     assert((chunkshape.size() == reduced_arrayshape.size() + 1) &&
            "number of dimensions of chunks must match number of dimensions of array");
 
-    /* Along all but the outermost dimension, initial array shape is reduced array shape.
-    Number of elements along outermost dimension = 0 (array initially empty) */
-    auto arrayshape = reduced_arrayshape;
-    arrayshape.insert(arrayshape.begin(), 0);
-    write_arrayshape(arrayshape);
+    /* Initial array shape is [0,0,0,...,0] along all dimensions (initially empty array) */
+    write_arrayshape(get_arrayshape());
   };
 
   /**
@@ -254,8 +251,7 @@ class ZarrArray {
    */
   ~ZarrArray() {
     if (buffer.get_fill() > 0) {
-      const auto reduced_chunksize = vec_product(chunks.get_chunkshape(), 1);
-      if (buffer.get_fill() % reduced_chunksize != 0) {
+      if (buffer.get_fill() % vec_product(chunks.get_chunkshape(), 1) != 0) {
         std::cout << "WARNING: The number of data elements in the buffer is not completely"
                      "divisible by the number of elements in a chunk along its inner dimensions\n";
       }
