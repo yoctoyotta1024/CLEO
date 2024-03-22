@@ -56,7 +56,7 @@ class DoStateObs {
  public:
   DoStateObs(FSStore &store, const int maxchunk, const size_t ngbxs)
       : zarr_thermo(std::make_shared<store_type_thermo>(store, maxchunk, "<f8", ngbxs, "")),
-      : zarr_winds(std::make_shared<store_type_winds>(store, maxchunk, "<f8", ngbxs, "")) {}
+        zarr_winds(std::make_shared<store_type_winds>(store, maxchunk, "<f8", ngbxs, "")) {}
 
   void before_timestepping(const viewh_constgbx h_gbxs) const {
     std::cout << "observer includes StateObserver\n";

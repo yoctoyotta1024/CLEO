@@ -49,8 +49,8 @@ struct WindBuffers {
  public:
   WindBuffers(const std::string endname, const unsigned int chunksize)
       : wvel(chunksize, std::numeric_limits<T>::max()),
-        vvel(chunksize, std::numeric_limits<T>::max()),
-        uvel(chunksize, std::numeric_limits<T>::max()) {}
+        uvel(chunksize, std::numeric_limits<T>::max()),
+        vvel(chunksize, std::numeric_limits<T>::max()) {}
 
   /* copy value to mass moments to their respective buffers */
   std::pair<unsigned int, unsigned int> copy2buffer(const State &state, const unsigned int ndata,
@@ -78,8 +78,8 @@ struct WindBuffers {
     const std::string dims = "[\"time\", \"gbxindex\"]";
 
     storehelpers::writejsons(store, "wvel", metadata, dims, "m/s", dlc::W0);
-    storehelpers::writejsons(store, "wvel", metadata, dims, "m/s", dlc::W0);
-    storehelpers::writejsons(store, "wvel", metadata, dims, "m/s", dlc::W0);
+    storehelpers::writejsons(store, "uvel", metadata, dims, "m/s", dlc::W0);
+    storehelpers::writejsons(store, "vvel", metadata, dims, "m/s", dlc::W0);
   }
 };
 
