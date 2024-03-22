@@ -90,7 +90,7 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
 inline Observer auto create_supersattrs_observer(const unsigned int interval, FSStore &store,
                                                  const int maxchunk) {
   SuperdropsBuffers auto buffers =
-      SdIdBuffer() >> Coord3Buffer() >> Coord1Buffer() >> SdgbxindexBuffer();
+      SdIdBuffer() >> Coord3Buffer() >> Coord1Buffer() >> Coord2Buffer() >> SdgbxindexBuffer();
   return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }
 
@@ -105,7 +105,9 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obs3 = create_supersattrs_observer(obsstep, store, maxchunk);
 
-  return obs1 >> obs2 >> obs3;
+  const Observer auto obs4 = StateObserver(obsstep, store, maxchunk, config.ngbxs);
+
+  return obs1 >> obs2 >> obs3 >> obs4;
 }
 
 inline auto create_sdm(const Config &config, const Timesteps &tsteps, FSStore &store) {
