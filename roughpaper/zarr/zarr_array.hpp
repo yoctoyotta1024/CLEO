@@ -256,7 +256,7 @@ class ZarrArray {
   ~ZarrArray() {
     if (buffer.get_fill() > 0) {
       if (buffer.get_fill() % vec_product(chunks.get_chunkshape(), 1) != 0) {
-        std::cout << "WARNING: The number of data elements in the buffer is not completely"
+        std::cout << "WARNING: The number of data elements in the buffer is not completely "
                      "divisible by the number of elements in a chunk along its inner dimensions\n";
       }
 

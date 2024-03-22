@@ -97,12 +97,26 @@ int main(int argc, char *argv[]) {
     // test_multid(store, data, "m2d_3p2", std::vector<size_t>({3, 2}),
     //             std::vector<size_t>({2}));  // shape = [5,1], chunks = 0.0, 1.0 WARNING
 
-    test_multid(store, data, "n2d_5p1", std::vector<size_t>({5, 1}),
-                std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0, 1.0
-    test_multid(store, data, "n2d_8p1", std::vector<size_t>({8, 1}),
-                std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0
-    test_multid(store, data, "n2d_11p1", std::vector<size_t>({11, 1}),
-                std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0
+    // test_multid(store, data, "n2d_5p1", std::vector<size_t>({5, 1}),
+    //             std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0, 1.0
+    // test_multid(store, data, "n2d_8p1", std::vector<size_t>({8, 1}),
+    //             std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0
+    // test_multid(store, data, "n2d_11p1", std::vector<size_t>({11, 1}),
+    //             std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0
+
+    // test_multid(store, data, "n3d_4p2p1", std::vector<size_t>({4, 2, 1}),
+    //             std::vector<size_t>({2, 1}));  // shape = [4,2,1], chunks = 0.0.0
+    // test_multid(store, data, "n3d_2p2p1", std::vector<size_t>({2, 2, 1}),
+    //             std::vector<size_t>({2, 1}));  // shape = [4,2,1], chunks = 0.0.0, 1.0.0
+    // test_multid(store, data, "n3d_1p1p1", std::vector<size_t>({1, 1, 1}),
+    //             std::vector<size_t>({2, 2}));  // shape = [2,2,2], chunks = (many)
+
+    test_multid(store, data, "n3d_1p3p2", std::vector<size_t>({1, 3, 2}),
+                std::vector<size_t>({3, 2}));  // shape = [2,3,2], chunks = 1.0.0, 1.0.0 WARNING
+    test_multid(store, data, "n3d_1p3p1", std::vector<size_t>({1, 3, 1}),
+                std::vector<size_t>({3, 1}));  // shape = [3,3,1] chunks = 0.0.0 -> 2.0.0 WARNING
+    test_multid(store, data, "n3d_2p3p1", std::vector<size_t>({2, 3, 1}),
+                std::vector<size_t>({3, 1}));  // shape = [4,3,1] chunks = 0.0.0, 1.0.0 WARNING
   }
   Kokkos::finalize();
 }
