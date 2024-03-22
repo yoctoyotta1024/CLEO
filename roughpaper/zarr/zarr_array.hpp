@@ -161,12 +161,12 @@ class ZarrArray {
 
     auto arrayshape = std::vector<size_t>(chunkshape.size(), 0);
     for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
-      const auto reduced_totnchunks = vec_product(reducedarray_nchunks, aa + 1);
-      const auto maxnchunks = std::ceil(totnchunks / reduced_totnchunks);
+      const auto nchunks = vec_product(reducedarray_nchunks, aa + 1);  // nchunks along inner dims
+      const auto maxnchunks = (totnchunks + nchunks - 1) / nchunks;    // round up int division
       arrayshape.at(aa) = std::min(maxnchunks, reducedarray_nchunks.at(aa - 1)) * chunkshape.at(aa);
     }
 
-    const auto reduced_arrayndata = std::min(vec_product(arrayshape, 1), 1);
+    const auto reduced_arrayndata = size_t{std::min(vec_product(arrayshape, 1), size_t{1})};
     const auto whole_shape0 = size_t{totndata / reduced_arrayndata};
     const auto remainder_ndata = totndata % reduced_arrayndata;
     const auto remainder_shape0 = std::ceil(remainder_ndata / vec_product(reducedarray_nchunks));
@@ -201,8 +201,8 @@ class ZarrArray {
     for (size_t nn = 0; nn < h_data_nchunks; ++nn) {
       const auto csz = buffer.get_chunksize();
       const auto refs = kkpair_size_t({nn * csz, (nn + 1) * csz});
-      totnchunks =
-          chunks.write_chunk<Store, T>(store, name, totnchunks, Kokkos::subview(h_data, refs));
+      const auto h_data_chunk = Kokkos::subview(h_data, refs);
+      totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, h_data_chunk);
     }
 
     totndata = totnchunks * buffer.get_chunksize();
@@ -260,12 +260,13 @@ class ZarrArray {
 
       totndata = totnchunks * buffer.get_chunksize() + buffer.get_fill();
       totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, buffer);
-      write_arrayshape(get_arrayshape());  // TODO(CB) make consistent with xarray
+      const auto arrayshape = get_arrayshape();
+      write_arrayshape(arrayshape);  // TODO(CB) make consistent with xarray
 
       const auto reduced_arrayshape = chunks.get_reduced_arrayshape();
       for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
         if (arrayshape.at(aa) < reduced_arrayshape.at(aa - 1)) {
-          std::cout << "WARNING: array is not complete along all of the inner dimensions.\n"
+          std::cout << "WARNING: array is not complete along inner dimension: " << aa << "\n";
         }
       }
       if (totndata < vec_product(arrayshape)) {
