@@ -86,6 +86,6 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
     cmake --build ${path2build} --parallel
 
 # ensure these directories exist (it's a good idea for later use)
-mkdir ${path2build}bin
-mkdir ${path2build}share
+mkdir -p ${path2build}bin
+mkdir -p ${path2build}share
 ### ---------------------------------------------------- ###
