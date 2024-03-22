@@ -65,7 +65,10 @@ struct CartesianDynamics {
   std::vector<double> vvel_yfaces;  // v velocity defined on coord2 faces of gridboxes
 
   // YAC field ids
-  int pressure_yac_id, temp_yac_id, qvap_yac_id, qcond_yac_id;
+  int pressure_yac_id;
+  int temp_yac_id;
+  int qvap_yac_id;
+  int qcond_yac_id;
 
   /* depending on nspacedims, read in data
   for 1-D, 2-D or 3-D wind velocity components */
