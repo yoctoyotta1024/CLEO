@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 22nd March 2024
+ * Last Modified: Monday 25th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -152,9 +152,17 @@ class ZarrArray {
     return metadata;
   }
 
-  /* assumes writing of chunks always fill inner dimensions first. Array shape is always at
-  least large enough to display all the elments fo data in the array to far
-  (i.e. arraysize >= totndata). */
+  /**
+   * @brief Get the shape of the array based on the number of data elements and chunks written in
+   * the store.
+   *
+   * This method assumes that writing of chunks always fills inner dimensions first.
+   * The array shape returned is always at least large enough to display all the elements of data
+   * in the array so far along each dimension (i.e., arraysize >= totndata along each dimension of
+   * the array).
+   *
+   * @return A vector representing the shape of the array.
+   */
   std::vector<size_t> get_arrayshape() const {
     const auto chunkshape = chunks.get_chunkshape();
     const auto reducedarray_nchunks = chunks.get_reducedarray_nchunks();
@@ -219,9 +227,11 @@ class ZarrArray {
    * @brief Constructs a ZarrArray object.
    *
    * Initializes an empty Zarr array in the provided store in order to writes chunks of an array to
-   * the store via a buffer. The assertions in this constructor ensure chunks are an appropriate
-   * size and shape for the array such that the final array dimensions are exactly integer multiples
-   * of its chunks along all but its outermost (0th) dimension.
+   * the store via a buffer. The assertions in this constructor ensure chunks have the same
+   * number of dimensions for the array. The buffer is the size of exactly 1 chunk, and chunks'
+   * shape is restricted such that the final array dimensions are exactly integer multiples of its
+   * chunks along all but the outermost (0th) dimension of the array. Order of data written to
+   * chunks is assumed to increment along innermost dimensions first.
    *
    * @param store The store where the array will be stored.
    * @param chunkshape The shape of individual data chunks along each dimension.
@@ -243,7 +253,7 @@ class ZarrArray {
     assert((chunkshape.size() == reduced_arrayshape.size() + 1) &&
            "number of dimensions of chunks must match number of dimensions of array");
 
-    /* Initial array shape is [0,0,0,...,0] along all dimensions (initially empty array) */
+    /* Initial array shape is [0,0,0,...,0] (initially empty array along all dimensions) */
     write_arrayshape(get_arrayshape());
   };
 
@@ -251,7 +261,8 @@ class ZarrArray {
    * @brief Destroys the ZarrArray object.
    *
    * Writes the buffer to a chunk of the array in the store if it isn't empty and updates the
-   * array's shape correspondingly.
+   * array's shape correspondingly. Also issues warnings if array is incomplete and/or data in
+   * buffer mismatches array dimensions.
    */
   ~ZarrArray() {
     if (buffer.get_fill() > 0) {
