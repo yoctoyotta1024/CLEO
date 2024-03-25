@@ -22,6 +22,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 #include <iostream>
+#include <unordered_map>
 #include <vector>
 
 #include "./zarr/fsstore.hpp"
@@ -44,6 +45,14 @@ viewh_type observer() {
   h_data(7) = 8.8;
 
   return h_data;
+}
+
+std::unordered_map<std::string, size_t> get_datasetdims() {
+  const auto datasetdims = std::unordered_map<std::string, size_t>{
+      {"SdId", 0},
+  };
+
+  return datasetdims;
 }
 
 void test_zarr_array(FSStore &store);
@@ -135,7 +144,20 @@ void test_zarr_array(FSStore &store) {
                   std::vector<size_t>({3, 1}));  // shape = [4,3,1] chunks = 0.0.0, 1.0.0 WARNING
 }
 
+XarrayZarrArray<FSStore, double> make_xarrayzarr(
+    FSStore &store, const std::unordered_map<std::string, size_t> &datasetdims,
+    const std::string_view name, const std::string_view units, const double scale_factor,
+    const std::vector<size_t> &chunkshape, const std::vector<std::string> &dimnames) {
+  const auto dtype = std::string_view("<f8");
+  return XarrayZarrArray(store, datasetdims, name, units, dtype, scale_factor, chunkshape,
+                         dimnames);
+}
+
 void test_xarray_zarr_array(FSStore &store) {
   // arrays of data returned by observer (maybe on device)
   auto data = observer();
+  auto datasetdims = get_datasetdims();
+
+  auto xzarr = make_xarrayzarr(store, datasetdims, "xarray_r1d", "m", 1e-6, {8}, "SdId");
+  xzarr = xzarr.write_to_xarray_zarr_array(datasetdims, data);
 }
