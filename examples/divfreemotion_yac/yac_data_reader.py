@@ -1,6 +1,8 @@
 from yac import *
 import numpy as np
 
+# --- Subroutines for binary data reading ---
+
 class variable_metadata:
     def __init__(self, b0, bsize, nvar, vtype, units, scale_factor):
         self.b0           = b0
@@ -52,15 +54,21 @@ def read_metadata(file):
 
     return variable_metadata
 
+# --- Start of YAC definitions ---
 yac = YAC()
 
+# --- Component definition ---
 component_name = "yac_reader"
 component = yac.def_comp(component_name)
 
 def_calendar(Calendar.PROLEPTIC_GREGORIAN)
 
+# --- Grid definition ---
 lon = np.linspace(0,2*np.pi,32)[:-1]
 lat = np.linspace(-0.5*np.pi,0.5*np.pi, 33)[1:-1]
+grid = Reg2dGrid(f"yac_reader_grid", lon, lat)
+
+# --- Point definitions ---
 cell_centers_lon = (lon + np.pi/32)[:-1]
 cell_centers_lat = (lat + np.pi/66)[:-1]
 edge_centers_lat = []
@@ -74,19 +82,21 @@ for lat_index in range(0, len(lat) * 2 - 1):
         edge_centers_lon.extend(lon)
         edge_centers_lat.extend([cell_centers_lat[(lat_index - 1) // 2]] * len(lon))
 
-grid = Reg2dGrid(f"yac_reader_grid", lon, lat)
 cell_centers = grid.def_points(Location.CELL, cell_centers_lon, cell_centers_lat)
 edge_centers = grid.def_points_unstruct(Location.EDGE, edge_centers_lon, edge_centers_lat)
 
+# --- Field definitions ---
 press               = Field.create("pressure", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 temp                = Field.create("temperature", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 qvap                = Field.create("qvap", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 qcond               = Field.create("qcond", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 hor_wind_velocities = Field.create("hor_wind_velocities", component, edge_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 
+# --- End of YAC definitions ---
 yac.enddef()
 np.set_printoptions(threshold=np.inf)
 
+# Read binary data from files
 press_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_press.dat")
 temp_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_temp.dat")
 qvap_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qvap.dat")
@@ -94,8 +104,8 @@ qcond_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_q
 uvel = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_uvel.dat")
 wvel = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_wvel.dat")
 
+# Pack all wind velocities edge data into one united field for YAC exchange
 united_edge_data = []
-
 for lat_index in range(0, len(lat) * 2 - 1):
     if (lat_index % 2 == 0):
         lower_index = (lat_index // 2) * (len(lon) - 1)
@@ -106,18 +116,21 @@ for lat_index in range(0, len(lat) * 2 - 1):
         upper_index = ((lat_index + 1) // 2) * len(lon)
         united_edge_data.extend(wvel[lower_index:upper_index])
 
+# Use YAC to exchange the values for first timestep
 press.put(press_values[0:900])
 temp.put(temp_values[0:900])
 qvap.put(qvap_values[0:900])
 qcond.put(qcond_values[0:900])
 hor_wind_velocities.put(np.asarray(united_edge_data[0:1860]))
 
+# Use YAC to exchange the values for second timestep
 press.put(press_values[900:1800])
 temp.put(temp_values[900:1800])
 qvap.put(qvap_values[900:1800])
 qcond.put(qcond_values[900:1800])
 hor_wind_velocities.put(np.asarray(united_edge_data[1860:3720]))
 
+# Use YAC to exchange the values for third timestep
 press.put(press_values[1800:2700])
 temp.put(temp_values[1800:2700])
 qvap.put(qvap_values[1800:2700])
