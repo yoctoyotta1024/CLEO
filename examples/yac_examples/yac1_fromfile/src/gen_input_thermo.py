@@ -62,8 +62,8 @@ class TimeVarying3DThermo:
     UVEL = wamp * xtilda / ztilda * np.cos(zcens_x/ztilda) * np.cos(xfaces/xtilda)
 
     # modulation in y direction
-    WVEL *= (1.25 + np.cos(self.Ylength / np.pi * ycens_z))
-    UVEL *= (1.25 + np.cos(self.Ylength / np.pi * ycens_x))
+    WVEL *= (1.0 + 0.5 * np.cos(self.Ylength / np.pi * ycens_z))
+    UVEL *= (1.0 + 0.5 * np.cos(self.Ylength / np.pi * ycens_x))
 
     return WVEL, UVEL
 
