@@ -302,11 +302,11 @@ std::string CartesianDynamics::set_winds_from_binaries(const unsigned int nspace
       infoend = ", u";
     case 2:  // 3-D or 2-D model
       uvel_xfaces = thermodynamicvar_from_binary(uvel_filename);
-      get_uvel = get_uvel_from_binary();
+      get_uvel = get_uvel_from_yac();
       infoend = ", v" + infoend;
     case 1:  // 3-D, 2-D or 1-D model
       wvel_zfaces = thermodynamicvar_from_binary(wvel_filename);
-      get_wvel = get_wvel_from_binary();
+      get_wvel = get_wvel_from_yac();
       infoend = "w" + infoend;
   }
 
@@ -326,7 +326,7 @@ CartesianDynamics::get_winds_func CartesianDynamics::nullwinds() const {
 /* set function for retrieving wvel defined at zfaces of
 a gridbox with index 'gbxindex' and return vector
 containting wvel data from binary file */
-CartesianDynamics::get_winds_func CartesianDynamics::get_wvel_from_binary() const {
+CartesianDynamics::get_winds_func CartesianDynamics::get_wvel_from_yac() const {
   const auto func = [&](const unsigned int gbxindex) {
     const auto kij =
         kijfromindex(ndims, static_cast<size_t>(gbxindex));  // [k,i,j] of gridbox centre on 3D grid
@@ -334,10 +334,9 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_wvel_from_binary() cons
 
     size_t lpos(ndims[1] * nzfaces * kij[2] + nzfaces * kij[1] +
                 kij[0]);  // position of z lower face in 1D wvel vector
-    lpos += pos_zface;
     const size_t uppos(lpos + 1);  // position of z upper face
 
-    return std::pair(wvel_zfaces.at(lpos), wvel_zfaces.at(uppos));
+    return std::pair(wvel.at(lpos), wvel.at(uppos));
   };
 
   return func;
@@ -346,7 +345,7 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_wvel_from_binary() cons
 /* returns vector of yvel retrieved from binary
 file called 'filename' where uvel is defined on
 the x-faces (coord1) of gridboxes */
-CartesianDynamics::get_winds_func CartesianDynamics::get_uvel_from_binary() const {
+CartesianDynamics::get_winds_func CartesianDynamics::get_uvel_from_yac() const {
   const auto func = [&](const unsigned int gbxindex) {
     const auto kij =
         kijfromindex(ndims, static_cast<size_t>(gbxindex));  // [k,i,j] of gridbox centre on 3D grid
@@ -354,10 +353,9 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_uvel_from_binary() cons
 
     size_t lpos(nxfaces * ndims[0] * kij[2] + ndims[0] * kij[1] +
                 kij[0]);  // position of x lower face in 1D uvel vector
-    lpos += pos_xface;
     const size_t uppos(lpos + ndims[0]);  // position of x upper face
 
-    return std::pair(uvel_xfaces.at(lpos), uvel_xfaces.at(uppos));
+    return std::pair(uvel.at(lpos), uvel.at(uppos));
   };
 
   return func;

@@ -96,12 +96,12 @@ struct CartesianDynamics {
   /* returns vector of wvel retrieved from binary
   file called 'filename' where wvel is defined on
   the z-faces (coord3) of gridboxes */
-  get_winds_func get_wvel_from_binary() const;
+  get_winds_func get_wvel_from_yac() const;
 
   /* returns vector of yvel retrieved from binary
   file called 'filename' where uvel is defined on
   the x-faces (coord1) of gridboxes */
-  get_winds_func get_uvel_from_binary() const;
+  get_winds_func get_uvel_from_yac() const;
 
   /* returns vector of vvel retrieved from binary
   file called 'filename' where vvel is defined on
