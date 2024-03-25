@@ -80,17 +80,15 @@ numconc = 5e8           # total no. conc of real droplets [m^-3]
 randcoord = False       # sample SD spatial coordinates randomly or not
 
 ### --- settings for 2D Thermodynamics --- ###
-PRESS0 = 100000 # [Pa]
-THETA = 298.15  # [K]
-qcond = 0.0     # [Kg/Kg]
-WMAX = 0.6      # [m/s]
-VVEL = 2.0      # [m/s]
-Zlength = 1500  # [m]
-Xlength = 1500  # [m]
-qvapmethod = "sratio"
-Zbase = 750     # [m]
-moistlayer = False
-sratios = [1.0, 1.0]  # s_ratio [below, above] Zbase
+PRESSz0 = 101500 # [Pa]
+TEMPz0 = 300     # [K]
+qvapz0 = 0.01    # [Kg/Kg]
+qcondz0 = 0.001  # [Kg/Kg]
+WMAX = 5.0       # [m/s]
+Zlength = 1500   # [m]
+Xlength = 1500   # [m]
+VMAX = 5.0       # [m/s]
+Ylength = 300    # [m]
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -115,10 +113,8 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = gen_input_thermo.TimeVarying3DThermo(configfile, constsfile, PRESS0,
-                                        THETA, qvapmethod, sratios, Zbase,
-                                        qcond, WMAX, Zlength, Xlength,
-                                        VVEL, moistlayer)
+thermodyngen = gen_input_thermo.TimeVarying3DThermo(PRESSz0, TEMPz0, qvapz0, qcondz0,
+                                                    WMAX, Zlength, Xlength, VMAX, Ylength)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 

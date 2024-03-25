@@ -45,9 +45,9 @@ def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir):
     "temp": ["RdBu_r", colors.Normalize(vmin=270, vmax=300)],
     "qvap": ["BrBG", colors.Normalize(vmin=0, vmax=0.1)],
     "qcond": ["BrBG", colors.Normalize(vmin=0, vmax=0.01)],
-    "wvel": ["coolwarm", colors.CenteredNorm(vcenter=0.0, halfrange=1.0)],
-    "uvel": ["coolwarm", colors.CenteredNorm(vcenter=0.0, halfrange=1.0)],
-    "vvel": ["coolwarm", colors.CenteredNorm(vcenter=0.0, halfrange=1.0)],
+    "wvel": ["coolwarm", colors.CenteredNorm(vcenter=0.0, halfrange=5.0)],
+    "uvel": ["coolwarm", colors.CenteredNorm(vcenter=0.0, halfrange=5.0)],
+    "vvel": ["coolwarm", colors.CenteredNorm(vcenter=0.0, halfrange=5.0)],
   }
 
   xxh, zzh = np.meshgrid(gbxs["xhalf"], gbxs["zhalf"], indexing="ij") # dims [xdims, zdims]

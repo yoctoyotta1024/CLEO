@@ -29,240 +29,67 @@ from pySD import cxx2py
 from pySD.thermobinary_src.create_thermodynamics import thermoinputsdict
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
-def get_Mrratio_from_constsfile(constsfile):
+class TimeVarying3DThermo:
+  ''' create some sinusoidal thermodynamics that varies in time and is
+  hetergenous throughout 3D domain '''
 
-  consts = cxx2py.read_cxxconsts_into_floats(constsfile)
-  mconsts = cxx2py.derive_more_floats(consts)
+  def __init__(self, PRESSz0, TEMPz0, qvapz0, qcondz0, WMAX, Zlength, Xlength, VMAX, Ylength):
 
-  return mconsts["Mr_ratio"]
+    ### parameters of profile ###
+    self.PRESSz0 = PRESSz0 # pressure at z=0m [Pa]
+    self.TEMPz0 = TEMPz0 # temperature at z=0m [K]
+    self.qvapz0 = qvapz0 # vapour mass mixing ratio at z=0m [Kg/Kg]
+    self.qcondz0 = qcondz0 # liquid mass mixing ratio at z=0m [Kg/Kg]
 
-def saturation_press(TEMP):
-  ''' Calculate the equilibrium vapor pressure of water over
-  liquid water ie. the saturation pressure (psat) given the
-  temperature [K]. Equation from Bjorn Steven's "make_tetens"
-  function in module "moist_thermodynamics.saturation_vapour_pressures"
-  available on gitlab. Original paper "Murray, F. W. On the
-  Computation of Saturation Vapor Pressure. Journal of Applied
-  Meteorology and Climatology 6, 203–204 (1967). '''
+    self.WMAX = WMAX  # max velocities constant [m/s]
+    self.Zlength = Zlength # wavelength of velocity modulation in z direction [m]
+    self.Xlength = Xlength # wavelength of velocity modulation in x direction [m]
+    self.VMAX = VMAX  # max horizontal (y) velocity
+    self.Ylength = Ylength # wavelength of velocity modulation in y direction [m]
 
-  Aconst = 17.4146
-  Bconst = 33.639
-  TREF = 273.16 # Triple point temperature [K] of water
-  PREF = 611.655 # Triple point pressure [Pa] of water
-
-  if (np.any(TEMP <= 0.0)):
-    raise ValueError("psat ERROR: T must be larger than 0K."+\
-                     " T = " + str(TEMP))
-
-  return PREF * np.exp(Aconst * (TEMP - TREF) / (TEMP - Bconst)) # [Pa]
-
-
-def relh2qvap(press, temp, relh, Mr_ratio):
-  ''' convert relative humidity [%] (relh) into vapour mass
-  mixing ratio (qvap) given ambient temperature and pressure
-  and ratio of molecular masses: vapour/air '''
-
-  vapourpress = saturation_press(temp) * relh / 100.0  # [Pa]
-
-  qvap = Mr_ratio * vapourpress / (press - vapourpress) # dimensionless [Kg/kg]
-
-  return qvap
-
-def sratio2qvap(sratio, press, temp, Mr_ratio):
-
-  psat = saturation_press(temp)
-
-  qvap = Mr_ratio * sratio
-  qvap = qvap / (press/psat - 1)
-
-  return qvap
-
-def qparams_to_qvap(method, params, Mr_ratio, PRESS, TEMP):
-  ''' returns qvaps given list of qvaps, supersaturation ratios
-  or relative humidities '''
-
-  if method == "qvap":
-    qparams = params
-    return qparams
-
-  elif method == "sratio":
-    qparams = []
-    for sratio in params:
-      qparams.append(sratio2qvap(sratio, PRESS, TEMP, Mr_ratio))
-    return qparams
-
-  elif method == "relh":
-    qparams = []
-    for relh in params:
-      qparams.append(relh2qvap(PRESS, TEMP, relh, Mr_ratio))
-    return qparams
-
-  else:
-    raise ValueError("valid method not given to generate qvap")
-
-def divfree_flowfield2D(wmax, zlength, xlength,
-                        rhotilda_zfaces, rhotilda_xfaces,
-                        gbxbounds, ndims):
+  def idealised_flowfield2D(self, gbxbounds, ndims):
 
     zfaces, xcens_z = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'z')[0:2]
     zcens_x, xfaces = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'x')[0:2]
 
-    ztilda = zlength / np.pi
-    xtilda = xlength / (2*np.pi)
-    wamp = 2 * wmax
+    ztilda = self.Zlength / np.pi
+    xtilda = self.Xlength / (2*np.pi)
+    wamp = 2 * self.WMAX
 
-    WVEL = wamp / rhotilda_zfaces
-    WVEL = WVEL * np.sin(zfaces / ztilda) * np.sin(xcens_z / xtilda)
-
-    UVEL = wamp / rhotilda_xfaces * xtilda / ztilda
-    UVEL = UVEL * np.cos(zcens_x/ztilda) * np.cos(xfaces/xtilda)
+    WVEL = wamp * np.sin(zfaces / ztilda) * np.sin(xcens_z / xtilda)
+    UVEL = wamp * xtilda / ztilda * np.cos(zcens_x/ztilda) * np.cos(xfaces/xtilda)
 
     return WVEL, UVEL
 
-class TimeVarying3DThermo:
-  ''' create thermodynamics that varies in time and is hetergenous throughout 3D domain '''
+  def generate_3dwinds(self, gbxbounds, ndims, ntime, THERMODATA):
 
-  def __init__(self, configfile, constsfile, PRESSz0, THETA,
-              qvapmethod, qvapparams, Zbase, qcond, WMAX,
-              Zlength, Xlength, VVEL, moistlayer):
+    WVEL, UVEL = self.idealised_flowfield2D(gbxbounds, ndims)
+    THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
+    THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
 
-    inputs = thermoinputsdict(configfile, constsfile)
-
-    ### parameters of profile ###
-    self.PRESSz0 = PRESSz0 # pressure at z=0m [Pa]
-    self.THETA = THETA # (constant) dry potential temperature [K]
-    self.qcond = qcond # liquid mass mixing ratio []
-    self.WMAX = WMAX  # max velocities constant
-    self.Zlength = Zlength # wavelength of velocity modulation in z direction [m]
-    self.Xlength = Xlength # wavelength of velocity modulation in x direction [m]
-    self.VVEL = VVEL # horizontal (y) velocity
-
-    # determine qvap [below, above] z (cloud) base
-    self.Zbase = Zbase
-    self.qvapmethod, self.qvapparams = qvapmethod, qvapparams
-    self.qvapz0 = qparams_to_qvap(qvapmethod, qvapparams,
-                                  inputs["Mr_ratio"], self.PRESSz0,
-                                  self.THETA)[0]
-    self.moistlayer = moistlayer
-
-    ### constants ###
-    self.GRAVG = inputs["G"]
-    self.CP_DRY = inputs["CP_DRY"]
-    self.RGAS_DRY = inputs["RGAS_DRY"]
-    self.RGAS_V = inputs["RGAS_V"]
-    self.RC_DRY = self.RGAS_DRY / self.CP_DRY
-    self.RCONST = 1 + self.qvapz0 * self.RGAS_V / self.RGAS_DRY
-    self.P1000 = 100000 # P_1000 = 1000 hPa [Pa]
-    self.CP0 = inputs["CP0"]
-    self.RHO0 = inputs["RHO0"]
-    self.Mr_ratio = inputs["Mr_ratio"]
-
-    alpha = PRESSz0 / (self.RCONST * self.P1000)
-    self.TEMPz0 = THETA * np.power(alpha, self.RC_DRY) # temperature at z=0m [K]
-
-    beta = (1+self.qvapz0) / self.RCONST / self.RGAS_DRY
-    self.RHOz0 = beta * self.PRESSz0 / self.TEMPz0
-
-  def hydrostatic_adiabatic_profile(self, ZCOORDS):
-    ''' returns *profile* of density (not the density itself!)
-    rho = rhoprofile^((1-RC_DRY)/RC_DRY) = profile^pow '''
-
-    pow = 1/self.RC_DRY - 1
-
-    Aa = (1+self.qvapz0)*np.power(self.P1000, self.RC_DRY)
-    Aa = (self.THETA * self.RGAS_DRY / Aa)
-    Aconst = self.RCONST * np.power(Aa, (1 / (1-self.RC_DRY)))
-
-    RHOconst = -1 * self.GRAVG * self.RC_DRY / Aconst
-    RHOprofile = np.power(self.RHOz0, 1/pow) + RHOconst * ZCOORDS # RHO^pow
-
-    return RHOprofile, Aconst
-
-  def hydrostatic_adiabatic_thermo(self, ZCOORDS):
-
-    RHOprof, Aconst = self.hydrostatic_adiabatic_profile(ZCOORDS)
-
-    RHO = np.power(RHOprof, (1/self.RC_DRY - 1))
-
-    PRESS = Aconst * np.power(RHOprof, 1/self.RC_DRY)
-
-    TEMPconst = np.power(Aconst / (self.RCONST * self.P1000), self.RC_DRY)
-    TEMP = self.THETA * TEMPconst * RHOprof
-
-    return PRESS, TEMP
-
-  def rhotilda(self, ZCOORDS):
-    ''' returns dimensionless rho_dry profile for use in stream function'''
-
-    PRESS, TEMP = self.hydrostatic_adiabatic_thermo(ZCOORDS)
-
-    RHO_DRY = PRESS / ((self.RGAS_DRY + self.qvapz0 * self.RGAS_V) * TEMP)
-
-    rhotilda = RHO_DRY/self.RHO0
-
-    return rhotilda
-
-  def wvel_uvel_from_flowfield(self, gbxbounds, ndims):
-
-    zfaces = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'z')[0]
-    xfaces = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'x')[1]
-    rhotilda_zfaces = self.rhotilda(zfaces)
-    rhotilda_xfaces = self.rhotilda(xfaces)
-
-    WVEL, UVEL = divfree_flowfield2D(self.WMAX, self.Zlength, self.Xlength,
-                                      rhotilda_zfaces, rhotilda_xfaces,
-                                      gbxbounds, ndims)
-    return WVEL, UVEL
-
-  def generate_winds(self, gbxbounds, ndims, ntime, THERMODATA):
-
-    for VEL in ["WVEL", "UVEL", "VVEL"]:
-      THERMODATA[VEL] = np.array([])
-
-    if self.WMAX != None:
-      WVEL, UVEL = self.wvel_uvel_from_flowfield(gbxbounds, ndims)
-      THERMODATA["WVEL"] =  np.tile(WVEL, ntime)
-      THERMODATA["UVEL"] =  np.tile(UVEL, ntime)
-
-      if self.VVEL != None:
-        shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1]*ntime)
-        THERMODATA["VVEL"] = np.full(shape_yface, self.VVEL)
+    shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1])
+    VVEL = np.full(shape_yface, self.VMAX)
+    THERMODATA["VVEL"] = np.tile(VVEL, ntime)
 
     return THERMODATA
-
-  def generate_qvap(self, zfulls, xfulls, PRESS, TEMP):
-
-    qvaps = qparams_to_qvap(self.qvapmethod, self.qvapparams,
-                            self.Mr_ratio, PRESS, TEMP)
-    qvap = np.where(zfulls<self.Zbase, qvaps[0], qvaps[1])
-
-    if self.moistlayer:
-      z1, z2 = self.moistlayer["z1"], self.moistlayer["z2"]
-      x1, x2 = self.moistlayer["x1"], self.moistlayer["x2"]
-      mlqvap = sratio2qvap(self.moistlayer["mlsratio"], PRESS,
-                           TEMP, self.Mr_ratio)
-      moistregion= (zfulls>=z1) & (zfulls<z2) & (xfulls >=x1) & (xfulls < x2)
-      qvap = np.where(moistregion, mlqvap, qvap)
-
-    return qvap
 
   def generate_thermo(self, gbxbounds, ndims, ntime):
 
     zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds,
                                                               ndims)
-    PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
+    shape_cen = int(np.prod(ndims))
+    PRESS = np.full(shape_cen, self.PRESSz0)
+    TEMP = np.full(shape_cen, self.TEMPz0)
+    qvap = np.full(shape_cen, self.qvapz0)
+    qcond = np.full(shape_cen, self.qcondz0)
 
-    qvap = self.generate_qvap(zfulls, xfulls, PRESS, TEMP)
-
-    shape_cen = int(ntime * np.prod(ndims))
     THERMODATA = {
       "PRESS": np.tile(PRESS, ntime),
       "TEMP": np.tile(TEMP, ntime),
       "qvap": np.tile(qvap, ntime),
-      "qcond": np.full(shape_cen, self.qcond),
+      "qcond": np.tile(qcond, ntime),
     }
 
-    THERMODATA = self.generate_winds(gbxbounds, ndims,
-                                     ntime, THERMODATA)
+    THERMODATA = self.generate_3dwinds(gbxbounds, ndims, ntime, THERMODATA)
 
     return THERMODATA
