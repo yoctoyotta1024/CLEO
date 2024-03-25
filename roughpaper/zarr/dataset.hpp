@@ -39,7 +39,7 @@
 template <typename Store>
 class Dataset {
  private:
-  ZarrGroup<Store>& zarr;  ///< Reference to the zarr group object.
+  ZarrGroup<Store> &zarr;  ///< Reference to the zarr group object.
 
  public:
   /**

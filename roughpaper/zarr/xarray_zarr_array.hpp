@@ -135,7 +135,8 @@ class XarrayZarrArray {
                   const std::string_view name, const std::string_view units,
                   const std::string_view dtype, const double scale_factor,
                   const std::vector<size_t>& chunkshape, const std::vector<std::string>& dimnames)
-      : zarr(store, name, dtype, chunkshape, reduced_arrayshape_from_dims(datasetdims, dimnames)),
+      : zarr(store, name, dtype, chunkshape, true,
+             reduced_arrayshape_from_dims(datasetdims, dimnames)),
         dimnames(dimnames) {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");

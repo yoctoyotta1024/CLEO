@@ -137,6 +137,7 @@ class ZarrArray {
   Chunks chunks;                  ///< Method to write chunks of array in store.
   Buffer<T> buffer;               ///< Buffer to hold data before writing chunks to store.
   std::string part_zarrmetadata;  ///< Metadata required for zarr array excluding array's shape
+  bool is_backend;                ///< true if zarr array is a backend of something else e.g. xarray
 
   /**
    * @brief Generates the compulsory metadata for the Zarr array .zarray json file.
@@ -241,7 +242,7 @@ class ZarrArray {
    * @param dtype The data type stored in the arrays (e.g., "<f8").
    */
   ZarrArray(Store& store, const std::string_view name, const std::string_view dtype,
-            const std::vector<size_t>& chunkshape,
+            const std::vector<size_t>& chunkshape, const bool is_backend,
             const std::vector<size_t>& reduced_arrayshape = std::vector<size_t>({}))
       : store(store),
         name(name),
@@ -249,7 +250,8 @@ class ZarrArray {
         totndata(0),
         chunks(chunkshape, reduced_arrayshape),
         buffer(vec_product(chunks.get_chunkshape())),
-        part_zarrmetadata(make_part_zarrmetadata(chunkshape, dtype)) {
+        part_zarrmetadata(make_part_zarrmetadata(chunkshape, dtype)),
+        is_backend(is_backend) {
     assert((chunkshape.size() == reduced_arrayshape.size() + 1) &&
            "number of dimensions of chunks must match number of dimensions of array");
 
@@ -260,9 +262,10 @@ class ZarrArray {
   /**
    * @brief Destroys the ZarrArray object.
    *
-   * Writes the buffer to a chunk of the array in the store if it isn't empty and updates the
-   * array's shape correspondingly. Also issues warnings if array is incomplete and/or data in
-   * buffer mismatches array dimensions.
+   * Writes the buffer to a chunk of the array in the store if it isn't empty and issues a warning
+   * if the data in buffer mismatches the array's expected dimensions. If the array is not a
+   * backend (e.g. of an array in an xarray or NetCDF dataset), then the metadata for the
+   * array's shape is also updated and warnings are issued if the array is incomplete.
    */
   ~ZarrArray() {
     if (buffer.get_fill() > 0) {
@@ -273,19 +276,22 @@ class ZarrArray {
 
       totndata = totnchunks * buffer.get_chunksize() + buffer.get_fill();
       totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, buffer);
-      write_arrayshape(get_arrayshape());  // TODO(CB) make consistent with xarray
     }
 
-    const auto arrayshape = get_arrayshape();
-    const auto reduced_arrayshape = chunks.get_reduced_arrayshape();
-    for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
-      if (arrayshape.at(aa) < reduced_arrayshape.at(aa - 1)) {
-        std::cout << "WARNING: array is not complete along inner dimension: " << aa << "\n";
+    if (!(is_backend)) {
+      write_arrayshape(get_arrayshape());
+
+      const auto arrayshape = get_arrayshape();
+      const auto reduced_arrayshape = chunks.get_reduced_arrayshape();
+      for (size_t aa = 1; aa < arrayshape.size(); ++aa) {
+        if (arrayshape.at(aa) < reduced_arrayshape.at(aa - 1)) {
+          std::cout << "WARNING: array is not complete along inner dimension: " << aa << "\n";
+        }
       }
-    }
-    if (totndata < vec_product(arrayshape)) {
-      std::cout << "WARNING: array is larger than total number of elements of data in it. Array"
-                   "will have missing (i.e. null / nan) values.\n";
+      if (totndata < vec_product(arrayshape)) {
+        std::cout << "WARNING: array is larger than total number of elements of data in it. Array"
+                     "will have missing (i.e. null / nan) values.\n";
+      }
     }
   }
 
@@ -326,7 +332,9 @@ class ZarrArray {
    * First copies some data from the view to a buffer (until number of elements in
    * buffer = chunksize), then writes any whole chunks of the array into a store. Finally
    * copies any leftover data, number of elements < chunksize, into the buffer.
-   * Assertion checks there is no remainng data unattended to.
+   * Assertion checks there is no remainng data unattended to. Function useful when using zarr array
+   * as backend of a dataset and/or you do not want to write metadata for the array when writing
+   * data elements.
    *
    * @param h_data The data in a Kokkos view in host memory which should be written to the array in
    * a store.

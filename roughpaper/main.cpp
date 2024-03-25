@@ -75,7 +75,8 @@ void test_1dzarr(FSStore &store, const viewh_type data, const std::string_view n
                  const std::vector<size_t> &chunkshape) {
   // create array
   const auto dtype = std::string_view("<f8");
-  auto zarr = ZarrArray<FSStore, double>(store, name, dtype, chunkshape);
+  const auto is_backend = false;
+  auto zarr = ZarrArray<FSStore, double>(store, name, dtype, chunkshape, is_backend);
 
   // output data to array
   zarr.write_to_zarr_array(data);
@@ -86,7 +87,9 @@ void test_multidzarr(FSStore &store, const viewh_type data, const std::string_vi
                      const std::vector<size_t> &reduced_arrayshape) {
   // create array
   const auto dtype = std::string_view("<f8");
-  auto zarr = ZarrArray<FSStore, double>(store, name, dtype, chunkshape, reduced_arrayshape);
+  const auto is_backend = false;
+  auto zarr =
+      ZarrArray<FSStore, double>(store, name, dtype, chunkshape, is_backend, reduced_arrayshape);
 
   // output data to array
   zarr.write_to_zarr_array(data);
