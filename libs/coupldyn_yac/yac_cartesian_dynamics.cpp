@@ -68,8 +68,6 @@ void CartesianDynamics::receive_fields_from_yac() {
   int info, error;
   double * yac_raw_data = NULL;
 
-  std::cout << "STARTED RECEIVING DATA FROM YAC" << std::endl;
-
   yac_raw_data = press.data();
   yac_cget(pressure_yac_id, 1, &yac_raw_data, &info, &error);
 
@@ -88,7 +86,7 @@ void CartesianDynamics::receive_fields_from_yac() {
   int lower_index, upper_index;
   lower_index = upper_index = 0;
   std::vector<double> * target;
-  for (size_t lat_index = 0; lat_index < latitudes.size() * 2 - 1; lat_index++) {
+  for (size_t lat_index = 0; lat_index < vertex_latitudes.size() * 2 - 1; lat_index++) {
         if (lat_index % 2 == 0) {
             target = &uvel;
             lower_index = upper_index;
@@ -98,11 +96,10 @@ void CartesianDynamics::receive_fields_from_yac() {
             lower_index = upper_index;
             upper_index = lower_index + 31;
         }
-        target->insert(target->end(), united_edge_data.begin() + lower_index,
-                      united_edge_data.begin() + upper_index);
+        target->insert(target->end(),
+                       united_edge_data.begin() + lower_index,
+                       united_edge_data.begin() + upper_index);
   }
-
-  std::cout << "FINISHED RECEIVING DATA FROM YAC" << std::endl;
 }
 
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
@@ -122,73 +119,89 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   yac_cdef_calendar(YAC_PROLEPTIC_GREGORIAN);
   yac_cdef_datetime("1850-01-01T00:00:00", "1850-12-31T00:00:00");
 
-  // component definition
+  // --- Component definition ---
   std::string component_name = "cleo";
   int component_id = -1;
   yac_cdef_comp(component_name.c_str(), &component_id);
 
-  // grid definition
+  // --- Grid definition ---
   int grid_id = -1;
   std::string cleo_grid_name = "cleo_grid";
-  int total_vertices[2] = {31, 31};
-  int total_cells[2] = {30, 30};
+
+  int total_cells[2]      = {ndims[0], ndims[1]};
+  int total_vertices[2]   = {ndims[0] + 1, ndims[1] + 1};
   int cyclic_dimension[2] = {0, 0};
+  int total_edges         = ndims[0] + ndims[1] + 2 * ndims[0] * ndims[1];
 
-  longitudes = std::vector<double>(31, 0);
-  latitudes = std::vector<double>(31, 0);
-  auto cell_center_longitudes = std::vector<double>(30);
-  auto cell_center_latitudes = std::vector<double>(30);
-  std::vector<double> edge_centers_longitudes, edge_centers_latitudes;
+  vertex_longitudes           = std::vector<double>(ndims[0] + 1, 0);
+  vertex_latitudes            = std::vector<double>(ndims[1] + 1, 0);
+  auto cell_center_longitudes = std::vector<double>(ndims[0]);
+  auto cell_center_latitudes  = std::vector<double>(ndims[1]);
+  std::vector<double> edge_centers_longitudes;
+  std::vector<double> edge_centers_latitudes;
 
-  for (size_t i = 0; i < longitudes.size(); i++) {
-    longitudes[i] = i * (2 * std::numbers::pi / 31);
-    if (i < latitudes.size())
-      latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / 32);
+  // Defines the vertex longitude and latitude values in radians for grid creation
+  // The values are later permuted by YAC to generate all vertex coordinates
+  for (size_t i = 0; i < vertex_longitudes.size(); i++) {
+    vertex_longitudes[i] = i * (2 * std::numbers::pi / (ndims[0] + 1));
+    if (i < vertex_latitudes.size())
+      vertex_latitudes[i] = (-0.5 * std::numbers::pi) +
+                            (i + 1) * (std::numbers::pi / (ndims[1] + 2));
   }
 
+  // Defines a regular 2D grid
+  yac_cdef_grid_reg2d(cleo_grid_name.c_str(), total_vertices,
+                      cyclic_dimension, vertex_longitudes.data(),
+                      vertex_latitudes.data(), &grid_id);
+
+  // --- Point definitions ---
+
+  // Defines the cell center longitude and latitude values in radians
+  // The values are later permuted by YAC to generate all cell center coordinates
   for (size_t i = 0; i < cell_center_longitudes.size(); i++) {
-    cell_center_longitudes[i] = longitudes[i] + std::numbers::pi / 32;
-    cell_center_latitudes[i]  = latitudes[i] + std::numbers::pi / 66;
+    cell_center_longitudes[i] = vertex_longitudes[i] + std::numbers::pi / (ndims[0] + 1);
+    cell_center_latitudes[i]  = vertex_latitudes[i] + std::numbers::pi / (2 * (ndims[1] + 2));
   }
 
-  for (size_t lat_index = 0; lat_index < latitudes.size() * 2 - 1; lat_index++) {
+  // Defines the edge center longitude and latitude values in radians.
+  // Since it is not possible to generate edge center coordinates with a single
+  // permutation of longitude and latitude values, usage of the
+  // yac_cdef_points_unstruct is required. The call then takes x and y arrays,
+  // with the actual radian coordinates for each edge center point. Therefore,
+  // these arrays will have a size equal to the number of edges.
+  for (size_t lat_index = 0; lat_index < vertex_latitudes.size() * 2 - 1; lat_index++) {
     if (lat_index % 2 == 0) {
       edge_centers_longitudes.insert(edge_centers_longitudes.end(),
                                      cell_center_longitudes.begin(),
                                      cell_center_longitudes.end());
       edge_centers_latitudes.insert(edge_centers_latitudes.end(),
                                     cell_center_longitudes.size(),
-                                    latitudes[lat_index / 2]);
+                                    vertex_latitudes[lat_index / 2]);
     } else {
       edge_centers_longitudes.insert(edge_centers_longitudes.end(),
-                                     longitudes.begin(),
-                                     longitudes.end());
+                                     vertex_longitudes.begin(),
+                                     vertex_longitudes.end());
       edge_centers_latitudes.insert(edge_centers_latitudes.end(),
-                                    longitudes.size(),
+                                    vertex_longitudes.size(),
                                     cell_center_latitudes[(lat_index - 1) / 2]);
     }
   }
 
-  yac_cdef_grid_reg2d(cleo_grid_name.c_str(), total_vertices,
-                      cyclic_dimension, longitudes.data(),
-                      latitudes.data(), &grid_id);
-
-  // Points definitions
   int cell_point_id = -1;
   int edge_point_id = -1;
   yac_cdef_points_reg2d(grid_id, total_cells, YAC_LOCATION_CELL,
                         cell_center_longitudes.data(), cell_center_latitudes.data(),
                         &cell_point_id);
-  yac_cdef_points_unstruct(grid_id, 1860, YAC_LOCATION_EDGE,
+  yac_cdef_points_unstruct(grid_id, total_edges, YAC_LOCATION_EDGE,
                         edge_centers_longitudes.data(), edge_centers_latitudes.data(),
                         &edge_point_id);
 
-  // Interpolation stack
+  // --- Interpolation stack ---
   int interp_stack_id;
   yac_cget_interp_stack_config(&interp_stack_id);
   yac_cadd_interp_stack_config_nnn(interp_stack_id, YAC_NNN_AVG, 1, 1.0);
 
-  // Field definition
+  // --- Field definitions ---
   int num_point_sets = 1;
   int collection_size = 1;
 
@@ -213,7 +226,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                  YAC_TIME_UNIT_ISO_FORMAT, &hor_wind_velocities_yac_id);
 
 
-  // Field couplings
+  // --- Field coupling definitions ---
   yac_cdef_couple("yac_reader", "yac_reader_grid", "pressure",
                   "cleo", "cleo_grid", "pressure",
                   "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
@@ -239,24 +252,25 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                   "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
+  // --- End of YAC definitions ---
   yac_cenddef();
 
-  press = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  temp  = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  qvap  = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  qcond = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  united_edge_data = std::vector<double>(1860, 0);
+  press            = std::vector<double>(total_cells[0] * total_cells[1], 0);
+  temp             = std::vector<double>(total_cells[0] * total_cells[1], 0);
+  qvap             = std::vector<double>(total_cells[0] * total_cells[1], 0);
+  qcond            = std::vector<double>(total_cells[0] * total_cells[1], 0);
+  united_edge_data = std::vector<double>(total_edges, 0);
 
   receive_fields_from_yac();
 
-  std::cout << "Finished reading thermodynamics from binaries for:\n"
+  std::cout << "Finished setting up YAC for receiving:\n"
                "  pressure,\n  temperature,\n"
                "  water vapour mass mixing ratio,\n"
                "  liquid water mass mixing ratio,\n";
 
   set_winds(config);
 
-  std::cout << "--- cartesian dynamics from file: success ---\n";
+  std::cout << "--- cartesian dynamics from YAC: success ---\n";
 }
 
 CartesianDynamics::~CartesianDynamics() { yac_cfinalize(); }

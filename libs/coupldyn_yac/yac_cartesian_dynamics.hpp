@@ -67,7 +67,8 @@ struct CartesianDynamics {
   std::vector<double> uvel_xfaces;  // u velocity defined on coord1 faces of gridboxes
   std::vector<double> vvel_yfaces;  // v velocity defined on coord2 faces of gridboxes
 
-  std::vector<double> longitudes, latitudes;
+  std::vector<double> vertex_latitudes;
+  std::vector<double> vertex_longitudes;
 
   // YAC field ids
   int pressure_yac_id;
@@ -169,7 +170,6 @@ struct YacDynamics {
   void run_step(const unsigned int t_mdl, const unsigned int t_next) const {
     // Temporary simple solution to prevent a 4th coupling with yac from happening
     if (on_step(t_mdl) && t_mdl != end_time * 100) {
-      std::cout << "END_TIME: " << end_time << " " << t_mdl << std::endl;
       run_dynamics(t_mdl);
     }
   }
