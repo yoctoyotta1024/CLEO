@@ -63,9 +63,20 @@ lon = np.linspace(0,2*np.pi,32)[:-1]
 lat = np.linspace(-0.5*np.pi,0.5*np.pi, 33)[1:-1]
 cell_centers_lon = (lon + np.pi/32)[:-1]
 cell_centers_lat = (lat + np.pi/66)[:-1]
+edge_centers_lat = []
+edge_centers_lon = []
+
+for lat_index in range(0, len(lat) * 2 - 1):
+    if (lat_index % 2 == 0):
+        edge_centers_lon.extend(cell_centers_lon)
+        edge_centers_lat.extend([lat[lat_index // 2]] * len(cell_centers_lon))
+    else:
+        edge_centers_lon.extend(lon)
+        edge_centers_lat.extend([cell_centers_lat[(lat_index - 1) // 2]] * len(lon))
 
 grid = Reg2dGrid(f"yac_reader_grid", lon, lat)
 cell_centers = grid.def_points(Location.CELL, cell_centers_lon, cell_centers_lat)
+edge_centers = grid.def_points_unstruct(Location.EDGE, edge_centers_lon, edge_centers_lat)
 
 press = Field.create("pressure", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 temp  = Field.create("temperature", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)

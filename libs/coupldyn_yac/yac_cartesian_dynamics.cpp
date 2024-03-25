@@ -118,6 +118,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   auto latitudes = std::vector<double>(31, 0);
   auto cell_center_longitudes = std::vector<double>(30);
   auto cell_center_latitudes = std::vector<double>(30);
+  std::vector<double> edge_centers_longitudes, edge_centers_latitudes;
 
   for (size_t i = 0; i < longitudes.size(); i++) {
     longitudes[i] = i * (2 * std::numbers::pi / 31);
@@ -130,15 +131,37 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
     cell_center_latitudes[i]  = latitudes[i] + std::numbers::pi / 66;
   }
 
+  for (size_t lat_index = 0; lat_index < latitudes.size() * 2 - 1; lat_index++) {
+    if (lat_index % 2 == 0) {
+      edge_centers_longitudes.insert(edge_centers_longitudes.end(),
+                                     cell_center_longitudes.begin(),
+                                     cell_center_longitudes.end());
+      edge_centers_latitudes.insert(edge_centers_latitudes.end(),
+                                    cell_center_longitudes.size(),
+                                    latitudes[lat_index / 2]);
+    } else {
+      edge_centers_longitudes.insert(edge_centers_longitudes.end(),
+                                     longitudes.begin(),
+                                     longitudes.end());
+      edge_centers_latitudes.insert(edge_centers_latitudes.end(),
+                                    longitudes.size(),
+                                    cell_center_latitudes[(lat_index - 1) / 2]);
+    }
+  }
+
   yac_cdef_grid_reg2d(cleo_grid_name.c_str(), total_vertices,
                       cyclic_dimension, longitudes.data(),
                       latitudes.data(), &grid_id);
 
   // Points definitions
   int cell_point_id = -1;
+  int edge_point_id = -1;
   yac_cdef_points_reg2d(grid_id, total_cells, YAC_LOCATION_CELL,
                         cell_center_longitudes.data(), cell_center_latitudes.data(),
                         &cell_point_id);
+  yac_cdef_points_unstruct(grid_id, 1860, YAC_LOCATION_EDGE,
+                        edge_centers_longitudes.data(), edge_centers_latitudes.data(),
+                        &edge_point_id);
 
   // Interpolation stack
   int interp_stack_id;
@@ -203,7 +226,6 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   set_winds(config);
 
-  // check_thermodynamics_vectorsizes(config.nspacedims, ndims, nsteps);
   std::cout << "--- cartesian dynamics from file: success ---\n";
 }
 
