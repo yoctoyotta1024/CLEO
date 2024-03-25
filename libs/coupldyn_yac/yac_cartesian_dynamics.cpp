@@ -85,6 +85,23 @@ void CartesianDynamics::receive_fields_from_yac() {
   yac_raw_data = united_edge_data.data();
   yac_cget(hor_wind_velocities_yac_id, 1, &yac_raw_data, &info, &error);
 
+  int lower_index, upper_index;
+  lower_index = upper_index = 0;
+  std::vector<double> * target;
+  for (size_t lat_index = 0; lat_index < latitudes.size() * 2 - 1; lat_index++) {
+        if (lat_index % 2 == 0) {
+            target = &uvel;
+            lower_index = upper_index;
+            upper_index = lower_index + 30;
+        } else {
+            target = &wvel;
+            lower_index = upper_index;
+            upper_index = lower_index + 31;
+        }
+        target->insert(target->end(), united_edge_data.begin() + lower_index,
+                      united_edge_data.begin() + upper_index);
+  }
+
   std::cout << "FINISHED RECEIVING DATA FROM YAC" << std::endl;
 }
 
