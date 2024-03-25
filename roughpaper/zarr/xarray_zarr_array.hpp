@@ -57,8 +57,8 @@ inline std::vector<size_t> reduced_arrayshape_from_dims(
   auto reduced_arrayshape = std::vector<size_t>({});
 
   for (size_t aa = 1; aa < dimnames.size(); ++aa) {
-    const auto it = datasetdims.find(dimnames.at(aa));
-    reduced_arrayshape.push_back(it->second);
+    const auto dsize = datasetdims.at(dimnames.at(aa));  // number of elements along a dimension
+    reduced_arrayshape.push_back(dsize);
   }
 
   return reduced_arrayshape;
@@ -113,8 +113,8 @@ class XarrayZarrArray {
     auto arrayshape = std::vector<size_t>({});
 
     for (auto& dim : dimnames) {
-      const auto it = datasetdims.find(dim);
-      arrayshape.push_back(it->second);
+      const auto dsize = datasetdims.at(dim);
+      arrayshape.push_back(dsize);
     }
 
     zarr.write_arrayshape(arrayshape);
