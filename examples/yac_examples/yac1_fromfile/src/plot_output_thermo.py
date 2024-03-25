@@ -98,7 +98,7 @@ def plot_domain_slices(fig, gs, nrows, ncols, time, t2plts,
     data3d = data4d[t, :, :, :]
     for n in range(nrows):
       ax = fig.add_subplot(gs[n+1, m])
-      ax.set_title("t={:.0f}min,\ny={:.3f}km".format(time.mins[t], yfull[n]/1000))
+      ax.set_title("t={:.0f}min,\ny={:.2f}km".format(time.mins[t], yfull[n]/1000))
       pcm = ax_colormap(ax, xxh, zzh, data3d[n, :, :], cmap, norm)
 
   return pcm
