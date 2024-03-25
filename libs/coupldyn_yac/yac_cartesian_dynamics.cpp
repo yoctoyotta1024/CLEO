@@ -114,8 +114,8 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int total_cells[2] = {30, 30};
   int cyclic_dimension[2] = {0, 0};
 
-  auto longitudes = std::vector<double>(31, 0);
-  auto latitudes = std::vector<double>(31, 0);
+  longitudes = std::vector<double>(31, 0);
+  latitudes = std::vector<double>(31, 0);
   auto cell_center_longitudes = std::vector<double>(30);
   auto cell_center_latitudes = std::vector<double>(30);
   std::vector<double> edge_centers_longitudes, edge_centers_latitudes;
@@ -188,6 +188,10 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                  num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id);
 
+  yac_cdef_field("hor_wind_velocities", component_id, &edge_point_id,
+                 num_point_sets, collection_size, "PT1M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &hor_wind_velocities_yac_id);
+
 
   // Field couplings
   yac_cdef_couple("yac_reader", "yac_reader_grid", "pressure",
@@ -207,6 +211,11 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   yac_cdef_couple("yac_reader", "yac_reader_grid", "qcond",
                   "cleo", "cleo_grid", "qcond",
+                  "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+
+  yac_cdef_couple("yac_reader", "yac_reader_grid", "hor_wind_velocities",
+                  "cleo", "cleo_grid", "hor_wind_velocities",
                   "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
