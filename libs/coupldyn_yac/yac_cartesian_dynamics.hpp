@@ -59,6 +59,7 @@ struct CartesianDynamics {
   std::vector<double> temp;
   std::vector<double> qvap;
   std::vector<double> qcond;
+  std::vector<double> united_edge_data;
 
   std::vector<double> wvel_zfaces;  // w velocity defined on coord3 faces of gridboxes
   std::vector<double> uvel_xfaces;  // u velocity defined on coord1 faces of gridboxes

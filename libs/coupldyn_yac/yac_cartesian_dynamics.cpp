@@ -82,6 +82,9 @@ void CartesianDynamics::receive_fields_from_yac() {
   yac_raw_data = qcond.data();
   yac_cget(qcond_yac_id, 1, &yac_raw_data, &info, &error);
 
+  yac_raw_data = united_edge_data.data();
+  yac_cget(hor_wind_velocities_yac_id, 1, &yac_raw_data, &info, &error);
+
   std::cout << "FINISHED RECEIVING DATA FROM YAC" << std::endl;
 }
 
@@ -225,6 +228,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   temp  = std::vector<double>(total_cells[0] * total_cells[1], 0);
   qvap  = std::vector<double>(total_cells[0] * total_cells[1], 0);
   qcond = std::vector<double>(total_cells[0] * total_cells[1], 0);
+  united_edge_data = std::vector<double>(1860, 0);
 
   receive_fields_from_yac();
 

@@ -91,20 +91,37 @@ press_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_p
 temp_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_temp.dat")
 qvap_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qvap.dat")
 qcond_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qcond.dat")
+uvel = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_uvel.dat")
+wvel = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_wvel.dat")
+
+united_edge_data = []
+
+for lat_index in range(0, len(lat) * 2 - 1):
+    if (lat_index % 2 == 0):
+        lower_index = (lat_index // 2) * (len(lon) - 1)
+        upper_index = (lat_index // 2 + 1) * (len(lon) - 1)
+        united_edge_data.extend(uvel[lower_index:upper_index])
+    else:
+        lower_index = ((lat_index - 1) // 2) * len(lon)
+        upper_index = ((lat_index + 1) // 2) * len(lon)
+        united_edge_data.extend(wvel[lower_index:upper_index])
 
 press.put(press_values[0:900])
 temp.put(temp_values[0:900])
 qvap.put(qvap_values[0:900])
 qcond.put(qcond_values[0:900])
+hor_wind_velocities.put(np.asarray(united_edge_data[0:1860]))
 
 press.put(press_values[900:1800])
 temp.put(temp_values[900:1800])
 qvap.put(qvap_values[900:1800])
 qcond.put(qcond_values[900:1800])
+hor_wind_velocities.put(np.asarray(united_edge_data[1860:3720]))
 
 press.put(press_values[1800:2700])
 temp.put(temp_values[1800:2700])
 qvap.put(qvap_values[1800:2700])
 qcond.put(qcond_values[1800:2700])
+hor_wind_velocities.put(np.asarray(united_edge_data[3720:5580]))
 
 del yac
