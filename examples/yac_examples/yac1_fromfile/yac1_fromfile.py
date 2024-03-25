@@ -33,14 +33,13 @@ sys.path.append(path2CLEO)  # for imports from pySD package
 # for imports from example plotting package
 sys.path.append(path2CLEO+"/examples/exampleplotting/")
 
-from src import thermoin, plot_output_thermo
+from src import gen_input_thermo, plot_output_thermo
 from plotssrc import pltsds, pltmoms
 from pySD.sdmout_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.initsuperdropsbinary_src import *
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
-from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
 
@@ -116,7 +115,7 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0,
+thermodyngen = gen_input_thermo.TimeVarying3DThermo(configfile, constsfile, PRESS0,
                                         THETA, qvapmethod, sratios, Zbase,
                                         qcond, WMAX, Zlength, Xlength,
                                         VVEL, moistlayer)
