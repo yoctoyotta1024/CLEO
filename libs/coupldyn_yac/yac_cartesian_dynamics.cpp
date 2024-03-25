@@ -148,21 +148,20 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // Field definition
   int num_point_sets = 1;
   int collection_size = 1;
-  int point_ids[num_point_sets] = {cell_point_id};
 
-  yac_cdef_field("pressure", component_id, point_ids,
+  yac_cdef_field("pressure", component_id, &cell_point_id,
                  num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &pressure_yac_id);
 
-  yac_cdef_field("temperature", component_id, point_ids,
+  yac_cdef_field("temperature", component_id, &cell_point_id,
                  num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &temp_yac_id);
 
-  yac_cdef_field("qvap", component_id, point_ids,
+  yac_cdef_field("qvap", component_id, &cell_point_id,
                  num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id);
 
-  yac_cdef_field("qcond", component_id, point_ids,
+  yac_cdef_field("qcond", component_id, &cell_point_id,
                  num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id);
 
