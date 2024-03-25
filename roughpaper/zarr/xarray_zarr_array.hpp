@@ -164,7 +164,7 @@ class XarrayZarrArray {
     write_arrayshape(datasetdims);  // overwrite zarr array shape with xarray dataset dimensions
 
     // TODO(CB) call write_arrayshape(datasetdims); after this function call in dataset once
-    // dimensions of dataset have been consolidated
+    // dimensions of dataset have been consolidated (see WIP in dataset)
 
     // TODO(CB) docstrings
   };

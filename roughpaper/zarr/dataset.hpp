@@ -83,6 +83,11 @@ class Dataset {
                       const Buffer<T>::viewh_buffer h_data) const {
     xzarr.write_to_xarray_zarr_array(datasetdims, h_data);
   }
+
+  void consolidate_dimensions() const {
+    // TODO(CB): set dimensions of dataset? Then: call write arrayshape with dimensions
+    // for all arrays in dataset (WIP)
+  }
 };
 
 #endif  // ROUGHPAPER_ZARR_DATASET_HPP_

@@ -162,4 +162,5 @@ void test_dataset(Dataset<Store> &dataset) {
 
   dataset.set_dimension({"SdId", 10});
   dataset.write_to_array(xzarr, h_data);
+  dataset.consolidate_dimensions();
 }
