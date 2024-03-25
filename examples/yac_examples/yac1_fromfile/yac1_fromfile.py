@@ -33,7 +33,7 @@ sys.path.append(path2CLEO)  # for imports from pySD package
 # for imports from example plotting package
 sys.path.append(path2CLEO+"/examples/exampleplotting/")
 
-from src import thermoin, thermoout
+from src import thermoin, plot_output_thermo
 from plotssrc import pltsds, pltmoms
 from pySD.sdmout_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -189,7 +189,8 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                              israndom=False)
 
 # plot thermodynamics results
-thermoout.plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir=savefigpath)
+plot_output_thermo.plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds,
+                                                         savedir=savefigpath)
 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

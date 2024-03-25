@@ -3,7 +3,7 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
-File: thermoout.py
+File: plot_output_thermo.py
 Project: src
 Created Date: Monday 25th March 2024
 Author: Clara Bayley (CB)
