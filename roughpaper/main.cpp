@@ -161,7 +161,7 @@ void test_xarray_zarr_array(FSStore &store) {
   auto data = observer();
   auto datasetdims = get_datasetdims();
 
-  auto xzarr = make_xarrayzarr(store, datasetdims, "xarray_r1d", "m", 1e-6, {8}, {"SdId"});
-  datasetdims.at("SdId") = 8;
+  auto xzarr = make_xarrayzarr(store, datasetdims, "xarray_r1d", "m", 1e-6, {6}, {"SdId"});
+  datasetdims.at("SdId") = 10;
   xzarr.write_to_xarray_zarr_array(datasetdims, data);
 }

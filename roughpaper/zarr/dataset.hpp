@@ -58,7 +58,16 @@ class Dataset {
         "\n}";
   }
 
-  void create_zarr_array() {}
+  template <typename T>
+  XarrayZarrArray<Store, T> create_array(FSStore &store,
+                                         const std::unordered_map<std::string, size_t> &datasetdims,
+                                         const std::string_view name, const std::string_view units,
+                                         const std::string_view dtype, const double scale_factor,
+                                         const std::vector<size_t> &chunkshape,
+                                         const std::vector<std::string> &dimnames) {
+    return XarrayZarrArray<Store, T>(store, datasetdims, name, units, dtype, scale_factor,
+                                     chunkshape, dimnames);
+  }
 };
 
 #endif  // ROUGHPAPER_ZARR_DATASET_HPP_
