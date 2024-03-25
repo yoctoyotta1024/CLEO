@@ -68,7 +68,7 @@ savefigpath = path2build+"/bin/"  # directory for saving figures
 ### --- settings for 2-D gridbox boundaries --- ###
 zgrid = [0, 1500, 60]           # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid = [0, 1500, 60]           # evenly spaced xhalf coords [m]
-ygrid = np.array([0, 10, 20])   # array of yhalf coords [m]
+ygrid = np.array([0, 100, 200, 300])   # array of yhalf coords [m]
 
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
@@ -172,13 +172,14 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
 totnsupers = pyzarr.get_totnsupers(dataset)
-thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
+thermo, winds = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"],
+                                      consts, getwinds=True)
 
 # plot super-droplet results
 savename = savefigpath + "yac1_totnsupers_validation.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-nsample = 500
+nsample = 1000
 savename = savefigpath + "yac1_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                              config["totnsupers"],
@@ -188,9 +189,7 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                              israndom=False)
 
 # plot thermodynamics results
-thermoout.plot_thermo()
-# TODO(CB): plot thermodata
-# TODO(CB): plot winds
+thermoout.plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir=savefigpath)
 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
