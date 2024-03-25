@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 22nd March 2024
+Last Modified: Monday 25th March 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -183,7 +183,8 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                              config["totnsupers"],
                                              nsample,
                                              savename=savename,
-                                             arrows=False)
+                                             arrows=False,
+                                             israndom=False)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
