@@ -41,10 +41,10 @@ def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir):
   }
 
   cmaps = {
-    "press": ["PRGn", colors.Normalize(vmin=800, vmax=1015)],
-    "temp": ["RdBu_r", colors.Normalize(vmin=270, vmax=300)],
-    "qvap": ["BrBG", colors.Normalize(vmin=0, vmax=0.1)],
-    "qcond": ["BrBG", colors.Normalize(vmin=0, vmax=0.01)],
+    "press": ["PRGn", colors.CenteredNorm(vcenter=1015)],
+    "temp": ["RdBu_r", colors.CenteredNorm(vcenter=300)],
+    "qvap": ["BrBG", colors.CenteredNorm(vcenter=0.01)],
+    "qcond": ["BrBG", colors.CenteredNorm(vcenter=0.001)],
     "wvel": ["coolwarm", colors.CenteredNorm(vcenter=0.0, halfrange=5.0)],
     "uvel": ["coolwarm", colors.CenteredNorm(vcenter=0.0, halfrange=5.0)],
     "vvel": ["coolwarm", colors.CenteredNorm(vcenter=0.0, halfrange=5.0)],

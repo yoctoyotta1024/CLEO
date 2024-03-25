@@ -33,7 +33,7 @@ class TimeVarying3DThermo:
   ''' create some sinusoidal thermodynamics that varies in time and is
   hetergenous throughout 3D domain '''
 
-  def __init__(self, PRESSz0, TEMPz0, qvapz0, qcondz0, Noscs,
+  def __init__(self, PRESSz0, TEMPz0, qvapz0, qcondz0,
                WMAX, Zlength, Xlength, VMAX, Ylength):
 
     ### parameters of profile ###
@@ -41,7 +41,7 @@ class TimeVarying3DThermo:
     self.TEMPz0 = TEMPz0 # temperature at z=0m [K]
     self.qvapz0 = qvapz0 # vapour mass mixing ratio at z=0m [Kg/Kg]
     self.qcondz0 = qcondz0 # liquid mass mixing ratio at z=0m [Kg/Kg]
-    self.Noscs = Noscs # number of oscilations to have in simulations (= T_END / oscilation_period)
+    self.dimless_omega = np.pi/4.0 # ~ frequency of time modulation []
 
     self.WMAX = WMAX  # max velocities constant [m/s]
     self.Zlength = Zlength # wavelength of velocity modulation in z direction [m]
@@ -90,15 +90,14 @@ class TimeVarying3DThermo:
     qvap = np.full(shape_cen, self.qvapz0)
     qcond = np.full(shape_cen, self.qcondz0)
 
-    dimless_omega = 2.0 * np.pi * self.Noscs
-    tmod = np.cos(dimless_omega * np.arange(0.0, ntime, 1.0))
-    tmod = tmod * tmod
+    tmod = np.cos(self.dimless_omega * np.arange(0.0, ntime, 1.0))
+    tmod = 1 + 0.5 * tmod
 
     THERMODATA = {
       "PRESS": np.outer(tmod, PRESS).flatten(),
-      "TEMP": np.tile(TEMP, ntime),
-      "qvap": np.tile(qvap, ntime),
-      "qcond": np.tile(qcond, ntime),
+      "TEMP": np.outer(tmod, TEMP).flatten(),
+      "qvap": np.outer(tmod, qvap).flatten(),
+      "qcond": np.outer(tmod, qcond).flatten(),
     }
 
     THERMODATA = self.generate_timevarying_3dwinds(gbxbounds, ndims, ntime, THERMODATA)
