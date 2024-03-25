@@ -33,6 +33,7 @@ sys.path.append(path2CLEO)  # for imports from pySD package
 # for imports from example plotting package
 sys.path.append(path2CLEO+"/examples/exampleplotting/")
 
+from src import thermoin, thermoout
 from plotssrc import pltsds, pltmoms
 from pySD.sdmout_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -171,8 +172,9 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
 totnsupers = pyzarr.get_totnsupers(dataset)
+thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
 
-# 4. plot results
+# plot super-droplet results
 savename = savefigpath + "yac1_totnsupers_validation.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
@@ -184,11 +186,14 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                              savename=savename,
                                              arrows=False,
                                              israndom=False)
+
+# plot thermodynamics results
+thermoout.plot_thermo()
+# TODO(CB): plot thermodata
+# TODO(CB): plot winds
+
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-# TODO(CB): make superdroplet 2dmotion plot not a random sample
-# TODO(CB): plot thermodata
-# TODO(CB): plot winds
 # TODO(CB): make thermo and winds time varying
 # TODO(CB): turn off initial conditions plots for thermo
