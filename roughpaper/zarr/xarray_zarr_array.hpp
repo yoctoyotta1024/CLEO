@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 21st March 2024
+ * Last Modified: Monday 25th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -103,8 +103,8 @@ inline std::string make_xarray_metadata(const std::string_view units, const doub
 template <typename Store, typename T>
 class XarrayZarrArray {
  private:
-  // TODO(CB) move aliases to aliases.hpp
-  ZarrArray<Store, T> zarr;           ///< zarr array in store
+  using viewh_buffer = Buffer<T>::viewh_buffer;  // TODO(CB) move aliases to aliases.hpp
+  ZarrArray<Store, T> zarr;                      ///< zarr array in store
   std::vector<std::string> dimnames;  ///< ordered list of names of each dimenion of array
 
   /* set the shape of the array and its dimensions
@@ -124,7 +124,7 @@ class XarrayZarrArray {
     auto arraydims = std::unordered_map<std::string, size_t>();
     auto arrayshape = zarr.get_arrayshape();
     for (size_t aa = 0; aa < dimnames.size(); ++aa) {
-      arraydims.insert({dimnames.at(aa), arrayshape.at(aa)})
+      arraydims.insert({dimnames.at(aa), arrayshape.at(aa)});
     }
 
     return arraydims;
@@ -135,8 +135,7 @@ class XarrayZarrArray {
                   const std::string_view name, const std::string_view units,
                   const std::string_view dtype, const double scale_factor,
                   const std::vector<size_t>& chunkshape, const std::vector<std::string>& dimnames)
-      : ZarrArray(store, name, dtype, chunkshape,
-                  reduced_arrayshape_from_dims(datasetdims, dimnames)),
+      : zarr(store, name, dtype, chunkshape, reduced_arrayshape_from_dims(datasetdims, dimnames)),
         dimnames(dimnames) {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");

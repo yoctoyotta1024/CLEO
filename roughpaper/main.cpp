@@ -26,7 +26,7 @@
 
 #include "./zarr/fsstore.hpp"
 #include "./zarr/xarray_zarr_array.hpp"
-#include "./zarr/zarr_array.hpp"
+// #include "./zarr/zarr_array.hpp"
 
 using viewh_type = Kokkos::View<double *, Kokkos::HostSpace>;  // view of doubles data
 
@@ -56,7 +56,8 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/dataset.zarr");
     auto store = FSStore(basedir);
 
-    test_zarr_array(store);
+    // test_zarr_array(store);
+    test_xarray_zarr_array(store);
   }
   Kokkos::finalize();
 }
