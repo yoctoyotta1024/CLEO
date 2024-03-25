@@ -84,6 +84,7 @@ PRESSz0 = 101500 # [Pa]
 TEMPz0 = 300     # [K]
 qvapz0 = 0.01    # [Kg/Kg]
 qcondz0 = 0.001  # [Kg/Kg]
+Noscs = 2        # []
 WMAX = 5.0       # [m/s]
 Zlength = 1500   # [m]
 Xlength = 1500   # [m]
@@ -113,7 +114,7 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = gen_input_thermo.TimeVarying3DThermo(PRESSz0, TEMPz0, qvapz0, qcondz0,
+thermodyngen = gen_input_thermo.TimeVarying3DThermo(PRESSz0, TEMPz0, qvapz0, qcondz0, Noscs,
                                                     WMAX, Zlength, Xlength, VMAX, Ylength)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
