@@ -167,8 +167,6 @@ class XarrayZarrArray {
     // dimensions of dataset have been consolidated
 
     // TODO(CB) docstrings
-
-    // TODO(CB) test creation of this class and dimensions of array
   };
 };
 

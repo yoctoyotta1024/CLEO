@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 19th March 2024
+ * Last Modified: Monday 25th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,11 +36,10 @@
  * @tparam Store The type of the store object used by the Zarr group.
  */
 template <typename Store>
-class ZarrGroup {
- private:
+struct ZarrGroup {
+ public:
   Store& store;  ///< Reference to the store object.
 
- public:
   /**
    * @brief Constructs a ZarrGroup with the specified store object.
    *
@@ -50,7 +49,7 @@ class ZarrGroup {
    *
    * @param store The store object associated with the Zarr group.
    */
-  explicit ZarrGroup(const Store store) : store(store) {
+  explicit ZarrGroup(Store& store) : store(store) {
     const std::string zarr_format("2");  // storage specification version 2
     const std::string zgroupjson("{\n  \"zarr_format\": " + zarr_format + "\n}");
     store[".zgroup"] = zgroupjson;

@@ -25,8 +25,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "./zarr/dataset.hpp"
 #include "./zarr/fsstore.hpp"
-#include "./zarr/xarray_zarr_array.hpp"
 // #include "./zarr/zarr_array.hpp"
 
 using viewh_type = Kokkos::View<double *, Kokkos::HostSpace>;  // view of doubles data
@@ -47,26 +47,22 @@ viewh_type observer() {
   return h_data;
 }
 
-std::unordered_map<std::string, size_t> get_datasetdims() {
-  const auto datasetdims = std::unordered_map<std::string, size_t>{
-      {"SdId", 0},
-  };
-
-  return datasetdims;
-}
-
 void test_zarr_array(FSStore &store);
 
-void test_xarray_zarr_array(FSStore &store);
+template <typename Store>
+void test_dataset(Dataset<Store> &dataset);
 
 int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
     const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/dataset.zarr");
-    auto store = FSStore(basedir);
 
+    // auto store = FSStore(basedir);
     // test_zarr_array(store);
-    test_xarray_zarr_array(store);
+
+    auto store = FSStore(basedir);
+    auto dataset = Dataset(store);
+    test_dataset(dataset);
   }
   Kokkos::finalize();
 }
@@ -97,53 +93,53 @@ void test_multidzarr(FSStore &store, const viewh_type data, const std::string_vi
 
 void test_zarr_array(FSStore &store) {
   /* arrays of data returned by observer (maybe on device) */
-  auto data = observer();
+  auto h_data = observer();
 
   /* 1 - D test */
-  test_1dzarr(store, data, "r1d_8", std::vector<size_t>({8}));    // shape = [8], chunks = 0
-  test_1dzarr(store, data, "r1d_2", std::vector<size_t>({2}));    // shape = [8], chunks = 0,1,2,3
-  test_1dzarr(store, data, "r1d_6", std::vector<size_t>({6}));    // shape = [8], chunks = 0,1
-  test_1dzarr(store, data, "r1d_11", std::vector<size_t>({11}));  // shape = [8], chunks = 0
+  test_1dzarr(store, h_data, "r1d_8", std::vector<size_t>({8}));    // shape = [8], chunks = 0
+  test_1dzarr(store, h_data, "r1d_2", std::vector<size_t>({2}));    // shape = [8], chunks = 0,1,2,3
+  test_1dzarr(store, h_data, "r1d_6", std::vector<size_t>({6}));    // shape = [8], chunks = 0,1
+  test_1dzarr(store, h_data, "r1d_11", std::vector<size_t>({11}));  // shape = [8], chunks = 0
 
   /* 2-D test */
-  test_multidzarr(store, data, "m2d_4p2", std::vector<size_t>({4, 2}),
+  test_multidzarr(store, h_data, "m2d_4p2", std::vector<size_t>({4, 2}),
                   std::vector<size_t>({2}));  // shape = [4,2], chunks = 0.0
-  test_multidzarr(store, data, "m2d_2p2", std::vector<size_t>({2, 2}),
+  test_multidzarr(store, h_data, "m2d_2p2", std::vector<size_t>({2, 2}),
                   std::vector<size_t>({2}));  // shape = [4,2], chunks = 0.0, 1.0
-  test_multidzarr(store, data, "m2d_4p1", std::vector<size_t>({4, 1}),
+  test_multidzarr(store, h_data, "m2d_4p1", std::vector<size_t>({4, 1}),
                   std::vector<size_t>({2}));  // shape = [4,2], chunks = 0.0, 0.1
-  test_multidzarr(store, data, "m2d_8p1", std::vector<size_t>({8, 1}),
+  test_multidzarr(store, h_data, "m2d_8p1", std::vector<size_t>({8, 1}),
                   std::vector<size_t>({2}));  // shape = [8,1], chunks = 0.0 WARNING
-  test_multidzarr(store, data, "m2d_5p2", std::vector<size_t>({5, 2}),
+  test_multidzarr(store, h_data, "m2d_5p2", std::vector<size_t>({5, 2}),
                   std::vector<size_t>({2}));  // shape = [5,2], chunks = 0.0 WARNING
 
-  test_multidzarr(store, data, "m2d_3p1", std::vector<size_t>({3, 1}),
+  test_multidzarr(store, h_data, "m2d_3p1", std::vector<size_t>({3, 1}),
                   std::vector<size_t>({2}));  // shape = [5,2], chunks = 0.0, 0.1, 1.0 WARNING
-  test_multidzarr(store, data, "m2d_11p1", std::vector<size_t>({11, 1}),
+  test_multidzarr(store, h_data, "m2d_11p1", std::vector<size_t>({11, 1}),
                   std::vector<size_t>({2}));  // shape = [8,1], chunks = 0.0 WARNING
-  test_multidzarr(store, data, "m2d_3p2", std::vector<size_t>({3, 2}),
+  test_multidzarr(store, h_data, "m2d_3p2", std::vector<size_t>({3, 2}),
                   std::vector<size_t>({2}));  // shape = [5,1], chunks = 0.0, 1.0 WARNING
 
-  test_multidzarr(store, data, "n2d_5p1", std::vector<size_t>({5, 1}),
+  test_multidzarr(store, h_data, "n2d_5p1", std::vector<size_t>({5, 1}),
                   std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0, 1.0
-  test_multidzarr(store, data, "n2d_8p1", std::vector<size_t>({8, 1}),
+  test_multidzarr(store, h_data, "n2d_8p1", std::vector<size_t>({8, 1}),
                   std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0
-  test_multidzarr(store, data, "n2d_11p1", std::vector<size_t>({11, 1}),
+  test_multidzarr(store, h_data, "n2d_11p1", std::vector<size_t>({11, 1}),
                   std::vector<size_t>({1}));  // shape = [8,1], chunks = 0.0
 
-  test_multidzarr(store, data, "n3d_4p2p1", std::vector<size_t>({4, 2, 1}),
+  test_multidzarr(store, h_data, "n3d_4p2p1", std::vector<size_t>({4, 2, 1}),
                   std::vector<size_t>({2, 1}));  // shape = [4,2,1], chunks = 0.0.0
-  test_multidzarr(store, data, "n3d_2p2p1", std::vector<size_t>({2, 2, 1}),
+  test_multidzarr(store, h_data, "n3d_2p2p1", std::vector<size_t>({2, 2, 1}),
                   std::vector<size_t>({2, 1}));  // shape = [4,2,1], chunks = 0.0.0, 1.0.0
-  test_multidzarr(store, data, "n3d_1p1p1", std::vector<size_t>({1, 1, 1}),
+  test_multidzarr(store, h_data, "n3d_1p1p1", std::vector<size_t>({1, 1, 1}),
                   std::vector<size_t>({2, 2}));  // shape = [2,2,2], chunks = (many)
 
   /* 3-D Test */
-  test_multidzarr(store, data, "n3d_1p3p2", std::vector<size_t>({1, 3, 2}),
+  test_multidzarr(store, h_data, "n3d_1p3p2", std::vector<size_t>({1, 3, 2}),
                   std::vector<size_t>({3, 2}));  // shape = [2,3,2], chunks = 1.0.0, 1.0.0 WARNING
-  test_multidzarr(store, data, "n3d_1p3p1", std::vector<size_t>({1, 3, 1}),
+  test_multidzarr(store, h_data, "n3d_1p3p1", std::vector<size_t>({1, 3, 1}),
                   std::vector<size_t>({3, 1}));  // shape = [3,3,1] chunks = 0.0.0 -> 2.0.0 WARNING
-  test_multidzarr(store, data, "n3d_2p3p1", std::vector<size_t>({2, 3, 1}),
+  test_multidzarr(store, h_data, "n3d_2p3p1", std::vector<size_t>({2, 3, 1}),
                   std::vector<size_t>({3, 1}));  // shape = [4,3,1] chunks = 0.0.0, 1.0.0 WARNING
 }
 
@@ -156,12 +152,14 @@ XarrayZarrArray<FSStore, double> make_xarrayzarr(
                                           chunkshape, dimnames);
 }
 
-void test_xarray_zarr_array(FSStore &store) {
-  // arrays of data returned by observer (maybe on device)
-  auto data = observer();
-  auto datasetdims = get_datasetdims();
+template <typename Store>
+void test_dataset(Dataset<Store> &dataset) {
+  // arrays of h_data returned by observer (maybe on device)
+  auto h_data = observer();
 
-  auto xzarr = make_xarrayzarr(store, datasetdims, "xarray_r1d", "m", 1e-6, {6}, {"SdId"});
-  datasetdims.at("SdId") = 10;
-  xzarr.write_to_xarray_zarr_array(datasetdims, data);
+  dataset.add_dimension({"SdId", 0});
+  auto xzarr = dataset.template create_array<double>("xarray_r1d", "m", "<f8", 1e-6, {6}, {"SdId"});
+
+  dataset.set_dimension({"SdId", 10});
+  dataset.write_to_array(xzarr, h_data);
 }

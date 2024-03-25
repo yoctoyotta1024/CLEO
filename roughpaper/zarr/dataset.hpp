@@ -24,6 +24,7 @@
 
 #include <Kokkos_Core.hpp>
 
+#include "./xarray_zarr_array.hpp"
 #include "./zarr_group.hpp"
 
 /**
@@ -39,7 +40,9 @@
 template <typename Store>
 class Dataset {
  private:
-  ZarrGroup<Store> &zarr;  ///< Reference to the zarr group object.
+  ZarrGroup<Store> group;  ///< Reference to the zarr group object.
+  std::unordered_map<std::string, size_t>
+      datasetdims;  ///< map from name of each dimension in dataset to their size
 
  public:
   /**
@@ -50,23 +53,35 @@ class Dataset {
    *
    * @param store The store object associated with the Dataset.
    */
-  explicit Dataset(const Store store) : zarr(store) {
+  explicit Dataset(Store &store) : group(store), datasetdims() {
     store[".zattrs"] =
         "{\n"
         "  \"creator\": \"Clara Bayley\",\n"
-        "  \"title\": \"Zarr Group for Data Output from CLEO\""
+        "  \"title\": \"Dataset from CLEO is Xarray and NetCDF compatible Zarr Group of Arrays\""
         "\n}";
   }
 
+  void add_dimension(const std::pair<std::string, std::size_t> &dim) {
+    datasetdims.insert({dim.first, dim.second});
+  }
+
+  void set_dimension(const std::pair<std::string, std::size_t> &dim) {
+    datasetdims.at(dim.first) = dim.second;
+  }
+
   template <typename T>
-  XarrayZarrArray<Store, T> create_array(FSStore &store,
-                                         const std::unordered_map<std::string, size_t> &datasetdims,
-                                         const std::string_view name, const std::string_view units,
+  XarrayZarrArray<Store, T> create_array(const std::string_view name, const std::string_view units,
                                          const std::string_view dtype, const double scale_factor,
                                          const std::vector<size_t> &chunkshape,
-                                         const std::vector<std::string> &dimnames) {
-    return XarrayZarrArray<Store, T>(store, datasetdims, name, units, dtype, scale_factor,
+                                         const std::vector<std::string> &dimnames) const {
+    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, dtype, scale_factor,
                                      chunkshape, dimnames);
+  }
+
+  template <typename T>
+  void write_to_array(XarrayZarrArray<Store, T> &xzarr,
+                      const Buffer<T>::viewh_buffer h_data) const {
+    xzarr.write_to_xarray_zarr_array(datasetdims, h_data);
   }
 };
 
