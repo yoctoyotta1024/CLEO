@@ -90,8 +90,9 @@ class TimeVarying3DThermo:
     qvap = np.full(shape_cen, self.qvapz0)
     qcond = np.full(shape_cen, self.qcondz0)
 
-    dimless_omega = 2.0 * np.pi / self.Noscs
+    dimless_omega = 2.0 * np.pi * self.Noscs
     tmod = np.cos(dimless_omega * np.arange(0.0, ntime, 1.0))
+    tmod = tmod * tmod
 
     THERMODATA = {
       "PRESS": np.outer(tmod, PRESS).flatten(),
