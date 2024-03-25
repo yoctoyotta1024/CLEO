@@ -149,8 +149,8 @@ XarrayZarrArray<FSStore, double> make_xarrayzarr(
     const std::string_view name, const std::string_view units, const double scale_factor,
     const std::vector<size_t> &chunkshape, const std::vector<std::string> &dimnames) {
   const auto dtype = std::string_view("<f8");
-  return XarrayZarrArray(store, datasetdims, name, units, dtype, scale_factor, chunkshape,
-                         dimnames);
+  return XarrayZarrArray<FSStore, double>(store, datasetdims, name, units, dtype, scale_factor,
+                                          chunkshape, dimnames);
 }
 
 void test_xarray_zarr_array(FSStore &store) {
@@ -158,6 +158,6 @@ void test_xarray_zarr_array(FSStore &store) {
   auto data = observer();
   auto datasetdims = get_datasetdims();
 
-  auto xzarr = make_xarrayzarr(store, datasetdims, "xarray_r1d", "m", 1e-6, {8}, "SdId");
-  xzarr = xzarr.write_to_xarray_zarr_array(datasetdims, data);
+  auto xzarr = make_xarrayzarr(store, datasetdims, "xarray_r1d", "m", 1e-6, {8}, {"SdId"});
+  xzarr.write_to_xarray_zarr_array(datasetdims, data);
 }
