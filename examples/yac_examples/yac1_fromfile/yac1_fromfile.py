@@ -113,7 +113,7 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = gen_input_thermo.TimeVarying3DThermo(PRESSz0, TEMPz0, qvapz0, qcondz0, Noscs,
+thermodyngen = gen_input_thermo.TimeVarying3DThermo(PRESSz0, TEMPz0, qvapz0, qcondz0,
                                                     WMAX, Zlength, Xlength, VMAX, Ylength)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
@@ -190,5 +190,4 @@ plot_output_thermo.plot_domain_thermodynamics_timeseries(time, gbxs, thermo, win
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-# TODO(CB): make thermo and winds time varying
 # TODO(CB): turn off initial conditions plots for thermo

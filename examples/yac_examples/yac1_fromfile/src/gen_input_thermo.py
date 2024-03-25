@@ -51,8 +51,8 @@ class TimeVarying3DThermo:
 
   def idealised_flowfield2D(self, gbxbounds, ndims):
 
-    zfaces, xcens_z = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'z')[0:2]
-    zcens_x, xfaces = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'x')[0:2]
+    zfaces, xcens_z, ycens_z = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'z')
+    zcens_x, xfaces, ycens_x = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'x')
 
     ztilda = self.Zlength / np.pi
     xtilda = self.Xlength / (2*np.pi)
@@ -61,7 +61,19 @@ class TimeVarying3DThermo:
     WVEL = wamp * np.sin(zfaces / ztilda) * np.sin(xcens_z / xtilda)
     UVEL = wamp * xtilda / ztilda * np.cos(zcens_x/ztilda) * np.cos(xfaces/xtilda)
 
+    # modulation in y direction
+    WVEL *= (1.25 + np.cos(self.Ylength / np.pi * ycens_z))
+    UVEL *= (1.25 + np.cos(self.Ylength / np.pi * ycens_x))
+
     return WVEL, UVEL
+
+  def gen_3dvvelocity(self, gbxbounds, ndims):
+
+    zcens_y, xcens_y, yfaces = rgrid.coords_forgridboxfaces(gbxbounds, ndims, 'y')
+    zxmod = zcens_y / self.Zlength + xcens_y / self.Xlength
+    VVEL = self.VMAX * (zxmod + np.cos(self.Ylength / np.pi * yfaces))
+
+    return VVEL
 
   def generate_timevarying_3dwinds(self, gbxbounds, ndims, ntime, THERMODATA):
 
@@ -70,9 +82,7 @@ class TimeVarying3DThermo:
     tmod = np.power(tmod, np.array(range(0, ntime, 1)))
 
     WVEL, UVEL = self.idealised_flowfield2D(gbxbounds, ndims)
-
-    shape_yface = int((ndims[2]+1)*ndims[0]*ndims[1])
-    VVEL = np.full(shape_yface, self.VMAX)
+    VVEL = self.gen_3dvvelocity(gbxbounds, ndims)
 
     THERMODATA["WVEL"] = np.outer(tmod, WVEL).flatten()
     THERMODATA["UVEL"] = np.outer(tmod, UVEL).flatten()
@@ -80,15 +90,22 @@ class TimeVarying3DThermo:
 
     return THERMODATA
 
-  def generate_thermo(self, gbxbounds, ndims, ntime):
+  def generate_3dsinusoidal_variable(self, gbxbounds, ndims, amp):
 
     zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds, ndims)
 
-    shape_cen = int(np.prod(ndims))
-    PRESS = np.full(shape_cen, self.PRESSz0)
-    TEMP = np.full(shape_cen, self.TEMPz0)
-    qvap = np.full(shape_cen, self.qvapz0)
-    qcond = np.full(shape_cen, self.qcondz0)
+    ztilda = self.Zlength / np.pi / 3.0
+    xtilda = self.Xlength / np.pi / 4.0
+    ytilda = self.Ylength / np.pi / 1.33
+
+    return amp + 0.25 * amp * (np.sin(zfulls / ztilda) * np.sin(xfulls / xtilda) + np.sin(yfulls/ ytilda))
+
+  def generate_thermo(self, gbxbounds, ndims, ntime):
+
+    PRESS = self.generate_3dsinusoidal_variable(gbxbounds, ndims, self.PRESSz0)
+    TEMP = self.generate_3dsinusoidal_variable(gbxbounds, ndims, self.TEMPz0)
+    qvap = self.generate_3dsinusoidal_variable(gbxbounds, ndims, self.qvapz0)
+    qcond = self.generate_3dsinusoidal_variable(gbxbounds, ndims, self.qcondz0)
 
     tmod = np.cos(self.dimless_omega * np.arange(0.0, ntime, 1.0))
     tmod = 1 + 0.5 * tmod
