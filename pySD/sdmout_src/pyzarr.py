@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 20th November 2023
+Last Modified: Monday 25th March 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -64,14 +64,19 @@ def var3d_fromzarr(ds, ndims, key):
 
   return np.reshape(ds[key].values, ndims)
 
-def get_thermodata(dataset, ntime, ndims, consts):
+def get_thermodata(dataset, ntime, ndims, consts, getwinds=False):
   ''' returns a thermodynamic data in a dictionary. The value under
   each key is the thermodynamics data in a 2D array
   with dimensions [time, gridbox]. E.g. thermo["qvap"][:,0] gives the
   timeseries of qvap for the 0th gridbox. thermo["qvap][0] gives
   the qvap of all gridboxes at the 0th output time '''
 
-  return thermodata.Thermodata(dataset, ntime, ndims, consts)
+  thermo = thermodata.Thermodata(dataset, ntime, ndims, consts)
+  if getwinds:
+    winds = thermodata.Winddata(dataset, ntime, ndims, consts)
+    return thermo, winds
+  else:
+    return thermo
 
 def get_supers(dataset, consts):
   return supersdata.SupersData(dataset, consts)
