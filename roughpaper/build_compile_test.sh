@@ -52,8 +52,8 @@ NVCC_WRAPPER_DEFAULT_COMPILER=${gxx}
 ### ---------------------------------------------------- ###
 
 ### ------------ choose extra compiler flags ----------- ###
-CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-#CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                         # performance
+CMAKE_CXX_FLAGS="-Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+#CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                 # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
@@ -63,10 +63,10 @@ kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_S
 # flags for host parallelism (e.g. using OpenMP)
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 
-# flags for device parallelism (e.g. on gpus)
-kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON \
--DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON \
--DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${NVCC_WRAPPER_DEFAULT_COMPILER}"
+# # flags for device parallelism (e.g. on gpus)
+# kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON \
+# -DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON \
+# -DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${NVCC_WRAPPER_DEFAULT_COMPILER}"
 ### ---------------------------------------------------- ###
 
 ### ------------ build and compile with cmake ---------- ###
@@ -80,10 +80,21 @@ echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
 echo "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}"
 
 # build then compile in parallel
-cmake -DCMAKE_CXX_COMPILER=${CXX} \
-    -DCMAKE_CC_COMPILER=${CC} \
-    -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
-    -S ${path2CLEO} -B ${path2build} \
-    ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
-    cmake --build ${path2build} --target test --parallel
+if [[ $1 == "build" ]];
+then
+  cmake -DCMAKE_CXX_COMPILER=${CXX} \
+      -DCMAKE_CC_COMPILER=${CC} \
+      -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
+      -S ${path2CLEO} -B ${path2build} \
+      ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
+      cmake --build ${path2build} --target test --parallel
+else
+  cd ${path2build} && make -j 64 test
+fi
+
+# good settings for Kokkos OpenMP at runtime
+export OMP_PROC_BIND=spread
+export OMP_PLACES=threads
+
+${path2CLEO}/roughpaper/build/roughpaper/test
 ### ---------------------------------------------------- ###
