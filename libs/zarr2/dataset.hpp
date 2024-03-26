@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: dataset.hpp
- * Project: zarr
+ * Project: zarr2
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -19,10 +19,15 @@
  * Structure to create a ZarrGroup which is xarray and netCDF compatible.
  */
 
-#ifndef ROUGHPAPER_ZARR_DATASET_HPP_
-#define ROUGHPAPER_ZARR_DATASET_HPP_
+#ifndef LIBS_ZARR2_DATASET_HPP_
+#define LIBS_ZARR2_DATASET_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <string>
+#include <string_view>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 #include "./xarray_zarr_array.hpp"
 #include "./zarr_group.hpp"
@@ -66,7 +71,7 @@ class Dataset {
    *
    * @param dim A pair containing the name and size of the dimension to be added.
    */
-  void add_dimension(const std::pair<std::string, std::size_t> &dim) {
+  void add_dimension(const std::pair<std::string, size_t> &dim) {
     datasetdims.insert({dim.first, dim.second});
   }
 
@@ -75,7 +80,7 @@ class Dataset {
    *
    * @param dim A pair containing the name of the dimension and its new size to be set.
    */
-  void set_dimension(const std::pair<std::string, std::size_t> &dim) {
+  void set_dimension(const std::pair<std::string, size_t> &dim) {
     datasetdims.at(dim.first) = dim.second;
   }
 
@@ -131,4 +136,4 @@ class Dataset {
   }
 };
 
-#endif  // ROUGHPAPER_ZARR_DATASET_HPP_
+#endif  // LIBS_ZARR2_DATASET_HPP_

@@ -25,9 +25,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "./zarr/dataset.hpp"
-#include "./zarr/fsstore.hpp"
-// #include "./zarr/zarr_array.hpp"
+#include "zarr2/dataset.hpp"
+#include "zarr2/fsstore.hpp"
+// #include "zarr2/zarr_array.hpp"
 
 using viewh_type = Kokkos::View<double *, Kokkos::HostSpace>;  // view of doubles data
 

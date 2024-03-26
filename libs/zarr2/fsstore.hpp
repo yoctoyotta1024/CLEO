@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: fsstore.hpp
- * Project: zarr
+ * Project: zarr2
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TB)
  * -----
- * Last Modified: Wednesday 20th March 2024
+ * Last Modified: Tuesday 26th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,8 +19,8 @@
  * Class for writing memory in a a file system store under a given key.
  */
 
-#ifndef ROUGHPAPER_ZARR_FSSTORE_HPP_
-#define ROUGHPAPER_ZARR_FSSTORE_HPP_
+#ifndef LIBS_ZARR2_FSSTORE_HPP_
+#define LIBS_ZARR2_FSSTORE_HPP_
 
 #include <filesystem>
 #include <fstream>
@@ -72,42 +72,7 @@ class FSStore {
    * written.
    * @return True if the write operation is successful, false otherwise.
    */
-  inline bool write(const std::string_view key, const std::span<const uint8_t> buffer) const;
+  bool write(const std::string_view key, const std::span<const uint8_t> buffer) const;
 };
 
-/**
- * @brief Write function called by StoreAccessor to write data to file system storage after the
- * data has been converted into a vector of unsigned integer types.
- *
- * This function can be used by a StoreAccessor object to write data represented as a vector of
- * unsigned integer types to the file system store under the specified key.
- *
- * TODO(ALL): move this function to a .cpp file
- *
- * @param key The key under which the data will be stored in the file system store.
- * @param buffer A span representing the range of memory containing the unsigned bytes to be
- * written.
- * @return True if the write operation is successful, false otherwise.
- */
-inline bool FSStore::write(std::string_view key, std::span<const uint8_t> buffer) const {
-  auto path = basedir / key;
-  auto mode = std::ios::out | std::ios::binary;
-  std::ofstream out(path, mode);
-
-  if (!out.good()) {
-    std::cout << "couldn't open " << path << ",\n " << "making directory " << path.parent_path()
-              << "\n";
-    std::filesystem::create_directories(path.parent_path());
-    out.open(path, mode);
-  }
-
-  if (!out.good()) {
-    std::cout << "can't write to " << path << "\n";
-    return false;
-  }
-
-  out.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
-  return true;
-}
-
-#endif  // ROUGHPAPER_ZARR_FSSTORE_HPP_
+#endif  // LIBS_ZARR2_FSSTORE_HPP_

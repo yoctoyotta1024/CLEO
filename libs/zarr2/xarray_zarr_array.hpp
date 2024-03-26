@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: xarray_zarr_array.hpp
- * Project: zarr
+ * Project: zarr2
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -20,12 +20,13 @@
  * (https://zarr.readthedocs.io/en/stable/spec/v2.html) in a given memory store.
  */
 
-#ifndef ROUGHPAPER_ZARR_XARRAY_ZARR_ARRAY_HPP_
-#define ROUGHPAPER_ZARR_XARRAY_ZARR_ARRAY_HPP_
+#ifndef LIBS_ZARR2_XARRAY_ZARR_ARRAY_HPP_
+#define LIBS_ZARR2_XARRAY_ZARR_ARRAY_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <algorithm>
+#include <cassert>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -219,4 +220,4 @@ class XarrayZarrArray {
   }
 };
 
-#endif  // ROUGHPAPER_ZARR_XARRAY_ZARR_ARRAY_HPP_
+#endif  // LIBS_ZARR2_XARRAY_ZARR_ARRAY_HPP_

@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: buffer.hpp
- * Project: zarr
+ * Project: zarr2
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 20th March 2024
+ * Last Modified: Tuesday 26th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,8 +19,8 @@
  * Class for a buffer used by a ZarrArray to acculuate data and then write it into a store
  */
 
-#ifndef ROUGHPAPER_ZARR_BUFFER_HPP_
-#define ROUGHPAPER_ZARR_BUFFER_HPP_
+#ifndef LIBS_ZARR2_BUFFER_HPP_
+#define LIBS_ZARR2_BUFFER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -155,4 +155,4 @@ struct Buffer {
   }
 };
 
-#endif  // ROUGHPAPER_ZARR_BUFFER_HPP_
+#endif  // LIBS_ZARR2_BUFFER_HPP_

@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: chunks.hpp
- * Project: zarr
+ * Project: zarr2
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 22nd March 2024
+ * Last Modified: Tuesday 26th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,8 +19,8 @@
  * Class to manage and write chunks of data to an array in a given memory store.
  */
 
-#ifndef ROUGHPAPER_ZARR_CHUNKS_HPP_
-#define ROUGHPAPER_ZARR_CHUNKS_HPP_
+#ifndef LIBS_ZARR2_CHUNKS_HPP_
+#define LIBS_ZARR2_CHUNKS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -210,4 +210,4 @@ class Chunks {
   }
 };
 
-#endif  // ROUGHPAPER_ZARR_CHUNKS_HPP_
+#endif  // LIBS_ZARR2_CHUNKS_HPP_

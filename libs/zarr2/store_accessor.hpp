@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: store_accessor.hpp
- * Project: zarr
+ * Project: zarr2
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TB)
  * -----
- * Last Modified: Wednesday 20th March 2024
+ * Last Modified: Tuesday 26th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,8 +20,8 @@
  * write to some kind of memory store under a given key.
  */
 
-#ifndef ROUGHPAPER_ZARR_STORE_ACCESSOR_HPP_
-#define ROUGHPAPER_ZARR_STORE_ACCESSOR_HPP_
+#ifndef LIBS_ZARR2_STORE_ACCESSOR_HPP_
+#define LIBS_ZARR2_STORE_ACCESSOR_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <span>
@@ -105,4 +105,4 @@ struct StoreAccessor {
   }
 };
 
-#endif  // ROUGHPAPER_ZARR_STORE_ACCESSOR_HPP_
+#endif  // LIBS_ZARR2_STORE_ACCESSOR_HPP_

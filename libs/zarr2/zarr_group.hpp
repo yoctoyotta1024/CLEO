@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: zarr_group.hpp
- * Project: zarr
+ * Project: zarr2
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 25th March 2024
+ * Last Modified: Tuesday 26th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,8 +20,8 @@
  * (https://zarr.readthedocs.io/en/stable/spec/v2.html) in a given memory store.
  */
 
-#ifndef ROUGHPAPER_ZARR_ZARR_GROUP_HPP_
-#define ROUGHPAPER_ZARR_ZARR_GROUP_HPP_
+#ifndef LIBS_ZARR2_ZARR_GROUP_HPP_
+#define LIBS_ZARR2_ZARR_GROUP_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <string>
@@ -56,4 +56,4 @@ struct ZarrGroup {
   }
 };
 
-#endif  // ROUGHPAPER_ZARR_ZARR_GROUP_HPP_
+#endif  // LIBS_ZARR2_ZARR_GROUP_HPP_
