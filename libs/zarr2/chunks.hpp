@@ -62,65 +62,6 @@ inline size_t vec_product(const std::vector<size_t>& vec, const size_t aa) {
 }
 
 /**
- * @brief Writes a chunk to the store and increments the total number of chunks written.
- *
- * This function writes the data held in a buffer in the specified store to a chunk identified by
- * "chunk_label" of an array called "name" given the number of chunks of the array already
- * existing. After writing the chunk, the total number of chunks is incremented.
- *
- * @tparam Store The type of the store.
- * @tparam T The type of the data elements stored in the buffer.
- * @param store Reference to the store where the chunk will be written.
- * @param name Name of the array in the store where the chunk will be written.
- * @param chunk_num The total number of chunks of the array already written.
- * @param buffer The buffer containing the data to be written to the chunk.
- * @return The updated total number of chunks after writing.
- */
-template <typename Store, typename T>
-size_t write_chunk(Store& store, const std::string_view name, const size_t chunk_num,
-                   Buffer<T>& buffer) {
-  buffer.write_buffer_to_chunk(store, name, chunk_label(chunk_num));
-  return chunk_num + 1;
-}
-
-/**
- * @brief Writes a chunk to the store and increments the total number of chunks written.
- *
- * This function writes the data stored in the Kokkos view (in host memory) in the specified store
- * to a chunk identified by "chunk_label" of an array called "name" given the number of chunks of
- * the array already existing. After writing the chunk, the total number of chunks is incremented.
- *
- * @tparam Store The type of the store.
- * @tparam T The type of the data elements stored in the buffer.
- * @param store Reference to the store where the chunk will be written.
- * @param name Name of the array in the store where the chunk will be written.
- * @param chunk_num The total number of chunks of the array already written.
- * @param h_data_chunk The view containing the data in host memory to be written to the chunk.
- * @return The updated total number of chunks after writing.
- */
-template <typename Store, typename T>
-size_t write_chunk(Store& store, const std::string_view name, const size_t chunk_num,
-                   const Buffer<T>::subviewh_buffer h_data_chunk) {
-  store[std::string(name) + '/' + chunk_label(chunk_num)].template operator= <T>(h_data_chunk);
-
-  return chunk_num + 1;
-}
-
-template <typename Store, typename T>
-size_t write_chunks_parallel(Store& store, const std::string_view name, const size_t totnchunks,
-                             const subviewh_buffer h_data, const size_t nchunks,
-                             const size_t chunksize) {
-  for (size_t nn = 0; nn < nchunks; ++nn) {
-    const auto refs = kkpair_size_t({nn * chunksize, (nn + 1) * chunksize});
-    const auto data_chunk = Kokkos::subview(h_data, refs);
-    const auto chunk_num = totnchunks + nn;
-    write_chunk<Store, T>(store, name, chunk_num, data_chunk);
-  }
-
-  return totnchunks + nchunks;
-}
-
-/**
  * @brief A class template for managing and writing chunks of an array.
  *
  * This class provides functionality for writing chunks of an array to a store.
@@ -221,6 +162,65 @@ class Chunks {
       reduced_arrayshape.at(aa) = chunkshape.at(aa + 1) * reducedarray_nchunks.at(aa);
     }
     return reduced_arrayshape;
+  }
+
+  /**
+   * @brief Writes a chunk to the store and increments the total number of chunks written.
+   *
+   * This function writes the data held in a buffer in the specified store to a chunk identified by
+   * "chunk_label" of an array called "name" given the number of chunks of the array already
+   * existing. After writing the chunk, the total number of chunks is incremented.
+   *
+   * @tparam Store The type of the store.
+   * @tparam T The type of the data elements stored in the buffer.
+   * @param store Reference to the store where the chunk will be written.
+   * @param name Name of the array in the store where the chunk will be written.
+   * @param chunk_num The total number of chunks of the array already written.
+   * @param buffer The buffer containing the data to be written to the chunk.
+   * @return The updated total number of chunks after writing.
+   */
+  template <typename Store, typename T>
+  size_t write_chunk(Store& store, const std::string_view name, const size_t chunk_num,
+                     Buffer<T>& buffer) const {
+    buffer.write_buffer_to_chunk(store, name, chunk_label(chunk_num));
+    return chunk_num + 1;
+  }
+
+  /**
+   * @brief Writes a chunk to the store and increments the total number of chunks written.
+   *
+   * This function writes the data stored in the Kokkos view (in host memory) in the specified store
+   * to a chunk identified by "chunk_label" of an array called "name" given the number of chunks of
+   * the array already existing. After writing the chunk, the total number of chunks is incremented.
+   *
+   * @tparam Store The type of the store.
+   * @tparam T The type of the data elements stored in the buffer.
+   * @param store Reference to the store where the chunk will be written.
+   * @param name Name of the array in the store where the chunk will be written.
+   * @param chunk_num The total number of chunks of the array already written.
+   * @param h_data_chunk The view containing the data in host memory to be written to the chunk.
+   * @return The updated total number of chunks after writing.
+   */
+  template <typename Store, typename T>
+  size_t write_chunk(Store& store, const std::string_view name, const size_t chunk_num,
+                     const Buffer<T>::subviewh_buffer h_data_chunk) const {
+    store[std::string(name) + '/' + chunk_label(chunk_num)].template operator= <T>(h_data_chunk);
+
+    return chunk_num + 1;
+  }
+
+  template <typename Store, typename T>
+  size_t write_chunks_parallel(Store& store, const std::string_view name, const size_t totnchunks,
+                               const subviewh_buffer h_data, const size_t nchunks,
+                               const size_t chunksize) const {
+    for (size_t nn = 0; nn < nchunks; ++nn) {
+      const auto refs = kkpair_size_t({nn * chunksize, (nn + 1) * chunksize});
+      const auto data_chunk = Kokkos::subview(h_data, refs);
+      const auto chunk_num = totnchunks + nn;
+      write_chunk<Store, T>(store, name, chunk_num, data_chunk);
+    }
+
+    return totnchunks + nchunks;
   }
 };
 
