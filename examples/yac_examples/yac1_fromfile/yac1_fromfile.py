@@ -66,7 +66,7 @@ savefigpath = path2build+"/bin/"  # directory for saving figures
 
 ### --- settings for 2-D gridbox boundaries --- ###
 zgrid = [0, 1500, 60]           # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = [0, 1500, 60]           # evenly spaced xhalf coords [m]
+xgrid = [0, 1500, 50]           # evenly spaced xhalf coords [m]
 ygrid = np.array([0, 100, 200, 300])   # array of yhalf coords [m]
 
 ### --- settings for initial superdroplets --- ###
