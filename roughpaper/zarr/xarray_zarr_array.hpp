@@ -37,7 +37,7 @@
  *
  * Write some data under .zattrs key in store for an array called 'name'. The key and attrs data
  * could be anything, but for example .zattrs could be a json file in a file system store
- * (see FSStore) for the extra metadata which must exist in order to make xarray and netCDF
+ * (see FSStore) for the extra metadata which must exist in order to make Xarray and netCDF
  * happy when opening a Zarr dataset, e.g. by naming the dimensions of the
  * "{\"_ARRAY_DIMENSIONS\": [\"dimension_name\"]}";.
  *
@@ -51,6 +51,20 @@ inline void write_zattrs_json(Store& store, std::string_view name, std::string_v
   store[std::string(name) + "/.zattrs"] = attrs;
 }
 
+/**
+ * @brief Calculate the reduced array shape of an array given the name of its dimensions and the
+ * dataset's dimensions.
+ *
+ * Given the dimensions of a dataset and the names of the dimensions of an array, this function
+ * calculates the reduced array shape by extracting the sizes of the dimensions from the dataset
+ * which correspond to the provided dimension names for all except for the outermost dimension of
+ * the array.
+ *
+ * @param datasetdims An unordered map containing the dimensions of the dataset.
+ * @param dimnames A vector containing the names of the dimensions of the array (ordered from
+ * outermost->innermost).
+ * @return A vector of size_t representing the reduced array shape.
+ */
 inline std::vector<size_t> reduced_arrayshape_from_dims(
     const std::unordered_map<std::string, size_t>& datasetdims,
     const std::vector<std::string>& dimnames) {
@@ -64,8 +78,13 @@ inline std::vector<size_t> reduced_arrayshape_from_dims(
   return reduced_arrayshape;
 }
 
-/* converts vector of strings, e.g. for names of dimensions, into a single list
-written as a string */
+/**
+ * @brief Converts vector of strings, e.g. for names of dimensions,into a single list written
+ * as a string.
+ *
+ * @param dims The vector of strings to be converted.
+ * @return A string representing the converted list.
+ */
 inline std::string vecstr_to_string(const std::vector<std::string>& dims) {
   auto dims_str = std::string{"["};
   for (const auto& d : dims) {
@@ -76,8 +95,15 @@ inline std::string vecstr_to_string(const std::vector<std::string>& dims) {
   return dims_str;
 }
 
-/* make string of array attributes metadata for .zattrs json for making zarr array
-compatible with xarray and NetCDF */
+/**
+ * @brief Make string of array attributes metadata for .zattrs json which is used to make zarr array
+ * compatible with Xarray and NetCDF.
+ *
+ * @param units The units of the array's coordinates.
+ * @param scale_factor The scale factor of data.
+ * @param dimnames The names of each dimension of the array.
+ * @return A string representing the metadata.
+ */
 inline std::string make_xarray_metadata(const std::string_view units, const double scale_factor,
                                         const std::vector<std::string>& dimnames) {
   const auto zattrs = std::string(
@@ -95,10 +121,13 @@ inline std::string make_xarray_metadata(const std::string_view units, const doub
   return zattrs;
 }
 
-/** Zarr array with additional metadata and constraining of shape of array to shape of dimensions
- * in order to ensure Zarr array is compatibile with NetCDF and Xarray
- * @param units The units of the array's coordinates.
- * @param dimnames The names of each dimension of the array.
+/**
+ * @brief Zarr array with additional metadata and functions to constrain the shape of array to the
+ * shape of its dimensions in a dataset in order to ensure Zarr array is compatibile with NetCDF
+ * and Xarray conventions.
+ *
+ * @tparam Store The type of the store object where the array will be stored.
+ * @tparam T The data type of the array.
  */
 template <typename Store, typename T>
 class XarrayZarrArray {
@@ -107,6 +136,11 @@ class XarrayZarrArray {
   ZarrArray<Store, T> zarr;                      ///< zarr array in store
   std::vector<std::string> dimnames;  ///< ordered list of names of each dimenion of array
 
+  /**
+   * @brief Get the name and size of the dimensions of the array.
+   *
+   * @return An unordered map containing the dimensions of the array.
+   */
   std::unordered_map<std::string, size_t> get_arraydims() const {
     auto arraydims = std::unordered_map<std::string, size_t>();
     auto arrayshape = zarr.get_arrayshape();
@@ -118,6 +152,18 @@ class XarrayZarrArray {
   }
 
  public:
+  /**
+   * @brief Constructs a new XarrayZarrArray object.
+   *
+   * @param store The store where the array will be stored.
+   * @param datasetdims Dictionary like object for the dimensions of the dataset.
+   * @param name The name of the array.
+   * @param units The units of the array data.
+   * @param dtype The data type of the array.
+   * @param scale_factor The scale factor of array data.
+   * @param chunkshape The shape of the array chunks.
+   * @param dimnames The names of each dimension of the array (in order outermost->innermost).
+   */
   XarrayZarrArray(Store& store, const std::unordered_map<std::string, size_t>& datasetdims,
                   const std::string_view name, const std::string_view units,
                   const std::string_view dtype, const double scale_factor,
@@ -128,7 +174,7 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
-    write_arrayshape(datasetdims);  // overwrite zarr array shape with xarray dataset dimensions
+    write_arrayshape(datasetdims);
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
   }
@@ -149,6 +195,17 @@ class XarrayZarrArray {
   of its dimensions according to the dataset. The order of the dimensions in array's shape is
     the order of dimensions in dimnames. Setting shape according to size of dataset dimensions makes
     zarr array consistent with the dimensions of the dataset as required by Xarray and NetCDF.*/
+
+  /**
+   * @brief Overwrites .zarray json file with metadata to ensure the shape of the array along each
+   * dimension has the same size as each of its dimensions according to the dataset.
+   *
+   * The order of the dimensions in the array's shape is the order of dimensions in dimnames
+   * (outermost -> innermost). Setting the shape to be conistent with the size of the dataset's
+   * dimensions makes zarr array also consistent with Xarray and NetCDF conventions.
+   *
+   * @param datasetdims Dictionary like object for the dimensions of the dataset.
+   */
   void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
     auto arrayshape = std::vector<size_t>({});
 
@@ -162,5 +219,3 @@ class XarrayZarrArray {
 };
 
 #endif  // ROUGHPAPER_ZARR_XARRAY_ZARR_ARRAY_HPP_
-
-// TODO(CB) docstrings
