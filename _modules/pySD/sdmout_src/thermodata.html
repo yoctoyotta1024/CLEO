@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>pySD.initsuperdropsbinary_src.rgens - CLEO 4.0 documentation</title>
+        <title>pySD.sdmout_src.thermodata - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -274,16 +274,16 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for pySD.initsuperdropsbinary_src.rgens</h1><div class="highlight"><pre>
+          <h1>Source code for pySD.sdmout_src.thermodata</h1><div class="highlight"><pre>
 <span></span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">----- CLEO -----</span>
-<span class="sd">File: rgens.py</span>
-<span class="sd">Project: initsuperdropsbinary_src</span>
-<span class="sd">Created Date: Friday 13th October 2023</span>
+<span class="sd">File: thermodata.py</span>
+<span class="sd">Project: sdmout_src</span>
+<span class="sd">Created Date: Tuesday 24th October 2023</span>
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">Last Modified: Wednesday 27th December 2023</span>
+<span class="sd">Last Modified: Monday 25th March 2024</span>
 <span class="sd">Modified By: CB</span>
 <span class="sd">-----</span>
 <span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
@@ -292,87 +292,141 @@
 <span class="sd">Copyright (c) 2023 MPI-M, Clara Bayley</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">various ways of generatring radii of</span>
-<span class="sd">superdroplets for their initial conditions</span>
+<span class="sd">python class to handle thermodynamics and wind fields</span>
+<span class="sd">data from SDM zarr store in cartesian</span>
+<span class="sd">domain</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
 
-<div class="viewcode-block" id="MonoAttrGen">
-<a class="viewcode-back" href="../../../pySD/initsuperdropsbinary_src/rgens.html#pySD.initsuperdropsbinary_src.rgens.MonoAttrGen">[docs]</a>
-<span class="k">class</span> <span class="nc">MonoAttrGen</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39; method to generate superdroplets with an</span>
-<span class="sd">    attribute all equal to attr0 &#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">thermoeqns</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr0</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">thermotryopen_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">attr0</span> <span class="o">=</span> <span class="n">attr0</span>
+  <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;thermodynamic fields dataset: &quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;zarr&quot;</span><span class="p">,</span> <span class="n">consolidated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">dataset</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Returns attribute for nsupers all</span>
-<span class="sd">        with the value of attr0 &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="thermovar4d_fromzarr">
+<a class="viewcode-back" href="../../../pySD/sdmout_src/thermodata.html#pySD.sdmout_src.thermodata.thermovar4d_fromzarr">[docs]</a>
+<span class="k">def</span> <span class="nf">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&#39;&#39;&#39;&#39; returns 4D variable with dims</span>
+<span class="sd">  [time, y, x, z] from zarr dataset &quot;ds&quot; &#39;&#39;&#39;</span>
 
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">nsupers</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-            <span class="n">nsupers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">nsupers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="n">attrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nsupers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attr0</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">attrs</span></div>
+  <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">reshape</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="SampleLog10RadiiGen">
-<a class="viewcode-back" href="../../../pySD/initsuperdropsbinary_src/rgens.html#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen">[docs]</a>
-<span class="k">class</span> <span class="nc">SampleLog10RadiiGen</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;method to generate superdroplet radii by randomly</span>
-<span class="sd">    sampling from bins that are linearly spaced in log10(r)</span>
-<span class="sd">    between rspan[0] and rspan[1] &#39;&#39;&#39;</span>
+<span class="k">class</span> <span class="nc">Thermodata</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rspan</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">rspan</span> <span class="o">=</span> <span class="n">rspan</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">thermotryopen_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Returns radii for nsupers sampled from rspan [m]&#39;&#39;&#39;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">consts</span> <span class="o">=</span> <span class="n">consts</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_radiisample</span><span class="p">(</span><span class="n">nsupers</span><span class="p">)</span> <span class="c1"># units [m]</span>
+    <span class="n">reshape</span> <span class="o">=</span> <span class="p">[</span><span class="n">ntime</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">ndims</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;press&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;temp&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;qvap&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;qcond&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_temp</span><span class="p">()</span>
 
-<div class="viewcode-block" id="SampleLog10RadiiGen.generate_radiisample">
-<a class="viewcode-back" href="../../../pySD/initsuperdropsbinary_src/rgens.html#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_radiisample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbins</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Divide rspan [m] into evenly spaced bins in log10(r).</span>
-<span class="sd">        If edges=True, return values of radii at edges of bins.</span>
-<span class="sd">        Else sample each bin randomly to obtain the radius</span>
-<span class="sd">        of &#39;nsupers&#39; no. of superdroplets &#39;&#39;&#39;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">press_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;press&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># probably hecto pascals</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">temp_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># probably kelvin</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">theta_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># probably kelvin</span>
 
-        <span class="k">if</span> <span class="n">nbins</span><span class="p">:</span>
-            <span class="n">log10redgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rspan</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">rspan</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">nbins</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># log10(r) bin edges</span>
+  <span class="k">def</span> <span class="nf">potential_temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; potential temperature, theta &#39;&#39;&#39;</span>
 
-            <span class="n">redgs</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">log10redgs</span><span class="p">)</span>
-            <span class="n">radii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">randomlysample_log10rbins</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="n">log10redgs</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">radii</span>  <span class="c1"># [m]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span></div>
+    <span class="n">press</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="o">*</span><span class="mi">100</span> <span class="c1"># convert from hPa to Pa</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">dry_pot_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">)</span>
 
+    <span class="k">return</span> <span class="n">theta</span>
 
-<div class="viewcode-block" id="SampleLog10RadiiGen.randomlysample_log10rbins">
-<a class="viewcode-back" href="../../../pySD/initsuperdropsbinary_src/rgens.html#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.randomlysample_log10rbins">[docs]</a>
-    <span class="k">def</span> <span class="nf">randomlysample_log10rbins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">log10redgs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; given the bin edges, randomly sample each bin of</span>
-<span class="sd">        log10(radius /m) and return the resultant radii [m]&#39;&#39;&#39;</span>
+  <span class="k">def</span> <span class="nf">saturationpressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; saturation pressure in hectoPascals &#39;&#39;&#39;</span>
 
-        <span class="n">log10r_binwidth</span> <span class="o">=</span> <span class="p">(</span><span class="n">log10redgs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">log10redgs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">nbins</span>
+    <span class="n">psat</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">saturation_pressure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span> <span class="c1"># [Pa]</span>
 
-        <span class="n">randlog10deltar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                                            <span class="n">high</span><span class="o">=</span><span class="n">log10r_binwidth</span><span class="p">,</span>
-                                            <span class="n">size</span><span class="o">=</span><span class="n">nbins</span><span class="p">)</span>
-        <span class="n">randlog10r</span> <span class="o">=</span> <span class="n">log10redgs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">randlog10deltar</span>
+    <span class="k">return</span>  <span class="n">psat</span> <span class="o">/</span> <span class="mi">100</span> <span class="c1"># [hPa]</span>
 
-        <span class="n">radii</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">randlog10r</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">vapourpressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;returns vapour pressure in hectoPascals &#39;&#39;&#39;</span>
 
-        <span class="k">return</span> <span class="n">radii</span>  <span class="c1"># [m]</span></div>
-</div>
+    <span class="n">p_pascals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="o">*</span><span class="mi">100</span> <span class="c1"># convert from hPa to Pa</span>
+    <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
+    <span class="n">pvap</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">vapour_pressure</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span> <span class="c1"># [Pa]</span>
 
+    <span class="k">return</span> <span class="n">pvap</span> <span class="o">/</span> <span class="mi">100</span> <span class="c1"># [hPa]</span>
+
+  <span class="k">def</span> <span class="nf">relative_humidity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; returns relative humidty and supersaturation &#39;&#39;&#39;</span>
+
+    <span class="n">p_pascals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="o">*</span><span class="mi">100</span> <span class="c1"># convert from hPa to Pa</span>
+    <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
+    <span class="n">relh</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">relative_humidity</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">relh</span>
+
+  <span class="k">def</span> <span class="nf">supersaturation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; returns relative humidty and supersaturation &#39;&#39;&#39;</span>
+
+    <span class="n">p_pascals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="o">*</span><span class="mi">100</span> <span class="c1"># convert from hPa to Pa</span>
+    <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
+    <span class="n">supersat</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">supersaturation</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">supersat</span>
+
+  <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;press&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span>
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;temp&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;qvap&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span>
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;qcond&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span>
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;theta&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span>
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;relh&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">relative_humidity</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;supersat&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">supersaturation</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;no known return provided for &quot;</span><span class="o">+</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot; key&quot;</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Winddata</span><span class="p">:</span>
+
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
+
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">thermotryopen_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">consts</span> <span class="o">=</span> <span class="n">consts</span>
+
+    <span class="n">reshape</span> <span class="o">=</span> <span class="p">[</span><span class="n">ntime</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">ndims</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">wvel</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;wvel&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">uvel</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;uvel&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">vvel</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;vvel&quot;</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">wvel_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;wvel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># probably hecto pascals</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">uvel_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;uvel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># probably hecto pascals</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">vvel_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;vvel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># probably hecto pascals</span>
+
+  <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;wvel&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wvel</span>
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;uvel&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uvel</span>
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;vvel&quot;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vvel</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;no known return provided for &quot;</span><span class="o">+</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot; key&quot;</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 </pre></div>
         </article>
       </div>

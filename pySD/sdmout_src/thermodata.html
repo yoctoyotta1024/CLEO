@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,7 +270,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -285,7 +285,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 —–
-Last Modified: Monday 20th November 2023
+Last Modified: Monday 25th March 2024
 Modified By: CB
 —–
 License: BSD 3-Clause “New” or “Revised” License
@@ -294,9 +294,16 @@ License: BSD 3-Clause “New” or “Revised” License
 Copyright (c) 2023 MPI-M, Clara Bayley
 —–
 File Description:
-python class to handle thermodynamic
+python class to handle thermodynamics and wind fields
 data from SDM zarr store in cartesian
 domain</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pySD.sdmout_src.thermodata.thermovar4d_fromzarr">
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.thermodata.</span></span><span class="sig-name descname"><span class="pre">thermovar4d_fromzarr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reshape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/thermodata.html#thermovar4d_fromzarr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.thermodata.thermovar4d_fromzarr" title="Link to this definition">#</a></dt>
+<dd><p>‘ returns 4D variable with dims
+[time, y, x, z] from zarr dataset “ds”</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -334,7 +341,7 @@ domain</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 22 March 2024</div>
+              Last updated on 26 March 2024</div>
           </div>
           <div class="right-details">
             
@@ -343,8 +350,27 @@ domain</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">THERMODATA</a><ul>
+<li><a class="reference internal" href="#pySD.sdmout_src.thermodata.thermovar4d_fromzarr"><code class="docutils literal notranslate"><span class="pre">thermovar4d_fromzarr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

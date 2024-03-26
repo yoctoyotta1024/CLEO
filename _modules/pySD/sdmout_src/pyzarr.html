@@ -283,7 +283,7 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">Last Modified: Monday 20th November 2023</span>
+<span class="sd">Last Modified: Monday 25th March 2024</span>
 <span class="sd">Modified By: CB</span>
 <span class="sd">-----</span>
 <span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
@@ -352,14 +352,19 @@
 
 <div class="viewcode-block" id="get_thermodata">
 <a class="viewcode-back" href="../../../pySD/sdmout_src/pyzarr.html#pySD.sdmout_src.pyzarr.get_thermodata">[docs]</a>
-<span class="k">def</span> <span class="nf">get_thermodata</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_thermodata</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">consts</span><span class="p">,</span> <span class="n">getwinds</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">  </span><span class="sd">&#39;&#39;&#39; returns a thermodynamic data in a dictionary. The value under</span>
 <span class="sd">  each key is the thermodynamics data in a 2D array</span>
 <span class="sd">  with dimensions [time, gridbox]. E.g. thermo[&quot;qvap&quot;][:,0] gives the</span>
 <span class="sd">  timeseries of qvap for the 0th gridbox. thermo[&quot;qvap][0] gives</span>
 <span class="sd">  the qvap of all gridboxes at the 0th output time &#39;&#39;&#39;</span>
 
-  <span class="k">return</span> <span class="n">thermodata</span><span class="o">.</span><span class="n">Thermodata</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">consts</span><span class="p">)</span></div>
+  <span class="n">thermo</span> <span class="o">=</span> <span class="n">thermodata</span><span class="o">.</span><span class="n">Thermodata</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">consts</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">getwinds</span><span class="p">:</span>
+    <span class="n">winds</span> <span class="o">=</span> <span class="n">thermodata</span><span class="o">.</span><span class="n">Winddata</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">consts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">thermo</span><span class="p">,</span> <span class="n">winds</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">thermo</span></div>
 
 
 <span class="k">def</span> <span class="nf">get_supers</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
@@ -446,7 +451,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 22 March 2024</div>
+              Last updated on 26 March 2024</div>
           </div>
           <div class="right-details">
             
