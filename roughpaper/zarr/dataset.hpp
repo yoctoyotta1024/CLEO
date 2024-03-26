@@ -101,12 +101,23 @@ class Dataset {
   }
 
   /**
-   * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and ensures
-   * the shape of the array matches the dimensions of the dataset.
+   * @brief Calls function to ensure the shape of the array matches the dimensions of the dataset.
    *
-   * Function writes data to an array in the dataset and update the metadata for the shape of
-   * the array to ensure the dimensions of the array are consistent with the dimensions of the
-   * dataset.
+   * @tparam T The data type of the array.
+   * @param xzarr An instance of XarrayZarrArray representing the array.
+   */
+  template <typename T>
+  void write_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
+    xzarr.write_arrayshape(datasetdims);
+  }
+
+  /**
+   * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls
+   * function to ensure the shape of the array matches the dimensions of the dataset.
+   *
+   * Function writes data to an array in the dataset and updates the metadata for the shape of
+   * the array to ensure the size of each dimension of the array is consistent with the
+   * dimensions of the dataset.
    *
    * @tparam T The data type of the array.
    * @param xzarr An instance of XarrayZarrArray representing the array.
