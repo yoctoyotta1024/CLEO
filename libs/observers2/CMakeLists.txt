@@ -4,7 +4,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set library name and print directory of this CMakeLists.txt (source directory of library)
-set(LIBNAME "runcleo")
+set(LIBNAME "observers2")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
@@ -12,8 +12,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
-"creategbxs.cpp"
-"createsupers.cpp"
+"obstest.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})
@@ -23,7 +22,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library
-set(LINKLIBS gridboxes observers2 superdrops zarr2)
+set(LINKLIBS gridboxes superdrops zarr2)
 target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 

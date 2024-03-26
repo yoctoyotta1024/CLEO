@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Monday 12th February 2024
+ * Last Modified: Tuesday 26th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,7 +31,7 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
-#include "observers/observers.hpp"
+#include "observers2/observers.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
@@ -52,7 +52,7 @@
 template <GridboxMaps GbxMaps, MicrophysicalProcess Microphys, Motion<GbxMaps> M, Observer Obs>
 class SDMMethods {
  private:
-  unsigned int couplstep;                     /**< Coupling timestep. */
+  unsigned int couplstep; /**< Coupling timestep. */
   MoveSupersInDomain<GbxMaps, M> movesupers;
   /**< object for super-droplets' MoveSupersInDomain with certain type of Motion. */
 
@@ -98,8 +98,8 @@ class SDMMethods {
   }
 
  public:
-  GbxMaps gbxmaps;  /**< object that is type of GridboxMaps. */
-  Obs obs;          /**< object that is type of Observer. */
+  GbxMaps gbxmaps; /**< object that is type of GridboxMaps. */
+  Obs obs;         /**< object that is type of Observer. */
 
   /**
    * @struct SDMMicrophysics
@@ -114,7 +114,7 @@ class SDMMethods {
    * @tparam Microphys Type of the MicrophysicalProcess.
    */
   struct SDMMicrophysics {
-    Microphys microphys;  /**< type of MicrophysicalProcess. */
+    Microphys microphys; /**< type of MicrophysicalProcess. */
 
     /**
      * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
