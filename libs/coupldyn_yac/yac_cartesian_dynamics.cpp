@@ -315,11 +315,9 @@ std::string CartesianDynamics::set_winds_from_binaries(const unsigned int nspace
       get_vvel = get_vvel_from_binary();
       infoend = ", u";
     case 2:  // 3-D or 2-D model
-      uvel_xfaces = thermodynamicvar_from_binary(uvel_filename);
       get_uvel = get_uvel_from_yac();
       infoend = ", v" + infoend;
     case 1:  // 3-D, 2-D or 1-D model
-      wvel_zfaces = thermodynamicvar_from_binary(wvel_filename);
       get_wvel = get_wvel_from_yac();
       infoend = "w" + infoend;
   }

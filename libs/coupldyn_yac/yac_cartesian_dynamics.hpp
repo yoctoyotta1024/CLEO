@@ -63,8 +63,6 @@ struct CartesianDynamics {
   std::vector<double> uvel;
   std::vector<double> wvel;
 
-  std::vector<double> wvel_zfaces;  // w velocity defined on coord3 faces of gridboxes
-  std::vector<double> uvel_xfaces;  // u velocity defined on coord1 faces of gridboxes
   std::vector<double> vvel_yfaces;  // v velocity defined on coord2 faces of gridboxes
 
   std::vector<double> vertex_latitudes;
