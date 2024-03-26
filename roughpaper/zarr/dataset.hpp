@@ -92,8 +92,8 @@ class Dataset {
 
   void consolidate_dimensions() const {
     if (ischangedims) {
-      // TODO(CB): set dimensions of dataset? Then: call write arrayshape with dimensions
-      // for all arrays in dataset (WIP) & call in destructor..?
+      // TODO(CB): check/set dimensions of dataset then call write_arrayshape for all arrays in
+      // dataset also use call in destructor..?
     }
   }
 };
