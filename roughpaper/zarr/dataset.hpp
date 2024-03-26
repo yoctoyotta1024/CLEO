@@ -42,7 +42,8 @@ class Dataset {
  private:
   ZarrGroup<Store> group;  ///< Reference to the zarr group object.
   std::unordered_map<std::string, size_t>
-      datasetdims;  ///< map from name of each dimension in dataset to their size
+      datasetdims;    ///< map from name of each dimension in dataset to their size
+  bool ischangedims;  ///< boolean is true if dimensions of dataset change
 
  public:
   /**
@@ -53,7 +54,7 @@ class Dataset {
    *
    * @param store The store object associated with the Dataset.
    */
-  explicit Dataset(Store &store) : group(store), datasetdims() {
+  explicit Dataset(Store &store) : group(store), datasetdims(), ischangedims(false) {
     store[".zattrs"] =
         "{\n"
         "  \"creator\": \"Clara Bayley\",\n"
@@ -63,10 +64,12 @@ class Dataset {
 
   void add_dimension(const std::pair<std::string, std::size_t> &dim) {
     datasetdims.insert({dim.first, dim.second});
+    ischangedims = true;
   }
 
   void set_dimension(const std::pair<std::string, std::size_t> &dim) {
     datasetdims.at(dim.first) = dim.second;
+    ischangedims = true;
   }
 
   template <typename T>
@@ -82,12 +85,16 @@ class Dataset {
   void write_to_array(XarrayZarrArray<Store, T> &xzarr,
                       const Buffer<T>::viewh_buffer h_data) const {
     xzarr.write_to_array(h_data);
-    xzarr.write_arrayshape(datasetdims);
+    if (ischangedims) {
+      xzarr.write_arrayshape(datasetdims);
+    }
   }
 
   void consolidate_dimensions() const {
-    // TODO(CB): set dimensions of dataset? Then: call write arrayshape with dimensions
-    // for all arrays in dataset (WIP)
+    if (ischangedims) {
+      // TODO(CB): set dimensions of dataset? Then: call write arrayshape with dimensions
+      // for all arrays in dataset (WIP) & call in destructor..?
+    }
   }
 };
 
