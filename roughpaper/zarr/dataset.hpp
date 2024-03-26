@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 25th March 2024
+ * Last Modified: Tuesday 26th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -81,7 +81,8 @@ class Dataset {
   template <typename T>
   void write_to_array(XarrayZarrArray<Store, T> &xzarr,
                       const Buffer<T>::viewh_buffer h_data) const {
-    xzarr.write_to_xarray_zarr_array(datasetdims, h_data);
+    xzarr.write_to_array(h_data);
+    xzarr.write_arrayshape(datasetdims);
   }
 
   void consolidate_dimensions() const {

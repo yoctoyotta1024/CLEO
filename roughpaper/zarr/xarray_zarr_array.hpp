@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 25th March 2024
+ * Last Modified: Tuesday 26th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -107,19 +107,6 @@ class XarrayZarrArray {
   ZarrArray<Store, T> zarr;                      ///< zarr array in store
   std::vector<std::string> dimnames;  ///< ordered list of names of each dimenion of array
 
-  /* set the shape of the array and its dimensions
-  given the dimensions in the dataset and order of dims in dimnames */
-  void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
-    auto arrayshape = std::vector<size_t>({});
-
-    for (auto& dim : dimnames) {
-      const auto dsize = datasetdims.at(dim);
-      arrayshape.push_back(dsize);
-    }
-
-    zarr.write_arrayshape(arrayshape);
-  }
-
   std::unordered_map<std::string, size_t> get_arraydims() const {
     auto arraydims = std::unordered_map<std::string, size_t>();
     auto arrayshape = zarr.get_arrayshape();
@@ -148,26 +135,32 @@ class XarrayZarrArray {
 
   /**
    * @brief Writes data from Kokkos view in host memory to chunks of a Zarr array in a store
-   * via a buffer such that Zarr array in compatible with NetCDF and Xarray.
+   * via a buffer. Function does *not* write metadata to zarray .json file.
    *
    * Calls ZarrArray's write_to_array function to write data from Kokkos view in host memory to
-   * chunks of a Zarr array in a store. Then overwrites the arrayshape and corresponding metadata
-   * to ensure the shape of the array is consistent with the dimensions of the dataset, as required
-   * by Xarray and NetCDF.
+   * chunks of a Zarr array in a store.
    *
    * @param h_data The data in a Kokkos view in host memory which should be written to the array
    * in a store.
    */
-  void write_to_xarray_zarr_array(const std::unordered_map<std::string, size_t>& datasetdims,
-                                  const viewh_buffer h_data) {
-    zarr.write_to_array(h_data);
-    write_arrayshape(datasetdims);  // overwrite zarr array shape with xarray dataset dimensions
+  void write_to_array(const viewh_buffer h_data) { zarr.write_to_array(h_data); };
 
-    // TODO(CB) call write_arrayshape(datasetdims); after this function call in dataset once
-    // dimensions of dataset have been consolidated (see WIP in dataset)
+  /* Overwrites .zarray json file metadata to ensure the shape of the array is size of each
+  of its dimensions according to the dataset. The order of the dimensions in array's shape is
+    the order of dimensions in dimnames. Setting shape according to size of dataset dimensions makes
+    zarr array consistent with the dimensions of the dataset as required by Xarray and NetCDF.*/
+  void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
+    auto arrayshape = std::vector<size_t>({});
 
-    // TODO(CB) docstrings
-  };
+    for (auto& dim : dimnames) {
+      const auto dsize = datasetdims.at(dim);
+      arrayshape.push_back(dsize);
+    }
+
+    zarr.write_arrayshape(arrayshape);
+  }
 };
 
 #endif  // ROUGHPAPER_ZARR_XARRAY_ZARR_ARRAY_HPP_
+
+// TODO(CB) docstrings
