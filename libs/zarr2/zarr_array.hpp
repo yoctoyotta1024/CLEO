@@ -204,21 +204,17 @@ class ZarrArray {
    * @return The remaining data that was not written to chunks.
    */
   subviewh_buffer write_chunks_to_store(const subviewh_buffer h_data) {
+    const auto csz = buffer.get_chunksize();
+
     if (buffer.get_space() == 0) {
       totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, buffer);
     }
 
-    const auto h_data_nchunks = size_t{h_data.extent(0) / buffer.get_chunksize()};
-    for (size_t nn = 0; nn < h_data_nchunks; ++nn) {
-      const auto csz = buffer.get_chunksize();
-      const auto refs = kkpair_size_t({nn * csz, (nn + 1) * csz});
-      const auto h_data_chunk = Kokkos::subview(h_data, refs);
-      totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, h_data_chunk);
-    }
+    const auto nchunks_data = size_t{h_data.extent(0) / csz};
+    totnchunks = chunks.write_chunks_parallel(store, name, totnchunks, h_data, nchunks_data, csz);
+    totndata = totnchunks * csz;
 
-    totndata = totnchunks * buffer.get_chunksize();
-
-    const auto n_to_chunks = h_data_nchunks * buffer.get_chunksize();
+    const auto n_to_chunks = nchunks_data * csz;
     const auto refs = kkpair_size_t({n_to_chunks, h_data.extent(0)});
     return Kokkos::subview(h_data, refs);
   }
@@ -349,4 +345,5 @@ class ZarrArray {
     assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
   }
 };
+
 #endif  // LIBS_ZARR2_ZARR_ARRAY_HPP_
