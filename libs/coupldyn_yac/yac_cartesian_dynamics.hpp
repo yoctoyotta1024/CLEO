@@ -59,13 +59,21 @@ struct CartesianDynamics {
   std::vector<double> temp;
   std::vector<double> qvap;
   std::vector<double> qcond;
+  std::vector<double> united_edge_data;
+  std::vector<double> uvel;
+  std::vector<double> wvel;
 
-  std::vector<double> wvel_zfaces;  // w velocity defined on coord3 faces of gridboxes
-  std::vector<double> uvel_xfaces;  // u velocity defined on coord1 faces of gridboxes
   std::vector<double> vvel_yfaces;  // v velocity defined on coord2 faces of gridboxes
 
+  std::vector<double> vertex_latitudes;
+  std::vector<double> vertex_longitudes;
+
   // YAC field ids
-  int pressure_yac_id, temp_yac_id, qvap_yac_id, qcond_yac_id;
+  int pressure_yac_id;
+  int temp_yac_id;
+  int qvap_yac_id;
+  int qcond_yac_id;
+  int hor_wind_velocities_yac_id;
 
   /* depending on nspacedims, read in data
   for 1-D, 2-D or 3-D wind velocity components */
@@ -87,21 +95,17 @@ struct CartesianDynamics {
   /* returns vector of wvel retrieved from binary
   file called 'filename' where wvel is defined on
   the z-faces (coord3) of gridboxes */
-  get_winds_func get_wvel_from_binary() const;
+  get_winds_func get_wvel_from_yac() const;
 
   /* returns vector of yvel retrieved from binary
   file called 'filename' where uvel is defined on
   the x-faces (coord1) of gridboxes */
-  get_winds_func get_uvel_from_binary() const;
+  get_winds_func get_uvel_from_yac() const;
 
   /* returns vector of vvel retrieved from binary
   file called 'filename' where vvel is defined on
   the y-faces (coord2) of gridboxes */
   get_winds_func get_vvel_from_binary() const;
-
-  void check_thermodynamics_vectorsizes(const unsigned int nspacedims,
-                                        const std::array<size_t, 3> &ndims,
-                                        const unsigned int nsteps) const;
 
  public:
   CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
@@ -160,7 +164,6 @@ struct YacDynamics {
   void run_step(const unsigned int t_mdl, const unsigned int t_next) const {
     // Temporary simple solution to prevent a 4th coupling with yac from happening
     if (on_step(t_mdl) && t_mdl != end_time * 100) {
-      std::cout << "END_TIME: " << end_time << " " << t_mdl << std::endl;
       run_dynamics(t_mdl);
     }
   }
