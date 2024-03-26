@@ -217,6 +217,8 @@ class Chunks {
    * chunks of the array already existing.After writing all the chunks, the total number of chunks
    * is updated accordingly.
    *
+   * TODO(all) parallelise this for loop for writing chunks
+   *
    * @tparam Store The type of the store.
    * @tparam T The type of the data elements stored in the buffer.
    * @param store Reference to the store where the chunks will be written.
