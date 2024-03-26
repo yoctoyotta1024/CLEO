@@ -30,8 +30,7 @@
 #include <string_view>
 #include <vector>
 
-using HostSpace = Kokkos::DefaultHostExecutionSpace;  // TODO(CB) (re-)move definitions
-using kkpair_size_t = Kokkos::pair<size_t, size_t>;   // TODO(CB) (re-)move definitions
+#include "../kokkosaliases.hpp"
 
 /**
  * @brief A class template for managing a buffer of elements of data type T.

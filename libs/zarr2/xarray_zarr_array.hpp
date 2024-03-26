@@ -134,8 +134,8 @@ inline std::string make_xarray_metadata(const std::string_view units, const doub
 template <typename Store, typename T>
 class XarrayZarrArray {
  private:
-  using viewh_buffer = Buffer<T>::viewh_buffer;  // TODO(CB) move aliases to aliases.hpp
-  ZarrArray<Store, T> zarr;                      ///< zarr array in store
+  using viewh_buffer = Buffer<T>::viewh_buffer;
+  ZarrArray<Store, T> zarr;           ///< zarr array in store
   std::vector<std::string> dimnames;  ///< ordered list of names of each dimenion of array
   std::vector<size_t> arrayshape;     ///< current size of the array along each of its dimensions
 
