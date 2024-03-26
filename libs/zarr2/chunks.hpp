@@ -210,9 +210,9 @@ class Chunks {
   }
 
   template <typename Store, typename T>
-  size_t write_chunks_parallel(Store& store, const std::string_view name, const size_t totnchunks,
-                               const Buffer<T>::subviewh_buffer h_data, const size_t nchunks,
-                               const size_t chunksize) const {
+  size_t write_chunks(Store& store, const std::string_view name,
+                      const Buffer<T>::subviewh_buffer h_data, const size_t totnchunks,
+                      const size_t chunksize, const size_t nchunks) const {
     for (size_t nn = 0; nn < nchunks; ++nn) {
       const auto refs = kkpair_size_t({nn * chunksize, (nn + 1) * chunksize});
       const auto data_chunk = Kokkos::subview(h_data, refs);
