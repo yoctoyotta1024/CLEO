@@ -82,7 +82,7 @@ randcoord = False       # sample SD spatial coordinates randomly or not
 ### --- settings for 2D Thermodynamics --- ###
 PRESSz0 = 101500 # [Pa]
 TEMPz0 = 300     # [K]
-qvapz0 = 0.01    # [Kg/Kg]
+qvapz0 = 0.05    # [Kg/Kg]
 qcondz0 = 0.001  # [Kg/Kg]
 WMAX = 1.5       # [m/s]
 Zlength = 1500   # [m]
