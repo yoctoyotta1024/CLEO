@@ -20,40 +20,116 @@
  */
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_DualView.hpp>
+#include <array>
+#include <concepts>
 #include <iostream>
-#include <unordered_map>
-#include <vector>
 
+#include "./observers2/observers.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/createcartesianmaps.hpp"
+#include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
+#include "coupldyn_fromfile/fromfilecomms.hpp"
+#include "gridboxes/gridboxmaps.hpp"
+#include "initialise/config.hpp"
+#include "initialise/initgbxs_null.hpp"
+#include "initialise/initsupers_frombinary.hpp"
+#include "initialise/timesteps.hpp"
+#include "runcleo/coupleddynamics.hpp"
+#include "runcleo/couplingcomms.hpp"
+#include "runcleo/initialconditions.hpp"
+#include "runcleo/runcleo.hpp"
+#include "runcleo/sdmmethods.hpp"
+#include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/motion.hpp"
 #include "zarr2/dataset.hpp"
 #include "zarr2/fsstore.hpp"
 
-using viewh_type = Kokkos::View<double *, Kokkos::HostSpace>;  // view of doubles data
+inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
+                                     FSStore &store) {
+  return NullObserver{};
+}
+
+inline InitialConditions auto create_initconds(const Config &config) {
+  const InitSupersFromBinary initsupers(config);
+  const InitGbxsNull initgbxs(config);
+
+  return InitConds(initsupers, initgbxs);
+}
+
+inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
+                                            const unsigned int couplstep,
+                                            const unsigned int t_end) {
+  const auto h_ndims(gbxmaps.ndims_hostcopy());
+  const std::array<size_t, 3> ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
+
+  const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
+
+  return FromFileDynamics(config, couplstep, ndims, nsteps);
+}
+
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, FSStore &store) {
+  const auto couplstep = (unsigned int)tsteps.get_couplstep();
+  const GridboxMaps auto gbxmaps =
+      create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
+  const MicrophysicalProcess auto microphys = NullMicrophysicalProcess{};
+  const Motion<CartesianMaps> auto movesupers = NullMotion{};
+  const Observer auto obs = create_observer(config, tsteps, store);
+  return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
+}
 
 int main(int argc, char *argv[]) {
+  Kokkos::Timer kokkostimer;
+
+  /* Read input parameters from configuration file(s) */
+  const Config config("/home/m/m300950/CLEO/roughpaper/share/config.txt");
+  const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
+
+  /* Create zarr store for writing output to storage */
+  auto fsstore = FSStore(config.zarrbasedir);
+
+  /* Initial conditions for CLEO run */
+  const InitialConditions auto initconds = create_initconds(config);
+
   Kokkos::initialize(argc, argv);
   {
-    const std::filesystem::path basedir("/home/m/m300950/CLEO/roughpaper/build/bin/dataset.zarr");
-    auto store = FSStore(basedir);
-    auto dataset = Dataset(store);
+    /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
+    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
 
-    auto state_observer = StateObserver(obsstep, store, maxchunk, ngbxs);
+    /* Solver of dynamics coupled to CLEO SDM */
+    CoupledDynamics auto coupldyn(
+        create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end()));
+
+    /* coupling between coupldyn and SDM */
+    const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
+
+    /* Run CLEO (SDM coupled to dynamics solver) */
+    const RunCLEO runcleo(sdm, coupldyn, comms);
+    // runcleo(initconds, tsteps.get_t_end()); // WIP
   }
   Kokkos::finalize();
+
+  const auto ttot = double{kokkostimer.seconds()};
+  std::cout << "-------------------------------\n"
+               "Total Program Duration: "
+            << ttot << "s \n-------------------------------\n";
 }
 
-template <typename Store>
-void test_dataset(Dataset<Store> &dataset) {
-  // arrays of h_data returned by observer (maybe on device)
-  auto h_data = observer();
+// WIP below
+// auto dataset = Dataset(store);
+// auto state_observer = StateObserver(obsstep, store, maxchunk, ngbxs);
 
-  dataset.add_dimension({"SdId", 0});
-  auto xzarr = dataset.template create_array<double>("radius", "m", "<f8", 1e-6, {6},
-                                                     {"SdId"});  // shape = [0], chunks = 0,1
+// template <typename Store>
+// void test_dataset(Dataset<Store> &dataset) {
+//   // arrays of h_data returned by observer (maybe on device)
+//   auto h_data = observer();
 
-  dataset.set_dimension({"SdId", 8});
-  dataset.write_to_array(xzarr, h_data);  // shape = [8], chunks = 0,1
+//   dataset.add_dimension({"SdId", 0});
+//   auto xzarr = dataset.template create_array<double>("radius", "m", "<f8", 1e-6, {6},
+//                                                      {"SdId"});  // shape = [0], chunks = 0,1
 
-  dataset.set_dimension({"SdId", 10});
-  dataset.write_arrayshape(xzarr);  // shape = [10], chunks = 0,1
-}
+//   dataset.set_dimension({"SdId", 8});
+//   dataset.write_to_array(xzarr, h_data);  // shape = [8], chunks = 0,1
+
+//   dataset.set_dimension({"SdId", 10});
+//   dataset.write_arrayshape(xzarr);  // shape = [10], chunks = 0,1
+// }
