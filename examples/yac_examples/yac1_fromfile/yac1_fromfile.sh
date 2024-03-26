@@ -1,8 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=yac1
-#SBATCH --partition=gpu
+#SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --gpus=1
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
 #SBATCH --time=00:10:00
@@ -64,9 +63,7 @@ kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_S
 kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 
 # flags for device parallelism (e.g. on gpus)
-kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON \
--DKokkos_ENABLE_CUDA_CONSTEXPR=ON -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON \
--DCUDA_ROOT=${CUDA_ROOT} -DNVCC_WRAPPER_DEFAULT_COMPILER=${CXX}"
+kokkosdevice=""
 ### ---------------------------------------------------- ###
 
 ### ------------------ build with cmake ---------------- ###
