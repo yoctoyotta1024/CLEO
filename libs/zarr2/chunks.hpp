@@ -175,15 +175,15 @@ class Chunks {
    * @tparam T The type of the data elements stored in the buffer.
    * @param store Reference to the store where the chunk will be written.
    * @param name Name of the array in the store where the chunk will be written.
-   * @param totnchunks The total number of chunks of the array already written.
+   * @param chunk_num The total number of chunks of the array already written.
    * @param buffer The buffer containing the data to be written to the chunk.
    * @return The updated total number of chunks after writing.
    */
   template <typename Store, typename T>
-  size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
+  size_t write_chunk(Store& store, const std::string_view name, const size_t chunk_num,
                      Buffer<T>& buffer) const {
-    buffer.write_buffer_to_chunk(store, name, chunk_label(totnchunks));
-    return totnchunks + 1;
+    buffer.write_buffer_to_chunk(store, name, chunk_label(chunk_num));
+    return chunk_num + 1;
   }
 
   /**
@@ -197,16 +197,50 @@ class Chunks {
    * @tparam T The type of the data elements stored in the buffer.
    * @param store Reference to the store where the chunk will be written.
    * @param name Name of the array in the store where the chunk will be written.
-   * @param totnchunks The total number of chunks of the array already written.
+   * @param chunk_num The total number of chunks of the array already written.
    * @param h_data_chunk The view containing the data in host memory to be written to the chunk.
    * @return The updated total number of chunks after writing.
    */
   template <typename Store, typename T>
-  size_t write_chunk(Store& store, const std::string_view name, const size_t totnchunks,
+  size_t write_chunk(Store& store, const std::string_view name, const size_t chunk_num,
                      const Buffer<T>::subviewh_buffer h_data_chunk) const {
-    store[std::string(name) + '/' + chunk_label(totnchunks)].template operator= <T>(h_data_chunk);
+    store[std::string(name) + '/' + chunk_label(chunk_num)].template operator= <T>(h_data_chunk);
 
-    return totnchunks + 1;
+    return chunk_num + 1;
+  }
+
+  /**
+   * @brief Writes multiple chunks to the store and increments the total number of chunks written.
+   *
+   * This function writes "nchunks" whole number of chunks from the data stored in the Kokkos view
+   * (in host memory) in an array called "name" in the specified store given the total number of
+   * chunks of the array already existing.After writing all the chunks, the total number of chunks
+   * is updated accordingly.
+   *
+   * TODO(all) parallelise this for loop for writing chunks
+   *
+   * @tparam Store The type of the store.
+   * @tparam T The type of the data elements stored in the buffer.
+   * @param store Reference to the store where the chunks will be written.
+   * @param name Name of the array in the store where the chunks will be written.
+   * @param h_data The view containing the data in host memory to be written to the chunks.
+   * @param totnchunks The total number of chunks of the array already written.
+   * @param chunksize The size of each chunk.
+   * @param nchunks The number of chunks to write.
+   * @return The updated total number of chunks after writing.
+   */
+  template <typename Store, typename T>
+  size_t write_chunks(Store& store, const std::string_view name,
+                      const Buffer<T>::subviewh_buffer h_data, const size_t totnchunks,
+                      const size_t chunksize, const size_t nchunks) const {
+    for (size_t nn = 0; nn < nchunks; ++nn) {
+      const auto refs = kkpair_size_t({nn * chunksize, (nn + 1) * chunksize});
+      const auto data_chunk = Kokkos::subview(h_data, refs);
+      const auto chunk_num = totnchunks + nn;
+      write_chunk<Store, T>(store, name, chunk_num, data_chunk);
+    }
+
+    return totnchunks + nchunks;
   }
 };
 
