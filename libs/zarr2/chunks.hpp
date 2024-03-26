@@ -209,6 +209,24 @@ class Chunks {
     return chunk_num + 1;
   }
 
+  /**
+   * @brief Writes multiple chunks to the store and increments the total number of chunks written.
+   *
+   * This function writes "nchunks" whole number of chunks from the data stored in the Kokkos view
+   * (in host memory) in an array called "name" in the specified store given the total number of
+   * chunks of the array already existing.After writing all the chunks, the total number of chunks
+   * is updated accordingly.
+   *
+   * @tparam Store The type of the store.
+   * @tparam T The type of the data elements stored in the buffer.
+   * @param store Reference to the store where the chunks will be written.
+   * @param name Name of the array in the store where the chunks will be written.
+   * @param h_data The view containing the data in host memory to be written to the chunks.
+   * @param totnchunks The total number of chunks of the array already written.
+   * @param chunksize The size of each chunk.
+   * @param nchunks The number of chunks to write.
+   * @return The updated total number of chunks after writing.
+   */
   template <typename Store, typename T>
   size_t write_chunks(Store& store, const std::string_view name,
                       const Buffer<T>::subviewh_buffer h_data, const size_t totnchunks,
