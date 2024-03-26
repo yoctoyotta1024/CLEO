@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 22nd March 2024
+Last Modified: Tuesday 26th March 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -33,14 +33,13 @@ sys.path.append(path2CLEO)  # for imports from pySD package
 # for imports from example plotting package
 sys.path.append(path2CLEO+"/examples/exampleplotting/")
 
+from src import gen_input_thermo, plot_output_thermo
 from plotssrc import pltsds, pltmoms
 from pySD.sdmout_src import *
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.initsuperdropsbinary_src import *
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
-from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
 
@@ -68,7 +67,7 @@ savefigpath = path2build+"/bin/"  # directory for saving figures
 ### --- settings for 2-D gridbox boundaries --- ###
 zgrid = [0, 1500, 60]           # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid = [0, 1500, 60]           # evenly spaced xhalf coords [m]
-ygrid = np.array([0, 10, 20])   # array of yhalf coords [m]
+ygrid = np.array([0, 100, 200, 300])   # array of yhalf coords [m]
 
 ### --- settings for initial superdroplets --- ###
 # settings for initial superdroplet coordinates
@@ -81,17 +80,15 @@ numconc = 5e8           # total no. conc of real droplets [m^-3]
 randcoord = False       # sample SD spatial coordinates randomly or not
 
 ### --- settings for 2D Thermodynamics --- ###
-PRESS0 = 100000 # [Pa]
-THETA = 298.15  # [K]
-qcond = 0.0     # [Kg/Kg]
-WMAX = 0.6      # [m/s]
-VVEL = 2.0      # [m/s]
-Zlength = 1500  # [m]
-Xlength = 1500  # [m]
-qvapmethod = "sratio"
-Zbase = 750     # [m]
-moistlayer = False
-sratios = [1.0, 1.0]  # s_ratio [below, above] Zbase
+PRESSz0 = 101500 # [Pa]
+TEMPz0 = 300     # [K]
+qvapz0 = 0.01    # [Kg/Kg]
+qcondz0 = 0.001  # [Kg/Kg]
+WMAX = 1.5       # [m/s]
+Zlength = 1500   # [m]
+Xlength = 1500   # [m]
+VMAX = 1.0       # [m/s]
+Ylength = 300    # [m]
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -116,10 +113,8 @@ cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0,
-                                        THETA, qvapmethod, sratios, Zbase,
-                                        qcond, WMAX, Zlength, Xlength,
-                                        VVEL, moistlayer)
+thermodyngen = gen_input_thermo.TimeVarying3DThermo(PRESSz0, TEMPz0, qvapz0, qcondz0,
+                                                    WMAX, Zlength, Xlength, VMAX, Ylength)
 cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
                                     constsfile, gridfile)
 
@@ -172,23 +167,25 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
 totnsupers = pyzarr.get_totnsupers(dataset)
+thermo, winds = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"],
+                                      consts, getwinds=True)
 
-# 4. plot results
+# plot super-droplet results
 savename = savefigpath + "yac1_totnsupers_validation.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-nsample = 500
+nsample = 1000
 savename = savefigpath + "yac1_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
                                              config["totnsupers"],
                                              nsample,
                                              savename=savename,
-                                             arrows=False)
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+                                             arrows=False,
+                                             israndom=False)
 
-# TODO(CB): make superdroplet 2dmotion plot not a random sample
-# TODO(CB): plot thermodata
-# TODO(CB): plot winds
-# TODO(CB): make thermo and winds time varying
-# TODO(CB): turn off initial conditions plots for thermo
+# plot thermodynamics results
+plot_output_thermo.plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds,
+                                                         savedir=savefigpath)
+
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###

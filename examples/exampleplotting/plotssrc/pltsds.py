@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 21st November 2023
+Last Modified: Monday 25th March 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -126,14 +126,17 @@ def plot_randomsample_superdrops(time, sddata, totnsupers,
 
 def plot_randomsample_superdrops_2dmotion(sddata, totnsupers,
                                           nsample, savename="",
-                                          arrows=False):
+                                          arrows=False, israndom=True):
   ''' plot timeseries of the attributes of a
   random sample of superdroplets '''
 
   fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6,6))
 
   minid, maxid = 0, int(totnsupers) # largest value of ids to sample
-  ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
+  if israndom:
+    ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
+  else:
+    ids2plot = np.linspace(0, maxid-1, nsample, dtype=int)
 
   mks = MarkerStyle('o', fillstyle='full')
   coordz = sdtracing.attribute_for_superdroplets_sample(sddata, "coord3",
