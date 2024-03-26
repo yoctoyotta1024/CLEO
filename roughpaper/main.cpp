@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 25th March 2024
+ * Last Modified: Tuesday 26th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -162,5 +162,7 @@ void test_dataset(Dataset<Store> &dataset) {
 
   dataset.set_dimension({"SdId", 10});
   dataset.write_to_array(xzarr, h_data);
-  dataset.consolidate_dimensions();
+
+  dataset.set_dimension({"SdId", 8});
+  dataset.write_arrayshape(xzarr);
 }
