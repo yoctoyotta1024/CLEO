@@ -44,7 +44,6 @@
 template <typename T>
 struct Buffer {
  public:
-  // TODO(CB) move aliases to aliases.hpp
   using viewh_buffer = Kokkos::View<T*, Kokkos::HostSpace>;  /// View of buffer type on host
   using subviewh_buffer = Kokkos::Subview<viewh_buffer, kkpair_size_t>;  ///< Subview of host view
 
