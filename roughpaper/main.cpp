@@ -158,11 +158,12 @@ void test_dataset(Dataset<Store> &dataset) {
   auto h_data = observer();
 
   dataset.add_dimension({"SdId", 0});
-  auto xzarr = dataset.template create_array<double>("xarray_r1d", "m", "<f8", 1e-6, {6}, {"SdId"});
-
-  dataset.set_dimension({"SdId", 10});
-  dataset.write_to_array(xzarr, h_data);
+  auto xzarr = dataset.template create_array<double>("xarray_r1d", "m", "<f8", 1e-6, {6},
+                                                     {"SdId"});  // shape = [0], chunks = 0,1
 
   dataset.set_dimension({"SdId", 8});
-  dataset.write_arrayshape(xzarr);
+  dataset.write_to_array(xzarr, h_data);  // shape = [8], chunks = 0,1
+
+  dataset.set_dimension({"SdId", 10});
+  dataset.write_arrayshape(xzarr);  // shape = [10], chunks = 0,1
 }
