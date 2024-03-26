@@ -165,21 +165,6 @@ class XarrayZarrArray {
   }
 
   /**
-   * @brief Get the name and size of the dimensions of the array.
-   *
-   * @return An unordered map containing the dimensions of the array.
-   */
-  std::unordered_map<std::string, size_t> get_arraydims() const {
-    auto arraydims = std::unordered_map<std::string, size_t>();
-    auto arrayshape = zarr.get_arrayshape();
-    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
-      arraydims.insert({dimnames.at(aa), arrayshape.at(aa)});
-    }
-
-    return arraydims;
-  }
-
-  /**
    * @brief Writes data from Kokkos view in host memory to chunks of a Zarr array in a store
    * via a buffer. Function does *not* write metadata to zarray .json file.
    *
