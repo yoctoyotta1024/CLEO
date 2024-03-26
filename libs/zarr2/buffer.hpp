@@ -61,7 +61,7 @@ struct Buffer {
     auto buffer_ = buffer;  // Copy of view for lambda functions using buffer
 
     Kokkos::parallel_for(
-        "init_buffer", Kokkos::RangePolicy<HostSpace>(0, chunksize),
+        "reset_buffer", Kokkos::RangePolicy<HostSpace>(0, chunksize),
         [buffer_](const size_t& jj) { buffer_(jj) = std::numeric_limits<T>::max(); });
     fill = 0;
   }
