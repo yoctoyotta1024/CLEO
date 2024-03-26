@@ -104,7 +104,7 @@ class Dataset {
    * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and ensures
    * the shape of the array matches the dimensions of the dataset.
    *
-   * Function writes data to an array in the dataset and overwrites the metadata for the shape of
+   * Function writes data to an array in the dataset and update the metadata for the shape of
    * the array to ensure the dimensions of the array are consistent with the dimensions of the
    * dataset.
    *

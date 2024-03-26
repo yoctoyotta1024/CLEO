@@ -25,6 +25,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <algorithm>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -204,12 +205,17 @@ class XarrayZarrArray {
    * @param datasetdims Dictionary like object for the dimensions of the dataset.
    */
   void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
+    auto ischange = std::vector<int>(arrayshape.size(), 0);
+
     for (size_t aa = 0; aa < dimnames.size(); ++aa) {
       const auto dsize = datasetdims.at(dimnames.at(aa));
+      ischange.at(aa) = dsize - arrayshape.at(aa);
       arrayshape.at(aa) = dsize;
     }
 
-    zarr.write_arrayshape(arrayshape);
+    if (std::any_of(ischange.begin(), ischange.end(), [](bool b) { return b; })) {
+      zarr.write_arrayshape(arrayshape);
+    }
   }
 };
 
