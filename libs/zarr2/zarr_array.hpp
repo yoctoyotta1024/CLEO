@@ -211,7 +211,8 @@ class ZarrArray {
     }
 
     const auto nchunks_data = size_t{h_data.extent(0) / csz};
-    totnchunks = chunks.write_chunks_parallel(store, name, totnchunks, h_data, nchunks_data, csz);
+    totnchunks =
+        chunks.write_chunks_parallel<Store, T>(store, name, totnchunks, h_data, nchunks_data, csz);
     totndata = totnchunks * csz;
 
     const auto n_to_chunks = nchunks_data * csz;
