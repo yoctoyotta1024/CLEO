@@ -13,7 +13,7 @@ message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -g -gdwarf-4")
 
 # Set libraries from CLEO to link with executable
-set(CLEOLIBS coupldyn_fromfile cartesiandomain gridboxes initialise runcleo superdrops zarr2)
+set(CLEOLIBS coupldyn_fromfile cartesiandomain gridboxes initialise runcleo superdrops zarr2 observers2)
 
 # create primary executable "test"
 add_executable(test main.cpp)

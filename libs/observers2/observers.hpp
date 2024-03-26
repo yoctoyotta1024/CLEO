@@ -21,15 +21,15 @@
  * from a gridbox's thermostate to the terminal
  */
 
-#ifndef ROUGHPAPER_OBSERVERS2_OBSERVERS_HPP_
-#define ROUGHPAPER_OBSERVERS2_OBSERVERS_HPP_
+#ifndef LIBS_OBSERVERS2_OBSERVERS_HPP_
+#define LIBS_OBSERVERS2_OBSERVERS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
 
-#include "../../libs/cleoconstants.hpp"
-#include "../../libs/gridboxes/gridbox.hpp"
-#include "../../libs/kokkosaliases.hpp"
+#include "../cleoconstants.hpp"
+#include "../kokkosaliases.hpp"
+#include "gridboxes/gridbox.hpp"
 
 /* concept Observer is all types that have functions
 for timestepping and at_start_step as constrained here */
@@ -172,4 +172,4 @@ struct ConstTstepObserver {
   }
 };
 
-#endif  // ROUGHPAPER_OBSERVERS2_OBSERVERS_HPP_
+#endif  // LIBS_OBSERVERS2_OBSERVERS_HPP_
