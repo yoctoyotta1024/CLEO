@@ -132,5 +132,3 @@ class Dataset {
 };
 
 #endif  // ROUGHPAPER_ZARR_DATASET_HPP_
-
-// TODO(CB) docstrings
