@@ -135,6 +135,7 @@ class XarrayZarrArray {
   using viewh_buffer = Buffer<T>::viewh_buffer;  // TODO(CB) move aliases to aliases.hpp
   ZarrArray<Store, T> zarr;                      ///< zarr array in store
   std::vector<std::string> dimnames;  ///< ordered list of names of each dimenion of array
+  std::vector<size_t> arrayshape;     ///< current size of the array along each of its dimensions
 
  public:
   /**
@@ -155,13 +156,28 @@ class XarrayZarrArray {
                   const std::vector<size_t>& chunkshape, const std::vector<std::string>& dimnames)
       : zarr(store, name, dtype, chunkshape, true,
              reduced_arrayshape_from_dims(datasetdims, dimnames)),
-        dimnames(dimnames) {
+        dimnames(dimnames),
+        arrayshape(dimnames.size(), 0) {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
     write_arrayshape(datasetdims);
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
+  }
+
+  /**
+   * @brief Returns the name and size of the dimensions of the array (unordered).
+   *
+   * @return An unordered map containing the current dimensions of the array.
+   */
+  std::unordered_map<std::string, size_t> get_arraydims() const {
+    auto arraydims = std::unordered_map<std::string, size_t>();
+    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
+      arraydims.insert({dimnames.at(aa), arrayshape.at(aa)});
+    }
+
+    return arraydims;
   }
 
   /**
@@ -177,8 +193,9 @@ class XarrayZarrArray {
   void write_to_array(const viewh_buffer h_data) { zarr.write_to_array(h_data); };
 
   /**
-   * @brief Overwrites .zarray json file with metadata to ensure the shape of the array along each
-   * dimension has the same size as each of its dimensions according to the dataset.
+   * @brief Sets shape of array along each dimension to be the same size as each of its dimensions
+   * according to the dataset. Then overwrites the .zarray json file with metadata containing the
+   * new shape of the array.
    *
    * The order of the dimensions in the array's shape is the order of dimensions in dimnames
    * (outermost -> innermost). Setting the shape to be conistent with the size of the dataset's
@@ -187,11 +204,9 @@ class XarrayZarrArray {
    * @param datasetdims Dictionary like object for the dimensions of the dataset.
    */
   void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
-    auto arrayshape = std::vector<size_t>({});
-
-    for (auto& dim : dimnames) {
-      const auto dsize = datasetdims.at(dim);
-      arrayshape.push_back(dsize);
+    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
+      const auto dsize = datasetdims.at(dimnames.at(aa));
+      arrayshape.at(aa) = dsize;
     }
 
     zarr.write_arrayshape(arrayshape);

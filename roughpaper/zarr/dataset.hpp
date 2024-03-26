@@ -42,8 +42,7 @@ class Dataset {
  private:
   ZarrGroup<Store> group;  ///< Reference to the zarr group object.
   std::unordered_map<std::string, size_t>
-      datasetdims;    ///< map from name of each dimension in dataset to their size
-  bool ischangedims;  ///< boolean is true if dimensions of the dataset change
+      datasetdims;  ///< map from name of each dimension in dataset to their size
 
  public:
   /**
@@ -54,7 +53,7 @@ class Dataset {
    *
    * @param store The store object associated with the Dataset.
    */
-  explicit Dataset(Store &store) : group(store), datasetdims(), ischangedims(false) {
+  explicit Dataset(Store &store) : group(store), datasetdims() {
     store[".zattrs"] =
         "{\n"
         "  \"creator\": \"Clara Bayley\",\n"
@@ -69,7 +68,6 @@ class Dataset {
    */
   void add_dimension(const std::pair<std::string, std::size_t> &dim) {
     datasetdims.insert({dim.first, dim.second});
-    ischangedims = true;
   }
 
   /**
@@ -79,7 +77,6 @@ class Dataset {
    */
   void set_dimension(const std::pair<std::string, std::size_t> &dim) {
     datasetdims.at(dim.first) = dim.second;
-    ischangedims = true;
   }
 
   /**
@@ -107,8 +104,9 @@ class Dataset {
    * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and ensures
    * the shape of the array matches the dimensions of the dataset.
    *
-   * Function writes data to an array in the dataset and updates the metadata for the shape of the
-   * array if the dimensions of the dataset have changed.
+   * Function writes data to an array in the dataset and overwrites the metadata for the shape of
+   * the array to ensure the dimensions of the array are consistent with the dimensions of the
+   * dataset.
    *
    * @tparam T The data type of the array.
    * @param xzarr An instance of XarrayZarrArray representing the array.
@@ -118,16 +116,7 @@ class Dataset {
   void write_to_array(XarrayZarrArray<Store, T> &xzarr,
                       const Buffer<T>::viewh_buffer h_data) const {
     xzarr.write_to_array(h_data);
-    if (ischangedims) {
-      xzarr.write_arrayshape(datasetdims);
-    }
-  }
-
-  void consolidate_dimensions() const {
-    if (ischangedims) {
-      // TODO(CB): check/set dimensions of dataset then call write_arrayshape for all arrays in
-      // dataset also use call in destructor..?
-    }
+    xzarr.write_arrayshape(datasetdims);
   }
 };
 
