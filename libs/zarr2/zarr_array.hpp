@@ -127,7 +127,6 @@ inline std::string make_part_zarrmetadata(const std::vector<size_t>& chunkshape,
 template <typename Store, typename T>
 class ZarrArray {
  private:
-  // TODO(CB) (1st move then) use aliases in aliases.hpp
   using viewh_buffer = Buffer<T>::viewh_buffer;
   using subviewh_buffer = Buffer<T>::subviewh_buffer;
   Store& store;                   ///< store in which to write Zarr array

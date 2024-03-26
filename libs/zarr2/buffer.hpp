@@ -30,8 +30,7 @@
 #include <string_view>
 #include <vector>
 
-using HostSpace = Kokkos::DefaultHostExecutionSpace;  // TODO(CB) (re-)move definitions
-using kkpair_size_t = Kokkos::pair<size_t, size_t>;   // TODO(CB) (re-)move definitions
+#include "../kokkosaliases.hpp"
 
 /**
  * @brief A class template for managing a buffer of elements of data type T.
@@ -45,7 +44,6 @@ using kkpair_size_t = Kokkos::pair<size_t, size_t>;   // TODO(CB) (re-)move defi
 template <typename T>
 struct Buffer {
  public:
-  // TODO(CB) move aliases to aliases.hpp
   using viewh_buffer = Kokkos::View<T*, Kokkos::HostSpace>;  /// View of buffer type on host
   using subviewh_buffer = Kokkos::Subview<viewh_buffer, kkpair_size_t>;  ///< Subview of host view
 
