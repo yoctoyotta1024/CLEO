@@ -44,6 +44,21 @@
 #include "zarr2/dataset.hpp"
 #include "zarr2/fsstore.hpp"
 
+template <typename Store>
+void test_dataset(Dataset<Store> &dataset) {
+  dataset.add_dimension({"SdId", 0});
+  auto xzarr = dataset.template create_array<double>("radius", "m", "<f8", 1e-6, {6},
+                                                     {"SdId"});  // shape = [0], chunks = 0,1
+
+  dataset.set_dimension({"SdId", 8});
+  // dataset.write_to_array(xzarr, h_data);  // shape = [8], chunks = 0,1
+
+  dataset.set_dimension({"SdId", 10});
+  dataset.write_arrayshape(xzarr);  // shape = [10], chunks = 0,1
+}
+
+/* ---------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      FSStore &store) {
   return NullObserver{};
@@ -86,6 +101,7 @@ int main(int argc, char *argv[]) {
 
   /* Create zarr store for writing output to storage */
   auto fsstore = FSStore(config.zarrbasedir);
+  auto dataset = Dataset(fsstore);
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
@@ -104,7 +120,9 @@ int main(int argc, char *argv[]) {
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
-    // runcleo(initconds, tsteps.get_t_end()); // WIP
+    runcleo(initconds, tsteps.get_t_end());
+
+    test_dataset(dataset);
   }
   Kokkos::finalize();
 
@@ -113,23 +131,5 @@ int main(int argc, char *argv[]) {
                "Total Program Duration: "
             << ttot << "s \n-------------------------------\n";
 }
-
-// WIP below
-// auto dataset = Dataset(store);
-// auto state_observer = StateObserver(obsstep, store, maxchunk, ngbxs);
-
-// template <typename Store>
-// void test_dataset(Dataset<Store> &dataset) {
-//   // arrays of h_data returned by observer (maybe on device)
-//   auto h_data = observer();
-
-//   dataset.add_dimension({"SdId", 0});
-//   auto xzarr = dataset.template create_array<double>("radius", "m", "<f8", 1e-6, {6},
-//                                                      {"SdId"});  // shape = [0], chunks = 0,1
-
-//   dataset.set_dimension({"SdId", 8});
-//   dataset.write_to_array(xzarr, h_data);  // shape = [8], chunks = 0,1
-
-//   dataset.set_dimension({"SdId", 10});
-//   dataset.write_arrayshape(xzarr);  // shape = [10], chunks = 0,1
-// }
+/* ---------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
