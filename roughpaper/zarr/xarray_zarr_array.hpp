@@ -136,21 +136,6 @@ class XarrayZarrArray {
   ZarrArray<Store, T> zarr;                      ///< zarr array in store
   std::vector<std::string> dimnames;  ///< ordered list of names of each dimenion of array
 
-  /**
-   * @brief Get the name and size of the dimensions of the array.
-   *
-   * @return An unordered map containing the dimensions of the array.
-   */
-  std::unordered_map<std::string, size_t> get_arraydims() const {
-    auto arraydims = std::unordered_map<std::string, size_t>();
-    auto arrayshape = zarr.get_arrayshape();
-    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
-      arraydims.insert({dimnames.at(aa), arrayshape.at(aa)});
-    }
-
-    return arraydims;
-  }
-
  public:
   /**
    * @brief Constructs a new XarrayZarrArray object.
@@ -180,6 +165,21 @@ class XarrayZarrArray {
   }
 
   /**
+   * @brief Get the name and size of the dimensions of the array.
+   *
+   * @return An unordered map containing the dimensions of the array.
+   */
+  std::unordered_map<std::string, size_t> get_arraydims() const {
+    auto arraydims = std::unordered_map<std::string, size_t>();
+    auto arrayshape = zarr.get_arrayshape();
+    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
+      arraydims.insert({dimnames.at(aa), arrayshape.at(aa)});
+    }
+
+    return arraydims;
+  }
+
+  /**
    * @brief Writes data from Kokkos view in host memory to chunks of a Zarr array in a store
    * via a buffer. Function does *not* write metadata to zarray .json file.
    *
@@ -190,11 +190,6 @@ class XarrayZarrArray {
    * in a store.
    */
   void write_to_array(const viewh_buffer h_data) { zarr.write_to_array(h_data); };
-
-  /* Overwrites .zarray json file metadata to ensure the shape of the array is size of each
-  of its dimensions according to the dataset. The order of the dimensions in array's shape is
-    the order of dimensions in dimnames. Setting shape according to size of dataset dimensions makes
-    zarr array consistent with the dimensions of the dataset as required by Xarray and NetCDF.*/
 
   /**
    * @brief Overwrites .zarray json file with metadata to ensure the shape of the array along each
