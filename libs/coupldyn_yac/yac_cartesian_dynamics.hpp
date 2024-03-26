@@ -109,10 +109,6 @@ struct CartesianDynamics {
   the y-faces (coord2) of gridboxes */
   get_winds_func get_vvel_from_binary() const;
 
-  void check_thermodynamics_vectorsizes(const unsigned int nspacedims,
-                                        const std::array<size_t, 3> &ndims,
-                                        const unsigned int nsteps) const;
-
  public:
   CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
                     const unsigned int nsteps);
