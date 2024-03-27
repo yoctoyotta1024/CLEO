@@ -1,4 +1,4 @@
-name: enviropy3
+name: cleoenv
 dependencies:
     - python>=3.9
     - pytest

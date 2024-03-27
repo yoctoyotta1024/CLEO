@@ -10,3 +10,4 @@ matplotlib
 xarray
 awkward
 zarr
+pre-commit
