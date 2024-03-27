@@ -41,7 +41,7 @@ struct StreamOutObserver {
   unsigned int interval;                              // timestep between print statements
   std::function<double(unsigned int)> step2realtime;  // function to convert timesteps to real time
 
-  void print_statement(const unsigned int t_mdl, const viewh_constgbx h_gbxs,
+  void print_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                        const viewd_constsupers totsupers) const;
 
  public:
@@ -49,7 +49,7 @@ struct StreamOutObserver {
                     const std::function<double(unsigned int)> step2realtime)
       : interval(obsstep), step2realtime(step2realtime) {}
 
-  void before_timestepping(const viewh_constgbx h_gbxs) const {
+  void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes StreamOutObserver\n";
   }
 
@@ -61,11 +61,11 @@ struct StreamOutObserver {
 
   bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }
 
-  /* observe Gridboxes (on host) at start of timestep */
-  void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs,
+  /* observe Gridboxes (copy to host) at start of timestep */
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
-      print_statement(t_mdl, h_gbxs, totsupers);
+      print_statement(t_mdl, d_gbxs, totsupers);
     }
   }
 
