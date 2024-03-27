@@ -220,7 +220,7 @@ struct NullObserver {
  * @brief Concept ObsFuncs for all types that can be called used by ConstTstepObserver for
  * observation functions.
  *
- * Type in ConstTstepObserver obeying ObsFunc makes it possible for ConstTstepObserver to obey
+ * Type in ConstTstepObserver obeying ObsFuncs makes it possible for ConstTstepObserver to obey
  * Observer concept.
  *
  * @tparam O Type that satisfies the ObsFuncs concept.
@@ -239,7 +239,7 @@ concept ObsFuncs = requires(O o, unsigned int t, const viewd_constgbx d_gbxs,
  * with a constant timestep interval between observations.
  *
  * Struct can be used to create an observer with a constant timestep and with observation
- * functionality as determined by the 'do_obs' instance of the ObsFunc type 'O'.
+ * functionality as determined by the 'do_obs' instance of the ObsFuncs type 'O'.
  *
  * @tparam O Type that satisfies the ObsFuncs concept.
  */

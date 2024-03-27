@@ -24,7 +24,7 @@ Header file: ``<libs/observers2/observers.hpp>``
    :members:
    :undoc-members:
 
-.. doxygenconcept:: ObsFunc
+.. doxygenconcept:: ObsFuncs
    :project: observers2
 
 .. doxygenstruct:: ConstTstepObserver
