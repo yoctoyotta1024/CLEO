@@ -4,6 +4,9 @@ ZarrArray
 Header file: ``<libs/zarr2/zarr_array.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/zarr2/zarr_array.hpp>`_
 
+.. doxygenfunction:: good2Dchunkshape
+   :project: zarr2
+
 .. doxygenfunction:: write_zarray_json
    :project: zarr2
 
