@@ -59,7 +59,11 @@ class DoStateObs {
   void after_timestepping() const {}
 
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {}
+                     const viewd_constsupers totsupers) const {
+    // TODO(CB) fill in function
+    // dataset.set_dimension({"time", time+1});
+    // dataset.write_arrayshape(xzarr);
+  }
 };
 
 /* constructs observer of variables in the state
