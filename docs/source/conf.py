@@ -77,6 +77,7 @@ breathe_projects = {
     "runcleo"          : "../build/doxygen/xml/",
     "superdrops"       : "../build/doxygen/xml/",
     "zarr2"            : "../build/doxygen/xml/",
+    "observer2"        : "../build/doxygen/xml/",
 }
 
 breathe_default_project = 'proj'

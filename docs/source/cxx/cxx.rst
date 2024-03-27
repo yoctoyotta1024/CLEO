@@ -20,6 +20,7 @@ a SDM coupled to a Dynamics Solver.
    runcleo/runcleomod
    superdrops/superdropsmod
    zarr2/zarr2mod
+   observer2/observer2mod
 
 Indices and tables
 ------------------
