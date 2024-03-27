@@ -96,7 +96,11 @@ class DoStateObs {
                      const viewd_constsupers totsupers) const {
     // TODO(CB) complete function WIP
     const auto h_data = copy_data_from_gridboxes(d_gbxs);
-    // dataset.write_to_array(xzarr_press, h_press);
+
+    auto xzarr_ptest = dataset.template create_array<double>("ptest", "hPa", "<f8", dlc::P0 / 100,
+                                                             {100000, 12}, {"time", "gbxindex"});
+
+    dataset.write_to_array(xzarr_ptest, h_data);
 
     // dataset.set_dimension({"time", time+1});
     // dataset.write_arrayshape(xzarr_press);
