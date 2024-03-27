@@ -37,19 +37,19 @@
 
 /**
  * @brief Given maximum chunk size 'maxchunksize' and length of inner dimension of one chunk of
- * array 'ndim1', function returns the largest possible chunk shape that has the length of its
- * inner dimension = ndim1.
+ * array 'dim1size', function returns the largest possible chunk shape that has the length of its
+ * inner dimension = dim1size.
  *
- * ndim1 must also be <= maxchunksize and to ensure good chunking, ndim1 should itself be completely
- * divisible by the final length of the inner dimension of the 2-D array.
+ * dim1size must also be <= maxchunksize and to ensure good chunking, dim1size should itself be
+ * completely divisible by the final length of the inner dimension of the 2-D array.
  *
  * @param maxchunksize The maximum chunk size (maximum number of elements in chunk).
- * @param ndim1 The length of (number of elements along) the inner dimension of one chunk.
+ * @param dim1size The length of (number of elements along) the inner dimension of one chunk.
  * @return std::vector<size_t> The largest possible 2-D chunk shape.
  */
-inline std::vector<size_t> good2Dchunkshape(const size_t maxchunksize, const size_t ndim1) {
-  const auto shape0 = size_t{std::floor(maxchunksize / ndim1)};
-  return {shape0, ndim1};
+inline std::vector<size_t> good2Dchunkshape(const size_t maxchunksize, const size_t dim1size) {
+  const auto shape0 = size_t{std::floor(maxchunksize / dim1size)};
+  return {shape0, dim1size};
 }
 
 /**
