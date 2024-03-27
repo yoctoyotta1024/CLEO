@@ -50,6 +50,8 @@ class DoStateObs {
         xzarr_press(dataset.template create_array<double>("press", "hPa", "<f8", dlc::P0 / 100,
                                                           chunkshape, {"time", "gbxindex"})) {}
 
+  ~DoStateObs() { dataset.write_arrayshape(xzarr_press); }
+
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes State observer\n";
   }
