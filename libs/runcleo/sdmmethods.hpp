@@ -200,12 +200,6 @@ class SDMMethods {
     const viewd_constsupers totsupers(d_gbxs(0).domain_totsupers_readonly());  // check compatible
 
     obs.at_start_step(t_mdl, d_gbxs, totsupers);
-
-    // const size_t ngbxs(h_gbxs.extent(0));
-    // for (size_t ii(0); ii < ngbxs; ++ii) {
-    //   obs.at_start_step(t_mdl, d_gbxs(ii));  // TODO(CB) delete this or make compatible with
-    //   device
-    // }
   }
 
   /**

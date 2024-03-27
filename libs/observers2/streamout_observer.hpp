@@ -68,8 +68,6 @@ struct StreamOutObserver {
       print_statement(t_mdl, d_gbxs, totsupers);
     }
   }
-
-  void at_start_step(const unsigned int t_mdl, const Gridbox &gbx) const {}
 };
 
 #endif  // LIBS_OBSERVERS2_STREAMOUT_OBSERVER_HPP_

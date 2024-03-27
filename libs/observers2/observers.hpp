@@ -29,23 +29,21 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "gridboxes/gridbox.hpp"
 
 /**
  * @brief Concept Observer is all types that have functions for timestepping and
- * at_start_step as constrained here.
+ * observations functions as constrained here.
  *
  * @tparam Obs The type that satisfies the Observer concept.
  */
 template <typename Obs>
 concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs,
-                            const viewd_constsupers totsupers, const Gridbox &gbx) {
-  { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
-  { obs.after_timestepping() } -> std::same_as<void>;
+                            const viewd_constsupers totsupers) {
   { obs.next_obs(t) } -> std::convertible_to<unsigned int>;
   { obs.on_step(t) } -> std::same_as<bool>;
+  { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
+  { obs.after_timestepping() } -> std::same_as<void>;
   { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { obs.at_start_step(t, gbx) } -> std::same_as<void>;  // TODO(CB) delete this?
 };
 
 /**
@@ -134,19 +132,6 @@ struct CombinedObserver {
     a.at_start_step(t_mdl, d_gbxs, totsupers);
     b.at_start_step(t_mdl, d_gbxs, totsupers);
   }
-
-  /**
-   * @brief Run at the start of a step for combination of 2 observers.
-   *
-   * Each observer is run sequentially.
-   *
-   * @param t_mdl The unsigned int parameter.
-   * @param gbx The Gridbox.
-   */
-  void at_start_step(const unsigned int t_mdl, const Gridbox &gbx) const {
-    a.at_start_step(t_mdl, gbx);
-    b.at_start_step(t_mdl, gbx);
-  }
 };
 
 /**
@@ -206,14 +191,6 @@ struct NullObserver {
    */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
-
-  /**
-   * @brief No operations at the start of a step.
-   *
-   * @param t_mdl The unsigned int for the current timestep.
-   * @param gbx The Gridbox.
-   */
-  void at_start_step(const unsigned int t_mdl, const Gridbox &gbx) const {}
 };
 
 /**
@@ -226,13 +203,12 @@ struct NullObserver {
  * @tparam O Type that satisfies the ObsFuncs concept.
  */
 template <typename O>
-concept ObsFuncs = requires(O o, unsigned int t, const viewd_constgbx d_gbxs,
-                            const viewd_constsupers totsupers, const Gridbox &gbx) {
-  { o.before_timestepping(d_gbxs) } -> std::same_as<void>;
-  { o.after_timestepping() } -> std::same_as<void>;
-  { o.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { o.at_start_step(t, gbx) } -> std::same_as<void>;
-};
+concept ObsFuncs =
+    requires(O o, unsigned int t, const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) {
+      { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
+      { obs.after_timestepping() } -> std::same_as<void>;
+      { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
+    };
 
 /**
  * @brief Structure ConstTstepObserver represents a type that satisfies the concept of an observer
@@ -313,21 +289,6 @@ struct ConstTstepObserver {
                      const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
       do_obs.at_start_step(t_mdl, d_gbxs, totsupers);
-    }
-  }
-
-  /**
-   * @brief Perform operations at the start of a step.
-   *
-   * Calls `at_start_step` function of `do_obs` if the current model time is on
-   * an observation timestep.
-   *
-   * @param t_mdl The unsigned int parameter representing the current model time.
-   * @param gbx The Gridbox.
-   */
-  void at_start_step(const unsigned int t_mdl, const Gridbox &gbx) const {
-    if (on_step(t_mdl)) {
-      do_obs.at_start_step(t_mdl, gbx);
     }
   }
 };
