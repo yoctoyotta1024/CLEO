@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Wednesday 27th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -194,17 +194,18 @@ class SDMMethods {
    * function for both the domain and individual gridboxes.
    *
    * @param t_mdl Current timestep of the coupled model.
-   * @param h_gbxs View of gridboxes on host.
+   * @param d_gbxs View of gridboxes on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs) const {
-    const viewd_constsupers totsupers(h_gbxs(0).domain_totsupers_readonly());
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
+    const viewd_constsupers totsupers(d_gbxs(0).domain_totsupers_readonly());  // check compatible
 
-    obs.at_start_step(t_mdl, h_gbxs, totsupers);
+    obs.at_start_step(t_mdl, d_gbxs, totsupers);
 
-    const size_t ngbxs(h_gbxs.extent(0));
-    for (size_t ii(0); ii < ngbxs; ++ii) {
-      obs.at_start_step(t_mdl, h_gbxs(ii));
-    }
+    // const size_t ngbxs(h_gbxs.extent(0));
+    // for (size_t ii(0); ii < ngbxs; ++ii) {
+    //   obs.at_start_step(t_mdl, d_gbxs(ii));  // TODO(CB) delete this or make compatible with
+    //   device
+    // }
   }
 
   /**

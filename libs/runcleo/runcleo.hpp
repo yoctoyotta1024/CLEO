@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Wednesday 27th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -162,8 +162,8 @@ class RunCLEO {
       gbxs.modify_host();
     }
 
-    gbxs.sync_host();
-    sdm.at_start_step(t_mdl, gbxs.view_host());
+    gbxs.sync_device();
+    sdm.at_start_step(t_mdl, gbxs.view_device());
 
     return get_next_step(t_mdl);
   }
