@@ -84,7 +84,7 @@ class RunCLEO {
     std::cout << "\n--- prepare timestepping ---\n";
 
     coupldyn.prepare_to_timestep();
-    sdm.prepare_to_timestep(gbxs.view_host());
+    sdm.prepare_to_timestep(gbxs.view_device());
 
     std::cout << "--- prepare timestepping: success ---\n";
     return 0;
@@ -163,7 +163,7 @@ class RunCLEO {
     }
 
     gbxs.sync_device();
-    sdm.at_start_step(t_mdl, gbxs.view_device());
+    sdm.at_start_step(t_mdl, gbxs);
 
     return get_next_step(t_mdl);
   }

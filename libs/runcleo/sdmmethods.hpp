@@ -182,9 +182,9 @@ class SDMMethods {
    * This function prepares the CLEO SDM for timestepping by
    * calling the `before_timestepping` function of the observer.
    *
-   * @param h_gbxs View of gridboxes on host.
+   * @param d_gbxs View of gridboxes on device.
    */
-  void prepare_to_timestep(const viewh_constgbx h_gbxs) const { obs.before_timestepping(h_gbxs); }
+  void prepare_to_timestep(const viewd_constgbx d_gbxs) const { obs.before_timestepping(d_gbxs); }
 
   /**
    * @brief Execute at the start of each coupled model timestep.
@@ -196,10 +196,11 @@ class SDMMethods {
    * @param t_mdl Current timestep of the coupled model.
    * @param d_gbxs View of gridboxes on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
-    const viewd_constsupers totsupers(d_gbxs(0).domain_totsupers_readonly());  // check compatible
+  void at_start_step(const unsigned int t_mdl, const dualview_constgbx gbxs) const {
+    const auto h_gbxs = gbxs.view_host();
+    const viewd_constsupers totsupers(h_gbxs(0).domain_totsupers_readonly());
 
-    obs.at_start_step(t_mdl, d_gbxs, totsupers);
+    obs.at_start_step(t_mdl, gbxs.view_device(), totsupers);
   }
 
   /**
