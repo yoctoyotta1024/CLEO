@@ -58,10 +58,6 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const Observer auto obs1 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
   dataset.set_dimension({"gbxindex", 12});
-  // dataset.write_to_array(xzarr, h_data);  // shape = [8], chunks = 0,1
-
-  // dataset.set_dimension({"SdId", 10});
-  // dataset.write_arrayshape(xzarr);  // shape = [10], chunks = 0,1
 
   return obs1;
 }
