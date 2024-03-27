@@ -27,7 +27,7 @@ void StreamOutObserver::print_statement(const unsigned int t_mdl, const viewd_co
                                         const viewd_constsupers totsupers) const {
   /* copy first gridbox into mirror view in case Gridboxes view is in device memory */
   auto d_gbx = Kokkos::subview(d_gbxs, kkpair_size_t({0, 1}));
-  auto h_gbx = Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), d_gbx);
+  auto h_gbx = Kokkos::create_mirror_view_and_copy(HostSpace(), d_gbx);
   const auto &gbx(h_gbx(0));
 
   std::cout << "t=" << std::fixed << std::setprecision(2) << step2realtime(t_mdl)
