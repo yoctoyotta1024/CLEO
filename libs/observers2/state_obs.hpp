@@ -56,19 +56,9 @@ struct DataFromGridboxesFunctor {
 
   viewh_data copy_data_to_host() const {
     Kokkos::deep_copy(h_data, d_data);
-
     return h_data;
   }
 };
-
-Kokkos::View<double *, HostSpace> copy_data_from_gridboxes(const viewd_constgbx d_gbxs) {
-  DataFromGridboxesFunctor functor(d_gbxs);
-
-  const auto ngbxs = size_t{d_gbxs.extent(0)};
-  Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
-
-  return functor.copy_data_to_host();
-}
 
 /* observe variables in the state of each
 gridbox and write them to repspective arrays
@@ -78,6 +68,15 @@ class DoStateObs {
  private:
   Dataset<Store> &dataset;
   XarrayZarrArray<Store, double> xzarr_press;
+
+  Kokkos::View<double *, HostSpace> copy_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
+    DataFromGridboxesFunctor functor(d_gbxs);
+
+    const auto ngbxs = size_t{d_gbxs.extent(0)};
+    Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
+
+    return functor.copy_data_to_host();
+  }
 
  public:
   DoStateObs(Dataset<Store> &dataset, const std::vector<size_t> &chunkshape)
@@ -96,7 +95,7 @@ class DoStateObs {
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
     // TODO(CB) complete function WIP
-    const auto h_press = copy_data_from_gridboxes(d_gbxs);
+    const auto h_data = copy_data_from_gridboxes(d_gbxs);
     // dataset.write_to_array(xzarr_press, h_press);
 
     // dataset.set_dimension({"time", time+1});
