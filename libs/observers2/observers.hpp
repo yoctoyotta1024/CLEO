@@ -38,13 +38,13 @@
  * @tparam Obs The type that satisfies the Observer concept.
  */
 template <typename Obs>
-concept Observer = requires(Obs obs, unsigned int t, const viewh_constgbx h_gbxs,
+concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs,
                             const viewd_constsupers totsupers, const Gridbox &gbx) {
-  { obs.before_timestepping(h_gbxs) } -> std::same_as<void>;
+  { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { obs.after_timestepping() } -> std::same_as<void>;
   { obs.next_obs(t) } -> std::convertible_to<unsigned int>;
   { obs.on_step(t) } -> std::same_as<bool>;
-  { obs.at_start_step(t, h_gbxs, totsupers) } -> std::same_as<void>;
+  { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
   { obs.at_start_step(t, gbx) } -> std::same_as<void>;
 };
 
@@ -75,11 +75,11 @@ struct CombinedObserver {
    *
    * Each observer is run sequentially.
    *
-   * @param h_gbxs The view of gridboxes in host memory.
+   * @param d_gbxs The view of gridboxes in device memory.
    */
-  void before_timestepping(const viewh_constgbx h_gbxs) const {
-    a.before_timestepping(h_gbxs);
-    b.before_timestepping(h_gbxs);
+  void before_timestepping(const viewd_constgbx d_gbxs) const {
+    a.before_timestepping(d_gbxs);
+    b.before_timestepping(d_gbxs);
   }
 
   /**
@@ -126,13 +126,13 @@ struct CombinedObserver {
    * Each observer is run sequentially.
    *
    * @param t_mdl The unsigned int parameter.
-   * @param h_gbxs The view of gridboxes in host memory.
+   * @param d_gbxs The view of gridboxes in device memory.
    * @param totsupers The view of super-droplets in device memory.
    */
-  void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs,
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
-    a.at_start_step(t_mdl, h_gbxs, totsupers);
-    b.at_start_step(t_mdl, h_gbxs, totsupers);
+    a.at_start_step(t_mdl, d_gbxs, totsupers);
+    b.at_start_step(t_mdl, d_gbxs, totsupers);
   }
 
   /**
@@ -170,9 +170,9 @@ struct NullObserver {
   /**
    * @brief No operations before timestepping.
    *
-   * @param h_gbxs The view of gridboxes in host memory.
+   * @param d_gbxs The view of gridboxes in device memory.
    */
-  void before_timestepping(const viewh_constgbx h_gbxs) const {}
+  void before_timestepping(const viewd_constgbx d_gbxs) const {}
 
   /**
    * @brief No perations after timestepping.
@@ -201,10 +201,10 @@ struct NullObserver {
    * @brief No operations at the start of a step.
    *
    * @param t_mdl The unsigned int for the current timestep.
-   * @param h_gbxs The view of gridboxes in host memory.
+   * @param d_gbxs The view of gridboxes in device memory.
    * @param totsupers The view of super-droplets in device memory.
    */
-  void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs,
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
 
   /**
@@ -226,11 +226,11 @@ struct NullObserver {
  * @tparam O Type that satisfies the ObsFuncs concept.
  */
 template <typename O>
-concept ObsFuncs = requires(O o, unsigned int t, const viewh_constgbx h_gbxs,
+concept ObsFuncs = requires(O o, unsigned int t, const viewd_constgbx d_gbxs,
                             const viewd_constsupers totsupers, const Gridbox &gbx) {
-  { o.before_timestepping(h_gbxs) } -> std::same_as<void>;
+  { o.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { o.after_timestepping() } -> std::same_as<void>;
-  { o.at_start_step(t, h_gbxs, totsupers) } -> std::same_as<void>;
+  { o.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
   { o.at_start_step(t, gbx) } -> std::same_as<void>;
 };
 
@@ -263,10 +263,10 @@ struct ConstTstepObserver {
    *
    * Calls `before_timestepping` function of `do_obs`.
    *
-   * @param h_gbxs The view of gridboxes in device memory.
+   * @param d_gbxs The view of gridboxes in device memory.
    */
-  void before_timestepping(const viewh_constgbx h_gbxs) const {
-    do_obs.before_timestepping(h_gbxs);
+  void before_timestepping(const viewd_constgbx d_gbxs) const {
+    do_obs.before_timestepping(d_gbxs);
   }
 
   /**
@@ -306,13 +306,13 @@ struct ConstTstepObserver {
    * an observation timestep.
    *
    * @param t_mdl The unsigned int parameter representing the current model time.
-   * @param h_gbxs The view of gridboxes in host memory.
+   * @param d_gbxs The view of gridboxes in device memory.
    * @param totsupers The view of super-droplets in device memory.
    */
-  void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs,
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
-      do_obs.at_start_step(t_mdl, h_gbxs, totsupers);
+      do_obs.at_start_step(t_mdl, d_gbxs, totsupers);
     }
   }
 
