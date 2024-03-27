@@ -33,7 +33,7 @@ nobs is number of observation events (no. time outputs)
 and ndim1 is the number of elements in 1st dimension
 of 2-D data i.e. no. elements observed for each time.
 For example, ndim1 could equal the number of gridboxes
-an observer observes during 1 observation. Data for values
+an observer observers during 1 observation. Data for values
 of time and dim1 could be output using a CoordinateStorage */
 template <typename T>
 struct TwoDStorage : SingleVarStorage<T> {

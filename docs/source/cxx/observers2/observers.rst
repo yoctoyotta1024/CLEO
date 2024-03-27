@@ -15,7 +15,7 @@ Header file: ``<libs/observers2/observers.hpp>``
    :undoc-members:
 
 .. doxygenfunction:: operator>>(const Observer auto obs1, const Observer auto obs2)
-   :project: observes2
+   :project: observers2
 
 .. doxygenstruct:: NullObserver
    :project: observers2
