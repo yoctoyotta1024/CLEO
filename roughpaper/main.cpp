@@ -51,9 +51,10 @@ inline void create_observer2(const Config &config, const Timesteps &tsteps,
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  dataset.add_dimension({"SdId", 0});
-  auto xzarr = dataset.template create_array<double>("radius", "m", "<f8", 1e-6, {6},
-                                                     {"SdId"});  // shape = [0], chunks = 0,1
+  dataset.add_dimension({"time", 0});
+  dataset.add_dimension({"gbxindex", 0});
+
+  // const Observer auto stateobs = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
   // dataset.set_dimension({"SdId", 8});
   // dataset.write_to_array(xzarr, h_data);  // shape = [8], chunks = 0,1
