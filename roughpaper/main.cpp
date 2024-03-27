@@ -46,8 +46,11 @@
 #include "zarr2/fsstore.hpp"
 
 template <typename Store>
-inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
-                                      Dataset<Store> &dataset) {
+inline void create_observer2(const Config &config, const Timesteps &tsteps,
+                             Dataset<Store> &dataset) {
+  const auto obsstep = (unsigned int)tsteps.get_obsstep();
+  const auto maxchunk = int{config.maxchunk};
+
   dataset.add_dimension({"SdId", 0});
   auto xzarr = dataset.template create_array<double>("radius", "m", "<f8", 1e-6, {6},
                                                      {"SdId"});  // shape = [0], chunks = 0,1
@@ -66,7 +69,6 @@ template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
