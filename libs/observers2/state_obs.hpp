@@ -35,6 +35,19 @@
 #include "superdrops/state.hpp"
 #include "zarr2/dataset.hpp"
 
+Buffer<double>::viewh_buffer copy_press(const viewd_constgbx d_gbxs) {
+  const auto ngbxs = size_t{d_gbxs.extent(0)};
+  auto h_press = Buffer<double>::viewh_buffer("press", ngbxs);
+  auto d_press = Kokkos::create_mirror_view(ExecSpace(), h_press);
+
+  Kokkos::parallel_for(
+      "stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+      KOKKOS_LAMBDA(const size_t ii) { d_press(ii) = d_gbxs(ii).state.press; });
+  Kokkos::deep_copy(h_press, d_press);
+
+  return h_press;
+}
+
 /* observe variables in the state of each
 gridbox and write them to repspective arrays
 in a store as determined by the Dataset */
@@ -60,10 +73,12 @@ class DoStateObs {
 
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
-    // TODO(CB) fill in function
-    // dataset.write_to_array(xzarr, h_data);
+    // TODO(CB) complete function WIP
+    const auto h_press = copy_press(d_gbxs);
+    dataset.write_to_array(xzarr_press, h_press);
+
     // dataset.set_dimension({"time", time+1});
-    // dataset.write_arrayshape(xzarr);
+    // dataset.write_arrayshape(xzarr_press);
   }
 };
 
