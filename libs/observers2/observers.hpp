@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Wednesday 27th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,8 +31,12 @@
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
 
-/* concept Observer is all types that have functions
-for timestepping and at_start_step as constrained here */
+/**
+ * @brief Concept Observer is all types that have functions for timestepping and
+ * at_start_step as constrained here.
+ *
+ * @tparam Obs The type that satisfies the Observer concept.
+ */
 template <typename Obs>
 concept Observer = requires(Obs obs, unsigned int t, const viewh_constgbx h_gbxs,
                             const viewd_constsupers totsupers, const Gridbox &gbx) {
@@ -44,15 +48,26 @@ concept Observer = requires(Obs obs, unsigned int t, const viewh_constgbx h_gbxs
   { obs.at_start_step(t, gbx) } -> std::same_as<void>;
 };
 
-/* new observer formed from combination
-of two Obervers 'a' and 'b' */
+/**
+ * @brief Structure CombinedObserver represents a new observer formed from combination of two
+ * Observers 'a' and 'b'.
+ *
+ * @tparam Obs1 Type satisfying the Observer concept.
+ * @tparam Obs2 Type satisfying the Observer concept.
+ */
 template <Observer Obs1, Observer Obs2>
 struct CombinedObserver {
  private:
-  Obs1 a;
-  Obs2 b;
+  Obs1 a; /**< First Observer. */
+  Obs2 b; /**< Second Observer. */
 
  public:
+  /**
+   * @brief Construct a new CombinedObserver object.
+   *
+   * @param obs1 First Observer.
+   * @param obs2 Second Observer.
+   */
   CombinedObserver(const Obs1 obs1, const Obs2 obs2) : a(obs1), b(obs2) {}
 
   /* for combination of 2 observers, each
@@ -98,13 +113,23 @@ struct CombinedObserver {
   }
 };
 
-/* define ">>" operator that combines two observers */
+/**
+ * @brief Overloaded operator >> to combine two Observers.
+ *
+ * @param obs1 First Observer.
+ * @param obs2 Second Observer.
+ * @return CombinedObserver<Obs1, Obs2> Combined Observer.
+ */
 auto operator>>(const Observer auto obs1, const Observer auto obs2) {
   return CombinedObserver(obs1, obs2);
 }
 
-/* NullObserver does nothing at all
-(is defined for a Monoid Structure) */
+/**
+ * @brief Structure NullObserver does nothing at all.
+ *
+ * NullObserver defined for completion of Observer's Monoid Set.
+ *
+ */
 struct NullObserver {
   void before_timestepping(const viewh_constgbx h_gbxs) const {}
 
@@ -120,9 +145,15 @@ struct NullObserver {
   void at_start_step(const unsigned int t_mdl, const Gridbox &gbx) const {}
 };
 
-/* concept for all types that can be called used
-by ConstTstepObserver for 'do_obs' (in order
-to make an Observer type out of a ConstTstepObserver) */
+/**
+ * @brief Concept ObsFuncs for all types that can be called used by ConstTstepObserver for
+ * observation functions.
+ *
+ * Type in ConstTstepObserver obeying ObsFunc makes it possible for ConstTstepObserver to obey
+ * Observer concept.
+ *
+ * @tparam O Type that satisfies the ObsFuncs concept.
+ */
 template <typename O>
 concept ObsFuncs = requires(O o, unsigned int t, const viewh_constgbx h_gbxs,
                             const viewd_constsupers totsupers, const Gridbox &gbx) {
@@ -132,18 +163,28 @@ concept ObsFuncs = requires(O o, unsigned int t, const viewh_constgbx h_gbxs,
   { o.at_start_step(t, gbx) } -> std::same_as<void>;
 };
 
-/* this structure is a type that satisfies the concept of
-an observer in SDM and has a constant tstep
-'interval'. It can be used to create an observer
-with a constant timestep and other functionality
-determined by the ObsFunc type 'O' */
+/**
+ * @brief Structure ConstTstepObserver represents a type that satisfies the concept of an observer
+ * with a constant timestep interval between observations.
+ *
+ * Struct can be used to create an observer with a constant timestep and with observation
+ * functionality as determined by the ObsFunc type 'O'
+ *
+ * @tparam O Type that satisfies the ObsFuncs concept.
+ */
 template <ObsFuncs O>
 struct ConstTstepObserver {
  private:
-  unsigned int interval;
-  O do_obs;
+  unsigned int interval; /**< interval between observations. */
+  O do_obs;              /**< Observation functionality. */
 
  public:
+  /**
+   * @brief Construct a new ConstTstepObserver object.
+   *
+   * @param interval Timestep interval.
+   * @param o Observer.
+   */
   ConstTstepObserver(const unsigned int interval, const O o) : interval(interval), do_obs(o) {}
 
   void before_timestepping(const viewh_constgbx h_gbxs) const {
