@@ -202,13 +202,13 @@ struct NullObserver {
  *
  * @tparam O Type that satisfies the ObsFuncs concept.
  */
-template <typename O>
-concept ObsFuncs =
-    requires(O o, unsigned int t, const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) {
-      { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
-      { obs.after_timestepping() } -> std::same_as<void>;
-      { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-    };
+template <typename OFs>
+concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs,
+                            const viewd_constsupers totsupers) {
+  { ofs.before_timestepping(d_gbxs) } -> std::same_as<void>;
+  { ofs.after_timestepping() } -> std::same_as<void>;
+  { ofs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
+};
 
 /**
  * @brief Structure ConstTstepObserver represents a type that satisfies the concept of an observer
