@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Wednesday 27th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,7 +44,7 @@
 template <typename T>
 struct Buffer {
  public:
-  using viewh_buffer = Kokkos::View<T*, Kokkos::HostSpace>;  /// View of buffer type on host
+  using viewh_buffer = Kokkos::View<T*, HostSpace>;  /// View of buffer type on host
   using subviewh_buffer = Kokkos::Subview<viewh_buffer, kkpair_size_t>;  ///< Subview of host view
 
  private:
