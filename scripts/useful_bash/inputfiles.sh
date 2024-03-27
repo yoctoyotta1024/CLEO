@@ -15,7 +15,7 @@
 ### ----- default compiler and python environment   ---- ###
 ### ----  and paths for CLEO and build directories  ---- ###
 module load python3/2022.01-gcc-11.2.0
-source activate /work/mh1126/m300950/condaenvs/cleoenv
+source activate /work/mh1126/m300950/cleoenv
 
 path2CLEO=${HOME}/CLEO/
 path2scripts=${path2CLEO}/scripts/
