@@ -46,26 +46,33 @@
 #include "zarr2/fsstore.hpp"
 
 template <typename Store>
-void test_dataset(Dataset<Store> &dataset) {
+inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
+                                      Dataset<Store> &dataset) {
   dataset.add_dimension({"SdId", 0});
   auto xzarr = dataset.template create_array<double>("radius", "m", "<f8", 1e-6, {6},
                                                      {"SdId"});  // shape = [0], chunks = 0,1
 
-  dataset.set_dimension({"SdId", 8});
+  // dataset.set_dimension({"SdId", 8});
   // dataset.write_to_array(xzarr, h_data);  // shape = [8], chunks = 0,1
 
-  dataset.set_dimension({"SdId", 10});
-  dataset.write_arrayshape(xzarr);  // shape = [10], chunks = 0,1
+  // dataset.set_dimension({"SdId", 10});
+  // dataset.write_arrayshape(xzarr);  // shape = [10], chunks = 0,1
 }
 
 /* ---------------------------------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
+
+template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     FSStore &store) {
+                                     Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  return StreamOutObserver(obsstep, &step2realtime);
+  const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
+
+  create_observer2(config, tsteps, dataset);
+
+  return obs0;
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
@@ -86,13 +93,14 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
   return FromFileDynamics(config, couplstep, ndims, nsteps);
 }
 
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, FSStore &store) {
+template <typename Store>
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps =
       create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
   const MicrophysicalProcess auto microphys = NullMicrophysicalProcess{};
   const Motion<CartesianMaps> auto movesupers = NullMotion{};
-  const Observer auto obs = create_observer(config, tsteps, store);
+  const Observer auto obs = create_observer(config, tsteps, dataset);
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
 
@@ -104,8 +112,8 @@ int main(int argc, char *argv[]) {
   const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
 
   /* Create zarr store for writing output to storage */
-  auto fsstore = FSStore(config.zarrbasedir);
-  auto dataset = Dataset(fsstore);
+  auto store = FSStore(config.zarrbasedir);
+  auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
@@ -113,7 +121,7 @@ int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(
@@ -125,8 +133,6 @@ int main(int argc, char *argv[]) {
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
     runcleo(initconds, tsteps.get_t_end());
-
-    test_dataset(dataset);
   }
   Kokkos::finalize();
 
