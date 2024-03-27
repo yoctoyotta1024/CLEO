@@ -47,21 +47,23 @@
 #include "zarr2/fsstore.hpp"
 
 template <typename Store>
-inline void create_observer2(const Config &config, const Timesteps &tsteps,
-                             Dataset<Store> &dataset) {
+inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
+                                      Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
   dataset.add_dimension({"time", 0});
   dataset.add_dimension({"gbxindex", 0});
 
-  // const Observer auto stateobs = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs1 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
   // dataset.set_dimension({"SdId", 8});
   // dataset.write_to_array(xzarr, h_data);  // shape = [8], chunks = 0,1
 
   // dataset.set_dimension({"SdId", 10});
   // dataset.write_arrayshape(xzarr);  // shape = [10], chunks = 0,1
+
+  return obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */
@@ -74,9 +76,9 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
-  create_observer2(config, tsteps, dataset);
+  const Observer auto obs1 = create_observer2(config, tsteps, dataset);
 
-  return obs0;
+  return obs0 >> obs1;
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
