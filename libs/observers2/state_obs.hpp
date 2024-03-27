@@ -35,17 +35,33 @@
 #include "superdrops/state.hpp"
 #include "zarr2/dataset.hpp"
 
-Buffer<double>::viewh_buffer copy_press(const viewd_constgbx d_gbxs) {
+// Functor to perform copy in parallel of 1 value (pressure) from each gridbox
+template <typename mirror_view>
+struct DataFromGridboxesFunctor {
+  viewd_constgbx d_gbxs;
+  mirror_view d_data;
+
+  // Constructor to initialize Kokkos view
+  DataFromGridboxesFunctor(const viewd_constgbx d_gbxs, const mirror_view d_data)
+      : d_gbxs(d_gbxs), d_data(d_data) {}
+
+  // Functor operator to perform copy of each element in parallel
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t ii) const { d_data(ii) = d_gbxs(ii).state.press; }
+};
+
+Buffer<double>::viewh_buffer copy_data_from_gridboxes(const viewd_constgbx d_gbxs) {
   const auto ngbxs = size_t{d_gbxs.extent(0)};
-  auto h_press = Buffer<double>::viewh_buffer("press", ngbxs);
-  auto d_press = Kokkos::create_mirror_view(ExecSpace(), h_press);
+  const auto h_data = Buffer<double>::viewh_buffer("h_data", ngbxs);
+  const auto d_data = Kokkos::create_mirror_view(ExecSpace(), h_data);
 
-  Kokkos::parallel_for(
-      "stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
-      KOKKOS_LAMBDA(const size_t ii) { d_press(ii) = d_gbxs(ii).state.press; });
-  Kokkos::deep_copy(h_press, d_press);
+  DataFromGridboxesFunctor functor(d_gbxs, d_data);
 
-  return h_press;
+  Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
+
+  Kokkos::deep_copy(h_data, d_data);
+
+  return h_data;
 }
 
 /* observe variables in the state of each
@@ -74,8 +90,8 @@ class DoStateObs {
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
     // TODO(CB) complete function WIP
-    const auto h_press = copy_press(d_gbxs);
-    dataset.write_to_array(xzarr_press, h_press);
+    const auto h_press = copy_data_from_gridboxes(d_gbxs);
+    // dataset.write_to_array(xzarr_press, h_press);
 
     // dataset.set_dimension({"time", time+1});
     // dataset.write_arrayshape(xzarr_press);
