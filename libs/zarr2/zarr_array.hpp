@@ -49,7 +49,7 @@
  * @return std::vector<size_t> The largest possible 2-D chunk shape.
  */
 inline std::vector<size_t> good2Dchunkshape(const size_t maxchunksize, const size_t dim1size) {
-  const auto shape0 = size_t{std::floor(maxchunksize / dim1size)};
+  const auto shape0 = size_t{maxchunksize / dim1size};  // same as floor for +ve integers
   return {shape0, dim1size};
 }
 
