@@ -79,6 +79,9 @@ echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
 echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
 echo "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}"
 
+# delete any existing "test" executable
+rm ${path2build}/roughpaper/test
+
 # build then compile in parallel
 if [[ $1 == "build" ]];
 then
