@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Wednesday 27th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,7 +24,6 @@
 #include <concepts>
 #include <iostream>
 
-#include "./observers2/observers.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
@@ -34,6 +33,8 @@
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
+#include "observers2/observers.hpp"
+#include "observers2/streamout_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
@@ -61,7 +62,10 @@ void test_dataset(Dataset<Store> &dataset) {
 /* ---------------------------------------------------------------------------------------------- */
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      FSStore &store) {
-  return NullObserver{};
+  const auto obsstep = (unsigned int)tsteps.get_obsstep();
+  const auto maxchunk = int{config.maxchunk};
+
+  return StreamOutObserver(obsstep, &step2realtime);
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
