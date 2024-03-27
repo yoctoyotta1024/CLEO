@@ -27,6 +27,7 @@
 #include <Kokkos_Pair.hpp>
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <string>
 #include <string_view>
