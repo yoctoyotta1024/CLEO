@@ -36,13 +36,13 @@
 #include "zarr2/dataset.hpp"
 
 // Functor to perform copy in parallel of 1 value (pressure) from each gridbox
-template <typename mirror_view>
 struct DataFromGridboxesFunctor {
   viewd_constgbx d_gbxs;
-  mirror_view d_data;
+  Kokkos::View<double *, HostSpace::array_layout, ExecSpace> d_data;
 
   // Constructor to initialize Kokkos view
-  DataFromGridboxesFunctor(const viewd_constgbx d_gbxs, const mirror_view d_data)
+  DataFromGridboxesFunctor(const viewd_constgbx d_gbxs,
+                           const Kokkos::View<double *, HostSpace::array_layout, ExecSpace> d_data)
       : d_gbxs(d_gbxs), d_data(d_data) {}
 
   // Functor operator to perform copy of each element in parallel
