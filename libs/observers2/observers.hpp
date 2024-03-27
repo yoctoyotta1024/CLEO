@@ -70,43 +70,79 @@ struct CombinedObserver {
    */
   CombinedObserver(const Obs1 obs1, const Obs2 obs2) : a(obs1), b(obs2) {}
 
-  /* for combination of 2 observers, each
-  observer is run sequentially */
+  /**
+   * @brief Run before timestepping for combination of 2 observers.
+   *
+   * Each observer is run sequentially.
+   *
+   * @param h_gbxs The view of gridboxes in host memory.
+   */
   void before_timestepping(const viewh_constgbx h_gbxs) const {
     a.before_timestepping(h_gbxs);
     b.before_timestepping(h_gbxs);
   }
 
-  /* for combination of 2 observers, each
-  observer is run sequentially */
+  /**
+   * @brief Run after timestepping for combination of 2 observers.
+   *
+   * Each observer is run sequentially.
+   */
   void after_timestepping() const {
     a.after_timestepping();
     b.after_timestepping();
   }
 
-  /* for combination of 2 observers, the next obs
-  time is smaller out of the two possible */
+  /**
+   * @brief Determine the next observation time for combination of 2 observers.
+   *
+   * For combination of 2 observers, the next observation time is the smaller out of the two
+   * possible.
+   *
+   * @param t_mdl The unsigned int parameter.
+   * @return unsigned int The next observation time.
+   */
   unsigned int next_obs(const unsigned int t_mdl) const {
     const auto t_a = a.next_obs(t_mdl);
     const auto t_b = b.next_obs(t_mdl);
 
-    return !(t_a < t_b) ? t_b : t_a;  // return smaller of two unsigned ints (see std::min)
+    /* return smaller of two unsigned ints (see std::min) */
+    return !(t_a < t_b) ? t_b : t_a;
   }
 
-  /* for combination of 2 observers, a tstep is
-  on_step = true when either observer is on_step */
+  /**
+   * @brief Check if on_step = true for combination of 2 observers.
+   *
+   * For combination of 2 observers, return on_step = true if either observer is on_step. Else
+   * return false.
+   *
+   * @param t_mdl The unsigned int parameter.
+   * @return bool True if on step, false otherwise.
+   */
   bool on_step(const unsigned int t_mdl) const { return a.on_step(t_mdl) || b.on_step(t_mdl); }
 
-  /* for combination of 2 observers, each
-  observer is run sequentially */
+  /**
+   * @brief Run at the start of a step for combination of 2 observers.
+   *
+   * Each observer is run sequentially.
+   *
+   * @param t_mdl The unsigned int parameter.
+   * @param h_gbxs The view of gridboxes in host memory.
+   * @param totsupers The view of super-droplets in device memory.
+   */
   void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {
     a.at_start_step(t_mdl, h_gbxs, totsupers);
     b.at_start_step(t_mdl, h_gbxs, totsupers);
   }
 
-  /* for combination of 2 observers, each
-  observer is run sequentially */
+  /**
+   * @brief Run at the start of a step for combination of 2 observers.
+   *
+   * Each observer is run sequentially.
+   *
+   * @param t_mdl The unsigned int parameter.
+   * @param gbx The Gridbox.
+   */
   void at_start_step(const unsigned int t_mdl, const Gridbox &gbx) const {
     a.at_start_step(t_mdl, gbx);
     b.at_start_step(t_mdl, gbx);
@@ -131,17 +167,52 @@ auto operator>>(const Observer auto obs1, const Observer auto obs2) {
  *
  */
 struct NullObserver {
+  /**
+   * @brief No operations before timestepping.
+   *
+   * @param h_gbxs The view of gridboxes in host memory.
+   */
   void before_timestepping(const viewh_constgbx h_gbxs) const {}
 
+  /**
+   * @brief No perations after timestepping.
+   */
   void after_timestepping() const {}
 
+  /**
+   * @brief Next observation time is largest possible value.
+   *
+   * @param t_mdl Unsigned int for current timestep.
+   * @return The next observation time (maximum unsigned int).
+   */
   unsigned int next_obs(const unsigned int t_mdl) const { return LIMITVALUES::uintmax; }
 
+  /**
+   * @brief Check if on step always returns false.
+   *
+   * Null observer is never on_step.
+   *
+   * @param t_mdl The unsigned int parameter.
+   * @return bool, always false.
+   */
   bool on_step(const unsigned int t_mdl) const { return false; }
 
+  /**
+   * @brief No operations at the start of a step.
+   *
+   * @param t_mdl The unsigned int for the current timestep.
+   * @param h_gbxs The view of gridboxes in host memory.
+   * @param totsupers The view of super-droplets in device memory.
+   */
   void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {}
 
+  /**
+   * @brief No operations at the start of a step.
+   *
+   * @param t_mdl The unsigned int for the current timestep.
+   * @param gbx The Gridbox.
+   */
   void at_start_step(const unsigned int t_mdl, const Gridbox &gbx) const {}
 };
 
@@ -168,7 +239,7 @@ concept ObsFuncs = requires(O o, unsigned int t, const viewh_constgbx h_gbxs,
  * with a constant timestep interval between observations.
  *
  * Struct can be used to create an observer with a constant timestep and with observation
- * functionality as determined by the ObsFunc type 'O'
+ * functionality as determined by the 'do_obs' instance of the ObsFunc type 'O'.
  *
  * @tparam O Type that satisfies the ObsFuncs concept.
  */
@@ -187,18 +258,57 @@ struct ConstTstepObserver {
    */
   ConstTstepObserver(const unsigned int interval, const O o) : interval(interval), do_obs(o) {}
 
+  /**
+   * @brief Perform operations before timestepping.
+   *
+   * Calls `before_timestepping` function of `do_obs`.
+   *
+   * @param h_gbxs The view of gridboxes in device memory.
+   */
   void before_timestepping(const viewh_constgbx h_gbxs) const {
     do_obs.before_timestepping(h_gbxs);
   }
 
+  /**
+   * @brief Perform operations after timestepping.
+   *
+   * Calls `after_timestepping` function of `do_obs`.
+   */
   void after_timestepping() const { do_obs.after_timestepping(); }
 
+  /**
+   * @brief Determine the next observation time.
+   *
+   * Calculates the next observation time based on the current model time and the constant
+   * timestep between observations, 'interval'.
+   *
+   * @param t_mdl The unsigned int parameter representing the current model time.
+   * @return Unsigned int for the next observation time.
+   */
   unsigned int next_obs(const unsigned int t_mdl) const {
     return ((t_mdl / interval) + 1) * interval;
   }
 
+  /**
+   * @brief Check if on step.
+   *
+   * Checks if the current model time is on an observation timestep.
+   *
+   * @param t_mdl The unsigned int parameter representing the current model time.
+   * @return bool True if on step, false otherwise.
+   */
   bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }
 
+  /**
+   * @brief Perform operations at the start of a step.
+   *
+   * Calls `at_start_step` function of `do_obs` if the current model time is on
+   * an observation timestep.
+   *
+   * @param t_mdl The unsigned int parameter representing the current model time.
+   * @param h_gbxs The view of gridboxes in host memory.
+   * @param totsupers The view of super-droplets in device memory.
+   */
   void at_start_step(const unsigned int t_mdl, const viewh_constgbx h_gbxs,
                      const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
@@ -206,6 +316,15 @@ struct ConstTstepObserver {
     }
   }
 
+  /**
+   * @brief Perform operations at the start of a step.
+   *
+   * Calls `at_start_step` function of `do_obs` if the current model time is on
+   * an observation timestep.
+   *
+   * @param t_mdl The unsigned int parameter representing the current model time.
+   * @param gbx The Gridbox.
+   */
   void at_start_step(const unsigned int t_mdl, const Gridbox &gbx) const {
     if (on_step(t_mdl)) {
       do_obs.at_start_step(t_mdl, gbx);

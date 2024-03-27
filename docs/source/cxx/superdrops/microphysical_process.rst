@@ -14,7 +14,7 @@ Header file: ``<libs/superdrops/microphysicalprocess.hpp>``
    :members:
    :undoc-members:
 
-.. doxygenfunction:: operator>>
+.. doxygenfunction:: operator>>(const MicrophysicalProcess auto a, const MicrophysicalProcess auto b)
    :project: superdrops
 
 .. doxygenstruct:: NullMicrophysicalProcess
