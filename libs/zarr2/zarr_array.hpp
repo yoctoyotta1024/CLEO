@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Wednesday 27th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,6 +34,23 @@
 
 #include "./buffer.hpp"
 #include "./chunks.hpp"
+
+/**
+ * @brief Given maximum chunk size 'maxchunksize' and length of inner dimension of one chunk of
+ * array 'ndim1', function returns the largest possible chunk shape that has the length of its
+ * inner dimension = ndim1.
+ *
+ * ndim1 must also be <= maxchunksize and to ensure good chunking, ndim1 should itself be completely
+ * divisible by the final length of the inner dimension of the 2-D array.
+ *
+ * @param maxchunksize The maximum chunk size (maximum number of elements in chunk).
+ * @param ndim1 The length of (number of elements along) the inner dimension of one chunk.
+ * @return std::vector<size_t> The largest possible 2-D chunk shape.
+ */
+inline std::vector<size_t> good2Dchunkshape(const size_t maxchunksize, const size_t ndim1) {
+  const auto shape0 = size_t{std::floor(maxchunksize / ndim1)};
+  return {shape0, ndim1};
+}
 
 /**
  * @brief Write metadata string to a store under a .zarray key.
