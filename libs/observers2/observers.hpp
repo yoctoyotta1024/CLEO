@@ -17,8 +17,8 @@
  * File Description:
  * Observer Concept and related structures for various ways
  * of observing (outputing data from) CLEO.
- * An example of an observer is printing some data
- * from a gridbox's thermostate to the terminal
+ * An example of an observer is one that outputs some data
+ * from a Gridbox's State to a computer screen.
  */
 
 #ifndef LIBS_OBSERVERS2_OBSERVERS_HPP_
