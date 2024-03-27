@@ -37,22 +37,24 @@
 
 // Functor to perform copy in parallel of 1 value (pressure) from each gridbox
 struct DataFromGridboxesFunctor {
-  using mirrorviewd_type = Kokkos::View<double *, HostSpace::array_layout,
+  using viewh_data = Kokkos::View<double *, HostSpace>;
+  using mirrorviewd_data = Kokkos::View<double *, HostSpace::array_layout,
                                         ExecSpace>;  // type for mirror of host view on device
   viewd_constgbx d_gbxs;
-  mirrorviewd_type d_data;
+  viewh_data h_data;
+  mirrorviewd_data d_data;
 
   // Constructor to initialize Kokkos view
-  DataFromGridboxesFunctor(const viewd_constgbx d_gbxs,
-                           const Kokkos::View<double *, HostSpace> h_data)
-      : d_gbxs(d_gbxs), d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
+  explicit DataFromGridboxesFunctor(const viewd_constgbx d_gbxs)
+      : d_gbxs(d_gbxs),
+        h_data("h_data", d_gbxs.extent(0)),
+        d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
 
   // Functor operator to perform copy of each element in parallel
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t ii) const { d_data(ii) = d_gbxs(ii).state.press; }
 
-  Kokkos::View<double *, HostSpace> copy_data_to_host(
-      Kokkos::View<double *, HostSpace> h_data) const {
+  viewh_data copy_data_to_host() const {
     Kokkos::deep_copy(h_data, d_data);
 
     return h_data;
@@ -60,14 +62,12 @@ struct DataFromGridboxesFunctor {
 };
 
 Kokkos::View<double *, HostSpace> copy_data_from_gridboxes(const viewd_constgbx d_gbxs) {
+  DataFromGridboxesFunctor functor(d_gbxs);
+
   const auto ngbxs = size_t{d_gbxs.extent(0)};
-  const auto h_data = Kokkos::View<double *, HostSpace>("h_data", ngbxs);
-
-  DataFromGridboxesFunctor functor(d_gbxs, h_data);
-
   Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
 
-  return functor.copy_data_to_host(h_data);
+  return functor.copy_data_to_host();
 }
 
 /* observe variables in the state of each
