@@ -9,8 +9,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./gpubuildCLEO_out.%j.out
-#SBATCH --error=./gpubuildCLEO_err.%j.out
+#SBATCH --output=./roughCLEO_out.%j.out
+#SBATCH --error=./roughCLEO_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------- You MUST edit these lines to set your ------ ###
