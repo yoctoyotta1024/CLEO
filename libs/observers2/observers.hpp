@@ -45,7 +45,7 @@ concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs
   { obs.next_obs(t) } -> std::convertible_to<unsigned int>;
   { obs.on_step(t) } -> std::same_as<bool>;
   { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { obs.at_start_step(t, gbx) } -> std::same_as<void>;
+  { obs.at_start_step(t, gbx) } -> std::same_as<void>;  // TODO(CB) delete this?
 };
 
 /**
