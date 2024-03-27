@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: streamout_observer.cpp
+ * File: streamout_obs.cpp
  * Project: observers2
  * Created Date: Monday 16th October 2023
  * Author: Clara Bayley (CB)
@@ -21,7 +21,7 @@
  * at fixed 'interval' timesteps.
  */
 
-#include "observers2/streamout_observer.hpp"
+#include "observers2/streamout_obs.hpp"
 
 void StreamOutObserver::print_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                                         const viewd_constsupers totsupers) const {

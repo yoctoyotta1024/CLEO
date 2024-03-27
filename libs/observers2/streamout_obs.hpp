@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: streamout_observer.hpp
+ * File: streamout_obs.hpp
  * Project: observers2
  * Created Date: Monday 16th October 2023
  * Author: Clara Bayley (CB)
@@ -21,8 +21,8 @@
  * at fixed 'interval' timesteps.
  */
 
-#ifndef LIBS_OBSERVERS2_STREAMOUT_OBSERVER_HPP_
-#define LIBS_OBSERVERS2_STREAMOUT_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS2_STREAMOUT_OBS_HPP_
+#define LIBS_OBSERVERS2_STREAMOUT_OBS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <functional>
@@ -70,4 +70,4 @@ struct StreamOutObserver {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_STREAMOUT_OBSERVER_HPP_
+#endif  // LIBS_OBSERVERS2_STREAMOUT_OBS_HPP_
