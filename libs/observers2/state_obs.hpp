@@ -24,6 +24,7 @@
 #define LIBS_OBSERVERS2_STATE_OBS_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <cassert>
 #include <concepts>
 #include <iostream>
 #include <memory>
@@ -41,8 +42,9 @@ struct DataFromGridboxesToArray {
   using viewh_data = Kokkos::View<double *, HostSpace>;
   using mirrorviewd_data = Kokkos::View<double *, HostSpace::array_layout,
                                         ExecSpace>;  // type for mirror of host view on device
-  const XarrayZarrArray<Store, double> &xzarr;
+  std::shared_ptr<XarrayZarrArray<Store, double>> xzarr_ptr;
   viewh_data h_data;
+  mirrorviewd_data d_data;
 
   struct Functor {
     viewd_constgbx d_gbxs;
@@ -54,16 +56,25 @@ struct DataFromGridboxesToArray {
     // Functor operator to perform copy of each element in parallel
     KOKKOS_INLINE_FUNCTION
     void operator()(const size_t ii) const { d_data(ii) = d_gbxs(ii).state.press; }
-  } functor;
+  };
 
   // Constructor to initialize Kokkos view
-  DataFromGridboxesToArray(const XarrayZarrArray<Store, double> &xzarr, const viewd_constgbx d_gbxs)
-      : xzarr(xzarr),
-        h_data("h_data", d_gbxs.extent(0)),
-        functor(d_gbxs, Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
+  DataFromGridboxesToArray(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
+      : xzarr_ptr(
+            std::make_shared<XarrayZarrArray<Store, double>>(dataset.template create_array<double>(
+                "press", "hPa", "<f8", dlc::P0 / 100, good2Dchunkshape(maxchunk, ngbxs),
+                {"time", "gbxindex"}))),
+        h_data("h_data", ngbxs),
+        d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
+
+  Functor get_functor(const viewd_constgbx d_gbxs) const {
+    assert((d_gbxs.extent(0) == d_data.extent(0)) &&
+           "d_data view must be size of the number of gridboxes");
+    return Functor(d_gbxs, d_data);
+  }
 
   viewh_data copy_data_to_host() const {
-    Kokkos::deep_copy(h_data, functor.d_data);
+    Kokkos::deep_copy(h_data, d_data);
     return h_data;
   }
 };
@@ -75,24 +86,22 @@ template <typename Store>
 class DoStateObs {
  private:
   Dataset<Store> &dataset;
-  XarrayZarrArray<Store, double> xzarr_press;
+  DataFromGridboxesToArray<Store> data2array;
 
   Kokkos::View<double *, HostSpace> copy_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
-    auto press = DataFromGridboxesToArray(xzarr_press, d_gbxs);
+    auto functor = data2array.get_functor(d_gbxs);
 
     const auto ngbxs = size_t{d_gbxs.extent(0)};
-    Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), press.functor);
+    Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
 
-    return press.copy_data_to_host();
+    return data2array.copy_data_to_host();
   }
 
  public:
-  DoStateObs(Dataset<Store> &dataset, const std::vector<size_t> &chunkshape)
-      : dataset(dataset),
-        xzarr_press(dataset.template create_array<double>("press", "hPa", "<f8", dlc::P0 / 100,
-                                                          chunkshape, {"time", "gbxindex"})) {}
+  DoStateObs(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
+      : dataset(dataset), data2array(dataset, maxchunk, ngbxs) {}
 
-  ~DoStateObs() { dataset.write_arrayshape(xzarr_press); }
+  ~DoStateObs() { dataset.write_arrayshape(data2array.xzarr_ptr); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes State observer\n";
@@ -118,8 +127,7 @@ using an instance of the DoStateObs class */
 template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
-  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-  const auto obs = DoStateObs<Store>(dataset, chunkshape);
+  const auto obs = DoStateObs<Store>(dataset, maxchunk, ngbxs);
   return ConstTstepObserver(interval, obs);
 }
 

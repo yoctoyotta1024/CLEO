@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 27th March 2024
+ * Last Modified: Thursday 28th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,6 +23,7 @@
 #define LIBS_ZARR2_DATASET_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -106,7 +107,8 @@ class Dataset {
   }
 
   /**
-   * @brief Calls function to ensure the shape of the array matches the dimensions of the dataset.
+   * @brief Calls array's shape function to ensure the shape of the array matches
+   * the dimensions of the dataset.
    *
    * @tparam T The data type of the array.
    * @param xzarr An instance of XarrayZarrArray representing the array.
@@ -114,6 +116,18 @@ class Dataset {
   template <typename T>
   void write_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
     xzarr.write_arrayshape(datasetdims);
+  }
+
+  /**
+   * @brief Calls array's shape function to ensure the shape of the array matches
+   * the dimensions of the dataset.
+   *
+   * @tparam T The data type of the array.
+   * @param xzarr A shared pointer to the instance of XarrayZarrArray representing the array.
+   */
+  template <typename T>
+  void write_arrayshape(std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr) const {
+    xzarr_ptr->write_arrayshape(datasetdims);
   }
 
   /**
