@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: state_obs.hpp
+ * File: state_observer.hpp
  * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  * each timestep to individual arrays in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_STATE_OBS_HPP_
-#define LIBS_OBSERVERS2_STATE_OBS_HPP_
+#ifndef LIBS_OBSERVERS2_STATE_OBSERVER_HPP_
+#define LIBS_OBSERVERS2_STATE_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <cassert>
@@ -90,8 +90,8 @@ template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
   const auto stateobs = DataFromGridboxesToArray(dataset, maxchunk, ngbxs);
-  const auto obs = WriteGridboxesToDataset(dataset, stateobs);
+  const auto obs = WriteGridboxesObserver(dataset, stateobs);
   return ConstTstepObserver(interval, obs);
 }
 
-#endif  // LIBS_OBSERVERS2_STATE_OBS_HPP_
+#endif  // LIBS_OBSERVERS2_STATE_OBSERVER_HPP_
