@@ -32,9 +32,8 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
-#include "gridboxes/gridbox.hpp"
+#include "./write_gridboxes_to_dataset.hpp"
 #include "superdrops/state.hpp"
-#include "zarr2/dataset.hpp"
 
 // Functor to perform copy in parallel of 1 value (pressure) from each gridbox
 template <typename Store>
@@ -83,50 +82,14 @@ class DataFromGridboxesToArray {
   void write_arrayshape(Dataset<Store> &dataset) const { dataset.write_arrayshape(xzarr_ptr); }
 };
 
-/* observe variables in the state of each
-gridbox and write them to repspective arrays
-in a store as determined by the Dataset */
-template <typename Store>
-class DoStateObs {
- private:
-  Dataset<Store> &dataset;
-  DataFromGridboxesToArray<Store> data2array;
-
-  void fetch_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
-    auto functor = data2array.get_functor(d_gbxs);
-
-    const size_t ngbxs(d_gbxs.extent(0));
-    Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
-  }
-
- public:
-  DoStateObs(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
-      : dataset(dataset), data2array(dataset, maxchunk, ngbxs) {}
-
-  ~DoStateObs() { data2array.write_arrayshape(dataset); }
-
-  void before_timestepping(const viewd_constgbx d_gbxs) const {
-    std::cout << "observer includes State observer\n";
-  }
-
-  void after_timestepping() const {}
-
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    fetch_data_from_gridboxes(d_gbxs);
-    data2array.write_data(dataset);
-
-    // dataset.set_dimension({"time", time+1}); // TODO(CB) do this with coord observer
-  }
-};
-
 /* constructs observer of variables in the state
 of each gridbox with a constant timestep 'interval'
 using an instance of the DoStateObs class */
 template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
-  const auto obs = DoStateObs<Store>(dataset, maxchunk, ngbxs);
+  const auto stateobs = DataFromGridboxesToArray(dataset, maxchunk, ngbxs);
+  const auto obs = WriteGridboxesToDataset(dataset, stateobs);
   return ConstTstepObserver(interval, obs);
 }
 
