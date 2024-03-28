@@ -92,19 +92,22 @@ struct CombinedGridboxDataWriter {
 };
 
 /**
- * @brief Operator for combining two gridbox data writers.
+ * @brief Operator for combining two gridbox data writers which write to a FSStore.
  *
  * This operator combines two gridbox data writers into one using the
- * CombinedGridboxDataWriter struct.
+ * CombinedGridboxDataWriter struct with Store = FSStore.
  *
  * @param a The first gridbox data writer.
  * @param b The second gridbox data writer.
  * @return The combined gridbox data writer.
  */
-template <typename Store, GridboxDataWriter<Store> GbxWriter1, GridboxDataWriter<Store> GbxWriter2>
-auto combiner(const GbxWriter1 a, const GbxWriter2 b) {
-  return CombinedGridboxDataWriter<Store, GbxWriter1, GbxWriter2>(a, b);
-}
+template <typename Store>
+struct CombineGDW {
+  template <GridboxDataWriter<Store> GbxWriter1, GridboxDataWriter<Store> GbxWriter2>
+  auto operator()(const GbxWriter1 a, const GbxWriter2 b) const {
+    return CombinedGridboxDataWriter<Store, GbxWriter1, GbxWriter2>(a, b);
+  }
+};
 
 template <typename Store>
 struct NullGbxWriter {
