@@ -32,7 +32,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
-#include "./write_gridboxes_to_dataset.hpp"
+#include "./write_gridboxes.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 
@@ -83,15 +83,13 @@ class DataFromGridboxesToArray {
   void write_arrayshape(Dataset<Store> &dataset) const { dataset.write_arrayshape(xzarr_ptr); }
 };
 
-/* constructs observer of variables in the state
-of each gridbox with a constant timestep 'interval'
-using an instance of the DoStateObs class */
+/* constructs observer which writes variables from the state of each gridbox
+with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
-  const auto stateobs = DataFromGridboxesToArray(dataset, maxchunk, ngbxs);
-  const auto obs = WriteGridboxesObserver(dataset, stateobs);
-  return ConstTstepObserver(interval, obs);
+  const auto write_state = DataFromGridboxesToArray(dataset, maxchunk, ngbxs);
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, write_state));
 }
 
 #endif  // LIBS_OBSERVERS2_STATE_OBSERVER_HPP_
