@@ -59,9 +59,9 @@ class DoTimeObs {
   DoTimeObs(Dataset<Store> &dataset, const size_t maxchunk,
             const std::function<double(unsigned int)> step2dimlesstime)
       : dataset(dataset),
-        xzarr_ptr(
-            std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-                "time", "s", "<f4", dlc::TIME0, {maxchunk}, {"time"}))),
+        xzarr_ptr(std::make_shared<XarrayZarrArray<Store, float>>(
+            dataset.template create_coordinate_array<float>("time", "s", "<f4", dlc::TIME0,
+                                                            maxchunk, 0))),
         step2dimlesstime(step2dimlesstime) {}
 
   ~DoTimeObs() { dataset.write_arrayshape(xzarr_ptr); }
@@ -84,7 +84,6 @@ template <typename Store>
 inline Observer auto TimeObserver(const unsigned int interval, Dataset<Store> &dataset,
                                   const int maxchunk,
                                   const std::function<double(unsigned int)> step2dimlesstime) {
-  dataset.add_dimension({"time", 0});
   return ConstTstepObserver(interval, DoTimeObs(dataset, maxchunk, step2dimlesstime));
 }
 

@@ -50,6 +50,15 @@ class Dataset {
   std::unordered_map<std::string, size_t>
       datasetdims;  ///< map from name of each dimension in dataset to their size
 
+  /**
+   * @brief Adds a dimension to the dataset.
+   *
+   * @param dim A pair containing the name and size of the dimension to be added.
+   */
+  void add_dimension(const std::pair<std::string, size_t> &dim) {
+    datasetdims.insert({dim.first, dim.second});
+  }
+
  public:
   /**
    * @brief Constructs a Dataset with the specified store object.
@@ -65,15 +74,6 @@ class Dataset {
         "  \"creator\": \"Clara Bayley\",\n"
         "  \"title\": \"Dataset from CLEO is Xarray and NetCDF compatible Zarr Group of Arrays\""
         "\n}";
-  }
-
-  /**
-   * @brief Adds a dimension to the dataset.
-   *
-   * @param dim A pair containing the name and size of the dimension to be added.
-   */
-  void add_dimension(const std::pair<std::string, size_t> &dim) {
-    datasetdims.insert({dim.first, dim.second});
   }
 
   /**
