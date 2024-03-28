@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 27th March 2024
+ * Last Modified: Thursday 28th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,26 +36,34 @@
 #include "zarr2/dataset.hpp"
 
 // Functor to perform copy in parallel of 1 value (pressure) from each gridbox
-struct DataFromGridboxesFunctor {
+template <typename Store>
+struct DataFromGridboxesToArray {
   using viewh_data = Kokkos::View<double *, HostSpace>;
   using mirrorviewd_data = Kokkos::View<double *, HostSpace::array_layout,
                                         ExecSpace>;  // type for mirror of host view on device
-  viewd_constgbx d_gbxs;
+  const XarrayZarrArray<Store, double> &xzarr;
   viewh_data h_data;
-  mirrorviewd_data d_data;
+
+  struct Functor {
+    viewd_constgbx d_gbxs;
+    mirrorviewd_data d_data;
+
+    Functor(const viewd_constgbx d_gbxs, mirrorviewd_data d_data)
+        : d_gbxs(d_gbxs), d_data(d_data) {}
+
+    // Functor operator to perform copy of each element in parallel
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const size_t ii) const { d_data(ii) = d_gbxs(ii).state.press; }
+  } functor;
 
   // Constructor to initialize Kokkos view
-  explicit DataFromGridboxesFunctor(const viewd_constgbx d_gbxs)
-      : d_gbxs(d_gbxs),
+  DataFromGridboxesToArray(const XarrayZarrArray<Store, double> &xzarr, const viewd_constgbx d_gbxs)
+      : xzarr(xzarr),
         h_data("h_data", d_gbxs.extent(0)),
-        d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
-
-  // Functor operator to perform copy of each element in parallel
-  KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii) const { d_data(ii) = d_gbxs(ii).state.press; }
+        functor(d_gbxs, Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
 
   viewh_data copy_data_to_host() const {
-    Kokkos::deep_copy(h_data, d_data);
+    Kokkos::deep_copy(h_data, functor.d_data);
     return h_data;
   }
 };
@@ -70,12 +78,12 @@ class DoStateObs {
   XarrayZarrArray<Store, double> xzarr_press;
 
   Kokkos::View<double *, HostSpace> copy_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
-    DataFromGridboxesFunctor functor(d_gbxs);
+    auto press = DataFromGridboxesToArray(xzarr_press, d_gbxs);
 
     const auto ngbxs = size_t{d_gbxs.extent(0)};
-    Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
+    Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), press.functor);
 
-    return functor.copy_data_to_host();
+    return press.copy_data_to_host();
   }
 
  public:
@@ -97,10 +105,7 @@ class DoStateObs {
     // TODO(CB) complete function WIP
     const auto h_data = copy_data_from_gridboxes(d_gbxs);
 
-    auto xzarr_ptest = dataset.template create_array<double>("ptest", "hPa", "<f8", dlc::P0 / 100,
-                                                             {100000, 12}, {"time", "gbxindex"});
-
-    dataset.write_to_array(xzarr_ptest, h_data);
+    // dataset.write_to_array(xzarr_press, h_data);
 
     // dataset.set_dimension({"time", time+1});
     // dataset.write_arrayshape(xzarr_press);
