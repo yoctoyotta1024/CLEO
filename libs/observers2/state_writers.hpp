@@ -90,25 +90,25 @@ GridboxDataWriter<Store> auto ThermoStateWriter(Dataset<Store> &dataset, const i
                                                 const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
 
+  auto make_array_ptr =
+      [&dataset, &chunkshape](
+          const std::string_view name, const std::string_view units,
+          const double scale_factor) -> std::shared_ptr<XarrayZarrArray<Store, float>> {
+    return std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
+        name, units, "<f4", scale_factor, chunkshape, {"time", "gbxindex"}));
+  };
+
   // create shared pointer to 2-D array in dataset for pressure in each gridbox over time
-  std::shared_ptr<XarrayZarrArray<Store, float>> press_ptr =
-      std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-          "press", "hPa", "<f4", dlc::P0 / 100, chunkshape, {"time", "gbxindex"}));
+  auto press_ptr = make_array_ptr("press", "hPa", dlc::P0 / 100);
 
   // create shared pointer to 2-D array in dataset for temperature in each gridbox over time
-  std::shared_ptr<XarrayZarrArray<Store, float>> temp_ptr =
-      std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-          "temp", "K", "<f4", dlc::TEMP0, chunkshape, {"time", "gbxindex"}));
+  auto temp_ptr = make_array_ptr("temp", "K", dlc::TEMP0);
 
-  // create shared pointer to 2-D array in dataset for temperature in each gridbox over time
-  std::shared_ptr<XarrayZarrArray<Store, float>> qvap_ptr =
-      std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-          "qvap", "g/Kg", "<f4", 1000.0, chunkshape, {"time", "gbxindex"}));
+  // create shared pointer to 2-D array in dataset for qvap in each gridbox over time
+  auto qvap_ptr = make_array_ptr("qvap", "g/Kg", 1000.0);
 
-  // create shared pointer to 2-D array in dataset for temperature in each gridbox over time
-  std::shared_ptr<XarrayZarrArray<Store, float>> qcond_ptr =
-      std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-          "qcond", "g/Kg", "<f4", 1000.0, chunkshape, {"time", "gbxindex"}));
+  // create shared pointer to 2-D array in dataset for qcond in each gridbox over time
+  auto qcond_ptr = make_array_ptr("qcond", "g/Kg", 1000.0);
 
   auto press = GenericGbxWriter<Store, float, PressFunc>(dataset, PressFunc{}, press_ptr, ngbxs);
   auto temp = GenericGbxWriter<Store, float, TempFunc>(dataset, TempFunc{}, temp_ptr, ngbxs);
