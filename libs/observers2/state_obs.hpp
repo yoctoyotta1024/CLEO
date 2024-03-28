@@ -33,6 +33,7 @@
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
 #include "./write_gridboxes_to_dataset.hpp"
+#include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 
 // Functor to perform copy in parallel of 1 value (pressure) from each gridbox
