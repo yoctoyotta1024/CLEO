@@ -31,7 +31,7 @@
 
 /**
  * @brief Concept for GridboxDataWriter is all types that have functions for creating a functor to
- * collect data from gridboxes and then writing that data to a dataset.
+ * collect data from gridboxes and then writing that data to an array in a dataset.
  *
  * @tparam GDW The type that satisfies the GridboxDataWriter concept.
  */
