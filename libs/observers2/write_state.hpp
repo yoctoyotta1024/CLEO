@@ -36,7 +36,8 @@
 #include "zarr2/xarray_zarr_array.hpp"
 #include "zarr2/zarr_array.hpp"
 
-// Operator is functor to perform copy of pressure in each gridbox to d_data in parallel
+// Operator is functor to perform copy of pressure in each gridbox to d_data in parallel.
+// Note conversion of pressure from double (8 bytes) to single precision (4 bytes float) in output
 struct PressFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t ii, viewd_constgbx d_gbxs,
@@ -61,12 +62,14 @@ GridboxDataWriter<Store> auto PressWriter(Dataset<Store> &dataset, const int max
 }
 
 // Operator is functor to perform copy of temperature in each gridbox to d_data in parallel
+// Note conversion of temperature from double (8 bytes) to single precision (4 bytes float) in
+// output
 struct TempFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t ii, viewd_constgbx d_gbxs,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
     auto temp = static_cast<float>(d_gbxs(ii).state.temp);
-    d_data(ii) = temp
+    d_data(ii) = temp;
   }
 };
 
