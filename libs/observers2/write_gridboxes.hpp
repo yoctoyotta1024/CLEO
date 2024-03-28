@@ -158,7 +158,7 @@ class GenericGbxWriter {
         h_data("h_data", ngbxs),
         d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
 
-  // return functor for getting pressure from each gridbox in parallel
+  // return functor for getting 1 variable from every gridbox in parallel
   Functor get_functor(const viewd_constgbx d_gbxs) const {
     assert((d_gbxs.extent(0) == d_data.extent(0)) &&
            "d_data view must be size of the number of gridboxes");
