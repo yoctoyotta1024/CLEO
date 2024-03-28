@@ -38,7 +38,8 @@
 
 // Functor to perform copy in parallel of 1 value (pressure) from each gridbox
 template <typename Store>
-struct DataFromGridboxesToArray {
+class DataFromGridboxesToArray {
+ private:
   using viewh_data = Kokkos::View<double *, HostSpace>;
   using mirrorviewd_data = Kokkos::View<double *, HostSpace::array_layout,
                                         ExecSpace>;  // type for mirror of host view on device
@@ -46,6 +47,7 @@ struct DataFromGridboxesToArray {
   viewh_data h_data;
   mirrorviewd_data d_data;
 
+ public:
   struct Functor {
     viewd_constgbx d_gbxs;
     mirrorviewd_data d_data;
@@ -73,10 +75,12 @@ struct DataFromGridboxesToArray {
     return Functor(d_gbxs, d_data);
   }
 
-  viewh_data copy_data_to_host() const {
+  void write_data(Dataset<Store> &dataset) const {
     Kokkos::deep_copy(h_data, d_data);
-    return h_data;
+    dataset.write_to_array(xzarr_ptr, h_data);
   }
+
+  void write_arrayshape(Dataset<Store> &dataset) const { dataset.write_arrayshape(xzarr_ptr); }
 };
 
 /* observe variables in the state of each
@@ -88,20 +92,18 @@ class DoStateObs {
   Dataset<Store> &dataset;
   DataFromGridboxesToArray<Store> data2array;
 
-  Kokkos::View<double *, HostSpace> copy_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
+  void fetch_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
     auto functor = data2array.get_functor(d_gbxs);
 
     const auto ngbxs = size_t{d_gbxs.extent(0)};
     Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
-
-    return data2array.copy_data_to_host();
   }
 
  public:
   DoStateObs(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
       : dataset(dataset), data2array(dataset, maxchunk, ngbxs) {}
 
-  ~DoStateObs() { dataset.write_arrayshape(data2array.xzarr_ptr); }
+  ~DoStateObs() { data2array.write_arrayshape(dataset); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes State observer\n";
@@ -111,10 +113,8 @@ class DoStateObs {
 
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
-    // TODO(CB) complete function WIP
-    const auto h_data = copy_data_from_gridboxes(d_gbxs);
-
-    // dataset.write_to_array(xzarr_press, h_data);
+    fetch_data_from_gridboxes(d_gbxs);
+    data2array.write_data(dataset);
 
     // dataset.set_dimension({"time", time+1});
     // dataset.write_arrayshape(xzarr_press);
