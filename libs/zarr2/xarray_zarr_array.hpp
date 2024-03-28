@@ -138,6 +138,7 @@ class XarrayZarrArray {
   ZarrArray<Store, T> zarr;           ///< zarr array in store
   std::vector<std::string> dimnames;  ///< ordered list of names of each dimenion of array
   std::vector<size_t> arrayshape;     ///< current size of the array along each of its dimensions
+  size_t last_totnchunks;             ///< Number of chunks of array since arrayshape last written
 
  public:
   /**
@@ -159,7 +160,8 @@ class XarrayZarrArray {
       : zarr(store, name, dtype, chunkshape, true,
              reduced_arrayshape_from_dims(datasetdims, dimnames)),
         dimnames(dimnames),
-        arrayshape(dimnames.size(), 0) {
+        arrayshape(dimnames.size(), 0),
+        last_totnchunks(0) {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
@@ -217,16 +219,20 @@ class XarrayZarrArray {
    * @param datasetdims Dictionary like object for the dimensions of the dataset.
    */
   void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
-    auto ischange = std::vector<int>(arrayshape.size(), 0);
+    if (last_totnchunks != zarr.get_totnchunks()) {
+      auto ischange = std::vector<int>(arrayshape.size(), 0);
 
-    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
-      const auto dsize = datasetdims.at(dimnames.at(aa));
-      ischange.at(aa) = dsize - arrayshape.at(aa);
-      arrayshape.at(aa) = dsize;
-    }
+      for (size_t aa = 0; aa < dimnames.size(); ++aa) {
+        const auto dsize = datasetdims.at(dimnames.at(aa));
+        ischange.at(aa) = dsize - arrayshape.at(aa);
+        arrayshape.at(aa) = dsize;
+      }
 
-    if (std::any_of(ischange.begin(), ischange.end(), [](bool b) { return b; })) {
-      zarr.write_arrayshape(arrayshape);
+      if (std::any_of(ischange.begin(), ischange.end(), [](bool b) { return b; })) {
+        zarr.write_arrayshape(arrayshape);
+      }
+
+      last_totnchunks = zarr.get_totnchunks();
     }
   }
 };
