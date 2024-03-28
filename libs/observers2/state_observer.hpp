@@ -36,11 +36,12 @@
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 
-// returns GridboxDataWriter which writes the pressure in each gridbox to an array in a dataset
+// returns GridboxDataWriter which writes the pressure in each gridbox to an array in a dataset in a
+// store
 template <typename Store>
-GridboxDataWriter<Store> auto get_pressure_gbxwriter(Dataset<Store> &dataset, const int maxchunk,
-                                                     const size_t ngbxs) {
-  // Functor operator to perform copy of pressure in each gridbox to d_data in parallel
+GridboxDataWriter<Store> auto PressureGbxWriter(Dataset<Store> &dataset, const int maxchunk,
+                                                const size_t ngbxs) {
+  // Operator is functor to perform copy of pressure in each gridbox to d_data in parallel
   struct PressureFunc {
     KOKKOS_INLINE_FUNCTION
     void operator()(const size_t ii, viewd_constgbx d_gbxs,
@@ -49,12 +50,13 @@ GridboxDataWriter<Store> auto get_pressure_gbxwriter(Dataset<Store> &dataset, co
     }
   };
 
+  // create shared pointer to 2-D array in dataset for pressure in each gridbox over time
   std::shared_ptr<XarrayZarrArray<Store, double>> xzarr_ptr =
       std::make_shared<XarrayZarrArray<Store, double>>(dataset.template create_array<double>(
           "press", "hPa", "<f8", dlc::P0 / 100, good2Dchunkshape(maxchunk, ngbxs),
           {"time", "gbxindex"}));
 
-  return OneVarGbxWriter<Store, double, PressureFunc>(dataset, PressureFunc{}, xzarr_ptr, ngbxs);
+  return GenericGbxWriter<Store, double, PressureFunc>(dataset, PressureFunc{}, xzarr_ptr, ngbxs);
 }
 
 /* constructs observer which writes variables from the state of each gridbox

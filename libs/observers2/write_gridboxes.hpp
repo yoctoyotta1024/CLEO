@@ -127,7 +127,7 @@ struct NullGbxWriter {
 
 // template GridboxDataWriter to write one variable from each gridbox to an array in a dataset
 template <typename Store, typename T, typename FunctorFunc>
-class OneVarGbxWriter {
+class GenericGbxWriter {
  private:
   FunctorFunc ffunc;
   using viewh_data = Buffer<T>::viewh_buffer;              // type of view for h_data
@@ -151,8 +151,8 @@ class OneVarGbxWriter {
   };
 
   // Constructor to initialize views and pointer to array in dataset
-  OneVarGbxWriter(Dataset<Store> &dataset, FunctorFunc ffunc,
-                  std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const size_t ngbxs)
+  GenericGbxWriter(Dataset<Store> &dataset, FunctorFunc ffunc,
+                   std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const size_t ngbxs)
       : ffunc(ffunc),
         xzarr_ptr(xzarr_ptr),
         h_data("h_data", ngbxs),
