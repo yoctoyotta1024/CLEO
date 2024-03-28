@@ -53,13 +53,12 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  dataset.add_dimension({"time", 0});
   dataset.add_dimension({"gbxindex", config.ngbxs});
 
-  const Observer auto obs1 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
   const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
+  const Observer auto obs1 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
-  return obs1 >> obs2;
+  return obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */

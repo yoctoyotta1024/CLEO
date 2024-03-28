@@ -84,6 +84,7 @@ template <typename Store>
 inline Observer auto TimeObserver(const unsigned int interval, Dataset<Store> &dataset,
                                   const int maxchunk,
                                   const std::function<double(unsigned int)> step2dimlesstime) {
+  dataset.add_dimension({"time", 0});
   return ConstTstepObserver(interval, DoTimeObs(dataset, maxchunk, step2dimlesstime));
 }
 
