@@ -33,6 +33,7 @@
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
+#include "observers2/gbxindex_observer.hpp"
 #include "observers2/observers.hpp"
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
@@ -55,10 +56,10 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 
   dataset.add_dimension({"gbxindex", config.ngbxs});
 
-  const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
-  const Observer auto obs1 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
-
-  return obs2 >> obs1;
+  const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
+  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
+  const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  return obs3 >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */
