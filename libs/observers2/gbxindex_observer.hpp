@@ -36,10 +36,11 @@
 #include "zarr2/xarray_zarr_array.hpp"
 
 struct GbxIndexFunctor {
-  viewd_constgbx d_gbxs;                      // view of gridboxes
-  Buffer<size_t>::mirrorviewd_buffer d_data;  // mirror view on device for gbxindex of every gridbox
+  viewd_constgbx d_gbxs;  // view of gridboxes
+  Buffer<uint32_t>::mirrorviewd_buffer
+      d_data;  // mirror view on device for gbxindex of every gridbox
 
-  GbxIndexFunctor(const viewd_constgbx d_gbxs, Buffer<size_t>::mirrorviewd_buffer d_data)
+  GbxIndexFunctor(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirrorviewd_buffer d_data)
       : d_gbxs(d_gbxs), d_data(d_data) {}
 
   // Functor operator to perform copy of gbxindex of each gridbox to d_data in parallel
@@ -52,13 +53,13 @@ as a coordinate of an xarray dataset */
 template <typename Store>
 class GbxindexObserver {
  private:
-  Dataset<Store> &dataset;                                    ///< dataset to write gbxindex data to
-  std::shared_ptr<XarrayZarrArray<Store, size_t>> xzarr_ptr;  ///< pointer to gbxindex array
+  Dataset<Store> &dataset;  ///< dataset to write gbxindex data to
+  std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr;  ///< pointer to gbxindex array
 
   /* returns a view in the host memor of the gbxindex of every gridbox in d_gbxs */
-  Buffer<size_t>::viewh_buffer collect_gbxindexes(const viewd_constgbx d_gbxs) const {
+  Buffer<uint32_t>::viewh_buffer collect_gbxindexes(const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
-    auto h_data = Buffer<size_t>::viewh_buffer("h_data", ngbxs);
+    auto h_data = Buffer<uint32_t>::viewh_buffer("h_data", ngbxs);
     auto d_data = Kokkos::create_mirror_view(ExecSpace(), h_data);
     Kokkos::parallel_for("collect_gbxs_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
                          GbxIndexFunctor(d_gbxs, d_data));
@@ -69,9 +70,9 @@ class GbxindexObserver {
  public:
   GbxindexObserver(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
-        xzarr_ptr(std::make_shared<XarrayZarrArray<Store, size_t>>(
-            dataset.template create_coordinate_array<size_t>("gbxindex", "", "<u4", 1, maxchunk,
-                                                             ngbxs))) {}
+        xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
+            dataset.template create_coordinate_array<uint32_t>("gbxindex", "", "<u4", 1, maxchunk,
+                                                               ngbxs))) {}
 
   ~GbxindexObserver() { dataset.write_arrayshape(xzarr_ptr); }
 
