@@ -361,6 +361,26 @@ class ZarrArray {
 
     assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
   }
+
+  /**
+   * @brief Writes 1 element of data to a Zarr array (writing to the store in chunks via a buffer).
+   * Function does *not* write metadata to zarray .json file.
+   *
+   * First copies data element from the view to a buffer (until number of elements in
+   * buffer = chunksize), then writes whole chunk of the array into the store. Function useful when
+   * using zarr array as backend of a dataset and/or you do not want to write metadata for the
+   * array when writing data elements.
+   *
+   * @param data The data element which should be written to the array in a store.
+   */
+  void write_to_array(const T data) {
+    if (buffer.get_space() == 0) {
+      totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, buffer);
+    }
+    totndata = totnchunks * buffer.get_chunksize();
+
+    buffer.copy_to_buffer(data);
+  }
 };
 
 #endif  // LIBS_ZARR2_ZARR_ARRAY_HPP_

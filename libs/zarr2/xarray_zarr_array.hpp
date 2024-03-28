@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Thursday 28th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -193,6 +193,17 @@ class XarrayZarrArray {
    * in a store.
    */
   void write_to_array(const viewh_buffer h_data) { zarr.write_to_array(h_data); };
+
+  /**
+   * @brief Writes 1 data element to a Zarr array in a store.
+   * Function does *not* write metadata to zarray .json file.
+   *
+   * Calls ZarrArray's write_to_array function to write data to a Zarr array in a store (in chunks
+   * via a buffer).
+   *
+   * @param data The data element which should be written to the array in a store.
+   */
+  void write_to_array(const T data) { zarr.write_to_array(data); };
 
   /**
    * @brief Sets shape of array along each dimension to be the same size as each of its dimensions

@@ -52,7 +52,7 @@ class DoTimeObs {
     dataset.set_dimension(timedim);
 
     const auto time = static_cast<float>(step2dimlesstime(t_mdl));
-    // dataset.write_to_array(time); // TODO(CB) WIP
+    dataset.write_to_array(time);
   }
 
  public:
