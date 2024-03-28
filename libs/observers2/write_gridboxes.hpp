@@ -55,6 +55,21 @@ struct CombinedGridboxDataWriter {
   GbxWriter2 b; /**< The second instance of type of GridboxDataWriter. */
 
  public:
+  struct Functor {
+    GbxWriter1::Functor a_functor;
+    GbxWriter2::Functor b_functor;
+
+    explicit Functor(const viewd_constgbx d_gbxs)
+        : a_functor(a.get_functor(d_gbxs)), b_functor(b.get_functor(d_gbxs)) {}
+
+    // Functor operator to perform copy of each element in parallel
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const size_t ii) const {
+      a_functor(ii);
+      b_functor(ii);
+    }
+  };
+
   /**
    * @brief Constructs a CombinedGridboxDataWriter object.
    *
@@ -62,6 +77,8 @@ struct CombinedGridboxDataWriter {
    * @param b The second gridbox data writer.
    */
   CombinedGridboxDataWriter(const GbxWriter1 a, const GbxWriter2 b) : a(a), b(b) {}
+
+  Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor(d_gbxs); }
 
   void write_to_array(Dataset<Store> &dataset) const {
     a.write_to_array(dataset);
