@@ -95,7 +95,7 @@ class DoStateObs {
   void fetch_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
     auto functor = data2array.get_functor(d_gbxs);
 
-    const auto ngbxs = size_t{d_gbxs.extent(0)};
+    const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for("stateobs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
   }
 
