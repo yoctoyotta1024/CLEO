@@ -36,10 +36,10 @@
 #include "zarr2/xarray_zarr_array.hpp"
 
 struct GbxIndexFunctor {
-  viewd_constgbx d_gbxs;    // view of gridboxes
-  mirrorviewd_data d_data;  // mirror view on device for value of gbxindex from every gridbox
+  viewd_constgbx d_gbxs;                      // view of gridboxes
+  Buffer<size_t>::mirrorviewd_buffer d_data;  // mirror view on device for gbxindex of every gridbox
 
-  GbxIndexFunctor(const viewd_constgbx d_gbxs, mirrorviewd_data d_data)
+  GbxIndexFunctor(const viewd_constgbx d_gbxs, Buffer<size_t>::mirrorviewd_buffer d_data)
       : d_gbxs(d_gbxs), d_data(d_data) {}
 
   // Functor operator to perform copy of gbxindex of each gridbox to d_data in parallel
