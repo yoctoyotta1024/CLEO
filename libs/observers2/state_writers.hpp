@@ -84,11 +84,47 @@ struct QcondFunc {
   }
 };
 
+// Operator is functor to perform copy of wvel at the centre of each gridbox to d_data
+// in parallel. Note conversion of wvel from double (8 bytes) to single precision (4 bytes
+// float) in output
+struct WvelFunc {
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t ii, viewd_constgbx d_gbxs,
+                  Buffer<float>::mirrorviewd_buffer d_data) const {
+    auto wvel = static_cast<float>(d_gbxs(ii).state.wvelcentre());
+    d_data(ii) = wvel;
+  }
+};
+
+// Operator is functor to perform copy of uvel at the centre of each gridbox to d_data
+// in parallel. Note conversion of uvel from double (8 bytes) to single precision (4 bytes
+// float) in output
+struct UvelFunc {
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t ii, viewd_constgbx d_gbxs,
+                  Buffer<float>::mirrorviewd_buffer d_data) const {
+    auto uvel = static_cast<float>(d_gbxs(ii).state.uvelcentre());
+    d_data(ii) = uvel;
+  }
+};
+
+// Operator is functor to perform copy of vvel at the centre of each gridbox to d_data
+// in parallel. Note conversion of vvel from double (8 bytes) to single precision (4 bytes
+// float) in output
+struct VvelFunc {
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t ii, viewd_constgbx d_gbxs,
+                  Buffer<float>::mirrorviewd_buffer d_data) const {
+    auto vvel = static_cast<float>(d_gbxs(ii).state.vvelcentre());
+    d_data(ii) = vvel;
+  }
+};
+
 // returns GridboxDataWriter which writes the pressure, temperature, qvap, and qcond from
 // each gridbox to an array in a dataset in a store
 template <typename Store>
-GridboxDataWriter<Store> auto ThermoStateWriter(Dataset<Store> &dataset, const int maxchunk,
-                                                const size_t ngbxs) {
+GridboxDataWriter<Store> auto ThermoWriter(Dataset<Store> &dataset, const int maxchunk,
+                                           const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
 
   auto make_array_ptr =
@@ -118,6 +154,30 @@ GridboxDataWriter<Store> auto ThermoStateWriter(Dataset<Store> &dataset, const i
   auto qcond = GenericGbxWriter<Store, float, QcondFunc>(dataset, QcondFunc{}, qcond_ptr, ngbxs);
 
   return c(c(qvap, c(press, temp)), qcond);
+}
+
+// returns GridboxDataWriter which writes the wind velocity components from the centre of each
+// gridbox to an array in a dataset in a store
+template <typename Store>
+GridboxDataWriter<Store> auto WindVelocityWriter(Dataset<Store> &dataset, const int maxchunk,
+                                                 const size_t ngbxs) {
+  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
+
+  auto vel_ptr =
+      [&dataset,
+       &chunkshape](const std::string_view name) -> std::shared_ptr<XarrayZarrArray<Store, float>> {
+    return std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
+        name, "m/s", "<f4", dlc::W0, chunkshape, {"time", "gbxindex"}));
+  };
+
+  // create shared pointer to 2-D arrays in a datasetfor the velocity at the centre of each gridbox
+  // over time and use to make GbxWriters for each velocity component
+  auto wvel = GenericGbxWriter<Store, float, WvelFunc>(dataset, WvelFunc{}, vel_ptr("wvel"), ngbxs);
+  auto uvel = GenericGbxWriter<Store, float, UvelFunc>(dataset, UvelFunc{}, vel_ptr("uvel"), ngbxs);
+  auto vvel = GenericGbxWriter<Store, float, VvelFunc>(dataset, VvelFunc{}, vel_ptr("vvel"), ngbxs);
+
+  const auto c = CombineGDW<Store>{};
+  return c(wvel, c(vvel, uvel));
 }
 
 #endif  // LIBS_OBSERVERS2_STATE_WRITERS_HPP_
