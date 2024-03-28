@@ -36,20 +36,20 @@
 #include "zarr2/xarray_zarr_array.hpp"
 #include "zarr2/zarr_array.hpp"
 
+// Operator is functor to perform copy of pressure in each gridbox to d_data in parallel
+struct PressureFunc {
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t ii, viewd_constgbx d_gbxs,
+                  Buffer<double>::mirrorviewd_buffer d_data) const {
+    d_data(ii) = d_gbxs(ii).state.press;
+  }
+};
+
 // returns GridboxDataWriter which writes the pressure in each gridbox to an array in a dataset in a
 // store
 template <typename Store>
 GridboxDataWriter<Store> auto PressureWriter(Dataset<Store> &dataset, const int maxchunk,
                                              const size_t ngbxs) {
-  // Operator is functor to perform copy of pressure in each gridbox to d_data in parallel
-  struct PressureFunc {
-    KOKKOS_INLINE_FUNCTION
-    void operator()(const size_t ii, viewd_constgbx d_gbxs,
-                    Buffer<double>::mirrorviewd_buffer d_data) const {
-      d_data(ii) = d_gbxs(ii).state.press;
-    }
-  };
-
   // create shared pointer to 2-D array in dataset for pressure in each gridbox over time
   std::shared_ptr<XarrayZarrArray<Store, double>> xzarr_ptr =
       std::make_shared<XarrayZarrArray<Store, double>>(dataset.template create_array<double>(
