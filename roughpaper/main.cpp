@@ -36,6 +36,7 @@
 #include "observers2/observers.hpp"
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
+#include "observers2/time_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
@@ -56,10 +57,9 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   dataset.add_dimension({"gbxindex", config.ngbxs});
 
   const Observer auto obs1 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
-  dataset.set_dimension({"time", 7});
-
-  return obs1;
+  return obs1 >> obs2;
 }
 
 /* ---------------------------------------------------------------------------------------------- */
