@@ -52,7 +52,7 @@ class DoTimeObs {
     dataset.set_dimension(timedim);
 
     const auto time = static_cast<float>(step2dimlesstime(t_mdl));
-    dataset.write_to_array(time);
+    dataset.write_to_array(xzarr_ptr, time);
   }
 
  public:
@@ -61,7 +61,7 @@ class DoTimeObs {
       : dataset(dataset),
         xzarr_ptr(
             std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-                "time", "s", "<f4", dlc::TIME0, {maxchunk}, {"time", "gbxindex"}))),
+                "time", "s", "<f4", dlc::TIME0, {maxchunk}, {"time"}))),
         step2dimlesstime(step2dimlesstime) {}
 
   ~DoTimeObs() { dataset.write_arrayshape(xzarr_ptr); }
