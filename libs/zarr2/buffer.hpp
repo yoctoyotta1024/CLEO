@@ -139,6 +139,20 @@ struct Buffer {
   }
 
   /**
+   * @brief Copies maximum of 1 element of data to buffer.
+   *
+   * Assert that there is space in the buffer, then copy 1 element of data to
+   * the buffer.
+   *
+   * @param data Data element to copy.
+   */
+  void copy_to_buffer(const T data) {
+    assert((get_space() > 0) && "buffer must have space to copy element");
+    buffer(fill) = data;
+    ++fill;
+  }
+
+  /**
    * @brief Writes data from buffer to a chunk in a store.
    *
    * Writes data from buffer to a chunk specified by "chunk_label" of an array

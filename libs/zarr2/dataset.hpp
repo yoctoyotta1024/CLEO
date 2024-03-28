@@ -175,6 +175,24 @@ class Dataset {
     xzarr_ptr->write_to_array(h_data);
     xzarr_ptr->write_arrayshape(datasetdims);
   }
+
+  /**
+   * @brief Writes 1 data element to a Zarr array in the dataset and calls
+   * function to ensure the shape of the array matches the dimensions of the dataset.
+   *
+   * Function writes 1 data element to an array in the dataset and updates the metadata for the
+   * shape of the array to ensure the size of each dimension of the array is consistent with the
+   * dimensions of the dataset.
+   *
+   * @tparam T The data type of the array.
+   * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
+   * @param data The data element to be written to the array.
+   */
+  template <typename T>
+  void write_to_array(std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const T data) const {
+    xzarr_ptr->write_to_array(data);
+    xzarr_ptr->write_arrayshape(datasetdims);
+  }
 };
 
 #endif  // LIBS_ZARR2_DATASET_HPP_
