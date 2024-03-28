@@ -91,6 +91,20 @@ struct CombinedGridboxDataWriter {
   }
 };
 
+/**
+ * @brief Operator for combining two gridbox data writers.
+ *
+ * This operator combines two gridbox data writers into one using the
+ * CombinedGridboxDataWriter struct.
+ *
+ * @param a The first gridbox data writer.
+ * @param b The second gridbox data writer.
+ * @return The combined gridbox data writer.
+ */
+auto operator>>(const GridboxDataWriter auto a, const GridboxDataWriter auto b) {
+  return CombinedGridboxDataWriter(a, b);
+}
+
 struct NullGbxWriter {
  public:
   struct Functor {
