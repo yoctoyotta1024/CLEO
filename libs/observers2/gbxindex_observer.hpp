@@ -40,34 +40,32 @@ as a coordinate of an xarray dataset */
 template <typename Store>
 class GbxindexObserver {
  private:
-  Dataset<Store> &dataset;                                   ///< dataset to write time data to
-  std::shared_ptr<XarrayZarrArray<Store, float>> xzarr_ptr;  ///< pointer to time array in dataset
+  Dataset<Store> &dataset;                                   ///< dataset to write gbxindex data to
+  std::shared_ptr<XarrayZarrArray<Store, float>> xzarr_ptr;  ///< pointer to gbxindex array
 
-  // increment size of time dimension in dataset and write out time data to array in the dataset.
-  // Note conversion of time from double (8 bytes) to single precision (4 bytes float) in output
-  void at_start_step(const unsigned int t_mdl) const {
-    const auto ntimes = size_t{dataset.get_dimension("time") + 1};
-    const auto timedim = std::pair<std::string, size_t>({"time", ntimes});
-    dataset.set_dimension(timedim);
+  /* increment size of gbxindex dimension in dataset and write out gbxindex data
+  to array in the dataset. */
+  void write_gbxindex(const viewd_constgbx d_gbxs) const {
+    const size_t ngbxs(d_gbxs.extent(0));
+    dataset.set_dimension(std::pair<std::string, size_t>({"gbxindex", ngbxs}));
 
-    const auto time = static_cast<float>(step2dimlesstime(t_mdl));
-    dataset.write_to_array(xzarr_ptr, time);
-  }  // tODO
+    // dataset.write_to_array(xzarr_ptr, h_data);
+  }
 
  public:
-  GbxindexObserver(Dataset<Store> &dataset, const size_t maxchunk)
+  GbxindexObserver(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         xzarr_ptr(
             std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-                "time", "s", "<f4", dlc::TIME0, {maxchunk}, {"time"}))) {
-    dataset.add_dimension({"time", 0});
+                "gbxindex", "", "<u4", 1, {maxchunk}, {"gbxindex"}))) {
+    dataset.add_dimension({"gbxindex", ngbxs});
   }
 
   ~GbxindexObserver() { dataset.write_arrayshape(xzarr_ptr); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes gbxindex observer\n";
-    // TODO(CB) WIP
+    write_gbxindex(d_gbxs);
   }
 
   void after_timestepping() const {}
