@@ -44,11 +44,11 @@ concept GridboxDataWriter = requires(GDW gdw, Dataset<Store> &ds, const viewd_co
 
 /* template class for observing variables from each gridbox in parallel
 and then writing them to their repspective arrays in a dataset */
-template <typename Store, typename DataWriter>
+template <typename Store, GridboxDataWriter<Store> GbxWriter>
 class WriteGridboxes {
  private:
   Dataset<Store> &dataset;  ///< dataset to write data to
-  DataWriter writer;  ///< object that collects data ffrom girdboxes and writes it to the dataset
+  GbxWriter writer;  ///< object that collects data ffrom girdboxes and writes it to the dataset
 
   void collect_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
@@ -63,7 +63,7 @@ class WriteGridboxes {
   }
 
  public:
-  WriteGridboxes(Dataset<Store> &dataset, DataWriter writer) : dataset(dataset), writer(writer) {}
+  WriteGridboxes(Dataset<Store> &dataset, GbxWriter writer) : dataset(dataset), writer(writer) {}
 
   ~WriteGridboxes() { writer.write_arrayshape(dataset); }
 
