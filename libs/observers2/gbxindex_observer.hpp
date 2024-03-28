@@ -40,26 +40,21 @@ as a coordinate of an xarray dataset */
 template <typename Store>
 class GbxindexObserver {
  private:
-  Dataset<Store> &dataset;                                   ///< dataset to write gbxindex data to
-  std::shared_ptr<XarrayZarrArray<Store, float>> xzarr_ptr;  ///< pointer to gbxindex array
+  Dataset<Store> &dataset;                                    ///< dataset to write gbxindex data to
+  std::shared_ptr<XarrayZarrArray<Store, size_t>> xzarr_ptr;  ///< pointer to gbxindex array
 
   /* increment size of gbxindex dimension in dataset and write out gbxindex data
   to array in the dataset. */
   void write_gbxindex(const viewd_constgbx d_gbxs) const {
-    const size_t ngbxs(d_gbxs.extent(0));
-    dataset.set_dimension(std::pair<std::string, size_t>({"gbxindex", ngbxs}));
-
     // dataset.write_to_array(xzarr_ptr, h_data);
   }
 
  public:
   GbxindexObserver(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
-        xzarr_ptr(
-            std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-                "gbxindex", "", "<u4", 1, {maxchunk}, {"gbxindex"}))) {
-    dataset.add_dimension({"gbxindex", ngbxs});
-  }
+        xzarr_ptr(std::make_shared<XarrayZarrArray<Store, size_t>>(
+            dataset.template create_coordinate_array<size_t>("gbxindex", "", "<u4", 1, maxchunk,
+                                                             ngbxs))) {}
 
   ~GbxindexObserver() { dataset.write_arrayshape(xzarr_ptr); }
 

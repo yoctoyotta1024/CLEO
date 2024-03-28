@@ -94,6 +94,28 @@ class Dataset {
   size_t get_dimension(const std::string &dimname) { return datasetdims.at(dimname); }
 
   /**
+   * @brief Creates a new 1-D array for a coordinate of the dataset.
+   *
+   * @tparam T The data type of the coordinate array.
+   * @param name The name of the new coordinate.
+   * @param units The units of the coordinate.
+   * @param dtype The data type of the coordinate.
+   * @param scale_factor The scale factor of the coordinate data.
+   * @param chunksize The size of each 1-D chunk of the coordinate array.
+   * @param dimsize The initial size of the coordinate (number of elements along array).
+   * @return An instance of XarrayZarrArray representing the newly created coordinate array.
+   */
+  template <typename T>
+  XarrayZarrArray<Store, T> create_coordinate_array(
+      const std::string_view name, const std::string_view units, const std::string_view dtype,
+      const double scale_factor, const size_t chunksize, const size_t dimsize) const {
+    add_dimension({name, dimsize});
+    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, dtype, scale_factor,
+                                     std::vector<size_t>{chunksize},
+                                     std::vector<std::string>{name});
+  }
+
+  /**
    * @brief Creates a new array in the dataset.
    *
    * @tparam T The data type of the array.
