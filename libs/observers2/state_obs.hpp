@@ -116,8 +116,7 @@ class DoStateObs {
     fetch_data_from_gridboxes(d_gbxs);
     data2array.write_data(dataset);
 
-    // dataset.set_dimension({"time", time+1});
-    // dataset.write_arrayshape(xzarr_press);
+    // dataset.set_dimension({"time", time+1}); // TODO(CB) do this with coord observer
   }
 };
 
