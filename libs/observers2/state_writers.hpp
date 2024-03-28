@@ -116,7 +116,7 @@ GridboxDataWriter<Store> auto ThermoStateWriter(Dataset<Store> &dataset, const i
   auto qcond = GenericGbxWriter<Store, float, QcondFunc>(dataset, QcondFunc{}, qcond_ptr, ngbxs);
 
   const auto c = CombineGDW<Store>{};
-  return c(qcond, c(qvap, c(press, temp)));
+  return c(c(qvap, c(press, temp)), qcond);
 }
 
 #endif  // LIBS_OBSERVERS2_STATE_WRITERS_HPP_
