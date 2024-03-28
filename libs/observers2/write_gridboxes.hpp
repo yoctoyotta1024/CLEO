@@ -137,7 +137,6 @@ class OneVarGbxWriter {
   mirrorviewd_data d_data;  // mirror view of h_data on device
 
  public:
-  template <typename FunctorFunc>
   struct Functor {
     FunctorFunc ffunc;
     viewd_constgbx d_gbxs;    // view of gridboxes
@@ -148,12 +147,12 @@ class OneVarGbxWriter {
 
     // Functor operator to perform copy of 1 variable in each gridbox to d_data in parallel
     KOKKOS_INLINE_FUNCTION
-    void operator()(const size_t ii) const { ffunc(ii) }
+    void operator()(const size_t ii) const { ffunc(ii, d_gbxs, d_data); }
   };
 
   // Constructor to initialize views and pointer to array in dataset
   OneVarGbxWriter(Dataset<Store> &dataset, FunctorFunc ffunc,
-                  std::make_shared<XarrayZarrArray<Store, T>> xzarr_ptr, const size_t ngbxs)
+                  std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const size_t ngbxs)
       : ffunc(ffunc),
         xzarr_ptr(xzarr_ptr),
         h_data("h_data", ngbxs),

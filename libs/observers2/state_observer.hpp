@@ -36,54 +36,26 @@
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 
-// GridboxDataWriter to write the pressure in each gridbox to an array in a dataset
+// returns GridboxDataWriter which writes the pressure in each gridbox to an array in a dataset
 template <typename Store>
-class PressureWriter {
- private:
-  using viewh_data = Buffer<double>::viewh_buffer;              // type of view for h_data
-  using mirrorviewd_data = Buffer<double>::mirrorviewd_buffer;  // mirror view type for d_data
-  std::shared_ptr<XarrayZarrArray<Store, double>> xzarr_ptr;    // pointer to array in dataset
-  viewh_data h_data;        // view for pressure in every gridbox on host
-  mirrorviewd_data d_data;  // mirror view for pressure in every gridbox (on device)
-
- public:
-  struct Functor {
-    viewd_constgbx d_gbxs;    // view of gridboxes
-    mirrorviewd_data d_data;  // mirror view for pressure in every gridbox
-
-    Functor(const viewd_constgbx d_gbxs, mirrorviewd_data d_data)
-        : d_gbxs(d_gbxs), d_data(d_data) {}
-
-    // Functor operator to perform copy of pressure in each gridbox to d_data in parallel
+GridboxDataWriter<Store> auto get_pressure_gbxwriter(Dataset<Store> &dataset, const int maxchunk,
+                                                     const size_t ngbxs) {
+  // Functor operator to perform copy of pressure in each gridbox to d_data in parallel
+  struct PressureFunc {
     KOKKOS_INLINE_FUNCTION
-    void operator()(const size_t ii) const { d_data(ii) = d_gbxs(ii).state.press; }
+    void operator()(const size_t ii, viewd_constgbx d_gbxs,
+                    Buffer<double>::mirrorviewd_buffer d_data) const {
+      d_data(ii) = d_gbxs(ii).state.press;
+    }
   };
 
-  // Constructor to initialize Pressure Writer vieincluding creating pressure array in dataset
-  PressureWriter(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
-      : xzarr_ptr(
-            std::make_shared<XarrayZarrArray<Store, double>>(dataset.template create_array<double>(
-                "press", "hPa", "<f8", dlc::P0 / 100, good2Dchunkshape(maxchunk, ngbxs),
-                {"time", "gbxindex"}))),
-        h_data("h_data", ngbxs),
-        d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
+  std::shared_ptr<XarrayZarrArray<Store, double>> xzarr_ptr =
+      std::make_shared<XarrayZarrArray<Store, double>>(dataset.template create_array<double>(
+          "press", "hPa", "<f8", dlc::P0 / 100, good2Dchunkshape(maxchunk, ngbxs),
+          {"time", "gbxindex"}));
 
-  // return functor for getting pressure from each gridbox in parallel
-  Functor get_functor(const viewd_constgbx d_gbxs) const {
-    assert((d_gbxs.extent(0) == d_data.extent(0)) &&
-           "d_data view must be size of the number of gridboxes");
-    return Functor(d_gbxs, d_data);
-  }
-
-  // copy data from device view directly to host and then write to array in dataset
-  void write_to_array(Dataset<Store> &dataset) const {
-    Kokkos::deep_copy(h_data, d_data);
-    dataset.write_to_array(xzarr_ptr, h_data);
-  }
-
-  // call function to write shape of array according to dataset
-  void write_arrayshape(Dataset<Store> &dataset) const { dataset.write_arrayshape(xzarr_ptr); }
-};
+  return OneVarGbxWriter<Store, double, PressureFunc>(dataset, PressureFunc{}, xzarr_ptr, ngbxs);
+}
 
 /* constructs observer which writes variables from the state of each gridbox
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
@@ -92,8 +64,8 @@ inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &
                                    const int maxchunk, const size_t ngbxs) {
   const auto c = CombineGDW<Store>{};
 
-  const GridboxDataWriter<Store> auto writer =
-      c(PressureWriter(dataset, maxchunk, ngbxs), NullGbxWriter<Store>{});
+  auto pressure_writer = get_pressure_gbxwriter(dataset, maxchunk, ngbxs);
+  const GridboxDataWriter<Store> auto writer = c(pressure_writer, NullGbxWriter<Store>{});
 
   return ConstTstepObserver(interval, WriteGridboxes(dataset, writer));
 }
