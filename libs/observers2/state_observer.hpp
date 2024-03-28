@@ -27,19 +27,15 @@
 #include <concepts>
 
 #include "./observers.hpp"
+#include "./state_writers.hpp"
 #include "./write_gridboxes.hpp"
-#include "./write_state.hpp"
 
 /* constructs observer which writes variables from the state of each gridbox
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
-  const auto c = CombineGDW<Store>{};
-
-  auto press = PressWriter(dataset, maxchunk, ngbxs);
-  auto temp = TempWriter(dataset, maxchunk, ngbxs);
-  const GridboxDataWriter<Store> auto writer = c(press, temp);
+  const GridboxDataWriter<Store> auto writer = ThermoStateWriter(dataset, maxchunk, ngbxs);
 
   return ConstTstepObserver(interval, WriteGridboxes(dataset, writer));
 }
