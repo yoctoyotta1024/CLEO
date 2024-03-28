@@ -88,8 +88,9 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
-  const auto write_state = DataFromGridboxesToArray(dataset, maxchunk, ngbxs);
-  return ConstTstepObserver(interval, WriteGridboxes(dataset, write_state));
+  const GridboxDataWriter<Store> auto writer =
+      combiner<Store>(DataFromGridboxesToArray(dataset, maxchunk, ngbxs), NullGbxWriter<Store>{});
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, writer));
 }
 
 #endif  // LIBS_OBSERVERS2_STATE_OBSERVER_HPP_

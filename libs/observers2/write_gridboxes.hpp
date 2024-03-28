@@ -59,7 +59,7 @@ struct CombinedGridboxDataWriter {
     GbxWriter1::Functor a_functor;
     GbxWriter2::Functor b_functor;
 
-    explicit Functor(const viewd_constgbx d_gbxs)
+    explicit Functor(const GbxWriter1 a, const GbxWriter2 b, const viewd_constgbx d_gbxs)
         : a_functor(a.get_functor(d_gbxs)), b_functor(b.get_functor(d_gbxs)) {}
 
     // Functor operator to perform copy of each element in parallel
@@ -78,7 +78,7 @@ struct CombinedGridboxDataWriter {
    */
   CombinedGridboxDataWriter(const GbxWriter1 a, const GbxWriter2 b) : a(a), b(b) {}
 
-  Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor(d_gbxs); }
+  Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor(a, b, d_gbxs); }
 
   void write_to_array(Dataset<Store> &dataset) const {
     a.write_to_array(dataset);
@@ -101,10 +101,12 @@ struct CombinedGridboxDataWriter {
  * @param b The second gridbox data writer.
  * @return The combined gridbox data writer.
  */
-auto operator>>(const GridboxDataWriter auto a, const GridboxDataWriter auto b) {
-  return CombinedGridboxDataWriter(a, b);
+template <typename Store, GridboxDataWriter<Store> GbxWriter1, GridboxDataWriter<Store> GbxWriter2>
+auto combiner(const GbxWriter1 a, const GbxWriter2 b) {
+  return CombinedGridboxDataWriter<Store, GbxWriter1, GbxWriter2>(a, b);
 }
 
+template <typename Store>
 struct NullGbxWriter {
  public:
   struct Functor {
