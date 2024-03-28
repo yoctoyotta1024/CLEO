@@ -35,7 +35,7 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
-  const GridboxDataWriter<Store> auto writer = ThermoStateWriter(dataset, maxchunk, ngbxs);
+  const GridboxDataWriter<Store> auto writer = ThermoWriter(dataset, maxchunk, ngbxs);
 
   return ConstTstepObserver(interval, WriteGridboxes(dataset, writer));
 }
