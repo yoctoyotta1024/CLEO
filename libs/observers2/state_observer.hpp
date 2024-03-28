@@ -37,8 +37,9 @@ inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &
                                    const int maxchunk, const size_t ngbxs) {
   const auto c = CombineGDW<Store>{};
 
-  auto press = PressureWriter(dataset, maxchunk, ngbxs);
-  const GridboxDataWriter<Store> auto writer = c(press, NullGbxWriter<Store>{});
+  auto press = PressWriter(dataset, maxchunk, ngbxs);
+  auto temp = TempWriter(dataset, maxchunk, ngbxs);
+  const GridboxDataWriter<Store> auto writer = c(press, temp);
 
   return ConstTstepObserver(interval, WriteGridboxes(dataset, writer));
 }
