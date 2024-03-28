@@ -110,12 +110,12 @@ GridboxDataWriter<Store> auto ThermoStateWriter(Dataset<Store> &dataset, const i
   // create shared pointer to 2-D array in dataset for qcond in each gridbox over time
   auto qcond_ptr = make_array_ptr("qcond", "g/Kg", 1000.0);
 
+  const auto c = CombineGDW<Store>{};
   auto press = GenericGbxWriter<Store, float, PressFunc>(dataset, PressFunc{}, press_ptr, ngbxs);
   auto temp = GenericGbxWriter<Store, float, TempFunc>(dataset, TempFunc{}, temp_ptr, ngbxs);
   auto qvap = GenericGbxWriter<Store, float, QvapFunc>(dataset, QvapFunc{}, qvap_ptr, ngbxs);
   auto qcond = GenericGbxWriter<Store, float, QcondFunc>(dataset, QcondFunc{}, qcond_ptr, ngbxs);
 
-  const auto c = CombineGDW<Store>{};
   return c(c(qvap, c(press, temp)), qcond);
 }
 
