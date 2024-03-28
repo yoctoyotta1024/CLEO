@@ -29,6 +29,19 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr2/dataset.hpp"
 
+/**
+ * @brief Concept for GridboxDataWriter is all types that have functions for creating a functor to
+ * collect data from gridboxes and then writing that data to a dataset.
+ *
+ * @tparam GDW The type that satisfies the GridboxDataWriter concept.
+ */
+template <typename GDW, typename Store>
+concept GridboxDataWriter = requires(GDW gdw, Dataset<Store> &ds, const viewd_constgbx d_gbxs) {
+  { gdw.get_functor(d_gbxs) };
+  { gdw.write_to_array(ds) } -> std::same_as<void>;
+  { gdw.write_arrayshape(ds) } -> std::same_as<void>;
+};
+
 /* template class for observing variables from each gridbox in parallel
 and then writing them to their repspective arrays in a dataset */
 template <typename Store, typename DataWriter>
@@ -45,7 +58,7 @@ class WriteGridboxes {
 
   void at_start_step(const viewd_constgbx d_gbxs) const {
     collect_data_from_gridboxes(d_gbxs);
-    writer.write_data(dataset);
+    writer.write_to_array(dataset);
     // dataset.set_dimension({"time", time+1}); // TODO(CB) do this with coord observer
   }
 
