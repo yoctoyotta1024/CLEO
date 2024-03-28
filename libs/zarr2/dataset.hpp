@@ -86,6 +86,14 @@ class Dataset {
   }
 
   /**
+   * @brief Returns the size of an existing dimension in the dataset.
+   *
+   * @param dimname A string for the name of the dimension in the dataset.
+   * @return The size of (i.e. number of elements along) the dimension.
+   */
+  size_t get_dimension(const std::string &dimname) { return datasetdims.at(dimname); }
+
+  /**
    * @brief Creates a new array in the dataset.
    *
    * @tparam T The data type of the array.
