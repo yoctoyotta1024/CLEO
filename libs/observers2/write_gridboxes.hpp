@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: write_gridboxes_observer.hpp
+ * File: write_gridboxes.hpp
  * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  * each timestep in parallel to individual arrays in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_WRITE_GRIDBOXES_OBSERVER_HPP_
-#define LIBS_OBSERVERS2_WRITE_GRIDBOXES_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS2_WRITE_GRIDBOXES_HPP_
+#define LIBS_OBSERVERS2_WRITE_GRIDBOXES_HPP_
 
 #include <Kokkos_Core.hpp>
 
@@ -31,11 +31,11 @@
 
 /* template class for observing variables from each gridbox in parallel
 and then writing them to their repspective arrays in a dataset */
-template <typename Store, typename GridboxWriter>
-class WriteGridboxesObserver {
+template <typename Store, typename DataWriter>
+class WriteGridboxes {
  private:
-  Dataset<Store> &dataset;
-  GridboxWriter writer;
+  Dataset<Store> &dataset;  ///< dataset to write data to
+  DataWriter writer;  ///< object that collects data ffrom girdboxes and writes it to the dataset
 
   void collect_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
@@ -50,10 +50,9 @@ class WriteGridboxesObserver {
   }
 
  public:
-  WriteGridboxesObserver(Dataset<Store> &dataset, GridboxWriter writer)
-      : dataset(dataset), writer(writer) {}
+  WriteGridboxes(Dataset<Store> &dataset, DataWriter writer) : dataset(dataset), writer(writer) {}
 
-  ~WriteGridboxesObserver() { writer.write_arrayshape(dataset); }
+  ~WriteGridboxes() { writer.write_arrayshape(dataset); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes Gridboxes to Dataset observer\n";
@@ -67,4 +66,4 @@ class WriteGridboxesObserver {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_WRITE_GRIDBOXES_OBSERVER_HPP_
+#endif  // LIBS_OBSERVERS2_WRITE_GRIDBOXES_HPP_
