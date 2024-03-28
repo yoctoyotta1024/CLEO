@@ -140,6 +140,30 @@ class XarrayZarrArray {
   std::vector<size_t> arrayshape;     ///< current size of the array along each of its dimensions
   size_t last_totnchunks;             ///< Number of chunks of array since arrayshape last written
 
+  /**
+   * @brief Sets shape of array along each dimension to be the same size as each of its dimensions
+   * according to the dataset. Returns boolean for whether shape has changed (true) or not (false).
+   *
+   * The order of the dimensions in the array's shape is the order of dimensions in dimnames
+   * (outermost -> innermost). Setting the shape to be conistent with the size of the dataset's
+   * dimensions makes zarr array also consistent with Xarray and NetCDF conventions. Boolean
+   * returns true if the shape of the array along any of its dimensions has changed.
+   *
+   * @param datasetdims Dictionary like object for the dimensions of the dataset.
+   * @return bool = true if arrayshape along any of its dimensions has changed, false otherwise.
+   */
+  bool set_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
+    auto ischange = std::vector<int>(arrayshape.size(), 0);
+
+    for (size_t aa = 0; aa < dimnames.size(); ++aa) {
+      const auto dsize = datasetdims.at(dimnames.at(aa));
+      ischange.at(aa) = dsize - arrayshape.at(aa);
+      arrayshape.at(aa) = dsize;
+    }
+
+    return std::any_of(ischange.begin(), ischange.end(), [](bool b) { return b; });
+  }
+
  public:
   /**
    * @brief Constructs a new XarrayZarrArray object.
@@ -165,6 +189,7 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
+    set_arrayshape(datasetdims);
     write_arrayshape(datasetdims);
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
@@ -220,15 +245,9 @@ class XarrayZarrArray {
    */
   void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
     if (last_totnchunks != zarr.get_totnchunks()) {
-      auto ischange = std::vector<int>(arrayshape.size(), 0);
+      auto ischange = set_arrayshape(datasetdims);
 
-      for (size_t aa = 0; aa < dimnames.size(); ++aa) {
-        const auto dsize = datasetdims.at(dimnames.at(aa));
-        ischange.at(aa) = dsize - arrayshape.at(aa);
-        arrayshape.at(aa) = dsize;
-      }
-
-      if (std::any_of(ischange.begin(), ischange.end(), [](bool b) { return b; })) {
+      if (ischange) {
         zarr.write_arrayshape(arrayshape);
       }
 
