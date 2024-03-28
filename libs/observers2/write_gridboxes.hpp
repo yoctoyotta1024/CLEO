@@ -125,6 +125,57 @@ struct NullGbxWriter {
   void write_arrayshape(Dataset<Store> &dataset) const {}
 };
 
+// template GridboxDataWriter to write one variable from each gridbox to an array in a dataset
+template <typename Store, typename T, typename FunctorFunc>
+class OneVarGbxWriter {
+ private:
+  FunctorFunc ffunc;
+  using viewh_data = Buffer<T>::viewh_buffer;              // type of view for h_data
+  using mirrorviewd_data = Buffer<T>::mirrorviewd_buffer;  // mirror view type for d_data
+  std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr;    // pointer to array in dataset
+  viewh_data h_data;        // view on host for value of 1 variable from every gridbox
+  mirrorviewd_data d_data;  // mirror view of h_data on device
+
+ public:
+  template <typename FunctorFunc>
+  struct Functor {
+    FunctorFunc ffunc;
+    viewd_constgbx d_gbxs;    // view of gridboxes
+    mirrorviewd_data d_data;  // mirror view on device for value of 1 variable from every gridbox
+
+    Functor(FunctorFunc ffunc, const viewd_constgbx d_gbxs, mirrorviewd_data d_data)
+        : ffunc(ffunc), d_gbxs(d_gbxs), d_data(d_data) {}
+
+    // Functor operator to perform copy of 1 variable in each gridbox to d_data in parallel
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const size_t ii) const { ffunc(ii) }
+  };
+
+  // Constructor to initialize views and pointer to array in dataset
+  OneVarGbxWriter(Dataset<Store> &dataset, FunctorFunc ffunc,
+                  std::make_shared<XarrayZarrArray<Store, T>> xzarr_ptr, const size_t ngbxs)
+      : ffunc(ffunc),
+        xzarr_ptr(xzarr_ptr),
+        h_data("h_data", ngbxs),
+        d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
+
+  // return functor for getting pressure from each gridbox in parallel
+  Functor get_functor(const viewd_constgbx d_gbxs) const {
+    assert((d_gbxs.extent(0) == d_data.extent(0)) &&
+           "d_data view must be size of the number of gridboxes");
+    return Functor(ffunc, d_gbxs, d_data);
+  }
+
+  // copy data from device view directly to host and then write to array in dataset
+  void write_to_array(Dataset<Store> &dataset) const {
+    Kokkos::deep_copy(h_data, d_data);
+    dataset.write_to_array(xzarr_ptr, h_data);
+  }
+
+  // call function to write shape of array according to dataset
+  void write_arrayshape(Dataset<Store> &dataset) const { dataset.write_arrayshape(xzarr_ptr); }
+};
+
 /* template class for observing variables from each gridbox in parallel
 and then writing them to their repspective arrays in a dataset */
 template <typename Store, GridboxDataWriter<Store> GbxWriter>
