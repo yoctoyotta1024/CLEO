@@ -42,6 +42,38 @@ concept GridboxDataWriter = requires(GDW gdw, Dataset<Store> &ds, const viewd_co
   { gdw.write_arrayshape(ds) } -> std::same_as<void>;
 };
 
+/**
+ * @brief Combined gridbox data writer struct combines two gridbox data writers into one.
+ *
+ * @tparam GbxWriter1 The type of the first gridbox data writer.
+ * @tparam GbxWriter2 The type of the second gridbox data writer.
+ */
+template <typename Store, GridboxDataWriter<Store> GbxWriter1, GridboxDataWriter<Store> GbxWriter2>
+struct CombinedGridboxDataWriter {
+ private:
+  GbxWriter1 a; /**< The first instance of type of GridboxDataWriter. */
+  GbxWriter2 b; /**< The second instance of type of GridboxDataWriter. */
+
+ public:
+  /**
+   * @brief Constructs a CombinedGridboxDataWriter object.
+   *
+   * @param a The first gridbox data writer.
+   * @param b The second gridbox data writer.
+   */
+  CombinedGridboxDataWriter(const GbxWriter1 a, const GbxWriter2 b) : a(a), b(b) {}
+
+  void write_to_array(Dataset<Store> &dataset) const {
+    a.write_to_array(dataset);
+    b.write_to_array(dataset);
+  }
+
+  void write_arrayshape(Dataset<Store> &dataset) const {
+    a.write_arrayshape(dataset);
+    b.write_arrayshape(dataset);
+  }
+};
+
 /* template class for observing variables from each gridbox in parallel
 and then writing them to their repspective arrays in a dataset */
 template <typename Store, GridboxDataWriter<Store> GbxWriter>
