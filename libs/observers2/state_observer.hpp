@@ -75,7 +75,7 @@ class DataFromGridboxesToArray {
     return Functor(d_gbxs, d_data);
   }
 
-  void write_data(Dataset<Store> &dataset) const {
+  void write_to_array(Dataset<Store> &dataset) const {
     Kokkos::deep_copy(h_data, d_data);
     dataset.write_to_array(xzarr_ptr, h_data);
   }
