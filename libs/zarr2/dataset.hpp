@@ -123,7 +123,7 @@ class Dataset {
    * the dimensions of the dataset.
    *
    * @tparam T The data type of the array.
-   * @param xzarr A shared pointer to the instance of XarrayZarrArray representing the array.
+   * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
    */
   template <typename T>
   void write_arrayshape(std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr) const {
@@ -147,6 +147,25 @@ class Dataset {
                       const Buffer<T>::viewh_buffer h_data) const {
     xzarr.write_to_array(h_data);
     xzarr.write_arrayshape(datasetdims);
+  }
+
+  /**
+   * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls
+   * function to ensure the shape of the array matches the dimensions of the dataset.
+   *
+   * Function writes data to an array in the dataset and updates the metadata for the shape of
+   * the array to ensure the size of each dimension of the array is consistent with the
+   * dimensions of the dataset.
+   *
+   * @tparam T The data type of the array.
+   * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
+   * @param h_data The data to be written to the array.
+   */
+  template <typename T>
+  void write_to_array(std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr,
+                      const Buffer<T>::viewh_buffer h_data) const {
+    xzarr_ptr->write_to_array(h_data);
+    xzarr_ptr->write_arrayshape(datasetdims);
   }
 };
 
