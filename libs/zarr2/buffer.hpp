@@ -46,6 +46,8 @@ struct Buffer {
  public:
   using viewh_buffer = Kokkos::View<T*, HostSpace>;  /// View of buffer type on host
   using subviewh_buffer = Kokkos::Subview<viewh_buffer, kkpair_size_t>;  ///< Subview of host view
+  using mirrorviewd_buffer = Kokkos::View<T*, HostSpace::array_layout,
+                                          ExecSpace>;  /// mirror view of buffer view on device
 
  private:
   const size_t chunksize;  ///< Total chunk size = product of shape of chunks

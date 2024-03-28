@@ -36,32 +36,31 @@
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 
-// Functor to perform copy in parallel of 1 value (pressure) from each gridbox
+// GridboxDataWriter to write the pressure in each gridbox to an array in a dataset
 template <typename Store>
-class DataFromGridboxesToArray {
+class PressureWriter {
  private:
-  using viewh_data = Kokkos::View<double *, HostSpace>;
-  using mirrorviewd_data = Kokkos::View<double *, HostSpace::array_layout,
-                                        ExecSpace>;  // type for mirror of host view on device
-  std::shared_ptr<XarrayZarrArray<Store, double>> xzarr_ptr;
-  viewh_data h_data;
-  mirrorviewd_data d_data;
+  using viewh_data = Buffer<double>::viewh_buffer;              // type of view for h_data
+  using mirrorviewd_data = Buffer<double>::mirrorviewd_buffer;  // mirror view type for d_data
+  std::shared_ptr<XarrayZarrArray<Store, double>> xzarr_ptr;    // pointer to array in dataset
+  viewh_data h_data;        // view for pressure in every gridbox on host
+  mirrorviewd_data d_data;  // mirror view for pressure in every gridbox (on device)
 
  public:
   struct Functor {
-    viewd_constgbx d_gbxs;
-    mirrorviewd_data d_data;
+    viewd_constgbx d_gbxs;    // view of gridboxes
+    mirrorviewd_data d_data;  // mirror view for pressure in every gridbox
 
     Functor(const viewd_constgbx d_gbxs, mirrorviewd_data d_data)
         : d_gbxs(d_gbxs), d_data(d_data) {}
 
-    // Functor operator to perform copy of each element in parallel
+    // Functor operator to perform copy of pressure in each gridbox to d_data in parallel
     KOKKOS_INLINE_FUNCTION
     void operator()(const size_t ii) const { d_data(ii) = d_gbxs(ii).state.press; }
   };
 
-  // Constructor to initialize Kokkos view
-  DataFromGridboxesToArray(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
+  // Constructor to initialize Pressure Writer vieincluding creating pressure array in dataset
+  PressureWriter(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
       : xzarr_ptr(
             std::make_shared<XarrayZarrArray<Store, double>>(dataset.template create_array<double>(
                 "press", "hPa", "<f8", dlc::P0 / 100, good2Dchunkshape(maxchunk, ngbxs),
@@ -69,17 +68,20 @@ class DataFromGridboxesToArray {
         h_data("h_data", ngbxs),
         d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
 
+  // return functor for getting pressure from each gridbox in parallel
   Functor get_functor(const viewd_constgbx d_gbxs) const {
     assert((d_gbxs.extent(0) == d_data.extent(0)) &&
            "d_data view must be size of the number of gridboxes");
     return Functor(d_gbxs, d_data);
   }
 
+  // copy data from device view directly to host and then write to array in dataset
   void write_to_array(Dataset<Store> &dataset) const {
     Kokkos::deep_copy(h_data, d_data);
     dataset.write_to_array(xzarr_ptr, h_data);
   }
 
+  // call function to write shape of array according to dataset
   void write_arrayshape(Dataset<Store> &dataset) const { dataset.write_arrayshape(xzarr_ptr); }
 };
 
@@ -91,7 +93,7 @@ inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &
   const auto c = CombineGDW<Store>{};
 
   const GridboxDataWriter<Store> auto writer =
-      c(DataFromGridboxesToArray(dataset, maxchunk, ngbxs), NullGbxWriter<Store>{});
+      c(PressureWriter(dataset, maxchunk, ngbxs), NullGbxWriter<Store>{});
 
   return ConstTstepObserver(interval, WriteGridboxes(dataset, writer));
 }
