@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 27th March 2024
+ * Last Modified: Thursday 28th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -74,11 +74,12 @@ struct Buffer {
    * @param h_data View containing the data to copy.
    */
   void copy_ndata_to_buffer(const size_t n_to_copy, const viewh_buffer h_data) {
-    auto buffer_ = buffer;  // Copy of view for lambda functions using buffer
+    auto fill_ = fill;      // Copy fill for lambda function
+    auto buffer_ = buffer;  // Copy of view for lambda function using buffer
 
-    Kokkos::parallel_for("copy_ndata_to_buffer",
-                         Kokkos::RangePolicy<HostSpace>(fill, fill + n_to_copy),
-                         [buffer_, h_data](const size_t& jj) { buffer_(jj) = h_data(jj); });
+    Kokkos::parallel_for(
+        "copy_ndata_to_buffer", Kokkos::RangePolicy<HostSpace>(0, n_to_copy),
+        [fill_, buffer_, h_data](const size_t& jj) { buffer_(fill_ + jj) = h_data(jj); });
     fill += n_to_copy;
   }
 
