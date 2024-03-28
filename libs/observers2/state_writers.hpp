@@ -26,6 +26,7 @@
 #include <Kokkos_Core.hpp>
 #include <concepts>
 #include <memory>
+#include <string_view>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
@@ -47,7 +48,7 @@ struct PressFunc {
   }
 };
 
-// Operator is functor to perform copy of temperature in each gridbox to d_data in parallel
+// Operator is functor to perform copy of temperature in each gridbox to d_data in parallel.
 // Note conversion of temperature from double (8 bytes) to single precision (4 bytes float) in
 // output
 struct TempFunc {
@@ -60,7 +61,7 @@ struct TempFunc {
 };
 
 // Operator is functor to perform copy of vapour mass mixing ratio (qvap) in each gridbox to d_data
-// in parallel Note conversion of qvap from double (8 bytes) to single precision (4 bytes float) in
+// in parallel. Note conversion of qvap from double (8 bytes) to single precision (4 bytes float) in
 // output
 struct QvapFunc {
   KOKKOS_INLINE_FUNCTION
@@ -72,7 +73,7 @@ struct QvapFunc {
 };
 
 // Operator is functor to perform copy of liquid mass mixing ratio (qcond) in each gridbox to d_data
-// in parallel Note conversion of qcond from double (8 bytes) to single precision (4 bytes
+// in parallel. Note conversion of qcond from double (8 bytes) to single precision (4 bytes
 // float) in output
 struct QcondFunc {
   KOKKOS_INLINE_FUNCTION

@@ -24,10 +24,14 @@
 #define LIBS_OBSERVERS2_WRITE_GRIDBOXES_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <concepts>
+#include <iostream>
+#include <memory>
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr2/dataset.hpp"
+#include "zarr2/xarray_zarr_array.hpp"
 
 /**
  * @brief Concept for GridboxDataWriter is all types that have functions for creating a functor to
@@ -194,7 +198,6 @@ class WriteGridboxes {
   void at_start_step(const viewd_constgbx d_gbxs) const {
     collect_data_from_gridboxes(d_gbxs);
     writer.write_to_array(dataset);
-    // dataset.set_dimension({"time", time+1}); // TODO(CB) do this with coord observer
   }
 
  public:
@@ -203,7 +206,7 @@ class WriteGridboxes {
   ~WriteGridboxes() { writer.write_arrayshape(dataset); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
-    std::cout << "observer includes Gridboxes to Dataset observer\n";
+    std::cout << "observer includes write gridboxes observer\n";
   }
 
   void after_timestepping() const {}
