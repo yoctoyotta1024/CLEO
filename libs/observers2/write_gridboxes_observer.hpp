@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: write_gridboxes_to_dataset.hpp
+ * File: write_gridboxes_observer.hpp
  * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
@@ -16,12 +16,12 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Template for an observer which outputs variables from Gridboxes at the start of
+ * Template for an observer which writes data collected from Gridboxes at the start of
  * each timestep in parallel to individual arrays in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_WRITE_GRIDBOXES_TO_DATASET_HPP_
-#define LIBS_OBSERVERS2_WRITE_GRIDBOXES_TO_DATASET_HPP_
+#ifndef LIBS_OBSERVERS2_WRITE_GRIDBOXES_OBSERVER_HPP_
+#define LIBS_OBSERVERS2_WRITE_GRIDBOXES_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 
@@ -29,33 +29,31 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr2/dataset.hpp"
 
-/* template for observing variables from each gridbox in parallel and then writing them to
-their repspective arrays in a dataset */
-template <typename Store, typename GridboxesToArrays>
-class WriteGridboxesToDataset {
+/* template class for observing variables from each gridbox in parallel
+and then writing them to their repspective arrays in a dataset */
+template <typename Store, typename GridboxWriter>
+class WriteGridboxesObserver {
  private:
   Dataset<Store> &dataset;
-  GridboxesToArrays gbxs2arrays;
+  GridboxWriter writer;
 
   void collect_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
-    auto functor = gbxs2arrays.get_functor(d_gbxs);
-
     const size_t ngbxs(d_gbxs.extent(0));
-    Kokkos::parallel_for("gbxs2arrays", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
+    auto functor = writer.get_functor(d_gbxs);
+    Kokkos::parallel_for("collect_gbxs_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
   }
 
   void at_start_step(const viewd_constgbx d_gbxs) const {
     collect_data_from_gridboxes(d_gbxs);
-    gbxs2arrays.write_data(dataset);
-
+    writer.write_data(dataset);
     // dataset.set_dimension({"time", time+1}); // TODO(CB) do this with coord observer
   }
 
  public:
-  WriteGridboxesToDataset(Dataset<Store> &dataset, GridboxesToArrays gbxs2arrays)
-      : dataset(dataset), gbxs2arrays(gbxs2arrays) {}
+  WriteGridboxesObserver(Dataset<Store> &dataset, GridboxWriter writer)
+      : dataset(dataset), writer(writer) {}
 
-  ~WriteGridboxesToDataset() { gbxs2arrays.write_arrayshape(dataset); }
+  ~WriteGridboxesObserver() { writer.write_arrayshape(dataset); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes Gridboxes to Dataset observer\n";
@@ -69,4 +67,4 @@ class WriteGridboxesToDataset {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_WRITE_GRIDBOXES_TO_DATASET_HPP_
+#endif  // LIBS_OBSERVERS2_WRITE_GRIDBOXES_OBSERVER_HPP_
