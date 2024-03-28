@@ -308,6 +308,25 @@ class ZarrArray {
     }
   }
 
+  /**
+   * @brief Get the total number of chunks currently written to array in store.
+   *
+   * @return The total number of chunks.
+   */
+  size_t get_totnchunks() { return totnchunks; }
+
+  /**
+   * @brief Write the array shape to the store.
+   *
+   * This function writes the given array shape to the store as part of the metadata in the Zarr
+   * .zarray json file. Function also asserts that the number of dimensions of the given arrayshape
+   * is consitent with number of dimensions provided by the shape of each chunk.
+   *
+   * @param arrayshape The array shape to be written.
+   *
+   * @pre The number of dimensions of the provided array shape must be equal to that of the chunk
+   *      shape. Otherwise, an assertion error is triggered.
+   */
   void write_arrayshape(const std::vector<size_t>& arrayshape) {
     assert((arrayshape.size() == chunks.get_chunkshape().size()) &&
            "number of dimensions of array must not change");
