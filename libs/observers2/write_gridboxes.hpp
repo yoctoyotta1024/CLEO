@@ -91,6 +91,20 @@ struct CombinedGridboxDataWriter {
   }
 };
 
+struct NullGbxWriter {
+ public:
+  struct Functor {
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const size_t ii) const {}
+  };
+
+  Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor{}; }
+
+  void write_to_array(Dataset<Store> &dataset) const {}
+
+  void write_arrayshape(Dataset<Store> &dataset) const {}
+};
+
 /* template class for observing variables from each gridbox in parallel
 and then writing them to their repspective arrays in a dataset */
 template <typename Store, GridboxDataWriter<Store> GbxWriter>
