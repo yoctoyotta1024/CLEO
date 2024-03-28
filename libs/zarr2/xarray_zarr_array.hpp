@@ -189,11 +189,12 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
 
-    set_arrayshape(datasetdims);
     write_arrayshape(datasetdims);
 
     write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
   }
+
+  ~XarrayZarrArray() { zarr.write_arrayshape(arrayshape); }
 
   /**
    * @brief Returns the name and size of the dimensions of the array (unordered).
@@ -234,23 +235,22 @@ class XarrayZarrArray {
 
   /**
    * @brief Sets shape of array along each dimension to be the same size as each of its dimensions
-   * according to the dataset. Then overwrites the .zarray json file with metadata containing the
-   * new shape of the array.
+   * according to the dataset.
    *
    * The order of the dimensions in the array's shape is the order of dimensions in dimnames
    * (outermost -> innermost). Setting the shape to be conistent with the size of the dataset's
-   * dimensions makes zarr array also consistent with Xarray and NetCDF conventions.
+   * dimensions makes zarr array also consistent with Xarray and NetCDF conventions. If chunks have
+   * been written since last writing of the arrayshape, and the shape of the array has changed, then
+   * function also overwrites the .zarray json file with metadata containing the new shape of the
+   * array.
    *
    * @param datasetdims Dictionary like object for the dimensions of the dataset.
    */
   void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
-    if (last_totnchunks != zarr.get_totnchunks()) {
-      auto ischange = set_arrayshape(datasetdims);
+    auto ischange = set_arrayshape(datasetdims);
 
-      if (ischange) {
-        zarr.write_arrayshape(arrayshape);
-      }
-
+    if (last_totnchunks != zarr.get_totnchunks() && ischange) {
+      zarr.write_arrayshape(arrayshape);
       last_totnchunks = zarr.get_totnchunks();
     }
   }
