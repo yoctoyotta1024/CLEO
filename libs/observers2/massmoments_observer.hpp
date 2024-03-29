@@ -35,20 +35,30 @@ struct MassMomArrays {
   XarrayZarrArray<Store, float> m1_xzarr;     ///< 1st mass moment array
   XarrayZarrArray<Store, float> m2_xzarr;     ///< 2nd mass moment array
 
-  template <typename T>
-  XarrayZarrArray<Store, T> create_array(Dataset<Store> &dataset, const std::string_view name,
-                                         const std::string_view units, const std::string_view dtype,
-                                         const double scale_factor,
-                                         const std::vector<size_t> &chunkshape) const {
-    return dataset.template create_array<T>(name, units, dtype, scale_factor, chunkshape,
-                                            {"time", "gbxindex"});
+  /* create array for 0th mass moment for 4 byte unsigned integers (uint32_t type) */
+  inline XarrayZarrArray<Store, uint32_t> create_m0_array(
+      Dataset<Store> &dataset, const std::vector<size_t> &chunkshape) const {
+    return dataset.template create_array<uint32_t>("massmom0", "", "<u4", 1, chunkshape,
+                                                   {"time", "gbxindex"});
+  }
+
+  /* create array for >0th mass moment for 4 byte floating point numbers. Note conversion of
+  scale factor from double (8 bytes) to single precision (4 bytes float) */
+  inline XarrayZarrArray<Store, float> create_array(Dataset<Store> &dataset,
+                                                    const std::string_view name,
+                                                    const std::string_view units,
+                                                    const double scale_factor,
+                                                    const std::vector<size_t> &chunkshape) const {
+    const auto scale_factor_ = static_cast<float>(scale_factor);
+    return dataset.template create_array<float>(name, units, "<f4", scale_factor_, chunkshape,
+                                                {"time", "gbxindex"});
   }
 
   MassMomArrays(Dataset<Store> &dataset, const std::vector<size_t> &chunkshape)
-      : m0_xzarr(create_array<uint32_t>(dataset, "massmom0", "", "<u4", 1, chunkshape)),
-        m1_xzarr(create_array<float>(dataset, "massmom1", "g", "<f4", dlc::MASS0grams, chunkshape)),
-        m2_xzarr(create_array<float>(dataset, "massmom2", "g^2", "<f4",
-                                     dlc::MASS0grams * dlc::MASS0grams, chunkshape)) {}
+      : m0_xzarr(create_m0_array(dataset, chunkshape)),
+        m1_xzarr(create_array(dataset, "massmom1", "g", dlc::MASS0grams, chunkshape)),
+        m2_xzarr(create_array(dataset, "massmom2", "g^2", dlc::MASS0grams * dlc::MASS0grams,
+                              chunkshape)) {}
 
   void write_arrayshape(Dataset<Store> &dataset) {
     dataset.write_arrayshape(m0_xzarr);
