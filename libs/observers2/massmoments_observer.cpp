@@ -37,10 +37,10 @@ void calculate_massmoments(const TeamMember &team_member, const int ii,
   Kokkos::parallel_reduce(
       Kokkos::TeamThreadRange(team_member, nsupers),
       KOKKOS_LAMBDA(const size_t kk, uint32_t &m0, float &m1, float &m2) {
-        const auto xi = static_cast<double>(
-            supers(kk).get_xi());  // cast multiplicity from unsigned int to double
-        const auto mass = supers(kk).mass();
-        m0 += static_cast<uint32_t>(supers(kk).get_xi());
+        const auto &drop(supers(kk));
+        const auto mass = drop.mass();
+        const auto xi = static_cast<double>(drop.get_xi());  // cast multiplicity to double
+        m0 += static_cast<uint32_t>(drop.get_xi());
         m1 += static_cast<float>(xi * mass);
         m2 += static_cast<float>(xi * mass * mass);
       },
@@ -82,11 +82,11 @@ void calculate_massmoments_raindrops(const TeamMember &team_member, const int ii
   Kokkos::parallel_reduce(
       Kokkos::TeamThreadRange(team_member, nsupers),
       KOKKOS_LAMBDA(const size_t kk, uint32_t &m0, float &m1, float &m2) {
-        const auto xi = static_cast<double>(
-            supers(kk).get_xi());  // cast multiplicity from unsigned int to double
-        const auto mass = supers(kk).mass();
-        const auto binary = bool{radius >= rlim};  // 1 if droplet is raindrop, 0 otherwise
-        m0 += static_cast<uint32_t>(binary) * static_cast<uint32_t>(supers(kk).get_xi());
+        const auto &drop(supers(kk));
+        const auto mass = drop.mass();
+        const auto binary = bool{drop.get_radius() >= rlim};  // 1 if droplet is raindrop, else 0
+        const auto xi = static_cast<double>(drop.get_xi());   // cast multiplicity to double
+        m0 += static_cast<uint32_t>(binary) * static_cast<uint32_t>(drop.get_xi());
         m1 += static_cast<float>(binary) * static_cast<float>(xi * mass);
         m2 += static_cast<float>(binary) * static_cast<float>(xi * mass * mass);
       },
