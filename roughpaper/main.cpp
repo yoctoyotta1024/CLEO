@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th March 2024
+ * Last Modified: Friday 29th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,6 +34,7 @@
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers2/gbxindex_observer.hpp"
+#include "observers2/massmoments_observer.hpp"
 #include "observers2/observers.hpp"
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
@@ -49,6 +50,20 @@
 #include "zarr2/fsstore.hpp"
 
 template <typename Store>
+inline Observer auto create_gridboxes_output(const unsigned int obsstep, Dataset<Store> &dataset,
+                                             const int maxchunk, const size_t ngbxs) {
+  const GridboxDataWriter<Store> auto thermo = ThermoWriter(dataset, maxchunk, ngbxs);
+  const GridboxDataWriter<Store> auto wind = WindVelocityWriter(dataset, maxchunk, ngbxs);
+  const GridboxDataWriter<Store> auto massmoms = MassMomentsWriter(dataset, maxchunk, ngbxs);
+
+  const auto c = CombineGDW<Store>{};
+  const GridboxDataWriter<Store> auto writers = c(massmoms, c(thermo, wind));
+
+  const Observer auto obsx = ConstTstepObserver(obsstep, WriteGridboxes(dataset, writers));
+  return obsx;
+}
+
+template <typename Store>
 inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
                                       Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
@@ -56,8 +71,9 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 
   const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
   const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
-  const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  return obs3 >> obs2 >> obs1;
+  const Observer auto obsx = create_gridboxes_output(obsstep, dataset, maxchunk, config.ngbxs);
+
+  return obsx >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */
