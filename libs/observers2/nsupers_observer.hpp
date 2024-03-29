@@ -61,3 +61,5 @@ inline Observer auto NsupersObserver(const unsigned int interval, Dataset<Store>
 }
 
 #endif  // LIBS_OBSERVERS2_NSUPERS_OBSERVER_HPP_
+
+// TODO(CB) totnsupers in domain observer
