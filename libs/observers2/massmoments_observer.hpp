@@ -134,7 +134,7 @@ class DoMassMomsObs {
 
  public:
   DoMassMomsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs,
-                std::array<std::string_view, 3> &names, MassMomsCalc calculate_massmoments)
+                const std::array<std::string_view, 3> &names, MassMomsCalc calculate_massmoments)
       : dataset(dataset),
         xzarrs_ptr(std::make_shared<MassMomArrays<Store>>(dataset, maxchunk, ngbxs, names)),
         calculate_massmoments(calculate_massmoments) {}
@@ -164,8 +164,9 @@ template <typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, Dataset<Store> &dataset,
                                          const int maxchunk, const size_t ngbxs) {
   struct MassMomsCalc {
-    operator(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
-             Buffer<float>::mirrorviewd_buffer d_mom1, Buffer<float>::mirrorviewd_buffer d_mom2) {
+    void operator()(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                    Buffer<float>::mirrorviewd_buffer d_mom1,
+                    Buffer<float>::mirrorviewd_buffer d_mom2) const {
       calculate_massmoments(d_gbxs, d_mom0, d_mom1, d_mom2);
     }
   } calc;
