@@ -187,9 +187,13 @@ class GenericGbxWriter {
   };
 
   // Constructor to initialize views and pointer to array in dataset
-  GenericGbxWriter(std::shared_ptr<XarrayForGenericGbxWriter<Store, T>> xzarr_ptr,
+  GenericGbxWriter(Dataset<Store> &dataset, const std::string_view name,
+                   const std::string_view units, const std::string_view dtype,
+                   const double scale_factor, const size_t maxchunk, const size_t ngbxs,
                    FunctorFunc ffunc)
-      : xzarr_ptr(xzarr_ptr), ffunc(ffunc) {}
+      : xzarr_ptr(std::make_shared<XarrayForGenericGbxWriter<Store, T>>(
+            dataset, name, units, dtype, scale_factor, maxchunk, ngbxs)),
+        ffunc(ffunc) {}
 
   // return functor for getting 1 variable from every gridbox in parallel
   Functor get_functor(const viewd_constgbx d_gbxs) const {
