@@ -16,7 +16,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Functions to create GridboxDataWriters which write out state variables from
+ * Functions to create WriteGridboxToArrays which write out state variables from
  * each Gridbox, e.g. to use in StateObserver.
  */
 
@@ -30,7 +30,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./write_gridboxes.hpp"
+#include "./write_gridbox_to_array.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 #include "zarr2/dataset.hpp"
@@ -120,11 +120,11 @@ struct VvelFunc {
   }
 };
 
-// returns GridboxDataWriter which writes the pressure, temperature, qvap, and qcond from
+// returns WriteGridboxToArray which writes the pressure, temperature, qvap, and qcond from
 // each gridbox to arrays in a dataset in a store
 template <typename Store>
-GridboxDataWriter<Store> auto ThermoWriter(Dataset<Store> &dataset, const int maxchunk,
-                                           const size_t ngbxs) {
+WriteGridboxToArray<Store> auto ThermoWriter(Dataset<Store> &dataset, const int maxchunk,
+                                             const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
 
   auto make_array_ptr =
@@ -156,11 +156,11 @@ GridboxDataWriter<Store> auto ThermoWriter(Dataset<Store> &dataset, const int ma
   return c(c(qvap, c(press, temp)), qcond);
 }
 
-// returns GridboxDataWriter which writes the wind velocity components from the centre of each
+// returns WriteGridboxToArray which writes the wind velocity components from the centre of each
 // gridbox to arrays in a dataset in a store
 template <typename Store>
-GridboxDataWriter<Store> auto WindVelocityWriter(Dataset<Store> &dataset, const int maxchunk,
-                                                 const size_t ngbxs) {
+WriteGridboxToArray<Store> auto WindVelocityWriter(Dataset<Store> &dataset, const int maxchunk,
+                                                   const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
 
   auto vel_ptr =
