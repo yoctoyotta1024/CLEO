@@ -31,6 +31,7 @@
 
 #include "../cleoconstants.hpp"
 #include "./observers.hpp"
+#include "./write_gridbox_to_array.hpp"
 #include "zarr2/buffer.hpp"
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
@@ -38,64 +39,26 @@
 
 template <typename Store>
 struct MassMomArrays {
-  XarrayZarrArray<Store, uint32_t> mom0_xzarr;  ///< 0th mass moment array
-  XarrayZarrArray<Store, float> mom1_xzarr;     ///< 1st mass moment array
-  XarrayZarrArray<Store, float> mom2_xzarr;     ///< 2nd mass moment array
-
-  Buffer<uint32_t>::viewh_buffer h_mom0;  // view on host for 0th mass moment from every gridbox
-  Buffer<uint32_t>::mirrorviewd_buffer d_mom0;  // mirror view of h_mom0 on device
-  Buffer<float>::viewh_buffer h_mom1;        // view on host for 1st mass moment from every gridbox
-  Buffer<float>::mirrorviewd_buffer d_mom1;  // mirror view of h_mom1 on device
-  Buffer<float>::viewh_buffer h_mom2;        // view on host for 2nd mass moment from every gridbox
-  Buffer<float>::mirrorviewd_buffer d_mom2;  // mirror view of h_mom2 on device
-
-  /* create array for 0th mass moment for 4 byte unsigned integers (uint32_t type) */
-  inline XarrayZarrArray<Store, uint32_t> create_array(Dataset<Store> &dataset,
-                                                       const size_t maxchunk,
-                                                       const size_t ngbxs) const {
-    const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-    return dataset.template create_array<uint32_t>("massmom0", "", "<u4", 1, chunkshape,
-                                                   {"time", "gbxindex"});
-  }
-
-  /* create array for >0th mass moment for 4 byte floating point numbers. Note conversion of
-  scale factor from double (8 bytes) to single precision (4 bytes float) */
-  inline XarrayZarrArray<Store, float> create_array(
-      Dataset<Store> &dataset, const std::string_view name, const std::string_view units,
-      const double scale_factor, const size_t maxchunk, const size_t ngbxs) const {
-    const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-    const auto scale_factor_ = static_cast<float>(scale_factor);
-    return dataset.template create_array<float>(name, units, "<f4", scale_factor_, chunkshape,
-                                                {"time", "gbxindex"});
-  }
+  XarrayForGenericGbxWriter<Store, uint32_t> mom0_xzarr;  ///< 0th mass moment array
+  XarrayForGenericGbxWriter<Store, float> mom1_xzarr;     ///< 1st mass moment array
+  XarrayForGenericGbxWriter<Store, float> mom2_xzarr;     ///< 2nd mass moment array
 
   MassMomArrays(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
-      : mom0_xzarr(create_array(dataset, maxchunk, ngbxs)),
-        mom1_xzarr(create_array(dataset, "massmom1", "g", dlc::MASS0grams, maxchunk, ngbxs)),
-        mom2_xzarr(create_array(dataset, "massmom2", "g^2", dlc::MASS0grams * dlc::MASS0grams,
-                                maxchunk, ngbxs)),
-        h_mom0("h_mom0", ngbxs),
-        d_mom0(Kokkos::create_mirror_view(ExecSpace(), h_mom0)),
-        h_mom1("h_mom1", ngbxs),
-        d_mom1(Kokkos::create_mirror_view(ExecSpace(), h_mom1)),
-        h_mom2("h_mom2", ngbxs),
-        d_mom2(Kokkos::create_mirror_view(ExecSpace(), h_mom2)) {}
+      : mom0_xzarr(dataset, "massmom0", "", "<u4", 1, maxchunk, ngbxs),
+        mom1_xzarr(dataset, "massmom1", "g", "<f4", dlc::MASS0grams, maxchunk, ngbxs),
+        mom2_xzarr(dataset, "massmom2", "g^2", "<f4", dlc::MASS0grams * dlc::MASS0grams, maxchunk,
+                   ngbxs) {}
 
   void write_arrayshape(Dataset<Store> &dataset) {
-    dataset.write_arrayshape(mom0_xzarr);
-    dataset.write_arrayshape(mom1_xzarr);
-    dataset.write_arrayshape(mom2_xzarr);
+    mom0_xzarr.write_arrayshape(dataset);
+    mom1_xzarr.write_arrayshape(dataset);
+    mom2_xzarr.write_arrayshape(dataset);
   }
 
   void write_massmoments_to_arrays(Dataset<Store> &dataset) {
-    Kokkos::deep_copy(h_mom0, d_mom0);
-    dataset.write_to_array(mom0_xzarr, h_mom0);
-
-    Kokkos::deep_copy(h_mom1, d_mom1);
-    dataset.write_to_array(mom1_xzarr, h_mom1);
-
-    Kokkos::deep_copy(h_mom2, d_mom2);
-    dataset.write_to_array(mom2_xzarr, h_mom2);
+    mom0_xzarr.write_to_array(dataset);
+    mom1_xzarr.write_to_array(dataset);
+    mom2_xzarr.write_to_array(dataset);
   }
 };
 
