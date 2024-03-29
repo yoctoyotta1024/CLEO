@@ -23,13 +23,13 @@
 #ifndef LIBS_OBSERVERS2_STATE_OBSERVER_HPP_
 #define LIBS_OBSERVERS2_STATE_OBSERVER_HPP_
 
-#include <Kokkos_Core.hpp>
 #include <concepts>
 
 #include "./observers.hpp"
 #include "./state_writers.hpp"
+#include "./write_gridbox_to_array.hpp"
 #include "./write_gridboxes.hpp"
-#include "./write_gridboxes_data.hpp"
+#include "zarr2/dataset.hpp"
 
 /* constructs observer which writes variables from the state of each gridbox
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
@@ -40,7 +40,7 @@ inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &
   const GridboxDataWriter<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
   const GridboxDataWriter<Store> auto statewriter = CombineGDW<Store>{}(thermowriter, windwriter);
 
-  return ConstTstepObserver(interval, WriteGridboxesData(dataset, statewriter));
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, statewriter));
 }
 
 #endif  // LIBS_OBSERVERS2_STATE_OBSERVER_HPP_
