@@ -38,9 +38,9 @@
 #include "zarr2/xarray_zarr_array.hpp"
 #include "zarr2/zarr_array.hpp"
 
-/* calculated 0th, 1st and 2nd moment of the (real)
-droplet mass distribution, i.e. 0th, 3rd and 6th
-moment of the droplet radius distribution for one gridbox.
+/* calculated 0th, 1st and 2nd moments of the (real)
+droplet mass distribution for one gridbox, i.e. 0th, 3rd and 6th
+moments of the droplet radius distribution for one gridbox.
 Kokkos::parallel_reduce([...]) is equivalent in serial to:
 for (size_t kk(0); kk < supers.extent(0); ++kk){[...]} */
 KOKKOS_FUNCTION
@@ -50,10 +50,12 @@ void calculate_massmoments(const TeamMember &team_member, const int ii,
                            Buffer<float>::mirrorviewd_buffer d_mom1,
                            Buffer<float>::mirrorviewd_buffer d_mom2);
 
-/* calculated 0th, 1st and 2nd moment of the (real)
-droplet mass distribution, i.e. 0th, 3rd and 6th
-moment of the droplet radius distribution for one gridbox.
-For all gridboxes in parallel */
+/* calculated 0th, 1st and 2nd moments of the (real)
+droplet mass distribution in each gridbox, i.e. 0th, 3rd and 6th
+moments of the droplet radius distribution for each gridbox.
+Calculation is done for all gridboxes in parallel.
+Kokkos::parallel_for([...]) is equivalent in serial to:
+for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}  */
 void calculate_massmoments(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
                            Buffer<float>::mirrorviewd_buffer d_mom1,
                            Buffer<float>::mirrorviewd_buffer d_mom2);
