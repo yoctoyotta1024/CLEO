@@ -34,13 +34,14 @@
 #include "zarr2/xarray_zarr_array.hpp"
 
 /**
- * @brief Concept for GridboxDataWriter is all types that have functions for creating a functor to
- * collect data from gridboxes and then writing that data to an array in a dataset.
+ * @brief Concept for WriteGridboxToArray is all types that have functions for creating a functor
+ * to collect data from a gridbox (in a parallel for loop) and then write the collected data for all
+ * gridboxes to an array in a dataset.
  *
- * @tparam GDW The type that satisfies the GridboxDataWriter concept.
+ * @tparam GDW The type that satisfies the WriteGridboxToArray concept.
  */
 template <typename GDW, typename Store>
-concept GridboxDataWriter = requires(GDW gdw, Dataset<Store> &ds, const viewd_constgbx d_gbxs) {
+concept WriteGridboxToArray = requires(GDW gdw, Dataset<Store> &ds, const viewd_constgbx d_gbxs) {
   { gdw.get_functor(d_gbxs) };
   { gdw.write_to_array(ds) } -> std::same_as<void>;
   { gdw.write_arrayshape(ds) } -> std::same_as<void>;
@@ -52,11 +53,12 @@ concept GridboxDataWriter = requires(GDW gdw, Dataset<Store> &ds, const viewd_co
  * @tparam GbxWriter1 The type of the first gridbox data writer.
  * @tparam GbxWriter2 The type of the second gridbox data writer.
  */
-template <typename Store, GridboxDataWriter<Store> GbxWriter1, GridboxDataWriter<Store> GbxWriter2>
-struct CombinedGridboxDataWriter {
+template <typename Store, WriteGridboxToArray<Store> GbxWriter1,
+          WriteGridboxToArray<Store> GbxWriter2>
+struct CombinedWriteGridboxToArray {
  private:
-  GbxWriter1 a; /**< The first instance of type of GridboxDataWriter. */
-  GbxWriter2 b; /**< The second instance of type of GridboxDataWriter. */
+  GbxWriter1 a; /**< The first instance of type of WriteGridboxToArray. */
+  GbxWriter2 b; /**< The second instance of type of WriteGridboxToArray. */
 
  public:
   struct Functor {
@@ -75,12 +77,12 @@ struct CombinedGridboxDataWriter {
   };
 
   /**
-   * @brief Constructs a CombinedGridboxDataWriter object.
+   * @brief Constructs a CombinedWriteGridboxToArray object.
    *
    * @param a The first gridbox data writer.
    * @param b The second gridbox data writer.
    */
-  CombinedGridboxDataWriter(const GbxWriter1 a, const GbxWriter2 b) : a(a), b(b) {}
+  CombinedWriteGridboxToArray(const GbxWriter1 a, const GbxWriter2 b) : a(a), b(b) {}
 
   Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor(a, b, d_gbxs); }
 
@@ -99,7 +101,7 @@ struct CombinedGridboxDataWriter {
  * @brief Operator for combining two gridbox data writers which write to a FSStore.
  *
  * This operator combines two gridbox data writers into one using the
- * CombinedGridboxDataWriter struct with Store = FSStore.
+ * CombinedWriteGridboxToArray struct with Store = FSStore.
  *
  * @param a The first gridbox data writer.
  * @param b The second gridbox data writer.
@@ -107,13 +109,13 @@ struct CombinedGridboxDataWriter {
  */
 template <typename Store>
 struct CombineGDW {
-  template <GridboxDataWriter<Store> GbxWriter1, GridboxDataWriter<Store> GbxWriter2>
+  template <WriteGridboxToArray<Store> GbxWriter1, WriteGridboxToArray<Store> GbxWriter2>
   auto operator()(const GbxWriter1 a, const GbxWriter2 b) const {
-    return CombinedGridboxDataWriter<Store, GbxWriter1, GbxWriter2>(a, b);
+    return CombinedWriteGridboxToArray<Store, GbxWriter1, GbxWriter2>(a, b);
   }
 };
 
-// struct satifying GridboxDataWriter and does nothing
+// struct satifying WriteGridboxToArray and does nothing
 template <typename Store>
 struct NullGbxWriter {
  public:
@@ -129,7 +131,7 @@ struct NullGbxWriter {
   void write_arrayshape(Dataset<Store> &dataset) const {}
 };
 
-// template GridboxDataWriter to write one variable from each gridbox to an array in a dataset
+// template WriteGridboxToArray to write one variable from each gridbox to an array in a dataset
 template <typename Store, typename T, typename FunctorFunc>
 class GenericGbxWriter {
  private:

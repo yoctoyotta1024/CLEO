@@ -29,14 +29,14 @@
 #include <memory>
 
 #include "../kokkosaliases.hpp"
-#include "./write_gridboxes.hpp"
+#include "./write_gridbox_to_array.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
 
 /* template class for observer with at_start_step function that collects variables from each
 gridbox in parallel and then writes them to their repspective arrays in a dataset */
-template <typename Store, GridboxDataWriter<Store> GbxWriter>
+template <typename Store, WriteGridboxToArray<Store> GbxWriter>
 class WriteGridboxes {
  private:
   Dataset<Store> &dataset;  ///< dataset to write data to
