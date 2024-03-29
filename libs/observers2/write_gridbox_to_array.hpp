@@ -162,7 +162,7 @@ struct XarrayForGenericGbxWriter {
 
   // call function to write shape of array according to dataset
   void write_arrayshape(Dataset<Store> &dataset) { dataset.write_arrayshape(xzarr); }
-}
+};
 
 // template WriteGridboxToArray to write one variable from each gridbox to an array in a dataset
 template <typename Store, typename T, typename FunctorFunc>
