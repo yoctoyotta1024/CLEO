@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th March 2024
+ * Last Modified: Friday 29th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -121,7 +121,7 @@ struct VvelFunc {
 };
 
 // returns GridboxDataWriter which writes the pressure, temperature, qvap, and qcond from
-// each gridbox to an array in a dataset in a store
+// each gridbox to arrays in a dataset in a store
 template <typename Store>
 GridboxDataWriter<Store> auto ThermoWriter(Dataset<Store> &dataset, const int maxchunk,
                                            const size_t ngbxs) {
@@ -157,7 +157,7 @@ GridboxDataWriter<Store> auto ThermoWriter(Dataset<Store> &dataset, const int ma
 }
 
 // returns GridboxDataWriter which writes the wind velocity components from the centre of each
-// gridbox to an array in a dataset in a store
+// gridbox to arrays in a dataset in a store
 template <typename Store>
 GridboxDataWriter<Store> auto WindVelocityWriter(Dataset<Store> &dataset, const int maxchunk,
                                                  const size_t ngbxs) {
