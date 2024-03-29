@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th March 2024
+ * Last Modified: Friday 29th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,6 +27,8 @@
 #include <Kokkos_Pair.hpp>
 #include <algorithm>
 #include <cassert>
+#include <iomanip>
+#include <sstream>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -98,6 +100,23 @@ inline std::string vecstr_to_string(const std::vector<std::string>& dims) {
 }
 
 /**
+ * @brief Make string of with set precision out of of scale factor double.
+ *
+ * Use precision of limit for float (~6-7 decimal places).
+ *
+ * @param scale_factor The scale factor of data.
+ * @return A string representing the scale factor.
+ */
+inline std::string scale_factor_string(const double scale_factor) {
+  const int prec = std::numeric_limits<float>::digits10;  // precision (no. decimal digits) of float
+  std::ostringstream oss;
+  oss << std::fixed << std::setprecision(prec) << scale_factor;
+  std::string scale_factor_str = oss.str();
+
+  return scale_factor_str;
+}
+
+/**
  * @brief Make string of array attributes metadata for .zattrs json which is used to make zarr array
  * compatible with Xarray and NetCDF.
  *
@@ -117,7 +136,7 @@ inline std::string make_xarray_metadata(const std::string_view units, const doub
       "\"" + std::string(units) + "\"" +  // units of coordinate being stored
       ",\n"
       "  \"scale_factor\": " +
-      std::to_string(scale_factor) +  // scale_factor of data
+      scale_factor_string(scale_factor) +  // scale_factor of data
       "\n}");
 
   return zattrs;
