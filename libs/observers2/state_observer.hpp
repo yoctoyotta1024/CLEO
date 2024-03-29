@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th March 2024
+ * Last Modified: Friday 29th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,7 +39,7 @@ inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &
   const GridboxDataWriter<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
   const GridboxDataWriter<Store> auto statewriter = CombineGDW<Store>{}(thermowriter, windwriter);
 
-  return ConstTstepObserver(interval, WriteGridboxes(dataset, statewriter));
+  return ConstTstepObserver(interval, WriteGridboxesData(dataset, statewriter));
 }
 
 #endif  // LIBS_OBSERVERS2_STATE_OBSERVER_HPP_

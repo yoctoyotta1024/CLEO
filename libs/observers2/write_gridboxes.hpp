@@ -179,42 +179,4 @@ class GenericGbxWriter {
   void write_arrayshape(Dataset<Store> &dataset) const { dataset.write_arrayshape(xzarr_ptr); }
 };
 
-/* template class for observing variables from each gridbox in parallel
-and then writing them to their repspective arrays in a dataset */
-template <typename Store, GridboxDataWriter<Store> GbxWriter>
-class WriteGridboxes {
- private:
-  Dataset<Store> &dataset;  ///< dataset to write data to
-  GbxWriter writer;  ///< object collects data from gridboxes and writes it to arrays in the dataset
-
-  // use functor from writer to collect data from gridboxes in parallel
-  void collect_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
-    const size_t ngbxs(d_gbxs.extent(0));
-    auto functor = writer.get_functor(d_gbxs);
-    Kokkos::parallel_for("collect_gbxs_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
-  }
-
-  // collect data from gridboxes and then write it to arrays in the dataset
-  void at_start_step(const viewd_constgbx d_gbxs) const {
-    collect_data_from_gridboxes(d_gbxs);
-    writer.write_to_array(dataset);
-  }
-
- public:
-  WriteGridboxes(Dataset<Store> &dataset, GbxWriter writer) : dataset(dataset), writer(writer) {}
-
-  ~WriteGridboxes() { writer.write_arrayshape(dataset); }
-
-  void before_timestepping(const viewd_constgbx d_gbxs) const {
-    std::cout << "observer includes write gridboxes observer\n";
-  }
-
-  void after_timestepping() const {}
-
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    at_start_step(d_gbxs);
-  }
-};
-
 #endif  // LIBS_OBSERVERS2_WRITE_GRIDBOXES_HPP_
