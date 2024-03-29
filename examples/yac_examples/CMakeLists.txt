@@ -5,3 +5,4 @@ endif()
 
 # subdirectories for specific yac examples of CLEO
 add_subdirectory(yac1_fromfile/src EXCLUDE_FROM_ALL)
+add_subdirectory(newouttest_fromfile/src EXCLUDE_FROM_ALL)
