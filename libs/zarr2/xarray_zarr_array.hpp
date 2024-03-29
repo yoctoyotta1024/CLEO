@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iomanip>
+#include <limits>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -110,7 +111,7 @@ inline std::string vecstr_to_string(const std::vector<std::string>& dims) {
 inline std::string scale_factor_string(const double scale_factor) {
   const int prec = std::numeric_limits<float>::digits10;  // precision (no. decimal digits) of float
   std::ostringstream oss;
-  oss << std::fixed << std::setprecision(prec) << scale_factor;
+  oss << std::scientific << std::setprecision(prec) << scale_factor;
   std::string scale_factor_str = oss.str();
 
   return scale_factor_str;
