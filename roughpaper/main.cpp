@@ -59,8 +59,9 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
   const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
   const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs5 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
-  return obs4 >> obs3 >> obs2 >> obs1;
+  return obs5 >> obs4 >> obs3 >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */

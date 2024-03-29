@@ -60,6 +60,7 @@ void calculate_massmoments_raindrops(const viewd_constgbx d_gbxs,
                                      Buffer<float>::mirrorviewd_buffer d_mom1,
                                      Buffer<float>::mirrorviewd_buffer d_mom2);
 
+/* note casting of mass moments from double to single precision types (uint32_t and floats) */
 template <typename Store>
 struct MassMomArrays {
   XarrayForGenericGbxWriter<Store, uint32_t> mom0_xzarr;  ///< 0th mass moment array
