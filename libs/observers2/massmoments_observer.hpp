@@ -32,33 +32,48 @@
 template <typename Store>
 struct MassMomArrays {
   XarrayZarrArray<Store, uint32_t> m0_xzarr;  ///< 0th mass moment array
-  XarrayZarrArray<Store, float> m1_xzarr;     ///< 1st mass moment array
-  XarrayZarrArray<Store, float> m2_xzarr;     ///< 2nd mass moment array
+  Buffer<uint32_t>::viewh_buffer h_mom0;      // view on host for 0th mass moment from every gridbox
+  Buffer<uint32_t>::mirrorviewd_buffer d_mom0;  // mirror view of h_mom0 on device
+
+  XarrayZarrArray<Store, float> m1_xzarr;    ///< 1st mass moment array
+  Buffer<float>::viewh_buffer h_mom1;        // view on host for 1st mass moment from every gridbox
+  Buffer<float>::mirrorviewd_buffer d_mom1;  // mirror view of h_mom1 on device
+
+  XarrayZarrArray<Store, float> m2_xzarr;    ///< 2nd mass moment array
+  Buffer<float>::viewh_buffer h_mom2;        // view on host for 2nd mass moment from every gridbox
+  Buffer<float>::mirrorviewd_buffer d_mom2;  // mirror view of h_mom2 on device
 
   /* create array for 0th mass moment for 4 byte unsigned integers (uint32_t type) */
-  inline XarrayZarrArray<Store, uint32_t> create_m0_array(
-      Dataset<Store> &dataset, const std::vector<size_t> &chunkshape) const {
+  inline XarrayZarrArray<Store, uint32_t> create_m0_array(Dataset<Store> &dataset,
+                                                          const size_t maxchunk,
+                                                          const size_t ngbxs) const {
+    const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
     return dataset.template create_array<uint32_t>("massmom0", "", "<u4", 1, chunkshape,
                                                    {"time", "gbxindex"});
   }
 
   /* create array for >0th mass moment for 4 byte floating point numbers. Note conversion of
   scale factor from double (8 bytes) to single precision (4 bytes float) */
-  inline XarrayZarrArray<Store, float> create_array(Dataset<Store> &dataset,
-                                                    const std::string_view name,
-                                                    const std::string_view units,
-                                                    const double scale_factor,
-                                                    const std::vector<size_t> &chunkshape) const {
+  inline XarrayZarrArray<Store, float> create_array(
+      Dataset<Store> &dataset, const std::string_view name, const std::string_view units,
+      const double scale_factor, const size_t maxchunk, const size_t ngbxs) const {
+    const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
     const auto scale_factor_ = static_cast<float>(scale_factor);
     return dataset.template create_array<float>(name, units, "<f4", scale_factor_, chunkshape,
                                                 {"time", "gbxindex"});
   }
 
-  MassMomArrays(Dataset<Store> &dataset, const std::vector<size_t> &chunkshape)
-      : m0_xzarr(create_m0_array(dataset, chunkshape)),
-        m1_xzarr(create_array(dataset, "massmom1", "g", dlc::MASS0grams, chunkshape)),
+  MassMomArrays(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
+      : m0_xzarr(create_m0_array(dataset, maxchunk, ngbxs)),
+        m1_xzarr(create_array(dataset, "massmom1", "g", dlc::MASS0grams, maxchunk, ngbxs)),
         m2_xzarr(create_array(dataset, "massmom2", "g^2", dlc::MASS0grams * dlc::MASS0grams,
-                              chunkshape)) {}
+                              maxchunk, ngbxs)),
+        h_mom0("h_mom0", ngbxs),
+        d_mom0(Kokkos::create_mirror_view(ExecSpace(), h_mom0)),
+        h_mom1("h_mom1", ngbxs),
+        d_mom1(Kokkos::create_mirror_view(ExecSpace(), h_mom1)),
+        h_mom2("h_mom2", ngbxs),
+        d_mom2(Kokkos::create_mirror_view(ExecSpace(), h_mom2)) {}
 
   void write_arrayshape(Dataset<Store> &dataset) {
     dataset.write_arrayshape(m0_xzarr);
@@ -76,8 +91,9 @@ class DoMassMomsObs {
   std::shared_ptr<MassMomArrays<Store>> xzarrs_ptr;  ///< pointer to mass moment arrays in dataset
 
  public:
-  DoMassMomsObs(Dataset<Store> &dataset, const std::vector<size_t> &chunkshape)
-      : dataset(dataset), xzarrs_ptr(std::make_shared<MassMomArrays<Store>>(dataset, chunkshape)) {}
+  DoMassMomsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
+      : dataset(dataset),
+        xzarrs_ptr(std::make_shared<MassMomArrays<Store>>(dataset, maxchunk, ngbxs)) {}
 
   ~DoMassMomsObs() { xzarrs_ptr->write_arrayshape(dataset); }
 
@@ -98,8 +114,7 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, Dataset<Store> &dataset,
                                          const int maxchunk, const size_t ngbxs) {
-  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-  return ConstTstepObserver(interval, DoMassMomsObs(dataset, chunkshape));
+  return ConstTstepObserver(interval, DoMassMomsObs(dataset, maxchunk, ngbxs));
 }
 
 #endif  // LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
