@@ -60,6 +60,31 @@ void calculate_massmoments(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirror
                            Buffer<float>::mirrorviewd_buffer d_mom1,
                            Buffer<float>::mirrorviewd_buffer d_mom2);
 
+/* calculated 0th, 1st and 2nd moments of the (real)
+raindroplet mass distribution for one gridbox, i.e. 0th, 3rd and 6th
+moments of the raindroplet radius distribution for one gridbox.
+A raindrop is droplet with a radius >= rlim = 40microns.
+Kokkos::parallel_reduce([...]) is equivalent in serial to:
+for (size_t kk(0); kk < supers.extent(0); ++kk){[...]} */
+KOKKOS_FUNCTION
+void calculate_massmoments_raindrops(const TeamMember &team_member, const int ii,
+                                     const subviewd_constsupers supers,
+                                     Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                                     Buffer<float>::mirrorviewd_buffer d_mom1,
+                                     Buffer<float>::mirrorviewd_buffer d_mom2);
+
+/* calculated 0th, 1st and 2nd moments of the (real)
+raindroplet mass distribution in each gridbox, i.e. 0th, 3rd and 6th
+moments of the raindroplet radius distribution for each gridbox.
+A raindrop is droplet with a radius >= rlim = 40microns.
+Calculation is done for all gridboxes in parallel.
+Kokkos::parallel_for([...]) is equivalent in serial to:
+for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}  */
+void calculate_massmoments_raindrops(const viewd_constgbx d_gbxs,
+                                     Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                                     Buffer<float>::mirrorviewd_buffer d_mom1,
+                                     Buffer<float>::mirrorviewd_buffer d_mom2);
+
 template <typename Store>
 struct MassMomArrays {
   XarrayForGenericGbxWriter<Store, uint32_t> mom0_xzarr;  ///< 0th mass moment array
@@ -100,18 +125,19 @@ struct MassMomArrays {
 
 /* template class for observing 0th, 1st and 2nd mass moment (i.e. 0th, 3rd and 6th radius moment)
 of droplet distribution in each gridbox to arrays in a dataset in a store */
-template <typename Store>
+template <typename Store, typename MassMomsCalc>
 class DoMassMomsObs {
  private:
   Dataset<Store> &dataset;                           ///< dataset to write moments to
   std::shared_ptr<MassMomArrays<Store>> xzarrs_ptr;  ///< pointer to mass moment arrays in dataset
+  MassMomsCalc calculate_massmoments;  ///< function like object to perform moment calculations
 
  public:
-  DoMassMomsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
+  DoMassMomsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs,
+                std::array<std::string_view, 3> &names, MassMomsCalc calculate_massmoments)
       : dataset(dataset),
-        xzarrs_ptr(std::make_shared<MassMomArrays<Store>>(
-            dataset, maxchunk, ngbxs,
-            std::array<std::string_view, 3>({"massmom0", "massmom1", "massmom2"}))) {}
+        xzarrs_ptr(std::make_shared<MassMomArrays<Store>>(dataset, maxchunk, ngbxs, names)),
+        calculate_massmoments(calculate_massmoments) {}
 
   ~DoMassMomsObs() { xzarrs_ptr->write_arrayshape(dataset); }
 
@@ -137,7 +163,16 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, Dataset<Store> &dataset,
                                          const int maxchunk, const size_t ngbxs) {
-  return ConstTstepObserver(interval, DoMassMomsObs(dataset, maxchunk, ngbxs));
+  struct MassMomsCalc {
+    operator(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+             Buffer<float>::mirrorviewd_buffer d_mom1, Buffer<float>::mirrorviewd_buffer d_mom2) {
+      calculate_massmoments(d_gbxs, d_mom0, d_mom1, d_mom2);
+    }
+  } calc;
+
+  const auto names = std::array<std::string_view, 3>({"massmom0", "massmom1", "massmom2"});
+
+  return ConstTstepObserver(interval, DoMassMomsObs(dataset, maxchunk, ngbxs, names, calc));
 }
 
 #endif  // LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
