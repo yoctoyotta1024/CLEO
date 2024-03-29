@@ -25,9 +25,16 @@
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
+#include <iostream>
+#include <memory>
+#include <string_view>
 
+#include "../cleoconstants.hpp"
 #include "./observers.hpp"
-#include "./write_gridboxes.hpp"
+#include "zarr2/buffer.hpp"
+#include "zarr2/dataset.hpp"
+#include "zarr2/xarray_zarr_array.hpp"
+#include "zarr2/zarr_array.hpp"
 
 template <typename Store>
 struct MassMomArrays {
