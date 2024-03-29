@@ -50,20 +50,6 @@
 #include "zarr2/fsstore.hpp"
 
 template <typename Store>
-inline Observer auto create_gridboxes_output(const unsigned int obsstep, Dataset<Store> &dataset,
-                                             const int maxchunk, const size_t ngbxs) {
-  const GridboxDataWriter<Store> auto thermo = ThermoWriter(dataset, maxchunk, ngbxs);
-  const GridboxDataWriter<Store> auto wind = WindVelocityWriter(dataset, maxchunk, ngbxs);
-  const GridboxDataWriter<Store> auto massmoms = MassMomentsWriter(dataset, maxchunk, ngbxs);
-
-  const auto c = CombineGDW<Store>{};
-  const GridboxDataWriter<Store> auto writers = c(massmoms, c(thermo, wind));
-
-  const Observer auto obsx = ConstTstepObserver(obsstep, WriteGridboxes(dataset, writers));
-  return obsx;
-}
-
-template <typename Store>
 inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
                                       Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
@@ -71,9 +57,10 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 
   const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
   const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
-  const Observer auto obsx = create_gridboxes_output(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
-  return obsx >> obs2 >> obs1;
+  return obs4 >> obs3 >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */
