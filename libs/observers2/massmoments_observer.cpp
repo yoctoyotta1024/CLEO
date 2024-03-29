@@ -84,8 +84,8 @@ void calculate_massmoments_raindrops(const TeamMember &team_member, const int ii
       KOKKOS_LAMBDA(const size_t kk, uint32_t &m0, float &m1, float &m2) {
         const auto &drop(supers(kk));
         const auto mass = drop.mass();
-        const auto binary = bool{drop.get_radius() >= rlim};  // 1 if droplet is raindrop, else 0
         const auto xi = static_cast<double>(drop.get_xi());   // cast multiplicity to double
+        const auto binary = bool{drop.get_radius() >= rlim};  // 1 if droplet is raindrop, else 0
         m0 += static_cast<uint32_t>(binary) * static_cast<uint32_t>(drop.get_xi());
         m1 += static_cast<float>(binary) * static_cast<float>(xi * mass);
         m2 += static_cast<float>(binary) * static_cast<float>(xi * mass * mass);
