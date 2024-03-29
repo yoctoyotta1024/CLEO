@@ -48,24 +48,25 @@ concept WriteGridboxToArray = requires(GDW gdw, Dataset<Store> &ds, const viewd_
 };
 
 /**
- * @brief Combined gridbox data writer struct combines two gridbox data writers into one.
+ * @brief Combined gridbox data writer struct combines two structs that write gridbox data to an
+ * array into one struct that does the actions of both.
  *
- * @tparam GbxWriter1 The type of the first gridbox data writer.
- * @tparam GbxWriter2 The type of the second gridbox data writer.
+ * @tparam WriteGbx1 The type of the first gridbox data writer.
+ * @tparam WriteGbx2 The type of the second gridbox data writer.
  */
-template <typename Store, WriteGridboxToArray<Store> GbxWriter1,
-          WriteGridboxToArray<Store> GbxWriter2>
+template <typename Store, WriteGridboxToArray<Store> WriteGbx1,
+          WriteGridboxToArray<Store> WriteGbx2>
 struct CombinedWriteGridboxToArray {
  private:
-  GbxWriter1 a; /**< The first instance of type of WriteGridboxToArray. */
-  GbxWriter2 b; /**< The second instance of type of WriteGridboxToArray. */
+  WriteGbx1 a; /**< The first instance of type of WriteGridboxToArray. */
+  WriteGbx2 b; /**< The second instance of type of WriteGridboxToArray. */
 
  public:
   struct Functor {
-    GbxWriter1::Functor a_functor;
-    GbxWriter2::Functor b_functor;
+    WriteGbx1::Functor a_functor;
+    WriteGbx2::Functor b_functor;
 
-    explicit Functor(const GbxWriter1 a, const GbxWriter2 b, const viewd_constgbx d_gbxs)
+    explicit Functor(const WriteGbx1 a, const WriteGbx2 b, const viewd_constgbx d_gbxs)
         : a_functor(a.get_functor(d_gbxs)), b_functor(b.get_functor(d_gbxs)) {}
 
     // Functor operator to perform copy of each element in parallel
@@ -82,7 +83,7 @@ struct CombinedWriteGridboxToArray {
    * @param a The first gridbox data writer.
    * @param b The second gridbox data writer.
    */
-  CombinedWriteGridboxToArray(const GbxWriter1 a, const GbxWriter2 b) : a(a), b(b) {}
+  CombinedWriteGridboxToArray(const WriteGbx1 a, const WriteGbx2 b) : a(a), b(b) {}
 
   Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor(a, b, d_gbxs); }
 
@@ -109,9 +110,9 @@ struct CombinedWriteGridboxToArray {
  */
 template <typename Store>
 struct CombineGDW {
-  template <WriteGridboxToArray<Store> GbxWriter1, WriteGridboxToArray<Store> GbxWriter2>
-  auto operator()(const GbxWriter1 a, const GbxWriter2 b) const {
-    return CombinedWriteGridboxToArray<Store, GbxWriter1, GbxWriter2>(a, b);
+  template <WriteGridboxToArray<Store> WriteGbx1, WriteGridboxToArray<Store> WriteGbx2>
+  auto operator()(const WriteGbx1 a, const WriteGbx2 b) const {
+    return CombinedWriteGridboxToArray<Store, WriteGbx1, WriteGbx2>(a, b);
   }
 };
 
