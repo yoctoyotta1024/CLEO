@@ -31,22 +31,21 @@
 
 template <typename Store>
 struct MassMomArrays {
-  XarrayZarrArray<Store, uint32_t> m0_xzarr;  ///< 0th mass moment array
-  Buffer<uint32_t>::viewh_buffer h_mom0;      // view on host for 0th mass moment from every gridbox
-  Buffer<uint32_t>::mirrorviewd_buffer d_mom0;  // mirror view of h_mom0 on device
+  XarrayZarrArray<Store, uint32_t> mom0_xzarr;  ///< 0th mass moment array
+  XarrayZarrArray<Store, float> mom1_xzarr;     ///< 1st mass moment array
+  XarrayZarrArray<Store, float> mom2_xzarr;     ///< 2nd mass moment array
 
-  XarrayZarrArray<Store, float> m1_xzarr;    ///< 1st mass moment array
+  Buffer<uint32_t>::viewh_buffer h_mom0;  // view on host for 0th mass moment from every gridbox
+  Buffer<uint32_t>::mirrorviewd_buffer d_mom0;  // mirror view of h_mom0 on device
   Buffer<float>::viewh_buffer h_mom1;        // view on host for 1st mass moment from every gridbox
   Buffer<float>::mirrorviewd_buffer d_mom1;  // mirror view of h_mom1 on device
-
-  XarrayZarrArray<Store, float> m2_xzarr;    ///< 2nd mass moment array
   Buffer<float>::viewh_buffer h_mom2;        // view on host for 2nd mass moment from every gridbox
   Buffer<float>::mirrorviewd_buffer d_mom2;  // mirror view of h_mom2 on device
 
   /* create array for 0th mass moment for 4 byte unsigned integers (uint32_t type) */
-  inline XarrayZarrArray<Store, uint32_t> create_m0_array(Dataset<Store> &dataset,
-                                                          const size_t maxchunk,
-                                                          const size_t ngbxs) const {
+  inline XarrayZarrArray<Store, uint32_t> create_array(Dataset<Store> &dataset,
+                                                       const size_t maxchunk,
+                                                       const size_t ngbxs) const {
     const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
     return dataset.template create_array<uint32_t>("massmom0", "", "<u4", 1, chunkshape,
                                                    {"time", "gbxindex"});
@@ -64,10 +63,10 @@ struct MassMomArrays {
   }
 
   MassMomArrays(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
-      : m0_xzarr(create_m0_array(dataset, maxchunk, ngbxs)),
-        m1_xzarr(create_array(dataset, "massmom1", "g", dlc::MASS0grams, maxchunk, ngbxs)),
-        m2_xzarr(create_array(dataset, "massmom2", "g^2", dlc::MASS0grams * dlc::MASS0grams,
-                              maxchunk, ngbxs)),
+      : mom0_xzarr(create_array(dataset, maxchunk, ngbxs)),
+        mom1_xzarr(create_array(dataset, "massmom1", "g", dlc::MASS0grams, maxchunk, ngbxs)),
+        mom2_xzarr(create_array(dataset, "massmom2", "g^2", dlc::MASS0grams * dlc::MASS0grams,
+                                maxchunk, ngbxs)),
         h_mom0("h_mom0", ngbxs),
         d_mom0(Kokkos::create_mirror_view(ExecSpace(), h_mom0)),
         h_mom1("h_mom1", ngbxs),
@@ -76,9 +75,20 @@ struct MassMomArrays {
         d_mom2(Kokkos::create_mirror_view(ExecSpace(), h_mom2)) {}
 
   void write_arrayshape(Dataset<Store> &dataset) {
-    dataset.write_arrayshape(m0_xzarr);
-    dataset.write_arrayshape(m1_xzarr);
-    dataset.write_arrayshape(m2_xzarr);
+    dataset.write_arrayshape(mom0_xzarr);
+    dataset.write_arrayshape(mom1_xzarr);
+    dataset.write_arrayshape(mom2_xzarr);
+  }
+
+  void write_massmoments_to_arrays(Dataset<Store> &dataset) {
+    Kokkos::deep_copy(h_mom0, d_mom0);
+    dataset.write_to_array(mom0_xzarr, h_mom0);
+
+    Kokkos::deep_copy(h_mom1, d_mom1);
+    dataset.write_to_array(mom1_xzarr, h_mom1);
+
+    Kokkos::deep_copy(h_mom2, d_mom2);
+    dataset.write_to_array(mom2_xzarr, h_mom2);
   }
 };
 
@@ -105,7 +115,8 @@ class DoMassMomsObs {
 
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
-    // TODO(CB)
+    calculate_massmoments(d_gbxs);
+    xzarrs_ptr->write_massmoments_to_arrays(dataset);
   }
 };
 
