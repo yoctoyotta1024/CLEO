@@ -125,33 +125,27 @@ struct VvelFunc {
 template <typename Store>
 WriteGridboxToArray<Store> auto ThermoWriter(Dataset<Store> &dataset, const int maxchunk,
                                              const size_t ngbxs) {
-  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-
-  auto make_array_ptr =
-      [&dataset, &chunkshape](
-          const std::string_view name, const std::string_view units,
-          const double scale_factor) -> std::shared_ptr<XarrayZarrArray<Store, float>> {
-    return std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-        name, units, "<f4", scale_factor, chunkshape, {"time", "gbxindex"}));
-  };
-
   // create shared pointer to 2-D array in dataset for pressure in each gridbox over time
-  auto press_ptr = make_array_ptr("press", "hPa", dlc::P0 / 100);
+  auto press_ptr = std::make_shared<XarrayForGenericGbxWriter<Store, float>>(
+      dataset, "press", "hPa", "<f4", dlc::P0 / 100, maxchunk, ngbxs);
 
   // create shared pointer to 2-D array in dataset for temperature in each gridbox over time
-  auto temp_ptr = make_array_ptr("temp", "K", dlc::TEMP0);
+  auto temp_ptr = std::make_shared<XarrayForGenericGbxWriter<Store, float>>(
+      dataset, "temp", "K", "<f4", dlc::TEMP0, maxchunk, ngbxs);
 
   // create shared pointer to 2-D array in dataset for qvap in each gridbox over time
-  auto qvap_ptr = make_array_ptr("qvap", "g/Kg", 1000.0);
+  auto qvap_ptr = std::make_shared<XarrayForGenericGbxWriter<Store, float>>(
+      dataset, "qvap", "g/Kg", "<f4", 1000.0, maxchunk, ngbxs);
 
   // create shared pointer to 2-D array in dataset for qcond in each gridbox over time
-  auto qcond_ptr = make_array_ptr("qcond", "g/Kg", 1000.0);
+  auto qcond_ptr = std::make_shared<XarrayForGenericGbxWriter<Store, float>>(
+      dataset, "qcond", "g/Kg", "<f4", 1000.0, maxchunk, ngbxs);
 
   const auto c = CombineGDW<Store>{};
-  auto press = GenericGbxWriter<Store, float, PressFunc>(dataset, PressFunc{}, press_ptr, ngbxs);
-  auto temp = GenericGbxWriter<Store, float, TempFunc>(dataset, TempFunc{}, temp_ptr, ngbxs);
-  auto qvap = GenericGbxWriter<Store, float, QvapFunc>(dataset, QvapFunc{}, qvap_ptr, ngbxs);
-  auto qcond = GenericGbxWriter<Store, float, QcondFunc>(dataset, QcondFunc{}, qcond_ptr, ngbxs);
+  auto press = GenericGbxWriter<Store, float, PressFunc>(press_ptr, PressFunc{});
+  auto temp = GenericGbxWriter<Store, float, TempFunc>(temp_ptr, TempFunc{});
+  auto qvap = GenericGbxWriter<Store, float, QvapFunc>(qvap_ptr, QvapFunc{});
+  auto qcond = GenericGbxWriter<Store, float, QcondFunc>(qcond_ptr, QcondFunc{});
 
   return c(c(qvap, c(press, temp)), qcond);
 }
@@ -161,20 +155,17 @@ WriteGridboxToArray<Store> auto ThermoWriter(Dataset<Store> &dataset, const int 
 template <typename Store>
 WriteGridboxToArray<Store> auto WindVelocityWriter(Dataset<Store> &dataset, const int maxchunk,
                                                    const size_t ngbxs) {
-  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-
   auto vel_ptr =
-      [&dataset,
-       &chunkshape](const std::string_view name) -> std::shared_ptr<XarrayZarrArray<Store, float>> {
-    return std::make_shared<XarrayZarrArray<Store, float>>(dataset.template create_array<float>(
-        name, "m/s", "<f4", dlc::W0, chunkshape, {"time", "gbxindex"}));
+      [&dataset, maxchunk, ngbxs](
+          const std::string_view name) -> std::shared_ptr<XarrayForGenericGbxWriter<Store, float>> {
+    return std::make_shared<XarrayForGenericGbxWriter<Store, float>>(dataset, name, "m/s", "<f4",
+                                                                     dlc::W0, maxchunk, ngbxs);
   };
-
   // create shared pointer to 2-D arrays in a datasetfor the velocity at the centre of each gridbox
   // over time and use to make GbxWriters for each velocity component
-  auto wvel = GenericGbxWriter<Store, float, WvelFunc>(dataset, WvelFunc{}, vel_ptr("wvel"), ngbxs);
-  auto uvel = GenericGbxWriter<Store, float, UvelFunc>(dataset, UvelFunc{}, vel_ptr("uvel"), ngbxs);
-  auto vvel = GenericGbxWriter<Store, float, VvelFunc>(dataset, VvelFunc{}, vel_ptr("vvel"), ngbxs);
+  auto wvel = GenericGbxWriter<Store, float, WvelFunc>(vel_ptr("wvel"), WvelFunc{});
+  auto uvel = GenericGbxWriter<Store, float, UvelFunc>(vel_ptr("uvel"), UvelFunc{});
+  auto vvel = GenericGbxWriter<Store, float, VvelFunc>(vel_ptr("vvel"), VvelFunc{});
 
   const auto c = CombineGDW<Store>{};
   return c(wvel, c(vvel, uvel));
