@@ -29,6 +29,7 @@
 #include "./observers.hpp"
 #include "./state_writers.hpp"
 #include "./write_gridboxes.hpp"
+#include "./write_gridboxes_data.hpp"
 
 /* constructs observer which writes variables from the state of each gridbox
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
