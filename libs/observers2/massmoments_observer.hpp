@@ -60,6 +60,18 @@ struct MassMomArrays {
     mom1_xzarr.write_to_array(dataset);
     mom2_xzarr.write_to_array(dataset);
   }
+
+  XarrayForGenericGbxWriter<Store, uint32_t>::mirrorviewd_data get_d_mom0() {
+    return mom0_xzarr.d_data;
+  }
+
+  XarrayForGenericGbxWriter<Store, float>::mirrorviewd_data get_d_mom1() {
+    return mom1_xzarr.d_data;
+  }
+
+  XarrayForGenericGbxWriter<Store, float>::mirrorviewd_data get_d_mom2() {
+    return mom2_xzarr.d_data;
+  }
 };
 
 /* calculated 0th, 1st and 2nd moment of the (real)
@@ -127,7 +139,11 @@ class DoMassMomsObs {
 
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
-    calculate_massmoments(d_gbxs, xzarrs_ptr->d_mom0, xzarrs_ptr->d_mom1, xzarrs_ptr->d_mom2);
+    auto d_mom0 = xzarrs_ptr->get_d_mom0();
+    auto d_mom1 = xzarrs_ptr->get_d_mom1();
+    auto d_mom2 = xzarrs_ptr->get_d_mom2();
+
+    calculate_massmoments(d_gbxs, d_mom0, d_mom1, d_mom2);
     xzarrs_ptr->write_massmoments_to_arrays(dataset);
   }
 };
