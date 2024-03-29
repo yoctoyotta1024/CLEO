@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th March 2024
+ * Last Modified: Friday 29th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -248,11 +248,11 @@ class ZarrArray {
    * chunks is assumed to increment along innermost dimensions first.
    *
    * @param store The store where the array will be stored.
-   * @param chunkshape The shape of individual data chunks along each dimension.
-   * @param reduced_arrayshape The shape of the array along all but the outermost (0th) dimension.
    * @param name The name of the array.
-   * @param scale_factor The scale factor of the data.
    * @param dtype The data type stored in the arrays (e.g., "<f8").
+   * @param chunkshape The shape of individual data chunks along each dimension.
+   * @param is_backend boolean is true if zarr array is a backend of something else e.g. xarray.
+   * @param reduced_arrayshape The shape of the array along all but the outermost (0th) dimension.
    */
   ZarrArray(Store& store, const std::string_view name, const std::string_view dtype,
             const std::vector<size_t>& chunkshape, const bool is_backend,
