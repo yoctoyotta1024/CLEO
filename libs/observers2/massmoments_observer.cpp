@@ -77,6 +77,7 @@ void calculate_massmoments_raindrops(const TeamMember &team_member, const int ii
                                      Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
                                      Buffer<float>::mirrorviewd_buffer d_mom1,
                                      Buffer<float>::mirrorviewd_buffer d_mom2) {
+  constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
   const size_t nsupers(supers.extent(0));
   Kokkos::parallel_reduce(
       Kokkos::TeamThreadRange(team_member, nsupers),
@@ -84,9 +85,10 @@ void calculate_massmoments_raindrops(const TeamMember &team_member, const int ii
         const auto xi = static_cast<double>(
             supers(kk).get_xi());  // cast multiplicity from unsigned int to double
         const auto mass = supers(kk).mass();
-        m0 += static_cast<uint32_t>(supers(kk).get_xi());
-        m1 += static_cast<float>(xi * mass);
-        m2 += static_cast<float>(xi * mass * mass);
+        const auto binary = bool{radius >= rlim};  // 1 if droplet is raindrop, 0 otherwise
+        m0 += static_cast<uint32_t>(binary) * static_cast<uint32_t>(supers(kk).get_xi());
+        m1 += static_cast<float>(binary) * static_cast<float>(xi * mass);
+        m2 += static_cast<float>(binary) * static_cast<float>(xi * mass * mass);
       },
       d_mom0(ii), d_mom1(ii), d_mom2(ii));  // {0th, 1st, 2nd} mass moments
 }
