@@ -36,7 +36,7 @@ void calculate_massmoments(const TeamMember &team_member, const int ii,
   const size_t nsupers(supers.extent(0));
   Kokkos::parallel_reduce(
       Kokkos::TeamThreadRange(team_member, nsupers),
-      [supers](const size_t kk, uint32_t &m0, float &m1, float &m2) {
+      KOKKOS_LAMBDA(const size_t kk, uint32_t &m0, float &m1, float &m2) {
         const auto xi = static_cast<double>(
             supers(kk).get_xi());  // cast multiplicity from unsigned int to double
         const auto mass = supers(kk).mass();
@@ -55,11 +55,12 @@ void calculate_massmoments(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirror
                            Buffer<float>::mirrorviewd_buffer d_mom1,
                            Buffer<float>::mirrorviewd_buffer d_mom2) {
   const size_t ngbxs(d_gbxs.extent(0));
-  Kokkos::parallel_for("calculate_massmoments", TeamPolicy(ngbxs, Kokkos::AUTO()),
-                       [d_gbxs, d_mom0, d_mom1, d_mom2](const TeamMember &team_member) {
-                         const int ii = team_member.league_rank();
+  Kokkos::parallel_for(
+      "calculate_massmoments", TeamPolicy(ngbxs, Kokkos::AUTO()),
+      KOKKOS_LAMBDA(const TeamMember &team_member) {
+        const int ii = team_member.league_rank();
 
-                         auto supers(d_gbxs(ii).supersingbx.readonly());
-                         calculate_massmoments(team_member, ii, supers, d_mom0, d_mom1, d_mom2);
-                       });
+        auto supers(d_gbxs(ii).supersingbx.readonly());
+        calculate_massmoments(team_member, ii, supers, d_mom0, d_mom1, d_mom2);
+      });
 }
