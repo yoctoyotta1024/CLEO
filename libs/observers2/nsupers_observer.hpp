@@ -30,12 +30,27 @@
 #include "./write_gridboxes.hpp"
 #include "zarr2/dataset.hpp"
 
+/* Operator is functor to perform copy of number of superdrops in each gridbox to d_data
+in parallel. Note conversion of nsupers from size_t (8 bytes) to single precision (4 bytes
+unsigned integer) in output */
+struct NsupersFunc {
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t ii, viewd_constgbx d_gbxs,
+                  Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
+    auto nsupers = static_cast<uint32_t>(d_gbxs(ii).supersingbx.nsupers());
+    d_data(ii) = nsupers;
+  }
+};
+
 /* constructs observer which writes number of superdrops in each gridbox with a constant
 timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
 inline Observer auto NsupersObserver(const unsigned int interval, Dataset<Store> &dataset,
                                      const int maxchunk, const size_t ngbxs) {
-  const WriteGridboxToArray<Store> auto nsuperswriter = NsupersWriter(dataset, maxchunk, ngbxs);
+  const WriteGridboxToArray<Store> auto nsuperswriter = =
+      GenericGbxWriter<Store, uint32_t, NsupersFunc>(dataset, "nsupers", "", "<u4", 1, maxchunk,
+                                                     ngbxs, NsupersFunc{});
+
   return ConstTstepObserver(interval, WriteGridboxes(dataset, nsuperswriter));
 }
 
