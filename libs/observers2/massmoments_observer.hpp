@@ -176,4 +176,24 @@ inline Observer auto MassMomentsObserver(const unsigned int interval, Dataset<St
   return ConstTstepObserver(interval, DoMassMomsObs(dataset, maxchunk, ngbxs, names, calc));
 }
 
+/* constructs observer which writes mass moments of raindroplet distribution in each gridbox
+with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
+template <typename Store>
+inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
+                                                  Dataset<Store> &dataset, const int maxchunk,
+                                                  const size_t ngbxs) {
+  struct MassMomsCalc {
+    void operator()(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                    Buffer<float>::mirrorviewd_buffer d_mom1,
+                    Buffer<float>::mirrorviewd_buffer d_mom2) const {
+      calculate_massmoments_raindrops(d_gbxs, d_mom0, d_mom1, d_mom2);
+    }
+  } calc;
+
+  const auto names = std::array<std::string_view, 3>(
+      {"massmom0_raindrops", "massmom1_raindrops", "massmom2_raindrops"});
+
+  return ConstTstepObserver(interval, DoMassMomsObs(dataset, maxchunk, ngbxs, names, calc));
+}
+
 #endif  // LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
