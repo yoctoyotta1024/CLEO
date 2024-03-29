@@ -36,11 +36,11 @@
 
 /* template class for observer with at_start_step function that collects variables from each
 gridbox in parallel and then writes them to their repspective arrays in a dataset */
-template <typename Store, WriteGridboxToArray<Store> GbxWriter>
+template <typename Store, WriteGridboxToArray<Store> WriteGbx>
 class WriteGridboxes {
  private:
   Dataset<Store> &dataset;  ///< dataset to write data to
-  GbxWriter writer;  ///< object collects data from gridboxes and writes it to arrays in the dataset
+  WriteGbx writer;  ///< object collects data from gridboxes and writes it to arrays in the dataset
 
   // use functor from writer to collect data from gridboxes in parallel
   void collect_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
@@ -56,7 +56,7 @@ class WriteGridboxes {
   }
 
  public:
-  WriteGridboxes(Dataset<Store> &dataset, GbxWriter writer) : dataset(dataset), writer(writer) {}
+  WriteGridboxes(Dataset<Store> &dataset, WriteGbx writer) : dataset(dataset), writer(writer) {}
 
   ~WriteGridboxes() { writer.write_arrayshape(dataset); }
 
