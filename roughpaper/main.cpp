@@ -51,6 +51,30 @@
 #include "zarr2/fsstore.hpp"
 
 template <typename Store>
+inline Observer auto create_gridbox_observer(const Config &config, const Timesteps &tsteps,
+                                             Dataset<Store> &dataset) {
+  const auto obsstep = (unsigned int)tsteps.get_obsstep();
+  const auto maxchunk = int{config.maxchunk};
+
+  const WriteGridboxToArray<Store> auto thermowriter =
+      ThermoWriter(dataset, maxchunk, config.ngbxs);
+  const WriteGridboxToArray<Store> auto windwriter =
+      WindVelocityWriter(dataset, maxchunk, config.ngbxs);
+  const WriteGridboxToArray<Store> auto nsuperswriter =
+      NsupersWriter(dataset, maxchunk, config.ngbxs);
+
+  const auto c = CombineGDW<Store>{};
+  const WriteGridboxToArray<Store> auto writer = c(c(thermowriter, windwriter), nsuperswriter);
+  const Observer auto obsx = ConstTstepObserver(obsstep, WriteGridboxes(dataset, writer));
+
+  // const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // const Observer auto obs6 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // return obs3 >> obs6;
+
+  return obsx;
+}
+
+template <typename Store>
 inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
                                       Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
@@ -58,12 +82,11 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 
   const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
   const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
-  const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  const Observer auto obs5 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  const Observer auto obs6 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs4 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
 
-  return obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
+  return obsx >> obs4 >> obs3 >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */
