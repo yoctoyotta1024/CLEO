@@ -35,6 +35,7 @@
 #include "initialise/timesteps.hpp"
 #include "observers2/gbxindex_observer.hpp"
 #include "observers2/massmoments_observer.hpp"
+#include "observers2/nsupers_observer.hpp"
 #include "observers2/observers.hpp"
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
@@ -60,8 +61,9 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
   const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
   const Observer auto obs5 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs6 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
-  return obs5 >> obs4 >> obs3 >> obs2 >> obs1;
+  return obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */

@@ -47,7 +47,7 @@ timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
 inline Observer auto NsupersObserver(const unsigned int interval, Dataset<Store> &dataset,
                                      const int maxchunk, const size_t ngbxs) {
-  const WriteGridboxToArray<Store> auto nsuperswriter = =
+  const WriteGridboxToArray<Store> auto nsuperswriter =
       GenericGbxWriter<Store, uint32_t, NsupersFunc>(dataset, "nsupers", "", "<u4", 1, maxchunk,
                                                      ngbxs, NsupersFunc{});
 
