@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th March 2024
+ * Last Modified: Friday 29th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -76,12 +76,14 @@ struct Buffer {
    * @param h_data View containing the data to copy.
    */
   void copy_ndata_to_buffer(const size_t n_to_copy, const viewh_buffer h_data) {
-    auto fill_ = fill;      // Copy fill for lambda function
-    auto buffer_ = buffer;  // Copy of view for lambda function using buffer
+    const auto refs_d = kkpair_size_t({0, n_to_copy});
+    const auto source = Kokkos::subview(h_data, refs_d);  // data to copy into buffer
 
-    Kokkos::parallel_for(
-        "copy_ndata_to_buffer", Kokkos::RangePolicy<HostSpace>(0, n_to_copy),
-        [fill_, buffer_, h_data](const size_t& jj) { buffer_(fill_ + jj) = h_data(jj); });
+    const auto refs_b = kkpair_size_t({fill, fill + n_to_copy});
+    const auto dest = Kokkos::subview(buffer, refs_b);  // space in buffer to paste into
+
+    Kokkos::deep_copy(dest, source);
+
     fill += n_to_copy;
   }
 
