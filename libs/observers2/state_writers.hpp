@@ -30,7 +30,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./write_gridboxes_data.hpp"
+#include "./write_gridboxes.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 #include "zarr2/dataset.hpp"
