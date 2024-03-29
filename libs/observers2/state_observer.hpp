@@ -31,6 +31,24 @@
 #include "./write_gridboxes.hpp"
 #include "zarr2/dataset.hpp"
 
+/* constructs observer which writes thermodynamic variables from the state of each gridbox
+with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
+template <typename Store>
+inline Observer auto ThermoObserver(const unsigned int interval, Dataset<Store> &dataset,
+                                    const int maxchunk, const size_t ngbxs) {
+  const WriteGridboxToArray<Store> auto thermowriter = ThermoWriter(dataset, maxchunk, ngbxs);
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, thermowriter));
+}
+
+/* constructs observer which writes the wind velocity from the state of each gridbox
+with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
+template <typename Store>
+inline Observer auto WindObserver(const unsigned int interval, Dataset<Store> &dataset,
+                                  const int maxchunk, const size_t ngbxs) {
+  const WriteGridboxToArray<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, windwriter));
+}
+
 /* constructs observer which writes variables from the state of each gridbox
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
