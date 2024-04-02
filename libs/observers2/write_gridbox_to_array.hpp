@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 29th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -181,9 +181,15 @@ class GenericGbxWriter {
     Functor(FunctorFunc ffunc, const viewd_constgbx d_gbxs, mirrorviewd_data d_data)
         : ffunc(ffunc), d_gbxs(d_gbxs), d_data(d_data) {}
 
-    // Functor operator to perform copy of 1 variable in each gridbox to d_data in parallel
+    /* Functor operator to perform copy of 1 variable in each gridbox to d_data in parallel when
+    using Kokkos range policy */
     KOKKOS_INLINE_FUNCTION
     void operator()(const size_t ii) const { ffunc(ii, d_gbxs, d_data); }
+
+    /* Functor operator to perform copy of 1 variable in each gridbox to d_data in parallel
+    when using Kokkos range policy */
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const TeamMember &team_member) const { ffunc(team_member, d_gbxs, d_data); }
   };
 
   // Constructor to initialize views and pointer to array in dataset
