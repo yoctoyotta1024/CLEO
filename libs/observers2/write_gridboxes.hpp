@@ -42,16 +42,12 @@ class WriteGridboxes {
   Dataset<Store> &dataset;  ///< dataset to write data to
   WriteGbx writer;  ///< object collects data from gridboxes and writes it to arrays in the dataset
 
-  // use functor from writer to collect data from gridboxes in parallel
-  void collect_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
+  /* Use the writer's functor to collect data from gridboxes in parallel.
+  Then write the datat to arrays in the dataset */
+  void at_start_step(const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
     auto functor = writer.get_functor(d_gbxs);
     Kokkos::parallel_for("collect_gbxs_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
-  }
-
-  // collect data from gridboxes and then write it to arrays in the dataset
-  void at_start_step(const viewd_constgbx d_gbxs) const {
-    collect_data_from_gridboxes(d_gbxs);
     writer.write_to_array(dataset);
   }
 
