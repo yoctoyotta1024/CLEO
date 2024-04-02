@@ -38,15 +38,17 @@
 #include "zarr2/xarray_zarr_array.hpp"
 #include "zarr2/zarr_array.hpp"
 
-// Operator is functor to perform copy of vvel at the centre of each gridbox to d_data
-// in parallel. Note conversion of vvel from double (8 bytes) to single precision (4 bytes
-// float) in output
+/* Operator is functor to perform copy of xi for each superdroplet in each gridbox to d_data
+in parallel. Note conversion of xi from size_t (arch dependent usuualyl 8 bytes) to long
+precision unsigned int (unit64_t) */
 struct XiFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs,
-                  Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto vvel = static_cast<float>(d_gbxs(ii).state.vvelcentre());
-    d_data(ii) = vvel;
+  void operator()(const TeamMember &team_member, viewd_constgbx d_gbxs,
+                  Buffer<uint64_t>::mirrorviewd_buffer d_data) const {
+    const int ii = team_member.league_rank();
+    auto supers(d_gbxs(ii).supersingbx.readonly());
+    const size_t kk = 0;
+    d_data(ii) = static_cast<uint64_t>(supers(kk).get_xi());  // TODO(CB) WIP
   }
 };
 
@@ -59,7 +61,7 @@ inline Observer auto SuperdropsObserver(const unsigned int interval, Dataset<Sto
       dataset, "xi", "", "<u8", 1, maxchunk, ngbxs, XiFunc{});
 
   const auto obsfunc = WriteGridboxes(ParallelGbxsTeamPolicy{}, dataset, xiwriter);
-
+  // TODO(CB) ragged count obs
   return ConstTstepObserver(interval, obsfunc);
 }
 
