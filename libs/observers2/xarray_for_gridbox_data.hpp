@@ -45,7 +45,7 @@ struct XarrayForGridboxData {
   viewh_data h_data;        // view on host for value of 1 variable from every gridbox
   mirrorviewd_data d_data;  // mirror view of h_data on device
 
-  // Constructor to initialize views and pointer to array in dataset
+  /* Constructor to initialize views and pointer to array in dataset */
   XarrayForGridboxData(const Dataset<Store> &dataset, const std::string_view name,
                        const std::string_view units, const std::string_view dtype,
                        const double scale_factor, const size_t maxchunk, const size_t ngbxs)
