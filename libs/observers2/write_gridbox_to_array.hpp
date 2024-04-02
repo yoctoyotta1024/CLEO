@@ -39,13 +39,13 @@
  * to collect data from a gridbox (in a parallel for loop) and then write the collected data for all
  * gridboxes to an array in a dataset.
  *
- * @tparam GDW The type that satisfies the WriteGridboxToArray concept.
+ * @tparam WG2A The type that satisfies the WriteGridboxToArray concept.
  */
-template <typename GDW, typename Store>
-concept WriteGridboxToArray = requires(GDW gdw, Dataset<Store> &ds, const viewd_constgbx d_gbxs) {
-  { gdw.get_functor(d_gbxs) };
-  { gdw.write_to_array(ds) } -> std::same_as<void>;
-  { gdw.write_arrayshape(ds) } -> std::same_as<void>;
+template <typename WG2A, typename Store>
+concept WriteGridboxToArray = requires(WG2A wg2a, Dataset<Store> &ds, const viewd_constgbx d_gbxs) {
+  { wg2a.get_functor(d_gbxs) };
+  { wg2a.write_to_array(ds) } -> std::same_as<void>;
+  { wg2a.write_arrayshape(ds) } -> std::same_as<void>;
 };
 
 /**
@@ -110,7 +110,7 @@ struct CombinedWriteGridboxToArray {
  * @return The combined gridbox data writer.
  */
 template <typename Store>
-struct CombineGDW {
+struct CombineWG2A {
   template <WriteGridboxToArray<Store> WriteGbx1, WriteGridboxToArray<Store> WriteGbx2>
   auto operator()(const WriteGbx1 a, const WriteGbx2 b) const {
     return CombinedWriteGridboxToArray<Store, WriteGbx1, WriteGbx2>(a, b);

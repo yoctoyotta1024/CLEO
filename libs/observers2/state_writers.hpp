@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 29th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -137,7 +137,7 @@ WriteGridboxToArray<Store> auto ThermoWriter(Dataset<Store> &dataset, const int 
   auto qcond = GenericGbxWriter<Store, float, QcondFunc>(dataset, "qcond", "g/Kg", "<f4", 1000.0,
                                                          maxchunk, ngbxs, QcondFunc{});
 
-  const auto c = CombineGDW<Store>{};
+  const auto c = CombineWG2A<Store>{};
   return c(c(qvap, c(press, temp)), qcond);
 }
 
@@ -155,7 +155,7 @@ WriteGridboxToArray<Store> auto WindVelocityWriter(Dataset<Store> &dataset, cons
   auto vvel = GenericGbxWriter<Store, float, VvelFunc>(dataset, "vvel", "m/s", "<f4", dlc::W0,
                                                        maxchunk, ngbxs, VvelFunc{});
 
-  const auto c = CombineGDW<Store>{};
+  const auto c = CombineWG2A<Store>{};
   return c(wvel, c(vvel, uvel));
 }
 
