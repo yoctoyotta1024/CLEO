@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,6 @@
  * File Description:
  * Functions and structures related to the CLEO gridboxes
  */
-
 
 #ifndef LIBS_GRIDBOXES_GRIDBOX_HPP_
 #define LIBS_GRIDBOXES_GRIDBOX_HPP_
@@ -69,6 +68,8 @@ struct Gridbox {
   viewd_constsupers domain_totsupers_readonly() const {
     return supersingbx.domain_totsupers_readonly();
   }
+
+  size_t domain_totnsupers() const { return supersingbx.domain_totnsupers(); }
 };
 
 #endif  // LIBS_GRIDBOXES_GRIDBOX_HPP_
