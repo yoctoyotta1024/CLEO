@@ -61,7 +61,6 @@ inline Observer auto SuperdropsObserver(const unsigned int interval, const Datas
       dataset, "xi", "", "<u8", 1, maxchunk, ngbxs, XiFunc{});
 
   const auto obsfunc = DoWriteSupers(ParallelGbxsTeamPolicy{}, dataset, xiwriter, maxchunk, ngbxs);
-  // TODO(CB) ragged count obs
   return ConstTstepObserver(interval, obsfunc);
 }
 

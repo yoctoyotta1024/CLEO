@@ -29,6 +29,7 @@
 #include <memory>
 
 #include "../kokkosaliases.hpp"
+#include "./nsupers_observer.hpp"
 #include "./write_gridbox_to_array.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr2/dataset.hpp"
