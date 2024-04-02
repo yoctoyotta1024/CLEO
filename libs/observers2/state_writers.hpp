@@ -30,12 +30,10 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./write_gridbox_to_array.hpp"
+#include "./generic_write_gridbox_to_array.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 #include "zarr2/dataset.hpp"
-#include "zarr2/xarray_zarr_array.hpp"
-#include "zarr2/zarr_array.hpp"
 
 // Operator is functor to perform copy of pressure in each gridbox to d_data in parallel.
 // Note conversion of pressure from double (8 bytes) to single precision (4 bytes float) in output
