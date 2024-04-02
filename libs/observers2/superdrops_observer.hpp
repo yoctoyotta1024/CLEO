@@ -60,7 +60,7 @@ inline Observer auto SuperdropsObserver(const unsigned int interval, Dataset<Sto
   const WriteGridboxToArray<Store> auto xiwriter = GenericGbxWriter<Store, uint64_t, XiFunc>(
       dataset, "xi", "", "<u8", 1, maxchunk, ngbxs, XiFunc{});
 
-  const auto obsfunc = DoWriteGridboxes(ParallelGbxsTeamPolicy{}, dataset, xiwriter);
+  const auto obsfunc = DoWriteSuperdrops(ParallelGbxsTeamPolicy{}, dataset, xiwriter);
   // TODO(CB) ragged count obs
   return ConstTstepObserver(interval, obsfunc);
 }
