@@ -29,7 +29,7 @@
 #include <memory>
 
 #include "../kokkosaliases.hpp"
-#include "./gridbox_data_xarray.hpp"
+#include "./xarray_for_gridbox_data.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
@@ -138,12 +138,12 @@ struct NullWriteGridboxToArray {
 template <typename Store, typename T, typename FunctorFunc>
 class GenericWriteGridboxToXarray {
  private:
-  std::shared_ptr<GridboxDataXarray<Store, T>> xzarr_ptr;
+  std::shared_ptr<XarrayForGridboxData<Store, T>> xzarr_ptr;
   FunctorFunc ffunc;
 
  public:
   struct Functor {
-    using mirrorviewd_data = GridboxDataXarray<Store, T>::mirrorviewd_data;
+    using mirrorviewd_data = XarrayForGridboxData<Store, T>::mirrorviewd_data;
     FunctorFunc ffunc;
     viewd_constgbx d_gbxs;    // view of gridboxes on device
     mirrorviewd_data d_data;  // mirror view for data on device
@@ -167,8 +167,8 @@ class GenericWriteGridboxToXarray {
                               const std::string_view units, const std::string_view dtype,
                               const double scale_factor, const size_t maxchunk, const size_t ngbxs,
                               FunctorFunc ffunc)
-      : xzarr_ptr(std::make_shared<GridboxDataXarray<Store, T>>(dataset, name, units, dtype,
-                                                                scale_factor, maxchunk, ngbxs)),
+      : xzarr_ptr(std::make_shared<XarrayForGridboxData<Store, T>>(dataset, name, units, dtype,
+                                                                   scale_factor, maxchunk, ngbxs)),
         ffunc(ffunc) {}
 
   // return functor for getting 1 variable from every gridbox in parallel

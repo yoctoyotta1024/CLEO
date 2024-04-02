@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: gridbox_data_xarray.hpp
+ * File: xarray_for_gridbox_data.hpp
  * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  * to an array in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_GRIDBOX_DATA_XARRAY_HPP_
-#define LIBS_OBSERVERS2_GRIDBOX_DATA_XARRAY_HPP_
+#ifndef LIBS_OBSERVERS2_XARRAY_FOR_GRIDBOX_DATA_HPP_
+#define LIBS_OBSERVERS2_XARRAY_FOR_GRIDBOX_DATA_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -38,7 +38,7 @@
 which can be useful when collecting data for 1 variable from 'ngbxs' gridboxes
 (in parallel) to then write the the array */
 template <typename Store, typename T>
-struct GridboxDataXarray {
+struct XarrayForGridboxData {
   XarrayZarrArray<Store, T> xzarr;                         // array in a dataset
   using viewh_data = Buffer<T>::viewh_buffer;              // type of view for h_data
   using mirrorviewd_data = Buffer<T>::mirrorviewd_buffer;  // mirror view type for d_data
@@ -46,9 +46,9 @@ struct GridboxDataXarray {
   mirrorviewd_data d_data;  // mirror view of h_data on device
 
   // Constructor to initialize views and pointer to array in dataset
-  GridboxDataXarray(Dataset<Store> &dataset, const std::string_view name,
-                    const std::string_view units, const std::string_view dtype,
-                    const double scale_factor, const size_t maxchunk, const size_t ngbxs)
+  XarrayForGridboxData(Dataset<Store> &dataset, const std::string_view name,
+                       const std::string_view units, const std::string_view dtype,
+                       const double scale_factor, const size_t maxchunk, const size_t ngbxs)
       : xzarr(dataset.template create_array<T>(name, units, dtype, scale_factor,
                                                good2Dchunkshape(maxchunk, ngbxs),
                                                {"time", "gbxindex"})),
@@ -65,4 +65,4 @@ struct GridboxDataXarray {
   void write_arrayshape(Dataset<Store> &dataset) { dataset.write_arrayshape(xzarr); }
 };
 
-#endif  // LIBS_OBSERVERS2_GRIDBOX_DATA_XARRAY_HPP_
+#endif  // LIBS_OBSERVERS2_XARRAY_FOR_GRIDBOX_DATA_HPP_

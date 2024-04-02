@@ -25,9 +25,9 @@
 
 #include <concepts>
 
+#include "./do_write_gridboxes.hpp"
 #include "./observers.hpp"
 #include "./write_gridbox_to_array.hpp"
-#include "./write_gridboxes.hpp"
 #include "zarr2/dataset.hpp"
 
 /* Operator is functor to perform copy of number of superdrops in each gridbox to d_data

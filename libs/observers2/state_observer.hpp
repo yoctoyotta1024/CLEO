@@ -25,10 +25,10 @@
 
 #include <concepts>
 
+#include "./do_write_gridboxes.hpp"
 #include "./observers.hpp"
 #include "./state_writers.hpp"
 #include "./write_gridbox_to_array.hpp"
-#include "./write_gridboxes.hpp"
 #include "zarr2/dataset.hpp"
 
 /* constructs observer which writes thermodynamic variables from the state of each gridbox
