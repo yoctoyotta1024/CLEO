@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -71,25 +71,17 @@ class GenericWriteGridboxToXarray {
                                                                    scale_factor, maxchunk, ngbxs)),
         ffunc(ffunc) {}
 
-  /* Constructor to initialize views and pointer to raggedcount array in dataset */
-  GenericWriteGridboxToXarray(const Dataset<Store> &dataset, const std::string_view name,
-                              const std::string_view dtype, const size_t maxchunk,
-                              const size_t ngbxs, FunctorFunc ffunc)
-      : xzarr_ptr(std::make_shared<XarrayForGridboxData<Store, T>>(dataset, name, dtype, maxchunk,
-                                                                   ngbxs)),
-        ffunc(ffunc) {}
-
-  // return functor for getting 1 variable from every gridbox in parallel
+  /* return functor for getting 1 variable from every gridbox in parallel */
   Functor get_functor(const viewd_constgbx d_gbxs) const {
     assert((d_gbxs.extent(0) == xzarr_ptr->d_data.extent(0)) &&
            "d_data view must be size of the number of gridboxes");
     return Functor(ffunc, d_gbxs, xzarr_ptr->d_data);
   }
 
-  // copy data from device view directly to host and then write to array in dataset
+  /* copy data from device view directly to host and then write to array in dataset */
   void write_to_array(const Dataset<Store> &dataset) const { xzarr_ptr->write_to_array(dataset); }
 
-  // call function to write shape of array according to dataset
+  /* call function to write shape of array according to dataset */
   void write_arrayshape(const Dataset<Store> &dataset) const {
     xzarr_ptr->write_arrayshape(dataset);
   }
