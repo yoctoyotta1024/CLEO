@@ -61,8 +61,9 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                         const int maxchunk, const size_t ngbxs) {
-  const WriteGridboxToArray<Store> auto xi = GenericWriteGridboxToXarray<Store, uint32_t, XiFunc>(
-      dataset, "xi", "", "<u8", 1, maxchunk, ngbxs, XiFunc{});
+  const WriteGridboxToArray<Store> auto xi =
+      GenericWriteSupersToXarray<Store, uint32_t, XiFunc, XarrayForSupersData>(
+          dataset, "xi", "", "<u8", 1, maxchunk, XiFunc{});
 
   const WriteGridboxToArray<Store> auto raggedcount =
       RaggedCountNsupersWriter(dataset, maxchunk, ngbxs);

@@ -67,10 +67,9 @@ class GenericWriteSupersToXarray {
   /* Constructor to initialize views and pointer to array in dataset */
   GenericWriteSupersToXarray(const Dataset<Store> &dataset, const std::string_view name,
                              const std::string_view units, const std::string_view dtype,
-                             const double scale_factor, const size_t maxchunk, const size_t ngbxs,
-                             FunctorFunc ffunc)
+                             const double scale_factor, const size_t maxchunk, FunctorFunc ffunc)
       : xzarr_ptr(std::make_shared<XarrayForSupersData<Store, T>>(dataset, name, units, dtype,
-                                                                  scale_factor, maxchunk, ngbxs)),
+                                                                  scale_factor, maxchunk)),
         ffunc(ffunc) {}
 
   /* Constructor to initialize views and pointer to raggedcount array in dataset */
