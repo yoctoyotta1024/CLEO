@@ -125,16 +125,16 @@ struct VvelFunc {
 template <typename Store>
 WriteGridboxToArray<Store> auto ThermoWriter(Dataset<Store> &dataset, const int maxchunk,
                                              const size_t ngbxs) {
-  auto press = GenericWriteGridboxToArray<Store, float, PressFunc>(
+  auto press = GenericWriteGridboxToXarray<Store, float, PressFunc>(
       dataset, "press", "hPa", "<f4", dlc::P0 / 100, maxchunk, ngbxs, PressFunc{});
 
-  auto temp = GenericWriteGridboxToArray<Store, float, TempFunc>(
+  auto temp = GenericWriteGridboxToXarray<Store, float, TempFunc>(
       dataset, "temp", "K", "<f4", dlc::TEMP0, maxchunk, ngbxs, TempFunc{});
 
-  auto qvap = GenericWriteGridboxToArray<Store, float, QvapFunc>(
+  auto qvap = GenericWriteGridboxToXarray<Store, float, QvapFunc>(
       dataset, "qvap", "g/Kg", "<f4", 1000.0, maxchunk, ngbxs, QvapFunc{});
 
-  auto qcond = GenericWriteGridboxToArray<Store, float, QcondFunc>(
+  auto qcond = GenericWriteGridboxToXarray<Store, float, QcondFunc>(
       dataset, "qcond", "g/Kg", "<f4", 1000.0, maxchunk, ngbxs, QcondFunc{});
 
   const auto c = CombineWG2A<Store>{};
@@ -146,11 +146,11 @@ WriteGridboxToArray<Store> auto ThermoWriter(Dataset<Store> &dataset, const int 
 template <typename Store>
 WriteGridboxToArray<Store> auto WindVelocityWriter(Dataset<Store> &dataset, const int maxchunk,
                                                    const size_t ngbxs) {
-  auto wvel = GenericWriteGridboxToArray<Store, float, WvelFunc>(
+  auto wvel = GenericWriteGridboxToXarray<Store, float, WvelFunc>(
       dataset, "wvel", "m/s", "<f4", dlc::W0, maxchunk, ngbxs, WvelFunc{});
-  auto uvel = GenericWriteGridboxToArray<Store, float, UvelFunc>(
+  auto uvel = GenericWriteGridboxToXarray<Store, float, UvelFunc>(
       dataset, "uvel", "m/s", "<f4", dlc::W0, maxchunk, ngbxs, UvelFunc{});
-  auto vvel = GenericWriteGridboxToArray<Store, float, VvelFunc>(
+  auto vvel = GenericWriteGridboxToXarray<Store, float, VvelFunc>(
       dataset, "vvel", "m/s", "<f4", dlc::W0, maxchunk, ngbxs, VvelFunc{});
 
   const auto c = CombineWG2A<Store>{};

@@ -136,7 +136,7 @@ struct NullWriteGridboxToArray {
 
 // template WriteGridboxToArray to write one variable from each gridbox to an array in a dataset
 template <typename Store, typename T, typename FunctorFunc>
-class GenericWriteGridboxToArray {
+class GenericWriteGridboxToXarray {
  private:
   std::shared_ptr<GridboxDataXarray<Store, T>> xzarr_ptr;
   FunctorFunc ffunc;
@@ -163,10 +163,10 @@ class GenericWriteGridboxToArray {
   };
 
   // Constructor to initialize views and pointer to array in dataset
-  GenericWriteGridboxToArray(Dataset<Store> &dataset, const std::string_view name,
-                             const std::string_view units, const std::string_view dtype,
-                             const double scale_factor, const size_t maxchunk, const size_t ngbxs,
-                             FunctorFunc ffunc)
+  GenericWriteGridboxToXarray(Dataset<Store> &dataset, const std::string_view name,
+                              const std::string_view units, const std::string_view dtype,
+                              const double scale_factor, const size_t maxchunk, const size_t ngbxs,
+                              FunctorFunc ffunc)
       : xzarr_ptr(std::make_shared<GridboxDataXarray<Store, T>>(dataset, name, units, dtype,
                                                                 scale_factor, maxchunk, ngbxs)),
         ffunc(ffunc) {}
