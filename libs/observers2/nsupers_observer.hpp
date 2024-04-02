@@ -57,8 +57,8 @@ template <typename Store>
 inline Observer auto NsupersObserver(const unsigned int interval, Dataset<Store> &dataset,
                                      const int maxchunk, const size_t ngbxs) {
   const WriteGridboxToArray<Store> auto nsuperswriter = NsupersWriter(dataset, maxchunk, ngbxs);
-  const auto loopfunc = ParallelGbxsRangePolicy{};
-  return ConstTstepObserver(interval, WriteGridboxes(dataset, nsuperswriter, loopfunc));
+  const auto looppolicy = ParallelGbxsRangePolicy{};
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, nsuperswriter, looppolicy));
 }
 
 #endif  // LIBS_OBSERVERS2_NSUPERS_OBSERVER_HPP_

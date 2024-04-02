@@ -37,8 +37,8 @@ template <typename Store>
 inline Observer auto ThermoObserver(const unsigned int interval, Dataset<Store> &dataset,
                                     const int maxchunk, const size_t ngbxs) {
   const WriteGridboxToArray<Store> auto thermowriter = ThermoWriter(dataset, maxchunk, ngbxs);
-  const auto loopfunc = ParallelGbxsRangePolicy{};
-  return ConstTstepObserver(interval, WriteGridboxes(dataset, thermowriter, loopfunc));
+  const auto looppolicy = ParallelGbxsRangePolicy{};
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, thermowriter, looppolicy));
 }
 
 /* constructs observer which writes the wind velocity from the state of each gridbox
@@ -47,8 +47,8 @@ template <typename Store>
 inline Observer auto WindObserver(const unsigned int interval, Dataset<Store> &dataset,
                                   const int maxchunk, const size_t ngbxs) {
   const WriteGridboxToArray<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
-  const auto loopfunc = ParallelGbxsRangePolicy{};
-  return ConstTstepObserver(interval, WriteGridboxes(dataset, windwriter, loopfunc));
+  const auto looppolicy = ParallelGbxsRangePolicy{};
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, windwriter, looppolicy));
 }
 
 /* constructs observer which writes variables from the state of each gridbox
@@ -59,9 +59,9 @@ inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &
   const WriteGridboxToArray<Store> auto thermowriter = ThermoWriter(dataset, maxchunk, ngbxs);
   const WriteGridboxToArray<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
   const WriteGridboxToArray<Store> auto statewriter = CombineGDW<Store>{}(thermowriter, windwriter);
-  const auto loopfunc = ParallelGbxsRangePolicy{};
+  const auto looppolicy = ParallelGbxsRangePolicy{};
 
-  return ConstTstepObserver(interval, WriteGridboxes(dataset, statewriter, loopfunc));
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, statewriter, looppolicy));
 }
 
 #endif  // LIBS_OBSERVERS2_STATE_OBSERVER_HPP_
