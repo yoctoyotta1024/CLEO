@@ -51,7 +51,7 @@ struct XarrayForGridboxData {
                        const double scale_factor, const size_t maxchunk, const size_t ngbxs)
       : xzarr(dataset.template create_array<T>(name, units, dtype, scale_factor,
                                                good2Dchunkshape(maxchunk, ngbxs),
-                                               {"time", "gbxindex"}, false)),
+                                               {"time", "gbxindex"})),
         h_data("h_data", ngbxs),
         d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
 
