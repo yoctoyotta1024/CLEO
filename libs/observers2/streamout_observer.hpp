@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -41,8 +41,7 @@ struct StreamOutObserver {
   unsigned int interval;                              // timestep between print statements
   std::function<double(unsigned int)> step2realtime;  // function to convert timesteps to real time
 
-  void print_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                       const viewd_constsupers totsupers) const;
+  void print_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const;
 
  public:
   StreamOutObserver(const unsigned int obsstep,
@@ -62,10 +61,9 @@ struct StreamOutObserver {
   bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }
 
   /* observe Gridboxes (copy to host) at start of timestep */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
     if (on_step(t_mdl)) {
-      print_statement(t_mdl, d_gbxs, totsupers);
+      print_statement(t_mdl, d_gbxs);
     }
   }
 };
