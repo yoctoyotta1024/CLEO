@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 30th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -65,7 +65,8 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
 
   const auto c = CombineGDW<Store>{};
   const WriteGridboxToArray<Store> auto writer = c(c(thermowriter, windwriter), nsuperswriter);
-  const Observer auto obsx = ConstTstepObserver(obsstep, WriteGridboxes(dataset, writer));
+  const Observer auto obsx =
+      ConstTstepObserver(obsstep, WriteGridboxes(dataset, writer, ParallelGbxsRangePolicy{}));
 
   // const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
   // const Observer auto obs6 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
