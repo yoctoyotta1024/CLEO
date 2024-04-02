@@ -23,7 +23,6 @@
 #define LIBS_ZARR2_DATASET_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -90,10 +89,7 @@ class Dataset {
    * @param dimname A string for the name of the dimension in the dataset.
    * @return The size of (i.e. number of elements along) the dimension.
    */
-  size_t get_dimension(const std::string &dimname) const {
-    assert((datasetdims.at(dimname)) && "dataset must contain dimension to get");
-    return datasetdims.at(dimname);
-  }
+  size_t get_dimension(const std::string &dimname) const { return datasetdims.at(dimname); }
 
   /**
    * @brief Sets the size of an existing dimension in the dataset.
@@ -101,7 +97,6 @@ class Dataset {
    * @param dim A pair containing the name of the dimension and its new size to be set.
    */
   void set_dimension(const std::pair<std::string, size_t> &dim) {
-    assert((datasetdims.at(dim.first)) && "dataset must contain dimension to set");
     datasetdims.at(dim.first) = dim.second;
   }
 
