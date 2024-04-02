@@ -68,8 +68,7 @@ inline Observer auto SuperdropsObserver(const unsigned int interval, const Datas
   const WriteGridboxToArray<Store> auto raggedcount =
       RaggedCountNsupersWriter(dataset, maxchunk, ngbxs);
 
-  const auto obsfunc =
-      DoWriteSupers(ParallelGbxsTeamPolicy{}, dataset, CombineWG2A<Store>{}(raggedcount, xi));
+  const auto obsfunc = DoWriteSupers(dataset, CombineWG2A<Store>{}(raggedcount, xi));
   return ConstTstepObserver(interval, obsfunc);
 }
 
