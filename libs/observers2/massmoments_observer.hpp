@@ -109,6 +109,15 @@ class DoMassMomsObs {
   std::shared_ptr<MassMomArrays<Store>> xzarrs_ptr;  ///< pointer to mass moment arrays in dataset
   MassMomsCalc calculate_massmoments;  ///< function like object to perform moment calculations
 
+  void at_start_step(const viewd_constgbx d_gbxs) const {
+    auto d_mom0 = xzarrs_ptr->get_d_mom0();
+    auto d_mom1 = xzarrs_ptr->get_d_mom1();
+    auto d_mom2 = xzarrs_ptr->get_d_mom2();
+    calculate_massmoments(d_gbxs, d_mom0, d_mom1, d_mom2);
+
+    xzarrs_ptr->write_massmoments_to_arrays(dataset);
+  }
+
  public:
   DoMassMomsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs,
                 const std::array<std::string_view, 3> &names, MassMomsCalc calculate_massmoments)
@@ -125,12 +134,7 @@ class DoMassMomsObs {
   void after_timestepping() const {}
 
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
-    auto d_mom0 = xzarrs_ptr->get_d_mom0();
-    auto d_mom1 = xzarrs_ptr->get_d_mom1();
-    auto d_mom2 = xzarrs_ptr->get_d_mom2();
-    calculate_massmoments(d_gbxs, d_mom0, d_mom1, d_mom2);
-
-    xzarrs_ptr->write_massmoments_to_arrays(dataset);
+    at_start_step(d_gbxs);
   }
 };
 
