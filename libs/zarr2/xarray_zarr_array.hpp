@@ -76,7 +76,6 @@ inline std::vector<size_t> reduced_arrayshape_from_dims(
   auto reduced_arrayshape = std::vector<size_t>({});
 
   for (size_t aa = 1; aa < dimnames.size(); ++aa) {
-    assert((datasetdims.at(dimnames.at(aa))) && "dataset must contain dimensions of array");
     const auto dsize = datasetdims.at(dimnames.at(aa));  // number of elements along a dimension
     reduced_arrayshape.push_back(dsize);
   }
@@ -177,7 +176,6 @@ class XarrayZarrArray {
     auto ischange = std::vector<int>(arrayshape.size(), 0);
 
     for (size_t aa = 0; aa < dimnames.size(); ++aa) {
-      assert((datasetdims.at(dimnames.at(aa))) && "dataset must contain dimensions of array");
       const auto dsize = datasetdims.at(dimnames.at(aa));
       ischange.at(aa) = dsize - arrayshape.at(aa);
       arrayshape.at(aa) = dsize;
