@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,6 +27,7 @@
 #include <concepts>
 
 #include "./do_write_supers.hpp"
+#include "./generic_write_supers_to_array.hpp"
 #include "./observers.hpp"
 #include "./write_gridbox_to_array.hpp"
 #include "zarr2/dataset.hpp"
@@ -51,11 +52,11 @@ template <typename Store>
 WriteGridboxToArray<Store> auto RaggedCountNsupersWriter(const Dataset<Store> &dataset,
                                                          const size_t maxchunk,
                                                          const size_t ngbxs) {
-  return GenericWriteGridboxToXarray<Store, uint32_t, NsupersFunc>(
+  return GenericWriteSupersToXarray<Store, uint32_t, NsupersFunc, XarrayForSupersRaggedCount>(
       dataset, "raggedcount_nsupers", "<u4", maxchunk, ngbxs, NsupersFunc{});
 }
 
-/* constructs observer which writes mass moments of droplet distribution in each gridbox
+/* constructs observer which writes out variables from every sueprdroplet in each gridbox
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
