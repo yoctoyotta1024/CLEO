@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 29th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -123,13 +123,12 @@ class DoMassMomsObs {
 
   void after_timestepping() const {}
 
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
     auto d_mom0 = xzarrs_ptr->get_d_mom0();
     auto d_mom1 = xzarrs_ptr->get_d_mom1();
     auto d_mom2 = xzarrs_ptr->get_d_mom2();
-
     calculate_massmoments(d_gbxs, d_mom0, d_mom1, d_mom2);
+
     xzarrs_ptr->write_massmoments_to_arrays(dataset);
   }
 };

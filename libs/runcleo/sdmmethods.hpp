@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Wednesday 27th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -198,9 +198,8 @@ class SDMMethods {
    */
   void at_start_step(const unsigned int t_mdl, const dualview_constgbx gbxs) const {
     const auto h_gbxs = gbxs.view_host();
-    const viewd_constsupers totsupers(h_gbxs(0).domain_totsupers_readonly());
 
-    obs.at_start_step(t_mdl, gbxs.view_device(), totsupers);
+    obs.at_start_step(t_mdl, gbxs.view_device());
   }
 
   /**
