@@ -24,19 +24,12 @@
 #define LIBS_OBSERVERS2_SUPERDROPS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <array>
 #include <concepts>
-#include <iostream>
-#include <memory>
-#include <string_view>
 
-#include "../cleoconstants.hpp"
+#include "./do_write_supers.hpp"
 #include "./observers.hpp"
 #include "./write_gridbox_to_array.hpp"
-#include "zarr2/buffer.hpp"
 #include "zarr2/dataset.hpp"
-#include "zarr2/xarray_zarr_array.hpp"
-#include "zarr2/zarr_array.hpp"
 
 /* Operator is functor to perform copy of xi for each superdroplet in each gridbox to d_data
 in parallel. Note conversion of xi from size_t (arch dependent usuualyl 8 bytes) to long
