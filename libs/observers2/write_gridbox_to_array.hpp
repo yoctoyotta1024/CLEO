@@ -99,6 +99,22 @@ struct CombinedWriteGridboxToArray {
   }
 };
 
+/* struct satifying WriteGridboxToArray and does nothing */
+template <typename Store>
+struct NullWriteGridboxToArray {
+ public:
+  struct Functor {
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const size_t ii) const {}
+  };
+
+  Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor{}; }
+
+  void write_to_array(const Dataset<Store> &dataset) const {}
+
+  void write_arrayshape(const Dataset<Store> &dataset) const {}
+};
+
 /**
  * @brief Operator for combining two gridbox data writers which write to a FSStore.
  *
@@ -115,22 +131,6 @@ struct CombineWG2A {
   auto operator()(const WriteGbx1 a, const WriteGbx2 b) const {
     return CombinedWriteGridboxToArray<Store, WriteGbx1, WriteGbx2>(a, b);
   }
-};
-
-// struct satifying WriteGridboxToArray and does nothing
-template <typename Store>
-struct NullWriteGridboxToArray {
- public:
-  struct Functor {
-    KOKKOS_INLINE_FUNCTION
-    void operator()(const size_t ii) const {}
-  };
-
-  Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor{}; }
-
-  void write_to_array(const Dataset<Store> &dataset) const {}
-
-  void write_arrayshape(const Dataset<Store> &dataset) const {}
 };
 
 #endif  // LIBS_OBSERVERS2_WRITE_GRIDBOX_TO_ARRAY_HPP_

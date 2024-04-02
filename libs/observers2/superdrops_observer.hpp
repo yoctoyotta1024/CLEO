@@ -45,15 +45,30 @@ struct XiFunc {
   }
 };
 
+/* returns WriteGridboxToArray which writes the number of superdrops in each
+gridbox to an array in a dataset in a store called "raggedcount_nsupers" */
+template <typename Store>
+WriteGridboxToArray<Store> auto RaggedCountNsupersWriter(const Dataset<Store> &dataset,
+                                                         const size_t maxchunk,
+                                                         const size_t ngbxs) {
+  return GenericWriteGridboxToXarray<Store, uint32_t, NsupersFunc>(
+      dataset, "raggedcount_nsupers", "", "<u4", 1, maxchunk, ngbxs, NsupersFunc{});
+}
+
 /* constructs observer which writes mass moments of droplet distribution in each gridbox
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                         const int maxchunk, const size_t ngbxs) {
-  const WriteGridboxToArray<Store> auto xiwriter = GenericGbxWriter<Store, uint64_t, XiFunc>(
+  const WriteGridboxToArray<Store> auto xi = GenericGbxWriter<Store, uint64_t, XiFunc>(
       dataset, "xi", "", "<u8", 1, maxchunk, ngbxs, XiFunc{});
 
-  const auto obsfunc = DoWriteSupers(ParallelGbxsTeamPolicy{}, dataset, xiwriter, maxchunk, ngbxs);
+  const WriteGridboxToArray<Store> auto raggedcount =
+      RaggedCountNsupersWriter(dataset, maxchunk, ngbxs);
+
+  const auto c = CombineWG2A{};
+  const WriteGridboxToArray<Store> auto writer = c(raggedcount, xi);
+  const auto obsfunc = DoWriteSupers(ParallelGbxsTeamPolicy{}, dataset, writer, maxchunk, ngbxs);
   return ConstTstepObserver(interval, obsfunc);
 }
 

@@ -43,10 +43,18 @@ struct NsupersFunc {
     auto nsupers = static_cast<uint32_t>(d_gbxs(ii).supersingbx.nsupers());
     d_data(ii) = nsupers;
   }
+
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const TeamMember &team_member, viewd_constgbx d_gbxs,
+                  Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
+    const int ii = team_member.league_rank();
+    auto nsupers = static_cast<uint32_t>(d_gbxs(ii).supersingbx.nsupers());
+    d_data(ii) = nsupers;
+  }
 };
 
 /* returns WriteGridboxToArray which writes the number of superdrops in each
-gridbox to an array in a dataset in a store */
+gridbox to an array in a dataset in a store called "nsupers" */
 template <typename Store>
 WriteGridboxToArray<Store> auto NsupersWriter(const Dataset<Store> &dataset, const size_t maxchunk,
                                               const size_t ngbxs) {
