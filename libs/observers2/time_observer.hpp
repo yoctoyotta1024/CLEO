@@ -53,7 +53,7 @@ class DoTimeObs {
     dataset.set_dimension(timedim);
 
     const auto time = static_cast<float>(step2dimlesstime(t_mdl));
-    write_to_array(dataset, xzarr_ptr, time);
+    dataset.write_to_array(xzarr_ptr, time);
   }
 
  public:
@@ -65,7 +65,7 @@ class DoTimeObs {
                                                             maxchunk, 0))),
         step2dimlesstime(step2dimlesstime) {}
 
-  ~DoTimeObs() { write_arrayshape(dataset, xzarr_ptr); }
+  ~DoTimeObs() { dataset.write_arrayshape(xzarr_ptr); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes time observer\n";

@@ -48,7 +48,7 @@ struct NsupersFunc {
 /* returns WriteGridboxToArray which writes the number of superdrops in each
 gridbox to an array in a dataset in a store */
 template <typename Store>
-WriteGridboxToArray<Store> auto NsupersWriter(Dataset<Store> &dataset, const size_t maxchunk,
+WriteGridboxToArray<Store> auto NsupersWriter(const Dataset<Store> &dataset, const size_t maxchunk,
                                               const size_t ngbxs) {
   return GenericWriteGridboxToXarray<Store, uint32_t, NsupersFunc>(dataset, "nsupers", "", "<u4", 1,
                                                                    maxchunk, ngbxs, NsupersFunc{});
@@ -57,7 +57,7 @@ WriteGridboxToArray<Store> auto NsupersWriter(Dataset<Store> &dataset, const siz
 /* constructs observer which writes number of superdrops in each gridbox with a constant
 timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
-inline Observer auto NsupersObserver(const unsigned int interval, Dataset<Store> &dataset,
+inline Observer auto NsupersObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                      const int maxchunk, const size_t ngbxs) {
   const WriteGridboxToArray<Store> auto nsuperswriter = NsupersWriter(dataset, maxchunk, ngbxs);
   const auto looppolicy = ParallelGbxsRangePolicy{};

@@ -57,7 +57,7 @@ gridbox in parallel and then writes them to their repspective arrays in a datase
 template <typename Store, typename ParallelLoopPolicy, WriteGridboxToArray<Store> WriteGbxToArray>
 class DoWriteGridboxes {
  private:
-  Dataset<Store> &dataset;  ///< dataset to write data to
+  const Dataset<Store> &dataset;  ///< dataset to write data to
   WriteGbxToArray
       write2array;  ///< object collects data from gridboxes and writes it to arrays in the dataset
   ParallelLoopPolicy parallel_loop;  ///< function like object to call during at_start_step to
@@ -72,9 +72,9 @@ class DoWriteGridboxes {
   }
 
  public:
-  DoWriteGridboxes(ParallelLoopPolicy parallel_loop, Dataset<Store> &dataset,
-                   WriteGbxToArray writer)
-      : dataset(dataset), writer(writer), parallel_loop(parallel_loop) {}
+  DoWriteGridboxes(ParallelLoopPolicy parallel_loop, const Dataset<Store> &dataset,
+                   WriteGbxToArray write2array)
+      : dataset(dataset), write2array(write2array), parallel_loop(parallel_loop) {}
 
   ~DoWriteGridboxes() { write2array.write_arrayshape(dataset); }
 

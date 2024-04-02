@@ -55,7 +55,7 @@ struct XiFunc {
 /* constructs observer which writes mass moments of droplet distribution in each gridbox
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
-inline Observer auto SuperdropsObserver(const unsigned int interval, Dataset<Store> &dataset,
+inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                         const int maxchunk, const size_t ngbxs) {
   const WriteGridboxToArray<Store> auto xiwriter = GenericGbxWriter<Store, uint64_t, XiFunc>(
       dataset, "xi", "", "<u8", 1, maxchunk, ngbxs, XiFunc{});
