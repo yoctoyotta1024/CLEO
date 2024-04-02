@@ -161,6 +161,8 @@ inline std::string make_raggedcount_xarray_metadata(const std::vector<std::strin
       "  \"sample_dimension\": " +
       "\"" + std::string(sampledim) + "\"" +  // name of sample dimension
       "\n}");
+
+  return zattrs;
 }
 
 /**

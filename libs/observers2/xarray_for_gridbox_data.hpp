@@ -55,6 +55,14 @@ struct XarrayForGridboxData {
         h_data("h_data", ngbxs),
         d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
 
+  /* Constructor to initialize views and pointer to raggedcount array in dataset */
+  XarrayForGridboxData(const Dataset<Store> &dataset, const std::string_view name,
+                       const std::string_view dtype, const size_t maxchunk, const size_t ngbxs)
+      : xzarr(dataset.template create_array<T>(name, dtype, good2Dchunkshape(maxchunk, ngbxs),
+                                               {"time", "gbxindex"}, "superdroplets")),
+        h_data("h_data", ngbxs),
+        d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
+
   // copy data from device view directly to host and then write to array in dataset
   void write_to_array(const Dataset<Store> &dataset) {
     Kokkos::deep_copy(h_data, d_data);
