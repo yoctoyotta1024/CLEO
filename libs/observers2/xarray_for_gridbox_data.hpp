@@ -58,11 +58,11 @@ struct XarrayForGridboxData {
   // copy data from device view directly to host and then write to array in dataset
   void write_to_array(Dataset<Store> &dataset) {
     Kokkos::deep_copy(h_data, d_data);
-    dataset.write_to_array(xzarr, h_data);
+    write_to_array(dataset, xzarr, h_data);
   }
 
   // call function to write shape of array according to dataset
-  void write_arrayshape(Dataset<Store> &dataset) { dataset.write_arrayshape(xzarr); }
+  void write_arrayshape(Dataset<Store> &dataset) { write_arrayshape(dataset, xzarr); }
 };
 
 #endif  // LIBS_OBSERVERS2_XARRAY_FOR_GRIDBOX_DATA_HPP_

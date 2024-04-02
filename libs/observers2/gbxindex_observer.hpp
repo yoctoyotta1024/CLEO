@@ -73,14 +73,14 @@ class GbxindexObserver {
             dataset.template create_coordinate_array<uint32_t>("gbxindex", "", "<u4", 1, maxchunk,
                                                                ngbxs))) {}
 
-  ~GbxindexObserver() { dataset.write_arrayshape(xzarr_ptr); }
+  ~GbxindexObserver() { write_arrayshape(dataset, xzarr_ptr); }
 
   /* write the gbxindex of every gridbox in d_gbxs to the gbxindex array in the dataset and assert
   the size of the gbxindex dimension in the dataset is correct */
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes gbxindex observer\n";
     auto h_data = collect_gbxindexes(d_gbxs);
-    dataset.write_to_array(xzarr_ptr, h_data);
+    write_to_array(dataset, xzarr_ptr, h_data);
     assert((dataset.get_dimension("gbxindex") == h_data.extent(0)) &&
            "inconsistent size of gbxindex data and dataset dimension");
   }

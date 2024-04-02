@@ -70,7 +70,7 @@ class DoWriteSupers {
         parallel_loop(parallel_loop) {}
 
   ~DoWriteSupers() {
-    dataset.write_arrayshape(raggedcount_xzarr_ptr);
+    write_arrayshape(dataset, raggedcount_xzarr_ptr);
     write2array.write_arrayshape(dataset);
   }
 
