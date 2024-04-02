@@ -118,7 +118,7 @@ class DoMassMomsObs {
   ~DoMassMomsObs() { xzarrs_ptr->write_arrayshape(dataset); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
-    std::cout << "observer includes time observer\n";
+    std::cout << "observer includes mass moments observer\n";
   }
 
   void after_timestepping() const {}
