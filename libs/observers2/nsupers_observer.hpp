@@ -47,8 +47,8 @@ gridbox to an array in a dataset in a store */
 template <typename Store>
 WriteGridboxToArray<Store> auto NsupersWriter(Dataset<Store> &dataset, const int maxchunk,
                                               const size_t ngbxs) {
-  return GenericGbxWriter<Store, uint32_t, NsupersFunc>(dataset, "nsupers", "", "<u4", 1, maxchunk,
-                                                        ngbxs, NsupersFunc{});
+  return GenericWriteGridboxToArray<Store, uint32_t, NsupersFunc>(dataset, "nsupers", "", "<u4", 1,
+                                                                  maxchunk, ngbxs, NsupersFunc{});
 }
 
 /* constructs observer which writes number of superdrops in each gridbox with a constant
