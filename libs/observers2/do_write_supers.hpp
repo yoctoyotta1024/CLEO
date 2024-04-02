@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: do_write_superdrops.hpp
+ * File: do_write_supers.hpp
  * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  * to individual ragged arrays in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_DO_WRITE_SUPERDROPS_HPP_
-#define LIBS_OBSERVERS2_DO_WRITE_SUPERDROPS_HPP_
+#ifndef LIBS_OBSERVERS2_DO_WRITE_SUPERS_HPP_
+#define LIBS_OBSERVERS2_DO_WRITE_SUPERS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -38,13 +38,13 @@
 super-droplets in each gridbox in parallel and then writes them to their respective ragged arrays in
 a dataset */
 template <typename Store, typename ParallelLoopPolicy,
-          WriteGridboxToArray<Store> WriteSuperdropsToArray>
-class DoWriteSuperdrops {
+          WriteGridboxToArray<Store> WriteSupersToArray>
+class DoWriteSupers {
  private:
   Dataset<Store> &dataset;  ///< dataset to write data to
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>>
       raggedcount_xzarr_ptr;  ///< pointer to ragged count array in dataset
-  WriteSuperdropsToArray
+  WriteSupersToArray
       write2array;  ///< object collects data from gridboxes and writes it to arrays in the dataset
   ParallelLoopPolicy parallel_loop;  ///< function like object to call during at_start_step to
                                      ///< loop over gridboxes
@@ -55,24 +55,27 @@ class DoWriteSuperdrops {
     auto functor = write2array.get_functor(d_gbxs);
     parallel_loop(functor, d_gbxs);
     write2array.write_to_array(dataset);
-    dataset.raggedcount_xzarr_ptr.write_to_array(nsupers);  // TODO(CB)
+    raggedcount_xzarr_ptr->write_to_array(nsupers);  // TODO(CB)
   }
 
  public:
-  DoWriteSuperdrops(ParallelLoopPolicy parallel_loop, Dataset<Store> &dataset,
-                    WriteGbxToArray writer, const size_t maxchunk, const size_t ngbxs)
+  DoWriteSupers(ParallelLoopPolicy parallel_loop, Dataset<Store> &dataset, WriteGbxToArray writer,
+                const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         raggedcount_xzarr_ptr(
             std::make_shared<XarrayZarrArray<Store, uint32_t>> dataset.template create_array<T>(
-                name, units, dtype, scale_factor, good2Dchunkshape(maxchunk, ngbxs),
+                "raggedcount_nsupers", "", "<u4", 1, good2Dchunkshape(maxchunk, ngbxs),
                 {"time", "gbxindex"})),
         writer(writer),
         parallel_loop(parallel_loop) {}
 
-  ~DoWriteSuperdrops() { write2array.write_arrayshape(dataset); }
+  ~DoWriteSupers() {
+    dataset.write_arrayshape(raggedcount_xzarr_ptr);
+    write2array.write_arrayshape(dataset);
+  }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
-    std::cout << "observer includes write gridboxes observer\n";
+    std::cout << "observer includes write supers observer\n";
   }
 
   void after_timestepping() const {}
@@ -82,4 +85,4 @@ class DoWriteSuperdrops {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_DO_WRITE_SUPERDROPS_HPP_
+#endif  // LIBS_OBSERVERS2_DO_WRITE_SUPERS_HPP_
