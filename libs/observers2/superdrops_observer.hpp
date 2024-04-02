@@ -37,11 +37,11 @@ precision unsigned int (unit64_t) */
 struct XiFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const TeamMember &team_member, viewd_constgbx d_gbxs,
-                  Buffer<uint64_t>::mirrorviewd_buffer d_data) const {
+                  Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
     const int ii = team_member.league_rank();
     auto supers(d_gbxs(ii).supersingbx.readonly());
     const size_t kk = 0;
-    d_data(ii) = static_cast<uint64_t>(supers(kk).get_xi());  // TODO(CB) WIP
+    d_data(ii) = static_cast<uint32_t>(supers(kk).get_xi());  // TODO(CB) WIP
   }
 };
 
@@ -60,15 +60,14 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                         const int maxchunk, const size_t ngbxs) {
-  const WriteGridboxToArray<Store> auto xi = GenericGbxWriter<Store, uint64_t, XiFunc>(
+  const WriteGridboxToArray<Store> auto xi = GenericWriteGridboxToXarray<Store, uint32_t, XiFunc>(
       dataset, "xi", "", "<u8", 1, maxchunk, ngbxs, XiFunc{});
 
   const WriteGridboxToArray<Store> auto raggedcount =
       RaggedCountNsupersWriter(dataset, maxchunk, ngbxs);
 
-  const auto c = CombineWG2A{};
-  const WriteGridboxToArray<Store> auto writer = c(raggedcount, xi);
-  const auto obsfunc = DoWriteSupers(ParallelGbxsTeamPolicy{}, dataset, writer, maxchunk, ngbxs);
+  const auto obsfunc =
+      DoWriteSupers(ParallelGbxsTeamPolicy{}, dataset, CombineWG2A<Store>{}(raggedcount, xi));
   return ConstTstepObserver(interval, obsfunc);
 }
 
