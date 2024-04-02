@@ -41,7 +41,7 @@ template <typename Store, typename ParallelLoopPolicy,
           WriteGridboxToArray<Store> WriteSupersToArray>
 class DoWriteSupers {
  private:
-  Dataset<Store> &dataset;  ///< dataset to write data to
+  const Dataset<Store> &dataset;  ///< dataset to write data to
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>>
       raggedcount_xzarr_ptr;  ///< pointer to ragged count array in dataset
   WriteSupersToArray
@@ -59,8 +59,8 @@ class DoWriteSupers {
   }
 
  public:
-  DoWriteSupers(ParallelLoopPolicy parallel_loop, Dataset<Store> &dataset, WriteGbxToArray writer,
-                const size_t maxchunk, const size_t ngbxs)
+  DoWriteSupers(ParallelLoopPolicy parallel_loop, const Dataset<Store> &dataset,
+                WriteGbxToArray writer, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         raggedcount_xzarr_ptr(
             std::make_shared<XarrayZarrArray<Store, uint32_t>> dataset.template create_array<T>(

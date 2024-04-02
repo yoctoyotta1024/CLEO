@@ -46,7 +46,7 @@ struct XarrayForGridboxData {
   mirrorviewd_data d_data;  // mirror view of h_data on device
 
   // Constructor to initialize views and pointer to array in dataset
-  XarrayForGridboxData(Dataset<Store> &dataset, const std::string_view name,
+  XarrayForGridboxData(const Dataset<Store> &dataset, const std::string_view name,
                        const std::string_view units, const std::string_view dtype,
                        const double scale_factor, const size_t maxchunk, const size_t ngbxs)
       : xzarr(dataset.template create_array<T>(name, units, dtype, scale_factor,
@@ -56,13 +56,13 @@ struct XarrayForGridboxData {
         d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
 
   // copy data from device view directly to host and then write to array in dataset
-  void write_to_array(Dataset<Store> &dataset) {
+  void write_to_array(const Dataset<Store> &dataset) {
     Kokkos::deep_copy(h_data, d_data);
-    write_to_array(dataset, xzarr, h_data);
+    dataset.write_to_array(xzarr, h_data);
   }
 
   // call function to write shape of array according to dataset
-  void write_arrayshape(Dataset<Store> &dataset) { write_arrayshape(dataset, xzarr); }
+  void write_arrayshape(const Dataset<Store> &dataset) { dataset.write_arrayshape(xzarr); }
 };
 
 #endif  // LIBS_OBSERVERS2_XARRAY_FOR_GRIDBOX_DATA_HPP_

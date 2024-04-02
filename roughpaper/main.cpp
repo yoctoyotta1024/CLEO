@@ -39,7 +39,7 @@
 #include "observers2/observers.hpp"
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
-#include "observers2/superdrops_observer.hpp"
+// #include "observers2/superdrops_observer.hpp"
 #include "observers2/time_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
@@ -64,10 +64,10 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
   const WriteGridboxToArray<Store> auto nsuperswriter =
       NsupersWriter(dataset, maxchunk, config.ngbxs);
 
-  const auto c = CombineGDW<Store>{};
+  const auto c = CombineWG2A<Store>{};
   const WriteGridboxToArray<Store> auto writer = c(c(thermowriter, windwriter), nsuperswriter);
   const Observer auto obsx =
-      ConstTstepObserver(obsstep, WriteGridboxes(ParallelGbxsRangePolicy{}, dataset, writer));
+      ConstTstepObserver(obsstep, DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, writer));
 
   // const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
   // const Observer auto obs6 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
@@ -87,8 +87,8 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
   const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
   const Observer auto obs4 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  const Observer auto obssd = SuperdropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  return obssd >> obsx >> obs4 >> obs3 >> obs2 >> obs1;
+  // const Observer auto obssd = SuperdropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  return obsx >> obs4 >> obs3 >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */

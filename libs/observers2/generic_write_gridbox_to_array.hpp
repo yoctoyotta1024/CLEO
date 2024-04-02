@@ -63,7 +63,7 @@ class GenericWriteGridboxToXarray {
   };
 
   // Constructor to initialize views and pointer to array in dataset
-  GenericWriteGridboxToXarray(Dataset<Store> &dataset, const std::string_view name,
+  GenericWriteGridboxToXarray(const Dataset<Store> &dataset, const std::string_view name,
                               const std::string_view units, const std::string_view dtype,
                               const double scale_factor, const size_t maxchunk, const size_t ngbxs,
                               FunctorFunc ffunc)
@@ -79,10 +79,12 @@ class GenericWriteGridboxToXarray {
   }
 
   // copy data from device view directly to host and then write to array in dataset
-  void write_to_array(Dataset<Store> &dataset) const { xzarr_ptr->write_to_array(dataset); }
+  void write_to_array(const Dataset<Store> &dataset) const { xzarr_ptr->write_to_array(dataset); }
 
   // call function to write shape of array according to dataset
-  void write_arrayshape(Dataset<Store> &dataset) const { xzarr_ptr->write_arrayshape(dataset); }
+  void write_arrayshape(const Dataset<Store> &dataset) const {
+    xzarr_ptr->write_arrayshape(dataset);
+  }
 };
 
 #endif  // LIBS_OBSERVERS2_GENERIC_WRITE_GRIDBOX_TO_ARRAY_HPP_

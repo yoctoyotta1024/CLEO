@@ -68,20 +68,20 @@ struct MassMomArrays {
   XarrayForGridboxData<Store, float> mom1_xzarr;     ///< 1st mass moment array
   XarrayForGridboxData<Store, float> mom2_xzarr;     ///< 2nd mass moment array
 
-  MassMomArrays(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs,
+  MassMomArrays(const Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs,
                 std::array<std::string_view, 3> names)
       : mom0_xzarr(dataset, names.at(0), "", "<u4", 1, maxchunk, ngbxs),
         mom1_xzarr(dataset, names.at(1), "g", "<f4", dlc::MASS0grams, maxchunk, ngbxs),
         mom2_xzarr(dataset, names.at(2), "g^2", "<f4", dlc::MASS0grams * dlc::MASS0grams, maxchunk,
                    ngbxs) {}
 
-  void write_arrayshape(Dataset<Store> &dataset) {
+  void write_arrayshape(const Dataset<Store> &dataset) {
     mom0_xzarr.write_arrayshape(dataset);
     mom1_xzarr.write_arrayshape(dataset);
     mom2_xzarr.write_arrayshape(dataset);
   }
 
-  void write_massmoments_to_arrays(Dataset<Store> &dataset) {
+  void write_massmoments_to_arrays(const Dataset<Store> &dataset) {
     mom0_xzarr.write_to_array(dataset);
     mom1_xzarr.write_to_array(dataset);
     mom2_xzarr.write_to_array(dataset);
@@ -100,7 +100,7 @@ struct MassMomArrays {
 template <typename Store, typename MassMomsCalc>
 class DoMassMomsObs {
  private:
-  Dataset<Store> &dataset;                           ///< dataset to write moments to
+  const Dataset<Store> &dataset;                     ///< dataset to write moments to
   std::shared_ptr<MassMomArrays<Store>> xzarrs_ptr;  ///< pointer to mass moment arrays in dataset
   MassMomsCalc calculate_massmoments;  ///< function like object to perform moment calculations
 
@@ -114,7 +114,7 @@ class DoMassMomsObs {
   }
 
  public:
-  DoMassMomsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs,
+  DoMassMomsObs(const Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs,
                 const std::array<std::string_view, 3> &names, MassMomsCalc calculate_massmoments)
       : dataset(dataset),
         xzarrs_ptr(std::make_shared<MassMomArrays<Store>>(dataset, maxchunk, ngbxs, names)),
@@ -136,7 +136,7 @@ class DoMassMomsObs {
 /* constructs observer which writes mass moments of droplet distribution in each gridbox
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
-inline Observer auto MassMomentsObserver(const unsigned int interval, Dataset<Store> &dataset,
+inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                          const int maxchunk, const size_t ngbxs) {
   struct MassMomsCalc {
     void operator()(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
@@ -155,7 +155,7 @@ inline Observer auto MassMomentsObserver(const unsigned int interval, Dataset<St
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
 inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
-                                                  Dataset<Store> &dataset, const int maxchunk,
+                                                  const Dataset<Store> &dataset, const int maxchunk,
                                                   const size_t ngbxs) {
   struct MassMomsCalc {
     void operator()(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirrorviewd_buffer d_mom0,

@@ -41,11 +41,12 @@
  * @tparam WG2A The type that satisfies the WriteGridboxToArray concept.
  */
 template <typename WG2A, typename Store>
-concept WriteGridboxToArray = requires(WG2A wg2a, Dataset<Store> &ds, const viewd_constgbx d_gbxs) {
-  { wg2a.get_functor(d_gbxs) };
-  { wg2a.write_to_array(ds) } -> std::same_as<void>;
-  { wg2a.write_arrayshape(ds) } -> std::same_as<void>;
-};
+concept WriteGridboxToArray =
+    requires(WG2A wg2a, const Dataset<Store> &ds, const viewd_constgbx d_gbxs) {
+      { wg2a.get_functor(d_gbxs) };
+      { wg2a.write_to_array(ds) } -> std::same_as<void>;
+      { wg2a.write_arrayshape(ds) } -> std::same_as<void>;
+    };
 
 /**
  * @brief Combined gridbox data writer struct combines two structs that write gridbox data to an
@@ -87,12 +88,12 @@ struct CombinedWriteGridboxToArray {
 
   Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor(a, b, d_gbxs); }
 
-  void write_to_array(Dataset<Store> &dataset) const {
+  void write_to_array(const Dataset<Store> &dataset) const {
     a.write_to_array(dataset);
     b.write_to_array(dataset);
   }
 
-  void write_arrayshape(Dataset<Store> &dataset) const {
+  void write_arrayshape(const Dataset<Store> &dataset) const {
     a.write_arrayshape(dataset);
     b.write_arrayshape(dataset);
   }
@@ -127,9 +128,9 @@ struct NullWriteGridboxToArray {
 
   Functor get_functor(const viewd_constgbx d_gbxs) const { return Functor{}; }
 
-  void write_to_array(Dataset<Store> &dataset) const {}
+  void write_to_array(const Dataset<Store> &dataset) const {}
 
-  void write_arrayshape(Dataset<Store> &dataset) const {}
+  void write_arrayshape(const Dataset<Store> &dataset) const {}
 };
 
 #endif  // LIBS_OBSERVERS2_WRITE_GRIDBOX_TO_ARRAY_HPP_
