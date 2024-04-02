@@ -58,7 +58,8 @@ inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &
                                    const int maxchunk, const size_t ngbxs) {
   const WriteGridboxToArray<Store> auto thermowriter = ThermoWriter(dataset, maxchunk, ngbxs);
   const WriteGridboxToArray<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
-  const WriteGridboxToArray<Store> auto statewriter = CombineGDW<Store>{}(thermowriter, windwriter);
+  const WriteGridboxToArray<Store> auto statewriter =
+      CombineWG2A<Store>{}(thermowriter, windwriter);
   const auto obsfunc = WriteGridboxes(ParallelGbxsRangePolicy{}, dataset, statewriter);
 
   return ConstTstepObserver(interval, obsfunc);
