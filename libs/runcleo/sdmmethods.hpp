@@ -196,10 +196,8 @@ class SDMMethods {
    * @param t_mdl Current timestep of the coupled model.
    * @param d_gbxs View of gridboxes on device.
    */
-  void at_start_step(const unsigned int t_mdl, const dualview_constgbx gbxs) const {
-    const auto h_gbxs = gbxs.view_host();
-
-    obs.at_start_step(t_mdl, gbxs.view_device());
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
+    obs.at_start_step(t_mdl, d_gbxs);
   }
 
   /**
