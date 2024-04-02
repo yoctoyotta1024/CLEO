@@ -36,21 +36,21 @@
 
 struct ParallelGbxsRangePolicy {
   template <typename Functor>
-  operator(Functor functor, const viewd_constgbx d_gbxs) const {
+  void operator()(Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for("range_policy_collect_gbxs_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
                          functor);
   }
-}
+};
 
 struct ParallelGbxsTeamPolicy {
   template <typename Functor>
-  operator(Functor functor, const viewd_constgbx d_gbxs) const {
+  void operator()(Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for("team_policy_collect_gbxs_data", TeamPolicy(ngbxs, Kokkos::AUTO()),
                          functor);
   }
-}
+};
 
 /* template class for observer with at_start_step function that collects variables from each
 gridbox in parallel and then writes them to their repspective arrays in a dataset */
