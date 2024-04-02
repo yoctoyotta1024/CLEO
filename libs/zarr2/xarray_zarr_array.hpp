@@ -126,21 +126,46 @@ inline std::string scale_factor_string(const double scale_factor) {
  * @param dimnames The names of each dimension of the array.
  * @return A string representing the metadata.
  */
-inline std::string make_xarray_metadata(const std::string_view units, const double scale_factor,
-                                        const std::vector<std::string>& dimnames) {
+inline std::string make_raggedcount_xarray_metadata(const std::vector<std::string>& dimnames) {
   const auto zattrs = std::string(
       "{\n"
       "  \"_ARRAY_DIMENSIONS\": " +
       vecstr_to_string(dimnames) +  // names of each dimension of array
       ",\n"
-      "  \"units\": " +
-      "\"" + std::string(units) + "\"" +  // units of coordinate being stored
-      ",\n"
-      "  \"scale_factor\": " +
-      scale_factor_string(scale_factor) +  // scale_factor of data
+      "  \"sample_dimension\": " +
+      "\"superdroplets\"" +  // units of coordinate being stored
       "\n}");
+}
 
-  return zattrs;
+/**
+ * @brief Make string of array attributes metadata for .zattrs json which is used to make zarr array
+ * compatible with Xarray and NetCDF.
+ *
+ * @param units The units of the array's coordinates.
+ * @param scale_factor The scale factor of data.
+ * @param dimnames The names of each dimension of the array.
+ * @return A string representing the metadata.
+ */
+inline std::string make_xarray_metadata(const std::string_view units, const double scale_factor,
+                                        const std::vector<std::string>& dimnames,
+                                        const bool is_raggedcount) {
+  if (is_raggedcount) {
+    make_raggedcount_xarray_metadata(dimnames);
+  } else {
+    const auto zattrs = std::string(
+        "{\n"
+        "  \"_ARRAY_DIMENSIONS\": " +
+        vecstr_to_string(dimnames) +  // names of each dimension of array
+        ",\n"
+        "  \"units\": " +
+        "\"" + std::string(units) + "\"" +  // units of coordinate being stored
+        ",\n"
+        "  \"scale_factor\": " +
+        scale_factor_string(scale_factor) +  // scale_factor of data
+        "\n}");
+
+    return zattrs;
+  }
 }
 
 /**
@@ -200,7 +225,8 @@ class XarrayZarrArray {
   XarrayZarrArray(Store& store, const std::unordered_map<std::string, size_t>& datasetdims,
                   const std::string_view name, const std::string_view units,
                   const std::string_view dtype, const double scale_factor,
-                  const std::vector<size_t>& chunkshape, const std::vector<std::string>& dimnames)
+                  const std::vector<size_t>& chunkshape, const std::vector<std::string>& dimnames,
+                  const bool is_raggedcount)
       : zarr(store, name, dtype, chunkshape, true,
              reduced_arrayshape_from_dims(datasetdims, dimnames)),
         dimnames(dimnames),
@@ -211,7 +237,8 @@ class XarrayZarrArray {
 
     write_arrayshape(datasetdims);
 
-    write_zattrs_json(store, name, make_xarray_metadata(units, scale_factor, dimnames));
+    write_zattrs_json(store, name,
+                      make_xarray_metadata(units, scale_factor, dimnames, is_raggedcount));
   }
 
   ~XarrayZarrArray() { zarr.write_arrayshape(arrayshape); }

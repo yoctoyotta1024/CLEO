@@ -120,7 +120,7 @@ class Dataset {
                                                     const size_t chunksize, const size_t dimsize) {
     add_dimension(std::pair<std::string, size_t>{name, dimsize});
     return create_array<T>(name, units, dtype, scale_factor, std::vector<size_t>{chunksize},
-                           std::vector<std::string>{std::string(name)});
+                           std::vector<std::string>{std::string(name)}, false);
   }
 
   /**
@@ -139,9 +139,10 @@ class Dataset {
   XarrayZarrArray<Store, T> create_array(const std::string_view name, const std::string_view units,
                                          const std::string_view dtype, const double scale_factor,
                                          const std::vector<size_t> &chunkshape,
-                                         const std::vector<std::string> &dimnames) const {
+                                         const std::vector<std::string> &dimnames,
+                                         const bool is_raggedcount) const {
     return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, dtype, scale_factor,
-                                     chunkshape, dimnames);
+                                     chunkshape, dimnames, is_raggedcount);
   }
 
   /**
