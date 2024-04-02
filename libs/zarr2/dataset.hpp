@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 28th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -77,13 +77,11 @@ class Dataset {
   }
 
   /**
-   * @brief Sets the size of an existing dimension in the dataset.
+   * @brief Returns the dictionary like object (unordered map) for the dimensions in the dataset.
    *
-   * @param dim A pair containing the name of the dimension and its new size to be set.
+   * @return The unordered map for the dimensions of the dataset.
    */
-  void set_dimension(const std::pair<std::string, size_t> &dim) {
-    datasetdims.at(dim.first) = dim.second;
-  }
+  std::unordered_map<std::string, size_t> get_datasetdims() const { return datasetdims; }
 
   /**
    * @brief Returns the size of an existing dimension in the dataset.
@@ -91,7 +89,16 @@ class Dataset {
    * @param dimname A string for the name of the dimension in the dataset.
    * @return The size of (i.e. number of elements along) the dimension.
    */
-  size_t get_dimension(const std::string &dimname) { return datasetdims.at(dimname); }
+  size_t get_dimension(const std::string &dimname) const { return datasetdims.at(dimname); }
+
+  /**
+   * @brief Sets the size of an existing dimension in the dataset.
+   *
+   * @param dim A pair containing the name of the dimension and its new size to be set.
+   */
+  void set_dimension(const std::pair<std::string, size_t> &dim) {
+    datasetdims.at(dim.first) = dim.second;
+  }
 
   /**
    * @brief Creates a new 1-D array for a coordinate of the dataset.
@@ -136,86 +143,93 @@ class Dataset {
     return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, dtype, scale_factor,
                                      chunkshape, dimnames);
   }
-
-  /**
-   * @brief Calls array's shape function to ensure the shape of the array matches
-   * the dimensions of the dataset.
-   *
-   * @tparam T The data type of the array.
-   * @param xzarr An instance of XarrayZarrArray representing the array.
-   */
-  template <typename T>
-  void write_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
-    xzarr.write_arrayshape(datasetdims);
-  }
-
-  /**
-   * @brief Calls array's shape function to ensure the shape of the array matches
-   * the dimensions of the dataset.
-   *
-   * @tparam T The data type of the array.
-   * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
-   */
-  template <typename T>
-  void write_arrayshape(std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr) const {
-    xzarr_ptr->write_arrayshape(datasetdims);
-  }
-
-  /**
-   * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls
-   * function to ensure the shape of the array matches the dimensions of the dataset.
-   *
-   * Function writes data to an array in the dataset and updates the metadata for the shape of
-   * the array to ensure the size of each dimension of the array is consistent with the
-   * dimensions of the dataset.
-   *
-   * @tparam T The data type of the array.
-   * @param xzarr An instance of XarrayZarrArray representing the array.
-   * @param h_data The data to be written to the array.
-   */
-  template <typename T>
-  void write_to_array(XarrayZarrArray<Store, T> &xzarr,
-                      const Buffer<T>::viewh_buffer h_data) const {
-    xzarr.write_to_array(h_data);
-    xzarr.write_arrayshape(datasetdims);
-  }
-
-  /**
-   * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls
-   * function to ensure the shape of the array matches the dimensions of the dataset.
-   *
-   * Function writes data to an array in the dataset and updates the metadata for the shape of
-   * the array to ensure the size of each dimension of the array is consistent with the
-   * dimensions of the dataset.
-   *
-   * @tparam T The data type of the array.
-   * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
-   * @param h_data The data to be written to the array.
-   */
-  template <typename T>
-  void write_to_array(std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr,
-                      const Buffer<T>::viewh_buffer h_data) const {
-    xzarr_ptr->write_to_array(h_data);
-    xzarr_ptr->write_arrayshape(datasetdims);
-  }
-
-  /**
-   * @brief Writes 1 data element to a Zarr array in the dataset and calls
-   * function to ensure the shape of the array matches the dimensions of the dataset.
-   *
-   * Function writes 1 data element to an array in the dataset and updates the metadata for the
-   * shape of the array to ensure the size of each dimension of the array is consistent with the
-   * dimensions of the dataset.
-   *
-   * @tparam T The data type of the array.
-   * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
-   * @param data The data element to be written to the array.
-   */
-  template <typename T>
-  void write_to_array(std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const T data) const {
-    xzarr_ptr->write_to_array(data);
-    xzarr_ptr->write_arrayshape(datasetdims);
-  }
 };
+
+/**
+ * @brief Calls array's shape function to ensure the shape of the array matches
+ * the dimensions of the dataset.
+ *
+ * @tparam T The data type of the array.
+ * @param dataset A reference to the dataset that stores the dimensions of the xarray.
+ * @param xzarr An instance of XarrayZarrArray representing the array.
+ */
+template <typename Store, typename T>
+void write_arrayshape(Dataset<Store> &dataset, XarrayZarrArray<Store, T> &xzarr) const {
+  xzarr.write_arrayshape(dataset.get_datasetdims());
+}
+
+/**
+ * @brief Calls array's shape function to ensure the shape of the array matches
+ * the dimensions of the dataset.
+ *
+ * @tparam T The data type of the array.
+ * @param dataset A reference to the dataset that stores the dimensions of the xarray.
+ * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
+ */
+template <typename Store, typename T>
+void write_arrayshape(Dataset<Store> &dataset,
+                      std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr) const {
+  xzarr_ptr->write_arrayshape(dataset.get_datasetdims());
+}
+
+/**
+ * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls
+ * function to ensure the shape of the array matches the dimensions of the dataset.
+ *
+ * Function writes data to an array in the dataset and updates the metadata for the shape of
+ * the array to ensure the size of each dimension of the array is consistent with the
+ * dimensions of the dataset.
+ *
+ * @tparam T The data type of the array.
+ * @param dataset A reference to the dataset that stores the dimensions of the xarray.
+ * @param xzarr An instance of XarrayZarrArray representing the array.
+ * @param h_data The data to be written to the array.
+ */
+template <typename Store, typename T>
+void write_to_array(Dataset<Store> &dataset, XarrayZarrArray<Store, T> &xzarr,
+                    const Buffer<T>::viewh_buffer h_data) const {
+  xzarr.write_to_array(h_data);
+  xzarr.write_arrayshape(dataset.get_datasetdims());
+}
+
+/**
+ * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls
+ * function to ensure the shape of the array matches the dimensions of the dataset.
+ *
+ * Function writes data to an array in the dataset and updates the metadata for the shape of
+ * the array to ensure the size of each dimension of the array is consistent with the
+ * dimensions of the dataset.
+ *
+ * @tparam T The data type of the array.
+ * @param dataset A reference to the dataset that stores the dimensions of the xarray.
+ * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
+ * @param h_data The data to be written to the array.
+ */
+template <typename Store, typename T>
+void write_to_array(Dataset<Store> &dataset, std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr,
+                    const Buffer<T>::viewh_buffer h_data) const {
+  xzarr_ptr->write_to_array(h_data);
+  xzarr_ptr->write_arrayshape(dataset.get_datasetdims());
+}
+
+/**
+ * @brief Writes 1 data element to a Zarr array in the dataset and calls
+ * function to ensure the shape of the array matches the dimensions of the dataset.
+ *
+ * Function writes 1 data element to an array in the dataset and updates the metadata for the
+ * shape of the array to ensure the size of each dimension of the array is consistent with the
+ * dimensions of the dataset.
+ *
+ * @tparam T The data type of the array.
+ * @param dataset A reference to the dataset that stores the dimensions of the xarray.
+ * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
+ * @param data The data element to be written to the array.
+ */
+template <typename Store, typename T>
+void write_to_array(Dataset<Store> &dataset, std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr,
+                    const T data) const {
+  xzarr_ptr->write_to_array(data);
+  xzarr_ptr->write_arrayshape(dataset.get_datasetdims());
+}
 
 #endif  // LIBS_ZARR2_DATASET_HPP_
