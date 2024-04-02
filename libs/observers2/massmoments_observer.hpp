@@ -33,10 +33,11 @@
 #include "../cleoconstants.hpp"
 #include "./observers.hpp"
 #include "./xarray_for_gridbox_data.hpp"
+#include "gridboxes/gridbox.hpp"
+#include "superdrops/superdrop.hpp"
 #include "zarr2/buffer.hpp"
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
-#include "zarr2/zarr_array.hpp"
 
 /* calculated 0th, 1st and 2nd moments of the (real)
 droplet mass distribution in each gridbox, i.e. 0th, 3rd and 6th

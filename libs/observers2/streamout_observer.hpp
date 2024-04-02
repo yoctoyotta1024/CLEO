@@ -25,6 +25,7 @@
 #define LIBS_OBSERVERS2_STREAMOUT_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <concepts>
 #include <functional>
 #include <iomanip>
 #include <ios>
