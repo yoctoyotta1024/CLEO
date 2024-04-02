@@ -38,26 +38,22 @@
 #include "zarr2/xarray_zarr_array.hpp"
 #include "zarr2/zarr_array.hpp"
 
-/* template class for observing superdroplets' attributes in each gridbox to ragged arrays in a
-dataset in a store */
+/* template class similar to WriteGridboxes for observing superdroplets' attributes in each
+gridbox to ragged arrays in a dataset in a store */
 template <typename Store, WriteGridboxToArray<Store> WriteGbx>
 class DoSuperdropsObs {
  private:
   Dataset<Store> &dataset;  ///< dataset to write moments to
   WriteGbx writer;          ///< pointer to attribute ragged arrays in dataset
 
-  // use functor from writer to collect data from gridboxes in parallel
-  void collect_data_from_gridboxes(const viewd_constgbx d_gbxs) const {
+  /* Use a functor to collect data from gridboxes in parallel.
+  Then write the datat to arrays in the dataset */
+  void at_start_step(const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
     auto functor = writer.get_functor(d_gbxs);
     Kokkos::parallel_for("collect_superdrops_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
                          functor);
     // TODO(CB) ragged count
-  }
-
-  // collect superdroplet data from gridboxes and then write it to arrays in the dataset
-  void at_start_step(const viewd_constgbx d_gbxs) const {
-    collect_data_from_gridboxes(d_gbxs);
     writer.write_to_array(dataset);
   }
 

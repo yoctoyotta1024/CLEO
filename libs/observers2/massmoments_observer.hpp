@@ -99,8 +99,9 @@ struct MassMomArrays {
   }
 };
 
-/* template class for observing 0th, 1st and 2nd mass moment (i.e. 0th, 3rd and 6th radius moment)
-of droplet distribution in each gridbox to arrays in a dataset in a store */
+/* template class similar to WriteGridboxes for observing 0th, 1st and 2nd mass moment (i.e. 0th,
+3rd and 6th radius moment) of droplet distribution in each gridbox to arrays in a dataset in a store
+*/
 template <typename Store, typename MassMomsCalc>
 class DoMassMomsObs {
  private:
