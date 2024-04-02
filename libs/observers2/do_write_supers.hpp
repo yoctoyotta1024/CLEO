@@ -60,17 +60,17 @@ class DoWriteSupers {
 
  public:
   DoWriteSupers(ParallelLoopPolicy parallel_loop, const Dataset<Store> &dataset,
-                WriteGbxToArray writer, const size_t maxchunk, const size_t ngbxs)
+                WriteSupersToArray write2array, size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         raggedcount_xzarr_ptr(
             std::make_shared<XarrayZarrArray<Store, uint32_t>> dataset.template create_array<T>(
                 "raggedcount_nsupers", "", "<u4", 1, good2Dchunkshape(maxchunk, ngbxs),
                 {"time", "gbxindex"})),
-        writer(writer),
+        write2arrray(write2array),
         parallel_loop(parallel_loop) {}
 
   ~DoWriteSupers() {
-    write_arrayshape(dataset, raggedcount_xzarr_ptr);
+    daatset.write_arrayshape(raggedcount_xzarr_ptr);
     write2array.write_arrayshape(dataset);
   }
 
