@@ -38,38 +38,15 @@
 #include "zarr2/xarray_zarr_array.hpp"
 #include "zarr2/zarr_array.hpp"
 
-/* template class similar to WriteGridboxes for observing superdroplets' attributes in each
-gridbox to ragged arrays in a dataset in a store */
-template <typename Store, WriteGridboxToArray<Store> WriteGbx>
-class DoSuperdropsObs {
- private:
-  Dataset<Store> &dataset;  ///< dataset to write moments to
-  WriteGbx writer;          ///< pointer to attribute ragged arrays in dataset
-
-  /* Use a functor to collect data from gridboxes in parallel.
-  Then write the datat to arrays in the dataset */
-  void at_start_step(const viewd_constgbx d_gbxs) const {
-    const size_t ngbxs(d_gbxs.extent(0));
-    auto functor = writer.get_functor(d_gbxs);
-    Kokkos::parallel_for("collect_superdrops_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
-                         functor);
-    // TODO(CB) ragged count
-    writer.write_to_array(dataset);
-  }
-
- public:
-  DoSuperdropsObs(Dataset<Store> &dataset, WriteGbx writer) : dataset(dataset), writer(writer) {}
-
-  ~DoSuperdropsObs() { writer.write_arrayshape(dataset); }
-
-  void before_timestepping(const viewd_constgbx d_gbxs) const {
-    std::cout << "observer includes superdrops observer\n";
-  }
-
-  void after_timestepping() const {}
-
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
-    at_start_step(d_gbxs);
+// Operator is functor to perform copy of vvel at the centre of each gridbox to d_data
+// in parallel. Note conversion of vvel from double (8 bytes) to single precision (4 bytes
+// float) in output
+struct XiFunc {
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t ii, viewd_constgbx d_gbxs,
+                  Buffer<float>::mirrorviewd_buffer d_data) const {
+    auto vvel = static_cast<float>(d_gbxs(ii).state.vvelcentre());
+    d_data(ii) = vvel;
   }
 };
 
@@ -78,7 +55,12 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, Dataset<Store> &dataset,
                                         const int maxchunk, const size_t ngbxs) {
-  return ConstTstepObserver(interval, DoSuperdropsObs(dataset, writer));
+  const WriteGridboxToArray<Store> auto xiwriter = GenericGbxWriter<Store, uint64_t, XiFunc>(
+      dataset, "xi", "", "<u8", 1, maxchunk, ngbxs, XiFunc{});
+
+  const auto obsfunc = WriteGridboxes(ParallelGbxsTeamPolicy{}, dataset, xiwriter);
+
+  return ConstTstepObserver(interval, obsfunc);
 }
 
 #endif  // LIBS_OBSERVERS2_SUPERDROPS_OBSERVER_HPP_
