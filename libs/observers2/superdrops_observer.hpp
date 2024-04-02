@@ -52,7 +52,7 @@ WriteGridboxToArray<Store> auto RaggedCountNsupersWriter(const Dataset<Store> &d
                                                          const size_t maxchunk,
                                                          const size_t ngbxs) {
   return GenericWriteGridboxToXarray<Store, uint32_t, NsupersFunc>(
-      dataset, "raggedcount_nsupers", "", "<u4", 1, maxchunk, ngbxs, NsupersFunc{});
+      dataset, "raggedcount_nsupers", "<u4", maxchunk, ngbxs, NsupersFunc{});
 }
 
 /* constructs observer which writes mass moments of droplet distribution in each gridbox

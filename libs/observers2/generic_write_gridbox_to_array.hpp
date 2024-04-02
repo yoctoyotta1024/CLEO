@@ -62,13 +62,21 @@ class GenericWriteGridboxToXarray {
     void operator()(const TeamMember &team_member) const { ffunc(team_member, d_gbxs, d_data); }
   };
 
-  // Constructor to initialize views and pointer to array in dataset
+  /* Constructor to initialize views and pointer to array in dataset */
   GenericWriteGridboxToXarray(const Dataset<Store> &dataset, const std::string_view name,
                               const std::string_view units, const std::string_view dtype,
                               const double scale_factor, const size_t maxchunk, const size_t ngbxs,
                               FunctorFunc ffunc)
       : xzarr_ptr(std::make_shared<XarrayForGridboxData<Store, T>>(dataset, name, units, dtype,
                                                                    scale_factor, maxchunk, ngbxs)),
+        ffunc(ffunc) {}
+
+  /* Constructor to initialize views and pointer to raggedcount array in dataset */
+  GenericWriteGridboxToXarray(const Dataset<Store> &dataset, const std::string_view name,
+                              const std::string_view dtype, const size_t maxchunk,
+                              const size_t ngbxs, FunctorFunc ffunc)
+      : xzarr_ptr(std::make_shared<XarrayForGridboxData<Store, T>>(dataset, name, dtype, maxchunk,
+                                                                   ngbxs)),
         ffunc(ffunc) {}
 
   // return functor for getting 1 variable from every gridbox in parallel

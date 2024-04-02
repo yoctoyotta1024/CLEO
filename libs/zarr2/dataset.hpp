@@ -124,6 +124,25 @@ class Dataset {
   }
 
   /**
+   * @brief Creates a new raggedcount array in the dataset.
+   *
+   * @tparam T The data type of the array.
+   * @param name The name of the new array.
+   * @param dtype The data type of the array.
+   * @param chunkshape The shape of the chunks of the array.
+   * @param dimnames The names of each dimension of the array.
+   * @return An instance of XarrayZarrArray representing the newly created array.
+   */
+  template <typename T>
+  XarrayZarrArray<Store, T> create_array(const std::string_view name, const std::string_view dtype,
+                                         const std::vector<size_t> &chunkshape,
+                                         const std::vector<std::string> &dimnames,
+                                         const std::string_view sampledim) const {
+    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, dtype, chunkshape, dimnames,
+                                     sampledim);
+  }
+
+  /**
    * @brief Creates a new array in the dataset.
    *
    * @tparam T The data type of the array.
