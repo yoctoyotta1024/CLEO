@@ -67,7 +67,7 @@ class GbxindexObserver {
   }
 
  public:
-  GbxindexObserver(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
+  GbxindexObserver(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_coordinate_array<uint32_t>("gbxindex", "", "<u4", 1, maxchunk,
