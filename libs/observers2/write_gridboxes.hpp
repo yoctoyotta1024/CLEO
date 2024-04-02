@@ -34,25 +34,45 @@
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
 
+struct ParallelGbxsRangePolicy {
+  template <typename Functor>
+  operator(Functor functor, const viewd_constgbx d_gbxs) const {
+    const size_t ngbxs(d_gbxs.extent(0));
+    Kokkos::parallel_for("range_policy_collect_gbxs_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+                         functor);
+  }
+}
+
+struct ParallelGbxsTeamPolicy {
+  template <typename Functor>
+  operator(Functor functor, const viewd_constgbx d_gbxs) const {
+    const size_t ngbxs(d_gbxs.extent(0));
+    Kokkos::parallel_for("team_policy_collect_gbxs_data", TeamPolicy(ngbxs, Kokkos::AUTO()),
+                         functor);
+  }
+}
+
 /* template class for observer with at_start_step function that collects variables from each
 gridbox in parallel and then writes them to their repspective arrays in a dataset */
-template <typename Store, WriteGridboxToArray<Store> WriteGbx>
+template <typename Store, typename ParallelLoopFunc, WriteGridboxToArray<Store> WriteGbx>
 class WriteGridboxes {
  private:
   Dataset<Store> &dataset;  ///< dataset to write data to
   WriteGbx writer;  ///< object collects data from gridboxes and writes it to arrays in the dataset
+  ParallelLoopFunc parallel_loop;  ///< function like object to call during at_start_step to
+                                   ///< loop over gridboxes
 
   /* Use the writer's functor to collect data from gridboxes in parallel.
   Then write the datat to arrays in the dataset */
   void at_start_step(const viewd_constgbx d_gbxs) const {
-    const size_t ngbxs(d_gbxs.extent(0));
     auto functor = writer.get_functor(d_gbxs);
-    Kokkos::parallel_for("collect_gbxs_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
+    parallel_loop(functor, d_gbxs);
     writer.write_to_array(dataset);
   }
 
  public:
-  WriteGridboxes(Dataset<Store> &dataset, WriteGbx writer) : dataset(dataset), writer(writer) {}
+  WriteGridboxes(Dataset<Store> &dataset, WriteGbx writer, ParallelLoopFunc parallel_loop)
+      : dataset(dataset), writer(writer), parallel_loop(parallel_loop) {}
 
   ~WriteGridboxes() { writer.write_arrayshape(dataset); }
 
