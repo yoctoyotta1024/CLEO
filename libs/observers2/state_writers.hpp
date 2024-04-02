@@ -125,17 +125,17 @@ struct VvelFunc {
 template <typename Store>
 WriteGridboxToArray<Store> auto ThermoWriter(Dataset<Store> &dataset, const int maxchunk,
                                              const size_t ngbxs) {
-  auto press = GenericGbxWriter<Store, float, PressFunc>(
+  auto press = GenericWriteGridboxToArray<Store, float, PressFunc>(
       dataset, "press", "hPa", "<f4", dlc::P0 / 100, maxchunk, ngbxs, PressFunc{});
 
-  auto temp = GenericGbxWriter<Store, float, TempFunc>(dataset, "temp", "K", "<f4", dlc::TEMP0,
-                                                       maxchunk, ngbxs, TempFunc{});
+  auto temp = GenericWriteGridboxToArray<Store, float, TempFunc>(
+      dataset, "temp", "K", "<f4", dlc::TEMP0, maxchunk, ngbxs, TempFunc{});
 
-  auto qvap = GenericGbxWriter<Store, float, QvapFunc>(dataset, "qvap", "g/Kg", "<f4", 1000.0,
-                                                       maxchunk, ngbxs, QvapFunc{});
+  auto qvap = GenericWriteGridboxToArray<Store, float, QvapFunc>(
+      dataset, "qvap", "g/Kg", "<f4", 1000.0, maxchunk, ngbxs, QvapFunc{});
 
-  auto qcond = GenericGbxWriter<Store, float, QcondFunc>(dataset, "qcond", "g/Kg", "<f4", 1000.0,
-                                                         maxchunk, ngbxs, QcondFunc{});
+  auto qcond = GenericWriteGridboxToArray<Store, float, QcondFunc>(
+      dataset, "qcond", "g/Kg", "<f4", 1000.0, maxchunk, ngbxs, QcondFunc{});
 
   const auto c = CombineWG2A<Store>{};
   return c(c(qvap, c(press, temp)), qcond);
@@ -146,14 +146,12 @@ WriteGridboxToArray<Store> auto ThermoWriter(Dataset<Store> &dataset, const int 
 template <typename Store>
 WriteGridboxToArray<Store> auto WindVelocityWriter(Dataset<Store> &dataset, const int maxchunk,
                                                    const size_t ngbxs) {
-  // create shared pointer to 2-D arrays in a datasetfor the velocity at the centre of each gridbox
-  // over time and use to make GbxWriters for each velocity component
-  auto wvel = GenericGbxWriter<Store, float, WvelFunc>(dataset, "wvel", "m/s", "<f4", dlc::W0,
-                                                       maxchunk, ngbxs, WvelFunc{});
-  auto uvel = GenericGbxWriter<Store, float, UvelFunc>(dataset, "uvel", "m/s", "<f4", dlc::W0,
-                                                       maxchunk, ngbxs, UvelFunc{});
-  auto vvel = GenericGbxWriter<Store, float, VvelFunc>(dataset, "vvel", "m/s", "<f4", dlc::W0,
-                                                       maxchunk, ngbxs, VvelFunc{});
+  auto wvel = GenericWriteGridboxToArray<Store, float, WvelFunc>(
+      dataset, "wvel", "m/s", "<f4", dlc::W0, maxchunk, ngbxs, WvelFunc{});
+  auto uvel = GenericWriteGridboxToArray<Store, float, UvelFunc>(
+      dataset, "uvel", "m/s", "<f4", dlc::W0, maxchunk, ngbxs, UvelFunc{});
+  auto vvel = GenericWriteGridboxToArray<Store, float, VvelFunc>(
+      dataset, "vvel", "m/s", "<f4", dlc::W0, maxchunk, ngbxs, VvelFunc{});
 
   const auto c = CombineWG2A<Store>{};
   return c(wvel, c(vvel, uvel));
