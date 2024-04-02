@@ -31,8 +31,8 @@
 #include <string_view>
 
 #include "../cleoconstants.hpp"
-#include "./gridbox_data_xarray.hpp"
 #include "./observers.hpp"
+#include "./xarray_for_gridbox_data.hpp"
 #include "zarr2/buffer.hpp"
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
@@ -63,9 +63,9 @@ void calculate_massmoments_raindrops(const viewd_constgbx d_gbxs,
 /* note casting of mass moments from double to single precision types (uint32_t and floats) */
 template <typename Store>
 struct MassMomArrays {
-  GridboxDataXarray<Store, uint32_t> mom0_xzarr;  ///< 0th mass moment array
-  GridboxDataXarray<Store, float> mom1_xzarr;     ///< 1st mass moment array
-  GridboxDataXarray<Store, float> mom2_xzarr;     ///< 2nd mass moment array
+  XarrayForGridboxData<Store, uint32_t> mom0_xzarr;  ///< 0th mass moment array
+  XarrayForGridboxData<Store, float> mom1_xzarr;     ///< 1st mass moment array
+  XarrayForGridboxData<Store, float> mom2_xzarr;     ///< 2nd mass moment array
 
   MassMomArrays(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs,
                 std::array<std::string_view, 3> names)
@@ -86,11 +86,11 @@ struct MassMomArrays {
     mom2_xzarr.write_to_array(dataset);
   }
 
-  GridboxDataXarray<Store, uint32_t>::mirrorviewd_data get_d_mom0() { return mom0_xzarr.d_data; }
+  XarrayForGridboxData<Store, uint32_t>::mirrorviewd_data get_d_mom0() { return mom0_xzarr.d_data; }
 
-  GridboxDataXarray<Store, float>::mirrorviewd_data get_d_mom1() { return mom1_xzarr.d_data; }
+  XarrayForGridboxData<Store, float>::mirrorviewd_data get_d_mom1() { return mom1_xzarr.d_data; }
 
-  GridboxDataXarray<Store, float>::mirrorviewd_data get_d_mom2() { return mom2_xzarr.d_data; }
+  XarrayForGridboxData<Store, float>::mirrorviewd_data get_d_mom2() { return mom2_xzarr.d_data; }
 };
 
 /* template class similar to DoWriteGridboxes for observing 0th, 1st and 2nd mass moment (i.e. 0th,
