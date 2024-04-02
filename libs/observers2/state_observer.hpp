@@ -37,7 +37,7 @@ template <typename Store>
 inline Observer auto ThermoObserver(const unsigned int interval, Dataset<Store> &dataset,
                                     const int maxchunk, const size_t ngbxs) {
   const WriteGridboxToArray<Store> auto thermowriter = ThermoWriter(dataset, maxchunk, ngbxs);
-  const auto obsfunc = WriteGridboxes(ParallelGbxsRangePolicy{}, dataset, thermowriter);
+  const auto obsfunc = DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, thermowriter);
   return ConstTstepObserver(interval, obsfunc);
 }
 
@@ -47,7 +47,7 @@ template <typename Store>
 inline Observer auto WindObserver(const unsigned int interval, Dataset<Store> &dataset,
                                   const int maxchunk, const size_t ngbxs) {
   const WriteGridboxToArray<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
-  const auto obsfunc = WriteGridboxes(ParallelGbxsRangePolicy{}, dataset, windwriter);
+  const auto obsfunc = DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, windwriter);
   return ConstTstepObserver(interval, obsfunc);
 }
 
@@ -59,7 +59,7 @@ inline Observer auto StateObserver(const unsigned int interval, Dataset<Store> &
   const WriteGridboxToArray<Store> auto thermowriter = ThermoWriter(dataset, maxchunk, ngbxs);
   const WriteGridboxToArray<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
   const WriteGridboxToArray<Store> auto writer = CombineWG2A<Store>{}(thermowriter, windwriter);
-  const auto obsfunc = WriteGridboxes(ParallelGbxsRangePolicy{}, dataset, writer);
+  const auto obsfunc = DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, writer);
 
   return ConstTstepObserver(interval, obsfunc);
 }

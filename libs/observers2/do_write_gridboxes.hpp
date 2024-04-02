@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: write_gridboxes.hpp
+ * File: do_write_gridboxes.hpp
  * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  * to individual arrays in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_WRITE_GRIDBOXES_HPP_
-#define LIBS_OBSERVERS2_WRITE_GRIDBOXES_HPP_
+#ifndef LIBS_OBSERVERS2_DO_WRITE_GRIDBOXES_HPP_
+#define LIBS_OBSERVERS2_DO_WRITE_GRIDBOXES_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -55,7 +55,7 @@ struct ParallelGbxsTeamPolicy {
 /* template class for observer with at_start_step function that collects variables from each
 gridbox in parallel and then writes them to their repspective arrays in a dataset */
 template <typename Store, typename ParallelLoopPolicy, WriteGridboxToArray<Store> WriteGbxToArray>
-class WriteGridboxes {
+class DoWriteGridboxes {
  private:
   Dataset<Store> &dataset;  ///< dataset to write data to
   WriteGbxToArray
@@ -72,10 +72,11 @@ class WriteGridboxes {
   }
 
  public:
-  WriteGridboxes(ParallelLoopPolicy parallel_loop, Dataset<Store> &dataset, WriteGbxToArray writer)
+  DoWriteGridboxes(ParallelLoopPolicy parallel_loop, Dataset<Store> &dataset,
+                   WriteGbxToArray writer)
       : dataset(dataset), writer(writer), parallel_loop(parallel_loop) {}
 
-  ~WriteGridboxes() { write2array.write_arrayshape(dataset); }
+  ~DoWriteGridboxes() { write2array.write_arrayshape(dataset); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes write gridboxes observer\n";
@@ -88,4 +89,4 @@ class WriteGridboxes {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_WRITE_GRIDBOXES_HPP_
+#endif  // LIBS_OBSERVERS2_DO_WRITE_GRIDBOXES_HPP_
