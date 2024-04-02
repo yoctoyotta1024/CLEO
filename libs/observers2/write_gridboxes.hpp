@@ -71,7 +71,7 @@ class WriteGridboxes {
   }
 
  public:
-  WriteGridboxes(Dataset<Store> &dataset, WriteGbx writer, ParallelLoopPolicy parallel_loop)
+  WriteGridboxes(ParallelLoopPolicy parallel_loop, Dataset<Store> &dataset, WriteGbx writer)
       : dataset(dataset), writer(writer), parallel_loop(parallel_loop) {}
 
   ~WriteGridboxes() { writer.write_arrayshape(dataset); }
