@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 30th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -57,7 +57,8 @@ template <typename Store>
 inline Observer auto NsupersObserver(const unsigned int interval, Dataset<Store> &dataset,
                                      const int maxchunk, const size_t ngbxs) {
   const WriteGridboxToArray<Store> auto nsuperswriter = NsupersWriter(dataset, maxchunk, ngbxs);
-  return ConstTstepObserver(interval, WriteGridboxes(dataset, nsuperswriter));
+  const auto loopfunc = ParallelGbxsRangePolicy{};
+  return ConstTstepObserver(interval, WriteGridboxes(dataset, nsuperswriter, loopfunc));
 }
 
 #endif  // LIBS_OBSERVERS2_NSUPERS_OBSERVER_HPP_
