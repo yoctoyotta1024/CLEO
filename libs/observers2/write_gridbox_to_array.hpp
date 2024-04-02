@@ -70,11 +70,18 @@ struct CombinedWriteGridboxToArray {
     explicit Functor(const WriteGbx1 a, const WriteGbx2 b, const viewd_constgbx d_gbxs)
         : a_functor(a.get_functor(d_gbxs)), b_functor(b.get_functor(d_gbxs)) {}
 
-    // Functor operator to perform copy of each element in parallel
+    /* Functor operator to perform copy of each element in parallel in Kokkos Range Policy */
     KOKKOS_INLINE_FUNCTION
     void operator()(const size_t ii) const {
       a_functor(ii);
       b_functor(ii);
+    }
+
+    /* Functor operator to perform copy of each element in parallel in Kokkos Team Policy */
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const TeamMember &team_member) const {
+      a_functor(team_member);
+      b_functor(team_member);
     }
   };
 

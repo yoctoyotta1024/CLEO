@@ -42,11 +42,9 @@ template <typename Store, typename ParallelLoopPolicy,
           WriteGridboxToArray<Store> WriteSupersToArray>
 class DoWriteSupers {
  private:
-  const Dataset<Store> &dataset;  ///< dataset to write data to
-  std::shared_ptr<XarrayZarrArray<Store, uint32_t>>
-      raggedcount_xzarr_ptr;  ///< pointer to ragged count array in dataset
-  WriteSupersToArray
-      write2array;  ///< object collects data from gridboxes and writes it to arrays in the dataset
+  const Dataset<Store> &dataset;     ///< dataset to write data to
+  WriteSupersToArray write2array;    ///< object collects superdrops data and writes it to arrays
+                                     ///< in dataset, including array for raggedcount
   ParallelLoopPolicy parallel_loop;  ///< function like object to call during at_start_step to
                                      ///< loop over gridboxes
 
@@ -56,24 +54,14 @@ class DoWriteSupers {
     auto functor = write2array.get_functor(d_gbxs);
     parallel_loop(functor, d_gbxs);
     write2array.write_to_array(dataset);
-    raggedcount_xzarr_ptr->write_to_array(nsupers);  // TODO(CB)
   }
 
  public:
   DoWriteSupers(ParallelLoopPolicy parallel_loop, const Dataset<Store> &dataset,
-                WriteSupersToArray write2array, size_t maxchunk, const size_t ngbxs)
-      : dataset(dataset),
-        raggedcount_xzarr_ptr(
-            std::make_shared<XarrayZarrArray<Store, uint32_t>> dataset.template create_array<T>(
-                "raggedcount_nsupers", "", "<u4", 1, good2Dchunkshape(maxchunk, ngbxs),
-                {"time", "gbxindex"})),
-        write2arrray(write2array),
-        parallel_loop(parallel_loop) {}
+                WriteSupersToArray write2array)
+      : dataset(dataset), write2array(write2array), parallel_loop(parallel_loop) {}
 
-  ~DoWriteSupers() {
-    daatset.write_arrayshape(raggedcount_xzarr_ptr);
-    write2array.write_arrayshape(dataset);
-  }
+  ~DoWriteSupers() { write2array.write_arrayshape(dataset); }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes write supers observer\n";
