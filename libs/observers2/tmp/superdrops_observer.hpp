@@ -54,6 +54,30 @@ CollectDataForDataset<Store> auto CollectSuperdropVariable(
   return GenericCollectData(ffunc, xzarr_ptr, 0);
 }
 
+template <typename Store>
+struct RaggedCount {
+ private:
+  std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr;  ///< pointer to raggedcount array
+
+ public:
+  RaggedCount(const Dataset<Store> &dataset, const size_t maxchunk)
+      : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
+            dataset.template create_raggedcount_array<uint32_t>(
+                "raggedcount", "", "<u4", 1, {maxchunk}, {"time"}, "superdroplets"))) {}
+
+  /* writes the total number of super-droplets in the domain "totnsupers" to the raggedcount array
+  in the dataset. Note static conversion from architecture dependent, usually 16 byte unsigned
+  integer (size_t = uint64_t), to 8 byte unsigned integer (uint32_t). */
+  void write_to_array(const Dataset<Store> &dataset, const viewd_constsupers totsupers) const {
+    const auto totnsupers = static_cast<uint32_t>(totsupers.extent(0));
+    dataset.write_to_array(xzarr_ptr, totnsupers);
+  }
+
+  void write_arrayshape(const Dataset<Store> &dataset) const {
+    dataset.write_arrayshape(xzarr_ptr);
+  }
+};
+
 /* constructs observer which writes writes superdroplet variables (e.g. an attributes) from each
 superdroplet with a constant timestep 'interval' using an instance of the WriteToDatasetObserver
 class */
@@ -63,9 +87,10 @@ inline Observer auto SuperdropsObserver(const unsigned int interval, const Datas
   const CollectDataForDataset<Store> auto xi =
       CollectSuperdropVariable<Store, uint32_t, XiFunc>(XiFunc{}, "xi", "", "<u8", 1, maxchunk);
 
-  const CollectRaggedCount<Store> auto ragged_count = 1;
+  const CollectRaggedCount<Store> auto ragged_count = RaggedCount(dataset, maxchunk);
 
-  return WriteToDatasetObserver(interval, dataset, collect_superdropsdata, ragged_count);
+  const auto collect_data = xi;  // TODO(CB) WIP
+  return WriteToDatasetObserver(interval, dataset, collect_data, ragged_count);
 }
 
 #endif  // LIBS_OBSERVERS2_TMP_SUPERDROPS_OBSERVER_HPP_
