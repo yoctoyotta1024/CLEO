@@ -35,12 +35,12 @@
 in order to collect variables from gridboxes and/or superdroplets in parallel and then write them
 to arrays in a dataset at a constant time interval. */
 template <typename Store, typename ParallelWriteData>
-class DoWriteInDataset {
+class DoWriteToDataset {
  private:
   ParallelWriteData parallel_write;  ///< function like object to call during at_start_step
 
  public:
-  DoWriteInDataset(const Dataset<Store> &dataset, ParallelWriteData parallel_write)
+  DoWriteToDataset(const Dataset<Store> &dataset, ParallelWriteData parallel_write)
       : parallel_write(dataset, parallel_write) {}
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
@@ -58,10 +58,10 @@ class DoWriteInDataset {
 /* constructs observer which writes number of superdrops in each gridbox with a constant
 timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store, typename ParallelWriteData>
-inline Observer auto WriteInDatasetObserver(const unsigned int interval,
+inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             const Dataset<Store> &dataset,
                                             ParallelWriteData parallel_write) {
-  const auto obsfunc = DoWriteInDataset(dataset, parallel_write);
+  const auto obsfunc = DoWriteToDataset(dataset, parallel_write);
 
   return ConstTstepObserver(interval, obsfunc);
 }
