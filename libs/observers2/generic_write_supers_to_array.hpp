@@ -30,7 +30,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "./write_gridbox_to_array.hpp"
-#include "./xarray_for_supers_data.hpp"  // TODO(CB)
+#include "./xarray_for_supers_data.hpp"
 #include "superdrops/superdrop.hpp"
 #include "zarr2/dataset.hpp"
 
@@ -68,8 +68,7 @@ class GenericWriteSupersToXarray {
 
   /* return functor for getting 1 variable from every superdroplets in each gridbox in parallel */
   Functor get_functor(const viewd_constsupers totsupers) const {
-    Kokkos::realloc(xzarr_ptr->h_data, totsupers.extent(0));  // TODO(CB) move into XarraySupersData
-    Kokkos::realloc(xzarr_ptr->d_data, totsupers.extent(0));
+    xzarr_ptr->reallocate_dataviews(totsupers.extent(0));
     assert((totsupers.extent(0) == d_data.extent(0)) &&
            "d_data view must be size of the total number of superdroplets");
     return Functor(ffunc, totsupers, xzarr_ptr->d_data);
