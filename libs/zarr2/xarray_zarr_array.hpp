@@ -168,7 +168,7 @@ inline std::string make_xarray_metadata(const std::string_view units, const doub
       scale_factor_string(scale_factor) +  // scale_factor of data
       ",\n"
       "  \"sample_dimension\": " +
-      "\"" + std::string(sampledim) + "\"" +  // name of sample dimension
+      "\"" + std::string(sampledimname) + "\"" +  // name of sample dimension
       "\n}");
 
   return zattrs;

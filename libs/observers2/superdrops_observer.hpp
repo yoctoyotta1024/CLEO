@@ -39,7 +39,7 @@ struct XiFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, const viewd_constsupers totsupers,
                   Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
-    auto xi = static_cast<uint32_t>(supers(kk).get_xi());
+    auto xi = static_cast<uint32_t>(totsupers(kk).get_xi());
     d_data(kk) = xi;
   }
 };
@@ -49,9 +49,9 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                         const int maxchunk) {
-  const WriteGridboxToArray<Store> auto xi =
-      GenericWriteSupersToXarray<Store, uint32_t, XiFunc, XarrayForSupersData>(
-          dataset, "xi", "", "<u8", 1, maxchunk, XiFunc{});
+  const WriteGridboxToArray<Store, viewd_constsupers> auto xi =
+      GenericWriteSupersToXarray<Store, uint32_t, XiFunc>(dataset, "xi", "", "<u8", 1, maxchunk,
+                                                          XiFunc{});
 
   const auto obsfunc = DoWriteSupers(dataset, maxchunk, xi);
   return ConstTstepObserver(interval, obsfunc);

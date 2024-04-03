@@ -69,7 +69,7 @@ class GenericWriteSupersToXarray {
   /* return functor for getting 1 variable from every superdroplets in each gridbox in parallel */
   Functor get_functor(const viewd_constsupers totsupers) const {
     xzarr_ptr->reallocate_dataviews(totsupers.extent(0));
-    assert((totsupers.extent(0) == d_data.extent(0)) &&
+    assert((totsupers.extent(0) == xzarr_ptr->d_data.extent(0)) &&
            "d_data view must be size of the total number of superdroplets");
     return Functor(ffunc, totsupers, xzarr_ptr->d_data);
   }
