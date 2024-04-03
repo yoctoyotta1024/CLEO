@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,20 +28,21 @@
 #include <iostream>
 
 #include "../kokkosaliases.hpp"
+#include "./collect_data_for_dataset.hpp"
 #include "./observers.hpp"
+#include "./parallel_write_data.hpp"
 #include "zarr2/dataset.hpp"
 
 /* template class for to call a function during the at_start_step function of an observer
 in order to collect variables from gridboxes and/or superdroplets in parallel and then write them
 to arrays in a dataset at a constant time interval. */
-template <typename Store, typename ParallelWriteData>
+template <typename ParallelWriteData>
 class DoWriteToDataset {
  private:
   ParallelWriteData parallel_write;  ///< function like object to call during at_start_step
 
  public:
-  DoWriteToDataset(const Dataset<Store> &dataset, ParallelWriteData parallel_write)
-      : parallel_write(dataset, parallel_write) {}
+  explicit DoWriteToDataset(ParallelWriteData parallel_write) : parallel_write(parallel_write) {}
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes write in dataset observer\n";
@@ -55,15 +56,36 @@ class DoWriteToDataset {
   }
 };
 
-/* constructs observer which writes number of superdrops in each gridbox with a constant
-timestep 'interval' using an instance of the ConstTstepObserver class */
-template <typename Store, typename ParallelWriteData>
+/* constructs observer which writes some data in parallel according to parallel_write at the start
+of a constant timestep 'interval' using instances of the ConstTstepObserver and DoWriteToDataset
+classes */
+template <typename ParallelWriteData>
+inline Observer auto WriteToDatasetObserver(const unsigned int interval,
+                                            ParallelWriteData parallel_write) {
+  return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
+}
+
+/* constructs observer which writes some data from gridboxes in parallel into arrays in a dataset
+according to parallel_write at the start of a constant timestep 'interval' using instances of the
+ConstTstepObserver and DoWriteToDataset classes */
+template <typename Store, CollectDataForDataset<Store> CollectData>
 inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             const Dataset<Store> &dataset,
-                                            ParallelWriteData parallel_write) {
-  const auto obsfunc = DoWriteToDataset(dataset, parallel_write);
+                                            CollectData collect_data) {
+  const auto parallel_write = ParallelWriteGridboxes(dataset, collect_data);
+  return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
+}
 
-  return ConstTstepObserver(interval, obsfunc);
+/* constructs observer which writes some data from superdroplets in parallel into ragged arrays in a
+dataset according to parallel_write at the start of a constant timestep 'interval' using instances
+of the ConstTstepObserver and DoWriteToDataset classes */
+template <typename Store, CollectDataForDataset<Store> CollectData,
+          CollectRaggedCount<Store> RaggedCount>
+inline Observer auto WriteToDatasetObserver(const unsigned int interval,
+                                            const Dataset<Store> &dataset, CollectData collect_data,
+                                            RaggedCount ragged_count) {
+  const auto parallel_write = ParallelWriteSupers(dataset, collect_data, ragged_count);
+  return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
 #endif  // LIBS_OBSERVERS2_TMP_WRITE_TO_DATASET_OBSERVER_HPP_

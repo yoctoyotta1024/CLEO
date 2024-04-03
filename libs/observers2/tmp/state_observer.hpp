@@ -23,4 +23,33 @@
 #ifndef LIBS_OBSERVERS2_TMP_STATE_OBSERVER_HPP_
 #define LIBS_OBSERVERS2_TMP_STATE_OBSERVER_HPP_
 
+#include "./write_to_dataset_observer.hpp"
+#include "gridboxes/gridbox.hpp"
+#include "zarr2/dataset.hpp"
+
+/* constructs observer which writes writes thermodynamic variables from the state of each gridbox
+with a constant timestep 'interval' using an instance of the WriteToDatasetObserver class */
+template <typename Store>
+inline Observer auto ThermoObserver(const unsigned int interval, const Dataset<Store> &dataset,
+                                    const int maxchunk, const size_t ngbxs) {
+  return WriteInDatasetObserver(interval, dataset, write_thermo);
+}
+
+/* constructs observer which writes writes the wind velocity from the state of each gridbox
+with a constant timestep 'interval' using an instance of the WriteToDatasetObserver class */
+template <typename Store>
+inline Observer auto WindObserver(const unsigned int interval, const Dataset<Store> &dataset,
+                                  const int maxchunk, const size_t ngbxs) {
+  return WriteInDatasetObserver(interval, dataset, write_winds);
+}
+
+/* constructs observer which writes writes thermodynamic and wind velocity variables from the state
+of each gridbox with a constant timestep 'interval' using an instance of the WriteToDatasetObserver
+class */
+template <typename Store>
+inline Observer auto StateObserver(const unsigned int interval, const Dataset<Store> &dataset,
+                                   const int maxchunk, const size_t ngbxs) {
+  return WriteInDatasetObserver(interval, dataset, write_state);
+}
+
 #endif  // LIBS_OBSERVERS2_TMP_STATE_OBSERVER_HPP_

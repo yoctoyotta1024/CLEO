@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,7 +31,7 @@
 
 /* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
 gridboxes in a parallel loop and write it to arrays in a dataset */
-template <typename Store, CollectDataForDataset CollectData>
+template <typename Store, CollectDataForDataset<Store> CollectData>
 class ParallelWriteGridboxes {
  private:
   const Dataset<Store> &dataset;  ///< dataset to write data to
