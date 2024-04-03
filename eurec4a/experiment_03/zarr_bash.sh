@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --job-name=sdm_eueurec4a_rain1d
-#SBATCH --partition=cpu
+#SBATCH --job-name=zarrfiles2netcdf_eurec4a_rain1d_subset
+#SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --mem=30G
 #SBATCH --time=01:30:00
@@ -26,21 +26,22 @@ echo "--------------------------------------------"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build/
 path2sdm_eurec4a=${HOME}/repositories/sdm-eurec4a/
+path2experiment=${path2CLEO}/eurec4a/experiment_03/
 rawdirectory=${path2CLEO}/data/output/raw/rain/
 processeddirectory=${path2CLEO}/data/output/processed/rain/
-yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/all_rain_clusters
-
+# yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/all_rain_clusters
+yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/subset
 
 
 for yamlfile in ${yamldirectory}/*.yaml; do
-    echo "Running rainshaft1d.py with ${yamlfile}"
+    echo "Running zarrfiles_to_netcdf.py with ${yamlfile}"
     # {
     #     ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile} ${rawdirectory} > ${logfile} 
     # } || {
     #     echo "NO DATA CREATED"
     #     }
     {
-        ${pythonPySD} zarrfiles_to_netcdf.py ${path2CLEO} ${path2sdm_eurec4a} ${yamlfile} ${rawdirectory} ${processeddirectory}
+        ${pythonPySD} ${path2experiment}/zarrfiles_to_netcdf.py ${path2CLEO} ${path2sdm_eurec4a} ${yamlfile} ${rawdirectory} ${processeddirectory}
     } || {
         echo "NO DATA CREATED"
     }
