@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -43,14 +43,6 @@ struct NsupersFunc {
     auto nsupers = static_cast<uint32_t>(d_gbxs(ii).supersingbx.nsupers());
     d_data(ii) = nsupers;
   }
-
-  KOKKOS_INLINE_FUNCTION
-  void operator()(const TeamMember &team_member, viewd_constgbx d_gbxs,
-                  Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
-    const int ii = team_member.league_rank();
-    auto nsupers = static_cast<uint32_t>(d_gbxs(ii).supersingbx.nsupers());
-    d_data(ii) = nsupers;
-  }
 };
 
 /* returns WriteGridboxToArray which writes the number of superdrops in each
@@ -73,5 +65,3 @@ inline Observer auto NsupersObserver(const unsigned int interval, const Dataset<
 }
 
 #endif  // LIBS_OBSERVERS2_NSUPERS_OBSERVER_HPP_
-
-// TODO(CB) totnsupers in domain observer

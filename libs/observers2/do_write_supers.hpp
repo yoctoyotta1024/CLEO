@@ -35,6 +35,27 @@
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
 
+/* Operator is functor to perform copy of number of superdrops in each gridbox to d_data
+  in parallel. Note conversion of nsupers from size_t (8 bytes) to single precision (4 bytes
+  unsigned integer) in output */
+struct RaggedCountFunc {
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t ii, viewd_constgbx d_gbxs,
+                  Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
+    auto nsupers = static_cast<uint32_t>(d_gbxs(ii).supersingbx.nsupers());
+    d_data(ii) = nsupers;
+  }
+};
+
+/* returns WriteGridboxToArray which writes the number of superdrops in each
+gridbox to an array in a dataset in a store called "raggedcount_nsupers" */
+template <typename Store>
+WriteGridboxToArray<Store> auto RaggedCountWriter(const Dataset<Store> &dataset,
+                                                  const size_t maxchunk, const size_t ngbxs) {
+  return GenericWriteSupersToXarray<Store, uint32_t, RaggedCountFunc, XarrayForSupersRaggedCount>(
+      dataset, "raggedcount_nsupers", "<u4", maxchunk, ngbxs, RaggedCountFunc{});
+}
+
 /* template class for observer with at_start_step function that collects variables from each
 superdroplet in each gridbox in parallel and then writes them to their repspective ragged arrays in
 a dataset alongside the raggedcount for the arrays */
@@ -76,7 +97,9 @@ class DoWriteSupers {
 
  public:
   DoWriteSupers(const Dataset<Store> &dataset, WriteSupersToArray write2array)
-      : dataset(dataset), write2array(write2array) {}
+      : dataset(dataset),
+        write2array(write2array),
+        write2raggedcount(RaggedCountWriter(dataset, maxchunk, ngbxs)) {}
 
   ~DoWriteSupers() { write2array.write_arrayshape(dataset); }
 
