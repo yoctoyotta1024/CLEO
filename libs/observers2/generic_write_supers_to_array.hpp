@@ -20,6 +20,8 @@
  * in parallel to a ragged array in a dataset.
  */
 
+// TODO(CB) combine with write_gridbox generic
+
 #ifndef LIBS_OBSERVERS2_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_
 #define LIBS_OBSERVERS2_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_
 
