@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: generic_write_supers_to_array.hpp
- * Project: observers2
+ * Project: tmp_delete
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -22,8 +22,8 @@
 
 // TODO(CB) delete file
 
-#ifndef LIBS_OBSERVERS2_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_
-#define LIBS_OBSERVERS2_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_
+#ifndef LIBS_OBSERVERS2_TMP_DELETE_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_
+#define LIBS_OBSERVERS2_TMP_DELETE_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -85,4 +85,4 @@ class GenericWriteSupersToXarray {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_
+#endif  // LIBS_OBSERVERS2_TMP_DELETE_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_

@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: write_gridbox_to_array.hpp
- * Project: observers2
+ * Project: tmp_delete
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -20,8 +20,8 @@
  * to an array in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_WRITE_GRIDBOX_TO_ARRAY_HPP_
-#define LIBS_OBSERVERS2_WRITE_GRIDBOX_TO_ARRAY_HPP_
+#ifndef LIBS_OBSERVERS2_TMP_DELETE_WRITE_GRIDBOX_TO_ARRAY_HPP_
+#define LIBS_OBSERVERS2_TMP_DELETE_WRITE_GRIDBOX_TO_ARRAY_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -143,4 +143,4 @@ struct CombineWG2A {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_WRITE_GRIDBOX_TO_ARRAY_HPP_
+#endif  // LIBS_OBSERVERS2_TMP_DELETE_WRITE_GRIDBOX_TO_ARRAY_HPP_

@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: parallel_write_data.hpp
- * Project: tmp
+ * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -20,8 +20,8 @@
  * writing data from gridboxes and/or superdroplets to arrays in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_TMP_PARALLEL_WRITE_DATA_HPP_
-#define LIBS_OBSERVERS2_TMP_PARALLEL_WRITE_DATA_HPP_
+#ifndef LIBS_OBSERVERS2_PARALLEL_WRITE_DATA_HPP_
+#define LIBS_OBSERVERS2_PARALLEL_WRITE_DATA_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -110,4 +110,4 @@ class ParallelWriteSupers {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_TMP_PARALLEL_WRITE_DATA_HPP_
+#endif  // LIBS_OBSERVERS2_PARALLEL_WRITE_DATA_HPP_

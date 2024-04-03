@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: collect_data_for_dataset.hpp
- * Project: tmp
+ * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,8 +20,8 @@
  * structs to collect data within parallel loops and write it to arrays in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_TMP_COLLECT_DATA_FOR_DATASET_HPP_
-#define LIBS_OBSERVERS2_TMP_COLLECT_DATA_FOR_DATASET_HPP_
+#ifndef LIBS_OBSERVERS2_COLLECT_DATA_FOR_DATASET_HPP_
+#define LIBS_OBSERVERS2_COLLECT_DATA_FOR_DATASET_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -151,4 +151,4 @@ struct NullCollectDataForDataset {
   void reallocate_views(const size_t sz) const {}
 };
 
-#endif  // LIBS_OBSERVERS2_TMP_COLLECT_DATA_FOR_DATASET_HPP_
+#endif  // LIBS_OBSERVERS2_COLLECT_DATA_FOR_DATASET_HPP_

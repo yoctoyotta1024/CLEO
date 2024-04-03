@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: state_writers.hpp
- * Project: observers2
+ * Project: tmp_delete
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -22,8 +22,8 @@
 
 // TODO(CB) delete file
 
-#ifndef LIBS_OBSERVERS2_STATE_WRITERS_HPP_
-#define LIBS_OBSERVERS2_STATE_WRITERS_HPP_
+#ifndef LIBS_OBSERVERS2_TMP_DELETE_STATE_WRITERS_HPP_
+#define LIBS_OBSERVERS2_TMP_DELETE_STATE_WRITERS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -159,4 +159,4 @@ WriteGridboxToArray<Store, viewd_constgbx> auto WindVelocityWriter(const Dataset
   return c(wvel, c(vvel, uvel));
 }
 
-#endif  // LIBS_OBSERVERS2_STATE_WRITERS_HPP_
+#endif  // LIBS_OBSERVERS2_TMP_DELETE_STATE_WRITERS_HPP_

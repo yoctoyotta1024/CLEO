@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: generic_collect_data.hpp
- * Project: tmp
+ * Project: observers2
  * Created Date: Thursday 4th April 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -20,8 +20,8 @@
  * variable(s) and write it to xarray(s) in a datatset.
  */
 
-#ifndef LIBS_OBSERVERS2_TMP_GENERIC_COLLECT_DATA_HPP_
-#define LIBS_OBSERVERS2_TMP_GENERIC_COLLECT_DATA_HPP_
+#ifndef LIBS_OBSERVERS2_GENERIC_COLLECT_DATA_HPP_
+#define LIBS_OBSERVERS2_GENERIC_COLLECT_DATA_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <memory>
@@ -103,4 +103,4 @@ class GenericCollectData {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_TMP_GENERIC_COLLECT_DATA_HPP_
+#endif  // LIBS_OBSERVERS2_GENERIC_COLLECT_DATA_HPP_
