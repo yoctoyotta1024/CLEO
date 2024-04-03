@@ -78,6 +78,18 @@ struct RaggedCount {
   }
 };
 
+/* Operator is functor to perform copy of xi for each superdroplet in totsupers view to d_data
+in parallel. Note conversion of xi from size_t (arch dependent usually 8 bytes) to long
+precision unsigned int (unit64_t) */
+struct XiFunc {
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+                  Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
+    auto xi = static_cast<uint32_t>(totsupers(kk).get_xi());
+    d_data(kk) = xi;
+  }
+};
+
 /* constructs observer which writes writes superdroplet variables (e.g. an attributes) from each
 superdroplet with a constant timestep 'interval' using an instance of the WriteToDatasetObserver
 class */
