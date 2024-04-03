@@ -51,9 +51,9 @@ struct WriteRaggedCountToArray {
 
   WriteRaggedCountToArray(const Dataset<Store> &dataset, const size_t maxchunk)
       : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
-            dataset.template create_raggedcount_array<uint32_t>("raggedcount", "", "<u4", 1,
-                                                                maxchunk))) {}
-}
+            dataset.template create_raggedcount_array<uint32_t>(
+                "raggedcount", "", "<u4", 1, {maxchunk}, {"time"}, "superdroplets"))) {}
+};
 
 /* template class for observer with at_start_step function that collects variables from each
 superdroplet in each gridbox in parallel and then writes them to their respective ragged arrays in
