@@ -46,7 +46,7 @@ concept WriteGridboxToArray =
       { wg2a.get_functor(d_view) };
       { wg2a.write_to_array(ds) } -> std::same_as<void>;
       { wg2a.write_arrayshape(ds) } -> std::same_as<void>;
-    };
+    };  // TODO(CB) rename
 
 /**
  * @brief Combined gridbox data writer struct combines two structs that write gridbox data to an
