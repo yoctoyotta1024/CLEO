@@ -137,12 +137,12 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
-  for (size_t i = 0; i < vertex_longitudes.size(); i++) {
+  for (size_t i = 0; i < vertex_longitudes.size(); i++)
     vertex_longitudes[i] = i * (2 * std::numbers::pi / (ndims[0] + 1));
-    if (i < vertex_latitudes.size())
+
+  for (size_t i = 0; i < vertex_latitudes.size(); i++)
       vertex_latitudes[i] = (-0.5 * std::numbers::pi) +
                             (i + 1) * (std::numbers::pi / (ndims[1] + 2));
-  }
 
   // Defines a regular 2D grid
   yac_cdef_grid_reg2d(cleo_grid_name.c_str(), total_vertices,
