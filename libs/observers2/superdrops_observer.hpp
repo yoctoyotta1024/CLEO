@@ -32,17 +32,15 @@
 #include "./write_gridbox_to_array.hpp"
 #include "zarr2/dataset.hpp"
 
-/* Operator is functor to perform copy of xi for each superdroplet in each gridbox to d_data
-in parallel. Note conversion of xi from size_t (arch dependent usuualyl 8 bytes) to long
+/* Operator is functor to perform copy of xi for each superdroplet in totsupers view to d_data
+in parallel. Note conversion of xi from size_t (arch dependent usually 8 bytes) to long
 precision unsigned int (unit64_t) */
 struct XiFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const TeamMember &team_member, viewd_constgbx d_gbxs,
+  void operator()(const size_t kk, const viewd_constsupers totsupers,
                   Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
-    const int ii = team_member.league_rank();
-    auto supers(d_gbxs(ii).supersingbx.readonly());
-    const size_t kk = 0;
-    d_data(ii) = static_cast<uint32_t>(supers(kk).get_xi());  // TODO(CB) WIP
+    auto xi = static_cast<uint32_t>(supers(kk).get_xi());
+    d_data(kk) = xi;
   }
 };
 
