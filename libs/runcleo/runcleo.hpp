@@ -162,7 +162,7 @@ class RunCLEO {
       gbxs.modify_host();
     }
 
-    const auto totsupers = domain_totsupers_readonly();
+    const auto totsupers = gbxs.view_host()(0).domain_totsupers_readonly();
     gbxs.sync_device();
     sdm.at_start_step(t_mdl, gbxs.view_device(), totsupers);
 
