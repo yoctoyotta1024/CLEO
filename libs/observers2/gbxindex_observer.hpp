@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -87,7 +87,8 @@ class GbxindexObserver {
 
   void after_timestepping() const {}
 
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {}
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+                     const viewd_constsupers totsupers) const {}
 
   unsigned int next_obs(const unsigned int t_mdl) const { return LIMITVALUES::uintmax; }
 
