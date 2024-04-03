@@ -35,6 +35,8 @@
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
 
+// TODO(CB) attempt 2-D ragged array?
+
 template <typename Store>
 struct WriteRaggedCountToArray {
  private:
