@@ -44,7 +44,7 @@ struct XiFunc {
   }
 };
 
-/* constructs observer which writes out variables from every sueprdroplet in each gridbox
+/* constructs observer which writes out variables from every superdroplet in the domain
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
