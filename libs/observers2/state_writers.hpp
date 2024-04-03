@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,6 +19,8 @@
  * Functions to create WriteGridboxToArrays which write out state variables from
  * each Gridbox, e.g. to use in StateObserver.
  */
+
+// TODO(CB) delete file
 
 #ifndef LIBS_OBSERVERS2_STATE_WRITERS_HPP_
 #define LIBS_OBSERVERS2_STATE_WRITERS_HPP_

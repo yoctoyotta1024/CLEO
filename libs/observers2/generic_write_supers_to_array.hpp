@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,7 +20,7 @@
  * in parallel to a ragged array in a dataset.
  */
 
-// TODO(CB) combine with write_gridbox generic
+// TODO(CB) delete file
 
 #ifndef LIBS_OBSERVERS2_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_
 #define LIBS_OBSERVERS2_GENERIC_WRITE_SUPERS_TO_ARRAY_HPP_
