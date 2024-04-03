@@ -39,9 +39,9 @@
 #include "observers2/observers.hpp"
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
-#include "observers2/totnsupers_observer.hpp"
-// #include "observers2/superdrops_observer.hpp"
+#include "observers2/superdrops_observer.hpp"
 #include "observers2/time_observer.hpp"
+#include "observers2/totnsupers_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
@@ -90,8 +90,9 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const Observer auto obs5 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
   const Observer auto obs6 = TotNsupersObserver(obsstep, dataset, maxchunk);
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
-  // const Observer auto obssd = SuperdropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  return obsx >> obs6 >> obs4 >> obs3 >> obs2 >> obs1;
+  const Observer auto obssd = SuperdropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+
+  return obssd >> obsx >> obs6 >> obs4 >> obs3 >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */
