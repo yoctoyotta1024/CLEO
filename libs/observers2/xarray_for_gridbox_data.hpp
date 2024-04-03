@@ -36,7 +36,7 @@
 
 /* struct holding an array in a dataset as well a view and its mirror view
 which can be useful when collecting data for 1 variable from 'ngbxs' gridboxes
-(in parallel) to then write the the array */
+(in parallel) to then write to the array */
 template <typename Store, typename T>
 struct XarrayForGridboxData {
   XarrayZarrArray<Store, T> xzarr;                         // array in a dataset
