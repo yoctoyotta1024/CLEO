@@ -37,8 +37,15 @@
 
 template <typename Store>
 struct WriteRaggedCountToArray {
+ private:
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>>
       xzarr_ptr;  ///< pointer to time array in dataset
+
+ public:
+  WriteRaggedCountToArray(const Dataset<Store> &dataset, const size_t maxchunk)
+      : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
+            dataset.template create_raggedcount_array<uint32_t>(
+                "raggedcount", "", "<u4", 1, {maxchunk}, {"time"}, "superdroplets"))) {}
 
   /* write_ragged_count_to_array operator() writes the total number of super-droplets in the domain
   "totnsupers" to the raggedcount array in the dataset. Note static conversion from architecture
@@ -49,10 +56,7 @@ struct WriteRaggedCountToArray {
     dataset.write_to_array(xzarr_ptr, totnsupers);
   }
 
-  WriteRaggedCountToArray(const Dataset<Store> &dataset, const size_t maxchunk)
-      : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
-            dataset.template create_raggedcount_array<uint32_t>(
-                "raggedcount", "", "<u4", 1, {maxchunk}, {"time"}, "superdroplets"))) {}
+  void write_arrayshape(const Dataset<Store> &dataset) { dataset.write_arrayshape(xzarr_ptr); }
 };
 
 /* template class for observer with at_start_step function that collects variables from each
@@ -90,7 +94,10 @@ class DoWriteSupers {
         write_raggedcount_to_array(WriteRaggedCountToArray(dataset, maxchunk)),
         write2array(write2array) {}
 
-  ~DoWriteSupers() { write2array.write_arrayshape(dataset); }
+  ~DoWriteSupers() {
+    write2array.write_arrayshape(dataset);
+    write_raggedcount_to_array.write_arrayshape(dataset);
+  }
 
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes write superdrops observer\n";
