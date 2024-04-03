@@ -30,7 +30,7 @@
 
 /* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
 gridboxes in a parallel loop and write it to arrays in a dataset */
-template <typename Store, typename CollectData>
+template <typename Store, CollectDataForDataset CollectData>
 class ParallelWriteGridboxes {
  private:
   const Dataset<Store> &dataset;  ///< dataset to write data to
@@ -60,7 +60,7 @@ class ParallelWriteGridboxes {
 
 /* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
 superdroplets in a parallel loop and write it to ragged arrays in a dataset */
-template <typename Store, typename CollectData, typename RaggedCount>
+template <typename Store, CollectDataForDataset CollectData, typename RaggedCount>
 class ParallelWriteSupers {
  private:
   const Dataset<Store> &dataset;  ///< dataset to write data to
