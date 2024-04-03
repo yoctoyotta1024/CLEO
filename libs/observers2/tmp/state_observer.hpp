@@ -42,7 +42,7 @@
 Note conversion of pressure from double (8 bytes) to single precision (4 bytes float) in output */
 struct PressFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs,
+  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
     auto press = static_cast<float>(d_gbxs(ii).state.press);
     d_data(ii) = press;
