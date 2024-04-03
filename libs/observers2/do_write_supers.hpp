@@ -35,38 +35,36 @@
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
 
-/* Operator is functor to perform copy of number of superdrops in each gridbox to d_data
-  in parallel. Note conversion of nsupers from size_t (8 bytes) to single precision (4 bytes
-  unsigned integer) in output */
-struct RaggedCountFunc {
-  KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs,
-                  Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
-    auto nsupers = static_cast<uint32_t>(d_gbxs(ii).supersingbx.nsupers());
-    d_data(ii) = nsupers;
-  }
-};
-
-/* returns WriteGridboxToArray which writes the number of superdrops in each
-gridbox to an array in a dataset in a store called "raggedcount_nsupers" */
 template <typename Store>
-WriteGridboxToArray<Store> auto RaggedCountWriter(const Dataset<Store> &dataset,
-                                                  const size_t maxchunk, const size_t ngbxs) {
-  return GenericWriteSupersToXarray<Store, uint32_t, RaggedCountFunc, XarrayForSupersRaggedCount>(
-      dataset, "raggedcount_nsupers", "<u4", maxchunk, ngbxs, RaggedCountFunc{});
+struct WriteRaggedCountToArray {
+  std::shared_ptr<XarrayZarrArray<Store, uint32_t>>
+      xzarr_ptr;  ///< pointer to time array in dataset
+
+  /* write_ragged_count_to_array operator() writes the total number of super-droplets in the domain
+  "totnsupers" to the raggedcount array in the dataset. Note static conversion from architecture
+  dependent, usually 8 byte unsigned integer (size_t = uint64_t), to 4 byte unsigned integer
+  (uint32_t). */
+  void operator()(const viewd_constsupers totsupers, const Dataset<Store> &dataset) const {
+    const auto totnsupers = static_cast<uint32_t>(totsupers.extent(0));
+    dataset.write_to_array(xzarr_ptr, totnsupers);
+  }
+
+  WriteRaggedCountToArray(const Dataset<Store> &dataset, const size_t maxchunk)
+      : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
+            dataset.template create_raggedcount_array<uint32_t>("raggedcount", "", "<u4", 1,
+                                                                maxchunk))) {}
 }
 
 /* template class for observer with at_start_step function that collects variables from each
-superdroplet in each gridbox in parallel and then writes them to their repspective ragged arrays in
+superdroplet in each gridbox in parallel and then writes them to their respective ragged arrays in
 a dataset alongside the raggedcount for the arrays */
-template <typename Store, WriteGridboxToArray<Store> WriteSupersToArray,
-          WriteGridboxToArray<Store> WriteRaggedCountToArray>
+template <typename Store, WriteGridboxToArray<Store> WriteSupersToArray>
 class DoWriteSupers {
  private:
-  const Dataset<Store> &dataset;  ///< dataset to write data to
+  const Dataset<Store> &dataset;                              ///< dataset to write data to
+  WriteRaggedCountToArray<Store> write_raggedcount_to_array;  ///< raggedcount array in dataset
   WriteSupersToArray
       write2array;  ///< object collects superdrops data and writes it to arrays in dataset
-  WriteRaggedCountToArray write2raggedcount;  ///< raggedcount array in dataset
 
   /* Use the writer's functor to collect data from superdroplets in parallel.
   Then write the data to ragged arrays in the dataset */
@@ -78,28 +76,19 @@ class DoWriteSupers {
     write2array.write_to_array(dataset);
   }
 
-  /* Use the raggedcount writer's functor to collect the raggedcount (i.e. the number of
-  superdroplets in each gridbox) and write it to an array in the dataset */
-  void write_raggedcount(const viewd_constgbx d_gbxs) const {
-    auto functor = write2raggedcount.get_functor(d_gbxs);
-    const size_t ngbxs(d_gbxs.extent(0));
-    Kokkos::parallel_for("range_policy_collect_gbxs_data", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
-                         functor);
-    write2raggedcount.write_to_array(dataset);
-  }
-
   /* Collect data from superdroplets and write into ragged arrays in the dataset alongside the
    * raggedcount */
-  void at_start_step(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
+  void at_start_step(const viewd_constsupers totsupers) const {
     write_superdrops_data(totsupers);
-    write_raggedcount(d_gbxs);
+    write_raggedcount_to_array(totsupers, dataset);
   }
 
  public:
-  DoWriteSupers(const Dataset<Store> &dataset, WriteSupersToArray write2array)
+  DoWriteSupers(const Dataset<Store> &dataset, const size_t maxchunk,
+                WriteSupersToArray write2array)
       : dataset(dataset),
-        write2array(write2array),
-        write2raggedcount(RaggedCountWriter(dataset, maxchunk, ngbxs)) {}
+        write_raggedcount_to_array(WriteRaggedCountToArray(dataset, maxchunk)),
+        write2array(write2array) {}
 
   ~DoWriteSupers() { write2array.write_arrayshape(dataset); }
 
@@ -111,7 +100,7 @@ class DoWriteSupers {
 
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
-    at_start_step(d_gbxs, totsupers);
+    at_start_step(totsupers);
   }
 };
 

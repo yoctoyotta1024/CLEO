@@ -48,12 +48,12 @@ struct XiFunc {
 with a constant timestep 'interval' using an instance of the ConstTstepObserver class */
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                        const int maxchunk, const size_t ngbxs) {
+                                        const int maxchunk) {
   const WriteGridboxToArray<Store> auto xi =
       GenericWriteSupersToXarray<Store, uint32_t, XiFunc, XarrayForSupersData>(
           dataset, "xi", "", "<u8", 1, maxchunk, XiFunc{});
 
-  const auto obsfunc = DoWriteSupers(dataset, xi);
+  const auto obsfunc = DoWriteSupers(dataset, maxchunk, xi);
   return ConstTstepObserver(interval, obsfunc);
 }
 
