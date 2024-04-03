@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -196,8 +196,9 @@ class SDMMethods {
    * @param t_mdl Current timestep of the coupled model.
    * @param d_gbxs View of gridboxes on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
-    obs.at_start_step(t_mdl, d_gbxs);
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+                     const viewd_constsupers totsupers) const {
+    obs.at_start_step(t_mdl, d_gbxs, totsupers);
   }
 
   /**

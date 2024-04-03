@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,12 +37,13 @@
  * @tparam Obs The type that satisfies the Observer concept.
  */
 template <typename Obs>
-concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs) {
+concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs,
+                            const viewd_constsupers totsupers) {
   { obs.next_obs(t) } -> std::convertible_to<unsigned int>;
   { obs.on_step(t) } -> std::same_as<bool>;
   { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { obs.after_timestepping() } -> std::same_as<void>;
-  { obs.at_start_step(t, d_gbxs) } -> std::same_as<void>;
+  { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
 };
 
 /**
@@ -125,9 +126,10 @@ struct CombinedObserver {
    * @param t_mdl The unsigned int parameter.
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
-    a.at_start_step(t_mdl, d_gbxs);
-    b.at_start_step(t_mdl, d_gbxs);
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+                     const viewd_constsupers totsupers) const {
+    a.at_start_step(t_mdl, d_gbxs, totsupers);
+    b.at_start_step(t_mdl, d_gbxs, totsupers);
   }
 };
 
@@ -185,7 +187,8 @@ struct NullObserver {
    * @param t_mdl The unsigned int for the current timestep.
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {}
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+                     const viewd_constsupers totsupers) const {}
 };
 
 /**
@@ -198,10 +201,11 @@ struct NullObserver {
  * @tparam O Type that satisfies the ObsFuncs concept.
  */
 template <typename OFs>
-concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs) {
+concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs,
+                            const viewd_constsupers totsupers) {
   { ofs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { ofs.after_timestepping() } -> std::same_as<void>;
-  { ofs.at_start_step(t, d_gbxs) } -> std::same_as<void>;
+  { ofs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
 };
 
 /**
@@ -278,9 +282,10 @@ struct ConstTstepObserver {
    * @param t_mdl The unsigned int parameter representing the current model time.
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
+  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+                     const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
-      do_obs.at_start_step(t_mdl, d_gbxs);
+      do_obs.at_start_step(t_mdl, d_gbxs, totsupers);
     }
   }
 };
