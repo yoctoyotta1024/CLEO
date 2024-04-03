@@ -40,8 +40,9 @@
 template <typename CDD, typename Store>
 concept CollectDataForDataset =
     requires(CDD cdd, const Dataset<Store> &ds, const viewd_constgbx d_gbxs,
-             const viewd_constsupers totsupers) {
+             const viewd_constsupers totsupers, const size_t sz) {
       { cdd.get_functor(d_gbxs, totsupers) };
+      { cdd.reallocate_views(sz) } -> std::same_as<void>;
       { cdd.write_to_arrays(ds) } -> std::same_as<void>;
       { cdd.write_arrayshapes(ds) } -> std::same_as<void>;
     };
@@ -107,6 +108,11 @@ struct CombinedCollectDataForDataset {  // TODO(CB) generalise
     a.write_arrayshapes(dataset);
     b.write_arrayshapes(dataset);
   }
+
+  void reallocate_views(const size_t sz) const {
+    a.reallocate_views(sz);
+    b.reallocate_views(sz);
+  }
 };
 
 /**
@@ -141,6 +147,8 @@ struct NullCollectDataForDataset {
   void write_to_arrays(const Dataset<Store> &dataset) const {}
 
   void write_arrayshapes(const Dataset<Store> &dataset) const {}
+
+  void reallocate_views(const size_t sz) const {}
 };
 
 #endif  // LIBS_OBSERVERS2_TMP_COLLECT_DATA_FOR_DATASET_HPP_
