@@ -1,13 +1,15 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: detectors.hpp
  * Project: gridboxes
- * Created Date: Friday 13th October 2023
+ * Created Date: Wednesday 8th November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 17th October 2023
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,14 +21,15 @@
  * in gridboxes
  */
 
+
 #ifndef LIBS_GRIDBOXES_DETECTORS_HPP_
 #define LIBS_GRIDBOXES_DETECTORS_HPP_
 
 #include <Kokkos_Core.hpp>
 
 struct Detectors {
-  KOKKOS_INLINE_FUNCTION Detectors() = default;   // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~Detectors() = default;  // Kokkos requirement for a (dual)View
+  Detectors() = default;   // Kokkos requirement for a (dual)View
+  ~Detectors() = default;  // Kokkos requirement for a (dual)View
 };
 
 #endif  // LIBS_GRIDBOXES_DETECTORS_HPP_

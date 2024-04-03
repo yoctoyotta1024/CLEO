@@ -1,7 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=createinit
-#SBATCH --partition=gpu
-#SBATCH --gpus=4
+#SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G

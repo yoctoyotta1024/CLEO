@@ -1,13 +1,15 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: main.cpp
  * Project: src
- * Created Date: Thursday 12th October 2023
+ * Created Date: Monday 29th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th January 2024
+ * Last Modified: Monday 11th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -16,8 +18,9 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM)
  * after make/compiling, execute for example via:
- * ./src/runCLEO ../src/config/config.txt
+ * ./src/cleocoupledsdm ../src/config/config.txt
  */
+
 
 #include <concepts>
 #include <iostream>
@@ -52,15 +55,15 @@
 #include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "superdrops/breakup.hpp"
-#include "superdrops/breakup_nfrags.hpp"
-#include "superdrops/coalbure.hpp"
-#include "superdrops/coalbure_flag.hpp"
-#include "superdrops/coalescence.hpp"
-#include "superdrops/collisionprobs/constprob.hpp"
-#include "superdrops/collisionprobs/golovinprob.hpp"
-#include "superdrops/collisionprobs/longhydroprob.hpp"
-#include "superdrops/collisionprobs/lowlistprob.hpp"
+#include "superdrops/collisions/breakup.hpp"
+#include "superdrops/collisions/breakup_nfrags.hpp"
+#include "superdrops/collisions/coalbure.hpp"
+#include "superdrops/collisions/coalescence.hpp"
+#include "superdrops/collisions/coalbure_flag.hpp"
+#include "superdrops/collisions/constprob.hpp"
+#include "superdrops/collisions/golovinprob.hpp"
+#include "superdrops/collisions/longhydroprob.hpp"
+#include "superdrops/collisions/lowlistprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
@@ -122,7 +125,8 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
   // const PairProbability auto coalprob = LowListCoalProb();
   // const PairProbability auto coalprob = GolovinProb();
   const PairProbability auto coalprob = LongHydroProb(1.0);
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
+  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
+                                                  coalprob);
 
   return coal;
   // return coal >> bu;

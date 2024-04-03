@@ -1,47 +1,31 @@
 # module load gcc && CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
 
 # set cmake version
-cmake_minimum_required(VERSION 3.18.0)
-# cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler
+if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
+  cmake_minimum_required(VERSION 3.18.0)
+endif()
 
-# set project name and source directory of .cpp files
-project("test")
+# set project name and print directory of this CMakeLists.txt (source directory of project)
+project("roughpaper/test")
+message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
-# print where exactly project source dir is for this CMakeLists.txt
-message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+#set compiler flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -g -gdwarf-4")
 
-# Kokkos library stuff
-set(CMAKE_CXX_FLAGS_B4 "${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_STANDARD_B4 "${CMAKE_CXX_STANDARD}")
-include(FetchContent)
-FetchContent_Declare(
-  Kokkos
-  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
-  GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
-)
-set(CMAKE_CXX_STANDARD "20")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-FetchContent_MakeAvailable(Kokkos)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
-set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
+# Set libraries from CLEO to link with executable
+set(CLEOLIBS superdrops zarr2)
 
-# # Set libraries and compiler warnings to use
-# set(SDMLIBS superdrops)
+# create primary executable "test"
+add_executable(test main.cpp)
 
-# default compiler options to use in subdirectories
-set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ compiler
-# set(defaultcompileops -Werror -Wall -pedantic -g)           # -gdwarf-4 flag not possible for nvc++ compiler
+# Add directories and link libraries to target
+target_link_libraries(test PRIVATE ${CLEOLIBS})
+target_link_libraries(test PUBLIC Kokkos::kokkos)
+target_include_directories(test PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_include_directories(test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
-# primary executable for CLEO sdm
-set(test "test")
-add_executable(${test} "main.cpp")
-# target_link_libraries(${test} PRIVATE "${SDMLIBS}")
-target_link_libraries(${test} PUBLIC Kokkos::kokkos)
-target_compile_options(${test} PRIVATE ${compileops})
-
-# set compiler properties for target(s)
-set_target_properties(${test} PROPERTIES
+# set C++ properties for target
+set_target_properties(test PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

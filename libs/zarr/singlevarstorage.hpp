@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: singlevarstorage.hpp
@@ -7,18 +9,18 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th October 2023
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * File Description:
  * Incomplete templated class for writing a single variable
  * (could be 1-D or 2-D variable or a coordinate etc.)
  * via a buffer into chunks of arrays in a fsstore obeying
  * the Zarr Storage specification version 2
- * */
+ */
+
 
 #ifndef LIBS_ZARR_SINGLEVARSTORAGE_HPP_
 #define LIBS_ZARR_SINGLEVARSTORAGE_HPP_
