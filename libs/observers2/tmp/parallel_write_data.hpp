@@ -24,6 +24,7 @@
 #define LIBS_OBSERVERS2_TMP_PARALLEL_WRITE_DATA_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <concepts>
 
 #include "../kokkosaliases.hpp"
 #include "zarr2/dataset.hpp"
@@ -58,9 +59,23 @@ class ParallelWriteGridboxes {
   }
 };
 
+/**
+ * @brief Concept for CollectRaggedCount is all types that have functions for writing the ragged
+ * count of superdroplet arrays to an array in a dataset.
+ *
+ * @tparam CRC The type that satisfies the CollectRaggedCount concept.
+ */
+template <typename CRC, typename Store>
+concept CollectRaggedCount =
+    requires(CRC crc, const Dataset<Store> &ds, const viewd_constsupers totsupers) {
+      { crc.write_to_array(ds, totsupers) } -> std::same_as<void>;
+      { crc.write_arrayshape(ds) } -> std::same_as<void>;
+    };
+
 /* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
 superdroplets in a parallel loop and write it to ragged arrays in a dataset */
-template <typename Store, CollectDataForDataset CollectData, typename RaggedCount>
+template <typename Store, CollectDataForDataset<Store> CollectData,
+          CollectRaggedCount<Store> RaggedCount>
 class ParallelWriteSupers {
  private:
   const Dataset<Store> &dataset;  ///< dataset to write data to
