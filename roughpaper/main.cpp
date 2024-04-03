@@ -90,7 +90,7 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const Observer auto obs5 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
   const Observer auto obs6 = TotNsupersObserver(obsstep, dataset, maxchunk);
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
-  const Observer auto obssd = SuperdropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obssd = SuperdropsObserver(obsstep, dataset, maxchunk);
 
   return obssd >> obsx >> obs6 >> obs4 >> obs3 >> obs2 >> obs1;
 }
