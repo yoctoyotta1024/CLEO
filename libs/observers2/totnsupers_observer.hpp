@@ -67,7 +67,7 @@ class DoTotNsupersObs {
 
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
-    at_start_step(totnsupers);
+    at_start_step(totsupers);
   }
 };
 
