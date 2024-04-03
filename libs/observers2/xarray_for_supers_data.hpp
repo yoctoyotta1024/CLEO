@@ -53,14 +53,13 @@ struct XarrayForSupersData {
         h_data("h_data", 0),
         d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
 
-  void reallocate_dataviews(const size_t totnsupers) const {
+  void reallocate_dataviews(const size_t totnsupers) {
     Kokkos::realloc(h_data, totnsupers);
     Kokkos::realloc(d_data, totnsupers);
   }
 
   /* copy data from device view directly to host and then write to array in dataset */
-  void write_to_array(const Dataset<Store> &dataset, const viewh_data h_data,
-                      const mirrorviewd_data d_data) {
+  void write_to_array(const Dataset<Store> &dataset) {
     Kokkos::deep_copy(h_data, d_data);
     dataset.write_to_array(xzarr, h_data);
   }
