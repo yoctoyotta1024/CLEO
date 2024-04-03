@@ -36,21 +36,26 @@ class ParallelWriteGridboxes {
   const Dataset<Store> &dataset;  ///< dataset to write data to
   CollectData collect_data;  ///< functions to collect data within gbxs loop and write in dataset
 
- public:
-  ParallelWriteGridboxes(const Dataset<Store> &dataset, CollectData collect_data)
-      : dataset(dataset), collect_data(collect_data) {}
-
-  ~ParallelWriteGridboxes() { collect_data.write_arrayshapes(dataset); }
-
   /* Use the writer's functor to collect data from gridboxes in parallel.
     Then write the data in the dataset */
-  void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) {
+  void parallel_write_gridboxes(const viewd_constgbx d_gbxs) const {
     auto functor = collect_data.get_functor(d_gbxs);
 
     const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for("write_gridboxes", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
 
     collect_data.write_to_arrays(dataset);
+  }
+
+ public:
+  ParallelWriteGridboxes(const Dataset<Store> &dataset, CollectData collect_data)
+      : dataset(dataset), collect_data(collect_data) {}
+
+  ~ParallelWriteGridboxes() { collect_data.write_arrayshapes(dataset); }
+
+  /* adapter to use struct as "ParallelWriteData" function in DoWriteToDataset struct */
+  void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
+    parallel_write_gridboxes(d_gbxs)
   }
 };
 
@@ -63,19 +68,9 @@ class ParallelWriteSupers {
   CollectData collect_data;  ///< functions to collect data within supers loop and write in dataset
   RaggedCount ragged_count;  ///< functions to write ragged count variable in dataset
 
- public:
-  ParallelWriteSupers(const Dataset<Store> &dataset, CollectData collect_data,
-                      RaggedCount write_ragged_count)
-      : dataset(dataset), collect_data(collect_data), write_ragged_count(write_ragged_count) {}
-
-  ~ParallelWriteSupers() {
-    collect_data.write_arrayshapes(dataset);
-    ragged_count.write_arrayshape(dataset);
-  }
-
   /* Use the writer's functor to collect data from superdrops in parallel.
   Then write the data in the dataset */
-  void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) {
+  void parallel_write_supers(const viewd_constsupers totsupers) const {
     auto functor = collect_data.get_functor(totsupers);
 
     const size_t totnsupers(totsupers.extent(0));
@@ -84,6 +79,21 @@ class ParallelWriteSupers {
     collect_data.write_to_arrays(dataset);
 
     ragged_count.write_to_array(dataset, totsupers);
+  }
+
+ public:
+  ParallelWriteSupers(const Dataset<Store> &dataset, CollectData collect_data,
+                      RaggedCount ragged_count)
+      : dataset(dataset), collect_data(collect_data), ragged_count(ragged_count) {}
+
+  ~ParallelWriteSupers() {
+    collect_data.write_arrayshapes(dataset);
+    ragged_count.write_arrayshape(dataset);
+  }
+
+  /* adapter to use struct as "ParallelWriteData" function in DoWriteToDataset struct */
+  void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
+    parallel_write_supers(totsupers);
   }
 };
 
