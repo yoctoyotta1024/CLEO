@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -144,19 +144,28 @@ inline std::string make_xarray_metadata(const std::string_view units, const doub
 }
 
 /**
- * @brief Make string of array attributes metadata for .zattrs json which is used to make zarr array
- * compatible with Xarray and NetCDF which stores the raggedcount of a ragged array.
+ * @brief Make string of array attributes metadata for .zattrs json which is used to make array for
+ * a raggedcount variable in Zarr compatible with Xarray and NetCDF.
  *
+ * @param units The units of the array's coordinates.
+ * @param scale_factor The scale factor of data.
  * @param dimnames The names of each dimension of the array.
- * @param sampledim The name of the dimension the ragged count samples e.g. "superdroplets"
+ * @param sampledimname The name of the dimension the ragged count samples.
  * @return A string representing the metadata.
  */
-inline std::string make_raggedcount_xarray_metadata(const std::vector<std::string>& dimnames,
-                                                    const std::string_view sampledim) {
+inline std::string make_xarray_metadata(const std::string_view units, const double scale_factor,
+                                        const std::vector<std::string>& dimnames,
+                                        const std::string_view sampledimname) {
   const auto zattrs = std::string(
       "{\n"
       "  \"_ARRAY_DIMENSIONS\": " +
       vecstr_to_string(dimnames) +  // names of each dimension of array
+      ",\n"
+      "  \"units\": " +
+      "\"" + std::string(units) + "\"" +  // units of coordinate being stored
+      ",\n"
+      "  \"scale_factor\": " +
+      scale_factor_string(scale_factor) +  // scale_factor of data
       ",\n"
       "  \"sample_dimension\": " +
       "\"" + std::string(sampledim) + "\"" +  // name of sample dimension
@@ -237,20 +246,24 @@ class XarrayZarrArray {
   }
 
   /**
-   * @brief Constructs a new XarrayZarrArray object with metadata for a raggedcount array.
+   * @brief Constructs a new XarrayZarrArray object with additional variable called
+   * "sample_dimension" in the metadata .zattrs json
    *
    * @param store The store where the array will be stored.
    * @param datasetdims Dictionary like object for the dimensions of the dataset.
    * @param name The name of the array.
+   * @param units The units of the array data.
    * @param dtype The data type of the array.
+   * @param scale_factor The scale factor of array data.
    * @param chunkshape The shape of the array chunks.
    * @param dimnames The names of each dimension of the array (in order outermost->innermost).
-   * @param sampledimnames The name of the sample dimension of the raggedcount array.
+   * @param sampledimname The name of the dimension the ragged count samples.
    */
   XarrayZarrArray(Store& store, const std::unordered_map<std::string, size_t>& datasetdims,
-                  const std::string_view name, const std::string_view dtype,
+                  const std::string_view name, const std::string_view units,
+                  const std::string_view dtype, const double scale_factor,
                   const std::vector<size_t>& chunkshape, const std::vector<std::string>& dimnames,
-                  const std::string_view sampledim)
+                  const std::string_view sampledimname)
       : zarr(store, name, dtype, chunkshape, true,
              reduced_arrayshape_from_dims(datasetdims, dimnames)),
         dimnames(dimnames),
@@ -261,7 +274,8 @@ class XarrayZarrArray {
 
     write_arrayshape(datasetdims);
 
-    write_zattrs_json(store, name, make_raggedcount_xarray_metadata(dimnames, sampledim));
+    write_zattrs_json(store, name,
+                      make_xarray_metadata(units, scale_factor, dimnames, sampledimname));
   }
 
   ~XarrayZarrArray() { zarr.write_arrayshape(arrayshape); }
