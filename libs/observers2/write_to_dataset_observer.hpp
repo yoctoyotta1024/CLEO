@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: write_to_dataset_observer.hpp
- * Project: tmp
+ * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -20,8 +20,8 @@
  * constant time interval
  */
 
-#ifndef LIBS_OBSERVERS2_TMP_WRITE_TO_DATASET_OBSERVER_HPP_
-#define LIBS_OBSERVERS2_TMP_WRITE_TO_DATASET_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS2_WRITE_TO_DATASET_OBSERVER_HPP_
+#define LIBS_OBSERVERS2_WRITE_TO_DATASET_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -88,4 +88,4 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
   return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
-#endif  // LIBS_OBSERVERS2_TMP_WRITE_TO_DATASET_OBSERVER_HPP_
+#endif  // LIBS_OBSERVERS2_WRITE_TO_DATASET_OBSERVER_HPP_

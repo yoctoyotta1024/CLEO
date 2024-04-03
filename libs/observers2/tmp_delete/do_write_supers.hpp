@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: do_write_supers.hpp
- * Project: observers2
+ * Project: tmp_delete
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -22,8 +22,8 @@
 
 // TODO(CB) delete file
 
-#ifndef LIBS_OBSERVERS2_DO_WRITE_SUPERS_HPP_
-#define LIBS_OBSERVERS2_DO_WRITE_SUPERS_HPP_
+#ifndef LIBS_OBSERVERS2_TMP_DELETE_DO_WRITE_SUPERS_HPP_
+#define LIBS_OBSERVERS2_TMP_DELETE_DO_WRITE_SUPERS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -115,4 +115,4 @@ class DoWriteSupers {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_DO_WRITE_SUPERS_HPP_
+#endif  // LIBS_OBSERVERS2_TMP_DELETE_DO_WRITE_SUPERS_HPP_

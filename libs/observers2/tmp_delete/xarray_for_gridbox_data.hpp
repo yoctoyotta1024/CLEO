@@ -3,8 +3,8 @@
  *
  *
  * ----- CLEO -----
- * File: xarray_for_supers_data.hpp
- * Project: observers2
+ * File: xarray_for_gridbox_data.hpp
+ * Project: tmp_delete
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -16,49 +16,46 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Helpful structs to write data collected from each superdroplet in parallel
- * to a ragged array in a dataset
+ * Helpful structs to write data collected from each Gridbox in parallel
+ * to an array in a dataset
  */
 
 // TODO(CB) delete file
 
-#ifndef LIBS_OBSERVERS2_XARRAY_FOR_SUPERS_DATA_HPP_
-#define LIBS_OBSERVERS2_XARRAY_FOR_SUPERS_DATA_HPP_
+#ifndef LIBS_OBSERVERS2_TMP_DELETE_XARRAY_FOR_GRIDBOX_DATA_HPP_
+#define LIBS_OBSERVERS2_TMP_DELETE_XARRAY_FOR_GRIDBOX_DATA_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
 #include <string_view>
 
 #include "../kokkosaliases.hpp"
-#include "superdrops/superdrop.hpp"
+#include "gridboxes/gridbox.hpp"
 #include "zarr2/buffer.hpp"
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
+#include "zarr2/zarr_array.hpp"
 
 /* struct holding an array in a dataset as well a view and its mirror view
-which can be useful when collecting data for 1 variable from 'totnsupers' superdroplets
-(in parallel) to then writing to the ragged array */
+which can be useful when collecting data for 1 variable from 'ngbxs' gridboxes
+(in parallel) to then write to the array */
 template <typename Store, typename T>
-struct XarrayForSupersData {
+struct XarrayForGridboxData {
+  XarrayZarrArray<Store, T> xzarr;                         // array in a dataset
   using viewh_data = Buffer<T>::viewh_buffer;              // type of view for h_data
   using mirrorviewd_data = Buffer<T>::mirrorviewd_buffer;  // mirror view type for d_data
-  XarrayZarrArray<Store, T> xzarr;                         // array in a dataset
-  viewh_data h_data;        // view on host for value of 1 variable from every superdrop
+  viewh_data h_data;        // view on host for value of 1 variable from every gridbox
   mirrorviewd_data d_data;  // mirror view of h_data on device
 
   /* Constructor to initialize views and pointer to array in dataset */
-  XarrayForSupersData(const Dataset<Store> &dataset, const std::string_view name,
-                      const std::string_view units, const std::string_view dtype,
-                      const double scale_factor, const size_t maxchunk)
-      : xzarr(dataset.template create_ragged_array<T>(name, units, dtype, scale_factor, {maxchunk},
-                                                      {"time"}, "superdroplets")),
-        h_data("h_data", 0),
+  XarrayForGridboxData(const Dataset<Store> &dataset, const std::string_view name,
+                       const std::string_view units, const std::string_view dtype,
+                       const double scale_factor, const size_t maxchunk, const size_t ngbxs)
+      : xzarr(dataset.template create_array<T>(name, units, dtype, scale_factor,
+                                               good2Dchunkshape(maxchunk, ngbxs),
+                                               {"time", "gbxindex"})),
+        h_data("h_data", ngbxs),
         d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
-
-  void reallocate_dataviews(const size_t totnsupers) {
-    Kokkos::realloc(h_data, totnsupers);
-    Kokkos::realloc(d_data, totnsupers);
-  }
 
   /* copy data from device view directly to host and then write to array in dataset */
   void write_to_array(const Dataset<Store> &dataset) {
@@ -70,4 +67,4 @@ struct XarrayForSupersData {
   void write_arrayshape(const Dataset<Store> &dataset) { dataset.write_arrayshape(xzarr); }
 };
 
-#endif  // LIBS_OBSERVERS2_XARRAY_FOR_SUPERS_DATA_HPP_
+#endif  // LIBS_OBSERVERS2_TMP_DELETE_XARRAY_FOR_GRIDBOX_DATA_HPP_
