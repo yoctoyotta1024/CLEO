@@ -54,14 +54,14 @@ struct ParallelGbxsTeamPolicy {
 
 /* template class for observer with at_start_step function that collects variables from each
 gridbox in parallel and then writes them to their repspective arrays in a dataset */
-template <typename Store, typename ParallelLoopPolicy, WriteGridboxToArray<Store> WriteGbxToArray>
+template <typename ParallelLoopPolicy, typename Store, WriteGridboxToArray<Store> WriteGbxToArray>
 class DoWriteGridboxes {
  private:
-  const Dataset<Store> &dataset;  ///< dataset to write data to
-  WriteGbxToArray
-      write2array;  ///< object collects data from gridboxes and writes it to arrays in the dataset
   ParallelLoopPolicy parallel_loop;  ///< function like object to call during at_start_step to
                                      ///< loop over gridboxes
+  const Dataset<Store> &dataset;     ///< dataset to write data to
+  WriteGbxToArray
+      write2array;  ///< object collects data from gridboxes and writes it to arrays in the dataset
 
   /* Use the writer's functor to collect data from gridboxes in parallel.
   Then write the datat to arrays in the dataset */
@@ -74,7 +74,7 @@ class DoWriteGridboxes {
  public:
   DoWriteGridboxes(ParallelLoopPolicy parallel_loop, const Dataset<Store> &dataset,
                    WriteGbxToArray write2array)
-      : dataset(dataset), write2array(write2array), parallel_loop(parallel_loop) {}
+      : parallel_loop(parallel_loop), dataset(dataset), write2array(write2array) {}
 
   ~DoWriteGridboxes() { write2array.write_arrayshape(dataset); }
 
