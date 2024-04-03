@@ -28,6 +28,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "zarr2/dataset.hpp"
+#include "zarr2/fsstore.hpp"
 
 /**
  * @brief Concept for CollectDataForDataset is all types that have functions for creating a functor
@@ -106,6 +107,40 @@ struct CombinedCollectDataForDataset {  // TODO(CB) generalise
     a.write_arrayshapes(dataset);
     b.write_arrayshapes(dataset);
   }
+};
+
+/**
+ * @brief Overloaded operator >> to combine two CollectDataForDataset instances into a new one.
+ *
+ * @param a First CollectDataForDataset with Store=FSStore.
+ * @param b Second CollectDataForDataset with Store=FSStore.
+ * @return CombinedObserver<Obs1, Obs2> Combined Observer.
+ */
+
+template <CollectDataForDataset<FSStore> CollectData1, CollectDataForDataset<FSStore> CollectData2>
+auto operator>>(const CollectData1 a, const CollectData2 b) {
+  return CombinedWriteGridboxToArray<FSStore, CollectData1, CollectData2>(a, b);
+}
+
+/* struct satifying CollectDataForDataset and does nothing */
+template <typename Store>
+struct NullCollectDataForDataset {
+ public:
+  struct Functor {
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const size_t nn) const {}
+
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const TeamMember &team_member) const {}
+  };
+
+  Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
+    return Functor{};
+  }
+
+  void write_to_arrays(const Dataset<Store> &dataset) const {}
+
+  void write_arrayshapes(const Dataset<Store> &dataset) const {}
 };
 
 #endif  // LIBS_OBSERVERS2_TMP_COLLECT_DATA_FOR_DATASET_HPP_
