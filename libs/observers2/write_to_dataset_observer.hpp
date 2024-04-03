@@ -23,8 +23,12 @@
 #ifndef LIBS_OBSERVERS2_WRITE_TO_DATASET_OBSERVER_HPP_
 #define LIBS_OBSERVERS2_WRITE_TO_DATASET_OBSERVER_HPP_
 
+#include <Kokkos_Core.hpp>
 #include <concepts>
+#include <iostream>
 
+#include "../kokkosaliases.hpp"
+#include "./observers.hpp"
 #include "zarr2/dataset.hpp"
 
 /* template class for to call a function during the at_start_step function of an observer
