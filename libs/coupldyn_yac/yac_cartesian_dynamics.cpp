@@ -88,10 +88,10 @@ void CartesianDynamics::receive_fields_from_yac() {
   std::vector<double>::iterator wvel_it = wvel.begin();
   for (size_t lat_index = 0; lat_index < vertex_latitudes.size() * 2 - 1; lat_index++) {
         if (lat_index % 2 == 0) {
-          for (size_t index = 0; index < 30; index++, uvel_it++, source_it++)
+          for (size_t index = 0; index < ndims[0]; index++, uvel_it++, source_it++)
             *uvel_it = *source_it;
         } else {
-          for (size_t index = 0; index < 31; index++, wvel_it++, source_it++)
+          for (size_t index = 0; index < ndims[0] + 1; index++, wvel_it++, source_it++)
             *wvel_it = *source_it;
         }
   }
