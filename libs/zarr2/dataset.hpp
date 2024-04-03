@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,6 +101,27 @@ class Dataset {
   }
 
   /**
+   * @brief Creates a new array in the dataset.
+   *
+   * @tparam T The data type of the array.
+   * @param name The name of the new array.
+   * @param units The units of the array data.
+   * @param dtype The data type of the array.
+   * @param scale_factor The scale factor of array data.
+   * @param chunkshape The shape of the chunks of the array.
+   * @param dimnames The names of each dimension of the array.
+   * @return An instance of XarrayZarrArray representing the newly created array.
+   */
+  template <typename T>
+  XarrayZarrArray<Store, T> create_array(const std::string_view name, const std::string_view units,
+                                         const std::string_view dtype, const double scale_factor,
+                                         const std::vector<size_t> &chunkshape,
+                                         const std::vector<std::string> &dimnames) const {
+    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, dtype, scale_factor,
+                                     chunkshape, dimnames);
+  }
+
+  /**
    * @brief Creates a new 1-D array for a coordinate of the dataset.
    *
    * @tparam T The data type of the coordinate array.
@@ -128,39 +149,21 @@ class Dataset {
    *
    * @tparam T The data type of the array.
    * @param name The name of the new array.
-   * @param dtype The data type of the array.
-   * @param chunkshape The shape of the chunks of the array.
-   * @param dimnames The names of each dimension of the array.
-   * @return An instance of XarrayZarrArray representing the newly created array.
-   */
-  template <typename T>
-  XarrayZarrArray<Store, T> create_array(const std::string_view name, const std::string_view dtype,
-                                         const std::vector<size_t> &chunkshape,
-                                         const std::vector<std::string> &dimnames,
-                                         const std::string_view sampledim) const {
-    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, dtype, chunkshape, dimnames,
-                                     sampledim);
-  }
-
-  /**
-   * @brief Creates a new array in the dataset.
-   *
-   * @tparam T The data type of the array.
-   * @param name The name of the new array.
    * @param units The units of the array data.
    * @param dtype The data type of the array.
    * @param scale_factor The scale factor of array data.
    * @param chunkshape The shape of the chunks of the array.
    * @param dimnames The names of each dimension of the array.
-   * @return An instance of XarrayZarrArray representing the newly created array.
+   * @param sampledimname The names of the sample dimension of the array.
+   * @return An instance of XarrayZarrArray representing the newly created raggedcount array.
    */
   template <typename T>
-  XarrayZarrArray<Store, T> create_array(const std::string_view name, const std::string_view units,
-                                         const std::string_view dtype, const double scale_factor,
-                                         const std::vector<size_t> &chunkshape,
-                                         const std::vector<std::string> &dimnames) const {
+  XarrayZarrArray<Store, T> create_raggedcount_array(
+      const std::string_view name, const std::string_view units, const std::string_view dtype,
+      const double scale_factor, const std::vector<size_t> &chunkshape,
+      const std::vector<std::string> &dimnames, const std::string_view sampledimname) const {
     return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, dtype, scale_factor,
-                                     chunkshape, dimnames);
+                                     chunkshape, dimnames, sampledimname);
   }
 
   /**
