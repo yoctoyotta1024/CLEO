@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,6 +19,8 @@
  * Observer to output variables related to Gridboxes' state at the start of
  * each timestep to individual arrays in a dataset
  */
+
+// TODO(CB) combine with new generic classes and delete file ?
 
 #ifndef LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
 #define LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_

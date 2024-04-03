@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,6 +32,8 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr2/buffer.hpp"
 #include "zarr2/dataset.hpp"
+
+// TODO(CB) combine with new generic classes and delete file ?
 
 /* Operator is functor to perform copy of number of superdrops in each gridbox to d_data
 in parallel. Note conversion of nsupers from size_t (8 bytes) to single precision (4 bytes
