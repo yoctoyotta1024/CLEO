@@ -32,7 +32,7 @@ with a constant timestep 'interval' using an instance of the WriteToDatasetObser
 template <typename Store>
 inline Observer auto ThermoObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                     const int maxchunk, const size_t ngbxs) {
-  return WriteInDatasetObserver(interval, dataset, write_thermo);
+  return WriteToDatasetObserver(interval, dataset, collect_thermodata);
 }
 
 /* constructs observer which writes writes the wind velocity from the state of each gridbox
@@ -40,7 +40,7 @@ with a constant timestep 'interval' using an instance of the WriteToDatasetObser
 template <typename Store>
 inline Observer auto WindObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                   const int maxchunk, const size_t ngbxs) {
-  return WriteInDatasetObserver(interval, dataset, write_winds);
+  return WriteToDatasetObserver(interval, dataset, collect_winddata);
 }
 
 /* constructs observer which writes writes thermodynamic and wind velocity variables from the state
@@ -49,7 +49,7 @@ class */
 template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
-  return WriteInDatasetObserver(interval, dataset, write_state);
+  return WriteToDatasetObserver(interval, dataset, collect_statedata);
 }
 
 #endif  // LIBS_OBSERVERS2_TMP_STATE_OBSERVER_HPP_
