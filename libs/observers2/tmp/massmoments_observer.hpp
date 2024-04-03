@@ -31,7 +31,7 @@
 #include "zarr2/dataset.hpp"
 
 /* constructs observer which writes mass moments of droplet distribution in each gridbox
-with a constant timestep 'interval' using an instance of the WriteInDatasetObserver class */
+with a constant timestep 'interval' using an instance of the WriteToDatasetObserver class */
 template <typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                          const int maxchunk, const size_t ngbxs) {
@@ -39,7 +39,7 @@ inline Observer auto MassMomentsObserver(const unsigned int interval, const Data
 }
 
 /* constructs observer which writes mass moments of raindroplet distribution in each gridbox
-with a constant timestep 'interval' using an instance of the WriteInDatasetObserver class */
+with a constant timestep 'interval' using an instance of the WritetoDatasetObserver class */
 template <typename Store>
 inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
                                                   const Dataset<Store> &dataset, const int maxchunk,
