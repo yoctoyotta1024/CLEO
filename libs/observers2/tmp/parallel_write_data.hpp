@@ -53,7 +53,6 @@ class ParallelWriteGridboxes {
     Then write the data in the dataset. Inclusion of totsupers so that object can be used as
     "ParallelWriteData" function in DoWriteToDataset struct */
   void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
-    collect_data.reallocate_views(d_gbxs.extent(0));
     auto functor = collect_data.get_functor(d_gbxs, totsupers);
     parallel_write_gridboxes(d_gbxs);
     collect_data.write_to_arrays(dataset);
