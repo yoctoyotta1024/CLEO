@@ -1,13 +1,15 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: supersingbx.hpp
  * Project: gridboxes
- * Created Date: Tuesday 28th November 2023
+ * Created Date: Wednesday 8th November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 27th December 2023
+ * Last Modified: Wednesday 6th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -17,6 +19,7 @@
  * Functions and structures related to
  * handling superdroplets inside CLEO's gridboxes
  */
+
 
 #ifndef LIBS_GRIDBOXES_SUPERSINGBX_HPP_
 #define LIBS_GRIDBOXES_SUPERSINGBX_HPP_
@@ -47,8 +50,8 @@ struct SupersInGbx {
   between r0 and r1 do not satisfy pred */
 
  public:
-  KOKKOS_INLINE_FUNCTION SupersInGbx() = default;   // Kokkos requirement for a (dual)View
-  KOKKOS_INLINE_FUNCTION ~SupersInGbx() = default;  // Kokkos requirement for a (dual)View
+  SupersInGbx() = default;   // Kokkos requirement for a (dual)View
+  ~SupersInGbx() = default;  // Kokkos requirement for a (dual)View
 
   /* assumes supers view (or subview) already
   sorted via sdgbxindex. Constructor works

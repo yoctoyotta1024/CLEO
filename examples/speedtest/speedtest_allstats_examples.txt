@@ -1,12 +1,12 @@
 /*
  * ----- CLEO -----
- * File: speedtest_allstats.txt
+ * File: speedtest_allstats_examples.txt
  * Project: speedtest
  * Created Date: Tuesday 12th December 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th January 2024
+ * Last Modified: Thursday 7th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,3 +30,6 @@ B1 5.50010 28.9400 166.024           # setup with only stats and bulk observer (
 
 C0 0.244817 8.63166 162.860          # setup with only stats observer (no bulk and superdrops)
 C1 0.249448 8.62775 164.900          # setup with only stats observer (no bulk and superdrops)
+
+D0 10.9348 32.7594 14.4969           # A0 with updated code 7th March 2024
+D1 10.9312 32.5546 14.5363           # A0 with updated code 7th March 2024

@@ -1,57 +1,86 @@
 #!/bin/bash
 #SBATCH --job-name=as2017
-#SBATCH --partition=gpu
+#SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
-#SBATCH --time=00:30:00
+#SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
 #SBATCH --output=./as2017_out.%j.out
 #SBATCH --error=./as2017_err.%j.out
 
-### ----- You need to edit these lines to set your ----- ###
-### ----- default compiler and python environment   ---- ###
+### ---------------------------------------------------- ###
+### ------- You MUST edit these lines to set your ------ ###
+### --- default compiler(s) (and python environment) --- ###
 ### ----  and paths for CLEO and build directories  ---- ###
+### ---------------------------------------------------- ###
 module load gcc/11.2.0-gcc-11.2.0
 module load python3/2022.01-gcc-11.2.0
-module load nvhpc/23.7-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
-
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build/
+path2build=${HOME}/CLEO/build0/
 configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.txt
-
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
-gxx="g++"
-gcc="gcc"
-cuda="nvc++"
+gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
+gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
+### ---------------------------------------------------- ###
+
+### ---------------------------------------------------- ###
+### ------- You can optionally edit the following ------ ###
+### -------- lines to customise your compiler(s) ------- ###
+###  ------------ and build configuration  ------------- ###
+### ---------------------------------------------------- ###
+
+### --------- choose C/C++ compiler and flags ---------- ###
+CC=${gcc}               # C
+CXX=${gxx}              # C++
+
+# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
-kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON"                 # serial kokkos
-kokkoshost="-DKokkos_ENABLE_OPENMP=ON"                                          # flags for host parallelism (e.g. using OpenMP)
+# flags for serial kokkos
+kokkosflags="-DKokkos_ARCH_NATIVE=ON -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON"
+
+# flags for host parallelism (e.g. using OpenMP)
+kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
+
+# flags for device parallelism (e.g. on gpus)
 kokkosdevice=""
 ### ---------------------------------------------------- ###
 
-### ------------------------ build --------------------- ###
-### build CLEO using cmake (with openMP thread parallelism through Kokkos)
-buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
-echo ${buildcmd}
-CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2CLEO} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}
+### ------------------ build with cmake ---------------- ###
+echo "CXX_COMPILER=${CXX} CC_COMPILER=${CC}"
+echo "CLEO_DIR: ${path2CLEO}"
+echo "BUILD_DIR: ${path2build}"
+echo "KOKKOS_FLAGS: ${kokkosflags}"
+echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
+echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
+echo "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}"
 
-export OMP_PROC_BIND=spread
-export OMP_PLACES=threads
+# build then compile in parallel
+cmake -DCMAKE_CXX_COMPILER=${CXX} \
+    -DCMAKE_CC_COMPILER=${CC} \
+    -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
+    -S ${path2CLEO} -B ${path2build} \
+    ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
-### ensure these directories exist (it's a good idea for later use)
+# ensure these directories exist (it's a good idea for later use)
 mkdir ${path2build}bin
 mkdir ${path2build}share
+
+# good settings for Kokkos OpenMP at runtime
+export OMP_PROC_BIND=spread
+export OMP_PLACES=threads
 ### ---------------------------------------------------- ###
 
 ### ------------------- compile & run ------------------ ###
 ### generate input files and run adiabatic parcel example
-${python} as2017.py ${path2CLEO} ${path2build} ${configfile}
+${python} ${path2CLEO}/examples/adiabaticparcel/as2017.py \
+  ${path2CLEO} ${path2build} ${configfile}
 
 ### ---------------------------------------------------- ###

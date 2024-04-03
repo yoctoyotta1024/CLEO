@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=gpurunCLEO
+#SBATCH --job-name=run_cleocoupledsdm
 #SBATCH --partition=gpu
 #SBATCH --gpus=4
 #SBATCH --nodes=1
@@ -9,8 +9,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./gpurunCLEO_out.%j.out
-#SBATCH --error=./gpurunCLEO_err.%j.out
+#SBATCH --output=./gpu_cleocoupledsdm_out.%j.out
+#SBATCH --error=./gpu_cleocoupledsdm_err.%j.out
 
 ### ------------- PLEASE NOTE: this script assumes you ------------- ###
 ### ------------- have already built CLEO in path2build ------------ ###
@@ -26,7 +26,7 @@ spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/cleoenv
 
 path2CLEO=${HOME}/CLEO/
-path2build=$1 # get from command line args
+path2build=$1 # get from command line argument(s)
 configfile=${HOME}/CLEO/src/config/config.txt
 
 python=python
@@ -46,7 +46,7 @@ make -j 128
 ### run CLEO
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
-runcmd="${path2build}/src/runCLEO ${configfile}"
+runcmd="${path2build}/src/cleocoupledsdm ${configfile}"
 echo ${runcmd}
 ${runcmd}
 ### ---------------------------------------------------- ###

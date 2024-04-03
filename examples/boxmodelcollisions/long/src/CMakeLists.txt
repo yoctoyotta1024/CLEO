@@ -4,47 +4,26 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
   # cmake_minimum_required(VERSION 3.21.1) # if using Kokkos c++ with NVC++ compiler
 endif()
 
-# set project name and source directory of .cpp files
-project("longcolls")
-
-# print where exactly project source dir is for this CMakeLists.txt
+# set project name and print directory of this CMakeLists.txt (source directory of project)
+project("boxmodelcollisions_long")
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
-# Kokkos library stuff
-set(CMAKE_CXX_FLAGS_B4 "${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_STANDARD_B4 "${CMAKE_CXX_STANDARD}")
-include(FetchContent)
-FetchContent_Declare(
-  Kokkos
-  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
-  GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
-)
-set(CMAKE_CXX_STANDARD "20")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-FetchContent_MakeAvailable(Kokkos)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_B4}")
-set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_B4}")
+# Set libraries from CLEO to link with executable
+set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
-# Set libraries and compiler warnings to use
-set(SDMLIBS gridboxes initialise observers runcleo superdrops zarr)
+# create primary executable for CLEO uncoupled model long kernel box model setup
+add_executable(longcolls EXCLUDE_FROM_ALL "main_longcolls.cpp")
 
-# set(compileops -Wall -pedantic -g -gdwarf-4) # less strict without -Werror
-# set compiler options
-if(NOT DEFINED compileops)
-  set(compileops ${defaultcompileops})
-endif()
+# Add directories and link libraries to target
+target_link_libraries(longcolls PRIVATE cartesiandomain "${CLEOLIBS}")
+target_link_libraries(longcolls PUBLIC Kokkos::kokkos)
+target_include_directories(longcolls PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
-# executable for CLEO uncoupled long 0D box model
-set(longcolls "longcolls")
-add_executable(${longcolls} EXCLUDE_FROM_ALL "main_longcolls.cpp")
-target_link_libraries(${longcolls} PRIVATE cartesiandomain "${SDMLIBS}")
-target_link_libraries(${longcolls} PUBLIC Kokkos::kokkos)
-target_include_directories(${longcolls} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
-target_compile_options(${longcolls} PRIVATE ${compileops})
+# set specific C++ compiler options for target (optional)
+#target_compile_options(longcolls PRIVATE)
 
 # set compiler properties for target(s)
-set_target_properties(${longcolls} PROPERTIES
+set_target_properties(longcolls PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
