@@ -86,6 +86,7 @@ class GenericCollectData {
   }
 
   void reallocate_dataviews(const size_t size) {
+    // TODO(CB) fix forseen issues over const-ness
     Kokkos::realloc(h_data, size);
     Kokkos::realloc(d_data, size);
   }
