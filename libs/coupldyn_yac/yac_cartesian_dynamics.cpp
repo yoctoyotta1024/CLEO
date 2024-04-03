@@ -153,10 +153,11 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // Defines the cell center longitude and latitude values in radians
   // The values are later permuted by YAC to generate all cell center coordinates
-  for (size_t i = 0; i < cell_center_longitudes.size(); i++) {
-    cell_center_longitudes[i] = vertex_longitudes[i] + std::numbers::pi / (ndims[0] + 1);
-    cell_center_latitudes[i]  = vertex_latitudes[i] + std::numbers::pi / (2 * (ndims[1] + 2));
-  }
+  for (size_t i = 0; i < cell_center_longitudes.size(); i++)
+    cell_center_longitudes[i] = vertex_longitudes[i] + std::numbers::pi / (ndims[0] + 2);
+
+  for (size_t i = 0; i < cell_center_latitudes.size(); i++)
+    cell_center_latitudes[i]  = vertex_latitudes[i] + std::numbers::pi / (2 * (ndims[1] + 3));
 
   // Defines the edge center longitude and latitude values in radians.
   // Since it is not possible to generate edge center coordinates with a single
