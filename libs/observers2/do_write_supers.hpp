@@ -58,7 +58,7 @@ struct WriteRaggedCountToArray {
 /* template class for observer with at_start_step function that collects variables from each
 superdroplet in each gridbox in parallel and then writes them to their respective ragged arrays in
 a dataset alongside the raggedcount for the arrays */
-template <typename Store, WriteGridboxToArray<Store> WriteSupersToArray>
+template <typename Store, WriteGridboxToArray<Store, viewd_constsupers> WriteSupersToArray>
 class DoWriteSupers {
  private:
   const Dataset<Store> &dataset;                              ///< dataset to write data to

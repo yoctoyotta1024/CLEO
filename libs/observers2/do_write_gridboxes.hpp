@@ -54,7 +54,8 @@ struct ParallelGbxsTeamPolicy {
 
 /* template class for observer with at_start_step function that collects variables from each
 gridbox in parallel and then writes them to their repspective arrays in a dataset */
-template <typename ParallelLoopPolicy, typename Store, WriteGridboxToArray<Store> WriteGbxToArray>
+template <typename ParallelLoopPolicy, typename Store,
+          WriteGridboxToArray<Store, viewd_constgbx> WriteGbxToArray>
 class DoWriteGridboxes {
  private:
   ParallelLoopPolicy parallel_loop;  ///< function like object to call during at_start_step to

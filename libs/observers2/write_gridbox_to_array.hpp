@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,10 +40,10 @@
  *
  * @tparam WG2A The type that satisfies the WriteGridboxToArray concept.
  */
-template <typename WG2A, typename Store>
+template <typename WG2A, typename Store, typename viewd_consttype>
 concept WriteGridboxToArray =
-    requires(WG2A wg2a, const Dataset<Store> &ds, const viewd_constgbx d_gbxs) {
-      { wg2a.get_functor(d_gbxs) };
+    requires(WG2A wg2a, const Dataset<Store> &ds, const viewd_consttype d_view) {
+      { wg2a.get_functor(d_view) };
       { wg2a.write_to_array(ds) } -> std::same_as<void>;
       { wg2a.write_arrayshape(ds) } -> std::same_as<void>;
     };
@@ -55,9 +55,9 @@ concept WriteGridboxToArray =
  * @tparam WriteGbx1 The type of the first gridbox data writer.
  * @tparam WriteGbx2 The type of the second gridbox data writer.
  */
-template <typename Store, WriteGridboxToArray<Store> WriteGbx1,
-          WriteGridboxToArray<Store> WriteGbx2>
-struct CombinedWriteGridboxToArray {
+template <typename Store, WriteGridboxToArray<Store, viewd_constgbx> WriteGbx1,
+          WriteGridboxToArray<Store, viewd_constgbx> WriteGbx2>
+struct CombinedWriteGridboxToArray {  // TODO(CB) generalise
  private:
   WriteGbx1 a; /**< The first instance of type of WriteGridboxToArray. */
   WriteGbx2 b; /**< The second instance of type of WriteGridboxToArray. */
@@ -134,7 +134,8 @@ struct NullWriteGridboxToArray {
  */
 template <typename Store>
 struct CombineWG2A {
-  template <WriteGridboxToArray<Store> WriteGbx1, WriteGridboxToArray<Store> WriteGbx2>
+  template <WriteGridboxToArray<Store, viewd_constgbx> WriteGbx1,
+            WriteGridboxToArray<Store, viewd_constgbx> WriteGbx2>
   auto operator()(const WriteGbx1 a, const WriteGbx2 b) const {
     return CombinedWriteGridboxToArray<Store, WriteGbx1, WriteGbx2>(a, b);
   }

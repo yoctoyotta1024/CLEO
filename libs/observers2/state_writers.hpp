@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -121,8 +121,9 @@ struct VvelFunc {
 // returns WriteGridboxToArray which writes the pressure, temperature, qvap, and qcond from
 // each gridbox to arrays in a dataset in a store
 template <typename Store>
-WriteGridboxToArray<Store> auto ThermoWriter(const Dataset<Store> &dataset, const size_t maxchunk,
-                                             const size_t ngbxs) {
+WriteGridboxToArray<Store, viewd_constgbx> auto ThermoWriter(const Dataset<Store> &dataset,
+                                                             const size_t maxchunk,
+                                                             const size_t ngbxs) {
   auto press = GenericWriteGridboxToXarray<Store, float, PressFunc>(
       dataset, "press", "hPa", "<f4", dlc::P0 / 100, maxchunk, ngbxs, PressFunc{});
 
@@ -142,8 +143,9 @@ WriteGridboxToArray<Store> auto ThermoWriter(const Dataset<Store> &dataset, cons
 // returns WriteGridboxToArray which writes the wind velocity components from the centre of each
 // gridbox to arrays in a dataset in a store
 template <typename Store>
-WriteGridboxToArray<Store> auto WindVelocityWriter(const Dataset<Store> &dataset,
-                                                   const size_t maxchunk, const size_t ngbxs) {
+WriteGridboxToArray<Store, viewd_constgbx> auto WindVelocityWriter(const Dataset<Store> &dataset,
+                                                                   const size_t maxchunk,
+                                                                   const size_t ngbxs) {
   auto wvel = GenericWriteGridboxToXarray<Store, float, WvelFunc>(
       dataset, "wvel", "m/s", "<f4", dlc::W0, maxchunk, ngbxs, WvelFunc{});
   auto uvel = GenericWriteGridboxToXarray<Store, float, UvelFunc>(

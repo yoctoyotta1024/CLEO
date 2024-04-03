@@ -58,15 +58,16 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  const WriteGridboxToArray<Store> auto thermowriter =
+  const WriteGridboxToArray<Store, viewd_constgbx> auto thermowriter =
       ThermoWriter(dataset, maxchunk, config.ngbxs);
-  const WriteGridboxToArray<Store> auto windwriter =
+  const WriteGridboxToArray<Store, viewd_constgbx> auto windwriter =
       WindVelocityWriter(dataset, maxchunk, config.ngbxs);
-  const WriteGridboxToArray<Store> auto nsuperswriter =
+  const WriteGridboxToArray<Store, viewd_constgbx> auto nsuperswriter =
       NsupersWriter(dataset, maxchunk, config.ngbxs);
 
   const auto c = CombineWG2A<Store>{};
-  const WriteGridboxToArray<Store> auto writer = c(c(thermowriter, windwriter), nsuperswriter);
+  const WriteGridboxToArray<Store, viewd_constgbx> auto writer =
+      c(c(thermowriter, windwriter), nsuperswriter);
   const Observer auto obsx =
       ConstTstepObserver(obsstep, DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, writer));
 

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,7 +36,8 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto ThermoObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                     const int maxchunk, const size_t ngbxs) {
-  const WriteGridboxToArray<Store> auto thermowriter = ThermoWriter(dataset, maxchunk, ngbxs);
+  const WriteGridboxToArray<Store, viewd_constgbx> auto thermowriter =
+      ThermoWriter(dataset, maxchunk, ngbxs);
   const auto obsfunc = DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, thermowriter);
   return ConstTstepObserver(interval, obsfunc);
 }
@@ -46,7 +47,8 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto WindObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                   const int maxchunk, const size_t ngbxs) {
-  const WriteGridboxToArray<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
+  const WriteGridboxToArray<Store, viewd_constgbx> auto windwriter =
+      WindVelocityWriter(dataset, maxchunk, ngbxs);
   const auto obsfunc = DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, windwriter);
   return ConstTstepObserver(interval, obsfunc);
 }
@@ -56,9 +58,12 @@ with a constant timestep 'interval' using an instance of the ConstTstepObserver 
 template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
-  const WriteGridboxToArray<Store> auto thermowriter = ThermoWriter(dataset, maxchunk, ngbxs);
-  const WriteGridboxToArray<Store> auto windwriter = WindVelocityWriter(dataset, maxchunk, ngbxs);
-  const WriteGridboxToArray<Store> auto writer = CombineWG2A<Store>{}(thermowriter, windwriter);
+  const WriteGridboxToArray<Store, viewd_constgbx> auto thermowriter =
+      ThermoWriter(dataset, maxchunk, ngbxs);
+  const WriteGridboxToArray<Store, viewd_constgbx> auto windwriter =
+      WindVelocityWriter(dataset, maxchunk, ngbxs);
+  const WriteGridboxToArray<Store, viewd_constgbx> auto writer =
+      CombineWG2A<Store>{}(thermowriter, windwriter);
   const auto obsfunc = DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, writer);
 
   return ConstTstepObserver(interval, obsfunc);
