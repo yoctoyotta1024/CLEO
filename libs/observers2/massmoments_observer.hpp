@@ -16,8 +16,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Observer to output variables related to Gridboxes' state at the start of
- * each timestep to individual arrays in a dataset
+ * Observer to output the mass moments of the droplet size distribution in each gridbox
+ * to individual arrays in a dataset a constant interval at the start of each timestep.
  */
 
 #ifndef LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
