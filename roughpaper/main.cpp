@@ -58,10 +58,17 @@ inline Observer auto create_superdrops_observer(const Config &config, const Time
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
+  CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
   CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
+  CollectDataForDataset<Store> auto msol = CollectMsol(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
 
-  const auto collect_data = xi >> radius;
+  const auto collect_data =
+      coord1 >> coord2 >> coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
   return SuperdropsObserver(obsstep, dataset, maxchunk, collect_data);
 }
 
