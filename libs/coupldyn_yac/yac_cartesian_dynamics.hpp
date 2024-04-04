@@ -109,6 +109,7 @@ struct CartesianDynamics {
   file called 'filename' where vvel is defined on
   the y-faces (coord2) of gridboxes */
   get_winds_func get_vvel_from_binary() const;
+  get_winds_func get_vvel_from_yac() const;
 
  public:
   CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,

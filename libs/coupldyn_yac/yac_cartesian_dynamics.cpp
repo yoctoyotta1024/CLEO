@@ -103,10 +103,25 @@ void CartesianDynamics::receive_fields_from_yac() {
   int total_horizontal_cells = ndims[0] * ndims[1];
   int total_u_edges = ndims[0] * (ndims[1] + 1);
   int total_w_edges = ndims[1] * (ndims[0] + 1);
-  for (int vertical_index = 0; vertical_index < ndims[2]; vertical_index++)
+
+  int info, error;
+  double * yac_raw_data = NULL;
+
+  if (config.nspacedims == 3) {
+    yac_raw_data = vvel.data();
+    yac_cget(vvel_yac_id, 1, &yac_raw_data, &info, &error);
+  }
+
+  for (int vertical_index = 0; vertical_index < ndims[2]; vertical_index++) {
     receive_hor_slice_from_yac(vertical_index * total_horizontal_cells,
                                vertical_index * total_u_edges,
                                vertical_index * total_w_edges);
+
+    if (config.nspacedims == 3) {
+      yac_raw_data += total_horizontal_cells;
+      yac_cget(vvel_yac_id, 1, &yac_raw_data, &info, &error);
+    }
+  }
 }
 
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
@@ -333,7 +348,7 @@ std::string CartesianDynamics::set_winds_from_binaries(const unsigned int nspace
   switch (nspacedims) {
     case 3:  // 3-D model
       vvel_yfaces = thermodynamicvar_from_binary(vvel_filename);
-      get_vvel = get_vvel_from_binary();
+      get_vvel = get_vvel_from_yac();
       infoend = ", u";
     case 2:  // 3-D or 2-D model
       get_uvel = get_uvel_from_yac();
@@ -389,6 +404,17 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_uvel_from_yac() const {
     const size_t uppos(lpos + ndims[0]);  // position of x upper face
 
     return std::pair(uvel.at(lpos), uvel.at(uppos));
+  };
+
+  return func;
+}
+
+CartesianDynamics::get_winds_func CartesianDynamics::get_vvel_from_yac() const {
+  const auto func = [&](const unsigned int gbxindex) {
+    const size_t lpos(static_cast<size_t>(gbxindex));  // position of y lower face in 1D vvel vector
+    const size_t uppos(lpos + ndims[1] * ndims[0]);  // position of x upper face
+
+    return std::pair(vvel.at(lpos), vvel.at(uppos));
   };
 
   return func;
