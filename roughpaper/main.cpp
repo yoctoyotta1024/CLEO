@@ -40,8 +40,10 @@
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
 #include "observers2/superdrops_observer.hpp"
+#include "observers2/thermo_observer.hpp"
 #include "observers2/time_observer.hpp"
 #include "observers2/totnsupers_observer.hpp"
+#include "observers2/windvel_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
@@ -78,27 +80,12 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  // const WriteGridboxToArray<Store, viewd_constgbx> auto thermowriter =
-  //     ThermoWriter(dataset, maxchunk, config.ngbxs);
-  // const WriteGridboxToArray<Store, viewd_constgbx> auto windwriter =
-  //     WindVelocityWriter(dataset, maxchunk, config.ngbxs);
-  // const WriteGridboxToArray<Store, viewd_constgbx> auto nsuperswriter =
-  //     NsupersWriter(dataset, maxchunk, config.ngbxs);
+  // const Observer auto obst = ThermoObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // const Observer auto obsw = WindVelObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // return obsw >> obst;
 
-  // const auto c = CombineWG2A<Store>{};
-  // const WriteGridboxToArray<Store, viewd_constgbx> auto writer =
-  //     c(c(thermowriter, windwriter), nsuperswriter);
-  // const Observer auto obsx =
-  //     ConstTstepObserver(obsstep, DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, writer));
-
-  // const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  // const Observer auto obs6 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  // return obs3 >> obs6;
-
-  const Observer auto obst = ThermoObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  const Observer auto obsw = WindVelObserver(obsstep, dataset, maxchunk, config.ngbxs);
-
-  return obsw >> obst;
+  const Observer auto obsx = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  return obsx;
 }
 
 template <typename Store>
