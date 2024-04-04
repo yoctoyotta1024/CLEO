@@ -31,6 +31,17 @@
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
 
+struct XarrayAndViews {
+  XarrayZarrArray<Store, T> xzarr;
+  viewh_data h_data;        // view on host for value of 1 variable from every superdrop
+  mirrorviewd_data d_data;  // mirror view of h_data on device
+
+  XarrayAndViews(const XarrayZarrArray<Store, T> xzarr, const size_t dataview_size)
+      : xzarr(xzarr),
+        h_data("h_data", dataview_size),
+        d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
+};
+
 /* generic struct satisyfing the CollectDataForDataset concept to collect data for a
  * variable and write it to an xarray in a datatset. */
 template <typename Store, typename T, typename FunctorFunc>
@@ -39,9 +50,7 @@ class GenericCollectData {
   using viewh_data = Buffer<T>::viewh_buffer;              // type of view for h_data
   using mirrorviewd_data = Buffer<T>::mirrorviewd_buffer;  // mirror view type for d_data
   FunctorFunc ffunc;
-  std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr;
-  viewh_data h_data;        // view on host for value of 1 variable from every superdrop
-  mirrorviewd_data d_data;  // mirror view of h_data on device
+  std::shared_ptr<XarrayAndViews> xzarr_ptr;  // pointer to xarray and views which collect data
 
  public:
   struct Functor {
@@ -70,13 +79,9 @@ class GenericCollectData {
   /* Constructor to initialize GenericCollectData given functor function-like object, shared pointer
   to an xarray in a dataset and the size of the data view used to collect data
   from within the functor function call. */
-  GenericCollectData(const FunctorFunc ffunc,
-                     const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr,
+  GenericCollectData(const FunctorFunc ffunc, const XarrayZarrArray<Store, T> xzarr,
                      const size_t dataview_size)
-      : ffunc(ffunc),
-        xzarr_ptr(xzarr_ptr),
-        h_data("h_data", dataview_size),
-        d_data(Kokkos::create_mirror_view(ExecSpace(), h_data)) {}
+      : ffunc(ffunc), xzarr_ptr(std::make_shared<XarrayAndViews>(xzarr, dataview_size)) {}
 
   /* return functor for getting 1 variable from every gridbox in parallel */
   Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
