@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 4th April 2024
+ * Last Modified: Friday 5th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -54,6 +54,7 @@ class GenericCollectData {
   std::shared_ptr<XarrayAndViews<Store, T>> ptr;  // pointer to xarray and views which collect data
 
  public:
+  /* functor to collect 1 variable's data from within a parallel range policy */
   struct Functor {
     using mirrorviewd_data = XarrayAndViews<Store, T>::mirrorviewd_data;
     FunctorFunc ffunc;
@@ -69,23 +70,16 @@ class GenericCollectData {
     to d_data from within a parallel loop using a Kokkos range policy */
     KOKKOS_INLINE_FUNCTION
     void operator()(const size_t nn) const { ffunc(nn, d_gbxs, totsupers, d_data); }
-
-    /* Functor operator to perform copy of 1 variable in gridboxes and/or superdroplets
-    to d_data from within a parallel loop using a Kokkos team policy */
-    KOKKOS_INLINE_FUNCTION
-    void operator()(const TeamMember &team_member) const {
-      ffunc(team_member, d_gbxs, totsupers, d_data);
-    }
   };
 
-  /* Constructor to initialize GenericCollectData given functor function-like object, shared pointer
-  to an xarray in a dataset and the size of the data view used to collect data
+  /* Constructor to initialize GenericCollectData given functor function-like object,
+  an xarray in a dataset and the size of the data view used to collect data
   from within the functor function call. */
   GenericCollectData(const FunctorFunc ffunc, const XarrayZarrArray<Store, T> xzarr,
                      const size_t dataview_size)
       : ffunc(ffunc), ptr(std::make_shared<XarrayAndViews<Store, T>>(xzarr, dataview_size)) {}
 
-  /* return functor for getting 1 variable from every gridbox in parallel */
+  /* return functor for getting 1 variable from every gridbox in parallel range policy */
   Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
     assert(((ptr->d_data.extent(0) == d_gbxs.extent(0)) ||
             (ptr->d_data.extent(0) == totsupers.extent(0))) &&
