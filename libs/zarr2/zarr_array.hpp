@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 29th March 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -314,6 +314,18 @@ class ZarrArray {
    * @return The total number of chunks.
    */
   size_t get_totnchunks() { return totnchunks; }
+
+  /**
+   * @brief Get the total number of data elements currently written to array in store and in buffer.
+   *
+   * Includes data in buffer, so not equal to totndata
+   *
+   * @return The total number of data elements.
+   */
+  size_t get_totalndata() {
+    const auto total_ndata = totnchunks * buffer.get_chunksize() + buffer.get_fill();
+    return total_ndata;
+  }
 
   /**
    * @brief Write the array shape to the store.

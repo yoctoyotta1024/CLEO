@@ -104,9 +104,20 @@ class GenericCollectData {
     dataset.write_to_array(ptr->xzarr, ptr->h_data);
   }
 
+  /* copy data from device view directly to host and then write to array in dataset */
+  void write_to_ragged_arrays(const Dataset<Store> &dataset) const {
+    Kokkos::deep_copy(ptr->h_data, ptr->d_data);
+    dataset.write_to_ragged_array(ptr->xzarr, ptr->h_data);
+  }
+
   /* call function to write shape of array according to dataset */
   void write_arrayshapes(const Dataset<Store> &dataset) const {
     dataset.write_arrayshape(ptr->xzarr);
+  }
+
+  /* call function to write shape of array according to dataset */
+  void write_ragged_arrayshapes(const Dataset<Store> &dataset) const {
+    dataset.write_ragged_arrayshape(ptr->xzarr);
   }
 };
 

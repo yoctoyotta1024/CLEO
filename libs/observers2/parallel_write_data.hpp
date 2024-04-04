@@ -96,7 +96,7 @@ class ParallelWriteSupers {
       : dataset(dataset), collect_data(collect_data), ragged_count(ragged_count) {}
 
   ~ParallelWriteSupers() {
-    collect_data.write_arrayshapes(dataset);
+    collect_data.write_ragged_arrayshapes(dataset);
     ragged_count.write_arrayshape(dataset);
   }
 
@@ -107,7 +107,7 @@ class ParallelWriteSupers {
     collect_data.reallocate_views(totsupers.extent(0));
     auto functor = collect_data.get_functor(d_gbxs, totsupers);
     parallel_write_supers(functor, totsupers);
-    collect_data.write_to_arrays(dataset);
+    collect_data.write_to_ragged_arrays(dataset);
     ragged_count.write_to_array(dataset, totsupers);
   }
 };

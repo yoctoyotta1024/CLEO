@@ -44,7 +44,9 @@ concept CollectDataForDataset =
       { cdd.get_functor(d_gbxs, totsupers) };
       { cdd.reallocate_views(sz) } -> std::same_as<void>;
       { cdd.write_to_arrays(ds) } -> std::same_as<void>;
+      { cdd.write_to_ragged_arrays(ds) } -> std::same_as<void>;
       { cdd.write_arrayshapes(ds) } -> std::same_as<void>;
+      { cdd.write_ragged_arrayshapes(ds) } -> std::same_as<void>;
     };
 
 /**
@@ -104,9 +106,19 @@ struct CombinedCollectDataForDataset {  // TODO(CB) generalise
     b.write_to_arrays(dataset);
   }
 
+  void write_to_ragged_arrays(const Dataset<Store> &dataset) const {
+    a.write_to_ragged_arrays(dataset);
+    b.write_to_ragged_arrays(dataset);
+  }
+
   void write_arrayshapes(const Dataset<Store> &dataset) const {
     a.write_arrayshapes(dataset);
     b.write_arrayshapes(dataset);
+  }
+
+  void write_ragged_arrayshapes(const Dataset<Store> &dataset) const {
+    a.write_ragged_arrayshapes(dataset);
+    b.write_ragged_arrayshapes(dataset);
   }
 
   void reallocate_views(const size_t sz) const {
@@ -146,7 +158,11 @@ struct NullCollectDataForDataset {
 
   void write_to_arrays(const Dataset<Store> &dataset) const {}
 
+  void write_to_ragged_arrays(const Dataset<Store> &dataset) const {}
+
   void write_arrayshapes(const Dataset<Store> &dataset) const {}
+
+  void write_ragged_arrayshapes(const Dataset<Store> &dataset) const {}
 
   void reallocate_views(const size_t sz) const {}
 };
