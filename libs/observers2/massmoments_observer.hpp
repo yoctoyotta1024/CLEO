@@ -36,6 +36,31 @@
 #include "superdrops/superdrop.hpp"
 #include "zarr2/dataset.hpp"
 
+/* Operator is functor to perform calculation of 0th, 1st and 2nd moments of the (real)
+droplet mass distribution in each gridbox, i.e. 0th, 3rd and 6th moments of the droplet
+radius distribution for each gridbox. Calculation is done for all gridboxes in parallel.
+Kokkos::parallel_reduce([...]) is equivalent in serial to:
+for (size_t kk(0); kk < supers.extent(0); ++kk){[...]} */
+struct MassMomentsFunc {
+  KOKKOS_FUNCTION
+  operator()(const TeamMember & team_member, const viewd_constgbx d_gbxs,
+             Buffer<uint32_t>::mirrorviewd_buffer d_mom0, Buffer<float>::mirrorviewd_buffer d_mom1,
+             Buffer<float>::mirrorviewd_buffer d_mom2);  // TODO(CB)
+};
+
+/* Operator is functor to perform calculation of 0th, 1st and 2nd moments of the (real)
+raindroplet mass distribution in each gridbox, i.e. 0th, 3rd and 6th moments of the raindroplet
+radius distribution for each gridbox. A raindrop is droplet with a radius >= rlim = 40microns.
+Calculation is done for all gridboxes in parallel.
+Kokkos::parallel_reduce([...]) is equivalent in serial to:
+for (size_t kk(0); kk < supers.extent(0); ++kk){[...]} */
+struct RaindropsMassMomentsFunc {
+  KOKKOS_FUNCTION
+  operator()(const TeamMember & team_member, const viewd_constgbx d_gbxs,
+             Buffer<uint32_t>::mirrorviewd_buffer d_mom0, Buffer<float>::mirrorviewd_buffer d_mom1,
+             Buffer<float>::mirrorviewd_buffer d_mom2);  // TODO(CB)
+};
+
 /* struct satifying CollectDataForDataset for collecting the 0th, 1st and 2nd moments of the
  * (rain)droplet mass distribution in each gridbox (ie. 0th, 3rd and 6th moments of the radius
  * distribution). struct similar to GenericCollectData but specialised with xarrays and a functor
@@ -77,7 +102,7 @@ struct CollectMassMoments {
     mirrorviewd_mom2 d_mom2;  // mirror view 2nd mass moment on device
 
     Functor(FunctorFunc ffunc, const viewd_constgbx d_gbxs, mirrorviewd_mom0 d_mom0,
-            mirrorviewd_mom0 d_mom1, mirrorviewd_mom0 d_mom2)
+            mirrorviewd_mom1 d_mom1, mirrorviewd_mom2 d_mom2)
         : ffunc(ffunc), d_gbxs(d_gbxs), d_mom0(d_mom0), d_mom1(d_mom1), d_mom2(d_mom2) {}
 
     /* Functor operator to perform calculation of massmoments in each gridbox
@@ -177,6 +202,8 @@ inline Observer auto MassMomentsObserver(const unsigned int interval, const Data
   const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1", maxchunk, ngbxs);
   const auto xzarr_mom2 = create_massmom2_xarray(dataset, "massmom2", maxchunk, ngbxs);
 
+  const auto ffunc = MassMomentsFunc{};
+
   const CollectDataForDataset<Store> auto massmoments =
       CollectMassMoments(ffunc, xzarr_mom0, xzarr_mom1, xzarr_mom2, ngbxs);
   const auto parallel_write =
@@ -193,6 +220,8 @@ inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
   const auto xzarr_mom0 = create_massmom0_xarray(dataset, "massmom0_raindrops", maxchunk, ngbxs);
   const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1_raindrops", maxchunk, ngbxs);
   const auto xzarr_mom2 = create_massmom2_xarray(dataset, "massmom2_raindrops", maxchunk, ngbxs);
+
+  const auto ffunc = RaindropsMassMomentsFunc{};
 
   const CollectDataForDataset<Store> auto massmoments_raindrops =
       CollectMassMoments(ffunc, xzarr_mom0, xzarr_mom1, xzarr_mom2, ngbxs);
