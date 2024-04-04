@@ -29,6 +29,44 @@
 #include "../kokkosaliases.hpp"
 #include "zarr2/dataset.hpp"
 
+/* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
+struct ParallelGridboxesRangePolicy {
+  /* parallel loop over gridboxes using Kokkos Range Policy */
+  template <typename Functor>
+  void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
+    const size_t ngbxs(d_gbxs.extent(0));
+    Kokkos::parallel_for("write_gridboxes", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
+  }
+};
+
+/* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
+gridboxes in a parallel loop and write it to arrays in a dataset */
+template <typename Store, typename ParallelGridboxesFunc, CollectDataForDataset<Store> CollectData>
+class ParallelWriteGridboxes {
+ private:
+  ParallelGridboxesFunc parallel_gridboxes_func;
+  const Dataset<Store> &dataset;  ///< dataset to write data to
+  CollectData collect_data;  ///< functions to collect data within gbxs loop and write in dataset
+
+ public:
+  ParallelWriteGridboxes(ParallelGridboxesFunc parallel_gridboxes_func,
+                         const Dataset<Store> &dataset, CollectData collect_data)
+      : parallel_gridboxes_func(parallel_gridboxes_func),
+        dataset(dataset),
+        collect_data(collect_data) {}
+
+  ~ParallelWriteGridboxes() { collect_data.write_arrayshapes(dataset); }
+
+  /* Use the CollectData instance's functor to collect data from gridboxes in a parallel loop.
+    Then write the data in the dataset. Inclusion of totsupers so that object can be used as
+    "ParallelWriteData" function in DoWriteToDataset struct */
+  void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
+    auto functor = collect_data.get_functor(d_gbxs, totsupers);
+    parallel_gridboxes_func(functor, d_gbxs);
+    collect_data.write_to_arrays(dataset);
+  }
+};
+
 /* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
 gridboxes in a parallel loop and write it to arrays in a dataset */
 template <typename Store, CollectDataForDataset<Store> CollectData>
@@ -71,8 +109,7 @@ class ParallelWriteGridboxesTeamPolicy {
   /* parallel loop over gridboxes using Kokkos Range Policy */
   template <typename Functor>
   void parallel_write_gridboxes(const Functor functor, const viewd_constgbx d_gbxs) const {
-    const size_t ngbxs(d_gbxs.extent(0));
-    Kokkos::parallel_for("write_gridboxes", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
+    // TODO(CB)
   }
 
  public:
@@ -116,7 +153,7 @@ class ParallelWriteSupers {
 
   /* parallel loop over superdroplets using Kokkos Range Policy */
   template <typename Functor>
-  void parallel_write_supers(const Functor functor, const viewd_constsupers totsupers) const {
+  void parallel_supers_func(const Functor functor, const viewd_constsupers totsupers) const {
     const size_t totnsupers(totsupers.extent(0));
     Kokkos::parallel_for("write_supers", Kokkos::RangePolicy<ExecSpace>(0, totnsupers), functor);
   }
@@ -137,7 +174,7 @@ class ParallelWriteSupers {
   void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
     collect_data.reallocate_views(totsupers.extent(0));
     auto functor = collect_data.get_functor(d_gbxs, totsupers);
-    parallel_write_supers(functor, totsupers);
+    parallel_supers_func(functor, totsupers);
     collect_data.write_to_ragged_arrays(dataset);
     ragged_count.write_to_array(dataset, totsupers);
   }
