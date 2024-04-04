@@ -38,7 +38,8 @@ class ParallelWriteGridboxes {
   CollectData collect_data;  ///< functions to collect data within gbxs loop and write in dataset
 
   /* parallel loop over gridboxes using Kokkos Range Policy */
-  void parallel_write_gridboxes(const viewd_constgbx d_gbxs) const {
+  template <typename Functor>
+  void parallel_write_gridboxes(const Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for("write_gridboxes", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
   }
@@ -54,7 +55,7 @@ class ParallelWriteGridboxes {
     "ParallelWriteData" function in DoWriteToDataset struct */
   void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
     auto functor = collect_data.get_functor(d_gbxs, totsupers);
-    parallel_write_gridboxes(d_gbxs);
+    parallel_write_gridboxes(functor, d_gbxs);
     collect_data.write_to_arrays(dataset);
   }
 };
@@ -83,7 +84,8 @@ class ParallelWriteSupers {
   RaggedCount ragged_count;  ///< functions to write ragged count variable in dataset
 
   /* parallel loop over superdroplets using Kokkos Range Policy */
-  void parallel_write_supers(const viewd_constsupers totsupers) const {
+  template <typename Functor>
+  void parallel_write_supers(const Functor functor, const viewd_constsupers totsupers) const {
     const size_t totnsupers(totsupers.extent(0));
     Kokkos::parallel_for("write_supers", Kokkos::RangePolicy<ExecSpace>(0, totnsupers), functor);
   }
@@ -104,7 +106,7 @@ class ParallelWriteSupers {
   void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
     collect_data.reallocate_views(totsupers.extent(0));
     auto functor = collect_data.get_functor(d_gbxs, totsupers);
-    parallel_write_supers(totsupers);
+    parallel_write_supers(functor, totsupers);
     collect_data.write_to_arrays(dataset);
     ragged_count.write_to_array(dataset, totsupers);
   }

@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: nsupers_observer.hpp
- * Project: observers2
+ * Project: tmp_delete
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -20,8 +20,8 @@
  * each timestep to an array in a dataset
  */
 
-#ifndef LIBS_OBSERVERS2_NSUPERS_OBSERVER_HPP_
-#define LIBS_OBSERVERS2_NSUPERS_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS2_TMP_DELETE_NSUPERS_OBSERVER_HPP_
+#define LIBS_OBSERVERS2_TMP_DELETE_NSUPERS_OBSERVER_HPP_
 
 #include <concepts>
 
@@ -68,4 +68,4 @@ inline Observer auto NsupersObserver(const unsigned int interval, const Dataset<
   return ConstTstepObserver(interval, obsfunc);
 }
 
-#endif  // LIBS_OBSERVERS2_NSUPERS_OBSERVER_HPP_
+#endif  // LIBS_OBSERVERS2_TMP_DELETE_NSUPERS_OBSERVER_HPP_

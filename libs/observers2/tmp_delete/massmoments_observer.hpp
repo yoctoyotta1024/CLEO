@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: massmoments_observer.hpp
- * Project: observers2
+ * Project: tmp_delete
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -22,8 +22,8 @@
 
 // TODO(CB) combine with new generic classes and delete file ?
 
-#ifndef LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
-#define LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS2_TMP_DELETE_MASSMOMENTS_OBSERVER_HPP_
+#define LIBS_OBSERVERS2_TMP_DELETE_MASSMOMENTS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <array>
@@ -174,4 +174,4 @@ inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
   return ConstTstepObserver(interval, DoMassMomsObs(dataset, maxchunk, ngbxs, names, calc));
 }
 
-#endif  // LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
+#endif  // LIBS_OBSERVERS2_TMP_DELETE_MASSMOMENTS_OBSERVER_HPP_
