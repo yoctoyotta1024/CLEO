@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 4th April 2024
+ * Last Modified: Friday 5th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,7 +32,7 @@
 /* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
 struct ParallelGridboxesRangePolicyFunc {
   /* parallel loop over gridboxes using Kokkos Range Policy.
-    Functor must have operator with signature: operator()(const size_t ii, ...) */
+    Functor must have operator with signature: operator()(const size_t ii) */
   template <typename Functor>
   void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
@@ -44,7 +44,7 @@ struct ParallelGridboxesRangePolicyFunc {
 /* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
 struct ParallelGridboxesTeamPolicyFunc {
   /* parallel loop over gridboxes using Kokkos Team Policy.
-  Functor must have operator with signature: operator()(const TeamMember &team_member, ...) */
+  Functor must have operator with signature: operator()(const TeamMember &team_member) */
   template <typename Functor>
   void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
