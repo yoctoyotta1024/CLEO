@@ -98,7 +98,7 @@ template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                         const int maxchunk) {
   const CollectDataForDataset<Store> auto xi = CollectSuperdropVariable<Store, uint32_t, XiFunc>(
-      dataset, XiFunc{}, "xi", "", "<u8", 1, maxchunk);
+      dataset, XiFunc{}, "xi", "", "<u4", 1, maxchunk);
 
   const CollectRaggedCount<Store> auto ragged_count = RaggedCount(dataset, maxchunk);
 
