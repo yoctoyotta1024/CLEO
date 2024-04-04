@@ -50,7 +50,7 @@ class GenericCollectData {
   using viewh_data = Buffer<T>::viewh_buffer;              // type of view for h_data
   using mirrorviewd_data = Buffer<T>::mirrorviewd_buffer;  // mirror view type for d_data
   FunctorFunc ffunc;
-  std::shared_ptr<XarrayAndViews> xzarr_ptr;  // pointer to xarray and views which collect data
+  std::shared_ptr<XarrayAndViews> ptr;  // pointer to xarray and views which collect data
 
  public:
   struct Functor {
@@ -81,7 +81,7 @@ class GenericCollectData {
   from within the functor function call. */
   GenericCollectData(const FunctorFunc ffunc, const XarrayZarrArray<Store, T> xzarr,
                      const size_t dataview_size)
-      : ffunc(ffunc), xzarr_ptr(std::make_shared<XarrayAndViews>(xzarr, dataview_size)) {}
+      : ffunc(ffunc), ptr(std::make_shared<XarrayAndViews>(xzarr, dataview_size)) {}
 
   /* return functor for getting 1 variable from every gridbox in parallel */
   Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
@@ -91,20 +91,19 @@ class GenericCollectData {
   }
 
   void reallocate_dataviews(const size_t size) {
-    // TODO(CB) fix forseen issues over const-ness
-    Kokkos::realloc(h_data, size);
-    Kokkos::realloc(d_data, size);
+    Kokkos::realloc(ptr->h_data, size);
+    Kokkos::realloc(ptr->d_data, size);
   }
 
   /* copy data from device view directly to host and then write to array in dataset */
   void write_to_arrays(const Dataset<Store> &dataset) const {
-    Kokkos::deep_copy(h_data, d_data);
-    dataset.write_to_array(xzarr_ptr, h_data);
+    Kokkos::deep_copy(ptr->h_data, ptr->d_data);
+    dataset.write_to_array(ptr->xzarr, ptr->h_data);
   }
 
   /* call function to write shape of array according to dataset */
   void write_arrayshapes(const Dataset<Store> &dataset) const {
-    dataset.write_arrayshape(xzarr_ptr);
+    dataset.write_arrayshape(ptr->xzarr);
   }
 };
 
