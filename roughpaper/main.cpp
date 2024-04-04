@@ -95,9 +95,10 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
   // const Observer auto obs6 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
   // return obs3 >> obs6;
 
-  const Observer auto obsx = ThermoObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obst = ThermoObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obsw = WindVelObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
-  return obsx;
+  return obsw >> obst;
 }
 
 template <typename Store>

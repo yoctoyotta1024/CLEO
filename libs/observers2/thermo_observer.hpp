@@ -41,7 +41,7 @@
 /* returns CollectDataForDataset which writes a state variable from
 each gridbox to an array in a dataset in a given store for a given datatype and using a given
 function-like functor */
-template <typename Store, typename T, typename FunctorFunc>
+template <typename Store, typename FunctorFunc>
 CollectDataForDataset<Store> auto CollectThermoVariable(const Dataset<Store> &dataset,
                                                         const FunctorFunc ffunc,
                                                         const std::string_view name,
@@ -52,7 +52,7 @@ CollectDataForDataset<Store> auto CollectThermoVariable(const Dataset<Store> &da
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr =
-      dataset.template create_array<T>(name, units, dtype, scale_factor, chunkshape, dimnames);
+      dataset.template create_array<float>(name, units, dtype, scale_factor, chunkshape, dimnames);
   return GenericCollectData(ffunc, xzarr, ngbxs);
 }
 
@@ -108,16 +108,16 @@ from the state of each gridbox using an instance of the GenericCollectData class
 template <typename Store>
 inline CollectDataForDataset<Store> auto CollectThermo(const Dataset<Store> &dataset,
                                                        const int maxchunk, const size_t ngbxs) {
-  const CollectDataForDataset<Store> auto press = CollectThermoVariable<Store, float, PressFunc>(
+  const CollectDataForDataset<Store> auto press = CollectThermoVariable<Store, PressFunc>(
       dataset, PressFunc{}, "press", "hPa", dlc::P0 / 100, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Store> auto temp = CollectThermoVariable<Store, float, TempFunc>(
+  const CollectDataForDataset<Store> auto temp = CollectThermoVariable<Store, TempFunc>(
       dataset, TempFunc{}, "temp", "K", dlc::TEMP0, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Store> auto qvap = CollectThermoVariable<Store, float, QvapFunc>(
+  const CollectDataForDataset<Store> auto qvap = CollectThermoVariable<Store, QvapFunc>(
       dataset, QvapFunc{}, "qvap", "g/Kg", 1000.0, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Store> auto qcond = CollectThermoVariable<Store, float, QcondFunc>(
+  const CollectDataForDataset<Store> auto qcond = CollectThermoVariable<Store, QcondFunc>(
       dataset, QcondFunc{}, "qcond", "g/Kg", 1000.0, maxchunk, ngbxs);
 
   return press >> temp >> qvap >> qcond;

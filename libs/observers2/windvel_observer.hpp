@@ -41,7 +41,7 @@
 /* returns CollectDataForDataset which writes a state variable from
 each gridbox to an array in a dataset in a given store for a given datatype and using a given
 function-like functor */
-template <typename Store, typename T, typename FunctorFunc>
+template <typename Store, typename FunctorFunc>
 CollectDataForDataset<Store> auto CollectWindVariable(const Dataset<Store> &dataset,
                                                       const FunctorFunc ffunc,
                                                       const std::string_view name,
@@ -52,7 +52,7 @@ CollectDataForDataset<Store> auto CollectWindVariable(const Dataset<Store> &data
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr =
-      dataset.template create_array<T>(name, units, dtype, scale_factor, chunkshape, dimnames);
+      dataset.template create_array<float>(name, units, dtype, scale_factor, chunkshape, dimnames);
   return GenericCollectData(ffunc, xzarr, ngbxs);
 }
 
