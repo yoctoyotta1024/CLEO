@@ -53,6 +53,19 @@
 #include "zarr2/fsstore.hpp"
 
 template <typename Store>
+inline Observer auto create_superdrops_observer(const Config &config, const Timesteps &tsteps,
+                                                Dataset<Store> &dataset) {
+  const auto obsstep = (unsigned int)tsteps.get_obsstep();
+  const auto maxchunk = int{config.maxchunk};
+
+  CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
+  CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
+
+  const auto collect_data = xi >> radius;
+  return SuperdropsObserver(obsstep, dataset, maxchunk, collect_data);
+}
+
+template <typename Store>
 inline Observer auto create_gridbox_observer(const Config &config, const Timesteps &tsteps,
                                              Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
@@ -96,7 +109,7 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   // config.ngbxs);
   const Observer auto obs6 = TotNsupersObserver(obsstep, dataset, maxchunk);
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
-  const Observer auto obssd = SuperdropsObserver(obsstep, dataset, maxchunk);
+  const Observer auto obssd = create_superdrops_observer(config, tsteps, dataset);
 
   return obssd >> obsx >> obs6 >> obs2 >> obs1;
 }
