@@ -72,7 +72,7 @@ template <typename Store, CollectDataForDataset<Store> CollectData>
 inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             const Dataset<Store> &dataset,
                                             CollectData collect_data) {
-  const auto parallel_write = ParallelWriteGridboxes(dataset, collect_data);
+  const auto parallel_write = ParallelWriteGridboxesRangePolicy(dataset, collect_data);
   return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
