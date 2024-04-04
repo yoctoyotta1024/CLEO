@@ -263,7 +263,7 @@ class XarrayZarrArray {
 
   /**
    * @brief Constructs a new XarrayZarrArray object with additional variable called
-   * "sample_dimension" in the metadata .zattrs json.
+   * "sample_dimension" in the metadata .zattrs json and initially no set arrayshape.
    *
    * @param store The store where the array will be stored.
    * @param datasetdims Dictionary like object for the dimensions of the dataset.
@@ -287,8 +287,6 @@ class XarrayZarrArray {
         last_totnchunks(0) {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
-
-    write_arrayshape(datasetdims);
 
     write_zattrs_json(store, name,
                       make_xarray_metadata(units, scale_factor, dimnames, sampledimname));
