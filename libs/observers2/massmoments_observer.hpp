@@ -26,18 +26,50 @@
 #include <Kokkos_Core.hpp>
 #include <concepts>
 
+#include "../cleoconstants.hpp"
+#include "../kokkosaliases.hpp"
+#include "./collect_data_for_dataset.hpp"
 #include "./observers.hpp"
 #include "./write_to_dataset_observer.hpp"
+#include "gridboxes/gridbox.hpp"
+#include "superdrops/superdrop.hpp"
 #include "zarr2/dataset.hpp"
 
-// TODO(CB) WIP
+/* struct satifying CollectDataForDataset for collecting the 0th, 1st and 2nd mass moments of the
+ * (rain)droplet distirubtion in each gridbox */
+template <typename Store>
+struct CollectMassMoments {
+  // TODO(CB)
+
+ public:
+  struct Functor {
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const TeamMember &team_member) const {}  // TODO(CB)
+  };
+
+  Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
+    return Functor{};  // TODO(CB)
+  }
+
+  void write_to_arrays(const Dataset<Store> &dataset) const {}  // TODO(CB)
+
+  void write_to_ragged_arrays(const Dataset<Store> &dataset) const {}
+
+  void write_arrayshapes(const Dataset<Store> &dataset) const {}  // TODO(CB)
+
+  void write_ragged_arrayshapes(const Dataset<Store> &dataset) const {}
+
+  void reallocate_views(const size_t sz) const {}
+};
 
 /* constructs observer which writes mass moments of droplet distribution in each gridbox
 with a constant timestep 'interval' using an instance of the WriteToDatasetObserver class */
 template <typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                          const int maxchunk, const size_t ngbxs) {
-  return WriteInDatasetObserver(interval, dataset, write_massmoments);
+  const auto collect_massmoments = 1;
+  const auto parallel_write = ParallelWriteGridboxesTeamPolicy(dataset, collect_massmoments);
+  return WriteToDatasetObserver(interval, parallel_write);
 }
 
 /* constructs observer which writes mass moments of raindroplet distribution in each gridbox
@@ -46,7 +78,9 @@ template <typename Store>
 inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
                                                   const Dataset<Store> &dataset, const int maxchunk,
                                                   const size_t ngbxs) {
-  return WriteInDatasetObserver(interval, dataset, write_massmoments_raindrops);
+  const auto collect_massmoments_raindrops = 1;
+  const auto write = ParallelWriteGridboxesTeamPolicy(dataset, collect_massmoments_raindrops);
+  return WriteToDatasetObserver(interval, write);
 }
 
 #endif  // LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
