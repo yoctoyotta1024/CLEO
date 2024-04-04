@@ -130,6 +130,7 @@ struct CartesianDynamics {
   (ie. number of gridboxes in each dimension) ndims */
   void increment_position();
   void receive_fields_from_yac();
+  void receive_hor_slice_from_yac(int cell_offset, int u_edges_offset, int w_edges_offset);
 };
 
 /* type satisfying CoupledDyanmics solver concept

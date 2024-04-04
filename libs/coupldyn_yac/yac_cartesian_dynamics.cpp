@@ -64,28 +64,30 @@ void CartesianDynamics::increment_position() {
   pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
-void CartesianDynamics::receive_fields_from_yac() {
+void CartesianDynamics::receive_hor_slice_from_yac(int cell_offset,
+                                                   int u_edges_offset,
+                                                   int w_edges_offset) {
   int info, error;
   double * yac_raw_data = NULL;
 
-  yac_raw_data = press.data();
+  yac_raw_data = press.data() + cell_offset;
   yac_cget(pressure_yac_id, 1, &yac_raw_data, &info, &error);
 
-  yac_raw_data = temp.data();
+  yac_raw_data = temp.data() + cell_offset;
   yac_cget(temp_yac_id, 1, &yac_raw_data, &info, &error);
 
-  yac_raw_data = qvap.data();
+  yac_raw_data = qvap.data() + cell_offset;
   yac_cget(qvap_yac_id, 1, &yac_raw_data, &info, &error);
 
-  yac_raw_data = qcond.data();
+  yac_raw_data = qcond.data() + cell_offset;
   yac_cget(qcond_yac_id, 1, &yac_raw_data, &info, &error);
 
   yac_raw_data = united_edge_data.data();
   yac_cget(hor_wind_velocities_yac_id, 1, &yac_raw_data, &info, &error);
 
   std::vector<double>::iterator source_it = united_edge_data.begin();
-  std::vector<double>::iterator uvel_it = uvel.begin();
-  std::vector<double>::iterator wvel_it = wvel.begin();
+  std::vector<double>::iterator uvel_it = uvel.begin() + u_edges_offset;
+  std::vector<double>::iterator wvel_it = wvel.begin() + w_edges_offset;
   for (size_t lat_index = 0; lat_index < vertex_latitudes.size() * 2 - 1; lat_index++) {
         if (lat_index % 2 == 0) {
           for (size_t index = 0; index < ndims[0]; index++, uvel_it++, source_it++)
@@ -95,6 +97,16 @@ void CartesianDynamics::receive_fields_from_yac() {
             *wvel_it = *source_it;
         }
   }
+}
+
+void CartesianDynamics::receive_fields_from_yac() {
+  int total_horizontal_cells = ndims[0] * ndims[1];
+  int total_u_edges = ndims[0] * (ndims[1] + 1);
+  int total_w_edges = ndims[1] * (ndims[0] + 1);
+  for (int vertical_index = 0; vertical_index < ndims[2]; vertical_index++)
+    receive_hor_slice_from_yac(vertical_index * total_horizontal_cells,
+                               vertical_index * total_u_edges,
+                               vertical_index * total_w_edges);
 }
 
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
@@ -251,12 +263,12 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // --- End of YAC definitions ---
   yac_cenddef();
 
-  press            = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  temp             = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  qvap             = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  qcond            = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  uvel             = std::vector<double>(total_edges[0], 0);
-  wvel             = std::vector<double>(total_edges[1], 0);
+  press            = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
+  temp             = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
+  qvap             = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
+  qcond            = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
+  uvel             = std::vector<double>(total_edges[0] * ndims[2], 0);
+  wvel             = std::vector<double>(total_edges[1] * ndims[2], 0);
   united_edge_data = std::vector<double>(total_edges[0] + total_edges[1], 0);
 
   receive_fields_from_yac();
