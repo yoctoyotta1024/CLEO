@@ -215,6 +215,22 @@ class XarrayZarrArray {
     return std::any_of(ischange.begin(), ischange.end(), [](bool b) { return b; });
   }
 
+  /**
+   * @brief Sets shape of array along each dimension to be the same as shape according to zarr.
+   *
+   * Useful when writing a ragged arrray in a dataset (meaning length of dimensions if not length of
+   * array)
+   *
+   */
+  bool set_ragged_arrayshape() {
+    const auto raggedarrayshape = std::vector<size_t>{zarr.get_totalndata()};
+    const auto ischange = (arrayshape != raggedarrayshape);
+
+    arrayshape = raggedarrayshape;
+
+    return ischange;
+  }
+
  public:
   /**
    * @brief Constructs a new XarrayZarrArray object.
@@ -332,6 +348,23 @@ class XarrayZarrArray {
    */
   void write_arrayshape(const std::unordered_map<std::string, size_t>& datasetdims) {
     auto ischange = set_arrayshape(datasetdims);
+
+    if (last_totnchunks != zarr.get_totnchunks() && ischange) {
+      zarr.write_arrayshape(arrayshape);
+      last_totnchunks = zarr.get_totnchunks();
+    }
+  }
+
+  /**
+   * @brief Sets shape of array along each dimension to be the same size as shape according to zarr.
+   * to write the shape of a ragged array.
+   *
+   * If chunks have been written since last writing of the arrayshape, then function also overwrites
+   * the .zarray json file with metadata containing the new shape of the array.
+   *
+   */
+  void write_ragged_arrayshape() {
+    auto ischange = set_ragged_arrayshape();
 
     if (last_totnchunks != zarr.get_totnchunks() && ischange) {
       zarr.write_arrayshape(arrayshape);

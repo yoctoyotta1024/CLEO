@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -203,6 +203,17 @@ class Dataset {
   }
 
   /**
+   * @brief Calls array's shape function to write the shape of the array for a ragged array.
+   *
+   * @tparam T The data type of the array.
+   * @param xzarr An instance of XarrayZarrArray representing the array.
+   */
+  template <typename T>
+  void write_ragged_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
+    xzarr.write_ragged_arrayshape();
+  }
+
+  /**
    * @brief Calls array's shape function to ensure the shape of the array matches
    * the dimensions of the dataset.
    *
@@ -231,6 +242,25 @@ class Dataset {
                       const typename Buffer<T>::viewh_buffer h_data) const {
     xzarr.write_to_array(h_data);
     xzarr.write_arrayshape(datasetdims);
+  }
+
+  /**
+   * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls
+   * function to ensure the shape of the array matches the dimensions of the dataset.
+   *
+   * Function writes data to an array in the dataset and updates the metadata for the shape of
+   * the array to ensure the size of each dimension of the array is consistent with the
+   * dimensions of the dataset.
+   *
+   * @tparam T The data type of the array.
+   * @param xzarr An instance of XarrayZarrArray representing the array.
+   * @param h_data The data to be written to the array.
+   */
+  template <typename T>
+  void write_to_ragged_array(XarrayZarrArray<Store, T> &xzarr,
+                             const typename Buffer<T>::viewh_buffer h_data) const {
+    xzarr.write_to_array(h_data);
+    xzarr.write_ragged_arrayshape();
   }
 
   /**
