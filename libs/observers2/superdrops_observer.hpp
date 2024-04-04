@@ -38,23 +38,6 @@
 #include "superdrops/superdrop.hpp"
 #include "zarr2/dataset.hpp"
 
-/* returns CollectDataForDataset which writes a variable (e.g. an attribute) from
-each superdroplet to an array in a dataset in a given store for a given datatype and using a given
-function-like functor */
-template <typename Store, typename T, typename FunctorFunc>
-CollectDataForDataset<Store> auto CollectSuperdropVariable(
-    const Dataset<Store> &dataset, const FunctorFunc ffunc, const std::string_view name,
-    const std::string_view units, const std::string_view dtype, const double scale_factor,
-    const size_t maxchunk) {
-  const auto chunkshape = std::vector<size_t>{maxchunk};
-  const auto dimnames = std::vector<std::string>{"superdroplets"};
-  const auto sampledimname = std::string_view("superdroplets");
-  const auto xzarr = dataset.template create_ragged_array<T>(name, units, dtype, scale_factor,
-                                                             chunkshape, dimnames, sampledimname);
-
-  return GenericCollectData(ffunc, xzarr, 0);
-}
-
 template <typename Store>
 struct RaggedCount {
  private:
@@ -91,18 +74,54 @@ struct XiFunc {
   }
 };
 
+/* Operator is functor to perform copy of radius for each superdroplet in totsupers view to d_data
+in parallel. Note conversion of radius from double (8 bytes) to float (4 bytes) */
+struct RadiusFunc {
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+                  Buffer<float>::mirrorviewd_buffer d_data) const {
+    auto radius = static_cast<float>(totsupers(kk).get_radius());
+    d_data(kk) = radius;
+  }
+};
+
+/* returns CollectDataForDataset which writes a variable (e.g. an attribute) from
+each superdroplet to an array in a dataset in a given store for a given datatype and using a given
+function-like functor */
+template <typename Store, typename T, typename FunctorFunc>
+CollectDataForDataset<Store> auto CollectSuperdropVariable(
+    const Dataset<Store> &dataset, const FunctorFunc ffunc, const std::string_view name,
+    const std::string_view units, const std::string_view dtype, const double scale_factor,
+    const size_t maxchunk) {
+  const auto chunkshape = std::vector<size_t>{maxchunk};
+  const auto dimnames = std::vector<std::string>{"superdroplets"};
+  const auto sampledimname = std::string_view("superdroplets");
+  const auto xzarr = dataset.template create_ragged_array<T>(name, units, dtype, scale_factor,
+                                                             chunkshape, dimnames, sampledimname);
+
+  return GenericCollectData(ffunc, xzarr, 0);
+}
+
+template <typename Store>
+CollectDataForDataset<Store> auto CollectXi(const Dataset<Store> &dataset, const int maxchunk) {
+  return CollectSuperdropVariable<Store, uint32_t, XiFunc>(dataset, XiFunc{}, "xi", "", "<u4", 1,
+                                                           maxchunk);
+}
+
+template <typename Store>
+CollectDataForDataset<Store> auto CollectRadius(const Dataset<Store> &dataset, const int maxchunk) {
+  return CollectSuperdropVariable<Store, float, RadiusFunc>(
+      dataset, RadiusFunc{}, "radius", "micro-m", "<f4", dlc::R0 * 1e6, maxchunk);
+}
+
 /* constructs observer which writes writes superdroplet variables (e.g. an attributes) from each
 superdroplet with a constant timestep 'interval' using an instance of the WriteToDatasetObserver
-class */
+class given data collect struct "collect_data" */
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                        const int maxchunk) {
-  const CollectDataForDataset<Store> auto xi = CollectSuperdropVariable<Store, uint32_t, XiFunc>(
-      dataset, XiFunc{}, "xi", "", "<u4", 1, maxchunk);
-
+                                        const int maxchunk,
+                                        CollectDataForDataset<Store> auto collect_data) {
   const CollectRaggedCount<Store> auto ragged_count = RaggedCount(dataset, maxchunk);
-
-  const auto collect_data = xi;  // TODO(CB) WIP
   return WriteToDatasetObserver(interval, dataset, collect_data, ragged_count);
 }
 

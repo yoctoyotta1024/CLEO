@@ -59,7 +59,7 @@ concept CollectDataForDataset =
  */
 template <typename Store, CollectDataForDataset<Store> CollectData1,
           CollectDataForDataset<Store> CollectData2>
-struct CombinedCollectDataForDataset {  // TODO(CB) generalise
+struct CombinedCollectDataForDataset {
  private:
   CollectData1 a; /**< The first instance of type of CollectDataForDataset. */
   CollectData2 b; /**< The second instance of type of CollectDataForDataset. */
@@ -137,7 +137,7 @@ struct CombinedCollectDataForDataset {  // TODO(CB) generalise
 
 template <CollectDataForDataset<FSStore> CollectData1, CollectDataForDataset<FSStore> CollectData2>
 auto operator>>(const CollectData1 a, const CollectData2 b) {
-  return CombinedWriteGridboxToArray<FSStore, CollectData1, CollectData2>(a, b);
+  return CombinedCollectDataForDataset<FSStore, CollectData1, CollectData2>(a, b);
 }
 
 /* struct satifying CollectDataForDataset and does nothing */
