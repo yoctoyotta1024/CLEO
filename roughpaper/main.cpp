@@ -35,7 +35,7 @@
 #include "initialise/timesteps.hpp"
 #include "observers2/gbxindex_observer.hpp"
 // #include "observers2/massmoments_observer.hpp"
-// #include "observers2/nsupers_observer.hpp"
+#include "observers2/nsupers_observer.hpp"
 #include "observers2/observers.hpp"
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
@@ -82,10 +82,8 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
 
   const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, config.ngbxs);
   const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, config.ngbxs);
-  const CollectDataForDataset<Store> auto nsupers = CollectNSupers(dataset, maxchunk, config.ngbxs);
-
-  const CollectDataForDataset<Store> auto collect_data = windvel >> thermo;
-
+  const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, config.ngbxs);
+  const CollectDataForDataset<Store> auto collect_data = nsupers >> windvel >> thermo;
   return WriteToDatasetObserver(obsstep, dataset, collect_data);
 
   // const Observer auto obst = ThermoObserver(obsstep, dataset, maxchunk, config.ngbxs);
@@ -94,6 +92,9 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
 
   // const Observer auto obsx = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
   // return obsx;
+
+  // const Observer auto obsn = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // return obsn;
 }
 
 template <typename Store>
