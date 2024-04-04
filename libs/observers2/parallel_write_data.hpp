@@ -30,7 +30,7 @@
 #include "zarr2/dataset.hpp"
 
 /* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
-struct ParallelGridboxesRangePolicy {
+struct ParallelGridboxesRangePolicyFunc {
   /* parallel loop over gridboxes using Kokkos Range Policy.
     Functor must have operator with signature: operator()(const size_t ii, ...) */
   template <typename Functor>
@@ -42,7 +42,7 @@ struct ParallelGridboxesRangePolicy {
 };
 
 /* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
-struct ParallelGridboxesTeamPolicy {
+struct ParallelGridboxesTeamPolicyFunc {
   /* parallel loop over gridboxes using Kokkos Team Policy.
   Functor must have operator with signature: operator()(const TeamMember &team_member, ...) */
   template <typename Functor>
