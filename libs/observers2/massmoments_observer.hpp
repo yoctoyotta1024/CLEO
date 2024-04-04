@@ -67,8 +67,9 @@ with a constant timestep 'interval' using an instance of the WriteToDatasetObser
 template <typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                          const int maxchunk, const size_t ngbxs) {
-  const auto collect_massmoments = 1;
-  const auto parallel_write = ParallelWriteGridboxesTeamPolicy(dataset, collect_massmoments);
+  const auto massmoments = 1;
+  const auto parallel_write =
+      ParallelWriteGridboxes(ParallelGridboxesTeamPolicyFunc{}, dataset, massmoments);
   return WriteToDatasetObserver(interval, parallel_write);
 }
 
@@ -78,9 +79,10 @@ template <typename Store>
 inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
                                                   const Dataset<Store> &dataset, const int maxchunk,
                                                   const size_t ngbxs) {
-  const auto collect_massmoments_raindrops = 1;
-  const auto write = ParallelWriteGridboxesTeamPolicy(dataset, collect_massmoments_raindrops);
-  return WriteToDatasetObserver(interval, write);
+  const auto massmoments_raindrops = 1;
+  const auto parallel_write =
+      ParallelWriteGridboxes(ParallelGridboxesTeamPolicyFunc{}, dataset, massmoments_raindrops);
+  return WriteToDatasetObserver(interval, parallel_write);
 }
 
 #endif  // LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_

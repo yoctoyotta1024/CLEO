@@ -73,7 +73,7 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             const Dataset<Store> &dataset,
                                             CollectData collect_data) {
   const auto parallel_write =
-      ParallelWriteGridboxes(ParallelGridboxesRangePolicy{}, dataset, collect_data);
+      ParallelWriteGridboxes(ParallelGridboxesRangePolicyFunc{}, dataset, collect_data);
   return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
