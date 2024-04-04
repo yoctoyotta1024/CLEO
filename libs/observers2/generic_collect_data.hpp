@@ -31,7 +31,10 @@
 #include "zarr2/dataset.hpp"
 #include "zarr2/xarray_zarr_array.hpp"
 
+template <typename Store, typename T>
 struct XarrayAndViews {
+  using viewh_data = Buffer<T>::viewh_buffer;              // type of view for h_data
+  using mirrorviewd_data = Buffer<T>::mirrorviewd_buffer;  // mirror view type for d_data
   XarrayZarrArray<Store, T> xzarr;
   viewh_data h_data;        // view on host for value of 1 variable from every superdrop
   mirrorviewd_data d_data;  // mirror view of h_data on device
@@ -47,13 +50,12 @@ struct XarrayAndViews {
 template <typename Store, typename T, typename FunctorFunc>
 class GenericCollectData {
  private:
-  using viewh_data = Buffer<T>::viewh_buffer;              // type of view for h_data
-  using mirrorviewd_data = Buffer<T>::mirrorviewd_buffer;  // mirror view type for d_data
   FunctorFunc ffunc;
-  std::shared_ptr<XarrayAndViews> ptr;  // pointer to xarray and views which collect data
+  std::shared_ptr<XarrayAndViews<Store, T>> ptr;  // pointer to xarray and views which collect data
 
  public:
   struct Functor {
+    using mirrorviewd_data = XarrayAndViews<Store, T>::mirrorviewd_data;
     FunctorFunc ffunc;
     viewd_constgbx d_gbxs;        // view of gridboxes on device
     viewd_constsupers totsupers;  // view of superdroplets on device
@@ -81,16 +83,17 @@ class GenericCollectData {
   from within the functor function call. */
   GenericCollectData(const FunctorFunc ffunc, const XarrayZarrArray<Store, T> xzarr,
                      const size_t dataview_size)
-      : ffunc(ffunc), ptr(std::make_shared<XarrayAndViews>(xzarr, dataview_size)) {}
+      : ffunc(ffunc), ptr(std::make_shared<XarrayAndViews<Store, T>>(xzarr, dataview_size)) {}
 
   /* return functor for getting 1 variable from every gridbox in parallel */
   Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
-    assert(((d_gbxs.extent(0) == d_data.extent(0)) || (totsupers.extent(0) == d_data.extent(0))) &&
+    assert(((ptr->d_data.extent(0) == d_gbxs.extent(0)) ||
+            (ptr->d_data.extent(0) == totsupers.extent(0))) &&
            "d_data view should be size of the number of gridboxes or superdroplets");
-    return Functor(ffunc, d_gbxs, totsupers, d_data);
+    return Functor(ffunc, d_gbxs, totsupers, ptr->d_data);
   }
 
-  void reallocate_dataviews(const size_t size) {
+  void reallocate_views(const size_t size) const {
     Kokkos::realloc(ptr->h_data, size);
     Kokkos::realloc(ptr->d_data, size);
   }
