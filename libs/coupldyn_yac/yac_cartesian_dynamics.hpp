@@ -62,6 +62,7 @@ struct CartesianDynamics {
   std::vector<double> united_edge_data;
   std::vector<double> uvel;
   std::vector<double> wvel;
+  std::vector<double> vvel;
 
   std::vector<double> vvel_yfaces;  // v velocity defined on coord2 faces of gridboxes
 
@@ -73,6 +74,7 @@ struct CartesianDynamics {
   int temp_yac_id;
   int qvap_yac_id;
   int qcond_yac_id;
+  int vvel_yac_id;
   int hor_wind_velocities_yac_id;
 
   /* depending on nspacedims, read in data

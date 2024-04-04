@@ -90,6 +90,7 @@ press               = Field.create("pressure", component, cell_centers, 1, "PT1M
 temp                = Field.create("temperature", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 qvap                = Field.create("qvap", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 qcond               = Field.create("qcond", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
+vvel                = Field.create("vvel", component, cell_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 hor_wind_velocities = Field.create("hor_wind_velocities", component, edge_centers, 1, "PT1M", TimeUnit.ISO_FORMAT)
 
 # --- End of YAC definitions ---

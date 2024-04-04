@@ -229,6 +229,10 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                  num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id);
 
+  yac_cdef_field("vvel", component_id, &cell_point_id,
+                 num_point_sets, collection_size, "PT1M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &vvel_yac_id);
+
   yac_cdef_field("hor_wind_velocities", component_id, &edge_point_id,
                  num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &hor_wind_velocities_yac_id);
@@ -255,6 +259,11 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                   "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
+  yac_cdef_couple("yac_reader", "yac_reader_grid", "vvel",
+                  "cleo", "cleo_grid", "vvel",
+                  "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+
   yac_cdef_couple("yac_reader", "yac_reader_grid", "hor_wind_velocities",
                   "cleo", "cleo_grid", "hor_wind_velocities",
                   "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
@@ -269,6 +278,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   qcond            = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
   uvel             = std::vector<double>(total_edges[0] * ndims[2], 0);
   wvel             = std::vector<double>(total_edges[1] * ndims[2], 0);
+  vvel             = std::vector<double>(total_cells[0] * total_cells[1] * (ndims[2] + 1), 0);
   united_edge_data = std::vector<double>(total_edges[0] + total_edges[1], 0);
 
   receive_fields_from_yac();
