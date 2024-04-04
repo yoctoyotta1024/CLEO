@@ -78,8 +78,6 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  // TODO(CB) WIP
-
   // const WriteGridboxToArray<Store, viewd_constgbx> auto thermowriter =
   //     ThermoWriter(dataset, maxchunk, config.ngbxs);
   // const WriteGridboxToArray<Store, viewd_constgbx> auto windwriter =
