@@ -31,8 +31,12 @@
 
 /* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
 struct ParallelGridboxesRangePolicyFunc {
-  /* parallel loop over gridboxes using Kokkos Range Policy.
-    Functor must have operator with signature: operator()(const size_t ii) */
+  /* Parallel loop over gridboxes using Kokkos Range Policy.
+  Kokkos::parallel_for([...]) is equivalent in serial to:
+  for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}
+  Note: Functor must have operator with signature:
+  operator()(const size_t ii).
+  */
   template <typename Functor>
   void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
@@ -43,8 +47,12 @@ struct ParallelGridboxesRangePolicyFunc {
 
 /* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
 struct ParallelGridboxesTeamPolicyFunc {
-  /* parallel loop over gridboxes using Kokkos Team Policy.
-  Functor must have operator with signature: operator()(const TeamMember &team_member) */
+  /* Parallel loop over gridboxes using Kokkos Team Policy.
+  Kokkos::parallel_for([...]) is equivalent in serial to:
+  for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}
+  Note: Functor must have operator with signature:
+  operator()(const TeamMember &team_member).
+  */
   template <typename Functor>
   void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
@@ -103,7 +111,9 @@ class ParallelWriteSupers {
   CollectData collect_data;  ///< functions to collect data within supers loop and write in dataset
   RaggedCount ragged_count;  ///< functions to write ragged count variable in dataset
 
-  /* parallel loop over superdroplets using Kokkos Range Policy */
+  /* parallel loop over superdroplets using Kokkos Range Policy.
+  Kokkos::parallel_for([...]) is equivalent in serial to:
+  for (size_t kk(0); kk < totsupers.extent(0); ++kk){[...]} */
   template <typename Functor>
   void parallel_supers_func(const Functor functor, const viewd_constsupers totsupers) const {
     const size_t totnsupers(totsupers.extent(0));
