@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: massmoments_observer_wip.hpp
+ * File: massmoments_observer.hpp
  * Project: observers2
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  * to individual arrays in a dataset a constant interval at the start of each timestep.
  */
 
-#ifndef LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_WIP_HPP_
-#define LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_WIP_HPP_
+#ifndef LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
+#define LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -49,4 +49,4 @@ inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
   return WriteInDatasetObserver(interval, dataset, write_massmoments_raindrops);
 }
 
-#endif  // LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_WIP_HPP_
+#endif  // LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
