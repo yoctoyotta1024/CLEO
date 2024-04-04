@@ -34,7 +34,6 @@
 #include <vector>
 
 #include "initialise/config.hpp"
-#include "initialise/readbinary.hpp"
 
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
@@ -64,8 +63,6 @@ struct CartesianDynamics {
   std::vector<double> uvel;
   std::vector<double> wvel;
   std::vector<double> vvel;
-
-  std::vector<double> vvel_yfaces;  // v velocity defined on coord2 faces of gridboxes
 
   std::vector<double> vertex_latitudes;
   std::vector<double> vertex_longitudes;
@@ -108,7 +105,6 @@ struct CartesianDynamics {
   /* returns vector of vvel retrieved from binary
   file called 'filename' where vvel is defined on
   the y-faces (coord2) of gridboxes */
-  get_winds_func get_vvel_from_binary() const;
   get_winds_func get_vvel_from_yac() const;
 
  public:
@@ -132,7 +128,6 @@ struct CartesianDynamics {
   acessing value at next timestep). Assumes domain
   is decomposed into cartesian C grid with dimensions
   (ie. number of gridboxes in each dimension) ndims */
-  void increment_position();
   void receive_fields_from_yac();
   void receive_hor_slice_from_yac(int cell_offset, int u_edges_offset, int w_edges_offset);
 };
@@ -150,7 +145,6 @@ struct YacDynamics {
   to positon at next timestep (ie. ngridbox_faces
   further along vector) */
   void run_dynamics(const unsigned int t_mdl) const {
-    dynvars->increment_position();
     dynvars->receive_fields_from_yac();
   }
 

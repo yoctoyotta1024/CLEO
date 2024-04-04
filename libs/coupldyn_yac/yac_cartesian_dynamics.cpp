@@ -26,20 +26,6 @@ extern "C" {
   #include "yac_interface.h"
 }
 
-/* open file called 'filename' and return vector
-of doubles for first variable in that file */
-std::vector<double> thermodynamicvar_from_binary(std::string_view filename) {
-  /* open file and read in the metatdata
-  for all the variables in that file */
-  std::ifstream file(open_binary(filename));
-  std::vector<VarMetadata> meta(metadata_from_binary(file));
-
-  /* read in the data for the 1st variable in the file */
-  std::vector<double> thermovar(vector_from_binary<double>(file, meta.at(0)));
-
-  return thermovar;
-}
-
 /* return (k,i,j) indicies from idx for a flattened 3D array
 with ndims [nz, nx, ny]. kij is useful for then getting
 position in of a variable in a flattened array defined on
@@ -51,17 +37,6 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
   const size_t i = index / ndims[0] - ndims[1] * j;
 
   return std::array<size_t, 3>{k, i, j};
-}
-
-/* updates positions to gbx0 in vector (for
-acessing value at next timestep). Assumes domain
-is decomposed into cartesian C grid with dimensions
-(ie. number of gridboxes in each dimension) ndims */
-void CartesianDynamics::increment_position() {
-  pos += ndims[0] * ndims[1] * ndims[2];
-  pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
-  pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
-  pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
 void CartesianDynamics::receive_hor_slice_from_yac(int cell_offset,
@@ -124,7 +99,8 @@ void CartesianDynamics::receive_fields_from_yac() {
   }
 }
 
-CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
+CartesianDynamics::CartesianDynamics(const Config &config,
+                                     const std::array<size_t, 3> i_ndims,
                                      const unsigned int nsteps)
     : ndims(i_ndims),
       pos(0),
@@ -347,7 +323,6 @@ std::string CartesianDynamics::set_winds_from_binaries(const unsigned int nspace
   std::string infoend;
   switch (nspacedims) {
     case 3:  // 3-D model
-      vvel_yfaces = thermodynamicvar_from_binary(vvel_filename);
       get_vvel = get_vvel_from_yac();
       infoend = ", u";
     case 2:  // 3-D or 2-D model
@@ -415,21 +390,6 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_vvel_from_yac() const {
     const size_t uppos(lpos + ndims[1] * ndims[0]);  // position of x upper face
 
     return std::pair(vvel.at(lpos), vvel.at(uppos));
-  };
-
-  return func;
-}
-
-/* returns vector of vvel retrieved from binary
-file called 'filename' where vvel is defined on
-the y-faces (coord2) of gridboxes */
-CartesianDynamics::get_winds_func CartesianDynamics::get_vvel_from_binary() const {
-  const auto func = [&](const unsigned int gbxindex) {
-    const size_t lpos(static_cast<size_t>(gbxindex) +
-                      pos_yface);                    // position of y lower face in 1D vvel vector
-    const size_t uppos(lpos + ndims[1] * ndims[0]);  // position of x upper face
-
-    return std::pair(vvel_yfaces.at(lpos), vvel_yfaces.at(uppos));
   };
 
   return func;
