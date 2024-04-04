@@ -33,6 +33,8 @@
 #include "./xarray_zarr_array.hpp"
 #include "./zarr_group.hpp"
 
+// TODO(CB) delet redundant functions?
+
 /**
  * @brief A class representing a dataset made from a Zarr group (i.e. collection of Zarr arrays)
  * in a storage system.
