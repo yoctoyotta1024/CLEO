@@ -34,117 +34,24 @@
 #include "../kokkosaliases.hpp"
 #include "./collect_data_for_dataset.hpp"
 #include "./generic_collect_data.hpp"
+#include "./thermo_observer.hpp"
+#include "./windvel_observer.hpp"
 #include "./write_to_dataset_observer.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr2/dataset.hpp"
 
-/* Operator is functor to perform copy of pressure in each gridbox to d_data in parallel.
-Note conversion of pressure from double (8 bytes) to single precision (4 bytes float) in output */
-struct PressFunc {
-  KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
-                  Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto press = static_cast<float>(d_gbxs(ii).state.press);
-    d_data(ii) = press;
-  }
-};
-
-// Operator is functor to perform copy of temperature in each gridbox to d_data in parallel.
-// Note conversion of temperature from double (8 bytes) to single precision (4 bytes float) in
-// output
-struct TempFunc {
-  KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
-                  Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto temp = static_cast<float>(d_gbxs(ii).state.temp);
-    d_data(ii) = temp;
-  }
-};
-
-// Operator is functor to perform copy of vapour mass mixing ratio (qvap) in each gridbox to d_data
-// in parallel. Note conversion of qvap from double (8 bytes) to single precision (4 bytes float) in
-// output
-struct QvapFunc {
-  KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
-                  Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto qvap = static_cast<float>(d_gbxs(ii).state.qvap);
-    d_data(ii) = qvap;
-  }
-};
-
-// Operator is functor to perform copy of liquid mass mixing ratio (qcond) in each gridbox to d_data
-// in parallel. Note conversion of qcond from double (8 bytes) to single precision (4 bytes
-// float) in output
-struct QcondFunc {
-  KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
-                  Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto qcond = static_cast<float>(d_gbxs(ii).state.qcond);
-    d_data(ii) = qcond;
-  }
-};
-
-/* returns CollectDataForDataset which writes a state variable from
-each gridbox to an array in a dataset in a given store for a given datatype and using a given
-function-like functor */
-template <typename Store, typename T, typename FunctorFunc>
-CollectDataForDataset<Store> auto CollectStateVariable(
-    const Dataset<Store> &dataset, const FunctorFunc ffunc, const std::string_view name,
-    const std::string_view units, const std::string_view dtype, const double scale_factor,
-    const size_t maxchunk, const size_t ngbxs) {
-  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-  const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
-  const auto xzarr =
-      dataset.template create_array<T>(name, units, dtype, scale_factor, chunkshape, dimnames);
-  return GenericCollectData(ffunc, xzarr, ngbxs);
-}
-
-/* constructs CollectDataForDataset for a given Store which writes writes thermodynamic variables
-from the state of each gridbox using an instance of the GenericCollectData class */
+/* constructs observer which writes writes thermodynamic and wind velocity variables from the state
+of each gridbox with a constant timestep 'interval' using an instance of the WriteToDatasetObserver
+class */
 template <typename Store>
-inline CollectDataForDataset<Store> auto CollectThermo(const Dataset<Store> &dataset,
-                                                       const int maxchunk, const size_t ngbxs) {
-  const CollectDataForDataset<Store> auto press = CollectStateVariable<Store, float, PressFunc>(
-      dataset, PressFunc{}, "press", "hPa", "<f4", dlc::P0 / 100, maxchunk, ngbxs);
+inline Observer auto StateObserver(const unsigned int interval, const Dataset<Store> &dataset,
+                                   const int maxchunk, const size_t ngbxs) {
+  const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Store> auto temp = CollectStateVariable<Store, float, TempFunc>(
-      dataset, TempFunc{}, "temp", "K", "<f4", dlc::TEMP0, maxchunk, ngbxs);
+  const CollectDataForDataset<Store> auto collect_data = windvel >> thermo;
 
-  const CollectDataForDataset<Store> auto qvap = CollectStateVariable<Store, float, QvapFunc>(
-      dataset, QvapFunc{}, "qvap", "g/Kg", "<f4", 1000.0, maxchunk, ngbxs);
-
-  const CollectDataForDataset<Store> auto qcond = CollectStateVariable<Store, float, QcondFunc>(
-      dataset, QcondFunc{}, "qcond", "g/Kg", "<f4", 1000.0, maxchunk, ngbxs);
-
-  return press >> temp >> qvap >> qcond;
+  return WriteToDatasetObserver(interval, dataset, collect_data);
 }
-
-/* constructs observer which writes writes thermodynamic variables from the state of each gridbox
-with a constant timestep 'interval' using an instance of the WriteToDatasetObserver class */
-template <typename Store>
-inline Observer auto ThermoObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                    const int maxchunk, const size_t ngbxs) {
-  const auto collect_thermodata = CollectThermo(dataset, maxchunk, ngbxs);
-  return WriteToDatasetObserver(interval, dataset, collect_thermodata);
-}
-
-// /* constructs observer which writes writes the wind velocity from the state of each gridbox
-// with a constant timestep 'interval' using an instance of the WriteToDatasetObserver class */
-// template <typename Store>
-// inline Observer auto WindObserver(const unsigned int interval, const Dataset<Store> &dataset,
-//                                   const int maxchunk, const size_t ngbxs) {
-//   // TODO(CB) WIP
-//   return WriteToDatasetObserver(interval, dataset, collect_winddata);
-// }
-
-// /* constructs observer which writes writes thermodynamic and wind velocity variables from the
-// state of each gridbox with a constant timestep 'interval' using an instance of the
-// WriteToDatasetObserver class */ template <typename Store> inline Observer auto
-// StateObserver(const unsigned int interval, const Dataset<Store> &dataset,
-//                                    const int maxchunk, const size_t ngbxs) {
-//   // TODO(CB) WIP
-//   return WriteToDatasetObserver(interval, dataset, collect_statedata);
-// }
 
 #endif  // LIBS_OBSERVERS2_STATE_OBSERVER_HPP_
