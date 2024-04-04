@@ -31,11 +31,24 @@
 
 /* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
 struct ParallelGridboxesRangePolicy {
-  /* parallel loop over gridboxes using Kokkos Range Policy */
+  /* parallel loop over gridboxes using Kokkos Range Policy.
+    Functor must have operator with signature: operator()(const size_t ii, ...) */
   template <typename Functor>
   void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
-    Kokkos::parallel_for("write_gridboxes", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
+    Kokkos::parallel_for("write_gridboxes_range", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+                         functor);
+  }
+};
+
+/* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
+struct ParallelGridboxesTeamPolicy {
+  /* parallel loop over gridboxes using Kokkos Team Policy.
+  Functor must have operator with signature: operator()(const TeamMember &team_member, ...) */
+  template <typename Functor>
+  void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
+    const size_t ngbxs(d_gbxs.extent(0));
+    Kokkos::parallel_for("write_gridboxes_team", TeamPolicy(ngbxs, Kokkos::AUTO()), functor);
   }
 };
 
