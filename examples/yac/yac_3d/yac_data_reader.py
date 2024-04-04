@@ -124,154 +124,33 @@ for timestep in range(5):
                 upper_index = w_timestep_offset + vertical_level_offset + ((lat_index + 1) // 2) * len(lon)
                 united_edge_data.extend(wvel[lower_index:upper_index])
 
-# generic version for cell and horizontal edge coupling
-# for timestep in range(5):
-#     timestep_cell_offset = timestep * 2250
-#     timestep_edge_offset = timestep * 4665
-#     for vertical_level in range(3):
-#         vertical_level_cell_offset = vertical_level * 750
-#         vertical_level_edge_offset = vertical_level * 1555
-#
-#         cell_lower_index = timestep_cell_offset + vertical_level_cell_offset
-#         cell_upper_index = cell_lower_index + 750
-#
-#         edge_lower_index = timestep_edge_offset + vertical_level_edge_offset
-#         edge_upper_index = edge_lower_index + 1555
-#
-#         press.put(press_values[cell_lower_index:cell_upper_index])
-#         temp.put(temp_values[cell_lower_index:cell_upper_index])
-#         qvap.put(qvap_values[cell_lower_index:cell_upper_index])
-#         qcond.put(qcond_values[cell_lower_index:cell_upper_index])
-#         hor_wind_velocities.put(np.asarray(united_edge_data[edge_lower_index:edge_upper_index]))
+# somewhat generic version for cell and horizontal edge coupling
+for timestep in range(5):
+    timestep_cell_offset = timestep * 2250
+    timestep_edge_offset = timestep * 4665
+    vertical_winds_lower_index = timestep * 3000
+    vertical_winds_upper_index = vertical_winds_lower_index + 750
 
-# Use YAC to exchange the values for first timestep
-vvel.put(vvel_values[0:750])
-press.put(press_values[0:750])
-temp.put(temp_values[0:750])
-qvap.put(qvap_values[0:750])
-qcond.put(qcond_values[0:750])
-hor_wind_velocities.put(np.asarray(united_edge_data[0:1555]))
+    vvel.put(vvel_values[vertical_winds_lower_index:vertical_winds_upper_index])
 
-# Use YAC to exchange the values for second timestep
-vvel.put(vvel_values[750:1500])
-press.put(press_values[750:1500])
-temp.put(temp_values[750:1500])
-qvap.put(qvap_values[750:1500])
-qcond.put(qcond_values[750:1500])
-hor_wind_velocities.put(np.asarray(united_edge_data[1555:3110]))
+    for vertical_level in range(3):
+        vertical_level_cell_offset = vertical_level * 750
+        vertical_level_edge_offset = vertical_level * 1555
 
-# Use YAC to exchange the values for third timestep
-vvel.put(vvel_values[1500:2250])
-press.put(press_values[1500:2250])
-temp.put(temp_values[1500:2250])
-qvap.put(qvap_values[1500:2250])
-qcond.put(qcond_values[1500:2250])
-hor_wind_velocities.put(np.asarray(united_edge_data[3110:4665]))
+        cell_lower_index = timestep_cell_offset + vertical_level_cell_offset
+        cell_upper_index = cell_lower_index + 750
 
-vvel.put(vvel_values[2250:3000])
+        edge_lower_index = timestep_edge_offset + vertical_level_edge_offset
+        edge_upper_index = edge_lower_index + 1555
 
-# Use YAC to exchange the values for fourth timestep
-vvel.put(vvel_values[3000:3750])
-press.put(press_values[2250:3000])
-temp.put(temp_values[2250:3000])
-qvap.put(qvap_values[2250:3000])
-qcond.put(qcond_values[2250:3000])
-hor_wind_velocities.put(np.asarray(united_edge_data[4665:6220]))
+        vertical_winds_lower_index = vertical_winds_upper_index
+        vertical_winds_upper_index = vertical_winds_lower_index + 750
 
-# Use YAC to exchange the values for second timestep
-vvel.put(vvel_values[3750:4500])
-press.put(press_values[3000:3750])
-temp.put(temp_values[3000:3750])
-qvap.put(qvap_values[3000:3750])
-qcond.put(qcond_values[3000:3750])
-hor_wind_velocities.put(np.asarray(united_edge_data[6220:7775]))
-
-# Use YAC to exchange the values for third timestep
-vvel.put(vvel_values[4500:5250])
-press.put(press_values[3750:4500])
-temp.put(temp_values[3750:4500])
-qvap.put(qvap_values[3750:4500])
-qcond.put(qcond_values[3750:4500])
-hor_wind_velocities.put(np.asarray(united_edge_data[7775:9330]))
-
-vvel.put(vvel_values[5250:6000])
-
-# Use YAC to exchange the values for fourth timestep
-vvel.put(vvel_values[6000:6750])
-press.put(press_values[4500:5250])
-temp.put(temp_values[4500:5250])
-qvap.put(qvap_values[4500:5250])
-qcond.put(qcond_values[4500:5250])
-hor_wind_velocities.put(np.asarray(united_edge_data[9330:10885]))
-
-# Use YAC to exchange the values for second timestep
-vvel.put(vvel_values[6750:7500])
-press.put(press_values[5250:6000])
-temp.put(temp_values[5250:6000])
-qvap.put(qvap_values[5250:6000])
-qcond.put(qcond_values[5250:6000])
-hor_wind_velocities.put(np.asarray(united_edge_data[10885:12440]))
-
-# Use YAC to exchange the values for third timestep
-vvel.put(vvel_values[7500:8250])
-press.put(press_values[6000:6750])
-temp.put(temp_values[6000:6750])
-qvap.put(qvap_values[6000:6750])
-qcond.put(qcond_values[6000:6750])
-hor_wind_velocities.put(np.asarray(united_edge_data[12440:13995]))
-
-vvel.put(vvel_values[8250:9000])
-
-# Use YAC to exchange the values for fourth timestep
-vvel.put(vvel_values[9000:9750])
-press.put(press_values[6750:7500])
-temp.put(temp_values[6750:7500])
-qvap.put(qvap_values[6750:7500])
-qcond.put(qcond_values[6750:7500])
-hor_wind_velocities.put(np.asarray(united_edge_data[13995:15550]))
-
-# Use YAC to exchange the values for second timestep
-vvel.put(vvel_values[9750:10500])
-press.put(press_values[7500:8250])
-temp.put(temp_values[7500:8250])
-qvap.put(qvap_values[7500:8250])
-qcond.put(qcond_values[7500:8250])
-hor_wind_velocities.put(np.asarray(united_edge_data[15550:17105]))
-
-# Use YAC to exchange the values for third timestep
-vvel.put(vvel_values[10500:11250])
-press.put(press_values[8250:9000])
-temp.put(temp_values[8250:9000])
-qvap.put(qvap_values[8250:9000])
-qcond.put(qcond_values[8250:9000])
-hor_wind_velocities.put(np.asarray(united_edge_data[17105:18660]))
-
-vvel.put(vvel_values[11250:12000])
-
-# Use YAC to exchange the values for fourth timestep
-vvel.put(vvel_values[12000:12750])
-press.put(press_values[9000:9750])
-temp.put(temp_values[9000:9750])
-qvap.put(qvap_values[9000:9750])
-qcond.put(qcond_values[9000:9750])
-hor_wind_velocities.put(np.asarray(united_edge_data[18660:20215]))
-
-# Use YAC to exchange the values for second timestep
-vvel.put(vvel_values[12750:13500])
-press.put(press_values[9750:10500])
-temp.put(temp_values[9750:10500])
-qvap.put(qvap_values[9750:10500])
-qcond.put(qcond_values[9750:10500])
-hor_wind_velocities.put(np.asarray(united_edge_data[20215:21770]))
-
-# Use YAC to exchange the values for third timestep
-vvel.put(vvel_values[13500:14250])
-press.put(press_values[10500:11250])
-temp.put(temp_values[10500:11250])
-qvap.put(qvap_values[10500:11250])
-qcond.put(qcond_values[10500:11250])
-hor_wind_velocities.put(np.asarray(united_edge_data[21770:23325]))
-
-vvel.put(vvel_values[14250:15000])
+        vvel.put(vvel_values[vertical_winds_lower_index:vertical_winds_upper_index])
+        press.put(press_values[cell_lower_index:cell_upper_index])
+        temp.put(temp_values[cell_lower_index:cell_upper_index])
+        qvap.put(qvap_values[cell_lower_index:cell_upper_index])
+        qcond.put(qcond_values[cell_lower_index:cell_upper_index])
+        hor_wind_velocities.put(np.asarray(united_edge_data[edge_lower_index:edge_upper_index]))
 
 del yac
