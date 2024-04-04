@@ -148,6 +148,7 @@ inline std::string make_xarray_metadata(const std::string_view units, const std:
         "\n}");
     return zattrs;
   } else {
+    assert((scale_factor == 1.0) && "scale_factor cannot be used on non-floating point type");
     const auto zattrs = std::string(
         "{\n"
         "  \"_ARRAY_DIMENSIONS\": " +
@@ -194,6 +195,7 @@ inline std::string make_xarray_metadata(const std::string_view units, const std:
         "\n}");
     return zattrs;
   } else {
+    assert((scale_factor == 1.0) && "scale_factor cannot be used on non-floating point type");
     const auto zattrs = std::string(
         "{\n"
         "  \"_ARRAY_DIMENSIONS\": " +
