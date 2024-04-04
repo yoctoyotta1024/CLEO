@@ -301,8 +301,7 @@ void CartesianDynamics::set_winds(const Config &config) {
     case 2:
     case 3:  // 1-D, 2-D or 3-D model
     {
-      const std::string windstr(set_winds_from_binaries(
-          nspacedims, config.wvel_filename, config.uvel_filename, config.vvel_filename));
+      const std::string windstr(set_winds_from_yac(nspacedims));
       std::cout << windstr;
     } break;
 
@@ -314,10 +313,7 @@ void CartesianDynamics::set_winds(const Config &config) {
 /* Read in data from binary files for wind
 velocity components in 1D, 2D or 3D model
 and check they have correct size */
-std::string CartesianDynamics::set_winds_from_binaries(const unsigned int nspacedims,
-                                                       std::string_view wvel_filename,
-                                                       std::string_view uvel_filename,
-                                                       std::string_view vvel_filename) {
+std::string CartesianDynamics::set_winds_from_yac(const unsigned int nspacedims) {
   std::string infostart(std::to_string(nspacedims) + "-D model, wind velocity");
 
   std::string infoend;
