@@ -443,50 +443,139 @@ sddata = SupersData(
 lagrange = sddata.to_Dataset()
 
 # %%
+def ak_apply(array, np_func, kwargs) :
+    counts = ak.num(array)
+
+    flat = ak.flatten(array)
+    flat.type.show()
+    flat = np_func(flat, **kwargs)
+
+    return ak.unflatten(array=flat, counts=counts) 
+
+# %%
 # create the output dimensions of the numpy array which are necessary to store the data
 
-# def variable_to_lagrange_array(self, varname : str) :
-#     """
-#     This function converts a variable of the superdroplet dataset to a numpy array with the dimensions of the superdroplet dataset.
-#     The function assumes that the variable is a scalar value for each superdroplet at each time step.
 
-#     The input array might look like this:
+data = ak.Array([
+        [10, 20, 30],
+        [],
+        [40, 50],
+    ])
+time = ak.Array([
+        10.0,
+        20.0,
+        45.0,
+    ])
+id = ak.Array([
+        [0, 1, 2],
+        [],
+        [2, 1],
+    ])
+x0 = ak.Array([
+        [0, 0, 1],
+        [],
+        [1, 1],
+    ])
+x1 = ak.Array([
+        [1, 0, 0],
+        [],
+        [0, 0],
+    ])
+x2 = ak.Array([
+        [0, 0, 0],
+        [],
+        [0, 0],
+    ])
 
-#     """
+data = sddata["xi"]
+time = sddata.time
+id = sddata["sdId"]
+x0 = sddata["coord1"]
+x1 = sddata["coord2"]
+x2 = sddata["coord3"]
+x2 = ak_apply(x2, np.digitize, {"bins" : np.arange(0, 1200, 20)})
+
+reduction_dim = id
+dim1 = time
+dim1_as_index = False
+if dim1_as_index is False:
+    T = int(ak.num(dim1, axis = 0))
+    leading_dim = np.arange(T)
+else :
+    leading_dim = dim1
+    T = int(ak.max(dim1) + 1)
+
+# The superdroplets are identified by their id.
+# Use the maximum value of the superdroplet index
+# The ids start with id "0", so the maximum id is the number of superdroplets - 1!
+S = int(ak.max(reduction_dim) + 1)
+
+def get_index(dim : ak.Array, leading_dim = leading_dim, reduction_dim = reduction_dim) :
+    if ak.count(dim) > 0:
+        L = int(ak.max(dim) + 1)
+        t, l = ak.unzip(ak.flatten(ak.cartesian((leading_dim, dim), axis = 1)))
+    else :
+        L = 1
+        t, l = ak.unzip(ak.flatten(ak.cartesian((leading_dim, reduction_dim), axis = 1)))
+        l = l * 0
+    return L, t, l
+
+M, t0, i = get_index(x0)
+N, t1, j = get_index(x1)
+O, t2, k = get_index(x2)
+
+# check if the resulting array is sparse and inform the User
+
+# The list of tuples is then unzipped, to seperate the time and superdroplet indeices into two arrays
+t_red, s = ak.unzip(ak.flatten(ak.cartesian((leading_dim, reduction_dim), axis = 1)))
+if np.all((t0 == t1) & (t0 == t2)) == True:
+    t = t0
+else:
+    raise ValueError("The time indices are not the same for all dimensions.")
+
+# check if the resulting array is sparse and inform the User
+filled_percentage = ak.count(reduction_dim) / (T * M * N * O * S) * 100
+print(f"{filled_percentage:.2f} % of the regular array is filled with values.")
+    
+result_numpy = np.full((T, M, N, O, S), np.nan)
+result_numpy[t, i, j, k, s] = ak.flatten(data)
+
+result = np.sum(result_numpy, axis = -1, where=~np.isnan(result_numpy))
+result[(~np.isnan(result_numpy)).sum(axis = -1) > 0] = np.nan
+100*(1 - (np.sum(np.isnan(result)) / result.size))
+# da = xr.DataArray(
+#     result_numpy,
+#     dims = ["time", "x0", "x1", "x2", "id"],
+#     coords = {
+#         "time" : time.to_list(),
+#         "x0" : np.arange(M),
+#         "x1" : np.arange(N),
+#         "x2" : np.arange(O),
+#         "id" : np.arange(S),
+#         },
+# )
+# da.mean("id")
+# Check if the indice tuples are unique.
+# For this, one can simply compute the index value they represented in a raveled array.
+# so i * N + j should be unique for all i, j
+# flattened_index = i * N + j
+# if check_indices_uniqueness is True :
+#     if not ak.count(i * N + j) == ak.count(np.unique(i * N + j)) :
+#         raise ValueError(
+#             "The indice tuples are not unique.\n"\
+#             +"This would lead to overwriting values in the numpy array.\n"\
+#             +"The reason might be, that the time indices aren't unique along axis 0 already.\n"
+#             )
+# else :
+#     warnings.warn("The uniqueness of the indices is not checked. This might lead to overwriting values in the numpy array.")
+
+# result_numpy = np.empty((T, N)) * np.nan
+# result_numpy[i, j] = ak.flatten(data)
+# return result_numpy
 
 
-#     # create the output dimensions of the numpy array which are necessary to store the data.
-#     T = int(ak.num(self.time, axis = 0))
-#     time_index = np.arange(T)
-#     # the superdroplets are identified by their id.
-#     # The ids start with id "0", so the maximum id is the number of superdroplets - 1!
-#     superdroplet_index = self["sdId"]
-#     N = int(ak.max(self["sdId"]) + 1)
 
-#     if ak.count(superdroplet_index) != ak.count(self[varname]):
-#         raise ValueError(f"The number of superdroplets ({ak.count(superdroplet_index)}) and the number of values in the variable ({ak.count(sddata[varname])}) do not match")
-#     if not ak.all(ak.num(self[varname]) == ak.num(self[varname])):
-#         raise ValueError(f"The number of superdroplets and the number of values in the variable do not match for all time steps")
-
-#     # check if the resulting array is sparse and inform the User
-#     filled_percentage = ak.count(superdroplet_index) / (N * T) * 100
-#     print(f"{filled_percentage:.2f} % of the regular array is filled with values. Total number of values is {ak.count(superdroplet_index)} out of {N * T} possible values.")
-#     if filled_percentage < 80:
-#         warnings.warn(f"The resulting array is sparse. This might lead to significant memory usage")
-
-#     # create tuples of all datapoint in the variable's akward array
-#     # For this, a cartesian product of the time_index and the superdroplet_index is created
-#     # The cartesian product is a tuple of all possible combinations of the two arrays
-#     # The resulting array is then flattened to have a list of tuples
-#     # The list of tuples is then unzipped, to seperate the time and superdroplet indeices into two arrays
-#     i, j = ak.unzip(ak.flatten(ak.cartesian((time_index, superdroplet_index))))
-
-#     result_numpy = np.empty((T, N)) * np.nan
-#     result_numpy[i, j] = ak.flatten(self[varname])
-
-
-
-result = akward_array_to_lagrange_array(sddata["xi"], sddata.time, sddata["sdId"])
+# result = akward_array_to_lagrange_array(sddata["xi"], sddata.time, sddata["sdId"])
 # %%
 # t = np.arange(len(sddata.time))
 # i = sddata.sdId
