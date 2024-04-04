@@ -114,6 +114,8 @@ inline std::string scale_factor_string(const double scale_factor) {
   oss << std::scientific << std::setprecision(prec) << scale_factor;
   std::string scale_factor_str = oss.str();
 
+  // TODO(CB) scale factor is cause of uint32 unrecogniseD?
+
   return scale_factor_str;
 }
 
