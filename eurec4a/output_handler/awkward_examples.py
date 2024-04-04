@@ -97,8 +97,8 @@ def akward_array_to_lagrange_array(data : ak.Array, dim1 : ak.Array, dim2 : ak.A
     The function assumes that the variable is a scalar value for each superdroplet at each time step.
 
     If you want to use it with the SupersData class, you can use the following syntax:
-    >>> akward_array_to_lagrange_array(sddata[varname], sddata.time, sddata["sdId"]) 
-    
+    >>> akward_array_to_lagrange_array(sddata[varname], sddata.time, sddata["sdId"])
+
     It will create a regular numpy array with the dimensions of the superdroplet dataset.
     N : number of superdroplets
     T : number of time steps
@@ -119,14 +119,14 @@ def akward_array_to_lagrange_array(data : ak.Array, dim1 : ak.Array, dim2 : ak.A
     Values in ``dim1`` are not used as indices by default!
     If ``dim1_as_index`` is set to ``True``, the values of ``dim1`` are used as indices for the rows of the output array!
 
-         
+
     Parameters
     ----------
     data : ak.Array
         The variable of the superdroplet dataset. The variable must be a scalar value for each superdroplet at each time step.
     dim1 : ak.Array
         The first dimension of the output numpy array. This is usually the time dimension.
-        It is not used as index by default.	
+        It is not used as index by default.
         This can be changed by setting ``dim1_as_index`` to ``True``.
     dim2 : ak.Array
         The second dimension of the output numpy array. This is usually the superdroplet dimension.
@@ -178,7 +178,7 @@ def akward_array_to_lagrange_array(data : ak.Array, dim1 : ak.Array, dim2 : ak.A
 
     In the following example, the time_index is used. As seen, the combination (0,0) from "time_index"and "id" is given twice. The last value will overwrite the previous.
     The check for uniqueness would through a ValueError.
-    
+
     >>> data = ak.Array([
             [10, 20, 30],
             [],
@@ -205,22 +205,22 @@ def akward_array_to_lagrange_array(data : ak.Array, dim1 : ak.Array, dim2 : ak.A
     ... ValueError: The indice tuples are not unique.
     ... This would lead to overwriting values in the numpy array.
     ... The reason might be, that the time indices aren't unique along axis 0 already.
-        
+
     """
 
 
     # create the output dimensions of the numpy array which are necessary to store the data.
-    
+
     if dim1_as_index is False:
         T = int(ak.num(dim1, axis = 0))
         time_index = np.arange(T)
-    else : 
+    else :
         time_index = dim1
         T = int(ak.max(dim1) + 1)
     # The superdroplets are identified by their id.
     # Use the maximum value of the superdroplet index
     # The ids start with id "0", so the maximum id is the number of superdroplets - 1!
-    N = int(ak.max(dim2) + 1)    
+    N = int(ak.max(dim2) + 1)
     superdroplet_index = dim2
 
     if ak.count(superdroplet_index) != ak.count(data):
@@ -239,7 +239,7 @@ def akward_array_to_lagrange_array(data : ak.Array, dim1 : ak.Array, dim2 : ak.A
     # The cartesian product is a tuple of all possible combinations of the two arrays
     # It is important to do this along axis 0 (time dimension). Otherwise, only unique combinations are created
     # The resulting array is then flattened to have a list of tuples
-    # The list of tuples is then unzipped, to seperate the time and superdroplet indeices into two arrays 
+    # The list of tuples is then unzipped, to seperate the time and superdroplet indeices into two arrays
     i, j = ak.unzip(ak.flatten(ak.cartesian((time_index, superdroplet_index), axis = 1)))
 
 
@@ -429,13 +429,13 @@ class SupersData(SuperdropProperties):
         varnames = ["sdId", "sdgbxindex", "xi", "radius", "coord3", "coord1", "coord2"]
         result_list = []
         for varname in varnames:
-            try : 
+            try :
                 result_list.append(self.variable_regular_array(varname, xr.DataArray))
             except ValueError:
                 print(f"Could not create regular array for {varname}")
         result = xr.Dataset(dict(zip(varnames, result_list)))
         return result
-        
+
 sddata = SupersData(
     dataset = str(dataset),
     consts = consts
@@ -478,7 +478,7 @@ lagrange = sddata.to_Dataset()
 #     # For this, a cartesian product of the time_index and the superdroplet_index is created
 #     # The cartesian product is a tuple of all possible combinations of the two arrays
 #     # The resulting array is then flattened to have a list of tuples
-#     # The list of tuples is then unzipped, to seperate the time and superdroplet indeices into two arrays 
+#     # The list of tuples is then unzipped, to seperate the time and superdroplet indeices into two arrays
 #     i, j = ak.unzip(ak.flatten(ak.cartesian((time_index, superdroplet_index))))
 
 #     result_numpy = np.empty((T, N)) * np.nan
