@@ -356,8 +356,10 @@ class XarrayZarrArray {
   }
 
   /**
-   * @brief Sets shape of array along each dimension to be the same size as shape according to zarr.
-   * to write the shape of a ragged array.
+   * @brief Sets shape of array along each dimension to be the same a expected for a 1-D ragged
+   * array.
+   *
+   * Expected shape is 1-D array with size of the total number of elements written to a zarr array.
    *
    * If chunks have been written since last writing of the arrayshape, then function also overwrites
    * the .zarray json file with metadata containing the new shape of the array.
