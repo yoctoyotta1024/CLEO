@@ -67,67 +67,6 @@ class ParallelWriteGridboxes {
   }
 };
 
-/* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
-gridboxes in a parallel loop and write it to arrays in a dataset */
-template <typename Store, CollectDataForDataset<Store> CollectData>
-class ParallelWriteGridboxesRangePolicy {
- private:
-  const Dataset<Store> &dataset;  ///< dataset to write data to
-  CollectData collect_data;  ///< functions to collect data within gbxs loop and write in dataset
-
-  /* parallel loop over gridboxes using Kokkos Range Policy */
-  template <typename Functor>
-  void parallel_write_gridboxes(const Functor functor, const viewd_constgbx d_gbxs) const {
-    const size_t ngbxs(d_gbxs.extent(0));
-    Kokkos::parallel_for("write_gridboxes", Kokkos::RangePolicy<ExecSpace>(0, ngbxs), functor);
-  }
-
- public:
-  ParallelWriteGridboxesRangePolicy(const Dataset<Store> &dataset, CollectData collect_data)
-      : dataset(dataset), collect_data(collect_data) {}
-
-  ~ParallelWriteGridboxesRangePolicy() { collect_data.write_arrayshapes(dataset); }
-
-  /* Use the CollectData instance's functor to collect data from gridboxes in a parallel loop.
-    Then write the data in the dataset. Inclusion of totsupers so that object can be used as
-    "ParallelWriteData" function in DoWriteToDataset struct */
-  void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
-    auto functor = collect_data.get_functor(d_gbxs, totsupers);
-    parallel_write_gridboxes(functor, d_gbxs);
-    collect_data.write_to_arrays(dataset);
-  }
-};
-
-/* same struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
-gridboxes in a parallel loop and write it to arrays in a dataset */
-template <typename Store, CollectDataForDataset<Store> CollectData>
-class ParallelWriteGridboxesTeamPolicy {
- private:
-  const Dataset<Store> &dataset;  ///< dataset to write data to
-  CollectData collect_data;  ///< functions to collect data within gbxs loop and write in dataset
-
-  /* parallel loop over gridboxes using Kokkos Range Policy */
-  template <typename Functor>
-  void parallel_write_gridboxes(const Functor functor, const viewd_constgbx d_gbxs) const {
-    // TODO(CB)
-  }
-
- public:
-  ParallelWriteGridboxesTeamPolicy(const Dataset<Store> &dataset, CollectData collect_data)
-      : dataset(dataset), collect_data(collect_data) {}
-
-  ~ParallelWriteGridboxesTeamPolicy() { collect_data.write_arrayshapes(dataset); }
-
-  /* Use the CollectData instance's functor to collect data from gridboxes in a parallel loop.
-    Then write the data in the dataset. Inclusion of totsupers so that object can be used as
-    "ParallelWriteData" function in DoWriteToDataset struct */
-  void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
-    auto functor = collect_data.get_functor(d_gbxs, totsupers);
-    parallel_write_gridboxes(functor, d_gbxs);
-    collect_data.write_to_arrays(dataset);
-  }
-};
-
 /**
  * @brief Concept for CollectRaggedCount is all types that have functions for writing the ragged
  * count of superdroplet arrays to an array in a dataset.
