@@ -128,13 +128,57 @@ struct CollectMassMoments {
   void reallocate_views(const size_t sz) const {}
 };
 
+template <typename Store, typename T>
+XarrayZarrArray<Store, T> create_massmoment_xarray(const Dataset<Store> &dataset,
+                                                   const std::string_view name,
+                                                   const std::string_view units,
+                                                   const std::string_view dtype,
+                                                   const double scale_factor, const size_t maxchunk,
+                                                   const size_t ngbxs) {
+  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
+  const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
+  return dataset.template create_array<T>(name, units, dtype, scale_factor, chunkshape, dimnames);
+}
+
+template <typename Store>
+XarrayZarrArray<Store, uint32_t> create_massmom0_xarray(const Dataset<Store> &dataset,
+                                                        const std::string_view name,
+                                                        const size_t maxchunk, const size_t ngbxs) {
+  const auto units = std::string_view("");
+  return create_massmoment_xarray<Store, uint32_t>(dataset, name, units, "<u4", 1, maxchunk, ngbxs);
+}
+
+template <typename Store>
+XarrayZarrArray<Store, float> create_massmom1_xarray(const Dataset<Store> &dataset,
+                                                     const std::string_view name,
+                                                     const size_t maxchunk, const size_t ngbxs) {
+  const auto units = std::string_view("g");
+  constexpr auto scale_factor = dlc::MASS0grams;
+  return create_massmoment_xarray<Store, float>(dataset, name, units, "<f4", scale_factor, maxchunk,
+                                                ngbxs);
+}
+
+template <typename Store>
+XarrayZarrArray<Store, float> create_massmom2_xarray(const Dataset<Store> &dataset,
+                                                     const std::string_view name,
+                                                     const size_t maxchunk, const size_t ngbxs) {
+  const auto units = std::string_view("g^2");
+  constexpr auto scale_factor = dlc::MASS0grams * dlc::MASS0grams;
+  return create_massmoment_xarray<Store, float>(dataset, name, units, "<f4", scale_factor, maxchunk,
+                                                ngbxs);
+}
+
 /* constructs observer which writes mass moments of droplet distribution in each gridbox
 with a constant timestep 'interval' using an instance of the WriteToDatasetObserver class */
 template <typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                          const int maxchunk, const size_t ngbxs) {
+  const auto xzarr_mom0 = create_massmom0_xarray(dataset, "massmom0", maxchunk, ngbxs);
+  const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1", maxchunk, ngbxs);
+  const auto xzarr_mom2 = create_massmom2_xarray(dataset, "massmom2", maxchunk, ngbxs);
+
   const CollectDataForDataset<Store> auto massmoments =
-      CollectMassMoments(ffunc, xzarr_mom0, xzarr_mom1, xzarr_mom2, ngbxs);  // TODO(CB) WIP
+      CollectMassMoments(ffunc, xzarr_mom0, xzarr_mom1, xzarr_mom2, ngbxs);
   const auto parallel_write =
       ParallelWriteGridboxes(ParallelGridboxesTeamPolicyFunc{}, dataset, massmoments);
   return WriteToDatasetObserver(interval, parallel_write);
@@ -146,8 +190,12 @@ template <typename Store>
 inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
                                                   const Dataset<Store> &dataset, const int maxchunk,
                                                   const size_t ngbxs) {
+  const auto xzarr_mom0 = create_massmom0_xarray(dataset, "massmom0_raindrops", maxchunk, ngbxs);
+  const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1_raindrops", maxchunk, ngbxs);
+  const auto xzarr_mom2 = create_massmom2_xarray(dataset, "massmom2_raindrops", maxchunk, ngbxs);
+
   const CollectDataForDataset<Store> auto massmoments_raindrops =
-      CollectMassMoments(ffunc, xzarr_mom0, xzarr_mom1, xzarr_mom2, ngbxs);  // TODO(CB) WIP
+      CollectMassMoments(ffunc, xzarr_mom0, xzarr_mom1, xzarr_mom2, ngbxs);
   const auto parallel_write =
       ParallelWriteGridboxes(ParallelGridboxesTeamPolicyFunc{}, dataset, massmoments_raindrops);
   return WriteToDatasetObserver(interval, parallel_write);
