@@ -47,7 +47,7 @@ CollectDataForDataset<Store> auto CollectSuperdropVariable(
     const std::string_view units, const std::string_view dtype, const double scale_factor,
     const size_t maxchunk) {
   const auto chunkshape = std::vector<size_t>{maxchunk};
-  const auto dimnames = std::vector<std::string>{"time"};
+  const auto dimnames = std::vector<std::string>{"superdroplets"};
   const auto sampledimname = std::string_view("superdroplets");
   const auto xzarr = dataset.template create_ragged_array<T>(name, units, dtype, scale_factor,
                                                              chunkshape, dimnames, sampledimname);
