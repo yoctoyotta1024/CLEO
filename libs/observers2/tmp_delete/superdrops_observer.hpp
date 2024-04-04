@@ -52,7 +52,7 @@ template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                         const int maxchunk) {
   const WriteGridboxToArray<Store, viewd_constsupers> auto xi =
-      GenericWriteSupersToXarray<Store, uint32_t, XiFunc>(dataset, "xi", "", "<u8", 1, maxchunk,
+      GenericWriteSupersToXarray<Store, uint32_t, XiFunc>(dataset, "xi", "", "<u4", 1, maxchunk,
                                                           XiFunc{});
 
   const auto obsfunc = DoWriteSupers(dataset, maxchunk, xi);
