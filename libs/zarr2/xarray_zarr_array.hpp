@@ -263,7 +263,7 @@ class XarrayZarrArray {
 
   /**
    * @brief Constructs a new XarrayZarrArray object with additional variable called
-   * "sample_dimension" in the metadata .zattrs json
+   * "sample_dimension" in the metadata .zattrs json.
    *
    * @param store The store where the array will be stored.
    * @param datasetdims Dictionary like object for the dimensions of the dataset.
