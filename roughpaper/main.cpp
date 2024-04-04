@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,8 +34,8 @@
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers2/gbxindex_observer.hpp"
-#include "observers2/massmoments_observer.hpp"
-#include "observers2/nsupers_observer.hpp"
+// #include "observers2/massmoments_observer.hpp"
+// #include "observers2/nsupers_observer.hpp"
 #include "observers2/observers.hpp"
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
@@ -58,22 +58,26 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  const WriteGridboxToArray<Store, viewd_constgbx> auto thermowriter =
-      ThermoWriter(dataset, maxchunk, config.ngbxs);
-  const WriteGridboxToArray<Store, viewd_constgbx> auto windwriter =
-      WindVelocityWriter(dataset, maxchunk, config.ngbxs);
-  const WriteGridboxToArray<Store, viewd_constgbx> auto nsuperswriter =
-      NsupersWriter(dataset, maxchunk, config.ngbxs);
+  // TODO(CB) WIP
 
-  const auto c = CombineWG2A<Store>{};
-  const WriteGridboxToArray<Store, viewd_constgbx> auto writer =
-      c(c(thermowriter, windwriter), nsuperswriter);
-  const Observer auto obsx =
-      ConstTstepObserver(obsstep, DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, writer));
+  // const WriteGridboxToArray<Store, viewd_constgbx> auto thermowriter =
+  //     ThermoWriter(dataset, maxchunk, config.ngbxs);
+  // const WriteGridboxToArray<Store, viewd_constgbx> auto windwriter =
+  //     WindVelocityWriter(dataset, maxchunk, config.ngbxs);
+  // const WriteGridboxToArray<Store, viewd_constgbx> auto nsuperswriter =
+  //     NsupersWriter(dataset, maxchunk, config.ngbxs);
+
+  // const auto c = CombineWG2A<Store>{};
+  // const WriteGridboxToArray<Store, viewd_constgbx> auto writer =
+  //     c(c(thermowriter, windwriter), nsuperswriter);
+  // const Observer auto obsx =
+  //     ConstTstepObserver(obsstep, DoWriteGridboxes(ParallelGbxsRangePolicy{}, dataset, writer));
 
   // const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
   // const Observer auto obs6 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
   // return obs3 >> obs6;
+
+  const Observer auto obsx = ThermoObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
   return obsx;
 }
@@ -86,14 +90,15 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 
   const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
   const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
-  const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  const Observer auto obs4 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  const Observer auto obs5 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // const Observer auto obs4 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk,
+  // config.ngbxs); const Observer auto obs5 = NsupersObserver(obsstep, dataset, maxchunk,
+  // config.ngbxs);
   const Observer auto obs6 = TotNsupersObserver(obsstep, dataset, maxchunk);
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
   const Observer auto obssd = SuperdropsObserver(obsstep, dataset, maxchunk);
 
-  return obssd >> obsx >> obs6 >> obs4 >> obs3 >> obs2 >> obs1;
+  return obssd >> obsx >> obs6 >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */

@@ -43,12 +43,13 @@ each superdroplet to an array in a dataset in a given store for a given datatype
 function-like functor */
 template <typename Store, typename T, typename FunctorFunc>
 CollectDataForDataset<Store> auto CollectSuperdropVariable(
-    const Functorfunc ffunc, const std::string_view name, const std::string_view units,
-    const std::string_view dtype, const double scale_factor, const size_t maxchunk) {
+    const Dataset<Store> &dataset, const FunctorFunc ffunc, const std::string_view name,
+    const std::string_view units, const std::string_view dtype, const double scale_factor,
+    const size_t maxchunk) {
   const auto chunkshape = std::vector<size_t>{maxchunk};
   const auto dimnames = std::vector<std::string>{"time"};
   const auto sampledimname = std::string_view("superdroplets");
-  const auto xzarr_ptr = std::make_shared(dataset.template create_raggedarray<T>(
+  const auto xzarr_ptr = std::make_shared(dataset.template create_ragged_array<T>(
       name, units, dtype, scale_factor, chunkshape, dimnames, sampledimname));
 
   return GenericCollectData(ffunc, xzarr_ptr, 0);
@@ -96,8 +97,8 @@ class */
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                         const int maxchunk) {
-  const CollectDataForDataset<Store> auto xi =
-      CollectSuperdropVariable<Store, uint32_t, XiFunc>(XiFunc{}, "xi", "", "<u8", 1, maxchunk);
+  const CollectDataForDataset<Store> auto xi = CollectSuperdropVariable<Store, uint32_t, XiFunc>(
+      dataset, XiFunc{}, "xi", "", "<u8", 1, maxchunk);
 
   const CollectRaggedCount<Store> auto ragged_count = RaggedCount(dataset, maxchunk);
 

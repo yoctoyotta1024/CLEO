@@ -53,12 +53,10 @@ struct PressFunc {
 each gridbox to an array in a dataset in a given store for a given datatype and using a given
 function-like functor */
 template <typename Store, typename T, typename FunctorFunc>
-CollectDataForDataset<Store> auto CollectStateVariable(const Functorfunc ffunc,
-                                                       const std::string_view name,
-                                                       const std::string_view units,
-                                                       const std::string_view dtype,
-                                                       const double scale_factor,
-                                                       const size_t maxchunk, const size_t ngbxs) {
+CollectDataForDataset<Store> auto CollectStateVariable(
+    const Dataset<Store> &dataset, const FunctorFunc ffunc, const std::string_view name,
+    const std::string_view units, const std::string_view dtype, const double scale_factor,
+    const size_t maxchunk, const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr_ptr = std::make_shared(
@@ -72,7 +70,7 @@ template <typename Store>
 inline Observer auto ThermoObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                     const int maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto press = CollectStateVariable<Store, float, PressFunc>(
-      PressFunc{}, "press", "hPa", "<f4", dlc::P0 / 100, maxchunk, ngbxs);
+      dataset, PressFunc{}, "press", "hPa", "<f4", dlc::P0 / 100, maxchunk, ngbxs);
 
   const auto collect_thermodata = press;  // TODO(CB) WIP
   return WriteToDatasetObserver(interval, dataset, collect_thermodata);
