@@ -80,12 +80,20 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
+  const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, config.ngbxs);
+  const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, config.ngbxs);
+  const CollectDataForDataset<Store> auto nsupers = CollectNSupers(dataset, maxchunk, config.ngbxs);
+
+  const CollectDataForDataset<Store> auto collect_data = windvel >> thermo;
+
+  return WriteToDatasetObserver(obsstep, dataset, collect_data);
+
   // const Observer auto obst = ThermoObserver(obsstep, dataset, maxchunk, config.ngbxs);
   // const Observer auto obsw = WindVelObserver(obsstep, dataset, maxchunk, config.ngbxs);
   // return obsw >> obst;
 
-  const Observer auto obsx = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  return obsx;
+  // const Observer auto obsx = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // return obsx;
 }
 
 template <typename Store>
