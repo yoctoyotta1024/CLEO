@@ -116,6 +116,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
       pos_zface(0),
       pos_xface(0),
       pos_yface(0),
+      config(config),
       get_wvel(nullwinds()),
       get_uvel(nullwinds()),
       get_vvel(nullwinds()) {

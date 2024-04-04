@@ -53,6 +53,7 @@ struct CartesianDynamics {
   size_t pos_zface;  // for variable defined at gridbox coord3 faces
   size_t pos_xface;  // for variable defined at gridbox coord1 faces
   size_t pos_yface;  // for variable defined at gridbox coord2 faces
+  const Config & config;
 
   /* (thermo)dynamic variables read from file */
   std::vector<double> press;
