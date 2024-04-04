@@ -59,9 +59,9 @@ CollectDataForDataset<Store> auto CollectStateVariable(
     const size_t maxchunk, const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
-  const auto xzarr_ptr = std::make_shared(
-      dataset.template create_array<T>(name, units, dtype, scale_factor, chunkshape, dimnames));
-  return GenericCollectData(ffunc, xzarr_ptr, ngbxs);
+  const auto xzarr =
+      dataset.template create_array<T>(name, units, dtype, scale_factor, chunkshape, dimnames);
+  return GenericCollectData(ffunc, xzarr, ngbxs);
 }
 
 /* constructs observer which writes writes thermodynamic variables from the state of each gridbox

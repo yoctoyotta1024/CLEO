@@ -49,10 +49,10 @@ CollectDataForDataset<Store> auto CollectSuperdropVariable(
   const auto chunkshape = std::vector<size_t>{maxchunk};
   const auto dimnames = std::vector<std::string>{"time"};
   const auto sampledimname = std::string_view("superdroplets");
-  const auto xzarr_ptr = std::make_shared(dataset.template create_ragged_array<T>(
-      name, units, dtype, scale_factor, chunkshape, dimnames, sampledimname));
+  const auto xzarr = dataset.template create_ragged_array<T>(name, units, dtype, scale_factor,
+                                                             chunkshape, dimnames, sampledimname);
 
-  return GenericCollectData(ffunc, xzarr_ptr, 0);
+  return GenericCollectData(ffunc, xzarr, 0);
 }
 
 template <typename Store>
