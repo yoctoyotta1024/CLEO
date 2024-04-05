@@ -412,10 +412,25 @@ class SupersData(SuperdropProperties):
             err = "no known return provided for "+key+" key"
             raise ValueError(err)
     def variable_regular_array(self, varname : str, dtype = np.ndarray) :
+        """
+        This function converts an awkward array to a regular array (either numpy ndarray or xarray DataArray) 
+        based on the provided dtype. The conversion is done for a specific variable name in the dataset.
+
+        Parameters:
+        varname (str): The name of the variable in the dataset to be converted.
+        dtype (type, optional): The type of the output array. It can be either numpy ndarray or xarray DataArray. 
+                                Default is numpy ndarray.
+
+        Returns:
+        numpy.ndarray or xarray.DataArray: The converted regular array.
+
+        Raises:
+        ValueError: If the dtype provided is not supported. Only numpy ndarray and xarray DataArray are supported.
+        """
         if dtype == np.ndarray:
             return akward_array_to_lagrange_array(self[varname], self.time, self["sdId"])
         elif dtype == xr.DataArray:
-            regular_array = akward_array_to_lagrange_array(self[varname], self.time, self["sdId"])
+            regular_array = self.variable_regular_array(varname=varname, dtype=np.ndarray)
             result = xr.DataArray(
                 regular_array,
                 dims = ["time", "sdId"],
@@ -426,7 +441,18 @@ class SupersData(SuperdropProperties):
         else:
             raise ValueError("dtype is not supported. Use np.ndarray, xr.DataArray")
     def to_Dataset(self) :
-        varnames = ["sdId", "sdgbxindex", "xi", "radius", "coord3", "coord1", "coord2"]
+        """
+        This function converts all variables in the dataset to regular arrays (either numpy ndarray or xarray DataArray)
+        and combines them to a xarray Dataset.
+
+        Returns
+        -------
+        xarray.Dataset
+            The dataset with all variables converted to regular arrays.
+            The dimensions are "time" and "sdId" for all variables.
+            The output variables are "sdId", "sdgbxindex", "xi", "radius", "coord1", "coord2", "coord3".
+        """
+        varnames = ["sdId", "sdgbxindex", "xi", "radius", "coord1", "coord2", "coord3"]
         result_list = []
         for varname in varnames:
             try :
@@ -451,6 +477,11 @@ def ak_apply(array, np_func, kwargs) :
     flat = np_func(flat, **kwargs)
 
     return ak.unflatten(array=flat, counts=counts) 
+
+# %%
+
+
+res = akward_array_to_lagrange_array(sddata["xi"], sddata.time, sddata["sdgbxindex"], check_indices_uniqueness=True)
 
 # %%
 # create the output dimensions of the numpy array which are necessary to store the data
@@ -487,13 +518,13 @@ x2 = ak.Array([
         [0, 0],
     ])
 
-data = sddata["xi"]
-time = sddata.time
-id = sddata["sdId"]
-x0 = sddata["coord1"]
-x1 = sddata["coord2"]
-x2 = sddata["coord3"]
-x2 = ak_apply(x2, np.digitize, {"bins" : np.arange(0, 1200, 20)})
+# data = sddata["xi"]
+# time = sddata.time
+# id = sddata["sdId"]
+# x0 = sddata["coord1"]
+# x1 = sddata["coord2"]
+# x2 = sddata["coord3"]
+# x2 = ak_apply(x2, np.digitize, {"bins" : np.arange(0, 1200, 20)})
 
 reduction_dim = id
 dim1 = time
