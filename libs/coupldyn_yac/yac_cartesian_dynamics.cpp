@@ -39,11 +39,16 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
   return std::array<size_t, 3>{k, i, j};
 }
 
+/* This subroutine receives thermodynamic data from YAC for a horizontal slice
+ * of the domain. This horizontal slice is defined in the u and w directions.
+ * The received values are press, temp, qvap, qcond defined on the cell-centers.
+ * united_edge_data receives the data for all the edge-centers, and component
+ * velocities are then placed in uvel and wvel according to their positions.*/
 void CartesianDynamics::receive_hor_slice_from_yac(int cell_offset,
                                                    int u_edges_offset,
                                                    int w_edges_offset) {
   int info, error;
-  double * yac_raw_data = NULL;
+  double *yac_raw_data = NULL;
 
   yac_raw_data = press.data() + cell_offset;
   yac_cget(pressure_yac_id, 1, &yac_raw_data, &info, &error);
@@ -60,6 +65,7 @@ void CartesianDynamics::receive_hor_slice_from_yac(int cell_offset,
   yac_raw_data = united_edge_data.data();
   yac_cget(hor_wind_velocities_yac_id, 1, &yac_raw_data, &info, &error);
 
+  // Splits the horizontal edge data into its components in uvel and wvel
   std::vector<double>::iterator source_it = united_edge_data.begin();
   std::vector<double>::iterator uvel_it = uvel.begin() + u_edges_offset;
   std::vector<double>::iterator wvel_it = wvel.begin() + w_edges_offset;
@@ -74,6 +80,11 @@ void CartesianDynamics::receive_hor_slice_from_yac(int cell_offset,
   }
 }
 
+/* This subroutine is the main entry point for receiving data from YAC.
+ * It checks the dimensionality of the simulation based on the config data.
+ * For 2D simulations it simply becomes a wrapper for receive_hor_slice_from_yac.
+ * For 3D simulations, for each vertical level, it runs receive_hor_slice_from_yac
+ * and gets the cell-centered vertical wind velocities.*/
 void CartesianDynamics::receive_fields_from_yac() {
   int total_horizontal_cells = ndims[0] * ndims[1];
   int total_u_edges = ndims[0] * (ndims[1] + 1);
@@ -109,8 +120,8 @@ CartesianDynamics::CartesianDynamics(const Config &config,
       get_vvel(nullwinds()) {
   std::cout << "\n--- coupled cartesian dynamics from file ---\n";
 
+  // -- YAC initialization and calendar definitions ---
   yac_cinit();
-
   yac_cdef_calendar(YAC_PROLEPTIC_GREGORIAN);
   yac_cdef_datetime("1850-01-01T00:00:00", "1850-12-31T00:00:00");
 
@@ -127,6 +138,8 @@ CartesianDynamics::CartesianDynamics(const Config &config,
   int total_cells[2]      = {ndims[0], ndims[1]};
   int total_vertices[2]   = {ndims[0] + 1, ndims[1] + 1};
   int total_edges[2]      = {ndims[0] * (ndims[1] + 1), ndims[1] * (ndims[0] + 1)};
+  int cell_point_id = -1;
+  int edge_point_id = -1;
 
   vertex_longitudes           = std::vector<double>(ndims[0] + 1, 0);
   vertex_latitudes            = std::vector<double>(ndims[1] + 1, 0);
@@ -183,8 +196,6 @@ CartesianDynamics::CartesianDynamics(const Config &config,
     }
   }
 
-  int cell_point_id = -1;
-  int edge_point_id = -1;
   yac_cdef_points_reg2d(grid_id, total_cells, YAC_LOCATION_CELL,
                         cell_center_longitudes.data(), cell_center_latitudes.data(),
                         &cell_point_id);
@@ -260,6 +271,7 @@ CartesianDynamics::CartesianDynamics(const Config &config,
   // --- End of YAC definitions ---
   yac_cenddef();
 
+  // Initialization of target containers for receiving data
   press            = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
   temp             = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
   qvap             = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
@@ -269,6 +281,7 @@ CartesianDynamics::CartesianDynamics(const Config &config,
   vvel             = std::vector<double>(total_cells[0] * total_cells[1] * (ndims[2] + 1), 0);
   united_edge_data = std::vector<double>(total_edges[0] + total_edges[1], 0);
 
+  // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
   receive_fields_from_yac();
 
   std::cout << "Finished setting up YAC for receiving:\n"
@@ -276,6 +289,8 @@ CartesianDynamics::CartesianDynamics(const Config &config,
                "  water vapour mass mixing ratio,\n"
                "  liquid water mass mixing ratio,\n";
 
+  // Defines the functions that will be used to retrieve data from the containers
+  // (Can probably be simplified)
   set_winds(config);
 
   std::cout << "--- cartesian dynamics from YAC: success ---\n";
