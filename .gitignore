@@ -2,7 +2,7 @@
 *.png
 *.dat
 *.out
-*.ipynb
+# *.ipynb
 *.gif
 *.tar.gz
 .vscode
