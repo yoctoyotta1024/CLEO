@@ -45,13 +45,8 @@ struct CartesianDynamics {
  private:
   using get_winds_func = std::function<std::pair<double, double>(const unsigned int)>;
 
-  /* position in vector for 0th gridbox at current timestep  */
-  const std::array<size_t, 3>
-      ndims;         // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
-  size_t pos;        // for variable defined at gridbox centres
-  size_t pos_zface;  // for variable defined at gridbox coord3 faces
-  size_t pos_xface;  // for variable defined at gridbox coord1 faces
-  size_t pos_yface;  // for variable defined at gridbox coord2 faces
+  // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
+  const std::array<size_t, 3> ndims;
   const Config & config;
 
   /* (thermo)dynamic variables read from file */
