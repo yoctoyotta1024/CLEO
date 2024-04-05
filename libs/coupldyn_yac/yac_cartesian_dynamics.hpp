@@ -49,16 +49,26 @@ struct CartesianDynamics {
   const std::array<size_t, 3> ndims;
   const Config & config;
 
-  /* (thermo)dynamic variables read from file */
-  std::vector<double> press;
-  std::vector<double> temp;
-  std::vector<double> qvap;
-  std::vector<double> qcond;
+  /* --- (thermo)dynamic variables received from YAC --- */
+
+  // Containers for cell-centered fields
+  std::vector<double> press, temp, qvap, qcond;
+
+  // Container for all edge-centered data (as in data in each edge center)
   std::vector<double> united_edge_data;
-  std::vector<double> uvel;
-  std::vector<double> wvel;
+
+  // Target for lon and lat edge data respectively
+  // (these are copied from united_edge_data after receiving from YAC)
+  std::vector<double> uvel, wvel;
+
+  // Container for cell-centered vertical wind velocities
+  // (Only meaningful in 3D simulations)
   std::vector<double> vvel;
 
+  /* --- YAC-specific definitions --- */
+
+  // lon and lat radian values for multiple vertices
+  // (YAC permutes these arrays to generate the final vertex positions)
   std::vector<double> vertex_latitudes;
   std::vector<double> vertex_longitudes;
 
@@ -67,16 +77,17 @@ struct CartesianDynamics {
   int temp_yac_id;
   int qvap_yac_id;
   int qcond_yac_id;
-  int vvel_yac_id;
   int hor_wind_velocities_yac_id;
+  int vvel_yac_id;
+
+  /* --- Private functions --- */
 
   /* depending on nspacedims, read in data
   for 1-D, 2-D or 3-D wind velocity components */
   void set_winds(const Config &config);
 
-  /* Read in data from binary files for wind
-  velocity components in 1D, 2D or 3D model
-  and check they have correct size */
+  /* Read in data from YAC coupling for wind
+  velocity components in 1D, 2D or 3D model */
   std::string set_winds_from_yac(const unsigned int nspacedims);
 
   /* nullwinds retuns an empty function 'func' that returns
@@ -85,20 +96,16 @@ struct CartesianDynamics {
   when setup is 2-D model (x and z only) */
   get_winds_func nullwinds() const;
 
-  /* returns vector of wvel retrieved from binary
-  file called 'filename' where wvel is defined on
-  the z-faces (coord3) of gridboxes */
+  /* returns vector of wvel, uvel and vvel retrieved from the YAC coupling
+   * where wvel is defined on the z-faces (coord3), uvel is defined on the
+   * x-faces (coord1) and vvel is defined on the y-faces (coord2) of gridboxes */
   get_winds_func get_wvel_from_yac() const;
-
-  /* returns vector of yvel retrieved from binary
-  file called 'filename' where uvel is defined on
-  the x-faces (coord1) of gridboxes */
   get_winds_func get_uvel_from_yac() const;
-
-  /* returns vector of vvel retrieved from binary
-  file called 'filename' where vvel is defined on
-  the y-faces (coord2) of gridboxes */
   get_winds_func get_vvel_from_yac() const;
+
+  /* Receives an horizontal slice from yac,
+   meaning a 2D set of grid boxes along u and w directions */
+  void receive_hor_slice_from_yac(int cell_offset, int u_edges_offset, int w_edges_offset);
 
  public:
   CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
@@ -117,26 +124,21 @@ struct CartesianDynamics {
 
   double get_qcond(const size_t ii) const { return qcond.at(ii); }
 
-  /* updates positions to gbx0 in vector (for
-  acessing value at next timestep). Assumes domain
-  is decomposed into cartesian C grid with dimensions
-  (ie. number of gridboxes in each dimension) ndims */
+  /* Public call to receive data from YAC
+   * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
-  void receive_hor_slice_from_yac(int cell_offset, int u_edges_offset, int w_edges_offset);
 };
 
 /* type satisfying CoupledDyanmics solver concept
 specifically for thermodynamics and wind velocities
-that are read from binary files */
+that are received from YAC */
 struct YacDynamics {
  private:
   const unsigned int interval;
   const unsigned int end_time;
   std::shared_ptr<CartesianDynamics> dynvars;  // pointer to (thermo)dynamic variables
 
-  /* increment position of thermodata for 0th gridbox
-  to positon at next timestep (ie. ngridbox_faces
-  further along vector) */
+  /* Calls the get operations to receive data from YAC for each of the fields of interest */
   void run_dynamics(const unsigned int t_mdl) const {
     dynvars->receive_fields_from_yac();
   }
