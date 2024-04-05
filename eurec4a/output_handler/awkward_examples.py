@@ -49,9 +49,6 @@ def ak_apply(array, np_func, kwargs) :
 
     return ak.unflatten(array=flat, counts=counts) 
 
-# %%
-
-
 res = akward_array_to_lagrange_array(sddata["xi"], sddata.time, sddata["sdgbxindex"], check_indices_uniqueness=True)
 
 # %%
