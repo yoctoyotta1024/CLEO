@@ -40,10 +40,11 @@
 #include "initialise/timesteps.hpp"
 #include "observers/massmomentsobs.hpp"
 #include "observers/nsupersobs.hpp"
-#include "observers/observers.hpp"
-#include "observers/printobs.hpp"
-#include "observers/supersattrsobs.hpp"
-#include "observers/timeobs.hpp"
+#include "observers2/gbxindex_observer.hpp"
+#include "observers2/observers.hpp"
+#include "observers2/streamout_observer.hpp"
+#include "observers2/superdrops_observer.hpp"
+#include "observers2/time_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
@@ -55,9 +56,8 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/terminalvelocity.hpp"
-#include "zarr/fsstore.hpp"
-#include "zarr/superdropattrsbuffers.hpp"
-#include "zarr/superdropsbuffers.hpp"
+#include "zarr2/dataset.hpp"
+#include "zarr2/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
                                             const unsigned int couplstep,
@@ -117,8 +117,9 @@ inline Observer auto create_supersattrs_observer(const unsigned int interval, FS
   return SupersAttrsObserver(interval, store, maxchunk, buffers);
 }
 
+template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     FSStore &store) {
+                                     Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
@@ -135,12 +136,14 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   return obs1 >> obs2 >> obs3 >> obs4 >> obs5;
 }
 
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, FSStore &store) {
+template <typename Store>
+inline auto inline auto create_sdm(const Config &config, const Timesteps &tsteps,
+                                   Dataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
-  const Observer auto obs(create_observer(config, tsteps, store));
+  const Observer auto obs(create_observer(config, tsteps, dataset));
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
