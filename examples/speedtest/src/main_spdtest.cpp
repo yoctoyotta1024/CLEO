@@ -145,17 +145,17 @@ inline Observer auto create_gridboxes_observer(const unsigned int interval, Data
 template <typename Store>
 inline Observer auto create_bulk_observer(const unsigned int interval, Dataset<Store> &dataset,
                                           const int maxchunk, const size_t ngbxs) {
-  const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
+  const Observer auto obs2 = TimeObserver(interval, dataset, maxchunk, &step2dimlesstime);
 
   const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, ngbxs);
 
-  const Observer auto obs4 = TotNsupersObserver(obsstep, dataset, maxchunk);
+  const Observer auto obs4 = TotNsupersObserver(interval, dataset, maxchunk);
 
-  const Observer auto obs5 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
+  const Observer auto obs5 = MassMomentsObserver(interval, dataset, maxchunk, ngbxs);
 
-  const Observer auto obs6 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, ngbxs);
+  const Observer auto obs6 = MassMomentsRaindropsObserver(interval, dataset, maxchunk, ngbxs);
 
-  const Observer auto obsgbx = create_gridboxes_observer(obsstep, dataset, maxchunk, ngbxs);
+  const Observer auto obsgbx = create_gridboxes_observer(interval, dataset, maxchunk, ngbxs);
 
   return obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2;
 }
