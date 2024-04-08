@@ -34,7 +34,25 @@ KOKKOS_FUNCTION
 MassMomentsFunc::operator()(const TeamMember & team_member, const viewd_constgbx d_gbxs,
                             Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
                             Buffer<float>::mirrorviewd_buffer d_mom1,
-                            Buffer<float>::mirrorviewd_buffer d_mom2) {}
+                            Buffer<float>::mirrorviewd_buffer d_mom2) {
+  const auto ii = team_member.league_rank();
+  const auto supers(d_gbxs(ii).supersingbx.readonly());
+
+  const size_t nsupers(supers.extent(0));
+  Kokkos::parallel_reduce(
+      Kokkos::TeamThreadRange(team_member, nsupers),
+      KOKKOS_LAMBDA(const size_t kk, uint32_t &m0, float &m1, float &m2) {
+        const auto &drop(supers(kk));
+
+        m0 += static_cast<uint32_t>(drop.get_xi());
+
+        const auto mass = drop.mass();
+        const auto xi = static_cast<double>(drop.get_xi());  // cast multiplicity to double
+        m1 += static_cast<float>(xi * mass);
+        m2 += static_cast<float>(xi * mass * mass);
+      },
+      d_mom0(ii), d_mom1(ii), d_mom2(ii));  // {0th, 1st, 2nd} mass moments
+}
 
 /* Function performs calculation of 0th, 1st and 2nd moments of the (real)
 raindroplet mass distribution in each gridbox, i.e. 0th, 3rd and 6th moments of the raindroplet
@@ -49,4 +67,24 @@ KOKKOS_FUNCTION
 RaindropsMassMomentsFunc::operator()(const TeamMember & team_member, const viewd_constgbx d_gbxs,
                                      Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
                                      Buffer<float>::mirrorviewd_buffer d_mom1,
-                                     Buffer<float>::mirrorviewd_buffer d_mom2) {}
+                                     Buffer<float>::mirrorviewd_buffer d_mom2) {
+  constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
+  const auto ii = team_member.league_rank();
+  const auto supers(d_gbxs(ii).supersingbx.readonly());
+
+  const size_t nsupers(supers.extent(0));
+  Kokkos::parallel_reduce(
+      Kokkos::TeamThreadRange(team_member, nsupers),
+      KOKKOS_LAMBDA(const size_t kk, uint32_t &m0, float &m1, float &m2) {
+        const auto &drop(supers(kk));
+        const auto binary = bool{drop.get_radius() >= rlim};  // 1 if droplet is raindrop, else 0
+
+        m0 += static_cast<uint32_t>(drop.get_xi() * binary);
+
+        const auto mass = drop.mass();
+        const auto xi = static_cast<double>(drop.get_xi());  // cast multiplicity to double
+        m1 += static_cast<float>(xi * mass * binary);
+        m2 += static_cast<float>(xi * mass * mass * binary);
+      },
+      d_mom0(ii), d_mom1(ii), d_mom2(ii));  // {0th, 1st, 2nd} mass moments
+}
