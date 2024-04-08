@@ -159,12 +159,32 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   // return NullMotion{};
 }
 
-inline Observer auto create_supersattrs_observer(const unsigned int interval, FSStore &store,
-                                                 const int maxchunk) {
-  SuperdropsBuffers auto buffers = SdIdBuffer() >> XiBuffer() >> MsolBuffer() >> RadiusBuffer() >>
-                                   Coord3Buffer() >> Coord1Buffer() >> Coord2Buffer() >>
-                                   SdgbxindexBuffer();
-  return SupersAttrsObserver(interval, store, maxchunk, buffers);
+template <typename Store>
+inline Observer auto create_superdrops_observer(const unsigned int interval,
+                                                Dataset<Store> &dataset, const int maxchunk) {
+  CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
+  CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
+  CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
+  CollectDataForDataset<Store> auto msol = CollectMsol(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
+
+  const auto collect_sddata =
+      coord1 >> coord2 >> coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
+  return SuperdropsObserver(interval, dataset, maxchunk, collect_sddata);
+}
+
+template <typename Store>
+inline Observer auto create_gridboxes_observer(const unsigned int interval, Dataset<Store> &dataset,
+                                               const int maxchunk, const size_t ngbxs) {
+  const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);
+
+  const CollectDataForDataset<Store> auto collect_gbxdata = nsupers >> windvel >> thermo;
+  return WriteToDatasetObserver(interval, dataset, collect_gbxdata);
 }
 
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
@@ -174,32 +194,23 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obs0 = RunStatsObserver(obsstep, config.stats_filename);
 
-  const Observer auto obs1 = PrintObserver(obsstep * 10, &step2realtime);
+  const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
 
-  const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk, &step2dimlesstime);
+  const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
-  const Observer auto obs3 = TotNsupersObserver(obsstep, store, maxchunk);
+  const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
 
-  const Observer auto obs4 = GbxindexObserver(store, maxchunk);
+  const Observer auto obs4 = TotNsupersObserver(obsstep, dataset, maxchunk);
 
-  // const Observer auto obs5 = StateObserver(obsstep, store, maxchunk,
-  //                                          config.ngbxs);
+  const Observer auto obs5 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
-  const Observer auto obs6 = NsupersObserver(obsstep, store, maxchunk, config.ngbxs);
+  const Observer auto obs6 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
-  // const Observer auto obs7 = NrainsupersObserver(obsstep, store, maxchunk,
-  //                                                config.ngbxs);
+  const Observer auto obsgbx = create_gridboxes_observer(obsstep, dataset, maxchunk, config.ngbxs);
 
-  const Observer auto obs8 = MassMomentsObserver(obsstep, store, maxchunk, config.ngbxs);
+  const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  // const Observer auto obs9 = RainMassMomentsObserver(obsstep, store, maxchunk,
-  //                                                    config.ngbxs);
-
-  const Observer auto obs10 = create_supersattrs_observer(obsstep, store, maxchunk);
-
-  // return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >>
-  //        obs7 >> obs8 >> obs9 >> obs10;
-  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs6 >> obs8 >> obs10;
+  return obssd >> obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 inline auto create_sdm(const Config &config, const Timesteps &tsteps, FSStore &store) {
