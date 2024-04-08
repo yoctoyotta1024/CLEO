@@ -8,7 +8,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 1st March 2024
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -78,7 +78,7 @@ coord3gen = None                        # do not generate superdroplet coords
 coord1gen = None
 coord2gen = None
 
-# setup parameters
+# parameters to edit in model configuration and plotting
 params1 = {
     "W_AVG": 1,
     "T_HALF": 150,
@@ -174,9 +174,10 @@ for i in range(len(monors)):
         os.system("rm "+params["setuptxt"])
 
         # 4. run model
+        executable = path2build+"/examples/adiabaticparcel/src/adia0D"
         print('Executable: '+executable)
         print('Config file: '+configfile)
-        executable = path2build+"/examples/adiabaticparcel/src/adia0D"
+        os.chdir(path2build)
         os.system(executable + " " + configfile)
 
         # 5. load results

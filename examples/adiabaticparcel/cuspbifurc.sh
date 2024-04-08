@@ -78,8 +78,8 @@ export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
 ### ---------------------------------------------------- ###
 
-### ------------------- compile & run ------------------ ###
-### generate input files and run cusp bifurcation example
+### ---------------------- run model ------------------- ###
+### generate input files, run executable and make plots for cusp bifurcation example
 ${python} ${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py \
   ${path2CLEO} ${path2build} ${configfile}
 

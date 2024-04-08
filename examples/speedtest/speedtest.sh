@@ -174,6 +174,7 @@ make -C ${path2build_serial} -j 64 spdtest
 mkdir ${path2build_serial}/bin
 mkdir ${path2build_serial}/share
 
+# generate input files, run and plot speed test example
 ${python} ${path2CLEO}/examples/speedtest/speedtest.py \
   ${path2CLEO} ${path2build_serial} ${configfile} ${path2build}"/bin/" ${buildtype}
 ### ---------------------------------------------------- ###

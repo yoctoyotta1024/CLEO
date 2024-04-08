@@ -83,7 +83,7 @@ export OMP_PLACES=threads
 ### ---------------------------------------------------- ###
 
 ### ---------------------- run model ------------------- ###
-### generate input files, run and plot adiabatic parcel example
+### generate input files, run executable and make plots for adiabatic parcel example
 ${python} ${path2CLEO}/examples/adiabaticparcel/as2017.py \
   ${path2CLEO} ${path2build} ${configfile}
 

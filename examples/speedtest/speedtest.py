@@ -221,6 +221,7 @@ for n in range(nruns):
   print('Executable: '+executable)
   print('Config file: '+configfile)
 
+  os.chdir(path2build)
   os.system('rm -rf '+dataset)
   os.system(executable + ' ' + configfile)
 
