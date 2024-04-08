@@ -105,7 +105,8 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
 # compile gpus_cpus executable
-make clean -C ${path2build_gpus_cpus} && make -C ${path2build_gpus_cpus} -j 64 spdtest
+make clean -C ${path2build_gpus_cpus}
+make -C ${path2build_gpus_cpus} -j 64 spdtest
 
 # run spdtest and plot results for gpus CUDA + cpus OpenMP parallelism
 mkdir ${path2build_gpus_cpus}/bin
@@ -135,7 +136,8 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
 # compile cpus executable
-make clean -C ${path2build_cpus} && make -C ${path2build_cpus} -j 64 spdtest
+make clean -C ${path2build_cpus}
+make -C ${path2build_cpus} -j 64 spdtest
 
 # run spdtest and plot results for a cpu with OpenMP parallelism
 mkdir ${path2build_cpus}/bin
@@ -165,7 +167,8 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
 # compile serial executable
-make clean -C ${path2build_serial} && make -C ${path2build_serial} -j 64 spdtest
+make clean -C ${path2build_serial}
+make -C ${path2build_serial} -j 64 spdtest
 
 # run spdtest and plot results for a cpu in serial
 mkdir ${path2build_serial}/bin
