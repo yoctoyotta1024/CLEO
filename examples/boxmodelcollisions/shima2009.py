@@ -135,7 +135,6 @@ def run_exectuable(path2build, dataset, executable, configfile):
   os.chdir(path2build)
   os.system('pwd')
   os.system('rm -rf '+dataset) # delete any existing dataset
-  executable = path2build+'/examples/boxmodelcollisions/golovin/src/'+executable
   print('Executable: '+executable)
   print('Config file: '+configfile)
   os.system(executable + ' ' + configfile)
@@ -144,7 +143,8 @@ if "golovin" in kernels:
     ### ------------------------------------------------------------ ###
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
-    run_exectuable(path2build, dataset, 'golcolls', configfile)
+    executable = path2build+'/examples/boxmodelcollisions/golovin/src/golcolls'
+    run_exectuable(path2build, dataset, executable, configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
 
@@ -177,7 +177,8 @@ if "long" in kernels:
     ### ------------------------------------------------------------ ###
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
-    run_exectuable(path2build, dataset, 'longcolls', configfile)
+    executable = path2build+'/examples/boxmodelcollisions/long/src/longcolls'
+    run_exectuable(path2build, dataset, executable, configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
 
@@ -210,7 +211,8 @@ if "lowlist" in kernels:
     ### ------------------------------------------------------------ ###
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
-    run_exectuable(path2build, dataset, 'lowlistcolls', configfile)
+    executable = path2build+'/examples/boxmodelcollisions/lowlist/src/lowlistcolls'
+    run_exectuable(path2build, dataset, executable, configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
 
