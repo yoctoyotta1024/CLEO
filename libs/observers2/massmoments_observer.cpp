@@ -34,7 +34,7 @@ KOKKOS_FUNCTION
 void MassMomentsFunc::operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
                                  Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
                                  Buffer<float>::mirrorviewd_buffer d_mom1,
-                                 Buffer<float>::mirrorviewd_buffer d_mom2) {
+                                 Buffer<float>::mirrorviewd_buffer d_mom2) const {
   const auto ii = team_member.league_rank();
   const auto supers(d_gbxs(ii).supersingbx.readonly());
 
@@ -68,7 +68,7 @@ void RaindropsMassMomentsFunc::operator()(const TeamMember &team_member,
                                           const viewd_constgbx d_gbxs,
                                           Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
                                           Buffer<float>::mirrorviewd_buffer d_mom1,
-                                          Buffer<float>::mirrorviewd_buffer d_mom2) {
+                                          Buffer<float>::mirrorviewd_buffer d_mom2) const {
   constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
   const auto ii = team_member.league_rank();
   const auto supers(d_gbxs(ii).supersingbx.readonly());
