@@ -111,7 +111,7 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
   const Observer auto obssd = create_superdrops_observer(config, tsteps, dataset);
 
-  return obssd >> obsx >> obs6 >> obs2 >> obs1;
+  return obssd >> obsx >> obs6 >> obs4 >> obs3 >> obs2 >> obs1;
 }
 
 /* ---------------------------------------------------------------------------------------------- */

@@ -49,7 +49,7 @@ struct MassMomentsFunc {
   void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
                   Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
-                  Buffer<float>::mirrorviewd_buffer d_mom2);
+                  Buffer<float>::mirrorviewd_buffer d_mom2) const;
 };
 
 struct RaindropsMassMomentsFunc {
@@ -66,7 +66,7 @@ struct RaindropsMassMomentsFunc {
   void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
                   Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
-                  Buffer<float>::mirrorviewd_buffer d_mom2);
+                  Buffer<float>::mirrorviewd_buffer d_mom2) const;
 };
 
 /* struct satifying CollectDataForDataset for collecting the 0th, 1st and 2nd moments of the
