@@ -31,10 +31,10 @@ Note conversion from 8 to 4byte precision for all mass moments: mom0 from size_t
 dependent usually long unsigned int = 8 bytes) to single precision (uint32_t = 4 bytes), and mom1
 and mom2 from double (8 bytes) to float (4 bytes) */
 KOKKOS_FUNCTION
-MassMomentsFunc::operator()(const TeamMember & team_member, const viewd_constgbx d_gbxs,
-                            Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
-                            Buffer<float>::mirrorviewd_buffer d_mom1,
-                            Buffer<float>::mirrorviewd_buffer d_mom2) {
+void MassMomentsFunc::operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
+                                 Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                                 Buffer<float>::mirrorviewd_buffer d_mom1,
+                                 Buffer<float>::mirrorviewd_buffer d_mom2) {
   const auto ii = team_member.league_rank();
   const auto supers(d_gbxs(ii).supersingbx.readonly());
 
@@ -64,10 +64,11 @@ Note conversion from 8 to 4byte precision for all mass moments: mom0 from size_t
 dependent usually long unsigned int = 8 bytes) to single precision (uint32_t = 4 bytes), and mom1
 and mom2 from double (8 bytes) to float (4 bytes) */
 KOKKOS_FUNCTION
-RaindropsMassMomentsFunc::operator()(const TeamMember & team_member, const viewd_constgbx d_gbxs,
-                                     Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
-                                     Buffer<float>::mirrorviewd_buffer d_mom1,
-                                     Buffer<float>::mirrorviewd_buffer d_mom2) {
+void RaindropsMassMomentsFunc::operator()(const TeamMember &team_member,
+                                          const viewd_constgbx d_gbxs,
+                                          Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                                          Buffer<float>::mirrorviewd_buffer d_mom1,
+                                          Buffer<float>::mirrorviewd_buffer d_mom2) {
   constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
   const auto ii = team_member.league_rank();
   const auto supers(d_gbxs(ii).supersingbx.readonly());

@@ -46,9 +46,10 @@ struct MassMomentsFunc {
   dependent usually long unsigned int = 8 bytes) to single precision (uint32_t = 4 bytes), and mom1
   and mom2 from double (8 bytes) to float (4 bytes) */
   KOKKOS_FUNCTION
-  operator()(const TeamMember & team_member, const viewd_constgbx d_gbxs,
-             Buffer<uint32_t>::mirrorviewd_buffer d_mom0, Buffer<float>::mirrorviewd_buffer d_mom1,
-             Buffer<float>::mirrorviewd_buffer d_mom2);
+  void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
+                  Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                  Buffer<float>::mirrorviewd_buffer d_mom1,
+                  Buffer<float>::mirrorviewd_buffer d_mom2);
 };
 
 struct RaindropsMassMomentsFunc {
@@ -62,9 +63,10 @@ struct RaindropsMassMomentsFunc {
   dependent usually long unsigned int = 8 bytes) to single precision (uint32_t = 4 bytes), and mom1
   and mom2 from double (8 bytes) to float (4 bytes) */
   KOKKOS_FUNCTION
-  operator()(const TeamMember & team_member, const viewd_constgbx d_gbxs,
-             Buffer<uint32_t>::mirrorviewd_buffer d_mom0, Buffer<float>::mirrorviewd_buffer d_mom1,
-             Buffer<float>::mirrorviewd_buffer d_mom2);
+  void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
+                  Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                  Buffer<float>::mirrorviewd_buffer d_mom1,
+                  Buffer<float>::mirrorviewd_buffer d_mom2);
 };
 
 /* struct satifying CollectDataForDataset for collecting the 0th, 1st and 2nd moments of the
@@ -72,7 +74,7 @@ struct RaindropsMassMomentsFunc {
  * distribution). struct similar to GenericCollectData but specialised with xarrays and a functor
  * that stores 3 variables (0th, 1st and 2nd mass moments) and with functor which can act inside a
  * kokkos team policy not range policy (see signature of functor's operator() function) */
-template <typename Store>
+template <typename Store, typename FunctorFunc>
 struct CollectMassMoments {
  private:
   FunctorFunc ffunc;
