@@ -107,7 +107,7 @@ else:
   Path(sharepath).mkdir(exist_ok=True)
   Path(binpath).mkdir(exist_ok=True)
 
-###  delete old datasets
+###  delete any exisitng initial conditions
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 

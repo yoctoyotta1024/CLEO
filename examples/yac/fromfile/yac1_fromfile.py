@@ -104,6 +104,8 @@ else:
     Path(binpath).mkdir(exist_ok=True)
     if isfigures[1]:
         Path(savefigpath).mkdir(exist_ok=True)
+
+### --- delete any existing initial conditions --- ###
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 os.system("rm "+thermofile[:-4]+"*")

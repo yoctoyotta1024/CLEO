@@ -111,6 +111,8 @@ else:
   Path(path2build).mkdir(exist_ok=True)
   Path(sharepath).mkdir(exist_ok=True)
   Path(binpath).mkdir(exist_ok=True)
+
+### --- delete any existing initial conditions --- ###
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 os.system("rm "+thermofile[:-4]+"*")
