@@ -89,18 +89,15 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
 }
 
 template <typename Store>
-inline Observer auto create_superdrops_observer(const Config &config, const Timesteps &tsteps,
-                                                Dataset<Store> &dataset) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
-
+inline Observer auto create_superdrops_observer(const unsigned int interval,
+                                                Dataset<Store> &dataset, const int maxchunk) {
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
 
   const auto collect_data = coord2 >> coord1 >> coord3 >> sdid;
-  return SuperdropsObserver(obsstep, dataset, maxchunk, collect_data);
+  return SuperdropsObserver(interval, dataset, maxchunk, collect_data);
 }
 
 template <typename Store>

@@ -151,7 +151,7 @@ if isfigures[0]:
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset) # delete any existing dataset
-executable = path2build+'/examples/yac_examples/yac1_fromfile/src/yac1'
+executable = path2build+'/examples/yac/fromfile/src/yac1'
 print('Executable: '+executable)
 print('Config file: '+configfile)
 os.system(executable + ' ' + configfile)
