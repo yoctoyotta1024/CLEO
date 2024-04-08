@@ -89,76 +89,88 @@ export OMP_PLACES=threads
 buildtype="gpus_cpus"
 kokkoshost=${use_kokkoshost}
 kokkosdevice=${use_kokkosdevice}
+path2build_gpus_cpus=${path2build}${buildtype}"/"
 
 echo "build type: ${buildtype}"
 echo "KOKKOS_FLAGS: ${kokkosflags}"
 echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
 echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
-echo "BUILD_DIR: ${path2build}${buildtype}/"
+echo "BUILD_DIR: ${path2build_gpus_cpus}"
 
 # build gpus_cpus executable
 cmake -DCMAKE_CXX_COMPILER=${CXX} \
     -DCMAKE_CC_COMPILER=${CC} \
     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
-    -S ${path2CLEO} -B ${path2build}${buildtype}"/" \
+    -S ${path2CLEO} -B ${path2build_gpus_cpus} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
+# compile gpus_cpus executable
+make clean -C ${path2build_gpus_cpus} && make -C ${path2build_gpus_cpus} -j 64 spdtest
+
 ### run test for gpus CUDA + cpus OpenMP parallelism
-mkdir ${path2build}${buildtype}/bin
-mkdir ${path2build}${buildtype}/share
+mkdir ${path2build_gpus_cpus}/bin
+mkdir ${path2build_gpus_cpus}/share
 
 ${python} ${path2CLEO}/examples/speedtest/speedtest.py \
-  ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${path2build}"/bin/" ${buildtype}
+  ${path2CLEO} ${path2build_gpus_cpus} ${configfile} ${path2build}"/bin/" ${buildtype}
 ### ---------------------------------------------------- ###
 
 ### ------------ build cpu OpenMP parallelism ---------- ###
 buildtype="cpus"
 kokkoshost=${use_kokkoshost}
 kokkosdevice=""
+path2build_cpus=${path2build}${buildtype}"/"
 
 echo "build type: ${buildtype}"
 echo "KOKKOS_FLAGS: ${kokkosflags}"
 echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
 echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
-echo "BUILD_DIR: ${path2build}${buildtype}/"
+echo "BUILD_DIR: ${path2build_cpus}"
 
-# build gpus_cpus executable
+# build cpu OpenMP executable
 cmake -DCMAKE_CXX_COMPILER=${CXX} \
     -DCMAKE_CC_COMPILER=${CC} \
     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
-    -S ${path2CLEO} -B ${path2build}${buildtype}"/" \
+    -S ${path2CLEO} -B ${path2build_cpus} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
+# compile cpus executable
+make clean -C ${path2build_cpus} && make -C ${path2build_cpus} -j 64 spdtest
+
 ### run test for cpus with OpenMP parallelism
-mkdir ${path2build}${buildtype}/bin
-mkdir ${path2build}${buildtype}/share
+mkdir ${path2build_cpus}/bin
+mkdir ${path2build_cpus}/share
 
 ${python} ${path2CLEO}/examples/speedtest/speedtest.py \
-  ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${path2build}"/bin/" ${buildtype}
+  ${path2CLEO} ${path2build_cpus} ${configfile} ${path2build}"/bin/" ${buildtype}
 ### ---------------------------------------------------- ###
 
 ### ----------------- build cpu serial ----------------- ###
 buildtype="serial"
 kokkoshost=""
 kokkosdevice=""
+path2build_serial=${path2build}${buildtype}"/"
 
 echo "build type: ${buildtype}"
 echo "KOKKOS_FLAGS: ${kokkosflags}"
 echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
 echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
-echo "BUILD_DIR: ${path2build}${buildtype}/"
+echo "BUILD_DIR: ${path2build_serial}"
 
 # build gpus_cpus executable
 cmake -DCMAKE_CXX_COMPILER=${CXX} \
     -DCMAKE_CC_COMPILER=${CC} \
     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
-    -S ${path2CLEO} -B ${path2build}${buildtype}"/" \
+    -S ${path2CLEO} -B ${path2build_serial} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
+# compile serial executable
+make clean -C ${path2build_serial} && make -C ${path2build_serial} -j 64 spdtest
+
 ### run test for a cpu in serial
-mkdir ${path2build}${buildtype}/bin
-mkdir ${path2build}${buildtype}/share
+mkdir ${path2build_serial}/bin
+mkdir ${path2build_serial}/share
 
 ${python} ${path2CLEO}/examples/speedtest/speedtest.py \
-  ${path2CLEO} ${path2build}${buildtype}"/" ${configfile} ${path2build}"/bin/" ${buildtype}
+  ${path2CLEO} ${path2build_serial} ${configfile} ${path2build}"/bin/" ${buildtype}
 ### ---------------------------------------------------- ###
