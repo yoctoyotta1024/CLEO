@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO for 0-D box model
+Script runs CLEO 0-D box model executables to
 of collisions with selected collision kernels (e.g.
 Golovin's or Long's) to create data and plot
 similar to Shima et al. 2009 Fig.2
@@ -102,6 +102,8 @@ else:
   Path(binpath).mkdir(exist_ok=True)
   if isfigures[1]:
     Path(savefigpath).mkdir(exist_ok=True)
+
+### --- delete any existing initial conditions --- ###
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 
@@ -132,7 +134,7 @@ def run_exectuable(path2build, dataset, executable, configfile):
   ''' delete existing dataset, the run exectuable with given config file'''
   os.chdir(path2build)
   os.system('pwd')
-  os.system('rm -rf '+dataset)
+  os.system('rm -rf '+dataset) # delete any existing dataset
   executable = path2build+'/examples/boxmodelcollisions/golovin/src/'+executable
   print('Executable: '+executable)
   print('Config file: '+configfile)

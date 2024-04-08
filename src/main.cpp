@@ -238,7 +238,6 @@ int main(int argc, char *argv[]) {
   const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
 
   /* Create Xarray dataset wit Zarr backend for writing output data to a store */
-  FSStore fsstore(config.zarrbasedir);
   auto store = FSStore(config.zarrbasedir);
   auto dataset = Dataset(store);
 

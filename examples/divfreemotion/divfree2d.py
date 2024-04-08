@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th January 2024
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO divfree2D to create the
+Script runs CLEO executable "divfree2D" to create the
 data and plots for divergence free motion of
 superdroplets in a 2-D divergence free wind field
 '''
@@ -157,13 +157,14 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
-### -------------------- COMPILE AND RUN CLEO ---------------------- ###
+### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
 os.chdir(path2build)
 os.system('pwd')
-os.system('rm -rf '+dataset)
-os.system('make clean && make -j 64 divfree2D')
+os.system('rm -rf '+dataset) # delete any existing dataset
 executable = path2build+'/examples/divfreemotion/src/divfree2D'
+print('Executable: '+executable)
+print('Config file: '+configfile)
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

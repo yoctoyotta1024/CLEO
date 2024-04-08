@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO adia0D to
+Script runs CLEO adia0D executable to
 create data and plots similar to Figure 5 of
 "On the CCN (de)activation nonlinearities"
 S. Arabas and S. Shima 2017 to show
@@ -133,7 +133,7 @@ plt.close()
 ### run model
 os.chdir(path2build)
 os.system('pwd')
-os.system('rm -rf '+dataset)
+os.system('rm -rf '+dataset) # delete any existing dataset
 executable = path2build+"/examples/adiabaticparcel/src/adia0D"
 print('Executable: '+executable)
 print('Config file: '+configfile)

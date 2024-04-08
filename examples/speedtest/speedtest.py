@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO speedtest to
+Script runs CLEO executable "spdtest" to
 check performance of CLEO usign different
 build configurations (e.g. serial, OpenmP
 and CUDA parallelism).
@@ -214,17 +214,17 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
-### ------------ COMPILE, RUN AND WRITE RESULTS TO FILE ------------ ###
+### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
 executable = path2build+'/examples/speedtest/src/spdtest'
 for n in range(nruns):
+  os.chdir(path2build)
+  os.system('rm -rf '+dataset) # delete any existing dataset
   print('Executable: '+executable)
   print('Config file: '+configfile)
-
-  os.chdir(path2build)
-  os.system('rm -rf '+dataset)
   os.system(executable + ' ' + configfile)
 
+  # copy speed results to new file
   print("--- reading runtime statistics ---")
   stats = read_statsfile(statsfile)
   for key, value in stats.items():

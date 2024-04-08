@@ -17,7 +17,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO adia0D to
+Script runs CLEO adia0D executable to
 create data and plots similar to Figure 5 of
 "On the CCN (de)activation nonlinearities"
 S. Arabas and S. Shima 2017 to show
@@ -115,7 +115,7 @@ def displacement(time, w_avg, thalf):
     return z
 
 ############### RUN EXAMPLE ##################
-###  delete old datasets
+###  delete any existing datasets
 for run_num in range(len(monors)*len(paramslist)):
     dataset = binpath+"as2017_sol"+str(run_num)+".zarr"
     os.system("rm -rf "+dataset)
@@ -169,6 +169,8 @@ for i in range(len(monors)):
         params["zarrbasedir"] = binpath+"as2017_sol"+str(runnum)+".zarr"
         params["setuptxt"] = binpath+"as2017_setup.txt"
         editconfigfile.edit_config_params(configfile, params)
+
+        ### delete any existing dataset
         os.system("rm -rf "+params["zarrbasedir"])
         os.system("rm "+params["setuptxt"])
 

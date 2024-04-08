@@ -1,12 +1,12 @@
 '''
 ----- CLEO -----
 File: yac1_fromfile.py
-Project: yac1_fromfile
+Project: fromfile
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 26th March 2024
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO for 3D example with time varying thermodynamics
+Script runs CLEO executable for 3D example with time varying thermodynamics
 read from binary files to test that YAC can send the data to CLEO correctly.
 '''
 
@@ -144,13 +144,14 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
-### -------------------- COMPILE AND RUN CLEO ---------------------- ###
+### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
 os.chdir(path2build)
 os.system('pwd')
-os.system('rm -rf '+dataset)
-os.system('make clean && make -j 64 yac1')
+os.system('rm -rf '+dataset) # delete any existing dataset
 executable = path2build+'/examples/yac_examples/yac1_fromfile/src/yac1'
+print('Executable: '+executable)
+print('Config file: '+configfile)
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
