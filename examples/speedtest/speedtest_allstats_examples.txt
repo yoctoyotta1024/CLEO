@@ -45,5 +45,11 @@ G1 0.334462 1.44754 13.6179          # test C (updated compilation)
 
 ### Wall Clock time For Timestepping, since New Observers and Zarr Libraries since 8th April 2024
 ###  columns are: test_label | gpus_cpus/s | cpus/s | serial/s | # notes
-A0 0.430902 1.4428 13.6574          # test E with new observers / data output libraries
-A1 0.428064 2.4814 14.6305          # test E with new observers / data output libraries
+A0 0.463895 1.69074 13.7383          # test E (new observers / data output libraries)
+A1 0.467456 1.66828 14.8679          # test E (new observers / data output libraries)
+
+B0 0.405156 1.77930 14.5953          # test F (new observers / data output libraries)
+B1 0.420606 1.80625 14.7943          # test F (new observers / data output libraries)
+
+C0 0.314786 1.66355 13.6694          # test G (new observers / data output libraries)
+C1 0.305725 1.64846 13.7267          # test G (new observers / data output libraries)
