@@ -79,13 +79,6 @@ class Dataset {
   }
 
   /**
-   * @brief Returns the dictionary like object (unordered map) for the dimensions in the dataset.
-   *
-   * @return The unordered map for the dimensions of the dataset.
-   */
-  std::unordered_map<std::string, size_t> get_datasetdims() const { return datasetdims; }
-
-  /**
    * @brief Returns the size of an existing dimension in the dataset.
    *
    * @param dimname A string for the name of the dimension in the dataset.
@@ -203,17 +196,6 @@ class Dataset {
   }
 
   /**
-   * @brief Calls array's shape function to write the shape of the array for a ragged array.
-   *
-   * @tparam T The data type of the array.
-   * @param xzarr An instance of XarrayZarrArray representing the array.
-   */
-  template <typename T>
-  void write_ragged_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
-    xzarr.write_ragged_arrayshape();
-  }
-
-  /**
    * @brief Calls array's shape function to ensure the shape of the array matches
    * the dimensions of the dataset.
    *
@@ -223,6 +205,17 @@ class Dataset {
   template <typename T>
   void write_arrayshape(const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr) const {
     xzarr_ptr->write_arrayshape(datasetdims);
+  }
+
+  /**
+   * @brief Calls array's shape function to write the shape of the array for a ragged array.
+   *
+   * @tparam T The data type of the array.
+   * @param xzarr An instance of XarrayZarrArray representing the array.
+   */
+  template <typename T>
+  void write_ragged_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
+    xzarr.write_ragged_arrayshape();
   }
 
   /**
@@ -242,25 +235,6 @@ class Dataset {
                       const typename Buffer<T>::viewh_buffer h_data) const {
     xzarr.write_to_array(h_data);
     xzarr.write_arrayshape(datasetdims);
-  }
-
-  /**
-   * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls
-   * function to ensure the shape of the array matches the dimensions of the dataset.
-   *
-   * Function writes data to an array in the dataset and updates the metadata for the shape of
-   * the array to ensure the size of each dimension of the array is consistent with the
-   * dimensions of the dataset.
-   *
-   * @tparam T The data type of the array.
-   * @param xzarr An instance of XarrayZarrArray representing the array.
-   * @param h_data The data to be written to the array.
-   */
-  template <typename T>
-  void write_to_ragged_array(XarrayZarrArray<Store, T> &xzarr,
-                             const typename Buffer<T>::viewh_buffer h_data) const {
-    xzarr.write_to_array(h_data);
-    xzarr.write_ragged_arrayshape();
   }
 
   /**
@@ -299,6 +273,25 @@ class Dataset {
                       const T data) const {
     xzarr_ptr->write_to_array(data);
     xzarr_ptr->write_arrayshape(datasetdims);
+  }
+
+  /**
+   * @brief Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls
+   * function to ensure the shape of the array matches the dimensions of the dataset.
+   *
+   * Function writes data to an array in the dataset and updates the metadata for the shape of
+   * the array to ensure the size of each dimension of the array is consistent with the
+   * dimensions of the dataset.
+   *
+   * @tparam T The data type of the array.
+   * @param xzarr An instance of XarrayZarrArray representing the array.
+   * @param h_data The data to be written to the array.
+   */
+  template <typename T>
+  void write_to_ragged_array(XarrayZarrArray<Store, T> &xzarr,
+                             const typename Buffer<T>::viewh_buffer h_data) const {
+    xzarr.write_to_array(h_data);
+    xzarr.write_ragged_arrayshape();
   }
 };
 
