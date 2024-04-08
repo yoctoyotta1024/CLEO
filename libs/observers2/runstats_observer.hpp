@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: runstats.hpp
+ * File: runstats_observer.hpp
  * Project: observers2
  * Created Date: Monday 8th April 2024
  * Author: Clara Bayley (CB)
@@ -21,8 +21,8 @@
  * e.g. of timestepping CLEO
  */
 
-#ifndef LIBS_OBSERVERS2_RUNSTATS_HPP_
-#define LIBS_OBSERVERS2_RUNSTATS_HPP_
+#ifndef LIBS_OBSERVERS2_RUNSTATS_OBSERVER_HPP_
+#define LIBS_OBSERVERS2_RUNSTATS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <fstream>
@@ -41,9 +41,9 @@ struct RunStats {
   Kokkos::Timer kokkostimer;
 
  public:
-  double t0;  // time of observer creation
-  double t_start;
-  double t_end;
+  double t0;       // time of observer creation
+  double t_start;  // time of before timestepping run
+  double t_end;    // time of end of timestepping
 
   RunStats() : kokkostimer(Kokkos::Timer()), t0(0.0), t_start(0.0), t_end(0.0) {
     t0 = kokkostimer.seconds();
@@ -102,4 +102,4 @@ class RunStatsObserver {
   }
 };
 
-#endif  // LIBS_OBSERVERS2_RUNSTATS_HPP_
+#endif  // LIBS_OBSERVERS2_RUNSTATS_OBSERVER_HPP_

@@ -37,6 +37,7 @@
 #include "observers2/massmoments_observer.hpp"
 #include "observers2/nsupers_observer.hpp"
 #include "observers2/observers.hpp"
+#include "observers2/runstats_observer.hpp"
 #include "observers2/state_observer.hpp"
 #include "observers2/streamout_observer.hpp"
 #include "observers2/superdrops_observer.hpp"
@@ -103,6 +104,7 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
+  const Observer auto obs0 = RunStatsObserver(obsstep, config.stats_filename);
   const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
   const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
   const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
@@ -111,7 +113,7 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
   const Observer auto obssd = create_superdrops_observer(config, tsteps, dataset);
 
-  return obssd >> obsx >> obs6 >> obs4 >> obs3 >> obs2 >> obs1;
+  return obssd >> obsx >> obs6 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 /* ---------------------------------------------------------------------------------------------- */
