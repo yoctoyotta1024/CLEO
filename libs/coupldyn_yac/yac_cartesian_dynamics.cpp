@@ -135,9 +135,12 @@ CartesianDynamics::CartesianDynamics(const Config &config,
   std::string cleo_grid_name = "cleo_grid";
 
   int cyclic_dimension[2] = {0, 0};
-  int total_cells[2]      = {ndims[0], ndims[1]};
-  int total_vertices[2]   = {ndims[0] + 1, ndims[1] + 1};
-  int total_edges[2]      = {ndims[0] * (ndims[1] + 1), ndims[1] * (ndims[0] + 1)};
+  int total_cells[2]      = {static_cast<int>(ndims[0]),
+                             static_cast<int>(ndims[1])};
+  int total_vertices[2]   = {static_cast<int>(ndims[0] + 1),
+                             static_cast<int>(ndims[1] + 1)};
+  int total_edges[2]      = {static_cast<int>(ndims[0] * (ndims[1] + 1)),
+                             static_cast<int>(ndims[1] * (ndims[0] + 1))};
   int cell_point_id = -1;
   int edge_point_id = -1;
 
