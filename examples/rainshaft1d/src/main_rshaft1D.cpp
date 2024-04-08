@@ -38,9 +38,9 @@
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
-#include "observers/massmomentsobs.hpp"
-#include "observers/nsupersobs.hpp"
 #include "observers2/gbxindex_observer.hpp"
+#include "observers2/massmoments_observer.hpp"
+#include "observers2/nsupers_observer.hpp"
 #include "observers2/observers.hpp"
 #include "observers2/streamout_observer.hpp"
 #include "observers2/superdrops_observer.hpp"
@@ -99,11 +99,18 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 }
 
-inline Observer auto create_supersattrs_observer(const unsigned int interval, FSStore &store,
-                                                 const int maxchunk) {
-  SuperdropsBuffers auto buffers = SdIdBuffer() >> XiBuffer() >> MsolBuffer() >> RadiusBuffer() >>
-                                   Coord3Buffer() >> SdgbxindexBuffer();
-  return SupersAttrsObserver(interval, store, maxchunk, buffers);
+template <typename Store>
+inline Observer auto create_superdrops_observer(const unsigned int interval,
+                                                Dataset<Store> &dataset, const int maxchunk) {
+  CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
+  CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
+  CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
+  CollectDataForDataset<Store> auto msol = CollectMsol(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
+
+  const auto collect_sddata = coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
+  return SuperdropsObserver(interval, dataset, maxchunk, collect_sddata);
 }
 
 template <typename Store>
@@ -112,24 +119,23 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
+  const Observer auto obs0 = StreamOutObserver(obsstep * 10, &step2realtime);
 
-  const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
+  const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
-  const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
+  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
 
-  const Observer auto obs3 = NsupersObserver(obsstep, store, maxchunk, config.ngbxs);
+  const Observer auto obs3 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
-  const Observer auto obs4 = MassMomentsObserver(obsstep, store, maxchunk, config.ngbxs);
+  const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
-  const Observer auto obs5 = create_supersattrs_observer(obsstep, store, maxchunk);
+  const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5;
+  return obssd >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Store>
-inline auto inline auto create_sdm(const Config &config, const Timesteps &tsteps,
-                                   Dataset<Store> &dataset) {
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
@@ -161,7 +167,7 @@ int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(

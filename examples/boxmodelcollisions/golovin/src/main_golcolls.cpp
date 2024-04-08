@@ -106,8 +106,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 }
 
 template <typename Store>
-inline auto inline auto create_sdm(const Config &config, const Timesteps &tsteps,
-                                   Dataset<Store> &dataset) {
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));

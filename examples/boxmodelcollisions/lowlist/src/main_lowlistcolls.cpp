@@ -106,8 +106,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 }
 
 template <typename Store>
-inline auto inline auto create_sdm(const Config &config, const Timesteps &tsteps,
-                                   Dataset<Store> &dataset) {
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
@@ -144,7 +143,7 @@ int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
