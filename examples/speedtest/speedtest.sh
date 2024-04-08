@@ -107,7 +107,7 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
 # compile gpus_cpus executable
 make clean -C ${path2build_gpus_cpus} && make -C ${path2build_gpus_cpus} -j 64 spdtest
 
-### run test for gpus CUDA + cpus OpenMP parallelism
+# run spdtest and plot results for gpus CUDA + cpus OpenMP parallelism
 mkdir ${path2build_gpus_cpus}/bin
 mkdir ${path2build_gpus_cpus}/share
 
@@ -137,7 +137,7 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
 # compile cpus executable
 make clean -C ${path2build_cpus} && make -C ${path2build_cpus} -j 64 spdtest
 
-### run test for cpus with OpenMP parallelism
+# run spdtest and plot results for a cpu with OpenMP parallelism
 mkdir ${path2build_cpus}/bin
 mkdir ${path2build_cpus}/share
 
@@ -167,7 +167,7 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
 # compile serial executable
 make clean -C ${path2build_serial} && make -C ${path2build_serial} -j 64 spdtest
 
-### run test for a cpu in serial
+# run spdtest and plot results for a cpu in serial
 mkdir ${path2build_serial}/bin
 mkdir ${path2build_serial}/share
 
