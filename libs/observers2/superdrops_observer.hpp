@@ -118,22 +118,22 @@ CollectDataForDataset<Store> auto CollectSdId(const Dataset<Store> &dataset, con
 }
 
 /* Operator is functor to perform copy of xi for each superdroplet in totsupers view to d_data
-in parallel. Note conversion of xi from size_t (arch dependent usually 8 bytes) to long
-precision unsigned int (unit64_t) */
+in parallel. Note conversion of xi from size_t (arch dependent usually 8 bytes) to 8 byte, long
+unsigned int (unit64_t) */
 struct XiFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
-                  Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
-    assert((totsupers(kk).get_xi() < dlc::uintmax) &&
+                  Buffer<uint64_t>::mirrorviewd_buffer d_data) const {
+    assert((totsupers(kk).get_xi() < LIMITVALUES::uint64_t_max) &&
            "superdroplet mulitiplicy too large to represent with 4 byte unsigned integer");
-    auto xi = static_cast<uint32_t>(totsupers(kk).get_xi());
+    auto xi = static_cast<uint64_t>(totsupers(kk).get_xi());
     d_data(kk) = xi;
   }
 };
 
 template <typename Store>
 CollectDataForDataset<Store> auto CollectXi(const Dataset<Store> &dataset, const int maxchunk) {
-  return CollectSuperdropVariable<Store, uint32_t, XiFunc>(dataset, XiFunc{}, "xi", "", "<u4", 1,
+  return CollectSuperdropVariable<Store, uint64_t, XiFunc>(dataset, XiFunc{}, "xi", "", "<u8", 1,
                                                            maxchunk);
 }
 

@@ -44,11 +44,11 @@ struct MassMomentsFunc {
   Kokkos::parallel_reduce([...]) is equivalent in serial to:
   for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
   Note conversion from 8 to 4byte precision for all mass moments: mom0 from size_t (architecture
-  dependent usually long unsigned int = 8 bytes) to single precision (uint32_t = 4 bytes), and mom1
+  dependent usually long unsigned int = 8 bytes) to 8 byte unsigned integer, and mom1
   and mom2 from double (8 bytes) to float (4 bytes) */
   KOKKOS_FUNCTION
   void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
-                  Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                  Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
                   Buffer<float>::mirrorviewd_buffer d_mom2) const;
 };
@@ -61,11 +61,11 @@ struct RaindropsMassMomentsFunc {
   Kokkos::parallel_reduce([...]) is equivalent in serial to:
   for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
   Note conversion from 8 to 4byte precision for all mass moments: mom0 from size_t (architecture
-  dependent usually long unsigned int = 8 bytes) to single precision (uint32_t = 4 bytes), and mom1
+  dependent usually long unsigned int = 8 bytes) to 8 byte unsigned integer, and mom1
   and mom2 from double (8 bytes) to float (4 bytes) */
   KOKKOS_FUNCTION
   void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
-                  Buffer<uint32_t>::mirrorviewd_buffer d_mom0,
+                  Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
                   Buffer<float>::mirrorviewd_buffer d_mom2) const;
 };
@@ -79,7 +79,7 @@ template <typename Store, typename FunctorFunc>
 struct CollectMassMoments {
  private:
   FunctorFunc ffunc;
-  std::shared_ptr<XarrayAndViews<Store, uint32_t>> mom0_ptr;  // xarray struct for 0th mass moment
+  std::shared_ptr<XarrayAndViews<Store, uint64_t>> mom0_ptr;  // xarray struct for 0th mass moment
   std::shared_ptr<XarrayAndViews<Store, float>> mom1_ptr;     // xarray struct for 1st mass moment
   std::shared_ptr<XarrayAndViews<Store, float>> mom2_ptr;     // xarray struct for 2nd mass moment
 
@@ -101,7 +101,7 @@ struct CollectMassMoments {
  public:
   /* functor to collect 3 variables from within a parallel team policy */
   struct Functor {
-    using mirrorviewd_mom0 = XarrayAndViews<Store, uint32_t>::mirrorviewd_data;
+    using mirrorviewd_mom0 = XarrayAndViews<Store, uint64_t>::mirrorviewd_data;
     using mirrorviewd_mom1 = XarrayAndViews<Store, float>::mirrorviewd_data;
     using mirrorviewd_mom2 = XarrayAndViews<Store, float>::mirrorviewd_data;
     FunctorFunc ffunc;        // functor to calculate mass moments within parallel team policy loop
@@ -125,11 +125,11 @@ struct CollectMassMoments {
   /* Constructor to initialize CollectMassMoments given functor function-like object,
   the xarrays for the 0th, 1st and 2nd mass moments in the dataset and the size of the data view
   used to collect data from within the functor function call. */
-  CollectMassMoments(const FunctorFunc ffunc, const XarrayZarrArray<Store, uint32_t> xzarr_mom0,
+  CollectMassMoments(const FunctorFunc ffunc, const XarrayZarrArray<Store, uint64_t> xzarr_mom0,
                      const XarrayZarrArray<Store, float> xzarr_mom1,
                      const XarrayZarrArray<Store, float> xzarr_mom2, const size_t dataview_size)
       : ffunc(ffunc),
-        mom0_ptr(std::make_shared<XarrayAndViews<Store, uint32_t>>(xzarr_mom0, dataview_size)),
+        mom0_ptr(std::make_shared<XarrayAndViews<Store, uint64_t>>(xzarr_mom0, dataview_size)),
         mom1_ptr(std::make_shared<XarrayAndViews<Store, float>>(xzarr_mom1, dataview_size)),
         mom2_ptr(std::make_shared<XarrayAndViews<Store, float>>(xzarr_mom2, dataview_size)) {}
 
@@ -175,11 +175,11 @@ XarrayZarrArray<Store, T> create_massmoment_xarray(const Dataset<Store> &dataset
 }
 
 template <typename Store>
-XarrayZarrArray<Store, uint32_t> create_massmom0_xarray(const Dataset<Store> &dataset,
+XarrayZarrArray<Store, uint64_t> create_massmom0_xarray(const Dataset<Store> &dataset,
                                                         const std::string_view name,
                                                         const size_t maxchunk, const size_t ngbxs) {
   const auto units = std::string_view("");
-  return create_massmoment_xarray<Store, uint32_t>(dataset, name, units, "<u4", 1, maxchunk, ngbxs);
+  return create_massmoment_xarray<Store, uint64_t>(dataset, name, units, "<u8", 1, maxchunk, ngbxs);
 }
 
 template <typename Store>
