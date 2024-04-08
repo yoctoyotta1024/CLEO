@@ -16,8 +16,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM) for speed test model example
- * after make/compiling, execute for example via:
+ * runs the CLEO super-droplet model (SDM) for speed test model example.
+ * After make/compiling, execute for example via:
  * ./src/spdtest ../src/config/config.txt
  */
 

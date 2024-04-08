@@ -15,8 +15,8 @@
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
- * runs the CLEO super-droplet model (SDM) for adiabatic parcel model example
- * after make/compiling, execute for example via:
+ * runs the CLEO super-droplet model (SDM) for adiabatic parcel model example.
+ * After make/compiling, execute for example via:
  * ./src/adia0D ../src/config/config.txt
  */
 
@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
   auto store = FSStore(config.zarrbasedir);
   auto dataset = Dataset(store);
 
-  /* create coupldyn solver and coupling between coupldyn and SDM */
+  /* Create coupldyn solver and coupling between coupldyn and SDM */
   CoupledDynamics auto coupldyn(create_coupldyn(config, tsteps.get_couplstep()));
   const CouplingComms<CvodeDynamics> auto comms = CvodeComms{};
 

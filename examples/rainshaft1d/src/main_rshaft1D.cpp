@@ -9,26 +9,24 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM)
- * after make/compiling, execute for example via:
+ * runs the CLEO super-droplet model (SDM) for 1-D rainshaft example.
+ * After make/compiling, execute for example via:
  * ./src/rshaft1D ../src/config/config.txt
  */
 
-
+#include <Kokkos_Core.hpp>
+#include <cmath>
 #include <concepts>
 #include <iostream>
-#include <cmath>
 #include <stdexcept>
 #include <string_view>
-
-#include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"

@@ -1,31 +1,32 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: main_divfree2D.cpp
  * Project: src
- * Created Date: Thursday 12th October 2023
+ * Created Date: Monday 29th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th January 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM)
+ * runs the CLEO super-droplet model (SDM) for 2-D divergence free motion example
  * after make/compiling, execute for example via:
- * ./src/df2D ../src/config/config.txt
+ * ./src/divfree2D ../src/config/config.txt
  */
 
+#include <Kokkos_Core.hpp>
+#include <cmath>
 #include <concepts>
 #include <iostream>
-#include <cmath>
 #include <stdexcept>
 #include <string_view>
-
-#include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
@@ -129,8 +130,9 @@ int main(int argc, char *argv[]) {
   const Config config(config_filename);
   const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
 
-  /* Create zarr store for writing output to storage */
-  FSStore fsstore(config.zarrbasedir);
+  /* Create Xarray dataset wit Zarr backend for writing output data to a store */
+  auto store = FSStore(config.zarrbasedir);
+  auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
@@ -139,7 +141,7 @@ int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(

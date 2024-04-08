@@ -9,14 +9,14 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 22nd March 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM)
+ * runs the CLEO super-droplet model (SDM) for yac_3d example using YAC.
  * after make/compiling, execute for example via:
  * ./src/yac1 ../src/config/config.txt
  */

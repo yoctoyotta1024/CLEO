@@ -1,31 +1,32 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: main_divfree2D.cpp
  * Project: src
- * Created Date: Thursday 12th October 2023
+ * Created Date: Monday 8th April 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th January 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM)
+ * runs the CLEO super-droplet model (SDM) for divergence free motion example using YAC.
  * after make/compiling, execute for example via:
- * ./src/df2D ../src/config/config.txt
+ * ./src/divfree2D_yac ../src/config/config.txt
  */
 
+#include <Kokkos_Core.hpp>
+#include <cmath>
 #include <concepts>
 #include <iostream>
-#include <cmath>
 #include <stdexcept>
 #include <string_view>
-
-#include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
