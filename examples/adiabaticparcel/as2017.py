@@ -21,8 +21,7 @@ Script compiles and runs CLEO adia0D to
 create data and plots similar to Figure 5 of
 "On the CCN (de)activation nonlinearities"
 S. Arabas and S. Shima 2017 to show
-example of cusp birfucation for
-0D adaibatic parcel exapansion and contraction.
+example of adaibatic parcel expansion and contraction.
 Note: SD(M) = superdroplet (model)
 '''
 
@@ -129,7 +128,7 @@ else:
   Path(sharepath).mkdir(exist_ok=True)
   Path(binpath).mkdir(exist_ok=True)
 
-### create file for gridbox boundaries
+### create file (and plot) for gridbox boundaries
 os.system("rm "+gridfile)
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
                                      ygrid, constsfile)
@@ -142,7 +141,7 @@ plt.close()
 runnum = 0
 for i in range(len(monors)):
 
-    ### create file with initial SDs conditions
+    ### create file (and plots) for initial SDs conditions
     monor, numconc = monors[i], numconcs[i]
     # all SDs have the same dryradius = monor [m]
     radiigen = rgens.MonoAttrGen(monor)
@@ -190,6 +189,7 @@ for i in range(len(monors)):
         gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"],
                                        isprint=True)
 
+        # read in output Xarray data
         thermo = pyzarr.get_thermodata(dataset, config["ntime"],
                                        gbxs["ndims"], consts)
         supersat = thermo.supersaturation()

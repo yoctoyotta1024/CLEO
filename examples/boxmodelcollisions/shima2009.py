@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 27th December 2023
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -128,20 +128,21 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-os.chdir(path2build)
-os.system('pwd')
-os.system('make clean')
+def run_exectuable(path2build, dataset, executable, configfile):
+  ''' delete existing dataset, the run exectuable with given config file'''
+  os.chdir(path2build)
+  os.system('pwd')
+  os.system('rm -rf '+dataset)
+  executable = path2build+'/examples/boxmodelcollisions/golovin/src/'+executable
+  print('Executable: '+executable)
+  print('Config file: '+configfile)
+  os.system(executable + ' ' + configfile)
 
 if "golovin" in kernels:
     ### ------------------------------------------------------------ ###
-    ### ------------------- COMPILE AND RUN CLEO ------------------- ###
+    ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
-    os.chdir(path2build)
-    os.system('pwd')
-    os.system('rm -rf '+dataset)
-    os.system('make -j 64 golcolls')
-    executable = path2build+'/examples/boxmodelcollisions/golovin/src/golcolls'
-    os.system(executable + ' ' + configfile)
+    run_exectuable(path2build, dataset, 'golcolls', configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
 
@@ -172,14 +173,9 @@ if "golovin" in kernels:
 
 if "long" in kernels:
     ### ------------------------------------------------------------ ###
-    ### ------------------- COMPILE AND RUN CLEO ------------------- ###
+    ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
-    os.chdir(path2build)
-    os.system('pwd')
-    os.system('rm -rf '+dataset)
-    os.system('make -j 64 longcolls')
-    executable = path2build+'/examples/boxmodelcollisions/long/src/longcolls'
-    os.system(executable + ' ' + configfile)
+    run_exectuable(path2build, dataset, 'longcolls', configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
 
@@ -210,14 +206,9 @@ if "long" in kernels:
 
 if "lowlist" in kernels:
     ### ------------------------------------------------------------ ###
-    ### ------------------- COMPILE AND RUN CLEO ------------------- ###
+    ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
-    os.chdir(path2build)
-    os.system('pwd')
-    os.system('rm -rf '+dataset)
-    os.system('make -j 64 lowlistcolls')
-    executable = path2build+'/examples/boxmodelcollisions/lowlist/src/lowlistcolls'
-    os.system(executable + ' ' + configfile)
+    run_exectuable(path2build, dataset, 'lowlistcolls', configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
 
