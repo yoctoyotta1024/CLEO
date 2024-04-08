@@ -99,14 +99,14 @@ np.set_printoptions(threshold=np.inf)
 
 # Read binary data from files
 press_values = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_press.dat")
-temp_values = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_temp.dat")
-qvap_values = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_qvap.dat")
+temp_values  = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_temp.dat")
+qvap_values  = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_qvap.dat")
 qcond_values = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_qcond.dat")
-uvel = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_uvel.dat")
-wvel = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_wvel.dat")
-vvel_values = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_vvel.dat")
+uvel         = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_uvel.dat")
+wvel         = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_wvel.dat")
+vvel_values  = thermodynamicvar_from_binary("../build/share/yac1_dimlessthermo_vvel.dat")
 
-# Pack all wind velocities edge data into one united field for YAC exchange
+# Pack all horizontal wind velocities edge data into one united field for YAC exchange
 united_edge_data = []
 for timestep in range(5):
     u_timestep_offset = timestep * 2325

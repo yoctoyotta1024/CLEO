@@ -98,11 +98,11 @@ np.set_printoptions(threshold=np.inf)
 
 # Read binary data from files
 press_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_press.dat")
-temp_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_temp.dat")
-qvap_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qvap.dat")
+temp_values  = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_temp.dat")
+qvap_values  = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qvap.dat")
 qcond_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qcond.dat")
-uvel = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_uvel.dat")
-wvel = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_wvel.dat")
+uvel         = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_uvel.dat")
+wvel         = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_wvel.dat")
 
 # Pack all wind velocities edge data into one united field for YAC exchange
 united_edge_data = []
