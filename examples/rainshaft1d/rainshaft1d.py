@@ -25,7 +25,6 @@ import sys
 import numpy as np
 import random
 from pathlib import Path
-from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]

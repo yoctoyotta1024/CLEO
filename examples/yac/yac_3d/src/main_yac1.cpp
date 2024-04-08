@@ -145,8 +145,9 @@ int main(int argc, char *argv[]) {
   const Config config(config_filename);
   const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
 
-  /* Create zarr store for writing output to storage */
-  FSStore fsstore(config.zarrbasedir);
+  /* Create Xarray dataset wit Zarr backend for writing output data to a store */
+  auto store = FSStore(config.zarrbasedir);
+  auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
