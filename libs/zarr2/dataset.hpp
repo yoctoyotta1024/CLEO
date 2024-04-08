@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 4th April 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,7 +33,7 @@
 #include "./xarray_zarr_array.hpp"
 #include "./zarr_group.hpp"
 
-// TODO(CB) delet redundant functions?
+// TODO(CB) delete redundant functions & document observers2
 
 /**
  * @brief A class representing a dataset made from a Zarr group (i.e. collection of Zarr arrays)
