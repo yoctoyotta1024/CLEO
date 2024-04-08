@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: runstats.cpp
+ * File: runstats_observer.cpp
  * Project: observers2
  * Created Date: Monday 8th April 2024
  * Author: Clara Bayley (CB)
@@ -21,7 +21,7 @@
  * e.g. of timestepping CLEO
  */
 
-#include "observers/runstats.hpp"
+#include "observers/runstats_observer.hpp"
 
 void RunStatsObserver::print_summary() const {
   const auto t_start = stats->t_start;
