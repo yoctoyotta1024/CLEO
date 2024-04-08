@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,14 +21,12 @@
  * ./src/cleocoupledsdm ../src/config/config.txt
  */
 
-
+#include <Kokkos_Core.hpp>
+#include <cmath>
 #include <concepts>
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
-#include <cmath>
-
-#include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
@@ -41,15 +39,16 @@
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
-#include "observers/gbxindexobs.hpp"
-#include "observers/massmomentsobs.hpp"
-#include "observers/nsupersobs.hpp"
-#include "observers/observers.hpp"
-#include "observers/printobs.hpp"
-#include "observers/runstats.hpp"
-#include "observers/stateobs.hpp"
-#include "observers/supersattrsobs.hpp"
-#include "observers/timeobs.hpp"
+#include "observers2/gbxindex_observer.hpp"
+#include "observers2/massmoments_observer.hpp"
+#include "observers2/nsupers_observer.hpp"
+#include "observers2/observers.hpp"
+#include "observers2/runstats_observer.hpp"
+#include "observers2/state_observer.hpp"
+#include "observers2/streamout_observer.hpp"
+#include "observers2/superdrops_observer.hpp"
+#include "observers2/time_observer.hpp"
+#include "observers2/totnsupers_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
@@ -58,8 +57,8 @@
 #include "superdrops/collisions/breakup.hpp"
 #include "superdrops/collisions/breakup_nfrags.hpp"
 #include "superdrops/collisions/coalbure.hpp"
-#include "superdrops/collisions/coalescence.hpp"
 #include "superdrops/collisions/coalbure_flag.hpp"
+#include "superdrops/collisions/coalescence.hpp"
 #include "superdrops/collisions/constprob.hpp"
 #include "superdrops/collisions/golovinprob.hpp"
 #include "superdrops/collisions/longhydroprob.hpp"
@@ -68,9 +67,8 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/terminalvelocity.hpp"
-#include "zarr/fsstore.hpp"
-#include "zarr/superdropattrsbuffers.hpp"
-#include "zarr/superdropsbuffers.hpp"
+#include "zarr2/dataset.hpp"
+#include "zarr2/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
                                             const unsigned int couplstep,
@@ -125,8 +123,7 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
   // const PairProbability auto coalprob = LowListCoalProb();
   // const PairProbability auto coalprob = GolovinProb();
   const PairProbability auto coalprob = LongHydroProb(1.0);
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
-                                                  coalprob);
+  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
 
   return coal;
   // return coal >> bu;
