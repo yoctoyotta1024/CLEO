@@ -9,7 +9,7 @@ Created Date: Monday 25th March 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Tuesday 9th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -33,8 +33,8 @@ def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir):
   labels = {
     "press": "Pressure /hPa",
     "temp": "Temperature /K",
-    "qvap": "q$_{v}$ Kg/Kg",
-    "qcond": "q$_{c}$ Kg/Kg",
+    "qvap": "q$_{v}$ g/Kg",
+    "qcond": "q$_{c}$ g/Kg",
     "wvel": "w m/s",
     "uvel": "u m/s",
     "vvel": "v m/s",
