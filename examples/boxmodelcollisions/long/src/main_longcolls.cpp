@@ -78,10 +78,16 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   return NullMotion{};
 }
 
-inline Observer auto create_supersattrs_observer(const unsigned int interval, FSStore &store,
-                                                 const int maxchunk) {
-  SuperdropsBuffers auto buffers = SdIdBuffer() >> XiBuffer() >> MsolBuffer() >> RadiusBuffer();
-  return SupersAttrsObserver(interval, store, maxchunk, buffers);
+template <typename Store>
+inline Observer auto create_superdrops_observer(const unsigned int interval,
+                                                Dataset<Store> &dataset, const int maxchunk) {
+  CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
+  CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
+  CollectDataForDataset<Store> auto msol = CollectMsol(dataset, maxchunk);
+
+  const auto collect_sddata = msol >> radius >> xi >> sdid;
+  return SuperdropsObserver(interval, dataset, maxchunk, collect_sddata);
 }
 
 template <typename Store>
@@ -90,13 +96,13 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  const Observer auto obs1 = PrintObserver(obsstep, &step2realtime);
+  const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
-  const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk, &step2dimlesstime);
+  const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
-  const Observer auto obs3 = create_supersattrs_observer(obsstep, store, maxchunk);
+  const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  return obs1 >> obs2 >> obs3;
+  return obssd >> obs1 >> obs0;
 }
 
 template <typename Store>

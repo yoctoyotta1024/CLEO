@@ -112,9 +112,11 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
-  const Observer auto obs1 = PrintObserver(obsstep * 10, &step2realtime);
+  const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
 
-  const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk, &step2dimlesstime);
+  const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
+
+  const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
 
   const Observer auto obs3 = NsupersObserver(obsstep, store, maxchunk, config.ngbxs);
 
