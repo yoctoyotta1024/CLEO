@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 7th March 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,7 +21,7 @@
  */
 
 ### Wall Clock time For Timestepping, columns are:
-### test_run gpus_cpus/s cpus/s serial/s
+### test_label | gpus_cpus/s | cpus/s | serial/s | # notes
 A0 14.6392 54.6415 166.347           # setup with all observers (stats, bulk and superdrops)
 A1 14.6466 52.8141 167.262           # setup with all observers (stats, bulk and superdrops)
 
@@ -31,5 +31,19 @@ B1 5.50010 28.9400 166.024           # setup with only stats and bulk observer (
 C0 0.244817 8.63166 162.860          # setup with only stats observer (no bulk and superdrops)
 C1 0.249448 8.62775 164.900          # setup with only stats observer (no bulk and superdrops)
 
-D0 10.9348 32.7594 14.4969           # A0 with updated code 7th March 2024
-D1 10.9312 32.5546 14.5363           # A0 with updated code 7th March 2024
+D0 10.9348 32.7594 14.4969           # test A with updated code compilation 7th March 2024
+D1 10.9312 32.5546 14.5363           # test A with updated code compilation 7th March 2024
+
+E0 8.94457 23.3795 14.7790           # test D without Nrainsupers observer (updated compilation)
+E1 7.64662 23.0729 14.4590           # test D without Nrainsupers observer (updated compilation)
+
+F0 3.87916 12.1330 14.5654           # test B (updated compilation)
+F1 3.87100 12.2397 14.5082           # test B (updated compilation)
+
+G0 0.322182 1.45971 13.9648          # test C (updated compilation)
+G1 0.334462 1.44754 13.6179          # test C (updated compilation)
+
+### Wall Clock time For Timestepping, since New Observers and Zarr Libraries since 8th April 2024
+###  columns are: test_label | gpus_cpus/s | cpus/s | serial/s | # notes
+A0 0.430902 1.4428 13.6574          # test E with new observers / data output libraries
+A1 0.428064 2.4814 14.6305          # test E with new observers / data output libraries
