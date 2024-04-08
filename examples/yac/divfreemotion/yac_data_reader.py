@@ -98,23 +98,25 @@ np.set_printoptions(threshold=np.inf)
 
 # Read binary data from files
 press_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_press.dat")
-temp_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_temp.dat")
-qvap_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qvap.dat")
+temp_values  = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_temp.dat")
+qvap_values  = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qvap.dat")
 qcond_values = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_qcond.dat")
-uvel = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_uvel.dat")
-wvel = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_wvel.dat")
+uvel         = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_uvel.dat")
+wvel         = thermodynamicvar_from_binary("../build/share/df2d_dimlessthermo_wvel.dat")
 
 # Pack all wind velocities edge data into one united field for YAC exchange
 united_edge_data = []
-for lat_index in range(0, len(lat) * 2 - 1):
-    if (lat_index % 2 == 0):
-        lower_index = (lat_index // 2) * (len(lon) - 1)
-        upper_index = (lat_index // 2 + 1) * (len(lon) - 1)
-        united_edge_data.extend(uvel[lower_index:upper_index])
-    else:
-        lower_index = ((lat_index - 1) // 2) * len(lon)
-        upper_index = ((lat_index + 1) // 2) * len(lon)
-        united_edge_data.extend(wvel[lower_index:upper_index])
+for timestep in range(0, 3):
+    timestep_offset = timestep * (len(edge_centers_lon) // 2 )
+    for lat_index in range(0, len(lat) * 2 - 1):
+        if (lat_index % 2 == 0):
+            lower_index = timestep_offset + (lat_index // 2) * (len(lon) - 1)
+            upper_index = timestep_offset + (lat_index // 2 + 1) * (len(lon) - 1)
+            united_edge_data.extend(uvel[lower_index:upper_index])
+        else:
+            lower_index = timestep_offset + ((lat_index - 1) // 2) * len(lon)
+            upper_index = timestep_offset + ((lat_index + 1) // 2) * len(lon)
+            united_edge_data.extend(wvel[lower_index:upper_index])
 
 # Use YAC to exchange the values for first timestep
 press.put(press_values[0:900])

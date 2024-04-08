@@ -26,20 +26,6 @@ extern "C" {
   #include "yac_interface.h"
 }
 
-/* open file called 'filename' and return vector
-of doubles for first variable in that file */
-std::vector<double> thermodynamicvar_from_binary(std::string_view filename) {
-  /* open file and read in the metatdata
-  for all the variables in that file */
-  std::ifstream file(open_binary(filename));
-  std::vector<VarMetadata> meta(metadata_from_binary(file));
-
-  /* read in the data for the 1st variable in the file */
-  std::vector<double> thermovar(vector_from_binary<double>(file, meta.at(0)));
-
-  return thermovar;
-}
-
 /* return (k,i,j) indicies from idx for a flattened 3D array
 with ndims [nz, nx, ny]. kij is useful for then getting
 position in of a variable in a flattened array defined on
@@ -53,69 +39,89 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
   return std::array<size_t, 3>{k, i, j};
 }
 
-/* updates positions to gbx0 in vector (for
-acessing value at next timestep). Assumes domain
-is decomposed into cartesian C grid with dimensions
-(ie. number of gridboxes in each dimension) ndims */
-void CartesianDynamics::increment_position() {
-  pos += ndims[0] * ndims[1] * ndims[2];
-  pos_zface += (ndims[0] + 1) * ndims[1] * ndims[2];
-  pos_xface += ndims[0] * (ndims[1] + 1) * ndims[2];
-  pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
-}
-
-void CartesianDynamics::receive_fields_from_yac() {
+/* This subroutine receives thermodynamic data from YAC for a horizontal slice
+ * of the domain. This horizontal slice is defined in the u and w directions.
+ * The received values are press, temp, qvap, qcond defined on the cell-centers.
+ * united_edge_data receives the data for all the edge-centers, and component
+ * velocities are then placed in uvel and wvel according to their positions.*/
+void CartesianDynamics::receive_hor_slice_from_yac(int cell_offset,
+                                                   int u_edges_offset,
+                                                   int w_edges_offset) {
   int info, error;
-  double * yac_raw_data = NULL;
+  double *yac_raw_data = NULL;
 
-  yac_raw_data = press.data();
+  yac_raw_data = press.data() + cell_offset;
   yac_cget(pressure_yac_id, 1, &yac_raw_data, &info, &error);
 
-  yac_raw_data = temp.data();
+  yac_raw_data = temp.data() + cell_offset;
   yac_cget(temp_yac_id, 1, &yac_raw_data, &info, &error);
 
-  yac_raw_data = qvap.data();
+  yac_raw_data = qvap.data() + cell_offset;
   yac_cget(qvap_yac_id, 1, &yac_raw_data, &info, &error);
 
-  yac_raw_data = qcond.data();
+  yac_raw_data = qcond.data() + cell_offset;
   yac_cget(qcond_yac_id, 1, &yac_raw_data, &info, &error);
 
   yac_raw_data = united_edge_data.data();
   yac_cget(hor_wind_velocities_yac_id, 1, &yac_raw_data, &info, &error);
 
-  int lower_index, upper_index;
-  lower_index = upper_index = 0;
-  std::vector<double> * target;
+  // Splits the horizontal edge data into its components in uvel and wvel
+  std::vector<double>::iterator source_it = united_edge_data.begin();
+  std::vector<double>::iterator uvel_it = uvel.begin() + u_edges_offset;
+  std::vector<double>::iterator wvel_it = wvel.begin() + w_edges_offset;
   for (size_t lat_index = 0; lat_index < vertex_latitudes.size() * 2 - 1; lat_index++) {
         if (lat_index % 2 == 0) {
-            target = &uvel;
-            lower_index = upper_index;
-            upper_index = lower_index + 30;
+          for (size_t index = 0; index < ndims[0]; index++, uvel_it++, source_it++)
+            *uvel_it = *source_it;
         } else {
-            target = &wvel;
-            lower_index = upper_index;
-            upper_index = lower_index + 31;
+          for (size_t index = 0; index < ndims[0] + 1; index++, wvel_it++, source_it++)
+            *wvel_it = *source_it;
         }
-        target->insert(target->end(),
-                       united_edge_data.begin() + lower_index,
-                       united_edge_data.begin() + upper_index);
   }
 }
 
-CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
+/* This subroutine is the main entry point for receiving data from YAC.
+ * It checks the dimensionality of the simulation based on the config data.
+ * For 2D simulations it simply becomes a wrapper for receive_hor_slice_from_yac.
+ * For 3D simulations, for each vertical level, it runs receive_hor_slice_from_yac
+ * and gets the cell-centered vertical wind velocities.*/
+void CartesianDynamics::receive_fields_from_yac() {
+  int total_horizontal_cells = ndims[0] * ndims[1];
+  int total_u_edges = ndims[0] * (ndims[1] + 1);
+  int total_w_edges = ndims[1] * (ndims[0] + 1);
+
+  int info, error;
+  double * yac_raw_data = NULL;
+
+  if (config.nspacedims == 3) {
+    yac_raw_data = vvel.data();
+    yac_cget(vvel_yac_id, 1, &yac_raw_data, &info, &error);
+  }
+
+  for (int vertical_index = 0; vertical_index < ndims[2]; vertical_index++) {
+    receive_hor_slice_from_yac(vertical_index * total_horizontal_cells,
+                               vertical_index * total_u_edges,
+                               vertical_index * total_w_edges);
+
+    if (config.nspacedims == 3) {
+      yac_raw_data += total_horizontal_cells;
+      yac_cget(vvel_yac_id, 1, &yac_raw_data, &info, &error);
+    }
+  }
+}
+
+CartesianDynamics::CartesianDynamics(const Config &config,
+                                     const std::array<size_t, 3> i_ndims,
                                      const unsigned int nsteps)
     : ndims(i_ndims),
-      pos(0),
-      pos_zface(0),
-      pos_xface(0),
-      pos_yface(0),
+      config(config),
       get_wvel(nullwinds()),
       get_uvel(nullwinds()),
       get_vvel(nullwinds()) {
   std::cout << "\n--- coupled cartesian dynamics from file ---\n";
 
+  // -- YAC initialization and calendar definitions ---
   yac_cinit();
-
   yac_cdef_calendar(YAC_PROLEPTIC_GREGORIAN);
   yac_cdef_datetime("1850-01-01T00:00:00", "1850-12-31T00:00:00");
 
@@ -128,10 +134,15 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int grid_id = -1;
   std::string cleo_grid_name = "cleo_grid";
 
-  int total_cells[2]      = {ndims[0], ndims[1]};
-  int total_vertices[2]   = {ndims[0] + 1, ndims[1] + 1};
   int cyclic_dimension[2] = {0, 0};
-  int total_edges         = ndims[0] + ndims[1] + 2 * ndims[0] * ndims[1];
+  int total_cells[2]      = {static_cast<int>(ndims[0]),
+                             static_cast<int>(ndims[1])};
+  int total_vertices[2]   = {static_cast<int>(ndims[0] + 1),
+                             static_cast<int>(ndims[1] + 1)};
+  int total_edges[2]      = {static_cast<int>(ndims[0] * (ndims[1] + 1)),
+                             static_cast<int>(ndims[1] * (ndims[0] + 1))};
+  int cell_point_id = -1;
+  int edge_point_id = -1;
 
   vertex_longitudes           = std::vector<double>(ndims[0] + 1, 0);
   vertex_latitudes            = std::vector<double>(ndims[1] + 1, 0);
@@ -142,12 +153,12 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
-  for (size_t i = 0; i < vertex_longitudes.size(); i++) {
+  for (size_t i = 0; i < vertex_longitudes.size(); i++)
     vertex_longitudes[i] = i * (2 * std::numbers::pi / (ndims[0] + 1));
-    if (i < vertex_latitudes.size())
+
+  for (size_t i = 0; i < vertex_latitudes.size(); i++)
       vertex_latitudes[i] = (-0.5 * std::numbers::pi) +
                             (i + 1) * (std::numbers::pi / (ndims[1] + 2));
-  }
 
   // Defines a regular 2D grid
   yac_cdef_grid_reg2d(cleo_grid_name.c_str(), total_vertices,
@@ -158,10 +169,11 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // Defines the cell center longitude and latitude values in radians
   // The values are later permuted by YAC to generate all cell center coordinates
-  for (size_t i = 0; i < cell_center_longitudes.size(); i++) {
-    cell_center_longitudes[i] = vertex_longitudes[i] + std::numbers::pi / (ndims[0] + 1);
-    cell_center_latitudes[i]  = vertex_latitudes[i] + std::numbers::pi / (2 * (ndims[1] + 2));
-  }
+  for (size_t i = 0; i < cell_center_longitudes.size(); i++)
+    cell_center_longitudes[i] = vertex_longitudes[i] + std::numbers::pi / (ndims[0] + 2);
+
+  for (size_t i = 0; i < cell_center_latitudes.size(); i++)
+    cell_center_latitudes[i]  = vertex_latitudes[i] + std::numbers::pi / (2 * (ndims[1] + 3));
 
   // Defines the edge center longitude and latitude values in radians.
   // Since it is not possible to generate edge center coordinates with a single
@@ -187,12 +199,10 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
     }
   }
 
-  int cell_point_id = -1;
-  int edge_point_id = -1;
   yac_cdef_points_reg2d(grid_id, total_cells, YAC_LOCATION_CELL,
                         cell_center_longitudes.data(), cell_center_latitudes.data(),
                         &cell_point_id);
-  yac_cdef_points_unstruct(grid_id, total_edges, YAC_LOCATION_EDGE,
+  yac_cdef_points_unstruct(grid_id, total_edges[0] + total_edges[1], YAC_LOCATION_EDGE,
                         edge_centers_longitudes.data(), edge_centers_latitudes.data(),
                         &edge_point_id);
 
@@ -221,6 +231,10 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                  num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id);
 
+  yac_cdef_field("vvel", component_id, &cell_point_id,
+                 num_point_sets, collection_size, "PT1M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &vvel_yac_id);
+
   yac_cdef_field("hor_wind_velocities", component_id, &edge_point_id,
                  num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &hor_wind_velocities_yac_id);
@@ -247,6 +261,11 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                   "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
+  yac_cdef_couple("yac_reader", "yac_reader_grid", "vvel",
+                  "cleo", "cleo_grid", "vvel",
+                  "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+
   yac_cdef_couple("yac_reader", "yac_reader_grid", "hor_wind_velocities",
                   "cleo", "cleo_grid", "hor_wind_velocities",
                   "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
@@ -255,12 +274,17 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // --- End of YAC definitions ---
   yac_cenddef();
 
-  press            = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  temp             = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  qvap             = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  qcond            = std::vector<double>(total_cells[0] * total_cells[1], 0);
-  united_edge_data = std::vector<double>(total_edges, 0);
+  // Initialization of target containers for receiving data
+  press            = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
+  temp             = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
+  qvap             = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
+  qcond            = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
+  uvel             = std::vector<double>(total_edges[0] * ndims[2], 0);
+  wvel             = std::vector<double>(total_edges[1] * ndims[2], 0);
+  vvel             = std::vector<double>(total_cells[0] * total_cells[1] * (ndims[2] + 1), 0);
+  united_edge_data = std::vector<double>(total_edges[0] + total_edges[1], 0);
 
+  // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
   receive_fields_from_yac();
 
   std::cout << "Finished setting up YAC for receiving:\n"
@@ -268,6 +292,8 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                "  water vapour mass mixing ratio,\n"
                "  liquid water mass mixing ratio,\n";
 
+  // Defines the functions that will be used to retrieve data from the containers
+  // (Can probably be simplified)
   set_winds(config);
 
   std::cout << "--- cartesian dynamics from YAC: success ---\n";
@@ -289,8 +315,7 @@ void CartesianDynamics::set_winds(const Config &config) {
     case 2:
     case 3:  // 1-D, 2-D or 3-D model
     {
-      const std::string windstr(set_winds_from_binaries(
-          nspacedims, config.wvel_filename, config.uvel_filename, config.vvel_filename));
+      const std::string windstr(set_winds_from_yac(nspacedims));
       std::cout << windstr;
     } break;
 
@@ -302,17 +327,13 @@ void CartesianDynamics::set_winds(const Config &config) {
 /* Read in data from binary files for wind
 velocity components in 1D, 2D or 3D model
 and check they have correct size */
-std::string CartesianDynamics::set_winds_from_binaries(const unsigned int nspacedims,
-                                                       std::string_view wvel_filename,
-                                                       std::string_view uvel_filename,
-                                                       std::string_view vvel_filename) {
+std::string CartesianDynamics::set_winds_from_yac(const unsigned int nspacedims) {
   std::string infostart(std::to_string(nspacedims) + "-D model, wind velocity");
 
   std::string infoend;
   switch (nspacedims) {
     case 3:  // 3-D model
-      vvel_yfaces = thermodynamicvar_from_binary(vvel_filename);
-      get_vvel = get_vvel_from_binary();
+      get_vvel = get_vvel_from_yac();
       infoend = ", u";
     case 2:  // 3-D or 2-D model
       get_uvel = get_uvel_from_yac();
@@ -373,16 +394,12 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_uvel_from_yac() const {
   return func;
 }
 
-/* returns vector of vvel retrieved from binary
-file called 'filename' where vvel is defined on
-the y-faces (coord2) of gridboxes */
-CartesianDynamics::get_winds_func CartesianDynamics::get_vvel_from_binary() const {
+CartesianDynamics::get_winds_func CartesianDynamics::get_vvel_from_yac() const {
   const auto func = [&](const unsigned int gbxindex) {
-    const size_t lpos(static_cast<size_t>(gbxindex) +
-                      pos_yface);                    // position of y lower face in 1D vvel vector
+    const size_t lpos(static_cast<size_t>(gbxindex));  // position of y lower face in 1D vvel vector
     const size_t uppos(lpos + ndims[1] * ndims[0]);  // position of x upper face
 
-    return std::pair(vvel_yfaces.at(lpos), vvel_yfaces.at(uppos));
+    return std::pair(vvel.at(lpos), vvel.at(uppos));
   };
 
   return func;
