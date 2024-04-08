@@ -57,7 +57,7 @@ class Thermodata:
     self.press_units = ds["press"].units # assumed probably hecto-pascals
     self.temp_units = ds["temp"].units # assumed probably kelvin
     self.qvap_units = ds["qvap"].units # assumed probably g/Kg
-    self.qcond_units = ds["cond"].units # assumed probably g/Kg
+    self.qcond_units = ds["qcond"].units # assumed probably g/Kg
     self.theta_units = ds["temp"].units # assumed probably kelvin
 
   def potential_temp(self):

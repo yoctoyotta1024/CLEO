@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 27th December 2023
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -127,8 +127,9 @@ plt.close()
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-os.system("make clean && make -j 64 adia0D")
 executable = path2build+"/examples/adiabaticparcel/src/adia0D"
+print('Executable: '+executable)
+print('Config file: '+configfile)
 os.system(executable + " " + configfile)
 
 # 3. load and plot results

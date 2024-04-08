@@ -174,10 +174,10 @@ for i in range(len(monors)):
         os.system("rm "+params["setuptxt"])
 
         ### run model
+        os.chdir(path2build)
         executable = path2build+"/examples/adiabaticparcel/src/adia0D"
         print('Executable: '+executable)
         print('Config file: '+configfile)
-        os.chdir(path2build)
         os.system(executable + " " + configfile)
 
         ### load results
