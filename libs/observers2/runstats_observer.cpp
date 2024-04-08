@@ -21,7 +21,7 @@
  * e.g. of timestepping CLEO
  */
 
-#include "observers/runstats_observer.hpp"
+#include "observers2/runstats_observer.hpp"
 
 void RunStatsObserver::print_summary() const {
   const auto t_start = stats->t_start;

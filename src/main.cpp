@@ -187,8 +187,9 @@ inline Observer auto create_gridboxes_observer(const unsigned int interval, Data
   return WriteToDatasetObserver(interval, dataset, collect_gbxdata);
 }
 
+template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     FSStore &store) {
+                                     Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
   const auto maxchunk = int{config.maxchunk};
 
@@ -213,12 +214,13 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   return obssd >> obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, FSStore &store) {
+template <typename Store>
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
-  const Observer auto obs(create_observer(config, tsteps, store));
+  const Observer auto obs(create_observer(config, tsteps, dataset));
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
@@ -235,8 +237,10 @@ int main(int argc, char *argv[]) {
   const Config config(config_filename);
   const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
 
-  /* Create zarr store for writing output to storage */
+  /* Create Xarray dataset wit Zarr backend for writing output data to a store */
   FSStore fsstore(config.zarrbasedir);
+  auto store = FSStore(config.zarrbasedir);
+  auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
@@ -245,7 +249,7 @@ int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(
