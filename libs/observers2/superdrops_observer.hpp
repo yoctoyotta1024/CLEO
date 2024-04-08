@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 4th April 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,6 +24,7 @@
 #define LIBS_OBSERVERS2_SUPERDROPS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <cassert>
 #include <concepts>
 #include <memory>
 #include <string>
@@ -123,6 +124,8 @@ struct XiFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
                   Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
+    assert((totsupers(kk).get_xi() < dlc::uintmax) &&
+           "superdroplet mulitiplicy too large to represent with 4 byte unsigned integer");
     auto xi = static_cast<uint32_t>(totsupers(kk).get_xi());
     d_data(kk) = xi;
   }

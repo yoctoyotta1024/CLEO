@@ -44,6 +44,8 @@ void MassMomentsFunc::operator()(const TeamMember &team_member, const viewd_cons
       KOKKOS_LAMBDA(const size_t kk, uint32_t &m0, float &m1, float &m2) {
         const auto &drop(supers(kk));
 
+        assert((drop.get_xi() < dlc::uintmax) &&
+               "superdroplet mulitiplicy too large to represent with 4 byte unsigned integer");
         m0 += static_cast<uint32_t>(drop.get_xi());
 
         const auto mass = drop.mass();
@@ -80,6 +82,8 @@ void RaindropsMassMomentsFunc::operator()(const TeamMember &team_member,
         const auto &drop(supers(kk));
         const auto binary = bool{drop.get_radius() >= rlim};  // 1 if droplet is raindrop, else 0
 
+        assert((drop.get_xi() < dlc::uintmax) &&
+               "superdroplet mulitiplicy too large to represent with 4 byte unsigned integer");
         m0 += static_cast<uint32_t>(drop.get_xi() * binary);
 
         const auto mass = drop.mass();

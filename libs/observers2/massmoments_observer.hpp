@@ -24,6 +24,7 @@
 #define LIBS_OBSERVERS2_MASSMOMENTS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <cassert>
 #include <concepts>
 
 #include "../cleoconstants.hpp"
