@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 4th April 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,7 +34,7 @@
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers2/gbxindex_observer.hpp"
-// #include "observers2/massmoments_observer.hpp"
+#include "observers2/massmoments_observer.hpp"
 #include "observers2/nsupers_observer.hpp"
 #include "observers2/observers.hpp"
 #include "observers2/state_observer.hpp"
@@ -105,10 +105,8 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 
   const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
   const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
-  // const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  // const Observer auto obs4 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk,
-  // config.ngbxs); const Observer auto obs5 = NsupersObserver(obsstep, dataset, maxchunk,
-  // config.ngbxs);
+  const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs4 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
   const Observer auto obs6 = TotNsupersObserver(obsstep, dataset, maxchunk);
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
   const Observer auto obssd = create_superdrops_observer(config, tsteps, dataset);
