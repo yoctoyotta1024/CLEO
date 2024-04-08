@@ -37,7 +37,7 @@ def get_rawdata4key(dataset, key):
 
 def get_rawdata4raggedkey(dataset, key):
   ds = get_rawdataset(dataset)
-  return ak.unflatten(ds[key].values, ds["rgd_totnsupers"].values)
+  return ak.unflatten(ds[key].values, ds["raggedcount"].values)
 
 def raggedvar_fromzarr(ds, raggedcount, var):
   ''' returns ragged ak.Array dims [time, ragged]
@@ -101,9 +101,9 @@ def get_totnsupers(dataset):
   if type(dataset) == str:
     dataset = get_rawdataset(dataset)
   try:
-    return dataset["rgd_totnsupers"].values
-  except:
     return dataset["totnsupers"].values
+  except:
+    return dataset["raggedcount"].values
 
 def get_nsupers(dataset, ntime, ndims):
   return var4d_fromzarr(dataset, ntime, ndims, "nsupers")
@@ -119,9 +119,9 @@ def surfaceprecip_estimate(dataset, gbxs):
 
   ds = get_rawdataset(dataset)
 
-  sdId = ak.unflatten(ds["sdId"].values, ds["rgd_totnsupers"].values)
-  radius = ak.unflatten(ds["radius"].values, ds["rgd_totnsupers"].values)
-  xi = ak.unflatten(ds["xi"].values, ds["rgd_totnsupers"].values)
+  sdId = ak.unflatten(ds["sdId"].values, ds["raggedcount"].values)
+  radius = ak.unflatten(ds["radius"].values, ds["raggedcount"].values)
+  xi = ak.unflatten(ds["xi"].values, ds["raggedcount"].values)
 
   r3sum = []
   for ti in range(ds.time.shape[0]-1):
