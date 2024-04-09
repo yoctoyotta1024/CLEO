@@ -9,7 +9,7 @@ project("speedtest")
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
-set(CLEOLIBS gridboxes initialise observers2 runcleo superdrops zarr2)
+set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
 # create primary executable for CLEO in serial, gpu and cpu speed tests
 add_executable(spdtest EXCLUDE_FROM_ALL "main_spdtest.cpp")

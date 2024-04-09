@@ -6,7 +6,7 @@ Created Date: Monday 20th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 27th March 2024
+Last Modified: Tuesday 9th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -76,8 +76,8 @@ exclude_patterns = []
 breathe_projects = {
     "runcleo"          : "../build/doxygen/xml/",
     "superdrops"       : "../build/doxygen/xml/",
-    "zarr2"            : "../build/doxygen/xml/",
-    "observers2"        : "../build/doxygen/xml/",
+    "zarr"             : "../build/doxygen/xml/",
+    "observers"        : "../build/doxygen/xml/",
 }
 
 breathe_default_project = 'proj'
