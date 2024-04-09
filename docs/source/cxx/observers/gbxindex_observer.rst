@@ -1,12 +1,17 @@
-XXX Observer
-============
+Gbxindex Observer
+=================
 
-// TODO(CB) write doc
+Header file: ``<libs/observers/gbxindex_observer.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/gbxindex_observer.hpp>`_
 
-Header file: ``<libs/observers/XXX_observer.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/XXX_observer.hpp>`_
+.. doxygenstruct:: GbxIndexFunctor
+   :project: observers
+   :private-members:
+   :protected-members:
+   :members:
+   :undoc-members:
 
-.. doxygenstruct:: XXXObserver
+.. doxygenclass:: GbxindexObserver
    :project: observers
    :private-members:
    :protected-members:

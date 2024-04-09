@@ -34,28 +34,49 @@
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
+/**
+ * @struct GbxIndexFunctor
+ * @brief Functor for copying gridbox indexes to a view in device memory.
+ */
 struct GbxIndexFunctor {
-  viewd_constgbx d_gbxs;  // view of gridboxes
-  Buffer<uint32_t>::mirrorviewd_buffer
-      d_data;  // mirror view on device for gbxindex of every gridbox
+  viewd_constgbx d_gbxs;                       /**< View of gridboxes. */
+  Buffer<uint32_t>::mirrorviewd_buffer d_data; /**< Mirror view on device for gridbox indexes. */
 
+  /**
+   * @brief Constructor for GbxIndexFunctor.
+   * @param d_gbxs View of gridboxes on device.
+   * @param d_data Mirror view on device of memory to copy gridbox indexes into.
+   */
   GbxIndexFunctor(const viewd_constgbx d_gbxs, Buffer<uint32_t>::mirrorviewd_buffer d_data)
       : d_gbxs(d_gbxs), d_data(d_data) {}
 
-  // Functor operator to perform copy of gbxindex of each gridbox to d_data in parallel
+  /**
+   * @brief Operator is functor for within a Kokkos::parallel_for loop.
+   *
+   * Copies a gridbox's gbxindex to d_data view (for each gridbox in parallel).
+   *
+   * @param ii index for the gridbox in the d_gbxs and d_data views.
+   */
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t ii) const { d_data(ii) = d_gbxs(ii).get_gbxindex(); }
 };
 
-/* template observer which writes gbxindex for every gridbox out to a 1-D array
-as a coordinate of an xarray dataset */
+/* @class GbxindexObserver
+ * @brief Observer to output gridbox indexes to a 1-D array as coordinate of an xarray dataset.
+ * @tparam Store Type of store for the dataset.
+ */
 template <typename Store>
 class GbxindexObserver {
  private:
-  Dataset<Store> &dataset;  ///< dataset to write gbxindex data to
-  std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr;  ///< pointer to gbxindex array
+  Dataset<Store> &dataset; /**< Dataset to write gridbox index data to. */
+  std::shared_ptr<XarrayZarrArray<Store, uint32_t>>
+      xzarr_ptr; /**< Pointer to gridbox index array in dataset. */
 
-  /* returns a view in the host memor of the gbxindex of every gridbox in d_gbxs */
+  /**
+   * @brief Collects gridbox indexes from g_gbxs into a host memory view.
+   * @param d_gbxs View of the gridboxes in device memory.
+   * @return View in host memory of gridbox index of every gridbox in d_gbxs.
+   */
   Buffer<uint32_t>::viewh_buffer collect_gbxindexes(const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
     auto h_data = Buffer<uint32_t>::viewh_buffer("h_data", ngbxs);
@@ -67,6 +88,12 @@ class GbxindexObserver {
   }
 
  public:
+  /**
+   * @brief Constructor for GbxindexObserver.
+   * @param dataset Dataset to write gridbox index data to.
+   * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+   * @param ngbxs Number of gridboxes in final array.
+   */
   GbxindexObserver(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
@@ -75,8 +102,14 @@ class GbxindexObserver {
 
   ~GbxindexObserver() { dataset.write_arrayshape(xzarr_ptr); }
 
-  /* write the gbxindex of every gridbox in d_gbxs to the gbxindex array in the dataset and assert
-  the size of the gbxindex dimension in the dataset is correct */
+  /**
+   * @brief Obsevers the gridboxes' gbxindexes before timestepping.
+   *
+   * Write the gbxindex of every gridbox in d_gbxs to the gbxindex array in the dataset and assert
+   * the size of the gbxindex dimension in the dataset is correct.
+   *
+   * @param d_gbxs View of gridboxes on device.
+   */
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes gbxindex observer\n";
     auto h_data = collect_gbxindexes(d_gbxs);
@@ -85,13 +118,41 @@ class GbxindexObserver {
            "inconsistent size of gbxindex data and dataset dimension");
   }
 
+  /**
+   * @brief Placeholder for after timestepping functionality and to make class satisfy observer
+   * concept.
+   */
   void after_timestepping() const {}
 
+  /**
+   * @brief Placeholder for functionality at the start of each timestep and to make class satisfy
+   * observer concept.
+   * @param t_mdl Current model timestep.
+   * @param d_gbxs View of gridboxes on device.
+   * @param totsupers View of superdrops on device.
+   */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
 
+  /**
+   * @brief Returns the timestep of the next observation.
+   *
+   * No observation during timestepping so function returns the largest possible timestep (largest
+   * unsigned integer).
+   *
+   * @param t_mdl Current model timestep.
+   * @return Next observation timestep.
+   */
   unsigned int next_obs(const unsigned int t_mdl) const { return LIMITVALUES::uintmax; }
 
+  /**
+   * @brief Checks if the current timestep is an observation timestep.
+   *
+   * No observation during timestepping so function always returns false.
+   *
+   * @param t_mdl Current model timestep.
+   * @return boolean, false.
+   */
   bool on_step(const unsigned int t_mdl) const { return false; }
 };
 
