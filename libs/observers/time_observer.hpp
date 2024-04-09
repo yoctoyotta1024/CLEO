@@ -16,7 +16,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Observer to output time at the start of each observation timestep to an array in a dataset
+ * Observer to output time at the start of each observation timestep as a coordinate of an Xarray
+ * dataset
  */
 
 #ifndef LIBS_OBSERVERS_TIME_OBSERVER_HPP_
@@ -36,17 +37,30 @@
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
-/* template class for observing time and writing to array as a coordinate of an xarray dataset */
+/**
+ * @class DoTimeObs
+ * @brief Template class for functionality to observe time at the start of each timestep and write
+ * it to a Zarr array as a coordinate of an xarray dataset.
+ * @tparam Store Type of store for dataset.
+ */
 template <typename Store>
 class DoTimeObs {
  private:
-  Dataset<Store> &dataset;                                   ///< dataset to write time data to
-  std::shared_ptr<XarrayZarrArray<Store, float>> xzarr_ptr;  ///< pointer to time array in dataset
+  Dataset<Store> &dataset; /**< Dataset to write time data to. */
+  std::shared_ptr<XarrayZarrArray<Store, float>>
+      xzarr_ptr; /**< Pointer to time array in dataset. */
   std::function<double(unsigned int)>
-      step2dimlesstime;  // function to convert timesteps to real time [assumed seconds]
+      step2dimlesstime; /**< Function to convert timesteps to real time [assumed seconds]. */
 
-  // increment size of time dimension in dataset and write out time data to array in the dataset.
-  // Note conversion of time from double (8 bytes) to single precision (4 bytes float) in output
+  /**
+   * @brief Increment size of time dimension in dataset and write out current time of model to the
+   * array in the dataset.
+   *
+   * Note: conversion of time from double precision (8 bytes double) to single precision (4 bytes
+   * float) in output.
+   *
+   * @param t_mdl Current model time.
+   */
   void at_start_step(const unsigned int t_mdl) const {
     const auto ntimes = size_t{dataset.get_dimension("time") + 1};
     const auto timedim = std::pair<std::string, size_t>({"time", ntimes});
@@ -57,6 +71,12 @@ class DoTimeObs {
   }
 
  public:
+  /**
+   * @brief Constructor for DoTimeObs.
+   * @param dataset Dataset to write time data to.
+   * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+   * @param step2dimlesstime Function to convert model timesteps to a real time [assumed seconds].
+   */
   DoTimeObs(Dataset<Store> &dataset, const size_t maxchunk,
             const std::function<double(unsigned int)> step2dimlesstime)
       : dataset(dataset),
@@ -65,22 +85,49 @@ class DoTimeObs {
                                                             maxchunk, 0))),
         step2dimlesstime(step2dimlesstime) {}
 
+  /**
+   * @brief Destructor for DoTimeObs.
+   */
   ~DoTimeObs() { dataset.write_arrayshape(xzarr_ptr); }
 
+  /**
+   * @brief Placeholder for before timestepping functionality and to make class satisfy observer
+   * concept.
+   */
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes time observer\n";
   }
 
+  /**
+   * @brief Placeholder for after timestepping functionality and to make class satisfy observer
+   * concept.
+   */
   void after_timestepping() const {}
 
+  /**
+   * @brief At the start of each timestep when function called, function writes time data to the
+   * array in a dataset.
+   * @param t_mdl Current model timestep.
+   * @param d_gbxs View of gridboxes on device.
+   * @param totsupers View of superdrops on device.
+   */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
     at_start_step(t_mdl);
   }
 };
 
-/* constructs observer which writes time variable out to a 1-D array with a constant timestep
-'interval' using an instance of the ConstTstepObserver class */
+/**
+ * @brief Constructs an observer which writes (real) time at start of each observation timestep to a
+ * 1-D array with a constant observation timestep "interval".
+ *
+ * @tparam Store Type of store for dataset.
+ * @param interval Observation timestep.
+ * @param dataset Dataset to write time data to.
+ * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+ * @param step2dimlesstime Function to convert model timesteps to real time (assumed seconds).
+ * @return Constructed type satisfying observer concept.
+ */
 template <typename Store>
 inline Observer auto TimeObserver(const unsigned int interval, Dataset<Store> &dataset,
                                   const int maxchunk,

@@ -1,14 +1,15 @@
-XXX Observer
-============
+Time Observer
+=============
 
-// TODO(CB) write doc
+Header file: ``<libs/observers/time_observer.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/time_observer.hpp>`_
 
-Header file: ``<libs/observers/XXX_observer.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/XXX_observer.hpp>`_
-
-.. doxygenstruct:: XXXObserver
+.. doxygenclass:: DoTimeObs
    :project: observers
    :private-members:
    :protected-members:
    :members:
    :undoc-members:
+
+.. doxygenfunction:: TimeObserver
+   :project: observers

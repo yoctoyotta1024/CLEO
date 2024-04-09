@@ -112,6 +112,7 @@ class GbxindexObserver {
    */
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes gbxindex observer\n";
+
     auto h_data = collect_gbxindexes(d_gbxs);
     dataset.write_to_array(xzarr_ptr, h_data);
     assert((dataset.get_dimension("gbxindex") == h_data.extent(0)) &&
