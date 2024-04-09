@@ -1,14 +1,15 @@
-XXX Observer
-============
+TotNsupers Observer
+===================
 
-// TODO(CB) write doc
+Header file: ``<libs/observers/totnsupers_observer.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/totnsupers_observer.hpp>`_
 
-Header file: ``<libs/observers/XXX_observer.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/XXX_observer.hpp>`_
-
-.. doxygenstruct:: XXXObserver
+.. doxygenclass:: DoTotNsupersObs
    :project: observers
    :private-members:
    :protected-members:
    :members:
    :undoc-members:
+
+.. doxygenfunction:: TotNsupersObserver
+   :project: observers

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Wednesday 10th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,7 +40,7 @@
 /**
  * @class DoTimeObs
  * @brief Template class for functionality to observe time at the start of each timestep and write
- * it to a Zarr array as a coordinate of an xarray dataset.
+ * it to a Zarr array as a coordinate of an Xarray dataset.
  * @tparam Store Type of store for dataset.
  */
 template <typename Store>
@@ -53,8 +53,8 @@ class DoTimeObs {
       step2dimlesstime; /**< Function to convert timesteps to real time [assumed seconds]. */
 
   /**
-   * @brief Increment size of time dimension in dataset and write out current time of model to the
-   * array in the dataset.
+   * @brief Increment size of time dimension in dataset and write out current time of model (assumed
+   * seconds) to the array in the dataset.
    *
    * _Note:_ conversion of time from double precision (8 bytes double) to single precision (4 bytes
    * float) in output.
@@ -105,8 +105,9 @@ class DoTimeObs {
   void after_timestepping() const {}
 
   /**
-   * @brief At the start of each timestep when function called, function writes time data to the
-   * array in a dataset.
+   * @brief Adapter to call at start step function which writes the current time of the model
+   * (assumed seconds) to the array in the dataset.
+   *
    * @param t_mdl Current model timestep.
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of superdrops on device.
