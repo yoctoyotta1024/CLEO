@@ -3,9 +3,9 @@
  *
  *
  * ----- CLEO -----
- * File: main.cpp
+ * File: main_eurec4a1D.cpp
  * Project: src
- * Created Date: Monday 29th January 2024
+ * Created Date: Tuesday 9th April 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
@@ -16,12 +16,13 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM)
- * after make/compiling, execute for example via:
- * ./src/cleocoupledsdm ../src/config/config.txt
+ * runs the CLEO super-droplet model (SDM) for eurec4a 1-D rainshaft example.
+ * After make/compiling, execute for example via:
+ * ./src/eurec4a1D ../src/config/config.txt
  */
 
 #include <Kokkos_Core.hpp>
+#include <array>
 #include <cmath>
 #include <concepts>
 #include <iostream>
@@ -30,7 +31,6 @@
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
-#include "cartesiandomain/cartesianmotion_withreset.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
@@ -48,21 +48,14 @@
 #include "observers2/streamout_observer.hpp"
 #include "observers2/superdrops_observer.hpp"
 #include "observers2/time_observer.hpp"
-#include "observers2/totnsupers_observer.hpp"
+#include "observers2/windvel_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "superdrops/collisions/breakup.hpp"
-#include "superdrops/collisions/breakup_nfrags.hpp"
-#include "superdrops/collisions/coalbure.hpp"
-#include "superdrops/collisions/coalbure_flag.hpp"
 #include "superdrops/collisions/coalescence.hpp"
-#include "superdrops/collisions/constprob.hpp"
-#include "superdrops/collisions/golovinprob.hpp"
 #include "superdrops/collisions/longhydroprob.hpp"
-#include "superdrops/collisions/lowlistprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
@@ -93,70 +86,22 @@ inline GridboxMaps auto create_gbxmaps(const Config &config) {
   return gbxmaps;
 }
 
-inline MicrophysicalProcess auto config_condensation(const Config &config,
-                                                     const Timesteps &tsteps) {
-  return Condensation(tsteps.get_condstep(), config.doAlterThermo, config.cond_iters,
-                      &step2dimlesstime, config.cond_rtol, config.cond_atol, config.cond_SUBTSTEP,
-                      &realtime2dimless);
-}
+inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
+  const auto terminalv = RogersGKTerminalVelocity{};
 
-inline MicrophysicalProcess auto config_collisions(const Config &config, const Timesteps &tsteps) {
-  // const PairProbability auto collprob = LongHydroProb();
-  // // const NFragments auto nfrags = ConstNFrags(5.0);
-  // const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-  // // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
-  // const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
-  // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
-  //                                                  &step2realtime,
-  //                                                  collprob,
-  //                                                  nfrags,
-  //                                                  coalbure_flag);
-  // return colls;
-
-  // const PairProbability auto buprob = LowListBuProb();
-  // const NFragments auto nfrags = ConstNFrags(5.0);
-  // const MicrophysicalProcess auto bu = CollBu(tsteps.get_collstep(),
-  //                                             &step2realtime,
-  //                                             buprob,
-  //                                             nfrags);
-
-  // const PairProbability auto coalprob = LowListCoalProb();
-  // const PairProbability auto coalprob = GolovinProb();
-  const PairProbability auto coalprob = LongHydroProb(1.0);
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
-
-  return coal;
-  // return coal >> bu;
+  return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 }
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
-  const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
+  const MicrophysicalProcess auto cond = Condensation(
+      tsteps.get_condstep(), config.doAlterThermo, config.cond_iters, &step2dimlesstime,
+      config.cond_rtol, config.cond_atol, config.cond_SUBTSTEP, &realtime2dimless);
 
-  const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
+  const PairProbability auto coalprob = LongHydroProb(1.0);
+  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
 
-  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
-
-  return colls >> cond;
-}
-
-inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
-  // const auto terminalv = NullTerminalVelocity{};
-  // const auto terminalv = RogersYauTerminalVelocity{};
-  // const auto terminalv = SimmelTerminalVelocity{};
-  const auto terminalv = RogersGKTerminalVelocity{};
-
-  // const auto ngbxs = (unsigned int)15; // total number of gbxs
-  // const auto ngbxs4reset = (unsigned int)5; // number of gbxs to randomly select in reset
-  // return CartesianMotionWithReset(motionstep,
-  //                                 &step2dimlesstime,
-  //                                 terminalv,
-  //                                 ngbxs,
-  //                                 ngbxs4reset);
-
-  return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
-
-  // return NullMotion{};
+  return coal >> cond;
 }
 
 template <typename Store>
@@ -168,11 +113,8 @@ inline Observer auto create_superdrops_observer(const unsigned int interval,
   CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
   CollectDataForDataset<Store> auto msol = CollectMsol(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
-  CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
-  CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
 
-  const auto collect_sddata =
-      coord2 >> coord1 >> coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
+  const auto collect_sddata = coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
   return SuperdropsObserver(interval, dataset, maxchunk, collect_sddata);
 }
 
@@ -180,10 +122,12 @@ template <typename Store>
 inline Observer auto create_gridboxes_observer(const unsigned int interval, Dataset<Store> &dataset,
                                                const int maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
-  const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Store> auto wvel =
+      CollectWindVariable<Store, WvelFunc>(dataset, WvelFunc{}, "wvel", maxchunk, ngbxs);
+
   const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Store> auto collect_gbxdata = nsupers >> windvel >> thermo;
+  const CollectDataForDataset<Store> auto collect_gbxdata = nsupers >> wvel >> thermo;
   return WriteToDatasetObserver(interval, dataset, collect_gbxdata);
 }
 
@@ -195,13 +139,11 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obs0 = RunStatsObserver(obsstep, config.stats_filename);
 
-  const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
+  const Observer auto obs1 = StreamOutObserver(realtime2step(240), &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
   const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
-
-  const Observer auto obs4 = TotNsupersObserver(obsstep, dataset, maxchunk);
 
   const Observer auto obs5 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
 
@@ -211,7 +153,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  return obssd >> obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
+  return obssd >> obsgbx >> obs6 >> obs5 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Store>
@@ -264,9 +206,7 @@ int main(int argc, char *argv[]) {
   Kokkos::finalize();
 
   const auto ttot = double{kokkostimer.seconds()};
-  std::cout << "-------------------------------\n"
-               "Total Program Duration: "
-            << ttot << "s \n-------------------------------\n";
+  std::cout << "-----\n Total Program Duration: " << ttot << "s \n-----\n";
 
   return 0;
 }
