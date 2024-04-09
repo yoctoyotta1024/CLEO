@@ -17,7 +17,7 @@
  * -----
  * File Description:
  * Struct satisfies observer type and streams out live data to an output device
- * (e.g. computer screen) about the state of gridboxes during every observation
+ * (e.g. computer screen) about gridboxes during every observation
  * at fixed 'interval' timesteps.
  */
 
@@ -37,35 +37,85 @@
 
 namespace dlc = dimless_constants;
 
+/**
+ * @struct StreamOutObserver
+ * @brief Struct that satisfies the observer type and streams out live data to an output device
+ * (e.g. computer screen) about gridboxes during every observation at fixed 'interval' timesteps.
+ */
 struct StreamOutObserver {
  private:
-  unsigned int interval;                              // timestep between print statements
-  std::function<double(unsigned int)> step2realtime;  // function to convert timesteps to real time
+  unsigned int interval; /**< Timestep between output events. */
+  std::function<double(unsigned int)>
+      step2realtime; /**< Function to convert model timesteps to real time. */
 
-  void print_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const;
+  /**
+   * @brief Prints a statement about the state of grid boxes.
+   *
+   * This function prints out information about the state of gridboxes.
+   * It extracts information from the 0th gridbox in the gridboxes' view and prints some information
+   * e.g. temperature, pressure, specific humidity, and specific cloud water content.
+   * Additionally, it prints the total number of superdroplets in the domain and the total number of
+   * gridboxes.
+   *
+   * @param t_mdl Current model time.
+   * @param d_gbxs View of the gridboxes on the device.
+   */
+  void streamout_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const;
 
  public:
+  /**
+   * @brief Constructor for StreamOutObserver.
+   * @param obsstep Interval in model timesteps between observation events.
+   * @param step2realtime Function to convert model timesteps to real time.
+   */
   StreamOutObserver(const unsigned int obsstep,
                     const std::function<double(unsigned int)> step2realtime)
       : interval(obsstep), step2realtime(step2realtime) {}
 
+  /**
+   * @brief Function called before timestepping.
+   * @param d_gbxs View of grid boxes.
+   */
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes StreamOutObserver\n";
   }
 
+  /**
+   * @brief Function called after timestepping.
+   */
   void after_timestepping() const {}
 
+  /**
+   * @brief Calculate the next observation timestep based on the current model timestep and the
+   * fixed interval between observations for this observer.
+   * @param t_mdl Current model timestep.
+   * @return Next observation timestep.
+   */
   unsigned int next_obs(const unsigned int t_mdl) const {
     return ((t_mdl / interval) + 1) * interval;
   }
 
+  /**
+   * @brief Check if the current timestep is an observation timestep.
+   * @param t_mdl Current model time.
+   * @return True if the current timestep is an observation timestep, false otherwise.
+   */
   bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }
 
-  /* observe Gridboxes (copy to host) at start of timestep */
+  /**
+   * @brief Observe gridboxes at the start of each timestep.
+   *
+   * If timestep is on observation step, stream out statement about gridboxes to output device
+   * e.g. a computer terminal.
+   *
+   * @param t_mdl Current model time.
+   * @param d_gbxs View of grid boxes.
+   * @param totsupers View of super grids.
+   */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
-      print_statement(t_mdl, d_gbxs);
+      streamout_statement(t_mdl, d_gbxs);
     }
   }
 };

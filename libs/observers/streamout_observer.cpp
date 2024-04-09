@@ -23,8 +23,20 @@
 
 #include "observers/streamout_observer.hpp"
 
-void StreamOutObserver::print_statement(const unsigned int t_mdl,
-                                        const viewd_constgbx d_gbxs) const {
+/**
+ * @brief Prints a statement about the state of grid boxes.
+ *
+ * This function prints out information about the state of gridboxes.
+ * It extracts information from the 0th gridbox in the gridboxes' view and prints some information
+ * e.g. temperature, pressure, specific humidity, and specific cloud water content.
+ * Additionally, it prints the total number of superdroplets in the domain and the total number of
+ * gridboxes.
+ *
+ * @param t_mdl Current model time.
+ * @param d_gbxs View of the gridboxes on the device.
+ */
+void StreamOutObserver::streamout_statement(const unsigned int t_mdl,
+                                            const viewd_constgbx d_gbxs) const {
   /* copy first gridbox into mirror view in case Gridboxes view is in device memory */
   auto d_gbx = Kokkos::subview(d_gbxs, kkpair_size_t({0, 1}));
   auto h_gbx = Kokkos::create_mirror_view_and_copy(HostSpace(), d_gbx);
