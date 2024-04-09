@@ -234,6 +234,21 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cxx/zarr2/zarr2mod.html">Zarr Module</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr2/buffer.html">Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr2/chunks.html">Chunks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr2/dataset.html">Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr2/fsstore.html">FSStore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr2/store_accessor.html">StoreAccessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr2/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr2/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr2/zarr_group.html">ZarrGroup</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cxx/observers2/observers2mod.html">Observers Module</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Observers Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers2/observers.html">Observers</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/contributing.html">Contributing</a></li>
@@ -283,7 +298,7 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">Last Modified: Monday 25th March 2024</span>
+<span class="sd">Last Modified: Monday 8th April 2024</span>
 <span class="sd">Modified By: CB</span>
 <span class="sd">-----</span>
 <span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
@@ -334,18 +349,19 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;qcond&quot;</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_temp</span><span class="p">()</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">press_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;press&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># probably hecto pascals</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">temp_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># probably kelvin</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">theta_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># probably kelvin</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">press_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;press&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># assumed probably hecto-pascals</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">temp_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># assumed probably kelvin</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qvap_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;qvap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># assumed probably g/Kg</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qcond_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;qcond&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># assumed probably g/Kg</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">theta_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="c1"># assumed probably kelvin</span>
 
   <span class="k">def</span> <span class="nf">potential_temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39; potential temperature, theta &#39;&#39;&#39;</span>
 
     <span class="n">press</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="o">*</span><span class="mi">100</span> <span class="c1"># convert from hPa to Pa</span>
-    <span class="n">theta</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">dry_pot_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">)</span>
+    <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="o">/</span><span class="mi">1000</span> <span class="c1"># convert g/Kg to Kg/Kg</span>
 
-    <span class="k">return</span> <span class="n">theta</span>
+    <span class="k">return</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">dry_pot_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">qvap</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">)</span>
 
   <span class="k">def</span> <span class="nf">saturationpressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39; saturation pressure in hectoPascals &#39;&#39;&#39;</span>
@@ -358,8 +374,9 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;returns vapour pressure in hectoPascals &#39;&#39;&#39;</span>
 
     <span class="n">p_pascals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="o">*</span><span class="mi">100</span> <span class="c1"># convert from hPa to Pa</span>
+    <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="o">/</span><span class="mi">1000</span> <span class="c1"># convert g/Kg to Kg/Kg</span>
     <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
-    <span class="n">pvap</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">vapour_pressure</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span> <span class="c1"># [Pa]</span>
+    <span class="n">pvap</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">vapour_pressure</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span> <span class="c1"># [Pa]</span>
 
     <span class="k">return</span> <span class="n">pvap</span> <span class="o">/</span> <span class="mi">100</span> <span class="c1"># [hPa]</span>
 
@@ -367,19 +384,18 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39; returns relative humidty and supersaturation &#39;&#39;&#39;</span>
 
     <span class="n">p_pascals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="o">*</span><span class="mi">100</span> <span class="c1"># convert from hPa to Pa</span>
+    <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="o">/</span><span class="mi">1000</span> <span class="c1"># convert g/Kg to Kg/Kg</span>
     <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
-    <span class="n">relh</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">relative_humidity</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">relh</span>
+
+    <span class="k">return</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">relative_humidity</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
 
   <span class="k">def</span> <span class="nf">supersaturation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39; returns relative humidty and supersaturation &#39;&#39;&#39;</span>
 
     <span class="n">p_pascals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="o">*</span><span class="mi">100</span> <span class="c1"># convert from hPa to Pa</span>
+    <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="o">/</span><span class="mi">1000</span> <span class="c1"># convert g/Kg to Kg/Kg</span>
     <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
-    <span class="n">supersat</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">supersaturation</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span>
-                                          <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">supersat</span>
+    <span class="k">return</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">supersaturation</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
 
   <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;press&quot;</span><span class="p">:</span>
@@ -445,7 +461,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 08 April 2024</div>
+              Last updated on 09 April 2024</div>
           </div>
           <div class="right-details">
             
