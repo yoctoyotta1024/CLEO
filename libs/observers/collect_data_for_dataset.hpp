@@ -20,8 +20,6 @@
  * structs to collect data within parallel loops and write it to arrays in a dataset
  */
 
-// TODO(CB) document observers
-
 #ifndef LIBS_OBSERVERS_COLLECT_DATA_FOR_DATASET_HPP_
 #define LIBS_OBSERVERS_COLLECT_DATA_FOR_DATASET_HPP_
 
@@ -40,16 +38,16 @@
  * @tparam CDD The type that satisfies the CollectDataForDataset concept.
  */
 template <typename CDD, typename Store>
-concept CollectDataForDataset =
-    requires(CDD cdd, const Dataset<Store> &ds, const viewd_constgbx d_gbxs,
-             const viewd_constsupers totsupers, const size_t sz) {
-      { cdd.get_functor(d_gbxs, totsupers) };
-      { cdd.reallocate_views(sz) } -> std::same_as<void>;
-      { cdd.write_to_arrays(ds) } -> std::same_as<void>;
-      { cdd.write_to_ragged_arrays(ds) } -> std::same_as<void>;
-      { cdd.write_arrayshapes(ds) } -> std::same_as<void>;
-      { cdd.write_ragged_arrayshapes(ds) } -> std::same_as<void>;
-    };
+concept CollectDataForDataset = requires(CDD cdd, const Dataset<Store> &ds,
+                                         const viewd_constgbx d_gbxs,
+                                         const viewd_constsupers totsupers, const size_t sz) {
+  {cdd.get_functor(d_gbxs, totsupers)};
+  { cdd.reallocate_views(sz) } -> std::same_as<void>;
+  { cdd.write_to_arrays(ds) } -> std::same_as<void>;
+  { cdd.write_to_ragged_arrays(ds) } -> std::same_as<void>;
+  { cdd.write_arrayshapes(ds) } -> std::same_as<void>;
+  { cdd.write_ragged_arrayshapes(ds) } -> std::same_as<void>;
+};
 
 /**
  * @brief struct is a new CollectDataForDataset formed from the combination of two structs that
