@@ -147,14 +147,14 @@ class ZarrArray {
  private:
   using viewh_buffer = Buffer<T>::viewh_buffer;
   using subviewh_buffer = Buffer<T>::subviewh_buffer;
-  Store& store;                   ///< store in which to write Zarr array
-  std::string_view name;          ///< Name of array to write in store.
-  size_t totnchunks;              ///< Total number of chunks of array written to store.
-  size_t totndata;                ///< Total number of elements of data in array written to store.
-  Chunks chunks;                  ///< Method to write chunks of array in store.
-  Buffer<T> buffer;               ///< Buffer to hold data before writing chunks to store.
-  std::string part_zarrmetadata;  ///< Metadata required for zarr array excluding array's shape
-  bool is_backend;                ///< true if zarr array is a backend of something else e.g. xarray
+  Store& store;                  /**< store in which to write Zarr array */
+  std::string_view name;         /**< Name of array to write in store. */
+  size_t totnchunks;             /**< Total number of chunks of array written to store. */
+  size_t totndata;               /**< Total number of elements of data in array written to store. */
+  Chunks chunks;                 /**< Method to write chunks of array in store. */
+  Buffer<T> buffer;              /**< Buffer to hold data before writing chunks to store. */
+  std::string part_zarrmetadata; /**< Metadata required for zarr array excluding array's shape */
+  bool is_backend; /**< true if zarr array is a backend of something else e.g. xarray */
 
   /**
    * @brief Generates the compulsory metadata for the Zarr array .zarray json file.

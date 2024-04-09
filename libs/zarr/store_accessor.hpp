@@ -42,8 +42,8 @@
  */
 template <typename Store>
 struct StoreAccessor {
-  Store& store;          ///< Reference to the store object.
-  std::string_view key;  ///< The key under which data will be stored in the store.
+  Store& store;         /**< Reference to the store object. */
+  std::string_view key; /**< The key under which data will be stored in the store. */
 
   /**
    * @brief Write a range of memory representing unsigned bytes (uint8_t) to the store.

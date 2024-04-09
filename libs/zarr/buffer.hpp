@@ -44,15 +44,15 @@
 template <typename T>
 struct Buffer {
  public:
-  using viewh_buffer = Kokkos::View<T*, HostSpace>;  /// View of buffer type on host
-  using subviewh_buffer = Kokkos::Subview<viewh_buffer, kkpair_size_t>;  ///< Subview of host view
+  using viewh_buffer = Kokkos::View<T*, HostSpace>; /**< View of buffer type on host */
+  using subviewh_buffer = Kokkos::Subview<viewh_buffer, kkpair_size_t>; /**< Subview of host view */
   using mirrorviewd_buffer = Kokkos::View<T*, HostSpace::array_layout,
-                                          ExecSpace>;  /// mirror view of buffer view on device
+                                          ExecSpace>; /**< mirror view of buffer view on device */
 
  private:
-  const size_t chunksize;  ///< Total chunk size = product of shape of chunks
-  size_t fill;             ///< Number of elements of buffer currently filled
-  viewh_buffer buffer;     ///< View for buffer in host memory
+  const size_t chunksize; /**< Total chunk size = product of shape of chunks */
+  size_t fill;            /**< Number of elements of buffer currently filled */
+  viewh_buffer buffer;    /**< View for buffer in host memory */
 
   /**
    * @brief Parallel loop on host to fill buffer with NaN (numerical limit).

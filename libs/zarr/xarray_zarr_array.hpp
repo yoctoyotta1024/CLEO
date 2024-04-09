@@ -221,10 +221,10 @@ template <typename Store, typename T>
 class XarrayZarrArray {
  private:
   using viewh_buffer = Buffer<T>::viewh_buffer;
-  ZarrArray<Store, T> zarr;           ///< zarr array in store
-  std::vector<std::string> dimnames;  ///< ordered list of names of each dimenion of array
-  std::vector<size_t> arrayshape;     ///< current size of the array along each of its dimensions
-  size_t last_totnchunks;             ///< Number of chunks of array since arrayshape last written
+  ZarrArray<Store, T> zarr;          /**< zarr array in store */
+  std::vector<std::string> dimnames; /**< ordered list of names of each dimenion of array */
+  std::vector<size_t> arrayshape;    /**< current size of the array along each of its dimensions */
+  size_t last_totnchunks;            /**< Number of chunks of array since arrayshape last written */
 
   /**
    * @brief Sets shape of array along each dimension to be the same size as each of its dimensions

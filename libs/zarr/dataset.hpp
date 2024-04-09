@@ -46,9 +46,9 @@
 template <typename Store>
 class Dataset {
  private:
-  ZarrGroup<Store> group;  ///< Reference to the zarr group object.
+  ZarrGroup<Store> group; /**< Reference to the zarr group object. */
   std::unordered_map<std::string, size_t>
-      datasetdims;  ///< map from name of each dimension in dataset to their size
+      datasetdims; /**< map from name of each dimension in dataset to their size */
 
   /**
    * @brief Adds a dimension to the dataset.

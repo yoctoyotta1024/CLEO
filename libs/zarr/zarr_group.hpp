@@ -38,7 +38,7 @@
 template <typename Store>
 struct ZarrGroup {
  public:
-  Store& store;  ///< Reference to the store object.
+  Store& store; /**< Reference to the store object. */
 
   /**
    * @brief Constructs a ZarrGroup with the specified store object.
