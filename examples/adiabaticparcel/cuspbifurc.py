@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 27th December 2023
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,12 +15,12 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO adia0D to
+Script runs CLEO adia0D executable to
 create data and plots similar to Figure 5 of
 "On the CCN (de)activation nonlinearities"
 S. Arabas and S. Shima 2017 to show
 example of cusp birfucation for
-0D adaibatic parcel exapansion and contraction.
+0D adaibatic parcel expansion and contraction.
 Note: SD(M) = superdroplet (model)
 '''
 
@@ -71,8 +71,10 @@ xgrid = np.asarray([0, 100])
 ygrid = np.asarray([0, 100])
 
 # settings for monodisperse droplet radii
-numconc = 0.5e9  # numconc = total no. concentration of droplets [m^-3]
-monor = 0.025e-6  # monor = dry radius of all droplets [m]
+# numconc = total no. concentration of droplets [m^-3]
+numconc = 0.5e9
+# monor = dry radius of all droplets [m]
+monor = 0.025e-6
 
 # monodisperse droplet radii probability distribution
 radiigen = rgens.MonoAttrGen(monor)
@@ -81,7 +83,8 @@ xiprobdist = probdists.DiracDelta(monor)
 
 # volume SD sample occupies (entire domain) [m^3]
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
-coord3gen = None                        # do not generate SD coords
+# do not generate SD coords
+coord3gen = None
 coord1gen = None
 coord2gen = None
 
@@ -95,7 +98,8 @@ def displacement(time, w_avg, thalf):
     z = zmax * (1 - np.cos(np.pi * time / thalf))
     return z
 
-### 1. create files for gridbox boundaries and initial SD conditions
+############### RUN EXAMPLE ##################
+### ensure build, share and bin directories exist
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
@@ -103,8 +107,11 @@ else:
   Path(sharepath).mkdir(exist_ok=True)
   Path(binpath).mkdir(exist_ok=True)
 
+###  delete any exisitng initial conditions
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
+
+### create files (and plots) for gridbox boundaries and initial SD conditions
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
                                      ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
@@ -123,26 +130,29 @@ if isfigures[0]:
                                               gridfile, binpath, isfigures[1], "all")
 plt.close()
 
-# # 2. compile and run model
+### run model
 os.chdir(path2build)
 os.system('pwd')
-os.system('rm -rf '+dataset)
-os.system("make clean && make -j 64 adia0D")
+os.system('rm -rf '+dataset) # delete any existing dataset
 executable = path2build+"/examples/adiabaticparcel/src/adia0D"
+print('Executable: '+executable)
+print('Config file: '+configfile)
 os.system(executable + " " + configfile)
 
-# 3. load and plot results
+### load results
 # read in constants and intial setup from setup .txt file
 config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setupfile, isprint=True)
 gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
+# read in output Xarray data
 thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
 supersat = thermo.supersaturation()
 time = pyzarr.get_time(dataset).secs
 sddata = pyzarr.get_supers(dataset, consts)
 zprof = displacement(time, config["W_AVG"], config["T_HALF"])
 
+### plot results
 # sample drops to plot from whole range of SD ids
 sample = [0, int(config["totnsupers"])]
 radii = sdtracing.attribute_for_superdroplets_sample(sddata, "radius",

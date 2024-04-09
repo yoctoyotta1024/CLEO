@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th January 2024
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO speedtest to
+Script runs CLEO executable "spdtest" to
 check performance of CLEO usign different
 build configurations (e.g. serial, OpenmP
 and CUDA parallelism).
@@ -168,6 +168,8 @@ else:
   Path(binpath).mkdir(exist_ok=True)
   if isfigures[1]:
     Path(savefigpath).mkdir(exist_ok=True)
+
+### --- delete any existing initial conditions --- ###
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 os.system("rm "+thermofile[:-4]+"*")
@@ -214,17 +216,17 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
-### ------------ COMPILE, RUN AND WRITE RESULTS TO FILE ------------ ###
+### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
-os.chdir(path2build)
-os.system('pwd')
-os.system('make clean && make -j 64 spdtest')
-
 executable = path2build+'/examples/speedtest/src/spdtest'
 for n in range(nruns):
-  os.system('rm -rf '+dataset)
+  os.chdir(path2build)
+  os.system('rm -rf '+dataset) # delete any existing dataset
+  print('Executable: '+executable)
+  print('Config file: '+configfile)
   os.system(executable + ' ' + configfile)
 
+  # copy speed results to new file
   print("--- reading runtime statistics ---")
   stats = read_statsfile(statsfile)
   for key, value in stats.items():

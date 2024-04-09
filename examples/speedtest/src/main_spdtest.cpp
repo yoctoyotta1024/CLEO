@@ -9,26 +9,24 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM)
- * after make/compiling, execute for example via:
+ * runs the CLEO super-droplet model (SDM) for speed test model example.
+ * After make/compiling, execute for example via:
  * ./src/spdtest ../src/config/config.txt
  */
 
-
+#include <Kokkos_Core.hpp>
+#include <cmath>
 #include <concepts>
 #include <iostream>
-#include <cmath>
 #include <stdexcept>
 #include <string_view>
-
-#include <Kokkos_Core.hpp>
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
@@ -40,15 +38,16 @@
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
-#include "observers/gbxindexobs.hpp"
-#include "observers/massmomentsobs.hpp"
-#include "observers/nsupersobs.hpp"
-#include "observers/observers.hpp"
-#include "observers/printobs.hpp"
-#include "observers/runstats.hpp"
-#include "observers/stateobs.hpp"
-#include "observers/supersattrsobs.hpp"
-#include "observers/timeobs.hpp"
+#include "observers2/gbxindex_observer.hpp"
+#include "observers2/massmoments_observer.hpp"
+#include "observers2/nsupers_observer.hpp"
+#include "observers2/observers.hpp"
+#include "observers2/runstats_observer.hpp"
+#include "observers2/state_observer.hpp"
+#include "observers2/streamout_observer.hpp"
+#include "observers2/superdrops_observer.hpp"
+#include "observers2/time_observer.hpp"
+#include "observers2/totnsupers_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
@@ -60,9 +59,8 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/terminalvelocity.hpp"
-#include "zarr/fsstore.hpp"
-#include "zarr/superdropattrsbuffers.hpp"
-#include "zarr/superdropsbuffers.hpp"
+#include "zarr2/dataset.hpp"
+#include "zarr2/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
                                             const unsigned int couplstep,
@@ -116,67 +114,76 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 }
 
-inline Observer auto create_supersattrs_observer(const unsigned int interval, FSStore &store,
-                                                 const int maxchunk) {
-  SuperdropsBuffers auto buffers = SdIdBuffer() >> XiBuffer() >> MsolBuffer() >> RadiusBuffer() >>
-                                   Coord3Buffer() >> Coord1Buffer() >> Coord2Buffer() >>
-                                   SdgbxindexBuffer();
-  return SupersAttrsObserver(interval, store, maxchunk, buffers);
+template <typename Store>
+inline Observer auto create_superdrops_observer(const unsigned int interval,
+                                                Dataset<Store> &dataset, const int maxchunk) {
+  CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
+  CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
+  CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
+  CollectDataForDataset<Store> auto msol = CollectMsol(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
+
+  const auto collect_sddata =
+      coord2 >> coord1 >> coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
+  return SuperdropsObserver(interval, dataset, maxchunk, collect_sddata);
 }
 
-inline Observer auto create_bulk_observer(const Config &config, const Timesteps &tsteps,
-                                          FSStore &store) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+template <typename Store>
+inline Observer auto create_gridboxes_observer(const unsigned int interval, Dataset<Store> &dataset,
+                                               const int maxchunk, const size_t ngbxs) {
+  const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);
 
-  const Observer auto obs1 = PrintObserver(obsstep, &step2realtime);
-
-  const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk, &step2dimlesstime);
-
-  const Observer auto obs3 = TotNsupersObserver(obsstep, store, maxchunk);
-
-  const Observer auto obs4 = GbxindexObserver(store, maxchunk);
-
-  const Observer auto obs5 = StateObserver(obsstep, store, maxchunk, config.ngbxs);
-
-  const Observer auto obs6 = NsupersObserver(obsstep, store, maxchunk, config.ngbxs);
-
-  const Observer auto obs7 = MassMomentsObserver(obsstep, store, maxchunk, config.ngbxs);
-
-  return obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >> obs7;
+  const CollectDataForDataset<Store> auto collect_gbxdata = nsupers >> windvel >> thermo;
+  return WriteToDatasetObserver(interval, dataset, collect_gbxdata);
 }
 
-inline Observer auto create_superdrops_observer(const Config &config, const Timesteps &tsteps,
-                                                FSStore &store) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+template <typename Store>
+inline Observer auto create_bulk_observer(const unsigned int interval, Dataset<Store> &dataset,
+                                          const int maxchunk, const size_t ngbxs) {
+  const Observer auto obs2 = TimeObserver(interval, dataset, maxchunk, &step2dimlesstime);
 
-  const Observer auto obs8 = NrainsupersObserver(obsstep, store, maxchunk, config.ngbxs);
+  const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, ngbxs);
 
-  const Observer auto obs9 = RainMassMomentsObserver(obsstep, store, maxchunk, config.ngbxs);
+  const Observer auto obs4 = TotNsupersObserver(interval, dataset, maxchunk);
 
-  const Observer auto obs10 = create_supersattrs_observer(obsstep, store, maxchunk);
+  const Observer auto obs5 = MassMomentsObserver(interval, dataset, maxchunk, ngbxs);
 
-  return obs8 >> obs9 >> obs10;
+  const Observer auto obs6 = MassMomentsRaindropsObserver(interval, dataset, maxchunk, ngbxs);
+
+  const Observer auto obsgbx = create_gridboxes_observer(interval, dataset, maxchunk, ngbxs);
+
+  return obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2;
 }
 
+template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     FSStore &store) {
-  const Observer auto obs0 = RunStatsObserver(tsteps.get_obsstep(), config.stats_filename);
+                                     Dataset<Store> &dataset) {
+  const auto obsstep = (unsigned int)tsteps.get_obsstep();
+  const auto maxchunk = int{config.maxchunk};
 
-  const Observer auto obs_blk = create_bulk_observer(config, tsteps, store);
+  const Observer auto obs0 = RunStatsObserver(obsstep, config.stats_filename);
 
-  const Observer auto obs_sd = create_superdrops_observer(config, tsteps, store);
+  const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
 
-  return obs0 >> obs_blk >> obs_sd;
+  const Observer auto obsblk = create_bulk_observer(obsstep, dataset, maxchunk, config.ngbxs);
+
+  const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
+
+  return obssd >> obsblk >> obs1 >> obs0;
 }
 
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, FSStore &store) {
+template <typename Store>
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
-  const Observer auto obs(create_observer(config, tsteps, store));
+  const Observer auto obs(create_observer(config, tsteps, dataset));
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
@@ -194,7 +201,8 @@ int main(int argc, char *argv[]) {
   const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
 
   /* Create zarr store for writing output to storage */
-  FSStore fsstore(config.zarrbasedir);
+  auto store = FSStore(config.zarrbasedir);
+  auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
@@ -203,7 +211,7 @@ int main(int argc, char *argv[]) {
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(

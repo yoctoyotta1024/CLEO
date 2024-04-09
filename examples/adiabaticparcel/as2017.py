@@ -8,7 +8,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 1st March 2024
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -17,12 +17,11 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO adia0D to
+Script runs CLEO adia0D executable to
 create data and plots similar to Figure 5 of
 "On the CCN (de)activation nonlinearities"
 S. Arabas and S. Shima 2017 to show
-example of cusp birfucation for
-0D adaibatic parcel exapansion and contraction.
+example of adaibatic parcel expansion and contraction.
 Note: SD(M) = superdroplet (model)
 '''
 
@@ -74,11 +73,12 @@ monors = [0.05e-6, 0.1e-6, 0.1e-6]
 
 # volume SD sample occupies (entire domain) [m^3]
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
-coord3gen = None                        # do not generate superdroplet coords
+# do not generate superdroplet coords
+coord3gen = None
 coord1gen = None
 coord2gen = None
 
-# setup parameters
+# parameters to edit in model configuration and plotting
 params1 = {
     "W_AVG": 1,
     "T_HALF": 150,
@@ -87,7 +87,6 @@ params1 = {
     "OBSTSTEP": 2,
     "lwdth": 2,
 }
-
 params2 = {
     "W_AVG": 0.5,
     "T_HALF": 300,
@@ -104,7 +103,6 @@ params3 = {
     "OBSTSTEP": 750,
     "lwdth": 0.5,
 }
-
 paramslist = [params1, params2, params3]
 
 def displacement(time, w_avg, thalf):
@@ -116,16 +114,13 @@ def displacement(time, w_avg, thalf):
     z = zmax * (1 - np.cos(np.pi * time / thalf))
     return z
 
-# ### 1. compile model
-os.chdir(path2build)
-os.system("pwd")
+############### RUN EXAMPLE ##################
+###  delete any existing datasets
 for run_num in range(len(monors)*len(paramslist)):
     dataset = binpath+"as2017_sol"+str(run_num)+".zarr"
     os.system("rm -rf "+dataset)
-os.system("make clean && make -j 64 adia0D")
 
-# 2a. create file with gridbox boundaries
-### --- ensure build, share and bin directories exist --- ###
+### ensure build, share and bin directories exist
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 else:
@@ -133,6 +128,7 @@ else:
   Path(sharepath).mkdir(exist_ok=True)
   Path(binpath).mkdir(exist_ok=True)
 
+### create file (and plot) for gridbox boundaries
 os.system("rm "+gridfile)
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid,
                                      ygrid, constsfile)
@@ -145,7 +141,7 @@ plt.close()
 runnum = 0
 for i in range(len(monors)):
 
-    # 2b. create file with initial SDs conditions
+    ### create file (and plots) for initial SDs conditions
     monor, numconc = monors[i], numconcs[i]
     # all SDs have the same dryradius = monor [m]
     radiigen = rgens.MonoAttrGen(monor)
@@ -169,29 +165,33 @@ for i in range(len(monors)):
     fig, axs = plt.subplots(nrows=3, ncols=1, figsize=(5, 16))
     for params in paramslist:
 
-        # 3. edit relevant setup file parameters
+        ### edit relevant setup file parameters
         params["zarrbasedir"] = binpath+"as2017_sol"+str(runnum)+".zarr"
         params["setuptxt"] = binpath+"as2017_setup.txt"
         editconfigfile.edit_config_params(configfile, params)
+
+        ### delete any existing dataset
         os.system("rm -rf "+params["zarrbasedir"])
         os.system("rm "+params["setuptxt"])
 
-        # 4. run model
+        ### run model
         os.chdir(path2build)
-        os.system('pwd')
         executable = path2build+"/examples/adiabaticparcel/src/adia0D"
+        print('Executable: '+executable)
+        print('Config file: '+configfile)
         os.system(executable + " " + configfile)
 
-        # 5. load results
+        ### load results
         setupfile = binpath+"as2017_setup.txt"
         dataset = binpath+"as2017_sol"+str(runnum)+".zarr"
 
-        # read in constants and intial setup from setup .txt file
+        ### read in constants and intial setup from setup .txt file
         config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
         consts = pysetuptxt.get_consts(setupfile, isprint=True)
         gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"],
                                        isprint=True)
 
+        # read in output Xarray data
         thermo = pyzarr.get_thermodata(dataset, config["ntime"],
                                        gbxs["ndims"], consts)
         supersat = thermo.supersaturation()
@@ -203,7 +203,7 @@ for i in range(len(monors)):
         sd0 = sdtracing.attributes_for1superdroplet(sddata, 0, attrs)
         numconc = np.sum(sddata["xi"][0])/gbxs["domainvol"]/1e6  # [/cm^3]
 
-        # 5. plot results
+        ### plot results
         wlab = "<w> = {:.1f}".format(config["W_AVG"]*100)+"cm s$^{-1}$"
         axs = as2017fig.condensation_validation_subplots(axs, time, sd0["radius"],
                                                    supersat[:, 0, 0, 0],
@@ -213,6 +213,7 @@ for i in range(len(monors)):
 
         runnum += 1
 
+    ### save figure
     as2017fig.plot_kohlercurve_with_criticalpoints(axs[1], sd0["radius"],
                                                    sd0["msol"][0],
                                              thermo.temp[0, 0, 0, 0],

@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -70,6 +70,7 @@ def where_typename_ends(line):
   elif line[:12] == "constexprint": x="constexprint"
   elif line[:15] == "constexprdouble": x="constexprdouble"
   elif line[:20] == "constexprunsignedint": x="constexprunsignedint"
+  elif line[:17] == "constexpruint64_t": x="constexpruint64_t"
   else:
     raise Exception ("c++ type for variable not understood")
   return len(x)

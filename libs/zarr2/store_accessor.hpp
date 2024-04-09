@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TB)
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Wednesday 27th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,6 +26,8 @@
 #include <Kokkos_Core.hpp>
 #include <span>
 #include <string_view>
+
+#include "../kokkosaliases.hpp"
 
 /**
  * @brief A template class for converting types into vectors of single bytes to write to a "store"
@@ -99,7 +101,7 @@ struct StoreAccessor {
    * @return A reference to the current StoreAccessor object.
    */
   template <typename T>
-  StoreAccessor& operator=(const Kokkos::View<T*, Kokkos::HostSpace> buffer) {
+  StoreAccessor& operator=(const Kokkos::View<T*, HostSpace> buffer) {
     return operator=(std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(buffer.data()),
                                               buffer.extent(0) * sizeof(T)));
   }

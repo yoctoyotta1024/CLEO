@@ -9,8 +9,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./gpubuildCLEO_out.%j.out
-#SBATCH --error=./gpubuildCLEO_err.%j.out
+#SBATCH --output=./roughCLEO_out.%j.out
+#SBATCH --error=./roughCLEO_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------- You MUST edit these lines to set your ------ ###
@@ -20,7 +20,7 @@
 module load gcc/11.2.0-gcc-11.2.0
 module load nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-source activate /work/mh1126/m300950/condaenvs/cleoenv
+source activate /work/mh1126/m300950/cleoenv
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/roughpaper/build/
 gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
@@ -78,6 +78,9 @@ echo "KOKKOS_FLAGS: ${kokkosflags}"
 echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
 echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
 echo "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}"
+
+# delete any existing "test" executable
+rm ${path2build}/roughpaper/test
 
 # build then compile in parallel
 if [[ $1 == "build" ]];

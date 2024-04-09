@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Thursday 4th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,6 +27,7 @@
 #include <Kokkos_Pair.hpp>
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <string>
 #include <string_view>
@@ -34,6 +35,23 @@
 
 #include "./buffer.hpp"
 #include "./chunks.hpp"
+
+/**
+ * @brief Given maximum chunk size 'maxchunksize' and length of inner dimension of one chunk of
+ * array 'dim1size', function returns the largest possible chunk shape that has the length of its
+ * inner dimension = dim1size.
+ *
+ * dim1size must also be <= maxchunksize and to ensure good chunking, dim1size should itself be
+ * completely divisible by the final length of the inner dimension of the 2-D array.
+ *
+ * @param maxchunksize The maximum chunk size (maximum number of elements in chunk).
+ * @param dim1size The length of (number of elements along) the inner dimension of one chunk.
+ * @return std::vector<size_t> The largest possible 2-D chunk shape.
+ */
+inline std::vector<size_t> good2Dchunkshape(const size_t maxchunksize, const size_t dim1size) {
+  const auto shape0 = size_t{maxchunksize / dim1size};  // same as floor for +ve integers
+  return {shape0, dim1size};
+}
 
 /**
  * @brief Write metadata string to a store under a .zarray key.
@@ -230,11 +248,11 @@ class ZarrArray {
    * chunks is assumed to increment along innermost dimensions first.
    *
    * @param store The store where the array will be stored.
-   * @param chunkshape The shape of individual data chunks along each dimension.
-   * @param reduced_arrayshape The shape of the array along all but the outermost (0th) dimension.
    * @param name The name of the array.
-   * @param scale_factor The scale factor of the data.
    * @param dtype The data type stored in the arrays (e.g., "<f8").
+   * @param chunkshape The shape of individual data chunks along each dimension.
+   * @param is_backend boolean is true if zarr array is a backend of something else e.g. xarray.
+   * @param reduced_arrayshape The shape of the array along all but the outermost (0th) dimension.
    */
   ZarrArray(Store& store, const std::string_view name, const std::string_view dtype,
             const std::vector<size_t>& chunkshape, const bool is_backend,
@@ -290,6 +308,37 @@ class ZarrArray {
     }
   }
 
+  /**
+   * @brief Get the total number of chunks currently written to array in store.
+   *
+   * @return The total number of chunks.
+   */
+  size_t get_totnchunks() { return totnchunks; }
+
+  /**
+   * @brief Get the total number of data elements currently written to array in store and in buffer.
+   *
+   * Includes data in buffer, so not equal to totndata
+   *
+   * @return The total number of data elements.
+   */
+  size_t get_totalndata() {
+    const auto total_ndata = totnchunks * buffer.get_chunksize() + buffer.get_fill();
+    return total_ndata;
+  }
+
+  /**
+   * @brief Write the array shape to the store.
+   *
+   * This function writes the given array shape to the store as part of the metadata in the Zarr
+   * .zarray json file. Function also asserts that the number of dimensions of the given arrayshape
+   * is consitent with number of dimensions provided by the shape of each chunk.
+   *
+   * @param arrayshape The array shape to be written.
+   *
+   * @pre The number of dimensions of the provided array shape must be equal to that of the chunk
+   *      shape. Otherwise, an assertion error is triggered.
+   */
   void write_arrayshape(const std::vector<size_t>& arrayshape) {
     assert((arrayshape.size() == chunks.get_chunkshape().size()) &&
            "number of dimensions of array must not change");
@@ -342,6 +391,26 @@ class ZarrArray {
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
 
     assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
+  }
+
+  /**
+   * @brief Writes 1 element of data to a Zarr array (writing to the store in chunks via a buffer).
+   * Function does *not* write metadata to zarray .json file.
+   *
+   * First copies data element from the view to a buffer (until number of elements in
+   * buffer = chunksize), then writes whole chunk of the array into the store. Function useful when
+   * using zarr array as backend of a dataset and/or you do not want to write metadata for the
+   * array when writing data elements.
+   *
+   * @param data The data element which should be written to the array in a store.
+   */
+  void write_to_array(const T data) {
+    if (buffer.get_space() == 0) {
+      totnchunks = chunks.write_chunk<Store, T>(store, name, totnchunks, buffer);
+    }
+    totndata = totnchunks * buffer.get_chunksize();
+
+    buffer.copy_to_buffer(data);
   }
 };
 

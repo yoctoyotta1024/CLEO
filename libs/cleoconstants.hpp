@@ -1,13 +1,15 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: cleoconstants.hpp
  * Project: libs
- * Created Date: Friday 13th October 2023
+ * Created Date: Monday 29th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 16th November 2023
+ * Last Modified: Monday 8th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -17,15 +19,15 @@
  * header file with namespaces for (physical) constants used by CLEO
  * Note: All letters in CAPITALS indicates constants have dimensions
  * (or are naturally dimensionless as for IONIC). Only first letter
- * capitalised indicates value is dimensionless (version of a) constant
+ * capitalised indicates value is dimensionless (version of a) constant.
  */
 
 #ifndef LIBS_CLEOCONSTANTS_HPP_
 #define LIBS_CLEOCONSTANTS_HPP_
 
-#include <numbers>
 #include <cstdint>
 #include <limits>
+#include <numbers>
 
 /* namespace containing values of
 constants with dimensions */
@@ -104,6 +106,7 @@ constexpr double surfconst =
 /* max/min values e.g. for using vlaues of c++ standard numeric limits on GPUs */
 namespace LIMITVALUES {
 constexpr unsigned int uintmax = std::numeric_limits<unsigned int>::max();
+constexpr uint64_t uint64_t_max = std::numeric_limits<uint64_t>::max();
 
 constexpr double llim = -1.0 * std::numeric_limits<double>::max();
 constexpr double ulim = std::numeric_limits<double>::max();
