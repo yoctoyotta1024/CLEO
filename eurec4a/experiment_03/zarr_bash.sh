@@ -36,7 +36,7 @@ yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/rain
 for yamlfile in ${yamldirectory}/*.yaml; do
     echo "Running zarrfiles_to_netcdf.py with ${yamlfile}"
     # {
-    #     ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile} ${rawdirectory} > ${logfile} 
+    #     ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile} ${rawdirectory} > ${logfile}
     # } || {
     #     echo "NO DATA CREATED"
     #     }

@@ -93,9 +93,9 @@ rspan       = [1e-6, 5e-5]                      # min and max range of radii to 
 dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
-# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-# geosigs              = [1.55, 2.3, 2]                    
-# scalefacs            = [1e6, 0.3e6, 0.025e6]   
+# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
+# geosigs              = [1.55, 2.3, 2]
+# scalefacs            = [1e6, 0.3e6, 0.025e6]
 # numconc = np.sum(scalefacs) * 100
 
 # settings for initial superdroplet multiplicies with ATR and Aerosol from Lohmann et. al 2016 Fig. 5.5

@@ -1,6 +1,6 @@
 # %% [markdown]
 # # Zarr files to netCDF
-# 
+#
 # With this script, the zarr files from CLEOS output can be transformed into a single netcdf file which has the dimensions
 # - time
 # - sd_id (super droplet id)
@@ -73,11 +73,11 @@ simple_ds = xr.open_dataset(dataset, engine="zarr",
 
 # %% [markdown]
 # ## Create a xarray dataset from the zarr file
-# 
-# 
+#
+#
 # For this, the ``sdtracing.attribute_for_superdroplets_sample`` function will be used for a subset of superdroplet ids.
 # Using a size of 100 makes sense, and is not too slow.
-# 
+#
 # The subdatasets will be stored in a temporary folder.
 
 # %% [markdown]
@@ -143,5 +143,3 @@ print(f"Combine datasets and store in folder {OUTPUT_DIR}")
 
 full_dataset = xr.open_mfdataset(temp_filepaths, parallel = True)
 full_dataset.to_netcdf(OUTPUT_DIR / "full_dataset.nc")
-
-

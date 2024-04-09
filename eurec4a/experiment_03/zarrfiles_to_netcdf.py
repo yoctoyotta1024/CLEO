@@ -1,6 +1,6 @@
 # %% [markdown]
 # # Zarr files to netCDF
-# 
+#
 # With this script, the zarr files from CLEOS output can be transformed into a single netcdf file which has the dimensions
 # - time
 # - sd_id (super droplet id)
@@ -66,7 +66,7 @@ def main(yaml_config_file):
         print(f"The file {OUTPUT_FILEPATH} exists. Skip processing.")
     else:
         print(f"The file {OUTPUT_FILEPATH} does not exist. Create it.")
-    
+
         # read in constants and intial setup from setup .txt file
         config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=False)
         consts = pysetuptxt.get_consts(setupfile, isprint=False)
@@ -80,7 +80,7 @@ import glob
 yaml_files = glob.glob(str(yamldirectory / "*.yaml"))
 yaml_files.sort()
 for yaml_file in yaml_files:
-    try: 
+    try:
         main(yaml_file)
     except Exception as e:
         print(f"Error in {yaml_file}")

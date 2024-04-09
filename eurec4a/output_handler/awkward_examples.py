@@ -8,7 +8,8 @@ from pathlib import Path
 # from plotssrc import pltsds, pltmoms, animations
 from pySD.sdmout_src import *
 from pySD.initsuperdropsbinary_src import *
-from pySD.sdmout_src.supersdata import SupersData 
+from pySD.sdmout_src.supersdata import SupersData
+
 
 from sdm_eurec4a.visulization import set_custom_rcParams
 set_custom_rcParams()
@@ -33,10 +34,14 @@ dataset       = path2CLEO / "data/output/raw/rain/clusters_18/rain1d_sol.zarr"
 config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=False)
 consts = pysetuptxt.get_consts(setupfile, isprint=False)
 
-sddata = SupersData(
-    dataset = str(dataset),
-    consts = consts
-)
+
+# Create a first simple dataset to have the coordinates for later netcdf creation
+sddata = pyzarr.get_supers(str(dataset), consts)
+
+# sddata = SupersData(
+#     dataset = str(dataset),
+#     consts = consts
+# )
 lagrange = sddata.to_Dataset()
 
 # %%
@@ -47,7 +52,7 @@ def ak_apply(array, np_func, kwargs) :
     flat.type.show()
     flat = np_func(flat, **kwargs)
 
-    return ak.unflatten(array=flat, counts=counts) 
+    return ak.unflatten(array=flat, counts=counts)
 
 res = akward_array_to_lagrange_array(sddata["xi"], sddata.time, sddata["sdgbxindex"], check_indices_uniqueness=True)
 
@@ -135,7 +140,7 @@ else:
 # check if the resulting array is sparse and inform the User
 filled_percentage = ak.count(reduction_dim) / (T * M * N * O * S) * 100
 print(f"{filled_percentage:.2f} % of the regular array is filled with values.")
-    
+
 result_numpy = np.full((T, M, N, O, S), np.nan)
 result_numpy[t, i, j, k, s] = ak.flatten(data)
 

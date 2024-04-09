@@ -346,15 +346,15 @@ class SupersData(SuperdropProperties):
         else:
             err = "no known return provided for "+key+" key"
             raise ValueError(err)
-    
+
     def variable_to_regular_array(self, varname : str, dtype = np.ndarray) :
         """
-        This function converts an awkward array to a regular array (either numpy ndarray or xarray DataArray) 
+        This function converts an awkward array to a regular array (either numpy ndarray or xarray DataArray)
         based on the provided dtype. The conversion is done for a specific variable name in the dataset.
 
         Parameters:
         varname (str): The name of the variable in the dataset to be converted.
-        dtype (type, optional): The type of the output array. It can be either numpy ndarray or xarray DataArray. 
+        dtype (type, optional): The type of the output array. It can be either numpy ndarray or xarray DataArray.
                                 Default is numpy ndarray.
 
         Returns:
@@ -376,7 +376,7 @@ class SupersData(SuperdropProperties):
             return result
         else:
             raise ValueError("dtype is not supported. Use np.ndarray, xr.DataArray")
-    
+
     def to_Dataset(self) :
         """
         This function converts all variables in the dataset to regular arrays (either numpy ndarray or xarray DataArray)
@@ -394,7 +394,7 @@ class SupersData(SuperdropProperties):
         for varname in varnames:
             try :
                 result_list.append(self.variable_to_regular_array(
-                    varname = varname, 
+                    varname = varname,
                     dtype = xr.DataArray
                     )
                 )
