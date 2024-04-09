@@ -30,7 +30,7 @@ path2experiment=${path2CLEO}/eurec4a/experiment_03/
 rawdirectory=${path2CLEO}/data/output/raw/rain/
 processeddirectory=${path2CLEO}/data/output/processed/rain/
 # yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/all_rain_clusters
-yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/subset
+yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/rain
 
 
 for yamlfile in ${yamldirectory}/*.yaml; do
