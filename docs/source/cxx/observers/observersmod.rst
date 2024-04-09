@@ -14,3 +14,18 @@ e.g. to a dataset or to a computer screen.
    :caption: Contents:
 
    observers
+   streamout_observer
+   runstats_observer.rst
+   write_to_dataset_observer.rst
+   parallel_write_data.rst
+   collect_data_for_dataset.rst
+   generic_collect_data.rst
+   time_observer.rst
+   gbxindex_observer.rst
+   superdrops_observer.rst
+   nsupers_observer.rst
+   totnsupers_observer.rst
+   state_observer.rst
+   thermo_observer.rst
+   windvel_observer.rst
+   massmoments_observer.rst
