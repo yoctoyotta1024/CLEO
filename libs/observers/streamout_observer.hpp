@@ -39,7 +39,7 @@ namespace dlc = dimless_constants;
 
 /**
  * @struct StreamOutObserver
- * @brief Struct that satisfies the observer type and streams out live data to an output device
+ * @brief Struct that satisfies the observer concept and streams out live data to an output device
  * (e.g. computer screen) about gridboxes during every observation at fixed 'interval' timesteps.
  */
 struct StreamOutObserver {
@@ -86,18 +86,24 @@ struct StreamOutObserver {
   void after_timestepping() const {}
 
   /**
-   * @brief Calculate the next observation timestep based on the current model timestep and the
-   * fixed interval between observations for this observer.
-   * @param t_mdl Current model timestep.
-   * @return Next observation timestep.
+   * @brief Determine the next observation time.
+   *
+   * Calculates the next observation time based on the current model time and this observer's
+   * constant timestep between observations, 'interval'.
+   *
+   * @param t_mdl The unsigned int parameter representing the current model timestep.
+   * @return Unsigned int for the next observation timestep.
    */
   unsigned int next_obs(const unsigned int t_mdl) const {
     return ((t_mdl / interval) + 1) * interval;
   }
 
   /**
-   * @brief Check if the current timestep is an observation timestep.
-   * @param t_mdl Current model time.
+   * @brief Check if observer is "on step".
+   *
+   * Checks if the current model time is on an observation timestep.
+   *
+   * @param t_mdl The unsigned int parameter representing the current model timestep.
    * @return True if the current timestep is an observation timestep, false otherwise.
    */
   bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }

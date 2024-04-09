@@ -253,23 +253,23 @@ struct ConstTstepObserver {
   /**
    * @brief Determine the next observation time.
    *
-   * Calculates the next observation time based on the current model time and the constant
-   * timestep between observations, 'interval'.
+   * Calculates the next observation time based on the current model time and this observer's
+   * constant timestep between observations, 'interval'.
    *
-   * @param t_mdl The unsigned int parameter representing the current model time.
-   * @return Unsigned int for the next observation time.
+   * @param t_mdl The unsigned int parameter representing the current model timestep.
+   * @return Unsigned int for the next observation timestep.
    */
   unsigned int next_obs(const unsigned int t_mdl) const {
     return ((t_mdl / interval) + 1) * interval;
   }
 
   /**
-   * @brief Check if on step.
+   * @brief Check if observer is "on step".
    *
    * Checks if the current model time is on an observation timestep.
    *
-   * @param t_mdl The unsigned int parameter representing the current model time.
-   * @return bool True if on step, false otherwise.
+   * @param t_mdl The unsigned int parameter representing the current model timestep.
+   * @return True if the current timestep is an observation timestep, false otherwise.
    */
   bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }
 

@@ -23,6 +23,9 @@
 
 #include "observers/runstats_observer.hpp"
 
+/**
+ * @brief Prints a summary of runtime statistics to the terminal window.
+ */
 void RunStatsObserver::print_summary() const {
   const auto t_start = stats->t_start;
   const auto t_end = stats->t_end;
@@ -34,8 +37,11 @@ void RunStatsObserver::print_summary() const {
             << "-----------------------------\n";
 }
 
-/* open and write some the runtime
-statistics to a file called 'statsfile' */
+/**
+ * @brief Writes out some of the runtime statistics to a file.
+ *
+ * Writes timing statistics out to a text file called stats_filename.
+ */
 void RunStatsObserver::write_to_file() const {
   std::ofstream file(stats_filename);
 
