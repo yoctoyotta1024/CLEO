@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,20 +21,18 @@
  * concept used in Collisions struct
  */
 
-
 #ifndef LIBS_SUPERDROPS_COLLISIONS_BREAKUP_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_BREAKUP_HPP_
 
-#include <concepts>
+#include <Kokkos_Core.hpp>
 #include <cassert>
+#include <concepts>
 #include <functional>
 
-#include <Kokkos_Core.hpp>
-
-#include "./breakup_nfrags.hpp"
-#include "./collisions.hpp"
 #include "../microphysicalprocess.hpp"
 #include "../superdrop.hpp"
+#include "./breakup_nfrags.hpp"
+#include "./collisions.hpp"
 
 template <NFragments NFrags>
 struct DoBreakup {
@@ -142,19 +140,19 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::breakup_superdroplet_pair(Superdrop &dro
 superdroplets produces (non-identical) twin superdroplets.
 Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
 Note implicit assumption that gamma factor = 1.
-Note: implicit casting of xi from uint64_t to double. */
+_Note:_ Implicit casting of xi from uint64_t to double. */
 template <NFragments NFrags>
 KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &drop1,
                                                                   Superdrop &drop2) const {
   const auto old_xi = drop2.get_xi();  // = drop1.xi
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
-  assert(((totnfrags  / old_xi) > 2.5) && "nfrags must be > 2.5");
+  assert(((totnfrags / old_xi) > 2.5) && "nfrags must be > 2.5");
 
-  const auto new_xi1 = (uint64_t)Kokkos::round(totnfrags / 2);  // cast double to uint64_t
+  const auto new_xi1 = (uint64_t)Kokkos::round(totnfrags / 2);        // cast double to uint64_t
   const auto new_xi2 = (uint64_t)Kokkos::round(totnfrags - new_xi1);  // cast double to uint64_t
   const auto new_xitot = new_xi1 + new_xi2;
   assert((new_xi2 > old_xi) && "nfrags must increase the drop2's multiplicity during breakup");
-  assert((new_xitot > (old_xi*2)) && "nfrags must increase total multiplicity during breakup");
+  assert((new_xitot > (old_xi * 2)) && "nfrags must increase total multiplicity during breakup");
 
   const auto sum_rcubed = double{drop1.rcubed() + drop2.rcubed()};
   const auto new_rcubed = double{sum_rcubed * old_xi / new_xitot};
@@ -177,7 +175,7 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &dro
 mass via decreasing multiplicity of drop1. Similar to
 Shima et al. 2009 Section 5.1.3. part (5) option (a).
 Note implicit assumption that gamma factor = 1.
-Note: implicit casting of xi from uint64_t to double. */
+_Note:_ Implicit casting of xi from uint64_t to double. */
 template <NFragments NFrags>
 KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop &drop1,
                                                                        Superdrop &drop2) const {
@@ -189,7 +187,7 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop
 
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi2};
   const auto new_xi2 = (uint64_t)Kokkos::round(totnfrags);  // cast double to uint64_t
-  assert(((totnfrags  / old_xi2) > 2.5) && "nfrags must be > 2.5");
+  assert(((totnfrags / old_xi2) > 2.5) && "nfrags must be > 2.5");
 
   assert((new_xi2 > old_xi2) && "nfrags must increase the drop2's multiplicity during breakup");
   assert(((new_xi1 + new_xi2) > (old_xi1 + old_xi2)) &&

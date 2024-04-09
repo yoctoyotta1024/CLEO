@@ -34,7 +34,7 @@ struct ParallelGridboxesRangePolicyFunc {
   /* Parallel loop over gridboxes using Kokkos Range Policy.
   Kokkos::parallel_for([...]) is equivalent in serial to:
   for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}
-  Note: Functor must have operator with signature:
+  _Note:_ Functor must have operator with signature:
   operator()(const size_t ii).
   */
   template <typename Functor>
@@ -50,7 +50,7 @@ struct ParallelGridboxesTeamPolicyFunc {
   /* Parallel loop over gridboxes using Kokkos Team Policy.
   Kokkos::parallel_for([...]) is equivalent in serial to:
   for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}
-  Note: Functor must have operator with signature:
+  _Note:_ Functor must have operator with signature:
   operator()(const TeamMember &team_member).
   */
   template <typename Functor>
@@ -95,11 +95,11 @@ class ParallelWriteGridboxes {
  * @tparam CRC The type that satisfies the CollectRaggedCount concept.
  */
 template <typename CRC, typename Store>
-concept CollectRaggedCount =
-    requires(CRC crc, const Dataset<Store> &ds, const viewd_constsupers totsupers) {
-      { crc.write_to_array(ds, totsupers) } -> std::same_as<void>;
-      { crc.write_arrayshape(ds) } -> std::same_as<void>;
-    };
+concept CollectRaggedCount = requires(CRC crc, const Dataset<Store> &ds,
+                                      const viewd_constsupers totsupers) {
+  { crc.write_to_array(ds, totsupers) } -> std::same_as<void>;
+  { crc.write_arrayshape(ds) } -> std::same_as<void>;
+};
 
 /* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
 superdroplets in a parallel loop and write it to ragged arrays in a dataset */

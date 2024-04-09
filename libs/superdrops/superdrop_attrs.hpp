@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,10 +24,9 @@
 #ifndef LIBS_SUPERDROPS_SUPERDROP_ATTRS_HPP_
 #define LIBS_SUPERDROPS_SUPERDROP_ATTRS_HPP_
 
-#include <cassert>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp>  // for pi
+#include <cassert>
 
 #include "../cleoconstants.hpp"
 
@@ -65,9 +64,9 @@ struct SoluteProperties {
 struct SuperdropAttrs {
   SoluteProperties solute;
   /**< instance of SoluteProperties for pointer-like reference to superdrop's solute properties. */
-  uint64_t xi;              /**< Multiplicity of superdrop. */
-  double radius;            /**< Radius of superdrop. */
-  double msol;              /**< Mass of solute dissolved in superdrop. */
+  uint64_t xi;   /**< Multiplicity of superdrop. */
+  double radius; /**< Radius of superdrop. */
+  double msol;   /**< Mass of solute dissolved in superdrop. */
 
   /**
    * @brief Default constructor requirement for use of SuperdropAttrs in Kokkos View
@@ -147,7 +146,7 @@ struct SuperdropAttrs {
    * This function sets the value of the super-droplet's radius to the specified value
    * with assert that new radius >= dry radius within 10^(-6) micron tolerance.
    *
-   * Note: see also change_radius which limits super-droplet radius to its dry radius.
+   * _Note:_ See also change_radius which limits super-droplet radius to its dry radius.
    *
    * @param i_radius The value to set for radius.
    */

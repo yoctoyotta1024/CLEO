@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,23 +23,21 @@
  * concept used in Collisions struct
  */
 
-
 #ifndef LIBS_SUPERDROPS_COLLISIONS_COALBURE_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_COALBURE_HPP_
 
+#include <Kokkos_Core.hpp>
 #include <concepts>
 #include <functional>
 
-#include <Kokkos_Core.hpp>
-
+#include "../microphysicalprocess.hpp"
+#include "../superdrop.hpp"
 #include "./breakup.hpp"
 #include "./breakup_nfrags.hpp"
 #include "./coalbure_flag.hpp"
 #include "./coalescence.hpp"
 #include "./collisionkinetics.hpp"
 #include "./collisions.hpp"
-#include "../microphysicalprocess.hpp"
-#include "../superdrop.hpp"
 
 /* ie. DoCoalescenceBreakupRebound */
 template <NFragments NFrags, CoalBuReFlag Flag>
@@ -49,10 +47,9 @@ struct DoCoalBuRe {
   DoBreakup<NFrags> bu;
   Flag coalbure_flag;
 
-  /* calculates value of gamma factor in Monte Carlo
-  collision as in Shima et al. 2009 given probability of
-  collision. Note: probability is probability of
-  collision *NOT* collision-coalescence! */
+  /* calculates value of gamma factor in Monte Carlo collision as in Shima et al. 2009 given
+  probability of collision.
+  _Note:_ Probability is probability of collision *NOT* collision-coalescence! */
   KOKKOS_FUNCTION
   uint64_t collision_gamma(const uint64_t xi1, const uint64_t xi2, const double prob,
                            const double phi) const {

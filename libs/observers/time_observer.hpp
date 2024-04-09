@@ -56,7 +56,7 @@ class DoTimeObs {
    * @brief Increment size of time dimension in dataset and write out current time of model to the
    * array in the dataset.
    *
-   * Note: conversion of time from double precision (8 bytes double) to single precision (4 bytes
+   * _Note:_ conversion of time from double precision (8 bytes double) to single precision (4 bytes
    * float) in output.
    *
    * @param t_mdl Current model time.

@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: cartesianboundaryconds.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 21st December 2023
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,23 +20,22 @@
  * at the edges of the cartesian domain e.g. for
  * returning the neighbouring gbxindex and
  * value of a superdroplet's coord when the superdroplet
- * crosses the domain boundary in a particular direction
+ * crosses the domain boundary in a particular direction.
  */
 
 #ifndef LIBS_CARTESIANDOMAIN_CARTESIANBOUNDARYCONDS_HPP_
 #define LIBS_CARTESIANDOMAIN_CARTESIANBOUNDARYCONDS_HPP_
 
-/* NOTE: boundary conditions of domain are defined as:
+/* _Note:_ boundary conditions of domain are defined as:
   z: FINITE   (see cartesian_coord3nghbrs & boundarycond_coord3)
   x: PERIODIC (see cartesian_coord3nghbrs & boundarycond_coord1)
   y: PERIODIC (see cartesian_coord3nghbrs & boundarycond_coord2)
 */
 
-#include <vector>
-#include <utility>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <utility>
+#include <vector>
 
 #include "../cleoconstants.hpp"
 
