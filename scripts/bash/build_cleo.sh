@@ -16,7 +16,7 @@ path2CLEO=$2
 path2build=$3
 path2buildbash=${path2CLEO}/scripts/bash/
 
-### ------------------ build_compile.sh ---------------- ###
+### --------------------- build CLEO ------------------- ###
 if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "openmp" ] && [ "${buildtype}" != "cuda" ];
 then
   echo "please specify the build type as 'serial', 'openmp' or 'cuda'"
