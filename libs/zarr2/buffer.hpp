@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Saturday 30th March 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,8 +44,10 @@
 template <typename T>
 struct Buffer {
  public:
-  using viewh_buffer = Kokkos::View<T*, Kokkos::HostSpace>;  /// View of buffer type on host
+  using viewh_buffer = Kokkos::View<T*, HostSpace>;  /// View of buffer type on host
   using subviewh_buffer = Kokkos::Subview<viewh_buffer, kkpair_size_t>;  ///< Subview of host view
+  using mirrorviewd_buffer = Kokkos::View<T*, HostSpace::array_layout,
+                                          ExecSpace>;  /// mirror view of buffer view on device
 
  private:
   const size_t chunksize;  ///< Total chunk size = product of shape of chunks
@@ -74,11 +76,14 @@ struct Buffer {
    * @param h_data View containing the data to copy.
    */
   void copy_ndata_to_buffer(const size_t n_to_copy, const viewh_buffer h_data) {
-    auto buffer_ = buffer;  // Copy of view for lambda functions using buffer
+    const auto refs_d = kkpair_size_t({0, n_to_copy});
+    const auto source = Kokkos::subview(h_data, refs_d);  // data to copy into buffer
 
-    Kokkos::parallel_for("copy_ndata_to_buffer",
-                         Kokkos::RangePolicy<HostSpace>(fill, fill + n_to_copy),
-                         [buffer_, h_data](const size_t& jj) { buffer_(jj) = h_data(jj); });
+    const auto refs_b = kkpair_size_t({fill, fill + n_to_copy});
+    const auto dest = Kokkos::subview(buffer, refs_b);  // space in buffer to paste into
+
+    Kokkos::deep_copy(dest, source);
+
     fill += n_to_copy;
   }
 
@@ -133,6 +138,20 @@ struct Buffer {
 
     const auto refs = kkpair_size_t({n_to_copy, h_data.extent(0)});  // indexes of remaining data
     return Kokkos::subview(h_data, refs);
+  }
+
+  /**
+   * @brief Copies maximum of 1 element of data to buffer.
+   *
+   * Assert that there is space in the buffer, then copy 1 element of data to
+   * the buffer.
+   *
+   * @param data Data element to copy.
+   */
+  void copy_to_buffer(const T data) {
+    assert((get_space() > 0) && "buffer must have space to copy element");
+    buffer(fill) = data;
+    ++fill;
   }
 
   /**

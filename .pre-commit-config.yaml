@@ -14,3 +14,9 @@ repos:
     -   id: cpplint
         args: [--linelength=100, "--filter=-runtime/references,-readability/braces,-build/include,-build/c++11"]
         types_or: [c, c++, cuda]
+-   repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.2.0
+    hooks:
+    -   id: conventional-pre-commit
+        stages: [commit-msg]
+        args: []

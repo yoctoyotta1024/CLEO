@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 25th March 2024
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -54,18 +54,19 @@ class Thermodata:
     self.qcond = thermovar4d_fromzarr(ds, reshape, "qcond")
     self.theta = self.potential_temp()
 
-    self.press_units = ds["press"].units # probably hecto pascals
-    self.temp_units = ds["temp"].units # probably kelvin
-    self.theta_units = ds["temp"].units # probably kelvin
+    self.press_units = ds["press"].units # assumed probably hecto-pascals
+    self.temp_units = ds["temp"].units # assumed probably kelvin
+    self.qvap_units = ds["qvap"].units # assumed probably g/Kg
+    self.qcond_units = ds["qcond"].units # assumed probably g/Kg
+    self.theta_units = ds["temp"].units # assumed probably kelvin
 
   def potential_temp(self):
     ''' potential temperature, theta '''
 
     press = self.press*100 # convert from hPa to Pa
-    theta = thermoeqns.dry_pot_temp(self.temp, press,
-                                    self.qvap, self.consts)
+    qvap = self.qvap/1000 # convert g/Kg to Kg/Kg
 
-    return theta
+    return thermoeqns.dry_pot_temp(self.temp, press, qvap, self.consts)
 
   def saturationpressure(self):
     ''' saturation pressure in hectoPascals '''
@@ -78,8 +79,9 @@ class Thermodata:
     '''returns vapour pressure in hectoPascals '''
 
     p_pascals = self.press*100 # convert from hPa to Pa
+    qvap = self.qvap/1000 # convert g/Kg to Kg/Kg
     Mr_ratio = self.consts["Mr_ratio"]
-    pvap = thermoeqns.vapour_pressure(p_pascals, self.qvap, Mr_ratio) # [Pa]
+    pvap = thermoeqns.vapour_pressure(p_pascals, qvap, Mr_ratio) # [Pa]
 
     return pvap / 100 # [hPa]
 
@@ -87,19 +89,18 @@ class Thermodata:
     ''' returns relative humidty and supersaturation '''
 
     p_pascals = self.press*100 # convert from hPa to Pa
+    qvap = self.qvap/1000 # convert g/Kg to Kg/Kg
     Mr_ratio = self.consts["Mr_ratio"]
-    relh = thermoeqns.relative_humidity(p_pascals, self.temp,
-                                        self.qvap, Mr_ratio)
-    return relh
+
+    return thermoeqns.relative_humidity(p_pascals, self.temp, qvap, Mr_ratio)
 
   def supersaturation(self):
     ''' returns relative humidty and supersaturation '''
 
     p_pascals = self.press*100 # convert from hPa to Pa
+    qvap = self.qvap/1000 # convert g/Kg to Kg/Kg
     Mr_ratio = self.consts["Mr_ratio"]
-    supersat = thermoeqns.supersaturation(p_pascals, self.temp,
-                                          self.qvap, Mr_ratio)
-    return supersat
+    return thermoeqns.supersaturation(p_pascals, self.temp, qvap, Mr_ratio)
 
   def __getitem__(self, key):
     if key == "press":

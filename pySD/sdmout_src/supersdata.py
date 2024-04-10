@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 20th November 2023
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -279,7 +279,7 @@ class SupersData(SuperdropProperties):
         SuperdropProperties.__init__(self, consts)
 
         self.ds = self.tryopen_dataset(dataset)
-        self.rgdcount = self.ds["rgd_totnsupers"].values  # ragged count variable
+        self.rgdcount = self.ds["raggedcount"].values  # ragged count variable
 
         self.time = ak.Array(self.ds.time.data)
         self.sdId = self.tryvar(self.ds, self.rgdcount, "sdId")

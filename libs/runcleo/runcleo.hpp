@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Monday 12th February 2024
+ * Last Modified: Wednesday 3rd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,15 +22,14 @@
 #ifndef LIBS_RUNCLEO_RUNCLEO_HPP_
 #define LIBS_RUNCLEO_RUNCLEO_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
+#include <Kokkos_Random.hpp>
 #include <concepts>
 #include <iostream>
 #include <random>
 #include <stdexcept>
 #include <string>
-
-#include <Kokkos_Core.hpp>
-#include <Kokkos_DualView.hpp>
-#include <Kokkos_Random.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "./coupleddynamics.hpp"
@@ -42,7 +41,7 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
-#include "observers/observers.hpp"
+#include "observers2/observers.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
@@ -68,8 +67,8 @@ template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphy
 class RunCLEO {
  private:
   const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm; /**< SDMMethods object. */
-  CD &coupldyn; /**< CoupledDynamics object.  */
-  const Comms &comms; /**< CouplingComms object. */
+  CD &coupldyn;                                      /**< CoupledDynamics object.  */
+  const Comms &comms;                                /**< CouplingComms object. */
 
   /**
    * @brief Prepare SDM and Coupled Dynamics for timestepping.
@@ -85,7 +84,7 @@ class RunCLEO {
     std::cout << "\n--- prepare timestepping ---\n";
 
     coupldyn.prepare_to_timestep();
-    sdm.prepare_to_timestep(gbxs.view_host());
+    sdm.prepare_to_timestep(gbxs.view_device());
 
     std::cout << "--- prepare timestepping: success ---\n";
     return 0;
@@ -163,37 +162,38 @@ class RunCLEO {
       gbxs.modify_host();
     }
 
-    gbxs.sync_host();
-    sdm.at_start_step(t_mdl, gbxs.view_host());
+    const auto totsupers = gbxs.view_host()(0).domain_totsupers_readonly();
+    gbxs.sync_device();
+    sdm.at_start_step(t_mdl, gbxs.view_device(), totsupers);
 
     return get_next_step(t_mdl);
   }
 
- /**
-  * @brief Get the size of the next timestep.
-  *
-  * This function calculates and returns the next step size to take based on the
-  * current model time, `t_mdl` and the coupling and obs times
-  * obtained from the `sdm` object; `t_coupl` and `t_obs` respectively.
-  *
-  * @param t_mdl The current timestep of the model.
-  * @return The size of the next timestep.
-  *
-  * @details
-  * The size of the next timestep is determined by finding the smaller out of the
-  * step to the next coupling time and the next observation time. The next coupling
-  * time is calculated after receiving the size of the coupling timestep (a constant)
-  * using the `sdm.get_couplstep()` function. The time of the next observation
-  * is obtained from the `sdm.obs.next_obs()` function.
-  *
-  * The size of the next timestep is then calculated as `t_next - t_mdl`,
-  * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
-  * and `next_obs`. The function uses Kokkos' version of C++ standard
-  * library's `std::min` to find `t_next` (also GPU compatible).
-  *
-  * @see SDMMethods::get_couplstep()
-  * @see SDMMethods::ObsClass::next_obs() // TODO(CB) fill in and reference "ObsClass" docs
-  */
+  /**
+   * @brief Get the size of the next timestep.
+   *
+   * This function calculates and returns the next step size to take based on the
+   * current model time, `t_mdl` and the coupling and obs times
+   * obtained from the `sdm` object; `t_coupl` and `t_obs` respectively.
+   *
+   * @param t_mdl The current timestep of the model.
+   * @return The size of the next timestep.
+   *
+   * @details
+   * The size of the next timestep is determined by finding the smaller out of the
+   * step to the next coupling time and the next observation time. The next coupling
+   * time is calculated after receiving the size of the coupling timestep (a constant)
+   * using the `sdm.get_couplstep()` function. The time of the next observation
+   * is obtained from the `sdm.obs.next_obs()` function.
+   *
+   * The size of the next timestep is then calculated as `t_next - t_mdl`,
+   * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
+   * and `next_obs`. The function uses Kokkos' version of C++ standard
+   * library's `std::min` to find `t_next` (also GPU compatible).
+   *
+   * @see SDMMethods::get_couplstep()
+   * @see SDMMethods::ObsClass::next_obs() // TODO(CB) fill in and reference "ObsClass" docs
+   */
   unsigned int get_next_step(const unsigned int t_mdl) const {
     const auto next_couplstep = [&, t_mdl]() {
       const auto interval = (unsigned int)sdm.get_couplstep();

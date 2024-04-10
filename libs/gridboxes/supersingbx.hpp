@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Tuesday 2nd April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,6 @@
  * Functions and structures related to
  * handling superdroplets inside CLEO's gridboxes
  */
-
 
 #ifndef LIBS_GRIDBOXES_SUPERSINGBX_HPP_
 #define LIBS_GRIDBOXES_SUPERSINGBX_HPP_
@@ -120,6 +119,12 @@ struct SupersInGbx {
   viewd_constsupers domain_totsupers_readonly() const {
     const auto domainrefs = find_domainrefs(totsupers);
     return Kokkos::subview(totsupers, domainrefs);
+  }
+
+  /* returns the total number of all the superdrops in the domain */
+  size_t domain_totnsupers() const {
+    const auto domainrefs = find_domainrefs(totsupers);
+    return domainrefs.second - domainrefs.first;
   }
 };
 

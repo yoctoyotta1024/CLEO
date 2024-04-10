@@ -81,12 +81,18 @@ echo "KOKKOS_DEVICE_PARALLELISM: ${kokkosdevice}"
 echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
 echo "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}"
 
-# build then compile in parallel
+# build CLEO in parallel
 cmake -DCMAKE_CXX_COMPILER=${CXX} \
     -DCMAKE_CC_COMPILER=${CC} \
     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
     -S ${path2CLEO} -B ${path2build} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost}
+
+# compile executable(s)
+make clean -C ${path2build}
+make -C ${path2build} -j 64 golcolls
+make -C ${path2build} -j 64 longcolls
+make -C ${path2build} -j 64 lowlistcolls
 
 # ensure these directories exist (it's a good idea for later use)
 mkdir ${path2build}bin
@@ -97,8 +103,8 @@ export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
 ### ---------------------------------------------------- ###
 
-### ------------------- compile & run ------------------ ###
-### generate input files and run 1D box model example(s)
+### ---------------------- run model ------------------- ###
+### generate input files, run executable and make plots for 1D box model example(s)
 ${python} ${path2CLEO}/examples/boxmodelcollisions/shima2009.py \
     ${path2CLEO} ${path2build} ${configfile} "golovin" "long" "lowlist"
 
