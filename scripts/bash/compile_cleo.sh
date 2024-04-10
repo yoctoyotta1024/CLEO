@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=run_cleocoupledsdm
+#SBATCH --job-name=compile_cleo
 #SBATCH --partition=gpu
 #SBATCH --gpus=4
 #SBATCH --nodes=1
@@ -9,11 +9,11 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./gpu_cleocoupledsdm_out.%j.out
-#SBATCH --error=./gpu_cleocoupledsdm_err.%j.out
+#SBATCH --output=./compile_cleo_out.%j.out
+#SBATCH --error=./compile_cleo_err.%j.out
 
 ### ------------- PLEASE NOTE: this script assumes you ------------- ###
-### ------------- have already built CLEO in path2build ------------ ###
+### ----------- have already built CLEO in "path2build" ------------ ###
 ### -------------------  directory using cmake  -------------------- ###
 
 ### ------------------ input parameters ---------------- ###
