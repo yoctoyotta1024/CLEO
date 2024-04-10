@@ -16,35 +16,21 @@
 ### ------------- have already built CLEO in path2build ------------ ###
 ### -------------------  directory using cmake  -------------------- ###
 
-### ----- You need to edit these lines to set your ----- ###
-### ----- default compiler and python environment   ---- ###
-### ----  and paths for CLEO and build directories  ---- ###
-module load gcc/11.2.0-gcc-11.2.0
-module load python3/2022.01-gcc-11.2.0
-module load nvhpc/23.7-gcc-11.2.0
+### ------------------ input parameters ---------------- ###
+### ----- You need to edit these lines to specify ------ ###
+### ----- (your environment and) build directory ------- ###
+### -------- path and executable to compile ------------ ###
 spack load cmake@3.23.1%gcc
-source activate /work/mh1126/m300950/cleoenv
-python=python
-path2CLEO=$1    # get from command line argument
-path2build=$2   # get from command line argument
-configfile=${HOME}/CLEO/src/config/config.txt
+
+path2build=$1   # get from command line argument
+executable=$2   # get from command line argument
 ### ---------------------------------------------------- ###
 
-### ------------------- compile_run.sh ----------------- ###
-if [ "${path2build}" == "" ]
-then
-  path2build=${HOME}/CLEO/build/
-fi
-
-### compile CLEO in ./build directory
+### ----------------- compile executable --------------- ###
 echo "path to build directory: ${path2build}"
-cd ${path2build} && pwd
-make -j 128
+echo "executable: ${executable}"
 
-### run CLEO
-export OMP_PROC_BIND=spread
-export OMP_PLACES=threads
-runcmd="${path2build}/src/cleocoupledsdm ${configfile}"
-echo ${runcmd}
-${runcmd}
+cd ${path2build}
+make clean
+make -j 128 ${executable}
 ### ---------------------------------------------------- ###

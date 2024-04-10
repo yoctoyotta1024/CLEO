@@ -18,9 +18,7 @@
 
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
-### ------- your environment and directory paths ------- ###
-module load python3/2022.01-gcc-11.2.0
-
+### ------ (your environment and) directory paths ------ ###
 executable="cleocoupledsdm"
 path2CLEO=${HOME}/CLEO/
 path2build=$1 # get from command line argument
