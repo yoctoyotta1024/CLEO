@@ -12,9 +12,11 @@
 #SBATCH --output=./compile_cleo_out.%j.out
 #SBATCH --error=./compile_cleo_err.%j.out
 
-### ------------- PLEASE NOTE: this script assumes you ------------- ###
-### ----------- have already built CLEO in "path2build" ------------ ###
-### -------------------  directory using cmake  -------------------- ###
+### ------------------------------------------------------------------------ ###
+### ----------------- PLEASE NOTE: this script assumes you ----------------- ###
+### --------------- have already built CLEO in "path2build" ---------------- ###
+### -----------------------  directory using cmake  ------------------------ ###
+### ------------------------------------------------------------------------ ###
 
 ### ------------------ input parameters ---------------- ###
 ### ------ Optionally edit these lines to specify ------ ###
