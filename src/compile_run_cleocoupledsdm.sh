@@ -22,7 +22,7 @@
 ### ------------ and executable to compile ------------- ###
 path2CLEO=${HOME}/CLEO/
 path2build=$1 # get from command line argument
-executable="cleocoupledsdm"
+executable="${path2build}/src/cleocoupledsdm"
 configfile=${HOME}/CLEO/src/config/config.txt
 
 if [ "${path2build}" == "" ]
@@ -38,9 +38,8 @@ ${compilecmd}
 ### ---------------------------------------------------- ###
 
 ### ------------------- run executable ----------------- ###
-export OMP_PROC_BIND=spread
-export OMP_PLACES=threads
-runcmd="${path2build}/src/${executable} ${configfile}"
+runcmd="${path2CLEO}/scripts/bash/run_cleo.sh ${executable}" ${configfile}
 echo ${runcmd}
 ${runcmd}
+
 ### -------------------------------------------------- ###
