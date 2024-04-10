@@ -12,27 +12,27 @@
 #SBATCH --output=./run_cleocoupledsdm_out.%j.out
 #SBATCH --error=./run_cleocoupledsdm_err.%j.out
 
-### ------------- PLEASE NOTE: this script assumes you ------------- ###
-### ------------- have already built CLEO in path2build ------------ ###
-### -------------------  directory using cmake  -------------------- ###
+### ------------- PLEASE NOTE: this script assumes you have ------------- ###
+### ------- already built CLEO in "path2build" and compiled the --------- ###
+### ------------- desired executable in "path2build/src" ---------------- ###
 
-### ----- You need to edit these lines to set your ----- ###
-### ----- default compiler and python environment   ---- ###
-### ----  and paths for CLEO and build directories  ---- ###
+### ------------------ input parameters ---------------- ###
+### ----- You need to edit these lines to specify ------ ###
+### ------- your environment and directory paths ------- ###
 module load python3/2022.01-gcc-11.2.0
 
 executable="cleocoupledsdm"
 path2CLEO=${HOME}/CLEO/
-path2build=$1              # get from command line argument
+path2build=$1 # get from command line argument
 configfile=${HOME}/CLEO/src/config/config.txt
-### ---------------------------------------------------- ###
 
-### ----------------- compile executable --------------- ###
 if [ "${path2build}" == "" ]
 then
   path2build=${HOME}/CLEO/build/
 fi
+### ---------------------------------------------------- ###
 
+### ----------------- compile executable --------------- ###
 compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${path2build} ${executable}"
 echo ${compilecmd}
 ${compilecmd}
