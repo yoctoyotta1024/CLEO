@@ -17,9 +17,9 @@
 spack load cmake@3.23.1%gcc
 
 buildtype=$1
-executable="cleocoupledsdm"
 path2CLEO=${HOME}/CLEO/
 path2build=$2 # get from command line argument
+executable="cleocoupledsdm"
 
 if [ "${path2build}" == "" ]
 then

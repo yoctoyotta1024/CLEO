@@ -19,9 +19,9 @@
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
 ### ------ (your environment and) directory paths ------ ###
-executable="cleocoupledsdm"
 path2CLEO=${HOME}/CLEO/
 path2build=$1 # get from command line argument
+executable="cleocoupledsdm"
 configfile=${HOME}/CLEO/src/config/config.txt
 
 if [ "${path2build}" == "" ]
