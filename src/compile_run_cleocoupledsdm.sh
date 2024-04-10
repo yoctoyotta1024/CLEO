@@ -35,12 +35,12 @@ fi
 
 compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${path2build} ${executable}"
 echo ${compilecmd}
-# ${compilecmd}
+${compilecmd}
 
 ### ------------------- run executable ----------------- ###
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
 runcmd="${path2build}/src/${executable} ${configfile}"
 echo ${runcmd}
-# ${runcmd}
+${runcmd}
 ### -------------------------------------------------- ###
