@@ -34,6 +34,7 @@ fi
 compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${path2build} ${executable}"
 echo ${compilecmd}
 ${compilecmd}
+### ---------------------------------------------------- ###
 
 ### ------------------- run executable ----------------- ###
 export OMP_PROC_BIND=spread

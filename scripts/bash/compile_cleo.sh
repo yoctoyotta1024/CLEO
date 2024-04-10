@@ -31,6 +31,5 @@ echo "path to build directory: ${path2build}"
 echo "executable: ${executable}"
 
 cd ${path2build}
-make clean
 make -j 128 ${executable}
 ### ---------------------------------------------------- ###
