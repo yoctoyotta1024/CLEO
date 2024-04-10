@@ -12,9 +12,9 @@
 #SBATCH --output=./run_cleocoupledsdm_out.%j.out
 #SBATCH --error=./run_cleocoupledsdm_err.%j.out
 
-### ------------- PLEASE NOTE: this script assumes you have ------------- ###
-### ---------- already built CLEO in "path2build" usign cmake ----------- ###
-### ------------- desired executable in "path2build/src" ---------------- ###
+### ------------- PLEASE NOTE: this script assumes you ------------- ###
+### ----------- have already built CLEO in "path2build" ------------ ###
+### -------------------  directory using cmake  -------------------- ###
 
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
