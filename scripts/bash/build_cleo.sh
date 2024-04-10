@@ -25,22 +25,23 @@ fi
 if [ "${buildtype}" == "serial" ] || [ "${buildtype}" == "openmp" ] || [ "${buildtype}" == "cuda" ];
 then
   echo "build type: ${buildtype}"
+  echo "path to CLEO: ${path2CLEO}"
   echo "path to build directory: ${path2build}"
 
   if [[ "${buildtype}" == "serial" ]];
   then
-    echo "${path2bashscripts}/build_cleo_serial.sh ${path2build}"
-    ${path2bashscripts}/build_cleo_serial.sh ${path2build}
+    echo "${path2bashscripts}/build_cleo_serial.sh ${path2CLEO} ${path2build}"
+    ${path2bashscripts}/build_cleo_serial.sh ${path2CLEO} ${path2build}
 
   elif [[ "${buildtype}" == "openmp" ]];
   then
-   echo "${path2bashscripts}/build_cleo_openmp.sh ${path2build}"
-    ${path2bashscripts}/build_cleo_openmp.sh ${path2build}
+   echo "${path2bashscripts}/build_cleo_openmp.sh ${path2CLEO} ${path2build}"
+    ${path2bashscripts}/build_cleo_openmp.sh ${path2CLEO} ${path2build}
 
   elif [[ "${buildtype}" == "cda" ]];
   then
-    echo "${path2bashscripts}/build_cleo_openmp_cuda.sh ${path2build}"
-    ${path2bashscripts}/build_cleo_openmp_cuda.sh ${path2build}
+    echo "${path2bashscripts}/build_cleo_openmp_cuda.sh ${path2CLEO} ${path2build}"
+    ${path2bashscripts}/build_cleo_openmp_cuda.sh ${path2CLEO} ${path2build}
   fi
 fi
 ### ---------------------------------------------------- ###
