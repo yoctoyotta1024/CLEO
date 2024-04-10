@@ -41,5 +41,4 @@ ${compilecmd}
 runcmd="${path2CLEO}/scripts/bash/run_cleo.sh ${executable}" ${configfile}
 echo ${runcmd}
 ${runcmd}
-
 ### -------------------------------------------------- ###
