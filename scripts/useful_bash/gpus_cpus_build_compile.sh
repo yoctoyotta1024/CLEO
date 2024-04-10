@@ -20,7 +20,7 @@
 module load gcc/11.2.0-gcc-11.2.0
 module load nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-source activate /work/mh1126/m300950/condaenvs/cleoenv
+source activate /work/mh1126/m300950/cleoenv
 path2CLEO=${HOME}/CLEO/
 path2build=$1             # get from command line argument(s)
 gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"

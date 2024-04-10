@@ -66,5 +66,14 @@ jobs:
     - name: Build example divfree2D
       run: cd build && make divfree2D
 
+    - name: Build example eurec4a1D
+      run: cd build && make eurec4a1D
+
     - name: Build example rshaft1D
       run: cd build && make rshaft1D
+
+    - name: Build example spdtest
+      run: cd build && make spdtest
+
+    - name: Build example yac1
+      run: cd build && make yac1

@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th January 2024
+Last Modified: Monday 8th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO rain1D to create the
+Script runs CLEO executable "rshaft1D" to create the
 data and plots precipitation example given constant
 1-D rainshaft thermodynamics read from a file
 '''
@@ -25,7 +25,6 @@ import sys
 import numpy as np
 import random
 from pathlib import Path
-from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
@@ -118,6 +117,8 @@ else:
   Path(path2build).mkdir(exist_ok=True)
   Path(sharepath).mkdir(exist_ok=True)
   Path(binpath).mkdir(exist_ok=True)
+
+### --- delete any existing initial conditions --- ###
 os.system("rm "+gridfile)
 os.system("rm "+initSDsfile)
 os.system("rm "+thermofile[:-4]+"*")
@@ -167,14 +168,14 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
-### -------------------- COMPILE AND RUN CLEO ---------------------- ###
+### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
-# 2. compile and the run model
 os.chdir(path2build)
 os.system('pwd')
-os.system('rm -rf '+dataset)
-os.system('make clean && make -j 64 rshaft1D')
+os.system('rm -rf '+dataset) # delete any existing dataset
 executable = path2build+'/examples/rainshaft1d/src/rshaft1D'
+print('Executable: '+executable)
+print('Config file: '+configfile)
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
