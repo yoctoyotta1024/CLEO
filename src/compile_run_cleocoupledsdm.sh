@@ -13,12 +13,13 @@
 #SBATCH --error=./run_cleocoupledsdm_err.%j.out
 
 ### ------------- PLEASE NOTE: this script assumes you have ------------- ###
-### ------- already built CLEO in "path2build" and compiled the --------- ###
+### ---------- already built CLEO in "path2build" usign cmake ----------- ###
 ### ------------- desired executable in "path2build/src" ---------------- ###
 
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
-### ------ (your environment and) directory paths ------ ###
+### ----- (your environment and) directory paths ------- ###
+### ------------ and executable to compile ------------- ###
 path2CLEO=${HOME}/CLEO/
 path2build=$1 # get from command line argument
 executable="cleocoupledsdm"

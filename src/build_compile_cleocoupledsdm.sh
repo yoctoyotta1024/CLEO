@@ -13,7 +13,8 @@
 
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
-### ------ (your environment and) directory paths ------ ###
+### ----- (your environment and) directory paths ------- ###
+### ------------ and executable to compile ------------- ###
 spack load cmake@3.23.1%gcc
 
 buildtype=$1
