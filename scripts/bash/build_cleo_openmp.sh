@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=buildcpu
+#SBATCH --job-name=openmpbuild
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./build/bin/buildcpu_out.%j.out
-#SBATCH --error=./build/bin/buildcpu_err.%j.out
+#SBATCH --output=./build/bin/openmpbuild_out.%j.out
+#SBATCH --error=./build/bin/openmpbuild_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------- You MUST edit these lines to set your ------ ###

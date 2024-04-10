@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=buildgpu
+#SBATCH --job-name=cudaopenmpbuild
 #SBATCH --partition=gpu
 #SBATCH --gpus=4
 #SBATCH --nodes=1
@@ -9,8 +9,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./build/bin/buildgpu_out.%j.out
-#SBATCH --error=./build/bin/buildgpu_err.%j.out
+#SBATCH --output=./build/bin/cudaopenmpbuild_out.%j.out
+#SBATCH --error=./build/bin/cudaopenmpbuild_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------- You MUST edit these lines to set your ------ ###
