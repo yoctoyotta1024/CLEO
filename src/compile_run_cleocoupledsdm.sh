@@ -9,8 +9,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./gpu_cleocoupledsdm_out.%j.out
-#SBATCH --error=./gpu_cleocoupledsdm_err.%j.out
+#SBATCH --output=./run_cleocoupledsdm_out.%j.out
+#SBATCH --error=./run_cleocoupledsdm_err.%j.out
 
 ### ------------- PLEASE NOTE: this script assumes you ------------- ###
 ### ------------- have already built CLEO in path2build ------------ ###
