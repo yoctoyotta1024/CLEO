@@ -9,3 +9,5 @@ simply :ref:`contact us<contact>`!
 
 We welcome your interest and are enthusiastic about both CLEO's
 computational development and its use for scientific research.
+
+TODO(CB) update with commit and code formating requirements

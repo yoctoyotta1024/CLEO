@@ -1,8 +1,6 @@
 Requirements
 ============
 
-TODO(CB) update requirements with micromambda package installer advice
-
 The following requirements ensure CLEO's build, compilation and
 execution on DKRZ's Levante HPC. If they do not work,
 please :ref:`contact us <contact>` or `open a new
