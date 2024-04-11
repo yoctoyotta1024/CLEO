@@ -9,15 +9,16 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Concept of CollectDataForDataset and monoidal structs which can be used by ParallelWriteData
- * structs to collect data within parallel loops and write it to arrays in a dataset
+ * Concept of CollectDataForDataset and monoidal structs which can be used within called to
+ * ParallelWriteData operator() to collect data within parallel loops and write it to arrays in a
+ * dataset
  */
 
 #ifndef LIBS_OBSERVERS_COLLECT_DATA_FOR_DATASET_HPP_
