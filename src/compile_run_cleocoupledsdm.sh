@@ -41,6 +41,7 @@ ${compilecmd}
 ### ---------------------------------------------------- ###
 
 ### ------------------- run executable ----------------- ###
+cd ${path2build} && pwd
 runcmd="${path2CLEO}/scripts/bash/run_cleo.sh ${run_executable} ${configfile}"
 echo ${runcmd}
 ${runcmd}
