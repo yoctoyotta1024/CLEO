@@ -1,12 +1,23 @@
-XXX Observer
-============
+Collect Data For Dataset
+========================
 
-// TODO(CB) write doc
+Header file: ``<libs/observers/collect_data_for_dataset.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/collect_data_for_dataset.hpp>`_
 
-Header file: ``<libs/observers/XXX_observer.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/XXX_observer.hpp>`_
+.. doxygenconcept:: CollectDataForDataset
+   :project: observers
 
-.. doxygenstruct:: XXXObserver
+.. doxygenstruct:: CombinedCollectDataForDataset
+   :project: observers
+   :private-members:
+   :protected-members:
+   :members:
+   :undoc-members:
+
+.. doxygenfunction:: operator>>(const CollectData1 a, const CollectData2 b)
+   :project: observers
+
+.. doxygenstruct:: NullCollectDataForDataset
    :project: observers
    :private-members:
    :protected-members:
