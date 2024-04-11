@@ -21,10 +21,16 @@
 executable=$1   # get from command line argument
 configfile=$2   # get from command line argument
 
-### ----------------- run executable --------------- ###
-export OMP_PROC_BIND=spread
-export OMP_PLACES=threads
-runcmd="${executable} ${configfile}"
-echo ${runcmd}
-${runcmd}
-### ---------------------------------------------------- ###
+if [[ "${executable}" == "" ||
+      "${configfile}" == "" ]]
+then
+  echo "Bad inputs, please check your executable and config file name"
+else
+  ### ----------------- run executable --------------- ###
+  export OMP_PROC_BIND=spread
+  export OMP_PLACES=threads
+  runcmd="${executable} ${configfile}"
+  echo ${runcmd}
+  ${runcmd}
+  ### ---------------------------------------------------- ###
+fi

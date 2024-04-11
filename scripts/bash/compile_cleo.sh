@@ -37,10 +37,17 @@ then
 fi
 ### ---------------------------------------------------- ###
 
-### ----------------- compile executable --------------- ###
-echo "path to build directory: ${path2build}"
-echo "executable: ${executable}"
+if [[ "${buildtype}" == "" ||
+      "${path2build}" == "" ||
+      "${executable}" == "" ]]
+then
+  echo "Bad inputs, please check your buildtype, path2build and executable"
+else
+  ### ----------------- compile executable --------------- ###
+  echo "path to build directory: ${path2build}"
+  echo "executable: ${executable}"
 
-cd ${path2build}
-make -j 128 ${executable}
-### ---------------------------------------------------- ###
+  cd ${path2build}
+  make -j 128 ${executable}
+  ### ---------------------------------------------------- ###
+fi
