@@ -4,13 +4,6 @@ Superdrops Observer
 Header file: ``<libs/observers/superdrops_observer.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/superdrops_observer.hpp>`_
 
-.. doxygenstruct:: RaggedCount
-   :project: observers
-   :private-members:
-   :protected-members:
-   :members:
-   :undoc-members:
-
 .. doxygenfunction:: CollectSuperdropVariable
    :project: observers
 
@@ -93,6 +86,13 @@ Header file: ``<libs/observers/superdrops_observer.hpp>``
 
 .. doxygenfunction:: CollectCoord2
    :project: observers
+
+.. doxygenstruct:: RaggedCount
+   :project: observers
+   :private-members:
+   :protected-members:
+   :members:
+   :undoc-members:
 
 .. doxygenfunction:: SuperdropsObserver
    :project: observers
