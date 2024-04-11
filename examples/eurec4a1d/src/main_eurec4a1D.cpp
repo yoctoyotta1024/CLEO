@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,16 +39,16 @@
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
-#include "observers2/gbxindex_observer.hpp"
-#include "observers2/massmoments_observer.hpp"
-#include "observers2/nsupers_observer.hpp"
-#include "observers2/observers.hpp"
-#include "observers2/runstats_observer.hpp"
-#include "observers2/state_observer.hpp"
-#include "observers2/streamout_observer.hpp"
-#include "observers2/superdrops_observer.hpp"
-#include "observers2/time_observer.hpp"
-#include "observers2/windvel_observer.hpp"
+#include "observers/gbxindex_observer.hpp"
+#include "observers/massmoments_observer.hpp"
+#include "observers/nsupers_observer.hpp"
+#include "observers/observers.hpp"
+#include "observers/runstats_observer.hpp"
+#include "observers/state_observer.hpp"
+#include "observers/streamout_observer.hpp"
+#include "observers/superdrops_observer.hpp"
+#include "observers/time_observer.hpp"
+#include "observers/windvel_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
@@ -60,8 +60,8 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/terminalvelocity.hpp"
-#include "zarr2/dataset.hpp"
-#include "zarr2/fsstore.hpp"
+#include "zarr/dataset.hpp"
+#include "zarr/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
                                             const unsigned int couplstep,
