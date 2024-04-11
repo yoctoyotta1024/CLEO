@@ -117,9 +117,6 @@ CollectDataForDataset<Store> auto CollectSuperdropVariable(
   return GenericCollectData(ffunc, xzarr, 0);
 }
 
-/* Operator is functor to perform copy of value of superdroplet's gridbox index "sdgbxindex" for
-each superdroplet in totsupers view to d_data in parallel. Note conversion of
-
 /**
  * @brief Functor operator to perform a copy of the sdgbxindex of each superdroplet to
  * d_data within Kokkos::parallel_for loop over superdroplets with a range policy.
@@ -144,7 +141,8 @@ struct SdgbxindexFunc {
 };
 
 /**
- * @brief Constructs a collector for each superdroplets' gridbox index data.
+ * @brief Constructs a type satisyfing the CollectDataForDataset concept for each superdroplets'
+ * gridbox index data.
  *
  * This function constructs a type satisfying the CollectDataForDataset to collect each
  * superdroplet's gridbox index "sdgbxindex" as a 4 byte unsigned integer and write it to a ragged
@@ -186,6 +184,20 @@ struct SdIdFunc {
   }
 };
 
+/**
+ * @brief Constructs a type satisyfing the CollectDataForDataset conceptfor each superdroplets'
+ * identity.
+ *
+ * This function constructs a type satisfying the CollectDataForDataset to collect each
+ * superdroplet's identity "sdId" as a 4 byte unsigned integer and write it to a ragged
+ * array in a dataset.
+ *
+ * @tparam Store The type of the dataset store.
+ * @param dataset The dataset to collect data from.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting
+ * sdId data.
+ */
 template <typename Store>
 CollectDataForDataset<Store> auto CollectSdId(const Dataset<Store> &dataset, const int maxchunk) {
   return CollectSuperdropVariable<Store, uint32_t, SdIdFunc>(dataset, SdIdFunc{}, "sdId", "", "<u4",
@@ -217,6 +229,19 @@ struct XiFunc {
   }
 };
 
+/**
+ * @brief Constructs a type satisyfing the CollectDataForDataset concept for each superdroplets'
+ * multiplicity.
+ *
+ * This function constructs a type satisfying the CollectDataForDataset to collect each
+ * superdroplet's multiplicity "xi" as a 8 byte unsigned integer and write it to a ragged
+ * array in a dataset.
+ *
+ * @tparam Store The type of the dataset store.
+ * @param dataset The dataset to collect data from.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting xi data.
+ */
 template <typename Store>
 CollectDataForDataset<Store> auto CollectXi(const Dataset<Store> &dataset, const int maxchunk) {
   return CollectSuperdropVariable<Store, uint64_t, XiFunc>(dataset, XiFunc{}, "xi", "", "<u8", 1,
@@ -245,6 +270,19 @@ struct RadiusFunc {
   }
 };
 
+/**
+ * @brief Constructs a type satisyfing the CollectDataForDataset concept or each superdroplets'
+ * radius.
+ *
+ * This function constructs a type satisfying the CollectDataForDataset to collect each
+ * superdroplet's radius as a 4 byte floating point value and write it to a ragged
+ * array in a dataset.
+ *
+ * @tparam Store The type of the dataset store.
+ * @param dataset The dataset to collect data from.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting radius.
+ */
 template <typename Store>
 CollectDataForDataset<Store> auto CollectRadius(const Dataset<Store> &dataset, const int maxchunk) {
   return CollectSuperdropVariable<Store, float, RadiusFunc>(
@@ -273,6 +311,19 @@ struct MsolFunc {
   }
 };
 
+/**
+ * @brief Constructs a type satisyfing the CollectDataForDataset concept or each superdroplets'
+ * solute mass.
+ *
+ * This function constructs a type satisfying the CollectDataForDataset to collect each
+ * superdroplet's solute mass "msol" as a 4 byte floating point value and write it to a ragged
+ * array in a dataset.
+ *
+ * @tparam Store The type of the dataset store.
+ * @param dataset The dataset to collect data from.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting msol.
+ */
 template <typename Store>
 CollectDataForDataset<Store> auto CollectMsol(const Dataset<Store> &dataset, const int maxchunk) {
   return CollectSuperdropVariable<Store, float, MsolFunc>(dataset, MsolFunc{}, "msol", "g", "<f4",
@@ -301,6 +352,19 @@ struct Coord3Func {
   }
 };
 
+/**
+ * @brief Constructs a type satisyfing the CollectDataForDataset concept or each superdroplets'
+ * coord3.
+ *
+ * This function constructs a type satisfying the CollectDataForDataset to collect each
+ * superdroplet's coord3 as a 4 byte floating point value and write it to a ragged
+ * array in a dataset.
+ *
+ * @tparam Store The type of the dataset store.
+ * @param dataset The dataset to collect data from.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting coord3.
+ */
 template <typename Store>
 CollectDataForDataset<Store> auto CollectCoord3(const Dataset<Store> &dataset, const int maxchunk) {
   return CollectSuperdropVariable<Store, float, Coord3Func>(dataset, Coord3Func{}, "coord3", "m",
@@ -329,6 +393,19 @@ struct Coord1Func {
   }
 };
 
+/**
+ * @brief Constructs a type satisyfing the CollectDataForDataset concept or each superdroplets'
+ * coord1.
+ *
+ * This function constructs a type satisfying the CollectDataForDataset to collect each
+ * superdroplet's coord1 as a 4 byte floating point value and write it to a ragged
+ * array in a dataset.
+ *
+ * @tparam Store The type of the dataset store.
+ * @param dataset The dataset to collect data from.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting coord1.
+ */
 template <typename Store>
 CollectDataForDataset<Store> auto CollectCoord1(const Dataset<Store> &dataset, const int maxchunk) {
   return CollectSuperdropVariable<Store, float, Coord1Func>(dataset, Coord1Func{}, "coord1", "m",
@@ -357,6 +434,19 @@ struct Coord2Func {
   }
 };
 
+/**
+ * @brief Constructs a type satisyfing the CollectDataForDataset concept or each superdroplets'
+ * coord2.
+ *
+ * This function constructs a type satisfying the CollectDataForDataset to collect each
+ * superdroplet's coord2 as a 4 byte floating point value and write it to a ragged
+ * array in a dataset.
+ *
+ * @tparam Store The type of the dataset store.
+ * @param dataset The dataset to collect data from.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting coord2.
+ */
 template <typename Store>
 CollectDataForDataset<Store> auto CollectCoord2(const Dataset<Store> &dataset, const int maxchunk) {
   return CollectSuperdropVariable<Store, float, Coord2Func>(dataset, Coord2Func{}, "coord2", "m",
