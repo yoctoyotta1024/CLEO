@@ -22,10 +22,16 @@
 ### ------ Optionally edit these lines to specify ------ ###
 ### ------ your environment and/or build directory ----- ###
 ### --------- path and/or executable to compile -------- ###
-spack load cmake@3.23.1%gcc
+buildtype=$1    # get from command line argument
+path2build=$2   # get from command line argument
+executable=$3   # get from command line argument
 
-path2build=$1   # get from command line argument
-executable=$2   # get from command line argument
+spack load cmake@3.23.1%gcc
+module load gcc/11.2.0-gcc-11.2.0
+if [[ "${buildtype}" == "cuda" ]];
+then
+  module load nvhpc/23.9-gcc-11.2.0 # load nvhpc compilers if compiling CUDA build
+fi
 ### ---------------------------------------------------- ###
 
 ### ----------------- compile executable --------------- ###
