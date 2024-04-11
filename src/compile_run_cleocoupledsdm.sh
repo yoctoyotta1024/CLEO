@@ -22,12 +22,14 @@
 ### ------------ and executable to compile ------------- ###
 path2CLEO=${HOME}/CLEO/
 path2build=$1 # get from command line argument
-executable="${path2build}/src/cleocoupledsdm"
+executable="cleocoupledsdm"
 configfile=${HOME}/CLEO/src/config/config.txt
+run_executable=${path2build}/src/${executable}
 
 if [ "${path2build}" == "" ]
 then
   path2build=${HOME}/CLEO/build/
+  run_executable=${path2build}/${run_executable}
 fi
 ### ---------------------------------------------------- ###
 
@@ -38,7 +40,7 @@ ${compilecmd}
 ### ---------------------------------------------------- ###
 
 ### ------------------- run executable ----------------- ###
-runcmd="${path2CLEO}/scripts/bash/run_cleo.sh ${executable}" ${configfile}
+runcmd="${path2CLEO}/scripts/bash/run_cleo.sh ${run_executable} ${configfile}"
 echo ${runcmd}
 ${runcmd}
 ### -------------------------------------------------- ###
