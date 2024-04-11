@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,9 +40,21 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr/dataset.hpp"
 
-/* constructs observer which writes writes thermodynamic and wind velocity variables from the state
-of each gridbox with a constant timestep 'interval' using an instance of the WriteToDatasetObserver
-class */
+/**
+ * @brief Constructs an observer which writes the state of a gridbox (thermodynamics and
+ * wind velocity components) in each gridbox at start of each observation timestep to an array with
+ * a constant observation timestep "interval".
+ *
+ * This function collects thermodynamic properties and wind velocities from the dataset and combines
+ * them into a single collection of state data.
+ *
+ * @tparam Store Type of store for dataset.
+ * @param interval Observation timestep.
+ * @param dataset Dataset to write time data to.
+ * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+ * @param ngbxs The number of gridboxes.
+ * @return Observer An observer instance for writing the state data.
+ */
 template <typename Store>
 inline Observer auto StateObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                    const int maxchunk, const size_t ngbxs) {
