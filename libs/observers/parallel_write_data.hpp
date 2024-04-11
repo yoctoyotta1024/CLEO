@@ -191,8 +191,7 @@ class ParallelWriteSupers {
  private:
   const Dataset<Store> &dataset; /**< dataset to write data to */
   CollectData collect_data;
-  /**< functions to collect data within loop over superdroplets and write it to ragged array(s)
-   * dataset */
+  /**< functions to collect data within loop over superdroplets and write to ragged array(s) */
   RaggedCount ragged_count; /**< functions to write ragged count variable to a dataset */
 
   /**
