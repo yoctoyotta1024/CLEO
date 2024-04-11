@@ -94,7 +94,7 @@ inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &da
  * @param ngbxs The number of gridboxes.
  * @return Observer An observer instance for writing the number of superdroplets.
  */
-temp template <typename Store>
+template <typename Store>
 inline Observer auto NsupersObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                      const int maxchunk, const size_t ngbxs) {
   return WriteToDatasetObserver(interval, dataset, CollectNsupers(dataset, maxchunk, ngbxs));
