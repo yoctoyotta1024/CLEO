@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,9 +38,20 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr/dataset.hpp"
 
-/* Operator is functor to perform copy of the number of superdroplets in each gridbox "nsupers" to
-d_data in parallel. Note conversion of nsupers from size_t (architecture dependent usually long
-unsigned int = 8 bytes) to single precision (uint32_t = 4 bytes) in output */
+/**
+ * @brief Functor operator to perform a copy of the number of superdroplets in each gridbox
+ * "nsupers" to d_data within Kokkos::parallel_for loop over gridboxes with range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of nsupers from size_t (architecture-dependent, usually long unsigned int = 8
+ * bytes) to single precision (uint32_t = 4 bytes).
+ *
+ * @param ii The index of the gridbox.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the number of superdroplets.
+ */
 struct NsupersFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -50,8 +61,17 @@ struct NsupersFunc {
   }
 };
 
-/* constructs CollectDataForDataset for a given Store which writes the number of superdroplets
-in each gridbox using an instance of the GenericCollectData class */
+/**
+ * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
+ * instance of the GenericCollectData class) which writes the number of superdroplets in each
+ * gridbox "nsupers" during the functor call.
+ *
+ * @param dataset The dataset to write nsupers to.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @param ngbxs The number of gridboxes.
+ * @return CollectDataForDataset<Store> An instance satisfying the CollectDataForDataset concept for
+ * collecting the number of superdroplets in each gridbox.
+ */
 template <typename Store>
 inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &dataset,
                                                         const int maxchunk, const size_t ngbxs) {
@@ -62,9 +82,19 @@ inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &da
   return GenericCollectData(NsupersFunc{}, xzarr, ngbxs);
 }
 
-/* constructs observer which writes the number of superdroplets each gridbox
-with a constant timestep 'interval' using an instance of the WriteToDatasetObserver class */
-template <typename Store>
+/**
+ * @brief Constructs an observer which writes the number of superdroplets in each gridbox "nsupers"
+ * at start of each observation timestep to an array with a constant observation timestep
+ * "interval".
+ *
+ * @tparam Store Type of store for dataset.
+ * @param interval Observation timestep.
+ * @param dataset Dataset to write time data to.
+ * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+ * @param ngbxs The number of gridboxes.
+ * @return Observer An observer instance for writing the number of superdroplets.
+ */
+temp template <typename Store>
 inline Observer auto NsupersObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                      const int maxchunk, const size_t ngbxs) {
   return WriteToDatasetObserver(interval, dataset, CollectNsupers(dataset, maxchunk, ngbxs));
