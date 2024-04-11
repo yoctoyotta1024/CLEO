@@ -81,7 +81,7 @@ CollectDataForDataset<Store> auto CollectWindVariable(const Dataset<Store> &data
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
  * @param totsupers The view of superdroplets on device.
- * @param d_data The mirror view buffer for the number of superdroplets.
+ * @param d_data The mirror view buffer for wvel form each gridbox.
  */
 struct WvelFunc {
   KOKKOS_INLINE_FUNCTION
@@ -103,7 +103,7 @@ struct WvelFunc {
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
  * @param totsupers The view of superdroplets on device.
- * @param d_data The mirror view buffer for the number of superdroplets.
+ * @param d_data The mirror view buffer for uvel form each gridbox.
  */
 struct UvelFunc {
   KOKKOS_INLINE_FUNCTION
@@ -125,7 +125,7 @@ struct UvelFunc {
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
  * @param totsupers The view of superdroplets on device.
- * @param d_data The mirror view buffer for the number of superdroplets.
+ * @param d_data The mirror view buffer for vvel form each gridbox.
  */
 struct VvelFunc {
   KOKKOS_INLINE_FUNCTION
@@ -167,7 +167,7 @@ inline CollectDataForDataset<Store> auto CollectWindVel(const Dataset<Store> &da
 
 /**
  * @brief Constructs an observer which writes the wind velocity components in each gridbox (wvel,
- * vvel and uvel) at start of each observation timestep to an array with a constant observation
+ * vvel and uvel) at start of each observation timestep to a arrays with a constant observation
  * timestep "interval".
  *
  * @tparam Store Type of store for dataset.

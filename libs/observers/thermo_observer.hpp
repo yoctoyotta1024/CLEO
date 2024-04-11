@@ -81,7 +81,7 @@ CollectDataForDataset<Store> auto CollectThermoVariable(const Dataset<Store> &da
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
  * @param totsupers The view of superdroplets on device.
- * @param d_data The mirror view buffer for the number of superdroplets.
+ * @param d_data The mirror view buffer for the pressure in each gridbox.
  */
 struct PressFunc {
   KOKKOS_INLINE_FUNCTION
@@ -103,7 +103,7 @@ struct PressFunc {
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
  * @param totsupers The view of superdroplets on device.
- * @param d_data The mirror view buffer for the number of superdroplets.
+ * @param d_data The mirror view buffer for the temperature in each gridbox.
  */
 struct TempFunc {
   KOKKOS_INLINE_FUNCTION
@@ -125,7 +125,7 @@ struct TempFunc {
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
  * @param totsupers The view of superdroplets on device.
- * @param d_data The mirror view buffer for the number of superdroplets.
+ * @param d_data The mirror view buffer for qvap from each gridbox.
  */
 struct QvapFunc {
   KOKKOS_INLINE_FUNCTION
@@ -147,7 +147,7 @@ struct QvapFunc {
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
  * @param totsupers The view of superdroplets on device.
- * @param d_data The mirror view buffer for the number of superdroplets.
+ * @param d_data The mirror view buffer for qcond from each gridbox.
  */
 struct QcondFunc {
   KOKKOS_INLINE_FUNCTION
@@ -192,7 +192,7 @@ inline CollectDataForDataset<Store> auto CollectThermo(const Dataset<Store> &dat
 
 /**
  * @brief Constructs an observer which writes thermodyanmcis from each gridbox (e.g. press, temp,
- * qvap, etc.) at start of each observation timestep to an array with a constant
+ * qvap, etc.) at start of each observation timestep to a arrays with a constant
  * observation timestep "interval".
  *
  * @tparam Store Type of store for dataset.

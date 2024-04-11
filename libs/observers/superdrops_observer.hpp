@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -63,9 +63,46 @@ struct RaggedCount {
   }
 };
 
-/* returns CollectDataForDataset which writes a variable (e.g. an attribute) from
-each superdroplet to an array in a dataset in a given store for a given datatype and using a given
-function-like functor */
+/**
+ * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
+ * instance of the GenericCollectData class) which writes a thermodynamic variable to an Xarray in a
+ * dataset.
+ *
+ * Function return type writes a thermodyanmic varaible "name" to an Xarray as a 4-byte floating
+ * point type by collecting data according to the given FunctorFunc from within a
+ * Kokkos::parallel_for loop over gridboxes with a range policy.
+ *
+ * @param dataset The dataset to write the variable to.
+ * @param ffunc The functor function to collect the variable from within a parallel range policy
+ * over gridboxes.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @param ngbxs The number of gridboxes.
+ * @return CollectDataForDataset<Store> An instance satisfying the CollectDataForDataset concept for
+ * collecting a 2-D floating point variable (e.g. a thermodynamic variable) from each gridbox.
+ */
+
+/**
+ * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
+ * instance of the GenericCollectData class) which writes a superdroplet variable to a ragged Xarray
+ * in a dataset.
+ *
+ * Function return type writes a superdroplet varaible "name" to a ragged Xarray for a data
+ * type by collecting data according to the given FunctorFunc from within a
+ * Kokkos::parallel_for loop over superdroplets with a range policy.
+ *
+ * @tparam Store The type of the dataset store.
+ * @tparam T The type of the superdroplet variable data.
+ * @tparam FunctorFunc The type of the functor function.
+ * @param dataset The dataset to collect data from.
+ * @param ffunc The functor function to apply to collect data.
+ * @param name The name of the variable.
+ * @param units The units of the variable.
+ * @param dtype A string representing the data type of the variable.
+ * @param scale_factor The scale factor of the variable.
+ * @param maxchunk The maximum chunk size.
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting
+ * superdroplet variable data.
+ */
 template <typename Store, typename T, typename FunctorFunc>
 CollectDataForDataset<Store> auto CollectSuperdropVariable(
     const Dataset<Store> &dataset, const FunctorFunc ffunc, const std::string_view name,
@@ -81,8 +118,22 @@ CollectDataForDataset<Store> auto CollectSuperdropVariable(
 }
 
 /* Operator is functor to perform copy of value of superdroplet's gridbox index "sdgbxindex" for
-each superdroplet in totsupers view to d_data in parallel. Note conversion of sdgbxindex from
-unsigned long int (8 bytes) to unsigned int (uint32_t = 4 bytes) */
+each superdroplet in totsupers view to d_data in parallel. Note conversion of
+
+/**
+ * @brief Functor operator to perform a copy of the sdgbxindex of each superdroplet to
+ * d_data within Kokkos::parallel_for loop over superdroplets with a range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of sdgbxindex from unsigned long int (8 bytes) to unsigned int
+ * (uint32_t = 4 bytes)
+ *
+ * @param kk The index of the superdrop.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the superdroplets' sdgbxindex.
+ */
 struct SdgbxindexFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -92,6 +143,19 @@ struct SdgbxindexFunc {
   }
 };
 
+/**
+ * @brief Constructs a collector for each superdroplets' gridbox index data.
+ *
+ * This function constructs a type satisfying the CollectDataForDataset to collect each
+ * superdroplet's gridbox index "sdgbxindex" as a 4 byte unsigned integer and write it to a ragged
+ * array in a dataset.
+ *
+ * @tparam Store The type of the dataset store.
+ * @param dataset The dataset to collect data from.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting
+ * sdgbxindex data.
+ */
 template <typename Store>
 CollectDataForDataset<Store> auto CollectSdgbxindex(const Dataset<Store> &dataset,
                                                     const int maxchunk) {
@@ -99,9 +163,20 @@ CollectDataForDataset<Store> auto CollectSdgbxindex(const Dataset<Store> &datase
       dataset, SdgbxindexFunc{}, "sdgbxindex", "", "<u4", 1, maxchunk);
 }
 
-/* Operator is functor to perform copy of value of superdroplet id "sdid.value" for each
-superdroplet in totsupers view to d_data in parallel. Note conversion of id from unsigned long int
-(8 bytes) to unsigned int (uint32_t = 4 bytes) */
+/**
+ * @brief Functor operator to perform a copy of the identity of each superdroplet to
+ * d_data within Kokkos::parallel_for loop over superdroplets with a range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of sdid from unsigned long int (8 bytes) to unsigned int
+ * (uint32_t = 4 bytes)
+ *
+ * @param kk The index of the superdrop.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the superdroplets' identity.
+ */
 struct SdIdFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -117,9 +192,20 @@ CollectDataForDataset<Store> auto CollectSdId(const Dataset<Store> &dataset, con
                                                              1, maxchunk);
 }
 
-/* Operator is functor to perform copy of xi for each superdroplet in totsupers view to d_data
-in parallel. Note conversion of xi from size_t (arch dependent usually 8 bytes) to 8 byte, long
-unsigned int (unit64_t) */
+/**
+ * @brief Functor operator to perform a copy of the multiplicity of each superdroplet to
+ * d_data within Kokkos::parallel_for loop over superdroplets with a range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of xi from size_t (architecture dependent usually 8 bytes) to 8 byte, long
+ * unsigned int (unit64_t).
+ *
+ * @param kk The index of the superdrop.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the superdroplets' multiplicity.
+ */
 struct XiFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -137,8 +223,19 @@ CollectDataForDataset<Store> auto CollectXi(const Dataset<Store> &dataset, const
                                                            maxchunk);
 }
 
-/* Operator is functor to perform copy of radius for each superdroplet in totsupers view to d_data
-in parallel. Note conversion of radius from double (8 bytes) to float (4 bytes) */
+/**
+ * @brief Functor operator to perform a copy of the radius of each superdroplet to
+ * d_data within Kokkos::parallel_for loop over superdroplets with a range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of radius from double (8 bytes) to float (4 bytes).
+ *
+ * @param kk The index of the superdrop.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the superdroplets' radius.
+ */
 struct RadiusFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -154,8 +251,19 @@ CollectDataForDataset<Store> auto CollectRadius(const Dataset<Store> &dataset, c
       dataset, RadiusFunc{}, "radius", "micro-m", "<f4", dlc::R0 * 1e6, maxchunk);
 }
 
-/* Operator is functor to perform copy of solute mass "msol" for each superdroplet in totsupers view
-to d_data in parallel. Note conversion of msol from double (8 bytes) to float (4 bytes) */
+/**
+ * @brief Functor operator to perform a copy of the solute mass of each superdroplet to
+ * d_data within Kokkos::parallel_for loop over superdroplets with a range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of msol from double (8 bytes) to float (4 bytes).
+ *
+ * @param kk The index of the superdrop.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the superdroplets' msol.
+ */
 struct MsolFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -171,8 +279,19 @@ CollectDataForDataset<Store> auto CollectMsol(const Dataset<Store> &dataset, con
                                                           dlc::MASS0grams, maxchunk);
 }
 
-/* Operator is functor to perform copy of coord3 for each superdroplet in totsupers view
-to d_data in parallel. Note conversion of coord3 from double (8 bytes) to float (4 bytes) */
+/**
+ * @brief Functor operator to perform a copy of the coord3 of each superdroplet to
+ * d_data within Kokkos::parallel_for loop over superdroplets with a range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of coord3 from double (8 bytes) to float (4 bytes).
+ *
+ * @param kk The index of the superdrop.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the superdroplets' coord3.
+ */
 struct Coord3Func {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -188,8 +307,19 @@ CollectDataForDataset<Store> auto CollectCoord3(const Dataset<Store> &dataset, c
                                                             "<f4", dlc::COORD0, maxchunk);
 }
 
-/* Operator is functor to perform copy of coord1 for each superdroplet in totsupers view
-to d_data in parallel. Note conversion of coord1 from double (8 bytes) to float (4 bytes) */
+/**
+ * @brief Functor operator to perform a copy of the coord1 of each superdroplet to
+ * d_data within Kokkos::parallel_for loop over superdroplets with a range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of coord1 from double (8 bytes) to float (4 bytes).
+ *
+ * @param kk The index of the superdrop.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the superdroplets' coord1.
+ */
 struct Coord1Func {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -205,8 +335,19 @@ CollectDataForDataset<Store> auto CollectCoord1(const Dataset<Store> &dataset, c
                                                             "<f4", dlc::COORD0, maxchunk);
 }
 
-/* Operator is functor to perform copy of coord2 for each superdroplet in totsupers view
-to d_data in parallel. Note conversion of coord2 from double (8 bytes) to float (4 bytes) */
+/**
+ * @brief Functor operator to perform a copy of the coord2 of each superdroplet to
+ * d_data within Kokkos::parallel_for loop over superdroplets with a range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of coord2 from double (8 bytes) to float (4 bytes).
+ *
+ * @param kk The index of the superdrop.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the superdroplets' coord2.
+ */
 struct Coord2Func {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -222,9 +363,19 @@ CollectDataForDataset<Store> auto CollectCoord2(const Dataset<Store> &dataset, c
                                                             "<f4", dlc::COORD0, maxchunk);
 }
 
-/* constructs observer which writes writes superdroplet variables (e.g. an attributes) from each
-superdroplet with a constant timestep 'interval' using an instance of the WriteToDatasetObserver
-class given data collect struct "collect_data" */
+/**
+ * @brief Constructs an observer which writes superdroplet variables (e.g. their attributes) from
+ * each superdroplet at start of each observation timestep to a ragged arrays with a constant
+ * observation timestep "interval".
+ *
+ * @tparam Store Type of store for dataset.
+ * @param interval Observation timestep.
+ * @param dataset Dataset to write time data to.
+ * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+ * @param collect_data Object satisfying CollectDataForDataset for given Store to write superdroplet
+ * data, such as their attributes, to ragged arrays.
+ * @return Observer An observer instance for writing thermodynamic variables from each gridbox.
+ */
 template <typename Store>
 inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                         const int maxchunk,
