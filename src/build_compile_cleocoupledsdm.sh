@@ -28,16 +28,22 @@ then
 fi
 ### ---------------------------------------------------- ###
 
-### ----------------- build executable --------------- ###
-buildcmd="${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}"
-echo ${buildcmd}
-${buildcmd}
-### ---------------------------------------------------- ###
+if [[ "${buildtype}" != "" && "${path2CLEO}" != "" && "${path2build}" != "" &&
+    "${executable}" != "" && "${path2CLEO}" != "${path2build}" ]]
+then
+  ### ----------------- build executable --------------- ###
+  buildcmd="${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}"
+  echo ${buildcmd}
+  ${buildcmd}
+  ### ---------------------------------------------------- ###
 
-### ----------------- compile executable --------------- ###
-cd ${path2build} && make clean
+  ### ----------------- compile executable --------------- ###
+  cd ${path2build} && make clean
 
-compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${path2build} ${executable}"
-echo ${compilecmd}
-${compilecmd}
-### ---------------------------------------------------- ###
+  compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${path2build} ${executable}"
+  echo ${compilecmd}
+  ${compilecmd}
+  ### ---------------------------------------------------- ###
+else
+  echo "Bad inputs, please check your buildtype, path2CLEO, path2build and executable names"
+fi
