@@ -38,10 +38,10 @@ then
    echo "${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build}"
     ${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build}
 
-  elif [[ "${buildtype}" == "cda" ]];
+  elif [[ "${buildtype}" == "cuda" ]];
   then
-    echo "${path2buildbash}/build_cleo_openmp_cuda.sh ${path2CLEO} ${path2build}"
-    ${path2buildbash}/build_cleo_openmp_cuda.sh ${path2CLEO} ${path2build}
+    echo "${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build}"
+    ${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build}
   fi
 fi
 ### ---------------------------------------------------- ###
