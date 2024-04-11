@@ -104,7 +104,6 @@ export OMP_PLACES=threads
 ### ---------------------------------------------------- ###
 
 ### ---------------------- run model ------------------- ###
-### generate input files, run executable and make plots for 1D box model example(s)
 ${python} ${path2CLEO}/examples/boxmodelcollisions/shima2009.py \
     ${path2CLEO} ${path2build} ${configfile} "golovin" "long" "lowlist"
 

@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Friday 12th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,10 +15,8 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script runs CLEO executable "spdtest" to
-check performance of CLEO usign different
-build configurations (e.g. serial, OpenmP
-and CUDA parallelism).
+Script generates input files, then runs CLEO executable "spdtest" to check performance
+of CLEO usign different build configurations (e.g. serial, OpenmP and CUDA parallelism).
 '''
 
 import os
