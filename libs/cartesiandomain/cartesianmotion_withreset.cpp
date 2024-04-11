@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,8 +23,6 @@
  * conditions and reset of superdroplets that leave
  * the domain through coord3 domain boundaries
  */
-
-// TODO(CB) decide to delete file
 
 #include "./cartesianmotion_withreset.hpp"
 

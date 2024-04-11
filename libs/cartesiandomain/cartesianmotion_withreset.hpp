@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,16 +24,15 @@
  * the domain through coord3 domain boundaries
  */
 
-// TODO(CB) decide to delete file
+// TODO(CB) revisit and improve
 
 #ifndef LIBS_CARTESIANDOMAIN_CARTESIANMOTION_WITHRESET_HPP_
 #define LIBS_CARTESIANDOMAIN_CARTESIANMOTION_WITHRESET_HPP_
 
-#include <functional>
-#include <random>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <functional>
+#include <random>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
@@ -169,7 +168,7 @@ struct ResetSuperdrop {
   /* returns xi given value of normalised probability
   distribution at radius and the bin width */
   KOKKOS_FUNCTION uint64_t new_xi(const double gbxvol, const double log10rlow,
-                                            const double log10rup, const double radius) const {
+                                  const double log10rup, const double radius) const {
     constexpr double numconc = 100000000 * dlc::VOL0;  // 100/cm^3, non-dimensionalised
 
     const auto rlow = double{Kokkos::pow(10.0, log10rlow)};
@@ -178,7 +177,7 @@ struct ResetSuperdrop {
     const auto prob = prob_distrib(radius, rlow, rup);
     const auto xi = double{prob * numconc * gbxvol};
 
-    return (uint64_t) Kokkos::round(xi);
+    return (uint64_t)Kokkos::round(xi);
   }
 
   KOKKOS_FUNCTION unsigned int operator()(const CartesianMaps &gbxmaps, Superdrop &drop) const {
