@@ -39,47 +39,60 @@
 #include "superdrops/superdrop.hpp"
 #include "zarr/dataset.hpp"
 
+// TODO(CB) docstrings
+
+/**
+ * @brief A struct for collecting ragged count data.
+ *
+ * This struct is responsible for collecting ragged count data, which represents the count of the
+ * number of super-droplets written during a write of a ragged array of superdroplet data.
+ *
+ * @tparam Store The type of the dataset store.
+ */
 template <typename Store>
 struct RaggedCount {
  private:
-  std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr;  ///< pointer to raggedcount array
+  std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr; /**< pointer to raggedcount Xarray */
 
  public:
+  /**
+   * @brief Constructs a RaggedCount object.
+   *
+   * Constructs a RaggedCount object with the specified dataset and maximum chunk size.
+   *
+   * @param dataset The dataset to collect data from.
+   * @param maxchunk The maximum chunk size (number of elements).
+   */
   RaggedCount(const Dataset<Store> &dataset, const size_t maxchunk)
       : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_raggedcount_array<uint32_t>(
                 "raggedcount", "", "<u4", 1, {maxchunk}, {"time"}, "superdroplets"))) {}
 
-  /* writes the total number of super-droplets in the domain "totnsupers" to the raggedcount array
-  in the dataset. Note static conversion from architecture dependent, usually 16 byte unsigned
-  integer (size_t = uint64_t), to 8 byte unsigned integer (uint32_t). */
+  /**
+   * @brief Writes the total number of super-droplets to the ragged count array in the dataset.
+   *
+   * _Note:_ static conversion from architecture dependent, usually 16 byte unsigned integer (size_t
+   * = uint64_t), to 8 byte unsigned integer (uint32_t).
+   *
+   * @param dataset The dataset to write data to.
+   * @param totsupers The view of total super-droplets.
+   */
   void write_to_array(const Dataset<Store> &dataset, const viewd_constsupers totsupers) const {
     const auto totnsupers = static_cast<uint32_t>(totsupers.extent(0));
     dataset.write_to_array(xzarr_ptr, totnsupers);
   }
 
+  /**
+   * @brief Writes the shape of the ragged count array to the dataset.
+   *
+   * This function writes the shape of the ragged count array to the dataset.
+   *
+   * @param dataset The dataset to write data to.
+   */
   void write_arrayshape(const Dataset<Store> &dataset) const {
     dataset.write_arrayshape(xzarr_ptr);
   }
 };
-
-/**
- * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
- * instance of the GenericCollectData class) which writes a thermodynamic variable to an Xarray in a
- * dataset.
- *
- * Function return type writes a thermodyanmic varaible "name" to an Xarray as a 4-byte floating
- * point type by collecting data according to the given FunctorFunc from within a
- * Kokkos::parallel_for loop over gridboxes with a range policy.
- *
- * @param dataset The dataset to write the variable to.
- * @param ffunc The functor function to collect the variable from within a parallel range policy
- * over gridboxes.
- * @param maxchunk The maximum chunk size (number of elements).
- * @param ngbxs The number of gridboxes.
- * @return CollectDataForDataset<Store> An instance satisfying the CollectDataForDataset concept for
- * collecting a 2-D floating point variable (e.g. a thermodynamic variable) from each gridbox.
- */
 
 /**
  * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
