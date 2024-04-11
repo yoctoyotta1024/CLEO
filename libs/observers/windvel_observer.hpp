@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,9 +38,23 @@
 #include "gridboxes/gridbox.hpp"
 #include "zarr/dataset.hpp"
 
-/* returns CollectDataForDataset which writes a state variable from
-each gridbox to an array in a dataset in a given store for a given datatype and using a given
-function-like functor */
+/**
+ * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
+ * instance of the GenericCollectData class) which writes a wind velocity component.
+ *
+ * Function return type writes a wind velocity component writes a wind velocity component to an
+ * Xarray as a 4-byte floating point type with units "m/s" by collecting data according
+ * to the given FunctorFunc from within a Kokkos::parallel_for loop over gridboxes with a range
+ * policy.
+ *
+ * @param dataset The dataset to write the wind velocity component to.
+ * @param ffunc The functor function to collect the wind velocity component from within a parallel
+ * range policy over gridboxes.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @param ngbxs The number of gridboxes.
+ * @return CollectDataForDataset<Store> An instance satisfying the CollectDataForDataset concept for
+ * collecting a wind velocity component from each gridbox.
+ */
 template <typename Store, typename FunctorFunc>
 CollectDataForDataset<Store> auto CollectWindVariable(const Dataset<Store> &dataset,
                                                       const FunctorFunc ffunc,
@@ -56,9 +70,19 @@ CollectDataForDataset<Store> auto CollectWindVariable(const Dataset<Store> &data
   return GenericCollectData(ffunc, xzarr, ngbxs);
 }
 
-/* Operator is functor to perform copy of wvel at the centre of each gridbox to d_data
-in parallel. Note conversion of wvel from double (8 bytes) to single precision (4 bytes
-float) in output */
+/**
+ * @brief Functor operator to perform a copy of the wvel at the centre of each gridbox "wvel" to
+ * d_data within Kokkos::parallel_for loop over gridboxes with range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of wvel from double (8 bytes) to single precision float (4 bytes).
+ *
+ * @param ii The index of the gridbox.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the number of superdroplets.
+ */
 struct WvelFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -68,9 +92,19 @@ struct WvelFunc {
   }
 };
 
-/* Operator is functor to perform copy of uvel at the centre of each gridbox to d_data
-in parallel. Note conversion of uvel from double (8 bytes) to single precision (4 bytes
-float) in output */
+/**
+ * @brief Functor operator to perform a copy of the uvel at the centre of each gridbox "uvel" to
+ * d_data within Kokkos::parallel_for loop over gridboxes with range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of uvel from double (8 bytes) to single precision float (4 bytes).
+ *
+ * @param ii The index of the gridbox.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the number of superdroplets.
+ */
 struct UvelFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -80,9 +114,19 @@ struct UvelFunc {
   }
 };
 
-/* Operator is functor to perform copy of vvel at the centre of each gridbox to d_data
-in parallel. Note conversion of vvel from double (8 bytes) to single precision (4 bytes
-float) in output */
+/**
+ * @brief Functor operator to perform a copy of the vvel at the centre of each gridbox "vvel" to
+ * d_data within Kokkos::parallel_for loop over gridboxes with range policy.
+ *
+ * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
+ *
+ * _Note:_ Conversion of vvel from double (8 bytes) to single precision float (4 bytes).
+ *
+ * @param ii The index of the gridbox.
+ * @param d_gbxs The view of gridboxes on device.
+ * @param totsupers The view of superdroplets on device.
+ * @param d_data The mirror view buffer for the number of superdroplets.
+ */
 struct VvelFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
@@ -92,8 +136,20 @@ struct VvelFunc {
   }
 };
 
-/* constructs CollectDataForDataset for a given Store which writes the wind velocity at center of
-each gridbox using an instance of the GenericCollectData class */
+/**
+ * @brief Constructs a type satisyfing the CollectDataForDataset concept for collecting all three
+ * wind velocity components in each gridbox and writing them to a dataset.
+ *
+ * This function combines CollectDataForDataset types for the three wind velocity components (wvel,
+ * vvel and uvel) in each gridbox using instances of the GenericCollectData class.
+ *
+ * @tparam Store The type of the dataset store.
+ * @param dataset The dataset to write the wind velocity components to.
+ * @param maxchunk The maximum chunk size (number of elements).
+ * @param ngbxs The number of gridboxes.
+ * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting wind
+ * velocity data.
+ */
 template <typename Store>
 inline CollectDataForDataset<Store> auto CollectWindVel(const Dataset<Store> &dataset,
                                                         const int maxchunk, const size_t ngbxs) {
@@ -112,6 +168,19 @@ inline CollectDataForDataset<Store> auto CollectWindVel(const Dataset<Store> &da
 /* constructs observer which writes writes the wind velocity at center of
 each gridbox with a constant timestep 'interval' using an instance of the WriteToDatasetObserver
 class */
+
+/**
+ * @brief Constructs an observer which writes the wind velocity components in each gridbox (wvel,
+ * vvel and uvel) at start of each observation timestep to an array with a constant observation
+ * timestep "interval".
+ *
+ * @tparam Store Type of store for dataset.
+ * @param interval Observation timestep.
+ * @param dataset Dataset to write time data to.
+ * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+ * @param ngbxs The number of gridboxes.
+ * @return Observer An observer instance for writing the wind velocity components.
+ */
 template <typename Store>
 inline Observer auto WindVelObserver(const unsigned int interval, const Dataset<Store> &dataset,
                                      const int maxchunk, const size_t ngbxs) {
