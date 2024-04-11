@@ -14,6 +14,7 @@
 buildtype=$1
 path2CLEO=$2
 path2build=$3
+
 path2buildbash=${path2CLEO}/scripts/bash/
 
 ### --------------------- build CLEO ------------------- ###

@@ -40,7 +40,7 @@ then
   ### ----------------- compile executable --------------- ###
   cd ${path2build} && make clean
 
-  compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${path2build} ${executable}"
+  compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executable}"
   echo ${compilecmd}
   ${compilecmd}
   ### ---------------------------------------------------- ###

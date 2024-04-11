@@ -20,8 +20,9 @@
 ### ----- You need to edit these lines to specify ------ ###
 ### ----- (your environment and) directory paths ------- ###
 ### ------------ and executable to compile ------------- ###
+buildtype=$1
 path2CLEO=${HOME}/CLEO/
-path2build=$1 # get from command line argument
+path2build=$2 # get from command line argument
 executable="cleocoupledsdm"
 configfile=${HOME}/CLEO/src/config/config.txt
 run_executable=${path2build}/src/${executable}
@@ -34,7 +35,7 @@ fi
 ### ---------------------------------------------------- ###
 
 ### ----------------- compile executable --------------- ###
-compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${path2build} ${executable}"
+compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executable}"
 echo ${compilecmd}
 ${compilecmd}
 ### ---------------------------------------------------- ###
