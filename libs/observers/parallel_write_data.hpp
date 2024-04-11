@@ -9,15 +9,15 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Template for "ParallelWriteData" function-like object (see write_to_dataset_observer.hpp) for
- * writing data from gridboxes and/or superdroplets to arrays in a dataset
+ * Some "ParallelWriteData" function-like objects (see write_to_dataset_observer.hpp) for
+ * writing data from gridboxes and/or superdroplets to arrays in a dataset.
  */
 
 #ifndef LIBS_OBSERVERS_PARALLEL_WRITE_DATA_HPP_
@@ -29,14 +29,27 @@
 #include "../kokkosaliases.hpp"
 #include "zarr/dataset.hpp"
 
-/* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
+/**
+ * @brief Struct for a function-like object with operator() to call when using type as
+ * parallel_gridboxes_func object in ParallelWriteGridboxes.
+ *
+ * Struct for a function-like object with operator() suitable for parallel_gridboxes_func object in
+ * ParallelWriteGridboxes in order to loop over gridbxoes using a kokkos range policy.
+ */
 struct ParallelGridboxesRangePolicyFunc {
-  /* Parallel loop over gridboxes using Kokkos Range Policy.
-  Kokkos::parallel_for([...]) is equivalent in serial to:
-  for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}
-  _Note:_ Functor must have operator with signature:
-  operator()(const size_t ii).
-  */
+  /**
+   * @brief Parallel loop over gridboxes using a Kokkos Range Policy.
+   *
+   * Kokkos::parallel_for([...]) is equivalent in serial to:
+   * for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
+   *
+   *  _Note:_ type for Functor used in this call must have operator() with signature:
+   * void operator()(const size_t ii).
+   *
+   * @tparam Functor The type of the functor.
+   * @param functor The functor to be executed in parallel.
+   * @param d_gbxs The view of gridboxes.
+   */
   template <typename Functor>
   void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
@@ -45,14 +58,27 @@ struct ParallelGridboxesRangePolicyFunc {
   }
 };
 
-/* struct for function-like object to call for parallel_gridboxes_func in ParallelWriteGridboxes */
+/**
+ * @brief Struct for a function-like object with operator() to call when using type as
+ * parallel_gridboxes_func object in ParallelWriteGridboxes.
+ *
+ * Struct for a function-like object with operator() suitable for parallel_gridboxes_func object in
+ * ParallelWriteGridboxes in order to loop over gridbxoes using a kokkos team policy.
+ */
 struct ParallelGridboxesTeamPolicyFunc {
-  /* Parallel loop over gridboxes using Kokkos Team Policy.
-  Kokkos::parallel_for([...]) is equivalent in serial to:
-  for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}
-  _Note:_ Functor must have operator with signature:
-  operator()(const TeamMember &team_member).
-  */
+  /**
+   * @brief Parallel loop over gridboxes using a Kokkos Team Policy.
+   *
+   * Kokkos::parallel_for([...]) is equivalent in serial to:
+   * for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
+   *
+   *  _Note:_ type for Functor used in this call must have operator() with signature:
+   * void operator()(const TeamMember &team_member).
+   *
+   * @tparam Functor The type of the functor.
+   * @param functor The functor to be executed in parallel.
+   * @param d_gbxs The view of gridboxes.
+   */
   template <typename Functor>
   void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
@@ -60,27 +86,69 @@ struct ParallelGridboxesTeamPolicyFunc {
   }
 };
 
-/* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
-gridboxes in a parallel loop and write it to arrays in a dataset */
+/**
+ * @brief Struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
+ * gridboxes in a loop (e.g. using Kokkos::parallel_for with a range or team policy) and then write
+ * that data to arrays in a dataset.
+ *
+ * This struct is responsible for collecting data from gridboxes and writing it to arrays in a
+ * dataset with a given store.
+ *
+ * The ParallelGridboxesFunc type is a function-like object responsible for looping over
+ * gridboxes in parallel (see ParallelGridboxesRangePolicyFunc or ParallelGridboxesTeamPolicyFunc).
+ * The CollectData type satisfies the concept for CollectDataForDataset and the signature for the
+ * operator of the type it returns from its get_functor() call should be compatible with the
+ * signature of the functor required by the ParallelGridboxesFunc type.
+ *
+ * @tparam Store The type of the data store in the dataset.
+ * @tparam ParallelGridboxesFunc Function-like object for call to loop over gridboxes.
+ * @tparam CollectData Object satisfying the CollectDataForDataset concept for the given
+ * store.
+ */
 template <typename Store, typename ParallelGridboxesFunc, CollectDataForDataset<Store> CollectData>
 class ParallelWriteGridboxes {
  private:
-  ParallelGridboxesFunc parallel_gridboxes_func;
-  const Dataset<Store> &dataset;  ///< dataset to write data to
-  CollectData collect_data;  ///< functions to collect data within gbxs loop and write in dataset
+  ParallelGridboxesFunc
+      parallel_gridboxes_func;   /**< Function-like object for call to loop over gridboxes.*/
+  const Dataset<Store> &dataset; /**< Dataset to write data to. */
+  CollectData collect_data; /**< CollectData Object satisfying the CollectDataForDataset concept. */
 
  public:
+  /**
+   * @brief Constructs a new ParallelWriteGridboxes object.
+   *
+   * @param parallel_gridboxes_func Function-like object for call to loop over gridboxes.
+   * @param dataset The dataset to write data to.
+   * @param collect_data The object satisfying the CollectDataForDataset concept to collect data.
+   */
   ParallelWriteGridboxes(ParallelGridboxesFunc parallel_gridboxes_func,
                          const Dataset<Store> &dataset, CollectData collect_data)
       : parallel_gridboxes_func(parallel_gridboxes_func),
         dataset(dataset),
         collect_data(collect_data) {}
 
+  /**
+   * @brief Destructor for the ParallelWriteGridboxes class.
+   */
   ~ParallelWriteGridboxes() { collect_data.write_arrayshapes(dataset); }
 
-  /* Use the CollectData instance's functor to collect data from gridboxes in a parallel loop.
+  /*
     Then write the data in the dataset. Inclusion of totsupers so that object can be used as
     "ParallelWriteData" function in DoWriteToDataset struct */
+
+  /**
+   * @brief Executes the operation to collect data from gridboxes and write it to arrays in the
+   * dataset.
+   *
+   * Use the funtor returned by CollectData's get_functor() call to collect data from gridboxes in a
+   * parallel loop as determined by the parallel_gridboxes_func operator().
+   *
+   * Inclusion of totsupers in function signature so that object can be used as "ParallelWriteData"
+   * function-like object in DoWriteToDataset struct.
+   *
+   * @param d_gbxs The view of gridboxes in device memory.
+   * @param totsupers The view of superdroplets in device memory.
+   */
   void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
     auto functor = collect_data.get_functor(d_gbxs, totsupers);
     parallel_gridboxes_func(functor, d_gbxs);
@@ -101,19 +169,45 @@ concept CollectRaggedCount = requires(CRC crc, const Dataset<Store> &ds,
   { crc.write_arrayshape(ds) } -> std::same_as<void>;
 };
 
-/* struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
-superdroplets in a parallel loop and write it to ragged arrays in a dataset */
+/**
+ * @brief Struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
+ * superdroplets in a (parallel) loop and then write that data to ragged arrays in a dataset.
+ *
+ * This struct is responsible for collecting data from superdroplets and writing it to ragged arrays
+ * in a dataset with a given store.
+ *
+ * The CollectData type satisfies the concept for CollectDataForDataset and the signature for
+ * the operator of the type it returns from its get_functor() call should be compatible with the
+ * signature of the functor required by the Kokkos::parallel_for loop over superdroplets.
+ *
+ * @tparam Store The type of data store in the dataset.
+ * @tparam CollectData The object for collecting data satsifying the CollectDataForDataset concept.
+ * @tparam RaggedCount The type of the function object for writing the ragged count variable in the
+ * dataset satisfying the CollectRaggedCount concept.
+ */
 template <typename Store, CollectDataForDataset<Store> CollectData,
           CollectRaggedCount<Store> RaggedCount>
 class ParallelWriteSupers {
  private:
-  const Dataset<Store> &dataset;  ///< dataset to write data to
-  CollectData collect_data;  ///< functions to collect data within supers loop and write in dataset
-  RaggedCount ragged_count;  ///< functions to write ragged count variable in dataset
+  const Dataset<Store> &dataset; /**< dataset to write data to */
+  CollectData collect_data;
+  /**< functions to collect data within loop over superdroplets and write it to ragged array(s)
+   * dataset */
+  RaggedCount ragged_count; /**< functions to write ragged count variable to a dataset */
 
-  /* parallel loop over superdroplets using Kokkos Range Policy.
-  Kokkos::parallel_for([...]) is equivalent in serial to:
-  for (size_t kk(0); kk < totsupers.extent(0); ++kk){[...]} */
+  /**
+   * @brief Parallel loop over superdroplets using a Kokkos Range Policy.
+   *
+   * Kokkos::parallel_for([...]) is equivalent in serial to:
+   * for (size_t kk(0); kk < totsupers.extent(0); ++kk){[...]}
+   *
+   * _Note:_ type for Functor used in this call must have operator() with signature:
+   * void operator()(const size_t kk).
+   *
+   * @tparam Functor The type of the functor.
+   * @param functor The functor to be executed in parallel.
+   * @param totsupers The view of superdroplets on device.
+   */
   template <typename Functor>
   void parallel_supers_func(const Functor functor, const viewd_constsupers totsupers) const {
     const size_t totnsupers(totsupers.extent(0));
@@ -121,18 +215,44 @@ class ParallelWriteSupers {
   }
 
  public:
+  /**
+   * @brief Constructs a new ParallelWriteSupers object.
+   *
+   * @param dataset The dataset to write data to.
+   * @param collect_data Object for collecting data satsifying the CollectDataForDataset concept.
+   * @param ragged_count Object for writing the ragged count variable in the dataset satisfying the
+   * CollectRaggedCount concept.
+   */
   ParallelWriteSupers(const Dataset<Store> &dataset, CollectData collect_data,
                       RaggedCount ragged_count)
       : dataset(dataset), collect_data(collect_data), ragged_count(ragged_count) {}
 
+  /**
+   * @brief Destructor for the ParallelWriteSupers class.
+   *
+   */
   ~ParallelWriteSupers() {
     collect_data.write_ragged_arrayshapes(dataset);
     ragged_count.write_arrayshape(dataset);
   }
 
   /* Use the CollectData instance's functor to collect data from superdroplets in a parallel loop.
-    Then write the data in the dataset alongside ragged count for arrays. Inclusion of d_gbxs
-    so that object can be used as "ParallelWriteData" function in DoWriteToDataset struct */
+   */
+
+  /**
+   * @brief Executes the operation to collect data from superdroplets and write it to ragged arrays
+   * in the dataset.
+   *
+   * Use the funtor returned by CollectData's get_functor() call to collect data from superdroplets
+   * in a parallel loop as determined by the parallel_supers_func function call. Then write the data
+   * in the dataset alongside ragged count for arrays.
+   *
+   * Inclusion of d_gbxs in function signature so that object can be used as "ParallelWriteData"
+   * function-like object in DoWriteToDataset struct.
+   *
+   * @param d_gbxs The view of gridboxes in device memory.
+   * @param totsupers The view of superdroplets in device memory.
+   */
   void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
     collect_data.reallocate_views(totsupers.extent(0));
     auto functor = collect_data.get_functor(d_gbxs, totsupers);
