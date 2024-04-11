@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,7 +23,6 @@
  * The Microscale to Climate" by Lohmann, Luond and
  * Mahrt, 1st edition." and Shima et al. 2009
  */
-
 
 #include "./impliciteuler.hpp"
 
@@ -110,8 +109,9 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_condensation_matsushima(
   }
 }
 
-KOKKOS_FUNCTION double ImplicitEuler::substepped_implicitmethod(
-    const ImplicitIteration &implit, const unsigned int nsubsteps, const double rprev) const {
+KOKKOS_FUNCTION double ImplicitEuler::substepped_implicitmethod(const ImplicitIteration &implit,
+                                                                const unsigned int nsubsteps,
+                                                                const double rprev) const {
   auto subr = rprev;
   for (unsigned int n(0); n < nsubsteps; ++n) {
     auto init_ziter = double{implit.initialguess(subr)};
@@ -167,7 +167,7 @@ and timesteps, and the maximum number of iterations is small. After
 'niters' iterations, convergence criteria is tested and futher
 iterations undertaken if not yet converged. */
 KOKKOS_FUNCTION double ImplicitIteration::newtonraphson_niterations(const double rprev,
-                                                                           double ziter) const {
+                                                                    double ziter) const {
   // perform 'niters' iterations
   auto numerator = double{0.0};
   for (unsigned int iter(0); iter < niters; ++iter) {
@@ -193,9 +193,9 @@ Newton Raphson Method for dr/dt condensation / evaporation ODE.
 ODE is for radial growth/shrink of each superdroplet due to
 condensation and diffusion of water vapour according to
 equations from "An Introduction To Clouds...."
-(see note at top of file). Note: z = ziter = radius^2 */
-KOKKOS_FUNCTION double ImplicitIteration::ode_gfunc(const double rprev,
-                                                           const double rsqrd) const {
+(see note at top of file).
+_Note:_ z = ziter = radius^2 */
+KOKKOS_FUNCTION double ImplicitIteration::ode_gfunc(const double rprev, const double rsqrd) const {
   const auto radius = double{Kokkos::sqrt(rsqrd)};
 
   const auto alpha = double{s_ratio - 1 - akoh / radius + bkoh / Kokkos::pow(radius, 3.0)};
@@ -226,8 +226,9 @@ tested and error is raised if method does not converge within
 'iterlimit' iterations. Otherwise returns new value for the radius
 (which is the radius at timestep 't+subdelt'. Refer to section 5.1.2 Shima
 et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. */
-KOKKOS_FUNCTION double ImplicitIteration::newtonraphson_untilconverged(
-    const unsigned int iterlimit, const double rprev, double ziter) const {
+KOKKOS_FUNCTION double ImplicitIteration::newtonraphson_untilconverged(const unsigned int iterlimit,
+                                                                       const double rprev,
+                                                                       double ziter) const {
   auto do_iter = bool{true};
   auto iter = (unsigned int)1;
 

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,7 +21,6 @@
  * Coalescence struct satisfies PairEnactX concept
  * used in Collisions struct
  */
-
 
 #include "./coalescence.hpp"
 
@@ -46,16 +45,15 @@ KOKKOS_FUNCTION bool DoCoalescence::operator()(Superdrop &drop1, Superdrop &drop
 
 /* calculates value of gamma factor in Monte Carlo
 collision-coalescence as in Shima et al. 2009 */
-KOKKOS_FUNCTION uint64_t DoCoalescence::coalescence_gamma(const uint64_t xi1,
-                                                          const uint64_t xi2,
+KOKKOS_FUNCTION uint64_t DoCoalescence::coalescence_gamma(const uint64_t xi1, const uint64_t xi2,
                                                           const double prob,
                                                           const double phi) const {
-  uint64_t gamma = floor(prob);   // if phi >= (prob - floor(prob))
+  uint64_t gamma = floor(prob);  // if phi >= (prob - floor(prob))
   if (phi < (prob - gamma)) {
     ++gamma;
   }
 
-  const auto maxgamma = xi1 / xi2;   // same as floor() for positive ints
+  const auto maxgamma = xi1 / xi2;  // same as floor() for positive ints
 
   return Kokkos::fmin(gamma, maxgamma);
 }
@@ -91,13 +89,12 @@ with same xi, r and solute mass. According to Shima et al. 2009
 Section 5.1.3. part (5) option (b). In rare case where
 xi1 = xi2 = gamma = 1, new_xi of drop1 = 0 and drop1 should be removed
 from domain.
-Note: implicit casting of gamma (i.e. therefore droplets'
-xi values) from uint64_t to double. */
+_Note:_ Implicit casting of gamma (i.e. therefore droplets' xi values) from uint64_t to double. */
 KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t gamma,
                                                                   Superdrop &drop1,
                                                                   Superdrop &drop2) const {
-  const auto old_xi = drop2.get_xi();   // = drop1.xi
-  const auto new_xi = old_xi / 2;       // same as floor() for positive ints
+  const auto old_xi = drop2.get_xi();  // = drop1.xi
+  const auto new_xi = old_xi / 2;      // same as floor() for positive ints
 
   assert((new_xi < old_xi) && "coalescence must decrease multiplicity");
 
@@ -119,8 +116,7 @@ KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t
 /* if xi1 > gamma*xi2 coalescence grows drop2 radius and mass
 via decreasing multiplicity of drop1. According to
 Shima et al. 2009 Section 5.1.3. part (5) option (a)
-Note: implicit casting of gamma (i.e. therefore droplets'
-xi values) from uint64_t to double. */
+_Note:_ Implicit casting of gamma (i.e. therefore droplets' xi values) from uint64_t to double. */
 KOKKOS_FUNCTION void DoCoalescence::different_superdroplet_coalescence(const uint64_t gamma,
                                                                        Superdrop &drop1,
                                                                        Superdrop &drop2) const {

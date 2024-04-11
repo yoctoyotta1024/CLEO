@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -41,7 +41,7 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
-#include "observers2/observers.hpp"
+#include "observers/observers.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
@@ -192,7 +192,6 @@ class RunCLEO {
    * library's `std::min` to find `t_next` (also GPU compatible).
    *
    * @see SDMMethods::get_couplstep()
-   * @see SDMMethods::ObsClass::next_obs() // TODO(CB) fill in and reference "ObsClass" docs
    */
   unsigned int get_next_step(const unsigned int t_mdl) const {
     const auto next_couplstep = [&, t_mdl]() {

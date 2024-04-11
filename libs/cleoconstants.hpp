@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 8th April 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -17,7 +17,7 @@
  * -----
  * File Description:
  * header file with namespaces for (physical) constants used by CLEO
- * Note: All letters in CAPITALS indicates constants have dimensions
+ * _Note:_ All letters in CAPITALS indicates constants have dimensions
  * (or are naturally dimensionless as for IONIC). Only first letter
  * capitalised indicates value is dimensionless (version of a) constant.
  */

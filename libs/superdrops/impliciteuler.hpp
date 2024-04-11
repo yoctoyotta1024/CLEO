@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,14 +24,12 @@
  * Mahrt, 1st edition." and Shima et al. 2009
  */
 
-
 #ifndef LIBS_SUPERDROPS_IMPLICITEULER_HPP_
 #define LIBS_SUPERDROPS_IMPLICITEULER_HPP_
 
-#include <cassert>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <cassert>
 
 #include "../cleoconstants.hpp"
 
@@ -102,7 +100,8 @@ struct ImplicitIteration {
   ODE is for radial growth/shrink of each superdroplet due to
   condensation and diffusion of water vapour according to
   equations from "An Introduction To Clouds...."
-  (see note at top of file). Note: z = ziter = radius^2 */
+  (see note at top of file).
+  _Note:_ z = ziter = radius^2 */
   KOKKOS_FUNCTION
   double ode_gfunc(const double rprev, const double rsqrd) const;
 

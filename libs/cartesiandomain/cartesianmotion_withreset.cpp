@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,8 +23,6 @@
  * conditions and reset of superdroplets that leave
  * the domain through coord3 domain boundaries
  */
-
-// TODO(CB) decide to delete file
 
 #include "./cartesianmotion_withreset.hpp"
 
@@ -41,7 +39,7 @@ move to neighbouring gridbox in coord3 direction.
 Funciton changes value of idx if flag != 0,
 if flag = 1 idx updated to backwards neighbour gbxindex.
 if flag = 2 idx updated to forwards neighbour gbxindex.
-Note: backwards/forwards functions may change the
+_Note:_ backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
 KOKKOS_FUNCTION unsigned int change_if_coord3nghbr_withreset(const ResetSuperdrop &reset_superdrop,
                                                              const CartesianMaps &gbxmaps,

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -17,7 +17,6 @@
  * -----
  * File Description:
  */
-
 
 #include "./cartesianmotion.hpp"
 
@@ -70,7 +69,7 @@ KOKKOS_FUNCTION void beyonddomain_forwards_coord2(const CartesianMaps &gbxmaps,
 update to forwards (flag = 1) or backwards (flag = 2)
 neighbour. Flag = 0 if idx is out of domain value or
 if coord lies within bounds = {lowerbound, upperbound}.
-(Note: lower bound inclusive and upper bound exclusive,
+(_Note:_ lower bound inclusive and upper bound exclusive,
 ie. lowerbound <= coord < upperbound).
 Flag = 1 if coord < lowerbound, indicating idx should
 be updated to backwards neighbour.
@@ -96,7 +95,7 @@ move to neighbouring gridbox in coord3 direction.
 Funciton changes value of idx if flag != 0,
 if flag = 1 idx updated to backwards neighbour gbxindex.
 if flag = 2 idx updated to forwards neighbour gbxindex.
-Note: backwards/forwards functions may change the
+_Note:_ backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
 KOKKOS_FUNCTION unsigned int change_if_coord3nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
                                                    Superdrop &drop) {
@@ -118,7 +117,7 @@ move to neighbouring gridbox in coord1 direction.
 Funciton changes value of idx if flag != 0,
 if flag = 1 idx updated to backwards neighbour gbxindex.
 if flag = 2 idx updated to forwards neighbour gbxindex.
-Note: backwards/forwards functions may change the
+_Note:_ backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
 KOKKOS_FUNCTION unsigned int change_if_coord1nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
                                                    Superdrop &drop) {
@@ -140,7 +139,7 @@ move to neighbouring gridbox in coord2 direction.
 Funciton changes value of idx if flag != 0,
 if flag = 1 idx updated to backwards neighbour gbxindex.
 if flag = 2 idx updated to forwards neighbour gbxindex.
-Note: backwards/forwards functions may change the
+_Note:_ backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
 KOKKOS_FUNCTION unsigned int change_if_coord2nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
                                                    Superdrop &drop) {
