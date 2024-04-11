@@ -45,6 +45,7 @@ class DoWriteToDataset {
  private:
   ParallelWriteData parallel_write; /**< Function-like object to call during at_start_step. */
 
+ public:
   /**
    * @brief Constructor for DoWriteToDataset.
    * @param parallel_write Function-like object to call during at_start_step.
