@@ -1,14 +1,42 @@
-XXX Observer
-============
+Thermodynamics Observer
+=======================
 
-// TODO(CB) write doc
+Header file: ``<libs/observers/thermo_observer.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/thermo_observer.hpp>`_
 
-Header file: ``<libs/observers/XXX_observer.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/XXX_observer.hpp>`_
+.. doxygenfunction:: CollectThermoVariable
+   :project: observers
 
-.. doxygenstruct:: XXXObserver
+.. doxygenstruct:: PressFunc
    :project: observers
    :private-members:
    :protected-members:
    :members:
    :undoc-members:
+
+.. doxygenstruct:: TempFunc
+   :project: observers
+   :private-members:
+   :protected-members:
+   :members:
+   :undoc-members:
+
+.. doxygenstruct:: QvapFunc
+   :project: observers
+   :private-members:
+   :protected-members:
+   :members:
+   :undoc-members:
+
+.. doxygenstruct:: QcondFunc
+   :project: observers
+   :private-members:
+   :protected-members:
+   :members:
+   :undoc-members:
+
+.. doxygenfunction:: CollectThermo
+   :project: observers
+
+.. doxygenfunction:: ThermoObserver
+   :project: observers

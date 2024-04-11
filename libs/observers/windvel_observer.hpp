@@ -40,12 +40,12 @@
 
 /**
  * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
- * instance of the GenericCollectData class) which writes a wind velocity component.
+ * instance of the GenericCollectData class) which writes a wind velocity component to an Xarray in
+ * a dataset.
  *
- * Function return type writes a wind velocity component writes a wind velocity component to an
- * Xarray as a 4-byte floating point type with units "m/s" by collecting data according
- * to the given FunctorFunc from within a Kokkos::parallel_for loop over gridboxes with a range
- * policy.
+ * Function return type writes a wind velocity component to an Xarray as a 4-byte floating point
+ * type with units "m/s" by collecting data according to the given FunctorFunc from within a
+ * Kokkos::parallel_for loop over gridboxes with a range policy.
  *
  * @param dataset The dataset to write the wind velocity component to.
  * @param ffunc The functor function to collect the wind velocity component from within a parallel
@@ -164,10 +164,6 @@ inline CollectDataForDataset<Store> auto CollectWindVel(const Dataset<Store> &da
 
   return vvel >> uvel >> wvel;
 }
-
-/* constructs observer which writes writes the wind velocity at center of
-each gridbox with a constant timestep 'interval' using an instance of the WriteToDatasetObserver
-class */
 
 /**
  * @brief Constructs an observer which writes the wind velocity components in each gridbox (wvel,

@@ -4,6 +4,9 @@ WindVel Observer
 Header file: ``<libs/observers/windvel_observer.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/windvel_observer.hpp>`_
 
+.. doxygenfunc:: CollectWindVariable
+   :project: observers
+
 .. doxygenstruct:: WvelFunc
    :project: observers
    :private-members:
@@ -24,9 +27,6 @@ Header file: ``<libs/observers/windvel_observer.hpp>``
    :protected-members:
    :members:
    :undoc-members:
-
-.. doxygenfunction:: WindVelObserver
-   :project: observers
 
 .. doxygenfunction:: CollectWindVel
    :project: observers
