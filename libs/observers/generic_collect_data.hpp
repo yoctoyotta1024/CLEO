@@ -9,15 +9,15 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Thursday 11th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * generic struct satisyfing the CollectDataForDataset concept to collect data a
- * variable(s) and write it to xarray(s) in a datatset.
+ * Very generic struct satisyfing the CollectDataForDataset concept to collect data for a
+ * variable from gridboxes and/or superdroplets and write it to an xarray in a datatset.
  */
 
 #ifndef LIBS_OBSERVERS_GENERIC_COLLECT_DATA_HPP_
@@ -31,14 +31,31 @@
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
+/**
+ * @brief Struct to 1) manage collecting data into a view in host memory by copying data from the
+ * device execution space and 2) manage how to write this data to an Xarray for a variable in a
+ * dataset.
+ *
+ * This struct manages an Xarray, a view in host memory and a mirror view in device memory in order
+ * to collect data for a variable from the execution space and write it to an Xarray in a dataset.
+ *
+ * @tparam Store The type of the data store in the Xarray.
+ * @tparam T The type of the data in the Xarray.
+ */
 template <typename Store, typename T>
 struct XarrayAndViews {
-  using viewh_data = Buffer<T>::viewh_buffer;              // type of view for h_data
-  using mirrorviewd_data = Buffer<T>::mirrorviewd_buffer;  // mirror view type for d_data
-  XarrayZarrArray<Store, T> xzarr;
-  viewh_data h_data;        // view on host for value of 1 variable from every superdrop
-  mirrorviewd_data d_data;  // mirror view of h_data on device
+  using viewh_data = Buffer<T>::viewh_buffer;             /**< type of view for h_data */
+  using mirrorviewd_data = Buffer<T>::mirrorviewd_buffer; /**< mirror view type for d_data */
+  XarrayZarrArray<Store, T> xzarr; /**< Xarray with Zarr backend to write h_data to */
+  viewh_data h_data;               /**< view on host used to collect some data for the Xarray */
+  mirrorviewd_data d_data;         /**< mirror view of h_data on device */
 
+  /**
+   * @brief Constructs a new XarrayAndViews object.
+   *
+   * @param xzarr The Xarray with Zarr backend object.
+   * @param dataview_size The size of the views for collecting data.
+   */
   XarrayAndViews(const XarrayZarrArray<Store, T> xzarr, const size_t dataview_size)
       : xzarr(xzarr),
         h_data("h_data", dataview_size),
@@ -47,39 +64,76 @@ struct XarrayAndViews {
 
 /* generic struct satisyfing the CollectDataForDataset concept to collect data for a
  * variable and write it to an xarray in a datatset. */
+
+/**
+ * @brief Generic class satisyfing the CollectDataForDataset concept to collect data for a variable
+ * and write it to an Xarray in a dataset.
+ *
+ * This class provides a functor to collect data into a view in device memory for a single variable
+ * from superdroplets and/or gridboxes (to be used in a parallel range policy loop over gridboxes
+ * and/or superdroplets). It also provides functions to then write that collected data to an Xarray
+ * in a dataset.
+ *
+ * @tparam Store The type of the data store of the dataset.
+ * @tparam T The type of the data in the Xarray.
+ * @tparam FunctorFunc Type to act as a functor in a Kokkos parallel range policy loop for
+ * collecting data for a variable from gridbxoes and/or superdroplets
+ */
 template <typename Store, typename T, typename FunctorFunc>
 class GenericCollectData {
  private:
-  FunctorFunc ffunc;
-  std::shared_ptr<XarrayAndViews<Store, T>> ptr;  // pointer to xarray and views which collect data
+  FunctorFunc ffunc; /**< functor to collect data into a view during a parallel range policy loop */
+  std::shared_ptr<XarrayAndViews<Store, T>> ptr; /**< pointer to xarray and views to collect data */
 
  public:
-  /* functor to collect 1 variable's data from within a parallel range policy */
+  /**
+   * @brief Generic wrapper to use FunctorFunc type to collect data into a view in device memory
+   * during a Kokkos::parallel_for loop with a range policy.
+   */
   struct Functor {
     using mirrorviewd_data = XarrayAndViews<Store, T>::mirrorviewd_data;
-    FunctorFunc ffunc;
-    viewd_constgbx d_gbxs;        // view of gridboxes on device
-    viewd_constsupers totsupers;  // view of superdroplets on device
-    mirrorviewd_data d_data;      // mirror view for data to collect on device
+    FunctorFunc ffunc;           /**< functor to collect data into d_data during parallel loop */
+    viewd_constgbx d_gbxs;       /**< view of gridboxes on device */
+    viewd_constsupers totsupers; /**< view of superdroplets on device */
+    mirrorviewd_data d_data;     /**< mirror view on device for data to collect */
 
     Functor(FunctorFunc ffunc, const viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
             mirrorviewd_data d_data)
         : ffunc(ffunc), d_gbxs(d_gbxs), totsupers(totsupers), d_data(d_data) {}
 
-    /* Functor operator to perform copy of 1 variable in gridboxes and/or superdroplets
-    to d_data from within a parallel loop using a Kokkos range policy */
+    /**
+     * @brief Adapter from signature of Kokkos::parallel_for with a range policy to call to
+     * FunctorFunc type for collecting data into d_data from gridboxes and/or superdroplets.
+     *
+     * @param nn The index of the data element.
+     */
     KOKKOS_INLINE_FUNCTION
     void operator()(const size_t nn) const { ffunc(nn, d_gbxs, totsupers, d_data); }
   };
 
   /* Constructor to initialize GenericCollectData given functor function-like object,
-  an xarray in a dataset and the size of the data view used to collect data
-  from within the functor function call. */
+  an xarray in a dataset and the size of the data view  */
+  /**
+   * @brief Constructs a new GenericCollectData object.
+   *
+   * The dataview_size should match the number of elements to collect when ffunc is called during a
+   * Kokkos::parallel_for loop which uses a range policy over gridboxes and/or superdroplets.
+   *
+   * @param ffunc Function-like object for the functor to collect data.
+   * @param xzarr The Xarray object in a dataset to write for a variable data to.
+   * @param dataview_size The size of the view to collect data (number of elements).
+   */
   GenericCollectData(const FunctorFunc ffunc, const XarrayZarrArray<Store, T> xzarr,
                      const size_t dataview_size)
       : ffunc(ffunc), ptr(std::make_shared<XarrayAndViews<Store, T>>(xzarr, dataview_size)) {}
 
-  /* return functor for getting 1 variable from every gridbox in parallel range policy */
+  /**
+   * @brief Returns the functor for collecting data.
+   *
+   * @param d_gbxs The view of gridboxes on device.
+   * @param totsupers The view of superdroplets on device.
+   * @return The functor object to use during a Kokkos:parallel_for range policy loop.
+   */
   Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
     assert(((ptr->d_data.extent(0) == d_gbxs.extent(0)) ||
             (ptr->d_data.extent(0) == totsupers.extent(0))) &&
@@ -87,29 +141,55 @@ class GenericCollectData {
     return Functor(ffunc, d_gbxs, totsupers, ptr->d_data);
   }
 
+  /**
+   * @brief Reallocates the views with a new size.
+   *
+   * The size of the view should match the number of elements to collect when ffunc is called during
+   * a Kokkos::parallel_for loop which uses a range policy over gridboxes and/or superdroplets.
+   *
+   * @param size The new size of the views on device and host.
+   */
   void reallocate_views(const size_t size) const {
     Kokkos::realloc(ptr->h_data, size);
     Kokkos::realloc(ptr->d_data, size);
   }
 
-  /* copy data from device view directly to host and then write to array in dataset */
+  /**
+   * @brief Deep copies data for an array from the device view to the host and then writes it to an
+   * array in the dataset.
+   *
+   * @param dataset The dataset to write data to.
+   */
   void write_to_arrays(const Dataset<Store> &dataset) const {
     Kokkos::deep_copy(ptr->h_data, ptr->d_data);
     dataset.write_to_array(ptr->xzarr, ptr->h_data);
   }
 
-  /* copy data from device view directly to host and then write to array in dataset */
+  /**
+   * @brief Deep copies data for a ragged array from the device view to the host and then writes it
+   * to a ragged array in the dataset.
+   *
+   * @param dataset The dataset to write data to.
+   */
   void write_to_ragged_arrays(const Dataset<Store> &dataset) const {
     Kokkos::deep_copy(ptr->h_data, ptr->d_data);
     dataset.write_to_ragged_array(ptr->xzarr, ptr->h_data);
   }
 
-  /* call function to write shape of array according to dataset */
+  /**
+   * @brief Calls a function to write the shape of an array to the dataset.
+   *
+   * @param dataset The dataset to write array shape to.
+   */
   void write_arrayshapes(const Dataset<Store> &dataset) const {
     dataset.write_arrayshape(ptr->xzarr);
   }
 
-  /* call function to write shape of array according to dataset */
+  /**
+   * @brief Calls a function to write the shape of a ragged array to the dataset.
+   *
+   * @param dataset The dataset to write array shape to.
+   */
   void write_ragged_arrayshapes(const Dataset<Store> &dataset) const {
     dataset.write_ragged_arrayshape(ptr->xzarr);
   }
