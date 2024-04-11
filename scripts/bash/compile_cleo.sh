@@ -31,7 +31,7 @@ path2build=$2   # get from command line argument
 executable=$3   # get from command line argument
 
 # load nvhpc compilers if compiling cuda build
-if [[ "${buildtype}" == "cuda" ]];
+if [[ "${buildtype}" == "cuda" ]]
 then
   module load nvhpc/23.9-gcc-11.2.0
 fi
