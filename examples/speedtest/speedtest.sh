@@ -28,6 +28,7 @@ configfile=${path2CLEO}/examples/speedtest/src/config/speedtest_config.txt
 ### ---------------------------------------------------- ###
 
 # ensure these directories exist (it's a good idea for later use)
+mkdir ${path2build}
 mkdir ${path2build}/bin
 
 ### ---- run test for different types of parallelism ---- ###
