@@ -24,13 +24,13 @@ executables="adia0D"
 
 pythonscript=${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py
 configfile=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.txt
+script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-runcmd="${path2CLEO}/examples/run_example.sh ${buildtype} \
-  ${path2CLEO} ${path2build} ${executables} ${pythonscript} ${configfile}"
-echo ${runcmd}
-${runcmd}
+${path2CLEO}/examples/run_example.sh \
+  ${buildtype} ${path2CLEO} ${path2build} \
+  "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

@@ -24,14 +24,13 @@ executables="golcolls longcolls lowlistcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py
 configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.txt
-script_args=${configfile}" golovin long lowlist"
+script_args="${configfile} golovin long lowlist"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-runcmd="${path2CLEO}/examples/run_example.sh ${buildtype} \
-  ${path2CLEO} ${path2build} ${executables} ${pythonscript} ${script_args}"
-echo ${runcmd}
-${runcmd}
+${path2CLEO}/examples/run_example.sh \
+  ${buildtype} ${path2CLEO} ${path2build} \
+  "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

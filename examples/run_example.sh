@@ -1,7 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=runexample
-#SBATCH --partition=compute
+#SBATCH --partition=gpu
 #SBATCH --nodes=1
+#SBATCH --gpus=4
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
 #SBATCH --time=00:10:00
@@ -30,25 +31,32 @@ python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 buildtype=$1
 path2CLEO=$2
 path2build=$3
-executables=$4
+executables="$4"
 pythonscript=$5
-script_args=$6
+script_args="$6"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
+### -------------------- print inputs ------------------ ###
+echo "----- Running Example -----"
+echo "buildtype:  ${buildtype}"
+echo "path2CLEO: ${path2CLEO}"
+echo "path2build: ${path2build}"
+echo "executables: ${executables}"
+echo "pythonscript: ${pythonscript}"
+echo "script_args: ${script_args}"
+echo "---------------------------"
+### ---------------------------------------------------- ###
+
 ### ---------------------- build CLEO ------------------ ###
-buildcmd="${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}"
-echo ${buildcmd}
-${buildcmd}
+${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}
 ### ---------------------------------------------------- ###
 
 ### --------- compile executable(s) from scratch ---------- ###
 cd ${path2build} && make clean
 
-compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executables}"
-echo ${compilecmd}
-${compilecmd}
+${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} "${executables}"
 ### ---------------------------------------------------- ###
 
 ### --------- run model through Python script ---------- ###

@@ -26,9 +26,9 @@ spack load cmake@3.23.1%gcc
 module load gcc/11.2.0-gcc-11.2.0
 source activate /work/mh1126/m300950/cleoenv
 
-buildtype=$1    # get from command line argument
-path2build=$2   # get from command line argument
-executables=$3   # get from command line argument
+buildtype=$1      # get from command line argument
+path2build=$2     # get from command line argument
+executables="$3"  # get from command line argument
 
 # load nvhpc compilers if compiling cuda build
 if [[ "${buildtype}" == "cuda" ]]
