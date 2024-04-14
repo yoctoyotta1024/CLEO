@@ -15,40 +15,21 @@
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
 ### ---- build type, directories, the executable to ---- ###
-### ----------- compile and your environment ----------- ###
+### ---------- compile, and your python script --------- ###
 ### ---------------------------------------------------- ###
-spack load cmake@3.23.1%gcc
-module load python3/2022.01-gcc-11.2.0
-source activate /work/mh1126/m300950/condaenvs/superdropsenv
-python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
-
 buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build0/
 executable="adia0D"
+pythonscript=${path2CLEO}/examples/adiabaticparcel/as2017.py
 configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.txt
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
-### ---------------------- build CLEO ------------------ ###
-buildcmd="${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}"
-echo ${buildcmd}
-${buildcmd}
-### ---------------------------------------------------- ###
-
-### --------- compile executable from scratch ---------- ###
-cd ${path2build} && make clean
-
-compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executable}"
-echo ${compilecmd}
-${compilecmd}
-### ---------------------------------------------------- ###
-
-### --------- run model through Python script ---------- ###
-export OMP_PROC_BIND=spread
-export OMP_PLACES=threads
-
-${python} ${path2CLEO}/examples/adiabaticparcel/as2017.py \
-  ${path2CLEO} ${path2build} ${configfile}
+### ---------- build, compile and run example ---------- ###
+runcmd="${path2CLEO}/examples/run_example.sh ${buildtype} \
+  ${path2CLEO} ${path2build} ${executable} ${pythonscript} ${configfile}"
+echo ${runcmd}
+${runcmd}
 ### ---------------------------------------------------- ###

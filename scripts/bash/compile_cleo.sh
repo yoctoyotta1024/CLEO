@@ -21,14 +21,14 @@
 ### ------------------ input parameters ---------------- ###
 ### ------ Optionally edit these lines to specify ------ ###
 ### ------ your environment and/or build directory ----- ###
-### --------- path and/or executable to compile -------- ###
+### ------- path and/or executable(s) to compile ------- ###
 spack load cmake@3.23.1%gcc
 module load gcc/11.2.0-gcc-11.2.0
 source activate /work/mh1126/m300950/cleoenv
 
 buildtype=$1    # get from command line argument
 path2build=$2   # get from command line argument
-executable=$3   # get from command line argument
+executables=$3   # get from command line argument
 
 # load nvhpc compilers if compiling cuda build
 if [[ "${buildtype}" == "cuda" ]]
@@ -39,15 +39,15 @@ fi
 
 if [[ "${buildtype}" == "" ||
       "${path2build}" == "" ||
-      "${executable}" == "" ]]
+      "${executables}" == "" ]]
 then
-  echo "Bad inputs, please check your buildtype, path2build and executable"
+  echo "Bad inputs, please check your buildtype, path2build and executables"
 else
-  ### ----------------- compile executable --------------- ###
+  ### ---------------- compile executables --------------- ###
   echo "path to build directory: ${path2build}"
-  echo "executable: ${executable}"
+  echo "executables: ${executables}"
 
   cd ${path2build}
-  make -j 128 ${executable}
+  make -j 128 ${executables}
   ### ---------------------------------------------------- ###
 fi

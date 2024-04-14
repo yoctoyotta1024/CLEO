@@ -14,8 +14,7 @@
 
 ### ------------------------------------------------------------------------ ###
 ### -------------- PLEASE NOTE: this script assumes you have --------------- ###
-### ------------- already built CLEO and compiled the desired -------------- ###
-### ---------------------------  executable -------------------------------- ###
+### -------- already built CLEO and compiled the desired executable -------- ###
 ### ------------------------------------------------------------------------ ###
 
 executable=$1   # get from command line argument

@@ -14,13 +14,13 @@
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
 ### ----- (your environment and) directory paths ------- ###
-### ------------ and executable to compile ------------- ###
+### ---------- and executable(s) to compile ------------ ###
 spack load cmake@3.23.1%gcc
 
 buildtype=$1
 path2CLEO=${HOME}/CLEO/
 path2build=$2 # get from command line argument
-executable="cleocoupledsdm"
+executables="cleocoupledsdm"
 
 if [ "${path2build}" == "" ]
 then
@@ -29,21 +29,21 @@ fi
 ### ---------------------------------------------------- ###
 
 if [[ "${buildtype}" != "" && "${path2CLEO}" != "" && "${path2build}" != "" &&
-    "${executable}" != "" && "${path2CLEO}" != "${path2build}" ]]
+    "${executables}" != "" && "${path2CLEO}" != "${path2build}" ]]
 then
-  ### ----------------- build executable --------------- ###
+  ### --------------------- build CLEO ------------------- ###
   buildcmd="${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}"
   echo ${buildcmd}
   ${buildcmd}
   ### ---------------------------------------------------- ###
 
-  ### ----------------- compile executable --------------- ###
+  ### ---------------- compile executables --------------- ###
   cd ${path2build} && make clean
 
-  compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executable}"
+  compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executables}"
   echo ${compilecmd}
   ${compilecmd}
   ### ---------------------------------------------------- ###
 else
-  echo "Bad inputs, please check your buildtype, path2CLEO, path2build and executable names"
+  echo "Bad inputs, please check your buildtype, path2CLEO, path2build and executables names"
 fi

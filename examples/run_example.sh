@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=as2017
+#SBATCH --job-name=runexample
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./as2017_out.%j.out
-#SBATCH --error=./as2017_err.%j.out
+#SBATCH --output=./runexample_out.%j.out
+#SBATCH --error=./runexample_err.%j.out
 
 ### ------ Generic script to build CLEO, compile  ------ ###
 ### ----- some of its executables and run a python ----- ###
@@ -18,19 +18,21 @@
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
-### ---- build type, directories, the executable to ---- ###
-### ----------- compile and your environment ----------- ###
+### ----- environment, build type, directories, the ---- ###
+### --------- executable(s) to compile and your -------- ###
+### --------------  python script to run. -------------- ###
 ### ---------------------------------------------------- ###
 spack load cmake@3.23.1%gcc
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 
-buildtype="openmp"
-path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build0/
-executable="adia0D"
-configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.txt
+buildtype=$1
+path2CLEO=$2
+path2build=$3
+executables=$4
+pythonscript=$5
+configfile=$6
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -41,10 +43,10 @@ echo ${buildcmd}
 ${buildcmd}
 ### ---------------------------------------------------- ###
 
-### --------- compile executable from scratch ---------- ###
+### --------- compile executable(s) from scratch ---------- ###
 cd ${path2build} && make clean
 
-compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executable}"
+compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executables}"
 echo ${compilecmd}
 ${compilecmd}
 ### ---------------------------------------------------- ###
@@ -52,7 +54,5 @@ ${compilecmd}
 ### --------- run model through Python script ---------- ###
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
-
-${python} ${path2CLEO}/examples/adiabaticparcel/as2017.py \
-  ${path2CLEO} ${path2build} ${configfile}
+${python}  ${pythonscript} ${path2CLEO} ${path2build} ${configfile}
 ### ---------------------------------------------------- ###
