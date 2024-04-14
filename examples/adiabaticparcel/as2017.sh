@@ -21,6 +21,7 @@ buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_adia0D/
 executable="adia0D"
+
 pythonscript=${path2CLEO}/examples/adiabaticparcel/as2017.py
 configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.txt
 ### ---------------------------------------------------- ###

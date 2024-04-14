@@ -32,7 +32,7 @@ path2CLEO=$2
 path2build=$3
 executables=$4
 pythonscript=$5
-configfile=$6
+script_args=$6
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -54,5 +54,5 @@ ${compilecmd}
 ### --------- run model through Python script ---------- ###
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
-${python}  ${pythonscript} ${path2CLEO} ${path2build} ${configfile}
+${python}  ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
 ### ---------------------------------------------------- ###

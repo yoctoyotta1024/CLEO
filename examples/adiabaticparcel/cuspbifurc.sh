@@ -21,6 +21,7 @@ buildtype="serial"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_adia0D/
 executable="adia0D"
+
 pythonscript=${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py
 configfile=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.txt
 ### ---------------------------------------------------- ###
