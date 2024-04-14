@@ -64,7 +64,7 @@ statsfile = binpath+"spd_stats.txt"
 dataset = binpath+"spd_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
-isfigures = [True, True] # booleans for [making, saving] initialisation figures
+isfigures = [False, False] # booleans for [making, saving] initialisation figures
 savefigpath = outputdir   # directory for saving figures
 SDgbxs2plt = [0] # gbxindex of SDs to plot (nb. "all" can be very slow)
 outdatafile = outputdir+"/spd_allstats.txt" # file to write out stats to
@@ -139,7 +139,7 @@ def write_outstats(nruns, n, outdatafile, buildtype, stats):
   with open(outdatafile, 'r') as file:
     lines = file.readlines()
 
-  if buildtype == "gpus_cpus":
+  if buildtype == "cuda":
     line = "\n"+str(n)+" "+str(stats["tstep"])
     with open(outdatafile, 'a') as file:
       file.write(line)
