@@ -14,8 +14,8 @@
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
-### ---- build type, directories, the executable to ---- ###
-### ---------- compile, and your python script --------- ###
+### ---- build type, directories, the executable(s) ---- ###
+### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
 buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
@@ -31,7 +31,7 @@ script_args=${configfile}" golovin long lowlist"
 
 ### ---------- build, compile and run example ---------- ###
 runcmd="${path2CLEO}/examples/run_example.sh ${buildtype} \
-  ${path2CLEO} ${path2build} ${executable} ${pythonscript} ${script_args}"
+  ${path2CLEO} ${path2build} ${executables} ${pythonscript} ${script_args}"
 echo ${runcmd}
 ${runcmd}
 ### ---------------------------------------------------- ###
