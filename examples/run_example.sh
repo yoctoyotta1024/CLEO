@@ -1,8 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=runexample
-#SBATCH --partition=gpu
+#SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --gpus=4
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
 #SBATCH --time=00:10:00

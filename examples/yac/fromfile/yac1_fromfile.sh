@@ -17,7 +17,7 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="cuda"
+buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_yac1/
 executables="yac1"
