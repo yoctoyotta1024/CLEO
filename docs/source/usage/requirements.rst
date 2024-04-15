@@ -1,22 +1,18 @@
 Requirements
 ============
 
-The following requirements ensure CLEO's build, compilation and
-execution on DKRZ's Levante HPC. If they do not work,
-please :ref:`contact us <contact>` or `open a new
-issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on
-our GitHub repository.
+The following requirements ensure CLEO's build, compilation and execution on DKRZ's Levante HPC.
+If they do not work, please :ref:`contact us <contact>` or `open a new
+issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository.
 
-Of course other architectures,
-other compilers, versions etc. are possible, but we leave
-this for you to discover.
+Of course other architectures, other compilers, versions etc. are possible, but we leavthis for you
+to discover.
 
 CMake
 -----
 CMake minimum version 3.18.0.
 
-On Levante it's best to use version
-3.23.1 which can be loaded e.g. via the command
+On Levante it's best to use version 3.23.1 which can be loaded e.g. via the command
 
 .. code-block:: console
 
@@ -24,17 +20,15 @@ On Levante it's best to use version
 
 Compilers
 ---------
-A c++ compiler with the c++20 standard library is the absolute minimum.
+A C++ compiler with the C++20 standard library is the absolute minimum.
 
-On Levante you can use the latest gcc compilers. At the time of writing
-this is gcc 11.2.0, e.g. via
+On Levante you can use the latest gcc compilers. At the time of writing this is gcc 11.2.0, e.g.
 
 .. code-block:: console
 
   $ module load gcc/11.2.0-gcc-11.2.0
 
-To compile with CUDA, use Levante's latest nvhpc compilers,
-e.g. via
+To compile with CUDA, use Levante's latest nvhpc compilers, e.g.
 
 .. code-block:: console
 
@@ -42,37 +36,38 @@ e.g. via
 
 Python
 ------
-To use PySD you need Python minimum version 3.10.4.
+To use PySD you need Python minimum version 3.10.4. We advise you to :ref:`create an
+environment using our envirnoment.yml file <environment>` which will include all the additional
+packages you may require.
 
-On Levante it's a good idea to load the python3 module, e.g. via
+On Levante it's a good idea to load the python3 module, e.g.
 
 .. code-block:: console
 
   $ module load python3/2022.01-gcc-11.2.0
 
-To use PySD and to run CLEO's examples, ``matplotlib``, ``numpy``,
-``scipy``, ``xarray``, ``zarr``, and ``awkward`` must be installed.
-If there are other dependencies not listed here, you will have to
-install them too. We kindly ask that you also
-:ref:`contact us <contact>` or `open a new
-issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on
-our GitHub repository if this is the case.
+To use PySD and to run CLEO's examples, particular Python packages are needed. These are included in
+our environment.yml file, and are ``matplotlib``, ``numpy``, ``scipy``, ``xarray``, ``zarr``, and
+``awkward``. If there are other dependencies not listed here, you will have to install them too. We
+kindly ask that you also :ref:`contact us <contact>` or `open a new
+issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository if this is
+the case.
 
-You can install packages to your conda environment e.g. via
+You can install Python packages to an existing Conda (or Mamba) environment, e.g.
 
 .. code-block:: console
 
   $ conda activate [your conda environment]
   $ python -m pip install [package name(s)]
 
-Pre-Commit
-----------
+YAC
+---
 
-We use pre-commit to check our code for simple issues before
-submission to code review, such as before
-pushing to a GitHub repository, and we reccomend you use it too.
-Pre-Commit fixes for example missing semicolons, trailing whitespaces
-etc., and ensures you conform to a chosen industry standard linter.
+To use YAC some additional MPI, NetCDF and yaml libraries are required alongside the gcc compiler.
 
-You can learn more by checking out
-`pre-commit <https://pre-commit.com/>`_'s comprehensive documentation.
+To load them on Levante, do
+
+.. code-block:: console
+
+  $ module load openmpi/4.1.2-gcc-11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
+  $ spack load openblas@0.3.18%gcc@=11.2.0 libfyaml /fvbhgoq py-mpi4py

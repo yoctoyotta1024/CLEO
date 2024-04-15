@@ -28,7 +28,7 @@ Configure the Bash Script
 The bash script for every example follows the same layout and to use
 one you will need to configure it in the following ways:
 
-  * Use your Conda environment:
+  * Use your Conda (or Mamba) environment:
 
     replace the Conda environment written in the line
     stating ``source activate[…]`` with your Conda environment.
