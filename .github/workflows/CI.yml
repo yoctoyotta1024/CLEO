@@ -57,7 +57,7 @@ jobs:
         with:
           name: html-docs
           path: docs/build/html/
-      - name: Publish docs on github pages
+      - name: Publish docs on GitHub pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
