@@ -21,6 +21,7 @@ figure 2(a) from Shima et al. 2009
 
 import sys
 import numpy as np
+import awkward as ak
 import matplotlib.pyplot as plt
 from scipy.special import iv
 
@@ -36,7 +37,8 @@ def plot_validation_figure(witherr, time, sddata, tplt, domainvol,
   selsddata = sdtracing.attributes_at_times(sddata, time, tplt, attrs2sel)
 
   nbins = 500
-  rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
+  non_nanradius = ak.nan_to_none(sddata["radius"])
+  rspan = [ak.min(non_nanradius), ak.max(non_nanradius)]
 
   fig, ax, ax_err = setup_validation_figure(witherr=witherr)
 

@@ -6,7 +6,7 @@ Created Date: Sunday 26th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 20th December 2023
+Last Modified: Monday 15th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -83,7 +83,8 @@ pltsds.plot_randomsample_superdrops_2dmotion(sddata, config["totnsupers"],
 
 ### ------------------ plot droplet distributions ------------------ ###
 if rspan == ["min", "max"]:
-  rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
+  non_nanradius = ak.nan_to_none(sddata["radius"])
+  rspan = [ak.min(non_nanradius), ak.max(non_nanradius)]
 
 if smoothsig_mass:
   smoothsig_mass = smoothsig_mass*(config["totnsupers"]**(-1/5))
