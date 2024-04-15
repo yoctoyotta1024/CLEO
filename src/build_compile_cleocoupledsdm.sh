@@ -17,6 +17,7 @@
 ### ----- (your environment and) directory paths ------- ###
 ### ---------- and executable(s) to compile ------------ ###
 spack load cmake@3.23.1%gcc
+cleoenv=/work/mh1126/m300950/cleoenv
 
 buildtype=$1
 path2CLEO=${HOME}/CLEO/
@@ -41,7 +42,7 @@ then
   ### ---------------- compile executables --------------- ###
   cd ${path2build} && make clean
 
-  compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executables}"
+  compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} ${executables}"
   echo ${compilecmd}
   ${compilecmd}
   ### ---------------------------------------------------- ###

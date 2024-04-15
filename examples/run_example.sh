@@ -22,17 +22,18 @@
 ### --------- executable(s) to compile and your -------- ###
 ### --------------  python script to run. -------------- ###
 ### ---------------------------------------------------- ###
-spack load cmake@3.23.1%gcc
-module load python3/2022.01-gcc-11.2.0
-source activate /work/mh1126/m300950/condaenvs/superdropsenv
-python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
-
 buildtype=$1
 path2CLEO=$2
 path2build=$3
 executables="$4"
 pythonscript=$5
 script_args="$6"
+
+cleoenv=/work/mh1126/m300950/cleoenv
+python=/work/mh1126/m300950/cleoenv/bin/python3
+spack load cmake@3.23.1%gcc
+module load python3/2022.01-gcc-11.2.0
+source activate ${cleoenv}
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -55,7 +56,7 @@ ${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}
 ### --------- compile executable(s) from scratch ---------- ###
 cd ${path2build} && make clean
 
-${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} "${executables}"
+${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} "${executables}"
 ### ---------------------------------------------------- ###
 
 ### --------- run model through Python script ---------- ###
