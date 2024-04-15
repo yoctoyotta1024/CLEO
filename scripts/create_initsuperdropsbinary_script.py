@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 1st March 2024
+Last Modified: Monday 15th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -51,7 +51,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 ### --- Number of Superdroplets per Gridbox --- ###
 ### ---        (an int or dict of ints)     --- ###
 zlim = 800
-npergbx = 8
+npergbx = 256
 # nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim) # supers where z <= zlim
 nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # supers where z >= zlim
 # nsupers = 100
@@ -66,11 +66,11 @@ radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from
 ### ---------------------------------------------- ###
 
 ### --- Choice of Superdroplet Dry Radii Generator --- ###
-# monodryr                = 1e-12                         # all SDs have this same dryradius [m]
-# dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
+monodryr                = 1e-12                         # all SDs have this same dryradius [m]
+dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
 
-dryr_sf               = 1.0                     # scale factor for dry radii [m]
-dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf) # dryradii are 1/sf of radii [m]
+# dryr_sf               = 1.0                     # scale factor for dry radii [m]
+# dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf) # dryradii are 1/sf of radii [m]
 
 ### ---------------------------------------------- ###
 
@@ -92,23 +92,23 @@ dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf) # dryradii are 1/sf of radii [m]
 # numconc = np.sum(scalefacs) * 5e8
 # xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 
-volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
-xiprobdist = probdists.VolExponential(volexpr0, rspan)
+# volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
+# numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
+# xiprobdist = probdists.VolExponential(volexpr0, rspan)
 
-# reff                 = 7e-6                     # effective radius [m]
-# nueff                = 0.08                     # effective variance
-# # xiprobdist = probdists.ClouddropsHansenGamma(reff, nueff)
-# rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
-# nrain                = 3000                         # raindrop concentration [m^-3]
-# qrain                = 0.9                          # rainwater content [g/m^3]
-# dvol                 = 8e-4                         # mean volume diameter [m]
-# # xiprobdist = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-# rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-# numconc = 1e9 # [m^3]
-# distribs = [rdist1, rdist2]
-# scalefacs = [1000, 1]
-# xiprobdist = probdists.CombinedRadiiProbDistribs(distribs, scalefacs)
+reff                 = 7e-6                     # effective radius [m]
+nueff                = 0.08                     # effective variance
+# xiprobdist = probdists.ClouddropsHansenGamma(reff, nueff)
+rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
+nrain                = 3000                         # raindrop concentration [m^-3]
+qrain                = 0.9                          # rainwater content [g/m^3]
+dvol                 = 8e-4                         # mean volume diameter [m]
+# xiprobdist = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+numconc = 1e9 # [m^3]
+distribs = [rdist1, rdist2]
+scalefacs = [1000, 1]
+xiprobdist = probdists.CombinedRadiiProbDistribs(distribs, scalefacs)
 
 ### --------------------------------------------------------- ###
 
@@ -122,8 +122,8 @@ coord3gen            =  crdgens.SampleCoordGen(True) # sample coord3 range rando
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m]
 # coord1gen            =  crdgens.MonoCoordGen(monocoord1)
-coord1gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
-# coord1gen            = None                        # do not generate superdroplet coord1s
+# coord1gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
+coord1gen            = None                        # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
