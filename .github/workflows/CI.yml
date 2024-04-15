@@ -13,7 +13,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: cienv
-          environment-file: /home/runner/work/CLEO/.github/ci_environment.yml
+          environment-file: .github/ci_environment.yml
           auto-activate-base: false
       - run: |
           conda info
