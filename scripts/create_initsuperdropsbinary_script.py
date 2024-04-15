@@ -51,7 +51,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 ### --- Number of Superdroplets per Gridbox --- ###
 ### ---        (an int or dict of ints)     --- ###
 zlim = 800
-npergbx = 256
+npergbx = 512
 # nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim) # supers where z <= zlim
 nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # supers where z >= zlim
 # nsupers = 100
@@ -59,9 +59,9 @@ nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # 
 
 ### --- Choice of Superdroplet Radii Generator --- ###
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
-# radiigen  =  rgens.MonoAttrGen(monor)                  # all SDs have the same radius [m]
+# radiigen  =  rgens.MonoAttrGen(monor)                 # all SDs have the same radius [m]
 
-rspan                = [3e-9, 5e-5]                # min and max range of radii to sample [m]
+rspan                = [3e-9, 2.5e-3]                     # min and max range of radii to sample [m]
 radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
