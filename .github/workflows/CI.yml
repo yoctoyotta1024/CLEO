@@ -12,8 +12,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3
         with:
-          activate-environment: myenv
-          environment-file: environment.yml
+          activate-environment: cienv
+          environment-file: ci_environment.yml
           auto-activate-base: false
       - run: |
           conda info
@@ -22,10 +22,10 @@ jobs:
         run: |
           conda init
           source /home/runner/.bashrc
-          conda activate /usr/share/miniconda/envs/myenv
+          conda activate /usr/share/miniconda/envs/cienv
           conda info --envs
       - name: Install Doxygen
-        run: /usr/share/miniconda/envs/myenv/bin/doxygen --version
+        run: /usr/share/miniconda/envs/cienv/bin/doxygen --version
         shell: bash
       - name: Test with pytest
         run: pytest .
@@ -33,7 +33,7 @@ jobs:
         run: cd docs &&
           mkdir build &&
           mkdir build/doxygen &&
-          /usr/share/miniconda/envs/myenv/bin/doxygen doxygen/doxygen.dox
+          /usr/share/miniconda/envs/cienv/bin/doxygen doxygen/doxygen.dox
         shell: bash
       - name: Build docs
         run: |

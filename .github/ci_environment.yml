@@ -1,0 +1,9 @@
+name: cienv
+dependencies:
+    - python>=3.9
+    - pytest
+    - sphinx
+    - conda-forge::doxygen>=1.10.0
+    - pip
+    - pip:
+      - -r ci_requirements.txt
