@@ -11,3 +11,4 @@ xarray
 awkward
 zarr
 pre-commit
+mpi4py
