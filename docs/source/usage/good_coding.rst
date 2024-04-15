@@ -64,7 +64,7 @@ Code Style / Formatting
 For Python, we obey the PEP 8 style guide.
 
 For C++ we obey the Google C++ Style Guide with:
-|  IndentWidth: 2
-|  TabWidth: 2
-|  UseTab: Never
-|  ColumnLimit: 100
+  |  IndentWidth: 2
+  |  TabWidth: 2
+  |  UseTab: Never
+  |  ColumnLimit: 100
