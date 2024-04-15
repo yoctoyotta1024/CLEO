@@ -11,21 +11,15 @@ some paths in the bash and Python scripts.)
 
   $ git clone https://github.com/yoctoyotta1024/CLEO.git
 
-
-Everything will also be much easier for you if you set up an envirnoment with the packages we
-suggest in our environment yaml file, e.g. using Conda
+Everything will also be much easier for you if you set up and use an envirnoment with the packages
+we suggest in our environment yaml file, e.g. using Conda:
 
 .. code-block:: console
 
   $ conda env create --file=environment.yml
-
-And then activate this environment everytime you use CLEO, e.g.
-
-.. code-block:: console
-
   $ conda activate cleoenv
 
-Finally we suggest you use pre-commit and install our hooks, e.g.
+Finally we suggest you use pre-commit. To install our hooks, you can do e.g.
 
 .. code-block:: console
 
