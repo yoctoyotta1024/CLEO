@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 12th April 2024
+Last Modified: Monday 15th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -196,7 +196,7 @@ if "long" in kernels:
     tplt = [0, 600, 1200, 1800]
     # 0.2 factor for guassian smoothing
     smoothsig = 0.62*(config["totnsupers"]**(-1/5))
-    plotwitherr = True
+    plotwitherr = False
 
     savename = savefigpath + "long_validation.png"
     fig, ax = shima2009fig.plot_validation_figure(plotwitherr, time,
@@ -230,7 +230,7 @@ if "lowlist" in kernels:
     tplt = [0, 600, 1200, 1800, 2400, 3600]
     # 0.2 factor for guassian smoothing
     smoothsig = 0.62*(config["totnsupers"]**(-1/5))
-    plotwitherr = True
+    plotwitherr = False
 
     savename = savefigpath + "lowlist_validation.png"
     fig, ax = shima2009fig.plot_validation_figure(plotwitherr, time,
