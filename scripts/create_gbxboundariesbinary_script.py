@@ -44,10 +44,12 @@ savefigpath = path2build+"/bin/"
 gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
 
 ### input parameters for zcoords of gridbox boundaries
-zmax = 1000 # maximum z coord [m]
+zmax = 820 # maximum z coord [m]
 zmin = 0 # minimum z coord [m]
 zdelta = 20 # even spacing
-zgrid = [zmin, zmax, zdelta]
+# zgrid = [zmin, zmax, zdelta]
+# zgrid = np.arange(zmin, zmax+zdelta, zdelta)
+zgrid = np.concatenate((np.arange(zmin, zmax, zdelta), np.array([850])))
 
 ### input parameters for x coords of gridbox boundaries
 xgrid = [0, 20, 20]

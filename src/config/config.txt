@@ -39,16 +39,16 @@ maxchunk = 1250000                        # maximum no. of elements in chunks of
 ### SDM Runtime parameters ###
 # domain setup #
 nspacedims = 1                            # no. of spatial dimensions to model
-ngbxs = 50                                # total number of Gbxs
-totnsupers = 5120                         # (initial) total no. of SDs
+ngbxs = 41                                # total number of Gbxs
+totnsupers = 2048                         # (initial) total no. of SDs
 
 # timestepping #
 CONDTSTEP = 0.1                           # time between SD condensation events [s]
 COLLTSTEP = 1                             # time between SD collision events [s]
 MOTIONTSTEP = 2                           # time between SDM motion [s]
-COUPLTSTEP = 2400                         # time between dynamic couplings [s]
-OBSTSTEP = 5                              # time between SDM observations [s]
-T_END = 2400                              # time span of integration from 0s to T_END [s]
+COUPLTSTEP = 120                          # time between dynamic couplings [s]
+OBSTSTEP = 2                              # time between SDM observations [s]
+T_END = 120                               # time span of integration from 0s to T_END [s]
 
 # microphysics #
 cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
