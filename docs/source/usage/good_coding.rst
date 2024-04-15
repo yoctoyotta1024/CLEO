@@ -5,10 +5,8 @@ Good Coding Practices
 
 Packages and Environment
 ------------------------
-We provide an `environment yaml file
-<https://github.com/yoctoyotta1024/CLEO/blob/main/environment.yml>`_ for creating an envirnoment
-with all the packages you need to use CLEO (in order to use PySD, to build the documentation,
-or to run pre-commit etc.).
+We provide an environment yaml file for creating an envirnoment with all the packages you need to
+use CLEO (to use PySD, to build the documentation, or to run pre-commit etc.).
 
 The easiest way to use it is to create a new Conda or Mamba environment, e.g.
 
@@ -35,38 +33,38 @@ this environment is missing any packages.
 Pre-Commit
 ----------
 We use pre-commit to check our code for simple issues before submission to code review, such as
-before pushing to a GitHub repository, and we reccomend you use it too.
+before pushing to a GitHub repository. We reccomend you use it too.
 
 Pre-Commit has "hooks" which can be used for a vast range of measures to ensure you follow good
 coding practices. For example, we use pre-commit to find and correct mistakes such as missing
-semicolons, trailing whitespaces, bad indentations etc., and to ensure we conform to the conform to
-our chosen coding style.
+semicolons, trailing whitespaces, bad indentations etc., and to ensure we conform to
+our chosen code style guide.
 
 You can learn more by checking out `pre-commit <https://pre-commit.com/>`_'s comprehensive
 documentation.
 
 In case you want to use our pre-commit hooks, first load your environment with pre-commit installed,
-then install the pre-commit hooks via
+then install the pre-commit hooks, e.g.
 
 .. code-block:: console
 
   $ pre-commit install
 
-pre-commit should then run automatically upon `git commit`.
+Pre-commit should then run automatically upon ```git commit``.
 
 
 Commit Specification
 --------------------
 We use `conventional commits <https://www.conventionalcommits.org/>`_ as a a lightweight convention
 on top of commit messages to ensure they are meaningful, provide a useful history and can be used
-by automated tools such as `Cocogitto-bot <https://github.com/apps/cocogitto-bot>_`.
+by automated tools such as `Cocogitto-bot <https://github.com/apps/cocogitto-bot>`_.
 
 Code Style / Formatting
 -----------------------
 For Python, we obey the PEP 8 style guide.
 
-For C++ we obey the Google C++ Style Guide with::
-  IndentWidth: 2
-  TabWidth: 2
-  UseTab: Never
-  ColumnLimit: 100
+For C++ we obey the Google C++ Style Guide with:
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+ColumnLimit: 100
