@@ -270,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
@@ -308,222 +309,222 @@
         <article role="main">
           <section id="examples">
 <span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
-<p>There are several test cases for CLEO, each with different builds,
-domains, microphysics, coupling, super-sroplet motion etc. They can be
-found in the <code class="docutils literal notranslate"><span class="pre">CLEO/examples</span></code> directory.  If you would like to
-a copy of the reference solutions please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
-<p>Each example can be run by building CLEO with the relevant main program
-and then executing the associated Python script. For running on
-DKRZ’s Levante HPC, there are bash scripts to help with this.
-The following instructions are intended to guide you through
-running each example on Levante using their bash scripts.</p>
-<p>Note most of the build configurations chosen in the bash scripts
-use GPUs. To execute these scripts sucesfully you will therefore
-need to be on a node in the gpu partition of Levante
+<p>There are various examples of CLEO, with different build configurations, domains, microphysics,
+coupling, and super-droplet motion etc. They can be found in the <code class="docutils literal notranslate"><span class="pre">CLEO/examples</span></code> directory. If you
+would like to a copy of the reference solutions please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
+<p>Each example can be run by building CLEO, compiling the relevant executable, and then running the
+example’s Python script. There are bash scripts to help you do all this on DKRZ’s Levante HPC. The
+following instructions are intended to guide you through running each example using their bash
+script.</p>
+<p>Please Note: the bash script for most of the examples chooses a build configuration which uses GPUs.
+To execute these scripts you will therefore need to be on a node in the GPU partition of Levante
 (<a class="reference external" href="https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html">see here</a>
-for documentation on Levante’s partitions).</p>
-<section id="configure-the-bash-script">
-<span id="configurebash"></span><h2>Configure the Bash Script<a class="headerlink" href="#configure-the-bash-script" title="Link to this heading">#</a></h2>
-<p>The bash script for every example follows the same layout and to use
-one you will need to configure it in the following ways:</p>
-<blockquote>
-<div><ul>
-<li><p>Use your Conda environment:</p>
-<p>replace the Conda environment written in the line
-stating <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">activate[…]</span></code> with your Conda environment.</p>
+for documentation on Levante’s partitions), or change the build configuration.</p>
+<section id="configure-the-bash-scripts">
+<span id="configurebash"></span><h2>Configure the Bash Scripts<a class="headerlink" href="#configure-the-bash-scripts" title="Link to this heading">#</a></h2>
+<p>The bash script for every example provides command line arguments to <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code>. This
+script has three steps:</p>
+<ol class="arabic simple">
+<li><p>It builds CLEO by running <code class="docutils literal notranslate"><span class="pre">scripts/bash/build_cleo.sh</span></code>,</p></li>
+<li><p>It compiles the specified exectuable(s) by running <code class="docutils literal notranslate"><span class="pre">scripts/bash/compile_cleo.sh</span></code>,</p></li>
+<li><p>It runs the example’s Python script.</p></li>
+</ol>
+<p>You will need to configure <code class="docutils literal notranslate"><span class="pre">`examples/run_example.sh`</span></code> in the following ways:</p>
+<ul>
+<li><p>Use your Conda (or Mamba) environment:</p>
+<p>replace the path in the line stating <code class="docutils literal notranslate"><span class="pre">cleoenv=[…]</span></code> with the path to your environment.</p>
 </li>
 <li><p>Use your Python version:</p>
-<p>replace the Python written in the line stating
-<code class="docutils literal notranslate"><span class="pre">python=[…]</span></code> with your Python.</p>
-</li>
-<li><p>(Optional) choose your build configuration:</p>
-<p>choose which thread parallelism to utilise by modifying the
-<code class="docutils literal notranslate"><span class="pre">kokkoshost</span></code> and <code class="docutils literal notranslate"><span class="pre">kokkosdevice</span></code> flags. Please note that
-to use CUDA parallelism you need to build and execute CLEO
-on Levante’s gpu partition.</p>
-</li>
-<li><p>If you did not install CLEO in your home directory:</p>
-<p>modify the lines which state the <code class="docutils literal notranslate"><span class="pre">path2CLEO</span></code> and
-<code class="docutils literal notranslate"><span class="pre">path2build</span></code> to reflect this.</p>
+<p>replace the path in the line stating <code class="docutils literal notranslate"><span class="pre">python=[...]</span></code> with the path to your Python interpreter.</p>
 </li>
 </ul>
-</div></blockquote>
+<p>You can optionally configure the bash script specific to each example in the following ways:</p>
+<ul>
+<li><p>Choose your build configuration:</p>
+<p>choose which parallelism to utilise by modifying the <code class="docutils literal notranslate"><span class="pre">buildtype</span></code> parameter. The options are
+<code class="docutils literal notranslate"><span class="pre">cuda</span></code>,  <code class="docutils literal notranslate"><span class="pre">openmp</span></code> or <code class="docutils literal notranslate"><span class="pre">serial</span></code>. Note that <code class="docutils literal notranslate"><span class="pre">buildtype=&quot;cuda&quot;</span></code> requires you to execute the script
+on a node in the GPU partition of Levante and may also include OpenMP parallelism.</p>
+</li>
+<li><p>Choose your build directory:</p>
+<p>replace the path in the line stating <code class="docutils literal notranslate"><span class="pre">path2build=[...]</span></code> with the path you desire.</p>
+</li>
+<li><p>If you did not install CLEO in your home directory:</p>
+<p>Ensure the lines which state the <code class="docutils literal notranslate"><span class="pre">path2CLEO</span></code> and <code class="docutils literal notranslate"><span class="pre">path2build</span></code> to reflect this.</p>
+</li>
+</ul>
 </section>
 <section id="adiabatic-parcel">
-<h2>1) Adiabatic Parcel<a class="headerlink" href="#adiabatic-parcel" title="Link to this heading">#</a></h2>
-<p>These examples are for a 0-D parcel of air expanding and
-contracting adiabatically with a two-way coupling between
-SDM and the thermodynamics. The setup mimics that in
-Arabas and Shima 2017 section 7 <span id="id2">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.
-Note that due to numerical differences, the conditions
-for cusp bifurcation and the plots will not be exactly
-identical to this reference.</p>
-<p>1. Navigate to the <code class="docutils literal notranslate"><span class="pre">adiabaticparcel/</span></code> directory,
-e.g.</p>
+<h2>Adiabatic Parcel<a class="headerlink" href="#adiabatic-parcel" title="Link to this heading">#</a></h2>
+<p>These examples are for a 0-D model of a parcel of air expanding and contracting adiabatically with a
+two-way coupling between the SDM microphysics and the thermodynamics. The setup mimics that in
+Arabas and Shima 2017 section 7 <span id="id2">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>. Note that due to numerical differences,
+the conditions for cusp bifurcation and the plots will not be exactly identical to this reference.</p>
+<ol class="arabic simple">
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">adiabaticparcel/</span></code> directory, e.g.</p></li>
+</ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/adiabaticparcel/
 </pre></div>
 </div>
 <section id="a-arabas-and-shima-2017">
 <h3>a) Arabas and Shima 2017<a class="headerlink" href="#a-arabas-and-shima-2017" title="Link to this heading">#</a></h3>
-<ol class="arabic simple" start="2">
-<li><p><a class="reference internal" href="#configurebash"><span class="std std-ref">Configure</span></a> and execute the bash script <code class="docutils literal notranslate"><span class="pre">as2017.sh</span></code>.</p></li>
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<code class="docutils literal notranslate"><span class="pre">examples/adiabaticparcel/as2017.sh</span></code>.</p>
+<ol class="arabic simple" start="3">
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">as2017.sh</span></code>, e.g.</p></li>
 </ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vim<span class="w"> </span>as2017.sh
-<span class="gp">$ </span>./as2017.sh
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./as2017.sh
 </pre></div>
 </div>
-<p>The plots produced,
-<code class="docutils literal notranslate"><span class="pre">~/CLEO/build/bin/as2017_fig_[x].png</span></code>, should be
-similar to the columns of figure 5 from Arabas and
-Shima 2017 <span id="id3">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.</p>
+<p>The plots produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_adia0D/bin/as2017fig_[x].png</span></code>, should be
+similar to the columns of figure 5 from Arabas and Shima 2017 <span id="id3">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.</p>
 </section>
 <section id="b-cusp-bifurcation">
 <h3>b) Cusp Bifurcation<a class="headerlink" href="#b-cusp-bifurcation" title="Link to this heading">#</a></h3>
-<ol class="arabic simple" start="2">
-<li><p><a class="reference internal" href="#configurebash"><span class="std std-ref">Configure</span></a> and execute the bash script <code class="docutils literal notranslate"><span class="pre">cuspbifurc.sh</span></code>.</p></li>
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<code class="docutils literal notranslate"><span class="pre">examples/adiabaticparcel/cuspbifurc.sh</span></code>.</p>
+<ol class="arabic simple" start="3">
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">cuspbifurc.sh</span></code>, e.g.</p></li>
 </ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vim<span class="w"> </span>cuspbifurc.sh
-<span class="gp">$ </span>./cuspbifurc.sh
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./cuspbifurc.sh
 </pre></div>
 </div>
-<p>The plots produced,
-<code class="docutils literal notranslate"><span class="pre">~/CLEO/build/bin/cuspbifurc_validation.png</span></code> and
-<code class="docutils literal notranslate"><span class="pre">~/CLEO/build/bin/cuspbifurc_SDgrowth.png</span></code>
-illustrate an example of cusp bifurcation, analagous to the
-third column of figure 5 from Arabas and
-Shima 2017 <span id="id4">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.</p>
+<p>The plots produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_adia0D/bin/cuspbifurc_validation.png</span></code> and
+<code class="docutils literal notranslate"><span class="pre">~/CLEO/build_adia0D/bin/cuspbifurc_SDgrowth.png</span></code> illustrate an example of cusp bifurcation, analagous
+to the third column of figure 5 from Arabas and Shima 2017 <span id="id4">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.</p>
 </section>
 </section>
 <section id="box-model-collisions">
-<h2>2) Box Model Collisions<a class="headerlink" href="#box-model-collisions" title="Link to this heading">#</a></h2>
-<p>Due to the randomness of the initial super-droplet conditions and
-the collision-coalescence algorithm, each run of these examples
-will not be completely identical, but they should be reasonably
-similar, and have the same mean behaviour.</p>
-<p>1. Navigate to the <code class="docutils literal notranslate"><span class="pre">boxmodelcollisions/</span></code> directory,
-e.g.</p>
+<h2>Box Model Collisions<a class="headerlink" href="#box-model-collisions" title="Link to this heading">#</a></h2>
+<p>These examples are for a 0-D box model with various collision-coalescence kernels.</p>
+<ol class="arabic simple">
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">boxmodelcollisions/</span></code> directory, e.g.</p></li>
+</ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/boxmodelcollisions/
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
-<li><p>Configure the bash script <code class="docutils literal notranslate"><span class="pre">shima2009.sh</span></code> for your environment.</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vim<span class="w"> </span>shima2009.sh
-</pre></div>
-</div>
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/shima2009.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
-<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">shima2009.sh</span></code>.</p></li>
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">shima2009.sh</span></code>, e.g.</p></li>
 </ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./shima2009.sh
 </pre></div>
 </div>
-<p>By default the golovin, long, and lowlist examples will compile
-and run. You can change this by editing the arguments given to
-<code class="docutils literal notranslate"><span class="pre">shima2009.py</span></code> in the final line of the bash script.</p>
+<p>By default the golovin, long, and lowlist executables will be compiled and run. You can change this
+by editing <code class="docutils literal notranslate"><span class="pre">script_args=&quot;[...]</span> <span class="pre">golovin</span> <span class="pre">long</span> <span class="pre">lowlist</span></code> in <code class="docutils literal notranslate"><span class="pre">shima2009.sh</span></code>.</p>
+<p>Note that due to the randomness of the initial super-droplet conditions and the
+collision-coalescence algorithm, each run of these examples will not be completely identical, but
+they should be reasonably similar, and have the same mean behaviour.</p>
 <section id="a-golovin">
 <h3>a) Golovin<a class="headerlink" href="#a-golovin" title="Link to this heading">#</a></h3>
-<p>This example is a 0-D box model with only collision-coalescence
-using Golovin’s kernel.</p>
-<p>The plot produced,
-<code class="docutils literal notranslate"><span class="pre">~/CLEO/build/bin/golovin_validation.png</span></code>, should be
-similar to Fig.2(a) of Shima et al. 2009 <span id="id5">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+<p>This example models collision-coalescence using Golovin’s kernel.</p>
+<p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_shima2009/bin/golovin_validation.png</span></code>, should be similar to
+Fig.2(a) of Shima et al. 2009 <span id="id5">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
 </section>
 <section id="b-long">
 <h3>b) Long<a class="headerlink" href="#b-long" title="Link to this heading">#</a></h3>
-<p>This example is a 0-D box model with only collision-coalescence
-using Long’s collision efficiency as given by equation 13 of
-Simmel et al. 2002 <span id="id6">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>.</p>
-<p>The plot produced,
-<code class="docutils literal notranslate"><span class="pre">~/CLEO/build/bin/long_validation.png</span></code>, should be
-similar to Fig.2(b) of Shima et al. 2009 <span id="id7">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+<p>This example models collision-coalescence using Long’s collision efficiency as given by equation
+13 of Simmel et al. 2002 <span id="id6">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>.</p>
+<p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_shima2009/bin/long_validation.png</span></code>, should be similar to
+Fig.2(b) of Shima et al. 2009 <span id="id7">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
 </section>
 <section id="c-low-and-list">
 <h3>c) Low and List<a class="headerlink" href="#c-low-and-list" title="Link to this heading">#</a></h3>
-<p>This example is a 0-D box model with only collision-coalescence
-using the hydrodynamic kernel with Long’s collision efficiency as
-given by equation 13 of Simmel et al. 2002 <span id="id8">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>, and the coalescence
-efficiency from Low and List 1982(a) <span id="id9">[<a class="reference internal" href="../references.html#id21" title="T. B. Low and Roland List. Collision, coalescence and breakup of raindrops. part i: experimentally established coalescence efficiencies and fragment size distributions in breakup. Journal of Atmospheric Sciences, 39(7):1591 - 1606, 1982. URL: https://journals.ametsoc.org/view/journals/atsc/39/7/1520-0469_1982_039_1591_ccabor_2_0_co_2.xml, doi:https://doi.org/10.1175/1520-0469(1982)039&lt;1591:CCABOR&gt;2.0.CO;2.">LL82</a>]</span>
-(see also McFarquhar 2004 <span id="id10">[<a class="reference internal" href="../references.html#id24" title="Greg M. McFarquhar. A new representation of collision-induced breakup of raindrops and its implications for the shapes of raindrop size distributions. Journal of the Atmospheric Sciences, 61(7):777 - 794, 2004. URL: https://journals.ametsoc.org/view/journals/atsc/61/7/1520-0469_2004_061_0777_anrocb_2.0.co_2.xml, doi:https://doi.org/10.1175/1520-0469(2004)061&lt;0777:ANROCB&gt;2.0.CO;2.">McF04</a>]</span>).
-This example produces a plot <code class="docutils literal notranslate"><span class="pre">~/CLEO/build/bin/lowlist_validation.png</span></code>.</p>
+<p>This example models collision-coalescence using the hydrodynamic kernel with Long’s collision
+efficiency as given by equation 13 of Simmel et al. 2002 <span id="id8">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>, and the coalescence
+efficiency from Low and List 1982(a) <span id="id9">[<a class="reference internal" href="../references.html#id21" title="T. B. Low and Roland List. Collision, coalescence and breakup of raindrops. part i: experimentally established coalescence efficiencies and fragment size distributions in breakup. Journal of Atmospheric Sciences, 39(7):1591 - 1606, 1982. URL: https://journals.ametsoc.org/view/journals/atsc/39/7/1520-0469_1982_039_1591_ccabor_2_0_co_2.xml, doi:https://doi.org/10.1175/1520-0469(1982)039&lt;1591:CCABOR&gt;2.0.CO;2.">LL82</a>]</span> (see also McFarquhar
+2004 <span id="id10">[<a class="reference internal" href="../references.html#id24" title="Greg M. McFarquhar. A new representation of collision-induced breakup of raindrops and its implications for the shapes of raindrop size distributions. Journal of the Atmospheric Sciences, 61(7):777 - 794, 2004. URL: https://journals.ametsoc.org/view/journals/atsc/61/7/1520-0469_2004_061_0777_anrocb_2.0.co_2.xml, doi:https://doi.org/10.1175/1520-0469(2004)061&lt;0777:ANROCB&gt;2.0.CO;2.">McF04</a>]</span>).</p>
+<p>This example produces a plot, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_shima2009/bin/lowlist_validation.png</span></code>.</p>
 </section>
 </section>
 <section id="divergence-free-motion">
-<h2>3) Divergence Free Motion<a class="headerlink" href="#divergence-free-motion" title="Link to this heading">#</a></h2>
-<p>1. Navigate to the <code class="docutils literal notranslate"><span class="pre">divfreemotion/</span></code> directory,
-e.g.</p>
+<h2>Divergence Free Motion<a class="headerlink" href="#divergence-free-motion" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">divfreemotion/</span></code> directory, e.g.</p></li>
+</ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/divfreemotion/
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
-<li><p>Configure the bash script <code class="docutils literal notranslate"><span class="pre">divfree2d.sh</span></code> for your environment.</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vim<span class="w"> </span>divfree2d.sh
-</pre></div>
-</div>
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/divfree2d.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
-<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">divfree2d.sh</span></code>.</p></li>
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">divfree2d.sh</span></code>, e.g.</p></li>
 </ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./divfree2d.sh
 </pre></div>
 </div>
-<p>This example plots the motion of super-droplets without
-sedimentation in a 2-D divergence free wind field
-(see <code class="docutils literal notranslate"><span class="pre">~/CLEO/build/bin/df2d_motion2d_validation.png</span></code>).
-The number of super-droplets in the domain should remain
-constant over time
-(see <code class="docutils literal notranslate"><span class="pre">~/CLEO/build/bin/df2d_totnsupers_validation.png</span></code>).</p>
+<p>This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
+free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
+called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_divfree2D/bin/df2d_motion2d_validation.png</span></code>. The number of super-droplets in the domain
+should remain constant over time, as shown in the plot produced and by default called
+<code class="docutils literal notranslate"><span class="pre">~/CLEO/build_divfree2D/bin/df2d_totnsupers_validation.png</span></code>.</p>
 </section>
 <section id="d-rainshaft">
-<h2>4) 1-D Rainshaft<a class="headerlink" href="#d-rainshaft" title="Link to this heading">#</a></h2>
-<p>1. Navigate to the <code class="docutils literal notranslate"><span class="pre">rainshaft1d/</span></code> directory,
-e.g.</p>
+<h2>1-D Rainshaft<a class="headerlink" href="#d-rainshaft" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">rainshaft1d/</span></code> directory, e.g.</p></li>
+</ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/rainshaft1d/
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
-<li><p>Configure the bash script <code class="docutils literal notranslate"><span class="pre">rainshaft1d.sh</span></code> for your environment.</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vim<span class="w"> </span>rainshaft1d.sh
-</pre></div>
-</div>
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/rainshaft1d.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
-<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">rainshaft1d.sh</span></code>.</p></li>
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">rainshaft1d.sh</span></code>, e.g.</p></li>
 </ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./rainshaft1d.sh
 </pre></div>
 </div>
-<p>Several plots and animations are produced by this example. If
-you would like to compare to reference solutions
-please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
+<p>Several plots and animations are produced by this example. If you would like to compare to our
+reference solutions please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
 </section>
 <section id="constant-2-d-thermodynamics">
-<h2>5) Constant 2-D Thermodynamics<a class="headerlink" href="#constant-2-d-thermodynamics" title="Link to this heading">#</a></h2>
-<p>1. Navigate to the <code class="docutils literal notranslate"><span class="pre">constthermo2d/</span></code> directory,
-e.g.</p>
+<h2>Constant 2-D Thermodynamics<a class="headerlink" href="#constant-2-d-thermodynamics" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">constthermo2d/</span></code> directory, e.g.</p></li>
+</ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/constthermo2d/
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
-<li><p>Configure the bash script <code class="docutils literal notranslate"><span class="pre">constthermo2d.sh</span></code> for your environment.</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vim<span class="w"> </span>constthermo2d.sh
-</pre></div>
-</div>
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/constthermo2d.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
-<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">constthermo2d.sh</span></code>.</p></li>
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">constthermo2d.sh</span></code>, e.g.</p></li>
 </ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./constthermo2d.sh
 </pre></div>
 </div>
-<p>Several plots and animations are produced by this example. If
-you would like to compare to reference solutions
-please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
+<p>Several plots and animations are produced by this example. If you would like to compare to our
+reference solutions please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
+</section>
+<section id="speed-test">
+<h2>Speed Test<a class="headerlink" href="#speed-test" title="Link to this heading">#</a></h2>
+<p>This example compiles and runs the same exectuable <code class="docutils literal notranslate"><span class="pre">spdtest</span></code> for three different build
+configurations, (1) “cuda” with CUDA and OpenMP parallelism, (2) “openmp” with only OpenMP
+parallelism, and (3) “serial” without parallelism.</p>
+<ol class="arabic simple">
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">speedtest/</span></code> directory, e.g.</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/speedtest/
+</pre></div>
+</div>
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/speedtest.sh</span></code>.</p>
+<ol class="arabic simple" start="3">
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">speedtest.sh</span></code>, e.g.</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./speedtest.sh
+</pre></div>
+</div>
+<p>By default, a .txt file with the wall-clock time spent time-stepping the model for the three
+different build configurations is written to <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_spdtest/bin/spd_allstats.txt</span></code>.
+The times can be compared with the ones
+in <code class="docutils literal notranslate"><span class="pre">~/CLEO/examples/speedtest/speedtest_allstats_examples.txt</span></code>.</p>
 </section>
 <section id="extension">
 <h2>Extension<a class="headerlink" href="#extension" title="Link to this heading">#</a></h2>
-<p>Explore the <code class="docutils literal notranslate"><span class="pre">exampleplotting/plotssrc</span></code> Python module which
-gives examples of how to plot output from CLEO with pySD, a few of
-which are demonstrated in the <code class="docutils literal notranslate"><span class="pre">exampleplotting/exampleplotting.py</span></code>
+<p>Explore the <code class="docutils literal notranslate"><span class="pre">exampleplotting/plotssrc</span></code> Python module which gives examples of how to plot output
+from CLEO with pySD, a few of which are demonstrated in the <code class="docutils literal notranslate"><span class="pre">exampleplotting/exampleplotting.py</span></code>
 script.</p>
 </section>
 </section>
@@ -563,7 +564,7 @@ script.</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 April 2024</div>
+              Last updated on 15 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -585,21 +586,22 @@ script.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Examples</a><ul>
-<li><a class="reference internal" href="#configure-the-bash-script">Configure the Bash Script</a></li>
-<li><a class="reference internal" href="#adiabatic-parcel">1) Adiabatic Parcel</a><ul>
+<li><a class="reference internal" href="#configure-the-bash-scripts">Configure the Bash Scripts</a></li>
+<li><a class="reference internal" href="#adiabatic-parcel">Adiabatic Parcel</a><ul>
 <li><a class="reference internal" href="#a-arabas-and-shima-2017">a) Arabas and Shima 2017</a></li>
 <li><a class="reference internal" href="#b-cusp-bifurcation">b) Cusp Bifurcation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#box-model-collisions">2) Box Model Collisions</a><ul>
+<li><a class="reference internal" href="#box-model-collisions">Box Model Collisions</a><ul>
 <li><a class="reference internal" href="#a-golovin">a) Golovin</a></li>
 <li><a class="reference internal" href="#b-long">b) Long</a></li>
 <li><a class="reference internal" href="#c-low-and-list">c) Low and List</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#divergence-free-motion">3) Divergence Free Motion</a></li>
-<li><a class="reference internal" href="#d-rainshaft">4) 1-D Rainshaft</a></li>
-<li><a class="reference internal" href="#constant-2-d-thermodynamics">5) Constant 2-D Thermodynamics</a></li>
+<li><a class="reference internal" href="#divergence-free-motion">Divergence Free Motion</a></li>
+<li><a class="reference internal" href="#d-rainshaft">1-D Rainshaft</a></li>
+<li><a class="reference internal" href="#constant-2-d-thermodynamics">Constant 2-D Thermodynamics</a></li>
+<li><a class="reference internal" href="#speed-test">Speed Test</a></li>
 <li><a class="reference internal" href="#extension">Extension</a></li>
 </ul>
 </li>

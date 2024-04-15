@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
@@ -300,95 +301,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="module-pySD.initsuperdropsbinary_src.create_initsuperdrops">
-<span id="create-initsuperdrops"></span><h1>CREATE_INITSUPERDROPS<a class="headerlink" href="#module-pySD.initsuperdropsbinary_src.create_initsuperdrops" title="Link to this heading">#</a></h1>
-<p>—– CLEO —–
-File: create_initsuperdrops.py
-Project: initsuperdropsbinary_src
-Created Date: Friday 13th October 2023
-Author: Clara Bayley (CB)
-Additional Contributors:
-—–
-Last Modified: Friday 22nd December 2023
-Modified By: CB
-—–
-License: BSD 3-Clause “New” or “Revised” License
-<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
-—–
-Copyright (c) 2023 MPI-M, Clara Bayley
-—–
-File Description:</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">ManyAttrs</span></span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/create_initsuperdrops.html#ManyAttrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs" title="Link to this definition">#</a></dt>
-<dd><p>store for lists of each attribute for all superdroplets</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs.extend_attrlists">
-<span class="sig-name descname"><span class="pre">extend_attrlists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mia</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/create_initsuperdrops.html#ManyAttrs.extend_attrlists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs.extend_attrlists" title="Link to this definition">#</a></dt>
-<dd><p>use an instance of ManyAttrs (mia) to
-extend lists in this instance</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.check_datashape">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">check_datashape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspacedims</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/create_initsuperdrops.html#check_datashape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.check_datashape" title="Link to this definition">#</a></dt>
-<dd><p>make sure each superdroplet attribute in data has length stated
-in ndata and that this length is compatible with the nummber of
-attributes and superdroplets expected given ndata</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.create_allsuperdropattrs">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">create_allsuperdropattrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nsupersdict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initattrsgen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gbxbounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUMCONC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/create_initsuperdrops.html#create_allsuperdropattrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.create_allsuperdropattrs" title="Link to this definition">#</a></dt>
-<dd><p>returns lists for attributes of all SDs in domain called attrs</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.ctype_compatible_attrs">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">ctype_compatible_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/create_initsuperdrops.html#ctype_compatible_attrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ctype_compatible_attrs" title="Link to this definition">#</a></dt>
-<dd><p>make list from arrays of SD attributes that are
-compatible with c type expected by SDM e.g. unsigned
-long ints for xi, doubles for radius and msol</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.dimless_superdropsattrs">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">dimless_superdropsattrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nsupers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initattrsgen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gbxindex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridboxbounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUMCONC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/create_initsuperdrops.html#dimless_superdropsattrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.dimless_superdropsattrs" title="Link to this definition">#</a></dt>
-<dd><p>use superdroplet attribute generator “initattrsgen”
-and settings from config and consts files to
-make dimensionless superdroplet attributes</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.initSDsinputsdict">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">initSDsinputsdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/create_initsuperdrops.html#initSDsinputsdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.initSDsinputsdict" title="Link to this definition">#</a></dt>
-<dd><p>create values from constants file &amp; config file
-required as inputs to create initial
-superdroplet conditions</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.is_sdgbxindex_correct">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">is_sdgbxindex_correct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridboxbounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gbxindex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sdgbxindex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/create_initsuperdrops.html#is_sdgbxindex_correct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.is_sdgbxindex_correct" title="Link to this definition">#</a></dt>
-<dd><p>rasises error if superdroplet coords [m] lie outside gridbox bounds [m]
-or if gridbox index not equal to superdroplet’s.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.create_initsuperdrops.write_initsuperdrops_binary">
-<span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.create_initsuperdrops.</span></span><span class="sig-name descname"><span class="pre">write_initsuperdrops_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initsupersfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initattrsgen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsupers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUMCONC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/create_initsuperdrops.html#write_initsuperdrops_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.write_initsuperdrops_binary" title="Link to this definition">#</a></dt>
-<dd><p>de-dimensionalise attributes in initattrsgen and then write to
-to a binary file, “initsupersfile”, with some metadata</p>
-</dd></dl>
-
+          <section id="create-initsuperdrops">
+<h1>CREATE_INITSUPERDROPS<a class="headerlink" href="#create-initsuperdrops" title="Link to this heading">#</a></h1>
 </section>
 
         </article>
@@ -426,7 +346,7 @@ to a binary file, “initsupersfile”, with some metadata</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 April 2024</div>
+              Last updated on 15 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -435,37 +355,8 @@ to a binary file, “initsupersfile”, with some metadata</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">CREATE_INITSUPERDROPS</a><ul>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs"><code class="docutils literal notranslate"><span class="pre">ManyAttrs</span></code></a><ul>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs.extend_attrlists"><code class="docutils literal notranslate"><span class="pre">ManyAttrs.extend_attrlists()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.check_datashape"><code class="docutils literal notranslate"><span class="pre">check_datashape()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.create_allsuperdropattrs"><code class="docutils literal notranslate"><span class="pre">create_allsuperdropattrs()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.ctype_compatible_attrs"><code class="docutils literal notranslate"><span class="pre">ctype_compatible_attrs()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.dimless_superdropsattrs"><code class="docutils literal notranslate"><span class="pre">dimless_superdropsattrs()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.initSDsinputsdict"><code class="docutils literal notranslate"><span class="pre">initSDsinputsdict()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.is_sdgbxindex_correct"><code class="docutils literal notranslate"><span class="pre">is_sdgbxindex_correct()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.create_initsuperdrops.write_initsuperdrops_binary"><code class="docutils literal notranslate"><span class="pre">write_initsuperdrops_binary()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

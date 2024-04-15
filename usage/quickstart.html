@@ -270,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
@@ -309,23 +310,20 @@
           <section id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">#</a></h1>
 <p>Start by following the steps to <a class="reference internal" href="installation.html"><span class="doc">install CLEO</span></a>.</p>
-<p>To use CLEO as an SDM coupled to a dynamics solver, essentially your
-task is to contruct a <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> file.</p>
-<p>Have a look at <code class="docutils literal notranslate"><span class="pre">src/main.cpp</span></code> for inspiration. Depending on the
-setup you desire, you need to include different instantiations of
-the core concepts of CLEO in your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>. For example you
-need to specify the type of super-droplet motion, microphysics,
-observer (output), and coupled dynamics.</p>
-<p>Once you’ve done that, your should have constructed all the
-necesary ingredients for CLEO so that the end of
-your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> can look something like this:</p>
+<p>To use CLEO as an SDM coupled to a dynamics solver, essentially your task is to contruct a
+<code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> file.</p>
+<p>Have a look at <code class="docutils literal notranslate"><span class="pre">src/main.cpp</span></code> for inspiration. Depending on the setup you desire, you need to
+include different instantiations of the core concepts of CLEO in your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>. For example you
+need to specify the type of super-droplet motion, microphysics, observer, and coupled dynamics.</p>
+<p>Once you’ve done that, your should have constructed all the necesary ingredients for CLEO so that
+the end of your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> looks something like this:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Initialise Kokkos parallel environment */</span>
 <span class="n">Kokkos</span><span class="o">::</span><span class="n">initialize</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span>
 <span class="p">{</span>
-<span class="w">  </span><span class="cm">/* CLEO Super-Droplet Model (excluding &#39;coupldyn&#39; coupled dynamics) */</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">SDMMethods</span><span class="w"> </span><span class="nf">sdm</span><span class="p">(</span><span class="n">create_sdm</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">,</span><span class="w"> </span><span class="n">fsstore</span><span class="p">));</span>
+<span class="w">  </span><span class="cm">/* CLEO Super-Droplet Model (excluding coupled dynamics solver) */</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">SDMMethods</span><span class="w"> </span><span class="nf">sdm</span><span class="p">(</span><span class="n">create_sdm</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="p">));</span>
 
-<span class="w">  </span><span class="cm">/* Run CLEO (SDM coupled to dynamics via comms) */</span>
+<span class="w">  </span><span class="cm">/* Run CLEO (SDM coupled to dynamics solver) */</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">RunCLEO</span><span class="w"> </span><span class="nf">runcleo</span><span class="p">(</span><span class="n">sdm</span><span class="p">,</span><span class="w"> </span><span class="n">coupldyn</span><span class="p">,</span><span class="w"> </span><span class="n">comms</span><span class="p">);</span>
 <span class="w">  </span><span class="n">runcleo</span><span class="p">(</span><span class="n">initconds</span><span class="p">,</span><span class="w"> </span><span class="n">t_end</span><span class="p">);</span>
 <span class="p">}</span>
@@ -369,7 +367,7 @@ your <code class="docutils literal notranslate"><span class="pre">main.cpp</span
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 April 2024</div>
+              Last updated on 15 April 2024</div>
           </div>
           <div class="right-details">
             

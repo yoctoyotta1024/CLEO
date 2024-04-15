@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
@@ -300,61 +301,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="module-pySD.thermobinary_src.create_thermodynamics">
-<span id="create-thermodynamics"></span><h1>CREATE_THERMODYNAMICS<a class="headerlink" href="#module-pySD.thermobinary_src.create_thermodynamics" title="Link to this heading">#</a></h1>
-<p>—– CLEO —–
-File: create_thermodynamics.py
-Project: thermobinary_src
-Created Date: Friday 13th October 2023
-Author: Clara Bayley (CB)
-Additional Contributors:
-—–
-Last Modified: Monday 30th October 2023
-Modified By: CB
-—–
-License: BSD 3-Clause “New” or “Revised” License
-<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
-—–
-Copyright (c) 2023 MPI-M, Clara Bayley
-—–
-File Description:</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.create_thermodynamics.check_datashape">
-<span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.create_thermodynamics.</span></span><span class="sig-name descname"><span class="pre">check_datashape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thermodata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ntime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/thermobinary_src/create_thermodynamics.html#check_datashape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.thermobinary_src.create_thermodynamics.check_datashape" title="Link to this definition">#</a></dt>
-<dd><p>make sure each superdroplet attribute in data has length stated
-in ndata and that this length is compatible with the nummber of
-attributes and superdroplets expected given ndata</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.create_thermodynamics.ctype_compatible_thermodynamics">
-<span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.create_thermodynamics.</span></span><span class="sig-name descname"><span class="pre">ctype_compatible_thermodynamics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thermodata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/thermobinary_src/create_thermodynamics.html#ctype_compatible_thermodynamics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.thermobinary_src.create_thermodynamics.ctype_compatible_thermodynamics" title="Link to this definition">#</a></dt>
-<dd><p>check type of gridbox boundaries data is compatible
-with c type double. If not, change type and raise error</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.create_thermodynamics.thermoinputsdict">
-<span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.create_thermodynamics.</span></span><span class="sig-name descname"><span class="pre">thermoinputsdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/thermobinary_src/create_thermodynamics.html#thermoinputsdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.thermobinary_src.create_thermodynamics.thermoinputsdict" title="Link to this definition">#</a></dt>
-<dd><p>create values from constants file &amp; config file
-required as inputs to create initial
-superdroplet conditions</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.thermobinary_src.create_thermodynamics.write_thermodynamics_binary">
-<span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.create_thermodynamics.</span></span><span class="sig-name descname"><span class="pre">write_thermodynamics_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thermofile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thermogen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/thermobinary_src/create_thermodynamics.html#write_thermodynamics_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.thermobinary_src.create_thermodynamics.write_thermodynamics_binary" title="Link to this definition">#</a></dt>
-<dd><p>write binarys for thermodynamic data over time on C staggered
-grid. So that pressure, temperature, qvap and qcond are defined at
-centres of gridboxes, whereas wind velocities are defined at faces</p>
-</dd></dl>
-
+          <section id="create-thermodynamics">
+<h1>CREATE_THERMODYNAMICS<a class="headerlink" href="#create-thermodynamics" title="Link to this heading">#</a></h1>
 </section>
 
         </article>
@@ -392,7 +346,7 @@ centres of gridboxes, whereas wind velocities are defined at faces</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 April 2024</div>
+              Last updated on 15 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -401,30 +355,8 @@ centres of gridboxes, whereas wind velocities are defined at faces</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">CREATE_THERMODYNAMICS</a><ul>
-<li><a class="reference internal" href="#pySD.thermobinary_src.create_thermodynamics.check_datashape"><code class="docutils literal notranslate"><span class="pre">check_datashape()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.thermobinary_src.create_thermodynamics.ctype_compatible_thermodynamics"><code class="docutils literal notranslate"><span class="pre">ctype_compatible_thermodynamics()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.thermobinary_src.create_thermodynamics.thermoinputsdict"><code class="docutils literal notranslate"><span class="pre">thermoinputsdict()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.thermobinary_src.create_thermodynamics.write_thermodynamics_binary"><code class="docutils literal notranslate"><span class="pre">write_thermodynamics_binary()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
@@ -300,91 +301,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="module-pySD.initsuperdropsbinary_src.probdists">
-<span id="probdists"></span><h1>PROBDISTS<a class="headerlink" href="#module-pySD.initsuperdropsbinary_src.probdists" title="Link to this heading">#</a></h1>
-<p>—– CLEO —–
-File: probdists.py
-Project: initsuperdropsbinary_src
-Created Date: Wednesday 22nd November 2023
-Author: Clara Bayley (CB)
-Additional Contributors:
-—–
-Last Modified: Wednesday 27th December 2023
-Modified By: CB
-—–
-License: BSD 3-Clause “New” or “Revised” License
-<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
-—–
-Copyright (c) 2023 MPI-M, Clara Bayley
-—–
-File Description:
-Class calls’ return normalised probability
-of radii for various probability distributions
-assuming bins are evenly spaced in log10(r)</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.probdists.ClouddropsHansenGamma">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.probdists.</span></span><span class="sig-name descname"><span class="pre">ClouddropsHansenGamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nueff</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/probdists.html#ClouddropsHansenGamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.probdists.ClouddropsHansenGamma" title="Link to this definition">#</a></dt>
-<dd><p>probability of radius according to gamma distribution for
-shallow cumuli cloud droplets from Poertge et al. 2023</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.probdists.CombinedRadiiProbDistribs">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.probdists.</span></span><span class="sig-name descname"><span class="pre">CombinedRadiiProbDistribs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probdistribs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalefacs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/probdists.html#CombinedRadiiProbDistribs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.probdists.CombinedRadiiProbDistribs" title="Link to this definition">#</a></dt>
-<dd><p>probability of radius from the sum of several
-probability distributions</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.probdists.DiracDelta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.probdists.</span></span><span class="sig-name descname"><span class="pre">DiracDelta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/probdists.html#DiracDelta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.probdists.DiracDelta" title="Link to this definition">#</a></dt>
-<dd><p>probability of radius nonzero if it is
-closest value in sample of radii to r0</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.probdists.LnNormal">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.probdists.</span></span><span class="sig-name descname"><span class="pre">LnNormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geomeans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geosigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalefacs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/probdists.html#LnNormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.probdists.LnNormal" title="Link to this definition">#</a></dt>
-<dd><p>probability of radius given by lognormal distribution
-as defined by section 5.2.3 of “An Introduction to clouds from
-the Microscale to Climate” by Lohmann, Luond and Mahrt and radii
-sampled from evenly spaced bins in ln(r).
-typical parameter values:
-geomeans = [0.02e-6, 0.2e-6, 3.5e-6] # [m]
-geosigs = [1.55, 2.3, 2]
-scalefacs = [1e6, 0.3e6, 0.025e6]
-numconc = 1e9 # [m^-3]</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.probdists.LnNormal.lnnormaldist">
-<span class="sig-name descname"><span class="pre">lnnormaldist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalefac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geomean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geosig</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/probdists.html#LnNormal.lnnormaldist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.probdists.LnNormal.lnnormaldist" title="Link to this definition">#</a></dt>
-<dd><p>calculate probability of radii given the paramters of a
-lognormal dsitribution accordin to equation 5.8 of “An
-Introduction to clouds from the Microscale to Climate”
-by Lohmann, Luond and Mahrt</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.probdists.RaindropsGeoffroyGamma">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.probdists.</span></span><span class="sig-name descname"><span class="pre">RaindropsGeoffroyGamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nrain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qrain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dvol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/probdists.html#RaindropsGeoffroyGamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.probdists.RaindropsGeoffroyGamma" title="Link to this definition">#</a></dt>
-<dd><p>probability of radius given gamma distribution for
-shallow cumuli rain droplets from Geoffroy et al. 2014</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.probdists.VolExponential">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.probdists.</span></span><span class="sig-name descname"><span class="pre">VolExponential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rspan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/probdists.html#VolExponential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.probdists.VolExponential" title="Link to this definition">#</a></dt>
-<dd><p>probability of radius given by exponential in
-volume distribution as defined by Shima et al. (2009)</p>
-</dd></dl>
-
+          <section id="probdists">
+<h1>PROBDISTS<a class="headerlink" href="#probdists" title="Link to this heading">#</a></h1>
 </section>
 
         </article>
@@ -422,7 +346,7 @@ volume distribution as defined by Shima et al. (2009)</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 April 2024</div>
+              Last updated on 15 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -431,35 +355,8 @@ volume distribution as defined by Shima et al. (2009)</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">PROBDISTS</a><ul>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.probdists.ClouddropsHansenGamma"><code class="docutils literal notranslate"><span class="pre">ClouddropsHansenGamma</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.probdists.CombinedRadiiProbDistribs"><code class="docutils literal notranslate"><span class="pre">CombinedRadiiProbDistribs</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.probdists.DiracDelta"><code class="docutils literal notranslate"><span class="pre">DiracDelta</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.probdists.LnNormal"><code class="docutils literal notranslate"><span class="pre">LnNormal</span></code></a><ul>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.probdists.LnNormal.lnnormaldist"><code class="docutils literal notranslate"><span class="pre">LnNormal.lnnormaldist()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.probdists.RaindropsGeoffroyGamma"><code class="docutils literal notranslate"><span class="pre">RaindropsGeoffroyGamma</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.probdists.VolExponential"><code class="docutils literal notranslate"><span class="pre">VolExponential</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

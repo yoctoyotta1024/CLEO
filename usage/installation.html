@@ -270,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
@@ -308,17 +309,25 @@
         <article role="main">
           <section id="installation">
 <span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
-<p>First clone CLEO’s github repository.</p>
-<p>It’s not essential, but everything
-will be much easier for you if you clone CLEO in your home directory.
-If you choose to do otherwise, you may have to change some paths in
-the bash and Python scripts.</p>
+<p>First clone CLEO’s GitHub repository. Everything will be much easier for you if you clone CLEO in
+your home directory. It’s not essential, but if you choose to do otherwise you may have to change
+some extra paths in the bash and Python scripts.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/yoctoyotta1024/CLEO.git
 </pre></div>
 </div>
+<p>Everything will also be much easier for you if you set up and use an environment with the packages
+we suggest in our environment.yml file, e.g. using Conda:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--file<span class="o">=</span>environment.yml
+<span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>cleoenv
+</pre></div>
+</div>
+<p>Finally we suggest you use pre-commit. You can install our hooks via:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pre-commit<span class="w"> </span>install
+</pre></div>
+</div>
 <p>That’s it, you’re done!</p>
-<p>Now maybe you want to run <a class="reference internal" href="examples.html"><span class="doc">some examples</span></a> or
-try out the <a class="reference internal" href="quickstart.html"><span class="doc">quickstart</span></a>…</p>
+<p>Now maybe you want to run <a class="reference internal" href="examples.html"><span class="doc">some examples</span></a> or try out
+the <a class="reference internal" href="quickstart.html"><span class="doc">quickstart</span></a>…</p>
 </section>
 
         </article>
@@ -356,7 +365,7 @@ try out the <a class="reference internal" href="quickstart.html"><span class="do
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 April 2024</div>
+              Last updated on 15 April 2024</div>
           </div>
           <div class="right-details">
             

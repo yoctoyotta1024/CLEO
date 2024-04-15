@@ -47,7 +47,7 @@ Kokkos Thread Parallelism
 For performance portable thread parallelism we embrace Kokkos. As a consequence,
 Kokkos' macros and functions are littered throughout our code and many of our key data structures,
 for example Gridboxes and super-droplets, are contained within Kokkos Views. For those seeking
-advanced understanding, we defer to Kokkos' github repositories and documentation therein.
+advanced understanding, we defer to Kokkos' GitHub repositories and documentation therein.
 
 Timestepping
 ------------

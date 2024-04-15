@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
@@ -300,87 +301,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="module-pySD.initsuperdropsbinary_src.attrsgen">
-<span id="attrsgen"></span><h1>ATTRSGEN<a class="headerlink" href="#module-pySD.initsuperdropsbinary_src.attrsgen" title="Link to this heading">#</a></h1>
-<p>—– CLEO —–
-File: attrsgen.py
-Project: initsuperdropsbinary_src
-Created Date: Friday 13th October 2023
-Author: Clara Bayley (CB)
-Additional Contributors:
-—–
-Last Modified: Wednesday 10th January 2024
-Modified By: CB
-—–
-License: BSD 3-Clause “New” or “Revised” License
-<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
-—–
-Copyright (c) 2023 MPI-M, Clara Bayley
-—–
-File Description:
-attrsgen generates multiple superdroplet
-attributes given individual generators</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.attrsgen.</span></span><span class="sig-name descname"><span class="pre">AttrsGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radiigen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dryradiigen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xiprobdist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord3gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord1gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord2gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/attrsgen.html#AttrsGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator" title="Link to this definition">#</a></dt>
-<dd><p>class for functions to generate attributes of
-superdroplets given the generators for independent
-attributes e.g. for radius and coord3 in substantation
-of class</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.check_totalnumconc">
-<span class="sig-name descname"><span class="pre">check_totalnumconc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multiplicities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUMCONC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samplevol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/attrsgen.html#AttrsGenerator.check_totalnumconc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.check_totalnumconc" title="Link to this definition">#</a></dt>
-<dd><p>check number concentration of real droplets calculated from
-multiplicities is same as input value for number conc. Also check
-total number of real droplets is within 10% of the expected
-value given the input number conc and sample volume</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.generate_attributes">
-<span class="sig-name descname"><span class="pre">generate_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nsupers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RHO_SOL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUMCONC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridboxbounds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/attrsgen.html#AttrsGenerator.generate_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.generate_attributes" title="Link to this definition">#</a></dt>
-<dd><p>generate superdroplets (SDs) attributes that have dimensions
-by calling the appropraite generating functions</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.generate_coords">
-<span class="sig-name descname"><span class="pre">generate_coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nsupers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspacedims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridboxbounds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/attrsgen.html#AttrsGenerator.generate_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.generate_coords" title="Link to this definition">#</a></dt>
-<dd><p>generate superdroplets (SDs) attributes that have dimensions
-by calling the appropraite generating functions</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.mass_solutes">
-<span class="sig-name descname"><span class="pre">mass_solutes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RHO_SOL</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/attrsgen.html#AttrsGenerator.mass_solutes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.mass_solutes" title="Link to this definition">#</a></dt>
-<dd><p>return the mass [Kg] of the solute in superdroplets given their
-dry radii [m] and solute density [Kg m^3]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.multiplicities">
-<span class="sig-name descname"><span class="pre">multiplicities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUMCONC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samplevol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/attrsgen.html#AttrsGenerator.multiplicities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.multiplicities" title="Link to this definition">#</a></dt>
-<dd><p>Calculate the multiplicity of the dry radius of each
-superdroplet given it’s probability such that the total number
-concentration [m^-3] of real droplets in the volume, vol, [m^3]
-is about ‘numconc’. Raise an error if any of the calculated
-mulitiplicities are zero</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.print_totalconc">
-<span class="sig-name descname"><span class="pre">print_totalconc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multiplicities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass_solutes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RHO_SOL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samplevol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/attrsgen.html#AttrsGenerator.print_totalconc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.print_totalconc" title="Link to this definition">#</a></dt>
-<dd><p>print statement of total num conc and mass conc</p>
-</dd></dl>
-
-</dd></dl>
-
+          <section id="attrsgen">
+<h1>ATTRSGEN<a class="headerlink" href="#attrsgen" title="Link to this heading">#</a></h1>
 </section>
 
         </article>
@@ -418,7 +346,7 @@ mulitiplicities are zero</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 April 2024</div>
+              Last updated on 15 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -427,35 +355,8 @@ mulitiplicities are zero</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">ATTRSGEN</a><ul>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator"><code class="docutils literal notranslate"><span class="pre">AttrsGenerator</span></code></a><ul>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.check_totalnumconc"><code class="docutils literal notranslate"><span class="pre">AttrsGenerator.check_totalnumconc()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.generate_attributes"><code class="docutils literal notranslate"><span class="pre">AttrsGenerator.generate_attributes()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.generate_coords"><code class="docutils literal notranslate"><span class="pre">AttrsGenerator.generate_coords()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.mass_solutes"><code class="docutils literal notranslate"><span class="pre">AttrsGenerator.mass_solutes()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.multiplicities"><code class="docutils literal notranslate"><span class="pre">AttrsGenerator.multiplicities()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.initsuperdropsbinary_src.attrsgen.AttrsGenerator.print_totalconc"><code class="docutils literal notranslate"><span class="pre">AttrsGenerator.print_totalconc()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

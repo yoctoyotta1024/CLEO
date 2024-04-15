@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -270,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
@@ -300,96 +301,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="module-pySD.sdmout_src.supersdata">
-<span id="supersdata"></span><h1>SUPERSDATA<a class="headerlink" href="#module-pySD.sdmout_src.supersdata" title="Link to this heading">#</a></h1>
-<p>—– CLEO —–
-File: supersdata.py
-Project: sdmout_src
-Created Date: Tuesday 24th October 2023
-Author: Clara Bayley (CB)
-Additional Contributors:
-—–
-Last Modified: Monday 8th April 2024
-Modified By: CB
-—–
-License: BSD 3-Clause “New” or “Revised” License
-<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
-—–
-Copyright (c) 2023 MPI-M, Clara Bayley
-—–
-File Description:
-python class to handle superdroplet
-attributes data from SDM zarr store
-in ragged array format</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.sdmout_src.supersdata.RainSupers">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.supersdata.</span></span><span class="sig-name descname"><span class="pre">RainSupers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sddata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/supersdata.html#RainSupers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.supersdata.RainSupers" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.sdmout_src.supersdata.SuperdropProperties">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.supersdata.</span></span><span class="sig-name descname"><span class="pre">SuperdropProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">consts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/supersdata.html#SuperdropProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.supersdata.SuperdropProperties" title="Link to this definition">#</a></dt>
-<dd><p>Contains attributes common to all superdroplets and functions
-for calculating derived ones</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.sdmout_src.supersdata.SuperdropProperties.m_water">
-<span class="sig-name descname"><span class="pre">m_water</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/supersdata.html#SuperdropProperties.m_water"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.supersdata.SuperdropProperties.m_water" title="Link to this definition">#</a></dt>
-<dd><p>mass of only water in droplet [g]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.sdmout_src.supersdata.SuperdropProperties.mass">
-<span class="sig-name descname"><span class="pre">mass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/supersdata.html#SuperdropProperties.mass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.supersdata.SuperdropProperties.mass" title="Link to this definition">#</a></dt>
-<dd><p>total mass of droplet (water + (dry) areosol) [g],
-m =  4/3*pi*rho_l**3 + msol(1-rho_l/rho_sol)
-ie. m = 4/3*pi*rhoeff*R**3</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.sdmout_src.supersdata.SuperdropProperties.rhoeff">
-<span class="sig-name descname"><span class="pre">rhoeff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/supersdata.html#SuperdropProperties.rhoeff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.supersdata.SuperdropProperties.rhoeff" title="Link to this definition">#</a></dt>
-<dd><p>calculates effective density [g m^-3] of
-droplet such that mass_droplet, m = 4/3*pi*r^3 * rhoeff
-taking into account mass of liquid and mass of
-solute assuming solute occupies volume it
-would given its (dry) density, RHO_SOL.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.sdmout_src.supersdata.SuperdropProperties.vol">
-<span class="sig-name descname"><span class="pre">vol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/supersdata.html#SuperdropProperties.vol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.supersdata.SuperdropProperties.vol" title="Link to this definition">#</a></dt>
-<dd><p>volume of droplet [m^3]</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pySD.sdmout_src.supersdata.SupersData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.supersdata.</span></span><span class="sig-name descname"><span class="pre">SupersData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/supersdata.html#SupersData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.supersdata.SupersData" title="Link to this definition">#</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="pySD.sdmout_src.supersdata.SupersData.tryunits">
-<span class="sig-name descname"><span class="pre">tryunits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/supersdata.html#SupersData.tryunits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.supersdata.SupersData.tryunits" title="Link to this definition">#</a></dt>
-<dd><p>attempts to return the units of a variable
-in xarray dataset ‘ds’. If attempt fails, returns null</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pySD.sdmout_src.supersdata.SupersData.tryvar">
-<span class="sig-name descname"><span class="pre">tryvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raggedcount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/supersdata.html#SupersData.tryvar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.supersdata.SupersData.tryvar" title="Link to this definition">#</a></dt>
-<dd><p>attempts to return variable in form of ragged array
-(ak.Array) with dims [time, raggedcount]
-for a variable “var” in xarray dataset ‘ds’.
-If attempt fails, returns empty array instead</p>
-</dd></dl>
-
-</dd></dl>
-
+          <section id="supersdata">
+<h1>SUPERSDATA<a class="headerlink" href="#supersdata" title="Link to this heading">#</a></h1>
 </section>
 
         </article>
@@ -427,7 +346,7 @@ If attempt fails, returns empty array instead</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 April 2024</div>
+              Last updated on 15 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -436,39 +355,8 @@ If attempt fails, returns empty array instead</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">SUPERSDATA</a><ul>
-<li><a class="reference internal" href="#pySD.sdmout_src.supersdata.RainSupers"><code class="docutils literal notranslate"><span class="pre">RainSupers</span></code></a></li>
-<li><a class="reference internal" href="#pySD.sdmout_src.supersdata.SuperdropProperties"><code class="docutils literal notranslate"><span class="pre">SuperdropProperties</span></code></a><ul>
-<li><a class="reference internal" href="#pySD.sdmout_src.supersdata.SuperdropProperties.m_water"><code class="docutils literal notranslate"><span class="pre">SuperdropProperties.m_water()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.sdmout_src.supersdata.SuperdropProperties.mass"><code class="docutils literal notranslate"><span class="pre">SuperdropProperties.mass()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.sdmout_src.supersdata.SuperdropProperties.rhoeff"><code class="docutils literal notranslate"><span class="pre">SuperdropProperties.rhoeff()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.sdmout_src.supersdata.SuperdropProperties.vol"><code class="docutils literal notranslate"><span class="pre">SuperdropProperties.vol()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#pySD.sdmout_src.supersdata.SupersData"><code class="docutils literal notranslate"><span class="pre">SupersData</span></code></a><ul>
-<li><a class="reference internal" href="#pySD.sdmout_src.supersdata.SupersData.tryunits"><code class="docutils literal notranslate"><span class="pre">SupersData.tryunits()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.sdmout_src.supersdata.SupersData.tryvar"><code class="docutils literal notranslate"><span class="pre">SupersData.tryvar()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

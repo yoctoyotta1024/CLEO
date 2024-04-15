@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Our Docs" href="ourdocs.html" /><link rel="prev" title="Massmoments Observer" href="../cxx/observers/massmoments_observer.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Contact Us!" href="contact.html" /><link rel="prev" title="Our Docs" href="ourdocs.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>Contributing - CLEO 4.0 documentation</title>
+        <title>Good Coding Practices - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -267,10 +267,10 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="good_coding.html">Good Coding Practices</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
@@ -301,21 +301,70 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">#</a></h1>
-<p>Yes please!</p>
-<p>CLEO is a completely open source code and entirely open development. If you have ideas or would
-like to collaborate, simply <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>!</p>
-<p>We welcome your interest and are enthusiastic about both CLEO’s computational development and its
-use for scientific research.</p>
-<p>Please see our documentation about <a class="reference internal" href="good_coding.html"><span class="doc">good coding practices</span></a> to ensure your
-contributions comply with our standards.</p>
+          <section id="good-coding-practices">
+<h1>Good Coding Practices<a class="headerlink" href="#good-coding-practices" title="Link to this heading">#</a></h1>
+<section id="packages-and-environment">
+<span id="environment"></span><h2>Packages and Environment<a class="headerlink" href="#packages-and-environment" title="Link to this heading">#</a></h2>
+<p>We provide an environment yaml file for creating an envirnoment with all the packages you need to
+use CLEO (to use PySD, to build the documentation, or to run pre-commit etc.).</p>
+<p>The easiest way to use it is to create a new Conda or Mamba environment, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--file<span class="o">=</span>environment.yml
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mamba<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--file<span class="o">=</span>environment.yml
+</pre></div>
+</div>
+<p>And then activate this environment everytime you use CLEO, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>cleoenv
+</pre></div>
+</div>
+<p>We kindly ask that you also <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a> or <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/issues/new">open a new
+issue</a> on our GitHub repository if you discover
+this environment is missing any packages.</p>
+</section>
+<section id="pre-commit">
+<h2>Pre-Commit<a class="headerlink" href="#pre-commit" title="Link to this heading">#</a></h2>
+<p>We use pre-commit to check our code for simple issues before submission to code review, such as
+before pushing to a GitHub repository. We reccomend you use it too.</p>
+<p>Pre-Commit has “hooks” which can be used for a vast range of measures to ensure you follow good
+coding practices. For example, we use pre-commit to find and correct mistakes such as missing
+semicolons, trailing whitespaces, bad indentations etc., and to ensure we conform to
+our chosen code style guide.</p>
+<p>You can learn more by checking out <a class="reference external" href="https://pre-commit.com/">pre-commit</a>’s comprehensive
+documentation.</p>
+<p>In case you want to use our pre-commit hooks, first load your environment with pre-commit installed,
+then install the pre-commit hooks, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pre-commit<span class="w"> </span>install
+</pre></div>
+</div>
+<p>Pre-commit should then run automatically upon <code class="docutils literal notranslate"><span class="pre">`git</span> <span class="pre">commit</span></code>.</p>
+</section>
+<section id="commit-specification">
+<h2>Commit Specification<a class="headerlink" href="#commit-specification" title="Link to this heading">#</a></h2>
+<p>We use <a class="reference external" href="https://www.conventionalcommits.org/">conventional commits</a> as a a lightweight convention
+on top of commit messages to ensure they are meaningful, provide a useful history and can be used
+by automated tools such as <a class="reference external" href="https://github.com/apps/cocogitto-bot">Cocogitto-bot</a>.</p>
+</section>
+<section id="code-style-formatting">
+<h2>Code Style / Formatting<a class="headerlink" href="#code-style-formatting" title="Link to this heading">#</a></h2>
+<p>For Python, we obey the PEP 8 style guide.</p>
+<dl>
+<dt>For C++ we obey the Google C++ Style Guide with:</dt><dd><div class="line-block">
+<div class="line">IndentWidth: 2</div>
+<div class="line">TabWidth: 2</div>
+<div class="line">UseTab: Never</div>
+<div class="line">ColumnLimit: 100</div>
+</div>
+</dd>
+</dl>
+</section>
 </section>
 
         </article>
@@ -323,23 +372,23 @@ contributions comply with our standards.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="ourdocs.html">
+          <a class="next-page" href="contact.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Our Docs</div>
+                <div class="title">Contact Us!</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../cxx/observers/massmoments_observer.html">
+          <a class="prev-page" href="ourdocs.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Massmoments Observer</div>
+                <div class="title">Our Docs</div>
                 
               </div>
             </a>
@@ -362,8 +411,30 @@ contributions comply with our standards.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Good Coding Practices</a><ul>
+<li><a class="reference internal" href="#packages-and-environment">Packages and Environment</a></li>
+<li><a class="reference internal" href="#pre-commit">Pre-Commit</a></li>
+<li><a class="reference internal" href="#commit-specification">Commit Specification</a></li>
+<li><a class="reference internal" href="#code-style-formatting">Code Style / Formatting</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

@@ -270,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ourdocs.html">Our Docs</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
@@ -308,66 +309,60 @@
         <article role="main">
           <section id="requirements">
 <h1>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h1>
-<p>The following requirements ensure CLEO’s build, compilation and
-execution on DKRZ’s Levante HPC. If they do not work,
-please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a> or <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/issues/new">open a new
-issue</a> on
-our GitHub repository.</p>
-<p>Of course other architectures,
-other compilers, versions etc. are possible, but we leave
-this for you to discover.</p>
+<p>The following requirements ensure CLEO’s build, compilation and execution on DKRZ’s Levante HPC.
+If they do not work, please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a> or <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/issues/new">open a new
+issue</a> on our GitHub repository.</p>
+<p>Of course other architectures, other compilers, versions etc. are possible, but we leave this for
+you to discover.</p>
 <section id="cmake">
 <h2>CMake<a class="headerlink" href="#cmake" title="Link to this heading">#</a></h2>
 <p>CMake minimum version 3.18.0.</p>
-<p>On Levante it’s best to use version
-3.23.1 which can be loaded e.g. via the command</p>
+<p>On Levante it’s best to use version 3.23.1 which can be loaded e.g. via the command</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>load<span class="w"> </span>cmake@3.23.1%gcc
 </pre></div>
 </div>
 </section>
 <section id="compilers">
 <h2>Compilers<a class="headerlink" href="#compilers" title="Link to this heading">#</a></h2>
-<p>A c++ compiler with the c++20 standard library is the absolute minimum.</p>
-<p>On Levante you can use the latest gcc compilers. At the time of writing
-this is gcc 11.2.0, e.g. via</p>
+<p>A C++ compiler with the C++20 standard library is the absolute minimum.</p>
+<p>On Levante you can use the latest gcc compilers. At the time of writing this is gcc 11.2.0, e.g.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>gcc/11.2.0-gcc-11.2.0
 </pre></div>
 </div>
-<p>To compile with CUDA, use Levante’s latest nvhpc compilers,
-e.g. via</p>
+<p>To compile with CUDA, use Levante’s latest nvhpc compilers, e.g.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>nvhpc/23.9-gcc-11.2.0
 </pre></div>
 </div>
 </section>
 <section id="python">
 <h2>Python<a class="headerlink" href="#python" title="Link to this heading">#</a></h2>
-<p>To use PySD you need Python minimum version 3.10.4.</p>
-<p>On Levante it’s a good idea to load the python3 module, e.g. via</p>
+<p>To use PySD you need Python minimum version 3.10.4. We advise you to <a class="reference internal" href="good_coding.html#environment"><span class="std std-ref">create an
+environment</span></a> using our envirnoment.yml file. This environment should automatically
+include all the additional packages you may require. If not, please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a> or
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/issues/new">open a new issue</a> on our GitHub repository.</p>
+<p>On Levante it’s a good idea to load the python3 module, e.g.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>python3/2022.01-gcc-11.2.0
 </pre></div>
 </div>
-<p>To use PySD and to run CLEO’s examples, <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy</span></code>,
-<code class="docutils literal notranslate"><span class="pre">scipy</span></code>, <code class="docutils literal notranslate"><span class="pre">xarray</span></code>, <code class="docutils literal notranslate"><span class="pre">zarr</span></code>, and <code class="docutils literal notranslate"><span class="pre">awkward</span></code> must be installed.
-If there are other dependencies not listed here, you will have to
-install them too. We kindly ask that you also
-<a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a> or <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/issues/new">open a new
-issue</a> on
-our GitHub repository if this is the case.</p>
-<p>You can install packages to your conda environment e.g. via</p>
+<p>To use PySD and to run CLEO’s examples, particular Python packages are needed. These are included in
+our environment.yml file and are the following: <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy</span></code>, <code class="docutils literal notranslate"><span class="pre">xarray</span></code>,
+<code class="docutils literal notranslate"><span class="pre">zarr</span></code>, and <code class="docutils literal notranslate"><span class="pre">awkward</span></code>. If there are other dependencies not listed here, you will have to install
+them too. We kindly ask that you also <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a> or <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/issues/new">open a new
+issue</a> on our GitHub repository to notify us.</p>
+<p>You can install Python packages to an existing Conda (or Mamba) environment via:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span><span class="o">[</span>your<span class="w"> </span>conda<span class="w"> </span>environment<span class="o">]</span>
 <span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="o">[</span>package<span class="w"> </span>name<span class="o">(</span>s<span class="o">)]</span>
 </pre></div>
 </div>
 </section>
-<section id="pre-commit">
-<h2>Pre-Commit<a class="headerlink" href="#pre-commit" title="Link to this heading">#</a></h2>
-<p>We use pre-commit to check our code for simple issues before
-submission to code review, such as before
-pushing to a GitHub repository, and we reccomend you use it too.
-Pre-Commit fixes for example missing semicolons, trailing whitespaces
-etc., and ensures you conform to a chosen industry standard linter.</p>
-<p>You can learn more by checking out
-<a class="reference external" href="https://pre-commit.com/">pre-commit</a>’s comprehensive documentation.</p>
+<section id="yac">
+<h2>YAC<a class="headerlink" href="#yac" title="Link to this heading">#</a></h2>
+<p>To use YAC some additional MPI, NetCDF and yaml libraries are required alongside the gcc compiler.</p>
+<p>You can load them on Levante via:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>openmpi/4.1.2-gcc-11.2.0<span class="w"> </span>netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
+<span class="gp">$ </span>spack<span class="w"> </span>load<span class="w"> </span>openblas@0.3.18%gcc@<span class="o">=</span><span class="m">11</span>.2.0<span class="w"> </span>libfyaml<span class="w"> </span>/fvbhgoq<span class="w"> </span>py-mpi4py
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -406,7 +401,7 @@ etc., and ensures you conform to a chosen industry standard linter.</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 April 2024</div>
+              Last updated on 15 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -431,7 +426,7 @@ etc., and ensures you conform to a chosen industry standard linter.</p>
 <li><a class="reference internal" href="#cmake">CMake</a></li>
 <li><a class="reference internal" href="#compilers">Compilers</a></li>
 <li><a class="reference internal" href="#python">Python</a></li>
-<li><a class="reference internal" href="#pre-commit">Pre-Commit</a></li>
+<li><a class="reference internal" href="#yac">YAC</a></li>
 </ul>
 </li>
 </ul>
