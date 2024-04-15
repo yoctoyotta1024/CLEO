@@ -30,7 +30,7 @@ pythonscript=$5
 script_args="$6"
 
 cleoenv=/work/mh1126/m300950/cleoenv
-python=/work/mh1126/m300950/cleoenv/bin/python3
+python=${cleoenv}/bin/python3
 spack load cmake@3.23.1%gcc
 module load python3/2022.01-gcc-11.2.0
 source activate ${cleoenv}
