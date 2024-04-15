@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 22nd November 2023
+Last Modified: Monday 15th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -21,6 +21,7 @@ figure 2(a) from Shima et al. 2009
 
 import sys
 import numpy as np
+import awkward as ak
 import matplotlib.pyplot as plt
 from scipy.special import iv
 
@@ -36,9 +37,10 @@ def plot_validation_figure(witherr, time, sddata, tplt, domainvol,
   selsddata = sdtracing.attributes_at_times(sddata, time, tplt, attrs2sel)
 
   nbins = 500
-  rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
+  non_nanradius = ak.nan_to_none(sddata["radius"])
+  rspan = [ak.min(non_nanradius), ak.max(non_nanradius)]
 
-  fig, ax, ax_err = setup_validation_figure(witherr=withgol)
+  fig, ax, ax_err = setup_validation_figure(witherr=witherr)
 
   for n in range(len(tplt)):
     ind = np.argmin(abs(time-tplt[n]))
@@ -55,7 +57,9 @@ def plot_validation_figure(witherr, time, sddata, tplt, domainvol,
     hist, hcens = plot_massdens_distrib(ax, rspan, nbins, domainvol,
                                    xi, radius, sddata, smoothsig, tlab, c)
 
-    if withgol:
+    if witherr:
+      golsol, hcens = golovin_analytical(rspan, time[ind], nbins,
+                                         n_a, r_a, sddata.RHO_L)
       diff = (hist - golsol)
       ax_err.plot(hcens, diff, c=c)
 

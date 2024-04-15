@@ -18,17 +18,14 @@
 ### -----------------------  directory using cmake  ------------------------ ###
 ### ------------------------------------------------------------------------ ###
 
-### ------------------ input parameters ---------------- ###
-### ------ Optionally edit these lines to specify ------ ###
-### ------ your environment and/or build directory ----- ###
-### ------- path and/or executable(s) to compile ------- ###
+cleoenv=$1        # get from command line argument
+buildtype=$2      # get from command line argument
+path2build=$3     # get from command line argument
+executables="$4"  # get from command line argument
+
 spack load cmake@3.23.1%gcc
 module load gcc/11.2.0-gcc-11.2.0
-source activate /work/mh1126/m300950/cleoenv
-
-buildtype=$1      # get from command line argument
-path2build=$2     # get from command line argument
-executables="$3"  # get from command line argument
+source activate ${cleoenv}
 
 # load nvhpc compilers if compiling cuda build
 if [[ "${buildtype}" == "cuda" ]]

@@ -3,244 +3,256 @@
 Examples
 ========
 
-There are several test cases for CLEO, each with different builds,
-domains, microphysics, coupling, super-sroplet motion etc. They can be
-found in the ``CLEO/examples`` directory.  If you would like to
-a copy of the reference solutions please :ref:`contact us <contact>`.
+There are various examples of CLEO, with different build configurations, domains, microphysics,
+coupling, and super-droplet motion etc. They can be found in the ``CLEO/examples`` directory. If you
+would like to a copy of the reference solutions please :ref:`contact us <contact>`.
 
-Each example can be run by building CLEO with the relevant main program
-and then executing the associated Python script. For running on
-DKRZ's Levante HPC, there are bash scripts to help with this.
-The following instructions are intended to guide you through
-running each example on Levante using their bash scripts.
+Each example can be run by building CLEO, compiling the relevant executable, and then running the
+example's Python script. There are bash scripts to help you do all this on DKRZ's Levante HPC. The
+following instructions are intended to guide you through running each example using their bash
+script.
 
-Note most of the build configurations chosen in the bash scripts
-use GPUs. To execute these scripts sucesfully you will therefore
-need to be on a node in the gpu partition of Levante
+Please Note: the bash script for most of the examples chooses a build configuration which uses GPUs.
+To execute these scripts you will therefore need to be on a node in the GPU partition of Levante
 (`see here <https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html>`_
-for documentation on Levante's partitions).
+for documentation on Levante's partitions), or change the build configuration.
 
 .. _configurebash:
 
-Configure the Bash Script
--------------------------
+Configure the Bash Scripts
+--------------------------
 
-The bash script for every example follows the same layout and to use
-one you will need to configure it in the following ways:
+The bash script for every example provides command line arguments to ``examples/run_example.sh``. This
+script has three steps:
 
-  * Use your Conda environment:
+1) It builds CLEO by running ``scripts/bash/build_cleo.sh``,
 
-    replace the Conda environment written in the line
-    stating ``source activate[…]`` with your Conda environment.
+2) It compiles the specified exectuable(s) by running ``scripts/bash/compile_cleo.sh``,
 
-  * Use your Python version:
+3) It runs the example's Python script.
 
-    replace the Python written in the line stating
-    ``python=[…]`` with your Python.
 
-  * (Optional) choose your build configuration:
+You will need to configure ```examples/run_example.sh``` in the following ways:
 
-    choose which thread parallelism to utilise by modifying the
-    ``kokkoshost`` and ``kokkosdevice`` flags. Please note that
-    to use CUDA parallelism you need to build and execute CLEO
-    on Levante's gpu partition.
+* Use your Conda (or Mamba) environment:
 
-  * If you did not install CLEO in your home directory:
+  replace the path in the line stating ``cleoenv=[…]`` with the path to your environment.
 
-    modify the lines which state the ``path2CLEO`` and
-    ``path2build`` to reflect this.
+* Use your Python version:
 
-1) Adiabatic Parcel
--------------------
-These examples are for a 0-D parcel of air expanding and
-contracting adiabatically with a two-way coupling between
-SDM and the thermodynamics. The setup mimics that in
-Arabas and Shima 2017 section 7 :cite:`arabasshima2017`.
-Note that due to numerical differences, the conditions
-for cusp bifurcation and the plots will not be exactly
-identical to this reference.
+  replace the path in the line stating ``python=[...]`` with the path to your Python interpreter.
 
-1. Navigate to the ``adiabaticparcel/`` directory,
-e.g.
+
+You can optionally configure the bash script specific to each example in the following ways:
+
+* Choose your build configuration:
+
+  choose which parallelism to utilise by modifying the ``buildtype`` parameter. The options are
+  ``cuda``,  ``openmp`` or ``serial``. Note that ``buildtype="cuda"`` requires you to execute the script
+  on a node in the GPU partition of Levante and may also include OpenMP parallelism.
+
+* Choose your build directory:
+
+  replace the path in the line stating ``path2build=[...]`` with the path you desire.
+
+* If you did not install CLEO in your home directory:
+
+  Ensure the lines which state the ``path2CLEO`` and ``path2build`` to reflect this.
+
+
+Adiabatic Parcel
+----------------
+These examples are for a 0-D model of a parcel of air expanding and contracting adiabatically with a
+two-way coupling between the SDM microphysics and the thermodynamics. The setup mimics that in
+Arabas and Shima 2017 section 7 :cite:`arabasshima2017`. Note that due to numerical differences,
+the conditions for cusp bifurcation and the plots will not be exactly identical to this reference.
+
+1. Navigate to the ``adiabaticparcel/`` directory, e.g.
 
 .. code-block:: console
 
   $ cd ~/CLEO/examples/adiabaticparcel/
 
-
 a) Arabas and Shima 2017
 ########################
-2. :ref:`Configure<configurebash>` and execute the bash script ``as2017.sh``.
+
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+``examples/adiabaticparcel/as2017.sh``.
+
+3. Execute the bash script ``as2017.sh``, e.g.
 
 .. code-block:: console
 
-  $ vim as2017.sh
   $ ./as2017.sh
 
-The plots produced,
-``~/CLEO/build/bin/as2017_fig_[x].png``, should be
-similar to the columns of figure 5 from Arabas and
-Shima 2017 :cite:`arabasshima2017`.
+The plots produced, by default called ``~/CLEO/build_adia0D/bin/as2017fig_[x].png``, should be
+similar to the columns of figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 
 b) Cusp Bifurcation
 ###################
-2. :ref:`Configure<configurebash>` and execute the bash script ``cuspbifurc.sh``.
+
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+``examples/adiabaticparcel/cuspbifurc.sh``.
+
+3. Execute the bash script ``cuspbifurc.sh``, e.g.
 
 .. code-block:: console
 
-  $ vim cuspbifurc.sh
   $ ./cuspbifurc.sh
 
-The plots produced,
-``~/CLEO/build/bin/cuspbifurc_validation.png`` and
-``~/CLEO/build/bin/cuspbifurc_SDgrowth.png``
-illustrate an example of cusp bifurcation, analagous to the
-third column of figure 5 from Arabas and
-Shima 2017 :cite:`arabasshima2017`.
+The plots produced, by default called ``~/CLEO/build_adia0D/bin/cuspbifurc_validation.png`` and
+``~/CLEO/build_adia0D/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
+to the third column of figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 
-2) Box Model Collisions
------------------------
 
-Due to the randomness of the initial super-droplet conditions and
-the collision-coalescence algorithm, each run of these examples
-will not be completely identical, but they should be reasonably
-similar, and have the same mean behaviour.
+Box Model Collisions
+--------------------
+These examples are for a 0-D box model with various collision-coalescence kernels.
 
-1. Navigate to the ``boxmodelcollisions/`` directory,
-e.g.
+1. Navigate to the ``boxmodelcollisions/`` directory, e.g.
 
 .. code-block:: console
 
   $ cd ~/CLEO/examples/boxmodelcollisions/
 
-2. Configure the bash script ``shima2009.sh`` for your environment.
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+``examples/boxmodelcollisions/shima2009.sh``.
 
-.. code-block:: console
-
-  $ vim shima2009.sh
-
-3. Execute the bash script ``shima2009.sh``.
+3. Execute the bash script ``shima2009.sh``, e.g.
 
 .. code-block:: console
 
   $ ./shima2009.sh
 
-By default the golovin, long, and lowlist examples will compile
-and run. You can change this by editing the arguments given to
-``shima2009.py`` in the final line of the bash script.
+By default the golovin, long, and lowlist executables will be compiled and run. You can change this
+by editing ``script_args="[...] golovin long lowlist`` in ``shima2009.sh``.
+
+Note that due to the randomness of the initial super-droplet conditions and the
+collision-coalescence algorithm, each run of these examples will not be completely identical, but
+they should be reasonably similar, and have the same mean behaviour.
 
 a) Golovin
 ##########
-This example is a 0-D box model with only collision-coalescence
-using Golovin's kernel.
+This example models collision-coalescence using Golovin's kernel.
 
-The plot produced,
-``~/CLEO/build/bin/golovin_validation.png``, should be
-similar to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
+The plot produced, by default called ``~/CLEO/build_shima2009/bin/golovin_validation.png``, should be similar to
+Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
 b) Long
 #######
-This example is a 0-D box model with only collision-coalescence
-using Long's collision efficiency as given by equation 13 of
-Simmel et al. 2002 :cite:`simmel2002`.
+This example models collision-coalescence using Long's collision efficiency as given by equation
+13 of Simmel et al. 2002 :cite:`simmel2002`.
 
-The plot produced,
-``~/CLEO/build/bin/long_validation.png``, should be
-similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
+The plot produced, by default called ``~/CLEO/build_shima2009/bin/long_validation.png``, should be similar to
+Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
 
 c) Low and List
 ###############
-This example is a 0-D box model with only collision-coalescence
-using the hydrodynamic kernel with Long's collision efficiency as
-given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the coalescence
-efficiency from Low and List 1982(a) :cite:`lowlist1982a`
-(see also McFarquhar 2004 :cite:`mcfarquhar2004`).
-This example produces a plot ``~/CLEO/build/bin/lowlist_validation.png``.
+This example models collision-coalescence using the hydrodynamic kernel with Long's collision
+efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the coalescence
+efficiency from Low and List 1982(a) :cite:`lowlist1982a` (see also McFarquhar
+2004 :cite:`mcfarquhar2004`).
 
-3) Divergence Free Motion
--------------------------
+This example produces a plot, by default called ``~/CLEO/build_shima2009/bin/lowlist_validation.png``.
 
-1. Navigate to the ``divfreemotion/`` directory,
-e.g.
+
+Divergence Free Motion
+----------------------
+
+1. Navigate to the ``divfreemotion/`` directory, e.g.
 
 .. code-block:: console
 
   $ cd ~/CLEO/examples/divfreemotion/
 
-2. Configure the bash script ``divfree2d.sh`` for your environment.
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+``examples/boxmodelcollisions/divfree2d.sh``.
 
-.. code-block:: console
-
-  $ vim divfree2d.sh
-
-3. Execute the bash script ``divfree2d.sh``.
+3. Execute the bash script ``divfree2d.sh``, e.g.
 
 .. code-block:: console
 
   $ ./divfree2d.sh
 
-This example plots the motion of super-droplets without
-sedimentation in a 2-D divergence free wind field
-(see ``~/CLEO/build/bin/df2d_motion2d_validation.png``).
-The number of super-droplets in the domain should remain
-constant over time
-(see ``~/CLEO/build/bin/df2d_totnsupers_validation.png``).
+This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
+free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
+called ``~/CLEO/build_divfree2D/bin/df2d_motion2d_validation.png``. The number of super-droplets in the domain
+should remain constant over time, as shown in the plot produced and by default called
+``~/CLEO/build_divfree2D/bin/df2d_totnsupers_validation.png``.
 
-4) 1-D Rainshaft
-------------------------------
 
-1. Navigate to the ``rainshaft1d/`` directory,
-e.g.
+1-D Rainshaft
+-------------
+
+1. Navigate to the ``rainshaft1d/`` directory, e.g.
 
 .. code-block:: console
 
   $ cd ~/CLEO/examples/rainshaft1d/
 
-2. Configure the bash script ``rainshaft1d.sh`` for your environment.
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+``examples/boxmodelcollisions/rainshaft1d.sh``.
 
-.. code-block:: console
-
-  $ vim rainshaft1d.sh
-
-3. Execute the bash script ``rainshaft1d.sh``.
+3. Execute the bash script ``rainshaft1d.sh``, e.g.
 
 .. code-block:: console
 
   $ ./rainshaft1d.sh
 
-Several plots and animations are produced by this example. If
-you would like to compare to reference solutions
-please :ref:`contact us <contact>`.
+Several plots and animations are produced by this example. If you would like to compare to our
+reference solutions please :ref:`contact us <contact>`.
 
-5) Constant 2-D Thermodynamics
-------------------------------
 
-1. Navigate to the ``constthermo2d/`` directory,
-e.g.
+Constant 2-D Thermodynamics
+---------------------------
+
+1. Navigate to the ``constthermo2d/`` directory, e.g.
 
 .. code-block:: console
 
   $ cd ~/CLEO/examples/constthermo2d/
 
-2. Configure the bash script ``constthermo2d.sh`` for your environment.
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+``examples/boxmodelcollisions/constthermo2d.sh``.
 
-.. code-block:: console
-
-  $ vim constthermo2d.sh
-
-3. Execute the bash script ``constthermo2d.sh``.
+3. Execute the bash script ``constthermo2d.sh``, e.g.
 
 .. code-block:: console
 
   $ ./constthermo2d.sh
 
-Several plots and animations are produced by this example. If
-you would like to compare to reference solutions
-please :ref:`contact us <contact>`.
+Several plots and animations are produced by this example. If you would like to compare to our
+reference solutions please :ref:`contact us <contact>`.
+
+
+Speed Test
+----------
+This example compiles and runs the same exectuable ``spdtest`` for three different build
+configurations, (1) "cuda" with CUDA and OpenMP parallelism, (2) "openmp" with only OpenMP
+parallelism, and (3) "serial" without parallelism.
+
+1. Navigate to the ``speedtest/`` directory, e.g.
+
+.. code-block:: console
+
+  $ cd ~/CLEO/examples/speedtest/
+
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+``examples/boxmodelcollisions/speedtest.sh``.
+
+3. Execute the bash script ``speedtest.sh``, e.g.
+
+.. code-block:: console
+
+  $ ./speedtest.sh
+
+By default, a .txt file with the wall-clock time spent time-stepping the model for the three
+different build configurations is written to ``~/CLEO/build_spdtest/bin/spd_allstats.txt``.
+The times can be compared with the ones
+in ``~/CLEO/examples/speedtest/speedtest_allstats_examples.txt``.
 
 Extension
 ---------
-Explore the ``exampleplotting/plotssrc`` Python module which
-gives examples of how to plot output from CLEO with pySD, a few of
-which are demonstrated in the ``exampleplotting/exampleplotting.py``
+Explore the ``exampleplotting/plotssrc`` Python module which gives examples of how to plot output
+from CLEO with pySD, a few of which are demonstrated in the ``exampleplotting/exampleplotting.py``
 script.

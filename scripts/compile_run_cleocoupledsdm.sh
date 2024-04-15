@@ -20,6 +20,7 @@
 ### ----- You need to edit these lines to specify ------ ###
 ### ----- (your environment and) directory paths ------- ###
 ### ------------ and executable to compile ------------- ###
+cleoenv=/work/mh1126/m300950/cleoenv
 buildtype=$1
 path2CLEO=${HOME}/CLEO/
 path2build=$2 # get from command line argument
@@ -35,7 +36,7 @@ fi
 ### ---------------------------------------------------- ###
 
 ### ----------------- compile executable --------------- ###
-compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executable}"
+compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} ${executable}"
 echo ${compilecmd}
 ${compilecmd}
 ### ---------------------------------------------------- ###
