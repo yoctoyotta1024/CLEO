@@ -61,12 +61,12 @@ nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # 
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
 # radiigen  =  rgens.MonoAttrGen(monor)                 # all SDs have the same radius [m]
 
-rspan                = [3e-9, 2.5e-3]                     # min and max range of radii to sample [m]
+rspan                = [3e-6, 2.5e-3]                   # min and max range of radii to sample [m]
 radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
 ### --- Choice of Superdroplet Dry Radii Generator --- ###
-monodryr                = 1e-12                         # all SDs have this same dryradius [m]
+monodryr                = 1e-6                          # all SDs have this same dryradius [m]
 dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
 
 # dryr_sf               = 1.0                     # scale factor for dry radii [m]
@@ -96,19 +96,19 @@ dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same 
 # numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
 # xiprobdist = probdists.VolExponential(volexpr0, rspan)
 
-reff                 = 7e-6                     # effective radius [m]
-nueff                = 0.08                     # effective variance
-# xiprobdist = probdists.ClouddropsHansenGamma(reff, nueff)
-rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
+# reff                 = 7e-6                     # effective radius [m]
+# nueff                = 0.08                     # effective variance
+# # xiprobdist = probdists.ClouddropsHansenGamma(reff, nueff)
+# rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
 nrain                = 3000                         # raindrop concentration [m^-3]
 qrain                = 0.9                          # rainwater content [g/m^3]
 dvol                 = 8e-4                         # mean volume diameter [m]
-# xiprobdist = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+xiprobdist = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
 rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
 numconc = 1e9 # [m^3]
-distribs = [rdist1, rdist2]
-scalefacs = [1000, 1]
-xiprobdist = probdists.CombinedRadiiProbDistribs(distribs, scalefacs)
+# distribs = [rdist1, rdist2]
+# scalefacs = [1000, 1]
+# xiprobdist = probdists.CombinedRadiiProbDistribs(distribs, scalefacs)
 
 ### --------------------------------------------------------- ###
 
