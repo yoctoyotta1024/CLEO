@@ -21,10 +21,10 @@ your ``main.cpp`` can look something like this:
   /* Initialise Kokkos parallel environment */
   Kokkos::initialize(argc, argv);
   {
-    /* CLEO Super-Droplet Model (excluding 'coupldyn' coupled dynamics) */
-    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
+    /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
 
-    /* Run CLEO (SDM coupled to dynamics via comms) */
+    /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);
     runcleo(initconds, t_end);
   }
