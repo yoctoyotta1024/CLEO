@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: cartesianmotion_withreset.hpp
+ * File: withreset.hpp
  * Project: cartesiandomain
  * Created Date: Tuesday 19th December 2023
  * Author: Clara Bayley (CB)
@@ -24,10 +24,10 @@
  * the domain through coord3 domain boundaries
  */
 
-// TODO(CB) revisit and improve
+// TODO(CB) Delete file (!)
 
-#ifndef LIBS_CARTESIANDOMAIN_CARTESIANMOTION_WITHRESET_HPP_
-#define LIBS_CARTESIANDOMAIN_CARTESIANMOTION_WITHRESET_HPP_
+#ifndef LIBS_CARTESIANDOMAIN_WITHRESET_HPP_
+#define LIBS_CARTESIANDOMAIN_WITHRESET_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -243,4 +243,4 @@ CartesianMotionWithReset(const unsigned int motionstep,
       motionstep, int2time, terminalv, cin, CartesianCheckBounds{});
 }
 
-#endif  // LIBS_CARTESIANDOMAIN_CARTESIANMOTION_WITHRESET_HPP_
+#endif  // LIBS_CARTESIANDOMAIN_WITHRESET_HPP_
