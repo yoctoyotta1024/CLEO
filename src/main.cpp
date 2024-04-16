@@ -124,9 +124,9 @@ template <GridboxMaps GbxMaps>
 inline auto create_movement(const Config &config, const Timesteps &tsteps, const GbxMaps &gbxmaps) {
   const Motion<GbxMaps> auto motion(create_motion(tsteps.get_motionstep()));
 
-  const auto bcs(create_boundary_conditions(config));
+  const auto boundary_conditions(create_boundary_conditions(config));
 
-  return MoveSupersInDomain(gbxmaps, motion, bcs);
+  return MoveSupersInDomain(gbxmaps, motion, boundary_conditions);
 }
 
 inline MicrophysicalProcess auto config_condensation(const Config &config,

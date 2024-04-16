@@ -136,12 +136,13 @@ struct MoveSupersInDomain {
     apply_domain_boundary_conditions(gbxmaps, d_gbxs, totsupers);
   }
 
-  MoveSupersInDomain(const M mtn, const BoundaryConditions bcs)
-      : motion(mtn), apply_domain_boundary_conditions(bcs) {}
+  MoveSupersInDomain(const M mtn, const BoundaryConditions boundary_conditions)
+      : motion(mtn), apply_domain_boundary_conditions(boundary_conditions) {}
 
   /* extra constructor useful to help when compiler cannot deduce type of GBxMaps */
-  MoveSupersInDomain(const GbxMaps &gbxmaps, const M mtn, const BoundaryConditions bcs)
-      : MoveSupersInDomain(mtn, bcs) {}
+  MoveSupersInDomain(const GbxMaps &gbxmaps, const M mtn,
+                     const BoundaryConditions boundary_conditions)
+      : MoveSupersInDomain(mtn, boundary_conditions) {}
 
   /* returns time when superdroplet motion is
   next due to occur given current time, t_sdm */
