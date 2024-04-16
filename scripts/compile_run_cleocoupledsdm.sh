@@ -36,6 +36,7 @@ fi
 ### ---------------------------------------------------- ###
 
 ### ----------------- compile executable --------------- ###
+rm ${run_executable}
 compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} ${executable}"
 echo ${compilecmd}
 ${compilecmd}

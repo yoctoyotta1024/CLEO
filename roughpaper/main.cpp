@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,6 +26,7 @@
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
+#include "cartesiandomain/null_boundary_conditions.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
@@ -131,6 +132,13 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   return obs0 >> obs1;
 }
 
+inline auto create_movement(const CartesianMaps &gbxmaps) {
+  const Motion<CartesianMaps> auto motion = NullMotion{};
+  const auto boundary_conditions = NullBoundaryConditions{};
+
+  return MoveSupersInDomain(gbxmaps, motion, boundary_conditions);
+}
+
 inline InitialConditions auto create_initconds(const Config &config) {
   const InitSupersFromBinary initsupers(config);
   const InitGbxsNull initgbxs(config);
@@ -155,7 +163,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<St
   const GridboxMaps auto gbxmaps =
       create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
   const MicrophysicalProcess auto microphys = NullMicrophysicalProcess{};
-  const Motion<CartesianMaps> auto movesupers = NullMotion{};
+  const MoveSupersInDomain movesupers(create_movement(gbxmaps));
   const Observer auto obs = create_observer(config, tsteps, dataset);
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }

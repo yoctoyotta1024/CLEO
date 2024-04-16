@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Monday 15th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -177,12 +177,12 @@ class SupersData(SuperdropProperties):
 
 class RainSupers(SuperdropProperties):
 
-    def __init__(self, sddata, rlim=40):
+    def __init__(self, sddata, consts, rlim=40):
         ''' return data for (rain)drops with radii > rlim.
         Default minimum raindrops size is rlim=40microns'''
 
         if type(sddata) != SupersData:
-            sddata = SupersData(dataset=sddata)
+            sddata = SupersData(dataset=sddata, consts=consts)
 
         israin = sddata.radius >= rlim  # ak array True for raindrops
 

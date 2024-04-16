@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: createcartesianmaps.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,17 +25,16 @@
 #ifndef LIBS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
 #define LIBS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <stdexcept>
 #include <string_view>
 #include <vector>
 
-#include <Kokkos_Core.hpp>
-#include <Kokkos_Pair.hpp>
-
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "cartesiandomain/cartesianboundaryconds.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/doubly_periodic_domain.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
 
 /* creates cartesian maps instance using gridbox bounds read from

@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Monday 15th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -91,7 +91,7 @@ def get_massmoms(dataset, ntime, ndims):
   return massmoms.MassMoms(dataset, ntime, ndims)
 
 def get_rainmassmoms(dataset, ntime, ndims):
-  return massmoms.MassMoms(dataset, ntime, ndims, lab="rain")
+  return massmoms.MassMoms(dataset, ntime, ndims, lab="_raindrops")
 
 def get_gbxindex(dataset, ndims):
   return var3d_fromzarr(dataset, ndims, "gbxindex")
@@ -107,9 +107,6 @@ def get_totnsupers(dataset):
 
 def get_nsupers(dataset, ntime, ndims):
   return var4d_fromzarr(dataset, ntime, ndims, "nsupers")
-
-def get_nrainsupers(dataset, ntime, ndims):
-  return var4d_fromzarr(dataset, ntime, ndims, "nrainsupers")
 
 def surfaceprecip_estimate(dataset, gbxs):
   ''' use last radius of SDs before they leave the domain to

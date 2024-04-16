@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -278,7 +278,7 @@ KOKKOS_FUNCTION void beyonddomain_backwards_coord3(const CartesianMaps &gbxmaps,
                                                    Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord3bounds(nghbr).second};  // upper lim of backward neighbour
   const auto lim2 = double{gbxmaps.coord3bounds(idx).first};     // lower lim of current gbx
-  drop.set_coord3(boundarycond_coord3(drop.get_coord3(), lim1, lim2));
+  drop.set_coord3(DoublyPeriodicDomain::boundarycond_coord3(drop.get_coord3(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -289,7 +289,7 @@ KOKKOS_FUNCTION void beyonddomain_forwards_coord3(const CartesianMaps &gbxmaps,
                                                   Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord3bounds(nghbr).first};  // lower lim of forward neighbour
   const auto lim2 = double{gbxmaps.coord3bounds(idx).second};   // upper lim of current gbx
-  drop.set_coord3(boundarycond_coord3(drop.get_coord3(), lim1, lim2));
+  drop.set_coord3(DoublyPeriodicDomain::boundarycond_coord3(drop.get_coord3(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -300,7 +300,7 @@ KOKKOS_FUNCTION void beyonddomain_backwards_coord1(const CartesianMaps &gbxmaps,
                                                    Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord1bounds(nghbr).second};  // upper lim of backward neigghbour
   const auto lim2 = double{gbxmaps.coord1bounds(idx).first};     // lower lim of current gbx
-  drop.set_coord1(boundarycond_coord1(drop.get_coord1(), lim1, lim2));
+  drop.set_coord1(DoublyPeriodicDomain::boundarycond_coord1(drop.get_coord1(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -311,7 +311,7 @@ KOKKOS_FUNCTION void beyonddomain_forwards_coord1(const CartesianMaps &gbxmaps,
                                                   Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord1bounds(nghbr).first};  // lower lim of forward nghbour
   const auto lim2 = double{gbxmaps.coord1bounds(idx).second};   // upper lim of gbx
-  drop.set_coord1(boundarycond_coord1(drop.get_coord1(), lim1, lim2));
+  drop.set_coord1(DoublyPeriodicDomain::boundarycond_coord1(drop.get_coord1(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -322,7 +322,7 @@ KOKKOS_FUNCTION void beyonddomain_backwards_coord2(const CartesianMaps &gbxmaps,
                                                    Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord2bounds(nghbr).second};  // upper lim of backward nghbour
   const auto lim2 = double{gbxmaps.coord2bounds(idx).first};     // lower lim of gbx
-  drop.set_coord2(boundarycond_coord2(drop.get_coord2(), lim1, lim2));
+  drop.set_coord2(DoublyPeriodicDomain::boundarycond_coord2(drop.get_coord2(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -333,5 +333,5 @@ KOKKOS_FUNCTION void beyonddomain_forwards_coord2(const CartesianMaps &gbxmaps,
                                                   Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord2bounds(nghbr).first};  // lower lim of forward nghbour
   const auto lim2 = double{gbxmaps.coord2bounds(idx).second};   // upper lim of gbx
-  drop.set_coord2(boundarycond_coord2(drop.get_coord2(), lim1, lim2));
+  drop.set_coord2(DoublyPeriodicDomain::boundarycond_coord2(drop.get_coord2(), lim1, lim2));
 }

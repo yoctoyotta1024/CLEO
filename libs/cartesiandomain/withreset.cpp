@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: cartesianmotion_withreset.cpp
+ * File: withreset.cpp
  * Project: cartesiandomain
  * Created Date: Tuesday 19th December 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th April 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,6 +23,8 @@
  * conditions and reset of superdroplets that leave
  * the domain through coord3 domain boundaries
  */
+
+// TODO(CB) Delete file (!)
 
 #include "./cartesianmotion_withreset.hpp"
 
