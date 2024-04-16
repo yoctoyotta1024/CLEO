@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: cartesiandomainboundaries.hpp
+ * File: domainboundaries.hpp
  * Project: cartesiandomain
  * Created Date: Thursday 9th November 2023
  * Author: Clara Bayley (CB)
@@ -16,19 +16,17 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * functions to implement finite and / or periodic boundary conditions
+ * functions to implement finite or periodic boundary conditions
  * at the edges of a cartesian domain e.g. for returning the neighbouring
  * gbxindex and value of a superdroplet's coord when the superdroplet
  * crosses the domain boundary in a particular direction.
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_CARTESIANDOMAINBOUNDARIES_HPP_
-#define LIBS_CARTESIANDOMAIN_CARTESIANDOMAINBOUNDARIES_HPP_
+#ifndef LIBS_CARTESIANDOMAIN_DOMAINBOUNDARIES_HPP_
+#define LIBS_CARTESIANDOMAIN_DOMAINBOUNDARIES_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
-#include <utility>
-#include <vector>
 
 #include "../cleoconstants.hpp"
 
@@ -117,4 +115,4 @@ KOKKOS_INLINE_FUNCTION double coordbeyond_periodicdomain(const double coord, con
   return coord + lim1 - lim2;  // periodic domain coord -> coord +/- |length_of_domain|
 }
 
-#endif  // LIBS_CARTESIANDOMAIN_CARTESIANDOMAINBOUNDARIES_HPP_
+#endif  // LIBS_CARTESIANDOMAIN_DOMAINBOUNDARIES_HPP_

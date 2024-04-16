@@ -33,8 +33,8 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "cartesiandomain/cartesiandomainboundaries.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/doubly_periodic_domain.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
 
 /* creates cartesian maps instance using gridbox bounds read from
