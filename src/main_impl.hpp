@@ -31,8 +31,8 @@
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
-#include "cartesiandomain/cartesianmotion_withreset.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
+#include "cartesiandomain/null_boundary_conditions.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
@@ -107,7 +107,7 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   //                                 &step2dimlesstime,
   //                                 terminalv,
   //                                 ngbxs,
-  //                                 ngbxs4reset);
+  //                                 ngbxs4reset);  //TODO(CB) Delete option (!)
 
   return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 

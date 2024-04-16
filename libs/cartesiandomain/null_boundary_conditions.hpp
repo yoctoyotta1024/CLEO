@@ -23,8 +23,11 @@
 #ifndef LIBS_CARTESIANDOMAIN_NULL_BOUNDARY_CONDITIONS_HPP_
 #define LIBS_CARTESIANDOMAIN_NULL_BOUNDARY_CONDITIONS_HPP_
 
+#include "../kokkosaliases.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
+
 struct NullBoundaryConditions {
-  void operator()(const GridboxMaps auto &gbxmaps, viewd_gbx d_gbxs,
+  void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
                   const viewd_supers totsupers) const {}
 };
 
