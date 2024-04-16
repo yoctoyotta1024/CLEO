@@ -33,7 +33,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "cartesiandomain/cartesianboundaries.hpp"
+#include "cartesiandomain/cartesiandomainboundaries.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "initialise/gbxbounds_frombinary.hpp"
 

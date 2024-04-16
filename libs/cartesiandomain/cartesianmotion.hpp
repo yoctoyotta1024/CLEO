@@ -31,7 +31,7 @@
 #include <cassert>
 #include <functional>
 
-#include "cartesiandomain/cartesianboundaries.hpp"
+#include "cartesiandomain/cartesiandomainboundaries.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "gridboxes/predcorrmotion.hpp"
 #include "superdrops/superdrop.hpp"
