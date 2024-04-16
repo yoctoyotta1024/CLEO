@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 27th January 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,9 +23,8 @@
 #ifndef LIBS_GRIDBOXES_MOVESUPERSINDOMAIN_HPP_
 #define LIBS_GRIDBOXES_MOVESUPERSINDOMAIN_HPP_
 
-#include <concepts>
-
 #include <Kokkos_Core.hpp>
+#include <concepts>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
@@ -39,9 +38,10 @@
 the domain by updating their spatial coordinates (according to
 some type of Motion) and then moving them between gridboxes
 after updating their gridbox indexes concordantly */
-template <GridboxMaps GbxMaps, Motion<GbxMaps> M>
+template <GridboxMaps GbxMaps, Motion<GbxMaps> M, typename BoundaryConditions>
 struct MoveSupersInDomain {
   M motion;
+  BoundaryConditions apply_domain_boundary_conditions;
 
   /* enact steps (1) and (2) movement of superdroplets for 1 gridbox:
   (1) update their spatial coords according to type of motion. (device)
@@ -119,9 +119,11 @@ struct MoveSupersInDomain {
   (1) update their spatial coords according to type of motion. (device)
   (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device)
-  (3) move superdroplets between gridboxes (host) */
+  (3) move superdroplets between gridboxes (host)
+  (4) (optional) apply domain boundary conditions (host and device)
   // TODO(all) use tasking to convert all 3 team policy
-  // loops in these function calls into 1 loop?
+  // loops from first two function calls into 1 loop?
+  */
   void move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
                                  const viewd_supers totsupers) const {
     /* steps (1 - 2) */
@@ -129,9 +131,17 @@ struct MoveSupersInDomain {
 
     /* step (3) */
     move_supers_between_gridboxes(d_gbxs, totsupers);
+
+    /* step (4) */
+    apply_domain_boundary_conditions(gbxmaps, d_gbxs, totsupers);
   }
 
-  explicit MoveSupersInDomain(const M i_motion) : motion(i_motion) {}
+  MoveSupersInDomain(const M mtn, const BoundaryConditions bcs)
+      : motion(mtn), apply_domain_boundary_conditions(bcs) {}
+
+  /* extra constructor useful to help when compiler cannot deduce type of GBxMaps */
+  MoveSupersInDomain(const GbxMaps &gbxmaps, const M mtn, const BoundaryConditions bcs)
+      : MoveSupersInDomain(mtn, bcs) {}
 
   /* returns time when superdroplet motion is
   next due to occur given current time, t_sdm */

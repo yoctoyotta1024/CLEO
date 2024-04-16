@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 15th April 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -70,6 +70,11 @@
 #include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
+struct NullCartesianBoundaryConditions {
+  void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
+                  const viewd_supers totsupers) const {}
+};
+
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
                                             const unsigned int couplstep,
                                             const unsigned int t_end) {
@@ -91,6 +96,39 @@ inline InitialConditions auto create_initconds(const Config &config) {
 inline GridboxMaps auto create_gbxmaps(const Config &config) {
   const auto gbxmaps = create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
   return gbxmaps;
+}
+
+inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
+  // const auto terminalv = NullTerminalVelocity{};
+  // const auto terminalv = RogersYauTerminalVelocity{};
+  // const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = RogersGKTerminalVelocity{};
+
+  // const auto ngbxs = (unsigned int)15; // total number of gbxs
+  // const auto ngbxs4reset = (unsigned int)5; // number of gbxs to randomly select in reset
+  // return CartesianMotionWithReset(motionstep,
+  //                                 &step2dimlesstime,
+  //                                 terminalv,
+  //                                 ngbxs,
+  //                                 ngbxs4reset);
+
+  return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
+
+  // return NullMotion{};
+}
+
+inline auto create_boundary_conditions() { return NullCartesianBoundaryConditions{}; }
+
+template <GridboxMaps GbxMaps>
+inline auto create_superdrops_movement(const Config &config, const Timesteps &tsteps,
+                                       const GbxMaps &gbxmaps) {
+  const Motion<GbxMaps> auto motion(create_motion(tsteps.get_motionstep()));
+
+  const auto bcs(create_boundary_conditions());
+
+  const auto movesupers = MoveSupersInDomain(gbxmaps, motion, bcs);
+
+  return movesupers;
 }
 
 inline MicrophysicalProcess auto config_condensation(const Config &config,
@@ -138,25 +176,6 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
 
   return colls >> cond;
-}
-
-inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
-  // const auto terminalv = NullTerminalVelocity{};
-  // const auto terminalv = RogersYauTerminalVelocity{};
-  // const auto terminalv = SimmelTerminalVelocity{};
-  const auto terminalv = RogersGKTerminalVelocity{};
-
-  // const auto ngbxs = (unsigned int)15; // total number of gbxs
-  // const auto ngbxs4reset = (unsigned int)5; // number of gbxs to randomly select in reset
-  // return CartesianMotionWithReset(motionstep,
-  //                                 &step2dimlesstime,
-  //                                 terminalv,
-  //                                 ngbxs,
-  //                                 ngbxs4reset);
-
-  return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
-
-  // return NullMotion{};
 }
 
 template <typename Store>
@@ -218,7 +237,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<St
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
-  const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
+  const auto movesupers(create_superdrops_movement(config, tsteps, gbxmaps));
   const Observer auto obs(create_observer(config, tsteps, dataset));
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);

@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -63,12 +63,12 @@
  * @tparam Comms Type of CouplingComms.
  */
 template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphys,
-          Motion<GbxMaps> M, Observer Obs, CouplingComms<CD> Comms>
+          Motion<GbxMaps> M, typename BoundaryConditions, Observer Obs, CouplingComms<CD> Comms>
 class RunCLEO {
  private:
-  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm; /**< SDMMethods object. */
-  CD &coupldyn;                                      /**< CoupledDynamics object.  */
-  const Comms &comms;                                /**< CouplingComms object. */
+  const SDMMethods<GbxMaps, Microphys, M, BoundaryConditions, Obs> &sdm; /**< SDMMethods object. */
+  CD &coupldyn;       /**< CoupledDynamics object.  */
+  const Comms &comms; /**< CouplingComms object. */
 
   /**
    * @brief Prepare SDM and Coupled Dynamics for timestepping.
@@ -270,7 +270,8 @@ class RunCLEO {
    * @param coupldyn CoupledDynamics object.
    * @param comms CouplingComms object.
    */
-  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm, CD &coupldyn, const Comms &comms)
+  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, BoundaryConditions, Obs> &sdm, CD &coupldyn,
+          const Comms &comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms) {
     check_coupling();
   }

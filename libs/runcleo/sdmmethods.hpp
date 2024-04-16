@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -49,12 +49,14 @@
  * @tparam M Type of super-droplets' Motion.
  * @tparam Obs Type of the Observer.
  */
-template <GridboxMaps GbxMaps, MicrophysicalProcess Microphys, Motion<GbxMaps> M, Observer Obs>
+template <GridboxMaps GbxMaps, MicrophysicalProcess Microphys, Motion<GbxMaps> M,
+          typename BoundaryConditions, Observer Obs>
 class SDMMethods {
  private:
   unsigned int couplstep; /**< Coupling timestep. */
-  MoveSupersInDomain<GbxMaps, M> movesupers;
-  /**< object for super-droplets' MoveSupersInDomain with certain type of Motion. */
+  MoveSupersInDomain<GbxMaps, M, BoundaryConditions> movesupers;
+  /**< object for super-droplets' MoveSupersInDomain with certain type of Motion and
+   * BoundaryConditions. */
 
   /**
    * @brief Get the next timestep for SDM.
@@ -78,15 +80,13 @@ class SDMMethods {
     return t_next;
   }
 
-  /* move superdroplets (including movement between
-  gridboxes) according to movesupers struct */
   /**
    * @brief Move superdroplets according to the `movesupers` struct.
    *
    * This function moves superdroplets, including their movement between
-   * gridboxes, according to the `movesupers` struct. `movesupers` is an
-   * instance of the MoveSupersInDomain templated type with a certain instance of a type of
-   * GridboxMaps and super-droplets' Motion.
+   * gridboxes and boundary conditions, according to the `movesupers` struct.
+   * `movesupers` is an instance of the MoveSupersInDomain templated type with a certain
+   * instance of a type of GridboxMaps, super-droplets' Motion and boundary conditions.
    *
    * @param t_sdm Current timestep for SDM.
    * @param d_gbxs View of gridboxes on device.
@@ -155,11 +155,12 @@ class SDMMethods {
    * @param couplstep Coupling timestep.
    * @param gbxmaps object that is type of GridboxMaps.
    * @param microphys object that is type of MicrophysicalProcess.
-   * @param movesupers object that is type of super-droplets' Motion.
+   * @param motion object that is type of super-droplets' Motion.
+   * @param boundary_conds object for domain boundary conditions.
    * @param obs object that is type of Observer.
    */
   SDMMethods(const unsigned int couplstep, const GbxMaps gbxmaps, const Microphys microphys,
-             const M movesupers, const Obs obs)
+             const MoveSupersInDomain<GbxMaps, M, BoundaryConditions> movesupers, const Obs obs)
       : couplstep(couplstep),
         movesupers(movesupers),
         gbxmaps(gbxmaps),
