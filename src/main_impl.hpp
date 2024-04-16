@@ -114,7 +114,10 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   // return NullMotion{};
 }
 
-inline auto create_boundary_conditions(const Config &config) { return NullBoundaryConditions{}; }
+inline auto create_boundary_conditions(const Config &config) {
+  // TODO(CB): diff BCs
+  return NullBoundaryConditions{};
+}
 
 template <GridboxMaps GbxMaps>
 inline auto create_movement(const Config &config, const Timesteps &tsteps, const GbxMaps &gbxmaps) {
