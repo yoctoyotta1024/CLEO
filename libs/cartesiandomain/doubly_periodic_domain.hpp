@@ -29,13 +29,12 @@
 
 #include "cartesiandomain/cartesiandomainboundaries.hpp"
 
-namespace DoublyPeriodicDomain {
-
 /* _Note:_ Doubly Periodic Domain Boundary Conditions are defined as:
   z: FINITE   (see cartesian_coord3nghbrs & boundarycond_coord3)
   x: PERIODIC (see cartesian_coord1nghbrs & boundarycond_coord1)
   y: PERIODIC (see cartesian_coord2nghbrs & boundarycond_coord2)
 */
+namespace DoublyPeriodicDomain {
 
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} z direction given a gridbox with
