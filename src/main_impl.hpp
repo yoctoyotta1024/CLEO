@@ -72,11 +72,6 @@
 #include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
-struct NullBoundaryConditions {
-  void operator()(const GridboxMaps auto &gbxmaps, viewd_gbx d_gbxs,
-                  const viewd_supers totsupers) const {}
-};
-
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
                                             const unsigned int couplstep,
                                             const unsigned int t_end) {

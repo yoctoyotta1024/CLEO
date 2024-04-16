@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: cartesianboundaryconds.hpp
+ * File: cartesianboundaries.hpp
  * Project: cartesiandomain
  * Created Date: Thursday 9th November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,8 +23,8 @@
  * crosses the domain boundary in a particular direction.
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_CARTESIANBOUNDARYCONDS_HPP_
-#define LIBS_CARTESIANDOMAIN_CARTESIANBOUNDARYCONDS_HPP_
+#ifndef LIBS_CARTESIANDOMAIN_CARTESIANBOUNDARIES_HPP_
+#define LIBS_CARTESIANDOMAIN_CARTESIANBOUNDARIES_HPP_
 
 /* _Note:_ boundary conditions of domain are defined as:
   z: FINITE   (see cartesian_coord3nghbrs & boundarycond_coord3)
@@ -191,4 +191,4 @@ KOKKOS_INLINE_FUNCTION double boundarycond_coord2(const double coord2, const dou
   return coordbeyond_periodicdomain(coord2, lim1, lim2);
 }
 
-#endif  // LIBS_CARTESIANDOMAIN_CARTESIANBOUNDARYCONDS_HPP_
+#endif  // LIBS_CARTESIANDOMAIN_CARTESIANBOUNDARIES_HPP_
