@@ -35,6 +35,7 @@
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
+#include "gridboxes/movesupersindomain.hpp"
 #include "initialise/config.hpp"
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
@@ -70,8 +71,8 @@
 #include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
-struct NullCartesianBoundaryConditions {
-  void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
+struct NullBoundaryConditions {
+  void operator()(const GridboxMaps auto &gbxmaps, viewd_gbx d_gbxs,
                   const viewd_supers totsupers) const {}
 };
 
@@ -117,18 +118,15 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   // return NullMotion{};
 }
 
-inline auto create_boundary_conditions() { return NullCartesianBoundaryConditions{}; }
+inline auto create_boundary_conditions(const Config &config) { return NullBoundaryConditions{}; }
 
 template <GridboxMaps GbxMaps>
-inline auto create_superdrops_movement(const Config &config, const Timesteps &tsteps,
-                                       const GbxMaps &gbxmaps) {
+inline auto create_movement(const Config &config, const Timesteps &tsteps, const GbxMaps &gbxmaps) {
   const Motion<GbxMaps> auto motion(create_motion(tsteps.get_motionstep()));
 
-  const auto bcs(create_boundary_conditions());
+  const auto bcs(create_boundary_conditions(config));
 
-  const auto movesupers = MoveSupersInDomain(gbxmaps, motion, bcs);
-
-  return movesupers;
+  return MoveSupersInDomain(gbxmaps, motion, bcs);
 }
 
 inline MicrophysicalProcess auto config_condensation(const Config &config,
@@ -237,7 +235,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<St
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
-  const auto movesupers(create_superdrops_movement(config, tsteps, gbxmaps));
+  const auto movesupers(create_movement(config, tsteps, gbxmaps));
   const Observer auto obs(create_observer(config, tsteps, dataset));
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
