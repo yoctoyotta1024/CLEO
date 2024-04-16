@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,6 +31,7 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
+#include "cartesiandomain/null_boundary_conditions.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
@@ -82,6 +83,16 @@ inline GridboxMaps auto create_gbxmaps(const Config &config) {
   return gbxmaps;
 }
 
+inline auto create_movement(const unsigned int motionstep, const CartesianMaps &gbxmaps) {
+  const auto terminalv = RogersGKTerminalVelocity{};
+  const Motion<CartesianMaps> auto motion =
+      CartesianMotion(motionstep, &step2dimlesstime, terminalv);
+
+  const auto boundary_conditions = NullBoundaryConditions{};
+
+  return MoveSupersInDomain(gbxmaps, motion, boundary_conditions);
+}
+
 inline MicrophysicalProcess auto config_condensation(const Config &config,
                                                      const Timesteps &tsteps) {
   return Condensation(tsteps.get_condstep(), config.doAlterThermo, config.cond_iters,
@@ -102,12 +113,6 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
   const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
 
   return cond >> colls;
-}
-
-inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
-  const auto terminalv = RogersGKTerminalVelocity{};
-
-  return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 }
 
 template <typename Store>
@@ -151,7 +156,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<St
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
-  const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
+  const MoveSupersInDomain movesupers(create_movement(tsteps.get_motionstep(), gbxmaps));
   const Observer auto obs(create_observer(config, tsteps, dataset));
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
