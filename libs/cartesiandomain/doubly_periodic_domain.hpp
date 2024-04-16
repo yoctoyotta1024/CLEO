@@ -27,7 +27,7 @@
 #include <Kokkos_Pair.hpp>
 #include <vector>
 
-#include "cartesiandomain/cartesiandomainboundaries.hpp"
+#include "cartesiandomain/domainboundaries.hpp"
 
 /* _Note:_ Doubly Periodic Domain Boundary Conditions are defined as:
   z: FINITE   (see cartesian_coord3nghbrs & boundarycond_coord3)
