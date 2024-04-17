@@ -39,8 +39,6 @@
 #include "superdrops/superdrop.hpp"
 #include "zarr/dataset.hpp"
 
-// TODO(CB) docstrings
-
 /**
  * @brief A struct for collecting ragged count data.
  *
