@@ -35,7 +35,7 @@ outputdata:
   zarrbasedir : ./bin/SDMdata.zarr                    # zarr store base directory
   maxchunk : 1250000                                  # maximum no. of elements in chunks of zarr store array
 
-### SDM Runtime parameters ###
+### SDM Runtime Parameters ###
 domain:
   nspacedims : 1                                       # no. of spatial dimensions to model
   ngbxs : 41                                           # total number of Gbxs

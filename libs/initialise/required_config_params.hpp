@@ -52,7 +52,7 @@ struct RequiredConfigParams {
     size_t maxchunk;                   /**< maximum number of elements in zarr array chunks */
   } outputdata;
 
-  /*** SDM Runtime parameters ***/
+  /*** SDM Runtime Parameters ***/
   struct DomainParams {
     unsigned int nspacedims;           /**< no. of spatial dimensions to model */
     size_t ngbxs;                      /**< total number of Gbxs */

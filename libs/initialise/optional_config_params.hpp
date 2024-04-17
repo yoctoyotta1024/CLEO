@@ -38,6 +38,7 @@
  *
  */
 struct OptionalConfigParams {
+  /* Condensation Runtime Parameters */
   struct DoCondensationParams {
     using dblNaN = std::numeric_limits<double>::signaling_NaN;
     using uintNaN = std::numeric_limits<unsigned int>::signaling_NaN;
@@ -48,6 +49,7 @@ struct OptionalConfigParams {
     double atol = dblNaN;         /**< abolute tolerance for implicit Euler integration */
   } condensation;
 
+  /* Coupled Dynamics Runtime Parameters for FromFileDynamics */
   struct FromFileDynamicsParams {
     std::string press_filename = ""; /**< name of file for pressure data */
     std::string temp_filename = "";  /**< name of file for temperature data */
@@ -58,6 +60,7 @@ struct OptionalConfigParams {
     std::string vvel_filename = "";  /**< name of file for horizontal y velocity data */
   } fromfiledynamics;
 
+  /* Coupled Dynamics Runtime Parameters for CvodeDynamics */
   struct CvodeDynamicsParams {
     using dblNaN = std::numeric_limits<double>::signaling_NaN;
     double P_INIT = dblNaN;    /**< initial pressure [Pa] */
