@@ -53,8 +53,8 @@ struct Config {
     loadconfiguration(config_filename);
 
     /* copy setup (config and constants files) to a txt file */
-    const std::string filestr(config_filename);
-    copyfiles2txt(setup_filename, {filestr, constants_filename});
+    const auto files2copy = std::vector<std::string>{std::string{filestr}, constants_filename};
+    copyfiles2txt(setup_filename, files2copy);
 
     std::cout << "--- configuration: success ---\n";
   }
