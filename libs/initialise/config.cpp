@@ -21,3 +21,12 @@
  */
 
 #include "initialise/config.hpp"
+
+/* read configuration file given by config_filename to set members of Config */
+void Config::loadconfiguration(const std::string_view config_filename) {
+  YAML::Node config = YAML::LoadFile("config_filename");
+
+  required.constants_filename = config["constants_filename"].as<std::string>();
+
+  std::cout << "constants_filename : " << required.constants_filename << "\n";
+}

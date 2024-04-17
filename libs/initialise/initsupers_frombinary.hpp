@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: initsupers_frombinary.hpp
@@ -7,18 +9,16 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct for superdroplets' initial conditions
- * for CLEO SDM (e.g. superdroplet attributes)
- * by reading binary file. InitSupersFromBinary
- * instance can be used by InitConds
- * struct as SuperdropInitConds type
+ * struct for superdroplets' initial conditions for CLEO SDM (e.g. superdroplet attributes)
+ * by reading binary file. InitSupersFromBinary instance can be used by InitConds
+ * struct as SuperdropInitConds type.
  */
 
 #ifndef LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
@@ -62,9 +62,9 @@ struct InitSupersFromBinary {
 
  public:
   explicit InitSupersFromBinary(const Config &config)
-      : totnsupers(config.totnsupers),
-        nspacedims(config.nspacedims),
-        initsupers_filename(config.initsupers_filename) {}
+      : totnsupers(config.get_totnsupers()),
+        nspacedims(config.get_nspacedims()),
+        initsupers_filename(config.get_initsupers_filename()) {}
 
   auto get_totnsupers() const { return totnsupers; }
 

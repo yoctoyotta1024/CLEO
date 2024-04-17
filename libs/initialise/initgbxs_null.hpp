@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: initgbxs_null.hpp
@@ -7,17 +9,15 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct for griboxes'
- * initial conditions for CLEO SDM
- * (e.g. thermodynamics) which can be used
- * by InitConds struct as GbxInitConds type
+ * struct for griboxes' initial conditions for CLEO SDM (e.g. thermodynamics)
+ * which can be used by InitConds struct as GbxInitConds type.
  */
 
 #ifndef LIBS_INITIALISE_INITGBXS_NULL_HPP_
@@ -36,7 +36,7 @@ struct InitGbxsNull {
   size_t ngbxs;
 
  public:
-  explicit InitGbxsNull(const Config &config) : ngbxs(config.ngbxs) {}
+  explicit InitGbxsNull(const Config &config) : ngbxs(config.get_ngbxs()) {}
 
   size_t get_ngbxs() const { return ngbxs; }
 

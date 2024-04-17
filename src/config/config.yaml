@@ -39,11 +39,12 @@ outputdata:
 domain:
   nspacedims : 1                                       # no. of spatial dimensions to model
   ngbxs : 41                                           # total number of Gbxs
-  totnsupers : 2048                                    # (initial) total no. of SDs
+  totnsupers : 2048                                    # initial total no. of SDs
+  coupled_dynamics : fromfile                          # type of coupled dynamics to configure
 
 timestepping:
-  CONDTSTEP : 0.1                                      # time between SD condensation events [s]
-  COLLTSTEP : 1                                        # time between SD collision events [s]
+  CONDTSTEP : 0.1                                      # time between SD condensation [s]
+  COLLTSTEP : 1                                        # time between SD collision [s]
   MOTIONTSTEP : 2                                      # time between SDM motion [s]
   COUPLTSTEP : 120                                     # time between dynamic couplings [s]
   OBSTSTEP : 2                                         # time between SDM observations [s]
@@ -57,8 +58,7 @@ condensation:
   doAlterThermo : false                                # enable condensation to alter the thermodynamic state
 
 ### Coupled Dynamics Runtime Parameters ###
-coupling:
-  thermosolver : fromfile                              # type of dynamics solver to configure
+dynamics:
   press : ./share/dimlessthermo_press.dat              # binary filename for pressure
   temp : ./share/dimlessthermo_temp.dat                # binary filename for temperature
   qvap : ./share/dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio

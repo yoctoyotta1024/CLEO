@@ -27,6 +27,7 @@
 
 #include <string_view>
 
+#include "./configparams.hpp"
 #include "./copyfiles2txt.hpp"
 
 /**
@@ -37,6 +38,11 @@
  */
 struct Config {
  private:
+  /* read configuration file given by config_filename to set members of Config */
+  void loadconfiguration(const std::string_view config_filename);
+
+  RequiredConfigParams required; /**< required configuration parameters of CLEO */
+
  public:
   /**
    * @brief Constructor for Config.
@@ -53,11 +59,21 @@ struct Config {
     loadconfiguration(config_filename);
 
     /* copy setup (config and constants files) to a txt file */
-    const auto files2copy = std::vector<std::string>{std::string{filestr}, constants_filename};
-    copyfiles2txt(setup_filename, files2copy);
+    const auto files2copy =
+        std::vector<std::string>{std::string{config_filename}, required.constants_filename};
+    copyfiles2txt(required.setup_filename, files2copy);
 
     std::cout << "--- configuration: success ---\n";
   }
+
+  std::string get_initsupers_filename() const { return required.initsupers_filename; };
+  std::string get_grid_filename() const { return required.grid_filename; }
+  std::string get_stats_filename() const { return required.stats_filename; }
+  std::filesystem::path get_zarrbasedir() const { return required.zarrbasedir; }
+  size_t get_maxchunk() const { return required.maxchunk; }
+  unsigned int get_nspacedims() const { return required.nspacedims; }
+  size_t get_ngbxs() const { return required.ngbxs; }
+  size_t get_totnsupers() const { return required.totnsupers; }
 };
 
 #endif  // LIBS_INITIALISE_CONFIG_HPP_
