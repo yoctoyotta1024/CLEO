@@ -80,7 +80,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
 
-  return FromFileDynamics(config, couplstep, ndims, nsteps);
+  return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {

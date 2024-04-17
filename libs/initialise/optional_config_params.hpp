@@ -16,19 +16,26 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Header file for members of Config struct which determine CLEO's configuration
+ * Header file for members of Config struct which determine CLEO's optional configuration
+ * parameters read from a config file.
  */
 
 #ifndef LIBS_INITIALISE_OPTIONAL_CONFIG_PARAMS_HPP_
 #define LIBS_INITIALISE_OPTIONAL_CONFIG_PARAMS_HPP_
 
+#include <yaml-cpp/yaml.h>
+
 #include <filesystem>
 #include <limits>
 #include <string>
-#include <string_view>
 
 // TODO(CB): check types of config params e.g. int maxchunk -> size_t maxchunk
 // TODO(CB): use std::filesystem::path not string
+
+namespace NaNVals {
+inline double dbl() { return std::numeric_limits<double>::signaling_NaN(); };
+inline unsigned int uint() { return std::numeric_limits<unsigned int>::signaling_NaN(); };
+}  // namespace NaNVals
 
 /**
  * @brief Struct storing optional configuration parameters for CLEO
@@ -38,39 +45,40 @@
  *
  */
 struct OptionalConfigParams {
+  /* read configuration file given by config_filename to set members of required configuration */
+  explicit OptionalConfigParams(const std::filesystem::path config_filename);
+
   /* Condensation Runtime Parameters */
   struct DoCondensationParams {
-    using dblNaN = std::numeric_limits<double>::signaling_NaN;
-    using uintNaN = std::numeric_limits<unsigned int>::signaling_NaN;
-    bool do_alter_thermo = false; /**< enable condensation to alter the thermodynamic state */
-    unsigned int iters = uintNaN; /**< suggested no. iterations of Newton Raphson Method */
-    double SUBTSTEP = dblNaN;     /**< smallest timestep in cases where substepping occurs [s] */
-    double rtol = dblNaN;         /**< relative tolerance for implicit Euler integration */
-    double atol = dblNaN;         /**< abolute tolerance for implicit Euler integration */
+    bool do_alter_thermo = false;         /**< true = condensation alters the thermodynamic state */
+    unsigned int iters = NaNVals::uint(); /**< suggested no. iterations of Newton Raphson Method */
+    double SUBTSTEP = NaNVals::dbl();     /**< smallest subtimestep in cases of substepping [s] */
+    double rtol = NaNVals::dbl();         /**< relative tolerance for implicit Euler integration */
+    double atol = NaNVals::dbl();         /**< abolute tolerance for implicit Euler integration */
   } condensation;
 
   /* Coupled Dynamics Runtime Parameters for FromFileDynamics */
   struct FromFileDynamicsParams {
-    std::string press_filename = ""; /**< name of file for pressure data */
-    std::string temp_filename = "";  /**< name of file for temperature data */
-    std::string qvap_filename = "";  /**< name of file for vapour mixing ratio data */
-    std::string qcond_filename = ""; /**< name of file for liquid mixing ratio data */
-    std::string wvel_filename = "";  /**< name of file for vertical (z) velocity data */
-    std::string uvel_filename = "";  /**< name of file for horizontal x velocity data */
-    std::string vvel_filename = "";  /**< name of file for horizontal y velocity data */
+    unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
+    std::string press_filename = "";           /**< name of file for pressure data */
+    std::string temp_filename = "";            /**< name of file for temperature data */
+    std::string qvap_filename = "";            /**< name of file for vapour mixing ratio data */
+    std::string qcond_filename = "";           /**< name of file for liquid mixing ratio data */
+    std::string wvel_filename = "";            /**< name of file for vertical (z) velocity data */
+    std::string uvel_filename = "";            /**< name of file for horizontal x velocity data */
+    std::string vvel_filename = "";            /**< name of file for horizontal y velocity data */
   } fromfiledynamics;
 
   /* Coupled Dynamics Runtime Parameters for CvodeDynamics */
   struct CvodeDynamicsParams {
-    using dblNaN = std::numeric_limits<double>::signaling_NaN;
-    double P_INIT = dblNaN;    /**< initial pressure [Pa] */
-    double TEMP_INIT = dblNaN; /**< initial temperature [T] */
-    double relh_init = dblNaN; /**< initial relative humidity (%) */
+    double P_INIT = NaNVals::dbl();    /**< initial pressure [Pa] */
+    double TEMP_INIT = NaNVals::dbl(); /**< initial temperature [T] */
+    double relh_init = NaNVals::dbl(); /**< initial relative humidity (%) */
 
-    double W_AVG = dblNaN;  /**< average amplitude of w velocity sinusoid [m/s] (dP/dt ~ w*dP/dz) */
-    double T_HALF = dblNaN; /**< timescale for w sinusoid, tau_half = T_HALF/pi [s] */
-    double rtol = dblNaN;   /**< relative tolerance for integration of [P, T, qv, qc] ODEs */
-    double atol = dblNaN;   /**< absolute tolerances for integration of [P, T, qv, qc] ODEs */
+    double W_AVG = NaNVals::dbl(); /**< average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz) */
+    double T_HALF = NaNVals::dbl(); /**< timescale for w sinusoid, tau_half = T_HALF/pi [s] */
+    double rtol = NaNVals::dbl(); /**< relative tolerance for integration of [P, T, qv, qc] ODEs */
+    double atol = NaNVals::dbl(); /**< absolute tolerances for integration of [P, T, qv, qc] ODEs */
   } cvodedynamics;
 };
 

@@ -23,9 +23,10 @@
 #ifndef LIBS_INITIALISE_CONFIG_HPP_
 #define LIBS_INITIALISE_CONFIG_HPP_
 
-#include <yaml-cpp/yaml.h>
-
-#include <string_view>
+#include <filesystem>
+#include <iostream>
+#include <string>
+#include <vector>
 
 #include "./copyfiles2txt.hpp"
 #include "./optional_config_params.hpp"
@@ -39,31 +40,50 @@
  */
 struct Config {
  private:
-  /* read configuration file given by config_filename to set members of Config */
-  void loadconfiguration(const std::string_view config_filename);
-
   RequiredConfigParams required; /**< required configuration parameters of CLEO */
   OptionalConfigParams optional; /**< optional configuration parameters of CLEO */
+
+  void print_configuration() const {
+    std::cout << "\n-------- Required Configuration Parameters --------------"
+              << "\nconstants_filename : " << required.inputfiles.constants_filename
+              << "\ninitsupers_filename : " << required.inputfiles.initsupers_filename
+              << "\ngrid_filename : " << required.inputfiles.grid_filename
+              << "\nsetup_filename : " << required.outputdata.setup_filename
+              << "\nstats_filename : " << required.outputdata.stats_filename
+              << "\nzarrbasedir : " << required.outputdata.zarrbasedir
+              << "\nmaxchunk : " << required.outputdata.maxchunk
+              << "\nnspacedims : " << required.domain.nspacedims
+              << "\nngbxs : " << required.domain.ngbxs
+              << "\ntotnsupers : " << required.domain.totnsupers
+              << "\ncoupled_dynamics : " << required.domain.coupled_dynamics
+              << "\nCONDTSTEP : " << required.timesteps.CONDTSTEP
+              << "\nCOLLTSTEP : " << required.timesteps.COLLTSTEP
+              << "\nMOTIONTSTEP : " << required.timesteps.MOTIONTSTEP
+              << "\nCOUPLTSTEP : " << required.timesteps.COUPLTSTEP
+              << "\nOBSTSTEP : " << required.timesteps.OBSTSTEP
+              << "\nT_END : " << required.timesteps.T_END
+              << "\n---------------------------------------------------------\n";
+  }
 
  public:
   /**
    * @brief Constructor for Config.
    *
-   * Initializes a Config instance by loading the configuration
-   * from the specified YAML configuration file and copies the setup
-   * to an output file "setup_filename".
+   * Initializes a Config instance by loading the configuration from the specified YAML
+   * configuration file "config_filename". Then copy the setup to an output file "setup_filename".
    *
    * @param config_filename The name of the YAML configuration file.
    */
-  explicit Config(const std::string_view config_filename) {
+  explicit Config(const std::filesystem::path config_filename)
+      : required(config_filename), optional(config_filename) {
     std::cout << "\n--- configuration ---\n";
 
-    loadconfiguration(config_filename);
+    print_configuration();
 
     /* copy setup (config and constants files) to a txt file */
-    const auto files2copy =
-        std::vector<std::string>{std::string{config_filename}, required.constants_filename};
-    copyfiles2txt(required.setup_filename, files2copy);
+    const auto files2copy = std::vector<std::string>{std::string{config_filename},
+                                                     required.inputfiles.constants_filename};
+    copyfiles2txt(required.outputdata.setup_filename, files2copy);
 
     std::cout << "--- configuration: success ---\n";
   }
@@ -72,7 +92,7 @@ struct Config {
 
   std::string get_grid_filename() const { return required.inputfiles.grid_filename; }
 
-  std::string get_stats_filename() const { return required.inputfiles.stats_filename; }
+  std::string get_stats_filename() const { return required.outputdata.stats_filename; }
 
   std::filesystem::path get_zarrbasedir() const { return required.outputdata.zarrbasedir; }
 
