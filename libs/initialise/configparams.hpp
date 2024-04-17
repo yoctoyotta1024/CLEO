@@ -23,6 +23,7 @@
 #define LIBS_INITIALISE_CONFIGPARAMS_HPP_
 
 #include <filesystem>
+#include <limits>
 #include <string>
 #include <string_view>
 
@@ -78,11 +79,13 @@ struct RequiredConfigParams {
  */
 struct OptionalConfigParams {
   struct DoCondensationParams {
+    using dblNaN = std::numeric_limits<double>::signaling_NaN;
+    using uintNaN = std::numeric_limits<unsigned int>::signaling_NaN;
     bool do_alter_thermo = false; /**< enable condensation to alter the thermodynamic state */
-    unsigned int iters = 0;       /**< suggested no. iterations of Newton Raphson Method */
-    double SUBTSTEP = 0.0;        /**< smallest timestep in cases where substepping occurs [s] */
-    double rtol = 0.0;            /**< relative tolerance for implicit Euler integration */
-    double atol = 0.0;            /**< abolute tolerance for implicit Euler integration */
+    unsigned int iters = uintNaN; /**< suggested no. iterations of Newton Raphson Method */
+    double SUBTSTEP = dblNaN;     /**< smallest timestep in cases where substepping occurs [s] */
+    double rtol = dblNaN;         /**< relative tolerance for implicit Euler integration */
+    double atol = dblNaN;         /**< abolute tolerance for implicit Euler integration */
   } condensation;
 
   struct FromFileDynamicsParams {
@@ -94,6 +97,18 @@ struct OptionalConfigParams {
     std::string uvel_filename = "";  /**< name of file for horizontal x velocity data */
     std::string vvel_filename = "";  /**< name of file for horizontal y velocity data */
   } fromfiledynamics;
+
+  struct CvodeDynamicsParams {
+    using dblNaN = std::numeric_limits<double>::signaling_NaN;
+    double P_INIT = dblNaN;    /**< initial pressure [Pa] */
+    double TEMP_INIT = dblNaN; /**< initial temperature [T] */
+    double relh_init = dblNaN; /**< initial relative humidity (%) */
+
+    double W_AVG = dblNaN;  /**< average amplitude of w velocity sinusoid [m/s] (dP/dt ~ w*dP/dz) */
+    double T_HALF = dblNaN; /**< timescale for w sinusoid, tau_half = T_HALF/pi [s] */
+    double rtol = dblNaN;   /**< relative tolerance for integration of [P, T, qv, qc] ODEs */
+    double atol = dblNaN;   /**< absolute tolerances for integration of [P, T, qv, qc] ODEs */
+  } cvodedynamics;
 };
 
 #endif  // LIBS_INITIALISE_CONFIGPARAMS_HPP_

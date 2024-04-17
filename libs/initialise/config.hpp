@@ -89,6 +89,10 @@ struct Config {
     return optional.condensation;
   }
 
+  OptionalConfigParams::CvodeDynamicsParams get_cvodedynamics() const {
+    return optional.cvodedynamics;
+  }
+
   OptionalConfigParams::FromFileDynamicsParams get_fromfiledynamics() const {
     return optional.fromfiledynamics;
   }

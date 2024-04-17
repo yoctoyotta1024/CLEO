@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,11 +60,11 @@ thermosolver = cvode                       # dynamics solver to configure
 ### CVODE ODE solver paramters ###
 # initial (uniform) thermodynamic conditions #
 P_INIT = 100000.0                          # initial pressure [Pa]
-TEMP_INIT = 273.15                         # initial parcel temperature [T]
-relh_init = 98.0                           # initial relative humidity (%) unphyical < 0.0 in this setup to prevent wetradius initialisation
+TEMP_INIT = 273.15                         # initial temperature [T]
+relh_init = 98.0                           # initial relative humidity (%)
 
 # ODE solver parameters #
-W_AVG = 0.002                           # average amplitude of sinusoidal vertical parcel speed [m/s] (dP/dt ~ w*dP/dz)
-T_HALF = 75000                          # timescale for w sinusoid, tau = THALF/pi [s]
-cvode_rtol = 1e-6                          # relative tolerance for [P, T, qv, qc] ODEs integration
-cvode_atol = 1e-6                          # absolute tolerance for [P, T, qv, qc] ODEs integration
+W_AVG = 0.002                           # average amplitude of w velocity sinusoid [m/s] (dP/dt ~ w*dP/dz)
+T_HALF = 75000                          # timescale for w sinusoid, tau_half = T_HALF/pi [s]
+cvode_rtol = 1e-6                       # relative tolerance for integration of [P, T, qv, qc] ODEs
+cvode_atol = 1e-6                       # relative tolerance for integration of [P, T, qv, qc] ODEs
