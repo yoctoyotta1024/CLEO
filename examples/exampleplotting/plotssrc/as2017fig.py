@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 17th November 2023
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -100,7 +100,7 @@ def condensation_validation_subplots(axs, time, radius, supersat, zprof,
     return axs
 
 def arabas_shima_2017_fig(time, zprof, radius, msol, temp, supersat,
-                          IONIC, MR_SOL, W_AVG, numconc, savename=""):
+                          IONIC, MR_SOL, W_avg, numconc, savename=""):
     ''' plots the same plots as in Figure 5 of
     "On the CCN (de)activation nonlinearities"
     S. Arabas and S. Shima 2017 to check radius
@@ -118,7 +118,7 @@ def arabas_shima_2017_fig(time, zprof, radius, msol, temp, supersat,
 
     textlab = "N = "+str(numconc)+"cm$^{-3}$\n" +\
               "r$_{dry}$ = "+"{:.2g}\u03BCm\n".format(radius[0]) +\
-              "<w> = {:.1f}".format(W_AVG*100)+"cm s$^{-1}$"
+              "<w> = {:.1f}".format(W_avg*100)+"cm s$^{-1}$"
     axs[0].text(0.03, 0.82, textlab, transform=axs[0].transAxes)
 
     axs[0].set_xlim([-1, 1])

@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 12th April 2024
+Last Modified: Thursday 18th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -149,7 +149,7 @@ thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
 supersat = thermo.supersaturation()
 time = pyzarr.get_time(dataset).secs
 sddata = pyzarr.get_supers(dataset, consts)
-zprof = displacement(time, config["W_AVG"], config["T_HALF"])
+zprof = displacement(time, config["W_avg"], config["TAU_half"])
 
 ### plot results
 # sample drops to plot from whole range of SD ids
@@ -169,5 +169,5 @@ as2017fig.arabas_shima_2017_fig(time, zprof, sd0["radius"], sd0["msol"],
                                 thermo.temp[:, 0, 0, 0],
                                 supersat[:, 0, 0, 0],
                                 sddata.IONIC, sddata.MR_SOL,
-                                config["W_AVG"], numconc,
+                                config["W_avg"], numconc,
                                 savename2)

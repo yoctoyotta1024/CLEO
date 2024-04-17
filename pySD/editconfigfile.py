@@ -9,7 +9,7 @@ Created Date: Wednesday 17th January 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th April 2024
+Last Modified: Thursday 18th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -24,19 +24,21 @@ def update_param(node, param, new_value):
     '''Function to recursively searches for 'param' key in YAML node
     and updates it's value to with 'new_value' when found '''
 
-    is_success = False
     if isinstance(node, dict):
         if param in node:
             node[param] = new_value # update value
-            is_success = True
+            return True
         else:
             for key, val in node.items():
-                update_param(val, param, new_value)
+                is_success = update_param(val, param, new_value)
+                if is_success:
+                    return True
     elif isinstance(node, list):
         for item in node:
-            update_param(item, param, new_value)
-
-    return is_success
+            is_success = update_param(item, param, new_value)
+            if is_success:
+                    return True
+    return False
 
 def edit_config_params(filename, params2change):
     ''' rewrites config YAML file with key,value pairs listed in params2change updated to new values
@@ -51,9 +53,8 @@ def edit_config_params(filename, params2change):
     # Update the parameters from the YAML file
     for param, new_value in params2change.items():
         is_success = update_param(data, param, new_value)
-
         if not is_success:
-          errmsg = param+"could not be updated to new value: "+str(new_value)
+          errmsg = param+" could not be updated to new value: "+str(new_value)
           raise ValueError(errmsg)
 
     # Overwrite the YAML file

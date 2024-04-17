@@ -70,6 +70,6 @@ coupled_dynamics:
   relh_init : 98.0                                      # initial relative humidity (%)
   # ODE solver parameters #
   W_avg : 0.002                                         # average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz)
-  TAU_half : 75000                                      # timescale for w sinusoid, tau_half = TAU_HALF/pi [s]
+  TAU_half : 75000                                      # timescale for w sinusoid, tau_half = TAU_half/pi [s]
   rtol : 1e-6                                           # relative tolerance for integration of [P, T, qv, qc] ODEs
   atol : 1e-6                                           # relative tolerance for integration of [P, T, qv, qc] ODEs
