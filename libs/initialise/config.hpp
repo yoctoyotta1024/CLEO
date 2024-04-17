@@ -27,8 +27,9 @@
 
 #include <string_view>
 
-#include "./configparams.hpp"
 #include "./copyfiles2txt.hpp"
+#include "./optional_config_params.hpp"
+#include "./required_config_params.hpp"
 
 /**
  * @brief Struct storing configuration parameters read from a YAML file.

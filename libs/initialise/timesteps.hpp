@@ -30,7 +30,7 @@
 #include <string>
 
 #include "../cleoconstants.hpp"
-#include "./configparams.hpp"
+#include "./required_config_params.hpp"
 
 namespace dlc = dimless_constants;
 
