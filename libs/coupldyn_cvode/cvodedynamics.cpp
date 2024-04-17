@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: cvodedynamics.cpp
@@ -7,15 +9,14 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * functionality for coupleddynamics concept for
- * dynamics solver in CLEO where coupling is
+ * functionality for coupleddynamics concept for dynamics solver in CLEO where coupling is
  * two-way to cvode adiabatic parcel ODE solver
  */
 
@@ -89,7 +90,7 @@ CvodeDynamics::CvodeDynamics(const Config &config, const unsigned int couplstep,
       LS(NULL),
       cvode_mem(NULL),
       retval(0),
-      neq(NVARS * config.ngbxs),
+      neq(NVARS * config.get_ngbxs()),
       t(0.0),
       y(NULL),
       re_y(NULL),

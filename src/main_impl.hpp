@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -91,7 +91,8 @@ inline InitialConditions auto create_initconds(const Config &config) {
 }
 
 inline GridboxMaps auto create_gbxmaps(const Config &config) {
-  const auto gbxmaps = create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
+  const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
+                                             config.get_grid_filename());
   return gbxmaps;
 }
 
@@ -206,23 +207,24 @@ template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      Dataset<Store> &dataset) {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+  const auto maxchunk = config.get_maxchunk();
+  const auto ngbxs = config.get_ngbxs();
 
-  const Observer auto obs0 = RunStatsObserver(obsstep, config.stats_filename);
+  const Observer auto obs0 = RunStatsObserver(obsstep, config.get_stats_filename());
 
   const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
-  const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
+  const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, ngbxs);
 
   const Observer auto obs4 = TotNsupersObserver(obsstep, dataset, maxchunk);
 
-  const Observer auto obs5 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs5 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
 
-  const Observer auto obs6 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs6 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, ngbxs);
 
-  const Observer auto obsgbx = create_gridboxes_observer(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obsgbx = create_gridboxes_observer(obsstep, dataset, maxchunk, ngbxs);
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 

@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: initgbxs_cvode.hpp
@@ -7,17 +9,15 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct for griboxes' initial conditions
- * for CLEO SDM (e.g. thermodynamics)
- * when coupled to cvode thermodynamics solver.
- * Struct can be used by InitConds as
+ * struct for griboxes' initial conditions for CLEO SDM (e.g. thermodynamics)
+ * when coupled to cvode thermodynamics solver. Struct can be used by InitConds as
  * GbxInitConds type
  */
 
@@ -47,7 +47,7 @@ struct InitGbxsCvode {
 
  public:
   explicit InitGbxsCvode(const Config &config)
-      : ngbxs(config.ngbxs),
+      : ngbxs(config.get_ngbxs()),
         press_i(config.P_INIT / dlc::P0),
         temp_i(config.TEMP_INIT / dlc::TEMP0),
         relh_init(config.relh_init),

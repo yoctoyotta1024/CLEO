@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
   const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
 
   /* Create Xarray dataset wit Zarr backend for writing output data to a store */
-  auto store = FSStore(config.zarrbasedir);
+  auto store = FSStore(config.get_zarrbasedir());
   auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */
