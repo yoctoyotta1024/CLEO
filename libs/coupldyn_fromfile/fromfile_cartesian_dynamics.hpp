@@ -24,6 +24,7 @@
 #define LIBS_COUPLDYN_FROMFILE_FROMFILE_CARTESIAN_DYNAMICS_HPP_
 
 #include <array>
+#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -72,9 +73,8 @@ struct CartesianDynamics {
   /* Read in data from binary files for wind
   velocity components in 1D, 2D or 3D model
   and check they have correct size */
-  std::string set_winds_from_binaries(const unsigned int nspacedims, std::string_view wvel_filename,
-                                      std::string_view uvel_filename,
-                                      std::string_view vvel_filename);
+  std::string set_winds_from_binaries(
+      const OptionalConfigParams::FromFileDynamicsParams &config_fromfiledynamics);
 
   /* nullwinds retuns an empty function 'func' that returns
   {0.0, 0.0}. Useful for setting get_[X]vel[Y]faces functions

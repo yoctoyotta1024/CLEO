@@ -81,8 +81,8 @@ struct Config {
     print_configuration();
 
     /* copy setup (config and constants files) to a txt file */
-    const auto files2copy = std::vector<std::string>{std::string{config_filename},
-                                                     required.inputfiles.constants_filename};
+    const auto files2copy =
+        std::vector<std::filesystem::path>{config_filename, required.inputfiles.constants_filename};
     copyfiles2txt(required.outputdata.setup_filename, files2copy);
 
     std::cout << "--- configuration: success ---\n";

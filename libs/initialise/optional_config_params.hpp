@@ -59,14 +59,15 @@ struct OptionalConfigParams {
 
   /* Coupled Dynamics Runtime Parameters for FromFileDynamics */
   struct FromFileDynamicsParams {
+    using fspath = std::filesystem::path;
     unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
-    std::string press_filename = "";           /**< name of file for pressure data */
-    std::string temp_filename = "";            /**< name of file for temperature data */
-    std::string qvap_filename = "";            /**< name of file for vapour mixing ratio data */
-    std::string qcond_filename = "";           /**< name of file for liquid mixing ratio data */
-    std::string wvel_filename = "";            /**< name of file for vertical (z) velocity data */
-    std::string uvel_filename = "";            /**< name of file for horizontal x velocity data */
-    std::string vvel_filename = "";            /**< name of file for horizontal y velocity data */
+    fspath press = fspath();                   /**< name of file for pressure data */
+    fspath temp = fspath();                    /**< name of file for temperature data */
+    fspath qvap = fspath();                    /**< name of file for vapour mixing ratio data */
+    fspath qcond = fspath();                   /**< name of file for liquid mixing ratio data */
+    fspath wvel = fspath();                    /**< name of file for vertical (z) velocity data */
+    fspath uvel = fspath();                    /**< name of file for horizontal x velocity data */
+    fspath vvel = fspath();                    /**< name of file for horizontal y velocity data */
   } fromfiledynamics;
 
   /* Coupled Dynamics Runtime Parameters for CvodeDynamics */

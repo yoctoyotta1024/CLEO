@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: gbxbounds_frombinary.cpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +27,7 @@
 /* read metadata and data in binary file called 'gridfile', then
 return GbxBoundsFromBinary instance created from that data */
 GbxBoundsFromBinary::GbxBoundsFromBinary(const unsigned int ngbxs, const unsigned int nspacedims,
-                                         std::string_view grid_filename) {
+                                         const std::filesystem::path grid_filename) {
   /* open file and read in the metatdata
   for all the variables in gridfile */
   std::ifstream file(open_binary(grid_filename));

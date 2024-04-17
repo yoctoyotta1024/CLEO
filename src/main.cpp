@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
-  const std::string_view config_filename(argv[1]);  // path to configuration file
+  const std::filesystem::path config_filename(argv[1]);  // path to configuration file
   const Config config(config_filename);
   const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
 

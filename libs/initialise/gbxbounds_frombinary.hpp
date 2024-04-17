@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: gbxbounds_frombinary.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 9th November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,17 +25,17 @@
 #ifndef LIBS_INITIALISE_GBXBOUNDS_FROMBINARY_HPP_
 #define LIBS_INITIALISE_GBXBOUNDS_FROMBINARY_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <algorithm>
 #include <array>
+#include <filesystem>
 #include <fstream>
 #include <iterator>
 #include <stdexcept>
 #include <string>
 #include <string_view>
 #include <vector>
-
-#include <Kokkos_Core.hpp>
-#include <Kokkos_Pair.hpp>
 
 #include "initialise/readbinary.hpp"
 
@@ -60,7 +62,7 @@ struct GbxBoundsFromBinary {
                                       // lower and upper coordinate boundaries
 
   GbxBoundsFromBinary(const unsigned int ngbxs, const unsigned int nspacedims,
-                      std::string_view grid_filename);
+                      const std::filesystem::path grid_filename);
 
   /* returns coord3 {lower, upper} gridbox bounds
   from position in gbxbounds vector which corresponds

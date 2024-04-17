@@ -24,6 +24,7 @@
 #ifndef LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
 #define LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
 
+#include <filesystem>
 #include <fstream>
 #include <string_view>
 #include <vector>
@@ -40,8 +41,7 @@ struct InitSupersFromBinary {
  private:
   size_t totnsupers;        // total number of superdroplets (in kokkos view on device initially)
   unsigned int nspacedims;  // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
-  std::string_view
-      initsupers_filename;  // name of binary file for some of superdrops' initial conditons
+  std::filesystem::path initsupers_filename;  // filename for some of superdrops' initial conditons
 
   /* sets initial data for solutes as
   a single SoluteProprties instance */

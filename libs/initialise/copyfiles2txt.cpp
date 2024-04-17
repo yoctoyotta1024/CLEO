@@ -26,19 +26,21 @@
 
 /* open a file called filename and copy
 text line by line into wfile */
-void copyfile(std::ofstream &wfile, const std::string filename);
+void copyfile(std::ofstream &wfile, const std::filesystem::path filename);
 
 /* creates new empty file called setup_filename and copies contents of
 files listed in files2copy vector one by one */
-void copyfiles2txt(const std::string setup_filename, const std::vector<std::string> files2copy) {
-  std::cout << "----- writing to new setup file: " << setup_filename << " -----\n";
+void copyfiles2txt(const std::filesystem::path setup_filename,
+                   const std::vector<std::filesystem::path> &files2copy) {
+  const auto setup_filestr = setup_filename.string();
+  std::cout << "----- writing to new setup file: " << setup_filestr << " -----\n";
 
   std::ofstream wfile;
 
-  wfile.open(setup_filename, std::ios::out | std::ios::trunc);  // clear previous contents
+  wfile.open(setup_filestr, std::ios::out | std::ios::trunc);  // clear previous contents
   wfile.close();
 
-  wfile.open(setup_filename, std::ios::app);  // copy files one by one
+  wfile.open(setup_filestr, std::ios::app);  // copy files one by one
   for (auto &filename : files2copy) {
     copyfile(wfile, filename);
   }
@@ -49,13 +51,14 @@ void copyfiles2txt(const std::string setup_filename, const std::vector<std::stri
 
 /* open a file called filename and copy
 text line by line into wfile */
-void copyfile(std::ofstream &wfile, const std::string filename) {
-  std::ifstream readfile(filename);
+void copyfile(std::ofstream &wfile, const std::filesystem::path filename) {
+  const auto filestr = filename.string();
+  std::ifstream readfile(filestr);
 
-  std::cout << " copying " + filename + " to setup file\n";
+  std::cout << " copying " + filestr + " to setup file\n";
 
   wfile << "// ----------------------------- //\n";
-  wfile << "// --------- " + filename + " --------- //\n";
+  wfile << "// --------- " + filestr + " --------- //\n";
   wfile << "// ----------------------------- //\n";
 
   std::string line;

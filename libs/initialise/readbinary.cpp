@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: readbinary.cpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -74,8 +76,8 @@ VarMetadata::VarMetadata(std::ifstream &file, const int off) {
 }
 
 /* open binary file for reading or raise error */
-std::ifstream open_binary(std::string_view filename) {
-  std::string filestr = static_cast<std::string>(filename);
+std::ifstream open_binary(const std::filesystem::path filename) {
+  std::string filestr = filename.string();
   std::cout << "opening binary file: " << filestr << '\n';
   std::ifstream file(filestr, std::ios::in | std::ios::binary);
 
