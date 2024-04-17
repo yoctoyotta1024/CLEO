@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: config.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 8th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,6 +22,8 @@
 
 #ifndef LIBS_INITIALISE_CONFIG_HPP_
 #define LIBS_INITIALISE_CONFIG_HPP_
+
+#include <yaml-cpp/yaml.h>
 
 #include <algorithm>
 #include <filesystem>

@@ -27,7 +27,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library
-target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
+target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos yaml-cpp::yaml-cpp)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)
