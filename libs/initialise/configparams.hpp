@@ -32,35 +32,68 @@
 /**
  * @brief Struct storing required configuration parameters for CLEO
  *
+ * Required means parameters have no default values and therefore must be set upon
+ * construction.
+ *
  */
 struct RequiredConfigParams {
   /*** Input and Output Parameters ***/
-  /* inputfiles */
-  std::string constants_filename;  /**< name of input file for values of physical constants */
-  std::string initsupers_filename; /**< name of input file for initialisation of super-droplets */
-  std::string grid_filename;       /**< name of input file for initialisation of GbxMaps */
-  /* outputdata */
-  std::string setup_filename;        /**< name of output file to copy model setup to */
-  std::string stats_filename;        /**< name of output file to output runtime statistics to */
-  std::filesystem::path zarrbasedir; /**< name of base directory of zarr output */
-  size_t maxchunk;                   /**< maximum number of elements in zarr array chunks */
+  struct InputFilesParams {
+    std::string constants_filename;  /**< name of input file for values of physical constants */
+    std::string initsupers_filename; /**< name of input file for initialisation of super-droplets */
+    std::string grid_filename;       /**< name of input file for initialisation of GbxMaps */
+  } inputfiles;
+
+  struct OutputDataParams {
+    std::string setup_filename;        /**< name of output file to copy model setup to */
+    std::string stats_filename;        /**< name of output file to output runtime statistics to */
+    std::filesystem::path zarrbasedir; /**< name of base directory of zarr output */
+    size_t maxchunk;                   /**< maximum number of elements in zarr array chunks */
+  } outputdata;
 
   /*** SDM Runtime parameters ***/
-  /* domain */
-  unsigned int nspacedims;           /**< no. of spatial dimensions to model */
-  size_t ngbxs;                      /**< total number of Gbxs */
-  size_t totnsupers;                 /**< initial total no. of SDs */
-  std::string_view coupled_dynamics; /**< type of coupled dynamics to configure */
+  struct DomainParams {
+    unsigned int nspacedims;           /**< no. of spatial dimensions to model */
+    size_t ngbxs;                      /**< total number of Gbxs */
+    size_t totnsupers;                 /**< initial total no. of SDs */
+    std::string_view coupled_dynamics; /**< type of coupled dynamics to configure */
+  } domain;
 
-  /* timestepping */
-  struct TSTEPS {
+  struct TimestepsParams {
     double CONDTSTEP;   /**< time between SD condensation [s] */
     double COLLTSTEP;   /**< time between SD collision [s] */
     double MOTIONTSTEP; /**< time between SDM motion [s] */
     double COUPLTSTEP;  /**< time between thermodynamic couplings [s] */
     double OBSTSTEP;    /**< time between SDM observations [s] */
     double T_END;       /**< time span of integration from 0s to T_END [s] */
-  } tsteps;
+  } timesteps;
+};
+
+/**
+ * @brief Struct storing optional configuration parameters for CLEO
+ *
+ * Optional means parameters have default values and therefore need not be set upon
+ * construction. Default values are not intended to be used and may caused model errors at runtime.
+ *
+ */
+struct OptionalConfigParams {
+  struct DoCondensationParams {
+    bool do_alter_thermo = false; /**< enable condensation to alter the thermodynamic state */
+    unsigned int iters = 0;       /**< suggested no. iterations of Newton Raphson Method */
+    double SUBTSTEP = 0.0;        /**< smallest timestep in cases where substepping occurs [s] */
+    double rtol = 0.0;            /**< relative tolerance for implicit Euler integration */
+    double atol = 0.0;            /**< abolute tolerance for implicit Euler integration */
+  } condensation;
+
+  struct FromFileDynamicsParams {
+    std::string press_filename = ""; /**< name of file for pressure data */
+    std::string temp_filename = "";  /**< name of file for temperature data */
+    std::string qvap_filename = "";  /**< name of file for vapour mixing ratio data */
+    std::string qcond_filename = ""; /**< name of file for liquid mixing ratio data */
+    std::string wvel_filename = "";  /**< name of file for vertical (z) velocity data */
+    std::string uvel_filename = "";  /**< name of file for horizontal x velocity data */
+    std::string vvel_filename = "";  /**< name of file for horizontal y velocity data */
+  } fromfiledynamics;
 };
 
 #endif  // LIBS_INITIALISE_CONFIGPARAMS_HPP_

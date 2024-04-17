@@ -42,7 +42,7 @@ domain:
   totnsupers : 2048                                    # initial total no. of SDs
   coupled_dynamics : fromfile                          # type of coupled dynamics to configure
 
-timestepping:
+timesteps:
   CONDTSTEP : 0.1                                      # time between SD condensation [s]
   COLLTSTEP : 1                                        # time between SD collision [s]
   MOTIONTSTEP : 2                                      # time between SDM motion [s]
@@ -51,14 +51,14 @@ timestepping:
   T_END : 120                                          # time span of integration from 0s to T_END [s]
 
 condensation:
+  doAlterThermo : false                                # enable condensation to alter the thermodynamic state
   iters : 2                                            # no. iterations of Newton Raphson Method before testing for convergence
   SUBTSTEP : 0.1                                       # smallest timestep in cases where substepping occurs [s]
-  rtol : 0.0                                           # relative tolerance for implicit euler integration
-  atol : 0.01                                          # abolute tolerance for implicit euler integration
-  doAlterThermo : false                                # enable condensation to alter the thermodynamic state
+  rtol : 0.0                                           # relative tolerance for implicit Euler integration
+  atol : 0.01                                          # abolute tolerance for implicit Euler integration
 
 ### Coupled Dynamics Runtime Parameters ###
-dynamics:
+fromfiledynamics:
   press : ./share/dimlessthermo_press.dat              # binary filename for pressure
   temp : ./share/dimlessthermo_temp.dat                # binary filename for temperature
   qvap : ./share/dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio

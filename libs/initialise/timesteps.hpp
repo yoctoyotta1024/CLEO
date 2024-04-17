@@ -78,7 +78,7 @@ class Timesteps {
   std::chrono library. Throw error if after convertion into
   model timestep, any timestep = 0 or if a sub-timestep is
   longer than a timestep */
-  explicit Timesteps(const RequiredConfigParams::TSTEPS &config_tsteps);
+  explicit Timesteps(const RequiredConfigParams::TimestepsParams &config_tsteps);
 
   auto get_condstep() const { return condstep; }
   auto get_collstep() const { return collstep; }

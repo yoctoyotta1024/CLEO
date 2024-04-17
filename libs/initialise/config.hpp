@@ -42,6 +42,7 @@ struct Config {
   void loadconfiguration(const std::string_view config_filename);
 
   RequiredConfigParams required; /**< required configuration parameters of CLEO */
+  OptionalConfigParams optional; /**< optional configuration parameters of CLEO */
 
  public:
   /**
@@ -66,14 +67,31 @@ struct Config {
     std::cout << "--- configuration: success ---\n";
   }
 
-  std::string get_initsupers_filename() const { return required.initsupers_filename; };
-  std::string get_grid_filename() const { return required.grid_filename; }
-  std::string get_stats_filename() const { return required.stats_filename; }
-  std::filesystem::path get_zarrbasedir() const { return required.zarrbasedir; }
-  size_t get_maxchunk() const { return required.maxchunk; }
-  unsigned int get_nspacedims() const { return required.nspacedims; }
-  size_t get_ngbxs() const { return required.ngbxs; }
-  size_t get_totnsupers() const { return required.totnsupers; }
+  std::string get_initsupers_filename() const { return required.inputfiles.initsupers_filename; };
+
+  std::string get_grid_filename() const { return required.inputfiles.grid_filename; }
+
+  std::string get_stats_filename() const { return required.inputfiles.stats_filename; }
+
+  std::filesystem::path get_zarrbasedir() const { return required.outputdata.zarrbasedir; }
+
+  size_t get_maxchunk() const { return required.outputdata.maxchunk; }
+
+  unsigned int get_nspacedims() const { return required.domain.nspacedims; }
+
+  size_t get_ngbxs() const { return required.domain.ngbxs; }
+
+  size_t get_totnsupers() const { return required.domain.totnsupers; }
+
+  RequiredConfigParams::TimestepsParams get_timesteps() const { return required.timesteps; }
+
+  OptionalConfigParams::DoCondensationParams get_condensation() const {
+    return optional.condensation;
+  }
+
+  OptionalConfigParams::FromFileDynamicsParams get_fromfiledynamics() const {
+    return optional.fromfiledynamics;
+  }
 };
 
 #endif  // LIBS_INITIALISE_CONFIG_HPP_
