@@ -12,3 +12,4 @@ awkward
 zarr
 pre-commit
 mpi4py
+ruamel.yaml
