@@ -1,6 +1,6 @@
 name: cienv
 dependencies:
-    - python=3.12.2
+    - python>=3.9
     - pytest
     - sphinx
     - conda-forge::doxygen>=1.10.0
