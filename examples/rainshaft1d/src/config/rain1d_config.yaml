@@ -1,12 +1,12 @@
 ---
 # ----- CLEO -----
-# File: const2d_config.yaml
+# File: rain1d_config.yaml
 # Project: config
-# Created Date: Wednesday 17th April 2024
+# Created Date: Thursday 18th April 2024
 # Author: Clara Bayley (CB)
 # Additional Contributors:
 # -----
-# Last Modified: Wednesday 17th April 2024
+# Last Modified: Thursday 18th April 2024
 # Modified By: CB
 # -----
 # License: BSD 3-Clause "New" or "Revised" License
@@ -15,7 +15,7 @@
 # Copyright (c) 2023 MPI-M, Clara Bayley
 # -----
 # File Description:
-# Configuration file for CLEO 2-D example with constant thermodynamics read from a file.
+# Configuration file for CLEO 1-D rainshaft example with constant thermodynamics.
 # Note: The inital superdroplets data read from file "initsupers_filename" can be made with
 # CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
 # Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
@@ -25,32 +25,32 @@
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp              # name of file for values of physical constants
-  grid_filename : ./share/const2d_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
+  grid_filename : ./share/rain1d_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type : frombinary                                           # type of initialisation of super-droplets
-  initsupers_filename : ./share/const2d_dimlessSDsinit.dat    # binary filename for initialisation of SDs
-  totnsupers : 960                                            # initial total no. of SDs
+  initsupers_filename : ./share/rain1d_dimlessSDsinit.dat    # binary filename for initialisation of SDs
+  totnsupers : 21760                                          # initial total no. of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/const2d_setup.txt             # .txt filename to copy configuration to
-  stats_filename : ./bin/const2d_stats.txt             # .txt file to output runtime statistics to
-  zarrbasedir : ./bin/const2d_sol.zarr                 # zarr store base directory
+  setup_filename : ./bin/rain1d_setup.txt              # .txt filename to copy configuration to
+  stats_filename : ./bin/rain1d_stats.txt              # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/rain1d_sol.zarr                  # zarr store base directory
   maxchunk : 2500000                                   # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime Parameters ###
 domain:
-  nspacedims : 2                                       # no. of spatial dimensions to model
-  ngbxs : 400                                          # total number of Gbxs
+  nspacedims : 1                                       # no. of spatial dimensions to model
+  ngbxs : 125                                          # total number of Gbxs
 
 timesteps:
   CONDTSTEP : 1                                        # time between SD condensation [s]
   COLLTSTEP : 1                                        # time between SD collision [s]
   MOTIONTSTEP : 2                                      # time between SDM motion [s]
-  COUPLTSTEP : 7200                                    # time between dynamic couplings [s]
+  COUPLTSTEP : 2400                                    # time between dynamic couplings [s]
   OBSTSTEP : 120                                       # time between SDM observations [s]
-  T_END : 7200                                         # time span of integration from 0s to T_END [s]
+  T_END : 2400                                         # time span of integration from 0s to T_END [s]
 
 ### Microphysics Parameters ###
 microphysics:
@@ -64,9 +64,8 @@ microphysics:
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
   type : fromfile                                      # type of coupled dynamics to configure
-  press : ./share/const2d_dimlessthermo_press.dat              # binary filename for pressure
-  temp : ./share/const2d_dimlessthermo_temp.dat                # binary filename for temperature
-  qvap : ./share/const2d_dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio
-  qcond : ./share/const2d_dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
-  wvel : ./share/const2d_dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
-  uvel : ./share/const2d_dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity
+  press : ./share/rain1d_dimlessthermo_press.dat              # binary filename for pressure
+  temp : ./share/rain1d_dimlessthermo_temp.dat                # binary filename for temperature
+  qvap : ./share/rain1d_dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio
+  qcond : ./share/rain1d_dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
+  wvel : ./share/rain1d_dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity

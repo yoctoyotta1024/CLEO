@@ -51,13 +51,3 @@ timesteps:
   COUPLTSTEP : 3600                                  # time between dynamic couplings [s]
   OBSTSTEP : 180                                     # time between SDM observations [s]
   T_END : 7200                                       # time span of integration from 0s to T_END [s]
-
-### Coupled Dynamics Parameters ###
-coupled_dynamics:
-  type : fromfile                                      # type of coupled dynamics to configure
-  press : ./share/df2d_dimlessthermo_press.dat              # binary filename for pressure
-  temp : ./share/df2d_dimlessthermo_temp.dat                # binary filename for temperature
-  qvap : ./share/df2d_dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio
-  qcond : ./share/df2d_dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
-  wvel : ./share/df2d_dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
-  uvel : ./share/df2d_dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity

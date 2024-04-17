@@ -1,0 +1,71 @@
+---
+# ----- CLEO -----
+# File: eurec4a1d_config.yaml
+# Project: config
+# Created Date: Thursday 18th April 2024
+# Author: Clara Bayley (CB)
+# Additional Contributors:
+# -----
+# Last Modified: Thursday 18th April 2024
+# Modified By: CB
+# -----
+# License: BSD 3-Clause "New" or "Revised" License
+# https://opensource.org/licenses/BSD-3-Clause
+# -----
+# Copyright (c) 2023 MPI-M, Clara Bayley
+# -----
+# File Description:
+# Configuration file for CLEO eurec4a 1-D rainshaft example.
+# Note: The inital superdroplets data read from file "initsupers_filename" can be made with
+# CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
+# Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
+# and so can the thermodynamics files when using coupled thermodynamics "fromfile".
+#
+
+### Initialisation Parameters ###
+inputfiles:
+  constants_filename : ../libs/cleoconstants.hpp                 # name of file for values of physical constants
+  grid_filename : ./share/eurec4a1d_ddimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
+
+initsupers:
+  type : frombinary                                              # type of initialisation of super-droplets
+  initsupers_filename : ./share/eurec4a1d_ddimlessSDsinit.dat    # binary filename for initialisation of SDs
+  totnsupers : 15360                                             # initial total no. of SDs
+
+### Output Parameters ###
+outputdata:
+  setup_filename : ./bin/eurec4a1d_setup.txt           # .txt filename to copy configuration to
+  stats_filename : ./bin/eurec4a1d_stats.txt           # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/eurec4a1d_sol.zarr               # zarr store base directory
+  maxchunk : 2500000                                   # maximum no. of elements in chunks of zarr store array
+
+### SDM Runtime Parameters ###
+domain:
+  nspacedims : 1                                       # no. of spatial dimensions to model
+  ngbxs : 60                                           # total number of Gbxs
+
+timesteps:
+  CONDTSTEP : 0.1                                      # time between SD condensation [s]
+  COLLTSTEP : 1                                        # time between SD collision [s]
+  MOTIONTSTEP : 2                                      # time between SDM motion [s]
+  COUPLTSTEP : 2400                                    # time between dynamic couplings [s]
+  OBSTSTEP : 5                                         # time between SDM observations [s]
+  T_END : 2400                                         # time span of integration from 0s to T_END [s]
+
+### Microphysics Parameters ###
+microphysics:
+  condensation:
+    do_alter_thermo : false                            # true = cond/evap alters the thermodynamic state
+    niters : 2                                         # no. iterations of Newton Raphson Method before testing for convergence
+    SUBTSTEP : 0.1                                     # smallest subtimestep in cases of substepping [s]
+    rtol : 0.0                                         # relative tolerance for implicit Euler integration
+    atol : 0.01                                        # abolute tolerance for implicit Euler integration
+
+### Coupled Dynamics Parameters ###
+coupled_dynamics:
+  type : fromfile                                      # type of coupled dynamics to configure
+  press : ./share/eurec4a1d_dimlessthermo_press.dat              # binary filename for pressure
+  temp : ./share/eurec4a1d_dimlessthermo_temp.dat                # binary filename for temperature
+  qvap : ./share/eurec4a1d_dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio
+  qcond : ./share/eurec4a1d_dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
+  wvel : ./share/eurec4a1d_dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
