@@ -63,7 +63,10 @@ You can install Python packages to an existing Conda (or Mamba) environment via:
 YAC
 ---
 
-YAC is one of the :doc:`external libraries<usage/extern>` which CLEO may require in order to
+.. note::
+  The installation of YAC for CLEO is currently in development and may require some manual installation.
+
+YAC is one of the :doc:`external libraries<extern>` which CLEO may require in order to
 couple to dynamics and/or have MPI domain decomposition.
 
 YAC requires some additional MPI, NetCDF and yaml libraries alongside the gcc compiler. You can
@@ -73,6 +76,3 @@ load them on Levante via:
 
   $ module load openmpi/4.1.2-gcc-11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
   $ spack load openblas@0.3.18%gcc@=11.2.0 libfyaml /fvbhgoq py-mpi4py
-
-.. note::
-  The installation of YAC for CLEO is currently in development and may require some manual installation.

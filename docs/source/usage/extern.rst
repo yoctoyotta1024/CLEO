@@ -6,12 +6,12 @@ yaml-cpp depending on your setup. These are automatically built using CMAKE and 
 required.
 
 .. note::
-  The installation of YAC for CLEO is currently in development and may rquire some manual installation.
+  The installation of YAC for CLEO is currently in development and may require some manual installation.
 
 Kokkos
 ------
 All builds of CLEO require Kokkos in order to implement thread parallelism. You can read more about
-how we use Kokkos on :doc:`our page about Kokkos<intro/kokkos>`.
+how we use Kokkos on :doc:`our page about Kokkos<../intro/kokkos>`.
 
 YAC
 ---
