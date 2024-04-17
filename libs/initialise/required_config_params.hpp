@@ -45,9 +45,8 @@ struct RequiredConfigParams {
 
   /*** Input and Output Parameters ***/
   struct InputFilesParams {
-    std::filesystem::path constants_filename;  /**< filename for values of physical constants */
-    std::filesystem::path initsupers_filename; /**< filename for initialisation of super-droplets */
-    std::filesystem::path grid_filename;       /**< filename for initialisation of GbxMaps */
+    std::filesystem::path constants_filename; /**< filename for values of physical constants */
+    std::filesystem::path grid_filename;      /**< filename for initialisation of GbxMaps */
   } inputfiles;
 
   struct OutputDataParams {
@@ -61,7 +60,6 @@ struct RequiredConfigParams {
   struct DomainParams {
     unsigned int nspacedims; /**< no. of spatial dimensions to model */
     size_t ngbxs;            /**< total number of Gbxs */
-    size_t totnsupers;       /**< initial total no. of SDs */
   } domain;
 
   struct TimestepsParams {

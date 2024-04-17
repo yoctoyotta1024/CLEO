@@ -59,6 +59,16 @@ struct OptionalConfigParams {
     double atol = NaNVals::dbl();          /**< abolute tolerance for implicit Euler integration */
   } condensation;
 
+  /* Super-Droplet Initialisation From a Binary File Runtime Parameters */
+  struct InitSupersFromBinaryParams {
+    using fspath = std::filesystem::path;
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    fspath initsupers_filename = fspath(); /**< filename for initialisation of super-droplets */
+    size_t totnsupers = NaNVals::sizet();  /**< initial total no. of Super-Droplets in the domain */
+    unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
+  } initsupersfrombinary;
+
   /* Coupled Dynamics Runtime Parameters for FromFileDynamics */
   struct FromFileDynamicsParams {
     void set_params(const YAML::Node& config);

@@ -64,10 +64,6 @@ struct Config {
     std::cout << "--- configuration: success ---\n";
   }
 
-  std::filesystem::path get_initsupers_filename() const {
-    return required.inputfiles.initsupers_filename;
-  };
-
   std::filesystem::path get_grid_filename() const { return required.inputfiles.grid_filename; }
 
   std::filesystem::path get_stats_filename() const { return required.outputdata.stats_filename; }
@@ -80,12 +76,14 @@ struct Config {
 
   size_t get_ngbxs() const { return required.domain.ngbxs; }
 
-  size_t get_totnsupers() const { return required.domain.totnsupers; }
-
   RequiredConfigParams::TimestepsParams get_timesteps() const { return required.timesteps; }
 
   OptionalConfigParams::CondensationParams get_condensation() const {
     return optional.condensation;
+  }
+
+  OptionalConfigParams::InitSupersFromBinaryParams get_initsupersfrombinary() const {
+    return optional.initsupersfrombinary;
   }
 
   OptionalConfigParams::CvodeDynamicsParams get_cvodedynamics() const {

@@ -32,7 +32,6 @@ RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_fi
 
   YAML::Node yaml = config["inputfiles"];
   inputfiles.constants_filename = fspath_from_yaml(yaml, "constants_filename");
-  inputfiles.initsupers_filename = fspath_from_yaml(yaml, "initsupers_filename");
   inputfiles.grid_filename = fspath_from_yaml(yaml, "grid_filename");
 
   yaml = config["outputdata"];
@@ -44,7 +43,6 @@ RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_fi
   yaml = config["domain"];
   domain.nspacedims = yaml["nspacedims"].as<unsigned int>();
   domain.ngbxs = yaml["ngbxs"].as<size_t>();
-  domain.totnsupers = yaml["totnsupers"].as<size_t>();
 
   yaml = config["timesteps"];
   timesteps.CONDTSTEP = yaml["CONDTSTEP"].as<double>();
@@ -60,14 +58,13 @@ RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_fi
 void RequiredConfigParams::print_params() const {
   std::cout << "\n-------- Required Configuration Parameters --------------"
             << "\nconstants_filename : " << inputfiles.constants_filename
-            << "\ninitsupers_filename : " << inputfiles.initsupers_filename
             << "\ngrid_filename : " << inputfiles.grid_filename
             << "\nsetup_filename : " << outputdata.setup_filename
             << "\nstats_filename : " << outputdata.stats_filename
             << "\nzarrbasedir : " << outputdata.zarrbasedir
             << "\nmaxchunk : " << outputdata.maxchunk << "\nnspacedims : " << domain.nspacedims
-            << "\nngbxs : " << domain.ngbxs << "\ntotnsupers : " << domain.totnsupers
-            << "\nCONDTSTEP : " << timesteps.CONDTSTEP << "\nCOLLTSTEP : " << timesteps.COLLTSTEP
+            << "\nngbxs : " << domain.ngbxs << "\nCONDTSTEP : " << timesteps.CONDTSTEP
+            << "\nCOLLTSTEP : " << timesteps.COLLTSTEP
             << "\nMOTIONTSTEP : " << timesteps.MOTIONTSTEP
             << "\nCOUPLTSTEP : " << timesteps.COUPLTSTEP << "\nOBSTSTEP : " << timesteps.OBSTSTEP
             << "\nT_END : " << timesteps.T_END

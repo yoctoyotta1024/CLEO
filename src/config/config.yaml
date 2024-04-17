@@ -25,8 +25,12 @@
 ### Input Files ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp      # name of file for values of physical constants
-  initsupers_filename : ./share/dimlessSDsinit.dat    # binary filename for initialisation of SDs
   grid_filename : ./share/dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
+
+initsupers:
+  type : frombinary                                   # type of initialisation of super-droplets
+  initsupers_filename : ./share/dimlessSDsinit.dat    # binary filename for initialisation of SDs
+  totnsupers : 2048                                   # initial total no. of SDs
 
 ### Output Data ###
 outputdata:
@@ -39,7 +43,6 @@ outputdata:
 domain:
   nspacedims : 1                                       # no. of spatial dimensions to model
   ngbxs : 41                                           # total number of Gbxs
-  totnsupers : 2048                                    # initial total no. of SDs
 
 timesteps:
   CONDTSTEP : 0.1                                      # time between SD condensation [s]

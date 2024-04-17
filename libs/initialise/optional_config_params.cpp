@@ -30,6 +30,17 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
     condensation.print_params();
   }
 
+  if (config["initsupers"]) {
+    const auto type = config["initsupers"]["type"].as<std::string>();
+
+    if (type == "frombinary") {
+      initsupersfrombinary.set_params(config);
+      initsupersfrombinary.print_params();
+    } else {
+      throw std::invalid_argument("unknown initsupers 'type' : " + type);
+    }
+  }
+
   if (config["coupled_dynamics"]) {
     const auto type = config["coupled_dynamics"]["type"].as<std::string>();
 
@@ -59,6 +70,23 @@ void OptionalConfigParams::CondensationParams::print_params() const {
   std::cout << "\n-------- DoCondensation Configuration Parameters --------------"
             << "\ndo_alter_thermo : " << do_alter_thermo << "\nniters : " << niters
             << "\nSUBSTEP : " << SUBTSTEP << "\nrtol : " << rtol << "\natol : " << atol
+            << "\n---------------------------------------------------------\n";
+}
+
+void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::Node &config) {
+  const YAML::Node yaml = config["initsupers"];
+
+  assert((yaml["type"].as<std::string>() == "frombinary"));
+
+  initsupers_filename = std::filesystem::path(yaml["initsupers_filename"].as<std::string>());
+  totnsupers = yaml["totnsupers"].as<size_t>();
+  nspacedims = config["domain"]["nspacedims"].as<unsigned int>();
+}
+
+void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
+  std::cout << "\n-------- InitSupersFromBinary Configuration Parameters --------------"
+            << "\ninitsupers_filename : " << initsupers_filename << "\ntotnsupers : " << totnsupers
+            << "\nnspacedims : " << nspacedims
             << "\n---------------------------------------------------------\n";
 }
 
@@ -112,7 +140,7 @@ void OptionalConfigParams::CvodeDynamicsParams::set_params(const YAML::Node &con
 
 void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
   std::cout << "\n-------- CvodeDynamics Configuration Parameters --------------"
-            << "\nP_init : " << P_init << "\nTEMP_init : " << TEMP_init
+            << "\nngbxs : " << ngbxs << "\nP_init : " << P_init << "\nTEMP_init : " << TEMP_init
             << "\nrelh_init : " << relh_init << "\nW_avg : " << W_avg << "\nTAU_half : " << TAU_half
             << "\nrtol : " << rtol << "\natol : " << atol
             << "\n---------------------------------------------------------\n";
