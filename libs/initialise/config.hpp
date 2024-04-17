@@ -43,7 +43,7 @@ struct Config {
    *
    * Initializes a Config instance by loading the configuration
    * from the specified YAML configuration file and copies the setup
-   * to an output file "setuptxt".
+   * to an output file "setup_filename".
    *
    * @param config_filename The name of the YAML configuration file.
    */
@@ -54,7 +54,7 @@ struct Config {
 
     /* copy setup (config and constants files) to a txt file */
     const std::string filestr(config_filename);
-    copyfiles2txt(setuptxt, {filestr, constants_filename});
+    copyfiles2txt(setup_filename, {filestr, constants_filename});
 
     std::cout << "--- configuration: success ---\n";
   }

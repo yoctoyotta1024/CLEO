@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: copyfiles2txt.cpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,23 +28,23 @@
 text line by line into wfile */
 void copyfile(std::ofstream &wfile, const std::string filename);
 
-/* creates new empty file called setuptxt and copies contents of
+/* creates new empty file called setup_filename and copies contents of
 files listed in files2copy vector one by one */
-void copyfiles2txt(const std::string setuptxt, const std::vector<std::string> files2copy) {
-  std::cout << "----- writing to new setuptxt file: " << setuptxt << " -----\n";
+void copyfiles2txt(const std::string setup_filename, const std::vector<std::string> files2copy) {
+  std::cout << "----- writing to new setup file: " << setup_filename << " -----\n";
 
   std::ofstream wfile;
 
-  wfile.open(setuptxt, std::ios::out | std::ios::trunc);  // clear previous contents
+  wfile.open(setup_filename, std::ios::out | std::ios::trunc);  // clear previous contents
   wfile.close();
 
-  wfile.open(setuptxt, std::ios::app);  // copy files one by one
+  wfile.open(setup_filename, std::ios::app);  // copy files one by one
   for (auto &filename : files2copy) {
     copyfile(wfile, filename);
   }
   wfile.close();
 
-  std::cout << "---- copy complete, setuptxt file closed -----\n";
+  std::cout << "---- copy complete, setup file closed -----\n";
 }
 
 /* open a file called filename and copy
@@ -50,7 +52,7 @@ text line by line into wfile */
 void copyfile(std::ofstream &wfile, const std::string filename) {
   std::ifstream readfile(filename);
 
-  std::cout << " copying " + filename + " to setuptxt file\n";
+  std::cout << " copying " + filename + " to setup file\n";
 
   wfile << "// ----------------------------- //\n";
   wfile << "// --------- " + filename + " --------- //\n";
