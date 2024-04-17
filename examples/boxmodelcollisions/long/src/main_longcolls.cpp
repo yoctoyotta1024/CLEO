@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for 0-D box model with Long's kernel.
  * After make/compiling, execute for example via:
- * ./src/longcolls ../src/config/config.tx
+ * ./src/longcolls ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>

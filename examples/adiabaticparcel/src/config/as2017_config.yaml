@@ -1,11 +1,11 @@
 # ----- CLEO -----
-# File: config.yaml
+# File: as2017_config.yaml
 # Project: config
 # Created Date: Wednesday 17th April 2024
 # Author: Clara Bayley (CB)
 # Additional Contributors:
 # -----
-# Last Modified: Monday 15th April 2024
+# Last Modified: Wednesday 17th April 2024
 # Modified By: CB
 # -----
 # License: BSD 3-Clause "New" or "Revised" License
@@ -35,7 +35,7 @@ initsupers:
 outputdata:
   setup_filename: /home/m/m300950/CLEO/build_adia0D//bin/as2017_setup.txt   # .txt filename to copy configuration to
   stats_filename: /home/m/m300950/CLEO/build_adia0D//bin/as2017_stats.txt   # .txt file to output runtime statistics to
-  zarrbasedir: /home/m/m300950/CLEO/build_adia0D//bin/as2017_sol2.zarr      # zarr store base directory
+  zarrbasedir: /home/m/m300950/CLEO/build_adia0D//bin/as2017_sol8.zarr      # zarr store base directory
   maxchunk: 2500000                                                         # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime Parameters ###
