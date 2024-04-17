@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 26th March 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +28,7 @@ grid_filename = ./share/yac1_dimlessGBxboundaries.dat       # binary filename fo
 setuptxt = ./bin/yac1_setup.txt                # .txt filename to copy configuration to
 stats_filename = ./bin/yac1_stats.txt          # .txt file to output runtime statistics to
 zarrbasedir = ./bin/yac1_sol.zarr              # zarr store base directory
-maxchunk = 1250000                             # maximum no. of elements in chunks of zarr store array
+maxchunk = 2500000                             # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime parameters ###
 # domain setup #

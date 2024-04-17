@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for speed test model example.
  * After make/compiling, execute for example via:
- * ./src/spdtest ../src/config/config.txt
+ * ./src/spdtest ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>
@@ -82,7 +82,8 @@ inline InitialConditions auto create_initconds(const Config &config) {
 }
 
 inline GridboxMaps auto create_gbxmaps(const Config &config) {
-  const auto gbxmaps = create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
+  const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
+                                             config.get_grid_filename());
   return gbxmaps;
 }
 
@@ -169,14 +170,14 @@ inline Observer auto create_bulk_observer(const unsigned int interval, Dataset<S
 template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      Dataset<Store> &dataset) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+  const auto obsstep = tsteps.get_obsstep();
+  const auto maxchunk = config.get_maxchunk();
 
-  const Observer auto obs0 = RunStatsObserver(obsstep, config.stats_filename);
+  const Observer auto obs0 = RunStatsObserver(obsstep, config.get_stats_filename());
 
   const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
 
-  const Observer auto obsblk = create_bulk_observer(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obsblk = create_bulk_observer(obsstep, dataset, maxchunk, config.get_ngbxs());
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
@@ -202,12 +203,12 @@ int main(int argc, char *argv[]) {
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
-  const std::string_view config_filename(argv[1]);  // path to configuration file
+  const std::filesystem::path config_filename(argv[1]);  // path to configuration file
   const Config config(config_filename);
-  const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
+  const Timesteps tsteps(config.get_timesteps());
 
   /* Create zarr store for writing output to storage */
-  auto store = FSStore(config.zarrbasedir);
+  auto store = FSStore(config.get_zarrbasedir());
   auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */
