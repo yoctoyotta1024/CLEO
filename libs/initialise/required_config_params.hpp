@@ -30,7 +30,6 @@
 #include <string>
 
 // TODO(CB): check types of config params e.g. int maxchunk -> size_t maxchunk
-// TODO(CB): use std::filesystem::path not string
 
 /**
  * @brief Struct storing required configuration parameters for CLEO

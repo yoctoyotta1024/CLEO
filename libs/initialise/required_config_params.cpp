@@ -21,14 +21,14 @@
 
 #include "initialise/required_config_params.hpp"
 
-/* convert string to std::filesystem::path type */
-std::filesystem::path fspath_from_yaml(YAML::Node &yaml, const std::string key) {
-  return yaml[key].as<std::string>();
-}
-
 /* read configuration file given by config_filename to set members of required configuration */
 RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_filename) {
   YAML::Node config = YAML::LoadFile(std::string{config_filename});
+
+  /* convert string to std::filesystem::path type */
+  auto fspath_from_yaml = [](YAML::Node& yaml, const std::string& key) {
+    return std::filesystem::path(yaml[key].as<std::string>());
+  };
 
   YAML::Node yaml = config["inputfiles"];
   inputfiles.constants_filename = fspath_from_yaml(yaml, "constants_filename");
