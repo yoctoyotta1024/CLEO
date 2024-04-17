@@ -2,7 +2,7 @@ External Libraries
 ==================
 
 CLEO depends upon Kokkos and may depend upon some additional external libraries such as YAC and
-yaml-cpp depending on your setup. These are automatically built using CMAKE and compiled if
+``yaml-cpp`` depending on your setup. These are automatically built using CMAKE and compiled if
 required.
 
 .. note::
@@ -22,10 +22,10 @@ TODO(all): Detail how to install YAC for CLEO.
 
 yaml-cpp
 --------
-The ```initialise``` library depends on the ```yaml-cpp``` package to read and write YAML files. You
+CLEO's ``initialise`` library depends on the ```yaml-cpp``` package to read and write YAML files. You
 can find more information about it from `its repository: <https://github.com/jbeder/yaml-cpp>`_.
 
 CVODE
 -----
-The ```coupldyn_cvode``` library requires the SUNDIALS CVODE package. You can find more information
+CLEO's ``coupldyn_cvode`` library requires the SUNDIALS CVODE package. You can find more information
 about it from `its webpage: <https://computing.llnl.gov/projects/sundials/cvode>`_.
