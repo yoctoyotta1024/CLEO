@@ -1,0 +1,68 @@
+#
+# ----- CLEO -----
+# File: config.yaml
+# Project: config
+# Created Date: Wednesday 17th April 2024
+# Author: Clara Bayley (CB)
+# Additional Contributors:
+# -----
+# Last Modified: Monday 15th April 2024
+# Modified By: CB
+# -----
+# License: BSD 3-Clause "New" or "Revised" License
+# https://opensource.org/licenses/BSD-3-Clause
+# -----
+# Copyright (c) 2023 MPI-M, Clara Bayley
+# -----
+# File Description:
+# Configuration file for CLEO SDM coupled to a dynamics solver.
+# Note: The inital superdroplets data read from file "initsupers_filename" can be made with
+# CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
+# Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
+# and so can the thermodynamics files when using coupled thermodynamics "fromfile".
+#
+
+### Input Files ###
+inputfiles:
+  constants_filename : ../libs/cleoconstants.hpp       # name of file for values of physical constants
+  initsupers_filename : ./share/dimlessSDsinit.dat     # binary filename for initialisation of SDs
+  grid_filename : ./share/dimlessGBxboundaries.dat     # binary filename for initialisation of GBxs / GbxMaps
+
+### Output Data ###
+outputdata:
+  setuptxt : ./bin/setup.txt                             # .txt filename to copy configuration to
+  stats_filename : ./bin/stats.txt                       # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/SDMdata.zarr                       # zarr store base directory
+  maxchunk : 1250000                                     # maximum no. of elements in chunks of zarr store array
+
+### SDM Runtime parameters ###
+domain:
+  nspacedims : 1                                       # no. of spatial dimensions to model
+  ngbxs : 41                                           # total number of Gbxs
+  totnsupers : 2048                                    # (initial) total no. of SDs
+
+timestepping:
+  CONDTSTEP : 0.1                                      # time between SD condensation events [s]
+  COLLTSTEP : 1                                        # time between SD collision events [s]
+  MOTIONTSTEP : 2                                      # time between SDM motion [s]
+  COUPLTSTEP : 120                                     # time between dynamic couplings [s]
+  OBSTSTEP : 2                                         # time between SDM observations [s]
+  T_END : 120                                          # time span of integration from 0s to T_END [s]
+
+condensation:
+  cond_iters : 2                                       # no. iterations of Newton Raphson Method before testing for convergence
+  cond_SUBTSTEP : 0.1                                  # smallest timestep in cases where substepping occurs [s]
+  cond_rtol : 0.0                                      # relative tolerance for implicit euler integration
+  cond_atol : 0.01                                     # abolute tolerance for implicit euler integration
+  doAlterThermo : false                                # enable condensation to alter the thermodynamic state
+
+### Coupled Dynamics Runtime Parameters ###
+coupling:
+  thermosolver : fromfile                              # type of dynamics solver to configure
+  press_filename : ./share/dimlessthermo_press.dat     # binary filename for pressure
+  temp_filename : ./share/dimlessthermo_temp.dat       # binary filename for temperature
+  qvap_filename : ./share/dimlessthermo_qvap.dat       # binary filename for vapour mixing ratio
+  qcond_filename : ./share/dimlessthermo_qcond.dat     # binary filename for liquid mixing ratio
+  wvel_filename : ./share/dimlessthermo_wvel.dat       # binary filename for vertical (coord3) velocity
+  uvel_filename : ./share/dimlessthermo_uvel.dat       # binary filename for eastwards (coord1) velocity
+  vvel_filename : ./share/dimlessthermo_vvel.dat       # binary filename for northwards (coord2) velocity
