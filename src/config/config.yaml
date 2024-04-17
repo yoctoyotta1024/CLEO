@@ -54,7 +54,7 @@ timesteps:
 
 condensation:
   do_alter_thermo : false                              # true = cond/evap alters the thermodynamic state
-  iters : 2                                            # no. iterations of Newton Raphson Method before testing for convergence
+  niters : 2                                           # no. iterations of Newton Raphson Method before testing for convergence
   SUBTSTEP : 0.1                                       # smallest subtimestep in cases of substepping [s]
   rtol : 0.0                                           # relative tolerance for implicit Euler integration
   atol : 0.01                                          # abolute tolerance for implicit Euler integration

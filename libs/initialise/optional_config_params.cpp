@@ -85,8 +85,8 @@ void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::No
 
 void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
   std::cout << "\n-------- InitSupersFromBinary Configuration Parameters --------------"
-            << "\ninitsupers_filename : " << initsupers_filename << "\ntotnsupers : " << totnsupers
-            << "\nnspacedims : " << nspacedims
+            << "\nnspacedims : " << nspacedims << "\ninitsupers_filename : " << initsupers_filename
+            << "\ntotnsupers : " << totnsupers
             << "\n---------------------------------------------------------\n";
 }
 
