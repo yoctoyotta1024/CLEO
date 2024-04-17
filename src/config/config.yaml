@@ -22,7 +22,7 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
-### Input Files ###
+### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp      # name of file for values of physical constants
   grid_filename : ./share/dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
@@ -32,7 +32,7 @@ initsupers:
   initsupers_filename : ./share/dimlessSDsinit.dat    # binary filename for initialisation of SDs
   totnsupers : 2048                                   # initial total no. of SDs
 
-### Output Data ###
+### Output Data Parameters ###
 outputdata:
   setup_filename : ./bin/setup.txt                    # .txt filename to copy configuration to
   stats_filename : ./bin/stats.txt                    # .txt file to output runtime statistics to
@@ -52,14 +52,16 @@ timesteps:
   OBSTSTEP : 2                                         # time between SDM observations [s]
   T_END : 120                                          # time span of integration from 0s to T_END [s]
 
-condensation:
-  do_alter_thermo : false                              # true = cond/evap alters the thermodynamic state
-  niters : 2                                           # no. iterations of Newton Raphson Method before testing for convergence
-  SUBTSTEP : 0.1                                       # smallest subtimestep in cases of substepping [s]
-  rtol : 0.0                                           # relative tolerance for implicit Euler integration
-  atol : 0.01                                          # abolute tolerance for implicit Euler integration
+### Microphysics Parameters ###
+microphysics:
+  condensation:
+    do_alter_thermo : false                            # true = cond/evap alters the thermodynamic state
+    niters : 2                                         # no. iterations of Newton Raphson Method before testing for convergence
+    SUBTSTEP : 0.1                                     # smallest subtimestep in cases of substepping [s]
+    rtol : 0.0                                         # relative tolerance for implicit Euler integration
+    atol : 0.01                                        # abolute tolerance for implicit Euler integration
 
-### Coupled Dynamics Runtime Parameters ###
+### Coupled Dynamics Parameters ###
 coupled_dynamics:
   type : fromfile                                      # type of coupled dynamics to configure
   press : ./share/dimlessthermo_press.dat              # binary filename for pressure
