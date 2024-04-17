@@ -1,4 +1,4 @@
-#
+---
 # ----- CLEO -----
 # File: config.yaml
 # Project: config
@@ -50,19 +50,19 @@ timestepping:
   T_END : 120                                          # time span of integration from 0s to T_END [s]
 
 condensation:
-  cond_iters : 2                                       # no. iterations of Newton Raphson Method before testing for convergence
-  cond_SUBTSTEP : 0.1                                  # smallest timestep in cases where substepping occurs [s]
-  cond_rtol : 0.0                                      # relative tolerance for implicit euler integration
-  cond_atol : 0.01                                     # abolute tolerance for implicit euler integration
+  iters : 2                                            # no. iterations of Newton Raphson Method before testing for convergence
+  SUBTSTEP : 0.1                                       # smallest timestep in cases where substepping occurs [s]
+  rtol : 0.0                                           # relative tolerance for implicit euler integration
+  atol : 0.01                                          # abolute tolerance for implicit euler integration
   doAlterThermo : false                                # enable condensation to alter the thermodynamic state
 
 ### Coupled Dynamics Runtime Parameters ###
 coupling:
   thermosolver : fromfile                              # type of dynamics solver to configure
-  press_filename : ./share/dimlessthermo_press.dat     # binary filename for pressure
-  temp_filename : ./share/dimlessthermo_temp.dat       # binary filename for temperature
-  qvap_filename : ./share/dimlessthermo_qvap.dat       # binary filename for vapour mixing ratio
-  qcond_filename : ./share/dimlessthermo_qcond.dat     # binary filename for liquid mixing ratio
-  wvel_filename : ./share/dimlessthermo_wvel.dat       # binary filename for vertical (coord3) velocity
-  uvel_filename : ./share/dimlessthermo_uvel.dat       # binary filename for eastwards (coord1) velocity
-  vvel_filename : ./share/dimlessthermo_vvel.dat       # binary filename for northwards (coord2) velocity
+  press : ./share/dimlessthermo_press.dat              # binary filename for pressure
+  temp : ./share/dimlessthermo_temp.dat                # binary filename for temperature
+  qvap : ./share/dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio
+  qcond : ./share/dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
+  wvel : ./share/dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
+  uvel : ./share/dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity
+  vvel : ./share/dimlessthermo_vvel.dat                # binary filename for northwards (coord2) velocity
