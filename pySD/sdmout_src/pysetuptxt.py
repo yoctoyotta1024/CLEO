@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 20th November 2023
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,7 @@ functions for reading setup.txt file
 output alongside zarr storage
 '''
 
-from .. import cxx2py
+from .. import cxx2py, readconfigfile
 
 def get_config(setuptxt, nattrs=3, isprint=True):
   '''returns dictionary of configuration parameters
@@ -35,7 +35,7 @@ def get_consts(setuptxt, isprint=True):
 
 def config_dict(setuptxt, nattrs, isprint):
 
-  config = cxx2py.read_configparams_into_floats(setuptxt)
+  config = readconfigfile.read_configparams_into_floats(setuptxt)
   config["numSDattrs"] = config["nspacedims"] + nattrs
   config["ntime"] = round(config["T_END"]/config["OBSTSTEP"])+1
 

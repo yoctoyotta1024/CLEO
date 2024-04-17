@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 22nd December 2023
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -20,7 +20,7 @@ File Description:
 
 import numpy as np
 from os.path import isfile
-from .. import cxx2py, writebinary
+from .. import cxx2py, readconfigfile, writebinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import read_dimless_gbxboundaries_binary
 
 class ManyAttrs:
@@ -62,7 +62,7 @@ def initSDsinputsdict(configfile, constsfile):
 
   consts = cxx2py.read_cxxconsts_into_floats(constsfile)
   mconsts = cxx2py.derive_more_floats(consts)
-  config = cxx2py.read_configparams_into_floats(configfile)
+  config = readconfigfile.read_configparams_into_floats(configfile)
 
   inputs = {
     # for creating SD attribute distirbutions
