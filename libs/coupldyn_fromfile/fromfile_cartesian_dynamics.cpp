@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: fromfile_cartesian_dynamics.cpp
@@ -7,16 +9,14 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * functionality for dynamics solver in CLEO
- * where coupling is one-way and dynamics
- * are read from file
+ * functionality for dynamics solver in CLEO where dynamics are read from files
  */
 
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
@@ -83,14 +83,14 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   set_winds(config);
 
-  check_thermodynamics_vectorsizes(config.nspacedims, ndims, nsteps);
+  check_thermodynamics_vectorsizes(config.get_nspacedims(), ndims, nsteps);
   std::cout << "--- cartesian dynamics from file: success ---\n";
 }
 
 /* depending on nspacedims, read in data
 for 1-D, 2-D or 3-D wind velocity components */
 void CartesianDynamics::set_winds(const Config &config) {
-  const auto nspacedims = (unsigned int)config.nspacedims;
+  const auto nspacedims = config.get_nspacedims();
 
   switch (nspacedims) {
     case 0:

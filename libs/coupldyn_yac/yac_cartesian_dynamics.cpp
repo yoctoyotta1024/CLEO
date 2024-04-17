@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: yac_cartesian_dynamics.cpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -304,7 +306,7 @@ CartesianDynamics::~CartesianDynamics() { yac_cfinalize(); }
 /* depending on nspacedims, read in data
 for 1-D, 2-D or 3-D wind velocity components */
 void CartesianDynamics::set_winds(const Config &config) {
-  const auto nspacedims = (unsigned int)config.nspacedims;
+  const auto nspacedims = config.get_nspacedims();
 
   switch (nspacedims) {
     case 0:
