@@ -23,7 +23,7 @@ path2build=${HOME}/CLEO/build_divfree2D/
 executables="divfree2D"
 
 pythonscript=${path2CLEO}/examples/divfreemotion/divfree2d.py
-configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.txt
+configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

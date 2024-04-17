@@ -24,7 +24,7 @@ path2build=${HOME}/CLEO/build_shima2009/
 executables="golcolls longcolls lowlistcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py
-configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.txt
+configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.yaml
 script_args="${configfile} golovin long lowlist"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

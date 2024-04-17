@@ -23,7 +23,7 @@ path2build=${HOME}/CLEO/build_adia0D/
 executables="adia0D"
 
 pythonscript=${path2CLEO}/examples/adiabaticparcel/as2017.py
-configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.txt
+configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
