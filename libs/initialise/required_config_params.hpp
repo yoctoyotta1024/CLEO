@@ -43,7 +43,6 @@ struct RequiredConfigParams {
 
   void print_params() const;
 
-  /*** Input and Output Parameters ***/
   struct InputFilesParams {
     std::filesystem::path constants_filename; /**< filename for values of physical constants */
     std::filesystem::path grid_filename;      /**< filename for initialisation of GbxMaps */
@@ -56,7 +55,6 @@ struct RequiredConfigParams {
     size_t maxchunk;                      /**< maximum number of elements in zarr array chunks */
   } outputdata;
 
-  /*** SDM Runtime Parameters ***/
   struct DomainParams {
     unsigned int nspacedims; /**< no. of spatial dimensions to model */
     size_t ngbxs;            /**< total number of Gbxs */

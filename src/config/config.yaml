@@ -32,7 +32,7 @@ initsupers:
   initsupers_filename : ./share/dimlessSDsinit.dat    # binary filename for initialisation of SDs
   totnsupers : 2048                                   # initial total no. of SDs
 
-### Output Data Parameters ###
+### Output Parameters ###
 outputdata:
   setup_filename : ./bin/setup.txt                    # .txt filename to copy configuration to
   stats_filename : ./bin/stats.txt                    # .txt file to output runtime statistics to

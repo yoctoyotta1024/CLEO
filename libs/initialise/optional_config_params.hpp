@@ -48,7 +48,13 @@ struct OptionalConfigParams {
   /* read configuration file given by config_filename to set members of required configuration */
   explicit OptionalConfigParams(const std::filesystem::path config_filename);
 
-  /* Condensation Runtime Parameters */
+  void set_initsupers(const YAML::Node& config);
+
+  void set_microphysics(const YAML::Node& config);
+
+  void set_coupled_dynamics(const YAML::Node& config);
+
+  /*** Super-Droplet Microphysics Parameters ***/
   struct CondensationParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
@@ -59,7 +65,7 @@ struct OptionalConfigParams {
     double atol = NaNVals::dbl();          /**< abolute tolerance for implicit Euler integration */
   } condensation;
 
-  /* Super-Droplet Initialisation From a Binary File Runtime Parameters */
+  /*** Super-Droplet Initialisation Parameters ***/
   struct InitSupersFromBinaryParams {
     using fspath = std::filesystem::path;
     void set_params(const YAML::Node& config);
@@ -69,7 +75,7 @@ struct OptionalConfigParams {
     unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
   } initsupersfrombinary;
 
-  /* Coupled Dynamics Runtime Parameters for FromFileDynamics */
+  /*** Coupled Dynamics Parameters ***/
   struct FromFileDynamicsParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
@@ -84,7 +90,6 @@ struct OptionalConfigParams {
     fspath vvel = fspath();                    /**< name of file for horizontal y velocity data */
   } fromfiledynamics;
 
-  /* Coupled Dynamics Runtime Parameters for CvodeDynamics */
   struct CvodeDynamicsParams {
     void set_params(const YAML::Node& config);
     void print_params() const;

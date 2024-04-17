@@ -25,39 +25,55 @@
 OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_filename) {
   const YAML::Node config = YAML::LoadFile(std::string{config_filename});
 
-  if (config["condensation"]) {
-    condensation.set_params(config);
-    condensation.print_params();
+  if (config["microphysics"]) {
+    set_microphysics(config);
   }
 
   if (config["initsupers"]) {
-    const auto type = config["initsupers"]["type"].as<std::string>();
-
-    if (type == "frombinary") {
-      initsupersfrombinary.set_params(config);
-      initsupersfrombinary.print_params();
-    } else {
-      throw std::invalid_argument("unknown initsupers 'type' : " + type);
-    }
+    set_initsupers(config);
   }
 
   if (config["coupled_dynamics"]) {
-    const auto type = config["coupled_dynamics"]["type"].as<std::string>();
+    set_coupled_dynamics(config);
+  }
+}
 
-    if (type == "fromfile") {
-      fromfiledynamics.set_params(config);
-      fromfiledynamics.print_params();
-    } else if (type == "cvode") {
-      cvodedynamics.set_params(config);
-      cvodedynamics.print_params();
-    } else {
-      throw std::invalid_argument("unknown coupled_dynamics 'type' : " + type);
-    }
+void OptionalConfigParams::set_microphysics(const YAML::Node &config) {
+  const YAML::Node yaml = config["microphysics"];
+
+  if (yaml["condensation"]) {
+    condensation.set_params(config);
+    condensation.print_params();
+  }
+}
+
+void OptionalConfigParams::set_initsupers(const YAML::Node &config) {
+  const auto type = config["initsupers"]["type"].as<std::string>();
+
+  if (type == "frombinary") {
+    initsupersfrombinary.set_params(config);
+    initsupersfrombinary.print_params();
+  } else {
+    throw std::invalid_argument("unknown initsupers 'type' : " + type);
+  }
+}
+
+void OptionalConfigParams::set_coupled_dynamics(const YAML::Node &config) {
+  const auto type = config["coupled_dynamics"]["type"].as<std::string>();
+
+  if (type == "fromfile") {
+    fromfiledynamics.set_params(config);
+    fromfiledynamics.print_params();
+  } else if (type == "cvode") {
+    cvodedynamics.set_params(config);
+    cvodedynamics.print_params();
+  } else {
+    throw std::invalid_argument("unknown coupled_dynamics 'type' : " + type);
   }
 }
 
 void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &config) {
-  const YAML::Node yaml = config["condensation"];
+  const YAML::Node yaml = config["microphysics"]["condensation"];
 
   do_alter_thermo = yaml["do_alter_thermo"].as<bool>();
   niters = yaml["niters"].as<unsigned int>();
