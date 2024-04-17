@@ -71,16 +71,3 @@ coupled_dynamics:
   wvel : ./share/dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
   uvel : ./share/dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity
   vvel : ./share/dimlessthermo_vvel.dat                # binary filename for northwards (coord2) velocity
-
-# ### Coupled Dynamics Runtime Parameters ###
-# coupled_dynamics:
-#   type : cvode                                          # type of coupled dynamics to configure
-#   # initial (uniform) thermodynamic conditions #
-#   P_init : 100000.0                                     # initial pressure [Pa]
-#   TEMP_init : 273.15                                    # initial temperature [T]
-#   relh_init : 98.0                                      # initial relative humidity (%)
-#   # ODE solver parameters #
-#   W_avg : 0.002                                         # average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz)
-#   TAU_half : 75000                                      # timescale for w sinusoid, tau_half = TAU_HALF/pi [s]
-#   rtol : 1e-6                                           # relative tolerance for integration of [P, T, qv, qc] ODEs
-#   atol : 1e-6                                           # relative tolerance for integration of [P, T, qv, qc] ODEs

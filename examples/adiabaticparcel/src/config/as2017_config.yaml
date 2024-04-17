@@ -1,0 +1,75 @@
+---
+# ----- CLEO -----
+# File: config.yaml
+# Project: config
+# Created Date: Wednesday 17th April 2024
+# Author: Clara Bayley (CB)
+# Additional Contributors:
+# -----
+# Last Modified: Monday 15th April 2024
+# Modified By: CB
+# -----
+# License: BSD 3-Clause "New" or "Revised" License
+# https://opensource.org/licenses/BSD-3-Clause
+# -----
+# Copyright (c) 2023 MPI-M, Clara Bayley
+# -----
+# File Description:
+# Configuration file for CLEO SDM coupled to a CVODE dynamics solver for an adiabatic parcel example
+# Note: The inital superdroplets data read from file "initsupers_filename" can be made with
+# CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
+# Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
+# and so can the thermodynamics files when using coupled thermodynamics "fromfile".
+#
+
+### Initialisation Parameters ###
+inputfiles:
+  constants_filename : ../libs/cleoconstants.hpp           # name of file for values of physical constants
+  grid_filename : ./share/as2017_dimlessGBxboundaries.dat  # binary filename for initialisation of GBxs / GbxMaps
+
+initsupers:
+  type : frombinary                                        # type of initialisation of super-droplets
+  initsupers_filename : ./share/as2017_dimlessSDsinit.dat  # binary filename for initialisation of SDs
+  totnsupers : 64                                          # initial total no. of SDs
+
+### Output Parameters ###
+outputdata:
+  setup_filename : /home/m/m300950/CLEO/build_adia0D//bin/as2017_setup.txt  # .txt filename to copy configuration to
+  stats_filename : /home/m/m300950/CLEO/build_adia0D//bin/as2017_stats.txt  # .txt file to output runtime statistics to
+  zarrbasedir : /home/m/m300950/CLEO/build_adia0D//bin/as2017_sol8.zarr     # zarr store base directory
+  maxchunk : 2500000                                                        # maximum no. of elements in chunks of zarr store array
+
+### SDM Runtime Parameters ###
+domain:
+  nspacedims : 0                                       # no. of spatial dimensions to model
+  ngbxs : 1                                            # total number of Gbxs
+
+timesteps:
+  CONDTSTEP : 1                                        # time between SD condensation [s]
+  COLLTSTEP : 1                                        # time between SD collision [s]
+  MOTIONTSTEP : 1                                      # time between SDM motion [s]
+  COUPLTSTEP : 3                                       # time between dynamic couplings [s]
+  OBSTSTEP : 750                                       # time between SDM observations [s]
+  T_END : 150000                                       # time span of integration from 0s to T_END [s]
+
+### Microphysics Parameters ###
+microphysics:
+  condensation:
+    do_alter_thermo : true                             # true = cond/evap alters the thermodynamic state
+    niters : 2                                         # no. iterations of Newton Raphson Method before testing for convergence
+    SUBTSTEP : 0.1                                     # smallest subtimestep in cases of substepping [s]
+    rtol : 0.0                                         # relative tolerance for implicit Euler integration
+    atol : 0.01                                        # abolute tolerance for implicit Euler integration
+
+### Coupled Dynamics Parameters ###
+coupled_dynamics:
+  type : cvode                                          # type of coupled dynamics to configure
+  # initial (uniform) thermodynamic conditions #
+  P_init : 100000.0                                     # initial pressure [Pa]
+  TEMP_init : 273.15                                    # initial temperature [T]
+  relh_init : 98.0                                      # initial relative humidity (%)
+  # ODE solver parameters #
+  W_avg : 0.002                                         # average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz)
+  TAU_half : 75000                                      # timescale for w sinusoid, tau_half = TAU_HALF/pi [s]
+  rtol : 1e-6                                           # relative tolerance for integration of [P, T, qv, qc] ODEs
+  atol : 1e-6                                           # relative tolerance for integration of [P, T, qv, qc] ODEs
