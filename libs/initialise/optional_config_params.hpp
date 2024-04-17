@@ -31,11 +31,10 @@
 #include <limits>
 #include <string>
 
-// TODO(CB): check types of config params e.g. int maxchunk -> size_t maxchunk
-
 namespace NaNVals {
 inline double dbl() { return std::numeric_limits<double>::signaling_NaN(); };
 inline unsigned int uint() { return std::numeric_limits<unsigned int>::signaling_NaN(); };
+inline size_t sizet() { return std::numeric_limits<size_t>::signaling_NaN(); };
 }  // namespace NaNVals
 
 /**
@@ -50,14 +49,14 @@ struct OptionalConfigParams {
   explicit OptionalConfigParams(const std::filesystem::path config_filename);
 
   /* Condensation Runtime Parameters */
-  struct DoCondensationParams {
+  struct CondensationParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
-    bool do_alter_thermo = false;         /**< true = condensation alters the thermodynamic state */
-    unsigned int iters = NaNVals::uint(); /**< suggested no. iterations of Newton Raphson Method */
-    double SUBTSTEP = NaNVals::dbl();     /**< smallest subtimestep in cases of substepping [s] */
-    double rtol = NaNVals::dbl();         /**< relative tolerance for implicit Euler integration */
-    double atol = NaNVals::dbl();         /**< abolute tolerance for implicit Euler integration */
+    bool do_alter_thermo = false;          /**< true = cond/evap alters the thermodynamic state */
+    unsigned int niters = NaNVals::uint(); /**< suggested no. iterations of Newton Raphson Method */
+    double SUBTSTEP = NaNVals::dbl();      /**< smallest subtimestep in cases of substepping [s] */
+    double rtol = NaNVals::dbl();          /**< relative tolerance for implicit Euler integration */
+    double atol = NaNVals::dbl();          /**< abolute tolerance for implicit Euler integration */
   } condensation;
 
   /* Coupled Dynamics Runtime Parameters for FromFileDynamics */
@@ -79,13 +78,14 @@ struct OptionalConfigParams {
   struct CvodeDynamicsParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
+    size_t ngbxs = NaNVals::sizet(); /**< no. of spatial dimensions to model */
     /* initial (uniform) thermodynamic conditions */
     double P_init = NaNVals::dbl();    /**< initial pressure [Pa] */
     double TEMP_init = NaNVals::dbl(); /**< initial temperature [T] */
     double relh_init = NaNVals::dbl(); /**< initial relative humidity (%) */
     /* ODE solver parameters */
     double W_avg = NaNVals::dbl(); /**< average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz) */
-    double TAU_half = NaNVals::dbl(); /**< timescale for w sinusoid, tau_half = T_HALF/pi [s] */
+    double TAU_half = NaNVals::dbl(); /**< timescale for w sinusoid, tau_half = TAU_HALF/pi [s] */
     double rtol = NaNVals::dbl(); /**< relative tolerance for integration of [P, T, qv, qc] ODEs */
     double atol = NaNVals::dbl(); /**< absolute tolerances for integration of [P, T, qv, qc] ODEs */
   } cvodedynamics;

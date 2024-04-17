@@ -82,7 +82,8 @@ int CvodeDynamics::reinitialise(const double next_t, const std::vector<double> &
 }
 
 /* construct instance of CVODE ODE solver with initial conditions */
-CvodeDynamics::CvodeDynamics(const Config &config, const unsigned int couplstep,
+CvodeDynamics::CvodeDynamics(const OptionalConfigParams::CvodeDynamicsParams &config,
+                             const unsigned int couplstep,
                              const std::function<double(unsigned int)> step2dimlesstime)
     : interval(couplstep),
       step2dimlesstime(step2dimlesstime),
@@ -90,7 +91,7 @@ CvodeDynamics::CvodeDynamics(const Config &config, const unsigned int couplstep,
       LS(NULL),
       cvode_mem(NULL),
       retval(0),
-      neq(NVARS * config.get_ngbxs()),
+      neq(NVARS * config.ngbxs),
       t(0.0),
       y(NULL),
       re_y(NULL),
@@ -100,12 +101,12 @@ CvodeDynamics::CvodeDynamics(const Config &config, const unsigned int couplstep,
 
   const auto wmax = double{
       (M_PI / 2) *
-      (config.W_AVG /
+      (config.W_avg /
        dlc::W0)};  // dimensionless w velocity passed to thermo ODEs eg. dp_dt(t,y,ydot,w,...)
   const auto tauhalf =
-      double{(config.T_HALF / dlc::TIME0) / M_PI};  // dimensionless timescale for w sinusoid
+      double{(config.TAU_half / dlc::TIME0) / M_PI};  // dimensionless timescale for w sinusoid
   init_userdata(neq, wmax, tauhalf);
-  setup_ODE_solver(config.cvode_rtol, config.cvode_atol);
+  setup_ODE_solver(config.rtol, config.atol);
 }
 
 /* print final statistics to the terminal screen */
@@ -126,9 +127,10 @@ CvodeDynamics::~CvodeDynamics() {
 /* return vector of dimensionless initial conditions
 for thermodynamic variables (p, temp, qv, qc) to
 initialise cvode thermodynamics solver */
-std::vector<double> CvodeDynamics::initial_conditions(const Config &config) const {
-  const auto press_i = double{config.P_INIT / dlc::P0};
-  const auto temp_i = double{config.TEMP_INIT / dlc::TEMP0};
+std::vector<double> CvodeDynamics::initial_conditions(
+    const OptionalConfigParams::CvodeDynamicsParams &config) const {
+  const auto press_i = double{config.P_init / dlc::P0};
+  const auto temp_i = double{config.TEMP_init / dlc::TEMP0};
   const auto qcond_i = double{0.0};
 
   const auto psat = double{cvode_saturationpressure(temp_i)};

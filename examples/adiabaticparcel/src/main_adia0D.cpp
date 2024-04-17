@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -55,12 +55,12 @@
 #include "zarr/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const unsigned int couplstep) {
-  return CvodeDynamics(config, couplstep, &step2dimlesstime);
+  return CvodeDynamics(config.get_cvodedynamics(), couplstep, &step2dimlesstime);
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
   const InitSupersFromBinary initsupers(config);
-  const InitGbxsCvode initgbxs(config);
+  const InitGbxsCvode initgbxs(config.get_cvodedynamics());
 
   return InitConds(initsupers, initgbxs);
 }
@@ -79,10 +79,10 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
-  const MicrophysicalProcess auto cond = Condensation(
-      tsteps.get_condstep(), config.doAlterThermo, config.cond_iters, &step2dimlesstime,
-      config.cond_rtol, config.cond_atol, config.cond_SUBTSTEP, &realtime2dimless);
-  return cond;
+  const auto c = config.get_condensation();
+
+  return Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.niters, c.rtol,
+                      c.atol, c.SUBTSTEP, &realtime2dimless);
 }
 
 template <typename Store>

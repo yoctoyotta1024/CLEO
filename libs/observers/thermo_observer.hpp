@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -174,7 +174,7 @@ struct QcondFunc {
  */
 template <typename Store>
 inline CollectDataForDataset<Store> auto CollectThermo(const Dataset<Store> &dataset,
-                                                       const int maxchunk, const size_t ngbxs) {
+                                                       const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto press = CollectThermoVariable<Store, PressFunc>(
       dataset, PressFunc{}, "press", "hPa", dlc::P0 / 100, maxchunk, ngbxs);
 
@@ -204,7 +204,7 @@ inline CollectDataForDataset<Store> auto CollectThermo(const Dataset<Store> &dat
  */
 template <typename Store>
 inline Observer auto ThermoObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                    const int maxchunk, const size_t ngbxs) {
+                                    const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   return WriteToDatasetObserver(interval, dataset, thermo);
 }

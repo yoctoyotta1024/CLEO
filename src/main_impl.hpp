@@ -86,7 +86,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 
 inline InitialConditions auto create_initconds(const Config &config) {
   const InitSupersFromBinary initsupers(config);
-  const InitGbxsNull initgbxs(config);
+  const InitGbxsNull initgbxs(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
 }
@@ -132,9 +132,10 @@ inline auto create_movement(const Config &config, const Timesteps &tsteps, const
 
 inline MicrophysicalProcess auto config_condensation(const Config &config,
                                                      const Timesteps &tsteps) {
-  return Condensation(tsteps.get_condstep(), config.doAlterThermo, config.cond_iters,
-                      &step2dimlesstime, config.cond_rtol, config.cond_atol, config.cond_SUBTSTEP,
-                      &realtime2dimless);
+  const auto c = config.get_condensation();
+
+  return Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.niters, c.rtol,
+                      c.atol, c.SUBTSTEP, &realtime2dimless);
 }
 
 inline MicrophysicalProcess auto config_collisions(const Config &config, const Timesteps &tsteps) {
@@ -179,7 +180,7 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
 
 template <typename Store>
 inline Observer auto create_superdrops_observer(const unsigned int interval,
-                                                Dataset<Store> &dataset, const int maxchunk) {
+                                                Dataset<Store> &dataset, const size_t maxchunk) {
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
   CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
@@ -195,7 +196,7 @@ inline Observer auto create_superdrops_observer(const unsigned int interval,
 
 template <typename Store>
 inline Observer auto create_gridboxes_observer(const unsigned int interval, Dataset<Store> &dataset,
-                                               const int maxchunk, const size_t ngbxs) {
+                                               const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);

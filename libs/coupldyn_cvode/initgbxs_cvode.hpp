@@ -29,7 +29,7 @@
 
 #include "../cleoconstants.hpp"
 #include "coupldyn_cvode/differentialfuncs.hpp"
-#include "initialise/config.hpp"
+#include "initialise/optional_config_params.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -46,21 +46,21 @@ struct InitGbxsCvode {
   double qcond_i;    // initial liquid water mixing ratio
 
  public:
-  explicit InitGbxsCvode(const Config &config)
-      : ngbxs(config.get_ngbxs()),
-        press_i(config.P_INIT / dlc::P0),
-        temp_i(config.TEMP_INIT / dlc::TEMP0),
+  explicit InitGbxsCvode(const OptionalConfigParams::CvodeDynamicsParams &config)
+      : ngbxs(config.ngbxs),
+        press_i(config.P_init / dlc::P0),
+        temp_i(config.TEMP_init / dlc::TEMP0),
         relh_init(config.relh_init),
         qcond_i(0.0) {}
 
   size_t get_ngbxs() const { return ngbxs; }
 
   /* pressure for all gbxs is same initial
-  (dimless) 'press_i' given by PRESS_INIT */
+  (dimless) 'press_i' given by PRESS_init */
   std::vector<double> press() const { return std::vector<double>(ngbxs, press_i); }
 
   /* temperature for all gbxs is same initial
-  (dimless) 'temp' given by TEMP_INIT */
+  (dimless) 'temp' given by TEMP_init */
   std::vector<double> temp() const { return std::vector<double>(ngbxs, temp_i); }
 
   /* vapour mass mixing ratio, 'qvap' for all

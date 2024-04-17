@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -74,7 +74,7 @@ struct NsupersFunc {
  */
 template <typename Store>
 inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &dataset,
-                                                        const int maxchunk, const size_t ngbxs) {
+                                                        const size_t maxchunk, const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr =
@@ -96,7 +96,7 @@ inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &da
  */
 template <typename Store>
 inline Observer auto NsupersObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                     const int maxchunk, const size_t ngbxs) {
+                                     const size_t maxchunk, const size_t ngbxs) {
   return WriteToDatasetObserver(interval, dataset, CollectNsupers(dataset, maxchunk, ngbxs));
 }
 

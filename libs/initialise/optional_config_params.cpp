@@ -45,19 +45,19 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
   }
 }
 
-void OptionalConfigParams::DoCondensationParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &config) {
   const YAML::Node yaml = config["condensation"];
 
   do_alter_thermo = yaml["do_alter_thermo"].as<bool>();
-  iters = yaml["iters"].as<unsigned int>();
+  niters = yaml["niters"].as<unsigned int>();
   SUBTSTEP = yaml["SUBTSTEP"].as<double>();
   rtol = yaml["rtol"].as<double>();
   atol = yaml["atol"].as<double>();
 }
 
-void OptionalConfigParams::DoCondensationParams::print_params() const {
+void OptionalConfigParams::CondensationParams::print_params() const {
   std::cout << "\n-------- DoCondensation Configuration Parameters --------------"
-            << "\ndo_alter_thermo : " << do_alter_thermo << "\niters : " << iters
+            << "\ndo_alter_thermo : " << do_alter_thermo << "\nniters : " << niters
             << "\nSUBSTEP : " << SUBTSTEP << "\nrtol : " << rtol << "\natol : " << atol
             << "\n---------------------------------------------------------\n";
 }
@@ -100,6 +100,7 @@ void OptionalConfigParams::CvodeDynamicsParams::set_params(const YAML::Node &con
 
   assert((yaml["type"].as<std::string>() == "cvode"));
 
+  ngbxs = config["domain"]["ngbxs"].as<unsigned int>();
   P_init = yaml["P_init"].as<double>();
   TEMP_init = yaml["TEMP_init"].as<double>();
   relh_init = yaml["relh_init"].as<double>();

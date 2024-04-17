@@ -61,7 +61,7 @@ struct InitSupersFromBinary {
   void check_initdata_sizes(const InitSupersData &initdata) const;
 
  public:
-  explicit InitSupersFromBinary(const Config &config)
+  explicit InitSupersFromBinary(const Config &config)  // TODO(CB): change input config
       : totnsupers(config.get_totnsupers()),
         nspacedims(config.get_nspacedims()),
         initsupers_filename(config.get_initsupers_filename()) {}

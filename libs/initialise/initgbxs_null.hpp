@@ -26,8 +26,6 @@
 #include <utility>
 #include <vector>
 
-#include "initialise/config.hpp"
-
 /* struct containing functions which return zero
 for all initial conditions to create gridboxes'
 states e.g. via the create_gbxs function */
@@ -36,7 +34,7 @@ struct InitGbxsNull {
   size_t ngbxs;
 
  public:
-  explicit InitGbxsNull(const Config &config) : ngbxs(config.get_ngbxs()) {}
+  explicit InitGbxsNull(const size_t ngbxs) : ngbxs(ngbxs) {}
 
   size_t get_ngbxs() const { return ngbxs; }
 

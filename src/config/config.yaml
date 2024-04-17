@@ -50,7 +50,7 @@ timesteps:
   T_END : 120                                          # time span of integration from 0s to T_END [s]
 
 condensation:
-  do_alter_thermo : false                              # true = condensation alters the thermodynamic state
+  do_alter_thermo : false                              # true = cond/evap alters the thermodynamic state
   iters : 2                                            # no. iterations of Newton Raphson Method before testing for convergence
   SUBTSTEP : 0.1                                       # smallest subtimestep in cases of substepping [s]
   rtol : 0.0                                           # relative tolerance for implicit Euler integration
@@ -76,6 +76,6 @@ coupled_dynamics:
 #   relh_init : 98.0                                      # initial relative humidity (%)
 #   # ODE solver parameters #
 #   W_avg : 0.002                                         # average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz)
-#   TAU_half : 75000                                        # timescale for w sinusoid, tau_half = T_HALF/pi [s]
+#   TAU_half : 75000                                      # timescale for w sinusoid, tau_half = TAU_HALF/pi [s]
 #   rtol : 1e-6                                           # relative tolerance for integration of [P, T, qv, qc] ODEs
 #   atol : 1e-6                                           # relative tolerance for integration of [P, T, qv, qc] ODEs

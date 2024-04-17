@@ -68,13 +68,12 @@ struct CartesianDynamics {
 
   /* depending on nspacedims, read in data
   for 1-D, 2-D or 3-D wind velocity components */
-  void set_winds(const OptionalConfigParams::FromFileDynamicsParams &config_fromfiledynamics);
+  void set_winds(const OptionalConfigParams::FromFileDynamicsParams &config);
 
   /* Read in data from binary files for wind
   velocity components in 1D, 2D or 3D model
   and check they have correct size */
-  std::string set_winds_from_binaries(
-      const OptionalConfigParams::FromFileDynamicsParams &config_fromfiledynamics);
+  std::string set_winds_from_binaries(const OptionalConfigParams::FromFileDynamicsParams &config);
 
   /* nullwinds retuns an empty function 'func' that returns
   {0.0, 0.0}. Useful for setting get_[X]vel[Y]faces functions
@@ -102,7 +101,7 @@ struct CartesianDynamics {
                                         const unsigned int nsteps) const;
 
  public:
-  CartesianDynamics(const OptionalConfigParams::FromFileDynamicsParams &config_fromfiledynamics,
+  CartesianDynamics(const OptionalConfigParams::FromFileDynamicsParams &config,
                     const std::array<size_t, 3> i_ndims, const unsigned int nsteps);
 
   get_winds_func get_wvel;  // funcs to get velocity defined in construction of class
@@ -138,11 +137,10 @@ struct FromFileDynamics {
   void run_dynamics(const unsigned int t_mdl) const { dynvars->increment_position(); }
 
  public:
-  FromFileDynamics(const OptionalConfigParams::FromFileDynamicsParams &config_fromfiledynamics,
+  FromFileDynamics(const OptionalConfigParams::FromFileDynamicsParams &config,
                    const unsigned int couplstep, const std::array<size_t, 3> ndims,
                    const unsigned int nsteps)
-      : interval(couplstep),
-        dynvars(std::make_shared<CartesianDynamics>(config_fromfiledynamics, ndims, nsteps)) {}
+      : interval(couplstep), dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps)) {}
 
   auto get_couplstep() const { return interval; }
 

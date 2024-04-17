@@ -64,11 +64,13 @@ struct Config {
     std::cout << "--- configuration: success ---\n";
   }
 
-  std::string get_initsupers_filename() const { return required.inputfiles.initsupers_filename; };
+  std::filesystem::path get_initsupers_filename() const {
+    return required.inputfiles.initsupers_filename;
+  };
 
-  std::string get_grid_filename() const { return required.inputfiles.grid_filename; }
+  std::filesystem::path get_grid_filename() const { return required.inputfiles.grid_filename; }
 
-  std::string get_stats_filename() const { return required.outputdata.stats_filename; }
+  std::filesystem::path get_stats_filename() const { return required.outputdata.stats_filename; }
 
   std::filesystem::path get_zarrbasedir() const { return required.outputdata.zarrbasedir; }
 
@@ -82,7 +84,7 @@ struct Config {
 
   RequiredConfigParams::TimestepsParams get_timesteps() const { return required.timesteps; }
 
-  OptionalConfigParams::DoCondensationParams get_condensation() const {
+  OptionalConfigParams::CondensationParams get_condensation() const {
     return optional.condensation;
   }
 

@@ -59,9 +59,8 @@ void CartesianDynamics::increment_position() {
   pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
-CartesianDynamics::CartesianDynamics(
-    const OptionalConfigParams::FromFileDynamicsParams &config_fromfiledynamics,
-    const std::array<size_t, 3> i_ndims, const unsigned int nsteps)
+CartesianDynamics::CartesianDynamics(const OptionalConfigParams::FromFileDynamicsParams &config,
+                                     const std::array<size_t, 3> i_ndims, const unsigned int nsteps)
     : ndims(i_ndims),
       pos(0),
       pos_zface(0),
@@ -72,27 +71,26 @@ CartesianDynamics::CartesianDynamics(
       get_vvel(nullwinds()) {
   std::cout << "\n--- coupled cartesian dynamics from file ---\n";
 
-  press = thermodynamicvar_from_binary(config_fromfiledynamics.press);
-  temp = thermodynamicvar_from_binary(config_fromfiledynamics.temp);
-  qvap = thermodynamicvar_from_binary(config_fromfiledynamics.qvap);
-  qcond = thermodynamicvar_from_binary(config_fromfiledynamics.qcond);
+  press = thermodynamicvar_from_binary(config.press);
+  temp = thermodynamicvar_from_binary(config.temp);
+  qvap = thermodynamicvar_from_binary(config.qvap);
+  qcond = thermodynamicvar_from_binary(config.qcond);
 
   std::cout << "Finished reading thermodynamics from binaries for:\n"
                "  pressure,\n  temperature,\n"
                "  water vapour mass mixing ratio,\n"
                "  liquid water mass mixing ratio,\n";
 
-  set_winds(config_fromfiledynamics);
+  set_winds(config);
 
-  check_thermodynamics_vectorsizes(config_fromfiledynamics.nspacedims, ndims, nsteps);
+  check_thermodynamics_vectorsizes(config.nspacedims, ndims, nsteps);
   std::cout << "--- cartesian dynamics from file: success ---\n";
 }
 
 /* depending on nspacedims, read in data
 for 1-D, 2-D or 3-D wind velocity components */
-void CartesianDynamics::set_winds(
-    const OptionalConfigParams::FromFileDynamicsParams &config_fromfiledynamics) {
-  const auto nspacedims = config_fromfiledynamics.nspacedims;
+void CartesianDynamics::set_winds(const OptionalConfigParams::FromFileDynamicsParams &config) {
+  const auto nspacedims = config.nspacedims;
 
   switch (nspacedims) {
     case 0:
@@ -103,7 +101,7 @@ void CartesianDynamics::set_winds(
     case 2:
     case 3:  // 1-D, 2-D or 3-D model
     {
-      const std::string windstr(set_winds_from_binaries(config_fromfiledynamics));
+      const std::string windstr(set_winds_from_binaries(config));
       std::cout << windstr;
     } break;
 
@@ -116,23 +114,23 @@ void CartesianDynamics::set_winds(
 velocity components in 1D, 2D or 3D model
 and check they have correct size */
 std::string CartesianDynamics::set_winds_from_binaries(
-    const OptionalConfigParams::FromFileDynamicsParams &config_fromfiledynamics) {
-  const auto nspacedims = config_fromfiledynamics.nspacedims;
+    const OptionalConfigParams::FromFileDynamicsParams &config) {
+  const auto nspacedims = config.nspacedims;
 
   std::string infostart(std::to_string(nspacedims) + "-D model, wind velocity");
 
   std::string infoend;
   switch (nspacedims) {
     case 3:  // 3-D model
-      vvel_yfaces = thermodynamicvar_from_binary(config_fromfiledynamics.vvel);
+      vvel_yfaces = thermodynamicvar_from_binary(config.vvel);
       get_vvel = get_vvel_from_binary();
       infoend = ", u";
     case 2:  // 3-D or 2-D model
-      uvel_xfaces = thermodynamicvar_from_binary(config_fromfiledynamics.uvel);
+      uvel_xfaces = thermodynamicvar_from_binary(config.uvel);
       get_uvel = get_uvel_from_binary();
       infoend = ", v" + infoend;
     case 1:  // 3-D, 2-D or 1-D model
-      wvel_zfaces = thermodynamicvar_from_binary(config_fromfiledynamics.wvel);
+      wvel_zfaces = thermodynamicvar_from_binary(config.wvel);
       get_wvel = get_wvel_from_binary();
       infoend = "w" + infoend;
   }
