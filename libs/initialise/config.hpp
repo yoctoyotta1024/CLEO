@@ -43,28 +43,6 @@ struct Config {
   RequiredConfigParams required; /**< required configuration parameters of CLEO */
   OptionalConfigParams optional; /**< optional configuration parameters of CLEO */
 
-  void print_configuration() const {
-    std::cout << "\n-------- Required Configuration Parameters --------------"
-              << "\nconstants_filename : " << required.inputfiles.constants_filename
-              << "\ninitsupers_filename : " << required.inputfiles.initsupers_filename
-              << "\ngrid_filename : " << required.inputfiles.grid_filename
-              << "\nsetup_filename : " << required.outputdata.setup_filename
-              << "\nstats_filename : " << required.outputdata.stats_filename
-              << "\nzarrbasedir : " << required.outputdata.zarrbasedir
-              << "\nmaxchunk : " << required.outputdata.maxchunk
-              << "\nnspacedims : " << required.domain.nspacedims
-              << "\nngbxs : " << required.domain.ngbxs
-              << "\ntotnsupers : " << required.domain.totnsupers
-              << "\ncoupled_dynamics : " << required.domain.coupled_dynamics
-              << "\nCONDTSTEP : " << required.timesteps.CONDTSTEP
-              << "\nCOLLTSTEP : " << required.timesteps.COLLTSTEP
-              << "\nMOTIONTSTEP : " << required.timesteps.MOTIONTSTEP
-              << "\nCOUPLTSTEP : " << required.timesteps.COUPLTSTEP
-              << "\nOBSTSTEP : " << required.timesteps.OBSTSTEP
-              << "\nT_END : " << required.timesteps.T_END
-              << "\n---------------------------------------------------------\n";
-  }
-
  public:
   /**
    * @brief Constructor for Config.
@@ -77,8 +55,6 @@ struct Config {
   explicit Config(const std::filesystem::path config_filename)
       : required(config_filename), optional(config_filename) {
     std::cout << "\n--- configuration ---\n";
-
-    print_configuration();
 
     /* copy setup (config and constants files) to a txt file */
     const auto files2copy =

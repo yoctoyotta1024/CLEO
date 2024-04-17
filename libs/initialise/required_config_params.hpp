@@ -26,6 +26,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include <filesystem>
+#include <iostream>
 #include <limits>
 #include <string>
 
@@ -41,6 +42,8 @@
 struct RequiredConfigParams {
   /* read configuration file given by config_filename to set members of required configuration */
   explicit RequiredConfigParams(const std::filesystem::path config_filename);
+
+  void print_params() const;
 
   /*** Input and Output Parameters ***/
   struct InputFilesParams {
@@ -58,10 +61,9 @@ struct RequiredConfigParams {
 
   /*** SDM Runtime Parameters ***/
   struct DomainParams {
-    unsigned int nspacedims;      /**< no. of spatial dimensions to model */
-    size_t ngbxs;                 /**< total number of Gbxs */
-    size_t totnsupers;            /**< initial total no. of SDs */
-    std::string coupled_dynamics; /**< type of coupled dynamics to configure */
+    unsigned int nspacedims; /**< no. of spatial dimensions to model */
+    size_t ngbxs;            /**< total number of Gbxs */
+    size_t totnsupers;       /**< initial total no. of SDs */
   } domain;
 
   struct TimestepsParams {

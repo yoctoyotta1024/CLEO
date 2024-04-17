@@ -25,12 +25,13 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include <cassert>
 #include <filesystem>
+#include <iostream>
 #include <limits>
 #include <string>
 
 // TODO(CB): check types of config params e.g. int maxchunk -> size_t maxchunk
-// TODO(CB): use std::filesystem::path not string
 
 namespace NaNVals {
 inline double dbl() { return std::numeric_limits<double>::signaling_NaN(); };
@@ -50,6 +51,8 @@ struct OptionalConfigParams {
 
   /* Condensation Runtime Parameters */
   struct DoCondensationParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
     bool do_alter_thermo = false;         /**< true = condensation alters the thermodynamic state */
     unsigned int iters = NaNVals::uint(); /**< suggested no. iterations of Newton Raphson Method */
     double SUBTSTEP = NaNVals::dbl();     /**< smallest subtimestep in cases of substepping [s] */
@@ -59,6 +62,8 @@ struct OptionalConfigParams {
 
   /* Coupled Dynamics Runtime Parameters for FromFileDynamics */
   struct FromFileDynamicsParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
     using fspath = std::filesystem::path;
     unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
     fspath press = fspath();                   /**< name of file for pressure data */
@@ -72,12 +77,15 @@ struct OptionalConfigParams {
 
   /* Coupled Dynamics Runtime Parameters for CvodeDynamics */
   struct CvodeDynamicsParams {
-    double P_INIT = NaNVals::dbl();    /**< initial pressure [Pa] */
-    double TEMP_INIT = NaNVals::dbl(); /**< initial temperature [T] */
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    /* initial (uniform) thermodynamic conditions */
+    double P_init = NaNVals::dbl();    /**< initial pressure [Pa] */
+    double TEMP_init = NaNVals::dbl(); /**< initial temperature [T] */
     double relh_init = NaNVals::dbl(); /**< initial relative humidity (%) */
-
-    double W_AVG = NaNVals::dbl(); /**< average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz) */
-    double T_HALF = NaNVals::dbl(); /**< timescale for w sinusoid, tau_half = T_HALF/pi [s] */
+    /* ODE solver parameters */
+    double W_avg = NaNVals::dbl(); /**< average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz) */
+    double TAU_half = NaNVals::dbl(); /**< timescale for w sinusoid, tau_half = T_HALF/pi [s] */
     double rtol = NaNVals::dbl(); /**< relative tolerance for integration of [P, T, qv, qc] ODEs */
     double atol = NaNVals::dbl(); /**< absolute tolerances for integration of [P, T, qv, qc] ODEs */
   } cvodedynamics;

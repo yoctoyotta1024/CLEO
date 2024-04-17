@@ -23,7 +23,7 @@
 
 /* read configuration file given by config_filename to set members of required configuration */
 RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_filename) {
-  YAML::Node config = YAML::LoadFile(std::string{config_filename});
+  const YAML::Node config = YAML::LoadFile(std::string{config_filename});
 
   /* convert string to std::filesystem::path type */
   auto fspath_from_yaml = [](YAML::Node& yaml, const std::string& key) {
@@ -45,7 +45,6 @@ RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_fi
   domain.nspacedims = yaml["nspacedims"].as<unsigned int>();
   domain.ngbxs = yaml["ngbxs"].as<size_t>();
   domain.totnsupers = yaml["totnsupers"].as<size_t>();
-  domain.coupled_dynamics = yaml["coupled_dynamics"].as<std::string>();
 
   yaml = config["timesteps"];
   timesteps.CONDTSTEP = yaml["CONDTSTEP"].as<double>();
@@ -54,4 +53,23 @@ RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_fi
   timesteps.COUPLTSTEP = yaml["COUPLTSTEP"].as<double>();
   timesteps.OBSTSTEP = yaml["OBSTSTEP"].as<double>();
   timesteps.T_END = yaml["T_END"].as<double>();
+
+  print_params();
+}
+
+void RequiredConfigParams::print_params() const {
+  std::cout << "\n-------- Required Configuration Parameters --------------"
+            << "\nconstants_filename : " << inputfiles.constants_filename
+            << "\ninitsupers_filename : " << inputfiles.initsupers_filename
+            << "\ngrid_filename : " << inputfiles.grid_filename
+            << "\nsetup_filename : " << outputdata.setup_filename
+            << "\nstats_filename : " << outputdata.stats_filename
+            << "\nzarrbasedir : " << outputdata.zarrbasedir
+            << "\nmaxchunk : " << outputdata.maxchunk << "\nnspacedims : " << domain.nspacedims
+            << "\nngbxs : " << domain.ngbxs << "\ntotnsupers : " << domain.totnsupers
+            << "\nCONDTSTEP : " << timesteps.CONDTSTEP << "\nCOLLTSTEP : " << timesteps.COLLTSTEP
+            << "\nMOTIONTSTEP : " << timesteps.MOTIONTSTEP
+            << "\nCOUPLTSTEP : " << timesteps.COUPLTSTEP << "\nOBSTSTEP : " << timesteps.OBSTSTEP
+            << "\nT_END : " << timesteps.T_END
+            << "\n---------------------------------------------------------\n";
 }
