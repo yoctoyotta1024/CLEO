@@ -26,6 +26,8 @@
 
 #include <filesystem>
 #include <fstream>
+#include <stdexcept>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -61,22 +63,50 @@ struct InitSupersFromBinary {
   coords data in check if nspacedims != 0 */
   void check_initdata_sizes(const InitSupersData &initdata) const;
 
+  /* data size returned is number of variables as
+  declared by the metadata for the first variable
+  in the initsupers file */
+  size_t fetch_data_size() const;
+
  public:
+  /**
+   * @brief Constructor for InitSupersFromBinary.
+   *
+   * This function checks if there is enough data in the initialisation files for super-droplets
+   * in order to initialise "maxnsupers" superdroplets. If the initialisation data is the wrong
+   * size, it throws an exception with the appropriate error message.
+   *
+   * @param maxnsupers The expected number of super-droplets to initialise
+   * @param config Configuration for member variables.
+   *
+   * @throws std::invalid_argument If the number of super-droplets is wrong.
+   */
   explicit InitSupersFromBinary(const size_t maxnsupers,
                                 const OptionalConfigParams::InitSupersFromBinaryParams &config)
       : maxnsupers(maxnsupers),
         initsupers_filename(config.initsupers_filename),
         initnsupers(config.initnsupers),
-        nspacedims(config.nspacedims) {}
+        nspacedims(config.nspacedims) {
+    const auto size = fetch_data_size();
+
+    if (maxnsupers < size) {
+      const std::string err(
+          "Fewer superdroplets will be created than is given by initialisation data ie. " +
+          std::to_string(maxnsupers) + " < " + std::to_string(size));
+      throw std::invalid_argument(err);
+    } else if (maxnsupers > size) {
+      const std::string err(
+          "Not enough initialisation data for number of superdroplets that will be created ie." +
+          std::to_string(maxnsupers) + " > " + std::to_string(size));
+      throw std::invalid_argument(err);
+    }
+
+    assert((maxnsupers == size) && "size of data not the same as the number of superdroplets");
+  }
 
   auto get_maxnsupers() const { return maxnsupers; }
 
   auto get_nspacedims() const { return nspacedims; }
-
-  /* data size returned is number of variables as
-  declared by the metadata for the first variable
-  in the initsupers file */
-  size_t fetch_data_size() const;
 
   /* return InitSupersData created by reading a binary
   file and creating a SoluteProperties struct.

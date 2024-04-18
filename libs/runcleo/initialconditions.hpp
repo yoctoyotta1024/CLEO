@@ -45,7 +45,6 @@ concept InitialConditions =
     requires(IC ic, unsigned int t, const viewh_constgbx h_gbxs, InitSupersData initdata) {
       { ic.initsupers.get_nspacedims() } -> std::convertible_to<unsigned int>;
       { ic.initsupers.get_maxnsupers() } -> std::convertible_to<size_t>;
-      { ic.initsupers.fetch_data_size() } -> std::convertible_to<size_t>;
       { ic.initsupers.fetch_data(initdata) } -> std::same_as<void>;
 
       { ic.initgbxs.get_ngbxs() } -> std::convertible_to<size_t>;
