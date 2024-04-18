@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Requirements" href="../usage/requirements.html" /><link rel="prev" title="Timestepping" href="timestepping.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>Kokkos Thread Parallelism - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -308,7 +310,7 @@
         </div>
         <article role="main">
           <section id="kokkos-thread-parallelism">
-<h1>Kokkos Thread Parallelism<a class="headerlink" href="#kokkos-thread-parallelism" title="Link to this heading">#</a></h1>
+<h1>Kokkos Thread Parallelism<a class="headerlink" href="#kokkos-thread-parallelism" title="Link to this heading">¶</a></h1>
 <p>For performance portable thread parallelism as well as thread safe random number generation we use
 Kokkos! <span id="id1">[<a class="reference internal" href="../references.html#id17" title="Christian R. Trott, Damien Lebrun-Grandié, Daniel Arndt, Jan Ciesko, Vinh Dang, Nathan Ellingwood, Rahulkumar Gayatri, Evan Harvey, Daisy S. Hollman, Dan Ibanez, Nevin Liber, Jonathan Madsen, Jeff Miles, David Poliakoff, Amy Powell, Sivasankaran Rajamanickam, Mikael Simberg, Dan Sunderland, Bruno Turcksin, and Jeremiah Wilke. Kokkos 3: programming model extensions for the exascale era. IEEE Transactions on Parallel and Distributed Systems, 33(4):805-817, 2022. doi:10.1109/TPDS.2021.3097283.">TLGA+22</a>]</span> <span id="id2">[<a class="reference internal" href="../references.html#id18" title="Christian Trott, Luc Berger-Vergiat, David Poliakoff, Sivasankaran Rajamanickam, Damien Lebrun-Grandie, Jonathan Madsen, Nader Al Awar, Milos Gligoric, Galen Shipman, and Geoff Womeldorff. The kokkos ecosystem: comprehensive performance portability for high performance computing. Computing in Science Engineering, 23(5):10-18, 2021. doi:10.1109/MCSE.2021.3098509.">TBVP+21</a>]</span>, <span id="id3">[<a class="reference internal" href="../references.html#id19" title="H. Carter Edwards, Christian R. Trott, and Daniel Sunderland. Kokkos: enabling manycore performance portability through polymorphic memory access patterns. Journal of Parallel and Distributed Computing, 74(12):3202 - 3216, 2014. Domain-Specific Languages and High-Level Frameworks for High-Performance Computing. URL: http://www.sciencedirect.com/science/article/pii/S0743731514001257, doi:https://doi.org/10.1016/j.jpdc.2014.07.003.">ETS14</a>]</span>.</p>
 <p>It has great documentation, lectures, tutorials and more, all of which
@@ -351,7 +353,7 @@ you can enjoy when you explore
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -367,7 +369,7 @@ you can enjoy when you explore
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

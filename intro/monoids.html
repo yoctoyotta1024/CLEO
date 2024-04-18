@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Coupling to Dynamics" href="coupling.html" /><link rel="prev" title="Memory Layout" href="memorylayout.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>Monoids - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -308,9 +310,9 @@
         </div>
         <article role="main">
           <section id="monoids">
-<h1>Monoids<a class="headerlink" href="#monoids" title="Link to this heading">#</a></h1>
+<h1>Monoids<a class="headerlink" href="#monoids" title="Link to this heading">¶</a></h1>
 <section id="concepts-for-templated-types">
-<h2>Concepts for Templated-Types<a class="headerlink" href="#concepts-for-templated-types" title="Link to this heading">#</a></h2>
+<h2>Concepts for Templated-Types<a class="headerlink" href="#concepts-for-templated-types" title="Link to this heading">¶</a></h2>
 <p>C++ concepts are used abundantly in CLEO. At its simplest, a C++ concept is used to define a set
 of constraints on a template. If a certain type satisfies these constraints, it can be called one
 possible type of that concept. For example, if a class “Cond” is created to model condensation and
@@ -319,7 +321,7 @@ Likewise another class ‘Colls’ which models collisions is also a microphysic
 satisfies the concept of a microphysical process.</p>
 </section>
 <section id="the-use-of-concepts-to-create-monoids">
-<h2>The Use of Concepts to Create Monoids<a class="headerlink" href="#the-use-of-concepts-to-create-monoids" title="Link to this heading">#</a></h2>
+<h2>The Use of Concepts to Create Monoids<a class="headerlink" href="#the-use-of-concepts-to-create-monoids" title="Link to this heading">¶</a></h2>
 <p>In essence, a monoid is a complete set of members (i.e. elements/types) where each member of the set
 has three essential properties:</p>
 <ol class="arabic simple">
@@ -351,7 +353,7 @@ Upon compilation, a templated type ‘Z’ can then be instantiated with ‘CC�
 (or any other member of the microphysics monoid) depending on what we want to model.</p>
 </section>
 <section id="a-good-analogy">
-<h2>A Good Analogy<a class="headerlink" href="#a-good-analogy" title="Link to this heading">#</a></h2>
+<h2>A Good Analogy<a class="headerlink" href="#a-good-analogy" title="Link to this heading">¶</a></h2>
 <p>The analogy I like to give is mixing paint. Suppose there are a variety of colours;
 blue, yellow, red, green, orange etc.. Let’s say that the blue, yellow and red colours
 satisfy all the requirements in order for them to be defined as ‘wet oil paint’ - in other
@@ -408,7 +410,7 @@ doesn’t do anything.)</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -445,7 +447,7 @@ doesn’t do anything.)</p>
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

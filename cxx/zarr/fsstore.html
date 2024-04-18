@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="StoreAccessor" href="store_accessor.html" /><link rel="prev" title="Dataset" href="dataset.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>FSStore - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -308,19 +310,19 @@
         </div>
         <article role="main">
           <section id="fsstore">
-<h1>FSStore<a class="headerlink" href="#fsstore" title="Link to this heading">#</a></h1>
+<h1>FSStore<a class="headerlink" href="#fsstore" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/zarr/fsstore.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/zarr/fsstore.hpp">[source]</a></p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv47FSStore">
-<span id="_CPPv37FSStore"></span><span id="_CPPv27FSStore"></span><span id="FSStore"></span><span class="target" id="classFSStore"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FSStore</span></span></span><a class="headerlink" href="#_CPPv47FSStore" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv37FSStore"></span><span id="_CPPv27FSStore"></span><span id="FSStore"></span><span class="target" id="classFSStore"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FSStore</span></span></span><a class="headerlink" href="#_CPPv47FSStore" title="Link to this definition">¶</a><br /></dt>
 <dd><p>A file system store e.g. for Zarr arrays or groups. </p>
 <p>This class represents a file system store for a series of key-value pairs for example for storing Zarr data arrays or groups. Data for a given key is written to the store via helper functions from the <a class="reference internal" href="store_accessor.html#structStoreAccessor"><span class="std std-ref">StoreAccessor</span></a> struct. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7FSStore7FSStoreEKNSt10filesystem4pathE">
-<span id="_CPPv3N7FSStore7FSStoreEKNSt10filesystem4pathE"></span><span id="_CPPv2N7FSStore7FSStoreEKNSt10filesystem4pathE"></span><span id="FSStore::FSStore__std::filesystem::pathC"></span><span class="target" id="classFSStore_1a8ea7c474507f1c09d7202a7240cce2f2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FSStore</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">basedir</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7FSStore7FSStoreEKNSt10filesystem4pathE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N7FSStore7FSStoreEKNSt10filesystem4pathE"></span><span id="_CPPv2N7FSStore7FSStoreEKNSt10filesystem4pathE"></span><span id="FSStore::FSStore__std::filesystem::pathC"></span><span class="target" id="classFSStore_1a8ea7c474507f1c09d7202a7240cce2f2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FSStore</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">basedir</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7FSStore7FSStoreEKNSt10filesystem4pathE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Constructs an <a class="reference internal" href="#classFSStore"><span class="std std-ref">FSStore</span></a> object with the specified base directory. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -331,7 +333,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7FSStoreixEKNSt11string_viewE">
-<span id="_CPPv3N7FSStoreixEKNSt11string_viewE"></span><span id="_CPPv2N7FSStoreixEKNSt11string_viewE"></span><span id="FSStore::subscript-operator__std::string_viewC"></span><span class="target" id="classFSStore_1a0fbaf9620e2f67a348eadc5f3137ec8c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="store_accessor.html#_CPPv4I0E13StoreAccessor" title="StoreAccessor"><span class="n"><span class="pre">StoreAccessor</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv47FSStore" title="FSStore"><span class="n"><span class="pre">FSStore</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7FSStoreixEKNSt11string_viewE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N7FSStoreixEKNSt11string_viewE"></span><span id="_CPPv2N7FSStoreixEKNSt11string_viewE"></span><span id="FSStore::subscript-operator__std::string_viewC"></span><span class="target" id="classFSStore_1a0fbaf9620e2f67a348eadc5f3137ec8c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="store_accessor.html#_CPPv4I0E13StoreAccessor" title="StoreAccessor"><span class="n"><span class="pre">StoreAccessor</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv47FSStore" title="FSStore"><span class="n"><span class="pre">FSStore</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7FSStoreixEKNSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Operator to use a <a class="reference internal" href="store_accessor.html#structStoreAccessor"><span class="std std-ref">StoreAccessor</span></a> to write values under a given key. </p>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">operator[y]</span> <span class="pre">=</span> <span class="pre">x;</span></code> writes values x under a key called ‘y’ using the <a class="reference internal" href="store_accessor.html#structStoreAccessor"><span class="std std-ref">StoreAccessor</span></a>.</p>
 <dl class="field-list simple">
@@ -346,7 +348,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7FSStore5writeEKNSt11string_viewEKNSt4spanIK7uint8_tEE">
-<span id="_CPPv3NK7FSStore5writeEKNSt11string_viewEKNSt4spanIK7uint8_tEE"></span><span id="_CPPv2NK7FSStore5writeEKNSt11string_viewEKNSt4spanIK7uint8_tEE"></span><span id="FSStore::write__std::string_viewC.std::span:uint8_tC:CC"></span><span class="target" id="classFSStore_1a2f30896bb96b38f9b1ba332c20ffdd6b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7FSStore5writeEKNSt11string_viewEKNSt4spanIK7uint8_tEE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK7FSStore5writeEKNSt11string_viewEKNSt4spanIK7uint8_tEE"></span><span id="_CPPv2NK7FSStore5writeEKNSt11string_viewEKNSt4spanIK7uint8_tEE"></span><span id="FSStore::write__std::string_viewC.std::span:uint8_tC:CC"></span><span class="target" id="classFSStore_1a2f30896bb96b38f9b1ba332c20ffdd6b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7FSStore5writeEKNSt11string_viewEKNSt4spanIK7uint8_tEE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Write function called by <a class="reference internal" href="store_accessor.html#structStoreAccessor"><span class="std std-ref">StoreAccessor</span></a> to write data to file system storage after the data has been converted into a vector of unsigned integer types. </p>
 <p>This function can be used by a <a class="reference internal" href="store_accessor.html#structStoreAccessor"><span class="std std-ref">StoreAccessor</span></a> object to write data represented as a vector of unsigned integer types to the file system store under the specified key.</p>
 <dl class="field-list simple">
@@ -367,7 +369,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N7FSStore7basedirE">
-<span id="_CPPv3N7FSStore7basedirE"></span><span id="_CPPv2N7FSStore7basedirE"></span><span id="FSStore::basedir__std::filesystem::pathC"></span><span class="target" id="classFSStore_1aefcc2168fa251650d0b7ada44f0675ce"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">basedir</span></span></span><a class="headerlink" href="#_CPPv4N7FSStore7basedirE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N7FSStore7basedirE"></span><span id="_CPPv2N7FSStore7basedirE"></span><span id="FSStore::basedir__std::filesystem::pathC"></span><span class="target" id="classFSStore_1aefcc2168fa251650d0b7ada44f0675ce"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">basedir</span></span></span><a class="headerlink" href="#_CPPv4N7FSStore7basedirE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>The root directory of the file system store. </p>
 </dd></dl>
 
@@ -411,7 +413,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -452,7 +454,7 @@
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>pySD.gbxboundariesbinary_src.create_gbxboundaries - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
@@ -167,6 +167,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/quickstart.html">Quickstart</a></li>
@@ -206,6 +207,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -314,7 +316,7 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">Last Modified: Tuesday 24th October 2023</span>
+<span class="sd">Last Modified: Wednesday 17th April 2024</span>
 <span class="sd">Modified By: CB</span>
 <span class="sd">-----</span>
 <span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
@@ -333,8 +335,7 @@
 <div class="viewcode-block" id="get_COORD0_from_constsfile">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.get_COORD0_from_constsfile">[docs]</a>
 <span class="k">def</span> <span class="nf">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constsfile</span><span class="p">,</span> <span class="n">returnconsts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; create values from constants file &amp; config file</span>
-<span class="sd">  required as inputs to create initial</span>
+<span class="w">  </span><span class="sd">&#39;&#39;&#39; create values from constants file required as inputs to create initial</span>
 <span class="sd">  superdroplet conditions &#39;&#39;&#39;</span>
 
   <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">constsfile</span><span class="p">)</span>
@@ -521,7 +522,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -537,7 +538,7 @@
     </aside>
   </div>
 </div><script src="../../../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>

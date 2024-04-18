@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>pySD.sdmout_src.pysetuptxt - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
@@ -167,6 +167,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/quickstart.html">Quickstart</a></li>
@@ -206,6 +207,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -314,7 +316,7 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">Last Modified: Monday 20th November 2023</span>
+<span class="sd">Last Modified: Thursday 18th April 2024</span>
 <span class="sd">Modified By: CB</span>
 <span class="sd">-----</span>
 <span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
@@ -329,15 +331,6 @@
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">cxx2py</span>
 
-<div class="viewcode-block" id="get_config">
-<a class="viewcode-back" href="../../../pySD/sdmout_src/pysetuptxt.html#pySD.sdmout_src.pysetuptxt.get_config">[docs]</a>
-<span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39;returns dictionary of configuration parameters</span>
-<span class="sd">  read from from setup.txt file &#39;&#39;&#39;</span>
-
-  <span class="k">return</span> <span class="n">config_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="o">=</span><span class="n">nattrs</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="n">isprint</span><span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="get_consts">
 <a class="viewcode-back" href="../../../pySD/sdmout_src/pysetuptxt.html#pySD.sdmout_src.pysetuptxt.get_consts">[docs]</a>
 <span class="k">def</span> <span class="nf">get_consts</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -347,16 +340,14 @@
   <span class="k">return</span> <span class="n">consts_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="n">isprint</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">config_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="p">,</span> <span class="n">isprint</span><span class="p">):</span>
+<div class="viewcode-block" id="get_config">
+<a class="viewcode-back" href="../../../pySD/sdmout_src/pysetuptxt.html#pySD.sdmout_src.pysetuptxt.get_config">[docs]</a>
+<span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&#39;&#39;&#39;returns dictionary of configuration parameters</span>
+<span class="sd">  read from from setup.txt file &#39;&#39;&#39;</span>
 
-  <span class="n">config</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_configparams_into_floats</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">)</span>
-  <span class="n">config</span><span class="p">[</span><span class="s2">&quot;numSDattrs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;nspacedims&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">nattrs</span>
-  <span class="n">config</span><span class="p">[</span><span class="s2">&quot;ntime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;T_END&quot;</span><span class="p">]</span><span class="o">/</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;OBSTSTEP&quot;</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
+  <span class="k">return</span> <span class="n">config_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="o">=</span><span class="n">nattrs</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="n">isprint</span><span class="p">)</span></div>
 
-  <span class="k">if</span> <span class="n">isprint</span><span class="p">:</span>
-    <span class="n">cxx2py</span><span class="o">.</span><span class="n">print_dict_statement</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
-
-  <span class="k">return</span> <span class="n">config</span>
 
 <span class="k">def</span> <span class="nf">consts_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">isprint</span><span class="p">):</span>
   <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">)</span>
@@ -366,6 +357,53 @@
     <span class="n">cxx2py</span><span class="o">.</span><span class="n">print_dict_statement</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="s2">&quot;consts&quot;</span><span class="p">,</span> <span class="n">consts</span><span class="p">)</span>
 
   <span class="k">return</span> <span class="n">consts</span>
+
+<span class="k">def</span> <span class="nf">config_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="p">,</span> <span class="n">isprint</span><span class="p">):</span>
+
+  <span class="n">config</span> <span class="o">=</span> <span class="n">read_configparams_fromsetuptxt_into_floats</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">)</span>
+  <span class="n">config</span><span class="p">[</span><span class="s2">&quot;numSDattrs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;nspacedims&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">nattrs</span>
+  <span class="n">config</span><span class="p">[</span><span class="s2">&quot;ntime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;T_END&quot;</span><span class="p">]</span><span class="o">/</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;OBSTSTEP&quot;</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
+
+  <span class="k">if</span> <span class="n">isprint</span><span class="p">:</span>
+    <span class="n">cxx2py</span><span class="o">.</span><span class="n">print_dict_statement</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">config</span>
+
+<div class="viewcode-block" id="read_configparams_fromsetuptxt_into_floats">
+<a class="viewcode-back" href="../../../pySD/sdmout_src/pysetuptxt.html#pySD.sdmout_src.pysetuptxt.read_configparams_fromsetuptxt_into_floats">[docs]</a>
+<span class="k">def</span> <span class="nf">read_configparams_fromsetuptxt_into_floats</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;returns dictionary of value: float from</span>
+<span class="sd">  values assigned in a config .txt file.</span>
+<span class="sd">  Also returns dictionary of notfloats</span>
+<span class="sd">  for values that couldn&#39;t be converted. &quot;&quot;&quot;</span>
+
+  <span class="n">floats</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="n">notfloats</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">rlines</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">filelines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">filelines</span><span class="p">:</span>
+      <span class="k">if</span> <span class="p">((</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;#&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">)):</span>
+        <span class="n">goodline</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">remove_excess_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">rlines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">goodline</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">rlines</span><span class="p">:</span>
+      <span class="n">ind</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+      <span class="n">name</span> <span class="o">=</span>  <span class="n">line</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span>
+      <span class="n">value</span> <span class="o">=</span>  <span class="n">line</span><span class="p">[</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
+
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">floats</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+      <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">notfloats</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">floats</span><span class="p">[</span><span class="s2">&quot;nspacedims&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">floats</span><span class="p">[</span><span class="s2">&quot;nspacedims&quot;</span><span class="p">])</span>              <span class="c1"># no spatial coords to SDs</span>
+  <span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+  <span class="k">return</span> <span class="n">floats</span></div>
+
 </pre></div>
         </article>
       </div>
@@ -384,7 +422,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -400,7 +438,7 @@
     </aside>
   </div>
 </div><script src="../../../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>

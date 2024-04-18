@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="WRITEBINARY" href="writebinary.html" /><link rel="prev" title="EDITCONFIGFILE" href="editconfigfile.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>READBINARY - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="writebinary.html">WRITEBINARY</a></li>
@@ -308,17 +310,17 @@
         </div>
         <article role="main">
           <section id="module-pySD.readbinary">
-<span id="readbinary"></span><h1>READBINARY<a class="headerlink" href="#module-pySD.readbinary" title="Link to this heading">#</a></h1>
+<span id="readbinary"></span><h1>READBINARY<a class="headerlink" href="#module-pySD.readbinary" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.readbinary.read_metadata">
-<span class="sig-prename descclassname"><span class="pre">pySD.readbinary.</span></span><span class="sig-name descname"><span class="pre">read_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isprint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/readbinary.html#read_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.readbinary.read_metadata" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.readbinary.</span></span><span class="sig-name descname"><span class="pre">read_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isprint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/readbinary.html#read_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.readbinary.read_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>read global metadata and return the variable specific metadata
 in a 2D array with each row being the metadata for a different variable</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.readbinary.readbinary">
-<span class="sig-prename descclassname"><span class="pre">pySD.readbinary.</span></span><span class="sig-name descname"><span class="pre">readbinary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isprint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/readbinary.html#readbinary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.readbinary.readbinary" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.readbinary.</span></span><span class="sig-name descname"><span class="pre">readbinary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isprint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/readbinary.html#readbinary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.readbinary.readbinary" title="Link to this definition">¶</a></dt>
 <dd><p>return list of vectors containing dimenionsless
 data read from binary file</p>
 </dd></dl>
@@ -360,7 +362,7 @@ data read from binary file</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -396,7 +398,7 @@ data read from binary file</p>
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

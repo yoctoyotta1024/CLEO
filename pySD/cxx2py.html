@@ -3,9 +3,9 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="EDITCONFIGFILE" href="editconfigfile.html" /><link rel="prev" title="ENSEMBZARR" href="sdmout_src/ensembzarr.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="READCONFIGFILE" href="readconfigfile.html" /><link rel="prev" title="ENSEMBZARR" href="sdmout_src/ensembzarr.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>CXX2PY - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="writebinary.html">WRITEBINARY</a></li>
@@ -308,7 +310,7 @@
         </div>
         <article role="main">
           <section id="module-pySD.cxx2py">
-<span id="cxx2py"></span><h1>CXX2PY<a class="headerlink" href="#module-pySD.cxx2py" title="Link to this heading">#</a></h1>
+<span id="cxx2py"></span><h1>CXX2PY<a class="headerlink" href="#module-pySD.cxx2py" title="Link to this heading">¶</a></h1>
 <p>—– CLEO —–
 File: cxx2py.py
 Project: pySD
@@ -316,7 +318,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 —–
-Last Modified: Monday 8th April 2024
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 —–
 License: BSD 3-Clause “New” or “Revised” License
@@ -327,7 +329,7 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 File Description:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.cxx2py.derive_more_floats">
-<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">derive_more_floats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">consts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#derive_more_floats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.derive_more_floats" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">derive_more_floats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">consts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#derive_more_floats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.derive_more_floats" title="Link to this definition">¶</a></dt>
 <dd><p>return mconsts dictionary containing
 some derived key,values from values in
 consts dictionary</p>
@@ -335,7 +337,7 @@ consts dictionary</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.cxx2py.line_with_assignment">
-<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">line_with_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#line_with_assignment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.line_with_assignment" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">line_with_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#line_with_assignment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.line_with_assignment" title="Link to this definition">¶</a></dt>
 <dd><p>find all the lines in a file
 which have form […] = […] ;
 ie. lines which assign variables. return
@@ -344,22 +346,13 @@ list of these lines truncatd at ;</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.cxx2py.print_dict_statement">
-<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">print_dict_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dictname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#print_dict_statement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.print_dict_statement" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">print_dict_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dictname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#print_dict_statement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.print_dict_statement" title="Link to this definition">¶</a></dt>
 <dd><p>print key, value pairs for dictionary created by reading filename</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pySD.cxx2py.read_configparams_into_floats">
-<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">read_configparams_into_floats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#read_configparams_into_floats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.read_configparams_into_floats" title="Link to this definition">#</a></dt>
-<dd><p>returns dictionary of value: float from
-values assigned in a config .txt file.
-Also returns dictionary of notfloats
-for values that couldn’t be converted.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="pySD.cxx2py.read_cxxconsts_into_floats">
-<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">read_cxxconsts_into_floats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#read_cxxconsts_into_floats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.read_cxxconsts_into_floats" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">read_cxxconsts_into_floats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#read_cxxconsts_into_floats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.read_cxxconsts_into_floats" title="Link to this definition">¶</a></dt>
 <dd><p>returns dictionary of value: float from
 (const) doubles and (const) ints
 assigned in a c++ file. Also returns
@@ -369,14 +362,14 @@ couldn’t be converted</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.cxx2py.remove_excess_line">
-<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">remove_excess_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#remove_excess_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.remove_excess_line" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">remove_excess_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#remove_excess_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.remove_excess_line" title="Link to this definition">¶</a></dt>
 <dd><p>removes white spaces and
 and comments from a line</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.cxx2py.where_typename_ends">
-<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">where_typename_ends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#where_typename_ends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.where_typename_ends" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.cxx2py.</span></span><span class="sig-name descname"><span class="pre">where_typename_ends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/cxx2py.html#where_typename_ends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.cxx2py.where_typename_ends" title="Link to this definition">¶</a></dt>
 <dd><p>finds index where c++ name for
 variable type ends for a const double,
 double, int or const int.</p>
@@ -389,12 +382,12 @@ double, int or const int.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="editconfigfile.html">
+          <a class="next-page" href="readconfigfile.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">EDITCONFIGFILE</div>
+                <div class="title">READCONFIGFILE</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -419,7 +412,7 @@ double, int or const int.</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -444,7 +437,6 @@ double, int or const int.</p>
 <li><a class="reference internal" href="#pySD.cxx2py.derive_more_floats"><code class="docutils literal notranslate"><span class="pre">derive_more_floats()</span></code></a></li>
 <li><a class="reference internal" href="#pySD.cxx2py.line_with_assignment"><code class="docutils literal notranslate"><span class="pre">line_with_assignment()</span></code></a></li>
 <li><a class="reference internal" href="#pySD.cxx2py.print_dict_statement"><code class="docutils literal notranslate"><span class="pre">print_dict_statement()</span></code></a></li>
-<li><a class="reference internal" href="#pySD.cxx2py.read_configparams_into_floats"><code class="docutils literal notranslate"><span class="pre">read_configparams_into_floats()</span></code></a></li>
 <li><a class="reference internal" href="#pySD.cxx2py.read_cxxconsts_into_floats"><code class="docutils literal notranslate"><span class="pre">read_cxxconsts_into_floats()</span></code></a></li>
 <li><a class="reference internal" href="#pySD.cxx2py.remove_excess_line"><code class="docutils literal notranslate"><span class="pre">remove_excess_line()</span></code></a></li>
 <li><a class="reference internal" href="#pySD.cxx2py.where_typename_ends"><code class="docutils literal notranslate"><span class="pre">where_typename_ends()</span></code></a></li>
@@ -460,7 +452,7 @@ double, int or const int.</p>
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

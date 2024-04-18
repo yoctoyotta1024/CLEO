@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Terminal Velocities" href="terminalvelocity.html" /><link rel="prev" title="Superdrop IDs" href="superdrop_ids.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>Superdrop Attributes - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -308,18 +310,18 @@
         </div>
         <article role="main">
           <section id="superdrop-attributes">
-<h1>Superdrop Attributes<a class="headerlink" href="#superdrop-attributes" title="Link to this heading">#</a></h1>
+<h1>Superdrop Attributes<a class="headerlink" href="#superdrop-attributes" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/superdrop_attrs.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/superdrop_attrs.hpp">[source]</a></p>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv416SoluteProperties">
-<span id="_CPPv316SoluteProperties"></span><span id="_CPPv216SoluteProperties"></span><span id="SoluteProperties"></span><span class="target" id="structSoluteProperties"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SoluteProperties</span></span></span><a class="headerlink" href="#_CPPv416SoluteProperties" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv316SoluteProperties"></span><span id="_CPPv216SoluteProperties"></span><span id="SoluteProperties"></span><span class="target" id="structSoluteProperties"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SoluteProperties</span></span></span><a class="headerlink" href="#_CPPv416SoluteProperties" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Struct representing the properties of solute in a super-droplet. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16SoluteProperties7rho_solEv">
-<span id="_CPPv3NK16SoluteProperties7rho_solEv"></span><span id="_CPPv2NK16SoluteProperties7rho_solEv"></span><span id="SoluteProperties::rho_solCCE"></span><span class="target" id="structSoluteProperties_1a9aa0e1fc944690a2aa7caa5b1b6c09c8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rho_sol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16SoluteProperties7rho_solEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16SoluteProperties7rho_solEv"></span><span id="_CPPv2NK16SoluteProperties7rho_solEv"></span><span id="SoluteProperties::rho_solCCE"></span><span class="target" id="structSoluteProperties_1a9aa0e1fc944690a2aa7caa5b1b6c09c8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rho_sol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16SoluteProperties7rho_solEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the density of solute (dimensionless). </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -330,7 +332,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16SoluteProperties6mr_solEv">
-<span id="_CPPv3NK16SoluteProperties6mr_solEv"></span><span id="_CPPv2NK16SoluteProperties6mr_solEv"></span><span id="SoluteProperties::mr_solCCE"></span><span class="target" id="structSoluteProperties_1a6e001512c25c9b248d46650a5106bd35"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mr_sol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16SoluteProperties6mr_solEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16SoluteProperties6mr_solEv"></span><span id="_CPPv2NK16SoluteProperties6mr_solEv"></span><span id="SoluteProperties::mr_solCCE"></span><span class="target" id="structSoluteProperties_1a6e001512c25c9b248d46650a5106bd35"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mr_sol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16SoluteProperties6mr_solEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the molecular mass of solute (dimensionless). </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -341,7 +343,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16SoluteProperties5ionicEv">
-<span id="_CPPv3NK16SoluteProperties5ionicEv"></span><span id="_CPPv2NK16SoluteProperties5ionicEv"></span><span id="SoluteProperties::ionicCCE"></span><span class="target" id="structSoluteProperties_1a56ed589536c70e4ee02d5d7025809176"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ionic</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16SoluteProperties5ionicEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16SoluteProperties5ionicEv"></span><span id="_CPPv2NK16SoluteProperties5ionicEv"></span><span id="SoluteProperties::ionicCCE"></span><span class="target" id="structSoluteProperties_1a56ed589536c70e4ee02d5d7025809176"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ionic</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16SoluteProperties5ionicEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the degree ionic dissociation (van’t Hoff factor) (dimensionless). </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -355,25 +357,25 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv414SuperdropAttrs">
-<span id="_CPPv314SuperdropAttrs"></span><span id="_CPPv214SuperdropAttrs"></span><span id="SuperdropAttrs"></span><span class="target" id="structSuperdropAttrs"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropAttrs</span></span></span><a class="headerlink" href="#_CPPv414SuperdropAttrs" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314SuperdropAttrs"></span><span id="_CPPv214SuperdropAttrs"></span><span id="SuperdropAttrs"></span><span class="target" id="structSuperdropAttrs"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropAttrs</span></span></span><a class="headerlink" href="#_CPPv414SuperdropAttrs" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Struct representing the attributes of a super-droplet. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs14SuperdropAttrsEv">
-<span id="_CPPv3N14SuperdropAttrs14SuperdropAttrsEv"></span><span id="_CPPv2N14SuperdropAttrs14SuperdropAttrsEv"></span><span id="SuperdropAttrs::SuperdropAttrs"></span><span class="target" id="structSuperdropAttrs_1a4d8a3a18d5d68f0db5a244df821d1600"></span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropAttrs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs14SuperdropAttrsEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs14SuperdropAttrsEv"></span><span id="_CPPv2N14SuperdropAttrs14SuperdropAttrsEv"></span><span id="SuperdropAttrs::SuperdropAttrs"></span><span class="target" id="structSuperdropAttrs_1a4d8a3a18d5d68f0db5a244df821d1600"></span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropAttrs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs14SuperdropAttrsEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Default constructor requirement for use of <a class="reference internal" href="#structSuperdropAttrs"><span class="std std-ref">SuperdropAttrs</span></a> in Kokkos View. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrsD0Ev">
-<span id="_CPPv3N14SuperdropAttrsD0Ev"></span><span id="_CPPv2N14SuperdropAttrsD0Ev"></span><span id="SuperdropAttrs::~SuperdropAttrs"></span><span class="target" id="structSuperdropAttrs_1abcfc67331f0bf22bfdef22fcc18203d9"></span><span class="sig-name descname"><span class="n"><span class="pre">~SuperdropAttrs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrsD0Ev" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrsD0Ev"></span><span id="_CPPv2N14SuperdropAttrsD0Ev"></span><span id="SuperdropAttrs::~SuperdropAttrs"></span><span class="target" id="structSuperdropAttrs_1abcfc67331f0bf22bfdef22fcc18203d9"></span><span class="sig-name descname"><span class="n"><span class="pre">~SuperdropAttrs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrsD0Ev" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Default destructor requirement for use of <a class="reference internal" href="#structSuperdropAttrs"><span class="std std-ref">SuperdropAttrs</span></a> in Kokkos View. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs14SuperdropAttrsEK16SolutePropertiesK8uint64_tKdKd">
-<span id="_CPPv3N14SuperdropAttrs14SuperdropAttrsEK16SolutePropertiesK8uint64_tKdKd"></span><span id="_CPPv2N14SuperdropAttrs14SuperdropAttrsEK16SolutePropertiesK8uint64_tKdKd"></span><span id="SuperdropAttrs::SuperdropAttrs__SolutePropertiesC.uint64_tC.doubleC.doubleC"></span><span class="target" id="structSuperdropAttrs_1a20a2e455cb4ae18df2ba8cc4f0a58d50"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropAttrs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv416SoluteProperties" title="SoluteProperties"><span class="n"><span class="pre">SoluteProperties</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">solute</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xi</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">msol</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs14SuperdropAttrsEK16SolutePropertiesK8uint64_tKdKd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs14SuperdropAttrsEK16SolutePropertiesK8uint64_tKdKd"></span><span id="_CPPv2N14SuperdropAttrs14SuperdropAttrsEK16SolutePropertiesK8uint64_tKdKd"></span><span id="SuperdropAttrs::SuperdropAttrs__SolutePropertiesC.uint64_tC.doubleC.doubleC"></span><span class="target" id="structSuperdropAttrs_1a20a2e455cb4ae18df2ba8cc4f0a58d50"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropAttrs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv416SoluteProperties" title="SoluteProperties"><span class="n"><span class="pre">SoluteProperties</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">solute</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xi</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">msol</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs14SuperdropAttrsEK16SolutePropertiesK8uint64_tKdKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Constructor with parameters. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -389,7 +391,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14SuperdropAttrs9is_soluteEv">
-<span id="_CPPv3NK14SuperdropAttrs9is_soluteEv"></span><span id="_CPPv2NK14SuperdropAttrs9is_soluteEv"></span><span id="SuperdropAttrs::is_soluteC"></span><span class="target" id="structSuperdropAttrs_1a6841f201b0fd5f14825834f51ac2ab06"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_solute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs9is_soluteEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK14SuperdropAttrs9is_soluteEv"></span><span id="_CPPv2NK14SuperdropAttrs9is_soluteEv"></span><span id="SuperdropAttrs::is_soluteC"></span><span class="target" id="structSuperdropAttrs_1a6841f201b0fd5f14825834f51ac2ab06"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_solute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs9is_soluteEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Check if solute is present. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -400,7 +402,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14SuperdropAttrs10get_soluteEv">
-<span id="_CPPv3NK14SuperdropAttrs10get_soluteEv"></span><span id="_CPPv2NK14SuperdropAttrs10get_soluteEv"></span><span id="SuperdropAttrs::get_soluteC"></span><span class="target" id="structSuperdropAttrs_1a0fbd46597dfdf5b80fbed364534f98f5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_solute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs10get_soluteEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK14SuperdropAttrs10get_soluteEv"></span><span id="_CPPv2NK14SuperdropAttrs10get_soluteEv"></span><span id="SuperdropAttrs::get_soluteC"></span><span class="target" id="structSuperdropAttrs_1a0fbd46597dfdf5b80fbed364534f98f5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_solute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs10get_soluteEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the solute properties. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -411,7 +413,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14SuperdropAttrs11get_rho_solEv">
-<span id="_CPPv3NK14SuperdropAttrs11get_rho_solEv"></span><span id="_CPPv2NK14SuperdropAttrs11get_rho_solEv"></span><span id="SuperdropAttrs::get_rho_solC"></span><span class="target" id="structSuperdropAttrs_1ab34675875b705b0d48c28c19cf8034fe"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_rho_sol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs11get_rho_solEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK14SuperdropAttrs11get_rho_solEv"></span><span id="_CPPv2NK14SuperdropAttrs11get_rho_solEv"></span><span id="SuperdropAttrs::get_rho_solC"></span><span class="target" id="structSuperdropAttrs_1ab34675875b705b0d48c28c19cf8034fe"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_rho_sol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs11get_rho_solEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the density of solute. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -422,7 +424,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14SuperdropAttrs10get_mr_solEv">
-<span id="_CPPv3NK14SuperdropAttrs10get_mr_solEv"></span><span id="_CPPv2NK14SuperdropAttrs10get_mr_solEv"></span><span id="SuperdropAttrs::get_mr_solC"></span><span class="target" id="structSuperdropAttrs_1a71888911fd7168791f28f24a08184c7c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_mr_sol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs10get_mr_solEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK14SuperdropAttrs10get_mr_solEv"></span><span id="_CPPv2NK14SuperdropAttrs10get_mr_solEv"></span><span id="SuperdropAttrs::get_mr_solC"></span><span class="target" id="structSuperdropAttrs_1a71888911fd7168791f28f24a08184c7c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_mr_sol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs10get_mr_solEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the molecular mass of the solute. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -433,7 +435,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14SuperdropAttrs9get_ionicEv">
-<span id="_CPPv3NK14SuperdropAttrs9get_ionicEv"></span><span id="_CPPv2NK14SuperdropAttrs9get_ionicEv"></span><span id="SuperdropAttrs::get_ionicC"></span><span class="target" id="structSuperdropAttrs_1a0df09aa420daa3e769965fe3f80dad42"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ionic</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs9get_ionicEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK14SuperdropAttrs9get_ionicEv"></span><span id="_CPPv2NK14SuperdropAttrs9get_ionicEv"></span><span id="SuperdropAttrs::get_ionicC"></span><span class="target" id="structSuperdropAttrs_1a0df09aa420daa3e769965fe3f80dad42"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ionic</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs9get_ionicEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the degree ionic dissociation (van’t Hoff factor). </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -444,7 +446,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs6set_xiEK8uint64_t">
-<span id="_CPPv3N14SuperdropAttrs6set_xiEK8uint64_t"></span><span id="_CPPv2N14SuperdropAttrs6set_xiEK8uint64_t"></span><span id="SuperdropAttrs::set_xi__uint64_tC"></span><span class="target" id="structSuperdropAttrs_1a79e7590c8a5497216d9bcd7958c247d8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_xi</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i_xi</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs6set_xiEK8uint64_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs6set_xiEK8uint64_t"></span><span id="_CPPv2N14SuperdropAttrs6set_xiEK8uint64_t"></span><span id="SuperdropAttrs::set_xi__uint64_tC"></span><span class="target" id="structSuperdropAttrs_1a79e7590c8a5497216d9bcd7958c247d8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_xi</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i_xi</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs6set_xiEK8uint64_t" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Set the multiplicity of superdroplet. </p>
 <p>Set the multiplicity ‘xi’ of the superdroplet with assert that new xi &gt;= 1.</p>
 <dl class="field-list simple">
@@ -456,7 +458,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs10set_radiusEKd">
-<span id="_CPPv3N14SuperdropAttrs10set_radiusEKd"></span><span id="_CPPv2N14SuperdropAttrs10set_radiusEKd"></span><span id="SuperdropAttrs::set_radius__doubleC"></span><span class="target" id="structSuperdropAttrs_1aa7550c82268e3bbda3e4a87e430f2fcc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_radius</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i_radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs10set_radiusEKd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs10set_radiusEKd"></span><span id="_CPPv2N14SuperdropAttrs10set_radiusEKd"></span><span id="SuperdropAttrs::set_radius__doubleC"></span><span class="target" id="structSuperdropAttrs_1aa7550c82268e3bbda3e4a87e430f2fcc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_radius</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i_radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs10set_radiusEKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Set the radius of the super-droplet. </p>
 <p>This function sets the value of the super-droplet’s radius to the specified value with assert that new radius &gt;= dry radius within 10^(-6) micron tolerance.</p>
 <p><em>Note:</em> See also change_radius which limits super-droplet radius to its dry radius.</p>
@@ -469,7 +471,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs8set_msolEKd">
-<span id="_CPPv3N14SuperdropAttrs8set_msolEKd"></span><span id="_CPPv2N14SuperdropAttrs8set_msolEKd"></span><span id="SuperdropAttrs::set_msol__doubleC"></span><span class="target" id="structSuperdropAttrs_1a19377f13ed8a9c06e206902bf0e0b158"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_msol</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i_msol</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs8set_msolEKd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs8set_msolEKd"></span><span id="_CPPv2N14SuperdropAttrs8set_msolEKd"></span><span id="SuperdropAttrs::set_msol__doubleC"></span><span class="target" id="structSuperdropAttrs_1a19377f13ed8a9c06e206902bf0e0b158"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_msol</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i_msol</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs8set_msolEKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Sets the value of the super-droplet’s mass of solute. </p>
 <p>This function sets the value of the super-droplet’s solute mass to the specified value.</p>
 <dl class="field-list simple">
@@ -481,7 +483,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14SuperdropAttrs4massEv">
-<span id="_CPPv3NK14SuperdropAttrs4massEv"></span><span id="_CPPv2NK14SuperdropAttrs4massEv"></span><span id="SuperdropAttrs::massC"></span><span class="target" id="structSuperdropAttrs_1a8362d8f8739cd2f8b39304d0ccc5cd61"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs4massEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK14SuperdropAttrs4massEv"></span><span id="_CPPv2NK14SuperdropAttrs4massEv"></span><span id="SuperdropAttrs::massC"></span><span class="target" id="structSuperdropAttrs_1a8362d8f8739cd2f8b39304d0ccc5cd61"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs4massEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the total droplet mass. </p>
 <p>Calculates and returns total droplet mass = water + dry areosol.</p>
 <dl class="field-list simple">
@@ -493,7 +495,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14SuperdropAttrs9dryradiusEv">
-<span id="_CPPv3NK14SuperdropAttrs9dryradiusEv"></span><span id="_CPPv2NK14SuperdropAttrs9dryradiusEv"></span><span id="SuperdropAttrs::dryradiusC"></span><span class="target" id="structSuperdropAttrs_1a7328e99328bee7fb81ef6987ea2c1f97"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dryradius</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs9dryradiusEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK14SuperdropAttrs9dryradiusEv"></span><span id="_CPPv2NK14SuperdropAttrs9dryradiusEv"></span><span id="SuperdropAttrs::dryradiusC"></span><span class="target" id="structSuperdropAttrs_1a7328e99328bee7fb81ef6987ea2c1f97"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dryradius</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs9dryradiusEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the dry radius of droplet. </p>
 <p>Calculate radius as if droplet is dry, ie. radius if droplet was only made of its solute mass</p>
 <dl class="field-list simple">
@@ -505,7 +507,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14SuperdropAttrs6rcubedEv">
-<span id="_CPPv3NK14SuperdropAttrs6rcubedEv"></span><span id="_CPPv2NK14SuperdropAttrs6rcubedEv"></span><span id="SuperdropAttrs::rcubedC"></span><span class="target" id="structSuperdropAttrs_1a0c7b707daef89a07d6c1584d54237053"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcubed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs6rcubedEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK14SuperdropAttrs6rcubedEv"></span><span id="_CPPv2NK14SuperdropAttrs6rcubedEv"></span><span id="SuperdropAttrs::rcubedC"></span><span class="target" id="structSuperdropAttrs_1a0c7b707daef89a07d6c1584d54237053"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcubed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs6rcubedEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the cubed radius of droplet. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -516,7 +518,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14SuperdropAttrs3volEv">
-<span id="_CPPv3NK14SuperdropAttrs3volEv"></span><span id="_CPPv2NK14SuperdropAttrs3volEv"></span><span id="SuperdropAttrs::volC"></span><span class="target" id="structSuperdropAttrs_1a87abec89d42052b4cde6fb129e74b79f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs3volEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK14SuperdropAttrs3volEv"></span><span id="_CPPv2NK14SuperdropAttrs3volEv"></span><span id="SuperdropAttrs::volC"></span><span class="target" id="structSuperdropAttrs_1a87abec89d42052b4cde6fb129e74b79f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vol</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14SuperdropAttrs3volEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the spherical volume of droplet. </p>
 <p>Volume as if droplet is sphere given its radius.</p>
 <dl class="field-list simple">
@@ -528,7 +530,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs13change_radiusEKd">
-<span id="_CPPv3N14SuperdropAttrs13change_radiusEKd"></span><span id="_CPPv2N14SuperdropAttrs13change_radiusEKd"></span><span id="SuperdropAttrs::change_radius__doubleC"></span><span class="target" id="structSuperdropAttrs_1a96057fd56c9466ecaf8632925a4c5713"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">change_radius</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs13change_radiusEKd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs13change_radiusEKd"></span><span id="_CPPv2N14SuperdropAttrs13change_radiusEKd"></span><span id="SuperdropAttrs::change_radius__doubleC"></span><span class="target" id="structSuperdropAttrs_1a96057fd56c9466ecaf8632925a4c5713"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">change_radius</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs13change_radiusEKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Change the radius of droplet. </p>
 <p>Update droplet radius to larger out of new radius ‘newr’ or dry radius and return the resultant change in radius = new radius - old radius. Prevents drops shrinking further once they are size of dry radius.</p>
 <dl class="field-list simple">
@@ -546,25 +548,25 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs6soluteE">
-<span id="_CPPv3N14SuperdropAttrs6soluteE"></span><span id="_CPPv2N14SuperdropAttrs6soluteE"></span><span id="SuperdropAttrs::solute__SoluteProperties"></span><span class="target" id="structSuperdropAttrs_1ab578ac2fea707bbaed627681b508ad12"></span><a class="reference internal" href="#_CPPv416SoluteProperties" title="SoluteProperties"><span class="n"><span class="pre">SoluteProperties</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solute</span></span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs6soluteE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs6soluteE"></span><span id="_CPPv2N14SuperdropAttrs6soluteE"></span><span id="SuperdropAttrs::solute__SoluteProperties"></span><span class="target" id="structSuperdropAttrs_1ab578ac2fea707bbaed627681b508ad12"></span><a class="reference internal" href="#_CPPv416SoluteProperties" title="SoluteProperties"><span class="n"><span class="pre">SoluteProperties</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solute</span></span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs6soluteE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>instance of <a class="reference internal" href="#structSoluteProperties"><span class="std std-ref">SoluteProperties</span></a> for pointer-like reference to superdrop’s solute properties. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs2xiE">
-<span id="_CPPv3N14SuperdropAttrs2xiE"></span><span id="_CPPv2N14SuperdropAttrs2xiE"></span><span id="SuperdropAttrs::xi__uint64_t"></span><span class="target" id="structSuperdropAttrs_1ab769fa8e11309552e88c146add5669d8"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">xi</span></span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs2xiE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs2xiE"></span><span id="_CPPv2N14SuperdropAttrs2xiE"></span><span id="SuperdropAttrs::xi__uint64_t"></span><span class="target" id="structSuperdropAttrs_1ab769fa8e11309552e88c146add5669d8"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">xi</span></span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs2xiE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Multiplicity of superdrop. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs6radiusE">
-<span id="_CPPv3N14SuperdropAttrs6radiusE"></span><span id="_CPPv2N14SuperdropAttrs6radiusE"></span><span id="SuperdropAttrs::radius__double"></span><span class="target" id="structSuperdropAttrs_1ad5d75dad05ea82339c851cea77c2190c"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radius</span></span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs6radiusE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs6radiusE"></span><span id="_CPPv2N14SuperdropAttrs6radiusE"></span><span id="SuperdropAttrs::radius__double"></span><span class="target" id="structSuperdropAttrs_1ad5d75dad05ea82339c851cea77c2190c"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radius</span></span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs6radiusE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Radius of superdrop. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N14SuperdropAttrs4msolE">
-<span id="_CPPv3N14SuperdropAttrs4msolE"></span><span id="_CPPv2N14SuperdropAttrs4msolE"></span><span id="SuperdropAttrs::msol__double"></span><span class="target" id="structSuperdropAttrs_1a2702d8b35b81ec318d6e7a206dacf384"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">msol</span></span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs4msolE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14SuperdropAttrs4msolE"></span><span id="_CPPv2N14SuperdropAttrs4msolE"></span><span id="SuperdropAttrs::msol__double"></span><span class="target" id="structSuperdropAttrs_1a2702d8b35b81ec318d6e7a206dacf384"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">msol</span></span></span><a class="headerlink" href="#_CPPv4N14SuperdropAttrs4msolE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Mass of solute dissolved in superdrop. </p>
 </dd></dl>
 
@@ -608,7 +610,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -671,7 +673,7 @@
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

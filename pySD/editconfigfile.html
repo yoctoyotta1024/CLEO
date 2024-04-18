@@ -3,9 +3,9 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="READBINARY" href="readbinary.html" /><link rel="prev" title="CXX2PY" href="cxx2py.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="READBINARY" href="readbinary.html" /><link rel="prev" title="READCONFIGFILE" href="readconfigfile.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>EDITCONFIGFILE - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="writebinary.html">WRITEBINARY</a></li>
@@ -301,21 +303,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="module-pySD.editconfigfile">
-<span id="editconfigfile"></span><h1>EDITCONFIGFILE<a class="headerlink" href="#module-pySD.editconfigfile" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="pySD.editconfigfile.edit_config_params">
-<span class="sig-prename descclassname"><span class="pre">pySD.editconfigfile.</span></span><span class="sig-name descname"><span class="pre">edit_config_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params2change</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySD/editconfigfile.html#edit_config_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.editconfigfile.edit_config_params" title="Link to this definition">#</a></dt>
-<dd><p>rewrites config file with parameters listed in
-dict params2change edited to new values also in dict</p>
-</dd></dl>
-
+          <section id="editconfigfile">
+<h1>EDITCONFIGFILE<a class="headerlink" href="#editconfigfile" title="Link to this heading">¶</a></h1>
 </section>
 
         </article>
@@ -332,14 +327,14 @@ dict params2change edited to new values also in dict</p>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="cxx2py.html">
+          <a class="prev-page" href="readconfigfile.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">CXX2PY</div>
+                <div class="title">READCONFIGFILE</div>
                 
               </div>
             </a>
@@ -353,7 +348,7 @@ dict params2change edited to new values also in dict</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -362,33 +357,14 @@ dict params2change edited to new values also in dict</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">EDITCONFIGFILE</a><ul>
-<li><a class="reference internal" href="#pySD.editconfigfile.edit_config_params"><code class="docutils literal notranslate"><span class="pre">edit_config_params()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

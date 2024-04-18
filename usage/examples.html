@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Quickstart" href="quickstart.html" /><link rel="prev" title="Installation" href="installation.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>Examples - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -308,7 +310,7 @@
         </div>
         <article role="main">
           <section id="examples">
-<span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
+<span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
 <p>There are various examples of CLEO, with different build configurations, domains, microphysics,
 coupling, and super-droplet motion etc. They can be found in the <code class="docutils literal notranslate"><span class="pre">CLEO/examples</span></code> directory. If you
 would like to a copy of the reference solutions please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
@@ -321,7 +323,7 @@ To execute these scripts you will therefore need to be on a node in the GPU part
 (<a class="reference external" href="https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html">see here</a>
 for documentation on Levante’s partitions), or change the build configuration.</p>
 <section id="configure-the-bash-scripts">
-<span id="configurebash"></span><h2>Configure the Bash Scripts<a class="headerlink" href="#configure-the-bash-scripts" title="Link to this heading">#</a></h2>
+<span id="configurebash"></span><h2>Configure the Bash Scripts<a class="headerlink" href="#configure-the-bash-scripts" title="Link to this heading">¶</a></h2>
 <p>The bash script for every example provides command line arguments to <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code>. This
 script has three steps:</p>
 <ol class="arabic simple">
@@ -354,7 +356,7 @@ on a node in the GPU partition of Levante and may also include OpenMP parallelis
 </ul>
 </section>
 <section id="adiabatic-parcel">
-<h2>Adiabatic Parcel<a class="headerlink" href="#adiabatic-parcel" title="Link to this heading">#</a></h2>
+<h2>Adiabatic Parcel<a class="headerlink" href="#adiabatic-parcel" title="Link to this heading">¶</a></h2>
 <p>These examples are for a 0-D model of a parcel of air expanding and contracting adiabatically with a
 two-way coupling between the SDM microphysics and the thermodynamics. The setup mimics that in
 Arabas and Shima 2017 section 7 <span id="id2">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>. Note that due to numerical differences,
@@ -366,7 +368,7 @@ the conditions for cusp bifurcation and the plots will not be exactly identical 
 </pre></div>
 </div>
 <section id="a-arabas-and-shima-2017">
-<h3>a) Arabas and Shima 2017<a class="headerlink" href="#a-arabas-and-shima-2017" title="Link to this heading">#</a></h3>
+<h3>a) Arabas and Shima 2017<a class="headerlink" href="#a-arabas-and-shima-2017" title="Link to this heading">¶</a></h3>
 <p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/adiabaticparcel/as2017.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
@@ -379,7 +381,7 @@ the conditions for cusp bifurcation and the plots will not be exactly identical 
 similar to the columns of figure 5 from Arabas and Shima 2017 <span id="id3">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.</p>
 </section>
 <section id="b-cusp-bifurcation">
-<h3>b) Cusp Bifurcation<a class="headerlink" href="#b-cusp-bifurcation" title="Link to this heading">#</a></h3>
+<h3>b) Cusp Bifurcation<a class="headerlink" href="#b-cusp-bifurcation" title="Link to this heading">¶</a></h3>
 <p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/adiabaticparcel/cuspbifurc.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
@@ -394,7 +396,7 @@ to the third column of figure 5 from Arabas and Shima 2017 <span id="id4">[<a cl
 </section>
 </section>
 <section id="box-model-collisions">
-<h2>Box Model Collisions<a class="headerlink" href="#box-model-collisions" title="Link to this heading">#</a></h2>
+<h2>Box Model Collisions<a class="headerlink" href="#box-model-collisions" title="Link to this heading">¶</a></h2>
 <p>These examples are for a 0-D box model with various collision-coalescence kernels.</p>
 <ol class="arabic simple">
 <li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">boxmodelcollisions/</span></code> directory, e.g.</p></li>
@@ -416,20 +418,20 @@ by editing <code class="docutils literal notranslate"><span class="pre">script_a
 collision-coalescence algorithm, each run of these examples will not be completely identical, but
 they should be reasonably similar, and have the same mean behaviour.</p>
 <section id="a-golovin">
-<h3>a) Golovin<a class="headerlink" href="#a-golovin" title="Link to this heading">#</a></h3>
+<h3>a) Golovin<a class="headerlink" href="#a-golovin" title="Link to this heading">¶</a></h3>
 <p>This example models collision-coalescence using Golovin’s kernel.</p>
 <p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_shima2009/bin/golovin_validation.png</span></code>, should be similar to
 Fig.2(a) of Shima et al. 2009 <span id="id5">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
 </section>
 <section id="b-long">
-<h3>b) Long<a class="headerlink" href="#b-long" title="Link to this heading">#</a></h3>
+<h3>b) Long<a class="headerlink" href="#b-long" title="Link to this heading">¶</a></h3>
 <p>This example models collision-coalescence using Long’s collision efficiency as given by equation
 13 of Simmel et al. 2002 <span id="id6">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>.</p>
 <p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_shima2009/bin/long_validation.png</span></code>, should be similar to
 Fig.2(b) of Shima et al. 2009 <span id="id7">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
 </section>
 <section id="c-low-and-list">
-<h3>c) Low and List<a class="headerlink" href="#c-low-and-list" title="Link to this heading">#</a></h3>
+<h3>c) Low and List<a class="headerlink" href="#c-low-and-list" title="Link to this heading">¶</a></h3>
 <p>This example models collision-coalescence using the hydrodynamic kernel with Long’s collision
 efficiency as given by equation 13 of Simmel et al. 2002 <span id="id8">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>, and the coalescence
 efficiency from Low and List 1982(a) <span id="id9">[<a class="reference internal" href="../references.html#id21" title="T. B. Low and Roland List. Collision, coalescence and breakup of raindrops. part i: experimentally established coalescence efficiencies and fragment size distributions in breakup. Journal of Atmospheric Sciences, 39(7):1591 - 1606, 1982. URL: https://journals.ametsoc.org/view/journals/atsc/39/7/1520-0469_1982_039_1591_ccabor_2_0_co_2.xml, doi:https://doi.org/10.1175/1520-0469(1982)039&lt;1591:CCABOR&gt;2.0.CO;2.">LL82</a>]</span> (see also McFarquhar
@@ -438,7 +440,7 @@ efficiency from Low and List 1982(a) <span id="id9">[<a class="reference interna
 </section>
 </section>
 <section id="divergence-free-motion">
-<h2>Divergence Free Motion<a class="headerlink" href="#divergence-free-motion" title="Link to this heading">#</a></h2>
+<h2>Divergence Free Motion<a class="headerlink" href="#divergence-free-motion" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">divfreemotion/</span></code> directory, e.g.</p></li>
 </ol>
@@ -460,7 +462,7 @@ should remain constant over time, as shown in the plot produced and by default c
 <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_divfree2D/bin/df2d_totnsupers_validation.png</span></code>.</p>
 </section>
 <section id="d-rainshaft">
-<h2>1-D Rainshaft<a class="headerlink" href="#d-rainshaft" title="Link to this heading">#</a></h2>
+<h2>1-D Rainshaft<a class="headerlink" href="#d-rainshaft" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">rainshaft1d/</span></code> directory, e.g.</p></li>
 </ol>
@@ -479,7 +481,7 @@ should remain constant over time, as shown in the plot produced and by default c
 reference solutions please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
 </section>
 <section id="constant-2-d-thermodynamics">
-<h2>Constant 2-D Thermodynamics<a class="headerlink" href="#constant-2-d-thermodynamics" title="Link to this heading">#</a></h2>
+<h2>Constant 2-D Thermodynamics<a class="headerlink" href="#constant-2-d-thermodynamics" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">constthermo2d/</span></code> directory, e.g.</p></li>
 </ol>
@@ -498,7 +500,7 @@ reference solutions please <a class="reference internal" href="contact.html#cont
 reference solutions please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
 </section>
 <section id="speed-test">
-<h2>Speed Test<a class="headerlink" href="#speed-test" title="Link to this heading">#</a></h2>
+<h2>Speed Test<a class="headerlink" href="#speed-test" title="Link to this heading">¶</a></h2>
 <p>This example compiles and runs the same exectuable <code class="docutils literal notranslate"><span class="pre">spdtest</span></code> for three different build
 configurations, (1) “cuda” with CUDA and OpenMP parallelism, (2) “openmp” with only OpenMP
 parallelism, and (3) “serial” without parallelism.</p>
@@ -522,7 +524,7 @@ The times can be compared with the ones
 in <code class="docutils literal notranslate"><span class="pre">~/CLEO/examples/speedtest/speedtest_allstats_examples.txt</span></code>.</p>
 </section>
 <section id="extension">
-<h2>Extension<a class="headerlink" href="#extension" title="Link to this heading">#</a></h2>
+<h2>Extension<a class="headerlink" href="#extension" title="Link to this heading">¶</a></h2>
 <p>Explore the <code class="docutils literal notranslate"><span class="pre">exampleplotting/plotssrc</span></code> Python module which gives examples of how to plot output
 from CLEO with pySD, a few of which are demonstrated in the <code class="docutils literal notranslate"><span class="pre">exampleplotting/exampleplotting.py</span></code>
 script.</p>
@@ -564,7 +566,7 @@ script.</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -615,7 +617,7 @@ script.</p>
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

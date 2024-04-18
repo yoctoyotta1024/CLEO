@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Background to the Super-Droplet Model (SDM)" href="background.html" /><link rel="prev" title="Welcome to CLEO’s Documentation!" href="../index.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>Programming Guide - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -308,7 +310,7 @@
         </div>
         <article role="main">
           <section id="programming-guide">
-<h1>Programming Guide<a class="headerlink" href="#programming-guide" title="Link to this heading">#</a></h1>
+<h1>Programming Guide<a class="headerlink" href="#programming-guide" title="Link to this heading">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Please consider that this project is under active development
@@ -320,7 +322,7 @@ in large regional domains, with horizontal extents O(100km). CLEO is an attempt 
 a SDM. It strives to be a library for SDM to model warm clouds with exceptional computational
 performance.</p>
 <section id="memory-layout">
-<h2>Memory Layout<a class="headerlink" href="#memory-layout" title="Link to this heading">#</a></h2>
+<h2>Memory Layout<a class="headerlink" href="#memory-layout" title="Link to this heading">¶</a></h2>
 <p>The fundamental basis for computational performance in CLEO is through efficient memory access
 patterns. Primarily this is acheived by ensuring super-droplets which occupy the same gridbox are
 always located contiguously in memory. We also try to avoid new memory allocation and cache misses
@@ -328,7 +330,7 @@ through our organisation of gridboxes and super-droplets and we use simplistic m
 low cost at run-time.</p>
 </section>
 <section id="monoids">
-<h2>Monoids<a class="headerlink" href="#monoids" title="Link to this heading">#</a></h2>
+<h2>Monoids<a class="headerlink" href="#monoids" title="Link to this heading">¶</a></h2>
 <p>A key novel feature of CLEO is the construction of monoids. We use C++20 concepts to constrain
 templated types for microphysics and observers. This ensures they satisfy monoid set properties
 and can be combined in well-defined ways. The purpose is to allow for several microphysics
@@ -338,7 +340,7 @@ extra-ordinary model flexibility without additional run-time cost. It also helps
 readable and modifyable code.</p>
 </section>
 <section id="coupling-to-dynamics">
-<h2>Coupling to Dynamics<a class="headerlink" href="#coupling-to-dynamics" title="Link to this heading">#</a></h2>
+<h2>Coupling to Dynamics<a class="headerlink" href="#coupling-to-dynamics" title="Link to this heading">¶</a></h2>
 <p>Whilst CLEO handles the transport of super-droplets throughout the domain, it cannot perform
 advection of Gridboxes’ dyanmic variables itself (temperature, pressure, winds etc.). Instead,
 CLEO can be one-way or two-way coupled to a dyanmical core capable of advection.
@@ -346,14 +348,14 @@ Nevertheless, such a dynamical core is not a necessity. There are many ways for 
 dynamics, which may even just involve reading data from binary files.</p>
 </section>
 <section id="kokkos-thread-parallelism">
-<h2>Kokkos Thread Parallelism<a class="headerlink" href="#kokkos-thread-parallelism" title="Link to this heading">#</a></h2>
+<h2>Kokkos Thread Parallelism<a class="headerlink" href="#kokkos-thread-parallelism" title="Link to this heading">¶</a></h2>
 <p>For performance portable thread parallelism we embrace Kokkos. As a consequence,
 Kokkos’ macros and functions are littered throughout our code and many of our key data structures,
 for example Gridboxes and super-droplets, are contained within Kokkos Views. For those seeking
 advanced understanding, we defer to Kokkos’ GitHub repositories and documentation therein.</p>
 </section>
 <section id="timestepping">
-<h2>Timestepping<a class="headerlink" href="#timestepping" title="Link to this heading">#</a></h2>
+<h2>Timestepping<a class="headerlink" href="#timestepping" title="Link to this heading">¶</a></h2>
 <p>As mentioned above, CLEO’s monoidal structures are designed to allow adaptive-timestepping,
 meaning different microphysical processes and observers may have arbitrary time-steps which bare
 no relation to one another and can in general change during run-time. This flexibility is contained
@@ -373,7 +375,7 @@ coupled to dynamics.</p>
 </div>
 </section>
 <section id="questions">
-<h2>Questions?<a class="headerlink" href="#questions" title="Link to this heading">#</a></h2>
+<h2>Questions?<a class="headerlink" href="#questions" title="Link to this heading">¶</a></h2>
 <p>Yes please! Simply <a class="reference internal" href="../usage/contact.html#contact"><span class="std std-ref">contact us!</span></a></p>
 </section>
 </section>
@@ -413,7 +415,7 @@ coupled to dynamics.</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -453,7 +455,7 @@ coupled to dynamics.</p>
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

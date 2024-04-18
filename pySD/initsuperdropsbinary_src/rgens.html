@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="DRYRGENS" href="dryrgens.html" /><link rel="prev" title="PROBDISTS" href="probdists.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>RGENS - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../writebinary.html">WRITEBINARY</a></li>
@@ -308,7 +310,7 @@
         </div>
         <article role="main">
           <section id="module-pySD.initsuperdropsbinary_src.rgens">
-<span id="rgens"></span><h1>RGENS<a class="headerlink" href="#module-pySD.initsuperdropsbinary_src.rgens" title="Link to this heading">#</a></h1>
+<span id="rgens"></span><h1>RGENS<a class="headerlink" href="#module-pySD.initsuperdropsbinary_src.rgens" title="Link to this heading">¶</a></h1>
 <p>—– CLEO —–
 File: rgens.py
 Project: initsuperdropsbinary_src
@@ -329,20 +331,20 @@ various ways of generatring radii of
 superdroplets for their initial conditions</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.rgens.MonoAttrGen">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.rgens.</span></span><span class="sig-name descname"><span class="pre">MonoAttrGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/rgens.html#MonoAttrGen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.MonoAttrGen" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.rgens.</span></span><span class="sig-name descname"><span class="pre">MonoAttrGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/rgens.html#MonoAttrGen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.MonoAttrGen" title="Link to this definition">¶</a></dt>
 <dd><p>method to generate superdroplets with an
 attribute all equal to attr0</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.rgens.</span></span><span class="sig-name descname"><span class="pre">SampleLog10RadiiGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rspan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.initsuperdropsbinary_src.rgens.</span></span><span class="sig-name descname"><span class="pre">SampleLog10RadiiGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rspan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen" title="Link to this definition">¶</a></dt>
 <dd><p>method to generate superdroplet radii by randomly
 sampling from bins that are linearly spaced in log10(r)
 between rspan[0] and rspan[1]</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample">
-<span class="sig-name descname"><span class="pre">generate_radiisample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbins</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen.generate_radiisample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">generate_radiisample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbins</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen.generate_radiisample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample" title="Link to this definition">¶</a></dt>
 <dd><p>Divide rspan [m] into evenly spaced bins in log10(r).
 If edges=True, return values of radii at edges of bins.
 Else sample each bin randomly to obtain the radius
@@ -351,7 +353,7 @@ of ‘nsupers’ no. of superdroplets</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.randomlysample_log10rbins">
-<span class="sig-name descname"><span class="pre">randomlysample_log10rbins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log10redgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen.randomlysample_log10rbins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.randomlysample_log10rbins" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">randomlysample_log10rbins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log10redgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen.randomlysample_log10rbins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.randomlysample_log10rbins" title="Link to this definition">¶</a></dt>
 <dd><p>given the bin edges, randomly sample each bin of
 log10(radius /m) and return the resultant radii [m]</p>
 </dd></dl>
@@ -395,7 +397,7 @@ log10(radius /m) and return the resultant radii [m]</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -435,7 +437,7 @@ log10(radius /m) and return the resultant radii [m]</p>
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

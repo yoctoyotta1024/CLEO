@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Template for Observer to Write To Dataset" href="write_to_dataset_observer.html" /><link rel="prev" title="StreamOut Observer" href="streamout_observer.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>RunStatsObserver - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -308,24 +310,24 @@
         </div>
         <article role="main">
           <section id="runstatsobserver">
-<h1>RunStatsObserver<a class="headerlink" href="#runstatsobserver" title="Link to this heading">#</a></h1>
+<h1>RunStatsObserver<a class="headerlink" href="#runstatsobserver" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/observers/runstats_observer.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/runstats_observer.hpp">[source]</a></p>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv48RunStats">
-<span id="_CPPv38RunStats"></span><span id="_CPPv28RunStats"></span><span id="RunStats"></span><span class="target" id="structRunStats"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunStats</span></span></span><a class="headerlink" href="#_CPPv48RunStats" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv38RunStats"></span><span id="_CPPv28RunStats"></span><span id="RunStats"></span><span class="target" id="structRunStats"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunStats</span></span></span><a class="headerlink" href="#_CPPv48RunStats" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Structure to hold runtime statistics. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8RunStats8RunStatsEv">
-<span id="_CPPv3N8RunStats8RunStatsEv"></span><span id="_CPPv2N8RunStats8RunStatsEv"></span><span id="RunStats::RunStats"></span><span class="target" id="structRunStats_1a31b4f65e0b283ffaf1ba8eb242de92b0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunStats</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8RunStats8RunStatsEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N8RunStats8RunStatsEv"></span><span id="_CPPv2N8RunStats8RunStatsEv"></span><span id="RunStats::RunStats"></span><span class="target" id="structRunStats_1a31b4f65e0b283ffaf1ba8eb242de92b0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunStats</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8RunStats8RunStatsEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Constructor for <a class="reference internal" href="#structRunStats"><span class="std std-ref">RunStats</span></a>. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8RunStats12time_elapsedEv">
-<span id="_CPPv3NK8RunStats12time_elapsedEv"></span><span id="_CPPv2NK8RunStats12time_elapsedEv"></span><span id="RunStats::time_elapsedC"></span><span class="target" id="structRunStats_1abfcb0711156fe88aa1dc371d7747c9ec"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_elapsed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8RunStats12time_elapsedEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK8RunStats12time_elapsedEv"></span><span id="_CPPv2NK8RunStats12time_elapsedEv"></span><span id="RunStats::time_elapsedC"></span><span class="target" id="structRunStats_1abfcb0711156fe88aa1dc371d7747c9ec"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_elapsed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8RunStats12time_elapsedEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Returns time elapsed since kokkostimer was at time=t0. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -339,19 +341,19 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8RunStats2t0E">
-<span id="_CPPv3N8RunStats2t0E"></span><span id="_CPPv2N8RunStats2t0E"></span><span id="RunStats::t0__double"></span><span class="target" id="structRunStats_1a9f777ea67be50f41a445fd5678232e57"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">t0</span></span></span><a class="headerlink" href="#_CPPv4N8RunStats2t0E" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N8RunStats2t0E"></span><span id="_CPPv2N8RunStats2t0E"></span><span id="RunStats::t0__double"></span><span class="target" id="structRunStats_1a9f777ea67be50f41a445fd5678232e57"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">t0</span></span></span><a class="headerlink" href="#_CPPv4N8RunStats2t0E" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Time of observer creation. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8RunStats7t_startE">
-<span id="_CPPv3N8RunStats7t_startE"></span><span id="_CPPv2N8RunStats7t_startE"></span><span id="RunStats::t_start__double"></span><span class="target" id="structRunStats_1ab59d7a11b3fae6b913d949c151a11229"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">t_start</span></span></span><a class="headerlink" href="#_CPPv4N8RunStats7t_startE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N8RunStats7t_startE"></span><span id="_CPPv2N8RunStats7t_startE"></span><span id="RunStats::t_start__double"></span><span class="target" id="structRunStats_1ab59d7a11b3fae6b913d949c151a11229"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">t_start</span></span></span><a class="headerlink" href="#_CPPv4N8RunStats7t_startE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Time before timestepping run. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8RunStats5t_endE">
-<span id="_CPPv3N8RunStats5t_endE"></span><span id="_CPPv2N8RunStats5t_endE"></span><span id="RunStats::t_end__double"></span><span class="target" id="structRunStats_1ad995840bc17aa650c05f4d21f7135134"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">t_end</span></span></span><a class="headerlink" href="#_CPPv4N8RunStats5t_endE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N8RunStats5t_endE"></span><span id="_CPPv2N8RunStats5t_endE"></span><span id="RunStats::t_end__double"></span><span class="target" id="structRunStats_1ad995840bc17aa650c05f4d21f7135134"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">t_end</span></span></span><a class="headerlink" href="#_CPPv4N8RunStats5t_endE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Time at the end of timestepping. </p>
 </dd></dl>
 
@@ -360,7 +362,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8RunStats11kokkostimerE">
-<span id="_CPPv3N8RunStats11kokkostimerE"></span><span id="_CPPv2N8RunStats11kokkostimerE"></span><span id="RunStats::kokkostimer__Kokkos::Timer"></span><span class="target" id="structRunStats_1a69964b3fccaa5a5565829a4ea2871bbe"></span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Timer</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kokkostimer</span></span></span><a class="headerlink" href="#_CPPv4N8RunStats11kokkostimerE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N8RunStats11kokkostimerE"></span><span id="_CPPv2N8RunStats11kokkostimerE"></span><span id="RunStats::kokkostimer__Kokkos::Timer"></span><span class="target" id="structRunStats_1a69964b3fccaa5a5565829a4ea2871bbe"></span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Timer</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kokkostimer</span></span></span><a class="headerlink" href="#_CPPv4N8RunStats11kokkostimerE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -368,13 +370,13 @@
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv416RunStatsObserver">
-<span id="_CPPv316RunStatsObserver"></span><span id="_CPPv216RunStatsObserver"></span><span id="RunStatsObserver"></span><span class="target" id="classRunStatsObserver"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunStatsObserver</span></span></span><a class="headerlink" href="#_CPPv416RunStatsObserver" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv316RunStatsObserver"></span><span id="_CPPv216RunStatsObserver"></span><span id="RunStatsObserver"></span><span class="target" id="classRunStatsObserver"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunStatsObserver</span></span></span><a class="headerlink" href="#_CPPv416RunStatsObserver" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Class that satisfies the observer concept and makes and outputs runtime performance statistics. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N16RunStatsObserver16RunStatsObserverEKjKNSt6stringE">
-<span id="_CPPv3N16RunStatsObserver16RunStatsObserverEKjKNSt6stringE"></span><span id="_CPPv2N16RunStatsObserver16RunStatsObserverEKjKNSt6stringE"></span><span id="RunStatsObserver::RunStatsObserver__unsigned-iC.ssC"></span><span class="target" id="classRunStatsObserver_1a698b0231e1add2b8916f2a368055583f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunStatsObserver</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">obsstep</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stats_filename</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16RunStatsObserver16RunStatsObserverEKjKNSt6stringE" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N16RunStatsObserver16RunStatsObserverEKjKNSt10filesystem4pathE">
+<span id="_CPPv3N16RunStatsObserver16RunStatsObserverEKjKNSt10filesystem4pathE"></span><span id="_CPPv2N16RunStatsObserver16RunStatsObserverEKjKNSt10filesystem4pathE"></span><span id="RunStatsObserver::RunStatsObserver__unsigned-iC.std::filesystem::pathC"></span><span class="target" id="classRunStatsObserver_1abb5d8869c61ee9631e6f33ab303fd1c9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunStatsObserver</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">obsstep</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stats_filename</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16RunStatsObserver16RunStatsObserverEKjKNSt10filesystem4pathE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Constructor for <a class="reference internal" href="#classRunStatsObserver"><span class="std std-ref">RunStatsObserver</span></a>. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -388,7 +390,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16RunStatsObserver19before_timesteppingEK14viewd_constgbx">
-<span id="_CPPv3NK16RunStatsObserver19before_timesteppingEK14viewd_constgbx"></span><span id="_CPPv2NK16RunStatsObserver19before_timesteppingEK14viewd_constgbx"></span><span id="RunStatsObserver::before_timestepping__viewd_constgbxCC"></span><span class="target" id="classRunStatsObserver_1ad00c99925f615bcc23fefced6a09aef2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">before_timestepping</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_constgbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver19before_timesteppingEK14viewd_constgbx" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16RunStatsObserver19before_timesteppingEK14viewd_constgbx"></span><span id="_CPPv2NK16RunStatsObserver19before_timesteppingEK14viewd_constgbx"></span><span id="RunStatsObserver::before_timestepping__viewd_constgbxCC"></span><span class="target" id="classRunStatsObserver_1ad00c99925f615bcc23fefced6a09aef2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">before_timestepping</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_constgbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver19before_timesteppingEK14viewd_constgbx" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Records statistics before timestepping. </p>
 <p>Records time of t_start = time of call to before_timestepping.</p>
 <dl class="field-list simple">
@@ -400,14 +402,14 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16RunStatsObserver18after_timesteppingEv">
-<span id="_CPPv3NK16RunStatsObserver18after_timesteppingEv"></span><span id="_CPPv2NK16RunStatsObserver18after_timesteppingEv"></span><span id="RunStatsObserver::after_timesteppingC"></span><span class="target" id="classRunStatsObserver_1aba5d96d0150be806383c64f05bffa395"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">after_timestepping</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver18after_timesteppingEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16RunStatsObserver18after_timesteppingEv"></span><span id="_CPPv2NK16RunStatsObserver18after_timesteppingEv"></span><span id="RunStatsObserver::after_timesteppingC"></span><span class="target" id="classRunStatsObserver_1aba5d96d0150be806383c64f05bffa395"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">after_timestepping</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver18after_timesteppingEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Records statistics after timestepping. </p>
 <p>Records time of t_end = time of call to after_timestepping. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16RunStatsObserver8next_obsEKj">
-<span id="_CPPv3NK16RunStatsObserver8next_obsEKj"></span><span id="_CPPv2NK16RunStatsObserver8next_obsEKj"></span><span id="RunStatsObserver::next_obs__unsigned-iCC"></span><span class="target" id="classRunStatsObserver_1a529a974f26c42800a4f32ad6cb5ed082"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next_obs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver8next_obsEKj" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16RunStatsObserver8next_obsEKj"></span><span id="_CPPv2NK16RunStatsObserver8next_obsEKj"></span><span id="RunStatsObserver::next_obs__unsigned-iCC"></span><span class="target" id="classRunStatsObserver_1a529a974f26c42800a4f32ad6cb5ed082"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next_obs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver8next_obsEKj" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Determine the next observation time. </p>
 <p>Calculates the next observation time based on the current model time and this observer’s constant timestep between observations, ‘interval’.</p>
 <dl class="field-list simple">
@@ -422,7 +424,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16RunStatsObserver7on_stepEKj">
-<span id="_CPPv3NK16RunStatsObserver7on_stepEKj"></span><span id="_CPPv2NK16RunStatsObserver7on_stepEKj"></span><span id="RunStatsObserver::on_step__unsigned-iCC"></span><span class="target" id="classRunStatsObserver_1aee04530b6f9d81b88dd8db2df7246cb4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver7on_stepEKj" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16RunStatsObserver7on_stepEKj"></span><span id="_CPPv2NK16RunStatsObserver7on_stepEKj"></span><span id="RunStatsObserver::on_step__unsigned-iCC"></span><span class="target" id="classRunStatsObserver_1aee04530b6f9d81b88dd8db2df7246cb4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver7on_stepEKj" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Check if observer is “on step”. </p>
 <p>Checks if the current model time is on an observation timestep.</p>
 <dl class="field-list simple">
@@ -437,7 +439,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16RunStatsObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">
-<span id="_CPPv3NK16RunStatsObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK16RunStatsObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="RunStatsObserver::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="classRunStatsObserver_1abb557ea9b8645356b5d29e841b8f1895"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_constgbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_constsupers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16RunStatsObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK16RunStatsObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="RunStatsObserver::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="classRunStatsObserver_1abb557ea9b8645356b5d29e841b8f1895"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_constgbx</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">viewd_constsupers</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Executes statistics functionality at the start of each timestep. </p>
 <p>If timestep is on observation step, call the function to make a runstats observation.</p>
 <dl class="field-list simple">
@@ -456,20 +458,20 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16RunStatsObserver13at_start_stepEv">
-<span id="_CPPv3NK16RunStatsObserver13at_start_stepEv"></span><span id="_CPPv2NK16RunStatsObserver13at_start_stepEv"></span><span id="RunStatsObserver::at_start_stepC"></span><span class="target" id="classRunStatsObserver_1a5b30695e33cd385300fcd381959ed55e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver13at_start_stepEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16RunStatsObserver13at_start_stepEv"></span><span id="_CPPv2NK16RunStatsObserver13at_start_stepEv"></span><span id="RunStatsObserver::at_start_stepC"></span><span class="target" id="classRunStatsObserver_1a5b30695e33cd385300fcd381959ed55e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver13at_start_stepEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Function to be executed at the start of each timestep. </p>
 <p>Plug function does nothing but exists in case of need to add functionality at the start of a timestep. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16RunStatsObserver13print_summaryEv">
-<span id="_CPPv3NK16RunStatsObserver13print_summaryEv"></span><span id="_CPPv2NK16RunStatsObserver13print_summaryEv"></span><span id="RunStatsObserver::print_summaryC"></span><span class="target" id="classRunStatsObserver_1a51f94ebf479a4d770bce377f2cb1a7c4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print_summary</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver13print_summaryEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16RunStatsObserver13print_summaryEv"></span><span id="_CPPv2NK16RunStatsObserver13print_summaryEv"></span><span id="RunStatsObserver::print_summaryC"></span><span class="target" id="classRunStatsObserver_1a51f94ebf479a4d770bce377f2cb1a7c4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print_summary</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver13print_summaryEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Prints a summary of runtime statistics to the terminal window. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16RunStatsObserver13write_to_fileEv">
-<span id="_CPPv3NK16RunStatsObserver13write_to_fileEv"></span><span id="_CPPv2NK16RunStatsObserver13write_to_fileEv"></span><span id="RunStatsObserver::write_to_fileC"></span><span class="target" id="classRunStatsObserver_1aecfb732db13b2bc2d1d333780f77e56d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_to_file</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver13write_to_fileEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK16RunStatsObserver13write_to_fileEv"></span><span id="_CPPv2NK16RunStatsObserver13write_to_fileEv"></span><span id="RunStatsObserver::write_to_fileC"></span><span class="target" id="classRunStatsObserver_1aecfb732db13b2bc2d1d333780f77e56d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_to_file</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver13write_to_fileEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Writes out some of the runtime statistics to a file. </p>
 <p>Writes timing statistics out to a text file called stats_filename. </p>
 </dd></dl>
@@ -479,19 +481,19 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16RunStatsObserver8intervalE">
-<span id="_CPPv3N16RunStatsObserver8intervalE"></span><span id="_CPPv2N16RunStatsObserver8intervalE"></span><span id="RunStatsObserver::interval__unsigned-i"></span><span class="target" id="classRunStatsObserver_1a8f7307fa0b284730485c7e9ec40612f1"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">interval</span></span></span><a class="headerlink" href="#_CPPv4N16RunStatsObserver8intervalE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N16RunStatsObserver8intervalE"></span><span id="_CPPv2N16RunStatsObserver8intervalE"></span><span id="RunStatsObserver::interval__unsigned-i"></span><span class="target" id="classRunStatsObserver_1a8f7307fa0b284730485c7e9ec40612f1"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">interval</span></span></span><a class="headerlink" href="#_CPPv4N16RunStatsObserver8intervalE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Timestep between runtime observations. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16RunStatsObserver5statsE">
-<span id="_CPPv3N16RunStatsObserver5statsE"></span><span id="_CPPv2N16RunStatsObserver5statsE"></span><span id="RunStatsObserver::stats__std::shared_ptr:RunStats:"></span><span class="target" id="classRunStatsObserver_1a47e91834ba02152c670557cd29b40e61"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv48RunStats" title="RunStats"><span class="n"><span class="pre">RunStats</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stats</span></span></span><a class="headerlink" href="#_CPPv4N16RunStatsObserver5statsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N16RunStatsObserver5statsE"></span><span id="_CPPv2N16RunStatsObserver5statsE"></span><span id="RunStatsObserver::stats__std::shared_ptr:RunStats:"></span><span class="target" id="classRunStatsObserver_1a47e91834ba02152c670557cd29b40e61"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv48RunStats" title="RunStats"><span class="n"><span class="pre">RunStats</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stats</span></span></span><a class="headerlink" href="#_CPPv4N16RunStatsObserver5statsE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Pointer to runtime statistics. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16RunStatsObserver14stats_filenameE">
-<span id="_CPPv3N16RunStatsObserver14stats_filenameE"></span><span id="_CPPv2N16RunStatsObserver14stats_filenameE"></span><span id="RunStatsObserver::stats_filename__ss"></span><span class="target" id="classRunStatsObserver_1a275f5dda6c1c74651402cc1cbee05ba3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stats_filename</span></span></span><a class="headerlink" href="#_CPPv4N16RunStatsObserver14stats_filenameE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N16RunStatsObserver14stats_filenameE"></span><span id="_CPPv2N16RunStatsObserver14stats_filenameE"></span><span id="RunStatsObserver::stats_filename__std::filesystem::path"></span><span class="target" id="classRunStatsObserver_1a66ae4355c4e05587033e36f17f4bd857"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stats_filename</span></span></span><a class="headerlink" href="#_CPPv4N16RunStatsObserver14stats_filenameE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Filename to output runtime statistics. </p>
 </dd></dl>
 
@@ -535,7 +537,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -567,7 +569,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv416RunStatsObserver"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N16RunStatsObserver16RunStatsObserverEKjKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::RunStatsObserver()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N16RunStatsObserver16RunStatsObserverEKjKNSt10filesystem4pathE"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::RunStatsObserver()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::before_timestepping()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::after_timestepping()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::next_obs()</span></code></a></li>
@@ -593,7 +595,7 @@
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

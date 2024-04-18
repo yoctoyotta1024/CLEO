@@ -3,9 +3,9 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Installation" href="installation.html" /><link rel="prev" title="Kokkos Thread Parallelism" href="../intro/kokkos.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="External Libraries" href="extern.html" /><link rel="prev" title="Kokkos Thread Parallelism" href="../intro/kokkos.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>Requirements - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -308,14 +310,14 @@
         </div>
         <article role="main">
           <section id="requirements">
-<h1>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h1>
+<h1>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">¶</a></h1>
 <p>The following requirements ensure CLEO’s build, compilation and execution on DKRZ’s Levante HPC.
 If they do not work, please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a> or <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/issues/new">open a new
 issue</a> on our GitHub repository.</p>
 <p>Of course other architectures, other compilers, versions etc. are possible, but we leave this for
 you to discover.</p>
 <section id="cmake">
-<h2>CMake<a class="headerlink" href="#cmake" title="Link to this heading">#</a></h2>
+<h2>CMake<a class="headerlink" href="#cmake" title="Link to this heading">¶</a></h2>
 <p>CMake minimum version 3.18.0.</p>
 <p>On Levante it’s best to use version 3.23.1 which can be loaded e.g. via the command</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>load<span class="w"> </span>cmake@3.23.1%gcc
@@ -323,7 +325,7 @@ you to discover.</p>
 </div>
 </section>
 <section id="compilers">
-<h2>Compilers<a class="headerlink" href="#compilers" title="Link to this heading">#</a></h2>
+<h2>Compilers<a class="headerlink" href="#compilers" title="Link to this heading">¶</a></h2>
 <p>A C++ compiler with the C++20 standard library is the absolute minimum.</p>
 <p>On Levante you can use the latest gcc compilers. At the time of writing this is gcc 11.2.0, e.g.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>gcc/11.2.0-gcc-11.2.0
@@ -335,7 +337,7 @@ you to discover.</p>
 </div>
 </section>
 <section id="python">
-<h2>Python<a class="headerlink" href="#python" title="Link to this heading">#</a></h2>
+<h2>Python<a class="headerlink" href="#python" title="Link to this heading">¶</a></h2>
 <p>To use PySD you need Python minimum version 3.10.4. We advise you to <a class="reference internal" href="good_coding.html#environment"><span class="std std-ref">create an
 environment</span></a> using our envirnoment.yml file. This environment should automatically
 include all the additional packages you may require. If not, please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a> or
@@ -356,9 +358,15 @@ issue</a> on our GitHub repository to notify us.</p>
 </div>
 </section>
 <section id="yac">
-<h2>YAC<a class="headerlink" href="#yac" title="Link to this heading">#</a></h2>
-<p>To use YAC some additional MPI, NetCDF and yaml libraries are required alongside the gcc compiler.</p>
-<p>You can load them on Levante via:</p>
+<h2>YAC<a class="headerlink" href="#yac" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The installation of YAC for CLEO is currently in development and may require some manual installation.</p>
+</div>
+<p>YAC is one of the <a class="reference internal" href="extern.html"><span class="doc">external libraries</span></a> which CLEO may require in order to
+couple to dynamics and/or have MPI domain decomposition.</p>
+<p>YAC requires some additional MPI, NetCDF and yaml libraries alongside the gcc compiler. You can
+load them on Levante via:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>openmpi/4.1.2-gcc-11.2.0<span class="w"> </span>netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
 <span class="gp">$ </span>spack<span class="w"> </span>load<span class="w"> </span>openblas@0.3.18%gcc@<span class="o">=</span><span class="m">11</span>.2.0<span class="w"> </span>libfyaml<span class="w"> </span>/fvbhgoq<span class="w"> </span>py-mpi4py
 </pre></div>
@@ -371,12 +379,12 @@ issue</a> on our GitHub repository to notify us.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="installation.html">
+          <a class="next-page" href="extern.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Installation</div>
+                <div class="title">External Libraries</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -401,7 +409,7 @@ issue</a> on our GitHub repository to notify us.</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -439,7 +447,7 @@ issue</a> on our GitHub repository to notify us.</p>
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

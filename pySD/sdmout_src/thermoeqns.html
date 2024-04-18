@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="ENSEMBZARR" href="ensembzarr.html" /><link rel="prev" title="MASSMOMS" href="massmoms.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>THERMOEQNS - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../writebinary.html">WRITEBINARY</a></li>
@@ -308,7 +310,7 @@
         </div>
         <article role="main">
           <section id="module-pySD.sdmout_src.thermoeqns">
-<span id="thermoeqns"></span><h1>THERMOEQNS<a class="headerlink" href="#module-pySD.sdmout_src.thermoeqns" title="Link to this heading">#</a></h1>
+<span id="thermoeqns"></span><h1>THERMOEQNS<a class="headerlink" href="#module-pySD.sdmout_src.thermoeqns" title="Link to this heading">¶</a></h1>
 <p>—– CLEO —–
 File: thermoeqns.py
 Project: sdmout_src
@@ -329,7 +331,7 @@ equations in python for calculating thermodynamic
 variables e.g. potential temperature</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.sdmout_src.thermoeqns.dry_pot_temp">
-<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.thermoeqns.</span></span><span class="sig-name descname"><span class="pre">dry_pot_temp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/thermoeqns.html#dry_pot_temp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.thermoeqns.dry_pot_temp" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.thermoeqns.</span></span><span class="sig-name descname"><span class="pre">dry_pot_temp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/thermoeqns.html#dry_pot_temp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.thermoeqns.dry_pot_temp" title="Link to this definition">¶</a></dt>
 <dd><p>calculate potential Temperature [K]
 assuming moist (unsaturated) air with
 vapour content qv</p>
@@ -337,7 +339,7 @@ vapour content qv</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.sdmout_src.thermoeqns.saturation_pressure">
-<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.thermoeqns.</span></span><span class="sig-name descname"><span class="pre">saturation_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TEMP</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/thermoeqns.html#saturation_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.thermoeqns.saturation_pressure" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.thermoeqns.</span></span><span class="sig-name descname"><span class="pre">saturation_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TEMP</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/thermoeqns.html#saturation_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.thermoeqns.saturation_pressure" title="Link to this definition">¶</a></dt>
 <dd><p>Calculate the equilibrium vapor pressure
 of water over liquid water ie. the
 saturation pressure (psat) given TEMP /K.
@@ -352,7 +354,7 @@ and Climatology 6, 203–204 (1967).”</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.sdmout_src.thermoeqns.saturation_pressure_murphy_koop">
-<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.thermoeqns.</span></span><span class="sig-name descname"><span class="pre">saturation_pressure_murphy_koop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TEMP</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/thermoeqns.html#saturation_pressure_murphy_koop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.thermoeqns.saturation_pressure_murphy_koop" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.thermoeqns.</span></span><span class="sig-name descname"><span class="pre">saturation_pressure_murphy_koop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TEMP</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/thermoeqns.html#saturation_pressure_murphy_koop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.thermoeqns.saturation_pressure_murphy_koop" title="Link to this definition">¶</a></dt>
 <dd><p>Calculate the equilibrium vapor pressure
 of water over liquid water ie. the
 saturation pressure (psat [Pa]). Equation taken from
@@ -361,7 +363,7 @@ typhon.physics.thermodynamics.e_eq_water_mk.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pySD.sdmout_src.thermoeqns.specific_moist_static_energy">
-<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.thermoeqns.</span></span><span class="sig-name descname"><span class="pre">specific_moist_static_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/thermoeqns.html#specific_moist_static_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.thermoeqns.specific_moist_static_energy" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pySD.sdmout_src.thermoeqns.</span></span><span class="sig-name descname"><span class="pre">specific_moist_static_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/sdmout_src/thermoeqns.html#specific_moist_static_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.sdmout_src.thermoeqns.specific_moist_static_energy" title="Link to this definition">¶</a></dt>
 <dd><p>calculate the specific mass moist static
 energy, mse, J/Kg. (ie. mse per unit mass).</p>
 </dd></dl>
@@ -403,7 +405,7 @@ energy, mse, J/Kg. (ie. mse per unit mass).</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -441,7 +443,7 @@ energy, mse, J/Kg. (ie. mse per unit mass).</p>
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

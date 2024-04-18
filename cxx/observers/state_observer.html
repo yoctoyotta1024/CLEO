@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Thermodynamics Observer" href="thermo_observer.html" /><link rel="prev" title="TotNsupers Observer" href="totnsupers_observer.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.6 and Furo 2024.01.29 -->
         <title>State Observer - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -168,6 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
@@ -207,6 +208,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pySD/readconfigfile.html">READCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/readbinary.html">READBINARY</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../pySD/writebinary.html">WRITEBINARY</a></li>
@@ -308,12 +310,12 @@
         </div>
         <article role="main">
           <section id="state-observer">
-<h1>State Observer<a class="headerlink" href="#state-observer" title="Link to this heading">#</a></h1>
+<h1>State Observer<a class="headerlink" href="#state-observer" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/observers/state_observer.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/state_observer.hpp">[source]</a></p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0E13StateObserver8ObserverKjRK7DatasetI5StoreEKiK6size_t">
-<span id="_CPPv3I0E13StateObserverKjRK7DatasetI5StoreEKiK6size_t"></span><span id="_CPPv2I0E13StateObserverKjRK7DatasetI5StoreEKiK6size_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Store</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="state__observer_8hpp_1a56991d09a94c8a6412a539d8c6a45b38"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="observers.html#_CPPv4I0E8Observer" title="Observer"><span class="n"><span class="pre">Observer</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">StateObserver</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../zarr/dataset.html#_CPPv4I0E7Dataset" title="Dataset"><span class="n"><span class="pre">Dataset</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E13StateObserver8ObserverKjRK7DatasetI5StoreEKiK6size_t" title="StateObserver::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dataset</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxchunk</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ngbxs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E13StateObserver8ObserverKjRK7DatasetI5StoreEKiK6size_t" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I0E13StateObserver8ObserverKjRK7DatasetI5StoreEK6size_tK6size_t">
+<span id="_CPPv3I0E13StateObserverKjRK7DatasetI5StoreEK6size_tK6size_t"></span><span id="_CPPv2I0E13StateObserverKjRK7DatasetI5StoreEK6size_tK6size_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Store</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="state__observer_8hpp_1a2b99d4ff2aa44086d8c262b46e46ce37"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="observers.html#_CPPv4I0E8Observer" title="Observer"><span class="n"><span class="pre">Observer</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">StateObserver</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../zarr/dataset.html#_CPPv4I0E7Dataset" title="Dataset"><span class="n"><span class="pre">Dataset</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E13StateObserver8ObserverKjRK7DatasetI5StoreEK6size_tK6size_t" title="StateObserver::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dataset</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxchunk</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ngbxs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E13StateObserver8ObserverKjRK7DatasetI5StoreEK6size_tK6size_t" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Constructs an observer which writes the state of a gridbox (thermodynamics and wind velocity components) in each gridbox at start of each observation timestep to an array with a constant observation timestep “interval”. </p>
 <p>This function collects thermodynamic properties and wind velocities from the dataset and combines them into a single collection of state data.</p>
 <dl class="field-list simple">
@@ -371,7 +373,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 April 2024</div>
+              Last updated on 18 April 2024</div>
           </div>
           <div class="right-details">
             
@@ -393,7 +395,7 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">State Observer</a><ul>
-<li><a class="reference internal" href="#_CPPv4I0E13StateObserver8ObserverKjRK7DatasetI5StoreEKiK6size_t"><code class="docutils literal notranslate"><span class="pre">StateObserver()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0E13StateObserver8ObserverKjRK7DatasetI5StoreEK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">StateObserver()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -406,7 +408,7 @@
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
