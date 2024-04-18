@@ -26,7 +26,7 @@
 domain:
   nspacedims : 0                                               # no. of spatial dimensions to model
   ngbxs : 1                                                    # total number of Gbxs
-  maxnsupers : &maxnsupers 1                                   # maximum number of SDs
+  maxnsupers: 1                                                # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 0.01                                             # time between SD condensation [s]
@@ -44,7 +44,6 @@ inputfiles:
 initsupers:
   type : frombinary                                            # type of initialisation of super-droplets
   initsupers_filename : ./share/cuspbifurc_dimlessSDsinit.dat  # binary filename for initialisation of SDs
-  initnsupers: *maxnsupers                                     # initial total no. of SDs
 
 ### Output Parameters ###
 outputdata:

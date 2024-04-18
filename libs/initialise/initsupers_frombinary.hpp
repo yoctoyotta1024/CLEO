@@ -41,9 +41,8 @@ for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
 struct InitSupersFromBinary {
  private:
-  size_t maxnsupers;
+  size_t maxnsupers;  // total number of superdroplets (in kokkos view on device initially)
   std::filesystem::path initsupers_filename;  // filename for some of superdrops' initial conditons
-  size_t initnsupers;       // total number of superdroplets (in kokkos view on device initially)
   unsigned int nspacedims;  // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
 
   /* sets initial data for solutes as
@@ -76,7 +75,7 @@ struct InitSupersFromBinary {
    * in order to initialise "maxnsupers" superdroplets. If the initialisation data is the wrong
    * size, it throws an exception with the appropriate error message.
    *
-   * @param maxnsupers The expected number of super-droplets to initialise
+   * @param maxnsupers The expected initial total number of super-droplets
    * @param config Configuration for member variables.
    *
    * @throws std::invalid_argument If the number of super-droplets is wrong.
@@ -85,7 +84,6 @@ struct InitSupersFromBinary {
                                 const OptionalConfigParams::InitSupersFromBinaryParams &config)
       : maxnsupers(maxnsupers),
         initsupers_filename(config.initsupers_filename),
-        initnsupers(config.initnsupers),
         nspacedims(config.nspacedims) {
     const auto size = fetch_data_size();
 

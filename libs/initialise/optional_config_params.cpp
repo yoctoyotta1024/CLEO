@@ -110,14 +110,12 @@ void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::No
   assert((yaml["type"].as<std::string>() == "frombinary"));
 
   initsupers_filename = std::filesystem::path(yaml["initsupers_filename"].as<std::string>());
-  initnsupers = yaml["initnsupers"].as<size_t>();
   nspacedims = config["domain"]["nspacedims"].as<unsigned int>();
 }
 
 void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
   std::cout << "\n-------- InitSupersFromBinary Configuration Parameters --------------"
             << "\nnspacedims: " << nspacedims << "\ninitsupers_filename: " << initsupers_filename
-            << "\ninitnsupers: " << initnsupers
             << "\n---------------------------------------------------------\n";
 }
 

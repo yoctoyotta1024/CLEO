@@ -25,7 +25,7 @@
 domain:
   nspacedims: 0                                            # no. of spatial dimensions to model
   ngbxs: 1                                                 # total number of Gbxs
-  maxnsupers : &maxnsupers 64                              # maximum number of SDs
+  maxnsupers: 64                                           # maximum number of SDs
 
 timesteps:
   CONDTSTEP: 1                                             # time between SD condensation [s]
@@ -43,7 +43,6 @@ inputfiles:
 initsupers:
   type: frombinary                                         # type of initialisation of super-droplets
   initsupers_filename: ./share/as2017_dimlessSDsinit.dat   # binary filename for initialisation of SDs
-  initnsupers: *maxnsupers                                 # initial total no. of SDs
 
 ### Output Parameters ###
 outputdata:
