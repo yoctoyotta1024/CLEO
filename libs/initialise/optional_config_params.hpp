@@ -68,13 +68,13 @@ struct OptionalConfigParams {
   } condensation;
 
   /*** Super-Droplet Initialisation Parameters ***/
-  struct InitSupersFromBinaryParams {
+  struct InitTotsupersFromBinaryParams {
     using fspath = std::filesystem::path;
     void set_params(const YAML::Node& config);
     void print_params() const;
     fspath initsupers_filename = fspath();     /**< filename for initialisation of super-droplets */
     unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
-  } initsupersfrombinary;
+  } inittotsupersfrombinary;
 
   /*** Coupled Dynamics Parameters ***/
   struct FromFileDynamicsParams {

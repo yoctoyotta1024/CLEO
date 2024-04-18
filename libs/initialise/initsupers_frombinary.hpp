@@ -17,7 +17,7 @@
  * -----
  * File Description:
  * struct for superdroplets' initial conditions for CLEO SDM (e.g. superdroplet attributes)
- * by reading binary file. InitSupersFromBinary instance can be used by InitConds
+ * by reading binary file. InitTotsupersFromBinary instance can be used by InitConds
  * struct as SuperdropInitConds type.
  */
 
@@ -39,7 +39,7 @@
 /* struct containing functions which return data
 for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
-struct InitSupersFromBinary {
+struct InitTotsupersFromBinary {
  private:
   size_t maxnsupers;  // total number of superdroplets (in kokkos view on device initially)
   std::filesystem::path initsupers_filename;  // filename for some of superdrops' initial conditons
@@ -69,7 +69,7 @@ struct InitSupersFromBinary {
 
  public:
   /**
-   * @brief Constructor for InitSupersFromBinary.
+   * @brief Constructor for InitTotsupersFromBinary.
    *
    * This function checks if there is enough data in the initialisation files for super-droplets
    * in order to initialise "maxnsupers" superdroplets. If the initialisation data is the wrong
@@ -80,8 +80,8 @@ struct InitSupersFromBinary {
    *
    * @throws std::invalid_argument If the number of super-droplets is wrong.
    */
-  explicit InitSupersFromBinary(const size_t maxnsupers,
-                                const OptionalConfigParams::InitSupersFromBinaryParams &config)
+  explicit InitTotsupersFromBinary(
+      const size_t maxnsupers, const OptionalConfigParams::InitTotsupersFromBinaryParams &config)
       : maxnsupers(maxnsupers),
         initsupers_filename(config.initsupers_filename),
         nspacedims(config.nspacedims) {

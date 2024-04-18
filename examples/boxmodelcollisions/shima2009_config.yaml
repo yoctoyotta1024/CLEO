@@ -42,7 +42,7 @@ inputfiles:
   grid_filename : ./share/shima2009_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
-  type : frombinary                                             # type of initialisation of super-droplets
+  type : totsupersfrombinary                                    # type of initialisation of super-droplets
   initsupers_filename : ./share/shima2009_dimlessSDsinit.dat    # binary filename for initialisation of SDs
 
 ### Output Parameters ###

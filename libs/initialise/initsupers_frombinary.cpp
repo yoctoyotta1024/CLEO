@@ -18,7 +18,7 @@
  * File Description:
  * struct for superdroplets' initial conditions
  * for CLEO SDM (e.g. superdroplet attributes)
- * by reading binary file. InitSupersFromBinary
+ * by reading binary file. InitTotsupersFromBinary
  * instance can be used by InitConds
  * struct as SuperdropInitConds type
  */
@@ -27,13 +27,13 @@
 
 /* sets initial data for solutes as
 a single SoluteProprties instance */
-void InitSupersFromBinary::initdata_for_solutes(InitSupersData &initdata) const {
+void InitTotsupersFromBinary::initdata_for_solutes(InitSupersData &initdata) const {
   initdata.solutes.at(0) = SoluteProperties{};
 }
 
 /* sets initial data in initdata using data read
 from a binary file called initsupers_filename */
-void InitSupersFromBinary::initdata_from_binary(InitSupersData &initdata) const {
+void InitTotsupersFromBinary::initdata_from_binary(InitSupersData &initdata) const {
   std::ifstream file(open_binary(initsupers_filename));
 
   std::vector<VarMetadata> meta(metadata_from_binary(file));
@@ -46,7 +46,7 @@ void InitSupersFromBinary::initdata_from_binary(InitSupersData &initdata) const 
 /* check all the vectors in the initdata struct all
 have sizes consistent with one another. Include
 coords data in check if nspacedims != 0 */
-void InitSupersFromBinary::check_initdata_sizes(const InitSupersData &in) const {
+void InitTotsupersFromBinary::check_initdata_sizes(const InitSupersData &in) const {
   std::vector<size_t> sizes(
       {in.sdgbxindexes.size(), in.xis.size(), in.radii.size(), in.msols.size()});
 
@@ -63,8 +63,8 @@ void InitSupersFromBinary::check_initdata_sizes(const InitSupersData &in) const 
 }
 
 /* copy data for vectors from binary file to initdata struct */
-void InitSupersFromBinary::read_initdata_binary(InitSupersData &initdata, std::ifstream &file,
-                                                const std::vector<VarMetadata> &meta) const {
+void InitTotsupersFromBinary::read_initdata_binary(InitSupersData &initdata, std::ifstream &file,
+                                                   const std::vector<VarMetadata> &meta) const {
   initdata.sdgbxindexes = vector_from_binary<unsigned int>(file, meta.at(0));
 
   initdata.xis = vector_from_binary<uint64_t>(file, meta.at(1));
@@ -83,7 +83,7 @@ void InitSupersFromBinary::read_initdata_binary(InitSupersData &initdata, std::i
 /* data size returned is number of variables as
 declared by the metadata for the first variable
 in the initsupers file */
-size_t InitSupersFromBinary::fetch_data_size() const {
+size_t InitTotsupersFromBinary::fetch_data_size() const {
   std::ifstream file(open_binary(initsupers_filename));
 
   VarMetadata meta(metadata_from_binary(file).at(0));

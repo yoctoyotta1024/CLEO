@@ -54,9 +54,9 @@ void OptionalConfigParams::set_microphysics(const YAML::Node &config) {
 void OptionalConfigParams::set_initsupers(const YAML::Node &config) {
   const auto type = config["initsupers"]["type"].as<std::string>();
 
-  if (type == "frombinary") {
-    initsupersfrombinary.set_params(config);
-    initsupersfrombinary.print_params();
+  if (type == "totsupersfrombinary") {
+    inittotsupersfrombinary.set_params(config);
+    inittotsupersfrombinary.print_params();
   } else {
     throw std::invalid_argument("unknown initsupers 'type': " + type);
   }
@@ -104,7 +104,7 @@ void OptionalConfigParams::CondensationParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::InitTotsupersFromBinaryParams::set_params(const YAML::Node &config) {
   const YAML::Node yaml = config["initsupers"];
 
   assert((yaml["type"].as<std::string>() == "frombinary"));
@@ -113,8 +113,8 @@ void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::No
   nspacedims = config["domain"]["nspacedims"].as<unsigned int>();
 }
 
-void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
-  std::cout << "\n-------- InitSupersFromBinary Configuration Parameters --------------"
+void OptionalConfigParams::InitTotsupersFromBinaryParams::print_params() const {
+  std::cout << "\n-------- InitTotsupersFromBinary Configuration Parameters --------------"
             << "\nnspacedims: " << nspacedims << "\ninitsupers_filename: " << initsupers_filename
             << "\n---------------------------------------------------------\n";
 }

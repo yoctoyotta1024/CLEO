@@ -57,7 +57,8 @@
 #include "zarr/fsstore.hpp"
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitSupersFromBinary initsupers(config.get_maxnsupers(), config.get_initsupersfrombinary());
+  const InitTotsupersFromBinary initsupers(config.get_maxnsupers(),
+                                           config.get_inittotsupersfrombinary());
   const InitGbxsNull initgbxs(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);

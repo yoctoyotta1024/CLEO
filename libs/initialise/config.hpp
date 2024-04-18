@@ -84,8 +84,8 @@ struct Config {
     return optional.condensation;
   }
 
-  OptionalConfigParams::InitSupersFromBinaryParams get_initsupersfrombinary() const {
-    return optional.initsupersfrombinary;
+  OptionalConfigParams::InitTotsupersFromBinaryParams get_inittotsupersfrombinary() const {
+    return optional.inittotsupersfrombinary;
   }
 
   OptionalConfigParams::CvodeDynamicsParams get_cvodedynamics() const {
