@@ -61,3 +61,4 @@ coupled_dynamics:
   qcond : ./share/yac1_dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
   wvel : ./share/yac1_dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
   uvel : ./share/yac1_dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity
+  vvel : ./share/yac1_dimlessthermo_vvel.dat                # binary filename for eastwards (coord1) velocity
