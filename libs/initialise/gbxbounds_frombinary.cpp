@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,7 +26,7 @@
 
 /* read metadata and data in binary file called 'gridfile', then
 return GbxBoundsFromBinary instance created from that data */
-GbxBoundsFromBinary::GbxBoundsFromBinary(const unsigned int ngbxs, const unsigned int nspacedims,
+GbxBoundsFromBinary::GbxBoundsFromBinary(const size_t ngbxs, const unsigned int nspacedims,
                                          const std::filesystem::path grid_filename) {
   /* open file and read in the metatdata
   for all the variables in gridfile */
@@ -53,7 +53,7 @@ GbxBoundsFromBinary::GbxBoundsFromBinary(const unsigned int ngbxs, const unsigne
 /* Throws error if ngbxs is not consistent with
 number of gridboxes from gridfile as calculated
 via the get_ngbxs() function */
-void GbxBoundsFromBinary::is_ngbxs_compatible(const unsigned int ngbxs) const {
+void GbxBoundsFromBinary::is_ngbxs_compatible(const size_t ngbxs) const {
   if (ngbxs != get_ngbxs()) {
     std::string err =
         "number of gridboxes read from gridfile"

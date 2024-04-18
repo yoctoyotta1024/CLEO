@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -61,7 +61,7 @@ however the area and volume of each gridbox remains finite.
 E.g. In the 0-D case, the bounds maps all have 1 {key, value} where
 key=gbxidx=0 and value = {max, min} numerical limits, meanwhile volume
 function returns a value determined from the gridfile 'grid_filename' */
-CartesianMaps create_cartesian_maps(const unsigned int ngbxs, const unsigned int nspacedims,
+CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspacedims,
                                     const std::filesystem::path grid_filename) {
   std::cout << "\n--- create cartesian gridbox maps ---\n";
 

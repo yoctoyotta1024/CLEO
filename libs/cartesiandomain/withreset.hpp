@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -90,11 +90,11 @@ struct ProbDistrib {
 struct ResetSuperdrop {
   GenRandomPool genpool4reset;
   Kokkos::View<double[101]> log10redges;  // edges to radius bins
-  Kokkos::pair<unsigned int, unsigned int> gbxidxs;
+  Kokkos::pair<size_t, size_t> gbxidxs;
   uint64_t nbins;
   ProbDistrib prob_distrib;
 
-  ResetSuperdrop(const unsigned int ngbxs, const unsigned int ngbxs4reset)
+  ResetSuperdrop(const size_t ngbxs, const size_t ngbxs4reset)
       : genpool4reset(std::random_device {}()),
         log10redges("log10redges"),
         gbxidxs({ngbxs - ngbxs4reset, ngbxs}),
@@ -210,7 +210,7 @@ coord3(...){...} function */
 struct CartesianChangeIfNghbrWithReset {
   ResetSuperdrop reset_superdrop;
 
-  CartesianChangeIfNghbrWithReset(const unsigned int ngbxs, const unsigned int ngbxs4reset)
+  CartesianChangeIfNghbrWithReset(const size_t ngbxs, const size_t ngbxs4reset)
       : reset_superdrop(ResetSuperdrop(ngbxs, ngbxs4reset)) {}
 
   KOKKOS_INLINE_FUNCTION unsigned int coord3(const CartesianMaps &gbxmaps, unsigned int idx,
@@ -237,7 +237,7 @@ template <VelocityFormula TV>
 inline PredCorrMotion<CartesianMaps, TV, CartesianChangeIfNghbrWithReset, CartesianCheckBounds>
 CartesianMotionWithReset(const unsigned int motionstep,
                          const std::function<double(unsigned int)> int2time, const TV terminalv,
-                         const unsigned int ngbxs, const unsigned int ngbxs4reset) {
+                         const size_t ngbxs, const size_t ngbxs4reset) {
   const auto cin = CartesianChangeIfNghbrWithReset(ngbxs, ngbxs4reset);
   return PredCorrMotion<CartesianMaps, TV, CartesianChangeIfNghbrWithReset, CartesianCheckBounds>(
       motionstep, int2time, terminalv, cin, CartesianCheckBounds{});

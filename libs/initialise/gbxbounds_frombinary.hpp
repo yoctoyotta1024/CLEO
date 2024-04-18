@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,7 +45,7 @@ coordinate boundaries which are read from gridfile
 and used in construction of GridboxMaps */
 struct GbxBoundsFromBinary {
  private:
-  void is_ngbxs_compatible(const unsigned int ngbxs) const;
+  void is_ngbxs_compatible(const size_t ngbxs) const;
   void is_nspacedims_compatible(const unsigned int nspacedims) const;
 
   bool check_0Dmodel_gbxbounds() const;
@@ -61,7 +61,7 @@ struct GbxBoundsFromBinary {
   std::vector<double> gbxbounds;      // corresponding [coord3 {l, u}, coord1 {l, u}, coord2 {l, u}]
                                       // lower and upper coordinate boundaries
 
-  GbxBoundsFromBinary(const unsigned int ngbxs, const unsigned int nspacedims,
+  GbxBoundsFromBinary(const size_t ngbxs, const unsigned int nspacedims,
                       const std::filesystem::path grid_filename);
 
   /* returns coord3 {lower, upper} gridbox bounds
