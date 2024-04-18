@@ -29,6 +29,7 @@
 #include "../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "gridboxes/sortsupers.hpp"
+#include "initialise/optional_config_params.hpp"
 
 struct AddSupersAtDomainTop {
   double coord3lim; /**< gridboxes with upper bound > coord3lim get new super-droplets */

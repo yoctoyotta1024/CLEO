@@ -177,7 +177,7 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::AddSupersAtDomainTopParams : set_params(const YAML::Node &config) {
+void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::Node &config) {
   const YAML::Node yaml = config["boundary_conditions"];
 
   COORD3LIM = yaml["COORD3LIM"].as<double>();

@@ -54,6 +54,8 @@ struct OptionalConfigParams {
 
   void set_coupled_dynamics(const YAML::Node& config);
 
+  void set_boundary_conditions(const YAML::Node& config);
+
   /*** Super-Droplet Microphysics Parameters ***/
   struct CondensationParams {
     void set_params(const YAML::Node& config);
