@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,6 +27,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <filesystem>
 #include <stdexcept>
 #include <string_view>
 #include <vector>
@@ -46,7 +47,7 @@ gridbox remains finite. E.g. In the 0-D case, the bounds maps all
 have 1 {key, value} where key=gbxidx=0 and value = {max, min}
 numerical limits, meanwhile volume function returns a value determined
 from the gridfile 'grid_filename' */
-CartesianMaps create_cartesian_maps(const unsigned int ngbxs, const unsigned int nspacedims,
-                                    std::string_view grid_filename);
+CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspacedims,
+                                    const std::filesystem::path grid_filename);
 
 #endif  // LIBS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_

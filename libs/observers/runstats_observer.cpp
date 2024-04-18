@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -43,7 +43,7 @@ void RunStatsObserver::print_summary() const {
  * Writes timing statistics out to a text file called stats_filename.
  */
 void RunStatsObserver::write_to_file() const {
-  std::ofstream file(stats_filename);
+  std::ofstream file(stats_filename.string());
 
   if (file.is_open()) {
     const std::string header(

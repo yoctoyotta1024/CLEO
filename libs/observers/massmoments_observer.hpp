@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -389,7 +389,7 @@ XarrayZarrArray<Store, float> create_massmom2_xarray(const Dataset<Store> &datas
  */
 template <typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                         const int maxchunk, const size_t ngbxs) {
+                                         const size_t maxchunk, const size_t ngbxs) {
   const auto xzarr_mom0 = create_massmom0_xarray(dataset, "massmom0", maxchunk, ngbxs);
   const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1", maxchunk, ngbxs);
   const auto xzarr_mom2 = create_massmom2_xarray(dataset, "massmom2", maxchunk, ngbxs);
@@ -417,8 +417,8 @@ inline Observer auto MassMomentsObserver(const unsigned int interval, const Data
  */
 template <typename Store>
 inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
-                                                  const Dataset<Store> &dataset, const int maxchunk,
-                                                  const size_t ngbxs) {
+                                                  const Dataset<Store> &dataset,
+                                                  const size_t maxchunk, const size_t ngbxs) {
   const auto xzarr_mom0 = create_massmom0_xarray(dataset, "massmom0_raindrops", maxchunk, ngbxs);
   const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1_raindrops", maxchunk, ngbxs);
   const auto xzarr_mom2 = create_massmom2_xarray(dataset, "massmom2_raindrops", maxchunk, ngbxs);

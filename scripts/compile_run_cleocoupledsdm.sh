@@ -25,7 +25,7 @@ buildtype=$1
 path2CLEO=${HOME}/CLEO/
 path2build=$2 # get from command line argument
 executable="cleocoupledsdm"
-configfile=${HOME}/CLEO/src/config/config.txt
+configfile=${HOME}/CLEO/src/config/config.yaml
 run_executable=${path2build}/src/${executable}
 
 if [ "${path2build}" == "" ]

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for 1-D rainshaft example.
  * After make/compiling, execute for example via:
- * ./src/rshaft1D ../src/config/config.txt
+ * ./src/rshaft1D ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>
@@ -68,18 +68,19 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
 
-  return FromFileDynamics(config, couplstep, ndims, nsteps);
+  return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitSupersFromBinary initsupers(config);
-  const InitGbxsNull initgbxs(config);
+  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
+  const InitGbxsNull initgbxs(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
 }
 
 inline GridboxMaps auto create_gbxmaps(const Config &config) {
-  const auto gbxmaps = create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
+  const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
+                                             config.get_grid_filename());
   return gbxmaps;
 }
 
@@ -95,9 +96,10 @@ inline auto create_movement(const unsigned int motionstep, const CartesianMaps &
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
-  const MicrophysicalProcess auto cond = Condensation(
-      tsteps.get_condstep(), config.doAlterThermo, config.cond_iters, &step2dimlesstime,
-      config.cond_rtol, config.cond_atol, config.cond_SUBTSTEP, &realtime2dimless);
+  const auto c = config.get_condensation();
+  const MicrophysicalProcess auto cond =
+      Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.niters, c.rtol,
+                   c.atol, c.SUBTSTEP, &realtime2dimless);
 
   const PairProbability auto coalprob = LongHydroProb(1.0);
   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
@@ -121,18 +123,19 @@ inline Observer auto create_superdrops_observer(const unsigned int interval,
 template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      Dataset<Store> &dataset) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+  const auto obsstep = tsteps.get_obsstep();
+  const auto maxchunk = config.get_maxchunk();
+  const auto ngbxs = config.get_ngbxs();
 
   const Observer auto obs0 = StreamOutObserver(obsstep * 10, &step2realtime);
 
   const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
-  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
+  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, ngbxs);
 
-  const Observer auto obs3 = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs3 = NsupersObserver(obsstep, dataset, maxchunk, ngbxs);
 
-  const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
@@ -158,12 +161,12 @@ int main(int argc, char *argv[]) {
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
-  const std::string_view config_filename(argv[1]);  // path to configuration file
+  const std::filesystem::path config_filename(argv[1]);  // path to configuration file
   const Config config(config_filename);
-  const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
+  const Timesteps tsteps(config.get_timesteps());
 
   /* Create Xarray dataset wit Zarr backend for writing output data to a store */
-  auto store = FSStore(config.zarrbasedir);
+  auto store = FSStore(config.get_zarrbasedir());
   auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */

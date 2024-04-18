@@ -23,7 +23,7 @@ path2build=${HOME}/CLEO/build_adia0D/
 executables="adia0D"
 
 pythonscript=${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py
-configfile=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.txt
+configfile=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

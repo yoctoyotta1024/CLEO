@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,6 +25,7 @@
 #include <Kokkos_Core.hpp>
 #include <cmath>
 #include <concepts>
+#include <filesystem>
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
@@ -80,18 +81,19 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
 
-  return FromFileDynamics(config, couplstep, ndims, nsteps);
+  return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitSupersFromBinary initsupers(config);
-  const InitGbxsNull initgbxs(config);
+  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
+  const InitGbxsNull initgbxs(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
 }
 
 inline GridboxMaps auto create_gbxmaps(const Config &config) {
-  const auto gbxmaps = create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
+  const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
+                                             config.get_grid_filename());
   return gbxmaps;
 }
 
@@ -130,9 +132,10 @@ inline auto create_movement(const Config &config, const Timesteps &tsteps, const
 
 inline MicrophysicalProcess auto config_condensation(const Config &config,
                                                      const Timesteps &tsteps) {
-  return Condensation(tsteps.get_condstep(), config.doAlterThermo, config.cond_iters,
-                      &step2dimlesstime, config.cond_rtol, config.cond_atol, config.cond_SUBTSTEP,
-                      &realtime2dimless);
+  const auto c = config.get_condensation();
+
+  return Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.niters, c.rtol,
+                      c.atol, c.SUBTSTEP, &realtime2dimless);
 }
 
 inline MicrophysicalProcess auto config_collisions(const Config &config, const Timesteps &tsteps) {
@@ -177,7 +180,7 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
 
 template <typename Store>
 inline Observer auto create_superdrops_observer(const unsigned int interval,
-                                                Dataset<Store> &dataset, const int maxchunk) {
+                                                Dataset<Store> &dataset, const size_t maxchunk) {
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
   CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
@@ -193,7 +196,7 @@ inline Observer auto create_superdrops_observer(const unsigned int interval,
 
 template <typename Store>
 inline Observer auto create_gridboxes_observer(const unsigned int interval, Dataset<Store> &dataset,
-                                               const int maxchunk, const size_t ngbxs) {
+                                               const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);
@@ -205,24 +208,25 @@ inline Observer auto create_gridboxes_observer(const unsigned int interval, Data
 template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      Dataset<Store> &dataset) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+  const auto obsstep = tsteps.get_obsstep();
+  const auto maxchunk = config.get_maxchunk();
+  const auto ngbxs = config.get_ngbxs();
 
-  const Observer auto obs0 = RunStatsObserver(obsstep, config.stats_filename);
+  const Observer auto obs0 = RunStatsObserver(obsstep, config.get_stats_filename());
 
   const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
-  const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
+  const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, ngbxs);
 
   const Observer auto obs4 = TotNsupersObserver(obsstep, dataset, maxchunk);
 
-  const Observer auto obs5 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs5 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
 
-  const Observer auto obs6 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs6 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, ngbxs);
 
-  const Observer auto obsgbx = create_gridboxes_observer(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obsgbx = create_gridboxes_observer(obsstep, dataset, maxchunk, ngbxs);
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 

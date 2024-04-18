@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: copyfiles2txt.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 3rd November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,13 +25,15 @@
 #ifndef LIBS_INITIALISE_COPYFILES2TXT_HPP_
 #define LIBS_INITIALISE_COPYFILES2TXT_HPP_
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 
-/* creates new empty file called setuptxt and copies contents
+/* creates new empty file called setup_filename and copies contents
 of files listed in files2copy vector one by one */
-void copyfiles2txt(const std::string setuptxt, const std::vector<std::string> files2copy);
+void copyfiles2txt(const std::filesystem::path setup_filename,
+                   const std::vector<std::filesystem::path> &files2copy);
 
 #endif  // LIBS_INITIALISE_COPYFILES2TXT_HPP_

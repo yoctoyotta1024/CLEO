@@ -23,7 +23,7 @@ path2build=${HOME}/CLEO/build_yac1/
 executables="yac1"
 
 pythonscript=${path2CLEO}/examples/yac/fromfile/yac1_fromfile.py
-configfile=${path2CLEO}/examples/yac/fromfile/src/config/yac1_fromfile_config.txt
+configfile=${path2CLEO}/examples/yac/fromfile/src/config/yac1_fromfile_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

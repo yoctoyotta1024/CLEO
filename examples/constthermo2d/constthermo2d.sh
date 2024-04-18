@@ -24,7 +24,7 @@ path2build=${HOME}/CLEO/build_const2D/
 executables="const2D"
 
 pythonscript=${path2CLEO}/examples/constthermo2d/constthermo2d.py
-configfile=${path2CLEO}/examples/constthermo2d/src/config/const2d_config.txt
+configfile=${path2CLEO}/examples/constthermo2d/src/config/const2d_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

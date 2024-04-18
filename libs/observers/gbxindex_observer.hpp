@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -94,7 +94,7 @@ class GbxindexObserver {
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    * @param ngbxs Number of gridboxes in final array.
    */
-  GbxindexObserver(Dataset<Store> &dataset, const int maxchunk, const size_t ngbxs)
+  GbxindexObserver(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_coordinate_array<uint32_t>("gbxindex", "", "<u4", 1, maxchunk,

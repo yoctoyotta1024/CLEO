@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 10th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -120,7 +120,7 @@ class DoTotNsupersObs {
  */
 template <typename Store>
 inline Observer auto TotNsupersObserver(const unsigned int interval, Dataset<Store> &dataset,
-                                        const int maxchunk) {
+                                        const size_t maxchunk) {
   return ConstTstepObserver(interval, DoTotNsupersObs(dataset, maxchunk));
 }
 

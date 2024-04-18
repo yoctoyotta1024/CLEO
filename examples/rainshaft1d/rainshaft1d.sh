@@ -23,7 +23,7 @@ path2build=${HOME}/CLEO/build_rshaft1D/
 executables="rshaft1D"
 
 pythonscript=${path2CLEO}/examples/rainshaft1d/rainshaft1d.py
-configfile=${path2CLEO}/examples/rainshaft1d/src/config/rain1d_config.txt
+configfile=${path2CLEO}/examples/rainshaft1d/src/config/rain1d_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

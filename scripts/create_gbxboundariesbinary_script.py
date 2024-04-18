@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 15th April 2024
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -41,7 +41,7 @@ constsfile = path2CLEO+"libs/cleoconstants.hpp"
 binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 
-gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
+gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.yaml
 
 ### input parameters for zcoords of gridbox boundaries
 zmax = 820 # maximum z coord [m]

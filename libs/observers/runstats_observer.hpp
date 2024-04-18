@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,6 +25,7 @@
 #define LIBS_OBSERVERS_RUNSTATS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <ios>
@@ -70,9 +71,9 @@ struct RunStats {
  */
 class RunStatsObserver {
  private:
-  unsigned int interval;           /**< Timestep between runtime observations. */
-  std::shared_ptr<RunStats> stats; /**< Pointer to runtime statistics. */
-  std::string stats_filename;      /**< Filename to output runtime statistics. */
+  unsigned int interval;                /**< Timestep between runtime observations. */
+  std::shared_ptr<RunStats> stats;      /**< Pointer to runtime statistics. */
+  std::filesystem::path stats_filename; /**< Filename to output runtime statistics. */
 
   /**
    * @brief Function to be executed at the start of each timestep.
@@ -100,7 +101,7 @@ class RunStatsObserver {
    * @param obsstep Model timestep between runstats observations.
    * @param stats_filename Filename to output run statistics.
    */
-  RunStatsObserver(const unsigned int obsstep, const std::string stats_filename)
+  RunStatsObserver(const unsigned int obsstep, const std::filesystem::path stats_filename)
       : interval(obsstep), stats(std::make_shared<RunStats>()), stats_filename(stats_filename) {}
 
   /**

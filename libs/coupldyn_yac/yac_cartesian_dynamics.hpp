@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: yac_cartesian_dynamics.hpp
@@ -7,15 +9,14 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct obeying coupleddynamics concept for
- * dynamics solver in CLEO where coupling is
+ * struct obeying coupleddynamics concept for dynamics solver in CLEO where coupling is
  * one-way and dynamics are read from file
  */
 
@@ -47,7 +48,7 @@ struct CartesianDynamics {
 
   // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
   const std::array<size_t, 3> ndims;
-  const Config & config;
+  const Config &config;
 
   /* --- (thermo)dynamic variables received from YAC --- */
 
@@ -139,14 +140,13 @@ struct YacDynamics {
   std::shared_ptr<CartesianDynamics> dynvars;  // pointer to (thermo)dynamic variables
 
   /* Calls the get operations to receive data from YAC for each of the fields of interest */
-  void run_dynamics(const unsigned int t_mdl) const {
-    dynvars->receive_fields_from_yac();
-  }
+  void run_dynamics(const unsigned int t_mdl) const { dynvars->receive_fields_from_yac(); }
 
  public:
-  YacDynamics(const Config &config, const unsigned int couplstep,
-                   const std::array<size_t, 3> ndims, const unsigned int nsteps)
-      : interval(couplstep), end_time(config.T_END),
+  YacDynamics(const Config &config, const unsigned int couplstep, const std::array<size_t, 3> ndims,
+              const unsigned int nsteps)
+      : interval(couplstep),
+        end_time(config.T_END),
         dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps)) {}
 
   auto get_couplstep() const { return interval; }

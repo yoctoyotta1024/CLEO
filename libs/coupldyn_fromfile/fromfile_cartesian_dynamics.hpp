@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: fromfile_cartesian_dynamics.hpp
@@ -7,22 +9,22 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct obeying coupleddynamics concept for
- * dynamics solver in CLEO where coupling is
- * one-way and dynamics are read from file
+ * struct obeying coupleddynamics concept for dynamics solver in CLEO where coupling is
+ * one-way and dynamics are read from file.
  */
 
 #ifndef LIBS_COUPLDYN_FROMFILE_FROMFILE_CARTESIAN_DYNAMICS_HPP_
 #define LIBS_COUPLDYN_FROMFILE_FROMFILE_CARTESIAN_DYNAMICS_HPP_
 
 #include <array>
+#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -33,7 +35,7 @@
 #include <utility>
 #include <vector>
 
-#include "initialise/config.hpp"
+#include "initialise/optional_config_params.hpp"
 #include "initialise/readbinary.hpp"
 
 /* contains 1-D vector for each (thermo)dynamic
@@ -66,14 +68,12 @@ struct CartesianDynamics {
 
   /* depending on nspacedims, read in data
   for 1-D, 2-D or 3-D wind velocity components */
-  void set_winds(const Config &config);
+  void set_winds(const OptionalConfigParams::FromFileDynamicsParams &config);
 
   /* Read in data from binary files for wind
   velocity components in 1D, 2D or 3D model
   and check they have correct size */
-  std::string set_winds_from_binaries(const unsigned int nspacedims, std::string_view wvel_filename,
-                                      std::string_view uvel_filename,
-                                      std::string_view vvel_filename);
+  std::string set_winds_from_binaries(const OptionalConfigParams::FromFileDynamicsParams &config);
 
   /* nullwinds retuns an empty function 'func' that returns
   {0.0, 0.0}. Useful for setting get_[X]vel[Y]faces functions
@@ -101,8 +101,8 @@ struct CartesianDynamics {
                                         const unsigned int nsteps) const;
 
  public:
-  CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
-                    const unsigned int nsteps);
+  CartesianDynamics(const OptionalConfigParams::FromFileDynamicsParams &config,
+                    const std::array<size_t, 3> i_ndims, const unsigned int nsteps);
 
   get_winds_func get_wvel;  // funcs to get velocity defined in construction of class
   get_winds_func get_uvel;  // warning: these functions are not const member funcs by default
@@ -137,8 +137,9 @@ struct FromFileDynamics {
   void run_dynamics(const unsigned int t_mdl) const { dynvars->increment_position(); }
 
  public:
-  FromFileDynamics(const Config &config, const unsigned int couplstep,
-                   const std::array<size_t, 3> ndims, const unsigned int nsteps)
+  FromFileDynamics(const OptionalConfigParams::FromFileDynamicsParams &config,
+                   const unsigned int couplstep, const std::array<size_t, 3> ndims,
+                   const unsigned int nsteps)
       : interval(couplstep), dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps)) {}
 
   auto get_couplstep() const { return interval; }

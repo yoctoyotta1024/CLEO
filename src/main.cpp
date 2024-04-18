@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM)
  * after make/compiling, execute for example via:
- * ./src/cleocoupledsdm ../src/config/config.txt
+ * ./src/cleocoupledsdm ../src/config/config.yaml
  */
 
 #include "./main_impl.hpp"
@@ -31,12 +31,12 @@ int main(int argc, char *argv[]) {
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
-  const std::string_view config_filename(argv[1]);  // path to configuration file
+  const std::filesystem::path config_filename(argv[1]);  // path to configuration file
   const Config config(config_filename);
-  const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
+  const Timesteps tsteps(config.get_timesteps());
 
   /* Create Xarray dataset wit Zarr backend for writing output data to a store */
-  auto store = FSStore(config.zarrbasedir);
+  auto store = FSStore(config.get_zarrbasedir());
   auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */

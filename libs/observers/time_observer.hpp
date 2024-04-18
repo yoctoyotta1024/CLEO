@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 10th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -131,7 +131,7 @@ class DoTimeObs {
  */
 template <typename Store>
 inline Observer auto TimeObserver(const unsigned int interval, Dataset<Store> &dataset,
-                                  const int maxchunk,
+                                  const size_t maxchunk,
                                   const std::function<double(unsigned int)> step2dimlesstime) {
   return ConstTstepObserver(interval, DoTimeObs(dataset, maxchunk, step2dimlesstime));
 }

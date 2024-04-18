@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -59,8 +59,8 @@
 template <typename Store>
 inline Observer auto create_superdrops_observer(const Config &config, const Timesteps &tsteps,
                                                 Dataset<Store> &dataset) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+  const auto obsstep = tsteps.get_obsstep();
+  const auto maxchunk = config.get_maxchunk();
 
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
   CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
@@ -79,37 +79,39 @@ inline Observer auto create_superdrops_observer(const Config &config, const Time
 template <typename Store>
 inline Observer auto create_gridbox_observer(const Config &config, const Timesteps &tsteps,
                                              Dataset<Store> &dataset) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+  const auto obsstep = tsteps.get_obsstep();
+  const auto maxchunk = config.get_maxchunk();
+  const auto ngbxs = config.get_ngbxs();
 
-  const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, config.ngbxs);
-  const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, config.ngbxs);
-  const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, config.ngbxs);
+  const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Store> auto collect_data = nsupers >> windvel >> thermo;
   return WriteToDatasetObserver(obsstep, dataset, collect_data);
 
-  // const Observer auto obst = ThermoObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  // const Observer auto obsw = WindVelObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // const Observer auto obst = ThermoObserver(obsstep, dataset, maxchunk, ngbxs);
+  // const Observer auto obsw = WindVelObserver(obsstep, dataset, maxchunk, ngbxs);
   // return obsw >> obst;
 
-  // const Observer auto obsx = StateObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // const Observer auto obsx = StateObserver(obsstep, dataset, maxchunk, ngbxs);
   // return obsx;
 
-  // const Observer auto obsn = NsupersObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  // const Observer auto obsn = NsupersObserver(obsstep, dataset, maxchunk, ngbxs);
   // return obsn;
 }
 
 template <typename Store>
 inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
                                       Dataset<Store> &dataset) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+  const auto obsstep = tsteps.get_obsstep();
+  const auto maxchunk = config.get_maxchunk();
+  const auto ngbxs = config.get_ngbxs();
 
-  const Observer auto obs0 = RunStatsObserver(obsstep, config.stats_filename);
+  const Observer auto obs0 = RunStatsObserver(obsstep, config.get_stats_filename());
   const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
-  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, config.ngbxs);
-  const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, config.ngbxs);
-  const Observer auto obs4 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, config.ngbxs);
+  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, ngbxs);
+  const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
+  const Observer auto obs4 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, ngbxs);
   const Observer auto obs6 = TotNsupersObserver(obsstep, dataset, maxchunk);
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
   const Observer auto obssd = create_superdrops_observer(config, tsteps, dataset);
@@ -123,7 +125,7 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      Dataset<Store> &dataset) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
+  const auto obsstep = tsteps.get_obsstep();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
@@ -140,8 +142,8 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitSupersFromBinary initsupers(config);
-  const InitGbxsNull initgbxs(config);
+  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
+  const InitGbxsNull initgbxs(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
 }
@@ -154,14 +156,14 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
 
-  return FromFileDynamics(config, couplstep, ndims, nsteps);
+  return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
 template <typename Store>
 inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
-  const GridboxMaps auto gbxmaps =
-      create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
+  const GridboxMaps auto gbxmaps = create_cartesian_maps(
+      config.get_ngbxs(), config.get_nspacedims(), config.get_grid_filename());
   const MicrophysicalProcess auto microphys = NullMicrophysicalProcess{};
   const MoveSupersInDomain movesupers(create_movement(gbxmaps));
   const Observer auto obs = create_observer(config, tsteps, dataset);
@@ -172,11 +174,11 @@ int main(int argc, char *argv[]) {
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
-  const Config config("/home/m/m300950/CLEO/roughpaper/share/config.txt");
-  const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
+  const Config config("/home/m/m300950/CLEO/roughpaper/share/config.yaml");
+  const Timesteps tsteps(config.get_timesteps());
 
   /* Create zarr store for writing output to storage */
-  auto store = FSStore(config.zarrbasedir);
+  auto store = FSStore(config.get_zarrbasedir());
   auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */

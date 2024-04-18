@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: timesteps.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +30,7 @@
 #include <string>
 
 #include "../cleoconstants.hpp"
-#include "./config.hpp"
+#include "./required_config_params.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -76,7 +78,7 @@ class Timesteps {
   std::chrono library. Throw error if after convertion into
   model timestep, any timestep = 0 or if a sub-timestep is
   longer than a timestep */
-  explicit Timesteps(const Config &config);
+  explicit Timesteps(const RequiredConfigParams::TimestepsParams &config_tsteps);
 
   auto get_condstep() const { return condstep; }
   auto get_collstep() const { return collstep; }

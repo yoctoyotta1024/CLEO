@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -121,36 +121,3 @@ def derive_more_floats(consts):
   mconsts["MASS0"]      = (consts["R0"]**3) * mconsts["RHO0"] # characteristic mass [Kg]
 
   return mconsts
-
-def read_configparams_into_floats(filename):
-  """returns dictionary of value: float from
-  values assigned in a config .txt file.
-  Also returns dictionary of notfloats
-  for values that couldn't be converted. """
-
-  floats = {}
-  notfloats = {}
-  with open(filename) as file:
-    rlines=[]
-    filelines = file.readlines()
-    for line in filelines:
-      if line[0] != "#" and line[0] != "/" and "=" in line:
-        goodline = remove_excess_line(line)
-        rlines.append(goodline)
-
-    for line in rlines:
-      ind = line.find("=")
-      name =  line[:ind]
-      value =  line[ind+1:]
-
-      try:
-        floats[name] = float(value)
-      except ValueError:
-        notfloats[name] = value
-
-  try:
-    floats["nspacedims"] = int(floats["nspacedims"])              # no spatial coords to SDs
-  except:
-    pass
-
-  return floats

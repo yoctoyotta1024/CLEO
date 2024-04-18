@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -152,7 +152,7 @@ struct VvelFunc {
  */
 template <typename Store>
 inline CollectDataForDataset<Store> auto CollectWindVel(const Dataset<Store> &dataset,
-                                                        const int maxchunk, const size_t ngbxs) {
+                                                        const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto wvel =
       CollectWindVariable<Store, WvelFunc>(dataset, WvelFunc{}, "wvel", maxchunk, ngbxs);
 
@@ -179,7 +179,7 @@ inline CollectDataForDataset<Store> auto CollectWindVel(const Dataset<Store> &da
  */
 template <typename Store>
 inline Observer auto WindVelObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                     const int maxchunk, const size_t ngbxs) {
+                                     const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
   return WriteToDatasetObserver(interval, dataset, windvel);
 }

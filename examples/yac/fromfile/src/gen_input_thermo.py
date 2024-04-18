@@ -9,7 +9,7 @@ Created Date: Monday 25th March 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 25th March 2024
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +25,6 @@ import sys
 import numpy as np
 
 sys.path.append("../../../..") # for imports from pySD package
-from pySD import cxx2py
 from pySD.thermobinary_src.create_thermodynamics import thermoinputsdict
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 

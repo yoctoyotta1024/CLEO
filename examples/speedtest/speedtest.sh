@@ -22,7 +22,7 @@ path2build=${HOME}/CLEO/build_spdtest/
 executables="spdtest"
 
 pythonscript=${path2CLEO}/examples/speedtest/speedtest.py
-configfile=${path2CLEO}/examples/speedtest/src/config/speedtest_config.txt
+configfile=${path2CLEO}/examples/speedtest/src/config/speedtest_config.yaml
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
