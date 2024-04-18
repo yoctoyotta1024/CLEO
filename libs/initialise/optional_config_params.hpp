@@ -111,7 +111,8 @@ struct OptionalConfigParams {
   struct AddSupersAtDomainTopParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
-    double COORD3LIM = NaNVals::dbl(); /**< SDs added to domain with coord3 >= COORD3LIM [m] */
+    size_t totnsupers = NaNVals::sizet(); /**< initial total no. of Super-Droplets in the domain */
+    double COORD3LIM = NaNVals::dbl();    /**< SDs added to domain with coord3 >= COORD3LIM [m] */
     size_t nsupers = NaNVals::sizet(); /**< number of SDs to add to each gridbox above COORD3LIM */
   } addsupersatdomaintop;
 };

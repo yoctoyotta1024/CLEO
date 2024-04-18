@@ -180,12 +180,14 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
 void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::Node &config) {
   const YAML::Node yaml = config["boundary_conditions"];
 
+  totnsupers = config["initsupers"]["totnsupers"].as<size_t>();
   COORD3LIM = yaml["COORD3LIM"].as<double>();
   nsupers = yaml["nsupers"].as<size_t>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
   std::cout << "\n-------- AddSupersAtDomainTop Configuration Parameters --------------"
-            << "\nCOORD3LIM: " << COORD3LIM << "\nsupers: " << nsupers
+            << "\ntotnsupers: " << totnsupers << "\nCOORD3LIM: " << COORD3LIM
+            << "\nsupers: " << nsupers
             << "\n---------------------------------------------------------\n";
 }
