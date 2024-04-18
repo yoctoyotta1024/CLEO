@@ -58,7 +58,7 @@ void OptionalConfigParams::set_initsupers(const YAML::Node &config) {
     initsupersfrombinary.set_params(config);
     initsupersfrombinary.print_params();
   } else {
-    throw std::invalid_argument("unknown initsupers 'type' : " + type);
+    throw std::invalid_argument("unknown initsupers 'type': " + type);
   }
 }
 
@@ -72,7 +72,7 @@ void OptionalConfigParams::set_coupled_dynamics(const YAML::Node &config) {
     cvodedynamics.set_params(config);
     cvodedynamics.print_params();
   } else {
-    throw std::invalid_argument("unknown coupled_dynamics 'type' : " + type);
+    throw std::invalid_argument("unknown coupled_dynamics 'type': " + type);
   }
 }
 
@@ -83,7 +83,7 @@ void OptionalConfigParams::set_boundary_conditions(const YAML::Node &config) {
     addsupersatdomaintop.set_params(config);
     addsupersatdomaintop.print_params();
   } else {
-    throw std::invalid_argument("unknown boundary_conditions 'type' : " + type);
+    throw std::invalid_argument("unknown boundary_conditions 'type': " + type);
   }
 }
 
@@ -99,8 +99,8 @@ void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &conf
 
 void OptionalConfigParams::CondensationParams::print_params() const {
   std::cout << "\n-------- Condensation Configuration Parameters --------------"
-            << "\ndo_alter_thermo : " << do_alter_thermo << "\nniters : " << niters
-            << "\nSUBSTEP : " << SUBTSTEP << "\nrtol : " << rtol << "\natol : " << atol
+            << "\ndo_alter_thermo: " << do_alter_thermo << "\nniters: " << niters
+            << "\nSUBSTEP: " << SUBTSTEP << "\nrtol: " << rtol << "\natol: " << atol
             << "\n---------------------------------------------------------\n";
 }
 
@@ -116,8 +116,8 @@ void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::No
 
 void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
   std::cout << "\n-------- InitSupersFromBinary Configuration Parameters --------------"
-            << "\nnspacedims : " << nspacedims << "\ninitsupers_filename : " << initsupers_filename
-            << "\ntotnsupers : " << totnsupers
+            << "\nnspacedims: " << nspacedims << "\ninitsupers_filename: " << initsupers_filename
+            << "\ntotnsupers: " << totnsupers
             << "\n---------------------------------------------------------\n";
 }
 
@@ -148,9 +148,9 @@ void OptionalConfigParams::FromFileDynamicsParams::set_params(const YAML::Node &
 
 void OptionalConfigParams::FromFileDynamicsParams::print_params() const {
   std::cout << "\n-------- FromFileDynamics Configuration Parameters --------------"
-            << "\nnspacedims : " << nspacedims << "\npress : " << press << "\ntemp : " << temp
-            << "\nqvap : " << qvap << "\nqcond : " << qcond << "\nwvel : " << wvel
-            << "\nuvel : " << uvel << "\nvvel : " << vvel
+            << "\nnspacedims: " << nspacedims << "\npress: " << press << "\ntemp: " << temp
+            << "\nqvap: " << qvap << "\nqcond: " << qcond << "\nwvel: " << wvel
+            << "\nuvel: " << uvel << "\nvvel: " << vvel
             << "\n---------------------------------------------------------\n";
 }
 
@@ -171,9 +171,9 @@ void OptionalConfigParams::CvodeDynamicsParams::set_params(const YAML::Node &con
 
 void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
   std::cout << "\n-------- CvodeDynamics Configuration Parameters --------------"
-            << "\nngbxs : " << ngbxs << "\nP_init : " << P_init << "\nTEMP_init : " << TEMP_init
-            << "\nrelh_init : " << relh_init << "\nW_avg : " << W_avg << "\nTAU_half : " << TAU_half
-            << "\nrtol : " << rtol << "\natol : " << atol
+            << "\nngbxs: " << ngbxs << "\nP_init: " << P_init << "\nTEMP_init: " << TEMP_init
+            << "\nrelh_init: " << relh_init << "\nW_avg: " << W_avg << "\nTAU_half: " << TAU_half
+            << "\nrtol: " << rtol << "\natol: " << atol
             << "\n---------------------------------------------------------\n";
 }
 
@@ -181,10 +181,11 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::No
   const YAML::Node yaml = config["boundary_conditions"];
 
   COORD3LIM = yaml["COORD3LIM"].as<double>();
+  nsupers = yaml["nsupers"].as<size_t>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
   std::cout << "\n-------- AddSupersAtDomainTop Configuration Parameters --------------"
-            << "\nCOORD3LIM : " << COORD3LIM
+            << "\nCOORD3LIM: " << COORD3LIM << "\nsupers: " << nsupers
             << "\n---------------------------------------------------------\n";
 }
