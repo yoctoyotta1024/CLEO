@@ -22,35 +22,36 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
-### Initialisation Parameters ###
-inputfiles:
-  constants_filename : ../libs/cleoconstants.hpp      # name of file for values of physical constants
-  grid_filename : ./share/dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
-
-initsupers:
-  type : frombinary                                   # type of initialisation of super-droplets
-  initsupers_filename : ./share/dimlessSDsinit.dat    # binary filename for initialisation of SDs
-  totnsupers : 2048                                   # initial total no. of SDs
-
-### Output Parameters ###
-outputdata:
-  setup_filename : ./bin/setup.txt                    # .txt filename to copy configuration to
-  stats_filename : ./bin/stats.txt                    # .txt file to output runtime statistics to
-  zarrbasedir : ./bin/SDMdata.zarr                    # zarr store base directory
-  maxchunk : 2500000                                  # maximum no. of elements in chunks of zarr store array
-
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 1                                       # no. of spatial dimensions to model
   ngbxs : 41                                           # total number of Gbxs
+  maxnsupers : &maxnsupers 2048                        # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 0.1                                      # time between SD condensation [s]
   COLLTSTEP : 1                                        # time between SD collision [s]
   MOTIONTSTEP : 2                                      # time between SDM motion [s]
-  COUPLTSTEP : 120                                     # time between dynamic couplings [s]
+  COUPLTSTEP : 4                                       # time between dynamic couplings [s]
   OBSTSTEP : 2                                         # time between SDM observations [s]
-  T_END : 120                                          # time span of integration from 0s to T_END [s]
+  T_END : 4                                            # time span of integration from 0s to T_END [s]
+
+### Initialisation Parameters ###
+inputfiles:
+  constants_filename : ../libs/cleoconstants.hpp       # name of file for values of physical constants
+  grid_filename : ./share/dimlessGBxboundaries.dat     # binary filename for initialisation of GBxs / GbxMaps
+
+initsupers:
+  type : frombinary                                    # type of initialisation of super-droplets
+  initsupers_filename : ./share/dimlessSDsinit.dat     # binary filename for initialisation of SDs
+  initnsupers : *maxnsupers                            # initial total no. of SDs
+
+### Output Parameters ###
+outputdata:
+  setup_filename : ./bin/setup.txt                     # .txt filename to copy configuration to
+  stats_filename : ./bin/stats.txt                     # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/SDMdata.zarr                     # zarr store base directory
+  maxchunk : 2500000                                   # maximum no. of elements in chunks of zarr store array
 
 ### Microphysics Parameters ###
 microphysics:

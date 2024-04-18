@@ -217,7 +217,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obs0 = RunStatsObserver(obsstep, config.get_stats_filename());
 
-  const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
+  const Observer auto obs1 = StreamOutObserver(obsstep, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 

@@ -22,6 +22,20 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### SDM Runtime Parameters ###
+domain:
+  nspacedims : 2                                              # no. of spatial dimensions to model
+  ngbxs : 400                                                 # total number of Gbxs
+  maxnsupers : &maxnsupers 960                                # maximum number of SDs
+
+timesteps:
+  CONDTSTEP : 1                                               # time between SD condensation [s]
+  COLLTSTEP : 1                                               # time between SD collision [s]
+  MOTIONTSTEP : 2                                             # time between SDM motion [s]
+  COUPLTSTEP : 7200                                           # time between dynamic couplings [s]
+  OBSTSTEP : 120                                              # time between SDM observations [s]
+  T_END : 7200                                                # time span of integration from 0s to T_END [s]
+
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp              # name of file for values of physical constants
@@ -30,43 +44,30 @@ inputfiles:
 initsupers:
   type : frombinary                                           # type of initialisation of super-droplets
   initsupers_filename : ./share/const2d_dimlessSDsinit.dat    # binary filename for initialisation of SDs
-  totnsupers : 960                                            # initial total no. of SDs
+  initnsupers : *maxnsupers                                   # initial total no. of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/const2d_setup.txt             # .txt filename to copy configuration to
-  stats_filename : ./bin/const2d_stats.txt             # .txt file to output runtime statistics to
-  zarrbasedir : ./bin/const2d_sol.zarr                 # zarr store base directory
-  maxchunk : 2500000                                   # maximum no. of elements in chunks of zarr store array
-
-### SDM Runtime Parameters ###
-domain:
-  nspacedims : 2                                       # no. of spatial dimensions to model
-  ngbxs : 400                                          # total number of Gbxs
-
-timesteps:
-  CONDTSTEP : 1                                        # time between SD condensation [s]
-  COLLTSTEP : 1                                        # time between SD collision [s]
-  MOTIONTSTEP : 2                                      # time between SDM motion [s]
-  COUPLTSTEP : 7200                                    # time between dynamic couplings [s]
-  OBSTSTEP : 120                                       # time between SDM observations [s]
-  T_END : 7200                                         # time span of integration from 0s to T_END [s]
+  setup_filename : ./bin/const2d_setup.txt                    # .txt filename to copy configuration to
+  stats_filename : ./bin/const2d_stats.txt                    # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/const2d_sol.zarr                        # zarr store base directory
+  maxchunk : 2500000                                          # maximum no. of elements in chunks of zarr store array
 
 ### Microphysics Parameters ###
 microphysics:
   condensation:
-    do_alter_thermo : false                            # true = cond/evap alters the thermodynamic state
-    niters : 2                                         # no. iterations of Newton Raphson Method before testing for convergence
-    SUBTSTEP : 0.1                                     # smallest subtimestep in cases of substepping [s]
-    rtol : 0.0                                         # relative tolerance for implicit Euler integration
-    atol : 0.01                                        # abolute tolerance for implicit Euler integration
+    do_alter_thermo : false                                   # true = cond/evap alters the thermodynamic state
+    niters : 2                                                # no. iterations of Newton Raphson Method before testing for convergence
+    SUBTSTEP : 0.1                                            # smallest subtimestep in cases of substepping [s]
+    rtol : 0.0                                                # relative tolerance for implicit Euler integration
+    atol : 0.01                                               # abolute tolerance for implicit Euler integration
 
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
-  type : fromfile                                      # type of coupled dynamics to configure
-  press : ./share/const2d_dimlessthermo_press.dat              # binary filename for pressure
-  temp : ./share/const2d_dimlessthermo_temp.dat                # binary filename for temperature
-  qvap : ./share/const2d_dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio
-  qcond : ./share/const2d_dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
-  wvel : ./share/const2d_dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
-  uvel : ./share/const2d_dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity
+  type : fromfile                                             # type of coupled dynamics to configure
+  press : ./share/const2d_dimlessthermo_press.dat             # binary filename for pressure
+  temp : ./share/const2d_dimlessthermo_temp.dat               # binary filename for temperature
+  qvap : ./share/const2d_dimlessthermo_qvap.dat               # binary filename for vapour mixing ratio
+  qcond : ./share/const2d_dimlessthermo_qcond.dat             # binary filename for liquid mixing ratio
+  wvel : ./share/const2d_dimlessthermo_wvel.dat               # binary filename for vertical (coord3) velocity
+  uvel : ./share/const2d_dimlessthermo_uvel.dat               # binary filename for eastwards (coord1) velocity

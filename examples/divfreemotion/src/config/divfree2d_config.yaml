@@ -22,6 +22,20 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### SDM Runtime Parameters ###
+domain:
+  nspacedims : 2                                          # no. of spatial dimensions to model
+  ngbxs : 900                                             # total number of Gbxs
+  maxnsupers : &maxnsupers 3600                           # maximum number of SDs
+
+timesteps:
+  CONDTSTEP : 3                                           # time between SD condensation [s]
+  COLLTSTEP : 3                                           # time between SD collision [s]
+  MOTIONTSTEP : 3                                         # time between SDM motion [s]
+  COUPLTSTEP : 3600                                       # time between dynamic couplings [s]
+  OBSTSTEP : 180                                          # time between SDM observations [s]
+  T_END : 7200                                            # time span of integration from 0s to T_END [s]
+
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp          # name of file for values of physical constants
@@ -30,34 +44,21 @@ inputfiles:
 initsupers:
   type : frombinary                                       # type of initialisation of super-droplets
   initsupers_filename : ./share/df2d_dimlessSDsinit.dat   # binary filename for initialisation of SDs
-  totnsupers : 3600                                       # initial total no. of SDs
+  initnsupers: *maxnsupers                                # initial total no. of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/df2d_setup.txt               # .txt filename to copy configuration to
-  stats_filename : ./bin/df2d_stats.txt               # .txt file to output runtime statistics to
-  zarrbasedir : ./bin/df2d_sol.zarr                   # zarr store base directory
-  maxchunk : 2500000                                  # maximum no. of elements in chunks of zarr store array
-
-### SDM Runtime Parameters ###
-domain:
-  nspacedims : 2                                      # no. of spatial dimensions to model
-  ngbxs : 900                                         # total number of Gbxs
-
-timesteps:
-  CONDTSTEP : 3                                      # time between SD condensation [s]
-  COLLTSTEP : 3                                      # time between SD collision [s]
-  MOTIONTSTEP : 3                                    # time between SDM motion [s]
-  COUPLTSTEP : 3600                                  # time between dynamic couplings [s]
-  OBSTSTEP : 180                                     # time between SDM observations [s]
-  T_END : 7200                                       # time span of integration from 0s to T_END [s]
+  setup_filename : ./bin/df2d_setup.txt                   # .txt filename to copy configuration to
+  stats_filename : ./bin/df2d_stats.txt                   # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/df2d_sol.zarr                       # zarr store base directory
+  maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
 
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
-  type : fromfile                                      # type of coupled dynamics to configure
-  press : ./share/df2d_dimlessthermo_press.dat              # binary filename for pressure
-  temp : ./share/df2d_dimlessthermo_temp.dat                # binary filename for temperature
-  qvap : ./share/df2d_dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio
-  qcond : ./share/df2d_dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
-  wvel : ./share/df2d_dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
-  uvel : ./share/df2d_dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity
+  type : fromfile                                         # type of coupled dynamics to configure
+  press : ./share/df2d_dimlessthermo_press.dat            # binary filename for pressure
+  temp : ./share/df2d_dimlessthermo_temp.dat              # binary filename for temperature
+  qvap : ./share/df2d_dimlessthermo_qvap.dat              # binary filename for vapour mixing ratio
+  qcond : ./share/df2d_dimlessthermo_qcond.dat            # binary filename for liquid mixing ratio
+  wvel : ./share/df2d_dimlessthermo_wvel.dat              # binary filename for vertical (coord3) velocity
+  uvel : ./share/df2d_dimlessthermo_uvel.dat              # binary filename for eastwards (coord1) velocity
