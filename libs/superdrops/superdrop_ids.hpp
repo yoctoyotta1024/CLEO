@@ -37,6 +37,18 @@ struct IntID {
   class Gen {
    public:
     /**
+     * @brief Default constructor for ID generation starting at value = 0.
+     *
+     */
+    Gen() : _id(0) {}
+
+    /**
+     * @brief Constructor for ID generation starting at value = id + 1.
+     *
+     */
+    explicit Gen(const size_t id) : _id(id) {}
+
+    /**
      * @brief Generate the next SD identity.
      *
      * _Note:_ This generator is not thread-safe (_id++ is undefined in a multi-threaded
