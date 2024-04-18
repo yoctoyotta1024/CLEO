@@ -119,7 +119,9 @@ inline auto create_boundary_conditions(const Config &config) {
   //                                 ngbxs,
   //                                 ngbxs4reset);  //TODO(CB) Delete option (!)
 
-  return AddSupersAtDomainTop{};
+  const auto COORD3LIM = double{800}; /* supers added to domain with coord3 >= COORD3LIM [m] */
+
+  return AddSupersAtDomainTop(COORD3LIM);
 
   // return NullBoundaryConditions{};
 }
