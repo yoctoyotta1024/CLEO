@@ -182,12 +182,12 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::No
 
   totnsupers = config["initsupers"]["totnsupers"].as<size_t>();
   COORD3LIM = yaml["COORD3LIM"].as<double>();
-  nsupers = yaml["nsupers"].as<size_t>();
+  newnsupers = yaml["newnsupers"].as<size_t>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
   std::cout << "\n-------- AddSupersAtDomainTop Configuration Parameters --------------"
             << "\ntotnsupers: " << totnsupers << "\nCOORD3LIM: " << COORD3LIM
-            << "\nsupers: " << nsupers
+            << "\nnewnsupers: " << newnsupers
             << "\n---------------------------------------------------------\n";
 }

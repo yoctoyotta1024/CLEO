@@ -37,8 +37,8 @@
 
 struct AddSupersAtDomainTop {
  private:
-  double coord3lim; /**< gridboxes with upper bound > coord3lim get new super-droplets */
-  size_t nsupers;   /**< number of superdroplets to add to gridboxes above coord3lim */
+  double coord3lim;  /**< gridboxes with upper bound > coord3lim get new super-droplets */
+  size_t newnsupers; /**< number of superdroplets to add to gridboxes above coord3lim */
   std::shared_ptr<Superdrop::IDType::Gen>
       sdIdGen; /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
 
@@ -49,6 +49,23 @@ struct AddSupersAtDomainTop {
         supers(kk).set_sdgbxindex(outofbounds_gbxindex());  // remove super-droplet from domain
       }
     }
+  }
+
+  void add_supers_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
+                              const viewd_supers totsupers) const {
+    for (size_t kk(0); kk < newnsupers; ++kk) {
+      const auto sd = create_superdrop(gbx);
+      // TODO(CB): add to totsupers
+    }
+  }
+
+  Superdrop create_superdrop(const Gridbox &gbx) const {
+    const auto sdgbxindex = gbx.get_gbxindex();
+    const auto coords312 = create_superdrop_coords();
+    const auto attrs = create_superdrop_attrs();
+    const auto sdId = sdIdGen->next();
+
+    return Superdrop(sdgbxindex, coords312[0], coords312[1], coords312[2], attrs, sdId);
   }
 
   std::array<double, 3> create_superdrop_coords() const {
@@ -66,21 +83,6 @@ struct AddSupersAtDomainTop {
     const auto solute = SoluteProperties{};
 
     return SuperdropAttrs(solute, xi, radius, msol);
-  }
-
-  Superdrop create_superdrop(const Gridbox &gbx) const {
-    const auto sdgbxindex = gbx.get_gbxindex();
-    const auto coords312 = create_superdrop_coords();
-    const auto attrs = create_superdrop_attrs();
-    const auto sdId = sdIdGen->next();  // TODO(CB): WIP
-
-    return Superdrop(sdgbxindex, coords312[0], coords312[1], coords312[2], attrs, sdId);
-  }
-
-  void add_supers_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
-                              const viewd_supers totsupers) const {
-    const auto sd = create_superdrop(gbx);
-    std::cout << "new supers for gbx: " << sd.sdId.value << "\n";
   }
 
   /* (re)sorting supers based on their gbxindexes and then updating the span for each
@@ -106,7 +108,7 @@ struct AddSupersAtDomainTop {
   /* New super-droplets are added to domain with coord3 >= COORD3LIM [m] */
   explicit AddSupersAtDomainTop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
       : coord3lim(config.COORD3LIM / dlc::COORD0),
-        nsupers(config.nsupers),
+        newnsupers(config.newnsupers),
         sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.totnsupers)) {}
 
   void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
