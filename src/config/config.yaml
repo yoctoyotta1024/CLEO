@@ -71,3 +71,8 @@ coupled_dynamics:
   wvel : ./share/dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
   uvel : ./share/dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity
   vvel : ./share/dimlessthermo_vvel.dat                # binary filename for northwards (coord2) velocity
+
+### Bounday Conditions Parameters ###
+boundary_conditions:
+  type: addsupersatdomaintop
+  COORD3LIM: 800                                       # SDs added to domain with coord3 >= COORD3LIM [m]

@@ -104,6 +104,13 @@ struct OptionalConfigParams {
     double rtol = NaNVals::dbl(); /**< relative tolerance for integration of [P, T, qv, qc] ODEs */
     double atol = NaNVals::dbl(); /**< absolute tolerances for integration of [P, T, qv, qc] ODEs */
   } cvodedynamics;
+
+  /*** Bounday Conditions Parameters ***/
+  struct AddSupersAtDomainTopParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    double COORD3LIM = NaNVals::dbl(); /**< SDs added to domain with coord3 >= COORD3LIM [m] */
+  } addsupersatdomaintop;
 };
 
 #endif  // LIBS_INITIALISE_OPTIONAL_CONFIG_PARAMS_HPP_

@@ -57,7 +57,8 @@ struct AddSupersAtDomainTop {
   }
 
   /* New super-droplets are added to domain with coord3 >= COORD3LIM [m] */
-  explicit AddSupersAtDomainTop(const double COORD3LIM) : coord3lim(COORD3LIM / dlc::COORD0) {}
+  explicit AddSupersAtDomainTop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
+      : coord3lim(config.COORD3LIM / dlc::COORD0) {}
 
   void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
                   const viewd_supers totsupers) const {

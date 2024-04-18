@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,6 +35,10 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
 
   if (config["coupled_dynamics"]) {
     set_coupled_dynamics(config);
+  }
+
+  if (config["boundary_conditions"]) {
+    set_boundary_conditions(config);
   }
 }
 
@@ -72,6 +76,17 @@ void OptionalConfigParams::set_coupled_dynamics(const YAML::Node &config) {
   }
 }
 
+void OptionalConfigParams::set_boundary_conditions(const YAML::Node &config) {
+  const auto type = config["boundary_conditions"]["type"].as<std::string>();
+
+  if (type == "addsupersatdomaintop") {
+    addsupersatdomaintop.set_params(config);
+    addsupersatdomaintop.print_params();
+  } else {
+    throw std::invalid_argument("unknown boundary_conditions 'type' : " + type);
+  }
+}
+
 void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &config) {
   const YAML::Node yaml = config["microphysics"]["condensation"];
 
@@ -83,7 +98,7 @@ void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &conf
 }
 
 void OptionalConfigParams::CondensationParams::print_params() const {
-  std::cout << "\n-------- DoCondensation Configuration Parameters --------------"
+  std::cout << "\n-------- Condensation Configuration Parameters --------------"
             << "\ndo_alter_thermo : " << do_alter_thermo << "\nniters : " << niters
             << "\nSUBSTEP : " << SUBTSTEP << "\nrtol : " << rtol << "\natol : " << atol
             << "\n---------------------------------------------------------\n";
@@ -159,5 +174,17 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
             << "\nngbxs : " << ngbxs << "\nP_init : " << P_init << "\nTEMP_init : " << TEMP_init
             << "\nrelh_init : " << relh_init << "\nW_avg : " << W_avg << "\nTAU_half : " << TAU_half
             << "\nrtol : " << rtol << "\natol : " << atol
+            << "\n---------------------------------------------------------\n";
+}
+
+void OptionalConfigParams::AddSupersAtDomainTopParams : set_params(const YAML::Node &config) {
+  const YAML::Node yaml = config["boundary_conditions"];
+
+  COORD3LIM = yaml["COORD3LIM"].as<double>();
+}
+
+void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
+  std::cout << "\n-------- AddSupersAtDomainTop Configuration Parameters --------------"
+            << "\nCOORD3LIM : " << COORD3LIM
             << "\n---------------------------------------------------------\n";
 }
