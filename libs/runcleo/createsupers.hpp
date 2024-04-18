@@ -208,8 +208,8 @@ viewd_supers create_supers(const SuperdropInitConds &sdic) {
   std::cout << "checking initialisation\n";
   is_sdsinit_complete(supers, sdic.fetch_data_size());
 
-  // Print information about the created superdrops
-  print_supers(supers);
+  // // Print information about the created superdrops
+  // print_supers(supers);
 
   // Log message indicating the successful creation of superdrops
   std::cout << "--- create superdrops: success ---\n";

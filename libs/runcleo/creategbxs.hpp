@@ -257,7 +257,9 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
 
   std::cout << "checking initialisation\n";
   is_gbxinit_complete(gbxmaps.maps_size() - 1, gbxs);
-  print_gbxs(gbxs.view_host());
+
+  // // Print information about the created superdrops
+  // print_gbxs(gbxs.view_host());
 
   std::cout << "--- create gridboxes: success ---\n";
 
