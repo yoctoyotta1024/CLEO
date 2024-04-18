@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,8 +39,9 @@ for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
 struct InitSupersFromBinary {
  private:
+  size_t maxnsupers;
   std::filesystem::path initsupers_filename;  // filename for some of superdrops' initial conditons
-  size_t totnsupers;        // total number of superdroplets (in kokkos view on device initially)
+  size_t initnsupers;       // total number of superdroplets (in kokkos view on device initially)
   unsigned int nspacedims;  // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
 
   /* sets initial data for solutes as
@@ -61,12 +62,14 @@ struct InitSupersFromBinary {
   void check_initdata_sizes(const InitSupersData &initdata) const;
 
  public:
-  explicit InitSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams &config)
-      : initsupers_filename(config.initsupers_filename),
-        totnsupers(config.totnsupers),
+  explicit InitSupersFromBinary(const size_t maxnsupers,
+                                const OptionalConfigParams::InitSupersFromBinaryParams &config)
+      : maxnsupers(maxnsupers),
+        initsupers_filename(config.initsupers_filename),
+        initnsupers(config.initnsupers),
         nspacedims(config.nspacedims) {}
 
-  auto get_totnsupers() const { return totnsupers; }
+  auto get_maxnsupers() const { return maxnsupers; }
 
   auto get_nspacedims() const { return nspacedims; }
 

@@ -231,7 +231,7 @@ viewd_supers create_supers(const SuperdropInitConds &sdic) {
 template <typename SuperdropInitConds>
 viewd_supers initialise_supers(const SuperdropInitConds &sdic) {
   // create superdrops view on device
-  viewd_supers supers("supers", sdic.get_totnsupers());
+  viewd_supers supers("supers", sdic.get_maxnsupers());
 
   // initialise a mirror of superdrops view on host
   const GenSuperdrop gen(sdic);

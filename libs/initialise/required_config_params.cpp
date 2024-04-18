@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -43,6 +43,7 @@ RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_fi
   yaml = config["domain"];
   domain.nspacedims = yaml["nspacedims"].as<unsigned int>();
   domain.ngbxs = yaml["ngbxs"].as<size_t>();
+  domain.maxnsupers = yaml["maxnsupers"].as<size_t>();
 
   yaml = config["timesteps"];
   timesteps.CONDTSTEP = yaml["CONDTSTEP"].as<double>();
@@ -63,8 +64,8 @@ void RequiredConfigParams::print_params() const {
             << "\nstats_filename : " << outputdata.stats_filename
             << "\nzarrbasedir : " << outputdata.zarrbasedir
             << "\nmaxchunk : " << outputdata.maxchunk << "\nnspacedims : " << domain.nspacedims
-            << "\nngbxs : " << domain.ngbxs << "\nCONDTSTEP : " << timesteps.CONDTSTEP
-            << "\nCOLLTSTEP : " << timesteps.COLLTSTEP
+            << "\nngbxs : " << domain.ngbxs << "\nmaxnsupers : " << domain.maxnsupers
+            << "\nCONDTSTEP : " << timesteps.CONDTSTEP << "\nCOLLTSTEP : " << timesteps.COLLTSTEP
             << "\nMOTIONTSTEP : " << timesteps.MOTIONTSTEP
             << "\nCOUPLTSTEP : " << timesteps.COUPLTSTEP << "\nOBSTSTEP : " << timesteps.OBSTSTEP
             << "\nT_END : " << timesteps.T_END

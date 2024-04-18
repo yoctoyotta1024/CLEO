@@ -110,14 +110,14 @@ void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::No
   assert((yaml["type"].as<std::string>() == "frombinary"));
 
   initsupers_filename = std::filesystem::path(yaml["initsupers_filename"].as<std::string>());
-  totnsupers = yaml["totnsupers"].as<size_t>();
+  initnsupers = yaml["initnsupers"].as<size_t>();
   nspacedims = config["domain"]["nspacedims"].as<unsigned int>();
 }
 
 void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
   std::cout << "\n-------- InitSupersFromBinary Configuration Parameters --------------"
             << "\nnspacedims: " << nspacedims << "\ninitsupers_filename: " << initsupers_filename
-            << "\ntotnsupers: " << totnsupers
+            << "\ninitnsupers: " << initnsupers
             << "\n---------------------------------------------------------\n";
 }
 
@@ -180,14 +180,12 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
 void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::Node &config) {
   const YAML::Node yaml = config["boundary_conditions"];
 
-  totnsupers = config["initsupers"]["totnsupers"].as<size_t>();
   COORD3LIM = yaml["COORD3LIM"].as<double>();
   newnsupers = yaml["newnsupers"].as<size_t>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
   std::cout << "\n-------- AddSupersAtDomainTop Configuration Parameters --------------"
-            << "\ntotnsupers: " << totnsupers << "\nCOORD3LIM: " << COORD3LIM
-            << "\nnewnsupers: " << newnsupers
+            << "\nCOORD3LIM: " << COORD3LIM << "\nnewnsupers: " << newnsupers
             << "\n---------------------------------------------------------\n";
 }

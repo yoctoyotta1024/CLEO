@@ -73,7 +73,7 @@ struct OptionalConfigParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
     fspath initsupers_filename = fspath(); /**< filename for initialisation of super-droplets */
-    size_t totnsupers = NaNVals::sizet();  /**< initial total no. of Super-Droplets in the domain */
+    size_t initnsupers = NaNVals::sizet(); /**< initial total no. of Super-Droplets in the domain */
     unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
   } initsupersfrombinary;
 
@@ -111,7 +111,6 @@ struct OptionalConfigParams {
   struct AddSupersAtDomainTopParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
-    size_t totnsupers = NaNVals::sizet(); /**< initial total no. of Super-Droplets in the domain */
     double COORD3LIM = NaNVals::dbl();    /**< SDs added to domain with coord3 >= COORD3LIM [m] */
     size_t newnsupers = NaNVals::sizet(); /**< number SDs to add to each gridbox above COORD3LIM */
   } addsupersatdomaintop;

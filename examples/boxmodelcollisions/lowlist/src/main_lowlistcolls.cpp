@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -57,7 +57,7 @@
 #include "zarr/fsstore.hpp"
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
+  const InitSupersFromBinary initsupers(config.get_maxnsupers(), config.get_initsupersfrombinary());
   const InitGbxsNull initgbxs(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
