@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,6 +30,7 @@
 #include <stdexcept>
 #include <string_view>
 
+#include "cartesiandomain/add_supers_at_domain_top.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
@@ -103,6 +104,13 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   // const auto terminalv = SimmelTerminalVelocity{};
   const auto terminalv = RogersGKTerminalVelocity{};
 
+  return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
+
+  // return NullMotion{};
+}
+
+inline auto create_boundary_conditions(const Config &config) {
+  // TODO(CB): diff BCs
   // const auto ngbxs = (unsigned int)15; // total number of gbxs
   // const auto ngbxs4reset = (unsigned int)5; // number of gbxs to randomly select in reset
   // return CartesianMotionWithReset(motionstep,
@@ -111,14 +119,9 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   //                                 ngbxs,
   //                                 ngbxs4reset);  //TODO(CB) Delete option (!)
 
-  return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
+  return AddSupersAtDomainTop{};
 
-  // return NullMotion{};
-}
-
-inline auto create_boundary_conditions(const Config &config) {
-  // TODO(CB): diff BCs
-  return NullBoundaryConditions{};
+  // return NullBoundaryConditions{};
 }
 
 template <GridboxMaps GbxMaps>
