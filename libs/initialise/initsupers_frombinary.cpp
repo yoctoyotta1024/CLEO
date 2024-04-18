@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: initsupers_frombinary.cpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 6th November 2023
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +27,7 @@
 
 /* sets initial data for solutes as
 a single SoluteProprties instance */
-void InitSupersFromBinary::init_solutes_data(InitSupersData &initdata) const {
+void InitSupersFromBinary::initdata_for_solutes(InitSupersData &initdata) const {
   initdata.solutes.at(0) = SoluteProperties{};
 }
 

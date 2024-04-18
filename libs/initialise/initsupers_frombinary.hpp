@@ -48,7 +48,7 @@ struct InitSupersFromBinary {
 
   /* sets initial data for solutes as
   a single SoluteProprties instance */
-  void init_solutes_data(InitSupersData &initdata) const;
+  void initdata_for_solutes(InitSupersData &initdata) const;
 
   /* sets initial data in initdata using data read
   from a binary file called initsupers_filename */
@@ -112,7 +112,7 @@ struct InitSupersFromBinary {
   file and creating a SoluteProperties struct.
   Then check that the input data has the correct sizes. */
   void fetch_data(InitSupersData &initdata) const {
-    init_solutes_data(initdata);
+    initdata_for_solutes(initdata);
     initdata_from_binary(initdata);
     check_initdata_sizes(initdata);
   }
