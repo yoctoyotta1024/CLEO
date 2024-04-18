@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,13 +22,12 @@
 #ifndef LIBS_RUNCLEO_CREATESUPERS_HPP_
 #define LIBS_RUNCLEO_CREATESUPERS_HPP_
 
+#include <Kokkos_Core.hpp>
 #include <array>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
-
-#include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/sortsupers.hpp"
@@ -43,10 +42,10 @@
  */
 class GenSuperdrop {
  private:
-  unsigned int nspacedims;   /**< Number of spatial dimensions. */
+  unsigned int nspacedims; /**< Number of spatial dimensions. */
   std::shared_ptr<Superdrop::IDType::Gen> sdIdGen;
   /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
-  InitSupersData initdata;   /**< instance of InitSupersData for initialising superdrops. */
+  InitSupersData initdata; /**< instance of InitSupersData for initialising superdrops. */
 
   /**
    * @brief Returns initial spatial coordinates of the kk'th super-droplet.

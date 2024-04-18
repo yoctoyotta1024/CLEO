@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 12th February 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,16 +22,15 @@
 #ifndef LIBS_RUNCLEO_CREATEGBXS_HPP_
 #define LIBS_RUNCLEO_CREATEGBXS_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
+#include <Kokkos_Pair.hpp>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <Kokkos_Core.hpp>
-#include <Kokkos_DualView.hpp>
-#include <Kokkos_Pair.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/findrefs.hpp"
@@ -52,10 +51,10 @@ class GenGridbox {
  private:
   std::shared_ptr<Gbxindex::Gen> GbxindexGen;
   /**< Pointer to gridbox index generator, Gbxindex::Gen object */
-  std::vector<double> presss;   /**< Vector of pressures for each gridbox */
-  std::vector<double> temps;    /**< Vector of temperatures for each gridbox */
-  std::vector<double> qvaps;    /**< Vector of vapor mass mixing ratio for each gridbox */
-  std::vector<double> qconds;   /**< Vector of condensed water mass mixing ratio for each gridbox */
+  std::vector<double> presss; /**< Vector of pressures for each gridbox */
+  std::vector<double> temps;  /**< Vector of temperatures for each gridbox */
+  std::vector<double> qvaps;  /**< Vector of vapor mass mixing ratio for each gridbox */
+  std::vector<double> qconds; /**< Vector of condensed water mass mixing ratio for each gridbox */
   std::vector<std::pair<double, double>> wvels;
   /**< Vector of vertical (coord3) wind velocities for each gridbox */
   std::vector<std::pair<double, double>> uvels;
@@ -77,13 +76,13 @@ class GenGridbox {
 
  public:
   /**
- * @brief Constructs a GenGridbox object.
- *
- * Constructs a GenGridbox object based on the provided initial conditions in 'GbxInitConds'.
- *
- * @tparam GbxInitConds Type of the Gridboxes' initial conditions.
- * @param gbxic The initial conditions for the Gridboxes.
- */
+   * @brief Constructs a GenGridbox object.
+   *
+   * Constructs a GenGridbox object based on the provided initial conditions in 'GbxInitConds'.
+   *
+   * @tparam GbxInitConds Type of the Gridboxes' initial conditions.
+   * @param gbxic The initial conditions for the Gridboxes.
+   */
   template <typename GbxInitConds>
   explicit GenGridbox(const GbxInitConds &gbxic)
       : GbxindexGen(std::make_shared<Gbxindex::Gen>()),
