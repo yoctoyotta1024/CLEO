@@ -55,7 +55,8 @@ struct AddSupersAtDomainTop {
                               const viewd_supers totsupers) const {
     for (size_t kk(0); kk < newnsupers; ++kk) {
       const auto sd = create_superdrop(gbx);
-      // TODO(CB): add to totsupers
+      // TODO(CB): WIP slot into totsupers <- first initialise not all supers from file (set empty
+      // ones with out of domain sdgbxindex)
     }
   }
 
