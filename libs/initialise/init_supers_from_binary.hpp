@@ -56,8 +56,7 @@ struct InitSupersFromBinary {
   InitSupersData add_uninitialised_superdrops_data(InitSupersData &initdata) const;
 
   /* sets sdIds for un-initialised superdrops' using an sdId's generator */
-  std::vector<Superdrop::IDType> sdIds_for_uninitialised_superdrops(
-      const size_t size, const Superdrop::IDType start_id) const;
+  std::vector<Superdrop::IDType> sdIds_for_uninitialised_superdrops(const size_t size) const;
 
  public:
   /* constructor ensures the number of super-droplets to intialise is >= maxiumum number of

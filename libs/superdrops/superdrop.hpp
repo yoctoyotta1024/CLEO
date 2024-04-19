@@ -45,7 +45,7 @@ class Superdrop {
  public:
   // TODO(all): define sduperdrop IDType using macros
   using IDType = IntID; /**< Type of ID to identify superdrop via 8 byte integer */
-  // using IDType = EmptyID;   /**< Type of ID for non-existent superdrop identity */
+  // using IDType = EmptyID; /**< Type of ID for non-existent superdrop identity */
   [[no_unique_address]] IDType sdId;
   /**< instance of super-droplet identity of Superdrop::IDType */
 

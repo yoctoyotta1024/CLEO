@@ -70,7 +70,7 @@ struct IntID {
      * @param id The value to use for generating the next SD identity.
      * @return SD identity.
      */
-    KOKKOS_INLINE_FUNCTION IntID next(const size_t id) { return {id}; }
+    KOKKOS_INLINE_FUNCTION IntID set(const unsigned int kk) { return {static_cast<size_t>(kk)}; }
 
    private:
     size_t _id = 0; /**< Internal counter for generating SD identities. */
@@ -104,7 +104,7 @@ struct EmptyID {
      * @param kk A parameter possibly used for generating SD identity.
      * @return Empty SD identity.
      */
-    KOKKOS_INLINE_FUNCTION EmptyID next(const unsigned int kk) { return {}; }
+    KOKKOS_INLINE_FUNCTION EmptyID set(const unsigned int kk) { return {}; }
   };
 };
 

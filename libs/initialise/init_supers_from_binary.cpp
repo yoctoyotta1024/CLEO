@@ -29,15 +29,13 @@ inline std::vector<T> nan_vector(const size_t size) {
   return std::vector<T>(size, nanValue);
 }
 
-/* sets sdIds for un-initialised superdrops' using an sdId's generator starting from start_id */
+/* sets sdIds for un-initialised superdrops' using an sdId's generator */
 std::vector<Superdrop::IDType> InitSupersFromBinary::sdIds_for_uninitialised_superdrops(
-    const size_t size, const Superdrop::IDType start_id) const {
-  auto sdIdgen = Superdrop::IDType::Gen(start_id);
+    const size_t size) const {
+  auto sdIdgen = Superdrop::IDType::Gen();
 
-  auto sdIds = std::vector<Superdrop::IDType>();
-  for (size_t kk(0); kk < size; ++kk) {
-    sdIds.push_back(sdIdgen.next());
-  }
+  auto sdIds = std::vector<Superdrop::IDType>(
+      size, sdIdgen.set(std::numeric_limits<unsigned int>::signaling_NaN()));
 
   return sdIds;
 }
@@ -55,7 +53,7 @@ InitSupersData InitSupersFromBinary::add_uninitialised_superdrops_data(
   const auto radii = nan_vector<double>(size);
   const auto msols = nan_vector<double>(size);
   const auto xis = nan_vector<uint64_t>(size);
-  const auto sdIds = sdIds_for_uninitialised_superdrops(size, initdata.sdIds.back());
+  const auto sdIds = sdIds_for_uninitialised_superdrops(size);
 
   const auto nandata = InitSupersData{
       initdata.solutes, sdgbxindexes, coord3s, coord1s, coord2s, radii, msols, xis, sdIds};
