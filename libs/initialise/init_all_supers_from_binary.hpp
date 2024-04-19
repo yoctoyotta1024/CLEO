@@ -58,9 +58,8 @@ struct InitAllSupersFromBinary {
   void read_initdata_binary(InitSupersData &initdata, std::ifstream &file,
                             const std::vector<VarMetadata> &meta) const;
 
-  /* check all the vectors in the initdata struct all
-  have sizes consistent with one another. Include
-  coords data in check if nspacedims != 0 */
+  /* check all the vectors in the initdata struct all have sizes consistent with one another
+  and with maxnsupers. Include coords data in check if nspacedims > 0 */
   void check_initdata_sizes(const InitSupersData &initdata) const;
 
   /* data size returned is number of variables as
@@ -123,9 +122,8 @@ struct InitAllSupersFromBinary {
 
   auto get_nspacedims() const { return nspacedims; }
 
-  /* return InitSupersData created by reading a binary
-  file and creating a SoluteProperties struct.
-  Then check that the input data has the correct sizes. */
+  /* returns InitSupersData created by reading a binary file and creating a
+  SoluteProperties struct. Also checks that the data created has the expected sizes. */
   InitSupersData fetch_data() const {
     auto initdata = InitSupersData{};
 

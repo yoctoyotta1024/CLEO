@@ -41,12 +41,11 @@ void InitAllSupersFromBinary::initdata_from_binary(InitSupersData &initdata) con
   file.close();
 }
 
-/* check all the vectors in the initdata struct all
-have sizes consistent with one another. Include
-coords data in check if nspacedims != 0 */
+/* check all the vectors in the initdata struct all have sizes consistent with one another
+and with maxnsupers. Include coords data in check if nspacedims > 0 */
 void InitAllSupersFromBinary::check_initdata_sizes(const InitSupersData &in) const {
   std::vector<size_t> sizes(
-      {in.sdgbxindexes.size(), in.xis.size(), in.radii.size(), in.msols.size()});
+      {maxnsupers, in.sdgbxindexes.size(), in.xis.size(), in.radii.size(), in.msols.size()});
 
   switch (nspacedims) {
     case 3:  // 3-D model

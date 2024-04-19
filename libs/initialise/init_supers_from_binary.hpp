@@ -71,11 +71,13 @@ struct InitSupersFromBinary {
 
   auto get_nspacedims() const { return nspacedims; }
 
-  /* return InitSupersData created by reading some data from a binary file and
-  filling the rest with invalid super-droplets */
+  /* return InitSupersData created by reading some data from a binary file and creating a
+  SoluteProperties struct. Fills the rest of the data with invalid (out of bounds) super-droplets.
+  Also checks that the data created has the expected sizes. */
   InitSupersData fetch_data() const {
     auto initdata = fetch_superdrops_from_file();
     initdata = fetch_invalid_superdrops_data(initdata);
+    check_initdata_sizes(initdata);
     return initdata;
   }
 };
