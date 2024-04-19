@@ -71,20 +71,27 @@ struct InitAllSupersFromBinary {
   /**
    * @brief Constructor for InitAllSupersFromBinary.
    *
+   * Calls constructor for InitAllSupersFromBinary wiht additional assert to sanity check
+   * condfiguration matches initialisation.
+   *
    * @param maxnsupers The expected initial total number of super-droplets
    * @param config Configuration for member variables.
    *
    */
   InitAllSupersFromBinary(const size_t maxnsupers,
                           const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
-      : InitAllSupersFromBinary(maxnsupers, config.initsupers_filename, config.nspacedims) {}
+      : InitAllSupersFromBinary(maxnsupers, config.initsupers_filename, config.nspacedims) {
+    assert((maxnsupers == config.initnsupers) &&
+           "configuration parameter not consistent with "
+           "initialising all super-droplets from binary");
+  }
 
   /**
    * @brief Constructor for InitAllSupersFromBinary.
    *
-   * This function checks if there is enough data in the initialisation files for super-droplets
-   * in order to initialise "maxnsupers" superdroplets. If the initialisation data is the wrong
-   * size, it throws an exception with the appropriate error message.
+   * This function checks if there is enough data in the initialisation files for
+   * super-droplets in order to initialise "maxnsupers" superdroplets. If the initialisation
+   * data is the wrong size, it throws an exception with the appropriate error message.
    *
    * @param maxnsupers The expected initial total number of super-droplets
    * @param initsupers_filename filename for super-droplets' initial conditons
