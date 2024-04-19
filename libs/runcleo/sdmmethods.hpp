@@ -199,8 +199,8 @@ class SDMMethods {
    */
   void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs) const {
     const auto d_gbxs = gbxs.view_device();
-    const auto totsupers = gbxs.view_host()(0).domain_totsupers_readonly();  // in domain SDs only.
-    obs.at_start_step(t_mdl, d_gbxs, totsupers);
+    const auto domain_totsupers = gbxs.view_host()(0).domain_totsupers_readonly();
+    obs.at_start_step(t_mdl, d_gbxs, domain_totsupers);
   }
 
   /**
