@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -43,6 +43,7 @@ class Superdrop {
   SuperdropAttrs attrs;    /**< instance of SuperdropAttrs for attributes of the super-droplet */
 
  public:
+  // TODO(all): define sduperdrop IDType using macros
   using IDType = IntID; /**< Type of ID to identify superdrop via 8 byte integer */
   // using IDType = EmptyID;   /**< Type of ID for non-existent superdrop identity */
   [[no_unique_address]] IDType sdId;
