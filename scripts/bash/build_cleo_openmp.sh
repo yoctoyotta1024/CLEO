@@ -66,6 +66,6 @@ cmake -DCMAKE_CXX_COMPILER=${CXX} \
     ${kokkosflags} ${kokkosdevice} ${kokkoshost}
 
 # ensure these directories exist (it's a good idea for later use)
-mkdir -p ${path2build}bin
-mkdir -p ${path2build}share
+mkdir -p ${path2build}/bin
+mkdir -p ${path2build}/share
 ### ---------------------------------------------------- ###

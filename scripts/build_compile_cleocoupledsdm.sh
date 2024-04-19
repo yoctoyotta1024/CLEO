@@ -20,14 +20,10 @@ spack load cmake@3.23.1%gcc
 cleoenv=/work/mh1126/m300950/cleoenv
 
 buildtype=$1
-path2CLEO=${HOME}/CLEO/
-path2build=$2 # get from command line argument
+path2CLEO=${2:-${HOME}/CLEO}
+path2build=${3:-${path2CLEO}/build} # get from command line argument
 executables="cleocoupledsdm"
 
-if [ "${path2build}" == "" ]
-then
-  path2build=${HOME}/CLEO/build/
-fi
 ### ---------------------------------------------------- ###
 
 if [[ "${buildtype}" != "" && "${path2CLEO}" != "" && "${path2build}" != "" &&

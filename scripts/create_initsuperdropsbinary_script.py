@@ -41,7 +41,7 @@ isfigures = [True, True]
 gbxs2plt = "all" # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
 
 ### essential paths and filenames
-constsfile = path2CLEO+"libs/cleoconstants.hpp"
+constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 
