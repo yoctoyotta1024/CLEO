@@ -42,7 +42,7 @@ inputfiles:
   grid_filename : ./share/eurec4a1d_ddimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
-  type : totsupersfrombinary                                     # type of initialisation of super-droplets
+  type: frombinary                                               # type of initialisation of super-droplets
   initsupers_filename : ./share/eurec4a1d_ddimlessSDsinit.dat    # binary filename for initialisation of SDs
 
 ### Output Parameters ###

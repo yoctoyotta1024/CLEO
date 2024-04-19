@@ -54,7 +54,7 @@ void OptionalConfigParams::set_microphysics(const YAML::Node &config) {
 void OptionalConfigParams::set_initsupers(const YAML::Node &config) {
   const auto type = config["initsupers"]["type"].as<std::string>();
 
-  if (type == "totsupersfrombinary") {
+  if (type == "frombinary") {
     initsupersfrombinary.set_params(config);
     initsupersfrombinary.print_params();
   } else {
