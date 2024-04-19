@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -56,7 +56,7 @@ class GenSuperdrop {
    * coord1 and coord2 are set to 0.0.
    *
    * @param kk The index of the super-droplet in the initial
-   * data (0 <= kk < total number of superdrops).
+   * data (0 <= kk < total number of super-droplets).
    * @return An array containing the kk'th superdroplet's spatial
    * coordinates (coord3, coord1, coord2).
    */
@@ -71,7 +71,7 @@ class GenSuperdrop {
    * super-droplets have the same solute properties.
    *
    * @param kk The index of the super-droplet in the initial
-   * data (0 <= kk < total number of superdrops).
+   * data (0 <= kk < total number of super-droplets).
    * @return The attributes of the superdrop from index 'kk'.
    */
   SuperdropAttrs attrs_at(const unsigned int kk) const;

@@ -16,9 +16,9 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct for superdroplets' initial conditions for CLEO SDM (e.g. superdroplet attributes)
- * by reading binary file. InitAllSupersFromBinary instance can be used by InitConds
- * struct as SuperdropInitConds type.
+ * struct for reading in all super-droplets' initial conditions for CLEO SDM
+ * (e.g. superdroplet attributes) from a binary file. InitAllSupersFromBinary instance
+ * can be used by InitConds struct as SuperdropInitConds type.
  */
 
 #ifndef LIBS_INITIALISE_INIT_ALL_SUPERS_FROM_BINARY_HPP_
@@ -41,7 +41,7 @@ for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
 struct InitAllSupersFromBinary {
  private:
-  size_t maxnsupers; /**< total number of superdroplets (in kokkos view on device initially) */
+  size_t maxnsupers; /**< total number of super-droplets (in kokkos view on device initially) */
   std::filesystem::path initsupers_filename; /**< filename for super-droplets' initial conditons */
   unsigned int nspacedims; /**< number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D) */
 
