@@ -113,6 +113,8 @@ void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::No
   nspacedims = config["domain"]["nspacedims"].as<unsigned int>();
   if (node["initnsupers"]) {
     initnsupers = node["initnsupers"].as<size_t>();
+  } else {
+    initnsupers = config["domain"]["maxnsupers"];
   }
 }
 
