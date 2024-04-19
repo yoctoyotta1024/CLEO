@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -68,13 +68,14 @@ struct OptionalConfigParams {
   } condensation;
 
   /*** Super-Droplet Initialisation Parameters ***/
-  struct InitTotsupersFromBinaryParams {
+  struct InitSupersFromBinaryParams {
     using fspath = std::filesystem::path;
     void set_params(const YAML::Node& config);
     void print_params() const;
     fspath initsupers_filename = fspath();     /**< filename for initialisation of super-droplets */
     unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
-  } inittotsupersfrombinary;
+    size_t initnsupers = NaNVals::sizet();     /**< no. of super-droplets to initialise */
+  } initsupersfrombinary;
 
   /*** Coupled Dynamics Parameters ***/
   struct FromFileDynamicsParams {

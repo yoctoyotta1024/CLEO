@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: initsupers_frombinary.cpp
+ * File: inittotsupers_frombinary.cpp
  * Project: initialise
  * Created Date: Monday 30th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
