@@ -23,15 +23,7 @@
 
 #include "initialise/init_supers_from_binary.hpp"
 
-/* returns InitSupersData created by reading some data from a binary file and
-filling the rest with invalid super-droplets */
-InitSupersData InitSupersFromBinary::fetch_superdrops_from_file() const {
-  auto initdata = InitSupersData{};  // TODO(CB) WIP
-
-  return initdata
-}
-
 InitSupersData InitSupersFromBinary::fetch_invalid_superdrops_data(InitSupersData &initdata) const {
-  // tTODO(CB): WIP
+  // TODO(CB): WIP
   return initdata;
 }

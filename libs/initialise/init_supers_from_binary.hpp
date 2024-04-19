@@ -31,6 +31,7 @@
 #include <string_view>
 #include <vector>
 
+#include "./init_all_supers_from_binary.hpp"
 #include "./initialconditions.hpp"
 #include "./optional_config_params.hpp"
 #include "./readbinary.hpp"
@@ -48,7 +49,10 @@ struct InitSupersFromBinary {
 
   /* returns InitSupersData created by reading some data from a binary file and
   filling the rest with invalid super-droplets */
-  InitSupersData fetch_superdrops_from_file() const;
+  InitSupersData fetch_superdrops_from_file() const {
+    auto initsupers = InitAllSupersFromBinary(initnsupers, initsupers_filename, nspacedims);
+    return initsupers.fetch_data();
+  }
 
   InitSupersData fetch_invalid_superdrops_data(InitSupersData &initdata) const;
 
