@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,7 +60,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const unsigned
 
 inline InitialConditions auto create_initconds(const Config &config) {
   const InitTotsupersFromBinary initsupers(config.get_maxnsupers(),
-                                           config.get_inittotsupersfrombinary());
+                                           config.get_initsupersfrombinary());
   const InitGbxsCvode initgbxs(config.get_cvodedynamics());
 
   return InitConds(initsupers, initgbxs);
