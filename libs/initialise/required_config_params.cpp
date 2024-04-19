@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,32 +26,32 @@ RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_fi
   const YAML::Node config = YAML::LoadFile(std::string{config_filename});
 
   /* convert string to std::filesystem::path type */
-  auto fspath_from_yaml = [](YAML::Node& yaml, const std::string& key) {
-    return std::filesystem::path(yaml[key].as<std::string>());
+  auto fspath_from_yaml = [](YAML::Node& node, const std::string& key) {
+    return std::filesystem::path(node[key].as<std::string>());
   };
 
-  YAML::Node yaml = config["inputfiles"];
-  inputfiles.constants_filename = fspath_from_yaml(yaml, "constants_filename");
-  inputfiles.grid_filename = fspath_from_yaml(yaml, "grid_filename");
+  YAML::Node node = config["inputfiles"];
+  inputfiles.constants_filename = fspath_from_yaml(node, "constants_filename");
+  inputfiles.grid_filename = fspath_from_yaml(node, "grid_filename");
 
-  yaml = config["outputdata"];
-  outputdata.setup_filename = fspath_from_yaml(yaml, "setup_filename");
-  outputdata.stats_filename = fspath_from_yaml(yaml, "stats_filename");
-  outputdata.zarrbasedir = fspath_from_yaml(yaml, "zarrbasedir");
-  outputdata.maxchunk = yaml["maxchunk"].as<size_t>();
+  node = config["outputdata"];
+  outputdata.setup_filename = fspath_from_yaml(node, "setup_filename");
+  outputdata.stats_filename = fspath_from_yaml(node, "stats_filename");
+  outputdata.zarrbasedir = fspath_from_yaml(node, "zarrbasedir");
+  outputdata.maxchunk = node["maxchunk"].as<size_t>();
 
-  yaml = config["domain"];
-  domain.nspacedims = yaml["nspacedims"].as<unsigned int>();
-  domain.ngbxs = yaml["ngbxs"].as<size_t>();
-  domain.maxnsupers = yaml["maxnsupers"].as<size_t>();
+  node = config["domain"];
+  domain.nspacedims = node["nspacedims"].as<unsigned int>();
+  domain.ngbxs = node["ngbxs"].as<size_t>();
+  domain.maxnsupers = node["maxnsupers"].as<size_t>();
 
-  yaml = config["timesteps"];
-  timesteps.CONDTSTEP = yaml["CONDTSTEP"].as<double>();
-  timesteps.COLLTSTEP = yaml["COLLTSTEP"].as<double>();
-  timesteps.MOTIONTSTEP = yaml["MOTIONTSTEP"].as<double>();
-  timesteps.COUPLTSTEP = yaml["COUPLTSTEP"].as<double>();
-  timesteps.OBSTSTEP = yaml["OBSTSTEP"].as<double>();
-  timesteps.T_END = yaml["T_END"].as<double>();
+  node = config["timesteps"];
+  timesteps.CONDTSTEP = node["CONDTSTEP"].as<double>();
+  timesteps.COLLTSTEP = node["COLLTSTEP"].as<double>();
+  timesteps.MOTIONTSTEP = node["MOTIONTSTEP"].as<double>();
+  timesteps.COUPLTSTEP = node["COUPLTSTEP"].as<double>();
+  timesteps.OBSTSTEP = node["OBSTSTEP"].as<double>();
+  timesteps.T_END = node["T_END"].as<double>();
 
   print_params();
 }

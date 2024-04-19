@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -43,9 +43,9 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
 }
 
 void OptionalConfigParams::set_microphysics(const YAML::Node &config) {
-  const YAML::Node yaml = config["microphysics"];
+  const YAML::Node node = config["microphysics"];
 
-  if (yaml["condensation"]) {
+  if (node["condensation"]) {
     condensation.set_params(config);
     condensation.print_params();
   }
@@ -88,13 +88,13 @@ void OptionalConfigParams::set_boundary_conditions(const YAML::Node &config) {
 }
 
 void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &config) {
-  const YAML::Node yaml = config["microphysics"]["condensation"];
+  const YAML::Node node = config["microphysics"]["condensation"];
 
-  do_alter_thermo = yaml["do_alter_thermo"].as<bool>();
-  niters = yaml["niters"].as<unsigned int>();
-  SUBTSTEP = yaml["SUBTSTEP"].as<double>();
-  rtol = yaml["rtol"].as<double>();
-  atol = yaml["atol"].as<double>();
+  do_alter_thermo = node["do_alter_thermo"].as<bool>();
+  niters = node["niters"].as<unsigned int>();
+  SUBTSTEP = node["SUBTSTEP"].as<double>();
+  rtol = node["rtol"].as<double>();
+  atol = node["atol"].as<double>();
 }
 
 void OptionalConfigParams::CondensationParams::print_params() const {
@@ -105,11 +105,11 @@ void OptionalConfigParams::CondensationParams::print_params() const {
 }
 
 void OptionalConfigParams::InitTotsupersFromBinaryParams::set_params(const YAML::Node &config) {
-  const YAML::Node yaml = config["initsupers"];
+  const YAML::Node node = config["initsupers"];
 
-  assert((yaml["type"].as<std::string>() == "frombinary"));
+  assert((node["type"].as<std::string>() == "frombinary"));
 
-  initsupers_filename = std::filesystem::path(yaml["initsupers_filename"].as<std::string>());
+  initsupers_filename = std::filesystem::path(node["initsupers_filename"].as<std::string>());
   nspacedims = config["domain"]["nspacedims"].as<unsigned int>();
 }
 
@@ -120,13 +120,13 @@ void OptionalConfigParams::InitTotsupersFromBinaryParams::print_params() const {
 }
 
 void OptionalConfigParams::FromFileDynamicsParams::set_params(const YAML::Node &config) {
-  const YAML::Node yaml = config["coupled_dynamics"];
+  const YAML::Node node = config["coupled_dynamics"];
 
-  assert((yaml["type"].as<std::string>() == "fromfile"));
+  assert((node["type"].as<std::string>() == "fromfile"));
 
   /* convert string to std::filesystem::path type */
-  auto fspath_from_yaml = [&yaml](const std::string &key) {
-    return std::filesystem::path(yaml[key].as<std::string>());
+  auto fspath_from_yaml = [&node](const std::string &key) {
+    return std::filesystem::path(node[key].as<std::string>());
   };
 
   nspacedims = config["domain"]["nspacedims"].as<unsigned int>();
@@ -153,18 +153,18 @@ void OptionalConfigParams::FromFileDynamicsParams::print_params() const {
 }
 
 void OptionalConfigParams::CvodeDynamicsParams::set_params(const YAML::Node &config) {
-  const YAML::Node yaml = config["coupled_dynamics"];
+  const YAML::Node node = config["coupled_dynamics"];
 
-  assert((yaml["type"].as<std::string>() == "cvode"));
+  assert((node["type"].as<std::string>() == "cvode"));
 
   ngbxs = config["domain"]["ngbxs"].as<unsigned int>();
-  P_init = yaml["P_init"].as<double>();
-  TEMP_init = yaml["TEMP_init"].as<double>();
-  relh_init = yaml["relh_init"].as<double>();
-  W_avg = yaml["W_avg"].as<double>();
-  TAU_half = yaml["TAU_half"].as<double>();
-  rtol = yaml["rtol"].as<double>();
-  atol = yaml["atol"].as<double>();
+  P_init = node["P_init"].as<double>();
+  TEMP_init = node["TEMP_init"].as<double>();
+  relh_init = node["relh_init"].as<double>();
+  W_avg = node["W_avg"].as<double>();
+  TAU_half = node["TAU_half"].as<double>();
+  rtol = node["rtol"].as<double>();
+  atol = node["atol"].as<double>();
 }
 
 void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
@@ -176,10 +176,10 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::Node &config) {
-  const YAML::Node yaml = config["boundary_conditions"];
+  const YAML::Node node = config["boundary_conditions"];
 
-  COORD3LIM = yaml["COORD3LIM"].as<double>();
-  newnsupers = yaml["newnsupers"].as<size_t>();
+  COORD3LIM = node["COORD3LIM"].as<double>();
+  newnsupers = node["newnsupers"].as<size_t>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
