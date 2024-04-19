@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -104,7 +104,7 @@ class GenGridbox {
    * @tparam GbxMaps Type of the Gridbox Maps.
    * @param ii The index of the Gridbox.
    * @param gbxmaps The Gridbox Maps.
-   * @param totsupers The view of (all) super-droplets.
+   * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
    * @return The generated Gridbox.
    */
   template <GridboxMaps GbxMaps>
@@ -131,8 +131,8 @@ class GenGridbox {
    * @param team_member The host team member reference.
    * @param ii The index of the Gridbox.
    * @param gbxmaps The Gridbox Maps.
-   * @param totsupers The view of (all) super-droplets.
-   * @param h_totsupers The host mirror of (all) super-droplets.
+   * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
+   * @param h_totsupers The host mirror of all super-droplets (both in and out of bounds of domain).
    * @return The generated Gridbox.
    */
   template <GridboxMaps GbxMaps>
@@ -159,7 +159,7 @@ class GenGridbox {
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The Gridbox initial conditions.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  *
  * @return The view of initialised Gridboxes.
  */
@@ -185,7 +185,7 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gen The Gridbox generator.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  * @param h_gbxs The view of Gridboxes on the host.
  */
 template <GridboxMaps GbxMaps>
@@ -204,7 +204,7 @@ inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps, const GenGridbox &ge
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The initial conditions for the Gridboxes.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  *
  * @return The initialised view of Gridboxes.
  */
@@ -245,7 +245,7 @@ void print_gbxs(const viewh_constgbx gbxs);
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The Gridbox initial conditions.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  *
  * @return The view of initialised Gridboxes.
  */
@@ -278,7 +278,7 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The initial conditions for the Gridboxes.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  *
  * @return The initialised view of Gridboxes.
  */
@@ -318,7 +318,7 @@ inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gen The Gridbox generator.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  * @param h_gbxs The view of Gridboxes on the host.
  */
 template <GridboxMaps GbxMaps>

@@ -115,7 +115,7 @@ class RunCLEO {
    *
    * @param t_end End time for timestepping.
    * @param gbxs DualView of gridboxes.
-   * @param totsupers View of total superdroplets.
+   * @param totsupers View of all superdroplets (both in and out of bounds of domain).
    * @param genpool Random number generator pool.
    * @return 0 on success.
    */
@@ -162,9 +162,8 @@ class RunCLEO {
       gbxs.modify_host();
     }
 
-    const auto totsupers = gbxs.view_host()(0).domain_totsupers_readonly();
     gbxs.sync_device();
-    sdm.at_start_step(t_mdl, gbxs.view_device(), totsupers);
+    sdm.at_start_step(t_mdl, gbxs);
 
     return get_next_step(t_mdl);
   }
@@ -217,7 +216,7 @@ class RunCLEO {
    * @param t_mdl Current timestep of the coupled model.
    * @param t_next Next timestep of the coupled model.
    * @param gbxs DualView of gridboxes.
-   * @param totsupers View of total superdroplets.
+   * @param totsupers View of all superdrops (both in and out of bounds of domain).
    * @param genpool Random number generator pool.
    */
   void sdm_step(const unsigned int t_mdl, unsigned int t_next, dualview_gbx gbxs,
@@ -296,7 +295,7 @@ class RunCLEO {
    */
   int operator()(const InitialConditions auto &initconds, const unsigned int t_end) const {
     // create runtime objects
-    viewd_supers totsupers(create_supers(initconds.initsupers));  // all the superdrops in domain
+    viewd_supers totsupers(create_supers(initconds.initsupers));
     dualview_gbx gbxs(create_gbxs(sdm.gbxmaps, initconds.initgbxs, totsupers));
     GenRandomPool genpool(std::random_device {}());
 

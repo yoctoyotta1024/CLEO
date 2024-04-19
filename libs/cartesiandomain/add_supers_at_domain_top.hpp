@@ -66,6 +66,7 @@ struct AddSupersAtDomainTop {
         newnsupers(config.newnsupers),
         sdIdGen(std::make_shared<Superdrop::IDType::Gen>()) {}
 
+  /*_Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).*/
   void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
                   const viewd_supers totsupers) const;
 };

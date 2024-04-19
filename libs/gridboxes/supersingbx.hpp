@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,9 +34,10 @@ containing super-droplets occupying a given Gridbox
 (e.g. through std::span or Kokkos::subview) */
 struct SupersInGbx {
  private:
-  viewd_supers totsupers;  // reference to view of all superdrops (in total domain)
-  unsigned int idx;        // value of gbxindex which sdgbxindex of superdrops must match
-  kkpair_size_t refs;      // position in view of (first, last) superdrop that occupies gridbox
+  viewd_supers
+      totsupers; /**< reference to view of all superdrops (both in and out of bounds of domain) */
+  unsigned int idx;   /**< value of gbxindex which sdgbxindex of superdrops must match */
+  kkpair_size_t refs; /**< position in view of (first, last) superdrop that occupies gridbox */
 
   template <typename Pred>
   bool is_pred(const Pred pred) const;
@@ -52,17 +53,15 @@ struct SupersInGbx {
   SupersInGbx() = default;   // Kokkos requirement for a (dual)View
   ~SupersInGbx() = default;  // Kokkos requirement for a (dual)View
 
-  /* assumes supers view (or subview) already
-  sorted via sdgbxindex. Constructor works
-  outside of parallelism */
+  /* assumes supers view (or subview) already sorted via sdgbxindex. Constructor
+  works outside of parallelism */
   SupersInGbx(const viewd_supers i_totsupers, const unsigned int i_idx)
       : totsupers(i_totsupers), idx(i_idx), refs({0, 0}) {
     set_refs();
   }
 
-  /* assumes supers view (or subview) already sorted
-  via sdgbxindex. Constructor works within parallel
-  team policy on host given member 'team_member' */
+  /* assumes supers view (or subview) already sorted via sdgbxindex. Constructor
+  works within parallel team policy on host given member 'team_member' */
   SupersInGbx(const viewd_supers i_totsupers, const unsigned int i_idx, const kkpair_size_t i_refs)
       : totsupers(i_totsupers), idx(i_idx), refs(i_refs) {}
 
