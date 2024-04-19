@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -190,7 +190,7 @@ struct SdIdFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
                   Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
-    auto sdid = static_cast<uint32_t>(totsupers(kk).sdId.value);
+    auto sdid = static_cast<uint32_t>(totsupers(kk).sdId.get_value());
     d_data(kk) = sdid;
   }
 };

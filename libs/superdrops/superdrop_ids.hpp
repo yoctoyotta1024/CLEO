@@ -25,11 +25,15 @@
 #include <Kokkos_Core.hpp>
 #include <ostream>
 
+#include "../cleoconstants.hpp"
+
 /**
  * @brief Struct containing value of SD identity (8 bytes integer).
  */
 struct IntID {
   size_t value; /**< Value of the SD identity. */
+
+  size_t get_value() const { return value; }
 
   /**
    * @brief Class for generating unique SD identity.
@@ -77,6 +81,8 @@ struct IntID {
  * @brief Struct for non-existent (no memory) SD identity.
  */
 struct EmptyID {
+  size_t get_value() const { return LIMITVALUES::uint64_t_max; }
+
   /**
    * @brief Class for generating empty SD identity.
    */

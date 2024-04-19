@@ -56,7 +56,7 @@ void print_supers(const viewd_constsupers supers) {
   Kokkos::deep_copy(h_supers, supers);
 
   for (size_t kk(0); kk < h_supers.extent(0); ++kk) {
-    std::cout << "SD: " << h_supers(kk).sdId.value << " [gbx, (coords), (attrs)]: [ "
+    std::cout << "SD: " << h_supers(kk).sdId << " [gbx, (coords), (attrs)]: [ "
               << h_supers(kk).get_sdgbxindex() << ", (" << h_supers(kk).get_coord3() << ", "
               << h_supers(kk).get_coord1() << ", " << h_supers(kk).get_coord2() << "), ("
               << h_supers(kk).is_solute() << ", " << h_supers(kk).get_radius() << ", "
