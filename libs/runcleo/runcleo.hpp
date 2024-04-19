@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,11 +36,11 @@
 #include "./couplingcomms.hpp"
 #include "./creategbxs.hpp"
 #include "./createsupers.hpp"
-#include "./initialconditions.hpp"
 #include "./sdmmethods.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
+#include "initialise/initialconditions.hpp"
 #include "observers/observers.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"

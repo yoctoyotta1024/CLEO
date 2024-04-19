@@ -3,31 +3,44 @@
  *
  * ----- CLEO -----
  * File: initialconditions.hpp
- * Project: runcleo
+ * Project: initialise
  * Created Date: Tuesday 17th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * concept for generator of initial conditions for
- * super-droplets and Gridboxes in RunCLEO
+ * structures and concept for generator of initial conditions for super-droplets and Gridboxes
+ * in RunCLEO.
  */
 
-#ifndef LIBS_RUNCLEO_INITIALCONDITIONS_HPP_
-#define LIBS_RUNCLEO_INITIALCONDITIONS_HPP_
+#ifndef LIBS_INITIALISE_INITIALCONDITIONS_HPP_
+#define LIBS_INITIALISE_INITIALCONDITIONS_HPP_
 
+#include <array>
 #include <concepts>
 #include <utility>
 #include <vector>
 
 #include "../kokkosaliases.hpp"
-#include "initialise/initconds.hpp"
+#include "superdrops/superdrop_attrs.hpp"
+
+/* struct required to generate initial super-droplets (see GenSuperdrop) */
+struct InitSupersData {
+  std::array<SoluteProperties, 1> solutes;
+  std::vector<unsigned int> sdgbxindexes;
+  std::vector<double> coord3s;
+  std::vector<double> coord1s;
+  std::vector<double> coord2s;
+  std::vector<double> radii;
+  std::vector<double> msols;
+  std::vector<uint64_t> xis;
+};
 
 /**
  * @concept InitialConditions
@@ -57,4 +70,15 @@ concept InitialConditions =
       { ic.initgbxs.vvel() } -> std::convertible_to<std::vector<std::pair<double, double>>>;
     };
 
-#endif  // LIBS_RUNCLEO_INITIALCONDITIONS_HPP_
+/* helpful struct satisyfing InitialConditions concept for functions to generate
+initial conditions for CLEO */
+template <typename SuperdropInitConds, typename GbxInitConds>
+struct InitConds {
+  SuperdropInitConds initsupers;  // initial conditions for creating superdroplets
+  GbxInitConds initgbxs;          // initial conditions for creating gridboxes
+
+  InitConds(const SuperdropInitConds initsupers, const GbxInitConds initgbxs)
+      : initsupers(initsupers), initgbxs(initgbxs) {}
+};
+
+#endif  // LIBS_INITIALISE_INITIALCONDITIONS_HPP_

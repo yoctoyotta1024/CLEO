@@ -31,7 +31,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/sortsupers.hpp"
-#include "initialise/initconds.hpp"
+#include "initialise/initialconditions.hpp"
 #include "superdrops/superdrop.hpp"
 
 /**

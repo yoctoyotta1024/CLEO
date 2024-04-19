@@ -31,7 +31,7 @@
 #include <string_view>
 #include <vector>
 
-#include "./initconds.hpp"
+#include "./initialconditions.hpp"
 #include "./optional_config_params.hpp"
 #include "./readbinary.hpp"
 #include "superdrops/superdrop_attrs.hpp"
