@@ -56,6 +56,17 @@ struct InitSupersFromBinary {
     assert((maxnsupers >= initnsupers) &&
            "cannot initialise more than the total number of super-droplets")
   }
+
+  auto get_maxnsupers() const { return maxnsupers; }
+
+  auto get_nspacedims() const { return nspacedims; }
+
+  /* return InitSupersData created by reading some data from a binary file and
+  filling the rest with invalid super-droplets */
+  void fetch_data(InitSupersData &initdata) const {
+    fetch_superdrops_from_file();
+    fetch_invalid_superdrops_data();
+  }
 };
 
 #endif  //  LIBS_INITIALISE_INIT_SUPERS_FROM_BINARY_HPP_

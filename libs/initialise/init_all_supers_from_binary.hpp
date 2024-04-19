@@ -71,20 +71,30 @@ struct InitAllSupersFromBinary {
   /**
    * @brief Constructor for InitAllSupersFromBinary.
    *
+   * @param maxnsupers The expected initial total number of super-droplets
+   * @param config Configuration for member variables.
+   *
+   */
+  InitAllSupersFromBinary(const size_t maxnsupers,
+                          const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
+      : InitAllSupersFromBinary(maxnsupers, config.initsupers_filename, config.nspacedims) {}
+
+  /**
+   * @brief Constructor for InitAllSupersFromBinary.
+   *
    * This function checks if there is enough data in the initialisation files for super-droplets
    * in order to initialise "maxnsupers" superdroplets. If the initialisation data is the wrong
    * size, it throws an exception with the appropriate error message.
    *
    * @param maxnsupers The expected initial total number of super-droplets
-   * @param config Configuration for member variables.
+   * @param initsupers_filename filename for super-droplets' initial conditons
+   * @param nspacedims Number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
    *
    * @throws std::invalid_argument If the number of super-droplets is wrong.
    */
-  InitAllSupersFromBinary(const size_t maxnsupers,
-                          const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
-      : maxnsupers(maxnsupers),
-        initsupers_filename(config.initsupers_filename),
-        nspacedims(config.nspacedims) {
+  InitAllSupersFromBinary(const size_t maxnsupers, const std::filesystem::path initsupers_filename,
+                          const unsigned int nspacedims)
+      : maxnsupers(maxnsupers), initsupers_filename(initsupers_filename), nspacedims(nspacedims) {
     const auto size = fetch_data_size();
 
     if (maxnsupers < size) {
