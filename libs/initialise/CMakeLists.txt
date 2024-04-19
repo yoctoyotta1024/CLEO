@@ -13,7 +13,7 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 # Add executables and create library target
 set(SOURCES
 "copyfiles2txt.cpp"
-"gbxbounds_frombinary.cpp"
+"gbx_bounds_from_binary.cpp"
 "initsupers_frombinary.cpp"
 "optional_config_params.cpp"
 "readbinary.cpp"

@@ -37,7 +37,7 @@
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
-#include "initialise/initgbxs_null.hpp"
+#include "initialise/initgbxsnull.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers/gbxindex_observer.hpp"
 #include "observers/massmoments_observer.hpp"
