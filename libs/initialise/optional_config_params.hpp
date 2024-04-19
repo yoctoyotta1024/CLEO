@@ -74,7 +74,7 @@ struct OptionalConfigParams {
     void print_params() const;
     fspath initsupers_filename = fspath();     /**< filename for initialisation of super-droplets */
     unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
-    size_t initnsupers = NaNVals::sizet();     /**< no. of super-droplets to initialise */
+    size_t initnsupers = NaNVals::sizet();     /**< initial no. of super-droplets to initialise */
   } initsupersfrombinary;
 
   /*** Coupled Dynamics Parameters ***/

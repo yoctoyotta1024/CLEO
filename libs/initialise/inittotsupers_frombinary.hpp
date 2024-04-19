@@ -41,9 +41,9 @@ for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
 struct InitTotsupersFromBinary {
  private:
-  size_t maxnsupers;  // total number of superdroplets (in kokkos view on device initially)
-  std::filesystem::path initsupers_filename;  // filename for some of superdrops' initial conditons
-  unsigned int nspacedims;  // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
+  size_t maxnsupers; /**< total number of superdroplets (in kokkos view on device initially) */
+  std::filesystem::path initsupers_filename; /**< filename for super-droplets' initial conditons */
+  unsigned int nspacedims; /**< number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D) */
 
   /* sets initial data for solutes as
   a single SoluteProprties instance */
