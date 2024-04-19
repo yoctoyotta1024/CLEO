@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: initsupers_frombinary.hpp
+ * File: inittotsupers_frombinary.hpp
  * Project: initialise
  * Created Date: Tuesday 17th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,8 +21,8 @@
  * struct as SuperdropInitConds type.
  */
 
-#ifndef LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
-#define LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
+#ifndef LIBS_INITIALISE_INITTOTSUPERS_FROMBINARY_HPP_
+#define LIBS_INITIALISE_INITTOTSUPERS_FROMBINARY_HPP_
 
 #include <filesystem>
 #include <fstream>
@@ -116,4 +116,4 @@ struct InitTotsupersFromBinary {
   }
 };
 
-#endif  // LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
+#endif  // LIBS_INITIALISE_INITTOTSUPERS_FROMBINARY_HPP_
