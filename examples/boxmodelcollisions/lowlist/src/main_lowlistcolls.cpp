@@ -36,8 +36,8 @@
 #include "coupldyn_null/nulldyncomms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
+#include "initialise/init_all_supers_from_binary.hpp"
 #include "initialise/initgbxs_null.hpp"
-#include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers/gbxindex_observer.hpp"
 #include "observers/observers.hpp"
@@ -57,7 +57,7 @@
 #include "zarr/fsstore.hpp"
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitTotsupersFromBinary initsupers(config.get_maxnsupers(),
+  const InitAllSupersFromBinary initsupers(config.get_maxnsupers(),
                                            config.get_initsupersfrombinary());
   const InitGbxsNull initgbxs(config.get_ngbxs());
 

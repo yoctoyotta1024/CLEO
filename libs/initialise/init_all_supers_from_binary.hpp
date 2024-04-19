@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: inittotsupers_frombinary.hpp
+ * File: init_all_supers_from_binary.hpp
  * Project: initialise
  * Created Date: Tuesday 17th October 2023
  * Author: Clara Bayley (CB)
@@ -17,12 +17,12 @@
  * -----
  * File Description:
  * struct for superdroplets' initial conditions for CLEO SDM (e.g. superdroplet attributes)
- * by reading binary file. InitTotsupersFromBinary instance can be used by InitConds
+ * by reading binary file. InitAllSupersFromBinary instance can be used by InitConds
  * struct as SuperdropInitConds type.
  */
 
-#ifndef LIBS_INITIALISE_INITTOTSUPERS_FROMBINARY_HPP_
-#define LIBS_INITIALISE_INITTOTSUPERS_FROMBINARY_HPP_
+#ifndef LIBS_INITIALISE_INIT_ALL_SUPERS_FROM_BINARY_HPP_
+#define LIBS_INITIALISE_INIT_ALL_SUPERS_FROM_BINARY_HPP_
 
 #include <filesystem>
 #include <fstream>
@@ -39,7 +39,7 @@
 /* struct containing functions which return data
 for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
-struct InitTotsupersFromBinary {
+struct InitAllSupersFromBinary {
  private:
   size_t maxnsupers; /**< total number of superdroplets (in kokkos view on device initially) */
   std::filesystem::path initsupers_filename; /**< filename for super-droplets' initial conditons */
@@ -69,7 +69,7 @@ struct InitTotsupersFromBinary {
 
  public:
   /**
-   * @brief Constructor for InitTotsupersFromBinary.
+   * @brief Constructor for InitAllSupersFromBinary.
    *
    * This function checks if there is enough data in the initialisation files for super-droplets
    * in order to initialise "maxnsupers" superdroplets. If the initialisation data is the wrong
@@ -80,8 +80,8 @@ struct InitTotsupersFromBinary {
    *
    * @throws std::invalid_argument If the number of super-droplets is wrong.
    */
-  explicit InitTotsupersFromBinary(
-      const size_t maxnsupers, const OptionalConfigParams::InitTotsupersFromBinaryParams &config)
+  explicit InitAllSupersFromBinary(
+      const size_t maxnsupers, const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
       : maxnsupers(maxnsupers),
         initsupers_filename(config.initsupers_filename),
         nspacedims(config.nspacedims) {
@@ -116,4 +116,4 @@ struct InitTotsupersFromBinary {
   }
 };
 
-#endif  // LIBS_INITIALISE_INITTOTSUPERS_FROMBINARY_HPP_
+#endif  // LIBS_INITIALISE_INIT_ALL_SUPERS_FROM_BINARY_HPP_
