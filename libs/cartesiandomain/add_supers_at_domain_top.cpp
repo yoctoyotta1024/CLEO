@@ -22,6 +22,46 @@
 
 #include "cartesiandomain/add_supers_at_domain_top.hpp"
 
+void AddSupersAtDomainTop::operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
+                                      const viewd_supers totsupers) const {
+  const size_t ngbxs(d_gbxs.extent(0));
+
+  bool is_supers_added = false;
+  for (size_t ii(0); ii < ngbxs; ++ii) {  // TODO(CB) parallelise?
+    auto &gbx(d_gbxs(ii));
+    const auto bounds = gbxmaps.coord3bounds(gbx.get_gbxindex());
+    if (bounds.second > coord3lim) {
+      remove_supers_from_gridbox(gbx);
+      add_supers_for_gridbox(gbxmaps, gbx, totsupers);
+      is_supers_added = true;
+    }
+  }
+
+  if (is_supers_added) {  // resort totsupers view and set gbx references
+    move_supers_between_gridboxes(d_gbxs, totsupers);
+  }
+}
+
+/* (re)sorting supers based on their gbxindexes and then updating the span for each
+gridbox accordingly.
+Kokkos::parallel_for([...]) (on host) is equivalent to:
+for (size_t ii(0); ii < ngbxs; ++ii){[...]}
+when in serial */
+void AddSupersAtDomainTop::move_supers_between_gridboxes(const viewd_gbx d_gbxs,
+                                                         const viewd_supers totsupers) const {
+  sort_supers(totsupers);
+
+  const size_t ngbxs(d_gbxs.extent(0));
+  Kokkos::parallel_for(
+      "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
+      KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+        const int ii = team_member.league_rank();
+
+        auto &gbx(d_gbxs(ii));
+        gbx.supersingbx.set_refs(team_member);
+      });
+}
+
 /* set super-droplet sdgbxindex to out of bounds value */
 void AddSupersAtDomainTop::remove_supers_from_gridbox(const Gridbox &gbx) const {
   const auto supers = gbx.supersingbx();
@@ -65,44 +105,4 @@ SuperdropAttrs AddSupersAtDomainTop::create_superdrop_attrs() const {
   const auto solute = SoluteProperties{};
 
   return SuperdropAttrs(solute, xi, radius, msol);
-}
-
-/* (re)sorting supers based on their gbxindexes and then updating the span for each
-gridbox accordingly.
-Kokkos::parallel_for([...]) (on host) is equivalent to:
-for (size_t ii(0); ii < ngbxs; ++ii){[...]}
-when in serial */
-void AddSupersAtDomainTop::move_supers_between_gridboxes(const viewd_gbx d_gbxs,
-                                                         const viewd_supers totsupers) const {
-  sort_supers(totsupers);
-
-  const size_t ngbxs(d_gbxs.extent(0));
-  Kokkos::parallel_for(
-      "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
-      KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-        const int ii = team_member.league_rank();
-
-        auto &gbx(d_gbxs(ii));
-        gbx.supersingbx.set_refs(team_member);
-      });
-}
-
-void AddSupersAtDomainTop::operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                                      const viewd_supers totsupers) const {
-  const size_t ngbxs(d_gbxs.extent(0));
-
-  bool is_supers_added = false;
-  for (size_t ii(0); ii < ngbxs; ++ii) {  // TODO(CB) parallelise?
-    auto &gbx(d_gbxs(ii));
-    const auto bounds = gbxmaps.coord3bounds(gbx.get_gbxindex());
-    if (bounds.second > coord3lim) {
-      remove_supers_from_gridbox(gbx);
-      add_supers_for_gridbox(gbxmaps, gbx, totsupers);
-      is_supers_added = true;
-    }
-  }
-
-  if (is_supers_added) {  // resort totsupers view and set gbx references
-    move_supers_between_gridboxes(d_gbxs, totsupers);
-  }
 }
