@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,6 +30,7 @@ void set_maps_ndims(const std::vector<size_t> &ndims, CartesianMaps &gbxmaps);
 
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
 
+/* set gbxindex to out of bounds value */
 void set_outofbounds(CartesianMaps &gbxmaps);
 
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
@@ -139,7 +140,7 @@ void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps
   gbxmaps.set_gbxvolume(gfb.gbxvol(idx));
 }
 
-/* sets (infinite) coordinate bounds for case
+/* sets value for coordinate bounds for case
 when outofbounds gbxidx searches map */
 void set_outofbounds(CartesianMaps &gbxmaps) {
   const auto idx = (unsigned int)outofbounds_gbxindex();

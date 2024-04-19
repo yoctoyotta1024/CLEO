@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,6 +42,7 @@ struct AddSupersAtDomainTop {
   std::shared_ptr<Superdrop::IDType::Gen>
       sdIdGen; /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
 
+  /* set super-droplet sdgbxindex to out of bounds value */
   void remove_supers_from_gridbox(const Gridbox &gbx) const {
     const auto supers = gbx.supersingbx();
     for (size_t kk(0); kk < supers.extent(0); ++kk) {
