@@ -53,7 +53,7 @@ void InitAllSupersFromBinary::initdata_for_sdIds(InitSupersData &initdata) const
   auto sdIdgen = Superdrop::IDType::Gen();
 
   for (size_t kk(0); kk < maxnsupers; ++kk) {
-    initdata.sdIds.push_back(sdIdGen.next());
+    initdata.sdIds.push_back(sdIdgen.next());
   }
 }
 

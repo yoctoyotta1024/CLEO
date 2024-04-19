@@ -36,7 +36,7 @@ std::vector<Superdrop::IDType> InitSupersFromBinary::sdIds_for_uninitialised_sup
 
   auto sdIds = std::vector<Superdrop::IDType>();
   for (size_t kk(0); kk < size; ++kk) {
-    sdIds.push_back(sdIdGen.next());
+    sdIds.push_back(sdIdgen.next());
   }
 
   return sdIds;

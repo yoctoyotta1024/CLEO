@@ -46,7 +46,7 @@ struct IntID {
      * @brief Constructor for ID generation starting at value = id + 1.
      *
      */
-    explicit Gen(const IntID id) : _id(id.value) {}
+    explicit Gen(const IntID id) : _id(id.value + 1) {}
 
     /**
      * @brief Generate the next SD identity.
