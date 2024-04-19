@@ -23,6 +23,25 @@
 
 #include "initialise/init_all_supers_from_binary.hpp"
 
+/* check all the vectors in the initdata struct all have sizes consistent with one another
+and with maxnsupers. Include coords data in check if nspacedims > 0 */
+void check_initdata_sizes(const InitSupersData &in, const size_t maxnsupers,
+                          const size_t nspacedims) {
+  std::vector<size_t> sizes(
+      {maxnsupers, in.sdgbxindexes.size(), in.xis.size(), in.radii.size(), in.msols.size()});
+
+  switch (nspacedims) {
+    case 3:  // 3-D model
+      sizes.push_back(in.coord2s.size());
+    case 2:  // 3-D or 2-D model
+      sizes.push_back(in.coord1s.size());
+    case 1:  // 3-D, 2-D or 1-D model
+      sizes.push_back(in.coord3s.size());
+  }
+
+  check_vectorsizes(sizes);
+}
+
 /* sets initial data for solutes as
 a single SoluteProprties instance */
 void InitAllSupersFromBinary::initdata_for_solutes(InitSupersData &initdata) const {
@@ -39,24 +58,6 @@ void InitAllSupersFromBinary::initdata_from_binary(InitSupersData &initdata) con
   read_initdata_binary(initdata, file, meta);
 
   file.close();
-}
-
-/* check all the vectors in the initdata struct all have sizes consistent with one another
-and with maxnsupers. Include coords data in check if nspacedims > 0 */
-void InitAllSupersFromBinary::check_initdata_sizes(const InitSupersData &in) const {
-  std::vector<size_t> sizes(
-      {maxnsupers, in.sdgbxindexes.size(), in.xis.size(), in.radii.size(), in.msols.size()});
-
-  switch (nspacedims) {
-    case 3:  // 3-D model
-      sizes.push_back(in.coord2s.size());
-    case 2:  // 3-D or 2-D model
-      sizes.push_back(in.coord1s.size());
-    case 1:  // 3-D, 2-D or 1-D model
-      sizes.push_back(in.coord3s.size());
-  }
-
-  check_vectorsizes(sizes);
 }
 
 /* copy data for vectors from binary file to initdata struct */

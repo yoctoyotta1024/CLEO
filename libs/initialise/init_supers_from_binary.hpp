@@ -77,7 +77,7 @@ struct InitSupersFromBinary {
   InitSupersData fetch_data() const {
     auto initdata = fetch_superdrops_from_file();
     initdata = fetch_invalid_superdrops_data(initdata);
-    check_initdata_sizes(initdata);
+    check_initdata_sizes(initdata, maxnsupers, nspacedims);
     return initdata;
   }
 };

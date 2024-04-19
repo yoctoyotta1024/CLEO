@@ -37,6 +37,11 @@
 #include "./readbinary.hpp"
 #include "superdrops/superdrop_attrs.hpp"
 
+/* check all the vectors in the initdata struct all have sizes consistent with one another
+and with maxnsupers. Include coords data in check if nspacedims > 0 */
+void check_initdata_sizes(const InitSupersData &in, const size_t maxnsupers,
+                          const size_t nspacedims);
+
 /* struct containing functions which return data
 for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
@@ -57,10 +62,6 @@ struct InitAllSupersFromBinary {
   /* copy data for vectors from binary file to initdata struct */
   void read_initdata_binary(InitSupersData &initdata, std::ifstream &file,
                             const std::vector<VarMetadata> &meta) const;
-
-  /* check all the vectors in the initdata struct all have sizes consistent with one another
-  and with maxnsupers. Include coords data in check if nspacedims > 0 */
-  void check_initdata_sizes(const InitSupersData &initdata) const;
 
   /* data size returned is number of variables as
   declared by the metadata for the first variable
@@ -129,7 +130,7 @@ struct InitAllSupersFromBinary {
 
     initdata_for_solutes(initdata);
     initdata_from_binary(initdata);
-    check_initdata_sizes(initdata);
+    check_initdata_sizes(initdata, maxnsupers, nspacedims);
 
     return initdata;
   }
