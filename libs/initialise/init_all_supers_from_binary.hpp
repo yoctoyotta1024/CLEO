@@ -80,8 +80,8 @@ struct InitAllSupersFromBinary {
    *
    * @throws std::invalid_argument If the number of super-droplets is wrong.
    */
-  explicit InitAllSupersFromBinary(
-      const size_t maxnsupers, const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
+  InitAllSupersFromBinary(const size_t maxnsupers,
+                          const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
       : maxnsupers(maxnsupers),
         initsupers_filename(config.initsupers_filename),
         nspacedims(config.nspacedims) {
