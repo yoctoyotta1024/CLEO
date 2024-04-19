@@ -30,9 +30,11 @@
 
 #include "../cleoconstants.hpp"
 
-/* value to set sdgbxindex to indicate (invalid) super-droplet
-is out of bounds i.e. out of domain */
-KOKKOS_INLINE_FUNCTION unsigned int outofbounds_gbxindex() { return LIMITVALUES::uintmax; }
+/* value to set sdgbxindex to indicate super-droplet
+is out of bounds i.e. out of domain / invalid */
+KOKKOS_INLINE_FUNCTION unsigned int outofbounds_gbxindex() {
+  return LIMITVALUES::uintmax;
+}  // TODO(CB): move to its own constant
 
 /* returns true if gbxindex for gridbox is at/beyond a
 boundary of cartesian domain, given neighbouring indexes

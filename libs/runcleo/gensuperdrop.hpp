@@ -29,8 +29,6 @@
 #include "../kokkosaliases.hpp"
 #include "initialise/initialconditions.hpp"
 #include "superdrops/superdrop.hpp"
-#include "superdrops/superdrop_attrs.hpp"
-#include "superdrops/superdrop_ids.hpp"
 
 /**
  * @brief Struct that holds data for the initial conditions of super-droplets.
@@ -41,8 +39,6 @@
 class GenSuperdrop {
  private:
   unsigned int nspacedims; /**< Number of spatial dimensions. */
-  std::shared_ptr<Superdrop::IDType::Gen> sdIdGen;
-  /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
   InitSupersData initdata; /**< instance of InitSupersData for initialising superdrops. */
 
   /**
@@ -86,9 +82,7 @@ class GenSuperdrop {
    */
   template <typename SuperdropInitConds>
   explicit GenSuperdrop(const SuperdropInitConds &sdic)
-      : nspacedims(sdic.get_nspacedims()),
-        sdIdGen(std::make_shared<Superdrop::IDType::Gen>()),
-        initdata(sdic.fetch_data()) {}
+      : nspacedims(sdic.get_nspacedims()), initdata(sdic.fetch_data()) {}
 
   /**
    * @brief Generate a super-droplet using initial data for the kk'th superdrop.

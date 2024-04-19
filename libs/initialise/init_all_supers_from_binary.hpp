@@ -35,7 +35,7 @@
 #include "./initialconditions.hpp"
 #include "./optional_config_params.hpp"
 #include "./readbinary.hpp"
-#include "superdrops/superdrop_attrs.hpp"
+#include "superdrops/superdrop.hpp"
 
 /* check all the vectors in the initdata struct all have sizes consistent with one another
 and with maxnsupers. Include coords data in check if nspacedims > 0 */
@@ -47,13 +47,16 @@ for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
 struct InitAllSupersFromBinary {
  private:
-  size_t maxnsupers; /**< total number of super-droplets (in kokkos view on device initially) */
+  size_t maxnsupers; /**< total number of super-droplets (in kokkos view on device) */
   std::filesystem::path initsupers_filename; /**< filename for super-droplets' initial conditons */
   unsigned int nspacedims; /**< number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D) */
 
   /* sets initial data for solutes as
   a single SoluteProprties instance */
   void initdata_for_solutes(InitSupersData &initdata) const;
+
+  /* sets initial data for sdIds using its generator */
+  void initdata_for_sdIds(InitSupersData &initdata) const;
 
   /* sets initial data in initdata using data read
   from a binary file called initsupers_filename */
@@ -129,6 +132,7 @@ struct InitAllSupersFromBinary {
     auto initdata = InitSupersData{};
 
     initdata_for_solutes(initdata);
+    initdata_for_sdIds(initdata);
     initdata_from_binary(initdata);
     check_initdata_sizes(initdata, maxnsupers, nspacedims);
 

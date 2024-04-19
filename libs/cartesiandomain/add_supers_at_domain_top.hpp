@@ -32,8 +32,6 @@
 #include "gridboxes/sortsupers.hpp"
 #include "initialise/optional_config_params.hpp"
 #include "superdrops/superdrop.hpp"
-#include "superdrops/superdrop_attrs.hpp"
-#include "superdrops/superdrop_ids.hpp"
 
 struct AddSupersAtDomainTop {
  private:

@@ -29,19 +29,36 @@ inline std::vector<T> nan_vector(const size_t size) {
   return std::vector<T>(size, nanValue);
 }
 
-InitSupersData InitSupersFromBinary::fetch_invalid_superdrops_data(InitSupersData &initdata) const {
+/* sets sdIds for un-initialised superdrops' using an sdId's generator starting from start_id */
+std::vector<Superdrop::IDType> InitSupersFromBinary::sdIds_for_uninitialised_superdrops(
+    const size_t size, const Superdrop::IDType start_id) const {
+  auto sdIdgen = Superdrop::IDType::Gen(start_id);
+
+  auto sdIds = std::vector<Superdrop::IDType>();
+  for (size_t kk(0); kk < size; ++kk) {
+    sdIds.push_back(sdIdGen.next());
+  }
+
+  return sdIds;
+}
+
+/* adds data for un-initialised (and out of bounds) superdrops into initdata so that initial
+conditions exist for maxnsupers number of superdrops in total */
+InitSupersData InitSupersFromBinary::add_uninitialised_superdrops_data(
+    InitSupersData &initdata) const {
   const auto size = maxnsupers - initdata.sdgbxindexes.size();
 
-  const auto sdgbxindexes = nan_vector<unsigned int>(size);
+  const auto sdgbxindexes = std::vector<unsigned int>(size, LIMITVALUES::uintmax);  // out of bounds
   const auto coord3s = nan_vector<double>(size);
   const auto coord1s = nan_vector<double>(size);
   const auto coord2s = nan_vector<double>(size);
   const auto radii = nan_vector<double>(size);
   const auto msols = nan_vector<double>(size);
   const auto xis = nan_vector<uint64_t>(size);
+  const auto sdIds = sdIds_for_uninitialised_superdrops(size, initdata.sdIds.back());
 
-  const auto nandata =
-      InitSupersData{initdata.solutes, sdgbxindexes, coord3s, coord1s, coord2s, radii, msols, xis};
+  const auto nandata = InitSupersData{
+      initdata.solutes, sdgbxindexes, coord3s, coord1s, coord2s, radii, msols, xis, sdIds};
 
   return initdata + nandata;
 }

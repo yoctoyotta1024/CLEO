@@ -33,28 +33,35 @@
 #include "./initialconditions.hpp"
 #include "./optional_config_params.hpp"
 #include "./readbinary.hpp"
-#include "superdrops/superdrop_attrs.hpp"
+#include "superdrops/superdrop.hpp"
 
-/* struct containing functions which return data
-for the initial conditions needed to create
+/* struct containing functions which return data for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
 struct InitSupersFromBinary {
  private:
-  size_t maxnsupers;  /**< total number of super-droplets (in kokkos view on device initially) */
+  size_t maxnsupers;  /**< total number of super-droplets (in kokkos view on device) */
   size_t initnsupers; /**< initial no. of super-droplets to initialise */
   std::filesystem::path initsupers_filename; /**< filename for super-droplets' initial conditons */
   unsigned int nspacedims; /**< number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D) */
 
   /* returns InitSupersData created by reading some data from a binary file and
-  filling the rest with invalid super-droplets */
+  filling the rest with un-initialised super-droplets */
   InitSupersData fetch_superdrops_from_file() const {
     auto initsupers = InitAllSupersFromBinary(initnsupers, initsupers_filename, nspacedims);
     return initsupers.fetch_data();
   }
 
-  InitSupersData fetch_invalid_superdrops_data(InitSupersData &initdata) const;
+  /* adds data for un-initialised (and out of bounds) superdrops into initdata so that initial
+  conditions exist for maxnsupers number of superdrops in total */
+  InitSupersData add_uninitialised_superdrops_data(InitSupersData &initdata) const;
+
+  /* sets sdIds for un-initialised superdrops' using an sdId's generator */
+  std::vector<Superdrop::IDType> sdIds_for_uninitialised_superdrops(
+      const size_t size, const Superdrop::IDType start_id) const;
 
  public:
+  /* constructor ensures the number of super-droplets to intialise is >= maxiumum number of
+   * superdrops*/
   explicit InitSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams &config)
       : maxnsupers(config.maxnsupers),
         initnsupers(config.initnsupers),
@@ -71,12 +78,12 @@ struct InitSupersFromBinary {
 
   auto get_nspacedims() const { return nspacedims; }
 
-  /* return InitSupersData created by reading some data from a binary file and creating a
-  SoluteProperties struct. Fills the rest of the data with invalid (out of bounds) super-droplets.
-  Also checks that the data created has the expected sizes. */
+  /* return InitSupersData created by reading data from a binary file to initialise "initnsupers"
+  superdrops and then fills the rest of "maxnsupers" with un-initialised (and out of bounds)
+  super-droplets. Also checks that the data created has the expected sizes. */
   InitSupersData fetch_data() const {
     auto initdata = fetch_superdrops_from_file();
-    initdata = fetch_invalid_superdrops_data(initdata);
+    initdata = add_uninitialised_superdrops_data(initdata);
     check_initdata_sizes(initdata, maxnsupers, nspacedims);
     return initdata;
   }

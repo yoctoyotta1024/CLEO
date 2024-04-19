@@ -27,8 +27,8 @@
 and with maxnsupers. Include coords data in check if nspacedims > 0 */
 void check_initdata_sizes(const InitSupersData &in, const size_t maxnsupers,
                           const size_t nspacedims) {
-  std::vector<size_t> sizes(
-      {maxnsupers, in.sdgbxindexes.size(), in.xis.size(), in.radii.size(), in.msols.size()});
+  std::vector<size_t> sizes({maxnsupers, in.sdgbxindexes.size(), in.xis.size(), in.radii.size(),
+                             in.msols.size(), in.sdIds.size()});
 
   switch (nspacedims) {
     case 3:  // 3-D model
@@ -46,6 +46,15 @@ void check_initdata_sizes(const InitSupersData &in, const size_t maxnsupers,
 a single SoluteProprties instance */
 void InitAllSupersFromBinary::initdata_for_solutes(InitSupersData &initdata) const {
   initdata.solutes.at(0) = SoluteProperties{};
+}
+
+/* sets initial data for sdIds using an sdId's generator */
+void InitAllSupersFromBinary::initdata_for_sdIds(InitSupersData &initdata) const {
+  auto sdIdgen = Superdrop::IDType::Gen();
+
+  for (size_t kk(0); kk < maxnsupers; ++kk) {
+    initdata.sdIds.push_back(sdIdGen.next());
+  }
 }
 
 /* sets initial data in initdata using data read

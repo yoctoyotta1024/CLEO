@@ -33,7 +33,7 @@ Superdrop GenSuperdrop::operator()(const unsigned int kk) const {
   const auto sdgbxindex = initdata.sdgbxindexes.at(kk);
   const auto coords312 = coords_at(kk);
   const SuperdropAttrs attrs(attrs_at(kk));
-  const auto sdId = sdIdGen->next(static_cast<size_t>(kk));
+  const auto sdId = initdata.sdIds.at(kk);
 
   return Superdrop(sdgbxindex, coords312[0], coords312[1], coords312[2], attrs, sdId);
 }
