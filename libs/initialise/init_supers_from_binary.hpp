@@ -57,14 +57,13 @@ struct InitSupersFromBinary {
   InitSupersData fetch_invalid_superdrops_data(InitSupersData &initdata) const;
 
  public:
-  InitSupersFromBinary(const size_t maxnsupers,
-                       const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
-      : maxnsupers(maxnsupers),
+  explicit InitSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams &config)
+      : maxnsupers(config.maxnsupers),
         initnsupers(config.initnsupers),
         initsupers_filename(config.initsupers_filename),
         nspacedims(config.nspacedims) {
     assert((maxnsupers >= initnsupers) &&
-           "cannot initialise more than the total number of super-droplets")
+           "cannot initialise more than the total number of super-droplets");
   }
 
   auto get_maxnsupers() const { return maxnsupers; }
@@ -75,7 +74,7 @@ struct InitSupersFromBinary {
   filling the rest with invalid super-droplets */
   InitSupersData fetch_data() const {
     auto initdata = fetch_superdrops_from_file();
-    auto initdata = fetch_invalid_superdrops_data(initdata);
+    initdata = fetch_invalid_superdrops_data(initdata);
     return initdata;
   }
 };

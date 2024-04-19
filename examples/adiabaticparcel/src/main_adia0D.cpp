@@ -36,6 +36,7 @@
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
+#include "initialise/initialconditions.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers/gbxindex_observer.hpp"
 #include "observers/observers.hpp"
@@ -45,7 +46,6 @@
 #include "observers/time_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
-#include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/condensation.hpp"
@@ -59,8 +59,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const unsigned
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitAllSupersFromBinary initsupers(config.get_maxnsupers(),
-                                           config.get_initsupersfrombinary());
+  const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
   const InitGbxsCvode initgbxs(config.get_cvodedynamics());
 
   return InitConds(initsupers, initgbxs);

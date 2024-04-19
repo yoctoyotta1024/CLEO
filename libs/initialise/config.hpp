@@ -76,8 +76,6 @@ struct Config {
 
   size_t get_ngbxs() const { return required.domain.ngbxs; }
 
-  size_t get_maxnsupers() const { return required.domain.maxnsupers; }
-
   RequiredConfigParams::TimestepsParams get_timesteps() const { return required.timesteps; }
 
   OptionalConfigParams::CondensationParams get_condensation() const {

@@ -72,6 +72,7 @@ struct OptionalConfigParams {
     using fspath = std::filesystem::path;
     void set_params(const YAML::Node& config);
     void print_params() const;
+    size_t maxnsupers = NaNVals::sizet();      /**< maximum number of SDs */
     fspath initsupers_filename = fspath();     /**< filename for initialisation of super-droplets */
     unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
     size_t initnsupers = NaNVals::sizet();     /**< initial no. of super-droplets to initialise */

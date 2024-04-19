@@ -109,18 +109,20 @@ void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::No
 
   assert((node["type"].as<std::string>() == "frombinary"));
 
+  maxnsupers = config["domain"]["maxnsupers"].as<size_t>();
   initsupers_filename = std::filesystem::path(node["initsupers_filename"].as<std::string>());
   nspacedims = config["domain"]["nspacedims"].as<unsigned int>();
   if (node["initnsupers"]) {
     initnsupers = node["initnsupers"].as<size_t>();
   } else {
-    initnsupers = config["domain"]["maxnsupers"];
+    initnsupers = maxnsupers;
   }
 }
 
 void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
   std::cout << "\n-------- InitSupersFromBinary Configuration Parameters --------------"
-            << "\nnspacedims: " << nspacedims << "\ninitsupers_filename: " << initsupers_filename
+            << "\nmaxnsupers: " << maxnsupers << "\nnspacedims: " << nspacedims
+            << "\ninitsupers_filename: " << initsupers_filename << "\ninitnsupers: " << initnsupers
             << "\n---------------------------------------------------------\n";
 }
 
