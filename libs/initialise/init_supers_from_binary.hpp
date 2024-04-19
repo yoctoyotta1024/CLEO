@@ -46,6 +46,14 @@ struct InitSupersFromBinary {
   std::filesystem::path initsupers_filename; /**< filename for super-droplets' initial conditons */
   unsigned int nspacedims; /**< number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D) */
 
+  /* returns InitSupersData created by reading some data from a binary file and
+  filling the rest with invalid super-droplets */
+  InitSupersData fetch_superdrops_from_file() const {
+    auto initdata = InitSupersData{};  // TODO(CB) WIP
+
+    return initdata
+  }
+
  public:
   InitAllSupersFromBinary(const size_t maxnsupers,
                           const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
@@ -63,9 +71,10 @@ struct InitSupersFromBinary {
 
   /* return InitSupersData created by reading some data from a binary file and
   filling the rest with invalid super-droplets */
-  void fetch_data(InitSupersData &initdata) const {
-    fetch_superdrops_from_file();
-    fetch_invalid_superdrops_data();
+  InitSupersData fetch_data() const {
+    auto initdata = fetch_superdrops_from_file();
+    auto initdata = fetch_invalid_superdrops_data(initdata);
+    return initdata;
   }
 };
 

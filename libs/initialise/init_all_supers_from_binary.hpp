@@ -127,10 +127,14 @@ struct InitAllSupersFromBinary {
   /* return InitSupersData created by reading a binary
   file and creating a SoluteProperties struct.
   Then check that the input data has the correct sizes. */
-  void fetch_data(InitSupersData &initdata) const {
+  InitSupersData fetch_data() const {
+    auto initdata = InitSupersData{};
+
     initdata_for_solutes(initdata);
     initdata_from_binary(initdata);
     check_initdata_sizes(initdata);
+
+    return initdata
   }
 };
 
