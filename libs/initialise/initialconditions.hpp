@@ -30,6 +30,13 @@
 #include "../kokkosaliases.hpp"
 #include "superdrops/superdrop_attrs.hpp"
 
+template <typename T>
+inline std::vector<T> join_vectors(const std::vector<T> a, const std::vector<T> b) {
+  auto ab = a;
+  ab.insert(ab.end(), b.begin(), b.end());
+  return ab
+}
+
 /* struct required to generate initial super-droplets (see GenSuperdrop) */
 struct InitSupersData {
   std::array<SoluteProperties, 1> solutes;
@@ -40,6 +47,21 @@ struct InitSupersData {
   std::vector<double> radii;
   std::vector<double> msols;
   std::vector<uint64_t> xis;
+
+  InitSupersData operator+(const InitSupersData& other) const {
+    auto solutes_ = solutes;
+    auto sdgbxindexes_ = join_vectors(sdgbxindexes, other.sdgbxindexes);
+    auto coord3s_ = join_vectors(coord3s, other.coord3s);
+    auto coord1s_ = join_vectors(coord1s, other.coord1s);
+    auto coord2s_ = join_vectors(coord2s, other.coord2s);
+    auto radii_ = join_vectors(radii, other.radii);
+    auto msols_ = join_vectors(msols, other.msols);
+    auto xis_ = join_vectors(xis, other.xis);
+
+    auto isd = InitSupersData{sdgbxindexes_, coord3s_, coord1s_, coord2s_, radii_, msols_, xis_};
+
+    return isd;
+  }
 };
 
 /**

@@ -24,6 +24,6 @@
 #include "initialise/init_supers_from_binary.hpp"
 
 InitSupersData InitSupersFromBinary::fetch_invalid_superdrops_data(InitSupersData &initdata) const {
-  // TODO(CB): WIP
+  std::cout << "size: " << maxnsupers << ", " << initdata.radii.size() << "\n";
   return initdata;
 }
