@@ -25,10 +25,8 @@
 #define LIBS_INITIALISE_INIT_SUPERS_FROM_BINARY_HPP_
 
 #include <filesystem>
-#include <fstream>
 #include <stdexcept>
 #include <string>
-#include <string_view>
 #include <vector>
 
 #include "./init_all_supers_from_binary.hpp"
@@ -62,8 +60,11 @@ struct InitSupersFromBinary {
         initnsupers(config.initnsupers),
         initsupers_filename(config.initsupers_filename),
         nspacedims(config.nspacedims) {
-    assert((maxnsupers >= initnsupers) &&
-           "cannot initialise more than the total number of super-droplets");
+    if (maxnsupers < initnsupers) {
+      const std::string err("cannot initialise more than the total number of super-droplets, ie. " +
+                            std::to_string(maxnsupers) + " < " + std::to_string(initnsupers));
+      throw std::invalid_argument(err);
+    }
   }
 
   auto get_maxnsupers() const { return maxnsupers; }

@@ -106,12 +106,12 @@ struct InitAllSupersFromBinary {
 
     if (maxnsupers < size) {
       const std::string err(
-          "Fewer superdroplets will be created than is given by initialisation data ie. " +
+          "Fewer superdroplets will be created than is given by initialisation data, ie. " +
           std::to_string(maxnsupers) + " < " + std::to_string(size));
       throw std::invalid_argument(err);
     } else if (maxnsupers > size) {
       const std::string err(
-          "Not enough initialisation data for number of superdroplets that will be created ie." +
+          "Not enough initialisation data for number of superdroplets that will be created, ie." +
           std::to_string(maxnsupers) + " > " + std::to_string(size));
       throw std::invalid_argument(err);
     }

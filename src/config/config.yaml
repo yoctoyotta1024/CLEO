@@ -76,5 +76,5 @@ coupled_dynamics:
 ### Bounday Conditions Parameters ###
 boundary_conditions:
   type: addsupersatdomaintop
-  COORD3LIM: 800                                       # SDs added to domain with coord3 >= COORD3LIM [m]
+  COORD3LIM: 810                                       # SDs added to domain with coord3 >= COORD3LIM [m]
   newnsupers: 256                                      # number SDs to add to each gridbox above COORD3LIM
