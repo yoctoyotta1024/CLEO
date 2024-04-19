@@ -17,8 +17,8 @@
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/cleoenv
 
-path2CLEO=${HOME}/CLEO/
-path2scripts=${path2CLEO}/scripts/
+path2CLEO=${HOME}/CLEO
+path2scripts=${path2CLEO}/scripts
 python=python
 ### ---------------------------------------------------- ###
 
@@ -32,7 +32,7 @@ else
 
   if [ "${path2build}" == "" ]
   then
-    path2build=${HOME}/CLEO/build/
+    path2build=${HOME}/CLEO/build
   fi
 
   echo "config file: ${configfile}"

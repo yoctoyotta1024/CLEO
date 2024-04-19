@@ -22,15 +22,15 @@
 ### ------------ and executable to compile ------------- ###
 cleoenv=/work/mh1126/m300950/cleoenv
 buildtype=$1
-path2CLEO=${HOME}/CLEO/
+path2CLEO=${HOME}/CLEO
 path2build=$2 # get from command line argument
 executable="cleocoupledsdm"
-configfile=${HOME}/CLEO/src/config/config.yaml
+configfile=${path2CLEO}/src/config/config.yaml
 run_executable=${path2build}/src/${executable}
 
 if [ "${path2build}" == "" ]
 then
-  path2build=${HOME}/CLEO/build/
+  path2build=${HOME}/CLEO/build
   run_executable=${path2build}/${run_executable}
 fi
 ### ---------------------------------------------------- ###

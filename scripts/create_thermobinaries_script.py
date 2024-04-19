@@ -41,7 +41,7 @@ configfile = sys.argv[3]
 isfigures = [True, True]
 
 ### essential paths and filenames
-constsfile = path2CLEO+"libs/cleoconstants.hpp"
+constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 
