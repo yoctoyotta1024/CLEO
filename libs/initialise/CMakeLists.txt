@@ -14,7 +14,8 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 set(SOURCES
 "copyfiles2txt.cpp"
 "gbx_bounds_from_binary.cpp"
-"initsupers_frombinary.cpp"
+"init_all_supers_from_binary.cpp"
+"init_supers_from_binary.cpp"
 "optional_config_params.cpp"
 "readbinary.cpp"
 "required_config_params.cpp"

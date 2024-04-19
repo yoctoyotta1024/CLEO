@@ -16,11 +16,9 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct for superdroplets' initial conditions
- * for CLEO SDM (e.g. superdroplet attributes)
- * by reading binary file. InitAllSupersFromBinary
- * instance can be used by InitConds
- * struct as SuperdropInitConds type
+ * struct for reading in all super-droplets' initial conditions for CLEO SDM
+ * (e.g. superdroplet attributes) from a binary file. InitAllSupersFromBinary instance
+ * can be used by InitConds struct as SuperdropInitConds type.
  */
 
 #include "initialise/init_all_supers_from_binary.hpp"

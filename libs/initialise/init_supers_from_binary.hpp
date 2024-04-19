@@ -48,15 +48,13 @@ struct InitSupersFromBinary {
 
   /* returns InitSupersData created by reading some data from a binary file and
   filling the rest with invalid super-droplets */
-  InitSupersData fetch_superdrops_from_file() const {
-    auto initdata = InitSupersData{};  // TODO(CB) WIP
+  InitSupersData fetch_superdrops_from_file() const;
 
-    return initdata
-  }
+  InitSupersData fetch_invalid_superdrops_data(InitSupersData &initdata) const;
 
  public:
-  InitAllSupersFromBinary(const size_t maxnsupers,
-                          const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
+  InitSupersFromBinary(const size_t maxnsupers,
+                       const OptionalConfigParams::InitAllSupersFromBinaryParams &config)
       : maxnsupers(maxnsupers),
         initnsupers(config.initnsupers),
         initsupers_filename(config.initsupers_filename),
