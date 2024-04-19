@@ -18,9 +18,9 @@ condaenv=/work/mh1126/m300950/cleoenv
 module load python3/2022.01-gcc-11.2.0
 source activate ${condaenv}
 
-path2CLEO=${2:-${HOME}/CLEO}
+path2CLEO=${HOME}/CLEO
 path2scripts=${path2CLEO}/scripts
-python=${condaenv}/bin/python
+python=python
 ### ---------------------------------------------------- ###
 
 configfile=$1
@@ -30,6 +30,11 @@ if [ "${configfile}" == "" ]
 then
   echo "Please specify config file"
 else
+
+  if [ "${path2build}" == "" ]
+  then
+    path2build=${HOME}/CLEO/build
+  fi
 
   echo "config file: ${configfile}"
   echo "path to build directory: ${path2build}"
