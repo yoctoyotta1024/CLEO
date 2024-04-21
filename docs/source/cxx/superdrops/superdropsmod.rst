@@ -17,6 +17,7 @@ and collision-coalescence.
 
    collisions/collisionsmod
    condensation
+   impliciteuler
    kokkosaliases_sd
    microphysical_process
    state
