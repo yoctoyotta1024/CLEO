@@ -1,8 +1,8 @@
 Collision Kinetics
 ==================
 
-Header file: ``<libs/superdrops/collisionkinetics.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisionkinetics.hpp>`_
+Header file: ``<libs/superdrops/collisions/collisionkinetics.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisions/collisionkinetics.hpp>`_
 
 .. doxygenfunction:: collision_kinetic_energy
    :project: superdrops
