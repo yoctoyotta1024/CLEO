@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Sunday 21st April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,45 +39,105 @@
 #include "./collisionkinetics.hpp"
 #include "./collisions.hpp"
 
-/* ie. DoCoalescenceBreakupRebound */
+/**
+ * @brief DoCoalBuRe = DoCoalescenceBreakupRebound, i.e. enacts collision-coalescence, breakup, or
+ * rebound of super-droplets.
+ *
+ * This class template implements the collision-coalescence, breakup, or rebound of
+ * superdroplets based on specified flag values.
+ *
+ * @tparam NFrags Calculation for number of fragments in case of breakup.
+ * @tparam Flag Flag indicating the type of action to perform: coalescence, breakup, or rebound.
+ */
 template <NFragments NFrags, CoalBuReFlag Flag>
 struct DoCoalBuRe {
  private:
-  DoCoalescence coal;
-  DoBreakup<NFrags> bu;
-  Flag coalbure_flag;
+  DoCoalescence coal;   /**< Instance of DoCoalescence. */
+  DoBreakup<NFrags> bu; /**< Instance of DoBreakup with specified no. of fragments calculation. */
+  Flag coalbure_flag;   /**< Instance of CoalBuReFlag indicating the action to perform. */
 
-  /* calculates value of gamma factor in Monte Carlo collision as in Shima et al. 2009 given
-  probability of collision.
-  _Note:_ Probability is probability of collision *NOT* collision-coalescence! */
+  /**
+   * @brief Calculates the value of the gamma factor in collision-coalescence.
+   *
+   * This function calculates the value of the gamma factor in collision-coalescence
+   * based on the given probability of collision.
+   *
+   * _Note:_ Probability is probability of collision *NOT* collision-coalescence.
+   *
+   * @param xi1 Xi value of the first superdroplet.
+   * @param xi2 Xi value of the second superdroplet.
+   * @param prob Probability of collision.
+   * @param phi Phi value.
+   * @return The calculated gamma factor.
+   */
   KOKKOS_FUNCTION
   uint64_t collision_gamma(const uint64_t xi1, const uint64_t xi2, const double prob,
                            const double phi) const {
     return coal.coalescence_gamma(xi1, xi2, prob, phi);
   }
 
-  /*  function enacts rebound or coalescence or breakup
-  depending on value of flag. If flag = 1 -> coalescence.
-  If flag = 2 -> breakup. Otherwise -> rebound. */
+  /**
+   * @brief Enacts rebound, coalescence, or breakup based on the flag.
+   *
+   * This function enacts rebound, coalescence, or breakup based on the specified flag value:
+   * If flag = 1 -> coalescence.
+   * If flag = 2 -> breakup.
+   * Otherwise -> rebound.
+   *
+   * @param gamma The gamma factor.
+   * @param phi Phi value.
+   * @param drop1 First superdroplet.
+   * @param drop2 Second superdroplet.
+   * @return True if the resulting superdroplet is null, otherwise false.
+   */
   KOKKOS_FUNCTION
   bool coalesce_breakup_or_rebound(const uint64_t gamma, const double phi, Superdrop &drop1,
                                    Superdrop &drop2) const;
 
  public:
+  /**
+   * @brief Constructs a new DoCoalBuRe = DoCoalescenceBreakupRebound object.
+   *
+   * @param nfrags Calculation for the nmber of fragments in cases of breakup.
+   * @param flag Flag indicating the action to perform: coalescence, breakup or rebound.
+   */
   DoCoalBuRe(const NFrags nfrags, const Flag flag) : bu(nfrags), coalbure_flag(flag) {}
 
-  /* this operator is used as an "adaptor" for
-  using DoCoalBuRe for collision - coalescence,
-  breakup or rebound as a function in DoCollisions
-  that satistfies the PairEnactX concept */
+  /**
+   * @brief Operator used as an adaptor such that DoCoalBuRe satisfies the PairEnactX concept
+   * and so can be used as the EnactCollision function-like object in the DoCollisions struct.
+   *
+   * This operator calls functions to enact the collision- coalescence, breakup or rebound of
+   * two super-droplets.
+   *
+   * @param drop1 First superdroplet.
+   * @param drop2 Second superdroplet.
+   * @param prob Probability of collision.
+   * @param phi Phi value.
+   * @return True if the resulting superdroplet is null, otherwise false.
+   */
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
 };
 
-/* constructs Microphysical Process for collision-
-coalscence, breakup or rebound of superdroplets with
-a constant timestep 'interval' and probability
-of collision determined by 'collprob' */
+/**
+ * @brief Constructs a Microphysical Process for collision-coalescence, breakup, or rebound of
+ * superdroplets.
+ *
+ * This function constructs a Microphysical Process for collision-coalescence, breakup, or rebound
+ * of superdroplets with a constant timestep 'interval' and probability of collision determined by
+ * 'collprob'.
+ *
+ * @tparam Probability Type of PairProbability.
+ * @tparam NFrags Number of fragments for breakup.
+ * @tparam Flag Flag indicating the action to perform.
+ * @param interval Timestep interval between collision events.
+ * @param int2realtime Function to convert interval to a real time [s].
+ * @param collprob Probability of collisions.
+ * @param nfrags Calculatino for number of fragments cases of breakup.
+ * @param coalbure_flag Flag indicating the action to perform: coalescence, breakup or rebound.
+ * @return A Microphysical Process enacting collision- coalescence, breakup or rebound.
+ */
 template <PairProbability Probability, NFragments NFrags, CoalBuReFlag Flag>
 inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
                                           const std::function<double(unsigned int)> int2realtime,
@@ -91,10 +151,19 @@ inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
   return ConstTstepMicrophysics(interval, colls);
 }
 
-/* this operator is used as an "adaptor" for
-using DoCoalBuRe for collision - coalescence,
-breakup or rebound as a function in DoCollisions
-that satistfies the PairEnactX concept */
+/**
+ * @brief Operator used as an adaptor such that DoCoalBuRe satisfies the PairEnactX concept
+ * and so can be used as the EnactCollision function-like object in the DoCollisions struct.
+ *
+ * This operator calls functions to enact the collision- coalescence, breakup or rebound of
+ * two super-droplets.
+ *
+ * @param drop1 First superdroplet.
+ * @param drop2 Second superdroplet.
+ * @param prob Probability of collision.
+ * @param phi Phi value.
+ * @return True if the resulting superdroplet is null, otherwise false.
+ */
 template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Superdrop &drop2,
                                                           const double prob,
@@ -113,9 +182,20 @@ KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Supe
   return 0;
 }
 
-/*  function enacts rebound or coalescence or breakup
-depending on value of flag. If flag = 1 -> coalescence.
-If flag = 2 -> breakup. Otherwise -> rebound. */
+/**
+ * @brief Enacts rebound, coalescence, or breakup based on the flag.
+ *
+ * This function enacts rebound, coalescence, or breakup based on the specified flag value:
+ * If flag = 1 -> coalescence.
+ * If flag = 2 -> breakup.
+ * Otherwise -> rebound.
+ *
+ * @param gamma The gamma factor.
+ * @param phi Phi value.
+ * @param drop1 First superdroplet.
+ * @param drop2 Second superdroplet.
+ * @return True if the resulting superdroplet is null, otherwise false.
+ */
 template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::coalesce_breakup_or_rebound(const uint64_t gamma,
                                                                            const double phi,

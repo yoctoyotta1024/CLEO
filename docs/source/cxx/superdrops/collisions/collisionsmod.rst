@@ -16,3 +16,5 @@ modeling rebound and/or breakup as well as coalescence.
 
    collisions
    collisionkinetics
+   coalescence
+   coalbure
