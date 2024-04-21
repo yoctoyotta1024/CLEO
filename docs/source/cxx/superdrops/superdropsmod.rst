@@ -15,7 +15,10 @@ and collision-coalescence.
    :maxdepth: 1
    :caption: Contents:
 
+   collisions/collisionsmod
    condensation
+   impliciteuler
+   kokkosaliases_sd
    microphysical_process
    state
    superdrop
