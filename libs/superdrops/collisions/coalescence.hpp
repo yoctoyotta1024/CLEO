@@ -8,70 +8,125 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Sunday 21st April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * class and function to enact collision-coalescence events
- * in superdroplet model according to Shima et al. 2009.
- * Coalescence struct satisfies PairEnactX concept
- * used in Collisions struct
+ * Class and function to enact collision-coalescence events in the super-droplet model
+ * according to Shima et al. 2009. DoCoalescence struct satisfies PairEnactX concept
+ * used by DoCollisions.
  */
-
 
 #ifndef LIBS_SUPERDROPS_COLLISIONS_COALESCENCE_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_COALESCENCE_HPP_
 
+#include <Kokkos_Core.hpp>
 #include <cassert>
 #include <functional>
 
-#include <Kokkos_Core.hpp>
-
-#include "./collisions.hpp"
 #include "../microphysicalprocess.hpp"
 #include "../nullsuperdrops.hpp"
 #include "../superdrop.hpp"
+#include "./collisions.hpp"
 
 struct DoCoalescence {
  private:
-  /* if xi1 = gamma*xi2 coalescence makes twin SDs
-  with same xi, r and solute mass. According to Shima et al. 2009
-  Section 5.1.3. part (5) option (b)  */
+  /**
+   * @brief Enacts coalescence of a pair of superdroplets where xi1 = gamma*xi2.
+   *
+   * This function coalesces a pair of superdroplets where drop1.get_xi() = gamma* drop2.get_xi() by
+   * making twin superdroplets with the same xi, radius, and solute mass. It implements Shima et al.
+   * 2009 Section 5.1.3. part (5) option (b).
+   *
+   * In rare case where xi1 = xi2 = gamma = 1, new_xi of drop1 = 0 and drop1 should be removed from
+   * domain.
+   *
+   * _Note:_ Implicit casting of gamma (and therefore droplets' xi values) from uint64_t to double.
+   *
+   * @param gamma The coalescence gamma factor.
+   * @param drop1 The first superdroplet.
+   * @param drop2 The second superdroplet.
+   */
   KOKKOS_FUNCTION void twin_superdroplet_coalescence(const uint64_t gamma, Superdrop &drop1,
                                                      Superdrop &drop2) const;
 
-  /* if xi1 > gamma*xi2 coalescence grows sd2 radius and mass
-  via decreasing multiplicity of sd1. According to
-  Shima et al. 2009 Section 5.1.3. part (5) option (a)  */
-  KOKKOS_FUNCTION void different_superdroplet_coalescence(const uint64_t gamma,
-                                                          Superdrop &drop1,
+  /**
+   * @brief Coalesces a pair of superdroplets where xi1 > gamma*xi2.
+   *
+   * This function coalesces a pair of superdroplets where xi1 > gamma*xi2 by growing the radius and
+   * mass of drop2 via decreasing the multiplicity of drop1. It implements Shima et al. 2009
+   * Section 5.1.3. part (5) option (a).
+   *
+   * _Note:_ Implicit casting of gamma (i.e. therefore droplets' xi values) from uint64_t to double.
+   *
+   * @param gamma The coalescence gamma factor.
+   * @param drop1 The first superdroplet.
+   * @param drop2 The second superdroplet.
+   */
+  KOKKOS_FUNCTION void different_superdroplet_coalescence(const uint64_t gamma, Superdrop &drop1,
                                                           Superdrop &drop2) const;
 
  public:
-  /* this operator is used as an "adaptor" for using
-  DoCoalescence as a function in DoCollisions that
-  satistfies the PairEnactX concept */
+  /**
+   * @brief Operator used as an adaptor such that DoCoalescence satisfies the PairEnactX concept
+   * and so can be used as the EnactCollision function-like object in the DoCollisions struct.
+   *
+   * This operator calls functions to enact the collision-coalescence of two super-droplets.
+   *
+   * @param drop1 The first super-droplet.
+   * @param drop2 The second super-droplet.
+   * @param prob The probability of collision-coalescence.
+   * @param phi Random number in the range [0.0, 1.0].
+   * @return boolean=true if collision-coalescence resulted in null superdrops.
+   */
   KOKKOS_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
 
-  /* calculates value of gamma factor in Monte Carlo
-  collision-coalescence as in Shima et al. 2009 */
+  /**
+   * @brief Calculates the value of the gamma factor in Monte Carlo collision-coalescence.
+   *
+   * This function calculates the value of the gamma factor used in Monte Carlo
+   * collision-coalescence as described in Shima et al. 2009.
+   *
+   * @param xi1 The multiplicity of the first super-droplet.
+   * @param xi2 The multiplicity of the second super-droplet.
+   * @param prob The probability of collision-coalescence.
+   * @param phi Random number in the range [0.0, 1.0].
+   * @return The calculated value of the coalescence gamma factor.
+   */
   KOKKOS_FUNCTION uint64_t coalescence_gamma(const uint64_t xi1, const uint64_t xi2,
                                              const double prob, const double phi) const;
 
-  /* coalesce pair of superdroplets by changing multiplicity,
-  radius and solute mass of each superdroplet in pair
-  according to Shima et al. 2009 Section 5.1.3. part (5) */
+  /**
+   * @brief Coalesces a pair of superdroplets.
+   *
+   * This function coalesces a pair of superdroplets by changing their multiplicity, radius, and
+   * solute mass according to Shima et al. 2009 Section 5.1.3. part (5).
+   *
+   * @param gamma The coalescence gamma factor.
+   * @param drop1 The first superdroplet.
+   * @param drop2 The second superdroplet.
+   * @return True if coalescence results in a null superdroplet, false otherwise.
+   */
   KOKKOS_FUNCTION bool coalesce_superdroplet_pair(const uint64_t gamma, Superdrop &drop1,
                                                   Superdrop &drop2) const;
 };
 
-/* constructs Microphysical Process for collision-coalescence
-of superdroplets with a constant timestep 'interval' and
-probability of collision-coalescence determined by 'collcoalprob' */
+/**
+ * @brief Constructs a microphysical process for collision-coalescence of superdroplets.
+ *
+ * This function constructs a microphysical process for collision-coalescence of superdroplets with
+ * a constant timestep and probability of collision-coalescence determined by 'collcoalprob'.
+ *
+ * @tparam Probability Type satisfying the PairProbability concept.
+ * @param interval The constant timestep interval.
+ * @param int2realtime A function that converts an integer timestep to real time.
+ * @param collcoalprob The probability of collision-coalescence.
+ * @return An instance of MicrophysicalProcess for collision-coalescence.
+ */
 template <PairProbability Probability>
 inline MicrophysicalProcess auto CollCoal(const unsigned int interval,
                                           const std::function<double(unsigned int)> int2realtime,
@@ -83,4 +138,4 @@ inline MicrophysicalProcess auto CollCoal(const unsigned int interval,
   return ConstTstepMicrophysics(interval, colls);
 }
 
-#endif   // LIBS_SUPERDROPS_COLLISIONS_COALESCENCE_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_COALESCENCE_HPP_
