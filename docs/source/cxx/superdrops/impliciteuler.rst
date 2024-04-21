@@ -11,7 +11,7 @@ Header file: ``<libs/superdrops/impliciteuler.hpp>``
    :members:
    :undoc-members:
 
-.. doxygenstruct:: ImplicitEuler
+.. doxygenclass:: ImplicitEuler
    :project: superdrops
    :private-members:
    :protected-members:
