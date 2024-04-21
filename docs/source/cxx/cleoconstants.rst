@@ -5,8 +5,7 @@ Header file: ``<libs/cleoconstants.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/cleoconstants.hpp>`_
 
 .. doxygennamespace:: dimmed_constants
-   :project: ...
-   :path: ...
+   :project: libs
    :content-only:
    :desc-only:
    :outline:
@@ -17,8 +16,7 @@ Header file: ``<libs/cleoconstants.hpp>``
    :no-link:
 
 .. doxygennamespace:: dimless_constants
-   :project: ...
-   :path: ...
+   :project: libs
    :content-only:
    :desc-only:
    :outline:
@@ -29,8 +27,7 @@ Header file: ``<libs/cleoconstants.hpp>``
    :no-link:
 
 .. doxygennamespace:: LIMITVALUES
-   :project: ...
-   :path: ...
+   :project: libs
    :content-only:
    :desc-only:
    :outline:
