@@ -15,7 +15,7 @@ and collision-coalescence.
    :maxdepth: 1
    :caption: Contents:
 
-   collisionkinetics
+   collisions/collisionsmod
    condensation
    kokkosaliases_sd
    microphysical_process
