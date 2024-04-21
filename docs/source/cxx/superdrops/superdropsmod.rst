@@ -17,6 +17,7 @@ and collision-coalescence.
 
    collisionkinetics
    condensation
+   kokkosaliases_sd
    microphysical_process
    state
    superdrop
