@@ -6,7 +6,7 @@ Created Date: Monday 20th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 19th April 2024
+Last Modified: Wednesday 1st May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -74,6 +74,7 @@ exclude_patterns = []
 
 # Integrate doxygen with sphinx via breathe
 breathe_projects = {
+    "libs"             : "../build/doxygen/xml/",
     "runcleo"          : "../build/doxygen/xml/",
     "superdrops"       : "../build/doxygen/xml/",
     "zarr"             : "../build/doxygen/xml/",

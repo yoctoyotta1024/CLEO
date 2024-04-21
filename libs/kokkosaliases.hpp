@@ -1,6 +1,9 @@
 /*
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: kokkosaliases.hpp
@@ -27,25 +30,28 @@
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_Random.hpp>
 #include <Kokkos_UnorderedMap.hpp>
+#include <memory>
 
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/kokkosaliases_sd.hpp"
 #include "superdrops/superdrop.hpp"
 
 /* Gridboxes */
-using dualview_gbx = Kokkos::DualView<Gridbox *>;             // dualview of gridboxes
-using dualview_constgbx = Kokkos::DualView<const Gridbox *>;  // dualview of const gridboxes
+using dualview_gbx = Kokkos::DualView<Gridbox *>;            /**< Dual view of gridboxes. */
+using dualview_constgbx = Kokkos::DualView<const Gridbox *>; /**< Dual view of const gridboxe. */
 
-using viewh_gbx = dualview_gbx::t_host;            // view in host memory of gridboxes
-using viewh_constgbx = dualview_constgbx::t_host;  // view in host memory of const gridboxes
+using viewh_gbx = dualview_gbx::t_host;           /**< View in host memory of gridboxes. */
+using viewh_constgbx = dualview_constgbx::t_host; /**< view in host memory of const gridboxes. */
 
-using viewd_gbx = dualview_gbx::t_dev;            // view in device memory of gridboxes
-using viewd_constgbx = dualview_constgbx::t_dev;  // view in device memory of const gridboxes
+using viewd_gbx = dualview_gbx::t_dev;           /**< View in device memory of gridboxes. */
+using viewd_constgbx = dualview_constgbx::t_dev; /**< View in device memory of const gridboxes. */
 
 /* Gridbox Maps */
-using viewd_ndims = Kokkos::View<size_t[3]>;
 using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int, Kokkos::pair<double, double>, ExecSpace>;
-using kokkos_dblmap = Kokkos::UnorderedMap<unsigned int, double, ExecSpace>;
+/**< E.g. for map from unsigned int gbxindex to gridbox boundaries */
 using kokkos_uintmap = Kokkos::UnorderedMap<unsigned int, unsigned int, ExecSpace>;
+/**< E.g. for map from one unsigned int gbxindex to another */
+using viewd_ndims =
+    Kokkos::View<size_t[3]>; /**< View in device memory for number of gridboxes in CartesianMaps. */
 
 #endif  // LIBS_KOKKOSALIASES_HPP_

@@ -21,7 +21,8 @@ a SDM coupled to a Dynamics Solver.
    superdrops/superdropsmod
    zarr/zarrmod
    observers/observersmod
-   initialise/initialisemod
+   cleoconstants
+   kokkosaliases
 
 Indices and tables
 ------------------
