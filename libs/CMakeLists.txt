@@ -8,8 +8,8 @@ add_subdirectory(gridboxes)
 add_subdirectory(initialise)
 add_subdirectory(runcleo)
 add_subdirectory(superdrops)
-add_subdirectory(zarr2)
-add_subdirectory(observers2)
+add_subdirectory(zarr)
+add_subdirectory(observers)
 
 # libraries particular to certain CLEO configurations #
 add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)

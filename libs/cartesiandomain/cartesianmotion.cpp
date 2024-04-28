@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -17,7 +17,6 @@
  * -----
  * File Description:
  */
-
 
 #include "./cartesianmotion.hpp"
 
@@ -70,7 +69,7 @@ KOKKOS_FUNCTION void beyonddomain_forwards_coord2(const CartesianMaps &gbxmaps,
 update to forwards (flag = 1) or backwards (flag = 2)
 neighbour. Flag = 0 if idx is out of domain value or
 if coord lies within bounds = {lowerbound, upperbound}.
-(Note: lower bound inclusive and upper bound exclusive,
+(_Note:_ lower bound inclusive and upper bound exclusive,
 ie. lowerbound <= coord < upperbound).
 Flag = 1 if coord < lowerbound, indicating idx should
 be updated to backwards neighbour.
@@ -96,7 +95,7 @@ move to neighbouring gridbox in coord3 direction.
 Funciton changes value of idx if flag != 0,
 if flag = 1 idx updated to backwards neighbour gbxindex.
 if flag = 2 idx updated to forwards neighbour gbxindex.
-Note: backwards/forwards functions may change the
+_Note:_ backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
 KOKKOS_FUNCTION unsigned int change_if_coord3nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
                                                    Superdrop &drop) {
@@ -118,7 +117,7 @@ move to neighbouring gridbox in coord1 direction.
 Funciton changes value of idx if flag != 0,
 if flag = 1 idx updated to backwards neighbour gbxindex.
 if flag = 2 idx updated to forwards neighbour gbxindex.
-Note: backwards/forwards functions may change the
+_Note:_ backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
 KOKKOS_FUNCTION unsigned int change_if_coord1nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
                                                    Superdrop &drop) {
@@ -140,7 +139,7 @@ move to neighbouring gridbox in coord2 direction.
 Funciton changes value of idx if flag != 0,
 if flag = 1 idx updated to backwards neighbour gbxindex.
 if flag = 2 idx updated to forwards neighbour gbxindex.
-Note: backwards/forwards functions may change the
+_Note:_ backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
 KOKKOS_FUNCTION unsigned int change_if_coord2nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
                                                    Superdrop &drop) {
@@ -279,7 +278,7 @@ KOKKOS_FUNCTION void beyonddomain_backwards_coord3(const CartesianMaps &gbxmaps,
                                                    Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord3bounds(nghbr).second};  // upper lim of backward neighbour
   const auto lim2 = double{gbxmaps.coord3bounds(idx).first};     // lower lim of current gbx
-  drop.set_coord3(boundarycond_coord3(drop.get_coord3(), lim1, lim2));
+  drop.set_coord3(DoublyPeriodicDomain::boundarycond_coord3(drop.get_coord3(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -290,7 +289,7 @@ KOKKOS_FUNCTION void beyonddomain_forwards_coord3(const CartesianMaps &gbxmaps,
                                                   Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord3bounds(nghbr).first};  // lower lim of forward neighbour
   const auto lim2 = double{gbxmaps.coord3bounds(idx).second};   // upper lim of current gbx
-  drop.set_coord3(boundarycond_coord3(drop.get_coord3(), lim1, lim2));
+  drop.set_coord3(DoublyPeriodicDomain::boundarycond_coord3(drop.get_coord3(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -301,7 +300,7 @@ KOKKOS_FUNCTION void beyonddomain_backwards_coord1(const CartesianMaps &gbxmaps,
                                                    Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord1bounds(nghbr).second};  // upper lim of backward neigghbour
   const auto lim2 = double{gbxmaps.coord1bounds(idx).first};     // lower lim of current gbx
-  drop.set_coord1(boundarycond_coord1(drop.get_coord1(), lim1, lim2));
+  drop.set_coord1(DoublyPeriodicDomain::boundarycond_coord1(drop.get_coord1(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -312,7 +311,7 @@ KOKKOS_FUNCTION void beyonddomain_forwards_coord1(const CartesianMaps &gbxmaps,
                                                   Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord1bounds(nghbr).first};  // lower lim of forward nghbour
   const auto lim2 = double{gbxmaps.coord1bounds(idx).second};   // upper lim of gbx
-  drop.set_coord1(boundarycond_coord1(drop.get_coord1(), lim1, lim2));
+  drop.set_coord1(DoublyPeriodicDomain::boundarycond_coord1(drop.get_coord1(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -323,7 +322,7 @@ KOKKOS_FUNCTION void beyonddomain_backwards_coord2(const CartesianMaps &gbxmaps,
                                                    Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord2bounds(nghbr).second};  // upper lim of backward nghbour
   const auto lim2 = double{gbxmaps.coord2bounds(idx).first};     // lower lim of gbx
-  drop.set_coord2(boundarycond_coord2(drop.get_coord2(), lim1, lim2));
+  drop.set_coord2(DoublyPeriodicDomain::boundarycond_coord2(drop.get_coord2(), lim1, lim2));
 }
 
 /* function updates superdrop that has crossed the
@@ -334,5 +333,5 @@ KOKKOS_FUNCTION void beyonddomain_forwards_coord2(const CartesianMaps &gbxmaps,
                                                   Superdrop &drop) {
   const auto lim1 = double{gbxmaps.coord2bounds(nghbr).first};  // lower lim of forward nghbour
   const auto lim2 = double{gbxmaps.coord2bounds(idx).second};   // upper lim of gbx
-  drop.set_coord2(boundarycond_coord2(drop.get_coord2(), lim1, lim2));
+  drop.set_coord2(DoublyPeriodicDomain::boundarycond_coord2(drop.get_coord2(), lim1, lim2));
 }

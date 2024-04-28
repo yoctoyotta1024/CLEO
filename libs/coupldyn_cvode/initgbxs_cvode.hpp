@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: initgbxs_cvode.hpp
@@ -7,17 +9,15 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct for griboxes' initial conditions
- * for CLEO SDM (e.g. thermodynamics)
- * when coupled to cvode thermodynamics solver.
- * Struct can be used by InitConds as
+ * struct for griboxes' initial conditions for CLEO SDM (e.g. thermodynamics)
+ * when coupled to cvode thermodynamics solver. Struct can be used by InitConds as
  * GbxInitConds type
  */
 
@@ -29,7 +29,7 @@
 
 #include "../cleoconstants.hpp"
 #include "coupldyn_cvode/differentialfuncs.hpp"
-#include "initialise/config.hpp"
+#include "initialise/optional_config_params.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -46,21 +46,21 @@ struct InitGbxsCvode {
   double qcond_i;    // initial liquid water mixing ratio
 
  public:
-  explicit InitGbxsCvode(const Config &config)
+  explicit InitGbxsCvode(const OptionalConfigParams::CvodeDynamicsParams &config)
       : ngbxs(config.ngbxs),
-        press_i(config.P_INIT / dlc::P0),
-        temp_i(config.TEMP_INIT / dlc::TEMP0),
+        press_i(config.P_init / dlc::P0),
+        temp_i(config.TEMP_init / dlc::TEMP0),
         relh_init(config.relh_init),
         qcond_i(0.0) {}
 
   size_t get_ngbxs() const { return ngbxs; }
 
   /* pressure for all gbxs is same initial
-  (dimless) 'press_i' given by PRESS_INIT */
+  (dimless) 'press_i' given by PRESS_init */
   std::vector<double> press() const { return std::vector<double>(ngbxs, press_i); }
 
   /* temperature for all gbxs is same initial
-  (dimless) 'temp' given by TEMP_INIT */
+  (dimless) 'temp' given by TEMP_init */
   std::vector<double> temp() const { return std::vector<double>(ngbxs, temp_i); }
 
   /* vapour mass mixing ratio, 'qvap' for all

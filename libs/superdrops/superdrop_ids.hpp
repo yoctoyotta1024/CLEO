@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Monday 12th February 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,15 +22,14 @@
 #ifndef LIBS_SUPERDROPS_SUPERDROP_IDS_HPP_
 #define LIBS_SUPERDROPS_SUPERDROP_IDS_HPP_
 
-#include <ostream>
-
 #include <Kokkos_Core.hpp>
+#include <ostream>
 
 /**
  * @brief Struct containing value of SD identity (8 bytes integer).
  */
 struct IntID {
-  size_t value;   /**< Value of the SD identity. */
+  size_t value; /**< Value of the SD identity. */
 
   /**
    * @brief Class for generating unique SD identity.
@@ -40,7 +39,8 @@ struct IntID {
     /**
      * @brief Generate the next SD identity.
      *
-     * Note: This generator is not thread-safe (_id++ is undefined in a multi-threaded environment).
+     * _Note:_ This generator is not thread-safe (_id++ is undefined in a multi-threaded
+     * environment).
      *
      * @return SD identity.
      */
@@ -49,7 +49,7 @@ struct IntID {
     /**
      * @brief Generate the next SD identity using given value 'id'.
      *
-     * Note: This generator assumes the ID was thread-safe generated (i.e., is unique).
+     * _Note:_ This generator assumes the ID was thread-safe generated (i.e., is unique).
      *
      * @param id The value to use for generating the next SD identity.
      * @return SD identity.
@@ -57,7 +57,7 @@ struct IntID {
     KOKKOS_INLINE_FUNCTION IntID next(const size_t id) { return {id}; }
 
    private:
-    size_t _id = 0;   /**< Internal counter for generating SD identities. */
+    size_t _id = 0; /**< Internal counter for generating SD identities. */
   };
 };
 

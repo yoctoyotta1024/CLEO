@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 8th April 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for divergence free motion example using YAC.
  * after make/compiling, execute for example via:
- * ./src/divfree2D_yac ../src/config/config.txt
+ * ./src/divfree2D_yac ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>
@@ -31,6 +31,7 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
+#include "cartesiandomain/null_boundary_conditions.hpp"
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
 #include "coupldyn_yac/yac_comms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
@@ -38,11 +39,11 @@
 #include "initialise/initgbxs_null.hpp"
 #include "initialise/initsupers_frombinary.hpp"
 #include "initialise/timesteps.hpp"
-#include "observers2/gbxindex_observer.hpp"
-#include "observers2/observers.hpp"
-#include "observers2/streamout_observer.hpp"
-#include "observers2/superdrops_observer.hpp"
-#include "observers2/time_observer.hpp"
+#include "observers/gbxindex_observer.hpp"
+#include "observers/observers.hpp"
+#include "observers/streamout_observer.hpp"
+#include "observers/superdrops_observer.hpp"
+#include "observers/time_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/initialconditions.hpp"
@@ -50,8 +51,8 @@
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
-#include "zarr2/dataset.hpp"
-#include "zarr2/fsstore.hpp"
+#include "zarr/dataset.hpp"
+#include "zarr/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
                                             const unsigned int couplstep,
@@ -65,14 +66,15 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitSupersFromBinary initsupers(config);
-  const InitGbxsNull initgbxs(config);
+  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
+  const InitGbxsNull initgbxs(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
 }
 
 inline GridboxMaps auto create_gbxmaps(const Config &config) {
-  const auto gbxmaps = create_cartesian_maps(config.ngbxs, config.nspacedims, config.grid_filename);
+  const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
+                                             config.get_grid_filename());
   return gbxmaps;
 }
 
@@ -81,10 +83,14 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
   return NullMicrophysicalProcess{};
 }
 
-inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
+inline auto create_movement(const unsigned int motionstep, const CartesianMaps &gbxmaps) {
   const auto terminalv = NullTerminalVelocity{};
+  const Motion<CartesianMaps> auto motion =
+      CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 
-  return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
+  const auto boundary_conditions = NullBoundaryConditions{};
+
+  return MoveSupersInDomain(gbxmaps, motion, boundary_conditions);
 }
 
 template <typename Store>
@@ -102,8 +108,8 @@ inline Observer auto create_superdrops_observer(const unsigned int interval,
 template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      Dataset<Store> &dataset) {
-  const auto obsstep = (unsigned int)tsteps.get_obsstep();
-  const auto maxchunk = int{config.maxchunk};
+  const auto obsstep = tsteps.get_obsstep();
+  const auto maxchunk = config.get_maxchunk();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
@@ -119,7 +125,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<St
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
-  const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
+  const MoveSupersInDomain movesupers(create_movement(tsteps.get_motionstep(), gbxmaps));
   const Observer auto obs(create_observer(config, tsteps, dataset));
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
@@ -133,12 +139,12 @@ int main(int argc, char *argv[]) {
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
-  const std::string_view config_filename(argv[1]);  // path to configuration file
+  const std::filesystem::path config_filename(argv[1]);  // path to configuration file
   const Config config(config_filename);
-  const Timesteps tsteps(config);  // timesteps for model (e.g. coupling and end time)
+  const Timesteps tsteps(config.get_timesteps());
 
   /* Create Xarray dataset wit Zarr backend for writing output data to a store */
-  auto store = FSStore(config.zarrbasedir);
+  auto store = FSStore(config.get_zarrbasedir());
   auto dataset = Dataset(store);
 
   /* Initial conditions for CLEO run */

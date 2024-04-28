@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: initsupers_frombinary.hpp
@@ -7,29 +9,28 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct for superdroplets' initial conditions
- * for CLEO SDM (e.g. superdroplet attributes)
- * by reading binary file. InitSupersFromBinary
- * instance can be used by InitConds
- * struct as SuperdropInitConds type
+ * struct for superdroplets' initial conditions for CLEO SDM (e.g. superdroplet attributes)
+ * by reading binary file. InitSupersFromBinary instance can be used by InitConds
+ * struct as SuperdropInitConds type.
  */
 
 #ifndef LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
 #define LIBS_INITIALISE_INITSUPERS_FROMBINARY_HPP_
 
+#include <filesystem>
 #include <fstream>
 #include <string_view>
 #include <vector>
 
-#include "./config.hpp"
 #include "./initconds.hpp"
+#include "./optional_config_params.hpp"
 #include "./readbinary.hpp"
 #include "superdrops/superdrop_attrs.hpp"
 
@@ -38,10 +39,9 @@ for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
 struct InitSupersFromBinary {
  private:
+  std::filesystem::path initsupers_filename;  // filename for some of superdrops' initial conditons
   size_t totnsupers;        // total number of superdroplets (in kokkos view on device initially)
   unsigned int nspacedims;  // number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D)
-  std::string_view
-      initsupers_filename;  // name of binary file for some of superdrops' initial conditons
 
   /* sets initial data for solutes as
   a single SoluteProprties instance */
@@ -61,10 +61,10 @@ struct InitSupersFromBinary {
   void check_initdata_sizes(const InitSupersData &initdata) const;
 
  public:
-  explicit InitSupersFromBinary(const Config &config)
-      : totnsupers(config.totnsupers),
-        nspacedims(config.nspacedims),
-        initsupers_filename(config.initsupers_filename) {}
+  explicit InitSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams &config)
+      : initsupers_filename(config.initsupers_filename),
+        totnsupers(config.totnsupers),
+        nspacedims(config.nspacedims) {}
 
   auto get_totnsupers() const { return totnsupers; }
 

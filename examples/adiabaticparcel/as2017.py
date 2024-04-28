@@ -8,7 +8,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Thursday 18th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -17,9 +17,9 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script runs CLEO adia0D executable to
-create data and plots similar to Figure 5 of
-"On the CCN (de)activation nonlinearities"
+Script generate input files, runs CLEO adia0D executable to
+create data and then creates plots for adiabatic parcel example
+similar to Figure 5 of "On the CCN (de)activation nonlinearities"
 S. Arabas and S. Shima 2017 to show
 example of adaibatic parcel expansion and contraction.
 Note: SD(M) = superdroplet (model)
@@ -80,30 +80,28 @@ coord2gen = None
 
 # parameters to edit in model configuration and plotting
 params1 = {
-    "W_AVG": 1,
-    "T_HALF": 150,
+    "W_avg": 1,
+    "TAU_half": 150,
     "T_END": 300,
     "COUPLTSTEP": 1,
     "OBSTSTEP": 2,
-    "lwdth": 2,
 }
 params2 = {
-    "W_AVG": 0.5,
-    "T_HALF": 300,
+    "W_avg": 0.5,
+    "TAU_half": 300,
     "T_END": 600,
     "COUPLTSTEP": 1,
     "OBSTSTEP": 2,
-    "lwdth": 1,
 }
 params3 = {
-    "W_AVG": 0.002,
-    "T_HALF": 75000,
+    "W_avg": 0.002,
+    "TAU_half": 75000,
     "T_END": 150000,
     "COUPLTSTEP": 3,
     "OBSTSTEP": 750,
-    "lwdth": 0.5,
 }
 paramslist = [params1, params2, params3]
+lwdths = [2, 1, 0.5]
 
 def displacement(time, w_avg, thalf):
     '''displacement z given velocity, w, is sinusoidal
@@ -163,16 +161,16 @@ for i in range(len(monors)):
         plt.close()
 
     fig, axs = plt.subplots(nrows=3, ncols=1, figsize=(5, 16))
-    for params in paramslist:
+    for params, lwdth in zip(paramslist, lwdths):
 
         ### edit relevant setup file parameters
         params["zarrbasedir"] = binpath+"as2017_sol"+str(runnum)+".zarr"
-        params["setuptxt"] = binpath+"as2017_setup.txt"
+        params["setup_filename"] = binpath+"as2017_setup.txt"
         editconfigfile.edit_config_params(configfile, params)
 
         ### delete any existing dataset
         os.system("rm -rf "+params["zarrbasedir"])
-        os.system("rm "+params["setuptxt"])
+        os.system("rm "+params["setup_filename"])
 
         ### run model
         os.chdir(path2build)
@@ -197,18 +195,18 @@ for i in range(len(monors)):
         supersat = thermo.supersaturation()
         time = pyzarr.get_time(dataset).secs
         sddata = pyzarr.get_supers(dataset, consts)
-        zprof = displacement(time, config["W_AVG"], config["T_HALF"])
+        zprof = displacement(time, config["W_avg"], config["TAU_half"])
 
         attrs = ["radius", "xi", "msol"]
         sd0 = sdtracing.attributes_for1superdroplet(sddata, 0, attrs)
         numconc = np.sum(sddata["xi"][0])/gbxs["domainvol"]/1e6  # [/cm^3]
 
         ### plot results
-        wlab = "<w> = {:.1f}".format(config["W_AVG"]*100)+"cm s$^{-1}$"
+        wlab = "<w> = {:.1f}".format(config["W_avg"]*100)+"cm s$^{-1}$"
         axs = as2017fig.condensation_validation_subplots(axs, time, sd0["radius"],
                                                    supersat[:, 0, 0, 0],
                                                    zprof,
-                                                   lwdth=params["lwdth"],
+                                                   lwdth=lwdth,
                                                    lab=wlab)
 
         runnum += 1

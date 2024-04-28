@@ -1,30 +1,62 @@
+'''
+Copyright (c) 2024 MPI-M, Clara Bayley
+
+
+----- CLEO -----
+File: editconfigfile.py
+Project: pySD
+Created Date: Wednesday 17th January 2024
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Thursday 18th April 2024
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+File Description:
+'''
+
+from ruamel.yaml import YAML
+
+def update_param(node, param, new_value):
+    '''Function to recursively searches for 'param' key in YAML node
+    and updates it's value to with 'new_value' when found '''
+
+    if isinstance(node, dict):
+        if param in node:
+            node[param] = new_value # update value
+            return True
+        else:
+            for key, val in node.items():
+                is_success = update_param(val, param, new_value)
+                if is_success:
+                    return True
+    elif isinstance(node, list):
+        for item in node:
+            is_success = update_param(item, param, new_value)
+            if is_success:
+                    return True
+    return False
+
 def edit_config_params(filename, params2change):
-  """rewrites config file with parameters listed in
-  dict params2change edited to new values also in dict"""
+    ''' rewrites config YAML file with key,value pairs listed in params2change updated to new values
+    whilst preserving original YAML file's formatting and comments etc. '''
 
-  wlines=[]
+    yaml = YAML()
 
-  with open(filename) as file:
-    filelines = file.readlines()
-    for line in filelines:
-      wlines.append(line)
+    # Load the YAML file
+    with open(filename, 'r') as file:
+        data = yaml.load(file)
 
-  for l, line in enumerate(wlines):
-    if line[0] != "#" and line[0] != "/" and "=" in line:
-      for key, value in params2change.items():
-        if key in line:
+    # Update the parameters from the YAML file
+    for param, new_value in params2change.items():
+        is_success = update_param(data, param, new_value)
+        if not is_success:
+          errmsg = param+" could not be updated to new value: "+str(new_value)
+          raise ValueError(errmsg)
 
-          # create line with new value for key
-          newline = key+" = "+str(value)
-          newline = newline.ljust(40)
-
-          # add comment to new line if there is one
-          ind = line.find("#")
-          newline = newline+line[ind:]
-
-          # overwrite line with newline
-          wlines[l] = newline
-
-  file = open(filename, "w")
-  file.writelines(wlines)
-  file.close()
+    # Overwrite the YAML file
+    with open(filename, 'w') as file:
+        yaml.dump(data, file)

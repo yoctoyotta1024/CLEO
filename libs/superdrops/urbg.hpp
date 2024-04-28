@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 9th February 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,7 +44,7 @@
  */
 template <class DeviceType>
 struct URBG {
-  Kokkos::Random_XorShift64<DeviceType> gen;   /**< Kokkos random number generator */
+  Kokkos::Random_XorShift64<DeviceType> gen; /**< Kokkos random number generator */
 
   /**
    * @brief Draws a random 64-bit unsigned integer (uint64_t) from a uniform distribution in the
@@ -77,7 +77,7 @@ struct URBG {
  *
  * Equivalent to C++98 std::swap but works on device as well as host (gpu compatible).
  *
- * Note: Involves a copy construction and two assignment operations, which may not be efficient
+ * _Note:_ Involves a copy construction and two assignment operations, which may not be efficient
  * if Superdrop class stores large quantities of data.
  *
  * @param a The first super-droplet.

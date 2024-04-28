@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th January 2024
+Last Modified: Monday 15th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -63,13 +63,13 @@ def attribute_for_superdroplets_sample(sddata, attr, ndrops2sample=0,
   randomly selected superdrops with Ids in the range
   [minid, maxid] '''
 
-  if ids == []:
+  if np.any(ids):
+    sample = ids
+  else: # ids == []
     population = list(range(minid, maxid, 1))
     if ndrops2sample == 0:
       ndrops2sample = maxid
     sample = random.sample(population, ndrops2sample)
-  else:
-    sample = ids
 
   ndrops_attr = []
   for id in sample:
@@ -110,13 +110,13 @@ def attrs_for_superdroplets_sample(sddata, attrs, ndrops2sample=0,
   randomly selected superdrops with Ids in the range
   [minid, maxid] '''
 
-  if ids == []:
+  if np.any(ids):
+    sample = ids
+  else: # ids == []
     population = list(range(minid, maxid, 1))
     if ndrops2sample == 0:
       ndrops2sample = maxid
     sample = random.sample(population, ndrops2sample)
-  else:
-    sample = ids
 
   data = {}
   for a in attrs:

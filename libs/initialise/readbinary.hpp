@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: readbinary.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 31st October 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,6 +23,7 @@
 #ifndef LIBS_INITIALISE_READBINARY_HPP_
 #define LIBS_INITIALISE_READBINARY_HPP_
 
+#include <filesystem>
 #include <fstream>
 #include <ios>
 #include <iostream>
@@ -60,7 +63,7 @@ struct VarMetadata {
 };
 
 /* open binary file for reading or raise error */
-std::ifstream open_binary(std::string_view filename);
+std::ifstream open_binary(const std::filesystem::path filename);
 
 /* Given a binary file that follows the correct layout,
 read and print the global metadata string at the start of the file,

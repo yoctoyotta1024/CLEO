@@ -14,7 +14,6 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(SOURCES
 "cartesianmaps.cpp"
 "cartesianmotion.cpp"
-#"cartesianmotion_withreset.cpp" # TODO(CB) decide to delete file
 "createcartesianmaps.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos

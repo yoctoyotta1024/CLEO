@@ -22,6 +22,7 @@ input files and processing the Zarr output from CLEO.
    thermobinary_src/thermobinary_src
    sdmout_src/sdmout_src
    cxx2py
+   readconfigfile
    editconfigfile
    readbinary
    writebinary

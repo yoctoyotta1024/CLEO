@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,6 @@
  * contained in structures which satisfy
  * requirements of the VelocityFormula concept
  */
-
 
 #include "./terminalvelocity.hpp"
 
@@ -51,7 +50,7 @@ double SimmelTerminalVelocity::watermass(const double radius) const {
  * and Beard (1976) and used in Simmel's parmeterisation of Long 1974's hydrodynamic collision
  * kernel. For drops with radius >= 1.74mm, terminal velocity is 9.17m/s.
  *
- * Note: Improvement could be made by following Arabas et al. 2015 and Morrison et al. 2005 in
+ * _Note:_ Improvement could be made by following Arabas et al. 2015 and Morrison et al. 2005 in
  * multiplying the terminal velocity by the density ratio, rho_dry0/rho_dry, of dry air under
  * standard conditions (rho_dry0) and in current state (rho_dry).
  *
@@ -66,8 +65,7 @@ double SimmelTerminalVelocity::operator()(const Superdrop &drop) const {
   constexpr double r3 = 1.73892e-3 / dlc::R0;
 
   /* alpha constants converted from [g^-beta m s^-1] into [g^-beta] units */
-  constexpr double VELCONST =
-      (100.0 * dlc::W0);  // convert from [cm/s] into dimensionless velocity
+  constexpr double VELCONST = (100.0 * dlc::W0);  // convert from [cm/s] into dimensionless velocity
   constexpr double a1 = 457950 / VELCONST;
   constexpr double a2 = 4962 / VELCONST;
   constexpr double a3 = 1732 / VELCONST;

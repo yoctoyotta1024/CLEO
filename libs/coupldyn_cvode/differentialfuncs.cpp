@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: differentialfuncs.cpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -16,7 +18,8 @@
  * File Description:
  * Header file for ODEs which are solved by
  * CVODE ode solver to model evolution of the
- * thermodynamics (p, temp, qv and qc) over time */
+ * thermodynamics (p, temp, qv and qc) over time
+ */
 
 #include "coupldyn_cvode/differentialfuncs.hpp"
 
@@ -44,7 +47,7 @@ double cvode_saturationpressure(const double temp) {
 
 /* dp/dt differential equation (dimensionless)
   describing pressure evolution over time.
-  note: true dP/dt = dp/dt * P0/TIME0 */
+  _Note:_ true dP/dt = dp/dt * P0/TIME0 */
 static double dp_dt(const double t, const double wmax, const double tauhalf) {
   constexpr double zg = 0.0 / (dlc::W0 * dlc::TIME0);  // dimensionless z value at ground level
   constexpr double tempg = 273.15 / dlc::TEMP0;        // dimensionless temperature at zg
@@ -77,7 +80,7 @@ static double dp_dt(const double t, const double wmax, const double tauhalf) {
   changes in parcel for adiabatic process (no heat loss).
   Parcel has water vapour mass mixing ratio (m_v/m_dry) = qv and
   liquid water mass mixing ratio (m_c/m_dry) = qc.
-  note: True dTemp/dt = dtemp * TEMP0/TIME0  */
+  _Note:_ True dTemp/dt = dtemp * TEMP0/TIME0  */
 static double dtemp_dt_adia(const int k, const double pdot, const N_Vector &y) {
   double p(NV_Ith_S(y, k));
   double temp(NV_Ith_S(y, k + 1));

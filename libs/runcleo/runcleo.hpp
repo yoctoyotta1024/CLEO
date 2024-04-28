@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Wednesday 3rd April 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -41,7 +41,7 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
-#include "observers2/observers.hpp"
+#include "observers/observers.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
@@ -63,12 +63,12 @@
  * @tparam Comms Type of CouplingComms.
  */
 template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphys,
-          Motion<GbxMaps> M, Observer Obs, CouplingComms<CD> Comms>
+          Motion<GbxMaps> M, typename BoundaryConditions, Observer Obs, CouplingComms<CD> Comms>
 class RunCLEO {
  private:
-  const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm; /**< SDMMethods object. */
-  CD &coupldyn;                                      /**< CoupledDynamics object.  */
-  const Comms &comms;                                /**< CouplingComms object. */
+  const SDMMethods<GbxMaps, Microphys, M, BoundaryConditions, Obs> &sdm; /**< SDMMethods object. */
+  CD &coupldyn;       /**< CoupledDynamics object.  */
+  const Comms &comms; /**< CouplingComms object. */
 
   /**
    * @brief Prepare SDM and Coupled Dynamics for timestepping.
@@ -192,7 +192,6 @@ class RunCLEO {
    * library's `std::min` to find `t_next` (also GPU compatible).
    *
    * @see SDMMethods::get_couplstep()
-   * @see SDMMethods::ObsClass::next_obs() // TODO(CB) fill in and reference "ObsClass" docs
    */
   unsigned int get_next_step(const unsigned int t_mdl) const {
     const auto next_couplstep = [&, t_mdl]() {
@@ -271,7 +270,8 @@ class RunCLEO {
    * @param coupldyn CoupledDynamics object.
    * @param comms CouplingComms object.
    */
-  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, Obs> &sdm, CD &coupldyn, const Comms &comms)
+  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, BoundaryConditions, Obs> &sdm, CD &coupldyn,
+          const Comms &comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms) {
     check_coupling();
   }

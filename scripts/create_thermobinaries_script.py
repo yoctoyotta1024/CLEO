@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 1st March 2024
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -41,11 +41,11 @@ configfile = sys.argv[3]
 isfigures = [True, True]
 
 ### essential paths and filenames
-constsfile = path2CLEO+"libs/cleoconstants.hpp"
+constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 
-gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
+gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.yaml
 thermofile =  binariespath+"/dimlessthermo.dat"
 
 ### --- Choose Initial Thermodynamic Conditions for Gridboxes  --- ###
@@ -62,53 +62,53 @@ thermofile =  binariespath+"/dimlessthermo.dat"
 #                                     qc_init, W_INIT, U_INIT, V_INIT,
 #                                     relh=relh_init, constsfile=constsfile)
 
-# ### --- 1-D T and qv set by Lapse Rates --- ###
-# PRESS0      = 101315                # [Pa]
-# TEMP0       = 297.9                 # [K]
-# qvap0       = 0.016                 # [Kg/Kg]
-# Zbase       = 800                   # [m]
-# TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
-# qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
-# qcond       = 0.0                   # [Kg/Kg]
-# WMAX        = 9.0                   # [m/s]
-# Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
+### --- 1-D T and qv set by Lapse Rates --- ###
+PRESS0      = 101315                # [Pa]
+TEMP0       = 297.9                 # [K]
+qvap0       = 0.016                 # [Kg/Kg]
+Zbase       = 800                   # [m]
+TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
+qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
+qcond       = 0.0                   # [Kg/Kg]
+WMAX        = 0.0                   # [m/s]
+Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
-# thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
-#                                                     PRESS0, TEMP0, qvap0,
-#                                                     Zbase, TEMPlapses,
-#                                                     qvaplapses, qcond,
-#                                                     WMAX, None, None,
-#                                                     Wlength)
+thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
+                                                    PRESS0, TEMP0, qvap0,
+                                                    Zbase, TEMPlapses,
+                                                    qvaplapses, qcond,
+                                                    WMAX, None, None,
+                                                    Wlength)
 
-### --- 2D Flow Field with Hydrostatic --- ###
-### ---       or Simple z Profile      --- ###
-PRESS0 = 101500 # [Pa]
-THETA = 289 # [K]
-qcond = 0.0 # [Kg/Kg]
-WMAX = 0.6 # [m/s]
-VVEL = None # [m/s]
-Zlength = 1500 # [m]
-Xlength = 1500 # [m]
+# ### --- 2D Flow Field with Hydrostatic --- ###
+# ### ---       or Simple z Profile      --- ###
+# PRESS0 = 101500 # [Pa]
+# THETA = 289 # [K]
+# qcond = 0.0 # [Kg/Kg]
+# WMAX = 0.6 # [m/s]
+# VVEL = None # [m/s]
+# Zlength = 1500 # [m]
+# Xlength = 1500 # [m]
 
-qvapmethod = "sratio"
-Zbase = 750 # [m]
-sratios = [0.85, 1.0001] # s_ratio [below, above] Zbase
-moistlayer = False
-moistlayer = {
-    "z1": 700,
-    "z2": 800,
-    "x1": 0,
-    "x2": 750,
-    "mlsratio": 1.005
-}
+# qvapmethod = "sratio"
+# Zbase = 750 # [m]
+# sratios = [0.85, 1.0001] # s_ratio [below, above] Zbase
+# moistlayer = False
+# moistlayer = {
+#     "z1": 700,
+#     "z2": 800,
+#     "x1": 0,
+#     "x2": 750,
+#     "mlsratio": 1.005
+# }
 # thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0,
 #                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL, moistlayer)
-thermodyngen = thermogen.SimpleThermo2DFlowField(configfile, constsfile, PRESS0,
-                                        THETA, qvapmethod, sratios, Zbase,
-                                        qcond, WMAX, Zlength, Xlength,
-                                        VVEL)
+# thermodyngen = thermogen.SimpleThermo2DFlowField(configfile, constsfile, PRESS0,
+#                                         THETA, qvapmethod, sratios, Zbase,
+#                                         qcond, WMAX, Zlength, Xlength,
+#                                         VVEL)
 ### ---------------------------------------------------------------- ###
 
 ### -------------------- BINARY FILE GENERATION--------------------- ###

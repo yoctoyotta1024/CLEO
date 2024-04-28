@@ -6,7 +6,7 @@ Created Date: Monday 16th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th October 2023
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -23,8 +23,7 @@ import numpy as np
 from .. import cxx2py, writebinary
 
 def get_COORD0_from_constsfile(constsfile, returnconsts=False):
-  ''' create values from constants file & config file
-  required as inputs to create initial
+  ''' create values from constants file required as inputs to create initial
   superdroplet conditions '''
 
   consts = cxx2py.read_cxxconsts_into_floats(constsfile)

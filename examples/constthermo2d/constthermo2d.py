@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Friday 12th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,9 +15,9 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script runs CLEO executable "const2D" to create the
-data and plots precipitation example given 2-D flow
-field and constant thermodynamics read from a file
+Script generatees input files, runs CLEO executable "const2D" to create
+data and then plots precipitation example given 2-D flow field and
+constant thermodynamics read from a file.
 '''
 
 import os

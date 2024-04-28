@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Tuesday 16th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,14 +26,13 @@
 #ifndef LIBS_CARTESIANDOMAIN_CARTESIANMOTION_HPP_
 #define LIBS_CARTESIANDOMAIN_CARTESIANMOTION_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <cassert>
 #include <functional>
 
-#include <Kokkos_Core.hpp>
-#include <Kokkos_Pair.hpp>
-
-#include "cartesiandomain/cartesianboundaryconds.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/doubly_periodic_domain.hpp"
 #include "gridboxes/predcorrmotion.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"

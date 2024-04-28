@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 1st March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,14 +36,14 @@
  */
 class Superdrop {
  private:
-  unsigned int sdgbxindex;  /**< Index of the gridbox the superdrop occupies */
-  double coord3;            /**< 3rd spatial coordinate of the superdrop (vertical) */
-  double coord1;            /**< 1st spatial coordinate of the superdrop (eastwards) */
-  double coord2;            /**< 2nd spatial coordinate of the superdrop (northwards) */
-  SuperdropAttrs attrs;     /**< instance of SuperdropAttrs for attributes of the super-droplet */
+  unsigned int sdgbxindex; /**< Index of the gridbox the superdrop occupies */
+  double coord3;           /**< 3rd spatial coordinate of the superdrop (vertical) */
+  double coord1;           /**< 1st spatial coordinate of the superdrop (eastwards) */
+  double coord2;           /**< 2nd spatial coordinate of the superdrop (northwards) */
+  SuperdropAttrs attrs;    /**< instance of SuperdropAttrs for attributes of the super-droplet */
 
  public:
-  using IDType = IntID;     /**< Type of ID to identify superdrop via 8 byte integer */
+  using IDType = IntID; /**< Type of ID to identify superdrop via 8 byte integer */
   // using IDType = EmptyID;   /**< Type of ID for non-existent superdrop identity */
   [[no_unique_address]] IDType sdId;
   /**< instance of super-droplet identity of Superdrop::IDType */
@@ -200,7 +200,7 @@ class Superdrop {
    *
    * This function sets the value of the super-droplet's radius to the specified value.
    *
-   * Note: see also change_radius which limits super-droplet radius to its dry radius.
+   * _Note:_ See also change_radius which limits super-droplet radius to its dry radius.
    *
    * @param i_radius The value to set for radius.
    */
@@ -224,7 +224,7 @@ class Superdrop {
    * if its new radius >= its dry radius. Return is difference in radius accoding to super-droplet's
    * attributes struct.
    *
-   * Note: see also set_radius which allows super-droplet radius less than its dry radius
+   * _Note:_ See also set_radius which allows super-droplet radius less than its dry radius
    *
    * @param newr The value to set the radius >= dry radius.
    * @return change in radius of the super-droplet.

@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 19th January 2024
+Last Modified: Thursday 18th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -54,7 +54,7 @@ def write_ensemb_setupfile(ensembsetupfile, setupfile, datasets):
   os.system('cp '+setupfile+" "+ensembsetupfile)
   params = {
     "initsupers_filename" : "[ensemble, see below]",
-    "setuptxt" : "[ensemble, see below]",
+    "setup_filename" : "[ensemble, see below]",
     "zarrbasedir" : "[ensemble, see below]",
     "stats_filename" : "[ensemble, see below]"
     }
