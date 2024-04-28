@@ -1,3 +1,23 @@
+'''
+Copyright (c) 2024 MPI-M, Clara Bayley
+
+
+----- CLEO -----
+File: read_gbxboundaries.py
+Project: gbxboundariesbinary_src
+Created Date: Wednesday 17th January 2024
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Wednesday 17th April 2024
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+File Description:
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -248,9 +268,7 @@ def grid_dimensions(gbxbounds):
     return extents, spacings, griddims
 
 def print_domain_info(constsfile, gridfile):
-    ''' create values from constants file & config file
-    required as inputs to create initial
-    superdroplet conditions '''
+    ''' prints information about domain reda from gridfile and constants file '''
 
     isprint=True
     COORD0 = get_COORD0_from_constsfile(constsfile)

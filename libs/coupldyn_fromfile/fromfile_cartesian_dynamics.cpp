@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: fromfile_cartesian_dynamics.cpp
@@ -7,23 +9,21 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 17th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * functionality for dynamics solver in CLEO
- * where coupling is one-way and dynamics
- * are read from file
+ * functionality for dynamics solver in CLEO where dynamics are read from files
  */
 
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 
 /* open file called 'filename' and return vector
 of doubles for first variable in that file */
-std::vector<double> thermodynamicvar_from_binary(std::string_view filename) {
+std::vector<double> thermodynamicvar_from_binary(const std::filesystem::path filename) {
   /* open file and read in the metatdata
   for all the variables in that file */
   std::ifstream file(open_binary(filename));
@@ -59,8 +59,8 @@ void CartesianDynamics::increment_position() {
   pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
-CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
-                                     const unsigned int nsteps)
+CartesianDynamics::CartesianDynamics(const OptionalConfigParams::FromFileDynamicsParams &config,
+                                     const std::array<size_t, 3> i_ndims, const unsigned int nsteps)
     : ndims(i_ndims),
       pos(0),
       pos_zface(0),
@@ -71,10 +71,10 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
       get_vvel(nullwinds()) {
   std::cout << "\n--- coupled cartesian dynamics from file ---\n";
 
-  press = thermodynamicvar_from_binary(config.press_filename);
-  temp = thermodynamicvar_from_binary(config.temp_filename);
-  qvap = thermodynamicvar_from_binary(config.qvap_filename);
-  qcond = thermodynamicvar_from_binary(config.qcond_filename);
+  press = thermodynamicvar_from_binary(config.press);
+  temp = thermodynamicvar_from_binary(config.temp);
+  qvap = thermodynamicvar_from_binary(config.qvap);
+  qcond = thermodynamicvar_from_binary(config.qcond);
 
   std::cout << "Finished reading thermodynamics from binaries for:\n"
                "  pressure,\n  temperature,\n"
@@ -89,8 +89,8 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
 /* depending on nspacedims, read in data
 for 1-D, 2-D or 3-D wind velocity components */
-void CartesianDynamics::set_winds(const Config &config) {
-  const auto nspacedims = (unsigned int)config.nspacedims;
+void CartesianDynamics::set_winds(const OptionalConfigParams::FromFileDynamicsParams &config) {
+  const auto nspacedims = config.nspacedims;
 
   switch (nspacedims) {
     case 0:
@@ -101,8 +101,7 @@ void CartesianDynamics::set_winds(const Config &config) {
     case 2:
     case 3:  // 1-D, 2-D or 3-D model
     {
-      const std::string windstr(set_winds_from_binaries(
-          nspacedims, config.wvel_filename, config.uvel_filename, config.vvel_filename));
+      const std::string windstr(set_winds_from_binaries(config));
       std::cout << windstr;
     } break;
 
@@ -114,24 +113,24 @@ void CartesianDynamics::set_winds(const Config &config) {
 /* Read in data from binary files for wind
 velocity components in 1D, 2D or 3D model
 and check they have correct size */
-std::string CartesianDynamics::set_winds_from_binaries(const unsigned int nspacedims,
-                                                       std::string_view wvel_filename,
-                                                       std::string_view uvel_filename,
-                                                       std::string_view vvel_filename) {
+std::string CartesianDynamics::set_winds_from_binaries(
+    const OptionalConfigParams::FromFileDynamicsParams &config) {
+  const auto nspacedims = config.nspacedims;
+
   std::string infostart(std::to_string(nspacedims) + "-D model, wind velocity");
 
   std::string infoend;
   switch (nspacedims) {
     case 3:  // 3-D model
-      vvel_yfaces = thermodynamicvar_from_binary(vvel_filename);
+      vvel_yfaces = thermodynamicvar_from_binary(config.vvel);
       get_vvel = get_vvel_from_binary();
       infoend = ", u";
     case 2:  // 3-D or 2-D model
-      uvel_xfaces = thermodynamicvar_from_binary(uvel_filename);
+      uvel_xfaces = thermodynamicvar_from_binary(config.uvel);
       get_uvel = get_uvel_from_binary();
       infoend = ", v" + infoend;
     case 1:  // 3-D, 2-D or 1-D model
-      wvel_zfaces = thermodynamicvar_from_binary(wvel_filename);
+      wvel_zfaces = thermodynamicvar_from_binary(config.wvel);
       get_wvel = get_wvel_from_binary();
       infoend = "w" + infoend;
   }

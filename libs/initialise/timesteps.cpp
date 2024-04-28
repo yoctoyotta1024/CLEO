@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: timesteps.cpp
@@ -7,12 +9,13 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 14th December 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
+ * File Description:
  * File Description:
  * functionality for handling model timesteps and
  * their conversions to/from real times
@@ -25,7 +28,7 @@ are converted into integer values of model timesteps using
 model_step and secd template functions created using std::chrono library.
 Throw error if after convertion into model timestep, any
 timestep = 0. Substeps for sdmprocess must be larger than steps! */
-Timesteps::Timesteps(const Config &config)
+Timesteps::Timesteps(const RequiredConfigParams::TimestepsParams &config)
     : condstep(realtime2step(config.CONDTSTEP)),
       collstep(realtime2step(config.COLLTSTEP)),
       motionstep(realtime2step(config.MOTIONTSTEP)),

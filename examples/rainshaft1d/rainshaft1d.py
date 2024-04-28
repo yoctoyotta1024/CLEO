@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Friday 12th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,9 +15,9 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script runs CLEO executable "rshaft1D" to create the
-data and plots precipitation example given constant
-1-D rainshaft thermodynamics read from a file
+Script generates input files, then runs CLEO executable "rshaft1D" to create the
+data which is then plotted to demonstrate precipitation example in 1-D rainshaft
+with constant thermodynamics read from a file.
 '''
 
 import os
@@ -92,9 +92,9 @@ rspan       = [1e-6, 5e-5]                      # min and max range of radii to 
 dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
-# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
-# geosigs              = [1.55, 2.3, 2]                    
-# scalefacs            = [1e6, 0.3e6, 0.025e6]   
+# geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
+# geosigs              = [1.55, 2.3, 2]
+# scalefacs            = [1e6, 0.3e6, 0.025e6]
 # numconc = np.sum(scalefacs) * 100
 
 # settings for initial superdroplet multiplicies with ATR and Aerosol from Lohmann et. al 2016 Fig. 5.5

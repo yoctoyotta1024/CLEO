@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: kokkosaliases_sd.hpp
@@ -7,14 +9,14 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 25th October 2023
+ * Last Modified: Sunday 21st April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * aliases for Kokkos superdrop views
+ * Aliases for Kokkos super-droplet views and parallelisation
  */
 
 #ifndef LIBS_SUPERDROPS_KOKKOSALIASES_SD_HPP_
@@ -27,34 +29,37 @@
 
 #include "./superdrop.hpp"
 
-/* Execution Spaces and Memory for Parallelism */
-using ExecSpace = Kokkos::DefaultExecutionSpace;
-using HostSpace = Kokkos::DefaultHostExecutionSpace;
+/* Defines aliases for the (default Kokkos) execution spaces and memory spaces for parallelism. */
+using ExecSpace =
+    Kokkos::DefaultExecutionSpace; /**< (default) execution space for device parallelism */
+using HostSpace =
+    Kokkos::DefaultHostExecutionSpace; /**< (default) execution space for host parallelism */
 
-/* Superdrop views and subviews */
-using viewd_supers = Kokkos::View<Superdrop *>;  // view in device memory of superdroplets
+/* Defines aliases for Kokkos views and subviews of super-droplets. */
+using viewd_supers = Kokkos::View<Superdrop *>; /**< View in device memory of superdrops. */
 using viewd_constsupers =
-    Kokkos::View<const Superdrop *>;  // view in device memory of const superdroplets
+    Kokkos::View<const Superdrop *>; /**< View in device memory of const superdrops. */
 
-using kkpair_size_t = Kokkos::pair<size_t, size_t>;  // kokkos pair of size_t (see supersingbx refs)
+using kkpair_size_t = Kokkos::pair<size_t, size_t>; /**< size_t pair (e.g. see supersingbx refs). */
 using subviewd_supers =
-    Kokkos::Subview<viewd_supers, kkpair_size_t>;  // subiew of supers (for instance in a gridbox)
+    Kokkos::Subview<viewd_supers,
+                    kkpair_size_t>; /**< Sub-View of supers (e.g. for instance in a gridbox). */
 using subviewd_constsupers =
     Kokkos::Subview<viewd_constsupers,
-                    kkpair_size_t>;  // const supers subview (for instance in a gridbox)
+                    kkpair_size_t>; /**< Const supers subview (e.g. for instance in a gridbox). */
 
-using mirrorh_constsupers = subviewd_constsupers::HostMirror;  // mirror view (copy) of subview of
-                                                               // superdroplets on host memory
+/* Defines aliases for team policies and team members in heirarchal (i.e. nested) parallelism. */
+using TeamPolicy = Kokkos::TeamPolicy<ExecSpace>; /**< Team policy in the execution space. */
+using TeamMember = TeamPolicy::member_type;       /**< Member in device parallel execution team. */
 
-/* Random Number Generation */
-using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>;  // type for pool of thread safe
-                                                                  // random number generators
+using HostTeamPolicy = Kokkos::TeamPolicy<HostSpace>; /**< Team policy in the host space. */
+using HostTeamMember = HostTeamPolicy::member_type;   /**< Member in host parallel execution team.*/
 
-/* Nested Parallelism */
-using TeamPolicy = Kokkos::TeamPolicy<ExecSpace>;
-using TeamMember = TeamPolicy::member_type;
-
-using HostTeamPolicy = Kokkos::TeamPolicy<HostSpace>;
-using HostTeamMember = HostTeamPolicy::member_type;
+/**
+ * @brief Thread-safe random number generation.
+ *
+ * Defines an alias for a pool of Kokkos random number generators in the execution space.
+ */
+using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>;
 
 #endif  // LIBS_SUPERDROPS_KOKKOSALIASES_SD_HPP_

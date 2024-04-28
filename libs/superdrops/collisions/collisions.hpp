@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Sunday 21st April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,14 +19,12 @@
  * struct for modelling collision microphysical processes in SDM e.g. collision-coalescence
  */
 
-
 #ifndef LIBS_SUPERDROPS_COLLISIONS_COLLISIONS_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_COLLISIONS_HPP_
 
-#include <concepts>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
+#include <concepts>
 
 #include "../../cleoconstants.hpp"
 #include "../kokkosaliases_sd.hpp"
@@ -37,64 +35,86 @@
 
 namespace dlc = dimless_constants;
 
-/* Objects that are of type 'PairProbability'
-take a pair of superdroplets and returns
-something convertible to a double
-(hopefully a probability!) */
+/**
+ * @brief Concept for objects that return a probability of collision between two (real) droplets.
+ *
+ * Object (has operator that) returns prob_jk, the probability a pair of droplets undergo some
+ * kind of collision process. Usually prob_jk = K(drop1, drop2) delta_t/delta_vol,
+ * where K(drop1, drop2) := C(drop1, drop2) * |v1−v2| is the coalescence kernel
+ * (see Shima 2009 eqn 3). For example a type of PairProbability may return prob_jk which is the
+ * probability of collision-coalescence according to a particular coalescence kernel, or
+ * collision-breakup.
+ *
+ * @tparam P The type representing the pair probability object.
+ */
 template <typename P>
 concept PairProbability = requires(P p, Superdrop &drop, double d) {
   { p(drop, drop, d, d) } -> std::convertible_to<double>;
 };
 
-/* Objects that are of type PairEnactX
-takes a pair of superdrops and returns
-void (it may change the properties of
-the superdrops)*/
+/**
+ * @brief Concept for objects that enact a sucessful collision event between two superdroplets, e.g.
+ * to model the coalscence and/or rebound and/or breakup of two superdroplets.
+ *
+ * Object (has operator that) enacts a collision-X event between two superdroplets. For example it
+ * may enact collision-coalescence of a pair of superdroplets by changing the multiplicity,
+ * radius and solute mass of each superdroplet in the pair.
+ *
+ * @tparam X The type representing the pair enactment object.
+ */
 template <typename X>
 concept PairEnactX = requires(X x, Superdrop &drop, double d) {
   { x(drop, drop, d, d) } -> std::convertible_to<bool>;
 };
 
-/* class for method to enact collisions
-between superdrops e.g. collision-coalescence */
+/**
+ * @struct DoCollisions
+ * @brief Implements microphysical processes for collisions between superdroplets.
+ * @tparam Probability The type representing the pair probability object.
+ * @tparam EnactCollision The type representing the pair enactment object.
+ */
 template <PairProbability Probability, PairEnactX EnactCollision>
 struct DoCollisions {
  private:
-  const double DELT;  // real time interval [s] for which probability of collision-x is calculated
+  const double DELT; /**< time interval [s] over which probability of collision is calculated. */
+  const Probability probability; /**< Probability object for calculating collision probabilities. */
+  const EnactCollision enact_collision; /**< Enactment object for enacting collision events. */
 
-  /* object (has operator that) returns prob_jk, the probability
-  a pair of droplets undergo some kind of collision process.
-  prob_jk is analogous to prob_jk = K(drop1, drop2) delta_t/delta_vol,
-  where K(drop1, drop2) := C(drop1, drop2) * |v1−v2|
-  is the coalescence kernel (see Shima 2009 eqn 3). For example
-  prob_jk may return the probability of collision-coalescence
-  according to a particular coalescence kernel, or collision-breakup */
-  const Probability probability;
-
-  /* object (has operator that) enacts a collision-X event on two
-  superdroplets. For example it may enact collision-coalescence by
-  of a pair of superdroplets by changing the multiplicity,
-  radius and solute mass of each superdroplet in the pair
-  according to Shima et al. 2009 Section 5.1.3. part (5). */
-  const EnactCollision enact_collision;
-
-  /* calculate probability of pair of superdroplets
-  undergoing collision-x according to Shima et al. 2009
-  ("p_alpha" in paper). Assumes drop1.xi >= drop2.xi */
+  /**
+   * @brief Scaled probability of collision for a pair of super-droplets.
+   *
+   * Returns the probability of pair of super-droplets colliding according to
+   * Shima et al. 2009 ("p_alpha" in paper). Function assumes drop1.xi >= drop2.xi.
+   *
+   * _Note:_ multiplicity, xi, of drop1 is cast to double for the calculation.
+   *
+   * @param drop1 The first super-droplet.
+   * @param drop2 The second super-droplet.
+   * @param scale_p The scaling factor.
+   * @param VOLUME The volume.
+   * @return The scaled probability of the collision.
+   */
   KOKKOS_INLINE_FUNCTION double scaled_probability(const Superdrop &drop1, const Superdrop &drop2,
                                                    const double scale_p,
                                                    const double VOLUME) const {
     const auto prob_jk = double{probability(drop1, drop2, DELT, VOLUME)};
-    const auto large_xi = static_cast<double>(drop1.get_xi());  // casting xi to double (!)
+    const auto large_xi = static_cast<double>(drop1.get_xi());  // casting to double (!)
 
     const auto prob = double{scale_p * large_xi * prob_jk};
 
     return prob;
   }
 
-  /* compare dropA.xi with dropB.xi and return (non-const)
-  references to dropA and dropB in a pair {drop1, drop2}
-  such that drop1.xi is always >= drop2.xi */
+  /**
+   * @brief Assigns references to super-droplets in a pair based on their multiplicities.
+   *
+   * Compare dropA's multiplicity with dropB's, and returns (non-const) references to dropA
+   * and dropB in a pair {drop1, drop2} such that drop1's multiplicity is always >= drop2's. *
+   *
+   * @param dropA The first super-droplet.
+   * @param dropB The second super-droplet.
+   * @return A pair of references to super-droplets ordered by descending xi value.
+   */
   KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop &, Superdrop &> assign_drops(
       Superdrop &dropA, Superdrop &dropB) const {
     if (!(dropA.get_xi() < dropB.get_xi())) {
@@ -104,9 +124,19 @@ struct DoCollisions {
     }
   }
 
-  /* Monte Carlo Routine from Shima et al. 2009 for
-  collision-coalescence generalised to any collision-X
-  process for a pair of superdroplets */
+  /**
+   * @brief Performs collision event for a pair of superdroplets.
+   *
+   * Monte Carlo Routine from Shima et al. 2009 for collision-coalescence generalised to any
+   * collision-[X] process for a pair of super-droplets.
+   *
+   * @param dropA The first superdroplet.
+   * @param dropB The second superdroplet.
+   * @param genpool The random number generator pool.
+   * @param scale_p The scaling factor.
+   * @param VOLUME The volume.
+   * @return True if the collision event results in null superdrops with xi=0), otherwise false.
+   */
   KOKKOS_INLINE_FUNCTION bool collide_superdroplet_pair(Superdrop &dropA, Superdrop &dropB,
                                                         GenRandomPool genpool, const double scale_p,
                                                         const double VOLUME) const {
@@ -129,21 +159,31 @@ struct DoCollisions {
     return isnull;
   }
 
-  /* Enacts collisions for pairs of superdroplets in supers
-  like for collision-coalescence in Shima et al. 2009.
-  Assumes supers is already randomly shuffled and these
-  superdrops are colliding some 'VOLUME' [m^3]). Function
-  uses Kokkos nested parallelism for paralelism over supers
-  inside parallelised loop for member 'teamMember'. In serial
-  Kokkos::parallel_reduce([...]) is equivalent to summing nnull
-  over for loop: for (size_t jj(0); jj < npairs; ++jj) {[...]}
-  when in serial */
+  /**
+   * @brief Performs collisions between super-droplets in supers view.
+   *
+   * Enacts collisions for pairs of super-droplets in supers view adapted from collision-coalescence
+   * of Shima et al. 2009 to generalise to allow for other types of collision-[X] events.
+   *
+   * Function uses Kokkos nested parallelism for paralelism over supers inside parallelised loop
+   * for member 'teamMember'.
+   * In serial Kokkos::parallel_reduce([...]) is equivalent to summing nnull over for loop:
+   * for (size_t jj(0); jj < npairs; ++jj) {[...]}.
+   *
+   * _NOTE:_ function assumes supers is already randomly shuffled and these superdrops are
+   * colliding some 'VOLUME' [m^3]).
+   *
+   * @param team_member The Kokkos team member.
+   * @param supers The randomly shuffled view of super-droplets.
+   * @param volume The volume in which to calculate the probability of collisions.
+   * @param genpool The random number generator pool.
+   * @return The number of null (xi=0) superdrops.
+   */
   KOKKOS_INLINE_FUNCTION size_t collide_supers(const TeamMember &team_member,
                                                subviewd_supers supers, const double volume,
                                                GenRandomPool genpool) const {
     const auto nsupers = static_cast<size_t>(supers.extent(0));
-    const auto npairs =
-        size_t{nsupers / 2};  // no. pairs of superdroplets (same as floor() for positive nsupers)
+    const auto npairs = size_t{nsupers / 2};  // no. pairs of superdrops (=floor() for nsupers > 0)
     const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
     const auto VOLUME = double{volume * dlc::VOL0};  // volume in which collisions occur [m^3]
 
@@ -161,12 +201,20 @@ struct DoCollisions {
     return totnnull;
   }
 
-  /* Superdroplet collision method adapted from collision-coalescence
-  in Shima et al. 2009. This function shuffles supers to get
-  random pairs of superdroplets (SDs) and then calls the
-  collision function for each pair (assuming these superdrops
-  are colliding some 'VOLUME' [m^3]). Function is called inside
-  a parallelised loop for member 'teamMember'. */
+  /**
+   * @brief Executes collision events for pairs of superdroplets.
+   *
+   * Superdroplet collision algorithm adapted from collision-coalescence in Shima et al. 2009.
+   * This function shuffles supers to get random pairs of superdroplets (SDs) and then calls the
+   * collision function for each pair assuming these superdrops are colliding some 'VOLUME' [m^3].
+   * Function is designed to be called inside a parallelised loop for member 'teamMember'.
+   *
+   * @param team_member The Kokkos team member.
+   * @param supers The view of super-droplets.
+   * @param volume The volume in which to calculate the probability of collisions.
+   * @param genpool The random number generator pool.
+   * @return The updated superdroplets.
+   */
   KOKKOS_INLINE_FUNCTION subviewd_supers do_collisions(const TeamMember &team_member,
                                                        subviewd_supers supers, const double volume,
                                                        GenRandomPool genpool) const {
@@ -182,13 +230,37 @@ struct DoCollisions {
   }
 
  public:
+  /**
+   * @brief Constructs a DoCollisions object.
+   *
+   * _Note:_ If DoCollisions used at the MicrophysicsFunction type for a ConstTstepMicrophysics
+   * instance, the interval between calls of DoCollisions operator() in model timesteps must be
+   * concordant with DELT [s].
+   *
+   * @param DELT Time interval [s] over which probability of collision is calculated.
+   * @param p The probability object for calculating the probability of a collision.
+   * @param x The enactment object for enacting collision events.
+   */
   DoCollisions(const double DELT, Probability p, EnactCollision x)
       : DELT(DELT), probability(p), enact_collision(x) {}
 
-  /* this operator is used as an "adaptor" for using
-  collisions as the MicrophysicsFunction type in a
-  ConstTstepMicrophysics instance (*hint* which itself
-  satsifies the MicrophysicalProcess concept) */
+  /**
+   * @brief Operator used as an "adaptor" for using collisions as the MicrophysicsFunction type for
+   * a ConstTstepMicrophysics instance (*hint* which itself satsifies the MicrophysicalProcess
+   * concept).
+   *
+   * i.e. Operator allows DoCollisions to be used as the function in a microphysical process with a
+   * constant timestep between events. _Note:_ If object used in this way, the interval between
+   * calls to this function (i.e. between collision events) in model timesteps should be concordant
+   * witih DELT of the instance.
+   *
+   * @param team_member The Kokkos team member.
+   * @param subt The sub-time step.
+   * @param supers The superdroplets.
+   * @param state The state.
+   * @param genpool The random number generator pool.
+   * @return The updated superdroplets.
+   */
   KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
                                                     const unsigned int subt, subviewd_supers supers,
                                                     const State &state,

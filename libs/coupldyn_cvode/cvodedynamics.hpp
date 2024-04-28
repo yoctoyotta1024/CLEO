@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: cvodedynamics.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st November 2023
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,7 +38,7 @@
 
 #include "../cleoconstants.hpp"
 #include "./differentialfuncs.hpp"
-#include "initialise/config.hpp"
+#include "initialise/optional_config_params.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -76,7 +78,8 @@ struct CvodeDynamics {
   /* return vector of dimensionless initial conditions
   for thermodynamic variables (p, temp, qv, qc) to
   initialise cvode thermodynamics solver */
-  std::vector<double> initial_conditions(const Config &config) const;
+  std::vector<double> initial_conditions(
+      const OptionalConfigParams::CvodeDynamicsParams &config) const;
 
   /* set values in UserData structure for odes_func */
   void init_userdata(const size_t neq, const double wmax, const double tauhalf);
@@ -91,7 +94,8 @@ struct CvodeDynamics {
  public:
   /* construct instance of CVODE ODE
   solver with initial conditions */
-  CvodeDynamics(const Config &config, const unsigned int couplstep,
+  CvodeDynamics(const OptionalConfigParams::CvodeDynamicsParams &config,
+                const unsigned int couplstep,
                 const std::function<double(unsigned int)> step2dimlesstime);
 
   /* print final statistics to the

@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Shin-ichiro Shima (SiS)
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,11 +24,10 @@
 #ifndef LIBS_SUPERDROPS_CONDENSATION_HPP_
 #define LIBS_SUPERDROPS_CONDENSATION_HPP_
 
-#include <concepts>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp>  // for pi
 #include <Kokkos_Random.hpp>
+#include <concepts>
 
 #include "../cleoconstants.hpp"
 #include "./impliciteuler.hpp"
@@ -46,7 +45,7 @@ namespace dlc = dimless_constants;
  */
 struct DoCondensation {
  private:
-  bool doAlterThermo;   /**< Whether to make condensation alter State or not */
+  bool do_alter_thermo; /**< Whether to make condensation/evaporation alter State or not */
   ImplicitEuler impe;   /**< instance of ImplicitEuler ODE solver */
 
   /**
@@ -106,7 +105,7 @@ struct DoCondensation {
    * @param s_ratio The saturation ratio.
    * @param ffactor The sum of the diffusion factors.
    * @return The mass of liquid condensed or evaporated.
-  */
+   */
   KOKKOS_FUNCTION
   double superdrop_mass_change(Superdrop &drop, const double temp, const double s_ratio,
                                const double ffactor) const;
@@ -114,7 +113,7 @@ struct DoCondensation {
   /**
    * @brief Applies the effect of condensation / evaporation on the thermodynamics of the State.
    *
-   * if doAlterThermo is true, use a single team member to change the thermodynamics of the
+   * if do_alter_thermo is true, use a single team member to change the thermodynamics of the
    * State due to the effect of condensation / evaporation.
    *
    * @param team_member The Kokkos team member.
@@ -144,16 +143,16 @@ struct DoCondensation {
  public:
   /**
    * @brief Constructs a DoCondensation object.
-   * @param doAlterThermo Whether to alter the thermodynamics of the State.
+   * @param do_alter_thermo Whether to alter the thermodynamics of the State.
    * @param niters Number of iterations of implicit Euler method.
    * @param delt Time step to integrate ODE using implcit Euler method.
    * @param maxrtol Maximum relative tolerance for implicit Euler method.
    * @param maxatol Maximum absolute tolerance for implicit Euler method.
    * @param subdelt Sub-time step size in implicit Euler method.
    */
-  DoCondensation(const bool doAlterThermo, const unsigned int niters, const double delt,
+  DoCondensation(const bool do_alter_thermo, const unsigned int niters, const double delt,
                  const double maxrtol, const double maxatol, const double subdelt)
-      : doAlterThermo(doAlterThermo), impe(niters, delt, maxrtol, maxatol, subdelt) {}
+      : do_alter_thermo(do_alter_thermo), impe(niters, delt, maxrtol, maxatol, subdelt) {}
 
   /**
    * @brief Operator used as an "adaptor" for using condensation as the function-like type
@@ -182,7 +181,7 @@ struct DoCondensation {
  * with a constant time-step 'interval'.
  *
  * @param interval The constant time-step for condensation.
- * @param doAlterThermo Whether to alter the thermodynamic state after condensation / evaporation.
+ * @param do_alter_thermo Whether to alter the thermodynamic state after condensation / evaporation.
  * @param niters Number of iterations of implicit Euler method.
  * @param step2dimlesstime A function to convert 'interval' time-step to a dimensionless time.
  * @param maxrtol Maximum relative tolerance for implicit Euler method.
@@ -192,14 +191,14 @@ struct DoCondensation {
  * @return The constructed microphysical process for condensation / evaporation.
  */
 inline MicrophysicalProcess auto Condensation(
-    const unsigned int interval, const bool doAlterThermo, const unsigned int niters,
-    const std::function<double(unsigned int)> step2dimlesstime, const double maxrtol,
+    const unsigned int interval, const std::function<double(unsigned int)> step2dimlesstime,
+    const bool do_alter_thermo, const unsigned int niters, const double maxrtol,
     const double maxatol, const double SUBDELT,
     const std::function<double(double)> realtime2dimless) {
   const auto delt = step2dimlesstime(interval);    // dimensionless time equivlent to interval
   const auto subdelt = realtime2dimless(SUBDELT);  // dimensionless time equivlent to SUBDELT [s]
 
-  const auto do_cond = DoCondensation(doAlterThermo, niters, delt, maxrtol, maxatol, subdelt);
+  const auto do_cond = DoCondensation(do_alter_thermo, niters, delt, maxrtol, maxatol, subdelt);
 
   return ConstTstepMicrophysics(interval, do_cond);
 }

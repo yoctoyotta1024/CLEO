@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 1st March 2024
+Last Modified: Wednesday 17th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -37,20 +37,22 @@ configfile = sys.argv[3]
 isfigures = [True, True]
 
 ### essential paths and filenames
-constsfile = path2CLEO+"libs/cleoconstants.hpp"
+constsfile = path2CLEO+"/libs/cleoconstants.hpp"
 binariespath = path2build+"/share/"
 savefigpath = path2build+"/bin/"
 
-gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.txt
+gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.yaml
 
 ### input parameters for zcoords of gridbox boundaries
-zmax = 2500 # maximum z coord [m]
+zmax = 820 # maximum z coord [m]
 zmin = 0 # minimum z coord [m]
-zdelta = 100 # even spacing
-zgrid = [zmin, zmax, zdelta]
+zdelta = 20 # even spacing
+# zgrid = [zmin, zmax, zdelta]
+# zgrid = np.arange(zmin, zmax+zdelta, zdelta)
+zgrid = np.concatenate((np.arange(zmin, zmax, zdelta), np.array([850])))
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 40, 20]
+xgrid = [0, 20, 20]
 
 ### input parameters for y coords of gridbox boundaries
 ygrid = np.asarray([0, 20])

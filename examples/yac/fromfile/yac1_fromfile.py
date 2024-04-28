@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th April 2024
+Last Modified: Friday 12th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,8 +15,9 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script runs CLEO executable for 3D example with time varying thermodynamics
-read from binary files to test that YAC can send the data to CLEO correctly.
+Script generates input files, then runs CLEO executable for 3D example with time varying
+thermodynamics read from binary files to test that YAC can send the data to CLEO correctly.
+Plots output data as .png files for visual checks.
 '''
 
 import os

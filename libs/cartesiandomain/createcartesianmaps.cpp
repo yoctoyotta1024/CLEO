@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: createcartesianmaps.cpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 19th December 2023
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -59,8 +61,8 @@ however the area and volume of each gridbox remains finite.
 E.g. In the 0-D case, the bounds maps all have 1 {key, value} where
 key=gbxidx=0 and value = {max, min} numerical limits, meanwhile volume
 function returns a value determined from the gridfile 'grid_filename' */
-CartesianMaps create_cartesian_maps(const unsigned int ngbxs, const unsigned int nspacedims,
-                                    std::string_view grid_filename) {
+CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspacedims,
+                                    const std::filesystem::path grid_filename) {
   std::cout << "\n--- create cartesian gridbox maps ---\n";
 
   const GbxBoundsFromBinary gfb(ngbxs, nspacedims, grid_filename);
@@ -181,7 +183,7 @@ void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
     gbxmaps.insert_coord1bounds(idx, nullbounds());
     gbxmaps.insert_coord2bounds(idx, nullbounds());
 
-    const auto c3nghbrs(cartesian_coord3nghbrs(idx, ndims));
+    const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));
     gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
     gbxmaps.insert_coord1nghbrs(idx, nullnghbrs(0));
     gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(0));
@@ -205,9 +207,9 @@ void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
     gbxmaps.insert_coord1bounds(idx, c1bs);
     gbxmaps.insert_coord2bounds(idx, nullbounds());
 
-    const auto c3nghbrs(cartesian_coord3nghbrs(idx, ndims));
+    const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));
     gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
-    const auto c1nghbrs(cartesian_coord1nghbrs(idx, ndims));
+    const auto c1nghbrs(DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims));
     gbxmaps.insert_coord1nghbrs(idx, c1nghbrs);
     gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(0));
   }
@@ -223,17 +225,17 @@ void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   for (auto idx : gfb.gbxidxs) {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.insert_coord3bounds(idx, c3bs);
-    const auto c3nghbrs(cartesian_coord3nghbrs(idx, ndims));
+    const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));
     gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
 
     const auto c1bs(gfb.get_coord1gbxbounds(idx));
     gbxmaps.insert_coord1bounds(idx, c1bs);
-    const auto c1nghbrs(cartesian_coord1nghbrs(idx, ndims));
+    const auto c1nghbrs(DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims));
     gbxmaps.insert_coord1nghbrs(idx, c1nghbrs);
 
     const auto c2bs(gfb.get_coord2gbxbounds(idx));
     gbxmaps.insert_coord2bounds(idx, c2bs);
-    const auto c2nghbrs(cartesian_coord2nghbrs(idx, ndims));
+    const auto c2nghbrs(DoublyPeriodicDomain::cartesian_coord2nghbrs(idx, ndims));
     gbxmaps.insert_coord2nghbrs(idx, c2nghbrs);
   }
 }

@@ -9,7 +9,7 @@ project("yac1")
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
-set(CLEOLIBS gridboxes initialise observers2 runcleo superdrops zarr2)
+set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
 # create primary executable for CLEO in 2-D coupled to thermodynamics from file setup
 add_executable(yac1 EXCLUDE_FROM_ALL "main_yac1.cpp")

@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -77,7 +77,7 @@ struct SimmelTerminalVelocity {
    * and Beard (1976) and used in Simmel's parmeterisation of Long 1974's hydrodynamic collision
    * kernel. For drops with radius >= 1.74mm, terminal velocity is 9.17m/s.
    *
-   * Note: Improvement could be made by following Arabas et al. 2015 and Morrison et al. 2005 in
+   * _Note:_ Improvement could be made by following Arabas et al. 2015 and Morrison et al. 2005 in
    * multiplying the terminal velocity by the density ratio, rho_dry0/rho_dry, of dry air under
    * standard conditions (rho_dry0) and in current state (rho_dry).
    *

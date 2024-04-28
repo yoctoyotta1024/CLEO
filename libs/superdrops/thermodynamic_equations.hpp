@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,14 +20,12 @@
  * Microscale to Climate" by Lohmann, Luond and Mahrt, 1st edition.
  */
 
-
 #ifndef LIBS_SUPERDROPS_THERMODYNAMIC_EQUATIONS_HPP_
 #define LIBS_SUPERDROPS_THERMODYNAMIC_EQUATIONS_HPP_
 
-#include <cassert>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <cassert>
 
 #include "../cleoconstants.hpp"
 #include "./superdrop.hpp"
@@ -102,7 +100,7 @@ Kokkos::pair<double, double> kohler_factors(const Superdrop &drop, const double 
  * paper for formula is Murray, F. W. (1967) "On the Computation of Saturation Vapor Pressure",
  * Journal of Applied Meteorology and Climatology 6, 203–204.
  *
- * Note: function starts with conversion from dimentionless to real temperature [Kelvin],
+ * _Note:_ Function starts with conversion from dimentionless to real temperature [Kelvin],
  * TEMP = temp*Temp0, and returns dimensionless pressure from real psat = PSAT/P0.
  *
  * @param temp The (dimensionless) ambient temperature.

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Wednesday 17th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,6 @@
  * Functionality related to modelling condensation
  * microphysical process in SDM
  */
-
 
 #include "./condensation.hpp"
 
@@ -104,7 +103,7 @@ double DoCondensation::superdroplets_change(const TeamMember &team_member,
  * @param s_ratio The saturation ratio.
  * @param ffactor The sum of the diffusion factors.
  * @return The mass of liquid condensed or evaporated.
-*/
+ */
 KOKKOS_FUNCTION
 double DoCondensation::superdrop_mass_change(Superdrop &drop, const double temp,
                                              const double s_ratio, const double ffactor) const {
@@ -126,7 +125,7 @@ double DoCondensation::superdrop_mass_change(Superdrop &drop, const double temp,
 /**
  * @brief Applies the effect of condensation / evaporation on the thermodynamics of the State.
  *
- * if doAlterThermo is true, use a single team member to change the thermodynamics of the
+ * if do_alter_thermo is true, use a single team member to change the thermodynamics of the
  * State due to the effect of condensation / evaporation.
  *
  * @param team_member The Kokkos team member.
@@ -141,7 +140,7 @@ void DoCondensation::effect_on_thermodynamic_state(const TeamMember &team_member
   Kokkos::single(
       Kokkos::PerTeam(team_member),
       [&, this](State &state) {
-        if (doAlterThermo) {
+        if (do_alter_thermo) {
           const auto VOLUME =
               double{state.get_volume() * dlc::VOL0};  // volume in which condensation occurs [m^3]
           const auto totrho_condensed =

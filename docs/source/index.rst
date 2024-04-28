@@ -31,6 +31,7 @@ Time to get involved! Start by :doc:`installing CLEO<usage/installation>` and ex
 
    intro/intro
    usage/requirements
+   usage/extern
    usage/installation
    usage/examples
    usage/quickstart
@@ -42,6 +43,7 @@ Time to get involved! Start by :doc:`installing CLEO<usage/installation>` and ex
    usage/ourdocs
 
    GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
+   usage/good_coding
    usage/contact
    references
 

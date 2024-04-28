@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Thursday 18th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,12 +15,11 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script runs CLEO adia0D executable to
-create data and plots similar to Figure 5 of
-"On the CCN (de)activation nonlinearities"
-S. Arabas and S. Shima 2017 to show
-example of cusp birfucation for
-0D adaibatic parcel expansion and contraction.
+Script generate input files, runs CLEO adia0D executable to
+create data and then creates plots for adiabatic parcel example
+similar to Figure 5 of "On the CCN (de)activation nonlinearities"
+S. Arabas and S. Shima 2017 to show example of cusp birfucation for
+0D adiabatic parcel expansion and contraction.
 Note: SD(M) = superdroplet (model)
 '''
 
@@ -150,7 +149,7 @@ thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
 supersat = thermo.supersaturation()
 time = pyzarr.get_time(dataset).secs
 sddata = pyzarr.get_supers(dataset, consts)
-zprof = displacement(time, config["W_AVG"], config["T_HALF"])
+zprof = displacement(time, config["W_avg"], config["TAU_half"])
 
 ### plot results
 # sample drops to plot from whole range of SD ids
@@ -170,5 +169,5 @@ as2017fig.arabas_shima_2017_fig(time, zprof, sd0["radius"], sd0["msol"],
                                 thermo.temp[:, 0, 0, 0],
                                 supersat[:, 0, 0, 0],
                                 sddata.IONIC, sddata.MR_SOL,
-                                config["W_AVG"], numconc,
+                                config["W_avg"], numconc,
                                 savename2)

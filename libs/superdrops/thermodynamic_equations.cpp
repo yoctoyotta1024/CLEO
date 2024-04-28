@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Tuesday 9th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,7 +23,6 @@
  * and Mahrt, 1st edition.
  */
 
-
 #include "./thermodynamic_equations.hpp"
 
 /**
@@ -35,7 +34,7 @@
  * paper for formula is Murray, F. W. (1967) "On the Computation of Saturation Vapor Pressure",
  * Journal of Applied Meteorology and Climatology 6, 203–204.
  *
- * Note: function starts with conversion from dimentionless to real temperature [Kelvin],
+ * _Note:_ Function starts with conversion from dimentionless to real temperature [Kelvin],
  * TEMP = temp*Temp0, and returns dimensionless pressure from real psat = PSAT/P0.
  *
  * @param temp The (dimensionless) ambient temperature.
