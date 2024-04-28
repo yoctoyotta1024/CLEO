@@ -99,7 +99,7 @@ simple_ds = xr.open_dataset(dataset, engine="zarr",
 
 
 np.random.seed(0)
-size = 1000 
+size = 1000
 random_array = np.random.choice(np.arange(0, int(config["totnsupers"])), size=size, replace=False)
 
 attributes = ["xi", "radius", "coord3", "sdgbxindex", "msol"]
@@ -143,13 +143,13 @@ plt.plot(ds2.mass, ds2.coord3, marker = '.', linestyle = 'None')
 ds2['mass_diff'] = ds2.mass.diff(dim = "time")
 # ds2['mass_diff'] = ds2['mass_diff'].where(ds2.mass_diff < 0)
 plt.scatter(
-    ds2.mass, 
-    ds2.coord3, 
-    c = ds2.radius, 
+    ds2.mass,
+    ds2.coord3,
+    c = ds2.radius,
     marker = '.',
     s = 0.1,
     linestyle = '-',
-    linewidth = 0.75, 
+    linewidth = 0.75,
     alpha = 0.6,
     cmap = "Reds")
 # plt.plot(ds2.mass_diff, ds2.radius, marker = '.', linestyle = 'None')
@@ -175,7 +175,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 # Plot the values
 ax.scatter(
-    ds2.isel(time = 10).radius, 
+    ds2.isel(time = 10).radius,
     ds2.isel(time = 10).xi,
     c = ds2.isel(time = 10).mass,
     marker='o')

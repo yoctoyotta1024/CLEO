@@ -30,13 +30,13 @@ path2experiment=${path2CLEO}/eurec4a/experiment_03/
 rawdirectory=${path2CLEO}/data/output/raw/rain/
 processeddirectory=${path2CLEO}/data/output/processed/rain/
 # yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/all_rain_clusters
-yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/subset
+yamldirectory=${HOME}/repositories/sdm-eurec4a/data/model/input/rain
 
 
 for yamlfile in ${yamldirectory}/*.yaml; do
     echo "Running zarrfiles_to_netcdf.py with ${yamlfile}"
     # {
-    #     ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile} ${rawdirectory} > ${logfile} 
+    #     ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile} ${rawdirectory} > ${logfile}
     # } || {
     #     echo "NO DATA CREATED"
     #     }

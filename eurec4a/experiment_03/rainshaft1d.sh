@@ -70,7 +70,7 @@ mkdir ${path2build}share
 for yamlfile in ${yamldirectory}/*.yaml; do
     echo "Running rainshaft1d.py with ${yamlfile}"
     {
-        ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile} ${rawdirectory} > ${logfile} 
+        ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile} ${yamlfile} ${rawdirectory} > ${logfile}
     } || {
         echo "NO DATA CREATED"
         }

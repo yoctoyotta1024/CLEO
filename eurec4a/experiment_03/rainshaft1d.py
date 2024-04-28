@@ -20,25 +20,38 @@ data and plots precipitation example given constant
 1-D rainshaft thermodynamics read from a file
 '''
 
+#%%
 import os
 import sys
 import numpy as np
 import random
 import yaml
-from pathlib import Path
+from pathlib import Path, PosixPath
 from matplotlib.colors import LogNorm, Normalize
 
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
-yaml_config_file = sys.argv[4]
-rawdirectory = sys.argv[5]
+# path2CLEO = sys.argv[1]
+# path2build = sys.argv[2]
+# configfile = sys.argv[3]
+# yaml_config_file = sys.argv[4]
+# rawdirectory = sys.argv[5]
+
+# Update the path2home variable to use the CustomPath class
+path2home = Path('/home/m/m301096')
+path2sdm_eurec4a = path2home / 'repositories' / 'sdm_eurec4a'
+path2CLEO = path2home / 'CLEO'
+path2build = path2home / 'build'
+configfile = path2CLEO / 'eurec4a/experiment_04/src/config/rain1d_config.txt'
+yaml_config_file = path2sdm_eurec4a / 'data/model/input/new/clusters_18.yaml'
+yaml_config_file = '/home/m/m301096/repositories/sdm-eurec4a/data/model/input/new/clusters_18.yaml'
+rawdirectory = path2CLEO / 'output/raw/rain/clusters_18'
+
+#%%
 
 with open(yaml_config_file, 'r') as f:
     config_yaml = yaml.safe_load(f)
 
-sys.path.append(path2CLEO)  # for imports from pySD package
-sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
+# sys.path.append(path2CLEO)  # for imports from pySD package
+# sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
 from pySD.sdmout_src import *
 from pySD import editconfigfile
@@ -56,25 +69,26 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
-binpath       = path2build+"/bin/"
-sharepath     = path2build+"/share/"
-gridfile      = sharepath+"rain1d_dimlessGBxboundaries.dat"
-initSDsfile   = sharepath+"rain1d_dimlessSDsinit.dat"
-thermofile    = sharepath+"rain1d_dimlessthermo.dat"
+constsfile    = path2CLEO / "libs/cleoconstants.hpp"
+binpath       = path2build / "bin/"
+sharepath     = path2build / "share/"
+gridfile      = sharepath / "rain1d_dimlessGBxboundaries.dat"
+initSDsfile   = sharepath / "rain1d_dimlessSDsinit.dat"
+thermofile    = sharepath / "rain1d_dimlessthermo.dat"
 
 
 identification_type = config_yaml['cloud']["identification_type"]
 cloud_id = config_yaml['cloud']["cloud_id"]
 datapaths = dict(
-  setuptxt = rawdirectory + f"{identification_type}_{cloud_id}/rain1d_setup.txt",
-  stats_filename = rawdirectory + f"{identification_type}_{cloud_id}/rain1d_stats.txt",
-  zarrbasedir = rawdirectory + f"{identification_type}_{cloud_id}/rain1d_sol.zarr",
+  setuptxt = rawdirectory / f"{identification_type}_{cloud_id}/rain1d_setup.txt",
+  stats_filename = rawdirectory / f"{identification_type}_{cloud_id}/rain1d_stats.txt",
+  zarrbasedir = rawdirectory / f"{identification_type}_{cloud_id}/rain1d_sol.zarr",
 )
 # path and file names for plotting results
 setupfile     = datapaths["setuptxt"]
 dataset       = datapaths["zarrbasedir"]
 
+#%%
 
 # overwrite the output paths
 editconfigfile.edit_config_params(configfile, datapaths)
@@ -82,12 +96,19 @@ editconfigfile.edit_config_params(configfile, datapaths)
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
-savefigpath = path2CLEO+"/results/examplesolutions/rain" # directory for saving figures
+savefigpath = path2CLEO / "/results/examplesolutions/rain" # directory for saving figures
 SDgbxs2plt  = list(range(39, 55))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid       = [0, 1200, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+cloud_altitude = config_yaml["cloud"]["altitude"][0]
+# only use integer precision
+cloud_altitude = int(cloud_altitude)
+cloud_bottom = cloud_altitude - 100
+cloud_top = cloud_altitude + 100
+vertical_resolution = 20
+
+zgrid       = [0, cloud_top, vertical_resolution]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid       = np.array([0, 20])  # array of xhalf coords [m]
 ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
@@ -111,8 +132,6 @@ Zbase       = np.mean([z_split_temp, z_split_qvap])                 # [m]
 
 
 ### --- settings for initial superdroplets --- ###
-# initial superdroplet coordinates
-zlim        = 800       # min z coord of superdroplets [m]
 npergbx     = 256       # number of superdroplets per gridbox
 
 # initial superdroplet radii (and implicitly solute masses)
@@ -130,6 +149,7 @@ scalefacs = psd_params["scale_factors"]
 numconc = np.sum(scalefacs)
 
 
+#%%
 ### ---------------------------------------------------------------- ###
 # Update config parameters
 # params = {
@@ -156,9 +176,9 @@ else:
   Path(path2build).mkdir(exist_ok=True)
   Path(sharepath).mkdir(exist_ok=True)
   Path(binpath).mkdir(exist_ok=True)
-os.system("rm "+gridfile)
-os.system("rm "+initSDsfile)
-os.system("rm "+thermofile[:-4]+"*")
+os.system("rm " + gridfile)
+os.system("rm " + initSDsfile)
+os.system("rm " + thermofile[:-4]+"*")
 
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
