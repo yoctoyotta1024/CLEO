@@ -196,6 +196,8 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::No
   MINRADIUS = node["MINRADIUS"].as<double>();
   MAXRADIUS = node["MAXRADIUS"].as<double>();
   NUMCONC = node["NUMCONC"].as<double>();
+  GEOMEAN = node["GEOMEAN"].as<double>();
+  geosigma = node["geosigma"].as<double>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
@@ -203,6 +205,6 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
             << "\ninitnsupers: " << initnsupers << "\nnewnsupers: " << newnsupers
             << "\nCOORD3LIM: " << COORD3LIM << "\nDRYRADIUS: " << DRYRADIUS
             << "\nMINRADIUS: " << MINRADIUS << "\nMAXRADIUS: " << MAXRADIUS
-            << "\nNUMCONC: " << NUMCONC
+            << "\nNUMCONC: " << NUMCONC << "\nGEOMEAN: " << GEOMEAN << "\ngeosigma: " << geosigma
             << "\n---------------------------------------------------------\n";
 }

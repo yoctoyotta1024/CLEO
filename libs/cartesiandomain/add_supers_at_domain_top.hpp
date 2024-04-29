@@ -28,6 +28,7 @@
 #include <array>
 #include <cmath>
 #include <memory>
+#include <numbers>
 #include <random>
 #include <stdexcept>
 #include <utility>
@@ -51,6 +52,8 @@ struct CreateSuperdrop {
   std::vector<double> log10redges; /**< edges of bins for superdroplet log_10(radius) */
   double dryradius;                /**< dry radius of new superdrop */
   double numconc;                  /**< number concentration of new droplets*/
+  double mutilda;                  /**< ln(geometric mean) of lognormal distribution */
+  double sigtilda;                 /**< ln(geometric sigma) of lognormal distribution */
 
   /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
   random value within the gridbox's bounds */
@@ -78,7 +81,9 @@ struct CreateSuperdrop {
         nbins(config.newnsupers),
         log10redges(),
         dryradius(config.DRYRADIUS / dlc::R0),
-        numconc(config.NUMCONC * dlc::VOL0) {
+        numconc(config.NUMCONC * dlc::VOL0),
+        mutilda(std::log(config.GEOMEAN / dlc::R0)),
+        sigtilda(std::log(config.geosigma)) {
     const auto log10rmin = std::log10(config.MINRADIUS / dlc::R0);
     const auto log10rmax = std::log10(config.MAXRADIUS / dlc::R0);
     const auto log10deltar = double{(log10rmax - log10rmin) / nbins};

@@ -138,7 +138,8 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
   const auto log10r = double{log10rlow + frac * log10rwidth};
   const auto radius = double{Kokkos::pow(10.0, log10r)};
 
-  const size_t xi = std::round(droplet_numconc_distribution(log10r, log10rwidth) * gbxvolume);
+  const auto numconc = droplet_numconc_distribution(radius, log10rwidth);
+  const auto xi = (uint64_t)std::round(numconc * gbxvolume);  // cast double to uint64_t
 
   return std::make_pair(xi, radius);  // xi_radius
 }
@@ -155,8 +156,17 @@ double CreateSuperdrop::new_msol(const double radius) const {
 }
 
 /* returns the droplet number concentration from a binned droplet number concentration
-distribution for a bin of width log10rwidth in log_10(r) space centred at log_10(r). */
-double CreateSuperdrop::droplet_numconc_distribution(const double log10r,
+distribution for a bin of width log10rwidth in log_10(r) space centred at radius. */
+double CreateSuperdrop::droplet_numconc_distribution(const double radius,
                                                      const double log10rwidth) const {
-  return numconc;  // number of droplets per unit volume of size log_10(r)
+  const auto dnumconc_dlnr = numconc * lognormal_pdf(radius);  // delta_numconc / delta_lnr
+  const auto dlnr = log10rwidth * std::log(10);  // convert delta_log10(r) into delta_ln(r)
+
+  return dnumconc_dlnr * dlnr;  // number of droplets per unit volume
+}
+
+double lognormal_pdf(const double radius) {
+  const auto inverse_norm = radius * sigtilda * std::sqrt(2.0 * std::numbers::pi);
+  const auto expo = (std::log(radius) - mutilda) / sigtilda;
+  return std::exp(-0.5 * expo * expo) / inverse_norm;
 }

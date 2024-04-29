@@ -82,3 +82,5 @@ boundary_conditions:
   MINRADIUS: 1e-7                                      # minimum radius of new super-droplets [m]
   MAXRADIUS: 1e-4                                      # maximum radius of new super-droplets [m]
   NUMCONC: 500e6                                       # number concentration of new droplets [m^-3]
+  GEOMEAN: 3.5e-6                                      # geometric mean radius of lognormal distribution [m]
+  geosigma: 2.0                                        # geometric standard deviation of lognormal distribution

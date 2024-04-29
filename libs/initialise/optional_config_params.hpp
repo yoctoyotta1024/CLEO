@@ -119,6 +119,8 @@ struct OptionalConfigParams {
     double MINRADIUS = NaNVals::dbl();     /**< minimum radius of new super-droplets [m] */
     double MAXRADIUS = NaNVals::dbl();     /**< maximum radius of new super-droplets [m] */
     double NUMCONC = NaNVals::dbl();       /**< number concentration of new droplets [m^-3] */
+    double GEOMEAN = NaNVals::dbl();  /**< geometric mean radius of lognormal distribution [m] */
+    double geosigma = NaNVals::dbl(); /**< geometric standard deviation of lognormal distribution */
   } addsupersatdomaintop;
 };
 
