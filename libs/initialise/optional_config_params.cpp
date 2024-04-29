@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 20th April 2024
+ * Last Modified: Monday 29th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -192,11 +192,15 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::No
   }
   newnsupers = node["newnsupers"].as<size_t>();
   COORD3LIM = node["COORD3LIM"].as<double>();
+  DRYRADIUS = node["DRYRADIUS"].as<double>();
+  MINRADIUS = node["MINRADIUS"].as<double>();
+  MAXRADIUS = node["MAXRADIUS"].as<double>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
   std::cout << "\n-------- AddSupersAtDomainTop Configuration Parameters --------------"
             << "\ninitnsupers: " << initnsupers << "\nnewnsupers: " << newnsupers
-            << "\nCOORD3LIM: " << COORD3LIM
+            << "\nCOORD3LIM: " << COORD3LIM << "\nDRYRADIUS: " << DRYRADIUS
+            << "\nMINRADIUS: " << MINRADIUS << "\nMAXRADIUS: " << MAXRADIUS
             << "\n---------------------------------------------------------\n";
 }

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 20th April 2024
+ * Last Modified: Monday 29th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -115,6 +115,9 @@ struct OptionalConfigParams {
     size_t initnsupers = NaNVals::sizet(); /**< initial no. of super-droplets in domain */
     size_t newnsupers = NaNVals::sizet();  /**< number SDs to add to each gridbox above COORD3LIM */
     double COORD3LIM = NaNVals::dbl();     /**< SDs added to domain with coord3 >= COORD3LIM [m] */
+    double DRYRADIUS = NaNVals::dbl();     /**< dry radius of new super-droplets (for msol) [m] */
+    double MINRADIUS = NaNVals::dbl();     /**< minimum radius of new super-droplets [m] */
+    double MAXRADIUS = NaNVals::dbl();     /**< maximum radius of new super-droplets [m] */
   } addsupersatdomaintop;
 };
 
