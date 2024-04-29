@@ -22,7 +22,7 @@ path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_eurec4a1D/
 executables="eurec4a1D"
 
-configfile=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
+configfile=${path2CLEO}examples/eurec4a1d/src/config/eurec4a1d_config.yaml
 pythonscript=${path2CLEO}examples/eurec4a1d/eurec4a1d.py
 script_args="${configfile}"
 
@@ -31,7 +31,7 @@ cloud_observation_configfile=${path2sdmeurec4a}data/model/input/new/clusters_18.
 rawdirectory=${path2CLEO}data/output/raw/no_aerosols/cluster_18/
 
 
-script_args="${HOME} ${path2CLEO} ${path2build} ${configfile} ${cloud_observation_configfile} ${rawdirectory}"
+script_args="${HOME} ${configfile} ${cloud_observation_configfile} ${rawdirectory}"
 
 
 ### ---------------------------------------------------- ###

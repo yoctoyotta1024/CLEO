@@ -22,17 +22,18 @@ data and plots precipitation example given constant
 
 #%%
 import os
-import re
 import sys
 import numpy as np
 import random
 import yaml
-from pathlib import Path, PosixPath
-from matplotlib.colors import LogNorm, Normalize
+from pathlib import Path
 
-path2home = Path(sys.argv[1])
-path2CLEO = Path(sys.argv[2])
-path2build = Path(sys.argv[3])
+import sys
+print(f"Enviroment: {sys.prefix}")
+
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+path2home = Path(sys.argv[3])
 configfile = Path(sys.argv[4])
 cloud_observation_filepath = Path(sys.argv[5])
 rawdirectory = Path(sys.argv[6])
@@ -48,7 +49,6 @@ rawdirectory = Path(sys.argv[6])
 # cloud_observation_filepath = '/home/m/m301096/repositories/sdm-eurec4a/data/model/input/new/clusters_18.yaml'
 # rawdirectory = path2CLEO / 'data/output/raw/no_aerosols'
 
-
 rawdirectory.mkdir(exist_ok=True, parents=True)
 
 #%%
@@ -60,10 +60,8 @@ sys.path.append(str(path2CLEO))  # for imports from pySD package
 sys.path.append(str(path2CLEO  /"examples/exampleplotting/")) # for imports from example plotting package
 
 
-import sys
-print(f"Enviroment: {sys.prefix}")
 
-from plotssrc import pltsds, pltmoms, animations
+
 from pySD.sdmout_src import *
 from pySD import editconfigfile
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -74,7 +72,6 @@ from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
-from pySD.gbxboundariesbinary_src import read_gbxboundaries
 # %%
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -323,26 +320,26 @@ os.system(executable + ' ' + str(configfile))
 ### ---------------------------------------------------------------- ###
 
 
-# %%
-### ---------------------------------------------------------------- ###
-### ---------------- CONVERT OUTPUT TO REGULAR ARRAY --------------- ###
-### ---------------------------------------------------------------- ###
-OUTPUT_FILEPATH = rawdirectory_individual / "full_dataset.nc"
-### ----------------------- INPUT PARAMETERS ----------------------- ###
-### --- essential paths and filenames --- ###
+# # %%
+# ### ---------------------------------------------------------------- ###
+# ### ---------------- CONVERT OUTPUT TO REGULAR ARRAY --------------- ###
+# ### ---------------------------------------------------------------- ###
+# OUTPUT_FILEPATH = rawdirectory_individual / "full_dataset.nc"
+# ### ----------------------- INPUT PARAMETERS ----------------------- ###
+# ### --- essential paths and filenames --- ###
 
-if os.path.exists(OUTPUT_FILEPATH):
-    print(f"The file {OUTPUT_FILEPATH} exists. Skip processing.")
-else:
-    print(f"The file {OUTPUT_FILEPATH} does not exist. Create it.")
+# if os.path.exists(OUTPUT_FILEPATH):
+#     print(f"The file {OUTPUT_FILEPATH} exists. Skip processing.")
+# else:
+#     print(f"The file {OUTPUT_FILEPATH} does not exist. Create it.")
 
-    # read in constants and intial setup from setup .txt file
-    config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=False)
-    consts = pysetuptxt.get_consts(setupfile, isprint=False)
-    # Create a first simple dataset to have the coordinates for later netcdf creation
-    sddata = pyzarr.get_supers(str(dataset), consts)
-    lagrange = sddata.to_Dataset()
-    lagrange.to_netcdf(OUTPUT_FILEPATH)
+#     # read in constants and intial setup from setup .txt file
+#     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=False)
+#     consts = pysetuptxt.get_consts(setupfile, isprint=False)
+#     # Create a first simple dataset to have the coordinates for later netcdf creation
+#     sddata = pyzarr.get_supers(str(dataset), consts)
+#     lagrange = sddata.to_Dataset()
+#     lagrange.to_netcdf(OUTPUT_FILEPATH)
 
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+# ### ---------------------------------------------------------------- ###
+# ### ---------------------------------------------------------------- ###
