@@ -78,7 +78,7 @@ struct CreateSuperdrop {
         nbins(config.newnsupers),
         log10redges(),
         dryradius(config.DRYRADIUS / dlc::R0),
-        numconc(config.NUMCONC * 100 * dlc::VOL0) {
+        numconc(config.NUMCONC * dlc::VOL0) {
     const auto log10rmin = std::log10(config.MINRADIUS / dlc::R0);
     const auto log10rmax = std::log10(config.MAXRADIUS / dlc::R0);
     const auto log10deltar = double{(log10rmax - log10rmin) / nbins};
