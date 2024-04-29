@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Saturday 20th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -47,10 +47,10 @@ struct IntID {
     Gen() : _id(0) {}
 
     /**
-     * @brief Constructor for ID generation starting at value = id + 1.
+     * @brief Constructor for ID generation with next id at value = id + 1.
      *
      */
-    explicit Gen(const IntID id) : _id(id.value + 1) {}
+    explicit Gen(const size_t id) : _id(id) {}
 
     /**
      * @brief Generate the next SD identity.
@@ -88,8 +88,8 @@ struct EmptyID {
    */
   class Gen {
    public:
-    Gen() = default;  // Default constructor equiavelnt to Gen{};
-    explicit Gen(const EmptyID id) {}
+    Gen() = default;  // Default constructor equiavlent to Gen{};
+    explicit Gen(const size_t id) {}
 
     /**
      * @brief Generate an empty SD identity.

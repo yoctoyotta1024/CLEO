@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Saturday 20th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,6 +24,9 @@
 #define LIBS_CARTESIANDOMAIN_ADD_SUPERS_AT_DOMAIN_TOP_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <array>
+#include <memory>
+#include <stdexcept>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
@@ -35,8 +38,8 @@
 
 struct AddSupersAtDomainTop {
  private:
-  double coord3lim;  /**< gridboxes with upper bound > coord3lim get new super-droplets */
   size_t newnsupers; /**< number of superdroplets to add to gridboxes above coord3lim */
+  double coord3lim;  /**< gridboxes with upper bound > coord3lim get new super-droplets */
   std::shared_ptr<Superdrop::IDType::Gen>
       sdIdGen; /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
 
@@ -60,11 +63,13 @@ struct AddSupersAtDomainTop {
   void move_supers_between_gridboxes(const viewd_gbx d_gbxs, const viewd_supers totsupers) const;
 
  public:
-  /* New super-droplets are added to domain with coord3 >= COORD3LIM [m] */
+  /* New super-droplets are added to domain with coord3 >= COORD3LIM [m]. Note generation of
+   * nextsdId assumes it is the only method creating super-droplets - otherwise created sdId may not
+   * be unique*/
   explicit AddSupersAtDomainTop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
-      : coord3lim(config.COORD3LIM / dlc::COORD0),
-        newnsupers(config.newnsupers),
-        sdIdGen(std::make_shared<Superdrop::IDType::Gen>()) {}
+      : newnsupers(config.newnsupers),
+        coord3lim(config.COORD3LIM / dlc::COORD0),
+        sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)) {}
 
   /*_Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).*/
   void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,

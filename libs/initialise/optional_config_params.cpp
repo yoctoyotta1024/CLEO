@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Saturday 20th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -185,12 +185,18 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
 void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::Node &config) {
   const YAML::Node node = config["boundary_conditions"];
 
-  COORD3LIM = node["COORD3LIM"].as<double>();
+  if (config["initsupers"] && config["initsupers"]["initnsupers"]) {
+    initnsupers = config["initsupers"]["initnsupers"].as<size_t>();
+  } else {
+    initnsupers = config["domain"]["maxnsupers"].as<size_t>();
+  }
   newnsupers = node["newnsupers"].as<size_t>();
+  COORD3LIM = node["COORD3LIM"].as<double>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
   std::cout << "\n-------- AddSupersAtDomainTop Configuration Parameters --------------"
-            << "\nCOORD3LIM: " << COORD3LIM << "\nnewnsupers: " << newnsupers
+            << "\ninitnsupers: " << initnsupers << "\nnewnsupers: " << newnsupers
+            << "\nCOORD3LIM: " << COORD3LIM
             << "\n---------------------------------------------------------\n";
 }

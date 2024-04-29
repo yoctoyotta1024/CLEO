@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Saturday 20th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -112,8 +112,9 @@ struct OptionalConfigParams {
   struct AddSupersAtDomainTopParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
-    double COORD3LIM = NaNVals::dbl();    /**< SDs added to domain with coord3 >= COORD3LIM [m] */
-    size_t newnsupers = NaNVals::sizet(); /**< number SDs to add to each gridbox above COORD3LIM */
+    size_t initnsupers = NaNVals::sizet(); /**< initial no. of super-droplets in domain */
+    size_t newnsupers = NaNVals::sizet();  /**< number SDs to add to each gridbox above COORD3LIM */
+    double COORD3LIM = NaNVals::dbl();     /**< SDs added to domain with coord3 >= COORD3LIM [m] */
   } addsupersatdomaintop;
 };
 

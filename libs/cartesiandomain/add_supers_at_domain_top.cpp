@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Monday 29th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -74,10 +74,17 @@ void AddSupersAtDomainTop::remove_supers_from_gridbox(const Gridbox &gbx) const 
 
 void AddSupersAtDomainTop::add_supers_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
                                                   const viewd_supers totsupers) const {
-  for (size_t kk(0); kk < newnsupers; ++kk) {
-    const auto sd = create_superdrop(gbx);
-    // TODO(CB): WIP slot into totsupers <- first initialise not all supers from file (set empty
-    // ones with out of domain sdgbxindex)
+  size_t start = gbx.domain_totnsupers();
+
+  if (start + newnsupers > totsupers.extent(0)) {
+    const auto err = std::string(
+        "UNDEFINED BEHAVIOUR: Number of super-droplets in the domain cannot become larger than the "
+        "size of the super-droplets' view");
+    throw std::invalid_argument(err);
+  }
+
+  for (size_t kk(start); kk < start + newnsupers; ++kk) {
+    totsupers(kk) = create_superdrop(gbx);
   }
 }
 
@@ -85,7 +92,7 @@ Superdrop AddSupersAtDomainTop::create_superdrop(const Gridbox &gbx) const {
   const auto sdgbxindex = gbx.get_gbxindex();
   const auto coords312 = create_superdrop_coords();
   const auto attrs = create_superdrop_attrs();
-  const auto sdId = sdIdGen->next();  // TODO(CB)
+  const auto sdId = sdIdGen->next();
 
   return Superdrop(sdgbxindex, coords312[0], coords312[1], coords312[2], attrs, sdId);
 }
