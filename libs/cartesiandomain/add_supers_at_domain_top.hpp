@@ -46,10 +46,11 @@ struct CreateSuperdrop {
   std::shared_ptr<Kokkos::Random_XorShift64<HostSpace>>
       randgen; /**< pointer to Kokkos random number generator */
   std::shared_ptr<Superdrop::IDType::Gen>
-      sdIdGen;      /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
-  double dryradius; /**< dry radius of new superdrop */
-  size_t nbins;     /**< number of bins for sampling superdroplet radius */
+      sdIdGen;  /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
+  size_t nbins; /**< number of bins for sampling superdroplet radius */
   std::vector<double> log10redges; /**< edges of bins for superdroplet log_10(radius) */
+  double dryradius;                /**< dry radius of new superdrop */
+  double numconc;                  /**< number concentration of new droplets*/
 
   /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
   random value within the gridbox's bounds */
@@ -74,9 +75,10 @@ struct CreateSuperdrop {
   explicit CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
       : randgen(std::make_shared<Kokkos::Random_XorShift64<HostSpace>>(std::random_device {}())),
         sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)),
-        dryradius(config.DRYRADIUS / dlc::R0),
         nbins(config.newnsupers),
-        log10redges() {
+        log10redges(),
+        dryradius(config.DRYRADIUS / dlc::R0),
+        numconc(config.NUMCONC * 100 * dlc::VOL0) {
     const auto log10rmin = std::log10(config.MINRADIUS / dlc::R0);
     const auto log10rmax = std::log10(config.MAXRADIUS / dlc::R0);
     const auto log10deltar = double{(log10rmax - log10rmin) / nbins};

@@ -138,7 +138,7 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
   const auto log10r = double{log10rlow + frac * log10rwidth};
   const auto radius = double{Kokkos::pow(10.0, log10r)};
 
-  const auto xi = droplet_numconc_distribution(log10r, log10rwidth) * gbxvolume;
+  const size_t xi = std::round(droplet_numconc_distribution(log10r, log10rwidth) * gbxvolume);
 
   return std::make_pair(xi, radius);  // xi_radius
 }
@@ -158,6 +158,5 @@ double CreateSuperdrop::new_msol(const double radius) const {
 distribution for a bin of width log10rwidth in log_10(r) space centred at log_10(r). */
 double CreateSuperdrop::droplet_numconc_distribution(const double log10r,
                                                      const double log10rwidth) const {
-  const double numconc = 100 / dlc::COORD0 / dlc::COORD0 / dlc::COORD0;
   return numconc;  // number of droplets per unit volume of size log_10(r)
 }

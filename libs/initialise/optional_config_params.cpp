@@ -195,6 +195,7 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::No
   DRYRADIUS = node["DRYRADIUS"].as<double>();
   MINRADIUS = node["MINRADIUS"].as<double>();
   MAXRADIUS = node["MAXRADIUS"].as<double>();
+  NUMCONC = node["NUMCONC"].as<double>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
@@ -202,5 +203,6 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
             << "\ninitnsupers: " << initnsupers << "\nnewnsupers: " << newnsupers
             << "\nCOORD3LIM: " << COORD3LIM << "\nDRYRADIUS: " << DRYRADIUS
             << "\nMINRADIUS: " << MINRADIUS << "\nMAXRADIUS: " << MAXRADIUS
+            << "\nNUMCONC: " << NUMCONC
             << "\n---------------------------------------------------------\n";
 }

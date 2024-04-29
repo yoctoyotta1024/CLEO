@@ -118,6 +118,7 @@ struct OptionalConfigParams {
     double DRYRADIUS = NaNVals::dbl();     /**< dry radius of new super-droplets (for msol) [m] */
     double MINRADIUS = NaNVals::dbl();     /**< minimum radius of new super-droplets [m] */
     double MAXRADIUS = NaNVals::dbl();     /**< maximum radius of new super-droplets [m] */
+    double NUMCONC = NaNVals::dbl();       /**< number concentration of new droplets [cm^-3] */
   } addsupersatdomaintop;
 };
 
