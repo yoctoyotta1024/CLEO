@@ -22,6 +22,25 @@
 
 #include "cartesiandomain/add_supers_at_domain_top.hpp"
 
+/* (re)sorting supers based on their gbxindexes and then updating the span for each
+gridbox accordingly.
+Kokkos::parallel_for([...]) (on host) is equivalent to:
+for (size_t ii(0); ii < ngbxs; ++ii){[...]}
+when in serial */
+void move_supers_between_gridboxes_again(const viewd_gbx d_gbxs, const viewd_supers totsupers) {
+  sort_supers(totsupers);
+
+  const size_t ngbxs(d_gbxs.extent(0));
+  Kokkos::parallel_for(
+      "move_supers_between_gridboxes_again", TeamPolicy(ngbxs, Kokkos::AUTO()),
+      KOKKOS_LAMBDA(const TeamMember &team_member) {
+        const int ii = team_member.league_rank();
+
+        auto &gbx(d_gbxs(ii));
+        gbx.supersingbx.set_refs(team_member);
+      });
+}
+
 /*
 Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
 abouve coord3lim.
@@ -44,7 +63,7 @@ void AddSupersAtDomainTop::operator()(const CartesianMaps &gbxmaps, viewd_gbx d_
   }
 
   if (is_supers_added) {  // resort totsupers view and set gbx references
-    move_supers_between_gridboxes(d_gbxs, totsupers);
+    move_supers_between_gridboxes_again(d_gbxs, totsupers);
   }
 }
 
@@ -77,36 +96,12 @@ void AddSupersAtDomainTop::add_superdrops_for_gridbox(const CartesianMaps &gbxma
   }
 }
 
-/* (re)sorting supers based on their gbxindexes and then updating the span for each
-gridbox accordingly.
-Kokkos::parallel_for([...]) (on host) is equivalent to:
-for (size_t ii(0); ii < ngbxs; ++ii){[...]}
-when in serial */
-void AddSupersAtDomainTop::move_supers_between_gridboxes(const viewd_gbx d_gbxs,
-                                                         const viewd_supers totsupers) const {
-  sort_supers(totsupers);
-
-  const size_t ngbxs(d_gbxs.extent(0));
-  Kokkos::parallel_for(
-      "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
-      KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-        const int ii = team_member.league_rank();
-
-        auto &gbx(d_gbxs(ii));
-        gbx.supersingbx.set_refs(team_member);
-      });
-}
-
 /* call to create a new superdroplet for gridbox with given gbxindex */
 Superdrop CreateSuperdrop::operator()(const CartesianMaps &gbxmaps, const auto gbxindex) const {
-  URBG<ExecSpace> urbg{genpool4reset.get_state()};  // thread safe random number generator
-
   const auto sdgbxindex = gbxindex;
-  const auto coords312 = create_superdrop_coords(gbxmaps, urbg, gbxindex);
+  const auto coords312 = create_superdrop_coords(gbxmaps, gbxindex);
   const auto attrs = create_superdrop_attrs();
   const auto sdId = sdIdGen->next();
-
-  genpool4reset.free_state(urbg.gen);
 
   return Superdrop(sdgbxindex, coords312[0], coords312[1], coords312[2], attrs, sdId);
 }
@@ -114,10 +109,9 @@ Superdrop CreateSuperdrop::operator()(const CartesianMaps &gbxmaps, const auto g
 /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
 random value within the gridbox's bounds */
 std::array<double, 3> CreateSuperdrop::create_superdrop_coords(const CartesianMaps &gbxmaps,
-                                                               URBG<ExecSpace> &urbg,
                                                                const auto gbxindex) const {
   const auto bounds = gbxmaps.coord3bounds(gbxindex);
-  const auto coord3 = urbg.drand(bounds.first, bounds.second);
+  const auto coord3 = randgen->drand(bounds.first, bounds.second);
   const auto coord1 = double{0.0 / dlc::COORD0};
   const auto coord2 = double{0.0 / dlc::COORD0};
 
@@ -126,21 +120,22 @@ std::array<double, 3> CreateSuperdrop::create_superdrop_coords(const CartesianMa
 
 /* create attributes for a new super-droplet */
 SuperdropAttrs CreateSuperdrop::create_superdrop_attrs() const {
-  const auto xi_radius = new_xi_radius();
-  const auto msol = new_msol();
+  const auto [xi, radius] = new_xi_radius();
+  const auto msol = new_msol(radius);
   const auto solute = SoluteProperties{};
 
-  return SuperdropAttrs(solute, xi_radius.first, xi_radius.second, msol);
+  return SuperdropAttrs(solute, xi, radius, msol);
 }
 
 /* returns radius and xi for a new super-droplet by randomly sampling a distribution. */
 std::pair<size_t, double> CreateSuperdrop::new_xi_radius() const {
-  const auto bin = uint64_t{urbg(0, nbins)};   // index of randomly selected log10(r) bin
-  const auto log10rlow = log10redges(bin);     // lower bound of log10(r)
-  const auto log10rup = log10redges(bin + 1);  // upper bound of log10(r)
+  const auto bin = uint64_t{randgen->urand(0, nbins)};  // index of randomly selected log10(r) bin
 
-  const auto frac = urbg.drand(0.0, 1.0);
-  const auto log10r = double{log10rlow + frac * (log10rup - log10rlow)};
+  const auto log10rlow = log10redges.at(bin);     // lower bound of log10(r)
+  const auto log10rup = log10redges.at(bin + 1);  // upper bound of log10(r)
+  const auto log10rwidth = (log10rup - log10rlow);
+  const auto frac = randgen->drand(0.0, 1.0);
+  const auto log10r = double{log10rlow + frac * log10rwidth};
   const auto radius = double{Kokkos::pow(10.0, log10r)};
 
   const auto xi = 100;
@@ -149,8 +144,12 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius() const {
 }
 
 /* returns solute mass for a new super-droplet with a dryradius = 1nano-meter. */
-double CreateSuperdrop::new_msol() const {
+double CreateSuperdrop::new_msol(const double radius) const {
   constexpr double msolconst = 4.0 * Kokkos::numbers::pi * dlc::Rho_sol / 3.0;
+
+  if (radius < dryradius) {
+    throw std::invalid_argument("new radius cannot be < dry radius of droplet");
+  }
 
   return msolconst * dryradius * dryradius * dryradius;
 }

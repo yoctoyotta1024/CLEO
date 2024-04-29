@@ -24,12 +24,13 @@
 #define LIBS_CARTESIANDOMAIN_ADD_SUPERS_AT_DOMAIN_TOP_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Random.hpp>
 #include <array>
 #include <cmath>
 #include <memory>
-#include <pair>
 #include <random>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 #include "../cleoconstants.hpp"
@@ -39,11 +40,11 @@
 #include "gridboxes/sortsupers.hpp"
 #include "initialise/optional_config_params.hpp"
 #include "superdrops/superdrop.hpp"
-#include "superdrops/urbg.hpp"
 
 struct CreateSuperdrop {
  private:
-  GenRandomPool genpool4reset; /**< Kokkos pool for random number generation */
+  std::shared_ptr<Kokkos::Random_XorShift64<HostSpace>>
+      randgen; /**< pointer to Kokkos random number generator */
   std::shared_ptr<Superdrop::IDType::Gen>
       sdIdGen;      /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
   double dryradius; /**< dry radius of new superdrop */
@@ -52,7 +53,7 @@ struct CreateSuperdrop {
 
   /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
   random value within the gridbox's bounds */
-  std::array<double, 3> create_superdrop_coords(const CartesianMaps &gbxmaps, URBG<ExecSpace> &urbg,
+  std::array<double, 3> create_superdrop_coords(const CartesianMaps &gbxmaps,
                                                 const auto gbxindex) const;
 
   /* create attributes for a new super-droplet */
@@ -62,18 +63,18 @@ struct CreateSuperdrop {
   std::pair<size_t, double> new_xi_radius() const;
 
   /* returns solute mass for a new super-droplet with a dryradius = 1nano-meter. */
-  double new_msol() const;
+  double new_msol(const double radius) const;
 
  public:
   /* call to create a new superdroplet for gridbox with given gbxindex */
   explicit CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
-      : genpool4reset(std::random_device {}()),
+      : randgen(std::make_shared<Kokkos::Random_XorShift64<HostSpace>>(std::random_device {}())),
         sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)),
-        dryradius(config.dryradius / dlc::R0),
+        dryradius(config.DRYRADIUS / dlc::R0),
         nbins(config.newnsupers),
         log10redges() {
-    const auto log10rmin = std::log10(config.minradius / dlc::R0);
-    const auto log10rmax = std::log10(config.maxradius / dlc::R0);
+    const auto log10rmin = std::log10(config.MINRADIUS / dlc::R0);
+    const auto log10rmax = std::log10(config.MAXRADIUS / dlc::R0);
     const auto log10deltar = double{(log10rmax - log10rmin) / nbins};
     for (size_t nn(0); nn < nbins + 1; ++nn) {
       log10redges.push_back(log10rmin + nn * log10deltar);
@@ -95,13 +96,6 @@ struct AddSupersAtDomainTop {
   /* create 'newnsupers' number of new superdroplets from the create_superdrop function */
   void add_superdrops_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
                                   const viewd_supers totsupers) const;
-
-  /* (re)sorting supers based on their gbxindexes and then updating the span for each
-  gridbox accordingly.
-  Kokkos::parallel_for([...]) (on host) is equivalent to:
-  for (size_t ii(0); ii < ngbxs; ++ii){[...]}
-  when in serial */
-  void move_supers_between_gridboxes(const viewd_gbx d_gbxs, const viewd_supers totsupers) const;
 
  public:
   /* New super-droplets are added to domain with coord3 >= COORD3LIM [m]. Note generation of
