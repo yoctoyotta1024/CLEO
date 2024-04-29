@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 20th April 2024
+ * Last Modified: Monday 29th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -112,17 +112,7 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
 }
 
 inline auto create_boundary_conditions(const Config &config) {
-  // TODO(CB): diff BCs
-  // const auto ngbxs = (unsigned int)15; // total number of gbxs
-  // const auto ngbxs4reset = (unsigned int)5; // number of gbxs to randomly select in reset
-  // return CartesianMotionWithReset(motionstep,
-  //                                 &step2dimlesstime,
-  //                                 terminalv,
-  //                                 ngbxs,
-  //                                 ngbxs4reset);  //TODO(CB) Delete option (!)
-
   return AddSupersAtDomainTop(config.get_addsupersatdomaintop());
-
   // return NullBoundaryConditions{};
 }
 
