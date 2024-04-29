@@ -84,32 +84,48 @@ void AddSupersAtDomainTop::add_supers_for_gridbox(const CartesianMaps &gbxmaps, 
   }
 
   for (size_t kk(start); kk < start + newnsupers; ++kk) {
-    totsupers(kk) = create_superdrop(gbx);
+    totsupers(kk) = create_superdrop(gbxmaps, gbx);
   }
 }
 
-Superdrop AddSupersAtDomainTop::create_superdrop(const Gridbox &gbx) const {
+Superdrop AddSupersAtDomainTop::create_superdrop(const CartesianMaps &gbxmaps,
+                                                 const Gridbox &gbx) const {
+  URBG<ExecSpace> urbg{genpool4reset.get_state()};  // thread safe random number generator
+
   const auto sdgbxindex = gbx.get_gbxindex();
-  const auto coords312 = create_superdrop_coords();
+  const auto coords312 = create_superdrop_coords(gbxmaps, urbg, gbx);
   const auto attrs = create_superdrop_attrs();
   const auto sdId = sdIdGen->next();
 
   return Superdrop(sdgbxindex, coords312[0], coords312[1], coords312[2], attrs, sdId);
 }
 
-std::array<double, 3> AddSupersAtDomainTop::create_superdrop_coords() const {
-  const auto coord3 = double{830.0 / dlc::COORD0};  // TODO(CB): WIP
-  const auto coord1 = double{10.0 / dlc::COORD0};
-  const auto coord2 = double{10.0 / dlc::COORD0};
+/* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
+random value within the gridbox's bounds */
+std::array<double, 3> AddSupersAtDomainTop::create_superdrop_coords(const CartesianMaps &gbxmaps,
+                                                                    URBG<ExecSpace> &urbg,
+                                                                    const Gridbox &gbx) const {
+  const auto bounds = gbxmaps.coord3bounds(gbx.get_gbxindex());
+  const auto coord3 = urbg.drand(bounds.first, bounds.second);
+  const auto coord1 = double{0.0 / dlc::COORD0};
+  const auto coord2 = double{0.0 / dlc::COORD0};
 
   return std::array<double, 3>{coord3, coord1, coord2};
 }
 
 SuperdropAttrs AddSupersAtDomainTop::create_superdrop_attrs() const {
   const auto radius = double{1e-3 / dlc::R0};  // TODO(CB): WIP
-  const auto msol = double{1e-12 / dlc::MASS0};
   const auto xi = size_t{20};
+  const auto msol = new_msol();
   const auto solute = SoluteProperties{};
 
   return SuperdropAttrs(solute, xi, radius, msol);
+}
+
+/* returns solute mass for a new super-droplet with a dryradius = 1nano-meter. */
+double AddSupersAtDomainTop::new_msol() const {
+  constexpr double dryradius = 1e-9 / dlc::R0;
+  constexpr double msolconst = 4.0 * Kokkos::numbers::pi * dlc::Rho_sol / 3.0;
+
+  return msolconst * dryradius * dryradius * dryradius;
 }

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 20th April 2024
+ * Last Modified: Monday 29th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,6 +26,7 @@
 #include <Kokkos_Core.hpp>
 #include <array>
 #include <memory>
+#include <random>
 #include <stdexcept>
 
 #include "../cleoconstants.hpp"
@@ -35,11 +36,13 @@
 #include "gridboxes/sortsupers.hpp"
 #include "initialise/optional_config_params.hpp"
 #include "superdrops/superdrop.hpp"
+#include "superdrops/urbg.hpp"
 
 struct AddSupersAtDomainTop {
  private:
-  size_t newnsupers; /**< number of superdroplets to add to gridboxes above coord3lim */
-  double coord3lim;  /**< gridboxes with upper bound > coord3lim get new super-droplets */
+  GenRandomPool genpool4reset; /**< Kokkos pool for random number generation */
+  size_t newnsupers;           /**< number of superdroplets to add to gridboxes above coord3lim */
+  double coord3lim;            /**< gridboxes with upper bound > coord3lim get new super-droplets */
   std::shared_ptr<Superdrop::IDType::Gen>
       sdIdGen; /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
 
@@ -49,11 +52,14 @@ struct AddSupersAtDomainTop {
   void add_supers_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
                               const viewd_supers totsupers) const;
 
-  Superdrop create_superdrop(const Gridbox &gbx) const;
+  Superdrop create_superdrop(const CartesianMaps &gbxmaps, const Gridbox &gbx) const;
 
-  std::array<double, 3> create_superdrop_coords() const;
+  std::array<double, 3> create_superdrop_coords(const CartesianMaps &gbxmaps, URBG<ExecSpace> &urbg,
+                                                const Gridbox &gbx) const;
 
   SuperdropAttrs create_superdrop_attrs() const;
+
+  double new_msol() const;
 
   /* (re)sorting supers based on their gbxindexes and then updating the span for each
   gridbox accordingly.
@@ -67,7 +73,8 @@ struct AddSupersAtDomainTop {
    * nextsdId assumes it is the only method creating super-droplets - otherwise created sdId may not
    * be unique*/
   explicit AddSupersAtDomainTop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
-      : newnsupers(config.newnsupers),
+      : genpool4reset(std::random_device {}()),
+        newnsupers(config.newnsupers),
         coord3lim(config.COORD3LIM / dlc::COORD0),
         sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)) {}
 
