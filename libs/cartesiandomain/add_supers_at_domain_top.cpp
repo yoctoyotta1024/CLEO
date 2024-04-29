@@ -167,7 +167,8 @@ double CreateSuperdrop::droplet_numconc_distribution(const double radius,
 
 /* normalised lognormal distribution returns the probability density of a given radius */
 double CreateSuperdrop::lognormal_pdf(const double radius) const {
-  const auto inverse_norm = radius * sigtilda * std::sqrt(2.0 * std::numbers::pi);
-  const auto expo = (std::log(radius) - mutilda) / sigtilda;
+  const auto RADIUS = radius * dlc::R0;
+  const auto inverse_norm = RADIUS * sigtilda * std::sqrt(2.0 * std::numbers::pi);
+  const auto expo = (std::log(RADIUS) - MUtilda) / sigtilda;
   return std::exp(-0.5 * expo * expo) / inverse_norm;
 }

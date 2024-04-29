@@ -52,7 +52,7 @@ struct CreateSuperdrop {
   std::vector<double> log10redges; /**< edges of bins for superdroplet log_10(radius) */
   double dryradius;                /**< dry radius of new superdrop */
   double numconc;                  /**< number concentration of new droplets*/
-  double mutilda;                  /**< ln(geometric mean) of lognormal distribution */
+  double MUtilda;                  /**< ln(geometric mean) of lognormal distribution */
   double sigtilda;                 /**< ln(geometric sigma) of lognormal distribution */
 
   /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
@@ -70,6 +70,9 @@ struct CreateSuperdrop {
   distribution for a bin of width log10rwidth in log_10(r) space centred at log_10(r). */
   double droplet_numconc_distribution(const double log10r, const double log10rwidth) const;
 
+  /* normalised lognormal distribution returns the probability density of a given radius */
+  double lognormal_pdf(const double radius) const;
+
   /* returns solute mass for a new super-droplet with a dryradius = 1nano-meter. */
   double new_msol(const double radius) const;
 
@@ -82,7 +85,7 @@ struct CreateSuperdrop {
         log10redges(),
         dryradius(config.DRYRADIUS / dlc::R0),
         numconc(config.NUMCONC * dlc::VOL0),
-        mutilda(std::log(config.GEOMEAN / dlc::R0)),
+        MUtilda(std::log(config.GEOMEAN)),
         sigtilda(std::log(config.geosigma)) {
     const auto log10rmin = std::log10(config.MINRADIUS / dlc::R0);
     const auto log10rmax = std::log10(config.MAXRADIUS / dlc::R0);
