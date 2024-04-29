@@ -100,7 +100,7 @@ void AddSupersAtDomainTop::add_superdrops_for_gridbox(const CartesianMaps &gbxma
 Superdrop CreateSuperdrop::operator()(const CartesianMaps &gbxmaps, const auto gbxindex) const {
   const auto sdgbxindex = gbxindex;
   const auto coords312 = create_superdrop_coords(gbxmaps, gbxindex);
-  const auto attrs = create_superdrop_attrs();
+  const auto attrs = create_superdrop_attrs(gbxmaps.get_gbxvolume(gbxindex));
   const auto sdId = sdIdGen->next();
 
   return Superdrop(sdgbxindex, coords312[0], coords312[1], coords312[2], attrs, sdId);
@@ -119,8 +119,8 @@ std::array<double, 3> CreateSuperdrop::create_superdrop_coords(const CartesianMa
 }
 
 /* create attributes for a new super-droplet */
-SuperdropAttrs CreateSuperdrop::create_superdrop_attrs() const {
-  const auto [xi, radius] = new_xi_radius();
+SuperdropAttrs CreateSuperdrop::create_superdrop_attrs(const double gbxvolume) const {
+  const auto [xi, radius] = new_xi_radius(gbxvolume);
   const auto msol = new_msol(radius);
   const auto solute = SoluteProperties{};
 
@@ -128,7 +128,7 @@ SuperdropAttrs CreateSuperdrop::create_superdrop_attrs() const {
 }
 
 /* returns radius and xi for a new super-droplet by randomly sampling a distribution. */
-std::pair<size_t, double> CreateSuperdrop::new_xi_radius() const {
+std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume) const {
   const auto bin = uint64_t{randgen->urand(0, nbins)};  // index of randomly selected log10(r) bin
 
   const auto log10rlow = log10redges.at(bin);     // lower bound of log10(r)
@@ -138,7 +138,7 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius() const {
   const auto log10r = double{log10rlow + frac * log10rwidth};
   const auto radius = double{Kokkos::pow(10.0, log10r)};
 
-  const auto xi = 100;
+  const auto xi = droplet_numconc_distribution(log10r, log10rwidth) * gbxvolume;
 
   return std::make_pair(xi, radius);  // xi_radius
 }
@@ -152,4 +152,12 @@ double CreateSuperdrop::new_msol(const double radius) const {
   }
 
   return msolconst * dryradius * dryradius * dryradius;
+}
+
+/* returns the droplet number concentration from a binned droplet number concentration
+distribution for a bin of width log10rwidth in log_10(r) space centred at log_10(r). */
+double CreateSuperdrop::droplet_numconc_distribution(const double log10r,
+                                                     const double log10rwidth) const {
+  const double numconc = 100 / dlc::COORD0 / dlc::COORD0 / dlc::COORD0;
+  return numconc;  // number of droplets per unit volume of size log_10(r)
 }

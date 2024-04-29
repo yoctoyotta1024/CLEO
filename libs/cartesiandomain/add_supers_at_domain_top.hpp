@@ -57,10 +57,14 @@ struct CreateSuperdrop {
                                                 const auto gbxindex) const;
 
   /* create attributes for a new super-droplet */
-  SuperdropAttrs create_superdrop_attrs() const;
+  SuperdropAttrs create_superdrop_attrs(const double gbxvolume) const;
 
   /* returns radius and xi for a new super-droplet by randomly sampling a distribution. */
-  std::pair<size_t, double> new_xi_radius() const;
+  std::pair<size_t, double> new_xi_radius(const double gbxvolume) const;
+
+  /* returns the droplet number concentration from a binned droplet number concentration
+  distribution for a bin of width log10rwidth in log_10(r) space centred at log_10(r). */
+  double droplet_numconc_distribution(const double log10r, const double log10rwidth) const;
 
   /* returns solute mass for a new super-droplet with a dryradius = 1nano-meter. */
   double new_msol(const double radius) const;
