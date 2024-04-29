@@ -25,9 +25,12 @@
 
 #include <Kokkos_Core.hpp>
 #include <array>
+#include <cmath>
 #include <memory>
+#include <pair>
 #include <random>
 #include <stdexcept>
+#include <vector>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
@@ -38,28 +41,60 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/urbg.hpp"
 
-struct AddSupersAtDomainTop {
+struct CreateSuperdrop {
  private:
   GenRandomPool genpool4reset; /**< Kokkos pool for random number generation */
-  size_t newnsupers;           /**< number of superdroplets to add to gridboxes above coord3lim */
-  double coord3lim;            /**< gridboxes with upper bound > coord3lim get new super-droplets */
   std::shared_ptr<Superdrop::IDType::Gen>
-      sdIdGen; /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
+      sdIdGen;      /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
+  double dryradius; /**< dry radius of new superdrop */
+  size_t nbins;     /**< number of bins for sampling superdroplet radius */
+  std::vector<double> log10redges; /**< edges of bins for superdroplet log_10(radius) */
 
-  /* set super-droplet sdgbxindex to out of bounds value */
-  void remove_supers_from_gridbox(const Gridbox &gbx) const;
-
-  void add_supers_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
-                              const viewd_supers totsupers) const;
-
-  Superdrop create_superdrop(const CartesianMaps &gbxmaps, const Gridbox &gbx) const;
-
+  /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
+  random value within the gridbox's bounds */
   std::array<double, 3> create_superdrop_coords(const CartesianMaps &gbxmaps, URBG<ExecSpace> &urbg,
-                                                const Gridbox &gbx) const;
+                                                const auto gbxindex) const;
 
+  /* create attributes for a new super-droplet */
   SuperdropAttrs create_superdrop_attrs() const;
 
+  /* returns radius and xi for a new super-droplet by randomly sampling a distribution. */
+  std::pair<size_t, double> new_xi_radius() const;
+
+  /* returns solute mass for a new super-droplet with a dryradius = 1nano-meter. */
   double new_msol() const;
+
+ public:
+  /* call to create a new superdroplet for gridbox with given gbxindex */
+  explicit CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
+      : genpool4reset(std::random_device {}()),
+        sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)),
+        dryradius(config.dryradius / dlc::R0),
+        nbins(config.newnsupers),
+        log10redges() {
+    const auto log10rmin = std::log10(config.minradius / dlc::R0);
+    const auto log10rmax = std::log10(config.maxradius / dlc::R0);
+    const auto log10deltar = double{(log10rmax - log10rmin) / nbins};
+    for (size_t nn(0); nn < nbins + 1; ++nn) {
+      log10redges.push_back(log10rmin + nn * log10deltar);
+    }
+  }
+
+  Superdrop operator()(const CartesianMaps &gbxmaps, const auto gbxindex) const;
+};
+
+struct AddSupersAtDomainTop {
+ private:
+  size_t newnsupers; /**< number of superdroplets to add to gridboxes above coord3lim */
+  double coord3lim;  /**< gridboxes with upper bound > coord3lim get new super-droplets */
+  CreateSuperdrop create_superdrop; /**< methods to create a new superdrop */
+
+  /* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim */
+  void remove_superdrops_from_gridbox(const Gridbox &gbx) const;
+
+  /* create 'newnsupers' number of new superdroplets from the create_superdrop function */
+  void add_superdrops_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
+                                  const viewd_supers totsupers) const;
 
   /* (re)sorting supers based on their gbxindexes and then updating the span for each
   gridbox accordingly.
@@ -73,12 +108,16 @@ struct AddSupersAtDomainTop {
    * nextsdId assumes it is the only method creating super-droplets - otherwise created sdId may not
    * be unique*/
   explicit AddSupersAtDomainTop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
-      : genpool4reset(std::random_device {}()),
-        newnsupers(config.newnsupers),
+      : newnsupers(config.newnsupers),
         coord3lim(config.COORD3LIM / dlc::COORD0),
-        sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)) {}
+        create_superdrop(config) {}
 
-  /*_Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).*/
+  /*
+  Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
+  abouve coord3lim.
+
+  _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
+  */
   void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
                   const viewd_supers totsupers) const;
 };
