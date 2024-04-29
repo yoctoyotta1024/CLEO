@@ -97,6 +97,8 @@ Superdrop AddSupersAtDomainTop::create_superdrop(const CartesianMaps &gbxmaps,
   const auto attrs = create_superdrop_attrs();
   const auto sdId = sdIdGen->next();
 
+  genpool4reset.free_state(urbg.gen);
+
   return Superdrop(sdgbxindex, coords312[0], coords312[1], coords312[2], attrs, sdId);
 }
 
