@@ -28,7 +28,7 @@ script_args="${configfile}"
 
 path2sdmeurec4a=${HOME}/repositories/sdm-eurec4a/
 cloud_observation_configfile=${path2sdmeurec4a}data/model/input/new/clusters_18.yaml
-rawdirectory=${path2CLEO}data/output/raw/no_aerosols/cluster_18/
+rawdirectory=${path2CLEO}data/output/raw/no_aerosols/
 
 
 script_args="${HOME} ${configfile} ${cloud_observation_configfile} ${rawdirectory}"
