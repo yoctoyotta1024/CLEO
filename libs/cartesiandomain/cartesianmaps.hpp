@@ -157,17 +157,26 @@ struct CartesianMaps {
         });
   }
 
+  /* insert 1 value into to_area map at key = idx with value=area */
+  void insert_gbxarea(const unsigned int idx, double area) {
+    /* parallel for for 1 value so that execution of insert occurs on device if necessary */
+    Kokkos::parallel_for(
+        "gbxarea", 1, KOKKOS_CLASS_LAMBDA(const unsigned int i) { to_area.insert(idx, area); });
+  }
+
+  /* insert 1 value into to_volume map at key = idx with value=volume */
+  void insert_gbxvolume(const unsigned int idx, double volume) {
+    /* parallel for for 1 value so that execution of insert occurs on device if necessary */
+    Kokkos::parallel_for(
+        "gbxvolume", 1,
+        KOKKOS_CLASS_LAMBDA(const unsigned int i) { to_volume.insert(idx, volume); });
+  }
+
   /* copies of h_ndims to ndims,
   possibly into device memory */
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims) {
     Kokkos::deep_copy(ndims, h_ndims);
   }
-
-  KOKKOS_INLINE_FUNCTION
-  void set_gbxarea(const double iarea) { gbxareas = iarea; }
-
-  KOKKOS_INLINE_FUNCTION
-  void set_gbxvolume(const double ivolume) { gbxvolumes = ivolume; }
 
   /* on host device, throws error if maps are not all
   the same size, else returns size of maps */
