@@ -27,9 +27,24 @@ import numpy as np
 import random
 import yaml
 from pathlib import Path
-
+from io import StringIO
 import sys
 print(f"Enviroment: {sys.prefix}")
+
+class Capturing(list):
+    """
+    Context manager for capturing stdout from print statements.
+    https://stackoverflow.com/a/16571630/16372843
+    """
+    def __enter__(self):
+        self._stdout = sys.stdout
+        sys.stdout = self._stringio = StringIO()
+        return self
+    def __exit__(self, *args):
+        self.extend(self._stringio.getvalue().splitlines())
+        del self._stringio    # free up some memory
+        sys.stdout = self._stdout
+
 
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
@@ -38,7 +53,7 @@ configfile = Path(sys.argv[4])
 cloud_observation_filepath = Path(sys.argv[5])
 rawdirectory = Path(sys.argv[6])
 
-# Update the path2home variable to use the CustomPath class
+# # Update the path2home variable to use the CustomPath class
 # path2home = Path('/home/m/m301096')
 # path2sdm_eurec4a = path2home / 'repositories' / 'sdm_eurec4a'
 # path2CLEO = path2home / 'CLEO'
@@ -220,8 +235,26 @@ os.system("rm " + thermofile[:-4]+"*")
 
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
-rgrid.print_domain_info(constsfile, gridfile)
+with Capturing() as grid_info:
+  rgrid.print_domain_info(constsfile, gridfile)
 
+for line in grid_info:
+    print(line)
+    if 'domain no. gridboxes:' in line :
+        grid_dimensions = np.array(line.split(':')[-1].replace(" ", "").split('x'), dtype = int)
+        total_number_gridboxeds = int(np.prod(grid_dimensions))
+        break
+
+# get the total number of gridboxes
+updated_configfile["domain"] = dict(
+    nspacedims = 1,
+    ngbxs = total_number_gridboxeds,
+)
+
+# update the config file
+editconfigfile.edit_config_params(str(configfile), updated_configfile)
+
+# %%
 
 ### ----- write thermodynamics binaries ----- ###
 thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
@@ -239,14 +272,6 @@ nsupers = crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, cloud_bot
 # get total number of superdroplets
 total_nsupers = int(np.sum(list(nsupers.values())))
 updated_configfile["initsupers"]['totnsupers'] = total_nsupers
-
-# get the total number of gridboxes
-total_number_gridboxeds = len(nsupers)
-updated_configfile["domain"] = dict(
-    nspacedims = 1,
-    ngbxs = total_number_gridboxeds,
-)
-
 # update the config file
 editconfigfile.edit_config_params(str(configfile), updated_configfile)
 
