@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 30th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,8 +42,7 @@
 #include "initialise/optional_config_params.hpp"
 #include "superdrops/superdrop.hpp"
 
-class LognormalDistribution {
- private:
+struct LognormalDistribution {
   double numconc; /**< number concentration of new droplets */
   double geomean; /**< geometric mean of lognormal distribution */
   double lnsigma; /**< ln(geometric sigma) of lognormal distribution */
@@ -51,14 +50,25 @@ class LognormalDistribution {
   /* normalised lognormal distribution returns the probability density of a given radius */
   double lognormal_pdf(double radius) const;
 
- public:
-  explicit LognormalDistribution(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
-      : numconc(config.NUMCONC * dlc::VOL0),
-        geomean(config.GEOMEAN / dlc::R0),
-        lnsigma(std::log(config.geosigma)) {}
-
   /* returns the droplet number concentration for a bin of width log10rlow -> log10rup
   from a Lognormal distribution centered on the radius at log10r. */
+  double droplet_numconc_distribution(double log10r, double log10rup, double log10rlow) const;
+};
+
+class TwoLognormalsDistribution {
+ private:
+  LognormalDistribution dist_a; /**< 1st lognormal distribution for creating superdroplet xi */
+  LognormalDistribution dist_b; /**< 2nd lognormal distribution for creating superdroplet xi */
+
+ public:
+  explicit TwoLognormalsDistribution(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
+      : dist_a({config.NUMCONC_a * dlc::VOL0, config.GEOMEAN_a / dlc::R0,
+                std::log(config.geosigma_a)}),
+        dist_b({config.NUMCONC_b * dlc::VOL0, config.GEOMEAN_b / dlc::R0,
+                std::log(config.geosigma_b)}) {}
+
+  /* returns the droplet number concentration for a bin of width log10rlow -> log10rup
+  from the sum of two Lognormal distributions centered on the radius at log10r. */
   double droplet_numconc_distribution(double log10r, double log10rup, double log10rlow) const;
 };
 
@@ -71,7 +81,7 @@ struct CreateSuperdrop {
   size_t nbins; /**< number of bins for sampling superdroplet radius */
   std::vector<double> log10redges; /**< edges of bins for superdroplet log_10(radius) */
   double dryradius;                /**< dry radius of new superdrop */
-  LognormalDistribution lndist;    /**< lognormal distribution for creating superdroplet xi */
+  TwoLognormalsDistribution dist;  /**< distribution for creating superdroplet xi */
 
   /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
   random value within the gridbox's bounds */
@@ -95,7 +105,7 @@ struct CreateSuperdrop {
         nbins(config.newnsupers),
         log10redges(),
         dryradius(config.DRYRADIUS / dlc::R0),
-        lndist(config) {
+        dist(config) {
     const auto log10rmin = std::log10(config.MINRADIUS / dlc::R0);
     const auto log10rmax = std::log10(config.MAXRADIUS / dlc::R0);
     const auto log10deltar = double{(log10rmax - log10rmin) / nbins};

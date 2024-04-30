@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 29th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -195,9 +195,12 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::No
   DRYRADIUS = node["DRYRADIUS"].as<double>();
   MINRADIUS = node["MINRADIUS"].as<double>();
   MAXRADIUS = node["MAXRADIUS"].as<double>();
-  NUMCONC = node["NUMCONC"].as<double>();
-  GEOMEAN = node["GEOMEAN"].as<double>();
-  geosigma = node["geosigma"].as<double>();
+  NUMCONC_a = node["NUMCONC_a"].as<double>();
+  GEOMEAN_a = node["GEOMEAN_a"].as<double>();
+  geosigma_a = node["geosigma_a"].as<double>();
+  NUMCONC_b = node["NUMCONC_b"].as<double>();
+  GEOMEAN_b = node["GEOMEAN_b"].as<double>();
+  geosigma_b = node["geosigma_b"].as<double>();
 }
 
 void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
@@ -205,6 +208,8 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
             << "\ninitnsupers: " << initnsupers << "\nnewnsupers: " << newnsupers
             << "\nCOORD3LIM: " << COORD3LIM << "\nDRYRADIUS: " << DRYRADIUS
             << "\nMINRADIUS: " << MINRADIUS << "\nMAXRADIUS: " << MAXRADIUS
-            << "\nNUMCONC: " << NUMCONC << "\nGEOMEAN: " << GEOMEAN << "\ngeosigma: " << geosigma
+            << "\nNUMCONC_a: " << NUMCONC_a << "\nGEOMEAN_a: " << GEOMEAN_a
+            << "\ngeosigma_a: " << geosigma_a << "\nNUMCONC_b: " << NUMCONC_b
+            << "\nGEOMEAN_b: " << GEOMEAN_b << "\ngeosigma_b: " << geosigma_b
             << "\n---------------------------------------------------------\n";
 }
