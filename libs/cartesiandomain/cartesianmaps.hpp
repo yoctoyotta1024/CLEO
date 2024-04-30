@@ -59,9 +59,9 @@ struct CartesianMaps {
   kokkos_uintmap to_forward_coord2nghbr;
 
   /* additional gridbox / domain information */
-  viewd_ndims ndims;  // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
-  double gbxareas;    // horizontal (x-y planar) area of all gridboxes
-  double gbxvolumes;  // volume of all gridboxes
+  kokkos_dblmap to_area;    // map from gbxindex to horizontal (x-y planar) area of gridbox
+  kokkos_dblmap to_volume;  // map from gbxindex to volume of gridbox
+  viewd_ndims ndims;        // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
 
  public:
   /* initialise maps with hint for their capacity
@@ -78,9 +78,9 @@ struct CartesianMaps {
         to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
         to_forward_coord2nghbr(kokkos_uintmap(ngbxs)),
-        ndims("ndims"),
-        gbxareas(0.0),
-        gbxvolumes(0.0) {}
+        to_area(kokkos_dblmap(ngbxs)),
+        to_volume(kokkos_dblmap(ngbxs)),
+        ndims("ndims") {}
 
   /* insert 1 value into to_coord3bounds
   map at key = idx with value=bounds */
@@ -197,11 +197,21 @@ struct CartesianMaps {
   KOKKOS_INLINE_FUNCTION
   size_t get_ndim(const unsigned int d) const { return ndims(d); }
 
+  /* returns horizontal (x-y planar) area of gridbox with index 'gbxindex' on device */
   KOKKOS_INLINE_FUNCTION
-  double get_gbxarea(const unsigned int gbxindex) const { return gbxareas; }
+  double get_gbxarea(const unsigned int gbxindex) const {
+    const auto i(to_area.find(gbxindex));  // index in map of key 'gbxindex'
 
+    return to_area.value_at(i);  // value returned by map at index i
+  }
+
+  /* returns volume of gridbox with index 'gbxindex' on device */
   KOKKOS_INLINE_FUNCTION
-  double get_gbxvolume(const unsigned int gbxindex) const { return gbxvolumes; }
+  double get_gbxvolume(const unsigned int gbxindex) const {
+    const auto i(to_volume.find(gbxindex));  // index in map of key 'gbxindex'
+
+    return to_volume.value_at(i);  // value returned by map at index i
+  }
 
   /* returns {lower bound, upper bound}  in coord3
   (z) direction of gridbox with index 'gbxindex'
