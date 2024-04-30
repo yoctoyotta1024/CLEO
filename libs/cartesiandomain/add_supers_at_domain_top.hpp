@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 29th April 2024
+ * Last Modified: Tuesday 30th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,6 +42,26 @@
 #include "initialise/optional_config_params.hpp"
 #include "superdrops/superdrop.hpp"
 
+class LognormalDistribution {
+ private:
+  double numconc; /**< number concentration of new droplets */
+  double geomean; /**< geometric mean of lognormal distribution */
+  double lnsigma; /**< ln(geometric sigma) of lognormal distribution */
+
+  /* normalised lognormal distribution returns the probability density of a given radius */
+  double lognormal_pdf(double radius) const;
+
+ public:
+  explicit LognormalDistribution(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
+      : numconc(config.NUMCONC * dlc::VOL0),
+        geomean(config.GEOMEAN / dlc::R0),
+        lnsigma(std::log(config.geosigma)) {}
+
+  /* returns the droplet number concentration for a bin of width log10rlow -> log10rup
+  from a Lognormal distribution centered on the radius at log10r. */
+  double droplet_numconc_distribution(double log10r, double log10rup, double log10rlow) const;
+};
+
 struct CreateSuperdrop {
  private:
   std::shared_ptr<Kokkos::Random_XorShift64<HostSpace>>
@@ -51,9 +71,7 @@ struct CreateSuperdrop {
   size_t nbins; /**< number of bins for sampling superdroplet radius */
   std::vector<double> log10redges; /**< edges of bins for superdroplet log_10(radius) */
   double dryradius;                /**< dry radius of new superdrop */
-  double numconc;                  /**< number concentration of new droplets*/
-  double mutilda;                  /**< ln(geometric mean) of lognormal distribution */
-  double sigtilda;                 /**< ln(geometric sigma) of lognormal distribution */
+  LognormalDistribution lndist;    /**< lognormal distribution for creating superdroplet xi */
 
   /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
   random value within the gridbox's bounds */
@@ -66,14 +84,6 @@ struct CreateSuperdrop {
   /* returns radius and xi for a new super-droplet by randomly sampling a distribution. */
   std::pair<size_t, double> new_xi_radius(const double gbxvolume) const;
 
-  /* returns the droplet number concentration from a binned droplet number concentration
-  distribution for a bin of width log10rwidth in log_10(r) space centred at log_10(r). */
-  double droplet_numconc_distribution(const double log10r, const double log10rup,
-                                      const double log10rlow) const;
-
-  /* normalised lognormal distribution returns the probability density of a given radius */
-  double lognormal_pdf(const double radius) const;
-
   /* returns solute mass for a new super-droplet with a dryradius = 1nano-meter. */
   double new_msol(const double radius) const;
 
@@ -85,9 +95,7 @@ struct CreateSuperdrop {
         nbins(config.newnsupers),
         log10redges(),
         dryradius(config.DRYRADIUS / dlc::R0),
-        numconc(config.NUMCONC * dlc::VOL0),
-        mutilda(std::log(config.GEOMEAN / dlc::R0)),
-        sigtilda(std::log(config.geosigma)) {
+        lndist(config) {
     const auto log10rmin = std::log10(config.MINRADIUS / dlc::R0);
     const auto log10rmax = std::log10(config.MAXRADIUS / dlc::R0);
     const auto log10deltar = double{(log10rmax - log10rmin) / nbins};

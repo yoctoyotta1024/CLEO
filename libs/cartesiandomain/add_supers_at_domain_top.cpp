@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 29th April 2024
+ * Last Modified: Tuesday 30th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -138,8 +138,8 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
   const auto log10r = double{log10rlow + frac * log10rwidth};
   const auto radius = double{std::pow(10.0, log10r)};
 
-  const auto numconc = droplet_numconc_distribution(log10r, log10rup, log10rlow);
-  const auto xi = (uint64_t)std::round(numconc * gbxvolume);  // cast double to uint64_t
+  const auto nconc = lndist.droplet_numconc_distribution(log10r, log10rup, log10rlow);
+  const auto xi = (uint64_t)std::round(nconc * gbxvolume);  // cast double to uint64_t
 
   return std::make_pair(xi, radius);  // xi_radius
 }
@@ -155,20 +155,18 @@ double CreateSuperdrop::new_msol(const double radius) const {
   return msolconst * dryradius * dryradius * dryradius;
 }
 
-/* returns the droplet number concentration from a binned droplet number concentration
-distribution for a bin of width 'binwidth' (in radius space) centred at radius. */
-double CreateSuperdrop::droplet_numconc_distribution(const double log10r, const double log10rup,
-                                                     const double log10rlow) const {
-  const auto radius = std::pow(10.0, log10r);
-  const auto delta_radius = (std::pow(10.0, log10rup) - std::pow(10.0, log10rlow));
-
-  const auto dnumconc_dradius = numconc * lognormal_pdf(radius);  // delta_numconc / delta_radius
-  return dnumconc_dradius * delta_radius;  // number of droplets per unit volume
+/* normalised lognormal distribution returns the probability density of a given radius */
+double LognormalDistribution::lognormal_pdf(double radius) const {
+  double inverse_norm = radius * lnsigma * std::sqrt(2 * std::numbers::pi);
+  double expo = std::log(radius / geomean) / lnsigma;
+  return std::exp(-0.5 * expo * expo) / inverse_norm;
 }
 
-/* normalised lognormal distribution returns the probability density of a given radius */
-double CreateSuperdrop::lognormal_pdf(const double radius) const {
-  const auto inverse_norm = radius * sigtilda * std::sqrt(2.0 * std::numbers::pi);
-  const auto expo = (std::log(radius) - mutilda) / sigtilda;
-  return std::exp(-0.5 * expo * expo) / inverse_norm;
+/* returns the droplet number concentration for a bin of width log10rlow -> log10rup
+from a Lognormal distribution centered on the radius at log10r. */
+double LognormalDistribution::droplet_numconc_distribution(double log10r, double log10rup,
+                                                           double log10rlow) const {
+  double delta_radius = std::pow(10.0, log10rup) - std::pow(10.0, log10rlow);
+  double dnumconc_dradius = numconc * lognormal_pdf(std::pow(10.0, log10r));
+  return dnumconc_dradius * delta_radius;  // number of droplets per unit volume for bin
 }
