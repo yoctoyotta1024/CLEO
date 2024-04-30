@@ -109,7 +109,7 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
   const PairProbability auto coalprob = LongHydroProb(1.0);
   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
 
-  return coal >> cond;
+  return cond;
 }
 
 template <typename Store>
