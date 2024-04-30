@@ -345,26 +345,24 @@ os.system(executable + ' ' + str(configfile))
 ### ---------------------------------------------------------------- ###
 
 
-# # %%
-# ### ---------------------------------------------------------------- ###
-# ### ---------------- CONVERT OUTPUT TO REGULAR ARRAY --------------- ###
-# ### ---------------------------------------------------------------- ###
-# OUTPUT_FILEPATH = rawdirectory_individual / "full_dataset.nc"
-# ### ----------------------- INPUT PARAMETERS ----------------------- ###
-# ### --- essential paths and filenames --- ###
+# %%
+### ---------------------------------------------------------------- ###
+### ---------------- CONVERT OUTPUT TO REGULAR ARRAY --------------- ###
+### ---------------------------------------------------------------- ###
+OUTPUT_FILEPATH = rawdirectory_individual /  "full_dataset.nc"
+# OUTPUT_FILEPATH = '/home/m/m301096/CLEO/data/output/raw/no_aerosols/cluster_18/clusters_18/full_dataset.nc'
+### ----------------------- INPUT PARAMETERS ----------------------- ###
+### --- essential paths and filenames --- ###
 
-# if os.path.exists(OUTPUT_FILEPATH):
-#     print(f"The file {OUTPUT_FILEPATH} exists. Skip processing.")
-# else:
-#     print(f"The file {OUTPUT_FILEPATH} does not exist. Create it.")
+# read in constants and intial setup from setup .txt file
+config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=False)
+consts = pysetuptxt.get_consts(setupfile, isprint=False)
+# Create a first simple dataset to have the coordinates for later netcdf creation
+sddata = pyzarr.get_supers(str(dataset), consts)
+lagrange = sddata.to_Dataset()
+lagrange.to_netcdf(OUTPUT_FILEPATH)
 
-#     # read in constants and intial setup from setup .txt file
-#     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=False)
-#     consts = pysetuptxt.get_consts(setupfile, isprint=False)
-#     # Create a first simple dataset to have the coordinates for later netcdf creation
-#     sddata = pyzarr.get_supers(str(dataset), consts)
-#     lagrange = sddata.to_Dataset()
-#     lagrange.to_netcdf(OUTPUT_FILEPATH)
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
 
-# ### ---------------------------------------------------------------- ###
-# ### ---------------------------------------------------------------- ###
+# %%
