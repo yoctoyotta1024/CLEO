@@ -329,25 +329,41 @@ class SupersData(SuperdropProperties):
 
         if key == "sdId":
             return self.sdId
+        elif key == "sdId_units":
+            return self.sdId_units
         elif key == "sdgbxindex":
             return self.sdgbxindex
+        elif key == "sdgbxindex_units":
+            return self.sdgbxindex_units
         elif key == "xi":
             return self.xi
+        elif key == "xi_units":
+            return self.xi_units
         elif key == "radius":
             return self.radius
+        elif key == "radius_units":
+            return self.radius_units
         elif key == "msol":
             return self.msol
+        elif key == "msol_units":
+            return self.msol_units
         elif key == "coord3":
             return self.coord3
+        elif key == "coord3_units":
+            return self.coord3_units
         elif key == "coord1":
             return self.coord1
+        elif key == "coord1_units":
+            return self.coord1_units
         elif key == "coord2":
             return self.coord2
+        elif key == "coord2_units":
+            return self.coord2_units
         else:
             err = "no known return provided for "+key+" key"
             raise ValueError(err)
 
-    def variable_to_regular_array(self, varname : str, dtype = np.ndarray) :
+    def variable_to_regular_array(self, varname : str, dtype : type = np.ndarray, metadata : dict = dict()) :
         """
         This function converts an awkward array to a regular array (either numpy ndarray or xarray DataArray)
         based on the provided dtype. The conversion is done for a specific variable name in the dataset.
@@ -371,7 +387,8 @@ class SupersData(SuperdropProperties):
                 regular_array,
                 dims = ["time", "sdId"],
                 coords = {"time" : self.time.to_list(), "sdId" : np.arange(regular_array.shape[1])},
-                name = varname
+                name = varname,
+                **metadata
             )
             return result
         else:
@@ -393,14 +410,25 @@ class SupersData(SuperdropProperties):
         result_dict = dict()
         for varname in varnames:
             try :
+                # use the metadata from the original dataset
+                metadata = {
+                    "units" : self[varname+"_units"],
+                    "description" : self.ds[varname].attrs["description"],
+                    }
+                # create the regular array
                 result_dict[varname] = self.variable_to_regular_array(
                     varname = varname,
-                    dtype = xr.DataArray
+                    dtype = xr.DataArray,
+                    metadata = metadata, # these are the metadata
                     )
             except ValueError:
                 print(f"Could not create regular array for {varname}")
+        # combine all variables to a dataset
         result = xr.Dataset(result_dict)
+
         return result
+
+
 class RainSupers(SuperdropProperties):
 
     def __init__(self, sddata, consts, rlim=40):
