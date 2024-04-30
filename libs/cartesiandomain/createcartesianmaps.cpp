@@ -136,8 +136,8 @@ void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) 
 volume using area and volume from gfb for gbxindex=0 */
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   const auto idx = (unsigned int)0;
-  gbxmaps.set_gbxarea(gfb.gbxarea(idx));
-  gbxmaps.set_gbxvolume(gfb.gbxvol(idx));
+  gbxmaps.insert_gbxarea(idx, gfb.gbxarea(idx));
+  gbxmaps.insert_gbxvolume(idx, gfb.gbxvol(idx));
 }
 
 /* sets value for coordinate bounds for case
