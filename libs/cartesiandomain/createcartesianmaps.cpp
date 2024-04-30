@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -135,9 +135,10 @@ void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) 
 /* sets (finite) dimensionless horizontal area and
 volume using area and volume from gfb for gbxidx=0 */
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
-  const auto idx = (unsigned int)0;
-  gbxmaps.insert_gbxarea(idx, gfb.gbxarea(idx));
-  gbxmaps.insert_gbxvolume(idx, gfb.gbxvol(idx));
+  for (auto idx : gfb.gbxidxs) {
+    gbxmaps.insert_gbxarea(idx, gfb.gbxarea(idx));
+    gbxmaps.insert_gbxvolume(idx, gfb.gbxvol(idx));
+  }
 }
 
 /* sets value for coordinate bounds for case
@@ -151,6 +152,9 @@ void set_outofbounds(CartesianMaps &gbxmaps) {
   gbxmaps.insert_coord3nghbrs(idx, nullnghbrs(idx));
   gbxmaps.insert_coord1nghbrs(idx, nullnghbrs(idx));
   gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(idx));
+
+  gbxmaps.insert_gbxarea(idx, 0.0);
+  gbxmaps.insert_gbxvolume(idx, 0.0);
 }
 
 /* gives all coord[X]bounds maps to 1 key with null
