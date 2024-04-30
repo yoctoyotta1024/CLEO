@@ -390,17 +390,16 @@ class SupersData(SuperdropProperties):
             The output variables are "sdId", "sdgbxindex", "xi", "radius", "coord1", "coord2", "coord3".
         """
         varnames = ["sdId", "sdgbxindex", "xi", "radius", "coord1", "coord2", "coord3"]
-        result_list = []
+        result_dict = dict()
         for varname in varnames:
             try :
-                result_list.append(self.variable_to_regular_array(
+                result_dict[varname] = self.variable_to_regular_array(
                     varname = varname,
                     dtype = xr.DataArray
                     )
-                )
             except ValueError:
                 print(f"Could not create regular array for {varname}")
-        result = xr.Dataset(dict(zip(varnames, result_list)))
+        result = xr.Dataset(result_dict)
         return result
 class RainSupers(SuperdropProperties):
 
