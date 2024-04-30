@@ -18,7 +18,6 @@
  * File Description:
  */
 
-
 /* Copyright (c) 2023 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
@@ -225,18 +224,18 @@ struct CartesianMaps {
   KOKKOS_INLINE_FUNCTION
   size_t get_ndim(const unsigned int d) const { return ndims(d); }
 
-  /* returns horizontal (x-y planar) area of gridbox with index 'gbxindex' on device */
+  /* returns horizontal (x-y planar) area of gridbox with index 'gbxidx' on device */
   KOKKOS_INLINE_FUNCTION
-  double get_gbxarea(const unsigned int gbxindex) const {
-    const auto i(to_area.find(gbxindex));  // index in map of key 'gbxindex'
+  double get_gbxarea(const unsigned int gbxidx) const {
+    const auto i(to_area.find(gbxidx));  // index in map of key 'gbxindex'
 
     return to_area.value_at(i);  // value returned by map at index i
   }
 
-  /* returns volume of gridbox with index 'gbxindex' on device */
+  /* returns volume of gridbox with index 'gbxidx' on device */
   KOKKOS_INLINE_FUNCTION
-  double get_gbxvolume(const unsigned int gbxindex) const {
-    const auto i(to_volume.find(gbxindex));  // index in map of key 'gbxindex'
+  double get_gbxvolume(const unsigned int gbxidx) const {
+    const auto i(to_volume.find(gbxidx));  // index in map of key 'gbxindex'
 
     return to_volume.value_at(i);  // value returned by map at index i
   }
