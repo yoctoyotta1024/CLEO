@@ -14,12 +14,13 @@
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
 ### ----  and paths for CLEO and build directories  ---- ###
+condaenv=/work/mh1126/m300950/cleoenv
 module load python3/2022.01-gcc-11.2.0
-source activate /work/mh1126/m300950/cleoenv
+source activate ${condaenv}
 
 path2CLEO=${2:-${HOME}/CLEO}
 path2scripts=${path2CLEO}/scripts
-python=python
+python=${condaenv}/bin/python
 ### ---------------------------------------------------- ###
 
 configfile=$1
@@ -34,17 +35,17 @@ else
   echo "path to build directory: ${path2build}"
 
   ### --------------- create gbx boundaries -------------- ###
-  echo "python create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}"
-  python ${path2scripts}/create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
+  echo "${python} create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}"
+  ${python} ${path2scripts}/create_gbxboundariesbinary_script.py ${path2CLEO} ${path2build} ${configfile}
   ### ---------------------------------------------------- ###
 
   ### -------- create superdrop initial conditions ------- ###
-  echo "python create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}"
-  python ${path2scripts}/create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
+  echo "${python} create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}"
+  ${python} ${path2scripts}/create_initsuperdropsbinary_script.py ${path2CLEO} ${path2build} ${configfile}
   ### ---------------------------------------------------- ###
 
   ### --------- create thermodynamics (optional) --------- ###
-  echo "python create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}"
-  python ${path2scripts}/create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}
+  echo "${python} create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}"
+  ${python} ${path2scripts}/create_thermobinaries_script.py ${path2CLEO} ${path2build} ${configfile}
   ### ---------------------------------------------------- ###
 fi
