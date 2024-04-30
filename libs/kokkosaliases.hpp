@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: kokkosaliases.hpp
@@ -7,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 2nd November 2023
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,8 +21,6 @@
 
 #ifndef LIBS_KOKKOSALIASES_HPP_
 #define LIBS_KOKKOSALIASES_HPP_
-
-#include <memory>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
@@ -43,9 +43,9 @@ using viewd_gbx = dualview_gbx::t_dev;            // view in device memory of gr
 using viewd_constgbx = dualview_constgbx::t_dev;  // view in device memory of const gridboxes
 
 /* Gridbox Maps */
-using viewd_ndims =
-    Kokkos::View<size_t[3]>;  // view in device memory for number of gridboxes in CartesianMaps
+using viewd_ndims = Kokkos::View<size_t[3]>;
 using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int, Kokkos::pair<double, double>, ExecSpace>;
+using kokkos_dblmap = Kokkos::UnorderedMap<unsigned int, double, ExecSpace>;
 using kokkos_uintmap = Kokkos::UnorderedMap<unsigned int, unsigned int, ExecSpace>;
 
 #endif  // LIBS_KOKKOSALIASES_HPP_

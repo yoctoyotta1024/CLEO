@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,7 +38,7 @@ namespace DoublyPeriodicDomain {
 
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} z direction given a gridbox with
-gbxidx='idx' in a cartesian domain. Treatment of neighbours
+gbxindex='idx' in a cartesian domain. Treatment of neighbours
 for gridboxes at the edges of the domain is either finite
 (null neighbour) or periodic (cyclic neighbour) */
 inline Kokkos::pair<unsigned int, unsigned int> cartesian_coord3nghbrs(
@@ -49,7 +49,7 @@ inline Kokkos::pair<unsigned int, unsigned int> cartesian_coord3nghbrs(
 
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} x direction given a gridbox with
-gbxidx='idx' in a cartesian domain. Treatment of neighbours
+gbxindex='idx' in a cartesian domain. Treatment of neighbours
 for gridboxes at the edges of the domain is either finite
 (null neighbour) or periodic (cyclic neighbour) */
 inline Kokkos::pair<unsigned int, unsigned int> cartesian_coord1nghbrs(
@@ -61,7 +61,7 @@ inline Kokkos::pair<unsigned int, unsigned int> cartesian_coord1nghbrs(
 
 /* returns pair for gbx index of neighbour in the
 {backwards, forwards} y direction given a gridbox with
-gbxidx='idx' in a cartesian domain. Treatment of neighbours
+gbxindex='idx' in a cartesian domain. Treatment of neighbours
 for gridboxes at the edges of the domain is either finite
 (null neighbour) or periodic (cyclic neighbour) */
 inline Kokkos::pair<unsigned int, unsigned int> cartesian_coord2nghbrs(

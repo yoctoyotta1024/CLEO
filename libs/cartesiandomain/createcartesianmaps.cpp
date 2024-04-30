@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,7 +60,7 @@ boundary conditions. In a non-3D case, boundaries and neighbours
 maps for unused dimensions are 'null' (ie. return numerical limits),
 however the area and volume of each gridbox remains finite.
 E.g. In the 0-D case, the bounds maps all have 1 {key, value} where
-key=gbxidx=0 and value = {max, min} numerical limits, meanwhile volume
+key=gbxindex=0 and value = {max, min} numerical limits, meanwhile volume
 function returns a value determined from the gridfile 'grid_filename' */
 CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspacedims,
                                     const std::filesystem::path grid_filename) {
@@ -133,7 +133,7 @@ void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) 
 }
 
 /* sets (finite) dimensionless horizontal area and
-volume using area and volume from gfb for gbxidx=0 */
+volume using area and volume from gfb for gbxindex=0 */
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   const auto idx = (unsigned int)0;
   gbxmaps.set_gbxarea(gfb.gbxarea(idx));
@@ -141,7 +141,7 @@ void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps
 }
 
 /* sets value for coordinate bounds for case
-when outofbounds gbxidx searches map */
+when outofbounds gbxindex searches map */
 void set_outofbounds(CartesianMaps &gbxmaps) {
   const auto idx = (unsigned int)outofbounds_gbxindex();
   gbxmaps.insert_coord3bounds(idx, nullbounds());
@@ -157,7 +157,7 @@ void set_outofbounds(CartesianMaps &gbxmaps) {
 values (max/min numerical limits). Also sets null
 neighbours maps (meaning periodic boundary conditions
 in all directions where neighbour of single gridbox
-with gbxidx=0 is itself) */
+with gbxindex=0 is itself) */
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   gbxmaps.insert_coord3bounds(0, nullbounds());
   gbxmaps.insert_coord1bounds(0, nullbounds());
@@ -178,7 +178,7 @@ periodic boundary conditions in a cartesian domain */
 void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   const auto ndims(gfb.ndims);
 
-  for (auto idx : gfb.gbxidxs) {
+  for (auto idx : gfb.gbxindexs) {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.insert_coord3bounds(idx, c3bs);
     gbxmaps.insert_coord1bounds(idx, nullbounds());
@@ -201,7 +201,7 @@ cartesian domain  */
 void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   const auto ndims(gfb.ndims);
 
-  for (auto idx : gfb.gbxidxs) {
+  for (auto idx : gfb.gbxindexs) {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.insert_coord3bounds(idx, c3bs);
     const auto c1bs(gfb.get_coord1gbxbounds(idx));
@@ -223,7 +223,7 @@ in cartesian domain */
 void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   const auto ndims(gfb.ndims);
 
-  for (auto idx : gfb.gbxidxs) {
+  for (auto idx : gfb.gbxindexs) {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
     gbxmaps.insert_coord3bounds(idx, c3bs);
     const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));

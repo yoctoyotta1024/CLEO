@@ -9,7 +9,7 @@ Created Date: Wednesday 17th January 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th April 2024
+Last Modified: Wednesday 1st May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -137,10 +137,10 @@ def read_dimless_gbxboundaries_binary(filename, COORD0=False,
         ll[n-1] = np.sum(ndata_pervar[:n])
 
     ndims = np.asarray(data[:ll[0]], dtype=datatypes[0])
-    gbxidxs = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1])
+    gbxindexs = np.asarray(data[ll[0]:ll[1]], dtype=datatypes[1])
 
     ngridboxes = int(np.prod(ndims))
-    if len(gbxidxs) != ngridboxes:
+    if len(gbxindexs) != ngridboxes:
         err = "number of gridbox indexes not consistent with (z,x,y) dims"
         raise ValueError(err)
 
@@ -150,7 +150,7 @@ def read_dimless_gbxboundaries_binary(filename, COORD0=False,
     if COORD0:
         boundsdata = boundsdata * COORD0
 
-    gbxbounds = {gbxidxs[i]: boundsdata[i] for i in range(ngridboxes)}
+    gbxbounds = {gbxindexs[i]: boundsdata[i] for i in range(ngridboxes)}
 
     if return_ndims:
         return gbxbounds, ndims

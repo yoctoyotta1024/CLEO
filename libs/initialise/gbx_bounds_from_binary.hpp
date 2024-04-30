@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -53,38 +53,38 @@ struct GbxBoundsFromBinary {
   bool check_2Dmodel_gbxbounds() const;
   bool check_3Dmodel_gbxbounds() const;
 
-  size_t find_idx_in_gbxidxs(const unsigned int idx) const;
+  size_t find_idx_in_gbxindexs(const unsigned int idx) const;
 
  public:
-  std::vector<size_t> ndims;          // number of gridboxes in [coord3, coord1, coord2] dimensions
-  std::vector<unsigned int> gbxidxs;  // gridbox indexes
-  std::vector<double> gbxbounds;      // corresponding [coord3 {l, u}, coord1 {l, u}, coord2 {l, u}]
-                                      // lower and upper coordinate boundaries
+  std::vector<size_t> ndims;  // number of gridboxes in [coord3, coord1, coord2] dimensions
+  std::vector<unsigned int> gbxindexs;  // gridbox indexes
+  std::vector<double> gbxbounds;  // corresponding [coord3 {l, u}, coord1 {l, u}, coord2 {l, u}]
+                                  // lower and upper coordinate boundaries
 
   GbxBoundsFromBinary(const size_t ngbxs, const unsigned int nspacedims,
                       const std::filesystem::path grid_filename);
 
   /* returns coord3 {lower, upper} gridbox bounds
   from position in gbxbounds vector which corresponds
-  to position in gbxidxs where gbxidx = idx */
+  to position in gbxindexs where gbxindex = idx */
   Kokkos::pair<double, double> get_coord3gbxbounds(const unsigned int idx) const;
 
   /* returns coord1 {lower, upper} gridbox bounds
   from position in gbxbounds vector which corresponds
-  to position in gbxidxs where gbxidx = idx */
+  to position in gbxindexs where gbxindex = idx */
   Kokkos::pair<double, double> get_coord1gbxbounds(const unsigned int idx) const;
 
   /* returns coord2 {lower, upper} gridbox bounds
   from position in gbxbounds vector which corresponds
-  to position in gbxidxs where gbxidx = idx */
+  to position in gbxindexs where gbxindex = idx */
   Kokkos::pair<double, double> get_coord2gbxbounds(const unsigned int idx) const;
 
   /* calculates horizontal (x-y planar) area of gridbox
-  using boundaries corresponding to gridbox with gbxidx=idx. */
+  using boundaries corresponding to gridbox with gbxindex=idx. */
   double gbxarea(const unsigned int idx) const;
 
   /* calculates volume of gridbox using boundaries
-  corresponding to gridbox with gbxidx=idx. */
+  corresponding to gridbox with gbxindex=idx. */
   double gbxvol(const unsigned int idx) const;
 
   /* returns total number of gridboxes = product of dimentions */
