@@ -79,11 +79,11 @@ boundary_conditions:
   COORD3LIM: 800                                       # SDs added to domain with coord3 >= COORD3LIM [m]
   newnsupers: 1024                                     # number SDs to add to each gridbox above COORD3LIM
   DRYRADIUS: 1e-9                                      # dry radius of new super-droplets (for solute mass) [m]
-  MINRADIUS: 1e-7                                      # minimum radius of new super-droplets [m]
+  MINRADIUS: 1e-8                                      # minimum radius of new super-droplets [m]
   MAXRADIUS: 1e-4                                      # maximum radius of new super-droplets [m]
-  NUMCONC_a: 1e9                                       # number conc. of 1st droplet lognormal dist [m^-3]
-  GEOMEAN_a: 3.5e-6                                    # geometric mean radius of 1st lognormal dist [m]
-  geosigma_a: 2.0                                      # geometric standard deviation of 1st lognormal dist
-  NUMCONC_b: 1e9                                       # number conc. of 2nd droplet lognormal dist [m^-3]
+  NUMCONC_a: 2e8                                       # number conc. of 1st droplet lognormal dist [m^-3]
+  GEOMEAN_a: 0.2e-6                                    # geometric mean radius of 1st lognormal dist [m]
+  geosigma_a: 2.3                                      # geometric standard deviation of 1st lognormal dist
+  NUMCONC_b: 4e8                                       # number conc. of 2nd droplet lognormal dist [m^-3]
   GEOMEAN_b: 3.5e-6                                    # geometric mean radius of 2nd lognormal dist [m]
   geosigma_b: 2.0                                      # geometric standard deviation of 2nd lognormal dist

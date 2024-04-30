@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 30th April 2024
+Last Modified: Wednesday 1st May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -61,7 +61,7 @@ nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # 
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
 # radiigen  =  rgens.MonoAttrGen(monor)                 # all SDs have the same radius [m]
 
-rspan                = [1e-7, 1e-4]                   # min and max range of radii to sample [m]
+rspan                = [1e-8, 1e-4]                   # min and max range of radii to sample [m]
 radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
@@ -90,11 +90,10 @@ dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same 
 # # # geosigs              = [1.4, 1.6]
 # # # scalefacs            = [0.06, 0.04]
 # numconc = np.sum(scalefacs) * 5e8
-
-numconc = 1e9
-geomeans = [3.5e-6]
-geosigs = [2.0]
-scalefacs = [1.0]
+geomeans = [0.2e-6, 3.5e-6]
+geosigs = [2.3, 2]
+scalefacs = [1, 2]
+numconc = np.sum(scalefacs) * 2e8
 xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
