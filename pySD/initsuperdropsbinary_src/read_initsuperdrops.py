@@ -6,7 +6,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 1st May 2024
+Last Modified: Wednesday 10th January 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -109,7 +109,7 @@ def print_initSDs_infos(initSDsfile, configfile, constsfile, gridfile):
     "\n------------------------------------\n"
     print(inforstr)
 
-def plot_initdistribs(attrs, gbxvols, gbxindexs):
+def plot_initdistribs(attrs, gbxvols, gbxidxs):
 
     plt.rcParams.update({'font.size': 14})
     fig, axs = figure_setup(attrs.coord3, attrs.coord1, attrs.coord2)
@@ -120,7 +120,7 @@ def plot_initdistribs(attrs, gbxvols, gbxindexs):
     hedgs = np.linspace(np.log10(minr), np.log10(maxr),
                         nbins+1)  # edges to lnr bins
 
-    for idx in gbxindexs:
+    for idx in gbxidxs:
         vol = gbxvols[idx]
         sl = np.s_[attrs.sdgbxindex==idx]
         l0 = plot_radiusdistrib(axs[0], hedgs,
@@ -149,16 +149,16 @@ def plot_initGBxs_attrdistribs(configfile, constsfile, initsupersfile,
                                         initsupersfile)
 
     if type(gbxs2plt) == int:
-        gbxindexs = [gbxs2plt]
+        gbxidxs = [gbxs2plt]
         savename = binpath+"initGBx"+str(gbxs2plt)+"_distrib.png"
     elif gbxs2plt == "all":
-        gbxindexs  = np.unique(attrs.sdgbxindex)
+        gbxidxs  = np.unique(attrs.sdgbxindex)
         savename = binpath+"initallGBxs_distribs.png"
     else:
-        gbxindexs = gbxs2plt
+        gbxidxs = gbxs2plt
         savename = binpath+"initGBxs_distribs.png"
 
-    fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxindexs)
+    fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)
 
     fig.tight_layout()
     if savefig:
@@ -336,16 +336,16 @@ def plot_initGBxs_dropletmasses(configfile, constsfile, initsupersfile,
     inputs = initSDsinputsdict(configfile, constsfile)
 
     if type(gbxs2plt) == int:
-        gbxindexs = [gbxs2plt]
+        gbxidxs = [gbxs2plt]
         savename = binpath+"initGBx"+str(gbxs2plt)+"_dropletmasses.png"
     elif gbxs2plt == "all":
-        gbxindexs  = np.unique(attrs.sdgbxindex)
+        gbxidxs  = np.unique(attrs.sdgbxindex)
         savename = binpath+"initallGBxs_dropletmasses.png"
     else:
-        gbxindexs = gbxs2plt
+        gbxidxs = gbxs2plt
         savename = binpath+"initGBxs_dropletmasses.png"
 
-    fig, axs, lines = plot_massdistribs(attrs, gbxvols, gbxindexs,
+    fig, axs, lines = plot_massdistribs(attrs, gbxvols, gbxidxs,
                                         inputs["RHO_L"], inputs["RHO_SOL"])
 
     fig.tight_layout()
@@ -355,7 +355,7 @@ def plot_initGBxs_dropletmasses(configfile, constsfile, initsupersfile,
         print("Figure .png saved as: "+savename)
     plt.show()
 
-def plot_massdistribs(attrs, gbxvols, gbxindexs, RHO_L, RHO_SOL):
+def plot_massdistribs(attrs, gbxvols, gbxidxs, RHO_L, RHO_SOL):
 
     plt.rcParams.update({'font.size': 14})
     fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(14, 4))
@@ -367,7 +367,7 @@ def plot_massdistribs(attrs, gbxvols, gbxindexs, RHO_L, RHO_SOL):
     hedgs = np.linspace(np.log10(minr), np.log10(maxr),
                         nbins+1)  # edges to lnr bins
 
-    for idx in gbxindexs:
+    for idx in gbxidxs:
         vol = gbxvols[idx]
         sl = np.s_[attrs.sdgbxindex==idx]
         l0 = plot_totmassdistrib(axs[0], hedgs, attrs.xi[sl],
