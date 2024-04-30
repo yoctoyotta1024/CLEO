@@ -66,7 +66,7 @@ radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from
 ### ---------------------------------------------- ###
 
 ### --- Choice of Superdroplet Dry Radii Generator --- ###
-monodryr                = 1e-6                          # all SDs have this same dryradius [m]
+monodryr                = 1e-9                          # all SDs have this same dryradius [m]
 dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same dryradius [m]
 
 # dryr_sf               = 1.0                     # scale factor for dry radii [m]
