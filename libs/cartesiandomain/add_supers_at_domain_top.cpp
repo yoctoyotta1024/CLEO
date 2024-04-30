@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 30th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -138,7 +138,7 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
   const auto log10r = double{log10rlow + frac * log10rwidth};
   const auto radius = double{std::pow(10.0, log10r)};
 
-  const auto nconc = lndist.droplet_numconc_distribution(log10r, log10rup, log10rlow);
+  const auto nconc = dist.droplet_numconc_distribution(log10r, log10rup, log10rlow);
   const auto xi = (uint64_t)std::round(nconc * gbxvolume);  // cast double to uint64_t
 
   return std::make_pair(xi, radius);  // xi_radius
@@ -153,6 +153,15 @@ double CreateSuperdrop::new_msol(const double radius) const {
   }
 
   return msolconst * dryradius * dryradius * dryradius;
+}
+
+/* returns the droplet number concentration for a bin of width log10rlow -> log10rup
+from the sum of two Lognormal distributions centered on the radius at log10r. */
+double TwoLognormalsDistribution::droplet_numconc_distribution(double log10r, double log10rup,
+                                                               double log10rlow) const {
+  const auto nconc_a = dist_a.droplet_numconc_distribution(log10r, log10rup, log10rlow);
+  const auto nconc_b = dist_b.droplet_numconc_distribution(log10r, log10rup, log10rlow);
+  return nconc_a + nconc_b;
 }
 
 /* normalised lognormal distribution returns the probability density of a given radius */

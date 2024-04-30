@@ -81,6 +81,9 @@ boundary_conditions:
   DRYRADIUS: 1e-9                                      # dry radius of new super-droplets (for solute mass) [m]
   MINRADIUS: 1e-7                                      # minimum radius of new super-droplets [m]
   MAXRADIUS: 1e-4                                      # maximum radius of new super-droplets [m]
-  NUMCONC: 1e9                                         # number concentration of new droplets [m^-3]
-  GEOMEAN: 3.5e-6                                      # geometric mean radius of lognormal distribution [m]
-  geosigma: 2.0                                        # geometric standard deviation of lognormal distribution
+  NUMCONC_a: 1e9                                       # number conc. of 1st droplet lognormal dist [m^-3]
+  GEOMEAN_a: 3.5e-6                                    # geometric mean radius of 1st lognormal dist [m]
+  geosigma_a: 2.0                                      # geometric standard deviation of 1st lognormal dist
+  NUMCONC_b: 1e9                                       # number conc. of 2nd droplet lognormal dist [m^-3]
+  GEOMEAN_b: 3.5e-6                                    # geometric mean radius of 2nd lognormal dist [m]
+  geosigma_b: 2.0                                      # geometric standard deviation of 2nd lognormal dist

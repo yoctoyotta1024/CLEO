@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 29th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -118,9 +118,12 @@ struct OptionalConfigParams {
     double DRYRADIUS = NaNVals::dbl();     /**< dry radius of new super-droplets (for msol) [m] */
     double MINRADIUS = NaNVals::dbl();     /**< minimum radius of new super-droplets [m] */
     double MAXRADIUS = NaNVals::dbl();     /**< maximum radius of new super-droplets [m] */
-    double NUMCONC = NaNVals::dbl();       /**< number concentration of new droplets [m^-3] */
-    double GEOMEAN = NaNVals::dbl();  /**< geometric mean radius of lognormal distribution [m] */
-    double geosigma = NaNVals::dbl(); /**< geometric standard deviation of lognormal distribution */
+    double NUMCONC_a = NaNVals::dbl();     /**< number conc. of 1st droplet lognormal dist [m^-3] */
+    double GEOMEAN_a = NaNVals::dbl();     /**< geometric mean radius of 1st lognormal dist [m] */
+    double geosigma_a = NaNVals::dbl(); /**< geometric standard deviation of 1st lognormal dist */
+    double NUMCONC_b = NaNVals::dbl();  /**< number conc. of 2nd droplet lognormal dist [m^-3] */
+    double GEOMEAN_b = NaNVals::dbl();  /**< geometric mean radius of 2nd lognormal dist [m] */
+    double geosigma_b = NaNVals::dbl(); /**< geometric standard deviation of 2nd lognormal dist */
   } addsupersatdomaintop;
 };
 
