@@ -31,6 +31,8 @@ from io import StringIO
 import sys
 print(f"Enviroment: {sys.prefix}")
 
+DEVELOPMENT = False
+
 class Capturing(list):
     """
     Context manager for capturing stdout from print statements.
@@ -46,23 +48,29 @@ class Capturing(list):
         sys.stdout = self._stdout
 
 
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-path2home = Path(sys.argv[3])
-configfile = Path(sys.argv[4])
-cloud_observation_filepath = Path(sys.argv[5])
-rawdirectory = Path(sys.argv[6])
+if DEVELOPMENT:
+  # Update the path2home variable to use the CustomPath class
+  path2home = Path('/home/m/m301096')
+  path2sdm_eurec4a = path2home / 'repositories' / 'sdm_eurec4a'
+  path2CLEO = path2home / 'CLEO'
+  path2build = path2CLEO / 'build_eurec4a1D'
+  path2example = path2CLEO / 'examples/eurec4a1d'
+  path2src = path2example / 'src'
+  configfile = path2src / 'config/eurec4a1d_config.yaml'
+  cloud_observation_filepath = '/home/m/m301096/repositories/sdm-eurec4a/data/model/input/new/clusters_18.yaml'
+  rawdirectory = path2CLEO / 'data/output/raw/no_aerosols'
+else :
+  path2CLEO = Path(sys.argv[1])
+  path2build = Path(sys.argv[2])
+  path2home = Path(sys.argv[3])
+  configfile = Path(sys.argv[4])
+  cloud_observation_filepath = Path(sys.argv[5])
+  rawdirectory = Path(sys.argv[6])
 
-# # Update the path2home variable to use the CustomPath class
-# path2home = Path('/home/m/m301096')
-# path2sdm_eurec4a = path2home / 'repositories' / 'sdm_eurec4a'
-# path2CLEO = path2home / 'CLEO'
-# path2build = path2CLEO / 'build_eurec4a1D'
-# path2example = path2CLEO / 'examples/eurec4a1d'
-# path2src = path2example / 'src'
-# configfile = path2src / 'config/eurec4a1d_config.yaml'
-# cloud_observation_filepath = '/home/m/m301096/repositories/sdm-eurec4a/data/model/input/new/clusters_18.yaml'
-# rawdirectory = path2CLEO / 'data/output/raw/no_aerosols'
+if "sdm_pysd_env312" not in sys.prefix:
+  sys.path.append(str(path2CLEO))  # for imports from pySD package
+  sys.path.append(str(path2CLEO  /"examples/exampleplotting/")) # for imports from example plotting package
+
 
 rawdirectory.mkdir(exist_ok=True, parents=True)
 
@@ -70,10 +78,6 @@ rawdirectory.mkdir(exist_ok=True, parents=True)
 
 with open(cloud_observation_filepath, 'r') as f:
     cloud_observation_config = yaml.safe_load(f)
-
-sys.path.append(str(path2CLEO))  # for imports from pySD package
-sys.path.append(str(path2CLEO  /"examples/exampleplotting/")) # for imports from example plotting package
-
 
 
 
@@ -359,7 +363,7 @@ config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=False)
 consts = pysetuptxt.get_consts(setupfile, isprint=False)
 # Create a first simple dataset to have the coordinates for later netcdf creation
 sddata = pyzarr.get_supers(str(dataset), consts)
-lagrange = sddata.to_Dataset()
+lagrange = sddata.to_Dataset(check_indices_uniqueness = True)
 lagrange.to_netcdf(OUTPUT_FILEPATH)
 
 ### ---------------------------------------------------------------- ###
