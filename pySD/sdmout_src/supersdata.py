@@ -329,8 +329,6 @@ class SupersData(SuperdropProperties):
 
         if key == "sdId":
             return self.sdId
-        elif key == "sdId_units":
-            return self.sdId_units
         elif key == "sdgbxindex":
             return self.sdgbxindex
         elif key == "sdgbxindex_units":
@@ -363,7 +361,7 @@ class SupersData(SuperdropProperties):
             err = "no known return provided for "+key+" key"
             raise ValueError(err)
 
-    def variable_to_regular_array(self, varname : str, dtype : type = np.ndarray, metadata : dict = dict()) :
+    def variable_to_regular_array(self, varname : str, dtype : type = np.ndarray, metadata : dict = dict(), check_indices_uniqueness : bool = False) :
         """
         This function converts an awkward array to a regular array (either numpy ndarray or xarray DataArray)
         based on the provided dtype. The conversion is done for a specific variable name in the dataset.
@@ -380,21 +378,21 @@ class SupersData(SuperdropProperties):
         ValueError: If the dtype provided is not supported. Only numpy ndarray and xarray DataArray are supported.
         """
         if dtype == np.ndarray:
-            return akward_array_to_lagrange_array(self[varname], self.time, self["sdId"])
+            return akward_array_to_lagrange_array(self[varname], self.time, self["sdId"], check_indices_uniqueness = check_indices_uniqueness)
         elif dtype == xr.DataArray:
-            regular_array = self.variable_to_regular_array(varname=varname, dtype=np.ndarray)
+            regular_array = self.variable_to_regular_array(varname = varname, dtype = np.ndarray, check_indices_uniqueness = check_indices_uniqueness)
             result = xr.DataArray(
                 regular_array,
                 dims = ["time", "sdId"],
                 coords = {"time" : self.time.to_list(), "sdId" : np.arange(regular_array.shape[1])},
                 name = varname,
-                **metadata
+                attrs = metadata,
             )
             return result
         else:
             raise ValueError("dtype is not supported. Use np.ndarray, xr.DataArray")
 
-    def to_Dataset(self) :
+    def to_Dataset(self, check_indices_uniqueness : bool = False) :
         """
         This function converts all variables in the dataset to regular arrays (either numpy ndarray or xarray DataArray)
         and combines them to a xarray Dataset.
@@ -410,21 +408,28 @@ class SupersData(SuperdropProperties):
         result_dict = dict()
         for varname in varnames:
             try :
-                # use the metadata from the original dataset
-                metadata = {
-                    "units" : self[varname+"_units"],
-                    "description" : self.ds[varname].attrs["description"],
-                    }
+                metadata = dict()
+                # try to add units:
+                try:
+                    metadata['units'] = self[varname + '_units']
+                except:
+                    print("No units found for", varname)
+                    pass
                 # create the regular array
                 result_dict[varname] = self.variable_to_regular_array(
                     varname = varname,
                     dtype = xr.DataArray,
                     metadata = metadata, # these are the metadata
+                    check_indices_uniqueness = check_indices_uniqueness,	# check for uniqueness of indices
                     )
             except ValueError:
                 print(f"Could not create regular array for {varname}")
         # combine all variables to a dataset
         result = xr.Dataset(result_dict)
+        result["time"].attrs = self.ds["time"].attrs
+        result.attrs.update(**self.ds.attrs)
+        result.attrs['description'] = "Regular shaped arrays created from the awkward arrays of the superdroplet dataset."
+        result.attrs['creator_2'] = "Nils Niebaum for the regular array conversion."
 
         return result
 
