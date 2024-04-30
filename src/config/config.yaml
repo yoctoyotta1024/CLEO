@@ -44,7 +44,7 @@ inputfiles:
 initsupers:
   type: frombinary                                     # type of initialisation of super-droplets
   initsupers_filename : ./share/dimlessSDsinit.dat     # binary filename for initialisation of SDs
-  initnsupers: 2048                                    # initial no. of super-droplets to initialise
+  initnsupers: 1024                                    # initial no. of super-droplets to initialise
 
 ### Output Parameters ###
 outputdata:

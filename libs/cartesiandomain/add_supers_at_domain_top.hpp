@@ -68,7 +68,8 @@ struct CreateSuperdrop {
 
   /* returns the droplet number concentration from a binned droplet number concentration
   distribution for a bin of width log10rwidth in log_10(r) space centred at log_10(r). */
-  double droplet_numconc_distribution(const double log10r, const double log10rwidth) const;
+  double droplet_numconc_distribution(const double log10r, const double log10rup,
+                                      const double log10rlow) const;
 
   /* normalised lognormal distribution returns the probability density of a given radius */
   double lognormal_pdf(const double radius) const;

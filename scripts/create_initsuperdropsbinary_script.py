@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th April 2024
+Last Modified: Tuesday 30th April 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -51,7 +51,7 @@ initsupersfile = binariespath+"/dimlessSDsinit.dat" # note this should match con
 ### --- Number of Superdroplets per Gridbox --- ###
 ### ---        (an int or dict of ints)     --- ###
 zlim = 800
-npergbx = 2048
+npergbx = 1024
 # nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim) # supers where z <= zlim
 nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # supers where z >= zlim
 # nsupers = 100
@@ -61,7 +61,7 @@ nsupers =  crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim) # 
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
 # radiigen  =  rgens.MonoAttrGen(monor)                 # all SDs have the same radius [m]
 
-rspan                = [3e-6, 2.5e-3]                   # min and max range of radii to sample [m]
+rspan                = [1e-7, 1e-4]                   # min and max range of radii to sample [m]
 radiigen =  rgens.SampleLog10RadiiGen(rspan)            # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
@@ -90,7 +90,12 @@ dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same 
 # # # geosigs              = [1.4, 1.6]
 # # # scalefacs            = [0.06, 0.04]
 # numconc = np.sum(scalefacs) * 5e8
-# xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
+
+numconc = 1e9
+geomeans = [3.5e-6]
+geosigs = [2.0]
+scalefacs = [1.0]
+xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
 # numconc              = 2**(23)                     # total no. conc of real droplets [m^-3]
@@ -100,12 +105,12 @@ dryradiigen  =  rgens.MonoAttrGen(monodryr)             # all SDs have the same 
 # nueff                = 0.08                     # effective variance
 # # xiprobdist = probdists.ClouddropsHansenGamma(reff, nueff)
 # rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
-nrain                = 3000                         # raindrop concentration [m^-3]
-qrain                = 0.9                          # rainwater content [g/m^3]
-dvol                 = 8e-4                         # mean volume diameter [m]
-xiprobdist = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
-numconc = 1e9 # [m^3]
+# nrain                = 3000                         # raindrop concentration [m^-3]
+# qrain                = 0.9                          # rainwater content [g/m^3]
+# dvol                 = 8e-4                         # mean volume diameter [m]
+# xiprobdist = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+# rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+# numconc = 1e9 # [m^3]
 # distribs = [rdist1, rdist2]
 # scalefacs = [1000, 1]
 # xiprobdist = probdists.CombinedRadiiProbDistribs(distribs, scalefacs)

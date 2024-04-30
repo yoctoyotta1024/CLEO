@@ -136,10 +136,9 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
   const auto log10rwidth = (log10rup - log10rlow);
   const auto frac = randgen->drand(0.0, 1.0);
   const auto log10r = double{log10rlow + frac * log10rwidth};
-  const auto radius = double{Kokkos::pow(10.0, log10r)};
+  const auto radius = double{std::pow(10.0, log10r)};
 
-  const auto binwidth = double{Kokkos::pow(10.0, log10rup) - Kokkos::pow(10.0, log10rlow)};
-  const auto numconc = droplet_numconc_distribution(radius, binwidth);
+  const auto numconc = droplet_numconc_distribution(log10r, log10rup, log10rlow);
   const auto xi = (uint64_t)std::round(numconc * gbxvolume);  // cast double to uint64_t
 
   return std::make_pair(xi, radius);  // xi_radius
@@ -147,7 +146,7 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
 
 /* returns solute mass for a new super-droplet with a dryradius = 1nano-meter. */
 double CreateSuperdrop::new_msol(const double radius) const {
-  constexpr double msolconst = 4.0 * Kokkos::numbers::pi * dlc::Rho_sol / 3.0;
+  constexpr double msolconst = 4.0 * std::numbers::pi * dlc::Rho_sol / 3.0;
 
   if (radius < dryradius) {
     throw std::invalid_argument("new radius cannot be < dry radius of droplet");
@@ -158,10 +157,13 @@ double CreateSuperdrop::new_msol(const double radius) const {
 
 /* returns the droplet number concentration from a binned droplet number concentration
 distribution for a bin of width 'binwidth' (in radius space) centred at radius. */
-double CreateSuperdrop::droplet_numconc_distribution(const double radius,
-                                                     const double binwidth) const {
+double CreateSuperdrop::droplet_numconc_distribution(const double log10r, const double log10rup,
+                                                     const double log10rlow) const {
+  const auto radius = std::pow(10.0, log10r);
+  const auto delta_radius = (std::pow(10.0, log10rup) - std::pow(10.0, log10rlow));
+
   const auto dnumconc_dradius = numconc * lognormal_pdf(radius);  // delta_numconc / delta_radius
-  return dnumconc_dradius * binwidth;  // number of droplets per unit volume
+  return dnumconc_dradius * delta_radius;  // number of droplets per unit volume
 }
 
 /* normalised lognormal distribution returns the probability density of a given radius */
