@@ -12,6 +12,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
+"add_supers_at_domain_top.cpp"
 "cartesianmaps.cpp"
 "cartesianmotion.cpp"
 "createcartesianmaps.cpp"

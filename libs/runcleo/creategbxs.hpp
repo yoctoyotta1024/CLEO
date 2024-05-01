@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 12th February 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,16 +22,15 @@
 #ifndef LIBS_RUNCLEO_CREATEGBXS_HPP_
 #define LIBS_RUNCLEO_CREATEGBXS_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
+#include <Kokkos_Pair.hpp>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <Kokkos_Core.hpp>
-#include <Kokkos_DualView.hpp>
-#include <Kokkos_Pair.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/findrefs.hpp"
@@ -52,10 +51,10 @@ class GenGridbox {
  private:
   std::shared_ptr<Gbxindex::Gen> GbxindexGen;
   /**< Pointer to gridbox index generator, Gbxindex::Gen object */
-  std::vector<double> presss;   /**< Vector of pressures for each gridbox */
-  std::vector<double> temps;    /**< Vector of temperatures for each gridbox */
-  std::vector<double> qvaps;    /**< Vector of vapor mass mixing ratio for each gridbox */
-  std::vector<double> qconds;   /**< Vector of condensed water mass mixing ratio for each gridbox */
+  std::vector<double> presss; /**< Vector of pressures for each gridbox */
+  std::vector<double> temps;  /**< Vector of temperatures for each gridbox */
+  std::vector<double> qvaps;  /**< Vector of vapor mass mixing ratio for each gridbox */
+  std::vector<double> qconds; /**< Vector of condensed water mass mixing ratio for each gridbox */
   std::vector<std::pair<double, double>> wvels;
   /**< Vector of vertical (coord3) wind velocities for each gridbox */
   std::vector<std::pair<double, double>> uvels;
@@ -77,13 +76,13 @@ class GenGridbox {
 
  public:
   /**
- * @brief Constructs a GenGridbox object.
- *
- * Constructs a GenGridbox object based on the provided initial conditions in 'GbxInitConds'.
- *
- * @tparam GbxInitConds Type of the Gridboxes' initial conditions.
- * @param gbxic The initial conditions for the Gridboxes.
- */
+   * @brief Constructs a GenGridbox object.
+   *
+   * Constructs a GenGridbox object based on the provided initial conditions in 'GbxInitConds'.
+   *
+   * @tparam GbxInitConds Type of the Gridboxes' initial conditions.
+   * @param gbxic The initial conditions for the Gridboxes.
+   */
   template <typename GbxInitConds>
   explicit GenGridbox(const GbxInitConds &gbxic)
       : GbxindexGen(std::make_shared<Gbxindex::Gen>()),
@@ -105,7 +104,7 @@ class GenGridbox {
    * @tparam GbxMaps Type of the Gridbox Maps.
    * @param ii The index of the Gridbox.
    * @param gbxmaps The Gridbox Maps.
-   * @param totsupers The view of (all) super-droplets.
+   * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
    * @return The generated Gridbox.
    */
   template <GridboxMaps GbxMaps>
@@ -132,8 +131,8 @@ class GenGridbox {
    * @param team_member The host team member reference.
    * @param ii The index of the Gridbox.
    * @param gbxmaps The Gridbox Maps.
-   * @param totsupers The view of (all) super-droplets.
-   * @param h_totsupers The host mirror of (all) super-droplets.
+   * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
+   * @param h_totsupers The host mirror of all super-droplets (both in and out of bounds of domain).
    * @return The generated Gridbox.
    */
   template <GridboxMaps GbxMaps>
@@ -160,7 +159,7 @@ class GenGridbox {
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The Gridbox initial conditions.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  *
  * @return The view of initialised Gridboxes.
  */
@@ -186,7 +185,7 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gen The Gridbox generator.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  * @param h_gbxs The view of Gridboxes on the host.
  */
 template <GridboxMaps GbxMaps>
@@ -205,7 +204,7 @@ inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps, const GenGridbox &ge
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The initial conditions for the Gridboxes.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  *
  * @return The initialised view of Gridboxes.
  */
@@ -246,7 +245,7 @@ void print_gbxs(const viewh_constgbx gbxs);
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The Gridbox initial conditions.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  *
  * @return The view of initialised Gridboxes.
  */
@@ -258,7 +257,9 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
 
   std::cout << "checking initialisation\n";
   is_gbxinit_complete(gbxmaps.maps_size() - 1, gbxs);
-  print_gbxs(gbxs.view_host());
+
+  // // Print information about the created superdrops
+  // print_gbxs(gbxs.view_host());
 
   std::cout << "--- create gridboxes: success ---\n";
 
@@ -277,7 +278,7 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The initial conditions for the Gridboxes.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  *
  * @return The initialised view of Gridboxes.
  */
@@ -317,7 +318,7 @@ inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gen The Gridbox generator.
- * @param totsupers The view of super-droplets.
+ * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
  * @param h_gbxs The view of Gridboxes on the host.
  */
 template <GridboxMaps GbxMaps>

@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -90,7 +90,7 @@ class SDMMethods {
    *
    * @param t_sdm Current timestep for SDM.
    * @param d_gbxs View of gridboxes on device.
-   * @param totsupers View of total superdroplets.
+   * @param totsupers View of all superdrops (both in and out of bounds of domain).
    */
   void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs,
                            const viewd_supers totsupers) const {
@@ -195,11 +195,12 @@ class SDMMethods {
    * function for both the domain and individual gridboxes.
    *
    * @param t_mdl Current timestep of the coupled model.
-   * @param d_gbxs View of gridboxes on device.
+   * @param gbxs Dualview of gridboxes (on host and on device).
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    obs.at_start_step(t_mdl, d_gbxs, totsupers);
+  void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs) const {
+    const auto d_gbxs = gbxs.view_device();
+    const auto domain_totsupers = gbxs.view_host()(0).domain_totsupers_readonly();
+    obs.at_start_step(t_mdl, d_gbxs, domain_totsupers);
   }
 
   /**
@@ -212,7 +213,7 @@ class SDMMethods {
    * @param t_mdl Current timestep of the coupled model.
    * @param t_mdl_next Next timestep of the coupled model.
    * @param d_gbxs View of gridboxes on device.
-   * @param totsupers View of total superdroplets.
+   * @param totsupers View of all superdrops (both in and out of bounds of domain).
    * @param genpool Random number generator pool.
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,

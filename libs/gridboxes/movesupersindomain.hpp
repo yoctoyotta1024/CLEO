@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -89,11 +89,13 @@ struct MoveSupersInDomain {
         });
   }
 
-  /* (re)sorting supers based on their gbxindexes and
-  then updating the span for each gridbox accordingly.
+  /* (re)sorting supers based on their gbxindexes and then updating the span for each gridbox
+  accordingly.
   Kokkos::parallel_for([...]) (on host) is equivalent to:
   for (size_t ii(0); ii < ngbxs; ++ii){[...]}
-  when in serial */
+  when in serial
+  _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
+  */
   void move_supers_between_gridboxes(const viewd_gbx d_gbxs, const viewd_supers totsupers) const {
     sort_supers(totsupers);
 
@@ -121,6 +123,7 @@ struct MoveSupersInDomain {
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host)
   (4) (optional) apply domain boundary conditions (host and device)
+  _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
   // TODO(all) use tasking to convert all 3 team policy
   // loops from first two function calls into 1 loop?
   */
@@ -149,9 +152,13 @@ struct MoveSupersInDomain {
   KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const { return motion.next_step(t_sdm); }
 
-  /* if current time, t_sdm, is time when superdrop
-  motion should occur, enact movement of
-  superdroplets throughout domain */
+  /*
+   * if current time, t_sdm, is time when superdrop motion should occur, enact movement of
+   * superdroplets throughout domain.
+   *
+   * @param totsupers View of all superdrops (both in and out of bounds of domain).
+   *
+   */
   void run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
                 const viewd_supers totsupers) const {
     if (motion.on_step(t_sdm)) {

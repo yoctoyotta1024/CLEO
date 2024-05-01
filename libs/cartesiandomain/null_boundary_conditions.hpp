@@ -9,14 +9,14 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Definition of the Domain Boundary Conditions to use for Cartesian GridBox Maps, Motion of
+ * A definition of the Domain Boundary Conditions to use for Cartesian GridBox Maps, Motion of
  * Super-Droplets and MoveSupersInDomain
  */
 
