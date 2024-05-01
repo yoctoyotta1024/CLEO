@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Superdrops Module" href="../superdrops/superdropsmod.html" /><link rel="prev" title="RunCLEO" href="runcleo.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.04.27 -->
         <title>SDMMethods - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=437aa6ec" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -112,6 +112,8 @@
 <label class="overlay toc-overlay" for="__toc">
   <div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -220,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="couplingcomms.html">CouplingComms</a></li>
 <li class="toctree-l3"><a class="reference internal" href="creategbxs.html">Create Gridboxes Sub-Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runcleo.html">RunCLEO</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">SDMMethods</a></li>
 </ul>
@@ -276,6 +277,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../observers/massmoments_observer.html">Massmoments Observer</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/initialconditions.html">InitialConditions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../cleoconstants.html">CLEO Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
@@ -319,7 +324,7 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <article role="main">
+        <article role="main" id="furo-main-content">
           <section id="sdmmethods">
 <h1>SDMMethods<a class="headerlink" href="#sdmmethods" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/runcleo/sdmmethods.hpp&gt;</span></code>
@@ -385,15 +390,15 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK10SDMMethods13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">
-<span id="_CPPv3NK10SDMMethods13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK10SDMMethods13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="SDMMethods::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="classSDMMethods_1ab38802cd24f04eb1ec5d8933c678d59b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10SDMMethods13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK10SDMMethods13at_start_stepEKjK12dualview_gbx">
+<span id="_CPPv3NK10SDMMethods13at_start_stepEKjK12dualview_gbx"></span><span id="_CPPv2NK10SDMMethods13at_start_stepEKjK12dualview_gbx"></span><span id="SDMMethods::at_start_step__unsigned-iC.dualview_gbxCC"></span><span class="target" id="classSDMMethods_1a1a5f57293e5a6b43a6d70b33ed8d4745"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv412dualview_gbx" title="dualview_gbx"><span class="n"><span class="pre">dualview_gbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10SDMMethods13at_start_stepEKjK12dualview_gbx" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Execute at the start of each coupled model timestep. </p>
 <p>This function is called at the start of each coupled model timestep (i.e. at start of <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code>) and includes calls to the observer’s <code class="docutils literal notranslate"><span class="pre">at_start_step</span></code> function for both the domain and individual gridboxes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
-<li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
+<li><p><strong>gbxs</strong> – Dualview of gridboxes (on host and on device). </p></li>
 </ul>
 </dd>
 </dl>
@@ -410,7 +415,7 @@
 <li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
 <li><p><strong>t_mdl_next</strong> – Next timestep of the coupled model. </p></li>
 <li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
-<li><p><strong>totsupers</strong> – View of total superdroplets. </p></li>
+<li><p><strong>totsupers</strong> – View of all superdrops (both in and out of bounds of domain). </p></li>
 <li><p><strong>genpool</strong> – Random number generator pool. </p></li>
 </ul>
 </dd>
@@ -469,7 +474,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t_sdm</strong> – Current timestep for SDM. </p></li>
 <li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
-<li><p><strong>totsupers</strong> – View of total superdroplets. </p></li>
+<li><p><strong>totsupers</strong> – View of all superdrops (both in and out of bounds of domain). </p></li>
 </ul>
 </dd>
 </dl>
@@ -571,7 +576,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 April 2024</div>
+              Last updated on 01 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -597,7 +602,7 @@
 <li><a class="reference internal" href="#_CPPv4N10SDMMethods10SDMMethodsEKjK7GbxMapsK9MicrophysK18MoveSupersInDomainI7GbxMaps1M18BoundaryConditionsEK3Obs"><code class="docutils literal notranslate"><span class="pre">SDMMethods::SDMMethods()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK10SDMMethods13get_couplstepEv"><code class="docutils literal notranslate"><span class="pre">SDMMethods::get_couplstep()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK10SDMMethods19prepare_to_timestepEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">SDMMethods::prepare_to_timestep()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10SDMMethods13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">SDMMethods::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SDMMethods13at_start_stepEKjK12dualview_gbx"><code class="docutils literal notranslate"><span class="pre">SDMMethods::at_start_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK10SDMMethods8run_stepEKjKj9viewd_gbxK12viewd_supers13GenRandomPool"><code class="docutils literal notranslate"><span class="pre">SDMMethods::run_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N10SDMMethods7gbxmapsE"><code class="docutils literal notranslate"><span class="pre">SDMMethods::gbxmaps</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N10SDMMethods3obsE"><code class="docutils literal notranslate"><span class="pre">SDMMethods::obs</span></code></a></li>
@@ -627,7 +632,7 @@
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/scripts/furo.js?v=4e2eecee"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     </body>

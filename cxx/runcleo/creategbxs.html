@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Create Super-droplets Sub-Module" href="createsupers.html" /><link rel="prev" title="CouplingComms" href="couplingcomms.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.04.27 -->
         <title>Create Gridboxes Sub-Module - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=437aa6ec" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -112,6 +112,8 @@
 <label class="overlay toc-overlay" for="__toc">
   <div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -220,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="couplingcomms.html">CouplingComms</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Create Gridboxes Sub-Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runcleo.html">RunCLEO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
 </ul>
@@ -276,6 +277,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../observers/massmoments_observer.html">Massmoments Observer</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/initialconditions.html">InitialConditions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../cleoconstants.html">CLEO Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
@@ -319,7 +324,7 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <article role="main">
+        <article role="main" id="furo-main-content">
           <section id="create-gridboxes-sub-module">
 <h1>Create Gridboxes Sub-Module<a class="headerlink" href="#create-gridboxes-sub-module" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/runcleo/creategbxs.hpp&gt;</span></code>
@@ -361,7 +366,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>ii</strong> – The index of the Gridbox. </p></li>
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
-<li><p><strong>totsupers</strong> – The view of (all) super-droplets. </p></li>
+<li><p><strong>totsupers</strong> – The view of all super-droplets (both in and out of bounds of domain). </p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -384,8 +389,8 @@ initialise Gridboxes (i.e. GBxs).</p>
 <li><p><strong>team_member</strong> – The host team member reference. </p></li>
 <li><p><strong>ii</strong> – The index of the Gridbox. </p></li>
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
-<li><p><strong>totsupers</strong> – The view of (all) super-droplets. </p></li>
-<li><p><strong>h_totsupers</strong> – The host mirror of (all) super-droplets. </p></li>
+<li><p><strong>totsupers</strong> – The view of all super-droplets (both in and out of bounds of domain). </p></li>
+<li><p><strong>h_totsupers</strong> – The host mirror of all super-droplets (both in and out of bounds of domain). </p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -485,7 +490,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
 <li><p><strong>gbxic</strong> – The Gridbox initial conditions. </p></li>
-<li><p><strong>totsupers</strong> – The view of super-droplets.</p></li>
+<li><p><strong>totsupers</strong> – The view of all super-droplets (both in and out of bounds of domain).</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -510,7 +515,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
 <li><p><strong>gbxic</strong> – The initial conditions for the Gridboxes. </p></li>
-<li><p><strong>totsupers</strong> – The view of super-droplets.</p></li>
+<li><p><strong>totsupers</strong> – The view of all super-droplets (both in and out of bounds of domain).</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -539,7 +544,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
 <li><p><strong>gen</strong> – The Gridbox generator. </p></li>
-<li><p><strong>totsupers</strong> – The view of super-droplets. </p></li>
+<li><p><strong>totsupers</strong> – The view of all super-droplets (both in and out of bounds of domain). </p></li>
 <li><p><strong>h_gbxs</strong> – The view of Gridboxes on the host. </p></li>
 </ul>
 </dd>
@@ -610,7 +615,7 @@ initialise Gridboxes (i.e. GBxs).</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 April 2024</div>
+              Last updated on 01 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -666,7 +671,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/scripts/furo.js?v=4e2eecee"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     </body>

@@ -3,12 +3,12 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="InitialConditions" href="initialconditions.html" /><link rel="prev" title="Create Gridboxes Sub-Module" href="creategbxs.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="RunCLEO" href="runcleo.html" /><link rel="prev" title="Create Gridboxes Sub-Module" href="creategbxs.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.04.27 -->
         <title>Create Super-droplets Sub-Module - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=437aa6ec" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -112,6 +112,8 @@
 <label class="overlay toc-overlay" for="__toc">
   <div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -220,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="couplingcomms.html">CouplingComms</a></li>
 <li class="toctree-l3"><a class="reference internal" href="creategbxs.html">Create Gridboxes Sub-Module</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runcleo.html">RunCLEO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
 </ul>
@@ -276,6 +277,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../observers/massmoments_observer.html">Massmoments Observer</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/initialconditions.html">InitialConditions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../cleoconstants.html">CLEO Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
@@ -319,7 +324,7 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <article role="main">
+        <article role="main" id="furo-main-content">
           <section id="create-super-droplets-sub-module">
 <h1>Create Super-droplets Sub-Module<a class="headerlink" href="#create-super-droplets-sub-module" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/runcleo/createsupers.hpp&gt;</span></code>
@@ -373,7 +378,7 @@ super-droplets in Kokkos view (on device).</p>
 <p>A coordinate is only copied from the corresponding coords vector if that coordinate is consistent with the number of spatial dimensions of the model. Otherwise, the coordinate is set to 0.0. For example, if the model is 1-D, only coord3 is obtained from the initial data vector; coord1 and coord2 are set to 0.0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kk</strong> – The index of the super-droplet in the initial data (0 &lt;= kk &lt; total number of superdrops). </p>
+<dd class="field-odd"><p><strong>kk</strong> – The index of the super-droplet in the initial data (0 &lt;= kk &lt; total number of super-droplets). </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>An array containing the kk’th superdroplet’s spatial coordinates (coord3, coord1, coord2). </p>
@@ -387,7 +392,7 @@ super-droplets in Kokkos view (on device).</p>
 <dd><p>Function returns a superdroplet’s attributes from position ‘kk’ in the initial conditions data. All super-droplets have the same solute properties. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kk</strong> – The index of the super-droplet in the initial data (0 &lt;= kk &lt; total number of superdrops). </p>
+<dd class="field-odd"><p><strong>kk</strong> – The index of the super-droplet in the initial data (0 &lt;= kk &lt; total number of super-droplets). </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The attributes of the superdrop from index ‘kk’. </p>
@@ -405,12 +410,6 @@ super-droplets in Kokkos view (on device).</p>
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N12GenSuperdrop7sdIdGenE">
-<span id="_CPPv3N12GenSuperdrop7sdIdGenE"></span><span id="_CPPv2N12GenSuperdrop7sdIdGenE"></span><span id="GenSuperdrop::sdIdGen__std::shared_ptr:Superdrop::IDType::Gen:"></span><span class="target" id="classGenSuperdrop_1aa92c9ae024cabb68afb4ec39e2f7f223"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../superdrops/superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../superdrops/superdrop.html#_CPPv4N9Superdrop6IDTypeE" title="Superdrop::IDType"><span class="n"><span class="pre">IDType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Gen</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdIdGen</span></span></span><a class="headerlink" href="#_CPPv4N12GenSuperdrop7sdIdGenE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Pointer <a class="reference internal" href="../superdrops/superdrop.html#classSuperdrop_1aebcbeafd43e6a898d84c580e5ee3f2be"><span class="std std-ref">Superdrop::IDType</span></a> object for super-droplet ID generation. </p>
-</dd></dl>
-
-<dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N12GenSuperdrop8initdataE">
 <span id="_CPPv3N12GenSuperdrop8initdataE"></span><span id="_CPPv2N12GenSuperdrop8initdataE"></span><span id="GenSuperdrop::initdata__InitSupersData"></span><span class="target" id="classGenSuperdrop_1a5304e47fd7155fc4b63398b1e71b47ec"></span><span class="n"><span class="pre">InitSupersData</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initdata</span></span></span><a class="headerlink" href="#_CPPv4N12GenSuperdrop8initdataE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>instance of InitSupersData for initialising superdrops. </p>
@@ -423,7 +422,7 @@ super-droplets in Kokkos view (on device).</p>
 <dt class="sig sig-object cpp" id="_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds">
 <span id="_CPPv3I0E13create_supersRK18SuperdropInitConds"></span><span id="_CPPv2I0E13create_supersRK18SuperdropInitConds"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="createsupers_8hpp_1a81b08e4a28f3a27f87c0b7c9b1df2b3a"></span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_supers</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds" title="create_supers::SuperdropInitConds"><span class="n"><span class="pre">SuperdropInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sdic</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Create a view of super-droplets in (device) memory. </p>
-<p>This function creates an ordered view of superdrops in device memory, where the number of superdrops is specified by the parameter <code class="docutils literal notranslate"><span class="pre">totnsupers</span></code>. The superdrops are ordered by the gridbox indexes and generated using a generator which uses the initial conditions referenced by the <code class="docutils literal notranslate"><span class="pre">SuperdropInitConds</span></code> type.</p>
+<p>This function creates an ordered view of superdrops in device memory, where the number of superdrops is specified by the parameter <code class="docutils literal notranslate"><span class="pre">totnsupers</span></code>. The superdrops are ordered by the gridbox indexes and generated using a generator which uses the initial conditions provided by the <code class="docutils literal notranslate"><span class="pre">SuperdropInitConds</span></code> type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>SuperdropInitConds</strong> – The type of the super-droplets’ initial conditions data. </p>
@@ -456,8 +455,8 @@ super-droplets in Kokkos view (on device).</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv425initialise_supers_on_hostRK12GenSuperdropK12viewd_supers">
-<span id="_CPPv325initialise_supers_on_hostRK12GenSuperdropK12viewd_supers"></span><span id="_CPPv225initialise_supers_on_hostRK12GenSuperdropK12viewd_supers"></span><span id="initialise_supers_on_host__GenSuperdropCR.viewd_supersC"></span><span class="target" id="createsupers_8hpp_1ac7ccf7711e299740da994abfdfd164c1"></span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialise_supers_on_host</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv412GenSuperdrop" title="GenSuperdrop"><span class="n"><span class="pre">GenSuperdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gen</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425initialise_supers_on_hostRK12GenSuperdropK12viewd_supers" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I0E25initialise_supers_on_hostN12viewd_supers10HostMirrorERK18SuperdropInitCondsK12viewd_supers">
+<span id="_CPPv3I0E25initialise_supers_on_hostRK18SuperdropInitCondsK12viewd_supers"></span><span id="_CPPv2I0E25initialise_supers_on_hostRK18SuperdropInitCondsK12viewd_supers"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="createsupers_8hpp_1ac1aa0a52e534812e404252b4d2d1f595"></span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialise_supers_on_host</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E25initialise_supers_on_hostN12viewd_supers10HostMirrorERK18SuperdropInitCondsK12viewd_supers" title="initialise_supers_on_host::SuperdropInitConds"><span class="n"><span class="pre">SuperdropInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sdic</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E25initialise_supers_on_hostN12viewd_supers10HostMirrorERK18SuperdropInitCondsK12viewd_supers" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Return a mirror view of superdrops on host memory. </p>
 <p>This function initialises a mirror view of superdrops on host memory, using the super-droplet generator instance <code class="docutils literal notranslate"><a class="reference internal" href="#classGenSuperdrop"><span class="std std-ref"><span class="pre">GenSuperdrop</span></span></a></code> to generate the kk’th super-droplet with their initial Gridbox index, spatial coordinates, and attributes. Kokkos::parallel_for is used to perform parallel initialisation of the mirror view, where each superdrop is generated by the provided <code class="docutils literal notranslate"><span class="pre">gen</span></code> function object.</p>
 <p>The equivalent serial version of the Kokkos::parallel_for([…]) is: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">kk</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">kk</span> <span class="o">&lt;</span> <span class="n">totnsupers</span><span class="p">;</span> <span class="o">++</span><span class="n">kk</span><span class="p">)</span>
@@ -470,7 +469,7 @@ super-droplets in Kokkos view (on device).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – The generator function object used to initialize the superdrops. </p></li>
+<li><p><strong>sdic</strong> – The instance of the super-droplets’ initial conditions data. </p></li>
 <li><p><strong>supers</strong> – The view of superdrops on device memory. </p></li>
 </ul>
 </dd>
@@ -481,19 +480,16 @@ super-droplets in Kokkos view (on device).</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv419is_sdsinit_completeK17viewd_constsupersK6size_t">
-<span id="_CPPv319is_sdsinit_completeK17viewd_constsupersK6size_t"></span><span id="_CPPv219is_sdsinit_completeK17viewd_constsupersK6size_t"></span><span id="is_sdsinit_complete__viewd_constsupersC.sC"></span><span class="target" id="createsupers_8hpp_1ab098af113f8a4a1fea56d481357c158e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_sdsinit_complete</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419is_sdsinit_completeK17viewd_constsupersK6size_t" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Check if superdroplets initialisation is complete and sorted. </p>
-<p>This function checks if the initialisation of supers view is complete and if the super-droplets are sorted by ascending superdroplet Gridbox index. If the initialisation is incomplete or the superdroplets are not sorted, it throws an exception with an appropriate error message.</p>
+<dt class="sig sig-object cpp" id="_CPPv419is_sdsinit_completeK17viewd_constsupers">
+<span id="_CPPv319is_sdsinit_completeK17viewd_constsupers"></span><span id="_CPPv219is_sdsinit_completeK17viewd_constsupers"></span><span id="is_sdsinit_complete__viewd_constsupersC"></span><span class="target" id="createsupers_8hpp_1a15e26caaf20b1f63346faf3719e26567"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_sdsinit_complete</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419is_sdsinit_completeK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Check if superdroplets initialisation is complete. </p>
+<p>This function checks if the initialisation of supers view is complete by checking if the superdroplets are sorted by ascending gridbox indexes. If the initialisation is incomplete (the superdroplets are not sorted), it throws an exception with an appropriate error message.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>supers</strong> – The view of super-droplets in device memory. </p></li>
-<li><p><strong>size</strong> – The expected number of super-droplets.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>supers</strong> – The view of super-droplets in device memory.</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – If the initialisation is incomplete or super-droplets are not ordered correctly. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – If the initialisation is incomplete i.e. the super-droplets are not ordered correctly. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -517,12 +513,12 @@ super-droplets in Kokkos view (on device).</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="initialconditions.html">
+          <a class="next-page" href="runcleo.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">InitialConditions</div>
+                <div class="title">RunCLEO</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -547,7 +543,7 @@ super-droplets in Kokkos view (on device).</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 April 2024</div>
+              Last updated on 01 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -575,14 +571,13 @@ super-droplets in Kokkos view (on device).</p>
 <li><a class="reference internal" href="#_CPPv4NK12GenSuperdrop9coords_atEKj"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::coords_at()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK12GenSuperdrop8attrs_atEKj"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::attrs_at()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N12GenSuperdrop10nspacedimsE"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::nspacedims</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12GenSuperdrop7sdIdGenE"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::sdIdGen</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N12GenSuperdrop8initdataE"><code class="docutils literal notranslate"><span class="pre">GenSuperdrop::initdata</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds"><code class="docutils literal notranslate"><span class="pre">create_supers()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0E17initialise_supers12viewd_supersRK18SuperdropInitConds"><code class="docutils literal notranslate"><span class="pre">initialise_supers()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv425initialise_supers_on_hostRK12GenSuperdropK12viewd_supers"><code class="docutils literal notranslate"><span class="pre">initialise_supers_on_host()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv419is_sdsinit_completeK17viewd_constsupersK6size_t"><code class="docutils literal notranslate"><span class="pre">is_sdsinit_complete()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0E25initialise_supers_on_hostN12viewd_supers10HostMirrorERK18SuperdropInitCondsK12viewd_supers"><code class="docutils literal notranslate"><span class="pre">initialise_supers_on_host()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv419is_sdsinit_completeK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">is_sdsinit_complete()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv412print_supersK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">print_supers()</span></code></a></li>
 </ul>
 </li>
@@ -598,7 +593,7 @@ super-droplets in Kokkos view (on device).</p>
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/scripts/furo.js?v=4e2eecee"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     </body>

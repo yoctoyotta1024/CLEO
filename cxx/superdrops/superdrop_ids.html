@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Superdrop Attributes" href="superdrop_attrs.html" /><link rel="prev" title="Superdrop" href="superdrop.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.04.27 -->
         <title>Superdrop IDs - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=437aa6ec" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -112,6 +112,8 @@
 <label class="overlay toc-overlay" for="__toc">
   <div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -220,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../runcleo/couplingcomms.html">CouplingComms</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../runcleo/initialconditions.html">InitialConditions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../runcleo/runcleo.html">RunCLEO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
@@ -276,6 +277,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../observers/massmoments_observer.html">Massmoments Observer</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/initialconditions.html">InitialConditions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../cleoconstants.html">CLEO Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
@@ -319,7 +324,7 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <article role="main">
+        <article role="main" id="furo-main-content">
           <section id="superdrop-ids">
 <h1>Superdrop IDs<a class="headerlink" href="#superdrop-ids" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/superdrop_ids.hpp&gt;</span></code>
@@ -328,6 +333,14 @@
 <dt class="sig sig-object cpp" id="_CPPv45IntID">
 <span id="_CPPv35IntID"></span><span id="_CPPv25IntID"></span><span id="IntID"></span><span class="target" id="structIntID"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IntID</span></span></span><a class="headerlink" href="#_CPPv45IntID" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Struct containing value of SD identity (8 bytes integer). </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5IntID9get_valueEv">
+<span id="_CPPv3NK5IntID9get_valueEv"></span><span id="_CPPv2NK5IntID9get_valueEv"></span><span id="IntID::get_valueC"></span><span class="target" id="structIntID_1ab85874b71a23040a9e9a2dd133e6847a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_value</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5IntID9get_valueEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -344,6 +357,18 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5IntID3Gen3GenEv">
+<span id="_CPPv3N5IntID3Gen3GenEv"></span><span id="_CPPv2N5IntID3Gen3GenEv"></span><span id="IntID::Gen::Gen"></span><span class="target" id="classIntID_1_1Gen_1ab210734e4e68132b783dc8ec0d40dd9a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5IntID3Gen3GenEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Default constructor for ID generation starting at value = 0. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5IntID3Gen3GenEK6size_t">
+<span id="_CPPv3N5IntID3Gen3GenEK6size_t"></span><span id="_CPPv2N5IntID3Gen3GenEK6size_t"></span><span id="IntID::Gen::Gen__sC"></span><span class="target" id="classIntID_1_1Gen_1a99f61122ac0317abe3a8b2a8a8544b48"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Gen</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5IntID3Gen3GenEK6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructor for ID generation with next id at value = id + 1. </p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5IntID3Gen4nextEv">
 <span id="_CPPv3N5IntID3Gen4nextEv"></span><span id="_CPPv2N5IntID3Gen4nextEv"></span><span id="IntID::Gen::next"></span><span class="target" id="classIntID_1_1Gen_1acc0bdb38e30541f2a284ca55092af738"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv45IntID" title="IntID"><span class="n"><span class="pre">IntID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5IntID3Gen4nextEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Generate the next SD identity. </p>
@@ -356,8 +381,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5IntID3Gen4nextEK6size_t">
-<span id="_CPPv3N5IntID3Gen4nextEK6size_t"></span><span id="_CPPv2N5IntID3Gen4nextEK6size_t"></span><span id="IntID::Gen::next__sC"></span><span class="target" id="classIntID_1_1Gen_1a80d04753e50b94ea547a5052111722cd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv45IntID" title="IntID"><span class="n"><span class="pre">IntID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5IntID3Gen4nextEK6size_t" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5IntID3Gen3setEKj">
+<span id="_CPPv3N5IntID3Gen3setEKj"></span><span id="_CPPv2N5IntID3Gen3setEKj"></span><span id="IntID::Gen::set__unsigned-iC"></span><span class="target" id="classIntID_1_1Gen_1aec0cd58a5cdd6daf74f481260fbb112d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv45IntID" title="IntID"><span class="n"><span class="pre">IntID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5IntID3Gen3setEKj" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Generate the next SD identity using given value ‘id’. </p>
 <p><em>Note:</em> This generator assumes the ID was thread-safe generated (i.e., is unique).</p>
 <dl class="field-list simple">
@@ -388,12 +413,30 @@
 <dt class="sig sig-object cpp" id="_CPPv47EmptyID">
 <span id="_CPPv37EmptyID"></span><span id="_CPPv27EmptyID"></span><span id="EmptyID"></span><span class="target" id="structEmptyID"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EmptyID</span></span></span><a class="headerlink" href="#_CPPv47EmptyID" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Struct for non-existent (no memory) SD identity. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7EmptyID9get_valueEv">
+<span id="_CPPv3NK7EmptyID9get_valueEv"></span><span id="_CPPv2NK7EmptyID9get_valueEv"></span><span id="EmptyID::get_valueC"></span><span class="target" id="structEmptyID_1a37f857a038b8da398107924686e379cc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_value</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7EmptyID9get_valueEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N7EmptyID3GenE">
 <span id="_CPPv3N7EmptyID3GenE"></span><span id="_CPPv2N7EmptyID3GenE"></span><span id="EmptyID::Gen"></span><span class="target" id="classEmptyID_1_1Gen"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Gen</span></span></span><a class="headerlink" href="#_CPPv4N7EmptyID3GenE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Class for generating empty SD identity. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7EmptyID3Gen3GenEv">
+<span id="_CPPv3N7EmptyID3Gen3GenEv"></span><span id="_CPPv2N7EmptyID3Gen3GenEv"></span><span id="EmptyID::Gen::Gen"></span><span class="target" id="classEmptyID_1_1Gen_1a4b2e7f1e6ef6ab0691b7da0b2a6689db"></span><span class="sig-name descname"><span class="n"><span class="pre">Gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N7EmptyID3Gen3GenEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7EmptyID3Gen3GenEK6size_t">
+<span id="_CPPv3N7EmptyID3Gen3GenEK6size_t"></span><span id="_CPPv2N7EmptyID3Gen3GenEK6size_t"></span><span id="EmptyID::Gen::Gen__sC"></span><span class="target" id="classEmptyID_1_1Gen_1ad183cbb3c8b13eac059f16dfa67bd468"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Gen</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7EmptyID3Gen3GenEK6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7EmptyID3Gen4nextEv">
 <span id="_CPPv3N7EmptyID3Gen4nextEv"></span><span id="_CPPv2N7EmptyID3Gen4nextEv"></span><span id="EmptyID::Gen::next"></span><span class="target" id="classEmptyID_1_1Gen_1ac0fe1392e98b84ac4167b72645acd8b7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47EmptyID" title="EmptyID"><span class="n"><span class="pre">EmptyID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7EmptyID3Gen4nextEv" title="Link to this definition">¶</a><br /></dt>
@@ -406,8 +449,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7EmptyID3Gen4nextEKj">
-<span id="_CPPv3N7EmptyID3Gen4nextEKj"></span><span id="_CPPv2N7EmptyID3Gen4nextEKj"></span><span id="EmptyID::Gen::next__unsigned-iC"></span><span class="target" id="classEmptyID_1_1Gen_1a12fb61fa534e010903ee261ce4a1bbf0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47EmptyID" title="EmptyID"><span class="n"><span class="pre">EmptyID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7EmptyID3Gen4nextEKj" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N7EmptyID3Gen3setEKj">
+<span id="_CPPv3N7EmptyID3Gen3setEKj"></span><span id="_CPPv2N7EmptyID3Gen3setEKj"></span><span id="EmptyID::Gen::set__unsigned-iC"></span><span class="target" id="classEmptyID_1_1Gen_1a4fd2b24f14ecdfd1c5236a8620da6421"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47EmptyID" title="EmptyID"><span class="n"><span class="pre">EmptyID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kk</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7EmptyID3Gen3setEKj" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Generate an empty SD identity. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -497,7 +540,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 April 2024</div>
+              Last updated on 01 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -520,19 +563,25 @@
             <ul>
 <li><a class="reference internal" href="#">Superdrop IDs</a><ul>
 <li><a class="reference internal" href="#_CPPv45IntID"><code class="docutils literal notranslate"><span class="pre">IntID</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4NK5IntID9get_valueEv"><code class="docutils literal notranslate"><span class="pre">IntID::get_value()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N5IntID5valueE"><code class="docutils literal notranslate"><span class="pre">IntID::value</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N5IntID3GenE"><code class="docutils literal notranslate"><span class="pre">IntID::Gen</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N5IntID3Gen3GenEv"><code class="docutils literal notranslate"><span class="pre">IntID::Gen::Gen()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N5IntID3Gen3GenEK6size_t"><code class="docutils literal notranslate"><span class="pre">IntID::Gen::Gen()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N5IntID3Gen4nextEv"><code class="docutils literal notranslate"><span class="pre">IntID::Gen::next()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N5IntID3Gen4nextEK6size_t"><code class="docutils literal notranslate"><span class="pre">IntID::Gen::next()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N5IntID3Gen3setEKj"><code class="docutils literal notranslate"><span class="pre">IntID::Gen::set()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N5IntID3Gen3_idE"><code class="docutils literal notranslate"><span class="pre">IntID::Gen::_id</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv47EmptyID"><code class="docutils literal notranslate"><span class="pre">EmptyID</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4NK7EmptyID9get_valueEv"><code class="docutils literal notranslate"><span class="pre">EmptyID::get_value()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N7EmptyID3GenE"><code class="docutils literal notranslate"><span class="pre">EmptyID::Gen</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N7EmptyID3Gen3GenEv"><code class="docutils literal notranslate"><span class="pre">EmptyID::Gen::Gen()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7EmptyID3Gen3GenEK6size_t"><code class="docutils literal notranslate"><span class="pre">EmptyID::Gen::Gen()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N7EmptyID3Gen4nextEv"><code class="docutils literal notranslate"><span class="pre">EmptyID::Gen::next()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7EmptyID3Gen4nextEKj"><code class="docutils literal notranslate"><span class="pre">EmptyID::Gen::next()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7EmptyID3Gen3setEKj"><code class="docutils literal notranslate"><span class="pre">EmptyID::Gen::set()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -553,7 +602,7 @@
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/scripts/furo.js?v=4e2eecee"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     </body>

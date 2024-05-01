@@ -3,12 +3,12 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="RunCLEO" href="runcleo.html" /><link rel="prev" title="Create Super-droplets Sub-Module" href="createsupers.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="CLEO Constants" href="../cleoconstants.html" /><link rel="prev" title="RunCLEO Module" href="initialisemod.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.04.27 -->
         <title>InitialConditions - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=437aa6ec" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -113,6 +113,8 @@
   <div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
 
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
 
 
 <div class="page">
@@ -215,14 +217,13 @@
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../cxx.html">API: C++ Library</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="runcleomod.html">RunCLEO Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="coupleddynamics.html">CoupledDynamics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="couplingcomms.html">CouplingComms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="creategbxs.html">Create Gridboxes Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">InitialConditions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="runcleo.html">RunCLEO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../runcleo/runcleomod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../superdrops/superdropsmod.html">Superdrops Module</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -276,6 +277,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../observers/massmoments_observer.html">Massmoments Observer</a></li>
 </ul>
 </li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="initialisemod.html">RunCLEO Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">InitialConditions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../cleoconstants.html">CLEO Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
@@ -319,17 +324,17 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <article role="main">
+        <article role="main" id="furo-main-content">
           <section id="initialconditions">
 <h1>InitialConditions<a class="headerlink" href="#initialconditions" title="Link to this heading">¶</a></h1>
-<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/runcleo/initialconditions.hpp&gt;</span></code>
-<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/initialconditions.hpp">[source]</a></p>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/initialise/initialconditions.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/initialise/initialconditions.hpp">[source]</a></p>
 <dl class="cpp concept">
 <dt class="sig sig-object cpp" id="_CPPv4I0E17InitialConditions">
 <span id="_CPPv3I0E17InitialConditions"></span><span id="_CPPv2I0E17InitialConditions"></span><span class="target" id="conceptInitialConditions"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IC</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InitialConditions</span></span></span><a class="headerlink" href="#_CPPv4I0E17InitialConditions" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="docutils container">
 <em>#include &lt;initialconditions.hpp&gt;</em></div>
-<p>Concept representing types that provide initial conditions used by operator call of <a class="reference internal" href="runcleo.html#classRunCLEO"><span class="std std-ref">RunCLEO</span></a>.</p>
+<p>Concept representing types that provide initial conditions used by operator call of <a class="reference internal" href="../runcleo/runcleo.html#classRunCLEO"><span class="std std-ref">RunCLEO</span></a>.</p>
 <p>A type satisfies the <a class="reference internal" href="#conceptInitialConditions"><span class="std std-ref">InitialConditions</span></a> concept if it provides the following structures:<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">initsupers</span></code>: Struct that can call functions related to initialising super-droplets.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">initgbxs</span></code>: Struct that can call functions related to initialising Gridboxes.</p></li>
@@ -349,23 +354,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="runcleo.html">
+          <a class="next-page" href="../cleoconstants.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">RunCLEO</div>
+                <div class="title">CLEO Constants</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="createsupers.html">
+          <a class="prev-page" href="initialisemod.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Create Super-droplets Sub-Module</div>
+                <div class="title">RunCLEO Module</div>
                 
               </div>
             </a>
@@ -379,7 +384,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 April 2024</div>
+              Last updated on 01 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -416,7 +421,7 @@
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/scripts/furo.js?v=4e2eecee"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     </body>

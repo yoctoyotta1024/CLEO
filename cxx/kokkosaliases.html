@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Contributing" href="../usage/contributing.html" /><link rel="prev" title="CLEO Constants" href="cleoconstants.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.04.27 -->
         <title>Kokkos Aliases - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=437aa6ec" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -112,6 +112,8 @@
 <label class="overlay toc-overlay" for="__toc">
   <div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -220,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="runcleo/couplingcomms.html">CouplingComms</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="runcleo/initialconditions.html">InitialConditions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runcleo/runcleo.html">RunCLEO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
@@ -276,6 +277,10 @@
 <li class="toctree-l3"><a class="reference internal" href="observers/massmoments_observer.html">Massmoments Observer</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="initialise/initialconditions.html">InitialConditions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="cleoconstants.html">CLEO Constants</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Kokkos Aliases</a></li>
 </ul>
@@ -319,7 +324,7 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <article role="main">
+        <article role="main" id="furo-main-content">
           <section id="kokkos-aliases">
 <h1>Kokkos Aliases<a class="headerlink" href="#kokkos-aliases" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/kokkosaliases.hpp&gt;</span></code>
@@ -375,6 +380,12 @@
 </dd></dl>
 
 <dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv413kokkos_dblmap">
+<span id="_CPPv313kokkos_dblmap"></span><span id="_CPPv213kokkos_dblmap"></span><span class="target" id="kokkosaliases_8hpp_1a44766aecf045fba75448a9ea74859e8b"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kokkos_dblmap</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">UnorderedMap</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="superdrops/kokkosaliases_sd.html#_CPPv49ExecSpace" title="ExecSpace"><span class="n"><span class="pre">ExecSpace</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv413kokkos_dblmap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>E.g. for map from unsigned int gbxindex to gridbox area/volume </p>
+</dd></dl>
+
+<dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv411viewd_ndims">
 <span id="_CPPv311viewd_ndims"></span><span id="_CPPv211viewd_ndims"></span><span class="target" id="kokkosaliases_8hpp_1a48f3c7356671ef49afea69e8f89c8ec0"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewd_ndims</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">View</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv411viewd_ndims" title="Link to this definition">¶</a><br /></dt>
 <dd><p>View in device memory for number of gridboxes in CartesianMaps. </p>
@@ -418,7 +429,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 April 2024</div>
+              Last updated on 01 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -448,6 +459,7 @@
 <li><a class="reference internal" href="#_CPPv414viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">viewd_constgbx</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv414kokkos_pairmap"><code class="docutils literal notranslate"><span class="pre">kokkos_pairmap</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv414kokkos_uintmap"><code class="docutils literal notranslate"><span class="pre">kokkos_uintmap</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv413kokkos_dblmap"><code class="docutils literal notranslate"><span class="pre">kokkos_dblmap</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv411viewd_ndims"><code class="docutils literal notranslate"><span class="pre">viewd_ndims</span></code></a></li>
 </ul>
 </li>
@@ -463,7 +475,7 @@
 </div><script src="../_static/documentation_options.js?v=9f5556dd"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../_static/scripts/furo.js?v=4e2eecee"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     </body>

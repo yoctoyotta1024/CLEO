@@ -3,12 +3,12 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="SDMMethods" href="sdmmethods.html" /><link rel="prev" title="InitialConditions" href="initialconditions.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="SDMMethods" href="sdmmethods.html" /><link rel="prev" title="Create Super-droplets Sub-Module" href="createsupers.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.04.27 -->
         <title>RunCLEO - CLEO 4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=437aa6ec" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -112,6 +112,8 @@
 <label class="overlay toc-overlay" for="__toc">
   <div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -220,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="couplingcomms.html">CouplingComms</a></li>
 <li class="toctree-l3"><a class="reference internal" href="creategbxs.html">Create Gridboxes Sub-Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="initialconditions.html">InitialConditions</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">RunCLEO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
 </ul>
@@ -276,6 +277,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../observers/massmoments_observer.html">Massmoments Observer</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/initialconditions.html">InitialConditions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../cleoconstants.html">CLEO Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
@@ -319,7 +324,7 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <article role="main">
+        <article role="main" id="furo-main-content">
           <section id="runcleo">
 <h1>RunCLEO<a class="headerlink" href="#runcleo" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/runcleo/runcleo.hpp&gt;</span></code>
@@ -368,13 +373,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEOclERK17InitialConditionsKj">
-<span id="_CPPv3NK7RunCLEOclERK17InitialConditionsKj"></span><span id="_CPPv2NK7RunCLEOclERK17InitialConditionsKj"></span><span id="RunCLEO::call-operator__InitialConditionsCR.unsigned-iCC"></span><span class="target" id="classRunCLEO_1a5a9b93cd876ebf713031a086d7c1ac75"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="initialconditions.html#_CPPv4I0E17InitialConditions" title="InitialConditions"><span class="n"><span class="pre">InitialConditions</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initconds</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_end</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEOclERK17InitialConditionsKj" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7RunCLEOclERK17InitialConditionsKj"></span><span id="_CPPv2NK7RunCLEOclERK17InitialConditionsKj"></span><span id="RunCLEO::call-operator__InitialConditionsCR.unsigned-iCC"></span><span class="target" id="classRunCLEO_1a5a9b93cd876ebf713031a086d7c1ac75"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../initialise/initialconditions.html#_CPPv4I0E17InitialConditions" title="InitialConditions"><span class="n"><span class="pre">InitialConditions</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initconds</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_end</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEOclERK17InitialConditionsKj" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Operator () for <a class="reference internal" href="#classRunCLEO"><span class="std std-ref">RunCLEO</span></a>. </p>
 <p>Creates runtime objects, gridboxes, superdrops and random number generators using initial conditions, then prepares and performs CLEO timestepping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>initconds</strong> – <a class="reference internal" href="initialconditions.html#conceptInitialConditions"><span class="std std-ref">InitialConditions</span></a> object containing initial conditions. </p></li>
+<li><p><strong>initconds</strong> – <a class="reference internal" href="../initialise/initialconditions.html#conceptInitialConditions"><span class="std std-ref">InitialConditions</span></a> object containing initial conditions. </p></li>
 <li><p><strong>t_end</strong> – End time for timestepping. </p></li>
 </ul>
 </dd>
@@ -419,7 +424,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t_end</strong> – End time for timestepping. </p></li>
 <li><p><strong>gbxs</strong> – DualView of gridboxes. </p></li>
-<li><p><strong>totsupers</strong> – View of total superdroplets. </p></li>
+<li><p><strong>totsupers</strong> – View of all superdroplets (both in and out of bounds of domain). </p></li>
 <li><p><strong>genpool</strong> – Random number generator pool. </p></li>
 </ul>
 </dd>
@@ -481,7 +486,7 @@ The size of the next timestep is determined by finding the smaller out of the st
 <li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
 <li><p><strong>t_next</strong> – Next timestep of the coupled model. </p></li>
 <li><p><strong>gbxs</strong> – DualView of gridboxes. </p></li>
-<li><p><strong>totsupers</strong> – View of total superdroplets. </p></li>
+<li><p><strong>totsupers</strong> – View of all superdrops (both in and out of bounds of domain). </p></li>
 <li><p><strong>genpool</strong> – Random number generator pool. </p></li>
 </ul>
 </dd>
@@ -561,14 +566,14 @@ The size of the next timestep is determined by finding the smaller out of the st
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="initialconditions.html">
+          <a class="prev-page" href="createsupers.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">InitialConditions</div>
+                <div class="title">Create Super-droplets Sub-Module</div>
                 
               </div>
             </a>
@@ -582,7 +587,7 @@ The size of the next timestep is determined by finding the smaller out of the st
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 April 2024</div>
+              Last updated on 01 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -635,7 +640,7 @@ The size of the next timestep is determined by finding the smaller out of the st
 </div><script src="../../_static/documentation_options.js?v=9f5556dd"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/scripts/furo.js?v=4e2eecee"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     </body>
