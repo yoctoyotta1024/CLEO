@@ -51,6 +51,8 @@ jobs:
       - uses: actions/checkout@main
         with:
           fetch-depth: 0
+          check-latest-tag-only: true
+
 
       - name: Conventional commits compliance
         uses: oknozor/cocogitto-action@v3
