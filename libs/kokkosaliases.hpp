@@ -1,9 +1,6 @@
 /*
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
-/*
- * Copyright (c) 2024 MPI-M, Clara Bayley
- *
  *
  * ----- CLEO -----
  * File: kokkosaliases.hpp
@@ -51,6 +48,8 @@ using kokkos_pairmap = Kokkos::UnorderedMap<unsigned int, Kokkos::pair<double, d
 /**< E.g. for map from unsigned int gbxindex to gridbox boundaries */
 using kokkos_uintmap = Kokkos::UnorderedMap<unsigned int, unsigned int, ExecSpace>;
 /**< E.g. for map from one unsigned int gbxindex to another */
+using kokkos_dblmap = Kokkos::UnorderedMap<unsigned int, double, ExecSpace>;
+/**< E.g. for map from unsigned int gbxindex to gridbox area/volume */
 using viewd_ndims =
     Kokkos::View<size_t[3]>; /**< View in device memory for number of gridboxes in CartesianMaps. */
 
