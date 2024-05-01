@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Sunday 21st April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,12 +20,22 @@
  * Low and List 1982(a).
  */
 
-
 #include "./collisionkinetics.hpp"
 
-/* returns cke, where cke = collision kinetic energy
-as formulated in Low and List 1982(a) eqn 3.1 given
-radii r1 and r2 and terminal velocities of droplets */
+/**
+ * @brief Calculates the collision kinetic energy between two droplets.
+ *
+ * Returns cke, where cke = collision kinetic energy [Joules] as formulated in Low and
+ * List 1982(a) eqn 3.1 given the dimensionless radii, r1 and r2, and the dimensionless
+ * terminal velocities of droplets, terminalv1 and terminalv2, respectively.
+ *
+ * @param r1 The radius of the first superdroplet.
+ * @param r2 The radius of the second superdroplet.
+ * @param terminalv1 The terminal velocity of the first superdroplet.
+ * @param terminalv2 The terminal velocity of the second superdroplet.
+ *
+ * @return The collision kinetic energy [Joules].
+ */
 KOKKOS_FUNCTION
 double collision_kinetic_energy(const double r1, const double r2, const double terminalv1,
                                 const double terminalv2) {
@@ -40,12 +50,19 @@ double collision_kinetic_energy(const double r1, const double r2, const double t
   const auto vdiff = double{terminalv1 - terminalv2};  // * dlc::W0 to convert to [m/s]
   const auto cke = double{ckeconst * rratio * vdiff * vdiff};
 
-  return cke;
+  return cke;  // [Joules]
 }
 
-/* returns surface energy of single spherical equivalent, ie.
-coalesced state of two drops, divided by pi as in
-equation 4.3 of Low and List 1982 */
+/**
+ * @brief Calculates the surface tension energy of a coalesced droplet.
+ *
+ * Returns the surface tension energy of a single spherical droplet, as calculated by equation
+ * 4.3 of Low and List 1982, equiavelent to two droplets which coalesce.
+ *
+ * @param r1 The dimensionless radius of one droplet involed in coalescence.
+ * @param r2 The dimensionless radius of the other droplet involed in coalescence.
+ * @return The surface tension energy of the superdroplet [Joules].
+ */
 KOKKOS_FUNCTION
 double coal_surfenergy(const double r1, const double r2) {
   const auto r1cubed = double{r1 * r1 * r1};
@@ -54,5 +71,5 @@ double coal_surfenergy(const double r1, const double r2) {
 
   const auto equiv_surfe = double{dlc::surfconst * Kokkos::pow(rcubedsum, 2.0 / 3.0)};
 
-  return equiv_surfe;  // coalesced (spherical equivalent) surface energy
+  return equiv_surfe;  // coalesced surface tension energy [Joules]
 }

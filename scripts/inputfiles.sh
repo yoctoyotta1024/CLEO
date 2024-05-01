@@ -21,6 +21,7 @@ source activate ${condaenv}
 path2CLEO=${2:-${HOME}/CLEO}
 path2scripts=${path2CLEO}/scripts
 python=${condaenv}/bin/python
+
 ### ---------------------------------------------------- ###
 
 configfile=$1

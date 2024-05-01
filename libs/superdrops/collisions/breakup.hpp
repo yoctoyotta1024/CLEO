@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Sunday 21st April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -62,9 +62,18 @@ struct DoBreakup {
  public:
   explicit DoBreakup(const NFrags nfrags) : nfrags(nfrags) {}
 
-  /* this operator is used as an "adaptor" for
-  using DoBreakup as a function in DoCollisions
-  that satistfies the PairEnactX concept */
+  /**
+   * @brief Operator used as an adaptor such that DoBreakup satisfies the PairEnactX concept
+   * and so can be used as the EnactCollision function-like object in the DoCollisions struct.
+   *
+   * This operator calls functions to enact the collision-breakup of two super-droplets.
+   *
+   * @param drop1 First superdroplet.
+   * @param drop2 Second superdroplet.
+   * @param prob Probability of collision.
+   * @param phi Phi value.
+   * @return True if the resulting superdroplet is null, otherwise false.
+   */
   KOKKOS_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
 
@@ -91,9 +100,18 @@ inline MicrophysicalProcess auto CollBu(const unsigned int interval,
   return ConstTstepMicrophysics(interval, colls);
 }
 
-/* this operator is used as an "adaptor" for
-using DoBreakup as a function in DoCollisions
-that satistfies the PairEnactX concept */
+/**
+ * @brief Operator used as an adaptor such that DoBreakup satisfies the PairEnactX concept
+ * and so can be used as the EnactCollision function-like object in the DoCollisions struct.
+ *
+ * This operator calls functions to enact the collision-breakup of two super-droplets.
+ *
+ * @param drop1 First superdroplet.
+ * @param drop2 Second superdroplet.
+ * @param prob Probability of collision.
+ * @param phi Phi value.
+ * @return True if the resulting superdroplet is null, otherwise false.
+ */
 template <NFragments NFrags>
 KOKKOS_FUNCTION bool DoBreakup<NFrags>::operator()(Superdrop &drop1, Superdrop &drop2,
                                                    const double prob, const double phi) const {

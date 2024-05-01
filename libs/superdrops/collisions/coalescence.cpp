@@ -9,24 +9,32 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Sunday 21st April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * functionality to enact collision-coalescence events
- * in superdroplet model according to Shima et al. 2009.
- * Coalescence struct satisfies PairEnactX concept
- * used in Collisions struct
+ * Functionality to enact collision-coalescence events in the super-droplet model
+ * according to Shima et al. 2009. DoCoalescence struct satisfies PairEnactX concept
+ * used by DoCollisions.
  */
 
 #include "./coalescence.hpp"
 
-/* this operator is used as an "adaptor" for using
-DoCoalescence as a function in DoCollisions that
-satistfies the PairEnactX concept */
+/**
+ * @brief Operator used as an adaptor such that DoCoalescence satisfies the PairEnactX concept
+ * and so can be used as the EnactCollision function-like object in the DoCollisions struct.
+ *
+ * This operator calls functions to enact the collision-coalescence of two super-droplets.
+ *
+ * @param drop1 The first super-droplet.
+ * @param drop2 The second super-droplet.
+ * @param prob The probability of collision-coalescence.
+ * @param phi Random number in the range [0.0, 1.0].
+ * @return boolean=true if collision-coalescence resulted in null superdrops.
+ */
 KOKKOS_FUNCTION bool DoCoalescence::operator()(Superdrop &drop1, Superdrop &drop2,
                                                const double prob, const double phi) const {
   /* 1. calculate gamma factor for collision-coalescence  */
@@ -43,8 +51,18 @@ KOKKOS_FUNCTION bool DoCoalescence::operator()(Superdrop &drop1, Superdrop &drop
   return 0;
 }
 
-/* calculates value of gamma factor in Monte Carlo
-collision-coalescence as in Shima et al. 2009 */
+/**
+ * @brief Calculates the value of the gamma factor in Monte Carlo collision-coalescence.
+ *
+ * This function calculates the value of the gamma factor used in Monte Carlo
+ * collision-coalescence as described in Shima et al. 2009.
+ *
+ * @param xi1 The multiplicity of the first super-droplet.
+ * @param xi2 The multiplicity of the second super-droplet.
+ * @param prob The probability of collision-coalescence.
+ * @param phi Random number in the range [0.0, 1.0].
+ * @return The calculated value of the coalescence gamma factor.
+ */
 KOKKOS_FUNCTION uint64_t DoCoalescence::coalescence_gamma(const uint64_t xi1, const uint64_t xi2,
                                                           const double prob,
                                                           const double phi) const {
@@ -58,9 +76,17 @@ KOKKOS_FUNCTION uint64_t DoCoalescence::coalescence_gamma(const uint64_t xi1, co
   return Kokkos::fmin(gamma, maxgamma);
 }
 
-/* coalesce pair of superdroplets by changing multiplicity,
-radius and solute mass of each superdroplet in pair
-according to Shima et al. 2009 Section 5.1.3. part (5) */
+/**
+ * @brief Coalesces a pair of superdroplets.
+ *
+ * This function coalesces a pair of superdroplets by changing their multiplicity, radius, and
+ * solute mass according to Shima et al. 2009 Section 5.1.3. part (5).
+ *
+ * @param gamma The coalescence gamma factor.
+ * @param drop1 The first superdroplet.
+ * @param drop2 The second superdroplet.
+ * @return True if coalescence results in a null superdroplet, false otherwise.
+ */
 KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t gamma,
                                                                Superdrop &drop1,
                                                                Superdrop &drop2) const {
@@ -84,15 +110,27 @@ KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t ga
   return 0;
 }
 
-/* if xi1 = gamma*xi2 coalescence makes twin SDs
-with same xi, r and solute mass. According to Shima et al. 2009
-Section 5.1.3. part (5) option (b). In rare case where
-xi1 = xi2 = gamma = 1, new_xi of drop1 = 0 and drop1 should be removed
-from domain.
-_Note:_ Implicit casting of gamma (i.e. therefore droplets' xi values) from uint64_t to double. */
+/**
+ * @brief Enacts coalescence of a pair of superdroplets where xi1 = gamma*xi2.
+ *
+ * This function coalesces a pair of superdroplets where drop1.get_xi() = gamma* drop2.get_xi() by
+ * making twin superdroplets with the same xi, radius, and solute mass. It implements Shima et al.
+ * 2009 Section 5.1.3. part (5) option (b).
+ *
+ * In rare case where xi1 = xi2 = gamma = 1, new_xi of drop1 = 0 and drop1 should be removed from
+ * domain.
+ *
+ * _Note:_ Implicit casting of gamma (and therefore droplets' xi values) from uint64_t to double.
+ *
+ * @param gamma The coalescence gamma factor.
+ * @param drop1 The first superdroplet.
+ * @param drop2 The second superdroplet.
+ */
 KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t gamma,
                                                                   Superdrop &drop1,
                                                                   Superdrop &drop2) const {
+  assert((drop1.get_xi() == gamma * drop2.get_xi()) && "condition for twin coalescence not met");
+
   const auto old_xi = drop2.get_xi();  // = drop1.xi
   const auto new_xi = old_xi / 2;      // same as floor() for positive ints
 
@@ -113,13 +151,24 @@ KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t
   drop2.set_msol(new_msol);
 }
 
-/* if xi1 > gamma*xi2 coalescence grows drop2 radius and mass
-via decreasing multiplicity of drop1. According to
-Shima et al. 2009 Section 5.1.3. part (5) option (a)
-_Note:_ Implicit casting of gamma (i.e. therefore droplets' xi values) from uint64_t to double. */
+/**
+ * @brief Coalesces a pair of superdroplets where xi1 > gamma*xi2.
+ *
+ * This function coalesces a pair of superdroplets where xi1 > gamma*xi2 by growing the radius and
+ * mass of drop2 via decreasing the multiplicity of drop1. It implements Shima et al. 2009
+ * Section 5.1.3. part (5) option (a).
+ *
+ * _Note:_ Implicit casting of gamma (i.e. therefore droplets' xi values) from uint64_t to double.
+ *
+ * @param gamma The coalescence gamma factor.
+ * @param drop1 The first superdroplet.
+ * @param drop2 The second superdroplet.
+ */
 KOKKOS_FUNCTION void DoCoalescence::different_superdroplet_coalescence(const uint64_t gamma,
                                                                        Superdrop &drop1,
                                                                        Superdrop &drop2) const {
+  assert((drop1.get_xi() > gamma * drop2.get_xi()) && "condition on xis for coalescence not met");
+
   const auto new_xi = drop1.get_xi() - gamma * drop2.get_xi();
 
   assert((new_xi < drop1.get_xi()) && "coalescence must decrease multiplicity");

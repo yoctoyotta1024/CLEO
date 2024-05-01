@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Sunday 21st April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -98,17 +98,6 @@ struct SupersInGbx {
   in the subview are const */
   KOKKOS_INLINE_FUNCTION
   subviewd_constsupers readonly() const { return Kokkos::subview(totsupers, refs); }
-
-  /* returns mirror view on host for const supers in
-  gridbox. If supers view is on device memory, a
-  deep copy is performed */
-  mirrorh_constsupers hostcopy() const {
-    const subviewd_constsupers d_supers = readonly();
-    auto h_supers = Kokkos::create_mirror_view(d_supers);
-    Kokkos::deep_copy(h_supers, d_supers);
-
-    return h_supers;
-  }
 
   /* returns current number of superdrops referred to by gridbox */
   KOKKOS_INLINE_FUNCTION size_t nsupers() const { return refs.second - refs.first; }
