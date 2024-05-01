@@ -50,7 +50,6 @@ jobs:
     steps:
       - uses: actions/checkout@main
         with:
-          fetch-depth: 0
           check-latest-tag-only: true
 
 
