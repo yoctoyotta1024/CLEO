@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.18.0)
 project(project
   LANGUAGES CXX
   DESCRIPTION "CLEO by Clara Bayley and other developers"
-  VERSION 1.0
+  VERSION 0.1.0
 )
 
 # ensure C++ compiler uses certain settings
