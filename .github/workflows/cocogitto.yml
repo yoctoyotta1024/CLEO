@@ -1,0 +1,32 @@
+name: cocogitto
+
+on:
+  workflow_dispatch:
+    branches: main
+
+jobs:
+  # Only update release when merging into `origin/main`.`
+  if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
+  release:
+    steps:
+      - name: Perform release
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Cocogitto release
+        id: release
+        uses: oknozor/cocogitto-action@v3
+        with:
+          release: true
+          git-user: 'yoctoyotta1024'
+          git-user-email: 'yoctoyotta1024@yahoo.com'
+
+      - name: Generate Changelog
+        run: cog changelog --at ${{ steps.release.outputs.version }} -t full_hash > GITHUB_CHANGELOG.md
+
+      - name: Upload github release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: GITHUB_CHANGELOG.md
+          tag_name: ${{ steps.release.outputs.version }}

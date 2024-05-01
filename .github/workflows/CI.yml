@@ -1,4 +1,4 @@
-name: Python test
+name: main GitHub CI
 
 on: [push, pull_request]
 
@@ -43,6 +43,17 @@ jobs:
         with:
           name: html-docs
           path: docs/build/html/
+
+  cog_check_job:
+    runs-on: ubuntu-latest
+    name: cocogitto checks
+    steps:
+      - uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+
+      - name: Conventional commits compliance
+        uses: oknozor/cocogitto-action@v3
 
   publish:
     needs: build
