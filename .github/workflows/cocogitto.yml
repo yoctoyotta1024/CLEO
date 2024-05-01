@@ -9,18 +9,22 @@ jobs:
   if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
   release:
     steps:
-      - name: Perform release
+      - name: Perform release using Cocogitto
         uses: actions/checkout@v3
         with:
           check-latest-tag-only: true
 
-      - name: Cocogitto release
+      - name: Generate release
         id: release
         uses: oknozor/cocogitto-action@v3
         with:
+          check-latest-tag-only: true
           release: true
           git-user: 'yoctoyotta1024'
           git-user-email: 'yoctoyotta1024@yahoo.com'
+
+      - name: Print release version
+        run: "echo '${{ steps.release.outputs.version }}'"
 
       - name: Generate Changelog
         run: cog changelog --at ${{ steps.release.outputs.version }} -t full_hash > GITHUB_CHANGELOG.md
