@@ -22,32 +22,32 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### SDM Runtime Parameters ###
+domain:
+  nspacedims : 0                                                # no. of spatial dimensions to model
+  ngbxs : 1                                                     # total number of Gbxs
+  maxnsupers: 4096                                              # maximum number of SDs
+
+timesteps:
+  CONDTSTEP : 200                                               # time between SD condensation [s]
+  COLLTSTEP : 1                                                 # time between SD collision [s]
+  MOTIONTSTEP : 200                                             # time between SDM motion [s]
+  COUPLTSTEP : 2000                                             # time between dynamic couplings [s]
+  OBSTSTEP : 200                                                # time between SDM observations [s]
+  T_END : 4000                                                  # time span of integration from 0s to T_END [s]
+
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp                # name of file for values of physical constants
   grid_filename : ./share/shima2009_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
-  type : frombinary                                             # type of initialisation of super-droplets
+  type: frombinary                                              # type of initialisation of super-droplets
   initsupers_filename : ./share/shima2009_dimlessSDsinit.dat    # binary filename for initialisation of SDs
-  totnsupers : 4096                                             # initial total no. of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/shima2009_setup.txt          # .txt filename to copy configuration to
-  stats_filename : ./bin/shima2009_stats.txt          # .txt file to output runtime statistics to
-  zarrbasedir : ./bin/shima2009_sol.zarr              # zarr store base directory
-  maxchunk : 2500000                                  # maximum no. of elements in chunks of zarr store array
-
-### SDM Runtime Parameters ###
-domain:
-  nspacedims : 0                                      # no. of spatial dimensions to model
-  ngbxs : 1                                           # total number of Gbxs
-
-timesteps:
-  CONDTSTEP : 200                                     # time between SD condensation [s]
-  COLLTSTEP : 1                                       # time between SD collision [s]
-  MOTIONTSTEP : 200                                   # time between SDM motion [s]
-  COUPLTSTEP : 2000                                   # time between dynamic couplings [s]
-  OBSTSTEP : 200                                      # time between SDM observations [s]
-  T_END : 4000                                        # time span of integration from 0s to T_END [s]
+  setup_filename : ./bin/shima2009_setup.txt                    # .txt filename to copy configuration to
+  stats_filename : ./bin/shima2009_stats.txt                    # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/shima2009_sol.zarr                        # zarr store base directory
+  maxchunk : 2500000                                            # maximum no. of elements in chunks of zarr store array

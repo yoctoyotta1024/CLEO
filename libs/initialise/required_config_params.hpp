@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Thursday 18th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -58,6 +58,7 @@ struct RequiredConfigParams {
   struct DomainParams {
     unsigned int nspacedims; /**< no. of spatial dimensions to model */
     size_t ngbxs;            /**< total number of Gbxs */
+    size_t maxnsupers;       /**< maximum number of SDs */
   } domain;
 
   struct TimestepsParams {

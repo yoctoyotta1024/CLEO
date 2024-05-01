@@ -6,7 +6,7 @@ Created Date: Monday 20th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Sunday 21st April 2024
+Last Modified: Wednesday 1st May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -79,6 +79,7 @@ breathe_projects = {
     "superdrops"       : "../build/doxygen/xml/",
     "zarr"             : "../build/doxygen/xml/",
     "observers"        : "../build/doxygen/xml/",
+    "initialise"       : "../build/doxygen/xml/",
 }
 
 breathe_default_project = 'proj'

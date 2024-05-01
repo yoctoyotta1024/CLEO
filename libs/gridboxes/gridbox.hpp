@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 2nd April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -46,15 +46,13 @@ struct Gridbox {
   Gridbox() = default;   // Kokkos requirement for a (dual)View
   ~Gridbox() = default;  // Kokkos requirement for a (dual)View
 
-  /* assumes supers view (or subview) already
-  sorted via sdgbxindex. Constructor works
+  /* assumes supers view (or subview) already sorted via sdgbxindex. Constructor works
   outside of parallelism */
   Gridbox(const Gbxindex igbxindex, const State istate, const viewd_supers totsupers)
       : gbxindex(igbxindex), state(istate), supersingbx(totsupers, gbxindex.value), detectors() {}
 
-  /* assumes supers view (or subview) already sorted
-  via sdgbxindex. Constructor works within parallel
-  team policy on host given member 'team_member' */
+  /* assumes supers view (or subview) already sorted via sdgbxindex. Constructor works within
+  parallel team policy on host given member 'team_member' */
   Gridbox(const Gbxindex igbxindex, const State istate, const viewd_supers totsupers,
           const kkpair_size_t irefs)
       : gbxindex(igbxindex),

@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: gbxbounds_frombinary.hpp
+ * File: gbx_bounds_from_binary.hpp
  * Project: initialise
  * Created Date: Wednesday 1st November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,8 +22,8 @@
  * for CLEO SDM e.g. a CartesianMaps)
  */
 
-#ifndef LIBS_INITIALISE_GBXBOUNDS_FROMBINARY_HPP_
-#define LIBS_INITIALISE_GBXBOUNDS_FROMBINARY_HPP_
+#ifndef LIBS_INITIALISE_GBX_BOUNDS_FROM_BINARY_HPP_
+#define LIBS_INITIALISE_GBX_BOUNDS_FROM_BINARY_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -91,4 +91,4 @@ struct GbxBoundsFromBinary {
   size_t get_ngbxs() const { return ndims.at(0) * ndims.at(1) * ndims.at(2); }
 };
 
-#endif  // LIBS_INITIALISE_GBXBOUNDS_FROMBINARY_HPP_
+#endif  // LIBS_INITIALISE_GBX_BOUNDS_FROM_BINARY_HPP_

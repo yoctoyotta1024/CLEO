@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: gbxbounds_frombinary.cpp
+ * File: gbx_bounds_from_binary.cpp
  * Project: initialise
  * Created Date: Wednesday 1st November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,7 @@
  * for CLEO SDM e.g. a CartesianMaps)
  */
 
-#include "initialise/gbxbounds_frombinary.hpp"
+#include "initialise/gbx_bounds_from_binary.hpp"
 
 /* read metadata and data in binary file called 'gridfile', then
 return GbxBoundsFromBinary instance created from that data */

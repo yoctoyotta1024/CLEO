@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -54,6 +54,8 @@ struct OptionalConfigParams {
 
   void set_coupled_dynamics(const YAML::Node& config);
 
+  void set_boundary_conditions(const YAML::Node& config);
+
   /*** Super-Droplet Microphysics Parameters ***/
   struct CondensationParams {
     void set_params(const YAML::Node& config);
@@ -70,9 +72,10 @@ struct OptionalConfigParams {
     using fspath = std::filesystem::path;
     void set_params(const YAML::Node& config);
     void print_params() const;
-    fspath initsupers_filename = fspath(); /**< filename for initialisation of super-droplets */
-    size_t totnsupers = NaNVals::sizet();  /**< initial total no. of Super-Droplets in the domain */
+    size_t maxnsupers = NaNVals::sizet();      /**< maximum number of SDs */
+    fspath initsupers_filename = fspath();     /**< filename for initialisation of super-droplets */
     unsigned int nspacedims = NaNVals::uint(); /**< no. of spatial dimensions to model */
+    size_t initnsupers = NaNVals::sizet();     /**< initial no. of super-droplets to initialise */
   } initsupersfrombinary;
 
   /*** Coupled Dynamics Parameters ***/
@@ -104,6 +107,24 @@ struct OptionalConfigParams {
     double rtol = NaNVals::dbl(); /**< relative tolerance for integration of [P, T, qv, qc] ODEs */
     double atol = NaNVals::dbl(); /**< absolute tolerances for integration of [P, T, qv, qc] ODEs */
   } cvodedynamics;
+
+  /*** Bounday Conditions Parameters ***/
+  struct AddSupersAtDomainTopParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    size_t initnsupers = NaNVals::sizet(); /**< initial no. of super-droplets in domain */
+    size_t newnsupers = NaNVals::sizet();  /**< number SDs to add to each gridbox above COORD3LIM */
+    double COORD3LIM = NaNVals::dbl();     /**< SDs added to domain with coord3 >= COORD3LIM [m] */
+    double DRYRADIUS = NaNVals::dbl();     /**< dry radius of new super-droplets (for msol) [m] */
+    double MINRADIUS = NaNVals::dbl();     /**< minimum radius of new super-droplets [m] */
+    double MAXRADIUS = NaNVals::dbl();     /**< maximum radius of new super-droplets [m] */
+    double NUMCONC_a = NaNVals::dbl();     /**< number conc. of 1st droplet lognormal dist [m^-3] */
+    double GEOMEAN_a = NaNVals::dbl();     /**< geometric mean radius of 1st lognormal dist [m] */
+    double geosigma_a = NaNVals::dbl(); /**< geometric standard deviation of 1st lognormal dist */
+    double NUMCONC_b = NaNVals::dbl();  /**< number conc. of 2nd droplet lognormal dist [m^-3] */
+    double GEOMEAN_b = NaNVals::dbl();  /**< geometric mean radius of 2nd lognormal dist [m] */
+    double geosigma_b = NaNVals::dbl(); /**< geometric standard deviation of 2nd lognormal dist */
+  } addsupersatdomaintop;
 };
 
 #endif  // LIBS_INITIALISE_OPTIONAL_CONFIG_PARAMS_HPP_
