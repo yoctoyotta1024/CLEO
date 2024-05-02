@@ -30,7 +30,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{secrets.RELEASE_TOKEN}}
 
       - name: semver release with cocogitto
         uses: oknozor/cocogitto-action@v3
