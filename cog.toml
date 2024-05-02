@@ -15,7 +15,8 @@ pre_bump_hooks = [
 ]
 
 post_bump_hooks = [
-    "git push && echo 'bump done with chore commit for notes appended to changelog'",
+    "git push",
+    "echo 'bump done with chore commit for notes appended to changelog'",
 ]
 
 [git_hooks]
