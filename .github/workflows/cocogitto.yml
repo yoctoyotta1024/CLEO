@@ -1,0 +1,19 @@
+name: cocogitto
+
+on: [push]
+
+jobs:
+  cog_check_job:
+    runs-on: ubuntu-latest
+    name: check commits with cocogitto
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Conventional commits compliance
+        uses: oknozor/cocogitto-action@v3
+        with:
+          check-latest-tag-only: true
+          git-user: 'yoctoyotta1024'
+          git-user-email: 'yoctoyotta1024@yahoo.com'
