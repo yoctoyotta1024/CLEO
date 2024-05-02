@@ -41,15 +41,14 @@ jobs:
           git-user-email: 'yoctoyotta1024@yahoo.com'
 
       # The version number is accessible as a github action output
-      - name: Print Version
+      - name: Print version
         run: "echo '${{ steps.release.outputs.version }}'"
 
       - name: Generate Changelog
         run: cog changelog --at ${{ steps.release.outputs.version }} -t remote > GITHUB_CHANGELOG.md
 
-      - name: Upload GitHub release
+      - name: Upload github release
         uses: softprops/action-gh-release@v2
         with:
           body_path: GITHUB_CHANGELOG.md
-          repository: yoctoyotta1024/CLEO
           tag_name: ${{ steps.release.outputs.version }}
