@@ -30,6 +30,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{secrets.RELEASE_TOKEN}}
 
       - name: semver release with cocogitto
         uses: oknozor/cocogitto-action@v3
@@ -45,10 +46,12 @@ jobs:
         run: "echo '${{ steps.release.outputs.version }}'"
 
       - name: Generate Changelog
-        run: cog changelog --at ${{ steps.release.outputs.version }} -t remote > GITHUB_CHANGELOG.md
+        run: |
+             cog changelog --at ${{ steps.release.outputs.version }} -t remote > GITHUB_CHANGELOG.md
+             pwd && ls
 
       - name: Upload GitHub release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           body_path: GITHUB_CHANGELOG.md
           tag_name: ${{ steps.release.outputs.version }}
