@@ -13,8 +13,9 @@ post_package_bump_hooks = []
 pre_bump_hooks = [
     "echo 'bumping version from {{latest}} to {{version}}'"
 ]
+
 post_bump_hooks = [
-    "echo 'version bump done'"
+    "git push && echo 'bump done with chore commit for notes appended to changelog'",
 ]
 
 [git_hooks]
