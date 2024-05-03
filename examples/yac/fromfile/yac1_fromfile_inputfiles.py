@@ -22,19 +22,17 @@ the data to CLEO correctly.
 
 import sys
 
-def main(path2CLEO, path2build, configfile):
+def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
 
-    import os
     import numpy as np
     import matplotlib.pyplot as plt
-    from pathlib import Path
 
     sys.path.append(path2CLEO)  # for imports from pySD package
 
     from src import gen_input_thermo
     from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
     from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
-    from pySD.initsuperdropsbinary_src import *
+    from pySD.initsuperdropsbinary_src import crdgens, rgens, dryrgens, probdists, attrsgen
     from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
     from pySD.thermobinary_src import create_thermodynamics as cthermo
     from pySD.thermobinary_src import read_thermodynamics as rthermo
@@ -45,11 +43,6 @@ def main(path2CLEO, path2build, configfile):
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
     constsfile = path2CLEO+"/libs/cleoconstants.hpp"
-    binpath = path2build+"/bin/"
-    sharepath = path2build+"/share/"
-    gridfile = sharepath+"yac1_dimlessGBxboundaries.dat"
-    initSDsfile = sharepath+"yac1_dimlessSDsinit.dat"
-    thermofile = sharepath+"/yac1_dimlessthermo.dat"
 
     ### --- plotting initialisation figures --- ###
     # booleans for [making, saving] initialisation figures
@@ -84,24 +77,12 @@ def main(path2CLEO, path2build, configfile):
     ### ---------------------------------------------------------------- ###
     ### ---------------------------------------------------------------- ###
 
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
+
     ### ---------------------------------------------------------------- ###
     ### ------------------- BINARY FILES GENERATION--------------------- ###
     ### ---------------------------------------------------------------- ###
-    ### --- ensure build, share and bin directories exist --- ###
-    if path2CLEO == path2build:
-        raise ValueError("build directory cannot be CLEO")
-    else:
-        Path(path2build).mkdir(exist_ok=True)
-        Path(sharepath).mkdir(exist_ok=True)
-        Path(binpath).mkdir(exist_ok=True)
-        if isfigures[1]:
-            Path(savefigpath).mkdir(exist_ok=True)
-
-    ### --- delete any existing initial conditions --- ###
-    os.system("rm "+gridfile)
-    os.system("rm "+initSDsfile)
-    os.system("rm "+thermofile[:-4]+"*")
-
     ### ----- write gridbox boundaries binary ----- ###
     cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
     rgrid.print_domain_info(constsfile, gridfile)
@@ -138,4 +119,5 @@ def main(path2CLEO, path2build, configfile):
     ### ---------------------------------------------------------------- ###
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    ### args = path2CLEO, path2build, configfile, binpath, gridfile, initSDsfile, thermofile
+    main(*sys.argv[1:])
