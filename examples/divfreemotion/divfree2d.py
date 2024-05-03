@@ -101,7 +101,7 @@ maxnsupers =pyzarr.get_totnsupers(dataset)
 
 # 4. plot results
 savename = savefigpath + "df2d_maxnsupers_validation.png"
-pltmoms.plot_maxnsupers(time, maxnsupers, savename=savename)
+pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
 
 nsample = 500
 savename = savefigpath + "df2d_motion2d_validation.png"

@@ -108,7 +108,7 @@ thermo, winds = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"],
 
 # plot super-droplet results
 savename = savefigpath + "yac1_maxnsupers_validation.png"
-pltmoms.plot_maxnsupers(time, maxnsupers, savename=savename)
+pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
 
 nsample = 1000
 savename = savefigpath + "yac1_motion2d_validation.png"
