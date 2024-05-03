@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 30th April 2024
+ * Last Modified: Friday 3rd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -112,13 +112,13 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
 }
 
 inline auto create_boundary_conditions(const Config &config) {
-  return AddSupersAtDomainTop(config.get_addsupersatdomaintop());
-  // return NullBoundaryConditions{};
+  // return AddSupersAtDomainTop(config.get_addsupersatdomaintop());
+  return NullBoundaryConditions{};
 }
 
 template <GridboxMaps GbxMaps>
 inline auto create_movement(const Config &config, const Timesteps &tsteps, const GbxMaps &gbxmaps) {
-  const Motion<GbxMaps> auto motion(create_motion(tsteps.get_motionstep()));
+  const auto motion(create_motion(tsteps.get_motionstep()));
 
   const auto boundary_conditions(create_boundary_conditions(config));
 
