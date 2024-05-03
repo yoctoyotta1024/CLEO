@@ -182,7 +182,7 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
-maxnsupers =pyzarr.get_maxnsupers(dataset)
+maxnsupers =pyzarr.get_totnsupers(dataset)
 
 # 4. plot results
 savename = savefigpath + "df2d_maxnsupers_validation.png"
