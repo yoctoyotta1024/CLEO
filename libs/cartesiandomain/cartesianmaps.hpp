@@ -78,8 +78,8 @@ struct CartesianMaps {
         to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
         to_forward_coord2nghbr(kokkos_uintmap(ngbxs)),
-        to_area(kokkos_dblmap(ngbxs)),
-        to_volume(kokkos_dblmap(ngbxs)),
+        to_area(kokkos_dblmaph(ngbxs)),
+        to_volume(kokkos_dblmaph(ngbxs)),
         ndims("ndims") {}
 
   /* insert 1 value into to_coord3bounds
