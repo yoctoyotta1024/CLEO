@@ -102,7 +102,7 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
-maxnsupers = pyzarr.get_maxnsupers(dataset)
+maxnsupers = pyzarr.get_totnsupers(dataset)
 thermo, winds = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"],
                                       consts, getwinds=True)
 
