@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 12th October 2023
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -62,7 +62,7 @@ module load gcc
 CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
 CXX=nvc++ CC=nvcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
 
-GO CRAZY CUDA and OPENMP build:
+CUDA and OPENMP build:
 module load gcc
 module load nvhpc
 spack load cmake@3.23.1%gcc

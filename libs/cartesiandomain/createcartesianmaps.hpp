@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,7 +36,7 @@
 #include "../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
-#include "initialise/gbxbounds_frombinary.hpp"
+#include "initialise/gbx_bounds_from_binary.hpp"
 
 /* creates cartesian maps instance using gridbox bounds read from
 gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite

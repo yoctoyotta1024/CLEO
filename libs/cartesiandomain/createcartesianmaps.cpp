@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Wednesday 1st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,6 +30,7 @@ void set_maps_ndims(const std::vector<size_t> &ndims, CartesianMaps &gbxmaps);
 
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
 
+/* set gbxindex to out of bounds value */
 void set_outofbounds(CartesianMaps &gbxmaps);
 
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
@@ -134,12 +135,13 @@ void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) 
 /* sets (finite) dimensionless horizontal area and
 volume using area and volume from gfb for gbxidx=0 */
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
-  const auto idx = (unsigned int)0;
-  gbxmaps.set_gbxarea(gfb.gbxarea(idx));
-  gbxmaps.set_gbxvolume(gfb.gbxvol(idx));
+  for (auto idx : gfb.gbxidxs) {
+    gbxmaps.insert_gbxarea(idx, gfb.gbxarea(idx));
+    gbxmaps.insert_gbxvolume(idx, gfb.gbxvol(idx));
+  }
 }
 
-/* sets (infinite) coordinate bounds for case
+/* sets value for coordinate bounds for case
 when outofbounds gbxidx searches map */
 void set_outofbounds(CartesianMaps &gbxmaps) {
   const auto idx = (unsigned int)outofbounds_gbxindex();
@@ -150,6 +152,9 @@ void set_outofbounds(CartesianMaps &gbxmaps) {
   gbxmaps.insert_coord3nghbrs(idx, nullnghbrs(idx));
   gbxmaps.insert_coord1nghbrs(idx, nullnghbrs(idx));
   gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(idx));
+
+  gbxmaps.insert_gbxarea(idx, 0.0);
+  gbxmaps.insert_gbxvolume(idx, 0.0);
 }
 
 /* gives all coord[X]bounds maps to 1 key with null

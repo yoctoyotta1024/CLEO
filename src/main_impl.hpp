@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Tuesday 30th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,6 +30,7 @@
 #include <stdexcept>
 #include <string_view>
 
+#include "cartesiandomain/add_supers_at_domain_top.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
@@ -39,8 +40,10 @@
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
 #include "initialise/config.hpp"
-#include "initialise/initgbxs_null.hpp"
-#include "initialise/initsupers_frombinary.hpp"
+#include "initialise/init_all_supers_from_binary.hpp"
+#include "initialise/init_supers_from_binary.hpp"
+#include "initialise/initgbxsnull.hpp"
+#include "initialise/initialconditions.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers/gbxindex_observer.hpp"
 #include "observers/massmoments_observer.hpp"
@@ -54,7 +57,6 @@
 #include "observers/totnsupers_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
-#include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/collisions/breakup.hpp"
@@ -85,6 +87,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
+  // const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
   const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
   const InitGbxsNull initgbxs(config.get_ngbxs());
 
@@ -103,22 +106,14 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
   // const auto terminalv = SimmelTerminalVelocity{};
   const auto terminalv = RogersGKTerminalVelocity{};
 
-  // const auto ngbxs = (unsigned int)15; // total number of gbxs
-  // const auto ngbxs4reset = (unsigned int)5; // number of gbxs to randomly select in reset
-  // return CartesianMotionWithReset(motionstep,
-  //                                 &step2dimlesstime,
-  //                                 terminalv,
-  //                                 ngbxs,
-  //                                 ngbxs4reset);  //TODO(CB) Delete option (!)
-
   return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 
   // return NullMotion{};
 }
 
 inline auto create_boundary_conditions(const Config &config) {
-  // TODO(CB): diff BCs
-  return NullBoundaryConditions{};
+  return AddSupersAtDomainTop(config.get_addsupersatdomaintop());
+  // return NullBoundaryConditions{};
 }
 
 template <GridboxMaps GbxMaps>
@@ -169,13 +164,12 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
-  const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
+  // const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
+  // const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
+  // return colls >> cond;
 
-  const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
-
-  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
-
-  return colls >> cond;
+  const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
+  return null;
 }
 
 template <typename Store>
@@ -214,7 +208,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obs0 = RunStatsObserver(obsstep, config.get_stats_filename());
 
-  const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
+  const Observer auto obs1 = StreamOutObserver(obsstep, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 

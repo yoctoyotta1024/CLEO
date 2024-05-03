@@ -1,0 +1,54 @@
+name: cocogitto
+
+on: [push]
+
+jobs:
+  cog_check_job:
+    runs-on: ubuntu-latest
+    name: check commits with cocogitto
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Conventional commits compliance check
+        uses: oknozor/cocogitto-action@v3
+        with:
+          check-latest-tag-only: true
+          git-user: 'yoctoyotta1024'
+          git-user-email: 'yoctoyotta1024@yahoo.com'
+
+  release:
+    needs: cog_check_job
+    # Only release new version when merging into `origin/main`.`
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    name: Perform semantic versioning release
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: semver release with cocogitto
+        uses: oknozor/cocogitto-action@v3
+        id: release
+        with:
+          release: true
+          check-latest-tag-only: true
+          git-user: 'yoctoyotta1024'
+          git-user-email: 'yoctoyotta1024@yahoo.com'
+
+      # The version number is accessible as a github action output
+      - name: Print version
+        run: "echo '${{ steps.release.outputs.version }}'"
+
+      - name: Generate Changelog
+        run: cog changelog --at ${{ steps.release.outputs.version }} -t remote > GITHUB_CHANGELOG.md
+
+      - name: Upload github release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: GITHUB_CHANGELOG.md
+          tag_name: ${{ steps.release.outputs.version }}

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,7 +35,8 @@
 #include "coupldyn_cvode/initgbxs_cvode.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
-#include "initialise/initsupers_frombinary.hpp"
+#include "initialise/init_all_supers_from_binary.hpp"
+#include "initialise/initialconditions.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers/gbxindex_observer.hpp"
 #include "observers/observers.hpp"
@@ -45,7 +46,6 @@
 #include "observers/time_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
-#include "runcleo/initialconditions.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/condensation.hpp"
@@ -59,7 +59,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const unsigned
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
+  const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
   const InitGbxsCvode initgbxs(config.get_cvodedynamics());
 
   return InitConds(initsupers, initgbxs);

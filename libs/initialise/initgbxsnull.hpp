@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: initgbxs_null.hpp
+ * File: initgbxsnull.hpp
  * Project: initialise
  * Created Date: Tuesday 17th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Friday 19th April 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,8 +20,8 @@
  * which can be used by InitConds struct as GbxInitConds type.
  */
 
-#ifndef LIBS_INITIALISE_INITGBXS_NULL_HPP_
-#define LIBS_INITIALISE_INITGBXS_NULL_HPP_
+#ifndef LIBS_INITIALISE_INITGBXSNULL_HPP_
+#define LIBS_INITIALISE_INITGBXSNULL_HPP_
 
 #include <utility>
 #include <vector>
@@ -84,4 +84,4 @@ struct InitGbxsNull {
   }
 };
 
-#endif  // LIBS_INITIALISE_INITGBXS_NULL_HPP_
+#endif  // LIBS_INITIALISE_INITGBXSNULL_HPP_
