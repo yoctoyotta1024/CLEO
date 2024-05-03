@@ -102,18 +102,18 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
-totnsupers = pyzarr.get_totnsupers(dataset)
+maxnsupers = pyzarr.get_maxnsupers(dataset)
 thermo, winds = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"],
                                       consts, getwinds=True)
 
 # plot super-droplet results
-savename = savefigpath + "yac1_totnsupers_validation.png"
-pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
+savename = savefigpath + "yac1_maxnsupers_validation.png"
+pltmoms.plot_maxnsupers(time, maxnsupers, savename=savename)
 
 nsample = 1000
 savename = savefigpath + "yac1_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
-                                             config["totnsupers"],
+                                             config["maxnsupers"],
                                              nsample,
                                              savename=savename,
                                              arrows=False,
