@@ -196,7 +196,7 @@ pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 nsample = 500
 savename = savefigpath + "rain1d_randomsample.png"
 pltsds.plot_randomsample_superdrops(time, sddata,
-                                        config["totnsupers"],
+                                        config["maxnsupers"],
                                         nsample,
                                         savename=savename)
 

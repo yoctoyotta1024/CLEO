@@ -6,7 +6,7 @@ Created Date: Sunday 26th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 15th April 2024
+Last Modified: Friday 3rd May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -73,11 +73,11 @@ sddata = pyzarr.get_supers(ds, consts)
 savename = ""
 if savefig:
   savename = savefigpath+"/randomsample_attrs.png"
-pltsds.plot_randomsample_superdrops(time, sddata, config["totnsupers"],
+pltsds.plot_randomsample_superdrops(time, sddata, config["maxnsupers"],
                                     nsample, savename=savename)
 if savefig:
   savename = savefigpath+"/randomsample_2dmotion.png"
-pltsds.plot_randomsample_superdrops_2dmotion(sddata, config["totnsupers"],
+pltsds.plot_randomsample_superdrops_2dmotion(sddata, config["maxnsupers"],
                                              nsample, arrows=False)
 ### ---------------------------------------------------------------- ###
 
@@ -87,7 +87,7 @@ if rspan == ["min", "max"]:
   rspan = [ak.min(non_nanradius), ak.max(non_nanradius)]
 
 if smoothsig_mass:
-  smoothsig_mass = smoothsig_mass*(config["totnsupers"]**(-1/5))
+  smoothsig_mass = smoothsig_mass*(config["maxnsupers"]**(-1/5))
 if savefig:
   savename = savefigpath+"/domain_mass_distrib.png"
 fig, ax = pltdist.plot_domainmass_distribs(time.secs, sddata, t2plts,
@@ -98,7 +98,7 @@ fig, ax = pltdist.plot_domainmass_distribs(time.secs, sddata, t2plts,
                                      savename=savename)
 
 if smoothsig_num:
-  smoothsig_num = smoothsig_num*(config["totnsupers"]**(-1/5))
+  smoothsig_num = smoothsig_num*(config["maxnsupers"]**(-1/5))
 if savefig:
   savename = savefigpath+"/domain_numconc_distrib.png"
 fig, ax = pltdist.plot_domainnumconc_distribs(time.secs, sddata, t2plts,

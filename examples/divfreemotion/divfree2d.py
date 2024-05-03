@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 12th April 2024
+Last Modified: Friday 3rd May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -182,16 +182,16 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)
-totnsupers =pyzarr.get_totnsupers(dataset)
+maxnsupers =pyzarr.get_maxnsupers(dataset)
 
 # 4. plot results
-savename = savefigpath + "df2d_totnsupers_validation.png"
-pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
+savename = savefigpath + "df2d_maxnsupers_validation.png"
+pltmoms.plot_maxnsupers(time, maxnsupers, savename=savename)
 
 nsample = 500
 savename = savefigpath + "df2d_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
-                                                 config["totnsupers"],
+                                                 config["maxnsupers"],
                                                  nsample,
                                                  savename=savename,
                                                  arrows=False)
