@@ -15,3 +15,4 @@ bin
 docs/source/_autosummary
 examples/examplesolutions/
 *.egg-info/*
+data
