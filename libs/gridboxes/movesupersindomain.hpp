@@ -34,14 +34,19 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
 
-/* struct for functionality to move superdroplets throughtout
+/*
+struct for functionality to move superdroplets throughtout
 the domain by updating their spatial coordinates (according to
 some type of Motion) and then moving them between gridboxes
-after updating their gridbox indexes concordantly */
+after updating their gridbox indexes concordantly
+*/
 template <GridboxMaps GbxMaps, Motion<GbxMaps> M, typename BoundaryConditions>
-class MoveSupersInDomain {
- private:
-  BoundaryConditions apply_domain_boundary_conditions;
+struct MoveSupersInDomain {
+  /*
+  EnactMotion struct encapsulates motion so that parallel loops with KOKKOS_CLASS_LAMBDA
+  (ie. [=] on CPUs) functors only captures motion and not other members of MoveSupersInDomain
+  coincidentally (which may not be GPU compatible).
+  */
   struct EnactMotion {
     M motion;
 
@@ -122,31 +127,8 @@ class MoveSupersInDomain {
     }
   } enactmotion;
 
-  /* enact movement of superdroplets throughout domain in three stages:
-  (1) update their spatial coords according to type of motion. (device)
-  (1b) optional detect precipitation (device)
-  (2) update their sdgbxindex accordingly (device)
-  (3) move superdroplets between gridboxes (host)
-  (4) (optional) apply domain boundary conditions (host and device)
-  _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
-  // TODO(all) use tasking to convert all 3 team policy
-  // loops from first two function calls into 1 loop?
-  */
-  void move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
-                                 const viewd_supers totsupers) const {
-    /* steps (1 - 2) */
-    enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs);
-
-    /* step (3) */
-    enactmotion.move_supers_between_gridboxes(d_gbxs, totsupers);
-
-    /* step (4) */
-    apply_domain_boundary_conditions(gbxmaps, d_gbxs, totsupers);
-  }
-
- public:
   MoveSupersInDomain(const M mtn, const BoundaryConditions boundary_conditions)
-      : apply_domain_boundary_conditions(boundary_conditions), enactmotion({mtn}) {}
+      : enactmotion({mtn}), apply_domain_boundary_conditions(boundary_conditions) {}
 
   /* extra constructor useful to help when compiler cannot deduce type of GBxMaps */
   MoveSupersInDomain(const GbxMaps &gbxmaps, const M mtn,
@@ -172,6 +154,31 @@ class MoveSupersInDomain {
     if (enactmotion.motion.on_step(t_sdm)) {
       move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, totsupers);
     }
+  }
+
+ private:
+  BoundaryConditions apply_domain_boundary_conditions;
+
+  /* enact movement of superdroplets throughout domain in three stages:
+  (1) update their spatial coords according to type of motion. (device)
+  (1b) optional detect precipitation (device)
+  (2) update their sdgbxindex accordingly (device)
+  (3) move superdroplets between gridboxes (host)
+  (4) (optional) apply domain boundary conditions (host and device)
+  _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
+  // TODO(all) use tasking to convert all 3 team policy
+  // loops from first two function calls into 1 loop?
+  */
+  void move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
+                                 const viewd_supers totsupers) const {
+    /* steps (1 - 2) */
+    enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs);
+
+    /* step (3) */
+    enactmotion.move_supers_between_gridboxes(d_gbxs, totsupers);
+
+    /* step (4) */
+    apply_domain_boundary_conditions(gbxmaps, d_gbxs, totsupers);
   }
 };
 
