@@ -54,9 +54,11 @@ void remove_superdrops(const TeamMember &team_member, const Gridbox &gbx, const 
 }
 
 /* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim */
-void remove_superdrops_from_gridboxes(const CartesianMaps &gbxmaps, const viewd_gbx d_gbxs,
-                                      const double coord3lim) {
+Kokkos::View<unsigned int *> remove_superdrops_from_gridboxes(const CartesianMaps &gbxmaps,
+                                                              const viewd_gbx d_gbxs,
+                                                              const double coord3lim) {
   const size_t ngbxs(d_gbxs.extent(0));
+  auto gbxindexes_for_newsupers = Kokkos::View<unsigned int *>("gbxindexes_for_newsupers", ngbxs);
   Kokkos::parallel_for(
       "remove_superdrops", TeamPolicy(ngbxs, Kokkos::AUTO()),
       KOKKOS_LAMBDA(const TeamMember &team_member) {
@@ -65,8 +67,13 @@ void remove_superdrops_from_gridboxes(const CartesianMaps &gbxmaps, const viewd_
         const auto ubound = gbxmaps.coord3bounds(d_gbxs(ii).get_gbxindex()).second;
         if (ubound > coord3lim) {
           remove_superdrops(team_member, d_gbxs(ii), coord3lim);
+          gbxindexes_for_newsupers(ii) = d_gbxs(ii).get_gbxindex();  // add newsupers
+        } else {
+          gbxindexes_for_newsupers(ii) = outofbounds_gbxindex();  // don't add newsupers
         }
       });
+
+  return gbxindexes_for_newsupers;
 }
 
 /* create 'newnsupers' number of new superdroplets from the create_superdrop function */
@@ -95,23 +102,12 @@ _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain
 */
 void AddSupersAtDomainTop::operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
                                       const viewd_supers totsupers) const {
-  const size_t ngbxs(d_gbxs.extent(0));
+  const auto gbxindexes_for_newsupers =
+      remove_superdrops_from_gridboxes(gbxmaps, d_gbxs, coord3lim);
 
-  bool is_supers_added = false;
-  remove_superdrops_from_gridboxes(gbx);
+  add_superdrops_for_gridboxes(totsupers, d_gbxs, gbxindexes_for_newsupers, newnsupers);
 
-  for (size_t ii(0); ii < ngbxs; ++ii) {  // TODO(CB) parallelise?
-    auto &gbx(d_gbxs(ii));
-    const auto bounds = gbxmaps.coord3bounds(gbx.get_gbxindex());
-    if (bounds.second > coord3lim) {
-      add_superdrops_for_gridbox(gbxmaps, gbx, totsupers);
-      is_supers_added = true;
-    }
-  }
-
-  if (is_supers_added) {  // resort totsupers view and set gbx references
-    move_supers_between_gridboxes_again(d_gbxs, totsupers);
-  }
+  move_supers_between_gridboxes_again(d_gbxs, totsupers);  // resort totsupers view and set gbx refs
 }
 
 /* call to create a new superdroplet for gridbox with given gbxindex */
