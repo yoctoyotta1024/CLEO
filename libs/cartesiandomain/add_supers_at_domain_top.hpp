@@ -86,7 +86,7 @@ struct CreateSuperdrop {
   /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
   random value within the gridbox's bounds */
   std::array<double, 3> create_superdrop_coords(const CartesianMaps &gbxmaps,
-                                                const auto gbxindex) const;
+                                                const unsigned int gbxindex) const;
 
   /* create attributes for a new super-droplet */
   SuperdropAttrs create_superdrop_attrs(const double gbxvolume) const;
@@ -114,7 +114,7 @@ struct CreateSuperdrop {
     }
   }
 
-  Superdrop operator()(const CartesianMaps &gbxmaps, const auto gbxindex) const;
+  Superdrop operator()(const CartesianMaps &gbxmaps, const unsigned int gbxindex) const;
 };
 
 struct AddSupersAtDomainTop {
