@@ -74,8 +74,7 @@ class TwoLognormalsDistribution {
 
 struct CreateSuperdrop {
  private:
-  std::shared_ptr<Kokkos::Random_XorShift64<HostSpace>>
-      randgen; /**< pointer to Kokkos random number generator */
+  std::shared_ptr<std::mt19937> randgen; /**< pointer to random number generator */
   std::shared_ptr<Superdrop::IDType::Gen>
       sdIdGen;  /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
   size_t nbins; /**< number of bins for sampling superdroplet radius */
@@ -83,8 +82,8 @@ struct CreateSuperdrop {
   double dryradius;                /**< dry radius of new superdrop */
   TwoLognormalsDistribution dist;  /**< distribution for creating superdroplet xi */
 
-  /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
-  random value within the gridbox's bounds */
+  /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to
+  a random value within the gridbox's bounds */
   std::array<double, 3> create_superdrop_coords(const CartesianMaps &gbxmaps,
                                                 const unsigned int gbxindex) const;
 
@@ -100,7 +99,7 @@ struct CreateSuperdrop {
  public:
   /* call to create a new superdroplet for gridbox with given gbxindex */
   explicit CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
-      : randgen(std::make_shared<Kokkos::Random_XorShift64<HostSpace>>(std::random_device {}())),
+      : randgen(std::make_shared<std::mt19937>(std::random_device {}())),
         sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)),
         nbins(config.newnsupers),
         log10redges(),

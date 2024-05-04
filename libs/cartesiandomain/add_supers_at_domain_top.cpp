@@ -241,7 +241,9 @@ random value within the gridbox's bounds */
 std::array<double, 3> CreateSuperdrop::create_superdrop_coords(const CartesianMaps &gbxmaps,
                                                                const unsigned int gbxindex) const {
   const auto bounds = hostcopy_coord3bounds(gbxmaps, gbxindex);
-  const auto coord3 = randgen->drand(bounds.first, bounds.second);
+  auto dist = std::uniform_real_distribution<double>(bounds.first, bounds.second);
+  const double coord3 = dist(*randgen);
+
   const auto coord1 = double{0.0 / dlc::COORD0};
   const auto coord2 = double{0.0 / dlc::COORD0};
 
@@ -259,12 +261,15 @@ SuperdropAttrs CreateSuperdrop::create_superdrop_attrs(const double gbxvolume) c
 
 /* returns radius and xi for a new super-droplet by randomly sampling a distribution. */
 std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume) const {
-  const auto bin = uint64_t{randgen->urand(0, nbins)};  // index of randomly selected log10(r) bin
+  auto uintdist = std::uniform_int_distribution<uint64_t>(0, nbins);
+  const uint64_t bin = uintdist(*randgen);  // index of randomly selected log10(r) bin
 
   const auto log10rlow = log10redges.at(bin);     // lower bound of log10(r)
   const auto log10rup = log10redges.at(bin + 1);  // upper bound of log10(r)
   const auto log10rwidth = (log10rup - log10rlow);
-  const auto frac = randgen->drand(0.0, 1.0);
+  auto dbldist = std::uniform_real_distribution<double>(0.0, 1.0);
+  const auto frac = dbldist(*randgen);
+
   const auto log10r = double{log10rlow + frac * log10rwidth};
   const auto radius = double{std::pow(10.0, log10r)};
 
