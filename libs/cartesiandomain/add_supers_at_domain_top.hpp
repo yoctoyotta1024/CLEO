@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st May 2024
+ * Last Modified: Saturday 4th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -122,13 +122,6 @@ struct AddSupersAtDomainTop {
   size_t newnsupers; /**< number of superdroplets to add to gridboxes above coord3lim */
   double coord3lim;  /**< gridboxes with upper bound > coord3lim get new super-droplets */
   CreateSuperdrop create_superdrop; /**< methods to create a new superdrop */
-
-  /* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim */
-  void remove_superdrops_from_gridbox(const Gridbox &gbx) const;
-
-  /* create 'newnsupers' number of new superdroplets from the create_superdrop function */
-  void add_superdrops_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
-                                  const viewd_supers totsupers) const;
 
  public:
   /* New super-droplets are added to domain with coord3 >= COORD3LIM [m]. Note generation of

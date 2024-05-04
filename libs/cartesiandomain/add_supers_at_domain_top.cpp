@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st May 2024
+ * Last Modified: Saturday 4th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -41,6 +41,34 @@ void move_supers_between_gridboxes_again(const viewd_gbx d_gbxs, const viewd_sup
       });
 }
 
+/* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim */
+void remove_superdrops_from_gridbox(const Gridbox &gbx) {
+  const auto supers = gbx.supersingbx();
+  for (size_t kk(0); kk < supers.extent(0); ++kk) {
+    if (supers(kk).get_coord3() >= coord3lim) {
+      supers(kk).set_sdgbxindex(outofbounds_gbxindex());  // remove super-droplet from domain
+    }
+  }
+}
+
+/* create 'newnsupers' number of new superdroplets from the create_superdrop function */
+void add_superdrops_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
+                                const viewd_supers totsupers) {
+  const auto gbxindex = gbx.get_gbxindex();
+  const size_t start = gbx.domain_totnsupers();
+
+  if (start + newnsupers > totsupers.extent(0)) {
+    const auto err = std::string(
+        "UNDEFINED BEHAVIOUR: Number of super-droplets in the domain cannot become larger than the "
+        "size of the super-droplets' view");
+    throw std::invalid_argument(err);
+  }
+
+  for (size_t kk(start); kk < start + newnsupers; ++kk) {
+    totsupers(kk) = create_superdrop(gbxmaps, gbxindex);
+  }
+}
+
 /*
 Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
 abouve coord3lim.
@@ -64,35 +92,6 @@ void AddSupersAtDomainTop::operator()(const CartesianMaps &gbxmaps, viewd_gbx d_
 
   if (is_supers_added) {  // resort totsupers view and set gbx references
     move_supers_between_gridboxes_again(d_gbxs, totsupers);
-  }
-}
-
-/* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim */
-void AddSupersAtDomainTop::remove_superdrops_from_gridbox(const Gridbox &gbx) const {
-  const auto supers = gbx.supersingbx();
-  for (size_t kk(0); kk < supers.extent(0); ++kk) {
-    if (supers(kk).get_coord3() >= coord3lim) {
-      supers(kk).set_sdgbxindex(outofbounds_gbxindex());  // remove super-droplet from domain
-    }
-  }
-}
-
-/* create 'newnsupers' number of new superdroplets from the create_superdrop function */
-void AddSupersAtDomainTop::add_superdrops_for_gridbox(const CartesianMaps &gbxmaps,
-                                                      const Gridbox &gbx,
-                                                      const viewd_supers totsupers) const {
-  const auto gbxindex = gbx.get_gbxindex();
-  const size_t start = gbx.domain_totnsupers();
-
-  if (start + newnsupers > totsupers.extent(0)) {
-    const auto err = std::string(
-        "UNDEFINED BEHAVIOUR: Number of super-droplets in the domain cannot become larger than the "
-        "size of the super-droplets' view");
-    throw std::invalid_argument(err);
-  }
-
-  for (size_t kk(start); kk < start + newnsupers; ++kk) {
-    totsupers(kk) = create_superdrop(gbxmaps, gbxindex);
   }
 }
 
