@@ -226,6 +226,22 @@ Kokkos::pair<double, double> hostcopy_coord3bounds(const CartesianMaps &gbxmaps,
 }
 
 /* call to create a new superdroplet for gridbox with given gbxindex */
+CreateSuperdrop::CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
+    : randgen(std::make_shared<std::mt19937>(std::random_device {}())),
+      sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)),
+      nbins(config.newnsupers),
+      log10redges(),
+      dryradius(config.DRYRADIUS / dlc::R0),
+      dist(config) {
+  const auto log10rmin = std::log10(config.MINRADIUS / dlc::R0);
+  const auto log10rmax = std::log10(config.MAXRADIUS / dlc::R0);
+  const auto log10deltar = double{(log10rmax - log10rmin) / nbins};
+  for (size_t nn(0); nn < nbins + 1; ++nn) {
+    log10redges.push_back(log10rmin + nn * log10deltar);
+  }
+}
+
+/* call to create a new superdroplet for gridbox with given gbxindex */
 Superdrop CreateSuperdrop::operator()(const CartesianMaps &gbxmaps,
                                       const unsigned int gbxindex) const {
   const auto sdgbxindex = gbxindex;
