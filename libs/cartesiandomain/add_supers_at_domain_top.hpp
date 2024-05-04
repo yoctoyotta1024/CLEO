@@ -24,13 +24,13 @@
 #define LIBS_CARTESIANDOMAIN_ADD_SUPERS_AT_DOMAIN_TOP_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Random.hpp>
 #include <array>
 #include <cmath>
 #include <memory>
 #include <numbers>
 #include <random>
 #include <stdexcept>
+#include <string>
 #include <utility>
 #include <vector>
 
