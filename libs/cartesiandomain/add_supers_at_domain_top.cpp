@@ -277,7 +277,7 @@ SuperdropAttrs CreateSuperdrop::create_superdrop_attrs(const double gbxvolume) c
 
 /* returns radius and xi for a new super-droplet by randomly sampling a distribution. */
 std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume) const {
-  auto uintdist = std::uniform_int_distribution<uint64_t>(0, nbins);
+  auto uintdist = std::uniform_int_distribution<uint64_t>(0, nbins - 1);
   const uint64_t bin = uintdist(*randgen);  // index of randomly selected log10(r) bin
 
   const auto log10rlow = log10redges.at(bin);     // lower bound of log10(r)
