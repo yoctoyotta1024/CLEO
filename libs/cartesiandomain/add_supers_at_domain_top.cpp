@@ -42,13 +42,31 @@ void move_supers_between_gridboxes_again(const viewd_gbx d_gbxs, const viewd_sup
 }
 
 /* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim */
-void remove_superdrops_from_gridbox(const Gridbox &gbx) {
+KOKKOS_FUNCTION
+void remove_superdrops(const TeamMember &team_member, const Gridbox &gbx, const double coord3lim) {
   const auto supers = gbx.supersingbx();
-  for (size_t kk(0); kk < supers.extent(0); ++kk) {
-    if (supers(kk).get_coord3() >= coord3lim) {
-      supers(kk).set_sdgbxindex(outofbounds_gbxindex());  // remove super-droplet from domain
-    }
-  }
+  Kokkos::parallel_for(
+      Kokkos::TeamThreadRange(team_member, supers.extent(0)), [supers, coord3lim](const size_t kk) {
+        if (supers(kk).get_coord3() >= coord3lim) {
+          supers(kk).set_sdgbxindex(outofbounds_gbxindex());  // remove super-droplet from domain
+        }
+      });
+}
+
+/* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim */
+void remove_superdrops_from_gridboxes(const CartesianMaps &gbxmaps, const viewd_gbx d_gbxs,
+                                      const double coord3lim) {
+  const size_t ngbxs(d_gbxs.extent(0));
+  Kokkos::parallel_for(
+      "remove_superdrops", TeamPolicy(ngbxs, Kokkos::AUTO()),
+      KOKKOS_LAMBDA(const TeamMember &team_member) {
+        const int ii = team_member.league_rank();
+
+        const auto ubound = gbxmaps.coord3bounds(d_gbxs(ii).get_gbxindex()).second;
+        if (ubound > coord3lim) {
+          remove_superdrops(team_member, d_gbxs(ii), coord3lim);
+        }
+      });
 }
 
 /* create 'newnsupers' number of new superdroplets from the create_superdrop function */
@@ -80,11 +98,12 @@ void AddSupersAtDomainTop::operator()(const CartesianMaps &gbxmaps, viewd_gbx d_
   const size_t ngbxs(d_gbxs.extent(0));
 
   bool is_supers_added = false;
+  remove_superdrops_from_gridboxes(gbx);
+
   for (size_t ii(0); ii < ngbxs; ++ii) {  // TODO(CB) parallelise?
     auto &gbx(d_gbxs(ii));
     const auto bounds = gbxmaps.coord3bounds(gbx.get_gbxindex());
     if (bounds.second > coord3lim) {
-      remove_superdrops_from_gridbox(gbx);
       add_superdrops_for_gridbox(gbxmaps, gbx, totsupers);
       is_supers_added = true;
     }
