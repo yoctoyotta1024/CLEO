@@ -30,17 +30,17 @@ timesteps:
   CONDTSTEP: 0.1
   COLLTSTEP: 1
   MOTIONTSTEP: 2
-  COUPLTSTEP: 4
+  COUPLTSTEP: 60
   OBSTSTEP: 2
-  T_END: 4
+  T_END: 60
 inputfiles:
   constants_filename: ../libs/cleoconstants.hpp
   grid_filename:
-    /home/m/m301096/CLEO/build_eurec4a1D_stationary/share/eurec4a1d_ddimlessGBxboundaries.dat
+    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_ddimlessGBxboundaries.dat
 initsupers:
   type: frombinary
   initsupers_filename:
-    /home/m/m301096/CLEO/build_eurec4a1D_stationary/share/eurec4a1d_dimlessSDsinit.dat
+    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessSDsinit.dat
   initnsupers: 3048
 outputdata:
   setup_filename: /home/m/m301096/CLEO/data/output/raw/stationary/clusters_18/eurec4a1d_setup.txt
@@ -57,23 +57,23 @@ microphysics:
 coupled_dynamics:
   type: fromfile
   press:
-    /home/m/m301096/CLEO/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_press.dat
+    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_press.dat
   temp:
-    /home/m/m301096/CLEO/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_temp.dat
+    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_temp.dat
   qvap:
-    /home/m/m301096/CLEO/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_qvap.dat
+    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_qvap.dat
   qcond:
-    /home/m/m301096/CLEO/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_qcond.dat
+    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_qcond.dat
   wvel:
-    /home/m/m301096/CLEO/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_wvel.dat
+    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_wvel.dat
   uvel: ./share/dimlessthermo_uvel.dat
   vvel: ./share/dimlessthermo_vvel.dat
   thermo:
-    /home/m/m301096/CLEO/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo.dat
+    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo.dat
 boundary_conditions:
   type: addsupersatdomaintop
   COORD3LIM: 656
-  newnsupers: 1024
+  newnsupers: 256
   DRYRADIUS: 1e-09
   MINRADIUS: 1e-07
   MAXRADIUS: 0.001
