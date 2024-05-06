@@ -145,7 +145,7 @@ updated_configfile['inputfiles'] = dict(
 updated_configfile["initsupers"] = dict(
     type = "frombinary",
     initsupers_filename = str(path2build / 'share/eurec4a1d_dimlessSDsinit.dat'),
-    totnsupers = 0, # Modify later!!!!
+    initnsupers = 0, # Modify later!!!!
 )
 
 gridfile      = updated_configfile['inputfiles']['grid_filename']
@@ -274,7 +274,7 @@ nsupers = crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, cloud_bot
 
 # get total number of superdroplets
 total_nsupers = int(np.sum(list(nsupers.values())))
-updated_configfile["initsupers"]['totnsupers'] = total_nsupers
+updated_configfile["initsupers"]['initnsupers'] = total_nsupers
 # update the config file
 editconfigfile.edit_config_params(str(configfile), updated_configfile)
 
