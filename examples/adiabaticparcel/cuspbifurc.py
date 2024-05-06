@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 18th April 2024
+Last Modified: Friday 3rd May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -153,7 +153,7 @@ zprof = displacement(time, config["W_avg"], config["TAU_half"])
 
 ### plot results
 # sample drops to plot from whole range of SD ids
-sample = [0, int(config["totnsupers"])]
+sample = [0, int(config["maxnsupers"])]
 radii = sdtracing.attribute_for_superdroplets_sample(sddata, "radius",
                                                      minid=sample[0],
                                                      maxid=sample[1])

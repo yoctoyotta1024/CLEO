@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st May 2024
+ * Last Modified: Friday 3rd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -59,9 +59,9 @@ struct CartesianMaps {
   kokkos_uintmap to_forward_coord2nghbr;
 
   /* additional gridbox / domain information */
-  kokkos_dblmap to_area;    // map from gbxindex to horizontal (x-y planar) area of gridbox
-  kokkos_dblmap to_volume;  // map from gbxindex to volume of gridbox
-  viewd_ndims ndims;        // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
+  kokkos_dblmaph to_area;    // map from gbxindex to horizontal (x-y planar) area of gridbox on host
+  kokkos_dblmaph to_volume;  // map from gbxindex to volume of gridbox on host
+  viewd_ndims ndims;  // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
 
  public:
   /* initialise maps with hint for their capacity
@@ -78,8 +78,8 @@ struct CartesianMaps {
         to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
         to_forward_coord2nghbr(kokkos_uintmap(ngbxs)),
-        to_area(kokkos_dblmap(ngbxs)),
-        to_volume(kokkos_dblmap(ngbxs)),
+        to_area(kokkos_dblmaph(ngbxs)),
+        to_volume(kokkos_dblmaph(ngbxs)),
         ndims("ndims") {}
 
   /* insert 1 value into to_coord3bounds
@@ -158,19 +158,10 @@ struct CartesianMaps {
   }
 
   /* insert 1 value into to_area map at key = idx with value=area */
-  void insert_gbxarea(const unsigned int idx, double area) {
-    /* parallel for for 1 value so that execution of insert occurs on device if necessary */
-    Kokkos::parallel_for(
-        "gbxarea", 1, KOKKOS_CLASS_LAMBDA(const unsigned int i) { to_area.insert(idx, area); });
-  }
+  void insert_gbxarea(const unsigned int idx, double area) { to_area.insert(idx, area); }
 
   /* insert 1 value into to_volume map at key = idx with value=volume */
-  void insert_gbxvolume(const unsigned int idx, double volume) {
-    /* parallel for for 1 value so that execution of insert occurs on device if necessary */
-    Kokkos::parallel_for(
-        "gbxvolume", 1,
-        KOKKOS_CLASS_LAMBDA(const unsigned int i) { to_volume.insert(idx, volume); });
-  }
+  void insert_gbxvolume(const unsigned int idx, double volume) { to_volume.insert(idx, volume); }
 
   /* copies of h_ndims to ndims,
   possibly into device memory */
@@ -193,6 +184,13 @@ struct CartesianMaps {
     return h_ndims;
   }
 
+  /* returns volume of gridbox with index 'gbxidx' on host */
+  double get_gbxvolume(const unsigned int gbxidx) const {
+    const auto i(to_volume.find(gbxidx));  // index in map of key 'gbxindex'
+
+    return to_volume.value_at(i);  // value returned by map at index i
+  }
+
   /* returns model dimensions ie. number of gridboxes
   along [coord3, coord1, coord2] directions */
   KOKKOS_INLINE_FUNCTION
@@ -206,20 +204,11 @@ struct CartesianMaps {
   KOKKOS_INLINE_FUNCTION
   size_t get_ndim(const unsigned int d) const { return ndims(d); }
 
-  /* returns horizontal (x-y planar) area of gridbox with index 'gbxidx' on device */
-  KOKKOS_INLINE_FUNCTION
+  /* returns horizontal (x-y planar) area of gridbox with index 'gbxidx' on host */
   double get_gbxarea(const unsigned int gbxidx) const {
     const auto i(to_area.find(gbxidx));  // index in map of key 'gbxindex'
 
     return to_area.value_at(i);  // value returned by map at index i
-  }
-
-  /* returns volume of gridbox with index 'gbxidx' on device */
-  KOKKOS_INLINE_FUNCTION
-  double get_gbxvolume(const unsigned int gbxidx) const {
-    const auto i(to_volume.find(gbxidx));  // index in map of key 'gbxindex'
-
-    return to_volume.value_at(i);  // value returned by map at index i
   }
 
   /* returns {lower bound, upper bound}  in coord3

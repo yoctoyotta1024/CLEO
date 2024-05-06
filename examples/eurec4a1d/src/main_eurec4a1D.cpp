@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Saturday 4th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,6 +29,7 @@
 #include <stdexcept>
 #include <string_view>
 
+#include "cartesiandomain/add_supers_at_domain_top.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
@@ -39,6 +40,7 @@
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
+#include "initialise/init_supers_from_binary.hpp"
 #include "initialise/initgbxsnull.hpp"
 #include "initialise/initialconditions.hpp"
 #include "initialise/timesteps.hpp"
@@ -78,9 +80,8 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 
 // Create initial conditions for CLEO run
 inline InitialConditions auto create_initconds(const Config &config) {
-  // initialise superdroplets from binary file
-  const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
-  // initilise gridboxes
+  // const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
+  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
   const InitGbxsNull initgbxs(config.get_ngbxs());
   return InitConds(initsupers, initgbxs);
 }
@@ -102,8 +103,11 @@ inline auto create_movement(const Config &config, const Timesteps &tsteps,
               const CartesianMaps &gbxmaps) {
   const auto terminalv = RogersGKTerminalVelocity{};
   const Motion<CartesianMaps> auto motion =
-    CartesianMotion(tsteps.get_motionstep(), &step2dimlesstime, terminalv);
-  const auto boundary_conditions = NullBoundaryConditions{};
+      CartesianMotion(tsteps.get_motionstep(), &step2dimlesstime, terminalv);
+
+  // const auto boundary_conditions = NullBoundaryConditions{};
+  const auto boundary_conditions = AddSupersAtDomainTop(config.get_addsupersatdomaintop());
+
   return MoveSupersInDomain(gbxmaps, motion, boundary_conditions);
 }
 

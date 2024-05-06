@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 30th April 2024
+ * Last Modified: Saturday 4th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -118,7 +118,7 @@ inline auto create_boundary_conditions(const Config &config) {
 
 template <GridboxMaps GbxMaps>
 inline auto create_movement(const Config &config, const Timesteps &tsteps, const GbxMaps &gbxmaps) {
-  const Motion<GbxMaps> auto motion(create_motion(tsteps.get_motionstep()));
+  const auto motion(create_motion(tsteps.get_motionstep()));
 
   const auto boundary_conditions(create_boundary_conditions(config));
 
