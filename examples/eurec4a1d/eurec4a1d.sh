@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=eurec4a1d
-#SBATCH --partition=compute
+#SBATCH --partition=gpu
+#SBATCH --gpus=4
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
@@ -26,7 +27,7 @@ echo "git hash: $(git rev-parse HEAD)"
 echo "git branch: $(git symbolic-ref --short HEAD)"
 echo "============================================"
 
-buildtype="openmp"
+buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
 path2builds=${path2CLEO}builds/
 path2data=${path2CLEO}data/output/raw/
@@ -79,14 +80,14 @@ echo "script_args: ${script_args}"
 echo "---------------------------"
 ### ---------------------------------------------------- ###
 
-# ### ---------------------- build CLEO ------------------ ###
-# ${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}
-# ### ---------------------------------------------------- ###
+### ---------------------- build CLEO ------------------ ###
+${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}
+### ---------------------------------------------------- ###
 
-# ### --------- compile executable(s) from scratch ---------- ###
-# cd ${path2build} && make clean
+### --------- compile executable(s) from scratch ---------- ###
+cd ${path2build} && make clean
 
-# ${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} "${executables}"
+${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} "${executables}"
 # ### ---------------------------------------------------- ###
 
 ### --------- run model through Python script ---------- ###
