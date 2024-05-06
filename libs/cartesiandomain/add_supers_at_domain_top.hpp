@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st May 2024
+ * Last Modified: Saturday 4th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,13 +24,13 @@
 #define LIBS_CARTESIANDOMAIN_ADD_SUPERS_AT_DOMAIN_TOP_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Random.hpp>
 #include <array>
 #include <cmath>
 #include <memory>
 #include <numbers>
 #include <random>
 #include <stdexcept>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -74,8 +74,7 @@ class TwoLognormalsDistribution {
 
 struct CreateSuperdrop {
  private:
-  std::shared_ptr<Kokkos::Random_XorShift64<HostSpace>>
-      randgen; /**< pointer to Kokkos random number generator */
+  std::shared_ptr<std::mt19937> randgen; /**< pointer to random number generator */
   std::shared_ptr<Superdrop::IDType::Gen>
       sdIdGen;  /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
   size_t nbins; /**< number of bins for sampling superdroplet radius */
@@ -83,10 +82,10 @@ struct CreateSuperdrop {
   double dryradius;                /**< dry radius of new superdrop */
   TwoLognormalsDistribution dist;  /**< distribution for creating superdroplet xi */
 
-  /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
-  random value within the gridbox's bounds */
+  /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to
+  a random value within the gridbox's bounds */
   std::array<double, 3> create_superdrop_coords(const CartesianMaps &gbxmaps,
-                                                const auto gbxindex) const;
+                                                const unsigned int gbxindex) const;
 
   /* create attributes for a new super-droplet */
   SuperdropAttrs create_superdrop_attrs(const double gbxvolume) const;
@@ -99,22 +98,9 @@ struct CreateSuperdrop {
 
  public:
   /* call to create a new superdroplet for gridbox with given gbxindex */
-  explicit CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
-      : randgen(std::make_shared<Kokkos::Random_XorShift64<HostSpace>>(std::random_device {}())),
-        sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)),
-        nbins(config.newnsupers),
-        log10redges(),
-        dryradius(config.DRYRADIUS / dlc::R0),
-        dist(config) {
-    const auto log10rmin = std::log10(config.MINRADIUS / dlc::R0);
-    const auto log10rmax = std::log10(config.MAXRADIUS / dlc::R0);
-    const auto log10deltar = double{(log10rmax - log10rmin) / nbins};
-    for (size_t nn(0); nn < nbins + 1; ++nn) {
-      log10redges.push_back(log10rmin + nn * log10deltar);
-    }
-  }
+  explicit CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config);
 
-  Superdrop operator()(const CartesianMaps &gbxmaps, const auto gbxindex) const;
+  Superdrop operator()(const CartesianMaps &gbxmaps, const unsigned int gbxindex) const;
 };
 
 struct AddSupersAtDomainTop {
@@ -122,13 +108,6 @@ struct AddSupersAtDomainTop {
   size_t newnsupers; /**< number of superdroplets to add to gridboxes above coord3lim */
   double coord3lim;  /**< gridboxes with upper bound > coord3lim get new super-droplets */
   CreateSuperdrop create_superdrop; /**< methods to create a new superdrop */
-
-  /* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim */
-  void remove_superdrops_from_gridbox(const Gridbox &gbx) const;
-
-  /* create 'newnsupers' number of new superdroplets from the create_superdrop function */
-  void add_superdrops_for_gridbox(const CartesianMaps &gbxmaps, const Gridbox &gbx,
-                                  const viewd_supers totsupers) const;
 
  public:
   /* New super-droplets are added to domain with coord3 >= COORD3LIM [m]. Note generation of

@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 12th April 2024
+Last Modified: Friday 3rd May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -196,13 +196,13 @@ pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 nsample = 500
 savename = savefigpath + "const2d_randomsample.png"
 pltsds.plot_randomsample_superdrops(time, sddata,
-                                        config["totnsupers"],
+                                        config["maxnsupers"],
                                         nsample,
                                         savename=savename)
 
 savename = savefigpath + "const2d_motion2d.png"
 pltsds.plot_randomsample_superdrops_2dmotion(sddata,
-                                                 config["totnsupers"],
+                                                 config["maxnsupers"],
                                                  nsample,
                                                  savename=savename,
                                                  arrows=False)

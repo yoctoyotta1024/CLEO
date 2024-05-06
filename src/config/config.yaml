@@ -32,9 +32,9 @@ timesteps:
   CONDTSTEP : 0.1                                      # time between SD condensation [s]
   COLLTSTEP : 1                                        # time between SD collision [s]
   MOTIONTSTEP : 2                                      # time between SDM motion [s]
-  COUPLTSTEP : 4                                       # time between dynamic couplings [s]
+  COUPLTSTEP : 8                                       # time between dynamic couplings [s]
   OBSTSTEP : 2                                         # time between SDM observations [s]
-  T_END : 4                                            # time span of integration from 0s to T_END [s]
+  T_END : 16                                           # time span of integration from 0s to T_END [s]
 
 ### Initialisation Parameters ###
 inputfiles:

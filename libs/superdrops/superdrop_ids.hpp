@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Saturday 20th April 2024
+ * Last Modified: Friday 3rd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,6 +33,7 @@
 struct IntID {
   size_t value; /**< Value of the SD identity. */
 
+  KOKKOS_INLINE_FUNCTION
   size_t get_value() const { return value; }
 
   /**
@@ -81,6 +82,7 @@ struct IntID {
  * @brief Struct for non-existent (no memory) SD identity.
  */
 struct EmptyID {
+  KOKKOS_INLINE_FUNCTION
   size_t get_value() const { return LIMITVALUES::uint64_t_max; }
 
   /**
