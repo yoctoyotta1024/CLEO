@@ -21,3 +21,8 @@ repos:
     -   id: conventional-pre-commit
         stages: [commit-msg]
         args: []
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.1.4 # Ruff version.
+  hooks:
+    - id: ruff # Run the linter for Python.
+    - id: ruff-format # Run the formatter for Python.
