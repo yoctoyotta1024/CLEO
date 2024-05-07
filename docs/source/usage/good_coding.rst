@@ -61,9 +61,9 @@ by automated tools such as `Cocogitto-bot <https://github.com/apps/cocogitto-bot
 
 Code Style / Formatting
 -----------------------
-For Python, we obey the default settings of `ruff <https://docs.astral.sh/ruff/>`_` for formatting
-and linting. Ruff checks are something like the combination of several Python linters
-(Flake8, isort, pydocstyle etc.) and the black formatter.
+For Python, we use `ruff <https://docs.astral.sh/ruff/>`_` for formatting and linting. Ruff checks
+are something like the combination of several Python linters (Flake8, isort, pydocstyle etc.) and
+the black formatter. We obey the default settings of ruff except we ignore E402 errors.
 
 For C++ we obey the Google C++ Style Guide with:
   | IndentWidth: 2
