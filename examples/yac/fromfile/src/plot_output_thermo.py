@@ -58,7 +58,7 @@ def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir):
     for key in labels.keys():
         try:
             data4d = thermo[key]
-        except KeyError:
+        except ValueError:
             data4d = winds[key]
 
         plot_timeseries_domain_slices(
