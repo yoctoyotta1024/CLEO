@@ -87,7 +87,7 @@ def plot_randomsample_superdrops(time, sddata, totnsupers, nsample, savename="")
                 sddata, attr, ids=ids2plot
             )
             axs[0, a].plot(time.mins, data, linewidth=0.8)
-        except ValueError:
+        except IndexError:
             print("WARNING: didn't plot " + attr)
 
     mks = MarkerStyle("o", fillstyle="full")
@@ -99,7 +99,7 @@ def plot_randomsample_superdrops(time, sddata, totnsupers, nsample, savename="")
             )
             data = data / 1000  # [km]
             axs[1, a].plot(time.mins, data, linestyle="", marker=mks, markersize=0.2)
-        except ValueError:
+        except IndexError:
             print("WARNING: didn't plot " + coord)
 
     axs[0, 0].set_yscale("log")
