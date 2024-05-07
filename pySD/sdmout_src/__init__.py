@@ -1,4 +1,4 @@
-'''
+"""
 ----- CLEO -----
 File: __init__.py
 Project: cleoout_src
@@ -16,8 +16,6 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
 init for submodule
-'''
+"""
 
-__all__ = ["pyzarr",
-           "pysetuptxt",
-           "pygbxsdat"]
+__all__ = ["pyzarr", "pysetuptxt", "pygbxsdat"]
