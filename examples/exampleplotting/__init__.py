@@ -1,4 +1,4 @@
-'''
+"""
 ----- CLEO -----
 File: __init__.py
 Project: exampleplotting
@@ -15,4 +15,4 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-'''
+"""

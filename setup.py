@@ -1,4 +1,4 @@
-'''
+"""
 ----- CLEO -----
 File: setup.py
 Project: CLEO
@@ -13,18 +13,18 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 Copyright (c) 2023 MPI-M, Clara Bayley
-'''
+"""
 
 
 from setuptools import setup, find_packages
 
 setup(
-    name='CLEO',
-    version='0.1.0',
+    name="CLEO",
+    version="0.1.0",
     packages=find_packages(),
     install_requires=[
-        'pytest',
-        'sphinx',
-        'matplotlib',
+        "pytest",
+        "sphinx",
+        "matplotlib",
     ],
 )
