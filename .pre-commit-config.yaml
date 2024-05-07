@@ -25,4 +25,5 @@ repos:
   rev: v0.1.4 # Ruff version.
   hooks:
     - id: ruff # Run the linter for Python.
+      args: ["--ignore=E402"]  # Ignore E402 error "Module level import not at top of file"
     - id: ruff-format # Run the formatter for Python.
