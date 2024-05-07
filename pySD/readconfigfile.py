@@ -33,7 +33,7 @@ def extract_floats(node, floats, notfloats):
             else:
                 try:
                     floats[key] = float(value)
-                except KeyError:
+                except ValueError:
                     notfloats[key] = value
     elif isinstance(node, list):
         for item in node:

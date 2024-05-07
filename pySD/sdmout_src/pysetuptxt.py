@@ -81,7 +81,7 @@ def read_configparams_fromsetuptxt_into_floats(filename):
 
             try:
                 floats[name] = float(value)
-            except KeyError:
+            except ValueError:
                 notfloats[name] = value
 
     try:
