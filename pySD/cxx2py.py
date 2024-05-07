@@ -110,7 +110,7 @@ def read_cxxconsts_into_floats(filename):
 
             try:
                 floats[name] = float(value)
-            except ValueError:
+            except KeyError:
                 notfloats[name] = value
 
     return floats

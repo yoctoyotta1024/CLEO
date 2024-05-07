@@ -139,7 +139,7 @@ class SupersData(SuperdropProperties):
         If attempt fails, returns empty array instead"""
         try:
             return ak.unflatten(ds[var].values, raggedcount)
-        except ValueError:
+        except KeyError:
             return ak.Array([])
 
     def tryunits(self, ds, var):
@@ -147,7 +147,7 @@ class SupersData(SuperdropProperties):
         in xarray dataset 'ds'. If attempt fails, returns null"""
         try:
             return ds[var].units
-        except ValueError:
+        except KeyError:
             return ""
 
     def __getitem__(self, key):

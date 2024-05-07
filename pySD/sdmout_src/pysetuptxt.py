@@ -81,12 +81,13 @@ def read_configparams_fromsetuptxt_into_floats(filename):
 
             try:
                 floats[name] = float(value)
-            except ValueError:
+            except KeyError:
                 notfloats[name] = value
 
     try:
         floats["nspacedims"] = int(floats["nspacedims"])  # no spatial coords to SDs
-    except ValueError:
+    except KeyError as e:
+        print("Warning, ignoring error", e)
         pass
 
     return floats

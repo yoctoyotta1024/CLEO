@@ -79,8 +79,8 @@ def check_dataset_for_ensemb(dataset, refset):
         if np.any(time != reftime):
             print("refset: " + refset + ", dataset: " + dataset)
             raise ValueError("data for time in dataset must be same as reference")
-    except ValueError:
-        raise ValueError("no time data in dataset " + dataset)
+    except KeyError:
+        raise KeyError("no time data in dataset " + dataset)
 
 
 def write_time_to_ensembzarr(ensembdataset, dataset):
