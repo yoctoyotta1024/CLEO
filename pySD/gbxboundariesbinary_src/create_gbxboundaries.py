@@ -71,7 +71,7 @@ def check_halfcoords(grid, coord):
         raise ValueError("coord should be x, y or z")
 
     criteria = len(grid) >= 2 and np.all(np.diff(grid) > 0)
-    if criteria is not True:
+    if criteria is False:
         errmsg = str(grid) + " does not meet criteria for " + coord + " halfcoords"
         raise ValueError(errmsg)
 
