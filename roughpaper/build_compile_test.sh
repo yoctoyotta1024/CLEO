@@ -37,7 +37,7 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 CC=${gcc}               # C
 CXX=${gxx}              # C++
 
-CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+CMAKE_CXX_FLAGS="-Werror -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
 # CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
 ### ---------------------------------------------------- ###
 
@@ -49,11 +49,6 @@ CUDA_ROOT="/sw/spack-levante/nvhpc-23.9-xpxqeo/Linux_x86_64/23.9/cuda/"
 
 # set path to Kokkos nvcc wrapper (usually Kokkos bin directory of kokkos after installation)
 NVCC_WRAPPER_DEFAULT_COMPILER=${gxx}
-### ---------------------------------------------------- ###
-
-### ------------ choose extra compiler flags ----------- ###
-CMAKE_CXX_FLAGS="-Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-#CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                 # performance
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
