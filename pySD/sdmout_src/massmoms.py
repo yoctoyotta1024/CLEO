@@ -32,7 +32,7 @@ class MassMoms:
             self.nsupers = self.var4d_fromzarr(
                 ds, reshape, "n" + lab + "supers"
             )  # number of superdroplets in gbxs over time
-        except ValueError:
+        except KeyError:
             self.nsupers = np.array([])
 
         self.mom0 = self.var4d_fromzarr(

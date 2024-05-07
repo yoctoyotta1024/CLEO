@@ -115,7 +115,7 @@ def get_totnsupers(dataset):
         dataset = get_rawdataset(dataset)
     try:
         return dataset["totnsupers"].values
-    except ValueError:
+    except KeyError:
         return dataset["raggedcount"].values
 
 

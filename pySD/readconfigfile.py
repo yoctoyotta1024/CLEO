@@ -33,7 +33,7 @@ def extract_floats(node, floats, notfloats):
             else:
                 try:
                     floats[key] = float(value)
-                except ValueError:
+                except KeyError:
                     notfloats[key] = value
     elif isinstance(node, list):
         for item in node:
@@ -57,7 +57,8 @@ def read_configparams_into_floats(filename):
 
     try:
         floats["nspacedims"] = int(floats["nspacedims"])  # no spatial coords to SDs
-    except ValueError:
+    except KeyError as e:
+        print("Warning, ignoring error", e)
         pass
 
     return floats
