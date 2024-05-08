@@ -2,6 +2,24 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.8.1](https://github.com/yoctoyotta1024/CLEO/compare/a4c22eb26a906faef8d91f140fc229d7025fd537..v0.8.1) - 2024-05-08
+#### Bug Fixes
+- docs corrected message abotu ruff settings - ([3e55894](https://github.com/yoctoyotta1024/CLEO/commit/3e558940718e085da1dfa849785dce1e250ed2ff)) - clara.bayley
+- value error is index error - ([cf9a8da](https://github.com/yoctoyotta1024/CLEO/commit/cf9a8da63a2fd06904255a0685071309c07cb4b6)) - clara.bayley
+- add Wextra to debugging compiler flags - ([3d1eacb](https://github.com/yoctoyotta1024/CLEO/commit/3d1eacbd9f49a4128b26ad041261d6b5959b950a)) - clara.bayley
+- wrong type of error except - ([fa353c3](https://github.com/yoctoyotta1024/CLEO/commit/fa353c319b3cb93a024b1f2d7872b5556af069da)) - clara.bayley
+- Key not Value Errors for dicts and datasets - ([4f0e2e4](https://github.com/yoctoyotta1024/CLEO/commit/4f0e2e49805d6eb883afa1b14cbbbe0a4735da70)) - clara.bayley
+- Key not Value Errors for dicts and datasets - ([274be91](https://github.com/yoctoyotta1024/CLEO/commit/274be913378060604d1e750fd0c3900e3d925ffd)) - clara.bayley
+- ignore Module level import not at top of file error in ruff linting - ([440f8d9](https://github.com/yoctoyotta1024/CLEO/commit/440f8d996779a042cdce49e39d652c30df2ece41)) - clara.bayley
+#### Documentation
+- include info about ruff in docs - ([a4c22eb](https://github.com/yoctoyotta1024/CLEO/commit/a4c22eb26a906faef8d91f140fc229d7025fd537)) - clara.bayley
+#### Miscellaneous Chores
+- format and linting Python with ruff - ([5b09491](https://github.com/yoctoyotta1024/CLEO/commit/5b09491d04ce0bc5b4820d1aac8732cf9c6e1f0c)) - clara.bayley
+- format and linting Python with ruff - ([dc4233d](https://github.com/yoctoyotta1024/CLEO/commit/dc4233db06602f7f7315009b7627785ba0c7a957)) - clara.bayley
+- format and linting Python with ruff - ([4ddb02f](https://github.com/yoctoyotta1024/CLEO/commit/4ddb02f8ef70896dcb4d6828ae7ea19d14eb647b)) - clara.bayley
+
+- - -
+
 ## [v0.8.0](https://github.com/yoctoyotta1024/CLEO/compare/cb5447f387e109abffbf5b21b4522423bd6e0540..v0.8.0) - 2024-05-07
 #### Features
 - use ruff in pre-commit for python linting and formatting - ([cb5447f](https://github.com/yoctoyotta1024/CLEO/commit/cb5447f387e109abffbf5b21b4522423bd6e0540)) - clara.bayley
