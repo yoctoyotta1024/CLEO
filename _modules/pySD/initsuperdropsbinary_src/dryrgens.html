@@ -380,7 +380,10 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for pySD.initsuperdropsbinary_src.dryrgens</h1><div class="highlight"><pre>
-<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
+
+
 <span class="sd">----- CLEO -----</span>
 <span class="sd">File: dryrgens.py</span>
 <span class="sd">Project: initsuperdropsbinary_src</span>
@@ -388,35 +391,31 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">Last Modified: Wednesday 27th December 2023</span>
+<span class="sd">Last Modified: Tuesday 7th May 2024</span>
 <span class="sd">Modified By: CB</span>
 <span class="sd">-----</span>
 <span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
-<span class="sd">Copyright (c) 2023 MPI-M, Clara Bayley</span>
-<span class="sd">-----</span>
 <span class="sd">File Description:</span>
 <span class="sd">various ways of generating dryradii of</span>
 <span class="sd">superdroplets for their initial conditions</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <div class="viewcode-block" id="ScaledRadiiGen">
 <a class="viewcode-back" href="../../../pySD/initsuperdropsbinary_src/dryrgens.html#pySD.initsuperdropsbinary_src.dryrgens.ScaledRadiiGen">[docs]</a>
 <span class="k">class</span> <span class="nc">ScaledRadiiGen</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39;method to generate superdroplet dryradii that</span>
-<span class="sd">  are the radii divided by a scale factor &#39;sf&#39; &#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;method to generate superdroplet dryradii that</span>
+<span class="sd">    are the radii divided by a scale factor &#39;sf&#39;&quot;&quot;&quot;</span>
 
-  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sf</span> <span class="o">=</span> <span class="n">scale_factor</span>
 
-      <span class="bp">self</span><span class="o">.</span><span class="n">sf</span> <span class="o">=</span> <span class="n">scale_factor</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns dryradii for nsupers [m]&quot;&quot;&quot;</span>
 
-  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">):</span>
-<span class="w">      </span><span class="sd">&#39;&#39;&#39; Returns dryradii for nsupers [m]&#39;&#39;&#39;</span>
-
-      <span class="k">return</span> <span class="n">radii</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sf</span> <span class="c1"># units [m]</span></div>
+        <span class="k">return</span> <span class="n">radii</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sf</span>  <span class="c1"># units [m]</span></div>
 
 </pre></div>
         </article>
@@ -436,7 +435,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 07 May 2024</div>
+              Last updated on 08 May 2024</div>
           </div>
           <div class="right-details">
             

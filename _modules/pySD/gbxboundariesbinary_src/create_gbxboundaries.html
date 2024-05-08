@@ -380,7 +380,10 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for pySD.gbxboundariesbinary_src.create_gbxboundaries</h1><div class="highlight"><pre>
-<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
+
+
 <span class="sd">----- CLEO -----</span>
 <span class="sd">File: create_gbxboundaries.py</span>
 <span class="sd">Project: gbxboundariesbinary_src</span>
@@ -388,193 +391,208 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">Last Modified: Wednesday 17th April 2024</span>
+<span class="sd">Last Modified: Tuesday 7th May 2024</span>
 <span class="sd">Modified By: CB</span>
 <span class="sd">-----</span>
 <span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
-<span class="sd">Copyright (c) 2023 MPI-M, Clara Bayley</span>
-<span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">&#39;&#39;&#39;</span>
-
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">cxx2py</span><span class="p">,</span> <span class="n">writebinary</span>
 
+
 <div class="viewcode-block" id="get_COORD0_from_constsfile">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.get_COORD0_from_constsfile">[docs]</a>
 <span class="k">def</span> <span class="nf">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constsfile</span><span class="p">,</span> <span class="n">returnconsts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; create values from constants file required as inputs to create initial</span>
-<span class="sd">  superdroplet conditions &#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;create values from constants file required as inputs to create initial</span>
+<span class="sd">    superdroplet conditions&quot;&quot;&quot;</span>
 
-  <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">constsfile</span><span class="p">)</span>
-  <span class="n">COORD0</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TIME0&quot;</span><span class="p">]</span><span class="o">*</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;W0&quot;</span><span class="p">]</span>
+    <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">constsfile</span><span class="p">)</span>
+    <span class="n">COORD0</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TIME0&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;W0&quot;</span><span class="p">]</span>
 
-  <span class="k">if</span> <span class="n">returnconsts</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">COORD0</span><span class="p">,</span> <span class="n">consts</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">COORD0</span></div>
+    <span class="k">if</span> <span class="n">returnconsts</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">COORD0</span><span class="p">,</span> <span class="n">consts</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">COORD0</span></div>
+
 
 
 <div class="viewcode-block" id="linearlyspaced_halfcoords">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.linearlyspaced_halfcoords">[docs]</a>
 <span class="k">def</span> <span class="nf">linearlyspaced_halfcoords</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; returns linearly spaced half coords ie. 1D</span>
-<span class="sd">  gridbox boundaries given &#39;grid&#39; list of</span>
-<span class="sd">  [min coord, max coord, delta coord] for x, y or z&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns linearly spaced half coords ie. 1D</span>
+<span class="sd">    gridbox boundaries given &#39;grid&#39; list of</span>
+<span class="sd">    [min coord, max coord, delta coord] for x, y or z&quot;&quot;&quot;</span>
 
-  <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">grid</span>
+    <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">grid</span>
 
-  <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="get_dimless_halfcoords">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.get_dimless_halfcoords">[docs]</a>
 <span class="k">def</span> <span class="nf">get_dimless_halfcoords</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">COORD0</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; given a list or array, return dimensionless halfcoords.</span>
-<span class="sd">  For list call &quot;halfcoords_from_coordlims&quot; before</span>
-<span class="sd">  de-dimensionalising. For array simply return array / COORD0&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;given a list or array, return dimensionless halfcoords.</span>
+<span class="sd">    For list call &quot;halfcoords_from_coordlims&quot; before</span>
+<span class="sd">    de-dimensionalising. For array simply return array / COORD0&quot;&quot;&quot;</span>
 
-  <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]):</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;input &quot;</span><span class="o">+</span><span class="n">coord</span><span class="o">+</span><span class="s2">&quot; grid is neither list or array &quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;input &quot;</span> <span class="o">+</span> <span class="n">coord</span> <span class="o">+</span> <span class="s2">&quot; grid is neither list or array &quot;</span><span class="p">)</span>
 
-  <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
-    <span class="n">grid</span> <span class="o">=</span> <span class="n">linearlyspaced_halfcoords</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">linearlyspaced_halfcoords</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
 
-  <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
 
-  <span class="k">return</span> <span class="n">grid</span> <span class="o">/</span> <span class="n">COORD0</span></div>
+    <span class="k">return</span> <span class="n">grid</span> <span class="o">/</span> <span class="n">COORD0</span></div>
+
 
 
 <div class="viewcode-block" id="check_halfcoords">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.check_halfcoords">[docs]</a>
 <span class="k">def</span> <span class="nf">check_halfcoords</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; check that x , y or z grid limits are for at least</span>
-<span class="sd">  1 cell with strictly monotonically increasing bounds &#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;check that x , y or z grid limits are for at least</span>
+<span class="sd">    1 cell with strictly monotonically increasing bounds&quot;&quot;&quot;</span>
 
-  <span class="k">if</span> <span class="p">(</span><span class="n">coord</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]):</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;coord should be x, y or z&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">coord</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;coord should be x, y or z&quot;</span><span class="p">)</span>
 
-  <span class="n">criteria</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span>
-  <span class="k">if</span> <span class="n">criteria</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">errmsg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; does not meet criteria for &quot;</span><span class="o">+</span><span class="n">coord</span><span class="o">+</span><span class="s2">&quot; halfcoords&quot;</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span></div>
+    <span class="n">criteria</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">criteria</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">errmsg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; does not meet criteria for &quot;</span> <span class="o">+</span> <span class="n">coord</span> <span class="o">+</span> <span class="s2">&quot; halfcoords&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="gridboxboundaries_from_halfcoords">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.gridboxboundaries_from_halfcoords">[docs]</a>
 <span class="k">def</span> <span class="nf">gridboxboundaries_from_halfcoords</span><span class="p">(</span><span class="n">allhalfcoords</span><span class="p">,</span> <span class="n">ngridboxes</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; returns gbxbounds dictionary. Each key of gbxbounds is a gridbox&#39;s</span>
-<span class="sd">  index and the corresponding value is the gridbox&#39;s</span>
-<span class="sd">  [zmin, zmax, xmin, xmax, ymin, ymax] boundaries&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns gbxbounds dictionary. Each key of gbxbounds is a gridbox&#39;s</span>
+<span class="sd">    index and the corresponding value is the gridbox&#39;s</span>
+<span class="sd">    [zmin, zmax, xmin, xmax, ymin, ymax] boundaries&quot;&quot;&quot;</span>
 
-  <span class="n">zhalfs</span> <span class="o">=</span> <span class="n">allhalfcoords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-  <span class="n">xhalfs</span> <span class="o">=</span> <span class="n">allhalfcoords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-  <span class="n">yhalfs</span> <span class="o">=</span> <span class="n">allhalfcoords</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">zhalfs</span> <span class="o">=</span> <span class="n">allhalfcoords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">xhalfs</span> <span class="o">=</span> <span class="n">allhalfcoords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">yhalfs</span> <span class="o">=</span> <span class="n">allhalfcoords</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
-  <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ii</span> <span class="o">=</span> <span class="p">{},</span> <span class="mi">0</span>
-  <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">yhalfs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xhalfs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-      <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zhalfs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">zbounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">zhalfs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">zhalfs</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="n">xbounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">xhalfs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">xhalfs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="n">ybounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">yhalfs</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">yhalfs</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="n">gbxbounds</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">zbounds</span> <span class="o">+</span> <span class="n">xbounds</span> <span class="o">+</span> <span class="n">ybounds</span>
-        <span class="n">ii</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ii</span> <span class="o">=</span> <span class="p">{},</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">yhalfs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xhalfs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zhalfs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">zbounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">zhalfs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">zhalfs</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+                <span class="n">xbounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">xhalfs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">xhalfs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+                <span class="n">ybounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">yhalfs</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">yhalfs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+                <span class="n">gbxbounds</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">zbounds</span> <span class="o">+</span> <span class="n">xbounds</span> <span class="o">+</span> <span class="n">ybounds</span>
+                <span class="n">ii</span> <span class="o">+=</span> <span class="mi">1</span>
 
-  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ngridboxes</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;not enough gbxbounds for ngridboxes&quot;</span><span class="p">)</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;created boundaries for&quot;</span><span class="p">,</span><span class="n">ngridboxes</span><span class="p">,</span><span class="s2">&quot;gridboxes&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ngridboxes</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;not enough gbxbounds for ngridboxes&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;created boundaries for&quot;</span><span class="p">,</span> <span class="n">ngridboxes</span><span class="p">,</span> <span class="s2">&quot;gridboxes&quot;</span><span class="p">)</span>
 
-  <span class="k">return</span> <span class="n">gbxbounds</span></div>
+    <span class="k">return</span> <span class="n">gbxbounds</span></div>
+
 
 
 <div class="viewcode-block" id="dimless_gridboxboundaries">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.dimless_gridboxboundaries">[docs]</a>
 <span class="k">def</span> <span class="nf">dimless_gridboxboundaries</span><span class="p">(</span><span class="n">zgrid</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span> <span class="n">ygrid</span><span class="p">,</span> <span class="n">COORD0</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; use zgrid, xgrid and ygrid lists or arrays to create half coords</span>
-<span class="sd">  of gridboxes (ie. their boundaries). Return single list of zhalf,</span>
-<span class="sd">  then xhalf, then yhalf coords and a list of len(3) which states how</span>
-<span class="sd">  many of each z, x and y coords there are&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;use zgrid, xgrid and ygrid lists or arrays to create half coords</span>
+<span class="sd">    of gridboxes (ie. their boundaries). Return single list of zhalf,</span>
+<span class="sd">    then xhalf, then yhalf coords and a list of len(3) which states how</span>
+<span class="sd">    many of each z, x and y coords there are&quot;&quot;&quot;</span>
 
-  <span class="n">allhalfcoords</span><span class="p">,</span> <span class="n">ndims</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span> <span class="c1"># z, x and y half coords in 1 continuous list</span>
-  <span class="k">for</span> <span class="n">grid</span><span class="p">,</span> <span class="n">coord</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">zgrid</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span> <span class="n">ygrid</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]):</span>
+    <span class="n">allhalfcoords</span><span class="p">,</span> <span class="n">ndims</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>  <span class="c1"># z, x and y half coords in 1 continuous list</span>
+    <span class="k">for</span> <span class="n">grid</span><span class="p">,</span> <span class="n">coord</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">zgrid</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span> <span class="n">ygrid</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]):</span>
+        <span class="n">halfcoords</span> <span class="o">=</span> <span class="n">get_dimless_halfcoords</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">COORD0</span><span class="p">)</span>
+        <span class="n">check_halfcoords</span><span class="p">(</span><span class="n">halfcoords</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
 
-    <span class="n">halfcoords</span> <span class="o">=</span> <span class="n">get_dimless_halfcoords</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">COORD0</span><span class="p">)</span>
-    <span class="n">check_halfcoords</span><span class="p">(</span><span class="n">halfcoords</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
+        <span class="n">allhalfcoords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">halfcoords</span><span class="p">)</span>
+        <span class="n">ndims</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">halfcoords</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">allhalfcoords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">halfcoords</span><span class="p">)</span>
-    <span class="n">ndims</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">halfcoords</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">gbxbounds</span> <span class="o">=</span> <span class="n">gridboxboundaries_from_halfcoords</span><span class="p">(</span><span class="n">allhalfcoords</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ndims</span><span class="p">))</span>
 
-  <span class="n">gbxbounds</span> <span class="o">=</span> <span class="n">gridboxboundaries_from_halfcoords</span><span class="p">(</span><span class="n">allhalfcoords</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ndims</span><span class="p">))</span>
+    <span class="n">ndims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">)</span>
+    <span class="n">gbxindicies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gbxbounds</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">gbxboundsdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gbxbounds</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-  <span class="n">ndims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">)</span>
-  <span class="n">gbxindicies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gbxbounds</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-  <span class="n">gbxboundsdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gbxbounds</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">gbxindicies</span><span class="p">,</span> <span class="n">gbxboundsdata</span></div>
 
-  <span class="k">return</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">gbxindicies</span><span class="p">,</span> <span class="n">gbxboundsdata</span></div>
 
 
 <span class="k">def</span> <span class="nf">set_arraydtype</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
+    <span class="n">og</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">og</span> <span class="o">!=</span> <span class="n">dtype</span><span class="p">:</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
 
-  <span class="n">og</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-  <span class="k">if</span> <span class="n">og</span> <span class="o">!=</span> <span class="n">dtype</span><span class="p">:</span>
-    <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">warning</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;WARNING! dtype of attributes is being changed!&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; from &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">og</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot; to &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
 
-    <span class="n">warning</span> <span class="o">=</span> <span class="s2">&quot;WARNING! dtype of attributes is being changed!&quot;</span><span class="o">+</span>\
-                <span class="s2">&quot; from &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">og</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; to &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
 
-  <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ctype_compatible_gridboxboundaries">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.ctype_compatible_gridboxboundaries">[docs]</a>
 <span class="k">def</span> <span class="nf">ctype_compatible_gridboxboundaries</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">idxs</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; check type of gridbox boundaries data is compatible</span>
-<span class="sd">  with c type double. If not, change type and raise error &#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;check type of gridbox boundaries data is compatible</span>
+<span class="sd">    with c type double. If not, change type and raise error&quot;&quot;&quot;</span>
 
-  <span class="n">datatypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">]</span>
+    <span class="n">datatypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">]</span>
 
-  <span class="n">ndims</span> <span class="o">=</span> <span class="n">set_arraydtype</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-  <span class="n">idxs</span> <span class="o">=</span> <span class="n">set_arraydtype</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-  <span class="n">bounds</span> <span class="o">=</span> <span class="n">set_arraydtype</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">ndims</span> <span class="o">=</span> <span class="n">set_arraydtype</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="n">set_arraydtype</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="n">set_arraydtype</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
-  <span class="n">datalist</span> <span class="o">=</span> <span class="n">ndims</span> <span class="o">+</span> <span class="n">idxs</span> <span class="o">+</span> <span class="n">bounds</span>
+    <span class="n">datalist</span> <span class="o">=</span> <span class="n">ndims</span> <span class="o">+</span> <span class="n">idxs</span> <span class="o">+</span> <span class="n">bounds</span>
 
-  <span class="k">return</span> <span class="n">datalist</span><span class="p">,</span> <span class="n">datatypes</span></div>
+    <span class="k">return</span> <span class="n">datalist</span><span class="p">,</span> <span class="n">datatypes</span></div>
+
 
 
 <div class="viewcode-block" id="write_gridboxboundaries_binary">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.write_gridboxboundaries_binary">[docs]</a>
 <span class="k">def</span> <span class="nf">write_gridboxboundaries_binary</span><span class="p">(</span><span class="n">gridfile</span><span class="p">,</span> <span class="n">zgrid</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span> <span class="n">ygrid</span><span class="p">,</span> <span class="n">constsfile</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; zgrid, xgrid and ygrid can either be list of</span>
-<span class="sd">  [min coord, max coord, delta] or they can be arrays of</span>
-<span class="sd">  their half coordinates (ie. gridbox boundaries). If the former,</span>
-<span class="sd">  first create half coordinates. In both cases, de-dimensionalise</span>
-<span class="sd">  and write the boundaries to a binary file, &quot;filename&quot; &#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;zgrid, xgrid and ygrid can either be list of</span>
+<span class="sd">    [min coord, max coord, delta] or they can be arrays of</span>
+<span class="sd">    their half coordinates (ie. gridbox boundaries). If the former,</span>
+<span class="sd">    first create half coordinates. In both cases, de-dimensionalise</span>
+<span class="sd">    and write the boundaries to a binary file, &quot;filename&quot; &quot;&quot;&quot;</span>
 
-  <span class="n">COORD0</span> <span class="o">=</span> <span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constsfile</span><span class="p">)</span>
+    <span class="n">COORD0</span> <span class="o">=</span> <span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constsfile</span><span class="p">)</span>
 
-  <span class="n">ndims</span><span class="p">,</span> <span class="n">gbxindicies</span><span class="p">,</span> <span class="n">gbxboundsdata</span> <span class="o">=</span> <span class="n">dimless_gridboxboundaries</span><span class="p">(</span><span class="n">zgrid</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span>
-                                                                <span class="n">ygrid</span><span class="p">,</span> <span class="n">COORD0</span><span class="p">)</span>
-  <span class="n">metastr</span> <span class="o">=</span> <span class="s1">&#39;Variables in this file are ndims in (z,x,y), then the &#39;</span><span class="o">+</span>\
-            <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ndims</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39; gridbox indicies followed by the&#39;</span><span class="o">+</span>\
-            <span class="s1">&#39; [zmin, zmax, xmin, xmax, ymin, ymax]&#39;</span><span class="o">+</span>\
-            <span class="s1">&#39; coordinates for each gridbox</span><span class="se">\&#39;</span><span class="s1">s boundaries&#39;</span>
+    <span class="n">ndims</span><span class="p">,</span> <span class="n">gbxindicies</span><span class="p">,</span> <span class="n">gbxboundsdata</span> <span class="o">=</span> <span class="n">dimless_gridboxboundaries</span><span class="p">(</span>
+        <span class="n">zgrid</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span> <span class="n">ygrid</span><span class="p">,</span> <span class="n">COORD0</span>
+    <span class="p">)</span>
+    <span class="n">metastr</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Variables in this file are ndims in (z,x,y), then the &quot;</span>
+        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ndims</span><span class="p">))</span>
+        <span class="o">+</span> <span class="s2">&quot; gridbox indicies followed by the&quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; [zmin, zmax, xmin, xmax, ymin, ymax]&quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; coordinates for each gridbox&#39;s boundaries&quot;</span>
+    <span class="p">)</span>
 
-  <span class="n">ndata</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ndims</span><span class="p">,</span> <span class="n">gbxindicies</span><span class="p">,</span> <span class="n">gbxboundsdata</span><span class="p">]]</span>
-  <span class="n">data</span><span class="p">,</span> <span class="n">datatypes</span> <span class="o">=</span> <span class="n">ctype_compatible_gridboxboundaries</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">gbxindicies</span><span class="p">,</span>
-                                                       <span class="n">gbxboundsdata</span><span class="p">)</span>
-  <span class="n">scale_factors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">COORD0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
-  <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;m&quot;</span><span class="p">]</span>
+    <span class="n">ndata</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ndims</span><span class="p">,</span> <span class="n">gbxindicies</span><span class="p">,</span> <span class="n">gbxboundsdata</span><span class="p">]]</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">datatypes</span> <span class="o">=</span> <span class="n">ctype_compatible_gridboxboundaries</span><span class="p">(</span>
+        <span class="n">ndims</span><span class="p">,</span> <span class="n">gbxindicies</span><span class="p">,</span> <span class="n">gbxboundsdata</span>
+    <span class="p">)</span>
+    <span class="n">scale_factors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">COORD0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;m&quot;</span><span class="p">]</span>
 
-  <span class="n">writebinary</span><span class="o">.</span><span class="n">writebinary</span><span class="p">(</span><span class="n">gridfile</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span>
-                          <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">)</span></div>
+    <span class="n">writebinary</span><span class="o">.</span><span class="n">writebinary</span><span class="p">(</span>
+        <span class="n">gridfile</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span>
+    <span class="p">)</span></div>
 
 </pre></div>
         </article>
@@ -594,7 +612,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 07 May 2024</div>
+              Last updated on 08 May 2024</div>
           </div>
           <div class="right-details">
             

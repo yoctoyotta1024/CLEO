@@ -380,7 +380,10 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for pySD.cxx2py</h1><div class="highlight"><pre>
-<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
+
+
 <span class="sd">----- CLEO -----</span>
 <span class="sd">File: cxx2py.py</span>
 <span class="sd">Project: pySD</span>
@@ -388,138 +391,152 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">Last Modified: Wednesday 17th April 2024</span>
+<span class="sd">Last Modified: Tuesday 7th May 2024</span>
 <span class="sd">Modified By: CB</span>
 <span class="sd">-----</span>
 <span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
-<span class="sd">Copyright (c) 2023 MPI-M, Clara Bayley</span>
-<span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">&#39;&#39;&#39;</span>
-
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1">######## function(s) for converting c++ values into python ones  ########</span>
+
 
 <div class="viewcode-block" id="print_dict_statement">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.print_dict_statement">[docs]</a>
 <span class="k">def</span> <span class="nf">print_dict_statement</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dictname</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39; print key, value pairs for dictionary created by reading filename &#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;print key, value pairs for dictionary created by reading filename&quot;&quot;&quot;</span>
 
-  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---- &quot;</span><span class="o">+</span><span class="n">dictname</span><span class="o">+</span><span class="s2">&quot; from &quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;-----&quot;</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---- &quot;</span> <span class="o">+</span> <span class="n">dictname</span> <span class="o">+</span> <span class="s2">&quot; from &quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;-----&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="remove_excess_line">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.remove_excess_line">[docs]</a>
 <span class="k">def</span> <span class="nf">remove_excess_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot; removes white spaces and</span>
-<span class="sd">  and comments from a line &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;removes white spaces and</span>
+<span class="sd">    and comments from a line&quot;&quot;&quot;</span>
 
-  <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-  <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-  <span class="k">if</span> <span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
-    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)]</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)]</span>
 
-  <span class="k">return</span> <span class="n">line</span></div>
+    <span class="k">return</span> <span class="n">line</span></div>
+
 
 
 <div class="viewcode-block" id="line_with_assignment">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.line_with_assignment">[docs]</a>
 <span class="k">def</span> <span class="nf">line_with_assignment</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot; find all the lines in a file</span>
-<span class="sd">  which have form [...] = [...] ;</span>
-<span class="sd">  ie. lines which assign variables. return</span>
-<span class="sd">  list of these lines truncatd at ; &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;find all the lines in a file</span>
+<span class="sd">    which have form [...] = [...] ;</span>
+<span class="sd">    ie. lines which assign variables. return</span>
+<span class="sd">    list of these lines truncatd at ;&quot;&quot;&quot;</span>
 
-  <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-  <span class="k">if</span> <span class="s2">&quot;double&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">&quot;int&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
-    <span class="n">ind1</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
-    <span class="n">ind2</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ind2</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">ind1</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
-      <span class="n">goodline</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">ind2</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-      <span class="k">return</span> <span class="n">goodline</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;double&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">&quot;int&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+        <span class="n">ind1</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+        <span class="n">ind2</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ind2</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">ind1</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+            <span class="n">goodline</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span> <span class="n">ind2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">goodline</span>
 
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">return</span> <span class="kc">False</span></div>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
 
 
 <div class="viewcode-block" id="where_typename_ends">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.where_typename_ends">[docs]</a>
 <span class="k">def</span> <span class="nf">where_typename_ends</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;finds index where c++ name for</span>
-<span class="sd">  variable type ends for a const double,</span>
-<span class="sd">  double, int or const int. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;finds index where c++ name for</span>
+<span class="sd">    variable type ends for a const double,</span>
+<span class="sd">    double, int or const int.&quot;&quot;&quot;</span>
 
-  <span class="k">if</span> <span class="n">line</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;int&quot;</span>
-  <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;double&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;double&quot;</span>
-  <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">11</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constdouble&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;constdouble&quot;</span>
-  <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constint&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;constint&quot;</span>
-  <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">12</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexprint&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;constexprint&quot;</span>
-  <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">15</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexprdouble&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;constexprdouble&quot;</span>
-  <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">20</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexprunsignedint&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;constexprunsignedint&quot;</span>
-  <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">17</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexpruint64_t&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;constexpruint64_t&quot;</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s2">&quot;c++ type for variable not understood&quot;</span><span class="p">)</span>
-  <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">line</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;int&quot;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
+    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;double&quot;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;double&quot;</span>
+    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">11</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constdouble&quot;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constdouble&quot;</span>
+    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constint&quot;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constint&quot;</span>
+    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">12</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexprint&quot;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constexprint&quot;</span>
+    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">15</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexprdouble&quot;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constexprdouble&quot;</span>
+    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">20</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexprunsignedint&quot;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constexprunsignedint&quot;</span>
+    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">17</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexpruint64_t&quot;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constexpruint64_t&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;c++ type for variable not understood&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="read_cxxconsts_into_floats">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.read_cxxconsts_into_floats">[docs]</a>
 <span class="k">def</span> <span class="nf">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;returns dictionary of value: float from</span>
-<span class="sd">  (const) doubles and (const) ints</span>
-<span class="sd">  assigned in a c++ file. Also returns</span>
-<span class="sd">  dictionary of notfloats for values that</span>
-<span class="sd">  couldn&#39;t be converted&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns dictionary of value: float from</span>
+<span class="sd">    (const) doubles and (const) ints</span>
+<span class="sd">    assigned in a c++ file. Also returns</span>
+<span class="sd">    dictionary of notfloats for values that</span>
+<span class="sd">    couldn&#39;t be converted&quot;&quot;&quot;</span>
 
-  <span class="n">floats</span> <span class="o">=</span> <span class="p">{}</span>
-  <span class="n">notfloats</span> <span class="o">=</span> <span class="p">{}</span>
-  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-      <span class="n">rlines</span><span class="o">=</span><span class="p">[]</span>
-      <span class="n">filelines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-      <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">filelines</span><span class="p">:</span>
-        <span class="n">goodline</span> <span class="o">=</span> <span class="n">line_with_assignment</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">goodline</span><span class="p">:</span>
-          <span class="n">rlines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">goodline</span><span class="p">)</span>
+    <span class="n">floats</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">notfloats</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">rlines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">filelines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">filelines</span><span class="p">:</span>
+            <span class="n">goodline</span> <span class="o">=</span> <span class="n">line_with_assignment</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">goodline</span><span class="p">:</span>
+                <span class="n">rlines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">goodline</span><span class="p">)</span>
 
-      <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">rlines</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">where_typename_ends</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="n">name</span> <span class="o">=</span>  <span class="n">line</span><span class="p">[</span><span class="n">x</span><span class="p">:</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)]</span>
-        <span class="n">value</span> <span class="o">=</span>  <span class="n">line</span><span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">rlines</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">where_typename_ends</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">x</span> <span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)]</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)]</span>
 
-        <span class="k">try</span><span class="p">:</span>
-          <span class="n">floats</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-          <span class="n">notfloats</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">floats</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">notfloats</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-  <span class="k">return</span> <span class="n">floats</span></div>
+    <span class="k">return</span> <span class="n">floats</span></div>
+
 
 
 <div class="viewcode-block" id="derive_more_floats">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.derive_more_floats">[docs]</a>
 <span class="k">def</span> <span class="nf">derive_more_floats</span><span class="p">(</span><span class="n">consts</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&#39;&#39;&#39;return mconsts dictionary containing</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;return mconsts dictionary containing</span>
 <span class="sd">    some derived key,values from values in</span>
-<span class="sd">    consts dictionary&#39;&#39;&#39;</span>
+<span class="sd">    consts dictionary&quot;&quot;&quot;</span>
 
-  <span class="n">mconsts</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;COORD0&quot;</span>     <span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TIME0&quot;</span><span class="p">]</span><span class="o">*</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;W0&quot;</span><span class="p">],</span> <span class="c1"># characteristic coordinate grid scale [m]</span>
-    <span class="s2">&quot;RGAS_DRY&quot;</span>   <span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_UNIV&quot;</span><span class="p">]</span><span class="o">/</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_DRY&quot;</span><span class="p">],</span> <span class="c1"># specific gas constant for dry air [J/Kg/K]</span>
-    <span class="s2">&quot;RGAS_V&quot;</span>     <span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_UNIV&quot;</span><span class="p">]</span><span class="o">/</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_WATER&quot;</span><span class="p">],</span> <span class="c1">#specific gas constant for water [J/Kg/K]</span>
-    <span class="s2">&quot;CP0&quot;</span>        <span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;CP_DRY&quot;</span><span class="p">],</span> <span class="c1"># characteristic Heat capacity [J/Kg/K]</span>
-    <span class="s2">&quot;Mr_ratio&quot;</span>   <span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_WATER&quot;</span><span class="p">]</span><span class="o">/</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_DRY&quot;</span><span class="p">],</span>
-  <span class="p">}</span>
+    <span class="n">mconsts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;COORD0&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TIME0&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;W0&quot;</span><span class="p">],</span>  <span class="c1"># characteristic coordinate grid scale [m]</span>
+        <span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_UNIV&quot;</span><span class="p">]</span>
+        <span class="o">/</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_DRY&quot;</span><span class="p">],</span>  <span class="c1"># specific gas constant for dry air [J/Kg/K]</span>
+        <span class="s2">&quot;RGAS_V&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_UNIV&quot;</span><span class="p">]</span>
+        <span class="o">/</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_WATER&quot;</span><span class="p">],</span>  <span class="c1"># specific gas constant for water [J/Kg/K]</span>
+        <span class="s2">&quot;CP0&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;CP_DRY&quot;</span><span class="p">],</span>  <span class="c1"># characteristic Heat capacity [J/Kg/K]</span>
+        <span class="s2">&quot;Mr_ratio&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_WATER&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_DRY&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
 
-  <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">]</span>       <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;P0&quot;</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;CP0&quot;</span><span class="p">]</span><span class="o">*</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TEMP0&quot;</span><span class="p">])</span> <span class="c1"># characteristic density [Kg/m^3]</span>
-  <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;MASS0&quot;</span><span class="p">]</span>      <span class="o">=</span> <span class="p">(</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;R0&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">]</span> <span class="c1"># characteristic mass [Kg]</span>
+    <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;P0&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;CP0&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TEMP0&quot;</span><span class="p">]</span>
+    <span class="p">)</span>  <span class="c1"># characteristic density [Kg/m^3]</span>
+    <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;MASS0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;R0&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">]</span>  <span class="c1"># characteristic mass [Kg]</span>
 
-  <span class="k">return</span> <span class="n">mconsts</span></div>
+    <span class="k">return</span> <span class="n">mconsts</span></div>
 
 </pre></div>
         </article>
@@ -539,7 +556,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 07 May 2024</div>
+              Last updated on 08 May 2024</div>
           </div>
           <div class="right-details">
             

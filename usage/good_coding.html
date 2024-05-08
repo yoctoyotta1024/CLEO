@@ -433,7 +433,9 @@ by automated tools such as <a class="reference external" href="https://github.co
 </section>
 <section id="code-style-formatting">
 <h2>Code Style / Formatting<a class="headerlink" href="#code-style-formatting" title="Link to this heading">¶</a></h2>
-<p>For Python, we obey the PEP 8 style guide.</p>
+<p>For Python, we use <cite>ruff &lt;https://docs.astral.sh/ruff/&gt;`_</cite> for formatting and linting. Ruff checks
+are something like the combination of several Python linters (Flake8, isort, pydocstyle etc.) and
+the black formatter. We obey the default settings of ruff except we ignore E402 errors.</p>
 <dl>
 <dt>For C++ we obey the Google C++ Style Guide with:</dt><dd><div class="line-block">
 <div class="line">IndentWidth: 2</div>
@@ -481,7 +483,7 @@ by automated tools such as <a class="reference external" href="https://github.co
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 07 May 2024</div>
+              Last updated on 08 May 2024</div>
           </div>
           <div class="right-details">
             

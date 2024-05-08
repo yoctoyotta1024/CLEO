@@ -380,26 +380,48 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for pySD.writebinary</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
+
+
+<span class="sd">----- CLEO -----</span>
+<span class="sd">File: writebinary.py</span>
+<span class="sd">Project: pySD</span>
+<span class="sd">Created Date: Tuesday 7th May 2024</span>
+<span class="sd">Author: Clara Bayley (CB)</span>
+<span class="sd">Additional Contributors:</span>
+<span class="sd">-----</span>
+<span class="sd">Last Modified: Tuesday 7th May 2024</span>
+<span class="sd">Modified By: CB</span>
+<span class="sd">-----</span>
+<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
+<span class="sd">-----</span>
+<span class="sd">File Description:</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">struct</span>
+
 
 <div class="viewcode-block" id="writebinary">
 <a class="viewcode-back" href="../../pySD/writebinary.html#pySD.writebinary.writebinary">[docs]</a>
-<span class="k">def</span> <span class="nf">writebinary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span>
-                <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39; &#39;data&#39; is 1D array containing continuous list of variables.</span>
+<span class="k">def</span> <span class="nf">writebinary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39;data&#39; is 1D array containing continuous list of variables.</span>
 <span class="sd">    The number of data points of each variable is give by it&#39;s index in</span>
 <span class="sd">    &#39;ndata&#39;, likewise it&#39;s datatype, unit and scale_factor are in</span>
 <span class="sd">    those lists. &#39;data&#39; is written to binary file with this metadata</span>
 <span class="sd">    beforehand and a global metadata string explaingnig how to interpret</span>
-<span class="sd">    the file &#39;&#39;&#39;</span>
+<span class="sd">    the file&quot;&quot;&quot;</span>
 
     <span class="n">check_validinputs</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">)</span>
 
     <span class="n">nvars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ndata</span><span class="p">))</span>
 
-    <span class="n">metamaker</span> <span class="o">=</span> <span class="n">CreateMetadataForBinaryArray</span><span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span>
-                                        <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">)</span>
+    <span class="n">metamaker</span> <span class="o">=</span> <span class="n">CreateMetadataForBinaryArray</span><span class="p">(</span>
+        <span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span>
+    <span class="p">)</span>
     <span class="n">metadata</span><span class="p">,</span> <span class="n">metaformat</span> <span class="o">=</span> <span class="n">metamaker</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()</span>
 
     <span class="n">dataformat</span> <span class="o">=</span> <span class="n">get_dataformat</span><span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">)</span>
@@ -407,176 +429,185 @@
     <span class="n">array2write</span> <span class="o">=</span> <span class="n">metadata</span> <span class="o">+</span> <span class="n">data</span>
     <span class="nb">format</span> <span class="o">=</span> <span class="n">metaformat</span> <span class="o">+</span> <span class="n">dataformat</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing gridbox boundaries binary file to:</span><span class="se">\n</span><span class="s2"> &quot;</span><span class="o">+</span><span class="n">filename</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing gridbox boundaries binary file to:</span><span class="se">\n</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="o">*</span><span class="n">array2write</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span>
     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
 
 
 <div class="viewcode-block" id="check_validinputs">
 <a class="viewcode-back" href="../../pySD/writebinary.html#pySD.writebinary.check_validinputs">[docs]</a>
 <span class="k">def</span> <span class="nf">check_validinputs</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;&#39; check that each variable&#39;s scale_factor is a double, unit is</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39; check that each variable&#39;s scale_factor is a double, unit is</span>
 <span class="sd">    a binary encoded single character and that the dataype given matches</span>
-<span class="sd">    the type of the data &#39;&#39;&#39;</span>
+<span class="sd">    the type of the data&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scale_factors</span><span class="p">]):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;type of scale_factors must be C type double&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;c&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;type of units is not binary C type char&quot;</span><span class="p">)</span>
 
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ndata</span><span class="p">):</span>
-      <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">!=</span> <span class="n">datatypes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]]):</span>
-          <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;stated datatype &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datatypes</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">+</span>\
-                <span class="s2">&quot; doesn&#39;t match type(data) &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">]))</span>
-          <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-      <span class="n">i</span> <span class="o">+=</span> <span class="n">n</span></div>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">!=</span> <span class="n">datatypes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">]]):</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;stated datatype &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datatypes</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="o">+</span> <span class="s2">&quot; doesn&#39;t match type(data) &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">]))</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="n">n</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">get_dataformat</span><span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">):</span>
-
     <span class="n">dtc</span> <span class="o">=</span> <span class="n">DataTypeCodes</span><span class="p">()</span>
 
-    <span class="n">dataformat</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">dataformat</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nvars</span><span class="p">):</span>
         <span class="n">nvar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">ndata</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
-        <span class="n">dataformat</span> <span class="o">+=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">d2f</span><span class="p">[</span><span class="n">datatypes</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span><span class="o">*</span><span class="n">nvar</span>
+        <span class="n">dataformat</span> <span class="o">+=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">d2f</span><span class="p">[</span><span class="n">datatypes</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span> <span class="o">*</span> <span class="n">nvar</span>
 
     <span class="k">return</span> <span class="n">dataformat</span>
 
+
 <span class="k">class</span> <span class="nc">DataTypeCodes</span><span class="p">:</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">d2f</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="c1"># dict for converting dtype to struct formatting code</span>
+            <span class="c1"># dict for converting dtype to struct formatting code</span>
             <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">:</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span>
             <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">:</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span>
             <span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">:</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span>
-            <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">):</span> <span class="s1">&#39;c&#39;</span>
+            <span class="nb">type</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">):</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">d2binaryf</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="c1"># dict for converting dtype to binary encoded struct formatting</span>
+            <span class="c1"># dict for converting dtype to binary encoded struct formatting</span>
             <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">:</span> <span class="sa">b</span><span class="s2">&quot;I&quot;</span><span class="p">,</span>
             <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">:</span> <span class="sa">b</span><span class="s2">&quot;d&quot;</span><span class="p">,</span>
             <span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">:</span> <span class="sa">b</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span>
-            <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">):</span> <span class="sa">b</span><span class="s1">&#39;c&#39;</span>
+            <span class="nb">type</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">):</span> <span class="sa">b</span><span class="s2">&quot;c&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">dtype2bytesize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
-<span class="w">      </span><span class="sd">&#39;&#39;&#39;returns C type unsigned int for the size of the</span>
-<span class="sd">      datatype given int&#39;s format when stored in binary using</span>
-<span class="sd">      python&#39;s struct module &#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns C type unsigned int for the size of the</span>
+<span class="sd">        datatype given int&#39;s format when stored in binary using</span>
+<span class="sd">        python&#39;s struct module&quot;&quot;&quot;</span>
 
-      <span class="n">dcode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d2f</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span>
+        <span class="n">dcode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d2f</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span>
 
-      <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">calcsize</span><span class="p">(</span><span class="n">dcode</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">calcsize</span><span class="p">(</span><span class="n">dcode</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">format_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">format</span><span class="p">):</span>
-<span class="w">      </span><span class="sd">&#39;&#39;&#39;returns size in bytes of data stored in a given format</span>
-<span class="sd">      using python&#39;s struct module &#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns size in bytes of data stored in a given format</span>
+<span class="sd">        using python&#39;s struct module&quot;&quot;&quot;</span>
 
-      <span class="n">bytesize</span> <span class="o">=</span> <span class="mi">0</span>
-      <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">format</span><span class="p">:</span>
-        <span class="n">bytesize</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">calcsize</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">bytesize</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">format</span><span class="p">:</span>
+            <span class="n">bytesize</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">calcsize</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 
-      <span class="k">return</span> <span class="n">bytesize</span>
+        <span class="k">return</span> <span class="n">bytesize</span>
+
 
 <span class="k">class</span> <span class="nc">MetadataPerVariable</span><span class="p">(</span><span class="n">DataTypeCodes</span><span class="p">):</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MetadataPerVariable</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-      <span class="nb">super</span><span class="p">(</span><span class="n">MetadataPerVariable</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
-      <span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span> <span class="o">=</span> <span class="s1">&#39;IIIccd&#39;</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">mpv_bytesize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span> <span class="o">=</span> <span class="s2">&quot;IIIccd&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpv_bytesize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">varmetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datap0</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">):</span>
+        <span class="n">bytespos0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">datap0</span><span class="p">)</span>  <span class="c1"># position of first datapoint of var</span>
+        <span class="n">varsz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype2bytesize</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>  <span class="c1"># size in bytes of 1 datapoint of var</span>
+        <span class="n">nvar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">ndata</span><span class="p">)</span>  <span class="c1"># number of datapoints of var</span>
+        <span class="n">vartype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d2binaryf</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span>  <span class="c1"># binary char symbolising datatype of var</span>
+        <span class="n">varunts</span> <span class="o">=</span> <span class="n">unit</span>  <span class="c1"># binary char symbolising units of var when * sclae_factor</span>
+        <span class="n">varsf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">scale_factor</span><span class="p">)</span>  <span class="c1"># double for scale_factor constant</span>
 
-      <span class="n">bytespos0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">datap0</span><span class="p">)</span> <span class="c1"># position of first datapoint of var</span>
-      <span class="n">varsz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype2bytesize</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span> <span class="c1"># size in bytes of 1 datapoint of var</span>
-      <span class="n">nvar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">ndata</span><span class="p">)</span> <span class="c1"># number of datapoints of var</span>
-      <span class="n">vartype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d2binaryf</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="c1"># binary char symbolising datatype of var</span>
-      <span class="n">varunts</span> <span class="o">=</span> <span class="n">unit</span> <span class="c1"># binary char symbolising units of var when * sclae_factor</span>
-      <span class="n">varsf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">scale_factor</span><span class="p">)</span> <span class="c1"># double for scale_factor constant</span>
+        <span class="n">metapervar</span> <span class="o">=</span> <span class="p">[</span><span class="n">bytespos0</span><span class="p">,</span> <span class="n">varsz</span><span class="p">,</span> <span class="n">nvar</span><span class="p">,</span> <span class="n">vartype</span><span class="p">,</span> <span class="n">varunts</span><span class="p">,</span> <span class="n">varsf</span><span class="p">]</span>
 
-      <span class="n">metapervar</span> <span class="o">=</span> <span class="p">[</span><span class="n">bytespos0</span><span class="p">,</span> <span class="n">varsz</span><span class="p">,</span> <span class="n">nvar</span><span class="p">,</span> <span class="n">vartype</span><span class="p">,</span> <span class="n">varunts</span><span class="p">,</span> <span class="n">varsf</span><span class="p">]</span>
+        <span class="n">varbytes</span> <span class="o">=</span> <span class="n">varsz</span> <span class="o">*</span> <span class="n">nvar</span>
 
-      <span class="n">varbytes</span> <span class="o">=</span> <span class="n">varsz</span> <span class="o">*</span> <span class="n">nvar</span>
+        <span class="k">return</span> <span class="n">metapervar</span><span class="p">,</span> <span class="n">varbytes</span>
 
-      <span class="k">return</span> <span class="n">metapervar</span><span class="p">,</span> <span class="n">varbytes</span>
 
 <span class="k">class</span> <span class="nc">CreateMetadataForBinaryArray</span><span class="p">(</span><span class="n">MetadataPerVariable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CreateMetadataForBinaryArray</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nvars</span> <span class="o">=</span> <span class="n">nvars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ndata</span> <span class="o">=</span> <span class="n">ndata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span> <span class="o">=</span> <span class="n">datatypes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span> <span class="o">=</span> <span class="n">scale_factors</span>
 
-    <span class="nb">super</span><span class="p">(</span><span class="n">CreateMetadataForBinaryArray</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gblmetastr</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;4 unsigned ints before this metadata string are&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; [1. position of first byte of data (after all the metadata),&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; 2. no. bytes of (this) global metadata string, 3. no. bytes&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; per variable specific metadata, 4. no. of variables in data].&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; After this global metadata string comes variable specific&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; metadata. For each variable, this is 3 unsigned ints, 2 chars&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; and then a double; it states: [1. position of first databyte,&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; 2. size (in bytes) of one datapoint, 3. no. of datapoints,&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; 4. char to indicate python struct type, 5. char to indicate&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; the units once multiplied by, 6. the scale factor]. &quot;</span>
+            <span class="o">+</span> <span class="n">metastr</span>
+        <span class="p">)</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">nvars</span> <span class="o">=</span> <span class="n">nvars</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">ndata</span> <span class="o">=</span> <span class="n">ndata</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span> <span class="o">=</span> <span class="n">datatypes</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">units</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span> <span class="o">=</span> <span class="n">scale_factors</span>
+    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">gblmeta</span><span class="p">,</span> <span class="n">gblmeta_format</span><span class="p">,</span> <span class="n">gblmeta_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metastr_to_chars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gblmetastr</span><span class="p">)</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">gblmetastr</span> <span class="o">=</span> <span class="s1">&#39;4 unsigned ints before this metadata string are&#39;</span><span class="o">+</span>\
-      <span class="s1">&#39; [1. position of first byte of data (after all the metadata),&#39;</span><span class="o">+</span>\
-      <span class="s1">&#39; 2. no. bytes of (this) global metadata string, 3. no. bytes&#39;</span><span class="o">+</span>\
-      <span class="s1">&#39; per variable specific metadata, 4. no. of variables in data].&#39;</span><span class="o">+</span>\
-      <span class="s1">&#39; After this global metadata string comes variable specific&#39;</span><span class="o">+</span>\
-      <span class="s1">&#39; metadata. For each variable, this is 3 unsigned ints, 2 chars&#39;</span><span class="o">+</span>\
-      <span class="s1">&#39; and then a double; it states: [1. position of first databyte,&#39;</span><span class="o">+</span>\
-      <span class="s1">&#39; 2. size (in bytes) of one datapoint, 3. no. of datapoints,&#39;</span><span class="o">+</span>\
-      <span class="s1">&#39; 4. char to indicate python struct type, 5. char to indicate&#39;</span><span class="o">+</span>\
-      <span class="s1">&#39; the units once multiplied by, 6. the scale factor]. &#39;</span> <span class="o">+</span> <span class="n">metastr</span>
+        <span class="n">datap0</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="s2">&quot;IIII&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">gblmeta_bytes</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpv_bytesize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nvars</span>
+        <span class="p">)</span>
+        <span class="n">metapvars</span><span class="p">,</span> <span class="n">metapvars_format</span><span class="p">,</span> <span class="n">metapv_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables_metadata</span><span class="p">(</span><span class="n">datap0</span><span class="p">)</span>
 
-  <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">metaformat</span> <span class="o">=</span> <span class="s2">&quot;&lt;IIII&quot;</span> <span class="o">+</span> <span class="n">gblmeta_format</span> <span class="o">+</span> <span class="n">metapvars_format</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">[</span><span class="n">datap0</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nvars</span><span class="p">,</span> <span class="n">metapv_bytes</span><span class="p">]</span>
+        <span class="n">metadata</span> <span class="o">+=</span> <span class="n">gblmeta</span> <span class="o">+</span> <span class="n">metapvars</span>
 
-    <span class="n">gblmeta</span><span class="p">,</span> <span class="n">gblmeta_format</span><span class="p">,</span> <span class="n">gblmeta_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metastr_to_chars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gblmetastr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">metaformat</span>
 
-    <span class="n">datap0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="s2">&quot;IIII&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">gblmeta_bytes</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpv_bytesize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nvars</span>
-    <span class="n">metapvars</span><span class="p">,</span> <span class="n">metapvars_format</span><span class="p">,</span> <span class="n">metapv_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables_metadata</span><span class="p">(</span><span class="n">datap0</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">metastr_to_chars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadatastr</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns metadata string as list of characters encoded</span>
+<span class="sd">        as binary bytes alongside the corresponding format interpretation</span>
+<span class="sd">        and total size of the metadata characters (in bytes)&quot;&quot;&quot;</span>
 
-    <span class="n">metaformat</span> <span class="o">=</span> <span class="s2">&quot;&lt;IIII&quot;</span> <span class="o">+</span> <span class="n">gblmeta_format</span> <span class="o">+</span> <span class="n">metapvars_format</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">[</span><span class="n">datap0</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nvars</span><span class="p">,</span> <span class="n">metapv_bytes</span><span class="p">]</span>
-    <span class="n">metadata</span> <span class="o">+=</span> <span class="n">gblmeta</span> <span class="o">+</span> <span class="n">metapvars</span>
+        <span class="n">metachars</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="n">metadatastr</span><span class="p">]]</span>
 
-    <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">metaformat</span>
+        <span class="c1"># interpret this metadata as c type characters</span>
+        <span class="n">metaformat</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">metachars</span><span class="p">)</span>
 
-  <span class="k">def</span> <span class="nf">metastr_to_chars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadatastr</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39; returns metadata string as list of characters encoded</span>
-<span class="sd">    as binary bytes alongside the corresponding format interpretation</span>
-<span class="sd">    and total size of the metadata characters (in bytes) &#39;&#39;&#39;</span>
+        <span class="n">metabytes</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">calcsize</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">metachars</span><span class="p">)</span>
 
-    <span class="n">metachars</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="n">metadatastr</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">metachars</span><span class="p">,</span> <span class="n">metaformat</span><span class="p">,</span> <span class="n">metabytes</span>
 
-    <span class="c1"># interpret this metadata as c type characters</span>
-    <span class="n">metaformat</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">metachars</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">variables_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datap0</span><span class="p">):</span>
+        <span class="n">metapervars</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">metapervars_format</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="n">metabytes</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">calcsize</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">metachars</span><span class="p">)</span>
+        <span class="c1"># datap0 is position in bytes of the first datapoint of a variable in file</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nvars</span><span class="p">):</span>
+            <span class="n">metapvar</span><span class="p">,</span> <span class="n">varbytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">varmetadata</span><span class="p">(</span>
+                <span class="n">datap0</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ndata</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+            <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">metachars</span><span class="p">,</span> <span class="n">metaformat</span><span class="p">,</span> <span class="n">metabytes</span>
+            <span class="n">metapervars</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">metapvar</span><span class="p">)</span>
+            <span class="n">metapervars_format</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span>
 
-  <span class="k">def</span> <span class="nf">variables_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datap0</span><span class="p">):</span>
-    <span class="n">metapervars</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">metapervars_format</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">datap0</span> <span class="o">+=</span> <span class="n">varbytes</span>
 
-    <span class="c1"># datap0 is position in bytes of the first datapoint of a variable in file</span>
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nvars</span><span class="p">):</span>
-
-      <span class="n">metapvar</span><span class="p">,</span> <span class="n">varbytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">varmetadata</span><span class="p">(</span><span class="n">datap0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndata</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
-
-      <span class="n">metapervars</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">metapvar</span><span class="p">)</span>
-      <span class="n">metapervars_format</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span>
-
-      <span class="n">datap0</span> <span class="o">+=</span> <span class="n">varbytes</span>
-
-    <span class="k">return</span> <span class="n">metapervars</span><span class="p">,</span> <span class="n">metapervars_format</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpv_bytesize</span>
+        <span class="k">return</span> <span class="n">metapervars</span><span class="p">,</span> <span class="n">metapervars_format</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpv_bytesize</span>
 </pre></div>
         </article>
       </div>
@@ -595,7 +626,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 07 May 2024</div>
+              Last updated on 08 May 2024</div>
           </div>
           <div class="right-details">
             
