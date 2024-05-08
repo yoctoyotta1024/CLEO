@@ -29,7 +29,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "./collect_data_for_dataset.hpp"
-#include "./const_step_observer.hpp"
+#include "./consttstep_observer.hpp"
 #include "./observers.hpp"
 #include "./parallel_write_data.hpp"
 #include "zarr/dataset.hpp"
@@ -98,7 +98,7 @@ class DoWriteToDataset {
 template <typename ParallelWriteData>
 inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             ParallelWriteData parallel_write) {
-  return ConstStepObserver(interval, DoWriteToDataset(parallel_write));
+  return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
 /**
@@ -117,7 +117,7 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             CollectData collect_data) {
   const auto parallel_write =
       ParallelWriteGridboxes(ParallelGridboxesRangePolicyFunc{}, dataset, collect_data);
-  return ConstStepObserver(interval, DoWriteToDataset(parallel_write));
+  return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
 /**
@@ -138,7 +138,7 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             const Dataset<Store> &dataset, CollectData collect_data,
                                             RaggedCount ragged_count) {
   const auto parallel_write = ParallelWriteSupers(dataset, collect_data, ragged_count);
-  return ConstStepObserver(interval, DoWriteToDataset(parallel_write));
+  return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
 #endif  // LIBS_OBSERVERS_WRITE_TO_DATASET_OBSERVER_HPP_

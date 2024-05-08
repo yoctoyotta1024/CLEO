@@ -29,7 +29,7 @@
 #include <memory>
 
 #include "../kokkosaliases.hpp"
-#include "./const_step_observer.hpp"
+#include "./consttstep_observer.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/buffer.hpp"
@@ -130,7 +130,7 @@ class DoTotNsupersObs {
 template <typename Store>
 inline Observer auto TotNsupersObserver(const unsigned int interval, Dataset<Store> &dataset,
                                         const size_t maxchunk) {
-  return ConstStepObserver(interval, DoTotNsupersObs(dataset, maxchunk));
+  return ConstTstepObserver(interval, DoTotNsupersObs(dataset, maxchunk));
 }
 
 #endif  // LIBS_OBSERVERS_TOTNSUPERS_OBSERVER_HPP_
