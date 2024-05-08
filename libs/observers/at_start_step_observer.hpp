@@ -2,7 +2,7 @@
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
- * File: at_start_step_observers.hpp
+ * File: at_start_step_observer.hpp
  * Project: observers
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -18,8 +18,8 @@
  * Concept and related structures for creating an observer which acts at the start of each step.
  */
 
-#ifndef LIBS_OBSERVERS_AT_START_STEP_OBSERVERS_HPP_
-#define LIBS_OBSERVERS_AT_START_STEP_OBSERVERS_HPP_
+#ifndef LIBS_OBSERVERS_AT_START_STEP_OBSERVER_HPP_
+#define LIBS_OBSERVERS_AT_START_STEP_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -28,7 +28,7 @@
 #include "../kokkosaliases.hpp"
 
 /**
- * @brief Concept ObsFuncs for all types that can be called used by ConstAtStartStepObserver for
+ * @brief Concept ObsFuncs for all types that can be called used by ConsttepObserver for
  * observation functions.
  *
  * Type in ConstAtStartStepObserver obeying ObsFuncs makes it possible for ConstAtStartStepObserver
@@ -136,4 +136,4 @@ struct ConstAtStartStepObserver {
   void at_start_sdm_substep(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {}
 };
 
-#endif  // LIBS_OBSERVERS_AT_START_STEP_OBSERVERS_HPP_
+#endif  // LIBS_OBSERVERS_AT_START_STEP_OBSERVER_HPP_
