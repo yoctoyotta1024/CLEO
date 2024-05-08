@@ -2,7 +2,7 @@
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
- * File: at_start_step_observer.hpp
+ * File: const_step_observer.hpp
  * Project: observers
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -18,8 +18,8 @@
  * Concept and related structures for creating an observer which acts at the start of each step.
  */
 
-#ifndef LIBS_OBSERVERS_AT_START_STEP_OBSERVER_HPP_
-#define LIBS_OBSERVERS_AT_START_STEP_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS_CONST_STEP_OBSERVER_HPP_
+#define LIBS_OBSERVERS_CONST_STEP_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -140,4 +140,4 @@ struct ConstStepObserver {
   }
 };
 
-#endif  // LIBS_OBSERVERS_AT_START_STEP_OBSERVER_HPP_
+#endif  // LIBS_OBSERVERS_CONST_STEP_OBSERVER_HPP_
