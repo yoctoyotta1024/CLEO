@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,6 +29,7 @@
 #include <memory>
 
 #include "../kokkosaliases.hpp"
+#include "./const_step_observer.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/buffer.hpp"
@@ -105,6 +106,14 @@ class DoTotNsupersObs {
                      const viewd_constsupers totsupers) const {
     at_start_step(totsupers);
   }
+
+  /**
+   * @brief No operation at the start of a SDM substep.
+   *
+   * @param t_sdm The unsigned int parameter representing the current model time.
+   * @param d_gbxs The view of gridboxes in device memory.
+   */
+  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
 };
 
 /**
@@ -121,7 +130,7 @@ class DoTotNsupersObs {
 template <typename Store>
 inline Observer auto TotNsupersObserver(const unsigned int interval, Dataset<Store> &dataset,
                                         const size_t maxchunk) {
-  return ConstTstepObserver(interval, DoTotNsupersObs(dataset, maxchunk));
+  return ConstStepObserver(interval, DoTotNsupersObs(dataset, maxchunk));
 }
 
 #endif  // LIBS_OBSERVERS_TOTNSUPERS_OBSERVER_HPP_

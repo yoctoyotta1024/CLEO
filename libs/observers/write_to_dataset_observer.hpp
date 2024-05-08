@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,6 +29,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "./collect_data_for_dataset.hpp"
+#include "./const_step_observer.hpp"
 #include "./observers.hpp"
 #include "./parallel_write_data.hpp"
 #include "zarr/dataset.hpp"
@@ -76,6 +77,14 @@ class DoWriteToDataset {
                      const viewd_constsupers totsupers) const {
     parallel_write(d_gbxs, totsupers);
   }
+
+  /**
+   * @brief No operation at the start of a SDM substep.
+   *
+   * @param t_sdm The unsigned int parameter representing the current model time.
+   * @param d_gbxs The view of gridboxes in device memory.
+   */
+  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
 };
 
 /**
@@ -89,7 +98,7 @@ class DoWriteToDataset {
 template <typename ParallelWriteData>
 inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             ParallelWriteData parallel_write) {
-  return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
+  return ConstStepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
 /**
@@ -108,7 +117,7 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             CollectData collect_data) {
   const auto parallel_write =
       ParallelWriteGridboxes(ParallelGridboxesRangePolicyFunc{}, dataset, collect_data);
-  return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
+  return ConstStepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
 /**
@@ -129,7 +138,7 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
                                             const Dataset<Store> &dataset, CollectData collect_data,
                                             RaggedCount ragged_count) {
   const auto parallel_write = ParallelWriteSupers(dataset, collect_data, ragged_count);
-  return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
+  return ConstStepObserver(interval, DoWriteToDataset(parallel_write));
 }
 
 #endif  // LIBS_OBSERVERS_WRITE_TO_DATASET_OBSERVER_HPP_
