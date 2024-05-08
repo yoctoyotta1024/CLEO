@@ -29,6 +29,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
+#include "./sdmmonitor.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/dataset.hpp"
@@ -135,13 +136,7 @@ class GbxindexObserver {
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
 
-  /**
-   * @brief Placeholder for functionality at the start of each SDM timestep and to make class
-   * satisfy observer concept.
-   * @param t_sdm Current model timestep.
-   * @param d_gbxs View of gridboxes on device.
-   */
-  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
+  SDMMonitor get_monitor_of_sdm_processes() const { return SDMMonitor{}; }
 
   /**
    * @brief Returns the timestep of the next observation.

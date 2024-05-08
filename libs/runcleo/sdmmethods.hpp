@@ -92,8 +92,8 @@ class SDMMethods {
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
    */
-  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs,
-                           const viewd_supers totsupers) const {
+  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, const viewd_supers totsupers,
+                           const SDMMonitor sdmmonitor) const {
     movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers);
   }
 
@@ -127,8 +127,8 @@ class SDMMethods {
      * @param t_next Next timestep for SDM.
      * @param d_gbxs View of gridboxes on device.
      */
-    void operator()(const unsigned int t_sdm, const unsigned int t_next,
-                    const viewd_gbx d_gbxs) const {
+    void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
+                    const SDMMonitor sdmmonitor) const {
       // TODO(all) use scratch space for parallel region?
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
@@ -216,13 +216,14 @@ class SDMMethods {
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
                 const viewd_supers totsupers) const {
+    const SDMMonitor sdmmonitor = obs.get_monitor_of_sdm_processes();
+
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
-      obs.at_start_sdm_substep(t_sdm, d_gbxs);
 
-      superdrops_movement(t_sdm, d_gbxs, totsupers);  // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs);    // on device
+      superdrops_movement(t_sdm, d_gbxs, totsupers, sdmmonitor);  // on host and device
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, sdmmonitor);    // on device
 
       t_sdm = t_sdm_next;
     }

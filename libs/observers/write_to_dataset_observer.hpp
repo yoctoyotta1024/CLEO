@@ -32,6 +32,7 @@
 #include "./consttstep_observer.hpp"
 #include "./observers.hpp"
 #include "./parallel_write_data.hpp"
+#include "./sdmmonitor.hpp"
 #include "zarr/dataset.hpp"
 
 /**
@@ -78,13 +79,7 @@ class DoWriteToDataset {
     parallel_write(d_gbxs, totsupers);
   }
 
-  /**
-   * @brief No operation at the start of a SDM substep.
-   *
-   * @param t_sdm The unsigned int parameter representing the current model time.
-   * @param d_gbxs The view of gridboxes in device memory.
-   */
-  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
+  SDMMonitor get_monitor_of_sdm_processes() const { return SDMMonitor{}; }
 };
 
 /**
