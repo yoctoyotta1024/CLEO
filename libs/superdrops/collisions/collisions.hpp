@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 21st April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,6 +25,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 #include <concepts>
+#include <random>
 
 #include "../../cleoconstants.hpp"
 #include "../kokkosaliases_sd.hpp"
@@ -79,6 +80,7 @@ struct DoCollisions {
   const double DELT; /**< time interval [s] over which probability of collision is calculated. */
   const Probability probability; /**< Probability object for calculating collision probabilities. */
   const EnactCollision enact_collision; /**< Enactment object for enacting collision events. */
+  const GenRandomPool genpool;          /**< Kokkos thread-safe random number generator pool.*/
 
   /**
    * @brief Scaled probability of collision for a pair of super-droplets.
@@ -132,13 +134,12 @@ struct DoCollisions {
    *
    * @param dropA The first superdroplet.
    * @param dropB The second superdroplet.
-   * @param genpool The random number generator pool.
    * @param scale_p The scaling factor.
    * @param VOLUME The volume.
    * @return True if the collision event results in null superdrops with xi=0), otherwise false.
    */
   KOKKOS_INLINE_FUNCTION bool collide_superdroplet_pair(Superdrop &dropA, Superdrop &dropB,
-                                                        GenRandomPool genpool, const double scale_p,
+                                                        const double scale_p,
                                                         const double VOLUME) const {
     /* 1. assign references to each superdrop in pair
     that will collide such that (drop1.xi) >= (drop2.xi) */
@@ -176,12 +177,10 @@ struct DoCollisions {
    * @param team_member The Kokkos team member.
    * @param supers The randomly shuffled view of super-droplets.
    * @param volume The volume in which to calculate the probability of collisions.
-   * @param genpool The random number generator pool.
    * @return The number of null (xi=0) superdrops.
    */
   KOKKOS_INLINE_FUNCTION size_t collide_supers(const TeamMember &team_member,
-                                               subviewd_supers supers, const double volume,
-                                               GenRandomPool genpool) const {
+                                               subviewd_supers supers, const double volume) const {
     const auto nsupers = static_cast<size_t>(supers.extent(0));
     const auto npairs = size_t{nsupers / 2};  // no. pairs of superdrops (=floor() for nsupers > 0)
     const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
@@ -193,7 +192,7 @@ struct DoCollisions {
         [&, this](const size_t jj, size_t &nnull) {
           const auto kk = size_t{jj * 2};
           const auto isnull =
-              collide_superdroplet_pair(supers(kk), supers(kk + 1), genpool, scale_p, VOLUME);
+              collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
           nnull += static_cast<size_t>(isnull);
         },
         totnnull);
@@ -212,19 +211,17 @@ struct DoCollisions {
    * @param team_member The Kokkos team member.
    * @param supers The view of super-droplets.
    * @param volume The volume in which to calculate the probability of collisions.
-   * @param genpool The random number generator pool.
    * @return The updated superdroplets.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers do_collisions(const TeamMember &team_member,
-                                                       subviewd_supers supers, const double volume,
-                                                       GenRandomPool genpool) const {
+                                                       subviewd_supers supers,
+                                                       const double volume) const {
     /* Randomly shuffle order of superdroplet objects
     in supers in order to generate random pairs */
     supers = one_shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
-    size_t nnull(
-        collide_supers(team_member, supers, volume, genpool));  // number of null superdrops
+    size_t nnull(collide_supers(team_member, supers, volume));  // number of null superdrops
 
     return is_null_supers(supers, nnull);
   }
@@ -242,7 +239,7 @@ struct DoCollisions {
    * @param x The enactment object for enacting collision events.
    */
   DoCollisions(const double DELT, Probability p, EnactCollision x)
-      : DELT(DELT), probability(p), enact_collision(x) {}
+      : DELT(DELT), probability(p), enact_collision(x), genpool(std::random_device {}()) {}
 
   /**
    * @brief Operator used as an "adaptor" for using collisions as the MicrophysicsFunction type for
@@ -258,14 +255,12 @@ struct DoCollisions {
    * @param subt The sub-time step.
    * @param supers The superdroplets.
    * @param state The state.
-   * @param genpool The random number generator pool.
    * @return The updated superdroplets.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
                                                     const unsigned int subt, subviewd_supers supers,
-                                                    const State &state,
-                                                    GenRandomPool genpool) const {
-    return do_collisions(team_member, supers, state.get_volume(), genpool);
+                                                    const State &state) const {
+    return do_collisions(team_member, supers, state.get_volume());
   }
 };
 
