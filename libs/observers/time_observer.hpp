@@ -34,6 +34,7 @@
 #include "../kokkosaliases.hpp"
 #include "./consttstep_observer.hpp"
 #include "./observers.hpp"
+#include "./sdmmonitor.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
@@ -118,13 +119,7 @@ class DoTimeObs {
     at_start_step(t_mdl);
   }
 
-  /**
-   * @brief No operation at the start of a SDM substep.
-   *
-   * @param t_sdm The unsigned int parameter representing the current model time.
-   * @param d_gbxs The view of gridboxes in device memory.
-   */
-  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
+  SDMMonitor get_monitor_of_sdm_processes() const { return SDMMonitor{}; }
 };
 
 /**

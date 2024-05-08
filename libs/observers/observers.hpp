@@ -29,6 +29,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
+#include "./sdmmonitor.hpp"
 
 /**
  * @brief Concept Observer is all types that have functions for timestepping and
@@ -44,7 +45,7 @@ concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs
   { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { obs.after_timestepping() } -> std::same_as<void>;
   { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { obs.at_start_sdm_substep(t, d_gbxs) } -> std::same_as<void>;
+  { obs.get_monitor_of_sdm_processes() } -> std::same_as<SDMMonitor>;
 };
 
 /**
@@ -134,18 +135,9 @@ struct CombinedObserver {
     b.at_start_step(t_mdl, d_gbxs, totsupers);
   }
 
-  /**
-   * @brief Run at the start of a SDM step for combination of 2 observers.
-   *
-   * Each observer is run sequentially.
-   *
-   * @param t_sdm The unsigned int parameter.
-   * @param d_gbxs The view of gridboxes in device memory.
-   */
-  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {
-    a.at_start_sdm_substep(t_sdm, d_gbxs);
-    b.at_start_sdm_substep(t_sdm, d_gbxs);
-  }
+  SDMMonitor get_monitor_of_sdm_processes() const {
+    return SDMMonitor{};
+  }  // TODO(CB) decide how to construct and combine monitors
 };
 
 /**
@@ -206,13 +198,7 @@ struct NullObserver {
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
 
-  /**
-   * @brief No operation at the start of a SDM substep.
-   *
-   * @param t_sdm The unsigned int for the current timestep.
-   * @param d_gbxs The view of gridboxes in device memory.
-   */
-  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
+  SDMMonitor get_monitor_of_sdm_processes() const { return SDMMonitor{}; }
 };
 
 #endif  // LIBS_OBSERVERS_OBSERVERS_HPP_

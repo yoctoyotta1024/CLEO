@@ -26,6 +26,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
+#include "./sdmmonitor.hpp"
 
 /**
  * @brief Concept ObsFuncs for all types that can be called used by ConsttepObserver for
@@ -42,7 +43,7 @@ concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs
   { ofs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { ofs.after_timestepping() } -> std::same_as<void>;
   { ofs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { ofs.at_start_sdm_substep(t, d_gbxs) } -> std::same_as<void>;
+  { ofs.get_monitor_of_sdm_processes() } -> std::same_as<SDMMonitor>;
 };
 
 /**
@@ -127,17 +128,7 @@ struct ConstTstepObserver {
     }
   }
 
-  /**
-   * @brief Perform operation at the start of an SDM substep if at appropriate interval.
-   *
-   * @param t_sdm The unsigned int parameter representing the current model time.
-   * @param d_gbxs The view of gridboxes in device memory.
-   */
-  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {
-    if (on_step(t_sdm)) {
-      do_obs.at_start_sdm_substep(t_sdm, d_gbxs);
-    }
-  }
+  SDMMonitor get_monitor_of_sdm_processes() const { return SDMMonitor{}; }
 };
 
 #endif  // LIBS_OBSERVERS_CONSTTSTEP_OBSERVER_HPP_
