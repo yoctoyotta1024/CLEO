@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -126,10 +126,9 @@ class SDMMethods {
      * @param t_sdm Current timestep for SDM.
      * @param t_next Next timestep for SDM.
      * @param d_gbxs View of gridboxes on device.
-     * @param genpool Random number generator pool.
      */
-    void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
-                    GenRandomPool genpool) const {
+    void operator()(const unsigned int t_sdm, const unsigned int t_next,
+                    const viewd_gbx d_gbxs) const {
       // TODO(all) use scratch space for parallel region?
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
@@ -139,7 +138,7 @@ class SDMMethods {
 
             auto supers(d_gbxs(ii).supersingbx());
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, genpool);
+              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state);
             }
           });
     }
@@ -214,16 +213,15 @@ class SDMMethods {
    * @param t_mdl_next Next timestep of the coupled model.
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
-   * @param genpool Random number generator pool.
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
-                const viewd_supers totsupers, GenRandomPool genpool) const {
+                const viewd_supers totsupers) const {
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
 
-      superdrops_movement(t_sdm, d_gbxs, totsupers);         // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, genpool);  // on device
+      superdrops_movement(t_sdm, d_gbxs, totsupers);  // on host and device
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs);    // on device
 
       t_sdm = t_sdm_next;
     }

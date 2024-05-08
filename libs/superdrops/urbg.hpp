@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -132,7 +132,7 @@ KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const viewd_supers supers,
  */
 KOKKOS_INLINE_FUNCTION viewd_supers one_shuffle_supers(const TeamMember& team_member,
                                                        const viewd_supers supers,
-                                                       GenRandomPool genpool) {
+                                                       const GenRandomPool genpool) {
   Kokkos::single(Kokkos::PerTeam(team_member), [&]() {
     URBG<ExecSpace> urbg{genpool.get_state()};
     shuffle_supers(supers, urbg);

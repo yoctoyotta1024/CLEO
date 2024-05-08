@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,7 +27,6 @@
 #include <Kokkos_Random.hpp>
 #include <concepts>
 #include <iostream>
-#include <random>
 #include <stdexcept>
 #include <string>
 
@@ -116,11 +115,10 @@ class RunCLEO {
    * @param t_end End time for timestepping.
    * @param gbxs DualView of gridboxes.
    * @param totsupers View of all superdroplets (both in and out of bounds of domain).
-   * @param genpool Random number generator pool.
    * @return 0 on success.
    */
-  int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs, const viewd_supers totsupers,
-                    GenRandomPool genpool) const {
+  int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs,
+                    const viewd_supers totsupers) const {
     std::cout << "\n--- timestepping ---\n";
 
     unsigned int t_mdl(0);
@@ -132,7 +130,7 @@ class RunCLEO {
       coupldyn_step(t_mdl, t_next);
 
       /* advance SDM (optionally concurrent to dynamics solver) */
-      sdm_step(t_mdl, t_next, gbxs, totsupers, genpool);
+      sdm_step(t_mdl, t_next, gbxs, totsupers);
 
       /* proceed to next step (in general involves coupling) */
       t_mdl = proceed_to_next_step(t_next, gbxs);
@@ -217,12 +215,11 @@ class RunCLEO {
    * @param t_next Next timestep of the coupled model.
    * @param gbxs DualView of gridboxes.
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
-   * @param genpool Random number generator pool.
    */
   void sdm_step(const unsigned int t_mdl, unsigned int t_next, dualview_gbx gbxs,
-                const viewd_supers totsupers, GenRandomPool genpool) const {
+                const viewd_supers totsupers) const {
     gbxs.sync_device();  // get device up to date with host
-    sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers, genpool);
+    sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers);
     gbxs.modify_device();  // mark device view of gbxs as modified
   }
 
@@ -297,13 +294,12 @@ class RunCLEO {
     // create runtime objects
     viewd_supers totsupers(create_supers(initconds.initsupers));
     dualview_gbx gbxs(create_gbxs(sdm.gbxmaps, initconds.initgbxs, totsupers));
-    GenRandomPool genpool(std::random_device {}());
 
     // prepare CLEO for timestepping
     prepare_to_timestep(gbxs);
 
     // do timestepping from t=0 to t=t_end
-    timestep_cleo(t_end, gbxs, totsupers, genpool);
+    timestep_cleo(t_end, gbxs, totsupers);
 
     return 0;
   }
