@@ -111,7 +111,7 @@ struct ConstStepObserver {
   bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }
 
   /**
-   * @brief Perform operations at the start of a step.
+   * @brief Perform operation at the start of a step if at appropriate interval.
    *
    * Calls `at_start_step` function of `do_obs` if the current model time is on
    * an observation timestep.
@@ -128,7 +128,7 @@ struct ConstStepObserver {
   }
 
   /**
-   * @brief No operation at the start of a SDM substep.
+   * @brief Perform operation at the start of an SDM substep if at appropriate interval.
    *
    * @param t_sdm The unsigned int parameter representing the current model time.
    * @param d_gbxs The view of gridboxes in device memory.

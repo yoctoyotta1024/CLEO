@@ -32,6 +32,7 @@
 #include <utility>
 
 #include "../kokkosaliases.hpp"
+#include "./const_step_observer.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/dataset.hpp"
@@ -116,6 +117,14 @@ class DoTimeObs {
                      const viewd_constsupers totsupers) const {
     at_start_step(t_mdl);
   }
+
+  /**
+   * @brief No operation at the start of a SDM substep.
+   *
+   * @param t_sdm The unsigned int parameter representing the current model time.
+   * @param d_gbxs The view of gridboxes in device memory.
+   */
+  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
 };
 
 /**
@@ -133,7 +142,7 @@ template <typename Store>
 inline Observer auto TimeObserver(const unsigned int interval, Dataset<Store> &dataset,
                                   const size_t maxchunk,
                                   const std::function<double(unsigned int)> step2dimlesstime) {
-  return ConstTstepObserver(interval, DoTimeObs(dataset, maxchunk, step2dimlesstime));
+  return ConstStepObserver(interval, DoTimeObs(dataset, maxchunk, step2dimlesstime));
 }
 
 #endif  // LIBS_OBSERVERS_TIME_OBSERVER_HPP_
