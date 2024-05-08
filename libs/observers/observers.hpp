@@ -139,12 +139,12 @@ struct CombinedObserver {
    *
    * Each observer is run sequentially.
    *
-   * @param t_mdl The unsigned int parameter.
+   * @param t_sdm The unsigned int parameter.
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void at_start_sdm_substep(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {
-    a.at_start_sdm_substep(t_mdl, d_gbxs);
-    b.at_start_sdm_substep(t_mdl, d_gbxs);
+  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {
+    a.at_start_sdm_substep(t_sdm, d_gbxs);
+    b.at_start_sdm_substep(t_sdm, d_gbxs);
   }
 };
 
@@ -209,10 +209,10 @@ struct NullObserver {
   /**
    * @brief No operation at the start of a SDM substep.
    *
-   * @param t_mdl The unsigned int for the current timestep.
+   * @param t_sdm The unsigned int for the current timestep.
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void at_start_sdm_substep(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {}
+  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
 };
 
 #endif  // LIBS_OBSERVERS_OBSERVERS_HPP_
