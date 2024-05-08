@@ -16,7 +16,7 @@ e.g. to a dataset or to a computer screen.
    observers
    streamout_observer
    runstats_observer.rst
-   const_step_observer
+   consttstep_observer
    write_to_dataset_observer.rst
    parallel_write_data.rst
    collect_data_for_dataset.rst

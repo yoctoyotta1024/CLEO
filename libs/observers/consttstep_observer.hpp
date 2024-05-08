@@ -2,7 +2,7 @@
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
- * File: const_step_observer.hpp
+ * File: consttstep_observer.hpp
  * Project: observers
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -18,8 +18,8 @@
  * Concept and related structures for creating an observer which acts at the start of each step.
  */
 
-#ifndef LIBS_OBSERVERS_CONST_STEP_OBSERVER_HPP_
-#define LIBS_OBSERVERS_CONST_STEP_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS_CONSTTSTEP_OBSERVER_HPP_
+#define LIBS_OBSERVERS_CONSTTSTEP_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -31,7 +31,7 @@
  * @brief Concept ObsFuncs for all types that can be called used by ConsttepObserver for
  * observation functions.
  *
- * Type in ConstStepObserver obeying ObsFuncs makes it possible for ConstStepObserver
+ * Type in ConstTstepObserver obeying ObsFuncs makes it possible for ConstTstepObserver
  * to obey Observer concept.
  *
  * @tparam O Type that satisfies the ObsFuncs concept.
@@ -46,7 +46,7 @@ concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs
 };
 
 /**
- * @brief Structure ConstStepObserver represents a type that satisfies the concept of an
+ * @brief Structure ConstTstepObserver represents a type that satisfies the concept of an
  * observer with a constant timestep interval between observations at the start of each timestep.
  *
  * Struct can be used to create an observer with a constant timestep and with observation
@@ -55,19 +55,19 @@ concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs
  * @tparam O Type that satisfies the ObsFuncs concept.
  */
 template <ObsFuncs O>
-struct ConstStepObserver {
+struct ConstTstepObserver {
  private:
   unsigned int interval; /**< interval between observations. */
   O do_obs;              /**< Observation functionality. */
 
  public:
   /**
-   * @brief Construct a new ConstStepObserver object.
+   * @brief Construct a new ConstTstepObserver object.
    *
    * @param interval Timestep interval.
    * @param o Observer.
    */
-  ConstStepObserver(const unsigned int interval, const O o) : interval(interval), do_obs(o) {}
+  ConstTstepObserver(const unsigned int interval, const O o) : interval(interval), do_obs(o) {}
 
   /**
    * @brief Perform operations before timestepping.
@@ -140,4 +140,4 @@ struct ConstStepObserver {
   }
 };
 
-#endif  // LIBS_OBSERVERS_CONST_STEP_OBSERVER_HPP_
+#endif  // LIBS_OBSERVERS_CONSTTSTEP_OBSERVER_HPP_

@@ -32,7 +32,7 @@
 #include <utility>
 
 #include "../kokkosaliases.hpp"
-#include "./const_step_observer.hpp"
+#include "./consttstep_observer.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "zarr/dataset.hpp"
@@ -142,7 +142,7 @@ template <typename Store>
 inline Observer auto TimeObserver(const unsigned int interval, Dataset<Store> &dataset,
                                   const size_t maxchunk,
                                   const std::function<double(unsigned int)> step2dimlesstime) {
-  return ConstStepObserver(interval, DoTimeObs(dataset, maxchunk, step2dimlesstime));
+  return ConstTstepObserver(interval, DoTimeObs(dataset, maxchunk, step2dimlesstime));
 }
 
 #endif  // LIBS_OBSERVERS_TIME_OBSERVER_HPP_
