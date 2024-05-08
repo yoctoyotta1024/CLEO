@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -134,6 +134,14 @@ class GbxindexObserver {
    */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
+
+  /**
+   * @brief Placeholder for functionality at the start of each SDM timestep and to make class
+   * satisfy observer concept.
+   * @param t_mdl Current model timestep.
+   * @param d_gbxs View of gridboxes on device.
+   */
+  void at_start_sdm_substep(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {}
 
   /**
    * @brief Returns the timestep of the next observation.

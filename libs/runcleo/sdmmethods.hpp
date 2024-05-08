@@ -219,6 +219,7 @@ class SDMMethods {
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
+      obs.at_start_sdm_substep(t_sdm, d_gbxs);
 
       superdrops_movement(t_sdm, d_gbxs, totsupers);  // on host and device
       sdm_microphysics(t_sdm, t_sdm_next, d_gbxs);    // on device

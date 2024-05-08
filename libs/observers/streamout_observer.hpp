@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -124,6 +124,14 @@ struct StreamOutObserver {
       streamout_statement(t_mdl, d_gbxs);
     }
   }
+
+  /**
+   * @brief Placeholder for functionality at the start of each SDM timestep and to make class
+   * satisfy observer concept.
+   * @param t_mdl Current model timestep.
+   * @param d_gbxs View of gridboxes on device.
+   */
+  void at_start_sdm_substep(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {}
 };
 
 #endif  // LIBS_OBSERVERS_STREAMOUT_OBSERVER_HPP_
