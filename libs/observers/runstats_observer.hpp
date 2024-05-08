@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -164,6 +164,14 @@ class RunStatsObserver {
       at_start_step();
     }
   }
+
+  /**
+   * @brief No operation at the start of a SDM substep.
+   *
+   * @param t_mdl The unsigned int parameter representing the current model time.
+   * @param d_gbxs The view of gridboxes in device memory.
+   */
+  void at_start_sdm_substep(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {}
 };
 
 #endif  // LIBS_OBSERVERS_RUNSTATS_OBSERVER_HPP_
