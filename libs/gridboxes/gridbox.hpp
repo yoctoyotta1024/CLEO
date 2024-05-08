@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,7 +26,6 @@
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
-#include "./detectors.hpp"
 #include "./gbxindex.hpp"
 #include "./supersingbx.hpp"
 #include "superdrops/kokkosaliases_sd.hpp"
@@ -36,12 +35,11 @@
 /* each gridbox has unique identifier and contains a
 reference to superdroplets in gridbox, alongside the
 Gridbox's State (e.g. thermodynamic variables
-used for SDM) and detectors for tracking chosen variables */
+used for SDM) */
 struct Gridbox {
   Gbxindex gbxindex;        // index (unique identifier) of gridbox
   State state;              // dynamical state of gridbox (e.g. thermodynamics)
   SupersInGbx supersingbx;  // reference(s) to superdrops occupying gridbox
-  Detectors detectors;      // detectors of various quantities
 
   Gridbox() = default;   // Kokkos requirement for a (dual)View
   ~Gridbox() = default;  // Kokkos requirement for a (dual)View
@@ -49,16 +47,13 @@ struct Gridbox {
   /* assumes supers view (or subview) already sorted via sdgbxindex. Constructor works
   outside of parallelism */
   Gridbox(const Gbxindex igbxindex, const State istate, const viewd_supers totsupers)
-      : gbxindex(igbxindex), state(istate), supersingbx(totsupers, gbxindex.value), detectors() {}
+      : gbxindex(igbxindex), state(istate), supersingbx(totsupers, gbxindex.value) {}
 
   /* assumes supers view (or subview) already sorted via sdgbxindex. Constructor works within
   parallel team policy on host given member 'team_member' */
   Gridbox(const Gbxindex igbxindex, const State istate, const viewd_supers totsupers,
           const kkpair_size_t irefs)
-      : gbxindex(igbxindex),
-        state(istate),
-        supersingbx(totsupers, gbxindex.value, irefs),
-        detectors() {}
+      : gbxindex(igbxindex), state(istate), supersingbx(totsupers, gbxindex.value, irefs) {}
 
   KOKKOS_INLINE_FUNCTION
   auto get_gbxindex() const { return gbxindex.value; }

@@ -16,7 +16,6 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 set(SOURCES
   "condensation.cpp"
   "impliciteuler.cpp"
-  "state.cpp"
   "superdrop_attrs.cpp"
   "terminalvelocity.cpp"
   "thermodynamic_equations.cpp"
