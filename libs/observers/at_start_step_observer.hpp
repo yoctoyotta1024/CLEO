@@ -31,7 +31,7 @@
  * @brief Concept ObsFuncs for all types that can be called used by ConsttepObserver for
  * observation functions.
  *
- * Type in ConstAtStartStepObserver obeying ObsFuncs makes it possible for ConstAtStartStepObserver
+ * Type in ConstStepObserver obeying ObsFuncs makes it possible for ConstStepObserver
  * to obey Observer concept.
  *
  * @tparam O Type that satisfies the ObsFuncs concept.
@@ -42,10 +42,11 @@ concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs
   { ofs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { ofs.after_timestepping() } -> std::same_as<void>;
   { ofs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
+  { ofs.at_start_sdm_substep(t, d_gbxs) } -> std::same_as<void>;
 };
 
 /**
- * @brief Structure ConstAtStartStepObserver represents a type that satisfies the concept of an
+ * @brief Structure ConstStepObserver represents a type that satisfies the concept of an
  * observer with a constant timestep interval between observations at the start of each timestep.
  *
  * Struct can be used to create an observer with a constant timestep and with observation
@@ -54,20 +55,19 @@ concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs
  * @tparam O Type that satisfies the ObsFuncs concept.
  */
 template <ObsFuncs O>
-struct ConstAtStartStepObserver {
+struct ConstStepObserver {
  private:
   unsigned int interval; /**< interval between observations. */
   O do_obs;              /**< Observation functionality. */
 
  public:
   /**
-   * @brief Construct a new ConstAtStartStepObserver object.
+   * @brief Construct a new ConstStepObserver object.
    *
    * @param interval Timestep interval.
    * @param o Observer.
    */
-  ConstAtStartStepObserver(const unsigned int interval, const O o)
-      : interval(interval), do_obs(o) {}
+  ConstStepObserver(const unsigned int interval, const O o) : interval(interval), do_obs(o) {}
 
   /**
    * @brief Perform operations before timestepping.
@@ -133,7 +133,11 @@ struct ConstAtStartStepObserver {
    * @param t_sdm The unsigned int parameter representing the current model time.
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
+  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {
+    if (on_step(t_sdm)) {
+      do_obs.at_start_sdm_substep(t_sdm, d_gbxs);
+    }
+  }
 };
 
 #endif  // LIBS_OBSERVERS_AT_START_STEP_OBSERVER_HPP_
