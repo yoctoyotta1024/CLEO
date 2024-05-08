@@ -14,6 +14,7 @@ e.g. to a dataset or to a computer screen.
    :caption: Contents:
 
    observers
+   at_start_step_observers
    streamout_observer
    runstats_observer.rst
    write_to_dataset_observer.rst
