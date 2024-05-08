@@ -138,10 +138,10 @@ class GbxindexObserver {
   /**
    * @brief Placeholder for functionality at the start of each SDM timestep and to make class
    * satisfy observer concept.
-   * @param t_mdl Current model timestep.
+   * @param t_sdm Current model timestep.
    * @param d_gbxs View of gridboxes on device.
    */
-  void at_start_sdm_substep(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {}
+  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
 
   /**
    * @brief Returns the timestep of the next observation.

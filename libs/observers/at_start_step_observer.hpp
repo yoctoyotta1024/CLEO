@@ -130,10 +130,10 @@ struct ConstAtStartStepObserver {
   /**
    * @brief No operation at the start of a SDM substep.
    *
-   * @param t_mdl The unsigned int parameter representing the current model time.
+   * @param t_sdm The unsigned int parameter representing the current model time.
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void at_start_sdm_substep(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const {}
+  void at_start_sdm_substep(const unsigned int t_sdm, const viewd_constgbx d_gbxs) const {}
 };
 
 #endif  // LIBS_OBSERVERS_AT_START_STEP_OBSERVER_HPP_
