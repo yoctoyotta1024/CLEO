@@ -37,7 +37,7 @@ path2build=$2   # get from command line argument
 CC=${gcc}               # C
 CXX=${gxx}              # C++
 
-# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+# CMAKE_CXX_FLAGS="-Werror -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
 CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
 ### ---------------------------------------------------- ###
 

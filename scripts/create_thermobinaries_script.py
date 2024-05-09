@@ -1,4 +1,7 @@
-'''
+"""
+Copyright (c) 2024 MPI-M, Clara Bayley
+
+
 ----- CLEO -----
 File: create_thermobinaries_script.py
 Project: scripts
@@ -6,26 +9,22 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th April 2024
+Last Modified: Tuesday 7th May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
-Copyright (c) 2023 MPI-M, Clara Bayley
------
 File Description:
 uses pySD module to create binary files
 for the dynamics to read into CLEO when
 using a from file data for coupled dynamics
-'''
-
+"""
 
 import sys
-import numpy as np
 from pathlib import Path
 
-sys.path.append(sys.argv[1]) # path to pySD (same as to CLEO)
+sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
 from pySD.thermobinary_src import thermogen
 from pySD.thermobinary_src import create_thermodynamics as cthermo
 from pySD.thermobinary_src import read_thermodynamics as rthermo
@@ -41,12 +40,14 @@ configfile = sys.argv[3]
 isfigures = [True, True]
 
 ### essential paths and filenames
-constsfile = path2CLEO+"/libs/cleoconstants.hpp"
-binariespath = path2build+"/share/"
-savefigpath = path2build+"/bin/"
+constsfile = path2CLEO + "/libs/cleoconstants.hpp"
+binariespath = path2build + "/share/"
+savefigpath = path2build + "/bin/"
 
-gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.yaml
-thermofile =  binariespath+"/dimlessthermo.dat"
+gridfile = (
+    binariespath + "/dimlessGBxboundaries.dat"
+)  # note this should match config.yaml
+thermofile = binariespath + "/dimlessthermo.dat"
 
 ### --- Choose Initial Thermodynamic Conditions for Gridboxes  --- ###
 
@@ -63,22 +64,33 @@ thermofile =  binariespath+"/dimlessthermo.dat"
 #                                     relh=relh_init, constsfile=constsfile)
 
 ### --- 1-D T and qv set by Lapse Rates --- ###
-PRESS0      = 101315                # [Pa]
-TEMP0       = 297.9                 # [K]
-qvap0       = 0.016                 # [Kg/Kg]
-Zbase       = 800                   # [m]
-TEMPlapses  = [9.8, 6.5]            # -dT/dz [K/km]
-qvaplapses  = [2.97, "saturated"]   # -dvap/dz [g/Kg km^-1]
-qcond       = 0.0                   # [Kg/Kg]
-WMAX        = 0.0                   # [m/s]
-Wlength     = 1000                  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
+PRESS0 = 101315  # [Pa]
+TEMP0 = 297.9  # [K]
+qvap0 = 0.016  # [Kg/Kg]
+Zbase = 800  # [m]
+TEMPlapses = [9.8, 6.5]  # -dT/dz [K/km]
+qvaplapses = [2.97, "saturated"]  # -dvap/dz [g/Kg km^-1]
+qcond = 0.0  # [Kg/Kg]
+WMAX = 0.0  # [m/s]
+Wlength = (
+    1000  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
+)
 
-thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
-                                                    PRESS0, TEMP0, qvap0,
-                                                    Zbase, TEMPlapses,
-                                                    qvaplapses, qcond,
-                                                    WMAX, None, None,
-                                                    Wlength)
+thermodyngen = thermogen.ConstHydrostaticLapseRates(
+    configfile,
+    constsfile,
+    PRESS0,
+    TEMP0,
+    qvap0,
+    Zbase,
+    TEMPlapses,
+    qvaplapses,
+    qcond,
+    WMAX,
+    None,
+    None,
+    Wlength,
+)
 
 # ### --- 2D Flow Field with Hydrostatic --- ###
 # ### ---       or Simple z Profile      --- ###
@@ -112,13 +124,14 @@ thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
 ### ---------------------------------------------------------------- ###
 
 ### -------------------- BINARY FILE GENERATION--------------------- ###
-cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
-                                    constsfile, gridfile)
+cthermo.write_thermodynamics_binary(
+    thermofile, thermodyngen, configfile, constsfile, gridfile
+)
 
 if isfigures[0]:
     if isfigures[1]:
         Path(savefigpath).mkdir(exist_ok=True)
-    rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
-                                          thermofile, savefigpath,
-                                          isfigures[1])
+    rthermo.plot_thermodynamics(
+        constsfile, configfile, gridfile, thermofile, savefigpath, isfigures[1]
+    )
 ### ---------------------------------------------------------------- ###
