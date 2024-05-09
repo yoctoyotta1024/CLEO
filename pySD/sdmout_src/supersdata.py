@@ -1,4 +1,7 @@
-'''
+"""
+Copyright (c) 2024 MPI-M, Clara Bayley
+
+
 ----- CLEO -----
 File: supersdata.py
 Project: sdmout_src
@@ -6,26 +9,29 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 15th April 2024
+Last Modified: Tuesday 7th May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
-Copyright (c) 2023 MPI-M, Clara Bayley
------
 File Description:
-python class to handle superdroplet
-attributes data from SDM zarr store
-in ragged array format
-'''
+python class to handle superdroplet attributes data from SDM zarr store in ragged array format
+"""
 
 import numpy as np
 import xarray as xr
 import awkward as ak
 import warnings
 
-def akward_array_to_lagrange_array(data : ak.Array, dim1 : ak.Array, dim2 : ak.Array, dim1_as_index = False, check_indices_uniqueness = False) :
+
+def akward_array_to_lagrange_array(
+    data: ak.Array,
+    dim1: ak.Array,
+    dim2: ak.Array,
+    dim1_as_index=False,
+    check_indices_uniqueness=False,
+):
     """
     This function converts a variable of the superdroplet dataset to a numpy array with the dimensions of the superdroplet dataset.
     The function assumes that the variable is a scalar value for each superdroplet at each time step.
@@ -142,13 +148,12 @@ def akward_array_to_lagrange_array(data : ak.Array, dim1 : ak.Array, dim2 : ak.A
 
     """
 
-
     # create the output dimensions of the numpy array which are necessary to store the data.
 
     if dim1_as_index is False:
-        T = int(ak.num(dim1, axis = 0))
+        T = int(ak.num(dim1, axis=0))
         time_index = np.arange(T)
-    else :
+    else:
         time_index = dim1
         T = int(ak.max(dim1) + 1)
     # The superdroplets are identified by their id.
@@ -158,15 +163,21 @@ def akward_array_to_lagrange_array(data : ak.Array, dim1 : ak.Array, dim2 : ak.A
     superdroplet_index = dim2
 
     if ak.count(superdroplet_index) != ak.count(data):
-        raise ValueError(f"The number of superdroplets ({ak.count(superdroplet_index)}) and the number of values in the variable ({ak.count(data)}) do not match")
+        raise ValueError(
+            f"The number of superdroplets ({ak.count(superdroplet_index)}) and the number of values in the variable ({ak.count(data)}) do not match"
+        )
     if not ak.all(ak.num(data) == ak.num(data)):
-        raise ValueError(f"The number of superdroplets and the number of values in the variable do not match for all time steps")
+        raise ValueError(
+            "The number of superdroplets and the number of values in the variable do not match for all time steps"
+        )
 
     # check if the resulting array is sparse and inform the User
     filled_percentage = ak.count(superdroplet_index) / (N * T) * 100
     # print(f"{filled_percentage:.2f} % of the regular array is filled with values. Total number of values is {ak.count(superdroplet_index)} out of {N * T} possible values.")
     if filled_percentage < 50:
-        warnings.warn(f"The resulting array is sparse. This might lead to significant memory usage")
+        warnings.warn(
+            "The resulting array is sparse. This might lead to significant memory usage"
+        )
 
     # create tuples of all datapoint in the variable's akward array
     # For this, a cartesian product of the time_index and the superdroplet_index is created
@@ -174,35 +185,35 @@ def akward_array_to_lagrange_array(data : ak.Array, dim1 : ak.Array, dim2 : ak.A
     # It is important to do this along axis 0 (time dimension). Otherwise, only unique combinations are created
     # The resulting array is then flattened to have a list of tuples
     # The list of tuples is then unzipped, to seperate the time and superdroplet indeices into two arrays
-    i, j = ak.unzip(ak.flatten(ak.cartesian((time_index, superdroplet_index), axis = 1)))
-
+    i, j = ak.unzip(ak.flatten(ak.cartesian((time_index, superdroplet_index), axis=1)))
 
     # Check if the indice tuples are unique.
     # For this, one can simply compute the index value they represented in a raveled array.
     # so i * N + j should be unique for all i, j
     # flattened_index = i * N + j
-    if check_indices_uniqueness is True :
-        if not ak.count(i * N + j) == ak.count(np.unique(i * N + j)) :
+    if check_indices_uniqueness is True:
+        if not ak.count(i * N + j) == ak.count(np.unique(i * N + j)):
             raise ValueError(
-                "The indice tuples are not unique.\n"\
-                +"This would lead to overwriting values in the numpy array.\n"\
-                +"The reason might be, that the time indices aren't unique along axis 0 already.\n"
-                )
-    else :
-        warnings.warn("The uniqueness of the indices is not checked. This might lead to overwriting values in the numpy array.")
+                "The indice tuples are not unique.\n"
+                + "This would lead to overwriting values in the numpy array.\n"
+                + "The reason might be, that the time indices aren't unique along axis 0 already.\n"
+            )
+    else:
+        warnings.warn(
+            "The uniqueness of the indices is not checked. This might lead to overwriting values in the numpy array."
+        )
 
     result_numpy = np.empty((T, N)) * np.nan
     result_numpy[i, j] = ak.flatten(data)
     return result_numpy
 
 
-
-class SuperdropProperties():
-    '''Contains attributes common to all superdroplets and functions
-    for calculating derived ones'''
+class SuperdropProperties:
+    """Contains attributes common to all superdroplets and functions
+    for calculating derived ones"""
 
     def __init__(self, consts):
-        '''Common attributes shared by superdroplets'''
+        """Common attributes shared by superdroplets"""
 
         # density of liquid in droplets (=density of water at 300K) [Kg/m^3]
         self.RHO_L = consts["RHO_L"]
@@ -226,55 +237,55 @@ class SuperdropProperties():
         print("-------------------------------")
 
     def rhoeff(self, r, msol):
-        ''' calculates effective density [g m^-3] of
-      droplet such that mass_droplet, m = 4/3*pi*r^3 * rhoeff
-      taking into account mass of liquid and mass of
-      solute assuming solute occupies volume it
-      would given its (dry) density, RHO_SOL. '''
+        """calculates effective density [g m^-3] of
+        droplet such that mass_droplet, m = 4/3*pi*r^3 * rhoeff
+        taking into account mass of liquid and mass of
+        solute assuming solute occupies volume it
+        would given its (dry) density, RHO_SOL."""
 
-        msol = msol/1000 # convert from grams to Kg
-        r = r/1e6 # convert microns to m
+        msol = msol / 1000  # convert from grams to Kg
+        r = r / 1e6  # convert microns to m
 
-        solfactor = 3*msol/(4.0*np.pi*(r**3))
-        rhoeff = self.RHO_L + solfactor*(1-self.RHO_L/self.RHO_SOL)
+        solfactor = 3 * msol / (4.0 * np.pi * (r**3))
+        rhoeff = self.RHO_L + solfactor * (1 - self.RHO_L / self.RHO_SOL)
 
-        return rhoeff * 1000 #[g/m^3]
+        return rhoeff * 1000  # [g/m^3]
 
     def vol(self, r):
-        ''' volume of droplet [m^3] '''
+        """volume of droplet [m^3]"""
 
-        r = r/1e6 # convert microns to m
+        r = r / 1e6  # convert microns to m
 
-        return 4.0/3.0 * np.pi * r**3
+        return 4.0 / 3.0 * np.pi * r**3
 
     def mass(self, r, msol):
-        '''
+        """
         total mass of droplet (water + (dry) areosol) [g],
         m =  4/3*pi*rho_l**3 + msol(1-rho_l/rho_sol)
         ie. m = 4/3*pi*rhoeff*R**3
-        '''
+        """
 
-        msol = msol/1000 # convert from grams to Kg
-        r = r/1e6 # convert microns to m
+        msol = msol / 1000  # convert from grams to Kg
+        r = r / 1e6  # convert microns to m
 
-        msoleff = msol*(1-self.RHO_L/self.RHO_SOL) # effect of solute on mass
-        m = msoleff + 4/3.0*np.pi*(r**3)*self.RHO_L
+        msoleff = msol * (1 - self.RHO_L / self.RHO_SOL)  # effect of solute on mass
+        m = msoleff + 4 / 3.0 * np.pi * (r**3) * self.RHO_L
 
-        return m * 1000 # [g]
+        return m * 1000  # [g]
 
     def m_water(self, r, msol):
-        ''' mass of only water in droplet [g]'''
+        """mass of only water in droplet [g]"""
 
-        msol = msol/1000 # convert msol from grams to Kg
-        r = r/1e6 # convert microns to m
+        msol = msol / 1000  # convert msol from grams to Kg
+        r = r / 1e6  # convert microns to m
 
-        v_sol = msol/self.RHO_SOL
-        v_w = 4/3.0*np.pi*(r**3) - v_sol
+        v_sol = msol / self.RHO_SOL
+        v_w = 4 / 3.0 * np.pi * (r**3) - v_sol
 
-        return self.RHO_L*v_w * 1000 #[g]
+        return self.RHO_L * v_w * 1000  # [g]
+
 
 class SupersData(SuperdropProperties):
-
     def __init__(self, dataset, consts):
         SuperdropProperties.__init__(self, consts)
 
@@ -300,33 +311,31 @@ class SupersData(SuperdropProperties):
         self.coord2_units = self.tryunits(self.ds, "coord2")  # probably meters
 
     def tryopen_dataset(self, dataset):
-
-        if type(dataset) == str:
+        if isinstance(dataset, str):
             print("supers dataset: ", dataset)
             return xr.open_dataset(dataset, engine="zarr", consolidated=False)
         else:
             return dataset
 
     def tryvar(self, ds, raggedcount, var):
-        ''' attempts to return variable in form of ragged array
-        (ak.Array) with dims [dim_temp, raggedcount]
+        """attempts to return variable in form of ragged array
+        (ak.Array) with dims [time, raggedcount]
         for a variable "var" in xarray dataset 'ds'.
-        If attempt fails, returns empty array instead '''
+        If attempt fails, returns empty array instead"""
         try:
             return ak.unflatten(ds[var].values, raggedcount)
-        except:
+        except KeyError:
             return ak.Array([])
 
     def tryunits(self, ds, var):
-        ''' attempts to return the units of a variable
-        in xarray dataset 'ds'. If attempt fails, returns null '''
+        """attempts to return the units of a variable
+        in xarray dataset 'ds'. If attempt fails, returns null"""
         try:
             return ds[var].units
-        except:
+        except KeyError:
             return ""
 
     def __getitem__(self, key):
-
         if key == "sdId":
             return self.sdId
         elif key == "sdgbxindex":
@@ -358,10 +367,16 @@ class SupersData(SuperdropProperties):
         elif key == "coord2_units":
             return self.coord2_units
         else:
-            err = "no known return provided for "+key+" key"
+            err = "no known return provided for " + key + " key"
             raise ValueError(err)
 
-    def variable_to_regular_array(self, varname : str, dtype : type = np.ndarray, metadata : dict = dict(), check_indices_uniqueness : bool = False) :
+    def variable_to_regular_array(
+        self,
+        varname: str,
+        dtype: type = np.ndarray,
+        metadata: dict = dict(),
+        check_indices_uniqueness: bool = False,
+    ):
         """
         This function converts an awkward array to a regular array (either numpy ndarray or xarray DataArray)
         based on the provided dtype. The conversion is done for a specific variable name in the dataset.
@@ -378,21 +393,33 @@ class SupersData(SuperdropProperties):
         ValueError: If the dtype provided is not supported. Only numpy ndarray and xarray DataArray are supported.
         """
         if dtype == np.ndarray:
-            return akward_array_to_lagrange_array(self[varname], self.time, self["sdId"], check_indices_uniqueness = check_indices_uniqueness)
+            return akward_array_to_lagrange_array(
+                self[varname],
+                self.time,
+                self["sdId"],
+                check_indices_uniqueness=check_indices_uniqueness,
+            )
         elif dtype == xr.DataArray:
-            regular_array = self.variable_to_regular_array(varname = varname, dtype = np.ndarray, check_indices_uniqueness = check_indices_uniqueness)
+            regular_array = self.variable_to_regular_array(
+                varname=varname,
+                dtype=np.ndarray,
+                check_indices_uniqueness=check_indices_uniqueness,
+            )
             result = xr.DataArray(
                 regular_array,
-                dims = ["time", "sdId"],
-                coords = {"time" : self.time.to_list(), "sdId" : np.arange(regular_array.shape[1])},
-                name = varname,
-                attrs = metadata,
+                dims=["time", "sdId"],
+                coords={
+                    "time": self.time.to_list(),
+                    "sdId": np.arange(regular_array.shape[1]),
+                },
+                name=varname,
+                attrs=metadata,
             )
             return result
         else:
             raise ValueError("dtype is not supported. Use np.ndarray, xr.DataArray")
 
-    def to_Dataset(self, check_indices_uniqueness : bool = False) :
+    def to_Dataset(self, check_indices_uniqueness: bool = False):
         """
         This function converts all variables in the dataset to regular arrays (either numpy ndarray or xarray DataArray)
         and combines them to a xarray Dataset.
@@ -407,45 +434,46 @@ class SupersData(SuperdropProperties):
         varnames = ["sdId", "sdgbxindex", "xi", "radius", "coord1", "coord2", "coord3"]
         result_dict = dict()
         for varname in varnames:
-            try :
+            try:
                 metadata = dict()
                 # try to add units:
                 try:
-                    metadata['units'] = self[varname + '_units']
-                except:
+                    metadata["units"] = self[varname + "_units"]
+                except ValueError:
                     print("No units found for", varname)
                     pass
                 # create the regular array
                 result_dict[varname] = self.variable_to_regular_array(
-                    varname = varname,
-                    dtype = xr.DataArray,
-                    metadata = metadata, # these are the metadata
-                    check_indices_uniqueness = check_indices_uniqueness,	# check for uniqueness of indices
-                    )
+                    varname=varname,
+                    dtype=xr.DataArray,
+                    metadata=metadata,  # these are the metadata
+                    check_indices_uniqueness=check_indices_uniqueness,  # check for uniqueness of indices
+                )
             except ValueError:
                 print(f"Could not create regular array for {varname}")
         # combine all variables to a dataset
         result = xr.Dataset(result_dict)
         result["time"].attrs = self.ds["time"].attrs
         result.attrs.update(**self.ds.attrs)
-        result.attrs['description'] = "Regular shaped arrays created from the awkward arrays of the superdroplet dataset."
-        result.attrs['creator_2'] = "Nils Niebaum for the regular array conversion."
+        result.attrs[
+            "description"
+        ] = "Regular shaped arrays created from the awkward arrays of the superdroplet dataset."
+        result.attrs["creator_2"] = "Nils Niebaum for the regular array conversion."
 
         return result
 
 
 class RainSupers(SuperdropProperties):
-
     def __init__(self, sddata, consts, rlim=40):
-        ''' return data for (rain)drops with radii > rlim.
-        Default minimum raindrops size is rlim=40microns'''
+        """return data for (rain)drops with radii > rlim.
+        Default minimum raindrops size is rlim=40microns"""
 
-        if type(sddata) != SupersData:
+        if not isinstance(sddata, SupersData):
             sddata = SupersData(dataset=sddata, consts=consts)
 
         israin = sddata.radius >= rlim  # ak array True for raindrops
 
-        self.totnsupers_rain = ak.num(israin[israin == True])
+        self.totnsupers_rain = ak.num(israin[israin is True])
         self.sdId = sddata.sdId[israin]
         self.sdgbxindex = sddata.sdgbxindex[israin]
         self.xi = sddata.xi[israin]
@@ -479,5 +507,5 @@ class RainSupers(SuperdropProperties):
         elif key == "coord2":
             return self.coord2
         else:
-            err = "no known return provided for "+key+" key"
+            err = "no known return provided for " + key + " key"
             raise ValueError(err)

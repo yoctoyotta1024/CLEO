@@ -1,4 +1,4 @@
-'''
+"""
 ----- CLEO -----
 File: create_gbxboundariesbinary_script.py
 Project: scripts
@@ -17,15 +17,20 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 File Description:
 uses pySD module to create gridbox boundaries
 binary file for input to CLEO SDM
-'''
+"""
 
 import sys
 import numpy as np
 from pathlib import Path
 
-sys.path.append(sys.argv[1]) # path to pySD (same as to CLEO)
-from pySD.gbxboundariesbinary_src.create_gbxboundaries import *
-from pySD.gbxboundariesbinary_src.read_gbxboundaries import *
+sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
+from pySD.gbxboundariesbinary_src.create_gbxboundaries import (
+    write_gridboxboundaries_binary,
+)
+from pySD.gbxboundariesbinary_src.read_gbxboundaries import (
+    print_domain_info,
+    plot_gridboxboundaries,
+)
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### absolute or relative paths for build and CLEO directories
@@ -37,16 +42,18 @@ configfile = sys.argv[3]
 isfigures = [True, True]
 
 ### essential paths and filenames
-constsfile = path2CLEO+"/libs/cleoconstants.hpp"
-binariespath = path2build+"/share/"
-savefigpath = path2build+"/bin/"
+constsfile = path2CLEO + "/libs/cleoconstants.hpp"
+binariespath = path2build + "/share/"
+savefigpath = path2build + "/bin/"
 
-gridfile =  binariespath+"/dimlessGBxboundaries.dat" # note this should match config.yaml
+gridfile = (
+    binariespath + "/dimlessGBxboundaries.dat"
+)  # note this should match config.yaml
 
 ### input parameters for zcoords of gridbox boundaries
-zmax = 820 # maximum z coord [m]
-zmin = 0 # minimum z coord [m]
-zdelta = 20 # even spacing
+zmax = 820  # maximum z coord [m]
+zmin = 0  # minimum z coord [m]
+zdelta = 20  # even spacing
 # zgrid = [zmin, zmax, zdelta]
 # zgrid = np.arange(zmin, zmax+zdelta, zdelta)
 zgrid = np.concatenate((np.arange(zmin, zmax, zdelta), np.array([850])))
@@ -62,10 +69,10 @@ ygrid = np.asarray([0, 20])
 ### -------------------- BINARY FILE GENERATION--------------------- ###
 ### ensure build, share and bin directories exist
 if path2CLEO == path2build:
-  raise ValueError("build directory cannot be CLEO")
+    raise ValueError("build directory cannot be CLEO")
 else:
-  Path(path2build).mkdir(exist_ok=True)
-  Path(binariespath).mkdir(exist_ok=True)
+    Path(path2build).mkdir(exist_ok=True)
+    Path(binariespath).mkdir(exist_ok=True)
 
 ### write gridbox boundaries binary
 write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
@@ -73,7 +80,7 @@ print_domain_info(constsfile, gridfile)
 
 ### plot gridbox boundaries binary
 if isfigures[0]:
-  if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True)
-  plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
+    if isfigures[1]:
+        Path(savefigpath).mkdir(exist_ok=True)
+    plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
 ### ---------------------------------------------------------------- ###

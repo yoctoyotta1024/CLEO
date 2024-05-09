@@ -1,4 +1,7 @@
-'''
+"""
+Copyright (c) 2024 MPI-M, Clara Bayley
+
+
 ----- CLEO -----
 File: thermodata.py
 Project: sdmout_src
@@ -6,145 +9,140 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 8th April 2024
+Last Modified: Tuesday 7th May 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
-Copyright (c) 2023 MPI-M, Clara Bayley
------
 File Description:
-python class to handle thermodynamics and wind fields
-data from SDM zarr store in cartesian
-domain
-'''
+python class to handle thermodynamics and wind fields data from SDM zarr store in cartesian domain
+"""
 
 import numpy as np
 import xarray as xr
 
 from . import thermoeqns
 
-def thermotryopen_dataset(dataset):
 
-  if type(dataset) == str:
-    print("thermodynamic fields dataset: ", dataset)
-    return xr.open_dataset(dataset, engine="zarr", consolidated=False)
-  else:
-    return dataset
+def thermotryopen_dataset(dataset):
+    if isinstance(dataset, str):
+        print("thermodynamic fields dataset: ", dataset)
+        return xr.open_dataset(dataset, engine="zarr", consolidated=False)
+    else:
+        return dataset
+
 
 def thermovar4d_fromzarr(ds, reshape, key):
-  '''' returns 4D variable with dims
-  [time, y, x, z] from zarr dataset "ds" '''
+    """' returns 4D variable with dims
+    [time, y, x, z] from zarr dataset "ds" """
 
-  return np.reshape(ds[key].values, reshape)
+    return np.reshape(ds[key].values, reshape)
+
 
 class Thermodata:
+    def __init__(self, dataset, ntime, ndims, consts):
+        ds = thermotryopen_dataset(dataset)
 
-  def __init__(self, dataset, ntime, ndims, consts):
+        self.consts = consts
 
-    ds = thermotryopen_dataset(dataset)
+        reshape = [ntime] + list(ndims)
+        self.press = thermovar4d_fromzarr(ds, reshape, "press")
+        self.temp = thermovar4d_fromzarr(ds, reshape, "temp")
+        self.qvap = thermovar4d_fromzarr(ds, reshape, "qvap")
+        self.qcond = thermovar4d_fromzarr(ds, reshape, "qcond")
+        self.theta = self.potential_temp()
 
-    self.consts = consts
+        self.press_units = ds["press"].units  # assumed probably hecto-pascals
+        self.temp_units = ds["temp"].units  # assumed probably kelvin
+        self.qvap_units = ds["qvap"].units  # assumed probably g/Kg
+        self.qcond_units = ds["qcond"].units  # assumed probably g/Kg
+        self.theta_units = ds["temp"].units  # assumed probably kelvin
 
-    reshape = [ntime] + list(ndims)
-    self.press = thermovar4d_fromzarr(ds, reshape, "press")
-    self.temp = thermovar4d_fromzarr(ds, reshape, "temp")
-    self.qvap = thermovar4d_fromzarr(ds, reshape, "qvap")
-    self.qcond = thermovar4d_fromzarr(ds, reshape, "qcond")
-    self.theta = self.potential_temp()
+    def potential_temp(self):
+        """potential temperature, theta"""
 
-    self.press_units = ds["press"].units # assumed probably hecto-pascals
-    self.temp_units = ds["temp"].units # assumed probably kelvin
-    self.qvap_units = ds["qvap"].units # assumed probably g/Kg
-    self.qcond_units = ds["qcond"].units # assumed probably g/Kg
-    self.theta_units = ds["temp"].units # assumed probably kelvin
+        press = self.press * 100  # convert from hPa to Pa
+        qvap = self.qvap / 1000  # convert g/Kg to Kg/Kg
 
-  def potential_temp(self):
-    ''' potential temperature, theta '''
+        return thermoeqns.dry_pot_temp(self.temp, press, qvap, self.consts)
 
-    press = self.press*100 # convert from hPa to Pa
-    qvap = self.qvap/1000 # convert g/Kg to Kg/Kg
+    def saturationpressure(self):
+        """saturation pressure in hectoPascals"""
 
-    return thermoeqns.dry_pot_temp(self.temp, press, qvap, self.consts)
+        psat = thermoeqns.saturation_pressure(self.temp)  # [Pa]
 
-  def saturationpressure(self):
-    ''' saturation pressure in hectoPascals '''
+        return psat / 100  # [hPa]
 
-    psat = thermoeqns.saturation_pressure(self.temp) # [Pa]
+    def vapourpressure(self):
+        """returns vapour pressure in hectoPascals"""
 
-    return  psat / 100 # [hPa]
+        p_pascals = self.press * 100  # convert from hPa to Pa
+        qvap = self.qvap / 1000  # convert g/Kg to Kg/Kg
+        Mr_ratio = self.consts["Mr_ratio"]
+        pvap = thermoeqns.vapour_pressure(p_pascals, qvap, Mr_ratio)  # [Pa]
 
-  def vapourpressure(self):
-    '''returns vapour pressure in hectoPascals '''
+        return pvap / 100  # [hPa]
 
-    p_pascals = self.press*100 # convert from hPa to Pa
-    qvap = self.qvap/1000 # convert g/Kg to Kg/Kg
-    Mr_ratio = self.consts["Mr_ratio"]
-    pvap = thermoeqns.vapour_pressure(p_pascals, qvap, Mr_ratio) # [Pa]
+    def relative_humidity(self):
+        """returns relative humidty and supersaturation"""
 
-    return pvap / 100 # [hPa]
+        p_pascals = self.press * 100  # convert from hPa to Pa
+        qvap = self.qvap / 1000  # convert g/Kg to Kg/Kg
+        Mr_ratio = self.consts["Mr_ratio"]
 
-  def relative_humidity(self):
-    ''' returns relative humidty and supersaturation '''
+        return thermoeqns.relative_humidity(p_pascals, self.temp, qvap, Mr_ratio)
 
-    p_pascals = self.press*100 # convert from hPa to Pa
-    qvap = self.qvap/1000 # convert g/Kg to Kg/Kg
-    Mr_ratio = self.consts["Mr_ratio"]
+    def supersaturation(self):
+        """returns relative humidty and supersaturation"""
 
-    return thermoeqns.relative_humidity(p_pascals, self.temp, qvap, Mr_ratio)
+        p_pascals = self.press * 100  # convert from hPa to Pa
+        qvap = self.qvap / 1000  # convert g/Kg to Kg/Kg
+        Mr_ratio = self.consts["Mr_ratio"]
+        return thermoeqns.supersaturation(p_pascals, self.temp, qvap, Mr_ratio)
 
-  def supersaturation(self):
-    ''' returns relative humidty and supersaturation '''
+    def __getitem__(self, key):
+        if key == "press":
+            return self.press
+        elif key == "temp":
+            return self.temp
+        elif key == "qvap":
+            return self.qvap
+        elif key == "qcond":
+            return self.qcond
+        elif key == "theta":
+            return self.theta
+        elif key == "relh":
+            return self.relative_humidity()
+        elif key == "supersat":
+            return self.supersaturation()
+        else:
+            err = "no known return provided for " + key + " key"
+            raise ValueError(err)
 
-    p_pascals = self.press*100 # convert from hPa to Pa
-    qvap = self.qvap/1000 # convert g/Kg to Kg/Kg
-    Mr_ratio = self.consts["Mr_ratio"]
-    return thermoeqns.supersaturation(p_pascals, self.temp, qvap, Mr_ratio)
-
-  def __getitem__(self, key):
-    if key == "press":
-      return self.press
-    elif key == "temp":
-      return self.temp
-    elif key == "qvap":
-      return self.qvap
-    elif key == "qcond":
-      return self.qcond
-    elif key == "theta":
-      return self.theta
-    elif key == "relh":
-      return self.relative_humidity()
-    elif key == "supersat":
-      return self.supersaturation()
-    else:
-      err = "no known return provided for "+key+" key"
-      raise ValueError(err)
 
 class Winddata:
+    def __init__(self, dataset, ntime, ndims, consts):
+        ds = thermotryopen_dataset(dataset)
 
-  def __init__(self, dataset, ntime, ndims, consts):
+        self.consts = consts
 
-    ds = thermotryopen_dataset(dataset)
+        reshape = [ntime] + list(ndims)
+        self.wvel = thermovar4d_fromzarr(ds, reshape, "wvel")
+        self.uvel = thermovar4d_fromzarr(ds, reshape, "uvel")
+        self.vvel = thermovar4d_fromzarr(ds, reshape, "vvel")
 
-    self.consts = consts
+        self.wvel_units = ds["wvel"].units  # probably hecto pascals
+        self.uvel_units = ds["uvel"].units  # probably hecto pascals
+        self.vvel_units = ds["vvel"].units  # probably hecto pascals
 
-    reshape = [ntime] + list(ndims)
-    self.wvel = thermovar4d_fromzarr(ds, reshape, "wvel")
-    self.uvel = thermovar4d_fromzarr(ds, reshape, "uvel")
-    self.vvel = thermovar4d_fromzarr(ds, reshape, "vvel")
-
-    self.wvel_units = ds["wvel"].units # probably hecto pascals
-    self.uvel_units = ds["uvel"].units # probably hecto pascals
-    self.vvel_units = ds["vvel"].units # probably hecto pascals
-
-  def __getitem__(self, key):
-    if key == "wvel":
-      return self.wvel
-    elif key == "uvel":
-      return self.uvel
-    elif key == "vvel":
-      return self.vvel
-    else:
-      err = "no known return provided for "+key+" key"
-      raise ValueError(err)
+    def __getitem__(self, key):
+        if key == "wvel":
+            return self.wvel
+        elif key == "uvel":
+            return self.uvel
+        elif key == "vvel":
+            return self.vvel
+        else:
+            err = "no known return provided for " + key + " key"
+            raise ValueError(err)

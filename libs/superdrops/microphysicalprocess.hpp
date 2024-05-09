@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Monday 12th February 2024
+ * Last Modified: Wednesday 8th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,10 +23,9 @@
 #ifndef LIBS_SUPERDROPS_MICROPHYSICALPROCESS_HPP_
 #define LIBS_SUPERDROPS_MICROPHYSICALPROCESS_HPP_
 
-#include <concepts>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
+#include <concepts>
 
 #include "../cleoconstants.hpp"
 #include "./kokkosaliases_sd.hpp"
@@ -44,10 +43,10 @@
  */
 template <typename P>
 concept MicrophysicalProcess = requires(P p, const TeamMember &tm, const unsigned int t,
-                                        subviewd_supers supers, State &state, GenRandomPool gp) {
+                                        subviewd_supers supers, State &state) {
   { p.next_step(t) } -> std::convertible_to<unsigned int>;
   { p.on_step(t) } -> std::same_as<bool>;
-  { p.run_step(tm, t, supers, state, gp) } -> std::convertible_to<subviewd_supers>;
+  { p.run_step(tm, t, supers, state) } -> std::convertible_to<subviewd_supers>;
 };
 
 /**
@@ -64,8 +63,8 @@ concept MicrophysicalProcess = requires(P p, const TeamMember &tm, const unsigne
 template <MicrophysicalProcess Microphys1, MicrophysicalProcess Microphys2>
 struct CombinedMicrophysicalProcess {
  private:
-  Microphys1 a;   /**< The first instance of type of MicrophysicalProcess. */
-  Microphys2 b;   /**< The second instance of type of MicrophysicalProcess. */
+  Microphys1 a; /**< The first instance of type of MicrophysicalProcess. */
+  Microphys2 b; /**< The second instance of type of MicrophysicalProcess. */
 
  public:
   /**
@@ -106,14 +105,13 @@ struct CombinedMicrophysicalProcess {
    * @param subt The current time step.
    * @param supers The view of super-droplets.
    * @param state The state of the system / volume.
-   * @param genpool The Kokkos thread-safe random number generator pool.
    * @return The updated view of super-droplets after the process.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state, GenRandomPool genpool) const {
-    supers = a.run_step(team_member, subt, supers, state, genpool);
-    supers = b.run_step(team_member, subt, supers, state, genpool);
+                                                  State &state) const {
+    supers = a.run_step(team_member, subt, supers, state);
+    supers = b.run_step(team_member, subt, supers, state);
     return supers;
   }
 };
@@ -167,12 +165,11 @@ struct NullMicrophysicalProcess {
    * @param subt The current time step.
    * @param supers The view of super-droplets.
    * @param state The state of the system.
-   * @param genpool The random number generator pool.
    * @return The unchanged view of super-droplets.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state, GenRandomPool genpool) const {
+                                                  State &state) const {
     return supers;
   }
 };
@@ -187,8 +184,8 @@ struct NullMicrophysicalProcess {
  */
 template <typename F>
 concept MicrophysicsFunc = requires(F f, const TeamMember &tm, const unsigned int subt,
-                                    subviewd_supers supers, State &state, GenRandomPool gp) {
-  { f(tm, subt, supers, state, gp) } -> std::convertible_to<subviewd_supers>;
+                                    subviewd_supers supers, State &state) {
+  { f(tm, subt, supers, state) } -> std::convertible_to<subviewd_supers>;
 };
 
 /**
@@ -203,8 +200,8 @@ concept MicrophysicsFunc = requires(F f, const TeamMember &tm, const unsigned in
 template <MicrophysicsFunc F>
 struct ConstTstepMicrophysics {
  private:
-  unsigned int interval;   /**< The constant time step between calls to microphysics. */
-  F do_microphysics;       /**< Function-like microphysics is type of MicrophysicsFunc*/
+  unsigned int interval; /**< The constant time step between calls to microphysics. */
+  F do_microphysics;     /**< Function-like microphysics is type of MicrophysicsFunc*/
 
  public:
   /**
@@ -244,14 +241,13 @@ struct ConstTstepMicrophysics {
    * @param subt The current time step.
    * @param supers The view of super-droplets.
    * @param state The state of the system / volume.
-   * @param genpool The Kokkos thread-safe random number generator pool.
    * @return The updated view of super-droplets after the process.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state, GenRandomPool genpool) const {
+                                                  State &state) const {
     if (on_step(subt)) {
-      supers = do_microphysics(team_member, subt, supers, state, genpool);
+      supers = do_microphysics(team_member, subt, supers, state);
     }
 
     return supers;
