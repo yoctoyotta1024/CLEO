@@ -7,7 +7,7 @@ from tqdm import tqdm
 data = ak.Array(
     [
         [10, 20, 30],
-        [],
+        [12],
         [40, 50],
         [90],
     ]
@@ -22,8 +22,8 @@ time_index = ak.Array(
 )
 gridbox = ak.Array(
     [
-        [0, 1, 0],
-        [],
+        [10, 1, 10],
+        [1],
         [1, 2],
         [3],
     ]
@@ -40,29 +40,12 @@ counts = ak.Array(
 
 id = ak.Array(
     [
-        [0, 1, 2],
-        [7],
+        [10, 1, 2],
+        [2],
         [2, 3],
         [7],
     ]
 )
-
-
-# %%
-
-time_unique = np.unique(time_index)
-gridbox_unique = np.unique(ak.flatten(gridbox))
-id_unique = np.unique(ak.flatten(id))
-T = int(ak.num(time_unique, axis=0))
-G = int(ak.num(gridbox_unique, axis=0))
-N = int(ak.max(id_unique, axis=0)) + 1
-
-
-gridbox_argsort = ak.argsort(gridbox)
-gridbox_argsort = ak.argsort(id)
-gridbox_sort = gridbox[gridbox_argsort]
-data_sort = data[gridbox_argsort]
-id_sort = id[gridbox_argsort]
 
 
 def eulerian_from_count(data, counts, G):
@@ -84,20 +67,40 @@ def create_counts_np(data, counts):
     return counts
 
 
-# %%
-
-
-def create_counts_fast(data, T, G):
-    maximum = ak.max(data) + 1
-    modified = data + np.arange(T) * maximum
+def create_counts_fast(data, T):
+    M = int(ak.max(data)) + 1
+    modified = data + np.arange(T) * M
     modified = ak.flatten(modified)
 
     counts_flat = np.bincount(modified)
-    counts_flat = ak.unflatten(counts_flat, G)
+    counts_flat = ak.fill_none(ak.pad_none(counts_flat, M * T, axis=0), 0)
+    counts_flat = ak.unflatten(counts_flat, M)
     return counts_flat
 
 
-eulerian_from_count(data_sort, create_counts_fast(id_sort, T, N), N)
+# %%
+
+time_unique = np.unique(time_index)
+gridbox_unique = np.unique(ak.flatten(gridbox))
+id_unique = np.unique(ak.flatten(id))
+T = int(ak.num(time_unique, axis=0))
+G = int(ak.num(gridbox_unique, axis=0))
+N = int(ak.max(id_unique, axis=0)) + 1
+
+
+gridbox_argsort = ak.argsort(gridbox)
+# gridbox_argsort = ak.argsort(id)
+id_sort = id[gridbox_argsort]
+gridbox_sort = gridbox[gridbox_argsort]
+data_sort = data[gridbox_argsort]
+id_sort = id[gridbox_argsort]
+
+# %%
+eulerian_from_count(data_sort, create_counts_fast(id_sort, T), N)
+
+# %%
+
+
 # unique = ak.unflatten(unique, num)
 # counts = ak.unflatten(counts, num)
 
@@ -190,9 +193,12 @@ id_sort = sddata.sdId[gridbox_argsort]
 data_sort = sddata.radius[gridbox_argsort]
 
 # %%
-counts_fast = create_counts_fast(id_sort, T, N)
-counts_np = np.zeros((T, N), dtype=int)
-counts_np = create_counts_np(id_sort, counts_np)
+# counts_fast = create_counts_fast(id_sort, T, G)
+# eulerian_from_count(data_sort, create_counts_fast(gridbox_sort, T, G), G)
+counts_fast = create_counts_fast(id_sort, T)
+
+# counts_np = np.zeros((T, N), dtype=int)
+# counts_np = create_counts_np(id_sort, counts_np)
 
 # %%
 
