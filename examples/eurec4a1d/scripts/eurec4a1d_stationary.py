@@ -24,7 +24,7 @@ data and plots precipitation example given constant
 import os
 import sys
 import numpy as np
-import random
+import shutil
 import yaml
 from pathlib import Path
 from io import StringIO
@@ -49,16 +49,17 @@ class Capturing(list):
 
 
 if DEVELOPMENT:
+   raise NotImplementedError()
   # Update the path2home variable to use the CustomPath class
-  path2home = Path('/home/m/m301096')
-  path2sdm_eurec4a = path2home / 'repositories' / 'sdm_eurec4a'
-  path2CLEO = path2home / 'CLEO'
-  path2build = path2CLEO / 'build_eurec4a1D_stationary'
-  path2example = path2CLEO / 'examples/eurec4a1d'
-  path2src = path2example / 'src'
-  configfile = path2src / 'config/eurec4a1d_config_stationary.yaml'
-  cloud_observation_filepath = '/home/m/m301096/repositories/sdm-eurec4a/data/model/input/new/clusters_18.yaml'
-  rawdirectory = path2CLEO / 'data/output/raw/stationary'
+  # path2home = Path('/home/m/m301096')
+  # path2sdm_eurec4a = path2home / 'repositories' / 'sdm_eurec4a'
+  # path2CLEO = path2home / 'CLEO'
+  # path2build = path2CLEO / 'build_eurec4a1D_stationary'
+  # path2example = path2CLEO / 'examples/eurec4a1d'
+  # path2src = path2example / 'src'
+  # configfile = path2src / 'config/eurec4a1d_config_stationary.yaml'
+  # cloud_observation_filepath = '/home/m/m301096/repositories/sdm-eurec4a/data/model/input/new/clusters_18.yaml'
+  # rawdirectory = path2CLEO / 'data/output/raw/stationary'
 else :
   path2CLEO = Path(sys.argv[1])
   path2build = Path(sys.argv[2])
@@ -74,12 +75,8 @@ if "sdm_pysd_env312" not in sys.prefix:
 
 rawdirectory.mkdir(exist_ok=True, parents=True)
 
+
 #%%
-
-with open(cloud_observation_filepath, 'r') as f:
-    cloud_observation_config = yaml.safe_load(f)
-
-
 
 from pySD.sdmout_src import *
 from pySD import editconfigfile
@@ -104,10 +101,27 @@ sharepath     = path2build / "share/"
 
 # create the raw directory for the individual cloud observation.
 # Here the output data will be stored.
+with open(cloud_observation_filepath, 'r') as f:
+    cloud_observation_config = yaml.safe_load(f)
+
+
 identification_type = cloud_observation_config['cloud']["identification_type"]
 cloud_id = cloud_observation_config['cloud']["cloud_id"]
+
 rawdirectory_individual = rawdirectory / f"{identification_type}_{cloud_id}"
 rawdirectory_individual.mkdir(exist_ok=True)
+
+# copy the cloud config file to the raw directory and use it
+shutil.copy(cloud_observation_config, rawdirectory_individual)
+
+
+# copy the config file to the raw directory and use it
+shutil.copy(configfile, rawdirectory_individual)
+
+configfile = rawdirectory_individual / configfile.name
+
+sharepath_individual = rawdirectory_individual / "share"
+sharepath_individual.mkdir(exist_ok=True)
 
 
 # CREATE A CONFIG FILE TO BE UPDATED
@@ -127,17 +141,19 @@ dataset       = updated_configfile["outputdata"]["zarrbasedir"]
 
 updated_configfile['coupled_dynamics'].update(**dict(
   type = 'fromfile',                                       # type of coupled dynamics to configure
-  press = str(path2build / 'share/eurec4a1d_dimlessthermo_press.dat'),               # binary filename for pressure
-  temp = str(path2build / 'share/eurec4a1d_dimlessthermo_temp.dat'),                 # binary filename for temperature
-  qvap = str(path2build / 'share/eurec4a1d_dimlessthermo_qvap.dat'),                 # binary filename for vapour mixing ratio
-  qcond = str(path2build / 'share/eurec4a1d_dimlessthermo_qcond.dat'),               # binary filename for liquid mixing ratio
-  wvel = str(path2build / 'share/eurec4a1d_dimlessthermo_wvel.dat'),                 # binary filename for vertical (coord3) velocity
-  thermo = str(path2build / 'share/eurec4a1d_dimlessthermo.dat'),                    # binary filename for thermodynamic profiles
+  press = str(sharepath_individual / 'eurec4a1d_dimlessthermo_press.dat'),               # binary filename for pressure
+  temp = str(sharepath_individual / 'eurec4a1d_dimlessthermo_temp.dat'),                 # binary filename for temperature
+  qvap = str(sharepath_individual / 'eurec4a1d_dimlessthermo_qvap.dat'),                 # binary filename for vapour mixing ratio
+  qcond = str(sharepath_individual / 'eurec4a1d_dimlessthermo_qcond.dat'),               # binary filename for liquid mixing ratio
+  wvel = str(sharepath_individual / 'eurec4a1d_dimlessthermo_wvel.dat'),                 # binary filename for vertical (coord3) velocity
+  thermo = str(sharepath_individual / 'eurec4a1d_dimlessthermo.dat'),                    # binary filename for thermodynamic profiles
 ))
 
-updated_configfile['inputfiles'].update(grid_filename = str(path2build / 'share/eurec4a1d_ddimlessGBxboundaries.dat'))     # binary filename for initialisation of GBxs / GbxMaps
-
-updated_configfile["initsupers"].update(initsupers_filename = str(path2build / 'share/eurec4a1d_dimlessSDsinit.dat'))
+updated_configfile['inputfiles'].update(
+   grid_filename = str(sharepath_individual / 'eurec4a1d_ddimlessGBxboundaries.dat'), # binary filename for initialisation of GBxs / GbxMaps
+    constants_filename = str(path2CLEO / "libs/cleoconstants.hpp"),               # filename for constants
+)
+updated_configfile["initsupers"].update(initsupers_filename = str(sharepath_individual / 'eurec4a1d_dimlessSDsinit.dat'))
 
 gridfile      = updated_configfile['inputfiles']['grid_filename']
 initSDsfile   = updated_configfile['initsupers']['initsupers_filename']
@@ -208,8 +224,6 @@ numconc = np.sum(scalefacs)
 
 updated_configfile["boundary_conditions"].update(
   COORD3LIM = COORD3LIM,                                       # SDs added to domain with coord3 >= COORD3LIM [m]
-  newnsupers = 1024,                                     # number SDs to add to each gridbox above COORD3LIM
-  DRYRADIUS = 1e-9,                                      # dry radius of new super-droplets (for solute mass) [m]
   MINRADIUS = MINRADIUS,                                      # minimum radius of new super-droplets [m]
   MAXRADIUS = MAXRADIUS,                                      # maximum radius of new super-droplets [m]
   NUMCONC_a = scalefacs[0],                                       # number conc. of 1st droplet lognormal dist [m^-3]
@@ -352,6 +366,8 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 ### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
+print("===============================")
+print("Running CLEO executable")
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset) # delete any existing dataset
@@ -359,6 +375,7 @@ executable = str(path2build)+'/examples/eurec4a1d/src/eurec4a1D'
 print('Executable: '+executable)
 print('Config file: '+str(configfile))
 os.system(executable + ' ' + str(configfile))
+print("===============================")
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -367,6 +384,8 @@ os.system(executable + ' ' + str(configfile))
 ### ---------------------------------------------------------------- ###
 ### ---------------- CONVERT OUTPUT TO REGULAR ARRAY --------------- ###
 ### ---------------------------------------------------------------- ###
+print("===============================")
+print("Converting output to regular array")
 OUTPUT_FILEPATH = rawdirectory_individual /  "full_dataset.nc"
 # OUTPUT_FILEPATH = '/home/m/m301096/CLEO/data/output/raw/no_aerosols/cluster_18/clusters_18/full_dataset.nc'
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -379,7 +398,7 @@ consts = pysetuptxt.get_consts(setupfile, isprint=False)
 sddata = pyzarr.get_supers(str(dataset), consts)
 lagrange = sddata.to_Dataset(check_indices_uniqueness = True)
 lagrange.to_netcdf(OUTPUT_FILEPATH)
-
+print("===============================")
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
