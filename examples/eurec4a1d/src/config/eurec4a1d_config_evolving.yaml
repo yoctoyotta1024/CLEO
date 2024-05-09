@@ -1,0 +1,73 @@
+# ----- CLEO -----
+# File: eurec4a1d_config.yaml
+# Project: config
+# Created Date: Thursday 18th April 2024
+# Author: Clara Bayley (CB)
+# Additional Contributors:
+# -----
+# Last Modified: Thursday 18th April 2024
+# Modified By: CB
+# -----
+# License: BSD 3-Clause "New" or "Revised" License
+# https://opensource.org/licenses/BSD-3-Clause
+# -----
+# Copyright (c) 2023 MPI-M, Clara Bayley
+# -----
+# File Description:
+# Configuration file for CLEO eurec4a 1-D rainshaft example.
+# Note: The inital superdroplets data read from file "initsupers_filename" can be made with
+# CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
+# Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
+# and so can the thermodynamics files when using coupled thermodynamics "fromfile".
+#
+
+### Initialisation Parameters ###
+inputfiles:
+  constants_filename: ../libs/cleoconstants.hpp
+  grid_filename:
+    /home/m/m301096/CLEO/build_eurec4a1D_evolving/share/eurec4a1d_ddimlessGBxboundaries.dat
+initsupers:
+  type: frombinary
+  initsupers_filename: /home/m/m301096/CLEO/build_eurec4a1D_evolving/share/eurec4a1d_dimlessSDsinit.dat
+  totnsupers: 512
+outputdata:
+  setup_filename:
+    /home/m/m301096/CLEO/data/output/raw/no_aerosols/clusters_301/eurec4a1d_setup.txt
+  stats_filename:
+    /home/m/m301096/CLEO/data/output/raw/no_aerosols/clusters_301/eurec4a1d_stats.txt
+  zarrbasedir: /home/m/m301096/CLEO/data/output/raw/no_aerosols/clusters_301/eurec4a1d_sol.zarr
+  maxchunk: 2500000
+domain:
+  nspacedims: 1
+  ngbxs: 9
+timesteps:
+  CONDTSTEP: 0.1                                       # time between SD condensation [s]
+  COLLTSTEP: 1                                         # time between SD collision [s]
+  MOTIONTSTEP: 2                                       # time between SDM motion [s]
+  COUPLTSTEP: 2400                                     # time between dynamic couplings [s]
+  OBSTSTEP: 5                                          # time between SDM observations [s]
+  T_END: 2400                                          # time span of integration from 0s to T_END [s]
+
+### Microphysics Parameters ###
+microphysics:
+  condensation:
+    do_alter_thermo: false                             # true = cond/evap alters the thermodynamic state
+    niters: 2                                          # no. iterations of Newton Raphson Method before testing for convergence
+    SUBTSTEP: 0.1                                      # smallest subtimestep in cases of substepping [s]
+    rtol: 0.0                                          # relative tolerance for implicit Euler integration
+    atol: 0.01                                         # abolute tolerance for implicit Euler integration
+
+### Coupled Dynamics Parameters ###
+coupled_dynamics:
+  type: fromfile
+  press:
+    /home/m/m301096/CLEO/build_eurec4a1D_evolving/share/eurec4a1d_dimlessthermo_press.dat
+  temp:
+    /home/m/m301096/CLEO/build_eurec4a1D_evolving/share/eurec4a1d_dimlessthermo_temp.dat
+  qvap:
+    /home/m/m301096/CLEO/build_eurec4a1D_evolving/share/eurec4a1d_dimlessthermo_qvap.dat
+  qcond:
+    /home/m/m301096/CLEO/build_eurec4a1D_evolving/share/eurec4a1d_dimlessthermo_qcond.dat
+  wvel:
+    /home/m/m301096/CLEO/build_eurec4a1D_evolving/share/eurec4a1d_dimlessthermo_wvel.dat
+  thermo: /home/m/m301096/CLEO/build_eurec4a1D_evolving/share/eurec4a1d_dimlessthermo.dat

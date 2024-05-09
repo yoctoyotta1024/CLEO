@@ -1,0 +1,86 @@
+# ----- CLEO -----
+# File: eurec4a1d_config.yaml
+# Project: config
+# Created Date: Thursday 18th April 2024
+# Author: Clara Bayley (CB)
+# Additional Contributors:
+# -----
+# Last Modified: Thursday 18th April 2024
+# Modified By: CB
+# -----
+# License: BSD 3-Clause "New" or "Revised" License
+# https://opensource.org/licenses/BSD-3-Clause
+# -----
+# Copyright (c) 2023 MPI-M, Clara Bayley
+# -----
+# File Description:
+# Configuration file for CLEO eurec4a 1-D rainshaft example.
+# Note: The inital superdroplets data read from file "initsupers_filename" can be made with
+# CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
+# Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
+# and so can the thermodynamics files when using coupled thermodynamics "fromfile".
+#
+
+### SDM Runtime Parameters ###
+domain:
+  nspacedims: 1
+  ngbxs: 34
+  maxnsupers: 32768
+timesteps:
+  CONDTSTEP: 0.1
+  COLLTSTEP: 1
+  MOTIONTSTEP: 2
+  COUPLTSTEP: 1200
+  OBSTSTEP: 10
+  T_END: 1200
+inputfiles:
+  constants_filename: /home/m/m301096/CLEO/libs/cleoconstants.hpp
+  grid_filename:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_ddimlessGBxboundaries.dat
+initsupers:
+  type: frombinary
+  initsupers_filename:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessSDsinit.dat
+  initnsupers: 256
+outputdata:
+  setup_filename:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/eurec4a1d_setup.txt
+  stats_filename:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/eurec4a1d_stats.txt
+  zarrbasedir:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/eurec4a1d_sol.zarr
+  maxchunk: 2500000
+microphysics:
+  condensation:
+    do_alter_thermo: false
+    niters: 2
+    SUBTSTEP: 0.1
+    rtol: 0.0
+    atol: 0.01
+coupled_dynamics:
+  type: fromfile
+  press:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_press.dat
+  temp:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_temp.dat
+  qvap:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_qvap.dat
+  qcond:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_qcond.dat
+  wvel:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_wvel.dat
+  thermo:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo.dat
+boundary_conditions:
+  type: addsupersatdomaintop
+  COORD3LIM: 656
+  newnsupers: 256
+  DRYRADIUS: 1e-09
+  MINRADIUS: 1e-07
+  MAXRADIUS: 0.001
+  NUMCONC_a: 575.2796379127539
+  GEOMEAN_a: 0.0001304169785725949
+  geosigma_a: 1.6746895810382312
+  NUMCONC_b: 64231.0182568868
+  GEOMEAN_b: 2.0697867776705365e-06
+  geosigma_b: 1.6999999990440153
