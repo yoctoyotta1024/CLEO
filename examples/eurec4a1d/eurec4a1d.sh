@@ -28,32 +28,33 @@ echo "git branch: $(git symbolic-ref --short HEAD)"
 echo "============================================"
 
 buildtype="cuda"
+executables="eurec4a1D"
+
 path2CLEO=${HOME}/CLEO/
 path2builds=${path2CLEO}builds/
 path2data=${path2CLEO}data/output/raw/
 path2eurec4a1d=${path2CLEO}examples/eurec4a1d/
+
+# cloud type
+path2sdmeurec4a=${HOME}/repositories/sdm-eurec4a/
+cloud_observation_configfile=${path2sdmeurec4a}data/model/input/new/clusters_18.yaml
+
 # Use the stationary or evolving version of the model
 
 ### ---------- Setup for the EUREC4A1D model ---------- ###
 
 # --- stationary version, with super droplet creation at domain top by boundarz conditions
 path2build=${path2builds}build_eurec4a1D_stationary/
+rawdirectory=${path2data}stationary/
+
 pythonscript=${path2eurec4a1d}scripts/eurec4a1d_stationary.py
 configfile=${path2eurec4a1d}src/config/eurec4a1d_config_stationary.yaml
-rawdirectory=${path2data}stationary/
 
 # # --- evolving version, without super droplet creation at domain top
 # path2build=${path2builds}build_eurec4a1D_evolving/
 # pythonscript=${path2eurec4a1d}scripts/eurec4a1d_evolving.py
 # configfile=${path2eurec4a1d}src/config/eurec4a1d_config_evolving.yaml
 # rawdirectory=${path2data}evolving/
-
-
-executables="eurec4a1D"
-
-
-path2sdmeurec4a=${HOME}/repositories/sdm-eurec4a/
-cloud_observation_configfile=${path2sdmeurec4a}data/model/input/new/clusters_18.yaml
 
 # create the script arguments
 script_args="${HOME} ${configfile} ${cloud_observation_configfile} ${rawdirectory}"
@@ -80,7 +81,7 @@ echo "script_args: ${script_args}"
 echo "---------------------------"
 ### ---------------------------------------------------- ###
 
-### ---------------------- build CLEO ------------------ ###
+## ---------------------- build CLEO ------------------ ###
 ${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}
 ### ---------------------------------------------------- ###
 

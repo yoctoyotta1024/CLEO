@@ -1,11 +1,11 @@
 # ----- CLEO -----
-# File: config.yaml
+# File: eurec4a1d_config.yaml
 # Project: config
-# Created Date: Wednesday 17th April 2024
+# Created Date: Thursday 18th April 2024
 # Author: Clara Bayley (CB)
 # Additional Contributors:
 # -----
-# Last Modified: Wednesday 17th April 2024
+# Last Modified: Thursday 18th April 2024
 # Modified By: CB
 # -----
 # License: BSD 3-Clause "New" or "Revised" License
@@ -14,7 +14,7 @@
 # Copyright (c) 2023 MPI-M, Clara Bayley
 # -----
 # File Description:
-# Configuration file for CLEO SDM coupled to a dynamics solver.
+# Configuration file for CLEO eurec4a 1-D rainshaft example.
 # Note: The inital superdroplets data read from file "initsupers_filename" can be made with
 # CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
 # Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
@@ -25,27 +25,30 @@
 domain:
   nspacedims: 1
   ngbxs: 34
-  maxnsupers: 3048
+  maxnsupers: 32768
 timesteps:
   CONDTSTEP: 0.1
   COLLTSTEP: 1
   MOTIONTSTEP: 2
-  COUPLTSTEP: 60
-  OBSTSTEP: 2
-  T_END: 60
+  COUPLTSTEP: 1200
+  OBSTSTEP: 10
+  T_END: 1200
 inputfiles:
-  constants_filename: ../libs/cleoconstants.hpp
+  constants_filename: /home/m/m301096/CLEO/libs/cleoconstants.hpp
   grid_filename:
-    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_ddimlessGBxboundaries.dat
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_ddimlessGBxboundaries.dat
 initsupers:
   type: frombinary
   initsupers_filename:
-    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessSDsinit.dat
-  initnsupers: 3048
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessSDsinit.dat
+  initnsupers: 256
 outputdata:
-  setup_filename: /home/m/m301096/CLEO/data/output/raw/stationary/clusters_18/eurec4a1d_setup.txt
-  stats_filename: /home/m/m301096/CLEO/data/output/raw/stationary/clusters_18/eurec4a1d_stats.txt
-  zarrbasedir: /home/m/m301096/CLEO/data/output/raw/stationary/clusters_18/eurec4a1d_sol.zarr
+  setup_filename:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/eurec4a1d_setup.txt
+  stats_filename:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/eurec4a1d_stats.txt
+  zarrbasedir:
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/eurec4a1d_sol.zarr
   maxchunk: 2500000
 microphysics:
   condensation:
@@ -57,19 +60,17 @@ microphysics:
 coupled_dynamics:
   type: fromfile
   press:
-    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_press.dat
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_press.dat
   temp:
-    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_temp.dat
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_temp.dat
   qvap:
-    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_qvap.dat
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_qvap.dat
   qcond:
-    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_qcond.dat
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_qcond.dat
   wvel:
-    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo_wvel.dat
-  uvel: ./share/dimlessthermo_uvel.dat
-  vvel: ./share/dimlessthermo_vvel.dat
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo_wvel.dat
   thermo:
-    /home/m/m301096/CLEO/builds/build_eurec4a1D_stationary/share/eurec4a1d_dimlessthermo.dat
+    /home/m/m301096/CLEO/data/output/raw/stationary_no_collision/clusters_18/share/eurec4a1d_dimlessthermo.dat
 boundary_conditions:
   type: addsupersatdomaintop
   COORD3LIM: 656

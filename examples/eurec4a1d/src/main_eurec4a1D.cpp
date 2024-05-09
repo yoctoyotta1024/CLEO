@@ -108,12 +108,13 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
   const auto c = config.get_condensation();
   const MicrophysicalProcess auto cond =
       Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.niters, c.rtol,
-                   c.atol, c.SUBTSTEP, &realtime2dimless);
+                  c.atol, c.SUBTSTEP, &realtime2dimless);
 
-  const PairProbability auto coalprob = LongHydroProb(1.0);
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
+  // const PairProbability auto coalprob = LongHydroProb(1.0);
+  // const MicrophysicalProcess auto coal = CollCoal(
+  //            tsteps.get_collstep(), &step2realtime, coalprob);
 
-  return coal >> cond;
+  return cond;  // >> coal;
 }
 
 template <typename Store>
