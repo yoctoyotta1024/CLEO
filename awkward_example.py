@@ -3,8 +3,62 @@ import awkward as ak
 import numpy as np
 from pySD.sdmout_src import pysetuptxt, pyzarr
 from typing import Union
+import pytest
 
 IntegerArray = Union[np.ndarray, ak.highlevel.Array]
+
+
+def get_awkward_shape(a):
+    """
+    Get the shape of the awkward array a as a list.
+    Variable axis lengths are replaced by ``np.nan``.
+
+    Parameters
+    ----------
+    a : ak.Array
+        The input array.
+
+    Returns
+    -------
+    list
+        The shape of the array as a list.
+        ``var`` positions are replaced by ``np.nan``.
+    """
+
+    # check for number of dimensions
+    ndim = a.ndim
+    # create output list
+    shape = []
+    # For each dinemsion, get the number of elements.
+    # If the number of elements changes over the axis, np.nan is used to indicate a variable axis length
+    for dim in range(ndim):
+        num = ak.num(a, axis=dim)
+        # for the 0th axis, the number of elements is an integer
+        if isinstance(num, np.ndarray):
+            num = int(num)
+            shape.append(num)
+        else:
+            maxi = int(ak.max(num))
+            mini = int(ak.min(num))
+            if maxi == mini:
+                shape.append(maxi)
+            else:
+                shape.append(np.nan)
+    return shape
+
+
+@pytest.mark.parametrize(
+    "a, should",
+    [
+        (ak.Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), [10]),
+        (ak.Array([[1, 2, 3], [4, 5, 6]]), [2, 3]),
+        (ak.Array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]]), [2, 2, 2]),
+        (ak.Array([[1, 2, 3], [4, 5, 6, 7]]), [2, np.nan]),
+    ],
+)
+def test_get_awkward_shape(a, should):
+    print(get_awkward_shape(a))
+    assert get_awkward_shape(a) == should
 
 
 def eulerian_from_count(data, counts, G):
