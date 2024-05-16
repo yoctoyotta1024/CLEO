@@ -61,6 +61,104 @@ def test_get_awkward_shape(a, should):
     assert get_awkward_shape(a) == should
 
 
+def ak_digitize_2D(
+    x: ak.highlevel.Array, bins: np.ndarray, right: bool = False
+) -> ak.highlevel.Array:
+    """
+    This function takes a 2D awkward array and bins it into the provided bins.
+    The binning is done using ``numpy.digitize`` along the flattened array.
+
+    Note
+    ----
+    The input array must be 2D.
+    None and np.nan will be stored in the last bin.
+
+    Parameters
+    ----------
+    x : ak.highlevel.Array
+        The input array to be binned.
+    bins : np.ndarray
+        The bins to be used for binning the array.
+    right : bool, optional
+        As from the numpy documentation:
+        Indicating whether the intervals include the right or the left bin edge.
+        Default behavior is (right==False) indicating that the interval does not include the right edge.
+        The left bin end is open in this case, i.e., bins[i-1] <= x < bins[i] is the default behavior for monotonically increasing bins.
+
+    Returns
+    -------
+    indices : ak.highlevel.Array of ints
+        Output array of indices, of same shape as x.
+
+    Example
+    -------
+    >>> x = ak.Array([[1, 2, 3], [4, 5, 6]])
+    >>> bins = np.array([0, 2, 4, 6])
+    >>> array_to_bin_index(x, bins, right = False)
+    [[1, 2, 2],
+     [3, 3, 4]]
+    ---------------------
+    type: 2 * var * int64
+
+    References
+    ----------
+    https://numpy.org/doc/stable/reference/generated/numpy.digitize.html
+    """
+
+    if x.ndim != 2:
+        raise ValueError("Array x must be 2D")
+    digi, num = ak.flatten(x), ak.num(x)
+
+    if bins.ndim != 1:
+        raise ValueError("Bins must be 1D")
+
+    digi = np.digitize(x=digi, bins=bins, right=right)
+    digi = ak.unflatten(digi, num)
+    return digi
+
+
+@pytest.mark.parametrize(
+    "x, bins, should",
+    [
+        (
+            ak.Array([[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]]),
+            np.array([0, 3, 6, 100]),
+            ak.Array([[1, 1, 2, 0, 4], [2, 2, 3, 4, 3, 4]]),
+        ),
+    ],
+)
+def test_array_to_bin_index(x, bins, should):
+    """Tests returns of the ak_digitize_2D function"""
+    x_binned = ak_digitize_2D(x, bins)
+    # check for equality
+    assert ak.sum(x_binned != should) == 0
+    # check for same shape
+    assert get_awkward_shape(x_binned) == get_awkward_shape(should)
+    # check for same counts
+    assert ak.count(x_binned) == ak.count(should)
+
+
+@pytest.mark.parametrize(
+    "x, bins, exception",
+    [
+        (
+            ak.Array([[[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]], [None]]),
+            np.array([0, 3, 6, 100]),
+            ValueError,
+        ),
+        (
+            ak.Array([[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]]),
+            np.array([[0], [3]]),
+            ValueError,
+        ),
+    ],
+)
+def test_array_to_bin_index_exception(x, bins, exception):
+    """Tests for exceptions in the ak_digitize_2D function"""
+    with pytest.raises(exception):
+        ak_digitize_2D(x, bins)
+
+
 def eulerian_from_count(data, counts, G):
     # def eulerian_from_counts(data, counts, G) :
     res = ak.unflatten(data, ak.flatten(counts), axis=1)
