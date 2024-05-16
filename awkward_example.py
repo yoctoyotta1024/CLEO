@@ -219,11 +219,11 @@ def create_counts_fast(data: IntegerArray) -> ak.highlevel.Array:
     return counts_flat
 
 
-def euler_full(
+def binning_by_2D_indexer(
     data: ak.highlevel.Array, indexer: ak.highlevel.Array
 ) -> ak.highlevel.Array:
     """
-    Calculates the Eulerian from the given data and indexer.
+    Calculates the Eulerian 3D array from the given 2D data and 2D indexer arrays.
     The indexer array needs to have a ``int`` like dtype.
     The output shape of the array will be given by the maximum value M in ``indexer``.
     Output shape : T x M x var
@@ -273,11 +273,142 @@ def euler_full(
     return eulerian_from_count(data_sort, counts, N)
 
 
+def create_counts_3d(
+    indexer: ak.highlevel.Array, flat: bool = False
+) -> ak.highlevel.Array:
+    """
+    This function creates a 3D array with the counts of unique values in the input array.
+    For instance, if the ``indexer`` array has the shape (T, N, var) and its highest values is B, the output array will have the shape (T, N, B+1),
+
+    Parameters
+    ----------
+    indexer : ak.highlevel.Array
+        The input array containing the integer indexing values which shall be used to create a counting array.
+        The dimensions should be T x N x var.
+    flat : bool, optional
+        If False, the output array will have the shape (T, N, B+1).
+        If True, the output array is flattened top be a 1D array of length T*N*(B+1).
+        Default is False.
+
+    Returns
+    -------
+    ak.highlevel.Array
+        A 3D array with the counts of values given in the indexer array.
+        The output shape will be (T, N, B+1).
+    """
+
+    shape_indexer = get_awkward_shape(indexer)
+
+    assert len(shape_indexer) == 3, "The indexer array must be 3D!"
+    x, y, _ = shape_indexer
+    z = int(ak.max(indexer)) + 1
+
+    # to make sure the indexer has unique value for each combination od i and j along dim0, dim1, a 2D array is created.
+    # Example:
+    # T = 4, N = 3, B = 4
+    # x = 4, y = 3, z = 5
+    # [[ 0,  5, 10],
+    #  [15, 20, 25],
+    #  [30, 35, 40],
+    #  [45, 50, 55]])
+
+    add_array = np.arange(0, x * y * z, z).reshape(x, y)
+
+    indexer_mod = indexer + add_array
+    indexer_mod = ak.flatten(indexer_mod, axis=1)
+    indexer_mod = ak.flatten(indexer_mod, axis=1)
+
+    bcount = np.bincount(indexer_mod)
+    bcount = ak.fill_none(ak.pad_none(bcount, x * y * z, axis=0), 0)
+
+    if flat is False:
+        bcount = ak.unflatten(bcount, z)
+        bcount = ak.unflatten(bcount, y)
+        return bcount
+    else:
+        return bcount
+
+
+def binning_by_3D_indexer(data, indexer):
+    """
+    This function bins the data array according to the indexer arrays values, which should be integers.
+    The resulting array will have the shape (T, N, B, var), where B is the number of unique values in the indexer array.
+
+    Note
+    ----
+    - The input arrays must have the same shape.
+    - The indexer array must have integer values.
+    - The data array can ONLY have variable axis lengths at the last axis!
+
+    Parameters
+    ----------
+    data : ak.Array
+        The input data array with shape (T, N, var).
+    indexer : ak.Array
+        The indexer array with shape (T, N, var).
+        And B unique values.
+
+    Returns
+    -------
+    result : ak.highlevel.Array
+        The binned data array with shape (T, N, B, var).
+    """
+
+    shape_data = get_awkward_shape(data)
+    shape_indexer = get_awkward_shape(indexer)
+
+    assert (
+        shape_data == shape_indexer
+    ), "The shapes of the data and indexer do not match!"
+
+    ndim_data = len(shape_data)
+    for idx, elem in enumerate(shape_data):
+        if idx < ndim_data - 1:
+            assert ~np.isnan(
+                elem
+            ), "The data array can ONLY have variable axis lengths at the last axis!"
+
+    x, y, _ = shape_indexer
+    z = int(ak.max(indexer)) + 1
+
+    args = ak.argsort(indexer, axis=2)
+    data = data[args]
+    indexer = indexer[args]
+
+    # flatten the data array
+    data_flat = ak.flatten(data, axis=1)
+    data_flat = ak.flatten(data_flat, axis=1)
+
+    # to make sure the indexer has unique value for each combination od i and j along dim0, dim1, a 2D array is created.
+    # Example:
+    # T = 4, N = 3, B = 4
+    # x = 4, y = 3, z = 5
+    # [[ 0,  5, 10],
+    #  [15, 20, 25],
+    #  [30, 35, 40],
+    #  [45, 50, 55]])
+
+    bin_counts_3D = create_counts_3d(indexer, flat=True)
+
+    result = ak.unflatten(data_flat, bin_counts_3D)
+    result = ak.unflatten(result, z)
+    result = ak.unflatten(result, y)
+
+    return result
+
+
+def binning_by_2_indexers(data, indexer1, indexer2):
+    data_3d = binning_by_2D_indexer(data, indexer1)
+    indexer_3d = binning_by_2D_indexer(indexer2, indexer1)
+
+    return binning_by_3D_indexer(data_3d, indexer_3d)
+
+
 # %%
 
 data = ak.Array(
     [
-        [10.2, 20, 30],
+        [10.0, 20, 30],
         [12],
         [40, 50],
         [90],
@@ -293,10 +424,10 @@ time_index = ak.Array(
 )
 gridbox = ak.Array(
     [
-        [5, 1, 2],
+        [0, 0, 0],
         [1],
-        [3, 3],
-        [3],
+        [1, 2],
+        [2],
     ]
 )
 
@@ -318,6 +449,29 @@ id = ak.Array(
     ]
 )
 
+radius = ak.Array(
+    [
+        [1.1, 1.2, 2.6, 2.5],
+        [2.1],
+        [1.2, 3.4],
+        [3.1],
+    ]
+)
+
+gbxindex = np.arange(ak.max(gridbox) + 1)
+
+bins = np.arange(0, 4, 1)
+indexer = ak_digitize_2D(radius, bins)
+
+# data_3d = binning_by_2D_indexer(data, gridbox)
+# data_3d = binning_by_2D_indexer(data, gridbox)
+# indexer_3d = binning_by_2D_indexer(indexer, gridbox)
+# id_3d = binning_by_2D_indexer(id, gridbox)
+
+# create_counts_3d(indexer_3d)
+
+binning_by_2_indexers(data, gridbox, indexer)
+# %%
 setupfile = "/home/m/m301096/CLEO/data/output/raw/no_aerosols_collision_many_5012/clusters_301/eurec4a1d_setup.txt"
 dataset = "/home/m/m301096/CLEO/data/output/raw/no_aerosols_collision_many_5012/clusters_301/eurec4a1d_sol.zarr"
 # read in constants and intial setup from setup .txt file
@@ -327,13 +481,16 @@ consts = pysetuptxt.get_consts(setupfile, isprint=False)
 sddata = pyzarr.get_supers(dataset, consts)
 
 
-# data = sddata.radius
-# id = sddata.sdId + int(10e5)
-# gridbox = sddata.sdgbxindex
+data = sddata.radius
+id = sddata.sdId
+gridbox = sddata.sdgbxindex
+radius = sddata.radius
 
-euler_full(data, id)
 
+bins = np.arange(0, 4, 1)
+indexer = ak_digitize_2D(radius, bins)
 
+binning_by_2_indexers(data, gridbox, indexer)
 # def calc_memory_array(elements):
 #     memory_usage = elements * 8  # 8 bytes per float
 
@@ -346,3 +503,5 @@ euler_full(data, id)
 #     else:
 #         memory_usage_tb = memory_usage / (1024 * 1024 * 1024 * 1024)
 #         return f"Memory usage: {memory_usage_tb:.2f} Tb"
+
+# %%
