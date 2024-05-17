@@ -10,8 +10,6 @@ message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 # explicitly set library executables path to /lib in top level of build tree
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
-enable_language(C)
-find_package(MPI REQUIRED COMPONENTS C)
 find_package(YAC)
 
 # Add executables and create library target
@@ -30,7 +28,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO
 # Link libraries to target library
 set(LINKLIBS initialise gridboxes superdrops)
 target_link_libraries("${LIBNAME}" PUBLIC ${LINKLIBS})
-target_link_libraries("${LIBNAME}" PRIVATE "-L/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib" YAC::YAC)
+target_link_libraries("${LIBNAME}" PRIVATE YAC::YAC)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)
