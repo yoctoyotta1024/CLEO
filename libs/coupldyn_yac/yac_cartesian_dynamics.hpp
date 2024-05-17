@@ -146,7 +146,7 @@ struct YacDynamics {
   YacDynamics(const Config &config, const unsigned int couplstep, const std::array<size_t, 3> ndims,
               const unsigned int nsteps)
       : interval(couplstep),
-        end_time(config.T_END),
+        end_time(config.get_timesteps().T_END),
         dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps)) {}
 
   auto get_couplstep() const { return interval; }
