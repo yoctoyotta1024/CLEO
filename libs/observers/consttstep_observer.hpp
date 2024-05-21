@@ -26,7 +26,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./sdmmonitor.hpp"
+#include "sdmmonitor/sdmmonitor.hpp"
 
 /**
  * @brief Concept ObsFuncs for all types that can be called used by ConsttepObserver for

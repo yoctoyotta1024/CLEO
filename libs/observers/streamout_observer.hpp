@@ -33,8 +33,8 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./sdmmonitor.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "sdmmonitor/sdmmonitor.hpp"
 
 namespace dlc = dimless_constants;
 
