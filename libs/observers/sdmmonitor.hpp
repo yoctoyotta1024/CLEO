@@ -28,8 +28,8 @@
  * @tparam SDMMo Type that satisfies the SDMMonitor concept.
  */
 template <typename SDMMo>
-concept SDMmonitor = requires(SDMMo sdmmo) {
-  { ofs.monitor_microphysics() } -> std::same_as<void>;
+concept SDMMonitor = requires(SDMMo mo) {
+  { mo.monitor_microphysics() } -> std::same_as<void>;
 };
 
 struct NullSDMMonitor {
