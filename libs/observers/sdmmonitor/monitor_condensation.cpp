@@ -28,6 +28,7 @@
  * precision (4 bytes float) in output.
  *
  */
+KOKKOS_FUNCTION
 void MonitorCondensation::monitor_microphysics() const {
   const auto rate_dbl = double{5.0};
   const auto rate = static_cast<float>(rate_dbl);

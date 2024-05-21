@@ -57,7 +57,7 @@ class DoCondensationObs {
    * @brief Copy data from monitor to the array in the dataset.
    */
   void at_start_step() const {
-    const size_t sz = 1;  // TODO(CB): make buffer and monitor consistent view / mirror types
+    const size_t sz = monitor.condrate.extent(0);
     auto h_data = Buffer<float>::viewh_buffer("h_data", sz);
     Kokkos::deep_copy(h_data, monitor.condrate);
     dataset.write_to_array(xzarr_ptr, h_data);

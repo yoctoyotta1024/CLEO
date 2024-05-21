@@ -24,11 +24,12 @@
 
 #include <Kokkos_Core.hpp>
 
-struct MonitorCondensation {
-  using viewd_condrate = Kokkos::View<float[1]>;
-  viewd_condrate condrate;  // TODO(CB) monitor condensation properly
+#include "zarr/buffer.hpp"
 
-  MonitorCondensation() : condrate("condrate") { Kokkos::deep_copy(condrate, 0.0); }
+struct MonitorCondensation {
+  Buffer<float>::mirrorviewd_buffer condrate;  // TODO(CB) monitor condensation properly
+
+  MonitorCondensation() : condrate("condrate", 1) { Kokkos::deep_copy(condrate, 0.0); }
 
   /**
    * @brief Monitor condensation rate
@@ -37,6 +38,7 @@ struct MonitorCondensation {
    * precision (4 bytes float) in output.
    *
    */
+  KOKKOS_FUNCTION
   void monitor_microphysics() const;
 };
 
