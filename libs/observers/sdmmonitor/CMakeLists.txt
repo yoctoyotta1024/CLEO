@@ -4,30 +4,21 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set library name and print directory of this CMakeLists.txt (source directory of library)
-set(LIBNAME "observers")
+set(LIBNAME "sdmmonitor")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
-add_subdirectory(sdmmonitor)
-
 # explicitly set library executables path to /lib in top level of build tree
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
-"streamout_observer.cpp"
-"runstats_observer.cpp"
-"massmoments_observer.cpp"
+  "monitor_condensation.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})
 
-# Add directories for target library
+# Add directories and link libraries for target library
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
-
-# Link libraries to target library
-set(LINKLIBS sdmmonitor gridboxes superdrops zarr)
-target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # set specific C++ compiler options for target (optional)

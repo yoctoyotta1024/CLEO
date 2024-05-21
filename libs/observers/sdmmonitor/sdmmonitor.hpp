@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: sdmmonitor.hpp
- * Project: observers
+ * Project: sdmmonitor
  * Created Date: Wednesday 8th May 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -19,8 +19,8 @@
  * concept and structs used by observers to monitor various SDM processes
  */
 
-#ifndef LIBS_OBSERVERS_SDMMONITOR_HPP_
-#define LIBS_OBSERVERS_SDMMONITOR_HPP_
+#ifndef LIBS_OBSERVERS_SDMMONITOR_SDMMONITOR_HPP_
+#define LIBS_OBSERVERS_SDMMONITOR_SDMMONITOR_HPP_
 
 /**
  * @brief Concept of SDMmonitor to monitor various SDM processes.
@@ -66,12 +66,7 @@ struct CombinedSDMMonitor {
 };
 
 struct NullSDMMonitor {
-  double WIP; /**< work in progress TODO(CB) Note: must be GPU compatible */
-
-  NullSDMMonitor() = default;   // Kokkos requirement for a (dual)View
-  ~NullSDMMonitor() = default;  // Kokkos requirement for a (dual)View
-
   void monitor_microphysics() const {}
 };
 
-#endif  // LIBS_OBSERVERS_SDMMONITOR_HPP_
+#endif  //  LIBS_OBSERVERS_SDMMONITOR_SDMMONITOR_HPP_

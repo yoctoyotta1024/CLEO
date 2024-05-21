@@ -32,7 +32,7 @@
 #include "./consttstep_observer.hpp"
 #include "./observers.hpp"
 #include "./parallel_write_data.hpp"
-#include "./sdmmonitor.hpp"
+#include "sdmmonitor/sdmmonitor.hpp"
 #include "zarr/dataset.hpp"
 
 /**

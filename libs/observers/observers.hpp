@@ -29,7 +29,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./sdmmonitor.hpp"
+#include "sdmmonitor/sdmmonitor.hpp"
 
 /**
  * @brief Concept Observer is all types that have functions for timestepping and

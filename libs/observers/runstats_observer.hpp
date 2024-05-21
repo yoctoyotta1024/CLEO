@@ -35,8 +35,8 @@
 #include <string>
 
 #include "../kokkosaliases.hpp"
-#include "./sdmmonitor.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "sdmmonitor/sdmmonitor.hpp"
 
 /**
  * @struct RunStats
