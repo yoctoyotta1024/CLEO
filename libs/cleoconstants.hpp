@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 21st April 2024
+ * Last Modified: Tuesday 21st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,8 +28,6 @@
 #include <cstdint>
 #include <limits>
 #include <numbers>
-
-// TODO(CB): docstrings
 
 /**
  * @brief Namespace containing values of constants with dimensions.
