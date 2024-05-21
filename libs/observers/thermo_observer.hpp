@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Tuesday 21st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -137,7 +137,7 @@ struct QvapFunc {
 };
 
 /**
- * @brief Functor operator to perform a copy of the liquid ass mixing ratio "qcond" from the state
+ * @brief Functor operator to perform a copy of the liquid mass mixing ratio "qcond" from the state
  * of each gridbox to d_data within Kokkos::parallel_for loop over gridboxes with range policy.
  *
  * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.
