@@ -43,8 +43,7 @@ concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs
   { ofs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { ofs.after_timestepping() } -> std::same_as<void>;
   { ofs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { ofs.get_monitor_of_sdm_processes() } -> std::same_as<NullSDMMonitor>;
-  // TODO(CB): return type for SDMMonitor concept
+  { ofs.get_monitor_of_sdm_processes() };
 };
 
 /**
