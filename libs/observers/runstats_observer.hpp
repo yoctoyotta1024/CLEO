@@ -166,7 +166,7 @@ class RunStatsObserver {
     }
   }
 
-  SDMMonitor auto get_monitor_of_sdm_processes() const { return NullSDMMonitor{}; }
+  SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 };
 
 #endif  // LIBS_OBSERVERS_RUNSTATS_OBSERVER_HPP_

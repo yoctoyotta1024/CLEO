@@ -43,7 +43,7 @@ concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs
   { ofs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { ofs.after_timestepping() } -> std::same_as<void>;
   { ofs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { ofs.get_monitor_of_sdm_processes() };
+  { ofs.get_sdmmonitor() };
 };
 
 /**
@@ -128,9 +128,7 @@ struct ConstTstepObserver {
     }
   }
 
-  SDMMonitor auto get_monitor_of_sdm_processes() const {
-    return do_obs.get_monitor_of_sdm_processes();
-  }
+  SDMMonitor auto get_sdmmonitor() const { return do_obs.get_sdmmonitor(); }
 };
 
 #endif  // LIBS_OBSERVERS_CONSTTSTEP_OBSERVER_HPP_

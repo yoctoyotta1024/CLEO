@@ -79,7 +79,7 @@ class DoWriteToDataset {
     parallel_write(d_gbxs, totsupers);
   }
 
-  SDMMonitor auto get_monitor_of_sdm_processes() const { return NullSDMMonitor{}; }
+  SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 };
 
 /**

@@ -32,6 +32,39 @@ concept SDMMonitor = requires(SDMMo mo) {
   { mo.monitor_microphysics() } -> std::same_as<void>;
 };
 
+/**
+ * @brief Structure CombinedSDMMonitor represents a new monitor formed from combination of two
+ * SDMMonitors 'a' and 'b'.
+ *
+ * @tparam SDMMo1 Type satisfying the SDMMonitor concept.
+ * @tparam SDMMo2 Type satisfying the SDMMonitor concept.
+ */
+template <SDMMonitor SDMMo1, SDMMonitor SDMMo2>
+struct CombinedSDMMonitor {
+ private:
+  SDMMo1 a; /**< First Monitor. */
+  SDMMo2 b; /**< Second Monitor. */
+
+ public:
+  /**
+   * @brief Construct a new CombinedSDMMonitor object.
+   *
+   * @param mo1 First Monitor.
+   * @param mo2 Second Monitor.
+   */
+  CombinedSDMMonitor(const SDMMo1 mo1, const SDMMo2 mo2) : a(mo1), b(mo2) {}
+
+  /**
+   * @brief monitor microphysics for combination of 2 sdm monitors.
+   *
+   * Each monitor is run sequentially.
+   */
+  void monitor_microphysics() const {
+    a.monitor_microphysics();
+    b.monitor_microphysics();
+  }
+};
+
 struct NullSDMMonitor {
   double WIP; /**< work in progress TODO(CB) Note: must be GPU compatible */
 
