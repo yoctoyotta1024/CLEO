@@ -12,12 +12,18 @@ set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
-  "monitor_condensation.cpp"
+  "condensation_observer.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})
 
-# Add directories and link libraries for target library
+# Add directories for target library
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
+
+# Link libraries to target library
+set(LINKLIBS zarr)
+target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 

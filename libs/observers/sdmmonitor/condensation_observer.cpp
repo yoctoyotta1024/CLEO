@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: monitor_condensation.cpp
+ * File: condensation_observer.cpp
  * Project: sdmmonitor
  * Created Date: Wednesday 8th May 2024
  * Author: Clara Bayley (CB)
@@ -19,7 +19,7 @@
  * functionality to monitor condensation SDM microphysical process
  */
 
-#include "./monitor_condensation.hpp"
+#include "./condensation_observer.hpp"
 
 /**
  * @brief Monitor condensation rate
@@ -32,5 +32,5 @@ KOKKOS_FUNCTION
 void MonitorCondensation::monitor_microphysics() const {
   const auto rate_dbl = double{5.0};
   const auto rate = static_cast<float>(rate_dbl);
-  Kokkos::deep_copy(condrate, rate);
+  Kokkos::deep_copy(d_data, rate);
 }

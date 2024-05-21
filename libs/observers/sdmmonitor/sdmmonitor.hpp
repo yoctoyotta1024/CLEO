@@ -22,6 +22,10 @@
 #ifndef LIBS_OBSERVERS_SDMMONITOR_SDMMONITOR_HPP_
 #define LIBS_OBSERVERS_SDMMONITOR_SDMMONITOR_HPP_
 
+#include <concepts>
+
+#include "zarr/buffer.hpp"
+
 /**
  * @brief Concept of SDMmonitor to monitor various SDM processes.
  *
