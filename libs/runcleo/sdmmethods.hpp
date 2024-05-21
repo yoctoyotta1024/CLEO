@@ -216,7 +216,7 @@ class SDMMethods {
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
                 const viewd_supers totsupers) const {
-    const SDMMonitor auto sdmmonitor = obs.get_monitor_of_sdm_processes();
+    const SDMMonitor auto sdmmonitor = obs.get_sdmmonitor();
 
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {

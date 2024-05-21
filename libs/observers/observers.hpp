@@ -45,7 +45,7 @@ concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs
   { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { obs.after_timestepping() } -> std::same_as<void>;
   { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { obs.get_monitor_of_sdm_processes() };
+  { obs.get_sdmmonitor() };
 };
 
 /**
@@ -55,11 +55,12 @@ concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs
  * @tparam Obs1 Type satisfying the Observer concept.
  * @tparam Obs2 Type satisfying the Observer concept.
  */
-template <Observer Obs1, Observer Obs2>
+template <Observer Obs1, Observer Obs2, SDMMonitor SDMMo>
 struct CombinedObserver {
  private:
-  Obs1 a; /**< First Observer. */
-  Obs2 b; /**< Second Observer. */
+  Obs1 a;   /**< First Observer. */
+  Obs2 b;   /**< Second Observer. */
+  SDMMo mo; /**< Combination of First and Second Observers' SDMMonitors */
 
  public:
   /**
@@ -67,8 +68,10 @@ struct CombinedObserver {
    *
    * @param obs1 First Observer.
    * @param obs2 Second Observer.
+   * @param mo12 Combined Monitor from first and second observers.
    */
-  CombinedObserver(const Obs1 obs1, const Obs2 obs2) : a(obs1), b(obs2) {}
+  CombinedObserver(const Obs1 obs1, const Obs2 obs2, const SDMMo mo12)
+      : a(obs1), b(obs2), mo(mo12) {}
 
   /**
    * @brief Run before timestepping for combination of 2 observers.
@@ -135,10 +138,19 @@ struct CombinedObserver {
     b.at_start_step(t_mdl, d_gbxs, totsupers);
   }
 
-  SDMMonitor auto get_monitor_of_sdm_processes() const {
-    return NullSDMMonitor{};
-  }  // TODO(CB) decide how to combine monitors
+  SDMMonitor auto get_sdmmonitor() const { return mo; }
 };
+
+/**
+ * @brief Return a new CombinedObserver object from combibation of 2 observers.
+ *
+ * @param obs1 First Observer.
+ * @param obs2 Second Observer.
+ */
+Observer auto CombineObservers(const Observer auto obs1, const Observer auto obs2) {
+  const SDMMonitor auto mo12 = CombinedSDMMonitor(obs1.get_sdmmonitor(), obs2.get_sdmmonitor());
+  return CombinedObserver(obs1, obs2, mo12);
+}
 
 /**
  * @brief Overloaded operator >> to combine two Observers.
@@ -148,7 +160,7 @@ struct CombinedObserver {
  * @return CombinedObserver<Obs1, Obs2> Combined Observer.
  */
 auto operator>>(const Observer auto obs1, const Observer auto obs2) {
-  return CombinedObserver(obs1, obs2);
+  return CombineObservers(obs1, obs2);
 }
 
 /**
@@ -198,7 +210,7 @@ struct NullObserver {
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
 
-  SDMMonitor auto get_monitor_of_sdm_processes() const { return NullSDMMonitor{}; }
+  SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 };
 
 #endif  // LIBS_OBSERVERS_OBSERVERS_HPP_

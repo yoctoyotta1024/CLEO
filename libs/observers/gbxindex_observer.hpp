@@ -136,7 +136,7 @@ class GbxindexObserver {
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
 
-  SDMMonitor auto get_monitor_of_sdm_processes() const { return NullSDMMonitor{}; }
+  SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 
   /**
    * @brief Returns the timestep of the next observation.
