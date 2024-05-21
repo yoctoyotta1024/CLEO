@@ -45,8 +45,7 @@ concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs
   { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { obs.after_timestepping() } -> std::same_as<void>;
   { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { obs.get_monitor_of_sdm_processes() } -> std::same_as<NullSDMMonitor>;
-  // TODO(CB): return type for SDMMonitor concept
+  { obs.get_monitor_of_sdm_processes() };
 };
 
 /**
