@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th May 2024
+ * Last Modified: Tuesday 21st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -45,7 +45,8 @@ concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs
   { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { obs.after_timestepping() } -> std::same_as<void>;
   { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { obs.get_monitor_of_sdm_processes() } -> std::same_as<SDMMonitor>;
+  { obs.get_monitor_of_sdm_processes() } -> std::same_as<NullSDMMonitor>;
+  // TODO(CB): return type for SDMMonitor concept
 };
 
 /**
@@ -135,9 +136,9 @@ struct CombinedObserver {
     b.at_start_step(t_mdl, d_gbxs, totsupers);
   }
 
-  SDMMonitor get_monitor_of_sdm_processes() const {
-    return SDMMonitor{};
-  }  // TODO(CB) decide how to construct and combine monitors
+  SDMMonitor auto get_monitor_of_sdm_processes() const {
+    return NullSDMMonitor{};
+  }  // TODO(CB) decide how to combine monitors
 };
 
 /**
@@ -198,7 +199,7 @@ struct NullObserver {
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
 
-  SDMMonitor get_monitor_of_sdm_processes() const { return SDMMonitor{}; }
+  SDMMonitor auto get_monitor_of_sdm_processes() const { return NullSDMMonitor{}; }
 };
 
 #endif  // LIBS_OBSERVERS_OBSERVERS_HPP_
