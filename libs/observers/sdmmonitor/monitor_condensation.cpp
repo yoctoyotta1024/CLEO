@@ -21,4 +21,15 @@
 
 #include "./monitor_condensation.hpp"
 
-void MonitorCondensation::monitor_microphysics() const { Kokkos::deep_copy(condrate, 5.0); }
+/**
+ * @brief Monitor condensation rate
+ *
+ * _Note:_ conversion of condensation rate from double precision (8 bytes double) to single
+ * precision (4 bytes float) in output.
+ *
+ */
+void MonitorCondensation::monitor_microphysics() const {
+  const auto rate_dbl = double{5.0};
+  const auto rate = static_cast<float>(rate_dbl);
+  Kokkos::deep_copy(condrate, rate);
+}

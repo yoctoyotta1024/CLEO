@@ -25,10 +25,18 @@
 #include <Kokkos_Core.hpp>
 
 struct MonitorCondensation {
-  Kokkos::View<double[1]> condrate;  // TODO(CB) monitor condensation properly
+  using viewd_condrate = Kokkos::View<float[1]>;
+  viewd_condrate condrate;  // TODO(CB) monitor condensation properly
 
   MonitorCondensation() : condrate("condrate") { Kokkos::deep_copy(condrate, 0.0); }
 
+  /**
+   * @brief Monitor condensation rate
+   *
+   * _Note:_ conversion of condensation rate from double precision (8 bytes double) to single
+   * precision (4 bytes float) in output.
+   *
+   */
   void monitor_microphysics() const;
 };
 
