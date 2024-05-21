@@ -34,7 +34,8 @@
 
 /* struct satisfies SDMMonitor concept for use in do_sdmmonitor_obs to make observer */
 struct MonitorCondensation {
-  Buffer<float>::mirrorviewd_buffer d_data;
+  using datatype = float;
+  Buffer<datatype>::mirrorviewd_buffer d_data;  // must match view type used by DoSDMMonitorObs
 
   MonitorCondensation() : d_data("condrate", 1) { Kokkos::deep_copy(d_data, 0.0); }
 
@@ -62,11 +63,13 @@ struct MonitorCondensation {
 template <typename Store>
 inline Observer auto CondensationObserver(const unsigned int interval, Dataset<Store> &dataset,
                                           const size_t maxchunk) {
-  const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, float>>(
-      dataset.template create_array<float>("condrate", "TODO(CB)", "<f4", 0.5, maxchunk, "time"));
+  const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, MonitorCondensation::datatype>>(
+      dataset.template create_array<MonitorCondensation::datatype>("condrate", "TODO(CB)", "<f4",
+                                                                   0.5, {maxchunk}, {"time"}));
 
-  const auto do_obs = DoSDMMonitorObs<Store, MonitorCondensation, float>(dataset, xzarr_ptr);
-  return ConstTstepObserver(interval, DoCondensationObs(dataset, maxchunk));
+  const auto do_obs = DoSDMMonitorObs<Store, MonitorCondensation, MonitorCondensation::datatype>(
+      dataset, xzarr_ptr);
+  return ConstTstepObserver(interval, do_obs);
 }
 
 #endif  //  LIBS_OBSERVERS_SDMMONITOR_CONDENSATION_OBSERVER_HPP_

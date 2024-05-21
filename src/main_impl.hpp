@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 4th May 2024
+ * Last Modified: Tuesday 21st May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,6 +50,7 @@
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/runstats_observer.hpp"
+#include "observers/sdmmonitor/condensation_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
@@ -200,6 +201,13 @@ inline Observer auto create_gridboxes_observer(const unsigned int interval, Data
 }
 
 template <typename Store>
+inline Observer auto create_sdmmonitor_observer(const unsigned int interval,
+                                                Dataset<Store> &dataset, const size_t maxchunk) {
+  const Observer auto monitor_cond = CondensationObserver(interval, dataset, maxchunk);
+  return monitor_cond;
+}
+
+template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      Dataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
@@ -224,7 +232,9 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  return obssd >> obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
+  const Observer auto obsm = create_sdmmonitor_observer(obsstep, dataset, maxchunk);
+
+  return obsm >> obssd >> obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Store>
