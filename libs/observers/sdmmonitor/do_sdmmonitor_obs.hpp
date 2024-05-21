@@ -43,6 +43,7 @@
 template <typename Store, SDMMonitor SDMMo, typename T>
 class DoSDMMonitorObs {
  private:
+  using viewh_buffer = Buffer<T>::viewh_buffer;
   Dataset<Store> &dataset;                              /**< Dataset to write time data to. */
   std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr; /**< Pointer to array in dataset. */
   SDMMo monitor;
@@ -52,7 +53,7 @@ class DoSDMMonitorObs {
    */
   void at_start_step() const {
     const size_t sz = monitor.d_data.extent(0);
-    auto h_data = Buffer<T>::viewh_buffer("h_data", sz);
+    const auto h_data = viewh_buffer("h_data", sz);
     Kokkos::deep_copy(h_data, monitor.d_data);
     dataset.write_to_array(xzarr_ptr, h_data);
   }
