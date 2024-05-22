@@ -4,6 +4,9 @@ import numpy as np
 from pySD.sdmout_src import pysetuptxt, pyzarr
 from typing import Union
 import pytest
+import ipytest
+
+ipytest.autoconfig()
 
 IntegerArray = Union[np.ndarray, ak.highlevel.Array]
 
@@ -127,7 +130,7 @@ def ak_digitize_2D(
         ),
     ],
 )
-def test_array_to_bin_index(x, bins, should):
+def test_ak_digitize_2D(x, bins, should):
     """Tests returns of the ak_digitize_2D function"""
     x_binned = ak_digitize_2D(x, bins)
     # check for equality
@@ -159,6 +162,111 @@ def test_array_to_bin_index_exception(x, bins, exception):
         ak_digitize_2D(x, bins)
 
 
+def ak_digitize_3D(
+    x: ak.highlevel.Array, bins: np.ndarray, right: bool = False
+) -> ak.highlevel.Array:
+    """
+    This function takes a 3D awkward array and bins it into the provided bins.
+    The binning is done using ``numpy.digitize`` along the flattened array.
+
+    Note
+    ----
+    The input array must be 3D.
+    None and np.nan will be stored in the last bin.
+    Only values in the last axis are allowed! This ``ak.Array([[[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]], [None, 1]])`` is not valid!
+
+
+    Parameters
+    ----------
+    x : ak.highlevel.Array
+        The input array to be binned.
+    bins : np.ndarray
+        The bins to be used for binning the array.
+    right : bool, optional
+        As from the numpy documentation:
+        Indicating whether the intervals include the right or the left bin edge.
+        Default behavior is (right==False) indicating that the interval does not include the right edge.
+        The left bin end is open in this case, i.e., bins[i-1] <= x < bins[i] is the default behavior for monotonically increasing bins.
+
+    Returns
+    -------
+    indices : ak.highlevel.Array of ints
+        Output array of indices, of same shape as x.
+
+    Example
+    -------
+    >>> x = ak.Array([[[1, 2, 3], [4, 5, 6]], [[1], [2]]])
+    >>> bins = np.array([0, 2, 4, 6])
+    >>> array_to_bin_index(x, bins, right = False)
+    [
+        [[1, 2, 2],[3, 3, 4]]
+        [[1], [2]],
+    ]
+    ---------------------
+    type: 2 * 2 * var * int64
+
+    References
+    ----------
+    https://numpy.org/doc/stable/reference/generated/numpy.digitize.html
+    """
+
+    if x.ndim != 3:
+        raise ValueError("Array x must be 3D")
+    digi, num0 = ak.flatten(x), ak.num(x)
+    digi, num1 = ak.flatten(digi), ak.num(digi)
+
+    if bins.ndim != 1:
+        raise ValueError("Bins must be 1D")
+
+    digi = np.digitize(x=digi, bins=bins, right=right)
+    digi = ak.unflatten(digi, num1)
+    digi = ak.unflatten(digi, num0)
+    return digi
+
+
+@pytest.mark.parametrize(
+    "x, bins, should",
+    [
+        (
+            ak.Array([[[1, 2, 3], [4, 5]], [[1], [2]]]),
+            np.array([0, 2, 4, 6]),
+            ak.Array([[[1, 2, 2], [3, 3]], [[1], [2]]]),
+        ),
+    ],
+)
+def test_ak_digitize_3D(x, bins, should):
+    """Tests returns of the ak_digitize_3D function"""
+    x_binned = ak_digitize_3D(x, bins)
+    # check for equality
+    assert ak.sum(x_binned != should) == 0
+    # check for same shape
+    assert get_awkward_shape(x_binned) == get_awkward_shape(should)
+    # check for same counts
+    assert ak.count(x_binned) == ak.count(should)
+
+
+@pytest.mark.parametrize(
+    "x, bins, exception",
+    [
+        # The first test is not a valid case, because only values in the last axis are allowed
+        (
+            ak.Array([[[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]], [None, 1]]),
+            np.array([0, 3, 6, 100]),
+            ValueError,
+        ),
+        (
+            ak.Array([[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None, 1]]),
+            np.array([[0], [3]]),
+            ValueError,
+        ),
+    ],
+)
+def test_ak_digitize_3D_exception(x, bins, exception):
+    """Tests for exceptions in the ak_digitize_3D function"""
+    with pytest.raises(exception):
+        ak_digitize_3D(x, bins)
+
+
 def eulerian_from_count(data, counts, G):
     # def eulerian_from_counts(data, counts, G) :
     res = ak.unflatten(data, ak.flatten(counts), axis=1)
@@ -169,7 +277,7 @@ def eulerian_from_count(data, counts, G):
     return res
 
 
-def create_counts_fast(data: IntegerArray) -> ak.highlevel.Array:
+def create_counts_2D(data: IntegerArray) -> ak.highlevel.Array:
     """
     This function creates a 2D array with the counts of unique values in the input array.
     It identifies the unique values in each subarray along axis 1.
@@ -219,61 +327,7 @@ def create_counts_fast(data: IntegerArray) -> ak.highlevel.Array:
     return counts_flat
 
 
-def binning_by_2D_indexer(
-    data: ak.highlevel.Array, indexer: ak.highlevel.Array
-) -> ak.highlevel.Array:
-    """
-    Calculates the Eulerian 3D array from the given 2D data and 2D indexer arrays.
-    The indexer array needs to have a ``int`` like dtype.
-    The output shape of the array will be given by the maximum value M in ``indexer``.
-    Output shape : T x M x var
-
-    Note
-    ----
-    This functions uses np.bincount on the lower levels.
-    Thus, at one point an np.ndarray of shape (T * M) will be created and needs to be stored in memory.
-    This limits the capability due to memory usage.
-
-    For a lagrangian tracking for non sparse outputs, it is prefered to use the lagrangian function.
-
-    Parameters
-    ----------
-    data (ak.highlevel.Array):
-        The input data array (T x var).
-    indexer (ak.highlevel.Array):
-        The indexer array (T x var) of dtype int.
-        With maximum value M.
-
-    Returns
-    -------
-    ak.highlevel.Array:
-        The calculated Eulerian array of shape (T x M x var)
-    """
-    # indexer_unique = np.unique(ak.flatten(indexer))
-    N = int(ak.max(indexer)) + 1
-
-    # sort arrays by their
-    argsort = ak.argsort(indexer, axis=1)
-    indexer_sort = indexer[argsort]
-    data_sort = data[argsort]
-
-    counts = create_counts_fast(indexer_sort)
-
-    # The function eulerian_from_count performes this bit of code:
-    # ----------
-    # # unflatten the data array using the counts array.
-    # res = ak.unflatten(data, ak.flatten(counts), axis=1)
-    # # flatten this array again
-    # res = ak.unflatten(ak.flatten(res), N)
-    # # then unflatten with the correct length of the number of gridboxes
-    # res = ak.unflatten(ak.flatten(res), N)
-    # return res
-    # ----------
-
-    return eulerian_from_count(data_sort, counts, N)
-
-
-def create_counts_3d(
+def create_counts_3D(
     indexer: ak.highlevel.Array, flat: bool = False
 ) -> ak.highlevel.Array:
     """
@@ -327,6 +381,114 @@ def create_counts_3d(
         return bcount
     else:
         return bcount
+
+
+def binning_by_1D_indexer(
+    data: ak.highlevel.Array, indexer: ak.highlevel.Array
+) -> ak.highlevel.Array:
+    """
+    Calculates the Eulerian 2D array from the given 1D data and 1D indexer arrays.
+    The indexer array needs to have a ``int`` like dtype.
+    The output shape of the array will be given by the maximum value M in ``indexer``.
+    Output shape : T x M x var
+
+    Note
+    ----
+    - This functions uses np.bincount on the lower levels.
+    - Thus, at one point an np.ndarray of shape (M) will be created and needs to be stored in memory.
+    - This limits the capability due to memory usage.
+    - A good practice is, to extract the N unique values of the indexer array. With this, create a new indexer with values from 0 to N. You can use the numpy.digitize function for this.
+
+    >>> unique_index = np.unique(indexer)
+    >>> unique_indexer = np.digitize(indexer, unique_index)
+    >>> binning_by_1D_indexer(data, unique_indexer)
+
+    For a lagrangian tracking for non sparse outputs, it is prefered to use the lagrangian function.
+
+    Parameters
+    ----------
+    data (ak.highlevel.Array):
+        The input data array (T).
+    indexer (ak.highlevel.Array):
+        The indexer array (T) of dtype int.
+        With maximum value M.
+
+    Returns
+    -------
+    ak.highlevel.Array:
+        The calculated Eulerian array of shape (T x M x var)
+    """
+
+    # indexer_unique = np.unique(ak.flatten(indexer))
+    N = int(ak.max(indexer)) + 1
+
+    # sort arrays by their
+    argsort = ak.argsort(indexer, axis=0)
+    indexer_sort = indexer[argsort]
+    data_sort = data[argsort]
+
+    # use np.bincount to get the counts of the unique values
+    bcount = np.bincount(indexer_sort)
+    bcount = ak.fill_none(ak.pad_none(bcount, N, axis=0), 0)
+
+    # unflatten the data array using the bcount array.
+    result = ak.unflatten(data_sort, bcount, axis=0)
+    return result
+
+
+def binning_by_2D_indexer(
+    data: ak.highlevel.Array, indexer: ak.highlevel.Array
+) -> ak.highlevel.Array:
+    """
+    Calculates the Eulerian 3D array from the given 2D data and 2D indexer arrays.
+    The indexer array needs to have a ``int`` like dtype.
+    The output shape of the array will be given by the maximum value M in ``indexer``.
+    Output shape : T x M x var
+
+    Note
+    ----
+    - This functions uses np.bincount on the lower levels.
+    - Thus, at one point an np.ndarray of shape (T * M) will be created and needs to be stored in memory.
+    - This limits the capability due to memory usage.
+    - A good practice is, to extract the N unique values of the indexer array. With this, create a new indexer with values from 0 to N. You can use the numpy.digitize function for this.
+
+    >>> unique_index = np.unique(ak.flatten(indexer))
+    >>> unique_indexer = ak_digitize_2d(indexer, unique_index)
+    >>> binning_by_2D_indexer(data, unique_indexer)
+
+    For a lagrangian tracking for non sparse outputs, it is prefered to use the lagrangian function.
+
+    Parameters
+    ----------
+    data (ak.highlevel.Array):
+        The input data array (T x var).
+    indexer (ak.highlevel.Array):
+        The indexer array (T x var) of dtype int.
+        With maximum value M.
+
+    Returns
+    -------
+    ak.highlevel.Array:
+        The calculated Eulerian array of shape (T x M x var)
+    """
+    # indexer_unique = np.unique(ak.flatten(indexer))
+    N = int(ak.max(indexer)) + 1
+
+    # sort arrays by their
+    argsort = ak.argsort(indexer, axis=1)
+    indexer_sort = indexer[argsort]
+    data_sort = data[argsort]
+
+    counts = create_counts_2D(indexer_sort)
+
+    # The function eulerian_from_count performes this bit of code:
+    # ----------
+    # # unflatten the data array using the counts array.
+    result = ak.unflatten(data_sort, ak.flatten(counts), axis=1)
+    # flatten this array again
+    result = ak.unflatten(ak.flatten(result), N)
+
+    return result
 
 
 def binning_by_3D_indexer(data, indexer):
@@ -388,7 +550,7 @@ def binning_by_3D_indexer(data, indexer):
     #  [30, 35, 40],
     #  [45, 50, 55]])
 
-    bin_counts_3D = create_counts_3d(indexer, flat=True)
+    bin_counts_3D = create_counts_3D(indexer, flat=True)
 
     result = ak.unflatten(data_flat, bin_counts_3D)
     result = ak.unflatten(result, z)
@@ -404,17 +566,19 @@ def binning_by_2_indexers(data, indexer1, indexer2):
     return binning_by_3D_indexer(data_3d, indexer_3d)
 
 
+ipytest.run()
+
 # %%
 
 data = ak.Array(
     [
         [10.0, 20, 30],
-        [12],
+        [12, 14],
         [40, 50],
         [90],
     ]
 )
-time_index = ak.Array(
+time_values = ak.Array(
     [
         0,
         1,
@@ -422,10 +586,15 @@ time_index = ak.Array(
         3,
     ]
 )
+
+time_index = ak.values_astype(
+    data * 0 + np.arange(ak.num(time_values, axis=0)), np.int64
+)
+
 gridbox = ak.Array(
     [
         [0, 0, 0],
-        [1],
+        [1, 0],
         [1, 2],
         [2],
     ]
@@ -443,7 +612,7 @@ counts = ak.Array(
 id = ak.Array(
     [
         [3, 1, 2],
-        [2],
+        [2, 1],
         [1, 3],
         [7],
     ]
@@ -452,25 +621,39 @@ id = ak.Array(
 radius = ak.Array(
     [
         [1.1, 1.2, 2.6, 2.5],
-        [2.1],
+        [2.1, 3.5],
         [1.2, 3.4],
         [3.1],
     ]
 )
 
-gbxindex = np.arange(ak.max(gridbox) + 1)
-
 bins = np.arange(0, 4, 1)
 indexer = ak_digitize_2D(radius, bins)
 
-# data_3d = binning_by_2D_indexer(data, gridbox)
-# data_3d = binning_by_2D_indexer(data, gridbox)
-# indexer_3d = binning_by_2D_indexer(indexer, gridbox)
-# id_3d = binning_by_2D_indexer(id, gridbox)
-
-# create_counts_3d(indexer_3d)
-
 binning_by_2_indexers(data, gridbox, indexer)
+
+# %%
+
+# indexer_unique = np.unique(ak.flatten(indexer))
+data_flat = ak.flatten(data, axis=1)
+time_flat = ak.flatten(time_index, axis=1)
+id_flat = ak.flatten(id, axis=1)
+
+
+data_new = binning_by_1D_indexer(data_flat, id_flat)
+time_new = binning_by_1D_indexer(time_flat, id_flat)
+new = binning_by_2D_indexer(data_new, time_new)
+time_new = binning_by_2D_indexer(time_new, time_new)
+new = ak.fill_none(ak.pad_none(new, 1, axis=-1), np.nan)
+
+diff = new[:, 1:] - new[:, :-1]
+diff = ak.drop_none(ak.nan_to_none(diff), axis=-1)
+mask = ak.values_astype(diff, bool)
+
+time_diff = time_new[:, :-1]
+time_diff = time_diff[mask]
+
+
 # %%
 setupfile = "/home/m/m301096/CLEO/data/output/raw/no_aerosols_collision_many_5012/clusters_301/eurec4a1d_setup.txt"
 dataset = "/home/m/m301096/CLEO/data/output/raw/no_aerosols_collision_many_5012/clusters_301/eurec4a1d_sol.zarr"
@@ -480,28 +663,21 @@ consts = pysetuptxt.get_consts(setupfile, isprint=False)
 # Create a first simple dataset to have the coordinates for later netcdf creation
 sddata = pyzarr.get_supers(dataset, consts)
 
-
+# %%
 data = sddata.radius
 id = sddata.sdId
 gridbox = sddata.sdgbxindex
 radius = sddata.radius
+time_values = sddata.time
 
-
-bins = np.arange(0, 4, 1)
-indexer = ak_digitize_2D(radius, bins)
-
-binning_by_2_indexers(data, gridbox, indexer)
-# def calc_memory_array(elements):
-#     memory_usage = elements * 8  # 8 bytes per float
-
-#     if memory_usage < 1024 * 1024:
-#         memory_usage_mb = memory_usage / (1024 * 1024)
-#         return f"Memory usage: {memory_usage_mb:.2f} Mb"
-#     elif memory_usage < 1024 * 1024 * 1024:
-#         memory_usage_gb = memory_usage / (1024 * 1024 * 1024)
-#         return f"Memory usage: {memory_usage_gb:.2f} Gb"
-#     else:
-#         memory_usage_tb = memory_usage / (1024 * 1024 * 1024 * 1024)
-#         return f"Memory usage: {memory_usage_tb:.2f} Tb"
-
-# %%
+time_index = ak.values_astype(
+    data * 0 + np.arange(ak.num(time_values, axis=0)), np.int64
+)
+# # %%
+# data_flat = ak.flatten(data, axis=1)
+# time_flat = ak.flatten(time_index, axis=1)
+# id_flat = ak.flatten(id, axis=1)
+# # %%
+# data_new = binning_by_1D_indexer(data_flat, id_flat)
+# time_new = binning_by_1D_indexer(time_flat, id_flat)
+# id_new = binning_by_1D_indexer(id_flat, id_flat)
