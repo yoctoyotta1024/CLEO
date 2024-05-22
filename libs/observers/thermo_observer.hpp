@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st May 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -62,11 +62,10 @@ CollectDataForDataset<Store> auto CollectThermoVariable(const Dataset<Store> &da
                                                         const std::string_view units,
                                                         const double scale_factor,
                                                         const size_t maxchunk, const size_t ngbxs) {
-  const auto dtype = std::string_view("<f4");
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr =
-      dataset.template create_array<float>(name, units, dtype, scale_factor, chunkshape, dimnames);
+      dataset.template create_array<float>(name, units, scale_factor, chunkshape, dimnames);
   return GenericCollectData(ffunc, xzarr, ngbxs);
 }
 

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -290,7 +290,6 @@ struct CollectMassMoments {
  * @param dataset The dataset where the XarrayZarrArray will be created.
  * @param name The name of the Xarray.
  * @param units The units of the mass moment data.
- * @param dtype A string representing the data type of the Xarray.
  * @param scale_factor The scale factor for the data.
  * @param maxchunk The maximum chunk size (number of elements) for the Xarray.
  * @param ngbxs The number of gridboxes.
@@ -300,12 +299,11 @@ template <typename Store, typename T>
 XarrayZarrArray<Store, T> create_massmoment_xarray(const Dataset<Store> &dataset,
                                                    const std::string_view name,
                                                    const std::string_view units,
-                                                   const std::string_view dtype,
                                                    const double scale_factor, const size_t maxchunk,
                                                    const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
-  return dataset.template create_array<T>(name, units, dtype, scale_factor, chunkshape, dimnames);
+  return dataset.template create_array<T>(name, units, scale_factor, chunkshape, dimnames);
 }
 
 /**
@@ -326,7 +324,7 @@ XarrayZarrArray<Store, uint64_t> create_massmom0_xarray(const Dataset<Store> &da
                                                         const std::string_view name,
                                                         const size_t maxchunk, const size_t ngbxs) {
   const auto units = std::string_view("");
-  return create_massmoment_xarray<Store, uint64_t>(dataset, name, units, "<u8", 1, maxchunk, ngbxs);
+  return create_massmoment_xarray<Store, uint64_t>(dataset, name, units, 1, maxchunk, ngbxs);
 }
 
 /**
@@ -348,7 +346,7 @@ XarrayZarrArray<Store, float> create_massmom1_xarray(const Dataset<Store> &datas
                                                      const size_t maxchunk, const size_t ngbxs) {
   const auto units = std::string_view("g");
   constexpr auto scale_factor = dlc::MASS0grams;
-  return create_massmoment_xarray<Store, float>(dataset, name, units, "<f4", scale_factor, maxchunk,
+  return create_massmoment_xarray<Store, float>(dataset, name, units, scale_factor, maxchunk,
                                                 ngbxs);
 }
 
@@ -371,7 +369,7 @@ XarrayZarrArray<Store, float> create_massmom2_xarray(const Dataset<Store> &datas
                                                      const size_t maxchunk, const size_t ngbxs) {
   const auto units = std::string_view("g^2");
   constexpr auto scale_factor = dlc::MASS0grams * dlc::MASS0grams;
-  return create_massmoment_xarray<Store, float>(dataset, name, units, "<f4", scale_factor, maxchunk,
+  return create_massmoment_xarray<Store, float>(dataset, name, units, scale_factor, maxchunk,
                                                 ngbxs);
 }
 

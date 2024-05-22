@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st May 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -73,8 +73,7 @@ class DoTotNsupersObs {
   DoTotNsupersObs(Dataset<Store> &dataset, const size_t maxchunk)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
-            dataset.template create_array<uint32_t>("totnsupers", "", "<u4", 1, {maxchunk},
-                                                    {"time"}))) {}
+            dataset.template create_array<uint32_t>("totnsupers", "", 1, {maxchunk}, {"time"}))) {}
 
   /**
    * @brief Destructor for DoTotNsupersObs.

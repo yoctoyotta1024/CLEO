@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st May 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -83,8 +83,7 @@ class DoTimeObs {
             const std::function<double(unsigned int)> step2dimlesstime)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, float>>(
-            dataset.template create_coordinate_array<float>("time", "s", "<f4", dlc::TIME0,
-                                                            maxchunk, 0))),
+            dataset.template create_coordinate_array<float>("time", "s", dlc::TIME0, maxchunk, 0))),
         step2dimlesstime(step2dimlesstime) {}
 
   /**
