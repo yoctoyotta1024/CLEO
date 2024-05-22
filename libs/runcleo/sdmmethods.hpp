@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Tuesday 21st May 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -127,8 +127,9 @@ class SDMMethods {
      * @param t_next Next timestep for SDM.
      * @param d_gbxs View of gridboxes on device.
      */
+    template <SDMMonitor SDMMo>
     void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
-                    const SDMMonitor auto sdmmonitor) const {
+                    const SDMMo sdmmonitor) const {
       // TODO(all) use scratch space for parallel region?
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
