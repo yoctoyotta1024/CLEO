@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st May 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,7 +29,7 @@
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
-#include "./sdmmonitor.hpp"
+#include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"

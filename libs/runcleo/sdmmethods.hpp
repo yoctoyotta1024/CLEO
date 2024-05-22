@@ -139,7 +139,7 @@ class SDMMethods {
 
             auto supers(d_gbxs(ii).supersingbx());
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state);
+              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, sdmmonitor);
             }
           });
     }
