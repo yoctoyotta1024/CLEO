@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st May 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -64,8 +64,8 @@ template <typename Store>
 inline Observer auto CondensationObserver(const unsigned int interval, Dataset<Store> &dataset,
                                           const size_t maxchunk) {
   const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, MonitorCondensation::datatype>>(
-      dataset.template create_array<MonitorCondensation::datatype>("condrate", "TODO(CB)", "<f4",
-                                                                   0.5, {maxchunk}, {"time"}));
+      dataset.template create_array<MonitorCondensation::datatype>("condrate", "TODO(CB)", 0.5,
+                                                                   {maxchunk}, {"time"}));
 
   const auto do_obs = DoSDMMonitorObs<Store, MonitorCondensation, MonitorCondensation::datatype>(
       dataset, xzarr_ptr);
