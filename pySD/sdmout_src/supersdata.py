@@ -18,11 +18,14 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 python class to handle superdroplet attributes data from SDM zarr store in ragged array format
 """
-
+# %%
 import numpy as np
 import xarray as xr
 import awkward as ak
 import warnings
+import os
+from typing import Union
+import pytest
 
 
 def akward_array_to_lagrange_array(
@@ -286,7 +289,7 @@ class SuperdropProperties:
 
 
 class SupersData(SuperdropProperties):
-    def __init__(self, dataset, consts):
+    def __init__(self, dataset: os.PathLike, consts: dict):
         SuperdropProperties.__init__(self, consts)
 
         self.ds = self.tryopen_dataset(dataset)
@@ -509,3 +512,796 @@ class RainSupers(SuperdropProperties):
         else:
             err = "no known return provided for " + key + " key"
             raise ValueError(err)
+
+
+IntegerArray = Union[np.ndarray, ak.highlevel.Array]
+
+
+def get_awkward_shape(a):
+    """
+    Get the shape of the awkward array a as a list.
+    Variable axis lengths are replaced by ``np.nan``.
+
+    Parameters
+    ----------
+    a : ak.Array
+        The input array.
+
+    Returns
+    -------
+    list
+        The shape of the array as a list.
+        ``var`` positions are replaced by ``np.nan``.
+    """
+
+    # check for number of dimensions
+    ndim = a.ndim
+    # create output list
+    shape = []
+    # For each dinemsion, get the number of elements.
+    # If the number of elements changes over the axis, np.nan is used to indicate a variable axis length
+    for dim in range(ndim):
+        num = ak.num(a, axis=dim)
+        # for the 0th axis, the number of elements is an integer
+        if isinstance(num, np.ndarray):
+            num = int(num)
+            shape.append(num)
+        else:
+            maxi = int(ak.max(num))
+            mini = int(ak.min(num))
+            if maxi == mini:
+                shape.append(maxi)
+            else:
+                shape.append(np.nan)
+    return shape
+
+
+@pytest.mark.parametrize(
+    "a, should",
+    [
+        (ak.Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), [10]),
+        (ak.Array([[1, 2, 3], [4, 5, 6]]), [2, 3]),
+        (ak.Array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]]), [2, 2, 2]),
+        (ak.Array([[1, 2, 3], [4, 5, 6, 7]]), [2, np.nan]),
+    ],
+)
+def test_get_awkward_shape(a, should):
+    print(get_awkward_shape(a))
+    assert get_awkward_shape(a) == should
+
+
+def ak_digitize_2D(
+    x: ak.highlevel.Array, bins: np.ndarray, right: bool = False
+) -> ak.highlevel.Array:
+    """
+    This function takes a 2D awkward array and bins it into the provided bins.
+    The binning is done using ``numpy.digitize`` along the flattened array.
+
+    Note
+    ----
+    The input array must be 2D.
+    None and np.nan will be stored in the last bin.
+
+    Parameters
+    ----------
+    x : ak.highlevel.Array
+        The input array to be binned.
+    bins : np.ndarray
+        The bins to be used for binning the array.
+    right : bool, optional
+        As from the numpy documentation:
+        Indicating whether the intervals include the right or the left bin edge.
+        Default behavior is (right==False) indicating that the interval does not include the right edge.
+        The left bin end is open in this case, i.e., bins[i-1] <= x < bins[i] is the default behavior for monotonically increasing bins.
+
+    Returns
+    -------
+    indices : ak.highlevel.Array of ints
+        Output array of indices, of same shape as x.
+
+    Example
+    -------
+    >>> x = ak.Array([[1, 2, 3], [4, 5, 6]])
+    >>> bins = np.array([0, 2, 4, 6])
+    >>> array_to_bin_index(x, bins, right = False)
+    [[1, 2, 2],
+     [3, 3, 4]]
+    ---------------------
+    type: 2 * var * int64
+
+    References
+    ----------
+    https://numpy.org/doc/stable/reference/generated/numpy.digitize.html
+    """
+
+    if x.ndim != 2:
+        raise ValueError("Array x must be 2D")
+    digi, num = ak.flatten(x), ak.num(x)
+
+    if bins.ndim != 1:
+        raise ValueError("Bins must be 1D")
+
+    digi = np.digitize(x=digi, bins=bins, right=right)
+    digi = ak.unflatten(digi, num)
+    return digi
+
+
+@pytest.mark.parametrize(
+    "x, bins, should",
+    [
+        (
+            ak.Array([[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]]),
+            np.array([0, 3, 6, 100]),
+            ak.Array([[1, 1, 2, 0, 4], [2, 2, 3, 4, 3, 4]]),
+        ),
+    ],
+)
+def test_ak_digitize_2D(x, bins, should):
+    """Tests returns of the ak_digitize_2D function"""
+    x_binned = ak_digitize_2D(x, bins)
+    # check for equality
+    assert ak.sum(x_binned != should) == 0
+    # check for same shape
+    assert get_awkward_shape(x_binned) == get_awkward_shape(should)
+    # check for same counts
+    assert ak.count(x_binned) == ak.count(should)
+
+
+@pytest.mark.parametrize(
+    "x, bins, exception",
+    [
+        (
+            ak.Array([[[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]], [None]]),
+            np.array([0, 3, 6, 100]),
+            ValueError,
+        ),
+        (
+            ak.Array([[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]]),
+            np.array([[0], [3]]),
+            ValueError,
+        ),
+    ],
+)
+def test_array_to_bin_index_exception(x, bins, exception):
+    """Tests for exceptions in the ak_digitize_2D function"""
+    with pytest.raises(exception):
+        ak_digitize_2D(x, bins)
+
+
+def ak_digitize_3D(
+    x: ak.highlevel.Array, bins: np.ndarray, right: bool = False
+) -> ak.highlevel.Array:
+    """
+    This function takes a 3D awkward array and bins it into the provided bins.
+    The binning is done using ``numpy.digitize`` along the flattened array.
+
+    Note
+    ----
+    The input array must be 3D.
+    None and np.nan will be stored in the last bin.
+    Only values in the last axis are allowed! This ``ak.Array([[[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]], [None, 1]])`` is not valid!
+
+
+    Parameters
+    ----------
+    x : ak.highlevel.Array
+        The input array to be binned.
+    bins : np.ndarray
+        The bins to be used for binning the array.
+    right : bool, optional
+        As from the numpy documentation:
+        Indicating whether the intervals include the right or the left bin edge.
+        Default behavior is (right==False) indicating that the interval does not include the right edge.
+        The left bin end is open in this case, i.e., bins[i-1] <= x < bins[i] is the default behavior for monotonically increasing bins.
+
+    Returns
+    -------
+    indices : ak.highlevel.Array of ints
+        Output array of indices, of same shape as x.
+
+    Example
+    -------
+    >>> x = ak.Array([[[1, 2, 3], [4, 5, 6]], [[1], [2]]])
+    >>> bins = np.array([0, 2, 4, 6])
+    >>> array_to_bin_index(x, bins, right = False)
+    [
+        [[1, 2, 2],[3, 3, 4]]
+        [[1], [2]],
+    ]
+    ---------------------
+    type: 2 * 2 * var * int64
+
+    References
+    ----------
+    https://numpy.org/doc/stable/reference/generated/numpy.digitize.html
+    """
+
+    if x.ndim != 3:
+        raise ValueError("Array x must be 3D")
+    digi, num0 = ak.flatten(x), ak.num(x)
+    digi, num1 = ak.flatten(digi), ak.num(digi)
+
+    if bins.ndim != 1:
+        raise ValueError("Bins must be 1D")
+
+    digi = np.digitize(x=digi, bins=bins, right=right)
+    digi = ak.unflatten(digi, num1)
+    digi = ak.unflatten(digi, num0)
+    return digi
+
+
+@pytest.mark.parametrize(
+    "x, bins, should",
+    [
+        (
+            ak.Array([[[1, 2, 3], [4, 5]], [[1], [2]]]),
+            np.array([0, 2, 4, 6]),
+            ak.Array([[[1, 2, 2], [3, 3]], [[1], [2]]]),
+        ),
+    ],
+)
+def test_ak_digitize_3D(x, bins, should):
+    """Tests returns of the ak_digitize_3D function"""
+    x_binned = ak_digitize_3D(x, bins)
+    # check for equality
+    assert ak.sum(x_binned != should) == 0
+    # check for same shape
+    assert get_awkward_shape(x_binned) == get_awkward_shape(should)
+    # check for same counts
+    assert ak.count(x_binned) == ak.count(should)
+
+
+@pytest.mark.parametrize(
+    "x, bins, exception",
+    [
+        # The first test is not a valid case, because only values in the last axis are allowed
+        (
+            ak.Array([[[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]], [None, 1]]),
+            np.array([0, 3, 6, 100]),
+            ValueError,
+        ),
+        (
+            ak.Array([[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None, 1]]),
+            np.array([[0], [3]]),
+            ValueError,
+        ),
+    ],
+)
+def test_ak_digitize_3D_exception(x, bins, exception):
+    """Tests for exceptions in the ak_digitize_3D function"""
+    with pytest.raises(exception):
+        ak_digitize_3D(x, bins)
+
+
+class SupersAttribute:
+    """
+    This class is used to store the attributes of the superdroplets.
+    It can be an indexer or a variable.
+
+    The class has the following attributes:
+    - name (str): The name of the attribute.
+    - units (str): The units of the attribute.
+    - data (ak.Array): The data of the attribute.
+    - metadata (dict): The metadata of the attribute.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        data: Union[xr.Dataset, xr.DataArray, np.ndarray, ak.Array],
+        units: str = "",
+        metadata: dict = dict(),
+    ):
+        """
+        The constructor of the class uses the data
+        This function extracts an attribute from a dataset and stores it in a SupersAttribute object.
+
+        Parameters
+        ----------
+        name : str
+            The name of the attribute.
+        data : xr.Dataset or xr.DataArray, or np.ndarray or ak.Array
+            The data of the attribute.
+            If a xr.Dataset or xr.DataArray is provided, the data is extracted from the dataset using the name of the attribute.
+        units : str, optional
+            The units of the attribute.
+            Default is an empty string.
+        metadata : dict, optional
+            The metadata of the attribute.
+            Default is an empty dictionary.
+        """
+        # store the name
+        self.set_name(name)
+
+        if isinstance(data, xr.Dataset):
+            self.set_from_Dataset(data)
+        elif isinstance(data, xr.DataArray):
+            self.set_from_DataArray(data)
+        else:
+            self.set_data(data)
+            self.set_units(units)
+            self.set_metadata(metadata)
+
+    def set_name(self, name: str):
+        """
+        This function sets the name of the attribute.
+        The name is stored in the attribute name.
+
+        Parameters
+        ----------
+        name : str
+            The name of the attribute.
+        """
+        self.name = name
+
+    def set_units(self, units):
+        """
+        This function sets the units of the attribute.
+        The units are stored in the attribute units.
+
+        Parameters
+        ----------
+        units : str
+            The units of the attribute.
+            If units are not provided, it is tried to fill the units from the dataset.
+        """
+        self.units = units
+
+    def set_data(self, data: Union[ak.Array, np.ndarray]):
+        """
+        This function sets the data of the attribute.
+        The data is stored in the attribute data.
+
+        Parameters
+        ----------
+        data : ak.Array or np.ndarray or xr.Dataset
+            The data of the attribute.
+            If a xr.Dataset is provided, the data is extracted from the dataset using the name of the attribute.
+        """
+        if isinstance(data, np.ndarray):
+            self.data = ak.Array(data)
+        elif isinstance(data, ak.Array):
+            self.data = data
+        else:
+            raise ValueError("Data must be an ak.Array or np.ndarray")
+
+    def set_metadata(self, metadata: dict):
+        """
+        This function sets the metadata of the attribute.
+        The metadata is stored in the attribute metadata.
+
+        Parameters
+        ----------
+        metadata : dict
+            The metadata of the attribute.
+        """
+        self.metadata = metadata
+
+    def set_from_Dataset(self, ds: xr.Dataset):
+        """
+        This function sets the data of the attribute from a dataset.
+        The data is stored in the attribute data.
+
+        Parameters
+        ----------
+        ds : xr.Dataset
+            The dataset containing the attribute.
+        """
+        self.set_data(data=ds[self.name].values)
+        try:
+            self.set_units(units=ds[self.name].units)
+        except AttributeError:
+            self.set_units(units="")
+        try:
+            self.set_metadata(metadata=ds[self.name].attrs)
+        except AttributeError:
+            self.set_metadata(metadata=dict())
+
+    def set_from_DataArray(self, da: xr.DataArray):
+        """
+        This function sets the data of the attribute from a DataArray.
+        The data is stored in the attribute data.
+
+        Parameters
+        ----------
+        da : xr.DataArray
+            The DataArray containing the attribute.
+        """
+        self.set_data(data=da.values)
+        try:
+            self.set_units(units=da.units)
+        except AttributeError:
+            self.set_units(units="")
+        try:
+            self.set_metadata(metadata=da.attrs)
+        except AttributeError:
+            self.set_metadata(metadata=dict())
+
+    def __str__(self):
+        """
+        This function returns a string representation of the attribute.
+        The string representation contains the name of the attribute and the units.
+
+        Returns
+        -------
+        str
+            The string representation of the attribute.
+        """
+        return f"{self.name} ({self.units})\n{self.data}"
+
+    @classmethod
+    def attribute_to_indexer(cls, attribute: "SupersAttribute") -> "SupersIndexer":
+        """
+        This function converts an attribute to an indexer.
+        The attribute is converted to an indexer by creating a SupersIndexer object.
+
+        Parameters
+        ----------
+        attribute : SupersAttribute
+            The attribute to be converted to an indexer.
+
+        Returns
+        -------
+        SupersIndexer
+            The indexer created from the attribute.
+        """
+        return SupersIndexer(
+            name=attribute.name,
+            data=attribute.data,
+            units=attribute.units,
+            metadata=attribute.metadata,
+        )
+
+    @classmethod
+    def attribute_to_indexer_binned(
+        cls, attribute: "SupersAttribute", bin_edges: np.ndarray, right: bool = False
+    ) -> "SupersIndexerBinned":
+        """
+        This function converts an attribute to a binned indexer.
+        The attribute is converted to a binned indexer by creating a SupersIndexerBinned object.
+
+        Parameters
+        ----------
+        attribute : SupersAttribute
+            The attribute to be converted to a binned indexer.
+        bin_edges : np.ndarray
+            The bin edges of the binned indexer.
+        right : bool, optional
+            As from the numpy documentation:
+            Indicating whether the intervals include the right or the left bin edge.
+            Default behavior is (right==False) indicating that the interval does not include the right edge.
+
+        Returns
+        -------
+        SupersIndexerBinned
+            The binned indexer created from the attribute.
+        """
+        return SupersIndexerBinned(
+            name=attribute.name,
+            data=attribute.data,
+            bin_edges=bin_edges,
+            right=right,
+            units=attribute.units,
+            metadata=attribute.metadata,
+        )
+
+
+class SupersIndexer(SupersAttribute):
+    """
+    This class is used to store an indexers attribute of the superdroplets dataset.
+    It is a subclass of the SupersAttribute class.
+    This class can be used to store the indexer of the superdroplets dataset.
+
+    It has the following attributes:
+    - name (str): The name of the indexer.
+    - units (str): The units of the indexer.
+    - data (ak.Array): The data of the indexer.
+    - digitized_data (ak.Array): The data of the indexer as digitized values.
+    - metadata (dict): The metadata of the indexer.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        data: Union[xr.Dataset, np.ndarray, ak.Array],
+        units: str = "",
+        metadata: dict = dict(),
+    ):
+        """
+        The constructor of the class uses the data
+        This function extracts an attribute from a dataset and stores it in a SupersAttribute object.
+
+        Parameters
+        ----------
+        name : str
+            The name of the attribute.
+        data : xr.Dataset or np.ndarray or ak.Array
+            The data of the attribute.
+            If a xr.Dataset is provided, the data is extracted from the dataset using the name of the attribute.
+        units : str, optional
+            The units of the attribute.
+            Default is an empty string.
+        metadata : dict, optional
+            The metadata of the attribute.
+            Default is an empty dictionary.
+        """
+
+        super().__init__(name=name, data=data, units=units, metadata=metadata)
+
+        self.set_digitized_data()
+
+    def set_digitized_data(self):
+        """
+        This function sets the digitized data of the indexer.
+        The digitized data is stored in the attribute digitized_data.
+        In this class, the digitzed data is the same as the data.
+        So the indexer should be integer values.
+        """
+
+        # digitize the data
+        self.digitized_data = self.data
+
+    @classmethod
+    def indexer_to_indexer_binned(
+        cls, attribute: "SupersAttribute", bin_edges: np.ndarray, right: bool = False
+    ) -> "SupersIndexerBinned":
+        """
+        This function converts an indexer to a binned indexer.
+        The indexer is converted to a binned indexer by creating a SupersIndexerBinned object.
+
+        Parameters
+        ----------
+        attribute : SupersAttribute
+            The attribute to be converted to a binned indexer.
+        bin_edges : np.ndarray
+            The bin edges of the binned indexer.
+        right : bool, optional
+            As from the numpy documentation:
+            Indicating whether the intervals include the right or the left bin edge.
+            Default behavior is (right==False) indicating that the interval does not include the right edge.
+
+        Returns
+        -------
+        SupersIndexerBinned
+            The binned indexer created from the indexer.
+        """
+        return SupersIndexerBinned(
+            name=attribute.name,
+            data=attribute.data,
+            bin_edges=bin_edges,
+            right=right,
+            units=attribute.units,
+            metadata=attribute.metadata,
+        )
+
+    @classmethod
+    def indexer_to_attribute(cls, indexer: "SupersIndexer") -> "SupersAttribute":
+        """
+        This function converts an indexer to an attribute.
+        The indexer is converted to an attribute by creating a SupersAttribute object.
+
+        Parameters
+        ----------
+        indexer : SupersIndexer
+            The indexer to be converted to an attribute.
+
+        Returns
+        -------
+        SupersAttribute
+            The attribute created from the indexer.
+        """
+        return SupersAttribute(
+            name=indexer.name,
+            data=indexer.data,
+            units=indexer.units,
+            metadata=indexer.metadata,
+        )
+
+
+class SupersIndexerBinned(SupersIndexer):
+    """
+    This class is used to store a binned indexers attribute of the superdroplets dataset.
+    It is a subclass of the SupersAttribute class.
+    This class can be used to store the binned indexer of the superdroplets dataset.
+
+    It has the following attributes:
+    - name (str): The name of the binned indexer.
+    - units (str): The units of the binned indexer.
+    - data (ak.Array): The data of the binned indexer.
+    - digitized_data (ak.Array): The data of the binned indexer as digitized values.
+    - metadata (dict): The metadata of the binned indexer.
+    - bin_edges (np.ndarray): The bin edges of the binned indexer.
+    - bin_centers (np.ndarray): The bin centers of the binned indexer.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        data: Union[xr.Dataset, np.ndarray, ak.Array],
+        bin_edges: np.ndarray,
+        right: bool = False,
+        units: str = "",
+        metadata: dict = dict(),
+    ):
+        """
+        The constructor of the class uses the data
+        This function extracts an attribute from a dataset and stores it in a SupersAttribute object.
+
+        Parameters
+        ----------
+        name : str
+            The name of the attribute.
+        data : xr.Dataset or np.ndarray or ak.Array
+            The data of the attribute.
+            If a xr.Dataset is provided, the data is extracted from the dataset using the name of the attribute.
+        bin_edges : np.ndarray
+            The bin edges of the binned indexer.
+        right : bool, optional
+            As from the numpy documentation:
+            Indicating whether the intervals include the right or the left bin edge.
+            Default behavior is (right==False) indicating that the interval does not include the right edge.
+        units : str, optional
+            The units of the attribute.
+            Default is an empty string.
+        metadata : dict, optional
+            The metadata of the attribute.
+            Default is an empty dictionary.
+        """
+
+        super().__init__(name=name, data=data, units=units, metadata=metadata)
+
+        self.set_bins(bin_edges=bin_edges)
+        self.set_digitized_data(bins=self.bin_edges, right=right)
+
+    def set_bins(self, bin_edges: np.ndarray):
+        """
+        This function sets the bins of the binned indexer.
+        The bins are stored in the attribute bins.
+        The bin centers are stored in the attribute bin_centers.
+
+        Parameters
+        ----------
+        bin_edges : np.ndarray
+            The bin edges of the binned indexer.
+        """
+
+        # set the bins
+        self.bin_edges = bin_edges
+        # set the bin centers
+        self.bin_centers = (self.bin_edges[:-1] + self.bin_edges[1:]) / 2
+
+    def set_digitized_data(self, bins: np.ndarray, right: bool = False):
+        """
+        Sets a digitized version of the data.
+        It uses the numpy digitize function to digitize the data.
+
+        The digitized data is stored in the attribute digitized_data.
+
+        Note
+
+        Parameters
+        ----------
+        bins : np.ndarray
+            The bins to digitize the data to.
+        right : bool, optional
+            As from the numpy documentation:
+            Indicating whether the intervals include the right or the left bin edge.
+            Default behavior is (right==False) indicating that the interval does not include the right edge.
+
+        """
+
+        # digitize the data
+        if self.data.ndim == 1:
+            self.digitized_data = np.digitize(x=self.data, bins=bins, right=right)
+        elif self.data.ndim == 2:
+            self.digitized_data = ak_digitize_2D(x=self.data, bins=bins, right=right)
+        elif self.data.ndim == 3:
+            self.digitized_data = ak_digitize_3D(x=self.data, bins=bins, right=right)
+        else:
+            raise NotImplementedError(
+                "Only 1D, 2D and 3D arrays are supported for digitization till now."
+            )
+
+
+# %%
+
+
+class SupersDataIndexed(SuperdropProperties):
+    attribute_names = [
+        "sdId",
+        "sdgbxindex",
+        "xi",
+        "radius",
+        "msol",
+        "coord3",
+        "coord1",
+        "coord2",
+    ]
+
+    def __init__(self, dataset: Union[os.PathLike, xr.Dataset], consts: dict):
+        """
+        The constructor of the class uses the data
+        This function extracts the attributes of the superdroplets dataset and stores them in a SupersDataIndexed object.
+
+        """
+
+        SuperdropProperties.__init__(self, consts=consts)
+
+        self.ds = self.tryopen_dataset(dataset)
+        self.raggedcount = self.ds["raggedcount"].values  # ragged count variable
+
+        self.attributes = dict()
+        self.set_attributes(attribute_names=self.attribute_names)
+
+    def tryopen_dataset(self, dataset: Union[os.PathLike, xr.Dataset]) -> xr.Dataset:
+        if isinstance(dataset, str):
+            print("supers dataset: ", dataset)
+            return xr.open_dataset(dataset, engine="zarr", consolidated=False)
+        elif isinstance(dataset, xr.Dataset):
+            return dataset
+        else:
+            raise ValueError("dataset must be a path or a xarray dataset")
+
+    def set_attributes(self, attribute_names):
+        """
+        This function sets the attributes of the superdroplets dataset.
+        The attributes are stored in the attribute attributes.
+
+        Parameters
+        ----------
+        attribute_names : list
+            The names of the attributes to be stored.
+        """
+
+        # set all attribtes
+        for name in attribute_names:
+            self.set_attribute(name=name)
+
+        # set time attribute
+        self.set_time()
+
+    def set_attribute(self, name: str):
+        """
+        This function sets an attribute of the superdroplets dataset.
+        The attribute is stored in the attribute attributes.
+
+        Parameters
+        ----------
+        name : str
+            The name of the attribute to be stored.
+        """
+
+        self.attributes[name] = SupersAttribute(name=name, data=self.ds[name])
+
+    def set_time(self):
+        """
+        This function sets the time attribute of the superdroplets dataset.
+        The time attribute is stored in the attribute time.
+        """
+
+        self.time = np.repeat(
+            ak.Array(self.ds.time.data),
+            self.raggedcount,
+        )
+
+    def __getitem__(self, key):
+        try:
+            self.attributes[key]
+        except KeyError:
+            err = "no known return provided for " + key + " key"
+            raise ValueError(err)
+
+    def __str__(self):
+        """
+        This function returns a string representation of the superdroplets dataset.
+        The string representation contains the names of the attributes and their units.
+
+        Returns
+        -------
+        str
+            The string representation of the superdroplets dataset.
+        """
+        result = ""
+        for name, attribute in self.attributes.items():
+            result += str(attribute) + "\n"
+        return result
