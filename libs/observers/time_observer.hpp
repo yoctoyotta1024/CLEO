@@ -35,7 +35,7 @@
 #include "./consttstep_observer.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
-#include "sdmmonitor/sdmmonitor.hpp"
+#include "superdrops/sdmmonitor.hpp"
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 

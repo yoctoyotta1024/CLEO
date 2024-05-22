@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th May 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,6 +30,7 @@
 #include "../../cleoconstants.hpp"
 #include "../kokkosaliases_sd.hpp"
 #include "../nullsuperdrops.hpp"
+#include "../sdmmonitor.hpp"
 #include "../state.hpp"
 #include "../superdrop.hpp"
 #include "../urbg.hpp"
@@ -259,7 +260,7 @@ struct DoCollisions {
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
                                                     const unsigned int subt, subviewd_supers supers,
-                                                    const State &state) const {
+                                                    const State &state, SDMMonitor auto mo) const {
     return do_collisions(team_member, supers, state.get_volume());
   }
 };
