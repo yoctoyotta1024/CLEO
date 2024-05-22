@@ -10,7 +10,7 @@ Header file: ``<libs/zarr/zarr_metadata.hpp>``
 .. doxygenfunction:: make_part_zarrmetadata
    :project: zarr
 
-.. doxygenstruct:: ZarrMetadata
+.. doxygenclass:: ZarrMetadata
    :project: zarr
    :private-members:
    :protected-members:
