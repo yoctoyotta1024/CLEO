@@ -25,6 +25,7 @@
 
 #include <iostream>
 
+#include <mpi.h>
 extern "C" {
 #include "yac_interface.h"
 }
